@@ -1,0 +1,41 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.043478260869565216,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2683528799909392,
+    "unit_count": 46
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units -4 (ls via Bash x4, rg via Bash x6, grep-rln via Bash, cat|grep pipeline), -6 (rg via Bash for section anchoring between every Edit block on plan.md x3, wc -l via Bash), -8 (rg via Bash for section anchoring before and between every Edit cycle x3+), -21 (rg -l via Bash, for-loop with rg via Bash for usage discovery), -32 (/usr/bin/grep explicit-path form x6+, find via Bash instead of Glob), -34 (cat -n via Bash instead of Read, /usr/bin/grep explicit-path form x6+, for-loop Bash success=false); 6 of 7 non-trivial units affected (86%); /usr/bin/grep explicit-path form and ls-via-Bash pattern structurally identical to all 13 prior cycles; frequency proportion WORSENING from 67% prior cycle to 86% this cycle — but single-session variance makes trend assessment unreliable; zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — unit -6: Read then 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit -8: failed Edit then rg anchor then 7+ Edit calls on plan.md with interleaved rg anchors and Reads; unit -32: 4 Edit calls on data-history-v3.tsx with 3 interleaved Reads plus 6 Edit calls on data-history-v3.table.tsx with interleaved Reads; peak Edit count 6-9 per file, interleaved-read-and-anchor structure identical to all 13 prior cycles, no improvement trend",
+      "path_assumption_bias:RECURRING:stable — unit -4: Read on use-sync-q.ts (success=false) requiring ls-via-Bash pivot to confirm file existence; this is the same file path that failed in a prior session (flagged in prior calibration history); no intra-session repetition this cycle, which is an improvement vs the cycle with unit-4 and unit-46 same-session repeated failure",
+      "optimistic_edit_without_read:RECURRING:REGRESSION — unit -8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit -34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances this cycle; was zero instances for two consecutive prior cycles (flagged as IMPROVING) — this cycle is a confirmed regression back to pre-improvement baseline; durable internalization did not occur during the improving streak"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 4,
+    "recommendations": [
+      "optimistic_edit_without_read regression is the highest-priority signal this cycle — two clean cycles followed by immediate reversion confirms the behavior was suppressed situationally, not corrected structurally; this warrants a PreToolUse hook that detects Edit calls on files not read within the last N tool calls and prompts confirmation before proceeding",
+      "shell_tool_preference_violations remains structurally unchanged across 14 cycles; further textual recommendations have demonstrated zero effect; only enforcement-layer intervention (hook blocking rg/grep/ls/find via Bash when Grep/Glob/Read is available) is likely to produce measurable change — deprioritizing this recommendation as already flagged in prior cycles with no uptake",
+      "re_edit_thrash and path_assumption_bias are stable recurring patterns with no deterioration trend — no new recommendations warranted beyond existing flags"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      29857685
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      15700702
+    ]
+  ],
+  "timestamp": "2026-05-04T15:05:47.356035Z",
+  "tokens_used": 10141,
+  "units_analyzed": 11,
+  "units_total": 46
+}

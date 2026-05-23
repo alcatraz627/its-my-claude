@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.31,\"overconfident_count\":2,\"underconfident_count\":0,\"well_calibrated_count\":10,\"biases_detected\":[\"anchoring: repeated Read→Edit→Read→Edit cycles on same file (plan.md) suggest over-commitment to incremental single-change edits rather than batching; pattern appears in units -6 and -8 with 10+ alternating tool calls\",\"tool-selection anchoring: multiple units use Bash grep/rg commands instead of the available Grep tool, suggesting habituation to a familiar tool even when a better one is available (units -4, -2 in session b5660cab)\",\"optimism bias: unit -4 attempts Read on a speculatively named file (use-sync-q.ts) before verifying existence; unit -8 attempts Edit without confirming exact match string first, resulting in failure then recovery\",\"completeness bias: unit -4 issues 28 tool calls for an exploration task that could have terminated earlier once the target pattern was found; exhaustive search applied uniformly regardless of signal quality\"],\"recommendations\":[\"prefer Grep tool over Bash rg/grep invocations for content searches — reduces tool call overhead and improves result consistency\",\"batch document edits: when multiple sections of the same file need updating in one turn, read once, plan all changes, then apply with minimal Read→Edit cycles rather than alternating per change\",\"verify speculative file paths with Glob or ls before issuing Read — a single existence check avoids the failed-read pattern seen in unit -4\",\"for exploration tasks, establish an early-exit condition: once the primary usage pattern or target API is confirmed, stop broad search and move to the narrower task rather than exhaustively mapping all call sites\"],\"unit_assessments\":[{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-2\",\"calibration\":0.5,\"strategy_quality\":0.7,\"notes\":\"minimal data; no tools; accepted\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-4\",\"calibration\":0.1,\"strategy_quality\":0.55,\"notes\":\"28 tool calls for exploration; one failed Read on speculative path; completeness bias; outcome accepted but approach inefficient\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-6\",\"calibration\":0.3,\"strategy_quality\":0.45,\"notes\":\"10+ Read/Edit alternations on same file; anchoring to incremental edit strategy; accepted\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-8\",\"calibration\":-0.2,\"strategy_quality\":0.5,\"notes\":\"first Edit failed (overconfident on match string); recovered correctly; accepted\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-11\",\"calibration\":0.5,\"strategy_quality\":0.8,\"notes\":\"minimal data; no tools; accepted\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-21\",\"calibration\":0.7,\"strategy_quality\":0.85,\"notes\":\"focused change with pre-verification, post-lint, and type check; well-structured\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-25\",\"calibration\":0.6,\"strategy_quality\":0.75,\"notes\":\"checkpoint/core-dump; appropriate tooling; accepted\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-26\",\"calibration\":0.6,\"strategy_quality\":0.8,\"notes\":\"terse query answered without unnecessary tool calls; well-calibrated\"},{\"unit_id\":\"c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f-29\",\"calibration\":0.0,\"strategy_quality\":0.5,\"notes\":\"unknown outcome; insufficient signal\"},{\"unit_id\":\"b5660cab-c4cb-4a7f-87ff-b255626e3d19-2\",\"calibration\":0.5,\"strategy_quality\":0.7,\"notes\":\"anchor verification with Python slugify was a good proactive quality step; Bash grep used instead of Grep tool\"},{\"unit_id\":\"b5660cab-c4cb-4a7f-87ff-b255626e3d19-3\",\"calibration\":0.55,\"strategy_quality\":0.75,\"notes\":\"quality checks post-write are appropriate; anchor self-verification is proactive; accepted\"},{\"unit_id\":\"b5660cab-c4cb-4a7f-87ff-b255626e3d19-7\",\"calibration\":0.5,\"strategy_quality\":0.8,\"notes\":\"minimal data; no tools; accepted\"}]}",
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      7652457
+    ],
+    [
+      "b5660cab-c4cb-4a7f-87ff-b255626e3d19",
+      11572397
+    ],
+    [
+      "aa174c98-cd2c-46d6-b451-31131c00dac0",
+      3856165
+    ],
+    [
+      "c2ec8679-3ddb-41c8-b209-1e2fba856006",
+      3735936
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      22335621
+    ]
+  ],
+  "timestamp": "2026-04-24T07:53:05.575903Z",
+  "tokens_used": 8443,
+  "units_analyzed": 12,
+  "units_total": 47
+}

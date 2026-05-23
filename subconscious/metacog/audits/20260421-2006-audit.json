@@ -1,0 +1,25 @@
+{
+  "response": "{\"calibration_score\":0.46,\"overconfident_count\":3,\"underconfident_count\":0,\"well_calibrated_count\":10,\"biases_detected\":[\"anchoring — units 20 and 27 assumed specific port/path state (3006, 5006, .env.local) before verifying, leading to cascading bash failures\",\"sunk_cost — unit 8 continued iterating on the heredoc jq approach through three Write/Bash failure cycles rather than switching to a simpler inline strategy after the first failure\",\"availability — unit 24 hardcoded a specific task output path derived from memory of a prior run rather than discovering it dynamically, producing an immediate failure\",\"environmental_optimism — units 20 and 27 assumed dev servers and pm2 processes were running without a pre-check, causing multiple no-op curl/lsof rounds\"],\"recommendations\":[\"Add an upfront environment probe step (pm2 list, lsof port check, .env existence) before any unit that depends on running services — this pattern caused repeated 3-tool failure sequences in units 20 and 27\",\"When a shell heredoc or file-write approach fails once, switch to the Write tool on the second attempt rather than retrying Bash; the unit 8 failure-recovery cycle took 3 extra tool calls\",\"For task output file paths, derive the path dynamically (glob or ls) rather than constructing it from session memory — the hardcoded path in unit 24 is brittle across sessions\",\"The session's overall calibration is sound (0.46) with no underconfidence detected; the primary drag is early-unit environmental overconfidence that self-corrects quickly — a one-time env-probe at session start would raise the score to ~0.6\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      22827500
+    ],
+    [
+      "79361922-8bd6-4a72-9e30-8260c6e9ffbb",
+      1173408
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      59890559
+    ],
+    [
+      "2d8239ca-41bf-4ea3-ae8d-263d821ce745",
+      8189838
+    ]
+  ],
+  "timestamp": "2026-04-21T20:06:11.197443Z",
+  "tokens_used": 10154,
+  "units_analyzed": 13,
+  "units_total": 80
+}

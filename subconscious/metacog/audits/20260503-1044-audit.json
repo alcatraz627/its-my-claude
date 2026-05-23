@@ -1,0 +1,17 @@
+{
+  "response": "{\"calibration_score\":0.12,\"overconfident_count\":4,\"underconfident_count\":1,\"well_calibrated_count\":6,\"biases_detected\":[\"anchoring — repeated grep/bash search failures without switching tool strategy early (units 1, 10, 16)\",\"sunk-cost — continued iterating on env-var workaround path (os.environ.get) instead of stopping to fix the Config class root cause (unit 30, 35)\",\"workaround-preference — patched test-collection failure by routing around Config import rather than fixing require_env handling (unit 35, self-identified)\",\"availability — defaulted to familiar bash one-liners for file search despite dedicated Grep tool being available and more reliable\"],\"recommendations\":[\"Switch search strategy after 2 consecutive tool failures — don't exhaust all permutations of a failing approach before pivoting\",\"Before writing os.environ.get or os.getenv, grep for the project's Config class first; if one exists, add the var there rather than bypassing it\",\"When test collection fails at import time, treat that as a signal to fix the import side, not to route around it\",\"Prefer the Grep tool over bash grep pipelines for code search — reduces permission friction and avoids --include flag parsing differences across macOS bash versions\",\"Unit 7 produced zero-length output that was accepted — consider whether silent acceptance of ambiguous continuations warrants a one-line status acknowledgment to avoid user uncertainty\"]}",
+  "sessions": [
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      8128104
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      4069519
+    ]
+  ],
+  "timestamp": "2026-05-03T10:44:11.148010Z",
+  "tokens_used": 9658,
+  "units_analyzed": 11,
+  "units_total": 18
+}

@@ -1,0 +1,46 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18370,
+    "correction_density": 0.04081632653061224,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2693061224489796,
+    "unit_count": 49
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units -4 (ls-via-Bash x4, rg-via-Bash x5+, grep-rln-via-Bash, cat|grep pipeline), -6 (rg-via-Bash for section anchoring on plan.md x2, wc-l-via-Bash), -8 (rg-via-Bash for section anchoring before/between every Edit cycle x4+), -21 (rg-l-via-Bash, for-loop rg-via-Bash), -25 (ls-via-Bash), -32 (/usr/bin/grep explicit-path x7+, find-via-Bash x2), -34 (cat-n-via-Bash instead of Read, /usr/bin/grep explicit-path x6+, for-loop-Bash success=false); 7 of 10 non-trivial units affected (70%); /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all 15 prior cycles; frequency 70% vs 58-86% across prior three cycles — within single-session variance; zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — unit -6: Read then 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit -8: failed Edit then rg anchor then 7+ Edit calls on plan.md with interleaved rg anchors and Reads; unit -32: 4 Edit calls on data-history-v3.tsx with 3 interleaved Reads plus 6 Edit calls on data-history-v3.table.tsx with interleaved Reads; peak Edit count 6-9 per file, interleaved-read-and-anchor structure identical to all 15 prior cycles; no improvement trend",
+      "path_assumption_bias:RECURRING:stable — unit -4: Read on use-sync-q.ts (success=false) requiring ls-via-Bash pivot; this is the same file path that produced success=false in unit -4 of prior session (flagged two cycles ago) and again in unit -46 of the cycle with same-session repeated failure; current cycle shows no same-session repetition (improvement vs worst prior cycle) but cross-session internalization remains zero; severity holding steady rather than worsening as in prior cycle",
+      "optimistic_edit_without_read:RECURRING:stable — unit -8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit -34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with prior two cycles; confirmed no durable internalization from the two-cycle improving streak that preceded the regression; pattern has remained at pre-improvement baseline for three consecutive cycles"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 4,
+    "recommendations": [
+      "shell_tool_preference_violations shows zero cross-session internalization after 15+ cycles of flagging — consider a hook or PreToolUse rule that blocks Bash calls matching patterns /usr/bin/grep|rg.*via.*Bash|ls.*via.*Bash and redirects to Grep/Glob/Read; CLAUDE.md rule alone has not produced behavior change",
+      "re_edit_thrash root cause appears structural: large markdown files edited via string-match Edit calls require rg anchoring to find positions, producing the read-anchor-edit loop; consider switching plan.md workflow to Write-full-file replacement or numbered-section Write pattern to eliminate the anchor dependency",
+      "optimistic_edit_without_read: three consecutive cycles at baseline with no recovery from the improving streak — this pattern is a candidate for a PostToolUse hook that checks Edit(success=false) and inserts a mandatory Read before next Edit on same target",
+      "path_assumption_bias on use-sync-q.ts specifically: the file has failed to Read successfully across at least four session-units; add a memory note that this exact path does not exist and the correct path must be confirmed via Glob before each session touches this area"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      31439854
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      17161021
+    ],
+    [
+      "e42d4f08-a9b8-453c-98be-bc5f0e3dacf9",
+      1176071
+    ]
+  ],
+  "timestamp": "2026-05-05T11:41:52.600052Z",
+  "tokens_used": 10194,
+  "units_analyzed": 11,
+  "units_total": 49
+}

@@ -1,0 +1,45 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18438,
+    "correction_density": 0.045454545454545456,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.32450637350215494,
+    "unit_count": 22
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 14/16 non-trivial units (88%); units 1 (grep-via-Bash x5+, find|xargs pipelines success=false x2, cat-n-via-Bash), 10 (ls-via-Bash, grep-rn-via-Bash success=false x2, /usr/bin/grep explicit-path x5+, find-via-Bash, wc-l-via-Bash, rg-via-Bash fallback), 14 (ls-via-Bash x2, /usr/bin/grep for section anchoring x1, wc-l-via-Bash), 16 (ls-via-Bash, find-via-Bash, /usr/bin/grep x2), 30 (ls-via-Bash, for-loop-Bash success=false, /usr/bin/grep x4+, find-via-Bash), 35 (/usr/bin/grep for symbol lookup before each Edit), 39 (/usr/bin/test /usr/bin/wc /usr/bin/tail /usr/bin/grep via Bash when Read+Grep sufficed), 42 (/usr/bin/grep x6+ for symbol lookup and import discovery), 74 (ls-via-Bash, cat|head-via-Bash, /usr/bin/grep x4+, find-via-Bash), 83 (find-via-Bash, ls-via-Bash, /usr/bin/grep), 90 (/usr/bin/grep-rn via Bash for symbol search), 91 (/usr/bin/grep-nE via Bash x5 attempts), 94 (/usr/bin/grep-nE /usr/bin/grep-rn /usr/bin/wc-l via Bash); rate 88% at upper bound of prior seven cycles (58-88%); /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all 17 prior measured cycles; zero internalization",
+      "re_edit_thrash:RECURRING:STABLE — units 14 (6+ Edit calls on job-output-cleanup.md with interleaved Reads and /usr/bin/grep section anchors), 30 (6+ Edit calls on __init__.py with interleaved Reads), 42 (6+ Edit calls across cache.py/helpers.py/test files with interleaved Reads), 74 (8+ Edit calls across cache.py/functions.py/context_store.py with interleaved Reads and git stash/pop to isolate), 85 (9+ Edit calls on worker-improvements-plan.md with interleaved Reads), 94 (9+ Edit calls on __init__.py with interleaved Reads plus 3 on task_runner.py plus 2 on workerv2.py); 6 of 16 units showing direct thrash; peak Edit count 6-9 per file unchanged from all 17 prior measured cycles; interleaved-read-and-anchor structure identical; no improvement trend",
+      "heredoc_for_file_modification:RECURRING — unit 35: cat >> ~/.claude/mistake-patterns.md << 'EOF' shell heredoc to append content instead of Edit tool; flagged as NEW:instance in prior cycle, now confirmed RECURRING on second consecutive occurrence; notable that the file modified was mistake-patterns.md itself — the correction ritual produced a tool-preference violation in its own execution for the second time; pattern is establishing",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 42: Edit on test_keys.py (success=false) before Read+successful Edit; unit 74: Edit on improvements.md (success=false) before Read+successful Edit; two instances consistent with prior three cycles; pattern stable at pre-improvement baseline for fifth consecutive cycle with no recovery from the brief two-cycle improving streak",
+      "path_assumption_bias:REDUCED — no Read(success=false) on assumed code file paths this cycle; use-sync-q.ts repeated failure path absent; however unit 81 shows Write(success=false) x2 on _last-checkpoint.json before Read+Write pivot indicating assumption failure in checkpoint workflow context rather than code search paths; improvement is domain-specific not general; monitor for recurrence",
+      "search_variant_thrash:NEW — unit 91: five successive /usr/bin/grep-nE Bash command variants with incrementally adjusted decorator-match regexes before landing on working syntax; each attempt was a near-duplicate of the prior with minor pattern adjustment; a single Grep tool call with correct pattern would resolve in one step; distinct from general shell_tool_preference_violations in that the thrash occurs on search pattern construction rather than tool choice alone; first observed occurrence"
+    ],
+    "calibration_score": 0.05,
+    "cross_references": [
+      "dream insight conf=0.78 (hallucination=thrash equivalence) confirmed in units 42 and 74: Edit(success=false) before Read is structurally identical to generating plausible output without grounding in source truth; both units attempted edits on stale mental models of file content and both required the Read+re-edit cycle the insight predicted",
+      "dream insight conf=0.74 (verify-before-act checklist scaled to blast radius) violated in units 42, 74, and 81: local file writes that failed (Edit success=false, Write success=false x2) represent acting on unverified state assumptions; blast radius is local but the pattern matches the insight's lowest-tier verification requirement (file-exists check before write)",
+      "dream insight conf=0.81 (terse input implies full-unit execution) confirmed in units 30 (17 chars input triggering full cache implementation) and 85 (19 chars input triggering full plan document editing cycle); this protocol is functioning correctly and consistently",
+      "dream insight conf=0.72 (WAL/checkpoint format rigor and idempotent replay) partially violated in units 48 and 81: Write(success=false) failures on _last-checkpoint.json suggest the checkpoint write path is not idempotent on first attempt; the insight specifically recommended idempotent replay semantics for checkpoint workflows and the repeated Write failures confirm this gap is not yet addressed"
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations and re_edit_thrash have been flagged across 17+ consecutive cycles with zero internalization — these are now treated as structural constants of this agent configuration; new recommendations for these two patterns are deprioritized unless the mechanism changes",
+      "heredoc_for_file_modification is now RECURRING across two consecutive cycles; recommend a PreToolUse Bash hook that matches cat\\s*>>.*<<.*EOF patterns and emits a block message redirecting to Edit tool; the irony of the pattern recurring specifically in the mistake-patterns correction ritual makes a targeted hook the only reliable prevention vector",
+      "search_variant_thrash (NEW) warrants an intra-session heuristic: if a second Bash grep attempt has greater than 60 percent regex overlap with the immediately preceding Bash grep attempt, that is a signal to pivot to the Grep tool and construct the pattern once correctly; recommend adding this to mistake-patterns.md"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      18956298
+    ]
+  ],
+  "timestamp": "2026-05-05T19:11:51.049497Z",
+  "tokens_used": 26815,
+  "units_analyzed": 22,
+  "units_total": 22
+}

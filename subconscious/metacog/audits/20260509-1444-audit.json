@@ -1,0 +1,51 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.06818181818181818,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.39036363636363636,
+    "unit_count": 88
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 10/15 units (67%; 060367c5-0,060367c5-10,060367c5-17,060367c5-30,060367c5-33,060367c5-34,060367c5-49,bc2715fa-2,bc2715fa-5,bc2715fa-7); ls-via-Bash and cat-via-Bash at session start (060367c5-0), test-f-cat compound via Bash on MEMORY.md (060367c5-10), ls-via-Bash plus rg-via-Bash x2 plus wc-l-via-Bash (060367c5-17), ls-and-rg-via-Bash (060367c5-30), rg-via-Bash (060367c5-33), grep-n-and-rg-and-ls-via-Bash (060367c5-34), ls-via-Bash at checkpoint write (060367c5-49), pwd-and-ls-via-Bash (bc2715fa-2), rg-via-Bash x6+ with cd-prefix compounds (bc2715fa-5), rg-via-Bash on wrong paths before ls pivot (bc2715fa-7); rate 67% is within the 59-92% range across all prior measured cycles; zero internalization across 35+ consecutive measured cycles; units 060367c5-0 060367c5-10 060367c5-17 060367c5-34 bc2715fa-2 bc2715fa-5 bc2715fa-7 were already enumerated in the 2026-05-09 calibration entry confirming identical violation topology across re-measurement",
+      "re_edit_thrash:RECURRING:STABLE — units 060367c5-17 and 060367c5-42; unit 060367c5-17: 4 Edit calls on DEPLOY.md plus 2 on main.rs plus 2 on dashboard.rs with interleaved rg-via-Bash section anchors; unit 060367c5-42: 11 Edit calls on dashboard.rs across two interleaved sub-sequences separated by cargo check plus 2 Edit calls on mod.rs; the 060367c5-42 single-file Edit count of 11 was already flagged as the highest single-unit-single-file count in the 2026-05-09 history entry — confirmed again in this measurement pass, consistent with zero within-session and zero cross-session improvement; no improvement trend across 18+ consecutive cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 060367c5-17: 2 Edit calls on README.md both success=false before eventual Read and successful Edit; single instance consistent with 1-2 per cycle baseline across all 19 prior measured cycles; this unit was already enumerated in the 2026-05-09 history entry; underlying mechanism unchanged",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5 and bc2715fa-7; unit bc2715fa-5: cd frontend && rg compound fails (success=false), then rg without correct path prefix also fails (success=false), then pwd discovery and ls before correct path resolved; unit bc2715fa-7: Bash targets wrong relative paths for app-init.utils.ts and with-server.ts (success=false) before ls pivot finds correct location at frontend/src; both instances arise from project-root vs frontend/ CWD ambiguity identical to prior cycles; both units were already enumerated in the 2026-05-09 history entry; cross-session internalization remains zero across 22+ consecutive sessions",
+      "wrong_edit_target_on_correction:RECURRING — unit 060367c5-9: user message references curl/shell/existing behavior; agent reads Dockerfile and edits Dockerfile (success=true); outcome is Corrected; unit 060367c5-10 (is_correction=true) then fixes render.yaml instead — the Dockerfile edit was the wrong artifact; agent applied a plausible-looking change to the wrong file without verifying which file actually controlled the behavior in question; this is structurally identical to the optimistic_edit_without_read pattern but distinguished by target-file misidentification rather than stale-string failure; not independently named in prior calibration history but the causal mechanism (editing before verifying which file owns the behavior) overlaps with optimistic_edit_without_read"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations: flagged in 35+ prior cycles with zero internalization — deprioritize further corrective recommendations; structural origin not addressable through prompt-level guidance alone",
+      "re_edit_thrash: unit 060367c5-42 confirms the 11-edit single-file record previously documented; no new mitigation is suggested beyond what was recommended in the 2026-05-09 entry; inserting a Read call between successive Edit sequences on the same file would mechanically break the loop but has not been adopted",
+      "path_assumption_bias: consider a startup invariant that always resolves CWD with pwd before the first path-dependent Bash call when the session is in a monorepo context; 22 consecutive sessions with identical failure topology and zero internalization indicates this correction will not self-apply",
+      "wrong_edit_target_on_correction: before making any edit in response to a user report about runtime behavior, add a file-ownership verification step — either grep for the relevant env var or config key to confirm which file controls it, or ask the user which file was wrong; the Dockerfile vs render.yaml confusion in unit 060367c5-9/10 is the canonical example; one additional instance this cycle warrants monitoring but not yet a stable-recurring classification"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "060367c5-53cd-434a-9021-5edc8f2828be",
+      10395284
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      9222253
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      25821550
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      7143151
+    ]
+  ],
+  "timestamp": "2026-05-09T14:44:29.790991Z",
+  "tokens_used": 13405,
+  "units_analyzed": 15,
+  "units_total": 88
+}

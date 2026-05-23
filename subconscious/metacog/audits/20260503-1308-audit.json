@@ -1,0 +1,13 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":1,\"underconfident_count\":0,\"well_calibrated_count\":1,\"biases_detected\":[\"environment_state_assumption — unit-13 proceeded with test spawns assuming ports 5043/5044 were free based on earlier checks; a stale ghost process caused a false-positive action against the live :5042 sys-pier-backend (documented in commit cavaet)\",\"retry_without_root_cause — unit-13 issued 4 successive pkill/kill attempts against the same PID without investigating why the process survived each time before retrying\",\"anchoring_on_prior_state — both unit-7 and unit-13 used port/process state snapshots from earlier in the turn as ground truth for later operations rather than re-verifying immediately before side-effecting spawns\"],\"recommendations\":[\"Re-verify port occupancy with lsof immediately before each test-server spawn, not at turn start — a single pgrep/lsof takes <100ms and eliminates ghost-process false positives\",\"When pkill/kill fails on the first attempt, inspect with ps -o stat before retrying; a zombie or D-state process requires a different remediation path than a running one\",\"Treat each smoke-test iteration as a clean-slate environment: record spawn PID, confirm the PID is listening on the expected port before issuing curl probes, and kill by recorded PID rather than pattern-matching (avoids hitting surviving ghosts from prior iterations)\"]}",
+  "sessions": [
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      7918865
+    ]
+  ],
+  "timestamp": "2026-05-03T13:08:20.412055Z",
+  "tokens_used": 7581,
+  "units_analyzed": 4,
+  "units_total": 10
+}

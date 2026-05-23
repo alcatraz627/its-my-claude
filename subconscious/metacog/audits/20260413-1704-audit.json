@@ -1,0 +1,11 @@
+{
+  "response": "```json\n{\n  \"calibration_score\": 0.72,\n  \"overconfident_count\": 0,\n  \"underconfident_count\": 0,\n  \"well_calibrated_count\": 2,\n  \"biases_detected\": [\n    \"anchoring: repeated Glob calls to same target path suggest over-reliance on initial directory structure assumption before pivoting to direct file read\",\n    \"efficiency_bias: triple redundant Glob invocations on identical target indicate possible tool-loop pattern without intermediate state evaluation\"\n  ],\n  \"recommendations\": [\n    \"Deduplicate Glob calls: three identical Glob invocations on the same path (/Users/alcatraz627/Code/Versable/enhancement-product/.github) with zero duration each suggest the agent did not cache or reuse results — implement result memoization or add a guard to skip redundant directory scans\",\n    \"Add intermediate confidence checkpoints: between repeated tool calls on the same target, insert an explicit evaluation step to determine whether additional calls are warranted before proceeding\",\n    \"Unit 1 produced zero-length output despite being accepted — monitor for silent no-op responses that may mask unresolved ambiguity in command/name resolution tasks\",\n    \"Low sample size (n=2) limits statistical confidence in calibration scoring; expand session corpus before drawing strong conclusions about systematic bias\"\n  ]\n}\n```",
+  "sessions": [
+    "d77eb2b1-0808-41af-a02e-b679829a88cc",
+    "98cd111e-f8dc-467d-9862-b07bf8a959bb",
+    "523b871b-64a4-443c-b166-e8fec59b881b"
+  ],
+  "timestamp": "2026-04-13T17:04:30.013909Z",
+  "tokens_used": 1095,
+  "units_analyzed": 2
+}

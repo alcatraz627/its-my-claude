@@ -1,0 +1,25 @@
+{
+  "response": "{\"calibration_score\":-0.22,\"overconfident_count\":4,\"underconfident_count\":1,\"well_calibrated_count\":6,\"biases_detected\":[\"anchoring — initial search terms locked to specific function names (generate_image_url, output_transforms) requiring multiple failed pivots before broadening\",\"workaround-over-root-cause — env-var bypass via os.environ.get applied when Config import raised, patching the symptom rather than the underlying require_env bug; explicitly self-documented as a mistake pattern\",\"tool-selection-persistence — bash grep with --include flags failed repeatedly across units 1, 10, 30; fell back to /usr/bin/grep or python3 inline scripts only after failure rather than using the Grep tool\",\"re-edit thrash — units 14 and 16 show 4-6 sequential edits to the same file (job-output-cleanup.md, jobs/__init__.py) interleaved with re-reads, indicating insufficient pre-edit comprehension\"],\"recommendations\":[\"route all content-search through the Grep tool rather than bash grep to avoid shell environment PATH issues that recurred in at least three separate units\",\"before patching a test failure with a workaround (os.environ.get, skipping an import), explicitly verify the root cause with one diagnostic read/bash call; the env-var pattern recurred specifically because a Config import-time raise was misread as a design problem rather than a fixable bug\",\"read the full target file once before making multiple edits — the re-read-then-edit-then-re-read cycles in units 14 and 16 suggest edits were being written before the surrounding context was fully understood\",\"when grep or find returns no results on the first attempt, prefer broadening the search pattern rather than switching to a different tool implementation of the same pattern\"]}",
+  "sessions": [
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      7748471
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      32838914
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      23635509
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      3784487
+    ]
+  ],
+  "timestamp": "2026-05-03T09:09:00.010475Z",
+  "tokens_used": 9738,
+  "units_analyzed": 11,
+  "units_total": 95
+}

@@ -1,0 +1,13 @@
+{
+  "response": "{\"calibration_score\":0.45,\"overconfident_count\":0,\"underconfident_count\":1,\"well_calibrated_count\":3,\"biases_detected\":[\"tool-familiarity-bias\",\"search-thrash\",\"bash-over-dedicated-tools\"],\"recommendations\":[\"Unit 2527f606-1 shows repeated Bash grep/find failures before falling back to working patterns — prefer Grep tool over shell grep to avoid permission/path issues\",\"Multiple failed tool calls before finding working variants suggests over-reliance on Bash for file search tasks that Glob/Grep handle natively\",\"Unit 2527f606-10 used python3 inline scripts for file scanning instead of the Grep tool, adding unnecessary complexity\",\"Unit 2527f606-7 produced zero output length despite accepted outcome — likely a no-op or implicit acknowledgment; underconfident about whether action was needed\",\"Search strategy in unit-1 lacked progressive narrowing — tried too many equivalent patterns in parallel rather than building on partial results\",\"No evidence of confidence miscalibration on task outcomes — all accepted reactions suggest outputs were appropriate despite tool inefficiency\"]}",
+  "sessions": [
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      916939
+    ]
+  ],
+  "timestamp": "2026-04-29T11:19:49.605566Z",
+  "tokens_used": 3909,
+  "units_analyzed": 4,
+  "units_total": 4
+}

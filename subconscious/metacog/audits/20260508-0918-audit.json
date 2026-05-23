@@ -1,0 +1,55 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18268,
+    "correction_density": 0.028037383177570093,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.21895327102803738,
+    "unit_count": 107
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 11/12 tool-using units (92%; units 4,6,8,21,25,32,34,35,40,45,46); ls-via-Bash head/tail split (unit 4), grep-rln-via-Bash and rg-l-via-Bash x2 and rg-via-Bash x5+ and cat|grep pipeline on package.json (unit 4), grep-n-via-Bash and rg-via-Bash as section anchors and wc-l-via-Bash (unit 6), rg-via-Bash x4+ as section anchors between Edit calls (unit 8), rg-l-via-Bash and for-loop-rg-via-Bash (unit 21), ls-via-Bash (unit 25), find-via-Bash and /usr/bin/grep explicit-path x6+ (unit 32), cat-n-via-Bash and /usr/bin/grep explicit-path x4+ and for-loop-Bash success=false and ls-via-Bash (unit 34), /usr/bin/grep explicit-path x3+ (unit 35), /usr/bin/grep explicit-path x1 (unit 40), grep-rn-via-Bash and grep-rln-via-Bash x2 and ls-via-Bash and /usr/bin/grep x4+ and for-loop-Bash success=false (unit 45), ls-via-Bash and /usr/bin/grep x6+ and xargs-grep-pipeline success=false (unit 46); rate 92% matches prior cycle peak exactly; zero internalization across 30+ consecutive measured cycles; structurally identical to all prior cycles with no change in violation type or frequency",
+      "re_edit_thrash:RECURRING:STABLE — units 6,8,32,34; unit 6: 8+ Edit calls on plan.md with interleaved rg-via-Bash section anchors and Reads; unit 8: Edit(success=false) then rg-via-Bash anchor then Read then 7+ Edit calls on plan.md with interleaved rg anchors; unit 32: 3 Edit calls on data-history-v3.tsx plus 6 Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx; unit 34: 2 Edit calls on data-history-row-actions.tsx plus 3 Edit calls on data-history-v3.table.tsx; peak Edit count per file and distribution consistent with all prior measured cycles; document-editing thrash on plan.md co-occurs with shell_tool_preference_violations as section-locating strategy in units 6 and 8 confirming established causal link; no improvement trend across 13+ consecutive cycles",
+      "path_assumption_bias:RECURRING:WORSENING — units 4 and 46; unit 4: Read on use-sync-q.ts (success=false) before ls-via-Bash pivot to correct path; unit 46: Read on use-sync-q.ts (success=false) before ls-via-Bash and /usr/bin/grep pivot then correct path src/utils/hooks/use-query-sync/index.ts read successfully; prior cycle (2026-05-07) showed single-instance count and was classified IMPROVING after two consecutive single-instance cycles; this cycle reverts to double-instance indicating the IMPROVING trend was transient and has not held across the session boundary; cross-session internalization remains zero across 19+ consecutive sessions; reclassified from IMPROVING back to WORSENING",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg-via-Bash anchor plus Read plus successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor plus successful Edit; two instances consistent with all prior twelve measured cycles at 1-2 instances per cycle; no improvement trend across 13+ consecutive cycles",
+      "rm_instead_of_trash:RECURRING:STABLE — unit 34: Bash rm -f /tmp/fs-tests/count-searches.ts (success=false, blocked by hook) followed by correct trash recovery; reappeared after single-cycle absence in prior cycle; prior absence now confirmed anomalous reflecting lighter filesystem work rather than genuine correction; self-correction within same unit confirmed across all occurrences; initial violation reflex uncorrected despite repeated hook blocks"
+    ],
+    "calibration_score": 0.07,
+    "cross_references": [
+      "Dream insight 'Never assert state without observation' violated in unit 8 (Edit on plan.md success=false without prior Read) and unit 34 (Edit on file-select.v2.tsx success=false without prior Read); both are direct optimistic_edit_without_read instances and directly contradict the insight's core rule",
+      "Dream insight 'Context reconstruction after session boundaries is a data-hallucination risk' confirmed by path_assumption_bias in unit 46: agent reconstructed the wrong path assumption (use-sync-q.ts) at turn start despite having successfully located the correct path (use-query-sync/index.ts) within the same session in unit 4; the correct path was not carried forward as verified state",
+      "Dream insight 'Credentials and config values must come from authoritative source never inferred' tangentially matches path_assumption_bias pattern: agent infers file path from hook name convention rather than reading directory listing first; the wrong inference persists across 19+ session boundaries with zero cross-session correction"
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "path_assumption_bias: IMPROVING trend from prior cycle has reversed — double-instance pattern returned in this cycle; single-instance improvement did not persist across the session boundary; consider whether the correct path (src/utils/hooks/use-query-sync/index.ts) can be surfaced at session-start via checkpoint or WAL annotation to short-circuit the wrong-path assumption before the first Read attempt",
+      "rm_instead_of_trash: Reappeared after one-cycle absence confirming absence was not genuine correction; no new intervention needed beyond existing hook; monitor whether self-correction latency (attempts before trash) is changing across cycles",
+      "shell_tool_preference_violations: 92% rate matches prior cycle peak; zero internalization across 30+ cycles with no trend in any direction; all text-based interventions have failed; structural enforcement at tool-dispatch level remains the only untried approach; deprioritize further text-based recommendations for this pattern"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      56147088
+    ],
+    [
+      "1e792352-68e5-4389-8429-3eee3c5cc6d6",
+      2144808
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      13959026
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      1958468
+    ]
+  ],
+  "timestamp": "2026-05-08T09:18:30.956554Z",
+  "tokens_used": 27288,
+  "units_analyzed": 16,
+  "units_total": 107
+}

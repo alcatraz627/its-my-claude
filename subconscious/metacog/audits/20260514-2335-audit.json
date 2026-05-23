@@ -1,0 +1,71 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18174,
+    "correction_density": 0.06779661016949153,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.29833363224752457,
+    "unit_count": 118
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 7255ac7e-0: ls+cat via Bash for vercel.json discovery, ls src/app/api via Bash; 7255ac7e-19: git diff piped through sed -n '100,200p' via Bash; 7255ac7e-21: sed -n '1,80p' connection.ts via Bash; 7255ac7e-25: cat+ls via Bash across multiple doc file reads, cat doc-writing-guidelines via Bash, cat docs/structure.md|sed-n via Bash; 29d7d6be-2: cd+ls -la+find via Bash, ls improvements/, wc-l, head-50 via Bash; 29d7d6be-3: find+grep-v pipeline via Bash; 29d7d6be-6: ls .github/workflows, find, wc-l, tail-10 via Bash; bc2715fa units carry full historical pattern; 7255ac7e session shows no reduction relative to prior 7255ac7e measurement; rate ~55-62% stable across all sessions",
+      "hook_bypass_via_absolute_grep_path:RECURRING:STABLE — bc2715fa-14,21,22,29,30,33,43,45 carry established pattern; 7255ac7e session in this set shows ZERO instances — third consecutive new session with zero absolute-grep calls, strengthening the improving signal in new sessions; bc2715fa units remain saturated at historical rate; structural hook gap (absolute-path invocation not intercepted by hook) unchanged and is the root cause for bc2715fa persistence",
+      "re_edit_thrash:RECURRING:WORSENING — 6 units (bc2715fa-14,22,32,33,36,45) vs stable plateau of 3 in prior three consecutive cycles; bc2715fa-33: Edit admin.data.ts success=false before Write-escape plus Edit PLAN.md success=false; bc2715fa-36: Edit console-sink.ts success=false x2 consecutively; bc2715fa-45: Edit worker-status.tsx success=false x3 then x2 more after Read pivot; first significant increase after plateau at 3 — count doubled, highest rate in measured history",
+      "optimistic_edit_without_read:RECURRING:WORSENING — 5 units (bc2715fa-14,22,32,33,45) vs prior plateau of 3; bc2715fa-33: Edit admin.data.ts success=false before Write-to-new-file escape; bc2715fa-45: Edit worker-status.tsx success=false x2 before Read pivot resolved the target; co-occurrence with re_edit_thrash worsening at the same 5-6 unit level suggests shared root cause: editing without first reading the specific target file",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 violates (crab-sink split declared ready after ts:build+vitest clean without dev server verification); bc2715fa-45 violates again in same session (outcome=Corrected; final compound Bash success=false indicating work declared complete prematurely); self-documentation ritual correctly executed in bc2715fa-18 between the two violations but did not prevent bc2715fa-45; two violations in one session is the highest within-session recurrence in measured history",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22 carries instance; accepted logger/index.ts system-reminder modification without diffing; LOGGER_ENABLED gate semantics flipped from default-on to default-off; caught only via test failure; self-documented via mistake-pattern append at end of unit; 7255ac7e session shows no instance; ninth consecutive cycle confirming this pattern in bc2715fa historical units",
+      "redundant_read_same_unit:RECURRING:STABLE — 7255ac7e-13: Read expiring-cycles/route.ts x2 at unit open (lines 1-end both times, no offset variation, no intervening edit between reads); bc2715fa-22: Read logger.demo.test.ts x2 and Read index.ts x2; bc2715fa-33: Read code-block.tsx x3 with no offset variation; 3 units again matching prior cycle stable plateau; 7255ac7e-13 is a new-session instance — first time this pattern observed outside bc2715fa",
+      "unprompted_infra_scope_creep:NEW — 29d7d6be-6: user sent correction (is_correction=true) after agent proposed GitHub Action for link-checking and redirect-stub phase in a docs restructure planning conversation; repo had ZERO .github/workflows/ for docs; agent ran ls .github/workflows/ ONLY AFTER receiving the correction, not before proposing; infra proposed from general best-practice instinct with no evidence in repo or conversation; self-correction ritual executed correctly (detailed mistake-pattern appended with triggers and root-cause analysis); first measured instance of this specific pattern"
+    ],
+    "calibration_score": 0.07,
+    "cross_references": [
+      "Dream insight 'Never assert state without observation' violated by bc2715fa-14 (declared crab-sink ready without browser observation of the import graph at runtime) and bc2715fa-45 (outcome=Corrected; declared complete without runtime verification — second violation of same insight in same session). Insight rule 'if evidence cannot be obtained, say so' was not applied before either completion claim.",
+      "Dream insight 'context limit hits correlate with fix-thrash loops' consistent with bc2715fa-14 which has the highest tool count in the set (80+ tools) and contains the heaviest re_edit_thrash concentration (with-server.ts success=false x3+, sink-options.ts success=false) — the unit length itself may have caused loss of root-cause state mid-execution, triggering the thrash the insight predicts. A /core-dump at iteration 3 of the with-server.ts edit loop (as the insight recommends) would have been appropriate.",
+      "Dream insight 'values connecting to external systems must be read from canonical source, never inferred' correctly applied in bc2715fa-21 (read .env.local before advising on LOGGER_CRAB token shape) and bc2715fa-29 (grep .env.local for actual URL before suggesting CRAB endpoint config); confirmed instances of the insight being followed, not violated."
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "unprompted_infra_scope_creep (NEW): Institutionalize the check-before-propose discipline for infra: run ls .github/workflows/ and equivalent before any planning response that mentions CI, hooks, or automation. If absent, omit the proposal entirely or quarantine it under an explicit out-of-scope note. The appended mistake-pattern entry (29d7d6be-6) captures the rule correctly — apply it proactively rather than reactively.",
+      "re_edit_thrash+optimistic_edit_without_read (WORSENING — highest count in measured history): Both patterns jumped simultaneously from plateau-3 to 6 and 5 respectively, suggesting a single shared root cause: editing without a prior Read of the specific target file. A mandatory Read before every first Edit on a given file in a unit would address both patterns simultaneously. This warrants escalation from mistake-patterns to a hook that checks if Read preceded the first Edit on any file path in the current turn.",
+      "declared_ready_without_runtime_exercise (two violations in one session): bc2715fa-14 and bc2715fa-45 both violate within bc2715fa despite bc2715fa-18 appending a detailed self-correction entry between them. Post-hoc ritual does not transfer within-session. The fix must be procedural and external to memory: before outputting any 'ready' or 'complete' claim on a frontend change, run npm run dev and load the affected page. If dev server cannot be started, say so explicitly rather than substituting ts:build+vitest as a completion signal.",
+      "hook_bypass_via_absolute_grep_path: Three consecutive new sessions (7255ac7e x2 plus this one) with zero instances. Trend toward resolution in current behavior, with bc2715fa carrying historical saturation. Monitor one more session before reclassifying to IMPROVING — do not relax the hook gap fix recommendation since the structural issue (absolute-path bypass of the hook) remains open."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 25
+  },
+  "sessions": [
+    [
+      "7255ac7e-f62c-40e3-b624-dd143cd13fb3",
+      3114930
+    ],
+    [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      452731
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      38237139
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      82620404
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      1048738
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      482079
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      1724631
+    ]
+  ],
+  "timestamp": "2026-05-14T23:35:28.099858Z",
+  "tokens_used": 29501,
+  "units_analyzed": 30,
+  "units_total": 118
+}

@@ -1,0 +1,63 @@
+{
+  "response": {
+    "biases_detected": [
+      "anchoring: unit-8 persisted with heredoc approach across 3 attempts before switching to Write tool, despite repeated encoding failures",
+      "sunk_cost: unit-8 spent ~6 tool calls debugging jq file encoding rather than abandoning the bash heredoc strategy early",
+      "availability_bias: units-20/27 repeatedly issued relative-path bash commands without verifying CWD, causing tool failures that required recovery",
+      "confirmation_bias: unit-29 performed deep playwright trace analysis (unzip, wc, grep, Read on binary trace) before validating whether the trace format would yield useful signal"
+    ],
+    "calibration_score": 0.28,
+    "overconfident_count": 2,
+    "recommendations": [
+      "prefer Write tool over bash heredoc for any multi-line file — heredoc encoding is fragile across shell invocations and the Write tool has no encoding ambiguity",
+      "establish CWD early with a single pwd/git rev-parse check and use absolute paths throughout the unit rather than re-anchoring after failures",
+      "cap diagnostic sleep commands to ≤30s or poll via Grep on the output file instead of sleeping, since Bash commands with sleep >60s are likely to fail or time out",
+      "before diving into binary/trace artifacts, probe file type and size first (ls -lah, file command) to confirm the artifact is human-readable — avoids wasted Read cycles on binary formats",
+      "the session shows good recovery discipline (overconfident units still reached correct outcomes) but recovery cost is high; the pattern of fail→retry→switch could be short-circuited by one-step environment verification at unit start"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      26172559
+    ],
+    [
+      "b5660cab-c4cb-4a7f-87ff-b255626e3d19",
+      4770573
+    ],
+    [
+      "aa174c98-cd2c-46d6-b451-31131c00dac0",
+      2779997
+    ],
+    [
+      "a76e1439-b17f-467b-b733-4369bba3eba0",
+      15960532
+    ],
+    [
+      "977101a0-a158-42d3-8062-cb3db3ea2ec9",
+      53472
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      14652749
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      67101239
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      19126757
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      62194351
+    ]
+  ],
+  "timestamp": "2026-04-23T23:08:07.433228Z",
+  "tokens_used": 10151,
+  "units_analyzed": 13,
+  "units_total": 182
+}

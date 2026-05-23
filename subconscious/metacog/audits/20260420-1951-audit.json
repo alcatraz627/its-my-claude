@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.38,\"overconfident_count\":4,\"underconfident_count\":1,\"well_calibrated_count\":15,\"biases_detected\":[\"anchoring: repeated use of bash heredoc for multi-line jq scripts despite Write tool being available and more reliable (bc59cf34-8)\",\"sunk-cost: continued issuing relative-path bash commands after multiple ENOENT failures rather than switching to absolute paths (bc59cf34-20)\",\"tool-familiarity: used bash grep/find in several units where dedicated Grep/Glob tools were available and preferred per project conventions\",\"availability: assumed dev server was running on expected ports without checking pm2 first, leading to cascading curl failures (bc59cf34-27)\"],\"recommendations\":[\"switch to Write tool for any multi-line script that will be executed with jq -f or bash -f; heredoc encoding issues are a recurring failure mode\",\"resolve CWD before any bash command that uses relative paths; check with pwd or use absolute paths from the start rather than discovering mismatch after failures\",\"check pm2 list before issuing port-specific curl health checks; avoids wasted round-trips when services are not running\",\"when three or more consecutive tool calls of the same type fail, treat it as a strategy signal and pivot approach rather than continuing with minor variations\"]}",
+  "sessions": [
+    [
+      "c64c4bfc-db28-4e60-97dc-e40241afff56",
+      966877
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      20120863
+    ],
+    [
+      "6345a8d3-8645-40e5-a625-fe143f65702d",
+      11856556
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      59409727
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      45148769
+    ]
+  ],
+  "timestamp": "2026-04-20T19:51:14.691466Z",
+  "tokens_used": 10132,
+  "units_analyzed": 20,
+  "units_total": 116
+}

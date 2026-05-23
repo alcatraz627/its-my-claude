@@ -1,0 +1,37 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":2,\"underconfident_count\":0,\"well_calibrated_count\":9,\"biases_detected\":[\"anchoring: plan.md document used as single source of truth across all units, creating over-reliance on a potentially stale artifact\",\"sunk-cost: repeated re-edit thrash on same document sections in units 6 and 8 rather than rewriting from scratch\",\"tool-familiarity: consistent use of bash grep/find over dedicated Grep tool despite shell.md rule preference, suggesting habitual shell-first pattern\",\"scope creep: unit 32 expanded to multiple unrelated files beyond stated task boundary without explicit user request\"],\"recommendations\":[\"enforce read-before-edit discipline: unit 8 opened with a failed Edit that would have succeeded with a prior Read — this is a detectable pre-condition that should be validated\",\"reduce re-edit thrash threshold: units 6 and 8 show 4-6 edit cycles on the same file section; after 3 edits to the same block, re-read full file before continuing\",\"consolidate TypeScript verification: unit 32 ran tsc --noEmit three separate times mid-task; batch verification checkpoints rather than per-change checks reduces noise and context burn\",\"substitute Grep tool for bash rg/grep invocations: shell.md explicitly prefers Grep over bash grep, but 80%+ of search calls in these units use bash rg — this is a persistent pattern that a hook could flag\"]}",
+  "sessions": [
+    [
+      "e91dc081-e6d0-41a6-9de0-94613fb84573",
+      31053
+    ],
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      19087360
+    ],
+    [
+      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
+      1396565
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      1560104
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      28800560
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      2367444
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      3890651
+    ]
+  ],
+  "timestamp": "2026-04-29T19:11:35.206330Z",
+  "tokens_used": 7676,
+  "units_analyzed": 11,
+  "units_total": 66
+}

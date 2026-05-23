@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":9,\"biases_detected\":[\"anchoring — repeated port probes (3006, 5006, 5000) before verifying environment state\",\"optimism bias — assumed dev server and env vars present without prior confirmation\",\"availability bias — reused jq heredoc pattern that required multiple failure-retry cycles before pivoting to Write tool\",\"sunk-cost continuation — unit -8 spent 6 Bash attempts debugging an inline jq script before switching to Write-then-run approach\"],\"recommendations\":[\"Probe environment state (pm2 list, lsof) before issuing curl or service-dependent commands to avoid cascading bash failures\",\"Read files before Write attempts — the tool contract requires it and skipping caused an unnecessary failure in unit -8\",\"Prefer absolute paths in all shell invocations; several failures traced to CWD assumptions when working directory differed from expected\",\"Consolidate repeated grep/glob searches that retrieve overlapping information into a single broader query to reduce tool call count\",\"For units with zero tool calls and non-trivial topic keywords (e.g., unit -13), flag the absence of verification rather than answering from context alone — risk of unverified claims\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      15814051
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      14328847
+    ],
+    [
+      "6345a8d3-8645-40e5-a625-fe143f65702d",
+      11019549
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      59154521
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      45049971
+    ],
+    [
+      "26476b4c-991c-4e20-ab14-2533d7914c58",
+      248862
+    ]
+  ],
+  "timestamp": "2026-04-20T01:53:02.370748Z",
+  "tokens_used": 10069,
+  "units_analyzed": 13,
+  "units_total": 125
+}

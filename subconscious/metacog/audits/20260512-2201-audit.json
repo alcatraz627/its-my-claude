@@ -1,0 +1,77 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18441,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4578162638900968,
+    "unit_count": 90
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 13/25 units (52%; bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); 03a1ad45-2 excluded (mcp__file-tools__list_sheets failure makes Node.js Bash fallback contextually justified); bc2715fa-33 highest concentration this cycle (sed-via-Bash, tail-via-Bash, grep-via-Bash, head-via-Bash, /usr/bin/grep x4+); rate 52% is within historical 44-92% range; zero internalization across 42+ consecutive measured cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:ELEVATED — 9/25 units (36%; bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); rate matches prior two consecutive cycles at 31-38%; bc2715fa-33 and bc2715fa-45 each show /usr/bin/grep x4+ in single unit; bc2715fa-43 shows /usr/bin/grep x3 in compound Bash calls; structural hook gap (absolute-path not intercepted) remains root cause; ELEVATED classification maintained across three consecutive cycles",
+      "re_edit_thrash:RECURRING:STABLE — 5 units (bc2715fa-14,bc2715fa-32,bc2715fa-33,bc2715fa-36,bc2715fa-45); bc2715fa-14: Edit with-server.ts success=false x2 in first sub-sequence plus Edit with-server.ts success=false in second sub-sequence; bc2715fa-32: Edit page.tsx success=false x2 before Read pivot; bc2715fa-33: Edit PLAN.md success=false before Read pivot; bc2715fa-36: Edit console-sink.ts success=false x2 consecutively; bc2715fa-45: Edit worker-status.tsx success=false x3 (positions ~12,13,21) before Read pivot then partial success; 5-unit count matches prior cycle count; zero improvement across 23+ consecutive cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — 4 units (bc2715fa-14,bc2715fa-22,bc2715fa-32,bc2715fa-33); bc2715fa-14: Edit decisions/_index.md success=false before Read then success; bc2715fa-22: Edit index.ts success=false before Read then success; bc2715fa-32: Edit page.tsx success=false x2 before Read then success; bc2715fa-33: Edit admin.data.ts success=false before Write escape-to-new-file; 4-unit count matches prior cycle baseline; pattern stable across 5+ consecutive measured cycles",
+      "path_assumption_bias:RECURRING:STABLE — bc2715fa-5,bc2715fa-7; bc2715fa-5: cd frontend && rg compounds then pwd+ls discovery before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot; identical topology to all prior bc2715fa measurement passes; cross-session internalization zero across 27+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 repeats declaration of crab-sink server/client split complete after ts:build+vitest without dev server verification; bc2715fa-18 correctly executes full self-correction ritual appending detailed mistake-pattern entry; self-documentation ritual executes correctly but violation reflex uncorrected across 5+ consecutive measured cycles",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22: accepted system-reminder file-modified notification on logger/index.ts without diffing; LOGGER_ENABLED gate semantics flipped from !== '0' (default-on) to === 'true' (default-off); self-documented via mistake-pattern append at end of unit; written pattern entry did not prevent violation in measured subsequent units; promoted to RECURRING:CONFIRMED from prior cycle",
+      "redundant_read_same_unit:RECURRING:ESCALATING — 3 units (bc2715fa-22,bc2715fa-33,bc2715fa-45); bc2715fa-22: Read logger.demo.test.ts x2; bc2715fa-33: Read code-block.tsx x3 (highest single-unit count recorded across all history); bc2715fa-45: Read worker-status.tsx x2; 3-unit count matches prior cycle peak; trend has been escalating across three consecutive cycles (1→2→3 units); bc2715fa-33 three identical reads with no offset variation indicates zero information gain on second and third reads",
+      "optimistic_write_without_read:RECURRING:STABLE — 2 units (bc2715fa-62,03a1ad45-4); bc2715fa-62: Write _last-checkpoint.json success=false then Write success=false then Read confirms file exists then Write success=true; 03a1ad45-4: Write /tmp/core-dump-data.json success=false x2 plus Write _last-checkpoint.json success=false x2 before Read-then-Write sequence succeeds; 2-unit count is up from 1 in prior measured cycle; structural topology identical across both units and all prior instances; write-tool contract (Read required before overwriting existing file) violated identically in each case"
+    ],
+    "calibration_score": 0.05,
+    "cross_references": [
+      {
+        "insight": "Never assert state without observation (conf=0.78)",
+        "units_confirming": [
+          "bc2715fa-22 (trusted_linter_reminder_without_diffing — asserted linter change was cosmetic without diffing the actual change, which had altered runtime gate semantics)",
+          "bc2715fa-14 (declared_ready_without_runtime_exercise — asserted crab-sink split was complete without observing it in a running dev server)",
+          "bc2715fa-45 (re_edit_thrash x3 on worker-status.tsx — proceeded with edits without reading current file state, confirming 'optimistic_edit_without_read' as a subcase of assertion-without-observation)"
+        ],
+        "units_violating": []
+      },
+      {
+        "insight": "Context limit hits correlate with fix-thrash loops (conf=0.72)",
+        "units_confirming": [
+          "bc2715fa-14 (highest single-unit tool count in this batch, contains multiple distinct re_edit_thrash sub-sequences — context pressure within the long unit may have erased root-cause understanding between sub-sequences)",
+          "bc2715fa-45 (Edit worker-status.tsx success=false x3 before Read pivot — structurally matches the 'fix-thrash loop' topology; /core-dump not triggered before the third failure)"
+        ],
+        "units_violating": []
+      },
+      {
+        "insight": "Credentials and config values must come from canonical source (conf=0.65)",
+        "units_confirming": [
+          "bc2715fa-29,bc2715fa-30 (both units read LOGGER_CRAB env vars from .env.local via /usr/bin/grep before proceeding — canonical-source read before use, consistent with insight)"
+        ],
+        "units_violating": []
+      }
+    ],
+    "overconfident_count": 11,
+    "recommendations": [
+      "redundant_read_same_unit escalating trend (1→2→3 units across three consecutive cycles) warrants prioritization over other RECURRING:STABLE patterns; bc2715fa-33 three-read instance on code-block.tsx with no offset variation is the highest single-unit count recorded — a circuit-breaker heuristic (if about to Read the same path a second time within a unit without a different offset or limit, pause and use previously-read content) could interrupt this pattern before it reaches 4+ reads per unit",
+      "optimistic_write_without_read escalated from 1 to 2 units this cycle; both instances follow identical Read-confirms-existence-then-Write topology; a pre-Write check (test -f path before Write on an expected-new file) would eliminate the pattern at near-zero cost; since the write tool itself errors rather than silently corrupting, the blast radius is low but the thrash adds tool-slot waste",
+      "shell_tool_preference_violations and hook_bypass_via_absolute_grep_path have shown zero internalization across 40+ consecutive cycles — do not re-recommend structural fixes for these; the hook gap for absolute-path /usr/bin/grep is the load-bearing root cause and requires a hook-level fix, not behavioral change",
+      "declared_ready_without_runtime_exercise self-documentation is executing correctly (bc2715fa-18 ritual is well-formed) but the violation reflex remains uncorrected; the self-documentation approach alone is insufficient across 5 measured cycles; a pre-completion gate (checklist item: 'have I started dev server and loaded a page exercising this code path?') embedded in task completion flow may be more effective than post-hoc mistake-pattern appends"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "03a1ad45-36a8-4103-b036-03a121912b1d",
+      560763
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      17868066
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      44831837
+    ]
+  ],
+  "timestamp": "2026-05-12T22:01:13.593551Z",
+  "tokens_used": 26700,
+  "units_analyzed": 25,
+  "units_total": 90
+}

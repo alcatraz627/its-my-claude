@@ -1,0 +1,59 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18320,
+    "correction_density": 0.046511627906976744,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.44912895704068123,
+    "unit_count": 86
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 11/24 units (46%; bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-29,bc2715fa-30,bc2715fa-32,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); bc2715fa-33 highest concentration (sed-via-Bash x2, tail-via-Bash, grep-via-Bash, /usr/bin/grep x4 in single unit); 03a1ad45-2 shows ls-via-Bash but MCP tool failure context makes node/Bash fallback reasonable — not counted; rate 46% is at lower bound of historical 44-92% range; zero internalization across 41+ consecutive measured cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:ELEVATED — 9/24 units (38%; bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); rate matches prior cycle 38% — stable at ELEVATED level; bc2715fa-45 shows /usr/bin/grep x4 in single unit (highest single-unit concentration this cycle); bc2715fa-33 shows both /usr/bin/grep x4 AND grep-via-Bash (non-absolute) in same unit suggesting the hook gap extends beyond absolute-path invocations; hook gap (absolute-path invocation not intercepted by rg-preference hook) remains structural root cause; ELEVATED classification maintained across two consecutive cycles",
+      "re_edit_thrash:RECURRING:STABLE — units bc2715fa-14,bc2715fa-32,bc2715fa-36,bc2715fa-45; bc2715fa-45 most severe instance this cycle (Edit worker-status.tsx success=false x3 consecutively then Read pivot then partial success, plus Edit file-sink.test.ts success=false); bc2715fa-36: Edit console-sink.ts success=false x2 consecutively before escape; no within-session or cross-session improvement across 25+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — units bc2715fa-14,bc2715fa-22,bc2715fa-32,bc2715fa-33; bc2715fa-33: Edit admin.data.ts success=false before Write-escape-to-new-file; 4-instance count matches prior cycle baseline; pattern unchanged",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5,bc2715fa-7; bc2715fa-5: cd frontend && rg compounds (some success=false) then pwd+ls discovery before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot finds correct frontend/src location; identical topology to all prior bc2715fa measurement passes; cross-session internalization zero across 26+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — unit bc2715fa-14: declared crab-sink server/client split complete after ts:build clean and vitest passing without dev server verification; bc2715fa-18 correctly executes full self-correction ritual and appends detailed mistake-pattern entry with incident context; fifth consecutive measurement pass with identical violation topology; self-documentation ritual executes correctly but prevention reflex is uncorrected across all five cycles",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — unit bc2715fa-22: accepted system-reminder file-modified notification on logger/index.ts without diffing; was NEW in immediately prior calibration cycle; promoted to RECURRING:CONFIRMED; self-documented via mistake-pattern append at end of bc2715fa-22; the written pattern entry did not prevent violation recurrence within the same session or in measured subsequent units",
+      "redundant_read_same_unit:RECURRING:ESCALATING — units bc2715fa-22 (Read logger.demo.test.ts x2), bc2715fa-33 (Read code-block.tsx x3 — highest single-unit count recorded), bc2715fa-45 (Read worker-status.tsx x2); 3-unit count is up from 1 unit in prior cycle and 2 units in the cycle before that; escalating trend across three consecutive measured cycles; bc2715fa-33 instance involves same file read 3 times without offset variation indicating zero information gain on second and third reads",
+      "optimistic_write_without_read:RECURRING:STABLE — unit bc2715fa-62: Write _last-checkpoint.json success=false, Bash mv compound success=false, Read confirms file exists, Write success=true; structurally identical to prior cycle instances (060367c5-49, 5455871e-36); zero improvement across three consecutive measured cycles"
+    ],
+    "calibration_score": 0.04,
+    "cross_references": [
+      "dream_insight_1 (fix-thrash loop at iteration 3 → force /core-dump): bc2715fa-45 shows re_edit_thrash with success=false x3+ on worker-status.tsx without triggering /core-dump or root-cause pause; insight rule violated — no circuit-breaker behavior observed",
+      "dream_insight_4 (never assert state without observation — unify all assertion-without-observation failures): bc2715fa-14 declared_ready_without_runtime_exercise is a direct instance of this meta-rule violation; ts:build+vitest pass was treated as sufficient observation for a runtime correctness claim; insight predicts this exact failure topology",
+      "dream_insight_2 (after /catchup flag unverified state assumptions): bc2715fa-2 reads checkpoint and WAL before proceeding and correctly restores session context — insight rule followed in this unit"
+    ],
+    "overconfident_count": 15,
+    "recommendations": [
+      "redundant_read_same_unit is escalating across three consecutive cycles (1→2→3 affected units per cycle) with bc2715fa-33 showing a 3-read instance of the same file — this is the only bias showing a directional worsening trend this cycle; prioritize a within-unit dedup check before re-issuing Read on a previously-read path at the same offset",
+      "hook_bypass_via_absolute_grep_path has been ELEVATED for two consecutive cycles at 36-38% unit rate with no improvement; the hook gap (absolute-path /usr/bin/grep not intercepted) is structural and cannot be fixed by agent behavior alone — escalate to a hook-configuration proposal targeting absolute-path grep invocations to close the enforcement gap",
+      "trusted_linter_reminder_without_diffing promoted to RECURRING:CONFIRMED this cycle; the mistake-pattern entry written in bc2715fa-22 did not prevent within-session recurrence — consider a mandatory post-file-modified-reminder action: run git diff HEAD -- <file> before continuing, implemented as a hook or explicit PreToolUse guard on Edit/Write after a file-modified system-reminder fires"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "03a1ad45-36a8-4103-b036-03a121912b1d",
+      372118
+    ],
+    [
+      "4e32e5a0-3f89-4f32-8675-4588a65ed81f",
+      906601
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      17017369
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      44618018
+    ]
+  ],
+  "timestamp": "2026-05-12T16:31:35.566637Z",
+  "tokens_used": 25438,
+  "units_analyzed": 24,
+  "units_total": 86
+}

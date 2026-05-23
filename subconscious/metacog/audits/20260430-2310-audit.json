@@ -1,0 +1,58 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 20953,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.6075957610357205,
+    "unit_count": 35
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:worsening — units f22bd641-0 (8 /usr/bin/grep Bash calls), f22bd641-12 (2 /usr/bin/grep Bash calls), 8d9169bc-0 (grep via Bash fails twice then find|xargs grep), 2527f606-1 (grep -r fails, find|xargs grep fails, then find|xargs grep with exclusion), 2527f606-10 (rg fails, python3 inline fallback, then /usr/bin/grep — three approaches), 2527f606-16 (/usr/bin/grep pipe failures); frequency unchanged vs prior cycle — 6 units flagged here vs 6 in prior cycle, pattern shows zero internalization across sessions",
+      "re_edit_thrash:RECURRING:worsening — 2527f606-14: 7 Edit+Read cycles on single markdown doc after initial research; 59c741e5-37: 7 consecutive Read calls on index.ts before editing; 59c741e5-45: 10+ Read+Edit cycles on index.ts across 30+ tool calls; 59c741e5-50: 9 Read calls on index.ts/sync.sh before edits; cycle counts are higher than prior session (prior max ~7, current max ~10+)",
+      "intra_session_tsc_path_repeat:RECURRING:worsening — within session 59c741e5: unit-21 tries node_modules/.bin/tsc twice (fail), switches to bun; unit-37 tries node_modules/.bin/tsc twice again (fail) before re-discovering bun; unit-45 tries bun tsc then node_modules/.bin/tsc again; unit-50 tries bun tsc then ./node_modules/.bin/tsc — correction from unit-21 not retained through units 37, 45, 50; now spans 4 intra-session recurrences vs 3 in prior cycle",
+      "mcp_fallback_without_retry:RECURRING:stable — f22bd641-2: mcp__file-tools__list_sheets called once (success=false), immediately pivots to 5 ExcelJS Bash scripts with no retry or error inspection; structurally identical to prior instance; not worsening but not improving",
+      "environment_state_assumption:RECURRING:stable — 59c741e5-1: cp without -f flag fails, cp -f still fails, yes|cp -f succeeds on third attempt; non-interactive flag requirement known from rules/shell.md but not applied pre-emptively",
+      "api_discovery_thrash:RECURRING:stable — 59c741e5-45: gum table attempted with pipe+headers style (fails), then printf+tab-sep style (fails), then gum style fallback, then gum choose/confirm --help read; docs-first not applied despite gum-guide.md existing at ~/.claude/skills/shared/gum-guide.md which was read later in same unit"
+    ],
+    "calibration_score": 0.1,
+    "cross_references": [
+      "dream_insight_5 (external integrations are weakest links) CONFIRMED by f22bd641-2: mcp__file-tools__list_sheets fails silently (success=false with no error inspection) and agent immediately falls back to 7 Bash ExcelJS scripts — the weakest-link pattern playing out exactly as predicted; insight recommended retry/inspection before fallback which was not applied",
+      "dream_insight_2 (terse delta communication — user thinks in deltas) CONFIRMED by units 2527f606-5, 2527f606-7, 2527f606-23, 59c741e5-38, 59c741e5-46 — all zero-tool units with short responses that were accepted; calibration is highest in these units; the re_edit_thrash pattern in high-tool units is the inverse: agent loses the delta-thinking frame and thrashes for completeness",
+      "dream_insight_1 (state machine persistence intuition) TANGENTIALLY CONFIRMED by unit 2527f606-10 writing job-output-cleanup.md with structured sections and a SCHEMA.md alongside PLAN.md — user's preference for explicit state documents mirrors WAL/checkpoint architecture; agent produced this structure without prompting which was accepted"
+    ],
+    "overconfident_count": 13,
+    "recommendations": [
+      "shell_tool_preference_violations has appeared in 7 consecutive calibration cycles with no improvement trend — escalate from rule to hook: block Bash tool calls whose target matches /(\\/usr\\/bin\\/grep|grep -r|find .* \\| xargs grep|rg )/ when input does not reference a known non-Grep use case; this is the highest-priority actionable item given zero self-correction observed",
+      "re_edit_thrash cycle counts are increasing (7→10+); current rule says stop at 3 — add hard checkpoint behavior: after 3rd Read on same file within a unit, mandatory hypothesis statement before next Edit; the pattern in 59c741e5-45 shows edits happening without clear hypothesis (function name lookups, grep-to-verify-grep patterns mid-edit stream)",
+      "intra_session_tsc_path_repeat now recurs 4 times within a single session; fix: at first TypeScript check attempt in a session, read package.json scripts section to determine runner before trying binary paths; bun is the correct runner in this project and this is statically knowable",
+      "mcp_fallback_without_retry: add one retry with error inspection before pivoting to Bash — already flagged prior cycle, still not improved; low implementation cost (one retry call) vs high cost of multi-hundred-line ExcelJS scripts that duplicate MCP functionality",
+      "deprioritize environment_state_assumption recommendations — cp flag issue corrected within unit and pattern frequency is not increasing; not worth further emphasis"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      2815880
+    ],
+    [
+      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
+      1234025
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      4447773
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      11840220
+    ]
+  ],
+  "timestamp": "2026-04-30T23:10:32.923899Z",
+  "tokens_used": 24099,
+  "units_analyzed": 26,
+  "units_total": 35
+}

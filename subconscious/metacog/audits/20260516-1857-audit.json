@@ -1,0 +1,56 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.07086614173228346,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.32475858889239256,
+    "unit_count": 127
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 7/12 measurable units (58%); 29d7d6be-2 (cd+ls+find+wc-l+rg via Bash), 29d7d6be-3 (find+grep pipeline via Bash), 29d7d6be-6 (cat>> append via Bash instead of Edit/Write), 29d7d6be-24 (grep/sed via Bash), 29d7d6be-25 (grep/sed+python3-inline-write via Bash), bc2715fa-5 (cd+rg x4 via Bash before pwd recovery), bc2715fa-7 (rg on nonexistent path via Bash); rate within historical 55-65% band; no improvement trajectory detectable across three consecutive calibration cycles at this rate",
+      "optimistic_edit_without_read:RECURRING:STABLE — 2 units with 5 sub-instances total; 29d7d6be-24: Edit widgets-v2.md fail→Read→Edit success, Edit process-vs-instance-math.md fail→Read→Edit success, Edit worker-v2-but-better.md fail→Read→Edit success (3 sub-instances); 29d7d6be-25: Edit improvements/CLAUDE.md fail→Read→Edit success, Edit expiring-cycles-cron.md fail→Read→Edit success (2 sub-instances); sub-instance count elevated vs prior cycle but unit-level count 2 is at prior stable plateau",
+      "re_edit_thrash:RECURRING:STABLE — 1 unit; 29d7d6be-24: 3 distinct Edit fail-read-succeed cycles across 3 different files within a single unit; count below prior worsening peak of 5 units; ambiguous whether improving or noise given single session sample",
+      "path_assumption_bias:RECURRING:STABLE — 2 units; bc2715fa-5: cd frontend && rg fails 4 consecutive times before pwd+ls recovery; bc2715fa-7: rg on nonexistent path fails before pivot; recovery topology identical to prior cycles (wrong relative path → multiple failures → pwd+ls → corrected retry); count at 2 matches stable baseline",
+      "redundant_read_same_unit:RECURRING:STABLE — 1 unit; 29d7d6be-2: Read product-todos.md x2 with no intervening edit or offset variation; count at 1 at or below prior stable plateau of 2; no worsening",
+      "python3_file_write_via_bash_bypass:RECURRING:CONFIRMED — unit 29d7d6be-25: python3 inline script (p.write_text()) used via Bash to bulk-inject frontmatter into 10 files; classified as CONFIRMED recurrence of the pattern flagged as NEW in the 2026-05-16 calibration entry referencing this exact unit; bulk-efficiency justification partially mitigates but bypasses Write tool audit trail"
+    ],
+    "calibration_score": 0.04,
+    "overconfident_count": 7,
+    "recommendations": [
+      "shell_tool_preference_violations has been flagged STABLE for 3+ consecutive calibration cycles with no measurable rate change; per calibration history protocol, deprioritize re-recommending generic shell tool fixes — a structural intervention (hook enforcement or pre-tool-use gate) would be more effective than repeated recommendations",
+      "optimistic_edit_without_read and re_edit_thrash share a root cause: Edit is attempted without prior Read when the target string is not guaranteed fresh in context; a single pre-Edit Read rule enforced at the tool-call level would address both patterns simultaneously",
+      "path_assumption_bias recovery topology is stereotyped (wrong path → multiple failures → pwd+ls → retry); the failures are recoverable but wasteful; recommend pre-flight pwd+ls before any rg/ls/find call in a session where CWD is uncertain rather than after the first failure",
+      "python3_file_write_via_bash_bypass is confirmed as a recurring variant distinct from Edit-fail escape; for bulk operations lacking a dedicated tool, this may be legitimately appropriate — classify as low-priority unless it begins occurring on single-file writes where Write tool is clearly applicable"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      4689326
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      42961571
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      97321849
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      5118712
+    ],
+    [
+      "09034bdf-733b-41c8-91fc-020327531b71",
+      7815616
+    ]
+  ],
+  "timestamp": "2026-05-16T18:57:15.624279Z",
+  "tokens_used": 10754,
+  "units_analyzed": 12,
+  "units_total": 127
+}

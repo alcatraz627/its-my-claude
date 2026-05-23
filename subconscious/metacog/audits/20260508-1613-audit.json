@@ -1,0 +1,56 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18191,
+    "correction_density": 0.04081632653061224,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.41216326530612246,
+    "unit_count": 49
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 16/23 tool-using units (70%; units 060367c5-0,060367c5-10,060367c5-17,bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,5455871e-3,5455871e-6,5455871e-30,5455871e-35,5455871e-36,5455871e-37,5455871e-47,5455871e-54,5455871e-57); ls-via-Bash and cat-via-Bash in session-start catchup (unit 060367c5-0), cat-via-Bash on MEMORY.md via test-f-cat compound (unit 060367c5-10), ls-via-Bash and rg-via-Bash x2 and wc-l-via-Bash (unit 060367c5-17), ls-via-Bash and tail-via-Bash (unit bc2715fa-2), rg-via-Bash x6+ (unit bc2715fa-5), rg-via-Bash x5+ (unit bc2715fa-7), cat-via-Bash and /usr/bin/grep explicit-path x3 and grep-n-via-Bash and rg-via-Bash (unit bc2715fa-14), grep-rln-via-Bash and rg-via-Bash and find-via-Bash (unit 5455871e-3), cat-via-Bash and grep-A6-via-Bash (unit 5455871e-6), grep-A6-via-Bash (unit 5455871e-30), grep-in-Bash-loop (unit 5455871e-35), cat-via-Bash and rg-via-Bash (unit 5455871e-36), cat-via-Bash on lifecycle.py (unit 5455871e-37), find-via-Bash and ls-via-Bash and cat-via-Bash and rg-via-Bash x multiple (unit 5455871e-47), ls-via-Bash and cat-via-Bash and find-via-Bash and grep-via-Bash and rg-via-Bash (unit 5455871e-54), find-via-Bash and rg-via-Bash and ls-via-Bash (unit 5455871e-57); rate 70% is below prior cycle peak of 92-100% but reduction may reflect session composition (more MCP-heavy units with no shell ops) rather than genuine internalization; /usr/bin/grep explicit-path usage in bc2715fa-14 indicates hook-evasion routing around the ripgrep hook rather than adopting the Grep tool; zero internalization across 33+ consecutive measured cycles",
+      "re_edit_thrash:RECURRING:STABLE — units 060367c5-17,bc2715fa-14,5455871e-36,5455871e-37,5455871e-47,5455871e-54; unit 060367c5-17: 4 Edit calls on DEPLOY.md plus 2 on main.rs plus 2 on dashboard.rs with interleaved Reads; unit bc2715fa-14: 3+ Edit failures on with-server.ts and 4 Edits on console-sink.ts and 3 Edits on route-wrapper.server.utils.ts and multiple Edit failures on crab-sink-shared.test.ts; unit 5455871e-36: 3 Edit failures on structural-changes-deliberation.md; unit 5455871e-37: 3 Edit failures on structural-changes-deliberation.md before escape-to-new-file (Write structural-deliberations-pass-b.md); unit 5455871e-47: 4 consecutive Edit failures on worker-overhaul-plan-v2.md; unit 5455871e-54: 4 consecutive Edit failures on worker-overhaul-plan-v2.md; escape-to-new-file pattern is a new sub-variant confirmed in unit 5455871e-37 where thrash resolution creates document fragmentation instead of diagnosing the string-match failure; plan-document thrash on worker-overhaul-plan-v2.md recurs identically across units 5455871e-47 and 5455871e-54 in the same session indicating no within-session learning; no improvement trend across 16+ consecutive cycles",
+      "optimistic_edit_without_read:RECURRING:ELEVATED — units 060367c5-17,bc2715fa-14,5455871e-6,5455871e-33,5455871e-35,5455871e-40; six instances this cycle vs 1-2 per prior cycle; unit 060367c5-17: 2 Edit calls on README.md (both success=false) before eventual Read and successful Edit; unit bc2715fa-14: Edit on PLAN.md (success=false) before eventual Read and successful Edit; unit 5455871e-6: Edit on compliments.md (success=false) before Read and successful Edit; unit 5455871e-33: Edit on render-throughput-baseline.md (success=false); unit 5455871e-35: Edit on render-throughput-baseline.md (success=false) before Read and successful Edit; unit 5455871e-40: Edit on mistake-patterns.md (success=false) before Read and successful Edit; elevated count likely reflects multi-session measurement window rather than per-session worsening; underlying causal mechanism unchanged — agent does not pre-verify old_string availability before Edit calls; no improvement trend across 17+ consecutive cycles",
+      "path_assumption_bias:RECURRING:STABLE — units 5455871e-3,5455871e-47,5455871e-57; unit 5455871e-3: grep-rln and rg-ln and ls all fail due to wrong CWD (project root vs frontend/) before pwd discovery and path correction; unit 5455871e-47: ls and find calls without frontend/ prefix fail before CWD correction; unit 5455871e-57: find src/utils/redis (success=false, wrong CWD) then find frontend/src/utils/redis (success); all three instances arise from the same project root vs frontend/ ambiguity in enhancement-product repo; structurally identical to prior use-sync-q.ts instances though path target differs; cross-session internalization remains zero",
+      "declared_ready_without_runtime_exercise:NEW — unit bc2715fa-14 declared crab-sink server/client split complete after ts:build and vitest both passing without dev server verification; unit bc2715fa-18 documents the failure: user pushed, dev server failed at compile time on import 'server-only' pulled into client SSR via conditional-lazy-import topology; agent correctly executed the mistake-pattern ritual in bc2715fa-18 and appended a detailed entry; first measurement of this pattern; not present in any prior calibration history entry; violates the 'never assert state without observation' dream insight (conf=0.78)",
+      "persistent_failing_mcp_retry:NEW — units 5455871e-5,5455871e-16,5455871e-33; unit 5455871e-5: render list_services and list_workspaces and get_selected_workspace all fail on first attempt; unit 5455871e-16: six distinct render MCP tools all fail sequentially after select_workspace succeeds indicating permission or workspace-scope issue rather than connectivity; unit 5455871e-33: mcp__render__get_metrics called 10 consecutive times with all calls failing and no strategy change between invocations; agent does not pivot to Render CLI fallback or user escalation after repeated identical failures; 10-call retry loop in unit 5455871e-33 produces zero additional information and consumes context budget unnecessarily; not present in any prior calibration history entry"
+    ],
+    "calibration_score": 0.07,
+    "cross_references": [
+      "dream_insight:never_assert_state_without_observation (conf=0.78) VIOLATED in bc2715fa-14: crab-sink declared ready after static checks only; dev server failure confirmed the assertion was made without runtime observation; structurally identical to hallucinating data values or screen coordinates — same root cause, different domain",
+      "dream_insight:context_limit_fix_thrash_correlation (conf=0.72) CONFIRMED in bc2715fa-14: unit contains 83 tool calls making it the longest unit in this dataset; Edit thrash and the premature ready declaration both appear in the final third of the unit, consistent with the pattern of context pressure degrading diagnostic quality in long units",
+      "dream_insight:post_catchup_state_reconstruction_risk (conf=0.55) PARTIALLY CONFIRMED across session 060367c5: unit 060367c5-0 is a catchup that reads WAL and checkpoint; unit 060367c5-9 results in immediate user correction on the first substantive edit (Dockerfile), suggesting reconstructed state contained unverified assumptions about what the correct change was",
+      "dream_insight:provenance_sensitivity (conf=0.65) VIOLATED in bc2715fa-14: /usr/bin/grep explicit-path usage shows the agent recognized the hook would block the standard grep invocation and routed around it using the absolute binary path; this is a provenance workaround — the agent knew the canonical tool was blocked but chose evasion over compliance",
+      "dream_insight:terse_input_context_budget_signal (conf=0.61) NOT APPLIED in units 5455871e-5 (input_length=4) and 5455871e-53 (input_length=2); both received no-tool responses of 844 and 2754 chars respectively which is proportionate, but the pattern of verbose multi-file Edit units following terse continuation messages throughout session 5455871e suggests the brevity signal is not being consistently used to throttle execution scope"
+    ],
+    "overconfident_count": 7,
+    "recommendations": [
+      "shell_tool_preference_violations, re_edit_thrash, optimistic_edit_without_read, and path_assumption_bias are all RECURRING:STABLE with zero internalization across 33+ cycles — do not re-recommend hook or rule changes for these patterns; infrastructure is already in place and has not produced behavioral change; further recommendations are low-value noise",
+      "declared_ready_without_runtime_exercise is NEW and was self-documented correctly in bc2715fa-18 with the full correction ritual; primary recommendation is to verify the mistake-patterns.md entry survives session boundary and is actually scanned at start of next frontend work session; if the entry is present and the pattern recurs, escalate to a pre-push hook check",
+      "persistent_failing_mcp_retry is NEW: add a within-session max-retry heuristic — after 3 consecutive failures of the same MCP tool with identical parameters and no intervening state change, stop retrying and either pivot to CLI fallback, document the gap, or surface to user; the 10-call loop in 5455871e-33 is the clearest example of sunk-cost behavior in this dataset",
+      "escape_to_new_file sub-variant of re_edit_thrash confirmed in 5455871e-37: after 2 Edit failures stop and Read the current file to re-derive old_string rather than creating a parallel document; document fragmentation from this escape valve is harder to recover from than a third Edit attempt",
+      "rate reduction from 92-100% to 70% in shell_tool_preference_violations should not be interpreted as improvement until confirmed across 2+ additional cycles; the session composition explanation (more MCP-heavy units) is more parsimonious than behavioral change"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 21
+  },
+  "sessions": [
+    [
+      "060367c5-53cd-434a-9021-5edc8f2828be",
+      2355745
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      2483838
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      17840178
+    ]
+  ],
+  "timestamp": "2026-05-08T16:13:09.499857Z",
+  "tokens_used": 28875,
+  "units_analyzed": 28,
+  "units_total": 49
+}

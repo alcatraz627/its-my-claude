@@ -1,0 +1,41 @@
+{
+  "response": "{\"calibration_score\":0.55,\"overconfident_count\":1,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"anchoring: repeated failed WebFetch targets (Naukri, Wellfound, Glassdoor) attempted multiple times before abandoning\",\"sunk cost: heredoc JSON approach retried via Python after jq parse failure instead of switching strategy earlier\",\"availability: over-indexed on LinkedIn/Cutshort as primary sources despite 403 failures on several other platforms\",\"confirmation bias: assumed summary.json write succeeded before verifying jq exit code in unit bc59cf34-8\"],\"recommendations\":[\"Add early-exit logic after 2 consecutive 403s on same domain — current pattern wastes 3-4 RTTs before abandoning\",\"Switch JSON generation strategy on first parse failure rather than retrying same heredoc approach\",\"Verify jq exit codes explicitly before piping to downstream commands\",\"When running background test tasks, poll output file directly rather than using sleep+tail which fails on path changes\",\"Parallelize env-var resolution checks with server liveness checks to reduce sequential round-trips in test setup units\"]}",
+  "sessions": [
+    [
+      "68cd7c45-6ae3-472d-831c-b5eb513ca5ab",
+      2698791
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      14315416
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      14135365
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      56944327
+    ],
+    [
+      "678fa031-c18c-440c-9e8e-8a6d5775c832",
+      21597
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      8741015
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      42916219
+    ],
+    [
+      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
+      6091765
+    ]
+  ],
+  "timestamp": "2026-04-19T13:07:39.649669Z",
+  "tokens_used": 10307,
+  "units_analyzed": 9,
+  "units_total": 124
+}

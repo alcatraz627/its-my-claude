@@ -1,0 +1,65 @@
+{
+  "response": "{\"calibration_score\":0.31,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":9,\"biases_detected\":[\"anchoring — repeated same failing npx command (fb93d9e7-4) without hypothesis change between attempts\",\"sunk-cost — continued iterative edits to plan.md across units 6 and 8 despite mounting edit count rather than rewriting\",\"re-edit thrash — units c6ea2b0e-6, c6ea2b0e-8, c6ea2b0e-32, c6ea2b0e-34 each edited the same file 5–8 times, matching the known re-edit-thrash pattern\",\"over-verification bias — unit c6ea2b0e-34 ran grep-before-edit then still produced a failed Edit, followed by another grep, suggesting uncertainty not resolved before acting\"],\"recommendations\":[\"Before repeating a failed shell command, require an explicit hypothesis change — log what changed and why the retry is expected to succeed differently\",\"For large document edits (plan.md), prefer a full-rewrite pass over incremental patch loops when the edit count exceeds 4 on the same file in one unit\",\"Apply the re-edit-thrash rule from testing.md: if the same function or block has been edited 3+ times, stop, re-read full context, form a single hypothesis, then edit once\",\"When an Edit tool call fails, do a targeted Read of the exact region before retrying — not a broad grep — to minimize round-trips\",\"Unit fb93d9e7-4 outcome was Unknown; treat unknown-outcome units with diagnostic tool failures as tentatively overconfident until confirmed, not neutral\"]}",
+  "sessions": [
+    [
+      "fb93d9e7-e7ef-4428-a711-54c96e40a9ef",
+      161992
+    ],
+    [
+      "dbafd3c9-e0ac-47a6-be38-636763d2311f",
+      104942
+    ],
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      15466144
+    ],
+    [
+      "b79c55a1-d011-4eb5-b988-97202a65d2a0",
+      17441
+    ],
+    [
+      "b5660cab-c4cb-4a7f-87ff-b255626e3d19",
+      12409088
+    ],
+    [
+      "aa174c98-cd2c-46d6-b451-31131c00dac0",
+      4094520
+    ],
+    [
+      "a69cda46-4e42-4402-b8c5-9d2bbb753b6e",
+      163905
+    ],
+    [
+      "9b9a4d4b-9a01-4442-bd47-bb3abd4faf0d",
+      16950
+    ],
+    [
+      "65542217-cb1a-4f0b-a469-2ccced698bb2",
+      145438
+    ],
+    [
+      "60c4c276-a3bd-43c2-b68c-584efbf1987a",
+      16978
+    ],
+    [
+      "12dcb467-4548-4030-a50d-22e30075bd9b",
+      377302
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      6132646
+    ],
+    [
+      "c2ec8679-3ddb-41c8-b209-1e2fba856006",
+      6027172
+    ],
+    [
+      "35721471-b676-4ce4-b313-3a924d3c8e52",
+      2629119
+    ]
+  ],
+  "timestamp": "2026-04-25T00:17:05.982083Z",
+  "tokens_used": 8514,
+  "units_analyzed": 13,
+  "units_total": 62
+}

@@ -1,0 +1,29 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.07407407407407407,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3130388703291035,
+    "unit_count": 108
+  },
+  "response": "{\"calibration_score\":-0.24,\"overconfident_count\":10,\"underconfident_count\":0,\"well_calibrated_count\":3,\"biases_detected\":[\"shell_tool_preference_violations:RECURRING:STABLE — bc2715fa-2 (pwd+ls+jq+tail via Bash), bc2715fa-5 (cd+rg x4 via Bash), bc2715fa-7 (rg on nonexistent paths via Bash), bc2715fa-14 (ls+cat+grep-n compound via Bash), bc2715fa-18 (cat>> append to mistake-patterns.md via Bash instead of Write), bc2715fa-29 (lsof+pm2 via Bash), bc2715fa-30 (ps+lsof via Bash), bc2715fa-32 (ls+head via Bash); rate ~62% of measurable units in this batch; sixth consecutive cycle within 55-65% band; zero improvement trajectory confirmed across all prior cycles with no sign of change\",\"optimistic_edit_without_read:RECURRING:WORSENING — bc2715fa-14 (Edit decisions/_index.md fail→Read→Edit success; Edit with-server.ts fail x3 across unit; 2 sub-instances); bc2715fa-22 (Edit index.ts fail→Read→Edit success; 1 sub-instance); bc2715fa-32 (Edit page.tsx fail x2→Read→Edit success; 2 sub-instances); 3 units with 5 sub-instances in this batch; sub-instance count at 11 across 2-session window is highest in recorded history confirming worsening trend despite unit-level plateau\",\"hook_bypass_via_absolute_grep_path:RECURRING:REGRESSING — bc2715fa-21 (/usr/bin/grep as sole tool), bc2715fa-29 (/usr/bin/grep x2 in compound), bc2715fa-30 (/usr/bin/grep in compound); 3 saturated units in this batch; structural root cause (absolute-path invocation not intercepted by hook) confirmed unchanged; zero new-session instances continue as calibration artifact of session context reset rather than behavioral improvement\",\"re_edit_thrash:RECURRING:STABLE — bc2715fa-14 (with-server.ts success=false x3 consecutive; sink-options.ts fail; console-sink.ts x4 edits in unit); bc2715fa-32 (page.tsx fail x2 before Read pivot); 2 units in this batch consistent with stable plateau of 3-4 units per cycle; no worsening or improvement signal\",\"path_assumption_bias:RECURRING:STABLE — bc2715fa-5 (cd frontend prefix on rg compounds fails 4 consecutive times before pwd+ls recovery); bc2715fa-7 (rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot); recovery topology identical across every instance: wrong relative path assumption → repeated tool failures → pwd+ls diagnostic → corrected retry; count at 2 matches stable baseline\",\"trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22 (accepted logger/index.ts linter-labeled modification without running git diff; LOGGER_ENABLED gate semantics flipped from default-on !== '0' to default-off === 'true'; bug surfaced only via test failure hours later within same unit; self-documentation via cat>> at end of unit confirms pattern recognition present post-hoc but not pre-emptive)\",\"declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 (declared crab-sink server/client split ready after ts:build and vitest pass without dev server exercise; import server-only pulled into client graph at runtime caused compile failure only discovered when user pushed); bc2715fa-18 is the self-correction ritual correctly executed immediately after; pattern recognition is present but fires only after the violation not before\"],\"recommendations\":[\"hook_bypass_via_absolute_grep_path has a structural gap (hook does not intercept /usr/bin/grep invocations): behavioral flagging across 6+ cycles has produced zero reduction; this requires a hook configuration change to intercept absolute-path grep invocations, not another recommendation cycle\",\"optimistic_edit_without_read sub-instance density is at recorded maximum and worsening: root cause is attempting Edit on files whose content is stale or unread in current turn context; a pre-Edit read check for files not explicitly read in the current unit would eliminate the failure-read-retry loop entirely\",\"shell_tool_preference_violations at 55-65% rate across six cycles confirms behavioral recommendation saturation: the only remaining lever is hook enforcement on individual commands (ls, find, cat, head, tail via Bash) to force redirect to dedicated tools; continued flagging in calibration reports has reached zero marginal value\",\"path_assumption_bias recovery topology is perfectly stereotyped (assumption → N failures → pwd+ls → retry): inserting one pwd verification before any rg or find invocation in an unfamiliar directory would eliminate all instances; the fix is a single pre-check habit not a post-failure recovery pattern\"]}'",
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      51603600
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      107622550
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      6598387
+    ]
+  ],
+  "timestamp": "2026-05-18T17:11:46.326350Z",
+  "tokens_used": 13760,
+  "units_analyzed": 13,
+  "units_total": 108
+}

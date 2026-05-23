@@ -1,0 +1,21 @@
+{
+  "response": "```json\n{\n  \"calibration_score\": 0.31,\n  \"overconfident_count\": 3,\n  \"underconfident_count\": 0,\n  \"well_calibrated_count\": 7,\n  \"biases_detected\": [\n    \"optimism_bias: assumed PATH environment would include cargo bin without verification (unit 60f43456-1, two consecutive build failures before explicit PATH export)\",\n    \"anchoring: repeatedly attempted reads on the same file path after initial failure rather than pivoting immediately (unit 60f43456-4, log file read failed then retried without path change)\",\n    \"completeness_bias: unit a76e1439-20 re-read same files multiple times and ran redundant scans across all 28 docs; marginal utility likely low relative to tool cost\",\n    \"overconfidence_in_edit_idempotency: unit a76e1439-20 issued five sequential edits to payment-plans.md with one failure mid-sequence, and unit a76e1439-11 had an Edit failure requiring a diagnostic rg step before retry — suggests insufficient pre-edit state verification\"\n  ],\n  \"recommendations\": [\n    \"Verify shell PATH before Rust/cargo invocations; a one-shot `which cargo` check would eliminate the two-failure pattern seen in unit 60f43456-1\",\n    \"On first Read failure, immediately check file existence or path spelling before retrying the same path; unit 60f43456-4 burned 3 tool slots retrying paths that weren't yet populated\",\n    \"Before multi-edit sequences on a single file, read the target section once to confirm the old_string anchor is present; would have prevented the mid-sequence Edit failure in unit a76e1439-20\",\n    \"For broad doc sweeps (unit a76e1439-20 style), consolidate validation checks into fewer compound bash commands rather than separate rg invocations per doc — reduces tool count without sacrificing coverage\",\n    \"When user_reaction is Unknown (unit a76e1439-20), treat the outcome as ambiguous rather than successful; the multiple retries in that unit suggest the task may have been partially incomplete at session end\"\n  ]\n}\n```",
+  "sessions": [
+    [
+      "a76e1439-b17f-467b-b733-4369bba3eba0",
+      13665575
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      64078934
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      14150470
+    ]
+  ],
+  "timestamp": "2026-04-23T10:42:56.274963Z",
+  "tokens_used": 8456,
+  "units_analyzed": 10,
+  "units_total": 69
+}

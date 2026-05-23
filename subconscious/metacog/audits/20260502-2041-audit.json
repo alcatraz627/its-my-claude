@@ -1,0 +1,21 @@
+{
+  "response": "{\"calibration_score\":0.12,\"overconfident_count\":4,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"anchoring — repeated variations of failing bash/grep commands before switching strategy (units 1, 10, 16, 30) rather than pivoting after first failure\",\"availability heuristic — defaulted to bash grep over the dedicated Grep tool across multiple units, contra explicit shell.md rules\",\"sunk cost — continued incremental command variations (e.g. 5+ grep attempts in unit 1) instead of stopping to reassess approach\",\"tool-familiarity over correctness — used inline python3 -c subprocesses and cat -n as workarounds rather than Read tool, increasing failure surface\",\"self-serving attribution — unit 36 (self-reflection on env-var mistake) framed the error as 'workaround ossification' rather than acknowledging it as a scope-bypass; well-written but slightly exculpatory\"],\"recommendations\":[\"adopt a two-strike rule: if a bash search command fails twice with the same pattern, switch to the dedicated Grep or Glob tool before attempting a third variant\",\"for any unit where more than 3 consecutive tool calls share the same target file or command family, insert a re-read of context before continuing — matches the [re-edit-thrash] rule already in mistake-patterns.md\",\"enforce the shell.md preference table at planning time, not after failures: grep → Grep tool, find → Glob, cat/head → Read; treat bash as a fallback, not a first resort\",\"when a test environment fails to collect, diagnose the config/env issue directly rather than routing around it (e.g. patching os.environ instead of fixing Config) — the env-var bypass anti-pattern in unit 35 shows this workaround-to-pattern pipeline is a live risk\",\"unit 39 (compliment recording) required three bash attempts to locate compliments.md, suggesting file-location assumptions are stale; refresh file-location knowledge at session start for frequently-written files\"]}",
+  "sessions": [
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      7738657
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      6734577
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      23626023
+    ]
+  ],
+  "timestamp": "2026-05-02T20:41:53.151246Z",
+  "tokens_used": 9788,
+  "units_analyzed": 11,
+  "units_total": 75
+}

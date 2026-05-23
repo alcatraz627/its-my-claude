@@ -1,0 +1,54 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18484,
+    "correction_density": 0.015151515151515152,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3132283420574886,
+    "unit_count": 66
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — f22bd641-0 (/usr/bin/grep 4+ times in orientation sweep alongside head-based Bash reads), f22bd641-12 (/usr/bin/grep twice before Read on gum-guide.md), f22bd641-13 (/usr/bin/grep multiple times in audit pipeline and file-section reads), f22bd641-19 (/usr/bin/grep multiple times in spot-check pipeline), c6ea2b0e-4 (rg and grep-n via Bash across multiple hook-discovery calls when Grep tool was available), c6ea2b0e-6 (rg via Bash for section-heading lookups in plan.md), c6ea2b0e-8 (rg via Bash for section anchoring before Edits); frequency ~7 units vs ~6-8 in prior cycles — stable, zero internalization across sessions",
+      "re_edit_thrash:RECURRING:worsening — f22bd641-13: 6 Edit calls on 20-fill-acdelco.js after single Read (matches prior cycle peak of 6); c6ea2b0e-6: ~10 Edit calls on plan.md interspersed with 4 Read calls and rg anchoring between each group — peak count higher than prior cycle max of 6; c6ea2b0e-8: ~8 Edit calls on plan.md with 4 Read-anchor cycles; document-editing tasks now show the same thrash pattern as code-editing tasks, extending the pattern domain",
+      "mcp_fallback_without_retry:RECURRING:stable — f22bd641-2: mcp__file-tools__list_sheets called once (success=false), no retry or error inspection, immediately pivots to 5 inline ExcelJS Bash scripts; structurally identical to prior three appearances of this same session ID; pattern shows no decay",
+      "path_assumption_bias:RECURRING:stable — c6ea2b0e-4: Read /src/utils/hooks/use-sync-q.ts called (success=false) before ls reveals the file does not exist at that path; identical structural pattern to prior cycles (8d9169bc-5 Read /backend/api/internal.py twice before ls; 034ab126 unit-46 on non-existent use-sync-q.ts); no existence check pre-Read on assumed paths"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 6,
+    "recommendations": [
+      "re_edit_thrash has expanded from code files to document/markdown files (c6ea2b0e-6 plan.md: 10 edits; c6ea2b0e-8 plan.md: 8 edits) and peak count has increased — this warrants escalation from 'stable' monitoring to active intervention; consider a hook that emits a warning after the 3rd Edit on the same file within a unit without an intervening Write or Bash verification",
+      "shell_tool_preference_violations remain at ~7 units with zero improvement across 4 consecutive cycles; prior recommendations have had no effect — a PreToolUse hook blocking /usr/bin/grep and bare rg Bash calls (when not piped) is the only remaining lever; rule-based reminders have failed to internalize",
+      "mcp_fallback_without_retry: fourth consecutive appearance on f22bd641 session — consider adding a retry wrapper or a lint rule in the MCP call sequence; the single-attempt-then-abandon pattern wastes the MCP channel entirely",
+      "path_assumption_bias: consistent cross-session recurrence on assumed file paths (use-sync-q.ts, internal.py); a lightweight pre-Read existence check (single Bash stat or ls) would eliminate the double-failure pattern at near-zero cost"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      5545115
+    ],
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      23804154
+    ],
+    [
+      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
+      2085131
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      13651841
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      6293450
+    ]
+  ],
+  "timestamp": "2026-05-01T01:39:09.223293Z",
+  "tokens_used": 12753,
+  "units_analyzed": 13,
+  "units_total": 66
+}

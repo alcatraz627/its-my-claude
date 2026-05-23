@@ -1,0 +1,45 @@
+{
+  "ts": "2026-05-15T23:08:33Z",
+  "session_id": "claude-audit-2e",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260515-claude-audit-2e.claude.md",
+  "insights": {
+    "worked": [
+      "Pushing back early on the per-folder README proliferation saved 25+ noise files; the single `FOLDERS.md` + generator script + 7 targeted READMEs cover the same ground.",
+      "Building checkpoint helpers as scripts first, then wiring SKILL.md to call them, kept the skill prompt readable and made the logic testable in isolation (verified all four resolve modes end-to-end without needing `/catchup` or `/core-dump`).",
+      "Marker-based split in `FOLDERS.md` (`<!-- AUTO-GENERATED BELOW -->`) lets policy stay hand-written while census stays fresh \u2014 same pattern as `mistake-patterns.md` being derived from `events.jsonl`."
+    ],
+    "didnt_work": [
+      "Initial mcp-catalog audit was wrong \u2014 used `.servers` JSON key when the actual key is `.catalog`. Self-corrected after rereading the file. Lesson: `jq | keys[]` errors with \"null has no keys\" can mean the field doesn't exist, not that the JSON is broken.",
+      "Bash-tool sandbox restricts `find /tmp` traversal \u2014 startup-script dry-run from this conversation reports 0 files; the script works correctly at LaunchAgent execution time outside the sandbox.",
+      "The tab-title fix is diagnostic, not curative \u2014 won't know if `/dev/tty` or `TTY_PATH` works until logs accumulate over real session activity.",
+      "First attempt at `/core-dump` argument-hint update partially failed (one Edit succeeded, the parallel one didn't); had to re-apply. Always re-read after parallel Edits on the same file."
+    ],
+    "gotchas": [],
+    "notes": [
+      "`_last-checkpoint.json` is now LEGACY \u2014 still written for back-compat but `resolve.sh` reads the new index first. Migration 0008 (~2 weeks out) removes the legacy write.",
+      "Connector MCPs (anything `claude.ai *` prefixed) cannot be removed via `claude mcp remove`; they're managed by the claude.ai web account.",
+      "`~/.claude/file-history/`, `projects/`, `tasks/`, `session-env/` and similar UUID-keyed dirs are Anthropic-managed \u2014 never modify them. `FOLDERS.md` documents this taxonomy.",
+      "The user's environment: single-user macOS, restarts ~weekly (no logout). LaunchAgent `RunAtLoad=true` is effectively \"per reboot\" for startup-script purposes."
+    ],
+    "feedback": [
+      "Strong preference for derived/regenerable indices over hand-maintained ones.",
+      "\"Durable system > one-shotting or pleasing me\" \u2014 explicit invitation to push back on questionable scope.",
+      "Per-folder discoverability should be proactive (not just doc-link), but agent overhead matters \u2014 hinter-style mechanisms preferred.",
+      "Skill grouping: filesystem layout doesn't reduce skill-list surface; scoping needs project-level enable list."
+    ]
+  },
+  "pending": [
+    "Disable `claude.ai Sentry` + `claude.ai Gmail` connectors via claude.ai web \u2192 Settings \u2192 Connectors (no CLI path for connector-managed MCPs).",
+    "Verify tab-title emit log: `tail ~/.claude/logs/tab-title-emit.log` after a few turns \u2014 confirms whether `/dev/tty` writes succeed or only `TTY_PATH` does.",
+    "`std::claude::startup` will run on next reboot (LaunchAgent loaded this session).",
+    "Transcript pruning is conservative: gzip at 6mo, delete at 12mo. No action needed for months.",
+    "`prop-20260515-124516-ff` \u2014 Build personas system",
+    "`prop-20260515-124516-d0` \u2014 Skills sweep (classify, scope, dedupe)",
+    "`prop-20260515-124516-a1` \u2014 llm-mini batch/pipeline mode",
+    "`prop-20260515-124517-7c` \u2014 Disable claude.ai connector MCPs (manual)",
+    "`prop-20260515-124517-14` \u2014 Drifting systems follow-up review",
+    "`prop-20260515-141140-44` \u2014 Checkpoint v2 migration cutover (legacy file removal in ~2 weeks)"
+  ],
+  "tags": []
+}

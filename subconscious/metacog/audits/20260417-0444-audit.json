@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.52,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":12,\"biases_detected\":[\"anchoring: assumed .env.local path and service ports from prior session state without verifying first\",\"tool-availability assumption: used heredoc+jq pipeline without checking for encoding hazards, required multi-step recovery\",\"recency bias: inferred dev-server liveness from pm2 list rather than direct port probe, leading to false-negative curl failures\",\"path-existence optimism: repeatedly issued bash/grep against paths that did not exist before confirming with ls/glob\"],\"recommendations\":[\"probe environment state (port liveness, file existence, env vars) in a single batched step at session start rather than lazily as failures surface\",\"when writing multi-line jq or shell scripts via heredoc, prefer Write tool over bash heredoc to avoid shell quoting and encoding corruption\",\"treat tool failures as calibration signals: two consecutive failures on the same resource (e.g. .env.local) should trigger an explicit existence check before a third attempt\",\"unit -13 produced no output despite an accepted user turn — consider whether a brief acknowledgement or state-check would have been more useful than silence\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      9165286
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      9157214
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      35036683
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      2383247
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      8894934
+    ],
+    [
+      "7b690cc9-b154-4195-b29a-1edf1cc2b591",
+      9773659
+    ]
+  ],
+  "timestamp": "2026-04-17T04:44:02.967796Z",
+  "tokens_used": 10569,
+  "units_analyzed": 16,
+  "units_total": 74
+}

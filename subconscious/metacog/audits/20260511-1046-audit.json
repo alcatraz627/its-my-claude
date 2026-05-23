@@ -1,0 +1,46 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.05,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3882323128188997,
+    "unit_count": 60
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 6/12 tool-using units (~50%; 5455871e-3,5455871e-30,5455871e-36,5455871e-37,5455871e-47); unit 5455871e-3: grep-rn-via-Bash plus grep-A2-via-Bash before rg pivot; unit 5455871e-30: grep-A6-via-Bash; unit 5455871e-36: cd-compound plus rg-via-Bash; unit 5455871e-37: cat-via-Bash on lifecycle.py; unit 5455871e-47: ls-via-Bash plus head-via-Bash (both success=false) plus rg-via-Bash on wrong paths; rate ~50% is within the 59-92% historical range but on the lower end; zero internalization continues across 37+ consecutive measured cycles",
+      "re_edit_thrash:RECURRING:STABLE — units 5455871e-33,5455871e-35,5455871e-36,5455871e-37; unit 5455871e-33: 3 Edits on render-read.sh in single unit; unit 5455871e-35: Edit on render-throughput-baseline.md success=false then success=true; unit 5455871e-36: 4 Edits on structural-changes-deliberation.md with interleaved failures; unit 5455871e-37: 4 Edits on structural-changes-deliberation.md (3 consecutive failures) before pivot to Write new file; the write-new-file pivot in 5455871e-37 is an adaptation but the 3-failure run preceding it still matches the thrash pattern; no improvement across 20+ consecutive cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — units 5455871e-6,5455871e-35,5455871e-36,5455871e-40; unit 5455871e-6: Edit compliments.md success=false before Read then success; unit 5455871e-35: Edit render-throughput-baseline.md success=false then success; unit 5455871e-36: Edit worker-v2-but-better.md success=false at end of unit; unit 5455871e-40: Edit mistake-patterns.md success=false before Read then success; 4-instance count is the highest single-cycle count observed — prior baseline was 1-2 per cycle; possible escalation but insufficient cycles to confirm trend",
+      "optimistic_write_without_read:RECURRING:CONFIRMED — unit 5455871e-36: Write /tmp/core-dump-data.json success=false, Write _last-checkpoint.json success=false, then Bash mv compound success=false, then Read of both confirms files exist, then Write of both succeeds; structurally identical to the instance first classified NEW in the immediately prior calibration cycle (2026-05-11); write-tool contract violation (Read required before overwriting existing files) remains uncorrected across two consecutive measured cycles; now promoted from NEW to RECURRING",
+      "path_assumption_bias:RECURRING:STABLE — units 5455871e-3,5455871e-47; unit 5455871e-3: rg targets without correct path prefix fail (success=false), rg with wrong relative prefix fails again, then pwd discovery and ls before correct paths resolved; unit 5455871e-47: ls and head targets with wrong relative path (both success=false), rg on wrong path (success=false), then pwd+ls pivot resolves; identical topology to all prior bc2715fa-5 and bc2715fa-7 instances; cross-session internalization remains zero across 24+ consecutive sessions",
+      "mcp_failure_retry_without_escalation:NEW — unit 5455871e-33: mcp__render__get_metrics called 9 consecutive times all success=false within a single unit without parameter variation, fallback strategy, or tool change between calls; unit 5455871e-6: mcp__render tools called 8 times with 6 failures; unit 5455871e-16: 6 mcp__render calls with 6 failures; prior calibration history noted mcp__render failures as context but never classified the same-unit same-tool retry loop as a distinct bias; 9-call repetition in 5455871e-33 is the most extreme instance; no circuit-breaker heuristic apparent",
+      "redundant_read_same_unit:NEW — unit 5455871e-51: Read task_runner.py twice and Read workerv2.py twice in the same unit with identical target paths; no evidence of different offset/limit parameters between the two calls on each file; each duplicate read consumes tool slots and context without information gain if page ranges match; not recorded in any prior calibration history entry across 36+ prior measured cycles"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 3,
+    "recommendations": [
+      "mcp_failure_retry_without_escalation is NEW this cycle: implement a within-unit circuit breaker — after 2 consecutive failures of the same MCP tool, pivot to an alternative (CLI fallback, different tool, or surface the failure to the user) rather than retrying identically up to 9 times",
+      "redundant_read_same_unit is NEW: before issuing a second Read on a file already read in the same unit, check if the needed content was already returned; if a different offset/limit is required, annotate why — otherwise skip the duplicate",
+      "optimistic_write_without_read is now CONFIRMED RECURRING (was NEW in prior cycle): enforce the Read-before-Write contract by defaulting to Read+verify-existence before any Write targeting a path that plausibly already exists (checkpoint files, memory files, shared config files)",
+      "optimistic_edit_without_read instance count rose to 4 this cycle vs the 1-2 per cycle prior baseline — monitor next cycle to determine whether this is escalation or noise; no new fix recommended until trend is confirmed",
+      "shell_tool_preference_violations, re_edit_thrash, and path_assumption_bias show zero improvement across 20-37 consecutive cycles; additional recommendations for these patterns are deprioritized per calibration history protocol — further recommendations would be redundant without a mechanism change"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      28057754
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      9327422
+    ]
+  ],
+  "timestamp": "2026-05-11T10:46:46.583339Z",
+  "tokens_used": 13239,
+  "units_analyzed": 17,
+  "units_total": 60
+}

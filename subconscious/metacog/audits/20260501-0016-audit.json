@@ -1,0 +1,83 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18622,
+    "correction_density": 0.01694915254237288,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.44319493925719117,
+    "unit_count": 59
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — f22bd641-0 (multiple /usr/bin/grep Bash calls), f22bd641-12 (/usr/bin/grep twice before Read), f22bd641-13 (/usr/bin/grep 3+ times in audit pipeline), f22bd641-19 (/usr/bin/grep multiple times), 8d9169bc-0 (grep via Bash fails twice then find|xargs grep), 5a0bcd6b-4 (grep -n fails twice → python3 subprocess fallback), 5a0bcd6b-8 (pip3 install attempts fail 3 times before locating js-yaml via pm2 node_modules — mis-applied environment assumption); frequency roughly stable vs prior cycle (~8-9 units here vs ~8-9 prior), zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — f22bd641-13: 6 Edit calls on 20-fill-acdelco.js after single Read (matches prior cycle count of 6); 8d9169bc-5: 3 Edit calls on auth_db.py following write thrash; 5a0bcd6b-4: 6 Edit calls across frontend-e2e-test.yaml and docs-deploy.yaml in single unit; 5a0bcd6b-25: 4 consecutive Edit calls on docsify-index.html; cycle counts stable vs prior session (prior max 6, current max 6)",
+      "mcp_fallback_without_retry:RECURRING:stable — f22bd641-2: mcp__file-tools__list_sheets called once (success=false), no error inspection or retry, immediately pivots to 5 ExcelJS Bash scripts; structurally identical to prior instance in f22bd641 session; pattern unchanged across two consecutive appearances of this session ID",
+      "path_assumption_bias:RECURRING:stable — 8d9169bc-5: Read /backend/api/internal.py called twice consecutively (both success=false) before ls reveals it is a directory /backend/api/internal/; identical pattern to prior cycle (unit-4 and unit-46 on non-existent use-sync-q.ts); no existence check before Read on assumed paths",
+      "write_overwrite_without_read:RECURRING — 8d9169bc-5: Write to /backend/api/internal/scraper.py called twice consecutively with no Read between first and second Write; same pattern flagged as NEW in prior cycle; appearing again confirms it is now recurring",
+      "environment_state_assumption:RECURRING:stable — 5a0bcd6b-8: pip3 install pyyaml attempted 3 times with different flag combinations (bare, -q, --user -q) all failing before agent discovers js-yaml available via /opt/homebrew/lib/node_modules/pm2/node_modules/js-yaml; non-interactive flag issue from rules/shell.md not pre-applied"
+    ],
+    "calibration_score": 0.11,
+    "cross_references": [
+      {
+        "insight_id": "dream_insight_3_vision_loop",
+        "note": "Unit 5a0bcd6b-25 executed a deliberate screenshot→edit→screenshot→evaluate_script→screenshot cycle using Chrome DevTools MCP; this is exactly the vision loop pattern (observe→judge→act→verify) described in Insight 3; agent did not assume CSS changes were correct from code alone but verified visually — a positive deviation from the common assumption pattern flagged in session-level watch-fors",
+        "unit_id": "5a0bcd6b-0c99-4759-b653-13ccfb801f63-25",
+        "verdict": "CONFIRMED"
+      },
+      {
+        "insight_id": "dream_insight_1_terse_continuation",
+        "note": "Units with zero tools and zero output_length match terse user inputs (message_length 44 and 75) about model identity; agent matched response density to input density without padding",
+        "unit_ids": [
+          "5a0bcd6b-0c99-4759-b653-13ccfb801f63-11",
+          "5a0bcd6b-0c99-4759-b653-13ccfb801f63-14"
+        ],
+        "verdict": "CONFIRMED"
+      },
+      {
+        "insight_id": "dream_insight_5_low_bandwidth_signals",
+        "note": "mcp__file-tools__list_sheets returned a low-bandwidth failure signal (success=false) that should have triggered error inspection; instead agent treated silence as permission to rebuild the entire pipeline in ExcelJS; the insight rule (interpret minimal signals rather than requesting fuller ones) was inverted — agent discarded a recoverable signal",
+        "unit_id": "f22bd641-a8b1-473c-bf97-1ccfa4202a70-2",
+        "verdict": "PARTIAL_VIOLATION"
+      }
+    ],
+    "overconfident_count": 7,
+    "recommendations": [
+      "shell_tool_preference_violations shows zero cross-session internalization despite 4+ consecutive cycles flagged; existing rules/shell.md tier-1 entry is not being read at session start in affected sessions — propose promoting to a PreToolUse hook that intercepts Bash calls matching /usr/bin/grep or find.*xargs.*grep and surfaces the Grep tool instead; hook path is the only mechanism that will interrupt mid-session",
+      "write_overwrite_without_read promoted from NEW to RECURRING in one cycle — add to mistake-patterns.md with specific trigger: before issuing a second Write to a path written in the same unit, always Read the first Write output to confirm correctness; this is distinct from re_edit_thrash (Edit cycles) and needs its own pattern entry",
+      "mcp_fallback_without_retry: before pivoting away from an MCP tool failure, inspect the error payload for retryable vs structural failures; a success=false with a permissions or path error warrants retry with corrected args; a success=false with a format-unsupported error warrants the ExcelJS fallback; the agent currently skips this branch entirely",
+      "vision_loop (5a0bcd6b-25) is a confirmed positive behavior — add to compliments.md; the screenshot→edit→verify cycle should be applied more broadly to any CSS or layout change in HTML files, not only when operating an explicit prototype server"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      4697568
+    ],
+    [
+      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
+      1796291
+    ],
+    [
+      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
+      8856097
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      5804572
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      12261296
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      1701924
+    ]
+  ],
+  "timestamp": "2026-05-01T00:16:56.875389Z",
+  "tokens_used": 25184,
+  "units_analyzed": 21,
+  "units_total": 59
+}

@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.18,\"overconfident_count\":4,\"underconfident_count\":1,\"well_calibrated_count\":8,\"biases_detected\":[\"anchoring: repeated use of failing grep/bash patterns before switching approach\",\"sunk_cost: continued compound bash commands after multiple failures instead of switching to dedicated Grep tool\",\"workaround_ossification: env-var bypass introduced as a short-term patch (test collection failure) then left in place as design choice\",\"re_edit_thrash: unit 14 shows multiple read-edit-read cycles on same doc file without a clear diff hypothesis between edits\",\"authority_deference: in unit 35 the correction was accepted and documented correctly, but the underlying pattern (os.environ over Config) had already been violated once before in the same session\"],\"recommendations\":[\"replace bash grep/find chains with the dedicated Grep tool — units 1 and 10 both show 3-5 failed bash grep attempts before fallback; Grep tool would have succeeded on attempt 1\",\"before writing os.environ.get or os.getenv, grep lib/config/__init__.py for a Config singleton — the env-var bypass pattern recurred within the same session despite prior correction\",\"for compound pytest invocations, split into separate bash calls (activate venv, then run pytest) rather than chaining with && or semicolons — unit 16 and 30 both show repeated variations trying to get output redirection and grep piping to work together\",\"when the same file is read 3+ times within one unit (units 14, 30), treat that as a re-edit-thrash signal — stop, form a complete hypothesis about all needed changes, then make a single targeted edit\",\"on cp/mv failures, check the actual error before retrying with yes | — unit 59c741e5-1 retried twice with escalating flags without reading the error output first\"]}",
+  "sessions": [
+    [
+      "5335e73a-bcc6-4899-b15f-e29a61e4add7",
+      132
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      6873248
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      21843870
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      13945547
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      2339614
+    ],
+    [
+      "e19636fc-6ae4-49d2-9d82-089143335770",
+      306431
+    ]
+  ],
+  "timestamp": "2026-05-01T21:49:31.738833Z",
+  "tokens_used": 10456,
+  "units_analyzed": 13,
+  "units_total": 63
+}

@@ -1,0 +1,59 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18395,
+    "correction_density": 0.038461538461538464,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4072050931035134,
+    "unit_count": 52
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — eca50a22-2 (sed+rg via Bash compounds), eca50a22-19 (ls+rg via Bash with ls -d compounds), eca50a22-20 (sed+rg+node via Bash), eca50a22-26 (Bash compounds with rg inside), 1c86d512-0 (ls+rg via Bash compound), 1c86d512-3 (file+sips+iconutil+launchctl compound then retry), 1c86d512-20 (rg+cargo compounds, sed via awk), 1c86d512-25 (mkdir+cargo+git compound chains); rate ~52% of units with tool calls; marginal improvement from prior 62-71% band but structurally unchanged — thirteenth consecutive cycle above 50% with no downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — eca50a22-26: gh run list Bash fails (success:false) then immediately retried with different flags without intermediate state-read; 1c86d512-3: iconutil invocation fails twice consecutively before succeeding with .iconset extension path; 2 units in this batch vs 1 in prior cycle; pattern is not improving",
+      "confirmation_bias:RECURRING:STABLE — eca50a22-2: Write to docs-migration-impact-map.md (success:true) executed before final AskUserQuestion completed (success:false); conclusions persisted before user input received; identical topology to prior flagged cycle; no structural change in ordering behavior",
+      "redundant_read_same_unit:RECURRING:STABLE — 7bc36b38-9 (Read notion-list.ts x2 with no intervening edit between reads; unit outcome is Corrected — the unnecessary re-read did not prevent the correctness failure), 7bc36b38-19 (Read diff-content.ts x3 within unit with no offset variation between second and third reads), 1c86d512-11 (Read daemon.rs x3 within unit, third read no offset variation from second); 3 units at or above prior plateau of 2; marginal worsening",
+      "optimistic_edit_without_read:RECURRING:STABLE — 1c86d512-20: Edit src/main.rs fails (success:false) then subsequent Edit succeeds without intervening Read; 1 unit with 1 sub-instance; count at or below prior reduced plateau of 1 unit; pattern not eliminated"
+    ],
+    "calibration_score": 0.18,
+    "cross_references": [
+      "dream-insight-git-push-approval-2026-05-07: 1c86d512-20 shows git push origin master fails (success:false) after AskUserQuestion was called (success:true) — approval was correctly sought before push attempt, consistent with the insight rule; push failure appears to be a remote rejection not an authorization bypass; insight CONFIRMED-FOLLOWED in this unit",
+      "dream-insight-git-push-approval-2026-05-07: 1c86d512-25 shows AskUserQuestion (success:true) before git push origin master (success:true) — correct approval-then-push sequence; insight CONFIRMED-FOLLOWED",
+      "dream-insight-git-push-approval-2026-05-07: 7bc36b38 session shows no git push operations across any measured units — no violation surface; consistent with prior new-session zero-push-violation signal"
+    ],
+    "overconfident_count": 10,
+    "recommendations": [
+      "bash_retry_without_diagnosis is now confirmed RECURRING across 2 consecutive cycles with 2 units in this batch; prior cycle had 1 unit; the pattern is expanding; recommend evaluating whether a diagnostic state-read (e.g. bash -n, node --check, ls, cat -v on the failing target) can be inserted between first failure and retry for iconutil/gh CLI patterns specifically",
+      "redundant_read_same_unit rose to 3 units this batch from 2 prior; at this rate the pattern warrants a pre-Edit check: if the last tool call on a file was already a Read with no Write or Edit between, avoid re-reading without an offset or purpose change — trust the prior read",
+      "confirmation_bias around Write-before-AskUserQuestion ordering has now appeared in 2 consecutive flagged cycles without improvement; if AskUserQuestion is the decision gate, Write should not precede its success:true return regardless of perceived confidence in the outcome"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      2959879
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      7140795
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      7864953
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      11637541
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      11499525
+    ]
+  ],
+  "timestamp": "2026-05-21T02:48:08.171769Z",
+  "tokens_used": 27222,
+  "units_analyzed": 21,
+  "units_total": 52
+}

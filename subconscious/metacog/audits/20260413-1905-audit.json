@@ -1,0 +1,9 @@
+{
+  "response": "```json\n{\n  \"calibration_score\": 0.1,\n  \"overconfident_count\": 0,\n  \"underconfident_count\": 0,\n  \"well_calibrated_count\": 1,\n  \"biases_detected\": [\n    \"insufficient_data_bias: Single execution unit with minimal signal makes session-level assessment unreliable\"\n  ],\n  \"recommendations\": [\n    \"Expand session corpus: One execution unit is insufficient for meaningful metacognitive pattern detection — aggregate at minimum 10-20 units for reliable calibration scoring\",\n    \"Capture confidence signals: The unit contains no expressed confidence markers (hedging language, certainty qualifiers) making calibration scoring largely indeterminate\",\n    \"Log tool usage: Empty tools array combined with zero output length suggests either a no-op response or a data capture gap — verify pipeline is recording output correctly\",\n    \"Track intermediate steps: Topic keywords suggest a naming/clarification task but without tool calls or output content, strategy quality cannot be assessed beyond 'accepted by user'\"\n  ]\n}\n```\n\n**Reasoning notes:**\n\n| Dimension | Assessment |\n|---|---|\n| Confidence calibration | Cannot score meaningfully — no expressed confidence in the unit; defaulting to neutral `0.1` |\n| Strategy quality | Indeterminate — zero tools used, zero output length, yet user accepted; likely a short clarifying response |\n| Bias indicators | Primary concern is **analyst-side insufficient data bias**, not model-side bias |\n| Error pattern match | Matches **sparse telemetry pattern** — common when logging pipelines drop output content for short responses |",
+  "sessions": [
+    "6fa91e14-2cea-4044-a6d8-660a652cf5ef"
+  ],
+  "timestamp": "2026-04-13T19:05:31.481402Z",
+  "tokens_used": 776,
+  "units_analyzed": 1
+}

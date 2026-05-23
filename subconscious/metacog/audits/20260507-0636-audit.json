@@ -1,0 +1,53 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18431,
+    "correction_density": 0.01639344262295082,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2508006188298286,
+    "unit_count": 61
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 11/12 tool-using units (92%; units 4,6,8,21,25,32,34,35,40,45,46); ls-via-Bash head/tail split (unit 4), grep-rln-via-Bash and rg-l-via-Bash x2 and rg-via-Bash x3+ and cat|grep pipeline on package.json (unit 4), grep-n-via-Bash and rg-via-Bash as section anchor and wc-l-via-Bash (unit 6), rg-via-Bash x3+ as section anchors between Edit calls (unit 8), rg-l-via-Bash and for-loop-rg-via-Bash (unit 21), ls-via-Bash (unit 25), find-via-Bash and /usr/bin/grep explicit-path x6+ (unit 32), cat-n-via-Bash and /usr/bin/grep explicit-path x4+ and for-loop-Bash success=false (unit 34), /usr/bin/grep explicit-path x3+ and find-via-Bash (unit 35), grep-rln-via-Bash and /usr/bin/grep x4+ (unit 40), grep-rn-via-Bash and grep-rln-via-Bash x2 and ls-via-Bash and /usr/bin/grep x5+ (unit 45), /usr/bin/grep x6+ and xargs-grep-pipeline success=false (unit 46); rate 92% exceeds prior cycle modal of 64% and matches worst-case 100% ceiling; zero internalization across 24+ consecutive measured cycles; structurally identical to all prior cycles with no change in violation type or frequency",
+      "re_edit_thrash:RECURRING:STABLE — units 6,8,32; unit 6: 10+ Edit calls on plan.md with interleaved rg-via-Bash section anchors and Reads; unit 8: Edit(success=false) then rg-via-Bash anchor then Read then 7+ Edit calls on plan.md with interleaved rg anchors; unit 32: 4 Edit calls on data-history-v3.tsx plus 6 Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx; peak Edit count per file unchanged from all prior measured cycles; no improvement trend across 9+ consecutive cycles; document-editing thrash on plan.md co-occurs with shell_tool_preference_violations as section-locating strategy, identical to all prior cycles",
+      "path_assumption_bias:RECURRING:WORSENING — units 4,45,46; FIRST CONFIRMED INTRA-SESSION DOUBLE-REPEAT: units 45 and 46 are separate turns within the same session both attempting Read on use-sync-q.ts (success=false on both); prior 14+ cycle history consistently noted no intra-session repeat or single intra-session instance; this cycle breaks that pattern; the correct path src/utils/hooks/use-query-sync/index.ts was successfully read in unit 46 after the failure confirming the agent can locate the correct path but defaults to the wrong one at turn start; cross-session internalization remains zero across 15+ consecutive sessions",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg-via-Bash anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with all prior cycles at 1-2 instances per cycle; no improvement trend across 8+ consecutive cycles",
+      "rm_instead_of_trash:NEW:SINGLE-OCCURRENCE — unit 34: Bash rm -f /tmp/fs-tests/count-searches.ts (success=false, blocked by hook) followed by correct trash recovery; self-corrected within same unit; below threshold for recurring classification; CLAUDE.md rule states trash not rm and hook blocks unconditionally; monitor for recurrence"
+    ],
+    "calibration_score": 0.07,
+    "cross_references": [
+      "units 8,34: optimistic_edit_without_read violates dream insight conf=0.78 'never assert state without observation' — Edit without Read is asserting file content without direct evidence; dream rule: before claiming any output is correct produce or read direct evidence",
+      "units 4,45,46: path_assumption_bias violates dream insight conf=0.65 on provenance sensitivity — agent infers use-sync-q.ts path from naming patterns rather than reading the directory first; dream rule: any value acting as a system identifier must be read from canonical source never inferred",
+      "unit 35: fiber-snatcher shoot then Read(screenshot) sequence CONFIRMS dream insight conf=0.78 — agent correctly captured screenshot and read it before claiming the fix was visually verified; positive instance of assertion-after-observation pattern",
+      "unit 46 intra-session double-repeat: cross-references dream insight conf=0.55 on context reconstruction risk — the agent rebuilt its turn context and re-assumed the same wrong path it had just failed on in unit 45; consistent with 'fill in details not preserved' reconstruction failure mode"
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "path_assumption_bias escalated to WORSENING due to first confirmed intra-session double-repeat in units 45 and 46 of the same session; the failure mode has expanded from cross-session-only to within-session recurrence; candidate for PreToolUse hook that rejects Read targets matching **/use-sync-q.ts and redirects to **/use-query-sync/index.ts",
+      "shell_tool_preference_violations: no new recommendation — flagged STABLE across 24+ cycles with no intervention uptake; deprioritized per calibration history standing instructions on recurring stable biases",
+      "re_edit_thrash: no new recommendation — flagged STABLE across 9+ cycles; deprioritized per standing instructions",
+      "rm_instead_of_trash: monitor for recurrence in next 2 cycles; if seen again elevate to RECURRING and propose hook audit"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      49472527
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      6979615
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      515860
+    ]
+  ],
+  "timestamp": "2026-05-07T06:36:04.551515Z",
+  "tokens_used": 25281,
+  "units_analyzed": 16,
+  "units_total": 61
+}

@@ -1,0 +1,25 @@
+{
+  "response": "{\"calibration_score\":0.58,\"overconfident_count\":2,\"underconfident_count\":2,\"well_calibrated_count\":7,\"biases_detected\":[\"anchoring: initial search strategy repeated across multiple failing invocations before adapting (unit 2527f606-1, unit 0ce8b4ef-28)\",\"re-edit-thrash: multiple sequential edits to same file without re-reading intermediate state (units 0ce8b4ef-32, 0ce8b4ef-34)\",\"scope creep: documentation task (0ce8b4ef-20) expanded to cover ai-agents, data-patterns, api-layer, and pipeline-seeding beyond the original drift-check scope\",\"sunk cost: persisted with silent npm install flags across two invocations before switching to verbose form (0ce8b4ef-28)\"],\"recommendations\":[\"replace Bash grep/find patterns with dedicated Grep tool — units 2527f606-1 and 0ce8b4ef-28 each burned 2-3 failed tool calls on shell grep invocations that Grep would have handled in one\",\"enforce re-read before nth edit: when the same file is edited 3+ times in a row, insert a Read call to verify intermediate state before continuing — would reduce thrash in UI iteration units\",\"tighten scope gate on documentation tasks: when asked to 'validate against plan', confirm scope ceiling before expanding to new sections — prevents silent scope creep accumulating across a long session\",\"zero-output units (7, 10) suggest under-response to terse inputs that warranted at least a one-line acknowledgment — calibrate minimum viable response to include a confirmation token\",\"for iterative UI work with Chrome DevTools, batch evaluate+screenshot into fewer cycles by planning all CSS changes before the first render rather than editing per-observation\"]}",
+  "sessions": [
+    [
+      "8750104f-3a30-4e15-8a64-e21be349ee3e",
+      15520
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      594996
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      26620947
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      1702888
+    ]
+  ],
+  "timestamp": "2026-04-29T01:18:41.943496Z",
+  "tokens_used": 10642,
+  "units_analyzed": 11,
+  "units_total": 32
+}

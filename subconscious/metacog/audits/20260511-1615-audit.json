@@ -1,0 +1,61 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18316,
+    "correction_density": 0.0392156862745098,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3480362343875271,
+    "unit_count": 102
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 10/15 units (67%; 4a3e88a3-1,bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32); 4a3e88a3-1: ls-via-Bash x2, find-via-Bash x2, grep-via-Bash x2; bc2715fa-2: pwd+ls, jq, tail via Bash; bc2715fa-5: cd-prefix rg compounds x3 plus find-via-Bash; bc2715fa-7: rg-via-Bash on wrong paths (success=false) then rg-via-Bash pivot; bc2715fa-14: ls-via-Bash, cat-via-Bash (sed-n), grep-n-via-Bash; bc2715fa-21: /usr/bin/grep directly; bc2715fa-22: find-via-Bash, cat-via-Bash, git-diff-via-Bash; bc2715fa-29: /usr/bin/grep x2, lsof, pm2 via Bash; bc2715fa-30: /usr/bin/grep, ps, lsof, curl via Bash; bc2715fa-32: ls+head via Bash; rate 67% within historical 59-92% range; zero internalization across 39+ consecutive measured cycles",
+      "re_edit_thrash:RECURRING:STABLE — units bc2715fa-14, bc2715fa-32; bc2715fa-14: Edit with-server.ts success=true then success=false x2 (first run), then later Edit with-server.ts success=true x2 then success=false (second run), plus Edit sink-options.ts success=false and Edit crab-sink-shared.test.ts success=false — multiple distinct thrash sub-sequences within single unit; bc2715fa-32: Edit page.tsx success=false x2 consecutively before Read pivot then success; no within-session or cross-session improvement across 22+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — units bc2715fa-14, bc2715fa-22, bc2715fa-32; bc2715fa-14: Edit decisions/_index.md success=false before Read then Edit success=true; bc2715fa-22: Edit index.ts success=false before Read then Edit success=true; bc2715fa-32: Edit page.tsx success=false x2 before Read then Edit success=true; 3-instance count matches prior cycle elevated baseline; pattern is stable and not improving across cycles",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5, bc2715fa-7; bc2715fa-5: cd frontend && rg compounds success=false x2 then pwd+ls discovery before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot finds correct frontend/src location; identical topology to all prior bc2715fa measurement passes; cross-session internalization zero across 25+ consecutive sessions",
+      "hook_bypass_via_absolute_grep_path:RECURRING:CONFIRMED — units bc2715fa-14, bc2715fa-21, bc2715fa-29, bc2715fa-30 use /usr/bin/grep directly (4 units, 27%); was classified NEW in immediately prior calibration cycle; promoted to RECURRING:CONFIRMED; bc2715fa-29 highest concentration (2 calls in single unit); rate stable at 27-36% across two consecutive measured cycles; hook gap (absolute-path invocation not intercepted) is structural root cause",
+      "redundant_read_same_unit:RECURRING:CONFIRMED — unit bc2715fa-22: Read logger.demo.test.ts at tool positions ~10 and ~18 within same unit with identical target paths; structurally identical to prior cycle instance (task_runner.py, workerv2.py); was RECURRING:CONFIRMED in immediately prior calibration entry; zero improvement across two consecutive cycles"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations has been flagged in every measured cycle across 39+ consecutive cycles with zero internalization — further behavior-level recommendations deprioritized; structural intervention required (hook enforcement gap for rg-via-Bash and ls-via-Bash calls)",
+      "hook_bypass_via_absolute_grep_path promoted from NEW to RECURRING:CONFIRMED in one cycle — fix the hook pattern to intercept /usr/bin/grep absolute-path invocations rather than relying on agent behavior change",
+      "optimistic_edit_without_read stable at 3 instances per cycle — candidate for PreToolUse hook that checks whether a Read on the same target path preceded the Edit call within the current unit",
+      "re_edit_thrash unchanged across 22+ cycles — recommend circuit-breaker heuristic: after 2 consecutive Edit failures on same file path, require a Read call before the next Edit on that path",
+      "redundant_read_same_unit RECURRING:CONFIRMED across 2 cycles — low priority relative to above patterns; no new recommendations beyond prior cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "4a3e88a3-769a-4b38-9359-8a3e5fb4f18e",
+      819163
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      14090087
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      33670316
+    ],
+    [
+      "06196d42-88fa-4f9e-b65c-8ca2e0c2d217",
+      112046
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      10662896
+    ],
+    [
+      "e60093cf-f7c0-42b1-9bb0-9cea6fc431c2",
+      2059113
+    ]
+  ],
+  "timestamp": "2026-05-11T16:15:02.775701Z",
+  "tokens_used": 14208,
+  "units_analyzed": 14,
+  "units_total": 102
+}

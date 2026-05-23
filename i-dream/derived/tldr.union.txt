@@ -1,0 +1,5 @@
+- [atone] Top mistake patterns to watch this session:
+- [atone]   ⚠️  [S3, 4x] structural-claim-without-reading-code — structural-claim-without-reading-code
+- [atone]   ⚠️  [S3, 5x] infra-before-grep — infra-before-grep
+- [atone]   ⚠️  [S3, 3x] source-comment-hygiene — terse, durable, no planning artifacts, no decoration
+- [atone]   ⚠️  [S3, 3x] generalize-before-enumerate — generalize-before-enumerate

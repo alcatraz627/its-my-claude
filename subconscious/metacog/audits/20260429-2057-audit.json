@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.35,\"overconfident_count\":2,\"underconfident_count\":0,\"well_calibrated_count\":8,\"biases_detected\":[\"anchoring: repeated re-reads of the same workflow file (frontend-e2e-test.yaml read 5 times in unit -4) suggest anchoring to initial understanding rather than updating model\",\"sunk cost: yaml validation loop in unit -8 escalated through 4 increasingly hacky approaches (pyyaml install, brew, pm2 node_modules) without pausing to reconsider whether validation was necessary at that point\",\"availability: unit -18 defaulted to curl-based verification in a compound bash one-liner pattern that had already failed earlier in the same session, repeating the approach without adapting\"],\"recommendations\":[\"Deduplicate file reads: if the same file is read more than twice in a unit, treat it as a signal that the mental model is wrong — stop, state the confusion, re-read once with explicit intent\",\"Set a tool-attempt budget for environment setup (yaml linting, pip installs): if a validation tool cannot be set up in 2 attempts, skip and note it as unverified rather than escalating through increasingly indirect workarounds\",\"Before issuing compound bash verification commands, check whether simpler sequential curl calls already failed in the current unit — failure pattern repetition without adaptation is a calibration deficit\",\"Zero-output units (units -11 and -14) with Accepted reactions suggest the model correctly recognized it had nothing to add; this is well-calibrated silence and should be preserved as a pattern\",\"Unit -18 showed good recovery instincts (RCA doc written, CLAUDE.md updated) but the final verification loop used a subshell heredoc pattern that failed twice — prefer simpler sequential calls for post-deploy checks\"]}",
+  "sessions": [
+    [
+      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
+      3216938
+    ],
+    [
+      "354d0079-1c0d-43ae-8671-6605d0a0f043",
+      76505
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      31118978
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      4187294
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      5760717
+    ],
+    [
+      "3fad6b88-13af-495f-802a-26110c36e2f5",
+      651702
+    ]
+  ],
+  "timestamp": "2026-04-29T20:57:21.571347Z",
+  "tokens_used": 8535,
+  "units_analyzed": 11,
+  "units_total": 58
+}

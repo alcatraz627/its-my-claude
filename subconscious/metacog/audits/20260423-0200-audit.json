@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.15,\"overconfident_count\":5,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"path_assumption_bias: repeatedly assumed file paths and CWDs were correct without verification, leading to failed Bash/Read/Grep calls in units bc59cf34-20 and bc59cf34-22\",\"environment_state_assumption: assumed services were running on expected ports without first checking pm2/lsof, causing multiple curl failures in bc59cf34-20 and bc59cf34-27\",\"tool_sequence_anchoring: in bc59cf34-8, anchored on a heredoc-based jq script approach despite repeated failures, requiring 3 Write attempts before switching strategy\",\"optimistic_success_bias: in c6ea2b0e-8, issued Edit without verifying exact string match, resulting in initial failure and requiring Read-then-reattempt cycle\",\"complexity_underestimation: bc59cf34-8 jq aggregator took significantly more iterations than the approach complexity implied, suggesting underestimation of jq heredoc/encoding edge cases\"],\"recommendations\":[\"verify CWD and key env vars at unit start before issuing path-dependent Bash commands — a single pwd + ls check prevents the majority of observed failures\",\"use the Write tool for multi-line scripts rather than heredoc in Bash; heredoc quoting and encoding issues caused 3+ retries in bc59cf34-8\",\"before assuming services are available, run pm2 list and lsof -iTCP:PORT -sTCP:LISTEN as a preflight rather than discovering failures mid-task\",\"for Edit operations on large files, always Read the target region first to confirm the exact string before issuing the edit; would have prevented the c6ea2b0e-8 initial failure\",\"when monitoring background test runs, avoid sleep-based polling in Bash; use the TaskOutput or Monitor tool directly — the sleep 60 call in bc59cf34-24 failed and wasted a tool round-trip\"]}",
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      5940581
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      25954389
+    ],
+    [
+      "a76e1439-b17f-467b-b733-4369bba3eba0",
+      10682332
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      63691453
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      13778918
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      61821265
+    ]
+  ],
+  "timestamp": "2026-04-23T02:00:42.155932Z",
+  "tokens_used": 10126,
+  "units_analyzed": 12,
+  "units_total": 146
+}

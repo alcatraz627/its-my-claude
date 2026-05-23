@@ -1,0 +1,58 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18534,
+    "correction_density": 0.06521739130434782,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4505698870785026,
+    "unit_count": 92
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 12/22 units (55%; bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); bc2715fa-2: pwd+ls+jq+tail via Bash; bc2715fa-5: cd-prefix rg compounds, pwd+ls discovery; bc2715fa-7: rg-via-Bash on wrong paths; bc2715fa-14: ls-via-Bash, cat-via-Bash (sed-n), grep-n-via-Bash; bc2715fa-22: find-via-Bash, cat-via-Bash, git-diff-via-Bash; bc2715fa-29: /usr/bin/grep+lsof+pm2 via Bash; bc2715fa-30: /usr/bin/grep+ps+lsof+curl via Bash; bc2715fa-32: ls+head via Bash; bc2715fa-33: sed-via-Bash, tail-via-Bash, grep-via-Bash; bc2715fa-43: /usr/bin/grep x3 in compound; bc2715fa-45: /usr/bin/grep x4+ in compound; bc2715fa-53: find+xargs+/usr/bin/grep via Bash (success=false); rate 55% within historical 18-69% range; zero internalization across 43+ consecutive measured cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:WORSENING — 9/22 units (41%; bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); rate 41% is UP from 31% in immediately prior cycle (which had been classified IMPROVING after decline from 36-38%); reversal from improving trend — prior cycle decline was premature; bc2715fa-33 and bc2715fa-45 each show /usr/bin/grep x4+ concentration; bc2715fa-43 shows /usr/bin/grep x3; structural hook gap (absolute-path invocation not intercepted) remains root cause; reclassified from IMPROVING back to WORSENING",
+      "re_edit_thrash:RECURRING:STABLE — 5/22 units (bc2715fa-14,bc2715fa-32,bc2715fa-33,bc2715fa-36,bc2715fa-45); bc2715fa-14: Edit with-server.ts success=false x3 across sub-sequences plus Edit sink-options.ts success=false; bc2715fa-32: Edit page.tsx success=false x2 before Read pivot; bc2715fa-33: Edit admin.data.ts success=false before Write escape; bc2715fa-36: Edit console-sink.ts success=false x2 consecutively; bc2715fa-45: Edit worker-status.tsx success=false x3 (positions ~12,13,21) before Read pivot then partial success plus Edit file-sink.test.ts success=false; 5-unit count matches prior cycle stable baseline; zero improvement across 25+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:SLIGHTLY_WORSENING — 5/22 units (bc2715fa-14,bc2715fa-22,bc2715fa-32,bc2715fa-33,bc2715fa-45); bc2715fa-14: Edit decisions/_index.md success=false before Read then success; bc2715fa-22: Edit index.ts success=false before Read then success; bc2715fa-32: Edit page.tsx success=false x2 before Read then success; bc2715fa-33: Edit admin.data.ts success=false before Write escape-to-new-file; bc2715fa-45: Edit worker-status.tsx success=false x2 before Read pivot; 5-unit count is UP from 3-4 in prior two consecutive cycles; first measurable increase after stable plateau",
+      "path_assumption_bias:RECURRING:STABLE — 2/22 units (bc2715fa-5,bc2715fa-7); bc2715fa-5: cd frontend prefix then rg compounds, pwd+ls discovery required before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot finds correct frontend/src location; identical topology to all prior bc2715fa measurement passes; cross-session internalization zero across 28+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 violates (declared crab-sink server/client split complete after ts:build clean and vitest passing without dev server verification); bc2715fa-18 executes full correction ritual appending detailed incident entry to mistake-patterns.md; self-documentation is thorough and correct; violation reflex uncorrected across 7+ consecutive measured cycles; ritual executes correctly every time but does not prevent the preceding violation",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22: accepted system-reminder file-modified notification on logger/index.ts without diffing; LOGGER_ENABLED gate semantics flipped; caught only via test failure; self-documented via mistake-pattern append at end of unit; written pattern entry did not prevent violation in subsequently measured units; third consecutive cycle confirming pattern",
+      "redundant_read_same_unit:RECURRING:STABLE — 3/22 units (bc2715fa-22,bc2715fa-33,bc2715fa-45); bc2715fa-22: Read logger.demo.test.ts x2; bc2715fa-33: Read code-block.tsx x3 (highest single-unit count; all three reads without offset variation indicating zero information gain); bc2715fa-45: Read worker-status.tsx x2 following edit failures; 3-unit count matches prior cycle baseline; escalating trend from prior two cycles appears to have plateaued at 3",
+      "optimistic_write_without_read:RECURRING:STABLE — bc2715fa-62: Write _20260509-mem-audit-5a.claude.md success=true then Bash mv _last-checkpoint.json success=false then Write _last-checkpoint.json success=false then Read confirms file exists then Write success=true; structurally identical to prior measured cycle instances; write-tool contract (Read required before overwriting existing file) violated identically"
+    ],
+    "calibration_score": 0.05,
+    "cross_references": [
+      "bc2715fa-45 (correction received): violates dream insight conf=0.78 'Never assert state without observation' — Edit worker-status.tsx success=false x3 then Read required = asserting file state without reading it; the insight unifies edit-thrash and optimistic-edit as the same failure mode",
+      "bc2715fa-14: violates dream insight conf=0.78 — declaring crab-sink ready without dev server exercise = asserting UI/runtime correctness without observation; insight correctly predicts this topology",
+      "bc2715fa-22: trusted_linter_reminder_without_diffing violates dream insight conf=0.78 — accepting linter modification as cosmetic without diffing = asserting file semantic content without reading it; all three failure modes (edit-without-read, declare-ready-without-run, trust-linter-without-diff) are the same 'assertion without observation' root",
+      "bc2715fa-18: self-documentation ritual confirms the corrective reflex is intact but dream insight conf=0.55 (context reconstruction risk) is relevant — thorough self-documentation only helps if the documented pattern survives into the next session context; the ritual executes but the violation recurs, consistent with the insight that reconstructed context may not carry behavioral inhibition forward"
+    ],
+    "overconfident_count": 8,
+    "recommendations": [
+      "hook_bypass_via_absolute_grep_path has reverted from IMPROVING to WORSENING (41% this cycle vs 31% prior); this reversal invalidates the prior cycle's tentative improvement claim — do not relax monitoring; structural fix (intercepting absolute-path grep invocations in the hook layer) remains the only reliable prevention path since behavioral internalization has not occurred across any measured cycle",
+      "optimistic_edit_without_read increased to 5 units this cycle from a stable 3-4 baseline; the Read-before-Edit discipline is not being applied consistently; a pre-Edit hook that checks whether the file was read in the current unit would address this structurally",
+      "re_edit_thrash and path_assumption_bias remain stable at historical baselines with zero cross-session improvement; these are load-bearing candidates for structural hook intervention rather than continued behavioral recommendations",
+      "declared_ready_without_runtime_exercise self-documentation ritual executes correctly every time but does not prevent the violation that precedes it; the ritual is not a prevention mechanism — it is a post-hoc documentation mechanism; a checklist gate before any 'ready to push' output would need to be hook-enforced, not just pattern-documented",
+      "shell_tool_preference_violations at 55% is within historical range and shows no trend; continue monitoring but deprioritize new recommendations given zero internalization history across 43+ cycles — structural tool preference enforcement is the only realistic intervention"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      19315781
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      47427576
+    ],
+    [
+      "b58dd5bd-108c-4055-ab81-1bec451b71ee",
+      192695
+    ]
+  ],
+  "timestamp": "2026-05-13T10:32:54.716514Z",
+  "tokens_used": 25078,
+  "units_analyzed": 23,
+  "units_total": 92
+}

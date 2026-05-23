@@ -1,0 +1,53 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18526,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3656922699974285,
+    "unit_count": 67
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — unit-0 (/usr/bin/grep 4+ times in orientation sweep with head-based Bash reads), unit-12 (/usr/bin/grep twice before Read on gum-guide.md), unit-13 (/usr/bin/grep multiple times in audit pipeline and section-range reads), unit-19 (/usr/bin/grep multiple times in spot-check pipeline), unit-30 (/usr/bin/grep for code anchoring mid-edit cycle on 20-fill.js), unit-33 (/usr/bin/grep for section anchoring before Edit); frequency ~6 units, identical to prior three cycles, zero internalization",
+      "re_edit_thrash:RECURRING:stable — unit-13: single Read then 6 Edit calls on 20-fill-acdelco.js (matches prior cycle peak exactly); unit-30: 5 Edit calls on 20-fill.js after no mid-cycle re-read, plus 2 Edits each on 30-assemble.js and 40-verify.js; peak count of 6 unchanged from prior cycles",
+      "mcp_fallback_without_retry:RECURRING:stable — unit-2: mcp__file-tools__list_sheets called once (success=false), no retry or error-log inspection, immediately pivots to 5 inline ExcelJS Bash scripts; structurally identical to every prior appearance of this session ID; fifth consecutive cycle with identical pattern",
+      "optimistic_edit_without_read:RECURRING:stable — unit-25: Edit on ~/.claude/compliments.md called without prior Read (success=false), followed by Read then successful Edit; flagged as INSTANCE in prior cycle, now confirmed recurring across sessions"
+    ],
+    "calibration_score": 0.08,
+    "overconfident_count": 4,
+    "recommendations": [
+      "shell_tool_preference_violations and re_edit_thrash have appeared in every cycle with no improvement trajectory — skip re-recommending; hook enforcement is the only viable mitigation path",
+      "mcp_fallback_without_retry is now five cycles identical on the same session ID — pattern shows no decay; no new recommendation warranted",
+      "optimistic_edit_without_read graduated from INSTANCE to RECURRING — candidate for hook: block Edit on paths not read in current turn"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      7147059
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      6217862
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      16686642
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      11457421
+    ],
+    [
+      "214184c4-51e4-4a39-a1de-be2ca38e253b",
+      12466998
+    ]
+  ],
+  "timestamp": "2026-05-01T17:34:55.275696Z",
+  "tokens_used": 11737,
+  "units_analyzed": 13,
+  "units_total": 67
+}

@@ -1,0 +1,37 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.16666666666666666,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.17414998144021454,
+    "unit_count": 6
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:IMPROVING — 3/5 non-trivial units (60%); unit 13 (/usr/bin/grep explicit-path x4 via Bash for symbol and API surface lookup before Read), unit 18 (/usr/bin/grep x2 via Bash for kind/protected anchoring, ls via Bash), unit 20 (/usr/bin/grep -E via Bash for log pattern search); rate 60% is a meaningful drop from prior cycle highs of 100%, 91.7%, 88%; /usr/bin/grep explicit-path form remains structurally identical to all 19 prior measured cycles but frequency reduction is measurable; units 21 and 26 contain zero shell tool violations — first time multiple clean units appear in a single cycle",
+      "re_edit_thrash:RECURRING:STABLE — unit 18: 9 Edit calls on index.ts plus 9 Edit calls on reconcile.ts with interleaved Bash/tsc type-check calls between cycles; peak Edit count per file (9) unchanged from all 19 prior measured cycles; tsc check between file groups is a marginal improvement in feedback loop structure but does not reduce Edit count within a single file; no improvement trend on core metric",
+      "git_push_without_verification:NEW — unit 26: git push origin main executed immediately on terse user directive (\"push\") without the mandatory verification triad (git status + git log --oneline -3 + git diff --stat); CLAUDE.md rules/git.md and rules/communication.md both require this triad before any push; pushing to main additionally requires fresh explicit approval per rules; user acceptance does not indicate the omission was correct — it indicates the user did not catch it; not observed as a named bias in any prior calibration cycle",
+      "search_variant_thrash:RECURRING:STABLE — unit 18: python3 one-liner for runs.jsonl parsing (success=false) followed by pivot to jq formulation for identical query; single instance, consistent with prior cycle single-instance occurrences; not worsening"
+    ],
+    "calibration_score": 0.18,
+    "overconfident_count": 3,
+    "recommendations": [
+      "git_push_without_verification (NEW): enforce verification triad before any git push, even on terse continuation messages; the rules/communication.md escape-hatch clause applies here — irreversible-at-scale operation warrants a pause even when user sends a one-word directive; propose a PreToolUse hook that injects git status + log + diff output before any git push invocation",
+      "re_edit_thrash (RECURRING:STABLE, no improvement): 9 edits per file with interleaved type-checks is the ceiling, not the floor — read the full file once, form a complete diff plan, apply in one or two edits; the tsc feedback loop between file groups is good structure but should replace intra-file anchor-thrash, not coexist with it",
+      "shell_tool_preference_violations (RECURRING:IMPROVING): rate dropped to 60% — improvement is real; continue current trajectory; no new intervention recommended this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "cedb55f4-79a6-4bf4-a78f-7641be51fe43",
+      3585157
+    ]
+  ],
+  "timestamp": "2026-05-06T07:46:13.675175Z",
+  "tokens_used": 5915,
+  "units_analyzed": 6,
+  "units_total": 6
+}

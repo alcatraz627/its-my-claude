@@ -1,0 +1,75 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18733,
+    "correction_density": 0.07563025210084033,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3184076845214471,
+    "unit_count": 119
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 29d7d6be-2: cd+ls-la+find+ls+wc-l+head-50 via Bash; 29d7d6be-3: find+grep pipeline via Bash; 29d7d6be-6: tail-10 via Bash; bc2715fa-2,5,7,14,22,29,30,32,33,43,53 carry historical rate; new 29d7d6be units contribute 3 additional instances; aggregate rate unchanged at 55-65% of units across all sessions",
+      "hook_bypass_via_absolute_grep_path:RECURRING:STABLE — bc2715fa-14,21,22,29,30,33,43,45 confirmed in this set; 29d7d6be session shows ZERO instances for second consecutive new session strengthening improving signal in new sessions; bc2715fa historical units remain saturated; structural hook gap unchanged",
+      "re_edit_thrash:RECURRING:WORSENING — 6 units (bc2715fa-14,22,32,33,36,45); bc2715fa-36: Edit console-sink.ts success=false x2 consecutively; bc2715fa-45: Edit worker-status.tsx success=false x3 then x2 more after Read pivot; count doubled from prior stable plateau of 3; highest within-session rate in measured history confirmed",
+      "optimistic_edit_without_read:RECURRING:WORSENING — 6 units (bc2715fa-14,22,32,33,36,45); co-occurrence with re_edit_thrash at identical 6-unit level confirms shared root cause: editing target files without first reading them; same topology in all 6 instances (fail, read, succeed)",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 violates (declared crab-sink split ready after ts:build+vitest without dev server exercise); bc2715fa-45 second violation in same session (outcome=Corrected; final compound Bash success=false indicates premature completion claim); two violations in one session is highest within-session recurrence in measured history",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22: accepted logger/index.ts linter modification without diffing; LOGGER_ENABLED gate semantics flipped from default-on to default-off; caught only via test failure; self-documented at end of unit; ninth consecutive cycle confirming pattern",
+      "redundant_read_same_unit:RECURRING:STABLE — bc2715fa-22: Read logger.demo.test.ts x2 and index.ts x2 without intervening edits; bc2715fa-32: Read page.tsx after edit failures; bc2715fa-33: Read code-block.tsx x3 with no offset variation; 3 units at or above prior cycle plateau",
+      "unprompted_infra_scope_creep:RECURRING:WORSENING — 29d7d6be-6 is second measured instance (was NEW in prior cycle); proposed GitHub Action CI for link-checking in docs restructure planning conversation where repo had zero .github/workflows; ls .github/workflows/ executed ONLY AFTER user correction not before proposing; self-correction ritual executed correctly; pattern now RECURRING across two consecutive sessions indicating no internalization from first instance",
+      "optimistic_write_without_read:RECURRING:STABLE — bc2715fa-62: Write _last-checkpoint.json success=false before Read pivot then Write success=true; identical fail-read-succeed topology to all prior instances; write-tool contract violated again"
+    ],
+    "calibration_score": 0.07,
+    "cross_references": [
+      "dream_insight:git-push-approval-resets-at-compaction — NOT violated in this set; no git push operations observed; bc2715fa-45 outcome=Corrected shows premature-completion pattern that is topologically adjacent (overconfident completion state at context boundary) but git push not triggered",
+      "dream_insight:session-continuity-deduplication — bc2715fa-62 executes checkpoint write correctly (Read then Write after first Write failure); consistent with heavy session-continuity pattern noted across 91 sessions in dream corpus; memory system used correctly in this unit",
+      "dream_insight:memory-deduplication — mistake-pattern appends in 29d7d6be-6, bc2715fa-18, bc2715fa-22 add new entries to mistake-patterns.md without deduplication check against existing entries; dream insight recommends consolidating entries sharing the same corrective theme; these appends may be adding redundant near-duplicate entries that dilute signal-to-noise ratio of the pattern store"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "re_edit_thrash+optimistic_edit_without_read worsening to 6 units (doubled from stable plateau of 3) — prior cycles have flagged and documented this pattern repeatedly with zero internalization; further documentation in mistake-patterns.md is not the fix; structural enforcement (mandatory Read before first Edit on any target file in a session) is the only intervention that could break the cycle; deprioritize re-documenting",
+      "unprompted_infra_scope_creep is now RECURRING with two instances in consecutive sessions despite correct self-documentation ritual in both; promote from mistake-patterns.md to a named entry in rules/communication.md scope-control section — specifically as an infra-dressed-as-best-practice variant of the scope-ceiling rule",
+      "declared_ready_without_runtime_exercise had two violations in bc2715fa single session despite ritual documentation (bc2715fa-18) occurring between them — ritual execution is not preventing same-session recurrence; the pattern requires a blocking check (explicit dev-server verification step before any ready claim) not another documentation append"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      879549
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      38687813
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      85068963
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      1516141
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      1822266
+    ],
+    [
+      "09034bdf-733b-41c8-91fc-020327531b71",
+      322970
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      3247336
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      379305
+    ]
+  ],
+  "timestamp": "2026-05-15T03:05:18.817470Z",
+  "tokens_used": 25766,
+  "units_analyzed": 28,
+  "units_total": 119
+}

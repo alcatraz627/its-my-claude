@@ -1,0 +1,41 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.034482758620689655,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.17873834842378505,
+    "unit_count": 29
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units 4 (ls-via-Bash x2 head/tail split, grep-rln-via-Bash, rg-via-Bash x4+, cat|grep pipeline on package.json, ls /docs/ x2 via Bash), 6 (rg-via-Bash for section anchoring x2 between Edit cycles, wc-l-via-Bash, grep -n via Bash for headings), 8 (rg-via-Bash for section anchoring before/between every Edit cycle x5+), 21 (rg-l-via-Bash, for-loop with rg-via-Bash instead of Grep+Read), 25 (ls-via-Bash), 32 (find-via-Bash x2 instead of Glob, /usr/bin/grep explicit-path x6+), 34 (cat-n-via-Bash instead of Read, /usr/bin/grep explicit-path x5+, for-loop-Bash success=false); 7 of 8 non-trivial units affected (88%); /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all 16 prior cycles; zero internalization; rate (88%) at upper bound of prior three cycles (58-86%), slight worsening",
+      "re_edit_thrash:RECURRING:stable — unit 6: Read then 10+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: failed Edit then rg anchor then 7+ Edit calls on plan.md with interleaved rg anchors and Reads; unit 32: 4 Edit calls on data-history-v3.tsx with interleaved Reads plus 6 Edit calls on data-history-v3.table.tsx with interleaved Reads; peak Edit count 6-10 per file, interleaved-read-and-anchor structure identical to all 16 prior cycles; no improvement trend across any measured cycle",
+      "optimistic_edit_without_read:RECURRING:stable — unit 8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with prior two cycles; pattern holding at pre-improvement baseline for fourth consecutive cycle after brief two-cycle improving streak",
+      "path_assumption_bias:RECURRING:worsening — unit 4: Read on use-sync-q.ts (success=false) again followed by ls-via-Bash pivot; this is now the fifth consecutive session where this specific file path produces a Read(success=false) failure (flagged across four prior cycles); cross-session non-internalization on a single concrete path has now persisted through five cycles with zero improvement; severity continues to escalate; same-session repetition not observed (consistent with most recent prior cycles) but cross-session failure on this exact path is now a structural constant"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 4,
+    "recommendations": [
+      "path_assumption_bias on use-sync-q.ts has now failed in five consecutive sessions — this specific path is either permanently absent or has been moved; a one-time ls of the hooks directory before any Read on use-sync-q.ts would terminate this recurring failure chain; the pattern is now severe enough to warrant a hook or a persistent note rather than another calibration recommendation",
+      "shell_tool_preference_violations reached 88% this cycle, above the prior stable band of 58-86%; no new recommendation is warranted given 16 prior cycles of no internalization — this bias requires a structural intervention (hook blocking Bash grep/ls/find when Grep/Glob/Read suffice) rather than behavioral correction",
+      "re_edit_thrash shows no trend in either direction across all measured cycles; the interleaved-rg-anchor pattern is structurally embedded in the Edit workflow; without a hook or a Read-then-single-targeted-Edit discipline, this will remain at current baseline indefinitely"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      31946579
+    ],
+    [
+      "cedb55f4-79a6-4bf4-a78f-7641be51fe43",
+      267793
+    ]
+  ],
+  "timestamp": "2026-05-05T16:53:41.234637Z",
+  "tokens_used": 10083,
+  "units_analyzed": 11,
+  "units_total": 29
+}

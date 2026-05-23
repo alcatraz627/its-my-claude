@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.31,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":10,\"biases_detected\":[\"anchoring — repeated attempts on same .env.local path after initial failure without changing approach\",\"availability — defaulted to shell heredoc for multi-line jq content before trying Write tool, causing two failed attempts\",\"sunk-cost — continued sleep-based polling strategy in unit-24 after first Bash sleep command failed rather than switching to Monitor\",\"path-assumption — assumed working directory context in several Bash calls (grep without abs path, npm test without cd) causing preventable failures\"],\"recommendations\":[\"Use Write tool for multi-line file content instead of heredoc in Bash; heredoc quoting interacts badly with jq escape sequences and caused two failed attempts before Write succeeded\",\"Replace sleep-poll patterns with Monitor tool for background task output; the 60s sleep in unit-24 failed and the same information was obtained synchronously via Read\",\"After a tool call fails on a path, verify the path exists with Glob before retrying rather than retrying the same call or switching to a sibling path — units 20 and 22 made 3-4 probing calls that a single Glob would have collapsed\",\"Run Bash commands with explicit absolute paths or leading cd when CWD is ambiguous; several units issued relative-path commands that failed because CWD was the parent repo rather than the frontend subdirectory\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      12967975
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      13855813
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      53612448
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      41106466
+    ],
+    [
+      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
+      5811257
+    ]
+  ],
+  "timestamp": "2026-04-18T19:36:54.404852Z",
+  "tokens_used": 10114,
+  "units_analyzed": 13,
+  "units_total": 104
+}

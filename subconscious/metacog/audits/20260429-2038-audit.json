@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.35,\"overconfident_count\":3,\"underconfident_count\":0,\"well_calibrated_count\":10,\"biases_detected\":[\"sunk_cost: unit 5a0bcd6b-8 attempted pip install three times in succession before switching to node/js-yaml workaround\",\"anchoring: unit 5a0bcd6b-4 read the same workflow file six times without structural change between reads, indicating fixation on a single artifact\",\"availability: units 5a0bcd6b-0 and 5a0bcd6b-8 defaulted to python/pip for YAML validation despite node being available in the environment\"],\"recommendations\":[\"Apply strategy-switch threshold after two consecutive tool failures on the same approach rather than three; the pip-install retry pattern cost multiple round-trips with no new information\",\"Treat repeated reads of the same file without intervening edits as a re-edit-thrash signal; re-read only after a structural hypothesis change\",\"Probe available runtimes (node, python, ruby) once at session start for validation tasks rather than assuming pip availability on the target machine\",\"Empty-output units (5a0bcd6b-11, 5a0bcd6b-14, 0ce8b4ef-10) suggest message-length truncation or dropped responses; add fallback acknowledgment even for zero-content turns to preserve calibration signal\"]}",
+  "sessions": [
+    [
+      "9dbd1360-5f37-49a0-8c4e-fb4cb26ce417",
+      93813
+    ],
+    [
+      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
+      2754765
+    ],
+    [
+      "354d0079-1c0d-43ae-8671-6605d0a0f043",
+      63860
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      31111089
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      3972795
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      5434046
+    ]
+  ],
+  "timestamp": "2026-04-29T20:38:25.568101Z",
+  "tokens_used": 9469,
+  "units_analyzed": 13,
+  "units_total": 56
+}

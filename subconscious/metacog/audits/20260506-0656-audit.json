@@ -1,0 +1,49 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.04838709677419355,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2332897663864511,
+    "unit_count": 62
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 7/7 non-trivial units (100%); unit 4 (ls-via-Bash x2 head/tail split, grep-rln-via-Bash, rg-via-Bash x4+, cat|grep pipeline on package.json, ls /docs/ x2 via Bash), unit 6 (grep-n via Bash, rg-via-Bash for section anchoring x2, wc-l-via-Bash), unit 8 (rg-via-Bash for section anchoring x5+ between every Edit cycle), unit 21 (rg-l-via-Bash, for-loop rg-via-Bash), unit 25 (ls-via-Bash), unit 32 (find-via-Bash x2, /usr/bin/grep explicit-path x8+), unit 34 (cat-n-via-Bash instead of Read, /usr/bin/grep explicit-path x6+, for-loop-Bash success=false); rate 100% up from prior cycle high of 91.7%; /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all 19 prior measured cycles; zero internalization",
+      "re_edit_thrash:RECURRING:STABLE — unit 6: Read then 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: Edit(success=false) then rg anchor then 9+ Edit calls on plan.md with interleaved rg anchors and Reads; unit 32: 4 Edit calls on data-history-v3.tsx with interleaved Reads plus 6+ Edit calls on data-history-v3.table.tsx with interleaved Reads plus 3 Edit calls on s1-upload.tsx; peak Edit count 6-9 per file unchanged from all 19 prior cycles; interleaved-read-and-anchor structure identical; no improvement trend",
+      "path_assumption_bias:RECURRING:STABLE — unit 4: Read on use-sync-q.ts (success=false) requiring ls-via-Bash pivot; same file that produced Read(success=false) in prior session (flagged in calibration history); sixth+ consecutive session appearance with zero cross-session internalization on this specific path; no same-session repetition observed this cycle (consistent with prior two cycles); cross-session failure rate unchanged",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with prior three cycles; no recovery from pre-improvement baseline for fifth consecutive cycle"
+    ],
+    "calibration_score": 0.04,
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations has reached 100% this cycle (up from 91.7%) — escalation warrants re-examining whether the hook blocking rm also surfaces shell-tool-preference guidance at tool-call time, since post-hoc pattern recording has produced zero internalization across 19 cycles",
+      "path_assumption_bias on use-sync-q.ts specifically: the path has failed Read in 6+ consecutive sessions; a one-time Glob call to canonicalize the path at session start for this project would eliminate recurrence; this is targetable via a UserPromptSubmit hint or session-start hook for the Versable frontend project",
+      "deprioritize further recommendations for re_edit_thrash and optimistic_edit_without_read — both are stable, already documented in mistake-patterns.md, and no new severity signal this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      35117284
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      23500275
+    ],
+    [
+      "cedb55f4-79a6-4bf4-a78f-7641be51fe43",
+      3335436
+    ],
+    [
+      "b7d0b340-1bcf-4ee1-971d-5c62f004924f",
+      189092
+    ]
+  ],
+  "timestamp": "2026-05-06T06:56:37.088729Z",
+  "tokens_used": 10681,
+  "units_analyzed": 11,
+  "units_total": 62
+}

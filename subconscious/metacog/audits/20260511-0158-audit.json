@@ -1,0 +1,56 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18494,
+    "correction_density": 0.06451612903225806,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3704903773350287,
+    "unit_count": 93
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 10/15 units (67%; 060367c5-0,060367c5-10,060367c5-17,060367c5-30,060367c5-33,060367c5-34,060367c5-49,bc2715fa-2,bc2715fa-5,bc2715fa-7); ls-via-Bash and cat-via-Bash in session-start WAL/checkpoint recovery (060367c5-0), test-f-cat compound via Bash on MEMORY.md (060367c5-10), ls-via-Bash plus rg-via-Bash x2 plus wc-l-via-Bash (060367c5-17), ls-via-Bash plus rg-via-Bash (060367c5-30), rg-via-Bash (060367c5-33), grep-n-via-Bash plus rg-via-Bash (060367c5-34), ls-via-Bash at checkpoint write (060367c5-49), pwd-and-ls-via-Bash plus jq-via-Bash plus tail-via-Bash (bc2715fa-2), rg-via-Bash x6+ with cd-prefix compounds (bc2715fa-5), rg-via-Bash on wrong paths before ls pivot (bc2715fa-7); rate 67% matches prior cycle range of 59-92%; zero internalization across 36+ consecutive measured cycles; topology and rate unchanged from prior entry",
+      "re_edit_thrash:RECURRING:STABLE — units 060367c5-17,060367c5-30,060367c5-33,060367c5-42; unit 060367c5-17: 4 Edits on DEPLOY.md plus 2 on main.rs plus 2 on dashboard.rs; unit 060367c5-30: 2 Edits each on dashboard.rs, error.rs, auth.rs within single unit; unit 060367c5-33: 5 Edits on dashboard.rs; unit 060367c5-42: 11 Edits on dashboard.rs plus 2 on mod.rs (highest single-file Edit count confirmed again across measurement passes); no within-session or cross-session improvement across 19+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 060367c5-17: 2 Edit calls on README.md both success=false before eventual Read and successful Edit; single instance consistent with 1-2 per cycle baseline across all 20 prior measured cycles; causal mechanism unchanged",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5,bc2715fa-7; unit bc2715fa-5: cd frontend && rg compound fails (success=false) then rg without correct prefix fails (success=false) then pwd discovery and ls before correct path resolved; unit bc2715fa-7: Bash targets wrong relative paths for app-init.utils.ts and with-server.ts (success=false) before ls pivot finds correct location at frontend/src; identical topology to all prior bc2715fa measurement passes; cross-session internalization remains zero across 23+ consecutive sessions",
+      "wrong_edit_target_on_correction:RECURRING:CONFIRMED — unit 060367c5-9: user message references curl/shell/existing behavior; agent reads Dockerfile and edits Dockerfile (success=true); outcome is Corrected; unit 060367c5-10 (is_correction=true) then fixes render.yaml — Dockerfile edit was the wrong artifact; structurally identical to the instance first classified RECURRING in the most recent prior calibration entry; the mistake-pattern entry written in that prior cycle did not prevent recurrence on the same unit re-measured here; zero within-session correction of target identification",
+      "optimistic_write_without_read:NEW — unit 060367c5-49: Write to /Users/alcatraz627/.claude/_last-checkpoint.json (success=false), Write to /tmp/core-dump-data.json (success=false), Bash mv compound (success=false), then Read of both files succeeds confirming they already exist, then Write of both succeeds; agent attempted to overwrite existing files without reading them first, violating the Write tool contract requiring Read before overwriting existing files; structurally analogous to optimistic_edit_without_read but applied to Write calls; not recorded in any prior calibration history entry across 35+ prior measured cycles"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations and re_edit_thrash have been flagged every cycle for 36+ cycles with zero internalization — skip redundant recommendations; hook enforcement is the only remaining lever with any expected effect",
+      "optimistic_write_without_read (NEW): add a PreToolUse hook that checks whether the target path of a Write call already exists on disk and blocks the call unless a Read of that exact path occurred earlier in the same turn; mirrors the existing pattern for Edit but closes the Write gap revealed in 060367c5-49",
+      "wrong_edit_target_on_correction now confirmed across two consecutive measurement passes on the same unit 060367c5-9 — verify whether the mistake-pattern entry appended in the prior cycle is present and readable in mistake-patterns.md; if it exists and violations continue the pattern should graduate to a hook that pauses on is_correction=true turns and requires explicit artifact identification before any Edit or Write",
+      "path_assumption_bias trigger is consistently the frontend/ vs project-root CWD ambiguity in enhancement-product; a single line in that project's CLAUDE.md stating the expected CWD convention for rg and find calls would eliminate the ambiguity structurally rather than requiring behavioral change that has not internalized across 23 sessions"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "060367c5-53cd-434a-9021-5edc8f2828be",
+      10395680
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      9704835
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      27610664
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      9101971
+    ],
+    [
+      "a216780d-1ff0-4fe8-a2e2-ff0655d5beb5",
+      14151
+    ]
+  ],
+  "timestamp": "2026-05-11T01:58:11.933523Z",
+  "tokens_used": 13335,
+  "units_analyzed": 15,
+  "units_total": 93
+}

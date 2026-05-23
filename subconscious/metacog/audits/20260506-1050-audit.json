@@ -1,0 +1,44 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.045454545454545456,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2645044155360473,
+    "unit_count": 66
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 7/7 non-trivial units (100%); unit 4 (ls-via-Bash x2 head/tail split, grep-rln-via-Bash, rg-via-Bash x5+, cat|grep pipeline on package.json, ls /docs/ x2 via Bash, Read on use-sync-q.ts success=false → ls-via-Bash pivot), unit 6 (grep-n via Bash for heading anchors, rg-via-Bash x2-3 for section anchoring between Edit cycles, wc-l-via-Bash), unit 8 (rg-via-Bash for section anchoring before/between every Edit cycle x3-4, wc-l-via-Bash), unit 21 (rg-l-via-Bash, for-loop rg-via-Bash), unit 25 (ls-via-Bash), unit 32 (find-via-Bash x2, /usr/bin/grep explicit-path x10+), unit 34 (cat-n-via-Bash instead of Read, /usr/bin/grep explicit-path x8+, for-loop-Bash success=false); rate 100% is a full regression from 60% in the immediately prior cycle which was the first measurable improvement in 19 cycles; /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all prior measured cycles; one-cycle improvement did not persist",
+      "re_edit_thrash:RECURRING:STABLE — unit 6: Read then 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: Edit(success=false) then rg anchor then Read then 9+ Edit calls on plan.md with interleaved rg anchors and Reads; unit 32: 5 Edit calls on data-history-v3.tsx plus 6+ Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx with interleaved Reads; peak Edit count per file (6-9) unchanged from all prior cycles; interleaved-read-and-anchor structure identical; no improvement trend",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with prior three cycles; no recovery",
+      "path_assumption_bias:RECURRING:STABLE — unit 4: Read on use-sync-q.ts (success=false) requiring ls-via-Bash pivot; this is the same file that produced Read(success=false) in multiple prior sessions across multiple cycles; no same-session repeat this cycle (an improvement over the worst-case cycle where it repeated within the same session); cross-session failure rate unchanged"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 7,
+    "recommendations": [
+      "shell_tool_preference_violations regression: the 60% rate in the prior cycle was the first measurable improvement in 19+ cycles and did not persist — this suggests the prior cycle was variance rather than learning; the /usr/bin/grep explicit-path form remains the most durable anti-pattern across all cycles; since prior recommendations have not produced durable change, a hook-level intervention (blocking /usr/bin/grep via Bash and redirecting to Grep tool) is the only remaining lever not yet applied",
+      "use-sync-q.ts path: this specific file has produced Read(success=false) across 5+ cycles; the correct path should be resolved once and stored in a memory entry or note — the cross-session failure on an identical path after repeated occurrences indicates no durable path resolution mechanism is active"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      36330233
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      24343973
+    ],
+    [
+      "cedb55f4-79a6-4bf4-a78f-7641be51fe43",
+      4284037
+    ]
+  ],
+  "timestamp": "2026-05-06T10:50:40.509725Z",
+  "tokens_used": 10193,
+  "units_analyzed": 11,
+  "units_total": 66
+}

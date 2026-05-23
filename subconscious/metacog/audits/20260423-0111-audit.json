@@ -1,0 +1,41 @@
+{
+  "response": "{\"calibration_score\":0.31,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":8,\"biases_detected\":[\"path_anchoring: multiple units attempted Read/Bash on unverified paths before confirming existence, leading to tool failures (bc59cf34-20: bash failures due to wrong CWD assumptions; c6ea2b0e-8: initial Edit failure requiring recovery via rg probe first)\",\"tool_proliferation: exploration units (c6ea2b0e-4 with 28 tools, bc59cf34-8 with 38 tools) show exhaustive search patterns beyond minimum required, suggesting low confidence in initial reconnaissance rather than targeted lookup\",\"persistence_bias: units bc59cf34-20 and bc59cf34-8 repeated structurally similar bash invocations after failures rather than pivoting strategy, indicating sunk-cost anchoring to initial approach\",\"sequential_over_parallel: units bc59cf34-22 and bc59cf34-27 issued multiple independent Glob/Read/Grep calls sequentially that could have been batched, inflating tool counts without necessity\"],\"recommendations\":[\"probe before acting: run a single Glob or Bash ls check before issuing Read or Edit on any path not confirmed in the current session; this would have prevented 4 failed tool calls across units bc59cf34-20 and c6ea2b0e-8\",\"set explicit failure thresholds: after 2 consecutive failures on the same target type (e.g., bash env reads), pivot to an alternative strategy rather than retrying with minor variations\",\"batch independent reconnaissance: units exploring a codebase should issue parallel Read/Grep calls rather than sequential chains; this reduces wall-clock latency and context consumption per unit\",\"distinguish exploration from execution units at planning time: units c6ea2b0e-4 and bc59cf34-8 mixed deep exploration with document writes in a single turn, making strategy harder to evaluate and increasing blast radius of any mid-unit error\"]}",
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      4969008
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      25654008
+    ],
+    [
+      "a76e1439-b17f-467b-b733-4369bba3eba0",
+      7082193
+    ],
+    [
+      "6345a8d3-8645-40e5-a625-fe143f65702d",
+      14875188
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      61351285
+    ],
+    [
+      "2d8239ca-41bf-4ea3-ae8d-263d821ce745",
+      8854480
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      13091419
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      60650220
+    ]
+  ],
+  "timestamp": "2026-04-23T01:11:00.281007Z",
+  "tokens_used": 10138,
+  "units_analyzed": 12,
+  "units_total": 171
+}

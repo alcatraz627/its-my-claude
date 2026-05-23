@@ -1,0 +1,57 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18479,
+    "correction_density": 0.02564102564102564,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4361606703793035,
+    "unit_count": 39
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — eca50a22-2 (sed+rg via Bash compound), eca50a22-19 (ls+rg compounds), 1c86d512-0 (ls+rg+file via Bash), 1c86d512-3 (file+sips+iconutil+launchctl compounds), 1c86d512-20 (sed+awk via Bash), 1c86d512-25 (rg+mkdir compounds), 1c86d512-28 (rg+cargo compounds), c5baf85e-2 (ls+rg via Bash, first call fails), c5baf85e-8 (ls+head+jq via Bash); rate ~69% of measurable units; twelfth consecutive cycle within 55-75% band; structural non-improvement confirmed with zero downward pressure",
+      "confirmation_bias:RECURRING:STABLE — eca50a22-2: Write to docs-migration-impact-map.md executed before final AskUserQuestion completed (success:false); conclusions persisted before user input received; identical topology to 2026-05-20 prior-cycle instance; no pre-emption improvement",
+      "optimistic_edit_without_read:RECURRING:IMPROVING — 1c86d512-20: Edit src/main.rs fails (success:false) before subsequent Edit succeeds without intervening Read; 1 unit with 1 sub-instance; significant improvement from prior 3-6 unit plateau; pattern not eliminated but materially reduced",
+      "bash_retry_without_diagnosis:NEW — 1c86d512-3: two consecutive Bash calls targeting iconutil both fail (success:false) with no intermediate state-read or diagnostic pivot between first and second attempt; third command uses different approach (iconutil with .iconset extension) and succeeds; structural equivalent of re_edit_thrash applied to Bash invocations rather than Edit calls"
+    ],
+    "calibration_score": 0.35,
+    "cross_references": [
+      "1c86d512-20 (git push success:false): dream insight re approval-state as conversational was NOT violated here — AskUserQuestion succeeded before push; push failed due to remote auth error, not approval bypass; confirms the insight is being heeded post-compaction",
+      "1c86d512-25 (git push x2, both success:true): both preceded by AskUserQuestion success:true; approval-reset discipline at context boundaries confirmed active across multiple commits in same session; dream insight conf=0.72 and conf=0.85 patterns corroborated",
+      "1c86d512-28 (git push success:true): third consecutive session unit where approval gate used correctly; dream insight about compaction stripping approval state does not appear to be firing as a failure mode in these units — behavioral improvement confirmed",
+      "eca50a22-2 (Write before AskUserQuestion success:false): dream insight about structural non-improvement from repeated flagging is directly illustrated here — this exact topology was flagged in the 2026-05-20 cycle as confirmation_bias and recurs unchanged; the insight that flagging alone produces no improvement (conf=0.85 deduplication insight) applies here too"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "shell_tool_preference_violations is structurally stable at ~69% across 12 consecutive cycles; repeated flagging produces zero improvement; root cause is Bash-first habit for multi-step investigations; no new recommendation warranted until structural intervention (hook enforcement at individual tool call level) is attempted",
+      "confirmation_bias write-before-question pattern in eca50a22-2 is a direct recurrence of the pattern flagged in the 2026-05-20 cycle; the gate must fire at Write-call time, not after the question — either sequence the Write after AskUserQuestion returns success:true, or treat a pending AskUserQuestion as a blocker before any file-write that depends on the user's answer",
+      "hook_bypass_via_absolute_grep_path: IMPROVING — zero /usr/bin/grep instances visible in this cycle across all 13 units; first zero-instance cycle in recorded history; do not regress",
+      "re_edit_thrash: IMPROVING — zero instances this cycle vs 3-4 in prior cycles; improvement may be session-type artifact (more new-file Writes vs existing-file Edits) but counts as genuine relief from the pattern",
+      "git_push_approval_discipline: CONFIRMED STABLE — all three git push calls in 1c86d512 session preceded by AskUserQuestion (success:true); dream insight about approval-state evaporation at context boundaries appears to be actively heeded; 1c86d512-20 push failure was auth/remote error, not approval bypass — correctly classified as calibrated behavior"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      2115041
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      7207017
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      11046422
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      10644523
+    ]
+  ],
+  "timestamp": "2026-05-21T00:03:59.758837Z",
+  "tokens_used": 24782,
+  "units_analyzed": 13,
+  "units_total": 39
+}

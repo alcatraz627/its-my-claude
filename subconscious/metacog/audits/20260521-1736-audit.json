@@ -1,0 +1,81 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18470,
+    "correction_density": 0.0603448275862069,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.42026034178858296,
+    "unit_count": 116
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — eca50a22-2 (sed+rg Bash compounds), eca50a22-9 (ruby+rg+git diff compound), eca50a22-19 (ls -d+rg Bash compounds x2), eca50a22-20 (rg+node+sed Bash compounds), eca50a22-22 (rg+node inline Bash), eca50a22-26 (gh+rg Bash compounds, printf Bash compound), eca50a22-46 (sed+rg compound on is_correction=true unit), bc2715fa-2 (pwd+ls+jq+tail Bash), bc2715fa-5 (cd+rg x4 Bash), bc2715fa-14 (ls+cat compound Bash), bc2715fa-18 (cat>> append to mistake-patterns.md via Bash instead of Write), bc2715fa-22 (cat>> append + git diagnostic compound), bc2715fa-29 (lsof+pm2+/usr/bin/grep x2), bc2715fa-30 (ps+lsof+/usr/bin/grep Bash), bc2715fa-33 (/usr/bin/grep x3 + sed Bash compounds); rate ~52% of units with tool calls; fourteenth+ consecutive cycle above 50% with zero downward trajectory; structural non-improvement fully confirmed",
+      "hook_bypass_via_absolute_grep_path:RECURRING:STABLE — bc2715fa-21 (/usr/bin/grep sole tool), bc2715fa-22 (/usr/bin/grep in stash diagnostic), bc2715fa-29 (/usr/bin/grep x2 in compound), bc2715fa-30 (/usr/bin/grep x1 in compound), bc2715fa-33 (/usr/bin/grep x3 in compound across unit); 5 units with ~7 instances; marginal worsening vs prior cycle 4-unit plateau due to bc2715fa-33 concentration; structural hook gap (absolute-path invocation not intercepted) unchanged",
+      "confirmation_bias:RECURRING:STABLE — eca50a22-2: Write to docs-migration-impact-map.md (success:true) executed before final AskUserQuestion completed (success:false); conclusions persisted before user input received; identical topology to all prior flagged cycles; no pre-emption improvement observed",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — eca50a22-26: gh run list --jq fails (success:false) then immediately retried with stripped flags (no --jq) without intermediate state-read; gh pr view --json labels --jq also fails (success:false) then retried with --template without diagnosis; 2 sub-instances in single unit; structurally identical to prior flagged cycles; no improvement",
+      "redundant_read_same_unit:RECURRING:STABLE — eca50a22-26: Read frontend-pr-check.yml x2 with no intervening edit and no offset variation between reads; 1 unit at prior plateau; pattern not eliminated",
+      "optimistic_edit_without_read:RECURRING:STABLE — bc2715fa-14 (Edit decisions/_index.md fail→Read→Edit success; Edit with-server.ts fail x3; 2 sub-instances), bc2715fa-22 (Edit logger/index.ts fail→Read→Edit success; 1 sub-instance), bc2715fa-32 (Edit page.tsx fail x2→Read→Edit success; 2 sub-instances); 3 units with 5 sub-instances; unit count consistent with prior 3-unit plateau; no improvement",
+      "re_edit_thrash:RECURRING:STABLE — bc2715fa-14 (with-server.ts Edit fail x3 consecutive before Read pivot), bc2715fa-22 (index.ts Edit fail before Read+retry; git diagnostic compound re-edit pattern), bc2715fa-32 (page.tsx Edit fail x2 before Read pivot); 3 units at or above prior 3-unit baseline; pattern structurally unchanged",
+      "path_assumption_bias:RECURRING:STABLE — bc2715fa-5 (cd frontend prefix on rg compounds fails multiple times before pwd+ls recovery), bc2715fa-7 (rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both fail success=false before ls pivot); 2 units matching all prior cycle baselines; identical wrong-relative-path→failure→ls→corrected-retry topology unchanged",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14: crab-sink server/client split declared ready after ts:build+vitest passed without dev server exercise; self-correction ritual executed in bc2715fa-18 same session batch; pattern recognition post-hoc but declaration-time gate absent; seventeenth consecutive cycle confirming; bc2715fa-18 self-documents the mistake correctly into mistake-patterns.md via Bash (cat>>) rather than Write — compounding shell_tool_preference_violations",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22: LOGGER_ENABLED semantics flip (!==\"0\" → ===\"true\") accepted without diffing; bug surfaced via test failure; self-documented at unit end via cat>> to mistake-patterns.md; sixteenth consecutive cycle confirming this historical anchor"
+    ],
+    "calibration_score": 0.26,
+    "cross_references": [
+      {
+        "insight": "git-push approval evaporates at compaction boundaries (conf=0.72, 0.85)",
+        "observation": "eca50a22-23 has empty tool list with input referencing 'push change' — no git push tool call observed in this unit; user_reaction Accepted suggests the push happened via prior user action or out-of-band; no violation confirmed, but the compaction-boundary approval-reset risk remains structurally present across the eca50a22 session span",
+        "status": "not_triggered_in_batch"
+      },
+      {
+        "insight": "memory deduplication failure — same correction recorded 15+ times without consolidation (conf=0.85)",
+        "observation": "bc2715fa-18 and bc2715fa-22 both append new entries to mistake-patterns.md via cat>> Bash rather than Write, bypassing deduplication checks and the write-tool audit trail; the cat>> pattern itself is a shell_tool_preference_violation that simultaneously risks creating duplicate or malformed entries if the file has been modified between reads; structurally confirms the deduplication-failure risk surface",
+        "status": "confirmed_risk_active"
+      }
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations has now appeared in 14+ consecutive cycles above 50% with zero downward trajectory — prior recommendations have produced no behavioral change; deprioritize re-flagging until a structural enforcement mechanism (hook blocking Bash when dedicated tool exists) is implemented",
+      "hook_bypass_via_absolute_grep_path shows marginal worsening (7 instances vs prior 5) concentrated in bc2715fa-33; the absolute-path exemption in the PreToolUse hook remains the unaddressed root cause; hook patch to intercept /usr/bin/grep and /bin/grep absolute paths would eliminate this class entirely",
+      "bash_retry_without_diagnosis: gh CLI specifically triggers this pattern — gh run list and gh pr view --jq both fail silently; recommend adding gh run list and gh pr view to the allowed-flags mental model before invocation rather than discovering via failure",
+      "confirmation_bias Write-before-AskUserQuestion: eca50a22-2 is the third consecutive cycle with identical topology (Write success before AskUserQuestion success:false); ordering discipline at dispatch time is the fix — AskUserQuestion must complete before any Write that depends on the answer",
+      "redundant_read_same_unit: eca50a22-26 continues at 1-unit plateau; low priority relative to shell violations"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 23
+  },
+  "sessions": [
+    [
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      6022175
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      64071877
+    ],
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      2221991
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      7156121
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      10647865
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      12298062
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      13142773
+    ]
+  ],
+  "timestamp": "2026-05-21T17:36:03.782849Z",
+  "tokens_used": 26948,
+  "units_analyzed": 29,
+  "units_total": 116
+}

@@ -1,0 +1,30 @@
+{
+  "last_updated": "2026-05-22T03:00:30.507643Z",
+  "average_depth": 35.5,
+  "average_breadth": 1.7,
+  "fixation_rate": 0.16,
+  "assumption_rate": 0.33,
+  "overconfidence_rate": 0.27,
+  "common_assumptions": [
+    "File paths and directory structure remain stable between tool calls within the same chain",
+    "Type-checker passing (tsc --noEmit) implies feature correctness, not just syntactic validity",
+    "Shell tool availability (pm2, gh, rg) without prior which/version check",
+    "Prior process or environment state is unchanged since the last read",
+    "Single-file edits resolve issues without cascading effects in sibling files"
+  ],
+  "strength_patterns": [
+    "Consistent read-before-edit discipline: targeted file reads precede almost every modification across chains",
+    "Verification loops using type-checkers and build outputs (tsc, svelte-check, npm run build) after editing batches",
+    "Multi-source debugging: config files, logs, environment probes, and live process output checked in concert"
+  ],
+  "weakness_patterns": [
+    "File-level fixation: statusline.sh and +page.svelte each appear 30+ times in single chains without a context-broadening pause",
+    "Symptom-driven iteration: long debugging chains (110+ steps) retry variants of the same fix rather than stepping back to reframe the root cause",
+    "Near-zero alternative breadth: chains almost universally commit to one approach before executing, with no visible branch evaluation"
+  ],
+  "trend": {
+    "calibration_improving": false,
+    "depth_trend": "stable",
+    "breadth_trend": "stable"
+  }
+}

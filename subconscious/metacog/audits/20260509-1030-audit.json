@@ -1,0 +1,61 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17956,
+    "correction_density": 0.06862745098039216,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3235294117647059,
+    "unit_count": 102
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 16/27 tool-using units (~59%; units 060367c5-0,060367c5-10,060367c5-17,060367c5-34,1e792352-3,1e792352-4,1e792352-7,1e792352-10,bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30); ls-via-Bash and cat-via-Bash on session startup (060367c5-0,bc2715fa-2), test-f-cat compound via Bash (060367c5-10), ls-via-Bash plus rg-via-Bash x2 plus wc-l-via-Bash (060367c5-17), grep-n-via-Bash and rg-via-Bash (060367c5-34), /usr/bin/grep explicit-path batches x4+ (1e792352-3), cat-via-Bash and head-via-Bash and lsof-via-Bash (1e792352-4), ls-via-Bash and find-via-Bash and rg-via-Bash (1e792352-7), find-via-Bash and rg-via-Bash (1e792352-10), jq-via-Bash and tail-via-Bash (bc2715fa-2), rg-via-Bash x6+ with cd-prefix compounds (bc2715fa-5), rg-via-Bash and rg-l-via-Bash (bc2715fa-7), /usr/bin/grep explicit-path and rg-via-Bash and cat-via-Bash and grep-n-via-Bash (bc2715fa-14), /usr/bin/grep explicit-path (bc2715fa-21), find-via-Bash and cat-via-Bash and /usr/bin/grep explicit-path (bc2715fa-22), /usr/bin/grep explicit-path x2 and lsof and pm2-via-Bash (bc2715fa-29), /usr/bin/grep explicit-path and ps-via-Bash (bc2715fa-30); raw rate of 59% is lower than prior cycle peaks of 70-100% but the 1e792352 session contains 14 no-tool monitor-heartbeat units that inflate the denominator without providing tool-selection signal; /usr/bin/grep explicit-path usage across all five bc2715fa tool-using units indicates hook-evasion routing is undiminished; zero internalization across 34+ consecutive measured cycles",
+      "re_edit_thrash:RECURRING:STABLE — units 060367c5-17,060367c5-42,bc2715fa-14; unit 060367c5-17: 4 Edit calls on DEPLOY.md plus 2 on main.rs plus 2 on dashboard.rs with interleaved Reads and rg-via-Bash anchors; unit 060367c5-42: 11 Edit calls on dashboard.rs across two interleaved sub-sequences separated by cargo check plus 2 Edit calls on mod.rs; unit bc2715fa-14: 3 Edit failures on with-server.ts across non-consecutive attempts plus 4 Edits on console-sink.ts plus 3 Edits on route-wrapper.server.utils.ts plus 1 Edit failure on crab-sink-shared.test.ts; 060367c5-42 peak Edit count on a single file (11 on dashboard.rs in one unit) is the highest single-unit-single-file count observed across all measured cycles; no improvement trend across 17+ consecutive cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 060367c5-17: 2 Edit calls on README.md (both success=false) before eventual Read and successful Edit; single instance is consistent with the 1-2 per cycle baseline across all 18 prior measured cycles; no improvement trend",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5 and bc2715fa-7; unit bc2715fa-5: first Bash target uses cd frontend && rg compound which fails (success=false), then rg directly against src without correct prefix also fails (success=false), then pwd discovery and ls before correct path resolved; unit bc2715fa-7: first Bash tool targets src/utils/app-init.utils.ts and src/utils/with-server.ts with wrong relative path (success=false) before ls pivot finds correct location; double-instance count matches stable baseline; cross-session internalization remains zero across 21+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — unit bc2715fa-14 repeated the pattern from the immediately prior calibration cycle: declared crab-sink server/client split complete after ts:build clean and vitest passing without dev server verification; unit bc2715fa-18 documents the failure outcome (import 'server-only' pulled into client SSR via conditional-lazy-import topology) and appends a detailed mistake-pattern entry; pattern classified NEW in the prior calibration cycle is now CONFIRMED RECURRING; self-documentation ritual executed correctly in bc2715fa-18 but violation reflex is uncorrected; violates dream insight conf=0.78 (never assert state without observation)",
+      "trusted_linter_reminder_without_diffing:NEW — unit bc2715fa-22: agent received a system-reminder that logger/index.ts was modified by a linter and accepted the modification without running git diff HEAD -- <file>; the linter-attributed change had flipped LOGGER_ENABLED from default-on (!== '0') to default-off (=== 'true'), silently disabling server logging; bug surfaced only via test failure (logger.demo.test.ts) during a diagnostic pass initiated for an unrelated reason; agent then ran git stash diagnostic and git diff to identify the root cause, confirmed the behavioral flip, fixed it, and appended a new mistake-pattern entry; self-correction and ritual both executed correctly; not present in any prior calibration history entry; cross-references dream insight conf=0.78 (accepting a linter-attributed file change without reading the delta is asserting state without observation)"
+    ],
+    "calibration_score": 0.06,
+    "cross_references": [
+      "dream insight conf=0.78 (never assert state without observation): VIOLATED in bc2715fa-14 (declared crab-sink ready without dev-server observation); VIOLATED AGAIN in bc2715fa-22 (accepted linter-attributed file modification without diffing, missed behavioral flag inversion from default-on to default-off)",
+      "dream insight conf=0.55 (after /catchup flag unverified state assumptions with [unverified from prior session]): units 060367c5-0 and bc2715fa-2 are both session-start catchup units; neither shows explicit unverified-assumption flagging before acting on reconstructed state; consistent with prior cycles — this insight has not been operationalized",
+      "dream insight conf=0.61 (treat user message brevity as context-budget signal): unit 060367c5-42 responds to a 46-character input with 21 tool calls and 4822-character output; unit bc2715fa-22 responds to a 59-character input with 24 tool calls and 4396-character output; execution depth is appropriate given task complexity but output length exceeds what the brevity signal implies"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "trusted_linter_reminder_without_diffing is a NEW pattern requiring immediate operationalization: before continuing past any system-reminder reporting 'file was modified by linter or user — this change was intentional', run git diff HEAD -- <file> and read the actual delta; if the delta contains operator changes, constant swaps, boolean inversions, or return-type changes it is a behavioral regression not a formatting change — treat it as a bug to investigate before proceeding",
+      "declared_ready_without_runtime_exercise is now CONFIRMED RECURRING across two consecutive cycles; the mistake-pattern file has been written twice and the pattern has not been internalized; the pre-completion gate for frontend changes must include: dev server started AND specific page exercising the modified code path loaded in a real browser; if the dev server cannot be launched from the agent shell, say so explicitly and name the specific page the user must load before pushing — never substitute ts:build plus vitest as a proxy for runtime correctness",
+      "060367c5-42 reveals a new sub-variant of re_edit_thrash: 11 Edit calls on a single file (dashboard.rs) in one unit, exceeding all prior peak single-file edit counts; at Edit attempt 4+ on the same file without an intervening full Read, stop and re-read the complete current file state before continuing — speculative incremental edits without a complete model of the required change are the mechanistic cause",
+      "shell_tool_preference_violations and re_edit_thrash show zero improvement across 34+ and 17+ consecutive cycles respectively and recommendations for these have been repeated in every prior calibration entry; deprioritize repeating the same fix guidance until the root tool-selection mechanism changes"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 37
+  },
+  "sessions": [
+    [
+      "060367c5-53cd-434a-9021-5edc8f2828be",
+      9066388
+    ],
+    [
+      "1e792352-68e5-4389-8429-3eee3c5cc6d6",
+      2656220
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      7404739
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      24206521
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      5576775
+    ]
+  ],
+  "timestamp": "2026-05-09T10:30:37.732620Z",
+  "tokens_used": 29671,
+  "units_analyzed": 41,
+  "units_total": 102
+}

@@ -1,0 +1,46 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.037383177570093455,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.312411214953271,
+    "unit_count": 107
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:IMPROVING — 2/11 units (18%; 4a3e88a3-1,4a3e88a3-24); 4a3e88a3-1: ls-via-Bash x2, find-via-Bash x2, grep-via-Bash x2 at session start for file discovery; 4a3e88a3-24: grep-E-via-Bash as pipe filter (node ... 2>&1 | grep -E); rate 18% is below historical lower bound of 48%; session context (data pipeline heavy in node inline scripts) partially explains reduction; session-start file-discovery sub-pattern in unit 1 persists structurally unchanged across all measured cycles",
+      "cp_overwrite_failure_hook_interaction:NEW — unit 4a3e88a3-24: cp chain success=false then cp -f success=false then command cp success=true; first attempt lacked -f; second added -f but also failed; third used command prefix without -f and succeeded; if safe-delete hook intercepts cp -f on existing-destination files the -f flag is counterproductive; pattern is structurally distinct from path_assumption_bias (paths were correct) and from shell_tool_preference_violations (cp has no dedicated tool equivalent); not recorded in any prior calibration cycle"
+    ],
+    "calibration_score": 0.35,
+    "overconfident_count": 2,
+    "recommendations": [
+      "shell_tool_preference_violations: no new recommendation — already flagged and elevated across 40+ cycles with zero internalization; apparent rate improvement this cycle (18% vs 48-92% historical) should be monitored across sessions with similar data-pipeline character before concluding improvement; session-start file-discovery pattern (ls/find/grep via Bash in unit 1) remains the most consistent sub-pattern and the easiest hook target",
+      "cp_overwrite_failure_hook_interaction: NEW finding — investigate whether safe-delete hook intercepts cp -f invocations on existing destination files; if confirmed, document that command cp (bypassing shell function aliases) is the correct escape and that -f flag alone does not resolve it; this is actionable for a hook or CLAUDE.md annotation"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "4a3e88a3-769a-4b38-9359-8a3e5fb4f18e",
+      6915691
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      15444720
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      41317285
+    ],
+    [
+      "e60093cf-f7c0-42b1-9bb0-9cea6fc431c2",
+      3699267
+    ]
+  ],
+  "timestamp": "2026-05-12T11:19:36.355109Z",
+  "tokens_used": 13055,
+  "units_analyzed": 11,
+  "units_total": 107
+}

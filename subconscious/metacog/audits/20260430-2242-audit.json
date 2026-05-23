@@ -1,0 +1,74 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 20918,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.6139719607799116,
+    "unit_count": 35
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:worsening — units f22bd641-0, f22bd641-12, 8d9169bc-0, 2527f606-1, 2527f606-10, 2527f606-16 all use Bash with /usr/bin/grep or find|xargs grep instead of Grep/Glob tools; unit 2527f606-10 shows extreme thrash: rg failed, python3 inline fallback, then /usr/bin/grep — three approaches before getting output that Grep tool would have produced in one call; frequency not decreasing vs prior cycles",
+      "re_edit_thrash:RECURRING:worsening — units 2527f606-14 (5+ Edit+Read cycles on job-output-cleanup.md), 59c741e5-37 (7 consecutive Read calls on index.ts before editing), 59c741e5-45 (10+ Read+Edit cycles on index.ts), 59c741e5-50 (multiple Read passes on same two files); pattern is more frequent and higher cycle-count than prior sessions",
+      "api_discovery_thrash:RECURRING:stable — unit 59c741e5-45 attempts gum table with two different invocation styles (pipe with headers, printf with tab-sep) both failing before running gum --help; structurally identical to prior fiber-snatcher probe-then-fail pattern; docs-first never applied",
+      "intra_session_tsc_path_repeat:NEW — unit 59c741e5-21 tries node_modules/.bin/tsc twice (both fail), then finds bun works; unit 59c741e5-37 in the same session tries node_modules/.bin/tsc twice again before switching to bun; unit 59c741e5-50 tries bun tsc then node_modules/.bin/tsc again; no within-session caching of 'bun works, tsc does not' — distinct from cross-session environment_state_assumption because the correction happened in-session and was not retained across units",
+      "environment_state_assumption:RECURRING:stable — tsc path assumption repeated across units 59c741e5-21, 37, 50; cp without flags in 59c741e5-1 required yes|cp -f workaround on third attempt",
+      "mcp_fallback_without_retry:INSTANCE — unit f22bd641-2 calls mcp__file-tools__list_sheets once, it fails (success=false), then immediately pivots to node/ExcelJS Bash scripts without a retry or error-inspection; matches dream insight 5 (external integrations are weakest links); not a new bias class but first appearance in this dataset"
+    ],
+    "calibration_score": 0.12,
+    "cross_references": [
+      {
+        "insight": "terse_delta_communication (conf=0.82)",
+        "note": "CONFIRMED — input length 34, zero tools, 172-char response, accepted; agent correctly interpreted terse acknowledgment as continuation signal without asking clarifying questions",
+        "unit": "59c741e5-a33d-48a3-89ab-297f42413dfd-38"
+      },
+      {
+        "insight": "external_integrations_weakest_link (conf=0.58)",
+        "note": "CONFIRMED — mcp__file-tools__list_sheets failed immediately (first tool attempted) and agent pivoted to Bash/node fallback; the weakness manifested exactly at the MCP boundary as predicted",
+        "unit": "f22bd641-a8b1-473c-bf97-1ccfa4202a70-2"
+      },
+      {
+        "insight": "state_persistence_cross_boundary (conf=0.72)",
+        "note": "PARTIAL VIOLATION — agent successfully restored checkpoints from Trash but had to use yes|cp -f workaround; state recovery worked but the mechanism was fragile; consistent with insight that persistence abstractions have boundary-crossing failure modes",
+        "unit": "59c741e5-a33d-48a3-89ab-297f42413dfd-1"
+      },
+      {
+        "insight": "vision_loop_proactive_screenshots (conf=0.65)",
+        "note": "VIOLATED — gum output was attempted but gum table failed; agent did not proactively take a screenshot or render output to verify before presenting to user; dry-run verification step was present but not applied to UI rendering",
+        "unit": "59c741e5-a33d-48a3-89ab-297f42413dfd-45"
+      }
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "Highest priority: add within-session command-result cache — when a tool invocation pattern succeeds, record it; when the same pattern (tsc path, grep flags) previously failed in the same session, skip it rather than re-anchoring; this targets intra_session_tsc_path_repeat which is new and not addressed by any prior recommendation",
+      "For api_discovery_thrash: enforce docs-first rule as a hard precondition before any trial invocation of external binaries (gum, fiber-snatcher, etc.); pattern has not improved across multiple cycles; a pre-tool-call check of --help output would eliminate most thrash",
+      "Deprioritize re_edit_thrash and shell_tool_preference_violations recommendations — both have been flagged in every prior cycle with no improvement trajectory; escalation to a hook or hard stop after N consecutive same-file edits may be required rather than another text recommendation",
+      "For mcp_fallback_without_retry: when an MCP tool call returns success=false on first attempt for a file-read operation, log the error before pivoting — the failure reason (format unsupported vs network vs path issue) should determine whether to retry with different params or fall back to Bash"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 15
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      2815249
+    ],
+    [
+      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
+      712759
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      4151772
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      11550909
+    ]
+  ],
+  "timestamp": "2026-04-30T22:42:42.622514Z",
+  "tokens_used": 23767,
+  "units_analyzed": 26,
+  "units_total": 35
+}

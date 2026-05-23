@@ -1,0 +1,53 @@
+# i-dream domain manifest — claude-audit (hook-usage feedback)
+#
+# STAGED, NOT LIVE. Do not copy into ~/.claude/i-dream/domains/ until the
+# hook-feedback system is built and ~/.claude/hooks-feedback-domain/events.jsonl
+# has accrued real events. See ACTIVATION.md in this dir.
+#
+# Derived from the filled integration request (../claude-audit.md) + two owner
+# decisions: (1) synthesized join — an extractor merges vents ⋈ telemetry on
+# hook_id; (2) severity_order generalization — impact uses low/med/high.
+
+[domain]
+name        = "claude-audit"
+version     = "1.0"
+description = "Hook/guardrail usage feedback — which hooks help vs obstruct"
+root        = "~/.claude/hooks-feedback-domain"
+
+[event_stream]
+# The extractor's joined output (vents enriched with telemetry's heeded/fire_count).
+path        = "{root}/events.jsonl"
+format      = "jsonl"
+id_field    = "id"
+ts_field    = "ts"
+
+[consolidation]
+# claude-audit owns this script: LEFT-JOIN ~/.claude/hooks/feedback.jsonl (vents)
+# ⋈ ~/.claude/hooks/warn-events.jsonl (telemetry) on hook_id → events.jsonl.
+enabled = true
+type    = "external_script"
+script  = "{root}/extract-events.sh"
+cadence = "daily"
+timeout = "60s"
+
+[dream]
+enabled       = true
+cadence       = "every-2-days"        # mirror atone — the sibling signal
+budget_tokens = 4000
+prompt_path   = "{root}/dream/prompt.md"
+insights_path = "{root}/dream/insights.jsonl"
+cursor_path   = "{root}/dream/cursor.json"
+prompt_fields = ["slug", "kind", "impact", "note", "command_or_context", "heeded"]
+severity_field = "impact"
+severity_order = ["low", "med", "high"]
+adapter       = "{root}/dream/adapter.sh"   # files TUNE/PRUNE proposals via propose.sh
+
+[hinter]
+tldr_path     = "{root}/derived/_tldr.txt"
+triggers_path = "{root}/derived/triggers.json"
+weight        = 1.0
+
+[permissions]
+network    = false
+disk       = "write"
+subprocess = true

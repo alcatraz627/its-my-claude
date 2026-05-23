@@ -1,0 +1,17 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":2,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"anchoring_on_grep_results — same Swift file read 5 times in unit 24d14c20-1 rather than extracting needed context once\",\"tool_proliferation — 80+ tool calls in unit 24d14c20-1, 13 TaskCreate calls before reading the file thoroughly\",\"authority_deference — unit f22bd641-13 uses bash sed ranges instead of Read tool despite rule preference, likely following prior session habit\",\"sunk_cost — unit f22bd641-25 continued issuing AskUserQuestion (4 calls) after first two went unanswered rather than stopping\",\"confirmation_seeking — coverage probe scripts written and run but results used only to affirm existing plan, not to revise it\"],\"recommendations\":[\"Consolidate repeated reads of large files into a single Read with offset/limit before spawning edits; the 5-pass Swift file read pattern wasted significant context budget\",\"Limit AskUserQuestion to 1-2 per turn; if user does not respond after 2, surface a summary and wait — issuing 4 in unit f22bd641-25 with Unknown outcome signals the interaction model broke down\",\"Replace sed-based file slicing (units f22bd641-13, f22bd641-25) with Read tool offset/limit — this is an explicit rule violation that recurred across multiple units\",\"Defer TaskCreate/TaskUpdate clusters until after the read-then-plan phase is complete; creating 13 tasks before fully reading the target file inflates tool count without strategic benefit\",\"When an Edit fails (compliments.md in f22bd641-25), always Read the file before re-attempting rather than retrying blind — the failed Edit followed by Read followed by successful Edit matches the [re-edit-thrash] pattern\"]}",
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      5625211
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      7794154
+    ]
+  ],
+  "timestamp": "2026-05-01T03:17:00.069719Z",
+  "tokens_used": 10582,
+  "units_analyzed": 10,
+  "units_total": 13
+}

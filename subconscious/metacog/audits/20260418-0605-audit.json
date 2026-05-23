@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.38,\"overconfident_count\":2,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"persistence_bias: unit 23 retried reading non-existent task output files three times before pivoting\",\"tool_first_bias: units 18 and 29 created multiple TaskCreate entries before verifying scope or prior state\",\"anchoring: unit 23 anchored to background-task output path pattern that was invalid in this context\",\"availability_bias: unit 29 assumed port 8080 availability without checking, leading to repeated server restart cycles\"],\"recommendations\":[\"before reading task output files, verify existence with ls or stat rather than assuming the path is valid\",\"reduce TaskCreate batching at session start — defer task scaffolding until after initial scope verification to avoid stale or redundant tasks\",\"add a port-availability check (lsof -iTCP:PORT -sTCP:LISTEN) before starting any server process to avoid silent bind failures and rebuild cycles\",\"cap retry depth on Bash tool failures at 2 attempts before escalating to a different strategy — the 3-failure cascade in unit 23 wasted context and time\",\"empty-output units (10, 12, 37) suggest context was consumed without producing measurable progress; consider checkpointing before low-signal turns to preserve state\"]}",
+  "sessions": [
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      12759636
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      49251735
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      7979885
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      37113410
+    ],
+    [
+      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
+      3403565
+    ],
+    [
+      "26476b4c-991c-4e20-ab14-2533d7914c58",
+      152548
+    ]
+  ],
+  "timestamp": "2026-04-18T06:05:48.715499Z",
+  "tokens_used": 10512,
+  "units_analyzed": 12,
+  "units_total": 77
+}

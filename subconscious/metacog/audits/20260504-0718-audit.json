@@ -1,0 +1,37 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.06666666666666667,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3396578886536701,
+    "unit_count": 15
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units -1 (grep -r x2 success=false, find|xargs|grep chain x4, cat -n via Bash, python3 subprocess success=false), -10 (grep -rn with --include flags success=false x3 before rg-via-Bash and xargs-python3 inline, then /usr/bin/grep explicit-path form x4), -14 (ls via Bash x2, /usr/bin/grep anchor before and between Edit blocks), -16 (ls/find via Bash, grep for pytest output filtering success=false x2 before /tmp redirect workaround), -30 (for-loop Bash success=false, /usr/bin/grep x4 for symbol and section anchoring), -35 (/usr/bin/grep for monkeypatch scan and mistake-patterns probe, one success=false), -39 (/usr/bin/test + /usr/bin/wc + /usr/bin/tail via Bash to probe compliments.md before Read, /usr/bin/grep for section anchor); 7 of 9 non-trivial units affected (78%); /usr/bin/grep explicit-path form and ls-via-Bash pattern structurally identical to all 10 prior cycles; frequency proportion STABLE relative to prior cycle (70%) — within single-session variance, no improvement trend",
+      "re_edit_thrash:RECURRING:stable — unit -14: Read then 6 Edit calls on job-output-cleanup.md with 2 interleaved Reads and 1 /usr/bin/grep anchor; unit -16: 5 Edit calls on __init__.py flanked by 2 Reads; unit -30: 4 Edit calls on __init__.py with 3 interleaved Reads; peak Edit count 4-6 per file unchanged from prior 10 cycles, interleaved-read-and-anchor structure identical, no improvement trend",
+      "path_assumption_bias:RECURRING:stable — unit -1: grep -r 'generate_image_url' fails x2 requiring pivot to broader presign/signed_url search; unit -10: grep -rn with --include flags fails x3 on assumed file set before /usr/bin/grep explicit-path form succeeds; consistent with prior 10 cycles; no intra-session repetition of identical path miss (improvement vs cycle where unit-4 and unit-46 repeated identical failure in same session)",
+      "optimistic_edit_without_read:IMPROVING — zero success=false Edit or Write attempts detected across all units this cycle; was RECURRING:worsening two cycles ago, RECURRING:stable one cycle ago, and now zero instances for second consecutive cycle; direction is positive but one more clean cycle needed before calling resolved"
+    ],
+    "calibration_score": 0.07,
+    "overconfident_count": 4,
+    "recommendations": [
+      "shell_tool_preference_violations and re_edit_thrash have been flagged RECURRING:stable across 10+ prior cycles with zero internalization — skip re-recommending tool-substitution fixes; the structural floor is not shifting within-session and recommendations have not moved the needle",
+      "path_assumption_bias: no new severity signals this cycle (no intra-session repeated identical miss); no new recommendation warranted",
+      "optimistic_edit_without_read: trending toward resolution — if next cycle is also clean, mark RESOLVED and stop tracking"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      12489921
+    ]
+  ],
+  "timestamp": "2026-05-04T07:18:05.009164Z",
+  "tokens_used": 12212,
+  "units_analyzed": 11,
+  "units_total": 15
+}

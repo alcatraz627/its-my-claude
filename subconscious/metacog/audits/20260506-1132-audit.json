@@ -1,0 +1,39 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.1,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.1523832034148352,
+    "unit_count": 10
+  },
+  "response": {
+    "biases_detected": [
+      "re-edit-thrash: unit -18 made 17 edits across index.ts and reconcile.ts in a single turn, indicating approach was not understood before editing began",
+      "authority-bypass: unit -26 pushed to main on an 11-char terse message ('push') without re-verifying state or confirming scope per git rules",
+      "string-driven-parsing: unit -13 attempted python3 pipe-based JSON parsing (success:false) rather than using jq or structured tooling",
+      "sunk-cost: unit -18 continued editing reconcile.ts 9 times rather than stopping to re-read context after repeated edits"
+    ],
+    "calibration_score": 0.2,
+    "overconfident_count": 2,
+    "recommendations": [
+      "Enforce re-read before edit #3 on any single file in a turn — if editing the same file more than twice, stop and read surrounding context before continuing",
+      "Flag terse push messages ('push', 'do it') to main as requiring explicit confirmation even when user-initiated — one-word approval is not fresh approval per git rules",
+      "Prefer jq over python3 pipe parsing for JSON in bash — more reliable, already shown working in same session (unit -13 switched to jq after failure)",
+      "Units -16, -30, -35, -36 show zero output and zero tools — likely hook-intercepted or context-boundary turns; treat these as signal that context state may be stale and re-verify before next side-effecting action",
+      "Unit -46 has unknown reaction and is an orphaned turn — checkpoint state should have been written before this turn given session length"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "cedb55f4-79a6-4bf4-a78f-7641be51fe43",
+      4287405
+    ]
+  ],
+  "timestamp": "2026-05-06T11:32:47.911574Z",
+  "tokens_used": 3419,
+  "units_analyzed": 10,
+  "units_total": 10
+}

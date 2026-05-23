@@ -1,0 +1,64 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 20236,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.5397458873319582,
+    "unit_count": 51
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — f22bd641-0 (8+ /usr/bin/grep+head Bash calls), f22bd641-12 (2 /usr/bin/grep Bash calls), f22bd641-13 (/usr/bin/grep in audit pipeline), 8d9169bc-0 (grep via Bash fails twice then find|xargs grep), 2527f606-1 (grep -r fails, find|xargs grep fails, then find|xargs python3), 2527f606-10 (rg fails, python3 inline, /usr/bin/grep — three approaches), 034ab126-14 (5+ /usr/bin/grep Bash calls), 034ab126-21 (/usr/bin/grep), 034ab126-28 (/usr/bin/grep), 034ab126-42 (/usr/bin/grep); frequency unchanged vs prior cycle — 6 units in prior vs ~8-9 units here; zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — f22bd641-13: 6 Edit calls on 20-fill-acdelco.js after single Read (down from 7 in prior cycle); 2527f606-14: 5 Edit+2 mid-edit Read cycles on job-output-cleanup.md; 8d9169bc-5: 3 Write calls on scraper.py (two successive Writes on same file) plus 3 Edit calls on auth_db.py; 034ab126-42: 4 Edit calls on inspect.ts across 3 Read-Edit cycles; cycle counts roughly stable vs prior session (prior max ~7, current max ~6)",
+      "mcp_fallback_without_retry:RECURRING:stable — f22bd641-2: mcp__file-tools__list_sheets called once (success=false), no retry or error inspection, immediately pivots to 5 ExcelJS Bash scripts; structurally identical to prior instance in f22bd641 session; pattern unchanged",
+      "path_assumption_bias:RECURRING:stable — 8d9169bc-5: Read /backend/api/internal.py called twice (both success=false) before ls reveals it is a directory /backend/api/internal/; same pattern as prior cycle (unit-4 and unit-46 on non-existent use-sync-q.ts); no existence check before Read on assumed paths",
+      "write_overwrite_without_read:NEW — 8d9169bc-5: Write to /backend/api/internal/scraper.py called twice consecutively with no Read between calls, indicating first Write was incorrect and replaced immediately; distinct from re_edit_thrash (that is Edit cycles); this is Write→Write on same file, suggesting the agent composed the file contents without verifying what was written before replacing it"
+    ],
+    "calibration_score": 0.09,
+    "cross_references": [
+      "dream_insight_5_confirmed: f22bd641-2 mcp__file-tools__list_sheets failure triggers immediate pivot to ExcelJS Bash scripts — external MCP integration is the weakest link; agent treats MCP failure as fatal rather than transient, consistent with insight that external integrations are weakest links",
+      "dream_insight_2_confirmed: units 2527f606-5, 2527f606-7, 034ab126-3, 034ab126-9, 034ab126-10, 034ab126-37 are all zero-tool planning/discussion turns with terse user inputs — agent correctly interprets terse input as delta signal and responds minimally or with pure text; no delta-thinking violations in this cycle"
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "mcp_fallback_without_retry: Before abandoning MCP tool after single failure, inspect the error field in the response and retry once with adjusted parameters — the fallback to 5-script Bash alternatives costs far more than a second MCP call",
+      "path_assumption_bias: Before Read on any path not confirmed earlier in the same unit, run ls on the parent directory; two consecutive failed Reads waste tool calls and context; a single ls would have revealed internal/ is a directory in 8d9169bc-5",
+      "write_overwrite_without_read: After Write, do a Read or at minimum a grep to verify content before issuing a second Write on the same file; consecutive Writes without verification indicate the file contents were composed in working memory rather than confirmed on disk",
+      "shell_tool_preference_violations: Pattern shows zero cross-session improvement across 7+ cycles; this suggests the correction is not being encoded in a load-bearing location; consider promoting a concrete rule to Tier-0 CLAUDE.md inline: 'never call grep or /usr/bin/grep via Bash; use Grep tool' — currently this lives in rules/shell.md (Tier-1 sub-file) which is clearly not being loaded reliably",
+      "re_edit_thrash: No worsening this cycle (cycle counts stable); deprioritize new intervention; existing guidance sufficient"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      3975923
+    ],
+    [
+      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
+      1537060
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      4797551
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      6581615
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      12026760
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      923652
+    ]
+  ],
+  "timestamp": "2026-04-30T23:51:47.819439Z",
+  "tokens_used": 24306,
+  "units_analyzed": 26,
+  "units_total": 51
+}

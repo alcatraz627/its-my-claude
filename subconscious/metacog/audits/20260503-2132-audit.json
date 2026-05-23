@@ -1,0 +1,63 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18349,
+    "correction_density": 0.021897810218978103,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.243774681362952,
+    "unit_count": 137
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units -4 (rg via Bash 8+ times for symbol discovery and file listing, ls via Bash twice for directory enumeration, grep -rln via Bash, cat|grep pipeline instead of Read+Grep), -6 (rg via Bash for section anchoring before each Edit block on plan.md, identical anchor pattern to prior cycles), -8 (rg via Bash for section anchoring on 4 of 7 Edit cycles, /usr/bin/grep form not present here but rg via Bash pervasive), -21 (rg -l via Bash for file discovery, for-loop rg -n via Bash across named files), -32 (/usr/bin/grep explicit path used 10+ times for symbol lookup, section anchoring, pagination prop scanning, find via Bash instead of Glob for team-filter), -34 (cat -n via Bash instead of Read, /usr/bin/grep -c and -n via Bash, for-loop /usr/bin/grep that fails); 6 of 11 units affected; /usr/bin/grep explicit-path form and rg-via-Bash anchor pattern structurally identical to all 5 prior calibration cycles; frequency stable, zero internalization",
+      "re_edit_thrash:RECURRING:stable — unit -6: Read then 8 Edit calls on plan.md with 4 interleaved rg anchors and 3 interleaved Reads; unit -8: failed Edit then rg anchor then 6 Edit calls on plan.md with 4 interleaved rg anchors and 3 Reads; unit -32: 4 Edit calls on data-history-v3.tsx (2 with interleaved Reads mid-cycle) plus 6 Edit calls on data-history-v3.table.tsx; peak Edit count per file unchanged from prior 5 cycles, interleaved-read-and-anchor structure identical",
+      "optimistic_edit_without_read:RECURRING:confirmed — unit -8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit -34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; flagged RECURRING:confirmed in prior cycle, still present at same two-unit-per-session frequency; no improvement",
+      "path_assumption_bias:RECURRING:stable — unit -8: blind Edit on plan.md fails requiring rg probe to locate content; unit -32: find+grep chain for ModalId and team-filter path before confirming existence; unit -34: blind Edit on file-select.v2.tsx fails before grep probe; consistent with prior 3 cycles of flagging"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations, re_edit_thrash, optimistic_edit_without_read, and path_assumption_bias are all RECURRING:stable with zero improvement across 5+ cycles — deprioritizing new fix recommendations; no new biases detected this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      24726340
+    ],
+    [
+      "c64c4bfc-db28-4e60-97dc-e40241afff56",
+      1586396
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      10877559
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      35178212
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      6885603
+    ],
+    [
+      "aa20dba3-eaeb-4f5d-8fc4-f5379ce98838",
+      130789
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      15854453
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      9915124
+    ]
+  ],
+  "timestamp": "2026-05-03T21:32:38.264770Z",
+  "tokens_used": 9548,
+  "units_analyzed": 11,
+  "units_total": 137
+}

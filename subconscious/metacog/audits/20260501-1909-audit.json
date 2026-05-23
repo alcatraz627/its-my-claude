@@ -1,0 +1,69 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18611,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3623107150835236,
+    "unit_count": 71
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — f22bd641-0 (/usr/bin/grep 4+ times in orientation sweep alongside head-based Bash reads), f22bd641-12 (/usr/bin/grep twice before Read on gum-guide.md), f22bd641-13 (/usr/bin/grep multiple times in audit-pipeline section reads and spot-check), f22bd641-19 (/usr/bin/grep multiple times in spot-check pipeline), f22bd641-30 (/usr/bin/grep for code anchoring before edit cycle on 20-fill.js), f22bd641-33 (/usr/bin/grep for section anchoring before Edits), 8d9169bc-0 (grep+find via Bash for symbol-discovery across multiple calls when Grep tool available); frequency ~7 units, identical to prior four cycles, zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — f22bd641-13: single Read then 6 Edit calls on 20-fill-acdelco.js (matches prior cycle peak exactly); f22bd641-30: 5 Edit calls on 20-fill.js without mid-cycle re-read plus 2 Edits on 30-assemble.js and 2 on 40-verify.js; peak count and structure unchanged from prior four cycles, no improvement trend",
+      "mcp_fallback_without_retry:RECURRING:stable — f22bd641-2: mcp__file-tools__list_sheets called once (success=false), no retry or error-log inspection, immediately pivots to 5 inline ExcelJS Bash scripts; structurally identical to every prior appearance of this session ID; sixth consecutive cycle with identical pattern on same session",
+      "optimistic_edit_without_read:RECURRING:confirmed — f22bd641-25: Edit on ~/.claude/compliments.md called without prior Read (success=false), followed by Read then successful Edit; was flagged INSTANCE in prior cycle, now confirmed recurring across sessions — pattern has graduated from INSTANCE to RECURRING",
+      "path_assumption_bias:RECURRING:stable — 8d9169bc-0: grep -n 'listJobsForIds|applyJobMetadata' on jobs.data.ts (success=false on second unarrested call), grep -n 'ENGINE_API_PREFIX' on utils.ts (success=false), grep on iter.ts (success=false), find+xargs+grep chain instead of Glob+Grep for discovery; three failing probe attempts on assumed paths before existence confirmed via ls or 2>/dev/null; consistent with prior flagging of this session ID in earlier cycles"
+    ],
+    "calibration_score": 0.07,
+    "overconfident_count": 5,
+    "recommendations": [
+      "optimistic_edit_without_read graduated from INSTANCE to RECURRING — f22bd641-25 is now the second confirmed occurrence; integrate a pre-Edit existence check or Read step whenever the target path is outside the current project tree (e.g., ~/.claude/*.md files) — the head-10 existence check already in use for compliments.md should be generalized to all global-config Edit targets",
+      "shell_tool_preference_violations, re_edit_thrash, mcp_fallback_without_retry, and path_assumption_bias remain stable with zero improvement across 4-6 consecutive cycles; existing recommendations have produced no observable change; hook-level enforcement (PreToolUse blocking /usr/bin/grep when Grep tool is available, blocking multi-Edit sequences without intervening Read) is likely required to break these patterns — conversational flagging has not been sufficient"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "bb2b041f-23af-48ef-b37b-f5c187fece8c",
+      127
+    ],
+    [
+      "025d513b-fee6-4ee6-b9fa-d3822d17b12c",
+      127
+    ],
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      7157390
+    ],
+    [
+      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
+      2089496
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      18960343
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      11949028
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      559502
+    ],
+    [
+      "e19636fc-6ae4-49d2-9d82-089143335770",
+      104808
+    ],
+    [
+      "214184c4-51e4-4a39-a1de-be2ca38e253b",
+      15762656
+    ]
+  ],
+  "timestamp": "2026-05-01T19:09:01.393371Z",
+  "tokens_used": 12611,
+  "units_analyzed": 14,
+  "units_total": 71
+}

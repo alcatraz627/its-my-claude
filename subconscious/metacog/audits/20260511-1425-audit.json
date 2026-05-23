@@ -1,0 +1,55 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18280,
+    "correction_density": 0.042105263157894736,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.3747456079519157,
+    "unit_count": 95
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 10/14 units (~71%; 4a3e88a3-1,bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32); 4a3e88a3-1: ls-via-Bash x2, find-via-Bash x2, grep-via-Bash x2 for file discovery; bc2715fa-2: pwd+ls, jq, tail via Bash; bc2715fa-5: cd-prefix rg compounds x3 plus ls-via-Bash; bc2715fa-7: rg-via-Bash on wrong paths (success=false) then ls pivot; bc2715fa-14: cat-via-Bash, test-f-head compound, sed-via-Bash, grep-via-Bash, /usr/bin/grep directly, find-via-Bash; bc2715fa-21: /usr/bin/grep directly; bc2715fa-22: find-via-Bash, cat-via-Bash x2, git-diff-via-Bash; bc2715fa-29: /usr/bin/grep directly x2, lsof, pm2-via-Bash; bc2715fa-30: /usr/bin/grep directly, ps, lsof, curl x2; bc2715fa-32: ls+head via Bash; rate 71% is within historical 59-92% range; zero internalization across 38+ consecutive measured cycles",
+      "re_edit_thrash:RECURRING:STABLE — units bc2715fa-14, bc2715fa-32; bc2715fa-14: Edit with-server.ts success=true then success=false x2 (first run), then later Edit with-server.ts success=true x2 then success=false (second run), plus Edit sink-options.ts success=false and Edit crab-sink-shared.test.ts success=false — 3+ separate thrash sub-sequences within a single unit; bc2715fa-32: Edit page.tsx success=false x2 (consecutive) before Read pivot then success; no within-session or cross-session improvement across 21+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — units bc2715fa-14, bc2715fa-22, bc2715fa-32; bc2715fa-14: Edit decisions/_index.md success=false before Read then Edit success=true; bc2715fa-22: Edit index.ts success=false before Read then Edit success=true; bc2715fa-32: Edit page.tsx success=false x2 before Read then Edit success=true; 3-instance count matches the elevated single-cycle count observed in the most recent prior calibration entry (4 instances); pattern is stable and not improving",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5, bc2715fa-7; bc2715fa-5: cd frontend && rg success=false, rg without prefix success=false, then pwd discovery and ls before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts success=false before ls pivot finds correct frontend/src location; identical topology to all prior bc2715fa measurement passes; cross-session internalization remains zero across 24+ consecutive sessions",
+      "redundant_read_same_unit:RECURRING:CONFIRMED — unit bc2715fa-22: Read logger.demo.test.ts appears at tool positions ~18 and ~30 within the same unit with identical target paths; structurally identical to the instance first classified NEW in the immediately prior calibration cycle (2026-05-11) on task_runner.py and workerv2.py; now promoted from NEW to RECURRING:CONFIRMED",
+      "hook_bypass_via_absolute_grep_path:NEW — units bc2715fa-14, bc2715fa-21, bc2715fa-22, bc2715fa-29, bc2715fa-30 use /usr/bin/grep directly (5 units, ~36%); rules/shell.md states the rg-preference hook blocks every direct grep and /usr/bin/grep Bash call; these calls succeed (success=true), suggesting either hook does not match absolute-path invocations or hook is not triggering on these calls; this constitutes a de-facto bypass of the rg-preference enforcement mechanism regardless of intent; pattern is structurally distinct from general shell_tool_preference_violations (which covers ls/cat/find/rg-via-Bash) because it specifically exploits a hook gap; bc2715fa-14 has the highest concentration (cat, /usr/bin/grep, grep, sed, test-f-head all in one unit); not recorded in any prior calibration history entry across 37+ prior measured cycles"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 4,
+    "recommendations": [
+      "hook_bypass_via_absolute_grep_path is NEW and actionable: the hook blocking grep/rg-via-Bash does not appear to block /usr/bin/grep absolute-path invocations — closing this gap in the hook regex would prevent the bypass without requiring agent behavior change",
+      "redundant_read_same_unit has been confirmed across two consecutive cycles — a hook that detects identical Read targets within the same turn could surface this at tool-call time before context is consumed",
+      "shell_tool_preference_violations, re_edit_thrash, optimistic_edit_without_read, and path_assumption_bias are all STABLE with zero improvement trend across 20+ cycles — deprioritizing new recommendations for these as prior cycle recommendations produced no observable effect; enforcement-layer changes (hooks, tool guards) are the only remaining lever worth proposing"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "4a3e88a3-769a-4b38-9359-8a3e5fb4f18e",
+      395102
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      13602884
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      32684485
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      10395854
+    ],
+    [
+      "e60093cf-f7c0-42b1-9bb0-9cea6fc431c2",
+      1739874
+    ]
+  ],
+  "timestamp": "2026-05-11T14:25:17.671957Z",
+  "tokens_used": 14249,
+  "units_analyzed": 14,
+  "units_total": 95
+}

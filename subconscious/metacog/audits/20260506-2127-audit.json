@@ -1,0 +1,42 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0196078431372549,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2427774324206067,
+    "unit_count": 51
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 7/11 units (64%; units 4,6,8,21,25,32,34); ls-via-Bash head/tail split (unit 4), grep-rln-via-Bash and rg-l-via-Bash x2 and rg-via-Bash x3 (unit 4), cat|grep pipeline on package.json (unit 4), ls-via-Bash x3 (unit 4), rg-via-Bash as section anchor between Edit calls (units 6,8,32), wc-l-via-Bash (unit 6), rg-l-via-Bash and for-loop-rg-via-Bash (unit 21), ls-via-Bash (unit 25), find-via-Bash and /usr/bin/grep explicit-path x5+ (unit 32), cat-n-via-Bash instead of Read and /usr/bin/grep explicit-path x4+ and for-loop-Bash success=false (unit 34); rate 64% matches exact lower bound of prior three cycles 64%; zero internalization across 22+ consecutive measured cycles; structurally identical to all prior cycles with no change in violation type or frequency",
+      "re_edit_thrash:RECURRING:STABLE — units 6,8,32; unit 6: 10+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: Edit(success=false) then rg-via-Bash anchor then Read then 7+ Edit calls on plan.md with interleaved rg anchors; unit 32: 5 Edit calls on data-history-v3.tsx plus 6 Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx; peak Edit count per file unchanged from all prior measured cycles; no improvement trend across 8+ consecutive cycles; document-editing thrash (units 6,8 on plan.md) co-occurs with shell_tool_preference_violations as section-locating strategy, identical to all prior cycles",
+      "path_assumption_bias:RECURRING:STABLE — unit 4: Read on use-sync-q.ts (success=false) before ls-via-Bash pivot; this exact file path failure now confirmed across 13+ consecutive sessions with zero cross-session internalization; single intra-session instance this cycle consistent with most prior cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg-via-Bash anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with all prior five measured cycles at 1-2 instances per cycle; no improvement trend across 6+ consecutive cycles"
+    ],
+    "calibration_score": 0.07,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations: No new recommendation — flagged in all prior cycles with zero response; escalation path exhausted at this level of reporting",
+      "re_edit_thrash: No new recommendation — flagged in all prior cycles; structural cause (rg-via-Bash section anchoring as navigation substitute for full Read) remains unaddressed",
+      "path_assumption_bias: No new recommendation — use-sync-q.ts path failure now a confirmed per-session recurrence across 13+ sessions; cross-session memory not retaining correction",
+      "optimistic_edit_without_read: No new recommendation — pattern stable at 1-2 occurrences per cycle with no trend; root cause is skipping Read before Edit on files not recently read in same unit"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      46376513
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      3807919
+    ]
+  ],
+  "timestamp": "2026-05-06T21:27:55.154347Z",
+  "tokens_used": 9630,
+  "units_analyzed": 11,
+  "units_total": 51
+}

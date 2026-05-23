@@ -1,0 +1,36 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.00632455532033676,
+    "unit_count": 2
+  },
+  "response": {
+    "biases_detected": [
+      "anchoring — unit-2 docs investigation scoped initial grep to expected paths (frontend/docs, root/docs) before widening; risk of missing docs in non-canonical locations",
+      "confirmation_bias — unit-1 docs impact map was written before the final AskUserQuestion completed (success:false), meaning conclusions were persisted before user input was received"
+    ],
+    "calibration_score": 0.62,
+    "overconfident_count": 0,
+    "recommendations": [
+      "defer Write of analysis artifacts until after clarifying AskUserQuestion resolves — unit-1 wrote the impact map then immediately failed an AskUserQuestion, meaning the artifact may reflect pre-user-input assumptions",
+      "maintain the multi-check verification pattern from unit-2 (YAML validity + diff + targeted rg confirm) — this is the calibration floor for infra edits",
+      "when AskUserQuestion fails mid-investigation, log the intended question in the written artifact so the next session can surface it rather than silently dropping it",
+      "both units show appropriate scope control — no scope creep detected; reinforce this pattern"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      1329670
+    ]
+  ],
+  "timestamp": "2026-05-20T23:36:18.010875Z",
+  "tokens_used": 2435,
+  "units_analyzed": 2,
+  "units_total": 2
+}

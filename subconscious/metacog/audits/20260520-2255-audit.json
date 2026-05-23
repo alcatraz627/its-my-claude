@@ -1,0 +1,45 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.07692307692307693,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2574833147735479,
+    "unit_count": 52
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — eca50a22-2 (sed+rg via Bash compounds), bc2715fa-2 (pwd+ls+jq+tail via Bash), bc2715fa-5 (cd+rg x4 via Bash with path failures), bc2715fa-14 (ls+cat+/usr/bin/grep compounds plus cat>> via Bash), bc2715fa-18 (cat>> append to mistake-patterns.md via Bash instead of Write), bc2715fa-22 (find+stash+git-diff via Bash plus cat>> append), bc2715fa-29 (lsof+pm2 via Bash plus /usr/bin/grep x2), bc2715fa-30 (ps+lsof via Bash plus /usr/bin/grep x1); rate ~71% of measurable units; eleventh consecutive cycle within 55-75% band; structural non-improvement confirmed with zero downward pressure from repeated flagging across all 11 cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:STABLE — bc2715fa-14 (/usr/bin/grep in compound Bash), bc2715fa-21 (/usr/bin/grep as sole tool), bc2715fa-22 (/usr/bin/grep in stash diagnostic compound), bc2715fa-29 (/usr/bin/grep x2 in compound), bc2715fa-30 (/usr/bin/grep x1 in compound); 5 affected units matching prior cycle count; structural hook gap (absolute-path invocation not intercepted by PreToolUse bash hook) remains unchanged root cause; no improvement trajectory",
+      "optimistic_edit_without_read:RECURRING:STABLE — bc2715fa-14 (Edit decisions/_index.md fail→Read→Edit success; Edit with-server.ts fail x3 consecutive; 2 sub-instances), bc2715fa-22 (Edit index.ts fail→Read→Edit success; 1 sub-instance); 2 units with 3 sub-instances; unit count below prior elevated plateau of 5-6 but pattern structurally unchanged",
+      "re_edit_thrash:RECURRING:STABLE — bc2715fa-14 (with-server.ts Edit fail x3 consecutive with no Read between first two failures; read pivot only after third failure); 1 unit; marginal improvement from prior 3-4 unit baseline but pattern not eliminated",
+      "path_assumption_bias:RECURRING:STABLE — bc2715fa-5 (cd frontend prefix on rg compounds fails multiple times before pwd+ls recovery), bc2715fa-7 (rg targets nonexistent paths fail success=false before ls pivot); 2 units; identical recovery topology to all prior cycles (wrong relative path assumption → multiple failures → pwd+ls → corrected retry); no improvement",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 (declared crab-sink server/client split ready after ts:build+vitest passed without dev server exercise); self-correction ritual executed in bc2715fa-18 within same session; pattern recognition present post-hoc but continues to not pre-empt the violation at declaration time; sixteenth consecutive cycle confirming",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22 (LOGGER_ENABLED gate semantics flip from default-on to default-off accepted without diffing; bug surfaced via test failure; self-documented at unit end); fifteenth consecutive cycle confirming this historical anchor; no new instances beyond the established bc2715fa anchor"
+    ],
+    "calibration_score": 0.04,
+    "overconfident_count": 10,
+    "recommendations": [
+      "shell_tool_preference_violations and hook_bypass_via_absolute_grep_path have shown zero improvement across 11 consecutive cycles; repeated flagging in calibration output is demonstrably insufficient; recommend structural PreToolUse hook enforcement that intercepts /usr/bin/grep invocations regardless of absolute path, and a Bash compound scanner that rejects rg/sed/ls/cat>> chains in favor of dedicated tools before execution rather than after",
+      "optimistic_edit_without_read is stable but not eliminated; a PreToolUse hook that auto-reads the target file before the first Edit attempt within a unit would mechanically eliminate the fail→read→retry cycle without requiring agent behavior change",
+      "path_assumption_bias recovery topology is identical across all instances (wrong path → multiple failures → pwd+ls → retry); adding a mandatory pwd verification step at the start of any unit that begins with cd+rg would prevent the multi-failure cascade; no agent-level change required if enforced mechanically",
+      "declared_ready_without_runtime_exercise has a self-correction ritual but no pre-declaration gate; consider a hook that fires on output containing 'ready to push' or 'task complete' patterns for frontend units and injects a dev-server verification reminder before the message is sent"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      1324666
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      63815301
+    ]
+  ],
+  "timestamp": "2026-05-20T22:55:49.735127Z",
+  "tokens_used": 14736,
+  "units_analyzed": 14,
+  "units_total": 52
+}

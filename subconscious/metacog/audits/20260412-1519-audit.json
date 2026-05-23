@@ -1,0 +1,9 @@
+{
+  "response": "```json\n{\n  \"calibration_score\": 0.15,\n  \"overconfident_count\": 1,\n  \"underconfident_count\": 0,\n  \"well_calibrated_count\": 6,\n  \"biases_detected\": [\n    \"anchoring: initial pm2 state assessment anchored on visible running processes, missing dump.pm2 content with additional registered processes\",\n    \"solution_momentum: in unit-4 (4badb0bc-...-4), committed to writing pm2-resurrect.sh before fully validating the failure mode (bash script failed on first dry-run, required multiple edits)\",\n    \"completeness_illusion: unit-2 produced a 5458-char response with 6 code blocks but missed the core user concern about other registered processes, leading to immediate correction\"\n  ],\n  \"recommendations\": [\n    \"Before summarizing pm2 state, always parse dump.pm2 directly rather than relying solely on `pm2 list` output — live list and persisted dump can diverge significantly\",\n    \"When writing executable scripts, validate shebang, quoting, and argument parsing in a minimal test before expanding to full implementation; the failed --dry-run in unit-4 indicates premature script finalization\",\n    \"Reduce response verbosity (6 code blocks, 5458 chars) when the user question is narrow and diagnostic; over-broad responses increase the chance of missing the actual question and triggering corrections\",\n    \"After a user correction (is_correction=true), explicitly acknowledge the gap between what was answered and what was asked before proceeding, to confirm the new interpretation is correct\",\n    \"For tool chains involving file writes followed by execution, add a read-back or checksum step before chmod+execute to catch encoding or control-character issues early (relevant to the dump.pm2 parsing workaround in unit-3)\"\n  ]\n}\n```",
+  "sessions": [
+    "4badb0bc-2729-4d90-840d-048e402aeb06"
+  ],
+  "timestamp": "2026-04-12T15:19:59.333386Z",
+  "tokens_used": 3573,
+  "units_analyzed": 7
+}

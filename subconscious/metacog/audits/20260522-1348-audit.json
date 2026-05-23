@@ -1,0 +1,46 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18112,
+    "correction_density": 0.03571428571428571,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.174552055328268,
+    "unit_count": 28
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~83% of tool-using units: 1cd43636-3 (ls+find+rg Bash compound, sed -n x2, uv run python inline JSON inspection instead of file-tools MCP), 1cd43636-7 (cd+rg compounds x2 in Bash), 1cd43636-11 (rg via Bash in first compound), 1cd43636-13 (ls -t+python inline for JSON inspection instead of Read+file-tools), 1cd43636-14 (ls -la compound, git+ls compound); rate above prior 52-71% band but small unit count (5 tool-using units vs 12-20 in prior cycles); no downward trajectory",
+      "redundant_read_same_unit:RECURRING:IMPROVING — 1 unit this cycle (1cd43636-3: Read MEMORY.md x2 with no offset variation between reads, no intervening edit) vs 4-5 units in prior two cycles; first downward movement after worsening trend; improvement tentative given small batch size",
+      "optimistic_edit_without_read:RECURRING:STABLE — 1cd43636-3: Write taxonomy_context.py fails success=false then immediately retried Write succeeds without intermediate Read or diagnostic; 1 sub-instance at prior reduced plateau; pattern not eliminated",
+      "cli_arg_probing_without_help_first:NEW-VARIANT — 1cd43636-11: atone.sh add called with --rca-content (failed), then atone.sh help consulted mid-sequence, then retried with --rca-file (succeeded); 3 invocations to complete one operation; distinct from bash_retry_without_diagnosis (non-zero-exit failure) — here the command succeeded but produced wrong result shape, prompting rereads; closest prior slug is bash_retry_without_diagnosis but the mechanism is argument-discovery rather than failure-retry"
+    ],
+    "calibration_score": 0.3,
+    "overconfident_count": 1,
+    "recommendations": [
+      "Track cli_arg_probing_without_help_first as new slug candidate — pattern is invoke-observe-adjust rather than read-help-then-invoke; consult CLI help or rg the script for accepted flags before first substantive invocation",
+      "redundant_read_same_unit showing first improvement after multi-cycle worsening — worth monitoring next 2 cycles before declaring trend; current improvement may be batch-size artifact",
+      "shell_tool_preference_violations has 16+ consecutive cycles above 50% with zero downward trajectory; deprioritize further behavioral recommendations for this slug — hook-level enforcement is the only remaining lever; no behavioral nudge has produced measurable change",
+      "unit 1cd43636-3 overconfidence driven by sycophancy/scope-floor framing rather than factual error in the built artifact — the build passed structural checks; the correction was behavioral not technical; classify as framing-confidence miscalibration, not domain-knowledge overconfidence"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      4862455
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      8574933
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      11386030
+    ]
+  ],
+  "timestamp": "2026-05-22T13:48:23.691699Z",
+  "tokens_used": 11678,
+  "units_analyzed": 6,
+  "units_total": 28
+}

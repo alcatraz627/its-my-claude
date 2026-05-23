@@ -1,0 +1,442 @@
+[
+  {
+    "id": "trig-added-scope-without-checking-siblings",
+    "from_slug": "added-scope-without-checking-siblings",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "IIFE-around-single-JSX-element when sibling buttons showed the simpler inline pattern",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260520-073507-42"
+  },
+  {
+    "id": "trig-ascii-art-tables-instead-of-gum-tools",
+    "from_slug": "ascii-art-tables-instead-of-gum-tools",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "use std::claude::shared/gum-tui.sh, never hand-rolled ASCII",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120002-m02"
+  },
+  {
+    "id": "trig-bypass-abstraction-instead-of-extending",
+    "from_slug": "bypass-abstraction-instead-of-extending",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "go around the abstraction when its shape doesn't fit, instead of extending it",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260512-120000-m00"
+  },
+  {
+    "id": "trig-chesterton-fence",
+    "from_slug": "chesterton-fence",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "refactor an unfamiliar split without first answering \"why does this split exist?\"",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260511-120000-m00"
+  },
+  {
+    "id": "trig-cli-convention-guess-instead-of-read",
+    "from_slug": "cli-convention-guess-instead-of-read",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "CLI-convention guess instead of read",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260513-120000-m00"
+  },
+  {
+    "id": "trig-declared-ready-without-runtime-exercise",
+    "from_slug": "declared-ready-without-runtime-exercise",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "declared-ready-without-runtime-exercise",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120000-m00"
+  },
+  {
+    "id": "trig-defensive-style-coercion-that-crashes-on-real-inputs",
+    "from_slug": "defensive-style-coercion-that-crashes-on-real-inputs",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Defensive-style coercion that crashes on real inputs",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260513-120000-m00"
+  },
+  {
+    "id": "trig-delta-drift-in-derived-counts",
+    "from_slug": "delta-drift-in-derived-counts",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Delta-drift in derived counts",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260512-120000-m00"
+  },
+  {
+    "id": "trig-feature-built-without-precondition-guard",
+    "from_slug": "feature-built-without-precondition-guard",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Built ScraperReviewModal without top-level 'was this job submitted?' guard",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260519-210056-89"
+  },
+  {
+    "id": "trig-flattery-and-unrequested-agenda",
+    "from_slug": "flattery-and-unrequested-agenda",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Flattery openers + unrequested next-step agendas (request treated as floor, not ceiling)",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-192122-37"
+  },
+  {
+    "id": "trig-generalize-before-enumerate",
+    "from_slug": "generalize-before-enumerate",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "generalize-before-enumerate",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-120002-m02"
+  },
+  {
+    "id": "trig-helper-return-type-assumption",
+    "from_slug": "helper-return-type-assumption",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "calling a method on a helper's return without checking what the helper actually returns",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260507-120000-m00"
+  },
+  {
+    "id": "trig-hypothesis-without-validation-when-the-fix-looks-obvious",
+    "from_slug": "hypothesis-without-validation-when-the-fix-looks-obvious",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Hypothesis without validation when the fix looks obvious",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260514-120000-m00"
+  },
+  {
+    "id": "trig-infra-before-grep",
+    "from_slug": "infra-before-grep",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "infra-before-grep",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260519-055641-ff"
+  },
+  {
+    "id": "trig-js-escape-sequences-inside-server-side-template-literals",
+    "from_slug": "js-escape-sequences-inside-server-side-template-literals",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "JS escape sequences inside server-side template literals",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-081008-4d"
+  },
+  {
+    "id": "trig-live-test-against-protected-log-without-isolation",
+    "from_slug": "live-test-against-protected-log-without-isolation",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Smoke-tested mutating CLI against production append-only log without ATONE_DIR isolation",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-174356-93"
+  },
+  {
+    "id": "trig-name-without-meaning",
+    "from_slug": "name-without-meaning",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "introducing a config/constant/flag in a question or recommendation without defining what it represents",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120000-m00"
+  },
+  {
+    "id": "trig-open-question-dismissed-without-explaining-what-it-means",
+    "from_slug": "open-question-dismissed-without-explaining-what-it-means",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Open-question dismissed without explaining what it means",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260511-120000-m00"
+  },
+  {
+    "id": "trig-prescribed-flattery-as-fix-for-pushback",
+    "from_slug": "prescribed-flattery-as-fix-for-pushback",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Wrote a SKILL.md guardrail prescribing softer agreement to fix pushback the user did not ask to suppress",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-221513-53"
+  },
+  {
+    "id": "trig-proposed-fix-breaks-design-invariant",
+    "from_slug": "proposed-fix-breaks-design-invariant",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "proposed-fix-breaks-design-invariant",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-222855-dd"
+  },
+  {
+    "id": "trig-raw-process-env-instead-of-project-flag",
+    "from_slug": "raw-process-env-instead-of-project-flag",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "raw-process-env-instead-of-project-flag",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120000-m00"
+  },
+  {
+    "id": "trig-recommended-disabling-the-feature-being-built",
+    "from_slug": "recommended-disabling-the-feature-being-built",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Recommended dropping transform_spec from FE as 'fix' for missing BE endpoint",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260519-072823-97"
+  },
+  {
+    "id": "trig-registered-by-import-only-assumption",
+    "from_slug": "registered-by-import-only-assumption",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Registered-by-import-only assumption",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260513-120000-m00"
+  },
+  {
+    "id": "trig-scope-exclusion-drift-during-long-staging",
+    "from_slug": "scope-exclusion-drift-during-long-staging",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "scope-exclusion-drift-during-long-staging",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260513-120000-m00"
+  },
+  {
+    "id": "trig-self-permitting-exception-to-an-adr-hard-rule",
+    "from_slug": "self-permitting-exception-to-an-adr-hard-rule",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Self-permitting exception to an ADR / hard rule",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-035155-ba"
+  },
+  {
+    "id": "trig-shipping-css-ui-changes-without-visual-verification",
+    "from_slug": "shipping-css-ui-changes-without-visual-verification",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Shipping CSS/UI changes without visual verification",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260509-120001-m01"
+  },
+  {
+    "id": "trig-shipping-surface-without-utility-check",
+    "from_slug": "shipping-surface-without-utility-check",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Kept shipping plugin surface area without verifying utility to a human",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260518-092322-cf"
+  },
+  {
+    "id": "trig-skill-spec-update-not-honored-by-running-session",
+    "from_slug": "skill-spec-update-not-honored-by-running-session",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Mid-session SKILL.md updates don't propagate; running sessions silently skip new mandatory phases",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260516-002740-d6"
+  },
+  {
+    "id": "trig-source-comment-hygiene",
+    "from_slug": "source-comment-hygiene",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "terse, durable, no planning artifacts, no decoration",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-172258-23"
+  },
+  {
+    "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
+    "from_slug": "speculative-abstractions-without-a-load-bearing-caller",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Speculative abstractions without a load-bearing caller",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260516-001122-82"
+  },
+  {
+    "id": "trig-string-message-regex-match-for-selector-flow",
+    "from_slug": "string-message-regex-match-for-selector-flow",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "String-message regex-match for selector flow",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120001-m01"
+  },
+  {
+    "id": "trig-structural-claim-without-reading-code",
+    "from_slug": "structural-claim-without-reading-code",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "structural-claim-without-reading-code",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-111955-4d"
+  },
+  {
+    "id": "trig-sub-agent-material-output-left-in-conversation-only",
+    "from_slug": "sub-agent-material-output-left-in-conversation-only",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Sub-agent material output left in conversation only",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260506-120000-m00"
+  },
+  {
+    "id": "trig-sycophantic-deference-on-coupled-decisions",
+    "from_slug": "sycophantic-deference-on-coupled-decisions",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "accepting a user simplification that drops a feature without flagging that another retained feature depends on it",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120000-m00"
+  },
+  {
+    "id": "trig-test-harness-bypasses-production-entry-path",
+    "from_slug": "test-harness-bypasses-production-entry-path",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Test suite exercised inner classifier directly, not the production shim — green tests, broken live hook",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-001233-cf"
+  },
+  {
+    "id": "trig-trusted-linter-reminder-without-diffing",
+    "from_slug": "trusted-linter-reminder-without-diffing",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "trusted-linter-reminder-without-diffing",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120000-m00"
+  },
+  {
+    "id": "trig-unprompted-infra-scope-creep",
+    "from_slug": "unprompted-infra-scope-creep",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "adding CI / hooks / automation in",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-120000-m00"
+  },
+  {
+    "id": "trig-unsolicited-index-manipulation",
+    "from_slug": "unsolicited-index-manipulation",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "unsolicited-index-manipulation",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260514-120000-m00"
+  },
+  {
+    "id": "trig-wrapper-hook-that-delegates-the-work-it-s-supposed-to-absorb",
+    "from_slug": "wrapper-hook-that-delegates-the-work-it-s-supposed-to-absorb",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Wrapper hook that delegates the work it's supposed to absorb",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260509-120000-m00"
+  },
+  {
+    "id": "trig-argued-case-instead-of-capitulating-on-pushback",
+    "from_slug": "argued-case-instead-of-capitulating-on-pushback",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Argued the case for Option D with reasoning instead of folding to MV pushback",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260515-182838-22"
+  },
+  {
+    "id": "trig-audit-file-character-before-applying-global-rule",
+    "from_slug": "audit-file-character-before-applying-global-rule",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Audited destination file's character before moving code into it",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260515-000528-bd"
+  },
+  {
+    "id": "trig-honor-agent-vs-user-category-boundary",
+    "from_slug": "honor-agent-vs-user-category-boundary",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Separated agent-action timeline from user-response when designing an analytic table",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260516-002517-83"
+  },
+  {
+    "id": "trig-intelligent-disobedience-over-sycophancy",
+    "from_slug": "intelligent-disobedience-over-sycophancy",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Push back on a default assumption when evidence supports a smarter path",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260517-082422-d5"
+  },
+  {
+    "id": "trig-wizard-questions-before-sub-agent-fanout",
+    "from_slug": "wizard-questions-before-sub-agent-fanout",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Pause to wizard-ask 2-4 ambiguity questions before kicking off a coordinated sub-agent fan-out",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260517-055701-48"
+  }
+]

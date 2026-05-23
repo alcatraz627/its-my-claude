@@ -1,0 +1,26 @@
+{
+  "ts": "2026-05-16T00:44:40Z",
+  "session_id": "mistake-infra",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260516-mistake-infra.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "L2 dream integration (pattern correlation between atone slugs + dream associations) \u2014 needs 2-3 weeks of feedback data",
+    "Plugin packaging under `~/.claude/plugins/atone/` for portability",
+    "Confidence calibration between atone weight bands and dream's 0-1 scores",
+    "The `atone.sh merge` subcommand (slug-cleanup workflow) \u2014 never built, still on deferred list",
+    "Backend session's `ascii-art-tables-instead-of-gum-tools` recurrence \u2014 explicitly left for backend agent to record on next /atone touch",
+    "`prop-20260516-003148-a5` \u2014 SKILL.md hot-reload upstream feedback",
+    "16 atone-prevention proposals from yesterday: 9 done, 30 rejected (incl. dedup), 0 currently open",
+    "Wait 2-3 weeks; check `~/.claude/atone/feedback.jsonl` for what fires usefully vs gets ignored",
+    "Check `~/.claude/atone/judgments.jsonl` stats for verdict distribution + pushback save-rate",
+    "Revisit deferred items with real data"
+  ],
+  "tags": []
+}

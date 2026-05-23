@@ -1,0 +1,36 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 1.0,
+    "unit_count": 1
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit -0: 29 Bash invocations; ls -la x5+, find x4, grep piped via Bash x8+, ls -1/ls -d compounds x4; Glob and Grep tools available but unused throughout entire system-survey; rate consistent with prior 52-83% band; nineteenth+ consecutive cycle above 50%; no downward trajectory confirmed",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit -0: compound commands at positions 4-8 all failed (success:false); agent then retried sub-operations individually (positions 8-11) without intermediate diagnostic (command -v, path check, or error read); same structural pattern as prior flagged cycles; 1 unit at prior baseline",
+      "compound_command_overreach:RECURRING — unit -0: 15+ Bash calls use multi-clause semicolon chains (e.g. echo+sw_vers+uname+sysctl, echo+git+git+echo+ls+gpg); 7/29 calls failed (24% failure rate), suggesting overconfidence in compound path/binary availability across a heterogeneous environment; rules explicitly flag these as permission-prompt risk; pattern present but labeled RECURRING from prior cycles"
+    ],
+    "calibration_score": 0.14,
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations: flagged RECURRING:STABLE for 18+ consecutive cycles with no measured improvement; deprioritize re-recommending; pattern appears structural rather than correctable via repeated flagging",
+      "bash_retry_without_diagnosis: add a command -v or ls existence check as first step before retrying failed compound commands; already recommended in prior cycles but failure count (7/29 this unit) is higher than prior cycles suggesting slight worsening",
+      "compound_command_overreach: when surveying an unknown environment, probe binary existence with command -v before chaining into version flags; would have prevented the 7 failures in this unit with minimal overhead; NEW sub-recommendation not previously isolated from the broader shell_tool_preference slug"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 0
+  },
+  "sessions": [
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      221919
+    ]
+  ],
+  "timestamp": "2026-05-23T13:14:09.276432Z",
+  "tokens_used": 4100,
+  "units_analyzed": 1,
+  "units_total": 1
+}

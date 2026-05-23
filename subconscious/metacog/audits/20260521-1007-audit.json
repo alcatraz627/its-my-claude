@@ -1,0 +1,38 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.21905250512148908,
+    "unit_count": 9
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — units 2 (sed+rg via Bash compound), 9 (ruby+rg+git diff compound), 19 (ls+rg compounds x2), 20 (rg+sed+node via Bash), 26 (gh+rg compounds, printf+bash compound); rate ~56% of units with tool calls; thirteenth+ consecutive cycle above 50%; no downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit 26: gh run list fails (success:false) then immediately retried with stripped flags without intermediate state-read; gh pr view --jq fails then retried with --template without diagnosis; 2 sub-instances; structurally identical to prior flagged cycles",
+      "confirmation_bias:RECURRING:STABLE — unit 2: Write to docs-migration-impact-map.md (success:true) executed before final AskUserQuestion completed (success:false); conclusions persisted before user input received; identical topology to both prior flagged cycles; no pre-emption improvement",
+      "redundant_read_same_unit:RECURRING:STABLE — unit 26: Read frontend-pr-check.yml x2 with no intervening edit or offset variation between reads; count at prior plateau of 1 unit; pattern not eliminated"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 2,
+    "recommendations": [
+      "shell_tool_preference_violations: DEPRIORITIZED — flagged in all prior cycles with zero improvement; structural non-improvement confirmed; no new recommendation until a mechanism change (hook enforcement, tooling constraint) is introduced",
+      "bash_retry_without_diagnosis: DEPRIORITIZED — flagged in prior two cycles; count stable at 2 sub-instances per batch; no regression but no improvement; recommendation stands from prior cycle (intermediate Bash state-read or diagnostic pivot before retry)",
+      "confirmation_bias: DEPRIORITIZED — third consecutive cycle with identical Write-before-AskUserQuestion topology; recommendation stands from prior cycles; escalate only if count increases above current 1-unit-per-batch baseline",
+      "redundant_read_same_unit: DEPRIORITIZED — present at prior plateau; no worsening; recommendation stands from prior cycle (check for pending edit before re-issuing identical Read)"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      3358548
+    ]
+  ],
+  "timestamp": "2026-05-21T10:07:11.865474Z",
+  "tokens_used": 8453,
+  "units_analyzed": 9,
+  "units_total": 9
+}

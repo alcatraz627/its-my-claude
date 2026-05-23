@@ -1,0 +1,69 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18216,
+    "correction_density": 0.06944444444444445,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.32924240341557715,
+    "unit_count": 72
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — ~10/26 measurable units with tools (~38%); below historical bc2715fa rate of 55-65% but elevated vs zero-target for new sessions; 29d7d6be-2 (cd+ls+find+wc-l+rg via Bash), 29d7d6be-3 (find+grep pipeline via Bash), 29d7d6be-6 (cat >> append via Bash instead of Edit/Write), 5455871e-3 (grep-rn+grep-A2+ls via Bash), 5455871e-30 (grep -A6 via Bash), 5455871e-37 (cat lifecycle.py via Bash), 5455871e-47 (ls+rg via Bash at wrong paths), 5455871e-54 (ls+rg via Bash multiple calls), 5455871e-57 (find+rg via Bash), 5455871e-71 (find via Bash); rate lower than bc2715fa historical saturation but persistent across both sessions in this batch",
+      "path_assumption_bias:RECURRING:WORSENING — 4 units vs prior new-session plateau of 0-2; 5455871e-3: rg/grep on wrong relative paths, 3 consecutive failures before pwd+ls recovery; 5455871e-47: ls frontend/docs/ and rg frontend/src/ both fail before pwd discovery; 5455871e-57: find src/utils/redis fails requiring pwd pivot; 5455871e-58: cd ../backend pytest invocation fails requiring cwd recovery; identical recovery topology in all 4 instances (wrong relative path → multiple failures → pwd+ls → retry with corrected path); doubling from stable 2 to 4 is a meaningful increase for new-session units",
+      "re_edit_thrash:RECURRING:WORSENING — 5 units vs prior stable plateau of 3; 5455871e-36 (Edit structural-changes-deliberation.md fail x3 then succeed, Edit worker-v2-but-better.md fail at end), 5455871e-37 (Edit structural-changes-deliberation.md fail x3 then Write-escape to new file structural-deliberations-pass-b.md), 5455871e-40 (Edit mistake-patterns.md fail before Read pivot then success), 5455871e-54 (Edit worker-overhaul-plan-v2.md fail x4 consecutive with no Read between attempts), 5455871e-58 (Edit test_item_terminal_state.py multiple sequential fail-then-edit cycles); Write-escape pattern in 5455871e-37 is a new variant — creating a replacement file when edit thrashing is a symptom of thrash, not a resolution; count at 5 matches worsening trend from prior bc2715fa cycles",
+      "mcp_exhaustion_without_pivot:RECURRING:CONFIRMED — flagged as NEW in prior calibration cycle referencing unit 5455871e-33; that exact unit is present in this batch and confirmed: 10 consecutive mcp__render__get_metrics failures with no argument variation, no fallback, no skip-and-document; additionally 5455871e-16 carries 6 consecutive Render service MCP failures (list_services, list_key_value, list_postgres_instances, get_service, list_deploys, get_key_value) with no pivot; contrast with 5455871e-67 which correctly pivots to a REST API wrapper script after curl failures — the correct behavior exists and was applied once; the gap between 5455871e-16/33 (no pivot after N failures) and 5455871e-67 (pivot after 2 failures) suggests the ability is available but not consistently triggered",
+      "optimistic_edit_without_read:RECURRING:STABLE — 3 units matching prior stable level; 5455871e-6 (Edit compliments.md fail before Read pivot then success), 5455871e-36 (Write _last-checkpoint.json fail x2 before Read pivot — overlaps with optimistic_write_without_read), 5455871e-40 (Edit mistake-patterns.md fail before Read pivot then success); co-occurrence with re_edit_thrash consistent with shared root cause; rate stable despite re_edit_thrash worsening",
+      "hook_bypass_via_absolute_grep_path:RECURRING:REGRESSING — 2 units (5455871e-64 uses /usr/bin/grep x2; 5455871e-71 uses /usr/bin/grep x2 plus /usr/bin/find, /usr/bin/git) vs ZERO in prior two new sessions (29d7d6be, 7255ac7e); prior cycle classified this as IMPROVING based on consecutive zero-instance new sessions; this session reverts the improvement; the zero-instance signal was not internalized; bc2715fa historical saturation and new-session regression together indicate no structural improvement",
+      "redundant_read_same_unit:RECURRING:STABLE — 2 units; 29d7d6be-2: Read product-todos.md x2 with no intervening edit or offset variation between duplicate reads; 5455871e-51: Read task_runner.py x2 and Read workerv2.py x2 with no intervening edits (this is the same unit referenced in prior calibration history as a confirmed instance); rate 2 matches prior stable plateau",
+      "optimistic_write_without_read:RECURRING:STABLE — 1 unit; 5455871e-36: Write _last-checkpoint.json fails x2 before Read pivot then Write success; identical fail-read-succeed topology to all prior instances"
+    ],
+    "calibration_score": 0.05,
+    "cross_references": [
+      "5455871e-33: mcp_exhaustion_without_pivot — this exact unit was the NEW flagged instance in the prior calibration cycle; seeing it in the current analysis batch confirms the pattern was correctly identified at first occurrence and is now RECURRING as predicted",
+      "5455871e-67: correct pivot behavior (Render MCP exhausted → REST API wrapper script created and tested) — antithesis of mcp_exhaustion_without_pivot; demonstrates the pivot capability exists; contrast with 5455871e-16 and 5455871e-33 (same failure type, no pivot) suggests inconsistent application rather than inability",
+      "dream-insight:git-push-approval-reset — not triggered; no git push operations observed in this batch; not violated",
+      "dream-insight:memory-deduplication — not violated in this batch; memory writes observed in 5455871e-6 and 5455871e-33 appear to be distinct entries rather than duplicates of existing patterns",
+      "29d7d6be-6: unprompted_infra_scope_creep pattern — this unit is a correction response to the infra proposal flagged NEW in prior cycle; the self-documentation ritual was executed (detailed entry appended to mistake-patterns.md) but the ls .github/workflows/ verification ran ONLY after user correction, identical topology to the prior instance; pattern appears confirmed as RECURRING across two consecutive sessions involving the 29d7d6be session"
+    ],
+    "overconfident_count": 11,
+    "recommendations": [
+      "mcp_exhaustion_without_pivot: NOW RECURRING — apply the 5455871e-67 pivot pattern proactively: after 3 consecutive identical MCP tool failures, switch strategy (Render CLI, REST API call, or skip-and-document); do not invoke the same tool more than 3 times with identical arguments regardless of how many calls the task feels like it requires; 5455871e-67 proves the pivot works when applied",
+      "path_assumption_bias: Rate doubled this session (2→4 units) — run pwd+ls BEFORE the first rg/find/ls attempt when CWD is ambiguous, not after the failures; the entire recovery pattern (wrong path → N failures → pwd → retry) is avoidable with a single upfront verification; this is lower cost than the hook_bypass fix and higher impact given the worsening rate",
+      "hook_bypass_via_absolute_grep_path: Regression from two zero-instance new sessions back to 2 units in 5455871e — the IMPROVING classification was premature; use Grep tool for all content searches; /usr/bin/grep calls in 5455871e-64 and 5455871e-71 had no justification that would warrant bypassing the hook",
+      "re_edit_thrash: Worsening trend continues (3→5); Write-escape to new filename when edit thrashes is not a fix — it creates orphan documents (structural-deliberations-pass-b.md alongside structural-changes-deliberation.md); Read target file immediately before the first Edit call; if Edit fails twice on the same target, stop and re-Read before the third attempt"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 20
+  },
+  "sessions": [
+    [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      881722
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      86255741
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      1819045
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      2069302
+    ],
+    [
+      "09034bdf-733b-41c8-91fc-020327531b71",
+      834883
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      3890561
+    ]
+  ],
+  "timestamp": "2026-05-15T11:44:29.671016Z",
+  "tokens_used": 27825,
+  "units_analyzed": 31,
+  "units_total": 72
+}

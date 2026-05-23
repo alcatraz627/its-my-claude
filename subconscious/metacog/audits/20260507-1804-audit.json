@@ -1,0 +1,54 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18342,
+    "correction_density": 0.03614457831325301,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.27710843373493976,
+    "unit_count": 83
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 7/7 tool-using units (100%; units 4,6,8,21,25,32,34); ls-via-Bash head/tail split (unit 4), grep-rln-via-Bash and rg-l-via-Bash x2 and rg-via-Bash x3+ and cat|grep pipeline on package.json (unit 4), grep-n-via-Bash and rg-via-Bash as section anchors and wc-l-via-Bash (unit 6), rg-via-Bash x3+ as section anchors between Edit calls (unit 8), rg-l-via-Bash and for-loop-rg-via-Bash (unit 21), ls-via-Bash (unit 25), find-via-Bash and /usr/bin/grep explicit-path x6+ (unit 32), cat-n-via-Bash and /usr/bin/grep explicit-path x4+ and for-loop-Bash success=false (unit 34); rate 100% EXCEEDS prior cycle peak of 92%; zero internalization across 28+ consecutive measured cycles; all prior cycles flagged as STABLE but rate increase this cycle warrants WORSENING classification",
+      "re_edit_thrash:RECURRING:STABLE — units 6,8,32; unit 6: 7+ Edit calls on plan.md with interleaved rg-via-Bash section anchors and Reads; unit 8: Edit(success=false) then rg-via-Bash anchor then Read then 7+ Edit calls on plan.md with interleaved rg anchors; unit 32: 3 Edit calls on data-history-v3.tsx plus 6 Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx; consistent with all prior measured cycles; document-editing thrash on plan.md co-occurs with shell_tool_preference_violations as section-locating strategy in both units 6 and 8, confirming the causal link between the two patterns",
+      "path_assumption_bias:RECURRING:IMPROVING — unit 4 only; Read on use-sync-q.ts (success=false) before ls-via-Bash pivot to correct path; single instance this cycle vs. double-instance in the prior three consecutive cycles; first observed reduction from double to single instance; cross-session internalization still zero (wrong path still attempted) but frequency reduced; tentative improvement pending next cycle confirmation",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg-via-Bash anchor plus Read plus successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor plus successful Edit; two instances consistent with all prior ten measured cycles at 1-2 instances per cycle; no improvement trend across 11+ consecutive cycles",
+      "rm_instead_of_trash:ABSENT — no Bash rm call observed in any unit this cycle; prior three consecutive cycles each contained one instance in unit 34; absence may reflect lighter filesystem work in this session rather than genuine correction; insufficient signal to reclassify; monitor next cycle"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations rate has escalated from 92% to 100% across tool-using units for the first time in measured history; the pattern is no longer STABLE — it is now structural and universal; the only novel recommendation given prior cycles have exhausted standard remediation suggestions is to investigate whether a PreToolUse hook can intercept Bash calls matching ls|grep|cat|find|rg|wc patterns when a dedicated tool (Glob, Grep, Read) would suffice, and emit a blocking warning; hook enforcement has proven effective for rm-vs-trash and could be applied here",
+      "path_assumption_bias shows first measurable improvement in 18+ cycles (double to single instance); no action recommended; continue monitoring to confirm trend before updating classification",
+      "re_edit_thrash and optimistic_edit_without_read remain unchanged across 10+ cycles; reclassifying both from monitoring priority to structural baseline; only noteworthy if rate changes significantly in either direction"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      51226584
+    ],
+    [
+      "1e792352-68e5-4389-8429-3eee3c5cc6d6",
+      1306021
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      9457119
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      1418345
+    ],
+    [
+      "98b0435a-8360-4f07-a69a-ba93adf0a62f",
+      634615
+    ]
+  ],
+  "timestamp": "2026-05-07T18:04:35.779450Z",
+  "tokens_used": 10886,
+  "units_analyzed": 11,
+  "units_total": 83
+}

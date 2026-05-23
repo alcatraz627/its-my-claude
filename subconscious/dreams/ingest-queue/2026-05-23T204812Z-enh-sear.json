@@ -1,0 +1,21 @@
+{
+  "ts": "2026-05-23T20:48:12Z",
+  "session_id": "enh-search-agent",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/backend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/backend/_20260524-enh-search-agent.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Section B** (clean-but-complete output): row-level `(make,model,year)` dedup across products;",
+    "**Section C**: per-item distinct-vehicle cap (e.g. 300\u2013500), applied after dedup+valid-filter,",
+    "**Robustness**: the 140 `attempt_failed` items need a retry/degrade policy for a full sweep.",
+    "**Open question** (user said \"working fine, refine later\"): no BE code converts a",
+    "Deferred: generic shared-research module (memory `project_taxonomy_generic_module_deferred`);"
+  ],
+  "tags": []
+}

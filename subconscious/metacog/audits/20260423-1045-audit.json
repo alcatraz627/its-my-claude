@@ -1,0 +1,17 @@
+{
+  "response": "{\"calibration_score\":-0.27,\"overconfident_count\":9,\"underconfident_count\":2,\"well_calibrated_count\":2,\"biases_detected\":[\"environment_anchoring: bare `cargo build` attempted without PATH prefix in 4 of 6 units despite prior corrections establishing the `export PATH=~/.cargo/bin:$PATH` fix\",\"optimism_bias: shell script output testing iterated 3 consecutive times with minor command variations (heredoc, printf, Write+env) before diagnosing the actual JSON parse issue\",\"availability_bias: unit-7 resumed session attempted `i-dream status` and `ls ~/.claude/subconscious/logs/` via bare shell 4 times before falling back to absolute binary path, repeating a known environment assumption\",\"sunk_cost: daemon management in unit-10 accumulated 6+ status/ps/log-tail checks without pausing to read service.rs first, which would have immediately clarified the daemonize behavior\"],\"recommendations\":[\"Export PATH with cargo bin once at session start for any Rust project session rather than prepending per-command — the repeated two-failure-then-fix cycle across units 1, 5, 7, 10 is a systematic calibration gap\",\"Apply a 2-failure pivot rule: after 2 consecutive failures of the same command shape, change strategy (read source, change approach) rather than incrementally varying the failing invocation\",\"Reduce redundant reads of the same unmodified file within a unit — dreaming.rs was read 5 consecutive times in unit-5 with no interleaved edits, indicating uncertainty about prior context that checkpointing would resolve\",\"For daemon lifecycle operations, read the service/cli source once before issuing start/stop/status commands to establish correct invocation pattern rather than discovering it through trial error\"]}",
+  "sessions": [
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      64125793
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      14317440
+    ]
+  ],
+  "timestamp": "2026-04-23T10:45:14.045189Z",
+  "tokens_used": 10290,
+  "units_analyzed": 6,
+  "units_total": 62
+}

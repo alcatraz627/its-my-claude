@@ -1,0 +1,83 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18130,
+    "correction_density": 0.06363636363636363,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3412626158492027,
+    "unit_count": 110
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — e7c8f9ae-2: lsof+wc-l+head via Bash (should use dedicated tools); e7c8f9ae-3: lsof via Bash; bc2715fa-2,5,7,14,22,29,30,32 repeat historical pattern; new session rate ~2/8 units (25%) is lower than historical bc2715fa 62% — possible improvement but sample too small to confirm trend",
+      "hook_bypass_via_absolute_grep_path:RECURRING:IMPROVING — ZERO instances of /usr/bin/grep in e7c8f9ae session (8 units); bc2715fa-21,22,29,30 carry historical rate; first new session in measured history with zero absolute-grep calls; do not relax — confirm over next 2+ sessions before reclassifying as resolved",
+      "optimistic_write_without_read:RECURRING:STABLE — e7c8f9ae-16: Write /Users/alcatraz627/.claude/_last-checkpoint.json success=false x1 before Read pivot then Write success=true; identical topology to all prior instances; write-tool contract (Read required before overwriting existing file) violated again; pattern has appeared in every session with checkpoint writes",
+      "re_edit_thrash:RECURRING:STABLE — e7c8f9ae-2: Edit dashboard.js success=false before Read pivot; bc2715fa-14: Edit with-server.ts x3 plus sink-options.ts; bc2715fa-22: Edit index.ts before Read; bc2715fa-32: Edit page.tsx x2 before Read; new session contributes 1 instance vs bc2715fa historical 3",
+      "optimistic_edit_without_read:RECURRING:STABLE — e7c8f9ae-2: Edit dashboard.js success=false before Read; bc2715fa-14,22,32 carry historical instances; new session contributes 1 instance; pattern of attempting edits without prior Read on the specific target file persists across sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 violates; bc2715fa-18 correctly self-documents; not observed in e7c8f9ae units measured here; ritual of self-documentation executes correctly but does not prevent violation in subsequent cycles",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22 carries the instance; not observed in e7c8f9ae units; eighth consecutive cycle carrying this pattern in history",
+      "ask_user_question_instead_of_inputs_mcp:NEW — e7c8f9ae-8: AskUserQuestion used to select Render workspace; CLAUDE.md MCP tool preferences (mandatory) specify mcp__inputs__confirm/pick_one over AskUserQuestion for structured input; first observed instance; not previously flagged",
+      "path_assumption_bias:RECURRING:IMPROVING — ZERO instances in e7c8f9ae session; bc2715fa-5 and bc2715fa-7 carry historical pattern; new session units show correct path handling without cd-prefix failures or wrong-path rg targeting; second consecutive new-session observation with zero instances"
+    ],
+    "calibration_score": 0.08,
+    "cross_references": [
+      {
+        "insight": "never_assert_state_without_observation",
+        "note": "Write _last-checkpoint.json without prior Read is a direct instance — asserting the file does not exist or can be overwritten without observing its current state. Dream insight violation confirmed.",
+        "unit": "e7c8f9ae-16"
+      },
+      {
+        "insight": "never_assert_state_without_observation",
+        "note": "Edit dashboard.js without prior Read is same class of assertion failure — assuming old_string is present without verifying. Violation confirmed.",
+        "unit": "e7c8f9ae-2"
+      },
+      {
+        "insight": "fix_thrash_context_limit_correlation",
+        "note": "Highest re_edit_thrash concentration in this batch (Edit with-server.ts x3+). Unit-14 is a long complex unit spanning multiple files — consistent with insight that large complex multi-file units produce more fix-thrash cycles.",
+        "unit": "bc2715fa-14"
+      },
+      {
+        "insight": "credentials_must_be_sourced_from_canonical",
+        "note": "Token extracted from log output (rg -o on /tmp/lc-test.log) rather than from a config file. Log extraction is contextually reasonable for a test token generated at runtime, not a stored credential — insight not violated here.",
+        "unit": "e7c8f9ae-3"
+      },
+      {
+        "insight": "context_reconstruction_hallucination_risk",
+        "note": "Core-dump/checkpoint write was the entire purpose of the unit. The checkpoint was written successfully (after the Read pivot). No reconstruction hallucination observed — insight not violated but relevant context.",
+        "unit": "e7c8f9ae-16"
+      }
+    ],
+    "overconfident_count": 7,
+    "recommendations": [
+      "optimistic_write_without_read: This pattern appears structurally in every session that writes checkpoint JSON. A pre-write Read is the minimal fix and the write tool itself enforces this contract — the failure is a reminder, not a blocker. Recommend adding a Read call before any Write to a file that existed in a prior session rather than just continuing.",
+      "ask_user_question_instead_of_inputs_mcp: New pattern. CLAUDE.md §MCP tool preferences marks this MANDATORY. For workspace selection, service picker, or any structured multiple-choice input in future units, prefer mcp__inputs__pick_one over AskUserQuestion.",
+      "hook_bypass_via_absolute_grep_path: Positive signal — e7c8f9ae has zero absolute-grep calls. Do not recommend any change; monitor for regression in next measured session before classifying as resolved.",
+      "shell_tool_preference_violations: Rate dropping (25% new session vs 62% historical bc2715fa). lsof is a legitimate shell-only operation (no dedicated tool). wc-l and head via Bash are the remaining avoidable violations — prefer Glob for file counts and Read with limit for head equivalents. No new hook can prevent this; internalization remains the only path.",
+      "re_edit_thrash + optimistic_edit_without_read: Plateau at low rates in new session (1 unit each vs 3 historically). Pattern appears when editing files with complex inline string matching requirements. No new recommendation beyond the existing read-before-edit discipline — current trajectory is acceptable."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "e7c8f9ae-956d-4158-9d7b-a77ad39049b4",
+      3130151
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      36136813
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      77802207
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      759972
+    ]
+  ],
+  "timestamp": "2026-05-14T16:54:40.234616Z",
+  "tokens_used": 27835,
+  "units_analyzed": 21,
+  "units_total": 110
+}

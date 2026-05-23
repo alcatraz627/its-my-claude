@@ -1,0 +1,17 @@
+{
+  "response": "{\"calibration_score\":-0.15,\"overconfident_count\":3,\"underconfident_count\":0,\"well_calibrated_count\":3,\"biases_detected\":[\"anchoring: cargo PATH assumption repeated across units 1, 5, 7, 10 despite consistent prior failure — agent re-anchors to bare `cargo build` each session start\",\"optimism bias: environment assumed to be configured (PATH, binary location, daemon socket) before verifying, leading to predictable first-try failures\",\"sunk cost: unit-5 shell script testing pursued through 5 failing invocations (json.tool parse, INSIGHTS_FILE env var, sourcing) rather than abandoning the approach after second failure\",\"availability bias: daemon management in unit-10 escalated to LaunchAgent creation and manual kill/restart before checking the simpler `i-dream start` subcommand path\"],\"recommendations\":[\"establish a session-start environment probe — resolve cargo binary path once, export as variable, reuse throughout; this single fix would eliminate ~30% of observed tool failures\",\"set a retry budget of 2 for any shell command pattern; on third failure, switch strategy rather than varying invocation syntax\",\"for exploration units (4, 7) apply a read-budget discipline: form a hypothesis about file structure before opening files, stop reading once hypothesis is confirmed or refuted\",\"daemon lifecycle operations should follow verify-then-act: check pid file and process table before issuing start/stop commands rather than issuing commands and reading state afterward\",\"after any tool failure, log the failure class (PATH, missing file, permission, parse error) and match against a known-failure registry before retrying — unit-10 would have caught the PATH class from unit-1 in the same session\"]}",
+  "sessions": [
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      64097334
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      14153427
+    ]
+  ],
+  "timestamp": "2026-04-23T10:43:54.940449Z",
+  "tokens_used": 10288,
+  "units_analyzed": 6,
+  "units_total": 62
+}

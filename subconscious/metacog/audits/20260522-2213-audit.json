@@ -1,0 +1,57 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18228,
+    "correction_density": 0.037037037037037035,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.24175372768010897,
+    "unit_count": 54
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~73% of tool-using units: 1cd43636-3 (ls+find+rg Bash compound, sed -n x2, uv run python inline JSON inspection), 1cd43636-7 (cd+rg compounds x2), 1cd43636-13 (ls -t+python3 inline for JSON inspection instead of Read+file-tools), 1cd43636-14 (ls -la compound, git+ls compound), 1cd43636-18 (find+ls compounds, python3 inline reads), 1cd43636-19 (python3 inline via Bash, find+ls+rg chains), 1cd43636-21 (python3 via Bash for reads, rg compounds), 1cd43636-27 (uv run python via Bash for MongoDB queries instead of mcp__mongodb), 7bc36b38-1 (git log+ls compound, rg via Bash), 7bc36b38-9 (rg via Bash), 7bc36b38-16 (rg via Bash); rate at high end of prior 52-83% band; no downward trajectory; seventeenth+ consecutive cycle above 50%",
+      "redundant_read_same_unit:RECURRING:STABLE — 7bc36b38-9: Read notion-list.ts x2 with no offset variation between reads and no intervening edit; unit outcome Corrected indicating redundant read did not prevent the correctness failure; 1 unit; at prior 1-2 unit plateau; no improvement",
+      "re_edit_thrash:RECURRING:STABLE — 1cd43636-18: 5 consecutive Edit calls to vcdb_lookup.py driven by code-review Agent output; no compile check between edits 1-4; all succeeded but density structurally identical to prior flagged cycles; 1 unit at prior 1-3 unit baseline",
+      "optimistic_edit_without_read:RECURRING:STABLE — 1cd43636-3: Write taxonomy_context.py fails (success:false) then immediately retried Write succeeds without intermediate Read or diagnostic; 1 sub-instance; at prior reduced plateau of 1 unit; pattern not eliminated",
+      "cli_arg_probing_without_help_first:RECURRING:STABLE — 1cd43636-11: atone.sh add called with --rca-content (produced wrong result shape), then atone.sh help consulted mid-sequence, then retried with --rca-file (succeeded); 3 invocations to complete one operation; same slug recorded as NEW-VARIANT in prior cycle; now RECURRING after second confirmed instance"
+    ],
+    "calibration_score": 0.26,
+    "cross_references": [
+      "dream-insight-git-push-compaction: no git push operations observed in this batch; insight neither violated nor confirmed; compaction boundary remains unexercised in these units",
+      "dream-insight-session-continuity: 1cd43636-19 contains an explicit Skill invocation for core-dump followed by checkpoint write and symlink management; confirms the heavy session-continuity pattern synthesized in the wake cycles; consistent with all prior observations across 91+ sessions",
+      "dream-insight-memory-deduplication: 1cd43636-3 writes a new project memory file (project_taxonomy_generic_module_deferred.md) and edits MEMORY.md without a visible deduplication check against existing entries; mild signal toward the 'records same correction repeatedly without consolidating' insight from 2026-05-08 wake cycle; not a strong instance but worth noting",
+      "1cd43636-27 outcome Corrected: MongoDB query analysis unit produced output requiring user correction; the inline Python via Bash approach (rather than mcp__mongodb tool) may have contributed to analysis errors by limiting query composability; cross-references shell_tool_preference_violations and the mcp tool preference rules"
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations is RECURRING:STABLE across 17+ consecutive cycles with no downward pressure; deprioritize further novel recommendations — structural non-improvement is confirmed; flag only if rate exceeds 90% or drops below 50%",
+      "cli_arg_probing_without_help_first: run --help before the first invocation of any CLI script whose flag interface is uncertain; the 3-invocation probe sequence in 1cd43636-11 (atone.sh) is avoidable with a single upfront help call; promote this to a behavioral precheck for all ~/.claude/scripts/ tooling",
+      "redundant_read_same_unit: before re-reading a file within the same execution unit, verify that either (a) an edit has occurred since the last read or (b) the offset differs; absent both conditions, skip the re-read; this pattern correlates with Corrected outcomes (7bc36b38-9)",
+      "re_edit_thrash: insert a py_compile or type-check invocation after every 2-3 consecutive edits to the same file; do not accumulate 5 same-file edits without an intermediate check; the vcdb_lookup.py sequence in 1cd43636-18 is the prototypical case"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      5097066
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      8596865
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      11862682
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      14203252
+    ]
+  ],
+  "timestamp": "2026-05-22T22:13:26.557251Z",
+  "tokens_used": 26402,
+  "units_analyzed": 17,
+  "units_total": 54
+}

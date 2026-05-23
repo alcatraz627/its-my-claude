@@ -1,0 +1,70 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18651,
+    "correction_density": 0.02127659574468085,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4870618939780718,
+    "unit_count": 94
+  },
+  "response": {
+    "biases_detected": [
+      "path_assumption_bias:RECURRING:no_improvement — unit-4 and unit-46 both attempted Read on src/utils/hooks/use-sync-q.ts (non-existent file) without prior existence check; same file, same session, hours apart — zero intra-session learning transfer",
+      "optimistic_edit_bias:RECURRING:stable — unit-8 and unit-34 both issued Edit as first action without Read verification, producing failed edits requiring Read-then-retry; pattern count unchanged vs prior cycles",
+      "heredoc_encoding_sunk_cost:RECURRING:stable — unit-35 persisted with heredoc-based fiber-snatcher eval scripts through ~4 consecutive encoding failures before switching to Write-tool approach; structurally identical to prior jq heredoc sunk-cost pattern",
+      "shell_tool_preference_violations:RECURRING:worsening — units-32/34/45/46 consistently use Bash with /usr/bin/grep, find, cat -n instead of Grep/Glob/Read tools; violation frequency not decreasing; rule exists at Tier-1 but is not being internalized",
+      "api_discovery_thrash:NEW — unit-40 iterated across fiber-snatcher subcommands (components, count, portal, atoms, watch) by trial-and-error without reading --help or docs first; distinct from heredoc encoding issues; indicates external-binary API uncertainty handled by probe-then-fail rather than docs-first",
+      "rm_before_trash:INSTANCE — unit-35 issued rm (hook blocked) before correcting to trash; corrected immediately within unit; not a new pattern class but first intra-session occurrence"
+    ],
+    "calibration_score": 0.18,
+    "cross_references": [
+      "dream_insight_external_integrations_confirmed — unit-35 heredoc encoding failures and unit-40 api_discovery_thrash both instantiate the 'external integration points are weakest links' insight (conf=0.58); fiber-snatcher eval boundary caused the majority of wasted tool calls in this session",
+      "dream_insight_terse_delta_user_confirmed — units-2/11/26/29 are zero-tool text-only responses all accepted without pushback; consistent with user issuing minimal-diff directives and expecting shared state maintenance; no violations detected",
+      "dream_insight_ui_feedback_loop_confirmed — unit-35 uses fiber-snatcher shoot for screenshot capture after fix (bug-repro-01, bug-fixed shots both taken and Read); vision-loop pattern operationally confirmed without being prompted"
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "path_assumption_bias: ESCALATE_TO_HOOK — flagged in 4+ prior cycles with no behavioral improvement; behavioral reminder is insufficient; add a PreToolUse hook that checks file existence before Read on .ts/.tsx paths in known hook directories",
+      "optimistic_edit_bias: SKIP — already recommended; no new signal; consider adding Read-before-Edit as a mandatory step in CLAUDE.md Tier-0 rather than a reminder",
+      "heredoc_sunk_cost: FORMALIZE_PIVOT_THRESHOLD — after 2 consecutive heredoc/encoding failures on any external-tool eval, switch to Write-tool approach; threshold is not currently formalized anywhere; add to mistake-patterns.md with explicit pivot rule",
+      "api_discovery_thrash: NEW_RECOMMENDATION — when invoking an external binary CLI for the first time in a session, run --help or docs-read as first action before any subcommand probing; add to mistake-patterns.md as new pattern",
+      "shell_tool_violations: ESCALATE_TIER — current Tier-1 mention in shell.md is insufficient given worsening trend; promote to Tier-0 inline rule in CLAUDE.md with explicit tool-substitution table"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      21756881
+    ],
+    [
+      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
+      7253762
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      1855913
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      31531308
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      4636373
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      9146437
+    ],
+    [
+      "3fad6b88-13af-495f-802a-26110c36e2f5",
+      2155249
+    ]
+  ],
+  "timestamp": "2026-04-29T23:30:02.512395Z",
+  "tokens_used": 23079,
+  "units_analyzed": 16,
+  "units_total": 94
+}

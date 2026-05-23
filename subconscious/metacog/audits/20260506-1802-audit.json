@@ -1,0 +1,41 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.024390243902439025,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.22845646703195038,
+    "unit_count": 41
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 7/11 units (64%; units 4,6,8,21,25,32,34); ls-via-Bash head/tail split (unit 4), rg-via-Bash as section anchor between Edit calls (units 6,8,32), /usr/bin/grep explicit-path (units 32,34), cat-n-via-Bash instead of Read (unit 34), for-loop-rg-via-Bash (unit 21); rate 64% falls at lower bound of prior cycle range 64–100%; zero internalization across 20+ consecutive measured cycles; structurally identical to all prior cycles",
+      "re_edit_thrash:RECURRING:STABLE — units 6,8,32; unit 6: 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: Edit(success=false) then rg-via-Bash anchor then 7+ Edit calls on plan.md; unit 32: 4 Edit calls on data-history-v3.tsx plus 6 Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx; peak Edit count per file unchanged from all prior measured cycles; no improvement trend across 5+ consecutive cycles",
+      "path_assumption_bias:RECURRING:STABLE — unit 4: Read on use-sync-q.ts (success=false) before ls-via-Bash pivot; this exact file path failure now confirmed across 10+ consecutive sessions with zero cross-session internalization; no intra-session repeat this cycle (consistent with most prior cycles, not worst-case double-repeat seen in 2026-05-06 third entry)",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg-via-Bash anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with all prior four measured cycles; no improvement trend"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations shows zero internalization after 20+ consecutive cycles; structural intervention required beyond session-level feedback — hook-level enforcement blocking Bash grep/rg/ls when Grep/Glob/Read would suffice; flagged for escalation despite recurring-no-improvement deprioritization policy",
+      "path_assumption_bias on use-sync-q.ts specifically has failed 10+ consecutive cross-session times at the identical path; candidate for a targeted persistent memory entry or project-level CLAUDE.md note recording the correct path to eliminate the ls-pivot recovery pattern",
+      "re_edit_thrash and optimistic_edit_without_read remain stable with no trajectory change; no new recommendations beyond prior cycles"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      41861112
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      2671211
+    ]
+  ],
+  "timestamp": "2026-05-06T18:02:05.134767Z",
+  "tokens_used": 9683,
+  "units_analyzed": 11,
+  "units_total": 41
+}

@@ -1,0 +1,28 @@
+{
+  "ts": "2026-05-21T13:16:13Z",
+  "session_id": "park-all-bc27",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260521-park-all-bc27.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#77** \u2014 Fix auto-select clobber in `use-scraper-parts.ts:116-122` (user bookmarked, real bug, skeptical-review confidence 0.85)",
+    "**#78** \u2014 BE-handoff for jobs-list cache invalidation after `apply_metadata` PATCH",
+    "**#79** \u2014 Resume point for parked scraper-success consolidation refactor",
+    "**#80** \u2014 Node bump 22.11\u219222.20 out-of-repo cleanup (Vercel dashboard + co-contributor `nvm use`)",
+    "Auto-select clobber on rawParts identity (tracked as #77 \u2014 applies to both refactor and original; same effect, same deps)",
+    "Several effect-deps concerns that exist in the original modal too",
+    "`jobTagStr` string-glue bug in `scraper-cycle-panel.tsx:77`",
+    "`useScraperParts` `!!parseFileData` dep coercion",
+    "Cycle default-seed clear-to-empty",
+    "`scrape-review.modal.tsx` auto-refresh dep array vs internal partsKey reset",
+    "**#36** `[Scraper success] [P2] File upload UX: rename cols across sheets + drop sheets` \u2014 still `in_progress`. P2 underlying feature is partial; refactor on top got reverted. Status worth user review.",
+    "**#62** `[Ship-pending] Param-rich app-link generators (per scoping doc)` \u2014 still `in_progress`. Long-running, likely stale."
+  ],
+  "tags": []
+}

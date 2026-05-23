@@ -1,0 +1,45 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":3,\"underconfident_count\":0,\"well_calibrated_count\":8,\"biases_detected\":[\"cwd_anchoring: bash commands assumed working directory context that was not set, causing repeated failures in bc59cf34-20\",\"sunk_cost_persistence: jq filter rewritten 3+ times in bc59cf34-8 rather than simplifying the approach after first failure\",\"tool_success_optimism: sleep-based polling attempted in bc59cf34-24 despite Monitor tool being available and sleep command failing\",\"path_over_specificity: hardcoded /private/tmp task output paths in bc59cf34-24 and bc59cf34-27 that were not consistently readable\"],\"recommendations\":[\"Emit explicit `cd <project_root>` or use absolute paths before all bash tool calls that are path-sensitive\",\"Break complex jq filters into incremental verification steps rather than composing full pipeline before first test\",\"Use Monitor tool for background task polling instead of sleep+tail; sleep-based polling failed in two units\",\"Probe task output file paths with ls/stat before reading rather than assuming path structure from session context\",\"Add a CWD sanity check (pwd + ls sentinel file) at the start of multi-step bash sequences in unfamiliar directories\"]}",
+  "sessions": [
+    [
+      "bcdb2e55-f41d-4481-bb27-b365e6c930db",
+      1166263
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      10878229
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      11983035
+    ],
+    [
+      "6345a8d3-8645-40e5-a625-fe143f65702d",
+      10916843
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      47215975
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      7689963
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      33674109
+    ],
+    [
+      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
+      2745481
+    ],
+    [
+      "26476b4c-991c-4e20-ab14-2533d7914c58",
+      98779
+    ]
+  ],
+  "timestamp": "2026-04-18T01:41:41.723633Z",
+  "tokens_used": 10314,
+  "units_analyzed": 11,
+  "units_total": 107
+}

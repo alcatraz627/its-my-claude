@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":7,\"biases_detected\":[\"sunk-cost: repeated iterative edits to plan.md (units -6, -8) rather than rewriting, indicating over-investment in incremental patching\",\"tool-anchoring: consistent use of Bash+grep/rg instead of dedicated Grep tool across units -4, -32, -34, and Bash+cat-n instead of Read tool in unit -34\",\"availability: defaulted to compound tsc+test+lint Bash chains in unit -21 and -32 rather than scoped individual checks, increasing noise surface\",\"scope-inflation: unit -32 expanded across team-filter, data-history-v3 (two files), s1-upload, and file-select in a single turn without explicit user approval for full scope\"],\"recommendations\":[\"enforce Grep tool over rg/grep in Bash for all content searches — current pattern violates stated shell preferences and produces noisier permission prompts\",\"add re-read gate before any second Edit to the same file: three or more edits to one file in a turn is the re-edit-thrash pattern; stop, re-read full file, form a single consolidated edit\",\"terse user inputs (unit -26: 24 chars) should produce terse outputs — the 4853-char response to 'what next' violates communication density-matching\",\"scope of unit -32 (5 files, 40+ tool calls) should have been confirmed before execution; user said 'carefully' in the input which is a signal to enumerate scope and get approval\",\"failed Edit attempts (units -8, -34) were preceded by no read of the target region — mandate a targeted read/grep of the edit region before any Edit call to avoid blind string-match failures\"]}",
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      15713598
+    ],
+    [
+      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
+      378701
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      22319815
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      243517
+    ],
+    [
+      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1",
+      85107
+    ],
+    [
+      "c90ca936-7b37-4c28-8993-89a137d637c4",
+      203632
+    ]
+  ],
+  "timestamp": "2026-04-28T03:55:19.488878Z",
+  "tokens_used": 7734,
+  "units_analyzed": 11,
+  "units_total": 29
+}

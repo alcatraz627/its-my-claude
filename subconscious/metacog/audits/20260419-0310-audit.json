@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":8,\"biases_detected\":[\"environment_assumption_anchoring\",\"optimism_bias_on_tool_prerequisites\",\"availability_bias_in_source_selection\",\"sunk_cost_in_iterative_debugging\"],\"recommendations\":[\"Verify CWD and file permissions before chaining relative-path Bash commands — units -20 and -8 show repeated silent failures caused by unverified environment assumptions\",\"Check hook-imposed constraints (sleep duration blocks, write guards) before using them as control-flow primitives — unit -24 sleep was blocked and required reactive adaptation\",\"Diversify web source strategy earlier when primary sources fail: unit -1 attempted 6+ failed fetches before switching to Playwright browser navigation\",\"Probe file encoding and tmp write permissions before constructing multi-step jq pipelines — unit -8 required two failed Write attempts due to encoding issues before succeeding\",\"For zero-tool turns (units -13, -51), emit at minimum a brief status token so calibration metadata is non-null and downstream monitors can distinguish intentional no-ops from abrupt terminations\"]}",
+  "sessions": [
+    [
+      "68cd7c45-6ae3-472d-831c-b5eb513ca5ab",
+      2339313
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      14103441
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      53841402
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      42141961
+    ],
+    [
+      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
+      6084261
+    ]
+  ],
+  "timestamp": "2026-04-19T03:10:38.507307Z",
+  "tokens_used": 10208,
+  "units_analyzed": 12,
+  "units_total": 87
+}

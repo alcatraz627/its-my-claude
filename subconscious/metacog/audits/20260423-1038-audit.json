@@ -1,0 +1,21 @@
+{
+  "response": "{\"calibration_score\":0.18,\"overconfident_count\":3,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"anchoring on expected file paths without existence checks before writes\",\"optimism bias in verification commands run after primary work succeeds\",\"environment assumption bias — cargo/PATH assumed available without pre-check in unit 60f43456-1\",\"sunk cost on edit retries in units a76e1439-11 and a76e1439-20 rather than re-reading file state first\"],\"recommendations\":[\"add existence pre-check before Bash ls/rg verification steps to avoid silent failures that mask incomplete task confirmation\",\"resolve PATH before first cargo invocation rather than discovering it missing on build failure — costs 2 extra failed tool calls per session\",\"when an Edit fails, re-read the target file before retrying rather than adjusting the match string blindly — reduces multi-attempt edit chains\",\"treat unknown user_reaction as underconfident signal — unit a76e1439-20 had the highest tool count and complexity yet no confirmed acceptance; bias toward shorter units with earlier checkpoints on long doc-editing sessions\"]}",
+  "sessions": [
+    [
+      "a76e1439-b17f-467b-b733-4369bba3eba0",
+      13664888
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      63972925
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      13998358
+    ]
+  ],
+  "timestamp": "2026-04-23T10:38:26.335941Z",
+  "tokens_used": 8250,
+  "units_analyzed": 10,
+  "units_total": 69
+}

@@ -1,0 +1,47 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.06593406593406594,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.4541532602270931,
+    "unit_count": 91
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 8/13 units (62%; bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32); rate 62% is UP from 52% in immediately prior cycle and up from 46% two cycles prior; trend is worsening not stable; bc2715fa-2: pwd+ls+jq+tail via Bash; bc2715fa-5: cd-prefix rg compounds, pwd+ls discovery; bc2715fa-7: rg-via-Bash on wrong paths; bc2715fa-14: ls-via-Bash, cat-via-Bash (sed-n), grep-n-via-Bash; bc2715fa-22: find-via-Bash, cat-via-Bash; bc2715fa-29: lsof+pm2 via Bash; bc2715fa-30: ps+lsof+curl via Bash; bc2715fa-32: ls+head via Bash; zero internalization across 42+ consecutive measured cycles; rate now at upper-middle of historical 44-92% range",
+      "hook_bypass_via_absolute_grep_path:RECURRING:IMPROVING — 4/13 units (31%; bc2715fa-14,bc2715fa-21,bc2715fa-29,bc2715fa-30); rate 31% is DOWN from 36-38% in prior two consecutive cycles; first measurable decline after three consecutive cycles at ELEVATED; bc2715fa-21: /usr/bin/grep as sole tool in unit; bc2715fa-14: /usr/bin/grep in compound Bash; bc2715fa-29: /usr/bin/grep x2; bc2715fa-30: /usr/bin/grep once; structural hook gap (absolute-path invocation not intercepted) remains root cause; classification downgraded from ELEVATED to IMPROVING pending second consecutive cycle of decline",
+      "re_edit_thrash:RECURRING:IMPROVING — 2/13 units (bc2715fa-14,bc2715fa-32); DOWN from 5 units in immediately prior cycle and 4 units in cycle before that; bc2715fa-14: Edit with-server.ts success=false x3 across sub-sequences plus Edit sink-options.ts success=false; bc2715fa-32: Edit page.tsx success=false x2 consecutively before Read pivot; first measurable decline after plateau at 4-5 units; improvement may be partially sample-size artifact; do not relax monitoring",
+      "optimistic_edit_without_read:RECURRING:STABLE — 3/13 units (bc2715fa-14,bc2715fa-22,bc2715fa-32); rate matches prior two cycle baselines at 3-4 instances; bc2715fa-14: Edit decisions/_index.md success=false before Read then success; bc2715fa-22: Edit index.ts success=false before Read then success; bc2715fa-32: Edit page.tsx success=false x2 before Read then success; zero improvement across 6+ consecutive measured cycles",
+      "path_assumption_bias:RECURRING:STABLE — 2/13 units (bc2715fa-5,bc2715fa-7); identical topology to all prior bc2715fa measurement passes; bc2715fa-5: cd frontend prefix then rg compounds fail, pwd+ls discovery required before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot; cross-session internalization zero across 27+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:SELF_DOCUMENTED — bc2715fa-14 violates; bc2715fa-18 executes full correction ritual appending detailed incident entry to mistake-patterns.md; self-documentation is thorough and correct; violation reflex uncorrected across 6+ consecutive measured cycles; ritual executes but does not prevent recurrence",
+      "trusted_linter_reminder_without_diffing:RECURRING:STABLE — bc2715fa-22: repeated from prior cycle; find+cat Bash compounds used for vitest config discovery instead of Glob+Read; git diff executed correctly later but only after test failures forced investigation; pattern self-documented at end of unit-22 again; written pattern entry did not prevent violation within same unit",
+      "redundant_read_same_unit:RECURRING:STABLE — 1/13 units (bc2715fa-22); Read logger.demo.test.ts appears twice within unit; down from 3 units in prior cycle but still present; unit-22 reads at diagnostic positions without offset variation suggesting zero information gain on second read"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations is WORSENING (62% this cycle vs 52% prior vs 46% two cycles ago) — flag to user that the trend is moving in the wrong direction despite 42+ cycles of annotation; structural intervention (hook expansion to block ls/head/cat/find via Bash when dedicated tools exist) is the only lever that has not been tried",
+      "hook_bypass rate declined for first time in three cycles (31% vs 36-38%) — do not change approach; observe whether next cycle sustains the improvement before proposing structural changes",
+      "re_edit_thrash declined to 2 units (from 5) — may be genuine improvement or sample variance; maintain Read-before-Edit discipline without additional intervention until trend is confirmed across a second cycle",
+      "optimistic_edit_without_read remains flat at 3-4 instances per cycle with zero trend movement — consider whether the Read-before-Edit rule needs to be enforced structurally (PreToolUse hook that checks whether Edit target was Read in the same unit) rather than relying on internalization",
+      "declared_ready_without_runtime_exercise: self-documentation ritual executes correctly every time but violation recurs every measured cycle; the disconnect between pattern-writing and pattern-application is the actual failure mode — note to user that this pattern has graduated beyond what mistake-patterns.md can fix"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      18267366
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      45426378
+    ]
+  ],
+  "timestamp": "2026-05-12T22:40:03.982138Z",
+  "tokens_used": 13518,
+  "units_analyzed": 13,
+  "units_total": 91
+}

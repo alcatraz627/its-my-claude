@@ -1,0 +1,223 @@
+{
+  "generated_at": "2026-05-23T18:57:21Z",
+  "events_analyzed": 40643,
+  "sessions_analyzed": 128,
+  "session_quality": {
+    "average_score": 69.0,
+    "top_sessions": [
+      {
+        "session_id": "130ecdff-573f-4589-9978-5959499fe437",
+        "project": "tmp",
+        "score": 81.2,
+        "tool_count": 5,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.6,
+        "efficiency": 5.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 2.7,
+        "completed": true,
+        "start": "2026-05-17T20:44:10Z"
+      },
+      {
+        "session_id": "ab5b6508-65d0-4285-93a4-52d36102ba61",
+        "project": "tmp",
+        "score": 81.2,
+        "tool_count": 5,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.6,
+        "efficiency": 5.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 4.9,
+        "completed": true,
+        "start": "2026-05-21T17:28:54Z"
+      },
+      {
+        "session_id": "8a3096b2-fd52-4c34-99b3-b94668413c78",
+        "project": "tmp",
+        "score": 78.8,
+        "tool_count": 3,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 1.0,
+        "efficiency": 3.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 323.5,
+        "completed": true,
+        "start": "2026-05-18T03:51:02Z"
+      },
+      {
+        "session_id": "5fd3633e-445a-4ee7-854d-f3d6cf50aef6",
+        "project": "tmp",
+        "score": 78.8,
+        "tool_count": 3,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 1.0,
+        "efficiency": 3.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 5.0,
+        "completed": true,
+        "start": "2026-05-19T10:33:34Z"
+      },
+      {
+        "session_id": "6febf7e1-bcc7-47e0-b397-12a64ad60697",
+        "project": "tmp",
+        "score": 77.5,
+        "tool_count": 2,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.5,
+        "efficiency": 2.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 0.9,
+        "completed": true,
+        "start": "2026-04-16T21:18:50Z"
+      }
+    ],
+    "bottom_sessions": [
+      {
+        "session_id": "eca50a22-6179-4267-8e51-a9fa6470346e",
+        "project": "frontend",
+        "score": 57.0,
+        "tool_count": 266,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.015,
+        "efficiency": 5.0,
+        "prompts": 53,
+        "compactions": 1,
+        "duration_min": 1447.0,
+        "completed": true,
+        "start": "2026-05-20T13:54:13Z"
+      },
+      {
+        "session_id": "7255ac7e-f62c-40e3-b624-dd143cd13fb3",
+        "project": "frontend",
+        "score": 56.9,
+        "tool_count": 121,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.033,
+        "efficiency": 4.2,
+        "prompts": 29,
+        "compactions": 0,
+        "duration_min": 292.4,
+        "completed": true,
+        "start": "2026-05-14T18:05:04Z"
+      },
+      {
+        "session_id": "c64c4bfc-db28-4e60-97dc-e40241afff56",
+        "project": "frontend",
+        "score": 56.4,
+        "tool_count": 75,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.053,
+        "efficiency": 3.0,
+        "prompts": 25,
+        "compactions": 0,
+        "duration_min": 19390.4,
+        "completed": true,
+        "start": "2026-04-20T10:01:00Z"
+      },
+      {
+        "session_id": "1e792352-68e5-4389-8429-3eee3c5cc6d6",
+        "project": "frontend",
+        "score": 55.0,
+        "tool_count": 140,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.021,
+        "efficiency": 3.2,
+        "prompts": 44,
+        "compactions": 0,
+        "duration_min": 2131.8,
+        "completed": true,
+        "start": "2026-05-07T10:14:34Z"
+      },
+      {
+        "session_id": "test-ev-01",
+        "project": "",
+        "score": 47.5,
+        "tool_count": 2,
+        "error_count": 1,
+        "error_rate": 0.5,
+        "diversity": 1.0,
+        "efficiency": 2,
+        "prompts": 0,
+        "compactions": 0,
+        "duration_min": 0,
+        "completed": true,
+        "start": ""
+      }
+    ]
+  },
+  "error_taxonomy": {
+    "total_errors": 1,
+    "by_tool": {
+      "Read": 1
+    },
+    "by_project": {
+      "tmp": 1
+    },
+    "error_rate_overall": 0.0
+  },
+  "topic_drift": {
+    "primary_focus": "tmp",
+    "recent_projects": {
+      "tmp": 3,
+      "enhancement-product": 2,
+      ".claude": 2,
+      "frontend": 2,
+      "i-dream": 1
+    },
+    "drift_rate": 0.667,
+    "total_switches": 84,
+    "recent_switches": [
+      {
+        "ts": "2026-05-20T08:46:46Z",
+        "from": ".claude",
+        "to": "frontend"
+      },
+      {
+        "ts": "2026-05-21T10:33:03Z",
+        "from": "frontend",
+        "to": "i-dream"
+      },
+      {
+        "ts": "2026-05-21T13:42:28Z",
+        "from": "i-dream",
+        "to": "enhancement-product"
+      },
+      {
+        "ts": "2026-05-21T17:28:54Z",
+        "from": "enhancement-product",
+        "to": "tmp"
+      },
+      {
+        "ts": "2026-05-23T11:05:17Z",
+        "from": "tmp",
+        "to": ".claude"
+      }
+    ]
+  },
+  "collaboration_style": {
+    "total_prompts": 3671,
+    "corrections": 876,
+    "confirmations": 682,
+    "directives": 142,
+    "terse_messages": 268,
+    "correction_rate": 0.239,
+    "confirmation_rate": 0.186,
+    "directive_rate": 0.039,
+    "terse_rate": 0.073,
+    "style_label": "corrective"
+  }
+}

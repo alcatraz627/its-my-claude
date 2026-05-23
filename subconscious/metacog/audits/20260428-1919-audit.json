@@ -1,0 +1,33 @@
+{
+  "response": "{\"calibration_score\":0.32,\"overconfident_count\":3,\"underconfident_count\":0,\"well_calibrated_count\":8,\"biases_detected\":[\"anchoring — plan.md treated as canonical artifact across multiple units causing repeated read-edit-verify cycles rather than a single well-scoped edit\",\"re-edit thrash — units -6 and -8 each make 5+ sequential edits to the same file, indicating the initial edit strategy was not grounded in a complete read of current state\",\"broad-first exploration — unit -4 issues 28 tool calls across shell, grep, and read before forming a clear hypothesis, with one failed read (use-sync-q.ts) that could have been avoided with a directory listing first\",\"sunk-cost framing — once the plan.md document was created, subsequent units invested heavily in elaborating it rather than questioning whether the planning artifact was the right output format\"],\"recommendations\":[\"Before any Edit call on a file touched in the same session, re-read the target range rather than relying on remembered state — the failed Edit in unit -8 and the re-read pattern in units -6 and -34 both stem from stale mental models\",\"Cap exploration breadth at 5-7 tool calls before committing to a hypothesis; unit -4 ran 28 tools without a clear stopping condition, which is consistent with the [re-edit-thrash] pattern in mistake-patterns.md\",\"Run tsc --noEmit earlier in the edit cycle rather than after all edits are complete; units -32 and -34 both defer type-checking to the end, which surfaced fixable errors late\",\"When a document-editing unit requires more than 3 sequential Edits to the same file, stop and do a full Read before continuing — the alternating rg+Read+Edit pattern in units -6 and -8 is a diagnostic signal for insufficient upfront context\"]}",
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      17999469
+    ],
+    [
+      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
+      447041
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      52130
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      26181654
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      930835
+    ],
+    [
+      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1",
+      321158
+    ]
+  ],
+  "timestamp": "2026-04-28T19:19:11.226284Z",
+  "tokens_used": 7765,
+  "units_analyzed": 11,
+  "units_total": 43
+}

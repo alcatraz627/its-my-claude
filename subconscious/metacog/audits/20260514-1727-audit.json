@@ -1,0 +1,43 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.08,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2709544511501033,
+    "unit_count": 50
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — units 2,5,7,14,22,29,30,32 (8/13=62%); identical rate to all three prior cycles; zero internalization; bc2715fa-2: pwd+ls+jq+tail via Bash; bc2715fa-5: cd-prefix rg compounds, pwd+ls discovery; bc2715fa-7: rg via Bash on wrong paths; bc2715fa-14: ls+cat(sed-n)+grep-n via Bash; bc2715fa-22: find+cat(flags.ts)+git-diff via Bash; bc2715fa-29: lsof+pm2 via Bash; bc2715fa-30: ps+lsof via Bash; bc2715fa-32: ls+head via Bash",
+      "hook_bypass_via_absolute_grep_path:RECURRING:STABLE — units 14,21,29,30 (4/13=31%); bc2715fa-14: /usr/bin/grep in compound after grep-n Bash attempt; bc2715fa-21: /usr/bin/grep as sole tool in unit; bc2715fa-29: /usr/bin/grep x2; bc2715fa-30: /usr/bin/grep once; rate slightly lower than prior cycles (38%) but consistent with range; structural hook gap unchanged",
+      "re_edit_thrash:RECURRING:STABLE — units 14,22,32 (3/13=23%); bc2715fa-14: Edit with-server.ts success=false x3 plus Edit sink-options.ts success=false; bc2715fa-22: Edit index.ts success=false before Read pivot; bc2715fa-32: Edit page.tsx success=false x2 before Read pivot; plateau at 3 units across three consecutive cycles — not regressing, not improving",
+      "optimistic_edit_without_read:RECURRING:STABLE — units 14,22,32 (3/13=23%); bc2715fa-14: Edit decisions/_index.md success=false before Read then success; bc2715fa-22: Edit index.ts success=false before Read then success; bc2715fa-32: Edit page.tsx success=false x2 before Read then success; identical topology across all three cycles — fail, read, succeed",
+      "path_assumption_bias:RECURRING:STABLE — units 5,7 (2/13=15%); bc2715fa-5: cd frontend prefix on rg compounds then pwd+ls discovery required; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot; rate unchanged from prior two cycles",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 violates (declared crab-sink split complete after ts:build clean and vitest passing without dev server exercise); bc2715fa-18 correctly self-documents the pattern via mistake-patterns append; ritual execution post-hoc does not prevent violation in same or subsequent cycles; confirmed across 12+ consecutive measured cycles",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22 carries the instance; accepted file-modified notification on logger/index.ts without diffing; LOGGER_ENABLED gate semantics flipped; caught only via test failure; ninth consecutive cycle confirming; self-documentation in same unit did not prevent occurrence",
+      "redundant_read_same_unit:RECURRING:STABLE — units 22,32 (2/13=15%); bc2715fa-22: Read logger.demo.test.ts x2 and Read index.ts x2 without intervening edits; bc2715fa-32: Read page.tsx after two edit failures; rate consistent with prior cycle"
+    ],
+    "calibration_score": 0.07,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations and hook_bypass are STABLE at identical rates across 4+ consecutive cycles — in-context rules and mistake-patterns entries have zero effect; the only remaining lever is a PreToolUse hook that intercepts Bash calls whose target matches (^ls |^find |^cat |^head |^tail |/usr/bin/grep|lsof|ps -) and surfaces a redirect prompt; do not re-recommend CLAUDE.md edits or mistake-pattern appends — those channels are saturated",
+      "re_edit_thrash and optimistic_edit_without_read are co-occurring in the same three units every cycle at plateau=3; a hook that counts consecutive Edit success=false on the same target and injects a forced Read before allowing a third attempt would break the topology without requiring agent self-awareness",
+      "declared_ready_without_runtime_exercise has a well-written mistake-pattern entry (added bc2715fa-18) but violates within the same session; consider a hook on session_end or on 'push'-keyword Bash commands that checks whether dev-server-start appeared in the session WAL for any frontend-affecting unit; absent that, the pattern will continue",
+      "redundant_read_same_unit is stable at 2 units per cycle with no worsening trend — deprioritize; monitor but no new intervention recommended",
+      "path_assumption_bias is stable at 2 units per cycle; rg-via-Bash on wrong paths is a subset of shell_tool_preference — fixing that parent pattern via hook would eliminate this as a byproduct"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      36137519
+    ]
+  ],
+  "timestamp": "2026-05-14T17:27:25.959549Z",
+  "tokens_used": 12724,
+  "units_analyzed": 13,
+  "units_total": 50
+}

@@ -1,0 +1,17 @@
+{
+  "response": "{\"calibration_score\":0.32,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":9,\"biases_detected\":[\"anchoring: repeated assumptions about server port availability (localhost:3006/5006) without prior liveness check, leading to predictable curl failures in units -20 and -27\",\"path-assumption bias: multiple bash commands run without explicit cd or absolute path, causing failures when CWD differed from expected project root\",\"sunk-cost: jq aggregator debugging in unit -8 iterated through 6+ tool calls (Write fail, hex inspection, non-ASCII grep, re-Write) rather than switching to a simpler inline approach earlier\",\"recency: unit -24 attempted a sleep-poll on a task output path derived from session context rather than verifying the path existed first\"],\"recommendations\":[\"probe environment preconditions before dependent commands — one lsof/curl check at task start to establish which ports are live avoids 3-5 redundant failure-recovery cycles per session\",\"normalize CWD at task entry with a single explicit cd or use absolute paths throughout; relative-path bash commands are the leading cause of recoverable failures in this session\",\"for iterative debugging (jq, shell scripts), apply a 3-strike rule: if the same approach fails twice, switch strategy rather than re-diagnosing the same artifact\",\"tag task output file paths as ephemeral and verify existence before polling; prefer TaskOutput MCP tool over direct file tail for in-flight task monitoring\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      9197553
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      8919295
+    ]
+  ],
+  "timestamp": "2026-04-17T14:29:04.283387Z",
+  "tokens_used": 10120,
+  "units_analyzed": 13,
+  "units_total": 20
+}

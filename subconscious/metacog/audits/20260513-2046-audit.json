@@ -1,0 +1,46 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.07216494845360824,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.31958762886597936,
+    "unit_count": 97
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 8/13 units (62%; bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32); rate 62% matches prior two cycles exactly; bc2715fa-2: pwd+ls+jq+tail via Bash; bc2715fa-5: cd-prefix rg compounds, pwd+ls discovery; bc2715fa-7: rg-via-Bash on wrong paths; bc2715fa-14: ls-via-Bash, cat-via-Bash (sed-n), grep-n-via-Bash; bc2715fa-22: find-via-Bash, cat-via-Bash (flags.ts), git-diff-via-Bash; bc2715fa-29: lsof+pm2 via Bash; bc2715fa-30: ps+lsof via Bash; bc2715fa-32: ls+head via Bash; zero internalization across 46+ consecutive measured cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:STABLE — 5/13 units (38%; bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30); rate 38% within recent 31-41% range; bc2715fa-14: /usr/bin/grep in compound Bash (CRAB|LOGGER then grep -n); bc2715fa-21: /usr/bin/grep as sole tool in unit; bc2715fa-22: /usr/bin/grep x2 (one in git stash compound); bc2715fa-29: /usr/bin/grep x2; bc2715fa-30: /usr/bin/grep once; structural hook gap (absolute-path invocation not intercepted) unchanged; count and rate identical to prior cycle",
+      "re_edit_thrash:RECURRING:STABLE — 3/13 units (bc2715fa-14,bc2715fa-22,bc2715fa-32); third consecutive cycle at 3 after declining from 5; bc2715fa-14: Edit with-server.ts success=false x3 plus Edit sink-options.ts success=false; bc2715fa-22: Edit index.ts success=false before Read pivot; bc2715fa-32: Edit page.tsx success=false x2 before Read pivot; plateau at 3 appears stable — not regressing to 5, not improving to 1-2",
+      "optimistic_edit_without_read:RECURRING:STABLE — 3/13 units (bc2715fa-14,bc2715fa-22,bc2715fa-32); third consecutive cycle at 3; bc2715fa-14: Edit decisions/_index.md success=false before Read then success; bc2715fa-22: Edit index.ts success=false before Read then success; bc2715fa-32: Edit page.tsx success=false x2 before Read then success; pattern topology unchanged — all three instances resolve identically (fail, read, succeed)",
+      "path_assumption_bias:RECURRING:STABLE — 2/13 units (bc2715fa-5,bc2715fa-7); identical topology to all prior bc2715fa measurement passes; bc2715fa-5: cd frontend prefix then rg compounds then pwd+ls discovery required; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot; cross-session internalization zero across 31+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 violates (declared crab-sink split complete after ts:build clean and vitest passing without dev server verification); bc2715fa-18 correctly executes self-documentation ritual appending detailed incident entry to mistake-patterns.md; ritual executes correctly post-hoc but does not prevent the violation in the same or subsequent cycles; confirmed across 10+ consecutive measured cycles",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22: pattern repeats; accepted file-modified notification on logger/index.ts without diffing; LOGGER_ENABLED gate semantics flipped from default-on to default-off; caught only via test failure; self-documented via mistake-pattern append at end of unit; seventh consecutive cycle confirming pattern; written pattern entry did not prevent violation within same or subsequent units",
+      "redundant_read_same_unit:RECURRING:STABLE — 2/13 units (bc2715fa-22,bc2715fa-32); bc2715fa-22: Read logger.demo.test.ts x2 (lines 1-end both times, zero offset variation indicating no information gain on second read); Read index.ts x2 without intervening edit between first and second read; bc2715fa-32: Read page.tsx x1 after two edit failures then continued edits — lower count than prior cycle (3 units); rate declining slightly from prior cycle"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 8,
+    "recommendations": [
+      "No new biases detected this cycle — all patterns are RECURRING with zero internalization; deprioritizing re-recommendation of already-catalogued fixes per standing instruction",
+      "shell_tool_preference_violations and hook_bypass_via_absolute_grep_path both stable at identical rates for 3+ consecutive cycles; structural hook gap for absolute-path grep invocation remains root cause for bypass pattern; if hook cannot intercept /usr/bin/grep, a PreToolUse hook matching the full path string may be the only viable mitigation",
+      "re_edit_thrash and optimistic_edit_without_read have plateaued at 3 for three consecutive cycles — no regression but no improvement; pattern remains structurally linked (edit fails → read → edit succeeds); Read-before-Edit enforcement at the tool level would eliminate both simultaneously",
+      "declared_ready_without_runtime_exercise: self-documentation ritual (bc2715fa-18) is correctly structured and detailed but functions as post-hoc correction only; violation precedes the ritual in every observed instance; a PreToolUse hook that intercepts task-completion signals and prompts for dev-server verification would move the gate earlier in the flow"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      22845380
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      55141986
+    ]
+  ],
+  "timestamp": "2026-05-13T20:46:42.051737Z",
+  "tokens_used": 13221,
+  "units_analyzed": 13,
+  "units_total": 97
+}

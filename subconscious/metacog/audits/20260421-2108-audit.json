@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.28,\"overconfident_count\":4,\"underconfident_count\":1,\"well_calibrated_count\":8,\"biases_detected\":[\"optimism_bias_on_service_availability\",\"path_anchoring\",\"sunk_cost_on_jq_heredoc_approach\",\"authority_bias_on_existing_config_patterns\"],\"recommendations\":[\"Probe localhost service availability with a single lsof check before issuing multiple curl attempts across different ports — units 20 and 27 each issued 3-5 speculative curl calls that all failed\",\"Verify target file existence before Grep/Read on .env.local paths that may not exist in branch-specific worktrees — 3 units hit preventable ENOENT failures\",\"Replace heredoc-based jq scripts written via Bash cat-redirect with Write tool directly — unit 8 took 3 attempts to land /tmp/aggregator.jq due to heredoc encoding issues that the Write tool would have avoided\",\"Unit 13 produced zero output bytes for a 135-char input — investigate whether a tool call was dropped or the agent silently no-oped; zero-length responses without at least an acknowledgment indicate an underconfident non-response\",\"Session recovery units (47) correctly re-read WAL and checkpoints before acting — this pattern is well-calibrated and should be retained\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      23110988
+    ],
+    [
+      "79361922-8bd6-4a72-9e30-8260c6e9ffbb",
+      1177546
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      60298782
+    ],
+    [
+      "2d8239ca-41bf-4ea3-ae8d-263d821ce745",
+      8854185
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      49886502
+    ]
+  ],
+  "timestamp": "2026-04-21T21:08:53.059418Z",
+  "tokens_used": 10055,
+  "units_analyzed": 13,
+  "units_total": 111
+}

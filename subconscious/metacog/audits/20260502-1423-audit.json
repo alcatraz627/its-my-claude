@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.55,\"overconfident_count\":3,\"underconfident_count\":2,\"well_calibrated_count\":11,\"biases_detected\":[\"path_assumption_bias: repeated use of bare `grep`/`ls` without absolute paths, then recovering with `/usr/bin/grep` — assumes PATH is stable across tool calls\",\"scope_expansion: terse inputs like 'depth' (23 chars) and 'validate against original plan' triggered exhaustive multi-file documentation marathons without explicit scope confirmation\",\"tool_proliferation: unit 0ce8b4ef-32 used 70+ tool calls including multiple redundant screenshot-evaluate-resize cycles where a single agent delegation might have sufficed\",\"anchoring: in c64c4bfc-0, initial WebFetch of security bulletin anchored the analysis frame; subsequent glob/bash calls checked for exposure signals that may not have been relevant to the actual codebase\"],\"recommendations\":[\"Always use absolute paths for shell tools (/usr/bin/grep, /usr/bin/find) rather than relying on PATH — the two PATH-related failures in c64c4bfc-0 and 0ce8b4ef-28 are the same pattern\",\"Scope-check before documentation marathons: when input is terse (under 30 chars) but the inferred task is large (10+ file writes), confirm scope ceiling before executing\",\"Reduce screenshot-evaluate-resize iteration cycles by batching layout checks into fewer agent calls with explicit success criteria upfront\",\"Zero-output units (c64c4bfc-3, c64c4bfc-15, 0ce8b4ef-10) with no tools suggest possible dropped acknowledgment turns — these may indicate context-compaction side effects worth monitoring\"]}",
+  "sessions": [
+    [
+      "c64c4bfc-db28-4e60-97dc-e40241afff56",
+      1327294
+    ],
+    [
+      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
+      32185459
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      22955423
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      14778187
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      3402011
+    ]
+  ],
+  "timestamp": "2026-05-02T14:23:48.131071Z",
+  "tokens_used": 9985,
+  "units_analyzed": 16,
+  "units_total": 107
+}

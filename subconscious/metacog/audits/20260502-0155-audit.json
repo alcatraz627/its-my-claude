@@ -1,0 +1,21 @@
+{
+  "response": "{\"calibration_score\":0.31,\"overconfident_count\":4,\"underconfident_count\":2,\"well_calibrated_count\":8,\"biases_detected\":[\"anchoring — repeated same failing command pattern (cp without -f, tsc via node_modules/.bin) before checking preconditions\",\"re-edit thrash — reading index.ts 3-6 times per unit without retaining state, matching known [re-edit-thrash] pattern\",\"familiarity bias — assumed node_modules/.bin/tsc present before checking; fell back to bun only after two failures\",\"optimism bias — gum table piped input attempted twice with same broken syntax before switching approach\"],\"recommendations\":[\"Before any file-copy or shell command that has a known failure mode, check preconditions first (directory exists, binary present) rather than retrying with minor flag variations\",\"Reduce redundant file reads per unit: read index.ts once, extract all needed ranges, then plan edits — do not interleave read/edit/read/edit on the same file without a clear hypothesis change\",\"When a bash command fails twice with similar syntax, treat second failure as a signal to investigate root cause (binary path, syntax, pipe format) rather than issuing a third near-identical attempt\",\"Cache tsc/bun/gum capability checks at session start rather than rediscovering them mid-unit\"]}",
+  "sessions": [
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      22285624
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      14139538
+    ],
+    [
+      "eec81882-243e-4b3f-9d90-c256307e3a21",
+      2712252
+    ]
+  ],
+  "timestamp": "2026-05-02T01:55:16.316480Z",
+  "tokens_used": 10387,
+  "units_analyzed": 14,
+  "units_total": 52
+}

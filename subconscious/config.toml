@@ -1,0 +1,66 @@
+[daemon]
+socket_path = "~/.claude/subconscious/daemon.sock"
+log_level = "info"
+max_concurrent_modules = 2
+
+[idle]
+threshold_hours = 4
+check_interval_minutes = 15
+activity_signal = "~/.claude/subconscious/.last-activity"
+
+[budget]
+max_tokens_per_cycle = 50000
+max_runtime_minutes = 10
+model = "claude-sonnet-4-6"
+model_heavy = "claude-opus-4-6"
+# Use the local claude CLI instead of the Anthropic API directly.
+# Billing goes through your Claude.ai subscription rather than API credits.
+use_claude_code_cli = true
+claude_code_cli_path = "/Users/alcatraz627/.local/bin/claude"
+
+[modules.dreaming]
+enabled = true
+sws_enabled = true
+rem_enabled = true
+wake_enabled = true
+min_sessions_since_last = 3
+journal_max_entries = 500
+wake_promotion_threshold = 0.5
+
+[modules.metacog]
+enabled = true
+sample_rate = 0.25
+triggered_sample_rate = 1.0
+trigger_on_correction = true
+trigger_on_multi_failure = true
+max_samples_per_session = 50
+
+[modules.intuition]
+enabled = true
+min_occurrences = 3
+decay_halflife_days = 30.0
+priming_decay_hours = 4.0
+max_valence_entries = 1000
+
+[modules.introspection]
+enabled = true
+sample_rate = 0.25
+report_interval_days = 7
+min_chains_for_report = 10
+
+[modules.prospective]
+enabled = true
+max_active_intentions = 50
+default_expiry_days = 30
+match_threshold = 0.7
+
+[hooks]
+session_start = true
+post_tool_use = true
+stop = true
+pre_compact = true
+user_prompt_submit = true
+
+[ingestion]
+projects_dir = "~/.claude/projects"
+max_sessions_per_scan = 50

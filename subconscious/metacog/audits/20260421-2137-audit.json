@@ -1,0 +1,65 @@
+{
+  "response": "{\"calibration_score\":0.31,\"overconfident_count\":3,\"underconfident_count\":1,\"well_calibrated_count\":9,\"biases_detected\":[\"anchoring — repeated assumption that services (ports 3006/5006) and env files were present at expected paths before verifying; unit-20 made 5+ failed tool calls before confirming nothing was running\",\"sunk_cost — unit-8 continued investing in the heredoc-based jq script approach (Write failed twice, Bash failed once) rather than pivoting to a simpler Write-then-Bash sequence earlier; 35+ tool calls for a task that resolved with a clean Write\",\"confirmation_bias — unit-29 drilled into playwright trace binary after log grep confirmed a failure, but read .trace line-by-line rather than extracting the specific action frame that would confirm the root cause; gathered more evidence than needed to reach a conclusion already supported\",\"scope_creep — unit-57 performed 5 WebSearch calls for a documentation task where existing repo files and prior session notes contained sufficient pattern data; external search added latency without materially changing the output\"],\"recommendations\":[\"pre-flight environment check before any multi-step workflow: one lsof/pm2/ls probe batch at the start of a unit rather than discovering missing state mid-execution across multiple failed calls\",\"for shell scripts written to /tmp, prefer Write-then-Bash over heredoc-in-Bash; the heredoc path is fragile under the tool sandbox and caused the unit-8 retry spiral\",\"cap trace/log deep-reads at the first frame that confirms the hypothesis; in unit-29 the root cause (onSuccess routing to error branch) was visible in the first 30 lines of the grep result but reading continued for 4 more tool calls\",\"when context-restoring (unit-47 pattern), read WAL checkpoint first and only read additional files if the checkpoint is stale or ambiguous — unit-47 read 9 files sequentially where the checkpoint + git log would have been sufficient\"]}",
+  "sessions": [
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      24848474
+    ],
+    [
+      "adc60435-c8bf-42ab-852b-745ac57e6193",
+      212103
+    ],
+    [
+      "6345a8d3-8645-40e5-a625-fe143f65702d",
+      13938431
+    ],
+    [
+      "60f43456-8086-4373-8d52-8685ee80c71a",
+      61025628
+    ],
+    [
+      "db16e439-e64f-4753-9dcb-2f74db1d80ab",
+      31163
+    ],
+    [
+      "d690451e-d409-48f3-8906-7bd26cd1e073",
+      1978
+    ],
+    [
+      "5f043174-c85c-4c29-9ce4-22ee8d2893fd",
+      1978
+    ],
+    [
+      "09b491b5-2c6e-466f-86fc-737298b77ec5",
+      30065
+    ],
+    [
+      "02b1316b-8d42-4e38-91dd-ffc9496a6c17",
+      30494
+    ],
+    [
+      "f94d1e50-71ec-4f09-9a31-bad7da398748",
+      31297
+    ],
+    [
+      "e3c1766e-f42f-49cc-aeb3-92a190b2e011",
+      31300
+    ],
+    [
+      "b8e7dea9-a1c6-4394-96af-be5f5f1f8145",
+      33739
+    ],
+    [
+      "b11385ce-1eda-4caa-a683-10ff7484fb58",
+      9868062
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      52103095
+    ]
+  ],
+  "timestamp": "2026-04-21T21:37:38.986982Z",
+  "tokens_used": 10237,
+  "units_analyzed": 13,
+  "units_total": 135
+}

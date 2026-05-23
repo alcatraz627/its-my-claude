@@ -1,0 +1,63 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18452,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3197573911412323,
+    "unit_count": 67
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — f22bd641-0 (/usr/bin/grep 4+ times in orientation sweep with head-based Bash reads), f22bd641-12 (/usr/bin/grep twice before Read on gum-guide.md), f22bd641-13 (/usr/bin/grep multiple times in audit pipeline and section-range reads), f22bd641-19 (/usr/bin/grep multiple times in spot-check pipeline), f22bd641-30 (/usr/bin/grep for code anchoring mid-edit cycle), 034ab126-14 (/usr/bin/grep+find across multiple symbol-discovery calls when Grep tool available), 034ab126-21 (/usr/bin/grep with --include flags and find instead of Glob for path discovery), 034ab126-28 (/usr/bin/grep for enum/export lookups), 034ab126-38 (/usr/bin/grep+find for file and export discovery), 034ab126-42 (/usr/bin/grep for line-anchor before edits on inspect.ts), 59c741e5-14 (grep via Bash before Read calls on same file, several failing); frequency ~11 units across 3 sessions, unchanged from prior 6 cycles, zero internalization",
+      "re_edit_thrash:RECURRING:stable — f22bd641-13: single Read then 6 Edit calls on 20-fill-acdelco.js (matches prior cycle peak exactly); 034ab126-42: Read inspect.ts → Edit → Read → /usr/bin/grep anchor → Read → 3 more Edits = 4 edit calls with 3 interleaved read-anchor cycles on same file; 59c741e5-21: single Read then 8 Edit calls on index.ts; max cycle count 8 consistent with prior session high of 10+, no improvement",
+      "mcp_fallback_without_retry:RECURRING:stable — f22bd641-2: mcp__file-tools__list_sheets called once (success=false), no retry or error-log inspection, immediately pivots to 5 inline ExcelJS Bash scripts; structurally identical to every prior appearance of this session ID; fourth consecutive cycle with identical pattern on same session",
+      "intra_session_tsc_path_repeat:RECURRING:stable — 59c741e5-21: node_modules/.bin/tsc attempted twice (both fail), ls discovery step, ./node_modules/.bin/tsc (fail again), another ls, then bun x tsc succeeds; same session ID (59c741e5) where this pattern was flagged in prior cycles; in-session correction from unit-21 not carried forward — same session re-probes the same broken path",
+      "optimistic_edit_without_read:INSTANCE — f22bd641-25: Edit on ~/.claude/compliments.md called without prior Read (success=false), followed by Read then successful Edit; matches optimistic_edit_bias pattern flagged 2026-04-29",
+      "read_loop_stasis:NEW — 59c741e5-14: 4 consecutive Read calls on /Code/Claude/notion-sync/index.ts interspersed with failing grep attempts, zero edits produced; agent reads same file repeatedly without synthesizing a hypothesis or making progress; distinct from re_edit_thrash (no edits occur) — circular investigation loop that terminates only when a higher-level question surfaces"
+    ],
+    "calibration_score": 0.09,
+    "cross_references": [
+      "Dream insight 2 (environment snapshot on /catchup) violated in 59c741e5-1: cp fails without -f flag requiring yes|cp -f workaround on third attempt — pre-flight env state verification was not applied despite rules/shell.md mandating non-interactive flags",
+      "Dream insight 3 (render-verify protocol for visual output) violated in 034ab126-38: admin cron page.tsx and run-button.client.tsx written and type-checked via npm run ts:build but no dev server started and no browser verification performed before reporting complete",
+      "Dream insight 5 (ghost dependency / persistent connections) confirmed in f22bd641-2: mcp__file-tools__list_sheets fails silently; agent pivots immediately to inline Node.js without probing the failure reason — MCP connection state was not verified before use and failure was not diagnosed",
+      "Dream insight 1 (terse continuation / directorial interaction) confirmed across f22bd641-20, f22bd641-23, f22bd641-31, 034ab126-3, 034ab126-4, 034ab126-9, 034ab126-10, 034ab126-37: short user messages (≤225 chars) handled with proportional output, no over-explanation detected in pure-text units"
+    ],
+    "overconfident_count": 15,
+    "recommendations": [
+      "shell_tool_preference_violations has shown zero internalization across 8+ consecutive cycles and is now the highest-priority persistent gap; in-context rules are not sufficient — a PreToolUse hook enforcing Grep/Glob over Bash for search operations is the only remaining lever",
+      "read_loop_stasis is newly identified: implement a self-imposed rule that after 3 consecutive Reads on the same file without an intervening Edit or Bash, force a synthesis step (write down what was found, form a hypothesis) before reading again",
+      "mcp_fallback_without_retry in f22bd641-2 has appeared identically in every analysis cycle — add at minimum one error-log read or structured retry before falling back to inline Node.js scripts so the root MCP failure is diagnosed rather than silently bypassed",
+      "intra_session_tsc_path_repeat: once bun is discovered as the working TypeScript checker within a session, record this as a WAL action so subsequent units within the same session do not re-probe node_modules/.bin/tsc",
+      "Deprioritize further standalone recommendations for re_edit_thrash and environment_state_assumption — both are stable with no worsening trend and have been recommended in every prior cycle; incremental text recommendations are not changing behavior"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 16
+  },
+  "sessions": [
+    [
+      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
+      6806191
+    ],
+    [
+      "034ab126-3696-40e8-850c-eca712dc9b47",
+      6688309
+    ],
+    [
+      "59c741e5-a33d-48a3-89ab-297f42413dfd",
+      15528492
+    ],
+    [
+      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
+      11150553
+    ],
+    [
+      "214184c4-51e4-4a39-a1de-be2ca38e253b",
+      6654576
+    ]
+  ],
+  "timestamp": "2026-05-01T16:54:18.448895Z",
+  "tokens_used": 26248,
+  "units_analyzed": 31,
+  "units_total": 67
+}

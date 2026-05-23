@@ -1,0 +1,36 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.6089442719099991,
+    "unit_count": 5
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 3: grep-rn-via-Bash, grep-rln-via-Bash, grep-A2-via-Bash x2, rg-n-via-Bash, rg-A2-via-Bash, rg-ln-via-Bash, ls-via-Bash x2+ all present; structurally identical to all prior measured cycles; rate consistent with 64-100% prior range; zero internalization across 20+ consecutive cycles",
+      "path_assumption_bias:RECURRING:STABLE — unit 3: rg on backend/uv.lock (success=false), rg-ln on src/db/ src/data/ (success=false), ls on frontend/docs/.../backend-workers/ docs/ (success=false) before correct-path pivots; three distinct path assumption failures in single unit; prior history notes this exact cross-session failure pattern across 8+ consecutive sessions with zero internalization; no same-session repeat (consistent with most prior cycles, not the worst-case double-repeat)",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 6: Edit on ~/.claude/compliments.md (success=false) before Read (success=true) then successful Edit; single instance consistent with all prior measured cycles at 1-2 instances per cycle; no improvement trend"
+    ],
+    "calibration_score": 0.07,
+    "overconfident_count": 3,
+    "recommendations": [
+      "re_edit_thrash absent this cycle — unit 3 has exactly 2 Edit calls on worker-v2-but-better.md (both successful), unit 6 has 2 Edit calls on compliments.md (1 failed/1 succeeded due to missing read, not thrash); no file exceeds 2 Edit calls; this is measurable improvement vs prior cycles where single files reached 6-10 Edit calls; note as potential positive signal but do not weight heavily given small sample",
+      "shell_tool_preference_violations and path_assumption_bias have been flagged across every measured cycle with zero internalization — deprioritize recommending fixes; these require hook-level enforcement or structural change, not additional recommendations",
+      "search_variant_thrash absent this cycle — no python3-c inline parsing failures, no heredoc thrash; consistent with unit 3 eventually finding correct rg paths rather than thrashing across syntax variants"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      2110914
+    ]
+  ],
+  "timestamp": "2026-05-06T16:27:28.762523Z",
+  "tokens_used": 5045,
+  "units_analyzed": 5,
+  "units_total": 5
+}

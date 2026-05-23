@@ -1,0 +1,41 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0425531914893617,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2593191489361702,
+    "unit_count": 47
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units -4 (ls via Bash x2, rg via Bash x8+, grep -rln via Bash, cat|grep pipeline), -6 (rg via Bash for section anchoring between every Edit block on plan.md x4, wc -l via Bash), -8 (rg via Bash for section anchoring before and between every Edit cycle x4), -21 (rg -l via Bash, for-loop with rg via Bash for usage discovery), -32 (find via Bash instead of Glob, /usr/bin/grep explicit-path form x6+), -34 (cat -n via Bash instead of Read, /usr/bin/grep explicit-path form x5+, for-loop Bash success=false); 7 of 12 units affected (58%); /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all 14 prior cycles; zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — unit -6: Read then 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit -8: failed Edit then rg anchor then 7+ Edit calls on plan.md with interleaved rg anchors and Reads; unit -32: 4 Edit calls on data-history-v3.tsx with 3 interleaved Reads plus 6 Edit calls on data-history-v3.table.tsx; peak Edit count 6-9 per file, interleaved-read-and-anchor structure unchanged across all 15 prior cycles, no improvement trend",
+      "path_assumption_bias:RECURRING:worsening — unit -4: Read on use-sync-q.ts (success=false) AGAIN — this is the identical file path that failed in prior session unit -4 (flagged two cycles ago as same-session repeated failure, then again last cycle); the file path failure has now recurred across at least three consecutive sessions with zero intra-session or cross-session internalization; severity is escalating as the same concrete file path continues to be assumed without verification",
+      "optimistic_edit_without_read:RECURRING:stable — unit -8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit -34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances, consistent with the prior cycle that marked confirmed regression from improving streak; pattern has remained at the pre-improvement baseline for two consecutive cycles with no recovery"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 7,
+    "recommendations": [
+      "path_assumption_bias on use-sync-q.ts specifically: this concrete path has failed across 3+ sessions — consider adding an explicit Glob or LS check before any Read on hooks in use-query-sync directory as a durable habit rather than per-session re-learning",
+      "optimistic_edit_without_read: prior improving streak (two cycles, zero instances) did not produce durable internalization — the pattern has restabilized at baseline; deprioritize generic recommendations already in history; a targeted hook blocking Edit on files not Read in the current turn would be more effective than continued flagging",
+      "shell_tool_preference_violations and re_edit_thrash: both have been flagged across 15 consecutive cycles with zero improvement trend; deprioritize per instructions — these are structural and only a hook or automated constraint will change behavior"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      30481770
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      16326740
+    ]
+  ],
+  "timestamp": "2026-05-04T21:05:35.045799Z",
+  "tokens_used": 10169,
+  "units_analyzed": 11,
+  "units_total": 47
+}

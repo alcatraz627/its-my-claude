@@ -1,0 +1,39 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.06,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.38632455532033677,
+    "unit_count": 50
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — units 3 (ls+wc-l+grep-rn+grep-A2 via Bash), 30 (grep -A6 via Bash), 35 (cat lifecycle.py via Bash), 37 (cat via Bash), 47 (ls+head via Bash at wrong paths); 5/14 measurable units; rate ~36-40%, slightly below historical 55-65% but pattern persists across all sessions",
+      "path_assumption_bias:RECURRING:STABLE — units 3 (rg/grep/ls on wrong relative paths; 3 consecutive failures before pwd+ls recovery) and 47 (ls frontend/docs/ fail, rg frontend/src/ fail before pwd discovery); identical recovery topology in both; rate unchanged from prior two cycles",
+      "re_edit_thrash:RECURRING:STABLE — 3 units: 36 (Edit structural-changes-deliberation.md fail x2+, Edit worker-v2-but-better.md fail at end of unit), 37 (Edit structural-changes-deliberation.md fail x3 then Write-escape to new file), 40 (Edit mistake-patterns.md fail then Read pivot); plateau at 3 units matches prior two consecutive cycles — not worsening, not improving",
+      "optimistic_edit_without_read:RECURRING:STABLE — units 6 (Edit compliments.md fail before Read pivot then success) and 40 (Edit mistake-patterns.md fail before Read pivot then success); 2 units, below prior cycle worsening peak of 5-6; co-occurrence with re_edit_thrash in unit 40 consistent with shared root cause",
+      "redundant_read_same_unit:RECURRING:CONFIRMED — unit 51: Read task_runner.py x2 and Read workerv2.py x2 with no intervening edits and no offset variation between the duplicate reads; identical fail topology to prior bc2715fa and 7255ac7e instances",
+      "mcp_exhaustion_without_pivot:NEW — unit 33: 10 consecutive mcp__render__get_metrics failures with no strategy change between calls; no fallback attempted (Render CLI alternative, skip-and-document, or early abort); identical tool invoked repeatedly against a clearly-failing endpoint; not a transient retry but sustained exhaustion across 10 calls; no prior instance of this specific pattern in calibration history across any measured session"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 4,
+    "recommendations": [
+      "mcp_exhaustion_without_pivot is a new high-priority pattern: after 3 consecutive failures of the same MCP tool call, halt, report the failure, and pivot — do not re-invoke the same failing tool without a structural change to parameters or auth state",
+      "re_edit_thrash Write-escape timing in unit 37 (3 consecutive Edit fails before pivoting to Write on new file) is correct recovery but late; the escape should trigger after 1-2 failures, not 3 — already flagged in prior cycles, no change observed",
+      "shell_tool_preference_violations and path_assumption_bias are co-recurring in units 3 and 47 and share a Bash-first discovery habit root cause; deprioritized for new recommendation given stable rate across all sessions with no regression signal"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      85106837
+    ]
+  ],
+  "timestamp": "2026-05-15T08:59:56.158428Z",
+  "tokens_used": 12160,
+  "units_analyzed": 17,
+  "units_total": 50
+}

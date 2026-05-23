@@ -1,0 +1,62 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18191,
+    "correction_density": 0.03669724770642202,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3351742088433645,
+    "unit_count": 109
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 14/29 units (48%; 4a3e88a3-1,bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); 4a3e88a3-1: ls-via-Bash x2, find-via-Bash x3, grep-via-Bash x2; bc2715fa-2: pwd+ls, jq, tail via Bash; bc2715fa-5: cd-prefix rg compounds x4+ some success=false; bc2715fa-7: rg-via-Bash on wrong paths; bc2715fa-32: ls+head via Bash; bc2715fa-33: sed-via-Bash, tail-via-Bash, head-via-Bash, multiple /usr/bin/grep; bc2715fa-53: find+xargs+/usr/bin/grep via Bash; rate 48% is at lower bound of historical 48-92% range; zero internalization across 40+ consecutive measured cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:ELEVATED — 9/29 units (31%; bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-33,bc2715fa-43,bc2715fa-45,bc2715fa-53); was RECURRING:CONFIRMED in prior cycle at 4-5 units; unit count increased from 4-5 to 9 this cycle — highest single-cycle count recorded; bc2715fa-33 highest concentration (multiple /usr/bin/grep calls plus grep-n-via-Bash plus grep-nc); hook gap (absolute-path invocation not intercepted) remains structural root cause; elevated from CONFIRMED to ELEVATED based on escalating unit count across consecutive cycles",
+      "re_edit_thrash:RECURRING:STABLE — units bc2715fa-14,bc2715fa-32,bc2715fa-36,bc2715fa-45; bc2715fa-14: Edit with-server.ts success=false x2 across two distinct sub-sequences plus Edit sink-options.ts success=false plus Edit crab-sink-shared.test.ts success=false; bc2715fa-32: Edit page.tsx success=false x2 consecutively before Read pivot then success; bc2715fa-36: Edit console-sink.ts success=false x2 consecutively; bc2715fa-45: Edit worker-status.tsx success=false at positions ~13,~14,~21 before Read pivot then eventual success; no within-session or cross-session improvement across 23+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — units bc2715fa-14,bc2715fa-22,bc2715fa-32,bc2715fa-33; bc2715fa-14: Edit decisions/_index.md success=false before Read then success; bc2715fa-22: Edit index.ts success=false before Read then success; bc2715fa-32: Edit page.tsx success=false x2 before Read then success; bc2715fa-33: Edit admin.data.ts success=false before Write escape-to-new-file; 4-instance count matches elevated baseline from prior cycle; pattern stable",
+      "optimistic_write_without_read:RECURRING:STABLE — unit bc2715fa-62: Write _20260509-mem-audit-5a.claude.md success=true then Bash mv _last-checkpoint.json success=false then Write _last-checkpoint.json success=false then Read confirms file exists then Write success=true; structurally identical to prior cycle instance (060367c5-49); was RECURRING:CONFIRMED in prior cycle; zero improvement across two consecutive cycles",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5,bc2715fa-7; bc2715fa-5: cd frontend && rg compounds success=false then pwd discovery and ls before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts success=false before ls pivot finds correct frontend/src location; identical topology to all prior bc2715fa measurement passes; cross-session internalization zero across 25+ consecutive sessions",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 repeated declaration of crab-sink server/client split as complete after ts:build clean and vitest passing without dev server verification; bc2715fa-18 correctly executes self-correction ritual and appends full mistake-pattern entry; third consecutive measurement pass with identical topology; self-documentation ritual executes correctly but violation reflex is uncorrected across all three cycles"
+    ],
+    "calibration_score": 0.05,
+    "cross_references": [
+      "dream:conf=0.78 (never assert state without observation) — violated in bc2715fa-14: crab-sink declared ready after static checks without dev server observation; correctly ritualized in bc2715fa-18 with full pattern entry",
+      "dream:conf=0.78 — confirmed and self-corrected in bc2715fa-22: trusted_linter_reminder_without_diffing caught via git stash diagnostic + git diff HEAD, behavioral flip (!== '0' → === 'true') identified, fixed, and appended to mistake-patterns.md; strongest positive example of the meta-rule being applied correctly this cycle",
+      "dream:conf=0.72 (fix-thrash loops correlate with context loss — force /core-dump at iteration 3) — bc2715fa-45 shows Edit worker-status.tsx success=false at three separate positions within a single unit without /core-dump trigger; dream rule was not applied despite reaching the three-failure threshold",
+      "dream:conf=0.55 (context reconstruction after session boundaries is hallucination risk) — bc2715fa-62 optimistic_write_without_read on _last-checkpoint.json structurally matches asserting file state without observation; the Write-without-Read pattern is the infrastructure analog of the reconstruction-hallucination risk described in the dream insight"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "hook_bypass_via_absolute_grep_path escalated from 4-5 units to 9 units this cycle — now the highest single-cycle count; structural hook gap (absolute-path invocation not intercepted) is root cause; patching the PreToolUse hook to match /usr/bin/grep and /bin/grep in addition to bare grep would eliminate the entire category; deprioritizing other recommendations in favor of this structural fix",
+      "shell_tool_preference_violations and re_edit_thrash have been flagged 40+ and 23+ consecutive cycles respectively with zero internalization — these are not learnable from in-context history alone; pre-tool-call validation hooks are the only viable remediation path; no new recommendation text warranted as prior cycles already made this recommendation with no action taken",
+      "declared_ready_without_runtime_exercise self-correction ritual executes correctly (bc2715fa-18) but does not prevent the initial violation; a PostToolUse hook that detects ts:build success followed by a session-completion claim in frontend context could prompt 'has the dev server been started and the modified path exercised in browser?'"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 25
+  },
+  "sessions": [
+    [
+      "4a3e88a3-769a-4b38-9359-8a3e5fb4f18e",
+      3486056
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      14745445
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      35554613
+    ],
+    [
+      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
+      10868930
+    ],
+    [
+      "e60093cf-f7c0-42b1-9bb0-9cea6fc431c2",
+      2334877
+    ]
+  ],
+  "timestamp": "2026-05-11T19:24:43.859386Z",
+  "tokens_used": 29444,
+  "units_analyzed": 29,
+  "units_total": 109
+}

@@ -1,0 +1,42 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.027777777777777776,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2777199699242686,
+    "unit_count": 36
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 7/7 tool-using units (100%); unit 4 (ls-via-Bash head/tail split x2, grep-rln-via-Bash, rg-via-Bash x5+, cat|grep pipeline on package.json, ls /docs/ x2 via Bash), unit 6 (grep-n-via-Bash for heading anchors, rg-via-Bash x2, wc-l-via-Bash), unit 8 (rg-via-Bash x4+ for section anchoring between Edit cycles), unit 21 (rg-l-via-Bash, for-loop-rg-via-Bash), unit 25 (ls-via-Bash), unit 32 (/usr/bin/grep explicit-path x8+, find-via-Bash x2), unit 34 (cat-n-via-Bash instead of Read, /usr/bin/grep explicit-path x4+, for-loop-Bash success=false); 100% rate matches worst-case prior cycle (7/7 = 100%, 2026-05-06 second entry); /usr/bin/grep explicit-path form and ls-via-Bash structurally identical across all measured cycles with zero internalization",
+      "re_edit_thrash:RECURRING:STABLE — unit 6: Read then 10+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: Edit(success=false) then rg anchor then 9+ Edit calls on plan.md with interleaved rg anchors; unit 32: 4 Edit calls on data-history-v3.tsx plus 6 Edit calls on data-history-v3.table.tsx plus 3 Edit calls on s1-upload.tsx; peak Edit count per file unchanged from all prior measured cycles; no improvement trend across 5+ consecutive cycles",
+      "path_assumption_bias:RECURRING:STABLE — unit 4: Read on use-sync-q.ts (success=false) followed by ls-via-Bash pivot; this exact path failure now spans 9+ consecutive sessions per prior history; no intra-session repeat this cycle (consistent with prior cycle, not the worst-case double-repeat seen in the 2026-05-06 first entry); cross-session internalization remains zero",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit 8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with all prior measured cycles; no recovery trend"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 7,
+    "recommendations": [
+      "shell_tool_preference_violations have now hit 100% in two of four measured cycles — this bias shows no internalization across any cycle; systemic intervention (hook-level enforcement or pre-tool-call hinting) is the only remaining lever; do not re-recommend pattern-level coaching as it has produced zero improvement across 20+ consecutive cycles",
+      "re_edit_thrash remains stable at peak Edit counts (6-10 per file) across all cycles; recommendation: enforce Read-then-single-Edit discipline before any sequence of >2 Edits on the same file — a pre-Edit read-verification step",
+      "path_assumption_bias on use-sync-q.ts is now a 9+ session cross-session repeat; the path does not exist; add it to memory or a project note as a permanent reminder that the correct hook file path is use-query-sync (not use-sync-q); this single stale assumption persists entirely due to missing persistent record",
+      "optimistic_edit_without_read: two instances per cycle is consistent and stable; this pattern co-occurs with re_edit_thrash and shares a root cause — skipping verification before structural edits; addressing re_edit_thrash likely reduces this as a side effect"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      40706124
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      2105756
+    ]
+  ],
+  "timestamp": "2026-05-06T15:41:41.785976Z",
+  "tokens_used": 10050,
+  "units_analyzed": 11,
+  "units_total": 36
+}

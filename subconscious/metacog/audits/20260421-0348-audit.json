@@ -1,0 +1,29 @@
+{
+  "response": "{\"calibration_score\":0.37,\"overconfident_count\":4,\"underconfident_count\":0,\"well_calibrated_count\":7,\"biases_detected\":[\"optimism_bias: assumed complex jq heredoc with nested quotes would work without prior syntax validation (bc59cf34-8, multiple Write/Bash retries before success)\",\"availability_bias: used sleep-based polling pattern (sleep 60 && tail) despite Monitor/TaskOutput tools being available and sleep polling being explicitly discouraged in config (bc59cf34-24)\",\"sunk_cost: continued iterating on broken jq aggregator script rather than pivoting to simpler Python approach that was already proven effective in the same session (bc59cf34-8)\",\"anchoring: assumed relative-path bash commands would resolve correctly without verifying CWD first, causing a cluster of preventable ENOENT failures (bc59cf34-20, bc59cf34-27)\"],\"recommendations\":[\"Validate shell escaping and heredoc syntax in isolated test before embedding in multi-step workflows — especially when mixing jq filters with bash variable interpolation\",\"Replace sleep+tail polling with TaskOutput or Monitor tool calls; the sleep 60 command in bc59cf34-24 timed out and forced a pivot that could have been avoided\",\"When 2+ consecutive bash commands fail with path/permission errors, switch to absolute-path Read/Glob/Grep tools immediately rather than retrying bash with modified flags\",\"Before running npm test or any relative-path command via Bash, emit a pwd check or use absolute cd prefix — CWD drift between tool calls caused multiple avoidable failures across bc59cf34 session\"]}",
+  "sessions": [
+    [
+      "71c019ea-a7ab-4229-89ae-cc23b8948ea0",
+      314200
+    ],
+    [
+      "bc59cf34-33f3-4992-9f2c-878df15403a3",
+      20770857
+    ],
+    [
+      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
+      14481952
+    ],
+    [
+      "6345a8d3-8645-40e5-a625-fe143f65702d",
+      12425895
+    ],
+    [
+      "867071c7-fbda-4044-aef3-fe69f068ef16",
+      46307384
+    ]
+  ],
+  "timestamp": "2026-04-21T03:48:32.803552Z",
+  "tokens_used": 10103,
+  "units_analyzed": 11,
+  "units_total": 93
+}

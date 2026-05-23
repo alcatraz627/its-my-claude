@@ -1,0 +1,87 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18252,
+    "correction_density": 0.0425531914893617,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2845957446808511,
+    "unit_count": 47
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units -4 (ls via Bash x2, rg via Bash x5, grep -rln via Bash, cat|grep pipeline instead of Read+Grep), -6 (rg via Bash for section anchoring before/between Edit blocks on plan.md x3, wc -l via Bash), -8 (rg via Bash for section anchoring before and between every Edit cycle x4+), -21 (rg -l and for-loop rg via Bash for file and usage discovery), -32 (/usr/bin/grep x8+ for symbol lookup and section anchoring, find via Bash instead of Glob), -34 (cat -n via Bash instead of Read, /usr/bin/grep x6, for-loop Bash success=false), -35 (/usr/bin/grep x10+ for log scanning, symbol lookup, file probing), -40 (/usr/bin/grep x4 for symbol discovery and log scanning), -45 (grep -rln via Bash success=false x2 before /usr/bin/grep fallback x10+, cd src for-loop success=false), -46 (/usr/bin/grep x10+, xargs pipelines success=false x4); 10 of 12 non-trivial units affected (83%); down from 86% prior cycle but within single-session variance; /usr/bin/grep explicit-path form and ls-via-Bash patterns structurally identical to all 14 prior cycles; zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — unit -6: Read then 9+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit -8: failed Edit then rg anchor then 7+ Edit calls on plan.md with interleaved rg anchors and Reads; unit -32: 4 Edit calls on data-history-v3.tsx with 3 interleaved Reads plus 6 Edit calls on data-history-v3.table.tsx with interleaved Reads; peak Edit count 6-9 per file unchanged from prior 14 cycles; interleaved-read-and-anchor structure identical; no improvement trend",
+      "path_assumption_bias:RECURRING:worsening — unit -4: Read on use-sync-q.ts (success=false) requiring ls-via-Bash pivot to confirm file existence; unit -46: Read on use-sync-q.ts (success=false) AGAIN — identical path failure as unit -4 within the same session, zero intra-session internalization of the earlier miss; this same-session repeated failure on the identical file path was first flagged as a severity signal two cycles ago and recurs again here unchanged; pattern is worsening in severity",
+      "optimistic_edit_without_read:RECURRING:stable — unit -8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit -34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances across two units consistent with the prior cycle that marked regression from IMPROVING; the two-cycle improving streak (zero instances) did not produce durable internalization; pattern has restabilized at the pre-improvement baseline",
+      "rm_instead_of_trash:RECURRING:stable — unit -35: rm -f /tmp/fs-tests/count-searches.ts (success=false) blocked by safe-delete hook; correct pivot to trash followed; hook functioned correctly; this is the second occurrence across two consecutive cycles (was NEW:instance in prior cycle); now elevated to RECURRING; single recurrence insufficient to assess trend direction"
+    ],
+    "calibration_score": 0.06,
+    "cross_references": [
+      {
+        "insight": "verify-before-act checklist (blast-radius scaling)",
+        "note": "Units -4 and -46 are file-read operations (low blast radius) that still failed due to path assumption; the insight's read-only tier does not require verification but these failures suggest even low-blast-radius ops benefit from a path-existence check when the file was last accessed in a prior session or was known to have been renamed. Units -8 and -34 are local file writes that should have triggered a pre-Edit Read per the insight's local-write tier — neither did.",
+        "units_affected": [
+          "-4",
+          "-8",
+          "-34",
+          "-46"
+        ]
+      },
+      {
+        "insight": "hallucination and fix-thrashing as the same failure mode — prioritizing output production over input comprehension",
+        "note": "re_edit_thrash in these units is the fix-thrashing manifestation described in the insight: the agent generates plausible Edit old_string anchors without fully comprehending the current file state, producing a sequence of interleaved reads and re-edits that mirrors 'generating plausible patches' rather than understanding the document structure first.",
+        "units_affected": [
+          "-6",
+          "-8",
+          "-32"
+        ]
+      },
+      {
+        "insight": "terse-command pattern implies full logical-unit execution autonomy",
+        "note": "Units -26 and -29 had zero tool calls and short outputs — consistent with the terse-in/terse-out rule and appropriate scoping of continuation messages; these units confirm the insight is being applied correctly in the non-tool-heavy path.",
+        "units_affected": [
+          "-26",
+          "-29"
+        ]
+      },
+      {
+        "insight": "WAL/checkpoint state-handoff rigor — versioned schema, idempotent replay, explicit deltas",
+        "note": "Unit -25 performed a structured core-dump with lock-file acquire/release, symlink, and prettier formatting — consistent with the insight's save-game-format discipline; confirmed behavior.",
+        "units_affected": [
+          "-25"
+        ]
+      }
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations is at 83% of non-trivial units for the 15th consecutive cycle with zero internalization — further flagging in calibration history has diminishing marginal value; recommend escalating to a hook-based intervention that intercepts grep/rg/ls/cat Bash invocations and surfaces the preferred tool at the point of use rather than in post-hoc analysis",
+      "path_assumption_bias on use-sync-q.ts is now a two-cycle same-session repeated failure on the identical path — the file was renamed or relocated; a one-time Glob probe at session start for the use-sync-q family of files would eliminate both the intra-session repetition and the cross-session recurrence; this is a specific, fixable path not a general pattern",
+      "optimistic_edit_without_read has now failed to hold the two-cycle improvement streak — the pattern is structurally tied to plan.md and similarly long documents where Edit requires an exact old_string anchor; adding a pre-Edit Read step as a habit before any Edit on a document that has been modified more than twice in the session would prevent the majority of these failures",
+      "rm_instead_of_trash has graduated from NEW to RECURRING in one cycle; the hook is blocking it correctly but the impulse is still firing; no additional recommendation beyond what the hook already enforces — monitor for third occurrence before proposing behavioral change"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      30431250
+    ],
+    [
+      "2527f606-d551-49f6-b14a-b081914964a2",
+      15972803
+    ],
+    [
+      "e42d4f08-a9b8-453c-98be-bc5f0e3dacf9",
+      246911
+    ],
+    [
+      "878334b4-17d0-4d22-9d38-21113eeb3b0f",
+      133226
+    ]
+  ],
+  "timestamp": "2026-05-04T16:18:36.823798Z",
+  "tokens_used": 26772,
+  "units_analyzed": 16,
+  "units_total": 47
+}

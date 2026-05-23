@@ -1,0 +1,74 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18284,
+    "correction_density": 0.064,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2714833147735479,
+    "unit_count": 125
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 29d7d6be-2 (cd+ls+find+wc-l+rg via Bash), 29d7d6be-3 (find+grep pipeline via Bash), 29d7d6be-6 (cat>> append via Bash instead of Write), 29d7d6be-24 (grep/sed via Bash), 29d7d6be-25 (grep+sed+python3-write via Bash), 29d7d6be-31 (git mv compound chains via Bash with failures), 29d7d6be-34 (python3+rg via Bash), bc2715fa-2 (pwd+ls+jq+tail via Bash), bc2715fa-5 (cd+rg x4 via Bash), bc2715fa-7 (rg on nonexistent paths via Bash), bc2715fa-14 (ls+cat+grep compounds via Bash), bc2715fa-18 (cat>> append to mistake-patterns.md via Bash), bc2715fa-22 (find+stash+git-diff via Bash), bc2715fa-29 (lsof+pm2 via Bash plus /usr/bin/grep), bc2715fa-30 (ps+lsof via Bash plus /usr/bin/grep); rate ~62% of measurable units, sixth consecutive cycle within 55-65% band with zero improvement trajectory; structural non-improvement now confirmed across 6 cycles",
+      "optimistic_edit_without_read:RECURRING:WORSENING — 29d7d6be-24 (Edit widgets-v2.md fail→Read→Edit success; Edit process-vs-instance-math.md fail→Read→Edit success; Edit worker-v2-but-better.md fail→Read→Edit success; 3 sub-instances); 29d7d6be-25 (Edit improvements/CLAUDE.md fail→Read→Edit success; Edit expiring-cycles-cron.md fail→Read→Edit success; 2 sub-instances); 29d7d6be-34 (Edit logger-crab-integration-scope.md fail→Read→Edit success; 1 sub-instance); bc2715fa-14 (Edit decisions/_index.md fail→Read→Edit success; Edit with-server.ts fail x3 across unit; 2 sub-instances); bc2715fa-22 (Edit index.ts fail→Read→Edit success; 1 sub-instance); bc2715fa-32 (Edit page.tsx fail x2→Read→Edit success; 2 sub-instances); 6 units with 11 sub-instances total; sub-instance count at 11 is highest in recorded history, confirming worsening trend despite stable unit-level plateau",
+      "re_edit_thrash:RECURRING:STABLE — 29d7d6be-24 (3 distinct Edit fail-read-succeed cycles across 3 different files within one unit); 29d7d6be-34 (Edit fail then immediate python3-Write-escape topology); bc2715fa-14 (with-server.ts edited success=false x3 consecutive plus sink-options.ts failure plus console-sink.ts x4 edits); bc2715fa-32 (page.tsx fail x2 before Read pivot); 4 units consistent with prior cycles; no worsening or improvement trajectory",
+      "hook_bypass_via_absolute_grep_path:RECURRING:REGRESSING — bc2715fa-21 (/usr/bin/grep as sole tool), bc2715fa-29 (/usr/bin/grep x2 in compound), bc2715fa-30 (/usr/bin/grep x2 in compound); zero instances in 29d7d6be session continuing new-session zero-instance signal for consecutive new sessions; bc2715fa historical units remain fully saturated; structural hook gap (absolute-path invocation not intercepted) confirmed unchanged as root cause",
+      "python3_file_write_via_bash_bypass:RECURRING:CONFIRMED — 29d7d6be-25 (python3 inline script p.write_text() bulk-injecting frontmatter into 10 files, bypassing Write tool entirely); 29d7d6be-34 (second python3 inline script via Bash for B3/C5 frontmatter normalization across multiple doc files); two consecutive sessions with instances each; bulk-efficiency justification partially mitigates but pattern is structurally recurring across every session with bulk-file operations",
+      "redundant_read_same_unit:RECURRING:STABLE — 29d7d6be-34 (Read movemap.mts x2 with no intervening edit between duplicate reads); rate at 1 unit matches or is below prior stable plateau; no worsening",
+      "unprompted_infra_scope_creep:RECURRING:CONFIRMED — 29d7d6be-6 (proposed GitHub Action CI for link-checking in docs restructure planning conversation where repo had zero .github/workflows/; ls .github/workflows/ executed only after receiving user correction is_correction=true); self-correction ritual correctly executed but pattern is now confirmed recurring across consecutive sessions indicating no pre-proposal internalization",
+      "trusted_linter_reminder_without_diffing:RECURRING:CONFIRMED — bc2715fa-22 (accepted logger/index.ts linter-labeled modification without diffing; LOGGER_ENABLED gate semantics flipped from default-on to default-off; bug surfaced only via test failure during the same unit; self-documented correctly at end of unit); eleventh consecutive cycle confirming pattern in bc2715fa historical units",
+      "path_assumption_bias:RECURRING:STABLE — bc2715fa-5 (cd frontend prefix on rg compounds fails 4 consecutive times before pwd+ls recovery); bc2715fa-7 (rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both fail success=false before ls pivot); recovery topology identical to prior cycles; count at 2 matches stable baseline",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — bc2715fa-14 (declared crab-sink split ready after ts:build+vitest without dev server exercise; unit bc2715fa-18 is the self-correction ritual correctly executed immediately after); self-correction happened within same session batch confirming pattern recognition is present but not pre-empting the violation"
+    ],
+    "calibration_score": 0.03,
+    "cross_references": [
+      "dream-insight-git-push-approval-context-boundary: not violated in this batch; no git push operations without explicit context in measured units — insight confirmed still load-bearing but not triggered",
+      "dream-insight-session-continuity-compaction: bc2715fa-18 and bc2715fa-22 both show correct self-correction ritual (atone-style append to mistake-patterns.md) immediately after violations — the insight about recording corrections is being applied; however the violations that trigger the corrections are still occurring, indicating pre-emption has not been internalized",
+      "dream-insight-memory-deduplication: bc2715fa-18 and bc2715fa-22 both append new patterns to mistake-patterns.md via cat>> rather than deduplicating or merging with existing entries; this is a direct violation of the deduplication insight — two new pattern appends in this batch for patterns (declared-ready-without-runtime-exercise, trusted-linter-reminder-without-diffing) that may already have partial representation in the file; the append-only cat>> topology structurally prevents deduplication checking"
+    ],
+    "overconfident_count": 17,
+    "recommendations": [
+      "shell_tool_preference_violations has shown zero improvement across 6 consecutive cycles at 62% rate — pattern-level correction and atone entries have failed to change behavior; recommend evaluating a structural hook that intercepts Bash calls containing find/ls/cat/head/tail/grep and prompts for Glob/Grep/Read tool equivalents instead, as behavioral guidance alone is demonstrably insufficient at this point",
+      "optimistic_edit_without_read sub-instance count reached 11 (highest in recorded history) despite unit-level count being stable — the per-edit failure density is increasing; recommend a PreToolUse hint that fires when Edit is called on a file that has not been Read in the current unit, surfacing a confirmation gate before allowing the edit",
+      "hook_bypass_via_absolute_grep_path shows new-session zero-instance signal but bc2715fa saturation persists; the root cause (absolute-path invocation not intercepted by hook) is structural and unchanged; deprioritize behavioral recommendations until the hook itself is extended to intercept /usr/bin/grep invocations",
+      "python3_file_write_via_bash_bypass is now confirmed recurring across every session with bulk file operations; a hook or wrapper pattern for bulk frontmatter injection via a dedicated script would remove the bypass incentive while preserving bulk-efficiency justification",
+      "redundant_read_same_unit and path_assumption_bias remain at stable plateaus with no worsening — no new recommendations; existing atone entries are sufficient"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      10305686
+    ],
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      51101550
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      6330708
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      6295112
+    ],
+    [
+      "09034bdf-733b-41c8-91fc-020327531b71",
+      11216825
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      7853443
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      8537492
+    ]
+  ],
+  "timestamp": "2026-05-18T13:02:25.492327Z",
+  "tokens_used": 29242,
+  "units_analyzed": 27,
+  "units_total": 125
+}

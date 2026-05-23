@@ -1,0 +1,36 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18471,
+    "correction_density": 0.034482758620689655,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17873834842378505,
+    "unit_count": 29
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:stable — units 4 (ls-via-Bash x4, rg-via-Bash x8+, grep-rln-via-Bash, cat|grep pipeline on package.json), 6 (rg-via-Bash for section anchoring between Edit cycles x3, wc-l-via-Bash), 8 (rg-via-Bash for section anchoring before/between every Edit cycle x5+), 21 (rg-l-via-Bash, for-loop with rg-via-Bash), 25 (ls-via-Bash), 32 (find-via-Bash, /usr/bin/grep explicit-path x8+), 34 (cat-n-via-Bash instead of Read, /usr/bin/grep explicit-path x6+, for-loop-Bash success=false); 7 of 10 non-trivial units affected (70%); rate within single-session variance of prior three cycles (58-86%); /usr/bin/grep explicit-path form and ls-via-Bash structurally identical to all 16 prior cycles; zero internalization across sessions",
+      "re_edit_thrash:RECURRING:stable — unit 6: Read then 8+ Edit calls on plan.md with interleaved rg-via-Bash anchors and Reads; unit 8: failed Edit then rg anchor then 7+ Edit calls on plan.md with interleaved rg anchors and Reads; unit 32: 4 Edit calls on data-history-v3.tsx with interleaved Reads plus 6 Edit calls on data-history-v3.table.tsx with interleaved Reads; peak Edit count 6-8 per file, interleaved-read-and-anchor structure identical to all 16 prior cycles; no improvement trend",
+      "optimistic_edit_without_read:RECURRING:stable — unit 8: Edit on plan.md (success=false) before rg anchor + Read + successful Edit; unit 34: Edit on file-select.v2.tsx (success=false) before /usr/bin/grep anchor + successful Edit; two instances consistent with prior two cycles; confirmed no durable internalization; pattern holding at pre-improvement baseline",
+      "path_assumption_bias:RECURRING:worsening — unit 4: Read on use-sync-q.ts (success=false) again — this is the identical file path that produced success=false in the prior two sessions (flagged as cross-session non-internalization last cycle); now appearing in a fourth consecutive session; same-session repetition not observed (minor improvement vs worst prior cycle) but the cross-session failure on this specific concrete path has now recurred across four consecutive cycles with zero internalization; severity continues to escalate"
+    ],
+    "calibration_score": 0.06,
+    "overconfident_count": 4,
+    "recommendations": [
+      "path_assumption_bias on use-sync-q.ts has now recurred across four consecutive sessions on the same concrete file path — this has graduated beyond a general pattern and is a specific file-path assumption that has never been verified before use; the only novel recommendation given prior cycles is to treat this specific file as a known-unstable path requiring ls/Glob verification before any Read",
+      "all other biases (shell_tool_preference_violations, re_edit_thrash, optimistic_edit_without_read) are unchanged from prior cycles with no improvement trend — previously recommended fixes remain applicable but are not novel; deprioritized per calibration history instructions"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
+      31803683
+    ]
+  ],
+  "timestamp": "2026-05-05T16:08:47.823515Z",
+  "tokens_used": 9949,
+  "units_analyzed": 11,
+  "units_total": 29
+}

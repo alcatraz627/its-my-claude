@@ -1,0 +1,45 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.047619047619047616,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.4533333333333333,
+    "unit_count": 84
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 9/13 units (69%; bc2715fa-2,bc2715fa-5,bc2715fa-7,bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30,bc2715fa-32); bc2715fa-2: pwd+ls+jq+tail via Bash; bc2715fa-5: cd-prefix rg compounds, pwd+ls discovery; bc2715fa-7: rg-via-Bash on wrong paths (success=false); bc2715fa-14: ls-via-Bash, cat-via-Bash (sed-n), grep-n-via-Bash; bc2715fa-22: find-via-Bash, cat-via-Bash, git-diff-via-Bash; bc2715fa-29: lsof+pm2 via Bash; bc2715fa-30: ps+lsof+curl via Bash; bc2715fa-32: ls+head via Bash; rate 69% is within historical 48-92% range; zero internalization across 40+ consecutive measured cycles",
+      "hook_bypass_via_absolute_grep_path:RECURRING:ELEVATED — 5/13 units (38%; bc2715fa-14,bc2715fa-21,bc2715fa-22,bc2715fa-29,bc2715fa-30); bc2715fa-14: /usr/bin/grep in inline Bash compound; bc2715fa-21: /usr/bin/grep -nE directly (single tool unit); bc2715fa-22: /usr/bin/grep in mistake-pattern append; bc2715fa-29: /usr/bin/grep -nE x2; bc2715fa-30: /usr/bin/grep -nE; rate 38% is up from 27-31% in prior two consecutive cycles; hook gap (absolute-path invocation not intercepted) is structural root cause; ELEVATED classification maintained from prior cycle",
+      "re_edit_thrash:RECURRING:STABLE — units bc2715fa-14,bc2715fa-32; bc2715fa-14: Edit with-server.ts success=false x3 across two distinct sub-sequences plus Edit sink-options.ts success=false; bc2715fa-32: Edit page.tsx success=false x2 consecutively before Read pivot then success; no within-session or cross-session improvement across 24+ consecutive measured cycles",
+      "optimistic_edit_without_read:RECURRING:STABLE — units bc2715fa-14,bc2715fa-22,bc2715fa-32; bc2715fa-14: Edit decisions/_index.md success=false before Read then Edit success=true; bc2715fa-22: Edit index.ts success=false before Read then Edit success=true; bc2715fa-32: Edit page.tsx success=false x2 before Read then Edit success=true; 3-instance count matches prior cycle baseline; pattern stable",
+      "path_assumption_bias:RECURRING:STABLE — units bc2715fa-5,bc2715fa-7; bc2715fa-5: cd frontend && rg compounds issued then pwd+ls discovery required before correct path resolved; bc2715fa-7: rg targets src/utils/app-init.utils.ts and src/utils/with-server.ts both success=false before ls pivot finds correct frontend/src location; identical topology to all prior bc2715fa measurement passes; cross-session internalization zero",
+      "declared_ready_without_runtime_exercise:RECURRING:CONFIRMED — unit bc2715fa-14: declared crab-sink server/client split complete after ts:build clean and vitest passing without dev server verification; unit bc2715fa-18: correctly executes full self-correction ritual and appends detailed mistake-pattern entry with incident context; fourth consecutive measurement pass with identical violation topology; self-documentation ritual executes correctly but violation reflex is uncorrected across all four cycles",
+      "trusted_linter_reminder_without_diffing:NEW — unit bc2715fa-22: accepted system-reminder 'file was modified by linter — intentional, do not revert' on logger/index.ts without diffing the actual change; the modification had flipped LOGGER_ENABLED gate semantics from !== '0' (default-on) to === 'true' (default-off), silently disabling the server logger; caught only via test failure during subsequent logger.demo.test.ts diagnostic; self-documented via mistake-pattern append at end of same unit; first occurrence in calibration history",
+      "redundant_read_same_unit:RECURRING:CONFIRMED — unit bc2715fa-22: Read logger.demo.test.ts at tool positions approximately 10 and 18 within same unit with identical target path; structurally identical to prior cycle instances (task_runner.py, workerv2.py); was RECURRING:CONFIRMED in immediately prior calibration entry; zero improvement across three consecutive cycles"
+    ],
+    "calibration_score": 0.02,
+    "overconfident_count": 9,
+    "recommendations": [
+      "hook_bypass_via_absolute_grep_path is ELEVATED at 38% and rising (27% → 31% → 38% across three consecutive cycles) — the behavioral pattern shows no self-correction trajectory; patching the hook to intercept /usr/bin/grep and /bin/grep absolute-path invocations is the only structural fix; behavioral recommendation has been in prior cycles without effect",
+      "trusted_linter_reminder_without_diffing is NEW and was self-documented in bc2715fa-22 — the mistake-pattern entry is detailed and well-formed; monitor next cycle for recurrence before promoting to a hook or rules/testing.md entry; no additional action recommended this cycle",
+      "declared_ready_without_runtime_exercise self-correction ritual continues to execute correctly (bc2715fa-18) while the underlying violation persists; recommend a structural intervention such as a PostToolUse hook on ts:build success that injects a dev-server verification reminder, since behavioral internalization is not occurring across four cycles of self-documentation"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      16512633
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      43499619
+    ]
+  ],
+  "timestamp": "2026-05-12T14:34:41.596297Z",
+  "tokens_used": 12320,
+  "units_analyzed": 13,
+  "units_total": 84
+}
