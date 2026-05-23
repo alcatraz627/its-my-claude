@@ -105,8 +105,19 @@ if os.path.isfile(_atone_tldr) and not os.path.isfile(_atone_tldr_off):
         with open(_atone_tldr, 'r', encoding='utf-8', errors='replace') as f:
             tldr = f.read().strip()
 
-        # slug -> latest precheck (fallback fix) from the event log.
-        prechecks = {}
+        # From the event log, per slug: the newest precheck (fallback fix) BY
+        # ts — keyed on ts, not file order, because atone has backfilled events
+        # out of chronological order — and how many times it recurred in the
+        # last 7 days. The recurrence count drives blind-spot escalation below:
+        # a pattern injected every session that KEEPS happening needs a louder
+        # framing than "watch out for this". RFC3339-Z timestamps compare
+        # lexically, so a string cutoff is sufficient.
+        import datetime
+        cutoff = (datetime.datetime.utcnow() - datetime.timedelta(days=7)).strftime(
+            '%Y-%m-%dT%H:%M:%SZ'
+        )
+        prechecks = {}      # slug -> (ts, precheck)
+        recent_count = {}   # slug -> occurrences in the last 7 days
         ev_path = os.path.join(_atone_dir, "events.jsonl")
         if os.path.isfile(ev_path):
             with open(ev_path, 'r', encoding='utf-8', errors='replace') as f:
@@ -119,27 +130,71 @@ if os.path.isfile(_atone_tldr) and not os.path.isfile(_atone_tldr_off):
                     except json.JSONDecodeError:
                         continue
                     s = o.get('slug')
+                    if not s:
+                        continue
+                    ts = o.get('ts') or ''
+                    if ts >= cutoff:
+                        recent_count[s] = recent_count.get(s, 0) + 1
                     pc = (o.get('precheck') or o.get('fix') or '').strip()
-                    if s and pc:
-                        prechecks[s] = pc  # latest wins
+                    if not pc:
+                        continue
+                    pc = ' '.join(pc.split())
+                    if s not in prechecks or ts >= prechecks[s][0]:
+                        prechecks[s] = (ts, pc)
 
-        # Rewrite "⚠️ [SEV, Nx] slug — <weak desc>" → "... slug → <precheck>"
-        # only when the description merely echoes the slug (no real guidance).
-        line_re = re.compile(r'^(\s*⚠️?\s*\[[^\]]*\]\s*)(\S+)\s+—\s+(.*)$')
+        # Rewrite each "⚠️ [SEV, Nx] slug — <desc>" line:
+        #  • enrich a weak description (one that just echoes the slug) with the
+        #    pattern's precheck, and
+        #  • escalate the framing to a 🔴 blind-spot callout when the pattern
+        #    recurred ≥2× in the last 7 days — i.e. it keeps happening DESPITE
+        #    being injected every session, so a soft reminder isn't landing.
+        line_re = re.compile(r'^(\s*)⚠️?\s*\[([^\]]*)\]\s*(\S+)\s+—\s+(.*)$')
         out_lines = []
+        injected_slugs = []
         for ln in tldr.splitlines():
             m = line_re.match(ln)
             if m:
-                prefix, slug, desc = m.group(1), m.group(2), m.group(3).strip()
-                pc = prechecks.get(slug)
-                if pc and (desc == slug or len(desc) <= len(slug) + 3):
-                    ln = f"{prefix}{slug} → {pc}"
+                indent, bracket, slug, desc = (
+                    m.group(1), m.group(2), m.group(3), m.group(4).strip()
+                )
+                injected_slugs.append(slug)
+                entry = prechecks.get(slug)
+                pc = entry[1] if entry else None
+                weak = (desc == slug or len(desc) <= len(slug) + 3)
+                guidance = pc if (pc and weak) else desc
+                rc = recent_count.get(slug, 0)
+                if rc >= 2:
+                    ln = (
+                        f"{indent}🔴 [{bracket} · {rc}× THIS WEEK, still recurring "
+                        f"despite this reminder — this is a blind spot, slow down] "
+                        f"{slug} → {guidance}"
+                    )
+                elif pc and weak:
+                    ln = f"{indent}⚠️  [{bracket}] {slug} → {pc}"
             out_lines.append(ln)
         tldr = "\n".join(out_lines)
 
         if tldr:
             parts.insert(0, "### Atone — patterns to watch\n" + tldr)
-    except OSError:
+
+        # Record what was flagged this session so `i-dream reflect` can show
+        # "warned N sessions" alongside the recurrence trend. Best-effort — a
+        # log-write failure must never break the session injection.
+        if injected_slugs:
+            try:
+                import datetime
+                inj_dir = os.path.expanduser("~/.claude/i-dream")
+                os.makedirs(inj_dir, exist_ok=True)
+                ts = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+                rec = json.dumps({"ts": ts, "slugs": injected_slugs})
+                with open(os.path.join(inj_dir, "injections.jsonl"), "a",
+                          encoding="utf-8") as f:
+                    f.write(rec + "\n")
+            except Exception:
+                pass
+    # Catch ANY error, not just OSError: this block runs at every SessionStart
+    # and must never break the hook (which would drop the injected context).
+    except Exception:
         pass
 
 if not parts:
