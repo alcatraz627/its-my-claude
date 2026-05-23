@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# 05-atone-tldr.sh — first-turn injection of top-5 mistake patterns.
+#
+# Reads from stdin (the user prompt) and emits a small map of recent S3+S2
+# patterns the agent should be aware of — once per session.
+#
+# Skip conditions:
+#   - ~/.claude/atone/.tldr-off exists (user mute)
+#   - this isn't the first turn of the session (gated by per-session marker)
+#   - no _tldr.txt has been generated yet by atone-consolidate.sh
+#
+# Latency budget: <100ms (read 1 small file + 1 marker check).
+
+set -uo pipefail
+
+[ -f "$HOME/.claude/atone/.tldr-off" ] && exit 0
+
+TLDR="$HOME/.claude/atone/derived/_tldr.txt"
+[ -f "$TLDR" ] || exit 0
+
+# Per-session "have I fired yet?" marker. Use CLAUDE_SESSION_ID if present;
+# otherwise fall back to a daily marker (still avoids spam within a day).
+STATE_DIR="$HOME/.claude/atone/.session-state"
+mkdir -p "$STATE_DIR" 2>/dev/null || true
+SESSION_KEY="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"
+MARKER="$STATE_DIR/$SESSION_KEY.tldr-fired"
+
+[ -f "$MARKER" ] && exit 0
+touch "$MARKER" 2>/dev/null || true
+
+cat <<'BANNER'
+[atone] Session-start mistake-pattern map (mute: touch ~/.claude/atone/.tldr-off):
+BANNER
+cat "$TLDR"
+echo "  Full curated view: ~/.claude/mistake-patterns.md"
+echo "  Pull deeper context: bash ~/.claude/scripts/atone.sh show <id>  |  search <kw>"

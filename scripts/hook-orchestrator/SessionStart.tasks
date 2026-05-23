@@ -1,0 +1,39 @@
+# SessionStart tasks — parallel orchestrator config
+# One command per line. Lines starting with # are comments / disabled.
+# Each task receives the SessionStart hook input JSON via stdin.
+
+# Tab title initialization
+input=$(cat); cwd=$(echo "$input" | jq -r '.cwd'); shortdir=$(basename "$cwd"); git_branch=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null); title="Claude: $shortdir"; [ -n "$git_branch" ] && title="$title ($git_branch)"; printf '\033]0;%s\007' "$title" > /dev/tty 2>/dev/null || true
+
+# Retro-checkpoint queue (detects unmatched previous session)
+~/.claude/scripts/session-mgmt/40-retro-checkpoint-queue.sh
+
+# diy-mem session init
+~/.claude/scripts/shell-mem.sh init-session
+
+# Environment health check
+/bin/bash ~/.claude/scripts/health-check.sh
+
+# Surface dream-derived insights from previous cycles
+/bin/bash ~/.claude/scripts/dream/dream-insights.sh
+
+# Surface open proposals if any are aged
+/bin/bash ~/.claude/scripts/pending-proposals.sh
+
+# Dream metrics context for subconscious
+/bin/bash ~/.claude/scripts/dream/dream-metrics-context.sh
+
+# Subconscious daemon notification of new session
+bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh
+
+# Event log emission
+~/.claude/scripts/emit-event.sh SessionStart
+
+# Detect stale (crashed) prior session and inject /catchup hint
+/bin/bash ~/.claude/scripts/session-mgmt/detect-stale-session.sh
+
+# Validate settings.json hooks (catches misconfigurations)
+/bin/bash ~/.claude/scripts/validate-settings-hooks.sh
+
+# sync-todos Phase 1 — workspace pull
+~/.claude/scripts/sync-todos/pull.sh

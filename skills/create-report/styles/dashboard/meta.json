@@ -1,0 +1,11 @@
+
+  {                                                                               
+  "name": "dashboard",                                                            
+  "description": "Dark analytics dashboard with metric cards and status pills",   
+  "emoji": "📊",                                                                  
+  "favicon": "data:image/svg+xml,",                                               
+  "color": "#3b82f6",
+  "author": "create-report",                                                      
+  "created": "2026-04-01"                                                         
+  }                                                                               
+

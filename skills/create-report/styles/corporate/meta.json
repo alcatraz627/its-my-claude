@@ -1,0 +1,9 @@
+{
+  "name": "corporate",
+  "description": "Formal corporate/legal report — print-ready, serif, numbered sections",
+  "emoji": "🏢",
+  "favicon": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='2' fill='%23fff' stroke='%23333' stroke-width='1'/><rect x='6' y='4' width='20' height='3' fill='%231a365d'/><line x1='6' y1='10' x2='26' y2='10' stroke='%23999'/><line x1='6' y1='14' x2='26' y2='14' stroke='%23ddd'/><line x1='6' y1='18' x2='26' y2='18' stroke='%23ddd'/></svg>",
+  "color": "#0f2b46",
+  "author": "create-report",
+  "created": "2026-04-01"
+}

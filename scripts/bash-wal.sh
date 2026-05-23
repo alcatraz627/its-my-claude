@@ -1,0 +1,1 @@
+wal/bash-wal.sh

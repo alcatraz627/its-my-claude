@@ -1,0 +1,1 @@
+session-mgmt/pre-compact-checkpoint.sh

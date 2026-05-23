@@ -1,0 +1,9 @@
+{
+  "name": "jupyter",
+  "description": "Jupyter notebook with executable-style cells",
+  "emoji": "📓",
+  "favicon": "data:image/svg+xml,",
+  "color": "#f57c00",
+  "author": "create-report",
+  "created": "2026-04-06"
+}

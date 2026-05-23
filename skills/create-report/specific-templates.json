@@ -1,0 +1,142 @@
+{
+  "_meta": {
+    "description": "Catalog of one-off, purpose-built HTML reports — curated reference designs with tagged features, styles, and vibes. Unlike generic styles/ templates, these are not reusable with arbitrary markdown. They serve as a design reference library for borrowing UI patterns.",
+    "updated": "2026-04-07"
+  },
+  "templates": [
+    {
+      "id": "prompt-testing-dashboard",
+      "title": "Enhancement A/B Prompt Testing Dashboard",
+      "source": "~/Code/Versable/enh-prompt-testing-apr-3/dashboard/index.html",
+      "server": "node dashboard/server.js → localhost:3457",
+      "tags": {
+        "features": [
+          "variant-cards", "comparison-table", "quality-badges", "inline-notes",
+          "sticky-header", "tab-navigation", "theme-toggle-dark-light",
+          "checkbox-toggle-visibility", "horizontal-scroll-table", "tooltip-hints",
+          "refresh-button", "helper-text-boxes", "legend-with-swatches",
+          "template-placeholder-highlighting", "stats-bar-per-card",
+          "note-toggle-inline-edit", "rules-collapsible", "empty-state-messages",
+          "rest-api-driven", "live-data-fetch"
+        ],
+        "style": [
+          "dark-default-theme", "css-custom-properties", "inter-font",
+          "jetbrains-mono-code", "rounded-cards", "subtle-shadows",
+          "color-coded-quality-badges", "green-red-yellow-orange-semantic",
+          "accent-blue-periwinkle", "surface-layering-3-levels",
+          "sticky-header-with-shadow", "border-separation"
+        ],
+        "vibe": [
+          "engineering-dashboard", "data-comparison-tool", "internal-tooling",
+          "professional-dev-tool", "AB-testing-workbench", "analytical",
+          "dense-information", "productivity-focused"
+        ]
+      }
+    },
+    {
+      "id": "v6-v9-loadsheet-comparison",
+      "title": "Walmart Loadsheet Audit: v6 → v9 Comparison Report",
+      "source": "~/Code/Versable/enhancement-product/backend/.claude/output/20260407-0337-v6-v9-comparison/index.html",
+      "tags": {
+        "features": [
+          "hero-metric-cards", "pill-badges", "inline-bar-charts",
+          "sticky-navbar-with-blur-backdrop", "gradient-hero-text",
+          "filter-buttons-all-changed-filled-empty", "data-table-with-fill-bars",
+          "spot-check-verification-table", "status-dots-green-red",
+          "change-list-with-categorized-icons", "architecture-before-after-diagrams",
+          "monospace-code-diagrams", "syntax-highlighted-spans",
+          "skip-keys-grid", "section-badges-with-counts",
+          "colored-top-border-accent-cards", "delta-positive-negative-coloring",
+          "responsive-grid-layout", "js-driven-data-rendering",
+          "footer-with-metadata"
+        ],
+        "style": [
+          "dark-theme-only", "custom-css-no-framework", "system-font-stack",
+          "monospace-for-data", "green-blue-amber-red-purple-semantic-palette",
+          "gradient-text-hero", "backdrop-blur-nav", "rounded-12px-cards",
+          "subtle-rgba-backgrounds", "pill-shaped-badges",
+          "colored-left-border-change-icons", "two-column-architecture-grid",
+          "compact-dense-layout"
+        ],
+        "vibe": [
+          "technical-audit", "data-migration-report", "before-after-comparison",
+          "engineering-changelog", "analytical-deep-dive", "confident-polished",
+          "dashboard-meets-report", "dark-premium-professional",
+          "version-diff-visual"
+        ]
+      }
+    },
+    {
+      "id": "claude-usage-insights",
+      "title": "Claude Code Usage Insights — Monthly Report",
+      "source": "~/.claude/usage-data/report.html",
+      "tags": {
+        "features": [
+          "at-a-glance-hero-card", "nav-toc-pill-links", "stats-row",
+          "project-area-cards", "narrative-prose-sections",
+          "key-insight-callout-boxes", "big-win-green-cards",
+          "friction-category-red-cards", "bar-chart-visualizations",
+          "collapsible-sections-with-arrow-animation", "copy-to-clipboard-buttons",
+          "claude-md-recommendation-checkboxes", "feature-cards-green",
+          "pattern-cards-blue", "horizon-cards-purple-gradient",
+          "feedback-cards-team-blue-model-purple", "fun-ending-amber-card",
+          "timezone-selector-dropdown", "multi-clauding-stats-panel",
+          "response-time-histogram", "tool-errors-chart",
+          "satisfaction-chart", "outcomes-chart",
+          "copy-all-checked-button", "checkbox-driven-selection"
+        ],
+        "style": [
+          "light-theme-only", "custom-css-no-framework", "system-font-stack",
+          "amber-gradient-hero", "blue-accent-primary", "green-accent-wins",
+          "red-accent-friction", "purple-accent-future",
+          "card-based-layout", "rounded-8px-cards", "subtle-shadows",
+          "section-intro-paragraphs", "narrative-long-form",
+          "serif-free-clean-sans", "generous-whitespace",
+          "semantic-color-per-category"
+        ],
+        "vibe": [
+          "personal-analytics", "retrospective-report", "self-reflection",
+          "wrapped-style-annual-review", "storytelling-with-data",
+          "friendly-insightful", "encouraging-tone", "light-premium-clean",
+          "spotify-wrapped-for-developers", "celebration-and-growth"
+        ]
+      }
+    },
+    {
+      "id": "statusline-playground",
+      "title": "Claude Code Statusline Playground — Interactive Configurator",
+      "source": "~/.claude/assets/static/statusline-playground.html",
+      "tags": {
+        "features": [
+          "live-terminal-preview", "3-state-toggles-1-auto-0",
+          "41-segment-configuration", "4-tier-width-visualization",
+          "draggable-width-slider", "profile-presets-default-minimal-full",
+          "diff-view-changes-from-base", "ini-config-generation",
+          "copy-config-to-clipboard", "download-conf-file",
+          "dark-light-theme-toggle-with-persistence",
+          "collapsible-instructions-panel", "group-level-help-text",
+          "segment-level-descriptions", "tier-priority-badges-P1-P4",
+          "ansi-color-simulation", "responsive-grid-layout",
+          "nerd-font-toggle-preview", "segment-width-estimates",
+          "toast-notifications",
+          "system-env-group-mem-disk-tokspeed-stash-uptime",
+          "efficiency-insight-group-editratio-branchage-costvel-focusfile-teststatus"
+        ],
+        "style": [
+          "tokyo-night-dark-default", "light-mode-via-css-custom-properties",
+          "css-grid-two-column", "monospace-terminal-preview",
+          "system-font-ui", "rounded-8px-cards",
+          "accent-blue-periwinkle", "green-yellow-red-toggle-states",
+          "priority-tier-color-coding", "subtle-hover-highlights",
+          "collapsible-group-headers", "responsive-single-column-mobile"
+        ],
+        "vibe": [
+          "developer-tool", "interactive-playground", "visual-configurator",
+          "settings-editor", "terminal-customization",
+          "zero-dependency-single-file", "self-documenting-ui",
+          "instant-feedback-loop"
+        ]
+      }
+    }
+  ]
+}

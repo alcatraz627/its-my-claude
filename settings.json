@@ -1,0 +1,732 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "latest",
+  "effortLevel": "medium",
+  "enableAllProjectMcpServers": false,
+  "enabledPlugins": {
+    "analyze-codebase@awesome-claude-code-plugins": false,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "explanatory-output-style@claude-code-plugins": true,
+    "feature-dev@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "frontend-developer@awesome-claude-code-plugins": false,
+    "github@claude-plugins-official": false,
+    "hookify@claude-plugins-official": true,
+    "linear@claude-plugins-official": false,
+    "playground@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "railway@claude-plugins-official": false,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "sentry@claude-plugins-official": false,
+    "skill-creator@claude-plugins-official": true,
+    "slack@claude-plugins-official": false,
+    "stripe@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": true,
+    "vercel@claude-plugins-official": false,
+    "wd@wd-marketplace": false
+  },
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "92",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alcatraz627/.cargo/bin:/Users/alcatraz627/.pyenv/shims:/Users/alcatraz627/.pyenv/bin:/Users/alcatraz627/.bun/bin:/Users/alcatraz627/.codeium/windsurf/bin:/Users/alcatraz627/Code/my-gcp-tools:/Users/alcatraz627/.local/bin",
+    "STATUSLINE_PROFILE": "custom"
+  },
+  "extraKnownMarketplaces": {
+    "awesome-claude-code-plugins": {
+      "source": {
+        "repo": "ccplugins/awesome-claude-code-plugins",
+        "source": "github"
+      }
+    },
+    "wd-marketplace": {
+      "source": {
+        "repo": "Para-FR/wd-framework",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "FileChanged": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/file-changed.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": ".envrc|.env|.env.local|.env.development|.env.production|.gitignore|package.json|package-lock.json|yarn.lock|pnpm-lock.yaml|bun.lockb|tsconfig.json|Dockerfile|docker-compose.yml|docker-compose.yaml"
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/notification-context.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "idle_prompt|elicitation_dialog"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh Notification",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/permission-notify.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh PermissionRequest",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/session-mgmt/post-compact-recovery.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "jq -n '{systemMessage: \"Post-compaction complete. Invoke /catchup now to restore full session context from the pre-compaction checkpoint file.\"}'",
+            "statusMessage": "Queuing /catchup...",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh PostCompact",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/tab-title/hooks/post-tool.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash|Agent|Task"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/auto-format.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/diff-preview.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/tool-counter.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/shell-mem.sh track-bash",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/shell-mem.sh mark-done-bash",
+            "type": "command"
+          }
+        ],
+        "matcher": "BashOutput"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/edit-tracker.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/check-human-comments.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/test-status-hook.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "BashOutput"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/exit-code-hook.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "BashOutput"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/post-tool-use.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh PostToolUse",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write|Bash|Task"
+      },
+      {
+        "hooks": [
+          {
+            "command": "/bin/bash ~/.claude/scripts/session-mgmt/heartbeat.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "/bin/bash ~/.claude/scripts/wal/bash-wal.sh post",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "async": true,
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/track-edits-session.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/session-mgmt/pre-compact-checkpoint.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/shell-mem.sh pre-compact-shell",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh PreCompact",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/tab-title/hooks/pre-tool.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash|Agent|Task"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/tab-title/hooks/raw-guard.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/safe-delete.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/cli-gating/gate-cli-actions.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/migrate-hint.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hooks/warn-kill-9.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hooks/prefer-read-over-cat.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hooks/prefer-read-over-head-tail-file.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hooks/prefer-glob-over-find.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hooks/prefer-tmp-py-over-inline.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/block-curl-post-auth.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/prefer-ripgrep.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/block-nested-claude.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "/bin/bash ~/.claude/scripts/wal/bash-wal.sh pre",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/protect-atone-raw.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/prevent-unsolicited-index-manipulation.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/warn-git-add-enumeration.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/warn-raw-process-env.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-cluster-e-smells.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-duplicate-symbol.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hook-orchestrator/run.sh SessionStart",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/hook-orchestrator/run.sh Stop",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/review-gate-stop.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/session-mgmt/subagent-tracker.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh SubagentStart",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/session-mgmt/subagent-tracker.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh SubagentStop",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/session-mgmt/turn-counter.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/session-mgmt/turn-start.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/shell-mem.sh inject-shell-state",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hint-injector.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/user-prompt-submit.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "~/.claude/scripts/emit-event.sh UserPromptSubmit",
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": "Explanatory",
+  "permissions": {
+    "allow": [
+      "Bash(bash:*)",
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "mcp__github__*",
+      "mcp__scratchpad__*",
+      "mcp__mongodb__find",
+      "mcp__mongodb__aggregate",
+      "mcp__mongodb__count",
+      "mcp__mongodb__list-collections",
+      "mcp__mongodb__list-databases",
+      "mcp__mongodb__collection-schema",
+      "mcp__redis__get",
+      "mcp__redis__set",
+      "mcp__redis__del",
+      "mcp__redis__scan",
+      "mcp__redis__hgetall",
+      "mcp__postgres__query",
+      "mcp__mini__*",
+      "Bash(rsync:*)",
+      "Bash(ssh:*)",
+      "Bash(tailscale:*)",
+      "Bash(/Applications/Tailscale.app/Contents/MacOS/Tailscale:*)"
+    ],
+    "defaultMode": "auto",
+    "deny": [
+      "Bash(*rm -rf /*)",
+      "Bash(*rm -rf ~*)",
+      "Bash(*rm -rf $HOME*)",
+      "Bash(*rm -rf .*)",
+      "Bash(* /etc*)",
+      "Bash(* /System*)",
+      "Bash(* /Library*)",
+      "Bash(* /usr*)",
+      "Bash(* /bin*)",
+      "Bash(* /sbin*)",
+      "Bash(* /boot*)",
+      "Bash(* /root*)",
+      "Bash(* /sys*)",
+      "Bash(* /proc*)",
+      "Bash(* /private*)",
+      "Bash(* /Volumes*)",
+      "Bash(* /dev*)",
+      "Bash(*chmod 777*)",
+      "Bash(*chmod -R 777*)",
+      "Bash(*chmod -R 7*)",
+      "Bash(*sudo rm*)",
+      "Bash(*sudo chmod -R*)",
+      "Bash(*sudo dd*)",
+      "Bash(*sudo mkfs*)",
+      "Bash(*sudo visudo*)",
+      "Bash(*sudo passwd*)",
+      "Bash(*launchctl load*)",
+      "Bash(*launchctl unload*)",
+      "Bash(*launchctl remove*)",
+      "Bash(*defaults write*)",
+      "Bash(*defaults delete*)",
+      "Bash(*csrutil*)",
+      "Bash(*nvram*)",
+      "Bash(*diskutil eraseDisk*)",
+      "Bash(*diskutil eraseVolume*)",
+      "Bash(*curl*|*bash*)",
+      "Bash(*curl*|*zsh*)",
+      "Bash(*curl*|*sh*)",
+      "Bash(*wget*|*bash*)",
+      "Bash(*wget*|*zsh*)",
+      "Bash(*wget*|*sh*)",
+      "Bash(*eval*curl*)",
+      "Bash(*eval*wget*)",
+      "Bash(*python* /etc*)",
+      "Bash(*python* /System*)",
+      "Bash(*python* /Library*)",
+      "Bash(*python*os.system*rm -rf*)",
+      "Bash(*python*shutil.rmtree*/*)",
+      "Bash(*node* /etc*)",
+      "Bash(*node* /System*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.npmrc)",
+      "Read(~/.git-credentials)",
+      "Read(~/.netrc)",
+      "Read(~/.config/gh/hosts.yml)",
+      "Bash(*cat ~/.ssh*)",
+      "Bash(*cat ~/.aws*)",
+      "Bash(*cat ~/.npmrc*)",
+      "Bash(*cat ~/.git-credentials*)",
+      "Bash(*cat ~/.netrc*)",
+      "mcp__claude_ai_Notion__*",
+      "mcp__claude_ai_Sentry__*"
+    ]
+  },
+  "preferredNotifChannel": "ghostty",
+  "skipAutoPermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": true,
+  "statusLine": {
+    "command": "~/.claude/scripts/statusline/statusline.sh",
+    "type": "command"
+  },
+  "teammateMode": "tmux",
+  "verbose": true,
+  "voiceEnabled": false
+}

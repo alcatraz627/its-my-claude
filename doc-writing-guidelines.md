@@ -1,0 +1,1 @@
+/Users/alcatraz627/.claude/conventions/doc-writing.md

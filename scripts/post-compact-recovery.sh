@@ -1,0 +1,1 @@
+session-mgmt/post-compact-recovery.sh

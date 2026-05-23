@@ -1,0 +1,9 @@
+{
+  "name": "terminal",
+  "description": "Green-on-black retro terminal with CRT scanlines and ASCII tables",
+  "emoji": "💻",
+  "favicon": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230a0a0a'/><text x='4' y='20' font-family='monospace' font-size='14' fill='%2333ff33'>%3E_</text></svg>",
+  "color": "#33ff33",
+  "author": "create-report",
+  "created": "2026-04-01"
+}

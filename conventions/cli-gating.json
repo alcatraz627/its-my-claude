@@ -1,0 +1,28 @@
+{
+  "_doc": "Selective CLI access gating policy. Read by scripts/cli-gating/gate-cli-actions.sh (PreToolUse[Bash] hook). JSON not YAML — no PyYAML dependency. Design: assets/magi/20260521-0509-cli-gating-design/. Model: allowlist of READ verbs per CLI; everything else on a gated CLI is WRITE; env is 'dev' only when positively proven; prod-write/unknown-env-write -> BLOCK (exit 2); reads + proven-dev writes pass. Project .claude/cli-gating.json may tighten; loosening a prod gate needs allow_loosen:true.",
+  "version": 1,
+  "gates": [
+    {
+      "cli": "render",
+      "read_verbs": ["services", "list", "get", "logs", "ps", "deploys", "env-vars", "psql", "help", "version", "whoami"],
+      "prod_signals": ["--prod", "--production", "--env prod", "--env production"],
+      "dev_signals": ["--env dev", "--env development", "--env staging"],
+      "default_env": "prod"
+    },
+    {
+      "cli": "vercel",
+      "read_verbs": ["ls", "list", "inspect", "logs", "whoami", "env ls", "project ls", "teams ls", "help", "--version"],
+      "prod_signals": ["--prod", "-p", "--target production", "--target prod"],
+      "dev_signals": ["--target preview", "--target development"],
+      "default_env": "dev",
+      "safe_default_verbs": ["deploy"]
+    },
+    {
+      "cli": "gh",
+      "read_verbs": ["auth", "browse", "status", "repo view", "repo list", "pr view", "pr list", "pr diff", "pr checks", "issue view", "issue list", "run view", "run list", "release view", "release list", "search", "label list", "help", "--version"],
+      "always_gate_verbs": ["repo delete", "release delete", "secret set", "secret delete"],
+      "main_branch_gate_verbs": ["pr merge", "push", "release create", "release edit"],
+      "main_branches": ["main", "master"]
+    }
+  ]
+}

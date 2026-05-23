@@ -1,0 +1,9 @@
+{
+  "name": "magazine",
+  "description": "Editorial magazine layout with serif typography and hero header",
+  "emoji": "📰",
+  "favicon": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23faf9f6'/><rect x='4' y='4' width='24' height='8' rx='1' fill='%238b2252'/></svg>",
+  "color": "#8b2252",
+  "author": "create-report",
+  "created": "2026-04-01"
+}

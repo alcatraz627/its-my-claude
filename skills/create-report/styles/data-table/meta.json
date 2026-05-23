@@ -1,0 +1,9 @@
+{
+  "name": "data-table",
+  "description": "Data-heavy spreadsheet layout optimized for tables and structured data",
+  "emoji": "\ud83d\udccb",
+  "favicon": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23f0fdf4'/><rect x='4' y='4' width='24' height='4' fill='%2316a34a'/></svg>",
+  "color": "#16a34a",
+  "author": "create-report",
+  "created": "2026-04-01"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "slide",
+  "description": "Presentation-style with full-viewport sections and arrow key navigation",
+  "emoji": "🎞️",
+  "favicon": "data:image/svg+xml,",
+  "color": "#818cf8",
+  "author": "create-report",
+  "created": "2026-04-06"
+}

@@ -1,0 +1,1166 @@
+/* ─── Jupyter Notebook Theme ─────────────────────────────────────────────── */
+
+/* ─── CSS Custom Properties (Light mode = default, like classic Jupyter) ── */
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --bg-tertiary: #eeeeee;
+  --text: #212121;
+  --text-secondary: #616161;
+  --text-muted: #9e9e9e;
+  --border: #e0e0e0;
+  --border-light: #f0f0f0;
+  --cell-bg: #ffffff;
+  --cell-hover: #fafafa;
+  --cell-selected-border: #2196f3;
+  --prompt-color: #303f9f;
+  --prompt-out-color: #d32f2f;
+  --toolbar-bg: #ffffff;
+  --toolbar-border: #e0e0e0;
+  --sidebar-bg: #f5f5f5;
+  --sidebar-text: #424242;
+  --sidebar-hover: #e8e8e8;
+  --sidebar-active: #e3f2fd;
+  --code-bg: #282c34;
+  --code-header-bg: #21252b;
+  --inline-code-bg: #f0f0f0;
+  --inline-code-color: #c7254e;
+  --table-header-bg: #f5f5f5;
+  --table-even-bg: #fafafa;
+  --table-border: #e0e0e0;
+  --blockquote-border: #e0e0e0;
+  --blockquote-color: #616161;
+  --tree-border: #e0e0e0;
+  --hr-color: #e0e0e0;
+  --mark-bg: #fff9c4;
+  --mark-color: #212121;
+  --dialog-bg: #ffffff;
+  --dialog-header-bg: #f5f5f5;
+  --dialog-border: #e0e0e0;
+  --search-bg: #f5f5f5;
+  --pill-bg: #eeeeee;
+  --pill-hover: #e0e0e0;
+  --pill-active-bg: #1976d2;
+  --pill-active-text: #ffffff;
+
+  /* Syntax highlighting — dark code cells (always dark bg) */
+  --hl-keyword: #c678dd;
+  --hl-string: #98c379;
+  --hl-comment: #5c6370;
+  --hl-function: #61afef;
+  --hl-type: #56b6c2;
+  --hl-number: #d19a66;
+  --hl-operator: #abb2bf;
+  --hl-attr: #e06c75;
+}
+
+/* ─── Dark mode ──────────────────────────────────────────────────────────── */
+html.dark {
+  --bg: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-tertiary: #0f3460;
+  --text: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #757575;
+  --border: #2a2a4a;
+  --border-light: #222244;
+  --cell-bg: #1e1e3a;
+  --cell-hover: #222244;
+  --cell-selected-border: #42a5f5;
+  --prompt-color: #7986cb;
+  --prompt-out-color: #ef5350;
+  --toolbar-bg: #12122a;
+  --toolbar-border: #2a2a4a;
+  --sidebar-bg: #12122a;
+  --sidebar-text: #b0b0b0;
+  --sidebar-hover: #1e1e3a;
+  --sidebar-active: #1a237e;
+  --code-bg: #1e1e2e;
+  --code-header-bg: #181828;
+  --inline-code-bg: #2a2a4a;
+  --inline-code-color: #f48fb1;
+  --table-header-bg: #1e1e3a;
+  --table-even-bg: #16213e;
+  --table-border: #2a2a4a;
+  --blockquote-border: #2a2a4a;
+  --blockquote-color: #9e9e9e;
+  --tree-border: #2a2a4a;
+  --hr-color: #2a2a4a;
+  --mark-bg: rgba(255, 235, 59, 0.2);
+  --mark-color: #e0e0e0;
+  --dialog-bg: #1a1a2e;
+  --dialog-header-bg: #12122a;
+  --dialog-border: #2a2a4a;
+  --search-bg: #1e1e3a;
+  --pill-bg: #2a2a4a;
+  --pill-hover: #333366;
+  --pill-active-bg: #42a5f5;
+  --pill-active-text: #ffffff;
+
+  --hl-keyword: #c792ea;
+  --hl-string: #c3e88d;
+  --hl-comment: #546e7a;
+  --hl-function: #82aaff;
+  --hl-type: #89ddff;
+  --hl-number: #f78c6c;
+  --hl-operator: #89ddff;
+  --hl-attr: #ffcb6b;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Jupyter Toolbar ────────────────────────────────────────────────────── */
+.nb-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--toolbar-border);
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  min-height: 38px;
+}
+
+.nb-toolbar-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.nb-toolbar-menu {
+  display: flex;
+  gap: 0;
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--toolbar-border);
+  font-size: 13px;
+}
+
+.nb-menu-item {
+  padding: 2px 10px;
+  color: var(--text-secondary);
+  cursor: default;
+  border-radius: 3px;
+  transition: background 0.12s;
+}
+
+.nb-menu-item:hover {
+  background: var(--pill-bg);
+  color: var(--text);
+}
+
+.nb-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+}
+
+.nb-toolbar-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition:
+    background 0.12s,
+    color 0.12s;
+  line-height: 1;
+}
+
+.nb-toolbar-btn:hover {
+  background: var(--pill-bg);
+  color: var(--text);
+}
+
+.nb-toolbar-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.nb-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-left: 1px solid var(--toolbar-border);
+}
+
+.nb-kernel-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nb-kernel-status::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf50;
+}
+
+/* ─── Width Picker ───────────────────────────────────────────────────────── */
+.width-picker {
+  background: var(--pill-bg);
+  border-radius: 4px;
+  padding: 1px;
+  display: inline-flex;
+  gap: 1px;
+}
+
+.width-btn {
+  padding: 2px 7px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text);
+  opacity: 0.5;
+  transition: all 0.12s;
+}
+
+.width-btn:hover {
+  opacity: 0.8;
+}
+
+.width-btn.active {
+  opacity: 1;
+  background: var(--pill-active-bg);
+  color: var(--pill-active-text);
+}
+
+/* ─── Theme Toggle ───────────────────────────────────────────────────────── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--pill-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.12s;
+}
+
+.theme-toggle:hover {
+  background: var(--pill-hover);
+}
+
+.theme-toggle .btn-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* ─── Search ─────────────────────────────────────────────────────────────── */
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--search-bg);
+  border-radius: 4px;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+}
+
+.search-icon {
+  color: var(--text-muted);
+  display: flex;
+}
+
+#search {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+  width: 140px;
+}
+
+#search::placeholder {
+  color: var(--text-muted);
+}
+
+#search-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
+.nb-layout {
+  display: flex;
+  min-height: calc(100vh - 70px);
+}
+
+/* ─── Sidebar ────────────────────────────────────────────────────────────── */
+.nb-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  padding: 12px 0;
+  transition: width .2s ease, opacity .15s ease;
+}
+.sidebar-collapsed .nb-sidebar { width: 0; opacity: 0; padding: 0; border: none; overflow: hidden; }
+
+.nb-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.nb-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nb-nav-link {
+  display: block;
+  padding: 5px 16px;
+  font-size: 13px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 0;
+  transition: background 0.12s;
+  border-left: 3px solid transparent;
+}
+
+.nb-nav-link:hover {
+  background: var(--sidebar-hover);
+}
+
+.nb-nav-link.active {
+  background: var(--sidebar-active);
+  border-left-color: var(--cell-selected-border);
+  font-weight: 500;
+}
+
+.nb-nav-h3 {
+  padding-left: 28px;
+  font-size: 12px;
+}
+
+.nb-nav-children {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ─── Notebook main area ─────────────────────────────────────────────────── */
+.notebook {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 40px 120px;
+  transition: max-width 0.3s ease;
+}
+
+/* ─── Notebook header ────────────────────────────────────────────────────── */
+.nb-header {
+  padding: 24px 0 40px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.nb-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.nb-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.nb-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  gap: 16px;
+}
+
+/* ─── Cell styling ───────────────────────────────────────────────────────── */
+.nb-cell {
+  display: flex;
+  gap: 0;
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+  border-left: 4px solid transparent;
+  border-radius: 2px;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+  position: relative;
+}
+
+.nb-cell:hover {
+  background: var(--cell-hover);
+}
+
+.nb-cell.cell-selected {
+  border-left-color: var(--cell-selected-border);
+  background: var(--cell-hover);
+}
+
+/* ─── Cell prompts ───────────────────────────────────────────────────────── */
+.cell-prompt {
+  width: 80px;
+  flex-shrink: 0;
+  text-align: right;
+  padding: 8px 8px 8px 0;
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.cell-prompt-in {
+  color: var(--prompt-color);
+}
+
+.cell-prompt-out {
+  color: var(--prompt-out-color);
+}
+
+.cell-prompt-md {
+  color: transparent;
+}
+
+/* ─── Cell content ───────────────────────────────────────────────────────── */
+.cell-content {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 12px 6px 0;
+  position: relative;
+}
+
+/* Run button on code cells */
+.cell-run-wrap {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+}
+
+.cell-run-btn {
+  background: var(--pill-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 28px;
+  height: 24px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    background 0.12s,
+    color 0.12s;
+}
+
+.nb-cell-code:hover .cell-run-btn {
+  opacity: 1;
+}
+
+.cell-run-btn:hover {
+  background: #4caf50;
+  color: #fff;
+  border-color: #4caf50;
+}
+
+.cell-run-btn.running {
+  animation: cell-run-pulse 0.6s ease-out;
+}
+
+@keyframes cell-run-pulse {
+  0% {
+    background: #4caf50;
+    color: #fff;
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    background: var(--pill-bg);
+    color: var(--text-muted);
+    transform: scale(1);
+  }
+}
+
+/* ─── Headings in cells ──────────────────────────────────────────────────── */
+.nb-cell h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 12px 0 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.nb-cell h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 8px 0 2px;
+}
+
+.nb-cell h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 6px 0 2px;
+}
+
+.nb-cell-heading {
+  margin-top: 24px;
+}
+
+/* ─── Paragraphs in cells ────────────────────────────────────────────────── */
+.nb-cell p {
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+/* ─── Blockquote ─────────────────────────────────────────────────────────── */
+blockquote {
+  border-left: 3px solid var(--blockquote-border);
+  padding: 2px 0 2px 16px;
+  margin: 8px 0;
+  color: var(--blockquote-color);
+  font-style: italic;
+}
+
+/* ─── Code blocks (always dark bg like Jupyter) ──────────────────────────── */
+.code-wrap {
+  margin: 4px 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--code-bg);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--code-header-bg);
+  font-size: 11px;
+}
+
+.code-lang {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9e9e9e;
+  font-weight: 500;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.code-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.code-actions button {
+  background: transparent;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-family: inherit;
+  color: #9e9e9e;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.code-actions button:hover {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.code-wrap pre {
+  margin: 0;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", Menlo, monospace;
+  white-space: pre;
+  color: #abb2bf;
+}
+
+.code-wrap code {
+  font-family: inherit;
+}
+
+/* Copy button */
+.copy-btn {
+  background: transparent;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: #9e9e9e;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.copy-btn:hover {
+  background: #444;
+  color: #e0e0e0;
+}
+
+/* Code expand button */
+.code-expand {
+  background: transparent;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: #9e9e9e;
+  cursor: pointer;
+}
+
+.code-expand:hover {
+  background: #444;
+  color: #e0e0e0;
+}
+
+/* Syntax highlighting */
+.kw,
+.cm-keyword {
+  color: var(--hl-keyword);
+}
+.st,
+.cm-string {
+  color: var(--hl-string);
+}
+.cm,
+.cm-comment {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+.fn,
+.cm-function {
+  color: var(--hl-function);
+}
+.tp,
+.cm-type {
+  color: var(--hl-type);
+}
+.nm,
+.cm-number {
+  color: var(--hl-number);
+}
+.op,
+.cm-operator {
+  color: var(--hl-operator);
+}
+.at,
+.cm-attribute {
+  color: var(--hl-attr);
+}
+
+/* ─── Inline code ────────────────────────────────────────────────────────── */
+code.inline,
+p code,
+li code,
+td code {
+  background: var(--inline-code-bg);
+  color: var(--inline-code-color);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+
+/* ─── Lists ──────────────────────────────────────────────────────────────── */
+ul,
+ol {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+
+ul li,
+ol li {
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+ul li::marker {
+  color: var(--text-muted);
+}
+
+/* ─── Table ──────────────────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 8px 0;
+  border-radius: 4px;
+  border: 1px solid var(--table-border);
+}
+
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+thead th {
+  background: var(--table-header-bg);
+  text-align: left;
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--table-border);
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-light);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--table-even-bg);
+}
+
+tbody td {
+  padding: 7px 12px;
+  color: var(--text);
+}
+
+/* ─── Tree blocks ────────────────────────────────────────────────────────── */
+.tree-wrap {
+  margin: 8px 0;
+  font-size: 13px;
+  font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+}
+
+.tree-node summary {
+  cursor: pointer;
+  padding: 2px 0;
+  list-style: none;
+}
+
+.tree-node summary::-webkit-details-marker {
+  display: none;
+}
+
+.tree-node summary::before {
+  content: "\25B6";
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 9px;
+  transition: transform 0.12s;
+  color: var(--text-muted);
+}
+
+.tree-node[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.tree-children {
+  padding-left: 18px;
+  border-left: 1px solid var(--tree-border);
+  margin-left: 4px;
+}
+
+.tree-leaf {
+  padding: 2px 0 2px 16px;
+}
+
+.tree-label {
+  color: var(--text);
+}
+
+.tree-dir-label {
+  font-weight: 600;
+  color: var(--hl-function);
+}
+
+.tree-file-label {
+  color: var(--text);
+}
+
+.tree-desc {
+  color: var(--text-secondary);
+  margin-left: 8px;
+  font-style: italic;
+}
+
+/* ─── Math blocks ────────────────────────────────────────────────────────── */
+.math-block {
+  margin: 12px 0;
+  text-align: center;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.math-inline {
+  /* KaTeX handles styling */
+}
+
+/* ─── Divider ────────────────────────────────────────────────────────────── */
+hr {
+  border: none;
+  border-top: 1px solid var(--hr-color);
+  margin: 16px 0;
+}
+
+/* ─── Code expand dialog ─────────────────────────────────────────────────── */
+dialog#code-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90vw;
+  max-height: 85vh;
+  width: 800px;
+  border: 1px solid var(--dialog-border);
+  border-radius: 8px;
+  background: var(--dialog-bg);
+  color: var(--text);
+  padding: 0;
+  overflow: hidden;
+  z-index: 1000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+dialog#code-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dialog#code-dialog .dlg-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--dialog-header-bg);
+  border-bottom: 1px solid var(--dialog-border);
+  font-size: 13px;
+}
+
+dialog#code-dialog .dlg-lang {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: var(--pill-bg);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+dialog#code-dialog .dlg-title {
+  flex: 1;
+  color: var(--text);
+  font-weight: 500;
+}
+
+dialog#code-dialog .dlg-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+dialog#code-dialog .dlg-lines {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+dialog#code-dialog .dlg-copy,
+dialog#code-dialog .dlg-close {
+  background: var(--pill-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+dialog#code-dialog .dlg-copy:hover,
+dialog#code-dialog .dlg-close:hover {
+  background: var(--pill-hover);
+  color: var(--text);
+}
+
+dialog#code-dialog .dlg-body {
+  overflow: auto;
+  max-height: calc(85vh - 50px);
+  padding: 0;
+}
+
+dialog#code-dialog .dlg-body pre {
+  margin: 0;
+  padding: 16px 20px;
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+  background: var(--code-bg);
+  color: #abb2bf;
+}
+
+/* ─── Search highlight ───────────────────────────────────────────────────── */
+mark.search-hit,
+mark {
+  background: var(--mark-bg);
+  color: var(--mark-color);
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+.search-active mark.search-hit {
+  background: #ff9800;
+  color: #000;
+}
+
+/* Hidden sections during search */
+section.search-hidden {
+  display: none;
+}
+
+.hidden-search {
+  display: none !important;
+}
+
+/* No results message */
+#no-results {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+#no-results.visible {
+  display: block;
+}
+
+/* ─── Line numbers ───────────────────────────────────────────────────────── */
+.line-row {
+  display: flex;
+}
+
+.line-num {
+  color: #636d83;
+  text-align: right;
+  padding-right: 16px;
+  user-select: none;
+  min-width: 2.5em;
+}
+
+.line-content {
+  flex: 1;
+}
+
+pre.has-line-nums {
+  padding-left: 0;
+}
+
+/* ─── Text size picker ───────────────────────────────────────────────────── */
+.text-size-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.text-size-picker .text-size-btn {
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.text-size-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: center;
+}
+
+/* ─── Collapsible cells ─────────────────────────────────────────────────── */
+.cell-prompt {
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.cell-prompt:hover {
+  opacity: 0.7;
+}
+
+.nb-cell.cell-collapsed .cell-content {
+  display: none;
+}
+
+.nb-cell.cell-collapsed .cell-prompt::after {
+  content: " ▸";
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.nb-cell.cell-collapsed {
+  opacity: 0.6;
+}
+
+.nb-cell.cell-collapsed:hover {
+  opacity: 0.8;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .nb-sidebar {
+    display: none;
+  }
+
+  .notebook {
+    padding: 24px 16px 80px;
+  }
+
+  .cell-prompt {
+    width: 60px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 640px) {
+  .nb-toolbar-menu {
+    display: none;
+  }
+
+  .nb-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .nb-toolbar-right {
+    border-left: none;
+    border-top: 1px solid var(--toolbar-border);
+    width: 100%;
+    padding: 4px 12px;
+  }
+
+  .nb-kernel-status {
+    display: none;
+  }
+
+  .cell-prompt {
+    width: 50px;
+    font-size: 10px;
+  }
+
+  .nb-header h1 {
+    font-size: 24px;
+  }
+
+  #search {
+    width: 100px;
+  }
+
+  .width-picker {
+    display: none;
+  }
+}
+
+/* ─── Print ──────────────────────────────────────────────────────────────── */
+@media print {
+  .nb-toolbar {
+    display: none;
+  }
+
+  .nb-sidebar {
+    display: none;
+  }
+
+  dialog#code-dialog {
+    display: none;
+  }
+
+  #no-results {
+    display: none;
+  }
+
+  .nb-layout {
+    display: block;
+  }
+
+  .notebook {
+    padding: 0;
+    max-width: none;
+  }
+
+  .nb-cell {
+    break-inside: avoid;
+    border-left-color: transparent;
+  }
+
+  .cell-run-btn {
+    display: none;
+  }
+}

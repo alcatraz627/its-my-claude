@@ -1,0 +1,17 @@
+{
+  "name": "create-report",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest run tests/static.test.ts",
+    "test:playwright": "playwright test tests/toolbar.spec.ts",
+    "test:all": "vitest run && playwright test tests/toolbar.spec.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.0",
+    "tsx": "^4.7.2",
+    "vitest": "^1.5.0"
+  }
+}

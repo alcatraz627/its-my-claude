@@ -1,0 +1,32 @@
+# Stop tasks — parallel orchestrator config
+# Each task receives the Stop hook input JSON via stdin.
+
+# Refresh tab title at end-of-turn
+~/.claude/scripts/update-tab-title.sh
+
+# Generate session summary
+~/.claude/scripts/session-mgmt/session-summary.sh
+
+# Cost alert if session has crossed threshold
+~/.claude/scripts/cost-alert.sh
+
+# Subconscious daemon notification of session stop
+bash /Users/alcatraz627/.claude/subconscious/hooks/stop.sh
+
+# diy-mem session-end shell snapshot
+~/.claude/scripts/shell-mem.sh session-end-shell
+
+# Rotate events.jsonl if oversized
+~/.claude/scripts/rotation/rotate-events.sh
+
+# Rotate WAL if oversized
+~/.claude/scripts/rotation/rotate-wal.sh
+
+# Turn-end cleanup (turn-state files, etc)
+~/.claude/scripts/session-mgmt/turn-end-cleanup.sh
+
+# Event log emission
+~/.claude/scripts/emit-event.sh Stop
+
+# Atone-stop check (surfaces pending atone events)
+~/.claude/scripts/hooks/atone-stop-check.sh

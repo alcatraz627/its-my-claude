@@ -1,0 +1,9 @@
+{
+  "name": "notion",
+  "description": "Clean, minimal Notion-style with cards and whitespace",
+  "emoji": "📝",
+  "favicon": "data:image/svg+xml,",
+  "color": "#9b9a97",
+  "author": "create-report",
+  "created": "2026-04-01"
+}

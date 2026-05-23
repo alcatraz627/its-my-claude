@@ -1,0 +1,288 @@
+{
+  "_readme": "Central MCP server catalog — COLD STORAGE ONLY. Nothing here is executed directly; entries are templates copied into a project's .mcp.json by the /add-mcp skill (or by hand). Audit scripts that look for active/dead MCPs should ignore this file. Entries with {{PLACEHOLDERS}} require substitution at inject time.",
+  "_policy": "Do not delete entries even if globally inactive — they exist for re-injection on demand. Do not auto-prune. Top-level keys: _readme, _policy, catalog (the actual entry map keyed by short name).",
+  "catalog": {
+    "github": {
+      "description": "GitHub API — read/write repos, issues, PRs, branches, files",
+      "tags": ["version-control", "global-ok"],
+      "requiresEnv": ["GITHUB_PERSONAL_ACCESS_TOKEN"],
+      "when": "Any project that interacts with GitHub repos, issues, or PRs",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github@2025.4.8"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+        }
+      }
+    },
+
+    "vercel": {
+      "description": "Vercel platform — list/inspect deployments, logs, env vars, domains, projects",
+      "tags": ["hosting", "global-ok"],
+      "requiresEnv": ["VERCEL_TOKEN"],
+      "when": "Projects deployed to Vercel",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "@vercel/mcp-server"],
+        "env": {
+          "VERCEL_TOKEN": "${VERCEL_TOKEN}"
+        }
+      }
+    },
+
+    "mongodb": {
+      "description": "MongoDB — query, aggregate, inspect schemas and indexes (custom connection string)",
+      "tags": ["database"],
+      "requiresEnv": [],
+      "templateVars": { "MONGO_URI": "mongodb://localhost:27017" },
+      "when": "Projects using MongoDB — substitute MONGO_URI with the actual connection string",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "mongodb-mcp-server@1.9.0"],
+        "env": {
+          "MDB_MCP_CONNECTION_STRING": "{{MONGO_URI}}"
+        }
+      }
+    },
+
+    "mongodb-local": {
+      "description": "MongoDB on localhost:27017 — preset, no substitution needed",
+      "tags": ["database", "localhost"],
+      "requiresEnv": [],
+      "when": "Local development with a MongoDB instance running on the default port",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "mongodb-mcp-server@1.9.0"],
+        "env": {
+          "MDB_MCP_CONNECTION_STRING": "mongodb://localhost:27017"
+        }
+      }
+    },
+
+    "redis": {
+      "description": "Redis — get/set keys, scan, sorted sets, hashes (custom connection string)",
+      "tags": ["cache", "database"],
+      "requiresEnv": [],
+      "templateVars": { "REDIS_URL": "redis://localhost:6379" },
+      "when": "Projects using Redis — substitute REDIS_URL with the actual connection string",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "redis-mcp@0.0.4"],
+        "env": {
+          "REDIS_URL": "{{REDIS_URL}}"
+        }
+      }
+    },
+
+    "redis-local": {
+      "description": "Redis on localhost:6379 — preset, no substitution needed",
+      "tags": ["cache", "database", "localhost"],
+      "requiresEnv": [],
+      "when": "Local development with a Redis instance running on the default port",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "redis-mcp@0.0.4"],
+        "env": {
+          "REDIS_URL": "redis://localhost:6379"
+        }
+      }
+    },
+
+    "postgres": {
+      "description": "PostgreSQL — query tables, inspect schema (custom connection string)",
+      "tags": ["database"],
+      "requiresEnv": [],
+      "templateVars": {
+        "POSTGRES_URL": "postgresql://localhost:5432/postgres"
+      },
+      "when": "Projects using PostgreSQL — substitute POSTGRES_URL with the actual connection string",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-postgres@0.6.2",
+          "{{POSTGRES_URL}}"
+        ]
+      }
+    },
+
+    "postgres-local": {
+      "description": "PostgreSQL on localhost:5432/postgres — preset, no substitution needed",
+      "tags": ["database", "localhost"],
+      "requiresEnv": [],
+      "when": "Local development with a Postgres instance running on the default port",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-postgres@0.6.2",
+          "postgresql://localhost:5432/postgres"
+        ]
+      }
+    },
+
+    "aws": {
+      "description": "AWS core MCP — interact with AWS services via the default profile",
+      "tags": ["cloud"],
+      "requiresEnv": [],
+      "templateVars": { "AWS_PROFILE": "default", "AWS_REGION": "us-east-1" },
+      "when": "Projects that deploy to or interact with AWS infrastructure",
+      "config": {
+        "type": "stdio",
+        "command": "uvx",
+        "args": ["awslabs.core-mcp-server@latest"],
+        "env": {
+          "AWS_PROFILE": "{{AWS_PROFILE}}",
+          "AWS_REGION": "{{AWS_REGION}}"
+        }
+      }
+    },
+
+    "render": {
+      "description": "Render.com — list/manage services, deploys, databases, env vars",
+      "tags": ["hosting"],
+      "requiresEnv": ["RENDER_API_KEY"],
+      "when": "Projects deployed to Render",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "@render-oss/render-mcp-server"],
+        "env": {
+          "RENDER_API_KEY": "${RENDER_API_KEY}"
+        }
+      }
+    },
+
+    "svelte": {
+      "description": "Svelte docs MCP — official Svelte/SvelteKit documentation, playground links, autofixer",
+      "tags": ["docs", "framework"],
+      "requiresEnv": [],
+      "scope": "project",
+      "scopeNote": "Add to .mcp.json only — never user-scope (injects mandatory context into every session)",
+      "when": "Projects using Svelte or SvelteKit",
+      "config": {
+        "type": "http",
+        "url": "https://mcp.svelte.dev/mcp"
+      }
+    },
+
+    "vscode": {
+      "description": "VS Code state MCP — access open files, workspace state from VS Code extension",
+      "tags": ["editor"],
+      "requiresEnv": [],
+      "when": "When running Claude from within VS Code and needing to read editor state",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "@vscode/mcp"]
+      }
+    },
+
+    "scratchpad": {
+      "description": "Scratchpad MCP — read/write/query/summarize local and global scratchpad entries for plans, learnings, and cross-project references",
+      "tags": ["knowledge", "global-ok"],
+      "requiresEnv": [],
+      "when": "All projects — provides structured working memory for agents",
+      "templateVars": {
+        "HOME_DIR": "$HOME"
+      },
+      "config": {
+        "type": "stdio",
+        "command": "node",
+        "args": ["{{HOME_DIR}}/.claude/scratchpad/mcp-server.mjs"]
+      }
+    },
+
+    "shell-mem": {
+      "description": "diy-claude-mem shell tracking MCP server — tail, search, mark-done, cleanup, append",
+      "tags": ["shell", "memory", "global-ok"],
+      "requiresEnv": [],
+      "when": "All projects — tracks shell command history and background processes",
+      "config": {
+        "type": "stdio",
+        "command": "node",
+        "args": ["~/Code/Claude/diy-claude-mem/mcp-server/server.js"]
+      }
+    },
+
+    "file-tools": {
+      "description": "File tools MCP — read/write/convert CSV, Excel, JSON, YAML, TOML, XML with output shaping and HTTP client",
+      "tags": ["files", "data", "global-ok"],
+      "requiresEnv": [],
+      "when": "Projects that need to read, write, transform, or convert data files (CSV, Excel, JSON, YAML, TOML, XML) or make HTTP requests",
+      "config": {
+        "type": "stdio",
+        "command": "node",
+        "args": ["~/Code/Claude/mcp-file-tools/server.js"]
+      }
+    },
+
+    "crontab": {
+      "description": "System crontab MCP — list, add, remove, and validate cron entries with human-readable schedule parsing",
+      "tags": ["system", "scheduling"],
+      "status": "planned",
+      "requiresEnv": [],
+      "when": "When you need structured crontab management instead of raw shell commands. Build signal: repeated crontab operations in a session.",
+      "notes": "Currently unnecessary — crontab -l / echo | crontab - via Bash covers all cases. Build when the shell approach becomes friction.",
+      "config": {
+        "type": "stdio",
+        "command": "node",
+        "args": ["~/Code/Claude/mcp-crontab/server.js"]
+      }
+    },
+
+    "processes": {
+      "description": "System process MCP — list, inspect, kill processes and check port occupancy with structured output",
+      "tags": ["system", "monitoring"],
+      "status": "planned",
+      "requiresEnv": [],
+      "when": "When you need structured process management instead of ps/kill/lsof shell commands. Build signal: repeated process debugging in a session.",
+      "notes": "Currently unnecessary — ps, kill, lsof -i :PORT via Bash covers all cases. pm2 handles named services. Build when shell parsing becomes friction.",
+      "config": {
+        "type": "stdio",
+        "command": "node",
+        "args": ["~/Code/Claude/mcp-processes/server.js"]
+      }
+    },
+
+    "interactive-inputs": {
+      "description": "Interactive user input tools — confirm, pick, forms, wizards via MCP elicitation",
+      "tags": ["input", "global-ok", "ui"],
+      "requiresEnv": [],
+      "when": "Always available — provides rich user input beyond AskUserQuestion (dropdowns, checkboxes, number fields, multi-step wizards)",
+      "config": {
+        "type": "stdio",
+        "command": "node",
+        "args": [
+          "/Users/alcatraz627/Code/Claude/mcp-interactive-inputs/server.js"
+        ]
+      }
+    },
+
+    "slack": {
+      "description": "Slack MCP — users / channels / DMs lookup, smart history, search (korotovsky/slack-mcp-server)",
+      "tags": ["messaging", "team"],
+      "requiresEnv": ["SLACK_MCP_XOXB_TOKEN"],
+      "scope": "project",
+      "scopeNote": "Add per-project only — team-scoped tokens shouldn't live at user or global level",
+      "when": "Projects that need Slack user-ID lookup (e.g., deep-links in docs), channel history, or message search",
+      "notes": "Bot token (xoxb-) is enough for user + channel lookup. User token (xoxp-) is needed for search + DM read. See https://github.com/korotovsky/slack-mcp-server/blob/master/docs/01-authentication-setup.md",
+      "config": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "slack-mcp-server@1.2.3", "--transport", "stdio"],
+        "env": {
+          "SLACK_MCP_XOXB_TOKEN": "${SLACK_MCP_XOXB_TOKEN}"
+        }
+      }
+    }
+  }
+}

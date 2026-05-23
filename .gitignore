@@ -1,0 +1,51 @@
+# ~/.claude version control — ALLOWLIST model: ignore everything, then
+# un-ignore only the config/code layer. This is leak-proof against new data
+# dirs (transcripts, dream data, .turn-state, telemetry, caches) that a
+# blocklist would silently start tracking.
+#
+# Big data (projects/, assets/, subconscious/, widgets/, plugins/, i-dream/,
+# memory*/, sessions*/, .turn-state/, output/, telemetry/, …) is NOT here —
+# it moves via rsync per mac-migration/MANIFEST.md §6. Standalone sub-projects
+# become their own repos (see PORTABILITY.md). Secrets are never tracked.
+
+# 1) ignore everything by default
+/*
+.*
+
+# 2) un-ignore the config/code layer
+!/.gitignore
+!/PORTABILITY.md
+!/*.md
+!/settings.json
+!/mcp-catalog.json
+!/scripts/
+!/skills/
+!/hinters/
+!/rules/
+!/conventions/
+!/features/
+!/personas/
+!/migrations/
+!/hooks-feedback-domain/
+
+# 3) re-exclude scratch + data + transient INSIDE the allowlisted areas
+/_*.claude.md
+/wal.md
+/wal.jsonl
+/weekly-todos.md
+node_modules/
+dist/
+build/
+.venv/
+**/locks/
+**/__pycache__/
+*.pyc
+*.bak
+*.log
+.DS_Store
+hooks-feedback-domain/events.jsonl
+hooks-feedback-domain/derived/
+hooks-feedback-domain/dream/cursor.json
+hooks-feedback-domain/dream/insights.jsonl
+hooks-feedback-domain/dream/.adapter-seen
+**/_seen.json

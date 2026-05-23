@@ -1,0 +1,34 @@
+{
+  "title": "Test Report",
+  "subtitle": "Minimal fixture for automated tests",
+  "generated": "2026-04-08",
+  "nav": [
+    { "id": "intro", "text": "Introduction", "level": 2 },
+    { "id": "data", "text": "Data", "level": 2 }
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "heading": "Introduction",
+      "blocks": [
+        { "type": "paragraph", "html": "This is a test paragraph used in automated tests." },
+        { "type": "code", "lang": "javascript", "content": "console.log('hello');" }
+      ]
+    },
+    {
+      "id": "data",
+      "heading": "Data",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Name", "Value"],
+          "rows": [["alpha", "1"], ["beta", "2"]]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "author": "Test",
+    "version": "1.0"
+  }
+}
