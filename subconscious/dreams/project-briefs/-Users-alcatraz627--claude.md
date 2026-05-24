@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-05-23T01:01:22.541148+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-23T23:32:15.891773+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the `~/.claude` global agent-configuration project — home of rules, skills, WAL infrastructure, atone/affirm systems, and session-continuity tooling. Work is long-running, multi-session, and heavily meta (the product is the agent's own behavior).
+This is the `~/.claude` global configuration workspace — skills, rules, WAL infrastructure, memory system, and session-continuity tooling. Work here is meta: building and maintaining the agent's own operating environment.
 
 ## Things to do (or keep doing)
-- **Always write WAL entries in JSONL** — the markdown format is legacy; `scripts/wal/wal.sh` is the canonical writer.
-- **Proactively `/core-dump` at milestones**, not just at session end — user recovers via `/catchup` across compaction boundaries; don't wait to be asked.
-- **Treat terse single-word messages as autonomous-continue signals** — "ahead", "looks", "next", "done" mean execute, not clarify.
-- **Merge before creating** — before adding any new rule, pattern, script, or constant, grep the full tree; this project has high duplication risk from multi-session accumulation.
+- **Write WAL entries as JSONL** (`scripts/wal/wal.sh`), never markdown; the format migrated in 2026-04 and old markdown is legacy-only
+- **Checkpoint proactively** with `/core-dump` at logical milestones, not just session end — `/catchup` is the primary recovery path after compaction
+- **Treat terse single-word messages as execution directives** (`next`, `ahead`, `done`, `looks`) — continue autonomously without asking for clarification
+- **Verify current state before every side-effect** — re-read files, run `git status`, confirm process state; never act on assumed or cached state
 
 ## Things to avoid
-- **Never commit or push without fresh per-push approval** — prior approval in the same session does not carry forward; this has triggered angry corrections repeatedly.
-- **Don't thrash on fixes** — if the same function/block is edited 3+ times, stop, re-read context, form a hypothesis, then edit once.
-- **Don't infer or synthesize values not traceable to source data** — present hallucinated fill-ins as inferred and flag them explicitly.
-- **Don't expand scope on terse continuations** — "keep going" increases execution depth, never scope.
+- **Never commit or push without fresh per-push explicit approval** — prior session approvals do not carry forward, ever
+- **Don't thrash on failed fixes** — if the same function has been edited 3+ times, stop, re-read surrounding context, form a hypothesis before the next edit
+- **Don't expand scope beyond the explicit request** — "keep going" means depth, not breadth; never add unsolicited improvements while fixing something else
+- **Never infer or synthesize data values not present in source** — only use values traceable to actual source data
 
 ## Open questions / known gaps
-- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event was recorded 4+ times independently; no dedup gate exists before `events.jsonl` append.
-- Tension between "terse = execute" and "terse = understand only" is unresolved when the prior context established an explore-don't-implement frame.
+- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event appeared 4× independently; future pattern reads from this project will have high semantic noise
+- Tension between terse-continuation autonomy and scope control is unresolved: short commands signal "execute deeper" but scope ceiling must still hold

@@ -1,22 +1,17 @@
-<!-- i-dream project brief · 2026-05-21T02:49:11.723261+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-23T23:31:37.919052+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-
-Frontend codebase for a multi-session product (Versable enhancement-product), worked in long autonomous sessions with heavy context compaction and session-continuity tooling. Dominant style: terse directives, scoped deep execution, continuous resumption via `/catchup` and `/core-dump`.
+Frontend of a multi-session SaaS product (Versable enhancement-product); dominant working style is long autonomous implementation runs across many context compaction boundaries, with heavy reliance on `/core-dump` and `/catchup` for state continuity.
 
 ## Things to do (or keep doing)
-
-- **Checkpoint proactively** — `/core-dump` at milestones and ~every 20 tools, not only at session end; user resumes via `/catchup` across compaction boundaries
-- **Confirm task scope explicitly at session start** — execute autonomously within that boundary, touch nothing outside it
-- **Treat terse directives as job-resumption signals** — reconstruct intent from WAL/checkpoint state, emit a one-line ack, then continue
-- **Prefer reading existing patterns before writing new code** — scan for prior implementations before proposing helpers or modules
+- **Checkpoint proactively**: run `/core-dump` at milestones and near 70% context — don't wait to be asked; `/catchup` is the primary recovery path after compaction
+- **Confirm task boundary at session start**: within it, execute autonomously and aggressively; outside it, do nothing without explicit approval
+- **Treat all state as ephemeral**: re-read WAL/checkpoint state before any side-effecting operation rather than relying on earlier-in-session assumptions
 
 ## Things to avoid
-
-- **Never commit or push without fresh, explicit per-operation approval** — prior session approval, even from moments ago, does not carry forward; this is the highest-severity recurring violation in this project
-- **Don't expand scope beyond the explicit request** — no "while I'm here" cleanups, no unrequested refactors, no speculative abstractions
-- **Don't create helpers or module-level exports without a live callsite** — if you can't name the file:line calling it right now, don't create it
+- **Never commit or push without fresh, per-operation approval** — prior approval anywhere in the session, even seconds ago, does not carry forward; this is the single most frequently triggered violation in this project
+- **Don't expand scope opportunistically** — "while I'm here" improvements, cleanup, or extra commits beyond what was explicitly requested have been corrected repeatedly
+- **Don't summarize or narrate** between tool calls; user sends terse continuations ("keep going", "move") expecting immediate execution, not acknowledgment
 
 ## Open questions / known gaps
-
-- Pattern extraction produces heavy semantic duplicates (same WAL migration event recorded 4× independently) — the continuity tooling itself may need deduplication logic
-- Tension between fully autonomous long sessions and the strict no-push-without-approval rule creates friction at natural commit points; no clear handoff protocol exists for when to pause mid-session and ask
+- Session continuity is entirely manual (core-dump → catchup cycle); recurring friction suggests the handoff artifact quality matters as much as frequency — unclear what level of detail is sufficient after compaction
+- Pattern extraction for this project over-indexes on git-push violations (12 of top 20 patterns are the same event); real architectural patterns may be underrepresented in memory

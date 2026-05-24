@@ -30,6 +30,10 @@ separately on a new machine; this repo only depends on their presence.
 | claude-instances (widget) | `~/.claude/widgets/claude-instances` | **TODO: not yet its own repo** | needs `git init` + remote, then register here |
 | file-tools MCP | `~/Code/Claude/mcp-file-tools` | local-only repo (unpushed) | push first, then clone (MANIFEST §5) |
 | interactive-inputs MCP | `~/Code/Claude/mcp-interactive-inputs` | local-only repo (unpushed) | push first, then clone (MANIFEST §5) |
+| **atone** (mistake-learning log) | `~/.claude/atone` | own repo → `github.com/alcatraz627/claude-atone` (private) | `git clone` to `~/.claude/atone`; daemon pushes biweekly |
+| **affirm** (affirmed-good-behavior log) | `~/.claude/affirm` | own repo → `github.com/alcatraz627/claude-affirm` (private) | `git clone` to `~/.claude/affirm`; daemon pushes biweekly |
+
+> Note: `atone`/`affirm` keep their own repos (their CLIs commit append-only as they run); the `sync-all.sh` daemon pushes them. The rest of the learned state (dream insights, memory, intentions, valence, calibration) is folded into THIS repo (`its-my-claude`) — see `.gitignore`, which tracks curated `subconscious/` outputs but excludes the ~130M of raw churn (logs, metacog samples, dream traces, introspection chains).
 
 ## Runtime / system state (NOT in git — re-provision on new machine)
 The migration kit (`~/mac-migration/kit/`) owns the heavy lifting; this is the

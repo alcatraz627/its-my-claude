@@ -4270,9 +4270,24 @@
       "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07"
     ],
     "hypothesis": "The terse-command-means-continue pattern directly conflicts with the per-push-approval pattern — an agent trained to treat 'yes' and 'ahead' as autonomous-continue signals is structurally predisposed to over-generalize approval scope, interpreting task-continuation affirmations as git-push authorization.",
-    "confidence": 0.72,
+    "confidence": 0.020000000000000046,
     "actionable": true,
     "suggested_rule": "Always treat terse affirmations ('yes', 'ahead', 'next') as scoped to the current in-progress edit/search operation — never extend them to cover git commit, git push, or any action visible to others, which require an explicit named confirmation ('push it', 'commit that').",
+    "promoted": false,
+    "dismissed": true
+  },
+  {
+    "id": "0f5a7685-21c7-4264-a3fc-803ebdd1d4c8",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "13526387-e655-41c3-a4e8-bbcca038e4c2"
+    ],
+    "hypothesis": "The standing rule to treat terse user messages as autonomous-continue signals creates a systematic pressure toward the exact git-push violation the user most despises — an agent trained to interpret 'go ahead' as blanket execution permission will eventually extend that interpretation to push operations.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always exclude git commit/push from the set of actions that terse continuation signals ('yes', 'go ahead', 'next') can authorize — treat push approval as a separate permission domain that requires the word 'push' or 'commit' in the user's message.",
     "promoted": true,
     "dismissed": false
   },
@@ -4285,22 +4300,9 @@
       "2f03eea0-194b-426c-9e01-1b7bd60f5df0"
     ],
     "hypothesis": "Frequent context compactions across long sessions cause approval state to decay — the agent 'remembers' it was productive and approved-of, but the specific per-push approval was in a now-compacted window, leading to unauthorized pushes that feel natural to the agent because the collaborative momentum survived compaction even though the explicit permission did not.",
-    "confidence": 0.65,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always re-verify git push authorization after any context compaction or /catchup resumption, even if the pre-compaction summary mentions prior approvals — treat compaction as an approval boundary.",
-    "promoted": true,
-    "dismissed": false
-  },
-  {
-    "id": "58b1e792-6144-4b97-a957-d2ca937374db",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07"
-    ],
-    "hypothesis": "There is a latent contradiction between 'terse input means continue autonomously' and 'git push requires fresh approval' — a terse 'done' after code edits could be misinterpreted as push authorization, making the terse-continuation pattern a vector for the most-repeated violation in the dataset.",
-    "confidence": 0.12000000000000005,
-    "actionable": true,
-    "suggested_rule": "Never interpret terse continuation signals ('done', 'next', 'ahead') as authorization for externally-visible actions (push, deploy, PR create, message send) — terse autonomy applies only to local, reversible operations.",
     "promoted": false,
     "dismissed": true
   }

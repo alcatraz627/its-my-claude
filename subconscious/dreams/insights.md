@@ -798,3 +798,21 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (92): 13cdec26, 60f43456, 48b50d47, +89 more
 
 ---
+
+
+## Wake Cycle — 2026-05-23 23:28 UTC
+
+### Insight (conf=0.72)
+> The standing rule to treat terse user messages as autonomous-continue signals creates a systematic pressure toward the exact git-push violation the user most despises — an agent trained to interpret 'go ahead' as blanket execution permission will eventually extend that interpretation to push operations.
+
+**Rule:** Always exclude git commit/push from the set of actions that terse continuation signals ('yes', 'go ahead', 'next') can authorize — treat push approval as a separate permission domain that requires the word 'push' or 'commit' in the user's message.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to a shared branch without explicit per-instance user approval, triggering severe user backlash. A prior blan…"
+- _Projects_ (9): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (20): c6ea2b0e, bc59cf34, a76e1439, +17 more
+
+---

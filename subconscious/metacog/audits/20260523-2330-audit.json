@@ -1,0 +1,71 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18379,
+    "correction_density": 0.07575757575757576,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3415444193387828,
+    "unit_count": 132
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~68% of tool-using units: 29d7d6be-2 (ls -la compound, find x2, grep piped via Bash instead of Glob+Grep), -3 (find|grep compound instead of Glob+Grep), -6 (cat>> to mistake-patterns.md instead of Write; tail-10 via Bash instead of Read), -24 (sed -n Bash reads instead of Read with offset; grep via Bash), -25 (head -3 in bash loop instead of Read; grep and sed via Bash; python3 inline bulk ops), -31 (python3 inline via Bash for bulk frontmatter writes; find Bash), -34 (python3 inline bulk Bash; npx|node pipeline), 5455871e-3 (grep -rn via Bash; ls Bash compounds), -35 (cat|head via Bash instead of Read), -37 (cat backend/...py | head via Bash instead of Read); rate in prior 52-83% band; nineteenth+ consecutive cycle above 50%; no downward trajectory confirmed",
+      "optimistic_edit_without_read:RECURRING:WORSENING — 5 units with instances: 29d7d6be-24 (Edit fails on widgets-v2.md, process-vs-instance-math.md, worker-v2-but-better.md — 3 sub-instances, each Edit→Read→Edit), -25 (CLAUDE.md Edit fail→Read→Edit; expiring-cycles-cron.md Edit fail→Read→Edit), -34 (logger-crab-integration-scope.md Edit fail→Read→Edit; expiring-cycles-cron.md second instance), 5455871e-36 (structural-changes-deliberation.md Edit fail→multiple retries then abandoned), -40 (mistake-patterns.md Edit fail→Read→Edit); 5 units vs prior 2-3 unit plateau; first confirmed upward escalation of this bias",
+      "compound_command_overreach:RECURRING:STABLE — 29d7d6be-31: 8-operation git mv chain attempted x3 before per-move recovery; each attempt fails (success:false); issue is mega-compound assumption not the individual git mv operations; 5455871e-35: multi-step render log jq pipelines with elaborate multi-clause constructs; rate consistent with prior cycles",
+      "bash_retry_without_diagnosis:RECURRING:MIXED — 5455871e-3: path failures addressed by running pwd+ls diagnostic before retry (IMPROVED vs prior cycles); 5455871e-33: 10 consecutive mcp__render__get_metrics calls all fail (success:false) with no diagnostic pivot between attempts — most severe single-unit instance in this batch; 29d7d6be-31: compound fails → explicit state diagnostic done → second compound attempt (partial improvement); Bash-retry variant shows marginal improvement but MCP-retry variant persists without change",
+      "redundant_read_same_unit:RECURRING:STABLE — 29d7d6be-2: product-todos.md Read x2 consecutively with no offset variation and no intervening edit; 29d7d6be-34: movemap.mts Read x2 consecutively before first Edit with no offset variation between reads; 2 units at prior 2-unit plateau; no improvement, no worsening",
+      "re_edit_thrash:RECURRING:STABLE — 5455871e-37: structural-changes-deliberation.md Edit fails x3 consecutively with no Read pivot attempted; agent resorts to creating structural-deliberations-pass-b.md as workaround instead of diagnosing why edits fail; 1 unit at prior 1-3 unit baseline; structurally unchanged",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — 5455871e-6: render service/key-value/postgres/deploy MCP endpoints called 6+ times (all success:false) after workspace selection succeeds; no diagnostic query to determine auth scope or permission model; -16: same pattern repeated with identical tool set and identical failure rate; -33: mcp__render__get_metrics called 10 consecutive times all success:false with no pivot strategy; this is distinct from bash_retry_without_diagnosis — the mechanism is MCP permission-scope confusion (workspace selects but service queries are blocked), not command-path failure; pattern spans 3 units in session 5455871e"
+    ],
+    "calibration_score": 0.15,
+    "cross_references": [
+      "dream-insight-git-push-compaction: 5455871e-36 included a core-dump and session boundary (compaction-adjacent); no unauthorized git push observed in this batch — the dream-insight rule appears to be holding, likely because the user explicitly requested the commit/push discussion in the input message",
+      "dream-insight-session-continuity-structural: confirmed active — 29d7d6be-68 and 5455871e-36 both execute core-dump rituals; heavy checkpoint cadence is deliberate user behavior pattern, not an anomaly signal",
+      "dream-insight-memory-deduplication: no mass-duplicate memory entries observed; the single mistake-patterns.md append in unit -6 was via cat>> Bash (bypassing atone.sh) which means deduplication logic in the consolidation script was not invoked — see recommendations"
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "mcp_retry_without_diagnosis should be recorded as a distinct atone slug from bash_retry_without_diagnosis — the diagnostic action for MCP auth failures (check API key scope, check workspace-vs-service permission model) differs from the bash failure diagnostic (check path, check binary availability); 10-consecutive-failure instance in unit 5455871e-33 meets S2 threshold",
+      "optimistic_edit_without_read worsening from 2-3 units to 5 units warrants severity escalation monitoring; the pattern is consistent enough that a pre-edit mandatory Read for files not created in the current unit would eliminate it; deprioritize general reminders — this needs a structural gate",
+      "unit 29d7d6be-6 appended to mistake-patterns.md via cat>> Bash instead of the proper atone ritual (events.jsonl append via atone.sh) — verify whether the unprompted-infra-scope-creep pattern was also written to ~/.claude/atone/events.jsonl or only to the derived mistake-patterns.md view; if only the derived view was updated, the kernel-locked raw log is missing this event and consolidation will overwrite the entry",
+      "shell_tool_preference_violations remain structurally stable after 19+ consecutive cycles above 50%; recommendation-layer interventions have not produced measurable improvement; hook-level enforcement targeting cat>>, tail -N, sed -n, and head -N Bash invocations (routing to Read/Write tools) would be more effective than continued flagging",
+      "compound git mv chains (unit -31) represent a specific sub-pattern of compound_command_overreach worth tagging separately — mega-batch file-system operations with interdependencies (trash + git mv in same compound) are categorically more failure-prone than compute compounds; consider flagging git mv chains over 3 operations as requiring sequential execution"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 15
+  },
+  "sessions": [
+    [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      11052572
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      113064297
+    ],
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      5681878
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      9165514
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      13481925
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      1869832
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      16230572
+    ]
+  ],
+  "timestamp": "2026-05-23T23:30:48.857528Z",
+  "tokens_used": 26393,
+  "units_analyzed": 30,
+  "units_total": 132
+}

@@ -1,17 +1,16 @@
-<!-- i-dream project brief · 2026-05-23T01:00:40.518017+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-05-23T23:32:32.719955+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-Versable enhancement product — a full-stack web app (Next.js frontend + Python backend). Work is continuous-integration-heavy with strong shared-repo discipline and strict git hygiene.
+Versable enhancement-product is a full-stack web application (Next.js frontend + Python backend) with strict human-in-the-loop gates around git operations and a codebase that enforces environment/utility conventions throughout.
 
 ## Things to do (or keep doing)
-- **Always confirm before every individual `git commit` and `git push`** — one approval never covers the next; re-ask after every compaction or `/catchup` resumption
-- **Use project-defined utilities** (`isDevelopment`, `isProduction`, etc.) instead of inlining raw `process.env.NODE_ENV` comparisons — grep the codebase before writing env checks
-- **Apply env var conventions by layer**: frontend uses `"true"`/`"false"` strings; backend uses `1`/`0` — never cross-apply
+- **Always use existing environment utilities** (`isDevelopment`, `isProduction`, etc.) — never inline `process.env.NODE_ENV` comparisons; grep for the utility before writing any env check
+- **Use `true`/`false` string booleans for frontend env vars; use `1`/`0` for backend env vars** — never cross-apply
+- **Treat terse continuation messages (`yes`, `go ahead`, `next`) as authorize-work-only** — explicitly exclude git commit/push from what these signals can authorize
 
 ## Things to avoid
-- **Don't treat terse affirmations (`yes`, `ahead`, `next`) as git authorization** — they scope only to the current edit/search operation, never to commit or push
-- **Never write credentials or secrets to any file, note, checkpoint, or log** — not even scratch files or WAL entries — even if the user shares them inline for manual testing
-- **Don't inline raw env conditions when a named utility already exists** — always grep (`isDevelopment`, `isProduction`) before writing a new env check
+- **Never commit or push without fresh, explicit, per-operation approval in the current turn** — prior session approval, blanket "yes", or task completion do not count; ask every time
+- **Never write credentials, secrets, or tokens to any file, note, checkpoint, or commit** — not even scratch notes; treat inline session credentials as ephemeral-only
+- **Don't inline environment conditions when a named utility already exists** — using raw `process.env.NODE_ENV` when `isDevelopment` exists is a convention violation
 
 ## Open questions / known gaps
-- Terse-continue protocol structurally conflicts with per-push approval gate — long sessions with many "keep going" turns are high-risk for accidental pushes; no automated gate enforces this distinction at the tool call level yet
-- Context compaction causes approval-state decay; there's no reliable signal when a pre-compaction push approval expires — treat every post-compaction session as having zero carry-forward git permissions
+- The terse-continuation protocol and the git-push prohibition are structurally in tension — a systematic pressure exists to interpret "keep going" as authorization; this has triggered the push violation repeatedly and needs active suppression on every turn

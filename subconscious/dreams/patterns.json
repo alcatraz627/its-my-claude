@@ -8923,6 +8923,32 @@
     "last_seen": "2026-05-23T00:57:28.593838+00:00"
   },
   {
+    "id": "ad0c0f75-3176-4d4c-b839-df8ec45943ac",
+    "pattern": "When the answer to 'which specific files?' is effectively 'all files in directory X', the agent should state that directory-level summary upfront rather than enumerating individual files — enumeration without the summary creates false specificity and forces the user to discover the obvious answer themselves through tedious review.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-notion-sync",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-23T23:26:55.700048+00:00",
+    "last_seen": "2026-05-23T23:26:55.700048+00:00"
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13119,25 +13145,6 @@
     "valence": "positive",
     "confidence": 0.85,
     "category": "architecture",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "cedb55f4-79a6-4bf4-a78f-7641be51fe43"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-05T19:09:15.753159+00:00",
-    "last_seen": "2026-05-05T19:09:15.753159+00:00"
-  },
-  {
-    "id": "17c174f8-2d50-41a7-a59c-4e7508c76526",
-    "pattern": "Before adding a new test dependency, the agent should scan existing test files for the established testing pattern and conform to it rather than introducing a new library.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
     "source_sessions": [
       "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
       "2527f606-d551-49f6-b14a-b081914964a2",
