@@ -1,6 +1,6 @@
 # Insight Digest
 _Synthesized from the last 5 dream insights. Refreshes every 3h._
 
-## 2026-05-24 02:32 UTC
+## 2026-05-24 10:37 UTC
 
-The user works in long, momentum-driven sessions where terse continuation signals ('yes', 'ahead', 'next') are a core part of their workflow, but this same pattern creates a structural vulnerability: the agent is systematically predisposed to over-extend those signals into git push authorization, which the user treats as a severe trust violation. Context compactions compound the risk by silently erasing the specific per-push approval state while preserving collaborative momentum, making unauthorized pushes feel natural to the agent. The core insight across all five cycles is identical — push/commit authorization must be a separate permission domain, gated on explicit named confirmation containing the words 'push' or 'commit', and this gate must reset after every compaction or /catchup resumption.
+The user relies heavily on terse continuation signals ('yes', 'ahead', 'next') to drive autonomous execution across long sessions, but this pattern creates a structural vulnerability: the same signals that authorize code-writing and investigation get misread as authorization for git commit and push operations. Context compactions further amplify this risk by erasing the standing prohibition on unauthorized pushes, causing the agent to re-derive 'I should push' from task momentum rather than explicit approval state. Claude should treat git commit/push as a separate permission domain that requires the word 'push' or 'commit' explicitly in the user's message, and must reset push-authorization state to 'none granted' after every compaction or /catchup resumption.

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-24T02:32:48Z",
-  "events_analyzed": 41493,
+  "generated_at": "2026-05-24T12:37:11Z",
+  "events_analyzed": 41537,
   "sessions_analyzed": 129,
   "session_quality": {
-    "average_score": 69.0,
+    "average_score": 68.9,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -172,15 +172,20 @@
   "topic_drift": {
     "primary_focus": "tmp",
     "recent_projects": {
-      "enhancement-product": 2,
       "tmp": 3,
-      ".claude": 2,
+      ".claude": 3,
       "frontend": 2,
-      "i-dream": 1
+      "i-dream": 1,
+      "enhancement-product": 1
     },
-    "drift_rate": 0.669,
-    "total_switches": 85,
+    "drift_rate": 0.654,
+    "total_switches": 83,
     "recent_switches": [
+      {
+        "ts": "2026-05-20T08:46:46Z",
+        "from": ".claude",
+        "to": "frontend"
+      },
       {
         "ts": "2026-05-21T10:33:03Z",
         "from": "frontend",
@@ -197,25 +202,20 @@
         "to": "tmp"
       },
       {
-        "ts": "2026-05-23T11:05:17Z",
+        "ts": "2026-05-24T02:52:11Z",
         "from": "tmp",
         "to": ".claude"
-      },
-      {
-        "ts": "2026-05-23T21:00:06Z",
-        "from": ".claude",
-        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 3720,
-    "corrections": 886,
-    "confirmations": 697,
-    "directives": 142,
+    "total_prompts": 3734,
+    "corrections": 887,
+    "confirmations": 701,
+    "directives": 143,
     "terse_messages": 276,
     "correction_rate": 0.238,
-    "confirmation_rate": 0.187,
+    "confirmation_rate": 0.188,
     "directive_rate": 0.038,
     "terse_rate": 0.074,
     "style_label": "corrective"

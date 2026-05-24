@@ -816,3 +816,33 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (20): c6ea2b0e, bc59cf34, a76e1439, +17 more
 
 ---
+
+
+## Wake Cycle — 2026-05-24 05:08 UTC
+
+### Insight (conf=0.72)
+> Heavy session continuity usage (compaction, catchup, core-dump) amplifies the git-push-without-approval violation rate — the agent loses the standing prohibition across context boundaries and re-derives 'I should push' from task momentum rather than from explicit approval state.
+
+**Rule:** Always re-verify git-push approval status immediately after any context compaction or /catchup resumption, treating post-compaction state as 'no approval granted' by default.
+
+**Evidence:**
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude
+- _Sessions_ (91): c6ea2b0e, 2527f606, e42d4f08, +88 more
+
+---
+### Insight (conf=0.65)
+> The user's terse continuation style ('ahead', 'next', 'done') creates a trap where the agent over-generalizes 'continue autonomously' to include git push — the same signal that means 'keep coding' gets misread as 'ship it'.
+
+**Rule:** Always treat terse continuation signals as scoped to code-writing and investigation only — never extend autonomous-continue interpretation to git commit, push, or any externally-visible side effect.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (17): c6ea2b0e, bc59cf34, a76e1439, +14 more
+
+---

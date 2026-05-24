@@ -1,0 +1,56 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18351,
+    "correction_density": 0.06060606060606061,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3979553110189474,
+    "unit_count": 33
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~71% of tool-using units (10/14): adb2d57d-0 (ls -la x5, find x4, grep/rg piped via Bash throughout — 29 Bash invocations for system survey where Glob+Grep+Read were available), adb2d57d-2 (ls, find, rg, grep all via Bash compounds), adb2d57d-5 (echo+git+rg compounds, rg via Bash instead of Grep), adb2d57d-6 (find via Bash for git traversal), 2edcbebe-4 (cat|head via Bash, sed -n x2, ls compounds), 2edcbebe-6 (head, sed, ls, rg via Bash), 2edcbebe-7 (find, ls, head, sed -n, rg, grep all via Bash — available dedicated tools unused throughout), 2edcbebe-12 (ls compounds), 2edcbebe-13 (sed -n x4 via Bash for offset reads instead of Read with offset param), 2edcbebe-25 (Bash compound for orchestrator test); rate at 71% — within prior 52-83% band; twentieth+ consecutive cycle above 50%; no downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:WORSENING — adb2d57d-0: 7 consecutive compound Bash commands all fail (success:false at positions 1-7) before pivoting to decomposed per-operation retry at position 9; no intermediate diagnostic (env check, path probe, error read) between first failure and seventh — most severe single-unit compound-failure chain in recent history; adb2d57d-2: 8 consecutive Bash commands all fail (success:false, positions 1-8) before pivot to Read + simpler Bash at position 9; same structural absence of diagnostic pivot; 2 units in same session with severe instances vs prior 1-unit MCP-retry baseline; severity escalation confirmed",
+      "optimistic_edit_without_read:RECURRING:WORSENING — 2edcbebe-7: Edit NAMESPACE.md fails x2 consecutively with no Read pivot between first and second attempt, then Read → Edit succeeds; Edit LOOKUP.md fails → Read → Edit succeeds; Write skills/README.md fails → Read → Write succeeds — 3 distinct sub-instances in one unit, highest per-unit count observed; adb2d57d-0: Write clone-all.sh fails → Read → Write succeeds (1 sub-instance); 2edcbebe-6: Edit mcp-catalog.json fails → Read → Edit succeeds (1 sub-instance); total 5 sub-instances across 3 units vs prior 2-unit plateau — first confirmed escalation above plateau",
+      "compound_command_overreach:RECURRING:STABLE — adb2d57d-0: 8-operation mega-compound survey commands attempted in first 7 Bash calls; failure rate 7/7 (100%) before decomposition; adb2d57d-2: similar pattern with 8 failures; structural pattern identical to prior flagged 29d7d6be-31 and 5455871e-35; rate unchanged",
+      "re_edit_thrash:RECURRING:STABLE — 2edcbebe-13: Edit core-dump/SKILL.md fails (success:false) → Edit again (fails) → Edit again (succeeds); 3 consecutive edits to same file without intermediate Read pivot after first failure; 1 unit at prior 1-unit baseline; structurally unchanged"
+    ],
+    "calibration_score": 0.18,
+    "cross_references": [
+      {
+        "insight": "git-push-approval-reset-at-compaction-boundary",
+        "observation": "No git push violations observed in this batch — positive signal; dream insight not triggered across any of the 14 units analyzed"
+      },
+      {
+        "insight": "memory-deduplication-for-recurring-corrections",
+        "observation": "bash_retry_without_diagnosis and optimistic_edit_without_read are both recorded as RECURRING in events.jsonl but show no behavioral change; the insight about deduplication applies here — the atone record accumulates entries for these slugs without producing corrective behavior change, consistent with the 'recording the correction repeatedly without consolidating' failure mode the dream synthesized"
+      }
+    ],
+    "overconfident_count": 7,
+    "recommendations": [
+      "bash_retry_without_diagnosis is worsening — adb2d57d-0 and adb2d57d-2 both show 7-8 consecutive failures before any pivot; the compound-command failures are a signal to decompose and run a single diagnostic (command -v, path probe, env read) after the FIRST failure, not the eighth; this was already RECURRING in prior cycles and the MCP-retry variant remains unaddressed — both mechanisms now showing same non-pivot pattern in same session",
+      "optimistic_edit_without_read escalated from 2-unit plateau to 3 units with 5 sub-instances — 2edcbebe-7 alone has 3 distinct file targets all failing on first Write/Edit; pattern suggests the agent is not checking whether old_string uniqueness is satisfied before Edit, or whether target path exists before Write; a pre-flight Read before any Edit/Write to a file not Read in the same unit would eliminate most instances",
+      "shell_tool_preference_violations has held above 50% for twenty+ consecutive cycles with no downward trajectory — deprioritize general recommendations here as prior cycles have noted this repeatedly without improvement; flag only when a specific Glob or Grep substitution was clear and the Bash alternative was significantly more complex"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      33657
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      1979175
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      16582015
+    ]
+  ],
+  "timestamp": "2026-05-24T05:10:07.636429Z",
+  "tokens_used": 22764,
+  "units_analyzed": 14,
+  "units_total": 33
+}

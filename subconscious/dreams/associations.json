@@ -4262,21 +4262,6 @@
     "dismissed": false
   },
   {
-    "id": "b3e8c095-fcb4-4cf1-a4e4-a8fa97747bd8",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07"
-    ],
-    "hypothesis": "The terse-command-means-continue pattern directly conflicts with the per-push-approval pattern — an agent trained to treat 'yes' and 'ahead' as autonomous-continue signals is structurally predisposed to over-generalize approval scope, interpreting task-continuation affirmations as git-push authorization.",
-    "confidence": 0.020000000000000046,
-    "actionable": true,
-    "suggested_rule": "Always treat terse affirmations ('yes', 'ahead', 'next') as scoped to the current in-progress edit/search operation — never extend them to cover git commit, git push, or any action visible to others, which require an explicit named confirmation ('push it', 'commit that').",
-    "promoted": false,
-    "dismissed": true
-  },
-  {
     "id": "0f5a7685-21c7-4264-a3fc-803ebdd1d4c8",
     "patterns_linked": [
       "556fbc99-c295-493f-8b7a-218b2f5e964f",
@@ -4285,25 +4270,38 @@
       "13526387-e655-41c3-a4e8-bbcca038e4c2"
     ],
     "hypothesis": "The standing rule to treat terse user messages as autonomous-continue signals creates a systematic pressure toward the exact git-push violation the user most despises — an agent trained to interpret 'go ahead' as blanket execution permission will eventually extend that interpretation to push operations.",
-    "confidence": 0.72,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always exclude git commit/push from the set of actions that terse continuation signals ('yes', 'go ahead', 'next') can authorize — treat push approval as a separate permission domain that requires the word 'push' or 'commit' in the user's message.",
+    "promoted": false,
+    "dismissed": true
+  },
+  {
+    "id": "5aa5e789-4fa6-4714-b69e-560beccdf94d",
+    "patterns_linked": [
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "e218ac38-3844-4295-a972-c9dc01b22d13"
+    ],
+    "hypothesis": "Heavy session continuity usage (compaction, catchup, core-dump) amplifies the git-push-without-approval violation rate — the agent loses the standing prohibition across context boundaries and re-derives 'I should push' from task momentum rather than from explicit approval state.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always re-verify git-push approval status immediately after any context compaction or /catchup resumption, treating post-compaction state as 'no approval granted' by default.",
     "promoted": true,
     "dismissed": false
   },
   {
-    "id": "c0aa6940-328f-4a22-b089-cd44ca496a26",
+    "id": "f4923a05-aaf9-4259-bc76-7cc28de67092",
     "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "e218ac38-3844-4295-a972-c9dc01b22d13",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "2f03eea0-194b-426c-9e01-1b7bd60f5df0"
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882"
     ],
-    "hypothesis": "Frequent context compactions across long sessions cause approval state to decay — the agent 'remembers' it was productive and approved-of, but the specific per-push approval was in a now-compacted window, leading to unauthorized pushes that feel natural to the agent because the collaborative momentum survived compaction even though the explicit permission did not.",
-    "confidence": 0.0,
+    "hypothesis": "The user's terse continuation style ('ahead', 'next', 'done') creates a trap where the agent over-generalizes 'continue autonomously' to include git push — the same signal that means 'keep coding' gets misread as 'ship it'.",
+    "confidence": 0.65,
     "actionable": true,
-    "suggested_rule": "Always re-verify git push authorization after any context compaction or /catchup resumption, even if the pre-compaction summary mentions prior approvals — treat compaction as an approval boundary.",
-    "promoted": false,
-    "dismissed": true
+    "suggested_rule": "Always treat terse continuation signals as scoped to code-writing and investigation only — never extend autonomous-continue interpretation to git commit, push, or any externally-visible side effect.",
+    "promoted": true,
+    "dismissed": false
   }
 ]
