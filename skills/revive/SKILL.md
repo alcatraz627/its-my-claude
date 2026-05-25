@@ -87,14 +87,18 @@ Add a final "Open transcript file directly" option that just prints the path (us
 
 ## Phase 4 — Output the resume command
 
-For the picked transcript, the JSON entry has `transcript` (full path) and `session_id` (UUID). Print:
+For the picked transcript, the JSON entry has `transcript` (full path) and `session_id` (UUID).
+
+**Derive the `cd` target from the transcript's parent folder, NOT from the checkpoint's `project_root`.** `claude --resume` only finds a session when launched from the directory whose project-slug matches the transcript's folder. The folder name is the original launch cwd with every `/` replaced by `-`; decode it back (strip leading `-`, swap `-` → `/`) to get the directory to `cd` into. These two can legitimately diverge — a session launched from a repo root but working in a subdir records `project_root` as the subdir in the checkpoint, while its transcript still lives under the root's slug. Using the checkpoint's `project_root` then reproduces the "no conversation found" failure.
+
+Print:
 
 ```
 ─────────────────────────────────────────────────────
   Resume command (run in another terminal)
 ─────────────────────────────────────────────────────
 
-  cd <project>
+  cd <slug-decoded dir>
   claude --resume <uuid>
 
   Transcript:  <full path>
@@ -104,6 +108,15 @@ For the picked transcript, the JSON entry has `transcript` (full path) and `sess
 ```
 
 Do NOT attempt to exec. The user runs it themselves.
+
+### Gotcha — "no conversation found"
+
+When the user reports `claude --resume <uuid>` says *no conversation found*, the cause is almost always a **cwd / project-slug mismatch** — they launched from a subdirectory (or a sibling) of the directory that owns the slug. Diagnose and fix:
+
+1. The transcript path is `~/.claude/projects/<slug>/<uuid>.jsonl`. The `<slug>` is the launch cwd with `/`→`-`.
+2. Decode the slug to a real path and have them `cd` there, then re-run `claude --resume <uuid>`.
+3. If the positional UUID still fails, `claude --resume` (no UUID) from that directory opens a picker listing every session for that project — they select by summary.
+4. Last resort: `/catchup <checkpoint-file>` restores task context from the checkpoint summary instead of the full transcript.
 
 ## Tips for the user (in the output)
 

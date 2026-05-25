@@ -1,8 +1,17 @@
 ---
-version: 1
+version: 2
 phase: inventory
 model: sonnet
+subagent_type: general-purpose
 ---
+
+> DISPATCH NOTE (for the orchestrator): dispatch inventory sub-agents as
+> `general-purpose`, NOT `Explore`. The Explore agent type has a restricted
+> tool set and has been observed to hallucinate a "cannot write files due to
+> safety restrictions" refusal — then dump content inline instead of saving.
+> `general-purpose` has full Write access and does not exhibit this failure.
+> If any sub-agent returns a refusal ("cannot write", "safety restriction",
+> "unable to save"), retry once as general-purpose before accepting a gap.
 
 You are a code-change inventory agent. Inventory file-by-file. No themes, no speculation, no cross-chunk references.
 

@@ -1,0 +1,79 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18276,
+    "correction_density": 0.06349206349206349,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.35033626339989976,
+    "unit_count": 126
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~65% of tool-using units: -3 (grep -rn, grep -A2, grep -rln via Bash instead of Grep; ls+wc compound), -30 (grep -A 6 via Bash), -37 (cat+head via Bash instead of Read for lifecycle.py), -47 (ls, head -50 via Bash instead of Read; compound path probing), -54 (ls, cat, head-40 via Bash for redis/__init__.py instead of Read; ls compounds throughout), -57 (find, rg -ln, rg -n x6+ via Bash instead of Glob+Grep throughout), -58 (rg -n via Bash x2, grep -n via Bash, sed -i bulk edit via Bash instead of Edit tool), -64 (ls -la compound via Bash), -67 (python3 inline JSON parsing instead of file-tools MCP, find via Bash), -72 (grep -rnE, grep -nE, grep -rn via Bash throughout); rate consistent with prior 52-83% band; twenty-second+ consecutive cycle above 50%; no downward trajectory",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — 5 units with instances: -5 (list_services, list_workspaces all fail with no pivot after get_selected_workspace also fails), -6 (workspace select succeeds; then get_service, list_deploys, get_key_value, list_services, list_key_value, list_postgres_instances, get_service all fail — 7 consecutive failures no diagnostic pivot), -16 (workspace select succeeds; list_services, list_key_value, list_postgres_instances, get_service, list_deploys, get_key_value all fail — 6 consecutive failures), -33 (mcp__render__get_metrics called 10 consecutive times all success:false — most severe single-unit instance matching prior -33 cycle record), -65 (workspace select succeeds; list_services called x3 all fail — no diagnostic query between attempts); 5 units at or above prior cycle flagging; pattern structurally unchanged across render MCP permission-scope failures; select_workspace succeeds but service-level queries remain blocked with no intermediate scope or auth diagnostic",
+      "grep_hook_bypass:RECURRING:STABLE — direct grep or /usr/bin/grep via Bash in 6 units: -3 (grep -rn, grep -A2, grep -rln before switching to rg — early in unit, rg used later), -30 (grep -A 6 via Bash), -58 (grep -n 'from lib.redis.client import get_client' via Bash), -64 (/usr/bin/grep -nE invoked directly x3 — two fail success:false, one succeeds; deliberate /usr/bin/ prefix bypasses the hook), -71 (/usr/bin/grep -nE, /usr/bin/grep -rnE, /usr/bin/grep -nE x5+ throughout unit; consistent /usr/bin/ prefix pattern), -72 (/usr/bin/grep -rnE, /usr/bin/grep -nE, /usr/bin/grep -rn throughout); the /usr/bin/ prefix pattern is structurally identical to bc2715fa grep_hook_bypass pattern (9 units prior cycle); now confirmed recurring across multiple sessions",
+      "re_edit_thrash:RECURRING:WORSENING — 4 units with instances: -33 (Edit render-throughput-baseline.md fails success:false → Edit again succeeds; Edit render-read.sh x3 consecutive = 2 sub-instances), -37 (Edit structural-changes-deliberation.md fails x3 consecutive with no Read pivot attempted — agent resorts to creating structural-deliberations-pass-b.md as workaround instead of diagnosing failure; escalation: workaround-file creation is new behavior in this slug), -54 (Edit worker-overhaul-plan-v2.md fails x4 consecutive at positions 25-28 with no intermediate Read), -58 (Edit test_item_terminal_state.py x6 consecutive near-consecutive edits including multiple failures); 4 units matches bc2715fa high point; workaround-file-creation escalation in -37 is first observed instance of this failure mode within re_edit_thrash pattern; worsening confirmed",
+      "optimistic_edit_without_read:RECURRING:STABLE — 4 units: -6 (Edit compliments.md fails success:false → Read → Edit succeeds), -36 (Write /tmp/core-dump-data.json fails x2 → Write to different /tmp path fails → Read → Write succeeds; 3 sub-instances in sequence), -40 (Edit mistake-patterns.md fails → Read → Edit succeeds), -54 (4 consecutive Edit failures on worker-overhaul-plan-v2.md with no Read pivot); unit count at high end of prior 2-5 unit plateau; structurally unchanged",
+      "redundant_read_same_unit:RECURRING:STABLE — 1 unit: -51 (Read task_runner.py x2 consecutively then Read workerv2.py x2 consecutively; no offset variation between paired reads, no intervening edit between each pair; 4 total Reads producing 2 redundant-pair instances); unit count below prior 2-unit plateau; marginal improvement possible but pattern not eliminated",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 3 units: -3 (rg/grep/ls on wrong paths fail success:false at positions 10-12 consecutively before pwd+ls diagnostic at position 13 — late diagnostic, 3 failures before pivot), -36 (heredoc Write with /bin/mv fails success:false; two Write attempts fail before Read of existing file and then successful Write — 3 failures before diagnostic read), -67 (curl+python compound fails x2 consecutively with no intermediate error read; agent then pivots to write a script — faster recovery than prior -33 instance but still no diagnostic query between failures 1 and 2); 3 units at prior baseline; structurally unchanged",
+      "compound_command_overreach:RECURRING:STABLE — 2 units: -35 (render restart + multi-clause jq pipeline compounds; elaborate jq transforms with group_by, sort_by, sub chains; broadly successful but same structural density as prior flagged instances), -67 (set -a + . .env + curl + python3 inline all piped in single compound; shell for-loop with env-group updates; multiple multi-line python3 inline via Bash for JSON inspection instead of file-tools MCP); rate consistent with prior cycles"
+    ],
+    "calibration_score": 0.21,
+    "cross_references": [
+      {
+        "insight": "git-push approval evaporates at compaction boundaries — re-confirm after any context compaction",
+        "observation": "Unit -36 is the /core-dump unit for this session; no git push was attempted. The session shows no git push violations. Insight not violated but also not testable in this session; dream insight remains unconfirmed for this session scope."
+      },
+      {
+        "insight": "heavy session-continuity pattern (compactions, core-dumps) is structural root cause of git-push violations",
+        "observation": "Unit -36 explicitly invokes the core-dump skill, consistent with the heavy continuity pattern. No push violations observed downstream in this session, possibly because the session was still mid-implementation rather than at a 'done' boundary where the pattern typically fires."
+      },
+      {
+        "insight": "memory system lacks deduplication — same correction recorded multiple times dilutes signal",
+        "observation": "Unit -40 edits mistake-patterns.md directly (first attempt fails → Read → Edit succeeds). The pattern of editing mistake-patterns.md via Edit rather than /atone is itself a recurring deviation. No evidence of deduplication check before the edit. Insight partially confirmed: the agent wrote directly to mistake-patterns.md rather than routing through the atone consolidation system."
+      }
+    ],
+    "overconfident_count": 9,
+    "recommendations": [
+      "mcp_retry_without_diagnosis requires targeted intervention — 5 units in this session, including the severe 10-call unit-33 repeat from the prior session. The workspace select_workspace succeeds but all service-level queries fail silently. A diagnostic query (get_selected_workspace verification + service list with explicit scope check) should precede any get_metrics or list_services call. This is the highest-recurrence pattern not showing any improvement across 4+ sessions.",
+      "re_edit_thrash workaround-file-creation is a new escalation — unit-37 created structural-deliberations-pass-b.md as a workaround when Edit failed x3 on structural-changes-deliberation.md. This is a scope-expansion failure: when Edit fails repeatedly, the correct response is Read → identify old_string mismatch → fix the string, not create a parallel file. Flag this specific failure mode separately from generic re_edit_thrash.",
+      "grep_hook_bypass via /usr/bin/ prefix is structurally worsening — units -71 and -72 use /usr/bin/grep consistently and extensively (5+ calls each) with explicit path prefix. This is not a forgotten-to-use-Grep-tool case; it is deliberate bypass. The Grep tool was available. The /usr/bin/ prefix pattern is the same mechanism flagged in bc2715fa (9 units). No improvement across sessions."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      114587907
+    ],
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      5728995
+    ],
+    [
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      9171547
+    ],
+    [
+      "da6b4021-32cb-4567-a891-363342164344",
+      31183
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      14123633
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      2920086
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      16864305
+    ]
+  ],
+  "timestamp": "2026-05-25T00:55:47.177861Z",
+  "tokens_used": 27614,
+  "units_analyzed": 27,
+  "units_total": 126
+}

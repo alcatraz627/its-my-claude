@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-05-13T11:47:47.974958+00:00 · 14 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-24T21:30:49.352046+00:00 · 19 patterns / 10 insights -->
 ## What this project is about
-General-purpose personal assistant workspace for a developer maintaining 3+ concurrent long-running projects (iDream dashboard, simulations, data pipelines) across many sessions with frequent context compaction.
+General-purpose home directory work spanning multiple concurrent long-running projects (iDream dashboard, geopolitical simulation, SvelteKit pipelines). Sessions are heavily continuation-based with frequent context compaction.
 
 ## Things to do (or keep doing)
-- Run `/catchup` immediately on session start; identify active project via CWD before loading any context
-- Checkpoint proactively at tool #20 (not #30) — sessions here routinely exceed single-session context windows
-- Take screenshots to verify UI changes on dashboard work; visual diffs catch what code review misses
-- Continue autonomously on terse prompts ("keep going", "ahead") — user iterates fast after direction is set
+- Run `/catchup` at session start; auto-detect active project from CWD before loading context
+- Checkpoint with `/core-dump` at tool #20 (not #30) — these sessions hit compaction earlier than average
+- Prefer generic, reusable test patterns with consistent naming; verify each change independently before moving on
+- After any compaction, worktree switch, or continuation: run a state-verification pass (`git status`, process list, file existence) before any side-effecting op
 
 ## Things to avoid
-- Don't act on stale git/process state after any session resumption or compaction — run `git status` + verify file/process existence first
-- Don't inflate pattern confidence from a single session or sparse metadata; require two independent signals before treating something as a rule
-- Don't ask clarifying questions mid-continuation when the active task is obvious from context
-- Don't let /catchup fail silently — fallback chain: WAL → `_checkpoint.claude.md` → runtime-notes → ask user
+- Don't cross env var conventions: frontend booleans use `true`/`false`; backend uses `1`/`0` — never swap
+- Don't expose vars as `NEXT_PUBLIC_` (or client-bundle equivalents) unless they genuinely need browser access; flag proactively
+- Don't make architectural authority claims ("X is the source of truth for Y") without reading the actual schema/code first — name the file:line
+- Don't delete or consolidate a server/client component split before investigating why the split exists
 
 ## Open questions / known gaps
-- No defined fallback when WAL and checkpoint files are both missing on session resume — recovery path is ad-hoc
-- Pattern extraction for this project may be inflating confidence via repeated low-signal sessions (fire-and-forget continuations) rather than distinct occurrences
+- Context restoration overhead often exceeds actual work cost (18–70 tool calls just for `/catchup`); no mitigation in place for when WAL/checkpoint files are missing or corrupt
+- Cache invalidation blast radius (shared `revalidateTag` patterns) has surfaced repeatedly — unclear if a project-level convention for scoping cache keys exists

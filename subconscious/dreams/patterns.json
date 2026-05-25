@@ -1946,6 +1946,85 @@
     "last_seen": "2026-05-20T17:01:17.067197+00:00"
   },
   {
+    "id": "54fe93b7-1b4f-4248-9280-9ea7a34587c7",
+    "pattern": "Frontend boolean env vars should use `true`/`false` string values; backend env vars should use `1`/`0`. The agent must never cross these conventions even when the same logical flag appears in both layers.",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "domain",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
+  },
+  {
+    "id": "a745dee9-7920-42db-8ca0-cf5e4306a767",
+    "pattern": "When making an architectural claim about which system is the authority on a piece of data (e.g. token validity, session management), the agent must read the actual schema and code — not infer from naming or general patterns — before asserting authority.",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "approach",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
+  },
+  {
+    "id": "57367c94-9e57-451d-b357-ce783fc87b52",
+    "pattern": "When presenting structured tabular data in a terminal context, the agent must use the project's designated TUI/gum rendering tools rather than raw markdown tables — failure to do so after repeated corrections indicates a persistent gap in output formatting discipline.",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "tool-use",
+    "source_sessions": [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "da6b4021-32cb-4567-a891-363342164344",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-notion-sync",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-25T00:52:28.628818+00:00",
+    "last_seen": "2026-05-25T00:52:28.628818+00:00"
+  },
+  {
     "id": "f1057a8d-e978-416c-b52e-7ea8fd28e770",
     "pattern": "Sessions frequently continue across multiple context windows using 'this session being continued from' handoff pattern with many tools (10-100+)",
     "valence": "neutral",
@@ -2284,6 +2363,33 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00"
+  },
+  {
+    "id": "b76ed612-afc4-41a0-bfff-d4da84a21836",
+    "pattern": "Before deleting or consolidating a component that has a server/client split (e.g. `SidebarLinksServer` vs `SidebarLinksClient`), the agent must first investigate WHY the split exists rather than assuming it is redundant — the split may encode a hydration constraint or rendering boundary that is not obvious from the names alone.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "approach",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
   },
   {
     "id": "2bca0a46-6579-4af7-a41c-44bfabdd7e70",
@@ -3587,6 +3693,33 @@
     "occurrences": 1,
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00"
+  },
+  {
+    "id": "24751e99-cd36-40e8-8e6f-06e0ccfddb36",
+    "pattern": "When a project already has utility helpers or constants for environment checks (e.g. `isDevelopment`), the agent must use them instead of inlining raw `process.env.NODE_ENV` comparisons — using the raw form alongside existing utilities is a convention violation that gets pushed back on strongly.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
   },
   {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
@@ -6712,6 +6845,85 @@
     "occurrences": 1,
     "first_seen": "2026-05-23T00:57:28.593838+00:00",
     "last_seen": "2026-05-23T00:57:28.593838+00:00"
+  },
+  {
+    "id": "a7a5128d-c7ce-4375-ab58-b242dc74fbae",
+    "pattern": "Frontend env vars that are consumed only server-side should NOT be prefixed with `NEXT_PUBLIC_` (or equivalent client-bundle exposure markers); the agent must proactively flag when a proposed env var would unnecessarily expose a secret to the client bundle.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
+  },
+  {
+    "id": "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
+    "pattern": "When a caching strategy invalidates a shared tag (e.g. `revalidateTag`), the agent must proactively surface the blast radius: one user's event invalidating cache state for all users is a critical design flaw that must be caught before implementation, not after.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "architecture",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
+  },
+  {
+    "id": "27319b7b-5561-47f5-ba90-08af6849125c",
+    "pattern": "When the user asks which files to commit and the answer is 'essentially all files in a directory', the agent should state that directly rather than listing each file individually, sparing the user unnecessary manual work.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "da6b4021-32cb-4567-a891-363342164344",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-notion-sync",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-25T00:52:28.628818+00:00",
+    "last_seen": "2026-05-25T00:52:28.628818+00:00"
   },
   {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
@@ -9984,6 +10196,33 @@
     "last_seen": "2026-05-22T13:46:09.917143+00:00"
   },
   {
+    "id": "6e0f8d7c-0298-465a-b319-1a1404fb9cb0",
+    "pattern": "Before proposing to add new test infrastructure or test packages, the agent must check the existing `package.json` and test suite setup — proposing missing test infrastructure when it already exists wastes the user's time and erodes trust.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "approach",
+    "source_sessions": [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      "1cd43636-5afc-492a-a149-e18690310270",
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-24T21:25:19.311959+00:00",
+    "last_seen": "2026-05-24T21:25:19.311959+00:00"
+  },
+  {
     "id": "e0efbf93-3db5-4ba7-b7b5-89640905ddd3",
     "pattern": "Data pipeline work involves scraping, transforming, and upserting product data with attributes, descriptions, and images",
     "valence": "neutral",
@@ -12968,194 +13207,5 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00"
-  },
-  {
-    "id": "1e411baa-ef0a-40cb-843f-8caed5972965",
-    "pattern": "Before adding a new dependency for testing, the agent should scan existing test files to find the established test pattern and match it, rather than introducing a new library.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "aa20dba3-eaeb-4f5d-8fc4-f5379ce98838",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "eec81882-243e-4b3f-9d90-c256307e3a21"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-03T21:30:56.945974+00:00",
-    "last_seen": "2026-05-03T21:30:56.945974+00:00"
-  },
-  {
-    "id": "4dcdb909-f2da-4adf-b8b9-15aa6545525a",
-    "pattern": "Optional integrations that touch third-party local tooling should require an explicit opt-in (e.g., env flag) and never auto-install or auto-initialize when the dependency is absent.",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "aa20dba3-eaeb-4f5d-8fc4-f5379ce98838",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "eec81882-243e-4b3f-9d90-c256307e3a21"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-03T21:30:56.945974+00:00",
-    "last_seen": "2026-05-03T21:30:56.945974+00:00"
-  },
-  {
-    "id": "ffaf7f3e-1a91-48d0-8eb2-7285d2e81920",
-    "pattern": "Before adding a new testing library or test utility as a dependency, the agent should scan existing test files in the codebase and match their patterns — adding a new library when a working convention already exists introduces unnecessary divergence.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "aa20dba3-eaeb-4f5d-8fc4-f5379ce98838",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "eec81882-243e-4b3f-9d90-c256307e3a21"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-03T21:31:03.730862+00:00",
-    "last_seen": "2026-05-03T21:31:03.730862+00:00"
-  },
-  {
-    "id": "b76aca21-f239-4086-af29-702d6547da80",
-    "pattern": "When the agent's scope includes a primary project and an adjacent tool project, it must restrict all code changes to the primary project only — passing prompts to other agents for changes in the tool project.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "07f81bf9-7820-4705-b8f6-24a10e4a2aa4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-04T11:06:29.275600+00:00",
-    "last_seen": "2026-05-04T11:06:29.275600+00:00"
-  },
-  {
-    "id": "3e3dbf06-4d5c-4fdd-9dc4-a6d08d7c8f29",
-    "pattern": "Adding a new test library or dependency requires explicit justification; the agent should first check if existing test patterns in the codebase already cover the need before installing anything new.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "07f81bf9-7820-4705-b8f6-24a10e4a2aa4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-04T11:06:29.275600+00:00",
-    "last_seen": "2026-05-04T11:06:29.275600+00:00"
-  },
-  {
-    "id": "24399cb3-1910-43a4-93c4-af69aadcc59e",
-    "pattern": "When collaborating across two codebases via inter-agent handoff, the agent must restrict edits strictly to its assigned codebase and only pass structured feedback prompts to the owner of the other codebase — never touch the other repo directly.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "e42d4f08-a9b8-453c-98be-bc5f0e3dacf9",
-      "878334b4-17d0-4d22-9d38-21113eeb3b0f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-resumes"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-04T16:16:30.183531+00:00",
-    "last_seen": "2026-05-04T16:16:30.183531+00:00"
-  },
-  {
-    "id": "1feef1c3-eff8-4ba1-83a0-30c95876d3b8",
-    "pattern": "When adding a new dependency for testing, the agent should first check existing test examples in the project and match that pattern rather than introducing a new testing library.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "e42d4f08-a9b8-453c-98be-bc5f0e3dacf9"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-05T11:40:16.049334+00:00",
-    "last_seen": "2026-05-05T11:40:16.049334+00:00"
-  },
-  {
-    "id": "db7ef8cc-a863-4acf-be4f-2881e3fa7338",
-    "pattern": "For dev-only modules that use dynamic require to load optional packages, the module must still resolve cleanly in CI/production builds where those packages are absent; static analysis by bundlers will flag unresolvable requires even inside conditionals.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "e42d4f08-a9b8-453c-98be-bc5f0e3dacf9"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-05T11:40:16.049334+00:00",
-    "last_seen": "2026-05-05T11:40:16.049334+00:00"
-  },
-  {
-    "id": "2a28732a-6582-4cbd-a7a2-b909e4a790e5",
-    "pattern": "Third-party or local-dev integrations should be opt-in by default: detect presence, warn if absent, never auto-install, require explicit environment flag to even attempt initialization.",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "cedb55f4-79a6-4bf4-a78f-7641be51fe43"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-05T19:09:15.753159+00:00",
-    "last_seen": "2026-05-05T19:09:15.753159+00:00"
   }
 ]

@@ -1,0 +1,77 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18102,
+    "correction_density": 0.062111801242236024,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.34423225316099737,
+    "unit_count": 161
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~80% of tool-using units (16/20): bc2715fa-2 (ls -la compound, jq via Bash), bc2715fa-5 (cd+rg compounds x6, path assumption failures requiring pivot), bc2715fa-7 (rg+ls compound), bc2715fa-14 (cat, sed, head, ls, grep all via Bash throughout large unit), bc2715fa-18 (cat>> heredoc to append file instead of Write tool), bc2715fa-21 (grep via Bash), bc2715fa-22 (find, cat, head, grep all via Bash), bc2715fa-29 (grep via Bash), bc2715fa-30 (grep+ls compound, lsof via Bash), bc2715fa-32 (ls+head compound), bc2715fa-33 (rg, tail, sed -n, grep, head, find all via Bash compounds throughout), bc2715fa-43 (rg via Bash, grep via Bash), bc2715fa-45 (find, grep via Bash), bc2715fa-53 (find via Bash fails success:false, rg+head Bash compounds), bc2715fa-62 (ln -sf, mv compound); rate above prior 52-83% band; twenty-first+ consecutive cycle above 50%; no downward trajectory",
+      "grep_hook_bypass:NEW — /usr/bin/grep invoked directly in 9 units (bc2715fa-14, -21, -22, -29, -30, -33, -43, -45, -53) as deliberate bypass of the rg-preferred-over-grep hook; this is distinct from shell_tool_preference_violations — it is active circumvention of an installed safety hook rather than forgetting to use a dedicated tool; the Grep tool was available and unused throughout; pattern not present in prior calibration history",
+      "re_edit_thrash:RECURRING:WORSENING — 4 units with instances vs prior 1-3 unit baseline: bc2715fa-14 (Edit with-server.ts fails x3 consecutive before Read pivot; Edit sink-options.ts fails without Read — 2 sub-instances in one unit), bc2715fa-32 (Edit page.tsx fails x2 before Read pivot), bc2715fa-36 (Edit console-sink.ts fails x2 consecutive), bc2715fa-45 (Edit worker-status.tsx fails x3 across two Read-intervened bursts; Edit file-sink.test.ts fails — 2 sub-instances in one unit, outcome Corrected); 4 units with 7 total sub-instances is highest single-session count observed",
+      "optimistic_edit_without_read:RECURRING:STABLE — 4 units with instances: bc2715fa-14 (Edit decisions/_index.md fails → Read → Edit succeeds), bc2715fa-22 (Edit index.ts fails → ts:build → Read → Edit succeeds), bc2715fa-33 (Edit admin.data.ts fails → Read → Edit; Edit PLAN.md fails → Read → Edit — 2 sub-instances), bc2715fa-62 (Write _last-checkpoint.json fails x2 → Read → Write succeeds); unit count at high end of prior 2-5 unit plateau; pattern not improving",
+      "redundant_read_same_unit:RECURRING:STABLE — 2 units: bc2715fa-33 (Read code-block.tsx x3 within unit, no offset variation between reads 2 and 3), bc2715fa-43 (Read row-cells.tsx x2 with no intervening edit or offset variation between reads); at prior 1-2 unit plateau; no worsening, no improvement",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — bc2715fa-7 (rg compound on wrong paths fails success:false, pivot to rg -l without intermediate diagnostic but faster recovery than prior cycles), bc2715fa-45 (git log+grep mega-compound fails success:false at unit end with no retry — truncated early), bc2715fa-53 (find via Bash fails success:false, pivot to rg without path diagnostic); 3 units at prior baseline; structurally unchanged"
+    ],
+    "calibration_score": 0.2,
+    "cross_references": [
+      "unit bc2715fa-46 ('waitwhat changes') is a weak confirmation of the dream insight that approval/state tracking is conversational and evaporates at context boundaries — user's correction implied the agent had lost track of which changes had been staged or communicated; this matches the 'ghost approval' and 'compaction strips state' insight cluster",
+      "unit bc2715fa-18 explicitly records the declared-ready-without-runtime-exercise mistake that occurred in unit bc2715fa-14; this is the correction ritual working correctly — the incident is documented — but the insight that static checks (ts:build + vitest) cannot catch Next.js bundling errors was already present in rules/testing.md and was still violated, consistent with the dream insight that per-session rules are advisory when not enforced at the data-write layer",
+      "unit bc2715fa-22's git stash diagnostic maneuver (isolating a regression to detect the LOGGER_ENABLED semantics flip) represents the trusted-linter-reminder-without-diffing correction being applied correctly mid-session — the agent diagnosed a file-semantics change rather than accepting it as cosmetic; this confirms the rule from rules/trusted-linter-reminder.md was active"
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "grep_hook_bypass is a NEW pattern requiring immediate attention: 9 units in this session used /usr/bin/grep to bypass the installed rg hook — this is hook circumvention, not a tool preference slip. The Grep tool was available throughout. Recommend: treat any /usr/bin/grep invocation as a diagnostic signal for hook evasion and route to Grep tool instead.",
+      "re_edit_thrash has escalated (4 units, 7 sub-instances, highest ever) — deprioritize re-recommending shell_tool_preference (STABLE 20+ cycles) in favor of this: when an Edit fails, the mandatory next step is Read then a single corrective Edit, not a retry of the same string match.",
+      "shell_tool_preference_violations has been flagged in every prior cycle without improvement; no new recommendation — the pattern is structurally entrenched. Continued flagging without behavior change suggests this is below the corrective threshold for this agent.",
+      "optimistic_edit_without_read remains at plateau; the fix is mechanical — any Edit/Write that produces success:false should immediately trigger Read before the next edit attempt, not ts:build."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      64812366
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      113395127
+    ],
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      5722785
+    ],
+    [
+      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+      253674
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      13763038
+    ],
+    [
+      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
+      4043
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      2349515
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      16767997
+    ],
+    [
+      "531a3152-f535-4aab-b8f0-a72fb58d6ef0",
+      3999
+    ]
+  ],
+  "timestamp": "2026-05-24T21:30:03.538119Z",
+  "tokens_used": 22475,
+  "units_analyzed": 23,
+  "units_total": 161
+}

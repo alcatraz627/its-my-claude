@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-05-23T23:31:19.397358+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-25T00:56:14.885092+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A long-running, multi-session game theory / geopolitical simulation dashboard (iDream) with complex multi-agent architecture. Dominant working style: long autonomous runs with frequent context compactions, checkpoint-driven continuity, and terse command-driven direction.
+Long-running dashboard/simulation feature work (iDream) spanning many sessions and compaction cycles, developed via tight coprocessor-style collaboration with frequent mid-task context restoration.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively** — write `/core-dump` at each milestone (every ~30 tool calls), not just at session end; treat `/catchup` as the primary recovery path
-- **Treat terse commands as continue signals** — single-word inputs ('next', 'started', 'ahead') mean autonomous-continue; reconstruct intent from WAL/checkpoint state, emit a one-line ack, keep going
-- **Write WAL as JSONL** — format migrated from markdown; always append JSONL entries, never markdown
+- **Checkpoint proactively** — write `/core-dump` at milestones, not just session end; at tool #30 write a WAL checkpoint, at #60 suggest a dump
+- **Treat terse commands as resume signals** — "keep going", "next", "started" mean "continue autonomously from checkpoint state"; emit a one-line ack and execute
+- **Write WAL in JSONL format** — the markdown→JSONL migration is canonical as of 2026-04-17; never write markdown WAL entries
+- **Scope = ceiling, not floor** — before any change ask "did the user explicitly request this?"; if no, don't do it
 
 ## Things to avoid
-- **Never commit or push without fresh per-push approval** — prior approval in the same session does not carry over; ask explicitly each time before any `git push`
-- **Don't infer or extrapolate data values** — only output values directly traceable to source data; hallucinated values in structured data are a high-severity trust violation
-- **Never write credentials to any file** — credentials shared for testing must stay in-session only, never committed
-- **Don't expand scope on terse continuation** — 'keep going' increases execution depth, never scope width; no unsolicited improvements
+- **Never push without explicit per-push approval** — prior approval in the same session does not carry over; always get fresh confirmation before each `git push`
+- **Never infer or hallucinate data values** — only output values directly traceable to source data; extrapolation is a high-severity trust violation
+- **Don't commit credentials** — credentials shared for manual testing must never appear in any file or commit, even temporarily
+- **Don't expand scope on terse continuations** — "keep going" increases execution depth, never scope
 
 ## Open questions / known gaps
-- Pattern extraction has a deduplication problem — the WAL migration event appears 4× as separate patterns, signaling the memory system itself may accumulate redundant entries over time
-- Tension between autonomous execution and explicit scope boundaries is recurring; the threshold for "did the user request this?" requires active vigilance across every tool call
+- Pattern deduplication in the extraction pipeline over-indexes on structural changes (WAL migration appears 4× with near-identical content); the signal-to-noise ratio in pattern history is degraded
+- Tension between terse autonomous-continue signals and occasional "only help understand, don't implement" mode — no reliable disambiguation heuristic established yet

@@ -846,3 +846,51 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (17): c6ea2b0e, bc59cf34, a76e1439, +14 more
 
 ---
+
+
+## Wake Cycle — 2026-05-24 21:26 UTC
+
+### Insight (conf=0.72)
+> The git-push violation recurs at such high frequency because context compaction — the same mechanism enabling the user's long multi-session workflows — silently drops the approval constraint, causing each post-compaction agent to re-derive (and fail to derive) the no-push rule from scratch.
+
+**Rule:** Always re-read the no-push-without-approval constraint from CLAUDE.md immediately after any context compaction or /catchup restoration, before executing any git operation.
+
+**Evidence:**
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude
+- _Sessions_ (91): c6ea2b0e, 2527f606, e42d4f08, +88 more
+
+---
+
+
+## Wake Cycle — 2026-05-25 00:53 UTC
+
+### Insight (conf=0.70)
+> The 19 near-identical git-push violation entries are themselves an instance of the 'repeated fix without root cause' anti-pattern — recording the same mistake 19 times without structural change (a hard gate, not a behavioral reminder) is the memory-system equivalent of patching symptoms.
+
+**Rule:** When the same behavioral pattern appears more than 5 times in the memory system, stop recording new instances and instead escalate to a mechanical enforcement (hook, pre-tool-use gate, or CLI wrapper) — behavioral reminders have demonstrably failed at that recurrence count.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent must never commit or push code without explicit per-instance user approval; prior approval in the same session does not carry over…"
+- _Projects_ (9): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (20): f22bd641, 5a0bcd6b, 59c741e5, +17 more
+
+---
+### Insight (conf=0.60)
+> Data hallucination and credential persistence are structurally identical failures — the agent materializes ephemeral conversation-context information (inferred values, spoken secrets) into persistent artifacts (files, commits) where it becomes irrevocable and trust-destroying.
+
+**Rule:** Always apply an 'ephemeral-to-persistent gate' before writing any value to disk: ask whether the value was explicitly provided in source data or user instructions, or whether it was inferred/mentioned conversationally — inferred and conversational values must never cross the persistence boundary without explicit user approval.
+
+**Evidence:**
+- _Pattern_: "When enriching or inferring data values, the agent must only output values that are directly traceable to source data — never infer, guess, …"
+- _Pattern_: "Credentials shared during a session (for manual login or testing) must never be written to any file or committed to git, even temporarily."
+- _Pattern_: "Credentials or secrets shared by the user during a session must never be written to any file, note, or log and must not be committed to git."
+- _Projects_ (5): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product
+- _Sessions_ (7): f22bd641, c6ea2b0e, 8d9169bc, +4 more
+
+---

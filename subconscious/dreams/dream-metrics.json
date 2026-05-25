@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-24T12:37:11Z",
-  "events_analyzed": 41537,
-  "sessions_analyzed": 129,
+  "generated_at": "2026-05-25T07:12:14Z",
+  "events_analyzed": 41767,
+  "sessions_analyzed": 131,
   "session_quality": {
-    "average_score": 68.9,
+    "average_score": 68.7,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -83,21 +83,6 @@
     ],
     "bottom_sessions": [
       {
-        "session_id": "eca50a22-6179-4267-8e51-a9fa6470346e",
-        "project": "frontend",
-        "score": 57.0,
-        "tool_count": 266,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 0.015,
-        "efficiency": 5.0,
-        "prompts": 53,
-        "compactions": 1,
-        "duration_min": 1447.0,
-        "completed": true,
-        "start": "2026-05-20T13:54:13Z"
-      },
-      {
         "session_id": "7255ac7e-f62c-40e3-b624-dd143cd13fb3",
         "project": "frontend",
         "score": 56.9,
@@ -143,6 +128,21 @@
         "start": "2026-05-07T10:14:34Z"
       },
       {
+        "session_id": "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
+        "project": "i-dream",
+        "score": 49.1,
+        "tool_count": 11,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.091,
+        "efficiency": 3.7,
+        "prompts": 3,
+        "compactions": 0,
+        "duration_min": 0,
+        "completed": false,
+        "start": "2026-05-24T02:51:40Z"
+      },
+      {
         "session_id": "test-ev-01",
         "project": "",
         "score": 47.5,
@@ -173,50 +173,49 @@
     "primary_focus": "tmp",
     "recent_projects": {
       "tmp": 3,
-      ".claude": 3,
-      "frontend": 2,
-      "i-dream": 1,
-      "enhancement-product": 1
+      "i-dream": 2,
+      ".claude": 2,
+      "enhancement-product": 3
     },
-    "drift_rate": 0.654,
-    "total_switches": 83,
+    "drift_rate": 0.651,
+    "total_switches": 84,
     "recent_switches": [
       {
-        "ts": "2026-05-20T08:46:46Z",
-        "from": ".claude",
-        "to": "frontend"
-      },
-      {
-        "ts": "2026-05-21T10:33:03Z",
-        "from": "frontend",
-        "to": "i-dream"
-      },
-      {
-        "ts": "2026-05-21T13:42:28Z",
+        "ts": "2026-05-24T02:53:32Z",
         "from": "i-dream",
+        "to": ".claude"
+      },
+      {
+        "ts": "2026-05-24T12:57:21Z",
+        "from": ".claude",
         "to": "enhancement-product"
       },
       {
-        "ts": "2026-05-21T17:28:54Z",
+        "ts": "2026-05-24T12:58:28Z",
         "from": "enhancement-product",
-        "to": "tmp"
+        "to": ".claude"
       },
       {
-        "ts": "2026-05-24T02:52:11Z",
-        "from": "tmp",
-        "to": ".claude"
+        "ts": "2026-05-24T13:01:36Z",
+        "from": ".claude",
+        "to": "i-dream"
+      },
+      {
+        "ts": "2026-05-25T00:48:42Z",
+        "from": "i-dream",
+        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 3734,
-    "corrections": 887,
-    "confirmations": 701,
-    "directives": 143,
-    "terse_messages": 276,
-    "correction_rate": 0.238,
-    "confirmation_rate": 0.188,
-    "directive_rate": 0.038,
+    "total_prompts": 3774,
+    "corrections": 893,
+    "confirmations": 706,
+    "directives": 147,
+    "terse_messages": 281,
+    "correction_rate": 0.237,
+    "confirmation_rate": 0.187,
+    "directive_rate": 0.039,
     "terse_rate": 0.074,
     "style_label": "corrective"
   }

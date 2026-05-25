@@ -1,0 +1,37 @@
+{
+  "ts": "2026-05-25T09:38:58Z",
+  "session_id": "idream-felt",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260525-idream-felt.claude.md",
+  "insights": {
+    "worked": [
+      "**Felt-value framing as a filter.** Once the owner said \"features without felt",
+      "**Verify the consumer before building.** Repeatedly paid off: the bridge fed an",
+      "**Skeptical-review on every code change.** Caught genuinely important bugs the",
+      "**Parallel grounded audit agents** for the 9,554-line Swift file \u2014 each writing"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "`cargo install --path .` lag: the shell runs the installed binary; sync",
+      "`~/.claude` is NOT a git repo \u2014 atone manifest/prompt/dream-insights.sh changes",
+      "The harness staleness cache served a stale file once (the claude-audit request",
+      "Rate-limited mid-audit-fanout \u2192 switched to staggered one-agent-at-a-time."
+    ],
+    "notes": [
+      "**Two parallel dreaming engines** coexist: the OLD shell `subconscious/` daemon",
+      "The whole felt-value loop: mistakes \u2192 atone events \u2192 dream-pass/`dream-insights.sh`",
+      "**Per-push git approval is required every time** (owner is strict on this; it's",
+      "Owner preference (now in memory `feedback_felt-value-over-features`):"
+    ],
+    "feedback": []
+  },
+  "pending": [
+    "**USER (new Mac):** clone repo \u2192 `cargo install --path .` \u2192 execute",
+    "**USER (anytime):** activate the review \u2014 `i-dream review --add-calendar` +",
+    "**i-dream (next build, when ready):** the **widget rebuild Tier 0+1+2**",
+    "**i-dream (evidence-gated):** hook-graduation (`docs/21 \u00a76`) \u2014 only if `reflect`",
+    "**claude-audit (their side):** `heeded` telemetry enrichment (events show",
+    "**Cosmetic/unresolved:** stray uncommitted `i-dream-bar.app` binary+plist in"
+  ],
+  "tags": []
+}
