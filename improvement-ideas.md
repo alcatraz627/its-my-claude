@@ -310,3 +310,25 @@ When a Node.js `handleRequest(req, res)` function declares `const path = urlObj.
   the                                                                         
   session and self-cleans.                                                    
 
+
+  ## 2026-05-25 — cred-rgate-b8 (hook hygiene + atone tooling)                
+                                                                              
+  • **Disabling a hook is a two-edit operation:** the script AND its settings.
+  json registration. Renaming the script alone (e.g. *.disabled-by-claude)    
+  while a *synchronous* Stop/PreToolUse registration still points at it makes 
+  every invocation emit exit 127 / No such file or directory — strictly worse 
+  than leaving the hook on. Always: drop the registration in the same change, 
+  then smoke-test (echo '{"hook_event_name":"Stop"}' | sh -c '<registered-    
+  path>' → expect exit 0).                                                    
+  • **A "too noisy / too aggressive" complaint = tune down, not turn off.**   
+  Apply the smallest trigger change and stop unless the user explicitly says  
+  remove. Reassurance ("I generally trust claude") is not a removal mandate.  
+  (S3 atone over-corrected-tuning-request-into-disable.)                      
+  • atone.sh add --rca-content "$(cat file)"** mangles leading whitespace**   
+  (fails its own rca-lint with "N% leading whitespace"). Use --rca-file PATH  
+  instead — it cats inside the CLI and passes. (prop-20260525-132203-b4.)     
+  • **atone juror gate cuts both ways:** it prevented a *false* self-atone    
+  (the Anthropic-key incident wasn't this session's action — verified zero key-
+  assignment sites) and confirmed a *real* S3. Don't reflexively self-atone   
+  for an angry-user incident you didn't cause; verify involvement first.      
+
