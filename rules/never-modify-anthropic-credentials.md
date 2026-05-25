@@ -76,3 +76,4 @@ forbidden writes. Mute (you almost never should): `touch ~/.claude/.allow-cred-w
 
 ## Related
 - `rules/shell.md` · the cli-gating secrets guard · MANIFEST §8 (secrets are MANUAL + rotate)
+- Incident provenance: atone `mist-20260525-080503-e9` (`bulk-sync-without-secret-scan`) — the migration's secret-scan slip that surfaced this leaked key. The key-*change* that crashed all instances traces to the same migration surface (token-rotation scope), not to a session that read/mentioned the key.
