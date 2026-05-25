@@ -7,12 +7,14 @@
 #     blocks once per smell-signature, then steps aside (non-blocking reminder) so
 #     it can never trap. Mute: touch ~/.claude/.no-review-gate
 #
-#   Gate 2 (review-required): a SUBSTANTIAL unreviewed change (≥3 unreviewed code
-#     files, OR a catalogued smell in them, OR a new exported symbol) must be run
-#     through /skeptical-review before 'done'. Hooks can't dispatch the reviewer
-#     themselves, so this gates instead — persisting until the change-set is
-#     reviewed (the skill writes the marker via review-marker.sh) or muted.
-#     Mute: touch ~/.claude/.no-review-required
+#   Gate 2 (review-required): an unreviewed change carrying a concrete RISK
+#     signal — a catalogued recurring smell in the source, OR new exported API
+#     surface — should go through /skeptical-review before 'done'. NEVER fires
+#     on edit volume alone (a big pile of low-risk edits stays silent; that
+#     volume trigger nagged on report batches and was removed). Hooks can't
+#     dispatch the reviewer themselves, so this gates instead — persisting
+#     until the change-set is reviewed (the skill writes the marker via
+#     review-marker.sh) or muted. Mute: touch ~/.claude/.no-review-required
 #
 # Registered as a DIRECT settings.json Stop hook (not via the hook-orchestrator,
 # whose task stdout goes to /dev/null and so cannot carry a decision back).
