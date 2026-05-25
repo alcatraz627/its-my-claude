@@ -391,6 +391,15 @@
         ]
       },
       {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/guard-anthropic-credentials.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
