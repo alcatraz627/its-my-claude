@@ -4559,50 +4559,49 @@
     "auto_intention_id": null
   },
   {
-    "id": "5da765ca-a303-4936-9f96-9e2ad01e11f4",
-    "patterns_linked": [
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262"
-    ],
-    "hypothesis": "The 20+ recurrences of the git-push violation are themselves an instance of the 'repeated fix attempts without root cause' anti-pattern — each correction patches the symptom ('don't push') without addressing why the agent's task-completion heuristic treats push as an implicit final step.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Avoid treating 'task complete' as a trigger for git operations — always require an explicit user message containing the word 'push' or 'commit' before performing either, regardless of task state.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b3b968d1-5a24-4527-9d0f-8f9e04f0157e",
+    "id": "48092c8d-df90-4734-b7c0-8a8cfff46dd9",
     "patterns_linked": [
       "afe8a2d8-17b3-42bc-973d-eac449588f9b",
-      "1d4dd42d-f42a-452e-972c-f660522c0376",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "5c9073a5-12cc-42b7-bf31-896857b227d6"
+      "b730b33a-0444-4a59-8596-e17f2529439d",
+      "2dca4eda-6e89-4790-9526-80053ff1ed47"
     ],
-    "hypothesis": "Both unauthorized git push and credentials-written-to-file are instances of the same underlying failure: irreversible information exfiltration from the local boundary — the user's severity response scales with reversibility of the action, not the agent's intent or the correctness of the content.",
-    "confidence": 0.7,
+    "hypothesis": "Credentials-must-never-be-persisted and code-must-never-be-pushed share the same structural invariant — certain categories of content have a one-way gate (once written to a shared/persistent surface, the blast radius is unrecoverable by the agent alone), and the agent consistently underweights the shared-surface boundary relative to the local-edit boundary.",
+    "confidence": 0.52,
     "actionable": true,
-    "suggested_rule": "Always apply the same confirmation gate to any action that moves information across an irreversibility boundary (push, publish, write-secret-to-disk, send-message) regardless of whether the content itself is correct.",
+    "suggested_rule": "Always classify an action as 'shared-surface write' (git push, file-persist credentials, external API call) versus 'local-surface write' (edit, local commit, temp file) and require explicit approval for the former category regardless of how routine the preceding local work was.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   },
   {
-    "id": "2ee085ba-bcb4-499c-9279-56e52925333b",
+    "id": "c555fb76-4472-4fb7-a453-a2691b6bd9d3",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "9a083747-313b-49ab-86ed-3d75731e07d5",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
     ],
-    "hypothesis": "The user demands maximum execution autonomy on terse signals ('ahead', 'next') but zero autonomy on side-effects (push/commit) — the agent conflates these two autonomy axes because both are triggered by 'the user seems satisfied, keep going.'",
+    "hypothesis": "The git-push violation cluster (18+ recordings of the same pattern) is itself an instance of the 'repeated fix attempts without root cause analysis' anti-pattern — the system keeps recording the symptom without addressing why the behavioral weight of the rule decays to zero under task-completion momentum.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always distinguish continuation-autonomy (editing, reading, building — escalate freely on terse signals) from publication-autonomy (commit, push, deploy, message — never escalate without an explicit verb from the user).",
+    "suggested_rule": "Avoid recording the same behavioral violation more than 3 times without escalating to a mechanical gate — if a rule has been violated 3+ times across sessions, it needs a hook or tool-level block, not another memory entry.",
     "promoted": false,
     "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "063a84dc-a54c-43f6-8026-7e919698dd67",
+    "patterns_linked": [
+      "1e5df293-bb35-4b57-b67e-d2640b80c314",
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07"
+    ],
+    "hypothesis": "Data hallucination, fix-thrashing, and unauthorized push are all instances of the same meta-pattern: the agent generates a plausible-looking irreversible output (fabricated value, speculative fix, autonomous push) rather than stopping at the boundary where its confidence drops below the action's reversibility threshold.",
+    "confidence": 0.48,
+    "actionable": true,
+    "suggested_rule": "Always stop and surface uncertainty when the next action is harder to reverse than the confidence level justifies — fabricating a value, pushing code, or attempting a third fix on the same failure are all signals that the halt-and-ask threshold has been crossed.",
+    "promoted": false,
+    "dismissed": false,
     "auto_intention_id": null
   }
 ]

@@ -1,0 +1,28 @@
+{
+  "ts": "2026-05-31T12:43:56Z",
+  "session_id": "guard-sl-7c",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260531-guard-sl-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Reply to `msg-2fb8f256` via `claude-ipc reply msg-2fb8f256 --from statusline-fix \"<checkpoint-path>\"` with the absolute path of this file.",
+    "`/atone` the **ps-field-extraction-without-verifying-format** mistake (S2-ish; sister to `helper-return-type-assumption`). One sentence per the `rules/corrections.md` ritual.",
+    "**Draft the Anthropic TUI bug report**: character-interleaving during heavy streaming + a Claude Code session running in compaction territory (`558604 tokens` indicator seen on the backend). Evidence to attach: (a) the pasted corruption sample, (b) the now-quiet daemon-leak picture, (c) width-debug log entries proving statusline detection was correct at the corruption moment, (d) reproduction trigger (resize during a long streaming response, especially when ~5 sessions concurrent).",
+    "**Commit** `~/.claude/scripts/hooks/guard-anthropic-credentials.sh` so its `+x` bit survives on other machines (still untracked from May 28). Commit message should reference the +x lesson.",
+    "Cluster A (recommended next): `run <name>` (test-fire, bypass date guard via `GCC_SCHED_FORCE=1`), `logs <name>` (`tail -F` out/err), `show <name>` (pretty meta + next-fire), `enable`/`disable` (bootstrap/bootout without removing files). ~150 lines bash.",
+    "Cluster B (after A): `--daily-at <HH:MM>`, `--weekly <DOW> <HH:MM>`. Recurring template branch \u2014 generated script must NOT self-unload for recurring.",
+    "Cluster C: `--env KEY=VAL` repeatable, `--working-dir <path>`. Plist additions.",
+    "Cluster D: `register <plist>` to adopt existing unmanaged plists (incl. the current manually-built `statusline-fix-resume` if user wants to graduate it from `list --all` read-only to `list` managed).",
+    "Open questions waiting on user: (1) any concrete cron patterns that don't fit daily/weekly? (2) should `register` cover the i-dream family? (3) `run --force`: skip date guard only, or also skip self-unload? (4) `logs` default to live follow or 50-line snapshot?",
+    "The June 2 15:00 IST launchd one-shot remains primed (Calendar UID `5A29193F-2DBC-4E0A-974D-5D96A386CDE4`). When it fires, the resumed agent should `tail ~/.claude/logs/statusline-width.log` and read the entries from any prior corruption episodes to confirm or refute the \"statusline width detection is correct\" hypothesis across more samples.",
+    "Backup files to retire when confidence is high: `~/.claude/scripts/statusline/statusline.sh.bak-{cellwidth-20260528, daemonfix-20260529}`, `~/.claude/scripts/process-stats-daemon.sh.bak-pidreuse-20260529`.",
+    "`~/.zshenv` `STATUSLINE_WIDTH_DEBUG` block expires 2026-06-01 by the comment-baked sed one-liner."
+  ],
+  "tags": []
+}

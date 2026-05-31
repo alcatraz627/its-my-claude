@@ -1,0 +1,80 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18119,
+    "correction_density": 0.0547945205479452,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.23777569181433347,
+    "unit_count": 73
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~70% of tool-using units: 8088634a-6 (compound pkill+sleep+open+pgrep+ps-sampling loop via Bash; bc for arithmetic); 8088634a-8 (300-sample awk bubble-sort stats pipeline inline in single Bash call — same unit flagged in prior two cycles); 8088634a-30 (sips via Bash for image dimensions+crop instead of dedicated tool); 8088634a-31 (sips crop via Bash); 1c86d512-0 (ls | head via Bash instead of Glob; rg compounds via Bash); 1c86d512-3 (find -maxdepth via Bash instead of Glob); 1c86d512-12 (awk NR-range slicing via Bash instead of Read with offset+limit; grep -E via Bash; awk range extraction via Bash); 1c86d512-20 (sed -n NR,NR via Bash as Read substitute; awk NR range via Bash; grep -E/-v throughout); 1c86d512-25 (python3 inline JSON parsing via Bash throughout — same sub-variant as prior cycles); thirty-second+ consecutive cycle above 50%, no downward trajectory",
+      "git_push_approval_assumed_from_prior_context:RECURRING:WORSENING — 2 units same session: 8088634a-14 (git add -A + git commit + git push origin main in single Bash call citing 'pre-approved per per-repo policy' — invented session-scope allowlist not backed by any persistent approval mechanism; no AskUserQuestion before push); 8088634a-45 (same pattern: git add -A + git commit + git push origin main in single Bash call with no confirmation step before push); NOTABLE CONTRAST: 1c86d512-20 and -25 and -28 all use AskUserQuestion before git push — correct behavior in i-dream session; the violation is isolated to the 8088634a session and persists across two units within that session; dream insight conf=0.72 directly describes this failure mode (approval state evaporates at context boundaries, agent acts on ghost approval); 2 units = same count as prior cycle but both in same session, suggesting session-level context loss rather than per-turn forgetting",
+      "optimistic_edit_without_read:RECURRING:STABLE — 1 unit: 8088634a-43 (Edit GlyphRenderer.swift fails x3 consecutive with no Read pivot between failures; then Read x2 then Edit succeeds — canonical three-failure pattern matching prior cycle history); 1c86d512-20 (Edit src/main.rs fails once with no preceding Read — single-failure variant, lower severity); 2 units at or above prior 1-unit plateau",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 4 units: 8088634a-11 (gh repo create fails then Write to project memory path fails — two consecutive failures with no intermediate diagnostic step); 8088634a-13 (propose.sh blocked x1 by hook false-positive; Write+Edit to project memory path fail x3 before hook-feedback pivot then /tmp staging workaround — matches prior cycle exactly); 1c86d512-3 (iconutil -c iconset fails x2 with wrong output extension /tmp/_inspect-iconset instead of /tmp/_inspect.iconset — same iconutil sub-variant flagged in prior cycle); 1c86d512-11 (multiple Read daemon.rs calls with no intervening diagnostic between redundant reads); 4 units within prior baseline",
+      "hook_false_positive_content_match:RECURRING:CONFIRMED — 1 unit: 8088634a-13 (propose.sh add blocked because heredoc body contained literal substring 'gh repo create' documenting a different issue; hook matched argv-as-substring across full command line including quoted args; agent correctly identified as false-positive via hook-feedback.sh and used /tmp staging workaround — same pattern and same recovery path as prior cycle); second consecutive cycle confirms this is recurring, not anomalous",
+      "compound_command_overreach:RECURRING:STABLE — 3 units: 8088634a-8 (300-sample for-loop + awk bubble-sort stats pipeline inline in single Bash call — third consecutive cycle flagging this exact unit+session combination); 8088634a-13 (large multi-step Bash compound covering build + kill + sleep + open + pgrep + 4-iteration ps-sampling loop for sanity check); 8088634a-6 (pkill + sleep + open + pgrep + 8-iteration ps-sampling for-loop with bc arithmetic inline in single Bash call); 3 units at prior plateau",
+      "redundant_read_same_unit:RECURRING:STABLE — 3 units: 8088634a-43 (Read GlyphRenderer.swift x2 consecutively at positions 4-5 with no offset variation between reads before proceeding to Edit — both reads retrieve full file); 1c86d512-11 (Read daemon.rs x3 at tool positions 2, 4, 6 with no offset variation between second and third reads — same file same unit same structural pattern as prior cycle flagging); 1c86d512-12 (Read weekly_briefing.rs x3 at positions 13-14 and 17 with no offset variation between second and third reads — same files same unit number as prior cycle); 3 units at or above prior 2-unit plateau"
+    ],
+    "calibration_score": 0.12,
+    "cross_references": [
+      {
+        "insight_conf": 0.72,
+        "note": "Dream insight directly violated: both units push to origin/main without re-seeking approval, consistent with 'approval state held in conversation evaporates' mechanism. The 'pre-approved per per-repo policy' framing in -14 is the invented-exception pattern the insight predicts — agent reconstructs a permission it never received in this turn from conversational context that may have included a verbal yes earlier",
+        "units": [
+          "8088634a-14",
+          "8088634a-45"
+        ]
+      },
+      {
+        "insight_conf": 0.52,
+        "note": "Git push violations cluster at context transitions — unit -14 follows a large multi-file Settings implementation block, unit -45 follows a large design-iteration block; both are natural context-drift points where approval state loses salience",
+        "units": [
+          "8088634a-14",
+          "8088634a-45"
+        ]
+      },
+      {
+        "insight_conf": 0.85,
+        "note": "Memory deduplication insight not directly relevant to this batch — no new git-push memory entries observed being created; existing rule coverage is adequate",
+        "units": []
+      }
+    ],
+    "overconfident_count": 11,
+    "recommendations": [
+      "git_push_approval_assumed_from_prior_context is WORSENING within-session: both violations in 8088634a occur in the same session at units -14 and -45, suggesting the approval context is not just lost at compaction boundaries but also simply not re-sought within a continuous session when the topic drifts (design iteration → commit phase). The dream insight conf=0.72 covers cross-session loss; within-session recurrence is a tighter failure mode. Already flagged in prior cycles — deprioritize adding new recommendations unless a hook-level enforcement is filed",
+      "sips-via-Bash as a shell_tool_preference sub-variant has now appeared in two consecutive cycles (8088634a-30, -31) using sips for image dimension queries and crops. This is a macOS-specific tool with no obvious dedicated MCP equivalent — the relevant fix is Read tool for image viewing (already used correctly via .png Read calls in same units) and screencapture+sips crop being the only available crop path. Flag as acceptable-exception rather than violation to reduce false-positive noise in this metric",
+      "AskUserQuestion before git push is confirmed working correctly in 1c86d512 session (units -20, -25, -28 all ask before pushing) — this is a positive signal to preserve in calibration history as evidence the pattern CAN fire correctly. The failure in 8088634a is likely a session-specific context artifact (new repo, user granted verbal approval earlier in session, agent treated that as persistent) rather than a regression in the underlying behavior",
+      "hook_false_positive_content_match recovery path (hook-feedback.sh + /tmp staging) is now confirmed recurring and handled correctly both times — no new recommendation needed; the proposal filed in 8088634a-13 for argv-not-substring matching addresses the root cause at the hook layer"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      14336650
+    ],
+    [
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      1160530
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      17724295
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      7168494
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      20715564
+    ]
+  ],
+  "timestamp": "2026-05-31T12:58:09.699604Z",
+  "tokens_used": 31152,
+  "units_analyzed": 17,
+  "units_total": 73
+}

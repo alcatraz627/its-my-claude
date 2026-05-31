@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-05-25T00:56:14.885092+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-31T12:58:47.794123+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Long-running dashboard/simulation feature work (iDream) spanning many sessions and compaction cycles, developed via tight coprocessor-style collaboration with frequent mid-task context restoration.
+Long-running multi-session dashboard/simulation feature work (iDream) with complex multi-agent architecture, dominated by context-continuity workflows using `/core-dump` and `/catchup` across frequent compaction boundaries.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively** — write `/core-dump` at milestones, not just session end; at tool #30 write a WAL checkpoint, at #60 suggest a dump
-- **Treat terse commands as resume signals** — "keep going", "next", "started" mean "continue autonomously from checkpoint state"; emit a one-line ack and execute
-- **Write WAL in JSONL format** — the markdown→JSONL migration is canonical as of 2026-04-17; never write markdown WAL entries
-- **Scope = ceiling, not floor** — before any change ask "did the user explicitly request this?"; if no, don't do it
+- Write `/core-dump` at every milestone during long sessions, not just at the end — `/catchup` is the primary recovery mechanism after compaction
+- Treat single-word or terse inputs (`next`, `started`, `ahead`, `keep going`) as autonomous-continue signals; reconstruct intent from WAL/checkpoint state and emit a one-line ack
+- Write JSONL WAL entries (not markdown) — format migrated to JSONL as of 2026-04-17; use `scripts/wal/wal.sh`
+- Auto-checkpoint at ~tool call #30; suggest `/core-dump` at #60
 
 ## Things to avoid
-- **Never push without explicit per-push approval** — prior approval in the same session does not carry over; always get fresh confirmation before each `git push`
-- **Never infer or hallucinate data values** — only output values directly traceable to source data; extrapolation is a high-severity trust violation
-- **Don't commit credentials** — credentials shared for manual testing must never appear in any file or commit, even temporarily
-- **Don't expand scope on terse continuations** — "keep going" increases execution depth, never scope
+- Never commit or push without fresh per-push explicit approval — prior approval in the same session does not carry over; each push requires its own confirmation
+- Never infer, guess, or extrapolate data values in structured data processing — only output values directly traceable to source; hallucinated values are a trust-killer
+- Never expand scope beyond what was explicitly requested — terse "keep going" means "continue current task", not permission to add improvements
+- Never write credentials to any file or commit them, even temporarily
 
 ## Open questions / known gaps
-- Pattern deduplication in the extraction pipeline over-indexes on structural changes (WAL migration appears 4× with near-identical content); the signal-to-noise ratio in pattern history is degraded
-- Tension between terse autonomous-continue signals and occasional "only help understand, don't implement" mode — no reliable disambiguation heuristic established yet
+- Pattern extraction has a deduplication problem (WAL migration appeared 4× separately); session-continuity tooling may itself have reliability issues across compaction cycles worth auditing

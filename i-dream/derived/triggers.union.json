@@ -57,7 +57,7 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-151842-04"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260530-142316-2d"
   },
   {
     "id": "trig-disproportionate-fix-without-measuring-cost",
@@ -253,7 +253,7 @@
     "id": "trig-sub-agent-material-output-left-in-conversation-only",
     "from_slug": "sub-agent-material-output-left-in-conversation-only",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Sub-agent material output left in conversation only",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -288,16 +288,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#aff-20260529-115830-e9"
-  },
-  {
-    "id": "trig-honor-agent-vs-user-category-boundary",
-    "from_slug": "honor-agent-vs-user-category-boundary",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Separated agent-action timeline from user-response when designing an analytic table",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260516-002517-83"
   },
   {
     "id": "trig-intelligent-disobedience-over-sycophancy",

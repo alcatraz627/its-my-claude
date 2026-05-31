@@ -1,17 +1,17 @@
-<!-- i-dream project brief · 2026-05-30T17:04:19.723429+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-05-31T12:58:34.739682+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A system monitoring tool (likely Python backend + Node/TUI frontend) with pipeline architecture, circuit breakers, and worker processes. Work style is iterative with strong TUI/gum presentation conventions and precise commit communication.
+A system monitor / pipeline project in Python with a Node/TUI frontend layer, working style is terminal-first with gum/TUI formatted output and disciplined git hygiene.
 
 ## Things to do (or keep doing)
-- **Always use gum/TUI tools** for tabular output in chat — raw markdown tables are a persistent compliance failure here (6+ recurrences)
-- **State commit scope completely** — if the answer is "all of `backend/`", say that directly; partial file lists that force follow-up questions are rejected
-- **Define constants inline** when introducing them in reports or docs — name + purpose + default + valid range, never name-drop without explanation
-- **Scope circuit breakers per pipeline module**, not per shared external dependency — flag blast-radius when scoping to a shared resource
+- **Always use gum TUI tools** for tabular output in chat — never raw markdown tables; this is a persistent compliance gap with strong user frustration
+- **State commit scope directly** — if the answer is "all of `backend/`", say that; never give a partial file list that forces follow-up questions
+- **Define constants inline** when first introduced in any doc or report — name + explanation, never just the name
+- **Consolidate imports at file top** — inline/function-level imports are a repeated violation that draws strong pushback
 
 ## Things to avoid
-- **Don't use inline imports** — top-of-file only; this is a strong persistent frustration, not a style preference
-- **Don't patch the definition namespace in Python tests** — patch where the consumer module looks up the name, not where the symbol is originally defined
-- **Don't name a config constant in a doc without defining it** — "WORKER_MAX_DEFER_COUNT" with no explanation is worse than omitting it
+- **Don't present markdown tables** in session output when gum tools are available — this is a 6th-recurrence violation, treat it as a hard rule
+- **Don't assume git push permission is global** — user grants push access repo-by-repo; always confirm for each new repo
+- **Don't name-drop config values without defining them** — `WORKER_MAX_DEFER_COUNT` without "what it does" is insufficient; always explain inline
 
 ## Open questions / known gaps
-- Recurring gum/TUI compliance gap suggests the tool integration may not be consistently available or the detection heuristic is unreliable — verify gum is on PATH at session start before committing to TUI output
+- Gum/TUI tool usage keeps recurring as a compliance failure — may need a project-level hook or CLAUDE.md reminder to enforce it mechanically rather than relying on agent memory

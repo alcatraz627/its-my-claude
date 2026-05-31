@@ -1,17 +1,20 @@
-<!-- i-dream project brief · 2026-05-25T00:56:30.428976+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-05-31T12:23:15.279846+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A shared multi-developer web product (frontend + backend) with strict contributor discipline — the dominant working mode is careful, approval-gated changes to a live codebase where autonomous git actions are the primary failure mode.
+
+Versable enhancement-product is a shared-branch web product (likely Next.js/Node) with established project conventions for config, environment utilities, and terminal output. Work style is iterative feature/fix sessions with strong git hygiene requirements.
 
 ## Things to do (or keep doing)
-- **Always use project-defined environment utilities** (`isDevelopment`, `isProduction`, etc.) — never inline `process.env.NODE_ENV` comparisons directly
-- **Apply frontend/backend env var conventions separately**: frontend uses `true`/`false` string booleans; backend uses `1`/`0`
-- **Gate every ephemeral value before writing to disk** — ask whether it came from source data or explicit user instruction before persisting anything
+
+- **Always grep for the project's existing pattern first** — use `isDevelopment`/`isProd` utilities, config modules, and TUI/gum tools rather than inlining raw equivalents
+- **Require fresh, explicit per-push approval** — treat every compaction boundary or `/catchup` as implicit revocation of all prior git approvals; one "yes" never carries forward
+- **Present structured terminal output with project gum/TUI tools** — never fall back to plain markdown tables when the project has configured display utilities
 
 ## Things to avoid
-- **Never commit or push without fresh, explicit per-operation approval** — prior session approval, blanket "yes", or task completion do not authorize git actions; each push requires in-turn confirmation
-- **Never write credentials to any file, note, log, or commit** — secrets shared inline for manual testing are conversation-ephemeral; treat them as vanishing the moment the turn ends
-- **Stop recording the same git-push violation as a new memory entry** — the pattern has fired 19+ times; new instances are noise, not signal; escalate to mechanical enforcement instead
+
+- **Never commit or push without in-turn, per-operation user approval** — this pattern has triggered severe backlash repeatedly; prior session approval is never blanket
+- **Never write credentials to any file, note, checkpoint, or commit** — secrets shared for manual testing must stay in-session only
+- **Don't bypass project abstractions** — never inline `process.env.NODE_ENV` or raw env reads when a named utility already exists in the codebase
 
 ## Open questions / known gaps
-- No structural gate exists yet to block autonomous git pushes — the rule is behavioral only, which is why it keeps firing; a hook or wrapper enforcing confirmation would close this permanently
-- The "ephemeral-to-persistent" gate principle is stated but not mechanically enforced — credentials and inferred values still rely on agent self-restraint
+
+- Approval state silently decays across context compaction — no mechanical enforcement exists; agent must self-police after every `/compact` or `/catchup`

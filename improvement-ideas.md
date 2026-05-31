@@ -338,3 +338,53 @@ When a Node.js `handleRequest(req, res)` function declares `const path = urlObj.
 When a hook script is created via the Write tool and wired into `settings.json` as a bare `command` (no `bash` prefix), the OS execs it directly and fails with `Permission denied` because Write produces mode 644. Result: the hook never runs and spams non-blocking errors on every matching tool call. Worse, if the hook IS a guardrail (like `guard-anthropic-credentials.sh`), the protection is silently advisory.
 
 **Apply:** when creating any hook script, immediately `chmod +x` it AND `git add` it in the same step so the executable bit survives across machines. Sister pattern to `rules/skill-spec-update-not-honored-by-running-session.md` — a spec/wiring change without a data-path-level enforcement check is advisory-only. Consider a pre-commit or PreToolUse hook that flags new files under `scripts/hooks/` lacking +x.
+
+  ## 2026-05-31 — Heredoc strips Swift \(...) interpolation even with single- 
+  quoted delimiter                                                            
+                                                                              
+  Tried writing a Swift test to /tmp/sysmon-fmt-check.swift with              
+  cat > file <<'SWIFT' ... SWIFT. Per POSIX, single-quoted heredoc            
+  delimiter should suppress all expansions and preserve backslashes           
+  literally. In this shell environment (zsh, macOS), the backslashes in       
+  Swift string interpolation \(name) were stripped — the file landed with     
+  literal (name) text, producing useless output on swift run.                 
+                                                                              
+  **Lesson:** for any file with shell-meta sequences (\(, $(, backslash       
+  escapes), use the Write tool directly instead of heredoc. The Write tool    
+  treats the content as opaque bytes; heredoc does not, even with             
+  single-quoted delimiter in some shells.                                     
+                                                                              
+  **Diagnostic:** the Swift compiler warned immutable value 'label' was       
+  never used — symptom of \(label) becoming the bare token (label)            
+  after the backslash was eaten.                                              
+
+
+  ## 2026-05-31 — audit-recon-7c (migration git/perms hardening)              
+                                                                              
+  • **The migration exec-bit trap:** rsync -a preserves file modes but git    
+  clone/git pull restores the *committed* mode. A chmod +x applied on disk but
+  never committed survives a file-copy migration yet dies on the next         
+  clone/pull — silently re-breaking a bare-path hook. Fix: when               
+  creating/fixing a hook, stage the mode (git add after chmod, or git update- 
+  index --chmod=+x) and verify git ls-files -s shows 100755. Verify origin's  
+  mode with git ls-tree origin/main <path>.                                   
+  • **Verify a merge by diffing back, not by absence of conflict markers.** A 
+  clean 3-way merge with no markers can still silently drop content when a    
+  "take theirs" policy hits a curated file both sides grew. After merging, git
+  diff <local-snapshot>..<merged> -- ':!<daemon-state>' and eyeball the       
+  removals. Superset check (+N/-0) tells you take-local is lossless.          
+  • permissions.deny** substring globs are read-blocking tyranny.** Bash(*    
+  /dev*) blocks ANY command containing  /dev — reads, args, even an           
+  echo/commit-message mention. Prefer a precise PreToolUse hook that matches  
+  write *forms* (> >> tee dd rm chmod/chown -R) and de-quotes the command     
+  first so paths inside string literals aren't matched.                       
+  • **Cache split:** permissions.deny is read at session-start (cached; edits 
+  apply next session) but PreToolUse **hook scripts are re-read per tool      
+  call** (edits apply immediately). Removing a deny rule won't help the       
+  current session; a new/edited hook will.                                    
+  • **Stop-hook **decision:block** is the only server-independent, no-        
+  injection way to auto-continue a TUI.** Bare Ghostty + no tmux + macOS      
+  removing TIOCSTI = external input injection is impossible. A per-session opt-
+  in Stop hook with a consecutive-error streak cap (resets on clean turn)     
+  gives safe error-recovery without keystroke automation.                     
+

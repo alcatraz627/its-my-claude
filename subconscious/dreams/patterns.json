@@ -7673,6 +7673,61 @@
     ]
   },
   {
+    "id": "1a05c6f6-487e-4f81-8d1d-de48fe52fec8",
+    "pattern": "The user grants git push permissions repo-by-repo, not globally — each new repository needs an explicit per-repo grant before the agent auto-pushes.",
+    "valence": "positive",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "c215307d-4557-4310-a6e0-c128dc5a25d2",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-31T12:19:18.005053+00:00",
+    "last_seen": "2026-05-31T12:19:18.005053+00:00",
+    "occurrence_history": [
+      "2026-05-31T12:19:18.005053+00:00"
+    ]
+  },
+  {
+    "id": "4b200823-84f1-4636-9400-fc5c7faa9611",
+    "pattern": "Git push permission granted for one repo does not generalize to other repos; the user grants push access repo-by-repo and each session requires explicit confirmation for new repos.",
+    "valence": "neutral",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-31T12:55:33.511377+00:00",
+    "last_seen": "2026-05-31T12:55:33.511377+00:00",
+    "occurrence_history": [
+      "2026-05-31T12:55:33.511377+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -13774,56 +13829,6 @@
     "valence": "negative",
     "confidence": 0.85,
     "category": "tool-use",
-    "source_sessions": [
-      "9dbd1360-5f37-49a0-8c4e-fb4cb26ce417",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "354d0079-1c0d-43ae-8671-6605d0a0f043",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "3fad6b88-13af-495f-802a-26110c36e2f5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T20:55:48.416999+00:00",
-    "last_seen": "2026-04-29T20:55:48.416999+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "1bdeaf88-2749-4320-8ed7-495d41d99f13",
-    "pattern": "Slack MCP access fails intermittently and requires diagnosis (installation check, token validation) before assuming the MCP server is functional",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "9dbd1360-5f37-49a0-8c4e-fb4cb26ce417",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "354d0079-1c0d-43ae-8671-6605d0a0f043",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "3fad6b88-13af-495f-802a-26110c36e2f5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T20:55:48.416999+00:00",
-    "last_seen": "2026-04-29T20:55:48.416999+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "50801316-be53-4a72-9529-40d10834b803",
-    "pattern": "UI design iterations require browser verification; multiple rounds of visual feedback were needed before acceptance, suggesting code-only verification is insufficient",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
     "source_sessions": [
       "9dbd1360-5f37-49a0-8c4e-fb4cb26ce417",
       "5a0bcd6b-0c99-4759-b653-13ccfb801f63",

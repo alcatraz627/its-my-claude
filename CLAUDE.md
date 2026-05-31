@@ -28,7 +28,7 @@ Never Glob/Grep from `~/` — resolve to project root first. **`trash` not `rm`*
 
 ### Git: frequent commits, public default, no main push
 
-Commit after each logical unit, before area switch, before risky ops, every ~15-20 min of work. Push every 2-3 commits. **Never push to main without fresh approval** — one approval is not blanket. Create GitHub repos as **public by default** (`gh repo create --public`). Don't commit: `.claude/wal.*`, `_*.claude.md`, `shared/locks/`. Full detail: `rules/git.md`.
+Commit after each logical unit, before area switch, before risky ops, every ~15-20 min of work. Push every 2-3 commits. **Never push to main without fresh approval** — one approval is not blanket. Create GitHub repos as **public by default** (`gh repo create --public`). Don't commit: `.claude/wal.*`, `_*.claude.md`, `shared/locks/`. Full detail: `rules/git.md`. **Committing THIS repo (`~/.claude` → `its-my-claude`): follow `~/.claude/COMMIT.md`** — mandatory secret-scan BEFORE `git add`, and it's multi-session so fetch + rebase-if-behind before push.
 
 ### Comments are for humans first
 

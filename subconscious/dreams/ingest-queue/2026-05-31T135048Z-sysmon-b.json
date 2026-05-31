@@ -1,0 +1,44 @@
+{
+  "ts": "2026-05-31T13:50:48Z",
+  "session_id": "sysmon-bar-v2-80",
+  "project_root": "/Users/alcatraz627/Code/Claude/sys-monitor",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/sys-monitor/_20260531-sysmon-bar-v2-80.claude.md",
+  "insights": {
+    "worked": [
+      "**Class-not-instance fix scope.** Reviewer flagged one symptom (GB tier",
+      "**Persisting sub-agent output to disk immediately.** The reviewer agent's",
+      "**Skeptical reviewer + structural-claim discipline.** Before applying fixes I",
+      "**Pre-flight commitlint awareness.** The first commit attempt used `polish(`"
+    ],
+    "didnt_work": [
+      "**Heredoc with `<<'SWIFT'` and Swift `\\(...)` interpolation.** Even with",
+      "**Initial `ScheduleWakeup` call while waiting for background agent** \u2014 was"
+    ],
+    "gotchas": [
+      "**`%3.0f` is minimum field width, not maximum.** Easy to read as \"3 digits\"",
+      "**`monospacedDigitSystemFont` is digit-monospace only.** `M`, `G`, `K`",
+      "**SMAppService requires .app in `~/Applications/` or `/Applications/`.**",
+      "**Commitlint type whitelist.** `polish` reads naturally for cosmetic-but-not-"
+    ],
+    "notes": [
+      "The bar v2 polish is the current shipping design \u2014 icon \u00b7 bar \u00b7 value grammar",
+      "The `WidgetPreview.swift` + `--preview-widget` flag are dev scaffolding the",
+      "The custom-drawn memory icon (`drawCustomMemoryIcon`) is gone for good \u2014 user",
+      "Final review report lives at"
+    ],
+    "feedback": [
+      "\"Let's do `cellularbars` for network\" \u2014 accepted icon pick.",
+      "\"Close and start works fine, tested\" \u2014 confirmed reopen flow is good.",
+      "\"Let's do all housekeeping next\" \u2014 full batch authorized.",
+      "\"I like how it is. Let's do a final code review, update all docs, and push"
+    ]
+  },
+  "pending": [
+    "**GPU sampling** (N1, deferred from spec) \u2014 needs `IOReport` private-framework",
+    "**Occlusion / Space-switch / display-disconnect panel handling** \u2014 click-outside",
+    "**Reduce-Motion / Increase-Contrast plumbing** for panel sections \u2014 per-process",
+    "**Custom `.app` icon** \u2014 currently the generic Swift binary icon in",
+    "**Distribution & notarization** \u2014 personal/local use only by design; ad-hoc-signed"
+  ],
+  "tags": []
+}
