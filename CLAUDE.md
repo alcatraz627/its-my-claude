@@ -12,6 +12,8 @@
 
 At session start, generate `[keyword]-[keyword]-[2hex]` from the initial prompt (1–2 keywords, max 5 chars each, 2 hex from content-hash). Announce as `Session: [id]`. Use in WAL headers, checkpoint files, runtime notes. Vague prompts → `misc-[2hex]`. Full rules: `features/context-retention.md`.
 
+**claude-ipc addressability:** right after announcing the Session ID, register it for cross-session messaging so the session is reachable by its friendly id (not just its UUID): `claude-ipc register <id>` (silently no-ops if the broker is down). Other sessions can then `claude-ipc send --to <id> …`. See `~/Code/Claude/claude-ipc`.
+
 ### Terse in = terse out · Scope = ceiling · State = ephemeral
 
 When user sends short continuation ("keep going", "yes", "next") → continue autonomously, don't ask clarifying questions. Match response length to user's. Treat user requests as a **ceiling** on scope — never "while I'm here" improvements. Re-read state before any side-effect; assume file contents, git status, processes may have changed between tool calls. Before git push: `git status` + `git log --oneline -3` + `git diff --stat`. Full detail: `rules/communication.md`.
@@ -34,21 +36,7 @@ Comments are for humans first, AI agents second, machines never. First sentence 
 
 ### Atone — mistake tracking & affirmation system
 
-`~/.claude/mistake-patterns.md` is now a **DERIVED** view (banner-banned for hand-edit). The raw event log lives at `~/.claude/atone/events.jsonl` (kernel append-only, git-tracked, snapshotted). Read the curated file at session start — its TL;DR + top-20 cover the current high-priority patterns. The first-turn `hinters/05-atone-tldr.sh` injects the TL;DR automatically.
-
-**To record a new mistake:** invoke `/atone` (or `bash ~/.claude/scripts/atone.sh add ...`). The skill gathers context, classifies severity (S1/S2/S3), writes a structured event, and for S3 also drafts an RCA with a runnable procedure. The corrections ritual (`rules/corrections.md`) routes through `/atone` instead of hand-editing the file.
-
-**To inspect past patterns:**
-- `bash ~/.claude/scripts/atone.sh list --severity S3` — high-severity events
-- `bash ~/.claude/scripts/atone.sh search <kw>` — full-text across slug/title/issue/cause/fix/tags
-- `bash ~/.claude/scripts/atone.sh show <id>` — one event + its RCA if any
-- `bash ~/.claude/scripts/atone.sh slugs` — top recurrers
-
-**Hinter behavior:** `hinters/30-atone-nudge.sh` fires when the user's prompt has correction language addressed at me (uses 3rd-person filter to skip "the user made a mistake in their CSV"-type false positives). Mute via `touch ~/.claude/atone/.nudge-off`. The TLDR hinter's mute file is `.tldr-off`.
-
-**Counterweight (planned):** `~/.claude/compliments.md` will become a derived view of `~/.claude/affirm/events.jsonl` once the affirm system ships (Stage 5 of the BUILD plan). Same architecture, different schema. Until then, compliments.md remains a stub.
-
-**Escape hatch:** `bash ~/.claude/scripts/atone-unsafe-unlock.sh` (phrase-gated; logged to `atone-snapshots/_unlock-log.txt`) clears kernel protection if you need to manually repair the raw log. Re-lock with `bash ~/.claude/scripts/atone.sh lock`.
+`~/.claude/mistake-patterns.md` is a **DERIVED** view — don't hand-edit it. The raw log is the kernel-append-only `~/.claude/atone/events.jsonl`; the first-turn `hinters/05-atone-tldr.sh` injects its TL;DR automatically, so read that at session start. **To record a mistake, invoke `/atone`** — it classifies severity (S1/S2/S3) and drafts an RCA for S3; the `rules/corrections.md` ritual routes through it rather than hand-editing. Inspect past patterns with `atone.sh list|search|show|slugs`. The `/affirm` counterweight (recorded good calls, higher write-bar) works the same way. Full operational detail — inspect flags, hinter mute files, the phrase-gated escape hatch, the snapshot/kernel-protection model — lives in `features/atone.md`.
 
 ### MCP tool preferences (MANDATORY)
 

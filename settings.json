@@ -553,6 +553,15 @@
             "command": "~/.claude/scripts/hooks/guard-duplicate-symbol.sh"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-comment-hygiene.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
