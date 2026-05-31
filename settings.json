@@ -42,18 +42,6 @@
       "Bash(*rm -rf ~*)",
       "Bash(*rm -rf $HOME*)",
       "Bash(*rm -rf .*)",
-      "Bash(* /etc*)",
-      "Bash(* /System*)",
-      "Bash(* /Library*)",
-      "Bash(* /usr*)",
-      "Bash(* /bin*)",
-      "Bash(* /sbin*)",
-      "Bash(* /boot*)",
-      "Bash(* /root*)",
-      "Bash(* /sys*)",
-      "Bash(* /proc*)",
-      "Bash(* /private*)",
-      "Bash(* /Volumes*)",
       "Bash(*chmod 777*)",
       "Bash(*chmod -R 777*)",
       "Bash(*chmod -R 7*)",
@@ -394,6 +382,15 @@
         "hooks": [
           {
             "command": "~/.claude/scripts/hooks/guard-anthropic-credentials.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/guard-system-dir-writes.sh",
             "type": "command"
           }
         ]
