@@ -206,21 +206,32 @@ shortdir=$(basename "$cwd")
 #   3. COLUMNS: shell env var (if > 0)
 #   4. tput cols: last-resort fallback
 cols=0
+_width_src="none"
+_width_p9k_raw=""; _width_columns_raw="${COLUMNS:-}"; _width_tput_raw=""
 if [[ "${STATUSLINE_COLS:-0}" -gt 0 ]]; then
-  cols=$STATUSLINE_COLS
+  cols=$STATUSLINE_COLS; _width_src="STATUSLINE_COLS"
 else
   # Only use P9K vars if they look like device paths (P9K_TTY may be set to "old" in non-SSH sessions)
   _real_tty=""
   [[ "${_P9K_TTY:-}" == /dev/* ]] && _real_tty="$_P9K_TTY"
   [[ -z "$_real_tty" && "${_P9K_SSH_TTY:-}" == /dev/* ]] && _real_tty="$_P9K_SSH_TTY"
   if [[ -n "$_real_tty" && -r "$_real_tty" ]]; then
-    cols=$(stty size < "$_real_tty" 2>/dev/null | awk '{print $2}')
+    _width_p9k_raw=$(stty size < "$_real_tty" 2>/dev/null | awk '{print $2}')
+    if [[ "${_width_p9k_raw:-0}" -gt 0 ]]; then
+      cols=$_width_p9k_raw; _width_src="p9k_tty:$_real_tty"
+    fi
   fi
   if [[ "${cols:-0}" -le 0 && "${COLUMNS:-0}" -gt 0 ]]; then
-    cols=$COLUMNS
+    cols=$COLUMNS; _width_src="COLUMNS"
   fi
   if [[ "${cols:-0}" -le 0 ]]; then
-    cols=$(tput cols 2>/dev/null || echo 120)
+    # No reliable width signal. Default to the universally-safe 80 (NOT 120):
+    # in a non-TTY hook with no P9K/COLUMNS, we cannot know the live pane width,
+    # and an over-wide assumption causes line-wrap → Claude Code's wrap-blind
+    # redraw overwrites scrollback. 80 fits any real terminal; richer detail
+    # returns automatically once a real signal (P9K_TTY/COLUMNS) is present.
+    _width_tput_raw=$(tput cols 2>/dev/null || echo 80)
+    cols=$_width_tput_raw; _width_src="tput_or_fallback"
   fi
   # v4 cap: reserve right margin for Claude Code's own status labels
   # (model name + token count shown at the right edge of Claude Code's UI, ~40 chars).
@@ -235,6 +246,20 @@ else
 fi
 [[ "${cols:-0}" -lt 60 ]] && cols=60
 
+# Opt-in width-detection debug log. Enable with STATUSLINE_WIDTH_DEBUG=1 to
+# diagnose wrap/scrollback-corruption issues — captures EVERY candidate width
+# source so a stale COLUMNS or mismatched _P9K_TTY shows up immediately. Off
+# by default (zero cost). Log: ~/.claude/logs/statusline-width.log
+if [[ "${STATUSLINE_WIDTH_DEBUG:-0}" == "1" ]]; then
+  _wlog="$HOME/.claude/logs/statusline-width.log"
+  mkdir -p "${_wlog%/*}" 2>/dev/null
+  printf '[%s] cols=%d src=%s | P9K_TTY=%q stty=%q | COLUMNS=%q | tput=%q | session=%s\n' \
+    "$(date '+%F %T')" "$cols" "$_width_src" \
+    "${_P9K_TTY:-}" "${_width_p9k_raw:-}" \
+    "${_width_columns_raw:-}" "${_width_tput_raw:-}" \
+    "${session_id:-unknown}" >> "$_wlog" 2>/dev/null || true
+fi
+
 # ── IDE detection (VS Code lock file) ──
 ide_name=""
 ide_lock=$(ls "$HOME/.claude/ide/"*.lock 2>/dev/null | head -1)
@@ -242,12 +267,20 @@ if [[ -n "$ide_lock" ]]; then
   ide_name=$(jq -r '.ideName // empty' "$ide_lock" 2>/dev/null) || true
 fi
 
-# ── Start daemon if needed ──
+# ── Start daemon if needed (single-daemon-per-PPID guard) ──
+# Prior bug: concurrent statusline renders (rapid turns, streaming updates)
+# both saw !STATS_FILE and both spawned a daemon — over a long session this
+# accumulated 5+ daemons per claude PID. The pgrep gate closes the race by
+# checking against the kernel-side process table (atomic enough that the
+# window shrinks from ms-scale file-stat to µs-scale syscall). The trailing
+# space in the pattern prevents PID-prefix matches (e.g. 80 vs 8000).
 STATS_FILE="/tmp/claude-statusline-${PPID}"
 DAEMON="$HOME/.claude/scripts/process-stats-daemon.sh"
 if [[ ! -f "$STATS_FILE" ]] && [[ -x "$DAEMON" ]]; then
-  nohup bash "$DAEMON" "$PPID" "$STATS_FILE" &>/dev/null &
-  disown
+  if ! pgrep -f "process-stats-daemon.sh ${PPID} " >/dev/null 2>&1; then
+    nohup bash "$DAEMON" "$PPID" "$STATS_FILE" &>/dev/null &
+    disown
+  fi
 fi
 
 # ── Read daemon data (key=value file → source it directly) ──

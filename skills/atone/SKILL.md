@@ -55,34 +55,53 @@ Required fields:
 | `agent_defense` | The 1-paragraph defense from 2.5.1 |
 | `context_summary` | ≤500 chars: codebase area + task + scope. Keep tight. |
 
-### 2.5.3 — Dispatch the juror sub-agent
+### 2.5.3 — Write the case file (atone dispatches the juror for you)
 
-Read the persona at `~/.claude/personas/juror.md`, then dispatch via the Agent tool:
+**Do NOT dispatch the juror sub-agent yourself or call `atone juror` by hand.**
+As of 2026-05-29 `atone.sh add` OWNS the juror dispatch: you write a case file,
+pass `--case-file`, and atone runs the juror via `claude -p`, persists the
+verdict to disk, records the judgment, and gates — in one call. This removes you
+from verdict composition (you cannot fabricate or "misplace" the verdict), and
+the verdict survives on disk so a lost context never forces a juror re-run.
 
-- `subagent_type`: `general-purpose`
-- `prompt`: `<persona contents>` + `\n\n---\n\nCASE TO EVALUATE:\n` + `user_callout`, `agent_did`, `agent_defense`, `context_summary` (clearly labeled)
-- `description`: "Juror verdict on /atone"
+Write the case as JSON (use `jq -n` so it's always valid):
 
-The juror has Bash access and is instructed to look up prior atone events + prior judgments before rendering its verdict. Wait for it to return — typically 30-90s.
-
-### 2.5.4 — Parse the verdict
-
-The juror returns JSON with shape:
-
-```json
-{
-  "verdict": "very-wrong | understandably-wrong | ambiguous | probably-right | reasonably-right",
-  "confidence": "low | medium | high",
-  "reasoning": "...",
-  "slips_identified": [...],
-  "constraints_considered": [...],
-  "should_have_done": "...",
-  "related_atone_slugs": [...],
-  "scope_note": "..."
-}
+```bash
+jq -n \
+  --arg uc "<user's exact correction text, VERBATIM>" \
+  --arg ad "<what you did, 1-2 sentences>" \
+  --arg adf "<your 1-paragraph defense from 2.5.1>" \
+  --arg ctx "<codebase area + task + scope, ≤500 chars>" \
+  --arg slug "<the slug you'll use in the add>" \
+  '{slug:$slug, user_callout:$uc, agent_did:$ad, agent_defense:$adf, context:$ctx}' \
+  > /tmp/atone-case-$$.json
 ```
 
-If parsing fails (malformed JSON, timeout, dispatch error): default `verdict = ambiguous`, record this in `reasoning` ("juror dispatch failed — proceeding"), and continue to Phase 3.
+If you ran `/skeptical-review` this session and its report is relevant, note its
+path — you'll pass it as `--review-report <path>` so the juror reads the grounded
+findings (otherwise the juror re-derives blind).
+
+### 2.5.4 — (the verdict is produced inside `atone add`)
+
+You do not parse a verdict in this phase anymore. In Phase 4 you call:
+
+```bash
+bash ~/.claude/scripts/atone.sh add ... --severity S3 \
+  --case-file /tmp/atone-case-$$.json [--review-report <skeptical-review path>]
+```
+
+atone then: dispatches the juror (~20-40s), writes the verdict to
+`atone/verdicts/<session>-<slug>-<ts>.json`, records the judgment row linked to
+the new event, and applies the verdict-threshold gate itself:
+- `very-wrong` / `understandably-wrong` / `ambiguous` → event is written.
+- `probably-right` / `reasonably-right` → **`add` refuses with exit 5** (the
+  juror cleared you). Surface the verdict to the user; retry with
+  `ATONE_OVERRIDE_VERDICT="<why the user overrules>"` only if they do.
+- juror unavailable (`claude -p` failed) → event written with
+  `suspect_fields:[juror-unavailable:...]`, audited, not blocked.
+
+The legacy two-step (`atone juror` then `atone add`) still works for manual /
+user-driven recording, but the `--case-file` path is the default.
 
 ## Phase 3 — Classify severity
 
@@ -98,72 +117,65 @@ If parsing fails (malformed JSON, timeout, dispatch error): default `verdict = a
 
 The verdict determines what happens next. Do NOT skip this branching — it's the load-bearing piece of the anti-sycophancy layer.
 
-> **Hardened 2026-05-17 — the CLI now enforces this branching at the data layer.**
-> `atone add` will refuse with exit 4 if no judgment in the last 15 min has the
-> event's slug in `related_atone_slugs` (strict match — the old OR-bypass via
-> `linked_atone_event_id` was a hole). It will refuse with exit 5 if the matched
-> verdict is `probably-right` or `reasonably-right` unless `ATONE_OVERRIDE_VERDICT=
-> "<reason>"` is set in the env. A <10s juror→atone gap is marked as
-> `suspect_fields: [synthetic-juror-suspected:gap_Xs]` on the event row. Passing
-> `ATONE_NO_JUROR=1` is allowed but writes `juror_bypassed:true` on the event so
-> the bypass is auditable, not silent. **Composing a fake juror line via
-> `atone juror` in the same context as the atoning agent defeats the purpose** —
-> the juror must be a dispatched sub-agent (Agent tool, fresh context).
+> **Hardened — the CLI enforces this at the data layer; use `--case-file`.**
+> The REQUIRED path is `atone add --case-file <case.json>`: atone dispatches the
+> juror itself (claude -p, fresh context), persists the verdict, records the
+> judgment stamped `dispatched_by:atone`, and gates. You never compose or relay
+> the verdict. The gate: exit 4 if no judgment within 15 min has this slug in
+> `related_atone_slugs` (strict); exit 5 if the verdict is `probably-right`/
+> `reasonably-right` unless `ATONE_OVERRIDE_VERDICT="<reason>"`. A matched judgment
+> WITHOUT `dispatched_by:atone` (i.e. a hand-recorded legacy verdict) flags the
+> event `unverified-juror-provenance` — auditable, not blocked. `ATONE_NO_JUROR=1`
+> writes `juror_bypassed:true`. If the juror dispatch fails, the event records
+> `juror-unavailable:<reason>` (fail-open) and the re-juror sweep
+> (`atone resweep`) back-fills the verdict later.
 
-### Branch A — `very-wrong` / `understandably-wrong` / `ambiguous`
+### Default (`--case-file`) flow: atone branches for you
 
-Proceed to Phase 4 (draft fields). Use the juror's `reasoning` to inform the `cause` field — cite `slips_identified` and `constraints_considered`. After writing the event, record the judgment with `--outcome atoned` and `--linked-event-id <new-event-id>`.
+On the `--case-file` path you do NOT branch on the verdict or record the judgment
+yourself — `atone add` does both:
 
-### Branch B — `probably-right` / `reasonably-right`
+- **`very-wrong` / `understandably-wrong` / `ambiguous`** → the event is written;
+  the judgment is recorded (`outcome:atoned`, linked to the event) and the verdict
+  persisted to `atone/verdicts/`. Nothing more for you to do.
+- **`probably-right` / `reasonably-right`** → `add` **exits 5** ("juror cleared the
+  agent"), records the judgment truthfully (`outcome:pending`, no event), and
+  removes the draft RCA. **This is the user-pushback signal.** Surface the verdict
+  to the user (the exit-5 message has it) and wait. If the user overrules, retry
+  the same `add` with `ATONE_OVERRIDE_VERDICT="<reason>"` — the event is then
+  written with `outcome:pushed-back-then-atoned`. If the user accepts the clear,
+  do nothing — the judgment is already preserved for measurement.
+- **juror unavailable** → event written with `suspect_fields:[juror-unavailable]`.
 
-**Stop. Do NOT auto-proceed to /atone.** Push back to the user with the juror's reasoning, then wait for the user's response.
+You never call `atone juror` by hand on this path, and you never re-record the
+judgment — doing so double-records. (This was the doc-lags-code trap: the section
+below is LEGACY, for the manual path only.)
 
-Format your pushback like this:
+### LEGACY manual flow (only when NOT using `--case-file`)
 
-```
-Before I /atone — the juror flagged this as <verdict> (confidence: <X>).
+If you are recording without a case file (user-driven, or a verdict produced
+out-of-band), dispatch a juror sub-agent yourself, branch on its verdict, then
+record the judgment by hand:
 
-Juror's reasoning: <reasoning>
-
-Slips it found:        <slips_identified or "none">
-Constraints considered: <constraints_considered or "none">
-Related atone slugs:    <related_atone_slugs or "none">
-
-I think I was right because: <my defense>.
-
-Want me to /atone anyway, or reconsider the correction?
-```
-
-Then wait for the user's actual response. Do not assume the answer.
-
-**If user overrules** (says: yes still atone, you are wrong, etc): proceed to Phase 4 normally. Severity may stay or drop one tier — your judgment. Record the judgment with `--outcome pushed-back-then-atoned`.
-
-**If user accepts the pushback** (says: ok you're right, never mind, my bad): SKIP Phase 4-6. Do NOT write an atone event. Record the judgment with `--outcome pushed-back-then-accepted`. Tell the user: "OK — no atone recorded. The juror's reasoning is preserved as judgment `<id>` for measurement."
-
-**If user response is ambiguous or asks a clarifying question**: answer it, then wait for the actual decision before recording anything.
-
-### After branching — always record the judgment
-
-Whether or not /atone proceeded:
+- **Branch A** (`very-wrong`/`understandably-wrong`/`ambiguous`) → Phase 4, then
+  `atone juror ... --outcome atoned --linked-event-id <new-event-id>`.
+- **Branch B** (`probably-right`/`reasonably-right`) → push back to the user with
+  the juror's reasoning and wait. Overruled → Phase 4 + `--outcome
+  pushed-back-then-atoned`. Accepted → skip Phase 4–6, record `--outcome
+  pushed-back-then-accepted`, tell the user the judgment is preserved for measurement.
 
 ```bash
 bash ~/.claude/scripts/atone.sh juror \
-  --user-callout "<verbatim>" \
-  --agent-did "<...>" \
-  --agent-defense "<your defense>" \
-  --context "<codebase summary>" \
-  --verdict "<juror verdict>" \
-  --confidence "<juror confidence>" \
-  --reasoning "<juror reasoning>" \
-  --slips "<slip1|slip2>" \
-  --constraints "<c1|c2>" \
-  --should-have-done "<...>" \
+  --user-callout "<verbatim>" --agent-did "<...>" --agent-defense "<your defense>" \
+  --context "<codebase summary>" --verdict "<v>" --confidence "<c>" --reasoning "<r>" \
+  --slips "<slip1|slip2>" --constraints "<c1|c2>" --should-have-done "<...>" \
   --related-slugs "<atone-slug-you-are-about-to-add> <other-related-slugs>" \
   --outcome "<atoned|pushed-back-then-atoned|pushed-back-then-accepted>" \
   --linked-event-id "<event-id-if-atoned-or-empty>"
 ```
 
-This record is what makes the juror measurable. Over time, `bash ~/.claude/scripts/atone.sh judgments stats` shows the verdict distribution + how often pushbacks survived. Keep the data flowing.
+Either way the judgment record is what makes the juror measurable — `bash
+~/.claude/scripts/atone.sh judgments stats` shows the verdict distribution over time.
 
 ## Phase 4 — Draft the four required fields
 

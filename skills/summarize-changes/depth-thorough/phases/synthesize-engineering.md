@@ -69,3 +69,4 @@ Per theme:
 Rules:
 - No fake-precise SHAs. Use "(see git log)" if not in commits.tsv.
 - Be exhaustive — all themes get an entry — but each entry tight.
+- **Always backtick-wrap env-var / token names** (`` `LOGGER_CRAB_URL` ``, `` `ADMIN_API_TOKEN` ``). Bare `SNAKE_CASE_*` tokens get mangled by markdown linters (underscores → emphasis). Backticks prevent this.

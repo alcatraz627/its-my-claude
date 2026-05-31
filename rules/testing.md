@@ -56,3 +56,4 @@ Scanned from `~/.claude/mistake-patterns.md`. Each rule has happened enough time
 - `[render-before-judge]` — Don't call a value "wrong" based on its number alone. Render it — visually, in the browser, in stdout — then judge.
 - `[human-note]` — `NOTE(by human)`, `HACK`, `IMPORTANT` comments mark tested deliberate choices. Changing without asking breaks an invariant you don't see.
 - `[post-compact]` — After a `/compact`, state you held in conversation is gone. Re-verify process/file/branch state before acting, even for things you "just did" pre-compact.
+- `[declared-ready]` — Never announce a feature/fix as done without running the code path at least once. "Tests pass" is not "I ran it." Start the server, call the endpoint, trigger the flow. If you can't run it, say so explicitly.

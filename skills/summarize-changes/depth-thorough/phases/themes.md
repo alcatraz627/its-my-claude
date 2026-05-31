@@ -15,6 +15,15 @@ You are the themes-and-issues agent. Cluster file-level inventories into coheren
 
 For under-reported chunks (coverage status != OK), cross-reference the chunk's file list in `{CHUNKS_JSON}` against the V1 inventory's `## File:` headers to identify dropped files. If a dropped file is structurally important (route, public API, schema, contract), read its diff at `diffs/<chunk-id>.diff` to recover. Skip if utility/test/cosmetic.
 
+## Supplementary signals (optional, read if present)
+
+These project-local files carry risk signals that commit messages alone miss — use them to inform issue tiers (an item the team is still mid-implementation on, or has flagged "unverified", is higher-risk):
+- `{PROJECT_NOTES_GLOB}` — e.g. `frontend/.claude/notes/*.md`, `_*.claude.md` checkpoints, plan docs
+- Any `MEMORY.md` index at the project memory path
+- Commit-message risk language in `{COMMITS_TSV}`: "unverified", "could break", "still broken", "wip", "hack", "todo"
+
+When an issue's underlying change appears in an in-progress task note or carries risk language, lean toward a higher confidence tier (MAYBE→DEFINITELY) and cite the signal in the evidence line.
+
 ## Outputs (write both before returning)
 
 - `{THEMES_OUTPUT}` — theme map

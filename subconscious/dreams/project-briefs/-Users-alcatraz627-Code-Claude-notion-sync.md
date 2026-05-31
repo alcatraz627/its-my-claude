@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-05-23T23:31:53.361662+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-26T00:57:05.045424+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A Notion sync pipeline (likely exporting/importing structured data between Notion and another system). Work is iterative and data-heavy, with recurring fragility in archive/unarchive, link handling, and image uploads.
+A Notion sync pipeline (archive/unarchive, link handling, image uploads) with recurring fragility. Work style is terse-directive: single words like "ahead", "again", "done" mean execute, not discuss.
 
 ## Things to do (or keep doing)
-- **Treat terse single-word messages** (`ahead`, `again`, `done`, `looks`) as execution directives — continue without asking for clarification
-- **Trace every emitted value to a source line** before writing it to a file, commit, or data structure; apply a provenance check at every data boundary
-- **Use project-defined utilities** (e.g. `isDevelopment`, named env helpers) everywhere rather than inlining the raw expression they abstract
-- **Re-read actual schema/source code** before asserting which system is authoritative on any data field or state value
+- **Treat terse one-word messages as execution directives** — continue the active task without asking for clarification
+- **Trace every emitted value to a source line** before writing it; if you can't cite `file:line`, stop and ask
+- **Use project-provided utilities** (e.g. `isDevelopment`) everywhere rather than inlining raw env checks
+- **Re-read ground truth before any side-effect** (git push, file write, API call) — never carry forward session assumptions
 
 ## Things to avoid
-- **Never commit or push without fresh per-instance approval** — prior approval in the same session does not carry forward; this rule has been violated repeatedly
-- **Never infer, guess, or extrapolate data values** not directly present in source data; flag gaps explicitly rather than filling them with plausible values
-- **Never write credentials to any file** — not even temporarily for testing; acknowledge and proceed in-memory only
-- **Don't attempt a second fix on the same block without identifying root cause** — re-read the error log and form a hypothesis first
+- **Never commit or push without fresh per-push approval** — prior approval in the same session does not carry forward; this has been violated multiple times and is a hard rule
+- **Never write credentials to any file**, even temporarily; acknowledge receipt in-context only
+- **Don't match on error message strings** for flow control — use structured error codes/fields
+- **Don't attempt a second fix on the same block without diagnosing root cause first** — re-read the error log, form a hypothesis, then edit once
 
 ## Open questions / known gaps
-- Notion sync scripts have recurring fragility across sessions (archive/unarchive bugs, link failures, image upload issues) — no durable fix has landed yet; treat each session as potentially re-encountering these known failure modes
+- Notion sync scripts have recurring fragility across sessions (archive/unarchive bugs, link handling failures, image uploads) — root causes appear systemic, not one-off; treat any new failure in these areas with suspicion rather than a quick patch
+- The no-push rule has been violated multiple times despite reinforcement — consider whether a pre-push hook would mechanically enforce what the rule cannot

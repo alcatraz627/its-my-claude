@@ -13,7 +13,8 @@
     "actionable": true,
     "suggested_rule": "When a session approaches 70% context usage, proactively offer to generate a structured state snapshot (like a WAL checkpoint) that includes: current task, blockers, recent decisions, file change summary, and next steps — formatted for optimal ingestion by the next session's catchup command.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ec35b262-3035-4c7e-a912-021ebfb343c8",
@@ -28,7 +29,8 @@
     "actionable": true,
     "suggested_rule": "Deduplicate patterns that share >80% semantic overlap before presenting them for analysis. Merge these four WAL-migration patterns into a single canonical entry and free 3 pattern slots.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "44b97797-cccb-4ddd-9b77-1bd8b6f5148b",
@@ -43,7 +45,8 @@
     "actionable": true,
     "suggested_rule": "Match the user's communication density. When the user sends a terse directive, respond with action first, explanation only if needed. Never ask clarifying questions that could be resolved by reading recent context. Treat 'sorry continue' as SIGCONT and resume the exact operation in progress.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "902b5915-5e71-4f50-abb3-ddef34747f74",
@@ -57,7 +60,8 @@
     "actionable": true,
     "suggested_rule": "Before persisting a new pattern, fuzzy-match against existing patterns on (category + key entities) and merge rather than append when similarity > 0.8.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5757232b-bac8-4df1-a59f-66a3c53234b7",
@@ -72,7 +76,8 @@
     "actionable": true,
     "suggested_rule": "When multiple extracted patterns describe the same event or decision, merge them into one pattern with the union of their evidence and the max of their confidence scores. Redundancy ≠ importance.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "36bc3901-9781-47fc-b9f8-633208f60667",
@@ -87,7 +92,8 @@
     "actionable": true,
     "suggested_rule": "Pattern extraction should deduplicate by semantic similarity before surfacing — when 4+ patterns share >80% content overlap, collapse them into one with a 'seen_count' field and earliest/latest timestamps.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "813ba4bb-4537-40ab-b7b7-5c478a688857",
@@ -102,7 +108,8 @@
     "actionable": true,
     "suggested_rule": "Before inserting a new pattern, check existing patterns for semantic overlap (same event/decision described from different angles). Merge into the highest-confidence existing entry rather than creating duplicates. Apply the same dedup to the session-continuity cluster (12+ near-identical patterns about /catchup and /core-dump).",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2b8603f3-6cbe-4f56-af22-c9e81c144ddb",
@@ -116,7 +123,8 @@
     "actionable": true,
     "suggested_rule": "Interpret all user messages as directives, not conversation starters. Never ask clarifying questions that could be resolved by examining project context. When a duplicate message arrives, silently treat the second as authoritative and proceed without commenting on the duplication. Keep responses action-oriented with minimal preamble.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f26214c0-2294-4829-a88f-ca6a791a0fd8",
@@ -131,7 +139,8 @@
     "actionable": true,
     "suggested_rule": "Before running tests, deployments, or major refactors, execute a 'clean slate' checklist: kill orphaned processes, clear Playwright cache, clear frontend/build caches, and restart dev server. Proactively do this rather than waiting for mysterious failures.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8a32d16a-cfd1-4a03-ad45-7399234822f7",
@@ -147,7 +156,8 @@
     "actionable": true,
     "suggested_rule": "Treat all state as ephemeral by default. Before any context-destroying operation (session end, branch switch, worktree change, deployment), explicitly serialize and confirm preservation of current state. Never assume state will survive a transition.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2e204c53-442a-4e28-902b-21c9576fe306",
@@ -163,7 +173,8 @@
     "actionable": true,
     "suggested_rule": "When the user issues a single-word or two-word directive, treat it as a job resumption signal: reconstruct intent from WAL/checkpoint state, emit a one-line acknowledgment, and begin execution. Do not ask clarifying questions unless genuinely blocked.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "bddc52d6-9fe2-4dac-8108-e131fa51b302",
@@ -178,7 +189,8 @@
     "actionable": true,
     "suggested_rule": "Before any change, ask: 'Did the user explicitly request this specific modification?' If the answer is no, do not make it — even if it seems like an obvious improvement. Log the temptation as a suppressed impulse rather than acting on it.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "37f36bfe-cb3f-4134-a463-b10a48bac0bf",
@@ -192,7 +204,8 @@
     "actionable": true,
     "suggested_rule": "At session start, explicitly confirm the task boundary. Within that boundary, execute autonomously and aggressively. Outside it, do nothing — not even 'helpful' adjacent improvements.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "98df342c-5a13-4e60-9500-b65c3c816e6f",
@@ -206,7 +219,8 @@
     "actionable": true,
     "suggested_rule": "Scale autonomy on the execution axis (more tool calls, longer runs) but never on the scope axis (no unrequested features, no 'while I'm here' improvements). High tool count ≠ permission to expand scope.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "99dddb08-4a14-4307-8152-fcffd3ac9ddb",
@@ -221,7 +235,8 @@
     "actionable": true,
     "suggested_rule": "Hard rule: at tool call #30 in a session, auto-write a WAL checkpoint. At #60, trigger a /core-dump suggestion. These are not soft heuristics — they should be automated via a PostToolUse hook counting tool calls per session.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b945f014-46ea-42d3-a348-4ff3e37a7613",
@@ -235,7 +250,8 @@
     "actionable": true,
     "suggested_rule": "When receiving terse continuation signals, increase execution depth (more tool calls, deeper investigation) but never expand scope. 'Keep going' means 'keep going on THIS task with more effort', not 'keep going and also clean up related things'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "aeac6059-e051-4c32-9747-674b1480ef32",
@@ -250,7 +266,8 @@
     "actionable": true,
     "suggested_rule": "Before emitting a new pattern, compute similarity against existing patterns (simple: shared entity + shared valence + overlapping keywords). If similarity > 0.8, merge into the existing pattern with an incremented occurrence count rather than creating a new entry. Apply same dedup to the 14+ session-continuity patterns in this batch.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "dfa7bb26-19cf-41a1-8440-b58357d998f9",
@@ -264,7 +281,8 @@
     "actionable": true,
     "suggested_rule": "Before generating any output that fills a gap (fix attempt, data value, inferred state), the agent must first produce a one-line hypothesis about WHY the gap exists. If the hypothesis can't be stated, the agent doesn't understand enough to generate — read more first.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
@@ -280,7 +298,8 @@
     "actionable": true,
     "suggested_rule": "For UI work, make exactly the change requested and nothing more — no 'while I'm here' improvements. Present the minimal diff. If you see obvious improvements, mention them as suggestions in text rather than implementing them. Wait for explicit 'deep audit' or similar commands before doing comprehensive passes.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "081b76af-e530-48a6-b37d-bf4538d525c3",
@@ -293,7 +312,8 @@
     "actionable": true,
     "suggested_rule": "Treat user requests as a ceiling on scope, not a floor. No unsolicited 'enhancements' (animations, polish, refactors). If the user asks to understand code, only explain — do not modify. When uncertain whether an adjacent change is wanted, ask first.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1bd75234-268e-4dfa-a6c9-1e406f8d207f",
@@ -308,7 +328,8 @@
     "actionable": true,
     "suggested_rule": "After any high tool-use turn (>20 tools), or when restarting the dev server, proactively check for and kill orphaned shell/node processes. Include a brief process cleanup summary. Treat process hygiene as a mandatory post-task step, not an optional one.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6af6e09b-4acb-4137-b150-fa364074932c",
@@ -324,7 +345,8 @@
     "actionable": true,
     "suggested_rule": "Interpret message length as an autonomy signal. Terse continuation messages ('keep going', 'more', 'please') mean stay on current trajectory with full autonomy. Explicit corrections or detailed instructions mean the trajectory has drifted — reduce autonomy, confirm scope, and make minimal targeted changes until trust is re-established.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "350e05c1-9fb9-4bb2-83ca-354846cca030",
@@ -339,7 +361,8 @@
     "actionable": true,
     "suggested_rule": "Never expand scope beyond what was explicitly requested. When tempted to add an enhancement, refactor, or spawn parallel work, stop and ask. The user's trust model is 'do exactly what I said, nothing more, and do it well.' Violations of this principle erode trust more than incomplete work does.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "802e5c36-d97f-483b-aa29-e2d08eb573d8",
@@ -354,7 +377,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive, creative, or scope-expanding action, verify the current state of the specific artifact being touched (git status, file read, explicit user confirmation). Never infer intent, cleanliness, or ownership from prior context alone.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "aa9e1f8d-1c7f-4670-a3ec-05cc752ef1ae",
@@ -368,7 +392,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or creative action, verify the ONE assumption most likely to be stale: working tree state before branch ops, repo ownership before push, and user intent before adding unrequested features.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6885a079-d7af-442d-9193-9036c294772c",
@@ -382,7 +407,8 @@
     "actionable": true,
     "suggested_rule": "Treat missing proactive /core-dump at milestones/risky-ops as a correctable defect — on session resume, if no recent checkpoint exists for a >30-tool session, write one immediately before continuing work.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9a6aab2f-0247-4548-808b-ca8aab253b82",
@@ -396,7 +422,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation commands, replay the original task scope from WAL/checkpoint and continue only within those bounds. Never interpret 'keep going' as permission to expand scope.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c612ee24-a650-471e-ac10-01b47f9d86f8",
@@ -410,7 +437,8 @@
     "actionable": true,
     "suggested_rule": "Optimize for steering-loop latency: when the user is in iterative UI refinement mode (short messages + screenshot requests), minimize explanatory text and maximize speed of the screenshot-verify cycle. Treat each terse message as a delta correction, not a new request.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d1fc1182-e470-40b4-8818-418ea76f65bf",
@@ -424,7 +452,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or externally-visible action, the agent must perform at least one fresh read of the relevant state (git status, file existence, branch owner) — never act on state remembered from earlier in the session or inferred from context.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "308f24d6-cf87-4239-b223-8f8f83d5d03f",
@@ -439,7 +468,8 @@
     "actionable": true,
     "suggested_rule": "Before running cross-pattern analysis, deduplicate patterns by content similarity (not just ID). Merge patterns that describe the same event/preference with >80% semantic overlap, keeping the highest-confidence version and noting the count as a 'reinforcement score'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b59e664d-39ac-4bed-b7a0-a56abe6ca655",
@@ -452,7 +482,8 @@
     "actionable": true,
     "suggested_rule": "Terse continuation commands ('go', 'next', 'keep going') increase execution velocity on the current task only. They never authorize scope expansion, new refactors, or unsolicited improvements.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "12cece76-8af7-48d5-b912-108d4f5257f3",
@@ -466,7 +497,8 @@
     "actionable": true,
     "suggested_rule": "Before any side-effecting operation that targets a specific entity (file, repo, UI element), the immediately preceding tool call must be a read/verify of that entity's current state. No exceptions — even if you 'just checked' before a compaction boundary.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6ee49ad9-d612-4564-a15b-912e405f9ca2",
@@ -480,7 +512,8 @@
     "actionable": true,
     "suggested_rule": "Terse continuation messages authorize deeper execution on the current task only. Never interpret brevity as implicit permission to expand scope — short input = 'go faster on this', not 'do more things'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6f9ae0d2-b27a-4f47-8fed-a85401e07ea6",
@@ -494,7 +527,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation: increase execution speed and depth within the current task boundary, but explicitly re-check the task boundary before each new file or feature touched. If the next logical step expands scope, pause — even if the user said 'keep going.'",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e04aadbd-8c83-4d95-9567-1a3e7efb1b6e",
@@ -508,7 +542,8 @@
     "actionable": true,
     "suggested_rule": "When producing structured data, API results, or any output the user will act on without independent verification: if you cannot trace a value to a specific source (file, API response, tool output), emit an explicit '[UNVERIFIED]' marker rather than a plausible-looking value. Never fill gaps with inference.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1d5c8de7-7247-4449-9d48-310fab6a2c25",
@@ -522,7 +557,8 @@
     "actionable": true,
     "suggested_rule": "Before any action that crosses a trust boundary (writing to file, pushing to remote, producing output data), apply a 'boundary check': is every value in this action directly sourced from a read/fetch in this session, or am I relying on recalled/inferred state? If the latter, re-verify.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "dbc69c38-cd23-4ec8-bc6c-fbfaf458f44c",
@@ -537,7 +573,8 @@
     "actionable": true,
     "suggested_rule": "For projects exceeding ~50 tool calls per logical task, auto-checkpoint every 25 tools AND proactively split work into sub-tasks that fit within a single context window, rather than relying on post-hoc recovery.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ac55617b-8115-4b8c-a9c3-0168b730393a",
@@ -551,7 +588,8 @@
     "actionable": true,
     "suggested_rule": "Before outputting any value that will persist (to a file, commit, or data structure), apply a provenance check: can this value be traced to a specific source line, API response, or user input? If not, flag it as '[UNVERIFIED]' inline rather than presenting it as factual.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "af50a575-fa8e-433b-9c9c-76067e5d7d68",
@@ -565,7 +603,8 @@
     "actionable": true,
     "suggested_rule": "Unify data-hallucination and coordinate-guessing under a single 'grounded-output' pattern: any value emitted as factual (data cell, coordinate, API result) must cite its source (column, screenshot region, response field). If no source exists, mark as INFERRED.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "05f70d5c-ff01-4810-9363-f1d16042fac1",
@@ -579,7 +618,8 @@
     "actionable": true,
     "suggested_rule": "Optimize /catchup to include project identification as its first step — detect which of the user's active projects is in CWD and load project-specific context before generic session state, since the user regularly switches between 3+ complex projects.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a7107f84-f043-4d92-92fc-6be2ada6c47e",
@@ -593,7 +633,8 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "88b9c9c0-f3e0-4f4b-99cf-61dd3e6b2bd3",
@@ -607,7 +648,8 @@
     "actionable": true,
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b02f2f9f-b95b-48ab-90b2-5abd0c74b404",
@@ -623,7 +665,8 @@
     "actionable": true,
     "suggested_rule": "For any task estimated to require >30 tool calls, proactively create intermediate checkpoints: commit partial progress, update notes, and produce a mini core dump at natural breakpoints. Don't wait for context exhaustion — treat every 40-50 tool calls as a checkpoint boundary. Structure work to be resumable from any checkpoint.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a76930e6-10ff-4f39-babb-76fb5191abc7",
@@ -636,7 +679,8 @@
     "actionable": true,
     "suggested_rule": "After any major feature completion or merge-to-main event, execute a full /core-dump followed by WAL truncation (keeping only the last checkpoint summary) — treat WAL like a database WAL with compaction, not an append-only journal.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a046745e-04bc-4873-82da-1b8a38cb6f90",
@@ -650,7 +694,8 @@
     "actionable": true,
     "suggested_rule": "Before any side-effect that touches an external system (git push, file write outside project, API call with auth), re-verify the target identity (repo owner, file path, endpoint) with a fresh read. Never reuse a value from earlier in the session for an irreversible external action.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9917b7ff-78fa-4afa-bade-62dc595c3321",
@@ -665,7 +710,8 @@
     "actionable": true,
     "suggested_rule": "Treat the user's session management commands (core dump, catchup, sorry continue) as a formal protocol. When any of these are invoked, execute the corresponding phase precisely: core dump = serialize all active state/decisions/blockers; catchup = load and summarize without re-asking; sorry continue = resume exact last operation with zero preamble.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3c9ece13-6b89-498e-96f9-9b6eff88f7e3",
@@ -679,7 +725,8 @@
     "actionable": true,
     "suggested_rule": "Before making UI changes, capture the current visual state (screenshot or detailed description of key elements). After changes, explicitly compare against the baseline. When the user says something regressed, immediately offer to revert to the last known-good state before attempting fixes. Consider suggesting Playwright visual regression tests for critical UI components.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4f890937-7487-4595-95b8-75419b4dd67b",
@@ -695,7 +742,8 @@
     "actionable": true,
     "suggested_rule": "When debugging any failure where the code appears correct, check for stale cached state FIRST before investigating code logic. Maintain a checklist of known cache layers (Playwright, Next.js/.next, Vercel build cache, ESLint cache, browser cache, dev server HMR state) and clear them systematically as step zero of debugging.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "15a654f5-d513-4233-8776-a3b2a394e109",
@@ -710,7 +758,8 @@
     "actionable": true,
     "suggested_rule": "In UI refinement loops, apply only the literal change requested. Never bundle aesthetic 'improvements' or 'while we're here' fixes. Present the result and wait — the user will issue the next micro-directive if they want more.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "beec351d-d0d3-4ef2-9b8d-dc350ce31b79",
@@ -725,7 +774,8 @@
     "actionable": true,
     "suggested_rule": "Default to 'scalpel mode': do exactly what was asked, nothing more. Before adding anything not explicitly requested — even if it seems obviously beneficial — ask. The cost of asking is near-zero; the cost of overstepping is trust erosion.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4f57cfa1-be36-4b56-a1aa-31ff83bfc38c",
@@ -740,7 +790,8 @@
     "actionable": true,
     "suggested_rule": "When a session exceeds 40 tool calls, proactively checkpoint AND switch to more targeted tool usage (batch reads, fewer exploratory greps). Trigger /core-dump at 60 tool calls automatically rather than waiting for context pressure.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3a3eacae-7cd6-4a9f-b93b-6c9de8050f58",
@@ -755,7 +806,8 @@
     "actionable": true,
     "suggested_rule": "In high-tool-count sessions (40+), agent responses between tool calls should be ≤15 words. Every unnecessary sentence accelerates compaction and degrades the /catchup recovery path.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d780436f-b047-4722-acb6-2a2ab6f47e7d",
@@ -769,7 +821,8 @@
     "actionable": true,
     "suggested_rule": "In long autonomous runs, maximize execution speed and minimize confirmation prompts — but if the next action would change something the user didn't explicitly mention (new file, new feature, visual change), stop and ask. Speed on the rails, brakes at the switches.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "726e9759-388a-4a14-a686-036c3228b7ae",
@@ -784,7 +837,8 @@
     "actionable": true,
     "suggested_rule": "After receiving a terse continuation command, never ask clarifying questions — reconstruct intent from the last 3-5 actions in the WAL/context and continue executing. Only pause if the next action is destructive or ambiguous between two very different paths.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d58a37fb-e02a-4825-ad60-2100c5ccfc63",
@@ -799,7 +853,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation commands, prefer to execute 10-30 tool calls autonomously before checking in rather than asking clarifying questions — but always checkpoint mid-stretch so interruptions are recoverable.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5ed6b213-37f8-445f-86b9-9067f9cd56ac",
@@ -814,7 +869,8 @@
     "actionable": true,
     "suggested_rule": "When the user issues a terse continuation ('keep going', 'more', 'better', 'sorry continue'), do NOT ask clarifying questions. Resume from the last concrete state in WAL/checkpoint and make the smallest reasonable forward step, then pause for feedback.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5849572f-e0f7-4882-bee1-0e2cc31b848e",
@@ -829,7 +885,8 @@
     "actionable": true,
     "suggested_rule": "On terse prompts ('keep going', 'more', 'continue'), the first action should be to consult WAL/checkpoint for last 'current'/'next' fields before acting — treat state recovery as mandatory, not optional.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "03be6fe6-cb12-4b50-8a8c-6e5acb72fa6c",
@@ -843,7 +900,8 @@
     "actionable": true,
     "suggested_rule": "Before any side-effecting operation (click, git checkout, push, file write to external system), execute exactly one read/verify step that confirms the target state matches expectations. Never chain two write operations without an intermediate read.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "555621c1-6c5e-4dc1-9810-ff7783a383a1",
@@ -858,7 +916,8 @@
     "actionable": true,
     "suggested_rule": "Interpret terse commands ('keep going', 'more') as 'continue exact current task direction at full speed' — never as permission to expand scope. Momentum yes, divergence no.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7d376734-50d7-44cb-8dde-f224e96602ca",
@@ -871,7 +930,8 @@
     "actionable": true,
     "suggested_rule": "Implement exactly the delta requested in each iteration. Never bundle predicted next-step changes with the current request, even when they seem obvious — the user's refinement sequence is intentional.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ef57063e-b7a6-45eb-a23e-7eac29dac5b4",
@@ -886,7 +946,8 @@
     "actionable": true,
     "suggested_rule": "When /catchup runs, auto-detect which project is active (via CWD or git remote) and pre-load project-specific WAL + runtime-notes, skipping cross-project noise. Add a 'project' field to WAL session_start events to enable this filtering.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f5fc1a6e-677e-46d1-9e26-09381841b5bb",
@@ -900,7 +961,8 @@
     "actionable": true,
     "suggested_rule": "Treat checkpoint writes with the same discipline as database commits: checkpoint before risky operations (not just after), verify the checkpoint is readable immediately after writing, and never assume a checkpoint exists without checking.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "750b086b-d9bb-46b9-a953-2cad3d8457f6",
@@ -915,7 +977,8 @@
     "actionable": true,
     "suggested_rule": "After any compaction or context loss event, the agent should not just restore task state but also restore the 'conversation register' — the implicit shared understanding of what terse commands mean in context. Core dumps should capture recent interaction style/tempo, not just technical state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b58a04cb-9978-4c8d-91c7-e176cd6fd9d9",
@@ -930,7 +993,8 @@
     "actionable": true,
     "suggested_rule": "When receiving terse continuation signals, maximize execution speed and depth on the CURRENT task but never interpret them as permission to widen scope. 'Keep going' = 'faster on this track', not 'find new tracks'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6637540d-6152-4877-b8d5-c6fa9eeeb0e2",
@@ -944,7 +1008,8 @@
     "actionable": true,
     "suggested_rule": "When starting a session on a stateful simulation or dashboard project, proactively run /catchup and set a checkpoint timer at tool #20 instead of #30, since these domains consistently exhaust context.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b41cedc1-af93-4e70-b277-409ffede408b",
@@ -958,7 +1023,8 @@
     "actionable": true,
     "suggested_rule": "Autonomy is a 2D vector: (execution_speed, scope_expansion). Terse commands increase execution_speed toward maximum. Scope_expansion should remain at zero unless the user explicitly widens it. When a terse command is ambiguous between 'continue current scope' and 'expand scope', always choose 'continue current scope'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c1667760-0f08-4598-bd0a-9ba9f7342cb9",
@@ -972,7 +1038,8 @@
     "actionable": true,
     "suggested_rule": "After any session resumption, context compaction, or worktree switch, run a state-verification pass (git status, process list, file existence checks) before any mutating operation — treat every boundary crossing as a potential state invalidation event.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2fb414a8-abde-4ada-9609-679c7986ffc4",
@@ -987,7 +1054,8 @@
     "actionable": true,
     "suggested_rule": "When receiving terse continuation signals during iterative UI work, execute exactly the last stated change and stop. Do not bundle 'obvious' next steps — the user's refinement loop depends on seeing each change in isolation before deciding the next one.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d1ff7ad7-981a-4ace-bbc6-2b327289159f",
@@ -1003,7 +1071,8 @@
     "actionable": true,
     "suggested_rule": "Terse continuation commands ('next', 'keep going', 'better') authorize deeper execution on the current task only. Never interpret them as permission to expand scope. If the current task is complete and a terse command arrives, ask what's next rather than inventing work.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "807aba00-1ac8-4a18-837f-aceb985476b7",
@@ -1016,7 +1085,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation: if the current task has an unambiguous next step, execute it. If the task is complete and 'next' would require choosing a new scope, pause and ask what's next rather than inferring.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a9b7d6c6-9286-4d6b-af93-b8e161ebbe3d",
@@ -1031,7 +1101,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation ('next', 'keep going', 'more'), increase execution depth (more verification, more tool calls) but never broaden scope. If the current task is complete, stop and report rather than finding adjacent work.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "36ebf4ac-98ab-4c2c-a00a-d77369d50aa8",
@@ -1046,7 +1117,8 @@
     "actionable": true,
     "suggested_rule": "When you lack a verified source for any value that will be persisted (data field, credential, repo owner, branch name), STOP and ask rather than inferring. The cost of a 10-second question is always less than the cost of a plausible-looking fabrication reaching a permanent store.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2be873b2-1497-4630-a446-3fdd260a7dfd",
@@ -1060,7 +1132,8 @@
     "actionable": true,
     "suggested_rule": "Terse user continuations ('next', 'keep going', 'more') authorize continued execution on the current task only. Never interpret them as approval to expand scope, refactor adjacent code, or start new work streams.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8de7ef0f-047d-42fa-babc-4e56b532af93",
@@ -1075,7 +1148,8 @@
     "actionable": true,
     "suggested_rule": "Before writing any value into a data pipeline output OR attempting a second fix on the same code block, re-read the source (file, API response, error log) — never operate from remembered state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3d51882d-5edd-462b-baab-fd354baed3a4",
@@ -1090,7 +1164,8 @@
     "actionable": true,
     "suggested_rule": "For projects with >3 prior session continuations, auto-generate a structured project-state manifest (key files, active branches, running services, pending tasks) at each checkpoint — not a narrative summary but a machine-queryable JSON snapshot that survives format drift.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "58443e6f-5777-4c2e-b415-2dbf406f7de1",
@@ -1104,7 +1179,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that is difficult to reverse (git push, branch switch, file write containing sensitive-looking strings), re-read the specific state being affected in that same tool-call sequence — never rely on state observed more than 3 tool calls ago.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "17f08160-cc86-4113-97e7-7a0547970d4b",
@@ -1118,7 +1194,8 @@
     "actionable": true,
     "suggested_rule": "Before reporting any visual or data task as complete, the agent must have at least one verification step that reads the actual output (screenshot, file read-back, curl response) — never report done based solely on the write/edit succeeding.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b6402869-7c24-4c77-a719-3b242d959e71",
@@ -1132,7 +1209,8 @@
     "actionable": true,
     "suggested_rule": "In any data transformation or extraction task, implement a two-column output pattern: every emitted value must be paired with its source reference (file:line, column name, API field). Values without source references are automatically flagged as 'UNVERIFIED' in the output.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1c2f6f59-9459-4a51-9885-972b7982a24e",
@@ -1145,7 +1223,8 @@
     "actionable": true,
     "suggested_rule": "When facing uncertainty (missing data values, unclear failure cause), output 'unknown/investigating' as the explicit state rather than filling the gap with a plausible guess. An honest gap is recoverable; a confident fabrication destroys trust.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "865fae44-1633-4148-8e35-dab98f1d8c6d",
@@ -1159,7 +1238,8 @@
     "actionable": true,
     "suggested_rule": "Before emitting any value (data cell, fix attempt, API response), verify you can point to the exact source (file line, API response, error message) that justifies it. If you cannot cite the source, flag it as unverified rather than presenting it as fact.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "501ad50e-0d9c-403b-b315-41f52b5d7c89",
@@ -1173,7 +1253,8 @@
     "actionable": true,
     "suggested_rule": "Unify verification patterns under a single 'read-before-act' principle: for UI work, screenshot before claiming done; for data work, read source before emitting values; for git work, status before pushing. Same muscle, different domains.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "02c801f4-7ae6-4826-8f60-b53eacddda2a",
@@ -1187,7 +1268,8 @@
     "actionable": true,
     "suggested_rule": "Unify under a single 'observe-before-assert' principle: never claim a state (pixel position, data value, UI appearance) without a fresh read from the actual source. This applies equally to desktop automation, data pipelines, and UI verification.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4d0ae977-ff07-4a8f-be20-263cf6a5cbf8",
@@ -1201,7 +1283,8 @@
     "actionable": true,
     "suggested_rule": "Unify verification patterns under a single 'observe-before-assert' principle: data values must trace to source, UI changes must be screenshot-verified, desktop actions must use vision loops, and fix attempts must verify the fix actually worked — no domain gets an exemption from ground-truth checking.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e2065ec6-3542-43f9-b04b-fda67f5f38a3",
@@ -1215,7 +1298,8 @@
     "actionable": true,
     "suggested_rule": "After /catchup, the threshold for asking clarifying questions should be even higher than normal — the user just spent effort restoring context and terse commands signal 'I know exactly where I am, keep moving.' Reserve questions for genuinely irreversible ambiguity only.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8604e82e-fd96-4cef-b3b7-4680f14efcc4",
@@ -1229,7 +1313,8 @@
     "actionable": true,
     "suggested_rule": "For projects with >50 tool calls per session, auto-checkpoint at tool #25 (not #30) and switch to compact JSONL WAL entries that omit tool output bodies, keeping only tool name + result summary.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "94cdee5d-83ae-43bb-981f-028c0585912d",
@@ -1243,7 +1328,8 @@
     "actionable": true,
     "suggested_rule": "Before reporting any result as complete — UI change, data transformation, or automated action — verify via direct observation (screenshot, rendered output, re-read). Never claim success based on the action taken; claim it based on the outcome observed.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "19ef9426-3e40-48e5-8796-5b24a7d7cb07",
@@ -1257,7 +1343,8 @@
     "actionable": true,
     "suggested_rule": "Unify under a single meta-principle: 'No assertion without observation.' Before claiming any state (data value, UI appearance, click target, build success), the agent must have a tool-call result from THIS turn that confirms it. Prior-turn observations are stale by default.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "73a03285-60d0-4fe8-907d-2e98e10bcbad",
@@ -1272,7 +1359,8 @@
     "actionable": true,
     "suggested_rule": "When receiving a terse continuation command after compaction, reconstruct the last task's full intent from WAL before executing — never interpret the terse message in isolation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8103d3c5-0eda-4e9a-a6c3-b9918f7db696",
@@ -1286,7 +1374,8 @@
     "actionable": true,
     "suggested_rule": "After any context reconstruction (catchup, compaction, session handoff), treat all recalled state as 'unverified source data' — re-read files and re-check git status before acting, applying the same no-hallucination discipline used for data pipelines. Flag any state claim from memory that cannot be verified with a tool call.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "78c55fcb-fece-4e43-9447-f76e3e44cdd8",
@@ -1300,7 +1389,8 @@
     "actionable": true,
     "suggested_rule": "Unify under a single 'ground-truth-first' principle: before producing any output value (data cell, coordinate, API result), cite the exact source artifact (source column, screenshot region, API response field). If no citation exists, flag as inferred rather than presenting as fact.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "656116e1-8733-4258-8af7-1c7d76a9ff1e",
@@ -1315,7 +1405,8 @@
     "actionable": true,
     "suggested_rule": "For this user, a single-word message after establishing context implies 'execute the full obvious next step and report the result' — the expected autonomy level is equivalent to a senior engineer saying 'ship it' to a trusted colleague. Default to completing the entire logical unit of work, not just the next atomic step.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b5254f93-a34d-49c1-b54d-2ef04cd95ba0",
@@ -1331,7 +1422,8 @@
     "actionable": true,
     "suggested_rule": "In data pipeline sessions, /core-dump must include a 'provenance map' section listing every source file and which output columns derive from it. After any compaction in a data-pipeline session, re-read source files before writing any output — never rely on pre-compaction memory of data values.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3e5b2980-a938-4177-bd68-95c3bfe4a59e",
@@ -1345,7 +1437,8 @@
     "actionable": true,
     "suggested_rule": "When a tool/integration fails and has failed in prior sessions (check runtime-notes), escalate from 'fix this instance' to 'document the systemic failure mode' — write a dedicated known-issues entry rather than attempting another point fix that won't survive the session.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "63d4a20a-f04f-4b9f-86d3-1fb3cdd094cf",
@@ -1360,7 +1453,8 @@
     "actionable": true,
     "suggested_rule": "For documentation generation and other high-tool-count tasks, proactively suggest breaking the work into Sonnet-appropriate chunks with clear handoff points, reserving Opus context for architectural decisions and complex debugging. Flag when a task is about to exceed a single context window so the user can decide whether to continue in Opus or switch.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "0c86c146-b4be-4a2d-a525-9a4d9daf9458",
@@ -1375,7 +1469,8 @@
     "actionable": true,
     "suggested_rule": "Separate concerns temporally: do exactly the requested action, then stop and report. Don't bundle implementation with documentation updates, test writing, or cleanup unless explicitly asked. The user will request secondary actions (notes, docs, tests) as separate explicit steps when they're ready for them.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "56705312-ea01-41dc-b4d9-9acf51ffb1e1",
@@ -1390,7 +1485,8 @@
     "actionable": true,
     "suggested_rule": "Operate as a 'trusted executor': within the explicitly requested scope, act decisively without confirmation. Outside that scope, stop completely — do not suggest, preview, or 'while we're here'. The boundary between inside and outside scope must be interpreted conservatively.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8bd36aad-abe0-4123-86e5-94de31f32051",
@@ -1404,7 +1500,8 @@
     "actionable": true,
     "suggested_rule": "Default to executing without confirmation for operations the user has previously approved in similar contexts. Reserve confirmation prompts only for genuinely novel or irreversible actions.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8a183894-87c7-4261-811b-e757f48b2e09",
@@ -1417,7 +1514,8 @@
     "actionable": true,
     "suggested_rule": "Pattern extraction should deduplicate by semantic hash before confidence aggregation — 15 patterns saying 'user uses /catchup heavily' should collapse to one pattern with a count, not 15 independent 0.95-confidence entries.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ffeb9669-9bcb-44a0-977e-ba1acbd3bd92",
@@ -1431,7 +1529,8 @@
     "actionable": true,
     "suggested_rule": "Add defensive fallbacks to /catchup: if WAL is missing/corrupt, check _checkpoint.claude.md; if both missing, check runtime-notes for recent entries; if all missing, explicitly tell user 'no continuity state found' and ask for re-orientation rather than proceeding blind.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "dba58460-3ab8-4787-bb27-2825e3cc0469",
@@ -1446,7 +1545,8 @@
     "actionable": true,
     "suggested_rule": "Before any action that modifies visible UI, branches, worktrees, or exceeds literal request scope: state the inferred intent in one line and verify against explicit user words before executing.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7760e19b-d77e-485d-ada3-4cf2e416ecce",
@@ -1461,7 +1561,8 @@
     "actionable": true,
     "suggested_rule": "Add a tool-call counter hook: automatically emit a WAL checkpoint at 20 tool calls since last checkpoint, regardless of task phase. Remove the judgment step.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e27cf175-4ec3-4f53-884e-a2cbcefd95af",
@@ -1475,7 +1576,8 @@
     "actionable": true,
     "suggested_rule": "During UI refinement loops, batch multiple visual adjustments into a single edit+screenshot cycle when the user gives stacked feedback ('increase font AND revert colors') rather than treating each as a separate round-trip.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "874b2eb9-cbd1-4aa9-a4c1-c9cefc5a1bb8",
@@ -1489,7 +1591,8 @@
     "actionable": true,
     "suggested_rule": "Treat /core-dump as a mandatory step (not a user-requested one) at: major milestone completion, before any risky op, after ≥3 files edited, and at natural session-end signals.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "95bb314f-0f66-43e1-9603-816bc63bd199",
@@ -1503,7 +1606,8 @@
     "actionable": true,
     "suggested_rule": "Unify the screenshot-verify pattern: whether the agent is autonomously driving desktop automation or the user is iteratively refining UI, always capture a screenshot after each mutation and present it before proceeding. Never report a visual change as 'done' without visual proof.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "87e37b9c-c857-4ba6-a36a-817ce2067e36",
@@ -1517,7 +1621,8 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "feb42a88-9413-4fa8-8aff-cd3279a88ab6",
@@ -1531,7 +1636,8 @@
     "actionable": true,
     "suggested_rule": "Infer session phase from message patterns: questions and 'explain/show/what' keywords = exploration mode (read-only, no unsolicited changes); imperatives and terse continuations = execution mode (act autonomously within stated scope). Phase can shift mid-session.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "732de2e4-bab5-4108-b719-afa7e08fb56c",
@@ -1545,7 +1651,8 @@
     "actionable": true,
     "suggested_rule": "Any task with a visual output (UI change, dashboard widget, desktop automation) must include a verification screenshot before reporting completion. Code-level correctness is necessary but not sufficient.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c6782123-9949-4c1b-8da4-8b3cea4c0e9b",
@@ -1559,7 +1666,8 @@
     "actionable": true,
     "suggested_rule": "Unify under a single 'ground before act' principle: for any domain (data, UI, git, desktop), if observation is possible before action, observe. The cost of one extra read/screenshot/status-check is always less than the cost of acting on stale inference.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "24c7c649-57b5-4892-9bd2-7b9f6e4f7758",
@@ -1573,7 +1681,8 @@
     "actionable": true,
     "suggested_rule": "After 2 consecutive failed fix attempts on the same issue, force a micro-checkpoint (lightweight core-dump of just the current hypothesis and attempts tried) before the third attempt. This both prevents thrashing and insures against imminent context exhaustion.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ab438a90-18df-4fd2-a0be-b17a4d6053ef",
@@ -1586,7 +1695,8 @@
     "actionable": true,
     "suggested_rule": "When an MCP connection has failed in 3+ sessions, stop retrying and write a diagnostic note to runtime-notes with the failure mode — treat it as a known-broken integration requiring user-side action, not an agent-solvable retry.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d662f980-5a33-4cdb-be5b-fa49f278bead",
@@ -1600,7 +1710,8 @@
     "actionable": true,
     "suggested_rule": "Treat the WAL/checkpoint/catchup system as a proper event-sourcing pipeline: WAL entries are the source of truth, checkpoints are materialized views, and /catchup is a projection rebuild. Apply event-sourcing invariants: never mutate WAL entries, checkpoints must be reproducible from WAL, and stale checkpoints should be rebuilt not patched.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c0de8207-4792-4deb-b2e3-47f12fc64900",
@@ -1614,7 +1725,8 @@
     "actionable": true,
     "suggested_rule": "For any task where the output is user-facing (UI, data export, report), always include a verification artifact (screenshot, sample output, diff) in the completion message. 'It works' without evidence is as bad as a hallucinated data value for this user.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9d8322d1-908f-4c25-b60f-4076942462a1",
@@ -1629,7 +1741,8 @@
     "actionable": true,
     "suggested_rule": "During high-complexity sessions, proactively offer mid-session state summaries (mini core dumps) at natural breakpoints — especially after completing a major sub-task or when tool count exceeds 40. Frame these as checkpoint saves, not interruptions. Include: what's done, what's in progress, what's next, and any blocking issues.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "0c2c8c0e-5ee6-42d7-8979-ab2774a9e080",
@@ -1644,7 +1757,8 @@
     "actionable": true,
     "suggested_rule": "When multiple parallel sub-tasks are running, maintain an internal task registry. On each notification receipt, update the registry silently. Only surface a summary when all tasks complete or when a failure requires intervention. Don't generate output for successful heartbeats.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f777057e-3891-46e8-a2de-9dca8fc984b5",
@@ -1660,7 +1774,8 @@
     "actionable": true,
     "suggested_rule": "Recognize and optimize for the user's session lifecycle protocol: (1) catchup = boot/context load — be fast and complete, (2) pick skill = process mode — lock into the persona, (3) terse commands = runtime execution — maintain high autonomy, (4) core dump = checkpoint — serialize comprehensively. Treat violations of this lifecycle (e.g., starting work without catchup, ending without core dump) as potential errors worth flagging.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f143bb38-9d7a-4623-8fa1-54cde21bc459",
@@ -1676,7 +1791,8 @@
     "actionable": true,
     "suggested_rule": "Treat terse user commands as high-priority compressed instructions. Never ask for clarification on known continuation commands ('keep going', 'continue', 'move', 'more'). Maximize work output per user token spent. Reserve verbose communication for truly ambiguous situations only.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5596aa98-1bcc-433e-a08d-a0725d9d557a",
@@ -1690,7 +1806,8 @@
     "actionable": true,
     "suggested_rule": "Use parallel sub-agents only for read-only, report-generating tasks (audits, documentation, codebase analysis). For any task that writes code or modifies state, use sequential single-agent execution so the user retains steering control at each step.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "53f3b5f7-bb10-4bf5-9a3d-0aec21dac930",
@@ -1704,7 +1821,8 @@
     "actionable": true,
     "suggested_rule": "When starting any new project with this user, scaffold with: dark/light toggle, widget-based layout, pm2 process management, and a data pipeline layer — this matches their architectural instinct across all observed domains.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "33b0994b-b7f5-4176-8860-4ed0c4d05abc",
@@ -1719,7 +1837,8 @@
     "actionable": true,
     "suggested_rule": "Treat every terse continuation message as 'apply the next increment from my last stated direction' — never ask for clarification on messages under 5 words if recent context exists. Reconstruct intent from the last substantive instruction.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "810b852c-e967-4f18-82f2-2ed8b16ef048",
@@ -1734,7 +1853,8 @@
     "actionable": true,
     "suggested_rule": "Before any state-changing action (git ops, file writes beyond explicit request, scope expansion), explicitly verify the current state and the exact user request — never infer intent from prior session context or general 'helpfulness' heuristics.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "70400da9-d079-4720-b43f-328e023c5487",
@@ -1748,7 +1868,8 @@
     "actionable": true,
     "suggested_rule": "For any claim that will be acted on (published, pushed, committed to memory), require two independent sources or one source + explicit verification step. Flag single-source claims in output as '(unverified, single source)'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "068596ba-5182-40ee-80f4-7e996f99635f",
@@ -1764,7 +1885,8 @@
     "actionable": true,
     "suggested_rule": "Write a WAL CHECKPOINT every 15-20 tool calls during active implementation work; trigger full /core-dump + WAL reset at feature-complete milestones or at 40+ accumulated calls.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e4889368-f0a4-4dbe-bd03-bec5fcd5a232",
@@ -1779,7 +1901,8 @@
     "actionable": true,
     "suggested_rule": "/catchup output should lead with project identity (CWD, pm2 service names, dominant domain keywords) so cross-project resumption is unambiguous even when the session_id is generic.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9ba3e6ad-5d11-48b7-a24e-e9e5feb87040",
@@ -1794,7 +1917,8 @@
     "actionable": true,
     "suggested_rule": "Implement a PostToolUse hook that tracks tool count per session and emits a reminder to write a WAL checkpoint every 15 tool calls, or auto-appends a checkpoint line when session context usage crosses 60%.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1c40526c-534a-4de8-9c1c-5852f79b1354",
@@ -1808,7 +1932,8 @@
     "actionable": true,
     "suggested_rule": "If a session exceeds 60 tool calls, trigger an automatic efficiency review: are we spending more tokens restoring context than doing work? If yes, break into smaller scoped sessions with explicit handoff docs rather than continuing indefinitely.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "23e15db7-07a9-4de7-9b02-d6bcae5369eb",
@@ -1822,7 +1947,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or state-dependent operation (worktree switch, git push, context resume), re-read current state from source of truth — never rely on what was true N steps ago.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "fc6e87db-3a15-41c4-ab56-6d88d6cd9eba",
@@ -1837,7 +1963,8 @@
     "actionable": true,
     "suggested_rule": "Interpret terse continuation commands as 'maintain current vector with full autonomy' but treat any new topic or scope expansion as requiring explicit user approval before acting — never extrapolate from continuation permission to initiation permission.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "04099431-662d-498a-a749-4746809a67fa",
@@ -1850,7 +1977,8 @@
     "actionable": true,
     "suggested_rule": "After any context restoration (/catchup, compaction resume), treat all git state (branch, remote, working tree cleanliness, repo owner) as unknown and re-query before any write operation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "528df95b-8551-4ccf-b8eb-e027b809de98",
@@ -1864,7 +1992,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or irreversible action, verify the specific precondition it depends on — never inherit state assumptions from prior context or inference. Treat all state older than the current tool-call round as potentially stale.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cac4907a-1500-4ceb-9641-923ef859fc7b",
@@ -1879,7 +2008,8 @@
     "actionable": true,
     "suggested_rule": "Treat WAL/checkpoint writes with the same discipline as git commits: never lose them, always verify freshness before acting on them, and maintain them as first-class infrastructure rather than optional convenience.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a8209265-c113-4b8c-9e8a-083158b6412c",
@@ -1893,7 +2023,8 @@
     "actionable": true,
     "suggested_rule": "Before any side-effecting operation, distinguish between 'I know X' (read it this session) and 'I believe X' (inferred or remembered). If the critical parameter is in the 'believe' category, verify it first. This single check would have prevented all three failure modes.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d87d0ed0-e07d-4dcd-ae84-7ee74e35d76d",
@@ -1908,7 +2039,8 @@
     "actionable": true,
     "suggested_rule": "After compaction, emit a one-line 'I still know: [project], [current task], [last 3 files touched]' confirmation so the user can verify continuity without issuing /catchup. Reduces the terse-command-after-compaction ambiguity.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "10636e92-3b12-4379-8821-d6e942995d86",
@@ -1921,7 +2053,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation signals, increase execution depth (more tool calls, deeper investigation) but never increase scope breadth (no new features, no adjacent file changes). High autonomy ≠ wide scope.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "84b7bbc4-123b-4015-951a-e65f78ef5601",
@@ -1935,7 +2068,8 @@
     "actionable": true,
     "suggested_rule": "Track whether the current session is in 'implementation mode' (user approved a plan, work is underway) or 'exploration mode' (user is asking questions, reviewing). Terse continuations in implementation mode = execute. Terse responses in exploration mode = provide more information, don't start building.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "fe18cd2c-6e59-4c83-853b-a0d02cfada57",
@@ -1949,7 +2083,8 @@
     "actionable": true,
     "suggested_rule": "When creating any new persistent artifact (logs, test fixtures, configuration, reports), default to structured machine-parseable formats (JSONL, JSON, YAML) over prose markdown. Reserve markdown only for documents meant primarily for human reading.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "efcf6aed-30d4-4ac5-bd53-0821e32509d1",
@@ -1964,7 +2099,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation signals, maximize execution velocity but re-read the original task scope before each action. If the next logical step would expand scope beyond the original request, pause — even if the user just said 'keep going'. Autonomy applies to depth, not breadth.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "36232e2a-f788-4722-b204-0a67dbce5a0c",
@@ -1979,7 +2115,8 @@
     "actionable": true,
     "suggested_rule": "When adding new state-persistence files (checkpoints, runtime-notes), prefer structured formats (JSONL, frontmatter-delimited sections) from the start rather than freeform markdown, to avoid a second markdown→structured migration.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c02c3df4-012b-4540-8182-91ec3987a877",
@@ -1993,7 +2130,8 @@
     "actionable": true,
     "suggested_rule": "After ANY boundary crossing (session resume, compaction, worktree switch, branch change), treat all cached state as invalidated. Run a verification pass: git status, check CWD, confirm active processes. Never carry forward assumptions across boundaries.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "91ad4ed8-8375-4e0a-a1e1-1b9ff9c5000a",
@@ -2008,7 +2146,8 @@
     "actionable": true,
     "suggested_rule": "When the user is in iterative-refinement mode (detected by 3+ short sequential messages), minimize preamble and explanation per turn — apply the delta, show the result (screenshot/output), and wait. Save the explanation for when the user asks 'why'.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f0ea8f2f-f259-4115-b23e-c2a25ad42ca0",
@@ -2022,7 +2161,8 @@
     "actionable": true,
     "suggested_rule": "After any visual change (CSS, layout, color, spacing), capture a screenshot before reporting completion — apply the same verify-before-act discipline from desktop automation to UI development.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "95cfd372-5162-4dc0-9496-7187ae0a4ce2",
@@ -2037,7 +2177,8 @@
     "actionable": true,
     "suggested_rule": "Treat git commits and WAL checkpoints as complementary, not redundant. Every git commit should be preceded or accompanied by a WAL checkpoint that captures current intent and next steps — not just completed work. On /catchup, reconstruct from both sources: git log for what changed, WAL for why and what's next.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "bb9079dd-cbe7-4d6f-a285-cf1896e6cee3",
@@ -2051,7 +2192,8 @@
     "actionable": true,
     "suggested_rule": "Before outputting extracted patterns, run a dedup pass: merge patterns sharing >80% keyword overlap into a single entry with a combined occurrence count and date range, preserving only the most specific formulation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6901bce8-5cd8-4954-8cc5-8a892a68abc9",
@@ -2065,7 +2207,8 @@
     "actionable": true,
     "suggested_rule": "After any UI-affecting change (CSS, layout, component), take a screenshot before reporting done. For desktop automation, use the vision loop. For dashboard/web work, use browser screenshot or dev tools. The verification step is not optional in either context.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1243827c-ef05-4e18-a121-4a61a5d29909",
@@ -2080,7 +2223,8 @@
     "actionable": true,
     "suggested_rule": "During iterative UI sessions, auto-screenshot after every visual change and present it before asking for next input — don't wait for the user to request verification. The terse command pattern means they expect to see results, not be asked if they want to see them.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "fc424323-f6cd-4e67-8e28-901bdce2b8be",
@@ -2094,7 +2238,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation, escalate execution intensity (more reads, deeper investigation, faster iteration) but never escalate scope. If the next logical step crosses a scope boundary, pause with a one-line confirmation even on a terse signal.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "985a732d-cc98-4e83-82f6-6a8caa800b09",
@@ -2109,7 +2254,8 @@
     "actionable": true,
     "suggested_rule": "For projects with complex domain state (simulations, dashboards with live data, data pipelines), core-dump should capture domain context (what the user is trying to achieve and why) not just technical state (what files changed). Include a 'domain intent' field in checkpoints.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "87077e45-8a6f-4ccd-b788-acc925c97ce9",
@@ -2123,7 +2269,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or externally-visible operation (git push, file write, branch create, credential handling), the agent must perform at least one fresh read of the relevant state — never act on cached mental models. Classify 'state assumption without verification' as the same severity as data hallucination.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7d899c96-41c8-4957-9938-4b4d7400e51a",
@@ -2137,7 +2284,8 @@
     "actionable": true,
     "suggested_rule": "When receiving a terse continuation after a scope correction in the same session, reduce scope aggressiveness by one level — the user has signaled both 'go fast' and 'stay narrow' in the same session, and narrow wins ties.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "605e51d2-3f55-4d59-9748-2fc056ca0bbe",
@@ -2151,7 +2299,8 @@
     "actionable": true,
     "suggested_rule": "On terse continuation, increase execution depth (more verification, more tool calls on current task) but freeze scope to exactly what was last explicitly requested. If the current task completes mid-continuation, stop and report rather than starting adjacent work.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "30c66619-4505-4c4e-9965-76de0c927924",
@@ -2165,7 +2314,8 @@
     "actionable": true,
     "suggested_rule": "Terse continuation signals authorize continued execution but never scope expansion. If continuing the current task would cross into a new area (new file, new feature, new system), pause and confirm even on terse input.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4aae72f5-d32c-456a-a4d7-77841cdc50d8",
@@ -2179,7 +2329,8 @@
     "actionable": true,
     "suggested_rule": "Before any git operation that moves or exposes data (worktree switch, push, branch create), run the verification triad (status + log + diff) AND confirm the target remote/org. Treat the cost of one extra read as always lower than the cost of one wrong write.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f344da6d-165e-4ae1-9cc6-7992205039b9",
@@ -2193,7 +2344,8 @@
     "actionable": true,
     "suggested_rule": "Before reporting any visual, spatial, or data-dependent result as 'done', the agent must have a verification artifact (screenshot, rendered output, actual API response) from the current state — not from memory or inference. 'I believe it looks correct' is never sufficient; 'here is what it looks like' is required.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "83dca171-de80-4ac0-9c83-96b2c2862714",
@@ -2207,7 +2359,8 @@
     "actionable": true,
     "suggested_rule": "When a fix attempt fails twice on the same issue, trigger an immediate mini core-dump of the current hypothesis and eliminated causes before the third attempt — this preserves debugging state even if context compaction happens mid-investigation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "69aaf519-0acb-45b1-887f-9458c4bda7d9",
@@ -2221,7 +2374,8 @@
     "actionable": true,
     "suggested_rule": "In iterative refinement loops (especially UI), minimize response length to under 2 sentences between actions. The user's next message IS the feedback — don't ask for it.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "812d7137-a61d-41f6-8aa0-a84cff393c41",
@@ -2236,7 +2390,8 @@
     "actionable": true,
     "suggested_rule": "Before outputting any derived/inferred value OR attempting a second fix for the same issue, the agent must cite the exact source (line number, API response field, error message) that justifies the output. No citation = no action.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3b6c15bb-21a7-45bf-bea4-f934cb82f6ed",
@@ -2249,7 +2404,8 @@
     "actionable": true,
     "suggested_rule": "Maintain a 'known-broken' registry in memory for integrations that have failed 3+ times across sessions. On encounter, surface the history and ask for new information before retrying.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e6a12499-f8d4-42f8-aa63-892f2e14b0f2",
@@ -2264,7 +2420,8 @@
     "actionable": true,
     "suggested_rule": "Before any generative action (data value, fix attempt, API call), require an explicit 'grounding citation' — the source file/line, the error message, or the data column that justifies the output. If no citation exists, flag as inferred rather than proceeding silently.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "03ca9e2c-0495-432c-a860-5bff78c8a0b8",
@@ -2278,7 +2435,8 @@
     "actionable": true,
     "suggested_rule": "When in iterative UI refinement mode (3+ sequential short feedback messages about the same component), auto-screenshot after each change without being asked — the user's mental model expects visual confirmation as the loop's return value.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4720c56b-8950-482c-8b2a-4feb545a81ea",
@@ -2293,7 +2451,8 @@
     "actionable": true,
     "suggested_rule": "When a session starts without /catchup and the user issues terse commands, proactively warn once that context may be stale rather than silently operating on partial state — terse commands assume shared context that may not exist post-compaction.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e6ec2893-3f34-467c-a831-4816520af674",
@@ -2307,7 +2466,8 @@
     "actionable": true,
     "suggested_rule": "Before reporting any task as complete, the agent must have at least one ground-truth verification step (screenshot for UI, read-back for files, curl for APIs, source-trace for data values). 'I believe it works' is never sufficient.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1f022ce4-f81e-47a8-bafa-13d4bea037f2",
@@ -2321,7 +2481,8 @@
     "actionable": true,
     "suggested_rule": "For projects with >5 prior sessions in WAL history, auto-load the last runtime-notes entry at session start without waiting for /catchup — the user's terse style assumes the agent already has context.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7ab23005-e8b8-444a-9fa6-c741b39741ca",
@@ -2335,7 +2496,8 @@
     "actionable": true,
     "suggested_rule": "In sessions that have already hit one compaction boundary, automatically reduce response verbosity by 50% — skip recaps of what was just done, omit 'I will now...' preambles, and report only deltas from the last checkpoint.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c18d4904-24e1-41f8-83e4-ab581484b457",
@@ -2349,7 +2511,8 @@
     "actionable": true,
     "suggested_rule": "Treat post-compaction state claims and data pipeline values with the same discipline: every asserted value must be traceable to a concrete source (checkpoint file or source column). If you can't cite the source, re-read it — never reconstruct from memory.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c32596d5-b634-4517-aeca-ffd2dd4bc2ce",
@@ -2363,7 +2526,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that crosses a boundary (local→remote, branch→worktree, memory→file), re-read the target state. Boundary crossings invalidate cached assumptions.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6c39d9e9-1b55-4dbd-95fb-ecb3090194f8",
@@ -2378,7 +2542,8 @@
     "actionable": true,
     "suggested_rule": "Before outputting any value (data or code fix), pass the 'citation test': can you point to the exact source line, API response, or error message that justifies this output? If not, stop and investigate rather than proceed.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6b3754c1-1607-48c7-a7d1-3b35423824b5",
@@ -2392,7 +2557,8 @@
     "actionable": true,
     "suggested_rule": "When hitting 3 consecutive failed fix attempts OR approaching 70% context usage — whichever comes first — force a checkpoint: write current understanding to WAL, identify what is known vs unknown, then resume from the checkpoint.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "433a3c10-8918-4d8a-b202-7973f77469a3",
@@ -2406,7 +2572,8 @@
     "actionable": true,
     "suggested_rule": "Treat the combination of terse input + active checkpoint files as a 'pipeline mode' signal: maximize execution velocity, auto-checkpoint at tool count thresholds (not just time), and never interrupt flow for confirmations that can be deferred to the next natural pause.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cb3ac621-51cb-4725-aaff-9f75642eb059",
@@ -2421,7 +2588,8 @@
     "actionable": true,
     "suggested_rule": "Before producing any output (data value, code fix, or API result), the agent must be able to cite the specific source line, file, or API response it derived the output from. If it cannot, it must emit a '[UNGROUNDED]' marker rather than a plausible fabrication. Apply to data cells, fix attempts, and status claims equally.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "84034a93-4f03-4c7a-b032-9ed481e04201",
@@ -2435,7 +2603,8 @@
     "actionable": true,
     "suggested_rule": "For integrations with 2+ sessions of repeated failure (Slack MCP, Notion sync), the first action must be reading prior session notes for that integration — not re-attempting the fix. If the same root cause appears in 3+ sessions, escalate to a written postmortem in runtime-notes before any new fix attempt.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9e82f8d5-b841-4e12-b420-d60427398cbf",
@@ -2449,7 +2618,8 @@
     "actionable": true,
     "suggested_rule": "When a session has already crossed 1 compaction boundary AND the user sends terse continuations, reduce agent verbosity by ~50% (shorter confirmations, skip insight boxes, minimize status updates) to conserve context budget.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cdef70b8-d4b4-45c1-8b53-194af6d5f986",
@@ -2463,7 +2633,8 @@
     "actionable": true,
     "suggested_rule": "After any information boundary (context compaction, session restart, or data source change), treat all previously-held state as unverified. Re-read before asserting. The same 'never fabricate, always trace to source' rule that applies to data pipelines applies to session state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7236a8fc-4e3a-48f9-9128-d2236b11f45e",
@@ -2477,7 +2648,8 @@
     "actionable": true,
     "suggested_rule": "Unify under a single meta-rule: 'Never assert state without observation.' Before claiming any output is correct — data values, UI appearance, coordinate positions, API responses — produce or read direct evidence. If evidence can't be obtained, say so.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cedd0fb4-0af2-435f-a9fe-d427b92effde",
@@ -2490,7 +2662,8 @@
     "actionable": true,
     "suggested_rule": "Generalize as 'ground-truth-first' principle: before any action that depends on state (screen coordinates, data values, file contents, git status), read the actual state from its canonical source. Never act on remembered or inferred state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "eeb30104-8fb8-4cf8-bdee-1a495a630589",
@@ -2504,7 +2677,8 @@
     "actionable": true,
     "suggested_rule": "Before reporting any generated output as correct — UI screenshot, data transform result, or automation action — verify against the actual artifact (re-read the file, take the screenshot, query the API). Internal confidence is not verification.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f4888c4f-a11c-4b1a-b5a8-e4e4f4ba6258",
@@ -2518,7 +2692,8 @@
     "actionable": true,
     "suggested_rule": "After 2 failed fix attempts on the same issue, write a /core-dump checkpoint BEFORE the 3rd attempt. This preserves diagnostic context against the compaction that thrashing makes likely, and forces a pause that often reveals the root cause.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "66fd4d2e-33dd-4ad4-8078-6bb0676aca7f",
@@ -2532,7 +2707,8 @@
     "actionable": true,
     "suggested_rule": "After any compaction or context restoration, treat all prior beliefs about file contents, process state, and data values as unverified claims requiring a fresh read — apply the same 'no inference without source' discipline used for data pipelines to session state itself.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5384ea70-7a5d-4ebd-b1c7-2ba17048e02b",
@@ -2546,7 +2722,8 @@
     "actionable": true,
     "suggested_rule": "Maintain a 'known-fragile integrations' section in runtime-notes or a dedicated file. For each entry: last known failure mode, what was tried, current workaround, and conditions under which a real fix should be reattempted. Before debugging a recurring integration failure, check this registry first to avoid re-treading prior sessions' dead ends.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c9bd1e53-1c58-4fab-ae93-61283a4f2544",
@@ -2561,7 +2738,8 @@
     "actionable": true,
     "suggested_rule": "When making architectural suggestions, bias toward production-readiness patterns: proper error handling, idempotent operations, migration rollback plans, and export format validation. The project has outgrown 'move fast and break things' — suggest guardrails proportional to the growing complexity.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "83b253a2-5b70-40ef-b9b6-5b864499f1b5",
@@ -2574,7 +2752,8 @@
     "actionable": true,
     "suggested_rule": "Before any assertion of fact (current events, repo metadata, file state, user identity), require at least two independent sources or one authoritative check — treat first-match values as candidates, not answers.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "00b5924f-b8f0-4497-9f28-7893a52568d5",
@@ -2588,7 +2767,8 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6371f8dc-2194-434a-a28b-23b5adf7671a",
@@ -2602,7 +2782,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that crosses a trust boundary (local→remote, memory→disk, branch→branch), run a domain-specific pre-flight: git ops get the verification triad, file ops get a existence check, auth ops get a 'is this the right target' confirmation. Never inherit verification from a prior tool call.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2562372c-7a46-4c62-b46f-fa936dcfdd07",
@@ -2617,7 +2798,8 @@
     "actionable": true,
     "suggested_rule": "Only use parallel agents/tasks when: (1) the tasks are truly independent with no shared state, (2) each task has explicit completion signaling, and (3) cleanup of spawned processes is guaranteed. Default to sequential execution. If parallel execution is used, proactively check for and clean up zombie processes afterward.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6596613c-caed-4b32-85ad-f7048f598e62",
@@ -2631,7 +2813,8 @@
     "actionable": true,
     "suggested_rule": "Before debugging any configuration or environment issue, first verify the actual current state (run the config, check the process, test the environment). Never assume state based on prior session knowledge — it may have changed. Spend 1 tool call verifying before spending 16 debugging a phantom.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2b6fa49f-adf2-4be1-8d71-7a9224a90b13",
@@ -2645,7 +2828,8 @@
     "actionable": true,
     "suggested_rule": "Classify each action as mechanical (git ops, file moves, formatting), creative (new code, refactors, UI changes), or epistemic (factual claims, current events, status reports). Mechanical = execute silently. Creative = confirm scope before acting. Epistemic = verify from multiple sources before stating.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4cf94bb2-d79c-49a3-a333-379315c36910",
@@ -2659,7 +2843,8 @@
     "actionable": true,
     "suggested_rule": "Batch or suppress zero-content task notifications during high-tool-count sessions. If a notification carries no actionable payload, it should not occupy a conversation turn.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "08f2b7e6-2124-4f90-b885-c10a00efe9f6",
@@ -2673,7 +2858,8 @@
     "actionable": true,
     "suggested_rule": "Treat WAL files with the same integrity guarantees as source code: never truncate without writing a replacement, always validate the last checkpoint is parseable before appending, and warn the user if WAL is >2 sessions stale (it's effectively 'detached HEAD' for cognitive state).",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "0cd111bd-12a5-46c9-a08a-d9facf16c767",
@@ -2688,7 +2874,8 @@
     "actionable": true,
     "suggested_rule": "Implement a PostToolUse hook that auto-writes a lightweight WAL checkpoint every 15 tool calls on sessions tagged as long-running (dashboard, simulation, pipeline work), reducing reliance on the user or agent remembering to checkpoint.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c6c3fd9a-992f-4b8a-8517-26f6ee57507c",
@@ -2703,7 +2890,8 @@
     "actionable": true,
     "suggested_rule": "When user message is <5 words and imperative/evaluative, treat as continuation signal — infer context from most recent WAL entry or last tool action rather than asking for clarification.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "78c8bb8b-1d2b-420f-aacf-ac2b2780e05f",
@@ -2719,7 +2907,8 @@
     "actionable": true,
     "suggested_rule": "Treat every terse continuation message as an implicit /catchup — read the most recent WAL checkpoint before acting, and write a fresh micro-checkpoint after each iterative UI refinement so the next 'better'/'revert' has accurate state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b5064105-3bf1-43d9-b060-9c03541ad70e",
@@ -2733,7 +2922,8 @@
     "actionable": true,
     "suggested_rule": "Update /catchup to prefer `jq -c 'select(.kind == \"checkpoint\")' .claude/wal.jsonl | tail -1` as the primary recovery path, falling back to markdown only when JSONL is absent.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1bed5518-aebc-4bdf-bac4-c75f13d60ffb",
@@ -2747,7 +2937,8 @@
     "actionable": true,
     "suggested_rule": "After 3+ session continuations on the same task, treat ALL cached assumptions as potentially stale — re-verify git state, file existence, and server status before acting, even if you 'remember' them from a prior context.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "aa3df409-28fc-4059-8d95-f165e813d824",
@@ -2761,7 +2952,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or externally-visible operation, explicitly verify the three most common stale-state sources: git status (uncommitted work), remote origin (correct owner/repo), and last checkpoint age (WAL staleness). Never infer these from conversation history.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "0f666169-e2ff-48a2-8252-17e13b2785f3",
@@ -2776,7 +2968,8 @@
     "actionable": true,
     "suggested_rule": "For projects with both data-pipeline and rich-UI layers, auto-checkpoint every 12 tool calls instead of the default 15-20, since state accumulates faster in these architectures.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4ecbe0ce-12ec-489d-99c6-903d5a9aba18",
@@ -2791,7 +2984,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that crosses a state boundary (compaction, worktree switch, branch change, long tool sequence), write a checkpoint. Treat state boundaries like transaction boundaries — commit before switching.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a0b6baea-11d8-46ed-a4bc-f9533f836235",
@@ -2805,7 +2999,8 @@
     "actionable": true,
     "suggested_rule": "When /catchup detects a project switch (CWD differs from last session's project), load only that project's WAL — do not attempt to reconstruct cross-project state, as it wastes context window on irrelevant checkpoints.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1715172b-2d52-477c-a548-7a38b6cc96e4",
@@ -2819,7 +3014,8 @@
     "actionable": true,
     "suggested_rule": "At any state boundary (session resume, branch switch, worktree change, repo operation), treat ALL cached assumptions as potentially stale. Run a verification step before acting: git status before worktree ops, gh api before repo ops, WAL freshness check before catchup.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d8cdceb7-0664-4b5b-9322-42e52f2cc8e7",
@@ -2833,7 +3029,8 @@
     "actionable": true,
     "suggested_rule": "Be maximally proactive on infrastructure/meta tasks (checkpoints, WAL writes, state verification) but strictly reactive on domain tasks (only implement what was explicitly requested). The boundary is: 'does this change what the code does?' If yes, wait for instruction.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "81002468-da16-4a1c-afac-ad4d3df3d01d",
@@ -2847,7 +3044,8 @@
     "actionable": true,
     "suggested_rule": "Before any side-effecting operation (click, push, checkout, delete), run exactly one read-only verification command that confirms the current state matches assumptions. Never act on cached/remembered state for destructive operations.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "84a34ed1-e257-4879-a12a-321b011076f3",
@@ -2861,7 +3059,8 @@
     "actionable": true,
     "suggested_rule": "Generalize the vision loop pattern into a 'mutable-state interaction protocol': observe → confirm observation matches expectation → act → verify result. Apply to git operations (status → confirm branch/changes → push → verify), desktop automation (screenshot → annotate → click → screenshot), and file transforms (read → confirm structure → write → read-back).",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5a3518f7-bd51-42ab-894c-0cebb43ee1b4",
@@ -2875,7 +3074,8 @@
     "actionable": true,
     "suggested_rule": "At every boundary crossing (session resume, worktree switch, branch change, compaction), treat ALL prior state beliefs as invalidated — re-verify before any side-effecting operation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "dc6037c5-0a6a-4668-9c46-4fa7ecb7baac",
@@ -2889,7 +3089,8 @@
     "actionable": true,
     "suggested_rule": "For any UI change, automatically enter a vision loop: make the change → take screenshot → present to user. Don't describe the change textually; show it. This matches both the desktop-automation best practice and the user's iterative refinement workflow.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "21ae17b1-0611-4a3f-ad89-019144712f5b",
@@ -2903,7 +3104,8 @@
     "actionable": true,
     "suggested_rule": "At session start, identify which project is active before loading context. Project-specific WAL and checkpoint files should be scoped to avoid cross-contamination. When /catchup loads, verify the checkpoint matches the current working directory's project.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5bb301f6-cf23-4cee-bd6c-f80868a6e495",
@@ -2918,7 +3120,8 @@
     "actionable": true,
     "suggested_rule": "At session start, if /catchup reveals a different project than the last known active one, explicitly confirm which project the user intends to work on before loading deep context — multi-project context contamination is a likely failure mode.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8416b288-03ae-4587-9cf1-a1a833d46575",
@@ -2933,7 +3136,8 @@
     "actionable": true,
     "suggested_rule": "Treat session continuity infrastructure (WAL, core-dump, catchup, runtime-notes) as Tier 0 priority — bugs or regressions in these tools have multiplied impact across all projects, unlike project-specific issues.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "01b24ac5-c38a-42c0-aeb9-5d12abf658f8",
@@ -2947,7 +3151,8 @@
     "actionable": true,
     "suggested_rule": "Treat WAL + core-dump as the primary state recovery mechanism, not git log. Git tells you what shipped; WAL tells you what was happening. When resuming work, read WAL first, then git log for context.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4c7311ce-818c-4d03-8c7e-5c468566e3a9",
@@ -2961,7 +3166,8 @@
     "actionable": true,
     "suggested_rule": "In UI sessions, split autonomy by layer: HIGH autonomy on visual/aesthetic changes (try variations, screenshot proactively), LOW autonomy on structural/functional changes (confirm before adding routes, state, APIs). The user's 'scope ceiling' applies to features, not to polish.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3b1eb8f8-dbe7-49f0-be6d-08a19f492f54",
@@ -2975,7 +3181,8 @@
     "actionable": true,
     "suggested_rule": "Formalize an 'OAV guard' (Observe-Act-Verify): any state-mutating operation must be preceded by a fresh read of the state it will mutate and followed by a verification read. No exceptions for 'I just checked it' — staleness is the default assumption.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "83e41cf9-8f76-4ca8-8517-46510f9a1b17",
@@ -2989,7 +3196,8 @@
     "actionable": true,
     "suggested_rule": "Before any state-mutating operation (git checkout, branch push, file overwrite, session handoff), re-read the current state even if you 'just' checked it. Treat every state-reading as having a TTL of one tool call.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d219f5ce-8a22-49d5-adc3-231a5f9ba7aa",
@@ -3003,7 +3211,8 @@
     "actionable": true,
     "suggested_rule": "After any UI-affecting code change, take a screenshot before responding. If screenshot capture fails, explicitly state the change is unverified rather than claiming completion.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b9f43447-f84c-4474-9180-448fae93b1dc",
@@ -3017,7 +3226,8 @@
     "actionable": true,
     "suggested_rule": "After any context discontinuity (compaction, session resume, worktree switch), the next git operation must be preceded by the full verification triad (status + log + diff) regardless of how recently it was last checked.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ab2b85eb-f4d5-40bb-9a48-ecfb55e026d4",
@@ -3031,7 +3241,8 @@
     "actionable": true,
     "suggested_rule": "For any UI change, take a screenshot and verify visually BEFORE reporting completion. The user's iterative refinement pattern means reporting 'done' without visual verification will always generate a correction round.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f6493f8e-77c0-41dc-8e88-8b71ddba1292",
@@ -3045,7 +3256,8 @@
     "actionable": true,
     "suggested_rule": "In sessions with terse-command patterns and tool counts exceeding 30, auto-checkpoint every 20 tool calls without being asked — the user is in 'transaction mode' and expects savepoints.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "51251f26-6024-4e3e-841a-0dbcfb3da43e",
@@ -3059,7 +3271,8 @@
     "actionable": true,
     "suggested_rule": "When the user gives terse iterative feedback on UI or behavior, make the smallest possible change that addresses the literal feedback. Do not escalate scope ('while I'm here...') or assume the small correction implies broader dissatisfaction. One adjustment per terse signal.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b5282ec2-e386-44db-ad41-f0ed165c5caa",
@@ -3073,7 +3286,8 @@
     "actionable": true,
     "suggested_rule": "Treat git commits and cognitive checkpoints as the same discipline: if you wouldn't work 20 minutes without committing code, don't work 20 tool-calls without a WAL checkpoint.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2159bc32-ef30-4268-8308-3b6fab80121a",
@@ -3088,7 +3302,8 @@
     "actionable": true,
     "suggested_rule": "Maintain a distinct 'trust-critical' operation tier (above 'risky') for: writing credentials, generating data values, destructive git operations on non-local state, and pushing to repos. Trust-critical ops require two verification steps (source check + output check) rather than one confirmation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ad9132c4-2da4-4b44-8523-9f547c461ab8",
@@ -3102,7 +3317,8 @@
     "actionable": true,
     "suggested_rule": "For UI tasks with this user, default to shipping the minimal visible change with a screenshot, then wait — don't anticipate refinements or bundle multiple aesthetic changes. The user's iteration loop is faster than the agent's prediction accuracy.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2689e3dc-a477-4a20-8a42-f75daef786bb",
@@ -3116,7 +3332,8 @@
     "actionable": true,
     "suggested_rule": "For projects with >50 tools per session, auto-checkpoint at tool #25 (not #30) and include a tool-count estimate in the core-dump header so /catchup can prioritize which checkpoints to load.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b5026561-a8ce-418b-ba9f-62d3f4687fb9",
@@ -3130,7 +3347,8 @@
     "actionable": true,
     "suggested_rule": "Before any action where the agent is working from 'I think X is...' rather than 'I just read/saw X is...', the verification cost should scale with irreversibility: read-only check for recoverable actions, explicit user confirmation for trust-sensitive ones.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "70eecbb7-403d-43a2-8599-b5dcf22962b6",
@@ -3145,7 +3363,8 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3f9cedad-75f5-42f4-8c91-61c606c449d9",
@@ -3159,7 +3378,8 @@
     "actionable": true,
     "suggested_rule": "Any task where the output is visual (UI, screenshot, rendered chart) or data-derived (transformed dataset, API enrichment) must include a verification step that reads back the actual output before reporting completion. 'I wrote the code' is not 'it works.'",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5e40867f-93cf-463b-8438-5dab5147e587",
@@ -3173,7 +3393,8 @@
     "actionable": true,
     "suggested_rule": "When a terse continuation follows a failed attempt (not a successful step), do NOT treat it as an autonomous-continue signal. Instead, pause for root-cause analysis. Heuristic: if the last action was a fix and the user's response is negative-terse ('no', 'wrong', 'again'), switch from execution mode to investigation mode.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "878cf1c1-f5cb-46a3-aa47-393194269b52",
@@ -3187,7 +3408,8 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9c199f1f-a985-45de-a379-1857ce32373e",
@@ -3201,7 +3423,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that modifies shared external state (git push, file write to non-local path, API call with side effects), re-verify the THREE assumptions most likely to have drifted: current branch/worktree state, target owner/org, and whether any sensitive data is staged.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "06474963-f78b-4356-95f4-43726cce59dc",
@@ -3215,7 +3438,8 @@
     "actionable": true,
     "suggested_rule": "Generalize the vision-loop principle: any claim about current state (UI appearance, data value, file content) must be backed by a direct observation from the current turn, not memory of a prior turn. 'I set it to X' is not proof that X is the current state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "06225fb3-a6f2-4a22-8f35-154c3d55c5a9",
@@ -3229,7 +3453,8 @@
     "actionable": true,
     "suggested_rule": "Before emitting any derived/inferred value in a data pipeline OR attempting a second fix for the same failure, require an explicit source citation (file:line, API response field, or error message) in the reasoning. No citation = no emit.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "582df53e-284e-4429-bd30-410d4e87bccc",
@@ -3243,7 +3468,8 @@
     "actionable": true,
     "suggested_rule": "Before any destructive or externally-visible git operation (push, worktree switch, branch create), run the verification triad (status + log + diff) AND verify the target (remote URL, org/owner, branch name) from live state, not memory.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1218b3d8-cfe8-4612-a529-9ff53566bbd3",
@@ -3257,7 +3483,8 @@
     "actionable": true,
     "suggested_rule": "Unify the 'render-before-judge' principle across all three domains into a single meta-rule: before asserting correctness of any output (UI state, data values, automation coordinates), the agent must have a direct observation (screenshot, file read-back, API response) from the current moment — never from memory or inference.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
@@ -3272,7 +3499,8 @@
     "actionable": true,
     "suggested_rule": "Treat imperatives like 'keep going', 'started', 'continue', 'do it' as explicit authorization for extended autonomous execution within the current task scope. Do NOT treat them as authorization to expand scope — autonomy is on depth, never breadth.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9ce930fa-26b1-4ddd-967f-0046d9f507c2",
@@ -3286,7 +3514,8 @@
     "actionable": true,
     "suggested_rule": "Before any state-mutating operation (git push, file write, worktree switch), run a 'staleness check' that verifies the 3 most recent assumptions the agent is acting on. If any assumption was formed before the last compaction boundary, re-verify it.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "772d99a8-6b6c-405d-8f19-8083e4a7c78d",
@@ -3301,7 +3530,8 @@
     "actionable": true,
     "suggested_rule": "Unify render-before-judge across all output modalities: data values must be traced to source, UI changes must be screenshot-verified, desktop actions must use the vision loop. The common principle is: never assert output state without observation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "23247bf2-658b-4619-8321-9f9ea141e640",
@@ -3315,7 +3545,8 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1f779102-7ff1-45e0-b1eb-6ad5fb91ce34",
@@ -3329,7 +3560,8 @@
     "actionable": true,
     "suggested_rule": "Unify UI change verification and desktop automation verification into a single 'visual assertion' primitive: any action that modifies visible state must be followed by a screenshot read before reporting completion or proceeding to the next action.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cd8fcb39-aa5a-4182-a8f1-a6e79a82e091",
@@ -3343,7 +3575,8 @@
     "actionable": true,
     "suggested_rule": "Unify all verification under a single principle: never assert state you haven't observed in this tool call. Screenshots for UI, source citations for data, git status for repo state — the modality differs but the rule is one: observe, then claim.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "079f2cf4-9e84-4695-833f-9dacc9d827b9",
@@ -3358,7 +3591,8 @@
     "actionable": true,
     "suggested_rule": "Maintain a 'verify-before-act' checklist that scales with blast radius: read-only ops need no verification, local file writes need file-exists check, git operations need the verification triad, external-facing operations need both state verification AND explicit user confirmation. The higher the blast radius, the more sources must corroborate.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ec44aaa2-84db-418f-82c1-3d35fd595b1b",
@@ -3372,7 +3606,8 @@
     "actionable": true,
     "suggested_rule": "Extend the git verification triad to all shared-state mutations: before any worktree switch, check `git stash list` + `git status`; before any repo operation, verify owner with `gh repo view --json owner`; before any file write in a data session, grep the content for credential-shaped strings.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9b60a790-c87f-418f-89e5-5ccf315cdc79",
@@ -3386,7 +3621,8 @@
     "actionable": true,
     "suggested_rule": "For external service integrations that fail 2+ times across sessions (Slack MCP, Notion sync), stop debugging code and check environmental prerequisites first: token expiry, API version changes, network/firewall state. Log the environmental check result to runtime-notes so the next session doesn't repeat the same diagnosis.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7532cc83-f411-40f8-8fd0-c43f6bfc3109",
@@ -3400,7 +3636,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that touches external state (push, worktree switch, file write with sensitive content), run the cheapest possible verification of the assumption being relied on — git remote -v for repo identity, git stash list for uncommitted work, grep for credential patterns before commit.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "bf16ed46-bd37-48e3-8fe9-97e29f2995c3",
@@ -3414,7 +3651,8 @@
     "actionable": true,
     "suggested_rule": "Apply single-source-of-truth discipline uniformly: config values flow through the Config class, data values trace to source columns, environment state traces to fresh reads. Any value that 'shortcuts' its canonical source path should be flagged as potentially ungrounded.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d86f214f-5f5b-4305-8755-f268f395455f",
@@ -3428,7 +3666,8 @@
     "actionable": true,
     "suggested_rule": "Treat implementation, documentation, testing, and refactoring as separate phases. Never combine them unless explicitly asked. When finishing an implementation task, stop and report — don't auto-document or auto-refactor. Wait for the user to explicitly request the next phase.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1574d95c-b456-4e13-ba8c-3c0e41609f00",
@@ -3443,7 +3682,8 @@
     "actionable": true,
     "suggested_rule": "Batch-suppress task notification acknowledgments — instead of processing each individually, accumulate them and emit a single summary ('4 tasks completed: X, Y, Z, W') to reduce context consumption. Target: save ~15-20% of context budget currently spent on notification round-trips.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1f48f1c1-fdfe-4850-9019-e987a8412873",
@@ -3457,7 +3697,8 @@
     "actionable": true,
     "suggested_rule": "Optimize for 'cold start' speed: every checkpoint should be readable and actionable in under 30 seconds. Include the single most important next action as the first line, not buried in a summary.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cf768813-bc41-4ce8-bb3c-e46079595143",
@@ -3471,7 +3712,8 @@
     "actionable": true,
     "suggested_rule": "Treat WAL hygiene like git hygiene: checkpoint at logical boundaries (not just time intervals), prune stale entries proactively, and never let more than 2 sessions of WAL accumulate without a clean reset.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "0e5f3038-3fde-487b-b875-7a5c415b2dc9",
@@ -3485,7 +3727,8 @@
     "actionable": true,
     "suggested_rule": "Treat WAL/checkpoint corruption or loss as a P0 incident equivalent to losing uncommitted code. Back up .claude/wal.jsonl to a dated copy before any operation that might truncate or overwrite it.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "22a0fef4-2ee8-4cce-91d6-18468cbdb4a8",
@@ -3499,7 +3742,8 @@
     "actionable": true,
     "suggested_rule": "In data pipeline projects with domain-specific identifiers (part numbers, SKUs, serial numbers), never generate placeholder or example values — use literal 'MISSING' or 'SOURCE_NOT_FOUND' strings that are visually impossible to mistake for real data.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7e24d2cd-c88c-4629-8048-7feb5cb8b3e3",
@@ -3513,7 +3757,8 @@
     "actionable": true,
     "suggested_rule": "Before any operation that changes the working tree (worktree switch, branch checkout, git stash), run 'git status' and 'git stash list' and log the result to the WAL — so even if changes are lost, the WAL records what was at risk.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c9a6d971-852c-47d5-be27-ccb10096b5e9",
@@ -3528,7 +3773,8 @@
     "actionable": true,
     "suggested_rule": "When generating any documentation, export, or UI artifact, optimize for scanability and rapid context recovery. Always include navigation/index structures in multi-page docs. Default to supporting both dark and light modes. Treat every output artifact as something the user will return to cold after hours or days away.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "6cbfa439-2843-4d49-9e7b-b36ac685256f",
@@ -3543,7 +3789,8 @@
     "actionable": true,
     "suggested_rule": "Format core dumps and documentation with the assumption that a human will read them in a browser with dark mode. Include navigable structure (headers, links) rather than flat text. Make session state summaries scannable — use bullet points for decisions made, problems encountered, and next steps.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a2683bfd-3b94-4250-9180-ec6475e0ca6c",
@@ -3558,7 +3805,8 @@
     "actionable": true,
     "suggested_rule": "When working on UI features, assume the user is testing on both desktop and mobile devices in real-time. Prioritize mobile-responsive implementations. Before making assumptions about the testing environment, ask or verify what's available rather than assuming limitations.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "af8c3d64-90b0-4df1-b53d-f0e9dafd7e00",
@@ -3572,7 +3820,8 @@
     "actionable": true,
     "suggested_rule": "Before ANY context transition (session end, git worktree switch, process restart), execute a state-preservation checklist: (1) check for unstaged changes, (2) check for running background processes, (3) serialize current task state. Treat all transitions as potential data loss events.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "60bd816d-125a-4a14-9ac0-5418db2b6a3d",
@@ -3587,7 +3836,8 @@
     "actionable": true,
     "suggested_rule": "When building state persistence features in the simulation project, cross-reference patterns from the session continuity infrastructure (WAL, core-dump, catchup) — the problems are isomorphic and solutions may transfer bidirectionally.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "fa137833-2543-4089-861e-81fcf695a604",
@@ -3602,7 +3852,8 @@
     "actionable": true,
     "suggested_rule": "Before any boundary crossing (context compaction, worktree switch, repo/branch switch, session continuation), run an explicit 'pre-flight check': verify uncommitted state, confirm target identity, and write a checkpoint. Never rely on carried-forward assumptions across boundaries.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c32ea067-9272-47ab-bfc5-60a14fb76a30",
@@ -3617,7 +3868,8 @@
     "actionable": true,
     "suggested_rule": "When receiving terse continuation commands, reconstruct the full intent from the last 3-5 exchanges before acting — never ask 'what do you mean?' for messages like 'more' or 'keep going'. Maintain an implicit intent stack.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "230b3600-8693-4e7c-995d-6f7c17c4bc2a",
@@ -3631,7 +3883,8 @@
     "actionable": true,
     "suggested_rule": "When designing state persistence for the simulation's agents, reference the WAL/checkpoint/catchup pattern already proven in the dev workflow — and vice versa, improvements to the simulation's state handoff could inform better core-dump formats.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5c2fa7dd-9de1-425b-b427-723c4637a618",
@@ -3645,7 +3898,8 @@
     "actionable": true,
     "suggested_rule": "When the user builds stateful domain models (simulations, dashboards, pipelines), proactively apply the same persistence patterns from the domain to session management — e.g., if the project uses event sourcing, mirror that in WAL structure.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "58e39c2e-b2eb-4885-8782-5ccda83fc6c1",
@@ -3659,7 +3913,8 @@
     "actionable": true,
     "suggested_rule": "For git: execute commit/push silently when explicitly requested, but add a pre-flight check (unstaged changes? correct remote?) before any operation that creates or switches branches, without prompting the user — just verify internally and abort with explanation if something is wrong.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "9454fdbd-4737-40e0-ae59-7e0205c997c3",
@@ -3672,7 +3927,8 @@
     "actionable": true,
     "suggested_rule": "When task notifications arrive with 0 tools/0 chars in multi-agent contexts, suppress them at the orchestration layer rather than routing to the main agent — reduces noise in session logs and WAL.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "db1456f5-5893-4a36-94ed-7940465ec275",
@@ -3685,7 +3941,8 @@
     "actionable": true,
     "suggested_rule": "Before any git worktree switch, branch creation, or push: run a verification triad — `git status` for unstaged work, `git remote -v` for owner/org, and confirm target branch. Treat this as a precondition checklist, not optional.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "aad55538-687f-432a-ade1-dac5490e91d7",
@@ -3698,7 +3955,8 @@
     "actionable": true,
     "suggested_rule": "Filter out zero-tool/zero-reply turns from pattern-extraction and retrospective analysis; treat them as heartbeats, not interactions.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ae773115-9bad-41a7-8b7d-c6e7399a1782",
@@ -3711,7 +3969,8 @@
     "actionable": true,
     "suggested_rule": "Before any git operation that changes branch/worktree/remote state, run a verification command (git status, git remote -v, gh repo view) and cite the output — never infer from session memory.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "81e60aa1-8b33-473c-a978-5f9923573f2f",
@@ -3725,7 +3984,8 @@
     "actionable": true,
     "suggested_rule": "Before any of (worktree switch, branch create/push, WAL reset), require an explicit verification step: `git status --porcelain`, `git remote -v`, or `wc -l wal.jsonl` respectively. No action on inferred state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "41fe257b-b428-495a-ba91-347f2f1c2c64",
@@ -3740,7 +4000,8 @@
     "actionable": true,
     "suggested_rule": "When receiving terse continuation commands, do not re-explain context or ask clarifying questions. Instead: read last WAL checkpoint → identify current task → execute next step → report result in one line. Treat 'keep going' as 'next()' on an iterator, not as a new prompt.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "df2a1b5d-66ba-4769-bcda-f8db785b62e2",
@@ -3754,7 +4015,8 @@
     "actionable": true,
     "suggested_rule": "Before any mutating action on external state (filesystem, git, GUI), read current state first — never act on cached/inferred state. Pattern: perceive → validate → act → verify.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8b78435d-84bc-4288-8781-a245416a1275",
@@ -3767,7 +4029,8 @@
     "actionable": true,
     "suggested_rule": "When designing any new state-capture or verification mechanism, default to structured machine-queryable formats over human-readable prose — the user consistently prefers precision over readability.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "fcd27d68-8104-4ddd-b1e4-5cde329edd45",
@@ -3782,7 +4045,8 @@
     "actionable": true,
     "suggested_rule": "When working on this user's projects, treat development session state with the same rigor as application state — both are long-lived, interrupt-prone, and lose value when context is dropped.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "fa76cffa-effa-4985-9da9-2ce651af0cde",
@@ -3797,7 +4061,8 @@
     "actionable": true,
     "suggested_rule": "When introducing new agent-managed state files, default to JSONL or JSON — never markdown. Reserve markdown for human-authored documents only.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "ab990193-62e7-41e8-8a77-d18897e67e4b",
@@ -3811,7 +4076,8 @@
     "actionable": true,
     "suggested_rule": "When receiving a terse continuation command, reconstruct intent from the last WAL checkpoint rather than asking clarifying questions — the user has already optimized their workflow for low-bandwidth signaling.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f4237416-4816-4004-9d87-e37dda01b73b",
@@ -3826,7 +4092,8 @@
     "actionable": true,
     "suggested_rule": "Implement automatic WAL compaction: after a session_end event, if the JSONL exceeds 200 lines, retain only the last 2 session boundaries and their checkpoints, archiving the rest to a dated file.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "a70e0f0c-bcc8-4d09-a90a-194a1913fb76",
@@ -3841,7 +4108,8 @@
     "actionable": true,
     "suggested_rule": "When designing any inter-agent or inter-session communication boundary, prefer structured machine-readable formats over prose. If a handoff currently relies on parsing natural language or inferring from context, it is a reliability debt that should be migrated to a structured format.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "e6769d65-0e71-4423-8452-dd2007b3a681",
@@ -3855,7 +4123,8 @@
     "actionable": true,
     "suggested_rule": "Checkpoint writes should be delta-based: store only fields changed since last checkpoint, with a full snapshot every N deltas. Catchup reconstructs by replaying deltas forward from last full snapshot.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b11df9c5-9a42-4c12-95e2-ae95adda273e",
@@ -3870,7 +4139,8 @@
     "actionable": true,
     "suggested_rule": "When the user is in terse-iterative mode (short commands + UI refinement), maintain a mental model of their 'current focus object' (the widget, component, or file they're iterating on) and apply all ambiguous commands to that object without asking for clarification.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "295a0c2e-2d93-47cc-bfc7-074c9d4ce7fd",
@@ -3883,7 +4153,8 @@
     "actionable": true,
     "suggested_rule": "Skip pattern extraction for sessions with fewer than 5 tool calls or fewer than 200 total reply characters. These are notification artifacts, not real work sessions.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cb5d7d7a-604b-43d4-b70b-8f4c8514ddbb",
@@ -3897,7 +4168,8 @@
     "actionable": true,
     "suggested_rule": "Any input under 5 tokens should trigger context-lookup (last WAL checkpoint + recent tool calls) before asking for clarification — the user's default communication mode assumes shared state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1e1f891a-048d-47bb-b747-1be0feafeeb6",
@@ -3910,7 +4182,8 @@
     "actionable": true,
     "suggested_rule": "Terse continuation commands ('next', 'more', 'keep going') authorize deeper execution of the current task but never lateral scope expansion. If continuing requires touching a new subsystem or file group not yet in play, pause and name it before proceeding.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4e79c9b8-1b0d-424a-8172-ac6fd623c546",
@@ -3924,7 +4197,8 @@
     "actionable": true,
     "suggested_rule": "After any compaction or context loss, proactively echo back the current task state in one sentence before continuing — this restores the shared-context contract that enables the user's terse communication style.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "42818594-e389-4afe-be3f-7773d7c93042",
@@ -3938,7 +4212,8 @@
     "actionable": true,
     "suggested_rule": "Before any side-effecting operation on external state (git, filesystem, desktop UI, API), re-observe the current state within the same tool call sequence — never rely on state observed more than 2 tool calls ago.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4bcf5a4d-ddf1-4309-814c-9c7b5e7fdb70",
@@ -3953,7 +4228,8 @@
     "actionable": true,
     "suggested_rule": "Minimize round-trip latency above all else. When the user is in iterative-refinement mode (short messages, UI tweaks, 'keep going'), prefer instant partial results over comprehensive but slow responses. Cache intermediate state aggressively so delta-corrections don't require full re-computation.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "045b2610-31f1-48b2-801f-2c1735202d69",
@@ -3967,7 +4243,8 @@
     "actionable": true,
     "suggested_rule": "At every context boundary (session resume, worktree switch, branch change, compaction), execute a mandatory state snapshot before proceeding: git status + diff for code contexts, WAL checkpoint for session contexts. Never carry assumptions across boundaries.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1746749f-d3c8-4e9a-91b5-a4d6533cc05d",
@@ -3981,7 +4258,8 @@
     "actionable": true,
     "suggested_rule": "When working on the geopolitical simulation's agent state management, cross-reference patterns from the session continuity infrastructure (WAL, checkpoints, handoff messages) — the two systems solve isomorphic problems and improvements to one may transfer to the other.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "4c3b7ceb-a0ff-4d27-865e-3ccfd402a707",
@@ -3996,7 +4274,8 @@
     "actionable": true,
     "suggested_rule": "Optimize for fast first-visible-change over comprehensive response. When the user sends a terse continuation, make one change, show the result, and wait — don't batch three improvements into one turn.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "5099d02e-9458-4ffd-87c7-7b5e15673f3b",
@@ -4010,7 +4289,8 @@
     "actionable": true,
     "suggested_rule": "Treat WAL/checkpoint writes with the same discipline as git commits: never skip them before context switches, never assume they can be reconstructed from git history alone. A git log shows what changed; only WAL shows why and what was planned next.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "cb264fd1-43f7-4bf4-85eb-33d03e8cfeeb",
@@ -4024,7 +4304,8 @@
     "actionable": true,
     "suggested_rule": "When working on simulation save/load or state-persistence features in user projects, cross-reference patterns from the session continuity infrastructure (WAL, JSONL checkpoints) — the user already thinks in these terms and the abstractions may be directly portable.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "f8e87b73-ec8e-4f23-b453-72f66f16bce1",
@@ -4039,7 +4320,8 @@
     "actionable": true,
     "suggested_rule": "For this user, optimize for minimal-latency feedback loops: prefer instant visual verification (screenshot) over verbal confirmation, and auto-checkpoint every N terse commands (not just every N minutes), since terse-command density correlates with context burn rate.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "37e3df3c-e727-44d0-9456-7d8a9b225892",
@@ -4053,7 +4335,8 @@
     "actionable": true,
     "suggested_rule": "After any context boundary crossing (session continuation, worktree switch, branch switch, or repo change), run a mandatory 3-command state audit (git status, git remote -v, git stash list) before any mutating operation. Treat context boundaries like privilege boundaries — re-authenticate state.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "2a4d9abf-b17a-446c-9637-2efa142271dc",
@@ -4067,7 +4350,8 @@
     "actionable": true,
     "suggested_rule": "For simulation/dashboard/visualization projects, core-dump should capture not just code state but runtime configuration state (active widget configs, simulation parameters, dev server ports, current visual iteration number) since these are not recoverable from git diff alone.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "1ddc70ec-eef7-4c4f-8110-a2962ee85036",
@@ -4082,7 +4366,8 @@
     "actionable": true,
     "suggested_rule": "When proposing new persistence or signaling mechanisms, default to JSONL/structured formats over markdown. The user's trajectory is toward machine-first, human-second data formats for infrastructure (while keeping human-first for UI/dashboards).",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "c0cc6fdd-4548-4f9a-ba7b-19d69a567332",
@@ -4097,7 +4382,8 @@
     "actionable": true,
     "suggested_rule": "Treat single-word user messages as process signals, not conversational turns. Map: 'next/go/continue' → SIGCONT (resume), 'stop/wait' → SIGSTOP (pause and report), 'status' → SIGUSR1 (emit state). Respond with action, not acknowledgment.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "d6ee93f0-9dfc-4ba5-9daf-fb46f0afa104",
@@ -4111,7 +4397,8 @@
     "actionable": true,
     "suggested_rule": "For projects with complex domain state (simulations, dashboards with many widgets), auto-generate a machine-readable project-state snapshot alongside the session core-dump, so /catchup can restore both agent context AND domain context in one pass.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "3ba8b728-d842-44cc-9ea7-33f028214659",
@@ -4126,7 +4413,8 @@
     "actionable": true,
     "suggested_rule": "During iterative UI refinement sessions (detected by 3+ consecutive short correction messages), auto-checkpoint every 5 changes rather than waiting for logical-unit boundaries, since each micro-correction is a potential rollback point.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "bff385cc-9fa4-48bf-a362-97db3833473f",
@@ -4140,7 +4428,8 @@
     "actionable": true,
     "suggested_rule": "Before any state-mutating operation (UI click, git branch switch, session resume, file write to external system), execute an explicit observe step that reads current state into context. Never act on remembered state alone — the cost of one extra read is always less than the cost of acting on stale assumptions.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "89dad670-0b3e-4f6e-8a31-ff888148c774",
@@ -4156,7 +4445,8 @@
     "actionable": true,
     "suggested_rule": "When creating any artifact that will be consumed by an agent (checkpoints, state files, annotation outputs), default to machine-queryable structured formats (JSONL, JSON, typed CSV) over prose markdown. Add a human-readable summary only as a secondary view.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "95392faa-a522-4189-9c30-59ffac444812",
@@ -4171,7 +4461,8 @@
     "actionable": true,
     "suggested_rule": "After every 5th terse continuation in a UI refinement chain, emit a one-line summary of accumulated constraints so far ('current spec: dark bg, 14px body, no border on cards, gradient header') to surface silent drift before it compounds.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b117bb28-4d86-4c2c-9fb0-e84a1b51620a",
@@ -4185,7 +4476,8 @@
     "actionable": true,
     "suggested_rule": "After every /catchup or context compaction, run a mandatory environment probe (git status, git remote -v, git stash list) before any git-mutating operation — even if the recovered state says the working tree is clean.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "8046ed6e-04f0-44d4-9e49-1622c4420c5a",
@@ -4199,7 +4491,8 @@
     "actionable": true,
     "suggested_rule": "During /catchup, skip WAL entries where tool_count=0 AND reply_chars=0 (fire-and-forget signals) to reduce context consumption by ~10-15% per session.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "bdac2e6a-a52d-4c92-b0d3-984b58c62a6d",
@@ -4214,7 +4507,8 @@
     "actionable": true,
     "suggested_rule": "Treat core-dump as a snapshot and WAL as the event log — on /catchup, replay only WAL entries after the last checkpoint instead of re-reading the full dump. This reduces reconstruction time proportionally to session length.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "82575f17-2086-45a0-b090-e70b9b907af2",
@@ -4229,7 +4523,8 @@
     "actionable": true,
     "suggested_rule": "When entering a new project context for this user, assume: widget-based architecture, dark/light mode requirement, iterative visual refinement workflow, and sessions that will span multiple compaction cycles. Front-load checkpoint infrastructure even for 'small' tasks.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "7b256e2f-4005-4b4d-92b4-ce1f90bbd7c4",
@@ -4243,7 +4538,8 @@
     "actionable": true,
     "suggested_rule": "After any context boundary (compaction, session resume, catchup), treat all prior state as unverified — re-read files and re-check git status before acting, just as you would require source references before emitting data values.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
     "id": "b908a026-350d-4c23-868b-c36564379c54",
@@ -4259,49 +4555,54 @@
     "actionable": true,
     "suggested_rule": "After any context boundary (compaction, catchup, session resume), treat all prior state claims as unverified hypotheses — re-read files and git state before acting, with the same rigor applied to avoiding data hallucination. Label this class of error 'context hallucination' in mistake-patterns.",
     "promoted": true,
-    "dismissed": false
+    "dismissed": false,
+    "auto_intention_id": null
   },
   {
-    "id": "0f5a7685-21c7-4264-a3fc-803ebdd1d4c8",
+    "id": "5da765ca-a303-4936-9f96-9e2ad01e11f4",
+    "patterns_linked": [
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+    ],
+    "hypothesis": "The 20+ recurrences of the git-push violation are themselves an instance of the 'repeated fix attempts without root cause' anti-pattern — each correction patches the symptom ('don't push') without addressing why the agent's task-completion heuristic treats push as an implicit final step.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Avoid treating 'task complete' as a trigger for git operations — always require an explicit user message containing the word 'push' or 'commit' before performing either, regardless of task state.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "b3b968d1-5a24-4527-9d0f-8f9e04f0157e",
+    "patterns_linked": [
+      "afe8a2d8-17b3-42bc-973d-eac449588f9b",
+      "1d4dd42d-f42a-452e-972c-f660522c0376",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "5c9073a5-12cc-42b7-bf31-896857b227d6"
+    ],
+    "hypothesis": "Both unauthorized git push and credentials-written-to-file are instances of the same underlying failure: irreversible information exfiltration from the local boundary — the user's severity response scales with reversibility of the action, not the agent's intent or the correctness of the content.",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "Always apply the same confirmation gate to any action that moves information across an irreversibility boundary (push, publish, write-secret-to-disk, send-message) regardless of whether the content itself is correct.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "2ee085ba-bcb4-499c-9279-56e52925333b",
     "patterns_linked": [
       "556fbc99-c295-493f-8b7a-218b2f5e964f",
       "6ebe732c-7eb4-456a-819c-55549a289e00",
       "c147ad79-f600-4a30-961a-491075472882",
-      "13526387-e655-41c3-a4e8-bbcca038e4c2"
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
     ],
-    "hypothesis": "The standing rule to treat terse user messages as autonomous-continue signals creates a systematic pressure toward the exact git-push violation the user most despises — an agent trained to interpret 'go ahead' as blanket execution permission will eventually extend that interpretation to push operations.",
+    "hypothesis": "The user demands maximum execution autonomy on terse signals ('ahead', 'next') but zero autonomy on side-effects (push/commit) — the agent conflates these two autonomy axes because both are triggered by 'the user seems satisfied, keep going.'",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always exclude git commit/push from the set of actions that terse continuation signals ('yes', 'go ahead', 'next') can authorize — treat push approval as a separate permission domain that requires the word 'push' or 'commit' in the user's message.",
+    "suggested_rule": "Always distinguish continuation-autonomy (editing, reading, building — escalate freely on terse signals) from publication-autonomy (commit, push, deploy, message — never escalate without an explicit verb from the user).",
     "promoted": false,
-    "dismissed": true
-  },
-  {
-    "id": "5aa5e789-4fa6-4714-b69e-560beccdf94d",
-    "patterns_linked": [
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "e218ac38-3844-4295-a972-c9dc01b22d13"
-    ],
-    "hypothesis": "Heavy session continuity usage (compaction, catchup, core-dump) amplifies the git-push-without-approval violation rate — the agent loses the standing prohibition across context boundaries and re-derives 'I should push' from task momentum rather than from explicit approval state.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Always re-verify git-push approval status immediately after any context compaction or /catchup resumption, treating post-compaction state as 'no approval granted' by default.",
-    "promoted": true,
-    "dismissed": false
-  },
-  {
-    "id": "f4923a05-aaf9-4259-bc76-7cc28de67092",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882"
-    ],
-    "hypothesis": "The user's terse continuation style ('ahead', 'next', 'done') creates a trap where the agent over-generalizes 'continue autonomously' to include git push — the same signal that means 'keep coding' gets misread as 'ship it'.",
-    "confidence": 0.65,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as scoped to code-writing and investigation only — never extend autonomous-continue interpretation to git commit, push, or any externally-visible side effect.",
-    "promoted": true,
-    "dismissed": false
+    "dismissed": true,
+    "auto_intention_id": null
   }
 ]

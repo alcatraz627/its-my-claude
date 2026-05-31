@@ -391,6 +391,15 @@
         ]
       },
       {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "command": "~/.claude/scripts/hooks/guard-anthropic-credentials.sh",
+            "type": "command"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -576,6 +585,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/review-gate-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/cleanup-comments-nudge.sh"
           }
         ]
       }

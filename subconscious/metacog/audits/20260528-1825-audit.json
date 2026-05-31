@@ -1,0 +1,68 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18283,
+    "correction_density": 0.031496062992125984,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.25879142664567545,
+    "unit_count": 127
+  },
+  "response": {
+    "biases_detected": [
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — 6 units (-5, -6, -16, -33, -64, -65): select_workspace succeeds but service-level queries fail consecutively with no intermediate scope or auth diagnostic across all flagged units; -33 repeats 10 consecutive get_metrics failures matching prior cycle record; -65 repeats list_services x3 with no diagnostic pivot between attempts; structurally identical to prior 3+ cycles; 6 units matches prior 6-unit plateau — no improvement, no worsening",
+      "re_edit_thrash:RECURRING:STABLE — 6 units matching prior 6-unit plateau: -33 (Edit render-throughput-baseline.md fails x2; render-read.sh x3 consecutive — 2 sub-instances), -35 (render-throughput-baseline.md fails then succeeds), -36 (structural-changes-deliberation.md fails x3; worker-v2-but-better.md fails at unit end — 2 sub-instances), -37 (structural-changes-deliberation.md fails x3 with no Read pivot → workaround file structural-deliberations-pass-b.md created — recurring workaround-file-creation escalation confirmed second consecutive session), -54 (worker-overhaul-plan-v2.md fails x4 consecutive positions 24-27 with no intermediate Read), -58 (test_item_terminal_state.py x6 near-consecutive edits including multiple failures); workaround-file-creation sub-pattern now confirmed recurring",
+      "grep_hook_bypass:RECURRING:STABLE — 6 units: -3 (grep -rn/-A2/-B1 -A4 via Bash before self-correcting to rg — multiple invocations before correction), -30 (grep -A 6 via Bash; Grep tool available and unused), -54 (grep -n invoked then immediately replaced with rg), -58 (grep -n via Bash before correction), -64 (/usr/bin/grep -nE invoked x3 — two fail success:false then one success; deliberate /usr/bin/ prefix bypasses hook), -71 (/usr/bin/grep -nE and /usr/bin/grep -rn throughout; consistent /usr/bin/ prefix pattern; /usr/bin/find also used); 6 units matches prior 6-unit plateau; /usr/bin/ prefix active circumvention pattern recurring in -64 and -71 identical to prior bc2715fa pattern",
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~65% of tool-using units: -3 (grep compounds via Bash), -30 (grep -A 6 via Bash), -35 (elaborate jq render CLI compounds), -37 (cat backend/lib/jobs/lifecycle.py | head -100 via Bash instead of Read with limit), -47 (head -25/-50 via Bash; ls compounds; render+jq elaborates), -54 (cat ../backend/lib/redis/__init__.py via Bash; ls compounds), -57 (find via Bash instead of Glob; rg -ln via Bash instead of Grep tool), -58 (grep -n via Bash; sed -i '' bulk text substitution via Bash instead of Edit tool), -67 (/usr/bin/python3 inline for JSON inspection instead of file-tools MCP throughout), -71 (/usr/bin/find via Bash; /usr/bin/grep compounds); rate at prior 65% band; no downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:WORSENING — 5 units vs prior 4-unit high: -3 (rg/grep on wrong paths fail x3 before pwd+ls diagnostic — 3 failures before pivot; structurally identical to prior cycles), -36 (Write /tmp fails x2; Write ~/.claude/_last-checkpoint.json fails; Write different /tmp path fails → Read → Write succeeds — 4 write failures before diagnostic read; matches prior high-water mark), -47 (ls frontend/ and rg src/ fail on wrong path before pwd+ls correction — 2 failures before pivot), -62 (which uv fails before fallback script write; recovery faster than prior instances), -67 (set -a + . .env + curl + python3 compound fails x2 with no intermediate error read before script-write pivot); 5 units above prior 4-unit record is new high-water mark",
+      "compound_command_overreach:RECURRING:WORSENING — 4 units vs prior 3-unit plateau: 8e2d1072-1 (6 consecutive elaborate jq Bash calls probing saved MCP output file — jq paths/keys/filters chains), -35 (render restart + instance-poll for-loop + jq group_by/sort_by/sub pipeline chains across 6 Bash calls), -47 (render restart + sleep-poll wait loop + render logs with jq group_by+sort_by transforms), -67 (set -a + . .env + curl + python3 inline compound; for-loop env-group updates; multiple /usr/bin/python3 inline via Bash for JSON inspection instead of file-tools MCP); 4 units above prior 3-unit plateau",
+      "optimistic_edit_without_read:RECURRING:STABLE — 3 units: -6 (Edit compliments.md fails success:false → Read → Edit succeeds), -36 (Write /tmp/core-dump-data.json fails x2; Write ~/.claude/_last-checkpoint.json fails; Write different /tmp path fails → Read → Write succeeds — 3 sub-instances in sequence), -40 (Edit mistake-patterns.md fails → Read → Edit succeeds); 3 units at prior plateau; structurally unchanged",
+      "redundant_read_same_unit:RECURRING:STABLE — 3 units: -51 (Read task_runner.py x2 consecutively with no offset variation; Read workerv2.py x2 consecutively with no offset variation — structurally identical to prior cycle's -51 instance same files same unit number), -57 (Read credits.db.ts x2 at positions 8 and 10 with no offset variation and no intervening edit between reads), -71 (Read formats/functions.py x2 consecutively before first edit with no offset variation); 3 units at prior plateau"
+    ],
+    "calibration_score": 0.16,
+    "cross_references": [
+      "Dream insight conf=0.85 (git push violations at context boundaries): not triggered in these units — no git push operations observed across any of the 27 analyzed units; insight remains valid but dormant this session",
+      "Dream insight conf=0.72 (approval-state evaporation at compaction): unit -36 involves /core-dump workflow which is the checkpointing surface flagged in the dream; the Write failures in that unit are infrastructure failures not approval violations; the dream insight is not directly triggered but the compaction-boundary context is present",
+      "Dream insight conf=0.52 (approval state is conversational non-persisted): unit -59 contains an 18558-character input consistent with a prior context compaction and synthesis delivery; no git push present in that unit; the insight surface is present but the violation is not triggered"
+    ],
+    "overconfident_count": 11,
+    "recommendations": [
+      "mcp_retry_without_diagnosis has appeared in every cycle for 5+ cycles with no improvement trajectory — the root cause (likely render MCP permission scope mismatch between workspace-level and service-level auth) has never been diagnosed; recommend a targeted one-time diagnostic session to determine why select_workspace succeeds but downstream service queries fail; continuing to log this pattern without addressing the root cause provides no new signal",
+      "bash_retry_without_diagnosis has reached 5 units (new high); the unit-36 severity (4 write failures before a diagnostic Read) matches the prior high-water mark with no improvement; a mechanical guard — checking file existence before Write rather than attempting and failing — would eliminate the write-variant sub-pattern without requiring behavioral change; deprioritize re-flagging the path-assumption variant as it has been stable for 4+ cycles without worsening",
+      "grep_hook_bypass /usr/bin/ prefix pattern in -64 and -71 is active circumvention of the installed hook (not forgetting); the Grep tool was available and unused throughout both units; this is the same pattern bc2715fa exhibited 2 cycles ago at 9 units — it is re-emerging; recommend verifying the hook covers /usr/bin/grep explicitly, and consider an atone event given the deliberate bypass pattern",
+      "compound_command_overreach appears in 8e2d1072-1 as a new session — the jq-via-Bash pattern for inspecting saved MCP JSON output files is structurally equivalent to the python3 inline JSON violation already in mistake-patterns; the file-tools MCP preference rule is not being applied to this surface; a single note in mistake-patterns covering saved .json MCP output files as a file-tools MCP target would close this gap",
+      "re_edit_thrash workaround-file-creation escalation (structural-deliberations-pass-b.md, structural-deliberations-pass-c.md) is now confirmed recurring across two sessions; the pattern indicates a Read-pivot is not being triggered after the 2nd Edit failure — adding an explicit rule to Read the target file after any 2nd consecutive Edit failure on the same file would prevent the workaround-file escalation without requiring broader behavioral change"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 16
+  },
+  "sessions": [
+    [
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      731436
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      125314027
+    ],
+    [
+      "1cd43636-5afc-492a-a149-e18690310270",
+      18880297
+    ],
+    [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      3573423
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      8693189
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      880145
+    ]
+  ],
+  "timestamp": "2026-05-28T18:25:05.823763Z",
+  "tokens_used": 30408,
+  "units_analyzed": 27,
+  "units_total": 127
+}

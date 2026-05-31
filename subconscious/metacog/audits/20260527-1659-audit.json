@@ -1,0 +1,42 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.06,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.4271593044902064,
+    "unit_count": 50
+  },
+  "response": {
+    "biases_detected": [
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — units -5, -6, -16, -33; select_workspace succeeds but service-level queries remain blocked with no intermediate scope/auth diagnostic across all four units; -33 repeats prior-cycle record of 10 consecutive get_metrics failures with no pivot; structurally unchanged from prior two cycles",
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~55% of tool-using units: -3 (grep -rn, grep -A2, grep -B1 -A4 via Bash before pivoting to rg), -30 (grep -A 6 via Bash; Grep tool available and unused), -37 (cat backend/lib/jobs/lifecycle.py | head -100 via Bash instead of Read with limit), -47 (head -25/-40/-50 via Bash; render+jq log-query compounds); rate below prior 65-80% band but pattern not eliminated",
+      "re_edit_thrash:RECURRING:STABLE — 4 units: -33 (Edit render-throughput-baseline.md fails x2; Edit render-read.sh x3 consecutive), -35 (Edit render-throughput-baseline.md fails then succeeds), -36 (Edit structural-changes-deliberation.md fails x3 then succeeds; Edit worker-v2-but-better.md fails at unit end), -37 (Edit structural-changes-deliberation.md fails x3 with no Read pivot → agent creates workaround file structural-deliberations-pass-b.md — workaround-file-creation escalation first confirmed prior cycle, now recurring); 4 units matches prior 4-unit plateau",
+      "optimistic_edit_without_read:RECURRING:STABLE — 3 units: -6 (Edit compliments.md fails success:false → Read → Edit succeeds), -36 (Write /tmp/core-dump-data.json fails x2 → Write different /tmp path fails → Read → Write succeeds — 3 sub-instances, matches prior cycle's -36 high-severity instance), -40 (Edit mistake-patterns.md fails → Read → Edit succeeds); 3 units at low end of prior 3-5 unit plateau; structurally unchanged",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 3 units: -3 (grep/rg on wrong paths fail at positions 10-12 before pwd+ls diagnostic at position 13 — 3 failures before pivot; structurally identical to prior two cycles' -3 instance), -36 (Write /tmp/core-dump-data.json x2 then Write ~/.claude/_last-checkpoint.json all fail before Read diagnostic — 3 write failures before read pivot), -47 (ls frontend/ and rg src/ fail on wrong path before pwd+ls — 2 failures before path correction); 3 units at prior baseline",
+      "compound_command_overreach:RECURRING:STABLE — 2 units: -35 (render restart + instance-poll for-loop + elaborate jq group_by/sort_by/sub pipelines across 6 Bash calls), -47 (render restart + sleep-poll wait loop + render logs queries with jq transforms and head pipes); rate consistent with prior cycles",
+      "grep_hook_bypass:RECURRING:STABLE — 2 units: -3 (grep -rn, grep -A2, grep -B1 -A4 via Bash before self-correcting to rg — multiple invocations before pivot), -30 (grep -A 6 via Bash; Grep tool unused); 2 units matches prior cycle count; no /usr/bin/ prefix bypass pattern observed this cycle unlike bc2715fa",
+      "redundant_read_same_unit:RECURRING:POSSIBLY_IMPROVING — 1 unit: -51 (Read task_runner.py x2 consecutively with no offset variation, Read workerv2.py x2 consecutively with no offset variation — structurally identical to prior cycle's -51 instance, same file, same unit number); 1 unit down from prior 3-5 unit plateau; possible genuine improvement but same-file recurrence in -51 suggests a structural trigger around that specific review workflow"
+    ],
+    "calibration_score": 0.18,
+    "overconfident_count": 8,
+    "recommendations": [
+      "mcp_retry_without_diagnosis: No new recommendation — pattern flagged 4+ consecutive cycles at same structural severity; per-cycle guidance has produced no behavioral change; only remaining lever is mechanical: a call budget per workspace-select scope or a mandatory diagnostic query requirement before nth retry attempt on service-level MCP tools",
+      "re_edit_thrash workaround-file-creation: Now confirmed recurring across two consecutive cycles (structural-deliberations-pass-b.md created both times after Edit failures on structural-changes-deliberation.md); agent is routing around Edit failures by creating new files rather than diagnosing the failure, silently multiplying the doc set; a hook detecting Write targets whose basename-prefix matches a recent failed Edit target would catch this specific escalation path",
+      "bash_retry_without_diagnosis path failures: Unit -3 instance is structurally identical across three consecutive cycles — same unit number, same failure topology (3 failures before pwd+ls at position 13); a pwd probe at the start of any unit where CWD is ambiguous from context would eliminate this class entirely; already in prior recommendations with no uptake; deprioritizing further escalation absent a mechanical hook",
+      "redundant_read_same_unit: Dropped from 5-unit peak (two cycles ago) to 1 unit this cycle — monitor one more cycle before treating as resolved; the -51 instance being structurally identical to prior cycle's -51 (same files, same pattern) suggests it may be a workflow-specific trigger rather than a general regression"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      118370103
+    ]
+  ],
+  "timestamp": "2026-05-27T16:59:47.156314Z",
+  "tokens_used": 14243,
+  "units_analyzed": 17,
+  "units_total": 50
+}

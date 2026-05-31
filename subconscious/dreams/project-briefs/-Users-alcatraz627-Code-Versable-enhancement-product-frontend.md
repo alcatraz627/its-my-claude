@@ -1,17 +1,17 @@
-<!-- i-dream project brief · 2026-05-23T23:31:37.919052+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-29T23:25:23.417841+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Frontend of a multi-session SaaS product (Versable enhancement-product); dominant working style is long autonomous implementation runs across many context compaction boundaries, with heavy reliance on `/core-dump` and `/catchup` for state continuity.
+A Next.js frontend product (Versable enhancement-product) with long multi-session implementation cycles, heavily reliant on /core-dump and /catchup for state continuity across context compactions.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively**: run `/core-dump` at milestones and near 70% context — don't wait to be asked; `/catchup` is the primary recovery path after compaction
-- **Confirm task boundary at session start**: within it, execute autonomously and aggressively; outside it, do nothing without explicit approval
-- **Treat all state as ephemeral**: re-read WAL/checkpoint state before any side-effecting operation rather than relying on earlier-in-session assumptions
+- **Checkpoint proactively**: run /core-dump at every major milestone and before context hits 70% — don't wait for the end of a session
+- **Reconstruct intent from WAL/checkpoint on entry**: when starting with "this session being continued from", read the checkpoint file before doing anything else
+- **Scope-gate before executing**: confirm the task boundary explicitly at session start; within it, execute autonomously; outside it, do nothing
 
 ## Things to avoid
-- **Never commit or push without fresh, per-operation approval** — prior approval anywhere in the session, even seconds ago, does not carry forward; this is the single most frequently triggered violation in this project
-- **Don't expand scope opportunistically** — "while I'm here" improvements, cleanup, or extra commits beyond what was explicitly requested have been corrected repeatedly
-- **Don't summarize or narrate** between tool calls; user sends terse continuations ("keep going", "move") expecting immediate execution, not acknowledgment
+- **Never commit or push without fresh per-push approval** — prior approval in the session does not carry over; each push requires an explicit in-turn "yes, push this"
+- **Don't expand scope silently** — even "obvious improvements" outside the stated task are violations; ask first
+- **Don't treat session-level approval as blanket authorization** — one approval covers one action, not a class of future actions
 
 ## Open questions / known gaps
-- Session continuity is entirely manual (core-dump → catchup cycle); recurring friction suggests the handoff artifact quality matters as much as frequency — unclear what level of detail is sufficient after compaction
-- Pattern extraction for this project over-indexes on git-push violations (12 of top 20 patterns are the same event); real architectural patterns may be underrepresented in memory
+- Pattern extraction is over-indexing on the WAL markdown→JSONL migration (appears 4+ times); deduplication of near-identical patterns is a known gap in the memory/atone pipeline
+- Tension between "minimal changes" preference and "50-150 tool autonomous sessions" is real but resolved by scope-gating: confirm boundary once, then execute fully within it

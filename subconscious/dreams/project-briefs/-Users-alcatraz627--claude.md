@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-05-23T23:32:15.891773+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-05-30T17:03:48.394287+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the `~/.claude` global configuration workspace — skills, rules, WAL infrastructure, memory system, and session-continuity tooling. Work here is meta: building and maintaining the agent's own operating environment.
+This is the user's personal Claude Code configuration system (`~/.claude`) — a meta-project governing agent behavior, memory, skills, hooks, and tooling across all sessions. Work style is heavy automation, long multi-session continuity, and iterative rule/skill refinement.
 
 ## Things to do (or keep doing)
-- **Write WAL entries as JSONL** (`scripts/wal/wal.sh`), never markdown; the format migrated in 2026-04 and old markdown is legacy-only
-- **Checkpoint proactively** with `/core-dump` at logical milestones, not just session end — `/catchup` is the primary recovery path after compaction
-- **Treat terse single-word messages as execution directives** (`next`, `ahead`, `done`, `looks`) — continue autonomously without asking for clarification
-- **Verify current state before every side-effect** — re-read files, run `git status`, confirm process state; never act on assumed or cached state
+- **Checkpoint proactively** — `/core-dump` at milestones and before risky ops, not just at session end; user recovers via `/catchup` constantly
+- **Treat terse messages as execution directives** — single words like "next", "ahead", "looks" mean "continue autonomously"; increase depth, never scope
+- **Write WAL entries as JSONL** — the markdown format is deprecated; canonical format is JSONL via `scripts/wal/wal.sh`
+- **Prefer dedicated tools** — File Tools MCP for data files, Interactive Inputs MCP for structured user input, `trash` not `rm`
 
 ## Things to avoid
-- **Never commit or push without fresh per-push explicit approval** — prior session approvals do not carry forward, ever
-- **Don't thrash on failed fixes** — if the same function has been edited 3+ times, stop, re-read surrounding context, form a hypothesis before the next edit
-- **Don't expand scope beyond the explicit request** — "keep going" means depth, not breadth; never add unsolicited improvements while fixing something else
-- **Never infer or synthesize data values not present in source** — only use values traceable to actual source data
+- **Never commit or push without fresh explicit approval** — prior approval in the same session does not carry forward; each push requires a new confirmation
+- **Don't fix-thrash** — three edits to the same block means you lack understanding; stop, re-read context, form a hypothesis, then edit once
+- **Don't infer or synthesize data values** — only use values traceable to source; never extrapolate and present as fact
+- **Don't expand scope on terse continuations** — "keep going" means keep going at the same scope, not "while I'm here" improvements
 
 ## Open questions / known gaps
-- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event appeared 4× independently; future pattern reads from this project will have high semantic noise
-- Tension between terse-continuation autonomy and scope control is unresolved: short commands signal "execute deeper" but scope ceiling must still hold
+- Pattern deduplication in the atone/pattern-extraction pipeline is broken — the same events appear 4+ times with near-identical content, polluting the mistake-patterns file and wasting context
+- Tension between "terse = execute" and "terse = scope-limit" is unresolved; needs a clearer heuristic for when a short message signals scope reduction vs. autonomous continuation

@@ -1,0 +1,21 @@
+{
+  "ts": "2026-05-26T22:41:47Z",
+  "session_id": "diffnoise-d1",
+  "project_root": "/Users/alcatraz627/Code/Claude/notion-sync",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/notion-sync/_20260527-diffnoise-d1.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**DECISION (user):** classification approach for the 240 residual-flagged files \u2014 threshold vs relabel. This is THE next conversational step.",
+    "**Re-run** `bash list.sh diff-content --force` (regenerates `.notion-diff-cache.36bbacd27dee.json`, ~few min, opens browser) to surface the blank-line + pipe-spacing improvements \u2014 current cached report (built 21:11) has the inline rules but NOT blank-removal/pipe fixes.",
+    "**(if chosen)** implement threshold or two-tier relabel in `hasMeaningfulDiff` / the badge labels (diff-content.ts:~560, ~613).",
+    "**Deferred normalization** (judged not worth it / lossy): full ordered-list renumbering (needs list-structure parse), Slack URL scheme (1 file), and complex-table cell truncation (REAL Notion content loss \u2014 correctly shown, not noise).",
+    "**Branch merge:** still pending \u2014 user soak-tests first, merges to main at the very end with fresh approval. Branch has ~10 commits this session, all pushed."
+  ],
+  "tags": []
+}

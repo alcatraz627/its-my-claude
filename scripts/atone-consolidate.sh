@@ -96,6 +96,11 @@ case "${1:-}" in
   --triggers-only)  MODE=triggers ;;
   --first-run)      MODE=force ;;
   --force)          MODE=force ;;
+  # A6: i-dream's DreamPass invokes consolidation with --read-only (per
+  # .i-dream-domain.toml). Rebuild the derived VIEWS but skip the only external
+  # side-effects: drafting proposals + git-committing. Used by the dream pass to
+  # refresh inputs without mutating the proposals backlog.
+  --read-only)      MODE=force; ATONE_READONLY=1 ;;
   '') ;;
   *) _err "unknown flag: $1"; show_help; exit 2 ;;
 esac

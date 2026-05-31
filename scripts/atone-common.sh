@@ -82,6 +82,32 @@ if [ "$ATONE_HAS_GUM" = "0" ]; then
   gum_warn()      { _warn "$@"; }
 fi
 
+# ─── atone summary card ──────────────────────────────────────────
+# render_atone_summary <inputs> <steps> <outputs> <residuals>
+# Each arg is a newline-separated body: inputs/outputs as "label\tvalue"
+# lines, steps/residuals as plain lines. Replaces the line-by-line log
+# scroll with one scannable card. Uses gum when on a TTY, plain otherwise.
+_atone_kv_lines() { while IFS=$'\t' read -r k v; do [ -n "$k" ] && printf '  %s%-14s%s %s\n' "${C_DIM}" "$k" "${C_RESET}" "$v"; done; }
+_atone_li_lines() { while IFS= read -r l; do [ -n "$l" ] && printf '  %s•%s %s\n' "${C_DIM}" "${C_RESET}" "$l"; done; }
+render_atone_summary() {
+  local inputs="$1" steps="$2" outputs="$3" residuals="$4"
+  local body
+  body=$(
+    printf '%sINPUTS%s\n'    "$C_BOLD" "$C_RESET"; printf '%s\n' "$inputs"   | _atone_kv_lines
+    printf '\n%sSTEPS%s\n'   "$C_BOLD" "$C_RESET"; printf '%s\n' "$steps"    | _atone_li_lines
+    printf '\n%sOUTPUTS%s\n' "$C_BOLD" "$C_RESET"; printf '%s\n' "$outputs"  | _atone_kv_lines
+    if [ -n "$residuals" ]; then
+      printf '\n%sRESIDUALS%s\n' "$C_BOLD" "$C_RESET"; printf '%s\n' "$residuals" | _atone_li_lines
+    fi
+  )
+  if [ "${ATONE_HAS_GUM:-0}" = "1" ] && command -v gum >/dev/null 2>&1; then
+    printf '%s\n' "$body" | gum style --border rounded --border-foreground 4 --padding "0 1" --margin "1 0"
+  else
+    printf '\n%s┌─ atone recorded ─────────────────────────────%s\n%s\n%s└──────────────────────────────────────────────%s\n' \
+      "$C_DIM" "$C_RESET" "$body" "$C_DIM" "$C_RESET"
+  fi
+}
+
 # ─── Convenience: assert tool present ────────────────────────────
 
 _require() {

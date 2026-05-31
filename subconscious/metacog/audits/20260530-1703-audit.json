@@ -1,0 +1,84 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18269,
+    "correction_density": 0.046875,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2814375,
+    "unit_count": 128
+  },
+  "response": {
+    "biases_detected": [
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — 4 units (5455871e-5,-6,-16,-33): select_workspace succeeds but service-level queries fail consecutively with no intermediate scope or auth diagnostic; -33 repeats 10 consecutive get_metrics failures matching prior cycle record; 4 units below prior 6-unit plateau but structurally identical — no diagnostic pivot toward permission-scope root cause; NOTABLE: 781e356c-2 and -3 show IMPROVED render MCP handling in new session context (select_workspace → list_services → query_render_postgres all succeed) — improvement is session-scoped not agent-wide",
+      "re_edit_thrash:RECURRING:STABLE — 5 units (5455871e-33,-35,-36,-37,-54) plus f0ba9f05-1: -33 render-throughput-baseline.md fails x2 plus render-read.sh x3 consecutive; -35 same file fails then succeeds; -36 structural-changes-deliberation.md fails x3 plus worker-v2-but-better fails at unit end; -37 structural-changes-deliberation.md fails x3 with no Read pivot then workaround file structural-deliberations-pass-b.md created — workaround-file-creation sub-pattern fifth+ consecutive cycle; -54 worker-overhaul-plan-v2.md fails x4 consecutive with no intermediate Read; f0ba9f05-1 two separate Edit-fail→Read x2→Edit cycles in same unit; 5-6 units within prior plateau",
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~65% of tool-using units: f0ba9f05-1 (shuf+process-substitution+head compound for file sampling; grep -v via Bash pipe; python3 inline JSON parsing via Bash instead of file-tools MCP); 781e356c-0 (find via Bash instead of Glob; rg compounds via Bash; grep -vi via Bash pipe); 781e356c-2 (grep -iE/-nE via Bash; python3 inline JSON via Bash); 5455871e-3 (grep compounds before pivoting to rg); 5455871e-30 (grep -A 6 via Bash; Grep tool unused); 5455871e-37 (cat | head via Bash instead of Read with limit); 5455871e-47 (head via Bash; elaborate jq render CLI compounds); 5455871e-54 (cat/head/ls via Bash; grep before rg); twenty-ninth+ consecutive cycle above 50% — no downward trajectory",
+      "grep_hook_bypass:RECURRING:POSSIBLY_IMPROVING — 4 units (5455871e-3,-30,-54, 781e356c-2): -3 grep -rn/-A2/-B1 via Bash before self-correcting to rg; -30 grep -A 6 via Bash with Grep tool unused; -54 grep -n via Bash before rg correction; 781e356c-2 grep -iE/-nE via Bash in multiple calls; no /usr/bin/ prefix active-circumvention bypass pattern observed this batch — below prior 6-unit plateau; marginal improvement but direct bypass persists",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 4 units (f0ba9f05-1, 5455871e-3,-36,-47): f0ba9f05-1 sleep 2 then cat fails before pivot; -3 grep/rg on wrong paths fail x3 before pwd+ls diagnostic; -36 Write /tmp fails x2 + Write ~/.claude fails + Write different /tmp fails → Read → Write succeeds (4 failures before diagnostic read); -47 ls frontend/ and rg src/ fail on wrong path before pwd+ls correction; 781e356c-3 mcp catalogue search x3 failures before finding correct path — new catalogue-discovery sub-variant; 4-5 units within prior baseline",
+      "optimistic_edit_without_read:RECURRING:STABLE — 5 units (f0ba9f05-1, 5455871e-6,-36,-40,-54): f0ba9f05-1 two separate Edit-fail→Read x2→Edit cycles in single unit — double-failure sub-variant confirmed again; -6 Edit compliments.md fails success:false → Read → Edit succeeds; -36 Write fails x4 in sequence before Read diagnostic; -40 Edit mistake-patterns.md fails → Read → Edit succeeds; -54 worker-overhaul-plan-v2.md Edit fails x4 consecutive with no Read pivot; 5 units at high end of prior plateau",
+      "redundant_read_same_unit:RECURRING:POSSIBLY_IMPROVING — 1 unit (5455871e-51): Read task_runner.py x2 consecutively then Read workerv2.py x2 consecutively with no offset variation — same files same unit number as prior 5+ consecutive cycles; 1 unit below prior 2-4 unit plateau; possible improvement but same-file recurrence is now sixth+ consecutive cycle flagging this specific file+unit combination",
+      "compound_command_overreach:RECURRING:STABLE — 3 units (f0ba9f05-1, 5455871e-35,-47): f0ba9f05-1 shuf+process-substitution+head compound for deterministic file sampling; -35 render restart + instance-poll for-loop + jq group_by/sort_by/sub pipeline chains across 6 Bash calls; -47 render restart + sleep-poll wait loop + render logs queries with jq group_by+sort_by transforms; 3 units at prior plateau"
+    ],
+    "calibration_score": 0.13,
+    "cross_references": [
+      "dream_insight_compaction_approval_reset: 5455871e session spans 54+ units with multiple compaction boundaries — units -25 and -29 are empty zero-output units consistent with post-compaction recovery turns; no git commit or push attempts observed in this batch so approval-reset risk was not triggered; insight was not violated",
+      "dream_insight_terse_continuation_as_execute: 5455871e-5 has message_length=4 (near-empty terse continuation); agent correctly interpreted as execute directive and launched MCP queries immediately; however the execution itself hit mcp_retry_without_diagnosis — correct interpretation of signal, incorrect execution strategy; insight confirmed applicable",
+      "dream_insight_data_hallucination_credential_gap: No credential fabrication or data hallucination observed in this batch; render MCP failures produce explicit error responses rather than synthesized data; 781e356c-3 correctly uses query_render_postgres results as factual ground rather than inferring schema state — insight not violated"
+    ],
+    "overconfident_count": 13,
+    "recommendations": [
+      "mcp_retry_without_diagnosis: No new intervention recommended — improvement observed in 781e356c session (new-session token state appears to enable render MCP success); monitor whether consistent workspace pre-selection at session start prevents downstream failures in 5455871e-class sessions; no change to 5455871e behavior despite 6+ cycle persistence",
+      "re_edit_thrash + optimistic_edit_without_read: No new intervention recommended — both flagged in 9+ prior consecutive cycles with no improvement trajectory; mechanical Read-before-Edit gate enforcement unavailable at agent layer; pattern is load-bearing friction cost",
+      "shell_tool_preference_violations + grep_hook_bypass: No new intervention recommended — rate stable at 65% for 29+ cycles; hook-based grep enforcement in place but bypassed via self-correction (not /usr/bin/ prefix this batch); no additional harness intervention available",
+      "parallel_agent_dispatch_positive: NEW POSITIVE PATTERN — 781e356c-3 dispatches 9 parallel Agent calls for runbook section generation with appropriate task decomposition and per-agent output paths; this is the sub-agent-outputs rule applied correctly; reinforce as a model for large-document generation tasks",
+      "render_mcp_session_scoped_improvement: 781e356c session demonstrates that render MCP success is achievable when session auth state is fresh; the 5455871e pattern of persistent service-level failures despite select_workspace success may reflect a stale auth token in that specific session rather than a permanent capability gap; no agent-layer fix available but session restart resolves it"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "fe6d7eb9-b237-4dee-9112-144f778b5863",
+      70556
+    ],
+    [
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      2154168
+    ],
+    [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      3138403
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      150544571
+    ],
+    [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      9591585
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      15685604
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      4680673
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      14662478
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      8959238
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      1821282
+    ]
+  ],
+  "timestamp": "2026-05-30T17:03:05.239588Z",
+  "tokens_used": 32161,
+  "units_analyzed": 23,
+  "units_total": 128
+}

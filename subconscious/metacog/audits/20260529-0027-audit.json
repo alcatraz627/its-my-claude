@@ -1,0 +1,64 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18335,
+    "correction_density": 0.036585365853658534,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3574634146341464,
+    "unit_count": 82
+  },
+  "response": {
+    "biases_detected": [
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — 6 units (5455871e-5, -6, -16, -33, -64, -65): select_workspace succeeds but service-level queries fail consecutively with no intermediate scope or auth diagnostic; -33 repeats 10 consecutive get_metrics failures matching prior cycle record; -65 repeats list_services x3 with no diagnostic pivot between attempts; 6 units matches prior 6-unit plateau — no improvement, no worsening",
+      "re_edit_thrash:RECURRING:STABLE — 6 units (5455871e-33, -35, -36, -37, -54, -58): -33 edit render-throughput-baseline.md fails x2 then render-read.sh x3 consecutive; -36 structural-changes-deliberation.md fails x3 with one success plus worker-v2-but-better.md fail; -37 structural-changes-deliberation.md fails x3 with no Read pivot then workaround file structural-deliberations-pass-b.md created — workaround-file-creation sub-pattern confirmed recurring for third+ consecutive cycle; -54 worker-overhaul-plan-v2.md fails x4 consecutive with no intermediate Read; -58 test_item_terminal_state.py x6 near-consecutive edits including multiple failures; 6 units matches prior 6-unit plateau",
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~65% of tool-using units: 8e2d1072-1 (elaborate jq pipeline chains via Bash on saved MCP output file); 781e356c-0 (find via Bash instead of Glob; rg compounds via Bash; grep -vi via Bash pipe); 5455871e-3 (grep -rn/-A2/-B1 -A4 via Bash before correcting to rg; ls compounds); 5455871e-30 (grep -A 6 via Bash; Grep tool available and unused); 5455871e-37 (cat backend/lib/jobs/lifecycle.py | head -100 via Bash instead of Read with limit); 5455871e-47 (head via Bash; elaborate render CLI compound + jq transforms); 5455871e-54 (cat/ls/head via Bash for redis/__init__.py; ls compounds); 5455871e-57 (find via Bash instead of Glob; rg -ln via Bash instead of Grep tool); 5455871e-58 (grep -n via Bash; sed -i '' bulk text substitution via Bash instead of Edit tool); 5455871e-67 (/usr/bin/python3 inline JSON parsing throughout instead of file-tools MCP; for-loop env-group updates via Bash); rate at prior 65% band; no downward trajectory",
+      "grep_hook_bypass:RECURRING:STABLE — 5 units (5455871e-3, -30, -54, -58, -64): -3 grep -rn/-A2/-B1 -A4 via Bash before self-correcting to rg; -30 grep -A 6 via Bash with Grep tool unused; -54 grep -n invoked then immediately replaced with rg; -58 grep -n via Bash before correction; -64 /usr/bin/grep -nE invoked x3 with /usr/bin/ prefix deliberately bypassing hook — two fail success:false before one succeeds; 5 units is slight improvement from prior 6-7 unit counts but /usr/bin/ prefix active circumvention pattern persists in -64",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 5 units (5455871e-3, -36, -47, -62, -67): -3 rg/grep on wrong paths fail x3 before pwd+ls diagnostic — structurally identical to prior cycles; -36 multiple Write failures before Read diagnostic — 4 write attempts before successful read+write; -47 ls frontend/ and rg src/ fail on wrong path before pwd+ls correction; -62 which uv fails before fallback script write — faster recovery; -67 set -a + . .env + curl + python3 compound fails x2 with no intermediate error read before script-write pivot; 5 units above prior 4-unit baseline — MILDLY_WORSENING",
+      "compound_command_overreach:RECURRING:STABLE — 4 units (8e2d1072-1, 5455871e-35, -47, -67): 8e2d1072-1 uses 6 consecutive elaborate jq Bash calls probing saved MCP output file with paths/keys/filters chains; -35 render restart + instance-poll for-loop + jq group_by/sort_by/sub pipeline chains across 6 Bash calls; -47 render restart + sleep-poll wait loop + render logs with jq group_by+sort_by transforms; -67 set -a + . .env + curl + python3 inline compound; for-loop env-group updates; multiple /usr/bin/python3 inline via Bash for JSON inspection instead of file-tools MCP; 4 units matches prior cycle count",
+      "optimistic_edit_without_read:RECURRING:STABLE — 4 units (5455871e-6, -36, -40, -54): -6 Edit compliments.md fails success:false then Read then Edit succeeds; -36 Write /tmp/core-dump-data.json fails x2 then Write ~/.claude/_last-checkpoint.json fails then Write different /tmp path fails then Read then Write succeeds — 4 sub-instances in sequence; -40 Edit mistake-patterns.md fails then Read then Edit succeeds; -54 4 consecutive Edit failures on worker-overhaul-plan-v2.md with no Read pivot; 4 units at high end of prior plateau; structurally unchanged",
+      "redundant_read_same_unit:RECURRING:POSSIBLY_IMPROVING — 2 units (5455871e-51, -57): -51 Read task_runner.py x2 consecutively then Read workerv2.py x2 consecutively with no offset variation between paired reads — structurally identical to prior cycle's -51 instance same files same unit number; -57 Read credits.db.ts x2 at positions 8 and 10 with no offset variation and no intervening edit between reads; 2 units down from prior 3-unit plateau; possible marginal improvement but same-file recurrence in -51 is now third consecutive cycle flagging that specific file+unit combination"
+    ],
+    "calibration_score": 0.16,
+    "cross_references": [
+      "dream-insight-git-push-violations: not testable in this unit set — no git push operations observed; insight remains unconfirmed/unviolated",
+      "dream-insight-compaction-approval-boundary: not testable in this unit set — no context compaction boundaries or git push decisions observed",
+      "dream-insight-memory-deduplication: tangentially relevant to 5455871e-6 which writes a new memory file (feedback_render_production_readonly.md) and updates MEMORY.md — dedup check not observable from tool call data alone; no confirmed violation",
+      "note: all three dream insights concern git-push approval state which is orthogonal to the primary failure modes observed in this unit set (MCP retries, edit thrash, shell preference violations)"
+    ],
+    "overconfident_count": 10,
+    "recommendations": [
+      "mcp_retry_without_diagnosis has plateaued at 6 units for 3+ consecutive cycles with no improvement — the render MCP permission-scope root cause remains undiagnosed and unfixed; deprioritize re-recommending diagnostic steps since prior recommendations have not produced behavioral change; the pattern requires a structural fix at the MCP auth layer, not agent-level reminders",
+      "re_edit_thrash with workaround-file-creation escalation is now confirmed recurring for the third+ cycle — the workaround-file pattern (structural-deliberations-pass-b.md, structural-deliberations-pass-c.md) represents a failure mode where the agent creates a parallel file instead of diagnosing the Edit uniqueness failure; this specific escalation path warrants a mechanical check: before creating a new file as a workaround, verify whether the original Edit failure was due to a non-unique old_string",
+      "bash_retry_without_diagnosis shows mild worsening (5 units vs prior 4); the -36 instance severity (4 write failures before diagnostic read) is the highest observed for the Write variant — no new recommendations beyond prior cycles since pattern is already tracked",
+      "redundant_read_same_unit shows possible improvement (2 units vs prior 3-unit plateau) — monitor for another cycle before concluding improvement; the -51 same-file same-unit recurrence for the third consecutive cycle suggests a structural trigger in that specific review workflow that is not random"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 18
+  },
+  "sessions": [
+    [
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      806029
+    ],
+    [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      1372016
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      126486625
+    ],
+    [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      5927519
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      8724210
+    ]
+  ],
+  "timestamp": "2026-05-29T00:27:09.243924Z",
+  "tokens_used": 30778,
+  "units_analyzed": 28,
+  "units_total": 82
+}

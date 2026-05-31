@@ -14,7 +14,10 @@ set -uo pipefail
 # shellcheck disable=SC1091
 source "$(dirname "${BASH_SOURCE[0]}")/atone-common.sh"
 
-ATONE_DIR="$HOME/.claude/atone"
+# ATONE_DIR is env-overridable ONLY so the flow can be exercised against an
+# isolated /tmp store in tests — never test against the real append-only log.
+# Production always uses the default.
+ATONE_DIR="${ATONE_DIR:-$HOME/.claude/atone}"
 STORE="$ATONE_DIR/events.jsonl"
 LOCK_FILE="$ATONE_DIR/events.jsonl.lock"
 RCA_DIR="$ATONE_DIR/rca"
@@ -121,9 +124,15 @@ cmd_add() {
   local slug="" title="" issue="" cause="" fix="" what_not=""
   local severity="" precheck="" tags_str="" cluster=""
   local project="" files_str="" rca_content="" rca_file=""
+  local session_id="${CLAUDE_CODE_SESSION_ID:-}"   # --session overrides
+  local case_file="" review_report=""              # atone-owned juror dispatch
+  local _ATONE_INTERNAL_DISPATCH=1                 # authorizes cmd_juror provenance (A4)
 
   while [ $# -gt 0 ]; do
     case "$1" in
+      --session)      session_id="$2"; shift 2 ;;
+      --case-file)    case_file="$2"; shift 2 ;;
+      --review-report) review_report="$2"; shift 2 ;;
       --slug)         slug="$2"; shift 2 ;;
       --title)        title="$2"; shift 2 ;;
       --issue)        issue="$2"; shift 2 ;;
@@ -272,10 +281,15 @@ PY
     local lint_script
     lint_script="$(dirname "${BASH_SOURCE[0]}")/atone-rca-lint.sh"
     if [ -x "$lint_script" ] && [ "${ATONE_NO_RCA_LINT:-0}" != "1" ]; then
-      if ! bash "$lint_script" "$rca_tmp" >&2; then
+      # Capture lint output; surface it ONLY on failure (success is recapped in
+      # the summary card — no need to scroll the ✓ list). ATONE_VERBOSE=1 shows it.
+      local lint_out
+      if ! lint_out=$(bash "$lint_script" "$rca_tmp" 2>&1); then
+        printf '%s\n' "$lint_out" >&2
         rm -f "$rca_tmp" 2>/dev/null || true
         _die "RCA failed lint — fix the issues above and retry, or set ATONE_NO_RCA_LINT=1 to bypass."
       fi
+      [ "${ATONE_VERBOSE:-0}" = "1" ] && printf '%s\n' "$lint_out" >&2
     fi
 
     # Move temp into place, then chflags + chmod.
@@ -299,8 +313,107 @@ PY
   # Skip this gate during migration / testing via ATONE_NO_JUROR=1.
   # judgment_id (event row forward-link) and suspect_fields populated below.
   local matched_judgment_id="" matched_verdict="" matched_ts="" suspect_fields_str=""
+  local atone_owned=0 juror_unavailable=0 verdict_path=""   # set by the atone-owned dispatch below
 
-  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" != "1" ]; then
+  # atone-OWNED juror dispatch (the agent is no longer in verdict composition).
+  # If --case-file is given for an S3 event, atone runs the juror via claude -p,
+  # persists the verdict to disk, and records the judgment row HERE — linked to
+  # this event's id. The existing slug-match gate below then finds it. This means
+  # the agent makes ONE call (`atone add --case-file …`) instead of dispatching a
+  # sub-agent, relaying its verdict, and re-typing ~10 fields — and the verdict
+  # survives on disk, so a lost context never forces a juror re-run.
+  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" != "1" ] && [ -n "$case_file" ]; then
+    [ -f "$case_file" ] || _die "add: --case-file not found: $case_file"
+    local dispatch verdict_json dverdict dconf dreason dslips dconstraints dshould dscope djid
+    # A5: pre-generate the judgment id so the EVENT row can reference it and be
+    # appended FIRST; the judgment is recorded AFTER the event (no orphan window).
+    djid=$(printf 'judg-%s-%02x' "$(date -u '+%Y%m%d-%H%M%S')" $((RANDOM % 256)))
+    local dispatch_script="$(dirname "${BASH_SOURCE[0]}")/atone-juror-dispatch.sh"
+    _info "dispatching juror (atone-owned, claude -p) — this takes ~20-40s…"
+    verdict_json=$(bash "$dispatch_script" --case-file "$case_file" \
+      ${review_report:+--review-report "$review_report"} 2>/tmp/atone-juror-$$.err)
+    dispatch=$?
+    if [ "$dispatch" -eq 3 ]; then
+      # Juror unavailable (claude -p failed/timeout/unparseable). Record audibly,
+      # don't block — same spirit as ATONE_NO_JUROR but auto + flagged. (A2) Fold
+      # the specific dispatcher reason into the suspect field so a config break and
+      # a model timeout aren't indistinguishable in the log; sanitize | and spaces.
+      local jreason
+      jreason=$(rg -o 'atone-juror-dispatch: .*' /tmp/atone-juror-$$.err 2>/dev/null | tail -1 | sed 's/atone-juror-dispatch: //; s/[|]/ /g; s/ /_/g' | cut -c1-60)
+      [ -n "$jreason" ] || jreason="unknown"
+      _warn "juror unavailable — recording event with juror_unavailable:true ($jreason)"
+      suspect_fields_str="${suspect_fields_str}|juror-unavailable:${jreason}"
+      juror_unavailable=1
+      cat /tmp/atone-juror-$$.err >&2 2>/dev/null || true
+      rm -f /tmp/atone-juror-$$.err 2>/dev/null || true
+    elif [ "$dispatch" -ne 0 ] || [ -z "$verdict_json" ]; then
+      rm -f /tmp/atone-juror-$$.err 2>/dev/null || true
+      _die "add: juror dispatch errored (rc=$dispatch). Fix the case file or use ATONE_NO_JUROR=1."
+    else
+      verdict_path=$(rg -o 'VERDICT_PATH=.*' /tmp/atone-juror-$$.err 2>/dev/null | head -1 | cut -d= -f2-)
+      rm -f /tmp/atone-juror-$$.err 2>/dev/null || true
+      dverdict=$(printf '%s' "$verdict_json" | jq -r '.verdict // ""')
+      dconf=$(printf '%s' "$verdict_json" | jq -r '.confidence // "medium"')
+      dreason=$(printf '%s' "$verdict_json" | jq -r '.reasoning // ""')
+      dslips=$(printf '%s' "$verdict_json" | jq -r '(.slips_identified // []) | join("|")')
+      dconstraints=$(printf '%s' "$verdict_json" | jq -r '(.constraints_considered // []) | join("|")')
+      dshould=$(printf '%s' "$verdict_json" | jq -r '.should_have_done // ""')
+      dscope=$(printf '%s' "$verdict_json" | jq -r '.scope_note // ""')   # A10
+
+      # If the juror CLEARED the agent (probably-right/reasonably-right) and the
+      # user is not overruling, do NOT record an atone: record the judgment with a
+      # truthful outcome (NOT "atoned"), remove the RCA we wrote earlier so no
+      # immutable orphan is left, and exit 5. Handling it HERE — before the event
+      # is written — avoids the later gate's exit-5-after-RCA-write orphan.
+      local dj_outcome="atoned" dj_link="$id"
+      if { [ "$dverdict" = "probably-right" ] || [ "$dverdict" = "reasonably-right" ]; } \
+         && [ -z "${ATONE_OVERRIDE_VERDICT:-}" ]; then
+        cmd_juror --session "$session_id" --id "$djid" \
+          --dispatched-by atone --verdict-path "$verdict_path" --scope-note "$dscope" \
+          --user-callout "$(jq -r '.user_callout // ""' "$case_file")" \
+          --agent-did "$(jq -r '.agent_did // ""' "$case_file")" \
+          --agent-defense "$(jq -r '.agent_defense // ""' "$case_file")" \
+          --context "$(jq -r '.context // ""' "$case_file")" \
+          --verdict "$dverdict" --confidence "$dconf" --reasoning "$dreason" \
+          --slips "$dslips" --constraints "$dconstraints" --should-have-done "$dshould" \
+          --related-slugs "$slug" --outcome "pending" --linked-event-id "" >/dev/null
+        if [ -n "$rca_path" ] && [ -f "$rca_path" ]; then
+          chflags nouchg "$rca_path" 2>/dev/null || true
+          chmod u+w "$rca_path" 2>/dev/null || true
+          rm -f "$rca_path" 2>/dev/null || true
+        fi
+        cat >&2 <<EOF
+${C_RED:-}atone add: REFUSED — juror cleared the agent${C_RESET:-}
+
+verdict=$dverdict  ($dreason)
+
+The juror said the agent was '$dverdict' — recording an atone contradicts the
+verdict (the "I'll atone anyway to please the user" failure mode). The verdict
+is preserved as a judgment for measurement; no event was written.
+
+If the user is overruling the juror, retry with:
+  ATONE_OVERRIDE_VERDICT="<reason>" bash atone.sh add ... --case-file ...
+EOF
+        exit 5
+      fi
+      # Overruled-right verdict still proceeds, but is marked as such.
+      { [ "$dverdict" = "probably-right" ] || [ "$dverdict" = "reasonably-right" ]; } \
+        && dj_outcome="pushed-back-then-atoned"
+      # A5: do NOT record the judgment yet — set the forward-link fields and defer
+      # recording to AFTER the event row is appended (event-first ordering closes
+      # the orphan-judgment window). The deferred recording block runs post-append.
+      matched_judgment_id="$djid"
+      matched_verdict="$dverdict"
+      atone_owned=1
+      [ "${ATONE_VERBOSE:-0}" = "1" ] && _ok "juror verdict: $dverdict (will record after event)"
+    fi
+  fi
+
+  # This legacy gate runs ONLY for the non-owned path (a pre-recorded judgment
+  # the agent hand-recorded). The owned --case-file path already set
+  # matched_judgment_id/matched_verdict from the dispatch and defers recording to
+  # after the event, so it skips this lookup (atone_owned guard).
+  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" != "1" ] && [ "$juror_unavailable" != "1" ] && [ "$atone_owned" != "1" ]; then
     local cutoff
     cutoff="$(date -u -v-15M '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -d '15 minutes ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo '')"
     # STRICT slug match only — the old OR-clause `.linked_atone_event_id != null`
@@ -310,7 +423,7 @@ PY
     match=$(jq -r --arg slug "$slug" --arg cutoff "$cutoff" '
       select(.ts >= $cutoff) |
       select((.related_atone_slugs // []) | any(. == $slug)) |
-      [.id, .verdict, .ts] | @tsv
+      [.id, .verdict, .ts, (.dispatched_by // "")] | @tsv
     ' "$JUDGMENTS_LOG" 2>/dev/null | tail -1)
 
     if [ -z "$match" ]; then
@@ -321,30 +434,39 @@ This is an S3 event but no recent juror judgment was found whose
 related_atone_slugs contains "$slug" (checked last 15 min of
 ~/.claude/atone/judgments.jsonl).
 
-S3 events MUST have a linked juror verdict — anti-sycophancy gate.
-Dispatching a juror from the SAME context as the atoning agent defeats the
-purpose; the juror is supposed to be an independent second opinion. If you
-just composed the juror JSON yourself, stop and dispatch a real sub-agent.
+S3 events MUST have a linked juror verdict — anti-sycophancy gate. The juror
+must be an INDEPENDENT second opinion, not composed by the atoning agent.
 
 Options:
 
-  1. (REQUIRED PATH) Dispatch a juror SUB-AGENT (Agent tool, fresh context)
-     with ~/.claude/personas/juror.md + your case. Wait for its verdict.
-     Then record via:
-       bash ~/.claude/scripts/atone.sh juror --user-callout ... --verdict ... \\
-         --related-slugs "$slug ..."
-     Retry this add — the gate will find the recent judgment.
+  1. (REQUIRED PATH) Re-run this add with --case-file <case.json>. atone will
+     dispatch the juror itself (claude -p, fresh context), persist the verdict,
+     record the judgment, and gate — you do NOT compose or relay the verdict.
+     Case file = {slug, user_callout, agent_did, agent_defense, context}.
+       bash ~/.claude/scripts/atone.sh add ... --severity S3 --case-file <path>
 
-  2. (LOGGED BYPASS) ATONE_NO_JUROR=1 retry. The event will carry
-     juror_bypassed:true so the bypass is auditable, not silent.
+  2. (LEGACY) Dispatch a juror SUB-AGENT yourself, record via
+     'atone juror --related-slugs "$slug" ...', then retry. The event will be
+     flagged unverified-juror-provenance (hand-recorded, not atone-dispatched).
 
-  3. (DOWNGRADE) Retry with --severity S2 if this isn't actually S3.
+  3. (LOGGED BYPASS) ATONE_NO_JUROR=1 retry → event carries juror_bypassed:true.
+
+  4. (DOWNGRADE) Retry with --severity S2 if this isn't actually S3.
 EOF
       exit 4
     fi
     matched_judgment_id="$(printf '%s' "$match" | awk -F'\t' '{print $1}')"
     matched_verdict="$(printf '%s' "$match" | awk -F'\t' '{print $2}')"
     matched_ts="$(printf '%s' "$match" | awk -F'\t' '{print $3}')"
+    # A4: a matched judgment NOT produced by the atone-owned dispatch (no
+    # dispatched_by:atone) is a hand-recorded verdict — the residual fabrication
+    # surface. Flag it (auditable) rather than block, so the legacy escape stays
+    # open. This replaces the brittle <10s timing heuristic as the real signal.
+    local matched_dispatched_by
+    matched_dispatched_by="$(printf '%s' "$match" | awk -F'\t' '{print $4}')"
+    if [ "$matched_dispatched_by" != "atone" ]; then
+      suspect_fields_str="${suspect_fields_str}|unverified-juror-provenance:hand-recorded"
+    fi
 
     # Verdict threshold gate: if juror cleared the agent, don't auto-atone.
     if [ "$matched_verdict" = "probably-right" ] || [ "$matched_verdict" = "reasonably-right" ]; then
@@ -364,6 +486,13 @@ fallible), retry with:
 
 The reason will be recorded on the event for audit.
 EOF
+        # No event will be written — remove the immutable RCA so it isn't orphaned
+        # (the owned cleared path does this; the legacy path had missed it).
+        if [ -n "$rca_path" ] && [ -f "$rca_path" ]; then
+          chflags nouchg "$rca_path" 2>/dev/null || true
+          chmod u+w "$rca_path" 2>/dev/null || true
+          rm -f "$rca_path" 2>/dev/null || true
+        fi
         exit 5
       fi
       suspect_fields_str="${suspect_fields_str}|verdict-overridden:${matched_verdict}"
@@ -371,17 +500,22 @@ EOF
 
     # Synthetic-juror heuristic: real sub-agent dispatch takes ≥10s. A judgment
     # that landed <10s before this atone was almost certainly composed inline
-    # by the same agent, not by a dispatched sub-agent.
-    local now_epoch jud_epoch gap_s
-    now_epoch="$(date -u '+%s')"
-    jud_epoch="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$matched_ts" '+%s' 2>/dev/null || date -u -d "$matched_ts" '+%s' 2>/dev/null || echo "$now_epoch")"
-    gap_s=$(( now_epoch - jud_epoch ))
-    if [ "$gap_s" -lt 10 ]; then
-      suspect_fields_str="${suspect_fields_str}|synthetic-juror-suspected:gap_${gap_s}s"
-      _warn "juror→atone gap was ${gap_s}s — real sub-agent dispatch takes ≥10s. Flagging suspect_fields."
+    # by the same agent. SKIPPED when atone owned the dispatch (--case-file):
+    # there the judgment is recorded immediately after a real claude -p run, so
+    # a ~0s gap is expected and is NOT evidence of fabrication.
+    if [ "$atone_owned" = "1" ]; then
+      [ "${ATONE_VERBOSE:-0}" = "1" ] && _ok "juror gate: matched $matched_judgment_id (verdict=$matched_verdict, atone-owned dispatch)"
+    else
+      local now_epoch jud_epoch gap_s
+      now_epoch="$(date -u '+%s')"
+      jud_epoch="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$matched_ts" '+%s' 2>/dev/null || date -u -d "$matched_ts" '+%s' 2>/dev/null || echo "$now_epoch")"
+      gap_s=$(( now_epoch - jud_epoch ))
+      if [ "$gap_s" -lt 10 ]; then
+        suspect_fields_str="${suspect_fields_str}|synthetic-juror-suspected:gap_${gap_s}s"
+        _warn "juror→atone gap was ${gap_s}s — real sub-agent dispatch takes ≥10s. Flagging suspect_fields."
+      fi
+      [ "${ATONE_VERBOSE:-0}" = "1" ] && _ok "juror gate: matched $matched_judgment_id (verdict=$matched_verdict, gap=${gap_s}s)"
     fi
-
-    _ok "juror gate: matched $matched_judgment_id (verdict=$matched_verdict, gap=${gap_s}s)"
   elif [ "${ATONE_NO_JUROR:-0}" = "1" ]; then
     suspect_fields_str="${suspect_fields_str}|juror-bypassed:ATONE_NO_JUROR=1"
     _warn "ATONE_NO_JUROR=1 — recording event with juror_bypassed:true"
@@ -400,9 +534,11 @@ EOF
     --arg verdict "$matched_verdict" \
     --arg suspect_fields_str "$suspect_fields_str" \
     --arg override_reason "${ATONE_OVERRIDE_VERDICT:-}" \
+    --arg session_id "$session_id" \
     --arg juror_bypassed "$([ "${ATONE_NO_JUROR:-0}" = "1" ] && echo true || echo false)" \
     '{
        id: $id, ts: $ts, slug: $slug, title: $title,
+       session_id: (if $session_id == "" then null else $session_id end),
        issue: $issue, cause: $cause, fix: $fix, what_not_to_do: $what_not,
        precheck: (if $precheck == "" then null else $precheck end),
        severity: $severity,
@@ -425,16 +561,65 @@ EOF
 
   _git_commit "atone: $id $slug ($severity)"
 
+  # A5: NOW that the event row exists, record the deferred owned-path judgment
+  # linked to it (event-first ordering — a crash before this point leaves NO
+  # orphan; a crash after leaves an event whose judgment the re-juror sweep
+  # back-fills). Provenance (dispatched_by:atone + verdict_path) is what the gate
+  # uses to distinguish a real dispatch from a hand-typed verdict (A4).
+  if [ "$atone_owned" = "1" ]; then
+    cmd_juror --session "$session_id" --id "$djid" \
+      --dispatched-by atone --verdict-path "$verdict_path" --scope-note "$dscope" \
+      --user-callout "$(jq -r '.user_callout // ""' "$case_file")" \
+      --agent-did "$(jq -r '.agent_did // ""' "$case_file")" \
+      --agent-defense "$(jq -r '.agent_defense // ""' "$case_file")" \
+      --context "$(jq -r '.context // ""' "$case_file")" \
+      --verdict "$dverdict" --confidence "$dconf" --reasoning "$dreason" \
+      --slips "$dslips" --constraints "$dconstraints" --should-have-done "$dshould" \
+      --related-slugs "$slug" --outcome "$dj_outcome" --linked-event-id "$id" >/dev/null
+  fi
+
   # Fast-path: refresh triggers.json + _tldr.txt so hinters pick up the new event.
   # Run in background so caller doesn't wait for the ~1s consolidation.
   ( bash "$HOME/.claude/scripts/atone-consolidate.sh" --triggers-only \
       >/dev/null 2>&1 & ) &
 
-  _ok "logged $id"
-  gum_kv "slug"     "$slug"
-  gum_kv "severity" "$severity"
-  [ -n "$cluster" ]  && gum_kv "cluster" "$cluster"
-  [ -n "$rca_path" ] && gum_kv "rca"     "$rca_path"
+  # ── Summary card: one scannable view instead of the line-by-line log ──
+  local sum_in sum_steps sum_out sum_resid sev_disp
+  sev_disp="$severity"; [ "$repeat_bumped" = "1" ] && sev_disp="$severity (same-session bump)"
+  sum_in=$(printf 'slug\t%s\nseverity\t%s' "$slug" "$sev_disp")
+  [ -n "$cluster" ]   && sum_in="$sum_in"$'\n'"$(printf 'cluster\t%s' "$cluster")"
+  [ -n "$project" ]   && sum_in="$sum_in"$'\n'"$(printf 'project\t%s' "$project")"
+  [ -n "$tags_str" ]  && sum_in="$sum_in"$'\n'"$(printf 'tags\t%s' "$tags_str")"
+  [ -n "$files_str" ] && sum_in="$sum_in"$'\n'"$(printf 'files\t%s' "$files_str")"
+
+  sum_steps=""
+  [ "$repeat_bumped" = "1" ]    && sum_steps="${sum_steps}same-session-repeat → severity bumped to $severity"$'\n'
+  [ -n "$rca_path" ]            && sum_steps="${sum_steps}RCA drafted + lint OK"$'\n'
+  if [ "$atone_owned" = "1" ]; then
+    sum_steps="${sum_steps}juror dispatched (claude -p, atone-owned): ${dverdict:-?}"$'\n'
+    sum_steps="${sum_steps}juror gate: matched ${matched_judgment_id:-$id} (no agent relay)"$'\n'
+  elif [ "$juror_unavailable" = "1" ]; then
+    sum_steps="${sum_steps}juror dispatch FAILED → recorded juror_unavailable (not blocked)"$'\n'
+  elif [ "${ATONE_NO_JUROR:-0}" = "1" ]; then
+    sum_steps="${sum_steps}juror bypassed (ATONE_NO_JUROR=1)"$'\n'
+  elif [ -n "$matched_judgment_id" ]; then
+    sum_steps="${sum_steps}juror gate: matched pre-recorded $matched_judgment_id ($matched_verdict)"$'\n'
+  fi
+  sum_steps="${sum_steps}event committed + triggers refresh queued"
+
+  sum_out=$(printf 'event\t%s' "$id")
+  [ -n "$matched_judgment_id" ] && sum_out="$sum_out"$'\n'"$(printf 'judgment\t%s' "$matched_judgment_id")"
+  [ -n "${dverdict:-}" ]        && sum_out="$sum_out"$'\n'"$(printf 'verdict\t%s' "$dverdict")"
+  [ -n "$rca_path" ]            && sum_out="$sum_out"$'\n'"$(printf 'rca\t%s' "$rca_path")"
+  [ -n "$verdict_path" ]        && sum_out="$sum_out"$'\n'"$(printf 'verdict-file\t%s' "$verdict_path")"
+
+  sum_resid=""
+  if [ -n "$suspect_fields_str" ]; then
+    sum_resid=$(printf '%s' "$suspect_fields_str" | tr '|' '\n')
+  fi
+  [ "$repeat_bumped" = "1" ] && sum_resid="${sum_resid}${sum_resid:+$'\n'}tag: same-session-repeat"
+
+  render_atone_summary "$sum_in" "$sum_steps" "$sum_out" "$sum_resid"
   return 0    # explicit — guards against the [ -n ... ] && pattern above returning 1 on empty
 }
 
@@ -656,17 +841,27 @@ EOF
 # judgment lines. Outcome can be set via --outcome (atoned | pushed-back-then-
 # atoned | pushed-back-then-accepted | pending).
 
-JUDGMENTS_LOG="$HOME/.claude/atone/judgments.jsonl"
-JUDGMENTS_LOCK="$HOME/.claude/atone/judgments.jsonl.lock"
+JUDGMENTS_LOG="$ATONE_DIR/judgments.jsonl"
+JUDGMENTS_LOCK="$ATONE_DIR/judgments.jsonl.lock"
 
 cmd_juror() {
   local user_callout="" agent_did="" agent_defense="" context_summary=""
   local verdict="" confidence="" reasoning="" should_have_done=""
   local outcome="pending" linked_atone_event_id=""
   local slips_str="" constraints_str="" related_slugs_str=""
+  # Default to the running session's id; --session overrides. (Was CLAUDE_SESSION_ID,
+  # which is never set — the real var is CLAUDE_CODE_SESSION_ID, so every prior
+  # judgment recorded session_id:"". Fixed 2026-05-29.)
+  local session_id="${CLAUDE_CODE_SESSION_ID:-}"
+  local forced_id="" dispatched_by="" verdict_path="" scope_note=""  # A4/A5/A10
 
   while [ $# -gt 0 ]; do
     case "$1" in
+      --session)             session_id="$2"; shift 2 ;;
+      --id)                  forced_id="$2"; shift 2 ;;
+      --dispatched-by)       dispatched_by="$2"; shift 2 ;;
+      --verdict-path)        verdict_path="$2"; shift 2 ;;
+      --scope-note)          scope_note="$2"; shift 2 ;;
       --user-callout)        user_callout="$2"; shift 2 ;;
       --agent-did)           agent_did="$2"; shift 2 ;;
       --agent-defense)       agent_defense="$2"; shift 2 ;;
@@ -730,17 +925,31 @@ EOF
     *) _die "juror: --outcome must be atoned | pushed-back-then-atoned | pushed-back-then-accepted | pending (got: $outcome)" ;;
   esac
 
+  # A4 hardening: provenance (--dispatched-by) is honored ONLY for internal calls.
+  # cmd_add/cmd_resweep set _ATONE_INTERNAL_DISPATCH=1 (bash dynamic scoping makes
+  # it visible to this function only when called from them, NOT from a hand CLI
+  # `atone juror`). Stops an agent forging dispatched_by:atone to dodge the
+  # unverified-juror-provenance flag.
+  if [ -n "$dispatched_by" ] && [ "${_ATONE_INTERNAL_DISPATCH:-0}" != "1" ]; then
+    _warn "ignoring --dispatched-by '$dispatched_by' (not an internal dispatch)"
+    dispatched_by=""
+  fi
+
   _require jq
 
   local id ts
-  id=$(printf 'judg-%s-%02x' "$(date -u '+%Y%m%d-%H%M%S')" $((RANDOM % 256)))
+  # A5: accept a caller-supplied id so the event row can reference the judgment
+  # BEFORE the judgment is appended (event-first ordering, no orphan window).
+  if [ -n "$forced_id" ]; then id="$forced_id"; else
+    id=$(printf 'judg-%s-%02x' "$(date -u '+%Y%m%d-%H%M%S')" $((RANDOM % 256)))
+  fi
   ts=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
   # Convert pipe-delimited / space-delimited strings to JSON arrays via jq
   local line
   line=$(jq -cn \
     --arg id "$id" --arg ts "$ts" \
-    --arg session_id "${CLAUDE_SESSION_ID:-}" \
+    --arg session_id "$session_id" \
     --arg user_callout "$user_callout" \
     --arg agent_did "$agent_did" \
     --arg agent_defense "$agent_defense" \
@@ -750,6 +959,8 @@ EOF
     --arg slips_str "$slips_str" --arg constraints_str "$constraints_str" \
     --arg related_slugs_str "$related_slugs_str" \
     --arg outcome "$outcome" --arg linked_event_id "$linked_atone_event_id" \
+    --arg dispatched_by "$dispatched_by" --arg verdict_path "$verdict_path" \
+    --arg scope_note "$scope_note" \
     '{
        id: $id, ts: $ts, session_id: ($session_id // ""),
        user_callout: $user_callout,
@@ -761,9 +972,12 @@ EOF
        slips_identified:       ($slips_str          | split("|") | map(select(length > 0))),
        constraints_considered: ($constraints_str    | split("|") | map(select(length > 0))),
        should_have_done: $should_have_done,
+       scope_note: (if $scope_note == "" then null else $scope_note end),
        related_atone_slugs:    ($related_slugs_str  | split(" ") | map(select(length > 0))),
        outcome: $outcome,
-       linked_atone_event_id: (if $linked_event_id == "" then null else $linked_event_id end)
+       linked_atone_event_id: (if $linked_event_id == "" then null else $linked_event_id end),
+       dispatched_by: (if $dispatched_by == "" then null else $dispatched_by end),
+       verdict_path: (if $verdict_path == "" then null else $verdict_path end)
      }')
 
   (
@@ -782,6 +996,71 @@ EOF
   gum_kv "confidence" "$confidence"
   gum_kv "outcome"    "$outcome"
   echo "$id"
+}
+
+# ─── resweep — re-dispatch the juror for fail-open (juror-unavailable) events ──
+# A3: a juror_unavailable event recorded with no verdict (claude -p was down).
+# This re-dispatches the juror from the event's own fields and records a
+# back-linked judgment, converting "permanent gap" → "eventually consistent".
+# The immutable event can't be updated to add judgment_id, but the new judgment
+# carries linked_atone_event_id so the pairing is queryable.
+cmd_resweep() {
+  local limit=5
+  local _ATONE_INTERNAL_DISPATCH=1   # authorizes cmd_juror provenance (A4)
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --limit) limit="$2"; shift 2 ;;
+      -h|--help) echo "atone resweep [--limit N] — re-juror events flagged juror-unavailable"; exit 0 ;;
+      *) _die "resweep: unknown flag: $1" ;;
+    esac
+  done
+  _require jq
+  [ -s "$STORE" ] || { _info "no events"; return 0; }
+  local dispatch_script="$(dirname "${BASH_SOURCE[0]}")/atone-juror-dispatch.sh"
+
+  # Events flagged juror-unavailable that have NO judgment linked to them yet.
+  local pending n=0
+  pending=$(jq -rc '
+    select((.suspect_fields // []) | any(test("juror-unavailable"))) | .id
+  ' "$STORE" 2>/dev/null)
+  [ -n "$pending" ] || { _ok "resweep: no juror-unavailable events"; return 0; }
+
+  local eid
+  while IFS= read -r eid; do
+    [ -n "$eid" ] || continue
+    [ "$n" -ge "$limit" ] && { _info "resweep: hit --limit $limit"; break; }
+    # already back-linked?
+    if jq -e --arg e "$eid" 'select(.linked_atone_event_id == $e)' "$JUDGMENTS_LOG" >/dev/null 2>&1; then
+      continue
+    fi
+    local ev cf slug sess
+    ev=$(jq -c --arg e "$eid" 'select(.id == $e)' "$STORE")
+    slug=$(printf '%s' "$ev" | jq -r '.slug'); sess=$(printf '%s' "$ev" | jq -r '.session_id // "resweep"')
+    cf="/tmp/atone-resweep-$$-$n.json"
+    printf '%s' "$ev" | jq '{slug, session_id:(.session_id//"resweep"),
+      user_callout:("[resweep] original mistake: " + (.issue//"")),
+      agent_did:(.cause//""), agent_defense:"(re-juror sweep — original dispatch was unavailable)",
+      context:(.fix//"")}' > "$cf"
+    _info "resweep: re-dispatching juror for $eid ($slug)…"
+    local vj rc
+    vj=$(bash "$dispatch_script" --case-file "$cf" 2>/dev/null); rc=$?
+    rm -f "$cf" 2>/dev/null || true
+    if [ "$rc" -ne 0 ] || [ -z "$vj" ]; then _warn "resweep: still unavailable for $eid"; continue; fi
+    local vv vc vr
+    vv=$(printf '%s' "$vj" | jq -r '.verdict'); vc=$(printf '%s' "$vj" | jq -r '.confidence // "medium"'); vr=$(printf '%s' "$vj" | jq -r '.reasoning // ""')
+    # Outcome follows the verdict: the event already exists (fail-open), so a
+    # clearing verdict can't un-record it — record honestly (pending) rather than
+    # claiming atoned against a right-leaning verdict.
+    local rsw_outcome="atoned"
+    { [ "$vv" = "probably-right" ] || [ "$vv" = "reasonably-right" ]; } && rsw_outcome="pending"
+    cmd_juror --session "$sess" --dispatched-by atone-resweep \
+      --user-callout "[resweep] $eid" --agent-did "(from event)" --agent-defense "(resweep)" \
+      --context "resweep of $eid" --verdict "$vv" --confidence "$vc" --reasoning "$vr" \
+      --related-slugs "$slug" --outcome "$rsw_outcome" --linked-event-id "$eid" >/dev/null
+    _ok "resweep: $eid → $vv (judgment back-linked, outcome=$rsw_outcome)"
+    n=$((n+1))
+  done <<< "$pending"
+  _ok "resweep: re-juried $n event(s)"
 }
 
 # ─── judgments — list / show / stats ──────────────────────────────
@@ -952,6 +1231,7 @@ case "${1:-help}" in
   triggers)        shift; cmd_triggers "$@" ;;
   feedback)        shift; cmd_feedback "$@" ;;
   juror)           shift; cmd_juror "$@" ;;
+  resweep)         shift; cmd_resweep "$@" ;;
   judgments)       shift; cmd_judgments "$@" ;;
   lock)            shift; cmd_lock "$@" ;;
   unlock-check)    shift; cmd_unlock_check "$@" ;;

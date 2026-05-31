@@ -24,9 +24,41 @@ ap.add_argument("--include", action="append", default=[])
 ap.add_argument("--max-size", type=int, default=0, help="max file size in bytes (0=no cap)")
 ap.add_argument("--input", default="02-files.txt")
 ap.add_argument("--output", default="03-files-relevant.txt")
+ap.add_argument("--excludes-file", default=None,
+                help="path to a .discover-excludes file (one glob per line); "
+                     "auto-detected at repo root if not given")
 args = ap.parse_args()
 
-excludes = DEFAULT_EXCLUDES + args.exclude
+# Per-repo excludes (W5): a `.discover-excludes` file at the repo root lets a
+# project opt into excluding paths the global defaults keep (e.g. docs-as-code
+# repos exclude `frontend/docs/**`). One glob per line; `#` comments allowed.
+def load_repo_excludes(explicit):
+    candidates = []
+    if explicit:
+        candidates.append(explicit)
+    else:
+        # Walk up from CWD looking for a repo-root marker + the excludes file.
+        d = os.getcwd()
+        for _ in range(6):
+            candidates.append(os.path.join(d, ".discover-excludes"))
+            if os.path.isdir(os.path.join(d, ".git")):
+                break
+            parent = os.path.dirname(d)
+            if parent == d:
+                break
+            d = parent
+    for path in candidates:
+        if os.path.exists(path):
+            with open(path) as f:
+                pats = [l.strip() for l in f
+                        if l.strip() and not l.strip().startswith("#")]
+            if pats:
+                print(f"loaded {len(pats)} repo excludes from {path}")
+                return pats
+    return []
+
+repo_excludes = load_repo_excludes(args.excludes_file)
+excludes = DEFAULT_EXCLUDES + repo_excludes + args.exclude
 includes = args.include  # if set, file must match at least one
 
 with open(args.input) as f:

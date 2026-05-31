@@ -1,0 +1,43 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2166213564863861,
+    "unit_count": 23
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 5/5 units (100%): unit-0 (ls+rg compounds via Bash instead of Glob+Grep), unit-3 (ls, find, file, sips, iconutil all via Bash), unit-11 (rg via Bash x3 instead of Grep tool), unit-12 (rg+awk compounds via Bash throughout), unit-20 (sed -n, awk, rg, ls all via Bash); rate at 100% — above prior 52-83% band; no downward trajectory",
+      "grep_hook_bypass:RECURRING:STABLE — unit-20 uses grep -E directly via Bash (\"grep -E '^test .* (FAILED|ok|ignored)'\"); was flagged as NEW in prior cycle (bc2715fa), now confirmed RECURRING; Grep tool was available and unused; one unit vs 9 units in prior cycle — possible session-scope reduction but pattern not eliminated",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit-20: Edit src/main.rs fails (success:false) → head -20 via Bash read → Edit succeeds; 1 unit instance; at low end of prior 2-5 unit plateau; no worsening, no improvement",
+      "redundant_read_same_unit:RECURRING:STABLE — unit-11: Read daemon.rs x3 with rg calls between reads but no offset variation between reads 2 and 3; unit-12: Read weekly_briefing.rs x2 consecutively before first edit with no offset variation; 2 units at prior 2-unit plateau; structurally unchanged",
+      "bash_retry_without_diagnosis:RECURRING:MILD — unit-3: iconutil compound with rm fails (success:false) → simplified iconutil without rm succeeds; 1 unit instance with fast recovery (1 retry); below prior 3-unit baseline; marginal improvement vs prior cycles"
+    ],
+    "calibration_score": 0.32,
+    "overconfident_count": 1,
+    "recommendations": [
+      "grep_hook_bypass is now RECURRING after being NEW last cycle — the Grep tool is available in all sessions and covers all rg use cases that appeared via Bash; no action needed beyond what was already flagged, but the pattern is confirmed persistent",
+      "shell_tool_preference_violations at 100% unit rate (above prior 52-83% band) is the dominant persistent pattern; however all 5 units had Accepted outcomes, suggesting the violations are not causing execution failures — deprioritize active intervention unless tool call volume or permission friction becomes user-visible",
+      "optimistic_edit_without_read remains at plateau (1 unit this cycle vs 2-5 prior); single instance in unit-20 recovered in 1 step — no escalation signal; monitor for return to higher counts",
+      "no new bias patterns detected this cycle; session shows improvement in bash_retry_without_diagnosis severity (1 mild instance vs 2-4 severe instances in prior cycles)"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      13976648
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      2831664
+    ]
+  ],
+  "timestamp": "2026-05-24T22:34:11.416350Z",
+  "tokens_used": 9838,
+  "units_analyzed": 5,
+  "units_total": 23
+}

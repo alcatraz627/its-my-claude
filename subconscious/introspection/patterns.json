@@ -1,30 +1,30 @@
 {
-  "last_updated": "2026-05-22T03:00:30.507643Z",
-  "average_depth": 35.5,
-  "average_breadth": 1.7,
-  "fixation_rate": 0.16,
-  "assumption_rate": 0.33,
-  "overconfidence_rate": 0.27,
+  "last_updated": "2026-05-29T15:40:44.880871Z",
+  "average_depth": 27.5,
+  "average_breadth": 1.6,
+  "fixation_rate": 0.4,
+  "assumption_rate": 0.47,
+  "overconfidence_rate": 0.37,
   "common_assumptions": [
-    "File paths and directory structure remain stable between tool calls within the same chain",
-    "Type-checker passing (tsc --noEmit) implies feature correctness, not just syntactic validity",
-    "Shell tool availability (pm2, gh, rg) without prior which/version check",
-    "Prior process or environment state is unchanged since the last read",
-    "Single-file edits resolve issues without cascading effects in sibling files"
+    "file location known without prior grep/search",
+    "return type inferred from function name without reading definition",
+    "structural authority claim made without file:line citation",
+    "helper/utility exists where semantically expected without verification",
+    "configuration format or schema assumed from pattern-matching alone"
   ],
   "strength_patterns": [
-    "Consistent read-before-edit discipline: targeted file reads precede almost every modification across chains",
-    "Verification loops using type-checkers and build outputs (tsc, svelte-check, npm run build) after editing batches",
-    "Multi-source debugging: config files, logs, environment probes, and live process output checked in concert"
+    "methodical diagnostic iteration: running commands, reading output, adjusting next step based on result",
+    "multi-file context assembly before editing to understand coupling across components",
+    "git-aware operations with pre-push status+diff+log verification before risky ops"
   ],
   "weakness_patterns": [
-    "File-level fixation: statusline.sh and +page.svelte each appear 30+ times in single chains without a context-broadening pause",
-    "Symptom-driven iteration: long debugging chains (110+ steps) retry variants of the same fix rather than stepping back to reframe the root cause",
-    "Near-zero alternative breadth: chains almost universally commit to one approach before executing, with no visible branch evaluation"
+    "edit-heavy loops without root-cause diagnosis: same file edited 5+ times when a single dependency read would clarify",
+    "assumption-driven implementation: jumping to edits based on expected structure rather than reading actual schema first",
+    "re-edit thrashing under overconfidence: initial approach confidently wrong, requiring 10+ correction rounds"
   ],
   "trend": {
     "calibration_improving": false,
     "depth_trend": "stable",
-    "breadth_trend": "stable"
+    "breadth_trend": "decreasing"
   }
 }

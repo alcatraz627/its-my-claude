@@ -1,0 +1,89 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18297,
+    "correction_density": 0.06493506493506493,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.32665494123540745,
+    "unit_count": 77
+  },
+  "response": {
+    "biases_detected": [
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — 4 units (5455871e-5, -6, -16, -33): select_workspace succeeds but service-level queries fail consecutively with no intermediate scope or auth diagnostic; -33 repeats 10 consecutive get_metrics failures matching prior cycle record; 4 units is below the prior 6-unit plateau, possible marginal improvement but structurally identical failure mode — no diagnostic pivot toward permission-scope root cause",
+      "re_edit_thrash:RECURRING:STABLE — 5 units (5455871e-33, -35, -36, -37, -54): -33 render-throughput-baseline.md Edit fails x2; -35 same file fails then succeeds; -36 structural-changes-deliberation.md fails x3 plus worker-v2-but-better.md fails at unit end; -37 structural-changes-deliberation.md fails x3 with no Read pivot then workaround file structural-deliberations-pass-b.md created — recurring workaround-file-creation sub-pattern confirmed again; -54 worker-overhaul-plan-v2.md fails x4 consecutive with no intermediate Read; 5 units within prior 4-6 unit plateau",
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~60% of tool-using units: f0ba9f05-1 (rg compound via Bash, grep via Bash, python3 inline heredoc); 8e2d1072-1 (6 consecutive elaborate jq Bash calls on saved MCP output file with paths/keys/filters chains); 5455871e-3 (grep -rn/-A2/-B1 -A4 via Bash before correcting to rg); 5455871e-30 (grep -A 6 via Bash; Grep tool unused); 5455871e-37 (cat | head via Bash instead of Read with limit); 5455871e-47 (head via Bash; render CLI + jq transforms; ls compounds); 5455871e-54 (cat/ls/head via Bash for redis/__init__.py; grep before rg); rate at prior 60-65% band; no downward trajectory",
+      "optimistic_edit_without_read:RECURRING:STABLE — 4 units: f0ba9f05-1 (Edit detect.py fails → Read x2 redundant → Edit succeeds; double-Read before recovery is prior-observed sub-variant); 5455871e-6 (Edit compliments.md fails → Read → Edit succeeds); 5455871e-36 (Write /tmp fails x2 → Write ~/.claude fails → Write different /tmp fails → Read → Write succeeds — 4 sub-instances in sequence matching prior high-water severity); 5455871e-54 (Edit worker-overhaul-plan-v2.md fails x4 consecutive with no Read pivot); 4 units at high end of prior plateau; structurally unchanged",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 3 units: 5455871e-3 (grep/rg on wrong paths fail x3 before pwd+ls diagnostic — structurally identical to prior cycles); 5455871e-36 (Write fails x4 before Read diagnostic — matches prior high-severity instance); 5455871e-47 (ls frontend/ and rg src/ fail on wrong path before pwd+ls — 2 failures before correction); 3 units at prior baseline",
+      "compound_command_overreach:RECURRING:STABLE — 3 units: 8e2d1072-1 (6 consecutive elaborate jq Bash calls probing saved MCP output file — structurally identical to prior 8e2d1072-1 flagging, same session same unit number, same pattern recurs); 5455871e-35 (render restart + instance-poll for-loop + jq group_by/sort_by/sub pipeline chains across 6 Bash calls); 5455871e-47 (render restart + sleep-poll wait loop + render logs with jq group_by+sort_by transforms); 3 units at prior plateau",
+      "redundant_read_same_unit:RECURRING:STABLE — 2 units: f0ba9f05-1 (Read detect.py x2 consecutively at positions 3-4 with no offset variation and no intervening edit between pair — triggered by Edit failure recovery); 5455871e-51 (Read task_runner.py x2 consecutively then Read workerv2.py x2 consecutively with no offset variation — structurally identical to prior cycle's -51 instance, same files, same unit number; now fourth+ consecutive cycle flagging this specific file+unit combination); 2 units at prior plateau",
+      "grep_hook_bypass:RECURRING:POSSIBLY_IMPROVING — 3 units: 5455871e-3 (grep -rn/-A2/-B1 -A4 via Bash before self-correcting to rg); 5455871e-30 (grep -A 6 via Bash; Grep tool unused); 5455871e-54 (grep -n via Bash before correction to rg); no /usr/bin/ prefix bypass pattern observed this cycle unlike recent 5455871e-64/-71/-72 instances — possible marginal improvement but direct grep bypass persists",
+      "atone_cli_interface_assumption_without_help_check:NEW — 1 unit (8e2d1072-14): atone.sh add called with --rca-content flag x3 consecutively (all fail success:false) before checking --help and discovering the correct flag is --rca-file; agent synthesized a plausible flag name matching the naming convention without verifying the interface; same structural failure as bash_retry_without_diagnosis but specific to internal ~/.claude/scripts/ CLI interfaces; not recorded in prior calibration history"
+    ],
+    "calibration_score": 0.15,
+    "cross_references": [
+      "dream_insight_push_approval_after_compaction: not triggered in analyzed units — no git push operations present in any unit; dormant but relevant to 5455871e session which has extensive implementation work approaching commit-ready state",
+      "dream_insight_terse_message_ambiguity: 5455871e-35 (input length=2) and 5455871e-5 (input length=4) are terse continuation triggers — agents continued without ambiguity; no irreversible shared-state action was proposed immediately prior so the insight boundary was not at risk",
+      "dream_insight_data_hallucination_as_gap_filling: 8e2d1072-14 partially confirms — agent synthesized --rca-content as a plausible flag name (gap-filling via pattern inference from --rca-file naming convention) rather than stopping to verify the interface; 3 failures before checking --help; structurally matches the insight's root-cause framing of synthesizing plausible content to fill an information gap"
+    ],
+    "overconfident_count": 10,
+    "recommendations": [
+      "atone_cli_interface_assumption_without_help_check is a new pattern in 8e2d1072-14 worth tracking: extend the bash_retry_without_diagnosis precheck to cover internal script interfaces — run --help before assuming flag names on ~/.claude/scripts/ CLIs, especially for atone.sh which has non-obvious flag variants",
+      "5455871e-51 redundant_read_same_unit is now the fourth+ consecutive cycle flagging task_runner.py + workerv2.py in unit -51; this is a structural trigger around that review workflow, not noise — investigate whether the double-read is driven by file size requiring offset confirmation or a habitual re-read pattern before code-review comments",
+      "8e2d1072-16 is a notable positive signal: Read before editing, all 4 edits succeeded without failure, verification via git diff afterward — confirms the anti-pattern correction works when applied; this unit is well-calibrated and the read-first pattern should be reinforced",
+      "mcp_retry_without_diagnosis stable at 4 units this cycle vs prior 6-unit plateau — marginal count improvement but root cause (render MCP permission-scope confusion) is unresolved; no new recommendation until the workspace scope diagnostic is actually attempted between failures",
+      "compound_command_overreach in 8e2d1072-1 is exact recurrence of prior cycle's 8e2d1072-1 flag on same session, same unit — the jq pipeline probing of saved MCP output files is a stable session-level pattern; file-tools MCP would be the appropriate alternative for structured JSON inspection"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      1590221
+    ],
+    [
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      1962495
+    ],
+    [
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
+      143610400
+    ],
+    [
+      "1b3b250f-e4de-4613-bda0-64b8e9f77fa5",
+      4334
+    ],
+    [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      8525190
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      325516
+    ],
+    [
+      "eb261d0e-2786-443b-9b38-f154517825bf",
+      36644
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      13092109
+    ],
+    [
+      "7a4f64a4-6fc1-466f-ae1e-180f0f888a40",
+      36121
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      1209207
+    ],
+    [
+      "0f9fee03-002e-467a-9a68-b49bef2ad1e6",
+      66481
+    ]
+  ],
+  "timestamp": "2026-05-29T15:38:52.911350Z",
+  "tokens_used": 31790,
+  "units_analyzed": 26,
+  "units_total": 77
+}

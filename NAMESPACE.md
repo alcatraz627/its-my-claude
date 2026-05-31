@@ -160,7 +160,7 @@ The two-axis rule (category × tier) for deciding where new config goes. Include
 **Surface:** Executable
 **Path:** `~/.claude/scripts/`
 
-Hook scripts, statusline, pm2-register, shell-mem (formerly diy-mem; see mig 0014), session-summary, `emit-event.sh`, `block-nested-claude.sh`, `rotate-*`, `prune-backups.sh`, `propose.sh`, `wal.sh`, `wal-convert.sh`, `validate-memory.sh`, `test-hooks.sh`, hook-orchestrator (mig 0013), etc. — everything invoked by hooks or as a user-facing CLI.
+Hook scripts, statusline, pm2-register, shell-mem (formerly diy-mem; see mig 0014), session-summary, `emit-event.sh`, `block-nested-claude.sh`, `rotate-*`, `prune-backups.sh`, `propose.sh`, `wal.sh`, `wal-convert.sh`, `validate-memory.sh`, `test-hooks.sh`, `schedule/schedule.sh` (gcc-schedule — launchd + Calendar one-shot CLI), hook-orchestrator (mig 0013), etc. — everything invoked by hooks or as a user-facing CLI.
 
 **In scope:** any file expected to be invoked.
 **Out of scope:** reference docs describing how scripts work (live in `::code` or inline READMEs).

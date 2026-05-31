@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# review-gate-stop.sh — Stop hook with TWO gates that refuse to let the turn END:
+#
+#   Gate 1 (smell): a file edited this session still contains a BLOCK-level
+#     recurring smell. The catalog that flags it (atone-lint.sh) is the SAME code
+#     that gates 'done', so a known pattern cannot pass review silently. Loop-safe:
+#     blocks once per smell-signature, then steps aside (non-blocking reminder) so
+#     it can never trap. Mute: touch ~/.claude/.no-review-gate
+#
+#   Gate 2 (review-required): an unreviewed change carrying a concrete RISK
+#     signal — a catalogued recurring smell in the source, OR new exported API
+#     surface — should go through /skeptical-review before 'done'. NEVER fires
+#     on edit volume alone (a big pile of low-risk edits stays silent; that
+#     volume trigger nagged on report batches and was removed). Hooks can't
+#     dispatch the reviewer themselves, so this gates instead — persisting
+#     until the change-set is reviewed (the skill writes the marker via
+#     review-marker.sh) or muted. Mute: touch ~/.claude/.no-review-required
+#
+# Registered as a DIRECT settings.json Stop hook (not via the hook-orchestrator,
+# whose task stdout goes to /dev/null and so cannot carry a decision back).
+
+set -uo pipefail
+[ -f "$HOME/.claude/.no-review-gate" ] && exit 0
+
+LINT="$HOME/.claude/scripts/atone-lint.sh"
+[ -x "$LINT" ] || exit 0
+
+input=$(cat 2>/dev/null) || exit 0
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+[ -n "$sid" ] || exit 0
+sid8="${sid:0:8}"
+EDITED="/tmp/claude-edited-files-${sid8}"
+MARK="/tmp/claude-review-gate-blocked-${sid8}"
+[ -f "$EDITED" ] || exit 0
+
+# Collect block-level findings across every file edited this session. The outer
+# loop runs in the current shell (process substitution, not a pipe) so the
+# accumulators survive the loop.
+findings=""
+findings_msg=""
+while IFS= read -r f; do
+  [ -n "$f" ] && [ -f "$f" ] || continue
+  hits=$("$LINT" --file "$f" --block-only 2>/dev/null)
+  [ -n "$hits" ] || continue
+  while IFS=$'\t' read -r sev rule slug msg; do
+    [ -n "$rule" ] || continue
+    findings="${findings}${f}::${rule}"$'\n'
+    findings_msg="${findings_msg}  - ${f}: ${msg}"$'\n'
+  done <<< "$hits"
+done < <(sort -u "$EDITED")
+
+# ── Gate 1: surviving block-level smell (takes precedence) ──────────────────
+if [ -n "$findings" ]; then
+  sig=$(printf '%s' "$findings" | sort -u | shasum 2>/dev/null | awk '{print $1}')
+  prev=""
+  [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
+  if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
+    # Already blocked for this exact signature last Stop — step aside (the agent
+    # saw it and chose to proceed, or it's a false positive) but stay visible.
+    msg="⚠ review-gate (not re-blocking): these recurring smells are still present —
+${findings_msg}Fix them or mute: touch ~/.claude/.no-review-gate"
+    jq -cn --arg m "$msg" '{systemMessage:$m}' 2>/dev/null || true
+    exit 0
+  fi
+  printf '%s' "$sig" > "$MARK" 2>/dev/null || true
+  reason="⚠ REVIEW GATE — about to declare done, but files you edited this session still contain a recurring smell you have corrected before:
+${findings_msg}
+Read the named insertion points and fix these before ending the turn. If this is a false positive, mute with: touch ~/.claude/.no-review-gate"
+  jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+  exit 0
+fi
+: > "$MARK" 2>/dev/null || true   # no smell — clear the smell block-signature
+
+# ── Gate 2: substantial unreviewed change → require /skeptical-review ────────
+# Persists until the change-set is reviewed (skill writes the marker) or muted —
+# that persistence IS the point. Keyed to the unreviewed DELTA, so one review
+# covers later fixes to the same files; only NEW files re-trigger.
+# Mute: touch ~/.claude/.no-review-required
+[ -f "$HOME/.claude/.no-review-required" ] && exit 0
+MARKER="$HOME/.claude/scripts/review-marker.sh"
+[ -x "$MARKER" ] || exit 0
+
+nunrev=$("$MARKER" count "$sid8" 2>/dev/null || echo 0)
+[ "${nunrev:-0}" -gt 0 ] || exit 0
+
+# Fire ONLY on a concrete RISK signal — never on volume. The user's reality is
+# large aggregations of mostly-harmless unpushed edits + general trust in the
+# agent; gating on count would nag on exactly those. So a big pile of edits with
+# no risk signal = SILENT. We gate only on: a catalogued recurring block-level
+# smell in unreviewed source, OR new exported API surface (genuinely new code to
+# vet). Everything else trusts the agent.
+substantial=0
+trigger=""
+while IFS= read -r f; do
+  [ -n "$f" ] && [ -f "$f" ] || continue
+  if [ -n "$("$LINT" --file "$f" --block-only 2>/dev/null)" ]; then
+    substantial=1; trigger="a recurring block-level smell in $f"; break
+  fi
+done < <("$MARKER" unreviewed "$sid8" 2>/dev/null)
+if [ "$substantial" = 0 ] && git rev-parse --show-toplevel >/dev/null 2>&1; then
+  groot=$(git rev-parse --show-toplevel 2>/dev/null)
+  if git -C "$groot" diff -U0 2>/dev/null | rg -q '^\+.*\bexport\s+(async\s+)?(function|const|class|type|interface|enum)\b'; then
+    substantial=1; trigger="new exported API surface"
+  fi
+fi
+[ "$substantial" = 1 ] || exit 0
+
+# Step-aside: block ONCE per unreviewed-set signature, then drop to a
+# non-blocking reminder. This is what stops the per-turn nagging that gets the
+# whole gate muted (guard dilution). Same pattern as Gate 1.
+MARK2="/tmp/claude-review-required-blocked-${sid8}"
+sig2=$("$MARKER" unreviewed "$sid8" 2>/dev/null | sort -u | shasum 2>/dev/null | awk '{print $1}')
+prev2=""; [ -f "$MARK2" ] && prev2=$(cat "$MARK2" 2>/dev/null)
+if [ "$sig2" = "$prev2" ] && [ -n "$sig2" ]; then
+  msg="ℹ review-gate (reminder, not blocking): ${nunrev} unreviewed source file(s) from this session. /skeptical-review when convenient, or mute: touch ~/.claude/.no-review-required"
+  jq -cn --arg m "$msg" '{systemMessage:$m}' 2>/dev/null || true
+  exit 0
+fi
+printf '%s' "$sig2" > "$MARK2" 2>/dev/null || true
+
+reason="⚠ REVIEW SUGGESTED — this session has an unreviewed substantial change (${trigger}). Worth a /skeptical-review (forks a fresh adversarial reviewer) before declaring done — the last few caught real bugs. Not harmful? This won't block again for this change-set. Mute for the session: touch ~/.claude/.no-review-required"
+jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+exit 0

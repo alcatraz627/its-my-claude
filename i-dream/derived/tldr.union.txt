@@ -1,5 +1,5 @@
 - [atone] Top mistake patterns to watch this session:
-- [atone]   ⚠️  [S3, 4x] structural-claim-without-reading-code — structural-claim-without-reading-code
-- [atone]   ⚠️  [S3, 5x] infra-before-grep — infra-before-grep
-- [atone]   ⚠️  [S3, 3x] source-comment-hygiene — terse, durable, no planning artifacts, no decoration
-- [atone]   ⚠️  [S3, 3x] generalize-before-enumerate — generalize-before-enumerate
+- [atone]   ⚠️  [S3, 4x] source-comment-hygiene — terse, durable, no planning artifacts, no decoration
+- [atone]   ⚠️  [S3, 2x] sub-agent-material-output-left-in-conversation-only — Sub-agent material output left in conversation only
+- [atone]   ⚠️  [S3, 2x] declared-ready-without-runtime-exercise — declared-ready-without-runtime-exercise
+- [atone]   ⚠️  [S3, 2x] adding-env-var-reads-without-checking-the-project-s-config-pattern — Adding env var reads without checking the project's config pattern

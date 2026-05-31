@@ -1,0 +1,50 @@
+{
+  "ts": "2026-05-28T14:15:39Z",
+  "session_id": "cron-oom-7f",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/backend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/backend/_20260528-cron-oom-7f.claude.md",
+  "insights": {
+    "worked": [
+      "**State-verification triad before any git action** caught that the user",
+      "**`tracemalloc` as the memory-gate tool** \u2014 stdlib, no new dependency,",
+      "**Reading code before asserting structural claims** \u2014 the explorer's",
+      "**Asking \"two design questions max\" via AskUserQuestion** before",
+      "**`Topic` indirection layer paid off** \u2014 the dedicated"
+    ],
+    "didnt_work": [
+      "**`feature-dev:code-explorer` agent has NO Write tool** despite the",
+      "**The dup-symbol guard fired on `dispatch`** \u2014 unrelated Starlette",
+      "**`PrintLogger` surface differs across the two logger libs.** Old",
+      "**Auto-mode safety classifier was temporarily unavailable for Bash"
+    ],
+    "gotchas": [],
+    "notes": [
+      "**`job.notified` is a one-way latch.** Any \"re-notify after rerun\" idea",
+      "**There are two scheduling mechanisms in this repo.** Render cron",
+      "**The repo has an absolute `\ud83d\udeab NEVER COMMIT OR PUSH` rule.** The user",
+      "**Resume command: `/catchup` from this checkpoint.** The Phase 2"
+    ],
+    "feedback": [
+      "Per-job defer/failure \u2192 Slack incident, NOT Mongo notification.",
+      "Daily stats \u2192 Slack only, never user.",
+      "Slack items grouped by `owner_ids` (one msg per tick, section per team).",
+      "Weekly user-facing report (jobs created/completed) \u2192 in-app",
+      "Webhook URL declared explicitly for the cron-checks (will repoint"
+    ]
+  },
+  "pending": [
+    "Review / merge the draft PR `notify-jobs-fix/aakarsh` \u2192 `development`.",
+    "Set `SLACK_CRON_CHECKS_WEBHOOK_URL` in the Render env-group(s) when a",
+    "Smoke-test on Render dev after merge: verify the cron actually finishes",
+    "Build the next pluggable check on the spine. Strongest candidates:",
+    "**Stalled-job alert** (INCIDENT) \u2014 pending tasks oldest-first with no",
+    "**Rerun-complete notification** (USER) \u2014 needs a new `rerun_notified_at`",
+    "**Breaker-blocked alert** (INCIDENT) \u2014 `get_module_breaker_states()`",
+    "Wire `FAILURE_RATE_THRESHOLD` (currently a module constant) into",
+    "Verify the explorer's three UNVERIFIED claims before building anything",
+    "Does `parent_run_id` actually have no writer? (impacts any",
+    "Does `rerun_tasks_for_job` audit-event? (impacts the job-level",
+    "Does `apply_pipeline_to_item` construct `Task()` without `run_id`?"
+  ],
+  "tags": []
+}

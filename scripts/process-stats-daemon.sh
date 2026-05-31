@@ -87,7 +87,11 @@ if [[ ! -f "$_ORIG_CKSUM_FILE" ]]; then
   _checksum "$_SCRIPT_PATH" > "$_ORIG_CKSUM_FILE" 2>/dev/null || true
 fi
 
-while kill -0 "$TARGET_PID" 2>/dev/null; do
+# Parent-death detection, PID-reuse hardened. Plain `kill -0 $TARGET_PID`
+# kept this daemon alive when macOS recycled the parent PID to an unrelated
+# process — leaked daemons stayed up for days feeding stats to whatever
+# inherited the PID. Requiring "claude" in the command line catches recycle.
+while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
   _NOW=$(date +%s)  # Single epoch timestamp for entire loop iteration
   tmp="${OUTPUT_FILE}.tmp"
   {

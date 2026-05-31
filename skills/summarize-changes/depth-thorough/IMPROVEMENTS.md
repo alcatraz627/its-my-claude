@@ -141,17 +141,21 @@ Each item below comes from a specific weakness observed when running the skill o
 
 ## Summary table
 
-| ID | Finding | Priority | Effort | Status |
+| ID | Finding | Priority | Status | Implementation |
 |---|---|---|---|---|
-| W1 | Flat chunking on docs-heavy | P0 | 30 min | open |
-| W2 | Sub-agent false refusal | P0 | 10 min | open |
-| W3 | No subsetting flag | P0 | 1 hour | open |
-| W4 | No mid-flow adaptation | P1 | 2-3 hours | open |
-| W5 | Per-repo excludes | P1 | 1 hour | open |
-| W6 | SHA hygiene post-process | P1 | 30 min | open |
-| W7 | Progress visibility | P2 | 30 min | open |
-| W8 | TaskList cross-reference | P2 | 15 min + 1 hour | open |
-| W9 | Regression test | P2 | 2 hours | open (was v1 must-have) |
-| W10 | Linter emphasis collision | P3 | 10 min | open |
+| W1 | Flat chunking on docs-heavy | P0 | ✅ DONE + tested | `chunk-files.py`: binary skip, cap counts only substantive groups, misc-split. Verified: semantic names restored, 51 binaries dropped |
+| W2 | Sub-agent false refusal | P0 | ✅ DONE | `phases/inventory.md` v2 dispatch note + `depth-runner.sh` header + `ORCHESTRATION.md` retry table |
+| W3 | No subsetting flag | P0 | ✅ DONE + tested | `depth-runner.sh select-chunks all\|N\|range`. Verified: `1-5` and `all` both work |
+| W4 | No mid-flow adaptation | P1 | ✅ DONE | `ORCHESTRATION.md` failure-handling table (retry-once, >25% abort, continue-on-single-fail) |
+| W5 | Per-repo excludes | P1 | ✅ DONE + tested | `apply-filters.py` reads `.discover-excludes` (auto-walk to repo root or `--excludes-file`). Verified: docs excluded |
+| W6 | SHA hygiene post-process | P1 | ✅ DONE + tested | `validate-shas.py` + runner `validate-shas`. Verified: 318 known SHAs, 0 fakes in the clean run |
+| W7 | Progress visibility | P2 | ✅ DONE | `depth-runner.sh progress()` appends to `_progress.log` on every phase |
+| W8 | TaskList cross-reference | P2 | ✅ DONE | `phases/themes.md` "Supplementary signals" section (project notes + commit risk language → issue tier) |
+| W9 | Regression test | P2 | ✅ DONE + tested | `regress.sh` (theme ±10%, DEFINITELY coverage, ops 80%) + baseline pinned in `regression-baseline/`. Verified: correctly FAILs on the 14/28 coverage drift, PASSes DEFINITELY check |
+| W10 | Linter emphasis collision | P3 | ✅ DONE | backtick-wrap instruction added to `synthesize-engineering.md` + `synthesize-ops.md` |
 
-**Total v1.1 build budget**: ~9 hours. Run on a representative repo after each P0/P1 ships to validate.
+**Status: all 10 shipped + the 5 Bash-testable ones verified (W1, W3, W5, W6, W9).** W2/W4/W7/W8/W10 are prompt/doc changes verified by inspection.
+
+**Validation against the real run**: `regress.sh` comparing `release-v-5.0/` (baseline) vs `release-v-5.0-rerun-20260524/` (candidate) returns the expected true-positive: theme-count drift flagged (56 vs 65, the known 14/28 coverage cut), all 3 baseline DEFINITELY issues present. The harness distinguishes "fewer themes due to coverage" from "missed a real bug" — exactly the W9 design intent.
+
+**Next**: a full 28-chunk re-run would close the theme-count gap and make `regress.sh` PASS clean — the cheap way to confirm the P0 chunking fix (W1) also improves real output, not just the synthetic test.

@@ -1,0 +1,37 @@
+{
+  "ts": "2026-05-26T19:07:25Z",
+  "session_id": "pipeline-hardening",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/backend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/backend/_20260527-pipeline-hardening.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [
+      "**REPO RULE (absolute): never `git commit`/`push`/`merge`** \u2014 the user stages + commits. This overrides any global git guidance.",
+      "Backend env vars **only** via `lib.config.Config` (a PreToolUse hook blocks raw `os.environ` outside `lib/config/`).",
+      "**bare `python3` is 3.9** (fails on `X | Y` generic-alias unions at import) \u2014 always `uv run --no-sync python` from `backend/`.",
+      "The **Edit guard** needs the **Read tool** to have read a file (Bash `sed`/`rg` doesn't count) before editing.",
+      "The **duplicate-symbol guard** false-positives when you edit an _existing_ class/def whose name also exists elsewhere \u2014 `scrape-service/` has a parallel `lib/pipeline/types.py:PipelineMethod`, and `_ensure_indexes` is also a `scheduler` method. Workaround: keep the `class X:`/`def X` line OUT of the edit (anchor on the body).",
+      "pymongo **async `_OperationCancelled`** = event-loop-starvation symptom (background pool monitor / cleanup loop), NOT a Mongo outage. Root cause here was sync oxylabs calls blocking the loop (fixed via `to_thread`).",
+      "The fitment pipeline **nests**: top-level pipeline = one `runner` step (`PipelineStepRunner`) \u2192 nested `process_pipeline` with the real steps (taxonomy, fitment, \u2026). Per-step caps apply at the nested level; the runner opts out (`step_timeout_sec=None`)."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "TaskList **#2** Gemini-3 `thought_signature` in grounded `query_gemini` \u2014 **DEFERRED** (Gemini is",
+    "**#3** research-model fallback on general grounded error \u2014 DEFERRED, same note.",
+    "**#4** declarative `generated_columns` consolidation \u2014 deferred (post-deploy).",
+    "**#6** A/B model selection per pipeline step. **#7** data-drop/filter controls (`vcdb_valid_only` +",
+    "**app_lifespan `_init_step` helper** refactor \u2014 deferred (see action 8).",
+    "Review-surfaced optional follow-ups (neither a regression): `_check_index_spec` verifies TTL",
+    "Worker-memory deferred (in the RCA's \"Open follow-ups\"): prod-faithful growth-source hunt;",
+    "Fitment-timeout deferred (in its note): tighten `STEP_TIMEOUT_DEFAULT_SEC`\u2192~120 **after auditing**",
+    "`backend/.claude/notes/fitment-task-timeout-redesign.md` \u2014 A/B/C + per-call + parallelization add-on (marked IMPLEMENTED).",
+    "`backend/.claude/notes/gemini-reliability-followups.md` \u2014 #2/#3 deferred (LOW priority).",
+    "`frontend/docs/team/postmortems/worker-memory-oom-rca.md` \u2014 the RCA (+ open follow-ups).",
+    "`frontend/.claude/notes/worker-memory-investigation.md` \u2014 internal companion to the RCA.",
+    "`backend/.claude/output/20260527-preflight-review/review.md` \u2014 latest skeptical review."
+  ],
+  "tags": []
+}

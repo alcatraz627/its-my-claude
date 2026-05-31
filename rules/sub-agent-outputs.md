@@ -68,6 +68,19 @@ When in doubt, write it.
 
 ## How to apply (for the PARENT agent)
 
+### Pre-dispatch gate (30 seconds, before writing the Agent prompt)
+
+1. Is the output material? (will be cited later, user-facing, or took >5 min
+   to produce)
+   - YES → assign an absolute output path now, before writing the dispatch prompt
+   - NO → proceed without the path requirement
+2. Have you written the output path and a "write before returning" instruction
+   into the Agent prompt? If no — stop and add them.
+3. Have you added `test -f <path> && wc -l <path>` as a verification step after
+   the dispatch? If no — add it.
+
+Do not write the dispatch prompt until all three pass.
+
 When dispatching a sub-agent that will produce material content, the dispatch
 prompt **must include**:
 

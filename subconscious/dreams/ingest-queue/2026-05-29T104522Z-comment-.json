@@ -1,0 +1,38 @@
+{
+  "ts": "2026-05-29T10:45:22Z",
+  "session_id": "comment-cleanup-c0",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260529-comment-cleanup-c0.claude.md",
+  "insights": {
+    "worked": [
+      "Splitting detection (deterministic Python regex) from application (agent judgment via Edit). A blind sed would strip a `[claude@]` tag AND the useful sentence; the agent keeps substance.",
+      "Reading the existing `review-gate-stop.sh` before building the nudge. Its own comments documented that a prior volume-based Stop nudge \"nagged on report batches and was removed\" \u2014 directly shaped the substance-not-volume trigger design.",
+      "Tuning the detector against `--all` on the real tree caught false positives (`# Step 1:`, arrows-as-emoji) that pure reasoning missed."
+    ],
+    "didnt_work": [
+      "Shell commands using `yes 42 | shuf` and process-substitution kept auto-backgrounding and getting SIGTERM'd. Fix: did the random-pick + scan in one Python script instead of shell pipelines."
+    ],
+    "gotchas": [
+      "Direct Stop hook required (not via hook-orchestrator) \u2014 orchestrator pipes stdout to /dev/null so `systemMessage` can't surface.",
+      "Edit-tracking state for \"files written this session\" lives at `/tmp/claude-edited-files-<sid8>` (one abs path/line), written by `track-edits-session.sh`. Reused by the nudge.",
+      "bash 3.2: `\"${arr[@]}\"` under `set -u` errors on empty array \u2014 guard with `[ \"${#arr[@]}\" -gt 0 ]` first."
+    ],
+    "notes": [
+      "Skill is GLOBAL and repo-agnostic now. It reads the repo's own comment rubric if present (`**/comment-style.md`, CLAUDE.md, `.claude/rules/comment*.md`), else uses the built-in voice rules.",
+      "Nudge floor tunable via `CLEANUP_NUDGE_MIN` (default 4). Mute: `touch ~/.claude/.no-cleanup-comments-nudge`."
+    ],
+    "feedback": [
+      "No em dashes, minimal emoji, comments as short as possible, right altitude (not idiot / not codebase-dreamer).",
+      "Profanity acceptable (esp. user-left), never flag for removal; 0 is fine, don't add any.",
+      "Over-removal acceptable since repo is human-gated, but still avoid where easy. Hard floor (NOTE(by human)/HACK/IMPORTANT/pragmas/license) never touched.",
+      "Skill should be global."
+    ]
+  },
+  "pending": [
+    "(optional) Add a `~/.claude/LOOKUP.md` / FOLDERS registry entry for the new skill + hook, so they show in the address book.",
+    "(optional) Run `/cleanup-comments` for real on the Versable working-tree changed files (4 files, ~18 findings) \u2014 user has not asked yet.",
+    "(optional, user-side) Fix the stale `[claude@]` mandate in `frontend/CLAUDE.md` \"Code Comments MANDATORY\" section \u2014 surfaced but not edited (project repo, agent-commit-forbidden).",
+    "(residual) detect.py self-reports 2 plan-ref findings (the example vocabulary in its own doc-comment). Below nudge threshold; acceptable. Could add a self-ignore if it ever annoys."
+  ],
+  "tags": []
+}
