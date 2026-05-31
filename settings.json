@@ -54,7 +54,6 @@
       "Bash(* /proc*)",
       "Bash(* /private*)",
       "Bash(* /Volumes*)",
-      "Bash(* /dev*)",
       "Bash(*chmod 777*)",
       "Bash(*chmod -R 777*)",
       "Bash(*chmod -R 7*)",
