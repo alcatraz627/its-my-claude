@@ -564,6 +564,14 @@
             "async": true
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/session-start.sh"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -588,7 +596,23 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/auto-continue-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/cleanup-comments-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/stop.sh"
           }
         ]
       }
@@ -683,6 +707,14 @@
             "type": "command",
             "command": "~/.claude/scripts/emit-event.sh UserPromptSubmit",
             "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/ups.sh"
           }
         ]
       }
