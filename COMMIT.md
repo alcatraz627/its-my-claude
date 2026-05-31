@@ -8,7 +8,16 @@
 > way each time, **with its own secret-scan**. (A past bulk-sync that skipped the
 > scan leaked an Anthropic key — atone `bulk-sync-without-secret-scan`.)
 
-## Procedure — in order, do not skip step 1
+## Procedure — in order, do not skip steps 0 or 1
+
+0. **Acquire the commit lock.** This repo is multi-session — other Claudes commit
+   here concurrently (your edits can get swept into their `git add -A`). Serialize
+   commits with the shared write-lock (reads are never blocked; only commits wait):
+   ```bash
+   bash ~/.claude/skills/shared/lock-file.sh acquire ~/.claude/.git gcc-commit
+   ```
+   If another session holds it, this retries, then prints the owner — wait, then
+   retry. **Always release in step 6**, even if you abort partway.
 
 1. **Secret-scan the committable surface FIRST** (before `git add`). `rg` respects
    `.gitignore`, so this scans exactly what would be pushed:
@@ -48,12 +57,19 @@
    ```
    Rejected (non-fast-forward = another session pushed) → step 2's rebase, retry.
 
-6. **(Optional) bump the aggregate** so `its-my-config` points at the new commit:
+6. **Release the lock** — ALWAYS, even if you aborted at any earlier step:
+   ```bash
+   bash ~/.claude/skills/shared/lock-file.sh release ~/.claude/.git gcc-commit
+   ```
+
+7. **(Optional) bump the aggregate** so `its-my-config` points at the new commit:
    ```bash
    bash ~/Code/Claude/its-my-config/sync.sh
    ```
 
 ## Hard rules
+- **Hold the `gcc-commit` lock** (step 0) for the whole commit→push, release in
+  step 6. This is what stops two Claudes interleaving edits/commits on this repo.
 - Step 1's secret-scan is **mandatory and runs before `git add`**. No exceptions.
 - Never `git push --force` here (shared, multi-session history).
 - Don't commit machine-local junk (`_*.claude.md`, `wal.*`, lock files) — they're

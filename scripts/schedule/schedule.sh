@@ -47,9 +47,14 @@ cmd_help() {
 ${BLD}gcc-schedule${RST} — manage launchd schedules with Calendar companion
 
 ${BLD}USAGE${RST}
-  $PROG add  --name <slug> --at <YYYY-MM-DDTHH:MM> --command <shell> [opts]
-  $PROG list [--all]
-  $PROG rm   <name>
+  $PROG add     --name <slug> --at <YYYY-MM-DDTHH:MM> --command <shell> [opts]
+  $PROG list    [--all]
+  $PROG show    <name>             pretty-print details, state, next-fire countdown
+  $PROG run     <name>             execute the user command now (no date guard, no self-unload)
+  $PROG logs    <name> [--lines N] [--no-follow]   tail out + err logs
+  $PROG enable  <name>             bootstrap a loaded-out plist
+  $PROG disable <name>             bootout the launchd agent, keep plist on disk
+  $PROG rm      <name>             retire fully (bootout + delete plist/script/Calendar event)
 
 ${BLD}add FLAGS${RST}
   --name <slug>           label = com.alcatraz.<slug> (required)
@@ -419,12 +424,183 @@ cmd_rm() {
   _retire "$1"
 }
 
+# ── Helpers (v0.2) ─────────────────────────────────────────────────────────
+_get_entry() {
+  # Echo JSON for the registry entry, or fail with a clear message.
+  local name="$1" entry
+  entry=$(jq -r --arg n "$name" '.[$n] // empty' "$REGISTRY")
+  [[ -n "$entry" ]] || fail "no schedule named '$name'. Try '$PROG list' or '$PROG list --all'."
+  printf '%s' "$entry"
+}
+
+_is_loaded() {
+  # Return 0 iff the launchd agent for <label> is currently bootstrapped.
+  launchctl print "gui/$USER_UID/$1" >/dev/null 2>&1
+}
+
+# ── run ────────────────────────────────────────────────────────────────────
+cmd_run() {
+  [[ $# -ge 1 ]] || fail "usage: $PROG run <name>"
+  local name="$1" entry cmd_str
+  entry=$(_get_entry "$name")
+  cmd_str=$(jq -r '.command' <<<"$entry")
+  [[ -n "$cmd_str" && "$cmd_str" != "null" ]] || fail "registry has no command for '$name'"
+  say "${BLD}running command for '$name' (test fire — no date guard, no self-unload)${RST}"
+  say "${DIM}$ $cmd_str${RST}"
+  bash -c "$cmd_str"
+  local rc=$?
+  if (( rc == 0 )); then ok "command exited 0"; else err "command exited $rc"; fi
+  return $rc
+}
+
+# ── logs ───────────────────────────────────────────────────────────────────
+cmd_logs() {
+  local lines=50 follow=1
+  while (( $# )); do
+    case "$1" in
+      --lines)     lines="$2"; shift 2 ;;
+      --no-follow) follow=0; shift ;;
+      -*) fail "unknown flag: $1" ;;
+      *)  break ;;
+    esac
+  done
+  [[ $# -ge 1 ]] || fail "usage: $PROG logs <name> [--lines N] [--no-follow]"
+  local name="$1" entry outlog errlog
+  entry=$(_get_entry "$name")
+  outlog=$(jq -r '.out_log' <<<"$entry")
+  errlog=$(jq -r '.err_log' <<<"$entry")
+  local exists_out=0 exists_err=0
+  [[ -f "$outlog" ]] && exists_out=1
+  [[ -f "$errlog" ]] && exists_err=1
+  if (( ! exists_out && ! exists_err )); then
+    warn "no log files yet — the schedule hasn't fired (or wrote nothing)."
+    say "${DIM}  expected: $outlog${RST}"
+    say "${DIM}            $errlog${RST}"
+    return 0
+  fi
+  say "${BLD}logs for '$name'${RST} ${DIM}(out=$outlog err=$errlog)${RST}"
+  # Use a sed-prefixed tail so the user can tell which stream a line came from.
+  # `tail -F` retries on missing files — safe even if only one log exists yet.
+  if (( follow )); then
+    tail -n "$lines" -F "$outlog" 2>/dev/null | sed -u 's/^/[out] /' &
+    local tpid_out=$!
+    tail -n "$lines" -F "$errlog" 2>/dev/null | sed -u 's/^/[err] /' &
+    local tpid_err=$!
+    trap "kill $tpid_out $tpid_err 2>/dev/null; trap - INT" INT
+    wait
+  else
+    if (( exists_out )); then say "${DIM}── last $lines lines of $outlog ──${RST}"; tail -n "$lines" "$outlog" | sed 's/^/[out] /'; fi
+    if (( exists_err )); then say "${DIM}── last $lines lines of $errlog ──${RST}"; tail -n "$lines" "$errlog" | sed 's/^/[err] /'; fi
+  fi
+}
+
+# ── show ───────────────────────────────────────────────────────────────────
+cmd_show() {
+  [[ $# -ge 1 ]] || fail "usage: $PROG show <name>"
+  local name="$1" entry
+  entry=$(_get_entry "$name")
+
+  local label fire_at kind cmd_str desc cal_uid created plist script outlog errlog
+  label=$(jq -r '.label'        <<<"$entry")
+  fire_at=$(jq -r '.fire_at'    <<<"$entry")
+  kind=$(jq -r '.kind'          <<<"$entry")
+  cmd_str=$(jq -r '.command'    <<<"$entry")
+  desc=$(jq -r '.description'   <<<"$entry")
+  cal_uid=$(jq -r '.calendar_uid // ""' <<<"$entry")
+  created=$(jq -r '.created_at' <<<"$entry")
+  plist=$(jq -r '.plist'        <<<"$entry")
+  script=$(jq -r '.script'      <<<"$entry")
+  outlog=$(jq -r '.out_log'     <<<"$entry")
+  errlog=$(jq -r '.err_log'     <<<"$entry")
+
+  # Launchd state
+  local state="not loaded"
+  if _is_loaded "$label"; then
+    state="loaded"
+    if launchctl print "gui/$USER_UID/$label" 2>/dev/null | grep -q 'state = running'; then
+      state="running"
+    fi
+  fi
+
+  # Next-fire time relative-to-now
+  local epoch_fire epoch_now next_rel="(unknown)"
+  epoch_fire=$(date -j -f '%Y-%m-%dT%H:%M' "$fire_at" +%s 2>/dev/null || echo 0)
+  epoch_now=$(date +%s)
+  if (( epoch_fire > 0 )); then
+    local delta=$(( epoch_fire - epoch_now ))
+    if (( delta > 0 )); then
+      local d=$(( delta / 86400 )) h=$(( (delta % 86400) / 3600 )) m=$(( (delta % 3600) / 60 ))
+      next_rel="in ${d}d ${h}h ${m}m"
+    else
+      next_rel="$(( -delta / 60 ))m AGO ${RED}(should have self-unloaded!)${RST}"
+    fi
+  fi
+
+  # Log freshness
+  local last_fired="never"
+  if [[ -f "$outlog" ]]; then
+    last_fired=$(date -r "$outlog" '+%F %T %Z' 2>/dev/null || echo unknown)
+  fi
+
+  printf '%s%s%s\n' "$BLD" "── $name ──" "$RST"
+  printf '  %-12s %s\n' "label:"        "$label"
+  printf '  %-12s %s\n' "kind:"         "$kind"
+  printf '  %-12s %s (%s)\n' "fires:"   "$fire_at" "$next_rel"
+  printf '  %-12s %s\n' "state:"        "$state"
+  printf '  %-12s %s\n' "last fired:"   "$last_fired"
+  printf '  %-12s %s\n' "created:"      "$created"
+  printf '  %-12s %s\n' "calendar:"     "${cal_uid:-(none — --no-calendar)}"
+  printf '  %-12s %s\n' "script:"       "$script"
+  printf '  %-12s %s\n' "plist:"        "$plist"
+  printf '  %-12s %s\n' "out log:"      "$outlog"
+  printf '  %-12s %s\n' "err log:"      "$errlog"
+  if [[ -n "$desc" && "$desc" != "null" ]]; then
+    printf '  %-12s %s\n' "description:" "$desc"
+  fi
+  printf '  %s\n' "${DIM}command:${RST}"
+  printf '    %s%s%s\n' "$DIM" "$cmd_str" "$RST"
+}
+
+# ── enable / disable ───────────────────────────────────────────────────────
+cmd_enable() {
+  [[ $# -ge 1 ]] || fail "usage: $PROG enable <name>"
+  local name="$1" entry plist label
+  entry=$(_get_entry "$name")
+  label=$(jq -r '.label' <<<"$entry")
+  plist=$(jq -r '.plist' <<<"$entry")
+  [[ -f "$plist" ]] || fail "plist missing: $plist (registry desync — consider '$PROG rm $name')"
+  if _is_loaded "$label"; then ok "already loaded: $label"; return 0; fi
+  if launchctl bootstrap "gui/$USER_UID" "$plist" 2>&1; then
+    ok "loaded: $label"
+  else
+    fail "bootstrap failed (check plist)"
+  fi
+}
+
+cmd_disable() {
+  [[ $# -ge 1 ]] || fail "usage: $PROG disable <name>"
+  local name="$1" entry label
+  entry=$(_get_entry "$name")
+  label=$(jq -r '.label' <<<"$entry")
+  if ! _is_loaded "$label"; then ok "already not loaded: $label (plist still on disk)"; return 0; fi
+  if launchctl bootout "gui/$USER_UID/$label" 2>&1; then
+    ok "unloaded: $label (plist + script preserved — 'enable' to reload)"
+  else
+    fail "bootout failed"
+  fi
+}
+
 # ── Dispatch ───────────────────────────────────────────────────────────────
 sub="${1:-help}"; shift 2>/dev/null || true
 case "$sub" in
-  add)              cmd_add  "$@" ;;
-  list|ls)          cmd_list "$@" ;;
-  rm|remove|retire) cmd_rm   "$@" ;;
+  add)              cmd_add     "$@" ;;
+  list|ls)          cmd_list    "$@" ;;
+  rm|remove|retire) cmd_rm      "$@" ;;
+  run)              cmd_run     "$@" ;;
+  logs|log)         cmd_logs    "$@" ;;
+  show|info)        cmd_show    "$@" ;;
+  enable|on)        cmd_enable  "$@" ;;
+  disable|off)      cmd_disable "$@" ;;
   help|--help|-h)   cmd_help ;;
   *) err "unknown subcommand: $sub"; cmd_help; exit 1 ;;
 esac
