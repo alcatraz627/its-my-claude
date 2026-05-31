@@ -1796,8 +1796,6 @@
 {"received_at":"2026-04-15T15:28:16.586498Z","tool":"Bash","hook_ts":1776266896}
 {"received_at":"2026-04-15T19:38:11.332754Z","tool":"Bash","hook_ts":1776281783}{"received_at":"2026-04-15T19:38:11.332775Z","tool":"Bash","hook_ts":1776281850}{"received_at":"2026-04-15T19:38:11.332755Z","tool":"Bash","hook_ts":1776281781}{"received_at":"2026-04-15T19:38:11.332773Z","tool":"Bash","hook_ts":1776281846}
 
-
-
 {"received_at":"2026-04-15T22:14:45.970615Z","tool":"Bash","hook_ts":1776291285}
 {"received_at":"2026-04-15T22:14:48.757408Z","tool":"Read","hook_ts":1776291288}
 {"received_at":"2026-04-15T22:14:51.579122Z","tool":"Read","hook_ts":1776291291}
@@ -2179,7 +2177,6 @@
 {"received_at":"2026-04-16T04:36:40.939Z","tool":"Bash","hook_ts":1776314194}
 {"received_at":"2026-04-16T04:36:40.938955Z","tool":"Bash","hook_ts":1776314198}
 {"received_at":"2026-04-16T08:51:57.800314Z","tool":"Bash","hook_ts":1776329514}{"received_at":"2026-04-16T08:51:57.800281Z","tool":"Bash","hook_ts":1776329512}
-
 {"received_at":"2026-04-16T11:02:00.381844Z","tool":"Write","hook_ts":1776337320}
 {"received_at":"2026-04-16T11:02:02.425249Z","tool":"Write","hook_ts":1776337322}
 {"received_at":"2026-04-16T11:02:15.827586Z","tool":"Bash","hook_ts":1776337335}
@@ -5460,10 +5457,8 @@
 {"received_at":"2026-04-17T04:44:31.690567Z","tool":"Bash","hook_ts":1776401065}
 {"received_at":"2026-04-17T04:44:31.690577Z","tool":"Bash","hook_ts":1776400994}
 {"received_at":"2026-04-17T04:44:31.690771Z","tool":"Bash","hook_ts":1776401062}{"received_at":"2026-04-17T04:44:31.690688Z","tool":"Bash","hook_ts":1776400910}
-
 {"received_at":"2026-04-17T04:44:31.690783Z","tool":"Bash","hook_ts":1776400908}
 {"received_at":"2026-04-17T08:47:36.653565Z","tool":"Bash","hook_ts":1776415650}{"received_at":"2026-04-17T08:47:36.653487Z","tool":"Write","hook_ts":1776415617}
-
 {"received_at":"2026-04-17T08:47:36.653585Z","tool":"Bash","hook_ts":1776415653}
 {"received_at":"2026-04-17T09:56:45.415395Z","tool":"Edit","hook_ts":1776419805}
 {"received_at":"2026-04-17T09:56:50.724628Z","tool":"TaskUpdate","hook_ts":1776419810}
@@ -6808,7 +6803,6 @@
 {"received_at":"2026-04-17T19:36:19.398460Z","tool":"Bash","hook_ts":1776454579}
 {"received_at":"2026-04-17T19:36:21.183989Z","tool":"Bash","hook_ts":1776454581}
 {"received_at":"2026-04-17T19:36:22.158238Z","tool":"Read","hook_ts":1776454582}
-{"received_at":"2026-04-17T19:36:28.344139Z","tool":"Glob","hook_ts":1776454588}
 {"received_at":"2026-04-17T19:36:28.344139Z","tool":"Glob","hook_ts":1776454588}
 {"received_at":"2026-04-17T19:36:31.175711Z","tool":"Bash","hook_ts":1776454591}
 {"received_at":"2026-04-17T19:36:31.367139Z","tool":"Bash","hook_ts":1776454591}
@@ -9231,7 +9225,6 @@
 {"received_at":"2026-04-18T15:00:23.285982Z","tool":"Bash","hook_ts":1776524423}
 {"received_at":"2026-04-18T19:37:17.693668Z","tool":"Bash","hook_ts":1776540645}
 {"received_at":"2026-04-18T19:37:17.693569Z","tool":"Bash","hook_ts":1776541007}{"received_at":"2026-04-18T19:37:17.693560Z","tool":"Write","hook_ts":1776541012}
-
 {"received_at":"2026-04-18T19:37:17.693818Z","tool":"Bash","hook_ts":1776540647}
 {"received_at":"2026-04-18T20:58:03.877336Z","tool":"Bash","hook_ts":1776545883}
 {"received_at":"2026-04-18T20:58:04.374759Z","tool":"ToolSearch","hook_ts":1776545884}
@@ -10670,7 +10663,6 @@
 {"received_at":"2026-04-20T19:51:42.625113Z","tool":"Bash","hook_ts":1776714699}
 {"received_at":"2026-04-20T19:51:42.625296Z","tool":"Bash","hook_ts":1776714536}{"received_at":"2026-04-20T19:51:42.625344Z","tool":"Bash","hook_ts":1776714539}
 {"received_at":"2026-04-20T19:51:42.625320Z","tool":"Bash","hook_ts":1776714534}
-
 {"received_at":"2026-04-20T19:51:42.625271Z","tool":"Bash","hook_ts":1776714604}
 {"received_at":"2026-04-20T19:51:42.625365Z","tool":"Bash","hook_ts":1776714666}
 {"received_at":"2026-04-20T22:20:44.739597Z","tool":"Glob","hook_ts":1776723644}
@@ -10877,7 +10869,6 @@
 {"received_at":"2026-04-20T23:36:43.287210Z","tool":"Bash","hook_ts":1776728203}
 {"received_at":"2026-04-21T03:49:01.853059Z","tool":"Glob","hook_ts":1776743309}
 {"received_at":"2026-04-21T03:49:01.853502Z","tool":"Bash","hook_ts":1776743334}{"received_at":"2026-04-21T03:49:01.853505Z","tool":"Bash","hook_ts":1776743338}
-
 {"received_at":"2026-04-21T03:49:01.853545Z","tool":"Bash","hook_ts":1776743184}
 {"received_at":"2026-04-21T09:10:56.946243Z","tool":"Write","hook_ts":1776762656}
 {"received_at":"2026-04-21T09:11:03.428945Z","tool":"TaskUpdate","hook_ts":1776762663}
@@ -11893,7 +11884,6 @@
 {"received_at":"2026-04-21T21:22:25.949682Z","tool":"Bash","hook_ts":1776806545}
 {"received_at":"2026-04-21T21:22:30.239205Z","tool":"Bash","hook_ts":1776806550}
 {"received_at":"2026-04-21T21:22:44.101201Z","tool":"Glob","hook_ts":1776806564}{"received_at":"2026-04-21T21:22:44.101541Z","tool":"Glob","hook_ts":1776806564}
-
 {"received_at":"2026-04-21T21:22:46.914130Z","tool":"Edit","hook_ts":1776806566}
 {"received_at":"2026-04-21T21:22:59.780474Z","tool":"Write","hook_ts":1776806579}
 {"received_at":"2026-04-21T21:23:05.761935Z","tool":"Bash","hook_ts":1776806585}
@@ -27294,7 +27284,6 @@
 {"received_at":"2026-05-05T22:17:41.948630Z","tool":"","hook_ts":1778019461}
 {"received_at":"2026-05-05T22:17:51.688985Z","tool":"","hook_ts":1778019471}
 {"received_at":"2026-05-05T22:17:57.905087Z","tool":"","hook_ts":1778019477}
-{"received_at":"2026-05-05T22:18:00.956953Z","tool":"","hook_ts":1778019480}
 {"received_at":"2026-05-05T22:18:00.956953Z","tool":"","hook_ts":1778019480}
 {"received_at":"2026-05-05T22:18:02.089621Z","tool":"","hook_ts":1778019482}
 {"received_at":"2026-05-05T22:18:03.322809Z","tool":"","hook_ts":1778019483}
@@ -46954,7 +46943,6 @@
 {"received_at":"2026-05-25T08:07:31.182027Z","tool":"","hook_ts":1779696451}
 {"received_at":"2026-05-25T08:07:34.912295Z","tool":"","hook_ts":1779696454}
 {"received_at":"2026-05-25T08:07:35.427296Z","tool":"","hook_ts":1779696455}
-{"received_at":"2026-05-25T08:07:36.075388Z","tool":"","hook_ts":1779696456}
 {"received_at":"2026-05-25T08:07:36.075388Z","tool":"","hook_ts":1779696456}
 {"received_at":"2026-05-25T08:07:40.775103Z","tool":"","hook_ts":1779696460}
 {"received_at":"2026-05-25T08:07:42.846717Z","tool":"","hook_ts":1779696462}
