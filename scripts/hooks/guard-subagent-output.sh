@@ -56,18 +56,9 @@ if [ "$has_write" -eq 1 ] && [ "$has_target" -eq 1 ]; then
   exit 0
 fi
 
-cat >&2 <<'EOF'
-[subagent-output] This dispatch looks like it produces material content
-(research / audit / analysis / design / review) but the prompt doesn't tell the
-agent to persist it. The return summary is a pointer, not the artifact — once
-this context compacts, an un-written result is gone (rules/sub-agent-outputs.md).
+msg="[subagent-output] This dispatch looks like it produces material content (research / audit / analysis / design / review) but the prompt doesn't tell the agent to persist it. The return summary is a pointer, not the artifact — once this context compacts an un-written result is gone (rules/sub-agent-outputs.md). Add to the dispatch prompt: (1) an absolute output path e.g. <project>/.claude/output/<date>-<slug>/<agent>.md, (2) 'write your full output to that path BEFORE returning; return a short abstract + the path' — then verify the file exists before relying on the findings. (mute: touch ~/.claude/.subagent-output-off)"
 
-  Add to the dispatch prompt:
-    • an absolute output path (e.g. <project>/.claude/output/<date>-<slug>/<agent>.md)
-    • "write your full output to that path BEFORE returning; return a short
-      abstract + the path"
-  Then verify the file exists before relying on the findings.
-
-  Mute: touch ~/.claude/.subagent-output-off   ·   One-shot: SUBAGENT_OUTPUT_OFF=1
-EOF
+# additionalContext on stdout (exit 0) is the only non-blocking channel the
+# MODEL reads; stderr+exit0 reaches the user transcript only.
+jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
 exit 0

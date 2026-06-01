@@ -91,14 +91,11 @@ if [ -n "$long_block" ]; then
 $long_block" || report_body="$long_block"
 fi
 
-cat >&2 <<EOF
-[comment-hygiene] new content for $(basename "$FP") has comment-style smells:
-
+msg="[comment-hygiene] new content for $(basename "$FP") has comment-style smells:
 $report_body
+rules/comments.md: strip archeology (plan refs, [claude@] tags, banners), drop emoji/AI-tells, move long comment blocks (>8 lines) to a doc. (mute: touch ~/.claude/.comment-hygiene-off)"
 
-  rules/comments.md: strip archeology (plan refs, [claude@] tags, banners), drop
-  emoji/AI-tells, and move long comment blocks (>8 lines) to a doc.
-
-  Mute: touch ~/.claude/.comment-hygiene-off   ·   One-shot: COMMENT_HYGIENE_OFF=1
-EOF
+# additionalContext on stdout (exit 0) — the channel the MODEL reads; stderr+exit0
+# reaches the user transcript only.
+jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
 exit 0
