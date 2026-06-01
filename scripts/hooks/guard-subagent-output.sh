@@ -58,7 +58,9 @@ fi
 
 msg="[subagent-output] This dispatch looks like it produces material content (research / audit / analysis / design / review) but the prompt doesn't tell the agent to persist it. The return summary is a pointer, not the artifact — once this context compacts an un-written result is gone (rules/sub-agent-outputs.md). Add to the dispatch prompt: (1) an absolute output path e.g. <project>/.claude/output/<date>-<slug>/<agent>.md, (2) 'write your full output to that path BEFORE returning; return a short abstract + the path' — then verify the file exists before relying on the findings. (mute: touch ~/.claude/.subagent-output-off)"
 
-# additionalContext on stdout (exit 0) is the only non-blocking channel the
-# MODEL reads; stderr+exit0 reaches the user transcript only.
+# additionalContext (stdout JSON) → the agent — the only non-blocking channel
+# any audience reads (user-transcript channels are all invisible; see
+# hooks-tui-limits). The directive makes the agent relay this to the user.
+msg="$msg  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
 exit 0

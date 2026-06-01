@@ -95,7 +95,10 @@ msg="[comment-hygiene] new content for $(basename "$FP") has comment-style smell
 $report_body
 rules/comments.md: strip archeology (plan refs, [claude@] tags, banners), drop emoji/AI-tells, move long comment blocks (>8 lines) to a doc. (mute: touch ~/.claude/.comment-hygiene-off)"
 
-# additionalContext on stdout (exit 0) — the channel the MODEL reads; stderr+exit0
-# reaches the user transcript only.
+# additionalContext (stdout JSON) → the agent — the only non-blocking channel any
+# audience reads (user-transcript channels are all invisible; see
+# hooks-tui-limits). The directive makes the agent relay this to the user.
+msg="$msg
+→→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
 exit 0

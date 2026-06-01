@@ -79,8 +79,9 @@ else
   msg="[env-access] new env read in $(basename "$FP"), and this project hasn't established how env access should be done (rules/env-var-config-pattern.md). Establish it ONCE: ask the user how env vars should be accessed here — a central config module? a validated schema (zod/pydantic)? a typed wrapper? — then record the answer + a single accessor at $CONV and route this (and future) reads through that accessor, defined once. (mute: touch ~/.claude/.env-access-off)"
 fi
 
-# Emit as additionalContext on stdout (exit 0) — the only non-blocking channel a
-# PreToolUse hook has that the MODEL reads. stderr+exit0 reaches the user
-# transcript only, not the agent (verified against the hooks docs).
+# additionalContext (stdout JSON) → the agent (no non-blocking channel reaches
+# the user's transcript — see hooks-tui-limits). The trailing directive makes
+# the agent surface this nudge to the user, the only path to their transcript.
+msg="$msg  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
 exit 0
