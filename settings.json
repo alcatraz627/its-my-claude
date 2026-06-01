@@ -532,7 +532,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/warn-raw-process-env.sh"
+            "command": "~/.claude/scripts/hooks/guard-env-access.sh"
           }
         ]
       },
@@ -560,6 +560,15 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-comment-hygiene.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-subagent-output.sh"
           }
         ]
       }

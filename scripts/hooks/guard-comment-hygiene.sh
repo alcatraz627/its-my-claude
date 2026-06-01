@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # guard-comment-hygiene.sh — PreToolUse hook on Edit/Write/MultiEdit.
 #
-# Warns, at write time, when the content about to land carries tier-1 comment
-# archeology — [claude@] tags, plan refs (Phase/Track/Round), pre/post-fix
-# notes, decorative banners. The existing cleanup-comments-nudge.sh catches the
-# same thing at end-of-turn; this catches it BEFORE the write, naming the line,
-# so it gets fixed before it lands rather than flagged after.
+# Warns, at write time, when the content about to land carries comment-style
+# smells: tier-1 archeology ([claude@] tags, plan refs, pre/post-fix notes,
+# banners), emoji AI-tells, or a long comment block (an essay that should be a
+# doc). The existing cleanup-comments-nudge.sh catches archeology at end-of-turn;
+# this catches it BEFORE the write, naming the finding, so it's fixed before it
+# lands. Em-dash is deliberately not flagged (legitimate prose punctuation).
 #
 # Graduated from atone slug source-comment-hygiene (S3, persisting despite
 # rules/comments.md). Filed as proposals.jsonl prop-20260531-120409-8a.
@@ -60,22 +61,43 @@ mv "$probe" "$probe_ext" 2>/dev/null || { rm -f "$probe"; exit 0; }
 trap 'rm -f "$probe_ext"' EXIT
 printf '%s' "$NEW_CONTENT" >"$probe_ext" 2>/dev/null || exit 0
 
-# Tier-1 only — the mechanical, high-confidence strip findings. Report the
-# matched comment text, not a line number: for Edit the number is relative to
-# the snippet, so the text is the unambiguous handle.
+# Mechanical strip findings (tier1) + emoji (a near-pure AI-tell — humans rarely
+# emoji source comments). Em-dash is deliberately excluded: it's legitimate prose
+# punctuation, so flagging it floods with false positives. Report the matched
+# text, not a line number (for Edit the number is snippet-relative).
 findings=$(python3 "$DETECT" "$probe_ext" 2>/dev/null | jq -r '
-  .files[]?.findings[]? | select(.tier == "tier1_strip")
+  .files[]?.findings[]?
+  | select(.tier == "tier1_strip" or (.tier == "tier2_voice" and .category == "emoji"))
   | "    [\(.category)] \(.text)"' 2>/dev/null)
 
-[ -z "$findings" ] && exit 0
+# Verbose-essay tell: the detector is judgment-only here, but a long run of
+# consecutive comment lines is a decent mechanical proxy (rules/comments.md:
+# docstrings >8 lines move to a doc). Count the longest comment-prefix run.
+longest_run=$(printf '%s\n' "$NEW_CONTENT" | awk '
+  /^[[:space:]]*(\/\/|#|\*)/ { run++; if (run > max) max = run; next }
+  { run = 0 }
+  END { print max + 0 }')
+long_block=""
+if [ "${longest_run:-0}" -gt 12 ]; then
+  long_block="    [long-comment-block] ${longest_run} consecutive comment lines — consider a doc"
+fi
+
+[ -z "$findings" ] && [ -z "$long_block" ] && exit 0
+
+# Join the two finding sources (either may be empty).
+report_body="$findings"
+if [ -n "$long_block" ]; then
+  [ -n "$report_body" ] && report_body="$report_body
+$long_block" || report_body="$long_block"
+fi
 
 cat >&2 <<EOF
-[comment-hygiene] new content for $(basename "$FP") carries comment archeology:
+[comment-hygiene] new content for $(basename "$FP") has comment-style smells:
 
-$findings
+$report_body
 
-  These rot the moment the work ships (rules/comments.md). Strip them from this
-  write — plan refs, [claude@] tags, pre/post-fix notes, decorative banners.
+  rules/comments.md: strip archeology (plan refs, [claude@] tags, banners), drop
+  emoji/AI-tells, and move long comment blocks (>8 lines) to a doc.
 
   Mute: touch ~/.claude/.comment-hygiene-off   ·   One-shot: COMMENT_HYGIENE_OFF=1
 EOF
