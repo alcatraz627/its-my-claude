@@ -48,10 +48,15 @@ instead of wrapping a function. Genuine exception? mute: touch ~/.claude/.no-clu
   exit 0
 fi
 
-# No block-level smell — surface any warn-level advisory (non-blocking).
+# No block-level smell — surface any warn-level advisory (non-blocking) via
+# additionalContext (the agent reads it + surfaces to the user; plain stdout
+# would reach neither — see hooks-tui-limits).
 all_hits=$(printf '%s' "$payload" | "$LINT" --path "$file_path" 2>/dev/null)
 if [ -n "$all_hits" ]; then
-  echo "[hint] atone-lint — review this edit ($file_path):"
-  printf '%s' "$all_hits" | msg_lines
+  hint_lines=$(printf '%s' "$all_hits" | msg_lines)
+  msg="[hint] atone-lint — review this edit ($file_path):
+$hint_lines
+→→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+  jq -cn --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}' 2>/dev/null || true
 fi
 exit 0

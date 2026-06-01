@@ -32,14 +32,6 @@ PY
 nl=${nl:-0}
 (( nl > 5 )) || exit 0
 
-cat <<EOF
-[hint] python3 -c with $nl newlines: tracebacks show "<string>" instead of
-real line numbers. Prefer:
-  cat > /tmp/<slug>.py <<'PY'
-  ...script...
-  PY
-  python3 /tmp/<slug>.py
-Wins: real line numbers in tracebacks, re-runnable, no shell-quote bugs.
-Mute: touch ~/.claude/.no-inline-py-hint
-EOF
+msg="[hint] python3 -c with $nl newlines: tracebacks show \"<string>\" instead of real line numbers. Prefer writing the script to /tmp/<slug>.py (heredoc) then 'python3 /tmp/<slug>.py' — real line numbers in tracebacks, re-runnable, no shell-quote bugs. (mute: touch ~/.claude/.no-inline-py-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 exit 0

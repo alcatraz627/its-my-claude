@@ -44,14 +44,8 @@ if echo "$CMD" | rg -q '(^|;|&&|\|\|)\s*cat\s+[^-<|>]\S*\s*(\||$|;|&&)' 2>/dev/n
   if echo "$CMD" | rg -q 'cat\s+\S+\s*\|\s*(jq|rg|grep|awk|sed|sort|uniq|cut|tr|xargs|python|node)' 2>/dev/null; then
     exit 0  # input-adapter use; legitimate
   fi
-  cat <<'EOF'
-[hint] `cat <file>` floods context with the whole file. Prefer the Read tool:
-  - Read with `offset` + `limit` for partial views (replaces `cat | head -N`)
-  - Read alone for full file (gives line-numbered output for accurate citing)
-  - Bash `cat` is still right for HEREDOC, redirect, or stdin adapter — those
-    cases aren't flagged here.
-Mute: touch ~/.claude/.no-cat-hint
-EOF
+  msg="[hint] \`cat <file>\` floods context with the whole file. Prefer the Read tool: Read with offset+limit for partial views (replaces 'cat | head -N'), or Read alone for the full file (line-numbered output for accurate citing). Bash cat is still right for heredoc / redirect / stdin-adapter. (mute: touch ~/.claude/.no-cat-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+  jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 fi
 
 exit 0

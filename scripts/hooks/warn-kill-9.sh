@@ -5,7 +5,8 @@
 # (subconscious, statusline-daemon, llm-mini ollama), this corrupts
 # in-flight writes. SIGTERM first lets the process flush + close gracefully.
 #
-# Non-blocking: emits a hint to stdout. Mute: touch ~/.claude/.no-kill-9-hint
+# Non-blocking: injects additionalContext to the agent (which surfaces it to the
+# user). Mute: touch ~/.claude/.no-kill-9-hint
 
 set -uo pipefail
 [[ -f "$HOME/.claude/.no-kill-9-hint" ]] && exit 0
@@ -19,13 +20,8 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 # script idiom for backgrounded watchers — explicit context).
 if echo "$CMD" | rg -q '(^|\s|;|&&|\|\|)\s*kill\s+(-9|-SIGKILL)\b' 2>/dev/null; then
   if ! echo "$CMD" | rg -q 'kill\s+-9\s+\$!' 2>/dev/null; then
-    cat <<'EOF'
-[hint] `kill -9` (SIGKILL) skips cleanup — daemons writing files may corrupt
-in-flight writes. Try SIGTERM first:
-  kill <pid>            # default signal — gives process chance to flush
-  sleep 1; kill -9 <pid>  # escalate ONLY if still running
-Mute: touch ~/.claude/.no-kill-9-hint
-EOF
+    msg="[hint] \`kill -9\` (SIGKILL) skips cleanup — daemons writing files may corrupt in-flight writes. Try SIGTERM first: 'kill <pid>' (default, lets it flush), then 'sleep 1; kill -9 <pid>' only if still running. (mute: touch ~/.claude/.no-kill-9-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+    jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
   fi
 fi
 

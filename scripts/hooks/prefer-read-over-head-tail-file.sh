@@ -26,12 +26,7 @@ echo "$CMD" | rg -q '<<\s*\w+' 2>/dev/null && exit 0
 
 # Match: head/tail with -N flag and a file path arg (not -, not -f)
 if echo "$CMD" | rg -q '(^|;|&&|\|\|)\s*(head|tail)\s+-\d+\s+[^-\s|>]\S*\s*(;|$|&&|\|\|)' 2>/dev/null; then
-  cat <<'EOF'
-[hint] `head -N <file>` / `tail -N <file>` → consider the Read tool with
-`offset` + `limit`. Wins: line-numbered output (accurate file:line cites),
-respects token budget, no shell-quote/path issues. For `cmd | head -N`
-(stream slicing) keep using head/tail — that's not flagged.
-Mute: touch ~/.claude/.no-head-tail-hint
-EOF
+  msg="[hint] \`head -N <file>\` / \`tail -N <file>\` → consider the Read tool with offset+limit: line-numbered output (accurate file:line cites), respects token budget, no shell-quote/path issues. For 'cmd | head -N' (stream slicing) keep head/tail. (mute: touch ~/.claude/.no-head-tail-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+  jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 fi
 exit 0

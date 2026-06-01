@@ -6,9 +6,10 @@
 # often means a parent dir would have covered the set cleanly. Listing items
 # invites the user to execute literally before noticing the abstraction.
 #
-# This hook is ADVISORY (always exits 0). It emits a stderr warning before
-# the command runs, suggesting a parent-dir check. The agent still runs the
-# command; the user gets a visible hint that the form is enumeration-shaped.
+# This hook is ADVISORY (always exits 0). It injects an additionalContext nudge
+# before the command runs, suggesting a parent-dir check; the agent still runs
+# the command but surfaces the nudge to the user (stderr would reach neither —
+# see features/hooks-tui-limits.md).
 #
 # Why advisory instead of blocking: legitimate cases exist (cherry-picking
 # specific files across non-overlapping dirs). A block would frustrate; a
@@ -90,18 +91,6 @@ END {
     --notes "advisory fired: git add with $N_PATHS path args" \
     >/dev/null 2>&1 & ) &
 
-cat >&2 <<EOF
-[warn-git-add-enumeration] git add has $N_PATHS path args — consider generalizing first.
-
-  Pattern: generalize-before-enumerate (atone S3, 3 recurrences)
-  Risk:    enumerated commit recipes get executed literally by the user
-           before the abstraction is noticed.
-
-  Pre-check (run before submitting the list):
-    git status ${COMMON_PARENT:-<parent-dir>}    # if clean (no leaks), parent IS the answer
-
-  Mute: touch ~/.claude/atone/.add-warn-off
-  One-shot bypass: ATONE_NO_ADD_WARN=1 git add ...
-
-EOF
+msg="[warn-git-add-enumeration] git add has $N_PATHS path args — consider generalizing first (generalize-before-enumerate, atone S3). Risk: enumerated commit recipes get executed literally by the user before the abstraction is noticed. Pre-check: 'git status ${COMMON_PARENT:-<parent-dir>}' — if clean (no leaks), the parent IS the answer. (mute: touch ~/.claude/atone/.add-warn-off ; one-shot: ATONE_NO_ADD_WARN=1)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 exit 0
