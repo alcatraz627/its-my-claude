@@ -34,12 +34,31 @@ event + whether you're blocking:
 | **PreToolUse** | stdout JSON: `{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"…"}}` + `exit 0` | stdout JSON: `{"hookSpecificOutput":{…,"permissionDecision":"deny","permissionDecisionReason":"…"}}` (or `exit 2` + stderr) |
 | **Stop** | `{"systemMessage":"…"}` + `exit 0` | `{"decision":"block","reason":"…"}` + `exit 0` |
 
-- [ ] **`stderr` + `exit 0` is AGENT-INVISIBLE** (it reaches only the user
-      transcript). If the hook's purpose is to change *agent* behavior and it
-      uses `cat >&2 …; exit 0`, it is broken. Convert to the table above.
+- [ ] **`stderr` + `exit 0` is AGENT-INVISIBLE.** A hook meant to change *agent*
+      behavior via `cat >&2 …; exit 0` is broken — convert to the table above.
+      (The docs claim exit-0 stderr shows in the user transcript; a live test
+      2026-06-01 showed it does NOT surface in-UI either — don't rely on stderr
+      for ANY audience.)
 - [ ] **Verified LIVE in-session** — a real tool call, observing the message
       arrive (e.g. a `PreToolUse:… hook additional context:` reminder). Stdin
       unit-tests do NOT prove this (you read the stderr yourself; the agent can't).
+
+## A2. Does it reach the USER? (only via the agent — no mechanical channel)
+
+**No non-blocking hook output reaches the user's transcript mechanically** —
+`stderr`, `systemMessage`, and `/dev/tty` are all invisible or clobbered by the
+TUI alternate-screen buffer (verified live 2026-06-01; see `hooks-tui-limits.md`).
+The conversation area belongs to the TUI; mechanical user-visible channels exist
+only OUTSIDE it (macOS notification, statusline, tab title, log file).
+
+So a per-incident nudge reaches the user's transcript ONLY agent-mediated:
+
+- [ ] Advisory hook appends a **`→→ SURFACE …`** directive to its
+      `additionalContext`; `rules/surface-hook-nudges-to-user.md` mandates the
+      agent render it as a bordered callout in its reply. The hybrid: hook
+      detects (mechanical) → agent surfaces with context (in-transcript).
+- [ ] For *aggregate* visibility ("fired N / heeded M"), log firings to a file
+      and surface in reflect/the widget — never a per-fire popup.
 
 ## B. Safe to fire — never breaks the tool path, never traps
 
