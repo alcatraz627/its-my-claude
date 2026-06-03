@@ -191,7 +191,9 @@ test -L "$PROJECT/.claude/session-notes/_active.md" && \
 
 When rendering the briefing in Phase 2, surface the workspace's unchecked Todos as the **immediate next steps** above (or in place of) the checkpoint's Pending Items. The workspace is the user-curated truth; the checkpoint is the agent's synthesis. When they disagree, the workspace wins.
 
-Silently skip this phase if `_active.md` is absent — the user hasn't initialized a workspace for this session. Suggest `/workspace init` at end of briefing if no workspace exists AND the session is non-trivial.
+On a revived session your live Task list starts empty, so these notes are the only record of open work. **Rehydrate them**: recreate the unchecked Todos (both the `## Todos` machine block — which mirrored the prior session's live task list — and any human-area items) as tasks via TaskCreate, so the session resumes with a populated, syncing task list rather than a stale doc.
+
+Silently skip this phase if `_active.md` is absent. (The `stop-sync` hook auto-creates it once a session has more than a couple of tasks, so a substantive prior session will have left one.)
 
 ## Phase 1 — Locate and Parse Checkpoint
 

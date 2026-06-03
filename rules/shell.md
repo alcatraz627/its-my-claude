@@ -41,6 +41,13 @@ Long multi-command chains (e.g., `echo ... && ls ... && find ... && wc ...`) can
 
 macOS `bash` is 3.2 — no associative arrays. Any script needing `declare -A` or bash-4 features must shebang `/opt/homebrew/bin/bash` if available, or delegate to Python.
 
+## macOS shell gotchas (silent-failure class)
+
+Two macOS-specific traps that fail *silently* — the code looks right, runs without error, and quietly does nothing. Both bit a hook this session and only surfaced under test:
+
+- **`find /tmp …` descends nothing.** `/tmp` is a symlink to `/private/tmp`, and BSD `find` does not follow a symlink **start point** without a trailing slash. `find /tmp -name x` → 0 matches; `find /tmp/ -name x` (or `find /private/tmp …`, or `find -L /tmp …`) works. Any `find` rooted at a symlinked dir needs the trailing slash.
+- **There is no `timeout`/`gtimeout` by default**, and the obvious fallback `perl -e 'alarm N; exec @ARGV' cmd` **does not actually time out** — `alarm` kills the shell but its child (e.g. a `sleep`/hung subprocess) is orphaned and keeps the output pipe open, so a `$(…)` capture blocks the full duration anyway. A real cap must kill the whole **process group**: `perl -e 'my $p=fork; if($p==0){setpgrp(0,0); exec(@ARGV)} local $SIG{ALRM}=sub{kill "KILL",-$p}; alarm N; waitpid($p,0)' cmd` (verified: dies at the cap, no orphan). Prefer `timeout`/`gtimeout` when present.
+
 ## Prefer dedicated tools over shell reimplementations
 
 Shell-log scans show repeated hand-built patterns when a better tool exists:

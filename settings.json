@@ -35,7 +35,11 @@
       "Bash(rsync:*)",
       "Bash(ssh:*)",
       "Bash(tailscale:*)",
-      "Bash(/Applications/Tailscale.app/Contents/MacOS/Tailscale:*)"
+      "Bash(/Applications/Tailscale.app/Contents/MacOS/Tailscale:*)",
+      "Bash(touch /Users/alcatraz627/.claude/.render-approve-*)",
+      "Bash(touch ~/.claude/.render-approve-*)",
+      "Bash(touch ~/.claude/.cli-approve-*)",
+      "Bash(touch /Users/alcatraz627/.claude/.cli-approve-*)"
     ],
     "deny": [
       "Bash(*rm -rf /*)",
@@ -571,6 +575,15 @@
             "command": "~/.claude/scripts/hooks/guard-subagent-output.sh"
           }
         ]
+      },
+      {
+        "matcher": "mcp__render__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/render-mcp-gate.py"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -623,6 +636,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/cleanup-comments-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/sync-todos/stop-sync.sh"
           }
         ]
       },

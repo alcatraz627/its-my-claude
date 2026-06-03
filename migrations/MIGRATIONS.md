@@ -56,6 +56,8 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0013 | Hook orchestrator (parallel) for SessionStart + Stop (21→2 settings blocks) | ✅ | 2026-05-17 | 2026-05-17 | [0013-hook-orchestrator-sessionstart-stop.md](0013-hook-orchestrator-sessionstart-stop.md) |
 | 0014 | Rename diy-mem → shell-mem + dispatcher (back-compat symlink) | ✅ | 2026-05-17 | 2026-05-17 | [0014-diy-mem-to-shell-mem.md](0014-diy-mem-to-shell-mem.md) |
 | 0015 | Introduce std::claude::magi namespace + /magi skill | ✅ | 2026-05-17 | 2026-05-17 | [0015-magi-namespace.md](0015-magi-namespace.md) |
+| 0016 | Add selective CLI access gating (PreToolUse hook + cli-gating policy) | ✅ | 2026-05-21 | 2026-05-22 | [0016-cli-gating-hook.md](0016-cli-gating-hook.md) |
+| 0017 | Repoint todo-sync at the Task tool + Stop-hook writeback & drift-block | ✅ | 2026-06-01 | 2026-06-01 | [0017-todo-sync-task-tool.md](0017-todo-sync-task-tool.md) |
 
 ---
 

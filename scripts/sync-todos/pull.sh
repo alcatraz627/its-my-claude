@@ -43,7 +43,10 @@ items = []
 for line in m.group(1).splitlines():
   mm = re.match(r'\s*[-*]\s*\[\s*\]\s+(.+?)\s*$', line)
   if mm:
-    items.append(mm.group(1))
+    text = re.sub(r'^\(#\d+\)\s*', '', mm.group(1))   # drop machine block's (#id) prefix
+    if re.match(r'_no todos yet', text, re.IGNORECASE):  # skip create.sh placeholder
+      continue
+    items.append(text)
 print(json.dumps(items))
 PY
 )
@@ -74,7 +77,7 @@ mv -f "$TMP" "$PENDING" 2>/dev/null
 # Memory pointer: first unchecked → ~/.claude/projects/<project>/memory/current-focus.md
 FIRST=$(echo "$TODOS_JSON" | jq -r '.[0] // ""')
 if [ -n "$FIRST" ]; then
-  PROJECT_KEY=$(echo "$CWD" | sed 's|^/||;s|/|-|g')
+  PROJECT_KEY=$(echo "$CWD" | sed 's|^/||;s|[/.]|-|g')   # '/' AND '.' → '-' (matches CC project-dir encoding)
   MEM_DIR="$HOME/.claude/projects/-$PROJECT_KEY/memory"
   if [ -d "$MEM_DIR" ]; then
     printf '%s\n' "$FIRST" > "$MEM_DIR/current-focus.md.tmp" 2>/dev/null

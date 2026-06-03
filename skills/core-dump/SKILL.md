@@ -153,6 +153,8 @@ One to two sentences: what does the user expect to happen next right now? What a
 
 A bullet list of things that have not yet been done but are needed to complete the current task. Include both agent-side and user-side items.
 
+Seed this from the live Task list first: read `~/.claude/tasks/<session-id>/*.json` (each is `{id, subject, status}`) and treat every non-`completed` task as a pending item. Then add anything the conversation surfaced that the task list missed. The live Task list is the freshest record of what's still open; the conversation only fills gaps.
+
 ### 2.5 Session Insights & Meta
 
 Capture meta-observations about the session:
@@ -317,11 +319,19 @@ Print: `Checkpoint indexed as "$CKPT_NAME" — resume with /catchup`.
 
 If `<project>/.claude/session-notes/_active.md` exists, propose updates to it. Never blind-overwrite.
 
+> **The `## Todos` machine block is auto-managed.** The region between
+> `<!-- sync:auto:start -->` and `<!-- sync:auto:end -->` mirrors the live Task
+> list and is rewritten by the `stop-sync` hook every turn — do NOT propose
+> todos into it; they'd be overwritten on the next turn. Only propose
+> `todos_new` for genuinely human-area items the Task list doesn't track. The
+> high-value writeback from `/core-dump` is the durable narrative — notes,
+> decisions, doc links — not the task checkboxes (those sync mechanically).
+
 1. Build a JSON proposal from the Phase 2 synthesis:
    ```json
    {
-     "todos_done":    [<items from "Done" sub-section that match existing unchecked todos>],
-     "todos_new":     [<items from "Pending Items" not already in the doc>],
+     "todos_done":    [<usually empty — completed tasks sync into the block automatically>],
+     "todos_new":     [<only human-area todos NOT present in the live Task list>],
      "notes_append":  [<2-3 most load-bearing observations from Phase 2.5>],
      "doclinks_new":  [<URLs / file refs cited this session, deduped>],
      "decisions_new": [<load-bearing choices from Phase 2.5 "What worked / didn't">]
@@ -341,7 +351,7 @@ If `<project>/.claude/session-notes/_active.md` exists, propose updates to it. N
    - `edit` → write JSON to `/tmp/core-dump-ws-proposal-<sid>.json`, prompt user to edit, re-read, apply
    - `skip` → do nothing
 
-Skip this phase silently if `_active.md` does not exist (the user hasn't initialized a workspace for this session — `/workspace init` is opt-in per session).
+Skip this phase silently if `_active.md` does not exist. (The `stop-sync` hook auto-creates it once a session has more than a couple of tasks, so on a substantive session it will usually be present; a trivial session legitimately has none.)
 
 ## Phase 4 — Visual Summary (full mode only)
 
