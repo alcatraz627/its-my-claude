@@ -33,8 +33,10 @@ TX=$(printf '%s' "$INPUT" | jq -r '.transcript_path // ""' 2>/dev/null)
 
 TASK_DIR="$HOME/.claude/tasks/$SID"
 
-WORKSPACE=$(sync_workspace_path "$CWD")
-NOTES_DIR=$(dirname "$WORKSPACE")
+# Write the per-SESSION doc, never the shared _active.md symlink (concurrent
+# same-dir sessions would otherwise collide on one realpath'd target — F1).
+NOTES_DIR=$(sync_notes_dir "$CWD")
+WORKSPACE=$(sync_session_doc_path "$CWD" "$SID")
 
 # Current task list. A caller (the Stop hook) may hand us an already-replayed
 # list via SYNC_TASKS_FILE so the transcript isn't parsed twice per turn.
@@ -81,10 +83,10 @@ if [ ! -f "$WORKSPACE" ]; then
 fi
 [ -f "$WORKSPACE" ] || exit 0
 
-# Per-file lock (mkdir is atomic) so two sessions writing the same project's
-# notes can't interleave. We deliberately do NOT use the global ~/.claude
-# sync.lock, which would serialise unrelated projects.
-LOCK="$NOTES_DIR/.sync.lock"
+# Per-SESSION lock (mkdir is atomic). Targets are per-session docs now, so this
+# only guards one session's own overlapping writebacks (Stop + a manual call) —
+# concurrent sessions write different files and never contend.
+LOCK="$NOTES_DIR/.sync-$SID.lock"
 # Reap a stale lock from a crashed writer: a sync takes well under a second, so a
 # lock dir older than 2 min is abandoned. Without this, one leftover lock would
 # no-op sync for this project forever, silently.
@@ -116,15 +118,17 @@ printf '{"ts":"%s","sid":"%s","event":"mirror %s"}\n' \
   >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
 
 # Memory "current focus" pointer (one-way derived; never authoritative).
+# Session-keyed in a hidden memory/.sync/ subdir: the bare current-focus.md is
+# project-scoped, so concurrent sessions would clobber it AND race on a shared
+# .tmp (torn writes — F2). The .sync/ subdir also keeps these out of the memory
+# index. Project-key encoding replaces BOTH '/' and '.' with '-'.
 if [ -n "$POINTER" ]; then
-  # Claude Code encodes a project dir by replacing BOTH '/' and '.' with '-'
-  # (so /Users/me/.claude → -Users-me--claude). Missing the dot silently points
-  # at a non-existent memory dir for any dotted path (notably ~/.claude itself).
   PROJECT_KEY=$(printf '%s' "$CWD" | sed 's|^/||;s|[/.]|-|g')
   MEM_DIR="$HOME/.claude/projects/-$PROJECT_KEY/memory"
   if [ -d "$MEM_DIR" ]; then
-    printf '%s\n' "$POINTER" > "$MEM_DIR/current-focus.md.tmp" 2>/dev/null \
-      && mv -f "$MEM_DIR/current-focus.md.tmp" "$MEM_DIR/current-focus.md" 2>/dev/null || true
+    mkdir -p "$MEM_DIR/.sync" 2>/dev/null
+    printf '%s\n' "$POINTER" > "$MEM_DIR/.sync/focus-$SID.md.tmp" 2>/dev/null \
+      && mv -f "$MEM_DIR/.sync/focus-$SID.md.tmp" "$MEM_DIR/.sync/focus-$SID.md" 2>/dev/null || true
   fi
 fi
 

@@ -317,7 +317,7 @@ Print: `Checkpoint indexed as "$CKPT_NAME" — resume with /catchup`.
 
 ### 3.7 Workspace doc diff (optional, non-blocking)
 
-If `<project>/.claude/session-notes/_active.md` exists, propose updates to it. Never blind-overwrite.
+Operate on THIS session's own doc — `<notes-dir>/$CLAUDE_CODE_SESSION_ID.md` — NOT the shared `_active.md` symlink (which, with concurrent same-dir sessions, may point at a different session's notes, and is what the `stop-sync` mirror writes by id). If that doc exists, propose updates to it. Never blind-overwrite.
 
 > **The `## Todos` machine block is auto-managed.** The region between
 > `<!-- sync:auto:start -->` and `<!-- sync:auto:end -->` mirrors the live Task
@@ -338,20 +338,22 @@ If `<project>/.claude/session-notes/_active.md` exists, propose updates to it. N
    }
    ```
 
-2. Show the diff:
+2. Show the diff (key the doc by the full session UUID so it's the SAME file the
+   `stop-sync` mirror writes — passing the friendly slug would create a second,
+   split doc):
    ```bash
    echo "$PROPOSAL_JSON" | \
      ~/.claude/scripts/session-notes/diff.sh \
        --project "$PROJECT" \
-       --session-id "$SESSION_ID"
+       --session-id "${CLAUDE_CODE_SESSION_ID:-$SESSION_ID}"
    ```
 
 3. Confirm via `mcp__inputs__confirm` with 3 options:
-   - `apply` (default) → pipe JSON to `apply.sh`
+   - `apply` (default) → pipe JSON to `apply.sh` with the same `--session-id "${CLAUDE_CODE_SESSION_ID:-$SESSION_ID}"`
    - `edit` → write JSON to `/tmp/core-dump-ws-proposal-<sid>.json`, prompt user to edit, re-read, apply
    - `skip` → do nothing
 
-Skip this phase silently if `_active.md` does not exist. (The `stop-sync` hook auto-creates it once a session has more than a couple of tasks, so on a substantive session it will usually be present; a trivial session legitimately has none.)
+Skip this phase silently if the session's own doc (`<notes-dir>/$CLAUDE_CODE_SESSION_ID.md`) does not exist. (The `stop-sync` hook auto-creates it once a session has more than a couple of tasks, so on a substantive session it will usually be present; a trivial session legitimately has none.)
 
 ## Phase 4 — Visual Summary (full mode only)
 

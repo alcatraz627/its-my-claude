@@ -54,11 +54,15 @@ Prints the absolute path to the new doc. Refresh `_active.md` symlink.
 
 ### `show`
 
+Prefer THIS session's own doc (`<sid>.md`) over the shared `_active.md` symlink — with concurrent same-dir sessions, `_active.md` may point at a different session's notes.
+
 ```bash
-cat "$PROJECT/.claude/session-notes/_active.md"
+ND="$PROJECT/.claude/session-notes"; { [ "$PROJECT" = "$HOME/.claude" ] || [[ "$PROJECT" == */.claude ]]; } && ND="$PROJECT/session-notes"
+DOC="$ND/${CLAUDE_CODE_SESSION_ID}.md"; [ -f "$DOC" ] || DOC="$ND/_active.md"
+cat "$DOC"
 ```
 
-If no `_active.md` → print "no workspace yet. Run /workspace init to create one."
+If neither exists → print "no workspace yet. Run /workspace init to create one."
 
 ### `list`
 
@@ -71,7 +75,9 @@ Render as a table with session-id, mtime, todo count.
 ### `open`
 
 ```bash
-"${EDITOR:-vi}" "$PROJECT/.claude/session-notes/_active.md"
+ND="$PROJECT/.claude/session-notes"; { [ "$PROJECT" = "$HOME/.claude" ] || [[ "$PROJECT" == */.claude ]]; } && ND="$PROJECT/session-notes"
+DOC="$ND/${CLAUDE_CODE_SESSION_ID}.md"; [ -f "$DOC" ] || DOC="$ND/_active.md"
+"${EDITOR:-vi}" "$DOC"
 ```
 
 ## Integration contract

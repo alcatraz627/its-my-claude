@@ -182,18 +182,19 @@ Format reference: `skills/shared/wal-format.md`.
 
 ## Phase 0.8 — Read session workspace (if present)
 
-Before the main checkpoint parse, check for `<project>/.claude/session-notes/_active.md`. If it exists, READ IT FIRST. Its sections — particularly **Todos** (unchecked items) and **Doc Links** — are the most direct expression of "what was the user actually trying to do" and should anchor the briefing.
+Before the main checkpoint parse, read the resuming session's workspace doc. **Resolve it by session id, NOT via `_active.md`** — `session_id` is stable across resume, and multiple sessions can share a project dir, so the shared `_active.md` symlink may point at a *different* session's doc. Read `<notes-dir>/$CLAUDE_CODE_SESSION_ID.md` first; fall back to `_active.md` only if the session's own doc is absent. Its **Todos** (unchecked) and **Doc Links** are the most direct expression of "what the user was actually trying to do" and should anchor the briefing.
 
 ```bash
-test -L "$PROJECT/.claude/session-notes/_active.md" && \
-  cat "$PROJECT/.claude/session-notes/_active.md"
+ND="$PROJECT/.claude/session-notes"; { [ "$PROJECT" = "$HOME/.claude" ] || [[ "$PROJECT" == */.claude ]]; } && ND="$PROJECT/session-notes"
+DOC="$ND/${CLAUDE_CODE_SESSION_ID}.md"; [ -f "$DOC" ] || DOC="$ND/_active.md"
+test -e "$DOC" && cat "$DOC"
 ```
 
 When rendering the briefing in Phase 2, surface the workspace's unchecked Todos as the **immediate next steps** above (or in place of) the checkpoint's Pending Items. The workspace is the user-curated truth; the checkpoint is the agent's synthesis. When they disagree, the workspace wins.
 
 On a revived session your live Task list starts empty, so these notes are the only record of open work. **Rehydrate them**: recreate the unchecked Todos (both the `## Todos` machine block — which mirrored the prior session's live task list — and any human-area items) as tasks via TaskCreate, so the session resumes with a populated, syncing task list rather than a stale doc.
 
-Silently skip this phase if `_active.md` is absent. (The `stop-sync` hook auto-creates it once a session has more than a couple of tasks, so a substantive prior session will have left one.)
+Silently skip this phase if neither the session's own doc nor `_active.md` exists. (The `stop-sync` hook auto-creates `<sid>.md` once a session has more than a couple of tasks, so a substantive prior session will have left its own doc.)
 
 ## Phase 1 — Locate and Parse Checkpoint
 

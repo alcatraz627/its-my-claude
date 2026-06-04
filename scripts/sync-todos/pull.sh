@@ -12,23 +12,23 @@ source "$SCRIPT_DIR/_lib.sh"
 sync_is_disabled && exit 0
 
 INPUT=$(cat 2>/dev/null || echo "{}")
-SID=$(sync_session_id "$INPUT")
+# Session id from stdin only — never the global .current-session-id slot.
+SID=$(printf '%s' "$INPUT" | jq -r '.session_id // ""' 2>/dev/null)
 CWD=$(echo "$INPUT" | jq -r '.cwd // ""' 2>/dev/null)
 
 [ -z "$SID" ] && exit 0
 [ -z "$CWD" ] && exit 0
 
-WORKSPACE=$(sync_workspace_path "$CWD")
+# Read THIS session's own prior notes (session_id is stable across resume), not
+# the shared _active.md — so a revived session rehydrates its own todos.
+WORKSPACE=$(sync_session_doc_path "$CWD" "$SID")
 [ -f "$WORKSPACE" ] || exit 0
 
 PENDING=$(sync_pending_path "$SID")
 
-if ! sync_acquire_lock; then
-  echo "[sync-pull] lock busy, skipping" >&2
-  exit 0
-fi
-trap sync_release_lock EXIT
-
+# No lock: every write below is session-keyed (pending file + memory focus), so
+# concurrent pulls don't collide. (The old global sync.lock had no reaper and
+# could wedge SessionStart pull for ALL projects — F3.)
 OP_ID=$(bash "$SCRIPT_DIR/wal.sh" start pull "$SID")
 
 # Extract unchecked items from a `## Todos` section. Supports `- [ ]` and `* [ ]`.
@@ -74,14 +74,16 @@ jq -nc \
   > "$TMP" 2>/dev/null
 mv -f "$TMP" "$PENDING" 2>/dev/null
 
-# Memory pointer: first unchecked → ~/.claude/projects/<project>/memory/current-focus.md
+# Memory "current focus": session-keyed hidden subdir (matches writeback; avoids
+# the shared current-focus.md collision + torn shared-.tmp race — F2).
 FIRST=$(echo "$TODOS_JSON" | jq -r '.[0] // ""')
 if [ -n "$FIRST" ]; then
   PROJECT_KEY=$(echo "$CWD" | sed 's|^/||;s|[/.]|-|g')   # '/' AND '.' → '-' (matches CC project-dir encoding)
   MEM_DIR="$HOME/.claude/projects/-$PROJECT_KEY/memory"
   if [ -d "$MEM_DIR" ]; then
-    printf '%s\n' "$FIRST" > "$MEM_DIR/current-focus.md.tmp" 2>/dev/null
-    mv -f "$MEM_DIR/current-focus.md.tmp" "$MEM_DIR/current-focus.md" 2>/dev/null || true
+    mkdir -p "$MEM_DIR/.sync" 2>/dev/null
+    printf '%s\n' "$FIRST" > "$MEM_DIR/.sync/focus-$SID.md.tmp" 2>/dev/null
+    mv -f "$MEM_DIR/.sync/focus-$SID.md.tmp" "$MEM_DIR/.sync/focus-$SID.md" 2>/dev/null || true
   fi
 fi
 

@@ -20,17 +20,36 @@ sync_session_id() {
   printf '%s' "$sid"
 }
 
-# Resolve workspace _active.md path for a given project CWD.
-# Mirrors the edge-case in scripts/session-notes/create.sh: PROJECT=~/.claude
-# uses session-notes/ at the same level, not nested under .claude/.
-sync_workspace_path() {
+# The session-notes directory for a project CWD. PROJECT=~/.claude uses
+# session-notes/ at the same level, not nested under .claude/.
+sync_notes_dir() {
   local cwd="$1"
   [ -z "$cwd" ] && return 1
   if [ "$cwd" = "$HOME/.claude" ] || [[ "$cwd" == */.claude ]]; then
-    printf '%s/session-notes/_active.md' "$cwd"
+    printf '%s/session-notes' "$cwd"
   else
-    printf '%s/.claude/session-notes/_active.md' "$cwd"
+    printf '%s/.claude/session-notes' "$cwd"
   fi
+}
+
+# The `_active.md` convenience symlink (most-recently-initialised session's doc).
+# This is a POINTER for humans + a fallback for readers — NEVER a write target,
+# because all same-dir sessions would share it (realpath collapse). Writers use
+# sync_session_doc_path instead.
+sync_workspace_path() {
+  local cwd="$1"
+  local dir; dir=$(sync_notes_dir "$cwd") || return 1
+  printf '%s/_active.md' "$dir"
+}
+
+# The canonical per-SESSION notes doc: <notes-dir>/<session_id>.md. Keyed by the
+# stdin session_id so concurrent sessions in one dir each own their own file and
+# never collide. This is what writeback writes and what /catchup resolves by id.
+sync_session_doc_path() {
+  local cwd="$1" sid="$2"
+  local dir; dir=$(sync_notes_dir "$cwd") || return 1
+  [ -z "$sid" ] && return 1
+  printf '%s/%s.md' "$dir" "$sid"
 }
 
 # Pending-todos file path for a session.
