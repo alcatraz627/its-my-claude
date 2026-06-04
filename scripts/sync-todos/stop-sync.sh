@@ -77,11 +77,12 @@ else
   TASKS_JSON="[]"
 fi
 
-# An empty list from a clearly-non-empty transcript means the replay/parse broke,
-# not that there's genuinely no work — flag it instead of silently mirroring [].
+# An empty list when the transcript actually CONTAINS task calls means the
+# replay/parse broke — flag it. (A task-free session legitimately replays to []
+# even with a long transcript, so gate on a real TaskCreate, not on size.)
 if [ "$TASKS_JSON" = "[]" ] && [ -n "$TX" ] && [ -f "$TX" ] \
-   && [ "$(wc -c < "$TX" 2>/dev/null || echo 0)" -gt 5000 ]; then
-  slog "warn:empty-replay-on-nonempty-transcript"
+   && rg -q '"name":"TaskCreate"' "$TX" 2>/dev/null; then
+  slog "warn:empty-replay-despite-taskcreate"
 fi
 
 # --- Job 1: mechanical mirror (always, silent) — reuses the list above ------
