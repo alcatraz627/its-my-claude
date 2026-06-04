@@ -107,7 +107,13 @@ trap 'rmdir "$LOCK" 2>/dev/null || true' EXIT
 
 OP_ID=$(bash "$SCRIPT_DIR/wal.sh" start push "$SID" 2>/dev/null || echo "")
 
-printf '%s' "$TASKS" | python3 "$SCRIPT_DIR/reconcile.py" "$WORKSPACE" >/dev/null 2>&1
+# Mirror, and log whether it actually changed the notes (effectiveness telemetry).
+RECON=$(printf '%s' "$TASKS" | python3 "$SCRIPT_DIR/reconcile.py" "$WORKSPACE" 2>/dev/null || echo '{}')
+mkdir -p "$HOME/.claude/logs" 2>/dev/null
+printf '{"ts":"%s","sid":"%s","event":"mirror %s"}\n' \
+  "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$SID" \
+  "$(printf '%s' "$RECON" | jq -r '"changed=\(.changed) items=\(.items) reason=\(.reason)"' 2>/dev/null || echo 'parse-fail')" \
+  >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
 
 # Memory "current focus" pointer (one-way derived; never authoritative).
 if [ -n "$POINTER" ]; then

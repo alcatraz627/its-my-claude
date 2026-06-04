@@ -30,4 +30,6 @@ reason=$(jq -r '.reason // ""' "$marker" 2>/dev/null)
 rm -f "$marker" 2>/dev/null
 [ -n "$reason" ] || exit 0
 
+printf '{"ts":"%s","sid":"-","event":"nudge:drift"}\n' \
+  "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
 printf '[task-sync] %s\n' "$reason"

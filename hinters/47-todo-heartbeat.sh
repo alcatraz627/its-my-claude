@@ -35,4 +35,6 @@ edits=$(jq -r '.edits_since_change // 0' "$state" 2>/dev/null || echo 0)
 # Stop-block's hard threshold (8/5) — this is the frequent soft layer.
 [ "${turns:-0}" -ge 2 ] && [ "${edits:-0}" -ge 2 ] || exit 0
 
+printf '{"ts":"%s","sid":"-","event":"nudge:heartbeat turns=%s"}\n' \
+  "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$turns" >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
 printf '[task-sync] Task list unchanged for %s turns while work continued — if the focus has moved, reconcile it now (TaskCreate/TaskUpdate); it auto-syncs to your notes + memory. Keeping it current silences this.\n' "$turns"

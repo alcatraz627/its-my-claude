@@ -159,12 +159,14 @@ if [ "$STOP_ACTIVE" = "true" ]; then
   # we don't immediately re-trip.
   CLEAN=$(printf '%s' "$SID" | tr -c 'A-Za-z0-9_-' '_')
   jq -cn --arg r "$REASON" '{reason:$r}' > "/tmp/claude-todo-drift-${CLEAN}.json" 2>/dev/null || true
+  slog "drift-escape turns=$TURNS_SINCE edits=$EDITS_SINCE"
   write_state 0 0
   exit 0
 fi
 
 # First stale stop → block once and ask for reconciliation. Reset the window so
 # the next nudge is another full stretch away, not every turn.
+slog "drift-block turns=$TURNS_SINCE edits=$EDITS_SINCE count=$TASK_COUNT"
 write_state 0 0
 jq -cn --arg r "$REASON" '{decision:"block", reason:$r}' 2>/dev/null || true
 exit 0
