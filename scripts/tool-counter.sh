@@ -67,16 +67,31 @@ mv -f "$tmp" "$COUNTER_FILE"
 
 _unlock
 
-# Auto-checkpoint: emit WAL checkpoint and additionalContext reminder at milestones.
-# Read the new total from the counter file.
+# Auto-checkpoint nudges — recurring every 30 tools (30, 60, 90, …), not a
+# one-shot, and suppressed right after a checkpoint so a fresh /core-dump doesn't
+# get nagged. The mkdir lock above serializes increments, so the total passes
+# through each exact multiple of 30 — modulo never skips one.
 new_total=$(grep '^_total=' "$COUNTER_FILE" 2>/dev/null | cut -d= -f2)
 new_total=${new_total:-0}
 
-if [[ "$new_total" -eq 30 ]]; then
-  # Milestone: suggest WAL checkpoint via additionalContext
-  echo '{"additionalContext":"[auto-checkpoint] Tool count reached 30. Consider writing a WAL checkpoint now to preserve session state."}'
-elif [[ "$new_total" -eq 60 ]]; then
-  echo '{"additionalContext":"[auto-checkpoint] Tool count reached 60. This is a long session — consider running /core-dump mini before context loss."}'
+if (( new_total > 0 && new_total % 30 == 0 )); then
+  # Suppress if a checkpoint (core-dump OR pre-compact) landed in the last 5 min.
+  cwd=$(echo "$input" | jq -r '.cwd // empty' 2>/dev/null) || true
+  now=$(date +%s)
+  recent_ckpt=0
+  for cf in "$cwd/_checkpoint.claude.md" "$HOME/.claude/_checkpoint.claude.md"; do
+    [[ -f "$cf" ]] || continue
+    m=$(stat -f %m "$cf" 2>/dev/null || echo 0)
+    (( now - m < 300 )) && recent_ckpt=1
+  done
+  if (( ! recent_ckpt )); then
+    if (( new_total == 30 )); then
+      msg="Tool count 30 — consider a WAL checkpoint to preserve session state."
+    else
+      msg="Tool count ${new_total} (long session) — consider /core-dump mini; context may auto-compact soon."
+    fi
+    jq -nc --arg m "[auto-checkpoint] $msg" '{additionalContext:$m}'
+  fi
 fi
 
 exit 0

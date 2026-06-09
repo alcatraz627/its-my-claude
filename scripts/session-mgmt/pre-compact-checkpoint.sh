@@ -156,6 +156,27 @@ if [[ -f "$TASK_FILE" ]]; then
   task_todos=$(cat "$TASK_FILE" 2>/dev/null) || true
 fi
 
+# --- Workspace session-notes (the live Todos/Notes/Decisions that survive /clear) ---
+# The richest semantic source: sync-todos mirrors the live Task list into it and
+# the human keeps Notes/Decisions there. Prefer this session's own file
+# (multi-session safe), falling back to the _active.md symlink.
+workspace_notes=""
+workspace_source=""
+if [[ -n "$cwd" ]]; then
+  notes_dir="$cwd/.claude/session-notes"
+  { [[ "$cwd" == "$HOME/.claude" ]] || [[ "$cwd" == */.claude ]]; } && notes_dir="$cwd/session-notes"
+  notes_file=""
+  if [[ -n "$session_id" && -f "$notes_dir/${session_id}.md" ]]; then
+    notes_file="$notes_dir/${session_id}.md"
+  elif [[ -f "$notes_dir/_active.md" ]]; then
+    notes_file="$notes_dir/_active.md"
+  fi
+  if [[ -n "$notes_file" ]]; then
+    workspace_notes=$(head -100 "$notes_file" 2>/dev/null) || true
+    workspace_source=$(basename "$(readlink "$notes_file" 2>/dev/null || echo "$notes_file")")
+  fi
+fi
+
 # ── 3. Write comprehensive checkpoint file ────────────────────────────────────
 dump_dir="${cwd:-$HOME/.claude}"
 dump_file="$dump_dir/_precompact-checkpoint.claude.md"
@@ -206,6 +227,16 @@ After compaction, run \`/catchup\` — it will:
 
 $recent_files_md
 HEADER
+
+  if [[ -n "$workspace_notes" ]]; then
+    echo "## Workspace Notes — live, survives /clear (\`$workspace_source\`)"
+    echo
+    echo "> Todos/Notes/Decisions for this session. The Task list is mirrored here"
+    echo "> by sync-todos; this is the primary thing to restore after compaction."
+    echo
+    echo "$workspace_notes"
+    echo
+  fi
 
   if [[ -n "$git_diff_stat" ]]; then
     echo "## Git Diff Summary"
@@ -313,15 +344,18 @@ bash "$HOME/.claude/assets/asset.sh" cleanup >/dev/null 2>&1 || true
 # checkpoints. Smart-skip prevents shadowing a fresh /core-dump (guard 30min)
 # and replace-latest ensures only ONE precompact entry per session at any time.
 sid_short="${session_id:0:8}"
+# kind defaults to precompact; the SessionEnd wrapper overrides it so /catchup's
+# index distinguishes "session ended" snapshots from "about to compact" ones.
+cp_kind="${PRECOMPACT_KIND_OVERRIDE:-precompact}"
 "$HOME/.claude/scripts/checkpoint/write.sh" \
   --session-id        "${session_id:-unknown}" \
   --project-root      "${cwd:-$HOME/.claude}" \
   --checkpoint-path   "$dump_file" \
-  --kind              precompact \
+  --kind              "$cp_kind" \
   --mode              replace-latest \
   --guard-newer-than  1800 \
-  --name              "precompact-${sid_short}" \
-  --summary           "Auto pre-compaction (${trigger}) — shell-only structural snapshot, no LLM synthesis" \
+  --name              "${cp_kind}-${sid_short}" \
+  --summary           "Auto ${cp_kind} (${trigger}) — shell-only structural snapshot, no LLM synthesis" \
   >/dev/null 2>&1 || true
 
 exit 0
