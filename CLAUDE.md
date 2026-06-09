@@ -22,6 +22,10 @@ When user sends short continuation ("keep going", "yes", "next") → continue au
 
 Scale testing to task size: trivial (syntax check) · small (call with 1-2 inputs) · medium (smoke test with real data, curl it) · large (dry-run on 2-3 items first). Verify each change independently, not as a batch. Clean slate before tests: no stale processes, no leftover temp files, no stray env vars. Human-commented values (`NOTE(by human)`, `HACK`) reflect a deliberate decision — ask before changing. Full detail: `rules/testing.md`.
 
+### Todos live in the Task tool
+
+The live todo list **is** the Task tool (`TaskCreate`/`TaskUpdate`) — that's the source of truth and what the Claude Code TUI shows. "Update your todos" (even without naming "Claude Code todos") means the Task tool, **not** a file. Multi-step work (≥3 steps) → create tasks at the start, update status as you go. The `session-notes` Todos block and the memory pointer are **auto-generated mirrors** (sync-todos, one-way Task→notes→memory) — never hand-edit them; the next Stop writeback overwrites them. Planning docs (`docs/plan.md`) are complementary, not the status surface — a plan in a file with an empty Task list leaves the TUI blind. Full detail: `rules/todo-discipline.md`.
+
 ### Shell safety
 
 Never Glob/Grep from `~/` — resolve to project root first. **`trash` not `rm`** (hook blocks `rm`). Non-interactive flags mandatory: `npm install -y`, `cp -f`, `mv -f`. Don't use `run_in_background: true` unless asked — orphans on `/clear`. macOS bash is 3.2 (no associative arrays); delegate to Python if needed. Full detail: `rules/shell.md`.
