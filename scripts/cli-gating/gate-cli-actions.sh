@@ -25,9 +25,13 @@ command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/nul
 [ -n "$command" ] || exit 0
 
 # Early bail: if no gated CLI name appears at all, skip the Python spawn.
-# (Cheap substring screen — the Python core does the real word-boundary check.)
-case " $command " in
-  *render*|*vercel*|*gh\ *|*\ gh*) : ;;
+# (Cheap substring screen — the Python core does the real word-boundary check,
+# so over-matching here costs only an extra python spawn, never correctness.)
+# Whitespace is normalized first so a tab/newline between the CLI and its
+# subcommand (`aws<TAB>s3 rm`) can't dodge the screen and skip the classifier.
+_screen=$(printf '%s' "$command" | tr '\t\n' '  ')
+case " $_screen " in
+  *render*|*vercel*|*gh\ *|*\ gh*|*aws\ *) : ;;
   *) exit 0 ;;
 esac
 
@@ -47,7 +51,7 @@ rc=$?
 if [ $rc -ne 0 ] || [ -z "$verdict" ]; then
   # Classifier crashed. Fail-split: block only if the command plainly contains a
   # gated write verb; otherwise allow (don't brick reads on a hook bug).
-  if printf '%s' "$command" | grep -qE '\b(render (deploy|restart|scale|secret|env)|vercel (deploy|env|alias|rm|rollback)|gh (repo delete|release|secret|push|pr merge))\b'; then
+  if printf '%s' "$command" | grep -qE '\b(render (deploy|restart|scale|secret|env)|vercel (deploy|env|alias|rm|rollback)|gh (repo delete|release|secret|push|pr merge)|aws s3 (rm|cp|sync|mv|mb|rb)|aws [a-z0-9-]+ (delete|create|put|update|terminate|modify|attach|detach|run|stop|reboot|deregister|register|revoke|authorize|disable|enable|remove|set|associate|disassociate))\b'; then
     printf '🛑 CLI GATE (fail-closed): classifier errored on a command containing a gated write verb. Blocked for safety.\nCommand: %s\nTo proceed: have the human confirm, then re-issue.\n' "$command" >&2
     exit 2
   fi
@@ -60,9 +64,19 @@ case "$verdict" in
     ;;
   BLOCK*)
     reason="${verdict#BLOCK	}"
+    # Per-command approval: a one-shot nonce keyed on the EXACT command. If the
+    # human approved THIS command (via AskUserQuestion) and dropped the nonce,
+    # allow it once and consume the nonce. The exit 2 below fires even in bypass.
+    HASH=$(printf '%s' "$command" | shasum -a 256 2>/dev/null | cut -c1-16)
+    NONCE="$HOME/.claude/.cli-approve-$HASH"
+    if [ -n "$HASH" ] && [ -f "$NONCE" ]; then
+      AGE=$(( $(date +%s) - $(stat -f %m "$NONCE" 2>/dev/null || echo 0) ))
+      rm -f "$NONCE"
+      [ "$AGE" -ge 0 ] && [ "$AGE" -le 300 ] && exit 0
+    fi
     # Telemetry: record the fire so the claude-audit dream domain can see it.
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook cli-gating --heeded unknown >/dev/null 2>&1 &
-    printf '🛑 CLI PROD-WRITE GATE — hard stop (not a guess).\n\nReason: %s\n\nThis is blocked to prevent an accidental production write. To proceed:\n  1. The human explicitly confirms this exact operation.\n  2. Re-issue the command after confirmation.\n\nSafe alternatives:\n  • render/vercel: drop the --prod/--production flag for a preview/dev op.\n  • gh: target a non-default branch, or run the read-only variant (view/list).\n\n⚠ Do NOT try to work around this gate. If you believe it is WRONG (e.g. it blocked a read), do BOTH:\n  • log it: bash ~/.claude/scripts/hooks/hook-feedback.sh --hook cli-gating --kind false-positive --note "<what you were doing>"\n  • tell the user. Routing around a guard instead of surfacing it is itself the failure mode.\nOverride entirely: touch ~/.claude/cli-gating.off (disables ALL CLI gating).\n' "$reason" >&2
+    printf '🛑 CLI WRITE GATE — human approval required (fires even in bypass).\n\nReason: %s\n\nEVERY write to a gated CLI (render/vercel/gh), any env, needs per-command approval. To proceed:\n  1. SHOW the user the exact command + a one-line plain-English note of what it does + its env, THEN ask with AskUserQuestion. Never ask without showing the command first.\n  2. On approval:  touch %s\n  3. Re-issue the EXACT same command. Approval is one-shot, expires in 300s.\n\nReads are never gated. If this blocked a READ, it is a bug: log it (bash ~/.claude/scripts/hooks/hook-feedback.sh --hook cli-gating --kind false-positive --note "...") and tell the user. Broad override: touch ~/.claude/cli-gating.off\n' "$reason" "$NONCE" >&2
     exit 2
     ;;
   *)

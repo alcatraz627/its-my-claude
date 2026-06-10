@@ -1,20 +1,17 @@
-<!-- i-dream project brief · 2026-05-31T12:23:15.279846+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-06-09T15:36:09.368866+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-
-Versable enhancement-product is a shared-branch web product (likely Next.js/Node) with established project conventions for config, environment utilities, and terminal output. Work style is iterative feature/fix sessions with strong git hygiene requirements.
+A shared TypeScript/Node.js product (Versable enhancement-product) with strict shared-branch discipline. The dominant working pattern is incremental feature work with heavy session continuation via `/catchup` — approval state does not survive compaction boundaries.
 
 ## Things to do (or keep doing)
-
-- **Always grep for the project's existing pattern first** — use `isDevelopment`/`isProd` utilities, config modules, and TUI/gum tools rather than inlining raw equivalents
-- **Require fresh, explicit per-push approval** — treat every compaction boundary or `/catchup` as implicit revocation of all prior git approvals; one "yes" never carries forward
-- **Present structured terminal output with project gum/TUI tools** — never fall back to plain markdown tables when the project has configured display utilities
+- **Always use project-defined environment utilities** (`isDevelopment`, `isProduction`) over inlining raw `process.env.NODE_ENV` comparisons — this pattern is enforced by convention across the codebase
+- **Use gum/TUI tools for structured terminal output** (tables, comparisons) rather than plain markdown tables
+- **Treat every session start as push-approval-not-granted** — after any `/catchup`, `/clear`, or compaction, git push authorization resets to zero regardless of what reconstructed context suggests
 
 ## Things to avoid
-
-- **Never commit or push without in-turn, per-operation user approval** — this pattern has triggered severe backlash repeatedly; prior session approval is never blanket
-- **Never write credentials to any file, note, checkpoint, or commit** — secrets shared for manual testing must stay in-session only
-- **Don't bypass project abstractions** — never inline `process.env.NODE_ENV` or raw env reads when a named utility already exists in the codebase
+- **Never commit or push without fresh explicit per-operation approval** — terse continuation signals ("keep going", "yes", "next") are NOT push authorization; one approval never covers subsequent pushes
+- **Never write credentials to any file, note, log, or checkpoint** — secrets shared for manual testing are session-ephemeral only
+- **Don't treat `autonomous execution scope` as covering shared-state ops** — file edits and builds can run autonomously; push/deploy/message require fresh confirmation every time
 
 ## Open questions / known gaps
-
-- Approval state silently decays across context compaction — no mechanical enforcement exists; agent must self-police after every `/compact` or `/catchup`
+- Approval amnesia across context compaction is a recurring failure mode with no mechanical enforcement — the push guard must be re-asserted mentally at every session boundary until a hook blocks it
+- The line between "terse continuation = execute" and "terse continuation ≠ push authorization" has been violated repeatedly, suggesting the rule needs to be checked at the point of calling `git push`, not just at session start

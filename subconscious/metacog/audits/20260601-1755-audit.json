@@ -1,0 +1,60 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18449,
+    "correction_density": 0.03508771929824561,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15235087719298246,
+    "unit_count": 57
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-0 (ls -dt via Bash instead of Glob x3, rg+grep -vi pipe chains); unit-2 (python3 inline JSON for gh pr view output parsing, grep -E chains for comment-line filtering, tee /tmp pipeline); unit-3 (python3 inline JSON x3 for mcp-catalogue discovery — sixth+ consecutive cycle for this exact sub-variant; git ls-tree + python3 journal parsing compound; require_env grep with paste+awk inline); 3 of 6 tool-using units; thirty-sixth+ consecutive cycle above 50%, no downward trajectory",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-16 (mcp__render__list_logs called x3 consecutively with no intermediate diagnostic pivot or parameter variation between calls; identical to prior cycle count and pattern; no improvement trajectory)",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-0 (7+ consecutive rg+ls compound Bash searches with incremental pattern variation across multiple directories before AskUserQuestion pivot; same unit same session-type as prior cycle)",
+      "hook_false_positive_content_match:RECURRING:CONFIRMED:STRUCTURAL_FIXTURE — unit-21 (rg alternation command blocked because quoted regex body contained pipe-delimited token segments matching gated verbs; agent correctly identified via hook-feedback.sh and used python3 workaround — fourth consecutive cycle with identical pattern and identical recovery path; no variation in either trigger or response)",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit-21 (Edit gate_cli_actions.py fails x2 consecutive before successful Edit; file was read earlier in session but old_string matching failed without re-reading current state; 6 total Edit calls on that file with 3 failures across session; matches prior cycle plateau)",
+      "compound_command_overreach:RECURRING:STABLE — unit-2 (multi-file git diff for-loop + grep -E comment-filter + tee pipeline in single Bash call x2; bash calls fail with pipe-inside-quoted-regex issues); unit-3 (require_env grep with alternation + paste + awk inline; git ls-tree + python3 journal parsing compound); 2 units within prior 2-3 unit plateau",
+      "catalogue_discovery_shell_sub_variant:RECURRING:STABLE — unit-3 (python3 inline JSON for mcp-catalogue location attempted x3 at repo-root, ~/.claude root, then frontend/.claude before succeeding — sixth+ consecutive cycle flagging this exact sub-variant; agent always eventually succeeds on third path; established structural fixture)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 4,
+    "recommendations": [
+      "mcp_retry_without_diagnosis: No improvement across 3+ cycles. Recommend structural fix: before second list_logs call, inspect the cursor/offset parameter or add a since_timestamp filter — identical retries yield identical truncated windows. This is the only recurring bias not showing even partial-cycle improvement.",
+      "catalogue_discovery_shell_sub_variant: Six consecutive cycles of the same three-path python3 probe sequence. The fix is a one-time Write to persist the confirmed catalogue path (frontend/.claude/mcp-catalogue.json) into a project memory entry — subsequent sessions would Read memory instead of re-probing. Low-cost fix relative to recurrence frequency.",
+      "unit-40 clean execution (targeted Edits, no failures, correct tool selection) is a positive signal for scoped modification tasks — the bias pattern is primarily in open-ended discovery and MCP-iteration phases, not in targeted edit-verify loops. Recommendations should focus on the discovery phase rather than general behavior."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      7232042
+    ],
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      1000816
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      21813255
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      13711686
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      4402133
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      1625738
+    ]
+  ],
+  "timestamp": "2026-06-01T17:55:28.455129Z",
+  "tokens_used": 13553,
+  "units_analyzed": 9,
+  "units_total": 57
+}

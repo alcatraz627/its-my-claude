@@ -160,10 +160,45 @@ The two-axis rule (category × tier) for deciding where new config goes. Include
 **Surface:** Executable
 **Path:** `~/.claude/scripts/`
 
-Hook scripts, statusline, pm2-register, shell-mem (formerly diy-mem; see mig 0014), session-summary, `emit-event.sh`, `block-nested-claude.sh`, `rotate-*`, `prune-backups.sh`, `propose.sh`, `wal.sh`, `wal-convert.sh`, `validate-memory.sh`, `test-hooks.sh`, `schedule/schedule.sh` (gcc-schedule — launchd + Calendar one-shot CLI), hook-orchestrator (mig 0013), etc. — everything invoked by hooks or as a user-facing CLI.
+Hook scripts, statusline, pm2-register, shell-mem (formerly diy-mem; see mig 0014), session-summary, `emit-event.sh`, `block-nested-claude.sh`, `rotate-*`, `prune-backups.sh`, `propose.sh`, `wal.sh`, `wal-convert.sh`, `validate-memory.sh`, `test-hooks.sh`, hook-orchestrator (mig 0013), etc. — everything invoked by hooks or as a user-facing CLI.
+
+Note: scheduling artifacts (`schedule/schedule.sh`, `schedule/INSTRUCTIONS.md`) are physically under `~/.claude/scripts/` but conceptually belong to `std::claude::schedule` — see that section.
 
 **In scope:** any file expected to be invoked.
 **Out of scope:** reference docs describing how scripts work (live in `::code` or inline READMEs).
+
+---
+
+### `std::claude::schedule` — Local scheduling cluster **[facet]**
+
+**Surface:** Cross-cutting (executable + docs + rules)
+**Paths:**
+- `~/.claude/scripts/schedule/` — tool + Claude-facing instructions
+- `~/.claude/rules/` (scheduling-discipline.md, cron-calendar-companion.md)
+- `~/.claude/scheduled/` — registry + per-name state
+- `~/Library/LaunchAgents/com.alcatraz.*.plist` — launchd entries (outside `~/.claude/` by necessity)
+- Calendar.app "Automations" calendar — companion events
+
+The "fire shell commands on a schedule on this Mac" cluster. Conceptually unifies what's otherwise scattered across `::scripts` (the gcc-schedule tool), `::rules` (the two discipline rules), launchd's plist directory, and Calendar.app.
+
+Member artifacts:
+
+| Artifact | Path | Role |
+|---|---|---|
+| `gcc-schedule` (the tool) | `scripts/schedule/schedule.sh` | CLI: add/list/inventory/show/run/logs/enable/disable/duplicate/register/doctor/rm |
+| Claude-facing usage contract | `scripts/schedule/INSTRUCTIONS.md` | Read by Claude before invoking the tool — modes, PLANNED-block discipline, when to halt |
+| Cross-tool scheduling discipline | `rules/scheduling-discipline.md` | Naming, retire-after-fire, no-secrets-in-command, when-to-use-which-scheduler |
+| Mechanical companion rule | `rules/cron-calendar-companion.md` | Every cron gets a Calendar event for observability |
+| Runtime state | `~/.claude/scheduled/registry.json` + per-name `<dir>/{script.sh,meta.json}` | Source of truth gcc-schedule manages |
+| Audit lens | `gcc-schedule inventory` + `gcc-schedule doctor` | Read-only views; doctor catches drift |
+
+**Promoted from `::scripts` on 2026-06-01** (gcc-schedule v0.5) after the cluster reached 4 distinct artifacts (tool + INSTRUCTIONS + 2 sibling rules). Earlier rationale lived as a TODO comment in `::scripts`; removed now that this section exists.
+
+**In scope:** anything whose primary purpose is "schedule a local command", or any rule/doc primarily about that practice.
+**Out of scope:**
+- Remote Claude-prompt scheduling (`/schedule` skill, harness `CronCreate`) — belongs to `::skills` (the skill is the surface)
+- Long-running daemons that happen to be loaded as LaunchAgents but don't fire on a schedule (claude-ipc, atone-consolidate uses `StartInterval` not `StartCalendarInterval`) — adopted into gcc-schedule's registry for visibility, but conceptually background services
+- Calendar event use beyond cron companions (general Calendar.app integration) — there is none in this account today; would warrant its own cluster if it grew
 
 ---
 

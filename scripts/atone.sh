@@ -120,7 +120,35 @@ _git_commit() {
 
 # ─── add ──────────────────────────────────────────────────────────
 
+# EXIT trap for cmd_add — keeps the atone-stop-gate's markers in sync with
+# whether the mistake actually got recorded. Without this, an add that bounces
+# (e.g. the RCA fails lint) leaves the agent free to walk away from an unrecorded
+# mistake — the exact failure that lost the local-models /atone (2026-06-09).
+#   exit 0  → event written                      → clear failed + pending markers
+#   exit 5  → juror cleared (no event, by design) → clear both (obligation is gone)
+#   other   → genuine failure to record          → arm the failed-add marker so
+#             the gate (scripts/hooks/atone-stop-gate.sh) forces a fix + retry
+_add_exit_trap() {
+  local code=$?
+  [ "${_ATONE_ADD_ATTEMPTED:-0}" = "1" ] || return 0   # never reached the record attempt
+  local sd="$HOME/.claude/atone/.session-state"
+  local key="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"   # same derivation as the hooks
+  local fmark="$sd/$key.atone-add-failed"
+  local pmark="$sd/$key.pending-atone"
+  mkdir -p "$sd" 2>/dev/null || true
+  case "$code" in
+    0|5) rm -f "$fmark" "$pmark" 2>/dev/null || true ;;
+    *)   command -v jq >/dev/null 2>&1 && \
+           jq -cn --arg ts "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" --argjson c "$code" \
+             '{ts:$ts, code:$c, blocks:0,
+               reason:("atone add exited "+($c|tostring)+" before recording (RCA lint / validation / juror-dispatch error)")}' \
+             > "$fmark" 2>/dev/null || true ;;
+  esac
+}
+
 cmd_add() {
+  _ATONE_ADD_ATTEMPTED=0          # global (no `local`): the EXIT trap reads it
+  trap '_add_exit_trap' EXIT
   local slug="" title="" issue="" cause="" fix="" what_not=""
   local severity="" precheck="" tags_str="" cluster=""
   local project="" files_str="" rca_content="" rca_file=""
@@ -162,6 +190,10 @@ cmd_add() {
     S1|S2|S3) ;;
     *) _die "add: --severity must be S1|S2|S3 (got: $severity)" ;;
   esac
+
+  # From here on this is a real, well-formed record attempt: the EXIT trap now
+  # tracks its outcome (success/juror-clear → clear markers; failure → arm gate).
+  _ATONE_ADD_ATTEMPTED=1
 
   _require jq
 

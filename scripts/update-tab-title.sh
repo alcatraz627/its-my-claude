@@ -52,46 +52,36 @@ tab_load_state "$session_id" || true
 prior_focus="${FOCUS:-}"
 prior_base="${BASE:-}"
 
-# Base resolution:
-#   1. Cached LLM topic (overall focus, refreshed turn 1 + every Nth turn)
-#   2. Existing BASE in state (don't churn between LLM refreshes)
-#   3. Dir + git branch fallback
-# Deliberately NOT falling back to "last user message" — that turned the
-# title into a recency diary instead of an overall-focus indicator.
-cached_topic=$(cat "$topic_file" 2>/dev/null || true)
-new_base=""
-if [[ -n "$cached_topic" ]]; then
-  new_base="$cached_topic"
-elif [[ -n "$prior_base" ]]; then
-  new_base="$prior_base"
-fi
-if [[ -z "$new_base" ]]; then
-  dir=$(basename "${cwd:-$(pwd)}")
-  branch=$(cd "${cwd:-.}" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null || true)
-  new_base="Claude: $dir"
-  [[ -n "$branch" ]] && new_base="$new_base ($branch)"
-fi
-
-# Session name (from `claude --name X` at launch). When set, PREFIX the base so
-# the explicit name dominates while CWD context remains visible.
-#   ~/.claude/sessions/<pid>.json carries `name` field per Claude Code.
-# IDEMPOTENCY: prior turn's state may already have the prefix; strip it first,
-# then re-prepend. Prevents "name · name · name · base" runaway.
+# The base is the session's identity. A session you named with `claude --name X`
+# shows that name; an un-named one shows "Am❓ <folder>" — the ❓ is a visible
+# "this session has no name" flag, and the folder is the only identity hint we
+# have for it. The old "Claude: <folder> (<branch>)" form is dropped: "Claude:"
+# is constant noise, and the folder/branch already live in the statusline.
+#
+# The name lives in ~/.claude/sessions/<pid>.json, keyed by sessionId.
 session_name=""
 for sf in "$HOME/.claude/sessions"/*.json; do
   [[ -f "$sf" ]] || continue
-  sid_in_file=$(jq -r '.sessionId // empty' "$sf" 2>/dev/null)
-  if [[ "$sid_in_file" == "$session_id" ]]; then
+  if [[ "$(jq -r '.sessionId // empty' "$sf" 2>/dev/null)" == "$session_id" ]]; then
     session_name=$(jq -r '.name // empty' "$sf" 2>/dev/null)
     break
   fi
 done
-if [[ -n "$session_name" && "$session_name" != "null" ]]; then
-  # Strip any prior "$session_name · " prefixes (handles N-deep accumulation)
-  while [[ "$new_base" == "$session_name · "* ]]; do
-    new_base="${new_base#${session_name} · }"
-  done
-  new_base="$session_name · $new_base"
+[[ "$session_name" == "null" ]] && session_name=""
+
+# Branch only when it carries signal: on main/master the branch is redundant
+# with the statusline, so it just wastes the tab's ~20 chars.
+dir=$(basename "${cwd:-$(pwd)}")
+branch=$(cd "${cwd:-.}" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null || true)
+branch_suffix=""
+[[ -n "$branch" && "$branch" != "main" && "$branch" != "master" ]] && branch_suffix=" ($branch)"
+
+# Recomputed every turn from name + branch (both stable), so there is no prior
+# base to carry forward, churn, or accumulate a runaway prefix.
+if [[ -n "$session_name" ]]; then
+  new_base="${session_name}${branch_suffix}"
+else
+  new_base="Am❓ ${dir}${branch_suffix}"
 fi
 
 # End-of-turn implies no tools in flight — auto-heal any drift in the

@@ -1,0 +1,42 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.14637220366243678,
+    "unit_count": 36
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — all 5 units: 1c86d512-0 (ls|head via Bash instead of Glob; rg compounds via Bash); 1c86d512-3 (find -maxdepth via Bash instead of Glob; sips via Bash for icns inspection); 1c86d512-12 (awk NR==78 range via Bash instead of Read offset+limit; awk NR>=145 range via Bash; grep -E via Bash); 1c86d512-20 (sed -n NR,NR via Bash as Read substitute; awk NR range via Bash; grep -E via Bash for test output filtering; python3 inline JSON via Bash for domain list parsing); 100% of tool-using units this batch, thirty-fourth+ consecutive cycle above 50%, no downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 1 unit: 1c86d512-3 (iconutil -c iconset fails x2 with wrong output extension /tmp/_inspect-iconset instead of /tmp/_inspect.iconset before correct .iconset suffix succeeds — same iconutil sub-variant flagged in prior two consecutive cycles); 1 unit at or below prior 4-unit plateau but sub-variant is now third consecutive occurrence indicating fixture behavior",
+      "redundant_read_same_unit:RECURRING:STABLE:STRUCTURAL_FIXTURE — 2 units: 1c86d512-11 (Read daemon.rs x3 at tool positions 2, 4, 6 with no offset variation between second and third reads — fifth+ consecutive cycle flagging this exact file in this session, now confirmed structural fixture); 1c86d512-12 (Read weekly_briefing.rs x3 at positions 13, 14, 17 with no offset variation between second and third reads — same file same unit number third consecutive cycle); 2 units matches prior plateau; daemon.rs recurrence across 5+ cycles with no change is structural, not stochastic",
+      "compound_command_overreach:RECURRING:STABLE — 2 units: 1c86d512-3 (launchctl bootout + rm + pkill + sleep + lsregister x2 + build.sh in single Bash call — necessary orchestration but no intermediate checkpoints); 1c86d512-20 (cargo run x6 + python3 inline JSON + git add + git commit in single Bash call smoke-test sequence); 2 units within prior 2-3 unit plateau",
+      "optimistic_edit_without_read:RECURRING:POSSIBLY_IMPROVING — 1 unit: 1c86d512-20 (Edit src/main.rs fails once with no preceding Read — single-failure variant; Read head -20 then Edit succeeds); 1 unit at or below prior 1-2 unit plateau, improvement trajectory holds"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 5,
+    "recommendations": [
+      "redundant_read_same_unit on daemon.rs has now fired in 5+ consecutive cycles on the same file — this is a structural fixture in the agent's read-before-edit pattern for this file, not a calibration failure. Flag for the session to use Read with targeted offset+limit rather than full-file re-reads; the file is large enough that full re-reads on positions 4 and 6 retrieve identical windows with no new information",
+      "iconutil .iconset suffix error has now fired in 3 consecutive cycles — the -o flag requires the output path to end in .iconset (macOS enforces this). This is a learnable fact; recommend adding a note to project memory or a pre-command check pattern since the same file is being inspected repeatedly",
+      "shell_tool_preference_violations and git_push_approval patterns are already in prior cycle recommendations with no improvement trajectory — deprioritized per recurrence policy; no new recommendation warranted this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 0
+  },
+  "sessions": [
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      19837608
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      11216522
+    ]
+  ],
+  "timestamp": "2026-06-01T09:06:17.197527Z",
+  "tokens_used": 10990,
+  "units_analyzed": 5,
+  "units_total": 36
+}

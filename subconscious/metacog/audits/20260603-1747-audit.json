@@ -1,0 +1,50 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 19075,
+    "correction_density": 0.05263157894736842,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2711578947368421,
+    "unit_count": 19
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-0 (ls -dt via Bash instead of Glob; rg+grep pipe chains across 13+ consecutive compound searches, regression vs prior cycle 8+); unit-2 (python3 inline JSON for gh pr view output parsing; grep -E chains for comment-line filtering; tee /tmp pipeline compound); unit-3 (python3 inline JSON x3 for mcp-catalogue discovery — eighth+ consecutive cycle for this exact sub-variant; require_env grep with paste+awk inline); 3 of 6 substantive tool-using units; thirty-eighth+ consecutive cycle above 50%, zero downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:WORSENING — unit-0 (13+ consecutive rg+ls compound Bash searches with incremental pattern variation across multiple directories before AskUserQuestion pivot; iteration count regressed from prior cycle 8+ to 13+; no diagnostic pivot between attempts; same unit same session-type pattern as prior cycle; escalated from STABLE due to widening pivot threshold)",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-16 (mcp__render__list_logs called x3 consecutively with no intermediate diagnostic pivot, no parameter variation, no fallback to Bash log fetch; fifth consecutive cycle with identical count and pattern; no improvement trajectory; approaching structural-fixture threshold)",
+      "hook_false_positive_content_match:RECURRING:CONFIRMED:STRUCTURAL_FIXTURE — unit-21 (rg alternation command blocked because quoted regex body contained pipe-delimited token segments matching gated verbs; agent correctly identified via hook-feedback.sh and used python3 workaround — sixth consecutive cycle with identical trigger pattern and identical recovery path; no variation in either the blocked command shape or the workaround strategy)",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit-21 (Edit gate_cli_actions.py fails x2 of 5 total calls; plateau maintained at same 2-of-5 rate as prior cycle; unit-40 shows zero-failure targeted edits on simpler isolated targets, suggesting context-dependent calibration rather than uniform improvement)",
+      "compound_command_overreach:RECURRING:STABLE — unit-2 (multi-file git diff for-loop + grep -E comment-filter + tee /tmp pipeline in single Bash call; one variant fails with pipe-inside-quoted-regex issue); unit-3 (require_env grep with alternation + paste + awk inline; git ls-tree + python3 journal parsing compound); 2 units matching prior cycle plateau",
+      "catalogue_discovery_shell_sub_variant:RECURRING:STABLE — unit-3 (python3 inline JSON for mcp-catalogue location attempted x3: repo-root .claude/mcp-catalogue.json fails, ~/.claude root fails, frontend/.claude/mcp-catalogue.json succeeds — eighth+ consecutive cycle with identical 3-path search sequence and same eventual success path; established structural fixture, no variation in trigger pattern or resolution)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 5,
+    "recommendations": [
+      "bash_retry_without_diagnosis escalated to WORSENING: iteration count regressed from 8+ to 13+ in same unit type across consecutive cycles. The widening pivot threshold is the signal — recommend monitoring whether next cycle exceeds 13+ before AskUserQuestion; if so, classify as STRUCTURAL_FIXTURE with a hard iteration cap as the required fix rather than bias remediation.",
+      "catalogue_discovery_shell_sub_variant has fired 8 consecutive cycles with zero variation in trigger, path sequence, or resolution — this is a structural fixture. Deprioritize from active recommendations; flag only if the resolution path changes or a fourth path attempt appears.",
+      "hook_false_positive_content_match is similarly entrenched (6 cycles, identical trigger and identical python3 workaround recovery). No further remediation recommendations warranted unless recovery path degrades or the blocked command shape changes.",
+      "mcp_retry_without_diagnosis has held at x3 retries for 5 consecutive cycles with no improvement. If the pattern persists unchanged in the next two cycles, reclassify as structural fixture and stop recommending fixes — the agent has no diagnostic path available when MCP calls return partial data without error signals.",
+      "optimistic_edit_without_read shows a context-sensitivity pattern: failures cluster on complex multi-edit sequences against frequently-modified files; unit-40 zero-failure edits on isolated targets suggest the bias is narrower than the label implies. Recommend narrowing the label to 'optimistic_edit_on_hot_files' in the next cycle assessment if the pattern holds."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      8256911
+    ],
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      2885873
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      3168896
+    ]
+  ],
+  "timestamp": "2026-06-03T17:47:52.459105Z",
+  "tokens_used": 13397,
+  "units_analyzed": 9,
+  "units_total": 19
+}

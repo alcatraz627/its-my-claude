@@ -1,0 +1,47 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 19943,
+    "correction_density": 0.07692307692307693,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4248207703147855,
+    "unit_count": 13
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-10 (cat+head-80 via Bash for JSON config files instead of Read); unit-18 (ls-la+find 5-type compound via Bash instead of LS/Glob); unit-30 (ls-la via Bash for .claude/ and lib/providers/ directory inspection); unit-31 (ls-la via Bash for tests/ + pandas inline json+pd.read_excel via Bash for catalog/benchmark analysis instead of mcp__file-tools); 4 of 13 substantive tool-using units; count matches prior three cycles exactly, zero downward trajectory across seven consecutive cycles",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-5 (mcp__file-tools__list_sheets called on two distinct file targets both fail success=false, pivot to pandas Bash heredoc with no intermediate diagnostic step; tool identity and failure count structurally identical to prior six cycles; trajectory described as possibly_improving three cycles ago has never materialized; no structural change for seventh consecutive cycle)",
+      "compound_command_overreach:RECURRING:STABLE — unit-30 (git status+stash list+branch+log compound fails success=false; decomposed into individual calls only after failure; pattern and count match prior two cycles exactly)",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-30 (git stash list fails success=false; retried with ATONE_INDEX_OK=1 env prefix without any intermediate diagnostic step; structurally identical to prior cycle)",
+      "optimistic_write_without_verification:RECURRING:STABLE — unit-31 (Write to tests/benchmark_client_classifier.py fails success=false x2 consecutively; file-existence check via Bash run only after both failures; third Write succeeds; structurally identical to prior cycle at same 2-of-N failure rate before check)",
+      "anchoring:RECURRING — unit-1 (hardware profiling via four sequential sysctl/system_profiler/df/ollama Bash calls treated as mandatory prerequisite before local model recommendation; recurs from 2026-06-07 single prior instance; count too low to classify trajectory)"
+    ],
+    "calibration_score": 0.12,
+    "overconfident_count": 5,
+    "recommendations": [
+      "All six detected biases are RECURRING:STABLE across 3-7 consecutive cycles with zero improvement trajectory; additional advisory recommendations are deprioritized per calibration history instructions — structural enforcement at the hook or tooling layer is the only mechanism likely to change the trajectory",
+      "shell_tool_preference_violations and mcp_retry_without_diagnosis together account for all 5 overconfident units; if a single enforcement action were prioritized, a PreToolUse hook blocking Bash cat/head/ls on paths that Read/LS/Glob/mcp__file-tools could serve would have the highest per-cycle impact across both patterns",
+      "No new bias patterns detected in this session"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      358017
+    ],
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      5954349
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      1205640
+    ]
+  ],
+  "timestamp": "2026-06-08T12:02:50.238029Z",
+  "tokens_used": 6382,
+  "units_analyzed": 13,
+  "units_total": 13
+}

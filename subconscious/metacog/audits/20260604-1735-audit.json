@@ -1,0 +1,43 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 20919,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.0,
+    "unit_count": 7
+  },
+  "response": {
+    "biases_detected": [
+      "anchoring — investigation path followed known directory conventions before confirming they applied to the current tool system",
+      "availability — heavy reliance on transcript scanning to infer TodoWrite vs Task system prevalence, which biases toward recently-used patterns"
+    ],
+    "calibration_score": 0.7,
+    "overconfident_count": 0,
+    "recommendations": [
+      "AskUserQuestion was used mid-investigation rather than after forming a hypothesis — earlier clarification would have reduced the 14-bash-call exploration chain",
+      "The unit spent significant tokens discovering that todos are stored under ~/.claude/tasks/ rather than a sync-todos path; a single targeted find before the multi-step shell tour would have been faster",
+      "TaskCreate was called 6 times in a batch after a long read phase — consider whether all 6 tasks needed creating in this turn or whether the count reflects scope-creep from the exploration"
+    ],
+    "underconfident_count": 1,
+    "well_calibrated_count": 1
+  },
+  "sessions": [
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      1112670
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      4749163
+    ],
+    [
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      1725423
+    ]
+  ],
+  "timestamp": "2026-06-04T17:35:18.162652Z",
+  "tokens_used": 2882,
+  "units_analyzed": 1,
+  "units_total": 7
+}

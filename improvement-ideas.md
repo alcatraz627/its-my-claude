@@ -388,3 +388,96 @@ When a hook script is created via the Write tool and wired into `settings.json` 
   in Stop hook with a consecutive-error streak cap (resets on clean turn)     
   gives safe error-recovery without keystroke automation.                     
 
+
+## 2026-06-01 — Default-on PLANNED block + --dry-run for any Claude-facing CLI
+
+When a CLI tool is meant to be invoked by Claude (or by a human via a Claude session), make every mutating subcommand print a structured "this is what will be created/changed" block **before** any state mutation, and provide `--dry-run` to exit after the block. Rationale: (a) Claude can self-verify the resolved interpretation matches the human intent without halting and asking; (b) the human reading the conversation sees the resolved spec, not just the args; (c) `--dry-run` becomes a natural "show me what would happen" mode for ambiguous requests. Implemented in `gcc-schedule add` v0.4 — the PLANNED block always prints, --dry-run exits after, no flag needed for the safety property. Compare with the alternative (`--confirm` opt-in): Claude would just always pass --confirm and the protection is theater. The default-on version is the actual safety property.
+
+**Apply:** for any future bash/python CLI under `~/.claude/scripts/` that Claude will invoke and that mutates state (filesystem, launchd, registry, network), follow this pattern: validate-everything-first → print PLANNED block → check --dry-run → mutate. The split also enforces a useful refactor: no parsing can be entangled with mutation.
+
+  ## 2026-06-01 — Earn the namespace promotion by writing the missing artefact
+  first                                                                       
+                                                                              
+  When deciding whether to promote a thematic cluster into its own            
+  NAMESPACE.md section (or any equivalent "named home" decision), resist the  
+  temptation to spin it as a placeholder and back-fill later. The convention  
+  should describe **existing clusters**, not aspirations. The honest path: if 
+  the cluster is one artefact short of the bar, **write that artefact first** 
+  as a deliberate prerequisite, then promote.                                 
+                                                                              
+  Example from gcc-schedule v0.5: the std::claude::schedule namespace needed a
+  3rd cluster artefact (tool + INSTRUCTIONS.md = 2, plus the existing cron-   
+  calendar-companion rule = 2.5, half-counting since it crossed namespaces).  
+  Writing rules/scheduling-discipline.md BEFORE promoting earned the row by   
+  making the count honest. The 4-artefact tally — tool + tool-specific        
+  contract                                                                    
+  + cross-tool practice rule + mechanical companion rule — is now the         
+  cluster's                                                                   
+  documented composition rather than a "TBD" promise.                         
+                                                                              
+  **Apply:** before promoting any thematic group (namespace, skill cluster,   
+  rules subsection), count concrete artefacts that already exist. If short,   
+  write the missing one as the explicit prerequisite. Bonus: the writing      
+  exercise often reveals whether the cluster is actually coherent — if you    
+  struggle to articulate the discipline doc, the cluster may not yet be a     
+  thing.                                                                      
+
+
+  ## 2026-06-05 — Model the runtime BEFORE building anything multi-session /  
+  concurrency-sensitive                                                       
+                                                                              
+  When a system runs as hooks/scripts shared by N concurrent Claude sessions  
+  (and they routinely share a project dir — ~/.claude is the extreme case),   
+  write the explicit runtime model FIRST: **identity** (only stdin session_id 
+  is trustworthy — not .current-session-id/.turn-state, both shared across    
+  terminals), **concurrency** (every per-session artifact must be keyed by    
+  session, never by project path/memory-key, or same-dir sessions clobber it  
+  last-writer-wins), **lifecycle** (what's wiped on resume vs durable). In the
+  todo-sync arc, FIVE bugs shared one root: assuming the runtime without      
+  verifying. Two anti-bodies that worked: (1) when the user asks "is this a   
+  smell or a one-off?", treat a repeat as a smell and audit the foundation;   
+  (2)                                                                         
+  a **fresh adversarial sub-agent** auditing your own classification — it     
+  found                                                                       
+  6 collision points where my in-context classification saw 2 (a model        
+  reviewing its own design is blind to its own assumptions). Also banked:     
+  macOS find /tmp/ needs the trailing slash (symlink); a real timeout needs   
+  fork + process-group-kill, not perl alarm (orphans the child, holds the     
+  pipe).                                                                      
+
+
+  ## 2026-06-09 — Open-loop systems, launchd PATH, multi-writer terminal      
+  titles                                                                      
+                                                                              
+  • **Open-loop / write-only systems need HARDER live grounding, not less.** A
+  Ghostty                                                                     
+  tab title is write-only (no CLI/AX/escape read-back), so a wrong root-cause 
+  claim has                                                                   
+  no cheap falsifier and survives until a human contradicts it. When a system 
+  gives no                                                                    
+  feedback loop, ground every "what is X now?" claim in present-tense sources 
+  (ps,                                                                        
+  process tree, env, sourcing the file) — never a cached pointer / /tmp mtime 
+  /                                                                           
+  registry. (Filed as atone status-verdict-from-stale-mental-model-no-re-check,
+  S3.)                                                                        
+  • **Scheduled (launchd) commands run in a clean env where **zsh -l -c**     
+  skips **~/.zshrc                                                            
+  (login but non-interactive), so PATH additions and aliases there are absent 
+  → a bare                                                                    
+  claude/node/etc. fails. Use absolute binary paths in any scheduled command. 
+  • **A terminal tab title can have up to 4 independent writers**: oh-my-zsh  
+  auto-title                                                                  
+  (DISABLE_AUTO_TITLE), Ghostty shell-integration (GHOSTTY_SHELL_FEATURES=…,  
+  title →                                                                     
+  shell-integration-features = no-title), claude-ipc badge (CLAUDE_IPC_BADGE),
+  and                                                                         
+  Claude Code (CLAUDE_CODE_DISABLE_TERMINAL_TITLE). Before blaming a custom   
+  title hook,                                                                 
+  enumerate writers via env + the process tree.                               
+  • **A bash-sourceable KEY=VALUE state file stores values via **printf %q    
+  (ANSI-C                                                                     
+  quoting, e.g. BASE=$'Am\342\235\223 .claude'). Read it by *sourcing*, not by
+  grepping                                                                    
+  the raw line — a raw read looks "broken" when the value is fine.            
+

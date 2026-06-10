@@ -1,0 +1,56 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18320,
+    "correction_density": 0.05172413793103448,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.18221175207458098,
+    "unit_count": 58
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-0 (ls -dt via Bash instead of Glob x2; rg+grep -vi pipe chains across 8+ consecutive compound searches); unit-2 (python3 inline JSON for gh pr view output parsing; grep -E chains for comment-line filtering; tee /tmp pipeline compound); unit-3 (python3 inline JSON x3 for mcp-catalogue discovery — seventh+ consecutive cycle for this exact sub-variant; git ls-tree + python3 journal parsing compound; require_env grep with paste+awk inline); 3 of 6 tool-using units, thirty-seventh+ consecutive cycle above 50%, zero downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-0 (8+ consecutive rg+ls compound Bash searches with incremental pattern variation across multiple directories before AskUserQuestion pivot; same session same unit pattern as prior cycle; no diagnostic pivot between attempts)",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-16 (mcp__render__list_logs called x3 consecutively with no intermediate diagnostic pivot, no parameter variation, no fallback to Bash log fetch; identical to prior two cycle counts and pattern; 'possibly_improving' trajectory from two cycles ago has fully stalled — zero improvement across three consecutive cycles)",
+      "hook_false_positive_content_match:RECURRING:CONFIRMED:STRUCTURAL_FIXTURE — unit-21 (rg alternation command blocked because quoted regex body contained pipe-delimited token segments matching gated verbs; agent correctly identified via hook-feedback.sh and used python3 workaround — fifth consecutive cycle with identical trigger pattern and identical recovery path; no variation in either the blocked command shape or the workaround strategy)",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit-21 (Edit gate_cli_actions.py fails x2 of 5 total calls; file was read earlier in session but old_string matching failed without re-reading current state; marginal improvement from prior cycle 3-of-5 failures to 2-of-5, but pattern persists)",
+      "compound_command_overreach:RECURRING:STABLE — unit-2 (multi-file git diff for-loop + grep -E comment-filter + tee /tmp pipeline in single Bash call; one variant fails with pipe-inside-quoted-regex issue); unit-3 (require_env grep with alternation + paste + awk inline; git ls-tree + python3 journal parsing compound); 2 units within prior 2-unit plateau",
+      "catalogue_discovery_shell_sub_variant:RECURRING:STABLE — unit-3 (python3 inline JSON for mcp-catalogue location attempted x3: first at repo-root .claude/mcp-catalogue.json fails, second at global ~/.claude fails, third at frontend/.claude/mcp-catalogue.json succeeds — seventh+ consecutive cycle with this exact 3-path search sequence and same eventual success path; established structural fixture, no variation in trigger, pattern, or resolution)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 4,
+    "recommendations": [
+      "mcp_retry_without_diagnosis has appeared at identical severity for three consecutive cycles with the 'possibly_improving' trajectory label from cycle N-2 now confirmed false — a hook enforcing a minimum diagnostic step (parameter variation or tool switch) after 2 identical consecutive MCP calls would mechanically prevent this; deprioritized in prior cycles as 'possibly improving' but that label should be dropped",
+      "catalogue_discovery_shell_sub_variant is a confirmed structural fixture across 7+ cycles with no variation — the 3-path discovery loop is deterministic; persisting the per-project catalogue path to a known location (e.g. a one-line .claude/mcp-catalogue-path.txt) would eliminate the loop entirely at near-zero cost",
+      "shell_tool_preference_violations and compound_command_overreach remain flat across 37+ cycles; per standing instruction deprioritized, no new signal to escalate"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      8084098
+    ],
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      2195180
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      21829452
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      14018714
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      1957595
+    ]
+  ],
+  "timestamp": "2026-06-02T13:30:10.843073Z",
+  "tokens_used": 13077,
+  "units_analyzed": 9,
+  "units_total": 58
+}

@@ -1,0 +1,39 @@
+{
+  "ts": "2026-06-04T09:45:32Z",
+  "session_id": "todo-discipline",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260604-todo-discipline.claude.md",
+  "insights": {
+    "worked": [
+      "**Gotchas (now durable in `rules/shell.md`):**",
+      "`find /tmp \u2026` descends nothing \u2014 `/tmp` is a symlink to `/private/tmp`; BSD",
+      "`perl -e 'alarm N; exec @ARGV'` does **not** time out \u2014 it kills the shell",
+      "`~/.claude/tasks/<sid>/` is a volatile cache (drops completed, wipes on",
+      "`~/.claude/.current-session-id` and the freshest `~/.claude/.turn-state/*.json`",
+      "**Architectural truth:** a hook can **never** call `TaskCreate`/`TaskUpdate` \u2014",
+      "**User feedback:** wants continuous while-working sync (not `/catchup`-time);",
+      "**Notes for future agents:** sync reads the transcript every Stop"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "`find /tmp \u2026` descends nothing \u2014 `/tmp` is a symlink to `/private/tmp`; BSD",
+      "`perl -e 'alarm N; exec @ARGV'` does **not** time out \u2014 it kills the shell",
+      "`~/.claude/tasks/<sid>/` is a volatile cache (drops completed, wipes on",
+      "`~/.claude/.current-session-id` and the freshest `~/.claude/.turn-state/*.json`",
+      "**Architectural truth:** a hook can **never** call `TaskCreate`/`TaskUpdate` \u2014",
+      "**User feedback:** wants continuous while-working sync (not `/catchup`-time);",
+      "**Notes for future agents:** sync reads the transcript every Stop"
+    ],
+    "notes": [],
+    "feedback": [
+      "**Notes for future agents:** sync reads the transcript every Stop"
+    ]
+  },
+  "pending": [
+    "**(Scheduled, not a task)** Tue 2026-06-09 15:00 \u2014 review telemetry. The",
+    "**(Optional, deferred)** Bump the `its-my-config` aggregate submodule pointer",
+    "**(Known limit, not fixable)** Cross-session nudge is *mitigated* (fail-safe",
+    "No code work items open; all 17 build/review/telemetry tasks completed."
+  ],
+  "tags": []
+}

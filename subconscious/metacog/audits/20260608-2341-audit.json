@@ -1,0 +1,196 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.15384615384615385,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.5028332823747151,
+    "unit_count": 13
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 5 of 13 substantive tool-using units (units 10, 18, 30, 31, 47); count matches or ties prior three cycle peaks (4/13, 5/9, 5/10); zero downward trajectory across nine consecutive cycles; pattern is entrenched",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-5 structurally identical to all prior nine cycle instances; unit-47 introduces confirmed skip-MCP-entirely variant (adaptive avoidance), representing a behavioral drift from retry-without-diagnosis to bypass-entirely; both sub-variants now active",
+      "compound_command_overreach:RECURRING:STABLE — unit-30; count, structure, and decompose-only-after-failure sequence match prior three cycles exactly",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-30 git stash retry with env prefix without intermediate diagnostic; structurally identical to prior two cycles",
+      "optimistic_write_without_verification:RECURRING:STABLE — unit-31 Write fails x2 before existence check; third consecutive cycle with identical sequence and failure rate",
+      "analysis_conclusion_without_sufficient_verification:RECURRING — unit-47 (second instance; previously labeled NEW in 2026-06-08 cycle); now confirmed recurring at same session slot with same Corrected outcome; trajectory should be escalated"
+    ],
+    "calibration_score": 0.1,
+    "cross_references": [
+      {
+        "insight": "terse-continuation-as-git-push-approval (2026-05-22)",
+        "note": "Unit-48 is a correction-response turn; no git push was proposed or ambiguously approved; dream insight not violated this cycle",
+        "relevant_units": [
+          "6412e83a-274e-438c-8fba-24fa08185bb3-48"
+        ],
+        "status": "honored"
+      },
+      {
+        "insight": "data-hallucination-as-gap-filling (2026-05-22)",
+        "note": "Unit-47 reported analysis conclusions from pandas aggregate script without verifying interpretation; user correction (unit-48) indicates the framing was wrong; structurally matches the gap-filling pattern — synthesized plausible interpretation rather than surfacing uncertainty before reporting",
+        "relevant_units": [
+          "6412e83a-274e-438c-8fba-24fa08185bb3-47"
+        ],
+        "status": "violated"
+      }
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "analysis_conclusion_without_sufficient_verification is now RECURRING: second instance in consecutive cycles at unit-47; recommend adding an explicit verification step (spot-check a sample of the raw diff rows manually before reporting interpretation) rather than relying solely on aggregate pandas script output",
+      "mcp_bypass_entirely variant (unit-47) is distinct from retry-without-diagnosis (unit-5) and may indicate the agent has learned to avoid MCP__file-tools entirely for Excel in this project context; this silent bypass is harder to detect than the retry pattern; recommend ToolSearch before any Excel analysis regardless of prior session MCP failures",
+      "shell_tool_preference_violations and optimistic_write_without_verification have shown zero improvement across nine consecutive cycles; deprioritize recommending fixes for these as they appear structurally resistant to in-cycle correction without external enforcement (hooks or pre-tool checks)",
+      "compound_command_overreach and bash_retry_without_diagnosis are co-located in unit-30 every cycle; decomposing git state queries into individual calls proactively (rather than reactively) would eliminate both simultaneously"
+    ],
+    "session_calibration_score": 0.1,
+    "session_notes": "Calibration score is consistent with prior eight cycles (range 0.10–0.12); no meaningful improvement detected; overconfident count stable at 5–6; all five core bias patterns persist unchanged; analysis_conclusion_without_sufficient_verification is the only pattern showing trajectory change (NEW→RECURRING); mcp_bypass_entirely is a newly confirmed behavioral variant that warrants separate tracking from mcp_retry_without_diagnosis",
+    "underconfident_count": 0,
+    "units": [
+      {
+        "biases": [],
+        "calibration": 0.8,
+        "confidence_score": 0.85,
+        "error_pattern_match": null,
+        "notes": "Double Read before Edit is mildly redundant but acceptable; outcome Accepted; well-calibrated.",
+        "strategy_score": 0.8,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-0"
+      },
+      {
+        "biases": [
+          "shell_tool_preference_violations",
+          "mcp_retry_without_diagnosis"
+        ],
+        "calibration": -0.5,
+        "confidence_score": -0.5,
+        "error_pattern_match": "mcp_retry_without_diagnosis:RECURRING:STABLE — two distinct mcp__file-tools__list_sheets calls both fail success=false, pivot immediately to pandas Bash heredoc with no intermediate diagnostic; structurally identical to every prior cycle instance; no improvement across nine consecutive cycles",
+        "notes": "Unit 5 repeats identically across all recorded cycles. Count and structure unchanged.",
+        "strategy_score": 0.35,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-5"
+      },
+      {
+        "biases": [],
+        "calibration": 0.9,
+        "confidence_score": 0.9,
+        "error_pattern_match": null,
+        "notes": "Correction-response unit, no tools, explanation only. Well-calibrated.",
+        "strategy_score": 0.9,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-9"
+      },
+      {
+        "biases": [
+          "shell_tool_preference_violations"
+        ],
+        "calibration": -0.4,
+        "confidence_score": -0.4,
+        "error_pattern_match": "shell_tool_preference_violations:RECURRING:STABLE — cat+head-80 via Bash on JSON config files instead of Read; identical to every prior cycle unit-10 instance",
+        "notes": "Same file types, same Bash pattern, same unit slot as prior cycles.",
+        "strategy_score": 0.4,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-10"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "confidence_score": 0.85,
+        "error_pattern_match": null,
+        "notes": "No-tool explanation. Well-calibrated.",
+        "strategy_score": 0.9,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-13"
+      },
+      {
+        "biases": [
+          "shell_tool_preference_violations"
+        ],
+        "calibration": -0.4,
+        "confidence_score": -0.4,
+        "error_pattern_match": "shell_tool_preference_violations:RECURRING:STABLE — ls-la + find 4-type compound via Bash instead of LS/Glob; identical pattern to prior cycle unit-18 instances across five consecutive cycles",
+        "notes": "Count and structure unchanged from prior cycles.",
+        "strategy_score": 0.4,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-18"
+      },
+      {
+        "biases": [],
+        "calibration": 0.9,
+        "confidence_score": 0.9,
+        "error_pattern_match": null,
+        "notes": "Compact directive, no tools, trivial unit.",
+        "strategy_score": 1.0,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-28"
+      },
+      {
+        "biases": [
+          "shell_tool_preference_violations",
+          "compound_command_overreach",
+          "bash_retry_without_diagnosis"
+        ],
+        "calibration": -0.5,
+        "confidence_score": -0.5,
+        "error_pattern_match": "compound_command_overreach:RECURRING:STABLE — git status+stash list+branch+log compound fails success=false, decomposed only after failure; bash_retry_without_diagnosis:RECURRING:STABLE — git stash list fails then retried with ATONE_INDEX_OK=1 prefix without intermediate diagnostic; shell_tool_preference_violations — ls-la for .claude/ and lib/providers/ directory inspection; all three patterns structurally identical to prior two cycles, count unchanged, no improvement trajectory",
+        "notes": "Three simultaneous recurring biases in one unit; positive aspect: Agent dispatches with output persisted to disk (sub-agent-outputs rule honored).",
+        "strategy_score": 0.45,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-30"
+      },
+      {
+        "biases": [
+          "shell_tool_preference_violations",
+          "optimistic_write_without_verification"
+        ],
+        "calibration": -0.5,
+        "confidence_score": -0.5,
+        "error_pattern_match": "optimistic_write_without_verification:RECURRING:STABLE — Write to benchmark_client_classifier.py fails success=false x2 consecutively, file-existence check via Bash run only after both failures, third Write succeeds; identical sequence and failure rate to prior two cycle instances; shell_tool_preference_violations — ls-la via Bash for tests/ inspection, python3 inline JSON x2 via Bash for catalog analysis instead of mcp__file-tools or Read",
+        "notes": "Pattern count and structure unchanged for third consecutive cycle.",
+        "strategy_score": 0.4,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-31"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "confidence_score": 0.85,
+        "error_pattern_match": null,
+        "notes": "Web research with ToolSearch, multiple WebSearch+WebFetch, output persisted to disk before returning. Well-calibrated, sub-agent-outputs rule honored for materialized research.",
+        "strategy_score": 0.85,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-33"
+      },
+      {
+        "biases": [],
+        "calibration": 0.9,
+        "confidence_score": 0.9,
+        "error_pattern_match": null,
+        "notes": "No-tool terse skip/clarification unit. Well-calibrated.",
+        "strategy_score": 1.0,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-43"
+      },
+      {
+        "biases": [
+          "shell_tool_preference_violations",
+          "analysis_conclusion_without_sufficient_verification"
+        ],
+        "calibration": -0.6,
+        "confidence_score": -0.6,
+        "error_pattern_match": "analysis_conclusion_without_sufficient_verification:RECURRING — unit outcome Corrected; inline pandas Bash analysis scripts ran success=true but result interpretation was not verified before reporting; structurally identical to prior cycle unit-47 (same session slot, same Corrected outcome, same analysis-without-verification root); now second instance, trajectory should be upgraded from NEW to RECURRING; shell_tool_preference_violations — ls-la via Bash for Downloads/Jun_8/ directory instead of LS; mcp__file-tools bypassed entirely for Excel analysis with no ToolSearch attempt (unit-5 adaptive avoidance confirmed as a distinct variant: not retry-without-diagnosis but skip-MCP-entirely)",
+        "notes": "mcp_retry_without_diagnosis variant confirmed: unit now skips MCP entirely rather than failing twice before pivoting; this is a behavioral adaptation that trades one failure mode for another (silent bypass vs noisy retry). Dream insight 2026-05-22 violation: analysis gap-filling pattern — conclusions synthesized from pandas script output without verifying interpretation before reporting.",
+        "strategy_score": 0.35,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-47"
+      },
+      {
+        "biases": [],
+        "calibration": 0.75,
+        "confidence_score": 0.75,
+        "error_pattern_match": null,
+        "notes": "Correction-response unit; thorough git diff investigation before edits; one Edit fails then Read re-grounds before retry — appropriate caution; outcome Accepted. Positive: no terse-continuation-as-push-approval ambiguity detected (dream insight honored).",
+        "strategy_score": 0.7,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-48"
+      }
+    ],
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      6518334
+    ]
+  ],
+  "timestamp": "2026-06-08T23:41:26.320290Z",
+  "tokens_used": 12851,
+  "units_analyzed": 13,
+  "units_total": 13
+}

@@ -28,6 +28,15 @@ MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
 
 [ -f "$MARKER" ] || exit 0  # nothing pending → nothing to do
 
+# Explicit /atone markers (explicit:true) are owned by the BLOCKING gate
+# (scripts/hooks/atone-stop-gate.sh, a direct settings.json Stop entry whose
+# stdout can carry a decision:block). This hook runs inside the orchestrator,
+# whose task stdout is /dev/null'd, so it can only nudge — never enforce. Leave
+# explicit markers to the gate so the two don't both age/clear the same file.
+if [ "$(jq -r '.explicit // false' "$MARKER" 2>/dev/null)" = "true" ]; then
+  exit 0
+fi
+
 # Read the marker
 MARKER_TS=$(jq -r '.ts // empty' "$MARKER" 2>/dev/null)
 MARKER_TURNS=$(jq -r '.turns_unaddressed // 0' "$MARKER" 2>/dev/null)

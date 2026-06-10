@@ -1,0 +1,44 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 20774,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2682970563455679,
+    "unit_count": 13
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-16 (ls -la via Bash for venv binary path check; ls piped to rg for bin/ listing instead of LS/Glob); unit-8297eca4-4 (ls for magi/ and personas/ directory inspection; sed -n '1,40p' for first-40-lines read instead of Read tool); 2 of 5 substantive tool-using units; prior cycle showed first downward signal at 2/13 — this cycle's smaller denominator makes rate comparison ambiguous but no improvement is confirmed",
+      "anchoring:RECURRING:STABLE — unit-1 (four sequential sysctl/system_profiler/df/ollama Bash calls as mandatory hardware-profiling prerequisite before local model recommendation; structurally identical to 2026-06-07 instance at same session entry slot; third consecutive confirmed instance across calibration history; zero improvement trajectory)",
+      "compound_command_overreach:RECURRING:WORSENING — unit-8 (curl wait-loop + rg log-grep compound fails success=false; decomposed into individual calls only after failure; matches prior three-cycle pattern exactly); unit-8297eca4-4 (git-status compound fails; heredoc-in-compound via inline cat-to-file pattern fails success=false twice before Write+Bash decomposition is adopted); two distinct failure instances this cycle represents a new per-session peak; heredoc-in-compound is a previously unobserved sub-variant of this pattern"
+    ],
+    "calibration_score": 0.05,
+    "overconfident_count": 4,
+    "recommendations": [
+      "compound_command_overreach should be escalated from STABLE to WORSENING: two failure instances per session is a new peak, and the heredoc-in-compound sub-variant (unit-8297eca4-4: cat heredoc inside a compound Bash block failing, then Write+Bash decomposition adopted) has not appeared in prior calibration history — track as a distinct variant",
+      "anchoring at session entry is confirmed across three consecutive sessions at the same structural slot; the fix has been recommended in two prior cycles with zero behavioral change; deprioritize recommending further unless a mechanical enforcement path (hook or session-start template) is identified",
+      "shell_tool_preference_violations: the prior cycle's downward signal (2/13) cannot be confirmed or refuted from this smaller batch (2/5); hold at STABLE pending a cycle with ≥10 substantive tool-using units before upgrading or downgrading trajectory"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      3089888
+    ],
+    [
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      1194123
+    ],
+    [
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      2699190
+    ]
+  ],
+  "timestamp": "2026-06-09T20:13:12.633914Z",
+  "tokens_used": 10179,
+  "units_analyzed": 7,
+  "units_total": 13
+}

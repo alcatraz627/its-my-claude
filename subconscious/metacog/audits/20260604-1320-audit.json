@@ -1,0 +1,56 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18789,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1111111111111111,
+    "unit_count": 18
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-6412e83a-5 (python3 pandas heredoc after mcp__file-tools failures instead of ToolSearch+structured fallback); unit-6412e83a-10 (cat + head via Bash for JSON config files instead of Read tool); unit-6412e83a-18 (ls -la + find 4-type compound via Bash instead of Glob/LS; forty-first+ consecutive cycle above 50%, zero downward trajectory); unit-431b5ec9-1 (ls -1 via Bash, python3 inline JSON x4+ for transcript/task parsing); unit-431b5ec9-4 (python3 inline JSON x2 for task-dir inspection, ls -dt via Bash); unit-431b5ec9-5 (ls -t via Bash, find via Bash, python3 inline JSON x3+); 6 of 14 substantive tool-using units — highest per-cycle unit-count observed in trailing 3-cycle window",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-431b5ec9-1 (15+ consecutive Bash investigation calls across task/todo/session-notes system with incremental pattern variation before AskUserQuestion pivot; iteration count maintains prior cycle peak of 15+; no diagnostic pivot between attempts; no improvement trajectory across four consecutive cycles at this count; pattern is structural)",
+      "compound_command_overreach:RECURRING:STABLE — unit-431b5ec9-1 (python3 heredoc + ls + rg + find compounds x4+); unit-431b5ec9-4 (python3 inline + ls -dt + rg multi-pipe; first Bash call fails success=false triggering re-attempt); unit-431b5ec9-5 (python3 heredoc + rg + find + stat compounds x3+; multiple Bash calls fail success=false); unit-5da7133c-24 (ls + plutil x3 + jq survey compound); 4 units matching prior cycle count, no escalation but no improvement",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit-431b5ec9-4 (Edit model.md requires 3 consecutive calls to clean rendering artifacts from freshly written file; re-edited without re-reading modified state between attempts); unit-431b5ec9-5 (Edit runtime-notes.md fails success=false; file state not re-read before attempt; identical failure mode to prior two cycles at same 2-of-N failure rate)",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-6412e83a-5 (mcp__file-tools__list_sheets called x2 on distinct file targets, both fail success=false, then pivot to Bash/pandas fallback; count=2 matches prior cycle; tool identity differs from prior cycle mcp__render__list_logs; 'possibly_improving' trajectory from two cycles ago remains unconfirmed — count held at 2 with different tool, insufficient cross-tool evidence to claim trend)",
+      "direct_grep_via_bash:RECURRING:CONFIRMED — unit-431b5ec9-5 (grep -n call via Bash for runtime-notes.md line search; flagged NEW in prior cycle; confirmed recurring across consecutive cycles; rules/shell.md mandates rg or Grep tool; pattern solidified from single-occurrence to structural fixture in two cycles; PreToolUse hook may not be catching standalone grep -n shape as distinct from rg+grep pipe-chain sub-variant)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations is structural at 40+ consecutive cycles with zero trajectory — no new recommendations per deprioritization rule for patterns already flagged without improvement signal.",
+      "bash_retry_without_diagnosis iteration count has plateaued at 15+ for four consecutive cycles — structural ceiling; no new recommendations beyond prior cycles.",
+      "direct_grep_via_bash newly confirmed recurring — audit PreToolUse hook coverage for standalone grep -n invocations vs pipe-chain sub-variants; hook may have a shape gap that allows standalone calls through while blocking compound patterns.",
+      "mcp_retry_without_diagnosis count stable at 2 across two cycles with different tool identities — continue monitoring one additional cycle before adjusting trajectory label from possibly_improving to stable."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      3025943
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      4757264
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      4712273
+    ],
+    [
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      448512
+    ],
+    [
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      1534527
+    ]
+  ],
+  "timestamp": "2026-06-04T13:20:10.208793Z",
+  "tokens_used": 13222,
+  "units_analyzed": 14,
+  "units_total": 18
+}

@@ -35,10 +35,21 @@ check ALLOW "ls -la"
 check ALLOW "git status"
 check ALLOW "npm run build"
 
-echo "=== PROVEN-DEV WRITES (expect ALLOW) ==="
-check ALLOW "render deploy --env staging"
-check ALLOW "vercel deploy --target preview"
-check ALLOW "vercel deploy"
+echo "=== command -v|-V <cli> is a LOOKUP, not an invocation (expect ALLOW) ==="
+# Regression: a `>/dev/null` redirect after the looked-up CLI used to be read as
+# the gh write verb, blocking the existence check. See atone command-v fix.
+check ALLOW "command -v gh"
+check ALLOW "command -v gh >/dev/null 2>&1 && echo ok"
+check ALLOW "command -V render"
+check ALLOW "gh auth status"
+check ALLOW "gh auth status 2>&1"
+# but `command <cli>` WITHOUT -v actually RUNS it — a write must still gate:
+check BLOCK "command gh pr merge 123"
+
+echo "=== EVERY WRITE GATED (gate_all_writes — even dev/preview writes BLOCK) ==="
+check BLOCK "render deploy --env staging"
+check BLOCK "vercel deploy --target preview"
+check BLOCK "vercel deploy"
 
 echo "=== PROD WRITES (expect BLOCK) ==="
 check BLOCK "render deploy --prod"
@@ -57,6 +68,60 @@ check BLOCK "gh secret set TOKEN"
 check BLOCK "gh pr merge 42"
 check BLOCK "gh push origin main"
 check BLOCK "gh release create v1.0.0"
+
+echo "=== AWS READS (operation-prefix; expect ALLOW) ==="
+check ALLOW "aws s3 ls"
+check ALLOW "aws s3 ls s3://bucket"
+check ALLOW "aws sts get-caller-identity"
+check ALLOW "aws ec2 describe-instances"
+check ALLOW "aws iam list-users"
+check ALLOW "aws dynamodb scan --table-name t"
+check ALLOW "aws dynamodb query --table-name t"
+check ALLOW "aws logs tail /aws/lambda/x"
+check ALLOW "aws logs filter-log-events --log-group-name x"
+check ALLOW "aws ec2 help"
+check ALLOW "aws --version"
+check ALLOW "aws s3api list-buckets"
+
+echo "=== AWS WRITES (every mutation gated; expect BLOCK) ==="
+check BLOCK "aws s3 rm s3://b/k"
+check BLOCK "aws s3 cp ./f s3://b/k"
+check BLOCK "aws s3 sync . s3://b"
+check BLOCK "aws s3 mb s3://newbucket"
+check BLOCK "aws ec2 terminate-instances --instance-ids i-1"
+check BLOCK "aws ec2 run-instances --image-id ami-1"
+check BLOCK "aws rds delete-db-instance --db-instance-identifier x"
+check BLOCK "aws iam create-user --user-name x"
+check BLOCK "aws iam attach-user-policy --user-name x"
+check BLOCK "aws lambda update-function-code --function-name x"
+check BLOCK "aws dynamodb put-item --table-name t"
+check BLOCK "aws configure set foo bar"
+check BLOCK "aws s3api put-bucket-policy --bucket b"
+
+echo "=== AWS WRITE BYPASS (launcher/shell/env; expect BLOCK) ==="
+check BLOCK "sudo aws s3 rm s3://b/k"
+check BLOCK "env aws ec2 terminate-instances"
+check BLOCK "AWS_PROFILE=prod aws s3 rm s3://b/k"
+check BLOCK 'bash -c "aws s3 sync . s3://b"'
+check BLOCK "/usr/local/bin/aws rds delete-db-instance"
+check BLOCK "aws ec2 describe-instances && aws s3 rm s3://b/k"
+# Global flag BEFORE the service must NOT launder a write into a read
+# (skeptical-review finding A — a leading --region/--profile/--output bypassed).
+check BLOCK "aws --region us-east-1 s3 rm s3://b/k"
+check BLOCK "aws --profile prod s3 rm s3://b/k"
+check BLOCK "aws --output json ec2 terminate-instances --instance-ids i-1"
+check BLOCK "sudo aws --region x s3 rm s3://b/k"
+check ALLOW "aws --region us-east-1 s3 ls"
+check ALLOW "aws --profile dev ec2 describe-instances"
+
+echo "=== AWS SENSITIVE READS (secret/credential exfil -> BLOCK) ==="
+check BLOCK "aws secretsmanager get-secret-value --secret-id x"
+check BLOCK "aws ecr get-login-password"
+check BLOCK "aws sts get-session-token"
+check BLOCK "aws ssm get-parameter --name x --with-decryption"
+check ALLOW "aws ssm get-parameter --name x"
+check ALLOW "aws ssm get-parameters --names a b"
+check ALLOW "aws sts get-caller-identity"
 
 echo "=== BYPASS TABLE (all expect BLOCK) ==="
 check BLOCK 'bash -c "render deploy --prod"'
@@ -139,8 +204,44 @@ check ALLOW "render services"
 check ALLOW "render env-vars"
 check ALLOW "render deploys"
 check ALLOW "render logs --tail"
-check ALLOW "vercel deploy"
-check ALLOW "vercel deploy --target preview"
+check BLOCK "vercel deploy"
+check BLOCK "vercel deploy --target preview"
+
+echo "=== VERCEL NOUN-LS READS (2026-06-01 domains-ls false-block — expect ALLOW) ==="
+check ALLOW "vercel domains ls"
+check ALLOW "vercel certs ls"
+check ALLOW "vercel dns ls"
+check ALLOW "vercel secrets ls"
+check ALLOW "vercel domains inspect x.com"
+check BLOCK "vercel domains add x.com"
+check BLOCK "vercel domains rm x.com"
+check BLOCK "vercel secrets add API x"
+
+echo "=== QUOTED-PIPE FALSE-POSITIVE (2026-05-31 bug — expect ALLOW) ==="
+check ALLOW 'rg -i "declare|render|workspace|automat" /tmp/x'
+check ALLOW 'grep -E "render|vercel|gh" file.txt'
+check ALLOW 'rg "a|b|render" .'
+check ALLOW 'bash ~/.claude/scripts/atone.sh slugs | rg "verif|render|scope"'
+
+echo "=== quoted pipe + REAL operator must STILL split + BLOCK (no security regression) ==="
+check BLOCK 'rg "x|y" && render deploy --prod'
+check BLOCK 'echo "render|x" | render deploy --prod'
+
+echo "=== AWS FALLBACK POLICY (unreadable JSON must NOT un-gate writes) ==="
+# gate_for() returns None for an unknown CLI -> allow. If aws is missing from
+# _fallback_policy, a broken policy file silently un-gates every AWS write.
+# This locks the fallback in. Pass a non-existent policy path to force fallback.
+_fbpol="/tmp/cli-gating-nonexistent-$$.json"
+_fbw=$(python3 "$PY" "aws s3 rm s3://b/k" "$_fbpol" 2>/dev/null)
+if [ "${_fbw%%	*}" = "BLOCK" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback aws write not blocked: %s\n' "$_fbw"; fi
+_fbr=$(python3 "$PY" "aws s3 ls" "$_fbpol" 2>/dev/null)
+if [ "${_fbr%%	*}" = "ALLOW" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback aws read not allowed: %s\n' "$_fbr"; fi
+# render/vercel fallback must keep gate_all_writes (skeptical-review finding D —
+# a broken JSON silently downgraded them to dev-allowed).
+_fbv=$(python3 "$PY" "vercel deploy" "$_fbpol" 2>/dev/null)
+if [ "${_fbv%%	*}" = "BLOCK" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback vercel write not blocked: %s\n' "$_fbv"; fi
+_fbrn=$(python3 "$PY" "render deploy --env staging" "$_fbpol" 2>/dev/null)
+if [ "${_fbrn%%	*}" = "BLOCK" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback render write not blocked: %s\n' "$_fbrn"; fi
 
 echo ""
 echo "── Core results: $pass passed, $fail failed ──"
@@ -176,6 +277,18 @@ else
   shim_check 2 "gh api -X DELETE /repos/o/r"
   shim_check 2 "vercel promote https://x"
   shim_check 0 'echo "gh pr list is just text"'
+  shim_check 0 "aws s3 ls"
+  shim_check 2 "aws s3 rm s3://b/k"
+  shim_check 2 "aws ec2 terminate-instances --instance-ids i-1"
+  shim_check 2 "$(printf 'aws\ts3 rm s3://b/k')"   # tab between aws+service must not dodge the screen (finding C)
+  # Per-command nonce approval: block -> approve(nonce) -> allow once -> consume -> block
+  _NCMD="vercel deploy --prod"
+  _NHASH=$(printf '%s' "$_NCMD" | shasum -a 256 | cut -c1-16); _N="$HOME/.claude/.cli-approve-$_NHASH"
+  rm -f "$_N"
+  shim_check 2 "$_NCMD"          # no nonce -> block
+  touch "$_N"; shim_check 0 "$_NCMD"   # nonce present -> allow once
+  shim_check 2 "$_NCMD"          # consumed -> block again
+  rm -f "$_N"
   echo "  Shim results: $shim_pass passed, $shim_fail failed"
 fi
 

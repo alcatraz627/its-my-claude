@@ -653,6 +653,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/atone-stop-gate.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/auto-continue-stop.sh"
           }
         ]

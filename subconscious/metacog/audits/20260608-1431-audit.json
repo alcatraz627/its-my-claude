@@ -1,0 +1,43 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.14285714285714285,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.47976582525984046,
+    "unit_count": 14
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-10 (cat+head-80 via Bash for JSON config files instead of Read); unit-18 (ls-la+find 5-type compound via Bash instead of Glob/LS); unit-30 (ls-la via Bash for .claude/ and lib/providers/ directory inspection); unit-31 (ls-la+pandas inline JSON via Bash instead of LS/mcp__file-tools); unit-47 (ls-la via Bash for Downloads/Jun_8/ directory instead of Glob/LS); 5 of 10 substantive tool-using units, rate matches or worsens prior two-cycle peaks (4/13 and 5/9), zero downward trajectory across eight consecutive cycles, pattern is entrenched",
+      "mcp_retry_without_diagnosis:RECURRING:AMBIGUOUS — unit-5 (mcp__file-tools__list_sheets called on two distinct targets both fail success=false, pivot to pandas Bash heredoc with no intermediate diagnostic; structurally identical to prior seven cycles); unit-47 skips mcp__file-tools entirely for Excel analysis and goes straight to pandas Bash (no ToolSearch, no MCP attempt); ambiguous whether unit-47 represents adaptive avoidance of a consistently failing tool or a new pattern of bypassing the correct tool path entirely; prior history labels this STABLE but unit-47 introduces a variant not seen before",
+      "compound_command_overreach:RECURRING:STABLE — unit-30 (git status+stash list+branch+log compound fails success=false; decomposed into individual calls only after failure; structure and count match prior two cycles exactly, no improvement across three cycles)",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-30 (git stash list fails success=false; retried with ATONE_INDEX_OK=1 env prefix without any intermediate diagnostic step; structurally identical to prior two cycles)",
+      "optimistic_write_without_verification:RECURRING:STABLE — unit-31 (Write to tests/benchmark_client_classifier.py fails success=false x2 consecutively; file-existence check via Bash run only after both failures; third Write succeeds; count and structure match prior two cycles exactly at same 2-of-N failure rate before check)",
+      "analysis_conclusion_without_sufficient_verification:NEW — unit-47 (pinecone on/off diff analysis completed via inline pandas Bash script and conclusions reported; outcome marked Corrected in unit-48; user correction indicates the framing or conclusions were wrong enough to require a follow-on correction turn; analysis scripts ran successfully=true but result interpretation was not verified before reporting; first instance of this specific pattern across all calibration history on record)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations is entrenched across eight consecutive cycles with zero trajectory improvement and has been flagged in every prior recommendation set — deprioritize repeating this recommendation; only re-escalate if per-cycle count rises above 5 or if a new tool category joins the violation set",
+      "mcp_retry_without_diagnosis: unit-47 introduces a variant (skip MCP entirely for Excel, go straight to pandas) that may represent adaptive avoidance of a persistently failing tool rather than the original retry-without-diagnosis pattern — monitor next two cycles to determine whether this variant should be classified as a separate bias or as a degenerate form of the original; if MCP begins succeeding, the bypass behavior becomes a regression",
+      "analysis_conclusion_without_sufficient_verification (NEW): before reporting quantitative comparison conclusions derived from inline Bash data scripts, add a verification step that confirms data alignment assumptions (column name matching, join key validity, expected row counts) before interpreting deltas; single occurrence does not establish a pattern but warrants a watch flag for the next two cycles"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      6422110
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      1416473
+    ]
+  ],
+  "timestamp": "2026-06-08T14:31:25.706382Z",
+  "tokens_used": 8883,
+  "units_analyzed": 14,
+  "units_total": 14
+}

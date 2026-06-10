@@ -7,15 +7,18 @@
       "read_verbs": ["services", "list", "get", "logs", "ps", "deploys", "env-vars", "psql", "help", "version", "whoami"],
       "prod_signals": ["--prod", "--production", "--env prod", "--env production"],
       "dev_signals": ["--env dev", "--env development", "--env staging"],
-      "default_env": "prod"
+      "default_env": "prod",
+      "gate_all_writes": true
     },
     {
       "cli": "vercel",
       "read_verbs": ["ls", "list", "inspect", "logs", "whoami", "env ls", "project ls", "teams ls", "help", "--version"],
+      "read_action_verbs": ["ls", "list", "inspect", "get"],
       "prod_signals": ["--prod", "-p", "--target production", "--target prod"],
       "dev_signals": ["--target preview", "--target development"],
       "default_env": "dev",
-      "safe_default_verbs": ["deploy"]
+      "safe_default_verbs": ["deploy"],
+      "gate_all_writes": true
     },
     {
       "cli": "gh",
@@ -23,6 +26,18 @@
       "always_gate_verbs": ["repo delete", "release delete", "secret set", "secret delete"],
       "main_branch_gate_verbs": ["pr merge", "push", "release create", "release edit"],
       "main_branches": ["main", "master"]
+    },
+    {
+      "cli": "aws",
+      "_model": "Read iff operation matches read_op_prefixes/read_ops_exact; everything else (create-/delete-/put-/update-/terminate-/run-/s3 cp|sync|mv|rm|mb|rb) is a WRITE and approval-gated per-command (any account). Conservative: an unlisted read just gets gated once; no write prefix is ever read. s3 cp/sync DOWNLOADS (dst is local) are gated too in v1 — known false-positive, approve once.",
+      "read_op_prefixes": ["describe-", "list-", "get-", "lookup-", "head-", "batch-get-", "search-", "view-"],
+      "read_ops_exact": ["ls", "help", "list", "get", "scan", "query", "select", "tail", "filter-log-events", "wait", "presign", "estimate-template-cost"],
+      "sensitive_read_ops": ["get-secret-value", "batch-get-secret-value", "get-login-password", "get-session-token", "get-federation-token"],
+      "_sensitive_note": "These read no state but return a live secret/credential -> approval-gated like a write. get-parameter* is gated only with --with-decryption (handled in code).",
+      "prod_signals": ["--profile prod", "--profile production"],
+      "dev_signals": ["--profile dev", "--profile development", "--profile staging"],
+      "default_env": "prod",
+      "gate_all_writes": true
     }
   ]
 }

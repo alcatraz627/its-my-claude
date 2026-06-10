@@ -1,15 +1,5 @@
 [
   {
-    "id": "trig-added-scope-without-checking-siblings",
-    "from_slug": "added-scope-without-checking-siblings",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "IIFE-around-single-JSX-element when sibling buttons showed the simpler inline pattern",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260520-073507-42"
-  },
-  {
     "id": "trig-adding-env-var-reads-without-checking-the-project-s-config-pattern",
     "from_slug": "adding-env-var-reads-without-checking-the-project-s-config-pattern",
     "from_source": "atone",
@@ -18,16 +8,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260528-193712-da"
-  },
-  {
-    "id": "trig-ascii-art-tables-instead-of-gum-tools",
-    "from_slug": "ascii-art-tables-instead-of-gum-tools",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "use std::claude::shared/gum-tui.sh, never hand-rolled ASCII",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260508-120002-m02"
   },
   {
     "id": "trig-batched-past-explicit-stop-checkpoints",
@@ -40,16 +20,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-182925-a5"
   },
   {
-    "id": "trig-bulk-sync-without-secret-scan",
-    "from_slug": "bulk-sync-without-secret-scan",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Bulk-synced transcripts+env to a 2nd machine without secret-scanning the payload",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260525-080503-e9"
-  },
-  {
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
@@ -57,27 +27,7 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260530-142316-2d"
-  },
-  {
-    "id": "trig-disproportionate-fix-without-measuring-cost",
-    "from_slug": "disproportionate-fix-without-measuring-cost",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Sized a high-blast shared-hook refactor to render COUNT, not measured COST",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260525-213533-4d"
-  },
-  {
-    "id": "trig-feature-built-without-precondition-guard",
-    "from_slug": "feature-built-without-precondition-guard",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Built ScraperReviewModal without top-level 'was this job submitted?' guard",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260519-210056-89"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-110718-c0"
   },
   {
     "id": "trig-flattery-and-unrequested-agenda",
@@ -120,16 +70,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-081008-4d"
   },
   {
-    "id": "trig-live-test-against-protected-log-without-isolation",
-    "from_slug": "live-test-against-protected-log-without-isolation",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Smoke-tested mutating CLI against production append-only log without ATONE_DIR isolation",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-174356-93"
-  },
-  {
     "id": "trig-over-corrected-tuning-request-into-disable",
     "from_slug": "over-corrected-tuning-request-into-disable",
     "from_source": "atone",
@@ -140,14 +80,14 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260525-132133-9a"
   },
   {
-    "id": "trig-prescribed-flattery-as-fix-for-pushback",
-    "from_slug": "prescribed-flattery-as-fix-for-pushback",
+    "id": "trig-parse-output-without-row-sample",
+    "from_slug": "parse-output-without-row-sample",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Wrote a SKILL.md guardrail prescribing softer agreement to fix pushback the user did not ask to suppress",
+    "instruction": "awk field-extraction on ps output without printing one row to verify column positions",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-221513-53"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-134335-e1"
   },
   {
     "id": "trig-propagating-legacy-inline-imports-in-python-backend",
@@ -167,63 +107,33 @@
     "instruction": "proposed-fix-breaks-design-invariant",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-222855-dd"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-143433-f2"
   },
   {
-    "id": "trig-recommended-disabling-the-feature-being-built",
-    "from_slug": "recommended-disabling-the-feature-being-built",
+    "id": "trig-review-missed-stale-caller-after-rename",
+    "from_slug": "review-missed-stale-caller-after-rename",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Recommended dropping transform_spec from FE as 'fix' for missing BE endpoint",
+    "instruction": "Release review documented a breaking rename but never grepped callers; inline import hid the stale caller until prod",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260519-072823-97"
-  },
-  {
-    "id": "trig-scope-exclusion-drift-during-long-staging",
-    "from_slug": "scope-exclusion-drift-during-long-staging",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "scope-exclusion-drift-during-long-staging",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260513-120000-m00"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-134101-f2"
   },
   {
     "id": "trig-self-permitting-exception-to-an-adr-hard-rule",
     "from_slug": "self-permitting-exception-to-an-adr-hard-rule",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "Self-permitting exception to an ADR / hard rule",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-035155-ba"
-  },
-  {
-    "id": "trig-shipping-surface-without-utility-check",
-    "from_slug": "shipping-surface-without-utility-check",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Kept shipping plugin surface area without verifying utility to a human",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260518-092322-cf"
-  },
-  {
-    "id": "trig-skill-spec-update-not-honored-by-running-session",
-    "from_slug": "skill-spec-update-not-honored-by-running-session",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Mid-session SKILL.md updates don't propagate; running sessions silently skip new mandatory phases",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260516-002740-d6"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-100904-83"
   },
   {
     "id": "trig-source-comment-hygiene",
     "from_slug": "source-comment-hygiene",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "terse, durable, no planning artifacts, no decoration",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -238,6 +148,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260516-001122-82"
+  },
+  {
+    "id": "trig-status-verdict-from-stale-mental-model-no-re-check",
+    "from_slug": "status-verdict-from-stale-mental-model-no-re-check",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "Status verdict from stale mental model (no re-check)",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-104640-ef"
   },
   {
     "id": "trig-structural-claim-without-reading-code",
@@ -270,16 +190,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-001233-cf"
   },
   {
-    "id": "trig-unsolicited-index-manipulation",
-    "from_slug": "unsolicited-index-manipulation",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "unsolicited-index-manipulation",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260514-120000-m00"
-  },
-  {
     "id": "trig-audit-file-character-before-applying-global-rule",
     "from_slug": "audit-file-character-before-applying-global-rule",
     "from_source": "affirm",
@@ -300,13 +210,13 @@
     "deep_link": "~/.claude/atone/events.jsonl#aff-20260526-205902-f6"
   },
   {
-    "id": "trig-wizard-questions-before-sub-agent-fanout",
-    "from_slug": "wizard-questions-before-sub-agent-fanout",
+    "id": "trig-scope-convention-change-to-one-consumer",
+    "from_slug": "scope-convention-change-to-one-consumer",
     "from_source": "affirm",
     "weight": "medium",
-    "instruction": "Pause to wizard-ask 2-4 ambiguity questions before kicking off a coordinated sub-agent fan-out",
+    "instruction": "Scoped an S3 path-convention change to the matcher, not the shared org_s3_key helper",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260517-055701-48"
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260608-093823-51"
   }
 ]

@@ -1,0 +1,59 @@
+{
+  "ts": "2026-05-31T14:08:12Z",
+  "session_id": "1pc-karab-3b",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260531-1pc-karab-3b.claude.md",
+  "insights": {
+    "worked": [
+      "**What didn't**: missing `\"type\": \"basic\"` on a Karabiner manipulator silently broke the whole profile (the simple_modifications for Nums 1\u20133 stopped firing as a side effect \u2014 Karabiner validates at profile level, not rule level). First osascript used `make new ... with properties {target:...}` \u2014 Finder silently drops the `target` property, opens at root.",
+      "**Gotchas**: `plutil -convert json` refuses on plists containing `<date>` or `<data>` (lossy). macOS \"switch to a Space with open windows\" setting can override AppleScript intent unless windows are created before activate. Karabiner profile validation is all-or-nothing.",
+      "**Notes for future agents**:",
+      "Memory file `project_mac_migration.md` is the durable migration record \u2014 read it before re-deriving state.",
+      "`~/mac-migration/AGENT-HANDOFF.md` (on both Macs) is the cross-machine handoff doc; `HANDOFF-RESPONSE-i-dream.md` is the most recent inter-agent exchange.",
+      "Reverse SSH is wired (old Mac sshd ON, new-Mac key in `~/.ssh/authorized_keys`).",
+      "Don't re-narrate the migration history; act on the small remaining list."
+    ],
+    "didnt_work": [
+      "**Gotchas**: `plutil -convert json` refuses on plists containing `<date>` or `<data>` (lossy). macOS \"switch to a Space with open windows\" setting can override AppleScript intent unless windows are created before activate. Karabiner profile validation is all-or-nothing.",
+      "**Notes for future agents**:",
+      "Memory file `project_mac_migration.md` is the durable migration record \u2014 read it before re-deriving state.",
+      "`~/mac-migration/AGENT-HANDOFF.md` (on both Macs) is the cross-machine handoff doc; `HANDOFF-RESPONSE-i-dream.md` is the most recent inter-agent exchange.",
+      "Reverse SSH is wired (old Mac sshd ON, new-Mac key in `~/.ssh/authorized_keys`).",
+      "Don't re-narrate the migration history; act on the small remaining list."
+    ],
+    "gotchas": [
+      "**Notes for future agents**:",
+      "Memory file `project_mac_migration.md` is the durable migration record \u2014 read it before re-deriving state.",
+      "`~/mac-migration/AGENT-HANDOFF.md` (on both Macs) is the cross-machine handoff doc; `HANDOFF-RESPONSE-i-dream.md` is the most recent inter-agent exchange.",
+      "Reverse SSH is wired (old Mac sshd ON, new-Mac key in `~/.ssh/authorized_keys`).",
+      "Don't re-narrate the migration history; act on the small remaining list."
+    ],
+    "notes": [
+      "Memory file `project_mac_migration.md` is the durable migration record \u2014 read it before re-deriving state.",
+      "`~/mac-migration/AGENT-HANDOFF.md` (on both Macs) is the cross-machine handoff doc; `HANDOFF-RESPONSE-i-dream.md` is the most recent inter-agent exchange.",
+      "Reverse SSH is wired (old Mac sshd ON, new-Mac key in `~/.ssh/authorized_keys`).",
+      "Don't re-narrate the migration history; act on the small remaining list."
+    ],
+    "feedback": [
+      "**What worked**: mtime comparison as a single-shot discriminator between rsync and clone (decisive in the i-dream diagnosis). Two-step osascript for new Finder window. Plist binary\u2192XML via `plutil` for diffable git. Per-tool `restore.sh` encoding gotchas (cfprefsd reload after plist drop).",
+      "**What didn't**: missing `\"type\": \"basic\"` on a Karabiner manipulator silently broke the whole profile (the simple_modifications for Nums 1\u20133 stopped firing as a side effect \u2014 Karabiner validates at profile level, not rule level). First osascript used `make new ... with properties {target:...}` \u2014 Finder silently drops the `target` property, opens at root.",
+      "**Gotchas**: `plutil -convert json` refuses on plists containing `<date>` or `<data>` (lossy). macOS \"switch to a Space with open windows\" setting can override AppleScript intent unless windows are created before activate. Karabiner profile validation is all-or-nothing.",
+      "**Notes for future agents**:",
+      "Memory file `project_mac_migration.md` is the durable migration record \u2014 read it before re-deriving state.",
+      "`~/mac-migration/AGENT-HANDOFF.md` (on both Macs) is the cross-machine handoff doc; `HANDOFF-RESPONSE-i-dream.md` is the most recent inter-agent exchange.",
+      "Reverse SSH is wired (old Mac sshd ON, new-Mac key in `~/.ssh/authorized_keys`).",
+      "Don't re-narrate the migration history; act on the small remaining list."
+    ]
+  },
+  "pending": [
+    "**#7** Rotate `RENDER_API_KEY` (Render dashboard) and `SLACK_MCP_XOXB_TOKEN` (Slack); update `~/.zenv` on new Mac with new values.",
+    "**#8** `gcloud auth login` on new Mac (browser); `gcloud auth revoke` on old Mac.",
+    "iCloud Photos sign-in on new Mac (only 20 originals came via `Pictures/photo-originals/`; rest are cloud-only).",
+    "claude-instances menubar v2 (v1 running on new Mac, v2 still needs work).",
+    "Final `~/.claude` re-sync after this session ends (captures today's settings/memory edits).",
+    "Cleanup on new Mac: `.claude-mig-overwritten-20260527-043816/` once subconscious-uniques judged, Trash (`.git-broken-backup` + `i-dream-fresh-clone`) once forensics done; `/tmp/*.sh` scratch on both.",
+    "**Open question for the new-Mac agent**: what command spawned the i-dream rsync? Not in `move-projects.sh` (excludes i-dream), not in `sync.sh` (only ~/.claude + system configs). Knowing the source rules out other latent defects on the same path.",
+    "**Codification candidate**: `rules/` entry for \"verify any cross-machine git-repo transfer (clone OR rsync) post-transfer with `test -d .git/objects && git rev-parse HEAD`\". Not done."
+  ],
+  "tags": []
+}

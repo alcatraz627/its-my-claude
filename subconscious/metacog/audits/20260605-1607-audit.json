@@ -1,0 +1,44 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.09090909090909091,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.5108532897854682,
+    "unit_count": 11
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-5 (mcp__file-tools x2 failures then pandas heredoc via Bash); unit-10 (cat+head via Bash for JSON config files instead of Read); unit-18 (ls -la + find 4-type compound via Bash instead of Glob/LS); unit-30 (ls -la via Bash for .claude/ directory inspection); unit-31 (ls -la via Bash, python3 inline JSON x2 for benchmark/catalog analysis); 5 of 9 substantive tool-using units — count matches prior cycle peak, zero downward trajectory across five consecutive cycles",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-5 (mcp__file-tools__list_sheets called x2 on distinct file targets, both fail success=false, pivot to pandas Bash fallback without intermediate diagnostic step; tool identity identical to prior cycle; count=2 unchanged; 'possibly_improving' trajectory claimed two cycles ago remains unconfirmed for fourth consecutive cycle; no structural change)",
+      "compound_command_overreach:RECURRING:STABLE — unit-30 (git status+stash+branch+log compound fails success=false; decomposed only after failure); unit-31 (python3 inline JSON + pandas via Bash x2; py_compile + ruff pipe compound); matches prior two-cycle count of 2-3 units, no escalation, no improvement",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-30 (git stash list fails success=false; retried with ATONE_INDEX_OK=1 env prefix without diagnosing root cause; no intermediate diagnostic step between failure and retry; identical to prior cycle pattern)",
+      "optimistic_write_without_verification:RECURRING:STABLE — unit-31 (Write to tests/benchmark_client_classifier.py fails success=false x2 consecutively before file-existence check is run; third Write succeeds; same failure-then-check sequence as prior cycle at same 2-of-N failure rate; pattern structurally unchanged for second consecutive cycle)"
+    ],
+    "calibration_score": 0.11,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations: DEPRIORITIZED — flagged in every cycle for five consecutive cycles with no downward trajectory; mechanical enforcement (hook or allowlist restriction) is the only lever left; agent-level recommendations are not producing change",
+      "mcp_retry_without_diagnosis: DEPRIORITIZED — flagged four consecutive cycles with identical count=2 and same pivot-to-Bash pattern; diagnosis step must be enforced at MCP call site or via a hook, not via agent self-correction",
+      "compound_command_overreach: DEPRIORITIZED — two consecutive cycles at same unit count; decomposition-on-failure is the observed behavior, suggesting the agent knows the fix but does not apply it proactively",
+      "bash_retry_without_diagnosis: DEPRIORITIZED — identical pattern across three consecutive cycles; environment-prefix retry (ATONE_INDEX_OK=1) without root-cause diagnosis is a structural habit, not a one-off lapse",
+      "optimistic_write_without_verification: Confirm whether the Write tool errors are permission-related or path-existence-related — if path-existence, a pre-Write Bash existence check is a one-line fix that would eliminate the 2-failure-then-check sequence entirely; this is the most tractable of the recurring patterns given its narrow blast radius"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      4548540
+    ],
+    [
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      1090029
+    ]
+  ],
+  "timestamp": "2026-06-05T16:07:42.532410Z",
+  "tokens_used": 6789,
+  "units_analyzed": 10,
+  "units_total": 11
+}

@@ -1,0 +1,55 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 19487,
+    "correction_density": 0.05,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.39,
+    "unit_count": 20
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-6412e83a-5 (python3 pandas heredoc after mcp__file-tools failures); unit-6412e83a-10 (cat+head via Bash for JSON config files instead of Read); unit-6412e83a-18 (ls -la + find 4-type compound via Bash instead of Glob/LS); unit-6412e83a-30 (ls via Bash for directory inspection); unit-6412e83a-31 (ls via Bash, python3 inline JSON x2); unit-77a7c308-0 (python3 heredoc x7+ for JSON parsing, cat -A via Bash, ls via Bash x4+); 6 of 9 substantive tool-using units — matches prior cycle peak unit-count, zero downward trajectory across four consecutive cycles",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-6412e83a-5 (mcp__file-tools__list_sheets called x2 on distinct file targets, both fail success=false, then pivot to pandas Bash fallback; same tool identity as prior two cycles, same count=2; 'possibly_improving' trajectory from cycle -3 remains unconfirmed for a third consecutive cycle; pattern is structurally unchanged)",
+      "compound_command_overreach:RECURRING:STABLE — unit-6412e83a-30 (git status+stash+branch+log compound fails success=false; decomposed into individual calls only after failure); unit-6412e83a-31 (python3 inline + pandas compound; npm py_compile + ruff pipe); unit-77a7c308-0 (python3 heredoc JSON + rg + echo compounds x5+; ls + python3 validate compound x3+); 3 units matches prior cycle count, no escalation but no improvement",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-6412e83a-30 (git stash list fails success=false; retried with ATONE_INDEX_OK=1 env prefix without diagnosing root cause; no intermediate diagnostic step); unit-77a7c308-0 (18+ consecutive Bash investigation calls across MCP/settings diagnostic surface with incremental variation; no diagnostic pivot or AskUserQuestion until late in unit; iteration count exceeds prior cycle peak of 15+)",
+      "optimistic_write_without_verification:RECURRING:STABLE — unit-6412e83a-31 (Write to tests/benchmark_client_classifier.py fails success=false x2 consecutively before file-existence check is run; third Write succeeds; same failure-then-check sequence as prior cycle optimistic_edit_without_read at same 2-of-N failure rate; label widened from 'edit' to 'write' to reflect tool generality)"
+    ],
+    "calibration_score": 0.12,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations has held at 4-6 units per cycle for 40+ consecutive cycles with zero downward trajectory; report-level flagging has no effect — escalate to a PreToolUse hook that blocks python3 inline JSON heredocs when File Tools MCP is available, rather than continuing to surface in calibration reports",
+      "mcp_retry_without_diagnosis count=2 has been stable for 3 cycles with the same tool; add a ToolSearch probe or MCP capability check before the second attempt rather than retrying blindly on the same failing surface",
+      "compound_command_overreach: decompose git investigation commands before the first Bash call rather than after failure; the compound-fail-then-decompose pattern wastes one call per failure and the decomposition is always performed in the same predictable way",
+      "optimistic_write_without_verification: when writing a new file to a project directory, verify the target directory exists and is writable before the first Write attempt; two consecutive failures in unit-31 indicate a systematic pre-flight check is missing"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      4291429
+    ],
+    [
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      482841
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      4952040
+    ],
+    [
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      450334
+    ],
+    [
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      2294039
+    ]
+  ],
+  "timestamp": "2026-06-05T12:46:07.498754Z",
+  "tokens_used": 11134,
+  "units_analyzed": 10,
+  "units_total": 20
+}

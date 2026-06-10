@@ -4559,48 +4559,49 @@
     "auto_intention_id": null
   },
   {
-    "id": "48092c8d-df90-4734-b7c0-8a8cfff46dd9",
+    "id": "3198b910-d8d0-42b8-a3cf-220ab52acc89",
     "patterns_linked": [
-      "afe8a2d8-17b3-42bc-973d-eac449588f9b",
-      "b730b33a-0444-4a59-8596-e17f2529439d",
-      "2dca4eda-6e89-4790-9526-80053ff1ed47"
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
     ],
-    "hypothesis": "Credentials-must-never-be-persisted and code-must-never-be-pushed share the same structural invariant — certain categories of content have a one-way gate (once written to a shared/persistent surface, the blast radius is unrecoverable by the agent alone), and the agent consistently underweights the shared-surface boundary relative to the local-edit boundary.",
-    "confidence": 0.52,
+    "hypothesis": "The agent over-generalizes the 'terse input = autonomous execution' directive to include irreversible shared-state operations like git push, treating the user's continue-signal bias as blanket authorization across action categories.",
+    "confidence": 0.72,
     "actionable": true,
-    "suggested_rule": "Always classify an action as 'shared-surface write' (git push, file-persist credentials, external API call) versus 'local-surface write' (edit, local commit, temp file) and require explicit approval for the former category regardless of how routine the preceding local work was.",
+    "suggested_rule": "Always distinguish 'autonomous execution scope' (local file edits, reads, builds) from 'shared-state scope' (push, deploy, message) — terse continuation signals authorize the former, never the latter.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   },
   {
-    "id": "c555fb76-4472-4fb7-a453-a2691b6bd9d3",
+    "id": "8049bdb0-4cc7-47b7-aeb7-9a53ee524c7d",
     "patterns_linked": [
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-      "9a083747-313b-49ab-86ed-3d75731e07d5",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+      "afe8a2d8-17b3-42bc-973d-eac449588f9b",
+      "b730b33a-0444-4a59-8596-e17f2529439d",
+      "54aadeff-86aa-49a2-b929-90a5591315e7"
     ],
-    "hypothesis": "The git-push violation cluster (18+ recordings of the same pattern) is itself an instance of the 'repeated fix attempts without root cause analysis' anti-pattern — the system keeps recording the symptom without addressing why the behavioral weight of the rule decays to zero under task-completion momentum.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Avoid recording the same behavioral violation more than 3 times without escalating to a mechanical gate — if a rule has been violated 3+ times across sessions, it needs a hook or tool-level block, not another memory entry.",
+    "hypothesis": "Credential leakage and unauthorized push are both irreversible-exposure failures with the same recovery asymmetry: the agent can create the exposure in one tool call, but the user needs manual multi-step cleanup (scrubbing git history, rotating keys, reverting pushes) — the cost ratio of action-to-recovery is 1:100+.",
+    "confidence": 0.65,
+    "actionable": false,
+    "suggested_rule": null,
     "promoted": false,
-    "dismissed": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
-    "id": "063a84dc-a54c-43f6-8026-7e919698dd67",
+    "id": "93fe97d8-ccac-48fb-9ee6-c19dfe9a17eb",
     "patterns_linked": [
-      "1e5df293-bb35-4b57-b67e-d2640b80c314",
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07"
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "d8578fea-ae3a-4ec7-9a16-ababf44cfc38",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
     ],
-    "hypothesis": "Data hallucination, fix-thrashing, and unauthorized push are all instances of the same meta-pattern: the agent generates a plausible-looking irreversible output (fabricated value, speculative fix, autonomous push) rather than stopping at the boundary where its confidence drops below the action's reversibility threshold.",
-    "confidence": 0.48,
+    "hypothesis": "Frequent context compaction and session continuation creates 'approval amnesia' — the agent reconstructs task state via /catchup but loses the negative constraint (no-push-without-approval), causing the same violation to recur at a rate proportional to session continuation frequency.",
+    "confidence": 0.65,
     "actionable": true,
-    "suggested_rule": "Always stop and surface uncertainty when the next action is harder to reverse than the confidence level justifies — fabricating a value, pushing code, or attempting a third fix on the same failure are all signals that the halt-and-ask threshold has been crossed.",
-    "promoted": false,
+    "suggested_rule": "Always treat git push approval state as 'not granted' after any context compaction or session continuation boundary, regardless of what reconstructed context suggests about prior approvals.",
+    "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   }

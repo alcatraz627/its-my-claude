@@ -1,0 +1,24 @@
+{
+  "ts": "2026-06-01T09:38:34Z",
+  "session_id": "guard-sl-7c",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260601-guard-sl-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Tomorrow 2026-06-02 15:00 IST**: `statusline-fix-resume` (adopted) fires. Self-unloads after firing. Opens Ghostty + `claude --resume 5da7133c\u2026`. No directive \u2014 relied on conversation context to figure out the task. After fire, plist is gone, sched_dir + meta.json + (manual) external script all survive; `gcc-schedule rm statusline-fix-resume` cleans the registry + warns about the external script.",
+    "**Thursday 2026-06-04 15:00 IST**: `statusline-debug-review` (managed) fires. Self-unloads. Opens Ghostty + `claude --resume 5da7133c\u2026` with a pre-filled prompt pointing at `~/.claude/assets/scheduled-prompts/statusline-debug-review-20260604.md`. Calendar alarm 10 min before.",
+    "**Anthropic TUI bug report** still skipped per user. Evidence ready in May 31 checkpoint: character-zipper corruption sample + width-debug log proving statusline detection was correct + daemon-leak picture + repro trigger.",
+    "**Adoption of unmanaged-alcatraz plists** (6 candidates): i-dream-{audit,daily,dreampass,review}, atone-consolidate, claude-ipc. One-line loop offered. Reversible via `gcc-schedule rm` (which warns about external scripts that gcc-schedule didn't author).",
+    "**`STATUSLINE_WIDTH_DEBUG=1` env var** in `~/.zshenv` remains active (originally 3-day window 2026-05-28 \u2192 2026-06-01; user extended to 2026-06-04). Thursday's review schedule will decide retire-vs-fix and embed the sed-removal command in its directive.",
+    "**Focused recurring flags** if a pattern arises that doesn't fit `--daily-at` / `--weekly`: `--weekdays-at <HH:MM>`, `--monthly <day> <HH:MM>`, `--every <duration>` (StartInterval-based intervals). Each ~10 lines.",
+    "**`std::claude::schedule` namespace promotion**: per TODO comment in NAMESPACE.md, revisit when \u22653 distinct cluster artefacts exist (currently 1 tool + INSTRUCTIONS.md + inventory lens, all inside one tool).",
+    "**`show`-of-adopted \"next-fire\" calculation**: currently displays `((unknown))` for adopted one-shots because `fire_at` format is `adopted-one-shot@MM-DD HH:MM` (no year). Could be fixed by inferring \"the next future occurrence of MM-DD HH:MM\"."
+  ],
+  "tags": []
+}

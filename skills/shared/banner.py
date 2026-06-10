@@ -231,15 +231,16 @@ class Banner:
 
     def _header_lines(self) -> list[str]:
         t = self._t()
-        sym = t["header_symbol"]
-        c = t["header_corner"]
-        h = t["header_h"]
-        v = t["header_v"]
+        sym: str = t["header_symbol"]
+        c: str = t["header_corner"]
+        h: str = t["header_h"]
+        v: str = t["header_v"]
+
 
         # Build inner box
         inner_title = f"{sym} {self.title} {sym}"
         box_width = max(len(inner_title) + 4, len(self.subtitle) + 4)
-        top_line = f"{c}{h*2}{inner_title}{h*2}{c}"
+        top_line = f"{c}{h*12}{inner_title}{h*12}{c}"
         box_width = len(top_line)
         sub_padded = self.subtitle + " " * (box_width - 4 - len(self.subtitle))
         mid_line = f"{v}  {sub_padded}{v}"

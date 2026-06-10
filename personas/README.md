@@ -75,6 +75,11 @@ When adding a dispatch persona: include an `output:` field (e.g., `output: json`
 | Greybeard          | `greybeard.md`          | dispatch     | Doc review — engineering veteran lens (decision archaeology, load-bearing assumptions, "why" preservation)     |
 | Translator         | `translator.md`         | dispatch     | Doc review — PM/strategist lens (customer impact, mental-model cleavage, cross-functional translatability)     |
 | Pager-Holder       | `pager-holder.md`       | dispatch     | Doc review — ops/on-call lens (runnability under pressure, escalation completeness, verification at each step) |
+| Closer             | `closer.md`             | working-mode | Scope discipline / YAGNI — declare done, defer until a need pulls it (strategic-lens triad)                     |
+| Platform-Builder   | `platform-builder.md`   | working-mode | Architecture sequencing / reusable substrate — realize the vision without over-abstracting (strategic-lens triad) |
+| Pragmatist         | `pragmatist.md`         | working-mode | Value-per-effort triage / cheap-option-buying — DO-NOW/DEFER/KILL scorecards (strategic-lens triad)             |
+
+The three strategic-lens personas (Closer / Platform-Builder / Pragmatist) are a complementary set for **scope / prioritization / "what-to-build-and-how-much"** decisions — their tension is the value. Designed to be dispatched together as MAGI voters; first run `~/.claude/assets/magi/20260609-1604-local-models-direction/`.
 
 The three doc-review personas (Greybeard / Translator / Pager-Holder) are designed to be invoked together against the same doc, producing a tri-perspective review. Build history: `frontend/.claude/output/20260517-persona-review/` in the enhancement-product repo (parent synthesis notes there too). **Length trade-off:** they're 270–445 lines each, over guideline #5 below — the 14-factor coverage spec the user requested required the extra density. Not a precedent for working-mode personas.
 

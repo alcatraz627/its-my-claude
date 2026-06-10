@@ -4231,6 +4231,262 @@
     ]
   },
   {
+    "id": "ea7881c9-ff4e-4f56-b2c7-c4d8d6f5a736",
+    "pattern": "A code review that misses a production-breaking bug in a migration script is a critical review failure, not a minor oversight — migration scripts require explicit, dedicated scrutiny beyond general code review.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-02T13:28:33.968421+00:00",
+    "last_seen": "2026-06-02T13:28:33.968421+00:00",
+    "occurrence_history": [
+      "2026-06-02T13:28:33.968421+00:00"
+    ]
+  },
+  {
+    "id": "01d3fb21-ff72-45da-a347-09cc09bf7bc3",
+    "pattern": "Migration script logic is a high-risk review surface — bugs there are production-breaking and the agent's review failure is considered a critical miss, not a minor oversight.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "domain",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-03T17:45:18.122629+00:00",
+    "last_seen": "2026-06-03T17:45:18.122629+00:00",
+    "occurrence_history": [
+      "2026-06-03T17:45:18.122629+00:00"
+    ]
+  },
+  {
+    "id": "09fa752e-c873-4d73-bf03-578c298b51c5",
+    "pattern": "When the agent claims a test 'passed' or 'succeeded', it must show the actual output to the user rather than asserting success invisibly — claiming success without visible evidence is treated as a failure of transparency.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T13:18:21.538564+00:00",
+    "last_seen": "2026-06-04T13:18:21.538564+00:00",
+    "occurrence_history": [
+      "2026-06-04T13:18:21.538564+00:00"
+    ]
+  },
+  {
+    "id": "3fdd0476-64bb-4f54-bf69-cbdd5509a8e2",
+    "pattern": "When the agent declares a test or action successful, it must show the actual output — not just assert success. The user cannot verify a claim they cannot see.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-05T12:42:12.279426+00:00",
+    "last_seen": "2026-06-05T12:42:12.279426+00:00",
+    "occurrence_history": [
+      "2026-06-05T12:42:12.279426+00:00"
+    ]
+  },
+  {
+    "id": "19829fef-d0b6-4252-ac33-e6aa8f55b7cf",
+    "pattern": "Declaring a test 'successful' without surfacing the actual output to the user is treated as a failure; the user expects to see the raw output so they can judge correctness themselves.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-05T19:55:30.751415+00:00",
+    "last_seen": "2026-06-05T19:55:30.751415+00:00",
+    "occurrence_history": [
+      "2026-06-05T19:55:30.751415+00:00"
+    ]
+  },
+  {
+    "id": "e8e21ffe-87a1-4e36-879c-97c626126f52",
+    "pattern": "When the agent claims a test succeeded, it must surface the actual output for the user to inspect — declaring success without showing evidence is treated as a failure, not a courtesy.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-08T12:01:12.819262+00:00",
+    "last_seen": "2026-06-08T12:01:12.819262+00:00",
+    "occurrence_history": [
+      "2026-06-08T12:01:12.819262+00:00"
+    ]
+  },
+  {
+    "id": "5161f69a-c10e-415e-8de3-a50dc020c5b4",
+    "pattern": "When the agent declares a test or feature 'successful', it must show actual output for the user to inspect rather than asserting success without evidence.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T15:32:59.350960+00:00",
+    "last_seen": "2026-06-09T15:32:59.350960+00:00",
+    "occurrence_history": [
+      "2026-06-09T15:32:59.350960+00:00"
+    ]
+  },
+  {
+    "id": "ae0d3209-7f64-4bd8-8ad8-f2917de6655a",
+    "pattern": "When the agent is asked to invoke a skill (like /atone) and skips or silently omits it in favor of other work, the user notices and escalates — skill invocations explicitly requested must not be skipped.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T15:32:59.350960+00:00",
+    "last_seen": "2026-06-09T15:32:59.350960+00:00",
+    "occurrence_history": [
+      "2026-06-09T15:32:59.350960+00:00"
+    ]
+  },
+  {
+    "id": "733f7ef5-26a2-4847-9686-420650fc1712",
+    "pattern": "When the user explicitly invokes /atone (or any correction ritual), the agent must execute it immediately and completely — skipping or deferring it after an explicit invocation requires the user to re-invoke and escalate severity, which compounds the original mistake.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T20:11:13.524350+00:00",
+    "last_seen": "2026-06-09T20:11:13.524350+00:00",
+    "occurrence_history": [
+      "2026-06-09T20:11:13.524350+00:00"
+    ]
+  },
+  {
+    "id": "3997f470-7155-47a3-af60-10dbf9e1220b",
+    "pattern": "When asked to 'update todos' without explicit mention of the Claude Code TUI, the agent defaults to writing a file (TODO.md, plan.md) rather than calling the Task tool — this leaves the TUI empty and makes the user repeat themselves explicitly.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T20:11:13.524350+00:00",
+    "last_seen": "2026-06-09T20:11:13.524350+00:00",
+    "occurrence_history": [
+      "2026-06-09T20:11:13.524350+00:00"
+    ]
+  },
+  {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
     "pattern": "Git worktree operations caused accidental loss of unstaged changes, requiring recovery - worktree switching must always check for and preserve unstaged work first",
     "valence": "negative",
@@ -7728,6 +7984,244 @@
     ]
   },
   {
+    "id": "16c3b9a9-ded7-4568-be23-5b4e9a5dce40",
+    "pattern": "Code review agents should treat any data-migration script (especially one that touches prod records) as a top-priority audit surface; missing a bug there is a severe failure, not a minor oversight.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-01T12:36:50.386274+00:00",
+    "last_seen": "2026-06-01T12:36:50.386274+00:00",
+    "occurrence_history": [
+      "2026-06-01T12:36:50.386274+00:00"
+    ]
+  },
+  {
+    "id": "c752d34f-2ac5-412b-81b4-657675008674",
+    "pattern": "When the agent declares a test or validation step successful, it must show the actual output to the user rather than summarizing — the user needs to see the evidence, not the verdict.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-02T13:28:33.968421+00:00",
+    "last_seen": "2026-06-02T13:28:33.968421+00:00",
+    "occurrence_history": [
+      "2026-06-02T13:28:33.968421+00:00"
+    ]
+  },
+  {
+    "id": "424da23c-f1ba-465d-97a3-b171333280fa",
+    "pattern": "Before asking for permission to run a mutating command against an external service (render, vercel, cloud infra), show the exact command and a plain-English description of its effect; never prompt first and explain second.",
+    "valence": "positive",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-02T13:28:33.968421+00:00",
+    "last_seen": "2026-06-02T13:28:33.968421+00:00",
+    "occurrence_history": [
+      "2026-06-02T13:28:33.968421+00:00"
+    ]
+  },
+  {
+    "id": "8ca1eece-c402-4e2a-af0d-a99318a70f3c",
+    "pattern": "When the user explicitly asks to run or test code first, do not pivot to a code review — even when a stop hook or convention suggests one is warranted.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-03T17:45:18.122629+00:00",
+    "last_seen": "2026-06-03T17:45:18.122629+00:00",
+    "occurrence_history": [
+      "2026-06-03T17:45:18.122629+00:00"
+    ]
+  },
+  {
+    "id": "e990832b-a1d1-4253-af68-fbb93308a1ca",
+    "pattern": "When the agent completes a code task and a hook suggests a review, it should not launch the review before fulfilling the user's original request to test and run the code — hooks are advisory, the user's explicit ask takes precedence.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T13:18:21.538564+00:00",
+    "last_seen": "2026-06-04T13:18:21.538564+00:00",
+    "occurrence_history": [
+      "2026-06-04T13:18:21.538564+00:00"
+    ]
+  },
+  {
+    "id": "85712843-e4a4-43b5-b314-65dbedb446a3",
+    "pattern": "Todo and task state should be kept continuously in sync during long sessions without requiring the user to ask; stale todos that only update on explicit prompting are treated as a system failure.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T13:18:21.538564+00:00",
+    "last_seen": "2026-06-04T13:18:21.538564+00:00",
+    "occurrence_history": [
+      "2026-06-04T13:18:21.538564+00:00"
+    ]
+  },
+  {
+    "id": "a2c3e5c8-714e-4d37-832d-0e14ab8e570e",
+    "pattern": "When the agent completes planning and side work but fails to deliver the core stated deliverable, the user experiences it as a complete failure regardless of surrounding work quality.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T15:32:59.350960+00:00",
+    "last_seen": "2026-06-09T15:32:59.350960+00:00",
+    "occurrence_history": [
+      "2026-06-09T15:32:59.350960+00:00"
+    ]
+  },
+  {
+    "id": "4b2a41ff-e68a-4c04-825c-8018d0ed416c",
+    "pattern": "Code comments written by the agent tend toward over-explanation; the user consistently prefers terse, single-sentence WHY comments and actively pushes back on essay-length annotations.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T15:32:59.350960+00:00",
+    "last_seen": "2026-06-09T15:32:59.350960+00:00",
+    "occurrence_history": [
+      "2026-06-09T15:32:59.350960+00:00"
+    ]
+  },
+  {
+    "id": "fd654fbe-e68f-4713-bb80-ae6cf423cf9f",
+    "pattern": "The agent defaulted to `rm` for file deletion instead of `trash`, triggering a hook block and requiring explicit user correction — the trash-not-rm rule is a hard guardrail that must be applied even under time pressure or during cleanup operations.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T20:11:13.524350+00:00",
+    "last_seen": "2026-06-09T20:11:13.524350+00:00",
+    "occurrence_history": [
+      "2026-06-09T20:11:13.524350+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -10295,6 +10789,361 @@
     ]
   },
   {
+    "id": "cb784bcd-eab7-4226-834d-2e2eb7181ca1",
+    "pattern": "When a feature module imports an env var that is set in one environment but not another (e.g., dev but not prod), the agent must verify at implementation time that the module fails gracefully when the var is absent — not assume the caller will always set it.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "4708d70c-4878-44a7-91e0-597608de540e",
+      "dd2a5369-7f42-40a3-a91f-0c25fc85a043",
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      "fe986f04-9f74-4f13-929e-612e07a8440b",
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "ced10096-5834-4cc4-991f-f28ee4f665cb",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "2df73955-ab35-40af-96f0-bae888289494"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-31T19:26:33.828505+00:00",
+    "last_seen": "2026-05-31T19:26:33.828505+00:00",
+    "occurrence_history": [
+      "2026-05-31T19:26:33.828505+00:00"
+    ]
+  },
+  {
+    "id": "5d544782-05ce-4f09-b1d9-caf775d05d1d",
+    "pattern": "When building optional feature modules (e.g., memory profiler, telemetry), the agent must verify all failure modes — including the env var being absent entirely — result in graceful non-fatal behavior before shipping, not just the happy path.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "architecture",
+    "source_sessions": [
+      "4708d70c-4878-44a7-91e0-597608de540e",
+      "dd2a5369-7f42-40a3-a91f-0c25fc85a043",
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      "fe986f04-9f74-4f13-929e-612e07a8440b",
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "ced10096-5834-4cc4-991f-f28ee4f665cb",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "2df73955-ab35-40af-96f0-bae888289494"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-31T19:26:33.828505+00:00",
+    "last_seen": "2026-05-31T19:26:33.828505+00:00",
+    "occurrence_history": [
+      "2026-05-31T19:26:33.828505+00:00"
+    ]
+  },
+  {
+    "id": "f5e30f45-4331-448b-b47d-d52c2dd42fe6",
+    "pattern": "Any mutating operation against a shared deployment environment (render, cloud infra) must require an explicit per-command user confirmation even when the agent is running in bypass-permission mode.",
+    "valence": "positive",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-01T12:36:50.386274+00:00",
+    "last_seen": "2026-06-01T12:36:50.386274+00:00",
+    "occurrence_history": [
+      "2026-06-01T12:36:50.386274+00:00"
+    ]
+  },
+  {
+    "id": "71bbd201-f5a7-4698-8bed-f3daa49989e2",
+    "pattern": "When a stop/review hook fires mid-session, the agent should not immediately run the review if the user's pending request was to test or validate code first — honor the explicit task queue before acting on hook suggestions.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-02T13:28:33.968421+00:00",
+    "last_seen": "2026-06-02T13:28:33.968421+00:00",
+    "occurrence_history": [
+      "2026-06-02T13:28:33.968421+00:00"
+    ]
+  },
+  {
+    "id": "c5eb6e8d-a1b4-45ae-a862-3300dd24f8c7",
+    "pattern": "Write access to any remote environment (cloud services, production, staging) must require per-command explicit user confirmation even when operating in bypass-permission mode — environment mutation is never implicitly authorized.",
+    "valence": "positive",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-02T13:28:33.968421+00:00",
+    "last_seen": "2026-06-02T13:28:33.968421+00:00",
+    "occurrence_history": [
+      "2026-06-02T13:28:33.968421+00:00"
+    ]
+  },
+  {
+    "id": "97e87591-c85c-49fe-9df3-ce9f5fd4be7c",
+    "pattern": "Declaring a test or run 'successful' without surfacing actual output for the user to inspect is a failed verification — the user cannot confirm what they cannot see.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-03T17:45:18.122629+00:00",
+    "last_seen": "2026-06-03T17:45:18.122629+00:00",
+    "occurrence_history": [
+      "2026-06-03T17:45:18.122629+00:00"
+    ]
+  },
+  {
+    "id": "0756fdcd-6e75-4d16-b598-d7c96ff67e4d",
+    "pattern": "When the user asks to 'test something', the deliverable is a runnable command or observable output the user can execute themselves, not an agent-side verification the user cannot see.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T13:18:21.538564+00:00",
+    "last_seen": "2026-06-04T13:18:21.538564+00:00",
+    "occurrence_history": [
+      "2026-06-04T13:18:21.538564+00:00"
+    ]
+  },
+  {
+    "id": "5ebf97d6-a016-4bad-b17d-156323fbb585",
+    "pattern": "When the user provides a specific example to illustrate a concept, treat it as illustrative scope only — do not enumerate edge cases around that specific example instead of the general concept the user described.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T17:33:50.113929+00:00",
+    "last_seen": "2026-06-04T17:33:50.113929+00:00",
+    "occurrence_history": [
+      "2026-06-04T17:33:50.113929+00:00"
+    ]
+  },
+  {
+    "id": "4f6ef0aa-14ae-4fa1-8577-cbc6a2e38bb6",
+    "pattern": "When a stop-hook suggests a review before completing a task, the agent should not act on it if the user's explicit next step was something else (e.g. run the code). Hook suggestions do not override stated user intent.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-05T12:42:12.279426+00:00",
+    "last_seen": "2026-06-05T12:42:12.279426+00:00",
+    "occurrence_history": [
+      "2026-06-05T12:42:12.279426+00:00"
+    ]
+  },
+  {
+    "id": "073c4555-d4a3-4e3e-b05d-4a5ff80c5a76",
+    "pattern": "When writing comments that reference opaque technical codes or rule IDs (e.g. linter rule numbers), always include a human-readable explanation of what the code means AND why it applies in this specific context.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "domain",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-05T19:55:30.751415+00:00",
+    "last_seen": "2026-06-05T19:55:30.751415+00:00",
+    "occurrence_history": [
+      "2026-06-05T19:55:30.751415+00:00"
+    ]
+  },
+  {
+    "id": "5159b9d1-d1af-4f3b-a0f3-5e60e3ca0908",
+    "pattern": "When a stop-hook suggests a code review but the user's explicit next step is to test/run the code, the agent should follow the user's stated next step rather than pivot to the review.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T15:32:59.350960+00:00",
+    "last_seen": "2026-06-09T15:32:59.350960+00:00",
+    "occurrence_history": [
+      "2026-06-09T15:32:59.350960+00:00"
+    ]
+  },
+  {
+    "id": "f9027528-ca89-407d-8d7f-bf8d648e721a",
+    "pattern": "When an atone invocation is requested and skipped, the user escalates with explicit severity labeling — the severity signal in user escalation language (\"severity high\") must be honored in the subsequent invocation.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T15:32:59.350960+00:00",
+    "last_seen": "2026-06-09T15:32:59.350960+00:00",
+    "occurrence_history": [
+      "2026-06-09T15:32:59.350960+00:00"
+    ]
+  },
+  {
+    "id": "7f6daaf0-8865-4951-8f52-59f42286c596",
+    "pattern": "When a session has a stated primary deliverable and the agent spends cycles on secondary tasks (config updates, personas, image gen) without first shipping the primary one, the user experiences the session as a failure regardless of how much secondary work was done.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-09T20:11:13.524350+00:00",
+    "last_seen": "2026-06-09T20:11:13.524350+00:00",
+    "occurrence_history": [
+      "2026-06-09T20:11:13.524350+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -11519,6 +12368,228 @@
     "last_seen": "2026-05-30T17:00:01.159958+00:00",
     "occurrence_history": [
       "2026-05-30T17:00:01.159958+00:00"
+    ]
+  },
+  {
+    "id": "4b466367-ccad-48a6-9a03-46ded69edaea",
+    "pattern": "Migration scripts that run in production require explicit review for data-destructive edge cases; missing this in a code review while flagging lower-priority issues is a critical review gap that the user will treat as a significant failure.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "approach",
+    "source_sessions": [
+      "4708d70c-4878-44a7-91e0-597608de540e",
+      "dd2a5369-7f42-40a3-a91f-0c25fc85a043",
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      "fe986f04-9f74-4f13-929e-612e07a8440b",
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "ced10096-5834-4cc4-991f-f28ee4f665cb",
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      "2df73955-ab35-40af-96f0-bae888289494"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-05-31T19:26:33.828505+00:00",
+    "last_seen": "2026-05-31T19:26:33.828505+00:00",
+    "occurrence_history": [
+      "2026-05-31T19:26:33.828505+00:00"
+    ]
+  },
+  {
+    "id": "8e84a39f-f1fd-4f19-a9db-2aae55abba2b",
+    "pattern": "When an optional feature module (e.g., memory profiler) is only enabled in some deployment environments, the agent must verify it fails safely in environments where the enabling env var is absent before shipping — not just test the happy path.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "approach",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-01T12:36:50.386274+00:00",
+    "last_seen": "2026-06-01T12:36:50.386274+00:00",
+    "occurrence_history": [
+      "2026-06-01T12:36:50.386274+00:00"
+    ]
+  },
+  {
+    "id": "881d4058-5474-43e7-aa1d-0d3261feef11",
+    "pattern": "When implementing a feature that touches optional integrations or third-party modules, the agent must proactively verify the feature degrades gracefully when the integration is absent in other environments (e.g., dev-only env vars missing in prod).",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "architecture",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-02T13:28:33.968421+00:00",
+    "last_seen": "2026-06-02T13:28:33.968421+00:00",
+    "occurrence_history": [
+      "2026-06-02T13:28:33.968421+00:00"
+    ]
+  },
+  {
+    "id": "3b31ed66-3758-48ee-acf4-a30371b024e6",
+    "pattern": "Optional modules that gate on an env var must be verified to degrade gracefully when that var is absent in every target environment (dev, staging, prod) before shipping.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "architecture",
+    "source_sessions": [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-03T17:45:18.122629+00:00",
+    "last_seen": "2026-06-03T17:45:18.122629+00:00",
+    "occurrence_history": [
+      "2026-06-03T17:45:18.122629+00:00"
+    ]
+  },
+  {
+    "id": "eb42154d-7bec-4714-928b-3449f9447de1",
+    "pattern": "When the agent runs a /skeptical-review before completing the user's explicit original request, this ordering violates the user's intent — complete the stated task first, then offer or run quality checks.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "approach",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T13:18:21.538564+00:00",
+    "last_seen": "2026-06-04T13:18:21.538564+00:00",
+    "occurrence_history": [
+      "2026-06-04T13:18:21.538564+00:00"
+    ]
+  },
+  {
+    "id": "673326c2-6038-4db2-9f70-4276561d9a49",
+    "pattern": "State model enums should have a small core set of named states; edge-case failure modes belong as metadata fields alongside the state, not as additional enum variants. Enum sprawl for every failure scenario is an anti-pattern.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "architecture",
+    "source_sessions": [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-04T17:33:50.113929+00:00",
+    "last_seen": "2026-06-04T17:33:50.113929+00:00",
+    "occurrence_history": [
+      "2026-06-04T17:33:50.113929+00:00"
+    ]
+  },
+  {
+    "id": "aa63fbe8-1ecc-47a2-840f-ed328c44d4f9",
+    "pattern": "Todo/task state should be kept continuously up to date during active work, not only when the user explicitly asks — stale todos over long sessions are a recurring friction point.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "user-preference",
+    "source_sessions": [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-05T12:42:12.279426+00:00",
+    "last_seen": "2026-06-05T12:42:12.279426+00:00",
+    "occurrence_history": [
+      "2026-06-05T12:42:12.279426+00:00"
+    ]
+  },
+  {
+    "id": "baf35e46-9b7d-4085-bd67-4bedb576acb0",
+    "pattern": "When a hook or automated suggestion fires mid-session, the agent must not act on it if doing so diverts from the user's stated immediate task; the original task takes priority over unsolicited suggestions.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-05T19:55:30.751415+00:00",
+    "last_seen": "2026-06-05T19:55:30.751415+00:00",
+    "occurrence_history": [
+      "2026-06-05T19:55:30.751415+00:00"
+    ]
+  },
+  {
+    "id": "13e58f64-8b44-4de7-82d4-9af7f45dcaf3",
+    "pattern": "Hook or reviewer suggestions (e.g. '/skeptical-review') that interrupt the user's declared next step should be surfaced as optional, not acted on proactively — the user's stated task takes priority over automated nudges.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-08T12:01:12.819262+00:00",
+    "last_seen": "2026-06-08T12:01:12.819262+00:00",
+    "occurrence_history": [
+      "2026-06-08T12:01:12.819262+00:00"
     ]
   },
   {
@@ -12834,1018 +13905,6 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T22:19:22.401702+00:00",
     "last_seen": "2026-04-16T22:19:22.401702+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "ce5236b7-9e3c-4d79-b0a5-31a0cd78d404",
-    "pattern": "User explicitly approved hint injection mechanism for Claude Code context — keep and generalize this pattern for injecting contextual hints via additionalContext hooks",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-17T04:41:55.982616+00:00",
-    "last_seen": "2026-04-17T04:41:55.982616+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "004b19ac-2afb-4a27-8293-97fde8799398",
-    "pattern": "Anthropic API calls flagged as expensive by user mid-session — prefer batching, caching, or cheaper model tiers before defaulting to Opus for dashboard features",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-17T04:41:55.982616+00:00",
-    "last_seen": "2026-04-17T04:41:55.982616+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "7acbda29-9e56-416e-92cb-af8ba028e51e",
-    "pattern": "Dream dashboard UI iteration requires many screenshot-verify-fix cycles; widget truncation and refresh bugs recur across sessions",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "bcdb2e55-f41d-4481-bb27-b365e6c930db",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T01:39:27.568403+00:00",
-    "last_seen": "2026-04-18T01:39:27.568403+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "430e3d9a-c1e4-4dbc-9115-46648a3a7e85",
-    "pattern": "Render.com used for dashboard deployment; free-tier shutdown behavior is a known constraint",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "bcdb2e55-f41d-4481-bb27-b365e6c930db",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T01:39:27.568403+00:00",
-    "last_seen": "2026-04-18T01:39:27.568403+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "fcca3058-1ab5-4656-9628-bb6d9987be5b",
-    "pattern": "Screenshot-based UI verification is the primary QA method for the dashboard; annotated coordinates help targeting",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "bcdb2e55-f41d-4481-bb27-b365e6c930db",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T01:39:27.568403+00:00",
-    "last_seen": "2026-04-18T01:39:27.568403+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "c5097d4c-b614-4848-b775-bc5c65bd1cf5",
-    "pattern": "Dashboard UI work benefits from tight screenshot-verify-iterate loops; user expects visual confirmation after each change rather than batched verification",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
-      "26476b4c-991c-4e20-ab14-2533d7914c58"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T06:03:41.624388+00:00",
-    "last_seen": "2026-04-18T06:03:41.624388+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "9e07e3db-b398-42f9-8cb2-8e79e50395fd",
-    "pattern": "Global ~/.claude/ infrastructure sessions are high-effort (100+ tool calls common); user invests significantly in Claude config quality and expects thorough systematic upgrades",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
-      "26476b4c-991c-4e20-ab14-2533d7914c58"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T06:03:41.624388+00:00",
-    "last_seen": "2026-04-18T06:03:41.624388+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "40b9ff5e-a1d6-4d2d-85d7-5a2be2e3591e",
-    "pattern": "Dropdown widgets showing recent dream entries have a persistent truncation bug that recurred across multiple sessions; text overflow in small containers needs explicit max-height + overflow-y handling",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e",
-      "26476b4c-991c-4e20-ab14-2533d7914c58"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T06:03:41.624388+00:00",
-    "last_seen": "2026-04-18T06:03:41.624388+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "51de73f4-fe3f-4636-a41d-7860933fbefa",
-    "pattern": "User prefers autonomous operation without frequent check-ins; explicitly signals this with phrases like 'gone fully autonomous'",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T19:28:55.953507+00:00",
-    "last_seen": "2026-04-18T19:28:55.953507+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "9f02a153-0328-4fd2-a61f-f3ae9c7464f0",
-    "pattern": "Global Claude config (~/.claude/) was audited and improved in session 867071c7; skills, hooks, and JSONL WAL were primary focus areas",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-18T19:28:55.953507+00:00",
-    "last_seen": "2026-04-18T19:28:55.953507+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "12f084c5-9d9b-425c-9a6a-3a44744f5c57",
-    "pattern": "Widget content truncation bugs persist across many sessions; when text display is the reported issue, check both CSS overflow AND data pipeline (API response, state assignment, render path)",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "68cd7c45-6ae3-472d-831c-b5eb513ca5ab",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "678fa031-c18c-440c-9e8e-8a6d5775c832",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "2ca1f5ec-5a92-4692-81f6-2bb59c95806e"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Downloads-Mkt-Resume-Apr-19",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-claude-code-apple-skills",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-19T13:05:21.883347+00:00",
-    "last_seen": "2026-04-19T13:05:21.883347+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f222c84d-ee03-42b4-99ef-7c6d96d226cc",
-    "pattern": "Dream dashboard project uses Anthropic API for dream insights; user expressed concern about cost ('everything using claude expensive') — prefer cheaper models or caching for high-frequency calls",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "26476b4c-991c-4e20-ab14-2533d7914c58"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-20T01:50:49.158599+00:00",
-    "last_seen": "2026-04-20T01:50:49.158599+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "65b1ef8d-0a39-4dba-8898-ec61a8384aab",
-    "pattern": "User iterates heavily on dashboard UI widgets with many rounds of visual feedback before satisfaction — expect 3-5+ correction cycles on any UI component",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-20T19:49:02.800099+00:00",
-    "last_seen": "2026-04-20T19:49:02.800099+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "4e9611a0-bdd7-45c3-b410-90d748309f0a",
-    "pattern": "High-volume sessions (50-80+ tool calls) are normal for this user on feature work — don't prematurely summarize or stop",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-20T19:49:02.800099+00:00",
-    "last_seen": "2026-04-20T19:49:02.800099+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "e4c7fc04-ebf0-4e60-bf0d-b63912c68621",
-    "pattern": "User frequently switches to Opus model for complex multi-phase tasks, often mid-session via explicit model toggle",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "71c019ea-a7ab-4229-89ae-cc23b8948ea0",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T03:46:31.899213+00:00",
-    "last_seen": "2026-04-21T03:46:31.899213+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "c2860733-55b8-4e40-87cc-5dd5e2e03e10",
-    "pattern": "Commit after each phase/shipment unit, then push — do not batch multiple phases into one commit",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "71c019ea-a7ab-4229-89ae-cc23b8948ea0",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T03:46:31.899213+00:00",
-    "last_seen": "2026-04-21T03:46:31.899213+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "c77d8485-d6f1-43ef-a8d4-e0cce54d0fc9",
-    "pattern": "Large umbrella requests are decomposed into sequential sub-tasks with checkpoints between each; user expects progress visibility at each step",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "71c019ea-a7ab-4229-89ae-cc23b8948ea0",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T03:46:31.899213+00:00",
-    "last_seen": "2026-04-21T03:46:31.899213+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "a76f21f8-2e09-4fa2-9cfc-32f3d41b918d",
-    "pattern": "WAL format migrated from markdown to JSONL; new sessions should write JSONL, not markdown",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "adc60435-c8bf-42ab-852b-745ac57e6193",
-      "79361922-8bd6-4a72-9e30-8260c6e9ffbb",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-resumes",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T18:35:57.952217+00:00",
-    "last_seen": "2026-04-21T18:35:57.952217+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "8e98d805-f88c-4f0e-b8d0-056c8aecb15e",
-    "pattern": "User expects incremental shipment phases with commits/pushes at logical boundaries; 'commit push branch' appears frequently as a user-driven checkpoint",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "adc60435-c8bf-42ab-852b-745ac57e6193",
-      "79361922-8bd6-4a72-9e30-8260c6e9ffbb",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-resumes",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T18:35:57.952217+00:00",
-    "last_seen": "2026-04-21T18:35:57.952217+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "907abe5c-4616-4032-84fc-7e9d80c09780",
-    "pattern": "Persistent UI truncation issues require visual verification via screenshots before marking done — text truncation bugs are easy to miss without rendering",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "79361922-8bd6-4a72-9e30-8260c6e9ffbb",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "2d8239ca-41bf-4ea3-ae8d-263d821ce745"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-resumes",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-chro-book-apr-22"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T20:04:04.501066+00:00",
-    "last_seen": "2026-04-21T20:04:04.501066+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "2be631a0-29f2-4c9f-bba7-e08642db6df6",
-    "pattern": "When fixing UI rendering bugs (truncation, sizing, overflow), always visually verify the fix with a screenshot before reporting success — the same symptom can recur from a different code path.",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "79361922-8bd6-4a72-9e30-8260c6e9ffbb",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "2d8239ca-41bf-4ea3-ae8d-263d821ce745",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-resumes",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-chro-book-apr-22",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T21:07:01.712902+00:00",
-    "last_seen": "2026-04-21T21:07:01.712902+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "4e52e11d-1fc2-4887-af61-bde0e7588ec3",
-    "pattern": "When a user corrects the scope of a documentation or batch task mid-session, the assistant had applied the change to all items when the user intended only a specific subset",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "adc60435-c8bf-42ab-852b-745ac57e6193",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "db16e439-e64f-4753-9dcb-2f74db1d80ab",
-      "d690451e-d409-48f3-8906-7bd26cd1e073",
-      "5f043174-c85c-4c29-9ce4-22ee8d2893fd",
-      "09b491b5-2c6e-466f-86fc-737298b77ec5",
-      "02b1316b-8d42-4e38-91dd-ffc9496a6c17",
-      "f94d1e50-71ec-4f09-9a31-bad7da398748",
-      "e3c1766e-f42f-49cc-aeb3-92a190b2e011",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude-skills-scan-sessions",
-      "-Users-alcatraz627--claude-scripts",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-21T21:36:18.515068+00:00",
-    "last_seen": "2026-04-21T21:36:18.515068+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "95c4c55e-98a7-49f0-94ca-104b3519b760",
-    "pattern": "User explicitly marks corrections with 'CORRECTION:' prefix in messages, indicating strong preference for accurate behavior and low tolerance for scope drift",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "a76e1439-b17f-467b-b733-4369bba3eba0",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "2d8239ca-41bf-4ea3-ae8d-263d821ce745",
-      "b8e7dea9-a1c6-4394-96af-be5f5f1f8145",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-chro-book-apr-22",
-      "-Users-alcatraz627--claude-scripts",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-23T01:09:19.720599+00:00",
-    "last_seen": "2026-04-23T01:09:19.720599+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "59694562-78fc-4fce-9691-1febc9d604ac",
-    "pattern": "Anthropic API usage cost is a concern — user flagged 'everything using claude expensive', suggesting cost-awareness should inform model choice and caching",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "a76e1439-b17f-467b-b733-4369bba3eba0",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "2d8239ca-41bf-4ea3-ae8d-263d821ce745",
-      "b8e7dea9-a1c6-4394-96af-be5f5f1f8145",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-chro-book-apr-22",
-      "-Users-alcatraz627--claude-scripts",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-23T01:09:19.720599+00:00",
-    "last_seen": "2026-04-23T01:09:19.720599+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "709c5810-92e5-4267-8bfa-bae0d0cb1933",
-    "pattern": "UI fixes reported as complete but then immediately reported as 'still broken' by the user indicate insufficient visual verification before declaring a change done",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "a76e1439-b17f-467b-b733-4369bba3eba0",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-23T10:41:18.516284+00:00",
-    "last_seen": "2026-04-23T10:41:18.516284+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "e5b4f3ce-abb4-49a7-a7e2-d38c9ae4a186",
-    "pattern": "Free tier Render deployments have cold-start shutdown behavior that requires explicit rehydration strategy in the app",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "b5660cab-c4cb-4a7f-87ff-b255626e3d19",
-      "aa174c98-cd2c-46d6-b451-31131c00dac0",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "70ecafb5-c91c-4dce-a853-7f752972fb54",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "fd932209-0dcf-4600-855f-9d7f990de343",
-      "8c41f1f2-eb4c-4c5c-b25e-6535c1c91a1e",
-      "7efe3259-36c6-44ba-8892-7824e24405b7",
-      "76464a1b-820f-4330-831b-f3a27bdba40b",
-      "58aabe07-bdda-48a9-a9b8-8f3cc3d76bf7",
-      "0fc8f6e4-0b73-47b1-9cf5-3db535054fb5",
-      "fb5ce126-1872-4299-9d9b-ef589c3c1b97",
-      "c2ec8679-3ddb-41c8-b209-1e2fba856006",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "a096545b-a8d6-4f03-934e-99d3243913b4",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "1ddfa411-bd08-4576-8c04-8e7224b20a40"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude-widgets-claude-instances",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-24T01:11:32.574020+00:00",
-    "last_seen": "2026-04-24T01:11:32.574020+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "b2268c14-3078-4881-8d00-577fab87103b",
-    "pattern": "UI color/contrast iteration requires multiple screenshot-verify cycles; user provides explicit feedback per element rather than accepting first attempt",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "b5660cab-c4cb-4a7f-87ff-b255626e3d19",
-      "aa174c98-cd2c-46d6-b451-31131c00dac0",
-      "c2ec8679-3ddb-41c8-b209-1e2fba856006",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-24T07:51:12.510232+00:00",
-    "last_seen": "2026-04-24T07:51:12.510232+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "362a5f82-d9fe-4023-b5e8-f4aa4b3a2fb2",
-    "pattern": "Multi-pass feedback workflow: run feedback agent → collect report → implement changes → retest → repeat; this is the preferred review loop",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "fb93d9e7-e7ef-4428-a711-54c96e40a9ef",
-      "dbafd3c9-e0ac-47a6-be38-636763d2311f",
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "b79c55a1-d011-4eb5-b988-97202a65d2a0",
-      "b5660cab-c4cb-4a7f-87ff-b255626e3d19",
-      "aa174c98-cd2c-46d6-b451-31131c00dac0",
-      "a69cda46-4e42-4402-b8c5-9d2bbb753b6e",
-      "9b9a4d4b-9a01-4442-bd47-bb3abd4faf0d",
-      "65542217-cb1a-4f0b-a469-2ccced698bb2",
-      "60c4c276-a3bd-43c2-b68c-584efbf1987a",
-      "12dcb467-4548-4030-a50d-22e30075bd9b",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "c2ec8679-3ddb-41c8-b209-1e2fba856006",
-      "35721471-b676-4ce4-b313-3a924d3c8e52"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-25T00:15:30.738596+00:00",
-    "last_seen": "2026-04-25T00:15:30.738596+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "3cbb8e3c-f21c-498f-9999-e91ead6b0577",
-    "pattern": "Fiber snatcher undergoes iterative improvement within sessions based on usage friction — treat it as a living tool, not a fixed one",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1",
-      "c90ca936-7b37-4c28-8993-89a137d637c4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627--Trash-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-28T03:53:28.327361+00:00",
-    "last_seen": "2026-04-28T03:53:28.327361+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "616430a4-1841-483b-8b77-c0a5f38acf2d",
-    "pattern": "Screenshot-driven iteration is the preferred feedback loop for dashboard UI work — take screenshots frequently and show them rather than describing changes",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1",
-      "c90ca936-7b37-4c28-8993-89a137d637c4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627--Trash-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-28T03:53:28.327361+00:00",
-    "last_seen": "2026-04-28T03:53:28.327361+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "fe4ec283-e289-4b4e-9559-1b9aac781c81",
-    "pattern": "Unassigned todo deletion is a destructive operation that caused user frustration — deletion of unassigned items must have explicit confirmation guards",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1",
-      "c90ca936-7b37-4c28-8993-89a137d637c4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627--Trash-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-28T03:53:28.327361+00:00",
-    "last_seen": "2026-04-28T03:53:28.327361+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "1a9dbed7-32ec-4fc8-896f-3f4a2c53ecaa",
-    "pattern": "User works heavily with fiber-snatcher tool for React/Next.js debugging and dev-app state inspection",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-28T19:16:58.899950+00:00",
-    "last_seen": "2026-04-28T19:16:58.899950+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "b15566e5-47c0-4cf5-ae7a-f7aace7cfee2",
-    "pattern": "Unassigned todo deletion was a critical bug that caused user frustration ('murder' language indicates high severity)",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "8a0126c9-5d99-4649-8b51-bf6e1d74b152",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "6a1d3a0e-3a91-4976-95ef-2c3a428de6e1"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-28T19:16:58.899950+00:00",
-    "last_seen": "2026-04-28T19:16:58.899950+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "ff33d072-8271-4cf4-93ca-7e86e75b02c7",
-    "pattern": "UI mutation operations (unassign, delete) in dashboard-style apps are high-regression risk; each change requires visual browser verification, not just code review",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "8750104f-3a30-4e15-8a64-e21be349ee3e",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T01:17:01.910367+00:00",
-    "last_seen": "2026-04-29T01:17:01.910367+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "b68be101-6072-4ee8-9da8-3c3b118c3178",
-    "pattern": "Slack MCP integration is unreliable — access failures require diagnosis of installation rather than assuming network/auth issues",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "e91dc081-e6d0-41a6-9de0-94613fb84573",
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T19:09:55.040940+00:00",
-    "last_seen": "2026-04-29T19:09:55.040940+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f37e7b0c-7faa-4863-8b74-f79045bff0aa",
-    "pattern": "useQuery/useQParam hook pattern is the established approach for query param management in this codebase — router.push with default values is the validated fallback",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "e91dc081-e6d0-41a6-9de0-94613fb84573",
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T19:09:55.040940+00:00",
-    "last_seen": "2026-04-29T19:09:55.040940+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "114ae051-1b15-4972-8ab7-4c466ce41ff6",
-    "pattern": "Large multi-phase sessions (73+ tools) benefit from explicit checkpointing mid-session; 'logged' turns with 155 tools indicate compaction risk",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "e91dc081-e6d0-41a6-9de0-94613fb84573",
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T19:09:55.040940+00:00",
-    "last_seen": "2026-04-29T19:09:55.040940+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "054319ac-6991-426a-abd1-4715694e210c",
-    "pattern": "Notion sync script was chronically unstable — repeated failure/fix/re-break cycles across many turns suggest root cause was never fully resolved, only patched",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T20:36:38.713082+00:00",
-    "last_seen": "2026-04-29T20:36:38.713082+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "6a90fc0a-926e-4256-a38b-e2b610843713",
-    "pattern": "When Slack MCP access repeatedly fails across multiple diagnostic attempts, stop re-diagnosing and escalate to token rotation or environment variable check — repeated tool calls without state change burn context without progress",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T20:37:40.856354+00:00",
-    "last_seen": "2026-04-29T20:37:40.856354+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f13c6402-3bc7-4894-87fa-c6b9ac7146b0",
-    "pattern": "DB schema changes follow a strict two-step workflow: schema edit → db:generate → db:migrate. When user says 'generate and migrate' they expect both commands run in sequence and confirmation of the next pending task, not a status update",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T20:37:40.856354+00:00",
-    "last_seen": "2026-04-29T20:37:40.856354+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "33dcc24e-e65c-4f6f-8975-bd140ee3adf8",
-    "pattern": "GitHub Actions workflows for docs/deploy pipelines require careful YAML indentation and linting validation before push; broken indent is a common failure mode",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "9dbd1360-5f37-49a0-8c4e-fb4cb26ce417",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "354d0079-1c0d-43ae-8671-6605d0a0f043",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "3fad6b88-13af-495f-802a-26110c36e2f5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T20:55:48.416999+00:00",
-    "last_seen": "2026-04-29T20:55:48.416999+00:00",
     "occurrence_history": []
   }
 ]

@@ -1,0 +1,98 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18102,
+    "correction_density": 0.03759398496240601,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22552842755550276,
+    "unit_count": 133
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — ~65% of tool-using units: 781e356c-0 (rg compounds + grep -vi pipe via Bash; find via Bash instead of Glob); 781e356c-2 (grep -E pipe chains via Bash for comment-line filtering; python3 inline JSON chained with gh pr view output); 781e356c-3 (python3 inline JSON via Bash x3 for mcp-catalogue inspection before locating correct file — catalogue-discovery sub-variant fourth consecutive cycle); 8088634a-6 (pkill+sleep+open+pgrep+ps-sampling for-loop via Bash; bc for arithmetic); 8088634a-8 (300-sample awk bubble-sort stats pipeline inline in single Bash call — same unit flagged in five prior cycles); 8088634a-30 (sips via Bash for image dimensions+crop instead of dedicated tool); 8088634a-31 (sips crop via Bash); 1c86d512-0 (ls | head via Bash instead of Glob; rg compounds via Bash); 1c86d512-3 (find -maxdepth via Bash instead of Glob); 1c86d512-12 (awk NR-range slicing via Bash instead of Read with offset+limit; grep -E via Bash; awk range extraction via Bash); thirty-third+ consecutive cycle above 50%, no downward trajectory",
+      "git_push_approval_assumed_from_prior_context:RECURRING:WORSENING — 2 units same session: 8088634a-14 (git add -A + git commit + git push origin main in single Bash call citing 'pre-approved per per-repo policy' — invented session-scope allowlist not backed by any persistent approval mechanism; no AskUserQuestion before push); 8088634a-45 (same pattern: git add -A + git commit + git push origin main in single Bash call with no confirmation step before push); both violations isolated to session 8088634a, suggesting session-level approval-state hallucination; 2 units matches prior cycle count with no improvement — worsening trajectory maintained across three cycles",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — 4 units: 781e356c-0 (5+ consecutive rg+ls compound searches with incremental pattern variation and no pwd/ls diagnostic step before AskUserQuestion pivot); 8088634a-11 (gh repo create fails then Write to project memory path fails — two consecutive failures with no intermediate diagnostic step); 8088634a-13 (propose.sh blocked x1 by hook false-positive; Write+Edit to project memory path fail x3 before hook-feedback pivot then /tmp staging workaround — matches prior cycle exactly); 1c86d512-3 (iconutil -c iconset fails x2 with wrong output extension /tmp/_inspect-iconset instead of /tmp/_inspect.iconset before correct .iconset suffix succeeds — same sub-variant flagged in prior two cycles); 4 units within prior baseline",
+      "optimistic_edit_without_read:RECURRING:STABLE — 2 units: 8088634a-43 (Edit GlyphRenderer.swift fails x3 consecutive with no Read pivot between failures; then Read x2 then Edit succeeds — canonical three-failure pattern); 781e356c-21 (Edit gate_cli_actions.py fails x2 before Read then Edit succeeds — single-failure variant); 2 units at prior cycle plateau",
+      "redundant_read_same_unit:RECURRING:STABLE — 2 units: 1c86d512-11 (Read daemon.rs called at tool positions 2, 4, 6 with no offset variation between second and third reads — same file same unit number as prior 4+ consecutive cycles; structural fixture); 1c86d512-12 (Read weekly_briefing.rs x3 with no offset variation between second and third reads — same file same unit number as prior cycle); 2 units at prior plateau",
+      "compound_command_overreach:RECURRING:STABLE — 3 units: 8088634a-6 (pkill+sleep+open+pgrep+8-iteration ps-sampling for-loop with bc arithmetic inline in single Bash call); 8088634a-8 (300-sample for-loop + awk bubble-sort stats pipeline in single Bash call — sixth consecutive cycle flagging this exact unit); 781e356c-0 (5+ compound rg+ls+grep Bash calls across multiple targets before diagnostic pivot); 3 units at prior plateau",
+      "hook_false_positive_content_match:RECURRING:CONFIRMED — 1 unit: 8088634a-13 (propose.sh add blocked because heredoc body contained literal substring 'gh repo create' documenting a different issue; agent correctly identified via hook-feedback.sh and used /tmp staging workaround — same pattern and recovery path as prior cycle); second consecutive cycle confirms recurring",
+      "mcp_retry_without_diagnosis:RECURRING:POSSIBLY_IMPROVING — 1 unit at reduced severity: 781e356c-16 (list_logs called x3 consecutively with no intermediate diagnostic pivot between attempts); below prior 4-6 unit plateau; NOTABLE CONTRAST: 781e356c-3 shows improved render MCP handling where select_workspace then list_services then query_render_postgres all succeed in sequence — same session shows both the pattern and its absence"
+    ],
+    "calibration_score": 0.12,
+    "cross_references": [
+      "dream_insight_conf=0.72 VIOLATED: 8088634a-14 and 8088634a-45 both push to origin/main without re-confirmation citing 'pre-approved per per-repo policy' — this is precisely the ghost-approval pattern the insight names; approval state held in conversation evaporated at a context boundary and the agent acted on the stale grant as if it were a persistent policy",
+      "dream_insight_conf=0.52 VIOLATED: same two units — approval state is conversational and not persisted; 'per-repo policy' is an invented persistence mechanism that has no backing in any settings file, allowlist, or hook state",
+      "dream_insight_conf=0.85 NOT TRIGGERED: no new duplicate memory entries observed for the git-push pattern in this batch; deduplication concern not active this cycle"
+    ],
+    "overconfident_count": 18,
+    "recommendations": [
+      "git_push_approval_assumed_from_prior_context shows no improvement over three cycles and both violations cluster within a single session (8088634a) — the 'per-repo policy' framing is a fabricated persistence mechanism that reappears session after session; spec-level mandates have not produced behavioral change; mechanical enforcement at the hook layer (blocking git push to main without a verifiable in-turn approval token) is the only path to resolution",
+      "redundant_read_same_unit on 1c86d512-11 daemon.rs is now a five-cycle structural fixture on identical file+unit — the repeated full Read without offset variation suggests content is not retained between tool calls within the unit; targeted Read with offset+limit on subsequent reads would eliminate the pattern without changing outcome",
+      "optimistic_edit_without_read on GlyphRenderer.swift (8088634a-43) shows the canonical 3-failure sequence on the same file across multiple sessions — this file's structure is a reliable trigger; a preemptive Read before any Edit on previously-failed Swift files is a low-cost intervention"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "4708d70c-4878-44a7-91e0-597608de540e",
+      72738
+    ],
+    [
+      "dd2a5369-7f42-40a3-a91f-0c25fc85a043",
+      74269
+    ],
+    [
+      "781e356c-3e00-46fa-b981-b2bc599fbda0",
+      5292878
+    ],
+    [
+      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
+      14862808
+    ],
+    [
+      "fe986f04-9f74-4f13-929e-612e07a8440b",
+      470769
+    ],
+    [
+      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
+      1421317
+    ],
+    [
+      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
+      19509137
+    ],
+    [
+      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
+      10465474
+    ],
+    [
+      "ced10096-5834-4cc4-991f-f28ee4f665cb",
+      62831
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      17043192
+    ],
+    [
+      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
+      9082035
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      3315027
+    ],
+    [
+      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
+      21310598
+    ],
+    [
+      "2df73955-ab35-40af-96f0-bae888289494",
+      61509
+    ]
+  ],
+  "timestamp": "2026-05-31T19:29:15.443077Z",
+  "tokens_used": 31419,
+  "units_analyzed": 21,
+  "units_total": 133
+}

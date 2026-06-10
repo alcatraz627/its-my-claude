@@ -1,30 +1,31 @@
 {
-  "last_updated": "2026-05-29T15:40:44.880871Z",
-  "average_depth": 27.5,
-  "average_breadth": 1.6,
-  "fixation_rate": 0.4,
-  "assumption_rate": 0.47,
-  "overconfidence_rate": 0.37,
+  "last_updated": "2026-06-05T16:08:36.124556Z",
+  "average_depth": 26.2,
+  "average_breadth": 2.1,
+  "fixation_rate": 0.13,
+  "assumption_rate": 0.62,
+  "overconfidence_rate": 0.42,
   "common_assumptions": [
-    "file location known without prior grep/search",
-    "return type inferred from function name without reading definition",
-    "structural authority claim made without file:line citation",
-    "helper/utility exists where semantically expected without verification",
-    "configuration format or schema assumed from pattern-matching alone"
+    "File exists at expected path without verification",
+    "Previous session state and process state are unchanged",
+    "Tool output is complete and untruncated",
+    "A single edit will resolve the issue without runtime testing",
+    "Environment variables and credentials are correctly set",
+    "Git working tree state matches expectation from earlier in session"
   ],
   "strength_patterns": [
-    "methodical diagnostic iteration: running commands, reading output, adjusting next step based on result",
-    "multi-file context assembly before editing to understand coupling across components",
-    "git-aware operations with pre-push status+diff+log verification before risky ops"
+    "Thorough pre-edit reads: most substantive chains read multiple context files before writing, reducing blind edits",
+    "Post-change verification: type-check and build commands (tsc --noEmit, npm run check) appear after edits in ~40% of tool-heavy chains",
+    "Diagnostic breadth on failures: chains like fb93d9e7 fan out across multiple diagnostic surfaces before narrowing"
   ],
   "weakness_patterns": [
-    "edit-heavy loops without root-cause diagnosis: same file edited 5+ times when a single dependency read would clarify",
-    "assumption-driven implementation: jumping to edits based on expected structure rather than reading actual schema first",
-    "re-edit thrashing under overconfidence: initial approach confidently wrong, requiring 10+ correction rounds"
+    "Same-file re-edit loops without re-reading or root-cause analysis: f3ddfd2f calls statusline.sh 20+ times, fa0b19cf edits +page.svelte 50+ times, fc4190a7 edits +layout.svelte 20+ times",
+    "Repeated identical commands on failure without hypothesis change: f3ddfd2f reruns statusline-diag.py and statusline-test.py in unbroken sequence with no intervening diagnostic pivot",
+    "Premature closure on trivial chains: 7 of 31 chains are 0-2 steps with no tool use, suggesting context was not checked before responding to tasks that warranted it"
   ],
   "trend": {
     "calibration_improving": false,
     "depth_trend": "stable",
-    "breadth_trend": "decreasing"
+    "breadth_trend": "stable"
   }
 }

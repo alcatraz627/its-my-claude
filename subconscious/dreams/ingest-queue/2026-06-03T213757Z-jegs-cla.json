@@ -1,0 +1,41 @@
+{
+  "ts": "2026-06-03T21:37:57Z",
+  "session_id": "jegs-classifier",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/_20260604-jegs-classifier.claude.md",
+  "insights": {
+    "worked": [
+      "Grounding before building \u2014 finding `lib/matchers/` first avoided rebuilding an embedding stack from scratch and resolved the \"no training\" concern with evidence.",
+      "The repl-agent comparison surfaced the single best idea: **confidence as a property of retrieval (score + margin-to-#2), not the model's self-report.** The live demo (LLM 0.95 vs retrieval 0.643 on a 0.0055-margin tie) is the proof.",
+      "Skeptical-review (fresh adversarial context) caught real nits and verified the Pinecone-7.3.0 result shapes by instantiating the real OpenAPI objects."
+    ],
+    "didnt_work": [
+      "File Tools MCP `list_sheets`/`read_tabular` errored on .xlsx (`XLSX.readFile is not a function`) \u2192 pandas fallback.",
+      "A tracked-file edit (registration in `methods/__init__.py`) was LOST across a user commit (58049cdc) \u2014 had to re-add. Watch for collateral loss of uncommitted edits to tracked files across commits/merges.",
+      "Early over-defensive code (dict-or-attr branches) tripped my own no-speculative-breadth rule; skeptical-review flagged it."
+    ],
+    "gotchas": [
+      "`NonRetryablePipelineError` is NOT special-cased by `task_runner` \u2014 despite the name it gets RETRIED. `TaskTerminalError(code, ...)` is the only true terminal/no-retry path; it must be passed through `process_pipeline` (now via `except WorkerException`).",
+      "Pinecone cache backend in prod = `MongoDBKVBackend` (DEBUG \u2192 in-memory), not Redis.",
+      "The autocorrect hinter mangles `rg`/`cat` OUTPUT (pinecone\u2192\"ln\", get_object\u2192\"n\") \u2014 read files with the Read tool, don't trust mangled bash text.",
+      "The retrieval_confidence formula is cosine-scale; do NOT copy repl-agent's `/5`,`/10` lexical-scale constants."
+    ],
+    "notes": [],
+    "feedback": [
+      "Wants to think-first: explore/ground/recommend before changing code; don't jump to edits.",
+      "Comment style: terse, human-first, no archeology/planning artifacts (the pyproject thread).",
+      "Show how to run/test things themselves (the \"where's the output / show me how to test\" correction).",
+      "Strongly anti-overengineering; measure before committing; wants the easy wins + tradeoffs + risks made explicit."
+    ]
+  },
+  "pending": [
+    "**Accuracy benchmark** (highest priority, recurring theme): wire a labeled, DIVERSE sample into `tests/benchmark_classifier.py`; compare gate sources (agent vs retrieval vs min) and plain vs two-pass. This is the gate to trusting `retrieval`/`min` confidence and to calibrating the retrieval_confidence formula (currently an uncalibrated cosine-scale heuristic).",
+    "**Two-pass recall fallback** \u2014 designed, NOT built (`retry_shortlist_size` arg: on low pass-1 confidence, re-retrieve with larger K, re-classify, then gate).",
+    "**Full pipeline-runner end-to-end** \u2014 the job-config path (process_pipeline \u2192 data_set_bulk \u2192 output columns) has NOT been run; only direct matcher+agent + isolated execute() verified.",
+    "**Decide which stashed wins to keep/merge** \u2014 deterministic confidence + alternatives + traceability are stashed.",
+    "**S3 catalog-load path** (`init_index_from_s3`) not live-tested (direct test used `init_index` from the local XLSX).",
+    "Stale ref: job config `dev_notes` points at `scripts/upload_and_index_client_part_types.py`, which the user removed.",
+    "Hold behind benchmark: hybrid lexical re-rank, LLM-skip-when-confident, catalog versioning (namespace/hash per list version)."
+  ],
+  "tags": []
+}

@@ -1,0 +1,101 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18143,
+    "correction_density": 0.02564102564102564,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.27406262140870263,
+    "unit_count": 39
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:POSSIBLY_IMPROVING — unit-16 (ls -la via Bash for venv binary path check; ls via Bash piped to rg for bin/ directory listing — both should use LS/Glob); unit-11 (ls -1 via Bash for docs/tech/frontend/ directory listing instead of LS; sed -n '1,40p' via Bash for first-40-lines read instead of Read tool); 2 of ~13 substantive tool-using units — count is lower than prior three-cycle peak of 4-5 units per cycle; first downward trajectory signal across nine consecutive cycles; pattern still present but rate visibly reduced; insufficient to mark resolved",
+      "compound_command_overreach:RECURRING:STABLE — unit-8 (231597a7-8): curl wait-loop + rg log-grep compound command fails success=false; decomposed into individual curl and rg Bash calls only after failure; structure and decompose-only-after-failure sequence match prior three cycles exactly; no improvement",
+      "anchoring:RECURRING:STABLE — unit-1 (231597a7-1): four sequential sysctl/system_profiler/df/ollama Bash calls as mandatory hardware-profiling prerequisite before local model recommendation; structurally identical to 2026-06-07 instance; now confirmed STABLE across two observed instances at same session entry slot; no improvement",
+      "mcp_retry_without_diagnosis:ABSENT_THIS_CYCLE — no mcp__file-tools usage observed across any unit in this batch; absence likely reflects task composition (no Excel/tabular files) rather than behavioral change; do not mark resolved until confirmed absent across a cycle that includes file-tools-eligible tasks",
+      "optimistic_write_without_verification:ABSENT_THIS_CYCLE — no consecutive Write failures observed; same caveat as mcp_retry; monitor next cycle with file-write-heavy sessions",
+      "bash_retry_without_diagnosis:ABSENT_AS_STANDALONE — no git-stash-style retry-without-diagnosis observed; unit-8 compound failure decomposed without a true retry loop; pattern may be subsumed by compound_command_overreach this cycle"
+    ],
+    "calibration_score": 0.25,
+    "cross_references": [
+      "unit-1 CONFIRMS dream insight (wake 2026-05-22, conf=0.65): hardware profiling treated as prerequisite before model recommendation is the anchoring pattern described exactly; dream synthesis accurately predicted recurrence; insight is load-bearing",
+      "unit-15 meta.json Bash write contains hardcoded token counts (73748, 75409, 67550) written inline without reading actual token data from voter files — aligns structurally with the data-hallucination insight (wake 2026-05-22, conf=0.65) about filling information gaps with synthesized plausible values rather than surfacing the gap; not confirmed fabrication but the pattern matches",
+      "no units in this batch involve git push or terse-continuation-as-push-approval ambiguity — the terse-signal boundary insight (wake 2026-05-22, conf=0.72) was neither violated nor confirmed this cycle"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "shell_tool_preference_violations: Rate is 2/13 vs prior peak of 5/9-13 — first genuine multi-cycle downward signal; avoid declaring improvement until replicated across a second cycle with similar file-inspection task density; the remaining instances (ls for binary check, sed for file preview) are lower-blast variants than prior cat+head patterns but still count",
+      "anchoring: Confirmed STABLE after second identical instance at session-entry slot; pre-task hardware profiling should be gated on whether system specs are present in memory or were queried earlier this session — skip profiling if already known; the four-call sequence is disproportionate to its information value when specs are retrievable from a prior turn",
+      "compound_command_overreach: No improvement across four consecutive cycles; apply decompose-first discipline at call-site — if a compound spans two distinct verification domains (server liveness + log inspection), split into two Bash calls before the first attempt, not after failure",
+      "mcp_retry_without_diagnosis and optimistic_write_without_verification: Absence this cycle does not signal improvement; these are task-density-dependent and will re-emerge; deprioritize active recommendations until next file-tools or write-heavy cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      2900811
+    ],
+    [
+      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
+      68365
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      1896144
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      2430979
+    ],
+    [
+      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
+      151083
+    ],
+    [
+      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
+      95218
+    ],
+    [
+      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
+      57261
+    ],
+    [
+      "c5baf85e-73ea-4410-a566-602ae4f4696f",
+      17043583
+    ],
+    [
+      "88816546-f50b-4439-a69f-11a0920af8d9",
+      63833
+    ],
+    [
+      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
+      74493
+    ],
+    [
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      427923
+    ],
+    [
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      2576923
+    ],
+    [
+      "4f8b41d2-2394-4357-b62d-540a2f64b245",
+      66160
+    ],
+    [
+      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
+      3826993
+    ],
+    [
+      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7",
+      44088
+    ]
+  ],
+  "timestamp": "2026-06-09T15:35:38.164784Z",
+  "tokens_used": 24513,
+  "units_analyzed": 20,
+  "units_total": 39
+}

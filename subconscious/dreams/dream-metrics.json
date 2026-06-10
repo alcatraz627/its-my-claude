@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-31T13:37:44Z",
-  "events_analyzed": 48602,
-  "sessions_analyzed": 147,
+  "generated_at": "2026-06-10T08:03:36Z",
+  "events_analyzed": 52296,
+  "sessions_analyzed": 162,
   "session_quality": {
-    "average_score": 68.4,
+    "average_score": 68.3,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,54 +170,54 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": ".claude",
+    "primary_focus": "enhancement-product",
     "recent_projects": {
+      "enhancement-product": 3,
       ".claude": 3,
+      "local-models": 1,
       "tmp": 2,
-      "i-dream": 3,
-      "frontend": 1,
-      "sys-monitor": 1
+      "banner-fun": 1
     },
-    "drift_rate": 0.669,
-    "total_switches": 97,
+    "drift_rate": 0.675,
+    "total_switches": 108,
     "recent_switches": [
       {
-        "ts": "2026-05-30T11:29:10Z",
+        "ts": "2026-06-08T21:15:05Z",
+        "from": "local-models",
+        "to": "tmp"
+      },
+      {
+        "ts": "2026-06-09T08:59:32Z",
         "from": "tmp",
-        "to": "frontend"
+        "to": "banner-fun"
       },
       {
-        "ts": "2026-05-30T11:29:15Z",
-        "from": "frontend",
-        "to": "i-dream"
+        "ts": "2026-06-09T09:46:12Z",
+        "from": "banner-fun",
+        "to": "enhancement-product"
       },
       {
-        "ts": "2026-05-31T10:47:04Z",
-        "from": "i-dream",
+        "ts": "2026-06-09T11:03:13Z",
+        "from": "enhancement-product",
         "to": ".claude"
       },
       {
-        "ts": "2026-05-31T10:56:23Z",
+        "ts": "2026-06-09T21:15:28Z",
         "from": ".claude",
-        "to": "i-dream"
-      },
-      {
-        "ts": "2026-05-31T12:49:08Z",
-        "from": "i-dream",
-        "to": "sys-monitor"
+        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 4460,
-    "corrections": 1051,
-    "confirmations": 840,
-    "directives": 164,
-    "terse_messages": 335,
-    "correction_rate": 0.236,
-    "confirmation_rate": 0.188,
-    "directive_rate": 0.037,
-    "terse_rate": 0.075,
+    "total_prompts": 4857,
+    "corrections": 1127,
+    "confirmations": 887,
+    "directives": 172,
+    "terse_messages": 389,
+    "correction_rate": 0.232,
+    "confirmation_rate": 0.183,
+    "directive_rate": 0.035,
+    "terse_rate": 0.08,
     "style_label": "corrective"
   }
 }

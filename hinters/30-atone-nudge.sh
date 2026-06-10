@@ -24,8 +24,6 @@
 
 set -uo pipefail
 
-[ -f "$HOME/.claude/atone/.nudge-off" ] && exit 0
-
 PROMPT=$(cat)
 [ -z "$PROMPT" ] && exit 0
 
@@ -33,6 +31,35 @@ SESSION_KEY="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"
 STATE_DIR="$HOME/.claude/atone/.session-state"
 MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
 mkdir -p "$STATE_DIR" 2>/dev/null || true
+
+# ─── Part 0: explicit /atone invocation → always arm the gate ──────
+# When the user literally types /atone, an event MUST be recorded this turn —
+# this is the deterministic case, not a heuristic guess. Arm an explicit marker
+# that the blocking Stop gate (atone-stop-gate.sh) enforces.
+#
+# This runs ABOVE the .nudge-off mute on purpose: muting the noisy keyword
+# nudges (what .nudge-off does) must NOT also disable enforcement of an explicit
+# request to record. The explicit gate has its OWN opt-out, .gate-off, default
+# off. The /atone may not be at offset 0 (e.g. a second line after "Did you just
+# skip the atone call?"), so match any line that *starts* with /atone — grep is
+# line-oriented, so this scans every line of the prompt.
+if [ ! -f "$HOME/.claude/atone/.gate-off" ] \
+   && printf '%s' "$PROMPT" | grep -Eq '^[[:space:]]*/atone([[:space:]]|$)'; then
+  if command -v jq >/dev/null 2>&1; then
+    TS=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+    SNIPPET=$(printf '%s' "$PROMPT" | head -c 200 | tr '\n' ' ')
+    jq -cn --arg ts "$TS" --arg snip "$SNIPPET" \
+      '{ts: $ts, turns_unaddressed: 0, correction_snippet: $snip, explicit: true}' \
+      > "$MARKER" 2>/dev/null || true
+  fi
+  # No nudge text — the user already invoked /atone. Just arm the gate and
+  # stay out of the way (the skill's own instructions drive the recording).
+  exit 0
+fi
+
+# Heuristic nudges below are muted by .nudge-off. The explicit /atone gate above
+# is deliberately NOT muted by it (it has its own .gate-off switch).
+[ -f "$HOME/.claude/atone/.nudge-off" ] && exit 0
 
 # ─── Part 1a: clear marker on "never mind" / "ignore that" ─────────
 if [ -f "$MARKER" ]; then
@@ -127,7 +154,7 @@ if command -v jq >/dev/null 2>&1; then
   # First 200 chars of prompt as the snippet
   SNIPPET=$(printf '%s' "$PROMPT" | head -c 200 | tr '\n' ' ')
   jq -cn --arg ts "$TS" --arg snip "$SNIPPET" \
-    '{ts: $ts, turns_unaddressed: 0, correction_snippet: $snip}' \
+    '{ts: $ts, turns_unaddressed: 0, correction_snippet: $snip, explicit: false}' \
     > "$MARKER" 2>/dev/null || true
 fi
 

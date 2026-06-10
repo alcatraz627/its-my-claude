@@ -1,0 +1,33 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.23404273114113155,
+    "unit_count": 2
+  },
+  "response": {
+    "biases_detected": [
+      "anchoring - second unit anchored on hardware profiling as prerequisite before model recommendation"
+    ],
+    "calibration_score": 0.6,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Continue grounding hardware-dependent recommendations in observed system specs rather than assumptions",
+      "Response length (5731, 5376 chars) is high relative to input brevity (83, 299 chars) — consider more concise outputs for exploratory/advisory queries"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      174078
+    ]
+  ],
+  "timestamp": "2026-06-07T13:48:28.490549Z",
+  "tokens_used": 821,
+  "units_analyzed": 2,
+  "units_total": 2
+}

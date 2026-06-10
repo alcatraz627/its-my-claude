@@ -1,0 +1,44 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.1111111111111111,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2222222222222222,
+    "unit_count": 9
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit-18 (ls -la + find compound via Bash instead of Glob/LS; 4-file type filter via find); unit-431b5ec9-1 (ls -1, ls -la via Bash x3+; python3 inline JSON x4 for transcript/task dir parsing); unit-431b5ec9-4 (ls -dt via Bash, python3 inline JSON x2 for task-dir inspection; first Bash call fails success=false); unit-431b5ec9-5 (python3 inline JSON x3+, ls -t via Bash, find via Bash); 4 of 9 tool-using units; fortieth+ consecutive cycle above 50%, zero downward trajectory",
+      "bash_retry_without_diagnosis:RECURRING:STABLE — unit-431b5ec9-1 (15+ consecutive Bash investigation calls across task/todo/session-notes system with incremental pattern variation before AskUserQuestion pivot; iteration count matches prior cycle peak of 15+; no diagnostic pivot between attempts; no improvement trajectory across three consecutive cycles at this count)",
+      "compound_command_overreach:RECURRING:STABLE — unit-431b5ec9-1 (python3 heredoc + ls + rg + find compounds x4+); unit-431b5ec9-4 (python3 + ls -dt + rg multi-pipe compound; first Bash call fails success=false triggering re-attempt); unit-431b5ec9-5 (python3 heredoc + rg + find + stat compounds x3; multiple Bash calls fail success=false); unit-6412e83a-5 (python3 pandas heredoc after MCP failures); 4 units vs prior 3-unit count — marginal escalation from prior plateau",
+      "optimistic_edit_without_read:RECURRING:STABLE — unit-431b5ec9-4 (Edit model.md requires 3 consecutive calls to clean rendering artifacts from freshly written file; re-edited without re-reading modified state between calls; plateau maintained at similar failure rate as prior cycles); unit-431b5ec9-5 (Edit runtime-notes.md fails success=false; file state not re-read before attempt)",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE — unit-6412e83a-5 (mcp__file-tools__list_sheets called x2 on different file targets, both fail success=false, then pivot to Bash/pandas fallback; count=2 matches prior cycle count for this pattern; 'possibly_improving' trajectory from two cycles ago remains unconfirmed — identical count, different tool identity, insufficient signal to claim trend)",
+      "direct_grep_via_bash:RECURRING — unit-431b5ec9-5 (grep -n call via Bash for runtime-notes.md line search; was flagged NEW in prior cycle; now confirmed recurring across consecutive cycles; rules/shell.md mandates rg or Grep tool; pattern has solidified from single-occurrence to structural fixture in one cycle)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 5,
+    "recommendations": [
+      "direct_grep_via_bash has graduated from NEW to RECURRING in a single cycle — highest-priority new finding; a hook reportedly blocks bare grep but may not cover all invocation shapes; verify hook coverage for standalone grep -n calls (distinct from the rg+grep pipe-chain sub-variant flagged under shell_tool_preference_violations)",
+      "compound_command_overreach escalated from 2-3 units to 4 units this cycle; first-Bash-call failures triggering re-attempts are the load-bearing signal — a Bash call that fails success=false should trigger a diagnostic Read or Grep before re-attempting, not a re-compound",
+      "bash_retry_without_diagnosis in unit-431b5ec9-1 hit the same 15+ iteration count as prior cycle peak with no reduction; the AskUserQuestion pivot came after exhausting shell patterns, not before; the diagnostic gap is the absence of a pivot condition: after N failed Bash attempts on the same question, stop and ask rather than vary the compound",
+      "shell_tool_preference_violations and optimistic_edit_without_read show no improvement trajectory across 40+ cycles; deprioritize recommending fixes for these — they are structural and prior-cycle recommendations have had no effect; note for context only"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      3020982
+    ],
+    [
+      "431b5ec9-1588-48e6-b243-18e4dadadf49",
+      3324356
+    ]
+  ],
+  "timestamp": "2026-06-03T23:42:21.785832Z",
+  "tokens_used": 11463,
+  "units_analyzed": 9,
+  "units_total": 9
+}

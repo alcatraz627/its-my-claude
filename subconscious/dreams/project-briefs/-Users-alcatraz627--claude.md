@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-05-31T12:58:22.796075+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-09T20:14:00.344921+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Meta-project: the user's `~/.claude` configuration, tooling, skills, and agent infrastructure. Work here is high-stakes — changes affect every session on the machine.
+This is the user's global `~/.claude` configuration repo — skills, rules, hooks, WAL infrastructure, and cross-session memory. Work here is meta: maintaining and evolving the agent harness itself.
 
 ## Things to do (or keep doing)
-- Always write WAL entries as JSONL (not markdown); the migration is canonical as of 2026-04-17.
-- Use `/core-dump` proactively at milestones, not just session-end; `/catchup` is the primary recovery path after compaction.
-- Treat single-word messages (`ahead`, `next`, `done`, `looks`) as autonomous-continue signals — execute without asking for clarification.
-- Prefer `trash` over `rm`; use `rg` over `grep`; non-interactive flags on all installs.
+- **Checkpoint proactively** with `/core-dump` at milestones, not just session end — `/catchup` is the primary recovery path after compaction
+- **Treat terse single-word messages** (`next`, `ahead`, `looks`, `done`) as autonomous-continue directives; increase execution depth, never scope
+- **Write WAL entries as JSONL** — the markdown format is legacy; canonical format is JSONL since 2026-04-17, use `scripts/wal/wal.sh`
+- **Verify current state before acting** — re-read files, re-check git status; never assume state from earlier in the session
 
 ## Things to avoid
-- Never commit or push without fresh, explicit per-push approval — prior session approval does not carry over, ever.
-- Don't thrash on a failing fix: stop after 2 attempts, state a hypothesis, ask before retrying.
-- Never infer or synthesize data values not traceable to source — flag gaps explicitly rather than filling them.
-- Don't expand scope beyond what was explicitly requested; "keep going" means continue depth, not broaden surface.
+- **Never commit or push without fresh explicit per-push approval** — prior approval in the session does not carry over; this is the single most-corrected pattern in this repo
+- **Don't fix-thrash** — if a fix attempt fails, stop and form a root-cause hypothesis before trying another patch
+- **Never infer or synthesize data values** not explicitly present in source material; flag gaps instead of filling them silently
+- **Don't expand scope** beyond the explicit request, even for obvious improvements
 
 ## Open questions / known gaps
-- Pattern extraction for this project deduplicates poorly — the WAL migration appears 4× as separate patterns; treat redundant entries as noise, not independent signal.
-- Tension between terse-continue signals and scope-control: short commands mean "execute deeper," not "do adjacent things."
+- Pattern extraction in the atone/affirm pipeline lacks deduplication — the same event (WAL migration) appears 4× as separate patterns; the consolidation script needs a semantic-similarity pass
+- Tension between terse-continuation (autonomous execute) and scope-ceiling (don't expand) has caused confusion; when the active task is ambiguous after a `/clear`, clarify before resuming

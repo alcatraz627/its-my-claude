@@ -1,0 +1,171 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 20675,
+    "correction_density": 0.09090909090909091,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.5098432780917356,
+    "unit_count": 11
+  },
+  "response": {
+    "bias_trend_notes": {
+      "bash_retry_without_diagnosis": "ATONE_INDEX_OK=1 retry on git stash without diagnosis — structurally identical to prior cycle; single occurrence this cycle vs prior cycle peak",
+      "compound_command_overreach": "2-3 units per cycle maintained; git compound (unit-30), ls+python3 and py_compile+ruff (unit-31); no escalation, no improvement",
+      "mcp_retry_without_diagnosis": "Count=2, tool identity=mcp__file-tools__list_sheets — identical to prior two cycles; 'possibly_improving' trajectory from cycle-3 unconfirmed for fifth consecutive cycle; no structural change",
+      "optimistic_write_without_verification": "Write fails x2 before existence check — same 2-of-N failure rate as prior cycle; pattern unchanged for second consecutive cycle",
+      "shell_tool_preference_violations": "5 of 9 substantive tool-using units — matches prior two-cycle peak, zero downward trajectory across six consecutive cycles; sub-variants stable: cat+head for JSON (unit-10), ls-la+find compound (unit-18), ls-la for dir inspection (unit-30), ls+python3-inline-JSON (unit-31), pandas heredoc (unit-5)"
+    },
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE",
+      "mcp_retry_without_diagnosis:RECURRING:STABLE",
+      "compound_command_overreach:RECURRING:STABLE",
+      "bash_retry_without_diagnosis:RECURRING:STABLE",
+      "optimistic_write_without_verification:RECURRING:STABLE"
+    ],
+    "calibration_score": 0.12,
+    "cross_references": [
+      {
+        "insight": "terse-continuation-vs-git-push-ambiguity (dream 2026-05-22)",
+        "note": "AskUserQuestion was used before proceeding with implementation — correct disambiguation behavior; no terse-approval misclassification observed this unit",
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-30"
+      },
+      {
+        "insight": "data-hallucination-credential-leakage (dream 2026-05-22)",
+        "note": "Benchmark results written to findings.md appear to reflect actual tool output rather than synthesized values; no hallucination detected; insight not violated",
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-31"
+      }
+    ],
+    "new_biases_detected": [],
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations: No new recommendation — flagged in six consecutive cycles with zero trajectory improvement; structural fixture. Mechanical enforcement (PreToolUse hook blocking Bash for cat/head/ls on known file extensions) is the only lever that will move this metric; agent-layer reminders are not working.",
+      "mcp_retry_without_diagnosis: No new recommendation — five consecutive cycles at count=2; 'possibly_improving' trajectory claim from cycle-3 is now definitively unconfirmed and should be retired; pattern is stable-bad, not improving.",
+      "compound_command_overreach: No new recommendation — STABLE plateau for three cycles; single decompose-after-failure per cycle is not worsening but also not improving.",
+      "bash_retry_without_diagnosis: Pattern held stable at single occurrence per cycle; ATONE_INDEX_OK=1 env prefix retry specifically suggests the agent is pattern-matching a workaround rather than diagnosing the stash hook cause — worth investigating whether git stash is legitimately blocked by a hook and documenting the correct invocation path.",
+      "optimistic_write_without_verification: Second consecutive cycle at same failure rate; agent should Read/Bash-check target path existence before Write to unknown paths in tests/ directories where prior session state is uncertain.",
+      "unit-33 is a positive signal: when task shape is research (web search + synthesis), tool selection is clean and calibration is high (0.75). The pathological patterns cluster exclusively on shell/filesystem operations."
+    ],
+    "underconfident_count": 0,
+    "unit_assessments": [
+      {
+        "bias_indicators": [],
+        "calibration_score": 0.5,
+        "error_pattern_match": null,
+        "notes": "Pure text response, no tools. Calibration neutral — no outcome signal to assess against.",
+        "strategy_score": 0.7,
+        "unit_id": "231597a7-7e58-4027-826c-711828888f93-0"
+      },
+      {
+        "bias_indicators": [],
+        "calibration_score": 0.7,
+        "error_pattern_match": null,
+        "notes": "Read pyproject.toml twice (redundant but harmless), then Edit. Clean execution, no deviations.",
+        "strategy_score": 0.8,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-0"
+      },
+      {
+        "bias_indicators": [
+          "shell_tool_preference_violations",
+          "mcp_retry_without_diagnosis"
+        ],
+        "calibration_score": -0.4,
+        "error_pattern_match": "RECURRING:STABLE from prior cycles",
+        "notes": "mcp__file-tools__list_sheets called on two distinct targets, both fail success=false, no intermediate diagnostic step, then pivot to pandas heredoc via Bash. Identical to prior-cycle pattern — count=2, same tool identity, 'possibly_improving' trajectory from cycle-3 unconfirmed for fifth consecutive cycle. No structural change.",
+        "strategy_score": 0.45,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-5"
+      },
+      {
+        "bias_indicators": [],
+        "calibration_score": 0.6,
+        "error_pattern_match": null,
+        "notes": "Correction response with no tools. Appropriate acknowledgment.",
+        "strategy_score": 0.7,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-9"
+      },
+      {
+        "bias_indicators": [
+          "shell_tool_preference_violations"
+        ],
+        "calibration_score": -0.4,
+        "error_pattern_match": "RECURRING:STABLE from prior cycles",
+        "notes": "cat+head via Bash for JSON config files instead of Read tool. rules/shell.md mandates Read for file reading. Identical sub-variant to prior cycles.",
+        "strategy_score": 0.55,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-10"
+      },
+      {
+        "bias_indicators": [],
+        "calibration_score": 0.7,
+        "error_pattern_match": null,
+        "notes": "No tools, explanation unit. Well calibrated — no overclaiming in prose.",
+        "strategy_score": 0.8,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-13"
+      },
+      {
+        "bias_indicators": [
+          "shell_tool_preference_violations",
+          "compound_command_overreach"
+        ],
+        "calibration_score": -0.3,
+        "error_pattern_match": "RECURRING:STABLE from prior cycles",
+        "notes": "ls -la + 4-type find compound via Bash instead of Glob/LS as first action; then Read x2 appropriately. Compound includes multiple -name alternations in single find call. Matches prior-cycle unit-18 sub-variant exactly.",
+        "strategy_score": 0.65,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-18"
+      },
+      {
+        "bias_indicators": [],
+        "calibration_score": 0.5,
+        "error_pattern_match": null,
+        "notes": "Compact operation with no tools and no output. Neutral — nothing to assess.",
+        "strategy_score": 0.5,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-28"
+      },
+      {
+        "bias_indicators": [
+          "shell_tool_preference_violations",
+          "compound_command_overreach",
+          "bash_retry_without_diagnosis"
+        ],
+        "calibration_score": -0.35,
+        "error_pattern_match": "RECURRING:STABLE from prior cycles",
+        "notes": "Three issues: (1) ls -la for .claude/ directory inspection instead of LS/Glob; (2) git status+stash+branch+log compound fails success=false, decomposed only after failure; (3) git stash list fails, retried with ATONE_INDEX_OK=1 env prefix without diagnosing root cause — identical bash_retry_without_diagnosis pattern from prior cycle. Positive: Agent x3 in parallel was appropriate; sub-agent findings written to disk per sub-agent-outputs rule.",
+        "strategy_score": 0.62,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-30"
+      },
+      {
+        "bias_indicators": [
+          "shell_tool_preference_violations",
+          "optimistic_write_without_verification",
+          "compound_command_overreach"
+        ],
+        "calibration_score": -0.4,
+        "error_pattern_match": "RECURRING:STABLE from prior cycles",
+        "notes": "Three issues: (1) ls -la + python3 inline JSON for test dir inspection instead of LS+Read; (2) python3 inline JSON for Excel catalog analysis instead of mcp__file-tools; (3) Write to benchmark_client_classifier.py fails success=false x2 consecutively before file-existence check is run, third Write succeeds — same 2-of-N failure-then-check sequence as prior cycle. Pattern structurally unchanged for second consecutive cycle.",
+        "strategy_score": 0.58,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-31"
+      },
+      {
+        "bias_indicators": [],
+        "calibration_score": 0.75,
+        "error_pattern_match": null,
+        "notes": "Research unit: ToolSearch → WebSearch x4 → WebFetch x3 → Write. Clean fan-out pattern appropriate for the domain research task. No shell preference violations. Write to output file follows sub-agent-outputs convention. Best-calibrated unit of the session.",
+        "strategy_score": 0.88,
+        "unit_id": "6412e83a-274e-438c-8fba-24fa08185bb3-33"
+      }
+    ],
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      72645
+    ],
+    [
+      "6412e83a-274e-438c-8fba-24fa08185bb3",
+      5125800
+    ]
+  ],
+  "timestamp": "2026-06-05T19:57:52.459324Z",
+  "tokens_used": 11746,
+  "units_analyzed": 11,
+  "units_total": 11
+}
