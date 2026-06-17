@@ -82,3 +82,15 @@ print(json.dumps({
   "by_voter": by_voter,
 }, indent=2))
 PY
+
+# Phase-11 conformance gate — rides on this MANDATORY cost step so it can't be
+# skipped (advisory SKILL.md prose didn't bind; see rules/skill-spec-update-not-
+# honored). Prints the verdict after the cost block; exits non-zero on a CRITICAL
+# failure (e.g. full-mode voting skipped without --no-voting) so the supervisor
+# and user must reckon with it before calling the run done.
+CHK="$(dirname "$0")/conformance-check.sh"
+if [ -x "$CHK" ]; then
+  echo
+  bash "$CHK" "$ARCHIVE"; conf_rc=$?
+  [ "${conf_rc:-0}" -ge 2 ] && exit "$conf_rc"
+fi

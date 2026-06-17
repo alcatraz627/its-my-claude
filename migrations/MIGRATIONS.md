@@ -60,6 +60,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0017 | Repoint todo-sync at the Task tool + Stop-hook writeback & drift-block | ✅ | 2026-06-01 | 2026-06-01 | [0017-todo-sync-task-tool.md](0017-todo-sync-task-tool.md) |
 | 0018 | Context-capture automation (PreCompact/SessionEnd enrichment + settings-write guard) | ✅ | 2026-06-05 | 2026-06-05 | [0018-context-capture-automation.md](0018-context-capture-automation.md) |
 | 0019 | Fable-run gcc integration — verification enforcement (declared-ready + rg-replace hooks) + paste-ready canon | ✅ | 2026-06-15 | 2026-06-15 | [0019-fable-run-gcc-integration.md](0019-fable-run-gcc-integration.md) |
+| 0020 | MAGI conformance gate — enforce full-mode voting at Phase-11 finalize (A1 voting gate + hygiene checks) | ✅ | 2026-06-17 | 2026-06-17 | [0020-magi-conformance-gate.md](0020-magi-conformance-gate.md) |
 
 ---
 

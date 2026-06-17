@@ -284,6 +284,18 @@ Note any:
 
 ## Phase 8 — Supervisor decision
 
+> **Phase 8 is POST-voting. It is NOT a license to skip Phase 6.** "Pick
+> directly" below means *the vote was clear and you agree with the winner* — it
+> presupposes Phase 6 ran and produced a matrix. The ONLY sanctioned way to skip
+> voting is the `--no-voting` flag set **at dispatch** (design §8). Do not skip
+> Phase 6 mid-run and cite "pick directly / Phase-8 merge / convergence was
+> obvious" — that is the exact rationalization voting exists to test, it discards
+> the bias-matrix + scope-dissent signal, and the Phase-11 conformance gate
+> (`conformance-check.sh`) will flag it as CRITICAL. If you believe the panel has
+> genuinely converged, **run the vote to prove it** (it's cheap once proposals
+> exist) — manufactured convergence (all voters fed one shared corpus) is exactly
+> what a real scored, anonymized round catches.
+
 Now compare:
 - Your independent nomination (Phase 5) vs vote winner (Phase 7)
 - Match → low-friction confirm
@@ -363,6 +375,16 @@ bash ~/.claude/scripts/magi/cost-estimate.sh "$ARCHIVE"
 ```
 
 Updates meta.json totals from the per-voter `tokens` blocks captured in Phase 4.2 / 6 (real numbers, not estimates).
+
+**Conformance gate (rides on this mandatory step).** `cost-estimate.sh` now also
+runs `conformance-check.sh` and prints its verdict after the cost block. A
+**CRITICAL** verdict — most commonly *full-mode voting skipped without
+`--no-voting`* — makes the step exit non-zero. Do not declare the run done while a
+CRITICAL stands: either run the skipped phase, or (if a skip was genuinely
+intended) re-dispatch with `--no-voting` so the intent is recorded. WARN-level
+items (params/prompts/cost not persisted) should be fixed but don't block. This
+gate exists because the spec's voting mandate was advisory and four full-mode runs
+silently skipped voting on 2026-06-13 (see `rules/`/the magi-audit report).
 
 ```bash
 # Update meta.json finished_at + duration
