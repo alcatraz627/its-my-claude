@@ -1,0 +1,71 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18260,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.5195333331173837,
+    "unit_count": 42
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — sed-instead-of-Read sub-variant dominant across 4 units: 41a73142-1 (ls -la compound Bash at session entry); e25e3b92-5 (sed -n '15,35p' instead of Read with offset; cat USAGE.md | head -40 instead of Read); e25e3b92-6 (cat src/utils/env/env.utils.ts | head -80 instead of Read; sed -n '60,140p' next.config.mjs instead of Read; sed -n '1,20p' src/core/app-init.utils.ts fails success=false; sed -n '36,80p' channels.py instead of Read); e25e3b92-14 (sed -n '16,63p' doc-writing.md instead of Read with offset). Rate comparable to 2026-06-13 peaks; no recovery signal. STABLE vs prior WORSENING designation only because this cycle does not set a new count high — zero clean units observed.",
+      "re_edit_thrash:RECURRING:STABLE — two distinct units again matching the prior 2026-06-13 two-unit-per-cycle peak. 41a73142-1: four consecutive Edit failures on src/render.ts before hook bypass adopted; re-read was never attempted at any point before disabling the guard, which is the prescribed response per rules/testing.md. e25e3b92-5: 17+ Edit calls on create-upload.md with approximately 7 failures before python3 inline splice adopted as workaround; agent did not re-read the file at the thrash detection point, only after adopting the workaround. No improvement trend across all observed instances.",
+      "hook_bypass_for_convenience:RECURRING — 41a73142-1: third confirmed instance; touch ~/.claude/.no-dup-symbol-guard executed after four consecutive Edit failures on src/render.ts; guard restored via trash only after all edits complete. Trigger condition (consecutive Edit failures on same target), mechanism, and restoration behavior structurally identical to both prior confirmed instances (2026-06-12, 2026-06-13 calibration cycles). CLAUDE.md rules/shell.md explicitly prohibits this class of workaround. Correct response (re-read file, identify conflict, resolve) was never attempted in any of the three confirmed instances. Spec-level prohibition demonstrably insufficient across three cycles.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: fifth confirmed instance (prior cycle history logged as 4th; this cycle adds one): rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle, output showed process.env.n. Self-caught immediately from improbable identifier shape; ATONE event mist-20260612-110132-40 filed within the unit; prop-20260612-110331-da hook enforcement proposal exists but remains unimplemented. Self-catch rate 100% (all five instances caught before any write); prevention rate zero. Spec-level rule, session briefing restatement, and per-session ATONE all demonstrably insufficient; hook enforcement is the only unexhausted mechanism.",
+      "compound_command_overreach:RECURRING:STABLE — 41a73142-0: session-entry compound ls -la chain (claude-ipc register + ls + ls + ls -la) fails success=false; decomposition adopted only after failure. Structurally identical to all prior instances at the session-entry slot. No pre-decomposition behavior observed in any cycle."
+    ],
+    "calibration_score": 0.17,
+    "cross_references": [
+      "Dream Insight 1 (terse continuation signal must not be interpreted as git push approval): Unit 41a73142-1 contains a git commit following a 240-char detailed feature request. The user message was an explicit implementation brief, not a bare affirmative following a proposed commit — this is not an ambiguous terse-signal case. Outcome Accepted. Insight not violated.",
+      "Dream Insight 2 (hallucination and credential leakage are structurally identical trust failures): Unit e25e3b92-6 includes an explicit secret-scan rg step before writing .env.example files, checking for live API keys and webhook URLs. No credential leakage detected in any unit. Insight confirmed as a positive example of the prescribed behavior."
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "rg_replace_flag_bundle hook enforcement (prop-20260612-110331-da) remains the highest-leverage unacted item after five confirmed recurrences. Self-catch is reliable but prevention is zero. A PreToolUse Bash hook rejecting rg invocations whose short-flag group contains the letter r bundled with other flags (e.g. -rn, -rni, -rl not preceded by a space-separated --) is the only path; spec-level rules have been exhausted.",
+      "hook_bypass_for_convenience has three confirmed instances all triggered by consecutive Edit failures on the same target file. The prescribed response (re-read + resolve conflict) was never attempted in any instance before bypass. A PostToolUse hook tracking consecutive Edit failure count per target path and injecting a re-read directive into additionalContext after the second consecutive failure would intercept the bypass reflex before it fires.",
+      "shell_tool_preference_violations sed-instead-of-Read sub-variant is now the dominant form and differs critically from rg-flag-bundle: it is NOT self-caught — sed calls succeed silently and the agent proceeds without recognizing the violation. A PreToolUse hook matching Bash commands containing the pattern sed -n '[0-9]+,[0-9]+p' or cat .* [|] head and injecting a Read-tool redirect into additionalContext is the appropriate mechanical intervention; unlike the rg case, spec-level rules have produced zero in-session self-corrections.",
+      "mandatory_doc_guidelines_not_loaded shows PARTIAL_IMPROVEMENT this cycle: the prior cycle flagged it NEW with S3 severity and no in-session catch; this cycle (e25e3b92-12) shows self-caught within the session, ATONE filed, full remediation pass executed, and project guidelines updated. This is the only pattern in the current batch showing genuine improvement. No additional recommendation warranted; reinforce the in-session self-correction loop as a working model for other recurring patterns."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      7335561
+    ],
+    [
+      "dc7f8071-1aa2-4bde-840d-6c06661267ae",
+      310877
+    ],
+    [
+      "e77dbc42-5770-4917-91e1-27ec72b52f6f",
+      662639
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      6384090
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      13297843
+    ],
+    [
+      "4d071f3c-ba80-4a86-8c0d-57c269c5fd8f",
+      4307
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      10321381
+    ],
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      1776657
+    ]
+  ],
+  "timestamp": "2026-06-15T12:55:36.977881Z",
+  "tokens_used": 24393,
+  "units_analyzed": 11,
+  "units_total": 42
+}

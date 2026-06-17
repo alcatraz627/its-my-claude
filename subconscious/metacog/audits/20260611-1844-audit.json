@@ -1,0 +1,52 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18468,
+    "correction_density": 0.038461538461538464,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.10628483829279115,
+    "unit_count": 26
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — unit-15 (ls ~/.claude/scripts/magi/ via Bash; ls ~/.claude/personas/ piped to head via Bash — both should use LS tool); unit-16 (ls -la .venv/bin/mflux-generate via Bash; ls .venv/bin/ piped to rg via Bash — both should use LS/Glob); unit-28 (ls -la outputs/*.png via Bash; ls -t outputs/*.png piped to head via Bash — both should use Glob); 3 of ~10 substantive tool-using units ≈ 30% rate, matches the prior 2026-06-10 WORSENING cycle peak of 27%; no improvement across five consecutive observed cycles; prior cycle was already marked WORSENING and this cycle confirms no recovery",
+      "anchoring:RECURRING:STABLE — unit-1 (four sequential sysctl/system_profiler/df/ollama Bash calls as mandatory hardware-profiling prerequisite before local model recommendation; structurally identical to prior four confirmed instances at same session-entry slot; fifth consecutive confirmed instance with zero improvement trajectory; pattern is fully entrenched at this session entry point)",
+      "compound_command_overreach:RECURRING:STABLE — unit-8 (curl wait-loop + rg log-grep compound command fails success=false; decomposed into individual curl then rg Bash calls only after failure; structure and decompose-only-after-failure sequence match prior four cycles exactly; no improvement observed)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations: advisory-only approach has failed across five consecutive cycles with no measurable improvement; mechanical enforcement is now warranted — a PreToolUse hook intercepting Bash calls containing bare 'ls ' patterns and blocking in favor of LS/Glob tool is the only remaining lever; filing a proposal is overdue given WORSENING re-entry",
+      "anchoring: five confirmed instances at the same session-entry slot; a UserPromptSubmit hinter keyed on local-model or hardware-profiling keywords should inject a directive to skip hardware profiling unless the user explicitly requested it; the pattern does not self-correct without an external trigger",
+      "compound_command_overreach: four cycles with identical decompose-only-after-failure arc; no hook candidate has been filed yet; propose a PreToolUse hook that detects compound Bash strings containing both a wait-loop construct (seq/sleep) and a log-grep (rg/grep on a log path) and requires decomposition before execution"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      6478750
+    ],
+    [
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      85729
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      5876778
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      2950963
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      4932965
+    ]
+  ],
+  "timestamp": "2026-06-11T18:44:08.874639Z",
+  "tokens_used": 7626,
+  "units_analyzed": 12,
+  "units_total": 26
+}

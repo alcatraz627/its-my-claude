@@ -1,27 +1,25 @@
 {
-  "last_updated": "2026-06-05T16:08:36.124556Z",
+  "last_updated": "2026-06-12T19:56:41.803900Z",
   "average_depth": 26.2,
   "average_breadth": 2.1,
   "fixation_rate": 0.13,
-  "assumption_rate": 0.62,
-  "overconfidence_rate": 0.42,
+  "assumption_rate": 0.58,
+  "overconfidence_rate": 0.29,
   "common_assumptions": [
-    "File exists at expected path without verification",
-    "Previous session state and process state are unchanged",
-    "Tool output is complete and untruncated",
-    "A single edit will resolve the issue without runtime testing",
-    "Environment variables and credentials are correctly set",
-    "Git working tree state matches expectation from earlier in session"
+    "File state is unchanged between consecutive tool calls within a session",
+    "A single-directory or single-file search is sufficient to establish absence of a pattern",
+    "Error messages reflect root cause without deeper tracing through callsites",
+    "Prior session context is fully recoverable from WAL or checkpoint files without independent verification"
   ],
   "strength_patterns": [
-    "Thorough pre-edit reads: most substantive chains read multiple context files before writing, reducing blind edits",
-    "Post-change verification: type-check and build commands (tsc --noEmit, npm run check) appear after edits in ~40% of tool-heavy chains",
-    "Diagnostic breadth on failures: chains like fb93d9e7 fan out across multiple diagnostic surfaces before narrowing"
+    "Iterative verification loops: large chains consistently run type-checkers or diagnostic scripts (tsc --noEmit, statusline-diag.py) after each edit batch before committing, catching regressions in-flight",
+    "Context-first orientation: chains that handle complex tasks reliably open by reading WAL, runtime-notes, or checkpoint files before any side-effecting operation",
+    "Targeted multi-file fan-out: when diagnosing failures, chains spread across config files, logs, and settings rather than fixating on a single suspected source"
   ],
   "weakness_patterns": [
-    "Same-file re-edit loops without re-reading or root-cause analysis: f3ddfd2f calls statusline.sh 20+ times, fa0b19cf edits +page.svelte 50+ times, fc4190a7 edits +layout.svelte 20+ times",
-    "Repeated identical commands on failure without hypothesis change: f3ddfd2f reruns statusline-diag.py and statusline-test.py in unbroken sequence with no intervening diagnostic pivot",
-    "Premature closure on trivial chains: 7 of 31 chains are 0-2 steps with no tool use, suggesting context was not checked before responding to tasks that warranted it"
+    "Fixation without re-framing: the longest chains repeat the same script or file 20-30+ times without stepping back to question the diagnosis (f3ddfd2f: 30+ statusline.sh invocations across a 110-step chain)",
+    "Shallow verdict chains: juror and summarization tasks resolve in 0-1 steps with no evidence of weighing alternatives or grounding claims in file:line citations, producing structurally underspecified outputs",
+    "Linear single-hypothesis execution: nearly all chains pursue one hypothesis to completion before reconsidering, generating high assumption density on the critical path with no explicit branching on uncertainty"
   ],
   "trend": {
     "calibration_improving": false,

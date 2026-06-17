@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-15T08:10:40Z",
+  "session_id": "chglog-skill-d2",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/.claude/release-v-5.1/_changelog-skill-dump.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "[ ] Extract the method (below) into `frontend/.claude/skills/release-changelog/SKILL.md`.",
+    "[ ] Decide skill inputs: PR number | base..head | worktree path; output location convention.",
+    "[ ] Design the headless/CI path (`--no-prompt`, no interactive `mcp__inputs__*`, structured output).",
+    "[ ] GitHub Action: trigger (PR labeled `release`? manual `workflow_dispatch`?), `claude -p` invocation, where the changelog lands (PR comment vs committed file vs artifact).",
+    "[ ] Honor repo rules in the skill: **never commit** (post as comment / artifact only), notes under `frontend/.claude/`."
+  ],
+  "tags": []
+}

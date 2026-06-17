@@ -118,6 +118,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `features/plugins.md`            | plugin vs skill decision, disabled plugins registry          | Plugin registry + plugin-vs-custom-skill rule                         |
 | `features/hooks-tui-limits.md`   | hook design, terminal-display hook questions                 | TUI alternate-screen buffer limits: what hooks CAN/CANNOT do          |
 | `features/shell-memory.md`       | `tool:shell-mem`, `mcp:shell-mem`, shell history             | shell-mem shell history + BG process tracking (formerly diy-mem; see mig 0014)                           |
+| `features/local-models.md`       | `tool:lm`/`q`/`imagine`/`warm`, `topic:local-models`, `topic:ollama`, `topic:image-generation` | Local LLM + image-gen suite (`~/Code/local-models`) — q/imagine/warm/lm on PATH, no-idle, JSONL histories as the agent API. Read `docs/STATE.md` there first |
 | `features/tab-title.md`          | `tool:tab-title`, `tool:set-focus`, `topic:terminal-title`, `topic:ghostty`, status/mode/intent convey | Ghostty tab-title CLI w/ named-enum slots — `status` (✅⚠️❌💤ℹ️🛑) · `mode` (auto-derived verb) · `intent` (session noun) · `focus` (sub-task). Convey state with: `~/.claude/scripts/tab-title/tab-title.sh <status\|mode\|intent\|focus> <name>`. Full guide: `features/tab-title.md` |
 
 ### Conventions

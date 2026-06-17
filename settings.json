@@ -95,6 +95,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -402,8 +403,8 @@
         "matcher": "Bash|Edit|Write|MultiEdit",
         "hooks": [
           {
-            "command": "~/.claude/scripts/hooks/guard-anthropic-credentials.sh",
-            "type": "command"
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-anthropic-credentials.sh"
           }
         ]
       },
@@ -411,8 +412,8 @@
         "matcher": "Bash",
         "hooks": [
           {
-            "command": "~/.claude/scripts/hooks/guard-system-dir-writes.sh",
-            "type": "command"
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-system-dir-writes.sh"
           }
         ]
       },
@@ -500,6 +501,15 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/prefer-ripgrep.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-rg-replace-bundle.sh"
           }
         ]
       },
@@ -653,6 +663,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/declared-ready-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/atone-stop-gate.sh"
           }
         ]
@@ -798,6 +816,15 @@
             "command": "~/.claude/scripts/hooks/ctx-signal-nudge.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/tab-title/hooks/auto-base.sh",
+            "async": true
+          }
+        ]
       }
     ],
     "SessionEnd": [
@@ -865,7 +892,7 @@
   },
   "outputStyle": "Explanatory",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",

@@ -184,6 +184,8 @@ If no instructions were given, use the default balanced style above.
 
 Use Glob to find `.claude/` in the working directory tree. The project root is the directory that contains `.claude/`. Print the resolved project root path.
 
+**Name the working surface.** If this session's work lives in a git worktree or a non-default branch that differs from the invoked CWD, capture the **absolute worktree path + branch** — the Quick Summary MUST lead with it (see template below). A `/catchup` agent loading this checkpoint will otherwise edit the wrong tree. Resolve via `git rev-parse --show-toplevel` + `git branch --show-current`.
+
 ### 3.2 Acquire lock and write
 
 ```bash
@@ -194,6 +196,11 @@ Write the checkpoint file to `<project-root>/<resolved-filename>` using the Writ
 
 ```markdown
 # Quick Summary (for LLMs) — <ISO timestamp>
+
+**Working surface:** <absolute worktree/repo path> · branch `<branch>`
+<!-- Include this line whenever work lives in a git worktree or a non-default branch
+     that differs from CWD, so a /catchup agent edits the right tree. Omit only when
+     working in the plain project root on the default branch. -->
 
 > <3-5 sentence executive summary: what the session accomplished, what's in progress,
 > what the immediate next step is, and any critical blockers. Written for an agent that

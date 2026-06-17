@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-10T10:17:29Z",
+  "session_id": "gcc-harden-7c",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260610-gcc-harden-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Audit fix waves (planned, NOT executed)** \u2014 Wave 1 (trivial: LOOKUP path, stale doc refs, dangling symlink, `/archive-notes`, frontmatter, `.bak` cleanup); Wave 2 (repoint-first: shell-mem SKILL \u2192 `scripts/shell-mem/` before trashing `scripts/diy-mem/`; dream-insights doc repoint; daemon-log rotation + Broken-pipe investigation; async-hook intent); Wave 3 (structural ROI: relocate ~12 niche rules out of auto-loaded `rules/`, ~15k tokens, needs a cross-session `/context` verification gate + migration entry).",
+    "**MCP connector pruning decision (#11)** \u2014 Linear(35)/Vercel(18)/Figma(17)/Notion(14) connected, maybe unused.",
+    "**Push decision** \u2014 3 local commits + now-uncommitted `mcp-catalog.json` + cli-gating set + audit reports. Fresh approval required.",
+    "**C1 auto-core-dump** \u2014 still opt-in (not enabled): needs `touch ~/.claude/.auto-coredump-enabled` + scheduled `retro-dump.sh --queue`.",
+    "**github token** \u2014 user to confirm `claude mcp list` shows github `\u2713` in a new terminal."
+  ],
+  "tags": []
+}

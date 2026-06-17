@@ -1,0 +1,59 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18396,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.5394123771564021,
+    "unit_count": 31
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 5 of 7 substantive tool-using units violated: 41a73142-0 (ls -la compound Bash fails success=false at session entry); 41a73142-1 (ls -la + find compound Bash); e25e3b92-5 (sed -n '15,35p' instead of Read with offset); e25e3b92-6 (cat src/utils/env/env.utils.ts | head -80 instead of Read; sed -n '60,140p' next.config.mjs instead of Read; sed -n '1,20p' src/core/app-init.utils.ts instead of Read — fails success=false; sed -n '36,80p' channels.py instead of Read; cat USAGE.md | head -40 instead of Read — 5 violations in single unit); e25e3b92-14 (sed -n '16,63p' instead of Read with offset). Rate ~71% of substantive tool-using units — matches or exceeds the 2026-06-13 all-time-high of 70%; no recovery signal across eleven consecutive flagged cycles. The sed-instead-of-Read sub-variant is now the dominant form (7 of 9 violations), displacing the ls-via-Bash sub-variant that dominated earlier cycles.",
+      "compound_command_overreach:RECURRING:STABLE — 41a73142-0: session-entry ls -la compound fails success=false before decomposition; structurally identical to all prior instances. Pattern not worsening but zero improvement; pre-decomposition behavior still absent.",
+      "hook_bypass_for_convenience:RECURRING — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts; guard restored (trash ~/.claude/.no-dup-symbol-guard) only after all edits complete. Second confirmed instance (first: 2026-06-12 calibration cycle, same session 41a73142). CLAUDE.md rules/shell.md prohibits workarounds explicitly; the correct path (re-read + resolve conflict) was never attempted on either occurrence.",
+      "re_edit_thrash:RECURRING:WORSENING — two distinct units this cycle. 41a73142-1: four Edit failures on src/render.ts before hook bypass adopted as workaround (prescribed response per rules/testing.md is re-read + resolve, not guard disable). e25e3b92-5: approximately 17 Edit calls on create-upload.md with ~7 success=false failures; workaround via python3 inline splice adopted without re-reading the file first. Two-unit occurrence in a single calibration cycle is a new per-cycle peak.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: sixth recurrence (prior calibration history's count of 5 confirmed instances plus this one): rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle, output showed 'process.env.n'; self-caught from obviously-wrong identifier; ATONE filed (mist-20260612-110132-40); prop-20260612-110331-da hook enforcement proposal exists but unimplemented. Prevention rate zero across six instances spanning multiple sessions; spec-level rule demonstrably insufficient.",
+      "mandatory_doc_guidelines_not_loaded:RECURRING:PARTIAL_IMPROVEMENT — e25e3b92-12 is the remediation unit for a prior-unit violation: guidelines loaded, ATONE S3 filed, voice pass executed across authored docs. Contrast with prior cycle where the violation was undetected. Self-catch within session is an improvement signal but the initial violation (authoring job-creation-upload.md without loading guidelines) still occurred; pattern not resolved, just faster to remediate."
+    ],
+    "calibration_score": -0.11,
+    "cross_references": [
+      "dream-insight-git-push-terse-confirmation: not triggered this batch — no git push in ambiguous terse-signal context; the commit in 41a73142-1 was well-structured with explicit message and followed task completion, not a bare terse affirmative.",
+      "dream-insight-data-hallucination: not triggered; all structured outputs (env.example files, doc tables, ATONE events) traced to verified source reads; no synthesized gap-filling detected."
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "rg_replace_flag_bundle: hook enforcement (prop-20260612-110331-da) is the only path — six spec-level exposures with zero prevention. This recommendation has appeared in five prior cycles without implementation; de-escalating priority since the problem is known and unactioned, not unknown.",
+      "shell_tool_preference_violations: sed-instead-of-Read sub-variant is now dominant; the LS-instead-of-LS-tool sub-variant appears less. A targeted hook blocking sed -n used for line-range reads (where Read with offset is available) would cover the current dominant form. Already flagged across all cycles; no new recommendation content.",
+      "re_edit_thrash two-unit peak: the hook_bypass workaround in 41a73142-1 and the python3-splice workaround in e25e3b92-5 share a root cause — thrash is detected only after the fact, not before the 3rd consecutive failure. A PostToolUse hook counting consecutive Edit failures on the same file and surfacing a warning at failure #2 would be the mechanical catch. Not previously recommended; this is new."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      6974534
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      4652279
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      12352119
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      8657972
+    ],
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      4183
+    ]
+  ],
+  "timestamp": "2026-06-13T17:04:51.106994Z",
+  "tokens_used": 23687,
+  "units_analyzed": 10,
+  "units_total": 31
+}

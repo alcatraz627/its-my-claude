@@ -1,0 +1,34 @@
+{
+  "ts": "2026-06-12T14:16:52Z",
+  "session_id": "enh-qa-agent",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260612-enh-qa-agent.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [
+      "`rg -rn` = `--replace n`, NOT recursive+line-numbers \u2014 mangled output 3\u00d7 (metadata\u2192mnidata phantom). Type `rg -n` always; never bundle r.",
+      "Linter races: same-file Edits frequently fail with \"modified since read\" \u2014 re-read + retry is routine; facts.sh exists because of this.",
+      "Multi-line content through Bash command strings arrives TTY-mangled at atone's lint \u2014 use `--rca-file` (proposal filed to fix skill doc).",
+      "Docs were sometimes RIGHTER than triage data (duplicate action shipped, gemini already parameterized) \u2014 code moves between triage and edit; verify at edit time.",
+      "A full-file rewrite makes you author of preserved text too (comms.md personal-convention leak).",
+      "`product/todos.md` is itself April-stale \u2014 batch-2 lead."
+    ],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Gate B: screenshot-sherpa session \u2014 13 \ud83d\udcf8 markers (list in `batch-1-PARCEL.md`)",
+    "Gate C: review + commit the ~35-file docs diff; then close/rebase PR #181",
+    "Confirm: extractor docs URL with `?key=...` OK to commit? (task #26)",
+    "Skim github-conventions evidence-drafts (1 [VERIFY] open: branch-direction)",
+    "Channel IDs for 8 name-only Slack channels (or leave names)",
+    "4 untracked `_checkpoint.claude.md` scratch files inside `docs/` \u2014 trash or keep",
+    "#22 Generate `.env.example` for frontend + backend (Q1 deliverable; backend from `require_env` list)",
+    "#23 **Batch 2**: `product/` rest ~50 docs (leads: stale todos.md table, modal docs, 2 SHOULD validator findings in admin docs)",
+    "#24 Fill `github-ci-actions.md` per-workflow + slack-automation topic\u2192channel bindings",
+    "#25 Aakarsh-owned doc fills (release-checklist \u2605 most important / hotfix Sept / feature-merge Aug) \u2014 assist when dictated",
+    "#26 Extractor doc link (confirm key first) + parked: onboarding-plan rework, expiring-cycles stub fill"
+  ],
+  "tags": []
+}

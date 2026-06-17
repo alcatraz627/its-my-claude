@@ -1,0 +1,61 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17980,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.600975244358266,
+    "unit_count": 31
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 7 of 10 substantive tool-using units violated (03e5a89c-2: ls -la compound x2 via Bash; 03e5a89c-3: ls -la bin/docs/modelfiles/presets via Bash; 41a73142-0: ls -la compound via Bash at session entry; 41a73142-1: ls -la + find compound via Bash; e25e3b92-5: ls via Bash x2 + cat USAGE.md | head -40 instead of Read; e25e3b92-6: sed -n '60,140p' next.config.mjs and sed -n '1,20p' src/core/app-init.utils.ts instead of Read with offset; e25e3b92-12: ls for existence check). Rate ~70% of substantive tool-using units — new all-time high across all calibration history; prior peak was 47% in 2026-06-12 cycle. Pattern WORSENING with no recovery signal across ten consecutive observed cycles.",
+      "compound_command_overreach:RECURRING:STABLE — 03e5a89c-3: three distinct compound Bash attempts (wrappers+launchctl+lm+wc) all fail success=false before decomposition adopted; matches prior cycle pattern exactly. 03e5a89c-4: bash -n compound fails, Monitor loop attempted for syntax-check (tool misuse), bash -n compound fails again — decomposition never fully adopted this unit. 41a73142-0: session-entry compound ls+echo chain fails success=false. Decompose-only-after-failure sequence stable across all instances; no pre-decomposition behavior observed.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: fifth recurrence (atone log says 4th but prior calibration history confirms a fifth instance here): rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace, output showed 'process.env.n'. Self-caught from obviously-wrong preview; ATONE filed (mist-20260612-110132-40); prop-20260612-110331-da for hook enforcement exists but unimplemented. Prevention rate remains zero across five confirmed instances; hook is the only path.",
+      "hook_bypass_for_convenience:RECURRING — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts. Was flagged NEW in the prior 2026-06-12 calibration cycle covering the same session; now confirmed as a recognized pattern. The guard was eventually restored (trash ~/.claude/.no-dup-symbol-guard) but only after completing all edits. Correct response to consecutive Edit failures is re-read + resolve conflict, not disabling the guard. CLAUDE.md rules/shell.md prohibits workarounds explicitly. Escalate from NEW to RECURRING.",
+      "declared_ready_without_verification:RECURRING:STABLE — 03e5a89c-5: input topic 'tested verification checklist' with length 44; only 3 tools used (TaskUpdate + 2 Edits with no execution or observation); outcome Corrected. Structurally identical to prior confirmed instances. Matches [declared-ready] mistake-pattern tag from rules/testing.md.",
+      "mandatory_doc_guidelines_not_loaded:NEW — e25e3b92-12: S3 ATONE filed within the unit itself for authoring two large docs (job-creation-upload.md ~310 lines, data-history.md) without loading either frontend/.claude/doc-writing-guidelines.md or ~/.claude/conventions/doc-writing.md, both marked MANDATORY in the project CLAUDE.md. Result was ChatGPT-voice prose (em dashes, 'Why this page matters' theatrical framing, flowery intros). User reaction in the correction unit (e25e3b92-6 context): 'WHAT IS THE POINT OF USING CLAUDE IF YOU'RE GONNA TALK LIKE GPT'. First observation across all calibration history; S3 severity; self-caught and remediated within the same session."
+    ],
+    "calibration_score": 0.05,
+    "cross_references": [
+      "dream_insight_terse_continuation_git_push: not violated this batch — no git push or commit actions were taken on terse continuation signals. One git commit in 41a73142-1 was explicitly composed with full message via heredoc and preceded by git status + log + diff --stat verification triad. Insight confirmed, not violated.",
+      "dream_insight_data_hallucination_credential_leakage: not violated — e25e3b92-6 includes a secret-scan rg pass before writing .env.example files and confirmed 0 real credentials in output. Pattern respected."
+    ],
+    "overconfident_count": 7,
+    "recommendations": [
+      "shell_tool_preference_violations has reached 70% of substantive tool-using units — the highest recorded rate across all history. Prior recommendations to reduce this have produced zero improvement across ten cycles. The only actionable path is a PreToolUse hook that intercepts Bash calls matching '^ls ' or '^ls -' or 'sed -n' and either blocks or warns. Spec-level rules and CLAUDE.md entries have demonstrated zero enforcement efficacy for this pattern. Deprioritize further spec updates; escalate prop for hook implementation.",
+      "rg_replace_flag_bundle hook (prop-20260612-110331-da) should be fast-tracked to implementation. Five confirmed recurrences with consistent self-catch but zero prevention. A PreToolUse hook matching 'rg.*-[a-qs-z]*r[a-z]*\\s' (flag bundle containing r) that blocks or requires confirmation would have prevented all five instances. Self-catch is not a substitute for enforcement.",
+      "hook_bypass_for_convenience is now RECURRING. Add a rule or hook that blocks creation of ~/.claude/.no-dup-symbol-guard (and similar .no-*-guard sentinel files) without a mandatory confirmation step. The correct diagnostic for consecutive Edit failures is re-read the current file state; if the guard fires three times in sequence, that is evidence of a stale-string assumption, not a false positive. Disabling the guard removes safety from all subsequent edits in the session.",
+      "mandatory_doc_guidelines_not_loaded is a NEW S3 pattern. A lightweight enforcement path: add a PostToolUse hook (on Write/Edit targeting frontend/docs/) that checks whether the doc-writing-guidelines file has been Read this session, and if not, emits a warning. The atone RCA added a per-doc checklist item to PLAN.md — verify the checklist step is mechanical (rg -c and the anti-pattern rg) rather than agent-discretion, since agent-discretion failed here across a full session.",
+      "compound_command_overreach continues at the same rate (STABLE). No new recommendation — existing guidance to pre-decompose is established; the pattern persists despite it. If hook enforcement for shell_tool_preference is implemented, compound-command failures would drop naturally since many compound failures combine ls + other tools that would be individually intercepted."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      3566058
+    ],
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      5860224
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      3817977
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      11585967
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      8089489
+    ]
+  ],
+  "timestamp": "2026-06-13T00:41:04.392083Z",
+  "tokens_used": 25353,
+  "units_analyzed": 15,
+  "units_total": 31
+}

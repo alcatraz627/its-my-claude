@@ -17,7 +17,7 @@ When the user corrects a mistake — any pushback, "why did you do X", "revert t
 ## The five steps
 
 1. **State the mistake** — one sentence: what you did wrong.
-2. **Identify the pattern** — the reusable category, not the specific instance (e.g., "batch verification skip", "number heuristic without rendering", "overrode user preference").
+2. **Identify the pattern** — the reusable category, not the specific instance (e.g., "batch verification skip", "number heuristic without rendering", "overrode user preference"). **Generalize the correction to its class, not the user's literal example.** Failure signal: you copied the user's specific examples verbatim into the rule (the exact reference doc, the exact strings they cited) instead of the underlying class — that over-fits and reads as gospel. If the rule only catches the one case the user named, you haven't found the pattern yet.
 3. **Invoke `/atone`** — the skill gathers context, classifies severity (S1/S2/S3), reuses an existing slug if one matches, writes a structured event to `~/.claude/atone/events.jsonl`, and for S3 also drafts an RCA with a runnable `## Procedure` section.
 4. **Check if a hook can prevent recurrence** — if yes, file via `bash ~/.claude/scripts/propose.sh add --category hooks ...`. The consolidate cron will surface it; you (the human) decide.
 5. **Fix the mistake** — revert, then apply the correct change.

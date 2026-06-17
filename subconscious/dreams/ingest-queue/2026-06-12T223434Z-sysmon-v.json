@@ -1,0 +1,48 @@
+{
+  "ts": "2026-06-12T22:34:34Z",
+  "session_id": "sysmon-v2",
+  "project_root": "/Users/alcatraz627/Code/Claude/sys-monitor",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/sys-monitor/_20260613-sysmon-v2.claude.md",
+  "insights": {
+    "worked": [
+      "**The verification protocol earned its keep repeatedly.** It caught: my first",
+      "**Grounding private-API signatures in working open-source code** (not guessing)",
+      "**Pushing back on the code reviewer.** Twice the reviewer's proposed fix was",
+      "**Two-agent design debate** for the UI sprint produced sharper decisions than"
+    ],
+    "didnt_work": [
+      "**Headless panel screenshots kept failing** \u2014 toggle-parity (a stray user",
+      "**Sandbox network throttled to ~200 B/s** made high-rate network verification"
+    ],
+    "gotchas": [
+      "This user's shell aliases `cat`\u2192`glow` and shadows `log` \u2014 use `/bin/cat` and",
+      "`os.Logger.info` lines are stream-only: `/usr/bin/log stream`, not `log show`.",
+      "Heredocs with long paths / special chars get line-wrapped and mangled \u2014 use",
+      "`memory_pressure -S` needs root; `memory_pressure -l warn` (real allocation)",
+      "CGWindowList is unusable for NSStatusItem self-visibility on macOS 26",
+      "macOS suppresses real tooltips for inactive (nonactivating accessory) apps \u2014",
+      "Per-process network: `QueryAllSources` doesn't refresh counters on macOS 26;",
+      "Commitlint rejects non-conventional types: `ui(...)` and `polish(...)` fail;"
+    ],
+    "notes": [
+      "The repo is whitelisted for auto-commit + main push (memory `auto-commit-policy`).",
+      "Verification artifacts and reviews live under `.claude/output/` (gitignored,",
+      "`docs/05-v2-plan.md` is the master plan with a field-bug log (FB-1..FB-4) and",
+      "The serial-queue isolation invariant in `SamplingCoordinator` is load-bearing"
+    ],
+    "feedback": [
+      "Pin-resets-on-close was sloppy product reasoning (atone S2,",
+      "\"Not feasible without private frameworks\" for per-process network was an",
+      "Per-process network/disk filters: user wants `>N:type` for cpu/mem/disk/net,"
+    ]
+  },
+  "pending": [
+    "**Verify per-process network on a real (un-throttled) network** \u2014 high-rate",
+    "**Phase 4 leftovers:** NET/DISK history sparklines (4.1), IOReport GPU/power",
+    "**Phase 5 (hygiene):** re-enable the test target (`Package.swift:12-13`",
+    "**Feature backlog:** battery/power cell (public `IOPSCopyPowerSourcesInfo`),",
+    "**Settings backlog:** bits/s vs bytes/s, adjustable severity thresholds,",
+    "**Open UI feel-checks** the user may still want: icon choices in the expanded"
+  ],
+  "tags": []
+}

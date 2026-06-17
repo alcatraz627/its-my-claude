@@ -21,7 +21,12 @@ Technical docs under `docs/` or `*/docs/` (excluding READMEs, CLAUDE.md files, c
 
 1. **Audience assumption** — reader is unfamiliar with the system. Support two reading modes: linear (tutorial-style, read top-to-bottom) and lookup (drop-in on any heading and find your answer).
 2. **Voice** — direct, specific, no marketing. Avoid a 19-item anti-pattern list: "deceptively," "transactional dance," "hunt for," "and beyond," "seamless," "robust," hedging modifiers ("relatively," "fairly"), meta-commentary ("let's explore," "as we'll see").
-3. **Structure** — reader-centric section titles. Tables for structured data (not prose paragraphs). Diagrams annotated, not decorative. Product-context block under any technical-state section so non-implementer readers know WHY it matters.
+3. **Structure** — the doc's shape is a lookup interface, not an essay:
+   - Reader-centric section titles: name the thing the reader searches for ("Quota checks"), not the narrative beat ("What happens next"). Titles are navigation targets and anchor slugs.
+   - Tables for structured data. Three or more parallel facts (variants, fields, states, limits) go in a table; prose paragraphs hide the third fact from a scanning reader. Full decision rules: §6.
+   - Diagrams annotated, not decorative: every node labeled, a legend when role tags are used, balanced aspect ratio (the reader cannot resize the render). Full rules: §7.
+   - Product-context block under any technical-state section, so a non-implementer knows why the state matters. Pattern: §8.
+   - Section order follows the reader's task order (configure → submit → diagnose), not the code's call order, unless the doc IS a call graph.
 4. **Annotations** — inline tags for stale or unverified material:
    - `[STUB]` — section exists but is empty, needs writing
    - `[PARTIAL]` — section is incomplete
@@ -53,7 +58,30 @@ Assume the reader is **unfamiliar with the system**. They are either:
 - **Reading linearly** — trying to learn what this surface does.
 - **Looking up a specific detail** — a flag name, an API endpoint, an error condition, a state transition.
 
-A doc that serves both modes does three things: it front-loads the definition, every section is self-contained, and structured content (enums, variants, field tables) uses tables rather than prose.
+### Linear mode (learning the surface)
+
+The linear reader builds a mental model from zero. Serve them by:
+
+- **Front-loading the definition.** The first paragraph answers "what is this and where does it sit" before any mechanism appears.
+- **Ordering sections by concept dependency.** Nothing references a concept the doc has not yet introduced; if avoiding that is impossible, link forward explicitly.
+- **One altitude shift at a time.** Behavior first, then mechanism. A linear reader who hits a payload dump before understanding the flow stops reading.
+- **Scenarios near the end.** Worked examples ("first scrape against a new domain") consolidate the model after the parts have been introduced.
+
+Linear mode does NOT mean tutorial voice. No "let's", no "now that we've seen", no second-person walkthrough. The order is pedagogical; the prose stays reference-grade.
+
+### Lookup mode (finding one fact)
+
+The lookup reader arrives mid-page from search, a cross-link, or a skim of headings. They have a question ("what is the file-size limit", "which env var sets the webhook") and a 30-second budget. Serve them by:
+
+- **Self-contained sections.** Never "as described above"; define or link terms on first use within the section (rule R2).
+- **Headings that match the question.** A support engineer searches "quota"; a section titled "Quota checks" wins, "Guard rails" loses.
+- **Answers in scannable form.** Limits, enums, variants, and mappings live in tables; the lookup reader should find the cell without reading sentences.
+- **Stable anchors.** Heading renames break inbound links; grep before renaming (rule R4).
+- **The shape before the prose.** Show the type, the table, or the diagram first; prose elaborates (rule R3).
+
+### Serving both at once
+
+The two modes conflict at one point: linear wants narrative order, lookup wants standalone sections. Resolve it section by section: order sections for the linear reader, write each section's interior for the lookup reader. When a section cannot serve both (a 200-line payload reference mid-flow stalls linear readers), move the heavy material to a trailing reference section or a separate engineering doc and leave a one-line pointer.
 
 Do **not** write as if the reader is:
 
@@ -208,12 +236,77 @@ After: (delete the sentence; start with step 1)
 Before: "Edges in the diagram carry the payload where non-obvious; nodes tagged with their role so the reader can see what runs where."
 After: (delete; add a one-line legend above the diagram instead, e.g., "Role tags: `[FE]` = frontend, `[API]` = server action, `[Py]` = FastAPI backend.")
 
+### 3.20–3.32 The AI-smell tell list (added 2026-06-13)
+
+Entries 3.1–3.19 cover prose tics. The entries below are the broader structural and rhythmic tells that make a reader sense a language model wrote the document. Compiled from a 2026-06-13 review round (Versable docs) plus the general LLM-writing fingerprint; ordered by signal strength. Entries marked `[observed]` were caught in real docs in that round; the rest are listed to keep the catalog ahead of the patterns, not just behind them.
+
+#### 3.20 Em dashes as connective tissue `[observed]`
+
+The single strongest tell. LLMs splice clauses with em dashes where a human writer would end the sentence or use a colon. One per page is fine; one per paragraph is a fingerprint. Restructure: period, colon, comma, or parenthesis. (Legitimate uses survive: heading separators, ranges, true parentheticals used sparingly.)
+
+#### 3.21 Rule-of-three triads
+
+"Fast, reliable, and scalable." "Configure, validate, and submit." Lists of exactly three qualities appear at LLM-typical rates far above human baseline. If the true count is two or four, write two or four.
+
+#### 3.22 Contrastive antithesis framing
+
+"It's not X — it's Y." "This isn't about A; it's about B." Persuasive-essay rhetoric (sibling of 3.17). State what the thing is.
+
+#### 3.23 Uniform rhythm `[observed]`
+
+Every bullet the same length; every section the same shape; every paragraph 2–3 sentences. Human technical writing is lumpy: a one-line section next to a 40-line one. Let importance, not symmetry, set length.
+
+#### 3.24 Bold-phrase-colon bullet armies `[observed]`
+
+Every bullet starting `**Bolded concept.** Sentence.` or `**Term:** definition` for ten bullets straight. The pattern is fine for true definition lists; as a default prose container it reads generated. Vary or flatten.
+
+#### 3.25 Echo summaries
+
+A closing sentence that restates the section heading ("In short, the two-phase transaction keeps billing safe."). The reader just read the section. Delete.
+
+#### 3.26 Sweeping-range constructions
+
+"From quick lookups to deep audits." "Whether you're a new hire or a veteran." Marketing cadence; names no specific reader. Name the actual cases or drop the frame.
+
+#### 3.27 Crucially / Notably / Importantly sentence openers
+
+Editorializing importance instead of demonstrating it (sibling of 3.3/3.16). If it matters, the content should show it.
+
+#### 3.28 Over-bolding mid-prose `[observed]`
+
+Bolding **key phrases** every sentence trains the reader to ignore bold. Reserve bold for the one term per section the reader must be able to find by scanning.
+
+#### 3.29 Precision theater
+
+"Approximately ~5s or so." "Roughly around 100." Stacked hedges on numbers. One qualifier, or better, the measured value with its source.
+
+#### 3.30 Generic placeholder examples
+
+`foo`/`bar`, Acme Corp, John Doe, in a repo where real values exist. Use a real (sanitized) template name, a real column header, a real domain from the test fixtures. Placeholders signal the author never looked.
+
+#### 3.31 Anthropomorphized code
+
+"The function happily accepts." "The worker patiently waits." Code does not have moods. (Mechanical-metaphor sibling of 3.2.)
+
+#### 3.32 Self-labeling scope claims
+
+"A comprehensive guide to..." "Everything you need to know about..." The doc's coverage is for the reader to judge. State scope factually ("Covers X; does not cover Y": the Scope block already does this).
+
+#### 3.33 Defensive / meta framing that signals doubt `[observed]`
+
+Narrating the doc's own carefulness — "two things are both true here, and the doc states both so neither is mistaken", "this is subtle", "note that these are not in conflict", "to be clear" — tells a casually-exploring reader they've wandered into a place of doubt and confusion, exactly where trust drops. State the facts neutrally and let them stand; do not editorialize that you are handling a tricky point or that two facts coexist. (It is fine to discuss the subtlety with a human in chat; the doc stays neutral.)
+
+Before: "Two things are both true here, and the doc states both so neither is mistaken: the system supports multiple currencies, and only USD is enabled. So these are not in conflict — the first is the design, the second the current config."
+After: "Each plan carries a `currency` field; the `currencyEnum` currently holds a single value, USD, so every plan is USD. Adding a currency is a one-value enum change." (Both facts, stated flat, no framing.)
+
+**Calibration note.** This list is a detector, not a banlist to regex-replace. A doc can pass every entry and still read generated if the rhythm is off, and a doc can contain one triad and read fine. The test that matters: would a reader who distrusts AI-written docs take this page seriously?
+
 ## 4. Find-and-flag string list
 
 Run this `rg` pattern against every draft. Every hit is a candidate rewrite. Not every hit is wrong, but every hit deserves a second look.
 
 ```bash
-rg -n "seamless|robust|powerful|intuitive|simply|just |essentially|basically|actually|typically|generally|under the hood|behind the scenes|it's worth noting|allows us to|let's |dive into|walk through|deep dive|deceptively|surprisingly|not just |hunt for| dance |handoff|and beyond|and more |load-bearing|In this section|cross-cutting" path/to/doc.md
+rg -n "seamless|robust|powerful|intuitive|simply|just |essentially|basically|actually|typically|generally|under the hood|behind the scenes|it's worth noting|allows us to|let's |dive into|walk through|deep dive|deceptively|surprisingly|not just |hunt for| dance |handoff|and beyond|and more |load-bearing|In this section|cross-cutting|crucially|notably|importantly|comprehensive|in short|in conclusion|happily |gracefully " path/to/doc.md
 ```
 
 If the result is non-empty, plan a targeted cleanup pass.
@@ -400,6 +493,25 @@ Pause and ask the user rather than guessing, if:
 - A stubbed feature has no tracking reference (ask for one; do not invent).
 - A backend or external-system behavior is load-bearing to the doc and you have not read that system.
 - A section reads flat no matter how you phrase it — the underlying content may be wrong, not the voice.
+
+## 7. You cannot see your own voice — route the voice pass to a fresh agent
+
+The single most reliable finding about AI-smell is that **the author is blind to
+their own.** An agent auditing documents for the §3 tells will, in the same
+session, write those exact tells into its own prose — em-dash splicing,
+rule-of-three triads, bold-phrase bullet armies — and not notice. (Live proof,
+2026-06-13: while writing a report *about* a model's voice-blindness, the
+reviewing agent's own output tripped the voice-lint hook.) This is general to
+LLMs, not specific to any one model.
+
+So: **when a doc needs a voice/AI-smell cleanup, route that pass to a fresh
+agent** (or a dedicated [`personas/doc-writer.md`](../personas/doc-writer.md)) that
+did not write the prose. A reviewer with no authorship investment sees the tells
+the author cannot. Do not trust your own self-review for voice — trust it for
+facts, route it for style.
+
+This is the doc-writing instance of the general rule that fresh-context
+adversarial review beats in-context self-review (cf. `/skeptical-review`).
 
 ---
 

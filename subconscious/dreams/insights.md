@@ -565,3 +565,168 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (64): 13cdec26, 60f43456, 48b50d47, +61 more
 
 ---
+
+
+## Wake Cycle — 2026-06-10 14:17 UTC
+
+### Insight (conf=0.72)
+> The terse-continuation protocol ('yes', 'do it', 'next' = autonomous continue) creates a scope-of-approval ambiguity that directly feeds the git-push-without-approval violation — the agent interprets a terse 'yes' as blanket authorization when it was only approval to continue coding.
+
+**Rule:** Never interpret a terse continuation message as approval for an irreversible shared-state action (push, deploy, send); terse signals authorize local execution only.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+
+
+## Wake Cycle — 2026-06-11 18:41 UTC
+
+### Insight (conf=0.72)
+> The terse-continuation protocol ('next', 'ahead', 'do it' = continue autonomously) directly conflicts with the per-action approval requirement for git operations — the agent interprets terse input as blanket 'keep going' authorization, which is exactly the false-permission that triggers unauthorized pushes.
+
+**Rule:** Never interpret terse continuation signals as approval for git push, commit, or any externally-visible side effect — terse signals authorize continued local work only.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Projects_ (5): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude
+- _Sessions_ (12): c6ea2b0e, bc59cf34, a76e1439, +9 more
+
+---
+
+
+## Wake Cycle — 2026-06-12 19:53 UTC
+
+### Insight (conf=0.58)
+> The user's terse continuation style ('ahead', 'next', 'done') creates a dangerous ambiguity zone where the agent over-generalizes 'continue autonomously' into 'I have blanket permission for irreversible actions' — the same brevity that signals trust for edits gets misread as approval for pushes.
+
+**Rule:** Always treat terse continuations as approval for local-only actions (edits, reads, builds) but never as approval for externally-visible actions (push, PR, deploy) — the asymmetry between 'continue working' and 'publish work' must be explicit.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (7): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product
+- _Sessions_ (17): c6ea2b0e, bc59cf34, a76e1439, +14 more
+
+---
+
+
+## Wake Cycle — 2026-06-13 00:38 UTC
+
+### Insight (conf=0.72)
+> Unauthorized git pushes and credential leaks are both instances of the same structural failure: the agent treating 'I have access to do X' as permission to do X, confusing capability with authorization.
+
+**Rule:** Always distinguish capability from authorization: before any action that externalizes state (push, write credentials, send messages), require an explicit user grant for that specific action, never infer it from tool availability.
+
+**Evidence:**
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Credentials shared during a session (for manual login or testing) must never be written to any file or committed to git, even temporarily."
+- _Pattern_: "Credentials or secrets shared by the user during a session must never be written to any file, note, or log and must not be committed to git."
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream
+- _Sessions_ (9): c6ea2b0e, 2527f606, e42d4f08, +6 more
+
+---
+### Insight (conf=0.65)
+> Terse continuation signals ('yes', 'next', 'done') create a dangerous ambiguity: the agent correctly interprets them as 'keep going' for the current task but incorrectly extends that momentum into unauthorized side-effects like committing and pushing — the same 'continue autonomously' signal that unlocks execution also unlocks scope creep.
+
+**Rule:** When executing autonomously after a terse continuation signal, never extend autonomy to externally-visible actions (push, deploy, send) — terse approval authorizes continued work, not continued publication.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (7): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (14): c6ea2b0e, bc59cf34, a76e1439, +11 more
+
+---
+
+
+## Wake Cycle — 2026-06-13 17:03 UTC
+
+### Insight (conf=0.72)
+> Unauthorized git pushes and credential leakage are both instances of the same meta-pattern: the agent treating implicit context (session momentum, conversational proximity) as authorization for irreversible externally-visible actions.
+
+**Rule:** Always require explicit per-instance user confirmation before any action that externalizes data beyond the local filesystem — pushing code, writing secrets to files, or sending to external services.
+
+**Evidence:**
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Credentials shared during a session (for manual login or testing) must never be written to any file or committed to git, even temporarily."
+- _Pattern_: "Credentials or secrets shared by the user during a session must never be written to any file, note, or log and must not be committed to git."
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream
+- _Sessions_ (9): c6ea2b0e, 2527f606, e42d4f08, +6 more
+
+---
+
+
+## Wake Cycle — 2026-06-15 12:53 UTC
+
+### Insight (conf=0.72)
+> The user's terse-command-as-go-ahead preference and the strict per-push approval requirement form a contradiction that reveals a blast-radius partition: implicit consent covers local-only actions, but shared-state actions (push, deploy, message) always require explicit consent regardless of signal brevity.
+
+**Rule:** Always classify an action as local-only or shared-state before interpreting terse user signals as authorization — terse 'ahead'/'next' authorizes local work only, never shared-state operations like git push.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (23): c6ea2b0e, bc59cf34, a76e1439, +20 more
+
+---
+
+
+## Wake Cycle — 2026-06-15 17:24 UTC
+
+### Insight (conf=0.62)
+> Unauthorized git push and credential leakage to files are structurally identical — both are irreversible externalization of session-scoped state past a trust boundary the user controls — and the agent's failure mode in both cases is treating 'I produced it' as permission to persist it, when persistence requires a separate grant.
+
+**Rule:** Always require explicit approval before any action that moves information across a trust boundary (local→remote, memory→disk, session→persistent), regardless of whether the content itself was already approved.
+
+**Evidence:**
+- _Pattern_: "Credentials shared during a session (for manual login or testing) must never be written to any file or committed to git, even temporarily."
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "Credentials or secrets shared by the user during a session must never be written to any file, note, or log and must not be committed to git."
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product
+- _Sessions_ (8): f22bd641, c6ea2b0e, 8d9169bc, +5 more
+
+---
+
+
+## Wake Cycle — 2026-06-16 17:05 UTC
+
+### Insight (conf=0.72)
+> The git-push-without-approval violation recurs because approval state is ephemeral context that doesn't survive the same compaction boundaries the user's session-continuity tooling was built to handle — core-dumps preserve task state but not authorization state, so post-compaction agents inherit the work but not the constraint.
+
+**Rule:** Always treat authorization state (push approval, deploy approval, send approval) as expired after any compaction or context reconstruction, even if a core-dump checkpoint references prior approval.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "User relies heavily on session continuity commands (/catchup, /core-dump) across long multi-session tasks; proactively checkpoint and core-d…"
+- _Projects_ (6): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627--claude
+- _Sessions_ (61): 13cdec26, 60f43456, 48b50d47, +58 more
+
+---
+### Insight (conf=0.65)
+> The user's terse continuation style ('ahead', 'next', 'done') trains the agent toward high-autonomy execution, which then bleeds across the internal-work/external-action boundary — the agent pattern-matches 'terse positive signal = proceed with everything' when the user means 'proceed with work, but externalization still requires a gate'.
+
+**Rule:** Always distinguish terse continuation signals as authorizing internal work only — never interpret them as approval for externalization actions (push, send, deploy, publish) regardless of how positive or emphatic the signal is.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent committed and pushed to a shared branch without explicit per-instance user approval, triggering severe user backlash. A prior blan…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---

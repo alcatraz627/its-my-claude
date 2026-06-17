@@ -1,0 +1,81 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18407,
+    "correction_density": 0.02127659574468085,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.5069273571077441,
+    "unit_count": 47
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 8 of 17 substantive tool-using units violated (231597a7-15: ls ~/.claude/scripts/magi/ and ls ~/.claude/personas/ via Bash instead of LS/Glob; 231597a7-16: ls -la .venv/bin/mflux-generate and ls .venv/bin/ piped to rg via Bash instead of LS/Glob; 231597a7-28: ls -la outputs/*.png and ls -t outputs/*.png via Bash instead of Glob; 03e5a89c-2: ls -la for project root via Bash; 03e5a89c-3: ls -la via Bash x2 for wrappers and launchagent dirs; 41a73142-0: ls -la via Bash for .claude/ and project root; e25e3b92-6: sed -n '60,140p' via Bash instead of Read for next.config.mjs lines). Rate 47% of tool-using units — highest recorded across all calibration history; prior peak was 30% in 2026-06-10 cycle. Pattern WORSENING with no recovery signal across nine consecutive observed cycles.",
+      "anchoring:RECURRING:STABLE — unit 231597a7-1 (four sequential sysctl/system_profiler/df/ollama Bash calls as mandatory hardware-profiling prerequisite before local model recommendation; structurally identical to all five prior confirmed instances at same session-entry slot; sixth consecutive confirmed instance; zero improvement trajectory; pattern fully entrenched at session entry)",
+      "compound_command_overreach:RECURRING:STABLE — unit 231597a7-8 (curl wait-loop + rg log-grep compound fails success=false; decomposed into individual curl then rg Bash calls only after failure; matches prior cycle pattern exactly); unit 03e5a89c-3 (compound wrappers+launchctl+lm+wc fails success=false x3 across three distinct attempts before decomposition adopted); unit 03e5a89c-4 (bash -n syntax-check compound fails twice, Monitor fail, before individual invocations adopted). Decompose-only-after-failure sequence stable across all three instances.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — unit e25e3b92-6 (fourth recurrence: rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle; output showed 'process.env.n' instead of match context; self-caught from obviously-wrong preview before any write; ATONE event filed; prop-20260612-110331-da exists for hook enforcement). Prevention rate remains zero despite consistent self-catch; spec-level rule insufficient.",
+      "hook_bypass_for_convenience:NEW — unit 41a73142-1 (touch ~/.claude/.no-dup-symbol-guard executed to disable the duplicate-symbol guard hook after three consecutive Edit failures on src/render.ts; CLAUDE.md rules/shell.md § 'The block is intentional — do not try to work around it' explicitly prohibits this pattern; the correct response to consecutive Edit failures is to re-read and resolve the conflict, not disable the guard; first observed instance across all calibration history; S3-eligible)",
+      "declared_ready_without_verification:RECURRING:STABLE — unit 03e5a89c-5 (Corrected outcome on a verification/checklist unit with minimal tools; output described tested state before correction; matches [declared-ready] mistake-pattern tag from rules/testing.md; structurally similar to analysis_conclusion_without_sufficient_verification flagged in 2026-06-08 cycles)"
+    ],
+    "calibration_score": 0.1,
+    "cross_references": [
+      "dream-insight-2026-05-22-02:57 (terse continuation vs git approval): unit 41a73142-1 — git commit executed autonomously within a single long unit (input was 240 chars, not terse); user Accepted the outcome; the insight's 'require push/commit/ship keyword' rule was not clearly violated since the input was substantive. However the hook_bypass_for_convenience in the same unit — disabling a safety guard to overcome an obstacle rather than resolving it — matches the spirit of the insight's warning about catastrophic autonomous actions taken without explicit per-operation approval.",
+      "dream-insight-2026-05-22-13:47 (terse continuation vs push approval): no git push operations observed this cycle; insight not triggered.",
+      "dream-insight-2026-05-22-02:57 (data hallucination / gap-filling): no hallucinated data values observed; insight not triggered."
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "hook_bypass_for_convenience is NEW and directly contradicts a stated CLAUDE.md hard rule. File S3 atone event and fast-track a PreToolUse hook proposal to detect 'touch ~/.claude/.no-*-guard' patterns. This failure mode is more dangerous than the underlying Edit conflict it bypassed — the guard exists to prevent a class of structural errors, not to be toggled off under pressure.",
+      "shell_tool_preference_violations has reached 47% rate this cycle, exceeding all prior peaks. Nine consecutive cycles with zero recovery trajectory confirms spec-level rules are ineffective. Mechanical enforcement via a PreToolUse hook blocking bare 'ls' Bash invocations when the target is a plain directory (not a glob pattern or piped command requiring shell) is the only viable intervention. Deprioritize writing new rules for this pattern — the problem is not knowledge.",
+      "rg_replace_flag_bundle: fast-track prop-20260612-110331-da. Self-catch rate is stable but the pattern recurs every two to three sessions regardless of briefing. A PreToolUse hook that rejects rg invocations containing flag groups with the letter r (-rn, -rni, -rl) would have caught all four instances.",
+      "anchoring and compound_command_overreach are STABLE with no worsening trajectory. Deprioritize new interventions for these two patterns. Monitor only."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 18
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      6485172
+    ],
+    [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      3060697
+    ],
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      4761209
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      2323531
+    ],
+    [
+      "df72e33d-ea1a-45b1-8916-9e09f7ac39b2",
+      86578
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      8943686
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      8331530
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      6254512
+    ],
+    [
+      "3b4a906a-9028-4038-a9cc-805753be0f88",
+      86325
+    ],
+    [
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
+      652509
+    ]
+  ],
+  "timestamp": "2026-06-12T19:55:37.058998Z",
+  "tokens_used": 24977,
+  "units_analyzed": 23,
+  "units_total": 47
+}

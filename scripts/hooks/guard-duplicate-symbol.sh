@@ -58,9 +58,40 @@ is_generic() {
   esac
 }
 
+# Is this path a BUILD ARTIFACT (a bundle/compiled output), not hand-authored
+# source? A git-TRACKED bundle (e.g. esbuild's content.js) holds a compiled twin
+# of every src/ export, so without this every new export collides with itself and
+# the guard mutes into uselessness (the better-file-browser incident). Layered:
+# bundler dirs/extensions → gitignored → committed-artifact signature → minified
+# single-line. This only ever SUPPRESSES a block (filters a false collision); it
+# can never introduce one.
+is_build_output() {
+  local p="$1"
+  case "$p" in
+    */dist/*|*/build/*|*/out/*|*/.next/*|*/node_modules/*|*/vendor/*|*.min.js|*.bundle.js|*.min.css) return 0 ;;
+  esac
+  git -C "$root" check-ignore -q "$p" 2>/dev/null && return 0
+  head -c 4000 "$p" 2>/dev/null | rg -q 'sourceMappingURL|esbuild|webpackBootstrap|__esModule' 2>/dev/null && return 0
+  # A minified bundle is a HUGE first line AND almost no newlines. Requiring both
+  # avoids mis-flagging hand-authored source whose first line is a long license
+  # header or a big inline type union (those have many following lines).
+  local firstlen lines
+  firstlen=$(head -n 1 "$p" 2>/dev/null | wc -c | tr -d ' ')
+  lines=$(wc -l < "$p" 2>/dev/null | tr -d ' ')
+  [ "${firstlen:-0}" -gt 1000 ] && [ "${lines:-99}" -lt 3 ] && return 0
+  return 1
+}
+
 # Extract newly-introduced symbol names by language.
+# JS/TS: exported FUNCTIONS in all three common forms — `export function`,
+# `export default function`, and `export const NAME = (…) =>` / `= function`
+# (the dominant modern style). Plain non-function `export const` (Props,
+# Next.js `metadata`, config objects) is deliberately NOT matched — those
+# legitimately recur per-file. One regex, one capture per branch; `-r '$1$2$3'`
+# yields whichever branch matched (the others are empty).
 if [ "$lang" = js ]; then
-  names=$(printf '%s' "$payload" | rg -o --no-line-number 'export\s+(?:async\s+)?function\s+([A-Za-z_$][A-Za-z0-9_$]*)' -r '$1' 2>/dev/null | sort -u)
+  js_def='export\s+(?:default\s+)?(?:async\s+)?function\s+([A-Za-z_$][A-Za-z0-9_$]*)|export\s+const\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)\s*=>|export\s+const\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*(?:async\s+)?function'
+  names=$(printf '%s' "$payload" | rg -o --no-line-number "$js_def" -r '$1$2$3' 2>/dev/null | sort -u)
 else
   names=$(printf '%s' "$payload" | rg -o --no-line-number '^(?:async\s+)?(?:def|class)\s+([A-Za-z_][A-Za-z0-9_]*)' -r '$1' 2>/dev/null | sort -u)
 fi
@@ -85,7 +116,16 @@ while IFS= read -r name; do
   # Exclude the file being edited by EXACT path prefix (awk, not regex) — a path
   # with regex-meta chars like ( | [ would make an `rg -v "^path:"` anchor miss
   # and the file would flag itself as its own duplicate.
-  found=$(rg -n --no-heading "${globs[@]}" "$def_re" "$root" 2>/dev/null | awk -v p="${file_path}:" 'substr($0,1,length(p)) != p' | head -3)
+  raw=$(rg -n --no-heading "${globs[@]}" "$def_re" "$root" 2>/dev/null | awk -v p="${file_path}:" 'substr($0,1,length(p)) != p')
+  # Drop matches that live in build artifacts — a compiled twin is not a real
+  # duplicate. Filtering here can only remove false collisions, never add one.
+  found=""
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    is_build_output "${line%%:*}" && continue
+    found="${found}${line}"$'\n'
+  done <<< "$raw"
+  found=$(printf '%s' "$found" | head -3)
   [ -n "$found" ] && hits="${hits}▸ ${name} already defined:
 $(printf '%s' "$found" | sed 's/^/    /')
 "

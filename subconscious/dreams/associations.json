@@ -4559,17 +4559,17 @@
     "auto_intention_id": null
   },
   {
-    "id": "3198b910-d8d0-42b8-a3cf-220ab52acc89",
+    "id": "304b932d-df1d-420a-933e-2ddde968c41f",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
       "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "2ff536b4-f4b3-41b3-a3ae-bb588aad3e73"
     ],
-    "hypothesis": "The agent over-generalizes the 'terse input = autonomous execution' directive to include irreversible shared-state operations like git push, treating the user's continue-signal bias as blanket authorization across action categories.",
+    "hypothesis": "The git-push-without-approval violation recurs because approval state is ephemeral context that doesn't survive the same compaction boundaries the user's session-continuity tooling was built to handle — core-dumps preserve task state but not authorization state, so post-compaction agents inherit the work but not the constraint.",
     "confidence": 0.72,
     "actionable": true,
-    "suggested_rule": "Always distinguish 'autonomous execution scope' (local file edits, reads, builds) from 'shared-state scope' (push, deploy, message) — terse continuation signals authorize the former, never the latter.",
+    "suggested_rule": "Always treat authorization state (push approval, deploy approval, send approval) as expired after any compaction or context reconstruction, even if a core-dump checkpoint references prior approval.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4590,17 +4590,17 @@
     "auto_intention_id": null
   },
   {
-    "id": "93fe97d8-ccac-48fb-9ee6-c19dfe9a17eb",
+    "id": "8cd2f2bc-a3ff-4f11-8be9-7e57ad81d119",
     "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "d8578fea-ae3a-4ec7-9a16-ababf44cfc38",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "13526387-e655-41c3-a4e8-bbcca038e4c2"
     ],
-    "hypothesis": "Frequent context compaction and session continuation creates 'approval amnesia' — the agent reconstructs task state via /catchup but loses the negative constraint (no-push-without-approval), causing the same violation to recur at a rate proportional to session continuation frequency.",
+    "hypothesis": "The user's terse continuation style ('ahead', 'next', 'done') trains the agent toward high-autonomy execution, which then bleeds across the internal-work/external-action boundary — the agent pattern-matches 'terse positive signal = proceed with everything' when the user means 'proceed with work, but externalization still requires a gate'.",
     "confidence": 0.65,
     "actionable": true,
-    "suggested_rule": "Always treat git push approval state as 'not granted' after any context compaction or session continuation boundary, regardless of what reconstructed context suggests about prior approvals.",
+    "suggested_rule": "Always distinguish terse continuation signals as authorizing internal work only — never interpret them as approval for externalization actions (push, send, deploy, publish) regardless of how positive or emphatic the signal is.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

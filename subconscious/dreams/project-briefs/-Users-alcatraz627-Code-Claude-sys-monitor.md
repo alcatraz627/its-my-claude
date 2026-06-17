@@ -1,16 +1,18 @@
-<!-- i-dream project brief · 2026-05-31T19:29:34.935797+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-15T12:56:54.584872+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A system monitoring tool (likely CLI/TUI-based) built with Python and Node, emphasizing structured output via gum/TUI tools and disciplined git practices.
+A system monitoring tool with a CLI/TUI interface; sessions involve backend service work, documentation, and git operations — with strong conventions around terminal output rendering and commit hygiene.
 
 ## Things to do (or keep doing)
-- Always use gum/TUI tools for tabular or structured output in chat — never raw markdown tables; this is a persistent compliance requirement with strong user frustration history
-- When asked what files to commit, answer completely and directly — if the answer is "all of `backend/`", say that plainly instead of listing individual files
-- Always define new constants, flags, or config values inline at first mention in any doc or report — naming without explaining forces re-reads
+- **Always use gum/TUI tools for tabular output** — raw markdown tables are a persistent violation; use configured gum tools every time, no exceptions
+- **Give complete commit answers** — when the answer is "all of a directory", say that directly; never give a partial file list that forces a follow-up
+- **Define constants inline** — any doc or report that names a config value must explain what it does right there, not just where it appears
+- **Formal, direct prose in docs** — match tone to the audience; no promotional or flowery language
 
 ## Things to avoid
-- Don't write inline imports (inside functions); always consolidate at the top of the file — this is a repeated frustration trigger
-- Don't assume git push permission from one repo generalizes to others — each repo requires explicit per-repo user grant before auto-pushing
-- Don't reference a named constant or config key in a doc without an inline definition of what it does
+- **Don't use inline imports** — consolidate all imports at the top of the file; this causes strong user frustration and has recurred multiple times
+- **Don't assume global git push permission** — push access is granted repo-by-repo; confirm for each new repo before auto-pushing
+- **Don't let secondary work displace the primary deliverable** — finish what was stated at session start before expanding scope or adding enhancements
+- **Don't omit YAML frontmatter from RCA files** — atone RCAs must start with `---` on line 1 or the lint gate rejects them silently
 
 ## Open questions / known gaps
-- Persistent pattern of agent defaulting to raw markdown tables despite 6+ correction cycles — may need a hook or settings-level enforcement rather than relying on model compliance
+- Gum tool compliance is a 6×-recurrence gap — something about how the project surfaces its TUI tooling makes the agent revert to markdown; worth checking if there's a `CLAUDE.md` or skill that should be making this automatic

@@ -10,6 +10,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260528-193712-da"
   },
   {
+    "id": "trig-ascii-art-tables-instead-of-gum-tools",
+    "from_slug": "ascii-art-tables-instead-of-gum-tools",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "use std::claude::shared/gum-tui.sh, never hand-rolled ASCII",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260610-101333-89"
+  },
+  {
     "id": "trig-batched-past-explicit-stop-checkpoints",
     "from_slug": "batched-past-explicit-stop-checkpoints",
     "from_source": "atone",
@@ -27,77 +37,57 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-110718-c0"
-  },
-  {
-    "id": "trig-flattery-and-unrequested-agenda",
-    "from_slug": "flattery-and-unrequested-agenda",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Flattery openers + unrequested next-step agendas (request treated as floor, not ceiling)",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-192122-37"
-  },
-  {
-    "id": "trig-generalize-before-enumerate",
-    "from_slug": "generalize-before-enumerate",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "generalize-before-enumerate",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260515-120002-m02"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-101251-0c"
   },
   {
     "id": "trig-infra-before-grep",
     "from_slug": "infra-before-grep",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "infra-before-grep",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260519-055641-ff"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260615-083524-64"
   },
   {
-    "id": "trig-js-escape-sequences-inside-server-side-template-literals",
-    "from_slug": "js-escape-sequences-inside-server-side-template-literals",
+    "id": "trig-interaction-default-without-usage-loop-walkthrough",
+    "from_slug": "interaction-default-without-usage-loop-walkthrough",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "JS escape sequences inside server-side template literals",
+    "instruction": "sys-monitor: pin reset on close - lifetime default chosen without walking the usage loop",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260517-081008-4d"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-144226-4d"
   },
   {
-    "id": "trig-over-corrected-tuning-request-into-disable",
-    "from_slug": "over-corrected-tuning-request-into-disable",
+    "id": "trig-mandatory-doc-guidelines-not-loaded-before-authoring",
+    "from_slug": "mandatory-doc-guidelines-not-loaded-before-authoring",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Over-corrected a 'soften the trigger' request into a full + broken hook disable",
+    "instruction": "Authored 2 large docs without reading the MANDATORY doc-writing guidelines; ChatGPT voice throughout",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260525-132133-9a"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-213044-93"
   },
   {
-    "id": "trig-parse-output-without-row-sample",
-    "from_slug": "parse-output-without-row-sample",
+    "id": "trig-personal-convention-presented-as-org-process",
+    "from_slug": "personal-convention-presented-as-org-process",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "awk field-extraction on ps output without printing one row to verify column positions",
+    "instruction": "Preserved a personal .claude convention as org process in team-facing comms.md",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-134335-e1"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-140545-1c"
   },
   {
     "id": "trig-propagating-legacy-inline-imports-in-python-backend",
     "from_slug": "propagating-legacy-inline-imports-in-python-backend",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "Propagated legacy lazy-import pattern across 4 sites despite standing rule",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-120704-1d"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260615-144939-d5"
   },
   {
     "id": "trig-proposed-fix-breaks-design-invariant",
@@ -123,7 +113,7 @@
     "id": "trig-self-permitting-exception-to-an-adr-hard-rule",
     "from_slug": "self-permitting-exception-to-an-adr-hard-rule",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Self-permitting exception to an ADR / hard rule",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -140,20 +130,10 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-092351-5e"
   },
   {
-    "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
-    "from_slug": "speculative-abstractions-without-a-load-bearing-caller",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Speculative abstractions without a load-bearing caller",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260516-001122-82"
-  },
-  {
     "id": "trig-status-verdict-from-stale-mental-model-no-re-check",
     "from_slug": "status-verdict-from-stale-mental-model-no-re-check",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Status verdict from stale mental model (no re-check)",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -163,11 +143,11 @@
     "id": "trig-structural-claim-without-reading-code",
     "from_slug": "structural-claim-without-reading-code",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "structural-claim-without-reading-code",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-111955-4d"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-201025-d1"
   },
   {
     "id": "trig-sub-agent-material-output-left-in-conversation-only",
@@ -178,16 +158,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-165639-53"
-  },
-  {
-    "id": "trig-test-harness-bypasses-production-entry-path",
-    "from_slug": "test-harness-bypasses-production-entry-path",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Test suite exercised inner classifier directly, not the production shim — green tests, broken live hook",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260521-001233-cf"
   },
   {
     "id": "trig-audit-file-character-before-applying-global-rule",

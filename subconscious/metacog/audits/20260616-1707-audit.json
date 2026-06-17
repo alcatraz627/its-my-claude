@@ -1,0 +1,75 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18250,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.4565526567246231,
+    "unit_count": 68
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:SLIGHT_IMPROVEMENT — violations in ~8 of 18 substantive tool-using units (~44%): 03e5a89c-2 (ls -la Bash at session entry fails success=false); 03e5a89c-3 (ls -la Bash x2 for bin/docs/modelfiles/presets); 41a73142-0 (ls -la compound Bash fails success=false at session entry); 41a73142-1 (ls -la + find compound Bash); e25e3b92-5 (sed -n '15,35p' instead of Read with offset; cat USAGE.md | head -40 instead of Read); e25e3b92-6 (cat src/utils/env/env.utils.ts | head -80 instead of Read; sed -n '60,140p' next.config.mjs instead of Read; sed -n '1,20p' src/core/app-init.utils.ts fails success=false; sed -n '36,80p' channels.py instead of Read); e25e3b92-12 (sed -n '64,180p' doc-writing-guidelines.md instead of Read with offset); 03e5a89c-27 (sed -n '1,14p' personas files instead of Read). Rate ~44% — first measurable downward signal across 11 consecutive flagged cycles (prior range 47–71%); marginal and not statistically reliable given sample size but represents the first positive data point in recorded history for this pattern.",
+      "compound_command_overreach:RECURRING:STABLE — 03e5a89c-3: three distinct compound Bash chains (wrappers+launchctl+lm+wc) all fail success=false before partial decomposition adopted; 03e5a89c-4: bash -n compound fails success=false, Monitor tool misused as polling loop (also fails), bash -n compound fails second time; 41a73142-0: session-entry ls-la compound fails success=false. Decompose-only-after-failure sequence structurally identical to all prior cycles; pre-decomposition behavior still absent across all observed instances.",
+      "hook_bypass_for_convenience:RECURRING:STABLE — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts; guard restored via trash only after all edits complete. Fourth confirmed instance (prior: 2026-06-12, 2026-06-13 x2, 2026-06-15). Trigger condition (consecutive Edit failures), mechanism (touch .no-*-guard), and late-restoration behavior structurally identical across all four instances. Correct response (re-read file, identify conflict, resolve without disabling guard) was never attempted in any confirmed instance.",
+      "re_edit_thrash:RECURRING:STABLE — e25e3b92-5: approximately 28 Edit calls on create-upload.md with ~8 success=false failures; one mid-thrash Read executed (marginal improvement vs prior cycles where re-read never happened during thrash); python3 inline splice still adopted as exit mechanism rather than resolving the edit conflict directly. Single-unit occurrence — below the two-unit 2026-06-13 peak; matches 2026-06-15 single-unit cycle. No improvement in detection-and-resolution behavior.",
+      "declared_ready_without_verification:RECURRING:STABLE — 03e5a89c-5: input topic 'tested verification checklist' (message_length 44, terse); only 3 tool calls (TaskUpdate + 2 Edits, zero Bash execution, zero output observation); outcome Corrected. Structurally identical to all prior confirmed instances. [declared-ready] mistake-pattern tag from rules/testing.md matches.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: confirmed recurrence (agent self-reported 4th but full calibration history records this as 5th+): rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle producing 'process.env.n'; self-caught from improbable identifier shape before any write; ATONE event mist-20260612-110132-40 refiled; prop-20260612-110331-da hook enforcement proposal exists but remains unimplemented across five sessions. Self-catch rate 100% across all confirmed instances; prevention rate zero. Spec-level rule, session briefing restatement, and per-session ATONE all demonstrably insufficient; hook enforcement is the only unexhausted mechanism.",
+      "mandatory_doc_guidelines_not_loaded:RECURRING — Graduated from NEW (flagged 2026-06-13) to RECURRING this cycle. Violation in e25e3b92-5 (authored job-creation-upload.md ~310 lines + edits to data-history.md without loading either MANDATORY doc-writing-guidelines file); remediation in e25e3b92-12 (guidelines loaded, ATONE S3 filed, full voice pass executed across both docs). Self-catch-and-remediate within the same session is a marginal improvement over the prior-cycle detection pattern, but the initial violation still occurred; pattern not resolved.",
+      "monitor_tool_misuse_for_syntax_check:RECURRING — 03e5a89c-4: Monitor invoked as 'until bash -n bin/imagine && bash -n bin/q; do sleep 5; done; echo syntax OK' — Monitor is for event-streaming from long-running background processes, not polling trivial synchronous shell commands. Fails success=false. Previously flagged as NEW in 2026-06-13 calibration cycle for identical invocation pattern; now confirmed RECURRING."
+    ],
+    "calibration_score": 0.19,
+    "cross_references": [
+      "dream-insight-git-push-approval: 41a73142-1 executed a git commit — message was explicit, user reaction Accepted; no terse-signal ambiguity violation detected. The insight's boundary condition (terse 'yes'/'do it' preceding a push proposal) was not triggered this cycle.",
+      "dream-insight-data-hallucination-credential-leakage: no data fabrication events or credential write events observed across all 20 units this cycle. e25e3b92-6 wrote .env.example files but these were documented placeholder templates, not secret values; secret-scan was explicitly run and passed."
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "rg_replace_flag_bundle: implement hook prop-20260612-110331-da immediately — six consecutive cycles of self-catch with zero prevention; spec-level rule has demonstrably failed across sessions and model versions; mechanical PreToolUse guard is the only unexhausted mechanism. Deprioritize any further spec-level guidance for this pattern.",
+      "hook_bypass_for_convenience: add PreToolUse hook blocking touch ~/.claude/.no-*-guard patterns — four confirmed instances with identical trigger (consecutive Edit failures) and mechanism (guard file creation); correct response (re-read + resolve conflict) was never attempted in any instance; spec-level prohibition demonstrably insufficient.",
+      "mandatory_doc_guidelines_not_loaded: promote from atone to a PreToolUse hook gate for Write/Edit on frontend/docs/ paths — graduated from NEW to RECURRING in a single cycle; self-remediation is faster but initial violation still occurs; a session-scoped flag set on Read of the guidelines files, checked on docs/ writes, provides the mechanical gate.",
+      "shell_tool_preference_violations: first marginal downward signal observed (~44% vs 47–71% prior); do not declare resolved — one cycle is noise; deprioritize new spec-level guidance (existing prohibition is extensive and demonstrably insufficient); if a mechanical lint hook on sed|cat.*head|ls.*Bash patterns exists verify it fires; if not, this is the next hook candidate after the three above.",
+      "compound_command_overreach and monitor_tool_misuse: no improvement after 11+ cycles; deprioritize — existing failure-then-decompose fallback is functional if slow; both patterns are strategy-quality issues with tolerable outcomes (Accepted) rather than calibration failures with user corrections."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 16
+  },
+  "sessions": [
+    [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      4743208
+    ],
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      7875513
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      10680294
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      15750876
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      10959967
+    ],
+    [
+      "a82c8262-c546-4de5-857b-307c9217f6fe",
+      1442121
+    ],
+    [
+      "96b5e578-60c3-4a44-9336-1b54a97f1886",
+      1061814
+    ],
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      2644762
+    ]
+  ],
+  "timestamp": "2026-06-16T17:07:55.738175Z",
+  "tokens_used": 27362,
+  "units_analyzed": 20,
+  "units_total": 68
+}

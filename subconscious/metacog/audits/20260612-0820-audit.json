@@ -1,0 +1,40 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.19282329983125268,
+    "unit_count": 8
+  },
+  "response": {
+    "biases_detected": [
+      "completion_bias: units 262a3a34-11 and 262a3a34-13 wrote multiple docs in one pass without intermediate user validation of structure",
+      "anchoring: unit 262a3a34-13 re-edited reference.md twice suggesting initial structure was anchored to source notes format rather than target doc conventions"
+    ],
+    "calibration_score": 0.62,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Unit cee4c5c8-1 and cee4c5c8-3 have near-zero signal (empty output, no tools) — confidence calibration cannot be assessed; exclude from scoring or flag as missing-data",
+      "Unit 262a3a34-14 is the strongest calibration signal: large input, audit-first approach, AskUserQuestion before acting — this pattern should be reinforced",
+      "The doc-writing units (262a3a34-9, -11, -13) show systematic verification (link-checker, validator runs, frontmatter checks) which is well-calibrated execution, but the multi-file bulk-write without intermediate checkpoints introduces undetected structural error risk",
+      "Underconfidence marker in 262a3a34-14: 6068 char output for a survey + one AskUserQuestion suggests over-explanation relative to task scope (asking before acting is correct; the verbosity is the calibration gap)"
+    ],
+    "underconfident_count": 1,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      88171
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      3482080
+    ]
+  ],
+  "timestamp": "2026-06-12T08:20:35.113360Z",
+  "tokens_used": 3945,
+  "units_analyzed": 6,
+  "units_total": 8
+}

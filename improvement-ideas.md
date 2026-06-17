@@ -481,3 +481,34 @@ When a CLI tool is meant to be invoked by Claude (or by a human via a Claude ses
   grepping                                                                    
   the raw line — a raw read looks "broken" when the value is fine.            
 
+
+  ## 2026-06-11 — local-models session                                        
+                                                                              
+  • Overwriting a bash script while a background job is still executing it can
+  corrupt the job's trailing execution (bash reads by byte-offset as it runs).
+  Edit after the job finishes, or copy the file first.                        
+  • macOS has no timeout/gtimeout by default — don't wrap commands in timeout;
+  rely on the harness/Bash-tool timeout.                                      
+  • Local diffusion: prompt quality beats model size; think:false must be an  
+  API flag (prompt text ignored); gemma4 is a great prompt-engineer + vision- 
+  critic but cannot generate images.                                          
+
+
+  ## 2026-06-12 — Per-machine macOS keyboard settings don't migrate with      
+  dotfiles                                                                    
+                                                                              
+  A "my keyboard behaves differently on the new Mac" report after a migration 
+  is usually                                                                  
+  NOT in the app config (karabiner.json, 1Piece plist) — those travel. The    
+  culprit is a                                                                
+  per-machine OS defaults domain that does not: com.apple.keyboard.fnState (F-
+  keys                                                                        
+  media vs function), key-repeat (KeyRepeat/InitialKeyRepeat),                
+  ApplePressAndHoldEnabled,                                                   
+  and modifier remaps (com.apple.keyboard.modifiermapping, ByHost). Diagnostic
+  order:                                                                      
+  check defaults read -g <key> BEFORE digging through app rules. Bonus: with  
+  Karabiner-Elements running (virtual HID keyboard), the macOS "standard      
+  function keys"                                                              
+  checkbox may not stick — set it in Karabiner's Function Keys tab instead.   
+

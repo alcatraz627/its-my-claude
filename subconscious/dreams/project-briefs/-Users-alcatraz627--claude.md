@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-06-09T20:14:00.344921+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-15T17:27:17.514816+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the user's global `~/.claude` configuration repo — skills, rules, hooks, WAL infrastructure, and cross-session memory. Work here is meta: maintaining and evolving the agent harness itself.
+This is the `~/.claude` configuration repository — the agent's own operating environment. Work spans rules, skills, hooks, WAL infrastructure, and memory systems across long multi-compaction sessions that are frequently resumed.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively** with `/core-dump` at milestones, not just session end — `/catchup` is the primary recovery path after compaction
-- **Treat terse single-word messages** (`next`, `ahead`, `looks`, `done`) as autonomous-continue directives; increase execution depth, never scope
-- **Write WAL entries as JSONL** — the markdown format is legacy; canonical format is JSONL since 2026-04-17, use `scripts/wal/wal.sh`
-- **Verify current state before acting** — re-read files, re-check git status; never assume state from earlier in the session
+- Checkpoint with `/core-dump` at milestones mid-session, not only at the end; `/catchup` is the primary recovery path after `/clear`
+- Write WAL entries as JSONL via `scripts/wal/wal.sh` — the markdown format is deprecated and must not be used in new entries
+- Treat single-word continuations (`next`, `ahead`, `done`, `looks`) as autonomous-execute directives; increase execution depth, never scope
 
 ## Things to avoid
-- **Never commit or push without fresh explicit per-push approval** — prior approval in the session does not carry over; this is the single most-corrected pattern in this repo
-- **Don't fix-thrash** — if a fix attempt fails, stop and form a root-cause hypothesis before trying another patch
-- **Never infer or synthesize data values** not explicitly present in source material; flag gaps instead of filling them silently
-- **Don't expand scope** beyond the explicit request, even for obvious improvements
+- Never commit or push without fresh, explicit per-operation approval — prior session approval does not carry forward, ever; this has been violated 5+ times and always triggers a hard correction
+- Don't attempt repeated fixes without first stating a one-line root-cause hypothesis; fix-thrashing without diagnosis is the dominant frustration pattern here
+- Never infer or synthesize values not traceable to source data; present any gap as `UNCONFIRMED — <reason>`, not a filled-in value
+- Don't expand scope beyond the explicit request, even for "obvious" improvements; propose, don't act
 
 ## Open questions / known gaps
-- Pattern extraction in the atone/affirm pipeline lacks deduplication — the same event (WAL migration) appears 4× as separate patterns; the consolidation script needs a semantic-similarity pass
-- Tension between terse-continuation (autonomous execute) and scope-ceiling (don't expand) has caused confusion; when the active task is ambiguous after a `/clear`, clarify before resuming
+- Pattern deduplication is broken: the WAL markdown→JSONL migration appears 4+ times as separate patterns — the consolidation tooling (`atone-consolidate.sh`) may need a semantic-merge pass
+- Tension between terse-continue (execute) and scope-control (hold): when a short "keep going" follows a task that's drifting in scope, verify scope before executing rather than assuming continuation means approval

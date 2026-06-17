@@ -1,0 +1,51 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18734,
+    "correction_density": 0.038461538461538464,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.14403492386532699,
+    "unit_count": 26
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — unit-15 (ls ~/.claude/scripts/magi/ and ls ~/.claude/personas/ via Bash instead of LS tool); unit-16 (ls -la .venv/bin/mflux-generate via Bash; ls .venv/bin/ piped to rg via Bash — both should use LS/Glob); unit-28 (ls -la outputs/*.png via Bash; ls -t outputs/*.png piped to head via Bash — both should use Glob); 3 of 11 units = 27% rate, regression from prior cycle's first-downward-signal at 2/13=15%; prior cycle was marked POSSIBLY_IMPROVING; this cycle reverses that trajectory and should be re-marked WORSENING",
+      "anchoring:RECURRING:STABLE — unit-1 (four sequential sysctl/system_profiler/df/ollama Bash calls as mandatory hardware-profiling prerequisite before local model recommendation; structurally identical to prior three confirmed instances at same session-entry slot; zero improvement across four observed cycles; pattern is entrenched at this session entry point)",
+      "compound_command_overreach:RECURRING:STABLE — unit-8 (curl wait-loop + rg log-grep compound command fails success=false; decomposed into individual curl then rg calls only after failure; structure and decompose-only-after-failure sequence match prior four cycles exactly; no improvement)"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 5,
+    "recommendations": [
+      "shell_tool_preference_violations: Prior cycle's POSSIBLY_IMPROVING signal was a false signal — this cycle's 27% rate reverses it. The pattern is now WORSENING. Mechanical enforcement (a PreToolUse hook blocking bare ls via Bash when LS/Glob would suffice) is the only remaining lever; advisory-only guidance has had zero durable effect across ten cycles.",
+      "anchoring at session-entry: No adjustment warranted beyond prior recommendations — pattern has been flagged across all four observed instances with no improvement; this is now a structural habit at this session slot, not a calibration error."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "231597a7-7e58-4027-826c-711828888f93",
+      5376109
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      3739422
+    ],
+    [
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      2914592
+    ],
+    [
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      1493824
+    ],
+    [
+      "77a7c308-4982-40b1-90c4-e03ab43f0135",
+      2906745
+    ]
+  ],
+  "timestamp": "2026-06-10T14:18:53.218890Z",
+  "tokens_used": 7430,
+  "units_analyzed": 11,
+  "units_total": 26
+}

@@ -35,6 +35,8 @@
     "mongodb": {
       "description": "MongoDB — query, aggregate, inspect schemas and indexes (custom connection string)",
       "tags": ["database"],
+      "scope": "project",
+      "scopeNote": "Project-local .mcp.json or the mongosh CLI only — never user/global scope. A global UNPINNED entry caused recurring 'Invalid Version' MCP-failed-to-connect errors (removed 2026-06-09). Keep mongodb per-project and pinned.",
       "requiresEnv": [],
       "templateVars": { "MONGO_URI": "mongodb://localhost:27017" },
       "when": "Projects using MongoDB — substitute MONGO_URI with the actual connection string",
@@ -51,6 +53,8 @@
     "mongodb-local": {
       "description": "MongoDB on localhost:27017 — preset, no substitution needed",
       "tags": ["database", "localhost"],
+      "scope": "project",
+      "scopeNote": "Project-local .mcp.json or the mongosh CLI only — never user/global scope (see 'mongodb' entry; global unpinned mongodb caused recurring MCP failures, removed 2026-06-09).",
       "requiresEnv": [],
       "when": "Local development with a MongoDB instance running on the default port",
       "config": {

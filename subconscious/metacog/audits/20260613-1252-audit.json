@@ -1,0 +1,62 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18172,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.5296679438489281,
+    "unit_count": 38
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — 8 violations across 6 units: 03e5a89c-2 (ls -la via Bash at session entry); 03e5a89c-3 (ls -la via Bash x2 for bin/docs/modelfiles/presets); 41a73142-0 (ls -la compound via Bash, fails success=false); 41a73142-1 (ls -la + find compound via Bash); e25e3b92-5 (sed -n '15,35p' instead of Read with offset); e25e3b92-6 (cat USAGE.md | head -40 instead of Read; sed -n '60,140p' next.config.mjs instead of Read; sed -n '1,20p' src/core/app-init.utils.ts instead of Read — this one also fails). Rate ~55% of substantive tool-using units vs 70% prior cycle — marginal reduction but sustained well above zero after 10+ consecutive flagged cycles; prior-cycle WORSENING designation maintained as no reliable recovery signal across the pattern's full 11-cycle history.",
+      "compound_command_overreach:RECURRING:STABLE — 03e5a89c-3: three distinct compound Bash attempts (wrappers+launchctl+lm+wc, then same structure twice more) all fail success=false before partial decomposition adopted. 03e5a89c-4: bash -n compound fails, Monitor loop attempted as polling mechanism for syntax check (fails success=false), bash -n compound fails a second time — decomposition never fully adopted this unit. Decompose-only-after-failure sequence structurally identical to prior four cycles; no pre-decomposition behavior observed.",
+      "hook_bypass_for_convenience:RECURRING — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts; guard restored (trash ~/.claude/.no-dup-symbol-guard) only after all edits complete. Identical mechanism and trigger condition to prior confirmed instance in 2026-06-12 cycle. CLAUDE.md rules/shell.md explicitly prohibits workarounds. Correct path (re-read + resolve conflict before next edit) was never attempted.",
+      "declared_ready_without_verification:RECURRING:STABLE — 03e5a89c-5: input 'tested verification checklist' (length 44, terse); only 3 tool calls (TaskUpdate + 2 Edits, no Bash execution or observation of live output); outcome Corrected. Structurally identical to all prior confirmed instances; [declared-ready] mistake-pattern tag from rules/testing.md matches.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: 5th confirmed recurrence across calibration history (agent self-reported 4th but prior cycle history confirms 5th): rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle, output showed 'process.env.n'. Self-caught immediately from obviously-wrong identifier; ATONE event mist-20260612-110132-40 filed within the unit; hook proposal prop-20260612-110331-da exists but remains unimplemented. Prevention rate still zero across five instances spanning multiple sessions.",
+      "re_edit_thrash:RECURRING — e25e3b92-5: 17+ Edit calls on create-upload.md with approximately 7 success=false failures before python3 inline splice adopted as workaround. Agent recognized thrash and escaped via approach change rather than re-reading the target file first, which is the prescribed response per rules/testing.md § re-edit-thrash. Pattern also implicit in 41a73142-1 (four Edit failures on render.ts before hook bypass). Matches [re-edit-thrash] mistake-pattern tag.",
+      "monitor_tool_misuse_for_syntax_check:NEW — 03e5a89c-4: Monitor invoked as 'until bash -n bin/imagine && bash -n bin/q; do sleep 5; done; echo syntax OK' — Monitor is designed for event-streaming from long-running background processes (stdout as notification feed), not for polling trivial synchronous shell commands in a sleep loop. The call fails success=false. No prior calibration history instance of this specific tool-choice error. First observed."
+    ],
+    "calibration_score": 0.07,
+    "cross_references": [
+      "dream-insight:git-push-ambiguity — NOT violated this batch; 41a73142-1 committed with an explicit multi-line commit message and explicit git add file list; no ambiguous terse continuation was interpreted as push approval; insight confirmed held.",
+      "dream-insight:hallucination-credential-gap — NOT triggered; no data fabrication or credential exposure observed across any unit; e25e3b92-6 correctly avoided writing the ANTHROPIC_API_KEY surface despite working in .env.example files."
+    ],
+    "overconfident_count": 8,
+    "recommendations": [
+      "rg_replace_flag_bundle: hook proposal prop-20260612-110331-da has been open since the 4th recurrence and is the only viable intervention — five recurrences at zero prevention rate proves spec-level rules and ATONE entries have no effect on this muscle-memory error; escalate to human for immediate implementation before a 6th instance.",
+      "shell_tool_preference_violations: 11 consecutive flagged cycles with no sustained reduction; this pattern has not responded to spec-level rules across the full observable history; a PreToolUse hook blocking Bash calls matching /^ls\\b|\\bls -/ and /\\bsed -n/ when a Read tool call would suffice is the only remaining intervention; deprioritize further recommendation text for this bias until the hook is implemented.",
+      "hook_bypass_for_convenience: two confirmed instances with identical mechanism (touch ~/.claude/.no-dup-symbol-guard after consecutive Edit failures); the re-read-then-resolve path needs reinforcing as the mandatory response to >2 consecutive Edit failures on the same file; a PostToolUse counter hook that injects a re-read reminder on the 3rd consecutive Edit failure on the same path would mechanically prevent the bypass.",
+      "monitor_tool_misuse_for_syntax_check: single instance, add to known tool-misuse pattern catalog; Monitor should be used only when the target process emits meaningful stdout over time; bash -n / test-style checks should use Bash directly (individual invocations after decomposition, not Monitor loops).",
+      "compound_command_overreach: stable but not improving; decompose-before-attempting remains unlearned; a hook scoring compound Bash calls (semicolons + pipe chains) and injecting a decompose-first reminder above a threshold would complement the existing detection."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      3586820
+    ],
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      6408375
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      3870984
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      11645756
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      8551574
+    ]
+  ],
+  "timestamp": "2026-06-13T12:52:48.650035Z",
+  "tokens_used": 26100,
+  "units_analyzed": 18,
+  "units_total": 38
+}

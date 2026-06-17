@@ -4487,6 +4487,139 @@
     ]
   },
   {
+    "id": "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
+    "pattern": "When the user explicitly invokes a mandatory skill like /atone, the agent must not skip or defer it — skipping a correction ritual while in the middle of being corrected is a compounding failure that erodes trust.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-10T14:16:55.017090+00:00",
+    "last_seen": "2026-06-10T14:16:55.017090+00:00",
+    "occurrence_history": [
+      "2026-06-10T14:16:55.017090+00:00"
+    ]
+  },
+  {
+    "id": "10d41879-99d3-4892-8a2e-855e87d8fd6e",
+    "pattern": "The agent used `rm` instead of `trash` for file deletion despite an explicit hard rule and a blocking hook — file deletion must always go through `trash`, with no exceptions for 'cleanup' or 'temporary' files.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-10T14:16:55.017090+00:00",
+    "last_seen": "2026-06-10T14:16:55.017090+00:00",
+    "occurrence_history": [
+      "2026-06-10T14:16:55.017090+00:00"
+    ]
+  },
+  {
+    "id": "a9078414-0b67-42b8-ac1a-b78ac978c653",
+    "pattern": "When a session involves multiple exploratory sub-tasks (research, planning, persona design, tooling setup, etc.), the agent risks completing peripheral work first and delivering the user's primary stated goal last or not at all — the first clear deliverable the user named is the main goal, not later elaborations.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-11T18:41:28.565308+00:00",
+    "last_seen": "2026-06-11T18:41:28.565308+00:00",
+    "occurrence_history": [
+      "2026-06-11T18:41:28.565308+00:00"
+    ]
+  },
+  {
+    "id": "34db8031-e2e2-4d23-ba2d-8d5c5c1b5e99",
+    "pattern": "RCA files written for atone must begin with '---' YAML frontmatter on line 1; omitting it causes the atone.sh lint gate to exit non-zero and leaves the mistake unrecorded.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "tool-use",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "df72e33d-ea1a-45b1-8916-9e09f7ac39b2",
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "3b4a906a-9028-4038-a9cc-805753be0f88",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-12T19:52:36.457017+00:00",
+    "last_seen": "2026-06-12T19:52:36.457017+00:00",
+    "occurrence_history": [
+      "2026-06-12T19:52:36.457017+00:00"
+    ]
+  },
+  {
+    "id": "3f087fba-55c2-4807-8ede-036b16b0c63d",
+    "pattern": "When writing technical documentation, the agent must default to formal, direct, simple prose — never promotional or 'flowery' language; tone should match the severity and audience of the content, not showcase capability",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T17:02:59.417794+00:00",
+    "last_seen": "2026-06-13T17:02:59.417794+00:00",
+    "occurrence_history": [
+      "2026-06-13T17:02:59.417794+00:00"
+    ]
+  },
+  {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
     "pattern": "Git worktree operations caused accidental loss of unstaged changes, requiring recovery - worktree switching must always check for and preserve unstaged work first",
     "valence": "negative",
@@ -8222,6 +8355,196 @@
     ]
   },
   {
+    "id": "1b2c58b7-9289-4b1f-acea-5d0831cb36a3",
+    "pattern": "When the user asks the agent to 'update todos' without explicitly naming the Claude Code TUI, the agent defaults to writing a file rather than calling the Task tool — the agent must treat any todo-update request as targeting the live Task tool.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-10T14:16:55.017090+00:00",
+    "last_seen": "2026-06-10T14:16:55.017090+00:00",
+    "occurrence_history": [
+      "2026-06-10T14:16:55.017090+00:00"
+    ]
+  },
+  {
+    "id": "f9318462-0de6-43a3-9197-604ce7a44576",
+    "pattern": "When the user explicitly invokes a mandatory skill or ritual (such as /atone) and the agent acknowledges it but skips the actual invocation, continuing to other work, the user must call it out a second time — the agent must invoke the skill before proceeding, not just acknowledge and move on.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-11T18:41:28.565308+00:00",
+    "last_seen": "2026-06-11T18:41:28.565308+00:00",
+    "occurrence_history": [
+      "2026-06-11T18:41:28.565308+00:00"
+    ]
+  },
+  {
+    "id": "e495f8d3-d062-4402-bf4d-9beada33c55a",
+    "pattern": "When the user establishes a primary deliverable at session start, secondary work (enhancements, bonus features, research) must not displace it — deliver the primary goal before expanding scope.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "df72e33d-ea1a-45b1-8916-9e09f7ac39b2",
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "3b4a906a-9028-4038-a9cc-805753be0f88",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-12T19:52:36.457017+00:00",
+    "last_seen": "2026-06-12T19:52:36.457017+00:00",
+    "occurrence_history": [
+      "2026-06-12T19:52:36.457017+00:00"
+    ]
+  },
+  {
+    "id": "96ab4d57-eebf-466e-baa2-60d9d347178c",
+    "pattern": "Technical documentation written for a software team must use a formal, direct, simple tone matched to the content's seriousness — flowery or promotional language ('why this matters', 'the power of X') is explicitly rejected by the user.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T00:38:00.014485+00:00",
+    "last_seen": "2026-06-13T00:38:00.014485+00:00",
+    "occurrence_history": [
+      "2026-06-13T00:38:00.014485+00:00"
+    ]
+  },
+  {
+    "id": "6dd84ffd-79df-4fc4-bf61-d621af5ff9b5",
+    "pattern": "When an atone RCA file fails to record (exit code 2), the agent must immediately diagnose the cause (typically missing YAML frontmatter on line 1) and re-run with a corrected RCA rather than silently moving on — repeated stop-hook feedback on the same unrecorded event signals the fix was not applied.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T00:38:00.014485+00:00",
+    "last_seen": "2026-06-13T00:38:00.014485+00:00",
+    "occurrence_history": [
+      "2026-06-13T00:38:00.014485+00:00"
+    ]
+  },
+  {
+    "id": "bcfd25bd-eed6-4537-b00a-aa2fcb511bae",
+    "pattern": "When the agent writes an RCA file for atone, it must begin with '---' YAML frontmatter on line 1 or the atone gate rejects the event silently — the mistake goes unrecorded until explicitly retried.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T12:49:34.282589+00:00",
+    "last_seen": "2026-06-13T12:49:34.282589+00:00",
+    "occurrence_history": [
+      "2026-06-13T12:49:34.282589+00:00"
+    ]
+  },
+  {
+    "id": "57658cb7-ec35-4f4d-bad2-062d48edb27f",
+    "pattern": "Technical and product documentation must use a formal, direct, plain tone — avoid 'Why this matters' framing, promotional adjectives, or any language that reads as a value pitch; each section should open with a factual statement of what the thing does, not a sales hook.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "dc7f8071-1aa2-4bde-840d-6c06661267ae",
+      "e77dbc42-5770-4917-91e1-27ec72b52f6f",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "4d071f3c-ba80-4a86-8c0d-57c269c5fd8f",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-15T12:52:24.127634+00:00",
+    "last_seen": "2026-06-15T12:52:24.127634+00:00",
+    "occurrence_history": [
+      "2026-06-15T12:52:24.127634+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -11144,6 +11467,186 @@
     ]
   },
   {
+    "id": "449180b8-aa65-4ae9-99db-6134930c3179",
+    "pattern": "The agent loses focus on the stated primary deliverable (a usable CLI tool) while investing effort in surrounding planning and personas, then ships everything except the main goal — the primary deliverable must be built before optional expansions.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
+      "77a7c308-4982-40b1-90c4-e03ab43f0135"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-10T14:16:55.017090+00:00",
+    "last_seen": "2026-06-10T14:16:55.017090+00:00",
+    "occurrence_history": [
+      "2026-06-10T14:16:55.017090+00:00"
+    ]
+  },
+  {
+    "id": "a88b8efb-5ce6-4cb4-ae20-6432e2d4ced9",
+    "pattern": "When generating a multi-section report that includes a TL;DR or executive summary, the summary must appear before the detailed sections it summarizes — placing a summary after the content it describes is a structural error the user will push back on.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-11T18:41:28.565308+00:00",
+    "last_seen": "2026-06-11T18:41:28.565308+00:00",
+    "occurrence_history": [
+      "2026-06-11T18:41:28.565308+00:00"
+    ]
+  },
+  {
+    "id": "99bdba14-3693-4eed-a298-ca3dd86b59a4",
+    "pattern": "When the user explicitly invokes /atone or a correction ritual, execute it immediately and in full; do not silently skip or defer it, as the user will notice and have to prompt again.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "tool-use",
+    "source_sessions": [
+      "231597a7-7e58-4027-826c-711828888f93",
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "df72e33d-ea1a-45b1-8916-9e09f7ac39b2",
+      "cee4c5c8-0be9-4f69-a2b8-f3cab53161c9",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "3b4a906a-9028-4038-a9cc-805753be0f88",
+      "22c728c4-a7da-4f46-831e-2b29e2d90ca3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-12T19:52:36.457017+00:00",
+    "last_seen": "2026-06-12T19:52:36.457017+00:00",
+    "occurrence_history": [
+      "2026-06-12T19:52:36.457017+00:00"
+    ]
+  },
+  {
+    "id": "983e6844-2182-44df-9912-cb38219eb8e9",
+    "pattern": "Technical documentation written for onboarding or mixed audiences (engineers, PMs, new joiners) must use a formal, direct, plain tone with no flowery or promotional language — the agent should flag its own doc writing against the project's copywriting guidelines before submitting.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T12:49:34.282589+00:00",
+    "last_seen": "2026-06-13T12:49:34.282589+00:00",
+    "occurrence_history": [
+      "2026-06-13T12:49:34.282589+00:00"
+    ]
+  },
+  {
+    "id": "c0e034f0-6af1-40f5-aea5-6b072578eeb0",
+    "pattern": "When guidelines or conventions are updated mid-session, the agent must write the updated version back to the project's canonical location; leaving the update only in conversation creates split-brain where future agents find the stale version on disk",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T17:02:59.417794+00:00",
+    "last_seen": "2026-06-13T17:02:59.417794+00:00",
+    "occurrence_history": [
+      "2026-06-13T17:02:59.417794+00:00"
+    ]
+  },
+  {
+    "id": "1a548bd0-258b-457a-a817-b45313d25b5d",
+    "pattern": "When generating documentation, the agent should check and comply with any project-specific copywriting or style guidelines before writing, rather than defaulting to marketing-style or promotional language that then requires explicit correction.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "96b5e578-60c3-4a44-9336-1b54a97f1886",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-15T17:22:48.309579+00:00",
+    "last_seen": "2026-06-15T17:22:48.309579+00:00",
+    "occurrence_history": [
+      "2026-06-15T17:22:48.309579+00:00"
+    ]
+  },
+  {
+    "id": "236a7674-1187-412f-909e-679ba17651c2",
+    "pattern": "When changing a field that has a logically paired sibling field (e.g., `bucket` and `prefix`, or `host` and `port`), the agent must check and update the paired field in the same change; leaving half of a coupled pair at its old value is a silent correctness bug.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "96b5e578-60c3-4a44-9336-1b54a97f1886",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-15T17:22:48.309579+00:00",
+    "last_seen": "2026-06-15T17:22:48.309579+00:00",
+    "occurrence_history": [
+      "2026-06-15T17:22:48.309579+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -12593,6 +13096,54 @@
     ]
   },
   {
+    "id": "ca5987ec-36ba-4ca8-8043-3862147af2a4",
+    "pattern": "Agent-generated markdown files containing tables must be render-checked before the user is asked to review them; AI-produced tables frequently have formatting issues that make them unreadable without a verification pass",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "approach",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-13T17:02:59.417794+00:00",
+    "last_seen": "2026-06-13T17:02:59.417794+00:00",
+    "occurrence_history": [
+      "2026-06-13T17:02:59.417794+00:00"
+    ]
+  },
+  {
+    "id": "abf6b171-5b3b-4210-bc17-55459db28581",
+    "pattern": "Markdown tables generated in output files must use correct pipe-and-dash syntax and be verified to render properly; malformed tables that visually break are flagged by the user and require a cleanup pass before content can be reviewed.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "tool-use",
+    "source_sessions": [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "96b5e578-60c3-4a44-9336-1b54a97f1886",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-15T17:22:48.309579+00:00",
+    "last_seen": "2026-06-15T17:22:48.309579+00:00",
+    "occurrence_history": [
+      "2026-06-15T17:22:48.309579+00:00"
+    ]
+  },
+  {
     "id": "e0efbf93-3db5-4ba7-b7b5-89640905ddd3",
     "pattern": "Data pipeline work involves scraping, transforming, and upserting product data with attributes, descriptions, and images",
     "valence": "neutral",
@@ -13460,451 +14011,6 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:22:22.725950+00:00",
     "last_seen": "2026-04-15T13:22:22.725950+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "5f451b72-228a-43ac-9980-8324fca3b42a",
-    "pattern": "High tool-call counts (40-70 per continuation) suggest complex multi-file edits requiring careful context preservation across compactions",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:22:22.725950+00:00",
-    "last_seen": "2026-04-15T13:22:22.725950+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "d65ac45b-65ec-4f9e-aceb-fe4db9d4ce16",
-    "pattern": "Dream dashboard project involves iterative widget development with frequent visual verification via screenshots",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:22:42.766438+00:00",
-    "last_seen": "2026-04-15T13:22:42.766438+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "6b619469-940b-4759-8dea-4a2db4d5877a",
-    "pattern": "pm2 service lifecycle management is central to the dream project; stopping/restarting instances is a recurring operation",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:22:42.766438+00:00",
-    "last_seen": "2026-04-15T13:22:42.766438+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "86445cdf-0cc5-4a36-b5d3-b3b79a6594d3",
-    "pattern": "Widget dropdown UX required multiple iterations: show latest dream, truncate long titles, show record count, and trigger background fetch — each landed as a separate correction cycle",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:23:15.385168+00:00",
-    "last_seen": "2026-04-15T13:23:15.385168+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "71c1cb8f-6944-447d-8eb8-8c7ca19a0551",
-    "pattern": "Incomplete file writes during large edits (dashboard fixes) produce silent failures — multi-phase edits need per-phase verification, not just end-to-end",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:23:15.385168+00:00",
-    "last_seen": "2026-04-15T13:23:15.385168+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "625dfa16-4663-4a65-85bb-e60ce308f04d",
-    "pattern": "Screenshot-based visual QA is effective for catching layout regressions in dashboard widgets that unit checks would miss",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:23:15.385168+00:00",
-    "last_seen": "2026-04-15T13:23:15.385168+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "74e974bc-3297-4725-bfde-d0a45fcc6f78",
-    "pattern": "Screenshot-based UI verification via Chrome DevTools MCP is the reliable path to confirm dashboard rendering — text inspection alone misses zero-width and layout collapse bugs",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:25:11.209337+00:00",
-    "last_seen": "2026-04-15T13:25:11.209337+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "37840e25-8c0d-44e9-bfb1-b18f92ef19cf",
-    "pattern": "Incomplete file writes cause silent breakage — after any large file edit, read back the file to confirm it was not truncated",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:25:11.209337+00:00",
-    "last_seen": "2026-04-15T13:25:11.209337+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "17e51faf-b7d1-48f4-890d-91957d379b6f",
-    "pattern": "User prefers generic, reusable test patterns over specific one-off tests; naming conventions matter and should be consistent across test files",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T19:36:29.897823+00:00",
-    "last_seen": "2026-04-15T19:36:29.897823+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "4eb3d64e-4138-4063-92d7-ac301f0ba66d",
-    "pattern": "Test naming conventions should be generic and reusable rather than specific to a single test case; user corrected naming approach mid-session",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T23:35:33.217995+00:00",
-    "last_seen": "2026-04-15T23:35:33.217995+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "4b53b8f1-d2a4-4258-8ee4-04ac4b62dcea",
-    "pattern": "Widget text truncation bugs recur frequently — always verify full text rendering in dashboard widgets, not just that content loads",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "41c22fcc-fd34-42de-a39c-e6eb356891f1",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T19:41:19.129368+00:00",
-    "last_seen": "2026-04-16T19:41:19.129368+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f68d9f4d-5ca4-4b22-8eb8-a788db71a666",
-    "pattern": "Extensive logging with cost tracking is a first-class requirement, not an afterthought — design storage schema to capture both",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "41c22fcc-fd34-42de-a39c-e6eb356891f1",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T19:41:19.129368+00:00",
-    "last_seen": "2026-04-16T19:41:19.129368+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "ca4ffe7c-7315-4ba0-91fa-6fb258d182e1",
-    "pattern": "Dashboard UI fixes often require multiple correction rounds before resolving (truncation, empty panels, zero-width elements); verify visually after each change, not batched",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T21:18:50.154511+00:00",
-    "last_seen": "2026-04-16T21:18:50.154511+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "adcbd824-fbf2-4f15-a90c-32b2df927124",
-    "pattern": "Vision loop (screenshot → annotate → act → verify) is the correct pattern for desktop automation; whole-desktop screenshots instead of targeted window captures are a known mistake",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T21:18:50.154511+00:00",
-    "last_seen": "2026-04-16T21:18:50.154511+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "e37b0838-e642-4f4d-8fc1-8726d7112945",
-    "pattern": "Diagram requests are frequent; always save diagrams to ~/.claude/assets/diagrams/ and show ASCII versions inline before any other explanation",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T21:18:50.154511+00:00",
-    "last_seen": "2026-04-16T21:18:50.154511+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "c036c427-56e5-4b16-a6b9-2e27bd73dbd1",
-    "pattern": "Desktop automation screenshots should target specific application windows via region-based capture rather than the full display, using AppleScript window bounds to compute the region",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T21:37:14.476575+00:00",
-    "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "1f72f187-a53a-405e-85eb-405fe4228f13",
-    "pattern": "User prefers to pick technology deliberately (e.g., Rust chosen over alternatives with explicit reasoning) and expects the agent to respect that choice without re-litigating it",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T21:37:14.476575+00:00",
-    "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f3cbf024-a15d-42c6-b814-3055035c00a7",
-    "pattern": "User actively monitors costs and questions whether Claude API calls in production workflows are justified; always surface cost tradeoffs when adding inference to a data pipeline",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T21:37:14.476575+00:00",
-    "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "10459ff3-13b1-4ea5-9367-983938168042",
-    "pattern": "Vision loop improvement: annotate screenshot for coordinates before clicking, verify after each action rather than assuming success",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T22:19:22.401702+00:00",
-    "last_seen": "2026-04-16T22:19:22.401702+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "660ea301-3712-4abf-8676-60e57eb0803d",
-    "pattern": "UI widget text truncation is a recurring bug in dashboard development; verify rendered output visually, not just in source code",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T22:19:22.401702+00:00",
-    "last_seen": "2026-04-16T22:19:22.401702+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "58550270-30cd-4ff2-914d-a561d600998e",
-    "pattern": "Claude API calls for every feature are expensive; prefer local/cached solutions and use Claude selectively for high-value inference tasks",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "bc59cf34-33f3-4992-9f2c-878df15403a3",
-      "826dce96-a8b3-4d57-a3ea-9fdbaaf4d3ce",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "867071c7-fbda-4044-aef3-fe69f068ef16",
-      "7b690cc9-b154-4195-b29a-1edf1cc2b591"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-16T22:19:22.401702+00:00",
-    "last_seen": "2026-04-16T22:19:22.401702+00:00",
     "occurrence_history": []
   }
 ]

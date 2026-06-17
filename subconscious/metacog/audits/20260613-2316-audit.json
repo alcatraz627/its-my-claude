@@ -1,0 +1,37 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.24791934172226257,
+    "unit_count": 1
+  },
+  "response": {
+    "biases_detected": [
+      "recency_anchoring: scoped archive search exclusively to 20260613 prefix without checking whether sessions span midnight",
+      "authority_deference: treated all four sub-agent outputs as equally reliable without cross-checking divergent findings",
+      "completion_bias: marked tasks complete upon Write success rather than upon verified user acceptance (user_reaction=Unknown)"
+    ],
+    "calibration_score": 0.52,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Add a post-write render-check step (glow/bat) before marking synthesis tasks complete — the Bash sanity check run was good but only counted lines and headings, not prose coherence",
+      "When dispatching N parallel sub-agents for comparative analysis, include an explicit reconciliation step that surfaces inter-agent disagreements rather than merging silently",
+      "For efficacy studies with Unknown user reaction, hold calibration at 0 until reaction is observed — the current workflow has no feedback loop to validate whether the consolidated report answered the user's actual question",
+      "The underconfident count reflects missing a pre-flight check: the agent searched for project-side deliverables (MISSING paths logged) but did not halt or escalate — treating missing source data as acceptable reduces report reliability"
+    ],
+    "underconfident_count": 1,
+    "well_calibrated_count": 0
+  },
+  "sessions": [
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      654483
+    ]
+  ],
+  "timestamp": "2026-06-13T23:16:28.245805Z",
+  "tokens_used": 1928,
+  "units_analyzed": 1,
+  "units_total": 1
+}

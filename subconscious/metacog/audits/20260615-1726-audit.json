@@ -1,0 +1,54 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18222,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.48792058636279695,
+    "unit_count": 36
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — sed-instead-of-Read sub-variant dominant across 5 substantive units: e25e3b92-5 (sed -n '15,35p' + cat|head instead of Read with offset; ls via Bash); e25e3b92-6 (cat src/utils/env/env.utils.ts | head -80 + sed -n '60,140p' next.config.mjs + sed -n '1,20p' src/core/app-init.utils.ts fails success=false + sed -n '36,80p' channels.py instead of Read); e25e3b92-12 (sed -n '64,180p' instead of Read with offset — violation persists even inside the guidelines-remediation unit itself); e25e3b92-14 (sed -n '16,63p' instead of Read with offset); e25e3b92-26 (ls -d compound + ls -la via Bash instead of LS/Glob); e25e3b92-35 (sed -n address-range on PLAN.md instead of Read). Rate comparable to prior 2026-06-15 cycle; no clean substantive units observed; no recovery signal across any cycle in recorded history.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: confirmed recurrence (counts as 5th per agent ATONE filing mist-20260612-110132-40, 6th per full calibration history), rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle producing 'process.env.n', self-caught from improbable identifier shape before any write, ATONE re-filed, hook proposal prop-20260612-110331-da exists but remains unimplemented. Self-catch rate 100% across all confirmed instances; prevention rate zero. Hook enforcement is the only unexhausted mechanism; spec-level rules demonstrably insufficient across 6 instances.",
+      "re_edit_thrash:RECURRING:STABLE — e25e3b92-5: 17+ Edit calls on create-upload.md with approximately 5 success=false failures; one mid-thrash Read was executed (marginal improvement over prior cycles where re-read never happened during thrash), but python3 inline splice was still adopted as the exit mechanism rather than resolving the edit conflict. One-unit-per-cycle occurrence is stable and not at the two-unit peak of 2026-06-13; no improvement trajectory.",
+      "infra_before_grep:RECURRING — e25e3b92-26: built a manual sherpa-inbox with manifest and 13 placeholders after an existence check scoped exclusively to frontend/.claude/; the real tool existed at ~/Code/Claude/screenshot-sherpa; user correction was required ('the screenshot sherpa is a running code project, do you have it?'). Self-filed ATONE slug infra-before-grep within the same unit. Matches rules/grep-scope-before-claiming-absence.md and prior atone slug history. Structurally identical to the known pattern (search scoped to where the artifact 'should' live, not the full plausible tree including ~/Code and PATH bins); surface area is tool discovery rather than code module discovery but the root behavior is identical. Prior calibration cycles flagged this; confirmed recurrence."
+    ],
+    "calibration_score": 0.22,
+    "cross_references": [
+      "dream_insight_1 (terse-continuation ambiguity at git-push boundary): NOT triggered — no git push or commit operations appeared in any unit this cycle. Insight valid but untested.",
+      "dream_insight_2 (data hallucination structurally equivalent to credential leakage): NOT triggered — no data synthesis or credential surfaces observed.",
+      "e25e3b92-22 (Fable eulogy unit): The message content explicitly names rg_replace_flag_bundle as 'P1 (flagship): the hook you kept diagnosing finally gets built' — the agent acknowledged the detection-over-prevention defect and committed to building the hook. The hook does not appear to have been built in any subsequent unit in this session, and the pattern recurred in e25e3b92-6. The Fable audit's meta-finding ('detection-over-prevention') is confirmed by the within-session recurrence sequence."
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "rg_replace_flag_bundle: prop-20260612-110331-da hook enforcement proposal has been pending across 6 confirmed recurrences spanning multiple sessions. No new advisory recommendation warranted — three prior cycles have already recommended the same hook; repeating the recommendation without implementation evidence is noise. Flag as stalled rather than re-recommending.",
+      "shell_tool_preference_violations: zero improvement trajectory across all observed cycles; prior advisory cycles have had no effect. A PreToolUse hook blocking Bash calls whose sole substantive operation is sed with line-range flags or cat piped to head on a local file path is the only candidate prevention mechanism not yet tried. No new advisory text warranted beyond what prior cycles have already stated.",
+      "infra_before_grep: ATONE self-filing now occurs reliably on detection (positive signal), but the initial violation still precedes detection and requires user correction. The rule exists; the check is not happening before the build decision. A lightweight PreToolUse hook that fires on Write or TaskCreate when the target path pattern matches a 'workaround inbox' shape (placeholders, manifests) could intercept the build step and prompt a broader grep first."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      6780728
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      14904281
+    ],
+    [
+      "96b5e578-60c3-4a44-9336-1b54a97f1886",
+      629889
+    ],
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      2260240
+    ]
+  ],
+  "timestamp": "2026-06-15T17:26:35.244603Z",
+  "tokens_used": 26603,
+  "units_analyzed": 12,
+  "units_total": 36
+}
