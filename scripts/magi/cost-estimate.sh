@@ -94,3 +94,4 @@ if [ -x "$CHK" ]; then
   bash "$CHK" "$ARCHIVE"; conf_rc=$?
   [ "${conf_rc:-0}" -ge 2 ] && exit "$conf_rc"
 fi
+exit 0   # clean/warn finalize succeeds — without this the trailing test would leak exit 1

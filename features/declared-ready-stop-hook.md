@@ -13,17 +13,18 @@ updated: 2026-06-01
 stale_after_days: 365
 ---
 
-# declared-ready Stop-hook (DESIGN — build-ready, not built)
+# declared-ready Stop-hook (BUILT — migration 0019)
 
 > Blocks the turn from ending when the agent claims success ("done / works /
 > shipped / fixed / passing / verified") but no run/test/build command actually
 > executed that turn. The strongest of the Phase-2 interventions — and the
 > highest-friction, so it must be tuned + live-tested before shipping.
 >
-> **Status:** mechanism fully reverse-engineered 2026-06-01 (from
-> `review-gate-stop.sh`); build deferred to a fresh context for careful
-> false-positive tuning. atone slug `declared-ready-without-runtime-exercise`
-> (S3, worsening despite the soft channel — warned ~90×).
+> **Status:** BUILT 2026-06-15 as `scripts/hooks/declared-ready-stop.sh`, wired in
+> settings.json `Stop`, paired with `rules/exercise-based-verification.md`
+> (migration 0019). Carve-out: collect/compile/lint ≠ run. Loop-safe; mute via
+> `~/.claude/.no-declared-ready-gate`. The design below is the as-built spec.
+> (Originated from atone slug `declared-ready-without-runtime-exercise`, S3, 5–6×.)
 
 ## Why a Stop hook (not PreToolUse)
 

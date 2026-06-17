@@ -105,30 +105,37 @@ Proceed with Sonnet, or override to keep Opus?
 
 Wait for response. Default = stay with Opus.
 
-## Phase 2 — Initialize archive
+## Phase 2 — Initialize archive (record params + the evidence manifest UP FRONT)
+
+Pass resolved params to `init-archive` via `--params` so they're written
+**atomically at creation** — not in a later python step (that step was skipped in
+3 of 4 audited runs, leaving `params:{}`; the Phase-11 conformance check now flags
+an empty params). The params MUST include **`voter_evidence`** — the per-voter
+DISTINCT evidence slice (D1). This is the load-bearing field: it is what makes
+convergence *discovered* rather than *manufactured*, and `setup-check.sh` reads it.
 
 ```bash
+PARAMS='{"mode":"full","voters":5,"model_main":"opus","model_jester":"sonnet",
+  "personas":[...],"jester":true,"voting":true,"research":"thorough",
+  "task_breadth":true,
+  "voter_evidence":[
+    {"voter":1,"slice":"<distinct primary source for v1>","model":"opus"},
+    {"voter":2,"slice":"<a DIFFERENT source>","model":"opus"},
+    {"voter":3,"slice":"<raw source, blind to any summary>","model":"opus"},
+    {"voter":4,"slice":"<another distinct base>","model":"opus"},
+    {"voter":5,"slice":"<external / best-practice>","model":"sonnet"}
+  ]}'
 ARCHIVE=$(bash ~/.claude/scripts/magi/init-archive.sh \
-  --slug "<short-slug-from-task>" \
-  --prompt "<full-user-prompt>")
+  --slug "<short-slug-from-task>" --prompt "<full-user-prompt>" --params "$PARAMS")
 ```
 
-The script returns the archive root path. All artifacts go inside.
-
-Record params into `$ARCHIVE/meta.json`:
-```bash
-python3 -c "
-import json
-with open('$ARCHIVE/meta.json') as f: m = json.load(f)
-m['params'] = {
-  'voters': N,
-  'model_main': 'opus',
-  'model_jester': 'sonnet',  # if jester on
-  ...
-}
-with open('$ARCHIVE/meta.json', 'w') as f: json.dump(m, f, indent=2)
-"
-```
+For a **breadth / "gather varied findings"** task the slices MUST differ (one voter
+the tests, one the reviews, one the raw transcript *blind to any digest*, one the
+canon, one external). Do **not** hand all voters the same corpus, and do **not**
+pre-write a supervisor *interpretive* baseline as the shared substrate — that is the
+manufactured-convergence conduit (a shared *factual* base is fine). For a convergent
+task (one right answer) partition by **sub-question/stance** instead of withholding
+shared facts. The script returns the archive root; all artifacts go inside.
 
 ## Phase 3 — Build voter prompts
 
@@ -138,7 +145,7 @@ For each voter:
 3. Compute per-voter output path: `$ARCHIVE/03-voter-proposals/voter-<N>.md`
 4. Write the prompt to `$ARCHIVE/02-voter-prompts/voter-<N>.md` (for audit)
 
-For jester: append the jester-block from design § 6. Different model. Opposite web access.
+For jester: append the jester-block from design § 6. Different model. Opposite web access. **Name its proposal `voter-jester.md`** (not a number) — the Phase-11 conformance gate uses that filename (plus `params.jester:true`) to detect a full-mode panel, so an unnamed/numeric jester can let a skipped vote slip through.
 
 If personas:
 - Look up existing in `~/.claude/personas/`
@@ -146,10 +153,23 @@ If personas:
 
 ## Phase 4 — Dispatch voters in PARALLEL
 
+**FIRST — gate the setup BEFORE the spend (the deep companion to the voting gate):**
+```bash
+bash ~/.claude/scripts/magi/setup-check.sh "$ARCHIVE"   # exit 2 = echo-prone → STOP
+```
+CRITICAL (all voters share one slice, or a supervisor digest is the shared
+substrate) means the run is *structurally incapable* of distributed consensus —
+**redesign the `voter_evidence` partition before dispatching.** Don't spend Opus
+voters on an echo. Independence is created here, in setup; voting (Phase 6) merely
+*measures* it. A WARN (no different-model seat, `research:minimal` on breadth) should
+be fixed but doesn't hard-stop.
+
+Then dispatch:
 ```
 Single message, multiple Agent tool calls (one per voter).
 Each agent gets:
-  - The voter prompt
+  - The voter prompt — SCOPED to that voter's assigned evidence slice (Phase 2
+    voter_evidence); tell it which source is ITS primary base and to ground there
   - The output path: $ARCHIVE/03-voter-proposals/voter-<N>.md
   - Instruction: "write before returning" + 5-8 bullet abstract format
   - allowed_tools: Read, Glob, Grep, WebSearch, WebFetch

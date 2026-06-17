@@ -48,7 +48,7 @@ voting_ran  = bool(glob.glob(p("04-voting", "*scores*.json"))
 #   jester is numerically named (e.g. voter-5, not voter-jester). Lite/voting-off
 #   is exempt.
 full_by_count  = len(proposals) >= 5
-voting_expected = (voting_cfg is True) or (mode == "full") or has_jester or full_by_count
+voting_expected = (voting_cfg is True) or (mode == "full") or (params.get("jester") is True) or has_jester or full_by_count
 
 crit, warn, ok = [], [], []
 
@@ -74,9 +74,10 @@ else:
     ok.append("voting not expected (lite/no-jester run)")
 
 # ── Phase-2: params recorded (WARN) ──────────────────────────────────────────
-if not params:
-    warn.append("Phase-2 MISS: meta.json params{} empty — mode/voters/voting "
-                "unrecorded; the run can't be audited from metadata.")
+if (not params) or ("_params_parse_error" in params):
+    why = "params{} empty" if not params else f"params failed to parse ({params.get('_params_parse_error')})"
+    warn.append(f"Phase-2 MISS: meta.json {why} — mode/voters/voting unrecorded; "
+                "the run can't be audited from metadata.")
 else:
     ok.append("Phase-2 params recorded")
 

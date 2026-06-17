@@ -13,12 +13,17 @@ set -uo pipefail
 SLUG=""
 PROMPT=""
 ROOT_BASE="$HOME/.claude/assets/magi"
+PARAMS_JSON=""   # optional: resolved run params (mode/voters/voting/research/
+                 # voter_evidence …) recorded into meta.json at creation. Passing
+                 # this fixes the Phase-2 params-miss AND seeds the evidence
+                 # manifest setup-check.sh reads. Backward-compatible if omitted.
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --slug)   SLUG="$2"; shift ;;
     --prompt) PROMPT="$2"; shift ;;
     --root)   ROOT_BASE="$2"; shift ;;
+    --params) PARAMS_JSON="$2"; shift ;;
   esac
   shift
 done
@@ -51,10 +56,18 @@ $PROMPT
 EOF
 
 # meta.json scaffolding
-python3 - "$ROOT" "$SLUG" "$PROMPT" <<'PY'
+python3 - "$ROOT" "$SLUG" "$PROMPT" "$PARAMS_JSON" <<'PY'
 import json, sys, os
 from datetime import datetime, timezone
-root, slug, prompt = sys.argv[1:4]
+root, slug, prompt, params_json = sys.argv[1:5]
+params = {}
+if params_json:
+    try:
+        params = json.loads(params_json)
+    except Exception as e:
+        # Don't fail archive creation on a bad params blob — record the error so
+        # the Phase-2 conformance check still flags the miss.
+        params = {"_params_parse_error": str(e)}
 meta = {
   "task_id": os.path.basename(root),
   "slug": slug,
@@ -63,7 +76,7 @@ meta = {
   "started_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
   "finished_at": None,
   "duration_seconds": None,
-  "params": {},
+  "params": params,
   "voters": [],
   "voting": {},
   "supervisor": {},
