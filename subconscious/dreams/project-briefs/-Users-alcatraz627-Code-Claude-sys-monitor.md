@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-06-15T12:56:54.584872+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-18T00:43:52.270086+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A system monitoring tool with a CLI/TUI interface; sessions involve backend service work, documentation, and git operations — with strong conventions around terminal output rendering and commit hygiene.
+A system monitor tool (likely a dashboard or CLI) in a Claude Code workspace, developed with a TUI-heavy workflow where gum tools are the designated display surface for structured output.
 
 ## Things to do (or keep doing)
-- **Always use gum/TUI tools for tabular output** — raw markdown tables are a persistent violation; use configured gum tools every time, no exceptions
-- **Give complete commit answers** — when the answer is "all of a directory", say that directly; never give a partial file list that forces a follow-up
-- **Define constants inline** — any doc or report that names a config value must explain what it does right there, not just where it appears
-- **Formal, direct prose in docs** — match tone to the audience; no promotional or flowery language
+- **Always use gum/TUI tools for tabular or structured output** — raw markdown tables are a persistent compliance failure here (6+ recurrences); never substitute them
+- **Answer "what files to commit?" completely and directly** — if the answer is effectively an entire directory, say `all of backend/` rather than listing individual files
+- **Define constants and config values inline** when first named in any report or doc — naming a value without explaining what it does forces a follow-up question
+- **Consolidate imports at the top of every file** — inline imports inside functions are a strong frustration trigger in this project
 
 ## Things to avoid
-- **Don't use inline imports** — consolidate all imports at the top of the file; this causes strong user frustration and has recurred multiple times
-- **Don't assume global git push permission** — push access is granted repo-by-repo; confirm for each new repo before auto-pushing
-- **Don't let secondary work displace the primary deliverable** — finish what was stated at session start before expanding scope or adding enhancements
-- **Don't omit YAML frontmatter from RCA files** — atone RCAs must start with `---` on line 1 or the lint gate rejects them silently
+- **Don't push to a new repo without an explicit per-repo grant** — git push permission is repo-scoped here, not session-global
+- **Don't use promotional or "flowery" tone in technical docs** — formal, direct, simple prose only; match the tone to the content's seriousness
+- **Don't let secondary work displace the primary deliverable** — deliver what was committed at session start before expanding scope or adding bonus features
+- **Don't write S3 atone RCA files without `---` YAML frontmatter on line 1** — the `atone.sh` lint gate exits non-zero and leaves the event unrecorded
 
 ## Open questions / known gaps
-- Gum tool compliance is a 6×-recurrence gap — something about how the project surfaces its TUI tooling makes the agent revert to markdown; worth checking if there's a `CLAUDE.md` or skill that should be making this automatic
+- The gum-table compliance gap has recurred 6+ times without resolution — a hook or pre-render check may be needed to enforce it mechanically

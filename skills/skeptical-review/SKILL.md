@@ -1,22 +1,21 @@
 ---
 name: skeptical-review
-description: Skeptically reviews the code changed this session by forking a FRESH adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling conventions, upstream/downstream usage, existing implementations to reuse, documented code smells, and comment quality. Produces a ranked list of SUSPECTED issues for the human to deep-dive. Flags, never auto-fixes. Use when the user says "review", "check my work", "is this right", "skeptically review", or before declaring a non-trivial change done.
+description: Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling conventions, upstream/downstream usage, existing implementations to reuse, documented code smells, and comment quality. Produces a ranked list of suspected issues for the human to deep-dive. Flags, never auto-fixes. Use when the user says "review", "check my work", "is this right", "skeptically review", or before declaring a non-trivial change done.
 ---
 
 # Skeptical Review
 
-A post-work review that is **biased toward suspicion, not approval**. Its job is
-to surface things the author (me) plausibly got wrong so the human can deep-dive
-— not to bless the diff. It **flags, it never auto-fixes**.
+A post-work review biased toward suspicion, not approval. Its job is to surface
+things the author (me) plausibly got wrong so the human can deep-dive — not to
+bless the diff. It flags, it never auto-fixes.
 
 ## Why this forks a fresh context (the load-bearing design choice)
 
-A model reviewing its own diff *in its own context* is structurally sycophantic:
+A model reviewing its own diff in its own context is structurally sycophantic:
 it already "knows" why it wrote each line, so it rationalizes. Genuine skepticism
-requires a **fresh sub-agent that has never seen the reasoning** — only the diff
-and the surrounding code — with an adversarial instruction to assume the change
-is wrong until the tree proves otherwise. This is the same anti-sycophancy logic
-as the atone juror gate.
+needs a fresh sub-agent that never saw the reasoning — only the diff and the
+surrounding code — instructed to assume the change is wrong until the tree proves
+otherwise. This is the same anti-sycophancy logic as the atone juror gate.
 
 The recurring failures this targets (atone clusters A "ungrounded assertion" and
 E "convention-blind code") all share one root: **producing output without
@@ -47,14 +46,14 @@ Pick an output path:
 - if `CWD` is `~/.claude`: `~/.claude/assets/reports/<YYYYMMDD>-<HHMM>-skeptical-review/review.md`
 
 Dispatch a `general-purpose` Agent (fresh context) with the prompt below,
-passing the file list, the pre-pass hits, and the output path. The agent **must
-write the report to disk before returning** and return only a short abstract +
-the path (per `rules/sub-agent-outputs.md`).
+passing the file list, the pre-pass hits, and the output path. The agent writes
+the report to disk before returning and returns only a short abstract + the path
+(per `rules/sub-agent-outputs.md`).
 
 ### 4. Present
 Read the report. Show the user a ranked summary (highest-suspicion first), each
 line: `severity · file:line · one-line claim · which check failed`. Offer to
-deep-dive any item. Do **not** start fixing unless the user picks items to fix.
+deep-dive any item. Don't start fixing unless the user picks items to fix.
 
 ### 5. Record coverage
 Mark this change-set reviewed so the Stop review-required gate stops blocking:
@@ -65,68 +64,98 @@ One review covers later fixes to the SAME files; touching new code files re-arms
 the gate. (This is what makes "auto-invoke" work: the gate refuses "done" on a
 substantial unreviewed change until this marker is written or the gate is muted.)
 
+Then log the persona usage for the efficacy trail (`features/persona-activation.md`):
+```bash
+bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatched \
+  --session <SID> --task "<what was reviewed>" --outcome unknown \
+  --note "<N findings; top severity; wiring verdict>"
+```
+
 ## The reviewer prompt (template)
 
-> You are a skeptical code reviewer. Assume the diff below is **wrong** until the
+> You are a skeptical code reviewer. Assume the diff below is wrong until the
 > surrounding code proves otherwise. You did not write it and owe it no charity.
-> Your output is a list of **suspicions for a human to deep-dive**, so bias
-> toward surfacing (report anything you are ≥40% sure of), but **every finding
-> MUST cite a `file:line` you actually opened** — no vibes, no "consider maybe".
-> You are STRICTLY READ-ONLY except for your one report file. You may NOT edit
-> code, and you may NOT run any command that appends to / overwrites / moves a
-> real file or data store — that explicitly includes things like `guidance.sh
-> add`, `atone.sh add`, `>`/`>>`/`mv`/`tee` onto a live path. To exercise a
-> parser or script against data, COPY the input to `/tmp` and run it there,
-> never against the live file. (A prior review pass clobbered the live
-> `guidance/notes.md` by testing `guidance.sh add` against it — never again.)
+> Your output is a list of suspicions for a human to deep-dive, so bias toward
+> surfacing: report anything you are ≥40% sure of, and cite a `file:line` you
+> actually opened for every finding — no vibes, no "consider maybe".
+>
+> Your job is coverage, then ranking — two separate stages. Report every in-scope
+> finding you turn up, including low-severity and uncertain ones, and tag each
+> with a confidence and a severity. Do **not** raise the reporting bar to cut the
+> list down: "only flag what matters / don't nitpick / be conservative" is
+> followed faithfully here and silently drops real findings. A separate ranking
+> step sinks the minor items to the bottom — that is where focus comes from.
+> Never drop a finding during investigation because it feels small.
+>
+> Read-only: you write only your one report file. Do not run any command that
+> mutates a real file or data store. To exercise a parser, copy the input to
+> `/tmp` and run it there. (Full statement in the skill's Hard rules.)
 >
 > Files changed this session: `<list>`
 > Mechanical smell pre-pass already found: `<atone-lint hits>`
 >
 > First read the user's standing directives — `bash ~/.claude/scripts/guidance.sh show`.
-> Any change that violates one is a HIGH-confidence finding: the user explicitly
+> A change that violates one is a high-confidence finding: the user explicitly
 > asked for this and the agent didn't comply. Cite the directive verbatim.
 >
-> Then run these six checks against each changed file/symbol, grounding each in
-> real `rg`/`Read`:
+> Then hunt across each changed file/symbol, grounding each finding in a real
+> `rg`/`Read`. Lead with the two highest-yield checks — they catch this account's
+> deepest, most-recurring slips:
 >
-> 1. **Surrounding context** — `Read` the *full enclosing function/scope* of each
->    changed hunk (not just the diff). Does the change actually fit its context,
->    or did it assume a shape the surrounding code contradicts?
-> 2. **Sibling conventions** — `rg`/`ls` the same directory for sibling files of
->    the same kind (component, hook, route, helper). Does the new code match
->    their established shape, or did it invent a different one?
-> 3. **Upstream/downstream usage** — for each changed/added symbol, `rg` every
->    caller and importer. Did a signature, return type, prop, or behavior change
->    break a caller? Are all call sites still compatible?
+> 1. **Upstream/downstream usage** (highest yield) — for each changed/added
+>    symbol, `rg` every caller and importer. Did a signature, return type, prop,
+>    or behavior change break a caller? Are all call sites still compatible?
+> 2. **Surrounding context** — `Read` the full enclosing function/scope of each
+>    changed hunk, not just the diff. Does the change fit its context, or did it
+>    assume a shape the surrounding code contradicts?
+>
+> Then the remaining heuristics — apply the ones the change-set warrants:
+>
+> 3. **Sibling conventions** — `rg`/`ls` the same directory for siblings of the
+>    same kind (component, hook, route, helper). Does the new code match their
+>    shape, or invent a different one?
 > 4. **Reuse vs reinvention** — `rg` the tree for an existing function/type/util
 >    that already does what the new code does. Was the wheel reinvented?
 > 5. **Documented code smells** — confirm/expand the pre-pass hits; check the
->    well-known ones for the stack (e.g. error-string matching for flow, raw env
+>    well-known ones for the stack (error-string matching for flow, raw env
 >    reads, missing precondition guards on destructive UI, effect dep arrays).
-> 6. **Comment quality** — against `~/.claude/rules/comments.md`: comments must be
->    for humans first, first sentence code-agnostic, WHY-not-WHAT, ≤8 lines, no
+> 6. **Comment quality** — against `~/.claude/rules/comments.md`: comments are for
+>    humans first, first sentence code-agnostic, WHY-not-WHAT, ≤8 lines, no
 >    jargon-flexing, no restating the code. Flag any comment that just narrates
 >    what the next line literally does.
 >
-> Write the full report to `<output_path>` BEFORE returning, as a table ranked by
-> suspicion: `| confidence | file:line | check | what's suspect | how to verify |`.
+> Write the full report to `<output_path>` before returning, as a table ranked by
+> suspicion: `| confidence | severity | file:line | check | what's suspect | how to verify |`.
 > Return a 5-bullet abstract + the absolute path. Do not fix anything.
 
 ## Hard rules
-- **Flag, never fix.** The human decides what's real and what to change.
-- **Read-only on all live state.** The reviewer writes ONLY its report. It must
-  never run a command that mutates a real data file/store (`guidance.sh add`,
-  `atone.sh add`, redirects/`mv`/`tee` onto a live path). Test parsers against a
-  `/tmp` copy. The dispatch prompt must restate this every time.
-- **No ungrounded findings.** Every item cites a `file:line` the reviewer opened.
-- **Suspicion bias.** Recall over precision — this is a pre-filter for human
-  deep-dive, not a high-precision gate. (Contrast `feature-dev:code-reviewer`,
-  which reports only confidence ≥80.)
-- **Persist to disk** before the agent returns; verify the file exists.
+- **Read-only on all live state** (the one load-bearing guard). The reviewer
+  writes only its report file and never runs a command that mutates a real data
+  file or store — no `guidance.sh add`, `atone.sh add`, `>`/`>>`/`mv`/`tee` onto
+  a live path, no code edits. To exercise a parser or script, copy the input to
+  `/tmp` and run it there. A prior pass clobbered the live `guidance/notes.md` by
+  testing `guidance.sh add` against it; that is the failure this guard prevents.
+- Flag, never fix. The human decides what's real and what to change.
+- Coverage, not bar-raising. Report every in-scope finding, including
+  low-severity and uncertain ones, each tagged confidence + severity. Don't raise
+  the reporting bar to shorten the list — a separate ranking culls; investigation
+  never drops. Recall over precision: this is a pre-filter for human deep-dive,
+  not a high-precision gate. (Contrast `feature-dev:code-reviewer`, ≥80 only.)
+- No ungrounded findings. Every item cites a `file:line` the reviewer opened.
+- Persist to disk before the agent returns; verify the file exists.
 
 ## Relationship to the write-time guards
 The PreToolUse guards (`guard-cluster-e-smells.sh`, `guard-duplicate-symbol.sh`)
-block the *precise, mechanizable* smells as they're written. This skill is the
-*judgment* layer that catches what a regex cannot — convention mismatch, usage
+block the precise, mechanizable smells as they're written. This skill is the
+judgment layer that catches what a regex cannot — convention mismatch, usage
 incompatibility, subtle reinvention, bad comments — at review time.
+
+## See Also
+- `~/.claude/personas/skeptical-reviewer.md` — the dispatch persona this skill forks.
+- `~/.claude/skills/magi/SKILL.md` — when a finding hinges on a real
+  should-we / architecture / correctness-tradeoff call, the reviewer escalates
+  that one scoped sub-question to `/magi` rather than ruling on it.
+- `~/.claude/skills/arch-qa/SKILL.md` — traces real code paths to ground a
+  suspected authority / data-flow claim instead of asserting one.
+- `~/.claude/rules/exercise-based-verification.md` — the run-before-done gate this
+  review precedes; the declared-ready Stop hook enforces it mechanically.

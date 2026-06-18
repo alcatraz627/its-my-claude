@@ -136,26 +136,26 @@ Use Grep to find implementation details:
 
 ```bash
 # Find login handlers
-grep -r "login\|sign.?in\|authenticate" --include="*.{js,ts,py}" -i
+rg -i "login|sign.?in|authenticate" -g "*.{js,ts,py}"
 
 # Find token/session creation
-grep -r "token\|session\|jwt\|cookie" --include="*.{js,ts,py}" -i
+rg -i "token|session|jwt|cookie" -g "*.{js,ts,py}"
 
 # Find middleware
-grep -r "middleware\|auth.*check\|require.*auth" --include="*.{js,ts,py}" -i
+rg -i "middleware|auth.*check|require.*auth" -g "*.{js,ts,py}"
 ```
 
 **Data flow example:**
 
 ```bash
 # Find API calls
-grep -r "fetch.*{endpoint}\|axios.*{endpoint}" --include="*.{js,ts,tsx}"
+rg "fetch.*{endpoint}|axios.*{endpoint}" -g "*.{js,ts,tsx}"
 
 # Find data transformations
-grep -r "map\|transform\|process.*data" --include="*.{js,ts,py}"
+rg "map|transform|process.*data" -g "*.{js,ts,py}"
 
 # Find database queries
-grep -r "find\|query\|select.*from" --include="*.{js,ts,py}"
+rg "find|query|select.*from" -g "*.{js,ts,py}"
 ```
 
 ### Phase 4: Trace the Code Path
@@ -208,7 +208,7 @@ Find related configuration:
 
 ```bash
 # Environment variables
-grep -r "{FEATURE_NAME}" --include=".env*"
+rg "{FEATURE_NAME}" -g ".env*"
 
 # Config files
 read config/{feature}.json
@@ -222,7 +222,7 @@ Tests often reveal usage patterns:
 ```bash
 glob "**/*.test.{js,ts,py}"
 glob "**/*.spec.{js,ts,py}"
-grep -r "describe.*{feature}\|test.*{feature}" --include="*.{test,spec}.{js,ts,py}"
+rg "describe.*{feature}|test.*{feature}" -g "*.{test,spec}.{js,ts,py}"
 ```
 
 ### Phase 8: Document the Answer

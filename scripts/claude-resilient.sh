@@ -1,35 +1,33 @@
 #!/usr/bin/env bash
-# claude-resilient.sh — wraps `claude` with exponential-backoff retry for API
-# errors, rate limits, and transient network issues. On retry, uses
-# `claude --continue` so the same session is resumed rather than started fresh.
+# claude-resilient.sh — DEPRECATED. Does not reliably do what its name claims.
 #
-# Usage:
-#   claude-resilient.sh [claude-args...]
+# This was meant to auto-retry `claude` through API errors. It does not work for
+# either real use case, verified 2026-06-18 against 48h of transcripts
+# (assets/reports/20260618-api-error-48h-analysis/findings.md):
 #
-# Examples:
-#   claude-resilient.sh                       # interactive, auto-retry on API error
-#   claude-resilient.sh -p "summarize repo"   # one-shot, auto-retry
+#   - INTERACTIVE: a transient 429 surfaces inline and the REPL keeps running —
+#     the process never exits non-zero, so the exit-code-gated retry below can
+#     never fire. Clean quit=0 and Ctrl+C=130 are both non-retryable.
+#   - HEADLESS (`-p`): even here the retry is bare `claude --continue` with no
+#     args, which DROPS the original `-p` prompt — so the one case it could
+#     theoretically serve, it corrupts.
 #
-# Env:
-#   CLAUDE_BIN                     — binary to wrap (default: claude)
-#   CLAUDE_RESILIENT_MAX_RETRIES   — max retries (default: 3)
-#   CLAUDE_RESILIENT_BASE_SLEEP    — first backoff seconds (default: 5)
-#   CLAUDE_RESILIENT_BACKOFF       — multiplier between retries (default: 3)
-#   CLAUDE_RESILIENT_DISABLED=1    — disable retries; first failure is final
+# Kept only as a record of the approach. Do NOT alias `claude` to this and do
+# NOT rely on it. For the real lessons see the report above; for interactive
+# recovery there is no process-wrapper fix (Claude Code emits no Stop/Notification
+# on an API-error abort) — that path is handled by hooks/api-recovery-nudge.sh.
 #
-# Exit-code policy:
-#   0                    — success; exit immediately
-#   130 (SIGINT)         — user Ctrl+C; never retry, propagate exit
-#   143 (SIGTERM)        — shell/OS kill; never retry, propagate exit
-#   anything else        — treated as retryable (API/network/5xx/rate limit)
-#
-# All retry attempts use `claude --continue` regardless of the original args,
-# so the conversation state is preserved and we don't re-prompt from scratch.
-#
-# This script is intended to be invoked manually (or via alias/symlink) in
-# place of `claude`. It is NOT a hook; it does not consume stdin JSON.
+# Env (legacy, only if you knowingly run the deprecated path):
+#   CLAUDE_BIN, CLAUDE_RESILIENT_MAX_RETRIES, CLAUDE_RESILIENT_BASE_SLEEP,
+#   CLAUDE_RESILIENT_BACKOFF, CLAUDE_RESILIENT_DISABLED=1.
 
 set -uo pipefail
+
+# Loud, non-fatal: anyone who runs this should know it's deprecated and broken
+# for its stated purpose. Goes to stderr so it never pollutes captured stdout.
+printf '%s\n' \
+  '[claude-resilient] DEPRECATED & non-functional for its stated purpose — see' \
+  '[claude-resilient] assets/reports/20260618-api-error-48h-analysis/findings.md' >&2
 
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
 MAX_RETRIES="${CLAUDE_RESILIENT_MAX_RETRIES:-3}"

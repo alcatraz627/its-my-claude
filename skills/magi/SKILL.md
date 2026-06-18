@@ -8,19 +8,21 @@ user-invokable: true
 
 ## Brief
 
-You are the SUPERVISOR. You design the prompt, spawn voter sub-agents in parallel, collect their proposals, run a voting round, write your own independent nomination, and produce a final artifact + report. The full design (parameters, schemas, validation DSL, jester mechanics, override rules) is at `~/.claude/assets/docs/20260518-magi-design.md`. Read it once per session before running. This SKILL.md is the orchestration script.
+You are the supervisor. You design the prompt, spawn voter sub-agents in parallel, collect their proposals, run a voting round, write your own independent nomination, and produce a final artifact + report. This SKILL.md is the orchestration script — the numbered flow below is what you execute.
+
+The full design — parameters, schemas, the validation DSL, jester mechanics, override rules — lives in `~/.claude/assets/docs/20260518-magi-design.md`. Read it once per session before running. Two migrations record the gates this skill enforces: `migrations/0020` (conformance gate) and `migrations/0021` (setup-independence + evidence partitioning).
 
 ## When to use
 
 - User asks "should we X" / "X or Y" / "what's the best approach for Z"
 - Architecture decisions, framework choices, rewrite-or-not, scope debates
-- Anywhere multiple legitimate perspectives exist + you'd benefit from seeing them surfaced
+- Anywhere multiple legitimate perspectives exist and you'd benefit from seeing them surfaced
 
 ## When NOT to use
 
 - Pure correctness tasks with one right answer (bug fix, syntax error, schema mismatch) — single-agent does fine
 - Throwaway questions; cost vs value won't justify N voters
-- Tasks where the user wants YOU to think, not delegate
+- Tasks where the user wants you to reason directly, not delegate
 
 ---
 
@@ -32,9 +34,9 @@ Read `~/.claude/assets/docs/20260518-magi-design.md` once (especially § 1-9, 17
 /magi "<task>" [--mode lite|full] [other flags]
 ```
 
-### Modes (NEW 2026-05-17)
+### Modes
 
-The default mode is **`lite`** — keeps the floor low so /magi is reachable for routine tradeoffs. Use `--mode full` opt-in when you want the heavy ceremony (personas, jester, voting, thorough rubric).
+The default mode is `lite` — it keeps the floor low so /magi stays reachable for routine tradeoffs. Use `--mode full` when you want the heavy ceremony (personas, jester, voting, thorough rubric).
 
 | | `--mode lite` (DEFAULT) | `--mode full` (opt-in) |
 |---|---|---|
@@ -50,32 +52,30 @@ The default mode is **`lite`** — keeps the floor low so /magi is reachable for
 | typical cost (Sonnet downgrade) | $0.30–1 | $1–3 |
 | use for | routine tradeoff, "X or Y", well-documented decisions | architecture, rewrite, design, "should we", consequential |
 
-> **Cost estimates revised 2026-05-19** after first wild-run data. Earlier "$0.15–0.50" estimate ignored web-search token cost (6-7 searches per voter × 60K tokens each was real). Lite now defaults to `min-searches=1` to keep the floor low; pass `--min-searches 2` for stronger grounding at higher cost. Full mode retains min-searches=2 since the ceremony already implies investment.
+Cost estimates were revised 2026-05-19 after first wild-run data: the earlier "$0.15–0.50" figure ignored web-search token cost (6-7 searches per voter × 60K tokens each was real). Lite defaults to `min-searches=1` to keep the floor low; pass `--min-searches 2` for stronger grounding at higher cost. Full mode retains min-searches=2 since the ceremony already implies investment.
 
-Per individual flags (override mode defaults):
-- `--voters N`, `--model M`, `--personas` / `--no-personas`, `--jester` / `--no-jester`, `--no-voting`, `--temp-mode auto|shared|spread`, `--no-research`, `--min-searches N`, `--validation light|thorough`
+Individual flags override mode defaults: `--voters N`, `--model M`, `--personas` / `--no-personas`, `--jester` / `--no-jester`, `--no-voting`, `--temp-mode auto|shared|spread`, `--no-research`, `--min-searches N`, `--validation light|thorough`.
 
-**Diversity + audit knobs (added 2026-05-17):**
-- `--diverse` — opt-in mixed-model main pool (rotate Opus/Sonnet/Haiku per voter; random persona<>model assignment to avoid confounding). Defaults OFF; same-model pool is the default. Use for genuinely-consequential decisions where same-model blind spots are likely load-bearing.
-- `--blind-vote` — skip Phase 5 supervisor independent nomination. Voters vote first; supervisor reads votes + proposals together and writes one rationale. One fewer phase, no pre-commitment ritual. Useful experiment; loses the pre-vote-vs-actual comparison signal.
+Two extra knobs (added 2026-05-17):
+- `--diverse` — opt-in mixed-model main pool (rotate Opus/Sonnet/Haiku per voter; random persona↔model assignment to avoid confounding). Defaults off; same-model pool is the default. Use for genuinely-consequential decisions where same-model blind spots are likely load-bearing.
+- `--blind-vote` — skip Phase 5 supervisor independent nomination. Voters vote first; supervisor reads votes + proposals together and writes one rationale. One fewer phase, no pre-commitment ritual; loses the pre-vote-vs-actual comparison signal.
 
 ### Mode auto-escalation hint
 
-If the supervisor classifies task as HIGH complexity AND user passed no explicit `--mode`, suggest:
+If you classify the task as HIGH complexity AND the user passed no explicit `--mode`, suggest:
 > "This task looks consequential (design / architecture / rewrite). Default `--mode lite` may underdeliver. Switch to `--mode full`? [y/N]"
 
-If user accepts → full. If declines → proceed with lite. Don't auto-escalate silently.
+If the user accepts → full. If they decline → proceed with lite. Don't auto-escalate silently.
 
 ## Phase 1 — Classify task, derive params, confirm with user
 
 Classify the task:
-- Complexity: LOW / MEDIUM / HIGH (see design doc § 2 heuristic)
+- Complexity: LOW / MEDIUM / HIGH (design doc § 2 heuristic)
 - Type: creative / convergent / analysis / mixed
 - Persona-need: yes/no
-- Jester-need: detect status-quo-risk markers (design, architect, rewrite, refactor, should-we, switch-to, replace, introduce).
-  - **EXCLUSION (added 2026-05-17 per test data):** skip jester for "compare-known-tools" patterns. Detection signals: task names 3+ specific competing tools (`X vs Y vs Z`), or phrasing like "choose between A, B, and C", or "<framework1> vs <framework2>". These are well-trodden discourse where consensus convergence is high and jester adds framing-but-not-outcome (Turborepo/Nx/pnpm test case). If --jester is explicit, honor it; this only affects auto-on detection.
+- Jester-need: detect status-quo-risk markers (design, architect, rewrite, refactor, should-we, switch-to, replace, introduce). Exclusion (added 2026-05-17 per test data): skip jester for "compare-known-tools" patterns — task names 3+ specific competing tools (`X vs Y vs Z`), or phrasing like "choose between A, B, and C". These are well-trodden discourse where convergence is high and the jester adds framing but not outcome (the Turborepo/Nx/pnpm test case). An explicit `--jester` is still honored; this only affects auto-on detection.
 
-Derive params per design doc § 2-6. Present via `mcp__inputs__form` for user confirmation (pre-filled with defaults):
+Derive params per design doc § 2-6. Present via `mcp__inputs__form` for confirmation (pre-filled with defaults):
 
 | Field | `lite` default | `full` default | User can override |
 |---|---|---|---|
@@ -89,13 +89,13 @@ Derive params per design doc § 2-6. Present via `mcp__inputs__form` for user co
 | `validation` | light | thorough | ✓ |
 | `min_searches` | 1 | 2 | ✓ |
 
-If user cancels form or accepts defaults, proceed.
+If the user cancels the form or accepts defaults, proceed.
 
-**Output:** clear status line e.g. — `Proceeding [--mode lite]: N=3 Opus voters, no personas/jester/voting, light validation, research=on (min 1 search). Est cost: $3–8.`
+Output a clear status line, e.g. — `Proceeding [--mode lite]: N=3 Opus voters, no personas/jester/voting, light validation, research=on (min 1 search). Est cost: $3–8.`
 
 Or for full mode: `Proceeding [--mode full]: N=5 (4 Opus main + 1 Sonnet jester), personas=[architect, qa-lead, ux-eng, dev-velocity], voting=on, thorough rubric. Est cost: $6–12.`
 
-If supervisor wants to propose model downgrade, use the exact format from design § 3:
+To propose a model downgrade, use the exact format from design § 3:
 
 ```
 PROPOSED DOWNGRADE: Sonnet for 7 voters (cost N=7 × Opus is ~$X;
@@ -103,16 +103,11 @@ Sonnet would save Y% with expected quality cost: <description>)
 Proceed with Sonnet, or override to keep Opus?
 ```
 
-Wait for response. Default = stay with Opus.
+Wait for the response. Default = stay with Opus.
 
-## Phase 2 — Initialize archive (record params + the evidence manifest UP FRONT)
+## Phase 2 — Initialize archive (record params + the evidence manifest up front)
 
-Pass resolved params to `init-archive` via `--params` so they're written
-**atomically at creation** — not in a later python step (that step was skipped in
-3 of 4 audited runs, leaving `params:{}`; the Phase-11 conformance check now flags
-an empty params). The params MUST include **`voter_evidence`** — the per-voter
-DISTINCT evidence slice (D1). This is the load-bearing field: it is what makes
-convergence *discovered* rather than *manufactured*, and `setup-check.sh` reads it.
+Pass resolved params to `init-archive` via `--params` so they're written atomically at creation — not in a later python step (that step was skipped in 3 of 4 audited runs, leaving `params:{}`; the Phase-11 conformance check now flags an empty params). The params must include **`voter_evidence`** — the per-voter distinct evidence slice (D1). This is the load-bearing field: it is what makes convergence *discovered* rather than *manufactured*, and `setup-check.sh` reads it.
 
 ```bash
 PARAMS='{"mode":"full","voters":5,"model_main":"opus","model_jester":"sonnet",
@@ -129,13 +124,7 @@ ARCHIVE=$(bash ~/.claude/scripts/magi/init-archive.sh \
   --slug "<short-slug-from-task>" --prompt "<full-user-prompt>" --params "$PARAMS")
 ```
 
-For a **breadth / "gather varied findings"** task the slices MUST differ (one voter
-the tests, one the reviews, one the raw transcript *blind to any digest*, one the
-canon, one external). Do **not** hand all voters the same corpus, and do **not**
-pre-write a supervisor *interpretive* baseline as the shared substrate — that is the
-manufactured-convergence conduit (a shared *factual* base is fine). For a convergent
-task (one right answer) partition by **sub-question/stance** instead of withholding
-shared facts. The script returns the archive root; all artifacts go inside.
+For a **breadth / "gather varied findings"** task the slices must differ (one voter the tests, one the reviews, one the raw transcript *blind to any digest*, one the canon, one external). Don't hand all voters the same corpus, and don't pre-write a supervisor *interpretive* baseline as the shared substrate — that is the manufactured-convergence conduit (a shared *factual* base is fine). For a convergent task (one right answer) partition by **sub-question/stance** instead of withholding shared facts. The full partitioning rules are in design § (evidence partitioning) / migration 0021. The script returns the archive root; all artifacts go inside.
 
 ## Phase 3 — Build voter prompts
 
@@ -145,30 +134,26 @@ For each voter:
 3. Compute per-voter output path: `$ARCHIVE/03-voter-proposals/voter-<N>.md`
 4. Write the prompt to `$ARCHIVE/02-voter-prompts/voter-<N>.md` (for audit)
 
-For jester: append the jester-block from design § 6. Different model. Opposite web access. **Name its proposal `voter-jester.md`** (not a number) — the Phase-11 conformance gate uses that filename (plus `params.jester:true`) to detect a full-mode panel, so an unnamed/numeric jester can let a skipped vote slip through.
+For the jester: append the jester-block from design § 6, with a different model and opposite web access. Name its proposal `voter-jester.md` (not a number) — the Phase-11 conformance gate uses that filename (plus `params.jester:true`) to detect a full-mode panel, so an unnamed/numeric jester can let a skipped vote slip through.
 
-If personas:
-- Look up existing in `~/.claude/personas/`
-- If missing, draft inline AND save to `~/.claude/personas/_proposed/<slug>-<sid>.md` per design § 5
+If personas: look up existing ones in `~/.claude/personas/`. If missing, draft inline AND save to `~/.claude/personas/_proposed/<slug>-<sid>.md` per design § 5.
 
-## Phase 4 — Dispatch voters in PARALLEL
+## Phase 4 — Dispatch voters in parallel
 
-**FIRST — gate the setup BEFORE the spend (the deep companion to the voting gate):**
+**Gate the setup before the spend (the deep companion to the voting gate):**
+
 ```bash
 bash ~/.claude/scripts/magi/setup-check.sh "$ARCHIVE"   # exit 2 = echo-prone → STOP
 ```
-CRITICAL (all voters share one slice, or a supervisor digest is the shared
-substrate) means the run is *structurally incapable* of distributed consensus —
-**redesign the `voter_evidence` partition before dispatching.** Don't spend Opus
-voters on an echo. Independence is created here, in setup; voting (Phase 6) merely
-*measures* it. A WARN (no different-model seat, `research:minimal` on breadth) should
-be fixed but doesn't hard-stop.
+
+An **exit-2 / CRITICAL** verdict (all voters share one slice, or a supervisor digest is the shared substrate) means the run is *structurally incapable* of distributed consensus — redesign the `voter_evidence` partition before dispatching. Don't spend Opus voters on an echo. Independence is created here, in setup; voting (Phase 6) merely *measures* it. A WARN (no different-model seat, `research:minimal` on breadth) should be fixed but doesn't hard-stop.
 
 Then dispatch:
+
 ```
 Single message, multiple Agent tool calls (one per voter).
 Each agent gets:
-  - The voter prompt — SCOPED to that voter's assigned evidence slice (Phase 2
+  - The voter prompt — scoped to that voter's assigned evidence slice (Phase 2
     voter_evidence); tell it which source is ITS primary base and to ground there
   - The output path: $ARCHIVE/03-voter-proposals/voter-<N>.md
   - Instruction: "write before returning" + 5-8 bullet abstract format
@@ -179,43 +164,27 @@ Each agent gets:
 ### 4.1 — Model selection per voter
 
 - Default (no `--diverse`): all voters use `--model` (default opus). Jester opposite.
-- With `--diverse` (NEW 2026-05-17): rotate Opus / Sonnet / Haiku per voter index. Randomize persona→model mapping per session to avoid confounding (record permutation in meta.json `voters[].model`).
+- With `--diverse`: rotate Opus / Sonnet / Haiku per voter index. Randomize persona→model mapping per session to avoid confounding (record the permutation in meta.json `voters[].model`).
 
 ### 4.2 — Capture cost
 
-The Agent tool returns a `<usage>total_tokens: N tool_uses: M duration_ms: T</usage>` block at the end of each sub-agent response. After EACH agent return, parse this and append to `meta.json` voters[].tokens:
-
-```python
-# After each Agent call, parse the trailing <usage> block:
-#   total_tokens: <int>   (mandatory — only field guaranteed present)
-#   tool_uses:    <int>
-#   duration_ms:  <int>
-# Append to meta.json: voters[i].tokens = {"total_tokens": N, "tool_uses": M, "duration_ms": T}
-# If block missing/malformed: voters[i].tokens = {"total_tokens": null, "note": "usage block missing/malformed"}
-```
-
-**Important — schema constraint surfaced by first wild run (2026-05-18):** the Agent tool's `<usage>` block exposes only `total_tokens`, NOT a separate input/output split. Cost computation downstream (`cost-estimate.sh`) handles this with a documented blended-rate heuristic (default 70% input / 30% output for research-heavy runs). Pass `--io-split A/B` to override.
-
-Apply same parsing in Phase 6 (voting round). This replaces the heuristic estimates from the initial MVP — real numbers, even if blended.
+Each sub-agent response ends with a `<usage>total_tokens: N tool_uses: M duration_ms: T</usage>` block. After each agent returns, parse it and append to `meta.json` `voters[].tokens`. Only `total_tokens` is guaranteed present; the Agent tool's `<usage>` block exposes no separate input/output split (surfaced by the first wild run, 2026-05-18). If the block is missing/malformed, record `{"total_tokens": null, "note": "usage block missing/malformed"}`. Downstream cost computation (`cost-estimate.sh`) handles the missing split with a blended-rate heuristic (default 70% input / 30% output; override with `--io-split A/B`). The exact parsing snippet is in design § 13. Apply the same parsing in Phase 6.
 
 ### 4.3 — Verify
 
-Per `rules/sub-agent-outputs.md` — each must include absolute output path + "write before returning."
+Per `rules/sub-agent-outputs.md`, each dispatch includes an absolute output path + "write before returning." After all return, verify the files exist:
 
-After all return, verify files exist:
 ```bash
 for i in 1..N; do test -f "$ARCHIVE/03-voter-proposals/voter-$i.md" || echo "MISSING voter-$i"; done
 ```
 
-If any failed, log to meta.json, proceed with N-1. Don't retry at proposal stage. (Retry IS in scope at voting stage — see Phase 6.2.)
+If any failed, log to meta.json and proceed with N-1. Don't retry at proposal stage. (Retry is in scope at voting stage — see Phase 6.2.)
 
-## Phase 5 — Write SUPERVISOR independent nomination FIRST
+## Phase 5 — Write supervisor independent nomination first
 
-**SKIP this phase entirely if `--blind-vote` flag is set.** In blind-vote mode, supervisor reads votes + proposals together in Phase 8 and writes one rationale. No pre-vote nomination file.
+Skip this phase entirely if `--blind-vote` is set. In blind-vote mode, the supervisor reads votes + proposals together in Phase 8 and writes one rationale — no pre-vote nomination file.
 
-
-
-This is the audit trail. BEFORE seeing votes, you read all proposals yourself and write your pick.
+This is the audit trail. Before seeing votes, you read all proposals yourself and write your pick.
 
 ```
 Read each $ARCHIVE/03-voter-proposals/voter-*.md
@@ -224,6 +193,7 @@ Write to: $ARCHIVE/05-supervisor-nomination.md
 ```
 
 Format:
+
 ```markdown
 # Supervisor's independent nomination
 
@@ -239,26 +209,15 @@ that's documented in the override section.]
 
 ## Phase 6 — Dispatch voting round (same voters, Round 2)
 
-### 6.0 — Build anonymization map (NEW, 2026-05-17 P0-C)
+### 6.0 — Build anonymization map
 
-Random per-session label remap to break persona/name deference bias:
+A random per-session label remap breaks persona/name deference bias: shuffle `voter-A`..`voter-E` onto the true voter ids, write the permutation to `$ARCHIVE/04-voting/_anon-map.json` for audit, and have voters see anonymized labels in their voting prompt. The aggregator un-maps before writing the matrix; personas are revealed only in the final report (Phase 10). The exact shuffle snippet is in design § 13.
 
-```python
-import random
-true_voters = ["voter-1","voter-2","voter-3","voter-4","voter-jester"]
-anon_labels = ["voter-A","voter-B","voter-C","voter-D","voter-E"]
-random.shuffle(anon_labels)
-true_to_anon = dict(zip(true_voters, anon_labels))
-# Write permutation to $ARCHIVE/04-voting/_anon-map.json for audit
-```
+### 6.1 — Per-voter randomized proposal order
 
-Voters see anonymized labels in their voting prompt. Aggregator un-maps before writing matrix. Personas are revealed only in the final report (§ Phase 10).
+For each voter, randomly permute the order in which proposals are presented in the voting prompt. Record each per-voter permutation in `_anon-map.json`. This addresses documented position bias in the LLM-as-judge literature.
 
-### 6.1 — Per-voter randomized proposal order (NEW, P0-D)
-
-For each voter, randomly permute the order in which proposals are presented in the voting prompt. Record per-voter permutation in `_anon-map.json`. This addresses documented position bias in LLM-as-judge literature.
-
-### 6.2 — Dispatch with retry-on-malformed (NEW, P0-E)
+### 6.2 — Dispatch with retry-on-malformed
 
 ```
 Single message, N parallel Agent tool calls.
@@ -271,9 +230,9 @@ Each voter gets the Round 2 prompt (design § 13) with:
 ```
 
 After all return, attempt to parse each JSON. If voter-N returns malformed JSON:
-- **Retry once** with explicit prompt: "Your previous output had format errors at <line/issue>. Rewrite exactly per this schema: <schema>. Do not include markdown fences or commentary outside the JSON."
-- If second attempt also fails: log to meta.json `voters_dropped += 1`, continue with N-1
-- Per design § 15 + user feedback: malformed isn't grounds for instant drop — retry first
+- Retry once with an explicit prompt: "Your previous output had format errors at <line/issue>. Rewrite exactly per this schema: <schema>. Do not include markdown fences or commentary outside the JSON."
+- If the second attempt also fails: log to meta.json `voters_dropped += 1` and continue with N-1.
+- Per design § 15 + user feedback: malformed isn't grounds for instant drop — retry first.
 
 ### 6.3 — Verify + report
 
@@ -282,7 +241,7 @@ RESULT=$(bash ~/.claude/scripts/magi/aggregate-votes.sh "$ARCHIVE")
 echo "$RESULT" | jq '.voters_scored, .voters_dropped, .warnings'
 ```
 
-If `voters_dropped > 0`, surface count + which voters in the final report.
+If `voters_dropped > 0`, surface the count + which voters in the final report.
 
 ## Phase 7 — Aggregate votes
 
@@ -297,38 +256,24 @@ Read the matrix + bias-matrix:
 - `$ARCHIVE/04-voting/matrix.md`
 - `$ARCHIVE/04-voting/bias-matrix.md`
 
-Note any:
-- HIGH self-bias (Δ > 1.5)
-- Scope dissent (pstdev > 1.5)
-- Voter who scored 0/low from all peers (groupthink defense)
+Note any HIGH self-bias (Δ > 1.5), scope dissent (pstdev > 1.5), or a voter who scored 0/low from all peers (a groupthink-defense signal).
 
 ## Phase 8 — Supervisor decision
 
-> **Phase 8 is POST-voting. It is NOT a license to skip Phase 6.** "Pick
-> directly" below means *the vote was clear and you agree with the winner* — it
-> presupposes Phase 6 ran and produced a matrix. The ONLY sanctioned way to skip
-> voting is the `--no-voting` flag set **at dispatch** (design §8). Do not skip
-> Phase 6 mid-run and cite "pick directly / Phase-8 merge / convergence was
-> obvious" — that is the exact rationalization voting exists to test, it discards
-> the bias-matrix + scope-dissent signal, and the Phase-11 conformance gate
-> (`conformance-check.sh`) will flag it as CRITICAL. If you believe the panel has
-> genuinely converged, **run the vote to prove it** (it's cheap once proposals
-> exist) — manufactured convergence (all voters fed one shared corpus) is exactly
-> what a real scored, anonymized round catches.
+Phase 8 is post-voting. It is not a license to skip Phase 6. "Pick directly" below means the vote was clear and you agree with the winner — it presupposes Phase 6 ran and produced a matrix. The only sanctioned way to skip voting is the `--no-voting` flag set **at dispatch** (design §8). Do not skip Phase 6 mid-run and cite "pick directly / Phase-8 merge / convergence was obvious" — that is the exact rationalization voting exists to test, it discards the bias-matrix + scope-dissent signal, and the Phase-11 conformance gate (`conformance-check.sh`) will flag it as CRITICAL. If you believe the panel has genuinely converged, run the vote to prove it (it's cheap once proposals exist) — manufactured convergence (all voters fed one shared corpus) is exactly what a real scored, anonymized round catches.
 
-Now compare:
-- Your independent nomination (Phase 5) vs vote winner (Phase 7)
+Now compare your independent nomination (Phase 5) against the vote winner (Phase 7):
 - Match → low-friction confirm
-- Mismatch → must override with reasoned dismissal (RFC 7282 + design § 9)
+- Mismatch → override with a reasoned dismissal (RFC 7282 + design § 9)
 
 Decision options:
 - **Pick directly** — voting clear, supervisor agrees, no scope dissent
-- **Pick + borrow** — pick X but borrow specific point from Y
+- **Pick + borrow** — pick X but borrow a specific point from Y
 - **Merge** — synthesize from multiple
 - **Use as reference, write fresh** — proposals all flawed but informed a better answer
-- **Override winner** — supervisor disagrees with vote; write ≥50 words rationale
+- **Override winner** — supervisor disagrees with the vote; write ≥50 words rationale
 
-Apply minority-scope-dissent rule (design § 7): if scope std-dev > 1.5, dissenting voter's argument gets explicit address in rationale.
+Apply the minority-scope-dissent rule (design § 7): if scope std-dev > 1.5, the dissenting voter's argument gets explicit address in the rationale.
 
 ## Phase 9 — Write final artifact
 
@@ -388,26 +333,19 @@ Human-readable summary. Sections:
 $ARCHIVE
 ```
 
-## Phase 11 — Cost + meta finalization (MANDATORY — surfaced every run)
+## Phase 11 — Cost + meta finalization (runs every run)
 
 ```bash
 bash ~/.claude/scripts/magi/cost-estimate.sh "$ARCHIVE"
 ```
 
-Updates meta.json totals from the per-voter `tokens` blocks captured in Phase 4.2 / 6 (real numbers, not estimates).
+This updates meta.json totals from the per-voter `tokens` blocks captured in Phase 4.2 / 6 (real numbers, not estimates).
 
-**Conformance gate (rides on this mandatory step).** `cost-estimate.sh` now also
-runs `conformance-check.sh` and prints its verdict after the cost block. A
-**CRITICAL** verdict — most commonly *full-mode voting skipped without
-`--no-voting`* — makes the step exit non-zero. Do not declare the run done while a
-CRITICAL stands: either run the skipped phase, or (if a skip was genuinely
-intended) re-dispatch with `--no-voting` so the intent is recorded. WARN-level
-items (params/prompts/cost not persisted) should be fixed but don't block. This
-gate exists because the spec's voting mandate was advisory and four full-mode runs
-silently skipped voting on 2026-06-13 (see `rules/`/the magi-audit report).
+**Conformance gate (rides on this mandatory step).** `cost-estimate.sh` also runs `conformance-check.sh` and prints its verdict after the cost block. A **CRITICAL** verdict — most commonly *full-mode voting skipped without `--no-voting`* — makes the step exit non-zero. Do not declare the run done while a CRITICAL stands: either run the skipped phase, or (if a skip was genuinely intended) re-dispatch with `--no-voting` so the intent is recorded. WARN-level items (params/prompts/cost not persisted) should be fixed but don't block. This gate exists because the spec's voting mandate used to be advisory and four full-mode runs silently skipped voting on 2026-06-13 (see migration 0020 / the magi-audit report).
+
+Then finalize meta.json's `finished_at` + `duration_seconds`:
 
 ```bash
-# Update meta.json finished_at + duration
 python3 -c "
 import json
 from datetime import datetime, timezone
@@ -420,9 +358,9 @@ with open('$ARCHIVE/meta.json', 'w') as f: json.dump(m, f, indent=2)
 "
 ```
 
-### MANDATORY end-of-run cost summary (added 2026-05-17 per user feedback)
+### End-of-run cost summary
 
-Print this block to the user every run, regardless of mode:
+Print this block to the user every run, regardless of mode (added 2026-05-17 per user feedback):
 
 ```
 ─────────────────────────────────────────────────────
@@ -442,7 +380,7 @@ Print this block to the user every run, regardless of mode:
 ─────────────────────────────────────────────────────
 ```
 
-For `% weekly limit`: check env `CLAUDE_CODE_USAGE_WEEKLY_REMAINING_USD` or similar (Anthropic exposes session-stats via `/session-stats` skill — call it or inspect its data). If unavailable, print "n/a" — don't speculate.
+For `% weekly limit`: check env `CLAUDE_CODE_USAGE_WEEKLY_REMAINING_USD` or similar (Anthropic exposes session-stats via the `/session-stats` skill — call it or inspect its data). If unavailable, print "n/a" — don't speculate.
 
 Print the final report path to the user + the archive root.
 
@@ -467,11 +405,11 @@ Print the final report path to the user + the archive root.
 
 ## Notes for the supervisor (you)
 
-- Sub-agent output rule is MANDATORY (per `rules/sub-agent-outputs.md`). Always give the voter an absolute output path + "write before returning" + verify with `test -f` before voting round.
-- The supervisor's independent nomination MUST be written BEFORE voting aggregation. This is the audit trail proving you weren't anchored on the vote.
+- The sub-agent output rule (`rules/sub-agent-outputs.md`) applies: always give the voter an absolute output path + "write before returning" + verify with `test -f` before the voting round.
+- Write the supervisor's independent nomination before voting aggregation. This is the audit trail proving you weren't anchored on the vote.
 - Per RFC 7282, every dismissed objection gets a reasoned dismissal — not just when overriding.
-- Per design § 7, scope dissents (high std-dev on scope-alignment axis) get explicit treatment.
-- The jester's argument must always be addressed, even when rejected (design § 6).
+- Per design § 7, scope dissents (high std-dev on the scope-alignment axis) get explicit treatment.
+- The jester's argument is always addressed, even when rejected (design § 6).
 - Honest disagreement is the design intent. If voters all agree completely, that's suspicious — note it.
 - Cost is reported, not capped (in MVP).
 
@@ -479,5 +417,7 @@ Print the final report path to the user + the archive root.
 
 - Design doc: `~/.claude/assets/docs/20260518-magi-design.md`
 - Research foundation: `~/.claude/assets/docs/20260518-magi-research.md`
+- Conformance gate: `migrations/0020` · setup-independence + evidence partitioning: `migrations/0021`
 - Sub-agent output rule: `~/.claude/rules/sub-agent-outputs.md`
+- Adjacent personas: `skeptical-reviewer` (scoped review) + `/arch-qa` (ground structural claims); `platform-builder` for design tradeoffs
 - Affirm event for intelligent-disobedience over sycophancy: `aff-20260517-082422-d5`

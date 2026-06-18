@@ -157,6 +157,31 @@ After running, re-run `npm audit --json` to verify the vulnerability count dropp
   Remaining: N (require manual update — see report above)
 ```
 
+### 4.1 — Exercise the app after the fix
+
+A dropped vulnerability count is not proof the app still works. `npm audit fix` mutates
+`node_modules` and `package-lock.json`, and even a patch-level bump can change runtime behavior.
+Re-auditing only re-checks the vulnerability list — it never runs a line of the app. Before
+reporting `--fix` as done, run the app's tests and confirm they still pass:
+
+```bash
+# Prefer the cached per-folder test command:
+/test
+# …or fall back to the project's own runner, e.g.:
+npm test
+```
+
+Read the pass/fail line, not just the exit code. If the suite is green, report it. If it goes
+red, the dependency bump broke something — say so explicitly and surface the failing tests rather
+than reporting the fix as clean. If the project has no runnable test suite, say so
+(`UNCONFIRMED — no test suite`) instead of claiming the app still works. This follows
+`rules/exercise-based-verification.md`: a change is done when you have run the affected path and
+read the result, not when the audit count looks right.
+
+> For a builder persona running `--fix` as part of a larger change, a dependency bump is exactly
+> the kind of edit worth a second set of eyes — chain `/skeptical-review` on the lockfile and any
+> code that touches the bumped packages before declaring the change done.
+
 ---
 
 ## Notes
@@ -167,3 +192,12 @@ After running, re-run `npm audit --json` to verify the vulnerability count dropp
 - Next.js major upgrades require App Router compatibility review — see the Next.js upgrade guide.
 - Drizzle `drizzle-orm` and `drizzle-kit` versions must be kept in sync — upgrading one without the other breaks migration generation.
 - `legacy-peer-deps=true` is set in `.npmrc` — this may suppress some peer dependency warnings that are real issues worth investigating.
+
+## See Also
+
+- `rules/exercise-based-verification.md` — run the affected path and read the result before
+  calling a change done; the basis for the post-`--fix` test step in Phase 4.1.
+- `/test` — cached per-folder test runner; use it to exercise the app after `--fix` mutates
+  dependencies.
+- `/skeptical-review` — fresh adversarial review of the changed code; chain it on a dependency
+  bump when `--fix` is part of a larger change.

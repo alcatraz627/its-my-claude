@@ -1,0 +1,82 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18080,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.42660665766396566,
+    "unit_count": 75
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:MARGINAL_IMPROVEMENT — violations in ~6 of 20 units (~30%): 03e5a89c-2 (ls-la Bash fails at session entry); 03e5a89c-3 (ls-la Bash across bin/docs/modelfiles/presets); 03e5a89c-27 (sed-n 1,14p via for loop in Bash instead of Read); 41a73142-0 (ls-la compound Bash fails at session entry); 41a73142-1 (ls-la + find compound Bash); e25e3b92-5 (sed-n 15,35p + cat USAGE.md | head-40 instead of Read with offset). Rate ~30% — down from 44% prior cycle and prior high of 70%; first sub-40% reading across all calibration history. Trajectory is positive for the first time but sample size is small and the pattern is still structurally identical in form — only the frequency has dropped.",
+      "compound_command_overreach:RECURRING:STABLE — 03e5a89c-2: compound claude-ipc+ls fails success=false before decomposition; 03e5a89c-3: three distinct compound chains (wrappers+launchctl+lm+wc) all fail success=false before partial decomposition adopted; 41a73142-0: session-entry compound ls+echo chain fails success=false. Decompose-only-after-failure sequence structurally identical to all prior cycles; no pre-decomposition behavior observed in any confirmed instance.",
+      "hook_bypass_for_convenience:RECURRING:STABLE — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts; guard restored via trash only after all edits complete. Fourth confirmed instance (prior: 2026-06-12 x1, 2026-06-13 x2). Trigger condition (consecutive Edit failures), mechanism (touch .no-*-guard), and late-restoration behavior structurally identical across all four instances. Correct response (re-read file, identify conflict, resolve without guard disable) was never attempted in any confirmed instance.",
+      "monitor_tool_misuse_for_syntax_check:RECURRING — 03e5a89c-4: Monitor invoked as polling loop ('until bash -n bin/imagine && bash -n bin/q; do sleep 5; done') for trivial synchronous syntax check; fails success=false. Was flagged NEW in 2026-06-16 calibration cycle for identical invocation pattern; now confirmed RECURRING. Monitor is designed for event-streaming from long-running background processes, not polling synchronous shell commands.",
+      "declared_ready_without_verification:RECURRING:STABLE — 03e5a89c-5: input 'tested verification checklist' (44 chars, terse); only 3 tool calls (TaskUpdate + 2 Edits, zero Bash execution, zero output observation); outcome Corrected. Structurally identical to all prior confirmed instances. [declared-ready] mistake-pattern tag matches.",
+      "re_edit_thrash:RECURRING:STABLE — e25e3b92-5: 5+ Edit failures on create-upload.md; mid-thrash Read executed at first failure (marginal improvement vs prior cycles where re-read never occurred during thrash); python3 inline splice still adopted as exit mechanism rather than resolving edit conflict directly. 41a73142-1: 4 Edit failures on render.ts before hook bypass adopted as workaround rather than re-read. Two-unit-per-cycle occurrence consistent with prior cycle peaks; no improvement in detection-and-resolution behavior."
+    ],
+    "calibration_score": 0.21,
+    "cross_references": [
+      "03e5a89c-36: potential violation of dream insight re terse signals and git push — input 'update docus others everything' (80 chars) is a terse continuation; the unit includes 'git push -q origin main' with no explicit 'push'/'ship'/'commit' keyword in the input; dream insight rule states 'Never interpret a terse continuation message as git push/commit approval — require the word push, commit, or ship'. Outcome Accepted, but the push may have been implicitly authorized by prior session context not visible in this unit. Flag for clarification rather than confirmed violation.",
+      "03e5a89c-5: directly confirms dream insight #1 failure mode — terse user input ('tested verification checklist', 44 chars) was treated as autonomous-execute confirmation that verification was complete, with no actual code execution performed; the [declared-ready] pattern is structurally the same ambiguity the dream insight describes for git push, applied to the verification boundary instead.",
+      "41a73142-1 and e25e3b92-5: neither dream insight covers re_edit_thrash or hook_bypass_for_convenience patterns; no cross-reference applicable; these patterns are orthogonal to the terse-signal and hallucination insights synthesized in the wake cycles."
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "hook_bypass_for_convenience has 4 confirmed instances with zero variation in trigger or resolution — spec-level prohibition in rules/shell.md demonstrably insufficient; a PreToolUse hook blocking 'touch ~/.claude/.no-*-guard' when the immediately prior N tool calls include Edit failures on the same file is the only unexhausted enforcement mechanism.",
+      "monitor_tool_misuse_for_syntax_check is now RECURRING after 2 confirmed instances; a PostToolUse hook on Monitor calls that contain sleep-loop polling patterns and fail success=false would provide mechanical signal; alternatively, a session-start hinter listing valid Monitor use cases (long-running background process streams) vs invalid (synchronous syntax checks) may reduce incidence.",
+      "declared_ready_without_verification continues despite the mechanical declared-ready-stop hook; review whether the hook fires correctly on units where terse user input signals 'verification done' without any Bash execution in the same unit — the 03e5a89c-5 instance had zero execution calls, suggesting the hook may not be triggering on task-completion Edit sequences that follow a terse continuation input.",
+      "shell_tool_preference_violations show a first-ever sub-40% rate this cycle (30% vs prior 44%). Deprioritizing new fix recommendations per improvement signal, but note: the sed-instead-of-Read sub-variant (03e5a89c-27, e25e3b92-5) is now the dominant form rather than ls-via-Bash; the improvement may reflect ls-via-Bash declining while sed-instead-of-Read remains stable — track sub-variant rates separately next cycle.",
+      "compound_command_overreach and re_edit_thrash both stable with no improvement trajectory and no unexhausted enforcement mechanism identified; continue monitoring but no new recommendation beyond existing proposals."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      5424367
+    ],
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      9251119
+    ],
+    [
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      1345331
+    ],
+    [
+      "af81c846-6ce1-434a-a530-812af2f62602",
+      1274181
+    ],
+    [
+      "9b9867c9-1a97-49f9-85a5-910ebe67ec91",
+      721030
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      13768534
+    ],
+    [
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      16557321
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      11402661
+    ],
+    [
+      "a82c8262-c546-4de5-857b-307c9217f6fe",
+      3830345
+    ],
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      3978467
+    ]
+  ],
+  "timestamp": "2026-06-17T17:08:14.655374Z",
+  "tokens_used": 25498,
+  "units_analyzed": 20,
+  "units_total": 75
+}

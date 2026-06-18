@@ -1,10 +1,11 @@
 ---
 name: cogitate
 description: >
-  Receives a user query or direction, interprets intent, refines context,
-  researches online or from local topic files, and writes a structured dated
-  response to ~/Documents/Claude/Topics/ — maintaining _index.claude.md,
-  _insights.claude.md, and a growing library of topic-specific templates.
+  Use when the user wants to research a topic and keep a durable, growing note
+  on it — answers a query and files a dated structured response under
+  ~/Documents/Claude/Topics/, maintaining _index.claude.md, _insights.claude.md,
+  and topic-specific templates. For heavy multi-source fact-checked reports,
+  route to /deep-research instead.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch, Agent
 argument-hint: "[quickly] <query or direction>"
 user-invokable: true
@@ -48,7 +49,9 @@ If it does not exist yet, continue without it.
 **Modes:**
 - **Normal** (default) — ask 1–2 targeted questions if the query is genuinely ambiguous
 - **Quick** — state all assumptions upfront, proceed without waiting for confirmation
-- **Deep** — triggered automatically when broad research or data analysis is needed; spins up a sub-agent
+- **Deep** — triggered automatically when broad multi-source research or
+  fact-checking is needed; delegates to the `/deep-research` skill rather than
+  running cogitate's own researcher (see Phase 2.2)
 
 ---
 
@@ -159,19 +162,19 @@ Before researching, briefly state:
 **For local topics:** Glob `~/Documents/Claude/Topics/` for related files, Read the
 most relevant ones.
 
-**For deep mode:** spawn a sub-agent with `agents/deep-research.md` as instructions:
+**For deep mode:** delegate to the `/deep-research` skill — the shared harness
+for fan-out web search, source fetching, adversarial claim verification, and
+cited synthesis. Don't reimplement it here; cogitate's job is to file the result
+as a topic note, not to re-run a multi-source pipeline.
 
 ```
-Agent prompt:
-  Read ~/.claude/skills/cogitate/agents/deep-research.md for your instructions.
-  ---
-  Question: <refined question>
-  Context: <what you already know>
-  Scope: exhaustive
-  Format hint: structured markdown with Key Facts / Analysis / Uncertainties / Sources
+/deep-research <refined question>
 ```
 
-Wait for the sub-agent to return before proceeding to Phase 3.
+Pass the refined question and what you already know. When it returns its cited
+report, carry that into Phase 2.3 (Synthesise) and Phase 3 (file it as the topic
+response). The legacy `agents/deep-research.md` sub-agent is retained only as a
+fallback for when `/deep-research` is unavailable.
 
 ### 2.3 — Synthesise
 
@@ -326,3 +329,19 @@ Want an HTML report of this topic? Run /create-report on the topic file.
   only created for a genuinely new topic.
 - **Working dir scope:** never write outside `~/Documents/Claude/Topics/` except when
   chained skills (`/create-report`) write their own output.
+
+---
+
+## See Also
+
+- **`/deep-research`** — the multi-source fact-checking research harness. Deep mode
+  routes here (Phase 2.2) instead of re-running its own pipeline.
+- **`~/.claude/personas/web-researcher.md`** — the cited, adversarial open-web
+  research disposition. Adopt it when a query needs rigorous sourcing before it
+  becomes a cogitate topic note; cogitate then files the result.
+- **scratchpad MCP** (`mcp__scratchpad__sp_*`) — inter-skill working memory. Use it
+  to hand off intermediate research notes when chaining cogitate with
+  `/deep-research`, web-researcher, or `/create-report`, rather than passing large
+  blobs through the conversation.
+- **`/create-report`** — turns a substantive topic file into a standalone HTML
+  report (offered in Phase 4.3).

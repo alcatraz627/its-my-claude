@@ -103,3 +103,5 @@ These are NUDGES — surface them, let the user pick which to actually run.
 
 - `scripts/test/detect.sh` — the cache manager
 - `~/.claude/cache/test-patterns/` — cached entries
+- `rules/exercise-based-verification.md` + the declared-ready Stop hook (`scripts/hooks/declared-ready-stop.sh`) — running this skill *is* the run-before-done exercise; a passing `/test` produces the run signal that satisfies the gate before you claim "done"/"passing".
+- `/skeptical-review` — the companion quality gate: `/test` proves the code runs green, `/skeptical-review` checks whether it's actually right.

@@ -80,6 +80,12 @@ When adding a dispatch persona: include an `output:` field (e.g., `output: json`
 | Platform-Builder   | `platform-builder.md`   | working-mode | Architecture sequencing / reusable substrate — realize the vision without over-abstracting (strategic-lens triad) |
 | Pragmatist         | `pragmatist.md`         | working-mode | Value-per-effort triage / cheap-option-buying — DO-NOW/DEFER/KILL scorecards (strategic-lens triad)             |
 | Art Director       | `art-director.md`       | working-mode | Vague impulse → realized image: guided creative brief (TUI wizard), direction synthesis, prompt + pipeline design, generate→critique→refine for local image gen |
+| Task/Goal Planner  | `task-goal-planner.md`  | working-mode | Goal/ask/theme → bounded numbered plan that seeds the Task tool; separates fixed contract from open interior; draft→self-crit→revise→stop loop |
+| Technical Doc Writer | `technical-doc-writer.md` | working-mode | Authors a real-value technical doc end-to-end (classify→ground→draft→find-flag→rewrite→render-check); routes the final voice pass to the dispatch `doc-writer` |
+| Skeptical Reviewer | `skeptical-reviewer.md` | dispatch     | Harsh-but-focused code auditor; recurrence-weighted hunt list, re-anchor refinement loop, scoped `/magi` escalation; the reusable lens the `/skeptical-review` skill can dispatch |
+| Web Researcher     | `web-researcher.md`     | working-mode | General multi-source web research — search→verify(≥2 src)→close-gaps→cited synthesis; honest Uncertainties; defers heavy deliverables to `/deep-research`. NOT the game-theory `researcher` |
+
+The five personas authored/revised 2026-06-18 (planner, technical-doc-writer, skeptical-reviewer, web-researcher + the juror rewrite) each carry a **first-class refinement loop** (`identify → act → self-critique → revise → stop-rule`) and the **reflexivity rule** — the persona must not commit the slip it guards against (the reviewer cites its own file:line; the researcher cites every claim; the juror names a mechanical tell; the doc-writer runs find-and-flag on its own draft). Grounding: `~/.claude/assets/reports/20260618-persona-grounding-scan/`.
 
 The three strategic-lens personas (Closer / Platform-Builder / Pragmatist) are a complementary set for **scope / prioritization / "what-to-build-and-how-much"** decisions — their tension is the value. Designed to be dispatched together as MAGI voters; first run `~/.claude/assets/magi/20260609-1604-local-models-direction/`.
 
@@ -108,3 +114,20 @@ When a persona is active, Claude should:
 2. Calibrate depth to the appropriate level
 3. Produce output matching that level's expectations
 4. Stay within the persona's domain — hand off to another persona if the task shifts
+
+## Logging persona usage (efficacy trail)
+
+Every persona invocation should leave a residue event so the efficacy of each persona is
+reviewable over time. Dispatch personas log mechanically from their dispatch script/skill
+(juror, skeptical-reviewer). **Working-mode personas log by convention** — when you finish
+working under a persona, record it:
+
+```bash
+bash ~/.claude/scripts/persona-log.sh record <persona> --mode adopted --depth L2 \
+  --task "<1-line>" --outcome accepted|revised|discarded --loop converged|partial \
+  --corrections <N> --note "<what worked / what the persona missed>"
+```
+
+Review with `persona-log.sh summary` (per-persona outcome/loop/correction distributions).
+Full design — the activation trigger, the dispatch-vs-working-mode split, the nudge — is in
+[`features/persona-activation.md`](../features/persona-activation.md).

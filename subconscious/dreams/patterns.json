@@ -4620,6 +4620,39 @@
     ]
   },
   {
+    "id": "8b87806a-2797-4205-99f9-09b432e63afe",
+    "pattern": "When using the atone recording tool to log mistakes with S3 severity, the RCA file must begin with '---' YAML frontmatter on line 1 or the add command exits with error 2 and the event is never recorded — the failure is silent from the agent's perspective until the stop-hook reports it.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "tool-use",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "af81c846-6ce1-434a-a530-812af2f62602",
+      "9b9867c9-1a97-49f9-85a5-910ebe67ec91",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "a82c8262-c546-4de5-857b-307c9217f6fe",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-17T17:04:47.577262+00:00",
+    "last_seen": "2026-06-17T17:04:47.577262+00:00",
+    "occurrence_history": [
+      "2026-06-17T17:04:47.577262+00:00"
+    ]
+  },
+  {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
     "pattern": "Git worktree operations caused accidental loss of unstaged changes, requiring recovery - worktree switching must always check for and preserve unstaged work first",
     "valence": "negative",
@@ -8545,6 +8578,69 @@
     ]
   },
   {
+    "id": "05f3faa7-79bd-4d90-a0bf-8fe71c13c870",
+    "pattern": "Documentation written in a product-marketing voice ('Why this page matters', 'flowery' language, hyperbolic framing) is explicitly rejected; the user expects technical docs to be formal, direct, and calibrated in tone to the content's severity — not aspirational or promotional.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "af81c846-6ce1-434a-a530-812af2f62602",
+      "9b9867c9-1a97-49f9-85a5-910ebe67ec91",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "a82c8262-c546-4de5-857b-307c9217f6fe",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-17T17:04:47.577262+00:00",
+    "last_seen": "2026-06-17T17:04:47.577262+00:00",
+    "occurrence_history": [
+      "2026-06-17T17:04:47.577262+00:00"
+    ]
+  },
+  {
+    "id": "ba9296d3-0870-4456-a584-3b72cdb47f9a",
+    "pattern": "Internal investigation doubts, uncertainty markers, or agent-analysis caveats must never appear verbatim in user-facing documentation; docs must use neutral, confident tone even when the underlying reality is ambiguous.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      "1a008c39-1b0a-40d6-9406-700e5947427f"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-18T00:38:06.338091+00:00",
+    "last_seen": "2026-06-18T00:38:06.338091+00:00",
+    "occurrence_history": [
+      "2026-06-18T00:38:06.338091+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -11647,6 +11743,69 @@
     ]
   },
   {
+    "id": "79cf26d2-7486-483c-9264-3dab2b2e1c39",
+    "pattern": "Caching the availability or warm/cold status of a locally-controlled service (e.g., a model server) with a TTL produces stale UI state when the user can toggle that state via an out-of-band command; live-polling the status endpoint is preferred over any TTL cache for externally-mutable liveness signals.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "architecture",
+    "source_sessions": [
+      "03e5a89c-05ab-4fdd-8161-dd408424034a",
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "af81c846-6ce1-434a-a530-812af2f62602",
+      "9b9867c9-1a97-49f9-85a5-910ebe67ec91",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "a82c8262-c546-4de5-857b-307c9217f6fe",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-17T17:04:47.577262+00:00",
+    "last_seen": "2026-06-17T17:04:47.577262+00:00",
+    "occurrence_history": [
+      "2026-06-17T17:04:47.577262+00:00"
+    ]
+  },
+  {
+    "id": "277d3794-8405-43c4-8d2c-daeac6af7bb7",
+    "pattern": "When the user explicitly says to hand-roll a complex component, the agent must plan it first and review against existing similar implementations before writing any code — one-shotting is not acceptable.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      "1a008c39-1b0a-40d6-9406-700e5947427f"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-18T00:38:06.338091+00:00",
+    "last_seen": "2026-06-18T00:38:06.338091+00:00",
+    "occurrence_history": [
+      "2026-06-18T00:38:06.338091+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13144,6 +13303,36 @@
     ]
   },
   {
+    "id": "7b7c8dd3-4d9f-49e8-88e2-da8efb13d7ab",
+    "pattern": "Technical documentation must be formal, direct, and simple; flowery or marketing-style language ('why this matters', 'desperate' framing, show-off phrasing) is a recurring violation across multiple doc-writing sessions.",
+    "valence": "negative",
+    "confidence": 0.87,
+    "category": "user-preference",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      "1a008c39-1b0a-40d6-9406-700e5947427f"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-18T00:38:06.338091+00:00",
+    "last_seen": "2026-06-18T00:38:06.338091+00:00",
+    "occurrence_history": [
+      "2026-06-18T00:38:06.338091+00:00"
+    ]
+  },
+  {
     "id": "e0efbf93-3db5-4ba7-b7b5-89640905ddd3",
     "pattern": "Data pipeline work involves scraping, transforming, and upserting product data with attributes, descriptions, and images",
     "valence": "neutral",
@@ -13872,145 +14061,6 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T08:21:44.107444+00:00",
     "last_seen": "2026-04-15T08:21:44.107444+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "8866a042-d0e5-4158-a55e-0abdd4b993ca",
-    "pattern": "Session continuation is expensive: each '/catchup' or 'continued from' segment burns 18-70 tool calls just to restore context, often exceeding the tool cost of the actual work that follows",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "41f2bbe0-6c49-41c5-a2fe-d0c8cc0421d5",
-      "c5567ad1-1808-41c9-a252-d7c624c3a332",
-      "8e2acec8-b9eb-4c96-a4aa-ffdb1f3fc240"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T10:02:55.385703+00:00",
-    "last_seen": "2026-04-15T10:02:55.385703+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "9d97e15e-c020-4b0d-8f80-35c3b8878f40",
-    "pattern": "Dashboard UI work requires screenshot verification after each change; visual diffs catch regressions text diffs miss",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "41f2bbe0-6c49-41c5-a2fe-d0c8cc0421d5",
-      "0e2029ab-4482-4096-938b-b0a1a3016013",
-      "03620216-15b3-433f-8309-da131cae0df5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T12:11:40.733270+00:00",
-    "last_seen": "2026-04-15T12:11:40.733270+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f44a2e90-e4df-4ff2-a2d7-9320f1ff34ef",
-    "pattern": "Multi-session complex tasks benefit from frequent /core-dump and /catchup checkpoints — sessions with 40-70 tool calls across many continuations show high drift risk without explicit checkpointing",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "41f2bbe0-6c49-41c5-a2fe-d0c8cc0421d5",
-      "a9d1393c-1c6e-4df5-8cd2-cb6481808323",
-      "6632951f-599c-4e98-a605-6649b146dc2b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T12:30:40.205186+00:00",
-    "last_seen": "2026-04-15T12:30:40.205186+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f5252780-762e-4073-b3b8-f8b4f7100a25",
-    "pattern": "Sessions with high tool counts (40-70 tools) are common for this user's dashboard work; context compaction is expected and planned for",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "41f2bbe0-6c49-41c5-a2fe-d0c8cc0421d5",
-      "7c873488-a479-4458-a839-049dc0c8b4b0",
-      "6fda69f7-51c0-4793-8c01-14756242631a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:20:18.468980+00:00",
-    "last_seen": "2026-04-15T13:20:18.468980+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "60a95f3f-1c37-4093-bdc0-cd7efa86035a",
-    "pattern": "Dashboard UI debugging involves iterative screenshot-verify cycles via browser automation tools",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:22:22.725950+00:00",
-    "last_seen": "2026-04-15T13:22:22.725950+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "40b56589-c396-4220-a32c-dba316cb90c3",
-    "pattern": "pm2 process management used for dream dashboard services; stopping/restarting instances is a common workflow step",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:22:22.725950+00:00",
-    "last_seen": "2026-04-15T13:22:22.725950+00:00",
     "occurrence_history": []
   }
 ]

@@ -103,6 +103,7 @@ When generating HTML (via `/create-report`, by hand, or in a skill), if a snippe
 |-------|---------|------|
 | Dark/light toggle button | MANDATORY — see top of file | inline above |
 | Searchable data dashboard | Summary cards + live text filter + click-to-expand rows with nested sub-entity detail tables; self-contained, dark/light persists. For "counts at a glance + drill into specifics" over entity→sub-entities→detail data. Adapt `cards()`/`row()`/detail render + the summary grid columns. | `conventions/html-assets/data-dashboard.html` |
+| Color-palette picker | Per-group color chooser: a full design-system palette in `<optgroup>` dropdowns (header + body per group), live mock preview, auto white/dark header text by WCAG contrast (reddens below 4.5:1), and a copy-paste summary of the picks. For letting a human dial in colors before you hard-code them. `.build.py` regenerates the HTML from a palette dict — edit the `TW` map / `COLS` / `GROUPS` for a different palette or preview shape. | `conventions/html-assets/color-palette-picker.{html,build.py}` |
 | _(add entries as they're promoted)_ | | |
 
 When the index grows past ~8 rows, break snippets out to their own file per category (`buttons.html`, `tables.html`, `modals.html`, etc.) and keep this table as the directory.

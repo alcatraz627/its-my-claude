@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 # auto-continue-stop.sh — Stop hook for opt-in, per-session error recovery.
 #
+# KNOWN-INEFFECTIVE FOR API-ERROR ABORTS. Verified 2026-06-18 (48h transcripts):
+# a turn that dies on a transient 429 emits NO Stop event — 50/51 such errors had
+# no Stop before the user's manual re-prompt (all sessions logged other Stops, so
+# not a logging gap). This hook's surface never fires on the case it targets, so
+# enabling it would not have recovered any of the observed errors. It can still
+# re-drive a turn that ends cleanly-but-incomplete after a recovered error; it
+# cannot catch the abort itself. See
+# assets/reports/20260618-api-error-48h-analysis/findings.md.
+#
 # When a session the user enabled (via auto-continue.sh on) ends a turn that was
 # cut short by a TRANSIENT API error (rate limit / 5xx / overloaded / timeout)
 # that Claude Code did not recover from, this waits a cooldown and tells the

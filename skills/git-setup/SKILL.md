@@ -234,6 +234,8 @@ If `gh` is not authenticated, instruct the user to run `! gh auth login`.
 3. If remote: `git remote -v` — should show the GitHub URL
 4. Print the final file tree of generated files
 
+> Next step for builders: before the first *feature* commit, run `/skeptical-review` and `/test` (exercise-based-verification) — a clean scaffold is not a working feature.
+
 ---
 
 ## Subcommand: `health`

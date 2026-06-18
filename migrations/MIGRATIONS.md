@@ -62,6 +62,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0019 | Fable-run gcc integration — verification enforcement (declared-ready + rg-replace hooks) + paste-ready canon | ✅ | 2026-06-15 | 2026-06-15 | [0019-fable-run-gcc-integration.md](0019-fable-run-gcc-integration.md) |
 | 0020 | MAGI conformance gate — enforce full-mode voting at Phase-11 finalize (A1 voting gate + hygiene checks) | ✅ | 2026-06-17 | 2026-06-17 | [0020-magi-conformance-gate.md](0020-magi-conformance-gate.md) |
 | 0021 | MAGI setup-independence — evidence partitioning + pre-dispatch gate (D1/D5/D-prereq) | ✅ | 2026-06-17 | 2026-06-17 | [0021-magi-setup-independence.md](0021-magi-setup-independence.md) |
+| 0022 | Persona activation + efficacy logging — persona-log.sh, persona-suggest/persona-log-nudge hooks, dispatch wiring | ✅ | 2026-06-18 | 2026-06-18 | [0022-persona-activation-logging.md](0022-persona-activation-logging.md) |
 
 ---
 

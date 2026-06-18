@@ -40,6 +40,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-101251-0c"
   },
   {
+    "id": "trig-dropped-existing-feature-during-rewrite",
+    "from_slug": "dropped-existing-feature-during-rewrite",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Silently dropped the activity-ribbon feature during a data-first rewrite",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260617-114343-a9"
+  },
+  {
     "id": "trig-infra-before-grep",
     "from_slug": "infra-before-grep",
     "from_source": "atone",
@@ -58,6 +68,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-144226-4d"
+  },
+  {
+    "id": "trig-literal-request-over-intent",
+    "from_slug": "literal-request-over-intent",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Implemented literal UI request wording instead of modeling its intent",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260617-121727-06"
   },
   {
     "id": "trig-mandatory-doc-guidelines-not-loaded-before-authoring",
@@ -83,7 +103,7 @@
     "id": "trig-propagating-legacy-inline-imports-in-python-backend",
     "from_slug": "propagating-legacy-inline-imports-in-python-backend",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Propagated legacy lazy-import pattern across 4 sites despite standing rule",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -168,16 +188,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#aff-20260529-115830-e9"
-  },
-  {
-    "id": "trig-intelligent-disobedience-over-sycophancy",
-    "from_slug": "intelligent-disobedience-over-sycophancy",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Push back on a default assumption when evidence supports a smarter path",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260526-205902-f6"
   },
   {
     "id": "trig-scope-convention-change-to-one-consumer",

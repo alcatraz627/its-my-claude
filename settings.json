@@ -333,6 +333,15 @@
             "command": "~/.claude/scripts/hooks/no-task-nudge.sh"
           }
         ]
+      },
+      {
+        "matcher": "Read|Bash|Edit|Write|MultiEdit|Grep|Glob|Task|TaskCreate|TaskUpdate|WebFetch|WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/persona-log-nudge.sh"
+          }
+        ]
       }
     ],
     "PreCompact": [
@@ -814,6 +823,22 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/ctx-signal-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/api-recovery-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/persona-suggest.sh"
           }
         ]
       },

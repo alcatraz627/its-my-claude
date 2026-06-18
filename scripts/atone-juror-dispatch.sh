@@ -140,4 +140,16 @@ esac
 }
 printf '%s\n' "$verdict" > "$out"
 echo "VERDICT_PATH=$out" >&2
+
+# Persona usage residue — best-effort. MUST NOT write to stdout (the verdict is the
+# only thing on stdout, parsed by the caller); errors are swallowed so a logging
+# failure can never break the gate. outcome is 'unknown' because whether the verdict
+# is later overruled is a downstream signal this script doesn't see.
+if [ -x "$HOME/.claude/scripts/persona-log.sh" ]; then
+  _vc=$(printf '%s' "$verdict" | jq -r '.confidence // ""' 2>/dev/null)
+  "$HOME/.claude/scripts/persona-log.sh" record juror --mode dispatched \
+    --session "$session_id" --task "atone:${slug}" --outcome unknown \
+    --note "verdict=${v}${_vc:+ conf=${_vc}}" >/dev/null 2>&1 || true
+fi
+
 printf '%s\n' "$verdict"

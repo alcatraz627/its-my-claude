@@ -1,7 +1,7 @@
 ---
 name: web-design
 description: Reviews, generates, and systematizes web UI designs — screenshot-based critique with actionable CSS fixes, design token extraction, and page layout generation with experienced defaults.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, mcp__plugin_chrome-devtools-mcp_chrome-devtools__*
 user-invokable: true
 argument-hint: "<review | system | page <type>> [options]"
 ---
@@ -49,17 +49,22 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Experienced Defaults — MANDATORY
+## Experienced Defaults
 
-These defaults are applied to ALL generated UI unless the user explicitly overrides them.
-They represent battle-tested choices that prevent the most common "it looks weird" complaints.
+These are the fallback choices for generated UI — sensible starting points that prevent the
+most common "it looks weird" complaints. Apply them **unless the project's own design tokens or
+stack already specify otherwise.** A project with its own font stack, spacing scale, or component
+library wins: read its tokens first (the `system` subcommand does this) and follow them. These
+defaults fill the gaps the project leaves open; they do not override decisions the project has
+already made. When in doubt about whether something is a project decision or an accident, match
+the surrounding code rather than reaching for the default here.
 
 ### Typography
 - **Font stack:** `Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif`
 - **Code font:** `'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, monospace`
 - **Scale:** Use a consistent type scale. Recommended: 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 48px
 - **Body text:** 16px, line-height 1.5-1.6 for reading content; 14px, 1.4 for dense UI
-- **Heading hierarchy:** Every page must have exactly one visual H1, with H2-H4 clearly differentiated by size AND weight (not just size)
+- **Heading hierarchy:** Give each page exactly one visual H1, with H2-H4 differentiated by size and weight (not size alone)
 - **Font loading:** Always include `font-display: swap` to prevent FOIT
 
 ### Spacing
@@ -70,13 +75,13 @@ They represent battle-tested choices that prevent the most common "it looks weir
 - **Never:** arbitrary values like 13px, 17px, 37px — they signal an unplanned layout
 
 ### Color
-- **Contrast:** All text must meet WCAG AA (4.5:1 for body text, 3:1 for large text / UI components)
+- **Contrast:** Text should meet WCAG AA (4.5:1 for body text, 3:1 for large text / UI components). Don't assert this from looking at the colors — measure it. When a live page is available, drive the `chrome-devtools` MCP to read computed contrast ratios from the rendered DOM (it surfaces the same AA/AAA pass/fail Chrome DevTools' contrast picker shows), or run a Lighthouse accessibility audit through it. A measured ratio is a fact; an eyeballed one is a guess that ships inaccessible text.
 - **Gray scale:** Use a consistent neutral palette (slate, zinc, or gray — pick one, never mix)
 - **Semantic colors:** success (green), warning (amber), error (red), info (blue) — with matching lighter tints for backgrounds
 - **Dark mode:** If requested, use CSS custom properties from the start. Never hardcode colors on elements.
 
 ### Interactive Elements
-- **Focus states:** Every button, link, and input MUST have a visible focus indicator (outline or ring, never just color change)
+- **Focus states:** Give every button, link, and input a visible focus indicator (outline or ring, not color change alone)
 - **Hover states:** Buttons need hover. Links need hover. Don't add hover to everything (no hover on static text or labels).
 - **Click targets:** Minimum 44x44px for touch, 32x32px for mouse-only
 - **Disabled states:** Reduced opacity (0.5-0.6) + `cursor: not-allowed` + `pointer-events: none`
@@ -117,6 +122,12 @@ Score the UI on 6 dimensions (1-10 each):
 | **Color & Contrast** | Does it meet WCAG AA? Are semantic colors used correctly? Is the palette cohesive? |
 | **Interactive States** | Do buttons have hover/focus? Are disabled states clear? Are click targets adequate? |
 | **Responsive Readiness** | Does the layout adapt or will it break on mobile? Are images/tables handled? |
+
+For a live URL (not a static screenshot), measure the Color & Contrast score rather than
+estimating it: drive the `chrome-devtools` MCP against the rendered page to read computed
+contrast ratios, or run its Lighthouse accessibility audit. Report measured ratios with the
+elements that fail. From a flat screenshot you can only flag *suspected* contrast problems —
+say so, and don't claim AA compliance you didn't measure.
 
 ### Phase 3 — Report
 
@@ -280,4 +291,13 @@ If a dev server is running:
 - The `system` subcommand proposes a token file but does NOT auto-replace values in existing code — it prints a migration plan the user can execute
 - For visual regression testing (automated before/after screenshot comparison), use the separate `/visual-regression` skill
 - Pairs well with: `/designer-reviewer` (terminal aesthetic), `frontend-design` plugin (general frontend), `/visual-regression` (automated diffing)
-- The Experienced Defaults section is the single source of truth for UI generation quality — all page generation and reviews use these as the baseline
+
+### See Also — personas that drive this skill
+
+- `~/.claude/personas/art-director.md` — the visual-direction working mode. Adopt it when the
+  task is "make this look right" rather than "review this UI"; it turns a vague aesthetic
+  impulse into a concrete brief, then reaches for `web-design page`/`review` to realize it.
+- `~/.claude/personas/fullstack-engineer.md` — the app-and-dashboard builder. It calls
+  `web-design` for layout generation and review as part of shipping a frontend, alongside
+  `/designer-reviewer`, the `chrome-devtools` MCP, and `/skeptical-review` before declaring done.
+- The Experienced Defaults section is the baseline for UI generation and review — applied where the project hasn't already chosen, and yielding to the project's own tokens/stack where it has

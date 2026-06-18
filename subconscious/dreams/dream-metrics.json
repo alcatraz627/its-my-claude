@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-17T08:10:05Z",
-  "events_analyzed": 57955,
-  "sessions_analyzed": 173,
+  "generated_at": "2026-06-18T07:40:00Z",
+  "events_analyzed": 61325,
+  "sessions_analyzed": 180,
   "session_quality": {
     "average_score": 68.5,
     "top_sessions": [
@@ -51,6 +51,21 @@
         "start": "2026-05-27T01:37:45Z"
       },
       {
+        "session_id": "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+        "project": "backend",
+        "score": 80.0,
+        "tool_count": 4,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.5,
+        "efficiency": 4,
+        "prompts": 0,
+        "compactions": 0,
+        "duration_min": 580.6,
+        "completed": true,
+        "start": "2026-06-17T21:09:02Z"
+      },
+      {
         "session_id": "8a3096b2-fd52-4c34-99b3-b94668413c78",
         "project": "tmp",
         "score": 78.8,
@@ -64,21 +79,6 @@
         "duration_min": 323.5,
         "completed": true,
         "start": "2026-05-18T03:51:02Z"
-      },
-      {
-        "session_id": "5fd3633e-445a-4ee7-854d-f3d6cf50aef6",
-        "project": "tmp",
-        "score": 78.8,
-        "tool_count": 3,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 1.0,
-        "efficiency": 3.0,
-        "prompts": 1,
-        "compactions": 0,
-        "duration_min": 5.0,
-        "completed": true,
-        "start": "2026-05-19T10:33:34Z"
       }
     ],
     "bottom_sessions": [
@@ -172,53 +172,53 @@
   "topic_drift": {
     "primary_focus": ".claude",
     "recent_projects": {
-      "tmp": 2,
-      "enhancement-product": 2,
-      ".claude": 3,
+      ".claude": 4,
+      "landing-app": 2,
       "two-enhancement-product": 1,
-      "local-models": 1,
-      "frontend": 1
+      "backend": 1,
+      "sys-monitor": 1,
+      "docs": 1
     },
-    "drift_rate": 0.702,
-    "total_switches": 120,
+    "drift_rate": 0.708,
+    "total_switches": 126,
     "recent_switches": [
       {
-        "ts": "2026-06-15T12:51:15Z",
-        "from": "enhancement-product",
-        "to": "tmp"
+        "ts": "2026-06-17T21:09:02Z",
+        "from": ".claude",
+        "to": "backend"
       },
       {
-        "ts": "2026-06-15T15:20:01Z",
-        "from": "tmp",
+        "ts": "2026-06-17T21:10:51Z",
+        "from": "backend",
+        "to": "sys-monitor"
+      },
+      {
+        "ts": "2026-06-18T06:24:04Z",
+        "from": "sys-monitor",
         "to": ".claude"
       },
       {
-        "ts": "2026-06-16T10:46:41Z",
+        "ts": "2026-06-18T06:33:10Z",
         "from": ".claude",
-        "to": "local-models"
+        "to": "docs"
       },
       {
-        "ts": "2026-06-16T11:06:09Z",
-        "from": "local-models",
-        "to": "frontend"
-      },
-      {
-        "ts": "2026-06-16T14:26:56Z",
-        "from": "frontend",
+        "ts": "2026-06-18T06:40:29Z",
+        "from": "docs",
         "to": ".claude"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 5199,
-    "corrections": 1190,
-    "confirmations": 937,
-    "directives": 184,
-    "terse_messages": 425,
-    "correction_rate": 0.229,
-    "confirmation_rate": 0.18,
+    "total_prompts": 5377,
+    "corrections": 1214,
+    "confirmations": 987,
+    "directives": 190,
+    "terse_messages": 460,
+    "correction_rate": 0.226,
+    "confirmation_rate": 0.184,
     "directive_rate": 0.035,
-    "terse_rate": 0.082,
+    "terse_rate": 0.086,
     "style_label": "corrective"
   }
 }

@@ -70,48 +70,45 @@ rules. They also gate what counts as a violation.
 
 ## What gets touched, by tier
 
-The detector (`detect.py`) emits findings in three tiers. This skill never
-commits, so a human reviews every change before it lands. Lean toward applying
-rather than timid flag-only: over-removing a comment is recoverable in review.
-Still, do not be sloppy. Keep substance, drop noise.
+The detector (`detect.py`) emits findings in three tiers, ordered by how much
+judgment the cleanup needs. This skill never commits, so a human reviews every
+change before it lands. Lean toward applying rather than timid flag-only:
+over-removing a comment is recoverable in review. Still, keep substance, drop
+noise.
 
 ### tier1_strip (mechanical, high confidence)
 
-Apply these on confirmation. Strip the offending fragment, keep any human
-substance on the line.
+Heuristic: the fragment is provenance or scaffolding, not meaning. Strip it on
+confirmation, keeping any human substance on the line. If the line was *only*
+the fragment, delete the line. Covers `claude-tag` (`[claude@2026-05-07]`),
+`plan-ref` (`Phase 2.B8`, `Track H`, `Round 3 #1.2`), `archeology` (`Pre-fix`,
+`used to be`, `See PR #1234`), and `decorative-banner` (`// ─────`).
 
-- `claude-tag`: `[claude@2026-05-07]` and similar. Remove the tag, keep the
-  sentence if it is useful human doc. If the line was only the tag, delete it.
-- `plan-ref`: `Phase 2.B8`, `Tier 1`, `Track H`, `Round 3 #1.2`. Remove the
-  reference. Keep the surrounding meaning if any.
-- `archeology`: `Pre-fix`, `Post-fix`, `used to be`, `See PR #1234`,
-  `as discussed on`. Delete. History lives in git and PRs, not source.
-- `decorative-banner`: `// ─────`. Delete a pure rule line. For a labelled
-  banner (`// --- env loading ---`) keep the label as `// env loading`.
+```
+// [claude@2026-05-07] retry uses backoff per Phase 2.B8   ->   // retry uses backoff
+// ────────────────────────────────                       ->   [delete]
+// --- env loading ---                                     ->   // env loading
+```
 
 ### tier2_voice (AI-tell, fix needs judgment)
 
-Rewrite to the voice rules. Read the line in context first.
+Heuristic: the comment carries a real fact wrapped in AI-smell or bulk. Read it
+in context, then rewrite to the voice rules above, keeping the factual kernel.
+`detect.py` flags only `em-dash` and `emoji` mechanically; you find the essays
+(>8 lines, cut to the load-bearing why and link the rest) and restate-the-code
+comments (delete unless they hold a non-obvious constraint) by reading the
+changed files.
 
-- `em-dash`: rephrase without the em dash. `a — b` becomes `a, b` or `a (b)`
-  or two sentences.
-- `emoji`: drop the emoji, keep the words.
-- Essays (>8 lines): cut to the load-bearing why, move the rest to a linked
-  doc. Find or confirm the doc target before deleting prose.
-- Restate-the-code comments: delete if the code is self evident. Keep only a
-  non-obvious constraint or invariant.
-
-`detect.py` only catches em-dash and emoji mechanically. You find the essays
-and restate-the-code comments by reading the changed files. If the repo has a
-comment rubric, follow its before/after examples.
+```
+// resolve at call time — per-customer scoping  ->  // resolve at call time (per-customer scoping)
+// 🚀 fast path for warm cache                  ->  // fast path for warm cache
+```
 
 ### tier3_flag (report only, never auto-edit)
 
-List these with file:line. Do not touch them.
-
-- `todo`: TODO/FIXME. Might still be live. The author decides.
-- `possibly-stale`: "currently", "for now". Could be true. Cannot verify
-  mechanically.
+Heuristic: only the author knows if it is still true. List with `file:line` and
+leave it. Covers `todo` (TODO/FIXME, may be live) and `possibly-stale`
+(`currently`, `for now`, claims that could have drifted).
 
 ---
 
@@ -268,3 +265,18 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "cleanup-comments" /tmp/cle
 - The hard floor lives in `detect.py` (`PROTECTED`) so protected lines never
   reach the finding set. Enforce it again by hand in Phase 5 as defense in
   depth.
+
+---
+
+## See Also
+
+The voice rules in this skill are the operational floor; the canon below is
+where they come from and where the deeper rationale lives.
+
+- `~/.claude/rules/comments.md` — the humans-first canon this skill enforces:
+  comments for humans first, AI second, machines never; strip `[claude@]` tags
+  and plan refs; keep human and agent-note comments in separate blocks.
+- `~/.claude/doc-writing-guidelines.md` — the anti-AI-voice catalog (em dashes,
+  emojis, essays, marketing register) the tier2 rewrites draw on.
+- `~/.claude/personas/technical-doc-writer.md` — adopt when a comment essay
+  should graduate into an actual doc rather than be trimmed in place.

@@ -108,7 +108,7 @@ If the file doesn't exist, print available stacks and stop.
 target = <dir>/<name>
 ```
 
-- If `target` already exists and is non-empty: warn and stop. Never overwrite.
+- If `target` already exists and is non-empty: warn and stop, leaving the existing files untouched.
 - If `target` exists and is empty: proceed (common with `mkdir` + `/scaffold`).
 - Create `target` if it doesn't exist.
 
@@ -126,7 +126,7 @@ Each stack definition contains:
 
 ### Generation Rules
 
-- **Use the Write tool** for each file — never `echo >` or heredocs
+- **Use the Write tool** for each file rather than `echo >` or heredocs
 - **Create directories as needed** — `mkdir -p` before writing nested files
 - **Apply experienced defaults:**
   - TypeScript: strict mode, path aliases (`@/`)
@@ -135,9 +135,9 @@ Each stack definition contains:
   - Tailwind: content paths configured, default theme extensions
   - Python: pyproject.toml (not setup.py), ruff for linting, pytest for testing
   - Ports: frontend 30xx, backend 50xx (never 3000 or 5000)
-- **Never include secrets or credentials** — use `.env.example` with placeholder values
-- **Always create `.gitignore`** appropriate to the stack
-- **Always create `.env.example`** with documented placeholder values (never `.env`)
+- **Keep secrets and credentials out** — use `.env.example` with placeholder values, not real ones
+- **Include a `.gitignore`** appropriate to the stack
+- **Include a `.env.example`** with documented placeholder values, in place of a real `.env`
 
 ### File Order
 
@@ -201,14 +201,25 @@ Generate a `README.md` with:
 
 Use the project's actual file structure — do not use a generic template.
 
-### 4.3 Smoke Test
+### 4.3 Boot Test (run-and-observe, not type-check)
 
-Run a basic verification:
-- **Node.js:** `npx tsc --noEmit` (type check)
-- **Python:** `python3 -c "import <package>"` (import check)
-- **Static:** verify `index.html` exists and is valid
+A type-check or import-check confirms the code *parses*, not that the app *runs* —
+that is collect-not-run, and `rules/exercise-based-verification.md` flags it. Boot the
+scaffolded app once and read its actual startup output. Prefer `/run` (it detects the
+project type and start command); otherwise use the stack's run command directly.
 
-Report: `✓ Smoke test passed` or `✗ Smoke test failed: <reason>`
+- **Node server / Next.js / Express:** start it (`/run`, or `npm run dev`), wait for the
+  listening line, then `curl` the health route or the root URL and confirm a real response.
+  Stop the process after.
+- **CLI:** invoke the entrypoint with `--help` (or a no-op command) and confirm it prints.
+- **Python service:** start it (`/run`, or `uvicorn app.main:app`) and hit an endpoint; for a
+  pure package, run the example test (`pytest`), not a bare import.
+- **Static:** serve `index.html` (`/run`, or `python3 -m http.server <port>`) and fetch the
+  page; confirm it returns 200 with the expected title.
+
+Report `✓ Booted: <observed signal>` (the listening line, the HTTP status, the help output)
+or `✗ Boot failed: <reason>`. If the app genuinely can't be booted here (missing service,
+hardware), report `UNCONFIRMED — <reason>` rather than claiming it passed.
 
 ---
 
@@ -306,6 +317,17 @@ These are copied into the project and customized per-stack rather than symlinked
 - The `--minimal` flag skips: linting config, testing setup, CI config, Docker. It still creates the core project structure, package manifest, and source files.
 - Port assignment follows `~/.claude/dev-servers-guide.md` — frontend 30xx, backend 50xx. The last two digits are auto-assigned based on project name hash to avoid collisions.
 - Stack definitions are intentionally verbose (full file content) rather than using a template engine. This makes each stack self-contained and easy to audit or customize.
-- This skill creates files in a new directory — it never modifies existing projects. To add features to an existing project, use the stack's specific tools directly.
+- This skill creates files in a new directory; it leaves existing projects untouched. To add features to an existing project, use the stack's specific tools directly.
 - The monorepo stack creates a Turborepo structure with one `apps/web` (Next.js) and one `packages/ui` (shared components) as starting points.
 - Pairs with: `/git-setup` (repo init), `/readme` (docs), `/diagram` (architecture vis), `/add-mcp` (database server setup)
+
+---
+
+## See Also
+
+- `~/.claude/rules/exercise-based-verification.md` — why the boot test in Phase 4.3 runs the
+  app instead of type-checking it. A scaffold that only compiles is not a scaffold that boots.
+- `/test` — run the generated test suite for the new project once it's scaffolded. Phase 4.3
+  boots the app; `/test` exercises its tests.
+- `/skeptical-review` — review the generated code before relying on it. Scaffolded defaults are
+  templated, not audited; a fresh adversarial pass catches config drift and stale assumptions.

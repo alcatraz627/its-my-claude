@@ -1,0 +1,70 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18154,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.28268076076133547,
+    "unit_count": 59
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — violations in ~6 of 15 tool-using units (~40%): 41a73142-1 (ls-la Bash + find compound); afe26d7d-0 (cat heredoc Bash fails before Write fallback); e25e3b92-5 (sed-n 15,35p + cat USAGE.md | head-40 instead of Read); e25e3b92-6 (cat env.utils.ts | head-80; sed -n 60,140p next.config.mjs; sed -n 1,20p app-init.utils.ts fails success=false; sed -n 36,80p channels.py); e25e3b92-12 (sed -n 64,180p doc-writing-guidelines.md instead of Read with offset). Rate ~40% — within the 30-44% range of the prior two cycles; marginal-improvement trajectory stalled vs 2026-06-17 cycle reading of 30%.",
+      "compound_command_overreach:RECURRING:STABLE — 41a73142-0: session-entry compound (claude-ipc register + ls x3 + wal path check) fails success=false before decomposition; afe26d7d-0: cat heredoc + python3 compound fails success=false before Write fallback adopted. Decompose-only-after-failure sequence structurally identical across all prior cycles; no pre-decomposition behavior observed.",
+      "hook_bypass_for_convenience:RECURRING:STABLE — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts; restored via trash only after all edits complete. Fifth confirmed instance. Trigger condition (consecutive Edit failures on same target), mechanism, and late-restoration behavior structurally identical across all five instances. Re-read-and-resolve-without-guard-disable was never attempted in any confirmed instance.",
+      "re_edit_thrash:RECURRING:STABLE — e25e3b92-5: ~17 Edit calls on create-upload.md with multiple success=false failures; python3 inline splice adopted as exit mechanism rather than re-reading the target file. One-unit-per-cycle occurrence consistent with 2026-06-15 and 2026-06-16 cycles; below the two-unit peak of 2026-06-13.",
+      "rg_replace_flag_bundle:RECURRING:STABLE — e25e3b92-6: rg -rn SKIP_ENV_VARIABLES_CHECK treated as --replace flag bundle; output showed 'process.env.n'; self-caught from improbable identifier before any write; ATONE refiled. Self-catch rate 100% across all confirmed instances; prevention rate zero. Hook enforcement proposal prop-20260612-110331-da remains unimplemented across six sessions.",
+      "git_add_A_instead_of_specific_files:NEW — 41a73142-34: git add -A used in commit pipeline, violating rules/git.md ('prefer adding specific files by name rather than git add -A or git add .'). Single observed instance; unit was Accepted so no user correction. Low severity; first recorded instance in calibration history.",
+      "sed_probe_edit_via_bash_instead_of_write:NEW — 41a73142-34: sed -e substitution on probe-imgdim.js piped to probe-imgdim2.js to generate a probe variant rather than using Write. Bash-for-file-editing sub-variant of shell_tool_preference_violations occurring in a test/probe context rather than production code. Single instance; worth tracking as a variant surface."
+    ],
+    "calibration_score": 0.12,
+    "cross_references": [
+      "dream-insight-terse-git-approval (conf=0.72): unit 41a73142-25 input='proceed' (7 chars) triggered tsc+test+build+commit pipeline including a git commit. Dream rule requires 'push'/'commit'/'ship' explicitly for commit approval; 'proceed' does not satisfy that threshold. Unit was Accepted, suggesting user intent was unambiguous from context, but the pattern is a marginal boundary case that matches the insight's flagged failure mode. No correction received; monitor for recurrence.",
+      "dream-insight-data-hallucination (conf=0.65): afe26d7d-0 computed palette WCAG contrast ratios and perceived lightness values from a deterministic Python script with explicit numeric validation. No synthesized or fabricated values detected; data sourced from documented color specifications. Insight confirmed as non-violated in this unit."
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "shell_tool_preference_violations: Rate plateaued at ~40% after two cycles of marginal improvement from the 70% historical high. No new spec-level intervention is warranted — prior recommendations have been made and the only unexhausted mechanism is a PreToolUse hook blocking sed/cat-on-readable-files patterns. Deprioritize further spec recommendations; hook is the path.",
+      "rg_replace_flag_bundle: Hook enforcement (prop-20260612-110331-da) remains the only unexhausted mechanism after six confirmed instances with 100% self-catch and 0% prevention. The self-catch signal proves the agent can recognize the output pattern post-execution but cannot prevent the flag-bundle input pre-execution; a hook that rejects rg invocations containing -r without a following space is mechanically implementable and should be escalated.",
+      "hook_bypass_for_convenience: Five confirmed instances; correct response (re-read + resolve without disabling guard) has never been attempted in any instance. A PostToolUse hook detecting writes to ~/.claude/.no-*-guard paths could block or require justification at the action boundary rather than relying on agent self-restraint, which has proven zero-percent effective.",
+      "git_add_A: NEW pattern, single instance, no user correction. Log for next calibration cycle; no intervention warranted yet.",
+      "sed_probe_edit_via_bash: NEW pattern, single instance, probe context. Monitor whether this extends to production files before classifying."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      10551959
+    ],
+    [
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      180630
+    ],
+    [
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      3171102
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      16090129
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      15943775
+    ],
+    [
+      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
+      4263136
+    ],
+    [
+      "1a008c39-1b0a-40d6-9406-700e5947427f",
+      2829201
+    ]
+  ],
+  "timestamp": "2026-06-18T00:41:54.553249Z",
+  "tokens_used": 26333,
+  "units_analyzed": 15,
+  "units_total": 59
+}

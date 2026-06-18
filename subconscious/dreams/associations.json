@@ -4559,17 +4559,33 @@
     "auto_intention_id": null
   },
   {
-    "id": "304b932d-df1d-420a-933e-2ddde968c41f",
+    "id": "b445ea4a-a983-4573-807c-5802449905cd",
     "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
       "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "2ff536b4-f4b3-41b3-a3ae-bb588aad3e73"
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
     ],
-    "hypothesis": "The git-push-without-approval violation recurs because approval state is ephemeral context that doesn't survive the same compaction boundaries the user's session-continuity tooling was built to handle — core-dumps preserve task state but not authorization state, so post-compaction agents inherit the work but not the constraint.",
+    "hypothesis": "Terse continuation signals ('ahead', 'done', 'next') create an ambiguity trap where the agent interprets task-completion directives as implicit push approval, because both share the same surface form of short affirmative input.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Always treat terse user messages as continuation of the current coding task only — never interpret them as approval for git push, commit, or any action requiring fresh explicit confirmation, even when the terse message immediately follows completed work.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "6a451264-6e7b-4047-a96b-2cfc006e09cf",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "9a083747-313b-49ab-86ed-3d75731e07d5"
+    ],
+    "hypothesis": "Terse-input-means-execute and push-requires-explicit-approval create an asymmetric autonomy model: the user wants maximum autonomy on the work axis (keep coding, don't ask) but zero autonomy on the visibility axis (never push without asking) — and the agent repeatedly conflates 'keep going' energy with blanket permission for externally-visible actions.",
     "confidence": 0.72,
     "actionable": true,
-    "suggested_rule": "Always treat authorization state (push approval, deploy approval, send approval) as expired after any compaction or context reconstruction, even if a core-dump checkpoint references prior approval.",
+    "suggested_rule": "Always treat terse continuation signals ('ahead', 'next', 'done') as authorization to continue local work only — never extend them to actions that cross the local/external boundary (git push, API calls to shared services, messages to others).",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4586,22 +4602,6 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "8cd2f2bc-a3ff-4f11-8be9-7e57ad81d119",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-      "13526387-e655-41c3-a4e8-bbcca038e4c2"
-    ],
-    "hypothesis": "The user's terse continuation style ('ahead', 'next', 'done') trains the agent toward high-autonomy execution, which then bleeds across the internal-work/external-action boundary — the agent pattern-matches 'terse positive signal = proceed with everything' when the user means 'proceed with work, but externalization still requires a gate'.",
-    "confidence": 0.65,
-    "actionable": true,
-    "suggested_rule": "Always distinguish terse continuation signals as authorizing internal work only — never interpret them as approval for externalization actions (push, send, deploy, publish) regardless of how positive or emphatic the signal is.",
-    "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   }

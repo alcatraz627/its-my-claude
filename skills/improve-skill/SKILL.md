@@ -1,18 +1,20 @@
 ---
 name: improve-skill
-description: Audits one or more Claude Code skills by reading their SKILL.md, runtime notes, and code files — identifies stale descriptions, structural gaps, and recurring failures, applies approved improvements, then validates the result against defined criteria with a 0–100 score and re-improves if needed.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
+description: Audits one or more Claude Code skills by reading their SKILL.md, runtime notes, and code files — identifies stale descriptions, structural gaps, recurring failures, and Claude-consumption defects, applies approved improvements, then validates the result against defined criteria with a 0–100 score and re-improves if needed.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, mcp__inputs__pick_one, mcp__inputs__form, mcp__inputs__confirm
 user-invokable: true
 argument-hint: "[skill-name | skill-name,skill-name,... | all]"
 ---
 
 ## Brief
 
-Reads existing skill definitions alongside their runtime notes and the latest GUIDELINES, identifies what can be improved (stale description, recurring failure patterns, structural gaps), asks the user for any specific focus, then applies approved improvements directly to the skill files. After applying changes, validates the updated skill against defined criteria (from `## Validation Examples` or auto-generated), scores it 0–100, and offers to re-improve if the score is below threshold.
+Reads existing skill definitions alongside their runtime notes and the latest GUIDELINES, audits them against the Claude-consumption rubric (the Opus-4.8 house rules — caps, suppression-bar, altitude, cross-links), asks the user for any specific focus, then applies approved improvements directly to the skill files. After applying changes, validates the updated skill against defined criteria (from `## Validation Examples` or auto-generated), scores it 0–100, and offers to re-improve if the score is below threshold.
 
 # Improve Skill
 
-Audits and upgrades existing Claude Code skills. It reads what a skill _says_ it does, compares it against what actually _happened_ during past runs (from runtime notes), and finds the gaps — then closes them.
+Audits and upgrades existing Claude Code skills. It reads what a skill _says_ it does, compares it against what actually _happened_ during past runs (from runtime notes), and measures it against how Opus 4.8 actually consumes a SKILL.md — then closes the gaps.
+
+This is the **meta-skill that audits every other skill**, so it carries the Claude-consumption rubric itself. The canonical source for that rubric is `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` (the Opus-4.8 house rules). Phase 2 below operationalizes it; read the spec when you need the underlying evidence.
 
 **Works on:**
 
@@ -116,45 +118,44 @@ Read `.claude/skills/GUIDELINES.md` and extract:
 
 ## Phase 2 — Analysis
 
-For each skill, produce a structured analysis. **Do not write anything yet.**
+For each skill, produce a structured analysis. Do not write anything yet.
 
-### 2.1 — Description and argument-hint accuracy
+### 2.1 — Audit rubric
 
-Re-read what the skill actually does (from its workflow steps) versus what its frontmatter declares.
+Two lenses run together: **structural compliance** (does the skill have the required shape?) and **Claude-consumption** (does an Opus-4.8 agent read it the way the author intended?). The second lens is what makes this a meta-skill — every other audit skill needs it applied to itself.
 
-**`description` — flag if it:**
+For each check, record `pass` / `partial` / `fail` and a one-line note. Don't force a numeric sub-score yet — that's Phase 6's job.
 
-- Is vague ("helps the user", "assists with")
-- Omits the primary output artifact
-- Doesn't match the actual workflow (e.g., says it "generates a report" but the workflow just prints to terminal)
-- Is longer than ~2 sentences
-- Does not start with a verb ("Scans…", "Generates…", "Guides…", "Audits…")
+**Frontmatter and routing:**
 
-Draft an improved description if flagged (must start with a verb, name input + action + output, ≤ 2 sentences).
+- `description` starts with a verb, names input + action + output, ≤ 2 sentences. A `description` is what Claude reads to decide whether to invoke the skill — vague or capability-list phrasing ("helps the user", "frontend expert") routes worse than an action-oriented one ("Scans the diff and reports unsafe casts"). Flag if vague, omits the output artifact, or doesn't match the actual workflow.
+- `argument-hint` present, with `<required>` / `[optional]` bracket convention matching the actual arguments. Use `""` if the skill takes none.
+- `allowed-tools` matches the tools the workflow actually uses.
 
-**`argument-hint` — flag if it:**
+Draft an improved `description` / `argument-hint` for any flagged item.
 
-- Is missing from the frontmatter entirely
-- Uses wrong bracket convention: required args must be `<name>`, optional args must be `[name]`
-- Doesn't reflect the actual arguments the skill accepts (compare against `## Usage` section)
+**Claude-consumption (Opus-4.8 house rules — source: `claude-consumption-spec.md`):**
 
-Draft a corrected `argument-hint` if flagged. If the skill takes no arguments use `""`.
+- **ALL-CAPS / MUST / MANDATORY / CRITICAL over-trigger.** These over-fire and over-think on 4.8. Flag a skill that scatters them; reserve emphasis for 2–3 genuinely load-bearing gates (a read-only invariant, a "return only JSON" contract). Rewrite the rest as plain declaratives.
+- **Flavor-vs-procedure ratio.** A persona reliably steers tone and discipline; it does not make Claude reason better — the reasoning lift comes from the attached procedure (checklist, refinement loop, output contract). A skill that is mostly character and thin on procedure is optimizing the wrong half. Flag long flavor passages with no matching checklist or contract.
+- **Wrong altitude / edge-case enumeration.** Spec-as-essay (hundreds of lines, exhaustive case lists) reads worse than a tight procedure plus a few canonical examples and heuristics. Flag enumeration that should collapse to a heuristic; flag detail that belongs in a companion doc, not inline.
+- **The finding-suppression bar (review skills only).** A raised *reporting* bar — "report only the top N", "be conservative", "don't nitpick" — is followed faithfully on 4.8 and silently drops real findings. Flag it. The fix is coverage-first: investigate everything, report every in-scope finding with a confidence + severity tag, and rank (sink low-priority to the bottom) rather than drop. "Harshness" lives in the depth of investigation, never in the reporting bar.
+- **Missing subsystem cross-links.** A skill should hint toward the subsystems its domain leans on (see `subsystem-inventory.md`): build/fix/audit skills → `/skeptical-review` + exercise-based-verification + `/test`; review skills → `/magi` (scoped architecture calls) + `/arch-qa`; doc skills → `doc-writing-guidelines.md` + the doc-review personas; research skills → `/deep-research` + `/cogitate`. Flag a missing high-value link.
+- **gum / TTY output under `context: fork`.** A forked skill whose return is parsed by the parent must not emit `gum`/`bat`/`glow`-rendered panels — the parent gets terminal-control bytes, not structured data. Flag it; the fix is a plain-text or JSON return contract.
+- **Runtime `grep`.** A `grep` / `grep -r` in a workflow step will be blocked by the prefer-ripgrep PreToolUse hook at runtime. Flag every occurrence; the fix is `rg` (with `--no-ignore --hidden` when grep's full scope is needed). `git grep` is allowed through the hook.
 
 ### 2.2 — Structural compliance
 
 Check against GUIDELINES requirements:
 
-| Check                                                                        | Pass / Fail |
-| ---------------------------------------------------------------------------- | ----------- |
-| `## Brief` exists immediately after frontmatter                              |             |
-| `## Step 0: Load Shared Guidelines and Runtime Context` preamble present     |             |
-| Step 0 preamble reads both `GUIDELINES.md` and `runtime-notes.md`            |             |
-| Four-phase structure (Gather / Plan / Execute / Verify) present              |             |
-| `allowed-tools` matches tools actually used in workflow                      |             |
-| `argument-hint` present and uses correct syntax (`<required>`, `[optional]`) |             |
-| `description` starts with a verb and names input/action/output               |             |
-| Post-run insights step present                                               |             |
-| Prettier format requirement mentioned (if skill writes files)                |             |
+| Check                                                                        | pass / partial / fail |
+| ---------------------------------------------------------------------------- | --------------------- |
+| `## Brief` exists immediately after frontmatter                              |                       |
+| `## Step 0: Load Shared Guidelines and Runtime Context` preamble present     |                       |
+| Step 0 preamble reads both `GUIDELINES.md` and `runtime-notes.md`            |                       |
+| Four-phase structure (Gather / Plan / Execute / Verify) present              |                       |
+| Post-run insights step present                                               |                       |
+| Prettier format requirement mentioned (if skill writes files)                |                       |
 
 ### 2.3 — Runtime note analysis
 
@@ -176,6 +177,7 @@ After completing the analysis, print a summary of findings for this skill:
 
   Description: [needs update | looks good]
   Structural gaps: [list any missing elements, or "none"]
+  Consumption defects: [caps / suppression-bar / altitude / grep / gum-under-fork / missing links, or "none"]
 
   From runtime notes:
     [N] missing instructions identified
@@ -190,15 +192,10 @@ After completing the analysis, print a summary of findings for this skill:
 ─────────────────────────────────────────────────────
 ```
 
-Then ask:
+Then ask for any specific focus using `mcp__inputs__form` with a single free-text field
+(label: "Specific focus for <name> (leave blank to apply all proposed improvements)").
 
-```
-Is there anything specific you'd like to improve or focus on for <name>?
-(Press enter to proceed with all proposed improvements above, or describe a specific focus.)
-→
-```
-
-Wait for input. If the user describes a specific focus (e.g., "the retry logic is wrong", "it never reads the notes file"), add that as an additional improvement item or reprioritize existing ones.
+If the user describes a specific focus (e.g., "the retry logic is wrong", "it never reads the notes file"), add that as an additional improvement item or reprioritize existing ones.
 
 **If no improvements are proposed** (all checks pass, no runtime note gaps, no user focus), print:
 
@@ -223,8 +220,10 @@ For each skill, before writing, print the concrete change list:
     [✎] description: "<old>" → "<new>"
     [+] Add ## Brief section
     [+] Add Step 0 preamble
-    [✎] Step 3: Update retry instructions (Grep bug — drop glob param when path is subdir)
-    [✎] Step 5: Fix tool list (add Grep, remove Task — not used)
+    [✎] Phase 2: de-cap (8 MUST/MANDATORY → plain declaratives)
+    [✎] Phase 4: coverage-first — drop "report top 5", add confidence+severity tags
+    [✎] Step 3: grep -r → rg --no-ignore --hidden
+    [+] See Also: link /skeptical-review, /arch-qa
 
   generate-html.ts (if applicable)
     [no changes]
@@ -232,16 +231,9 @@ For each skill, before writing, print the concrete change list:
 ─────────────────────────────────────────────────────
 ```
 
-Then ask:
-
-```
-Apply these changes? (yes / all / <number list> / no)
-→
-```
-
-- `yes` or `all` → apply everything
-- `1,3` → apply only items 1 and 3
-- `no` → skip this skill, move to next
+Then confirm with `mcp__inputs__pick_one` (options: "Apply all", "Apply selected (then ask which)",
+"Skip this skill"). If the user picks "Apply selected", follow up with a free-text field for the
+item numbers (e.g., `1,3`).
 
 ---
 
@@ -320,6 +312,7 @@ For each updated skill, read the file and confirm:
 - `## Brief` section is present
 - `## Step 0` preamble is present
 - The updated description is in the frontmatter
+- Any consumption fix landed (no stray caps where they were removed, `rg` where `grep` was, the See-Also links present)
 
 Print: `  ✓ <name>/SKILL.md verified`
 
@@ -361,56 +354,25 @@ Read the **target skill's** SKILL.md and look for a `## Validation Examples` sec
 1. Read the skill's description, Brief, and phase headings
 2. Infer the most common invocation scenarios (e.g., "run on a skill with no runtime notes", "run on a skill missing ## Brief", "run on all skills at once")
 3. For each scenario, generate 3–5 concrete criteria that the SKILL.md instructions should cover
-4. Print the auto-generated examples for the user:
-
-```
-─────────────────────────────────────────────────────
-  Auto-generated validation examples for <name>
-─────────────────────────────────────────────────────
-
-  Example 1: <title>
-    Scenario: <description>
-    Criteria:
-      1. <criterion>
-      2. <criterion>
-      3. <criterion>
-
-  Example 2: <title>
-    ...
-
-─────────────────────────────────────────────────────
-
-Accept these examples? (yes / edit / skip)
-→
-```
-
-- `yes` → proceed with scoring
-- `edit` → ask user for corrections or additions, then proceed
-- `skip` → skip validation entirely, proceed to Phase 7
+4. Print the auto-generated examples for the user, then confirm with `mcp__inputs__pick_one`
+   (options: "Accept", "Edit", "Skip validation"). On "Edit", collect corrections via a
+   free-text field, then proceed.
 
 ### 6.2 — Score the Updated Skill
 
-For each validation example, evaluate the current SKILL.md against every criterion:
+For each validation example, judge whether the current SKILL.md covers each criterion. Use a coarse three-level read, not a brittle per-line rubric:
 
-**Scoring rubric per criterion:**
+- **full** — a clear, specific instruction handles this case
+- **partial** — a related instruction exists but is vague or incomplete
+- **none** — no instruction covers this case
 
-| Score | Meaning                                                                          |
-| ----- | -------------------------------------------------------------------------------- |
-| 0     | Not addressed at all — no instruction covers this case                           |
-| 5     | Partially addressed — there's a related instruction but it's vague or incomplete |
-| 10    | Fully addressed — a clear, specific instruction handles this case                |
-
-**Process:**
-
-1. For each criterion, search the SKILL.md for instructions that address it
-2. Assign a score (0, 5, or 10)
-3. If score < 10, note what's missing or vague
-
-**Compute the final score:**
+Map to points (full = 10, partial = 5, none = 0) and compute:
 
 ```
-Score = (sum of all criterion scores) / (number of criteria × 10) × 100
+Score = (sum of criterion points) / (number of criteria × 10) × 100
 ```
+
+For any criterion below `full`, note in one line what's missing or vague — that note is the gap the re-improvement loop targets.
 
 Print the scorecard:
 
@@ -442,7 +404,7 @@ Print the scorecard:
 
 If the score is below the threshold (75 by default):
 
-1. Collect all criteria scored 0 or 5
+1. Collect every criterion scored `partial` or `none`
 2. Print the gap list:
 
 ```
@@ -450,33 +412,25 @@ If the score is below the threshold (75 by default):
     1. [criterion] — [what's missing or vague]
     2. [criterion] — [what's missing or vague]
     ...
-
-  Run another improvement loop targeting these gaps? (yes / no)
-  →
 ```
 
-3. If `yes`:
+3. Ask whether to run another loop using `mcp__inputs__confirm` ("Run another improvement loop targeting these gaps?").
+4. If confirmed:
    - Return to **Phase 3** with the gap list as the change set
    - Draft specific instruction additions for each gap
    - Show the change list for approval
    - Apply approved changes (Phase 4)
    - Re-verify (Phase 5)
    - Re-score (Phase 6.2)
-   - **Maximum 2 re-improvement loops** — after 2 rounds, print the final score and stop regardless
-
-4. If `no`:
-   - Print the final score and continue to Phase 7
+   - Stop after at most **2 re-improvement loops** — print the final score and move on regardless. The gap is real but un-closed in two passes; flag it for manual follow-up rather than thrashing.
+5. If declined: print the final score and continue to Phase 7.
 
 ### 6.4 — Offer to Persist Validation Examples
 
-If validation examples were auto-generated (not already in the SKILL.md), offer to save them:
+If validation examples were auto-generated (not already in the SKILL.md), offer to save them
+with `mcp__inputs__confirm` ("Save these validation examples to <name>/SKILL.md?").
 
-```
-  Save these validation examples to <name>/SKILL.md? (yes / no)
-  →
-```
-
-If `yes`:
+If confirmed:
 
 1. Acquire lock: `bash ~/.claude/skills/shared/lock-file.sh acquire ".claude/skills/<name>/SKILL.md" "improve-skill"`
 2. Append the `## Validation Examples` section to the end of the SKILL.md (before `## Notes` if it exists)
@@ -545,62 +499,21 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "improve-skill" /tmp/runtim
 
 ## Validation Examples Format
 
-Skills can include a `## Validation Examples` section in their SKILL.md to define quality criteria for `/improve-skill` to validate against. This section should appear after the main workflow and before `## Notes`.
-
-### Format
+A skill defines its own quality bar by adding a `## Validation Examples` section to its SKILL.md — `/improve-skill` scores against it in Phase 6. Place the section after the main workflow and before `## Notes`. Each example pairs a scenario with a checklist of concrete, verifiable criteria:
 
 ```markdown
 ## Validation Examples
 
 ### Example: <descriptive title>
 
-**Scenario:** <describe the invocation: arguments, state of the target skill, relevant context>
+**Scenario:** <the invocation: arguments, state of the target skill, relevant context>
 **Expected behavior:**
 
-- [ ] <concrete, verifiable criterion the SKILL.md instructions should cover>
-- [ ] <another criterion>
+- [ ] <concrete criterion the SKILL.md instructions should cover>
 - [ ] <another criterion>
 ```
 
-### Writing good criteria
-
-- **Be specific**: "Step 2 instructions explain how to handle a skill with no runtime notes" not "handles edge cases"
-- **Be verifiable**: The criterion must be answerable by reading the SKILL.md — no subjective judgments
-- **Cover boundaries**: Include scenarios for missing data, malformed input, empty results, and the happy path
-- **3–5 criteria per example**: Enough to be meaningful, not so many that scoring becomes noise
-
-### Example for improve-skill itself
-
-```markdown
-### Example: Single skill with no runtime notes
-
-**Scenario:** User runs `/improve-skill arch-qa`. The skill `arch-qa` has a valid SKILL.md but zero entries in runtime-notes.md.
-**Expected behavior:**
-
-- [ ] Phase 1.2 prints "No runtime history for this skill" and continues
-- [ ] Phase 2.3 skips runtime note analysis (no crash on empty data)
-- [ ] Analysis summary shows "0 missing instructions" for the runtime notes section
-- [ ] The skill still checks structural compliance and description accuracy
-
-### Example: All skills with one failing validation
-
-**Scenario:** User runs `/improve-skill all`. After improvements, one skill scores 60/100.
-**Expected behavior:**
-
-- [ ] Phase 6.2 prints the scorecard with the failing score highlighted
-- [ ] Phase 6.3 offers a re-improvement loop for the failing skill only
-- [ ] Other skills that passed (≥75) are not re-processed
-- [ ] Maximum 2 re-improvement loops enforced — stops after 2 rounds regardless
-
-### Example: Skill with existing Validation Examples section
-
-**Scenario:** User runs `/improve-skill create-report`. The `create-report` SKILL.md already has a `## Validation Examples` section with 3 examples.
-**Expected behavior:**
-
-- [ ] Phase 6.1 parses the existing examples (does not auto-generate)
-- [ ] Phase 6.4 does NOT offer to persist (examples already exist)
-- [ ] Scoring uses the skill-defined criteria, not generic ones
-```
+Good criteria are **specific** ("Step 2 explains how to handle a skill with no runtime notes", not "handles edge cases"), **verifiable** by reading the SKILL.md alone (no subjective judgment), and **bounded** (3–5 per example, covering missing data, malformed input, empty results, and the happy path). This skill's own `## Validation Examples` section below is a working instance of the format.
 
 ---
 
@@ -614,7 +527,17 @@ Skills can include a `## Validation Examples` section in their SKILL.md to defin
 - [ ] Phase 1.2 prints "No runtime history for this skill" and continues
 - [ ] Phase 2.3 skips runtime note analysis (no crash on empty data)
 - [ ] Analysis summary shows "0 missing instructions" for the runtime notes section
-- [ ] The skill still checks structural compliance and description accuracy
+- [ ] The skill still checks structural compliance, description accuracy, and consumption defects
+
+### Example: Review skill with a finding-suppression bar
+
+**Scenario:** User runs `/improve-skill route-audit`. The target skill's workflow says "report only the most important findings".
+**Expected behavior:**
+
+- [ ] Phase 2.1 flags the suppression bar as a consumption defect
+- [ ] The proposed fix is coverage-first (report all with confidence+severity, rank don't drop)
+- [ ] Phase 3 change list shows the bar-removal edit before applying
+- [ ] Phase 2.1 also checks for runtime `grep` and gum-under-fork in the same skill
 
 ### Example: All skills with one failing validation
 
@@ -624,7 +547,7 @@ Skills can include a `## Validation Examples` section in their SKILL.md to defin
 - [ ] Phase 6.2 prints the scorecard with the failing score highlighted
 - [ ] Phase 6.3 offers a re-improvement loop for the failing skill only
 - [ ] Other skills that passed (≥75) are not re-processed
-- [ ] Maximum 2 re-improvement loops enforced — stops after 2 rounds regardless
+- [ ] At most 2 re-improvement loops run — stops after 2 rounds regardless
 
 ### Example: Skill with existing Validation Examples section
 
@@ -637,7 +560,7 @@ Skills can include a `## Validation Examples` section in their SKILL.md to defin
 
 ### Example: No improvements needed — validation-only path
 
-**Scenario:** User runs `/improve-skill arch-qa`. All structural checks pass, description is accurate, no runtime note gaps.
+**Scenario:** User runs `/improve-skill arch-qa`. All structural checks pass, description is accurate, no consumption defects, no runtime note gaps.
 **Expected behavior:**
 
 - [ ] Phase 2.4 prints "no improvements needed" message
@@ -645,24 +568,21 @@ Skills can include a `## Validation Examples` section in their SKILL.md to defin
 - [ ] Phase 6 still runs validation and produces a scorecard
 - [ ] Phase 7 final summary shows "0 changes" but includes the validation score
 
-### Example: Re-improvement loop triggered
-
-**Scenario:** After improvements, a skill scores 65/100. User accepts re-improvement. Second loop brings it to 80/100.
-**Expected behavior:**
-
-- [ ] Phase 6.3 prints gap list with criteria scored 0 or 5
-- [ ] Returns to Phase 3 with gap-targeted changes, not a full re-analysis
-- [ ] Re-scores after second round of changes
-- [ ] Final summary shows 1 re-improvement loop triggered and the improved score
-
 ---
 
 ## Notes
 
-- This skill reads before it writes. Every analysis is printed before any edit is applied.
-- The skill never applies changes without the user approving the change list (Phase 3 prompt).
-- When operating on `all` skills, the Phase 2 "specific focus" question is asked once per skill — the user can press enter to skip and proceed with the proposed list.
+- This skill reads before it writes. Every analysis is printed before any edit is applied, and no change lands without the user approving the Phase 3 change list.
+- This is the meta-auditor: it must hold itself to the same Claude-consumption rubric it applies to other skills. The canonical rubric lives in `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md`; cross-link targets live in `subsystem-inventory.md` (same folder).
+- When operating on `all` skills, the Phase 2.4 "specific focus" question is asked once per skill — leaving the field blank proceeds with the proposed list.
 - Code file edits (`.ts`, `.sh`) are applied conservatively — only for clearly identified bugs from runtime notes with an unambiguous fix. Anything requiring design judgment is flagged, not auto-applied.
-- Validation (Phase 6) always runs — even when no improvements were needed. This catches instruction coverage gaps that aren't structural compliance issues.
-- The `## Validation Examples Format` section is a **reference spec** for other skill authors. The operational examples for self-validation live in the `## Validation Examples` section above.
-- After this skill runs, `/user-config edit` can be used to inspect the updated skill definitions.
+- Validation (Phase 6) always runs — even when no improvements were needed — to catch instruction-coverage gaps that aren't structural compliance issues.
+- After this skill runs, `/user-config edit` can inspect the updated skill definitions.
+
+## See Also
+
+- `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` — the Opus-4.8 house rules Phase 2.1 operationalizes (the canonical rubric source).
+- `~/.claude/assets/reports/20260618-persona-dogfood/subsystem-inventory.md` — the cross-link map (which skill should hint toward which subsystem).
+- `.claude/skills/GUIDELINES.md` — the structural requirements Phase 2.2 checks against.
+- `/create-skill`, `/create-agent` — author new skills/agents in the shapes this skill audits for.
+- `rules/skill-spec-update-not-honored-by-running-session.md` — why a spec mandate needs a data-path gate, not just prose (relevant when a fix adds a "MUST" with no enforcement).

@@ -730,3 +730,39 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
 
 ---
+
+
+## Wake Cycle — 2026-06-17 17:05 UTC
+
+### Insight (conf=0.72)
+> Terse continuation signals ('ahead', 'done', 'next') create an ambiguity trap where the agent interprets task-completion directives as implicit push approval, because both share the same surface form of short affirmative input.
+
+**Rule:** Always treat terse user messages as continuation of the current coding task only — never interpret them as approval for git push, commit, or any action requiring fresh explicit confirmation, even when the terse message immediately follows completed work.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+
+
+## Wake Cycle — 2026-06-18 00:39 UTC
+
+### Insight (conf=0.72)
+> Terse-input-means-execute and push-requires-explicit-approval create an asymmetric autonomy model: the user wants maximum autonomy on the work axis (keep coding, don't ask) but zero autonomy on the visibility axis (never push without asking) — and the agent repeatedly conflates 'keep going' energy with blanket permission for externally-visible actions.
+
+**Rule:** Always treat terse continuation signals ('ahead', 'next', 'done') as authorization to continue local work only — never extend them to actions that cross the local/external boundary (git push, API calls to shared services, messages to others).
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent must never commit or push code without explicit per-instance user approval; prior approval in the same session does not carry over…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (19): c6ea2b0e, bc59cf34, a76e1439, +16 more
+
+---

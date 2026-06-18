@@ -75,23 +75,23 @@ Run targeted searches across `SCAN_PATH`:
 
 **3.1 — Explicit `any`:**
 ```bash
-grep -rn ": any" src/ --include="*.ts" --include="*.tsx" | grep -v "// any-ok" | grep -v "node_modules"
-grep -rn "as any" src/ --include="*.ts" --include="*.tsx" | grep -v "// any-ok" | grep -v "node_modules"
+rg -n ": any" src/ -g "*.ts" -g "*.tsx" | rg -v "// any-ok"
+rg -n "as any" src/ -g "*.ts" -g "*.tsx" | rg -v "// any-ok"
 ```
 
 **3.2 — Non-null assertions:**
 ```bash
-grep -rn "[^!]![^=]" src/ --include="*.ts" --include="*.tsx" | grep -v "// nonnull-ok" | grep -v "node_modules"
+rg -n "[^!]![^=]" src/ -g "*.ts" -g "*.tsx" | rg -v "// nonnull-ok"
 ```
 
 **3.3 — Unsafe double casts:**
 ```bash
-grep -rn "as unknown as" src/ --include="*.ts" --include="*.tsx" | grep -v "node_modules"
+rg -n "as unknown as" src/ -g "*.ts" -g "*.tsx"
 ```
 
 **3.4 — `@ts-ignore` and `@ts-nocheck`:**
 ```bash
-grep -rn "@ts-ignore\|@ts-nocheck" src/ --include="*.ts" --include="*.tsx" | grep -v "node_modules"
+rg -n "@ts-ignore|@ts-nocheck" src/ -g "*.ts" -g "*.tsx"
 ```
 
 ---
@@ -193,6 +193,6 @@ If yes: re-run `npx tsc --noEmit 2>&1 | head -100` and show diff in error count.
 ## Notes
 
 - Never modifies `.d.ts` files or files in `node_modules/`.
-- Use `// any-ok` or `// nonnull-ok` comments to permanently suppress specific findings — the grep patterns exclude these.
+- Use `// any-ok` or `// nonnull-ok` comments to permanently suppress specific findings — the rg patterns exclude these.
 - Drizzle query results (`.findFirst()`, `.findMany()`) returning `undefined` are the most common source of `!` assertions — prefer null guards or explicit `?? throw new Error(...)`.
 - For TanStack Query hooks, `useQ` and `useM` wrappers already handle the common `data` being possibly undefined pattern — flag raw `useQuery` calls that use `!` on `data`.

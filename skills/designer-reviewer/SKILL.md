@@ -1,7 +1,7 @@
 ---
 name: designer-reviewer
 description: Reviews UI screenshots against the user's terminal-dashboard aesthetic fingerprints. Gives scored critiques with actionable CSS fixes. Use when reviewing pm2-manage, visualize-claude, or any developer tool UI for visual consistency against the established dark/dense/semantic design system.
-allowed-tools: Read
+allowed-tools: Read, Bash
 user-invokable: true
 argument-hint: "[screenshot-path]"
 context: fork
@@ -45,7 +45,7 @@ to this skill. If it does not exist yet, continue without it.
 
 ## Aesthetic Fingerprints — Grading Rubric
 
-These are the non-negotiable constraints this reviewer enforces. Internalize them before analyzing any screenshot.
+These are the constraints this reviewer enforces. Read them before analyzing any screenshot — every finding ties back to one of them.
 
 ### FP-1 — Dark Mode Default
 - **Rule:** Muted charcoal backgrounds (#1a1a1a–#2d2d2d range). Not OLED true-black (#000). Not navy or blue-tinted dark.
@@ -133,6 +133,7 @@ For each visible issue, produce a finding in this format:
   Violation: FP-<N> — <rule name>
   Observation: <what you see and why it's wrong, 1-2 sentences>
   Severity: critical | major | minor
+  Confidence: high | medium | low
 ```
 
 **Severity guide:**
@@ -140,7 +141,12 @@ For each visible issue, produce a finding in this format:
 - **major**: Clearly wrong, visually inconsistent, noticeable without squinting (e.g., hardcoded hex color, wrong font family on a key metric, padding 3x too large)
 - **minor**: Subtle drift, acceptable but worth noting (e.g., slightly generous row height, single unlabeled accent)
 
-Generate findings for all visible violations. Do not skip minor ones — include them with `severity: minor`. Limit to 10 findings maximum; if more exist, note the count and list only the most impactful.
+**Confidence guide:**
+- **high**: The screenshot shows it plainly — a true-black background, a proportional font on a numeric column.
+- **medium**: Likely a violation, but the screenshot leaves room (a color that reads decorative but might be semantic, a padding that looks generous at this resolution).
+- **low**: Suspected from a partial or low-res view — flag it so a human can confirm, don't drop it.
+
+Report every violation you can see, including low-severity and low-confidence ones. Finding and filtering are separate jobs: your job is coverage here, and the ranking in Phase 6 sinks the minor and uncertain findings to the bottom — that's where focus comes from, not from withholding. Don't suppress a finding because you're unsure; tag it `confidence: low` and let the reader weigh it. A dropped finding the reader never sees is worse than a low-confidence one they can dismiss in a glance.
 
 ---
 
@@ -167,7 +173,7 @@ Every finding must have a corresponding fix. Do not generate orphaned findings.
 
 ## Phase 5 — Identify Positives
 
-List 3–6 things that are working well and should NOT be changed. Format:
+List 3–6 things that are working well and should stay as they are. Format:
 
 ```
 [+] <element or pattern>: <why it's correct — which fingerprint rule it satisfies>
@@ -196,7 +202,7 @@ SCORES
   Overall             ██████░░░░  N.N/10
 
 FINDINGS (N issues)
-  [FINDING-1] ...
+  [FINDING-1] ...   (severity / confidence)
   [FINDING-2] ...
   ...
 
@@ -212,6 +218,8 @@ POSITIVES
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Finding order:** Rank critical first, then major, then minor; within a tier, high confidence before low. The reader sees the load-bearing issues at the top and the uncertain drift at the bottom — every finding stays on the page.
 
 **Score bar rendering:** Use `█` for filled, `░` for empty. 10 chars total. Round to nearest char.
 
@@ -250,3 +258,11 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "designer-reviewer" /tmp/ru
 - **Missing context** — if the screenshot is too low-resolution or cropped to assess a dimension, note it explicitly: `[SCORE-N: unable to assess — image resolution insufficient for font identification]`
 - **Scope** — if the screenshot shows only a partial UI (a single component, a modal), note this and limit critique to what is visible; do not assume the rest of the UI is broken
 - **No design trends** — critique only against the 6 fingerprint rules, not against general design best practices or current industry trends that conflict with the user's aesthetic
+
+---
+
+## See Also
+
+- `~/.claude/personas/art-director.md` — the visual-design working mode; adopt it when the task is *making* a UI look right, not scoring one that exists.
+- `/web-design` — reviews, generates, and systematizes web UI with token extraction and layout generation; reach for it when the critique needs to become a redesign.
+- `render-before-judge` (mistake-patterns) — this skill reads a screenshot before scoring for exactly that reason: judge the rendered pixels, never the markup or a value's number alone.

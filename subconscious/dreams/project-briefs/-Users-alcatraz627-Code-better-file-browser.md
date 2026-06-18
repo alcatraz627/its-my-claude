@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-06-15T12:56:32.980147+00:00 · 11 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-18T00:43:13.625454+00:00 · 17 patterns / 0 insights -->
 ## What this project is about
-A file browser tool project (`better-file-browser`) with active session tooling integration (atone, WAL, RCA rituals). Dominant working style: correction-heavy sessions with formal documentation outputs and strict deliverable sequencing.
+A local file-browser tool with a UI layer and local model integration. Work involves feature implementation, technical documentation, and session-scoped investigation tooling.
 
 ## Things to do (or keep doing)
-- Always execute `/atone` immediately and in full when invoked — no deferral, no partial runs; user notices every skip
-- Begin every RCA file with `---` YAML frontmatter on line 1 or the atone gate rejects it silently
-- Render-check all markdown tables before presenting to user — agent-generated tables frequently misformat
-- Write any mid-session guideline updates back to the project's canonical file, not just into conversation
+- **Deliver the primary goal first** before exploring enhancements or bonus features — secondary work must never displace the stated deliverable.
+- **Plan before hand-rolling complex UI components**; review existing similar implementations in the codebase before writing any new code.
+- **Persist updated guidelines and conventions** to their canonical file immediately — leaving changes only in conversation context means they vanish after `/clear`.
+- **Render-check markdown tables** before presenting them; AI-generated tables frequently misformat and will be rejected unread.
 
 ## Things to avoid
-- Don't use promotional, flowery, or "why this matters" framing in technical or product documentation — plain, formal, direct only
-- Don't expand scope or pursue secondary features before the primary session deliverable is done
-- Don't leave an atone RCA in a failed state (exit code 2) without immediately diagnosing and re-running with corrected frontmatter
+- **Don't cache service availability or warm/cold status with a TTL** — external writers (e.g. `lm warm on`) flip state out-of-band and the cache serves stale UI. Read live.
+- **Don't write documentation in a promotional or flowery voice** — "Why this matters", hyperbolic framing, or marketing adjectives are explicitly rejected; use formal, direct, plain prose matched to the audience's technical level.
+- **Don't skip or defer `/atone` when invoked** — execute immediately and in full; the user notices deferred rituals and will re-prompt.
+- **Don't write RCA files without `---` YAML frontmatter on line 1** — the atone gate exits non-zero and the event goes unrecorded silently.
 
 ## Open questions / known gaps
-- RCA frontmatter failures have recurred multiple times — consider adding a pre-write lint step or template to prevent the pattern from firing again
-- Documentation tone corrections appear 4× across variants; may indicate the default model voice doesn't match this user's house style — load tone guidance early in docs sessions
+- Recurring documentation tone violations suggest the project may have accumulated docs written in a mixed voice — worth auditing existing docs before adding new ones.

@@ -12,6 +12,17 @@ Scans a project's code, config, and existing docs, asks focused clarifying quest
 then generates technical documentation that reads like a senior engineer wrote it.
 Baked-in anti-fluff rules prevent sycophantic, ChatGPT-style prose.
 
+### Two audiences — keep them separate
+
+This SKILL.md is read by Claude as an operating procedure. The docs it produces are
+read by **humans** and follow the human-first house style in
+[`conventions/doc-writing.md`](../../conventions/doc-writing.md). These are different
+audiences with different rules: the procedure below is terse and imperative; the docs
+you write can be warm where warmth helps and prose where prose reads better. Don't let
+the clipped tone of this procedure leak into the docs, and don't soften the procedure
+into doc-prose. When in doubt about doc voice, the human-first canon governs the output —
+not this file.
+
 ## Step 0: Load Shared Guidelines and Runtime Context
 
 Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
@@ -49,30 +60,32 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Voice Rules — MANDATORY
+## Voice Rules
 
-These rules govern all text this skill produces. They are non-negotiable.
+These rules govern all text this skill produces.
 
-### Banned Phrases
+### Anti-fluff voice — defer to the canon
 
-Never use these words or phrases in generated documentation:
+The canonical anti-AI-voice catalog lives in
+[`conventions/doc-writing.md`](../../conventions/doc-writing.md) §3 — a maintained
+list of ~30 prose and structural tells, plus the find-and-flag `rg` in §4. Read it
+and apply it rather than carrying a duplicate list here (a copy here would drift out
+of sync with the canonical source).
 
-| Banned | Replace with |
-| ------ | ------------ |
-| "comprehensive" | (delete — if the doc is comprehensive, the reader will notice) |
-| "robust" | specific: "handles X and Y edge cases" |
-| "seamless" | specific: "requires no manual step between X and Y" |
-| "powerful" | (delete — show, don't tell) |
-| "cutting-edge" | (delete entirely) |
-| "leverage" | "use" |
-| "utilize" | "use" |
-| "facilitate" | (rewrite the sentence) |
-| "in order to" | "to" |
-| "it is important to note that" | (delete — just state the thing) |
-| "Welcome to the X documentation" | (delete — start with what the reader needs to do) |
-| "This document provides a comprehensive overview" | (delete — the TOC does that) |
-| "As you can see" | (delete) |
-| "Simply" / "just" / "easily" | (delete — nothing is simple if you have to say it) |
+**The heuristic:** if a phrase editorializes importance, promises quality, hedges, or
+narrates the doc instead of the subject, cut it. State what is true; let the reader
+judge whether it's comprehensive or robust. Three canonical rewrites:
+
+- "This document provides a comprehensive overview of the auth flow." → delete the
+  sentence; start with the first real fact ("Auth runs on short-lived JWTs minted by
+  `POST /api/login`.").
+- "The system leverages a robust retry mechanism to seamlessly handle failures." →
+  "Failed requests retry 3× with exponential backoff (200ms base), then surface a
+  banner error."
+- "It is important to note that the column map is simply validated server-side." →
+  "`POST /api/jobs/create` validates the column map server-side."
+
+Run the §4 `rg` against every draft. Every hit is a candidate, not an automatic defect.
 
 ### Voice Principles
 
@@ -179,7 +192,7 @@ Group endpoints by resource (Users, Posts, etc.), not by HTTP method.
 
 1. Count: every discovered route has a corresponding section
 2. Check: every endpoint has at least a request and response example
-3. Validate: no banned phrases leaked through
+3. Validate: run the §4 find-and-flag `rg` from the canon; rewrite or justify each hit
 4. If `--format html`: pipe to `/create-report` with `data-table` style
 5. If `--format pdf`: pipe to `/generate-pdf`
 
@@ -430,6 +443,20 @@ Read the onboarding doc as if you have zero context. Flag any step that says "co
 - `--format pdf`: generate markdown first, then invoke `/generate-pdf` on it
 - Always print the absolute path to the generated file
 
+### Render-check before declaring done
+
+This skill writes `.md` (and via the integrations above, `.html`) — so it must
+render-check its own output before claiming the doc is finished, per
+[`rules/sub-agent-outputs.md`](../../rules/sub-agent-outputs.md) (the
+render-before-judge discipline). After writing, run a 10-second check:
+
+- **Markdown:** `glow <file>.md` or `bat -l md <file>.md` — confirm frontmatter is
+  present, the H1 isn't wrapped, tables render, and no `…`/2-space-indent artifacts
+  from a TTY renderer leaked into the source.
+- **HTML:** open it in a browser (or `tidy -e <file>.html`).
+
+The "I wrote it" claim is not the same as "I saw it render."
+
 ---
 
 ## Notes
@@ -440,3 +467,23 @@ Read the onboarding doc as if you have zero context. Flag any step that says "co
 - For `api` mode: the skill prefers reading actual type definitions over inferring from usage
 - For `changelog` mode: if the repo uses conventional commits, parsing is automatic; otherwise it falls back to file-path heuristics
 - Chains with: `/create-report` (html output), `/generate-pdf` (pdf output), `/readme` (project overview)
+
+---
+
+## See Also
+
+- [`conventions/doc-writing.md`](../../conventions/doc-writing.md) — the canonical
+  anti-AI-voice catalog, structural rules, tables-vs-prose, diagram rules, and the
+  find-and-flag `rg`. The human-first ruleset the docs this skill writes follow.
+- [`personas/technical-doc-writer.md`](../../personas/technical-doc-writer.md) — the
+  authoring disposition (classify → ground → draft → flag → rewrite → render); adopt
+  it to drive a doc all the way to disk.
+- **Content review (accuracy / mental-model / runnability):** route the finished doc
+  through the three review lenses — [`personas/greybeard.md`](../../personas/greybeard.md)
+  (engineering correctness + provenance, pairs with `/arch-qa`),
+  [`personas/translator.md`](../../personas/translator.md) (product mental-model),
+  [`personas/pager-holder.md`](../../personas/pager-holder.md) (ops / can-an-engineer-run-this).
+- **Voice review:** the author is blind to their own AI-smell, so route the final
+  prose pass to a fresh reviewer — [`personas/doc-writer.md`](../../personas/doc-writer.md).
+- [`rules/sub-agent-outputs.md`](../../rules/sub-agent-outputs.md) — render-before-judge:
+  this skill writes `.md`/`.html`, so it render-checks its own output before declaring done.

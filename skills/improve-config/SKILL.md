@@ -45,9 +45,8 @@ tool preferences, verbosity, timeouts, post-run insights, and the **file lock pr
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
 
-> Lock reminder: acquire a lock via `lock-file.sh acquire` before every Edit/Write, and
-> release it immediately after. Never write to `runtime-notes.md` or any `.claude/` file
-> without holding its lock.
+> Lock reminder: hold a `lock-file.sh` lock around every Edit/Write to any `.claude/` file,
+> including `runtime-notes.md`. Full protocol in 3.1.
 
 ---
 
@@ -191,6 +190,27 @@ Produce a categorized list of proposed improvements. For each item include:
 Dead instruction removals must be justified: cite which GUIDELINES rule or other file
 already covers it. Never remove an instruction that handles an edge case not covered elsewhere.
 
+### 2.1a — Consult the placement indices before any structural move
+
+Before proposing any `skill-extraction` or any item that **relocates** a rule, feature,
+convention, or script, consult the canonical "where does config go" indices. This is the same
+discipline `~/.claude/PLACEMENT.md` mandates for adding config by hand.
+
+- `~/.claude/PLACEMENT.md` — the category × tier rule for where new config belongs. Read this
+  before extracting a skill or moving an instruction; it decides whether the thing is a rule, a
+  feature, a convention, a skill, or inline.
+- `~/.claude/NAMESPACE.md` — the `std::claude::*` cluster the thing belongs to.
+- `~/.claude/FOLDERS.md` — the per-folder owner/purpose map; confirms the destination folder
+  accepts this kind of file.
+
+For any item that **moves a canonical path** — renames a script others reference, relocates a
+skill, changes a top-level directory — file a `/migrate` entry. Note the planned `/migrate` call
+in the improvement item's rationale so the user sees it before approving.
+
+If the indices say a proposed extraction belongs somewhere other than a new skill (e.g. it's a
+rule or a convention), reclassify the item and say so in its rationale rather than extracting a
+skill anyway.
+
 ### 2.2 — Print analysis summary
 
 ```
@@ -263,7 +283,16 @@ Apply all approved improvements. Process them in this order to minimize conflict
 3. `per-skill` improvements
 4. `cross-cutting` changes (apply to each affected file sequentially)
 5. `consolidation` merges
-6. `skill-extraction` — invoke `/create-skill` interactively for each new skill
+6. `skill-extraction` — first confirm placement against `PLACEMENT.md` / `NAMESPACE.md` /
+   `FOLDERS.md` (per 2.1a), file a `/migrate` entry if the extraction moves a canonical path,
+   then invoke `/create-skill` interactively for each new skill
+
+When an approved improvement **rewrites a skill's SKILL.md** (its prose, structure, or output
+contract), apply the Claude-consumption house rules in
+`~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` — behavior over
+flavor, plain declaratives over ALL-CAPS/MUST, explicit scope, a load-bearing output contract,
+action-oriented frontmatter. A SKILL.md is system-prompt material consumed by Claude, not a
+human doc.
 
 ### 3.1 — File lock protocol
 
@@ -279,22 +308,12 @@ If acquire exits 1 (file locked): print the owner, skip this file, note it in th
 
 ### 3.2 — Per-change narration
 
-For each improvement applied:
+Narrate each applied improvement in one block — title, files, the section touched, and the
+result. The lock acquire/release happens per 3.1; you don't need to narrate each lock step.
 
 ```
-  [✎] Applying: <title>
-      Files: <list>
-      → Acquiring lock on <file> ...
-      → Editing <section> ...
-      → Releasing lock ...
-      ✓ Done
-```
-
-For skill extractions:
-
-```
-  [+] Extracting new skill: <name>
-      Invoking /create-skill <name> ...
+  [✎] <title> — <files> — editing <section> ... ✓
+  [+] Extracting skill <name> — invoking /create-skill ...
 ```
 
 ### 3.3 — Respect modification prompt
