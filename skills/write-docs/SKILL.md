@@ -1,7 +1,7 @@
 ---
 name: write-docs
 description: Scans a codebase to generate focused technical documentation — API references, guides, ADRs, changelogs, or onboarding docs — with anti-fluff voice calibration.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, Skill, mcp__inputs__form
 user-invokable: true
 argument-hint: "<api | guide | adr | changelog | onboarding> [options]"
 ---

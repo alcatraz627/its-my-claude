@@ -149,7 +149,7 @@ rg -i "middleware|auth.*check|require.*auth" -g "*.{js,ts,py}"
 
 ```bash
 # Find API calls
-rg "fetch.*{endpoint}|axios.*{endpoint}" -g "*.{js,ts,tsx}"
+rg "fetch.*<endpoint>|axios.*<endpoint>" -g "*.{js,ts,tsx}"
 
 # Find data transformations
 rg "map|transform|process.*data" -g "*.{js,ts,py}"
@@ -208,7 +208,7 @@ Find related configuration:
 
 ```bash
 # Environment variables
-rg "{FEATURE_NAME}" -g ".env*"
+rg "<FEATURE_NAME>" -g ".env*"
 
 # Config files
 read config/{feature}.json
@@ -222,7 +222,7 @@ Tests often reveal usage patterns:
 ```bash
 glob "**/*.test.{js,ts,py}"
 glob "**/*.spec.{js,ts,py}"
-rg "describe.*{feature}|test.*{feature}" -g "*.{test,spec}.{js,ts,py}"
+rg "describe.*<feature>|test.*<feature>" -g "*.{test,spec}.{js,ts,py}"
 ```
 
 ### Phase 8: Document the Answer

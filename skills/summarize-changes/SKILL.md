@@ -1,7 +1,7 @@
 ---
 name: summarize-changes
 description: Generates a categorized changelog of recent work, scoped by three orthogonal axes (time / topic / source) and rendered in a user-selected format. Treats git as ONE signal source among many — also reads WAL, checkpoint files, runtime-notes, memory entries, recently-modified files, and past-session transcripts — and reads the actual code, never relying on commit messages or commit boundaries alone. Asks the user when sources disagree.
-allowed-tools: Bash, Read, Write, Glob, Grep, Agent
+allowed-tools: Bash, Read, Write, Glob, Grep, Agent, Skill, mcp__inputs__pick_one, mcp__inputs__pick_many, mcp__inputs__text_input, mcp__inputs__pick_path
 user-invokable: true
 argument-hint: "[--last <dur> | --since <when> | --between <a> <b> | --unstaged | --staged | --vs <ref> | --pr [#]] [--topic <q>] [--path <p>] [--include-sources <csv>] [--format <k>]"
 ---

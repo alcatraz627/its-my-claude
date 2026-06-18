@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-18T07:47:14Z",
+  "session_id": "export-improve",
+  "project_root": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/two-enhancement-product/_20260618-export-improve.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**User decision:** commit the backend export work? (everything uncommitted; repo rule \u2014 only commit when explicitly told. Branch `export-fixes/aakarsh`.)",
+    "**Frontend wiring (next phase):** wire actual `column_groups` assignment \u2014 which columns are `error`/`warning`/`primary`. The `column_groups?: ExcelColumnGroups` type exists on the FE `JobOutputSettings` but has NO implementation/callsite yet. User wants priority/semantic fields \"implicitly encoded into `generated_columns`\" rather than per-preview custom option inclusion \u2014 needs their context on the source (likely a `role` on `GeneratedColumn`).",
+    "**Deferred testing-harness + frontend wiring** the user parked earlier (\"frontend wiring needs more context from me anyways\").",
+    "**Optional, low-value:** route the legacy `ExcelExporter` (`lib/exporter/__init__.py`, only used for XML via `/export`) through `write_data_to_excel` for consistency \u2014 NOT user-facing (FE uses `getJobOutputPost` \u2192 `JobOutputFormats.excel` for Excel; verified at `export-output.tsx:208`).",
+    "**Known-but-kept (conscious deferrals):** stats SHA re-serializes full dataset per export (cost on huge jobs); `_warn_missing_columns` at `warning` level (user explicitly wanted it)."
+  ],
+  "tags": []
+}

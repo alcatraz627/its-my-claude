@@ -34,14 +34,21 @@ mkdir -p "$USAGE_DIR"
 
 _now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
 
+_acquired=0
 _lock() {  # mkdir-based lock; ~2s budget, then proceed (a dropped log beats a hang)
   local i=0
   while ! mkdir "$LOCK_DIR" 2>/dev/null; do
-    i=$((i+1)); [ "$i" -ge 20 ] && return 0
+    i=$((i+1)); [ "$i" -ge 20 ] && return 0   # gave up — do NOT mark acquired
     sleep 0.1
   done
+  _acquired=1
 }
-_unlock() { rmdir "$LOCK_DIR" 2>/dev/null || true; }
+# Only release a lock we actually took — never rmdir a lock another live writer holds.
+_unlock() { [ "$_acquired" = 1 ] && rmdir "$LOCK_DIR" 2>/dev/null; _acquired=0; }
+
+# Emit a numeric value for jq --argjson, else `null`. A fat-fingered --corrections
+# must not crash the whole event under set -e (jq --argjson rejects non-JSON).
+_numjson() { case "$1" in ''|*[!0-9]*) printf 'null';; *) printf '%s' "$1";; esac; }
 
 _persona_exists() { [ -f "${PERSONA_DIR}/$1.md" ]; }
 
@@ -73,8 +80,8 @@ cmd_record() {
     --arg id "$id" --arg ts "$(_now)" --arg persona "$persona" --arg session "$session" \
     --arg mode "$mode" --arg depth "$depth" --arg task "$task" --arg outcome "$outcome" \
     --arg loop "$loop" --arg note "$note" \
-    --argjson iterations "${iterations:-null}" --argjson corrections "${corrections:-null}" \
-    --argjson cost "${cost:-null}" \
+    --argjson iterations "$(_numjson "$iterations")" --argjson corrections "$(_numjson "$corrections")" \
+    --argjson cost "$(_numjson "$cost")" \
     '{id:$id, ts:$ts, persona:$persona, session:$session, mode:$mode, depth:$depth,
       task:$task, outcome:$outcome, loop:$loop, iterations:$iterations,
       corrections:$corrections, cost_tokens:$cost, note:$note}
@@ -93,7 +100,7 @@ cmd_summary() {
     esac
   done
   [ -f "$EVENTS" ] || { echo "No persona usage recorded yet ($EVENTS)"; return 0; }
-  jq -rs --arg persona "$persona" --arg since "$since" '
+  jq -R 'fromjson? // empty' "$EVENTS" | jq -rs --arg persona "$persona" --arg since "$since" '
     map(select(($persona=="" or .persona==$persona) and ($since=="" or .ts>=$since)))
     | group_by(.persona)
     | "PERSONA EFFICACY SUMMARY" ,
@@ -108,7 +115,7 @@ cmd_summary() {
         , "    last notes: " + ( [ .[] | select(.note) ] | sort_by(.ts) | reverse | .[0:2] | map("• " + .note) | join("  ") )
         , ""
       )
-  ' "$EVENTS"
+  '
 }
 
 cmd_list() {
@@ -121,8 +128,8 @@ cmd_list() {
     esac
   done
   [ -f "$EVENTS" ] || { echo "No persona usage recorded yet"; return 0; }
-  jq -rc --arg persona "$persona" 'select($persona=="" or .persona==$persona)
-    | "\(.ts)  \(.persona)  [\(.mode // "?")/\(.outcome // "?")]  \(.task // "")"' "$EVENTS" | tail -n "$limit"
+  jq -R 'fromjson? // empty' "$EVENTS" | jq -rc --arg persona "$persona" 'select($persona=="" or .persona==$persona)
+    | "\(.ts)  \(.persona)  [\(.mode // "?")/\(.outcome // "?")]  \(.task // "")"' | tail -n "$limit"
 }
 
 cmd_help() {

@@ -1,7 +1,7 @@
 ---
 name: web-design
 description: Reviews, generates, and systematizes web UI designs — screenshot-based critique with actionable CSS fixes, design token extraction, and page layout generation with experienced defaults.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, mcp__plugin_chrome-devtools-mcp_chrome-devtools__*
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, mcp__plugin_chrome-devtools-mcp_chrome-devtools__*, mcp__plugin_playwright_playwright__*
 user-invokable: true
 argument-hint: "<review | system | page <type>> [options]"
 ---

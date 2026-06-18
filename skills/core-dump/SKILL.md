@@ -1,7 +1,7 @@
 ---
 name: core-dump
 description: Writes _checkpoint.claude.md (or a named file) to the project root — condensing the active session into original goal, sequential agent actions, current expectation, and pending items. Supports "mini" mode for quick abbreviated notes. Records a session-keyed pointer + chronological index entry under ~/.claude/checkpoints/ so multiple long-running agents do not clobber each other. Serves as a hand-off artifact for /catchup after /clear.
-allowed-tools: Read, Write, Glob, Bash, Edit
+allowed-tools: Read, Write, Glob, Bash, Edit, mcp__inputs__form, mcp__inputs__confirm
 argument-hint: "[mini] [filename] [--name NAME] [--no-prompt] [instructions]"
 user-invokable: true
 ---

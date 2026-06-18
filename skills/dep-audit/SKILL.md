@@ -1,7 +1,7 @@
 ---
 name: dep-audit
 description: Runs npm audit and npm outdated, cross-references key dependencies against known breaking versions, and produces a prioritized upgrade list — separating critical security patches from optional major upgrades. With --fix, applies npm audit fix for patch-level security patches only.
-allowed-tools: Read, Bash, Glob
+allowed-tools: Read, Bash, Glob, Skill
 user-invokable: true
 argument-hint: "[--fix]"
 context: fork
@@ -104,39 +104,30 @@ These libraries have high impact when outdated — always flag them explicitly:
 
 ## Phase 3 — Report
 
-Source gum-tui.sh and render the report using panels. Render only sections that have data — skip empty sections entirely:
+This skill runs under `context: fork`, so the parent agent reads your returned text, not a terminal. Return a plain-text structured report — do not source `gum-tui.sh` (its escape codes are noise to the parent). Include only sections that have data; omit empty ones.
 
-```bash
-source ~/.claude/skills/shared/gum-tui.sh
-gum_header "Dep Audit — frontend"
+```
+DEP AUDIT — <project>
 
-# Render only if critical/high vulns exist:
-gum_panel "CRITICAL / HIGH SECURITY" \
-  "✗ lodash 4.17.19 — Prototype pollution (GHSA-xxxx)" \
-  "  Fix: npm audit fix  (patch available)" \
-  "" \
-  "✗ axios 1.4.0 — SSRF vulnerability (GHSA-yyyy)" \
-  "  Fix: manual update to ≥1.6.0 required"
+CRITICAL / HIGH SECURITY (N)
+  ✗ lodash 4.17.19 — prototype pollution (GHSA-xxxx) — fix: npm audit fix (patch available)
+  ✗ axios 1.4.0 — SSRF (GHSA-yyyy) — fix: manual update to ≥1.6.0 required
 
-# Render only if major version gaps exist:
-gum_panel "MAJOR VERSION GAPS (breaking risk)" \
-  "⚠ next-auth: 4.x → 5.x available" \
-  "  Impact: Session API, adapter API changes" \
-  "  Action: Review NextAuth v5 migration guide before upgrading"
+MAJOR VERSION GAPS / breaking risk (N)
+  ⚠ next-auth 4.x → 5.x — session + adapter API changes — review the v5 migration guide before upgrading
 
-# Render only if minor/patch updates exist:
-gum_panel "MINOR / PATCH UPDATES (optional)" \
-  "· react: 19.0.0 → 19.2.3 available  (patch)" \
-  "· typescript: 5.3.0 → 5.8.0 available  (minor)"
+MINOR / PATCH UPDATES / optional (N)
+  · react 19.0.0 → 19.2.3 (patch)
+  · typescript 5.3.0 → 5.8.0 (minor)
 
-gum_complete "dep-audit" \
-  "Security=N critical/high (N fixable with npm audit fix)" \
-  "Breaking risk=N major-version gaps" \
-  "Optional=N minor/patch updates available" \
-  "Run=npm audit fix (N patch-level fixes available)"
+SUMMARY
+  security:      N critical/high (N fixable with `npm audit fix`)
+  breaking-risk: N major-version gaps
+  optional:      N minor/patch updates
+  run:           npm audit fix (N patch-level fixes available)
 ```
 
-If zero issues: call `gum_success "No security vulnerabilities or major version gaps found."`
+If zero issues: return `DEP AUDIT — <project>: no security vulnerabilities or major version gaps found.`
 
 ---
 

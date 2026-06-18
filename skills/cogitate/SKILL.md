@@ -6,7 +6,7 @@ description: >
   ~/Documents/Claude/Topics/, maintaining _index.claude.md, _insights.claude.md,
   and topic-specific templates. For heavy multi-source fact-checked reports,
   route to /deep-research instead.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch, Agent
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch, Agent, Skill
 argument-hint: "[quickly] <query or direction>"
 user-invokable: true
 ---

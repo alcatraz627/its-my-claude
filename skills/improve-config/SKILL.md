@@ -1,7 +1,7 @@
 ---
 name: improve-config
 description: Audits the project's .claude/ directory (or ~/.claude/ for global config) using /user-config context to catalogue instructions and skill patterns, produces a prioritized improvement list, applies user-approved changes, and generates a summary HTML report.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, Skill
 user-invokable: true
 argument-hint: "[--scope=<focus-area>] [--skip=<skill,...>] [--dry-run] [notes...]"
 ---

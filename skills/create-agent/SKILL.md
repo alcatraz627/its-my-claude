@@ -1,7 +1,7 @@
 ---
 name: create-agent
 description: Reads all existing skills as context then scaffolds a new autonomous agent SKILL.md — with context: fork, no interactive prompts, and structured output — from user instructions, or rewrites an existing skill in agent format. Suggests a template when a similar skill exists.
-allowed-tools: Read, Write, Edit, Bash, Glob
+allowed-tools: Read, Write, Edit, Bash, Glob, Skill
 user-invokable: true
 argument-hint: "<instructions | existing-skill-name>"
 ---
