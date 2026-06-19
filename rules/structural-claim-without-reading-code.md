@@ -38,6 +38,8 @@ Before typing any of these phrasings, **pause and require a file:line citation i
 
 If you cannot name a file:line that proves it, **read the code that decides X first**. Don't type the claim until you have.
 
+**Precheck (answer before typing the claim):** Can I name the exact file:line that proves this statement right now? YES → include the citation. NO → read the code first, then type the claim. This is the same gate the atone event format records as `precheck`; treat it as a decision point, not a reminder.
+
 ## What this rule does NOT mean
 
 - Don't bury every sentence in citations. The rule fires on *authority/control-flow* assertions, not on uncontroversial descriptive prose.

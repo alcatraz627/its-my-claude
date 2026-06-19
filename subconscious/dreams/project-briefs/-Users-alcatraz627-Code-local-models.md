@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-06-17T17:09:36.718696+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-19T01:40:51.638909+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Local LLM tooling and infrastructure (`~/Code/local-models`). Work is exploratory — research, persona design, CLI setup, script authoring — with strong emphasis on evidence-based verification over declaration.
+Local-models tooling project (`~/Code/local-models`) — managing local LLM/image-gen infrastructure with agent-driven workflows, scripting, and documentation. Work style is iterative with heavy use of correction rituals and task tracking.
 
 ## Things to do (or keep doing)
-- **Show actual output when testing.** Surface raw results for the user to inspect; never assert success without evidence — the user judges correctness, not you.
-- **Execute `/atone` immediately when invoked.** If the user calls it mid-correction, run it before any other work — skipping while being corrected is a compounded failure.
-- **Use the Task tool for todos.** "Update your todos" always means `TaskCreate`/`TaskUpdate`, never a file. The TUI must stay live.
-- **Write RCA files with `---` YAML frontmatter on line 1.** Omitting it causes `atone.sh` to exit with error 2 and the event goes unrecorded silently.
+- Always surface actual command output for the user to inspect before declaring a test or feature successful — evidence first, verdict second
+- Call the Task tool (`TaskCreate`/`TaskUpdate`) whenever "update todos" is requested; never write to a file as a substitute
+- Invoke `/atone` immediately and completely when corrections happen — do not defer or skip mid-correction
+- Use `trash` for all file deletion; `rm` is hard-blocked by hook with no exceptions
 
 ## Things to avoid
-- **Don't deliver peripheral work before the primary deliverable.** Bonus features, research, and enhancements must not displace the stated core goal — the user treats a missing primary as total failure regardless of surrounding quality.
-- **Don't use `rm`.** Use `trash`. The hook blocks it; attempting it anyway signals the rule wasn't internalized.
-- **Don't write essay-length comments.** One terse sentence on WHY only when non-obvious; the user pushes back on over-explained code.
-- **Don't skip mandatory skill invocations.** If a skill is explicitly named, acknowledge it by running it — deferral after explicit invocation requires explicit user permission.
+- Don't declare tests/features "successful" without showing the raw output — asserting success without evidence is treated as a failure
+- Don't skip or defer explicitly-invoked skills (`/atone`, `/core-dump`, etc.) in favor of other work; skipping an invoked ritual is a compounding offense
+- Don't complete peripheral/bonus work before delivering the session's primary stated deliverable
+- Don't write essay-length comments; one terse WHY-only sentence max, or nothing
 
 ## Open questions / known gaps
-- Recurring atone gate failures (missing YAML frontmatter) suggest RCA template isn't being followed consistently — consider adding a frontmatter snippet to the write step.
-- Tension between exploratory multi-subtask sessions and core deliverable priority; no clear session-start contract pattern yet.
+- RCA files for atone must begin with `---` YAML frontmatter on line 1 or the gate silently rejects the event — this has recurred; verify frontmatter every time before running `atone.sh add`

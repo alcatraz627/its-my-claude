@@ -92,6 +92,10 @@
 | Term | Meaning | Context |
 |---|---|---|
 | **GCC** | `~/.claude/` — the global Claude config directory | Used when distinguishing global config from per-project `.claude/` |
+| **efficacy** | The user's evaluation metric: effectiveness/quality of output relative to the effort *they* spend — not raw speed (tok/s, latency). "Lead with efficacy." | Judging tools/models/agents. Canonical: `memory/global/feedback_efficacy_over_speed.md` |
+| **one-shotting** | Hoping a task lands in a single unplanned attempt. User treats it as a fantasy — a *failed* one-shot wastes more than structured plan→implement→review. Default to structure. | Non-trivial/agentic work. Canonical: `memory/global/feedback_structure_over_oneshot.md` |
+| **ease–effort–output triad** | The user's mental model for routing a task to a tool, weighing ease of invoking, their own effort, and the output quality the task needs. | Drives "just use chatgpt" vs "use the agent". Canonical: `memory/global/user_work_routing_triad.md` |
+| **"just use chatgpt" (mode)** | The light-path escape hatch: route a low-stakes one-off to ChatGPT / a small local `lm`. Signals the *task* is light — not that the agent is bad. | Tool routing. Canonical: `memory/global/user_work_routing_triad.md` |
 
 ---
 

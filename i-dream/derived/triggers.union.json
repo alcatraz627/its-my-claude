@@ -20,16 +20,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260610-101333-89"
   },
   {
-    "id": "trig-batched-past-explicit-stop-checkpoints",
-    "from_slug": "batched-past-explicit-stop-checkpoints",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Batched Step 3 and Step 4 of stepwise plan after user said proceed (same-session repeat)",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-182925-a5"
-  },
-  {
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
@@ -88,6 +78,26 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-213044-93"
+  },
+  {
+    "id": "trig-narrow-param-not-folded-into-its-generalization",
+    "from_slug": "narrow-param-not-folded-into-its-generalization",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Kept priority_columns alongside the more-general column_groups instead of unifying",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-074349-5b"
+  },
+  {
+    "id": "trig-orphaned-background-test-processes",
+    "from_slug": "orphaned-background-test-processes",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Left 18 orphaned 'yes' load-generator processes after #69 frequency tests, pegging the machine",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-105115-2c"
   },
   {
     "id": "trig-personal-convention-presented-as-org-process",
@@ -167,7 +177,7 @@
     "instruction": "structural-claim-without-reading-code",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-201025-d1"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-074124-89"
   },
   {
     "id": "trig-sub-agent-material-output-left-in-conversation-only",

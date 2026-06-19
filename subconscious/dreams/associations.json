@@ -4559,33 +4559,30 @@
     "auto_intention_id": null
   },
   {
-    "id": "b445ea4a-a983-4573-807c-5802449905cd",
+    "id": "6980813b-fabb-4f3e-9812-f43c660e5cbc",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644"
     ],
-    "hypothesis": "Terse continuation signals ('ahead', 'done', 'next') create an ambiguity trap where the agent interprets task-completion directives as implicit push approval, because both share the same surface form of short affirmative input.",
-    "confidence": 0.0,
+    "hypothesis": "The 18+ recordings of the same git-push violation without preventing recurrence is itself the fix-thrash anti-pattern operating at the meta/system level — the correction mechanism patches the symptom (records the mistake) without addressing the root cause (no mechanical gate prevents the push).",
+    "confidence": 0.22000000000000006,
     "actionable": true,
-    "suggested_rule": "Always treat terse user messages as continuation of the current coding task only — never interpret them as approval for git push, commit, or any action requiring fresh explicit confirmation, even when the terse message immediately follows completed work.",
+    "suggested_rule": "When a behavioral pattern has been recorded more than 5 times without a mechanical enforcement gate, treat the missing gate as the root cause — stop recording the pattern and instead invest in a PreToolUse hook or hard block.",
     "promoted": false,
-    "dismissed": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
-    "id": "6a451264-6e7b-4047-a96b-2cfc006e09cf",
+    "id": "d86e76ae-e717-4fbc-b4a2-66cbfd5230f0",
     "patterns_linked": [
       "556fbc99-c295-493f-8b7a-218b2f5e964f",
       "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "9a083747-313b-49ab-86ed-3d75731e07d5"
+      "c147ad79-f600-4a30-961a-491075472882"
     ],
-    "hypothesis": "Terse-input-means-execute and push-requires-explicit-approval create an asymmetric autonomy model: the user wants maximum autonomy on the work axis (keep coding, don't ask) but zero autonomy on the visibility axis (never push without asking) — and the agent repeatedly conflates 'keep going' energy with blanket permission for externally-visible actions.",
+    "hypothesis": "The terse-command-as-autonomous-execution rule and the per-push-approval rule create a genuine contradiction: a post-task 'done' or 'next' maximizes execution autonomy on the same turn where git push requires explicit friction — the agent must partition 'autonomy on in-process work' from 'gate on externally-visible side-effects' using visibility boundary as the discriminator, not message length.",
     "confidence": 0.72,
     "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals ('ahead', 'next', 'done') as authorization to continue local work only — never extend them to actions that cross the local/external boundary (git push, API calls to shared services, messages to others).",
+    "suggested_rule": "Always apply terse-as-continue only to reversible, local actions; never let a terse continuation cross a visibility boundary (push, deploy, message send) without an explicit named confirmation.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

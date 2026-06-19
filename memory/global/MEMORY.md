@@ -16,6 +16,11 @@
 - [Maximalist ≠ ambitious](feedback_ambitious_vs_maximalist.md) — Wide-and-flat works for agents; tall-stacked dependent layers fail (tower without spine)
 - [Propose safety nets](feedback_propose_safety_nets.md) — Surface missing safety nets (idempotency, dry-runs, diff previews, undo) ASAP, even on existing projects; over-suggesting is fine, missing is regrettable
 
+## Feedback — Workflow, Efficacy & Tool Routing
+- [Efficacy over speed](feedback_efficacy_over_speed.md) — Judge tools/models/agents by efficacy (result-per-user-effort), not tok/s; willing to dedicate resources for ballpark efficacy
+- [Structure over one-shotting](feedback_structure_over_oneshot.md) — One-shotting is a fantasy; a failed one-shot wastes more than plan→implement→review. Default to structure on non-trivial work
+- [Work-routing triad ("just use chatgpt")](user_work_routing_triad.md) — Routes by ease–effort–output: trivial one-offs → ChatGPT/small `lm`; structured heavy work → the agent. "Just use chatgpt" = light task, not a knock on the agent
+
 ## Feedback — Verification & Testing
 - [Always test small sample first](feedback_always_test_small_sample.md) — MANDATORY: test every transform on 2-3 rows before full run
 - [Verify before refactoring](feedback_verify_before_refactoring.md) — Spot-check 2-3 targets against actual code before starting cleanup

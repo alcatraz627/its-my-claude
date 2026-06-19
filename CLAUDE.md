@@ -67,6 +67,10 @@ When the user asks for something that touches a surface an ADR or hard architect
 
 When the user says "drop X" and other features they want to keep depend on X, **push back individually before accepting the broader simplification**. Cleanly accepting a request that silently breaks an adjacent feature is sycophantic deference, not helpfulness. Specifically: when evaluating "drop Y", check what else uses Y; if the user retained dependencies on Y, surface the coupling: "you can drop the broader direction, but this specific piece is load-bearing for the cap behavior you want." Graduated from atone `sycophantic-deference-on-coupled-decisions` (S3).
 
+### Prefer structured plan+review over one-shotting
+
+On non-trivial / multi-file / agentic work, default to **plan → implement → review** — surface a short plan before executing and keep steps verifiable (the Task list holds them). The user is explicit: one-shotting is "a nice fantasy," and a *failed* one-shot wastes more than structure would have, because they then debug a tangle and redo it. One-shotting is fine only for genuinely trivial one-offs — those route to the light lane ("just use chatgpt" / a quick tool), not the structured agent. The metric is **efficacy** (result per unit of *their* effort, counting rework), not single-shot speed. Full rule: `rules/structure-over-one-shotting.md`.
+
 ### Render before saving artifact files
 
 When writing a `.md`, `.html`, or `.txt` file that humans will read or other agents will parse, NEVER pipe a draft through a TTY renderer (`gum_table`, `gum_panel`, `bat`, `glow`, `mdcat`, etc.) and save the rendered output as source. The renderer's output is for terminals, not source files. Write source syntax (markdown tables: `| col | col |\n|---|---|`) and let the renderer run at view time. Signatures of this slip in the saved file: every line indented 2 spaces, `…` characters inside tables, fixed-width column alignment in supposedly-flowing prose. After writing, **render-check your own output** with `glow file.md` or `bat -l md file.md` — the 10-second check catches missing frontmatter, broken H1, and gum-output-saved-as-source patterns. Graduated from atone `ascii-art-tables-instead-of-gum-tools` (S2, 4×) + RCA-quality incident 2026-05-16.
@@ -127,10 +131,12 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | --------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `conventions/html-output.md`      | `topic:html-output`, `topic:reports`, HTML generation                 | HTML rules: dark/light toggle MANDATORY + CSS vars + future HTML rules                                               |
 | `conventions/cli-help-design.md`  | `-h`/`--help` implementation                                          | Help text structure, colors, columns, no-pager                                                                       |
+| `conventions/tui-design.md`       | `topic:tui`, `topic:fzf`, `phrase:"interactive explorer"`, terminal browser/launcher | Functional TUI patterns + fzf-as-runtime launcher blueprint + fzf>gum>framework decision + degradation ladder       |
 | `conventions/asset-management.md` | `tool:asset.sh`, screenshots/reports/PDFs                             | Assets under `~/.claude/assets/<type>/` + CWD double-nest hazard                                                     |
 | `conventions/doc-writing.md`      | `skill:write-docs`, technical docs                                    | Anti-pattern catalog + STUB/PARTIAL/PLANNED annotations                                                              |
 | `conventions/scratch-files.md`    | `_*.claude.md` management, checkpoints                                | Scratch-file naming + monthly archive to `assets/checkpoints/YYYYMM/`                                                |
 | `conventions/dashboard-tools.md`  | `topic:dashboard-tool`, single-user Node + watcher + JSON-state tools | Build template: mutex on load-mutate-save, GETs never write, atomic + rotated writes, anti-patterns, Sherpa skeleton |
+| `conventions/preference-graduation.md` | `topic:preferences`, `topic:workflow-vocabulary`, `phrase:"bake this in"`, `phrase:"remember how I work"` | How recurring preference/vocabulary signals graduate from post-insight streams (i-dream/atone/affirm/core-dump/runtime-notes) → GLOSSARY/memory/rules. Harvester: `scripts/preference-harvest.sh` |
 
 ---
 

@@ -766,3 +766,36 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (19): c6ea2b0e, bc59cf34, a76e1439, +16 more
 
 ---
+
+
+## Wake Cycle — 2026-06-18 22:46 UTC
+
+### Insight (conf=0.72)
+> The 18+ recordings of the same git-push violation without preventing recurrence is itself the fix-thrash anti-pattern operating at the meta/system level — the correction mechanism patches the symptom (records the mistake) without addressing the root cause (no mechanical gate prevents the push).
+
+**Rule:** When a behavioral pattern has been recorded more than 5 times without a mechanical enforcement gate, treat the missing gate as the root cause — stop recording the pattern and instead invest in a PreToolUse hook or hard block.
+
+**Evidence:**
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
+- _Sessions_ (9): c6ea2b0e, 2527f606, e42d4f08, +6 more
+
+---
+
+
+## Wake Cycle — 2026-06-19 01:39 UTC
+
+### Insight (conf=0.72)
+> The terse-command-as-autonomous-execution rule and the per-push-approval rule create a genuine contradiction: a post-task 'done' or 'next' maximizes execution autonomy on the same turn where git push requires explicit friction — the agent must partition 'autonomy on in-process work' from 'gate on externally-visible side-effects' using visibility boundary as the discriminator, not message length.
+
+**Rule:** Always apply terse-as-continue only to reversible, local actions; never let a terse continuation cross a visibility boundary (push, deploy, message send) without an explicit named confirmation.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (17): c6ea2b0e, bc59cf34, a76e1439, +14 more
+
+---

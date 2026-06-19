@@ -11806,6 +11806,66 @@
     ]
   },
   {
+    "id": "afbbd8d4-3985-4b93-a10d-e09643dcad9e",
+    "pattern": "Scratch or checkpoint files placed in project root directories that are loaded as complete artifacts (Chrome extensions, npm packages, browser add-ons) will cause load failures — build tools and runtimes treat all files in the directory as part of the artifact, including agent-generated scratch files.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "3b248df0-1036-4a43-8031-156c136ebd51",
+      "6d1a32cf-ef44-4b70-843e-aac1a5de2f01",
+      "22fc3c6e-b400-4b15-bc3a-6af194256ad2",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      "5fd458bf-8cbd-4380-8d28-3ac9cb9f0121",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "1a008c39-1b0a-40d6-9406-700e5947427f"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-18T22:44:48.169152+00:00",
+    "last_seen": "2026-06-18T22:44:48.169152+00:00",
+    "occurrence_history": [
+      "2026-06-18T22:44:48.169152+00:00"
+    ]
+  },
+  {
+    "id": "7eb641d0-443b-4d13-bd31-de4d889ba7e6",
+    "pattern": "When the user has already performed an environment migration (e.g., switching version managers), the agent should verify the current toolchain state before referencing it rather than relying on prior context which may name the old tool.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-19T01:37:39.440186+00:00",
+    "last_seen": "2026-06-19T01:37:39.440186+00:00",
+    "occurrence_history": [
+      "2026-06-19T01:37:39.440186+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13333,6 +13393,43 @@
     ]
   },
   {
+    "id": "45fb7b1d-d1b1-4e36-88b7-073e79799243",
+    "pattern": "For complex hand-rolled UI components, the user prefers the agent to plan first and review against existing design patterns before implementing — never one-shot a non-trivial custom widget.",
+    "valence": "positive",
+    "confidence": 0.87,
+    "category": "user-preference",
+    "source_sessions": [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      "3b248df0-1036-4a43-8031-156c136ebd51",
+      "6d1a32cf-ef44-4b70-843e-aac1a5de2f01",
+      "22fc3c6e-b400-4b15-bc3a-6af194256ad2",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      "5fd458bf-8cbd-4380-8d28-3ac9cb9f0121",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "1a008c39-1b0a-40d6-9406-700e5947427f"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-sys-monitor",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-18T22:44:48.169152+00:00",
+    "last_seen": "2026-06-18T22:44:48.169152+00:00",
+    "occurrence_history": [
+      "2026-06-18T22:44:48.169152+00:00"
+    ]
+  },
+  {
     "id": "e0efbf93-3db5-4ba7-b7b5-89640905ddd3",
     "pattern": "Data pipeline work involves scraping, transforming, and upserting product data with attributes, descriptions, and images",
     "valence": "neutral",
@@ -13919,148 +14016,6 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "4b14eec9-83e7-4004-ae67-fa3f9bfd17b2",
-    "pattern": "User prefers Zellij over tmux for terminal multiplexing",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "13cdec26-23ef-42e8-89a6-10fc02ec02a5",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "48b50d47-1493-4f68-a1bd-444ba3c25a7e",
-      "76e79c84-e1a8-461e-bd30-0ab78b14496f",
-      "697d14fb-bfae-4650-ba16-6ebdad4e0b96",
-      "98296345-0f81-4d22-bccc-ed57bc792133",
-      "2fa7f794-d8be-4b93-8934-5b4edab278fd",
-      "cfc1d16f-0ff3-4e63-a275-199f7aaf8bee",
-      "4cc3b1d3-836f-441b-8217-76047f9564b1",
-      "605ac510-d84e-41d3-9d4a-235be41b0178",
-      "fd0787a0-a782-4a36-8138-9235fca18426",
-      "fa20ade0-3c96-44a4-a081-d95cf425e3df",
-      "f6813160-9037-4a12-b47e-f7a95913ea41",
-      "f4c49981-67e5-45de-ad40-ebe08b253019",
-      "de11f780-7e53-473b-8b39-f78455d1fc5e",
-      "da85a83b-098e-4bef-9522-b01541f9ac22",
-      "a4ebda4e-52c4-4f02-968f-14eb3f231e10",
-      "a0c85499-49d8-4a12-9229-2e05847914e2",
-      "a051a878-83b0-4dad-b9d1-9a384e143f75",
-      "940ec482-502c-42a7-b553-1371a5d3bac8",
-      "8659d11c-b4bf-4b7c-9b57-8519e582a02a",
-      "818391ae-f06f-4413-b1ac-e099c12544a7",
-      "7f78f87b-9dd5-42a6-9a58-c87141d5bb16",
-      "7ca7dd1a-b63d-4471-8e3d-bc36d1c8af1c",
-      "6eecdde3-a454-4d88-8fec-9737a22fd903",
-      "5a7a08d1-64e4-4353-bf42-60690df4e332",
-      "496d496c-4d95-4c75-b969-8fa1eee0cfa3",
-      "3a55a464-076b-4cf3-8433-685281e0f8d8",
-      "37641699-69c1-435c-ba46-9f4d5a85ed30",
-      "32ffecb4-78fa-4f85-890e-ae6ad940e61e",
-      "2f72c1cb-5beb-4e74-a03c-aa146abd11c7",
-      "0ec03eac-2f0f-425d-9c84-d2cd4cbae067",
-      "052c5615-8a54-41a0-a255-5dd45a16941e",
-      "04ae7075-5541-4a82-b0ef-3d21d348b3e1",
-      "979684bc-7e68-40d9-8b89-ed1b259ac534",
-      "6b3a756f-734f-4e3c-ab00-b6db2cd34220",
-      "26d5db46-6428-4102-8b6f-8b760e61796a",
-      "d12c2a59-b74e-4495-8f87-2e5c2d289021",
-      "fde6f24a-d0aa-4416-920a-dcb6cee8182f",
-      "fc6c438b-2d0a-40d8-9e65-a8f4e8283b52",
-      "f3ddfd2f-1f54-4313-96a7-a9a6af5854fe",
-      "d7e8dce2-6dc0-4304-a1da-42806edbd5af",
-      "d780bb16-90a7-46a7-9787-e5809c02a195",
-      "ccc9ccc9-5a5a-4611-919c-40d72e1fa6e9",
-      "cc6cb578-3076-4208-8c77-935dcf196675",
-      "bd2b33bb-4022-4180-abad-8d2509df56a9",
-      "b5c4743e-5e4c-417b-819b-986a3a1dcea2",
-      "a94a9f3a-c6b6-4197-825d-851590cc01a7",
-      "a6f721df-1e3b-4046-b90f-6286573fa069",
-      "92688780-4be8-4d93-a109-e9b0ea085d7b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:28:45.862163+00:00",
-    "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "9e486a20-41bf-4d37-92de-95175dadb92e",
-    "pattern": "Parallel sub-agents (Task tool) are effective for large-scale documentation generation, codebase audits, and independent feature builds",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "f5a1fde7-ec25-47a3-bc9e-a8be91444530",
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "d092c64c-6135-4852-91d6-c747a64615f0",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "720c3307-86e1-401c-a313-40e2250112b8",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "52ec83f9-3cf1-446d-b369-3c8cc7de5eaa",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "0c2b41a8-de98-4884-956f-be508d7306cc",
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "8d669b1c-b0c3-46f2-9798-17391bbd69a6",
-      "86d18740-3024-4e69-87e9-4d23bea6ebf0",
-      "80b65086-2d1d-43ab-88b6-5a9708f72f3c",
-      "6bc14f4a-fdbe-446b-aeaf-b52ce840e6de",
-      "67dcd273-7231-4d0d-9d18-4924e861442b",
-      "58c2e5c6-ddd8-4796-9b46-db49e5cd2733",
-      "4badb0bc-2729-4d90-840d-048e402aeb06",
-      "44b56107-271d-4089-bec8-9932a97e8877",
-      "3e5d8fae-b9de-43b9-8397-6db77832f850",
-      "36c1c63f-fcd3-4159-ba3c-1ba691ac4432",
-      "331c917c-b0fe-4499-8144-5f871842b6a5",
-      "2f9a7f08-d0f1-46d6-9d06-ff6ae5165e9c",
-      "2c327b58-a114-48e6-a1c2-ff79f984bbbe",
-      "2b7de12f-4005-4355-81f2-d7825cf3b972",
-      "2ae312ff-0b07-4e3b-8424-fb19b96eee50",
-      "21fe929f-1817-4a14-9b0b-59332d6e9e9e",
-      "2005bc29-9168-4012-8ae8-13399ed8968f",
-      "110847f9-1e42-4bc3-8edf-bcc4a27b9e39",
-      "0e609988-6c4d-4123-8939-e075602d1b92",
-      "0bbf66a1-2068-4483-9a2c-1e39e84b7ef1",
-      "0b6a4a75-66f0-4bfc-b0c8-113172a124dc",
-      "016b3721-680c-4f02-9535-328fc0b97289",
-      "942b6492-d23a-4fc2-b44c-054d7bee389b",
-      "8dff36fc-ad36-4a15-b624-ba51bed76490",
-      "3180fb44-90f2-41b8-92bd-3da77c3a409a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T00:47:41.799910+00:00",
-    "last_seen": "2026-04-15T00:47:41.799910+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "1142f367-98e2-4412-9f5b-98c9a43aad1f",
-    "pattern": "Pure reasoning sessions (creative, analytical, consolidation) consistently complete with zero tool calls when the task is self-contained text generation or structured analysis",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "bf1e7f62-d38e-49cd-b4b1-45230dccf4e4",
-      "b03fb689-ba5a-4cd3-ab80-22fe11bcf1f5",
-      "5aceac42-8bb6-439a-9b7d-763ca9c5bb7d"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T08:21:44.107444+00:00",
-    "last_seen": "2026-04-15T08:21:44.107444+00:00",
     "occurrence_history": []
   }
 ]

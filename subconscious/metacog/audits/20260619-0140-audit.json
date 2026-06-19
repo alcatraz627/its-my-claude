@@ -1,0 +1,45 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 21234,
+    "correction_density": 0.2,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.43633180424916995,
+    "unit_count": 5
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — violations in ~4-5 of 4 substantive units (~40-50%): db668075-2 (cat package.json|head-80 instead of Read; ls-la+echo+ls compound Bash success=false); db668075-7 (cat heredoc in compound Bash success=false before Write fallback to /tmp/memprobe2.mjs — structurally identical to afe26d7d-0 and db668075-7 from prior cycles); db668075-18 (grep -qE in polling for-loop instead of rg; rm -rf .next in Bash blocked by hook success=false before trash fallback). Rate ~40-50% — within the 30-44% STABLE band of prior three cycles. No improvement trend; marginal-improvement reading from 2026-06-17 (30%) was not sustained.",
+      "compound_command_overreach:RECURRING:STABLE — db668075-2: ls-la+echo+ls next.config compound Bash success=false before decomposition; db668075-7: large compound (kill-USR1+curl+cat-heredoc+node) success=false before Write-fallback adopted. Decompose-only-after-failure sequence structurally identical across all prior cycles; no pre-decomposition behavior observed in any confirmed instance across full calibration history.",
+      "rm_bash_instead_of_trash:RECURRING_VARIANT — db668075-18: rm -rf .next executed in Bash and blocked by safe-delete hook (success=false); recovered correctly with trash .next in subsequent command. Sub-variant of shell_tool_preference_violations on the destructive-delete surface. Not independently named in prior calibration history but rule violation (rules/shell.md trash-not-rm mandate) is unambiguous. Hook enforcement confirmed effective; root-cause prevention would require pre-selection discipline identical to the broader shell violations class.",
+      "re_edit_thrash:MARGINAL_IMPROVEMENT — db668075-21: Edit-fail on package.json → Read → Edit-succeed; Edit-fail on .gitignore → Read → Edit-succeed. Four consecutive Edits on playwright.perf.config.ts driven by iterative test-run results (externally justified iteration rather than blind retry). First cycle where Read-before-retry behavior appeared within an edit-thrash-adjacent unit rather than hook-bypass as exit. Not yet confirmed improvement — single-cycle signal."
+    ],
+    "calibration_score": 0.18,
+    "overconfident_count": 2,
+    "recommendations": [
+      "shell_tool_preference_violations and compound_command_overreach are STABLE across 4+ consecutive cycles with identical structural form and no frequency reduction. No new recommendations — prior recommendations unimplemented and no new leverage point identified this cycle.",
+      "rm_bash_instead_of_trash: safe-delete hook is catching violations correctly. No additional recommendation beyond what the existing hook provides; root-cause is the same pre-selection gap as the broader shell violations pattern.",
+      "re_edit_thrash: Read-before-retry behavior in db668075-21 is a positive signal worth tracking for one more cycle before drawing conclusions. If confirmed in next cycle, this may warrant downgrading re_edit_thrash from RECURRING:STABLE to RECURRING:MARGINAL_IMPROVEMENT."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      260386
+    ],
+    [
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      3003727
+    ],
+    [
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      463664
+    ]
+  ],
+  "timestamp": "2026-06-19T01:40:36.935722Z",
+  "tokens_used": 9565,
+  "units_analyzed": 5,
+  "units_total": 5
+}

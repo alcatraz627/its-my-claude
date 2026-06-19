@@ -1,17 +1,17 @@
-<!-- i-dream project brief · 2026-05-29T23:25:23.417841+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-18T22:48:39.264561+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A Next.js frontend product (Versable enhancement-product) with long multi-session implementation cycles, heavily reliant on /core-dump and /catchup for state continuity across context compactions.
+Frontend of the Versable enhancement product — a multi-session, long-running feature development context where the dominant working style is autonomous execution within tight scope gates, with heavy reliance on session continuity tooling.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively**: run /core-dump at every major milestone and before context hits 70% — don't wait for the end of a session
-- **Reconstruct intent from WAL/checkpoint on entry**: when starting with "this session being continued from", read the checkpoint file before doing anything else
-- **Scope-gate before executing**: confirm the task boundary explicitly at session start; within it, execute autonomously; outside it, do nothing
+- **Checkpoint proactively**: run `/core-dump` at milestones and whenever context approaches 70% — don't wait to be asked; `/catchup` is the primary recovery path after compaction
+- **Confirm the task boundary at session start**, then execute autonomously and aggressively within it — terse user messages ("keep going", "move") mean "resume from WAL/checkpoint state, don't ask again"
+- **Reconstruct from WAL/checkpoint first** when resuming via "this session being continued from" — re-read task state before taking any action
 
 ## Things to avoid
-- **Never commit or push without fresh per-push approval** — prior approval in the session does not carry over; each push requires an explicit in-turn "yes, push this"
-- **Don't expand scope silently** — even "obvious improvements" outside the stated task are violations; ask first
-- **Don't treat session-level approval as blanket authorization** — one approval covers one action, not a class of future actions
+- **Never commit or push without explicit, fresh, per-operation approval** — prior session approval does not carry forward, ever; this is the single highest-severity recurring violation in this project's history
+- **Don't expand scope beyond what was explicitly requested** — no "while I'm here" improvements; the user has corrected this pattern multiple times across sessions
+- **Don't re-run sub-agents that already wrote output to disk** — triage before re-dispatching after failures
 
 ## Open questions / known gaps
-- Pattern extraction is over-indexing on the WAL markdown→JSONL migration (appears 4+ times); deduplication of near-identical patterns is a known gap in the memory/atone pipeline
-- Tension between "minimal changes" preference and "50-150 tool autonomous sessions" is real but resolved by scope-gating: confirm boundary once, then execute fully within it
+- Pattern deduplication in session memory is unreliable — the same WAL migration event appears 4+ times as separate entries; treat repeated pattern signals as noise until deduplicated
+- Scope-gating vs. autonomous execution creates ongoing tension: confirm the gate once at session start, then don't re-ask mid-task

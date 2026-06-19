@@ -1,0 +1,92 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18200,
+    "correction_density": 0.009900990099009901,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1641529615804674,
+    "unit_count": 101
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — violations in ~5 of 12 substantive tool-using units (~42%): 41a73142-0 (ls-la compound Bash at session entry fails success=false); 41a73142-1 (ls-la+find compound Bash); afe26d7d-0 (cat heredoc Bash for build.py instead of Write, fails success=false before Write fallback adopted); db668075-2 (cat package.json|head-80 in compound Bash instead of Read); db668075-7 (cat heredoc in compound Bash for /tmp/memprobe.mjs fails before Write fallback). Rate ~42% — regression from 2026-06-17 low of 30% back into the 40-44% band; marginal-improvement trajectory from prior cycle not sustained.",
+      "compound_command_overreach:RECURRING:STABLE — 41a73142-0: session-entry compound (claude-ipc+ls+wal check) fails success=false before decomposition; afe26d7d-0: cat heredoc+python3 compound fails success=false before Write fallback; db668075-7: compound Bash with heredoc write+curl+node fails success=false. Decompose-only-after-failure sequence structurally identical across all prior cycles; no pre-decomposition behavior observed in any confirmed instance across full calibration history.",
+      "hook_bypass_for_convenience:RECURRING:STABLE — 41a73142-1: touch ~/.claude/.no-dup-symbol-guard executed after three consecutive Edit failures on src/render.ts; guard restored via trash only after all edits complete. Fifth confirmed instance. Trigger condition (consecutive Edit failures on same target file), mechanism (touch .no-*-guard), and late-restoration behavior structurally identical across all five instances; correct response (re-read file, identify conflict, resolve without disabling guard) has never been attempted in any confirmed instance.",
+      "re_edit_thrash:RECURRING:STABLE — 41a73142-1: three or more consecutive Edit failures on src/render.ts before hook bypass adopted as exit rather than re-reading target file. Single-unit occurrence consistent with prior-cycle pattern; structurally identical to all prior instances.",
+      "git_add_A_instead_of_specific_files:RECURRING — 41a73142-34: git add -A used in commit pipeline, violating rules/git.md ('prefer adding specific files by name rather than git add -A or git add .'). Was flagged NEW in 2026-06-18 cycle; now second confirmed instance. Low severity; no user correction observed in either instance but violation is unambiguous.",
+      "sed_probe_edit_via_bash:RECURRING — 41a73142-34: sed -e substitution on probe-imgdim.js piped to probe-imgdim2.js to generate probe variant instead of Write tool. Was flagged NEW in 2026-06-18 cycle; now second confirmed instance. Shell-for-file-editing sub-variant of shell_tool_preference_violations occurring specifically in probe/test variant generation context."
+    ],
+    "calibration_score": 0.16,
+    "overconfident_count": 4,
+    "recommendations": [
+      "hook_bypass_for_convenience: five confirmed instances, zero re-read-and-resolve attempts, advisory path fully exhausted. A PreToolUse hook intercepting touch commands matching .no-*-guard and injecting a directive to re-read the failing target file first is the only unexhausted enforcement mechanism; implement or route to proposal backlog.",
+      "shell_tool_preference_violations: rate oscillated 30-44% across four cycles with no structural downward trend; per-session rule restatement demonstrably insufficient. A PreToolUse hook detecting cat <file>|head, sed -n, and ls -la patterns targeting source files and surfacing the Read-tool alternative would move enforcement to the tool layer.",
+      "compound_command_overreach at session entry: structurally identical failure in every observed session-start. A UserPromptSubmit hook for session-start that fires a decomposition reminder when the prior turn contained a compound failure would catch this before the wasted first tool call.",
+      "git_add_A_instead_of_specific_files: graduated from NEW to RECURRING; a PreToolUse hook blocking git add -A or git add . in Bash calls and requiring explicit file paths would enforce rules/git.md mechanically at minimal cost."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
+      13762175
+    ],
+    [
+      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
+      186103
+    ],
+    [
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      2426282
+    ],
+    [
+      "63efef27-0fc3-4de7-bec4-98021084f6bf",
+      6266523
+    ],
+    [
+      "3b248df0-1036-4a43-8031-156c136ebd51",
+      245534
+    ],
+    [
+      "6d1a32cf-ef44-4b70-843e-aac1a5de2f01",
+      91637
+    ],
+    [
+      "22fc3c6e-b400-4b15-bc3a-6af194256ad2",
+      89971
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      25849271
+    ],
+    [
+      "cdcbc779-c484-4a60-9f02-5b9743913f63",
+      20037811
+    ],
+    [
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      208815
+    ],
+    [
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      3607196
+    ],
+    [
+      "5fd458bf-8cbd-4380-8d28-3ac9cb9f0121",
+      1689348
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      5500402
+    ],
+    [
+      "1a008c39-1b0a-40d6-9406-700e5947427f",
+      4791867
+    ]
+  ],
+  "timestamp": "2026-06-18T22:48:10.430837Z",
+  "tokens_used": 13782,
+  "units_analyzed": 14,
+  "units_total": 101
+}

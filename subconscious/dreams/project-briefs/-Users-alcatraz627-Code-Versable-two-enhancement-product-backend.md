@@ -1,18 +1,16 @@
-<!-- i-dream project brief · 2026-06-18T00:44:15.683402+00:00 · 3 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-18T22:48:55.521761+00:00 · 5 patterns / 0 insights -->
 ## What this project is about
-A backend for a product called "Versable" (enhancement product). The dominant working style is incremental feature additions and refactors with strong conventions around code placement, auth patterns, and documentation tone.
+Backend for a Versable enhancement product; work spans API, documentation, and hand-rolled UI components with strong standards for code quality and writing tone.
 
 ## Things to do (or keep doing)
-- **Plan before coding complex components** — read existing analogous implementations first, confirm the shape, then write; never one-shot complex hand-rolled logic
-- **Grep for existing wrappers before raw reads** — `isDevelopment`, config loaders, env utilities all exist; use them; grep before writing `process.env.*`
-- **Write docs in formal, neutral, confident prose** — no internal analysis hedges, no uncertainty markers, no marketing framing; direct declarative sentences only
-- **Place auth logic in the auth module** — never inline guards in route files; locate the auth module first and add there
+- **Plan before implementing** complex hand-rolled UI or non-trivial custom components — review existing similar implementations first, then write code; never one-shot
+- **Write docs in confident, neutral tone** — formal, direct, simple; no hedging, no marketing framing, no "why this matters" flourishes
+- **Check for existing patterns** before introducing new implementations — grep the full project tree for analogous components or conventions before writing new ones
 
 ## Things to avoid
-- **Don't scatter auth code outside the auth module** — token and session guards belong in one place; mixing them in routes has been corrected repeatedly
-- **Don't let internal agent doubts surface in documentation** — no "this may", "one concern is", or caveats in user-facing docs; rewrite to neutral fact before writing the file
-- **Don't use flowery or marketing-style language in technical docs** — avoid "why this matters", "desperate" framing, or show-off phrasing; keep it dry
-- **Don't write without scanning for existing patterns first** — convention violations have triggered strong user corrections; always grep analogous files before adding new code
+- **Don't let agent uncertainty leak into docs** — internal doubts, analysis caveats, or "might be" qualifiers must not appear verbatim in user-facing documentation; strip them before writing
+- **Don't place scratch or checkpoint files in the project root** — any directory loaded as a complete artifact (npm package, Chrome extension, browser add-on) will fail to load if it contains `_*.claude.md` or similar agent scratch files; place those elsewhere
+- **Don't use flowery or show-off language in technical writing** — "desperate," "powerful," "why this matters" phrasing is a recurring violation; prefer plain declarative sentences
 
 ## Open questions / known gaps
-- Recurring tension between writing code quickly and missing existing project utilities — the cost of undiscovered wrappers is high (user has caught these post-push)
+- Tension between thorough planning (required) and one-shot temptation on UI work — enforce the plan-first gate even when the component "looks simple"

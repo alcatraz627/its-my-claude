@@ -1,0 +1,20 @@
+{
+  "ts": "2026-06-18T16:53:34Z",
+  "session_id": "sysmon-v21-ship",
+  "project_root": "/Users/alcatraz627/Code/Claude/sys-monitor",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/sys-monitor/_20260618-sysmon-v21-ship.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**(optional) Screenshots** \u2014 drop `assets/panel.png` + `assets/menubar.png`",
+    "**(optional) Notarization (Path B)** \u2014 if the one-time `xattr -dr",
+    "**#69 GHz panel row (deferred)** \u2014 validate the FrequencyMonitor cluster",
+    "**#37 (NOT sys-monitor)** \u2014 the parked `~/.claude` \"verify-by-default\" gcc design."
+  ],
+  "tags": []
+}

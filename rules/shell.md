@@ -54,11 +54,36 @@ Shell-log scans show repeated hand-built patterns when a better tool exists:
 
 | Shell pattern | Prefer |
 |---------------|--------|
-| `find ... -name "*.X" \| head -N` | **Glob** — faster, sorted by mtime, no `head` noise |
+| `find ... -name "*.X" \| head -N` | **Glob** (agent) · **`fd`** (in shell) — gitignore-aware, parallel, dodges the macOS `find /tmp` symlink trap |
 | `grep -r "X" ... --include="*.Y"` | **rg** — 18–65× faster; see section below |
 | `cat file 2>/dev/null \| head` | **Read** — reads only what's needed, cleaner errors |
+| `grep`/`sed`/`awk` on `.yaml`/`.toml`/`.xml` | **File Tools MCP** (`read_structured`) for programmatic R/W · **`yq`** for shell pipelines / in-place edits |
 
 Use Bash for shell-only operations (process control, pipes, environment). Don't use it as a filesystem browser.
+
+### `fd` over `find` (in shell contexts)
+
+In a Bash script or pipeline, prefer **`fd`** to `find` for locating files: it
+respects `.gitignore`, runs in parallel, has saner syntax, and — critically on
+this machine — sidesteps the BSD `find <symlinked-dir>` no-descent trap above
+(`find /tmp …` silently matches nothing). The agent's primary file-find is still
+the **Glob tool**; `fd` is for when you're already in a shell.
+
+This is a **preference, not a hard block** (unlike grep→rg): `find -delete`,
+`-exec`, `-newer`, `-mtime` have no clean `fd` equivalent, so `find` stays
+legitimate for its action/predicate flags. Reach for `fd` for "locate files by
+name/type"; keep `find` when you need what only `find` can do.
+
+### `yq` for structured config — under the File Tools MCP mandate
+
+**`yq`** reads/edits YAML · TOML · XML · properties from the shell
+(`yq '.a.b' f.yaml`, `yq -p toml '.x'`, in-place `yq -i '.x = 1' f.yaml`). It does
+**not** override the standing **File Tools MCP** mandate: for programmatic
+read/write of a data file, the MCP (`read_structured` / `write_structured`) is
+still preferred. Use `yq` when already inside a Bash pipeline (transforming
+command output, a quick `.field` extraction, an in-place edit a script must do)
+where invoking the MCP would be awkward. Order of preference for structured data:
+**File Tools MCP → `yq` (shell) → never hand-rolled `grep`/`sed`**.
 
 ## ripgrep over grep (MANDATORY)
 
