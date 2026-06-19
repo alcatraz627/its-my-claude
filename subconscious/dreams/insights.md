@@ -799,3 +799,32 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (17): c6ea2b0e, bc59cf34, a76e1439, +14 more
 
 ---
+
+
+## Wake Cycle — 2026-06-19 17:51 UTC
+
+### Insight (conf=0.82)
+> The git-push-without-approval pattern has itself become an instance of the root-cause-thrash anti-pattern: the same advisory fix ('don't push without approval') has been re-recorded 15+ times across sessions without solving the underlying problem, which is the absence of a mechanical gate — the system is treating a structural enforcement gap as a behavioral correction target.
+
+**Rule:** When the same behavioral correction appears more than 3 times across sessions, stop recording it as a preference and instead escalate to mechanical enforcement (a hook, a pre-tool gate, or a hard block) — advisory repetition is the diagnostic signal that the fix is at the wrong layer.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product
+- _Sessions_ (9): f22bd641, 5a0bcd6b, 59c741e5, +6 more
+
+---
+### Insight (conf=0.72)
+> The user enforces a single meta-principle — 'state must be explicitly transferred, never implicitly inherited' — across three unrelated domains: git authorization (approval doesn't carry forward), session context (must be checkpointed and restored), and configuration access (must go through the canonical module, not raw env vars).
+
+**Rule:** Always treat prior-turn state (approvals, context, access patterns) as expired by default — re-derive from the canonical source each time rather than inheriting from memory or convention.
+
+**Evidence:**
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "When a project has an established configuration system, the agent must use it exclusively — never access environment variables directly with…"
+- _Projects_ (5): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
+- _Sessions_ (60): c6ea2b0e, 2527f606, e42d4f08, +57 more
+
+---

@@ -14,12 +14,18 @@ tool_name=$(echo "$input" | jq -r '.tool_name // empty')
 command=$(echo "$input" | jq -r '.tool_input.command // empty')
 [[ -n "$command" ]] || exit 0
 
+# Match against a de-quoted copy so an `rm` named INSIDE a string literal — a
+# commit message, an `echo`, RCA prose passed to another tool — is treated as
+# data, not a command. A real deletion lives OUTSIDE quotes. Same idiom as
+# guard-system-dir-writes.sh; closes the `echo "...; rm ..."` false positive.
+scan=$(printf '%s' "$command" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
+
 # Detect rm commands (rm, rm -f, rm -rf, rm -r, etc.)
 # Match: standalone rm at start of command or after && ; | etc.
 # Skip: commands like "npm rm", "cargo rm", "git rm" (package manager operations)
-if echo "$command" | grep -qE '(^|[;&|]\s*)rm\s+'; then
+if echo "$scan" | grep -qE '(^|[;&|]\s*)rm\s+'; then
   # Don't intercept git rm (staging area operation, not file deletion)
-  if echo "$command" | grep -qE '(^|[;&|]\s*)git\s+rm\b'; then
+  if echo "$scan" | grep -qE '(^|[;&|]\s*)git\s+rm\b'; then
     exit 0
   fi
 

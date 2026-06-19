@@ -1,17 +1,18 @@
-<!-- i-dream project brief · 2026-06-19T01:41:08.471293+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-19T17:53:21.469891+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Long-running dream-tracking dashboard (`iDream`) built over many multi-session compaction cycles, with heavy use of session continuity tooling (`/core-dump`, `/catchup`) as the dominant workflow. Work involves Anthropic API, pm2 services, widget UI, and structured data pipelines.
+Long-running dream-tracking dashboard (iDream) with multi-session development spanning 100+ turns per feature; work style is coprocessor-mode with terse commands and frequent context compaction.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively at milestones** — write `/core-dump` at tool #30 and suggest it at #60; don't wait for the user to ask
-- **Treat single-word continuations as resume signals** — "next", "ahead", "started" means reconstruct intent from WAL/checkpoint and continue autonomously; emit a one-line ack, then execute
-- **Read WAL as JSONL** — the WAL format migrated from markdown to JSONL (canonical as of 2026-04-17); always write and query JSONL, never markdown
+- Write `/core-dump` at every major milestone and at tool call #30; don't wait for end-of-session — compaction happens mid-task
+- Treat single-word directives (`keep going`, `next`, `started`, `ahead`) as autonomous-continue signals; reconstruct intent from WAL/checkpoint, emit one-line ack, resume
+- Use WAL JSONL format (canonical since 2026-04-17); write via `scripts/wal/wal.sh`, never markdown
 
 ## Things to avoid
-- **Never push without fresh per-push approval** — each `git push` requires explicit user confirmation; approval earlier in the same session does not carry over
-- **Never infer or extrapolate data values** — only output values directly traceable to source data; hallucinated values in structured pipelines are a critical trust violation
-- **Never expand scope on terse continuations** — "keep going" increases execution depth, not scope; never add improvements the user didn't explicitly request
+- Never commit or push without fresh per-push approval; prior approval in the same session does not carry forward — ask every time
+- Never infer, extrapolate, or hallucinate data values in structured data processing; only output values directly traceable to source data
+- Never write credentials or secrets to any file, even temporarily, even for testing
+- Never expand scope beyond what was explicitly requested; "keep going" means continue at the same scope, not broaden it
 
 ## Open questions / known gaps
-- **Session deduplication debt** — the WAL/pattern extraction system over-generates duplicate entries for the same events; a deduplication pass on the checkpoint pipeline is overdue
-- **Credential hygiene in long sessions** — credentials shared for testing must never be written to files; this tension is unresolved across multi-session work
+- Pattern extraction for this project has severe deduplication failures (same WAL migration event recorded 4× independently) — signals the session log may accumulate noise over time; treat pattern counts skeptically
+- Tension between terse-autonomy mode and scope-ceiling rule is unresolved: short commands usually mean "execute deeper," but can occasionally mean "help me understand only" — when ambiguous, emit a one-line scope check before acting

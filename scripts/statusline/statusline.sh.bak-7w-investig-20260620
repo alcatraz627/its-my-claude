@@ -1,0 +1,1227 @@
+#!/usr/bin/env bash
+# Claude Code statusline v4 — fixed 4-line semantic layout
+# Config: ~/.claude/statusline.conf  |  Detail hint: /tmp/claude-detail-$PPID
+# Daemon: ~/.claude/scripts/process-stats-daemon.sh (collects slow data every 4s)
+#
+# Flow: JSON stdin → parse → daemon read → conditions → L1/L2/L3/L4 render → print
+# L1: identity/performance  L2: rate/session  L3: code/services  L4: metadata/IDs
+# Width tiers (cols): T0≥140  T1=120-139  T2=100-119  T3=80-99  T4<80
+# Segments skipped when empty; lines skipped when all their segments are empty.
+
+set -uo pipefail
+# Note: set -e intentionally omitted — (( expr )) returns exit 1 when false,
+# which kills the script under set -e. A statusline should never abort early.
+shopt -s extglob  # enables *([0-9;]) patterns in ${var//} substitutions (used by _vlen)
+
+input=$(cat)
+
+# ── Colors ──
+dim="\033[2m"  rst="\033[0m"  red="\033[31m"  grn="\033[32m"
+ylw="\033[33m" blu="\033[34m" mag="\033[35m"  cyn="\033[36m"
+bld="\033[1m"  wht="\033[37m"
+sep="${dim} │ ${rst}"
+
+_cpct() { # sets _c based on val vs warn/crit thresholds
+  local v=$1 w=${2:-50} c=${3:-80}
+  if (( v > c )); then _c="$red"; elif (( v > w )); then _c="$ylw"; else _c="$dim"; fi
+}
+_ccost() {
+  local c=$1
+  if (( c > 500 )); then _c="$red"; elif (( c > 200 )); then _c="$ylw"
+  elif (( c > 50 )); then _c="$rst"; else _c="$dim"; fi
+}
+# Build a 10-char block bar from a 0-100 percentage
+_bar10() {
+  local pct=${1:-0} bar="" filled empty
+  filled=$(( pct * 10 / 100 )); empty=$(( 10 - filled ))
+  for ((i=0; i<filled; i++)); do bar+="█"; done
+  for ((i=0; i<empty; i++)); do bar+="░"; done
+  printf '%s' "$bar"
+}
+
+# Pure-bash ANSI-stripping length — 0 subprocess forks (extglob enabled at top)
+# Strips \e[Nm / \e[N;Mm color codes only. OSC 8 links: pass visible length explicitly.
+# Result stored in _VLEN (global) to avoid subshell overhead.
+_VLEN=0
+_vlen() {
+  local s="$1" _esc=$'\033'
+  s="${s//${_esc}\[*([0-9;])m/}"
+  _VLEN="${#s}"
+}
+
+# ── Load config ──
+CONF="$HOME/.claude/statusline.conf"
+PROFILE="${STATUSLINE_PROFILE:-custom}"
+
+# Segment defaults (all auto)
+seg_dir=1; seg_git=1; seg_model=1; seg_cost=auto
+seg_lines=auto; seg_rate=auto; seg_countdown=auto; seg_cpu=auto
+seg_warn_200k=auto; seg_context=1
+# New always-on
+seg_agent=auto; seg_session_id=auto
+# New auto/model-decided
+seg_tools=auto; seg_wal=auto
+seg_uncommitted=auto; seg_ext_changes=auto; seg_scratchpad=auto
+seg_turns=auto; seg_network=auto
+# Contextual
+seg_pm2=auto; seg_ports=auto; seg_mcp=auto; seg_pr=auto
+# Subagent tracking
+seg_subagents=auto
+# Analytics / visualization
+seg_timeline=auto
+# New segments
+seg_mem=auto; seg_disk=auto; seg_tok_speed=auto; seg_git_stash=auto; seg_uptime=auto
+# Batch 2 — analytics / contextual
+seg_edit_ratio=auto; seg_branch_age=auto; seg_cost_vel=auto; seg_focus_file=auto; seg_test_status=auto
+# Batch 3 — new widgets
+seg_cache_hit=auto; seg_merge_conflicts=auto; seg_cloud=auto
+# Batch 4 — token analytics + runtime versions + session file ops + security
+seg_cache_write=auto; seg_out_ratio=auto; seg_runtime_ver=auto; seg_files_touched=auto; seg_sudo=auto
+# Batch 5 — environment context + tool telemetry
+seg_tmux=auto; seg_docker=auto; seg_exit_code=auto; seg_latency=auto
+
+# Parse config
+if [[ -f "$CONF" ]]; then
+  in_profile=false
+  while IFS= read -r line; do
+    line="${line%%#*}"; line="${line// /}"
+    [[ -z "$line" ]] && continue
+    if [[ "$line" == "[$PROFILE]" ]]; then in_profile=true; continue
+    elif [[ "$line" == "["* ]]; then $in_profile && break; continue; fi
+    $in_profile || continue
+    key="${line%%=*}"; val="${line#*=}"
+    # Validate: key must be alphanumeric/underscore, val must be 0/1/auto/nerd
+    [[ "$key" =~ ^[a-z_]+$ && "$val" =~ ^(0|1|auto|nerd)$ ]] && eval "seg_${key}=${val}" || true
+  done < "$CONF"
+fi
+
+seg_on() {
+  local val auto_val="${2:-1}"
+  eval "val=\${seg_$1:-auto}"
+  case "$val" in 1) return 0;; 0) return 1;; auto) [[ "$auto_val" == "1" ]] && return 0 || return 1;; esac
+}
+
+# ── Nerd Font Icons ──
+# When icons=1 or icons=nerd, use Nerd Font glyphs for denser display
+# Requires terminal with Nerd Font installed (FiraCode NF, JetBrains Mono NF, etc.)
+use_icons=0
+[[ "${seg_icons:-0}" == "1" || "${seg_icons:-0}" == "nerd" ]] && use_icons=1
+# Icon definitions (safe fallbacks when icons=0)
+if (( use_icons )); then
+  # Prefer nf-fa/nf-pl (single-width) over nf-md (often double-width)
+  # Every icon ends with a space for consistent "icon value" formatting
+  ic_git=" "      # nf-pl-branch (U+E0A0) — git branch
+  ic_model=" "     # nf-fa-code (U+F121) — model name
+  ic_cost=" "      # nf-fa-dollar (U+F155) — cost
+  ic_rate=" "      # nf-fa-tachometer (U+F0E4) — rate limit
+  ic_cpu=" "      # nf-fa-microchip (U+F2DB) — cpu/mem
+  ic_ctx=" "      # nf-fa-cogs (U+F085) — context window
+  ic_wal=" "      # nf-fa-bookmark (U+F02E) — WAL entries
+  ic_turn=" "     # nf-fa-repeat (U+F01E) — turns
+  ic_pm2=" "      # nf-fa-server (U+F233) — pm2 procs
+  ic_spark=" "     # nf-fa-line-chart (U+F201) — sparkline
+  ic_agent=" "     # nf-fa-user-secret (U+F21B) — agent
+  ic_warn=" "     # nf-fa-warning (U+F071) — 200k warn
+  ic_net=" "      # nf-fa-globe (U+F0AC) — network
+  ic_mem=" "     # nf-fa-database (U+F1C0) — memory
+  ic_disk=" "      # nf-fa-hdd-o (U+F0A0) — disk
+  ic_tspd=" "     # nf-fa-bolt (U+F0E7) — tok/speed
+  ic_stash=" "     # nf-fa-archive (U+F187) — git stash
+  ic_up=" "      # nf-fa-clock-o (U+F017) — uptime
+  ic_eratio=" "    # nf-fa-pencil (U+F040) — edit ratio
+  ic_branch=" "   # nf-fa-code-fork (U+F126) — branch age
+  ic_burn=" "      # nf-fa-fire (U+F06D) — burn rate
+  ic_focus=" "     # nf-fa-eye (U+F06E) — focus file
+  ic_test=" "     # nf-fa-flask (U+F0C3) — test status
+  ic_cache=" "   # nf-fa-database (U+F1C0) — cache hit ratio
+  ic_cloud=" "   # nf-fa-cloud (U+F0C2) — cloud profile
+else
+  # ASCII fallbacks — short labels as icon stand-ins
+  ic_git="git:"
+  ic_model=""
+  ic_cost="$ "
+  ic_rate="5h: "
+  ic_cpu="cpu:"
+  ic_ctx="ctx:"
+  ic_wal="W: "
+  ic_turn="T: "
+  ic_pm2="pm2: "
+  ic_spark=""
+  ic_agent=""
+  ic_warn="! "
+  ic_net="net: "
+  ic_mem="mem: "
+  ic_disk="dsk: "
+  ic_tspd=""
+  ic_stash="s: "
+  ic_up="up: "
+  ic_eratio="e/t: "
+  ic_branch=""
+  ic_burn="$/m: "
+  ic_focus=""
+  ic_test="tst: "
+  ic_cache=""  # label is in widget text
+  ic_cloud=""  # label is in widget text
+fi
+
+# ── Agent detail hint ──
+# Agent writes "minimal"|"normal"|"full" to this file to control verbosity
+DETAIL_FILE="/tmp/claude-detail-${PPID}"
+detail="normal"
+[[ -f "$DETAIL_FILE" ]] && detail=$(cat "$DETAIL_FILE" 2>/dev/null | tr -d '[:space:]') || true
+[[ "$detail" != "minimal" && "$detail" != "full" ]] && detail="normal"
+
+# ── Parse JSON ──
+eval "$(echo "$input" | jq -r '
+  "cwd=" + (.workspace.current_dir // "" | @sh),
+  "remaining=" + (.context_window.remaining_percentage // "" | tostring | @sh),
+  "model_name=" + (.model.display_name // "" | @sh),
+  "cost_usd=" + (.cost.total_cost_usd // "" | tostring | @sh),
+  "duration_ms=" + (.cost.total_duration_ms // "" | tostring | @sh),
+  "lines_add=" + (.cost.total_lines_added // "" | tostring | @sh),
+  "lines_rm=" + (.cost.total_lines_removed // "" | tostring | @sh),
+  "rate_5h=" + (.rate_limits.five_hour.used_percentage // "" | tostring | @sh),
+  "rate_7d=" + (.rate_limits.seven_day.used_percentage // "" | tostring | @sh),
+  "rate_5h_resets=" + (.rate_limits.five_hour.resets_at // "" | tostring | @sh),
+  "rate_7d_resets=" + (.rate_limits.seven_day.resets_at // "" | tostring | @sh),
+  "exceeds_200k=" + (.exceeds_200k_tokens // false | tostring | @sh),
+  "agent_name=" + (.agent.name // "" | @sh),
+  "session_id=" + (.session_id // "" | @sh),
+  "input_tokens=" + (.context_window.total_input_tokens // 0 | tostring | @sh),
+  "output_tokens=" + (.context_window.total_output_tokens // 0 | tostring | @sh),
+  "ctx_size=" + (.context_window.context_window_size // 0 | tostring | @sh),
+  "transcript=" + (.transcript_path // "" | @sh),
+  "thinking_effort=" + (.thinking_effort // "" | @sh),
+  "cache_read_tok=" + (.cost.cache_read_input_tokens // 0 | tostring | @sh),
+  "cache_create_tok=" + (.cost.cache_creation_input_tokens // 0 | tostring | @sh)
+' 2>/dev/null)" || true
+
+cwd="${cwd:-$(pwd)}"
+shortdir=$(basename "$cwd")
+
+# ── Terminal Width Detection ──
+# Hook runs in a non-TTY subprocess — tput falls back to 80. Priority:
+#   1. STATUSLINE_COLS: explicit override (render server / testing)
+#   2. _P9K_TTY: real terminal device stored by Powerlevel10k
+#   3. COLUMNS: shell env var (if > 0)
+#   4. tput cols: last-resort fallback
+cols=0
+_width_src="none"
+_width_p9k_raw=""; _width_columns_raw="${COLUMNS:-}"; _width_tput_raw=""
+if [[ "${STATUSLINE_COLS:-0}" -gt 0 ]]; then
+  cols=$STATUSLINE_COLS; _width_src="STATUSLINE_COLS"
+else
+  # Only use P9K vars if they look like device paths (P9K_TTY may be set to "old" in non-SSH sessions)
+  _real_tty=""
+  [[ "${_P9K_TTY:-}" == /dev/* ]] && _real_tty="$_P9K_TTY"
+  [[ -z "$_real_tty" && "${_P9K_SSH_TTY:-}" == /dev/* ]] && _real_tty="$_P9K_SSH_TTY"
+  if [[ -n "$_real_tty" && -r "$_real_tty" ]]; then
+    _width_p9k_raw=$(stty size < "$_real_tty" 2>/dev/null | awk '{print $2}')
+    if [[ "${_width_p9k_raw:-0}" -gt 0 ]]; then
+      cols=$_width_p9k_raw; _width_src="p9k_tty:$_real_tty"
+    fi
+  fi
+  if [[ "${cols:-0}" -le 0 && "${COLUMNS:-0}" -gt 0 ]]; then
+    cols=$COLUMNS; _width_src="COLUMNS"
+  fi
+  if [[ "${cols:-0}" -le 0 ]]; then
+    # No reliable width signal. Default to the universally-safe 80 (NOT 120):
+    # in a non-TTY hook with no P9K/COLUMNS, we cannot know the live pane width,
+    # and an over-wide assumption causes line-wrap → Claude Code's wrap-blind
+    # redraw overwrites scrollback. 80 fits any real terminal; richer detail
+    # returns automatically once a real signal (P9K_TTY/COLUMNS) is present.
+    _width_tput_raw=$(tput cols 2>/dev/null || echo 80)
+    cols=$_width_tput_raw; _width_src="tput_or_fallback"
+  fi
+  # v4 cap: reserve right margin for Claude Code's own status labels
+  # (model name + token count shown at the right edge of Claude Code's UI, ~40 chars).
+  # Only apply at wide terminals where the UI labels are visible.
+  # Render server (STATUSLINE_COLS) bypasses this entirely.
+  if (( cols > 160 )); then
+    cols=$(( cols - 10 ))   # narrow right-margin reserve for Claude Code UI labels
+  fi
+  # Only scale down truly ultra-wide displays (monitors > 240 cols)
+  if (( cols > 240 )); then cols=$(( cols * 90 / 100 )); fi
+  # No cap below 160 — standard terminals use full width
+fi
+[[ "${cols:-0}" -lt 60 ]] && cols=60
+
+# Opt-in width-detection debug log. Enable with STATUSLINE_WIDTH_DEBUG=1 to
+# diagnose wrap/scrollback-corruption issues — captures EVERY candidate width
+# source so a stale COLUMNS or mismatched _P9K_TTY shows up immediately. Off
+# by default (zero cost). Log: ~/.claude/logs/statusline-width.log
+if [[ "${STATUSLINE_WIDTH_DEBUG:-0}" == "1" ]]; then
+  _wlog="$HOME/.claude/logs/statusline-width.log"
+  mkdir -p "${_wlog%/*}" 2>/dev/null
+  printf '[%s] cols=%d src=%s | P9K_TTY=%q stty=%q | COLUMNS=%q | tput=%q | session=%s\n' \
+    "$(date '+%F %T')" "$cols" "$_width_src" \
+    "${_P9K_TTY:-}" "${_width_p9k_raw:-}" \
+    "${_width_columns_raw:-}" "${_width_tput_raw:-}" \
+    "${session_id:-unknown}" >> "$_wlog" 2>/dev/null || true
+fi
+
+# ── IDE detection (VS Code lock file) ──
+ide_name=""
+ide_lock=$(ls "$HOME/.claude/ide/"*.lock 2>/dev/null | head -1)
+if [[ -n "$ide_lock" ]]; then
+  ide_name=$(jq -r '.ideName // empty' "$ide_lock" 2>/dev/null) || true
+fi
+
+# ── Start daemon if needed (single-daemon-per-PPID guard) ──
+# Prior bug: concurrent statusline renders (rapid turns, streaming updates)
+# both saw !STATS_FILE and both spawned a daemon — over a long session this
+# accumulated 5+ daemons per claude PID. The pgrep gate closes the race by
+# checking against the kernel-side process table (atomic enough that the
+# window shrinks from ms-scale file-stat to µs-scale syscall). The trailing
+# space in the pattern prevents PID-prefix matches (e.g. 80 vs 8000).
+STATS_FILE="/tmp/claude-statusline-${PPID}"
+DAEMON="$HOME/.claude/scripts/process-stats-daemon.sh"
+if [[ ! -f "$STATS_FILE" ]] && [[ -x "$DAEMON" ]]; then
+  if ! pgrep -f "process-stats-daemon.sh ${PPID} " >/dev/null 2>&1; then
+    nohup bash "$DAEMON" "$PPID" "$STATS_FILE" &>/dev/null &
+    disown
+  fi
+fi
+
+# ── Read daemon data (key=value file → source it directly) ──
+proc_cpu=0; proc_rss=0; proc_mem=0; git_uncommitted=0; git_ahead=0; git_behind=0; git_pr=""
+pm2_online=0; pm2_errored=0; wal_since_checkpoint=0; net_latency=""; scratchpad_count=0
+ext_changes=0; ports_up=""
+mcp_healthy=""; mcp_down=""; complexity_df=0; complexity_dl=0
+sys_free_mb=0; sys_total_mb=0; disk_free_gb=0; git_stash=0; tok_speed=0
+branch_age_days=0; branch_behind=0; cost_vel_cpm=0; focus_file=""; focus_count=0
+test_status=""; test_total=0; test_failed=0
+net_rx_kbps=0; net_tx_kbps=0
+if [[ -f "$STATS_FILE" ]]; then
+  # Only eval lines matching safe key=value pattern (alphanumeric keys, no shell metacharacters in values)
+  eval "$(grep -E '^[a-z_]+=[A-Za-z0-9_.,:/ -]*$' "$STATS_FILE" 2>/dev/null)" 2>/dev/null || true
+fi
+
+# ── Read tool call counters ──
+tool_summary=""
+TOOL_FILE="/tmp/claude-tools-${PPID}"
+if [[ -f "$TOOL_FILE" ]]; then
+  # Compact: colored "R:12 E:5 B:8" — read=dim-blue, edit=dim-yellow, bash=dim-green, others=dim
+  tool_summary=$(grep -v '^_total=' "$TOOL_FILE" 2>/dev/null | sort -t= -k2 -rn | head -3 | awk -F= '{
+    k=tolower($1)
+    if (k=="r"||k=="read")       col="\033[2;34m"
+    else if (k=="e"||k=="edit")  col="\033[2;33m"
+    else if (k=="b"||k=="bash")  col="\033[2;32m"
+    else                         col="\033[2m"
+    printf "%s%s:%s\033[0m ", col, $1, $2
+  }')
+  # Verbose: "read:12 edit:5 bash:8" — used at full width; maps all tool abbreviations to full names
+  # No head cap — line budget system handles overflow at render time
+  tool_summary_wide=$(grep -v '^_total=' "$TOOL_FILE" 2>/dev/null | sort -t= -k2 -rn | awk -F= '{
+    key=tolower($1)
+    if      (key=="r")   key="read"
+    else if (key=="e")   key="edit"
+    else if (key=="w")   key="write"
+    else if (key=="b")   key="bash"
+    else if (key=="g")   key="glob"
+    else if (key=="gr")  key="grep"
+    else if (key=="ag")  key="agent"
+    else if (key=="sk")  key="skill"
+    else if (key=="o")   key="other"
+    if      (key=="read")  col="\033[2;34m"
+    else if (key=="edit")  col="\033[2;33m"
+    else if (key=="write") col="\033[2;35m"
+    else if (key=="bash")  col="\033[2;32m"
+    else if (key=="grep")  col="\033[2;36m"
+    else if (key=="glob")  col="\033[2;36m"
+    else if (key=="agent") col="\033[2;33m"
+    else if (key=="skill") col="\033[2;37m"
+    else                   col="\033[2m"
+    printf "%s%s:%s\033[0m ", col, key, $2
+  }')
+  tool_total=$(grep '^_total=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2) || true
+  # File ops: sum of Read + Edit + Write counts (stored as R=, E=, W= or full names)
+  _tf_r=$(grep -iE '^(R|Read)=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2 | head -1) || true
+  _tf_e=$(grep -iE '^(E|Edit)=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2 | head -1) || true
+  _tf_w=$(grep -iE '^(W|Write)=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2 | head -1) || true
+  files_touched=$(( ${_tf_r:-0} + ${_tf_e:-0} + ${_tf_w:-0} ))
+fi
+files_touched=${files_touched:-0}
+
+# ── Read turn counter ──
+turn_count=0
+sid_short="${session_id:0:8}"
+# Fallback: if session_id not in JSON, use parent PID as stable identifier
+[[ -z "${sid_short:-}" ]] && sid_short="${PPID}"
+TURN_FILE="/tmp/claude-turns-${sid_short}"
+[[ -f "$TURN_FILE" ]] && turn_count=$(cat "$TURN_FILE" 2>/dev/null | tr -d '[:space:]') || true
+turn_count=${turn_count:-0}
+# Epoch cached here — used by subagents, spinner, and countdown (3 forks → 1)
+_NOW=$(date +%s)
+
+# ── Read active subagents ──
+subagent_count=0; subagent_names=""
+AGENTS_FILE="/tmp/claude-agents-${sid_short}"
+if [[ -f "$AGENTS_FILE" ]]; then
+  while IFS='|' read -r _aid atype ats; do
+    age=$(( _NOW - ${ats:-0} ))
+    (( age > 300 )) && continue  # skip stale entries
+    (( subagent_count++ ))
+    [[ -n "$subagent_names" ]] && subagent_names+=","
+    subagent_names+="$atype"
+  done < "$AGENTS_FILE"
+fi
+
+# ── Activity bar: per-turn tool call delta ring buffer (10 turns → 10 chars) ──
+# At each render, compute how many tool calls happened since last render.
+# Append to a 10-entry ring buffer for display as the `act:` bar in L4.
+TL_TURN_FILE="/tmp/statusline-tl-turns-${PPID}"   # ring buffer (10 entries)
+TL_TURN_LAST="/tmp/statusline-tl-last-${PPID}"    # last seen total
+_tl_current_total="${tool_total:-0}"
+_tl_last_total=0
+[[ -f "$TL_TURN_LAST" ]] && _tl_last_total=$(cat "$TL_TURN_LAST" 2>/dev/null | tr -d '[:space:]') || true
+_tl_delta=$(( _tl_current_total - ${_tl_last_total:-0} ))
+(( _tl_delta < 0 )) && _tl_delta=0
+printf '%s\n' "$_tl_current_total" > "$TL_TURN_LAST" 2>/dev/null || true
+# Append delta to ring buffer (keep last 10 entries)
+if [[ -f "$TL_TURN_FILE" ]]; then
+  tail -9 "$TL_TURN_FILE" > "${TL_TURN_FILE}.tmp" 2>/dev/null
+  printf '%d\n' "$_tl_delta" >> "${TL_TURN_FILE}.tmp"
+  mv "${TL_TURN_FILE}.tmp" "$TL_TURN_FILE" 2>/dev/null || true
+else
+  printf '%d\n' "$_tl_delta" > "$TL_TURN_FILE"
+fi
+
+# ── Git info (cached — refresh every 5 turns to avoid blocking on every render) ──
+# Cache keyed by PPID (stable for the Claude Code session, unlike $$ which changes each invocation)
+git_branch=""; git_dirty="0"; git_conflicts=0
+GIT_CACHE="/tmp/statusline-git-${PPID}"
+_git_refresh=0
+if [[ ! -f "$GIT_CACHE" ]]; then
+  _git_refresh=1
+elif (( (turn_count % 10) == 0 && turn_count > 0 )); then
+  _git_refresh=1  # Refresh every 10 turns to catch branch changes
+fi
+if (( _git_refresh )); then
+  git_branch=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null) || true
+  git_dirty=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false status --porcelain 2>/dev/null | wc -l | tr -d ' ') || true
+  git_conflicts=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false diff --name-only --diff-filter=U 2>/dev/null | wc -l | tr -d ' ') || true
+  printf '%s\n%s\n%s\n' "${git_branch:-}" "${git_dirty:-0}" "${git_conflicts:-0}" > "$GIT_CACHE" 2>/dev/null || true
+else
+  { read -r git_branch; read -r git_dirty; read -r git_conflicts; } < "$GIT_CACHE" 2>/dev/null || true
+fi
+git_conflicts=${git_conflicts:-0}
+
+# ── Session phase detection ──
+# Phase determines which "insight" segments are worth showing:
+#   early (turns<5, cost<$0.10): suppress efficiency metrics, they lack data
+#   active (turns 5-20): show most segments
+#   deep (turns>20 or cost>$1): show everything, including efficiency insights
+total_tok=$(( ${input_tokens:-0} + ${output_tokens:-0} ))
+total_lines_changed=$(( ${lines_add:-0} + ${lines_rm:-0} ))
+session_phase="early"
+[[ $turn_count -ge 5 ]] && session_phase="active"
+[[ $turn_count -ge 20 ]] && session_phase="deep"
+
+# ── Precompute conditions ──
+# Cost: show when above $0.05 (skip trivial early-session costs)
+has_cost=0; [[ -n "${cost_usd:-}" && "$cost_usd" != "null" && "$cost_usd" != "0" ]] && has_cost=1
+has_lines=0; [[ -n "${lines_add:-}" && "${lines_add:-}" != "null" && ( "${lines_add:-0}" != "0" || "${lines_rm:-0}" != "0" ) ]] && has_lines=1
+r5=0; has_rate=0; [[ -n "${rate_5h:-}" && "$rate_5h" != "null" ]] && { r5=$(printf "%.0f" "$rate_5h" 2>/dev/null || echo 0); has_rate=1; }
+# Note: (( expr )) returns exit code 1 when false, which kills set -e.
+# Use [[ ]] for all conditions, or guard with || true.
+has_countdown=0; [[ $r5 -gt 0 && -n "${rate_5h_resets:-}" && "$rate_5h_resets" != "null" ]] && has_countdown=1
+# Side-effect: write rate limits to widgets cache for claude-instances-bar
+if (( has_rate )); then
+  _r7_int=$(printf "%.0f" "${rate_7d:-0}" 2>/dev/null || echo 0)
+  _limits_json="{\"5h\":{\"pct\":${r5},\"used\":0,\"cap\":0}"
+  [[ $_r7_int -gt 0 ]] && _limits_json+=",\"week\":{\"pct\":${_r7_int},\"used\":0,\"cap\":0}"
+  # Persist resets_at timestamps if available (ISO string or epoch).
+  # `resets_at` is the 5h-window reset (existing); `resets_at_weekly` is the
+  # 7d-window reset (new — read by claude-instances-bar's 7d countdown).
+  if [[ -n "${rate_5h_resets:-}" && "$rate_5h_resets" != "null" ]]; then
+    _limits_json+=",\"resets_at\":\"${rate_5h_resets}\""
+  fi
+  if [[ -n "${rate_7d_resets:-}" && "$rate_7d_resets" != "null" ]]; then
+    _limits_json+=",\"resets_at_weekly\":\"${rate_7d_resets}\""
+  fi
+  _limits_json+="}"
+  mkdir -p "$HOME/.claude/widgets" 2>/dev/null || true
+  printf '%s' "$_limits_json" > "$HOME/.claude/widgets/.limits.json" 2>/dev/null || true
+fi
+# Thinking effort → percentage for visual bar
+# Persist last seen non-zero effort for 10 minutes so the bar stays visible
+# between requests even when thinking_effort field is absent from the hook JSON.
+TE_PERSIST="/tmp/statusline-think-${PPID}"  # format: "pct timestamp"
+_te_pct=0
+case "${thinking_effort:-}" in
+  low|Low|1)                       _te_pct=25 ;;
+  medium|Medium|2)                 _te_pct=50 ;;
+  high|High|3)                     _te_pct=75 ;;
+  extended|Extended|turbo|max|4|5) _te_pct=100 ;;
+esac
+if (( _te_pct > 0 )); then
+  printf '%d %d\n' "$_te_pct" "$_NOW" > "$TE_PERSIST" 2>/dev/null || true
+elif [[ -f "$TE_PERSIST" ]]; then
+  # Read persisted value; use it if <10 min old
+  read -r _te_pct_saved _te_ts_saved < "$TE_PERSIST" 2>/dev/null || true
+  _te_age=$(( _NOW - ${_te_ts_saved:-0} ))
+  if (( _te_age < 600 )); then
+    _te_pct=${_te_pct_saved:-0}
+    # Fade: dim the bar color based on age (fresh=bright, old=very dim)
+    _te_faded=$(( _te_age > 300 ? 1 : 0 ))  # >5 min = faded
+  fi
+fi
+has_thinking=0; (( _te_pct > 0 )) && has_thinking=1
+has_200k=0; [[ "${exceeds_200k:-}" == "true" ]] && has_200k=1
+has_cpu=0; [[ $proc_cpu -gt 10 || $proc_rss -gt 500 ]] && has_cpu=1
+has_agent=0; [[ -n "${agent_name:-}" ]] && has_agent=1
+has_uncommitted=0; [[ $git_uncommitted -gt 2 ]] && has_uncommitted=1
+has_pm2=0; [[ $pm2_online -gt 0 || $pm2_errored -gt 0 ]] && has_pm2=1
+has_wal=0; [[ $wal_since_checkpoint -gt 8 ]] && has_wal=1
+has_net=0; [[ "$net_latency" == "offline" ]] && has_net=1
+[[ "$net_latency" =~ ^[0-9]+$ && $net_latency -gt 200 ]] && has_net=1
+has_pr=0; [[ -n "$git_pr" ]] && has_pr=1
+has_scratchpad=0; [[ $scratchpad_count -gt 0 ]] && has_scratchpad=1
+has_subagents=0; [[ $subagent_count -gt 0 ]] && has_subagents=1
+# System: only flag when genuinely concerning (was: any nonzero → now: actual thresholds)
+has_mem=0; [[ $sys_free_mb -gt 0 && $sys_total_mb -gt 0 && $sys_free_mb -lt 8192 ]] && has_mem=1
+has_disk=0; [[ ${disk_free_gb:-0} -gt 0 && ${disk_free_gb:-0} -lt 20 ]] && has_disk=1
+has_stash=0; [[ $git_stash -gt 0 ]] && has_stash=1
+has_tok_speed=0; [[ $tok_speed -gt 50 ]] && has_tok_speed=1
+has_uptime=0; [[ -n "${duration_ms:-}" && "$duration_ms" != "null" && "$duration_ms" != "0" ]] && has_uptime=1
+# Efficiency metrics — only meaningful after enough data accumulates
+has_edit_ratio=0
+[[ $total_lines_changed -gt 10 && $total_tok -gt 5000 && "$session_phase" != "early" ]] && has_edit_ratio=1
+has_branch_age=0; [[ $branch_age_days -gt 1 || $branch_behind -gt 0 ]] && has_branch_age=1
+has_cost_vel=0; [[ $cost_vel_cpm -gt 0 && "$session_phase" != "early" ]] && has_cost_vel=1
+has_focus=0; [[ -n "$focus_file" && "$focus_file" != "0" && $focus_count -ge 2 ]] && has_focus=1
+has_test=0
+TEST_MARKER="/tmp/claude-test-${PPID}"
+if [[ -f "$TEST_MARKER" ]]; then
+  eval "$(grep -E '^(test_status|test_total|test_failed)=' "$TEST_MARKER" 2>/dev/null)" 2>/dev/null || true
+  [[ -n "${test_status:-}" ]] && has_test=1
+fi
+# Detect external edits to statusline.sh (daemon compares checksum to session baseline)
+has_script_changed=0; [[ "${script_changed:-0}" == "1" ]] && has_script_changed=1
+
+# ── Cache hit ratio (from JSON cache_read_tok / total input) ──
+has_cache=0; cache_hit_pct=0
+_cr=${cache_read_tok:-0}; _cc=${cache_create_tok:-0}
+if (( _cr > 0 && input_tokens > 0 )); then
+  cache_hit_pct=$(( _cr * 100 / input_tokens ))
+  (( cache_hit_pct > 0 )) && has_cache=1
+fi
+
+# ── Cache write amortization (tokens being written to cache / total input) ──
+has_cache_write=0; cache_write_pct=0
+if (( _cc > 0 && input_tokens > 0 )); then
+  cache_write_pct=$(( _cc * 100 / input_tokens ))
+  (( cache_write_pct > 0 )) && has_cache_write=1
+fi
+
+# ── Output token ratio (output / (input + output)) ──
+has_out_ratio=0; out_ratio_pct=0
+_ot=${output_tokens:-0}; _it=${input_tokens:-0}
+if (( _ot > 0 && _it + _ot > 0 )); then
+  out_ratio_pct=$(( _ot * 100 / (_it + _ot) ))
+  (( out_ratio_pct > 0 )) && has_out_ratio=1
+fi
+
+# ── Merge conflicts ──
+has_conflicts=0; (( git_conflicts > 0 )) && has_conflicts=1
+
+# ── Active cloud profile (from launch-time environment) ──
+cloud_provider=""; cloud_profile=""
+if [[ -n "${AWS_PROFILE:-}" ]]; then
+  cloud_provider="aws"; cloud_profile="${AWS_PROFILE}"
+elif [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
+  cloud_provider="aws"; cloud_profile="${AWS_DEFAULT_PROFILE}"
+elif [[ -n "${GCLOUD_PROJECT:-}" ]]; then
+  cloud_provider="gcp"; cloud_profile="${GCLOUD_PROJECT}"
+elif [[ -n "${CLOUDSDK_CORE_PROJECT:-}" ]]; then
+  cloud_provider="gcp"; cloud_profile="${CLOUDSDK_CORE_PROJECT}"
+elif [[ -n "${AZURE_SUBSCRIPTION_ID:-}" ]]; then
+  cloud_provider="az"; cloud_profile="${AZURE_SUBSCRIPTION_ID:0:8}"
+fi
+has_cloud=0; [[ -n "$cloud_provider" ]] && has_cloud=1
+
+# ── Sudo credential active (single no-TTY check; 0 forks if false, 1 fork otherwise) ──
+# -n = non-interactive (no password prompt); fails fast if creds are expired/absent
+has_sudo=0
+sudo -n true 2>/dev/null && has_sudo=1 || true
+
+# ── Runtime version detection (reads .nvmrc / .python-version from project root) ──
+# No subprocess forks — pure bash file reads. Checks cwd first, then walks up 2 levels.
+node_ver=""; python_ver=""
+_vcheck_dir="$cwd"
+for _vd in "$_vcheck_dir" "${_vcheck_dir%/*}" "${_vcheck_dir%/*/*}"; do
+  [[ -z "$node_ver" && -f "${_vd}/.nvmrc" ]] && { read -r node_ver < "${_vd}/.nvmrc" 2>/dev/null || true; node_ver="${node_ver#v}"; }
+  [[ -z "$python_ver" && -f "${_vd}/.python-version" ]] && { read -r python_ver < "${_vd}/.python-version" 2>/dev/null || true; }
+done
+has_node_ver=0; [[ -n "$node_ver" ]] && has_node_ver=1
+has_python_ver=0; [[ -n "$python_ver" ]] && has_python_ver=1
+
+# ── Tmux session count (fast; only calls tmux if binary exists) ──
+has_tmux=0; tmux_count=0
+if command -v tmux &>/dev/null; then
+  _tc=$(tmux ls 2>/dev/null | wc -l | tr -d ' ')
+  [[ "$_tc" =~ ^[0-9]+$ && "$_tc" -gt 0 ]] && tmux_count="$_tc" && has_tmux=1 || true
+fi
+
+# ── Docker running containers — daemon-guarded to avoid slow timeout ──
+# Only run docker ps if the Unix socket exists (confirms daemon is up).
+# docker ps hangs ~10s if daemon is unreachable; socket check is instant.
+# timeout 2 prevents hangs if socket exists but daemon is stalled.
+has_docker=0; docker_count=0
+if [[ -S /var/run/docker.sock ]] && command -v docker &>/dev/null; then
+  _dc=$(timeout 2 docker ps -q 2>/dev/null | wc -l | tr -d ' ')
+  [[ "$_dc" =~ ^[0-9]+$ ]] && docker_count="$_dc" && has_docker=1 || true
+fi
+
+# ── Last bash exit code (written by exit-code-hook.sh PostToolUse) ──
+has_exit_code=0; last_exit_code=0
+_exit_file="/tmp/claude-last-exit-${PPID}"
+if [[ -f "$_exit_file" ]]; then
+  _ec=$(< "$_exit_file")
+  [[ "$_ec" =~ ^[0-9]+$ ]] && last_exit_code="$_ec" && has_exit_code=1 || true
+fi
+
+# ── Inter-render latency (time between statusline renders = event gap) ──
+# No extra hooks needed: statusline reads/writes its own timestamp each render.
+has_latency=0; render_lat_s=0
+_last_ts_file="/tmp/claude-last-ts-${PPID}"
+if [[ -f "$_last_ts_file" ]]; then
+  _lts=$(< "$_last_ts_file")
+  [[ "$_lts" =~ ^[0-9]+$ ]] && render_lat_s=$(( _NOW - _lts )) && (( render_lat_s > 0 )) && has_latency=1 || true
+fi
+printf '%s' "$_NOW" > "$_last_ts_file" 2>/dev/null || true
+
+# ── Animation: event-tick spinner (advances on every hook invocation) ──
+# Uses tool_call_count from JSON if available, falls back to turn_count.
+# This guarantees a frame change on each render regardless of wall-clock timing.
+_SPIN=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+_spin_ctr=$(( ${tool_call_count:-0} + turn_count ))
+_sf=$(( _spin_ctr % 10 ))
+_spin="${_SPIN[$_sf]}"
+
+# ══════════════════════════════════════════════════════════════════════
+# v4 RENDERING — Fixed semantic lines (lines skipped if empty)
+# L1: dir | ide | model | cost | lines | cpu || context_bar
+# L2: rate_bar | think_bar | countdown | agent | WAL | subagents | turns | tools | sparkline
+# L3: git_branch | uncommitted | mcp_down | network | PR | pm2 | scratchpad | test | tok | branch_age | stash
+# L4: sid | ports | uptime | edit_ratio | cost_vel | mem | disk | timeline
+#
+# Width conventions:
+#   L1 uses _l1_add(visible_len, content) — explicit length arg required (icons: $(( ${#ic_x} + ${#val} )) )
+#   L2/L3/L4 use _vlen(str) → _VLEN — auto-strips ANSI; prepend ${ic_x} to segment strings directly
+#   Separator _V4SEP = " │ " = 3 visible chars; counted explicitly in L1, via _vlen in L2-L4
+# ══════════════════════════════════════════════════════════════════════
+
+_V4SEP="${dim} │ ${rst}"   # 3 visible chars
+
+# Width tiers (v4 — wider thresholds)
+# Tier 0: ≥140 cols — everything, full labels
+# Tier 1: 120-139 — most segments, some abbreviation
+# Tier 2: 100-119 — core + actionable only
+# Tier 3:  80-99  — essential only
+# Tier 4:  <80   — minimal
+if   (( cols >= 140 )); then wtier=0
+elif (( cols >= 120 )); then wtier=1
+elif (( cols >= 100 )); then wtier=2
+elif (( cols >= 80  )); then wtier=3
+else                         wtier=4; fi
+
+# L1 accumulator — segments fill left-to-right until budget exhausted
+_l1_out=""; _l1_len=0; _l1_budget=0
+_l1_add() {
+  # $1=visible_len  $2=rendered_content
+  # Returns 0 if added, 1 if over budget
+  local _need=$(( _l1_len > 0 ? _l1_len + 3 + $1 : _l1_len + $1 ))
+  (( _need > _l1_budget )) && return 1
+  (( _l1_len > 0 )) && _l1_out+="${_V4SEP}" && _l1_len=$(( _l1_len + 3 ))
+  _l1_out+="$2"; _l1_len=$(( _l1_len + $1 ))
+  return 0
+}
+
+# ── LINE 1: Performance / Identity ─────────────────────────────────
+# Context bar is always last (reserved); everything else fills left-to-right.
+
+# Pre-build context bar so we can reserve its width from the L1 budget
+_ctx_str=""
+if seg_on context 1 && [[ -n "${remaining:-}" && "$remaining" != "null" ]]; then
+  _used=$(echo "$remaining" | awk '{printf "%d", 100 - $1}')
+  if (( _used > 75 )); then _cbc="${red}"; elif (( _used > 50 )); then _cbc="${ylw}"; else _cbc="${grn}"; fi
+  _ctxbar=$(_bar10 "$_used")
+  _ctx_extra=""
+  if (( wtier <= 1 )) && [[ "${input_tokens:-0}" != "0" ]]; then
+    _ctx_extra=" ↑$(( ${input_tokens:-0} / 1000 ))K"
+  fi
+  _ctx_pct="$(printf "%.0f" "$remaining")%"
+  (( _used >= 90 )) && _ctx_pct="\033[5m${_ctx_pct}\033[25m"
+  _ctx_str="${_cbc}${ic_ctx}[${_ctxbar}] ${_ctx_pct}${_ctx_extra}${rst}"
+fi
+
+# Daemon side-effect writes (cost/token forwarding for ring buffers)
+CTX_FILE="/tmp/claude-ctx-${PPID}"
+[[ -n "${remaining:-}" && "$remaining" != "null" ]] && printf "%.0f" "$remaining" > "$CTX_FILE" 2>/dev/null || true
+TOK_FILE="/tmp/claude-tokens-${PPID}"
+(( total_tok > 0 )) && echo "$total_tok" > "$TOK_FILE" 2>/dev/null || true
+COST_FWD="/tmp/claude-cost-${PPID}"
+[[ -n "${cost_usd:-}" && "$cost_usd" != "null" ]] && echo "$cost_usd" > "$COST_FWD" 2>/dev/null || true
+TPATH_FWD="/tmp/claude-tpath-${PPID}"
+[[ -n "${transcript:-}" ]] && echo "$transcript" > "$TPATH_FWD" 2>/dev/null || true
+
+# L1 budget = cols minus context bar reservation
+_ctx_vl=0; if [[ -n "$_ctx_str" ]]; then _vlen "$_ctx_str"; _ctx_vl=$_VLEN; fi
+_l1_budget=$(( cols - ( _ctx_vl > 0 ? _ctx_vl + 3 : 0 ) ))
+
+# P1: dir (blue-bold name; OSC 8 hyperlinks removed — caused ANSI bleeding in ghostty)
+if seg_on dir 1; then
+  _l1_add ${#shortdir} "\033[1;34m${shortdir}\033[0m"
+fi
+
+# P2: IDE indicator (show at all widths)
+if [[ -n "${ide_name:-}" ]]; then
+  case "$ide_name" in *Visual*|*VS*Code*) _is="vsc";; *Cursor*) _is="cur";; *) _is="ide";; esac
+  _l1_add ${#_is} "${dim}${_is}${rst}"
+fi
+
+# P3: Model — full name at T0-T3; family abbrev only at T4
+if seg_on model 1 && [[ -n "${model_name:-}" ]]; then
+  if (( wtier <= 3 )); then
+    _mn="$model_name"  # full name (e.g. "Claude Sonnet 4.6")
+  else
+    case "$model_name" in *Opus*) _mn="Opus";; *Sonnet*) _mn="Snnt";; *Haiku*) _mn="Hiku";; *) _mn="${model_name:0:6}";; esac
+    [[ "$model_name" == *"1M"* ]] && _mn+=" 1M"
+  fi
+  _l1_add $(( ${#ic_model} + ${#_mn} )) "${cyn}${ic_model}${_mn}${rst}"
+fi
+
+# P2: Cost (+ 200K warning badge)
+if seg_on cost "$has_cost" && (( has_cost )); then
+  _cf="${ic_cost}$(printf "%.2f" "$cost_usd" 2>/dev/null || echo "$cost_usd")"
+  _cents=$(echo "$cost_usd" | awk '{printf "%d", $1 * 100}'); _ccost "$_cents"
+  if (( has_200k )); then
+    _l1_add $(( ${#_cf} + 2 )) "${red}${bld}${_cf} ⚠${rst}"
+  else
+    _l1_add ${#_cf} "${_c}${_cf}${rst}"
+  fi
+elif (( has_200k )); then
+  _l1_add 5 "${red}${bld}200K+${rst}"
+fi
+
+# P5: Session uptime (T0-T2, >30 min) — moved from L4
+if (( wtier <= 2 )) && seg_on uptime "$has_uptime" && (( has_uptime )); then
+  _up_sec=$(( ${duration_ms%.*} / 1000 ))
+  if (( _up_sec >= 1800 )); then
+    _up_m=$(( (_up_sec % 3600) / 60 ))
+    if (( _up_sec >= 86400 )); then
+      _up_d=$(( _up_sec / 86400 )); _up_h=$(( (_up_sec % 86400) / 3600 ))
+      _up_str="${_up_d}d"; (( _up_h > 0 )) && _up_str+="${_up_h}h"; (( _up_m > 0 )) && _up_str+="${_up_m}m"
+    elif (( _up_sec >= 3600 )); then
+      _up_h=$(( _up_sec / 3600 )); _up_str="${_up_h}h"; (( _up_m > 0 )) && _up_str+="${_up_m}m"
+    else _up_str="$(( _up_sec / 60 ))m"; fi
+    if (( _up_sec > 86400 )); then _up_c="${red}"; elif (( _up_sec > 7200 )); then _up_c="${ylw}"; else _up_c="${dim}"; fi
+    _l1_add $(( 3 + ${#_up_str} )) "${_up_c}up:${_up_str}${rst}"
+  fi
+fi
+
+# P6: Lines changed (tier 0-2)
+if (( wtier <= 2 )) && seg_on lines "$has_lines" && (( has_lines )); then
+  _lstr="+${lines_add:-0}-${lines_rm:-0}"
+  _l1_add ${#_lstr} "${grn}+${lines_add:-0}${rst}${red}-${lines_rm:-0}${rst}"
+fi
+
+# P3: CPU/mem + net rate (tier 0-2)
+if (( wtier <= 2 )) && seg_on cpu "$has_cpu" && (( has_cpu )); then
+  _cpct "$proc_cpu" 20 50; _cpu_c="$_c"
+  if (( proc_rss > 1000 )); then _mem_c="${red}"; elif (( proc_rss > 500 )); then _mem_c="${ylw}"; else _mem_c="${dim}"; fi
+  # Net rate suffix: show when >5 KB/s at T2 or wider (format as K or M)
+  _net_sfx=""; _net_sfx_vis=""
+  if (( wtier <= 2 && (net_rx_kbps > 5 || net_tx_kbps > 5) )); then
+    if (( net_rx_kbps >= 1024 )); then _rx_s="$(( net_rx_kbps / 1024 ))M"; else _rx_s="${net_rx_kbps}K"; fi
+    if (( net_tx_kbps >= 1024 )); then _tx_s="$(( net_tx_kbps / 1024 ))M"; else _tx_s="${net_tx_kbps}K"; fi
+    _net_sfx=" ${dim}↓${_rx_s}↑${_tx_s}${rst}"
+    _net_sfx_vis=" ↓${_rx_s}↑${_tx_s}"
+  fi
+  if (( proc_rss > 0 )); then
+    _cpustr="${ic_cpu}${proc_cpu}% ${proc_rss}MB${_net_sfx_vis}"
+    _l1_add ${#_cpustr} "${_cpu_c}${ic_cpu}${proc_cpu}%${rst} ${_mem_c}${proc_rss}MB${rst}${_net_sfx}"
+  else
+    _cpustr="${ic_cpu}${proc_cpu}%${_net_sfx_vis}"
+    _l1_add ${#_cpustr} "${_cpu_c}${ic_cpu}${proc_cpu}%${rst}${_net_sfx}"
+  fi
+fi
+
+# P4: (thinking effort moved to L2 visual bar)
+
+# Print L1 (context bar always appended last)
+if [[ -n "$_l1_out" || -n "$_ctx_str" ]]; then
+  if [[ -n "$_l1_out" && -n "$_ctx_str" ]]; then
+    printf '%b\n' "${_l1_out}${_V4SEP}${_ctx_str}${rst}"
+  elif [[ -n "$_l1_out" ]]; then
+    printf '%b\n' "${_l1_out}${rst}"
+  else
+    printf '%b\n' "${_ctx_str}${rst}"
+  fi
+fi
+
+# ── LINE 2: Rate Limits / Session Activity ──────────────────────────
+_l2_segs=()
+
+# P1: 5h rate bar + pct + optional 7d + countdown + reset time
+if seg_on rate "$has_rate" && (( has_rate )); then
+  _cpct "$r5" 50 80
+  _rl_bar=$(_bar10 "$r5")
+  _rl_pct="${r5}%"; (( r5 >= 90 )) && _rl_pct="\033[5m${_rl_pct}\033[25m"
+  _rl_str="${ic_rate}[${_rl_bar}] ${_rl_pct}"
+  # 7d (always show when available — user wants full picture of both windows)
+  if [[ -n "${rate_7d:-}" && "$rate_7d" != "null" ]]; then
+    _r7=$(printf "%.0f" "$rate_7d" 2>/dev/null || echo "0")
+    _rl_str+=" · 7d:${_r7}%"
+  fi
+  # Countdown + reset time (show when rate is visible and reset time is known)
+  if seg_on countdown "$has_countdown" && (( has_countdown )); then
+    if [[ "$rate_5h_resets" =~ ^[0-9]+$ ]]; then _re="$rate_5h_resets"
+    else _re=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${rate_5h_resets%%.*}" "+%s" 2>/dev/null \
+           || date -d "${rate_5h_resets%%.*}" "+%s" 2>/dev/null \
+           || echo "0"); fi
+    if (( _re > _NOW )); then
+      _d=$(( _re - _NOW ))
+      if (( _d >= 3600 )); then _rf="$(( _d / 3600 ))h$(( (_d % 3600) / 60 ))m"; else _rf="$(( _d / 60 ))m"; fi
+      _rl_str+=" ~${_rf}"
+      if (( wtier <= 1 )); then
+        _rt=$(date -r "$_re" "+%-I:%M%p" 2>/dev/null || date -d "@$_re" "+%-I:%M%p" 2>/dev/null || true)
+        [[ -n "$_rt" ]] && _rl_str+=" (${_rt})"
+      fi
+    fi
+  fi
+  _l2_segs+=("${_c}${_rl_str}${rst}")
+fi
+
+# P1.5: Thinking effort visual bar — persists for 10 min after last seen effort
+if seg_on thinking_effort "$has_thinking" && (( has_thinking )); then
+  _tebar=$(_bar10 "$_te_pct")
+  if (( ${_te_faded:-0} )); then
+    _te_c="\033[38;5;240m"  # faded: >5 min since last real thinking_effort
+  elif (( _te_pct >= 75 )); then _te_c="${ylw}"
+  elif (( _te_pct >= 50 )); then _te_c="${dim}"
+  else _te_c="\033[38;5;240m"; fi
+  _l2_segs+=("${_te_c}${_spin}think:[${_tebar}]${rst}")
+fi
+
+# P2: Agent name
+if seg_on agent "$has_agent" && (( has_agent )); then
+  if (( use_icons )); then _l2_segs+=("${ylw}${ic_agent}${agent_name} ${_spin}${rst}")
+  else _l2_segs+=("${ylw}[${agent_name}] ${_spin}${rst}"); fi
+fi
+
+# P1: WAL checkpoint overdue (actionable)
+if seg_on wal "$has_wal" && (( wal_since_checkpoint > 8 )); then
+  if (( wal_since_checkpoint > 15 )); then _wc="${red}"; else _wc="${ylw}"; fi
+  _l2_segs+=("${_wc}${ic_wal:+$ic_wal}ckpt:${wal_since_checkpoint}${rst}")
+fi
+
+# P2: Active subagents
+if seg_on subagents "$has_subagents" && (( subagent_count > 0 )); then
+  _dn="$subagent_names"
+  if (( subagent_count > 3 )); then
+    _dn=$(echo "$subagent_names" | cut -d, -f1-3); _dn+=",+$(( subagent_count - 3 ))"
+  fi
+  _l2_segs+=("${cyn}${_spin}sa:${subagent_count}(${_dn})${rst}")
+fi
+
+# P3: Turn counter (show when >10)
+if seg_on turns 1 && (( turn_count > 10 )); then
+  if (( turn_count > 30 )); then _tc="${ylw}"; else _tc="${dim}"; fi
+  if (( use_icons )); then
+    _turn_label="${ic_turn}${turn_count}"
+  else
+    (( wtier <= 1 )) && _turn_label="turns:${turn_count}" || _turn_label="t:${turn_count}"
+  fi
+  _l2_segs+=("${_tc}${_turn_label}${rst}")
+fi
+
+# P3: Tool summary (tier 0-1) — colors baked in per tool type
+if (( wtier <= 1 )) && seg_on tools 1 && [[ -n "${tool_summary:-}" ]]; then
+  _ts="${tool_summary_wide:-$tool_summary}"; _ts="${_ts% }"
+  _l2_segs+=("${_ts}${rst}")
+fi
+
+# P4: Sparkline + depletion estimate (tier 0-1)
+# Uses relative min/max scaling within the display window so even small changes
+# (e.g., 72%→70% remaining) produce visible step differences in bar height.
+SPARK_FILE="/tmp/claude-sparkline-${PPID}"
+if (( wtier <= 1 )) && seg_on sparkline 1 && [[ -f "$SPARK_FILE" ]]; then
+  _spark_data=()
+  while IFS= read -r _sv; do [[ -n "$_sv" ]] && _spark_data+=("$_sv"); done < "$SPARK_FILE"
+  if (( ${#_spark_data[@]} >= 3 )); then
+    _spark_str=""; _sblocks=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+    # Cap display to last 12 points (≤12 visible chars)
+    _spark_disp=("${_spark_data[@]}")
+    (( ${#_spark_disp[@]} > 12 )) && _spark_disp=("${_spark_disp[@]: -12}")
+    # Convert remaining% → used% for each point
+    _spark_used=()
+    for _sv in "${_spark_disp[@]}"; do
+      _su=$(( 100 - _sv )); (( _su < 0 )) && _su=0; (( _su > 100 )) && _su=100
+      _spark_used+=("$_su")
+    done
+    # Relative scaling: find min/max within display window
+    _sp_min=${_spark_used[0]}; _sp_max=${_spark_used[0]}
+    for _su in "${_spark_used[@]}"; do
+      (( _su < _sp_min )) && _sp_min=$_su
+      (( _su > _sp_max )) && _sp_max=$_su
+    done
+    _sp_range=$(( _sp_max - _sp_min ))
+    for _su in "${_spark_used[@]}"; do
+      if (( _sp_range == 0 )); then
+        _spark_str+="${_sblocks[3]}"  # flat → mid-height bar (▄)
+      else
+        _sp_idx=$(( (_su - _sp_min) * 7 / _sp_range ))
+        _spark_str+="${_sblocks[$_sp_idx]}"
+      fi
+    done
+    _cu=$((100 - ${remaining:-100}))
+    if (( _cu > 75 )); then _sc="${red}"; elif (( _cu > 50 )); then _sc="${ylw}"; else _sc="${grn}"; fi
+    _l2_spark="${dim}cxh:${rst}${_sc}${_spark_str}${rst}"
+    if seg_on depletion 1 && (( ${#_spark_data[@]} >= 5 )); then
+      _su_old=$((100 - ${_spark_data[$(( ${#_spark_data[@]} - 5 ))]}))
+      _su_new=$((100 - ${_spark_data[$(( ${#_spark_data[@]} - 1 ))]}))
+      _rdelta=$(( _su_new - _su_old ))
+      if (( _rdelta > 2 )); then
+        _rpp=$(( _rdelta * 100 / 5 ))
+        if (( _rpp > 0 )); then
+          _rl=$(( (100 - _su_new) * 100 / _rpp ))
+          if (( _rl > 0 && _rl < 100 )); then
+            if (( _rl < 5 )); then _dc="${red}"; elif (( _rl < 15 )); then _dc="${ylw}"; else _dc="${dim}"; fi
+            _l2_spark+=" ${_dc}~${_rl}t${rst}"
+          fi
+        fi
+      fi
+    fi
+    _l2_segs+=("$_l2_spark")
+  fi
+fi
+
+# P5: Cache hit ratio (T0-T1) — % of input tokens served from context cache
+# High (>80%) = efficient reuse; low (<30%) = lots of unique context being processed
+if (( wtier <= 1 )) && seg_on cache_hit "$has_cache" && (( has_cache )); then
+  if (( cache_hit_pct >= 80 )); then _ch_c="${grn}"
+  elif (( cache_hit_pct >= 50 )); then _ch_c="${dim}"
+  else _ch_c="${ylw}"; fi
+  _l2_segs+=("${_ch_c}${ic_cache}cch:${cache_hit_pct}%${rst}")
+fi
+
+# P5: Cache write amortization (T0-T1) — tokens queued into cache for future reads
+# High (>30%) = aggressively caching context; signals cost will drop in future turns
+if (( wtier <= 1 )) && seg_on cache_write "$has_cache_write" && (( has_cache_write )); then
+  if (( cache_write_pct >= 30 )); then _cw_c="${cyn}"
+  elif (( cache_write_pct >= 10 )); then _cw_c="${dim}"
+  else _cw_c="\033[38;5;240m"; fi
+  _l2_segs+=("${_cw_c}cw:${cache_write_pct}%${rst}")
+fi
+
+# P6: Output token ratio (T0) — output as % of total tokens; high = model talking more
+# >25% = verbose output; <5% = mostly reading/tool use
+if (( wtier == 0 )) && seg_on out_ratio "$has_out_ratio" && (( has_out_ratio )); then
+  if (( out_ratio_pct >= 30 )); then _or_c="${ylw}"
+  elif (( out_ratio_pct >= 10 )); then _or_c="${dim}"
+  else _or_c="\033[38;5;240m"; fi
+  _l2_segs+=("${_or_c}out:${out_ratio_pct}%${rst}")
+fi
+
+# Render L2 (indent "  ", stop at budget)
+_l2_budget=$(( cols - 2 ))
+_l2_out="  "; _l2_len=2; _l2_any=0
+for _seg in "${_l2_segs[@]-}"; do
+  [[ -z "$_seg" ]] && continue
+  _vlen "$_seg"; _sl=$_VLEN
+  _need=$(( _l2_any ? _l2_len + 3 + _sl : _l2_len + _sl ))
+  (( _need > _l2_budget )) && break
+  (( _l2_any )) && _l2_out+="${_V4SEP}" && _l2_len=$(( _l2_len + 3 ))
+  _l2_out+="${_seg}"; _l2_len=$(( _l2_len + _sl ))
+  _l2_any=1
+done
+printf '%b\n' "${_l2_out}${rst}"  # always print L2 (may be empty — consistent 4-line layout)
+
+# ── LINE 3: Code / Services ─────────────────────────────────────────
+_l3_segs=()
+
+# P1: git branch (first when in a repo)
+if seg_on git 1 && [[ -n "$git_branch" ]]; then
+  _gb="${git_branch}"; [[ "$git_dirty" != "0" ]] && _gb+="*"
+  (( git_ahead > 0 )) && _gb+="^${git_ahead}"
+  (( git_behind > 0 )) && _gb+="v${git_behind}"
+  _l3_segs+=("${mag}${ic_git}${_gb}${rst}")
+fi
+
+# P1: Uncommitted files (actionable)
+if seg_on uncommitted "$has_uncommitted" && (( git_uncommitted > 2 )); then
+  if (( git_uncommitted > 5 )); then _uc="${red}"; else _uc="${ylw}"; fi
+  _l3_segs+=("${_uc}uncommitted:${git_uncommitted}${rst}")
+fi
+
+# P2: Merge conflicts (critical — blocking; always visible when present)
+if seg_on merge_conflicts "$has_conflicts" && (( has_conflicts )); then
+  if (( git_conflicts > 3 )); then _cf_c="${red}${bld}"; else _cf_c="${red}"; fi
+  _l3_segs+=("${_cf_c}conflicts:${git_conflicts}${rst}")
+fi
+
+# P3: Scratchpad (T0-T2) — promoted to P3 for visibility
+if (( wtier <= 2 )) && seg_on scratchpad "$has_scratchpad" && [[ "$detail" != "minimal" ]] && (( scratchpad_count > 0 )); then
+  if (( scratchpad_count >= 6 )); then _sp_c="${ylw}"; else _sp_c="${wht}"; fi
+  if (( scratchpad_count <= 4 )); then
+    _sp_dots=""; for ((i=0; i<scratchpad_count; i++)); do _sp_dots+="●"; done
+    _l3_segs+=("${_sp_c}sp:${_sp_dots}${rst}")
+  else
+    _l3_segs+=("${_sp_c}sp:●●●●+$(( scratchpad_count - 4 ))${rst}")
+  fi
+fi
+
+# P4: MCP down (critical — always visible)
+if seg_on mcp 1 && [[ -n "$mcp_down" ]]; then
+  _mcp_dc=$(echo "$mcp_down" | tr ',' '\n' | grep -c . | tr -d ' ')
+  if (( _mcp_dc > 2 )); then _l3_segs+=("${red}mcp↓:${_mcp_dc}${rst}")
+  elif (( _mcp_dc == 2 )); then
+    _n1=$(echo "$mcp_down" | cut -d, -f1 | cut -c1-6); _n2=$(echo "$mcp_down" | cut -d, -f2 | cut -c1-6)
+    _l3_segs+=("${red}mcp↓:${_n1},${_n2}${rst}")
+  else
+    _l3_segs+=("${red}mcp↓:$(echo "$mcp_down" | cut -d, -f1 | cut -c1-10)${rst}")
+  fi
+elif seg_on mcp 1 && [[ -n "$mcp_healthy" ]] && [[ "$detail" == "full" ]]; then
+  _mcp_uc=$(echo "$mcp_healthy" | tr ',' '\n' | grep -c . | tr -d ' ')
+  _l3_segs+=("${dim}mcp:${_mcp_uc}ok${rst}")
+fi
+
+# P5: Token speed (T0-T2)
+if (( wtier <= 2 )) && seg_on tok_speed "$has_tok_speed" && (( tok_speed > 50 )); then
+  if (( tok_speed > 500 )); then _ts_c="${grn}"; elif (( tok_speed > 200 )); then _ts_c="${dim}"; else _ts_c="${ylw}"; fi
+  _l3_segs+=("${_ts_c}spd:${tok_speed}t/s${rst}")
+fi
+
+# P6: Test status (T0-T3 — promoted; red FAIL is critical)
+if (( wtier <= 3 )) && seg_on test_status "$has_test" && (( has_test )); then
+  if [[ "$test_status" == "pass" ]]; then _l3_segs+=("${grn}PASS ${test_total}${rst}")
+  else _l3_segs+=("${red}${bld}FAIL ${test_failed}/${test_total}${rst}"); fi
+fi
+
+# P7: Open PR (T0-T2)
+if (( wtier <= 2 )) && seg_on pr "$has_pr" && [[ -n "$git_pr" ]]; then
+  _l3_segs+=("${cyn}PR#${git_pr}${rst}")
+fi
+
+# P8: pm2 errors first, healthy count at T0-T2
+if seg_on pm2 "$has_pm2" && (( has_pm2 )); then
+  if (( pm2_errored > 0 )); then
+    _l3_segs+=("${red}${ic_pm2}${pm2_online}up/${pm2_errored}err${rst}")
+  elif (( wtier <= 2 )); then
+    _l3_segs+=("${dim}${ic_pm2}${pm2_online}up${rst}")
+  fi
+fi
+
+# P8.5: Runtime versions (T0-T2) — node/python from .nvmrc/.python-version in project tree
+if (( wtier <= 2 )) && seg_on runtime_ver 1 && (( has_node_ver || has_python_ver )); then
+  _rv_parts=()
+  if [[ -n "$node_ver" ]]; then
+    _nv="${node_ver:0:7}"; _nv="${_nv%.}"; _rv_parts+=("node:${_nv}")
+  fi
+  if [[ -n "$python_ver" ]]; then
+    _pv="${python_ver:0:7}"; _pv="${_pv%.}"; _rv_parts+=("py:${_pv}")
+  fi
+  _rv_str=$(IFS='/'; echo "${_rv_parts[*]}")
+  _l3_segs+=("${dim}${_rv_str}${rst}")
+fi
+
+# P9: Focus file (T0-T2)
+if (( wtier <= 2 )) && seg_on focus_file "$has_focus" && (( has_focus )); then
+  _ff=$(basename "$focus_file"); [[ ${#_ff} -gt 20 ]] && _ff="${_ff:0:18}.."
+  if (( focus_count >= 11 )); then _fc="${red}"
+  elif (( focus_count >= 6 )); then _fc="${ylw}"
+  else _fc="${dim}"; fi
+  _l3_segs+=("${_fc}focus:${_ff}(${focus_count})${rst}")
+fi
+
+# P10: Branch age / staleness (T0-T1)
+if (( wtier <= 1 )) && seg_on branch_age "$has_branch_age" && (( has_branch_age )); then
+  _ba="${branch_age_days}d"; [[ $branch_behind -gt 0 ]] && _ba+=" ↓${branch_behind}"
+  if (( branch_age_days > 7 || branch_behind > 20 )); then _ba_c="${red}"
+  elif (( branch_age_days > 3 || branch_behind > 10 )); then _ba_c="${ylw}"
+  else _ba_c="${dim}"; fi
+  _l3_segs+=("${_ba_c}br:${_ba}${rst}")
+fi
+
+# P11: Edit efficiency ratio (T0-T1, non-early sessions)
+if (( wtier <= 1 )) && seg_on edit_ratio "$has_edit_ratio" && (( has_edit_ratio )); then
+  _rx10=$(( total_lines_changed * 10000 / total_tok ))
+  _ri=$(( _rx10 / 10 )); _rd=$(( _rx10 % 10 ))
+  if (( _ri >= 5 )); then _er_c="${grn}"; elif (( _ri >= 1 )); then _er_c="${dim}"; else _er_c="${ylw}"; fi
+  _l3_segs+=("${_er_c}eff:${_ri}.${_rd}L/Kt${rst}")
+fi
+
+# P12: Git stash (T0-T1)
+if (( wtier <= 1 )) && seg_on git_stash "$has_stash" && (( git_stash > 0 )); then
+  if (( git_stash > 5 )); then _st_c="${ylw}"; else _st_c="${dim}"; fi
+  if (( use_icons )); then
+    _l3_segs+=("${_st_c}${ic_stash}${git_stash}${rst}")
+  else
+    _l3_segs+=("${_st_c}stash:${git_stash}${rst}")
+  fi
+fi
+
+# P13: External changes (T0-T1)
+if (( wtier <= 1 )) && seg_on ext_changes 1 && (( ${ext_changes:-0} > 5 )); then
+  _l3_segs+=("${ylw}ext:${ext_changes}${rst}")
+fi
+
+# P13.5: Files touched this session (T0-T1; T0 shows from >2, T1 from >5)
+_ft_thresh=5; (( wtier == 0 )) && _ft_thresh=2
+if (( wtier <= 1 )) && seg_on files_touched 1 && (( files_touched > _ft_thresh )); then
+  if (( files_touched > 50 )); then _ft_c="${ylw}"; else _ft_c="${dim}"; fi
+  _l3_segs+=("${_ft_c}files:${files_touched}${rst}")
+fi
+
+# P14: Network — offline (critical) or high latency >200ms (warning at T0-T2)
+if seg_on network "$has_net"; then
+  if [[ "$net_latency" == "offline" ]]; then
+    _l3_segs+=("${red}${bld}${ic_net}OFFLINE${rst}")
+  elif [[ "$net_latency" =~ ^[0-9]+$ ]] && (( net_latency > 200 && wtier <= 2 )); then
+    if (( net_latency > 500 )); then _nl_c="${red}"; else _nl_c="${ylw}"; fi
+    _l3_segs+=("${_nl_c}${ic_net}net:${net_latency}ms${rst}")
+  fi
+fi
+
+# Render L3 (indent "  ", stop at budget)
+_l3_budget=$(( cols - 2 ))
+_l3_out="  "; _l3_len=2; _l3_any=0
+for _seg in "${_l3_segs[@]-}"; do
+  [[ -z "$_seg" ]] && continue
+  _vlen "$_seg"; _sl=$_VLEN
+  _need=$(( _l3_any ? _l3_len + 3 + _sl : _l3_len + _sl ))
+  (( _need > _l3_budget )) && break
+  (( _l3_any )) && _l3_out+="${_V4SEP}" && _l3_len=$(( _l3_len + 3 ))
+  _l3_out+="${_seg}"; _l3_len=$(( _l3_len + _sl ))
+  _l3_any=1
+done
+printf '%b\n' "${_l3_out}${rst}"  # always print L3
+
+# ── LINE 4: Metadata / IDs ──────────────────────────────────────────
+_l4_segs=()
+
+# P1: Session ID (first 8 chars to keep it compact)
+if seg_on session_id 1 && [[ -n "${sid_short:-}" ]]; then
+  _l4_segs+=("\033[2;36msid:${sid_short}${rst}")
+fi
+
+# P2: Active ports (dim green — running services)
+if seg_on ports 1 && [[ -n "${ports_up:-}" ]]; then
+  _l4_segs+=("\033[2;32mports:${ports_up}${rst}")
+fi
+
+# P3: Uptime — moved to L1 (shown there at T0-T2); L4 no longer renders it
+
+# P3: Active cloud profile (env var at launch time — AWS/GCP/Azure)
+if seg_on cloud "$has_cloud" && (( has_cloud )); then
+  # Truncate long profile names (e.g. long GCP project IDs)
+  _cp="${cloud_profile}"; [[ ${#_cp} -gt 16 ]] && _cp="${_cp:0:14}.."
+  if (( use_icons )); then
+    _l4_segs+=("${dim}${ic_cloud}${cloud_provider}:${_cp}${rst}")
+  else
+    _l4_segs+=("${dim}${cloud_provider}:${_cp}${rst}")
+  fi
+fi
+
+# P3.5: Sudo credential active (T0-T2) — brief flash to show elevated session state
+if (( wtier <= 2 )) && seg_on sudo "$has_sudo" && (( has_sudo )); then
+  _l4_segs+=("${ylw}sudo${rst}")
+fi
+
+# P4: Tmux session count — useful for multi-pane workflow awareness
+if seg_on tmux "$has_tmux" && (( has_tmux )); then
+  _l4_segs+=("${dim}tmux:${tmux_count}${rst}")
+fi
+
+# P4: Docker running containers — daemon-guarded; 0 if socket absent
+# Shows even when count=0 (daemon is up) so user knows docker is active
+if seg_on docker "$has_docker" && (( has_docker )); then
+  if (( docker_count > 0 )); then _dk_c="${grn}"; else _dk_c="${dim}"; fi
+  _l4_segs+=("${_dk_c}docker:${docker_count}${rst}")
+fi
+
+# P4.5: Last bash exit code — shown only when non-zero (signals a failed command)
+if (( wtier <= 2 )) && seg_on exit_code "$has_exit_code" && (( has_exit_code && last_exit_code != 0 )); then
+  _l4_segs+=("${red}exit:${last_exit_code}${rst}")
+fi
+
+# P5: Inter-render latency — time between statusline renders; dim when <5s, yellow when >30s
+if (( wtier <= 1 )) && seg_on latency "$has_latency" && (( has_latency )); then
+  if (( render_lat_s > 30 )); then _lat_c="${ylw}"; else _lat_c="${dim}"; fi
+  _l4_segs+=("${_lat_c}lat:${render_lat_s}s${rst}")
+fi
+
+# P5: Cost velocity (tier 0-1)
+if (( wtier <= 1 )) && seg_on cost_vel "$has_cost_vel" && (( cost_vel_cpm > 0 )); then
+  _cv_str=$(printf '$%d.%02d/min' "$(( cost_vel_cpm / 100 ))" "$(( cost_vel_cpm % 100 ))")
+  if (( cost_vel_cpm > 30 )); then _cvcolor="${red}"; elif (( cost_vel_cpm > 10 )); then _cvcolor="${ylw}"; else _cvcolor="${dim}"; fi
+  _l4_segs+=("${_cvcolor}${_cv_str}${rst}")
+fi
+
+# P4: System memory — show when below 8GB free (dim=4-8GB, yellow=2-4GB, red=<2GB)
+# Suppressed when healthy (≥8GB) to avoid noise on machines with ample RAM
+if seg_on mem "$has_mem" && (( has_mem )); then
+  if (( sys_free_mb < 2048 )); then _mc="${red}"; elif (( sys_free_mb < 4096 )); then _mc="${ylw}"; else _mc="${dim}"; fi
+  _fg=$(( sys_free_mb / 1024 )); _fr=$(( (sys_free_mb % 1024) * 10 / 1024 ))
+  if (( use_icons )); then
+    _l4_segs+=("${_mc}${ic_mem}${_fg}.${_fr}G${rst}")
+  else
+    _l4_segs+=("${_mc}mem:${_fg}.${_fr}G${rst}")
+  fi
+fi
+
+# P4: Disk free — show when below 20GB free (dim=10-20GB, yellow=5-10GB, red=<5GB)
+# Suppressed when disk is comfortable (≥20GB) to reduce noise
+if seg_on disk "$has_disk" && (( has_disk )); then
+  if (( disk_free_gb < 5 )); then _dk_c="${red}"; elif (( disk_free_gb < 10 )); then _dk_c="${ylw}"; else _dk_c="${dim}"; fi
+  if (( use_icons )); then
+    _l4_segs+=("${_dk_c}${ic_disk}${disk_free_gb}G${rst}")
+  else
+    _l4_segs+=("${_dk_c}dsk:${disk_free_gb}G${rst}")
+  fi
+fi
+
+# P5: Activity bar — 10-char wide, per-turn ring buffer (TL_TURN_FILE written above)
+# Each char = 1 turn; uses relative min/max scaling so activity changes are visible
+# even when absolute tool call counts are small. Always shows exactly 10 chars.
+if (( wtier <= 1 )) && seg_on timeline 0; then
+  _tl_data=()
+  [[ -f "$TL_TURN_FILE" ]] && while IFS= read -r _tv; do
+    [[ -n "$_tv" && "$_tv" =~ ^[0-9]+$ ]] && _tl_data+=("$_tv")
+  done < "$TL_TURN_FILE"
+  # Pad to 10 entries (left-pad with 0s for early session)
+  while (( ${#_tl_data[@]} < 10 )); do _tl_data=("0" "${_tl_data[@]}"); done
+  # Relative scaling: find max for this window
+  _tl_max=1
+  for _tv in "${_tl_data[@]}"; do (( _tv > _tl_max )) && _tl_max=$_tv; done
+  _tl_str=""
+  _sblocks_act=("░" "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")  # 9 levels (0=empty)
+  for _tv in "${_tl_data[@]}"; do
+    if (( _tv == 0 )); then _tl_str+="░"
+    else _tl_str+="${_sblocks_act[$(( _tv * 8 / _tl_max ))]}"; fi
+  done
+  _ltv=${_tl_data[9]}  # most recent turn's delta
+  if (( _ltv > _tl_max / 2 )); then _tl_c="${ylw}"; elif (( _ltv > 0 )); then _tl_c="${dim}"; else _tl_c="\033[38;5;240m"; fi
+  _l4_segs+=("${_tl_c}act:${_tl_str}${rst}")
+fi
+
+# Script modified since session start (daemon detected checksum mismatch)
+(( has_script_changed )) && _l4_segs+=("${ylw}${ic_warn}statusline edited${rst}")
+
+# Render L4 (indent "  ", stop at budget)
+_l4_budget=$(( cols - 2 ))
+_l4_out="  "; _l4_len=2; _l4_any=0
+for _seg in "${_l4_segs[@]-}"; do
+  [[ -z "$_seg" ]] && continue
+  _vlen "$_seg"; _sl=$_VLEN
+  _need=$(( _l4_any ? _l4_len + 3 + _sl : _l4_len + _sl ))
+  (( _need > _l4_budget )) && break
+  (( _l4_any )) && _l4_out+="${_V4SEP}" && _l4_len=$(( _l4_len + 3 ))
+  _l4_out+="${_seg}"; _l4_len=$(( _l4_len + _sl ))
+  _l4_any=1
+done
+printf '%b\n' "${_l4_out}${rst}"  # always print L4
+

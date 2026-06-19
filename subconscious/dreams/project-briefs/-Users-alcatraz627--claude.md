@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-06-18T22:49:49.690055+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-19T17:53:42.609878+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-The `~/.claude` meta-project: the user's global Claude Code configuration, WAL/session-continuity infrastructure, rules, skills, and atone system. Work is long-running, multi-session, and resumes via `/catchup` — session continuity is the dominant pattern.
+This is the `~/.claude` meta-repository — the agent's own configuration, rules, skills, WAL infrastructure, and session-continuity tooling. Work here is almost always tooling/infrastructure maintenance, not product features.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively**: call `/core-dump` at milestones and before risky ops; don't wait for user to ask; `/catchup` is the primary recovery path after compaction
-- **Write WAL as JSONL** (canonical since 2026-04-17); never write markdown WAL — jq-based catchup is the authoritative reader
-- **Treat terse one-word messages as execution directives** (`next`, `ahead`, `looks`, `done` = "continue autonomously"); do not request clarification
-- **Verify current state before any side-effecting action**: re-read file/git/task-list state; never act on inferred or remembered state
+- Proactively `/core-dump` at milestones during long sessions; user resumes via `/catchup` across compaction boundaries — this is the dominant working pattern
+- Write WAL entries as JSONL (canonical since 2026-04-17); never write markdown WAL
+- Treat terse single-word messages (`ahead`, `next`, `looks`, `done`) as autonomous-continue directives — execute without asking for clarification
+- Verify current state before any write (git status, file read) — the most common failure class is acting on stale or inferred state
 
 ## Things to avoid
-- **Never commit or push without fresh per-push explicit approval** — the most-violated rule in this project (5+ recorded incidents); prior session approval does not carry over to the next push
-- **Don't thrash fixes without diagnosing root cause**: 3+ edits to the same function = stop, re-read surrounding context, form a hypothesis, then edit once
-- **Never infer or hallucinate data values** not directly traceable to source; flag gaps as `UNCONFIRMED` rather than fill them
+- Never commit or push without fresh explicit per-push approval from the user; prior session approval does not carry forward to any subsequent push
+- Don't loop on fix attempts without identifying root cause first — three edits to the same block without a hypothesis means stop and probe
+- Never expand scope beyond what's explicitly requested, even for obvious improvements; treat the request as a ceiling, not a floor
+- Don't infer or hallucinate values not traceable to source data; flag gaps explicitly rather than filling them
 
 ## Open questions / known gaps
-- Pattern extraction in this project's atone/memory system lacks deduplication — 4 near-identical WAL-migration entries were emitted as separate patterns; the consolidation cron may need manual intervention
-- Tension between "terse = continue" and "terse = scope-check": when a terse message follows a scope-expanding action the user didn't request, treat it as approval for the current step only, not blanket scope expansion
+- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event was recorded 4× independently; extraction needs fuzzy-match-before-insert logic
+- Tension between terse-continue semantics and scope-only-when-asked: short directives mean "go deeper," never "go broader" — but the system conflates them

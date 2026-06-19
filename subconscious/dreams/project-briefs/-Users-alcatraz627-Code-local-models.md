@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-06-19T01:40:51.638909+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-19T17:53:56.761298+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Local-models tooling project (`~/Code/local-models`) — managing local LLM/image-gen infrastructure with agent-driven workflows, scripting, and documentation. Work style is iterative with heavy use of correction rituals and task tracking.
+A local-models development workspace focused on AI tooling, research agents, and automation scripts. Work style is exploratory multi-session with heavy use of skills, sub-agents, and correction rituals.
 
 ## Things to do (or keep doing)
-- Always surface actual command output for the user to inspect before declaring a test or feature successful — evidence first, verdict second
-- Call the Task tool (`TaskCreate`/`TaskUpdate`) whenever "update todos" is requested; never write to a file as a substitute
-- Invoke `/atone` immediately and completely when corrections happen — do not defer or skip mid-correction
-- Use `trash` for all file deletion; `rm` is hard-blocked by hook with no exceptions
+- Always surface actual output for the user to inspect when claiming a test succeeded — evidence, not assertion
+- Use `TaskCreate`/`TaskUpdate` when told to "update todos"; never write to a file as a substitute
+- Deliver the primary session deliverable before expanding into secondary research or bonus work
+- Use formal, direct language in technical docs — no promotional framing or "why this matters" flourishes
 
 ## Things to avoid
-- Don't declare tests/features "successful" without showing the raw output — asserting success without evidence is treated as a failure
-- Don't skip or defer explicitly-invoked skills (`/atone`, `/core-dump`, etc.) in favor of other work; skipping an invoked ritual is a compounding offense
-- Don't complete peripheral/bonus work before delivering the session's primary stated deliverable
-- Don't write essay-length comments; one terse WHY-only sentence max, or nothing
+- Don't skip or defer explicit skill invocations (e.g. `/atone`) — execute them immediately and completely when requested
+- Don't use `rm`; always use `trash` — the hook blocks `rm` and there are no exceptions for "cleanup" or "temp" files
+- Don't write essay-length comments; one terse WHY-only sentence maximum, omit entirely when obvious
+- Don't write atone RCA files without `---` YAML frontmatter on line 1 — the lint gate rejects them and the event goes unrecorded
 
 ## Open questions / known gaps
-- RCA files for atone must begin with `---` YAML frontmatter on line 1 or the gate silently rejects the event — this has recurred; verify frontmatter every time before running `atone.sh add`
+- Recurring tension: agent completes peripheral work (planning, research, persona design) but misses the core deliverable, which the user treats as total session failure regardless of surrounding quality

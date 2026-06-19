@@ -1,0 +1,58 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18188,
+    "correction_density": 0.01694915254237288,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.18313648996291265,
+    "unit_count": 59
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — db668075-2: cat package.json|head-80 in compound Bash instead of Read (success=true but tool preference violation); ls-la|head-40 compound Bash success=false before decomposition. db668075-18: grep -qE in polling for-loop instead of rg (success=true). Violations in ~3 of 8 units (~37%); within the 30-44% STABLE band of all prior cycles. No improvement trajectory observed across full calibration history spanning six sessions.",
+      "compound_command_overreach:RECURRING:STABLE — db668075-2: ls-la+echo+ls next.config compound Bash success=false before decomposition. db668075-7: large compound (kill-USR1+curl+cat-heredoc+node) success=false before Write-fallback adopted. Decompose-only-after-failure sequence structurally identical across all prior cycles. No pre-decomposition behavior observed in any confirmed instance across full calibration history.",
+      "rm_bash_instead_of_trash:RECURRING — db668075-18: rm -rf .next executed in Bash, blocked by safe-delete hook (success=false); recovered correctly with trash .next in subsequent command. Third confirmed instance. Hook enforcement effective; root-cause prevention (pre-selection discipline) absent. Consistent with prior cycle reading.",
+      "re_edit_thrash:MARGINAL_IMPROVEMENT_CONFIRMING — db668075-21: Edit-fail on package.json → Read → Edit-succeed; Edit-fail on .gitignore → Read → Edit-succeed. Second consecutive cycle showing Read-before-retry behavior within edit-thrash-adjacent units rather than hook-bypass as exit. Four externally-justified consecutive Edits on playwright.perf.config.ts driven by real test-run feedback, not blind retry. Improvement trend appears consolidating; no hook bypass observed this cycle.",
+      "bash_glob_expansion_error:NEW — db668075-26: rg command with shell ** glob (rg -n 'pattern' node_modules/@sentry/nextjs/build/**/*.js) success=false; macOS bash 3.2 does not expand ** without globstar option. Recovered by removing glob in subsequent command. Single instance; not seen in prior calibration history. Sub-variant of shell scripting error class."
+    ],
+    "calibration_score": 0.21,
+    "overconfident_count": 2,
+    "recommendations": [
+      "shell_tool_preference_violations and compound_command_overreach are both STABLE across six consecutive cycles with no improvement trend; deprioritize new recommendations for these — enforcement hooks are the only effective signal and they already fire. Further advisory text has no measurable effect.",
+      "re_edit_thrash trajectory is positive (Read-before-retry confirmed two consecutive cycles, no hook-bypass observed); deprioritize this recommendation until regression appears.",
+      "bash_glob_expansion_error is new and single-instance; watch for recurrence before recommending mitigation. If it recurs, recommend pre-flight rg calls use explicit path enumeration (rg -l pattern dir/) rather than shell globs."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      1579627
+    ],
+    [
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      6667442
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      28107614
+    ],
+    [
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      1011767
+    ],
+    [
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      4889718
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      5960073
+    ]
+  ],
+  "timestamp": "2026-06-19T17:52:32.486547Z",
+  "tokens_used": 11997,
+  "units_analyzed": 8,
+  "units_total": 59
+}

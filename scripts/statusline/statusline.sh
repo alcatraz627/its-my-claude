@@ -199,6 +199,20 @@ eval "$(echo "$input" | jq -r '
 cwd="${cwd:-$(pwd)}"
 shortdir=$(basename "$cwd")
 
+# ── Rate-limit debug capture (env-gated) ────────────────────────────────────
+# Set STATUSLINE_RATELIMIT_DEBUG=1 in your shell to log every render's parsed
+# rate-limit values. Used to confirm whether Claude Code's stdin JSON is
+# feeding stale rate_limits.* fields (the suspected cause of the 7d lag).
+if [[ "${STATUSLINE_RATELIMIT_DEBUG:-0}" == "1" ]]; then
+  _rl_log="$HOME/.claude/logs/statusline-ratelimit.log"
+  mkdir -p "${_rl_log%/*}" 2>/dev/null
+  printf '[%s] sid=%s | rate_5h=%q rate_5h_resets=%q | rate_7d=%q rate_7d_resets=%q\n' \
+    "$(date '+%F %T')" "${session_id:-unknown}" \
+    "${rate_5h:-}" "${rate_5h_resets:-}" \
+    "${rate_7d:-}" "${rate_7d_resets:-}" \
+    >> "$_rl_log" 2>/dev/null || true
+fi
+
 # ── Terminal Width Detection ──
 # Hook runs in a non-TTY subprocess — tput falls back to 80. Priority:
 #   1. STATUSLINE_COLS: explicit override (render server / testing)
@@ -771,10 +785,29 @@ if seg_on rate "$has_rate" && (( has_rate )); then
   _rl_bar=$(_bar10 "$r5")
   _rl_pct="${r5}%"; (( r5 >= 90 )) && _rl_pct="\033[5m${_rl_pct}\033[25m"
   _rl_str="${ic_rate}[${_rl_bar}] ${_rl_pct}"
-  # 7d (always show when available — user wants full picture of both windows)
+  # 7d (always show when available — user wants full picture of both windows).
+  # Cross-window staleness: if rate_7d_resets is in the past, the 7d value is
+  # from a window that has already expired and Claude Code's JSON is feeding
+  # stale data. Mark with dim+red and a `~` suffix so the user knows not to
+  # trust it. (Within-window lag — when Claude Code sends slow-updating values
+  # while still inside the current window — is not detectable from JSON alone;
+  # see STATUSLINE_RATELIMIT_DEBUG=1 for the time-series capture used to
+  # characterise it.)
   if [[ -n "${rate_7d:-}" && "$rate_7d" != "null" ]]; then
     _r7=$(printf "%.0f" "$rate_7d" 2>/dev/null || echo "0")
-    _rl_str+=" · 7d:${_r7}%"
+    _r7_stale=0
+    if [[ -n "${rate_7d_resets:-}" && "$rate_7d_resets" != "null" ]]; then
+      if [[ "$rate_7d_resets" =~ ^[0-9]+$ ]]; then _r7_re="$rate_7d_resets"
+      else _r7_re=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${rate_7d_resets%%.*}" "+%s" 2>/dev/null \
+                || date -d "${rate_7d_resets%%.*}" "+%s" 2>/dev/null \
+                || echo "0"); fi
+      (( _r7_re > 0 && _r7_re < _NOW )) && _r7_stale=1
+    fi
+    if (( _r7_stale )); then
+      _rl_str+=" · ${dim}${red}7d:${_r7}%~${rst}"
+    else
+      _rl_str+=" · 7d:${_r7}%"
+    fi
   fi
   # Countdown + reset time (show when rate is visible and reset time is known)
   if seg_on countdown "$has_countdown" && (( has_countdown )); then

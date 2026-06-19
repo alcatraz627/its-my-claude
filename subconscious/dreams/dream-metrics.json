@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-19T09:42:45Z",
-  "events_analyzed": 63397,
+  "generated_at": "2026-06-19T17:52:45Z",
+  "events_analyzed": 64043,
   "sessions_analyzed": 184,
   "session_quality": {
     "average_score": 68.4,
@@ -175,19 +175,15 @@
       "backend": 1,
       "sys-monitor": 1,
       ".claude": 3,
-      "two-enhancement-product": 2,
+      "two-enhancement-product": 1,
       "docs": 1,
       "i-dream": 1,
-      "local-models": 1
+      "local-models": 1,
+      "frontend": 1
     },
-    "drift_rate": 0.698,
-    "total_switches": 127,
+    "drift_rate": 0.703,
+    "total_switches": 128,
     "recent_switches": [
-      {
-        "ts": "2026-06-18T06:24:04Z",
-        "from": "sys-monitor",
-        "to": ".claude"
-      },
       {
         "ts": "2026-06-18T10:47:44Z",
         "from": ".claude",
@@ -207,16 +203,21 @@
         "ts": "2026-06-18T23:21:47Z",
         "from": "i-dream",
         "to": "local-models"
+      },
+      {
+        "ts": "2026-06-19T14:50:02Z",
+        "from": "local-models",
+        "to": "frontend"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 5514,
-    "corrections": 1234,
-    "confirmations": 1011,
-    "directives": 196,
-    "terse_messages": 473,
-    "correction_rate": 0.224,
+    "total_prompts": 5549,
+    "corrections": 1248,
+    "confirmations": 1017,
+    "directives": 197,
+    "terse_messages": 475,
+    "correction_rate": 0.225,
     "confirmation_rate": 0.183,
     "directive_rate": 0.036,
     "terse_rate": 0.086,
