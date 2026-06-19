@@ -128,3 +128,9 @@ contextual action keys, layout toggle, `fzf`-absent → `kit` fallback. State in
 - Storing usage/favorites **inside** a synced config repo (churn + leaks habits).
 - Building a category tree when inline fuzzy-matchable **tags** + frecency sort
   do the navigation for free.
+- **`--nth=N` to scope search onto a field that carries ANSI color codes** — it
+  silently matches *nothing* (the color escapes corrupt field tokenization even
+  under `--ansi`). Keep one **clean, un-colored field** as the search target
+  (`--nth` it, or just omit `--nth` and let whole-line search hit the hidden
+  clean column), and put color only in the **display** field (`--with-nth`).
+  Symptom: typing in the picker yields zero results though the list renders fine.
