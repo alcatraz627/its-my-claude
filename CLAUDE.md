@@ -36,7 +36,7 @@ Commit after each logical unit, before area switch, before risky ops, every ~15-
 
 ### Comments are for humans first
 
-Comments are for humans first, AI agents second, machines never. First sentence of every non-trivial docstring is code-agnostic — what the thing IS in human terms. Speak from the caller's perspective, not the machine's. NEVER include `[claude@<ts>]` tags, "Phase N / Track X / Round Y" plan refs, "pre-fix/post-fix" archeology, or shipped-already TODOs — those rot. Docstrings >8 lines move to a doc. Full rules: `rules/comments.md`.
+Comments are for humans first, AI agents second, machines never. First sentence of every non-trivial docstring is code-agnostic — what the thing IS in human terms. Speak from the caller's perspective, not the machine's. NEVER include `[claude@<ts>]` tags, "Phase N / Track X / Round Y" plan refs, "pre-fix/post-fix" archeology, or shipped-already TODOs — those rot. Docstrings >8 lines move to a doc. Full rules: `rules/comments.md`. This generalizes to all prose: writing is a UI surface with an audience. Human readers (comments, docs, PRs, user-facing messages) get a human voice, meaning-first, no em-dashes or AI-smell; agent readers (internal notes, RCAs) can be dry but still read meaning-first. Identify the reader before writing: `rules/audience-aware-writing.md`.
 
 ### Atone — mistake tracking & affirmation system
 
@@ -132,6 +132,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `conventions/html-output.md`      | `topic:html-output`, `topic:reports`, HTML generation                 | HTML rules: dark/light toggle MANDATORY + CSS vars + future HTML rules                                               |
 | `conventions/cli-help-design.md`  | `-h`/`--help` implementation                                          | Help text structure, colors, columns, no-pager                                                                       |
 | `conventions/tui-design.md`       | `topic:tui`, `topic:fzf`, `phrase:"interactive explorer"`, terminal browser/launcher | Functional TUI patterns + fzf-as-runtime launcher blueprint + fzf>gum>framework decision + degradation ladder       |
+| `conventions/visual-design.md`    | `topic:color`, `topic:ui-design`, `topic:visual-design`, `phrase:"design system"`, restyling any UI surface | Color harmony (perceptual OKLCH tiers + de-chaos rule) + hierarchy/spacing/type/truncation + curated Apple/web/widget/CLI design reference links |
 | `conventions/asset-management.md` | `tool:asset.sh`, screenshots/reports/PDFs                             | Assets under `~/.claude/assets/<type>/` + CWD double-nest hazard                                                     |
 | `conventions/doc-writing.md`      | `skill:write-docs`, technical docs                                    | Anti-pattern catalog + STUB/PARTIAL/PLANNED annotations                                                              |
 | `conventions/scratch-files.md`    | `_*.claude.md` management, checkpoints                                | Scratch-file naming + monthly archive to `assets/checkpoints/YYYYMM/`                                                |
