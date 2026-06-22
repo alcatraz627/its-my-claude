@@ -30,6 +30,10 @@ The live todo list **is** the Task tool (`TaskCreate`/`TaskUpdate`) — that's t
 
 Never Glob/Grep from `~/` — resolve to project root first. **`trash` not `rm`** (hook blocks `rm`). Non-interactive flags mandatory: `npm install -y`, `cp -f`, `mv -f`. Don't use `run_in_background: true` unless asked — orphans on `/clear`. macOS bash is 3.2 (no associative arrays); delegate to Python if needed. Full detail: `rules/shell.md`.
 
+### File paths in output: never directly followed by a period
+
+When you print a file path or filename, **never put a period immediately after it** — in backticks (`` `foo.md`. ``) or bare (`foo.md.`). Ghostty auto-links file paths in the terminal, and a trailing period is swallowed into the link, so the path stops being clickable and the user has to ask for the full path again. Follow every path with a space, a word, or a comma, or restructure so the path is not the last thing before a sentence period. Mechanically enforced by the `filename-dot-stop.sh` Stop hook (mute: `touch ~/.claude/.no-filename-dot-gate`).
+
 ### Git: frequent commits, public default, no main push
 
 Commit after each logical unit, before area switch, before risky ops, every ~15-20 min of work. Push every 2-3 commits. **Never push to main without fresh approval** — one approval is not blanket. Create GitHub repos as **public by default** (`gh repo create --public`). Don't commit: `.claude/wal.*`, `_*.claude.md`, `shared/locks/`. Full detail: `rules/git.md`. **Committing THIS repo (`~/.claude` → `its-my-claude`): follow `~/.claude/COMMIT.md`** — mandatory secret-scan BEFORE `git add`, and it's multi-session so fetch + rebase-if-behind before push.

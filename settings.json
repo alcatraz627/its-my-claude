@@ -93,7 +93,7 @@
       "mcp__claude_ai_Notion__*",
       "mcp__claude_ai_Sentry__*"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "default"
   },
   "model": "opus",
   "enableAllProjectMcpServers": false,
@@ -680,6 +680,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/filename-dot-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/guard-structural-claim.sh"
           }
         ]
@@ -879,6 +887,9 @@
       }
     ]
   },
+  "worktree": {
+    "baseRef": "fresh"
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/statusline/statusline.sh"
@@ -931,7 +942,10 @@
   "theme": "dark",
   "verbose": true,
   "preferredNotifChannel": "ghostty",
-  "teammateMode": "tmux",
+  "teammateMode": "auto",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
+  "useAutoModeDuringPlan": true,
   "voiceEnabled": false
 }
