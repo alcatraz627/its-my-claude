@@ -14,15 +14,26 @@ build_meta() {
   [ -f "$EVENTS" ]        && event_count=$(wc -l < "$EVENTS" | tr -d ' ')
   [ -f "$EVENTS" ]        && slug_count=$(jq -r '.slug' "$EVENTS" 2>/dev/null | sort -u | wc -l | tr -d ' ')
   [ -f "$AFFIRM_EVENTS" ] && affirm_count=$(wc -l < "$AFFIRM_EVENTS" | tr -d ' ')
+
+  # juror_health rollup (T3.3): counts of the juror's per-event outcome. Events
+  # written before the field shipped bucket as "unset" — expected, forward-looking.
+  local juror_rollup="{}"
+  [ -f "$EVENTS" ] && juror_rollup=$(jq -s '
+    group_by(.juror_health // "unset")
+    | map({(.[0].juror_health // "unset"): length}) | add // {}' "$EVENTS" 2>/dev/null)
+  [ -z "$juror_rollup" ] && juror_rollup="{}"
+
   jq -n --arg ts "$NOW_UTC" --arg hash "$hash" \
     --argjson events "$event_count" --argjson slugs "$slug_count" \
     --argjson affirms "$affirm_count" \
+    --argjson juror_health "$juror_rollup" \
     '{
        generated_at: $ts,
        input_hash: $hash,
        event_count: $events,
        slug_count: $slugs,
-       affirm_count: $affirms
+       affirm_count: $affirms,
+       juror_health: $juror_health
      }' > "$out.tmp" && mv "$out.tmp" "$out"
   _ok "wrote _meta.json"
 }

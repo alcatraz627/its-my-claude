@@ -30,3 +30,6 @@ bash /Users/alcatraz627/.claude/subconscious/hooks/stop.sh
 
 # Atone-stop check (surfaces pending atone events)
 ~/.claude/scripts/hooks/atone-stop-check.sh
+
+# Atone objective fired-and-ignored detector (T3.2): same-session slug recurrence
+~/.claude/scripts/hooks/atone-fired-and-ignored-check.sh

@@ -230,6 +230,17 @@ cmd_add() {
     fi
   fi
 
+  # T1.4 — the juror self-bypass must be LOUD, not silent. ATONE_NO_JUROR=1 was
+  # set on 6 June events (the "advisory rules don't bind this" moments — exactly
+  # where dishonesty risk is highest), with no stated reason. The juror is now
+  # reliable (sonnet, compact prompt), so a genuine need to bypass is rare.
+  # Require an explicit reason: every bypass is then recorded (juror_bypassed:true
+  # + the reason in suspect_fields) and countable via events.jsonl. Next lever if
+  # this is abused: a human-only token, per the graduated-approval model.
+  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" = "1" ] && [ -z "${ATONE_NO_JUROR_REASON:-}" ]; then
+    _die "ATONE_NO_JUROR=1 on an S3 requires ATONE_NO_JUROR_REASON=\"why the juror can't run\". The juror is reliable now — silent self-bypass is not allowed. Legit reasons: migration/test isolation, or claude -p genuinely down."
+  fi
+
   # Fuzzy-slug check: warn if a near-duplicate slug already exists.
   # Heuristic: Levenshtein < 3 OR token overlap ≥ 50%.
   # Skips if env ATONE_NO_FUZZY=1 (for scripts/migration that already validated).
@@ -549,15 +560,53 @@ EOF
       [ "${ATONE_VERBOSE:-0}" = "1" ] && _ok "juror gate: matched $matched_judgment_id (verdict=$matched_verdict, gap=${gap_s}s)"
     fi
   elif [ "${ATONE_NO_JUROR:-0}" = "1" ]; then
-    suspect_fields_str="${suspect_fields_str}|juror-bypassed:ATONE_NO_JUROR=1"
-    _warn "ATONE_NO_JUROR=1 — recording event with juror_bypassed:true"
+    # Reason is required for S3 (guarded above); for S1/S2 it's optional context.
+    local _byreason="${ATONE_NO_JUROR_REASON:-unstated}"
+    # Sanitize | and newlines so the reason can't corrupt the suspect_fields split.
+    _byreason=$(printf '%s' "$_byreason" | tr '|\n' '  ' | cut -c1-80)
+    suspect_fields_str="${suspect_fields_str}|juror-bypassed:ATONE_NO_JUROR=1:${_byreason}"
+    _warn "ATONE_NO_JUROR=1 — recording event with juror_bypassed:true (reason: $_byreason)"
   fi
   # Strip leading | from suspect_fields_str for cleaner downstream split.
   suspect_fields_str="${suspect_fields_str#|}"
 
+  # F1 — stamp the stakes tier (high|low) so recurrence can be split prod-vs-local
+  # (the cost the user actually cares about). high = a repo they also work in / that
+  # ships; low = throwaway tooling. Resolved from the event's project path.
+  local stakes_tier
+  stakes_tier=$(bash "$HOME/.claude/scripts/stakes-tier.sh" "${project:-$PWD}" 2>/dev/null || echo low)
+
+  # juror_health (T3.3) — a clean, dedicated field for the juror's outcome on THIS
+  # event, so the consolidate rollup can measure juror reliability directly instead
+  # of parsing suspect_fields. (Reliability itself is fixed in T1.3; this measures
+  # it.) Derived from what add already knows at write time:
+  #   bypassed       ATONE_NO_JUROR=1 (loud self-bypass)
+  #   not-applicable severity != S3 (the juror gate only runs for S3)
+  #   timeout        dispatch rc=3 and the dispatcher reason names a timeout
+  #   unparseable    dispatch rc=3 and the reason names an unparseable/no verdict
+  #   unavailable    dispatch rc=3, reason otherwise unclassified
+  #   ok             a verdict came back and parsed
+  local juror_health
+  if [ "${ATONE_NO_JUROR:-0}" = "1" ]; then
+    juror_health="bypassed"
+  elif [ "$severity" != "S3" ]; then
+    juror_health="not-applicable"
+  elif [ "${juror_unavailable:-0}" = "1" ]; then
+    case "${jreason:-}" in
+      *timeout*|*timed_out*|*timed-out*)                 juror_health="timeout" ;;
+      *unparseable*|*no_parseable*|*no_verdict*|*parse*) juror_health="unparseable" ;;
+      *)                                                 juror_health="unavailable" ;;
+    esac
+  elif [ -n "$matched_verdict" ]; then
+    juror_health="ok"
+  else
+    juror_health="unknown"
+  fi
+
   local line
   line=$(jq -cn \
     --arg id "$id" --arg ts "$ts" --arg slug "$slug" \
+    --arg stakes "$stakes_tier" \
     --arg title "$title" --arg issue "$issue" --arg cause "$cause" \
     --arg fix "$fix" --arg what_not "$what_not" --arg precheck "$precheck" \
     --arg severity "$severity" --arg cluster "$cluster" --arg project "$project" \
@@ -567,6 +616,7 @@ EOF
     --arg suspect_fields_str "$suspect_fields_str" \
     --arg override_reason "${ATONE_OVERRIDE_VERDICT:-}" \
     --arg session_id "$session_id" \
+    --arg juror_health "$juror_health" \
     --arg juror_bypassed "$([ "${ATONE_NO_JUROR:-0}" = "1" ] && echo true || echo false)" \
     '{
        id: $id, ts: $ts, slug: $slug, title: $title,
@@ -574,6 +624,7 @@ EOF
        issue: $issue, cause: $cause, fix: $fix, what_not_to_do: $what_not,
        precheck: (if $precheck == "" then null else $precheck end),
        severity: $severity,
+       stakes: (if $stakes == "" then null else $stakes end),
        cluster: (if $cluster == "" then null else $cluster end),
        project: (if $project == "" then null else $project end),
        tags:  ($tags_str  | split(" ") | map(select(length > 0))),
@@ -581,6 +632,7 @@ EOF
        rca_id: (if $rca_id == "" then null else $rca_id end),
        judgment_id: (if $judgment_id == "" then null else $judgment_id end),
        juror_verdict: (if $verdict == "" then null else $verdict end),
+       juror_health: $juror_health,
        juror_bypassed: ($juror_bypassed == "true"),
        override_reason: (if $override_reason == "" then null else $override_reason end),
        suspect_fields: ($suspect_fields_str | split("|") | map(select(length > 0)))
@@ -592,6 +644,20 @@ EOF
   ) 9>>"$LOCK_FILE"
 
   _git_commit "atone: $id $slug ($severity)"
+
+  # F1 — session-precise slug counter. The date-based bump above is a coarse
+  # proxy (it fires across different sessions on the same UTC day). This records
+  # one line per atone in THIS session so the circuit breaker (T2.1) can detect
+  # "same slug twice in one session" precisely, and so the bypass/recurrence
+  # signals are session-scoped. Best-effort: never break an atone write.
+  if [ -n "$session_id" ]; then
+    local _sdir="$HOME/.claude/.session-atone-slugs"
+    mkdir -p "$_sdir" 2>/dev/null || true
+    jq -cn --arg s "$slug" --arg ts "$ts" --arg sev "$severity" \
+           --arg st "$stakes_tier" --arg eid "$id" \
+      '{slug:$s, ts:$ts, severity:$sev, stakes:$st, event_id:$eid}' \
+      >> "$_sdir/${session_id}.json" 2>/dev/null || true
+  fi
 
   # A5: NOW that the event row exists, record the deferred owned-path judgment
   # linked to it (event-first ordering — a crash before this point leaves NO
@@ -808,8 +874,11 @@ cmd_unlock_check() {
 #                            this implicitly — the event itself is the signal)
 # Foundation for L2 dream integration (pattern correlation).
 
-FEEDBACK_LOG="$HOME/.claude/atone/feedback.jsonl"
-FEEDBACK_LOCK="$HOME/.claude/atone/feedback.jsonl.lock"
+# Derived from ATONE_DIR (like JUDGMENTS_LOG below) so the feedback flow can be
+# exercised against an isolated dir via the ATONE_DIR override — the override's
+# stated purpose (see top of file). Was hardcoded to $HOME; that blocked testing.
+FEEDBACK_LOG="$ATONE_DIR/feedback.jsonl"
+FEEDBACK_LOCK="$ATONE_DIR/feedback.jsonl.lock"
 
 cmd_feedback() {
   local kind="" slug="" event_id="" trigger_id="" notes=""

@@ -34,19 +34,15 @@ ATONE_DIR="${ATONE_DIR:-$HOME/.claude/atone}"
 PERSONA="$HOME/.claude/personas/juror.md"
 CLAUDE_BIN="${CLAUDE_BIN:-$HOME/.local/bin/claude}"
 
-# The juror should be a DIFFERENT model from the offender to be a real check:
-# the same model that made the mistake, asked to grade itself, misses its own
-# error far more often than an externally-attributed one (self-correction
-# illusion). The plumbing for that is here — set ATONE_JUROR_MODEL=sonnet to make
-# the juror independent of the Opus main loop (and cheaper), with 'ambiguous'
-# verdicts escalated to the stronger model.
-#
-# DEFAULT stays opus (= prior behaviour) on purpose: the juror persona is heavy,
-# so a smaller model is currently slow/parse-fragile and yields "no parseable
-# verdict" (the same juror-unavailable failure seen 3x in June). Flipping the
-# default to sonnet is BLOCKED on fixing that reliability (juror-health work);
-# until then sonnet is opt-in so we don't regress every S3 atone to unavailable.
-JUROR_MODEL="${ATONE_JUROR_MODEL:-opus}"
+# The juror is a DIFFERENT model from the offender, by design: the same model
+# that made the mistake, asked to grade itself, misses its own error far more
+# often than an externally-attributed one (the self-correction illusion). So the
+# juror defaults to Sonnet — independent of the Opus main loop and cheaper — with
+# only the genuinely-hard 'ambiguous' verdicts escalated to Opus for a second
+# opinion. This became viable once the headless prompt was made compact (the full
+# persona made claude -p slow/parse-fragile → the June juror-unavailable events);
+# verified end-to-end ~15s clean verdict at sonnet. Override with ATONE_JUROR_MODEL.
+JUROR_MODEL="${ATONE_JUROR_MODEL:-sonnet}"
 JUROR_ESCALATE_MODEL="${ATONE_JUROR_ESCALATE_MODEL:-opus}"
 
 case_file=""; review_report=""; out=""
@@ -85,17 +81,59 @@ ctx=$(jq -r '.context // ""'      "$case_file")
 prompt_file=$(mktemp "${TMPDIR:-/tmp}/atone-juror-prompt.XXXXXX")
 trap 'rm -f "$prompt_file" 2>/dev/null' EXIT
 {
-  cat "$PERSONA"
-  printf '\n\n---\n\nIMPORTANT: You have NO tools in this dispatch. All context you need is below.\n'
-  printf 'Return ONLY the JSON verdict object specified above — no prose, no markdown fence.\n\n'
+  # COMPACT juror prompt (not the full persona). The 200-line persona.md makes
+  # headless `claude -p` ruminate for minutes and frequently return no parseable
+  # verdict (the juror-unavailable failures). A distilled prompt returns a clean
+  # verdict in ~10s. persona.md ($PERSONA) remains the canonical spec/rationale;
+  # this is its operational distillation — keep the two in sync when either moves.
+  cat <<'JUROR_EOF'
+You are a JUROR giving a fair second opinion on whether an agent's mistake was
+real. You are the juror, not the judge — the USER is the judge and can overrule
+you. You have NO tools; reason only from the context below and return ONE JSON
+object. You exist to catch BOTH failure modes: the agent under-correcting AND the
+agent over-capitulating (recording an atone when it was actually right).
+
+Pick ONE verdict (lowercase, hyphenated):
+- very-wrong: obvious slip; no constraint excuses it
+- understandably-wrong: real slip, but a genuine constraint contributed (limited
+  context, ambiguous input reasonably read, no cross-session memory)
+- ambiguous: genuinely unclear who's right
+- probably-right: agent has a substantive case; the correction is plausible but
+  not clearly justified
+- reasonably-right: agent was correct given the information it had
+
+Calibration:
+- Name the ONE checkable fact that decides it (a file:line absent, a skipped grep,
+  no run signal, a carve-out the rule does not contain). A confirm with no
+  nameable tell is weak — lean toward the agent.
+- Clusters leaning CONFIRM: A = ungrounded assertion (claimed structure/authority
+  without reading the code); B = declared done/passing with no run signal. A slip
+  fitting NO cluster deserves more scrutiny before you confirm.
+- Use the injected prior verdicts: a first-ever occurrence resists severity
+  inflation; a 3rd+ occurrence of an A/B slug leans serious; a same-session repeat
+  of structural-claim-without-reading-code is auto very-wrong.
+- Anti-sycophancy (applies to YOU): do not drift toward "right" to please the
+  agent, and do not rubber-stamp the user. Framing-only heat with no behavior
+  regression, where the user did not ask for softer behavior, is reasonably-right.
+  Use the full scale honestly.
+
+IMPORTANT: You have NO tools. All context you need is below. Return ONLY the JSON
+object specified at the end — no prose, no markdown fence.
+
+JUROR_EOF
   printf 'PRIOR-PATTERN CONTEXT (already looked up for you):\nTop recurring slugs:\n%s\n\n' "$prior_slugs"
   printf 'Prior verdicts for this slug (%s):\n%s\n\n' "$slug" "$prior_verdicts"
   [ -n "$review_report" ] && [ -f "$review_report" ] && {
     printf 'SKEPTICAL-REVIEW REPORT (grounded findings for this change — weigh these):\n'
     cat "$review_report"; printf '\n\n'
   }
-  printf 'CASE TO EVALUATE:\nuser_callout: %s\nagent_did: %s\nagent_defense: %s\ncontext: %s\ncandidate_slug: %s\n' \
+  printf 'CASE TO EVALUATE:\nuser_callout: %s\nagent_did: %s\nagent_defense: %s\ncontext: %s\ncandidate_slug: %s\n\n' \
     "$uc" "$ad" "$adf" "$ctx" "$slug"
+  # Output schema LAST so it is the most recent instruction. related_atone_slugs
+  # MUST include the candidate slug so the judgment links to its event. reasoning
+  # is capped (length is hedging, and long prose is what slowed the old prompt).
+  printf 'Return ONLY this JSON object — no prose, no fence, reasoning <=3 sentences:\n'
+  printf '{"verdict":"very-wrong|understandably-wrong|ambiguous|probably-right|reasonably-right","confidence":"low|medium|high","mechanical_tell":"the one checkable fact deciding this, or none","cluster":"A|B|C|D|E|none","reasoning":"<=3 sentences, evidence-based, no flattery","slips_identified":[],"constraints_considered":[],"should_have_done":"one specific alternative","related_atone_slugs":["%s"],"scope_note":"this incident only"}\n' "$slug"
 } > "$prompt_file"
 
 # Dispatch headless. Plain output (one JSON object). Retry once on empty/parse

@@ -10,6 +10,7 @@
 #                      ~/.claude/atone/derived/_meta.json
 #                      ~/.claude/atone/derived/_tldr.txt
 #                      ~/.claude/atone/derived/triggers.json
+#                      ~/.claude/atone/derived/intervention-efficacy.json
 #                      ~/.claude/mistake-patterns.md            (v2 curated)
 #                      ~/.claude/compliments.md                 (v2, if affirm/)
 #                      ~/.claude/topics/atone-consolidate-YYYY-MM-DD.md (report)
@@ -35,7 +36,7 @@ SPLIT_DIR="$(dirname "${BASH_SOURCE[0]}")/atone-consolidate"
 # shellcheck disable=SC1091
 for f in helpers.sh build-triggers.sh build-tldr.sh build-index.sh \
          build-clusters.sh build-curated-atone.sh build-curated-affirm.sh \
-         build-proposals.sh build-meta.sh build-topics-report.sh; do
+         build-proposals.sh build-meta.sh build-efficacy.sh build-topics-report.sh; do
   source "$SPLIT_DIR/$f"
 done
 
@@ -196,6 +197,7 @@ build_triggers
 build_tldr
 build_proposals
 build_meta
+build_efficacy
 build_topics_report
 
 # Mark last-run

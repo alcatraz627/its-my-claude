@@ -40,6 +40,27 @@ build_curated_atone() {
 CSS/UI, error handling, frontend deploys, file refactors, comment hygiene.
 Hot 5 first; top 20 below; archive (rank 21+) for the rest.
 
+## The honest floor (what these patterns can and cannot fix)
+
+Roughly 60-65% of recent recurrence is a cognitive-model ceiling, not a gap a
+gate can close. The two biggest recurrers, structural-claim-without-reading-code
+and speculative-abstractions, are assertions made in natural-language reasoning
+with no greppable tool-call surface, so no PreToolUse hook can catch them at the
+moment they happen. The other ~35-40% is mechanically gateable (the rg -r
+footgun, comment noise, no-persistence sub-agent dispatches) and those gates
+exist and bind.
+
+So the honest target is: gateable classes driven to near zero, cognitive classes
+down 20-35%, not to zero. Adding more rules or reminders aimed at the cognitive
+classes scores near zero on behaviour change, because awareness is already
+saturated; the lever there is the same-session circuit breaker (a hard stop at
+the proven repeat point), not another reminder. The measured truth per slug,
+recurrence before vs after each intervention shipped, lives in
+\`atone/derived/intervention-efficacy.json\`. Read that, not the raw recurrence
+count, before concluding any fix worked.
+
+(Floor figure from the 2026-06-25 atone-recurrence audit + MAGI deliberation.)
+
 ## TL;DR — top 5 (severity × recency × frequency)
 
 EOF

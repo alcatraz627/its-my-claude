@@ -11,8 +11,17 @@
 # Graduated from atone slug source-comment-hygiene (S3, persisting despite
 # rules/comments.md). Filed as proposals.jsonl prop-20260531-120409-8a.
 #
-# ADVISORY — always exits 0, never blocks. Reuses the cleanup-comments detector
-# so the definition of "finding" stays single-sourced with /cleanup-comments.
+# STAKES-SCALED (atone T1.1). Reuses the cleanup-comments detector so the
+# definition of "finding" stays single-sourced with /cleanup-comments.
+#   - high-stakes repo (per stakes-tier.sh) + an UNAMBIGUOUS-noise finding
+#     (plan-ref, archeology, or a pure decorative-rule line) → BLOCK the write so
+#     the noise can't land. [claude@] agent-note blocks (permitted by
+#     rules/comments.md), em-dash, emoji, and long-comment-block are NEVER
+#     blocked — they stay advisory, because each can be legitimate.
+#   - everything else (low-stakes, or only ambiguous findings) → the original
+#     advisory additionalContext note, exit 0.
+# (This file used to be advisory in ALL repos; the MAGI atone-recurrence
+# deliberation escalated the unambiguous subset to a stakes-gated block.)
 #
 # Mute:          touch ~/.claude/.comment-hygiene-off
 # One-shot skip: COMMENT_HYGIENE_OFF=1
@@ -65,9 +74,26 @@ printf '%s' "$NEW_CONTENT" >"$probe_ext" 2>/dev/null || exit 0
 # emoji source comments). Em-dash is deliberately excluded: it's legitimate prose
 # punctuation, so flagging it floods with false positives. Report the matched
 # text, not a line number (for Edit the number is snippet-relative).
-findings=$(python3 "$DETECT" "$probe_ext" 2>/dev/null | jq -r '
+detect_json=$(python3 "$DETECT" "$probe_ext" 2>/dev/null)
+
+# Advisory findings (unchanged): all tier1 noise + emoji. Listed in the note.
+findings=$(printf '%s' "$detect_json" | jq -r '
   .files[]?.findings[]?
   | select(.tier == "tier1_strip" or (.tier == "tier2_voice" and .category == "emoji"))
+  | "    [\(.category)] \(.text)"' 2>/dev/null)
+
+# Blockable subset: ONLY unambiguous noise — plan-refs, archeology, and pure
+# decorative-rule lines. Deliberately EXCLUDES claude-tag (rules/comments.md
+# permits [claude@] agent-note blocks), any finding sharing a line with a
+# [claude@] tag (a sanctioned agent-note that merely mentions a phase), labelled
+# banners (keep their label), emoji, and long blocks — each can be legitimate.
+blockable=$(printf '%s' "$detect_json" | jq -r '
+  .files[]?.findings[]?
+  | select(.tier == "tier1_strip"
+           and (.text | test("\\[claude@"; "i") | not)
+           and ( .category == "plan-ref"
+                 or .category == "archeology"
+                 or (.category == "decorative-banner" and .action == "delete_line") ))
   | "    [\(.category)] \(.text)"' 2>/dev/null)
 
 # Verbose-essay tell: the detector is judgment-only here, but a long run of
@@ -83,6 +109,22 @@ if [ "${longest_run:-0}" -gt 12 ]; then
 fi
 
 [ -z "$findings" ] && [ -z "$long_block" ] && exit 0
+
+# High-stakes + unambiguous noise → BLOCK the write. No loop-safety needed: a
+# PreToolUse block denies this one tool call; the agent revises the content and
+# retries, and an identical re-submit blocking again is correct, not a trap.
+if [ -n "$blockable" ]; then
+  cwd=$(echo "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
+  [ -z "$cwd" ] && cwd="$PWD"
+  stakes=$(bash "$HOME/.claude/scripts/stakes-tier.sh" "$cwd" 2>/dev/null || echo low)
+  if [ "$stakes" = "high" ]; then
+    reason="⛔ COMMENT NOISE IN A HIGH-STAKES WRITE — new content for $(basename "$FP") carries archeology / plan-refs / decorative-rule lines that rules/comments.md forbids in source (they rot and mislead the next reader):
+$blockable
+Remove them and re-submit. NOT blocked: [claude@] agent-note blocks, em-dash, emoji, long comment blocks — only unambiguous noise. False positive or a sanctioned case? Mute: touch ~/.claude/.comment-hygiene-off"
+    jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+    exit 0
+  fi
+fi
 
 # Join the two finding sources (either may be empty).
 report_body="$findings"
