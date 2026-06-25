@@ -1,0 +1,48 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18165,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.13483179079614474,
+    "unit_count": 58
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:POSSIBLE_IMPROVEMENT — unit 460e2aa4-14: ls -la *.md | awk compound Bash instead of LS/Glob tool; unit 460e2aa4-19: cat > anon-map.json << EOF heredoc instead of Write tool. Violation rate ~25% of substantive units (2/8), below the 30-44% STABLE band across all prior cycles. First cycle in calibration history falling below the band floor; single-cycle signal insufficient to reclassify from STABLE but warrants monitoring for trend confirmation.",
+      "re_edit_thrash:IMPROVEMENT_CONSOLIDATING — unit d93990c0-19: 3 consecutive Edit failures on PLAN.md (success=false x3) before Read+Write fallback; no blind retry loop persisting past failure signal; recovery escalated correctly. Fourth consecutive cycle showing recovery-before-hook-bypass exit pattern with no regression. Consistent with prior IMPROVEMENT_CONSOLIDATING classification; approaching RESOLVED threshold.",
+      "compound_command_overreach:MARGINAL_IMPROVEMENT_STRENGTHENING — unit 460e2aa4-18: large multi-clause compound Bash (ls, rg, ls, ls, rg) succeeded on first try; unit 460e2aa4-19: multi-step Python heredoc Bash compounds succeeded on first try; unit d93990c0-27: fd+rg multi-dir compound succeeded on first try. Third consecutive cycle with no observed decompose-only-after-failure sequence. Signal now spanning three cycles; reclassification from MARGINAL_IMPROVEMENT to RESOLVED warranted if fourth cycle confirms."
+    ],
+    "calibration_score": 0.22,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations: Violation rate (25%) may be declining below the historical 30-44% band for the first time. Withhold new intervention; monitor next cycle. If rate stays below 30% for two consecutive cycles, reclassify from STABLE to IMPROVING and retire the existing recommendation.",
+      "re_edit_thrash: Four consecutive cycles of recovery-before-bypass behavior. Recommend reclassifying to RESOLVED if the next cycle shows no instances or shows immediate Read-before-retry without multi-failure sequence. No new intervention needed this cycle.",
+      "compound_command_overreach: Three consecutive confirming cycles. Recommend reclassifying to RESOLVED now; flag only if a decompose-only-after-failure sequence reappears."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      4833168
+    ],
+    [
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      2774146
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      35537208
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      9028166
+    ]
+  ],
+  "timestamp": "2026-06-21T12:18:21.979552Z",
+  "tokens_used": 7788,
+  "units_analyzed": 12,
+  "units_total": 58
+}

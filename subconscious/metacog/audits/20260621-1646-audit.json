@@ -1,0 +1,53 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18171,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.12326525659469131,
+    "unit_count": 66
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:POSSIBLE_IMPROVEMENT_STRENGTHENING — unit 460e2aa4-14: ls -la *.md | awk compound Bash instead of LS/Glob tool; unit 460e2aa4-19: cat > anon-map.json << EOF heredoc instead of Write tool. Violation rate ~20% of substantive units (2/10), below the 30-44% STABLE band for the second consecutive cycle (prior cycle was 25%). Two consecutive cycles below the band floor strengthens the signal beyond the single-cycle caution noted last cycle; tentative reclassification from STABLE to POSSIBLE_IMPROVEMENT warranted, not yet IMPROVEMENT_CONSOLIDATING.",
+      "re_edit_thrash:IMPROVEMENT_CONSOLIDATING — unit d93990c0-19: 3 consecutive Edit failures on PLAN.md (success=false x3) before Read+Write fallback; no blind retry loop persisting past failure signal; recovery escalated correctly. Fifth consecutive cycle showing recovery-before-hook-bypass exit pattern with no regression. Approaching RESOLVED threshold.",
+      "compound_command_overreach:RESOLVED — units 460e2aa4-18 (large multi-clause compound Bash), 460e2aa4-19 (magi bash orchestration and Python heredoc scripts), d93990c0-27 (fd+rg multi-dir compound): all succeeded on first try without prior failure-then-decompose sequence. Fourth consecutive confirming cycle; reclassifying from MARGINAL_IMPROVEMENT_STRENGTHENING to RESOLVED."
+    ],
+    "calibration_score": 0.27,
+    "overconfident_count": 2,
+    "recommendations": [
+      "shell_tool_preference_violations: Violation rate has fallen below the 30-44% STABLE band for two consecutive cycles. Monitor for a third confirming cycle before reclassifying to IMPROVEMENT_CONSOLIDATING; no new intervention warranted this cycle.",
+      "re_edit_thrash: Five consecutive cycles of IMPROVEMENT_CONSOLIDATING with no regression. Reclassify to RESOLVED if a sixth confirming cycle shows the same recovery-before-bypass exit pattern.",
+      "compound_command_overreach: Reclassify to RESOLVED effective this cycle. Reopen only if a decompose-only-after-failure sequence recurs in a future cycle.",
+      "proactive_ai_smell_self_audit (NEW_POSITIVE): Unit d93990c0-28 ran an explicit em-dash and AI-smell tell check on its own design doc output before declaring it complete. This aligns with rules/audience-aware-writing.md and the render-check mandate in rules/sub-agent-outputs.md; reinforce via affirm rather than flag."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      5730294
+    ],
+    [
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      3750246
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      38883957
+    ],
+    [
+      "4634ed74-6924-49ac-ac36-ec3cf3322377",
+      387678
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      11735991
+    ]
+  ],
+  "timestamp": "2026-06-21T16:46:11.202503Z",
+  "tokens_used": 9657,
+  "units_analyzed": 14,
+  "units_total": 66
+}

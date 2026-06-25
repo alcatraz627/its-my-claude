@@ -1,0 +1,19 @@
+{
+  "ts": "2026-06-24T21:34:26Z",
+  "session_id": "local-models",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260625-local-models.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#3 \u2014 Coder bake-off (pending).** Run `probe qwen3-coder-next:q4_K_M` and `probe qwen3.6:35b-a3b` FOREGROUND (background runs orphaned twice this session). Compare the two judgment reports in `probe/runs/`; decide whether the 51GB `qwen3-coder-next` beats the on-disk `qwen3.6:35b-a3b` baseline enough to become `CODE_MODEL` in `config.sh`. The real-PR review (#214) already leans yes; the probe is the formal gate. `bin/probe` now self-unloads, so it won't pin RAM.",
+    "**#5 \u2014 MLX performance measurement (pending).** `OLLAMA_USE_MLX` is INERT on ollama 0.30.6 (confirmed via a human `NOTE` in `bin/lm-serve` \u2014 do NOT re-add the flag). A real MLX path needs a newer ollama with MLX support OR `mlx_lm.server` / `mlx-vlm`. Measure tok/s before vs after on a representative model before committing to MLX.",
+    "**User-side:** branch `feat/intents-as-data` is committed but NOT pushed (no approval sought). Push when ready."
+  ],
+  "tags": []
+}

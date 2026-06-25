@@ -1,25 +1,26 @@
 {
-  "last_updated": "2026-06-12T19:56:41.803900Z",
+  "last_updated": "2026-06-20T02:06:10.372810Z",
   "average_depth": 26.2,
-  "average_breadth": 2.1,
-  "fixation_rate": 0.13,
-  "assumption_rate": 0.58,
-  "overconfidence_rate": 0.29,
+  "average_breadth": 1.6,
+  "fixation_rate": 0.26,
+  "assumption_rate": 0.46,
+  "overconfidence_rate": 0.21,
   "common_assumptions": [
-    "File state is unchanged between consecutive tool calls within a session",
-    "A single-directory or single-file search is sufficient to establish absence of a pattern",
-    "Error messages reflect root cause without deeper tracing through callsites",
-    "Prior session context is fully recoverable from WAL or checkpoint files without independent verification"
+    "File paths exist at expected locations without prior verification",
+    "Prior session state remains valid across context transitions and compactions",
+    "Tool availability (node, python3, npm, rg) without PATH confirmation",
+    "TypeScript compile success implies runtime feature correctness",
+    "Error root cause can be inferred from symptoms without targeted probing"
   ],
   "strength_patterns": [
-    "Iterative verification loops: large chains consistently run type-checkers or diagnostic scripts (tsc --noEmit, statusline-diag.py) after each edit batch before committing, catching regressions in-flight",
-    "Context-first orientation: chains that handle complex tasks reliably open by reading WAL, runtime-notes, or checkpoint files before any side-effecting operation",
-    "Targeted multi-file fan-out: when diagnosing failures, chains spread across config files, logs, and settings rather than fixating on a single suspected source"
+    "Systematic diagnostic sequencing with verbatim output capture on infrastructure and MCP issues",
+    "Verification gates before committing — tsc/svelte-check/npm-build runs confirm type correctness",
+    "Targeted multi-file reads before edits on unfamiliar codebases"
   ],
   "weakness_patterns": [
-    "Fixation without re-framing: the longest chains repeat the same script or file 20-30+ times without stepping back to question the diagnosis (f3ddfd2f: 30+ statusline.sh invocations across a 110-step chain)",
-    "Shallow verdict chains: juror and summarization tasks resolve in 0-1 steps with no evidence of weighing alternatives or grounding claims in file:line citations, producing structurally underspecified outputs",
-    "Linear single-hypothesis execution: nearly all chains pursue one hypothesis to completion before reconsidering, generating high assumption density on the critical path with no explicit branching on uncertainty"
+    "Fixation loops on single files (30+ repeated edits to same target) without stepping back to diagnose root cause",
+    "Shallow alternative exploration — linear single-hypothesis execution dominates over branching",
+    "Assumption-first tool invocation without initial state re-read after context transitions or compactions"
   ],
   "trend": {
     "calibration_improving": false,

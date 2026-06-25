@@ -125,6 +125,16 @@
 | `scripts/dev-servers/gen-nginx-conf.sh` | Generate nginx `.test` server blocks from port registry. Handles Host header rewrite for Vite/Next.js. `--dry-run` to preview | Activating `<name>.test` domains for registered apps |
 | `~/.claude/dev-servers-guide.md` | Full pm2 + nginx + port workflow guide including persistence (startup+save), registration script usage, and troubleshooting | Any dev server setup, port allocation, or pm2 persistence questions |
 
+## Personal CLIs (`zcmd` registry)
+
+Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-config/shell/zcmd/`, symlinked into `~/.local/bin/`). Discover with `zcmd list` / `zcmd kit`; manage with `zcmd add|rm|edit` (it refuses names that shadow a system binary).
+
+| Command | Brief | Use when... |
+|---------|-------|-------------|
+| `zconvert` | Convert tabular data between csv/tsv/xlsx/json, any direction; refuses structurally-broken output, preserves long IDs; `zconvert --capabilities`/`-h` for support | Changing a data file's format — prefer over a throwaway pandas/csv/openpyxl script |
+| `zap` | Hunt + kill a specific process surgically (fzf picker, signal/scope menu, tree view, htop-style `^K`/`^X`) | Killing the right process by port/name/args without nuking everything |
+| `memhog` | Rank processes by a memory type (macOS), zero deps | "what's eating my RAM" |
+
 ## Hook Scripts (`~/.claude/scripts/`)
 
 | File | Hook type | Brief | Read when... |
@@ -225,6 +235,7 @@
 
 | Path | Brief | Read when... |
 |------|-------|-------------|
+| `~/.claude/assets/reports/20260621-large-review-strategy/REPORT.md` | **Large Review Strategy** — reusable calibrated playbook for reviewing a big / distributed change (large PR, restructure, bulk sweep, many files): review by transformation-TYPE not file order, trust green CI, stakes-order, cheap agent pre-flag greps. Backed by a 6-discipline MAGI panel (code / peer-review / wiki / editorial / large-diff + jester) in `magi-panel/`. Auto-surfaced by hinter `20-large-review-strategy.sh`. | Designing how to review any large or distributed contribution; "how much effort does this review deserve"; "the diff is enormous, where do I look" |
 | `~/.claude/assets/reports/20260417-0144-phase12-complete/index.html` | Phase 1+2 upgrade final report (minimal style). Covers async-flip audit, global event log, /doctor + /past-sessions skills, WAL JSONL migration, backup + revert paths | Reviewing what Phase 1+2 changed; deciding what to revert; grepping for "why did we touch X" |
 | `~/.claude/assets/reports/20260417-phase12-complete.md` | Source markdown for the above report (reusable with `/create-report --style <other>` via `data.json`) | Restyling the upgrade report, citing sections in other docs |
 | `~/.claude/assets/backups/20260417-phase12-upgrade/` | Pristine settings.json backup + 130-line RESTORE.md with symptom→cause table for Phase 1+2 reverts | Reverting a specific Phase 1+2 change, or diagnosing hook misbehavior introduced after 2026-04-17 |

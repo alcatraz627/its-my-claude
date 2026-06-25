@@ -1,0 +1,23 @@
+{
+  "ts": "2026-06-19T20:16:08Z",
+  "session_id": "frontend-devtools-perf",
+  "project_root": "/Users/alcatraz627/Code/Versable/two-enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/two-enhancement-product/frontend/.claude/_20260620-devtools-perf.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Open the PR for `frontend-tooling-improve/aakarsh` (user action; PR description ready in the prior turn).",
+    "Reconcile `deployment-services.md` with the Sentry `allowedBranches` change (`frontend-release` \u2192 `development`/`release`). The user owns the branch decision; the doc still names `frontend-release` as prod, so confirm the current Vercel prod branch and update the doc.",
+    "`#36` PARKED: `build:report` post-build summary wrapper (next week).",
+    "`#37` PARKED: `@sentry/nextjs` v10 upgrade to silence `clientInstrumentationHook` (next week).",
+    "Next.js tuning backlog for next week (`.claude/notes/nextjs-perf-tuning-backlog.md`): add `usehooks-ts` + `date-fns-tz` to `optimizePackageImports`; act on `analyze:next` findings; uncomment Sentry `bundleSizeOptimizations`; lower TanStack Query `gcTime` 24h \u2192 ~30min; decide on the root-layout `force-dynamic` (design call).",
+    "`prop-20260619-194931-ba`: decide whether to build the Stop-stage prose-smell hook.",
+    "`#23` (export \"B4: Verify FE\") is a stale in_progress from a different work stream, not this session; the user said to leave it."
+  ],
+  "tags": []
+}

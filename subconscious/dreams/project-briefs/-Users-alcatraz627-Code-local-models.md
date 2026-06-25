@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-06-19T17:53:56.761298+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-25T00:50:57.691862+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A local-models development workspace focused on AI tooling, research agents, and automation scripts. Work style is exploratory multi-session with heavy use of skills, sub-agents, and correction rituals.
+A local LLM and image-generation tooling suite (`~/Code/local-models`) with heavy emphasis on persona/agent design, documentation pipelines, and CLI tooling. Work style is exploratory-then-structured: research phases translate into lean implementation docs and shipped CLIs.
 
 ## Things to do (or keep doing)
-- Always surface actual output for the user to inspect when claiming a test succeeded — evidence, not assertion
-- Use `TaskCreate`/`TaskUpdate` when told to "update todos"; never write to a file as a substitute
-- Deliver the primary session deliverable before expanding into secondary research or bonus work
-- Use formal, direct language in technical docs — no promotional framing or "why this matters" flourishes
+- Always surface actual test output for the user to inspect — never assert success without showing evidence
+- Use the Task tool (not TODO.md or plan.md) whenever work has ≥3 steps; keep the TUI list live throughout
+- Translate research/design phases into behavior-focused implementation docs before the session ends — raw synthesis is not a deliverable
+- Write terse single-sentence WHY comments only; omit anything that restates what the code does
 
 ## Things to avoid
-- Don't skip or defer explicit skill invocations (e.g. `/atone`) — execute them immediately and completely when requested
-- Don't use `rm`; always use `trash` — the hook blocks `rm` and there are no exceptions for "cleanup" or "temp" files
-- Don't write essay-length comments; one terse WHY-only sentence maximum, omit entirely when obvious
-- Don't write atone RCA files without `---` YAML frontmatter on line 1 — the lint gate rejects them and the event goes unrecorded
+- Don't re-introduce deleted complexity or add unrequested features when the user has explicitly simplified — scope ceiling is absolute
+- Don't skip or defer explicitly invoked skills (`/atone`, `/core-dump`, etc.) — skipping a correction ritual mid-correction compounds the original mistake
+- Don't use `rm`; always use `trash` — the hook blocks rm unconditionally, no exceptions for "cleanup"
+- Don't open docs or PRs with "Why this matters" / motivational framing or em-dashes — direct, formal, lean prose only
 
 ## Open questions / known gaps
-- Recurring tension: agent completes peripheral work (planning, research, persona design) but misses the core deliverable, which the user treats as total session failure regardless of surrounding quality
+- Core deliverable risk: the session pattern shows peripheral work (research, personas, tooling) completing while the primary stated output ships late or not at all — verify the main deliverable is done before declaring a session complete
+- RCA files must start with `---` YAML frontmatter on line 1 or `atone.sh` rejects them silently (error 2)

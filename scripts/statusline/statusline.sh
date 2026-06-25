@@ -432,6 +432,84 @@ session_phase="early"
 [[ $turn_count -ge 5 ]] && session_phase="active"
 [[ $turn_count -ge 20 ]] && session_phase="deep"
 
+# ── Cross-session rate-limit freshness propagation ─────────────────────────
+# Symptom this fixes: Claude Code refetches rate_limits at coarse intervals
+# inside a long-running session, so the session's stdin JSON often carries
+# values that are 5h/1d behind reality. Different sessions on the same
+# account see different values at the same moment. New sessions boot with
+# fresh values; long-running sessions stay stale.
+#
+# Mechanism: ~/.claude/widgets/.limits.json is already written by every
+# statusline render (a few lines below). Read it FIRST and pick whichever
+# of (own stdin, cached file) has a later `resets_at` timestamp. Since the
+# 5h/7d windows are rolling, a fresher fetch produces a later resets_at —
+# so resets_at is a free freshness proxy without needing a separate
+# fetched_at timestamp.
+#
+# Net effect: the moment any session has fresh data, every other session
+# picks it up on its next render. Architecture unchanged — same file,
+# same daemon, same display segments. Only adds one file read per render.
+_limits_file="$HOME/.claude/widgets/.limits.json"
+_cached_r5=""; _cached_r5_resets=""; _cached_r7=""; _cached_r7_resets=""
+if [[ -f "$_limits_file" ]]; then
+  eval "$(jq -r '
+    "_cached_r5=" + ((."5h".pct // "" | tostring) | @sh),
+    "_cached_r5_resets=" + ((.resets_at // "") | @sh),
+    "_cached_r7=" + ((.week.pct // "" | tostring) | @sh),
+    "_cached_r7_resets=" + ((.resets_at_weekly // "") | @sh)
+  ' "$_limits_file" 2>/dev/null)"
+fi
+# Parse a resets timestamp (empty, epoch int, or ISO datetime) to epoch.
+_rl_to_epoch() {
+  local v="$1"
+  [[ -z "$v" || "$v" == "null" ]] && { echo 0; return; }
+  if [[ "$v" =~ ^[0-9]+$ ]]; then echo "$v"
+  else date -j -f "%Y-%m-%dT%H:%M:%S" "${v%%.*}" "+%s" 2>/dev/null \
+       || date -d "${v%%.*}" "+%s" 2>/dev/null \
+       || echo 0; fi
+}
+# 7d merge: pick freshest by two signals in priority order.
+#
+#   1. Later resets_at wins → handles window-roll case (own just rolled
+#      into a new 7-day window, percentage dropped to ~0; cached still has
+#      the old window's 80%). Without this, max-value would stick on 80%.
+#   2. Within the same window (equal resets_at), higher percentage wins →
+#      handles the common "halted session is 60% while running session is
+#      61%" case. Usage in a rolling window essentially only goes up, so
+#      a higher value is a fresher fetch.
+#   3. Otherwise own value wins (status quo).
+#
+# Why not resets_at as the sole signal: empirically Claude Code seems to
+# emit the SAME resets_at across all sessions in one window (it's the
+# window-end clock-time, not a per-fetch shifting timestamp). Without the
+# value comparison, the merge has no signal to discriminate same-window
+# stale-vs-fresh values, which is the exact symptom we're fixing.
+_own_r7_ep=$(_rl_to_epoch "${rate_7d_resets:-}")
+_cached_r7_ep=$(_rl_to_epoch "$_cached_r7_resets")
+_own_r7_int=$(printf '%.0f' "${rate_7d:-0}" 2>/dev/null || echo 0)
+_cached_r7_int=$(printf '%.0f' "${_cached_r7:-0}" 2>/dev/null || echo 0)
+if [[ -n "$_cached_r7" ]]; then
+  if   (( _cached_r7_ep >  _own_r7_ep )); then
+    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"
+  elif (( _cached_r7_ep == _own_r7_ep && _cached_r7_int > _own_r7_int )); then
+    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"
+  fi
+fi
+# 5h merge: same shape. The 5h window is much shorter (5 hours) so
+# window-rolls are more frequent and resets_at moves more often — but
+# the value-comparison fallback handles same-window staleness regardless.
+_own_r5_ep=$(_rl_to_epoch "${rate_5h_resets:-}")
+_cached_r5_ep=$(_rl_to_epoch "$_cached_r5_resets")
+_own_r5_int=$(printf '%.0f' "${rate_5h:-0}" 2>/dev/null || echo 0)
+_cached_r5_int=$(printf '%.0f' "${_cached_r5:-0}" 2>/dev/null || echo 0)
+if [[ -n "$_cached_r5" ]]; then
+  if   (( _cached_r5_ep >  _own_r5_ep )); then
+    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"
+  elif (( _cached_r5_ep == _own_r5_ep && _cached_r5_int > _own_r5_int )); then
+    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"
+  fi
+fi
+
 # ── Precompute conditions ──
 # Cost: show when above $0.05 (skip trivial early-session costs)
 has_cost=0; [[ -n "${cost_usd:-}" && "$cost_usd" != "null" && "$cost_usd" != "0" ]] && has_cost=1

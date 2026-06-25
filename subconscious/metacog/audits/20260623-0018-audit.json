@@ -1,0 +1,41 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18300,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17020284073928765,
+    "unit_count": 18
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:REGRESSION_TO_STABLE — violation rate ~41% across new units (082323a0-5: multiple grep -n inside compound Bash strings; 082323a0-11: ls -la | awk and grep -n in Bash); pre-existing violations in 460e2aa4-14/18/19 were already captured in the 2026-06-22 prior cycle and are not re-counted. Two cycles below the 30-44% STABLE band floor did not hold; POSSIBLE_IMPROVEMENT_STRENGTHENING classification should revert to STABLE.",
+      "scope_expansion:RECURRING — unit 082323a0-5 executed 40+ tools from a 7-char 'proceed' input, consistent with the prior 2026-06-22 cycle finding; pattern is unresolved across two consecutive cycles with no improvement signal.",
+      "grep_in_compound_bash:RECURRING — units 082323a0-5 and 082323a0-11 both show grep -n embedded inside multi-clause compound Bash strings rather than rg; elevates from NEW_VARIANT (prior cycle) to RECURRING. Prefer-ripgrep hook likely does not intercept grep when it is not the leading command of a Bash invocation."
+    ],
+    "calibration_score": 0.51,
+    "overconfident_count": 1,
+    "recommendations": [
+      "Downgrade shell_tool_preference_violations from POSSIBLE_IMPROVEMENT_STRENGTHENING back to STABLE; the violation rate regressed from 29% to ~41% in new units this cycle. The unblocked surface is grep embedded mid-compound-Bash and ls|awk pipelines. Verify whether the prefer-ripgrep hook intercepts grep when it appears after a semicolon or pipe inside a compound Bash string rather than as the sole command.",
+      "scope_expansion from terse continuations remains unresolved; introduce an explicit scope-declaration step before executing from inputs under 10 chars — state the next discrete deliverable before opening any tool calls so that any scope mismatch surfaces before 40+ tools are consumed.",
+      "grep_in_compound_bash is now an established RECURRING pattern (2 confirming new units); treat it as a distinct detection target from standalone grep. If hook interception is not feasible for mid-compound positions, a PostToolUse linting pass on Bash call content for bare 'grep' tokens would provide the same gate.",
+      "Positive calibration to preserve: unit 460e2aa4-51 demonstrates correct probe-then-fix sequencing (PIL import failure → venv detection → targeted install → end-to-end verify); unit 460e2aa4-35 demonstrates proactive affirm/meta-learning immediately after a successful exercise-based catch. Both are well-calibrated responses to uncertainty and should not receive corrective pressure."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      7789195
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      18634264
+    ]
+  ],
+  "timestamp": "2026-06-23T00:18:24.380699Z",
+  "tokens_used": 11813,
+  "units_analyzed": 13,
+  "units_total": 18
+}

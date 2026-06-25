@@ -1,0 +1,38 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.12499599993599794,
+    "unit_count": 12
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias"
+    ],
+    "calibration_score": 0.72,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Continue systematic pre-grep before claiming absence of existing infrastructure",
+      "Maintain probe-before-fix pattern for external API verification",
+      "One tool failure recovered quickly with targeted edit - pattern is healthy"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      2609011
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      19353151
+    ]
+  ],
+  "timestamp": "2026-06-23T13:08:59.435071Z",
+  "tokens_used": 2811,
+  "units_analyzed": 4,
+  "units_total": 12
+}

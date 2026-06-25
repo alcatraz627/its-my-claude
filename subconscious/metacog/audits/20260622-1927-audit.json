@@ -1,0 +1,41 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.05003998401278721,
+    "unit_count": 11
+  },
+  "response": {
+    "biases_detected": [
+      "status_quo_anchoring: on Bash failure in unit 6ec6743c-5, agent retried with minimal diagnosis rather than reconsidering approach",
+      "scope_expansion: unit 082323a0-5 executed 40+ tool calls from a 7-char terse continuation, suggesting scope inflation beyond what was signaled",
+      "completeness_bias: unit 082323a0-5 bundled palette changes, dropdown redesign tasks, and submenu planning into a single proceed response rather than scoping to the next discrete step"
+    ],
+    "calibration_score": 0.52,
+    "overconfident_count": 0,
+    "recommendations": [
+      "When a Bash tool call fails, log the failure reason explicitly before retrying — pattern-match against known failure classes (auth, path, missing dep) rather than immediately editing and rerunning",
+      "Terse continuations (7-char 'proceed') should be scoped to the next task-list item only; confirm scope before expanding into adjacent sub-tasks",
+      "Unit 6ec6743c-3 produced zero output despite a 132-char input — investigate whether this represents a dropped response or an appropriate no-op; zero-length outputs from non-trivial inputs are a calibration signal worth flagging",
+      "Iterative Swift compile-fix loops (Read → Edit → compile → error → Read → Edit) in 082323a0-5 suggest the agent may benefit from reading full file context before the first edit rather than discovering needed context mid-iteration"
+    ],
+    "underconfident_count": 1,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      2014137
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      18382487
+    ]
+  ],
+  "timestamp": "2026-06-22T19:27:49.171349Z",
+  "tokens_used": 4272,
+  "units_analyzed": 5,
+  "units_total": 11
+}

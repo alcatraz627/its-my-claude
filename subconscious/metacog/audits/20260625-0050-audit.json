@@ -1,0 +1,56 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18304,
+    "correction_density": 0.021739130434782608,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.19176110179172162,
+    "unit_count": 46
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — violation rate ~54% (7/13 tool-using units): 4b1b8967-1 ls -la *.xlsx instead of LS/Glob; 460e2aa4-12 ls -la *.md | awk compound Bash instead of LS; 460e2aa4-14 ls -la *.md | awk compound Bash instead of LS; 460e2aa4-18 ls -la + cat | head-5 + ls -d + ls in compound Bash instead of LS/Read; 460e2aa4-19 multiple cat > file <<EOF heredocs instead of Write; 460e2aa4-33 ls -l + ls -d instead of LS; 460e2aa4-51 ls -d instead of LS. Rate 54% exceeds prior cycle 50% and two cycles prior 44%. Four consecutive cycles of escalation with zero improvement; trend confirmed WORSENING.",
+      "grep_in_compound_bash:ABSENT_THIS_CYCLE — no grep invocations detected in any Bash command across all units; all text search used rg. Prior three cycles were RECURRING. Possible improvement but single-cycle absence insufficient to reclassify; monitor.",
+      "scope_expansion:ABSENT_THIS_CYCLE — no scope inflation events or user anger/deletion detected. Prior two cycles had S3 events (speculative-abstractions-without-a-load-bearing-caller slug, user-anger/deletion consequence). Possible improvement; single-cycle absence insufficient to confirm resolution; monitor."
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations has escalated to 54% across four consecutive cycles with zero response to advisory flagging. Hook-level enforcement intercepting leading ls and cat Bash calls is the only remaining lever; text-level recommendations have had no measurable effect across any cycle. Deprioritize further advisory text on this pattern until a mechanical gate exists.",
+      "grep_in_compound_bash shows a one-cycle absence after three consecutive RECURRING cycles. Do not recommend fixes yet; flag for monitoring one additional cycle before reclassifying as improving.",
+      "scope_expansion shows a one-cycle absence after two consecutive S3 events. No fix recommendation warranted if next cycle is also clean; track for two additional cycles before marking resolved."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      477160
+    ],
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      9131230
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      5295264
+    ],
+    [
+      "d8c7b254-2baa-4435-9cc5-33636a8b818d",
+      477300
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      25700448
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      2467315
+    ]
+  ],
+  "timestamp": "2026-06-25T00:50:04.326200Z",
+  "tokens_used": 11099,
+  "units_analyzed": 15,
+  "units_total": 46
+}

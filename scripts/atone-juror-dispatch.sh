@@ -34,6 +34,21 @@ ATONE_DIR="${ATONE_DIR:-$HOME/.claude/atone}"
 PERSONA="$HOME/.claude/personas/juror.md"
 CLAUDE_BIN="${CLAUDE_BIN:-$HOME/.local/bin/claude}"
 
+# The juror should be a DIFFERENT model from the offender to be a real check:
+# the same model that made the mistake, asked to grade itself, misses its own
+# error far more often than an externally-attributed one (self-correction
+# illusion). The plumbing for that is here — set ATONE_JUROR_MODEL=sonnet to make
+# the juror independent of the Opus main loop (and cheaper), with 'ambiguous'
+# verdicts escalated to the stronger model.
+#
+# DEFAULT stays opus (= prior behaviour) on purpose: the juror persona is heavy,
+# so a smaller model is currently slow/parse-fragile and yields "no parseable
+# verdict" (the same juror-unavailable failure seen 3x in June). Flipping the
+# default to sonnet is BLOCKED on fixing that reliability (juror-health work);
+# until then sonnet is opt-in so we don't regress every S3 atone to unavailable.
+JUROR_MODEL="${ATONE_JUROR_MODEL:-opus}"
+JUROR_ESCALATE_MODEL="${ATONE_JUROR_ESCALATE_MODEL:-opus}"
+
 case_file=""; review_report=""; out=""
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -105,21 +120,45 @@ for i, c in enumerate(t):
                 objs.append(t[start:i+1]); start = -1
 for o in reversed(objs):
     try:
-        d = json.loads(o)
+        # strict=False permits literal control chars (newlines/tabs) inside
+        # string values — the juror reasoning field is multi-paragraph, so the
+        # model routinely emits raw newlines there; strict parsing rejected them
+        # ("control characters U+0000-U+001F must be escaped") and dropped every
+        # verdict, which is the juror-unavailable-with-rc=0 failure.
+        d = json.loads(o, strict=False)
         if isinstance(d, dict) and "verdict" in d:
             print(json.dumps(d, separators=(",", ":"))); break
     except Exception:
         pass
 ' 2>/dev/null
 }
-verdict=""
-for attempt in 1 2; do
-  raw=$("$CLAUDE_BIN" -p < "$prompt_file" 2>>"${ATONE_JUROR_ERRLOG:-/dev/null}")
-  rc=$?
-  verdict=$(extract_verdict "$raw")
-  [ -n "$verdict" ] && break
-  [ "$attempt" = "1" ] && echo "atone-juror-dispatch: empty/unparseable verdict (rc=$rc) — retrying once…" >&2
-done
+# Run the juror at a given model; retry once on empty/parse failure. Called
+# DIRECTLY (not via $()) so the exit code and the verdict both propagate to the
+# parent — a command-substitution subshell would strip both. Outputs: global
+# `rc` (claude's exit code) and global `JUROR_VERDICT` (verdict JSON, "" on fail).
+run_juror() {
+  local model="$1" attempt raw
+  JUROR_VERDICT=""
+  for attempt in 1 2; do
+    raw=$("$CLAUDE_BIN" -p --model "$model" < "$prompt_file" 2>>"${ATONE_JUROR_ERRLOG:-/dev/null}")
+    rc=$?
+    JUROR_VERDICT=$(extract_verdict "$raw")
+    [ -n "$JUROR_VERDICT" ] && break
+    [ "$attempt" = "1" ] && echo "atone-juror-dispatch: empty/unparseable verdict (rc=$rc, model=$model) — retrying once…" >&2
+  done
+}
+
+rc=0
+run_juror "$JUROR_MODEL"
+verdict="$JUROR_VERDICT"
+# Escalate only the genuinely-hard 'ambiguous' verdicts to the stronger model.
+if [ -n "$verdict" ] && [ "$JUROR_MODEL" != "$JUROR_ESCALATE_MODEL" ]; then
+  if [ "$(printf '%s' "$verdict" | jq -r '.verdict // ""' 2>/dev/null)" = "ambiguous" ]; then
+    echo "atone-juror-dispatch: ambiguous on $JUROR_MODEL — escalating to $JUROR_ESCALATE_MODEL…" >&2
+    run_juror "$JUROR_ESCALATE_MODEL"
+    [ -n "$JUROR_VERDICT" ] && verdict="$JUROR_VERDICT"
+  fi
+fi
 
 if [ "$rc" -ne 0 ] || [ -z "$verdict" ]; then
   echo "atone-juror-dispatch: claude -p produced no parseable verdict (rc=$rc) — juror unavailable" >&2

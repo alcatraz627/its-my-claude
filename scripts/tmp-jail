@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# tmp-jail — control the session-scoped "/tmp jail".
+#
+#   tmp-jail on               enable for the CURRENT Claude session
+#   tmp-jail off <session_id> lift it (run by the USER; the agent cannot)
+#   tmp-jail status           list active jails
+#
+# Full design: ~/.claude/features/tmp-jail.md
+#
+# `on` is actually performed by the PreToolUse hook (tmp-jail-guard.sh), which is
+# the only component that knows the session id. This script's `on` branch only
+# prints guidance for the case where the hook did not intercept (a session that
+# started before the hook was installed). `off` is the real user-run lever.
+
+set -uo pipefail
+JAIL="$HOME/.claude/run/tmpjail"
+
+list() {
+  if [ -d "$JAIL" ] && [ -n "$(ls -A "$JAIL" 2>/dev/null)" ]; then
+    for f in "$JAIL"/*; do [ -e "$f" ] && printf '  %s  ->  %s\n' "$(basename "$f")" "$(tr '\n' ' ' < "$f" 2>/dev/null)"; done
+  else
+    echo "  (none)"
+  fi
+}
+
+case "${1:-status}" in
+  on)
+    echo "tmp-jail: 'on' is handled by the PreToolUse hook (it needs the Claude session id)."
+    echo "If you did NOT just see a '✅ /tmp JAIL ENABLED' message, the hook is not active"
+    echo "in this session yet (hooks load at session start). Restart the session, then"
+    echo "run 'tmp-jail on' again."
+    ;;
+  off)
+    sid="${2:-}"
+    if [ -z "$sid" ]; then
+      echo "usage: tmp-jail off <session_id>"
+      echo "active jails:"; list
+      exit 1
+    fi
+    if [ -e "$JAIL/$sid" ]; then
+      rm -f "$JAIL/$sid" && echo "✅ /tmp jail LIFTED for session $sid"
+    else
+      echo "no active jail for session '$sid'"
+      echo "active jails:"; list
+    fi
+    ;;
+  status)
+    echo "active /tmp jails (session_id -> details):"
+    list
+    ;;
+  -h|--help|help)
+    sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'
+    ;;
+  *)
+    echo "usage: tmp-jail {on | off <session_id> | status}" >&2
+    exit 1
+    ;;
+esac

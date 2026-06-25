@@ -49,6 +49,7 @@ Comments are for humans first, AI agents second, machines never. First sentence 
 ### MCP tool preferences (MANDATORY)
 
 - **File Tools MCP** — globally installed. Always prefer over shell parsing for any data file (CSV, Excel, JSON, YAML, TOML, XML, HTTP). Pattern: `file_info` (probe) → `read_tabular`/`read_structured` (slice) → `convert`/`write_*` (act). Never parse data files with shell commands or inline JS.
+- **`zconvert` (local CLI) for tabular format conversion** — to turn a file between **csv / tsv / xlsx / json** (any direction), use `zconvert <in> <out>` instead of hand-rolling a pandas/csv/openpyxl throwaway script. It infers direction from extensions, refuses rather than emit a structurally-broken file (ragged rows, ambiguous delimiter, missing sheet → quick-fail with the fixing flag), and preserves long IDs / `inf`/`nan` as text. `zconvert --capabilities` (machine-readable) or `-h` to see support. Division of labor: File Tools MCP to *read/slice* a data file; `zconvert` to *change its format*.
 - **Interactive Inputs MCP** — globally installed. Prefer over `AskUserQuestion` for structured input: `confirm`, `pick_one`, `pick_many`, `form`, `text_input`, `number_input`, `pick_path`, `wizard`. Use `AskUserQuestion` only for open-ended discussion.
 
 ### Proactive ASCII diagrams
@@ -128,6 +129,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `features/shell-memory.md`       | `tool:shell-mem`, `mcp:shell-mem`, shell history             | shell-mem shell history + BG process tracking (formerly diy-mem; see mig 0014)                           |
 | `features/local-models.md`       | `tool:lm`/`q`/`imagine`/`warm`, `topic:local-models`, `topic:ollama`, `topic:image-generation` | Local LLM + image-gen suite (`~/Code/local-models`) — q/imagine/warm/lm on PATH, no-idle, JSONL histories as the agent API. Read `docs/STATE.md` there first |
 | `features/tab-title.md`          | `tool:tab-title`, `tool:set-focus`, `topic:terminal-title`, `topic:ghostty`, status/mode/intent convey | Ghostty tab-title CLI w/ named-enum slots — `status` (✅⚠️❌💤ℹ️🛑) · `mode` (auto-derived verb) · `intent` (session noun) · `focus` (sub-task). Convey state with: `~/.claude/scripts/tab-title/tab-title.sh <status\|mode\|intent\|focus> <name>`. Full guide: `features/tab-title.md` |
+| `features/tmp-jail.md`           | `topic:tmp-jail`, `topic:confine-to-tmp`, `topic:restrict-writes`, `phrase:"only write to tmp"` | Session-scoped /tmp write-jail. `tmp-jail on` confines this session (and its sub-agents) to /tmp; reads unaffected. Off ONLY by the user (`tmp-jail off <id>`) — the agent CANNOT lift it and must ASK with that exact command. Rare-use, off by default, no mute file. Guide: `features/tmp-jail.md` |
 
 ### Conventions
 

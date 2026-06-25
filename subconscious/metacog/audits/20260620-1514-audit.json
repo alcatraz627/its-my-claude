@@ -1,0 +1,50 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18139,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1505941170815567,
+    "unit_count": 50
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 460e2aa4-14: ls -la *.md | awk compound Bash instead of LS/Glob tool; unit e25e3b92-6: sed -n instead of Read (multiple occurrences), cat USAGE.md | head instead of Read, cat >> file << EOF instead of Write tool. Violation rate ~35-40% of substantive units, within the 30-44% STABLE band across all prior cycles. No improvement trajectory.",
+      "rg_replace_flag_bundle:RECURRING — unit e25e3b92-6: rg -rn invocation with -r n treated as --replace; self-caught immediately from mangled output (improbable identifiers), logged as 4th recurrence via atone. Hook proposal fast-tracked per session notes. Self-catch rate improving but root-cause (pre-selection discipline) absent; only detection speed improved.",
+      "re_edit_thrash:IMPROVEMENT_CONSOLIDATING — unit e25e3b92-5: ~6 Edit failures out of ~22 edits on create-upload.md; recovery escalated to Python heredoc scripts rather than continued blind retry; no Read-before-retry intermediate step observed consistently but Python fallback pattern represents a higher-order recovery than prior baseline. Third consecutive cycle showing non-hook-bypass exit from thrash. Consistent with IMPROVEMENT_CONSOLIDATING reading from prior cycle.",
+      "compound_command_overreach:MARGINAL_IMPROVEMENT — no clear decompose-only-after-failure sequence observed this cycle; unit 460e2aa4-18 and d93990c0-7 compound Bash commands succeeded without prior failure. Single-cycle signal; not sufficient to reclassify from RECURRING:STABLE without a second confirming cycle."
+    ],
+    "calibration_score": 0.17,
+    "overconfident_count": 3,
+    "recommendations": [
+      "No new biases detected this cycle; all patterns are recurring from prior calibration history. Deprioritize further recommendation of fixes for shell_tool_preference_violations and rg_replace_flag_bundle — both have been flagged across all seven prior cycles with no improvement trajectory; mechanical enforcement (hook on rg -r flag bundle) is the only remaining lever, already proposed.",
+      "Monitor re_edit_thrash one more cycle before reclassifying to RESOLVED; Python-fallback recovery is a positive signal but the upstream failure rate on Edits remains high. The consolidating improvement trend needs a third confirming cycle.",
+      "compound_command_overreach absence this cycle is weak positive signal; hold classification at RECURRING:STABLE pending confirmation next cycle before updating.",
+      "No action recommended on rg_replace_flag_bundle self-catch improvement — detection speed is not the target behavior; pre-selection discipline is. The hook proposal is the correct next action, not further agent-level recommendation."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      2431704
+    ],
+    [
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      1751508
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      30646254
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      6259787
+    ]
+  ],
+  "timestamp": "2026-06-20T15:14:36.600835Z",
+  "tokens_used": 12691,
+  "units_analyzed": 9,
+  "units_total": 50
+}

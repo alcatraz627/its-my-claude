@@ -1,0 +1,44 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 20535,
+    "correction_density": 0.1,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.23514436725220922,
+    "unit_count": 10
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE_TO_WORSENING — violation rate ~50% across tool-using units (3/6 clear violations): 6ec6743c-5 ls-d+ls in compound Bash and ls-la *.json instead of LS; 6ec6743c-14 sed-n-1-80p and sed-n-91-100p instead of Read-with-offset plus ls-la/ls for three directory listings instead of LS; 6ec6743c-23 cat /tmp/task2-modal-review.md in Bash after Write instead of Read. Rate at 50% is above the prior STABLE band ceiling of 44%; four consecutive cycles with no improvement and this cycle shows slight escalation beyond the ceiling.",
+      "grep_in_compound_bash:RECURRING — 6ec6743c-5: grep -niE embedded in multi-clause compound Bash .gitignore scan; 6ec6743c-14: grep -iv embedded in compound Bash rg pipeline (two instances). Fourth consecutive cycle with no improvement signal. Hook gap confirmed: prefer-ripgrep intercepts grep only as leading command, not when embedded after a pipe or &&.",
+      "scope_expansion:RECURRING:S3_CONFIRMED — unit 6ec6743c-17 documents a user-anger/deletion event (scope_expansion, speculative-abstractions-without-a-load-bearing-caller slug, S3). Agent built a 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO seam when the user requested only raw aggregate data and explicitly reserved the UI layer. This is the third consecutive cycle with a scope-expansion S3 event and the second consecutive cycle with a user-anger/deletion consequence. Atone correctly filed including RCA and runnable precheck procedure; no behavioral improvement across cycles."
+    ],
+    "calibration_score": 0.45,
+    "overconfident_count": 1,
+    "recommendations": [
+      "scope_expansion: No improvement across three cycles including two user-anger/deletion incidents. The precheck in the RCA filed in unit 6ec6743c-17 is the correct gate — before authoring a new exported function or type for a 'just get me the data' / 'the same way X does it' / 'the existing one' request, verify an existing primitive already produces it AND a caller for the new shape exists right now. The hook proposed in that RCA (warn on new top-level export const/type in a *.ts data file when the diff adds no caller and the prompt contained 'just' + 'data'/'the existing') remains unimplemented and is the highest-priority mechanical intervention.",
+      "grep_in_compound_bash: Four consecutive cycles with no improvement confirms the prefer-ripgrep hook does not cover grep as a non-leading command in compound Bash strings. Filing a proposal for a hook that scans the full Bash command string for bare 'grep' not preceded by 'git' would close the coverage gap.",
+      "shell_tool_preference_violations: Rate has moved from 41-44% STABLE ceiling to ~50% this cycle, a marginal worsening. Prior cycles' advisory reminders have not reduced the rate. The pattern is now above STABLE band; if it persists above 44% in the next cycle, reclassify as WORSENING and consider a PreToolUse hook blocking Bash calls matching patterns ls\\b, sed -n, and cat <file> when no pipe follows and a dedicated tool is available."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      3745308
+    ],
+    [
+      "d8c7b254-2baa-4435-9cc5-33636a8b818d",
+      471870
+    ],
+    [
+      "30fbfebf-8bb9-4038-ad98-9c3cc62d6c1e",
+      85096
+    ]
+  ],
+  "timestamp": "2026-06-24T17:08:26.354285Z",
+  "tokens_used": 10801,
+  "units_analyzed": 10,
+  "units_total": 10
+}

@@ -548,3 +548,66 @@ When a CLI tool is meant to be invoked by Claude (or by a human via a Claude ses
   don't write _-prefixed files to a directory that is itself a loadable web/  
   extension root.                                                             
 
+
+  ## 2026-06-20 — zcmd CLI-registry / fzf-TUI session                         
+                                                                              
+  • **fzf **--nth=N** on an ANSI-colored field silently matches nothing**     
+  (even under --ansi); keep one clean un-colored field as the search target.  
+  Symptom: list renders, search yields zero. Now in conventions/tui-design.md.
+  • **fzf run-an-action: **execute** returns to the list (side effects);      
+  **become** hands off the TTY (run a command).** Using execute for           
+  interactive subprocesses causes blank-screen + buffer/arrow corruption. Use 
+  become + re-exec for a clean run-loop.                                      
+  • **Interactive TUI behavior can't be claimed working without a real-TTY    
+  run** — headless harness can't drive fzf; mark such paths UNCONFIRMED rather
+  than "verified by construction." (Shipped a broken execute run-loop this way;
+  user caught it.)                                                            
+  • **Validate discovered tools against **command -v**, not their             
+  package/formula name** — brew leaves gives formula names (redis,awscli,     
+  tealdeer) that differ from commands (redis-cli,aws,tldr). Filter candidates 
+  to real commands.                                                           
+  • **Declarative-data discipline scales features**: one TSV registry feeding 
+  many consumers (list/kit/random/doctor/tldr-sync/explore/scan) means one row
+  lights up every surface; avoids tangled per-feature code.                   
+
+
+  ## 2026-06-20 — Venue-local conventions trump generic anti-AI-style rules   
+                                                                              
+  When writing a document intended for an EXTERNAL venue (a GitHub bug        
+  tracker, a Linear ticket, a mailing-list post), the internal house style    
+  rules (conventions/doc-writing.md § anti-ChatGPT-voice catalog) are not     
+  automatically authoritative. The venue has its own voice, and that voice    
+  wins when they conflict.                                                    
+                                                                              
+  Concrete example from this session: my first pass at an anthropic/claude-   
+  code                                                                        
+  bug report stripped em-dashes mechanically per the §3.20 anti-AI tell. A    
+  voice-                                                                      
+  extract sub-agent then read 14 high-signal accepted reports from the actual 
+  venue and found em-dashes are house style ("— that was an output rendering  
+  issue", "— a data-loss footgun for commits"). I had to restore them in v2.  
+  Same applied to other tells: rule-of-three triads, bold-phrase bullets,     
+  "What                                                                       
+  we'd like" framings — some are venue-acceptable, some aren't, and you can't 
+  tell without sampling the venue.                                            
+                                                                              
+  **Apply:** before writing an external doc, run a voice-extract sub-agent    
+  against the venue's existing high-engagement content (sort by reactions or  
+  comments to get the accepted style). Concrete-quoted findings beat abstract 
+  rules. The internal conventions/doc-writing.md is calibrated for our        
+  internal                                                                    
+  docs and tells like em-dash-as-splice are inside-baseball calibrated, not   
+  universal.                                                                  
+                                                                              
+  This is the doc-writing parallel to the broader CLAUDE.md "project rules    
+  take                                                                        
+  precedence on conflict" pattern.                                            
+
+
+## 2026-06-20 - env gotcha: `cat` is shadowed by a Go CLI on this machine
+`cat` resolves to a cobra-style Go binary, not coreutils/BSD cat: `cat -A` errors "unknown shorthand flag", and `$(cat file)` can emit rendered/indented text that corrupts command args (it broke an /atone RCA lint mid-session). When you need raw file bytes in an argument, use `jq --rawfile`, a tool's own `--*-file` flag, `/bin/cat`, or the Read tool.
+
+## 2026-06-25 — local-models vision session
+- Bash-tool heredocs reflow/indent file bodies (broke a .toml + 2 py scripts this session) — use the Write tool for any file content, never `cat <<EOF`.
+- Harness CronCreate durable:true did NOT persist to disk (verified: no scheduled_tasks.json) — for a cross-session durable reminder use gcc-schedule (launchd), not CronCreate.
+- Model-selection decisions: an independent agent with labeled ground-truth (here claude-instances screenshots) turns opinion into evidence — worth soliciting over IPC.

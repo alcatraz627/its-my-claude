@@ -1,19 +1,25 @@
 ---
-brief: CLI --help output: header, USAGE/EXAMPLES/OPTIONS order, color coding, column alignment, no-pager rule
+brief: Building CLI tools — help layout/color/pipe-mode/man-pages/source-vs-render, plus (from zap+zcmd) destructive-tool safety, headless-testable internal verbs, file/symlink/registry robustness, PATH-shadow hardening, and metadata auto-derivation
 triggers:
   - topic:cli-help
   - topic:terminal-ux
+  - topic:cli-tools
   - phrase:"-h"
   - phrase:"--help"
-related: []
+  - phrase:"build a cli"
+related: [tui-design.md]
 tier: 2
 category: conventions
-updated: 2026-04-24
+updated: 2026-06-25
 stale_after_days: 90
 ---
 
 # Cli Help Design
-Rules for `-h` / `--help` output on any CLI tool Claude writes.
+Conventions for CLI tools Claude writes. Help output comes first (it's the most
+common need); below that are pipe mode, man pages, source-vs-render, and the
+robustness/safety patterns that recurring tool work (zap, zcmd) surfaced. For
+interactive TUI patterns (fzf-as-launcher, color-vs-search fields) see
+`tui-design.md`.
 
 ## Principles
 
@@ -71,3 +77,37 @@ mytool report --render > file.md # WRONG: rendered output saved as source
 ```
 
 This is the source-vs-render discipline graduated from the 2026-05-16 RCA-quality incident (`ascii-art-tables-instead-of-gum-tools` recurring at 4× because RCA-writing tools rendered then saved). New tools that touch saveable output should follow this default.
+
+## Safety for destructive tools (kill / delete / bulk ops)
+
+A tool whose Enter key destroys something (kills a process, removes files, drops rows) needs guardrails a read-only tool doesn't. Graduated from `zap`:
+
+- **Default to EXACT match, not fuzzy, in any picker that destroys.** fzf's default fuzzy match scatters: typing `python` matched **136** rows (124 junk like `WardaSynthesizer`, `SpeechSynthesisServerXPC`) on a real machine; `fzf --exact` gave 10 real ones. A false positive costs a re-pick in a file-opener but the wrong kill in a killer. Exact-by-default; let the user opt into fuzzy, not the reverse.
+- **Floor-guard any catch-all sentinel.** `kill -<pgid>` with pgid 0 signals the caller's own group (kills the terminal); pgid 1 means "every process you can signal" on macOS. Refuse pgid ≤ 1 before sending. Generalizes: any API where a zero/low/negative argument silently means "all" needs an explicit floor check before you pass a computed value into it.
+- **Show the blast radius before a bulk destroy.** A `[scope: group]` confirm hides how many die. Expand the group/tree to the actual id list and print it (count + ids) before the confirm — the user can only approve what they can see.
+- **Refuse with a pointer, not a flat error.** When you block an action, name the conflict AND the safe alternative in the same message: `zcmd add rg` prints "'rg' already exists (/opt/homebrew/bin/rg); use `zcmd scan` instead." A bare "refused" makes the user guess the next move.
+
+## Make an interactive TUI headless-testable with internal verbs
+
+An fzf/gum tool can't be driven by a headless test harness — but its *logic* can, if you split UI from action. Expose the data/destructive paths as hidden subcommands (`tool --__kill SIG SCOPE PID...`, `tool --__feed`, `tool --__advise PID`) that take args and print/act with no TUI. Then one seam serves two masters:
+- the test harness calls `--__kill` / `--__advise` directly and reads the result (zap's kill, escalation, tree-expansion, truthful report, and recommendation engine were all verified this way without ever opening fzf);
+- the fzf binds reuse the same verbs: `--bind "ctrl-k:execute-silent(kill -TERM {1})+reload(tool --__feed)"`.
+
+The interactive shell (the menus, the fzf loop) stays the thin part you verify by hand; everything underneath is exercised by tests.
+
+## Robustness for tools that own files, symlinks, or a registry
+
+Graduated from `zcmd` (a TSV manifest + PATH-symlink registry):
+
+- **A `while read` loop drops a final line with no trailing newline.** A hand-editable data file eventually loses its trailing `\n`; then `while IFS=$'\t' read -r a b; do ...; done < file` silently skips the last row while `awk` keeps it, so two code paths disagree on the same file. Guard the loop with a final-line check: `while IFS=$'\t' read -r a b || [ -n "$a" ]; do`.
+- **Never `ln -sf` over a path you didn't create.** If `~/.local/bin/<name>` is a real file, `ln -sf` replaces it and the content is gone. Check `[ -e X ] && [ ! -L X ]` and refuse.
+- **Validate any string that becomes a filename AND a symlink AND a command word.** Spaces, slashes, and a leading dash give broken symlinks or flag injection. Reject `-*|*[!A-Za-z0-9._-]*` up front, before you create anything.
+- **Don't let a tool shadow the binaries it depends on.** A registry that symlinks into `~/.local/bin` can register `ps`/`lsof`, shadowing the real ones on PATH and silently breaking every tool (itself included) that calls them. Two-sided fix: (a) the registry's `add` refuses names that resolve to an existing command on the *full* PATH minus its own bin dir; (b) a tool that depends on system binaries prepends `/bin:/usr/bin:/sbin:/usr/sbin` to its own PATH so a stub can't shadow them.
+
+## Derive metadata from the ecosystem before prompting the human
+
+When a tool needs a description/label for something it registers, don't write a `TODO` placeholder and don't immediately prompt — *derive* it, best-signal-first, and only then fall back. For a command on macOS the chain that works: `tldr` one-liner → `man` NAME section (UTF-8 en-dash aware — macOS man uses `–`, not `-`) → `brew desc <name>` (clean package tagline) → first prose line of `--help`, then `-h` → honest "(describe me)" placeholder. A registered tool then gets a real one-liner automatically (`fd → "Find entries in the filesystem"`) and the human edits only the leftovers.
+
+## Registry pattern: source-of-truth + derived projection + a reconciling doctor
+
+For a tool that catalogs things and installs them: keep one **source of truth** (a TSV/JSON manifest), treat the live state (PATH symlinks, generated tldr/man pages) as a **derived projection** rebuilt from it, and ship a **`doctor`** that reconciles both directions — manifest rows with no symlink, and symlinks/commands with no manifest row. The manifest is editable and diffable; the projection is disposable. This is what lets `install` be idempotent and `rm` clean up completely.

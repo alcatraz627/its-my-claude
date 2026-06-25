@@ -1,17 +1,15 @@
-<!-- i-dream project brief · 2026-05-13T12:17:48.319838+00:00 · 6 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-25T00:51:31.951200+00:00 · 4 patterns / 10 insights -->
 ## What this project is about
-A Downloads directory used as a general-purpose scratchpad — mixed one-off tasks, tooling experiments, and agent infrastructure work. Sessions tend to be exploratory with occasional multi-phase shipments.
+A developer's local Downloads directory used as a general-purpose scratch/staging area. Work here is session-continuity-heavy, with the WAL/checkpoint/catchup infrastructure as the primary continuity mechanism.
 
 ## Things to do (or keep doing)
-- Write WAL entries as JSONL (`scripts/wal/wal.sh`) — markdown format is legacy fallback only
-- Decompose umbrella requests into sequential sub-tasks; surface progress at each checkpoint before moving on
-- Commit after each logical phase/shipment unit; push every 2–3 commits — never batch multiple phases into one commit
-- Wait for monitor completion events on long background tasks; do not poll or assume done
+- Write WAL entries as JSONL (not markdown); old markdown checkpoints are still readable via `/catchup` as fallback
+- Use monitor events for long background tasks — wait for the completion event before reporting status, never poll in a loop
+- Update the Task tool list proactively as file edits accumulate; reconcile it before it drifts more than a few turns behind actual work
 
 ## Things to avoid
-- Don't ship nav/sidebar expanded by default — user expects collapsed with hamburger toggle; confirm UI state before marking UI tasks complete
-- Don't create new persistence files in markdown when JSONL is available — prefer structured, machine-queryable formats from the start
-- Don't batch phases into one commit or defer commits until "everything is done"
+- Don't ship nav/sidebar in an expanded-by-default state; user expects collapsed with hamburger toggle
+- Don't let the Task list go stale while edits accumulate — drift between the task list and actual work is a recurring correction
 
 ## Open questions / known gaps
-- Pattern extraction pipeline has a deduplication gap: high-salience events (like the WAL migration) appear as 4+ redundant patterns; deduplication logic should run before surfacing insights
+- Pattern extraction for this project over-indexes on format-migration events (WAL markdown→JSONL showed up 4×); real behavioral signals are sparse — trust the task list and WAL tail more than extracted patterns here

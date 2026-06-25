@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-19T18:59:28Z",
+  "session_id": "zcmd-explore-74",
+  "project_root": "/Users/alcatraz627/Code/Claude/its-my-config",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260620-zcmd-explore-74.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**local-models `docs/STATE.md`** \u2014 my `llm`-fallback note is uncommitted there, deliberately *not* committed because the file holds the user's active 2026-06-19 research WIP. It will ride along with the user's next STATE.md commit (purely additive, no conflict).",
+    "**banner-fun** (`~/Code/Claude/banner-fun`) \u2014 **not git-tracked**; the new `modules/toolkit.py` is live but unversioned. Offered to `git init` \u2014 awaiting user decision.",
+    "**Scan-added service/decorative entries** (`nginx`, `dnsmasq`, `cbonsai`, `lynx`, `fontforge`) \u2014 kept because the user picked them; `zcmd rm <name>` prunes any unwanted.",
+    "**Shell reload** \u2014 completions + `gping` alias need a fresh shell / `source ~/.zshrc` (one-time).",
+    "No code work pending. All 41 in-conversation tasks completed."
+  ],
+  "tags": []
+}

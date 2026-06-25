@@ -1,0 +1,86 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18035,
+    "correction_density": 0.013333333333333334,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1804897357172422,
+    "unit_count": 75
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 460e2aa4-14: ls -la *.md | awk compound Bash instead of LS/Glob tool for directory listing; unit db668075-2: cat package.json|head-80 in compound Bash instead of Read tool (success=true but tool preference violation); unit db668075-18: grep -qE in polling for-loop instead of rg (success=true). Violation rate ~35-40% of substantive units — within the 30-44% STABLE band of all prior cycles. No improvement trajectory observed across full calibration history spanning seven sessions.",
+      "compound_command_overreach:RECURRING:STABLE — unit db668075-2: ls-la+echo+ls next.config compound Bash success=false before decomposition; unit db668075-7: kill-USR1+curl+cat-heredoc+node compound Bash success=false before Write-fallback to /tmp/memprobe2.mjs adopted. Decompose-only-after-failure sequence structurally identical across all prior cycles. No pre-decomposition behavior observed in any confirmed instance across full calibration history.",
+      "rm_bash_instead_of_trash:RECURRING — unit db668075-18: rm -rf .next executed in Bash, blocked by safe-delete hook (success=false); recovered correctly with trash .next in subsequent command. Fourth confirmed instance. Hook enforcement effective; root-cause prevention (pre-selection discipline) absent. Consistent across all prior cycle readings.",
+      "bash_glob_expansion_error:RECURRING — unit db668075-26: rg command with shell ** glob (rg -n pattern node_modules/@sentry/nextjs/build/**/*.js) success=false; macOS bash 3.2 does not expand ** without globstar option. Second confirmed instance (was flagged NEW in 2026-06-18 cycle). Now recurring — warrants classification as a stable pattern rather than a one-off.",
+      "re_edit_thrash:IMPROVEMENT_CONSOLIDATING — unit db668075-21: Edit-fail on package.json → Read → Edit-succeed; Edit-fail on .gitignore → Read → Edit-succeed; four consecutive Edits on playwright.perf.config.ts driven by real iterative test-run feedback (externally justified, not blind retry). Third consecutive cycle showing Read-before-retry behavior within edit-thrash-adjacent units. No hook bypass observed. Improvement trend appears consolidated."
+    ],
+    "calibration_score": 0.19,
+    "overconfident_count": 4,
+    "recommendations": [
+      "bash_glob_expansion_error is now RECURRING across two consecutive cycles — worth explicit intervention: when building rg or find commands in Bash that would require ** glob expansion, use rg's own recursive flags (rg -r, -g patterns) rather than relying on shell glob expansion, which silently fails in macOS bash 3.2 without globstar.",
+      "shell_tool_preference_violations and compound_command_overreach remain STABLE with no improvement trajectory across 7 sessions — further advisory recommendations are unlikely to produce change; deprioritize in favor of hook-based enforcement if improvement is desired.",
+      "re_edit_thrash improvement is consolidating — no new recommendation needed; monitor only for regression back to hook-bypass behavior."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      2170316
+    ],
+    [
+      "ee12a304-ac29-4314-9a04-b42adf21ae09",
+      169768
+    ],
+    [
+      "dcbf8736-2105-404e-b4d3-6e27fa7faf42",
+      136336
+    ],
+    [
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      8903037
+    ],
+    [
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      977413
+    ],
+    [
+      "b988c7d4-e955-40c1-9c45-39e16e5d041f",
+      12348
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      30038212
+    ],
+    [
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      1039876
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      5212339
+    ],
+    [
+      "d566b200-be78-4060-9839-0e5a856969da",
+      4861
+    ],
+    [
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      5017733
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      6695416
+    ],
+    [
+      "e89830e8-d550-488b-a743-c429c0db849a",
+      4107
+    ]
+  ],
+  "timestamp": "2026-06-20T02:04:57.261141Z",
+  "tokens_used": 12604,
+  "units_analyzed": 11,
+  "units_total": 75
+}

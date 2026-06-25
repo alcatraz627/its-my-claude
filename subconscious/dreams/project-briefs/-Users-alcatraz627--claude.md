@@ -1,19 +1,17 @@
-<!-- i-dream project brief · 2026-06-19T17:53:42.609878+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-25T00:51:16.087654+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the `~/.claude` meta-repository — the agent's own configuration, rules, skills, WAL infrastructure, and session-continuity tooling. Work here is almost always tooling/infrastructure maintenance, not product features.
+Meta-infrastructure maintenance for the `~/.claude` config repo — rules, skills, hooks, WAL, and session tooling. Work is long-running, multi-session, and continuity-dependent.
 
 ## Things to do (or keep doing)
-- Proactively `/core-dump` at milestones during long sessions; user resumes via `/catchup` across compaction boundaries — this is the dominant working pattern
-- Write WAL entries as JSONL (canonical since 2026-04-17); never write markdown WAL
-- Treat terse single-word messages (`ahead`, `next`, `looks`, `done`) as autonomous-continue directives — execute without asking for clarification
-- Verify current state before any write (git status, file read) — the most common failure class is acting on stale or inferred state
+- Always write WAL entries as JSONL (`scripts/wal/wal.sh`), never markdown — migration is canonical as of 2026-04-17
+- Proactively `/core-dump` at milestones (every ~15-20 tool calls), not just at session end; user resumes via `/catchup` across many compaction boundaries
+- Treat single-word continuations (`next`, `ahead`, `looks`, `done`) as autonomous-execute signals — increase tool-call depth, never expand scope
 
 ## Things to avoid
-- Never commit or push without fresh explicit per-push approval from the user; prior session approval does not carry forward to any subsequent push
-- Don't loop on fix attempts without identifying root cause first — three edits to the same block without a hypothesis means stop and probe
-- Never expand scope beyond what's explicitly requested, even for obvious improvements; treat the request as a ceiling, not a floor
-- Don't infer or hallucinate values not traceable to source data; flag gaps explicitly rather than filling them
+- Never commit or push without fresh per-push explicit approval — prior session approvals do not carry forward, even one push ago
+- Don't attempt repeat fixes without pausing to state a root-cause hypothesis first; fix-thrashing (3+ edits to the same block) signals you don't understand the failure yet
+- Never infer or synthesize data values not traceable to source; hallucinated fills in pipelines are a critical correctness failure here
 
 ## Open questions / known gaps
-- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event was recorded 4× independently; extraction needs fuzzy-match-before-insert logic
-- Tension between terse-continue semantics and scope-only-when-asked: short directives mean "go deeper," never "go broader" — but the system conflates them
+- Scope-creep tension: terse "keep going" signals mean _deeper execution on current scope_, not license to expand — this boundary has been corrected multiple times and remains fragile
+- Pattern extraction in this repo's tooling lacks deduplication; the WAL migration appeared 4× independently, suggesting the insight pipeline itself needs a fuzzy-merge pass

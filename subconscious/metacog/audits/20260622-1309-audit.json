@@ -1,0 +1,62 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18216,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.14072543939851948,
+    "unit_count": 75
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:POSSIBLE_IMPROVEMENT_STRENGTHENING — unit 460e2aa4-14: ls -la *.md | awk compound Bash instead of LS/Glob tool; unit 460e2aa4-18: cat file 2>/dev/null | head -5 inside compound Bash instead of Read tool; unit 460e2aa4-19: multiple cat > file <<EOF heredocs instead of Write tool (voter-1.md through voter-jester.md and _anon-map.json); unit 6ec6743c-5: grep -niE inside compound Bash instead of rg (violates prefer-ripgrep rule). Violation rate ~29% of substantive units (4/14), third consecutive cycle below the 30-44% STABLE band floor. Reclassifying from POSSIBLE_IMPROVEMENT to POSSIBLE_IMPROVEMENT_STRENGTHENING.",
+      "re_edit_thrash:RECURRING:IMPROVEMENT_CONSOLIDATING — unit d93990c0-19: 3 consecutive Edit failures on PLAN.md (success=false x3) before Read+Write fallback; recovery escalated correctly without hook bypass. Sixth consecutive cycle showing recovery-before-hook-bypass exit pattern with no regression. Reclassify to RESOLVED if seventh cycle confirms.",
+      "compound_command_overreach:RESOLVED — units 460e2aa4-18, 460e2aa4-19, 6ec6743c-5: large multi-clause compound Bash calls all succeeded on first try without prior failure-then-decompose sequence; unit 460e2aa4-51 Bash failures were expected probe-then-fix behavior (PIL not found → venv detection → success), not overreach. Fifth consecutive confirming cycle; remains RESOLVED.",
+      "grep_in_compound_bash:NEW_VARIANT — unit 6ec6743c-5: grep -niE used inside a multi-clause compound Bash string (checking .gitignore) rather than rg. The prefer-ripgrep hook may not intercept grep when embedded in a multi-command compound string rather than as a standalone Bash call. This is a distinct surface from the standalone-grep pattern; verify hook scope covers compound strings."
+    ],
+    "calibration_score": 0.31,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations is POSSIBLE_IMPROVEMENT_STRENGTHENING across three consecutive cycles below band floor — advisory reminders have not eliminated cat-heredoc→Write and ls|awk→LS/Glob patterns; consider whether the hook that blocks grep also needs a variant that catches cat > file <<EOF and ls -la | awk when a Write/LS tool would serve",
+      "grep_in_compound_bash is a new variant: verify the prefer-ripgrep hook pattern matches grep inside a multi-clause compound command string, not only standalone Bash calls; if the hook does not intercept compound-embedded grep, this creates a systematic bypass surface",
+      "re_edit_thrash recovery is healthy and consistent; deprioritize further recommendations here — reclassify to RESOLVED at seventh confirming cycle",
+      "exercise-based verification behavior is strongly positive (unit 460e2aa4-35: exercised see command immediately on model download completion, caught real ARG_MAX bug before user encounter; unit 460e2aa4-51: probe-then-fix with two expected Bash failures before venv resolution); preserve this pattern"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      7542150
+    ],
+    [
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      3965399
+    ],
+    [
+      "b40f9d66-8c30-4a8d-82b9-4a2159ed7485",
+      781253
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      1916663
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      38884638
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      17654638
+    ],
+    [
+      "d566b200-be78-4060-9839-0e5a856969da",
+      10503
+    ]
+  ],
+  "timestamp": "2026-06-22T13:09:19.905270Z",
+  "tokens_used": 11681,
+  "units_analyzed": 19,
+  "units_total": 75
+}

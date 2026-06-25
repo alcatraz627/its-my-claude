@@ -2605,6 +2605,35 @@
     "occurrence_history": []
   },
   {
+    "id": "d542be04-7c3d-4d9f-a1a9-7616930895f1",
+    "pattern": "When the user has explicitly deleted previously-written code and requests a simpler replacement, the agent must not re-introduce the removed complexity or add unrequested features — deliver only what the replacement request literally asked for.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "approach",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "c3167bf2-0a0f-4792-b5a3-46b0543be54d",
+      "a91af7c2-95b2-4772-b63a-5f625d05cba0",
+      "7f9cd9d3-4bcf-4c41-a393-132a0f89d52b",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "14dc9085-9492-4fe0-a795-7335a20471a9",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-24T10:24:10.726316+00:00",
+    "last_seen": "2026-06-24T10:24:10.726316+00:00",
+    "occurrence_history": [
+      "2026-06-24T10:24:10.726316+00:00"
+    ]
+  },
+  {
     "id": "2bca0a46-6579-4af7-a41c-44bfabdd7e70",
     "pattern": "User frequently uses 'catchup' command at session start to re-orient the assistant to ongoing project context",
     "valence": "positive",
@@ -4678,6 +4707,169 @@
     "last_seen": "2026-06-19T17:49:46.984809+00:00",
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
+    ]
+  },
+  {
+    "id": "6a32912f-3a09-4e09-9819-0b0d351feede",
+    "pattern": "The agent repeatedly uses em-dashes and AI-smell phrasing in human-facing prose (PR descriptions, docs) even when explicit rules against them exist in the same session. This is a recurring failure that requires atone-level reinforcement, not a one-time reminder.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "ee12a304-ac29-4314-9a04-b42adf21ae09",
+      "dcbf8736-2105-404e-b4d3-6e27fa7faf42",
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "b988c7d4-e955-40c1-9c45-39e16e5d041f",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "d566b200-be78-4060-9839-0e5a856969da",
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "e89830e8-d550-488b-a743-c429c0db849a"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-20T02:01:59.851749+00:00",
+    "last_seen": "2026-06-20T02:01:59.851749+00:00",
+    "occurrence_history": [
+      "2026-06-20T02:01:59.851749+00:00"
+    ]
+  },
+  {
+    "id": "ddd5965e-1aa9-4523-b4f9-e79a7e3a89ae",
+    "pattern": "Docs must not open with self-justifying 'Why this matters' or motivational framing — this reads as desperate or flowery; prefer a direct, formal tone appropriate to the content's severity and audience.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T12:16:04.148972+00:00",
+    "last_seen": "2026-06-21T12:16:04.148972+00:00",
+    "occurrence_history": [
+      "2026-06-21T12:16:04.148972+00:00"
+    ]
+  },
+  {
+    "id": "bf6d7fd7-40be-4413-bbce-37df1772f289",
+    "pattern": "Research synthesis and architectural analysis must be translated into product/behavior-focused implementation docs — professional and lean, not enterprise-heavy or purely academic research notes",
+    "valence": "positive",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "4634ed74-6924-49ac-ac36-ec3cf3322377",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T16:43:27.454214+00:00",
+    "last_seen": "2026-06-21T16:43:27.454214+00:00",
+    "occurrence_history": [
+      "2026-06-21T16:43:27.454214+00:00"
+    ]
+  },
+  {
+    "id": "631c93bf-f3db-461c-a669-9073719a8b85",
+    "pattern": "Implementation and design docs should be 'professional but lean' — behavioral and product-focused, neither too enterprise-heavyweight nor too hacky. The user explicitly rejects docs that read as research dumps or over-engineered specs.",
+    "valence": "positive",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "b40f9d66-8c30-4a8d-82b9-4a2159ed7485",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "d566b200-be78-4060-9839-0e5a856969da"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-22T13:05:50.557852+00:00",
+    "last_seen": "2026-06-22T13:05:50.557852+00:00",
+    "occurrence_history": [
+      "2026-06-22T13:05:50.557852+00:00"
+    ]
+  },
+  {
+    "id": "3bc376bc-88ce-421b-9988-ca5f9c5e8da8",
+    "pattern": "When a research or design phase concludes, the user explicitly expects the output to be translated into a lean, behavior- and product-focused implementation doc — not left as raw research notes. The framing should be professional but not enterprise, not hacky, and not AI-flavored prose.",
+    "valence": "positive",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-23T00:15:19.177245+00:00",
+    "last_seen": "2026-06-23T00:15:19.177245+00:00",
+    "occurrence_history": [
+      "2026-06-23T00:15:19.177245+00:00"
+    ]
+  },
+  {
+    "id": "6452711e-4c1d-4149-ab38-88c4ed584e6f",
+    "pattern": "When the user explicitly asks to defer or simplify a feature, the agent must not re-introduce that complexity under a different implementation — re-adding deferred scope is a scope violation even when the new version seems cleaner.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "d8c7b254-2baa-4435-9cc5-33636a8b818d",
+      "30fbfebf-8bb9-4038-ad98-9c3cc62d6c1e"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-24T17:05:25.884606+00:00",
+    "last_seen": "2026-06-24T17:05:25.884606+00:00",
+    "occurrence_history": [
+      "2026-06-24T17:05:25.884606+00:00"
     ]
   },
   {
@@ -8697,6 +8889,201 @@
     ]
   },
   {
+    "id": "5390e5ff-a040-47a2-bfce-ed3a2f42eef0",
+    "pattern": "When correcting AI-smell prose (em-dashes, label:fragment rows, over-bolding), the agent tends to overcorrect into overly warm narrative prose that reads as 'social science essay' rather than landing in developer-register prose (concrete facts, code references, scannable). Calibration requires a middle register, not swinging between extremes.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "ee12a304-ac29-4314-9a04-b42adf21ae09",
+      "dcbf8736-2105-404e-b4d3-6e27fa7faf42",
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "b988c7d4-e955-40c1-9c45-39e16e5d041f",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "d566b200-be78-4060-9839-0e5a856969da",
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "e89830e8-d550-488b-a743-c429c0db849a"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-20T02:01:59.851749+00:00",
+    "last_seen": "2026-06-20T02:01:59.851749+00:00",
+    "occurrence_history": [
+      "2026-06-20T02:01:59.851749+00:00"
+    ]
+  },
+  {
+    "id": "ca6b2dd2-c507-4fd3-a05a-3cf1e4750f03",
+    "pattern": "Documentation should use formal, direct, neutral language; promotional or 'show-off' phrasing (e.g. 'why this page matters') and anxiety-signalling language (e.g. flagging uncertainty, doubt, or confusion inline) belong in internal chat, not in reader-facing docs.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-20T15:12:03.208355+00:00",
+    "last_seen": "2026-06-20T15:12:03.208355+00:00",
+    "occurrence_history": [
+      "2026-06-20T15:12:03.208355+00:00"
+    ]
+  },
+  {
+    "id": "8d097f70-ea28-44d0-a97b-45663e89dbb0",
+    "pattern": "Opening a doc section with 'Why this page matters' or similar marketing-style justification language reads as desperate and inappropriate for a technical audience; docs should open with a direct, factual statement of what the subject is.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "domain",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T00:26:17.390298+00:00",
+    "last_seen": "2026-06-21T00:26:17.390298+00:00",
+    "occurrence_history": [
+      "2026-06-21T00:26:17.390298+00:00"
+    ]
+  },
+  {
+    "id": "f4c1a909-e14e-43f8-9e19-5c4782d1c42f",
+    "pattern": "Do not halt for user input on small intermediate steps; perform internal validation in small chunks but surface only meaningful batches for user review",
+    "valence": "positive",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "4634ed74-6924-49ac-ac36-ec3cf3322377",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T16:43:27.454214+00:00",
+    "last_seen": "2026-06-21T16:43:27.454214+00:00",
+    "occurrence_history": [
+      "2026-06-21T16:43:27.454214+00:00"
+    ]
+  },
+  {
+    "id": "de981112-0b3f-46ce-9a25-60db6cae7653",
+    "pattern": "When asked to implement work in steps, the user prefers meaningful batches with self-validation rather than halting for approval after each small change — the agent should work autonomously across multiple small steps and present the user with a meaningful checkpoint to review.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "b40f9d66-8c30-4a8d-82b9-4a2159ed7485",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "d566b200-be78-4060-9839-0e5a856969da"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-22T13:05:50.557852+00:00",
+    "last_seen": "2026-06-22T13:05:50.557852+00:00",
+    "occurrence_history": [
+      "2026-06-22T13:05:50.557852+00:00"
+    ]
+  },
+  {
+    "id": "1ffd1766-7c94-4d8e-9a35-635311d40991",
+    "pattern": "Before beginning implementation the user wants explicit validation criteria written down (covering behavior, runtime, code, and intent), checked after each task completes and again when all tasks are done. This is a standing expectation, not a per-session ask.",
+    "valence": "positive",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-23T00:15:19.177245+00:00",
+    "last_seen": "2026-06-23T00:15:19.177245+00:00",
+    "occurrence_history": [
+      "2026-06-23T00:15:19.177245+00:00"
+    ]
+  },
+  {
+    "id": "cd2d63f6-867f-4712-bb59-550efba1be7c",
+    "pattern": "When the task list goes many turns without updates while file edits accumulate, the agent has drifted from tracking actual work; the task list must be reconciled proactively rather than waiting for a mechanical stop-hook correction.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "d8c7b254-2baa-4435-9cc5-33636a8b818d",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Downloads",
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-25T00:47:19.884006+00:00",
+    "last_seen": "2026-06-25T00:47:19.884006+00:00",
+    "occurrence_history": [
+      "2026-06-25T00:47:19.884006+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -11950,6 +12337,174 @@
     ]
   },
   {
+    "id": "9276c3fd-e1ef-4c55-a597-13407f7a91af",
+    "pattern": "After the user explicitly confirms a decision, the agent should not re-raise it in written artifacts (PR descriptions, reports) as something the reader needs to validate. Phrases like 'Must change: nothing required' or re-flagging settled choices signal distrust of the user and produce confusing prose.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "ee12a304-ac29-4314-9a04-b42adf21ae09",
+      "dcbf8736-2105-404e-b4d3-6e27fa7faf42",
+      "db668075-63c3-4e85-a290-d63a116bd5fc",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "b988c7d4-e955-40c1-9c45-39e16e5d041f",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "7547fba6-ad34-46cd-944e-ac534ad9df9a",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "d566b200-be78-4060-9839-0e5a856969da",
+      "74ced694-ee6d-4feb-9123-47c36f51a37e",
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      "e89830e8-d550-488b-a743-c429c0db849a"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-20T02:01:59.851749+00:00",
+    "last_seen": "2026-06-20T02:01:59.851749+00:00",
+    "occurrence_history": [
+      "2026-06-20T02:01:59.851749+00:00"
+    ]
+  },
+  {
+    "id": "6b4bfac3-33ea-444f-8e30-497e9b0e2ba7",
+    "pattern": "When the agent produces research or exploration findings, the user expects a separate explicit step to translate those findings into a lean, product-and-behaviour-focused implementation doc — research output and implementation spec are two distinct deliverables, not one.",
+    "valence": "positive",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T00:26:17.390298+00:00",
+    "last_seen": "2026-06-21T00:26:17.390298+00:00",
+    "occurrence_history": [
+      "2026-06-21T00:26:17.390298+00:00"
+    ]
+  },
+  {
+    "id": "a156f368-3264-469a-86a2-eaa9fd0e9162",
+    "pattern": "Documentation written for end users (engineers, new joiners, non-technical stakeholders) must use a neutral, authoritative tone even when describing technically uncertain areas — framing uncertainty as suspicious or confusing belongs in chat, not in docs.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "domain",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T00:26:17.390298+00:00",
+    "last_seen": "2026-06-21T00:26:17.390298+00:00",
+    "occurrence_history": [
+      "2026-06-21T00:26:17.390298+00:00"
+    ]
+  },
+  {
+    "id": "70f7d61c-70c8-459c-aa42-5424f2d43e72",
+    "pattern": "When producing research or analysis docs, the user expects an explicit follow-up pass that translates findings into a product/behavior-focused implementation doc — research artifacts are not the deliverable; the lean, actionable doc is.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T12:16:04.148972+00:00",
+    "last_seen": "2026-06-21T12:16:04.148972+00:00",
+    "occurrence_history": [
+      "2026-06-21T12:16:04.148972+00:00"
+    ]
+  },
+  {
+    "id": "1e5f398a-857f-42f5-9b39-895446dd75af",
+    "pattern": "Established tone and voice guidelines for a documentation repository must be applied when writing or editing docs in that repo — failure to follow them is a high-severity miss",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "4634ed74-6924-49ac-ac36-ec3cf3322377",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-21T16:43:27.454214+00:00",
+    "last_seen": "2026-06-21T16:43:27.454214+00:00",
+    "occurrence_history": [
+      "2026-06-21T16:43:27.454214+00:00"
+    ]
+  },
+  {
+    "id": "fbd9adf4-56cf-4d44-88a6-b7d78651f0d2",
+    "pattern": "Deliverable documents and summaries must be written in plain, human-voiced prose; the user will explicitly correct AI-sounding or over-structured output and ask for 'non-AI and raw markdown'.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "c3167bf2-0a0f-4792-b5a3-46b0543be54d",
+      "a91af7c2-95b2-4772-b63a-5f625d05cba0",
+      "7f9cd9d3-4bcf-4c41-a393-132a0f89d52b",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "14dc9085-9492-4fe0-a795-7335a20471a9",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-24T10:24:10.726316+00:00",
+    "last_seen": "2026-06-24T10:24:10.726316+00:00",
+    "occurrence_history": [
+      "2026-06-24T10:24:10.726316+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13143,769 +13698,5 @@
     "occurrence_history": [
       "2026-05-29T23:21:48.497946+00:00"
     ]
-  },
-  {
-    "id": "284c7bf6-acb2-4d50-9e6f-3b02b4b1a8ee",
-    "pattern": "When an MCP server fails to authenticate, the agent should immediately pivot to the equivalent CLI approach without waiting for the user to suggest it.",
-    "valence": "positive",
-    "confidence": 0.87,
-    "category": "tool-use",
-    "source_sessions": [
-      "fe6d7eb9-b237-4dee-9112-144f778b5863",
-      "f0ba9f05-db25-4481-ace5-908884322f75",
-      "781e356c-3e00-46fa-b981-b2bc599fbda0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-release-v-5-0-runbook",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-30T17:00:01.159958+00:00",
-    "last_seen": "2026-05-30T17:00:01.159958+00:00",
-    "occurrence_history": [
-      "2026-05-30T17:00:01.159958+00:00"
-    ]
-  },
-  {
-    "id": "4b466367-ccad-48a6-9a03-46ded69edaea",
-    "pattern": "Migration scripts that run in production require explicit review for data-destructive edge cases; missing this in a code review while flagging lower-priority issues is a critical review gap that the user will treat as a significant failure.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "4708d70c-4878-44a7-91e0-597608de540e",
-      "dd2a5369-7f42-40a3-a91f-0c25fc85a043",
-      "781e356c-3e00-46fa-b981-b2bc599fbda0",
-      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
-      "fe986f04-9f74-4f13-929e-612e07a8440b",
-      "d6e803bf-1bdc-402e-aac1-ab2083909c06",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "ced10096-5834-4cc4-991f-f28ee4f665cb",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
-      "2df73955-ab35-40af-96f0-bae888289494"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-31T19:26:33.828505+00:00",
-    "last_seen": "2026-05-31T19:26:33.828505+00:00",
-    "occurrence_history": [
-      "2026-05-31T19:26:33.828505+00:00"
-    ]
-  },
-  {
-    "id": "8e84a39f-f1fd-4f19-a9db-2aae55abba2b",
-    "pattern": "When an optional feature module (e.g., memory profiler) is only enabled in some deployment environments, the agent must verify it fails safely in environments where the enabling env var is absent before shipping — not just test the happy path.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "781e356c-3e00-46fa-b981-b2bc599fbda0",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-01T12:36:50.386274+00:00",
-    "last_seen": "2026-06-01T12:36:50.386274+00:00",
-    "occurrence_history": [
-      "2026-06-01T12:36:50.386274+00:00"
-    ]
-  },
-  {
-    "id": "881d4058-5474-43e7-aa1d-0d3261feef11",
-    "pattern": "When implementing a feature that touches optional integrations or third-party modules, the agent must proactively verify the feature degrades gracefully when the integration is absent in other environments (e.g., dev-only env vars missing in prod).",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "781e356c-3e00-46fa-b981-b2bc599fbda0",
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "431b5ec9-1588-48e6-b243-18e4dadadf49"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-02T13:28:33.968421+00:00",
-    "last_seen": "2026-06-02T13:28:33.968421+00:00",
-    "occurrence_history": [
-      "2026-06-02T13:28:33.968421+00:00"
-    ]
-  },
-  {
-    "id": "3b31ed66-3758-48ee-acf4-a30371b024e6",
-    "pattern": "Optional modules that gate on an env var must be verified to degrade gracefully when that var is absent in every target environment (dev, staging, prod) before shipping.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "781e356c-3e00-46fa-b981-b2bc599fbda0",
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "431b5ec9-1588-48e6-b243-18e4dadadf49"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-03T17:45:18.122629+00:00",
-    "last_seen": "2026-06-03T17:45:18.122629+00:00",
-    "occurrence_history": [
-      "2026-06-03T17:45:18.122629+00:00"
-    ]
-  },
-  {
-    "id": "eb42154d-7bec-4714-928b-3449f9447de1",
-    "pattern": "When the agent runs a /skeptical-review before completing the user's explicit original request, this ordering violates the user's intent — complete the stated task first, then offer or run quality checks.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
-      "431b5ec9-1588-48e6-b243-18e4dadadf49",
-      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
-      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-04T13:18:21.538564+00:00",
-    "last_seen": "2026-06-04T13:18:21.538564+00:00",
-    "occurrence_history": [
-      "2026-06-04T13:18:21.538564+00:00"
-    ]
-  },
-  {
-    "id": "673326c2-6038-4db2-9f70-4276561d9a49",
-    "pattern": "State model enums should have a small core set of named states; edge-case failure modes belong as metadata fields alongside the state, not as additional enum variants. Enum sprawl for every failure scenario is an anti-pattern.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
-      "431b5ec9-1588-48e6-b243-18e4dadadf49",
-      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-04T17:33:50.113929+00:00",
-    "last_seen": "2026-06-04T17:33:50.113929+00:00",
-    "occurrence_history": [
-      "2026-06-04T17:33:50.113929+00:00"
-    ]
-  },
-  {
-    "id": "aa63fbe8-1ecc-47a2-840f-ed328c44d4f9",
-    "pattern": "Todo/task state should be kept continuously up to date during active work, not only when the user explicitly asks — stale todos over long sessions are a recurring friction point.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "77a7c308-4982-40b1-90c4-e03ab43f0135",
-      "431b5ec9-1588-48e6-b243-18e4dadadf49",
-      "22c728c4-a7da-4f46-831e-2b29e2d90ca3",
-      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-05T12:42:12.279426+00:00",
-    "last_seen": "2026-06-05T12:42:12.279426+00:00",
-    "occurrence_history": [
-      "2026-06-05T12:42:12.279426+00:00"
-    ]
-  },
-  {
-    "id": "baf35e46-9b7d-4085-bd67-4bedb576acb0",
-    "pattern": "When a hook or automated suggestion fires mid-session, the agent must not act on it if doing so diverts from the user's stated immediate task; the original task takes priority over unsolicited suggestions.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "231597a7-7e58-4027-826c-711828888f93",
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "77a7c308-4982-40b1-90c4-e03ab43f0135"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-05T19:55:30.751415+00:00",
-    "last_seen": "2026-06-05T19:55:30.751415+00:00",
-    "occurrence_history": [
-      "2026-06-05T19:55:30.751415+00:00"
-    ]
-  },
-  {
-    "id": "13e58f64-8b44-4de7-82d4-9af7f45dcaf3",
-    "pattern": "Hook or reviewer suggestions (e.g. '/skeptical-review') that interrupt the user's declared next step should be surfaced as optional, not acted on proactively — the user's stated task takes priority over automated nudges.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "231597a7-7e58-4027-826c-711828888f93",
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "262a3a34-b043-48a6-bce6-c6fc97b092a9"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-08T12:01:12.819262+00:00",
-    "last_seen": "2026-06-08T12:01:12.819262+00:00",
-    "occurrence_history": [
-      "2026-06-08T12:01:12.819262+00:00"
-    ]
-  },
-  {
-    "id": "ca5987ec-36ba-4ca8-8043-3862147af2a4",
-    "pattern": "Agent-generated markdown files containing tables must be render-checked before the user is asked to review them; AI-produced tables frequently have formatting issues that make them unreadable without a verification pass",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
-      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
-      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
-      "cdcbc779-c484-4a60-9f02-5b9743913f63",
-      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-better-file-browser",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-13T17:02:59.417794+00:00",
-    "last_seen": "2026-06-13T17:02:59.417794+00:00",
-    "occurrence_history": [
-      "2026-06-13T17:02:59.417794+00:00"
-    ]
-  },
-  {
-    "id": "abf6b171-5b3b-4210-bc17-55459db28581",
-    "pattern": "Markdown tables generated in output files must use correct pipe-and-dash syntax and be verified to render properly; malformed tables that visually break are flagged by the user and require a cleanup pass before content can be reviewed.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "tool-use",
-    "source_sessions": [
-      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
-      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
-      "96b5e578-60c3-4a44-9336-1b54a97f1886",
-      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-15T17:22:48.309579+00:00",
-    "last_seen": "2026-06-15T17:22:48.309579+00:00",
-    "occurrence_history": [
-      "2026-06-15T17:22:48.309579+00:00"
-    ]
-  },
-  {
-    "id": "7b7c8dd3-4d9f-49e8-88e2-da8efb13d7ab",
-    "pattern": "Technical documentation must be formal, direct, and simple; flowery or marketing-style language ('why this matters', 'desperate' framing, show-off phrasing) is a recurring violation across multiple doc-writing sessions.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
-      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
-      "63efef27-0fc3-4de7-bec4-98021084f6bf",
-      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
-      "cdcbc779-c484-4a60-9f02-5b9743913f63",
-      "1de6fd5b-c60e-4e91-b2f4-30d21e8a07a5",
-      "1a008c39-1b0a-40d6-9406-700e5947427f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-better-file-browser",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-18T00:38:06.338091+00:00",
-    "last_seen": "2026-06-18T00:38:06.338091+00:00",
-    "occurrence_history": [
-      "2026-06-18T00:38:06.338091+00:00"
-    ]
-  },
-  {
-    "id": "45fb7b1d-d1b1-4e36-88b7-073e79799243",
-    "pattern": "For complex hand-rolled UI components, the user prefers the agent to plan first and review against existing design patterns before implementing — never one-shot a non-trivial custom widget.",
-    "valence": "positive",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "41a73142-3baa-4a2a-a065-ffa50bf122cd",
-      "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
-      "db668075-63c3-4e85-a290-d63a116bd5fc",
-      "63efef27-0fc3-4de7-bec4-98021084f6bf",
-      "3b248df0-1036-4a43-8031-156c136ebd51",
-      "6d1a32cf-ef44-4b70-843e-aac1a5de2f01",
-      "22fc3c6e-b400-4b15-bc3a-6af194256ad2",
-      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
-      "cdcbc779-c484-4a60-9f02-5b9743913f63",
-      "74ced694-ee6d-4feb-9123-47c36f51a37e",
-      "5fd458bf-8cbd-4380-8d28-3ac9cb9f0121",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
-      "1a008c39-1b0a-40d6-9406-700e5947427f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-better-file-browser",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-18T22:44:48.169152+00:00",
-    "last_seen": "2026-06-18T22:44:48.169152+00:00",
-    "occurrence_history": [
-      "2026-06-18T22:44:48.169152+00:00"
-    ]
-  },
-  {
-    "id": "e0efbf93-3db5-4ba7-b7b5-89640905ddd3",
-    "pattern": "Data pipeline work involves scraping, transforming, and upserting product data with attributes, descriptions, and images",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "domain",
-    "source_sessions": [
-      "08521d3b-2df1-463d-b71e-a778b2d08c60",
-      "e64d4561-3356-4ef7-aa4b-bdb66acd60cc",
-      "c8140d66-4d7b-4892-91b7-6222b60ced69",
-      "0638c029-1f2a-450f-9b9c-eef444ec91e4",
-      "f53f114b-2dfd-460f-91f5-485be7aaeb6c",
-      "a61ed0dc-7648-468b-a431-d063d59a4dba",
-      "7c3012f7-e4ef-4d4f-a034-b037a34e1ff2",
-      "fe626f1c-703d-4774-afe6-44891346711d",
-      "fbec9ce8-2b5a-431d-8bd2-3dceadc714b2",
-      "fb6c3920-f8e4-4fd4-b150-7bae1511665f",
-      "f14e5106-413a-4b36-bc1a-aa3b371155c5",
-      "ee179ffd-3c57-4642-bceb-e623f35bf23a",
-      "e54774ff-6758-4317-b9b3-020ccf89e7ef",
-      "df9fedad-41ef-4a0b-b19a-4458f65553d6",
-      "da11d616-5e52-4bdd-9924-c68afbe964e0",
-      "c1cb95ab-4074-4704-a5f8-e3fedb97be30",
-      "c054c2ca-725f-49f4-9ff6-e4f0b2d57875",
-      "be48a6be-c07b-4972-b8d3-e0dcb483d1f6",
-      "bdb1e751-86aa-4b56-a8e4-68ca7c007bf3",
-      "b1d888d2-5f5c-4d74-9562-16dcc80d5bf0",
-      "ade810ab-a543-4433-8d96-1af9471fd429",
-      "a13593fa-4d1a-444e-bc00-3192bfdc630d",
-      "a072b2e5-c991-4bee-88c4-d1e60ca3820c",
-      "9fb58564-8866-482b-9e7f-45005b2d1059",
-      "9c81d911-bea3-4c5f-99c4-b17b584f952d",
-      "93934cc8-2faa-4a4f-bc42-18ecf088ea86",
-      "90748f54-4841-48a4-ab9c-a771b25284fd",
-      "8f7160d4-0fab-4497-b9ba-690df80ae694",
-      "88124426-5737-4412-a908-c0b0f66fa9a7",
-      "7b3bd22c-9f0f-4fc8-8e48-4a03d9c9c0c8",
-      "78e02fd2-e9b8-4ca3-806b-d665d3674b5c",
-      "6d116e0d-e962-4085-aa6f-d509e7fbee94",
-      "6cbddf94-5b8f-419e-a0e3-6d2e36ab2790",
-      "61b0f22e-77cd-47fc-9b5a-ec98cfbd6a08",
-      "58e53a86-ef13-4813-af0b-92c6932e93a4",
-      "4b436540-26f7-4659-9035-162a91a075f2",
-      "46b9ac32-fc5e-4878-9b62-751a85b513be",
-      "41114217-9065-4efe-a37e-49edce3d9476",
-      "3b570a5b-8fdc-4685-86c8-e7714c921345",
-      "34766b65-4e6a-4628-bbff-5974a8a7d559",
-      "32a3f3c9-742c-497d-a72d-9926041f42e4",
-      "27b2d56f-7b47-4698-990b-e731ba5da39e",
-      "218950b7-10a5-474d-849a-d22f948b699c",
-      "206996c5-52a2-4e2e-a8c7-9bd3bdbb400a",
-      "1fcf80eb-15e1-4fd6-ae18-4891941eae13",
-      "192e0dab-6636-4142-81f3-f7b6a112a47c",
-      "182c8f72-cd18-4c8e-bc59-be5a432c0b62",
-      "0ecd7e46-44b9-49d7-bf9c-8c06c5a6eaf5",
-      "08dcfa69-9339-406e-8b1e-6b47d4feaaa1",
-      "0607c124-dd03-4fb5-8cf3-ee404bf58a3f"
-    ],
-    "source_projects": [],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:11:44.033788+00:00",
-    "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "71584e9e-2556-4c0f-b671-ce1301df4e63",
-    "pattern": "High tool-use turns (50-103 tools) occur during complex multi-file refactoring or full pipeline execution tasks",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "tool-use",
-    "source_sessions": [
-      "08521d3b-2df1-463d-b71e-a778b2d08c60",
-      "e64d4561-3356-4ef7-aa4b-bdb66acd60cc",
-      "c8140d66-4d7b-4892-91b7-6222b60ced69",
-      "0638c029-1f2a-450f-9b9c-eef444ec91e4",
-      "f53f114b-2dfd-460f-91f5-485be7aaeb6c",
-      "a61ed0dc-7648-468b-a431-d063d59a4dba",
-      "7c3012f7-e4ef-4d4f-a034-b037a34e1ff2",
-      "fe626f1c-703d-4774-afe6-44891346711d",
-      "fbec9ce8-2b5a-431d-8bd2-3dceadc714b2",
-      "fb6c3920-f8e4-4fd4-b150-7bae1511665f",
-      "f14e5106-413a-4b36-bc1a-aa3b371155c5",
-      "ee179ffd-3c57-4642-bceb-e623f35bf23a",
-      "e54774ff-6758-4317-b9b3-020ccf89e7ef",
-      "df9fedad-41ef-4a0b-b19a-4458f65553d6",
-      "da11d616-5e52-4bdd-9924-c68afbe964e0",
-      "c1cb95ab-4074-4704-a5f8-e3fedb97be30",
-      "c054c2ca-725f-49f4-9ff6-e4f0b2d57875",
-      "be48a6be-c07b-4972-b8d3-e0dcb483d1f6",
-      "bdb1e751-86aa-4b56-a8e4-68ca7c007bf3",
-      "b1d888d2-5f5c-4d74-9562-16dcc80d5bf0",
-      "ade810ab-a543-4433-8d96-1af9471fd429",
-      "a13593fa-4d1a-444e-bc00-3192bfdc630d",
-      "a072b2e5-c991-4bee-88c4-d1e60ca3820c",
-      "9fb58564-8866-482b-9e7f-45005b2d1059",
-      "9c81d911-bea3-4c5f-99c4-b17b584f952d",
-      "93934cc8-2faa-4a4f-bc42-18ecf088ea86",
-      "90748f54-4841-48a4-ab9c-a771b25284fd",
-      "8f7160d4-0fab-4497-b9ba-690df80ae694",
-      "88124426-5737-4412-a908-c0b0f66fa9a7",
-      "7b3bd22c-9f0f-4fc8-8e48-4a03d9c9c0c8",
-      "78e02fd2-e9b8-4ca3-806b-d665d3674b5c",
-      "6d116e0d-e962-4085-aa6f-d509e7fbee94",
-      "6cbddf94-5b8f-419e-a0e3-6d2e36ab2790",
-      "61b0f22e-77cd-47fc-9b5a-ec98cfbd6a08",
-      "58e53a86-ef13-4813-af0b-92c6932e93a4",
-      "4b436540-26f7-4659-9035-162a91a075f2",
-      "46b9ac32-fc5e-4878-9b62-751a85b513be",
-      "41114217-9065-4efe-a37e-49edce3d9476",
-      "3b570a5b-8fdc-4685-86c8-e7714c921345",
-      "34766b65-4e6a-4628-bbff-5974a8a7d559",
-      "32a3f3c9-742c-497d-a72d-9926041f42e4",
-      "27b2d56f-7b47-4698-990b-e731ba5da39e",
-      "218950b7-10a5-474d-849a-d22f948b699c",
-      "206996c5-52a2-4e2e-a8c7-9bd3bdbb400a",
-      "1fcf80eb-15e1-4fd6-ae18-4891941eae13",
-      "192e0dab-6636-4142-81f3-f7b6a112a47c",
-      "182c8f72-cd18-4c8e-bc59-be5a432c0b62",
-      "0ecd7e46-44b9-49d7-bf9c-8c06c5a6eaf5",
-      "08dcfa69-9339-406e-8b1e-6b47d4feaaa1",
-      "0607c124-dd03-4fb5-8cf3-ee404bf58a3f"
-    ],
-    "source_projects": [],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:11:44.033788+00:00",
-    "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "5eb7ad61-3993-45a1-adc5-801090d57609",
-    "pattern": "Long-running tasks are broken into parallel sub-tasks using a task notification system, with many tasks completing asynchronously (0 tools, 0 reply chars on notification receipt)",
-    "valence": "positive",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "0214bd92-2715-4a4a-8968-20207a47a302",
-      "98e3ef12-cf4c-42a6-9930-166ec2dd706d",
-      "f547df25-456e-4550-a7c7-bbc31a096ae4",
-      "ec1f9eb3-19b4-4a2c-b01c-26e5c0e6ba7c",
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "d77eb2b1-0808-41af-a02e-b679829a88cc",
-      "d35772e9-5b4d-4bcb-8e9d-e116768b4904",
-      "ce576b4e-e741-45db-a636-c9ce09389c90",
-      "bf4d0f03-0c66-4233-a10a-e34d2ba24785",
-      "9f64da98-4117-4823-8386-6f6404b2d6bb",
-      "98cd111e-f8dc-467d-9862-b07bf8a959bb",
-      "905740d0-58eb-42d4-b1b3-be87eddfa6d2",
-      "8d21c264-9f38-4241-b473-104a62e06355",
-      "89fc4bc3-5269-4395-add8-ca14d3f81775",
-      "86954229-41d6-44ec-92d1-171e6d076196",
-      "847f6704-b4f1-4e3d-b684-9b841e879a2a",
-      "83b8c5de-2ee9-49bd-bc5f-0a965864ac82",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "6fa91e14-2cea-4044-a6d8-660a652cf5ef",
-      "5d0f438f-30db-4cc5-80f8-089a83162d0d",
-      "523b871b-64a4-443c-b166-e8fec59b881b",
-      "4d2b6539-43c8-46c1-829a-6b28ca42b8c1",
-      "4275366d-dce0-4a07-a936-4a9a19f7410b",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "381c2091-ccf1-48ad-bf60-faea5fac21ea",
-      "35bc8216-e1ad-4940-b809-3327d251141b",
-      "2f469242-e407-43ba-adc4-4d015d6845b9",
-      "259c4c02-aec5-434c-8ccd-a8820c1a32e2",
-      "11a16e89-2c8b-42ac-b5d3-67c4d9621ca8",
-      "0d395ccb-df17-4d9d-aeb1-a5fb9ba9b22d",
-      "3917e720-6f65-4b7e-afe7-8c1cf2e51f55",
-      "1baa92ba-0005-41eb-b1f8-0de4f054fa3c",
-      "fc214d6e-aa71-4006-8ec8-4683d9195f86",
-      "e0159e2a-0feb-4bd6-896b-10a5280d3f00",
-      "d79f6481-b0a9-4446-87c4-4549b809c17c",
-      "c7530bf3-6469-48d9-b4f3-92d906096818",
-      "b220fd07-504d-40d7-8c5a-b062e7a924dd",
-      "ac02ffb7-26d7-43b7-9a16-c113aeab4940",
-      "a9933293-eacb-4c1e-8c77-463ab008480f",
-      "a63db45b-fadd-46db-9b6c-eee2bcf19977",
-      "a1272563-dd30-494b-9da7-9975f4a51253",
-      "9b96947f-b5c6-4711-9951-4cb675ef0933",
-      "859e3f01-a31a-495b-8dbc-85439da2a88f",
-      "82f5015f-3731-4075-b40c-19e5c4d897d5",
-      "8032a1f1-878a-4689-9ccf-257fe2e88e6a",
-      "782de3cb-2b28-4db1-8868-084f5f627fab",
-      "6ee158bd-dfaf-4192-a591-fe85abc2b8c8",
-      "6c11c940-a5ee-49f2-8f85-c86720adc8a6",
-      "692b6519-65c0-463d-8232-6ed34b0a9012",
-      "60600d48-2d71-4bc3-bbe8-367bfa55be9b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-backend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:12:22.674979+00:00",
-    "last_seen": "2026-04-14T16:12:22.674979+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "77e94f2c-f370-4a50-8c81-af479573573d",
-    "pattern": "User uses model switching (opus vs sonnet) strategically across sessions, suggesting awareness of cost/capability tradeoffs",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "user-preference",
-    "source_sessions": [
-      "0214bd92-2715-4a4a-8968-20207a47a302",
-      "98e3ef12-cf4c-42a6-9930-166ec2dd706d",
-      "f547df25-456e-4550-a7c7-bbc31a096ae4",
-      "ec1f9eb3-19b4-4a2c-b01c-26e5c0e6ba7c",
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "d77eb2b1-0808-41af-a02e-b679829a88cc",
-      "d35772e9-5b4d-4bcb-8e9d-e116768b4904",
-      "ce576b4e-e741-45db-a636-c9ce09389c90",
-      "bf4d0f03-0c66-4233-a10a-e34d2ba24785",
-      "9f64da98-4117-4823-8386-6f6404b2d6bb",
-      "98cd111e-f8dc-467d-9862-b07bf8a959bb",
-      "905740d0-58eb-42d4-b1b3-be87eddfa6d2",
-      "8d21c264-9f38-4241-b473-104a62e06355",
-      "89fc4bc3-5269-4395-add8-ca14d3f81775",
-      "86954229-41d6-44ec-92d1-171e6d076196",
-      "847f6704-b4f1-4e3d-b684-9b841e879a2a",
-      "83b8c5de-2ee9-49bd-bc5f-0a965864ac82",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "6fa91e14-2cea-4044-a6d8-660a652cf5ef",
-      "5d0f438f-30db-4cc5-80f8-089a83162d0d",
-      "523b871b-64a4-443c-b166-e8fec59b881b",
-      "4d2b6539-43c8-46c1-829a-6b28ca42b8c1",
-      "4275366d-dce0-4a07-a936-4a9a19f7410b",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "381c2091-ccf1-48ad-bf60-faea5fac21ea",
-      "35bc8216-e1ad-4940-b809-3327d251141b",
-      "2f469242-e407-43ba-adc4-4d015d6845b9",
-      "259c4c02-aec5-434c-8ccd-a8820c1a32e2",
-      "11a16e89-2c8b-42ac-b5d3-67c4d9621ca8",
-      "0d395ccb-df17-4d9d-aeb1-a5fb9ba9b22d",
-      "3917e720-6f65-4b7e-afe7-8c1cf2e51f55",
-      "1baa92ba-0005-41eb-b1f8-0de4f054fa3c",
-      "fc214d6e-aa71-4006-8ec8-4683d9195f86",
-      "e0159e2a-0feb-4bd6-896b-10a5280d3f00",
-      "d79f6481-b0a9-4446-87c4-4549b809c17c",
-      "c7530bf3-6469-48d9-b4f3-92d906096818",
-      "b220fd07-504d-40d7-8c5a-b062e7a924dd",
-      "ac02ffb7-26d7-43b7-9a16-c113aeab4940",
-      "a9933293-eacb-4c1e-8c77-463ab008480f",
-      "a63db45b-fadd-46db-9b6c-eee2bcf19977",
-      "a1272563-dd30-494b-9da7-9975f4a51253",
-      "9b96947f-b5c6-4711-9951-4cb675ef0933",
-      "859e3f01-a31a-495b-8dbc-85439da2a88f",
-      "82f5015f-3731-4075-b40c-19e5c4d897d5",
-      "8032a1f1-878a-4689-9ccf-257fe2e88e6a",
-      "782de3cb-2b28-4db1-8868-084f5f627fab",
-      "6ee158bd-dfaf-4192-a591-fe85abc2b8c8",
-      "6c11c940-a5ee-49f2-8f85-c86720adc8a6",
-      "692b6519-65c0-463d-8232-6ed34b0a9012",
-      "60600d48-2d71-4bc3-bbe8-367bfa55be9b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-backend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:12:22.674979+00:00",
-    "last_seen": "2026-04-14T16:12:22.674979+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "5ebb155f-41f7-4d7b-8f76-68cb84897b5f",
-    "pattern": "Documentation generation is a major recurring task, often requiring 40-78 tool calls and multiple session continuations to complete",
-    "valence": "neutral",
-    "confidence": 0.85,
-    "category": "approach",
-    "source_sessions": [
-      "0214bd92-2715-4a4a-8968-20207a47a302",
-      "98e3ef12-cf4c-42a6-9930-166ec2dd706d",
-      "f547df25-456e-4550-a7c7-bbc31a096ae4",
-      "ec1f9eb3-19b4-4a2c-b01c-26e5c0e6ba7c",
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "d77eb2b1-0808-41af-a02e-b679829a88cc",
-      "d35772e9-5b4d-4bcb-8e9d-e116768b4904",
-      "ce576b4e-e741-45db-a636-c9ce09389c90",
-      "bf4d0f03-0c66-4233-a10a-e34d2ba24785",
-      "9f64da98-4117-4823-8386-6f6404b2d6bb",
-      "98cd111e-f8dc-467d-9862-b07bf8a959bb",
-      "905740d0-58eb-42d4-b1b3-be87eddfa6d2",
-      "8d21c264-9f38-4241-b473-104a62e06355",
-      "89fc4bc3-5269-4395-add8-ca14d3f81775",
-      "86954229-41d6-44ec-92d1-171e6d076196",
-      "847f6704-b4f1-4e3d-b684-9b841e879a2a",
-      "83b8c5de-2ee9-49bd-bc5f-0a965864ac82",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "6fa91e14-2cea-4044-a6d8-660a652cf5ef",
-      "5d0f438f-30db-4cc5-80f8-089a83162d0d",
-      "523b871b-64a4-443c-b166-e8fec59b881b",
-      "4d2b6539-43c8-46c1-829a-6b28ca42b8c1",
-      "4275366d-dce0-4a07-a936-4a9a19f7410b",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "381c2091-ccf1-48ad-bf60-faea5fac21ea",
-      "35bc8216-e1ad-4940-b809-3327d251141b",
-      "2f469242-e407-43ba-adc4-4d015d6845b9",
-      "259c4c02-aec5-434c-8ccd-a8820c1a32e2",
-      "11a16e89-2c8b-42ac-b5d3-67c4d9621ca8",
-      "0d395ccb-df17-4d9d-aeb1-a5fb9ba9b22d",
-      "3917e720-6f65-4b7e-afe7-8c1cf2e51f55",
-      "1baa92ba-0005-41eb-b1f8-0de4f054fa3c",
-      "fc214d6e-aa71-4006-8ec8-4683d9195f86",
-      "e0159e2a-0feb-4bd6-896b-10a5280d3f00",
-      "d79f6481-b0a9-4446-87c4-4549b809c17c",
-      "c7530bf3-6469-48d9-b4f3-92d906096818",
-      "b220fd07-504d-40d7-8c5a-b062e7a924dd",
-      "ac02ffb7-26d7-43b7-9a16-c113aeab4940",
-      "a9933293-eacb-4c1e-8c77-463ab008480f",
-      "a63db45b-fadd-46db-9b6c-eee2bcf19977",
-      "a1272563-dd30-494b-9da7-9975f4a51253",
-      "9b96947f-b5c6-4711-9951-4cb675ef0933",
-      "859e3f01-a31a-495b-8dbc-85439da2a88f",
-      "82f5015f-3731-4075-b40c-19e5c4d897d5",
-      "8032a1f1-878a-4689-9ccf-257fe2e88e6a",
-      "782de3cb-2b28-4db1-8868-084f5f627fab",
-      "6ee158bd-dfaf-4192-a591-fe85abc2b8c8",
-      "6c11c940-a5ee-49f2-8f85-c86720adc8a6",
-      "692b6519-65c0-463d-8232-6ed34b0a9012",
-      "60600d48-2d71-4bc3-bbe8-367bfa55be9b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-backend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:12:22.674979+00:00",
-    "last_seen": "2026-04-14T16:12:22.674979+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "2773a5b3-65d8-45a3-b9ad-933d815a2850",
-    "pattern": "SessionStart/clear hook errors were persistent and difficult to debug, requiring many iterations (16+ tools in one session) - hook initialization errors can cascade and block normal operation",
-    "valence": "negative",
-    "confidence": 0.85,
-    "category": "architecture",
-    "source_sessions": [
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "6045f539-b5aa-4d1f-8927-a2f5f316a505",
-      "5b2a0ad6-5e9c-473e-8151-f092e018308f",
-      "50f6ef35-bd87-484f-b3b2-d6b2964fefa2",
-      "46a6732c-3554-4639-9a8b-c2fe6f8e42e8",
-      "4244fa57-10d7-4ed3-9caa-e03f1fd3ce17",
-      "395ace67-063c-440e-9d31-74e39870d932",
-      "32f8924a-4f4c-4adb-a5ec-93cd3b093898",
-      "1db5719f-b41a-4c6a-8017-ef461125586b",
-      "177b9977-412e-4e90-8210-312e297bc0c3",
-      "17336869-a7a2-43e0-96cb-f85a801c1242",
-      "132df131-8888-4882-bb57-fe136ce18188",
-      "0d66f582-3c44-4fcd-bc53-15841207f94a",
-      "0337ff18-532b-4817-8fe5-a4cd23fbc456",
-      "01a0c26f-a80b-4432-be87-cde2368ed9b0",
-      "fce0cfb0-3f7f-4096-be02-986f86af2d8c",
-      "fb686b5b-42d0-4bfd-a9e1-6e9fe36b6367",
-      "d97b1209-c6a0-4588-b1bb-b7090d41887d",
-      "c9f07d32-1667-4da6-abb7-7b8d33509bc5",
-      "ab88d258-e627-4cf9-9fb1-ba6db64c3e8c",
-      "a90f3d07-577d-4b5e-a02d-ce610242161e",
-      "9c5ac644-99b5-4672-b421-f3fe74b9f418",
-      "95888be1-250e-4ad6-ab8a-8a65d4ab7410",
-      "903bf1ee-1aef-44fe-880f-2c115ae4d6d4",
-      "7d536f5c-a537-4b63-9a17-cb4b10f52ba7",
-      "75980057-8b0b-401d-9774-0849be1cebaa",
-      "711760c5-570f-4609-a0eb-b8458bdc2be4",
-      "673ffaff-91ed-4f44-ad55-8e3ef8285ad1",
-      "63ddcde8-e9ef-48bd-b17c-8fdf48c52dbb",
-      "492ed652-39ad-44ae-9b58-d0fcd8b731c9",
-      "478ca83a-4dac-450f-8cc9-5f248788b3ec",
-      "41bb2d03-f83d-445b-9dba-3b27e95f1127",
-      "3c08619e-473e-49a1-b2e7-fd15f6b11e04",
-      "36abbb13-454d-408a-abb0-b00a76df6d02",
-      "2b5f4376-89de-4298-b74b-fcd6e35e3f9f",
-      "269c2b24-e923-4bbe-88db-ad576384cdad",
-      "04cb8e88-61c7-44a8-805f-efa58566f786",
-      "fc4190a7-4a9f-43f8-9f88-dc33a0f476bc",
-      "fa35f0f2-5779-4cdb-9a77-8416cd79c6a8",
-      "fa0b19cf-401e-4f16-9073-4dad791c0cd7",
-      "f30f14f2-0551-4509-ad65-afb3d7a4f125",
-      "ebe4cff7-314b-409c-9c90-9eb3d02609e5",
-      "e7efa79a-ce6d-408e-8344-1d6b97402f25",
-      "d4d7d724-59cd-4465-94fc-ef1c5c41b092",
-      "c791649f-3aef-4555-88a9-7c9027214f78",
-      "c45893b1-576f-4cc8-aa07-ab42ccb0157e",
-      "c0e02ead-244e-417b-a742-0fd55f5e61be",
-      "bef35823-b858-4982-a85b-d3d3330b024c"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:27:03.749609+00:00",
-    "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
   }
 ]

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-05-24T21:30:49.352046+00:00 · 19 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-20T02:07:06.817344+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-General-purpose home directory work spanning multiple concurrent long-running projects (iDream dashboard, geopolitical simulation, SvelteKit pipelines). Sessions are heavily continuation-based with frequent context compaction.
+Global developer config and cross-project tooling under `~/.claude` — the dominant work pattern is long stateful sessions across multiple concurrent projects (iDream dashboard, geopolitical sim, SvelteKit pipeline) that routinely exceed context windows and require structured continuity.
 
 ## Things to do (or keep doing)
-- Run `/catchup` at session start; auto-detect active project from CWD before loading context
-- Checkpoint with `/core-dump` at tool #20 (not #30) — these sessions hit compaction earlier than average
-- Prefer generic, reusable test patterns with consistent naming; verify each change independently before moving on
-- After any compaction, worktree switch, or continuation: run a state-verification pass (`git status`, process list, file existence) before any side-effecting op
+- Run `/catchup` at session start; identify active project via CWD before loading any context
+- Use `/core-dump` mid-session at milestones (tool #20–30), not only at exit
+- Prefer generic, reusable test patterns with consistent naming over one-off implementations
+- After any context compaction or worktree switch, verify current state (`git status`, process list, file existence) before taking side-effecting actions
 
 ## Things to avoid
-- Don't cross env var conventions: frontend booleans use `true`/`false`; backend uses `1`/`0` — never swap
-- Don't expose vars as `NEXT_PUBLIC_` (or client-bundle equivalents) unless they genuinely need browser access; flag proactively
-- Don't make architectural authority claims ("X is the source of truth for Y") without reading the actual schema/code first — name the file:line
-- Don't delete or consolidate a server/client component split before investigating why the split exists
+- Don't cross env var conventions: frontend booleans use `true`/`false`; backend uses `1`/`0`
+- Don't make architectural authority claims ("X is the source of truth") without reading the actual file:line — grep first, assert after
+- Don't write em-dashes, `Label:fragment` rows, or re-raised settled decisions into human-facing artifacts (PR descriptions, docs)
+- Don't expose env vars with `NEXT_PUBLIC_` (or equivalent) unless the client genuinely needs them — proactively flag when server-only vars get client-bundle prefixes
 
 ## Open questions / known gaps
-- Context restoration overhead often exceeds actual work cost (18–70 tool calls just for `/catchup`); no mitigation in place for when WAL/checkpoint files are missing or corrupt
-- Cache invalidation blast radius (shared `revalidateTag` patterns) has surfaced repeatedly — unclear if a project-level convention for scoping cache keys exists
+- State verification after compaction is inconsistently applied — stale git/process assumptions are a recurring failure class
+- Low-signal sessions with sparse metadata may inflate pattern confidence; treat single-source pattern claims with skepticism until corroborated

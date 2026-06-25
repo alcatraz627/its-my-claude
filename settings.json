@@ -629,6 +629,15 @@
             "command": "python3 ~/.claude/scripts/hooks/guard-settings-write.py"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/tmp-jail-guard.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -882,6 +891,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/session-mgmt/enqueue-auto-coredump.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/tmp-jail-cleanup.sh"
           }
         ]
       }

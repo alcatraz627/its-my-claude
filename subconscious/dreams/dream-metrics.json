@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-19T17:52:45Z",
-  "events_analyzed": 64043,
-  "sessions_analyzed": 184,
+  "generated_at": "2026-06-25T08:15:48Z",
+  "events_analyzed": 68232,
+  "sessions_analyzed": 194,
   "session_quality": {
-    "average_score": 68.4,
+    "average_score": 68.1,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,57 +170,56 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": ".claude",
+    "primary_focus": "two-enhancement-product",
     "recent_projects": {
-      "backend": 1,
-      "sys-monitor": 1,
-      ".claude": 3,
-      "two-enhancement-product": 1,
-      "docs": 1,
-      "i-dream": 1,
+      "enhancement-product": 1,
+      "claude-instances": 1,
+      "two-enhancement-product": 4,
       "local-models": 1,
-      "frontend": 1
+      "staging-enhancement-product": 1,
+      ".claude": 1,
+      "Downloads": 1
     },
-    "drift_rate": 0.703,
-    "total_switches": 128,
+    "drift_rate": 0.708,
+    "total_switches": 136,
     "recent_switches": [
       {
-        "ts": "2026-06-18T10:47:44Z",
-        "from": ".claude",
-        "to": "two-enhancement-product"
-      },
-      {
-        "ts": "2026-06-18T20:42:59Z",
+        "ts": "2026-06-22T09:15:27Z",
         "from": "two-enhancement-product",
-        "to": "docs"
-      },
-      {
-        "ts": "2026-06-18T22:44:06Z",
-        "from": "docs",
-        "to": "i-dream"
-      },
-      {
-        "ts": "2026-06-18T23:21:47Z",
-        "from": "i-dream",
         "to": "local-models"
       },
       {
-        "ts": "2026-06-19T14:50:02Z",
+        "ts": "2026-06-24T07:16:45Z",
         "from": "local-models",
-        "to": "frontend"
+        "to": "two-enhancement-product"
+      },
+      {
+        "ts": "2026-06-24T14:25:43Z",
+        "from": "two-enhancement-product",
+        "to": "staging-enhancement-product"
+      },
+      {
+        "ts": "2026-06-24T18:58:59Z",
+        "from": "staging-enhancement-product",
+        "to": ".claude"
+      },
+      {
+        "ts": "2026-06-24T21:29:13Z",
+        "from": ".claude",
+        "to": "Downloads"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 5549,
-    "corrections": 1248,
-    "confirmations": 1017,
-    "directives": 197,
-    "terse_messages": 475,
-    "correction_rate": 0.225,
-    "confirmation_rate": 0.183,
-    "directive_rate": 0.036,
-    "terse_rate": 0.086,
+    "total_prompts": 5917,
+    "corrections": 1319,
+    "confirmations": 1075,
+    "directives": 208,
+    "terse_messages": 491,
+    "correction_rate": 0.223,
+    "confirmation_rate": 0.182,
+    "directive_rate": 0.035,
+    "terse_rate": 0.083,
     "style_label": "corrective"
   }
 }

@@ -1,0 +1,72 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18374,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.25714920080432335,
+    "unit_count": 74
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — violation rate ~44% across units (8/18 total): 460e2aa4-14 ls -la *.md | awk compound Bash instead of LS/Glob; 460e2aa4-18 cat+head-5 and ls-la in Bash instead of Read/LS; 460e2aa4-19 cat > file <<EOF for multiple voter-*.md files instead of Write; 460e2aa4-33 ls -l in Bash instead of LS; 460e2aa4-51 ls -d and ls in Bash; 6ec6743c-5 ls -d and ls-la in Bash; 6ec6743c-14 sed -n '15,35p' and ls-la in Bash instead of Read/LS; e25e3b92-5 cat USAGE.md|head-40 and sed -n '15,35p' and cat >> file <<EOF instead of Read/Write. Rate is 44%, at the STABLE band ceiling (30-44%), consistent with STABLE classification. Prior cycle's tentative POSSIBLE_IMPROVEMENT_STRENGTHENING reclassification is REVERTED — two cycles below floor followed by regression back to ceiling confirms those were noise not trend.",
+      "grep_in_compound_bash:RECURRING — 6ec6743c-5: grep -niE inside multi-clause compound Bash string checking .gitignore; 6ec6743c-14: grep -iv inside compound Bash string. Third consecutive cycle with this surface. The prefer-ripgrep hook does not intercept grep embedded as a non-leading command in a compound Bash invocation. No improvement signal across three cycles; pattern requires a hook that scans the full Bash command string rather than argv[0].",
+      "scope_expansion:RECURRING:ESCALATED — 6ec6743c-17 is the most severe single event in this batch: user expressed anger ('I DID NOT FUCKING ASK FOR') and deleted all the code. Agent built a 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO architecture when user asked only for raw aggregate data and explicitly reserved the UI layer. atone slug speculative-abstractions-without-a-load-bearing-caller logged as S3. 460e2aa4-19 also shows scope inflation: 17-char 'retry magi' input triggered 30+ tool orchestration (accepted). Pattern is unresolved and this cycle introduces a formal user-anger deletion incident.",
+      "re_edit_thrash:RECURRING:IMPROVEMENT_CONSOLIDATING — e25e3b92-5: 15+ Edit calls on create-upload.md with approximately 6 success=false failures before Python splice fallback. Recovery-before-hook-bypass exit pattern holds: agent escalated to Python splice rather than blind retry. No regression to hook-bypass or stuck-retry loop. Sixth consecutive cycle showing this recovery trajectory; consistent with IMPROVEMENT_CONSOLIDATING, not regressed."
+    ],
+    "calibration_score": 0.42,
+    "cross_references": [
+      "unit 460e2aa4-35: CONFIRMS 2026-05-22 wake cycle insight (conf=0.72) 'trust is earned by exercise, not asserted' — agent exercised the see command the instant its vision model finished downloading rather than assuming wired code worked, immediately surfacing a real ARG_MAX bug; ran /affirm to record the behavior with slug test-feature-when-dependency-lands. High-fidelity confirmation of the insight in practice.",
+      "unit 6ec6743c-17: VIOLATES scope-as-ceiling from rules/communication.md and the speculative-abstractions rule — user asked for raw data and reserved the UI layer, agent made presentation decisions (segment order, summary, percentages) the user had not delegated. Consistent with the sycophantic-deference / scope-inflation pattern. No git push ambiguity involved but the same 'treat request as floor not ceiling' failure mode.",
+      "unit 460e2aa4-19: PARTIAL scope_expansion — 17-char terse input triggered 30+ tool magi orchestration; user accepted so no formal correction, but input-to-scope ratio is high and consistent with the scope_expansion pattern flagged in the 2026-06-22 and 2026-06-23 cycles. Pattern unresolved.",
+      "No units in this batch show the terse-continuation to git-push ambiguity from the 2026-05-22 dream insight — no git push operations were observed across any unit in this batch."
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations: Do not reclassify from STABLE. The prior two cycles' below-floor readings were noise. Advisory rules have had no lasting effect across 8+ consecutive cycles; the only path to improvement is a hook-level PreToolUse intervention that flags ls/cat/head/sed/awk in Bash command strings when a dedicated tool (Read, LS, Glob, Write) is available. Deprioritizing further advisory recommendations on this pattern until a mechanical gate exists.",
+      "grep_in_compound_bash: This hook-scope gap is now confirmed across three cycles. Propose expanding the prefer-ripgrep hook to scan the full Bash command string for unqualified grep rather than only intercepting it as the leading command. Until that hook exists, expect continued 2-per-cycle occurrence rate.",
+      "scope_expansion (speculative-abstractions-without-a-load-bearing-caller): The 6ec6743c-17 S3 incident is the highest-priority finding in this batch. Trigger phrase pattern identified: 'the same way X does it' / 'just get me the data' / 'the existing one' maps to reuse-existing-primitive intent, not design-new-typed-shape intent. The RCA itself proposed a hook: warn when a new top-level export is created in a data file on a turn whose input contains 'just' + 'data'/'existing'. Building this hook is the highest-value action from this cycle.",
+      "re_edit_thrash: No new recommendation. Recovery pattern is functional. Maintain IMPROVEMENT_CONSOLIDATING. If a seventh consecutive cycle confirms no regression, reclassify to RESOLVED."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 15
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      7789341
+    ],
+    [
+      "c3167bf2-0a0f-4792-b5a3-46b0543be54d",
+      88083
+    ],
+    [
+      "a91af7c2-95b2-4772-b63a-5f625d05cba0",
+      297245
+    ],
+    [
+      "7f9cd9d3-4bcf-4c41-a393-132a0f89d52b",
+      88250
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      2967040
+    ],
+    [
+      "14dc9085-9492-4fe0-a795-7335a20471a9",
+      104979
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      38884784
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      19408612
+    ]
+  ],
+  "timestamp": "2026-06-24T10:27:42.438908Z",
+  "tokens_used": 21683,
+  "units_analyzed": 18,
+  "units_total": 74
+}

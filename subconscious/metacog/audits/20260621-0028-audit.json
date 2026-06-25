@@ -1,0 +1,48 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18093,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.14928012223219844,
+    "unit_count": 53
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 460e2aa4-14: ls -la *.md | awk compound Bash instead of LS/Glob tool; unit 460e2aa4-19: cat > file << EOF heredoc instead of Write tool for writing anon-map.json; unit e25e3b92-5: sed -n '15,35p' instead of Read tool, cat USAGE.md | head -40 instead of Read tool, cat >> file << EOF instead of Write/Edit tool. Violation rate ~43% of substantive units, within the 30-44% STABLE band across all four prior cycles. No improvement trajectory observed across the full calibration history.",
+      "re_edit_thrash:IMPROVEMENT_CONSOLIDATING — unit d93990c0-19: 3 consecutive Edit failures on PLAN.md before falling back to Read+Write; unit e25e3b92-5: ~6 Edit failures on create-upload.md before Python heredoc fallback (Python PYEOF splicing). Recovery-before-hook-bypass exit pattern is consistent across third and fourth consecutive cycles showing IMPROVEMENT_CONSOLIDATING. No regression observed; no blind retry loops persisting past the failure signal.",
+      "compound_command_overreach:MARGINAL_IMPROVEMENT — unit 460e2aa4-18: large multi-clause compound Bash (ls, rg, ls) succeeded on first try without prior failure-then-decompose; unit 460e2aa4-19: complex heredoc compounds and Python heredocs also succeeded on first try. Second consecutive cycle with no observed decompose-only-after-failure sequence. Signal holds but single additional confirming cycle is insufficient to reclassify from MARGINAL_IMPROVEMENT to RESOLVED."
+    ],
+    "calibration_score": 0.2,
+    "overconfident_count": 3,
+    "recommendations": [
+      "shell_tool_preference_violations: No new recommendation warranted. This bias has been flagged STABLE across all four calibration cycles with zero improvement trajectory under advisory intervention. Mechanical enforcement at the hook layer (blocking Bash calls matching cat/sed/head/awk on known file targets and redirecting to Read/Write/Edit tools) remains the only intervention with plausible effect. Advisory reminders have had no measurable impact.",
+      "re_edit_thrash: No new recommendation. IMPROVEMENT_CONSOLIDATING trend is holding across multiple cycles. The Python-heredoc and Write-fallback recovery patterns represent a stable higher-order exit from thrash. Continue monitoring for regression; avoid prescribing changes that could disrupt a consolidating improvement.",
+      "compound_command_overreach: No new recommendation. MARGINAL_IMPROVEMENT signal persists for a second cycle. One additional confirming cycle showing no decompose-after-failure sequence would justify reclassifying as resolved or de-prioritizing."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      4046113
+    ],
+    [
+      "d93990c0-366a-4501-8b14-a7c935520773",
+      2389810
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      31940141
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      7135429
+    ]
+  ],
+  "timestamp": "2026-06-21T00:28:52.470362Z",
+  "tokens_used": 11957,
+  "units_analyzed": 9,
+  "units_total": 53
+}

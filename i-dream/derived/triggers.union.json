@@ -1,13 +1,13 @@
 [
   {
-    "id": "trig-adding-env-var-reads-without-checking-the-project-s-config-pattern",
-    "from_slug": "adding-env-var-reads-without-checking-the-project-s-config-pattern",
+    "id": "trig-ai-smell-prose-against-stored-voice",
+    "from_slug": "ai-smell-prose-against-stored-voice",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Adding env var reads without checking the project's config pattern",
+    "instruction": "default-LLM prose register against the user's stored human-voice preference",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260528-193712-da"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260619-194539-c9"
   },
   {
     "id": "trig-ascii-art-tables-instead-of-gum-tools",
@@ -23,7 +23,7 @@
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -80,16 +80,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-213044-93"
   },
   {
-    "id": "trig-narrow-param-not-folded-into-its-generalization",
-    "from_slug": "narrow-param-not-folded-into-its-generalization",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Kept priority_columns alongside the more-general column_groups instead of unifying",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-074349-5b"
-  },
-  {
     "id": "trig-orphaned-background-test-processes",
     "from_slug": "orphaned-background-test-processes",
     "from_source": "atone",
@@ -130,16 +120,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-143433-f2"
   },
   {
-    "id": "trig-review-missed-stale-caller-after-rename",
-    "from_slug": "review-missed-stale-caller-after-rename",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Release review documented a breaking rename but never grepped callers; inline import hid the stale caller until prod",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-134101-f2"
-  },
-  {
     "id": "trig-self-permitting-exception-to-an-adr-hard-rule",
     "from_slug": "self-permitting-exception-to-an-adr-hard-rule",
     "from_source": "atone",
@@ -160,6 +140,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-092351-5e"
   },
   {
+    "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
+    "from_slug": "speculative-abstractions-without-a-load-bearing-caller",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "Speculative abstractions without a load-bearing caller",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260624-071907-d0"
+  },
+  {
     "id": "trig-status-verdict-from-stale-mental-model-no-re-check",
     "from_slug": "status-verdict-from-stale-mental-model-no-re-check",
     "from_source": "atone",
@@ -177,7 +167,7 @@
     "instruction": "structural-claim-without-reading-code",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-074124-89"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260619-194737-86"
   },
   {
     "id": "trig-sub-agent-material-output-left-in-conversation-only",
@@ -190,23 +180,13 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-165639-53"
   },
   {
-    "id": "trig-audit-file-character-before-applying-global-rule",
-    "from_slug": "audit-file-character-before-applying-global-rule",
+    "id": "trig-test-feature-when-dependency-lands",
+    "from_slug": "test-feature-when-dependency-lands",
     "from_source": "affirm",
     "weight": "medium",
-    "instruction": "Audited destination file's character before moving code into it",
+    "instruction": "Run a feature the instant its blocking dependency lands — don't assume wired = works",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260529-115830-e9"
-  },
-  {
-    "id": "trig-scope-convention-change-to-one-consumer",
-    "from_slug": "scope-convention-change-to-one-consumer",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Scoped an S3 path-convention change to the matcher, not the shared org_s3_key helper",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260608-093823-51"
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260621-135213-c5"
   }
 ]

@@ -1,6 +1,6 @@
 # Insight Digest
 _Synthesized from the last 5 dream insights. Refreshes every 3h._
 
-## 2026-06-19 17:52 UTC
+## 2026-06-25 08:15 UTC
 
-The user enforces a strict asymmetric autonomy model: maximum execution autonomy on local/reversible work, zero autonomy on externally-visible side-effects like git push — and the repeated failure to honor this boundary has itself become a meta-level instance of the fix-thrash anti-pattern, with the same advisory correction recorded 15+ times without a mechanical enforcement gate. Across domains (git authorization, session context, config access), the user applies a single principle: prior-turn state is always expired and must be re-derived from canonical sources, never inherited. The core actionable signal is that advisory repetition at this frequency is diagnostic of a structural enforcement gap, not a behavioral correction target — the fix belongs in a PreToolUse hook, not another atone entry.
+The user relies heavily on terse single-word continuation signals ('ahead', 'yes', 'next', 'done') as execution directives, which creates a persistent ambiguity boundary: the same signal that means 'keep coding' gets misread as authorization for irreversible shared-state operations like git push or commit. Four of the five insights converge on this exact tension — the terse-autonomy rule and the per-push-fresh-approval rule are structurally in conflict, and the agent repeatedly over-generalizes task-execution autonomy into publish-state autonomy. Claude should treat any terse signal as scoped exclusively to local, reversible work, and always escalate to an explicit named confirmation before crossing any visibility boundary to shared state, regardless of conversational momentum.

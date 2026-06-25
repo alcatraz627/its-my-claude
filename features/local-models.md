@@ -1,17 +1,20 @@
 ---
-brief: Local-model CLI suite on this Mac — q (quick LLM), imagine (image gen), warm (residency), lm (front door); all on PATH, $0, offline
+brief: Local-model CLI suite on this Mac — q (quick LLM), imagine (image gen), see (image/screenshot → text via VLM), review (PR/code review), warm (residency), lm (front door); all on PATH, $0, offline
 triggers:
   - tool:lm
   - tool:q
   - tool:imagine
   - tool:warm
+  - tool:see
+  - tool:review
+  - topic:vision
   - topic:local-models
   - topic:ollama
   - topic:image-generation
 related: [features/llm-mini.md]
 tier: 2
 category: features
-updated: 2026-06-12
+updated: 2026-06-23
 stale_after_days: 90
 ---
 
@@ -29,6 +32,8 @@ goals + design rationale.
 |---|---|---|
 | `q "..."` | quick local answer (≤2 sentences) | intents: `cmd` (one macOS command) · `title` (2-5 words) · `commit` (`git diff \| q commit`) · piped stdin = input context · `q -c` continues the last exchange · deterministic (temp 0) |
 | `imagine "..."` | local image gen (Flux/Qwen, mflux) | `redo/vary/refine N` iterate on history entry N · `--enhance` (LLM prompt rewrite) · `critique IMG` (local vision) · `star N`/`prune`/`gallery` · auto-open is TTY-gated, so agent calls won't pop windows |
+| `see <img> [q]` | local vision: structural read of an image/screenshot (type + text + layout + state) or a grounded answer | `--json` → `{ok,text,model,ms}` · `-m minicpm-v` (default; strong-but-imperfect text — **verify exact strings/values, don't trust verbatim blindly**) or `gemma4:26b` · local-only, unloads after · permits interpretive asks |
+| `review <pr#\|file\|dir>` | local code review — the `review` intent on the code tier | `gh pr diff N \| review` · `review src/` · `cat x \| review` · `--json` · `-m` picks the coder |
 | `warm on\|off` | pin/unpin the small warm model (~5.6 GB) | residency is a deliberate human choice — agents should not toggle it unasked |
 | `lm` | front door: overview, `status`, `doctor`, `timeline` | `lm doctor` = full smoke check; `lm status` = server/resident/disk |
 

@@ -63,6 +63,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0020 | MAGI conformance gate — enforce full-mode voting at Phase-11 finalize (A1 voting gate + hygiene checks) | ✅ | 2026-06-17 | 2026-06-17 | [0020-magi-conformance-gate.md](0020-magi-conformance-gate.md) |
 | 0021 | MAGI setup-independence — evidence partitioning + pre-dispatch gate (D1/D5/D-prereq) | ✅ | 2026-06-17 | 2026-06-17 | [0021-magi-setup-independence.md](0021-magi-setup-independence.md) |
 | 0022 | Persona activation + efficacy logging — persona-log.sh, persona-suggest/persona-log-nudge hooks, dispatch wiring | ✅ | 2026-06-18 | 2026-06-18 | [0022-persona-activation-logging.md](0022-persona-activation-logging.md) |
+| 0023 | Session-scoped /tmp jail — PreToolUse confine hook + run/ dir + tmp-jail CLI (off user-only) | ✅ | 2026-06-25 | 2026-06-25 | [0023-tmp-jail-session-confine.md](0023-tmp-jail-session-confine.md) |
 
 ---
 
