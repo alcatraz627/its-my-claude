@@ -51,7 +51,7 @@ std::claude
 ├── ::plugins             Marketplace plugins                    → settings.json enabledPlugins
 ├── ::mcp          [facet]    MCP server config + catalog        → .mcp.json, mcp-catalog.json, shared/mcp-config.md
 ├── ::tui          [facet]    Styled output + rich input         → gum-tui.sh + inputs MCP + AskUserQuestion
-├── ::vision       [facet]    Screen perception + desktop automation → scripts/desktop.sh + annotate-screenshot.py + assets/images/ + shared/desktop-automation.md
+├── ::vision       [facet]    Screen perception + desktop automation → scripts/desktop.sh + annotate-screenshot.py + local-models `see` (VLM read) + assets/images/ + shared/desktop-automation.md
 ├── ::network             Internet + local network helpers       → ~/.claude/scripts/ (gen-nginx-conf.sh + future)
 ├── ::widgets      [facet]    macOS widgets + mini-apps          → ~/.claude/widgets/ + subconscious/dashboard.html
 ├── ::assets              Non-source file registry               → ~/.claude/assets/
@@ -282,8 +282,9 @@ The **elicit extension** — how Claude speaks to the terminal and solicits user
 | `~/.claude/scripts/annotate-screenshot.py` | Coordinate-grid overlay — lets Claude read exact pixel targets from screenshots instead of guessing |
 | `~/.claude/assets/images/` | Screenshot storage (timestamped names, never `/tmp`) |
 | `~/.claude/skills/shared/desktop-automation.md` | Reference: Phase 2 trigger, permission requirements, vision-loop pattern |
+| `see` (local-models; on PATH at `~/.local/bin/see`, source `~/Code/local-models/bin/see`) | Local VLM read — image/screenshot to structured text, all on-box ("the VLM parses, the agent reasons"). `see img.png [question] [--json]`. Complements annotate: `see` reads image *content*; annotate+grid reads *coordinates*. |
 
-The vision-loop pattern: screenshot → annotate → `Read` the annotated PNG → identify coordinates → act → screenshot again to verify. `cliclick` (brew), `screencapture`, and `osascript` are the underlying tools.
+The vision-loop pattern: screenshot → annotate → `Read` the annotated PNG → identify coordinates → act → screenshot again to verify. `cliclick` (brew), `screencapture`, and `osascript` are the underlying tools. To read image *content* (not coordinates), `see <img>` runs a local VLM (image → text) — the read half of the loop without a screenshot-annotate round-trip, useful for "what does this chart/UI say".
 
 **Color on vibrancy surfaces:** Custom `NSColor(red:green:blue:)` values get composited through macOS vibrancy and appear muddy. Use system colors with `.shadow(withLevel:)` to darken while preserving vibrancy-awareness. The color sampler tool (`::widgets`) can preview candidates against real NSMenu material. NSMenu dropdowns cannot be captured by `screencapture` — they dismiss on any focus change.
 

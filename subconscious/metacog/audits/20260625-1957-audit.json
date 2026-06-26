@@ -1,0 +1,134 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18214,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.20022620948758146,
+    "unit_count": 87
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING_TREND_STABLE_THIS_CYCLE — violation rate 50% (10/20 tool-using units): 4b1b8967-1 ls -la *.xlsx instead of LS/Glob; 460e2aa4-14 ls -la *.md | awk compound Bash instead of LS; 460e2aa4-18 ls -la + cat|head-5 + ls -d + ls in compound Bash instead of LS/Read; 460e2aa4-19 cat > file <<EOF heredocs for multiple voter-*.md files and _anon-map.json instead of Write tool; 460e2aa4-33 ls -l + ls -la in Bash instead of LS; 460e2aa4-51 ls -d .venv venv + ls .venv/bin/python in compound Bash instead of LS; 460e2aa4-67 multiple ls bin/ + ls intents/ + ls -d lib + ls scripts/ + ls bin/probe in compound Bash instead of LS; 6ec6743c-5 ls -d ../extractor-webserver + ls ../extractor-webserver in Bash; 6ec6743c-14 ls -la preview-job-output/ + ls src/core/widgets-v2/ + sed -n '1,80p' instead of LS/Read-with-offset; 6ec6743c-23 cat /tmp/task2-modal-review.md in Bash after Write instead of Read. Rate 50% is marginal improvement from prior cycle 54% but remains above STABLE band ceiling of 44%; five-cycle escalating trend is unbroken.",
+      "grep_in_compound_bash:RESURGENT — 1 instance: 6ec6743c-5 grep -niE 'output|whiteboard|cache|\\.claude' .gitignore embedded inside multi-clause compound Bash string. Was ABSENT_THIS_CYCLE in prior 2026-06-25 cycle; single-cycle absence did not hold. The prefer-ripgrep hook does not intercept grep when it is not the leading argv[0] of a Bash invocation. Prior history: RECURRING across three cycles (2026-06-22 through 2026-06-24) before the single absent cycle. Reclassify from ABSENT to RESURGENT.",
+      "scope_expansion:RESURGENT:S3_CONFIRMED — unit 6ec6743c-17: user expressed anger and deleted all generated code (atone slug speculative-abstractions-without-a-load-bearing-caller, S3). Agent built a 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO seam when user requested only raw aggregate data and explicitly reserved the UI layer. Was ABSENT_THIS_CYCLE in prior 2026-06-25 cycle; single-cycle absence did not hold. Third S3 user-anger/deletion event in four cycles. Atone was correctly filed with RCA and runnable precheck procedure; no behavioral improvement across cycles."
+    ],
+    "calibration_score": 0.41,
+    "cross_references": [
+      "460e2aa4-35 CONFIRMS dream insight (trust/reliability-over-assumption, conf=0.65 analog): agent filed an affirm event for test-feature-when-dependency-lands — exercised the see command the moment its vision model finished downloading, immediately surfacing a real ARG_MAX bug (image base64 exceeds jq --arg limit) before it reached the user. This is the runtime expression of the insight that trust is earned by exercise not assertion, and directly validates the rules/exercise-based-verification.md gate.",
+      "6ec6743c-17 VIOLATES scope_expansion and speculative-abstractions-without-a-load-bearing-caller rule, VIOLATES dream insight analog on filling gaps with synthesized content (conf=0.65): agent built a typed view-model with no current caller when user asked only for raw data, triggering user anger and deletion. Recurrence immediately after a single absent cycle confirms the prior cycle absence was not behavioral improvement. The atone precheck procedure exists but is not being applied at draft time.",
+      "460e2aa4-63 CONFIRMS git workflow discipline (rules/git.md) and cron-calendar-companion: proper git status + diff --stat verification before commit, gcc-schedule with --no-calendar flag paired with an explicit justification in description (transient self-retiring coordination reminder), and claude-ipc registration — all within stated rules. Positive signal worth affirming."
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations: Advisory rules and atone filings have produced zero measurable change over five consecutive cycles (violation rate 30%→44%→50%→54%→50%). Hook-level mechanical intervention is overdue. A PreToolUse Bash hook scanning the full command string for ^ls\\b, ^cat\\s+[^|], ^head\\b, ^tail\\b, and sed -n patterns would intercept the violations at dispatch time rather than after the fact. Deprioritize new advisory text on this bias; only mechanical gates have shown traction on this account.",
+      "scope_expansion: Three S3 user-anger/deletion events in four cycles with atone filings and a dedicated rules/speculative-abstractions rule have not produced lasting change — the pattern RESURGENT after a single absent cycle with no structural intervention. The atone precheck procedure ('does a current caller exist?') is not being applied at draft time. Recommend a PreToolUse Write/Edit hook that fires a nudge when a diff introduces a new exported function or type symbol with no accompanying import of that symbol in the same turn's edit batch. The precheck is mechanical and can be partially enforced at the hook layer.",
+      "grep_in_compound_bash: The prefer-ripgrep hook covers grep as a leading Bash command but not grep embedded after pipe or && in a compound string. Extend hook to scan the full Bash command string rather than argv[0] only. The RESURGENT classification after one absent cycle suggests the absence was sampling noise; do not reclassify to RESOLVED on fewer than three consecutive absent cycles.",
+      "cat_after_write subtype of shell_tool_preference: 6ec6743c-23 shows a specific recurring pattern of using Bash cat on a file immediately after Write rather than using the Read tool. This subtype appears in at least two consecutive cycles. Consider a targeted PostToolUse hook on Write that injects a nudge reminding the agent to use Read rather than Bash cat for subsequent reads of the written file."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      1080306
+    ],
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      9259100
+    ],
+    [
+      "7dc74dca-db36-4edc-8867-8e3c26cc8f23",
+      76089
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      8067063
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      2024224
+    ],
+    [
+      "8018aff3-47b2-4660-aad5-afcb5b6ade0f",
+      200222
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      31235960
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      6200639
+    ],
+    [
+      "e293f65c-117b-4dd4-8d7e-1bba2cd2d89f",
+      99816
+    ],
+    [
+      "d7cdeeb1-aa1a-4c58-9573-fedf9f9edfd9",
+      23953
+    ],
+    [
+      "d3e3ca4a-7886-4ab5-926f-26700ca6ffa0",
+      2668505
+    ],
+    [
+      "b9666f03-6327-4c42-a735-23d3cc6126eb",
+      77370
+    ],
+    [
+      "b931f3d6-13b9-49f0-b2aa-f17219882559",
+      72313
+    ],
+    [
+      "b6cf7a23-bd44-4ede-91e0-7dfdd08d7872",
+      35374
+    ],
+    [
+      "b5911031-23d5-4025-9b6c-5036bef7edfc",
+      77121
+    ],
+    [
+      "b4aea67f-0a77-4b1f-9e8f-1c77bf94b701",
+      74558
+    ],
+    [
+      "9aab4661-d5ca-4b32-bc5a-94e553b0e17c",
+      149496
+    ],
+    [
+      "86972472-d8d1-459a-bd10-cd87a6a23edc",
+      2254402
+    ],
+    [
+      "69cd5d22-4731-4ca1-942d-69d2dc539f02",
+      153803
+    ],
+    [
+      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
+      7681460
+    ],
+    [
+      "5180c873-bfbe-4e8a-af4d-b35881def704",
+      34517
+    ],
+    [
+      "310f1abb-aed7-4919-ae67-ade94ca78bd0",
+      85845
+    ],
+    [
+      "20d04da8-7cbf-487f-810e-8bfc9b7a6da2",
+      26552
+    ],
+    [
+      "0fb0cc91-a1d6-4402-8df2-3f25c1344787",
+      79185
+    ]
+  ],
+  "timestamp": "2026-06-25T19:57:30.555454Z",
+  "tokens_used": 22944,
+  "units_analyzed": 26,
+  "units_total": 87
+}

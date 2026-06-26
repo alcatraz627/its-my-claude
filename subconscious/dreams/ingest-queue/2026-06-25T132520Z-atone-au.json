@@ -1,0 +1,22 @@
+{
+  "ts": "2026-06-25T13:25:20Z",
+  "session_id": "atone-audit-a7",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260625-atone-audit-a7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**T2.1 \u2014 circuit breaker** (next, highest novel leverage): new `hinters/NN-atone-circuit-breaker.sh` (dispatched via `scripts/hint-injector.sh`); read the session counter, and when a slug count \u22652 AND (stakes high OR cluster A/C/E) inject a hard \"stop + plan + run precheck\" directive, dedup once per arming.",
+    "**T2.2 \u2014 authority-claim pause**: new Stop hook `scripts/hooks/authority-claim-pause.sh`, loop-safe like `scripts/hooks/declared-ready-stop.sh`; high-stakes only.",
+    "**T1.1 \u2014 stakes-aware hook flips (NUANCED carve-out)**: flip `guard-comment-hygiene.sh` + `guard-subagent-output.sh` to block only in high-stakes repos AND only the unambiguous subset \u2014 do NOT flip wholesale (subagent-output is advisory by deliberate design; comment-hygiene tier1_strip flags `[claude@]` which `rules/comments.md` permits). Verify against `skills/cleanup-comments/detect.py` first.",
+    "**T3.1** efficacy metric (`atone-consolidate.sh` \u2192 `derived/intervention-efficacy.json`, before/after counts split by the new `stakes` field \u2014 the falsifiability backbone). **T3.2** objective fired-and-ignored Stop detector. **T3.3** `juror_health` field + rollup.",
+    "**T4.1** remove/gate `hinters/50-atone-periodic-refresh.sh` (fired twice this session as ambient noise; keep `hinters/30-atone-nudge.sh`). **T4.2** mostly moot (`05-atone-tldr` already disabled). **T4.3** publish the honest cognitive-floor note via `atone-consolidate.sh` (mistake-patterns.md is DERIVED).",
+    "**Migrations + commit**: migration entries (gcc-hygiene) for events.jsonl `+stakes`, the new `.session-atone-slugs/` path, `stakes.json`+`stakes-tier.sh`, the juror dispatch change. Then COMMIT.md secret-scan + **selective** staging (repo is dirty with other sessions' work) + fetch/rebase. **Never push to main without fresh approval.**"
+  ],
+  "tags": []
+}

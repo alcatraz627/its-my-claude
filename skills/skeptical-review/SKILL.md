@@ -114,8 +114,17 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 > 3. **Sibling conventions** — `rg`/`ls` the same directory for siblings of the
 >    same kind (component, hook, route, helper). Does the new code match their
 >    shape, or invent a different one?
-> 4. **Reuse vs reinvention** — `rg` the tree for an existing function/type/util
->    that already does what the new code does. Was the wheel reinvented?
+> 4. **Right-sizing — fit, both directions** (per `rules/right-sized-code.md`) —
+>    judge the change against its *goal shape and scope*, not a blanket "less is
+>    better". Over-built: dead code, a speculative abstraction with one caller,
+>    reinvented stdlib/native, a dependency for a few lines (`rg` the tree for the
+>    util it duplicates). Mis-fit / under-built: a hand-rolled version of something
+>    the codebase or platform already does well (a bare `<div>` dropdown over the
+>    design-system component, an inlined copy that drifts from an existing util), or
+>    a guard / a11y / edge case simplified away to save lines. If the diff matches a
+>    shape the user explicitly asked for (a local helper they requested, a library
+>    they named), that intent is not a finding — flag the mismatch, never the
+>    obedience.
 > 5. **Documented code smells** — confirm/expand the pre-pass hits; check the
 >    well-known ones for the stack (error-string matching for flow, raw env
 >    reads, missing precondition guards on destructive UI, effect dep arrays).
@@ -159,3 +168,6 @@ incompatibility, subtle reinvention, bad comments — at review time.
   suspected authority / data-flow claim instead of asserting one.
 - `~/.claude/rules/exercise-based-verification.md` — the run-before-done gate this
   review precedes; the declared-ready Stop hook enforces it mechanically.
+- `~/.claude/rules/right-sized-code.md` — the judgment layer behind heuristic #4:
+  gate minimize-vs-fit on goal/scope/intent/total-cost before flagging either
+  over-building or false-minimalism.

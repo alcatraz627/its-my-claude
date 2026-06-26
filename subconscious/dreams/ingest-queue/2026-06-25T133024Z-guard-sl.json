@@ -1,0 +1,20 @@
+{
+  "ts": "2026-06-25T13:30:24Z",
+  "session_id": "guard-sl-7c-jun25",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260625-guard-sl-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**w4 (FINAL) STATUSLINE_WIDTH_DEBUG review** \u2014 automatic fire 2026-07-02 15:00 IST per `gcc-schedule list`. The final verdict decides whether to manually disable `STATUSLINE_WIDTH_DEBUG=1` in `~/.zshenv`. Calibrate the headline strictly to the data's scope this time (no \"exoneration is firm\" framing \u2014 only \"cols-picker continues to be correct in observed conditions\" or similar narrow phrasing). The bug-mangling lane is *separate* from this debug log, which the atone explicitly graduates.",
+    "**Experimental env knob test (parked)** \u2014 `~/.claude/guidance/notes.md` carries the standing directive. When the user next mentions tui/statusline/mangling/claude-code/ghostty/render in a session where they have free time and no other claude instances running, surface the knobs (`NATIVE_CURSOR`, `ALT_SCREEN_FULL_REPAINT`, `DISABLE_VIRTUAL_SCROLL`) one at a time. Diagnostic pair (`DEBUG_REPAINTS`, `FRAME_TIMING_LOG`) is for the bug thread if Anthropic asks.",
+    "**claude-instances v1 widget regression** \u2014 observation from the June 20 round (the widget slid back from 61% \u2192 57% after the cross-session merge fix landed) was reported as fixed by the user but the mechanism is still unclear (widget's own cache logic is separate from `.limits.json`). Listed as a possible follow-up; no commitment.",
+    "**Possible follow-up: `atone add --rca-content \"$(cat file)\"` shell-mangling** \u2014 the shell layer between `cat` and `atone.sh` column-aligns markdown tables and inserts `\u2026` truncation before the lint sees them, causing legitimate RCAs to be rejected as \"TTY-rendered-as-source.\" `--rca-file PATH` works correctly. Worth either (a) documenting the gotcha in atone's SKILL.md or (b) hardening `atone add` to strip-pretty `--rca-content` before lint. Not filing a proposal until I confirm it's reproducible (it might have been the heredoc-via-Bash auto-format hook the prior summary flagged)."
+  ],
+  "tags": []
+}

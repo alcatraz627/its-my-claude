@@ -1347,6 +1347,21 @@
     "auto_intention_id": null
   },
   {
+    "id": "e9c0b0f5-4860-4f7e-afa0-983259e3bc07",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "9a083747-313b-49ab-86ed-3d75731e07d5"
+    ],
+    "hypothesis": "The terse-continuation preference ('ahead' = keep going) directly contradicts the push-approval rule (never push without fresh confirmation), creating a boundary the agent must recognize: 'continue autonomously' has an invisible ceiling at side-effects visible to others.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "When a terse continuation signal arrives, always continue implementation work autonomously but never cross into externally-visible side-effects (push, PR, deploy, message) — those require explicit per-instance approval regardless of continuation context.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "73a03285-60d0-4fe8-907d-2e98e10bcbad",
     "patterns_linked": [
       "edaeaf8c-9b6e-4652-b777-ccedba905520",
@@ -3487,6 +3502,21 @@
     "auto_intention_id": null
   },
   {
+    "id": "15cc442a-3390-4e5e-b158-c5cf37828435",
+    "patterns_linked": [
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+    ],
+    "hypothesis": "The 18+ repeated recordings of the same git-push violation is itself a meta-instance of the 'repeated fix attempts without root cause analysis' pattern — the system keeps logging the symptom (unauthorized push) without addressing the root cause (lack of a mechanical enforcement gate), exactly mirroring the thrash-loop anti-pattern it documents.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "When the same behavioral pattern has been recorded more than 5 times, always escalate from advisory recording to mechanical enforcement (a hook, a gate, a tool constraint) — repeated logging without a gate is itself a thrash loop.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
     "patterns_linked": [
       "86e6683c-0a66-4f68-98ed-37c7e07c715e",
@@ -4570,37 +4600,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "Always treat permission state and knowledge state with the same skepticism after any boundary crossing (new operation, compaction, continuation) — if context was reconstructed rather than continuously held, re-verify both what you know AND what you're allowed to do.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "8b934eb7-9f35-4385-888b-05e1722a56a8",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07"
-    ],
-    "hypothesis": "The user's demand that terse messages ('ahead', 'yes', 'next') be treated as unconditional execution directives directly conflicts with the demand that approval never be inferred from conversational context — creating an ambiguity zone where a terse 'yes' after showing a diff could be over-interpreted as push authorization.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as execution directives for local/reversible actions only — never infer authorization for irreversible external side-effects (push, publish, send) from any terse or contextual signal, regardless of conversational momentum.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "2d541dc8-ee09-4d09-97b8-0178ce97d449",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "9a083747-313b-49ab-86ed-3d75731e07d5"
-    ],
-    "hypothesis": "The user's terse continuation style ('ahead', 'next', 'done') creates an ambiguity gradient where the agent correctly interprets terse signals as 'execute autonomously' for task work but incorrectly generalizes that autonomy to irreversible shared-state operations like git push — the boundary between 'continue working' and 'publish work' is invisible in terse input.",
-    "confidence": 0.62,
-    "actionable": true,
-    "suggested_rule": "Always distinguish 'continue-task' autonomy from 'publish-state' autonomy — terse continuation signals authorize the next implementation step but never authorize commit, push, deploy, or message-send without an explicit named action in the user's message.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

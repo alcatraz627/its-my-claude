@@ -351,3 +351,6 @@
 {"id":"cc8001b6-a739-4c8e-8d9c-8964b11049ed","timestamp":"2026-06-24T10:25:16.722812Z","phase":"all","sessions_analyzed":8,"patterns_extracted":8,"associations_found":5,"insights_promoted":1,"tokens_used":13252}
 {"id":"7ff784b6-caf0-4786-afc9-ab287ba1b84f","timestamp":"2026-06-24T17:06:28.276421Z","phase":"all","sessions_analyzed":3,"patterns_extracted":6,"associations_found":6,"insights_promoted":1,"tokens_used":8929}
 {"id":"576fab20-fcb5-48cc-aeb7-4a5dde9590a0","timestamp":"2026-06-25T00:48:28.878171Z","phase":"all","sessions_analyzed":6,"patterns_extracted":8,"associations_found":6,"insights_promoted":0,"tokens_used":13391}
+{"id":"8fc9136b-f93c-4be5-a176-81a9317406e4","timestamp":"2026-06-25T19:54:38.534521Z","phase":"all","sessions_analyzed":24,"patterns_extracted":9,"associations_found":6,"insights_promoted":1,"tokens_used":13572}
+{"id":"4d73bf3e-1ca5-46da-b10f-af9c713222bb","timestamp":"2026-06-26T00:53:31.026378Z","phase":"all","sessions_analyzed":5,"patterns_extracted":10,"associations_found":6,"insights_promoted":0,"tokens_used":13718}
+{"id":"13504370-daac-4fd9-8bcc-327529975a53","timestamp":"2026-06-26T16:45:49.107754Z","phase":"all","sessions_analyzed":6,"patterns_extracted":5,"associations_found":6,"insights_promoted":2,"tokens_used":13244}

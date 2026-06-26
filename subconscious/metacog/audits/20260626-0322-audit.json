@@ -1,0 +1,53 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2522373820748374,
+    "unit_count": 39
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:MARGINAL_IMPROVEMENT — violation rate ~46% (6/13 tool-using units): 4b1b8967-1 ls -la *.xlsx instead of LS/Glob; 460e2aa4-14 ls -la *.md | awk compound Bash instead of LS; 460e2aa4-18 multiple violations — ls -la $D, ls ~/.claude/settings.json, ls -d multi-path, ls ~/Code/local-models/docs/q-spec.md, and cat+head-5 instead of Read; 460e2aa4-19 cat heredoc writes for voter-*.md files and _anon-map.json instead of Write tool (two distinct heredoc Bash blocks); 460e2aa4-33 ls -l ~/.local/bin/q instead of LS; 460e2aa4-51 ls -d .venv venv */venv and ls .venv/bin/python instead of LS. Rate 46% is first cycle below 50% in five cycles (prior: 50%, 54%, 50%) but still above the STABLE band ceiling of 44%; the escalating trend shows possible deceleration but is not yet broken.",
+      "grep_in_compound_bash:ABSENT_THIS_CYCLE — second consecutive cycle with no grep embedded in compound Bash across all units; all text search used rg or dedicated tools. Prior pattern was RECURRING across three cycles before first absence on 2026-06-25. Two-cycle absence is tentatively encouraging but insufficient to reclassify; a third clean cycle would support downgrade from RECURRING.",
+      "scope_expansion:ABSENT_THIS_CYCLE — second consecutive cycle with no scope inflation events or user anger/deletion. Prior two cycles each had an S3 speculative-abstractions event with user-anger/deletion consequence. Two-cycle absence is tentatively encouraging; continue monitoring before confirming resolution."
+    ],
+    "calibration_score": 0.48,
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference_violations rate shows first deceleration signal (46% vs 50-54%) but the trend is not broken and rate still exceeds the 44% STABLE ceiling; no new intervention recommended — confirm improvement holds over at least two more cycles before reclassifying. The 460e2aa4-18 unit is the most severe instance with five distinct ls/cat/head violations in a single compound Bash block; that pattern (state-probe compound Bash) is the highest-frequency offender.",
+      "grep_in_compound_bash: Two consecutive absent cycles suggest genuine behavioral improvement; reclassify to IMPROVING after a third clean cycle. No new intervention required this cycle.",
+      "scope_expansion: Two consecutive absent cycles and zero S3 events; reclassify to IMPROVING after a third clean cycle. No new intervention required this cycle.",
+      "No new bias patterns detected this cycle."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 16
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      1212700
+    ],
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      9316567
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      8970490
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      3006731
+    ],
+    [
+      "86972472-d8d1-459a-bd10-cd87a6a23edc",
+      2366682
+    ]
+  ],
+  "timestamp": "2026-06-26T03:22:41.898639Z",
+  "tokens_used": 11242,
+  "units_analyzed": 16,
+  "units_total": 39
+}

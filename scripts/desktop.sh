@@ -30,6 +30,11 @@ set -euo pipefail
 
 IMAGES_DIR="$HOME/.claude/assets/images"
 ANNOTATE_SCRIPT="$HOME/.claude/scripts/annotate-screenshot.py"
+# Run the annotate helper's Pillow dep in uv's isolated, cached env — no global
+# install. Override with DESKTOP_PY (a python/command that already has Pillow).
+if [ -n "${DESKTOP_PY:-}" ]; then ANNOTATE_PY="$DESKTOP_PY"
+elif command -v uv >/dev/null 2>&1; then ANNOTATE_PY="uv run --with pillow python3"
+else ANNOTATE_PY="python3"; fi
 MIN_SCREENSHOT_BYTES=5120   # < 5KB = blank/failed capture
 
 mkdir -p "$IMAGES_DIR"
@@ -132,7 +137,8 @@ case "$cmd" in
     out="${base}-annotated.png"
     # Pass remaining args to the Python script
     shift 2
-    python3 "$ANNOTATE_SCRIPT" "$input" "$out" "$@"
+    # shellcheck disable=SC2086
+    $ANNOTATE_PY "$ANNOTATE_SCRIPT" "$input" "$out" "$@"
     echo "$out"
     ;;
 
@@ -274,12 +280,14 @@ OSASCRIPT
       echo "[FAIL] cliclick not found — install with: brew install cliclick"
     fi
 
-    # python3 + PIL for annotate
-    if python3 -c "from PIL import Image" &>/dev/null; then
-      echo "[OK] python3 + Pillow: annotation available"
+    # annotate's Pillow dep — isolated via uv (no global install)
+    if command -v uv >/dev/null 2>&1; then
+      echo "[OK] annotate: Pillow via uv (isolated, no global install)"
+    elif python3 -c "from PIL import Image" &>/dev/null; then
+      echo "[OK] annotate: python3 + global Pillow"
     else
-      echo "[WARN] Pillow not installed — annotate command unavailable"
-      echo "       Fix: pip3 install Pillow --break-system-packages"
+      echo "[WARN] annotate needs uv (recommended) or a python with Pillow"
+      echo "       Fix: install uv, or set DESKTOP_PY to a python that has Pillow"
     fi
 
     # Accessibility — test cliclick by moving mouse 0px (no-op)

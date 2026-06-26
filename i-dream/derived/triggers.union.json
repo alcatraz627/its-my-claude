@@ -23,11 +23,11 @@
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-101251-0c"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-112246-96"
   },
   {
     "id": "trig-dropped-existing-feature-during-rewrite",
@@ -40,10 +40,30 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260617-114343-a9"
   },
   {
+    "id": "trig-file-referenced-without-full-path",
+    "from_slug": "file-referenced-without-full-path",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Named a file by basename in a report instead of its full clickable path",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-141452-f5"
+  },
+  {
+    "id": "trig-filename-followed-by-period",
+    "from_slug": "filename-followed-by-period",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Ended a file path with a period, breaking terminal clickability (recurred despite the hook)",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-141452-84"
+  },
+  {
     "id": "trig-infra-before-grep",
     "from_slug": "infra-before-grep",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "infra-before-grep",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -167,17 +187,27 @@
     "instruction": "structural-claim-without-reading-code",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260619-194737-86"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-112025-2c"
   },
   {
-    "id": "trig-sub-agent-material-output-left-in-conversation-only",
-    "from_slug": "sub-agent-material-output-left-in-conversation-only",
+    "id": "trig-tui-primitive-without-required-affordances",
+    "from_slug": "tui-primitive-without-required-affordances",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Sub-agent material output left in conversation only",
+    "instruction": "Shipped zconvert -i on gum file, which lacks the search + full-path entry the user asked for",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-165639-53"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-141452-03"
+  },
+  {
+    "id": "trig-unprompted-infra-scope-creep",
+    "from_slug": "unprompted-infra-scope-creep",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "adding CI / hooks / automation in",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-095334-62"
   },
   {
     "id": "trig-test-feature-when-dependency-lands",

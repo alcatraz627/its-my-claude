@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-06-25T00:50:57.691862+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-26T01:15:49.505420+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A local LLM and image-generation tooling suite (`~/Code/local-models`) with heavy emphasis on persona/agent design, documentation pipelines, and CLI tooling. Work style is exploratory-then-structured: research phases translate into lean implementation docs and shipped CLIs.
+Local LLM tooling suite (`~/Code/local-models`) — shell wrappers (`q`, `lm`, `imagine`, `warm`) around Ollama and image-gen models, with JSONL history tracking and a no-idle daemon policy. Work style is exploratory research followed by lean implementation docs.
 
 ## Things to do (or keep doing)
-- Always surface actual test output for the user to inspect — never assert success without showing evidence
-- Use the Task tool (not TODO.md or plan.md) whenever work has ≥3 steps; keep the TUI list live throughout
-- Translate research/design phases into behavior-focused implementation docs before the session ends — raw synthesis is not a deliverable
-- Write terse single-sentence WHY comments only; omit anything that restates what the code does
+- Always surface actual command output for the user to inspect when claiming a test succeeded — raw stdout, not an assertion
+- Translate research/design phases into behavior-focused implementation docs immediately after the phase concludes; never leave raw synthesis as the deliverable
+- Use `trash` for all file deletion; no exceptions for "cleanup" or "temporary" files
+- Call the Task tool (`TaskCreate`/`TaskUpdate`) when managing todos — never write to `TODO.md` or `plan.md` as a substitute for the live TUI task list
 
 ## Things to avoid
-- Don't re-introduce deleted complexity or add unrequested features when the user has explicitly simplified — scope ceiling is absolute
-- Don't skip or defer explicitly invoked skills (`/atone`, `/core-dump`, etc.) — skipping a correction ritual mid-correction compounds the original mistake
-- Don't use `rm`; always use `trash` — the hook blocks rm unconditionally, no exceptions for "cleanup"
-- Don't open docs or PRs with "Why this matters" / motivational framing or em-dashes — direct, formal, lean prose only
+- Don't re-introduce complexity the user explicitly deleted; when asked for a simpler replacement, deliver exactly that
+- Don't skip or defer an explicitly invoked skill (`/atone`, `/core-dump`, etc.) — skipping a correction ritual mid-correction compounds the original mistake
+- Don't open docs with "Why this matters" or motivational framing; use direct, formal, factually grounded prose with no em-dashes or AI-smell phrasing
+- Don't complete peripheral work (research, persona design, tooling) and deliver it as the session result when a core deliverable was the stated goal
 
 ## Open questions / known gaps
-- Core deliverable risk: the session pattern shows peripheral work (research, personas, tooling) completing while the primary stated output ships late or not at all — verify the main deliverable is done before declaring a session complete
-- RCA files must start with `---` YAML frontmatter on line 1 or `atone.sh` rejects them silently (error 2)
+- RCA files for `/atone` require `---` YAML frontmatter on line 1 or the lint gate rejects them — easy to forget under pressure
+- Doc tone calibration is a recurring correction: "professional but lean" means behavioral/product-focused, not enterprise-heavy and not hacky

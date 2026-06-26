@@ -1,0 +1,57 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18378,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15929285639896448,
+    "unit_count": 32
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — violation rate 62.5% (5/8 tool-using units): 4b1b8967-1 ls -la *.xlsx instead of LS/Glob; 6ec6743c-5 ls -d ../extractor-webserver, ls ../extractor-webserver | head -30, ls -la automation/, ls -la *.json — 4 violations in one unit; 6ec6743c-14 ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/, sed -n '1,80p' instead of Read-with-offset, cat src/utils/hooks/use-job-data.ts | head -80 — 5 violations in one unit; 6ec6743c-22 cat on task output file instead of Read tool; 6ec6743c-23 cat /tmp/task2-modal-review.md immediately after Write instead of Read tool. Rate 62.5% is sharp escalation from prior cycle 46%, breaking the tentative deceleration flagged last cycle. Five consecutive cycles of monotonic escalation with zero net improvement; the prior cycle's 'possible deceleration' did not materialize.",
+      "grep_in_compound_bash:RECURRING — 1 instance: 6ec6743c-5 grep -niE embedded inside a multi-clause compound Bash string (not as leading argv[0], bypassing the prefer-ripgrep hook). Was RESURGENT in prior cycle after one-cycle absence; now confirmed RECURRING again for second consecutive cycle. Hook architecture gap: the hook intercepts grep as argv[0] only; mid-pipeline grep after && or ; is invisible to it.",
+      "scope_expansion:RECURRING:S3_CONFIRMED — unit 6ec6743c-17 (user_reaction=Corrected) represents the S3 correction for speculative-abstractions-without-a-load-bearing-caller: agent built a 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO seam when user asked only for raw aggregate data and explicitly reserved the UI layer. Atone was correctly filed with RCA and runnable precheck procedure. Scope expansion event was already logged as RESURGENT:S3_CONFIRMED in prior cycle analysis of this same unit; confirmed recurring in consecutive cycles. Third S3 occurrence across four analysis cycles."
+    ],
+    "calibration_score": 0.33,
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations: rate now 62.5% (up from 46%, 50%, 54% across prior three cycles) — five-cycle monotonic escalation. Prior cycle noted 'possible deceleration' that failed to hold. Advisory rules and atone slugs have had zero measurable behavioral effect across all cycles. Priority: implement a PreToolUse Bash hook that scans the full command string for ls/cat/head/sed invocations whose sole function is directory listing or file reading, and emits a blocking or loud nudge pointing at LS, Read, or Glob. The hook must scan beyond argv[0] to catch compound Bash strings; the current shell-tool-preference-violations pattern is exclusively in compound Bash, not isolated single commands.",
+      "grep_in_compound_bash: the prefer-ripgrep hook only intercepts grep as the leading argv[0] of a Bash invocation. Embedded grep after && or ; in compound strings bypasses it entirely. If the hook cannot be extended to scan the full Bash string, consider an advisory-only scan that flags and logs without blocking. Deprioritized relative to shell_tool_preference_violations given lower absolute frequency.",
+      "scope_expansion: the atone process and RCA were executed correctly (precheck procedure documented, cluster E tagged, runnable procedure written). No new structural recommendation beyond verifying the precheck ('does an existing derivation already produce it, and is there a caller for the new shape right now?') is applied at draft time before any new export is written, not post-hoc. The behavioral gate exists; the gap is pre-draft application.",
+      "cat_after_write pattern: units 6ec6743c-22 and 6ec6743c-23 show a sub-pattern of using cat in Bash to verify or display a file immediately after Write — a NEW sub-pattern not explicitly called out in prior cycles though folded into shell_tool_preference_violations. The correct tool is Read. Consider flagging this as a named sub-pattern within the broader violation category, since Write-then-cat-to-verify appears to be a distinct habit from ls-for-directory-listing."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      1491536
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      10116731
+    ],
+    [
+      "42ea8b17-77f4-4c73-a311-d441fa6b5259",
+      119950
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      5055956
+    ],
+    [
+      "2904b2df-83d8-4713-87a9-690a5a8b5940",
+      36127
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      788070
+    ]
+  ],
+  "timestamp": "2026-06-26T16:48:59.250583Z",
+  "tokens_used": 12220,
+  "units_analyzed": 15,
+  "units_total": 32
+}

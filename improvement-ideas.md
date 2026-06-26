@@ -611,3 +611,50 @@ When a CLI tool is meant to be invoked by Claude (or by a human via a Claude ses
 - Bash-tool heredocs reflow/indent file bodies (broke a .toml + 2 py scripts this session) — use the Write tool for any file content, never `cat <<EOF`.
 - Harness CronCreate durable:true did NOT persist to disk (verified: no scheduled_tasks.json) — for a cross-session durable reminder use gcc-schedule (launchd), not CronCreate.
 - Model-selection decisions: an independent agent with labeled ground-truth (here claude-instances screenshots) turns opinion into evidence — worth soliciting over IPC.
+
+  ## 2026-06-25 — Probe the Claude Code binary for hidden env knobs via       
+  strings                                                                     
+                                                                              
+  Claude Code (~/.local/share/claude/versions/<VER>/<exe>, currently a single 
+  215MB compiled file) carries a large surface of undocumented env knobs that 
+  don't show up in --help. strings <bin> | rg -i '^CLAUDE_CODE_' | rg <topic> 
+  surfaces them quickly. Useful when investigating why the TUI behaves a      
+  certain way and whether a behavior is configurable.                         
+                                                                              
+  This session's TUI-mangling thread found five render-relevant ones not in --
+  help: CLAUDE_CODE_NATIVE_CURSOR, CLAUDE_CODE_ALT_SCREEN_FULL_REPAINT,       
+  CLAUDE_CODE_DISABLE_VIRTUAL_SCROLL (potential mitigations) plus             
+  CLAUDE_CODE_DEBUG_REPAINTS and CLAUDE_CODE_FRAME_TIMING_LOG (diagnostic).   
+  Caveat: undocumented = no guarantee, may break other features; set one at a 
+  time in ~/.zshenv for testing, revert with unset + restart.                 
+                                                                              
+  The general lesson: when a tool's --help says nothing about a knob you'd    
+  expect, the binary itself is often the most authoritative source. strings is
+  cheap and the search is keyword-scoped. Don't assume "the flag doesn't      
+  exist"                                                                      
+  from --help alone.                                                          
+                                                                              
+  ## 2026-06-25 — atone --rca-content "$(cat file)" gets shell-rendered before
+  lint                                                                        
+                                                                              
+  atone add --rca-content "$(cat /tmp/rca.md)" failed the rca-lint with "TTY- 
+  rendered-as-source" signature (… in tables, 81% leading-whitespace lines,   
+  missing frontmatter) even though the source file had none of those.         
+  Something in the shell layer between cat and atone.sh column-aligned the    
+  markdown and inserted ellipsis truncation before the lint saw it.           
+                                                                              
+  Workaround that works: use --rca-file PATH directly — atone.sh then calls   
+  its                                                                         
+  own cat "$rca_file" internally, bypassing the shell layer. The file's bytes 
+  go through to the lint untouched.                                           
+                                                                              
+  Hypothesis for root cause (not yet investigated): the auto-format.sh        
+  PostToolUse hook may intercept heredoc-written content and re-render it. Or 
+  cat is shadowed by a Go CLI on this machine (logged earlier 6/20) and its   
+  output isn't what BSD cat would produce in some edge case.                  
+                                                                              
+  Apply: when writing RCA content via atone, prefer --rca-file over --rca-    
+  content                                                                     
+  "$(cat ...)". The skill SKILL.md template shows the latter pattern; worth   
+  updating.                                                                   
+

@@ -1,15 +1,17 @@
-<!-- i-dream project brief · 2026-06-25T00:51:31.951200+00:00 · 4 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-26T01:16:12.171030+00:00 · 5 patterns / 10 insights -->
 ## What this project is about
-A developer's local Downloads directory used as a general-purpose scratch/staging area. Work here is session-continuity-heavy, with the WAL/checkpoint/catchup infrastructure as the primary continuity mechanism.
+A downloads/scratch workspace used across sessions primarily for file processing, tooling experiments, and agent-infrastructure work. Dominant style: agentic multi-session work with heavy use of WAL/checkpoint continuity primitives.
 
 ## Things to do (or keep doing)
-- Write WAL entries as JSONL (not markdown); old markdown checkpoints are still readable via `/catchup` as fallback
-- Use monitor events for long background tasks — wait for the completion event before reporting status, never poll in a loop
-- Update the Task tool list proactively as file edits accumulate; reconcile it before it drifts more than a few turns behind actual work
+- Write WAL entries as JSONL (`wal.sh`); `/catchup` still accepts old markdown as fallback but new writes must be JSONL
+- Wait for monitor completion events on long background tasks (builds, deploys) before reporting status — do not poll
+- Weight reliability and judgment (knowing when to ask, delegate, or escalate) over raw benchmarks when recommending models or tools
+- Reconcile the Task tool list proactively whenever file edits accumulate across multiple turns without a corresponding task update
 
 ## Things to avoid
-- Don't ship nav/sidebar in an expanded-by-default state; user expects collapsed with hamburger toggle
-- Don't let the Task list go stale while edits accumulate — drift between the task list and actual work is a recurring correction
+- Don't ship nav/sidebar expanded by default — user expects it collapsed behind a hamburger toggle; raises a correction every time
+- Don't let the task list drift silent while edits accumulate — an empty or stale task list while files are changing is a flag, not a normal state
+- Don't emit redundant pattern records for the same historical event; deduplicate by semantic overlap before surfacing
 
 ## Open questions / known gaps
-- Pattern extraction for this project over-indexes on format-migration events (WAL markdown→JSONL showed up 4×); real behavioral signals are sparse — trust the task list and WAL tail more than extracted patterns here
+- Pattern extraction for this project over-indexes on the WAL migration event (appeared 4× independently), suggesting the continuity infrastructure itself was high-friction to ship — watch for residual gaps between what `/catchup` restores and what the WAL actually recorded
