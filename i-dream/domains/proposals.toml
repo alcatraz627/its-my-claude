@@ -1,0 +1,50 @@
+# i-dream domain manifest - proposals (gcc improvement backlog)
+#
+# Registers ~/.claude/proposals.jsonl (authored by propose.sh) as a dream domain
+# so the dreaming layer surfaces stale, duplicate, and superseded proposals.
+# Native-emitted: the events are appended directly, symlinked in as
+# {root}/events.jsonl; consolidation is a disabled noop (nothing to extract).
+# Registered via the centralized dir per `i-dream contract`.
+
+[domain]
+name        = "proposals"
+version     = "1.0"
+description = "GCC improvement proposals backlog - dedup and stale-surfacing"
+root        = "~/.claude/proposals-domain"
+
+[event_stream]
+path        = "{root}/events.jsonl"
+format      = "jsonl"
+id_field    = "id"
+ts_field    = "ts"
+
+[consolidation]
+enabled = true
+type    = "external_script"
+script  = "{root}/consolidate.sh"
+cadence = "daily"
+timeout = "10s"
+
+[dream]
+enabled       = true
+cadence       = "weekly"
+budget_tokens = 4000
+prompt_path   = "{root}/dream/prompt.md"
+insights_path = "{root}/dream/insights.jsonl"
+cursor_path   = "{root}/dream/cursor.json"
+prompt_fields = ["category", "status", "effort", "title", "body", "tags"]
+
+[hinter]
+tldr_path     = "{root}/derived/_tldr.txt"
+triggers_path = "{root}/derived/triggers.json"
+weight        = 0.8
+# Deliberately below the active-signal domains (atone/affirm/claude-audit ~1.0,
+# pinned 1.5): a backlog must not evict an active-mistake signal from the top-5
+# session-start hinter. proposals contributes a union line but defers; its value
+# surfaces on PULL — the daily digest, /backlog-triage, and querying dream/insights.
+# Verified 2026-06-27 it DOES reach the union at higher weight; the dial is here.
+
+[permissions]
+network    = false
+disk       = "write"
+subprocess = false

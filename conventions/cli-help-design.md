@@ -111,3 +111,16 @@ When a tool needs a description/label for something it registers, don't write a 
 ## Registry pattern: source-of-truth + derived projection + a reconciling doctor
 
 For a tool that catalogs things and installs them: keep one **source of truth** (a TSV/JSON manifest), treat the live state (PATH symlinks, generated tldr/man pages) as a **derived projection** rebuilt from it, and ship a **`doctor`** that reconciles both directions — manifest rows with no symlink, and symlinks/commands with no manifest row. The manifest is editable and diffable; the projection is disposable. This is what lets `install` be idempotent and `rm` clean up completely.
+
+## Isolate a tool's non-stdlib dependency with `uv` — never a global install
+
+A shell tool that shells out to python (or node) for one heavy capability should NOT depend on a globally `pip install`ed package. The global is invisible breakage: it lives in *one* of the machine's several pythons (a user-site dir), so the tool works for you and fails for the next python on PATH (pyenv/homebrew), and it doesn't travel to a new machine. Graduated from `zconvert` (openpyxl) + `desktop.sh`/`annotate-screenshot.py` (Pillow), both 2026-06-25.
+
+The pattern (`uv` is the cleanest on a machine that already has it):
+- **Keep the cheap paths dependency-free.** Only the capability that *needs* the package routes through the isolated runner; the stdlib paths run bare `python3`. (`zconvert` runs csv/tsv/json on plain `python3`; only xlsx goes through uv.)
+- **Run the dep in an isolated, cached env:** `uv run --with <pkg> python3 - <<'PY' …`. uv fetches the package into its own cache (`~/.cache/uv/…`, never global site-packages), cached after first use, and provides its own python — so it works regardless of which `python3` the user has. Verify once: `uv run --with <pkg> python3 -c 'import <pkg>'` should resolve from the uv cache, not a global path.
+- **Expose an override env var** (`ZCONVERT_PY`, `DESKTOP_PY`) so a machine without uv — or with a deliberately-chosen interpreter — can point the tool at any python/command that has the package. Set it in your shell config and it travels with you.
+- **Resolver precedence:** `$OVERRIDE` → `uv run --with <pkg> python3` (if uv present) → bare `python3` (stdlib-only paths) → a clear error that says "install uv (recommended) or set `$OVERRIDE`" — **never** "pip install globally".
+- **Tests must use the same isolation**, not the machine's happens-to-exist global, or the suite isn't portable: build xlsx/PNG fixtures via `uv run --with <pkg>` too.
+
+This keeps a tool portable (clone the repo + have uv → it works) without vendoring a venv into the repo or polluting global site-packages.
