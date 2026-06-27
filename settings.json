@@ -657,6 +657,14 @@
             "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/session-start.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/sessionstart-inject.sh"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -855,6 +863,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/ctx-pressure-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/api-recovery-nudge.sh"
           }
         ]
@@ -899,6 +915,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/tmp-jail-cleanup.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/gcc-signal-capture.sh"
           }
         ]
       }

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-26T16:49:14Z",
-  "events_analyzed": 70133,
-  "sessions_analyzed": 200,
+  "generated_at": "2026-06-27T08:07:44Z",
+  "events_analyzed": 71189,
+  "sessions_analyzed": 202,
   "session_quality": {
-    "average_score": 68.1,
+    "average_score": 68.2,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -172,48 +172,51 @@
   "topic_drift": {
     "primary_focus": ".claude",
     "recent_projects": {
-      ".claude": 5,
       "staging-enhancement-product": 1,
-      "two-enhancement-product": 3,
-      "Downloads": 1
+      ".claude": 4,
+      "Downloads": 1,
+      "two-enhancement-product": 1,
+      "frontend": 1,
+      "backend": 1,
+      "tmp": 1
     },
-    "drift_rate": 0.717,
-    "total_switches": 142,
+    "drift_rate": 0.72,
+    "total_switches": 144,
     "recent_switches": [
-      {
-        "ts": "2026-06-25T12:05:26Z",
-        "from": ".claude",
-        "to": "two-enhancement-product"
-      },
-      {
-        "ts": "2026-06-25T13:22:55Z",
-        "from": "two-enhancement-product",
-        "to": ".claude"
-      },
-      {
-        "ts": "2026-06-25T14:40:53Z",
-        "from": ".claude",
-        "to": "Downloads"
-      },
-      {
-        "ts": "2026-06-26T09:21:31Z",
-        "from": "Downloads",
-        "to": ".claude"
-      },
       {
         "ts": "2026-06-26T09:38:06Z",
         "from": ".claude",
         "to": "two-enhancement-product"
+      },
+      {
+        "ts": "2026-06-26T18:53:48Z",
+        "from": "two-enhancement-product",
+        "to": ".claude"
+      },
+      {
+        "ts": "2026-06-26T19:16:45Z",
+        "from": ".claude",
+        "to": "frontend"
+      },
+      {
+        "ts": "2026-06-26T19:26:15Z",
+        "from": "frontend",
+        "to": "backend"
+      },
+      {
+        "ts": "2026-06-27T00:57:19Z",
+        "from": "backend",
+        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6074,
-    "corrections": 1356,
-    "confirmations": 1102,
-    "directives": 210,
-    "terse_messages": 495,
-    "correction_rate": 0.223,
+    "total_prompts": 6130,
+    "corrections": 1362,
+    "confirmations": 1108,
+    "directives": 214,
+    "terse_messages": 496,
+    "correction_rate": 0.222,
     "confirmation_rate": 0.181,
     "directive_rate": 0.035,
     "terse_rate": 0.081,

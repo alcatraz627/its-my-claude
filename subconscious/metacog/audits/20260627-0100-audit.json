@@ -1,0 +1,56 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18281,
+    "correction_density": 0.016666666666666666,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.20253570214625477,
+    "unit_count": 60
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — violation rate ~71% (5-6/7 tool-using units): 4b1b8967-1 ls -la *.xlsx instead of LS/Glob; 4b1b8967-8 ls -la *.json inside compound bash tail; 4b1b8967-19 sed -n '1,60p' lib/tasks/errors.py instead of Read-with-offset, ls -la *.json in compound bash; 4b1b8967-20 ls -t /tmp/pt_sweep_1rows_*.json for timestamp-sorted file discovery; 6ec6743c-5 ls -d ../extractor-webserver, ls ../extractor-webserver | head -30, ls -la automation/, ls -la *.json — 4 violations in one unit; 6ec6743c-14 ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/, sed -n '1,80p' instead of Read-with-offset, cat | head -80 — 5 violations in one unit. Rate ~71% is escalation from prior cycle 62.5%, extending a six-cycle monotonic worsening trend with zero net improvement across any cycle. The ls-t-for-timestamp-sort pattern (4b1b8967-19 and -20) is a new subvariant not seen in prior cycle analyses — LS/Glob have no timestamp-sort mode, making this partially justified but still a shell-first reflex.",
+      "grep_in_compound_bash:RECURRING — 1 instance: 6ec6743c-5 grep -niE 'output|whiteboard|cache|\\.claude' .gitignore embedded inside a multi-clause compound Bash string, bypassing the prefer-ripgrep hook which intercepts grep only as leading argv[0]. Pattern is RECURRING for the second consecutive cycle (was RESURGENT in the 0.33 cycle, ABSENT only once in five cycles total). No improvement.",
+      "scope_expansion:ABSENT_THIS_CYCLE — all 13 units accepted with no user anger or deletion events. Prior cycle (0.33 score) had RECURRING:S3_CONFIRMED on unit 6ec6743c-17; the current batch from the same session covers earlier units (-3,-5,-12,-14) that predate the -17 event. Single-cycle absence is consistent with the one-cycle absence seen in the 0.48 cycle before it recurred. Insufficient to declare resolved; continue monitoring."
+    ],
+    "calibration_score": 0.4,
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference_violations: Six consecutive cycles of monotonic worsening with no behavioral response to advisory recommendations. The ls-t-for-timestamp-sort subvariant is a partially valid exception (no LS-tool equivalent for mtime sorting) and should be carved out rather than flagged, to avoid false-positive noise diluting valid violations. Mechanical enforcement — a PreToolUse hook scanning Bash argv[0] for ls, cat, sed, head — is the only remaining lever; advisory-only regime has failed across six cycles. Deprioritize this as a new recommendation only because it has been flagged in every prior cycle with no uptake.",
+      "grep_in_compound_bash: Hook architecture gap is the known root cause. Extend prefer-ripgrep hook to scan the full Bash command string for grep tokens at any position, not just leading argv[0]. Already recommended in prior cycles; no change.",
+      "ls-t-timestamp-sort subvariant: NEW minor pattern — ls -t used to find the most recent file matching a glob (4b1b8967-19, 4b1b8967-20). This is a genuine gap in the LS/Glob tool set (no mtime-sort support). If this pattern recurs, either document it as an accepted exception or request a Glob-with-mtime-sort capability rather than flagging it as a violation."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 13
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      3665331
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      13432590
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      7917825
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      31333785
+    ],
+    [
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      2434756
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      3607638
+    ]
+  ],
+  "timestamp": "2026-06-27T01:00:51.629949Z",
+  "tokens_used": 9888,
+  "units_analyzed": 13,
+  "units_total": 60
+}

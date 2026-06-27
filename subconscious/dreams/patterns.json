@@ -4925,6 +4925,33 @@
     ]
   },
   {
+    "id": "08bb0a75-ffc6-4ca9-a910-20ed52f849e7",
+    "pattern": "When the user asks to simplify one part of a component, the agent must not touch adjacent patterns or reinvent existing solutions—adding unrequested complexity to solve a scoped problem is treated as a serious failure requiring atone",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-27T00:58:04.925103+00:00",
+    "last_seen": "2026-06-27T00:58:04.925103+00:00",
+    "occurrence_history": [
+      "2026-06-27T00:58:04.925103+00:00"
+    ]
+  },
+  {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
     "pattern": "Git worktree operations caused accidental loss of unstaged changes, requiring recovery - worktree switching must always check for and preserve unstaged work first",
     "valence": "negative",
@@ -12609,6 +12636,33 @@
     ]
   },
   {
+    "id": "dd2f29e6-6054-4c69-8cb2-90e05c4af561",
+    "pattern": "Calling /atone without completing the full event-recording flow (slug selection → atone.sh add → RCA validation) leaves the mistake unrecorded; the atone gate will block the turn and require the flow to be completed",
+    "valence": "neutral",
+    "confidence": 0.88,
+    "category": "tool-use",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-27T00:58:04.925103+00:00",
+    "last_seen": "2026-06-27T00:58:04.925103+00:00",
+    "occurrence_history": [
+      "2026-06-27T00:58:04.925103+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13638,50 +13692,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T21:26:21.748062+00:00",
     "last_seen": "2026-05-21T21:26:21.748062+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "80dc1180-1b60-4684-be50-2826eb93a762",
-    "pattern": "When a user asks to see next steps while waiting for a background process, do not propose additional unrelated improvements — provide only the requested playbook and wait.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "1cd43636-5afc-492a-a149-e18690310270",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-22T02:56:40.033536+00:00",
-    "last_seen": "2026-05-22T02:56:40.033536+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "5d5a75ae-9202-4bce-8f52-c9c02605f7fd",
-    "pattern": "When a diff or change-detection tool returns results that include trivial or cosmetic differences alongside real changes, the user rejects the output entirely and demands noise filtering before proceeding.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "1cd43636-5afc-492a-a149-e18690310270",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-22T13:46:09.917143+00:00",
-    "last_seen": "2026-05-22T13:46:09.917143+00:00",
     "occurrence_history": []
   }
 ]

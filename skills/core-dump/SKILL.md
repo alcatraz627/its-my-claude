@@ -349,6 +349,46 @@ confirm via `mcp__inputs__confirm` (apply / edit / skip). Key the doc by the ful
 session UUID so it's the same file the `stop-sync` mirror writes. Skip silently if
 the session's own doc doesn't exist.
 
+### 3.8 Contribute a gcc-improvement proposal (full mode, only when reusable friction surfaced)
+
+End-of-session is the cheapest moment to capture an improvement to `~/.claude`
+itself, because the Session Insights (2.5) are already in front of you. A friction
+worth more than a checkpoint note belongs in the improvement backlog, where the
+weekly consolidation triages it — not buried in a checkpoint nobody re-reads.
+
+From the Session Insights, judge two things: was there a friction that is **(a)
+about the gcc itself** (a hook gap, a missing guard, a skill that misfired, a
+clunky workflow) — not project-specific — **and (b) reusable beyond this one
+session**?
+
+- **No** → skip silently. This is the common case; most sessions contribute nothing,
+  and that is correct. Do not invent a contribution to fill the slot (see
+  `rules/right-sized-code.md` and `speculative-abstractions-without-a-load-bearing-caller`).
+- **Yes** → file **exactly one** proposal (cap: one per session — if several
+  surfaced, pick the highest-value; do not batch). Cross-link it to the residue
+  that motivated it so the weekly consolidation can corroborate it:
+
+```bash
+bash ~/.claude/scripts/propose.sh add \
+  --title "<imperative — what to change in ~/.claude>" \
+  --body  "<the friction · where it bit (file:line if known) · the proposed fix>" \
+  --category hooks|scripts|skills|config|docs|other \
+  --effort  small|medium|large \
+  --session "${CLAUDE_CODE_SESSION_ID:-}" \
+  --tags    "src:session-contrib link:atone:<slug> link:dream:<id> link:prop:<id>"
+```
+
+The `--session` stamp lets the `gcc-signal-capture` Stop hook see that this session
+already filed, so it won't also auto-stub a duplicate.
+
+Set only the `link:*` tags you actually have — an atone slug you filed this session,
+a dream insight id you acted on, a related open proposal id. Do **not** set a
+value/priority: that is computed at triage from how many independent streams
+corroborate the item, so you never have to guess it. Skip in mini mode and in
+headless / sub-agent runs. This is the deliberate, high-quality capture path; the
+`gcc-signal-capture` Stop hook is its data-path safety net (it auto-stubs a proposal
+on a strong signal if this step is skipped), so a missed contribution is never lost.
+
 ## Phase 4 — Visual summary (optional, full mode only)
 
 A terminal-only convenience: render a CPU-dump style summary via

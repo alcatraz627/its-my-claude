@@ -29,8 +29,8 @@
 
 set -uo pipefail
 
-STORE="$HOME/.claude/proposals.jsonl"
-LOCK="$HOME/.claude/.proposals.lock"
+STORE="${PROPOSE_STORE:-$HOME/.claude/proposals.jsonl}"
+LOCK="${PROPOSE_LOCK:-$HOME/.claude/.proposals.lock}"
 
 mkdir -p "$(dirname "$STORE")" 2>/dev/null || true
 touch "$STORE" 2>/dev/null || true

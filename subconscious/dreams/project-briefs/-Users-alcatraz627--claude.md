@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-06-26T16:49:33.760744+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-06-27T01:02:34.940026+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the user's `~/.claude` configuration repo — the global Claude Code rules, skills, hooks, WAL infrastructure, and session-continuity tooling. Work here is predominantly meta-tooling: evolving the agent's own behavioral rules, scripts, and memory systems across long multi-session efforts.
+Meta-project: the `~/.claude` configuration system itself — rules, features, conventions, skills, WAL, atone, memory, and all supporting scripts. Work here is almost exclusively configuration authoring, script development, and system maintenance.
 
 ## Things to do (or keep doing)
-- Proactively `/core-dump` at task milestones — don't wait to be asked; sessions resume via `/catchup` and context is routinely lost across compactions
-- Write WAL entries as JSONL (canonical since 2026-04-17); never revert to markdown format
-- Treat terse single-word messages (`next`, `ahead`, `looks`, `done`) as autonomous-continue directives — increase execution depth, don't ask for clarification
-- Verify current artifact state (file content, git status) immediately before any destructive or creative action; never act on inferred state
+- **Always write WAL entries as JSONL** — the markdown format was retired; use `scripts/wal/wal.sh`, not hand-composed markdown.
+- **Proactively `/core-dump` at milestones**, not just session end — this project spans many compaction boundaries and `/catchup` is the primary recovery path.
+- **Treat single-word continuations as execute directives** — "next", "ahead", "looks", "done" mean continue autonomously at current depth; never ask for clarification on them.
+- **Use gum/TUI tools for structured terminal output** — tables and multi-column comparisons must go through the configured TUI stack, not plain markdown.
 
 ## Things to avoid
-- **Never commit or push without fresh per-push approval** — prior approvals in the same session do not carry forward; this rule has been violated 5+ times and triggers immediate correction
-- Don't thrash on failed fixes — pause after 2 failed attempts, form a root-cause hypothesis, probe it, then fix
-- Don't infer or synthesize data values not traceable to source; flag gaps explicitly rather than filling them
-- Don't use plain markdown tables for structured terminal output — use the project's gum/TUI tools
+- **Never commit or push without fresh per-push approval** — prior approval this session does not carry over; this rule has been violated repeatedly and triggers sharp corrections.
+- **Don't patch symptoms in fix loops** — three edits to the same block without a confirmed root cause is thrash; stop and probe before touching the code again.
+- **Never infer or synthesize data values** not traceable to the source — hallucinated values in pipelines or configs must be flagged as inferred, never silently filled.
+- **Don't expand scope beyond the explicit request** — "understand this" ≠ "implement this"; verify intent before acting.
 
 ## Open questions / known gaps
-- Pattern extraction for this project has a deduplication gap — the same WAL-migration event appears 4× independently; the extraction pipeline needs semantic dedup before it pollutes future briefs
-- Tension between "terse = continue autonomously" and "scope = ceiling" is unresolved; short commands mean execute deeper, never execute wider
+- **Terse-continue vs. scope-ceiling tension**: short commands mean "execute deeper", not "expand wider" — the boundary requires active judgment each turn.

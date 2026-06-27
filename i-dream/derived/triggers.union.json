@@ -70,14 +70,14 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260615-083524-64"
   },
   {
-    "id": "trig-interaction-default-without-usage-loop-walkthrough",
-    "from_slug": "interaction-default-without-usage-loop-walkthrough",
+    "id": "trig-inverted-user-defined-opt-in-polarity",
+    "from_slug": "inverted-user-defined-opt-in-polarity",
     "from_source": "atone",
-    "weight": "medium",
-    "instruction": "sys-monitor: pin reset on close - lifetime default chosen without walking the usage loop",
+    "weight": "high",
+    "instruction": "Acknowledged opt-in language, coded its inverse default branch",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-144226-4d"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-093928-bd"
   },
   {
     "id": "trig-literal-request-over-intent",
@@ -100,6 +100,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-213044-93"
   },
   {
+    "id": "trig-manufactured-problem-by-removing-own-solution",
+    "from_slug": "manufactured-problem-by-removing-own-solution",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Removed user's satisfies-typed registry, flagged the gap as a cost, then re-proposed satisfies as my own fix",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-103857-b0"
+  },
+  {
     "id": "trig-orphaned-background-test-processes",
     "from_slug": "orphaned-background-test-processes",
     "from_source": "atone",
@@ -108,16 +118,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-105115-2c"
-  },
-  {
-    "id": "trig-personal-convention-presented-as-org-process",
-    "from_slug": "personal-convention-presented-as-org-process",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Preserved a personal .claude convention as org process in team-facing comms.md",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-140545-1c"
   },
   {
     "id": "trig-propagating-legacy-inline-imports-in-python-backend",
@@ -138,6 +138,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-143433-f2"
+  },
+  {
+    "id": "trig-reusable-tooling-left-in-tmp-not-promoted-to-repo",
+    "from_slug": "reusable-tooling-left-in-tmp-not-promoted-to-repo",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Built reusable test-infra in /tmp instead of promoting to the repo next to its sibling",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-195732-91"
   },
   {
     "id": "trig-self-permitting-exception-to-an-adr-hard-rule",
@@ -203,7 +213,7 @@
     "id": "trig-unprompted-infra-scope-creep",
     "from_slug": "unprompted-infra-scope-creep",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "adding CI / hooks / automation in",
     "match_keywords": [],
     "match_tool_signatures": [],

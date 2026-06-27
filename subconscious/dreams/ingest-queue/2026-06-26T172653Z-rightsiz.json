@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-26T17:26:53Z",
+  "session_id": "rightsize-rev",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260626-rightsize-rev.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "[agent] Run the ledger research+design Workflow: external research (event",
+    "[agent] Present the plan + notes; get the naming decision + v1 scope + migration",
+    "[async] Fold IPC feedback from export-v3 / job-output-work (mailbox",
+    "[open] Phase-2 `right-sized:` marker + harvester = the ledger's first consumer;",
+    "[optional] Push commit `2b40573` (needs explicit approval)."
+  ],
+  "tags": []
+}

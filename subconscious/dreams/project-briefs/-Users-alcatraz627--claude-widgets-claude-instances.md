@@ -1,18 +1,17 @@
-<!-- i-dream project brief · 2026-06-25T00:51:50.609410+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-27T01:02:06.116801+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A fullstack app with Claude/Anthropic integration, likely a widgets or instance-management dashboard. Work involves both frontend (env bool strings) and backend (env 1/0) layers with shared utilities and named constants.
+A frontend/backend widget system for Claude instances, with established environment helpers and typed error classification. Working style is iterative with high sensitivity to scope creep and unauthorized git operations.
 
 ## Things to do (or keep doing)
-- **Use project-defined constants** (`isDevelopment`, `isProduction`, etc.) everywhere — grep for them before inlining any raw `process.env` comparison
-- **Push back on incorrect user statements** — the user explicitly praised this; factual accuracy over compliance
-- **Read the actual code** before asserting which system is authoritative on any value (token validity, session state, user identity)
-- **Classify errors with typed codes**, not message string matching — the project enforces structured flag-driven error branching
+- **Use project-defined boolean helpers** (`isDevelopment`, `isProduction`, etc.) everywhere — never re-derive the same check inline, even in new files
+- **Push back on incorrect statements** rather than comply to please; user explicitly rewards factual accuracy over appeasement
+- **Read the code before asserting authority** — confirm which module is the actual source of truth before claiming it; cite file:line
 
 ## Things to avoid
-- **Never commit or push without fresh per-operation approval** — prior session approvals are not blanket; prior blanket approvals are not per-operation; this is the project's most critical violation pattern
-- **Never write credentials or secrets to any file, note, or commit** — even internal Claude notes
-- **Don't re-introduce removed complexity** — when the user deletes code and requests a simpler replacement, don't add it back or add unrequested features
-- **Don't cross-apply env var boolean conventions** — frontend uses `"true"`/`"false"` strings; backend uses `1`/`0`; mixing layers breaks semantics silently
+- **Never commit or push without fresh per-operation approval** — a blanket "yes" from earlier in the session does not authorize a push; always get explicit sign-off at push time
+- **Never write secrets or credentials to any file** — not code, not notes, not internal claude scratch files
+- **Don't cross-apply env var conventions** — frontend booleans are `true`/`false` strings; backend booleans are `1`/`0`; never mix
+- **Don't re-introduce deleted complexity** — if the user removed code and asked for a simpler replacement, do not add it back or expand scope unrequested
 
 ## Open questions / known gaps
-- Recurrent confusion about what counts as "fresh approval" before a push — establish this explicitly at session start each time
+- Pattern around "declaring done" without verifying conventions are followed fires repeatedly — always check project-specific utilities before marking a feature complete

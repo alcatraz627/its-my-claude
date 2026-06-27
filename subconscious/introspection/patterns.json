@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-06-20T02:06:10.372810Z",
-  "average_depth": 26.2,
+  "last_updated": "2026-06-27T03:03:43.861157Z",
+  "average_depth": 26.3,
   "average_breadth": 1.6,
-  "fixation_rate": 0.26,
-  "assumption_rate": 0.46,
-  "overconfidence_rate": 0.21,
+  "fixation_rate": 0.17,
+  "assumption_rate": 0.67,
+  "overconfidence_rate": 0.27,
   "common_assumptions": [
-    "File paths exist at expected locations without prior verification",
-    "Prior session state remains valid across context transitions and compactions",
-    "Tool availability (node, python3, npm, rg) without PATH confirmation",
-    "TypeScript compile success implies runtime feature correctness",
-    "Error root cause can be inferred from symptoms without targeted probing"
+    "File contents and process state unchanged since last read",
+    "Tool output is complete and not silently truncated",
+    "Prior session environment (processes, services, auth) still valid after context gaps",
+    "Type-checking or compile success implies runtime correctness",
+    "Sequential edits across a long chain are each individually correct without intermediate test runs"
   ],
   "strength_patterns": [
-    "Systematic diagnostic sequencing with verbatim output capture on infrastructure and MCP issues",
-    "Verification gates before committing — tsc/svelte-check/npm-build runs confirm type correctness",
-    "Targeted multi-file reads before edits on unfamiliar codebases"
+    "Systematic use of project-specific diagnostic scripts (statusline-diag.py, fleet-triage, detect.py) to verify actual runtime behavior before declaring success",
+    "Reading surrounding file context and cross-referencing multiple related files before making structural changes",
+    "Iterative narrowing via targeted rg searches before making existence or architectural claims"
   ],
   "weakness_patterns": [
-    "Fixation loops on single files (30+ repeated edits to same target) without stepping back to diagnose root cause",
-    "Shallow alternative exploration — linear single-hypothesis execution dominates over branching",
-    "Assumption-first tool invocation without initial state re-read after context transitions or compactions"
+    "Fixation loops: re-reading the same file or re-running the same diagnostic 10-30+ times across a chain without advancing state (f3ddfd2f, fa0b19cf, fc4190a7)",
+    "Long tool-call chains (40-135 steps) proceeding without mid-chain verification steps, matching the collect-not-run and declared-ready-without-exercise anti-patterns",
+    "Assuming external process, service, and authentication state is unchanged across context boundaries and session resumptions without re-verification"
   ],
   "trend": {
     "calibration_improving": false,

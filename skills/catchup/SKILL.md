@@ -280,6 +280,43 @@ Print each loaded snippet with its source path and why it was loaded.
 
 Scan `.claude/skills/runtime-notes.md` for entries relevant to the task domain (match by skill names, file paths, or keywords mentioned in the checkpoint). Print any matching entries as "Learnings from previous runs" — these may prevent repeating past mistakes.
 
+### 3.4 Surface live subsystem state
+
+A resumed session loses awareness of what was *running* when the prior session ended — background servers, file watchers, long jobs. The shell-mem subsystem already records these; the checkpoint does not. Surface them so you don't relaunch a server that is already up, or assume a job that was mid-flight never ran.
+
+```bash
+# Background commands still marked active ([BG], not [BG:DONE]) in the last 2 days.
+bash ~/.claude/scripts/shell-mem.sh shell-log-active
+
+# If this resume follows a compaction, pre-compact-shell.sh appended a snapshot
+# of the processes that were live at compaction time. Show the most recent block:
+WAL="$HOME/.claude/wal.md"; [ -f "$WAL" ] || WAL="$PWD/.claude/wal.md"
+[ -f "$WAL" ] && awk '/=== SHELL SNAPSHOT/{buf=""} {buf=buf $0 "\n"} /Resume with/{snap=buf} END{printf "%s", snap}' "$WAL"
+```
+
+If any active background processes are found, surface them in the briefing under a **▸ Live subsystem state** heading: list each command and its port if known. Do **not** assert a process is still running — verify the load-bearing ones (e.g. `lsof -ti :<port>` or a quick curl) before relying on or restarting them, since the prior session may have exited and taken its children with it. Silently skip this step when there is no active background state (the common case).
+
+### 3.5 Contribute a gcc-improvement proposal (post-catchup, only when reusable friction surfaced)
+
+Resuming is a uniquely good moment to spot improvements to `~/.claude` itself, because you have just loaded a wide slice of cross-session residue — the checkpoint, the WAL, the workspace, runtime-notes, the live subsystem state. Cross-session friction shows up here that an in-session reflection misses: the checkpoint format was missing something you needed, the prior session crashed for a reason worth guarding against, or `/catchup` / `/core-dump` themselves were rough.
+
+Judge: did this resume surface a friction that is **(a) about the gcc itself** (not this project) **and (b) reusable**?
+
+- **No** → skip silently. The common case — do not manufacture a contribution.
+- **Yes** → file **exactly one** proposal, cross-linked to the residue that motivated it:
+
+```bash
+bash ~/.claude/scripts/propose.sh add \
+  --title "<imperative — what to change in ~/.claude>" \
+  --body  "<the friction surfaced during this resume · pointer · proposed fix>" \
+  --category hooks|scripts|skills|config|docs|other \
+  --effort  small|medium|large \
+  --session "${CLAUDE_CODE_SESSION_ID:-}" \
+  --tags    "src:post-catchup link:prop:<id> link:atone:<slug>"
+```
+
+Set only the `link:*` tags you actually have. Do not set a value/priority (computed at triage from corroboration). This must not delay the hand-off — it is a quick reflective check, not a research task. Skip silently if nothing reusable surfaced.
+
 ## Phase 4 — Hand Off
 
 Print:

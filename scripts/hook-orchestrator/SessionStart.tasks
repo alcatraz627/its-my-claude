@@ -1,6 +1,13 @@
 # SessionStart tasks — parallel orchestrator config
 # One command per line. Lines starting with # are comments / disabled.
 # Each task receives the SessionStart hook input JSON via stdin.
+#
+# NOTE: this orchestrator is async, so task stdout is discarded (run.sh sends it
+# to /dev/null). That is correct for SIDE-EFFECT tasks only. CONTEXT-INJECTING
+# hooks (those that print {additionalContext}) were moved out to the synchronous
+# injection lane at scripts/session-mgmt/sessionstart-inject.sh, registered
+# directly in settings.json — otherwise their output is silently dropped. Keep
+# injectors there, not here.
 
 # Tab title initialization
 input=$(cat); cwd=$(echo "$input" | jq -r '.cwd'); shortdir=$(basename "$cwd"); git_branch=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null); title="Claude: $shortdir"; [ -n "$git_branch" ] && title="$title ($git_branch)"; printf '\033]0;%s\007' "$title" > /dev/tty 2>/dev/null || true
@@ -11,17 +18,11 @@ input=$(cat); cwd=$(echo "$input" | jq -r '.cwd'); shortdir=$(basename "$cwd"); 
 # diy-mem session init
 ~/.claude/scripts/shell-mem.sh init-session
 
-# Environment health check
-/bin/bash ~/.claude/scripts/health-check.sh
-
-# Surface dream-derived insights from previous cycles
-/bin/bash ~/.claude/scripts/dream/dream-insights.sh
-
-# Surface open proposals if any are aged
-/bin/bash ~/.claude/scripts/pending-proposals.sh
-
-# Dream metrics context for subconscious
-/bin/bash ~/.claude/scripts/dream/dream-metrics-context.sh
+# [moved → session-mgmt/sessionstart-inject.sh] Environment health check
+# [moved → session-mgmt/sessionstart-inject.sh] Surface dream-derived insights
+# [moved → session-mgmt/sessionstart-inject.sh] Surface open proposals if aged
+# [moved → session-mgmt/sessionstart-inject.sh] Dream metrics context
+# (these inject additionalContext; an async orchestrator would /dev/null them)
 
 # Subconscious daemon notification of new session
 bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh
@@ -29,11 +30,8 @@ bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh
 # Event log emission
 ~/.claude/scripts/emit-event.sh SessionStart
 
-# Detect stale (crashed) prior session and inject /catchup hint
-/bin/bash ~/.claude/scripts/session-mgmt/detect-stale-session.sh
-
-# Validate settings.json hooks (catches misconfigurations)
-/bin/bash ~/.claude/scripts/validate-settings-hooks.sh
+# [moved → session-mgmt/sessionstart-inject.sh] Detect stale prior session + /catchup hint
+# [moved → session-mgmt/sessionstart-inject.sh] Validate settings.json hooks
 
 # sync-todos Phase 1 — workspace pull
 ~/.claude/scripts/sync-todos/pull.sh
