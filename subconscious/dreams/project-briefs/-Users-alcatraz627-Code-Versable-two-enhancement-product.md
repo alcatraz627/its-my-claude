@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-06-27T01:01:31.229593+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-28T12:38:45.966199+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A product enhancement layer (Versable) with a heavy emphasis on design docs, implementation planning, and technical writing. Dominant working style is scope-tight, batch-autonomous, doc-heavy.
+Versable enhancement-product is a full-stack product (likely Next.js frontend + Python backend) where the dominant work pattern is feature implementation with strict scope discipline — the user discards entire outputs when scope ceiling is violated.
 
 ## Things to do (or keep doing)
-- **Work in meaningful batches**: self-validate intermediate steps internally; surface only meaningful milestones for user review — never halt on small sub-steps
-- **Translate research/design into lean implementation docs**: product- and behavior-focused, professional, neither enterprise-heavyweight nor academic
-- **Implement exactly what you verbally agreed to**: verbal acknowledgment of intended semantics (e.g. "opt-in") must match the code — check the implementation before declaring it done
+- **Implement opt-in as include-everything-by-default** — when user says "opt-in", code the feature as active unless an explicit signal excludes it; never invert this
+- **Translate research/design phases into lean, behavior-focused implementation docs** — product and behavior first, professional but not enterprise-heavy, no raw research dumps
+- **Write docs in formal, direct, neutral technical voice** — confident tone even under uncertainty; no AI smell, no em-dashes, no Label:fragment rows, no warm narrative overcorrection
 
 ## Things to avoid
-- **Don't exceed the scope ceiling**: when the user deletes complexity or defers a feature, do not re-introduce it under a different name or abstraction — ever
-- **No marketing-voice prose in docs**: ban "Why this matters", motivational openers, hyperbolic framing, em-dashes, label:fragment bullets, and over-bolding — use neutral, direct, technical language
-- **Don't leak investigation uncertainty into docs**: internal suspicion notes or agent-analysis caveats must never appear verbatim in user-facing documentation; docs use confident, neutral tone
-- **Don't over-correct AI-smell into warm narrative**: the fix for em-dash/label:fragment prose is plain technical sentences, not social-science essay prose
+- **Don't re-introduce removed complexity** — when user deletes code and asks for simpler replacement, implement the simpler version only; do not recreate what was discarded under a different name
+- **Don't add abstractions when a simpler existing approach fits** — no wrappers, helpers, or architecture for functionality the user described as a direct extraction
+- **Stop opening docs with "Why this matters" / motivational framing** — technical audience; open with the thing itself, not its justification
+- **Never let verbal acknowledgment substitute for correct implementation** — if you said "opt-in means X", verify the code reflects X before sending
 
 ## Open questions / known gaps
-- Recurring tension: agent over-builds on scoped changes (adds abstractions, touches adjacent patterns) even after explicit corrections — treat every scoped request as a ceiling, not a floor
-- Doc voice calibration is fragile: overcorrection from marketing voice → warm essay voice happens repeatedly; aim for "developer writing an ADR", not either extreme
+- Prose correction oscillates between AI-smell and warm-narrative overcorrection — no stable calibration for "professional but lean" voice yet
+- Internal investigation uncertainty leaks into user-facing docs intermittently despite repeated corrections

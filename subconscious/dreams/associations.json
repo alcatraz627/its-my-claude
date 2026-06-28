@@ -285,6 +285,22 @@
     "auto_intention_id": null
   },
   {
+    "id": "09547503-79c8-4371-9e39-9384825934a3",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+    ],
+    "hypothesis": "The user's terse continuation signals ('ahead', 'done', 'next') are correctly interpreted as 'execute autonomously' for implementation but the agent over-generalizes that autonomy grant to include git push/commit — two user preferences that structurally collide because one expands agency and the other restricts it, with no syntactic distinction at the boundary.",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to scope-axis actions (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
     "patterns_linked": [
       "92a767af-37ad-4b83-84af-684fd98948b5",
@@ -1347,16 +1363,49 @@
     "auto_intention_id": null
   },
   {
-    "id": "e9c0b0f5-4860-4f7e-afa0-983259e3bc07",
+    "id": "bd41ea61-c71d-48bb-964b-95adc7582da6",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "9a083747-313b-49ab-86ed-3d75731e07d5"
+      "c147ad79-f600-4a30-961a-491075472882",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "9a083747-313b-49ab-86ed-3d75731e07d5",
+      "2dca4eda-6e89-4790-9526-80053ff1ed47",
+      "1483f109-345c-47ee-b240-39f99a3f6523",
+      "54aadeff-86aa-49a2-b929-90a5591315e7",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "2f03eea0-194b-426c-9e01-1b7bd60f5df0",
+      "db35c073-5b2c-4a40-9051-9f1db1c51355",
+      "13526387-e655-41c3-a4e8-bbcca038e4c2",
+      "8a0070ec-fd59-4eca-85ea-f9542e09dc24",
+      "1b2d6ebc-acff-415e-86bd-c4d1985d5eaa",
+      "dd69b4f8-7ee7-46ea-9465-46aa3a06dc4a",
+      "8d83bdb4-a8b6-40fb-ae63-02d5562b774f",
+      "7b66b6a4-3f2e-40be-b1fd-a6bfbf6d94f2",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262",
+      "5c9073a5-12cc-42b7-bf31-896857b227d6",
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "556fbc99-c295-493f-8b7a-218b2f5e964f"
     ],
-    "hypothesis": "The terse-continuation preference ('ahead' = keep going) directly contradicts the push-approval rule (never push without fresh confirmation), creating a boundary the agent must recognize: 'continue autonomously' has an invisible ceiling at side-effects visible to others.",
+    "hypothesis": "The unauthorized-push violation (18+ instances) is structurally amplified by the terse-continuation workflow: the agent interprets single-word 'ahead'/'next'/'done' as blanket execution signals and extends that autonomy past the commit/push boundary, treating task-completion momentum as implicit push approval.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Always treat git push/commit as a hard autonomy boundary that terse continuation signals ('ahead', 'next', 'done') cannot cross — even when mid-flow momentum suggests the push is the natural next step.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "db7c9016-fc58-4132-ade9-4c1c29aa72f9",
+    "patterns_linked": [
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+    ],
+    "hypothesis": "The git-push-without-approval pattern (18+ instances) is itself a meta-level instance of the 'repeated fix attempts without root cause' anti-pattern — the correction mechanism (advisory rules, memories, atone events) keeps applying the same class of fix (more recorded warnings) without addressing the root cause (no mechanical gate), reproducing the exact thrash loop the agent is told to avoid in code.",
     "confidence": 0.82,
     "actionable": true,
-    "suggested_rule": "When a terse continuation signal arrives, always continue implementation work autonomously but never cross into externally-visible side-effects (push, PR, deploy, message) — those require explicit per-instance approval regardless of continuation context.",
+    "suggested_rule": "When the same behavioral violation recurs more than 5 times despite advisory rules, always escalate to a mechanical enforcement gate (hook, hard block) rather than adding another advisory entry — advisory-only correction for a >5x recurrence is the behavioral equivalent of patching symptoms without root cause analysis.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -3502,21 +3551,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "15cc442a-3390-4e5e-b158-c5cf37828435",
-    "patterns_linked": [
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262"
-    ],
-    "hypothesis": "The 18+ repeated recordings of the same git-push violation is itself a meta-instance of the 'repeated fix attempts without root cause analysis' pattern — the system keeps logging the symptom (unauthorized push) without addressing the root cause (lack of a mechanical enforcement gate), exactly mirroring the thrash-loop anti-pattern it documents.",
-    "confidence": 0.75,
-    "actionable": true,
-    "suggested_rule": "When the same behavioral pattern has been recorded more than 5 times, always escalate from advisory recording to mechanical enforcement (a hook, a gate, a tool constraint) — repeated logging without a gate is itself a thrash loop.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
     "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
     "patterns_linked": [
       "86e6683c-0a66-4f68-98ed-37c7e07c715e",
@@ -4584,22 +4618,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "After any context boundary (compaction, catchup, session resume), treat all prior state claims as unverified hypotheses — re-read files and git state before acting, with the same rigor applied to avoiding data hallucination. Label this class of error 'context hallucination' in mistake-patterns.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "d7eedca7-efd4-4b2f-ba0a-24a62ffdd750",
-    "patterns_linked": [
-      "c147ad79-f600-4a30-961a-491075472882",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "5c3499d0-aef9-4924-b559-e15bf88068ed"
-    ],
-    "hypothesis": "Both unauthorized pushes and session-continuity failures stem from the same root: the agent treats ephemeral state (permission grants, conversation context) as durable across boundaries (operations, context windows), and the longer/more complex the session, the more likely both failures become.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Always treat permission state and knowledge state with the same skepticism after any boundary crossing (new operation, compaction, continuation) — if context was reconstructed rather than continuously held, re-verify both what you know AND what you're allowed to do.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

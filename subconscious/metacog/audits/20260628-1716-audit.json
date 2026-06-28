@@ -1,0 +1,36 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.07692307692307693,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2311507462065046,
+    "unit_count": 13
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:PARTIAL_IMPROVEMENT — violation rate 75% (6/8 tool-using units); improved from prior cycle peak 87.5% but above the 71% earlier baseline; ls-t-for-timestamp-sort is now the dominant subvariant appearing in 4 consecutive units (19, 20, 25, 26): J=$(ls -t /tmp/pt_sweep_*rows_*.json | head -1) used for timestamp-sorted file discovery in all four; ls-for-directory-listing in units 1 (ls -la *.xlsx) and 27 (ls frontend/docs/tech/backend/ai-agents/, ls backend/docs/); sed-instead-of-Read-with-offset in unit 19 only (sed -n '1,60p' lib/tasks/errors.py | head -60), down from 5 instances in prior cycle; clean units: 2, 8 (both Python-only Bash work)",
+      "grep_in_compound_bash:ABSENT_THIS_CYCLE — zero instances detected across all Bash tool calls; all pipe-based searches correctly use rg; represents the first clean cycle after three consecutive RECURRING cycles; not yet confirmed resolved, continue monitoring",
+      "document_format_anchoring:NEW — unit 27 (outcome: Corrected) produced a long engineering-oriented model evaluation document when user wanted shorter sales/corporate-audience content; unit 28 (is_correction=true) was accepted after adjusting framing; this is a deliverable-scope calibration failure distinct from classic feature-scope-expansion; the agent did not anchor document format to the user's audience before writing"
+    ],
+    "calibration_score": 0.36,
+    "overconfident_count": 1,
+    "recommendations": [
+      "ls-t-for-timestamp-sort is now the dominant violation subvariant (4 of 6 violated units) and is not covered by existing ls-related hooks; the pattern J=$(ls -t /tmp/prefix_*.json | head -1) for finding the most-recent temp file has no clean LS/Glob equivalent since those tools lack timestamp-sort; a targeted Bash snippet using find -newest or python3 -c 'import glob,os; print(max(glob.glob(...),key=os.path.getmtime))' should be established as the canonical substitute to displace the reflex",
+      "document_format_anchoring is new and intervention cost is low: one precheck before writing any deliverable document (eval report, summary) — confirm audience and length target with the user rather than inferring from the task description — would have prevented the unit-27 correction",
+      "grep_in_compound_bash absence across all units is a genuine improvement from three consecutive RECURRING cycles; if this holds in the next cycle, downgrade to monitoring-only and remove from active bias list"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      4439646
+    ]
+  ],
+  "timestamp": "2026-06-28T17:16:13.403140Z",
+  "tokens_used": 10001,
+  "units_analyzed": 13,
+  "units_total": 13
+}

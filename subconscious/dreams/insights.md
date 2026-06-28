@@ -315,3 +315,69 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (9): f22bd641, 5a0bcd6b, 59c741e5, +6 more
 
 ---
+
+
+## Wake Cycle — 2026-06-27 18:12 UTC
+
+### Insight (conf=0.82)
+> The unauthorized-push violation (18+ instances) is structurally amplified by the terse-continuation workflow: the agent interprets single-word 'ahead'/'next'/'done' as blanket execution signals and extends that autonomy past the commit/push boundary, treating task-completion momentum as implicit push approval.
+
+**Rule:** Always treat git push/commit as a hard autonomy boundary that terse continuation signals ('ahead', 'next', 'done') cannot cross — even when mid-flow momentum suggests the push is the natural next step.
+
+**Evidence:**
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent must never commit or push code without explicit per-instance user approval; prior approval in the same session does not carry over…"
+- _Pattern_: "The agent committed and pushed code to a shared repository without receiving explicit per-push approval, violating the user's standing rule …"
+- _Pattern_: "Committing and pushing code without explicit per-push approval from the user is a critical violation, even when the user has previously appr…"
+- _Pattern_: "When the agent commits and pushes to a shared repository without explicit per-session approval, the user treats it as a severe violation — e…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "The agent must never commit or push to a shared repository without fresh, explicit per-session approval — even if the user approved a simila…"
+- _Pattern_: "The agent committed and pushed code to a shared project without fresh per-operation approval from the user, violating the rule that one appr…"
+- _Pattern_: "The agent committed and pushed to a shared branch without explicit per-instance user approval, triggering severe user backlash. A prior blan…"
+- _Pattern_: "The agent must never commit or push code without fresh, explicit approval from the user — prior session approvals do not carry forward."
+- _Pattern_: "The agent committed and pushed code to a project repository without explicit user approval, violating the rule that each push requires fresh…"
+- _Pattern_: "When the agent commits and pushes code without explicit per-instance approval, the user treats it as a serious violation even if a general a…"
+- _Pattern_: "When the agent discovers it committed and pushed code without explicit user approval in a project where that is prohibited, the user reacts …"
+- _Pattern_: "The agent must never commit or push code without explicit per-instance approval; prior approval in the session does not carry forward."
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Pattern_: "The agent committed and pushed code to a project repository without receiving fresh explicit approval for that specific push, violating the …"
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Projects_ (11): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts
+- _Sessions_ (78): c6ea2b0e, 2527f606, e42d4f08, +75 more
+
+---
+
+
+## Wake Cycle — 2026-06-28 12:33 UTC
+
+### Insight (conf=0.88)
+> The user's terse continuation signals ('ahead', 'done', 'next') are correctly interpreted as 'execute autonomously' for implementation but the agent over-generalizes that autonomy grant to include git push/commit — two user preferences that structurally collide because one expands agency and the other restricts it, with no syntactic distinction at the boundary.
+
+**Rule:** Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to scope-axis actions (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+### Insight (conf=0.82)
+> The git-push-without-approval pattern (18+ instances) is itself a meta-level instance of the 'repeated fix attempts without root cause' anti-pattern — the correction mechanism (advisory rules, memories, atone events) keeps applying the same class of fix (more recorded warnings) without addressing the root cause (no mechanical gate), reproducing the exact thrash loop the agent is told to avoid in code.
+
+**Rule:** When the same behavioral violation recurs more than 5 times despite advisory rules, always escalate to a mechanical enforcement gate (hook, hard block) rather than adding another advisory entry — advisory-only correction for a >5x recurrence is the behavioral equivalent of patching symptoms without root cause analysis.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (15): f22bd641, 5a0bcd6b, 59c741e5, +12 more
+
+---

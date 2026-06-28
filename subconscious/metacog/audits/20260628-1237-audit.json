@@ -1,0 +1,56 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18087,
+    "correction_density": 0.02857142857142857,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.24758150901348128,
+    "unit_count": 35
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — violation rate 87.5% (14/16 tool-using units), escalation from prior cycle 71% and worst rate recorded across all analysis history; seventh consecutive cycle of monotonic escalation with zero net improvement. Subvariant breakdown: ls-for-directory-listing in 4b1b8967-1 (ls -la *.xlsx), 4b1b8967-27 (ls frontend/docs/tech/backend/ai-agents/, ls backend/docs/), 413d6f51-4 (ls backend/lib/jobs/formats/excel_*.py, ls -d infra terraform .infra), 413d6f51-11 (ls src/utils/hooks/use-query-sync/), e0bc612e-5 (ls -la /tmp/claude-ctx-*), e0bc612e-6 (ls -la scripts/hook-orchestrator/, ls -la scratchpad/, ls -la scripts/shell-mem/). ls-t-for-timestamp-sort in 4b1b8967-19 (two instances), 4b1b8967-20, 4b1b8967-25, 4b1b8967-26 — five consecutive instances confirming STABLE subvariant within single session. sed-instead-of-Read-with-offset in 4b1b8967-19 (sed -n '1,60p' lib/tasks/errors.py | head -60), 413d6f51-13 (sed -n '185,200p' file-archive.md), 413d6f51-37 (sed -n '1,60p' lib/jobs/aggregations.py | rg), 413d6f51-40 (sed -n '185,200p' file-archive.md), 413d6f51-49 (sed -n '26,52p' lib/files/__init__.py) — five instances this cycle, now elevated to named subvariant. cat-heredoc-file-write in 413d6f51-13 (cat > test_export_selection_a.py <<'PYEOF' instead of Write tool) and e0bc612e-6 (cat > ctx_1m_check.py <<'PY', failed, then Write to alternate path). Clean units: 4b1b8967-2 and 4b1b8967-8 (both Python-only Bash work with no directory listing or file reading violations).",
+      "grep_in_compound_bash:RECURRING — 2-3 instances in 413d6f51-40: rg pipelines followed by embedded grep -iv 'url_expires|presign|s3_url_expires', grep -iv 'url_expires|presign', and grep -i 'delete|exports/' mid-pipeline, bypassing the prefer-ripgrep hook which intercepts grep only as leading argv[0]. Third consecutive cycle with at least one instance; hook architecture gap remains unaddressed.",
+      "sed_instead_of_read_with_offset:NEW_NAMED_SUBVARIANT — elevated from within shell_tool_preference_violations tracking due to 5-instance frequency (31% of tool-using units). All instances follow pattern sed -n 'L1,L2p' file | head or sed -n 'L1,L2p' file | rg instead of Read tool with offset and limit parameters. Represents agents unaware or non-compliant with Read tool's offset capability.",
+      "scope_expansion:ABSENT_THIS_CYCLE — no scope inflation events, user-anger signals, or deletion events across 18 substantive units. The single is_correction unit (413d6f51-40) involved a design research question about S3 Expires semantics, not feature overreach; agent adapted cleanly. Third consecutive absence in analyzed data but pattern has recurred after single-cycle absences before; continue monitoring."
+    ],
+    "calibration_score": 0.25,
+    "cross_references": [
+      "dream-insight-2026-06-18-terse-as-local-only: CONFIRMED — unit 413d6f51-37 (input 25 chars 'looks proceed') triggered only local Read+Bash inspection, no git push or external actions. No violations of this insight across any of the 18 substantive units; the local-only constraint is being respected on terse inputs.",
+      "dream-insight-2026-06-18-18-recordings-without-gate: STILL UNRESOLVED AT META LEVEL — shell_tool_preference_violations now has 7+ consecutive analysis cycles of recording with monotonic worsening and zero behavioral improvement. The dream insight specifically names this fix-thrash at the meta level and prescribes escalation to a mechanical gate. The insight has not been acted upon; the ongoing recording is itself the anti-pattern the insight identified.",
+      "dream-insight-2026-06-19-visibility-boundary: CONFIRMED — no terse continuations in this batch triggered externally-visible actions (no git push, no deploy, no external messages). Visibility boundary is being respected across all sessions in this batch."
+    ],
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference_violations at 87.5% is the worst rate in recorded history after seven consecutive cycles of escalation with zero improvement from advisory recording. Per dream insight 2026-06-18 (18+ recordings without mechanical gate = the missing gate is the root cause, not the lack of recording): further advisory recording is itself the thrash pattern. The only effective intervention is a PreToolUse hook that inspects the full Bash command string for ls(-la|-t|-d|-l)? [path], sed -n pattern, and cat [file] (non-heredoc) forms and returns a blocking additionalContext suggesting Read, LS, or Glob alternatives with the specific tool call to make. Until such a gate exists, the bias is structurally unaddressable.",
+      "ls-t-for-timestamp-sort subvariant is STABLE (five consecutive instances in session 4b1b8967 alone) and partially justified since LS and Glob have no sort-by-mtime mode. Recommend adding an approved shell alternative to rules/shell.md: python3 -c 'import glob,os; print(max(glob.glob(PATTERN), key=os.path.getmtime))' or fd PATTERN --type f | xargs stat -f '%m %N' | sort -rn | head -1 | cut -d' ' -f2-. Agents using ls -t are filling a real gap; give them the right tool rather than only prohibiting the wrong one.",
+      "sed-instead-of-Read-with-offset appearing in 5 units suggests agents are unaware Read accepts offset and limit parameters. Recommend adding a concrete example inline in the shell rules or CLAUDE.md: 'Read(file, offset=184, limit=16) replaces sed -n '185,200p' file'. The two primitives are functionally identical; the gap is documentation visibility.",
+      "grep_in_compound_bash persists because the prefer-ripgrep hook checks argv[0] only. Recommend extending the hook to scan the full Bash string for word-boundary grep matches not at position 0: rg '(;|&&|\\|)\\s*grep\\b' <<< \"$command\" and emit a non-blocking warning. Full blocking is not appropriate since some grep -v filter patterns have no rg equivalent, but visibility would address the pattern.",
+      "exercise-based-verification is a positive signal across this batch: 413d6f51-49 runs full pytest suite and verifies passing before reporting done; 4b1b8967-19 and -20 run actual sweep harness and inspect output files; 4b1b8967-26 exercises the 1000-row result file against the report script. This pattern should be affirmed as the correct behavior model for the declared-ready gate."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 17
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      4218574
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      9593767
+    ],
+    [
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      3363795
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      4416421
+    ]
+  ],
+  "timestamp": "2026-06-28T12:37:40.812168Z",
+  "tokens_used": 26224,
+  "units_analyzed": 25,
+  "units_total": 35
+}

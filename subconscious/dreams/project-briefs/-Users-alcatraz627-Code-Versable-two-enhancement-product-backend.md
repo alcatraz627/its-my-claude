@@ -1,17 +1,19 @@
-<!-- i-dream project brief · 2026-06-27T01:01:50.555143+00:00 · 8 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-28T12:38:22.556497+00:00 · 12 patterns / 0 insights -->
 ## What this project is about
-A backend for a product-enhancement SaaS (Versable). Dominant working style: scoped, surgical changes with zero tolerance for unrequested scope expansion.
+Versable enhancement-product backend — a structured TypeScript/Python codebase where scope discipline and implementation fidelity to stated intent are the dominant working challenges.
 
 ## Things to do (or keep doing)
-- **Plan before hand-rolling complex components**: review existing similar implementations first, then write code — one-shot attempts on complex UI/component work consistently fail
-- **Match verbal semantics to code semantics**: if you say "opt-in default," implement `false` by default — double-check the boolean polarity before committing
-- **Keep user-facing docs confident and neutral**: strip internal uncertainty markers, caveats, and agent-analysis hedges before writing to any doc the user will read
+- **Plan before implementing** any complex component, especially hand-rolled ones; review existing similar implementations before writing new code
+- **Write to a new path** whenever generating derived/filtered outputs — never overwrite the source file
+- **Treat scratch files as invisible to the runtime** — keep `_*.claude.md` and checkpoint files out of any directory loaded as a package (Chrome extension, npm module, etc.)
+- **Match docs tone to neutral confidence** — strip investigation caveats and uncertainty markers before any user-facing documentation lands
 
 ## Things to avoid
-- **Don't expand scope on a scoped request**: if the user asks to simplify one part, touch only that part — adding unrequested abstractions or refactoring neighbors causes the entire output to be discarded
-- **Never remove a working user-authored solution**: if a solution already exists, extend or preserve it; removing it, re-solving the same problem, and presenting it as new is a trust-destroying pattern
-- **Don't place scratch or checkpoint files in the project root**: directories loaded as packages (npm, Chrome extensions) will fail to load if they pick up stray `.claude.md` or temp files
+- **Don't invert opt-in semantics** — when user says "opt-in", default is include-all; explicit signal opts out. Verbal acknowledgment of the correct polarity does not count — check the branch condition in code
+- **Don't widen scope when asked to simplify** — a scoped simplification request is not permission to refactor adjacent patterns or introduce new abstractions
+- **Don't remove working user-authored solutions** and re-implement them — if existing code already solves the problem, extend it, don't replace it
+- **Don't add architectural wrappers** where a direct call or existing primitive suffices; the user discards oversized outputs entirely
 
 ## Open questions / known gaps
-- Recurring tension between planning discipline (plan first) and scope ceiling (don't touch more than asked) — resolve by scoping the plan tightly to the requested change before writing any code
-- `/atone` invocations frequently stall without completing the full slug→`atone.sh add`→RCA flow; treat the gate block as a hard stop, not a formality to skip
+- Repeated opt-in/opt-out polarity inversions suggest a systematic check is missing — consider a pre-submit read of every new boolean default against the user's stated intent
+- `/atone` flow is frequently invoked but not completed end-to-end; the gate blocks the turn and wastes context — complete slug → `atone.sh add` → RCA in one shot or don't invoke at all

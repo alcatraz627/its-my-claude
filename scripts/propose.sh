@@ -35,6 +35,9 @@ LOCK="${PROPOSE_LOCK:-$HOME/.claude/.proposals.lock}"
 mkdir -p "$(dirname "$STORE")" 2>/dev/null || true
 touch "$STORE" 2>/dev/null || true
 
+# shellcheck disable=SC1091
+source "$(dirname "${BASH_SOURCE[0]}")/ledger/ledger-common.sh" 2>/dev/null || true
+
 usage() {
   sed -n '2,30p' "$0"
 }
@@ -82,10 +85,9 @@ cmd_add() {
     *) echo "propose add: invalid --effort '$effort' (want: small|medium|large)" >&2; exit 2 ;;
   esac
 
-  local ts id hex
-  ts=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
-  hex=$(printf '%02x' $((RANDOM % 256)))
-  id="prop-$(date -u '+%Y%m%d-%H%M%S')-$hex"
+  local ts id
+  ts=$(ledger_ts)
+  id=$(ledger_id prop)
 
   # Convert space-separated tags to a JSON array via jq
   local line
@@ -110,10 +112,7 @@ cmd_add() {
        tags: ($tags_str | split(" ") | map(select(length > 0)))
      } | with_entries(select(.value != "" and .value != null))')
 
-  (
-    flock -x 9 2>/dev/null || true
-    printf '%s\n' "$line" >> "$STORE"
-  ) 9>>"$LOCK"
+  ledger_append "$STORE" "$LOCK" "$line"
 
   echo "✓ filed $id"
   echo "  title:    $title"

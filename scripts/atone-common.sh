@@ -16,6 +16,12 @@
 [ "${__ATONE_COMMON_LOADED:-0}" = "1" ] && return 0
 __ATONE_COMMON_LOADED=1
 
+# Ledger primitives (id/ts/append/commit/seal) — the shared writer for atone,
+# affirm, and propose. Sourced here so anything sourcing atone-common.sh inherits
+# them with no extra wiring.
+# shellcheck disable=SC1091
+source "$(dirname "${BASH_SOURCE[0]}")/ledger/ledger-common.sh" 2>/dev/null || true
+
 # ─── Pipe-friendly TTY detection ─────────────────────────────────
 
 if [ -t 1 ] && [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then

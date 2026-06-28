@@ -101,21 +101,13 @@ show_help() {
 
 # ─── Helpers ──────────────────────────────────────────────────────
 
-_new_id() {
-  local hex
-  hex=$(printf '%02x' $((RANDOM % 256)))
-  printf 'mist-%s-%s\n' "$(date -u '+%Y%m%d-%H%M%S')" "$hex"
-}
+_new_id() { ledger_id mist; }
 
-_ts() { date -u '+%Y-%m-%dT%H:%M:%SZ'; }
+_ts() { ledger_ts; }
 
 _git_commit() {
   # Idempotent. Commits if events.jsonl or rca/* changed; silent if not.
-  ( cd "$ATONE_DIR" && \
-    git add events.jsonl rca/ 2>/dev/null && \
-    if ! git diff --cached --quiet 2>/dev/null; then
-      git commit -q -m "$1" 2>/dev/null
-    fi ) || true
+  ledger_commit "$ATONE_DIR" "$1" events.jsonl rca/
 }
 
 # ─── add ──────────────────────────────────────────────────────────
@@ -638,10 +630,7 @@ EOF
        suspect_fields: ($suspect_fields_str | split("|") | map(select(length > 0)))
      }')
 
-  (
-    flock -x 9 2>/dev/null || true
-    printf '%s\n' "$line" >> "$STORE"
-  ) 9>>"$LOCK_FILE"
+  ledger_append "$STORE" "$LOCK_FILE" "$line"
 
   _git_commit "atone: $id $slug ($severity)"
 

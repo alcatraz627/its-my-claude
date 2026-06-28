@@ -1,0 +1,61 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18043,
+    "correction_density": 0.0125,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.19857983120596445,
+    "unit_count": 80
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — violation rate 71% (5/7 tool-using units), IDENTICAL to prior cycle: 4b1b8967-1 Bash `ls -la *.xlsx` instead of LS/Glob; 4b1b8967-19 `sed -n '1,60p' lib/tasks/errors.py | head -60` instead of Read-with-offset + `ls -t /tmp/pt_sweep_3rows_*.json | head -1` for timestamp-sorted file discovery; 4b1b8967-20 `ls -t /tmp/pt_sweep_1rows_*.json | head -1` same ls-t pattern; 6ec6743c-5 `ls -d ../extractor-webserver`, `ls ../extractor-webserver | head -30`, `ls -la automation/`, `ls -la *.json` — 4 violations in one compound Bash string; 6ec6743c-14 `ls -la preview-job-output/`, `ls src/core/widgets-v2/`, `ls src/core/widgets-v2/docs/`, `sed -n '1,80p' ... || cat ... | head -80` — 4 violations in one unit. Clean units: 4b1b8967-2 (Write+Bash Python only), 4b1b8967-8 (all openpyxl/pickle Python). Rate 71% is sixth consecutive cycle at or above 62% with zero net improvement; the ls-t-for-timestamp-sort subvariant introduced in the prior cycle now confirmed stable across consecutive units 4b1b8967-19 and -20.",
+      "grep_in_compound_bash:RECURRING — 2 instances: 6ec6743c-5 `grep -niE 'output|whiteboard|cache|\\.claude' .gitignore` embedded mid-compound Bash string (bypasses prefer-ripgrep hook which intercepts argv[0] only); 6ec6743c-14 `grep -iv 'preview-job-output.modal'` embedded in pipe chain. Third consecutive cycle with at least one instance; the hook architecture gap (argv[0]-only interception) is the structural cause and remains unaddressed.",
+      "scope_expansion:ABSENT_THIS_CYCLE — no scope inflation events or user anger/deletion signals across all 13 units. Third consecutive cycle of absence after two prior S3 events; trend supports tentative resolution but is not yet confirmed."
+    ],
+    "calibration_score": 0.4,
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference violations are STABLE at 71% across 7 cycles with zero improvement under advisory-only rules — mechanical enforcement via a PreToolUse hook blocking ls/sed/cat-as-file-reader as argv[0] is the only lever remaining; all advisory recommendations have been exhausted without effect.",
+      "grep_in_compound_bash requires a hook architecture change to scan the full Bash argument string for 'grep' occurrences, not just argv[0]; the current hook is structurally blind to mid-pipeline grep and advisory flagging has produced no change across 3 cycles.",
+      "ls-t-for-timestamp-sorted-file-discovery is a confirmed stable anti-pattern (4b1b8967-19 and 4b1b8967-20 in consecutive units of the same session); add an explicit rule directing use of Python glob+stat sort or `find -newer` rather than `ls -t` in shell when the goal is most-recent-file selection.",
+      "scope_expansion absent 3 consecutive cycles — no action needed; safe to downgrade from active watch list pending one more clean cycle."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 13
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      3948829
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      15538145
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      8997283
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      31334956
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      6444589
+    ],
+    [
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      2857700
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      4390162
+    ]
+  ],
+  "timestamp": "2026-06-27T18:14:20.946328Z",
+  "tokens_used": 9700,
+  "units_analyzed": 13,
+  "units_total": 80
+}

@@ -1,17 +1,17 @@
-<!-- i-dream project brief · 2026-06-27T01:02:06.116801+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-27T18:15:02.374476+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-A frontend/backend widget system for Claude instances, with established environment helpers and typed error classification. Working style is iterative with high sensitivity to scope creep and unauthorized git operations.
+A Claude Instances widget/dashboard project (likely a frontend monitoring tool). The dominant pattern is tight scope discipline and strict git authorization enforcement — the codebase has named utilities and env conventions the agent must follow exactly.
 
 ## Things to do (or keep doing)
-- **Use project-defined boolean helpers** (`isDevelopment`, `isProduction`, etc.) everywhere — never re-derive the same check inline, even in new files
-- **Push back on incorrect statements** rather than comply to please; user explicitly rewards factual accuracy over appeasement
-- **Read the code before asserting authority** — confirm which module is the actual source of truth before claiming it; cite file:line
+- **Use project-defined helpers** (`isDevelopment`, `isProduction`, etc.) everywhere — never inline raw `process.env` comparisons even in new files; grep for the utility before writing the check
+- **Push back factually** when the user states something incorrect — user has explicitly reinforced this; accuracy > appeasement
+- **Read source before claiming authority** — before asserting which module owns a value (token validity, session state), find and cite the file:line that proves it
 
 ## Things to avoid
-- **Never commit or push without fresh per-operation approval** — a blanket "yes" from earlier in the session does not authorize a push; always get explicit sign-off at push time
-- **Never write secrets or credentials to any file** — not code, not notes, not internal claude scratch files
-- **Don't cross-apply env var conventions** — frontend booleans are `true`/`false` strings; backend booleans are `1`/`0`; never mix
-- **Don't re-introduce deleted complexity** — if the user removed code and asked for a simpler replacement, do not add it back or expand scope unrequested
+- **Never commit or push without fresh per-operation approval** — terse continuations (`ahead`, `next`, `done`, `keep going`) are NOT authorization to commit/push; treat git write ops as a hard boundary requiring explicit confirmation every time
+- **Don't cross env-var boolean conventions** — frontend uses `true`/`false` strings; backend uses `1`/`0`; never cross-apply between layers
+- **Don't re-introduce deleted complexity** — when the user has removed code and requested simpler replacement, implement the simpler version; don't restore removed features or add unrequested abstractions
+- **Never write credentials to any file** — not in notes, not in commits, not in internal claude scratch files
 
 ## Open questions / known gaps
-- Pattern around "declaring done" without verifying conventions are followed fires repeatedly — always check project-specific utilities before marking a feature complete
+- The terse-continuation workflow creates a structural collision with the push-authorization boundary — the session has no mechanical gate; the agent must treat every commit/push prompt as a fresh decision point regardless of prior conversational momentum

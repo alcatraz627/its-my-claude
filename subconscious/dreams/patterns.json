@@ -2229,6 +2229,30 @@
     ]
   },
   {
+    "id": "710a1dea-b73c-41fd-9e39-71ad115ba538",
+    "pattern": "When the user describes a feature as 'opt-in', the agent must default to including everything and require an explicit opt-in signal to exclude — never the reverse. Coding the exclusion as the default when the user said exclusion is opt-in is the exact inversion of their intent.",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "user-preference",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-28T12:32:18.420032+00:00",
+    "last_seen": "2026-06-28T12:32:18.420032+00:00",
+    "occurrence_history": [
+      "2026-06-28T12:32:18.420032+00:00"
+    ]
+  },
+  {
     "id": "f1057a8d-e978-416c-b52e-7ea8fd28e770",
     "pattern": "Sessions frequently continue across multiple context windows using 'this session being continued from' handoff pattern with many tools (10-100+)",
     "valence": "neutral",
@@ -2631,6 +2655,34 @@
     "last_seen": "2026-06-24T10:24:10.726316+00:00",
     "occurrence_history": [
       "2026-06-24T10:24:10.726316+00:00"
+    ]
+  },
+  {
+    "id": "dcabdb8f-3c2e-4e52-9b8b-d429072e6111",
+    "pattern": "When the user asks for data extraction or a specific piece of functionality, the agent must not introduce new abstractions, wrappers, or complexity where a simpler existing approach would suffice; adding unsolicited structural complexity is a critical scope violation that causes the user to discard the work entirely.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "approach",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-27T18:11:13.741084+00:00",
+    "last_seen": "2026-06-27T18:11:13.741084+00:00",
+    "occurrence_history": [
+      "2026-06-27T18:11:13.741084+00:00"
     ]
   },
   {
@@ -9215,6 +9267,30 @@
     ]
   },
   {
+    "id": "17eca404-d918-4d1e-8ebc-b55af565f7ac",
+    "pattern": "When generating derived or filtered outputs from source files, never write back to or overwrite the original source path — always write to a new path. The user's reaction to an agent overwriting a source file was severe.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-28T12:32:18.420032+00:00",
+    "last_seen": "2026-06-28T12:32:18.420032+00:00",
+    "occurrence_history": [
+      "2026-06-28T12:32:18.420032+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -12663,6 +12739,34 @@
     ]
   },
   {
+    "id": "4ce186a0-760b-429d-9a66-7a80cbe9b1d4",
+    "pattern": "When the user flags AI-flavored or verbose output in a document and asks for it to be 'non-AI', they want terse, direct markdown with no bullet armies, decorative prose, or LLM-register language.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-27T18:11:13.741084+00:00",
+    "last_seen": "2026-06-27T18:11:13.741084+00:00",
+    "occurrence_history": [
+      "2026-06-27T18:11:13.741084+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13604,94 +13708,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "c5c0911f-3e16-4f93-87c7-7dded785e238",
-    "pattern": "When implementing a cache-invalidation or revalidation mechanism, the agent must check whether the strategy is scoped to a single user — broadcasting a cache invalidation that affects all users is a serious bug requiring explicit flagging before implementation.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-18T16:36:46.282196+00:00",
-    "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "668f658d-80c7-4dc9-abc9-0b9fcc9e5706",
-    "pattern": "Before claiming that test infrastructure is absent or proposing to add test tooling, the agent must inspect package.json and existing test suite configurations — assuming absence without checking leads to redundant or conflicting setup.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-19T23:04:24.585142+00:00",
-    "last_seen": "2026-05-19T23:04:24.585142+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "54d9bc4f-062f-419d-9cfb-72de83ce391c",
-    "pattern": "When a long-running operation is in progress, the agent should not proactively offer next-steps plans or alternative actions unprompted — the user did not ask and may be focused on monitoring the current operation.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "eca50a22-6179-4267-8e51-a9fa6470346e",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-21T02:46:34.840647+00:00",
-    "last_seen": "2026-05-21T02:46:34.840647+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "ee37286f-a7d0-4e8e-a70c-f42379ea89a4",
-    "pattern": "When the user is waiting for a long-running background process to complete, the agent offered to do additional unsolicited work, requiring the user to redirect and restate their actual intent.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "1cd43636-5afc-492a-a149-e18690310270",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-21T21:26:21.748062+00:00",
-    "last_seen": "2026-05-21T21:26:21.748062+00:00",
     "occurrence_history": []
   }
 ]
