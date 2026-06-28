@@ -63,13 +63,27 @@ marked in-progress.
 - The alert layer is removable by deleting `ledger/` + `scripts/ledger/`; nothing
   else reads them yet.
 
-## Owed / follow-ups (tracked in the Task list + filed proposals)
+## Done — P1 wiring + P3 deploy (2026-06-29)
 
-- Wire `ledger-common.sh` into atone/affirm/propose (the dedup half of P1).
-- Schedule `evaluate-detectors.sh` on the existing atone/i-dream cadence (no new
-  cron) + its Calendar companion; add a `/doctor` "ledger alerts" section.
-- Auto-file a `propose.sh` gate candidate on a `graduate-to-mechanism` ticket.
-- Per-domain `[[detector]]` blocks once parser tolerance is confirmed.
-- A guard-whitelist note: `evaluate-detectors.sh` reads atone raw; running it by
-  hand with the path inline trips `protect-atone-raw.sh` (the script's own read is
-  fine; only an inline-path Bash call is blocked).
+- ✓ Wired `ledger-common.sh` into atone/affirm/propose — now 4 live callers
+  (incl. the evaluator); source-chain + affirm/propose end-to-end verified.
+- ✓ Scheduled `evaluate-detectors.sh` daily 03:15 via gcc-schedule (launchd
+  `com.alcatraz.ledger-evaluate` + Calendar companion `102C7758-...`).
+- ✓ `/doctor` ledger-alerts read-only section (skills/doctor Step 5.7).
+- ✓ Auto-file a `propose.sh` gate candidate on a `graduate-to-mechanism` ticket
+  (idempotent via the alert's idempotence_key; tested fire + no-dup).
+
+## Still owed
+
+- Per-domain `[[detector]]` blocks once i-dream parser tolerance is confirmed.
+- P3.5 efficacy proof (needs a 2nd detector); P4 query surface + `::ledger` facet.
+
+## Gotchas for the runbook
+
+- `evaluate-detectors.sh` reads atone raw; running it by hand with the path inline
+  trips `protect-atone-raw.sh`. The script's own internal read is fine (and cron is
+  unaffected) — call the script, don't put the atone path in your Bash command.
+- **`cat` is aliased to `glow`** in the interactive shell the Bash tool inherits.
+  Inline `cat > file <<EOF` heredocs write rendered garbage, and `cat <bigfile>`
+  launches a pager that hangs (~2-min timeouts seen repeatedly this build). Use the
+  Read tool, `printf`, or a `bash script.sh` (aliases off) — never inline `cat`.

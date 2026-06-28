@@ -234,6 +234,41 @@ fi
 
 ---
 
+## Step 5.7: Ledger alerts
+
+Read-only view of the event-ledger alert layer (refreshed daily by the
+`ledger-evaluate` cron at 03:15). Shows firing detectors, their latest actionable
+instruction, and any detector-lint findings — a *misconfigured* detector is a
+silent-failure risk, so surfacing it here is load-bearing.
+
+```bash
+source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
+gum_divider "Ledger Alerts"
+
+LED=~/.claude/ledger
+if [ ! -f "$LED/detector-state.json" ]; then
+  gum_muted "alert layer not yet evaluated (daily 03:15, or: bash ~/.claude/scripts/ledger/evaluate-detectors.sh)"
+else
+  firing=$(jq -r 'to_entries[] | select(.value.firing==true) | .key' "$LED/detector-state.json" 2>/dev/null)
+  if [ -n "$firing" ]; then
+    gum_warn "Detectors FIRING: $(echo "$firing" | tr '\n' ' ')"
+    for d in $firing; do
+      msg=$(jq -r --arg d "$d" 'select(.detector==$d and .actionable==true) | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -1)
+      [ -n "$msg" ] && gum_info "  $d: $msg"
+    done
+  else
+    gum_success "No ledger detectors firing"
+  fi
+  lints=$(jq -r 'select(.tier=="find") | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -3)
+  if [ -n "$lints" ]; then
+    gum_error "Detector-lint findings (a broken detector goes silently quiet — fix):"
+    echo "$lints" | sed 's/^/  /'
+  fi
+fi
+```
+
+---
+
 ## Step 6: Summary
 
 Collate all findings into a completion block. The severity summary should reflect

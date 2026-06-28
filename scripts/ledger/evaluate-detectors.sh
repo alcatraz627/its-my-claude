@@ -200,6 +200,24 @@ echo "$RESULT" | jq -c '.alerts[]?' 2>/dev/null | while IFS= read -r rec; do
   aid=$(ledger_id alert)
   line=$(printf '%s' "$rec" | jq -c --arg id "$aid" --arg ts "$NOW" '. + {id:$id, ts:$ts} | {id, ts} + .')
   ledger_append "$ALERTS" "$LOCK" "$line"
+
+  # Route: a graduate-to-mechanism ticket/page auto-files a propose.sh gate
+  # candidate — making "a recurring pattern should become a gate" mechanical
+  # instead of relying on an agent to remember. Idempotent: skip if an open
+  # proposal already carries this alert's idempotence key.
+  gref=$(printf '%s' "$rec" | jq -r '.goal_ref // ""')
+  tier=$(printf '%s' "$rec" | jq -r '.tier // ""')
+  ikey=$(printf '%s' "$rec" | jq -r '.idempotence_key // ""')
+  if [ "$gref" = "graduate-to-mechanism" ] && { [ "$tier" = "ticket" ] || [ "$tier" = "page" ]; }; then
+    pstore="${PROPOSE_STORE:-$HOME/.claude/proposals.jsonl}"
+    if [ -n "$ikey" ] && ! rg -qF "$ikey" "$pstore" 2>/dev/null; then
+      instr=$(printf '%s' "$rec" | jq -r '.instruction // ""')
+      bash "$HOME/.claude/scripts/propose.sh" add --category hooks --effort medium \
+        --title "Graduate a recurring pattern to a gate (ledger alert: $ikey)" \
+        --body "Auto-filed by the ledger alert evaluator. $instr Identify the worst recurring slug(s) (atone slugs / atone stats) and add a mechanical gate." \
+        --tags "ledger auto-filed graduate-to-mechanism" >/dev/null 2>&1 || true
+    fi
+  fi
 done
 
 # Persist state atomically.
