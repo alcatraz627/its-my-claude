@@ -121,6 +121,7 @@
 | File | Brief | Read when... |
 |------|-------|-------------|
 | `scripts/desktop.sh` | macOS desktop automation helper: screenshot, windows, click, type, key, space, focus subcommands | Running desktop automation tasks without constructing raw screencapture/osascript/cliclick commands |
+| `scripts/tui/file-preview.sh` | Reusable rich `fzf --preview` module: jq/bat/xlsx-sheets, degrades to head, always exits 0 | Building any fzf-based picker that needs a file preview pane (plug-and-play; std::claude::tui) |
 | `scripts/dev-servers/pm2-register.sh` | Register/deregister pm2 apps, auto-assign 30xx/50xx ports, output ecosystem.config.cjs snippets. Commands: `register`, `deregister`, `change`, `list` | Setting up a new server or pair app, or reassigning ports |
 | `scripts/dev-servers/gen-nginx-conf.sh` | Generate nginx `.test` server blocks from port registry. Handles Host header rewrite for Vite/Next.js. `--dry-run` to preview | Activating `<name>.test` domains for registered apps |
 | `~/.claude/dev-servers-guide.md` | Full pm2 + nginx + port workflow guide including persistence (startup+save), registration script usage, and troubleshooting | Any dev server setup, port allocation, or pm2 persistence questions |

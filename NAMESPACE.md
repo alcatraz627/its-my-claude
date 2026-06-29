@@ -258,13 +258,18 @@ Facet because MCP config spans three files: the active list, the catalog, and th
 ### `std::claude::tui` — Terminal UI surface **[facet]**
 
 **Surface:** Behavior (input + output rendering)
-**Paths:** `shared/gum-tui.sh` (output), `~/.claude/.mcp.json` `inputs` server (input), `AskUserQuestion` built-in, `/dev/tty` pattern in `bash-gotchas.md`.
+**Paths:** `shared/gum-tui.sh` (output), `~/.claude/.mcp.json` `inputs` server (input), `AskUserQuestion` built-in, `/dev/tty` pattern in `bash-gotchas.md`, `scripts/tui/` (reusable picker modules).
 
 The **elicit extension** — how Claude speaks to the terminal and solicits user input.
 - Output: `gum_header`, `gum_table`, `gum_success`, etc.
 - Rich input: `inputs` MCP (`confirm`, `pick_one`, `pick_many`, `form`, `wizard`).
 - Fallback: `AskUserQuestion` for open-ended questions.
 - Low-level: `/dev/tty` prompts from Bash when neither fits.
+
+**Reusable picker modules** (`scripts/tui/`) — plug-and-play building blocks for `fzf`-based TUIs, so each tool doesn't re-roll them:
+- `scripts/tui/file-preview.sh <path>` — rich, dependency-degrading file preview (jq for JSON, bat for csv/tsv, sheet-names for xlsx; falls back to `head`). Drop into any picker: `fzf --preview '~/.claude/scripts/tui/file-preview.sh {}'`. First consumer: `zconvert -i`. Always exits 0 so a preview can't break the host TUI; honors `PREVIEW_LINES`.
+
+**TUI-execute gotcha (load-bearing):** never nest an alternate-screen program (`gum`, another `fzf`) inside an `fzf --bind ...:execute(...)` — it blanks the host screen. Use `execute-silent` for non-interactive actions, or plain `/dev/tty` `read` prompts for interactive ones (see `zconvert -i` ctrl-o options panel).
 
 **In scope:** styled output and structured input.
 **Out of scope:** general shell scripting (`::scripts`), unstyled echoing (normal shell behavior).
