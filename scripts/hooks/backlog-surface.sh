@@ -23,6 +23,10 @@ set -uo pipefail
 [ -f "$HOME/.claude/.no-backlog-surface" ] && exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 
+# Read the SessionStart payload (the inject lane pipes it in) for session_id.
+input=$(cat 2>/dev/null || true)
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+
 SIDECAR="$HOME/.claude/.backlog-triage-latest.json"
 COOLDOWN_MARKER="$HOME/.claude/.backlog-surface-last"
 COOLDOWN_SECONDS=$((2 * 24 * 3600))   # surface at most once every 2 days
@@ -56,5 +60,6 @@ tops=$(jq -r '.promote[:3] | map("• " + .title) | join("  ")' "$SIDECAR" 2>/de
 msg="[backlog] ${promote} gcc improvement item(s) are triaged as PROMOTE and awaiting your decision: ${tops}. Run /backlog-triage to PROMOTE or DROP them. (Weekly consolidation; muted with ~/.claude/.no-backlog-surface.)"
 
 printf '%s' "$now" > "$COOLDOWN_MARKER" 2>/dev/null || true
+bash "$HOME/.claude/scripts/ledger/plug-log.sh" --plug backlog-surface --lifecycle start --outcome surfaced --chars "${#msg}" --session "$sid" --tags "promote:$promote" >/dev/null 2>&1 || true
 jq -nc --arg m "$msg" '{additionalContext: $m}'
 exit 0

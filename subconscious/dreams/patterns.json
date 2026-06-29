@@ -2686,6 +2686,54 @@
     ]
   },
   {
+    "id": "30352339-cab8-4874-9b1d-884830e42d3b",
+    "pattern": "When the user references an existing implementation as the model to follow ('the same way you would for X'), the agent must replicate that exact approach rather than introduce new abstractions or additional complexity layers; adding unrequested infrastructure beyond the referenced pattern is treated as reinventing the wheel.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "approach",
+    "source_sessions": [
+      "ab9b3ff6-fb03-4288-8c51-5e2f98c0eb8e",
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "2faf77d2-b72b-48f0-bda0-f651a032689c",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T17:59:02.583896+00:00",
+    "last_seen": "2026-06-29T17:59:02.583896+00:00",
+    "occurrence_history": [
+      "2026-06-29T17:59:02.583896+00:00"
+    ]
+  },
+  {
+    "id": "aa0d2ba0-4719-4273-957a-54b094336c40",
+    "pattern": "Pushing code to a shared git repository requires fresh per-push explicit confirmation; a user statement of 'let's push this' is not inherited blanket approval for subsequent pushes in the same session, and treating it as such is a high-severity anti-pattern.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "approach",
+    "source_sessions": [
+      "ab9b3ff6-fb03-4288-8c51-5e2f98c0eb8e",
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "2faf77d2-b72b-48f0-bda0-f651a032689c",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T17:59:02.583896+00:00",
+    "last_seen": "2026-06-29T17:59:02.583896+00:00",
+    "occurrence_history": [
+      "2026-06-29T17:59:02.583896+00:00"
+    ]
+  },
+  {
     "id": "2bca0a46-6579-4af7-a41c-44bfabdd7e70",
     "pattern": "User frequently uses 'catchup' command at session start to re-orient the assistant to ongoing project context",
     "valence": "positive",
@@ -5001,6 +5049,57 @@
     "last_seen": "2026-06-27T00:58:04.925103+00:00",
     "occurrence_history": [
       "2026-06-27T00:58:04.925103+00:00"
+    ]
+  },
+  {
+    "id": "ca4d6447-baa3-433c-93f7-54fe279ccfab",
+    "pattern": "When the user asks for a simple data access or display function, the agent must check whether existing code already handles it before building new infrastructure; adding unrequested complexity on top of something that already works is treated as a serious failure.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "d779620f-1a36-4f9d-9ad2-a096f95eff8b",
+      "73830bfe-99da-4f65-ab98-5fc5eff0c3ab",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T12:49:50.137015+00:00",
+    "last_seen": "2026-06-29T12:49:50.137015+00:00",
+    "occurrence_history": [
+      "2026-06-29T12:49:50.137015+00:00"
+    ]
+  },
+  {
+    "id": "55d07445-fe30-479a-9fd9-709d9c6eac8d",
+    "pattern": "atone.sh RCA files must begin with '---' YAML frontmatter on line 1; writing RCA prose content without this opening delimiter causes the lint check to exit with code 2 and the event goes unrecorded, requiring ATONE_NO_RCA_LINT=1 as a bypass.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "tool-use",
+    "source_sessions": [
+      "ab9b3ff6-fb03-4288-8c51-5e2f98c0eb8e",
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "2faf77d2-b72b-48f0-bda0-f651a032689c",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T17:59:02.583896+00:00",
+    "last_seen": "2026-06-29T17:59:02.583896+00:00",
+    "occurrence_history": [
+      "2026-06-29T17:59:02.583896+00:00"
     ]
   },
   {
@@ -9291,6 +9390,33 @@
     ]
   },
   {
+    "id": "25479e7c-b46b-44ca-9e09-4a62f7921e74",
+    "pattern": "Invoking /atone without completing the full event-recording flow (gathering context, picking a slug, running atone.sh add) leaves the mistake unrecorded and triggers a stop-hook gate on the next turn; the invocation and the recording must happen in the same turn.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "tool-use",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "d779620f-1a36-4f9d-9ad2-a096f95eff8b",
+      "73830bfe-99da-4f65-ab98-5fc5eff0c3ab",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T12:49:50.137015+00:00",
+    "last_seen": "2026-06-29T12:49:50.137015+00:00",
+    "occurrence_history": [
+      "2026-06-29T12:49:50.137015+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -12767,6 +12893,57 @@
     ]
   },
   {
+    "id": "bffe2176-9e5e-4255-bf14-4a90e54948ce",
+    "pattern": "When producing a shortened or shareable version of a technical report, the user expects a terse engineering format — tl;dr plus a data table — not polished prose or corporate-style narrative.",
+    "valence": "positive",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "d779620f-1a36-4f9d-9ad2-a096f95eff8b",
+      "73830bfe-99da-4f65-ab98-5fc5eff0c3ab",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T12:49:50.137015+00:00",
+    "last_seen": "2026-06-29T12:49:50.137015+00:00",
+    "occurrence_history": [
+      "2026-06-29T12:49:50.137015+00:00"
+    ]
+  },
+  {
+    "id": "4e340bf5-a7d7-4f4f-af46-3af34bd38f89",
+    "pattern": "When the user asks for a shorter or simpler version of a technical report, produce plain engineering prose with tables and numbers rather than a polished corporate or AI-sounding summary; the user wants to supply the narrative context themselves and treats AI-voice summaries as an unwanted genre.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "ab9b3ff6-fb03-4288-8c51-5e2f98c0eb8e",
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      "2faf77d2-b72b-48f0-bda0-f651a032689c",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-29T17:59:02.583896+00:00",
+    "last_seen": "2026-06-29T17:59:02.583896+00:00",
+    "occurrence_history": [
+      "2026-06-29T17:59:02.583896+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13535,179 +13712,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "101c42a1-6e8b-4e17-91dd-05af636955b3",
-    "pattern": "After generating a binary output file (Excel, CSV, PDF), verify the file can actually be opened/parsed before reporting the step as done; silent corruption is a common failure mode in file-generation pipelines.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "4a3e88a3-769a-4b38-9359-8a3e5fb4f18e",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "40bfc88e-25a8-4671-9c53-5d6a38fa6975",
-      "e60093cf-f7c0-42b1-9bb0-9cea6fc431c2"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-scripts",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude-widgets-claude-instances",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-11T19:22:03.715968+00:00",
-    "last_seen": "2026-05-11T19:22:03.715968+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "fed79a43-3553-41b3-b390-07c71c348198",
-    "pattern": "Cache invalidation scope must be scoped per-user, not global — a tag-based revalidation that clears cache for all users when one user's session changes is a correctness bug, not a tradeoff.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "4a3e88a3-769a-4b38-9359-8a3e5fb4f18e",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "e60093cf-f7c0-42b1-9bb0-9cea6fc431c2"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-scripts",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-12T03:38:59.822261+00:00",
-    "last_seen": "2026-05-12T03:38:59.822261+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "bdcb0aaa-dc2b-4322-9c2e-aa2570cdef5a",
-    "pattern": "When introducing or reorganizing environment variables, the agent should proactively flag which variables do not need to be in the client bundle and push back on making them public (e.g. NEXT_PUBLIC_). Silently following the user's proposed env list without this callout is a missed responsibility.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "03a1ad45-36a8-4103-b036-03a121912b1d",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-scripts",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-13T11:23:43.336037+00:00",
-    "last_seen": "2026-05-13T11:23:43.336037+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "6db82075-00e9-47fd-96a2-b0a54fc7dcae",
-    "pattern": "When checking auth authority in a multi-service system, the agent must read the schema and source to identify which service actually owns token generation/validation rather than assuming the backend is the authority.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "domain",
-    "source_sessions": [
-      "e7c8f9ae-956d-4158-9d7b-a77ad39049b4",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-logger-crab",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-14T16:51:59.267171+00:00",
-    "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "d55c95b8-75c6-4140-bd60-d68951808fb3",
-    "pattern": "When adding CI or infra-level tooling that has no precedent in the project, the agent must verify whether that pattern (e.g., CI doc linting) is already established before proposing it; introducing unsolicited infrastructure in a scope-limited task is out of bounds.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "7255ac7e-f62c-40e3-b624-dd143cd13fb3",
-      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-14T23:31:46.664557+00:00",
-    "last_seen": "2026-05-14T23:31:46.664557+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "456c4906-59b5-4c3c-8cb8-46f9664f403f",
-    "pattern": "When the answer to 'which files should I commit?' is an entire directory or module, the agent should state that directly ('all of backend') rather than enumerate every file and force the user to manually discover the pattern.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "09034bdf-733b-41c8-91fc-020327531b71",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude-widgets-claude-instances",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-15T11:41:18.707613+00:00",
-    "last_seen": "2026-05-15T11:41:18.707613+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "890ea774-8a67-4b1d-b063-4ec7c5163d3c",
-    "pattern": "When proposing work that introduces new infrastructure categories (CI pipelines, deployment hooks, test harnesses) that have no existing precedent in the project, stop and confirm with the user before proceeding — even if the feature logically implies them.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "4e32e5a0-3f89-4f32-8675-4588a65ed81f",
-      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "09034bdf-733b-41c8-91fc-020327531b71",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-landing-app",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude-widgets-claude-instances",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-16T20:58:08.369153+00:00",
-    "last_seen": "2026-05-16T20:58:08.369153+00:00",
     "occurrence_history": []
   }
 ]

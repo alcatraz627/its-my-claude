@@ -73,10 +73,19 @@ marked in-progress.
 - ✓ Auto-file a `propose.sh` gate candidate on a `graduate-to-mechanism` ticket
   (idempotent via the alert's idempotence_key; tested fire + no-dup).
 
-## Still owed
+## Done — P4 query surface + facet (2026-06-30)
+
+- ✓ `scripts/ledger/ledger.sh` — the read surface over the family
+  (list/search/show/stats/timeline/sources + agent ask/status), no global
+  `--kind/--severity`, `why` cut, scoped to ledger+alert-state. Verified live.
+- ✓ `std::claude::ledger` promoted as a facet in NAMESPACE.md (relabel, not move;
+  `::logs` boundary deliberately not promoted).
+- ✓ Agent verbs already allowed (settings `Bash(bash:*)`) — no new permission.
+
+## Still owed (deferred, out of the MVP arc)
 
 - Per-domain `[[detector]]` blocks once i-dream parser tolerance is confirmed.
-- P3.5 efficacy proof (needs a 2nd detector); P4 query surface + `::ledger` facet.
+- P3.5 efficacy proof (needs a 2nd detector to be observable).
 
 ## Gotchas for the runbook
 

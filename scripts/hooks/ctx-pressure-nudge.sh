@@ -82,5 +82,7 @@ else
   msg="[ctx-pressure] Context is ~${used}% full — entering the rate-limit danger zone (the large majority of past 429s occurred above 80% fill). Good moment to /core-dump + /clear if you're switching focus, or to finish the current step before it grows.${enq}"
 fi
 
+# Record the firing to the plug-events ledger (FIRED side of efficacy).
+bash "$HOME/.claude/scripts/ledger/plug-log.sh" --plug ctx-pressure --lifecycle turn --outcome fired --chars "${#msg}" --session "$sid" --tags "band:$band" >/dev/null 2>&1 || true
 jq -nc --arg m "$msg" '{additionalContext: $m}'
 exit 0

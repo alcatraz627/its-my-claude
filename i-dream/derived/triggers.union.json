@@ -73,7 +73,7 @@
     "id": "trig-inverted-user-defined-opt-in-polarity",
     "from_slug": "inverted-user-defined-opt-in-polarity",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Acknowledged opt-in language, coded its inverse default branch",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -130,14 +130,14 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260615-144939-d5"
   },
   {
-    "id": "trig-proposed-fix-breaks-design-invariant",
-    "from_slug": "proposed-fix-breaks-design-invariant",
+    "id": "trig-pushed-to-remote-without-explicit-go",
+    "from_slug": "pushed-to-remote-without-explicit-go",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "proposed-fix-breaks-design-invariant",
+    "instruction": "Ran git push to a shared remote off 'I want to push' instead of confirming the push action",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260531-143433-f2"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260629-142001-3d"
   },
   {
     "id": "trig-reusable-tooling-left-in-tmp-not-promoted-to-repo",
@@ -158,16 +158,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-100904-83"
-  },
-  {
-    "id": "trig-source-comment-hygiene",
-    "from_slug": "source-comment-hygiene",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "terse, durable, no planning artifacts, no decoration",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260529-092351-5e"
   },
   {
     "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
@@ -218,6 +208,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-095334-62"
+  },
+  {
+    "id": "trig-scope-derived-metric-to-declared-schema",
+    "from_slug": "scope-derived-metric-to-declared-schema",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Scope per-column completion to generated_columns, not all result keys",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260629-135117-4f"
   },
   {
     "id": "trig-test-feature-when-dependency-lands",

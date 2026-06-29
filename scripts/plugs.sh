@@ -95,8 +95,31 @@ if [ -f "$GCC/i-dream/injections.jsonl" ] && [ "$have_jq" = 1 ]; then
   printf '    dream injected:      %s total, last %s\n' "${cnt:-?}" "${last:-?}"
 fi
 hr
-show_mutes
+
+# ── Plug firings (the plug-events ledger — the FIRED side of efficacy) ───────
+PE="${LEDGER_DIR:-$GCC/ledger}/plug-events.jsonl"
+sidf="${CLAUDE_CODE_SESSION_ID:-}"
+echo "▸ Plug firings  (ledger/plug-events.jsonl — frequency + token cost, ranked)"
+if [ "$have_jq" = 1 ] && [ -s "$PE" ]; then
+  src="$PE"; scope="all-time"
+  if [ -n "$sidf" ]; then
+    tmp="/tmp/.pe-filt.$$"
+    jq -c --arg s "$sidf" 'select(.session_id==$s)' "$PE" 2>/dev/null > "$tmp"
+    if [ -s "$tmp" ]; then src="$tmp"; scope="this session"; fi
+  fi
+  echo "    scope: $scope"
+  jq -rs '
+    group_by(.plug)
+    | map({plug:.[0].plug, n:length, chars:(map(.chars//0)|add), last:(max_by(.ts).ts)})
+    | sort_by(-.chars) | .[]
+    | "      \(.plug): fired \(.n) · ~\(.chars) ch total · last \(.last[0:16])"
+  ' "$src" 2>/dev/null
+  rm -f "/tmp/.pe-filt.$$" 2>/dev/null || true
+else
+  echo "    (none recorded yet — plug-events.jsonl empty/absent)"
+fi
 hr
-echo "Per-session firing history (which plug fired this session, acted-on ratio)"
-echo "is NOT yet recorded — that is the plug-events ledger gap (next step)."
+echo "Note: this is the FIRED side (how often + how many tokens each plug spends)."
+echo "The ACTED side (was the injection used / the proposal promoted?) is not yet"
+echo "recorded — it needs a feedback signal + a ledger detector (deferred)."
 exit 0

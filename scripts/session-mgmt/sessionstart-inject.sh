@@ -60,6 +60,7 @@ for p in "${pids[@]}"; do wait "$p" 2>/dev/null; done
 
 # Merge each injector's additionalContext (accept either schema), in order.
 merged=""
+fired=0
 j=0
 while [ "$j" -lt "$i" ]; do
   f="$TMP/$j.out"
@@ -68,10 +69,15 @@ while [ "$j" -lt "$i" ]; do
   ctx=$(jq -r '(.additionalContext // .hookSpecificOutput.additionalContext // empty)' "$f" 2>/dev/null)
   [ -z "$ctx" ] && continue
   if [ -z "$merged" ]; then merged="$ctx"; else merged="$merged"$'\n\n---\n\n'"$ctx"; fi
+  fired=$((fired + 1))
 done
 
 rm -rf "$TMP" 2>/dev/null || true
 [ -z "$merged" ] && exit 0
+
+# Record start-time injection cost to the plug-events ledger (FIRED side).
+sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+bash "$HOME/.claude/scripts/ledger/plug-log.sh" --plug sessionstart-lane --lifecycle start --outcome injected --chars "${#merged}" --session "$sid" --tags "injectors:$fired" >/dev/null 2>&1 || true
 
 jq -nc --arg c "$merged" \
   '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $c}}'

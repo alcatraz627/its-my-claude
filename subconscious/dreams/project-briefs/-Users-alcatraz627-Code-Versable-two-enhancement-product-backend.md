@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-06-28T12:38:22.556497+00:00 · 12 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-06-29T18:03:47.379257+00:00 · 19 patterns / 0 insights -->
 ## What this project is about
-Versable enhancement-product backend — a structured TypeScript/Python codebase where scope discipline and implementation fidelity to stated intent are the dominant working challenges.
+Backend for Versable's enhancement product — a domain with explicit conventions around opt-in feature flags, tight scope discipline, and zero tolerance for unrequested abstractions.
 
 ## Things to do (or keep doing)
-- **Plan before implementing** any complex component, especially hand-rolled ones; review existing similar implementations before writing new code
-- **Write to a new path** whenever generating derived/filtered outputs — never overwrite the source file
-- **Treat scratch files as invisible to the runtime** — keep `_*.claude.md` and checkpoint files out of any directory loaded as a package (Chrome extension, npm module, etc.)
-- **Match docs tone to neutral confidence** — strip investigation caveats and uncertainty markers before any user-facing documentation lands
+- **Check existing implementations first**: before building anything new, grep the codebase for an existing pattern that handles it; replicate that exact approach rather than introducing new abstractions
+- **Plan before hand-rolling complex components**: surface a plan and review against similar existing implementations before writing any code on non-trivial components
+- **Write RCA files with `---` YAML frontmatter on line 1**: atone.sh lint exits 2 without it and the event goes unrecorded
+- **Produce terse engineering output for docs/reports**: tl;dr + data table format; no bullet armies, no corporate prose, no LLM register
 
 ## Things to avoid
-- **Don't invert opt-in semantics** — when user says "opt-in", default is include-all; explicit signal opts out. Verbal acknowledgment of the correct polarity does not count — check the branch condition in code
-- **Don't widen scope when asked to simplify** — a scoped simplification request is not permission to refactor adjacent patterns or introduce new abstractions
-- **Don't remove working user-authored solutions** and re-implement them — if existing code already solves the problem, extend it, don't replace it
-- **Don't add architectural wrappers** where a direct call or existing primitive suffices; the user discards oversized outputs entirely
+- **Don't invert opt-in semantics in code**: when the user says "opt-in", default is include-everything; explicit signal required to exclude — never the reverse; verbal acknowledgment of correct semantics does not substitute for correct implementation
+- **Don't add unrequested complexity**: scope ceiling is enforced hard here — adding wrappers, abstractions, or architectural layers beyond the explicit request causes the user to discard the entire output
+- **Never write derived/filtered output back to the source path**: always write to a new path; overwriting source with derived content is treated as data loss
+- **Don't remove existing user-authored solutions and re-solve them**: removing a working implementation, presenting the problem as open, and re-crediting yourself is a critical trust failure here
 
 ## Open questions / known gaps
-- Repeated opt-in/opt-out polarity inversions suggest a systematic check is missing — consider a pre-submit read of every new boolean default against the user's stated intent
-- `/atone` flow is frequently invoked but not completed end-to-end; the gate blocks the turn and wastes context — complete slug → `atone.sh add` → RCA in one shot or don't invoke at all
+- Repeated recurrence of inverted opt-in polarity (verbal acknowledgment + wrong code) suggests a systemic drift between reasoning and codegen — treat any feature described as "opt-in" as a hard checklist item before committing
+- `/atone` flow completion is consistently incomplete (gate blocks turns); always run the full slug → `atone.sh add` → RCA validation sequence before proceeding

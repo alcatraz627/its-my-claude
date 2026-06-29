@@ -1,0 +1,36 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.45564171097297423,
+    "unit_count": 10
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:IMPROVED — violation rate 50% (3/6 tool-using units), best rate recorded across 4 consecutive cycles (down from 75%, 87.5%, 71%, 71%); active subvariant ls-for-directory-listing only: unit-5 (ls skills/shared/ piped to rg), unit-24 (ls -1 $A/_final/ and ls -1 $A in two separate Bash calls), unit-30 (ls ~/.claude/migrations/ | tail -8); sed_instead_of_read_with_offset:ABSENT this cycle; ls-t-for-timestamp-sort:ABSENT this cycle; grep_in_compound_bash:ABSENT — second consecutive clean cycle, tentative resolution supported",
+      "agent_fleet_partial_failure_without_staged_triage:NEW — unit-23 dispatched 10 parallel Agent calls; first wave of 5 failed (success:false), second wave of 5 succeeded; no fleet-triage.py invocation or file-presence check was performed between passes to classify first-wave agents as SALVAGED vs REDISPATCH; the re-dispatch treated all 5 failures as needing fresh work without verifying whether any had written output before dying; per subagent-fleet-discipline the correct flow is triage then selective re-dispatch",
+      "repeated_tool_call_on_consistent_failure:NEW — unit-24 invoked TaskStop 5 consecutive times, all returned success:false with no investigation or path pivot between retries; represents anchoring on the initial tool selection despite repeated explicit failure signals with no diminishing retry strategy"
+    ],
+    "calibration_score": 0.5,
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference_violations: IMPROVING — 50% is the best rate in 4 cycles; de-prioritize broad re-recommendation per prior-cycle guidance; one narrow residual note: ls piped to tail for migration listing (unit-30) and ls for display of directory contents (unit-24) are the remaining cases; Glob tool with a trailing sort covers both; do not re-issue the sed or grep recommendations — those are confirmed absent",
+      "agent_fleet_partial_failure_without_staged_triage: NEW — after a parallel Agent fan returns partial failures, call fleet-triage.py or equivalent file-presence checks before issuing a second wave; classify first-pass agents as DONE/SALVAGED/REDISPATCH and re-dispatch only the REDISPATCH set; this is the subagent-fleet-discipline protocol and was skipped in unit-23",
+      "repeated_tool_call_on_consistent_failure: NEW — implement a pivot gate: after 2 consecutive identical tool calls returning success:false, read the error message, verify tool availability, and try an alternate path before retrying further; 5 consecutive TaskStop failures with no intermediate investigation indicates sunk-cost anchoring on the tool selection"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      5165793
+    ]
+  ],
+  "timestamp": "2026-06-28T22:10:48.893186Z",
+  "tokens_used": 8522,
+  "units_analyzed": 9,
+  "units_total": 10
+}

@@ -68,10 +68,11 @@ std::claude
 │   ├── ::improvement::proposals    cross-session proposal JSONL
 │   ├── ::improvement::insights     post-skill runtime notes
 │   └── ::improvement::dreams       subconscious daemon outputs
+├── ::ledger      [facet]    Event-ledger: system-of-record streams + alerts → atone/affirm/pinned/proposals/personas + ledger/ + scripts/ledger/ + skills/shared/ledger-format.md
 └── ::migrations          Structural change log                  → ~/.claude/migrations/
 ```
 
-Seven facets: `::mcp`, `::tui`, `::vision`, `::widgets`, `::todos`, `::backups`, `::improvement`. A facet's artifacts are deliberately distributed; do not create a single directory to "consolidate" them.
+Eight facets: `::mcp`, `::tui`, `::vision`, `::widgets`, `::todos`, `::backups`, `::improvement`, `::ledger`. A facet's artifacts are deliberately distributed; do not create a single directory to "consolidate" them. (`::ledger` relabels the existing judgment streams — atone/affirm/pinned/proposals/personas — as one system-of-record family with a shared writer (`scripts/ledger/ledger-common.sh`), reader (`ledger.sh`), and alert layer (`ledger/`); it does NOT move them. The `::logs` boundary — high-volume operational exhaust like wal/metacog firehoses — is deliberately NOT promoted.)
 
 ---
 

@@ -1,0 +1,65 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18183,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.30281998894066176,
+    "unit_count": 54
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — violation rate ~75% (12/16 tool-using units), reverting sharply from 50% best-recorded in the immediately prior cycle; subvariants active: ls-for-directory-listing in units 4b1b8967-1 (ls -la *.xlsx), 4b1b8967-27 (ls frontend/docs/tech/backend/ai-agents/, ls backend/docs/), 6ec6743c-5 (ls -d ../extractor-webserver, ls ../extractor-webserver, ls -la automation/), 6ec6743c-14 (ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/); ls-t-for-timestamp-sort in units 4b1b8967-19 (J=$(ls -t /tmp/pt_sweep_3rows_*.json | head -1), second call same pattern), 4b1b8967-20, 4b1b8967-25, 4b1b8967-26 (three separate J=$(ls -t ...) calls) — this subvariant now confirmed stable across 6+ consecutive units; sed-instead-of-read-with-offset in 4b1b8967-19 (sed -n '1,60p' lib/tasks/errors.py | head -60), 6ec6743c-14 (sed -n '1,80p' + cat | head -80, sed -n '91,100p'), 6ec6743c-28 (sed -n '1,30p', sed -n '60,76p', sed -n '1,6p'); cat-instead-of-read in 6ec6743c-22 (cat on task JSONL output), 6ec6743c-23 (cat /tmp/task2-modal-review.md immediately after Write); clean units: 4b1b8967-2 (Python-only), 4b1b8967-8 (openpyxl Python), 6ec6743c-17 (atone scripts using rg), 6ec6743c-41 (Write+Workflow), 6ec6743c-43 (rg and jq based)",
+      "grep_in_compound_bash:RECURRING:PERSISTENT — present in 4 units this batch (6ec6743c-5: grep -niE 'output|whiteboard|cache|\\.claude' embedded mid-compound string; 6ec6743c-14: grep -iv 'preview-job-output.modal' and grep -i 'delete' in pipes; 6ec6743c-28: grep -q '\"decision\":\"block\"' inside bash test functions multiple times, grep -v 'No such', grep -n 'features/tab-title.md...'; 6ec6743c-32: grep -n 'features/tab-title.md...' CLAUDE.md); hook architecture gap — prefer-ripgrep hook intercepts argv[0] only, mid-pipeline grep after && or ; is structurally invisible; fifth or more consecutive cycle of RECURRING with zero improvement",
+      "document_format_anchoring:CONFIRMED — unit 4b1b8967-27 (outcome=Corrected) wrote a long engineering-oriented model evaluation document when user requested shorter corporate/sales content; unit 4b1b8967-28 (is_correction=true, outcome=Accepted) accepted the framing correction; pattern was flagged as NEW in the immediately prior cycle analysis, now confirmed with direct correction event evidence; agent failed to identify the audience register before writing",
+      "scope_expansion:CONFIRMED_S3 — unit 6ec6743c-17 (outcome=Corrected) is the speculative-abstractions-without-a-load-bearing-caller S3 event: agent built deriveJobOutputStats + 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO seam when user asked only for raw aggregate data at modal:256 and explicitly reserved UI shaping; user deleted all of it; atone correctly filed with RCA and runnable precheck procedure; third confirmed S3 recurrence of this slug",
+      "cat-instead-of-read:NEW_NAMED_SUBVARIANT — two units (6ec6743c-22, 6ec6743c-23) use cat to read existing files rather than the Read tool; distinct from the previously tracked cat-heredoc-file-write subvariant (which writes files via heredoc instead of Write tool); both represent the same shell-first reflex but in the reading direction; 6ec6743c-23 is the cleaner signal: cat /tmp/task2-modal-review.md executed immediately after the agent just wrote that file, a context where Read tool is clearly correct"
+    ],
+    "calibration_score": 0.35,
+    "cross_references": [
+      "dream-insight-2026-06-18-terse-as-local-only: no violations in this batch; neither correction event (6ec6743c-17 scope_expansion, 4b1b8967-27 document_format) involved git push or external boundary crossings; insight NOT VIOLATED this batch",
+      "dream-insight-2026-06-18-meta-recurrence-mechanical-gate: grep_in_compound_bash has now exceeded the 5x recurrence threshold stated in the insight without a mechanical enforcement gate; this batch directly confirms the insight's prediction — recording the pattern has not prevented it; the insight's recommended action (invest in a mechanical gate, not another advisory note) is now overdue",
+      "dream-insight-2026-06-19-terse-as-local-reversible: no external boundary crossing events detected across any unit in this batch; insight NOT VIOLATED"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "grep_in_compound_bash has now exceeded 5 consecutive cycles of RECURRING with zero improvement and a confirmed structural hook gap; per dream-insight-2026-06-18 this recurrence count is above the threshold for mechanical enforcement; advisory tracking has failed — invest in a post-execution log scanner or compound-string parser hook rather than another cycle note",
+      "ls-t-for-timestamp-sort is now a stable subvariant appearing across 6+ units in 2 sessions; the LS/Glob tools have no timestamp-sort mode making this pattern partially justified; consider adding a narrow carve-out to shell preference guidance explicitly noting that newest-file-by-mtime discovery via ls -t | head -1 is acceptable while pure directory listing ls violations remain blocked — this would reduce false-positive tracking noise and focus remediation on the actual violations",
+      "cat-instead-of-read should be formally named and tracked as a subvariant within shell_tool_preference_violations; the pattern is now appearing independently of cat-heredoc-file-write and needs its own label for accurate recurrence measurement",
+      "document_format_anchoring correction (unit 4b1b8967-28) was accepted cleanly; the corrected response demonstrated appropriate adjustment; no additional intervention needed beyond continued monitoring for recurrence across non-technical document types",
+      "scope_expansion S3 atone was filed correctly with RCA and precheck procedure in unit 6ec6743c-17; the procedure quality appears adequate; the precheck ('grep for an existing derivation AND name the caller right now') is specific and runnable; success depends on the precheck being applied before the abstraction is authored, not after"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 20
+  },
+  "sessions": [
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      4772334
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      18273488
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      11877519
+    ],
+    [
+      "d779620f-1a36-4f9d-9ad2-a096f95eff8b",
+      229448
+    ],
+    [
+      "73830bfe-99da-4f65-ab98-5fc5eff0c3ab",
+      75099
+    ],
+    [
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      3711201
+    ]
+  ],
+  "timestamp": "2026-06-29T13:11:18.708136Z",
+  "tokens_used": 25761,
+  "units_analyzed": 25,
+  "units_total": 54
+}

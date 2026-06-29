@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-28T17:16:28Z",
-  "events_analyzed": 71772,
-  "sessions_analyzed": 202,
+  "generated_at": "2026-06-29T18:03:22Z",
+  "events_analyzed": 72381,
+  "sessions_analyzed": 203,
   "session_quality": {
-    "average_score": 68.2,
+    "average_score": 68.1,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -172,49 +172,49 @@
   "topic_drift": {
     "primary_focus": ".claude",
     "recent_projects": {
-      "staging-enhancement-product": 1,
       ".claude": 4,
       "Downloads": 1,
       "two-enhancement-product": 1,
-      "frontend": 1,
       "backend": 1,
-      "tmp": 1
+      "tmp": 1,
+      "staging-enhancement-product": 1,
+      "frontend": 1
     },
-    "drift_rate": 0.72,
-    "total_switches": 144,
+    "drift_rate": 0.721,
+    "total_switches": 145,
     "recent_switches": [
-      {
-        "ts": "2026-06-26T09:38:06Z",
-        "from": ".claude",
-        "to": "two-enhancement-product"
-      },
       {
         "ts": "2026-06-26T18:53:48Z",
         "from": "two-enhancement-product",
         "to": ".claude"
       },
       {
-        "ts": "2026-06-26T19:16:45Z",
-        "from": ".claude",
-        "to": "frontend"
-      },
-      {
         "ts": "2026-06-26T19:26:15Z",
-        "from": "frontend",
+        "from": ".claude",
         "to": "backend"
       },
       {
         "ts": "2026-06-27T00:57:19Z",
         "from": "backend",
         "to": "tmp"
+      },
+      {
+        "ts": "2026-06-29T06:46:49Z",
+        "from": "tmp",
+        "to": "staging-enhancement-product"
+      },
+      {
+        "ts": "2026-06-29T08:43:32Z",
+        "from": "staging-enhancement-product",
+        "to": "frontend"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6189,
-    "corrections": 1372,
-    "confirmations": 1117,
-    "directives": 215,
+    "total_prompts": 6253,
+    "corrections": 1387,
+    "confirmations": 1126,
+    "directives": 216,
     "terse_messages": 498,
     "correction_rate": 0.222,
     "confirmation_rate": 0.18,

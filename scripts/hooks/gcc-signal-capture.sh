@@ -82,5 +82,6 @@ bash "$GCC/scripts/propose.sh" add \
   --session "$sid" \
   --tags "$links" >/dev/null 2>&1 || true
 
+bash "$GCC/scripts/ledger/plug-log.sh" --plug gcc-signal-capture --lifecycle end --outcome stubbed --session "$sid" --tags "$links" >/dev/null 2>&1 || true
 : > "$marker"
 exit 0
