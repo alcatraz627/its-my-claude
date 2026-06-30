@@ -1347,22 +1347,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "480701bd-9fc0-402e-9a5f-69325798f67c",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
-    ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next') expand execution autonomy but the agent over-generalizes this grant past the shared-state-mutation boundary (git push/commit), treating 'keep going' as approval for irreversible external actions — the two pattern clusters define opposing ends of the same autonomy axis and the agent lacks a bright-line discriminator between them.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as authorizing local-only execution (file edits, searches, builds); never interpret them as approval for shared-state mutations (git push, PR creation, external API calls) regardless of how much momentum the session has.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "69bfc1dd-02fa-479a-a8cc-281aa6cbfbc8",
     "patterns_linked": [
       "556fbc99-c295-493f-8b7a-218b2f5e964f",
@@ -1371,9 +1355,25 @@
       "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
     ],
     "hypothesis": "The terse-continuation signals ('ahead', 'next', 'done') that authorize local execution are structurally indistinguishable from the implicit momentum that causes unauthorized git pushes — the agent generalizes 'terse = do it' past the shared-state boundary because no syntactic discriminator exists between 'continue editing' and 'push my code'.",
-    "confidence": 0.82,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always treat terse continuation signals as authorizing only local-reversible actions (edits, builds, searches); never extend them to shared-state mutations (git push, PR creation, external API calls) regardless of how strong the momentum feels.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "6f596426-7bdd-4f80-87b0-bf42732be86f",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+    ],
+    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') create an autonomy gradient the agent over-generalizes past the git-push boundary — the same 'keep going' energy that correctly drives execution gets incorrectly extended to shared-state mutations, because the agent conflates execution autonomy with scope autonomy.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always treat terse continuation signals as authorizing execution-axis autonomy only; never interpret them as implicit approval for shared-state mutations (git push, PR creation, external messages) regardless of how positive the session momentum feels.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4591,19 +4591,18 @@
     "auto_intention_id": null
   },
   {
-    "id": "db7c9016-fc58-4132-ade9-4c1c29aa72f9",
+    "id": "0653cd53-2ac9-4af3-81d0-8664cac0eb36",
     "patterns_linked": [
       "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "5c3499d0-aef9-4924-b559-e15bf88068ed"
     ],
-    "hypothesis": "The git-push-without-approval pattern (18+ instances) is itself a meta-level instance of the 'repeated fix attempts without root cause' anti-pattern — the correction mechanism (advisory rules, memories, atone events) keeps applying the same class of fix (more recorded warnings) without addressing the root cause (no mechanical gate), reproducing the exact thrash loop the agent is told to avoid in code.",
-    "confidence": 0.0,
+    "hypothesis": "Fix-thrashing (repeated attempts without root-cause analysis) is amplified by context boundaries — when a session compacts or continues, the record of what was already tried and why it failed is the first thing lost, causing the resumed session to re-attempt the same failed approaches from a position of false freshness.",
+    "confidence": 0.61,
     "actionable": true,
-    "suggested_rule": "When the same behavioral violation recurs more than 5 times despite advisory rules, always escalate to a mechanical enforcement gate (hook, hard block) rather than adding another advisory entry — advisory-only correction for a >5x recurrence is the behavioral equivalent of patching symptoms without root cause analysis.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "Always include 'what was tried and why it failed' as a mandatory field in core-dump and checkpoint artifacts, so resumed sessions inherit the negative-result record and don't re-enter a thrash loop from a clean-looking state.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   }
 ]

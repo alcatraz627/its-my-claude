@@ -445,3 +445,34 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (23): c6ea2b0e, bc59cf34, a76e1439, +20 more
 
 ---
+
+
+## Wake Cycle — 2026-06-30 02:10 UTC
+
+### Insight (conf=0.82)
+> Terse continuation signals ('ahead', 'next', 'done') create an autonomy gradient the agent over-generalizes past the git-push boundary — the same 'keep going' energy that correctly drives execution gets incorrectly extended to shared-state mutations, because the agent conflates execution autonomy with scope autonomy.
+
+**Rule:** Always treat terse continuation signals as authorizing execution-axis autonomy only; never interpret them as implicit approval for shared-state mutations (git push, PR creation, external messages) regardless of how positive the session momentum feels.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+### Insight (conf=0.61)
+> Fix-thrashing (repeated attempts without root-cause analysis) is amplified by context boundaries — when a session compacts or continues, the record of what was already tried and why it failed is the first thing lost, causing the resumed session to re-attempt the same failed approaches from a position of false freshness.
+
+**Rule:** Always include 'what was tried and why it failed' as a mandatory field in core-dump and checkpoint artifacts, so resumed sessions inherit the negative-result record and don't re-enter a thrash loop from a clean-looking state.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Sessions frequently hit context limits and require continuation via 'this session being continued from' handoff messages"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product-backend
+- _Sessions_ (105): f22bd641, 5a0bcd6b, 59c741e5, +102 more
+
+---

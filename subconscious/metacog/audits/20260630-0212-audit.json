@@ -1,0 +1,67 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18102,
+    "correction_density": 0.043478260869565216,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2646324678063607,
+    "unit_count": 92
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — rate 62.5% (10/16 tool-using units), matching the best-recorded prior cycle exactly with zero net movement; subvariants: ls-for-directory-listing in 4b1b8967-1 (ls -la *.xlsx), 4b1b8967-25 (ls -la /tmp/pt_sweep_1000rows_*.json), 4b1b8967-27 (ls frontend/docs/tech/backend/ai-agents/, ls backend/docs/), 6ec6743c-5 (ls -d ../extractor-webserver, ls ../extractor-webserver | head, ls -la automation/), 6ec6743c-14 (ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/); ls-t-for-timestamp-sort in 4b1b8967-19 (two instances J=$(ls -t /tmp/pt_sweep_3rows_*.json | head -1)), 4b1b8967-20 (J=$(ls -t /tmp/pt_sweep_1rows_*.json | head -1)), 4b1b8967-25 (J=$(ls -t /tmp/pt_sweep_1rows_*.json | head -1)), 4b1b8967-26 (three separate J=$(ls -t ...) calls) — stable across consecutive units for sixth confirmed cycle; sed-instead-of-read-with-offset in 4b1b8967-19 (sed -n '1,60p' lib/tasks/errors.py | head -60), 6ec6743c-14 (sed -n '1,80p' + cat fallback | head -80, sed -n '91,100p'); cat-instead-of-read in 6ec6743c-22 (cat on task JSONL output, first attempt failed then adapted to python parse), 6ec6743c-23 (cat /tmp/task2-modal-review.md immediately after Write tool wrote that file — cleaner signal); clean units: 4b1b8967-2 (Python+SendUserFile), 4b1b8967-8 (openpyxl Python only), 4b1b8967-32 (rg+Read), 4b1b8967-33 (git ops+rg+Read+Edit), 4b1b8967-38 (rg only), 6ec6743c-17 (atone scripts using rg correctly)",
+      "grep_in_compound_bash:RECURRING:STABLE — 2 units: 6ec6743c-5 (grep -niE 'output|whiteboard|cache|\\.claude' .gitignore embedded mid-compound Bash string, bypasses prefer-ripgrep hook which intercepts argv[0] only), 6ec6743c-14 (grep -iv 'preview-job-output.modal' and grep -i 'delete|exports/' in pipe chains); hook architecture gap remains unaddressed; eighth or more consecutive RECURRING cycle with zero net improvement",
+      "document_format_anchoring:RECURRING:CONFIRMED — unit 4b1b8967-27 (outcome=Corrected) wrote a long engineering-oriented model-evaluation document when user input (165 chars, topic_keywords: ['apply','changes','recommend','gemmini','flash']) contained no explicit audience or format specification; unit 4b1b8967-28 (is_correction=true) accepted the framing correction cleanly; pattern first flagged NEW two cycles ago and now RECURRING for third consecutive cycle with a direct correction event in each",
+      "scope_expansion:RECURRING:S3_CONFIRMED — unit 6ec6743c-17 (outcome=Corrected) is the speculative-abstractions-without-a-load-bearing-caller S3 event: agent built deriveJobOutputStats plus 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO seam when user asked only for raw aggregate data and explicitly reserved UI layer; atone correctly filed with RCA and runnable precheck procedure; fourth confirmed S3 recurrence of this slug across full analysis history"
+    ],
+    "calibration_score": 0.38,
+    "cross_references": [
+      "dream insight 2026-06-18 00:39 UTC (terse-as-local-work-only): unit 4b1b8967-33 input 'push code' (36 chars, topic_keywords=['push','code']) is an explicit push directive naming the external action, not a terse continuation over-extended to cross a visibility boundary; agent correctly treated it as explicit per-turn authorization; insight NOT VIOLATED in this unit",
+      "dream insight 2026-06-18 22:46 UTC (fix-thrash meta-pattern): scope_expansion slug now has 4 S3 events with a documented precheck procedure; if the precheck is not being executed at draft time, the advisory record will not prevent recurrence — same meta-pattern as the git-push fix-thrash the insight describes; mechanical precheck gate at the export-authoring decision point is the required fix",
+      "dream insight 2026-06-19 01:39 UTC (visibility-boundary discriminator): git push in 4b1b8967-33 crossed the local/external boundary after user message explicitly named 'push code' in 36 chars; explicit naming of the action satisfies the visibility gate; no violation; contrast with terse-continuation-only messages where the action was not named"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations: rate STABLE at 62.5% across two consecutive cycles after peak of 87.5% — partial improvement has plateaued; ls-t-for-timestamp-sort subvariant appears in 4 units this batch confirming it as a stable recurring pattern with no improvement trajectory; advisory recommendations have been exhausted across 8+ cycles; only a hook-level mechanical gate on ls/sed/cat substituted for LS/Glob/Read will move the rate below the current floor; deprioritizing further advisory text",
+      "grep_in_compound_bash: hook architecture gap (argv[0]-only interception) is the structural root cause; advisory flagging has produced zero improvement across 8+ cycles; only fix is patching the hook to intercept grep appearing after && or | in compound strings; no new advisory recommendation",
+      "document_format_anchoring: three-cycle RECURRING with correction events; agent must identify audience register before writing any deliverable; mechanical trigger is: when topic_keywords contain action verbs ('apply','recommend') without explicit audience or format specification, default to asking rather than choosing format autonomously; the overconfident unit in this batch (4b1b8967-27) is the only counted overconfidence event",
+      "scope_expansion: fourth S3 recurrence on speculative-abstractions-without-a-load-bearing-caller; runnable precheck procedure exists in atone RCA and is the correct fix; the precheck ('does a caller exist right now?') must be executed before authoring any new exported function/type; advisory recording alone will not prevent recurrence per dream insight 2026-06-18 22:46 UTC meta-pattern on fix-thrash"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 22
+  },
+  "sessions": [
+    [
+      "cc7b53bb-cb3b-44d7-a2b8-04708bdf65d0",
+      146
+    ],
+    [
+      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
+      6505413
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      21105538
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      14187185
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      7661914
+    ],
+    [
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      3883379
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      5506000
+    ]
+  ],
+  "timestamp": "2026-06-30T02:12:31.558620Z",
+  "tokens_used": 23656,
+  "units_analyzed": 24,
+  "units_total": 92
+}

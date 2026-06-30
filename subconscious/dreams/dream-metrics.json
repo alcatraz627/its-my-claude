@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-29T18:03:22Z",
-  "events_analyzed": 72381,
+  "generated_at": "2026-06-30T08:15:38Z",
+  "events_analyzed": 72802,
   "sessions_analyzed": 203,
   "session_quality": {
     "average_score": 68.1,
@@ -180,14 +180,9 @@
       "staging-enhancement-product": 1,
       "frontend": 1
     },
-    "drift_rate": 0.721,
-    "total_switches": 145,
+    "drift_rate": 0.726,
+    "total_switches": 146,
     "recent_switches": [
-      {
-        "ts": "2026-06-26T18:53:48Z",
-        "from": "two-enhancement-product",
-        "to": ".claude"
-      },
       {
         "ts": "2026-06-26T19:26:15Z",
         "from": ".claude",
@@ -204,22 +199,27 @@
         "to": "staging-enhancement-product"
       },
       {
-        "ts": "2026-06-29T08:43:32Z",
+        "ts": "2026-06-29T19:48:13Z",
         "from": "staging-enhancement-product",
+        "to": ".claude"
+      },
+      {
+        "ts": "2026-06-29T23:08:34Z",
+        "from": ".claude",
         "to": "frontend"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6253,
-    "corrections": 1387,
-    "confirmations": 1126,
-    "directives": 216,
-    "terse_messages": 498,
-    "correction_rate": 0.222,
+    "total_prompts": 6312,
+    "corrections": 1392,
+    "confirmations": 1139,
+    "directives": 219,
+    "terse_messages": 516,
+    "correction_rate": 0.221,
     "confirmation_rate": 0.18,
     "directive_rate": 0.035,
-    "terse_rate": 0.08,
+    "terse_rate": 0.082,
     "style_label": "corrective"
   }
 }
