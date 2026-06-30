@@ -22,10 +22,15 @@ _bat() { command -v bat >/dev/null 2>&1 && bat --color=always --style=numbers --
 
 case "$ext" in
   json)
-    if command -v jq >/dev/null 2>&1 && jq -e . "$f" >/dev/null 2>&1; then
-      jq -C . "$f" 2>/dev/null | head -n "$lines"          # valid JSON → colorized + structured
+    # Single parse, size-gated: jq reads the whole file, so only pretty-print
+    # small JSON; large blobs get a bounded syntax-highlight/head instead of a
+    # multi-second hover stall. Empty jq output (JSONL/invalid) → fallback.
+    sz="$(wc -c < "$f" 2>/dev/null || echo 0)"
+    if command -v jq >/dev/null 2>&1 && [ "${sz:-0}" -lt 2000000 ]; then
+      out="$(jq -C . "$f" 2>/dev/null | head -n "$lines")"
+      if [ -n "$out" ]; then printf '%s\n' "$out"; else _bat -l json "$f" || head -n "$lines" "$f"; fi
     else
-      _bat -l json "$f" || head -n "$lines" "$f"           # JSONL / invalid → syntax highlight or raw
+      _bat -l json "$f" || head -n "$lines" "$f"
     fi ;;
   csv)  _bat -l csv "$f" || head -n "$lines" "$f" ;;
   tsv)  _bat -l tsv "$f" || _bat -l csv "$f" || head -n "$lines" "$f" ;;
