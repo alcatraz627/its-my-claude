@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-30T08:15:38Z",
-  "events_analyzed": 72802,
-  "sessions_analyzed": 203,
+  "generated_at": "2026-07-01T06:25:20Z",
+  "events_analyzed": 73683,
+  "sessions_analyzed": 206,
   "session_quality": {
-    "average_score": 68.1,
+    "average_score": 68.0,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -172,53 +172,52 @@
   "topic_drift": {
     "primary_focus": ".claude",
     "recent_projects": {
-      ".claude": 4,
-      "Downloads": 1,
-      "two-enhancement-product": 1,
-      "backend": 1,
+      ".claude": 3,
       "tmp": 1,
-      "staging-enhancement-product": 1,
-      "frontend": 1
+      "staging-enhancement-product": 3,
+      "frontend": 1,
+      "backend": 1,
+      "walmart-mvp": 1
     },
-    "drift_rate": 0.726,
-    "total_switches": 146,
+    "drift_rate": 0.73,
+    "total_switches": 149,
     "recent_switches": [
       {
-        "ts": "2026-06-26T19:26:15Z",
-        "from": ".claude",
-        "to": "backend"
-      },
-      {
-        "ts": "2026-06-27T00:57:19Z",
-        "from": "backend",
-        "to": "tmp"
-      },
-      {
-        "ts": "2026-06-29T06:46:49Z",
-        "from": "tmp",
+        "ts": "2026-06-30T08:49:50Z",
+        "from": "frontend",
         "to": "staging-enhancement-product"
       },
       {
-        "ts": "2026-06-29T19:48:13Z",
+        "ts": "2026-06-30T09:27:51Z",
         "from": "staging-enhancement-product",
         "to": ".claude"
       },
       {
-        "ts": "2026-06-29T23:08:34Z",
+        "ts": "2026-06-30T09:28:38Z",
         "from": ".claude",
-        "to": "frontend"
+        "to": "backend"
+      },
+      {
+        "ts": "2026-06-30T13:24:08Z",
+        "from": "backend",
+        "to": "staging-enhancement-product"
+      },
+      {
+        "ts": "2026-06-30T13:46:39Z",
+        "from": "staging-enhancement-product",
+        "to": "walmart-mvp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6312,
-    "corrections": 1392,
-    "confirmations": 1139,
+    "total_prompts": 6376,
+    "corrections": 1406,
+    "confirmations": 1150,
     "directives": 219,
-    "terse_messages": 516,
+    "terse_messages": 523,
     "correction_rate": 0.221,
     "confirmation_rate": 0.18,
-    "directive_rate": 0.035,
+    "directive_rate": 0.034,
     "terse_rate": 0.082,
     "style_label": "corrective"
   }

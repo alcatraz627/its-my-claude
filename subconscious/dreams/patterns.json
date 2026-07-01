@@ -5130,6 +5130,33 @@
     ]
   },
   {
+    "id": "3b08feb7-ed95-487d-b692-81cf62efa129",
+    "pattern": "When the user asks for data exposure or a simple addition to a component, the agent must not invent intermediate abstractions, wrapper functions, or status-derivation logic beyond what was literally requested — adding unrequested complexity in 'helpful' territory is a scope violation that triggers strong user correction.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "user-preference",
+    "source_sessions": [
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "dbd926e0-7a8b-43af-84a4-3b5440c91aa9",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-30T23:43:44.791641+00:00",
+    "last_seen": "2026-06-30T23:43:44.791641+00:00",
+    "occurrence_history": [
+      "2026-06-30T23:43:44.791641+00:00"
+    ]
+  },
+  {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
     "pattern": "Git worktree operations caused accidental loss of unstaged changes, requiring recovery - worktree switching must always check for and preserve unstaged work first",
     "valence": "negative",
@@ -9444,6 +9471,33 @@
     ]
   },
   {
+    "id": "77e8ffb7-211e-4085-89a2-8d2662b66ab8",
+    "pattern": "When the agent removes or rewrites a user's existing working solution (even while flagging it as a 'potential loss'), then re-solves the same problem and presents the solution as novel, this is a double failure: it overrides user-authored code without consent and then performs the fix as an achievement.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "dbd926e0-7a8b-43af-84a4-3b5440c91aa9",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-30T23:43:44.791641+00:00",
+    "last_seen": "2026-06-30T23:43:44.791641+00:00",
+    "occurrence_history": [
+      "2026-06-30T23:43:44.791641+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -13025,6 +13079,65 @@
     ]
   },
   {
+    "id": "cf13db26-0578-4cba-8a94-21e40196cedb",
+    "pattern": "For AI model evaluation in pair-coding / agentic contexts, the user judges quality by reliability, judgment under ambiguity, and knowing when to ask/research/delegate — not by raw performance, math accuracy, or token throughput.",
+    "valence": "positive",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "cc7b53bb-cb3b-44d7-a2b8-04708bdf65d0",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "dbd926e0-7a8b-43af-84a4-3b5440c91aa9",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-30T15:54:50.235965+00:00",
+    "last_seen": "2026-06-30T15:54:50.235965+00:00",
+    "occurrence_history": [
+      "2026-06-30T15:54:50.235965+00:00"
+    ]
+  },
+  {
+    "id": "0cc91449-b434-4d58-9cfe-8fb31534f1df",
+    "pattern": "When invoking /atone in response to a correction, the agent must verify the event was actually written to disk before stopping — invoking the skill without confirming the write leaves the mistake unrecorded and triggers a gate failure on the next Stop hook.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "tool-use",
+    "source_sessions": [
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "dbd926e0-7a8b-43af-84a4-3b5440c91aa9",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-06-30T23:43:44.791641+00:00",
+    "last_seen": "2026-06-30T23:43:44.791641+00:00",
+    "occurrence_history": [
+      "2026-06-30T23:43:44.791641+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13633,94 +13746,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "962defc4-7537-4b2e-8160-79d81b256206",
-    "pattern": "Before adding a new testing library or test utility, check existing test files in the project and match their pattern — adding dependencies that duplicate existing capability is treated as a mistake.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "060367c5-53cd-434a-9021-5edc8f2828be",
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "1e792352-68e5-4389-8429-3eee3c5cc6d6",
-      "d7513904-933c-47f0-ab68-ab7aea6c4d82",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "40bfc88e-25a8-4671-9c53-5d6a38fa6975"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-logger-crab",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude-widgets-claude-instances"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-08T14:29:59.676799+00:00",
-    "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "997c088e-acc6-4fc3-b992-ce51d7074ed7",
-    "pattern": "When resuming via checkpoint, the agent must verify the loaded context actually matches the current task before announcing next steps. Loading a checkpoint from a different work-stream and proceeding is worse than starting fresh.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "060367c5-53cd-434a-9021-5edc8f2828be",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-logger-crab",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-08T16:09:07.243289+00:00",
-    "last_seen": "2026-05-08T16:09:07.243289+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "57594e03-195b-4ba0-a72a-c19e88f4b1a5",
-    "pattern": "NEXT_PUBLIC_ env var prefix exposes values to the client bundle; the agent should push back when the user proposes making a value public that has no legitimate client-side need.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "domain",
-    "source_sessions": [
-      "060367c5-53cd-434a-9021-5edc8f2828be",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-logger-crab",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-09T10:27:10.480086+00:00",
-    "last_seen": "2026-05-09T10:27:10.480086+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "d7366d14-ca81-451e-b8af-994d64c5c213",
-    "pattern": "When suggesting cache invalidation strategies in multi-tenant systems, the agent must verify the invalidation scope is per-user or per-session — broad invalidation that penalizes all users for one user's issue is a critical architectural error.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "060367c5-53cd-434a-9021-5edc8f2828be",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "40bfc88e-25a8-4671-9c53-5d6a38fa6975"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-logger-crab",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude-widgets-claude-instances"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-09T13:03:20.913554+00:00",
-    "last_seen": "2026-05-09T13:03:20.913554+00:00",
     "occurrence_history": []
   }
 ]

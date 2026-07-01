@@ -1,0 +1,25 @@
+{
+  "ts": "2026-06-30T09:17:09Z",
+  "session_id": "gcc-plugs-a7",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260630-gcc-plugs-a7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [
+      "**GOTCHA \u2014 `AskUserQuestion` and `mcp__inputs__*` are unusable in this user's `/tui` fullscreen mode** (they can't select; must reject + answer in prose). Saved as memory `feedback-askuserquestion-tui-fullscreen`. Use plain numbered choices instead.",
+      "**Multi-session reality:** this repo (`its-my-claude`) moves under you \u2014 another session swept my in-progress files into its own commits and left 4 unpushed commits I carried up. The `gcc-commit` lock serializes commits but not working-tree edits. `git add -A` per COMMIT.md is the model; foreign untracked WIP (the `ledger/` feature) was excluded by hand earlier, then committed by its author.",
+      "**`$PPID`-based per-session attribution is unreliable from a script** (the reader can't pin the session); hooks have `session_id` on stdin, so the `plug-events` ledger keys on it. Doing the manifest/reader (option 2) first surfaced this and shaped option 1's design."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**ACTED-side detector** \u2014 proposal `prop-20260630-085101-30` is filed; wiring it into the ledger author's `detectors.toml` (bound to `attention-scarcity`) needs coordination with their active WIP. Not started by design.",
+    "**Efficacy review (the payoff ritual)** \u2014 after ~a week of `plug-events` data, run `/plugs` and decide whether the start lane's ~6.5k ch/session (mostly dream-insights, historically ~0 acted) should graduate to rules/hooks or be gated, rather than blanket-injected on faith.",
+    "**Decision: should the improvement backlog be version-controlled?** `proposals.jsonl` is gitignored (`.gitignore:12`), so the whole Item-2 backlog is machine-local and won't survive a machine move \u2014 inconsistent with `atone/events.jsonl` (tracked). Filed as a proposal this session (see 3.8). Relevant to the mac-migration project.",
+    "**`improvement-ideas.md` fate** \u2014 keep as scratch vs backfill into `proposals.jsonl` then retire (open question from the original analysis; not done).",
+    "**Verify on next session start** that the injection lane actually renders into context (the one thing un-testable from inside a session \u2014 look for the \"Dream Insights + Atone\" block at startup)."
+  ],
+  "tags": []
+}

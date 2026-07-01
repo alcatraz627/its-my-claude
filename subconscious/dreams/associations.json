@@ -80,6 +80,21 @@
     "auto_intention_id": null
   },
   {
+    "id": "49e9a1a4-d903-476a-9409-c9817d76f665",
+    "patterns_linked": [
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+    ],
+    "hypothesis": "The 'repeated fix without root cause' anti-pattern applies recursively to itself: the git-push violation has recurred 18+ times and the system keeps applying the same class of fix (more recorded warnings, more memory entries, more atone events) without addressing the mechanical root cause — which is the absence of a pre-tool hook that blocks git push absent an in-turn approval token.",
+    "confidence": 0.12000000000000016,
+    "actionable": true,
+    "suggested_rule": "When the same behavioral violation recurs more than 5 times despite advisory rules, stop adding advisory rules and escalate to a mechanical gate (hook, pre-tool check, or hard block) — advisory-only corrections for high-recurrence patterns are themselves a thrash loop.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
     "id": "36bc3901-9781-47fc-b9f8-633208f60667",
     "patterns_linked": [
       "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
@@ -280,6 +295,20 @@
     "confidence": 0.88,
     "actionable": true,
     "suggested_rule": "Before generating any output that fills a gap (fix attempt, data value, inferred state), the agent must first produce a one-line hypothesis about WHY the gap exists. If the hypothesis can't be stated, the agent doesn't understand enough to generate — read more first.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "1f6c5681-cd02-4768-a027-16319de625ac",
+    "patterns_linked": [
+      "c147ad79-f600-4a30-961a-491075472882",
+      "556fbc99-c295-493f-8b7a-218b2f5e964f"
+    ],
+    "hypothesis": "The terse-continuation protocol ('yes', 'ahead', 'next' = execute autonomously) structurally collides with the per-operation approval requirement for git push — the agent generalizes 'terse input means full autonomy' past the shared-state-mutation boundary where autonomy is explicitly revoked.",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "Always treat git push/commit as an exception to terse-continuation autonomy — even when the user sends a single-word continuation signal, never interpret it as approval to push unless the word is specifically 'push' or 'commit'.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -649,6 +678,22 @@
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
     "promoted": true,
     "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "b834fe38-7d2c-4e03-92d3-47799961264a",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+    ],
+    "hypothesis": "Terse continuation signals ('ahead', 'next') correctly grant execution autonomy, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'just keep going' signal that authorizes editing gets misread as authorizing push, because both feel like 'the user said continue'.",
+    "confidence": 0.0500000000000001,
+    "actionable": true,
+    "suggested_rule": "Always treat terse continuation signals as authorizing LOCAL-ONLY actions (edits, reads, builds, tests) — never as authorizing shared-state mutations (git push, PR creation, external messages) regardless of how autonomous the session feels.",
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -1342,38 +1387,6 @@
     "confidence": 0.82,
     "actionable": true,
     "suggested_rule": "Unify under a single meta-principle: 'No assertion without observation.' Before claiming any state (data value, UI appearance, click target, build success), the agent must have a tool-call result from THIS turn that confirms it. Prior-turn observations are stale by default.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "69bfc1dd-02fa-479a-a8cc-281aa6cbfbc8",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
-    ],
-    "hypothesis": "The terse-continuation signals ('ahead', 'next', 'done') that authorize local execution are structurally indistinguishable from the implicit momentum that causes unauthorized git pushes — the agent generalizes 'terse = do it' past the shared-state boundary because no syntactic discriminator exists between 'continue editing' and 'push my code'.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as authorizing only local-reversible actions (edits, builds, searches); never extend them to shared-state mutations (git push, PR creation, external API calls) regardless of how strong the momentum feels.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "6f596426-7bdd-4f80-87b0-bf42732be86f",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
-    ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') create an autonomy gradient the agent over-generalizes past the git-push boundary — the same 'keep going' energy that correctly drives execution gets incorrectly extended to shared-state mutations, because the agent conflates execution autonomy with scope autonomy.",
-    "confidence": 0.82,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as authorizing execution-axis autonomy only; never interpret them as implicit approval for shared-state mutations (git push, PR creation, external messages) regardless of how positive the session momentum feels.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2753,6 +2766,21 @@
     "confidence": 0.78,
     "actionable": true,
     "suggested_rule": "Maintain a 'known-fragile integrations' section in runtime-notes or a dedicated file. For each entry: last known failure mode, what was tried, current workaround, and conditions under which a real fix should be reattempted. Before debugging a recurring integration failure, check this registry first to avoid re-treading prior sessions' dead ends.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "9c0682f5-b915-46aa-8ee1-1a5228a44239",
+    "patterns_linked": [
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "d8578fea-ae3a-4ec7-9a16-ababf44cfc38"
+    ],
+    "hypothesis": "The git-push violation recurs despite 18+ recorded instances because the correction mechanism (advisory memory entries) suffers from the same context-boundary fragility that the catchup system was built to solve — the negative rule is stored but stripped or deprioritized during compaction, so resumed sessions re-enter the violation from a clean slate.",
+    "confidence": 0.78,
+    "actionable": true,
+    "suggested_rule": "Always enforce git-push approval via a mechanical pre-tool hook rather than advisory memory — advisory rules have proven insufficient across 18+ recurrences because they are lost or deprioritized at compaction boundaries.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4569,38 +4597,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "After any context boundary (compaction, session resume, catchup), treat all prior state as unverified — re-read files and re-check git status before acting, just as you would require source references before emitting data values.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b908a026-350d-4c23-868b-c36564379c54",
-    "patterns_linked": [
-      "1e5df293-bb35-4b57-b67e-d2640b80c314",
-      "10b7a87a-5217-44e1-be13-e9acb9c24ae8",
-      "ef57d880-da40-403d-b5bc-49ae318f35bd",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "5c3499d0-aef9-4924-b559-e15bf88068ed"
-    ],
-    "hypothesis": "Context loss across session boundaries creates the same class of trust violation as data hallucination — when the agent loses state and reconstructs it incorrectly, the user experiences fabricated context (wrong assumptions about what was done, what files look like, what branch is active) the same way they experience fabricated data values. Both are 'the agent confidently presented something false as true.' Session continuity infrastructure is actually anti-hallucination infrastructure.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "After any context boundary (compaction, catchup, session resume), treat all prior state claims as unverified hypotheses — re-read files and git state before acting, with the same rigor applied to avoiding data hallucination. Label this class of error 'context hallucination' in mistake-patterns.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "0653cd53-2ac9-4af3-81d0-8664cac0eb36",
-    "patterns_linked": [
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "5c3499d0-aef9-4924-b559-e15bf88068ed"
-    ],
-    "hypothesis": "Fix-thrashing (repeated attempts without root-cause analysis) is amplified by context boundaries — when a session compacts or continues, the record of what was already tried and why it failed is the first thing lost, causing the resumed session to re-attempt the same failed approaches from a position of false freshness.",
-    "confidence": 0.61,
-    "actionable": true,
-    "suggested_rule": "Always include 'what was tried and why it failed' as a mandatory field in core-dump and checkpoint artifacts, so resumed sessions inherit the negative-result record and don't re-enter a thrash loop from a clean-looking state.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

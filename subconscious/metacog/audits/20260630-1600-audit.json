@@ -1,0 +1,79 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18110,
+    "correction_density": 0.018691588785046728,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.21313714453789934,
+    "unit_count": 107
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — rate ~65% (13/20 tool-using units), within historical 62.5-87.5% range; subvariants active: ls-for-directory-listing in 460e2aa4-14 (ls -la *.md | awk), 460e2aa4-18 (ls -la \"$D\", ls ~/.claude/settings.json, ls -d ~/.claude/subconscious..., ls ~/Code/local-models/docs/q-spec.md), 460e2aa4-19 (ls ~/.claude/scripts/magi/, ls ~/.claude/personas/), 460e2aa4-33 (ls -l ~/.local/bin/q), 460e2aa4-51 (ls -d .venv venv */venv), 460e2aa4-67 (ls bin/, ls intents/, ls -d lib procedures, ls scripts/, ls bin/probe probe/), 6ec6743c-5 (ls -d ../extractor-webserver, ls ../extractor-webserver | head -30, ls -la automation/, ls -la *.json), 6ec6743c-14 (ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/), 6ec6743c-28 (ls -la guard-system-dir-writes.sh, ls -la ~/.claude/scripts/hooks multiple times, ls -d ~/.local/bin, ls ~/.local/bin); ls-t-for-timestamp-sort in 460e2aa4-35 (ls -t ~/.claude/projects/*/${SID}*.jsonl 2>/dev/null | head -1); sed-instead-of-read-with-offset in 6ec6743c-14 (sed -n '1,80p' use-job-data.tsx || cat | head -80), 6ec6743c-28 (sed -n '1,30p' prefer-ripgrep.sh, sed -n '60,76p' prefer-ripgrep.sh); cat-instead-of-read in 460e2aa4-18 (cat gcc-integration-surface.md | head -5), 460e2aa4-19 (cat matrix.md, cat bias-matrix.md), 6ec6743c-17 (cat task output | tail -30), 6ec6743c-22 (cat wwhbuderl.output initial attempt, success:false, then adapted to python open()), 6ec6743c-23 (cat /tmp/task2-modal-review.md immediately after Write tool wrote same file — cleanest signal); clean units: 460e2aa4-12, 460e2aa4-45, 460e2aa4-48, 460e2aa4-62, 460e2aa4-63, 6ec6743c-32, 6ec6743c-41; ninth or more consecutive RECURRING cycle at or above 62% with zero net improvement",
+      "grep_in_compound_bash:RECURRING:STABLE — 3 units this batch: 6ec6743c-5 (grep -niE 'output|whiteboard|cache|\\.claude' .gitignore embedded mid-compound Bash string, bypasses prefer-ripgrep hook argv[0]-only interception); 6ec6743c-14 (grep -iv 'preview-job-output.modal' and grep -i 'delete|exports/' in pipe chains); 6ec6743c-28 (direct grep -n 'features/tab-title.md...' CLAUDE.md at end of Bash string, plus grep -q '\"decision\":\"block\"' embedded in heredoc test script multiple times); 3 units is within the 2-4 range of recent cycles, classified STABLE rather than WORSENING from the prior cycle's 2 units; hook architecture gap (argv[0]-only interception) remains the structural root cause and is unaddressed",
+      "scope_expansion:RECURRING:S3_CONFIRMED — unit 6ec6743c-17 (outcome=Corrected) is the speculative-abstractions-without-a-load-bearing-caller S3 event; agent built deriveJobOutputStats + 15-field JobOutputStats view-model (segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, multi-sheet TODO seam) when user asked only for raw aggregate data at preview-job-output.modal.tsx:256 and explicitly reserved UI shaping; user deleted all of it; atone correctly filed with RCA and runnable precheck procedure; this is the fifth total confirmed S3 recurrence of this slug across full analysis history; no new scope expansion events in remaining 25 units",
+      "cat-heredoc-file-write:RECURRING — unit 460e2aa4-19 uses cat > /path/_anon-map.json <<'EOF' heredoc to write a JSON file instead of Write tool; previously named subvariant first appearing in 413d6f51-13 (2026-06-28 cycle) and e0bc612e-6; third confirmed instance across analysis history; appears in the same session as two other cat-instead-of-read violations (matrix.md, bias-matrix.md) suggesting a session-level shell-first regression in 460e2aa4"
+    ],
+    "calibration_score": 0.38,
+    "cross_references": [
+      "Dream Insight 1 and 3 (terse-input maps to local work only; visibility boundary requires explicit confirmation): COMPLIANT in this batch — git commit in 460e2aa4-63 was local (no push); claude-ipc send in 460e2aa4-63 crosses session boundaries but was part of a user-requested peer-review workflow and accepted; no instances of terse continuation signals being generalized to externally-visible actions without named confirmation",
+      "Dream Insight 2 (18+ advisory-only recordings of a pattern without a mechanical gate is itself the fix-thrash anti-pattern at the meta level): DIRECTLY CONFIRMED by unit 6ec6743c-28 — the agent implemented the tmp-jail-guard PreToolUse hook, a mechanical enforcement gate for write-confinement; this session embodies the insight's prescription that recording mistakes is insufficient and a hook is the only load-bearing intervention; the hook-building work is itself evidence the user and agent share the meta-diagnosis",
+      "Dream Insight 2 applied to shell_tool_preference_violations: NOT YET APPLIED — the pattern has 9+ consecutive RECURRING cycles with zero improvement but no PreToolUse hook has been built for it, exactly the failure mode the dream insight describes; this batch provides no new evidence that the pattern will self-correct without mechanical intervention"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations: DEPRIORITIZE — ninth or more consecutive RECURRING cycles with zero net improvement across all documented subvariants; rate 65% is within historical steady-state range; further advisory recommendations add no leverage; the only actionable lever is a PreToolUse hook intercepting Bash calls containing bare ls or cat patterns against file paths, which remains unbuilt",
+      "grep_in_compound_bash: MONITOR — rate is STABLE at 3 units (within historical 2-4 range); the argv[0]-only hook interception gap is the structural root cause; if rate climbs above 4 units in the next cycle, escalate to a hook-improvement proposal targeting grep appearing after && or ; or | in compound Bash strings",
+      "scope_expansion: DEPRIORITIZE NEW RECOMMENDATIONS — fifth S3 recurrence of speculative-abstractions-without-a-load-bearing-caller; existing atone event, RCA with runnable precheck procedure, and rules/speculative-abstractions-without-a-load-bearing-caller.md are already the canonical interventions; the precheck ('does an existing derivation already produce it, and is there a caller for the new shape right now?') is the correct gate and is baked in; no new recommendation would add leverage",
+      "cat-heredoc-file-write: MONITOR — three instances across three cycles; consistent enough to warrant a targeted PreToolUse hook checking whether Bash contains 'cat >' or 'cat>>' patterns redirecting to non-/tmp paths, which would have non-trivially low false-positive rate given Write tool is almost always the correct alternative"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 25
+  },
+  "sessions": [
+    [
+      "cc7b53bb-cb3b-44d7-a2b8-04708bdf65d0",
+      862
+    ],
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      9380144
+    ],
+    [
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      34230
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      23679673
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      15464747
+    ],
+    [
+      "dbd926e0-7a8b-43af-84a4-3b5440c91aa9",
+      605676
+    ],
+    [
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      3378195
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      8286883
+    ],
+    [
+      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
+      4361782
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      6769968
+    ]
+  ],
+  "timestamp": "2026-06-30T16:00:35.845604Z",
+  "tokens_used": 27317,
+  "units_analyzed": 26,
+  "units_total": 107
+}

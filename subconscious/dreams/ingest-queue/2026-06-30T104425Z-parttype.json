@@ -1,0 +1,24 @@
+{
+  "ts": "2026-06-30T10:44:25Z",
+  "session_id": "parttype-adjud-ba",
+  "project_root": "/Users/alcatraz627/Code/Versable/staging-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/staging-enhancement-product/_20260630-parttype-validation-adjudication.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [
+      "**Gotcha \u2014 macOS has no `timeout`/`gtimeout`.** Don't wrap python runs in `timeout`; the script's own per-call `asyncio.wait_for` is the right cap. Also `rg -rn` is blocked (the `-r` = replace guard) \u2014 split grep from any heredoc.",
+      "**Resumable judge cache paid off conceptually** \u2014 keying each verdict by judge+row+labels means a 429/abort mid-run continues from cache rather than re-paying ~700 calls (the subagent-fleet 429 lesson applied to direct API fan-out; capped concurrency at 6/judge).",
+      "**The error profile was crisp because the sample was broad.** Auditing worst-sim AND mid-sim deviations (not just the cherry-picked worst) is what let the \"no genuine model errors, it's all input quality\" claim survive the full adjudication, and surfaced the tight Brakes/Baer signature."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**(Deferred, user declined this session)** Update the stale memory `project_part_type_classifier.md` \u2014 it still says \"confidence gate useless\" and references Pinecone, both now contradicted by the Jun 30 data (confidence is calibrated; Pinecone removed). Offer again next session if relevant.",
+    "**(Optional product follow-up)** The model's 6 real errors are a single fixable pattern: brake **kit vs single component** confusion on Baer products. A targeted rule or a few catalog few-shot examples for \"kit vs rotor/pad\" would likely remove most. Not requested \u2014 flag only.",
+    "**(Optional)** The bigger deliverable for the client is the **data-quality finding** (their input labels wrong in 96% of disagreements, generic in 35% of agreements). Worth raising as its own work item \u2014 it's their data to clean.",
+    "**Scratchpad is ephemeral.** Analysis scripts (`score_validation.py`, `adjudicate.py`, `build_report_v2.py`) and the per-row verdicts (`adjudication_results.json`, `verdicts_cache.json`) live in this session's scratchpad and will be cleaned. The durable artifact is the report in `~/Downloads`. If the adjudication must be reproduced or extended (e.g. tighten the EXACT misfit CI beyond n=60, or human-review the 6 errors), the judge will need to be rebuilt \u2014 the verdict cache is resumable only while the scratchpad survives."
+  ],
+  "tags": []
+}

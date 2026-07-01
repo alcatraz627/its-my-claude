@@ -24,7 +24,8 @@ case "$ext" in
   json)
     # Single parse, size-gated: jq reads the whole file, so only pretty-print
     # small JSON; large blobs get a bounded syntax-highlight/head instead of a
-    # multi-second hover stall. Empty jq output (JSONL/invalid) → fallback.
+    # multi-second hover stall. jq pretty-prints a valid JSONL stream too; it
+    # only falls back (empty output) when jq errors on genuinely invalid JSON.
     sz="$(wc -c < "$f" 2>/dev/null || echo 0)"
     if command -v jq >/dev/null 2>&1 && [ "${sz:-0}" -lt 2000000 ]; then
       out="$(jq -C . "$f" 2>/dev/null | head -n "$lines")"

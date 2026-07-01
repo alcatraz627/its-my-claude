@@ -267,8 +267,15 @@ The **elicit extension** — how Claude speaks to the terminal and solicits user
 - Fallback: `AskUserQuestion` for open-ended questions.
 - Low-level: `/dev/tty` prompts from Bash when neither fits.
 
-**Reusable picker modules** (`scripts/tui/`) — plug-and-play building blocks for `fzf`-based TUIs, so each tool doesn't re-roll them:
+**Reusable picker modules** (`scripts/tui/`) — plug-and-play building blocks for `fzf`-based TUIs, so each tool doesn't re-roll them (all `source`d except file-preview which is `exec`d):
+- `scripts/tui/colors.sh` — `tui_colors_init` sets a TTY-gated palette (both `B/R` and `BLD/RST` dialects), empty strings when not a terminal (both-fd gate, no ANSI leak).
+- `scripts/tui/tty.sh` — `tui_have_tty` (honest open-probe, not `[ -r /dev/tty ]`) + `tui_read_tty` (bounded, never hangs headless).
+- `scripts/tui/require.sh` — `tui_have DEP` (boolean) + `tui_require DEP...` (install hint, returns 1, doesn't exit).
+- `scripts/tui/pick.sh` — `tui_pick_one` (fzf→gum→read ladder, `--non-tty` policy) + `tui_pick_many` (multi) + `tui_choose OPT...` (static arg list) + `tui_confirm` (yes=0, no/headless=1).
+- `scripts/tui/list.sh` — live catalog: `bash ~/.claude/scripts/tui/list.sh` prints every `tui_*` primitive scanned from the modules (can't drift). Run it before building a TUI.
 - `scripts/tui/file-preview.sh <path>` — rich, dependency-degrading file preview (jq for JSON, bat for csv/tsv, sheet-names for xlsx; falls back to `head`). Drop into any picker: `fzf --preview '~/.claude/scripts/tui/file-preview.sh {}'`. First consumer: `zconvert -i`. Always exits 0 so a preview can't break the host TUI; honors `PREVIEW_LINES`.
+
+**The handbook** for building TUIs here (the blueprint, the patterns, the traps) is `conventions/tui-handbook.md` — read it before building a new terminal UI.
 
 **TUI-execute gotcha (load-bearing):** never nest an alternate-screen program (`gum`, another `fzf`) inside an `fzf --bind ...:execute(...)` — it blanks the host screen. Use `execute-silent` for non-interactive actions, or plain `/dev/tty` `read` prompts for interactive ones (see `zconvert -i` ctrl-o options panel).
 

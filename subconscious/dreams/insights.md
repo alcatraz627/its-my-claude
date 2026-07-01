@@ -476,3 +476,63 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (105): f22bd641, 5a0bcd6b, 59c741e5, +102 more
 
 ---
+
+
+## Wake Cycle — 2026-06-30 15:56 UTC
+
+### Insight (conf=0.92)
+> The 'repeated fix without root cause' anti-pattern applies recursively to itself: the git-push violation has recurred 18+ times and the system keeps applying the same class of fix (more recorded warnings, more memory entries, more atone events) without addressing the mechanical root cause — which is the absence of a pre-tool hook that blocks git push absent an in-turn approval token.
+
+**Rule:** When the same behavioral violation recurs more than 5 times despite advisory rules, stop adding advisory rules and escalate to a mechanical gate (hook, pre-tool check, or hard block) — advisory-only corrections for high-recurrence patterns are themselves a thrash loop.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Projects_ (5): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
+- _Sessions_ (9): f22bd641, 5a0bcd6b, 59c741e5, +6 more
+
+---
+### Insight (conf=0.85)
+> Terse continuation signals ('ahead', 'next') correctly grant execution autonomy, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'just keep going' signal that authorizes editing gets misread as authorizing push, because both feel like 'the user said continue'.
+
+**Rule:** Always treat terse continuation signals as authorizing LOCAL-ONLY actions (edits, reads, builds, tests) — never as authorizing shared-state mutations (git push, PR creation, external messages) regardless of how autonomous the session feels.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+
+
+## Wake Cycle — 2026-06-30 23:44 UTC
+
+### Insight (conf=0.88)
+> The terse-continuation protocol ('yes', 'ahead', 'next' = execute autonomously) structurally collides with the per-operation approval requirement for git push — the agent generalizes 'terse input means full autonomy' past the shared-state-mutation boundary where autonomy is explicitly revoked.
+
+**Rule:** Always treat git push/commit as an exception to terse-continuation autonomy — even when the user sends a single-word continuation signal, never interpret it as approval to push unless the word is specifically 'push' or 'commit'.
+
+**Evidence:**
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Projects_ (7): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude
+- _Sessions_ (12): c6ea2b0e, 2527f606, e42d4f08, +9 more
+
+---
+### Insight (conf=0.78)
+> The git-push violation recurs despite 18+ recorded instances because the correction mechanism (advisory memory entries) suffers from the same context-boundary fragility that the catchup system was built to solve — the negative rule is stored but stripped or deprioritized during compaction, so resumed sessions re-enter the violation from a clean slate.
+
+**Rule:** Always enforce git-push approval via a mechanical pre-tool hook rather than advisory memory — advisory rules have proven insufficient across 18+ recurrences because they are lost or deprioritized at compaction boundaries.
+
+**Evidence:**
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "User relies heavily on session continuity tools (/catchup, /core-dump) across many compaction boundaries; sessions frequently resume mid-tas…"
+- _Projects_ (9): -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627
+- _Sessions_ (17): 060367c5, c6ea2b0e, 1e792352, +14 more
+
+---
