@@ -47,20 +47,40 @@ yq -p toml -o json "$DETECTORS" > "$TMP/det.json"    2>/dev/null || echo '{}' > 
 cat "$STATE" 2>/dev/null > "$TMP/state.json" || true
 [ -s "$TMP/state.json" ] || echo '{}' > "$TMP/state.json"
 
+# Pre-convert the efficacy registry (TOML→JSON) so the embedded python — which has
+# no TOML parser (macOS python3 < 3.11, no tomllib) — can read the slug→gate
+# mappings. Mirrors the goals/detectors conversion above. The registry path is
+# whatever the efficacy detector declares; missing/unparseable → {} (the python
+# branch then emits a loud lint finding, never a silent skip).
+REG_PATH=$(jq -r '.detector[]? | select(.archetype=="efficacy") | .registry // empty' "$TMP/det.json" 2>/dev/null | head -1)
+REG_PATH_EXP="${REG_PATH/#\~/$HOME}"
+if [ -n "$REG_PATH_EXP" ] && [ -f "$REG_PATH_EXP" ]; then
+  yq -p toml -o json "$REG_PATH_EXP" > "$TMP/efficacy.json" 2>/dev/null || echo '{}' > "$TMP/efficacy.json"
+else
+  echo '{}' > "$TMP/efficacy.json"
+fi
+
 # Python computes decisions + lints; emits one JSON object (no id/ts — bash stamps
 # those via ledger_id so the alert ids match the ledger format).
-RESULT=$(python3 - "$NOW" "$TMP/goals.json" "$TMP/det.json" "$TMP/state.json" <<'PY'
+RESULT=$(python3 - "$NOW" "$TMP/goals.json" "$TMP/det.json" "$TMP/state.json" "$TMP/efficacy.json" <<'PY'
 import json, sys, os, datetime
 
 now = datetime.datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
 goals = json.load(open(sys.argv[2])).get("goals", {})
 dets  = json.load(open(sys.argv[3])).get("detector", [])
 state = json.load(open(sys.argv[4]))
+# The efficacy registry (slug→gate mappings), pre-converted TOML→JSON by bash.
+# Absent for a run with no efficacy detector; the efficacy branch lints if empty.
+efficacy_reg = json.load(open(sys.argv[5])) if len(sys.argv) > 5 and os.path.exists(sys.argv[5]) else {}
 
-KNOWN = {"burn_rate", "we_run_rule", "heartbeat", "robust_outlier"}
+KNOWN = {"burn_rate", "we_run_rule", "heartbeat", "robust_outlier", "efficacy"}
 TIER_ORDER = ["log", "find", "ticket", "page"]
 
 def expand(p): return os.path.expanduser(p or "")
+def parse_date(s):
+    if not s: return None
+    try: return datetime.datetime.strptime(str(s), "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
+    except Exception: return None
 def parse_ts(s):
     try: return datetime.datetime.strptime(s, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
     except Exception: return None
@@ -186,6 +206,130 @@ for det in dets:
                 summary.append(f"{name}: condition met but in cooldown ({cooldown}d) -> suppressed (logged, not paged)")
             else:
                 summary.append(f"{name}: quiet (long={long_c} short={short_c})")
+
+    # ---- EFFICACY eval (registry-driven) ----
+    # For every slug→gate mapping, does the slug's recurrence-rate DROP after the
+    # gate deployed? pre = events/30d over the 90d before deploy; post = events/30d
+    # since max(deployed, redeployed). A mature window still recurring at/above the
+    # pre rate is "regressing" — a gate that isn't working, which under
+    # graduate-to-mechanism is itself a thrash loop. Only HIGH-confidence mappings
+    # alert; provisional ones are informational. Idempotent per (slug, gate, month).
+    elif det.get("archetype") == "efficacy":
+        mappings = efficacy_reg.get("mapping", []) if isinstance(efficacy_reg, dict) else []
+        if not mappings:
+            alerts.append({"detector": name, "tier": "find", "kind": "alert", "goal_ref": gref,
+                           "actionable": True, "subject": f"efficacy-lint: {name}",
+                           "instruction": f"efficacy detector '{name}' has no readable registry mappings (registry '{det.get('registry')}' missing/empty/unparseable). It would go silently quiet — fix the registry.",
+                           "idempotence_key": f"efflint|{name}|{now.strftime('%Y-%m-%d')}"})
+            summary.append(f"{name}: LINT no registry mappings")
+        else:
+            min_window = int(det.get("min_window_days", 21))
+            margin     = float(det.get("margin", 0.15))
+            pre_days   = int(det.get("pre_window_days", 90))
+            ceiling    = goals[gref].get("tier_ceiling", "log")
+            req_tier   = det.get("tier", "ticket")
+            month      = now.strftime("%Y-%m")
+
+            # Load the atone ledger (subject_stream) and warn stream once.
+            atone_ev = []  # (ts_dt, slug, cluster)
+            for line in open(expand(stream)):
+                line = line.strip()
+                if not line: continue
+                try: d = json.loads(line)
+                except Exception: continue
+                t = parse_ts(d.get("ts", ""))
+                if t is None: continue
+                atone_ev.append((t, d.get("slug"), d.get("cluster")))
+            warn_ev = []  # (ts_dt, hook_id, heeded)
+            wpath = expand(det.get("warn_stream", ""))
+            if wpath and os.path.exists(wpath):
+                for line in open(wpath):
+                    line = line.strip()
+                    if not line: continue
+                    try: d = json.loads(line)
+                    except Exception: continue
+                    t = parse_ts(d.get("ts", ""))
+                    if t is None: continue
+                    warn_ev.append((t, d.get("hook_id", "") or "", d.get("heeded", "unknown")))
+
+            fired_months = dict(st.get("fired_months", {}))
+            HEED_YES = {"yes", "heeded", "true", "1"}
+            HEED_NO  = {"no", "ignored", "false", "0"}
+
+            for m in mappings:
+                slug = m.get("slug", "?"); gate = m.get("gate", "?")
+                conf = (m.get("confidence", "high") or "high").lower()
+                mfield = m.get("match_field", "slug"); mval = m.get("match_value", slug)
+                dep = parse_date(m.get("deployed")); redep = parse_date(m.get("redeployed"))
+                if dep is None:
+                    summary.append(f"{name} {slug}/{gate}: LINT bad/absent deployed date")
+                    continue
+                eff = redep if (redep and redep > dep) else dep
+
+                def matches(ev, _mf=mfield, _mv=mval):
+                    return (ev[2] == _mv) if _mf == "cluster" else (ev[1] == _mv)
+
+                pre_start = dep - datetime.timedelta(days=pre_days)
+                pre_c  = sum(1 for ev in atone_ev if pre_start <= ev[0] < dep and matches(ev))
+                post_c = sum(1 for ev in atone_ev if ev[0] >= eff and matches(ev))
+                post_days = (now - eff).days
+                pre_rate  = pre_c / pre_days * 30.0
+                post_rate = (post_c / post_days * 30.0) if post_days > 0 else 0.0
+
+                # gate telemetry in the post window (informational)
+                wprefix = m.get("warn_prefix", "")
+                g_fires = g_heeded = g_known = 0
+                if wprefix:
+                    for (t, hid, heeded) in warn_ev:
+                        if t >= eff and hid.startswith(wprefix):
+                            g_fires += 1
+                            hl = str(heeded).lower()
+                            if hl in HEED_YES: g_heeded += 1; g_known += 1
+                            elif hl in HEED_NO: g_known += 1
+                heed_str = f"{g_heeded}/{g_known}" if g_known else "?"
+
+                if post_days < min_window:
+                    status = "insufficient-data"
+                elif post_c == 0:
+                    status = "improving"
+                elif pre_rate == 0:
+                    status = "regressing" if post_c > 0 else "flat"
+                elif post_rate <= pre_rate * (1 - margin):
+                    status = "improving"
+                elif post_rate >= pre_rate:
+                    status = "regressing"
+                else:
+                    status = "flat"
+
+                mature = post_days >= min_window
+                cflag = "" if conf == "high" else f" [{conf}]"
+                summary.append(f"{name} {slug}/{gate}: {status}{cflag} (pre={pre_rate:.1f} post={post_rate:.1f}/30d, win={post_days}d, fires={g_fires} heeded={heed_str})")
+
+                # Alert only on a regressing, mature, HIGH-confidence mapping — and
+                # only once per (slug, gate, month). Provisional mappings never
+                # ticket (their attribution is too fuzzy to auto-file a gate).
+                if status == "regressing" and mature and conf == "high":
+                    mkey = f"{slug}|{gate}"
+                    if fired_months.get(mkey) == month:
+                        summary.append(f"{name} {slug}/{gate}: regressing but already alerted this month -> suppressed")
+                    else:
+                        tier = cap_tier(req_tier, ceiling)
+                        det_instr = str(det.get("instruction") or "").strip()
+                        alerts.append({"detector": name, "tier": tier, "kind": "alert", "goal_ref": gref,
+                                       "actionable": True,
+                                       "subject": f"gate not reducing recurrence: {slug} / {gate}",
+                                       "slug": slug, "gate": gate,
+                                       "pre_rate_30d": round(pre_rate, 2), "post_rate_30d": round(post_rate, 2),
+                                       "window_days": post_days, "gate_fires_post": g_fires,
+                                       "gate_heeded_post": heed_str, "deep_link": det.get("registry", ""),
+                                       "idempotence_key": f"{name}|{slug}|{gate}|{month}",
+                                       "instruction": (f"{slug} still recurs at {post_rate:.1f}/30d after {gate} deployed "
+                                                       f"{eff.date()} (pre {pre_rate:.1f}/30d, {post_days}d window, "
+                                                       f"gate fires={g_fires}). {goals[gref].get('statement','')}"
+                                                       + (f" || {det_instr}" if det_instr else ""))})
+                        fired_months[mkey] = month
+                        summary.append(f"{name} {slug}/{gate}: ALERT regressing tier={tier}")
+            st["fired_months"] = fired_months
     else:
         summary.append(f"{name}: archetype '{det.get('archetype')}' not implemented in v1 -> skipped")
 

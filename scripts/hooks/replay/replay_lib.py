@@ -18,6 +18,7 @@ import os
 import re
 import secrets
 import subprocess
+import tempfile
 from pathlib import Path
 
 HOME = os.path.expanduser("~")
@@ -177,7 +178,18 @@ def classify_outcome(stdout):
 
 
 def run_hook(hook_path, payload, timeout=45):
-    """Pipe a Stop stdin payload into the real hook; return (stdout, rc, err)."""
+    """Pipe a Stop stdin payload into the real hook; return (stdout, rc, err).
+
+    Telemetry isolation: hooks under test call warn-log.sh, which honors
+    WARN_LOG_STORE. Without a redirect, every replay/fixture run pollutes the
+    LIVE warns ledger (98 junk events on 2026-07-02 taught us this). Redirect
+    to a per-process temp store unless the caller already set one.
+    """
+    env = dict(os.environ)
+    env.setdefault(
+        "WARN_LOG_STORE",
+        os.path.join(tempfile.gettempdir(), f"replay-warn-events-{os.getpid()}.jsonl"),
+    )
     try:
         proc = subprocess.run(
             ["bash", hook_path],
@@ -185,6 +197,7 @@ def run_hook(hook_path, payload, timeout=45):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             timeout=timeout,
+            env=env,
         )
         return proc.stdout.decode("utf-8", "replace"), proc.returncode, None
     except subprocess.TimeoutExpired:
