@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-01T06:25:20Z",
-  "events_analyzed": 73683,
+  "generated_at": "2026-07-02T09:41:39Z",
+  "events_analyzed": 73811,
   "sessions_analyzed": 206,
   "session_quality": {
     "average_score": 68.0,
@@ -210,12 +210,12 @@
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6376,
-    "corrections": 1406,
-    "confirmations": 1150,
-    "directives": 219,
+    "total_prompts": 6397,
+    "corrections": 1410,
+    "confirmations": 1152,
+    "directives": 220,
     "terse_messages": 523,
-    "correction_rate": 0.221,
+    "correction_rate": 0.22,
     "confirmation_rate": 0.18,
     "directive_rate": 0.034,
     "terse_rate": 0.082,

@@ -1,0 +1,148 @@
+{
+  "fixtures": [
+    {
+      "name": "tp-781e356c-t21",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/tp-781e356c-t21.jsonl",
+      "expected": "soft",
+      "desired": "block-or-soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/Code/Versable/enhancement-product/backend",
+      "source_transcript": "781e356c-3e00-46fa-b981-b2bc599fbda0.jsonl",
+      "turn_in_file": 21,
+      "note": "ruff lint substituted for runtime exercise of an async/event-loop perf fix; body self-discloses the runtime effect is NOT verified"
+    },
+    {
+      "name": "tp-b40f9d66-t0",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/tp-b40f9d66-t0.jsonl",
+      "expected": "soft",
+      "desired": "block-or-soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
+      "turn_in_file": 0,
+      "note": "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified' — the interaction tsc cannot see is never exercised"
+    },
+    {
+      "name": "tp-b40f9d66-t1",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/tp-b40f9d66-t1.jsonl",
+      "expected": "block",
+      "desired": "block-or-soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
+      "turn_in_file": 1,
+      "note": "'Done. Type-checks clean.' on a drag/modifier hook — the cursor/keyboard interaction a type-check cannot see"
+    },
+    {
+      "name": "tp-b40f9d66-t3",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/tp-b40f9d66-t3.jsonl",
+      "expected": "block",
+      "desired": "block-or-soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
+      "turn_in_file": 3,
+      "note": "'both fixes applied, type-check clean' on a cursor-correctness fix; drag interaction unexercised"
+    },
+    {
+      "name": "fp-b40f9d66-t4",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/fp-b40f9d66-t4.jsonl",
+      "expected": "silent",
+      "desired": "soft-or-silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
+      "turn_in_file": 4,
+      "note": "comment-only .tsx edit — nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"
+    },
+    {
+      "name": "tp-1c86d512-t108",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/tp-1c86d512-t108.jsonl",
+      "expected": "soft",
+      "desired": "block-or-soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
+      "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
+      "turn_in_file": 108,
+      "note": "swift menubar rebuild 'complete and compiling at every step' — compile-checked to /tmp, never deployed/run"
+    },
+    {
+      "name": "fp-1c86d512-t2",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/fp-1c86d512-t2.jsonl",
+      "expected": "soft",
+      "desired": "soft-or-silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
+      "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
+      "turn_in_file": 2,
+      "note": "agent DID run the changed CLI ('Verified by running i-dream widget status'); Det2's allow-list has no i-dream/project-CLI entry"
+    },
+    {
+      "name": "fp-1c86d512-t128",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/fp-1c86d512-t128.jsonl",
+      "expected": "soft",
+      "desired": "soft-or-silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
+      "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
+      "turn_in_file": 128,
+      "note": "verifiable half verified live; the remaining half is a user-only observation ('awaiting you') — a hedge, not an over-claim"
+    },
+    {
+      "name": "fp-5da7133c-t59",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/fp-5da7133c-t59.jsonl",
+      "expected": "soft",
+      "desired": "soft-or-silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "5da7133c-3e35-46de-95c2-f1d50b5fb715.jsonl",
+      "turn_in_file": 59,
+      "note": "4-scenario smoke test with observed per-row results in assistant prose; the tool_result pass/fail scan missed the table"
+    },
+    {
+      "name": "tp-dc7f8071-t1",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/tp-dc7f8071-t1.jsonl",
+      "expected": "soft",
+      "desired": "block-or-soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product/frontend",
+      "source_transcript": "dc7f8071-1aa2-4bde-840d-6c06661267ae.jsonl",
+      "turn_in_file": 1,
+      "note": "React stale-useMemo fix; the toggle a screenshot cannot catch was never toggled"
+    },
+    {
+      "name": "control-1c86d512-t3",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/control-1c86d512-t3.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "CONTROL",
+      "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
+      "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
+      "turn_in_file": 3,
+      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+    },
+    {
+      "name": "control-1c86d512-t12",
+      "hook": "declared-ready-stop.sh",
+      "fixture": "fixtures/declared-ready/control-1c86d512-t12.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "CONTROL",
+      "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
+      "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
+      "turn_in_file": 12,
+      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+    }
+  ]
+}

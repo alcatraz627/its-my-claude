@@ -170,13 +170,17 @@ for det in dets:
                 st["last_fired_ts"] = nowiso
                 ceiling = goals[gref].get("tier_ceiling", "log")
                 tier = cap_tier(det.get("tier", "ticket"), ceiling)
+                # A detector's own instruction (remediation guidance in detectors.toml)
+                # rides the alert so the reader gets the specific fix, not just the goal.
+                det_instr = str(det.get("instruction") or "").strip()
                 alerts.append({"detector": name, "tier": tier, "kind": "alert", "goal_ref": gref,
                                "actionable": True, "subject": f"{name} {field}={val}",
                                "window_count": long_c, "short_count": short_c, "window_days": wdays,
                                "deep_link": stream,
                                "idempotence_key": f"{name}|{now.strftime('%Y-%m-%d')}",
                                "instruction": (f"{val} burn: {long_c} in {wdays}d (budget {int(budget)}), "
-                                               f"{short_c} in {sdays}d. {goals[gref].get('statement','')}")})
+                                               f"{short_c} in {sdays}d. {goals[gref].get('statement','')}"
+                                               + (f" || {det_instr}" if det_instr else ""))})
                 summary.append(f"{name}: FIRE tier={tier} (long={long_c}>={budget*fmult:.0f}, short={short_c}>={smin})")
             elif fires and in_cooldown:
                 summary.append(f"{name}: condition met but in cooldown ({cooldown}d) -> suppressed (logged, not paged)")

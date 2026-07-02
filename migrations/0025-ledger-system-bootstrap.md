@@ -2,8 +2,9 @@
 number: 0025
 title: Event-ledger system bootstrap — spec, shared writer, proposals domain, alert layer (P0-P3)
 slug: ledger-system-bootstrap
-status: in-progress
+status: complete
 date: 2026-06-27
+completed: 2026-07-02
 session: rightsize-rev@2026-06-27
 affected_paths:
   - skills/shared/ledger-format.md

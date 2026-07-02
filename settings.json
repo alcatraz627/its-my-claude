@@ -95,7 +95,7 @@
     ],
     "defaultMode": "default"
   },
-  "model": "opus",
+  "model": "claude-fable-5[1m]",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -207,6 +207,15 @@
             "type": "command",
             "command": "~/.claude/scripts/diff-preview.sh",
             "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-speculative-export.sh"
           }
         ]
       },

@@ -27,6 +27,7 @@ _streams() {
     pinned    "$HOME/.claude/pinned/events.jsonl"         '(.framing//"pin")'                      '(.text//"")' \
     proposals "$HOME/.claude/proposals.jsonl"             '(.category//"")+"/"+(.status//"")'      '(.title//"")' \
     personas  "$HOME/.claude/personas/usage/events.jsonl" '(.persona//"")+"/"+(.mode//"")'         '(.task//"")' \
+    warns     "$HOME/.claude/hooks/warn-events.jsonl"     '(.hook_id//"")+"/"+(.heeded//"")'       '(.hook_id//"")' \
     alerts    "$HOME/.claude/ledger/alerts.jsonl"         '(.detector//"")+" ["+(.tier//"")+"]"'   '(.instruction//"")'
 }
 
@@ -70,14 +71,19 @@ cmd_search() {  # search <query> [--src D]
 
 cmd_show() {  # show <id> — full record from whichever stream holds it
   [ -n "${1:-}" ] || { echo "usage: ledger show <id>" >&2; return 2; }
-  _streams | while IFS=$'\t' read -r dom path cls sum; do
+  # No pipeline here: `_streams | while … return` runs the loop in a subshell,
+  # so the return never left the function and every hit ALSO printed "id not
+  # found" + exit 1. Process substitution keeps the loop in this shell.
+  local dom path cls sum rec
+  while IFS=$'\t' read -r dom path cls sum; do
     [ -f "$path" ] || continue
-    if jq -e --arg id "$1" 'select(.id==$id)' "$path" >/dev/null 2>&1; then
+    rec=$(jq --arg id "$1" 'select(.id==$id)' "$path" 2>/dev/null)
+    if [ -n "$rec" ]; then
       echo "── $dom ──"
-      jq --arg id "$1" 'select(.id==$id)' "$path" 2>/dev/null
+      printf '%s\n' "$rec"
       return 0
     fi
-  done
+  done < <(_streams)
   echo "id not found: $1" >&2; return 1
 }
 

@@ -1,0 +1,40 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.1548888888888889,
+    "unit_count": 36
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — rate 100% (7/7 tool-using units), worst recorded in full analysis history (prior range 58–87.5%); subvariants active: ls-for-directory-listing in unit-4 (ls backend/lib/jobs/formats/excel_*.py), unit-11 (ls src/utils/hooks/use-query-sync/), unit-13 (ls tests/job_outputs/ | head), unit-40 (ls -d infra terraform .infra); sed-instead-of-read-with-offset in unit-37 (sed -n '1,60p' aggregations.py piped to rg), unit-40 (sed -n '185,200p' file-archive.md), unit-49 (sed -n '26,52p' lib/files/__init__.py); sed-on-git-show-output NEW SUBVARIANT in unit-56 (git show HEAD:backend/lib/jobs/__init__.py | sed -n '1424,1427p' and git show HEAD:backend/api/tasks.py | sed -n '47,52p' — sed applied to git show pipe output rather than a direct file path, bypasses both Read tool and prefer-ripgrep hook); cat-heredoc-file-write in unit-13 (cat > test_export_selection_a.py <<'PYEOF' for a test file, immediately followed by a Write-tool attempt on same path that failed, then Read, then Write succeeded — third confirmed instance of this subvariant, first appearance was also unit-id prefix 413d6f51-13 per prior cycle history); zero clean tool-using units this batch",
+      "grep_in_compound_bash:RECURRING:STABLE — 1 unit (unit-40): grep -iv 'url_expires\\|presign\\|s3_url_expires' and grep -i 'delete\\|exports/' embedded in pipe chains across first Bash (failed) and retry Bash (succeeded) with identical grep pattern retained; within prior 1–5 unit range; hook architecture gap (argv[0]-only interception) remains structurally unaddressed",
+      "structural_claim_without_reading_code:RECURRING:PLAUSIBLE_INSTANCE — unit-40 (is_correction=true): agent made claims or took an approach regarding S3 lifecycle and export retention behavior that the user pushed back on; agent then issued four successive Bash commands to verify actual S3 lifecycle behavior (raw_upload_file, IaC dirs, lifecycle docs, exporter prefix); first Bash in unit-40 failed with a grep pattern that included lifecycle/delete scoping constructed without prior file reads; consistent with atone slug 'structural-claim-without-reading-code' (S3, 11x in session-start context) and active rule in rules/structural-claim-without-reading-code.md; classified PLAUSIBLE because message content is not available to confirm what specific claim triggered the correction"
+    ],
+    "calibration_score": 0.34,
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations reached 100% this batch — the sed-on-git-show-output subvariant in unit-56 demonstrates the pattern actively finding new surfaces not covered by prior tracking; advisory entries for this bias have reached saturation; deprioritize any additional advisory recommendations for this bias and prioritize hook-level structural intervention that targets sed beyond argv[0] detection",
+      "sed-on-git-show-output should be tracked as a distinct named subvariant in future cycles: pattern is 'git show ref:path | sed -n START,ENDp' used to slice line ranges from historical file contents — Read tool with offset parameter is the correct replacement and would have been shorter syntax; add to subvariant catalog alongside sed-instead-of-read-with-offset",
+      "structural_claim_without_reading_code correction in unit-40 occurred in the S3/lifecycle domain specifically — the atone session-start context already flags this slug at 11x recurrence; given the pattern has a PreToolUse hook candidate (IaC/lifecycle grep queries without a prior Read on the target file), this is a viable hook target that has not been implemented; deprioritize advisory notes and file a proposal for a pre-Bash hook that detects lifecycle/LifecycleConfiguration grep patterns without a corresponding preceding Read on the same file path"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      17862202
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      9832124
+    ]
+  ],
+  "timestamp": "2026-07-01T12:59:02.727870Z",
+  "tokens_used": 12128,
+  "units_analyzed": 12,
+  "units_total": 36
+}

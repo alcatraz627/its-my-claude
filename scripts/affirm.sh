@@ -121,7 +121,7 @@ cmd_add() {
 
   _ok "logged $id"
   gum_kv "slug" "$slug"
-  [ -n "$cluster" ] && gum_kv "cluster" "$cluster"
+  if [ -n "$cluster" ]; then gum_kv "cluster" "$cluster"; fi
 }
 
 cmd_list() {

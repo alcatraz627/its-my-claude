@@ -1,0 +1,37 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.10526315789473684,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2827538126791075,
+    "unit_count": 19
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — rate 100% (7/7 tool-using units), matching the worst recorded prior cycle (2026-07-01 was also 100%); active subvariants: ls-for-directory-listing in unit-4 (ls backend/lib/jobs/formats/excel_*.py), unit-11 (ls src/utils/hooks/use-query-sync/), unit-13 (ls tests/job_outputs/ | head), unit-40 (ls -d infra terraform .infra); sed-instead-of-read-with-offset in unit-37 (sed -n '1,60p' aggregations.py piped to rg), unit-40 (sed -n '185,200p' file-archive.md), unit-49 (sed -n '26,52p' lib/files/__init__.py and sed -n '1,60p' lib/dependencies/s3.py piped to rg); cat-heredoc-file-write in unit-13 (cat > test_export_selection_a.py <<'PYEOF' followed immediately by Write tool failure, then Read, then Write success — identical sequence to the 413d6f51-13 instance already documented in 2026-07-01 prior cycle history); sed-on-git-show-output in unit-56 (git show HEAD:backend/lib/jobs/__init__.py | sed -n '1424,1427p' and git show HEAD:backend/api/tasks.py | sed -n '47,52p' — same two-instance sequence classified NEW SUBVARIANT in 2026-07-01 cycle)",
+      "grep_in_compound_bash:RECURRING:STABLE — unit-40: grep -iv 'url_expires\\|presign\\|s3_url_expires' embedded in first Bash (failed), grep -iv 'url_expires\\|presign' retained in retry Bash (succeeded); same unit-40 instance classified in 2026-07-01 prior cycle; no new instances beyond unit-40",
+      "structural_claim_without_reading_code:RECURRING:STABLE — unit-40 (is_correction=true): S3 lifecycle/retention claim preceded first Bash failure where grep scope was constructed without prior file reads (exclusion filter 'url_expires|presign|s3_url_expires' embedded rather than targeted search); agent issued four successive verification Bash commands post-correction; precheck gate from rules/structural-claim-without-reading-code.md was not run before initial claim; consistent with 2026-07-01 classification and atone slug (11x recurrence in session-start context)",
+      "sed-on-git-show-output:RECURRING:CONFIRMED — subvariant was classified NEW in 2026-07-01 prior cycle for unit-56; same unit appears in this batch confirming the pattern persists; git show piped to sed bypasses both Read tool and prefer-ripgrep argv[0]-only interception; architecturally invisible to current hook stack"
+    ],
+    "calibration_score": 0.34,
+    "overconfident_count": 1,
+    "recommendations": [
+      "sed-on-git-show-output transitions from NEW to CONFIRMED RECURRING in this cycle; this subvariant has no current hook coverage because the hook intercepts argv[0] only and cannot detect sed inside a git-show pipe; this is an unaddressed hook gap distinct from all prior recommendations — the fix requires a PreToolUse Bash hook that pattern-matches 'git show.*|.*sed' and surfaces the Read+offset equivalent",
+      "shell_tool_preference_violations at 100% for this session with zero reduction across all tool-using units; advisory recommendations for this pattern have appeared in every prior cycle without measurable effect; this batch contains no clean tool-using units; deprioritize further advisory text for ls/sed/cat violations and prioritize mechanical enforcement — a Bash PreToolUse hook detecting sed on a file path argument and suggesting Read with offset parameters is the only undeployed structural lever",
+      "no new bias classes detected in this batch; all findings map directly to prior 2026-07-01 cycle classifications for the same session (413d6f51); skip re-flagging ls-for-directory-listing, cat-heredoc-file-write, and grep_in_compound_bash — these have RECURRING classifications spanning 10+ consecutive cycles with no structural resolution and additional advisory flagging has zero marginal value"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      18224862
+    ]
+  ],
+  "timestamp": "2026-07-01T18:27:52.177014Z",
+  "tokens_used": 11950,
+  "units_analyzed": 12,
+  "units_total": 19
+}
