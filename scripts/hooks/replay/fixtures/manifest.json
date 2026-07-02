@@ -143,6 +143,138 @@
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 12,
       "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+    },
+    {
+      "name": "real-a280d4810495-t0",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/real-a280d4810495-t0.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "AUTHORING-NOREAD",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "agent-a280d481049521721.jsonl",
+      "turn_in_file": 0,
+      "note": "design-from-brief ownership map, no code read -> the valued authoring fire (SOFT)"
+    },
+    {
+      "name": "real-a290b519d80f-t0",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/real-a290b519d80f-t0.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "AUTHORING-NOREAD",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "agent-a290b519d80f12b2d.jsonl",
+      "turn_in_file": 0,
+      "note": "'Designing model-first, no codebase reads' -- the canonical design-from-memory fire (SOFT)"
+    },
+    {
+      "name": "real-ae475269eb8b-t0",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/real-ae475269eb8b-t0.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "AUTHORING-READ",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+      "source_transcript": "agent-ae475269eb8be556d.jsonl",
+      "turn_in_file": 0,
+      "note": "code review that READ 10 files this turn -> grounding done -> silent"
+    },
+    {
+      "name": "real-6ec6743c-c04-t50",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/real-6ec6743c-c04-t50.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "VERIFIED",
+      "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product/frontend",
+      "source_transcript": "6ec6743c-c045-4612-b3a4-a3cfe285e6ce.jsonl",
+      "turn_in_file": 50,
+      "note": "ownership diagram in a turn that edited 4 .ts files + ran build -> code_touch/E3 -> silent"
+    },
+    {
+      "name": "synth-person-owns",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-person-owns.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "PERSON",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the PERSON read-gate branch"
+    },
+    {
+      "name": "synth-meta",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-meta.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "META",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the META read-gate branch"
+    },
+    {
+      "name": "synth-backtick-path",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-backtick-path.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "AUTHORITY",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the AUTHORITY read-gate branch"
+    },
+    {
+      "name": "synth-verified-e3",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-verified-e3.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "AUTHORITY",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the AUTHORITY read-gate branch"
+    },
+    {
+      "name": "synth-authoring-read",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-authoring-read.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "AUTHORING-READ",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the AUTHORING-READ read-gate branch"
+    },
+    {
+      "name": "synth-blind-authority-block",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-blind-authority-block.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "BLIND",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the BLIND read-gate branch"
+    },
+    {
+      "name": "synth-blind-authority-soft",
+      "hook": "guard-structural-claim.sh",
+      "fixture": "fixtures/structural-claim/synth-blind-authority-soft.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "BLIND",
+      "cwd": "/Users/alcatraz627/Downloads",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the BLIND read-gate branch"
     }
   ]
 }

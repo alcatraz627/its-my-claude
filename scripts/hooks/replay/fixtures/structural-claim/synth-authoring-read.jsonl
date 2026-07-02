@@ -1,0 +1,3 @@
+{"type": "user", "cwd": "/Users/alcatraz627/.claude", "message": {"role": "user", "content": "continue"}}
+{"type": "assistant", "cwd": "/Users/alcatraz627/.claude", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read", "input": {"file_path": "/x/output-controls.ts"}}]}}
+{"type": "assistant", "cwd": "/Users/alcatraz627/.claude", "message": {"role": "assistant", "content": [{"type": "text", "text": "| 1 FETCH-SHAPING | output-data hook | it owns the fetch; these are the request inputs |"}]}}

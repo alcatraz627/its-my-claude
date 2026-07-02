@@ -7,7 +7,7 @@ triggers:
 related: []
 tier: 2
 category: features
-updated: 2026-04-24
+updated: 2026-07-02
 stale_after_days: 90
 ---
 
@@ -34,3 +34,11 @@ Display visual content in the conversation/terminal area. Period.
 ## Practical implication
 
 If you want a hook to surface information to Claude, use `additionalContext`. If you want to surface it to the human, use a macOS notification or log file + statusline widget. Never try to `printf` to `/dev/tty` expecting the user to see it.
+
+## Config snapshot vs file swap (deploy behavior)
+
+Hook WIRING (`settings.json` hooks blocks) is snapshot at session start — adding or changing a matcher mid-session does nothing until the next session. Hook SCRIPTS are re-executed fresh at every event, so swapping the file at an already-wired path goes live immediately, mid-session, for every running session. Verified empirically 2026-07-02 (a newly wired PostToolUse matcher stayed silent in-session; a swapped Stop-hook file took effect at the next Stop). Deploy consequence: new-hook wiring is safe-by-default (arms next session); editing a live hook file is the risky operation — validate before the swap (`scripts/hooks/replay/` is the ship-gate) and keep the `git show HEAD:<path>` restore one command away.
+
+## `additionalContext` requires a synchronous hook (cross-ref)
+
+`"async": true` makes PostToolUse stdout side-effect-only — a warn hook wired async runs, logs telemetry, and reaches nobody (false coverage, worse than a mute). Wire agent-facing warn hooks sync and keep them fast. See the hook-output-contracts memory + the lane-3 adversarial review (assets/reports/20260630-s3-gate-leak/, 2026-06-30).
