@@ -1,0 +1,2 @@
+{"type": "user", "message": {"role": "user", "content": [{"type": "text", "text": "hand it off"}]}, "sessionId": "fixt0000-0000-0000-0000-000000000000", "cwd": "/tmp", "timestamp": "2026-07-04T00:00:00.000Z"}
+{"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": "The brief is at `docs/foo.md` and ready to hand off."}]}, "sessionId": "fixt0000-0000-0000-0000-000000000000", "cwd": "/tmp", "timestamp": "2026-07-04T00:00:01.000Z"}

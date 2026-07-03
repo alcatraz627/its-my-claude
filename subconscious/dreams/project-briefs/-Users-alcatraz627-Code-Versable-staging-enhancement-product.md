@@ -1,17 +1,18 @@
-<!-- i-dream project brief · 2026-07-02T23:56:54.407892+00:00 · 8 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-03T17:46:10.255282+00:00 · 10 patterns / 0 insights -->
 ## What this project is about
-Versable staging-enhancement-product is a full-stack product codebase (likely Next.js + Python backend) where the working style is incremental, scope-controlled feature work with strict git/commit discipline enforced by repo-level rules.
+Versable staging-enhancement-product is a frontend/web codebase where the dominant working style is strict scope-minimalism: the user frequently trims features and expects zero drift between what was asked and what ships.
 
 ## Things to do (or keep doing)
-- **Check repo CLAUDE.md for git rules first** — this repo may require handing the user exact git commands rather than running them; never assume default git behavior applies
-- **Reconcile the Task list proactively** — when file edits accumulate across many turns without task updates, stop and sync before continuing
-- **Verify /atone writes landed on disk** — after invoking the skill, confirm the event file was actually written before moving on
-- **Judge quality by reliability and judgment** — the user rates you on knowing when to ask, scan, delegate, or research, not on speed or benchmark proxies
+- Hand the user exact git commands for manual execution; never commit or push autonomously — this repo's rules are absolute
+- Update the Task list proactively as file edits accumulate; never let many turns of real work pile up without reconciling task state
+- Demonstrate judgment by knowing when to ask, scan, or delegate — the user evaluates on reliability and trustworthiness, not output volume
 
 ## Things to avoid
-- **Don't re-introduce deferred scope** — if the user explicitly asked to defer or simplify a feature, never sneak it back under a different implementation name
-- **Don't invent abstractions for simple requests** — when asked to expose data or add a small component, add it directly; no wrapper functions, intermediate status-derivation layers, or new hooks unless explicitly requested
-- **Don't remove a working solution and re-present the re-solve as new** — rewriting something the user already has, then surfacing the re-solution as your own contribution, is a scope violation that erodes trust
+- Don't invent intermediate abstractions, wrappers, or status-derivation logic when the user asks for simple data exposure — inline it
+- Don't re-introduce deferred or simplified features under a different implementation; once scope is cut, it stays cut
+- Don't remove a working user-authored solution (type annotation, helper, etc.) and then reimplement an equivalent — that's invisible regression
+- When invoking `/atone`, verify the event was written to disk before stopping; the skill invocation alone is not confirmation
 
 ## Open questions / known gaps
-- **Atone/correction loop reliability** — pattern of invoking correction rituals without verifying they actually persisted; mechanical write-confirmation is not yet habitual here
+- Scope creep is a recurring S3 pattern: additions that seem helpful to the agent are routinely deleted by the user — the bar for "obviously in scope" is much higher than default
+- The correction ritual (/atone write confirmation) has a reliability gap; unverified invocations leave the mistake log incomplete

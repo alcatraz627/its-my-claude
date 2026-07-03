@@ -28,7 +28,8 @@ _streams() {
     proposals "$HOME/.claude/proposals.jsonl"             '(.category//"")+"/"+(.status//"")'      '(.title//"")' \
     personas  "$HOME/.claude/personas/usage/events.jsonl" '(.persona//"")+"/"+(.mode//"")'         '(.task//"")' \
     warns     "$HOME/.claude/hooks/warn-events.jsonl"     '(.hook_id//"")+"/"+(.action//"?")+"/"+(.heeded//"")' '(.hook_id//"")' \
-    alerts    "$HOME/.claude/ledger/alerts.jsonl"         '(.detector//"")+" ["+(.tier//"")+"]"'   '(.instruction//"")'
+    alerts    "$HOME/.claude/ledger/alerts.jsonl"         '(.detector//"")+" ["+(.tier//"")+"]"'   '(.instruction//"")' \
+    bookmarks "$HOME/.claude/ledger/bookmarks.jsonl"      '(.label//"")'                            '(.note//"")'
 }
 
 # Normalized rows from every stream: ts \t domain \t id \t session \t classifier \t summary

@@ -43,9 +43,14 @@ prose=$(printf '%s\n' "$text" | awk 'BEGIN{f=0} /^[[:space:]]*```/{f=!f; next} !
 [ -n "$prose" ] || exit 0
 
 EXT='md|markdown|py|sh|bash|ts|tsx|js|jsx|mjs|cjs|html|htm|css|scss|json|jsonl|ya?ml|toml|swift|go|rs|rb|c|h|hpp|cpp|cc|java|kt|sql|txt|log|plist|xml|svg|conf|cfg|ini|env'
+# Optional line/col suffix. Terminals link `foo.ts:42` and `foo.ts:42:8` as ONE
+# target, so the extension is not always the last thing before the closing
+# backtick / sentence period — a `:line[:col]` tail can sit between them, and the
+# period still breaks the link. Allow that tail so the anchor doesn't miss it.
+LC='(:[0-9]+){0,2}'
 # Two offending forms (backticks are literal inside single quotes; $ is literal):
-bt='`[^`]*\.('"$EXT"')`\.'                                                    # `path/foo.md`.
-bare='(?<![A-Za-z0-9])[A-Za-z0-9_./@~-]*\.('"$EXT"')\.(\s|$|[)\]"])'          # path/foo.md.
+bt='`[^`]*\.('"$EXT"')'"$LC"'`\.'                                             # `path/foo.md`. · `path/foo.ts:42`.
+bare='(?<![A-Za-z0-9])[A-Za-z0-9_./@~-]*\.('"$EXT"')'"$LC"'\.(\s|$|[)\]"])'   # path/foo.md. · path/foo.ts:42.
 PAT="($bt)|($bare)"
 
 MARK="/tmp/claude-filename-dot-${sid8}"

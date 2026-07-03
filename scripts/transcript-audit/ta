@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# ta — transcript-audit dispatcher.
+#
+# A reusable way for Claude to query, mine, and tag its own transcript corpus,
+# so the recurring forensic digs (session reviews, hook-fire replays, FP
+# classification, N-day sweeps) become one tool instead of ad-hoc one-offs.
+#
+#   ta query   content query over turns (the load-bearing surface)
+#   ta tag     bookmark a (transcript, turn) into the bookmarks ledger
+#   ta tags    list those bookmarks
+#   ta mine    emit ready-to-paste sub-agent mining prompts over matched turns
+#   ta help    this text
+#
+# Reuse map (what this does NOT re-implement):
+#   scripts/hooks/replay/replay_lib.py       the turn model
+#   scripts/checkpoint/list-transcripts.sh   discovery + date-filter + ckpt-join
+#   scripts/ledger/ledger-common.sh          the bookmark ledger writer
+set -uo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LIB="$DIR/lib"
+
+ta_help() {
+  cat <<'HELP'
+ta — query, tag, and mine the Claude transcript corpus
+
+USAGE
+  ta query   [scope] [filters] [--format jsonl|table|count|files]
+  ta tag     --transcript PATH --turn IDX --label SLUG [--note TEXT]
+  ta tags    [--label SLUG] [--format table|jsonl]
+  ta mine    [scope] [filters] --preset NAME [--batch-size N]
+  ta help
+
+QUERY — scope
+  --project PATH|SUBSTR   substring vs the encoded project-dir name
+  --within DAYS           transcripts modified within N days (default 30)
+  --since ISO             transcripts since an ISO date
+  --all                   the whole corpus, no date bound
+  --include-subagents     also scan sub-agent transcripts (default: primary only)
+
+QUERY — turn filters (AND together)
+  --role user|assistant|any   which side --match applies to (default any)
+  --tool NAME                 turns that invoked a tool_use of NAME (e.g. Bash)
+  --match REGEX               regex over the role-scoped text
+  --user-match REGEX          regex over the user text
+  --assistant-match REGEX     regex over the assistant text
+  --no-prefilter              skip the ripgrep pre-filter (slower, exact)
+  --limit N                   cap rows (0 = no cap)
+
+EXAMPLES
+  ta query --project enhancement-product --within 30 --user-match 'comment|prune' --format table
+  ta query --tool Bash --match 'rg -r' --within 14 --format count
+  ta tag --transcript /path/to/x.jsonl --turn 12 --label hook-feedback --note "muted the gate"
+  ta mine --preset hook-feedback --within 7
+
+Presets live in presets/*.md. Bookmarks land in ~/.claude/ledger/bookmarks.jsonl
+and are also readable via `ledger list --src bookmarks`.
+HELP
+}
+
+cmd="${1:-help}"
+[ $# -gt 0 ] && shift
+
+case "$cmd" in
+  query) exec python3 "$LIB/query.py" "$@" ;;
+  mine)  exec python3 "$LIB/mine.py" "$@" ;;
+  tag)   exec bash "$LIB/tag.sh" "$@" ;;
+  tags)  exec python3 "$LIB/tags.py" "$@" ;;
+  help|-h|--help|"") ta_help ;;
+  *) printf "ta: unknown subcommand '%s' (try: ta help)\n" "$cmd" >&2; exit 2 ;;
+esac

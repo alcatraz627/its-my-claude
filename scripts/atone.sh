@@ -132,7 +132,8 @@ _add_exit_trap() {
     0|5) rm -f "$fmark" "$pmark" 2>/dev/null || true ;;
     *)   command -v jq >/dev/null 2>&1 && \
            jq -cn --arg ts "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" --argjson c "$code" \
-             '{ts:$ts, code:$c, blocks:0,
+             --arg slug "${_ATONE_ADD_SLUG:-}" \
+             '{ts:$ts, code:$c, blocks:0, slug:$slug,
                reason:("atone add exited "+($c|tostring)+" before recording (RCA lint / validation / juror-dispatch error)")}' \
              > "$fmark" 2>/dev/null || true ;;
   esac
@@ -140,6 +141,10 @@ _add_exit_trap() {
 
 cmd_add() {
   _ATONE_ADD_ATTEMPTED=0          # global (no `local`): the EXIT trap reads it
+  _ATONE_ADD_SLUG=""              # global too — carries the final slug into the
+                                  # failed-add marker so atone-stop-gate can tell a
+                                  # dup/rejected re-run of an already-recorded slug
+                                  # from a genuinely-unrecorded first-attempt failure
   trap '_add_exit_trap' EXIT
   local slug="" title="" issue="" cause="" fix="" what_not=""
   local severity="" precheck="" tags_str="" cluster=""
@@ -297,6 +302,13 @@ PY
       fi
     fi
   fi
+
+  # Capture the FINAL slug (post fuzzy-match resolution) for the EXIT trap. A
+  # failure downstream of here arms the gate's failed-add marker WITH this slug,
+  # so a duplicate re-run of an already-recorded slug is distinguishable from a
+  # genuine first-attempt failure. Failures upstream of here leave it empty, and
+  # the gate correctly still blocks (no slug to clear against).
+  _ATONE_ADD_SLUG="$slug"
 
   local id ts rca_id rca_path
   id=$(_new_id); ts=$(_ts); rca_id=""; rca_path=""

@@ -11,10 +11,14 @@
 #     signal — a catalogued recurring smell in the source, OR new exported API
 #     surface — should go through /skeptical-review before 'done'. NEVER fires
 #     on edit volume alone (a big pile of low-risk edits stays silent; that
-#     volume trigger nagged on report batches and was removed). Hooks can't
-#     dispatch the reviewer themselves, so this gates instead — persisting
-#     until the change-set is reviewed (the skill writes the marker via
-#     review-marker.sh) or muted. Mute: touch ~/.claude/.no-review-required
+#     volume trigger nagged on report batches and was removed), and NEVER on a
+#     docs-only change-set: the export/API scan is scoped to review-marker's
+#     unreviewed CODE set (docs, reports, generated dirs already dropped), so a
+#     `export` inside a markdown fence or a release-note snippet can never be
+#     mistaken for real code surface. Hooks can't dispatch the reviewer
+#     themselves, so this gates instead — persisting until the change-set is
+#     reviewed (the skill writes the marker via review-marker.sh) or muted.
+#     Mute: touch ~/.claude/.no-review-required
 #
 # Registered as a DIRECT settings.json Stop hook (not via the hook-orchestrator,
 # whose task stdout goes to /dev/null and so cannot carry a decision back).
@@ -91,31 +95,63 @@ MARKER="$HOME/.claude/scripts/review-marker.sh"
 nunrev=$("$MARKER" count "$sid8" 2>/dev/null || echo 0)
 [ "${nunrev:-0}" -gt 0 ] || exit 0
 
-# Fire ONLY on a concrete RISK signal — never on volume. The user's reality is
-# large aggregations of mostly-harmless unpushed edits + general trust in the
-# agent; gating on count would nag on exactly those. So a big pile of edits with
-# no risk signal = SILENT. We gate only on: a catalogued recurring block-level
-# smell in unreviewed source, OR new exported API surface (genuinely new code to
-# vet). Everything else trusts the agent.
+# Fire ONLY on a concrete RISK signal — never on volume, never on docs. The
+# user's reality is large aggregations of mostly-harmless unpushed edits + general
+# trust in the agent; gating on count would nag on exactly those. So a big pile of
+# edits with no risk signal = SILENT, and a docs-only change-set = SILENT (the
+# unreviewed set below is CODE-only). We gate only on: a catalogued recurring
+# block-level smell in unreviewed source, OR genuinely NEW exported/public code
+# surface. Everything else trusts the agent.
+#
+# new_code_export <file> <git-root-or-empty> → exit 0 when the file introduces
+# real exported/public API surface. Scoped per-file to a CODE file: a brand-new
+# (untracked) file counts its whole body as added; a tracked file counts only its
+# added ('+') lines vs HEAD, so a pre-existing export is not re-flagged and a
+# removed one is ignored. This is what keeps a `export` inside a markdown fence
+# (never in the code-only unreviewed set) from being read as code surface, and
+# what makes a brand-new .ts/.py file's exports actually register (a whole-tree
+# `git diff` misses untracked files — the false-negative this replaces).
+new_code_export() {
+  local f="$1" groot="$2" added=""
+  if [ -n "$groot" ] && git -C "$groot" ls-files --error-unmatch -- "$f" >/dev/null 2>&1; then
+    added=$(git -C "$groot" diff -U0 HEAD -- "$f" 2>/dev/null | rg '^\+[^+]' 2>/dev/null)
+  else
+    added=$(cat "$f" 2>/dev/null)   # untracked / non-git → whole body is new
+  fi
+  [ -n "$added" ] || return 1
+  case "$f" in
+    *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs)
+      printf '%s' "$added" | rg -q '(^|\+)\s*export\b' ;;
+    *.py)
+      printf '%s' "$added" | rg -q '(^|\+)(def |class |__all__\b)' ;;
+    *.go)
+      printf '%s' "$added" | rg -q '(^|\+)\s*func\s+[A-Z]|(^|\+)\s*type\s+[A-Z]' ;;
+    *.rs)
+      printf '%s' "$added" | rg -q '(^|\+)\s*pub\s+(fn|struct|enum|trait|mod|const)\b' ;;
+    *) return 1 ;;
+  esac
+}
+
 substantial=0
 trigger=""
+groot=""
+git rev-parse --show-toplevel >/dev/null 2>&1 && groot=$(git rev-parse --show-toplevel 2>/dev/null)
 while IFS= read -r f; do
   [ -n "$f" ] && [ -f "$f" ] || continue
   if [ -n "$("$LINT" --file "$f" --block-only 2>/dev/null)" ]; then
     substantial=1; trigger="a recurring block-level smell in $f"; break
   fi
-done < <("$MARKER" unreviewed "$sid8" 2>/dev/null)
-if [ "$substantial" = 0 ] && git rev-parse --show-toplevel >/dev/null 2>&1; then
-  groot=$(git rev-parse --show-toplevel 2>/dev/null)
-  if git -C "$groot" diff -U0 2>/dev/null | rg -q '^\+.*\bexport\s+(async\s+)?(function|const|class|type|interface|enum)\b'; then
-    substantial=1; trigger="new exported API surface"
+  if new_code_export "$f" "$groot"; then
+    substantial=1; trigger="new exported API surface"; break
   fi
-fi
+done < <("$MARKER" unreviewed "$sid8" 2>/dev/null)
 [ "$substantial" = 1 ] || exit 0
 
 # Step-aside: block ONCE per unreviewed-set signature, then drop to a
 # non-blocking reminder. This is what stops the per-turn nagging that gets the
-# whole gate muted (guard dilution). Same pattern as Gate 1.
+# whole gate muted (guard dilution). Same pattern as Gate 1. The signature is the
+# unreviewed CODE-file set, so a docs-only growth of the change-set never flips
+# it — the gate cannot re-fire as unrelated docs pile up.
 MARK2="/tmp/claude-review-required-blocked-${sid8}"
 sig2=$("$MARKER" unreviewed "$sid8" 2>/dev/null | sort -u | shasum 2>/dev/null | awk '{print $1}')
 prev2=""; [ -f "$MARK2" ] && prev2=$(cat "$MARK2" 2>/dev/null)

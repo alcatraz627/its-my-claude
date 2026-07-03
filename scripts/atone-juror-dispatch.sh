@@ -34,6 +34,12 @@ ATONE_DIR="${ATONE_DIR:-$HOME/.claude/atone}"
 PERSONA="$HOME/.claude/personas/juror.md"
 CLAUDE_BIN="${CLAUDE_BIN:-$HOME/.local/bin/claude}"
 
+# Mark this and every `claude -p` juror child so the atone-stop-gate Stop hook can
+# tell it's running inside the juror (a no-tools, verdict-only session that cannot
+# run `atone.sh add`) and suppress itself instead of blocking + looping on a
+# date-keyed pending marker that leaked in from the parent session.
+export ATONE_JUROR_SESSION=1
+
 # The juror is a DIFFERENT model from the offender, by design: the same model
 # that made the mistake, asked to grade itself, misses its own error far more
 # often than an externally-attributed one (the self-correction illusion). So the

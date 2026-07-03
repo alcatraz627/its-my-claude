@@ -131,6 +131,79 @@ def turn_cwd(turn, default_cwd):
     return default_cwd
 
 
+def turn_session_id(turn):
+    """Which session this turn belongs to. Transcript lines carry `sessionId`
+    (the session UUID); return the first one present, or "" if none."""
+    for _, obj in turn:
+        if obj is not None:
+            sid = obj.get("sessionId")
+            if isinstance(sid, str) and sid:
+                return sid
+    return ""
+
+
+def turn_ts(turn):
+    """When this turn started — the ISO-8601 `timestamp` of its opening user
+    message, falling back to the first timestamped line. "" if none present."""
+    for _, obj in turn:
+        if obj is not None:
+            ts = obj.get("timestamp")
+            if isinstance(ts, str) and ts:
+                return ts
+    return ""
+
+
+def turn_user_text(turn):
+    """The human's words that opened this turn. A user message's content is
+    either a plain string or a list of items; join the text of the first real
+    user message so a caller can match or scope on what the person actually
+    said (as opposed to a mid-turn tool return)."""
+    for _, obj in turn:
+        if obj is None or not is_real_user_msg(obj):
+            continue
+        content = (obj.get("message") or {}).get("content")
+        if isinstance(content, str):
+            return content.strip()
+        if isinstance(content, list):
+            return "\n".join(
+                it.get("text", "") for it in content
+                if isinstance(it, dict) and it.get("type") == "text"
+            ).strip()
+        return ""
+    return ""
+
+
+def turn_assistant_text(turn):
+    """Everything the assistant said this turn — every text block across every
+    assistant message in it, in order. Distinct from `turn_final_text`, which
+    returns only the last message; use this to match against the whole reply."""
+    out = []
+    for _, obj in turn:
+        if obj is None or obj.get("type") != "assistant":
+            continue
+        content = (obj.get("message") or {}).get("content")
+        if isinstance(content, list):
+            for it in content:
+                if isinstance(it, dict) and it.get("type") == "text" and it.get("text"):
+                    out.append(it["text"])
+    return "\n".join(out).strip()
+
+
+def turn_tool_names(turn):
+    """The tools this turn invoked (Bash, Edit, Read, …), in call order and with
+    duplicates kept — so a caller can ask 'did this turn use tool X'."""
+    names = []
+    for _, obj in turn:
+        if obj is None or obj.get("type") != "assistant":
+            continue
+        content = (obj.get("message") or {}).get("content")
+        if isinstance(content, list):
+            for it in content:
+                if isinstance(it, dict) and it.get("type") == "tool_use" and it.get("name"):
+                    names.append(it["name"])
+    return names
+
+
 def new_sid(idx):
     """A unique synthetic session_id whose first 8 chars are a zero-padded index,
     so the /tmp mark/edit files keyed on sid[0:8] never collide across turns."""

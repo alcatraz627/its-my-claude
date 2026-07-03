@@ -1,0 +1,23 @@
+{
+  "ts": "2026-07-03T22:34:00Z",
+  "session_id": "versable-ci-413d",
+  "project_root": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/two-enhancement-product/_20260704-413d6f51-full-session.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**IMMEDIATE:** the unrelated PR review the user will bring (they're on the backend branch for it).",
+    "**#34 (pending):** confirm why Render created **no preview for #229** \u2014 likely (a) the `[render preview]` tag was added via a **title edit after open** (Render may only evaluate at PR-open/push), and/or (b) **#229 is `.github`-only** (no `backend/**` change) and Render's preview may be backend-gated. Determines whether a CI-only PR can ever exercise the wiring or if a real backend PR is required. `gh run rerun <run-id>` re-runs the workflow **without a push**, but a preview must exist first.",
+    "**CI pre-merge testing (user-side, in Actions):** the two live-write Vercel calls (`vercel-preview-env set`, `trigger-vercel-deploy`) are only proven by a green wiring run. `label`/`auto-pr-body`/`nudge`/`static-analysis`/Vercel already green on #229. `run-e2e` **label** path is testable pre-merge; the `/e2e` **comment** path is **not** (issue_comment needs the default branch \u2014 verify post-merge).",
+    "**#16 (pending, deferred):** `export_slices/` S3 lifecycle/TTL \u2014 belongs in PR #210.",
+    "**#22 (pending, deferred):** non-scraper completion \u2192 worker-counters + UX reconciliation (do when the live-compute perf actually hurts).",
+    "**Backend commits:** the held-back Task 1/2 + processed_count + get_data + cleanup + extractor UA + scheduler guard \u2014 **the user commits these** (never the agent).",
+    "**Extractor:** IP whitelist (team requested) is the durable fix; the UA header is the stopgap."
+  ],
+  "tags": []
+}

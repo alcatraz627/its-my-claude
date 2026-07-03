@@ -1,0 +1,2 @@
+{"type": "user", "message": {"role": "user", "content": [{"type": "text", "text": "how do i run it"}]}, "sessionId": "fixt0000-0000-0000-0000-000000000000", "cwd": "/tmp", "timestamp": "2026-07-04T00:00:00.000Z"}
+{"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": "Run `npm test`. Then check the output."}]}, "sessionId": "fixt0000-0000-0000-0000-000000000000", "cwd": "/tmp", "timestamp": "2026-07-04T00:00:01.000Z"}

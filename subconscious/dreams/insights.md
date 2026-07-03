@@ -568,3 +568,34 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (96): 13cdec26, 60f43456, 48b50d47, +93 more
 
 ---
+
+
+## Wake Cycle — 2026-07-03 17:42 UTC
+
+### Insight (conf=0.92)
+> The terse-continuation autonomy grant ('ahead', 'next' = keep executing) structurally collides with the per-operation approval gate for git push — the agent extends the autonomy signal across a boundary it was never meant to cross, treating 'continue the task' as 'continue all side-effects including shared-state mutations'.
+
+**Rule:** Always treat git commit/push as outside the scope of terse-continuation autonomy — even when the user sends 'ahead' or 'next', never interpret it as approval for shared-state mutations.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+### Insight (conf=0.72)
+> The very mechanism that enables long multi-session work (frequent compactions with catchup/core-dump) also degrades the git-approval rule — each compaction strips the conversational memory of 'I have not been approved to push', resetting the agent to its default behavior which treats task-completion as implying permission to ship.
+
+**Rule:** Always re-verify git push approval status after any context compaction — treat compaction as having reset all ephemeral approvals to 'not granted'.
+
+**Evidence:**
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Pattern_: "User heavily relies on session continuity tools (/catchup, /core-dump) — multiple sessions show 'this session being continued from' as the d…"
+- _Pattern_: "The agent must never commit or push code without fresh, explicit approval from the user — prior session approvals do not carry forward."
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (45): f5a1fde7, e3e763ee, d092c64c, +42 more
+
+---

@@ -81,6 +81,15 @@ case "$path_hint" in
   *.md|*.markdown) is_md=1 ;;
 esac
 
+# A prose/doc file (.md/.markdown/.mdx/.txt) can DESCRIBE code — a findings
+# report, a design doc, a skeptical-review write-up — without BEING code. Rules
+# that assume an interactive/runtime surface (e.g. R3's destructive-action guard)
+# must not fire on docs; a doc has no surface to guard.
+is_doc=0
+case "$path_hint" in
+  *.md|*.markdown|*.mdx|*.txt) is_doc=1 ;;
+esac
+
 # ── R1  iife-in-jsx  (BLOCK) ──────────────────────────────────────────────
 # An immediately-invoked function expression wrapping JSX/derivation where a
 # sibling inline pattern was almost certainly the right shape. Precise signal:
@@ -99,6 +108,10 @@ fi
 # must answer: what renders when the precondition is FALSE, and are the
 # destructive buttons hidden (not just runtime-guarded) in that state?
 # Slug: feature-built-without-precondition-guard (S3).
+# Docs are exempt: a findings report / design doc under a *review*/*panel* name
+# describes destructive actions (quoting onClick/<Button>) without rendering any,
+# so gating it is meaningless — it was the dominant FP source for this rule.
+if [ "$is_doc" = "0" ]; then
 case "$path_hint" in
   *modal*|*review*|*inspect*|*viewer*|*detail*|*panel*)
     if printf '%s' "$body" | rg -qi '(revert|refund|delete|remove|destroy|drop)[^a-z]' \
@@ -108,6 +121,7 @@ case "$path_hint" in
     fi
     ;;
 esac
+fi
 
 # ── R4  comment-essay  (WARN) ─────────────────────────────────────────────
 # A multi-line block / JSDoc comment opened on its own line — proxy for the
@@ -149,9 +163,13 @@ fi
 
 # ── R7  markdown-table-health  (WARN) ─────────────────────────────────────
 # Catches the table corruptions prettier can't fix: a row whose pipe-count ≠
-# the header's (usually an unescaped `|` inside a cell), `…` inside a table row
-# (TTY-rendered output saved as source), and an unclosed code fence. Skips
-# fenced code blocks. Universal — fires for any agent/scope writing .md.
+# the header's (usually an unescaped `|` inside a cell), a `…` at a fixed-width
+# cell-truncation boundary (a TTY-rendered table saved as source), and an
+# unclosed code fence. Skips fenced code blocks. Universal — fires for any
+# agent/scope writing .md. The pipe-count half is the load-bearing structural
+# signal and is untouched; the ellipsis half is deliberately narrow (truncation
+# boundary + column padding) so a plain `…` in prose or an ASCII diagram never
+# trips it — that bare-`…` version was the corpus noise leader.
 if [ "$is_md" = "1" ]; then
   md_msgs=$(printf '%s' "$body" | python3 -c '
 import sys, re
@@ -160,6 +178,7 @@ lines = t.split("\n")
 msgs = []
 if t.count("```") % 2 != 0:
     msgs.append("Unclosed code fence (odd number of ``` ) — everything after it renders as a code block.")
+
 # A real GFM table is a header row FOLLOWED BY a separator row (|---|---|).
 # Only after that do we compare data-row column counts. Escaped pipes (\|) are
 # stripped before counting — a correctly-escaped cell must not be flagged.
@@ -186,8 +205,19 @@ for i, l in enumerate(lines):
             cand = n                                  # candidate header; needs a separator next
     else:
         intable = False; cand = None
-    if chr(0x2026) in l and "|" in l:
-        msgs.append(f"Ellipsis inside a table row at line {i+1} — a TTY-rendered/truncated table saved as source. Write source markdown, not rendered output.")
+    # Ellipsis TTY-truncation signal — fire ONLY on a genuinely rendered/aligned
+    # table saved as source: a "…" sitting at a fixed-width cell-truncation
+    # boundary. A deliberate "…" in prose (even inside a hand-written GFM cell, a
+    # citation, an ID pattern like `mist-…`, or an ASCII box diagram) is NOT
+    # truncation and must not fire. Two co-signals, BOTH required:
+    #   (a) "…" at a pipe cell-boundary:      …<spaces>|<space-or-EOL>
+    #   (b) fixed-width column padding on the line:  <non-space><2+ spaces>|
+    # ASCII "|" only — box-drawing diagrams (│) and prose `───` dividers are
+    # deliberate here, so keying on them re-introduced the prose false positive.
+    if (chr(0x2026) in l
+            and re.search(chr(0x2026) + r"[ \t]*\|([ \t]|$)", l)
+            and re.search(r"\S[ \t]{2,}\|", l)):
+        msgs.append(f"Ellipsis at a fixed-width table-cell boundary on line {i+1} — a TTY-rendered/truncated table saved as source. Write source markdown, not rendered output.")
 seen = set()
 for m in msgs:
     if m not in seen:
