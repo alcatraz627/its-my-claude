@@ -84,4 +84,5 @@ fi
 # the agent surface this nudge to the user, the only path to their transcript.
 msg="$msg  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-env-access --action nudge --heeded unknown >/dev/null 2>&1 || true
 exit 0

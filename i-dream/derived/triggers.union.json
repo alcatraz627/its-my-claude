@@ -20,6 +20,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260610-101333-89"
   },
   {
+    "id": "trig-committing-without-explicit-request",
+    "from_slug": "committing-without-explicit-request",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "Committing without explicit request",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-202559-fe"
+  },
+  {
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
@@ -27,17 +37,7 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-112246-96"
-  },
-  {
-    "id": "trig-dropped-existing-feature-during-rewrite",
-    "from_slug": "dropped-existing-feature-during-rewrite",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Silently dropped the activity-ribbon feature during a data-first rewrite",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260617-114343-a9"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-113302-e8"
   },
   {
     "id": "trig-file-referenced-without-full-path",
@@ -63,11 +63,11 @@
     "id": "trig-infra-before-grep",
     "from_slug": "infra-before-grep",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "infra-before-grep",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260615-083524-64"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-130808-88"
   },
   {
     "id": "trig-inverted-user-defined-opt-in-polarity",
@@ -80,26 +80,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-093928-bd"
   },
   {
-    "id": "trig-literal-request-over-intent",
-    "from_slug": "literal-request-over-intent",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Implemented literal UI request wording instead of modeling its intent",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260617-121727-06"
-  },
-  {
-    "id": "trig-mandatory-doc-guidelines-not-loaded-before-authoring",
-    "from_slug": "mandatory-doc-guidelines-not-loaded-before-authoring",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Authored 2 large docs without reading the MANDATORY doc-writing guidelines; ChatGPT voice throughout",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260612-213044-93"
-  },
-  {
     "id": "trig-manufactured-problem-by-removing-own-solution",
     "from_slug": "manufactured-problem-by-removing-own-solution",
     "from_source": "atone",
@@ -108,16 +88,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-103857-b0"
-  },
-  {
-    "id": "trig-orphaned-background-test-processes",
-    "from_slug": "orphaned-background-test-processes",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Left 18 orphaned 'yes' load-generator processes after #69 frequency tests, pegging the machine",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260618-105115-2c"
   },
   {
     "id": "trig-propagating-legacy-inline-imports-in-python-backend",
@@ -163,7 +133,7 @@
     "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
     "from_slug": "speculative-abstractions-without-a-load-bearing-caller",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Speculative abstractions without a load-bearing caller",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -228,5 +198,15 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#aff-20260621-135213-c5"
+  },
+  {
+    "id": "trig-weigh-fp-metric-by-cost-of-false-fire",
+    "from_slug": "weigh-fp-metric-by-cost-of-false-fire",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Priced hook mute-risk as FP-rate x cost-of-false-fire, not raw FP-rate",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260702-121112-21"
   }
 ]

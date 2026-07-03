@@ -153,7 +153,8 @@ def cleanup_sid(sid8):
     """Remove every /tmp mark/edit file keyed by a sid8 the harness created."""
     for f in (f"/tmp/claude-edited-files-{sid8}",
               f"/tmp/claude-declared-ready-{sid8}",
-              f"/tmp/claude-structural-claim-{sid8}"):
+              f"/tmp/claude-structural-claim-{sid8}",
+              f"/tmp/claude-absence-claim-{sid8}"):
         try:
             os.remove(f)
         except OSError:

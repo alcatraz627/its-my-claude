@@ -63,6 +63,7 @@ if echo "$command" | grep -qE '(^|[;&|]{1,2}|\n)\s*(\/usr\/bin\/grep|\/bin\/grep
     USAGE_HINT="For file/directory search:\n   [36mrg --no-ignore --hidden \"PATTERN\" /path/          # full scope (equiv to grep -r)[0m\n   [36mrg --no-ignore --hidden -i \"PATTERN\" /path/       # case-insensitive[0m\n   [36mrg --no-ignore --hidden -l \"PATTERN\" /path/       # list files only[0m\n   [36mrg --no-ignore --hidden -g \"*.jsonl\" \"PATTERN\" /  # file-type scoped[0m\n   [36mrg --no-ignore --hidden -E \"REGEX\" /path/         # extended regex[0m"
   fi
 
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-ripgrep --action block --heeded unknown >/dev/null 2>&1 || true
   cat <<BLOCK_JSON
 {
   "decision": "block",

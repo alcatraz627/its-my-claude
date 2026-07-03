@@ -1,17 +1,18 @@
-<!-- i-dream project brief · 2026-06-30T23:48:29.436645+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-02T23:55:36.379214+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the user's `~/.claude` configuration repo — a meta-project for managing Claude Code's own behavior, rules, skills, and session infrastructure. Work here is maintenance/improvement of the agent scaffolding itself, not a product feature.
+The `~/.claude` meta-configuration repo — managing Claude's own rules, skills, hooks, WAL, and tooling. Work is long-running, multi-session, and heavily continuity-dependent.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively**: `/core-dump` at every milestone and before context compaction, not just at session end; `/catchup` is the primary recovery path for resumed sessions
-- **Treat terse single-word messages as execute directives**: "ahead", "next", "looks", "done" mean continue autonomously — increase tool-call depth, never scope
-- **Write WAL entries as JSONL** (`scripts/wal/wal.sh`), not markdown; JSONL is canonical as of 2026-04-17
-- **Use TUI/gum tools for structured terminal output**: tables and comparisons go through the configured TUI stack, not plain markdown
+- **Run `/core-dump` at milestones**, not just session end; `/catchup` is the primary recovery path after compaction
+- **Treat terse single-word messages** (`ahead`, `next`, `looks`, `done`) as autonomous-continue directives — increase execution depth, never expand scope
+- **Write WAL entries as JSONL** (`scripts/wal/wal.sh`); markdown format is legacy-only
+- **Checkpoint every ~15 actions** and before any risky operation; state here is especially ephemeral across compaction boundaries
 
 ## Things to avoid
-- **Never push or commit without fresh per-push approval**: prior session approval does not carry over; terse continuations ("yes", "keep going") are NOT push approval — this is the single most-violated rule in this project
-- **Don't fix-thrash**: when the same failure recurs, stop and identify root cause before generating another patch; three attempts without diagnosis is a signal to pause
-- **Don't infer or synthesize data values not present in source**: only use values traceable to source; flag gaps explicitly rather than filling them
+- **Never commit or push without fresh per-operation approval** — this has triggered angry corrections 5+ times; prior session approvals do not carry forward to subsequent push actions
+- **Don't thrash on fixes** — if the same block has been edited 3+ times, stop, re-read, form a hypothesis, then edit once
+- **Don't infer or synthesize data values** not explicitly traceable to source; flag any gap rather than fill it
+- **Don't over-generalize terse continuation as push approval** — `keep going` means continue editing/analysis, not perform shared-state mutations
 
 ## Open questions / known gaps
-- **Terse-continuation vs. git-push collision is unresolved mechanically**: the protocol "terse = execute" structurally conflicts with "push requires explicit approval" — the agent repeatedly over-generalizes autonomy across the push boundary despite repeated corrections
+- Structural tension: the terse-continuation protocol grants broad execution autonomy that the agent repeatedly over-generalizes past the commit/push boundary; advisory rules alone have not fixed this in 18+ sessions — a mechanical pre-push hook is the only class of fix that will hold

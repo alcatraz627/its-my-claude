@@ -1,0 +1,2 @@
+{"type": "user", "cwd": "/Users/alcatraz627/.claude", "message": {"role": "user", "content": "is there a config loader"}}
+{"type": "assistant", "cwd": "/Users/alcatraz627/.claude", "message": {"role": "assistant", "content": [{"type": "text", "text": "As far as I searched, `src/config_loader.py` does not exist \u2014 but I haven't grepped the full tree."}]}}

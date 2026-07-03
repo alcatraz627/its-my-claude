@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-02T09:41:39Z",
-  "events_analyzed": 73811,
-  "sessions_analyzed": 206,
+  "generated_at": "2026-07-03T09:28:16Z",
+  "events_analyzed": 75542,
+  "sessions_analyzed": 208,
   "session_quality": {
-    "average_score": 68.0,
+    "average_score": 68.1,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,55 +170,55 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": ".claude",
+    "primary_focus": "staging-enhancement-product",
     "recent_projects": {
-      ".claude": 3,
-      "tmp": 1,
+      ".claude": 2,
       "staging-enhancement-product": 3,
-      "frontend": 1,
-      "backend": 1,
-      "walmart-mvp": 1
+      "walmart-mvp": 1,
+      "claude-instances": 1,
+      "two-enhancement-product": 2,
+      "tmp": 1
     },
-    "drift_rate": 0.73,
-    "total_switches": 149,
+    "drift_rate": 0.728,
+    "total_switches": 150,
     "recent_switches": [
-      {
-        "ts": "2026-06-30T08:49:50Z",
-        "from": "frontend",
-        "to": "staging-enhancement-product"
-      },
-      {
-        "ts": "2026-06-30T09:27:51Z",
-        "from": "staging-enhancement-product",
-        "to": ".claude"
-      },
-      {
-        "ts": "2026-06-30T09:28:38Z",
-        "from": ".claude",
-        "to": "backend"
-      },
-      {
-        "ts": "2026-06-30T13:24:08Z",
-        "from": "backend",
-        "to": "staging-enhancement-product"
-      },
       {
         "ts": "2026-06-30T13:46:39Z",
         "from": "staging-enhancement-product",
         "to": "walmart-mvp"
+      },
+      {
+        "ts": "2026-07-02T11:30:32Z",
+        "from": "walmart-mvp",
+        "to": "claude-instances"
+      },
+      {
+        "ts": "2026-07-02T11:45:02Z",
+        "from": "claude-instances",
+        "to": "staging-enhancement-product"
+      },
+      {
+        "ts": "2026-07-02T15:25:49Z",
+        "from": "staging-enhancement-product",
+        "to": "two-enhancement-product"
+      },
+      {
+        "ts": "2026-07-02T21:43:39Z",
+        "from": "two-enhancement-product",
+        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6397,
-    "corrections": 1410,
-    "confirmations": 1152,
-    "directives": 220,
+    "total_prompts": 6498,
+    "corrections": 1431,
+    "confirmations": 1157,
+    "directives": 224,
     "terse_messages": 523,
     "correction_rate": 0.22,
-    "confirmation_rate": 0.18,
+    "confirmation_rate": 0.178,
     "directive_rate": 0.034,
-    "terse_rate": 0.082,
+    "terse_rate": 0.08,
     "style_label": "corrective"
   }
 }

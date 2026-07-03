@@ -62,6 +62,7 @@ Fix:
                                                        rg \"PATTERN\" --replace \"REPL\" path/
 
 Mute for this session: touch ~/.claude/.no-rg-replace-guard"
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-rg-replace-bundle --action block --heeded unknown >/dev/null 2>&1 || true
   jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0
 fi

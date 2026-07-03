@@ -1,16 +1,17 @@
-<!-- i-dream project brief · 2026-06-20T02:08:09.088576+00:00 · 3 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-02T23:55:10.626377+00:00 · 5 patterns / 0 insights -->
 ## What this project is about
-Frontend for Versable's enhancement product — a TypeScript/React codebase where the dominant working style is precise, minimal, and convention-driven. Human-facing prose (PR descriptions, docs, commit messages) is a first-class deliverable.
+Versable frontend (Next.js/React enhancement-product). Dominant working style: careful, convention-following feature work with strong opinions on prose quality and git discipline.
 
 ## Things to do (or keep doing)
-- Write PR descriptions and docs at developer altitude: dense, code-referenced, scannable (`file:line`, flags, numbers) — not narrative
-- After any prose draft, mechanically scan for em-dashes, `Label:fragment` rows, and over-bolded bullets before sending
-- Check `frontend/docs/boring-technical-stuff/comment-style.md` before writing comments or docs in this repo
+- **Hand git commands to the user** — repo CLAUDE.md prohibits agent-executed commits/pushes; always produce the exact command for manual execution
+- **Write developer-register prose** — PR descriptions and docs want dense, code-referenced, scannable text (file:line, flags, numbers); match the engineering register, not a warm narrative
+- **Confirm decisions once, then drop them** — after the user validates a call, treat it as settled; never re-raise it in artifacts as something needing validation
 
 ## Things to avoid
-- Don't use em-dashes in any human-facing output — not in PRs, not in docs, not in messages; use commas, periods, or restructure the sentence
-- Don't overcorrect AI-smell into warm narrative prose ("this enables teams to…", "by leveraging…") — the target register is plain engineering prose, not a social science essay
-- Don't re-raise a decision the user has already confirmed in written artifacts; once confirmed, fold it in low or drop it entirely — never frame it as "confirm this" or a blocker in the output
+- **Don't use em-dashes or AI-smell phrasing** in any human-facing output (PRs, docs, comments); explicit rule exists and keeps being violated — slow down and scan before sending
+- **Don't overcorrect into narrative warmth** — fixing em-dashes by rewriting as flowing prose is a lateral failure; target plain engineering sentences, not social-science paragraphs
+- **Don't re-raise settled decisions** in written artifacts (phrases like "confirm this", "validate that", "ensure X is intended" after the user already confirmed X)
 
 ## Open questions / known gaps
-- The boundary between "too terse/telegraphic" and "too narrative/warm" is the recurring tension — when in doubt, read the draft aloud as a developer skimming a diff, not as a product manager writing a pitch
+- Em-dash / AI-smell slip persists across corrections within the same session — a mechanical pre-send scan (`rg " — "`) before any human-facing prose output may be needed as a habit
+- _(no further signal)_

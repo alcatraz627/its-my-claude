@@ -57,7 +57,7 @@ sid8="${sid:0:8}"
 WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
 soft_note() {  # $1 = message text
   jq -cn --arg m "$1" '{systemMessage:$m}' 2>/dev/null || true
-  [ -x "$WARN" ] && bash "$WARN" --hook declared-ready-soft --heeded unknown >/dev/null 2>&1 || true
+  [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --action soft --heeded unknown >/dev/null 2>&1 || true
   exit 0
 }
 
@@ -282,7 +282,17 @@ fi
 [ "$comment_only" = 1 ] && exit 0
 
 # RAN) a real test/program ran this turn → trust the claim (v1 parity) → SILENT.
-if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then exit 0; fi
+if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
+  # Heed: a prior block this session (MARK present) followed by a real run before the
+  # next claim = that block was heeded. Emit once per session (HEED sentinel dedups).
+  MARK="/tmp/claude-declared-ready-${sid8}"
+  HEEDMARK="/tmp/claude-declared-ready-heeded-${sid8}"
+  if [ -f "$MARK" ] && [ ! -f "$HEEDMARK" ]; then
+    [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready:$sid8" --heeded true >/dev/null 2>&1 || true
+    : > "$HEEDMARK" 2>/dev/null || true
+  fi
+  exit 0
+fi
 
 # C) opportunistic diff-coverage verdict.
 if [ "$cov_decision" = "covered" ]; then
@@ -307,6 +317,8 @@ MARK="/tmp/claude-declared-ready-${sid8}"
 sig=$(printf '%s' "$claim_text" | shasum 2>/dev/null | awk '{print $1}')
 prev=""; [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
 if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
+  # Same claim signature came back after a block → the prior block was not heeded.
+  [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready:$sid8" --heeded false >/dev/null 2>&1 || true
   # Already blocked for this exact claim last Stop — the agent saw it and chose to
   # proceed, or it's a false positive. Step aside (visible, non-blocking).
   soft_note "⚠ declared-ready (not re-blocking): you edited source/test files and declared success, but I saw nothing exercise the changed path this turn. If you verified out-of-band or this is a false positive, carry on. Mute: touch ~/.claude/.no-declared-ready-gate"
@@ -337,5 +349,5 @@ This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6�
 If you genuinely ran it out-of-band, or this is a false positive, say so and proceed — this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
 fi
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
-[ -x "$WARN" ] && bash "$WARN" --hook declared-ready-block --heeded unknown >/dev/null 2>&1 || true
+[ -x "$WARN" ] && bash "$WARN" --hook declared-ready --action block --heeded unknown >/dev/null 2>&1 || true
 exit 0

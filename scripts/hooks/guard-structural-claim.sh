@@ -294,9 +294,9 @@ else
 fi
 
 emit_soft() { jq -cn --arg m "⚠ structural-claim (grounding gate) — $body" '{systemMessage:$m}' 2>/dev/null || true
-  [ -x "$WARN" ] && bash "$WARN" --hook structural-claim-soft --heeded unknown >/dev/null 2>&1 || true; }
+  [ -x "$WARN" ] && bash "$WARN" --hook structural-claim --action soft --heeded unknown >/dev/null 2>&1 || true; }
 emit_block() { jq -cn --arg r "⛔ structural-claim (grounding gate) — $body" '{decision:"block", reason:$r}' 2>/dev/null || true
-  [ -x "$WARN" ] && bash "$WARN" --hook structural-claim-block --heeded unknown >/dev/null 2>&1 || true; }
+  [ -x "$WARN" ] && bash "$WARN" --hook structural-claim --action block --heeded unknown >/dev/null 2>&1 || true; }
 
 if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
   # Same claim sentence as the last Stop — step aside (never trap).

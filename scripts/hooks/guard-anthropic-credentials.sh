@@ -12,14 +12,25 @@
 # Mute (almost never): touch ~/.claude/.allow-cred-write
 
 set -uo pipefail
-[ -f "$HOME/.claude/.allow-cred-write" ] && exit 0
 
+# Mute is applied AFTER detection (inside block()), not at the top: a muted run that
+# WOULD have fired is logged action:"muted" — the "muted under pressure" signal — so
+# the silence is dated and visible rather than an early exit that leaves no trace.
 input=$(cat 2>/dev/null)
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 
 CRED='(ANTHROPIC_API_KEY|ANTHROPIC_AUTH_TOKEN|CLAUDE_API_KEY|ANTHROPIC_BASE_URL)'
 
+MUTED=0
+[ -f "$HOME/.claude/.allow-cred-write" ] && MUTED=1
+WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
+
 block() {
+  if [ "$MUTED" = 1 ]; then
+    bash "$WARN" --hook guard-anthropic-credentials --action muted --heeded unknown >/dev/null 2>&1 || true
+    exit 0
+  fi
+  bash "$WARN" --hook guard-anthropic-credentials --action block --heeded unknown >/dev/null 2>&1 || true
   jq -cn --arg r "🛑 CREDENTIAL GUARD — refusing to modify the Anthropic key / global credential.
 
 $1

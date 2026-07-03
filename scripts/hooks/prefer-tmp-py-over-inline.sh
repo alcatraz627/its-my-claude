@@ -34,4 +34,5 @@ nl=${nl:-0}
 
 msg="[hint] python3 -c with $nl newlines: tracebacks show \"<string>\" instead of real line numbers. Prefer writing the script to /tmp/<slug>.py (heredoc) then 'python3 /tmp/<slug>.py' — real line numbers in tracebacks, re-runnable, no shell-quote bugs. (mute: touch ~/.claude/.no-inline-py-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-tmp-py-over-inline --action nudge --heeded unknown >/dev/null 2>&1 || true
 exit 0

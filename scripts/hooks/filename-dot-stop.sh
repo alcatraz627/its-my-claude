@@ -48,14 +48,24 @@ bt='`[^`]*\.('"$EXT"')`\.'                                                    # 
 bare='(?<![A-Za-z0-9])[A-Za-z0-9_./@~-]*\.('"$EXT"')\.(\s|$|[)\]"])'          # path/foo.md.
 PAT="($bt)|($bare)"
 
+MARK="/tmp/claude-filename-dot-${sid8}"
 hit=$(printf '%s\n' "$prose" | rg -nP "$PAT" 2>/dev/null | head -3)
-[ -n "$hit" ] || exit 0
+if [ -z "$hit" ]; then
+  # No violation this turn. A lingering block signature means the blocked path was
+  # fixed before this clean message → that block was heeded. Emit once, then clear.
+  if [ -f "$MARK" ]; then
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook filename-dot --heed-of "filename-dot:$sid8" --heeded true >/dev/null 2>&1 || true
+    rm -f "$MARK" 2>/dev/null || true
+  fi
+  exit 0
+fi
 
 # Loop-safe: don't re-block the identical message.
 MARK="/tmp/claude-filename-dot-${sid8}"
 sig=$(printf '%s' "$prose" | shasum 2>/dev/null | awk '{print $1}')
 prev=""; [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
 if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook filename-dot --heed-of "filename-dot:$sid8" --heeded false >/dev/null 2>&1 || true
   jq -cn '{systemMessage:"⚠ filename-dot (not re-blocking the identical message): a file path is still immediately followed by a period, so Ghostty cannot link it. Mute: touch ~/.claude/.no-filename-dot-gate"}' 2>/dev/null || true
   exit 0
 fi
@@ -73,5 +83,6 @@ Fix: re-emit the message so NO file path is immediately followed by a period. Fo
   good:  See \`docs/foo.md\` for the full brief.
 
 The user asked for hard enforcement of this. Mute: touch ~/.claude/.no-filename-dot-gate"
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook filename-dot --action block --heeded unknown >/dev/null 2>&1 || true
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
 exit 0

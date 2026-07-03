@@ -59,11 +59,14 @@ _ts_epoch()  { date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$1" '+%s' 2>/dev/null \
                  || date -u -d "$1" '+%s' 2>/dev/null || echo 0; }
 
 _block() {  # $1 = reason. Emit the decision and stop processing.
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook atone-stop-gate --action block --heeded unknown >/dev/null 2>&1 || true
   jq -cn --arg r "$1" '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0
 }
 
 _give_up() {  # $1 = marker path, $2 = slug, $3 = note. Clear + log missed.
+  # Gave up after MAX_BLOCKS with no event recorded → the blocks were not heeded.
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook atone-stop-gate --heed-of "atone-stop-gate:$SESSION_KEY" --heeded false >/dev/null 2>&1 || true
   if [ "${ATONE_NO_FEEDBACK:-0}" != "1" ]; then
     ( bash "$HOME/.claude/scripts/atone.sh" feedback --kind missed \
         --slug "$2" --notes "$3" >/dev/null 2>&1 & ) &
@@ -105,6 +108,8 @@ fi
 # the marker is written at UserPromptSubmit, the event necessarily later.)
 RECENT=$(jq -r --arg ts "$MTS" 'select(.ts >= $ts) | .id' "$EVENTS" 2>/dev/null | head -1)
 if [ -n "$RECENT" ]; then
+  # Event landed at/after the /atone marker → the explicit /atone was addressed.
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook atone-stop-gate --heed-of "atone-stop-gate:$SESSION_KEY" --heeded true >/dev/null 2>&1 || true
   rm -f "$PMARK" 2>/dev/null || true   # recorded — clean close
   exit 0
 fi

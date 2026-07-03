@@ -1,16 +1,16 @@
-<!-- i-dream project brief · 2026-06-24T10:28:17.097555+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-07-02T23:54:47.007863+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A shared multi-developer web product (Versable enhancement) with a strict git discipline regime and established codebase conventions. The dominant working style is conservative: confirm before any external side-effect, follow existing patterns rather than invent new ones.
+A shared TypeScript/Next.js product codebase ("enhancement-product") worked collaboratively with the user; the dominant working style is incremental feature work with strict git discipline and strong convention adherence.
 
 ## Things to do (or keep doing)
-- Always use the project's defined environment utilities (`isDevelopment`, `isProduction`, etc.) — never inline `process.env.NODE_ENV` comparisons directly
-- Always use the project's configured TUI/gum tools when presenting structured data in the terminal (tables, comparisons, multi-column output)
-- Treat terse continuation signals ("yes", "ahead", "next") as execution directives for local, reversible actions only — never infer git push authorization from them
+- **Use project utility constants** (`isDevelopment`, `isProduction`, etc.) instead of inlining raw `process.env.NODE_ENV` comparisons — the codebase defines these; always grep before deriving inline.
+- **Use the project's TUI/gum tools** for terminal table/comparison output; plain markdown tables are wrong here.
+- **Hard-stop before any git commit or push** and surface the exact command + effect to the user — wait for in-turn approval before running it.
 
 ## Things to avoid
-- **Never commit or push without fresh, explicit per-operation approval** — this is the single most-violated rule in this project; prior session approval, blanket permission, or positive feedback does NOT carry forward to the next push
-- Never write credentials or secrets to any file, note, scratch doc, checkpoint, or commit — even inline during a testing session
-- Don't infer authorization for irreversible external side-effects from conversational context that may have been set before a compaction, continuation, or operation boundary
+- **Never commit or push without fresh, explicit, per-operation approval** — prior session approval, terse continuations ("next", "ahead", "keep going"), or general task approval do NOT authorize git mutations. This is the single highest-recurrence violation in this project (18+ incidents).
+- **Never write credentials to any file**, note, checkpoint, or commit artifact — even scratch claude notes. Credentials shared inline during a session are for immediate manual use only.
+- **Don't re-derive constants the codebase already defines** — grep for existing environment/boolean utilities before writing a new `process.env.*` check.
 
 ## Open questions / known gaps
-- Tension between "terse = execute" and "never infer push authorization" is unresolved at the protocol level — when in doubt, treat any git external action as requiring explicit confirmation, even if the user just said "yes" to something adjacent
+- Terse continuation signals structurally amplify the git-push violation — the execution-autonomy grant bleeds past the shared-state-mutation boundary every session; advisory corrections alone have not fixed this across compaction boundaries.

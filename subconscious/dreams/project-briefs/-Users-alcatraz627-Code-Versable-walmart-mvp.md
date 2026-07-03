@@ -1,17 +1,17 @@
-<!-- i-dream project brief · 2026-06-30T23:47:40.801608+00:00 · 4 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-02T23:56:32.792149+00:00 · 6 patterns / 0 insights -->
 ## What this project is about
-Walmart MVP feature work under the Versable product — a pair-coding / agentic context where the user evaluates AI quality by judgment and reliability, not output volume.
+Walmart MVP feature work inside the Versable monorepo — retail/e-commerce domain. Working style is minimal-blast-radius: surgical changes, no speculative abstractions, strict git discipline enforced via repo CLAUDE.md.
 
 ## Things to do (or keep doing)
-- Inline data at the callsite when asked for simple exposure; prefer the smallest change that satisfies the stated request
-- Verify tool side-effects completed (e.g. `/atone` write landed on disk) before reporting done — outcomes, not invocations
-- Ask or research before deciding; the user rates judgment under ambiguity above raw speed
+- **Read the repo's CLAUDE.md before any git operation** — it overrides default behavior; hand the user exact commands rather than running them yourself.
+- **Inline simple data at the callsite** — when asked to expose a value or add a field, pass it directly; do not invent wrapper functions, status-derivation helpers, or intermediate types unless the user names them.
+- **Verify `/atone` events landed on disk** after invoking the skill — confirm the write before moving on; a non-confirmed `/atone` is a no-op.
+- **Surface uncertainty early** — this user judges reliability and judgment-under-ambiguity above all; asking a clarifying question is strictly better than guessing and producing plausible-but-wrong output.
 
 ## Things to avoid
-- Don't introduce wrapper functions, status-derivation helpers, or intermediate abstractions for requests that only need a field exposed — that's over-engineering a one-liner
-- Don't silently replace a working user solution, then present your re-solve as the "fix" — user sees this as net-negative; the destruction is the bug, not just the output
-- Don't declare `/atone` (or any write-to-disk skill) complete without confirming the artifact exists
+- **Don't remove a working solution and re-present it as new** — if you rewrite the user's existing code to fix a problem, say so explicitly; presenting the same fix as novel after silently destroying the original is a trust-killer.
+- **Don't add abstractions the user didn't request** — no status-derivation logic, no wrapper layers, no "helper for future use" on a simple component addition.
+- **Don't treat a skill invocation as complete without disk confirmation** — `/atone`, `/affirm`, and similar write-to-disk skills must be verified before the turn closes.
 
 ## Open questions / known gaps
-- Pattern around when abstractions ARE warranted vs. inline is unresolved — no positive signal yet establishing the threshold
-- _(no further signal)_
+- Git push discipline has recurring violations in this repo — the CLAUDE.md gate exists for a reason; always re-read it rather than inferring from prior-session behavior.

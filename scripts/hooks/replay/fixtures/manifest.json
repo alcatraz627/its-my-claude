@@ -275,6 +275,114 @@
       "source_transcript": "SYNTHETIC",
       "turn_in_file": 0,
       "note": "synthetic slice (faithful to empirical record) -- controlled tool-history for the BLIND read-gate branch"
+    },
+    {
+      "name": "real-founding-69aeb3ea-t56",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/real-founding-69aeb3ea-t56.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "FOUNDING",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "69aeb3ea-3288-47e0-87e7-d1c639a4c438.jsonl",
+      "turn_in_file": 56,
+      "note": "FOUNDING event — `warn-log.sh` writes to a file that 'doesn't even exist yet, never fired', off an `fd -H` probe (hidden, NOT --no-ignore) that skipped the git-ignored warn-events.jsonl. High-stakes ~/.claude -> BLOCK. The exact recurrence this gate targets."
+    },
+    {
+      "name": "synth-fd-H-no-clear",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-fd-H-no-clear.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=block)"
+    },
+    {
+      "name": "synth-noignore-clears",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-noignore-clears.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=silent)"
+    },
+    {
+      "name": "synth-testf-clears",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-testf-clears.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=silent)"
+    },
+    {
+      "name": "synth-hedged",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-hedged.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=silent)"
+    },
+    {
+      "name": "synth-pathA-no-existing-module",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-pathA-no-existing-module.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=block)"
+    },
+    {
+      "name": "synth-weak-subject-noise",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-weak-subject-noise.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=silent)"
+    },
+    {
+      "name": "synth-multiline-unrelated-ls",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-multiline-unrelated-ls.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=block)"
+    },
+    {
+      "name": "synth-read-clears",
+      "hook": "guard-absence-claim.sh",
+      "fixture": "fixtures/absence-claim/synth-read-clears.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "SYNTH",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "note": "synthetic controlled-tool-history slice (desired=silent)"
     }
   ]
 }

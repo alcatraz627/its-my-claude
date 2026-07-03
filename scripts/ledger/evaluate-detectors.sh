@@ -248,6 +248,9 @@ for det in dets:
                     if not line: continue
                     try: d = json.loads(line)
                     except Exception: continue
+                    # Fires only: kind:"heed" resolutions share the hook_id but
+                    # are responses to a fire, not fires — don't double-count.
+                    if d.get("kind") != "warn": continue
                     t = parse_ts(d.get("ts", ""))
                     if t is None: continue
                     warn_ev.append((t, d.get("hook_id", "") or "", d.get("heeded", "unknown")))

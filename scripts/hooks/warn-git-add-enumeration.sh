@@ -91,6 +91,8 @@ END {
     --notes "advisory fired: git add with $N_PATHS path args" \
     >/dev/null 2>&1 & ) &
 
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook warn-git-add-enumeration --action nudge --heeded unknown >/dev/null 2>&1 || true
+
 msg="[warn-git-add-enumeration] git add has $N_PATHS path args — consider generalizing first (generalize-before-enumerate, atone S3). Risk: enumerated commit recipes get executed literally by the user before the abstraction is noticed. Pre-check: 'git status ${COMMON_PARENT:-<parent-dir>}' — if clean (no leaks), the parent IS the answer. (mute: touch ~/.claude/atone/.add-warn-off ; one-shot: ATONE_NO_ADD_WARN=1)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 exit 0

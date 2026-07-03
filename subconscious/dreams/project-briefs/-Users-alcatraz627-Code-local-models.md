@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-06-30T16:02:46.772115+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-02T23:56:06.286412+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Local model tooling suite (`~/Code/local-models`) — CLI wrappers, warm/cold state management, and agent API over local LLMs. Work style is exploratory but delivery-oriented; the user expects concrete outputs, not research summaries.
+Local LLM tooling project (`~/Code/local-models`) — managing local model runners, warmth state, and CLI tooling. Sessions are research-heavy with concrete deliverable expectations at the end.
 
 ## Things to do (or keep doing)
-- Always surface actual command output when claiming a test passed — show the raw result so the user can judge correctness themselves
-- Execute mandatory skills (`/atone`, `/core-dump`, etc.) immediately and completely when invoked; never defer or skip mid-correction
-- Use the Task tool for todos — `TaskCreate`/`TaskUpdate` — never write to a file instead
-- Translate research/design phases into lean, behavior-focused implementation docs before the session ends — direct and formal, no "Why this matters" openers
+- Always show raw test output for the user to inspect; declaring success without evidence is a failure
+- Always invoke `/atone` immediately and completely when triggered — skipping it mid-correction compounds the mistake
+- Use the Task tool (not TODO files) when asked to update todos; the TUI is the live surface
+- Translate research/design phases into lean, behavior-focused implementation docs before the session ends
 
 ## Things to avoid
-- Don't re-introduce complexity the user explicitly deleted; if they simplified, match that ceiling exactly
-- Don't use `rm` — always `trash`; the hook blocks it and there are no exceptions for "cleanup" work
-- Don't declare success without showing evidence; asserting a test passed without output is treated as a failure
-- Don't write AI-smell prose (em-dashes, promotional framing, essay-length comments) in any human-facing output — one terse WHY sentence only
+- Don't re-introduce removed complexity or add features the user didn't ask for when replacing deleted code
+- Don't use `rm` — use `trash`; the hook blocks `rm` unconditionally with no "cleanup" exceptions
+- Don't write docs with promotional/motivational framing ("why this matters", em-dashes, AI-smell phrasing) — direct and formal only
+- Don't complete peripheral work (research, planning, persona design) while leaving the core stated deliverable undelivered
 
 ## Open questions / known gaps
-- Peripheral sub-tasks (research, persona design, tooling scaffolding) consistently crowd out the core deliverable; ensure the primary ask ships before side work
-- RCA files require `---` YAML frontmatter on line 1 or `atone.sh` exits non-zero — verify frontmatter before considering an atone recorded
+- Sessions tend to over-invest in exploratory side work and under-deliver on the primary ask; finish the core deliverable first, then extras
+- RCA files must open with `---` YAML frontmatter on line 1 or `atone.sh` exits non-zero silently — verify frontmatter before considering any `/atone` call complete

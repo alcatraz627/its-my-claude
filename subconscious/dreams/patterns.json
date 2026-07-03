@@ -2734,6 +2734,45 @@
     ]
   },
   {
+    "id": "27352a7b-8a7e-4395-a897-3bb1f9117318",
+    "pattern": "Repo-specific CLAUDE.md rules that require the agent to stop and hand the user exact git commands for manual execution take absolute precedence over default git operation behavior; running the operations directly when the local rule prohibits it is a hard rule violation, confirmed by an independent juror.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "approach",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      "d7954ec0-e839-4054-b6f3-88f2ddfad50a",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "6d207e12-beb2-4e4e-84f0-349d6b737b72",
+      "507245b9-361b-428e-b42e-6b6c2888363a",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "752601dd-94fb-4cea-b72f-71fe9f2ea847",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "07cc224b-0865-4361-beec-993aa045a6e4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-02T23:49:07.272682+00:00",
+    "last_seen": "2026-07-02T23:49:07.272682+00:00",
+    "occurrence_history": [
+      "2026-07-02T23:49:07.272682+00:00"
+    ]
+  },
+  {
     "id": "2bca0a46-6579-4af7-a41c-44bfabdd7e70",
     "pattern": "User frequently uses 'catchup' command at session start to re-orient the assistant to ongoing project context",
     "valence": "positive",
@@ -13138,6 +13177,45 @@
     ]
   },
   {
+    "id": "0bec250f-4071-41f8-be0e-2c4071601b01",
+    "pattern": "The user evaluates AI models primarily on reliability, appropriate judgment (knowing when to ask, research, delegate, or scan), and trustworthiness of output — not raw benchmark scores, math accuracy, or throughput metrics.",
+    "valence": "neutral",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      "d7954ec0-e839-4054-b6f3-88f2ddfad50a",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "6d207e12-beb2-4e4e-84f0-349d6b737b72",
+      "507245b9-361b-428e-b42e-6b6c2888363a",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "752601dd-94fb-4cea-b72f-71fe9f2ea847",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "07cc224b-0865-4361-beec-993aa045a6e4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-02T23:49:07.272682+00:00",
+    "last_seen": "2026-07-02T23:49:07.272682+00:00",
+    "occurrence_history": [
+      "2026-07-02T23:49:07.272682+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13704,48 +13782,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "132e5996-1be3-4ae3-ad88-08b89ee71894",
-    "pattern": "Optional integrations that use conditional requires must avoid static imports resolvable at build time; if the module may be absent, the resolution must be deferred (dynamic require, try/catch, or build-time exclusion) to prevent CI/production build failures.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "architecture",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "1e792352-68e5-4389-8429-3eee3c5cc6d6",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-07T13:11:39.996033+00:00",
-    "last_seen": "2026-05-07T13:11:39.996033+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "4d0abc33-6de2-4b36-ba62-e17ee7330ed5",
-    "pattern": "When adding test infrastructure, the agent added a new testing library dependency without first scanning the codebase for existing test patterns. The user corrected this and pointed to existing tests as the reference.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "1e792352-68e5-4389-8429-3eee3c5cc6d6",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "40bfc88e-25a8-4671-9c53-5d6a38fa6975"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude-widgets-claude-instances"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-08T09:15:20.978365+00:00",
-    "last_seen": "2026-05-08T09:15:20.978365+00:00",
     "occurrence_history": []
   }
 ]

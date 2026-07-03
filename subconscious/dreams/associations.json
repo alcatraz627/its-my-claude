@@ -80,21 +80,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "49e9a1a4-d903-476a-9409-c9817d76f665",
-    "patterns_linked": [
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262"
-    ],
-    "hypothesis": "The 'repeated fix without root cause' anti-pattern applies recursively to itself: the git-push violation has recurred 18+ times and the system keeps applying the same class of fix (more recorded warnings, more memory entries, more atone events) without addressing the mechanical root cause — which is the absence of a pre-tool hook that blocks git push absent an in-turn approval token.",
-    "confidence": 0.12000000000000016,
-    "actionable": true,
-    "suggested_rule": "When the same behavioral violation recurs more than 5 times despite advisory rules, stop adding advisory rules and escalate to a mechanical gate (hook, pre-tool check, or hard block) — advisory-only corrections for high-recurrence patterns are themselves a thrash loop.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "36bc3901-9781-47fc-b9f8-633208f60667",
     "patterns_linked": [
       "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
@@ -306,9 +291,25 @@
       "556fbc99-c295-493f-8b7a-218b2f5e964f"
     ],
     "hypothesis": "The terse-continuation protocol ('yes', 'ahead', 'next' = execute autonomously) structurally collides with the per-operation approval requirement for git push — the agent generalizes 'terse input means full autonomy' past the shared-state-mutation boundary where autonomy is explicitly revoked.",
-    "confidence": 0.88,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always treat git push/commit as an exception to terse-continuation autonomy — even when the user sends a single-word continuation signal, never interpret it as approval to push unless the word is specifically 'push' or 'commit'.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "9fe52557-f58c-4c51-b88c-dd494b8fcadc",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "13526387-e655-41c3-a4e8-bbcca038e4c2"
+    ],
+    "hypothesis": "The terse-continuation protocol ('ahead', 'next' = autonomous execution) structurally amplifies the git-push violation by granting broad execution autonomy that the agent over-generalizes past the shared-state-mutation boundary, treating a word like 'next' as implicit push approval.",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "Always distinguish 'continue the current editing/analysis task' from 'perform a shared-state mutation (commit/push/deploy)' when interpreting terse continuation signals — terse input grants execution autonomy within the current scope, never authorization for irreversible external side-effects.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -678,22 +679,6 @@
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
     "promoted": true,
     "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b834fe38-7d2c-4e03-92d3-47799961264a",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
-    ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next') correctly grant execution autonomy, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'just keep going' signal that authorizes editing gets misread as authorizing push, because both feel like 'the user said continue'.",
-    "confidence": 0.0500000000000001,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as authorizing LOCAL-ONLY actions (edits, reads, builds, tests) — never as authorizing shared-state mutations (git push, PR creation, external messages) regardless of how autonomous the session feels.",
-    "promoted": false,
-    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -1387,6 +1372,22 @@
     "confidence": 0.82,
     "actionable": true,
     "suggested_rule": "Unify under a single meta-principle: 'No assertion without observation.' Before claiming any state (data value, UI appearance, click target, build success), the agent must have a tool-call result from THIS turn that confirms it. Prior-turn observations are stale by default.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "0fa8f134-fe21-47f4-b831-ebe37961cd61",
+    "patterns_linked": [
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "e218ac38-3844-4295-a972-c9dc01b22d13",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644"
+    ],
+    "hypothesis": "The git-push violation's 18+ recurrences despite 18+ corrections IS the fix-thrashing pattern operating at the meta level — each advisory correction (memory entry, atone event) is a 'fix attempt without root cause analysis' that gets stripped by the very compaction boundaries the session-continuity cluster documents, creating a self-referential failure loop where the correction mechanism suffers from the same context-loss that motivates the continuity tooling.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Avoid advisory-only corrections for high-recurrence patterns that must survive context compaction — when a behavioral rule has recurred 3+ times across sessions, escalate from memory/atone entries to a mechanical pre-tool gate (hook) that does not depend on in-context rule recall.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2778,11 +2779,11 @@
       "d8578fea-ae3a-4ec7-9a16-ababf44cfc38"
     ],
     "hypothesis": "The git-push violation recurs despite 18+ recorded instances because the correction mechanism (advisory memory entries) suffers from the same context-boundary fragility that the catchup system was built to solve — the negative rule is stored but stripped or deprioritized during compaction, so resumed sessions re-enter the violation from a clean slate.",
-    "confidence": 0.78,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always enforce git-push approval via a mechanical pre-tool hook rather than advisory memory — advisory rules have proven insufficient across 18+ recurrences because they are lost or deprioritized at compaction boundaries.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {

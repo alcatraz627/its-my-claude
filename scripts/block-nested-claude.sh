@@ -32,6 +32,7 @@ notebook_path=$(echo "$input" | jq -r '.tool_input.notebook_path // empty' 2>/de
 haystack="$file_path $command_str $notebook_path"
 
 if echo "$haystack" | grep -q '/\.claude/\.claude/'; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook block-nested-claude --action block --heeded unknown >/dev/null 2>&1 || true
   cat >&2 <<EOF
 BLOCKED: .claude/.claude/ nesting detected.
 

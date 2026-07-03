@@ -13,9 +13,25 @@
 #
 # Contract (unchanged, and itself load-bearing — a WARN hook must never be broken
 # by its own telemetry):
-#   - CLI:        warn-log.sh --hook <id> [--heeded true|false|unknown]
+#   - CLI:        warn-log.sh --hook <id> [--action block|soft|nudge|muted] [--heeded true|false|unknown]
+#   - heed line:  warn-log.sh --hook <id> --heed-of <fire-id-or-key> --heeded true|false
 #   - never-fail: any internal error is swallowed; it ALWAYS exits 0.
 #   - silent no-op when called without --hook.
+#
+# --heed-of records whether an EARLIER fire of this hook was heeded. It emits a
+# resolution line with kind:"heed" (NOT "warn") and NO action field, carrying a
+# `ref` back to the fire it resolves ({sid, hook_id} key or a fire id). Because the
+# burn detectors match on the action field regardless of kind (action==block|soft|
+# nudge), a heed line — which has no action — is ignored by every burn detector by
+# construction; it only feeds the heed-rate readers.
+#
+# --action names WHAT the fire did: block = denied the tool call/turn (decision:block
+# or exit 2); soft = a systemMessage / step-aside note; nudge = an additionalContext
+# advisory; muted = would have fired but a mute file suppressed it. An absent OR
+# unrecognized value omits the field (never rejects, never fails) — so old callers,
+# legacy lines, and typos all stay valid. It replaces the old hook_id-suffix
+# convention (declared-ready-block / -soft) so per-hook grouping is native and blocks
+# get their own detector budget separate from advisory noise.
 #
 # Test override: WARN_LOG_STORE relocates the store so tests never touch the live
 # path. Spec: ~/.claude/skills/shared/ledger-format.md
@@ -24,15 +40,20 @@ set -uo pipefail
 LOG="${WARN_LOG_STORE:-$HOME/.claude/hooks/warn-events.jsonl}"
 LOCK="$(dirname "$LOG")/.warn-events.lock"
 
-hook_id="" heeded="unknown"
+hook_id="" heeded="unknown" action="" ref=""
 while [ $# -gt 0 ]; do
   case "$1" in
-    --hook)   hook_id="${2:-}"; shift 2 ;;
-    --heeded) heeded="${2:-unknown}"; shift 2 ;;
+    --hook)    hook_id="${2:-}"; shift 2 ;;
+    --action)  action="${2:-}"; shift 2 ;;
+    --heeded)  heeded="${2:-unknown}"; shift 2 ;;
+    --heed-of) ref="${2:-}"; shift 2 ;;
     *) shift ;;
   esac
 done
 [ -n "$hook_id" ] || exit 0   # silent no-op on misuse; never break the calling hook
+# Only a recognized action reaches the line; anything else (absent, typo, junk)
+# leaves action empty so LEDGER_STRIP_EMPTY drops the field. Never reject.
+case "$action" in block|soft|nudge|muted) : ;; *) action="" ;; esac
 
 # The sanctioned ledger writer (id-gen + timestamp + flock append). If it can't be
 # sourced, fall back to byte-compatible inline equivalents so telemetry still works
@@ -50,11 +71,20 @@ sid="${CLAUDE_SESSION_ID:-}"
 [ -z "$sid" ] && [ -f "$HOME/.claude/.current-session-id" ] && sid=$(cat "$HOME/.claude/.current-session-id" 2>/dev/null)
 
 {
-  id=$(ledger_id warn)
   ts=$(ledger_ts)
   mkdir -p "$(dirname "$LOG")"
-  line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" \
-    "{id:\$id, ts:\$ts, kind:\"warn\", hook_id:\$h, sid:\$sid, fired:1, heeded:\$heeded} | $LEDGER_STRIP_EMPTY")
+  if [ -n "$ref" ]; then
+    # Heed resolution line: kind:"heed", NO action field, carries a ref to the fire
+    # it resolves. Burn detectors match on action (regardless of kind), so a line
+    # with no action never counts toward any burn budget.
+    id=$(ledger_id heed)
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" \
+      "{id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref} | $LEDGER_STRIP_EMPTY")
+  else
+    id=$(ledger_id warn)
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg action "$action" --arg sid "$sid" --arg heeded "$heeded" \
+      "{id:\$id, ts:\$ts, kind:\"warn\", hook_id:\$h, action:\$action, sid:\$sid, fired:1, heeded:\$heeded} | $LEDGER_STRIP_EMPTY")
+  fi
   ledger_append "$LOG" "$LOCK" "$line"
 } 2>/dev/null || true
 exit 0

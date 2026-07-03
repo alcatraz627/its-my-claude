@@ -55,6 +55,8 @@ if [ -n "$findings" ]; then
   prev=""
   [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
   if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
+    # Same smell signature came back after a block → the prior block was not heeded.
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook review-gate --heed-of "review-gate:$sid8" --heeded false >/dev/null 2>&1 || true
     # Already blocked for this exact signature last Stop — step aside (the agent
     # saw it and chose to proceed, or it's a false positive) but stay visible.
     msg="⚠ review-gate (not re-blocking): these recurring smells are still present —
@@ -63,11 +65,17 @@ ${findings_msg}Fix them or mute: touch ~/.claude/.no-review-gate"
     exit 0
   fi
   printf '%s' "$sig" > "$MARK" 2>/dev/null || true
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook review-gate --action block --heeded unknown >/dev/null 2>&1 || true
   reason="⚠ REVIEW GATE — about to declare done, but files you edited this session still contain a recurring smell you have corrected before:
 ${findings_msg}
 Read the named insertion points and fix these before ending the turn. If this is a false positive, mute with: touch ~/.claude/.no-review-gate"
   jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0
+fi
+# No smell now. A lingering block signature means the smell was fixed since the
+# block → that block was heeded. Emit once, then clear the signature.
+if [ -s "$MARK" ]; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook review-gate --heed-of "review-gate:$sid8" --heeded true >/dev/null 2>&1 || true
 fi
 : > "$MARK" 2>/dev/null || true   # no smell — clear the smell block-signature
 
@@ -112,11 +120,13 @@ MARK2="/tmp/claude-review-required-blocked-${sid8}"
 sig2=$("$MARKER" unreviewed "$sid8" 2>/dev/null | sort -u | shasum 2>/dev/null | awk '{print $1}')
 prev2=""; [ -f "$MARK2" ] && prev2=$(cat "$MARK2" 2>/dev/null)
 if [ "$sig2" = "$prev2" ] && [ -n "$sig2" ]; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook review-gate --heed-of "review-gate:$sid8" --heeded false >/dev/null 2>&1 || true
   msg="ℹ review-gate (reminder, not blocking): ${nunrev} unreviewed source file(s) from this session. /skeptical-review when convenient, or mute: touch ~/.claude/.no-review-required"
   jq -cn --arg m "$msg" '{systemMessage:$m}' 2>/dev/null || true
   exit 0
 fi
 printf '%s' "$sig2" > "$MARK2" 2>/dev/null || true
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook review-gate --action block --heeded unknown >/dev/null 2>&1 || true
 
 reason="⚠ REVIEW SUGGESTED — this session has an unreviewed substantial change (${trigger}). Worth a /skeptical-review (forks a fresh adversarial reviewer) before declaring done — the last few caught real bugs. Not harmful? This won't block again for this change-set. Mute for the session: touch ~/.claude/.no-review-required"
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true

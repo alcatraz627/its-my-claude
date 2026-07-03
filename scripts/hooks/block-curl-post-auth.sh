@@ -10,7 +10,12 @@
 # security/auditability guardrail, not a convenience nudge).
 
 set -uo pipefail
-[[ -f "$HOME/.claude/.no-curl-auth-block" ]] && exit 0
+
+# Mute is applied AFTER detection (below), not at the top: a muted run that WOULD
+# have fired is logged action:"muted", so the silence is dated and visible rather
+# than an early exit that leaves no trace.
+MUTED=0
+[[ -f "$HOME/.claude/.no-curl-auth-block" ]] && MUTED=1
 
 INPUT=$(cat 2>/dev/null || true)
 [[ -z "$INPUT" ]] && exit 0
@@ -21,6 +26,12 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 echo "$CMD" | rg -q '\bcurl\b' 2>/dev/null || exit 0
 echo "$CMD" | rg -q "\-X\s+(POST|PUT|PATCH|DELETE)\b|--request\s+(POST|PUT|PATCH|DELETE)\b|--(data|data-raw|data-binary|data-urlencode|json|form)\b" 2>/dev/null || exit 0
 echo "$CMD" | rg -q "Authorization\s*:|-u\s+\S+:|--user\s+\S+:" 2>/dev/null || exit 0
+
+if [ "$MUTED" = 1 ]; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook block-curl-post-auth --action muted --heeded unknown >/dev/null 2>&1 || true
+  exit 0
+fi
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook block-curl-post-auth --action block --heeded unknown >/dev/null 2>&1 || true
 
 cat >&2 <<'EOF'
 [BLOCK] curl with mutating method + auth header has no audit trail.

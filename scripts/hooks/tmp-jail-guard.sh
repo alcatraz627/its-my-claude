@@ -68,6 +68,7 @@ if [ "$tool" = "Bash" ]; then
     [ -n "$sid" ] || exit 0
     mkdir -p "$JAIL_DIR" 2>/dev/null || true
     { printf 'jailed_at=%s\ncwd=%s\n' "$(date '+%Y-%m-%dT%H:%M:%S' 2>/dev/null || echo '?')" "$cwd" > "$JAIL_DIR/$sid"; } 2>/dev/null || true
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook tmp-jail-guard --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "✅ /tmp JAIL ENABLED for this session ($sid).
 Writes are now confined to /tmp (and /private/tmp); reads are unaffected.
 To work outside /tmp again, ask the USER to run:  tmp-jail off $sid
@@ -83,6 +84,7 @@ fi
 
 # ════ from here: THIS session is jailed ════
 block() {
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook tmp-jail-guard --action block --heeded unknown >/dev/null 2>&1 || true
   jq -cn --arg r "🔒 /tmp JAIL active for this session ($sid) — writes confined to /tmp.
 Blocked: $1
 To work outside /tmp, ASK THE USER to lift the jail with this exact instruction:

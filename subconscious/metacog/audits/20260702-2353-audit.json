@@ -1,0 +1,89 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18144,
+    "correction_density": 0.02040816326530612,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.16685714285714284,
+    "unit_count": 196
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:IMPROVING — rate ~64% (9/14 tool-using units), improved from 100% in both prior cycles but above the 58–62% historical baseline; active subvariants: ls-for-directory-listing in unit-14 (ls -la *.md | awk inside verification Bash), unit-18 (ls -la \"$D\" and ls -d ~/.claude/subconscious and ls ~/Code/local-models/docs/q-spec.md), unit-19 (ls ~/.claude/scripts/magi/ and ls ~/.claude/personas/), unit-33 (ls -l ~/.local/bin/q and ls -d .venv venv */venv and ls .venv/bin/python), unit-51 (ls -d .venv venv */venv and ls .venv/bin/python), unit-67 (ls bin/ and ls intents/ and ls -d lib procedures and ls scripts/ and ls bin/probe probe/ — densest single-unit ls concentration in tracked history, five separate ls calls in one Bash command); head-instead-of-read NEW_SUBVARIANT in unit-1ee3c72e-4 (head -3 ARCHITECTURE.md directly after Write tool created the file — should use Read with limit=3); head-in-pipe MINOR in unit-63 (gcc-schedule --help 2>&1 | head -40) and unit-72 (lm probe 2>&1 | head -1); sed-on-git-show-output ABSENT (zero instances, was new subvariant classified in both prior cycles — provisional improvement); sed-instead-of-read-with-offset ABSENT (zero instances, was active in prior two cycles); grep_in_compound_bash ABSENT (zero instances, was 5 units in 2026-06-30 cycle); clean units: unit-12, unit-35, unit-45, unit-48, unit-62",
+      "cat_heredoc_file_write:RECURRING:WORSENING — unit-19 contains six cat-heredoc writes in a single Bash call (highest single-unit concentration in tracked history): one cat > _anon-map.json <<'EOF' for a JSON file plus five cat > voter-N.md <<'EOF' blocks writing voter-prompt markdown files; prior batches showed one to two instances per batch; all six files could have used separate Write tool calls with proper path safety and error handling; density is increasing even if unit count remains 1–2 per batch"
+    ],
+    "calibration_score": 0.44,
+    "overconfident_count": 0,
+    "recommendations": [
+      "ls-for-directory-listing is the dominant active subvariant with 6 violating units this batch; it has been flagged in every tracked cycle without structural resolution; the only intervention class that survives compaction is a mechanical PreToolUse Bash-argv hook detecting standalone ls invocations (not embedded in find -exec or arithmetic contexts) and emitting an additionalContext nudge toward Glob, fd, or Read; advisory memory entries have demonstrably failed to reduce this pattern across 10+ consecutive cycles",
+      "cat-heredoc-file-write escalated to 6 instances in one Bash call in unit-19; the consolidation pattern (multiple heredoc writes in one tool call to minimize tool count) is counterproductive — it bypasses Write tool path validation and error surfacing; recommend a Bash-argv hook detecting 'cat >' or 'cat>' patterns and emitting a Write-tool redirect; this is now higher priority than in prior cycles given the density increase",
+      "head-instead-of-read is confirmed as a new trackable subvariant in unit-1ee3c72e-4; add to the tracking schema alongside sed-instead-of-read-with-offset; the head-in-pipe minor instances in unit-63 and unit-72 (piping command output through head for truncation) are lower priority than file-reading head uses but should be monitored for frequency",
+      "sed-on-git-show-output, sed-instead-of-read-with-offset, and grep_in_compound_bash all show zero instances this batch — deprioritize per instructions; do not recommend fixes for these in the next cycle unless they re-emerge",
+      "the multi-phase MAGI orchestration in unit-19 (30+ tool calls, 10 parallel Agent dispatches across two rounds, vote aggregation, conformance checks, token-patching) completed with zero calibration failures and all sub-agent outputs written to disk before parent consumption — the structured plan+implement+verify approach is performing correctly on complex agentic work; the cat-heredoc concentration in the same unit is a tool-preference failure, not a strategic one"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 16
+  },
+  "sessions": [
+    [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      9948525
+    ],
+    [
+      "1ee3c72e-c081-475d-9405-e0b946d42a92",
+      172184
+    ],
+    [
+      "d7954ec0-e839-4054-b6f3-88f2ddfad50a",
+      77709
+    ],
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      45065739
+    ],
+    [
+      "6d207e12-beb2-4e4e-84f0-349d6b737b72",
+      129623
+    ],
+    [
+      "507245b9-361b-428e-b42e-6b6c2888363a",
+      77382
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      20190152
+    ],
+    [
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      4384028
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      39122568
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      32483655
+    ],
+    [
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      9921686
+    ],
+    [
+      "752601dd-94fb-4cea-b72f-71fe9f2ea847",
+      85142
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      8785395
+    ],
+    [
+      "07cc224b-0865-4361-beec-993aa045a6e4",
+      104705
+    ]
+  ],
+  "timestamp": "2026-07-02T23:53:58.936291Z",
+  "tokens_used": 13006,
+  "units_analyzed": 18,
+  "units_total": 196
+}

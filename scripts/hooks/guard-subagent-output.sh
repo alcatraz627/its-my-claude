@@ -81,6 +81,7 @@ if [ "$material_verb" -eq 1 ] && [ "$has_write" -eq 0 ]; then
   Add to the dispatch prompt: (1) an absolute output path, e.g. <project>/.claude/output/<date>-<slug>/<agent>.md, and (2) 'write your full output to that path BEFORE returning; return a short abstract + the path'. Then verify the file exists before relying on the findings.
 
 A genuine quick lookup mis-flagged as material? Mute: touch ~/.claude/.subagent-output-off"
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-subagent-output --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0
   fi
@@ -93,4 +94,5 @@ msg="[subagent-output] This dispatch looks like it produces material content (re
 # hooks-tui-limits). The directive makes the agent relay this to the user.
 msg="$msg  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-subagent-output --action nudge --heeded unknown >/dev/null 2>&1 || true
 exit 0

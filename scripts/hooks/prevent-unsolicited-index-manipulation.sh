@@ -47,6 +47,8 @@ if echo "$CMD" | grep -qE '\bgit\s+(reset(\s+HEAD|\s+--mixed|\s+--soft)?\s+[^-]|
       --notes "PreToolUse hook blocked git index-modification command" \
       >/dev/null 2>&1 & ) &
 
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prevent-unsolicited-index-manipulation --action block --heeded unknown >/dev/null 2>&1 || true
+
   cat >&2 <<EOF
 [prevent-unsolicited-index] BLOCKED — git command modifies the user's curated index
 

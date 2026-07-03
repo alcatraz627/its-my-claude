@@ -40,6 +40,7 @@ if echo "$scan" | grep -qE '(^|[;&|]\s*)rm\s+'; then
   done)
   [[ -z "$paths" ]] && paths="<files>"
 
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook safe-delete --action block --heeded unknown >/dev/null 2>&1 || true
   # Output block decision with yellow-highlighted message
   cat <<BLOCK_JSON
 {

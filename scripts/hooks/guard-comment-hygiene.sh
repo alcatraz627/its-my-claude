@@ -121,6 +121,7 @@ if [ -n "$blockable" ]; then
     reason="⛔ COMMENT NOISE IN A HIGH-STAKES WRITE — new content for $(basename "$FP") carries archeology / plan-refs / decorative-rule lines that rules/comments.md forbids in source (they rot and mislead the next reader):
 $blockable
 Remove them and re-submit. NOT blocked: [claude@] agent-note blocks, em-dash, emoji, long comment blocks — only unambiguous noise. False positive or a sanctioned case? Mute: touch ~/.claude/.comment-hygiene-off"
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-comment-hygiene --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0
   fi

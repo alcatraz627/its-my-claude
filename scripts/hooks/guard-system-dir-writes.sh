@@ -16,8 +16,10 @@
 # Override (rare): touch ~/.claude/.allow-system-writes
 
 set -uo pipefail
-[ -f "$HOME/.claude/.allow-system-writes" ] && exit 0
 
+# Mute is applied AFTER detection (inside block()): a muted run that WOULD have fired
+# is logged action:"muted", so the silence is dated and visible rather than an early
+# exit that leaves no trace. Reads/args unaffected; muted still = no block.
 input=$(cat 2>/dev/null)
 [ "$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)" = "Bash" ] || exit 0
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
@@ -34,7 +36,16 @@ scan=$(printf '%s' "$cmd" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
 ROOTS='etc|System|Library|bin|sbin|boot|root|sys|proc'
 END='(/|[[:space:]]|$)'
 
+MUTED=0
+[ -f "$HOME/.claude/.allow-system-writes" ] && MUTED=1
+WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
+
 block() {
+  if [ "$MUTED" = 1 ]; then
+    bash "$WARN" --hook guard-system-dir-writes --action muted --heeded unknown >/dev/null 2>&1 || true
+    exit 0
+  fi
+  bash "$WARN" --hook guard-system-dir-writes --action block --heeded unknown >/dev/null 2>&1 || true
   jq -cn --arg r "🛑 SYSTEM-DIR WRITE GUARD — refusing a destructive write to a system directory.
 
 $1

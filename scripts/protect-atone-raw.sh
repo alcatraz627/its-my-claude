@@ -41,6 +41,7 @@ case "$TOOL" in
        [[ "$FP" == *atone/judgments.jsonl ]] || \
        [[ "$FP" == *atone/judgments.jsonl.lock ]] || \
        [[ "$FP" == *atone/rca/*.md ]]; then
+      bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook protect-atone-raw --action block --heeded unknown >/dev/null 2>&1 || true
       cat >&2 <<EOF
 [protect-atone-raw] BLOCKED — $TOOL targets raw atone path
   path:   $FP
@@ -96,6 +97,7 @@ EOF
     fi
 
     # Otherwise — block
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook protect-atone-raw --action block --heeded unknown >/dev/null 2>&1 || true
     cat >&2 <<EOF
 [protect-atone-raw] BLOCKED — Bash command targets raw atone path
   reason: raw atone data is append-only; modifications must go through atone.sh

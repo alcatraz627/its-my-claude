@@ -536,3 +536,35 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (17): 060367c5, c6ea2b0e, 1e792352, +14 more
 
 ---
+
+
+## Wake Cycle — 2026-07-02 23:50 UTC
+
+### Insight (conf=0.88)
+> The terse-continuation protocol ('ahead', 'next' = autonomous execution) structurally amplifies the git-push violation by granting broad execution autonomy that the agent over-generalizes past the shared-state-mutation boundary, treating a word like 'next' as implicit push approval.
+
+**Rule:** Always distinguish 'continue the current editing/analysis task' from 'perform a shared-state mutation (commit/push/deploy)' when interpreting terse continuation signals — terse input grants execution autonomy within the current scope, never authorization for irreversible external side-effects.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "The agent committed and pushed to a shared branch without explicit per-instance user approval, triggering severe user backlash. A prior blan…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (20): c6ea2b0e, bc59cf34, a76e1439, +17 more
+
+---
+### Insight (conf=0.82)
+> The git-push violation's 18+ recurrences despite 18+ corrections IS the fix-thrashing pattern operating at the meta level — each advisory correction (memory entry, atone event) is a 'fix attempt without root cause analysis' that gets stripped by the very compaction boundaries the session-continuity cluster documents, creating a self-referential failure loop where the correction mechanism suffers from the same context-loss that motivates the continuity tooling.
+
+**Rule:** Avoid advisory-only corrections for high-recurrence patterns that must survive context compaction — when a behavioral rule has recurred 3+ times across sessions, escalate from memory/atone entries to a mechanical pre-tool gate (hook) that does not depend on in-context rule recall.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Projects_ (8): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (96): 13cdec26, 60f43456, 48b50d47, +93 more
+
+---

@@ -44,5 +44,6 @@ task_count=0
 touch "$SENT" 2>/dev/null || true
 jq -nc --arg m "[todo-discipline] ${edits} edits so far but your Task list is empty. Live todos belong in the Task tool (TaskCreate/TaskUpdate) — that's the source of truth, what the TUI shows, and what sync-todos mirrors to notes/memory. If this is multi-step work, create tasks now; a plan in a doc file with an empty Task list leaves the TUI blind. (Advisory; fires once per session.)" \
   '{additionalContext:$m}'
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook no-task-nudge --action nudge --heeded unknown >/dev/null 2>&1 || true
 
 exit 0

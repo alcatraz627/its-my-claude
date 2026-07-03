@@ -20,6 +20,7 @@ those writes are out of scope here (and already go through validated code paths)
 import sys
 import os
 import json
+import subprocess
 
 GUARDED = ("settings.json", "settings.local.json", ".mcp.json")
 
@@ -27,6 +28,17 @@ GUARDED = ("settings.json", "settings.local.json", ".mcp.json")
 def block(msg):
     sys.stderr.write("SETTINGS WRITE GATE - blocked to prevent an invalid config save.\n\n")
     sys.stderr.write(msg + "\n")
+    # Telemetry: record the prevented broken-config save before exiting. Best-effort
+    # and fully swallowed — the guard must never be broken by its own logging, and
+    # this stderr message + exit 2 are already committed by the time we get here.
+    try:
+        subprocess.run(
+            ["bash", os.path.expanduser("~/.claude/scripts/hooks/warn-log.sh"),
+             "--hook", "guard-settings-write", "--action", "block", "--heeded", "unknown"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5,
+        )
+    except Exception:
+        pass
     sys.exit(2)
 
 

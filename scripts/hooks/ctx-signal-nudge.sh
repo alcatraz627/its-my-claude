@@ -54,6 +54,7 @@ if [[ -n "$reason" ]] && (( since_nudge > 900 )); then
   { echo "ts=$now"; echo "cwd=$cwd"; echo "nudge=$now"; } > "$STATE"
   jq -nc --arg m "[ctx-signal] Possible task boundary: ${reason}. If switching focus, /core-dump + /clear gives a clean low-token context; if continuing the same thread, ignore this." \
     '{additionalContext:$m}'
+  bash "$HOME/.claude/scripts/ledger/plug-log.sh" --plug ctx-signal --lifecycle turn --outcome fired --session "$sid" >/dev/null 2>&1 || true
 fi
 
 exit 0
