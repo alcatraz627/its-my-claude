@@ -78,7 +78,7 @@ body=$(printf '%s' "$result" | jq -r '
 [ -z "$body" ] && exit 0
 
 # Telemetry from birth. Never let it touch stdout / exit status.
-bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-comment-verbosity --action nudge --heeded unknown >/dev/null 2>&1 || true
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-comment-verbosity --action nudge --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$FP" >/dev/null 2>&1 || true
 
 msg="[comment-verbosity] the content just written to $(basename "$FP") carries an over-long comment block:
 $body

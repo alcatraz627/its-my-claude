@@ -51,7 +51,7 @@ ${DIM}Claude-facing usage contract: ~/.claude/scripts/schedule/INSTRUCTIONS.md${
 
 ${BLD}USAGE${RST}
   $PROG add     --name <slug> <schedule-mode> --command <shell> [opts]
-                schedule-mode: --at <ISO> | --daily-at <HH:MM> | --weekly <dow> <HH:MM>
+                schedule-mode: --at <ISO> | --daily-at <HH:MM> | --weekly <dow> <HH:MM> | --monthly <day> <HH:MM>
   $PROG list    [--all]
   $PROG inventory                  survey ALL launchd plists + user crontab (read-only audit)
   $PROG doctor [--check-calendar]  drift audit (+ sweeps missed one-shots into history)
@@ -74,6 +74,7 @@ ${BLD}add FLAGS${RST}
   --at <ISO datetime>      one-shot: fire once at YYYY-MM-DDTHH:MM local
   --daily-at <HH:MM>       daily recurring: fire every day at HH:MM
   --weekly <dow> <HH:MM>   weekly recurring: fire every <dow> at HH:MM
+  --monthly <day> <HH:MM>  monthly recurring: fire on <day> (1-31) of each month at HH:MM
                            dow ∈ {mon, tue, wed, thu, fri, sat, sun}
   ── optional ──────────────────────────────────────────────────────────
   --description <text>     Calendar event notes suffix
@@ -113,7 +114,7 @@ ${BLD}NOTES${RST}
 
 ${BLD}DEFERRED (post-v0.4)${RST}
   Focused recurring flags if needed: --weekdays-at <HH:MM> (Mon-Fri),
-  --monthly <day> <HH:MM>, --every <duration> (interval / StartInterval).
+  --every <duration> (interval / StartInterval).
   Add when a real use case appears, not pre-emptively.
 
 ${BLD}REGISTER NOTES${RST}
@@ -564,7 +565,7 @@ cmd_add() {
       --no-bootstrap) do_bootstrap=0; shift ;;
       --force)        force=1; shift ;;
       --dry-run)      dry_run=1; shift ;;
-      --cron)         fail "--cron is intentionally absent — use --daily-at <HH:MM>, --weekly <dow> <HH:MM>, or --at <ISO>. See 'help' or INSTRUCTIONS.md." ;;
+      --cron)         fail "--cron is intentionally absent — use --daily-at <HH:MM>, --weekly <dow> <HH:MM>, --monthly <day> <HH:MM>, or --at <ISO>. See 'help' or INSTRUCTIONS.md." ;;
       -h|--help)      cmd_help; exit 0 ;;
       *) fail "unknown flag: $1 (try '$PROG help')" ;;
     esac

@@ -138,6 +138,6 @@ msg="[near-dup-env] this edit to $(basename "$file_path") introduces an env var 
 ${hits}Near-duplicate env names (KEY vs TOKEN, reordered words) cause silent config drift — two names for one secret, one never populated. Confirm you want a genuinely new var, or reuse the existing name. (mute: touch ~/.claude/.no-near-dup-env-gate)
 →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 
-bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook near-dup-env-var --action nudge --heeded unknown >/dev/null 2>&1 || true
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook near-dup-env-var --action nudge --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 || true
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}' 2>/dev/null || true
 exit 0

@@ -43,7 +43,7 @@ $(printf '%s' "$block_hits" | msg_lines)
 
 Blocked at write-time because it recurs. Conform to the sibling inline pattern
 instead of wrapping a function. Genuine exception? mute: touch ~/.claude/.no-cluster-e-nudge"
-  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-cluster-e-smells --action block --heeded unknown >/dev/null 2>&1 &
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-cluster-e-smells --action block --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 &
   jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0
 fi
@@ -58,6 +58,6 @@ if [ -n "$all_hits" ]; then
 $hint_lines
 →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -cn --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}' 2>/dev/null || true
-  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-cluster-e-smells --action nudge --heeded unknown >/dev/null 2>&1 || true
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-cluster-e-smells --action nudge --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 || true
 fi
 exit 0

@@ -150,6 +150,6 @@ reason="⛔ BANNED VOCABULARY — this write to $(basename "$file_path") adds a 
 ${hits}Rephrase to remove it (or use the suggested replacement) and re-submit.
 This ban is declared by the project at .claude/banned-vocab.txt. Genuinely need the term (e.g. quoting it)? Edit that file to remove the entry, or mute: touch ~/.claude/.no-banned-vocab-gate"
 
-bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-banned-vocab --action block --heeded unknown >/dev/null 2>&1 || true
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-banned-vocab --action block --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 || true
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
 exit 0

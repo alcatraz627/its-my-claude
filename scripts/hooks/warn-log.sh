@@ -14,9 +14,20 @@
 # Contract (unchanged, and itself load-bearing — a WARN hook must never be broken
 # by its own telemetry):
 #   - CLI:        warn-log.sh --hook <id> [--action block|soft|nudge|muted] [--heeded true|false|unknown]
-#   - heed line:  warn-log.sh --hook <id> --heed-of <fire-id-or-key> --heeded true|false
+#                              [--cwd <dir>] [--target <file>] [--detail <short-reason>]
+#   - heed line:  warn-log.sh --hook <id> --heed-of <fire-id-or-key> --heeded true|false [--cwd <dir>]
 #   - never-fail: any internal error is swallowed; it ALWAYS exits 0.
 #   - silent no-op when called without --hook.
+#
+# Diagnosis context (all OPTIONAL — a call with none of them is byte-identical to
+# the pre-enrichment line, so the ~194 existing lines and every existing caller
+# stay valid):
+#   --cwd     the absolute working dir the hook fired in.
+#   --target  the file path a file-scoped gate fired on (omit for session Stop gates).
+#   --detail  a short (<80 char) reason, e.g. "31-line docstring".
+# `project` is NOT a flag — warn-log derives it from --cwd (git-toplevel basename
+# if inside a repo, else cwd basename). Each of cwd/project/target/detail is written
+# only when non-empty (LEDGER_STRIP_EMPTY drops empties); no empty/null key is emitted.
 #
 # --heed-of records whether an EARLIER fire of this hook was heeded. It emits a
 # resolution line with kind:"heed" (NOT "warn") and NO action field, carrying a
@@ -40,13 +51,16 @@ set -uo pipefail
 LOG="${WARN_LOG_STORE:-$HOME/.claude/hooks/warn-events.jsonl}"
 LOCK="$(dirname "$LOG")/.warn-events.lock"
 
-hook_id="" heeded="unknown" action="" ref=""
+hook_id="" heeded="unknown" action="" ref="" cwd="" target="" detail=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --hook)    hook_id="${2:-}"; shift 2 ;;
     --action)  action="${2:-}"; shift 2 ;;
     --heeded)  heeded="${2:-unknown}"; shift 2 ;;
     --heed-of) ref="${2:-}"; shift 2 ;;
+    --cwd)     cwd="${2:-}"; shift 2 ;;
+    --target)  target="${2:-}"; shift 2 ;;
+    --detail)  detail="${2:-}"; shift 2 ;;
     *) shift ;;
   esac
 done
@@ -54,6 +68,19 @@ done
 # Only a recognized action reaches the line; anything else (absent, typo, junk)
 # leaves action empty so LEDGER_STRIP_EMPTY drops the field. Never reject.
 case "$action" in block|soft|nudge|muted) : ;; *) action="" ;; esac
+
+# Diagnosis context (all OPTIONAL — omitted when absent, so old callers and the
+# ~194 existing lines stay byte-identical). `project` is DERIVED here from --cwd:
+# the git-toplevel basename when cwd is inside a repo, else the cwd basename. Any
+# git failure (not a repo, cwd gone) silently falls back to the basename — this
+# must never break the calling hook. Overlong detail is clipped to keep lines small.
+project=""
+if [ -n "$cwd" ]; then
+  top=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null || true)
+  if [ -n "$top" ]; then project=$(basename "$top" 2>/dev/null || true)
+  else project=$(basename "$cwd" 2>/dev/null || true); fi
+fi
+[ ${#detail} -gt 79 ] && detail="${detail:0:79}"
 
 # The sanctioned ledger writer (id-gen + timestamp + flock append). If it can't be
 # sourced, fall back to byte-compatible inline equivalents so telemetry still works
@@ -78,12 +105,12 @@ sid="${CLAUDE_SESSION_ID:-}"
     # it resolves. Burn detectors match on action (regardless of kind), so a line
     # with no action never counts toward any burn budget.
     id=$(ledger_id heed)
-    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" \
-      "{id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref} | $LEDGER_STRIP_EMPTY")
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" --arg cwd "$cwd" \
+      "{id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref, cwd:\$cwd} | $LEDGER_STRIP_EMPTY")
   else
     id=$(ledger_id warn)
-    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg action "$action" --arg sid "$sid" --arg heeded "$heeded" \
-      "{id:\$id, ts:\$ts, kind:\"warn\", hook_id:\$h, action:\$action, sid:\$sid, fired:1, heeded:\$heeded} | $LEDGER_STRIP_EMPTY")
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg action "$action" --arg sid "$sid" --arg heeded "$heeded" --arg cwd "$cwd" --arg project "$project" --arg target "$target" --arg detail "$detail" \
+      "{id:\$id, ts:\$ts, kind:\"warn\", hook_id:\$h, action:\$action, sid:\$sid, fired:1, heeded:\$heeded, cwd:\$cwd, project:\$project, target:\$target, detail:\$detail} | $LEDGER_STRIP_EMPTY")
   fi
   ledger_append "$LOG" "$LOCK" "$line"
 } 2>/dev/null || true
