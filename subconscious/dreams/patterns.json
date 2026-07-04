@@ -2253,6 +2253,34 @@
     ]
   },
   {
+    "id": "7e227751-1141-4781-8c0d-8a182a046dd8",
+    "pattern": "When the user explicitly requests a simpler or deferred scope, the agent must not add unrequested complexity — adding complexity the user deliberately asked to exclude is a scope violation, not a helpful enhancement.",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "approach",
+    "source_sessions": [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-04T07:08:53.367433+00:00",
+    "last_seen": "2026-07-04T07:08:53.367433+00:00",
+    "occurrence_history": [
+      "2026-07-04T07:08:53.367433+00:00"
+    ]
+  },
+  {
     "id": "f1057a8d-e978-416c-b52e-7ea8fd28e770",
     "pattern": "Sessions frequently continue across multiple context windows using 'this session being continued from' handoff pattern with many tools (10-100+)",
     "valence": "neutral",
@@ -5216,6 +5244,34 @@
     "last_seen": "2026-07-03T17:41:29.756336+00:00",
     "occurrence_history": [
       "2026-07-03T17:41:29.756336+00:00"
+    ]
+  },
+  {
+    "id": "0d769a7b-7054-4415-8fb5-ae854ff9caf0",
+    "pattern": "The agent must not silently remove an existing user-authored solution, flag it as a potential loss, then re-implement the same pattern and present it as the agent's own finding — this reads as gaslighting and destroys trust.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-04T07:08:53.367433+00:00",
+    "last_seen": "2026-07-04T07:08:53.367433+00:00",
+    "occurrence_history": [
+      "2026-07-04T07:08:53.367433+00:00"
     ]
   },
   {
@@ -13737,54 +13793,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T22:04:08.958103+00:00",
     "last_seen": "2026-05-03T22:04:08.958103+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "a90039ba-4a80-4607-b829-a38dff5389b7",
-    "pattern": "The user strongly prefers building UI primitives (modals, animations) in-house rather than pulling in third-party libraries; any new dependency must be explicitly cleared with tradeoffs shown first.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "07f81bf9-7820-4705-b8f6-24a10e4a2aa4",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "eec81882-243e-4b3f-9d90-c256307e3a21"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-04T05:51:25.900092+00:00",
-    "last_seen": "2026-05-04T05:51:25.900092+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "f02179f2-6244-412d-8e88-7dc0ba48887d",
-    "pattern": "Before adding a new testing library or test framework, the agent should scan the existing codebase for established test patterns and follow them instead of introducing new dependencies.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-06T14:38:53.017447+00:00",
-    "last_seen": "2026-05-06T14:38:53.017447+00:00",
     "occurrence_history": []
   }
 ]

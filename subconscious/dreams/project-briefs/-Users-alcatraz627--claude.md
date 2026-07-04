@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-03T17:47:00.696979+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-04T07:14:44.184064+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the user's global `~/.claude` configuration repo — rules, scripts, skills, WAL infrastructure, and meta-tooling. Work here is maintenance and enhancement of the agent harness itself, conducted across many long multi-session compaction chains.
+The `~/.claude` meta-configuration repository — skills, rules, hooks, scripts, and the WAL/memory systems that govern all Claude Code sessions on this machine. Work here is infrastructure-level: changes affect every downstream session.
 
 ## Things to do (or keep doing)
-- **Write `/core-dump` at milestones mid-session**, not only at the end — `/catchup` is the primary recovery path after compaction; checkpoint every ~20 actions
-- **Treat single-word messages (`ahead`, `next`, `looks`) as autonomous-continue signals** — do not ask for clarification, continue the active task
-- **Write WAL entries as JSONL** (`~/.claude/wal.jsonl`), not markdown — the migration is complete and jq-based catchup depends on it
-- **Deduplicate before proposing new patterns or rules** — check semantic overlap against existing entries before appending
+- **Checkpoint proactively** — run `/core-dump` at task milestones, not just at session end; `/catchup` is the primary recovery path across compaction boundaries
+- **Treat terse single-word messages as SIGCONT** — "ahead", "next", "looks", "done" mean continue autonomously; no clarifying questions
+- **Write WAL entries as JSONL** — the markdown format is deprecated; jq-based catchup requires canonical JSONL (`scripts/wal/wal.sh`)
+- **Verify before acting** — read current git status, file contents, and task list state before any side-effecting operation; state drifts between tool calls
 
 ## Things to avoid
-- **Never commit or push without fresh explicit per-push approval** — terse continuation signals (`ahead`, `next`) do NOT constitute approval for git operations; ask every time
-- **Don't fix-thrash** — if the same change has been attempted 2+ times without success, stop and form a root-cause hypothesis before touching code again
-- **Don't infer or synthesize values not present in source data** — flag any gap explicitly rather than filling it
+- **Never commit or push without fresh per-operation approval** — this fires almost every session; prior approval does not carry forward, not even from two minutes ago
+- **Don't fix-thrash** — three edits to the same block without a root-cause hypothesis means stop, re-read context, form a hypothesis, then edit once
+- **Don't infer or synthesize values not traceable to source** — hallucinated data in pipelines/reports is a critical violation; flag gaps explicitly rather than filling them
+- **Don't expand scope on terse continuation** — "keep going" increases execution depth, not blast radius; only touch what was explicitly requested
 
 ## Open questions / known gaps
-- Structural tension: terse-continuation autonomy grant and per-push approval gate collide — `ahead` is routinely mis-interpreted as push approval across compaction boundaries; no mechanical solution yet
-- Pattern extraction pipeline lacks deduplication — same events (e.g. WAL migration) appear 4× independently, polluting the insight feed
+- Pattern extraction for this project has a deduplication problem — the same WAL migration event appeared 4× as separate patterns; the extraction pipeline needs a semantic-similarity merge pass
+- Tension between autonomous-continue signals and the scope-ceiling rule creates recurring ambiguity when tasks naturally compound; no clean resolution yet

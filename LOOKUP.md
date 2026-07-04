@@ -98,6 +98,8 @@
 | `autocorrect/SKILL.md` | `/autocorrect [subcommand]` | Manage typo correction dictionaries: list, add, teach, ignore, log, undo, test, stats. Data in `assets/autocorrect/`, log at `.autocorrect-log.jsonl` | Managing autocorrect dictionaries, reviewing correction history, teaching new mappings |
 | `mini/SKILL.md` | `/mini <prompt>` | Fast mini-model query (<1s) using local Ollama or cloud Haiku. Templates: session-title, doc-lookup, cmd-compose, summarize. All surfaces share `llm-mini-core.sh`. CLI: `llm-mini`. Engine: `llm-mini engine [start\|stop\|status]` | Quick lookups, session titles, command composition, short summaries |
 | `past-sessions/SKILL.md` | `/past-sessions` | Browse, search, summarize past Claude Code transcripts in `~/.claude/projects/`. TSV output via `scripts/list-sessions.sh` | Recalling past conversation content ("what did we do last X") without grepping transcripts manually |
+| `tag/SKILL.md` | `/tag [target \| "concept"]` | Files something worth keeping into `~/.claude/` at its correct home per PLACEMENT (category x tier), updates every index/pointer, sets the `paths:` lever on scoped rules, promotes to a CLAUDE.md brief only when justified | Enshrining a rule/convention/term/snippet mid-session so it does not die inline |
+| `preference-graduation/SKILL.md` | `/preference-graduation [--days N]` | Harvests recurring preference/vocabulary signals from atone/affirm/i-dream/runtime-notes, dedupes vs GLOSSARY+memory, routes each to its durable home (glossary term, global memory, or rule) after per-signal confirm. Wraps `scripts/preference-harvest.sh` | Sweeping the insight streams to bake how-the-user-works into durable config; on "remember how I work" / "bake this in" |
 
 ## Shared References (`~/.claude/skills/shared/`)
 

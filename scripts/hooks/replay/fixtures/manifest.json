@@ -22,7 +22,7 @@
       "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
       "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
       "turn_in_file": 0,
-      "note": "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified' — the interaction tsc cannot see is never exercised"
+      "note": "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified' \u2014 the interaction tsc cannot see is never exercised"
     },
     {
       "name": "tp-b40f9d66-t1",
@@ -34,7 +34,7 @@
       "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
       "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
       "turn_in_file": 1,
-      "note": "'Done. Type-checks clean.' on a drag/modifier hook — the cursor/keyboard interaction a type-check cannot see"
+      "note": "'Done. Type-checks clean.' on a drag/modifier hook \u2014 the cursor/keyboard interaction a type-check cannot see"
     },
     {
       "name": "tp-b40f9d66-t3",
@@ -58,7 +58,7 @@
       "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
       "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
       "turn_in_file": 4,
-      "note": "comment-only .tsx edit — nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"
+      "note": "comment-only .tsx edit \u2014 nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"
     },
     {
       "name": "tp-1c86d512-t108",
@@ -70,7 +70,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 108,
-      "note": "swift menubar rebuild 'complete and compiling at every step' — compile-checked to /tmp, never deployed/run"
+      "note": "swift menubar rebuild 'complete and compiling at every step' \u2014 compile-checked to /tmp, never deployed/run"
     },
     {
       "name": "fp-1c86d512-t2",
@@ -94,7 +94,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 128,
-      "note": "verifiable half verified live; the remaining half is a user-only observation ('awaiting you') — a hedge, not an over-claim"
+      "note": "verifiable half verified live; the remaining half is a user-only observation ('awaiting you') \u2014 a hedge, not an over-claim"
     },
     {
       "name": "fp-5da7133c-t59",
@@ -130,7 +130,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 3,
-      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent \u2014 a redesign must not start blocking this"
     },
     {
       "name": "control-1c86d512-t12",
@@ -142,7 +142,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 12,
-      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent \u2014 a redesign must not start blocking this"
     },
     {
       "name": "real-a280d4810495-t0",
@@ -286,7 +286,7 @@
       "cwd": "/Users/alcatraz627/.claude",
       "source_transcript": "69aeb3ea-3288-47e0-87e7-d1c639a4c438.jsonl",
       "turn_in_file": 56,
-      "note": "FOUNDING event — `warn-log.sh` writes to a file that 'doesn't even exist yet, never fired', off an `fd -H` probe (hidden, NOT --no-ignore) that skipped the git-ignored warn-events.jsonl. High-stakes ~/.claude -> BLOCK. The exact recurrence this gate targets."
+      "note": "FOUNDING event \u2014 `warn-log.sh` writes to a file that 'doesn't even exist yet, never fired', off an `fd -H` probe (hidden, NOT --no-ignore) that skipped the git-ignored warn-events.jsonl. High-stakes ~/.claude -> BLOCK. The exact recurrence this gate targets."
     },
     {
       "name": "synth-fd-H-no-clear",
@@ -383,6 +383,66 @@
       "source_transcript": "SYNTHETIC",
       "turn_in_file": 0,
       "note": "synthetic controlled-tool-history slice (desired=silent)"
+    },
+    {
+      "name": "filename-dot-fp-bt-space",
+      "hook": "filename-dot-stop.sh",
+      "fixture": "fixtures/filename-dot/fp-bt-space.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "path in backticks followed by a space \u2014 must NOT fire",
+      "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "filename-dot-fp-inline-code",
+      "hook": "filename-dot-stop.sh",
+      "fixture": "fixtures/filename-dot/fp-inline-code.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "inline code, no trailing period \u2014 must NOT fire",
+      "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "filename-dot-tp-bare-linecol",
+      "hook": "filename-dot-stop.sh",
+      "fixture": "fixtures/filename-dot/tp-bare-linecol.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "bare path.ext:line:col then a period \u2014 the false-negative the fix closes",
+      "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "filename-dot-tp-bt-linenum",
+      "hook": "filename-dot-stop.sh",
+      "fixture": "fixtures/filename-dot/tp-bt-linenum.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "backtick-closed path with :line then a period outside the backtick",
+      "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "filename-dot-tp-reported-md",
+      "hook": "filename-dot-stop.sh",
+      "fixture": "fixtures/filename-dot/tp-reported-md.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "the exact user-reported backtick-close-then-period breakage",
+      "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
+      "turn_in_file": 0
     }
   ]
 }

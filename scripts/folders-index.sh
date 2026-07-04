@@ -25,7 +25,7 @@ census=$(cd "$HOME/.claude" && for d in */; do
   size=$(du -sh "$d" 2>/dev/null | cut -f1 | tr -d ' ')
   files=$(find "$d" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')
   subdirs=$(find "$d" -maxdepth 1 -type d 2>/dev/null | tail -n +2 | wc -l | tr -d ' ')
-  newest=$(find "$d" -type f -exec stat -f "%m" {} \; 2>/dev/null | sort -rn | head -1)
+  newest=$(find "$d" -type f -exec stat -f "%m" {} + 2>/dev/null | sort -rn | head -1)
   if [[ -n "$newest" ]]; then
     newest_date=$(date -r "$newest" "+%Y-%m-%d" 2>/dev/null)
   else

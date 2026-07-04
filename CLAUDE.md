@@ -149,6 +149,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `conventions/scratch-files.md`    | `_*.claude.md` management, checkpoints                                | Scratch-file naming + monthly archive to `assets/checkpoints/YYYYMM/`                                                |
 | `conventions/dashboard-tools.md`  | `topic:dashboard-tool`, single-user Node + watcher + JSON-state tools | Build template: mutex on load-mutate-save, GETs never write, atomic + rotated writes, anti-patterns, Sherpa skeleton |
 | `conventions/preference-graduation.md` | `topic:preferences`, `topic:workflow-vocabulary`, `phrase:"bake this in"`, `phrase:"remember how I work"` | How recurring preference/vocabulary signals graduate from post-insight streams (i-dream/atone/affirm/core-dump/runtime-notes) → GLOSSARY/memory/rules. Harvester: `scripts/preference-harvest.sh` |
+| `conventions/agent-first-tools.md` | `topic:agent-first-tools`, `topic:cli-for-agents`, `phrase:"tool for an agent"`, building ANY tool Claude itself will drive | MANDATORY read before building tools whose primary user is Claude: 5 obligations (digest deltas, output budgets, fix-proposing errors, one-round-trip ambiguity, built-in waits) + 15 researched principles + lived evidence from the fiber-snatcher V2 build |
 
 ---
 

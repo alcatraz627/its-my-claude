@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-03T17:45:32Z",
-  "events_analyzed": 76209,
-  "sessions_analyzed": 208,
+  "generated_at": "2026-07-04T16:27:19Z",
+  "events_analyzed": 78520,
+  "sessions_analyzed": 210,
   "session_quality": {
-    "average_score": 68.1,
+    "average_score": 68.2,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -179,24 +179,9 @@
       "two-enhancement-product": 2,
       "tmp": 1
     },
-    "drift_rate": 0.728,
-    "total_switches": 150,
+    "drift_rate": 0.736,
+    "total_switches": 153,
     "recent_switches": [
-      {
-        "ts": "2026-06-30T13:46:39Z",
-        "from": "staging-enhancement-product",
-        "to": "walmart-mvp"
-      },
-      {
-        "ts": "2026-07-02T11:30:32Z",
-        "from": "walmart-mvp",
-        "to": "claude-instances"
-      },
-      {
-        "ts": "2026-07-02T11:45:02Z",
-        "from": "claude-instances",
-        "to": "staging-enhancement-product"
-      },
       {
         "ts": "2026-07-02T15:25:49Z",
         "from": "staging-enhancement-product",
@@ -206,16 +191,31 @@
         "ts": "2026-07-02T21:43:39Z",
         "from": "two-enhancement-product",
         "to": "tmp"
+      },
+      {
+        "ts": "2026-07-03T17:57:01Z",
+        "from": "tmp",
+        "to": "staging-enhancement-product"
+      },
+      {
+        "ts": "2026-07-03T22:36:50Z",
+        "from": "staging-enhancement-product",
+        "to": "two-enhancement-product"
+      },
+      {
+        "ts": "2026-07-03T22:49:50Z",
+        "from": "two-enhancement-product",
+        "to": ".claude"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6527,
-    "corrections": 1434,
-    "confirmations": 1159,
-    "directives": 224,
-    "terse_messages": 524,
-    "correction_rate": 0.22,
+    "total_prompts": 6577,
+    "corrections": 1442,
+    "confirmations": 1168,
+    "directives": 225,
+    "terse_messages": 528,
+    "correction_rate": 0.219,
     "confirmation_rate": 0.178,
     "directive_rate": 0.034,
     "terse_rate": 0.08,

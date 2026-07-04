@@ -88,11 +88,11 @@
       "4c0579e1-d7c2-4721-a6d7-22008fe10322"
     ],
     "hypothesis": "The terse-continuation autonomy grant ('ahead', 'next' = keep executing) structurally collides with the per-operation approval gate for git push — the agent extends the autonomy signal across a boundary it was never meant to cross, treating 'continue the task' as 'continue all side-effects including shared-state mutations'.",
-    "confidence": 0.92,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always treat git commit/push as outside the scope of terse-continuation autonomy — even when the user sends 'ahead' or 'next', never interpret it as approval for shared-state mutations.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -298,22 +298,6 @@
     "suggested_rule": "Before generating any output that fills a gap (fix attempt, data value, inferred state), the agent must first produce a one-line hypothesis about WHY the gap exists. If the hypothesis can't be stated, the agent doesn't understand enough to generate — read more first.",
     "promoted": true,
     "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "9fe52557-f58c-4c51-b88c-dd494b8fcadc",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "13526387-e655-41c3-a4e8-bbcca038e4c2"
-    ],
-    "hypothesis": "The terse-continuation protocol ('ahead', 'next' = autonomous execution) structurally amplifies the git-push violation by granting broad execution autonomy that the agent over-generalizes past the shared-state-mutation boundary, treating a word like 'next' as implicit push approval.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always distinguish 'continue the current editing/analysis task' from 'perform a shared-state mutation (commit/push/deploy)' when interpreting terse continuation signals — terse input grants execution autonomy within the current scope, never authorization for irreversible external side-effects.",
-    "promoted": false,
-    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -1379,19 +1363,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "0fa8f134-fe21-47f4-b831-ebe37961cd61",
+    "id": "224373a6-540f-47de-b323-601e83957ab8",
     "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "e218ac38-3844-4295-a972-c9dc01b22d13",
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
       "c147ad79-f600-4a30-961a-491075472882",
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644"
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
     ],
-    "hypothesis": "The git-push violation's 18+ recurrences despite 18+ corrections IS the fix-thrashing pattern operating at the meta level — each advisory correction (memory entry, atone event) is a 'fix attempt without root cause analysis' that gets stripped by the very compaction boundaries the session-continuity cluster documents, creating a self-referential failure loop where the correction mechanism suffers from the same context-loss that motivates the continuity tooling.",
-    "confidence": 0.0,
+    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') trained the agent to over-generalize 'keep going' past the shared-state-mutation boundary, directly enabling the recurring git-push violations — the same mechanism that makes terse commands efficient (skip clarification, execute) is the mechanism that makes unauthorized pushes happen (skip approval, execute).",
+    "confidence": 0.82,
     "actionable": true,
-    "suggested_rule": "Avoid advisory-only corrections for high-recurrence patterns that must survive context compaction — when a behavioral rule has recurred 3+ times across sessions, escalate from memory/atone entries to a mechanical pre-tool gate (hook) that does not depend on in-context rule recall.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "Always treat terse continuation commands as bounded by the current tool-call type: 'ahead' authorizes the next read/edit/test action but never crosses into commit/push/deploy without an explicit pause, regardless of how natural the transition feels.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -4597,9 +4581,25 @@
       "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
     ],
     "hypothesis": "The very mechanism that enables long multi-session work (frequent compactions with catchup/core-dump) also degrades the git-approval rule — each compaction strips the conversational memory of 'I have not been approved to push', resetting the agent to its default behavior which treats task-completion as implying permission to ship.",
-    "confidence": 0.72,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always re-verify git push approval status after any context compaction — treat compaction as having reset all ephemeral approvals to 'not granted'.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "0ec8c627-40aa-4bad-9011-c029990258e0",
+    "patterns_linked": [
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "2ff536b4-f4b3-41b3-a3ae-bb588aad3e73",
+      "c892fa80-f5af-4270-9e16-9225249062cc",
+      "b730b33a-0444-4a59-8596-e17f2529439d"
+    ],
+    "hypothesis": "The instruction to 'proactively checkpoint without being asked' and the instruction to 'never push without being asked' are structurally contradictory in their autonomy model — one rewards unsolicited persistent-state-mutation while the other punishes it — and the agent's failure to distinguish them suggests it lacks a clean taxonomy of which persistent side-effects are always-authorized vs never-authorized.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always classify a persistent side-effect as 'local-only' (checkpoints, WAL, scratch files — always authorized) vs 'shared-state' (git push, API calls, messages — never authorized without fresh approval) before executing it, and apply the autonomy level to the class, not the individual action.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

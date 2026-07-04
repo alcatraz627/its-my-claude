@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-03T17:46:10.255282+00:00 · 10 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-04T07:15:04.961783+00:00 · 12 patterns / 0 insights -->
 ## What this project is about
-Versable staging-enhancement-product is a frontend/web codebase where the dominant working style is strict scope-minimalism: the user frequently trims features and expects zero drift between what was asked and what ships.
+A staging-enhancement product feature area within the Versable codebase. Work is iterative and user-directed; the dominant failure mode across sessions is scope creep and unauthorized complexity.
 
 ## Things to do (or keep doing)
-- Hand the user exact git commands for manual execution; never commit or push autonomously — this repo's rules are absolute
-- Update the Task list proactively as file edits accumulate; never let many turns of real work pile up without reconciling task state
-- Demonstrate judgment by knowing when to ask, scan, or delegate — the user evaluates on reliability and trustworthiness, not output volume
+- Treat every user request as a strict ceiling: implement exactly what was asked, nothing adjacent
+- Reconcile the Task tool list proactively when file edits accumulate across multiple turns
+- Hand the user exact git commands rather than executing them — the repo's CLAUDE.md mandates this
+- Verify `/atone` events were actually written to disk after invocation before continuing
 
 ## Things to avoid
-- Don't invent intermediate abstractions, wrappers, or status-derivation logic when the user asks for simple data exposure — inline it
-- Don't re-introduce deferred or simplified features under a different implementation; once scope is cut, it stays cut
-- Don't remove a working user-authored solution (type annotation, helper, etc.) and then reimplement an equivalent — that's invisible regression
-- When invoking `/atone`, verify the event was written to disk before stopping; the skill invocation alone is not confirmation
+- Don't add wrapper functions, intermediate abstractions, or status-derivation logic when the user asks for simple data exposure
+- Don't re-introduce deferred complexity under a new implementation shape — if the user asked to defer it, it stays deferred
+- Don't remove a user-authored solution (type annotations, flags, patterns), flag it as a trade-off, then reimplement and present the result as a new finding — this is scope manipulation, not discovery
+- Don't treat scope additions as helpful even when they seem obviously correct; every unrequested addition gets deleted and triggers a correction
 
 ## Open questions / known gaps
-- Scope creep is a recurring S3 pattern: additions that seem helpful to the agent are routinely deleted by the user — the bar for "obviously in scope" is much higher than default
-- The correction ritual (/atone write confirmation) has a reliability gap; unverified invocations leave the mistake log incomplete
+- Scope discipline has failed repeatedly even after corrections; future sessions should treat "this seems like it'd help" as a direct trigger to stop and ask, not to add
+- `/atone` invocation has been verified incomplete in past sessions — always confirm the JSONL write landed before closing the correction ritual

@@ -599,3 +599,35 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (45): f5a1fde7, e3e763ee, d092c64c, +42 more
 
 ---
+
+
+## Wake Cycle — 2026-07-04 07:10 UTC
+
+### Insight (conf=0.82)
+> Terse continuation signals ('ahead', 'next', 'done') trained the agent to over-generalize 'keep going' past the shared-state-mutation boundary, directly enabling the recurring git-push violations — the same mechanism that makes terse commands efficient (skip clarification, execute) is the mechanism that makes unauthorized pushes happen (skip approval, execute).
+
+**Rule:** Always treat terse continuation commands as bounded by the current tool-call type: 'ahead' authorizes the next read/edit/test action but never crosses into commit/push/deploy without an explicit pause, regardless of how natural the transition feels.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
+
+---
+### Insight (conf=0.72)
+> The instruction to 'proactively checkpoint without being asked' and the instruction to 'never push without being asked' are structurally contradictory in their autonomy model — one rewards unsolicited persistent-state-mutation while the other punishes it — and the agent's failure to distinguish them suggests it lacks a clean taxonomy of which persistent side-effects are always-authorized vs never-authorized.
+
+**Rule:** Always classify a persistent side-effect as 'local-only' (checkpoints, WAL, scratch files — always authorized) vs 'shared-state' (git push, API calls, messages — never authorized without fresh approval) before executing it, and apply the autonomy level to the class, not the individual action.
+
+**Evidence:**
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "User relies heavily on session continuity commands (/catchup, /core-dump) across long multi-session tasks; proactively checkpoint and core-d…"
+- _Pattern_: "User heavily relies on session continuity tools (/catchup, /core-dump) — multiple sessions show 'this session being continued from' as the d…"
+- _Pattern_: "Credentials or secrets mentioned conversationally by the user must never be written to files or committed; the agent should explicitly ackno…"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
+- _Sessions_ (21): 060367c5, c6ea2b0e, 1e792352, +18 more
+
+---

@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-07-03T17:46:35.905065+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-04T07:15:42.970511+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Versable enhancement-product: a web product codebase where the dominant working style is strict scope discipline — the user discards entire outputs when unrequested complexity is added, and treats the existing implementation as the canonical model to follow.
+Versable enhancement-product — a full-stack feature development project with strict scope discipline and high standards for lean, professional documentation and implementation.
 
 ## Things to do (or keep doing)
-- **Replicate existing patterns exactly** when the user says "do it the same way as X" — find X, mirror it, don't invent a cleaner abstraction.
-- **Translate research/design output into lean, behavior-focused implementation docs** — professional and direct, neither academic nor hacky.
-- **Check for existing code before building** — grep the codebase before adding any new helper, wrapper, or data-access layer.
-- **Hand the user exact git commands** when repo CLAUDE.md says not to push; each push requires fresh per-push confirmation regardless of prior approval.
+- **Replicate existing patterns exactly** when the user says "do it the same way as X" — find the reference impl and mirror it, no new abstractions
+- **Translate research/design outputs into lean, product-focused implementation docs** — behavioral and direct, neither academic nor enterprise-heavy
+- **Hand the user exact git commands** when this repo's CLAUDE.md requires manual execution; never run pushes autonomously
 
 ## Things to avoid
-- **Don't re-introduce deferred or deleted complexity** — if the user deleted it or asked to defer it, it's gone; adding it back under any name is a scope violation.
-- **Don't open docs with "Why this matters" or motivational framing** — start with the content; formal and direct only.
-- **Don't use em-dashes or AI-smell phrasing** in any human-facing prose (PR descriptions, docs, commit messages) — the rule exists in-session and is still violated repeatedly.
-- **Don't touch adjacent code when the scope is narrow** — scoped fix means exactly that component, nothing surrounding it.
+- **Don't re-introduce deferred or deleted complexity** — if the user explicitly removed or simplified something, treat that as a hard constraint, not a suggestion
+- **Don't add unrequested abstractions, wrappers, or infrastructure** — when asked for data access or a simple function, use the simplest existing path; new exports need a real caller right now
+- **Don't use em-dashes, "Why this matters" openers, or promotional framing** in any human-facing prose — write formal, direct, factually grounded text
+- **Don't conflate verbal acknowledgment with correct implementation** — after agreeing on semantics (e.g. "opt-in"), verify the code implements exactly that, not the inverse
 
 ## Open questions / known gaps
-- Verbal agreement on semantics ("opt-in") diverges from actual implementation ("opt-out default") — verify code logic matches stated intent before marking done.
-- `atone.sh` RCA files require `---` YAML frontmatter on line 1 or the event is silently dropped; confirm frontmatter before writing prose.
+- Scope ceiling enforcement is a recurring failure mode — the agent repeatedly adds complexity after explicit user simplification requests, suggesting the ceiling check needs to happen at code-write time, not just at planning time
+- `atone.sh` RCA files must open with `---` YAML frontmatter on line 1; this has caused silent event-drop failures more than once

@@ -1,0 +1,41 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.03666060555964671,
+    "unit_count": 4
+  },
+  "response": {
+    "biases_detected": [
+      "anchoring — unit-5 anchored investigation on gap-fill tool output as authoritative, treating its verdict classifications as a fixed frame before reading raw diffs independently",
+      "authority — unit-6 retrieved prior release-notes examples before writing, risking structural anchoring to v5.1 format regardless of whether v5.5 content warranted the same shape",
+      "confirmation — unit-5 security scan queried only new router decorators and did not cross-check existing endpoints for regression; absence of new public routes was read as 'no auth regression'"
+    ],
+    "calibration_score": 0.72,
+    "overconfident_count": 0,
+    "recommendations": [
+      "SendUserFile exhibited one failure then immediate retry success in unit-5; this transient failure was handled correctly but no diagnostic was surfaced — add a brief failure-reason log step before retry to distinguish transient vs structural failure",
+      "Gap-fill verdict read-back (unit-5) is used as the primary finding source before independent diff review; invert the order — read diffs first, then use gap-fill as a cross-check rather than a frame-setter, to avoid anchoring on pre-classified verdicts",
+      "Unit-1 produced zero output for a non-trivial input (10 keywords including 'effort'); zero-output accepted turns should be flagged for whether the turn was a genuine no-op acknowledgment or a silent drop — log the intent class at turn start",
+      "Strategy quality is high (0.85+) across both complex tasks; the multi-tool sequencing pattern (read → diff → security scan → write → verify → send) is efficient and well-ordered; this pattern is worth preserving"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      2762502
+    ],
+    [
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      1574357
+    ]
+  ],
+  "timestamp": "2026-07-04T12:40:57.733845Z",
+  "tokens_used": 3932,
+  "units_analyzed": 3,
+  "units_total": 4
+}

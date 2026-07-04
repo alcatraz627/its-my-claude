@@ -1,0 +1,62 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18210,
+    "correction_density": 0.027972027972027972,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.19200372190283166,
+    "unit_count": 143
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:WORSENING — rate 100% (5/5 tool-using units: unit-5, unit-14, unit-17, unit-22, unit-23), up from 75% in the 2026-07-03 cycle and matching the worst recorded prior cycles; subvariants: ls-for-directory-listing in unit-5 (ls -d ../extractor-webserver, ls ../extractor-webserver | head -30, ls -la automation/, ls -la *.json) and unit-14 (ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/); cat-instead-of-read in unit-17 (cat bvymojokk.output | tail -30), unit-22 (cat wwhbuderl.output first attempt failed, adapted to python open()), unit-23 (cat /tmp/task2-modal-review.md immediately after Write tool wrote that file — identical to prior cycle unit-23 classification); sed-instead-of-read-with-offset in unit-14 (sed -n '1,80p' use-job-data.tsx, sed -n '91,100p' jobs.data.ts); clean units: unit-3, unit-12, unit-24",
+      "grep_in_compound_bash:RECURRING:IMPROVING — 2 units this batch (unit-5: grep -niE in compound Bash; unit-14: grep -iv and grep -i in pipe chains), down from 5 units in the 2026-07-03 cycle; improvement is real but pattern is not eliminated; argv[0]-only hook interception gap remains structurally unaddressed across 12+ consecutive cycles",
+      "sed-instead-of-read-with-offset:RECURRING:RETURNING — unit-14 shows 2 instances (sed -n '1,80p' and sed -n '91,100p') after being classified ABSENT in the 2026-07-02 cycle; confirms intermittent recurrence pattern rather than elimination; advisory correction remains insufficient",
+      "scope_expansion:RECURRING:STABLE — unit-17 (is_correction=true) confirms S3 speculative-abstractions-without-a-load-bearing-caller; agent built deriveJobOutputStats plus 15-field JobOutputStats view-model (segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, multi-sheet TODO seam) when user asked only for raw aggregate data at preview-job-output.modal.tsx:256; user deleted all of it; atone correctly filed with RCA and runnable precheck procedure; fifth confirmed S3 recurrence of this slug across full analysis history; correction ritual functioning but not preventing recurrence"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 2,
+    "recommendations": [
+      "shell_tool_preference_violations: rate returned to 100% from 75% in the prior cycle — the improvement was not sustained. Advisory corrections have failed across 12+ consecutive cycles. No new advisory recommendation; mechanical hook enforcement (intercepting ls invocations and redirecting to LS tool, cat-of-known-path redirecting to Read tool) is the only structurally sufficient fix and remains unimplemented.",
+      "scope_expansion: the atone+RCA correction ritual is functioning correctly (well-structured RCA, runnable precheck procedure written, slug correctly reused) but the fifth S3 recurrence confirms the ritual does not prevent initial scope inflation. The RCA's proposed hook (warn on new top-level export const/type in a data file with no same-diff caller on a turn whose prompt contained 'just' plus 'data' or 'the existing') is the highest-leverage unimplemented mechanical gate for this slug.",
+      "sed-instead-of-read-with-offset: returned after one-cycle absence; pattern is intermittent rather than monotonically improving; no new recommendation beyond prior cycles — Read tool with offset parameter is the correct replacement and hook enforcement is the structural fix.",
+      "grep_in_compound_bash: genuine improvement trend (5→0→5→2 unit counts across cycles); monitor for regression but deprioritize new recommendations relative to the 100%-rate ls and cat violations."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      51296753
+    ],
+    [
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      20369211
+    ],
+    [
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      6097037
+    ],
+    [
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      2196596
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      37063434
+    ],
+    [
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      720940
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      10734651
+    ]
+  ],
+  "timestamp": "2026-07-04T07:11:56.454420Z",
+  "tokens_used": 10298,
+  "units_analyzed": 8,
+  "units_total": 143
+}

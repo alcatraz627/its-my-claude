@@ -37,6 +37,24 @@ Sub-categorization uses naming only (no deeper directories). E.g. `conventions/h
 | **2** | Specific domain/tool/task type | **Pointer line with triggers** in CLAUDE.md §On-demand pointers |
 | **3** | Rare, reference-only | **LOOKUP.md only**, no CLAUDE.md mention |
 
+### Loading reality: `tier:` does not control loading for `rules/`
+
+The tier column above describes intent, not mechanism. Claude Code natively
+auto-loads every file under `~/.claude/rules/*.md` (and project `.claude/rules/`)
+in full at session start, regardless of `tier:`. A rule marked Tier 2 still loads
+every session. `tier:` and `triggers:` are advisory metadata: they guide agent
+self-selection and how large a CLAUDE.md brief to write, and do not gate loading.
+
+The platform's actual lazy-load lever is a `paths:` frontmatter field. A rule with
+`paths:` globs loads only when Claude touches a matching file; a rule without it
+loads unconditionally. Use `paths:` to scope project- or language-specific rules so
+they stop paying always-on budget.
+
+`features/` and `conventions/` are genuinely on-demand (the loader never pulls them
+until an agent opens the file), so the tier model works as intended there; the
+special case is `rules/`. Measured cost and the full picture live in
+`assets/reports/20260704-gcc-structure-map/MAP.md` (session tag-skill, 2026-07-04).
+
 ### Decision heuristics
 
 1. **80%-skip test:** if an agent would skip reading this in 80%+ of sessions → Tier 2 or lower
@@ -60,6 +78,9 @@ triggers:
   - phrase:"<exact string>"     # exact phrase match
   - skill:<name>                # Claude skill invocation
   - mcp:<name>                  # MCP server name
+paths:                          # OPTIONAL, rules/ only: the native lazy-load lever.
+  - "src/**/*.ts"               #   rule loads ONLY when Claude opens a match;
+  - "**/*.test.*"               #   omit paths: entirely to load every session.
 related: [path/to/other.md]
 tier: 0|1|2|3
 category: rules|features|conventions
@@ -78,7 +99,7 @@ stale_after_days: 90
 | `skill:` | Claude skill name | `skill:create-skill`, `skill:doctor` |
 | `mcp:` | MCP server name | `mcp:mongodb`, `mcp:vercel` |
 
-Triggers are **advisory** — they guide agent self-selection when scanning LOOKUP.md + CLAUDE.md pointers at session start. No hook auto-loads files today; triggers document intent so an upgrade path exists.
+Triggers are **advisory** — they guide agent self-selection when scanning LOOKUP.md + CLAUDE.md pointers at session start. No hook auto-loads files *based on triggers* today (the `rules/` directory auto-load is a separate native mechanism; see "Loading reality" above); triggers document intent so an upgrade path exists.
 
 **Rule:** `brief` must be sufficient on its own for the agent to decide "load or skip." `triggers` are secondary hints for literal/domain matching.
 

@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-06-27T03:03:43.861157Z",
-  "average_depth": 26.3,
-  "average_breadth": 1.6,
-  "fixation_rate": 0.17,
-  "assumption_rate": 0.67,
-  "overconfidence_rate": 0.27,
+  "last_updated": "2026-07-04T07:13:59.562562Z",
+  "average_depth": 27.2,
+  "average_breadth": 1.4,
+  "fixation_rate": 0.1,
+  "assumption_rate": 0.6,
+  "overconfidence_rate": 0.28,
   "common_assumptions": [
-    "File contents and process state unchanged since last read",
-    "Tool output is complete and not silently truncated",
-    "Prior session environment (processes, services, auth) still valid after context gaps",
-    "Type-checking or compile success implies runtime correctness",
-    "Sequential edits across a long chain are each individually correct without intermediate test runs"
+    "Current file state matches last-read version without re-reading between edits",
+    "Compilation or type-check success implies behavioral correctness",
+    "PATH tools (node, npm, tsc, pm2, rg) are available at expected versions",
+    "Prior session context from WAL or checkpoints accurately reflects current disk state",
+    "Single-file edits will resolve bugs that span multiple files or runtime interactions"
   ],
   "strength_patterns": [
-    "Systematic use of project-specific diagnostic scripts (statusline-diag.py, fleet-triage, detect.py) to verify actual runtime behavior before declaring success",
-    "Reading surrounding file context and cross-referencing multiple related files before making structural changes",
-    "Iterative narrowing via targeted rg searches before making existence or architectural claims"
+    "Systematic multi-command diagnostic sequencing before attempting fixes, narrowing problem space methodically",
+    "Post-change verification via type checks, server health probes, and log inspection",
+    "Thorough file exploration and reading for context before editing in unfamiliar areas"
   ],
   "weakness_patterns": [
-    "Fixation loops: re-reading the same file or re-running the same diagnostic 10-30+ times across a chain without advancing state (f3ddfd2f, fa0b19cf, fc4190a7)",
-    "Long tool-call chains (40-135 steps) proceeding without mid-chain verification steps, matching the collect-not-run and declared-ready-without-exercise anti-patterns",
-    "Assuming external process, service, and authentication state is unchanged across context boundaries and session resumptions without re-verification"
+    "Fixation loops on single files with incremental edits without stepping back to verify system-level behavior — f3ddfd2f ran 30+ statusline.sh read/write cycles, fc4190a7 made 17+ edits to +layout.svelte",
+    "Substituting compile or collect passes (tsc --noEmit, npx tsc) for runtime exercise and reporting success without observing actual behavior",
+    "Low exploration breadth — chains are predominantly linear sequential tool calls with minimal branching; alternative approaches are rarely generated and compared before committing to a path"
   ],
   "trend": {
     "calibration_improving": false,
