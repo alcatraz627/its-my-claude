@@ -330,6 +330,24 @@ next_weekly_start() {
   echo "$y $((10#$mo)) $((10#$d)) $h $m"
 }
 
+# next_monthly_start <day-of-month> <H> <M> → echoes "Y MO D H MI" — the first
+# future occurrence on that day-of-month. Recurrence is carried by the plist's
+# StartCalendarInterval Day key + the Calendar RRULE; this only seeds the first
+# Calendar event.
+next_monthly_start() {
+  local td="$1" h="$2" m="$3"
+  local cy cmo cd now_sod target_sod
+  cy=$(date +%Y); cmo=$((10#$(date +%m))); cd=$((10#$(date +%d)))
+  now_sod=$(( $(date +%H | sed 's/^0//') * 3600 + $(date +%M | sed 's/^0//') * 60 + $(date +%S | sed 's/^0//') ))
+  target_sod=$(( h * 3600 + m * 60 ))
+  if (( cd < td )) || { (( cd == td )) && (( target_sod > now_sod )); }; then
+    echo "$cy $cmo $td $h $m"
+  else
+    cmo=$((cmo + 1)); (( cmo > 12 )) && { cmo=1; cy=$((cy + 1)); }
+    echo "$cy $cmo $td $h $m"
+  fi
+}
+
 # ── Calendar event ─────────────────────────────────────────────────────────
 calendar_create() {
   # calendar_create <year> <month> <day> <hour> <minute> <summary> <notes> <alert_minutes> [rrule]
@@ -525,7 +543,7 @@ PLIST
 
 # ── add ────────────────────────────────────────────────────────────────────
 cmd_add() {
-  local name="" at="" daily_at="" weekly_dow="" weekly_at=""
+  local name="" at="" daily_at="" weekly_dow="" weekly_at="" monthly_day="" monthly_at=""
   local cmd_str="" desc="" alert="10" working_dir=""
   local do_calendar=1 do_bootstrap=1 force=0 dry_run=0
   local env_pairs=()
@@ -536,6 +554,7 @@ cmd_add() {
       --at)           at="$2"; shift 2 ;;
       --daily-at)     daily_at="$2"; shift 2 ;;
       --weekly)       weekly_dow="$2"; weekly_at="$3"; shift 3 ;;
+      --monthly)      monthly_day="$2"; monthly_at="$3"; shift 3 ;;
       --command)      cmd_str="$2"; shift 2 ;;
       --description)  desc="$2"; shift 2 ;;
       --alert)        alert="$2"; shift 2 ;;
@@ -561,12 +580,14 @@ cmd_add() {
   [[ -n "$at" ]]         && mode_count=$((mode_count + 1))
   [[ -n "$daily_at" ]]   && mode_count=$((mode_count + 1))
   [[ -n "$weekly_dow" ]] && mode_count=$((mode_count + 1))
-  (( mode_count == 1 )) || fail "exactly one of --at <ISO>, --daily-at <HH:MM>, --weekly <dow> <HH:MM> required (got $mode_count)"
+  [[ -n "$monthly_day" ]] && mode_count=$((mode_count + 1))
+  (( mode_count == 1 )) || fail "exactly one of --at <ISO>, --daily-at <HH:MM>, --weekly <dow> <HH:MM>, --monthly <day> <HH:MM> required (got $mode_count)"
 
   local kind
   if   [[ -n "$at" ]];         then kind="one-shot"
   elif [[ -n "$daily_at" ]];   then kind="daily"
-  else                              kind="weekly"
+  elif [[ -n "$weekly_dow" ]]; then kind="weekly"
+  else                              kind="monthly"
   fi
 
   # ── Validate + build EnvironmentVariables / WorkingDirectory plist chunks ─
@@ -660,6 +681,22 @@ cmd_add() {
       read -r cal_y cal_mo cal_d cal_h cal_mi < <(next_weekly_start "$tdow" "$h" "$mi")
       cal_summary="[cron-weekly] $name — fires every $dow_low at $(printf '%02d:%02d' $h $mi)"
       cal_rrule="FREQ=WEEKLY;BYDAY=$byday"
+      ;;
+
+    monthly)
+      [[ "$monthly_day" =~ ^[0-9]{1,2}$ ]] && (( monthly_day >= 1 && monthly_day <= 31 )) \
+        || fail "--monthly day must be an integer 1-31, got '$monthly_day'"
+      (( monthly_day <= 28 )) || warn "--monthly day $monthly_day is absent from some months; launchd skips those months (use 1-28 to fire every month)"
+      parse_hhmm "$monthly_at"
+      h=$PARSED_H; mi=$PARSED_M
+      sci_xml="        <key>Day</key><integer>$monthly_day</integer>
+        <key>Hour</key><integer>$h</integer>
+        <key>Minute</key><integer>$mi</integer>"
+      fire_at_meta="monthly@day$monthly_day@$(printf '%02d:%02d' $h $mi)"
+      when_human="MONTHLY on day $monthly_day at $(printf '%02d:%02d' $h $mi) local time (recurring; does not self-unload)"
+      read -r cal_y cal_mo cal_d cal_h cal_mi < <(next_monthly_start "$monthly_day" "$h" "$mi")
+      cal_summary="[cron-monthly] $name — fires day $monthly_day at $(printf '%02d:%02d' $h $mi)"
+      cal_rrule="FREQ=MONTHLY;BYMONTHDAY=$monthly_day"
       ;;
   esac
 

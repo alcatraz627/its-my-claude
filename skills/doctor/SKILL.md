@@ -192,6 +192,38 @@ fi
 
 ---
 
+## Step 3.5: Hook health (last 7d)
+
+Step 3 checks that hook scripts *exist*; this checks how they're *landing* — a
+3-line read from the fire telemetry (`ledger/hook-health.sh`). A gate that is muted
+but still firing is the signal worth surfacing here.
+
+```bash
+source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
+gum_divider "Hook Health (last 7d)"
+
+HH=$(bash ~/.claude/scripts/ledger/hook-health.sh --within 7 --json 2>/dev/null)
+if [ -z "$HH" ] || [ "$(echo "$HH" | jq -r '.note // empty' 2>/dev/null)" = "no telemetry yet" ]; then
+  gum_muted "no hook telemetry yet (~/.claude/hooks/warn-events.jsonl)"
+else
+  gum_kv "hooks fired" "$(echo "$HH" | jq -r '.total_hooks') ($(echo "$HH" | jq -r '.total_fires') fires)"
+  gum_kv "hottest"     "$(echo "$HH" | jq -r '.hooks[0] | "\(.hook) (\(.fires))"')"
+  muted=$(echo "$HH" | jq -r '.muted_but_firing | if length==0 then "none" else join(", ") end')
+  if [ "$muted" = "none" ]; then
+    gum_success "no muted-but-firing gates"
+  else
+    gum_warn "MUTED but still firing: $muted"
+  fi
+  gum_info "full view: bash ~/.claude/scripts/ledger/hook-health.sh"
+fi
+```
+
+**What to look for:**
+- **A hook with a huge fire count** → it may be noisy (a hint firing on every prompt) — drill in with `hook-health.sh --hook <id>`
+- **MUTED but still firing** → the mute file is present yet the gate keeps tripping; either the mute is stale or the gate ignores it
+
+---
+
 ## Step 4: MCP config validity
 
 ```bash
