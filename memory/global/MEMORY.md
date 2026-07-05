@@ -32,6 +32,11 @@
 - [No commit unless asked](feedback_no_commit_unless_asked.md) — Only commit when user says "commit" explicitly; "don't push" means no git ops
 - [Session continuity](feedback_session_continuity.md) — Long sessions with frequent compaction; relies on /catchup and /core-dump
 
+## Feedback — Guardrails & Model Temperament
+- [Guardrail mute-risk = FP × cost](feedback_guardrail_mute_risk.md) — Judge a hook by FP-rate × cost-of-a-false-fire, not raw FP; a muted hook enforces nothing, the mute is the model's escape valve
+- [Hooks fuzzy-by-default; hard-blocks earned](feedback_hard_gate_earned.md) — Guardrails default to fuzzy+mutable; deterministic hard-blocks only for vital, near-zero-mismatch actions (commit-in-protected-repo, rm-vs-trash)
+- [Fable vs Opus temperaments](feedback_fable_opus_temperaments.md) — Two temperaments not a ranking: Fable intent-eager/creative, Opus literal/reliable; hold each to a floor then play to type
+
 ## Feedback — Technical
 - [Node.js require cache](feedback_require_cache_clearing.md) — Always clear require.cache before re-loading config in pipeline engine
 - [Use uv, avoid context overflow](feedback_uv_context.md) — Use uv package manager; don't load large files into context

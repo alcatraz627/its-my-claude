@@ -8,6 +8,13 @@ triggers:
   - phrase:"inline script"
 related:
   - rules/testing.md
+paths:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.mjs"
+  - "**/*.cjs"
 tier: 2
 category: rules
 updated: 2026-05-15

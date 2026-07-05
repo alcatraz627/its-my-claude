@@ -8,6 +8,14 @@ triggers:
   - phrase:"os.environ"
 related:
   - rules/grep-scope-before-claiming-absence.md
+paths:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+  - "**/*.go"
+  - "**/*.rb"
 tier: 1
 category: rules
 updated: 2026-05-30

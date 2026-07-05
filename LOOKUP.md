@@ -26,6 +26,7 @@
 | `~/.claude/PLACEMENT.md` | **Two-axis placement rule (category × tier) + trigger taxonomy + anti-patterns.** Determines where new rules/features/conventions go. [impr-cfg-7a@2026-04-24] | Adding any new config file; reviewing an existing file's placement; Phase B migration |
 | `~/.claude/GLOSSARY.md` | Terminology reference for the GCC — abbreviations, namespace labels, concepts, file conventions | Encountering unfamiliar shorthand; adding new terms the user introduces |
 | `~/.claude/FOLDERS.md` | **Per-folder index** — every top-level dir under `~/.claude/`, owner (Anthropic vs user), purpose, what-goes-here / what-doesn't. Auto-regen via `scripts/folders-index.sh`. | Adding a new top-level folder, cleaning up unknown dirs, deciding where data goes |
+| `*-domain/` + `i-dream/` `ledger/` `pinned/` `scheduled/` | **i-dream event-domain subsystem**: per-domain event capture (`events.jsonl`) to derived session-start hinters (`_tldr.txt` / `triggers.json`) to a weekly dream pass. Engine source `~/Code/Claude/i-dream`; per-dir owners in `FOLDERS.md`; `scheduled/registry.json` runs the passes | Understanding session-start insight injection, the dream cycle, or where feedback events go |
 | `~/.claude/memory/global/MEMORY.md` | Cross-project global memory tier index (14 universal feedback/user memories) | Any session — loaded via CLAUDE.md instruction alongside per-project memory |
 | `~/.claude/settings.json` | Permissions, hooks, plugins, env vars, UI settings | Modifying hooks, permissions, or plugin config |
 | `~/.claude/settings.local.json` | Local permission overrides (npm, git, skills, etc.) | Adding tool permissions for local dev |
@@ -45,7 +46,6 @@
 | `rules/corrections.md` | After-correction ritual: state mistake → invoke /atone → fix | `topic:user-corrections`, `phrase:"revert this"` |
 | `rules/cron-calendar-companion.md` | Every cron (launchd/crontab/CronCreate) gets a companion `Automations` calendar event for human visibility; retire both together (sibling of `scheduling-discipline.md`; both in `std::claude::schedule`) | `topic:cron`, `topic:launchd`, `tool:CronCreate` |
 | `rules/scheduling-discipline.md` | Cross-tool scheduling practice (`std::claude::schedule`): which scheduler for which job, --description required, naming, retire-after-fire, no-secrets-in-command, audit cadence, pause-vs-rm | `topic:scheduling`, `topic:cron`, `topic:launchd`, `tool:gcc-schedule` |
-| `features/atone.md` | atone+affirm system — mistake/compliment event logs, derived views, hinters | `tool:atone`, `tool:affirm`, `topic:mistake-tracking` |
 
 ### `features/` — tool/subsystem/integration docs
 
@@ -56,16 +56,26 @@
 | `features/context-retention.md` | Session ID, core-dump/catchup, scratchpad, archive cadence | `skill:core-dump`, `skill:catchup`, `topic:session-id` |
 | `features/proposals.md` | Improvement backlog + self-feedback → canon lifecycle | `tool:propose.sh`, `topic:improvements` |
 | `features/mcp-catalog.md` | MCP server catalog + add-mcp + version pinning | `tool:add-mcp`, `topic:mcp-setup` |
+| `features/atone.md` | atone+affirm system: mistake/compliment event logs, derived views, hinters | `tool:atone`, `tool:affirm`, `topic:mistake-tracking` |
 | `features/llm-mini.md` | Fast mini-model: CLI, chat, MCP, hook surfaces | `tool:llm-mini`, `skill:mini` |
 | `features/hinter-pipeline.md` | UserPromptSubmit hints + autocorrect | `tool:hint-injector`, `skill:autocorrect` |
 | `features/shared-library.md` | std::claude::shared Python + shell utilities | `tool:gum-tui.sh`, `topic:shared-utilities` |
 | `features/plugins.md` | Disabled plugins registry + plugin-vs-skill | `topic:plugins`, `topic:skill-selection` |
 | `features/desktop-automation.md` | macOS GUI: screencapture/osascript/cliclick | `tool:desktop.sh`, `topic:macos-windows` |
+| `features/macos-menubar-widget.md` | AppKit menu-bar widget patterns: settings window, live-propagation, composited badge, hover popover | `topic:macos-menubar`, `topic:appkit`, `tool:claude-instances` |
 | `features/hooks-tui-limits.md` | Hook TUI display limitation (alt-screen buffer) | `topic:hooks`, `topic:terminal-display` |
 | `features/dev-servers.md` | pm2 + port 30xx/50xx + persistence | `tool:pm2`, `topic:dev-servers` |
 | `features/claudew.md` | Plugin-based claude CLI wrapper | `tool:claudew`, `topic:rate-limit-recovery` |
 | `features/shell-memory.md` | shell-mem shell history + BG processes (renamed from diy-mem in mig 0014) | `tool:shell-mem`, `topic:shell-history` |
 | `features/fiber-snatcher.md` | React/Next.js dev-app debugging daemon | `tool:fiber-snatcher`, `topic:react-debugging` |
+| `features/tab-title.md` | Modular Ghostty tab-title composer: mode / intent / base / focus / status slots | `tool:tab-title`, `topic:terminal-title` |
+| `features/local-models.md` | Local-model CLI suite: q (quick LLM), imagine (image gen), see (VLM), lm / warm | `tool:lm`, `topic:local-models`, `topic:ollama` |
+| `features/tmp-jail.md` | Session-scoped /tmp write-jail; hook-gated, user-lifted only | `topic:tmp-jail`, `phrase:"only write to tmp"` |
+| `features/session-plugs.md` | Registry of context-injecting + learning-capturing plugs across the session lifecycle | `skill:plugs`, `topic:session-lifecycle` |
+| `features/persona-activation.md` | How personas get picked up + each usage logged for efficacy review | `topic:personas`, `topic:persona-activation` |
+| `features/git-commands.md` | git + gh command cheatsheet: common ops, PR workflows, recovery | `topic:git-commands`, `topic:gh-cli` |
+| `features/declared-ready-stop-hook.md` | Stop-hook that blocks a premature done/works/shipped claim when nothing ran | `topic:declared-ready`, `topic:stop-hook` |
+| `features/env-access-convention-hook.md` | Env-access convention hook (DESIGN, not built): cache a project's env convention, nudge accesses | `tool:guard-env-access`, `topic:env-access` |
 
 ### `conventions/` — output/authoring standards
 
@@ -78,6 +88,15 @@
 | `conventions/ascii-diagrams.md` | Proactive box-drawing diagrams; /diagram for complex | `skill:diagram`, `topic:diagrams` |
 | `conventions/doc-writing.md` | Technical doc guidelines + anti-patterns (migrated from root) | `skill:write-docs`, `topic:docs-work` |
 | `conventions/scratch-files.md` | `_*.claude.md` hygiene + monthly archive to assets/checkpoints | `topic:scratch-files`, `topic:checkpoints` |
+| `conventions/gcc-hygiene.md` | Clean ~/.claude: keep/derive/archive heuristics + structural-change (migration) definition | `topic:gcc-hygiene`, `tool:migrate` |
+| `conventions/preference-graduation.md` | Graduate recurring preference/vocab signals from insight streams into GLOSSARY / memory / rules | `topic:preferences`, `skill:preference-graduation` |
+| `conventions/agent-first-tools.md` | Design doctrine for tools Claude drives: digest deltas, ref contracts, fix-proposing errors | `topic:agent-first-tools`, `topic:cli-for-agents` |
+| `conventions/tui-design.md` | Functional TUI patterns + fzf-as-runtime launcher blueprint + approach selection | `topic:tui`, `topic:fzf` |
+| `conventions/visual-design.md` | Visual-design reference: OKLCH color harmony, layout/hierarchy, de-chaos rule | `topic:color`, `topic:visual-design` |
+| `conventions/dashboard-tools.md` | Build template for single-user dashboard tools: watcher + JSON-state, mutex, atomic writes | `topic:dashboard-tool` |
+| `conventions/run-and-observe-affordance.md` | Every project exposes a one-command run-and-observe affordance so verifying is cheap | `topic:run-and-observe`, `topic:verify-affordance` |
+| `conventions/large-external-list-scan.md` | Procedure for scanning a vast external list (GH / Linear / Slack): pagination + budget | `topic:large-list-scan`, `topic:pagination` |
+| `conventions/hook-authoring-and-review.md` | Checklist for authoring + reviewing gcc hooks | `topic:hook-authoring`, `topic:hooks` |
 
 ---
 
@@ -97,7 +116,7 @@
 | `doctor/SKILL.md` | `/doctor` | On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirty count, event log health, hook integrity, MCP config validity. Wraps `scripts/health-check.sh` | Running a quick env audit mid-session, or after seeing unexpected hook behavior |
 | `autocorrect/SKILL.md` | `/autocorrect [subcommand]` | Manage typo correction dictionaries: list, add, teach, ignore, log, undo, test, stats. Data in `assets/autocorrect/`, log at `.autocorrect-log.jsonl` | Managing autocorrect dictionaries, reviewing correction history, teaching new mappings |
 | `mini/SKILL.md` | `/mini <prompt>` | Fast mini-model query (<1s) using local Ollama or cloud Haiku. Templates: session-title, doc-lookup, cmd-compose, summarize. All surfaces share `llm-mini-core.sh`. CLI: `llm-mini`. Engine: `llm-mini engine [start\|stop\|status]` | Quick lookups, session titles, command composition, short summaries |
-| `past-sessions/SKILL.md` | `/past-sessions` | Browse, search, summarize past Claude Code transcripts in `~/.claude/projects/`. TSV output via `scripts/list-sessions.sh` | Recalling past conversation content ("what did we do last X") without grepping transcripts manually |
+| `past-sessions/SKILL.md` | `/past-sessions` | Browse, search, summarize past Claude Code transcripts in `~/.claude/projects/`. TSV output via `skills/past-sessions/scripts/list-sessions.sh` | Recalling past conversation content ("what did we do last X") without grepping transcripts manually |
 | `tag/SKILL.md` | `/tag [target \| "concept"]` | Files something worth keeping into `~/.claude/` at its correct home per PLACEMENT (category x tier), updates every index/pointer, sets the `paths:` lever on scoped rules, promotes to a CLAUDE.md brief only when justified | Enshrining a rule/convention/term/snippet mid-session so it does not die inline |
 | `preference-graduation/SKILL.md` | `/preference-graduation [--days N]` | Harvests recurring preference/vocabulary signals from atone/affirm/i-dream/runtime-notes, dedupes vs GLOSSARY+memory, routes each to its durable home (glossary term, global memory, or rule) after per-signal confirm. Wraps `scripts/preference-harvest.sh` | Sweeping the insight streams to bake how-the-user-works into durable config; on "remember how I work" / "bake this in" |
 | `gcc-map/SKILL.md` | `/gcc-map [--deep]` | Maps how instruction content loads + the CLAUDE.md doc graph; measures ground truth first, diffs vs what the indices claim, runs a health battery (orphans / broken-links / staleness / always-loaded budget / tier-paths drift) + an unconstrained blindspot pass; writes a durable map to `assets/reports/`. Read-only on config | Auditing gcc structure health, finding drift/orphans/bloat, before a config cleanup |
@@ -189,7 +208,6 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | `scripts/llm-mini/llm-mini-core.sh` | CLI + backend | Single-source mini-model dispatcher: Ollama local + Haiku cloud, prompt templates, cold-start engine, fallback cascade, usage logging | Building any surface that needs fast mini-model queries |
 | `scripts/llm-mini/llm-mini.sh` | CLI wrapper | Thin `exec` wrapper around `llm-mini-core.sh`, symlinked to `~/.local/bin/llm-mini` | Using llm-mini from the shell: `llm-mini "question"` or `echo text \| llm-mini summarize` |
 | `scripts/llm-mini/llm-mini-engine.sh` | Engine manager | Ollama lifecycle: start/stop/status/switch/stats/models + cold-start ensure + idle watchdog | Managing Ollama runtime, model switching, auto-start/stop |
-| `scripts/llm-mini/llm-mini-mcp-server.js` | MCP server | Node.js stdio MCP server exposing `ask` + `list_templates` tools; registered in `.mcp.json` as `llm-mini` | Claude calling mini-model directly via MCP without shell hop |
 | `scripts/llm-mini/llm-mini-hook.sh` | Hook callable | Sourceable `mini_quick()` for hooks; enforces 3s timeout, prefers local backend | Using mini inside hook scripts (session titles, summaries) |
 | `llm-mini.conf` | Config | Persistent settings: backend, model, timeouts, auto-start, idle shutdown | Customizing llm-mini behavior |
 | `assets/mini-prompts/` | Templates | 4 prompt templates: `session-title`, `doc-lookup`, `cmd-compose`, `summarize` — `{{input}}` placeholder | Adding or modifying mini-model prompt templates |

@@ -631,3 +631,80 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (21): 060367c5, c6ea2b0e, 1e792352, +18 more
 
 ---
+
+
+## Wake Cycle — 2026-07-04 23:52 UTC
+
+### Insight (conf=0.82)
+> Terse continuation signals ('ahead', 'next') are explicitly designated as autonomous-execute directives, but the agent over-generalizes this autonomy past the shared-state mutation boundary (git push), and frequent context compactions via /catchup strip the ephemeral 'not yet approved to push' state — creating a self-reinforcing loop where the very workflow that enables efficient long sessions also erases the guardrail memory that prevents the most recurring violation.
+
+**Rule:** Always re-derive git-push authorization from scratch after any context compaction or session resumption — never carry forward implicit approval from pre-compaction context, even if the terse continuation signal implies 'keep going autonomously'.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
+- _Sessions_ (66): c6ea2b0e, bc59cf34, a76e1439, +63 more
+
+---
+### Insight (conf=0.65)
+> The extreme density of session-continuity patterns (20-80 tools per turn, multiple compaction cycles) means the agent operates in a state where most of its 'memory' is reconstructed rather than witnessed — and reconstructed context systematically drops negative constraints (what NOT to do) while preserving positive task state (what to do next), which is why the git-push prohibition is the specific rule that fails most often: it is a negative constraint with no positive artifact to reconstruct from.
+
+**Rule:** After any context reconstruction (/catchup, compaction, session resume), explicitly re-load negative constraints (push prohibitions, credential rules, scope boundaries) from durable sources before resuming positive task execution — negative rules have no natural artifact to trigger recall.
+
+**Evidence:**
+- _Pattern_: "User heavily relies on session continuity tools (/catchup, /core-dump) — multiple sessions show 'this session being continued from' as the d…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Pattern_: "The agent must never commit or push to a shared repository without fresh, explicit per-session approval — even if the user approved a simila…"
+- _Pattern_: "When the agent commits and pushes code without explicit per-instance approval, the user treats it as a serious violation even if a general a…"
+- _Projects_ (5): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627-Code-Versable-enhancement-product
+- _Sessions_ (49): 826dce96, 6345a8d3, 60f43456, +46 more
+
+---
+
+
+## Wake Cycle — 2026-07-05 12:47 UTC
+
+### Insight (conf=0.92)
+> Context compaction systematically strips negative constraints (prohibitions) while preserving positive task state, causing the git-push prohibition — a purely negative rule with no positive artifact to reconstruct from — to be the single most violated rule across sessions despite 18+ recorded incidents.
+
+**Rule:** Always re-derive all push/deploy/shared-state-mutation prohibitions from durable sources (CLAUDE.md, project settings) immediately after any context compaction or session resumption, treating compaction as a hard reset of all prior authorizations.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "User relies heavily on session continuity tools (/catchup, /core-dump) across many compaction boundaries; sessions frequently resume mid-tas…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (61): 13cdec26, 60f43456, 48b50d47, +58 more
+
+---
+### Insight (conf=0.85)
+> Terse continuation signals ('ahead', 'next', 'done') are correctly interpreted as execution directives for local work, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'momentum' that correctly drives file edits incorrectly drives git pushes, because the authorization taxonomy lacks a clean local-vs-shared distinction.
+
+**Rule:** Always treat terse continuation signals as authorizing only local, reversible side-effects (file edits, local builds, scratch files); never interpret them as authorization for shared-state mutations (git push, deploy, external messages) regardless of task momentum.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "The agent committed and pushed code to a project repository without receiving fresh explicit approval for that specific push, violating the …"
+- _Pattern_: "The agent committed and pushed to a shared branch without explicit per-instance user approval, triggering severe user backlash. A prior blan…"
+- _Projects_ (9): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (20): c6ea2b0e, bc59cf34, a76e1439, +17 more
+
+---
+### Insight (conf=0.68)
+> Project-specific conventions (config systems, push rules) are most likely to be violated in sessions that required context reconstruction, because convention knowledge is implicit and distributed — it lives in the agent's understanding of the project, not in a single checkpointable artifact, making it the first casualty of any state-restoration gap.
+
+**Rule:** Always include project-specific prohibitions and convention overrides (no-push rules, config-system mandates, naming conventions) as explicit items in core-dump checkpoints, not just task progress — conventions that survive only in conversation context will not survive compaction.
+
+**Evidence:**
+- _Pattern_: "When a project has an established configuration system, the agent must use it exclusively — never access environment variables directly with…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Pattern_: "Session continuation pattern is heavily used - large multi-session workflows with 'this session being continued from' as frequent entry poin…"
+- _Projects_ (4): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (59): e952a600, e7d74b05, 62582ce6, +56 more
+
+---

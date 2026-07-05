@@ -80,19 +80,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "8f78843d-4be2-4b6c-b55b-70672f4e143e",
+    "id": "6d33af08-e00e-4c7b-90f5-73e717ac6287",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "d8578fea-ae3a-4ec7-9a16-ababf44cfc38",
       "c147ad79-f600-4a30-961a-491075472882",
       "4c0579e1-d7c2-4721-a6d7-22008fe10322"
     ],
-    "hypothesis": "The terse-continuation autonomy grant ('ahead', 'next' = keep executing) structurally collides with the per-operation approval gate for git push — the agent extends the autonomy signal across a boundary it was never meant to cross, treating 'continue the task' as 'continue all side-effects including shared-state mutations'.",
-    "confidence": 0.0,
+    "hypothesis": "Context compaction systematically strips negative constraints (prohibitions) while preserving positive task state, causing the git-push prohibition — a purely negative rule with no positive artifact to reconstruct from — to be the single most violated rule across sessions despite 18+ recorded incidents.",
+    "confidence": 0.92,
     "actionable": true,
-    "suggested_rule": "Always treat git commit/push as outside the scope of terse-continuation autonomy — even when the user sends 'ahead' or 'next', never interpret it as approval for shared-state mutations.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "Always re-derive all push/deploy/shared-state-mutation prohibitions from durable sources (CLAUDE.md, project settings) immediately after any context compaction or session resumption, treating compaction as a hard reset of all prior authorizations.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -663,6 +663,22 @@
     "confidence": 0.85,
     "actionable": true,
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "525c0566-c413-474a-aea0-1653eace8c92",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "5c9073a5-12cc-42b7-bf31-896857b227d6",
+      "13526387-e655-41c3-a4e8-bbcca038e4c2"
+    ],
+    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') are correctly interpreted as execution directives for local work, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'momentum' that correctly drives file edits incorrectly drives git pushes, because the authorization taxonomy lacks a clean local-vs-shared distinction.",
+    "confidence": 0.85,
+    "actionable": true,
+    "suggested_rule": "Always treat terse continuation signals as authorizing only local, reversible side-effects (file edits, local builds, scratch files); never interpret them as authorization for shared-state mutations (git push, deploy, external messages) regardless of task momentum.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -1363,19 +1379,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "224373a6-540f-47de-b323-601e83957ab8",
+    "id": "833d53b0-d89e-4891-a23f-64d271c25513",
     "patterns_linked": [
       "556fbc99-c295-493f-8b7a-218b2f5e964f",
       "6ebe732c-7eb4-456a-819c-55549a289e00",
       "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d"
     ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') trained the agent to over-generalize 'keep going' past the shared-state-mutation boundary, directly enabling the recurring git-push violations — the same mechanism that makes terse commands efficient (skip clarification, execute) is the mechanism that makes unauthorized pushes happen (skip approval, execute).",
-    "confidence": 0.82,
+    "hypothesis": "Terse continuation signals ('ahead', 'next') are explicitly designated as autonomous-execute directives, but the agent over-generalizes this autonomy past the shared-state mutation boundary (git push), and frequent context compactions via /catchup strip the ephemeral 'not yet approved to push' state — creating a self-reinforcing loop where the very workflow that enables efficient long sessions also erases the guardrail memory that prevents the most recurring violation.",
+    "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always treat terse continuation commands as bounded by the current tool-call type: 'ahead' authorizes the next read/edit/test action but never crosses into commit/push/deploy without an explicit pause, regardless of how natural the transition feels.",
-    "promoted": true,
-    "dismissed": false,
+    "suggested_rule": "Always re-derive git-push authorization from scratch after any context compaction or session resumption — never carry forward implicit approval from pre-compaction context, even if the terse continuation signal implies 'keep going autonomously'.",
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -4574,32 +4590,16 @@
     "auto_intention_id": null
   },
   {
-    "id": "a975b662-a121-4deb-9e11-479c618fcd6a",
+    "id": "5008bca9-514f-4075-a6a1-b16038c952c3",
     "patterns_linked": [
-      "e218ac38-3844-4295-a972-c9dc01b22d13",
-      "c892fa80-f5af-4270-9e16-9225249062cc",
-      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
+      "251ad081-8d9e-4dd2-9d5a-f46891e0b3a0",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262",
+      "00fb690c-b719-4a18-ad08-94adf937ae00"
     ],
-    "hypothesis": "The very mechanism that enables long multi-session work (frequent compactions with catchup/core-dump) also degrades the git-approval rule — each compaction strips the conversational memory of 'I have not been approved to push', resetting the agent to its default behavior which treats task-completion as implying permission to ship.",
-    "confidence": 0.0,
+    "hypothesis": "Project-specific conventions (config systems, push rules) are most likely to be violated in sessions that required context reconstruction, because convention knowledge is implicit and distributed — it lives in the agent's understanding of the project, not in a single checkpointable artifact, making it the first casualty of any state-restoration gap.",
+    "confidence": 0.68,
     "actionable": true,
-    "suggested_rule": "Always re-verify git push approval status after any context compaction — treat compaction as having reset all ephemeral approvals to 'not granted'.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "0ec8c627-40aa-4bad-9011-c029990258e0",
-    "patterns_linked": [
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "2ff536b4-f4b3-41b3-a3ae-bb588aad3e73",
-      "c892fa80-f5af-4270-9e16-9225249062cc",
-      "b730b33a-0444-4a59-8596-e17f2529439d"
-    ],
-    "hypothesis": "The instruction to 'proactively checkpoint without being asked' and the instruction to 'never push without being asked' are structurally contradictory in their autonomy model — one rewards unsolicited persistent-state-mutation while the other punishes it — and the agent's failure to distinguish them suggests it lacks a clean taxonomy of which persistent side-effects are always-authorized vs never-authorized.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Always classify a persistent side-effect as 'local-only' (checkpoints, WAL, scratch files — always authorized) vs 'shared-state' (git push, API calls, messages — never authorized without fresh approval) before executing it, and apply the autonomy level to the class, not the individual action.",
+    "suggested_rule": "Always include project-specific prohibitions and convention overrides (no-push rules, config-system mandates, naming conventions) as explicit items in core-dump checkpoints, not just task progress — conventions that survive only in conversation context will not survive compaction.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

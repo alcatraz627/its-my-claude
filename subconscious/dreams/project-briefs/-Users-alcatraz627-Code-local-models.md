@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-07-02T23:56:06.286412+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-05T12:51:14.181017+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Local LLM tooling project (`~/Code/local-models`) — managing local model runners, warmth state, and CLI tooling. Sessions are research-heavy with concrete deliverable expectations at the end.
+Local LLM and image-generation tooling (`q`/`imagine`/`warm`/`lm`) running on this machine. Work style is iterative exploration with tight scope discipline and zero tolerance for undeclared extras.
 
 ## Things to do (or keep doing)
-- Always show raw test output for the user to inspect; declaring success without evidence is a failure
-- Always invoke `/atone` immediately and completely when triggered — skipping it mid-correction compounds the mistake
-- Use the Task tool (not TODO files) when asked to update todos; the TUI is the live surface
-- Translate research/design phases into lean, behavior-focused implementation docs before the session ends
+- Always surface actual test/command output verbatim — declaring success without showing evidence is a failure, not a courtesy
+- Translate research and design phases into lean, product- and behavior-focused implementation docs immediately; don't leave raw synthesis as the deliverable
+- Use the Task tool (not TODO.md / plan.md) when tracking multi-step work — that's what populates the TUI
+- Execute `/atone` and other explicitly-invoked skills immediately and completely when called; deferring or skipping mid-correction compounds the original mistake
 
 ## Things to avoid
-- Don't re-introduce removed complexity or add features the user didn't ask for when replacing deleted code
-- Don't use `rm` — use `trash`; the hook blocks `rm` unconditionally with no "cleanup" exceptions
-- Don't write docs with promotional/motivational framing ("why this matters", em-dashes, AI-smell phrasing) — direct and formal only
-- Don't complete peripheral work (research, planning, persona design) while leaving the core stated deliverable undelivered
+- Don't re-introduce code the user deleted — if they removed complexity and asked for a replacement, build only the replacement
+- Don't use `rm`; always use `trash` — the hook blocks `rm` unconditionally, no "cleanup" exceptions
+- Don't open docs with motivational "Why this matters" framing — direct, formal, factually grounded only; strip em-dashes and AI-smell prose before sending any human-facing text
+- Don't complete all peripheral work (research, planning, tooling) while failing to deliver the stated core deliverable — that's a full session failure regardless of surrounding quality
 
 ## Open questions / known gaps
-- Sessions tend to over-invest in exploratory side work and under-deliver on the primary ask; finish the core deliverable first, then extras
-- RCA files must open with `---` YAML frontmatter on line 1 or `atone.sh` exits non-zero silently — verify frontmatter before considering any `/atone` call complete
+- RCA files for `/atone` S3 events must start with `---` YAML frontmatter on line 1 or the lint gate rejects them silently — verify the template before writing

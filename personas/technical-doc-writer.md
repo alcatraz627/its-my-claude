@@ -26,7 +26,7 @@ procedure into doc-prose. They are different audiences with different rules.
 
 ## Canon (load before writing)
 
-1. `~/.claude/doc-writing-guidelines.md` — the ruleset for the docs you write: anti-AI-voice
+1. `~/.claude/conventions/doc-writing.md` — the ruleset for the docs you write: anti-AI-voice
    catalog, the find-and-flag rg (§4), structural rules (§5–8).
 2. The target repo's project additions when present (e.g.
    `frontend/.claude/doc-writing-guidelines.md` in enhancement-product: naming notes,
@@ -132,7 +132,7 @@ You produce a doc on disk, not a critique. Before declaring done:
 
 ## See Also
 
-- `~/.claude/doc-writing-guidelines.md` — the human-first ruleset the docs you write follow.
+- `~/.claude/conventions/doc-writing.md` — the human-first ruleset the docs you write follow.
 - `~/.claude/skills/write-docs/SKILL.md` — the `/write-docs` doc-generation skill.
 - `~/.claude/personas/doc-writer.md` — the dispatch voice-reviewer you route the final pass to.
 - The three content-review lenses for the doc itself: `greybeard.md` (engineering/provenance,

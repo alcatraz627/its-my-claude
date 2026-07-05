@@ -1,3 +1,18 @@
+---
+brief: Comments are for humans first, AI agents second, machines never; first sentence of a non-trivial docstring is code-agnostic; keep [claude@] agent-notes separate from human comments; no plan-refs or archeology
+triggers:
+  - topic:comments
+  - topic:docstrings
+  - phrase:"docstring"
+related:
+  - rules/audience-aware-writing.md
+  - conventions/doc-writing.md
+tier: 1
+category: rules
+updated: 2026-07-05
+stale_after_days: 180
+---
+
 # Comments
 
 **The one rule:** Comments are for humans first, AI agents second,

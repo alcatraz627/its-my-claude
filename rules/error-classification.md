@@ -7,6 +7,12 @@ triggers:
   - phrase:"cause_message"
   - phrase:"includes("
 related: []
+paths:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
 tier: 1
 category: rules
 updated: 2026-05-04

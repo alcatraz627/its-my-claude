@@ -61,6 +61,21 @@ the only observation channel).
 
 ## Lived additions the research didn't predict
 
+- **Don't assume the app describes itself.** Principle 1 ("observe as structured
+  semantic text") silently assumes the app HAS structured semantics — aria roles,
+  labels, text. A driver for arbitrary apps meets low-accessibility pages where
+  every DOM rung fails and the tool degrades to a useless component name. Fall
+  through to structural inference and, when even that is ambiguous, hand the agent
+  the raw evidence (icon, handler source, nearby text) — never a dead label. This
+  is principle 13 applied to identity, not just to ambiguity.
+- **The framework holds what the DOM doesn't.** A fiber-attached tool's real edge:
+  a control's label often lives in a React PROP, not the DOM — a closed dropdown's
+  menu items, an un-rendered tooltip's text. React builds those elements at the
+  parent's render and hands them to the mounted trigger as prop VALUES; a
+  conditional `{open && children}` gates MOUNTING, not the value's existence. So
+  the content of an un-opened overlay is readable from the trigger's ancestor
+  fiber props with no interaction — no sourcemap, no bundle, no mounting. Read the
+  fiber for meaning, not just the DOM. (fiber-snatcher WP9.)
 - **Honest unknowns beat fabricated calm**: when observation is impossible
   (document died mid-read), report `unknown`, never a value that implies
   "nothing happened".

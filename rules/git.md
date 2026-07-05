@@ -66,8 +66,8 @@ These never inherit prior approval. Confirm for every invocation, naming the tar
 
 - **[`/git-setup`](../.claude/skills/git-setup/SKILL.md)** — initializes/audits repos (`.gitignore`, branch protection, conventional commits, PR templates, health check). Use when starting a new repo or inheriting one with ambiguous state.
 - **[`/readme`](../.claude/skills/readme/SKILL.md)** — generates a polished `README.md` with GitHub-style badges, a pixel-art cover image, a quick-start, and a linked doc index. Pair with `/banner` for a colorful ASCII header and `/svg` (if present) for a hero image.
-- **[`/commit`](../.claude/skills/commit-commands/commit/SKILL.md)** and **[`/commit-push-pr`](../.claude/skills/commit-commands/commit-push-pr/SKILL.md)** — structured commit + PR-open flows.
-- **[`/clean_gone`](../.claude/skills/commit-commands/clean_gone/SKILL.md)** — prunes local branches whose remote is gone.
+- **`/commit`** and **`/commit-push-pr`** (from the `commit-commands` plugin) — structured commit + PR-open flows.
+- **`/clean_gone`** (from the `commit-commands` plugin) — prunes local branches whose remote is gone.
 
 ## Command & gh cheatsheet
 

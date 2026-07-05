@@ -23,7 +23,7 @@
     "id": "trig-committing-without-explicit-request",
     "from_slug": "committing-without-explicit-request",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Committing without explicit request",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -88,6 +88,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-103857-b0"
+  },
+  {
+    "id": "trig-mis-triaged-inflight-task-as-crashed",
+    "from_slug": "mis-triaged-inflight-task-as-crashed",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Read a background workflow's 0-byte output, called it crashed, relaunched a duplicate",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260703-231033-72"
   },
   {
     "id": "trig-propagating-legacy-inline-imports-in-python-backend",

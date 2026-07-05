@@ -29,11 +29,9 @@ These folders are created and maintained by Claude Code itself. Touching them ri
 | `projects/` | Per-session conversation transcripts (UUID-keyed jsonl) | ~790 MB — pruned by `std::claude::startup` (gzip at 6 mo, delete at 12 mo) |
 | `session-env/` | Per-session env captures (UUID subdirs) | 880 subdirs, mostly empty — Anthropic cleanup expected |
 | `sessions/` | Session metadata | |
-| `statsig/` | Feature-flag SDK cache | |
 | `tasks/` | TaskCreate/TaskList persistence (UUID-keyed) | |
 | `teams/` | Agent-team state | |
 | `telemetry/` | Anonymized usage metrics | |
-| `todos/` | Task list persistence (per session) | |
 
 **Plus root files:** `config.json`, `settings.local.json` (Anthropic-managed); session state files like `wal.jsonl`/`wal.md` are co-owned (Claude writes, user reads/edits).
 
@@ -87,6 +85,12 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `tools/` | misc | 14 MB single subdir; check before touching |
 | `topics/` | `/cogitate` skill | Topic-themed long-form notes |
 | `widgets/` | statusline widget system | Widget definitions for the statusline (`features/tab-title.md` adjacent) |
+| `*-domain/` (memory-, sessions-, proposals-, hooks-feedback-) | i-dream engine | Per-domain event streams feeding the dream cycle. Each holds `events.jsonl` + `derived/` (session-start hinter `_tldr.txt` + `triggers.json`) + `dream/` (weekly LLM pass) + a `.i-dream-domain.toml` manifest; extracted idempotently by `extract-events.sh` (`_seen.json` cursor). `proposals-domain/events.jsonl` symlinks to `proposals.jsonl` (fed by `scripts/hooks/gcc-signal-capture.sh`, a SessionEnd hook). NOTE: `memory-domain/` (dream capture) is unrelated to `memory/` (auto-memory) despite the name |
+| `i-dream/` | i-dream engine (source: `~/Code/Claude/i-dream`) | Runtime data for the dream engine: `daily/` digests, `derived/` cross-domain union (`*.union.*`), `domains/` manifests, `injections.jsonl` (session-start context). Sibling of `subconscious/` |
+| `ledger/` | `scripts/ledger/` | Value-system + alerting layer: `goals.toml`, `detectors.toml`, `efficacy.toml`, `plug-events.jsonl`, `alerts.jsonl` |
+| `pinned/` | `/pin-for-dream` | Insights pinned for the next dream cycle; `consolidate.sh` decays them after ~2 cycles |
+| `scheduled/` | `gcc-schedule` / routines | Cron/launchd routine registry (`registry.json` + `history.jsonl`) that runs the domain consolidations + dream passes |
+| `session-notes/` | `/workspace` + `/core-dump` + `/catchup` | Per-session workspace docs (`<session-id>.md`: Todos / Notes / Doc Links / Decisions); `_active.md` points to the current session |
 
 ---
 

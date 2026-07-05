@@ -1,3 +1,19 @@
+---
+brief: Grep the FULL relevant tree (not just one subdir) before claiming a module/function/helper doesn't exist or proposing to create one
+triggers:
+  - topic:absence-claims
+  - topic:before-creating
+  - phrase:"no existing"
+  - phrase:"proposing to add"
+related:
+  - rules/structural-claim-without-reading-code.md
+  - rules/speculative-abstractions-without-a-load-bearing-caller.md
+tier: 1
+category: rules
+updated: 2026-07-05
+stale_after_days: 180
+---
+
 # Grep the FULL tree before claiming a thing doesn't exist
 
 Before stating *"there's no existing module / function / helper for X"* — or proposing to create one — grep the **entire relevant tree** for X's keywords, not just the directory where X "should" live.

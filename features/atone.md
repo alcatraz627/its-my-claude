@@ -56,9 +56,10 @@ Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 l
    └── ~/.claude/atone/derived/_meta.json     run metadata + content hash
             │
    ════ INJECTION (read triggers.json + _tldr.txt) ══════════════════
-   ├── hinters/05-atone-tldr.sh           first-turn TL;DR
+   ├── SessionStart dream-insights lane   first-turn TL;DR (from _tldr.txt)
+   ├── hinters/10-atone-circuit-breaker   halts a thrash loop
    ├── hinters/30-atone-nudge.sh          you/your+correction → /atone
-   └── hinters/50-atone-periodic-refresh  every N=12 turns
+   └── [disabled] 05-atone-tldr, 50-atone-periodic-refresh (subsumed)
 ```
 
 ## Use it daily
@@ -144,9 +145,9 @@ Periodic-refresh frequency tunable in `~/.claude/atone/config.json` (`periodic_r
 └── affirm/SKILL.md           4-phase affirmation skill
 
 ~/.claude/hinters/
-├── 05-atone-tldr.sh          first-turn TL;DR injection
-├── 30-atone-nudge.sh         you/your+correction nudge
-└── 50-atone-periodic-refresh.sh  every N turns
+├── 10-atone-circuit-breaker.sh   halts a thrash loop
+├── 30-atone-nudge.sh             you/your+correction nudge
+└── [disabled] 05-atone-tldr.sh, 50-atone-periodic-refresh.sh (TL;DR now via SessionStart dream-insights)
 
 ~/Library/LaunchAgents/
 └── com.alcatraz.atone-snapshot.plist  daily 03:00 (load with launchctl)

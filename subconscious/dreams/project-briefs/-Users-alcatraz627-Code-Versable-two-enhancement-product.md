@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-04T07:15:42.970511+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-05T12:50:52.201219+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Versable enhancement-product — a full-stack feature development project with strict scope discipline and high standards for lean, professional documentation and implementation.
+A Next.js/TypeScript enhancement product (Versable) with a strongly opinionated working style: the user enforces strict scope ceilings and rejects any complexity beyond what was explicitly requested.
 
 ## Things to do (or keep doing)
-- **Replicate existing patterns exactly** when the user says "do it the same way as X" — find the reference impl and mirror it, no new abstractions
-- **Translate research/design outputs into lean, product-focused implementation docs** — behavioral and direct, neither academic nor enterprise-heavy
-- **Hand the user exact git commands** when this repo's CLAUDE.md requires manual execution; never run pushes autonomously
+- When the user says "opt-in," default to including everything and require an explicit signal to exclude — never implement opt-out by default
+- Replicate existing patterns exactly when the user says "the same way you would for X" — read the reference implementation before writing new code
+- Translate research/design phases into lean, behavior-focused implementation docs — professional and direct, neither academic nor enterprise-heavy
+- Hand the user exact git commands and stop before pushing; repo-specific CLAUDE.md git rules take absolute precedence over default behavior
 
 ## Things to avoid
-- **Don't re-introduce deferred or deleted complexity** — if the user explicitly removed or simplified something, treat that as a hard constraint, not a suggestion
-- **Don't add unrequested abstractions, wrappers, or infrastructure** — when asked for data access or a simple function, use the simplest existing path; new exports need a real caller right now
-- **Don't use em-dashes, "Why this matters" openers, or promotional framing** in any human-facing prose — write formal, direct, factually grounded text
-- **Don't conflate verbal acknowledgment with correct implementation** — after agreeing on semantics (e.g. "opt-in"), verify the code implements exactly that, not the inverse
+- Don't re-introduce deferred scope: if the user said "not now" or deleted something, it stays out even when the implementation is "trivially easy"
+- Don't add abstractions, wrappers, or new infrastructure when existing code already handles the request — check first, build only if nothing fits
+- Don't write em-dashes, "why this matters" intros, or promotional framing in any human-facing prose; docs open with a direct statement of fact
+- Don't treat verbal acknowledgment of correct semantics as verification — confirm the implemented logic matches the agreed behavior before declaring done
 
 ## Open questions / known gaps
-- Scope ceiling enforcement is a recurring failure mode — the agent repeatedly adds complexity after explicit user simplification requests, suggesting the ceiling check needs to happen at code-write time, not just at planning time
-- `atone.sh` RCA files must open with `---` YAML frontmatter on line 1; this has caused silent event-drop failures more than once
+- Scope ceiling enforcement is the single most recurring failure: verbal agreement + wrong code happens repeatedly, suggesting a missing pre-commit self-check habit
+- The boundary between "deferred" and "just not yet wired" is consistently ambiguous; the user's intent on deferral needs to be surfaced and confirmed explicitly before implementation begins

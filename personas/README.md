@@ -75,7 +75,7 @@ When adding a dispatch persona: include an `output:` field (e.g., `output: json`
 | Greybeard          | `greybeard.md`          | dispatch     | Doc review — engineering veteran lens (decision archaeology, load-bearing assumptions, "why" preservation)     |
 | Translator         | `translator.md`         | dispatch     | Doc review — PM/strategist lens (customer impact, mental-model cleavage, cross-functional translatability)     |
 | Pager-Holder       | `pager-holder.md`       | dispatch     | Doc review — ops/on-call lens (runnability under pressure, escalation completeness, verification at each step) |
-| Doc Writer         | `doc-writer.md`         | dispatch     | Doc authoring + voice review — professional-copywriter register, AI-smell removal; applies `~/.claude/doc-writing-guidelines.md` |
+| Doc Writer         | `doc-writer.md`         | dispatch     | Doc authoring + voice review — professional-copywriter register, AI-smell removal; applies `~/.claude/conventions/doc-writing.md` |
 | Closer             | `closer.md`             | working-mode | Scope discipline / YAGNI — declare done, defer until a need pulls it (strategic-lens triad)                     |
 | Platform-Builder   | `platform-builder.md`   | working-mode | Architecture sequencing / reusable substrate — realize the vision without over-abstracting (strategic-lens triad) |
 | Pragmatist         | `pragmatist.md`         | working-mode | Value-per-effort triage / cheap-option-buying — DO-NOW/DEFER/KILL scorecards (strategic-lens triad)             |

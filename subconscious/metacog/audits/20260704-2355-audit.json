@@ -1,0 +1,58 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18194,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3174238682331068,
+    "unit_count": 84
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — rate 75% (9/12 tool-using units: unit-5, unit-14, unit-17, unit-22, unit-23, unit-28, unit-43, unit-44, unit-51); matches 2026-07-03 cycle rate exactly, no improvement from baseline; subvariants below",
+      "ls-for-directory-listing:RECURRING:STABLE — 3 units: unit-5 (ls -d ../extractor-webserver, ls ../extractor-webserver | head -30, ls -la automation/, ls -la *.json); unit-14 (ls -la preview-job-output/, ls src/core/widgets-v2/, ls src/core/widgets-v2/docs/); unit-28 (ls -la guard-system-dir-writes.sh, ls -d ~/.local/bin, ls ~/.local/bin)",
+      "grep_in_compound_bash:RECURRING:WORST_RECORDED_TIE — 5 units (unit-5: grep -niE embedded in compound Bash; unit-14: grep -iv and grep -i in pipe chains; unit-28: grep -q inside heredoc test function multiple times plus grep -v in pipe plus grep -n at Bash string end; unit-44: two grep -v filter chains; unit-51: grep -v in pipe filter); ties 2026-06-30 peak; argv[0]-only hook interception gap structurally unaddressed across 12+ consecutive RECURRING cycles",
+      "cat-instead-of-read:RECURRING:STABLE — 3 units: unit-17 (cat task output | tail -30 at turn end); unit-22 (cat on task JSONL output file, first attempt failed, adapted to python open()); unit-23 (cat /tmp/task2-modal-review.md immediately after Write tool wrote same file — clearest reading-direction signal); consistent 3-instance floor for third consecutive batch",
+      "sed-instead-of-read-with-offset:RECURRING:RETURNING — 2 units: unit-14 (sed -n '1,80p' use-job-data.tsx and sed -n '91,100p' jobs.data.ts); unit-28 (sed -n '1,30p' prefer-ripgrep.sh and sed -n '60,76p' prefer-ripgrep.sh); classified ABSENT in 2026-07-02 cycle, confirms intermittent recurrence rather than elimination",
+      "head-instead-of-read:RECURRING:RETURNING — unit-43: head -c 400 on task output file and head -3 on design-*.md files in Bash for content inspection; structurally identical reflex to cat-instead-of-read; was present in 2026-07-02 (unit-1ee3c72e-4, unit-63, unit-72), absent in 2026-07-03 and 2026-07-04 cycles, returning this batch",
+      "scope_expansion:RECURRING:S3_CONFIRMED — unit-17 (outcome=Corrected): speculative-abstractions-without-a-load-bearing-caller sixth confirmed S3 recurrence; agent built deriveJobOutputStats plus 15-field JobOutputStats view-model with segment ordering, summary string, completedPct/terminalPct, EMPTY_COUNTS const, unit tests, and multi-sheet TODO seam when user asked only for raw aggregate data at preview-job-output.modal.tsx:256 with explicit UI ownership reservation; user deleted all of it; atone correctly filed with RCA; no new scope expansion events in remaining 12 units",
+      "re-edit-thrash:RECURRING:CONFIRMED — unit-51: 7 consecutive Edit failures on preview-job-modal.title.tsx (all success:false) with no Read or investigation between retries 1 through 7; agent pivoted only after 7 failures by reading the file then retrying successfully; identical pattern and same unit classified in 2026-06-30 and 2026-07-03 cycles; mechanical gate (consecutive-Edit-failure counter triggering forced Read) remains unimplemented"
+    ],
+    "calibration_score": 0.4,
+    "cross_references": [
+      "dream-insight-2026-06-18 terse-as-execute vs push boundary: no git push or externally-visible actions observed in any unit this batch; local/external boundary correctly maintained; insight not violated",
+      "dream-insight-2026-06-18 mechanical-gate-over-advisory: grep_in_compound_bash at 12+ RECURRING cycles with zero structural resolution is the canonical example of this insight; advisory corrections have demonstrably failed to close this gap; the insight prescribes stopping the advisory cycle and investing in a mechanical gate instead",
+      "unit-23 cat-after-Write pattern: writing to /tmp/task2-modal-review.md via Write tool then immediately catting the same path via Bash directly contradicts the dedicated-tool preference; the just-wrote context does not exempt from the Read tool obligation; this subvariant (reading-direction cat of a file just created) has appeared in every batch analysis of this session at the same unit number"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "grep_in_compound_bash has now tied worst-recorded count (5 units) for the second time despite 12+ consecutive RECURRING advisory classifications; argv[0]-only hook interception is the confirmed structural root cause; escalate from advisory to a concrete proposal for a PostToolUse Bash hook that scans the executed command text for bare grep/egrep patterns not at argv[0] position — this is the only path to structural resolution",
+      "re-edit-thrash mechanical gate remains unimplemented after 3 confirmed consecutive cycles on the same unit pattern; a PreToolUse hook counting consecutive Edit failures on the same file path and injecting a forced-Read advisory after N=3 failures would close this without relying on in-context recall; recommend filing as a proposal rather than an advisory correction",
+      "head-instead-of-read subvariant returning after apparent absence in two prior cycles; no new recommendation needed beyond flagging the return; same shell-first reflex as cat-instead-of-read; existing guidance covers it structurally"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      52810822
+    ],
+    [
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      2764766
+    ],
+    [
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      3082533
+    ],
+    [
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      11628531
+    ]
+  ],
+  "timestamp": "2026-07-04T23:55:02.683624Z",
+  "tokens_used": 25184,
+  "units_analyzed": 15,
+  "units_total": 84
+}

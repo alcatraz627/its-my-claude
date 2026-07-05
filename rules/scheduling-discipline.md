@@ -10,7 +10,7 @@ triggers:
   - tool:CronCreate
   - tool:gcc-schedule
 related:
-  - features/cron-calendar-companion.md
+  - rules/cron-calendar-companion.md
   - scripts/schedule/INSTRUCTIONS.md
 tier: 1
 category: rules

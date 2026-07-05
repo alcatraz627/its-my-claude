@@ -7,7 +7,7 @@ triggers:
   - phrase:"os.getenv"
 related:
   - rules/env-var-config-pattern.md
-  - scripts/hooks/warn-raw-process-env.sh
+  - scripts/hooks/guard-env-access.sh
 tier: 2
 category: features
 updated: 2026-06-01
