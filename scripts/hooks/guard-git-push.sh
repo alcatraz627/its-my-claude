@@ -46,18 +46,15 @@ SENTINEL="$HOME/.claude/.push-approved-${sid_safe}"
 
 blockjson() { jq -cn --arg r "$1" '{decision:"block", reason:$r}' 2>/dev/null || true; exit 0; }
 
-# ── Anti-self-lift: the agent must not create the approval sentinel itself ────
-# The user's `! touch …` bypasses PreToolUse entirely, so this only ever catches
-# the agent trying to self-approve.
-if printf '%s' "$cmd" | grep -qE '\.push-approved-'; then
-  case "$cmd" in
-    *touch*|*'>'*|*tee*|*install*|*cp\ *|*mv\ *|*printf*|*echo*)
-      blockjson "⛔ PUSH GATE: creating the push-approval sentinel is the USER's action, not yours.
-Ask the user to approve the push by typing (with the ! prefix, in their own shell):
-  ! touch ${SENTINEL}
-Do not create this file yourself — that would defeat the gate." ;;
-  esac
-fi
+# No anti-self-lift string-scan. An earlier version blocked any command that
+# merely NAMED the sentinel path alongside "touch"/">"/"tee" — which false-fired
+# on existence checks and on any command that just DISPLAYS the approval
+# instructions (they contain "touch <sentinel>"). Raw-string scanning of the
+# command can't tell a write from a mention (see command-scanning-guards-state),
+# and by the hook-design cost-of-false-fire test that guard was a bad bet: high
+# FP cost, low marginal benefit. The real protection is the push gate below plus
+# the block message telling the agent not to self-approve — the same trust model
+# guard-user-commit.sh uses for its protection config.
 
 # ── Is this a git push at all? ───────────────────────────────────────────────
 GIT_PUSH_RE='(^|[;&|[:space:](])git([[:space:]]+-C[[:space:]]+[^[:space:]]+|[[:space:]]+-c[[:space:]]+[^[:space:]]+|[[:space:]]+--[[:alnum:]-]+(=[^[:space:]]*)?)*[[:space:]]+push([[:space:]]|$|")'
