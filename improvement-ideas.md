@@ -669,3 +669,34 @@ When a CLI tool is meant to be invoked by Claude (or by a human via a Claude ses
 - **0-byte background-task output != crashed.** A harness-tracked task with an empty output artifact may still be running, not dead. Confirm termination (status / completion notification) before re-dispatching; a duplicate of a still-live workflow trips the org rate-throttle. (atone mist-20260703-231033-72)
 - **Voluminous mechanical multi-file agent tasks stall/throttle.** ~30 near-identical edits across live files is worse for a background agent than a hard-but-contained task (max stall/throttle surface, no natural checkpoint). Do them directly or script-driven; if delegating, have the agent do the design-judgment part first so a mid-task death still salvages the hard bit.
 - **Harness blocks the literal filename report.md** for sub-agent writes (findings return as text). Name sub-agent reports <slug>.md to dodge it. (filed as a proposal)
+
+## 2026-07-05 (tag-skill session)
+
+- **Re-verify a report's findings against the live tree before acting on them.** The `/gcc-map` v2 map was right about most divergences but wrong 3x (a compat symlink read as a byte-dup; a wrong llm-mini fix-path; a moved file). Reading the tree before each edit caught all three; a migration record explained the symlink. A generated audit is a set of hypotheses, not facts.
+- **rules/\*.md autoload is native + platform-owned** (not `@`-imports or hooks; CLAUDE.md has 0 imports). `tier:`/`triggers:` are advisory and do NOT gate loading; `paths:` is the only real lazy-load lever. Confirmed via the claude-code-guide agent. Applies to any `~/.claude/rules/` budget reasoning.
+- **For a per-turn background helper, local `q` beats cloud haiku on lane-separation** — a per-turn haiku call draws from the main session's rate budget (429-prone under load), while local `q` is a separate lane and adequate for easy selection/classification tasks. Reserve haiku for tasks that outgrow q's capability or its 8k context.
+
+  ## 2026-07-05 — Data-loss landmine: prune steps over a store that outlives  
+  its                                                                         
+  source                                                                      
+                                                                              
+  An indexer/sync job with a destructive prune (delete rows for files no      
+  longer on                                                                   
+  disk) is a silent data-loss trap when the store OUTLIVES its source.        
+  Concrete                                                                    
+  case:                                                                       
+  ~/.claude/skills/scan-sessions/crawl.py pruned DB rows for JSONL that Claude
+  Code's cleanupPeriodDays (default 30d) had already permanently deleted — so 
+  a                                                                           
+  naive refresh would have destroyed the only surviving copy of Jan–April     
+  history                                                                     
+  (1554 sessions). Fix: made pruning opt-in (prune_orphans=False default) +   
+  backed                                                                      
+  up first. General rule: before running any refresh with a prune, confirm    
+  what the                                                                    
+  prune deletes and back up. Related: CC silently deletes transcripts         
+  >cleanupPeriodDays                                                          
+  — raise it + archive (see ~/.claude/scripts/archive-transcripts.sh). macOS  
+  menu-bar                                                                    
+  widget gotchas now canonical in features/macos-menubar-widget.md.           
+

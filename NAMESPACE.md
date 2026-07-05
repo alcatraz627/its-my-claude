@@ -6,6 +6,12 @@
 > `std::claude::*` is a **naming convention** — C++-flavored labels to organize how
 > the user and Claude refer to features. It is NOT an import system, package manager,
 > or runtime linkage. Labels are aliases; the real artifacts live at the paths below.
+>
+> **`gcc::<cluster>` is an accepted informal shortcut for `std::claude::<cluster>`.**
+> `std::claude` is the formal name; `gcc::` is the user's shorthand (from GCC = Global
+> Claude Config). Treat `gcc::logging`, `gcc::shared`, `gcc::rules`, etc. as identical
+> to their `std::claude::` form — same referent, no difference in meaning. Bare `gcc`
+> (no `::`) means `~/.claude` itself, the config tree.
 
 ---
 

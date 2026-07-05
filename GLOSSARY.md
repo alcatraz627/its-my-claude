@@ -21,6 +21,7 @@
 | Abbrev | Full form | Notes |
 |---|---|---|
 | **GCC** | Global Claude Config | The entire `~/.claude/` directory tree — all config, skills, scripts, memory, hooks, and assets that persist across projects and sessions |
+| **gcc::** | `std::claude::` (informal shortcut) | `gcc::<cluster>` ≡ `std::claude::<cluster>` — same referent; `std::claude` is the formal name, `gcc::` is the user's shorthand. E.g. `gcc::logging` = `std::claude::logging`. Bare `gcc` (no `::`) = `~/.claude`. See NAMESPACE.md preamble. |
 | **WAL** | Write-Ahead Log | Append-only session journal (`.claude/wal.jsonl`). JSONL format since v2; legacy markdown `.claude/wal.md` still read by `/catchup` |
 | **MCP** | Model Context Protocol | Server protocol for extending Claude's tool access (databases, APIs, services). Config: `.mcp.json` (active) vs `mcp-catalog.json` (available) |
 | **TUI** | Terminal User Interface | Styled terminal output via `gum`. Source `gum-tui.sh`; never call raw `gum style` |

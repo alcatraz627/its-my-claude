@@ -1,0 +1,20 @@
+{
+  "ts": "2026-07-05T16:43:04Z",
+  "session_id": "local-models",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260705-local-models.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#5 \u2014 MLX perf measurement.** Baseline `qwen3.6` tok/s on Ollama, then find a REAL MLX path",
+    "**#9 \u2014 the fan-out fleet / Claude integration** (the big lever; `docs/09`). A concurrency-capped batch",
+    "**NEW \u2014 local-agent work.** \"Finishing an unfinished codebase\": agentic multi-file completion via a",
+    "Optional polish: `review --json` structured findings; `review-pr` worktree variant when surrounding"
+  ],
+  "tags": []
+}

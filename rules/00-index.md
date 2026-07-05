@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-05 21:46.
+Regenerated 2026-07-05 22:35.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -47,6 +47,7 @@ Regenerated 2026-07-05 21:46.
 | `performative-self-criticism` | always | Under pushback, a structured self-critical reply (ranked table, insight block, named-pattern list) is not the work — it's a description of the work. Run the checks it names before sending, or you're performing thoroughness instead of doing it. |
 | `prescribed-flattery-as-fix-for-pushback` | always | Don't prescribe softer agreement as a "fix" for user-perceived pushback unless the user explicitly asked for softer framing — capitulation is the failure, not the fix |
 | `proposed-fix-breaks-design-invariant` | always | Treat a design doc's goals/constraints section as a checklist, not background — before writing "mode A trades X for Y" framing, verify no consumer-rendered field diverges against a stated constraint |
+| `pushback-honesty` | always | When a user states something demonstrably wrong that would drive a wrong implementation, push back with evidence (file:line / measurement / spec) before complying — don't silently execute on a false premise. The positive-form completion of the prescribed-flattery + performative-self-criticism pair. |
 | `right-sized-code` | always | Right-size code to the task, don't blindly minimize — gate the decision on goal shape, scope, stated intent, and total-cost fit, then climb the laziness ladder inside that gate. Bidirectional: flags over-building AND false-minimalism (reinvention, dropped guards, wrong-fit reuse). |
 | `scheduling-discipline` | always | Cross-tool scheduling practice — discipline that applies whether you use gcc-schedule, hand-built launchd plists, or other schedulers. Naming, retire-after-fire, secrets, calendar companion, when-to-use-which-scheduler. Distinct from INSTRUCTIONS.md which is gcc-schedule-tool-specific. |
 | `shell` | always | Resolve project root before Glob/Grep; trash not rm; non-interactive flags; background task hygiene |
