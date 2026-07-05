@@ -1051,5 +1051,6 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "useAutoModeDuringPlan": true,
-  "voiceEnabled": false
+  "voiceEnabled": false,
+  "cleanupPeriodDays": 365
 }

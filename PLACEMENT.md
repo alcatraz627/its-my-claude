@@ -172,5 +172,6 @@ Triggers are **advisory** — they guide agent self-selection when scanning LOOK
 - **Every sub-file** carries full frontmatter (no exceptions)
 - **CLAUDE.md never exceeds 200 lines** — if an edit would push past, something else must move out first
 - **Validator:** run `bash ~/.claude/scripts/validate-triggers.sh` after any sub-file add/rename
+- **Rules index:** after adding/renaming/removing a `rules/*.md` file, regenerate the always-on menu with `bash ~/.claude/scripts/rules-index.sh` (it derives from each rule's `brief:`; if a similar rule exists, refine it instead of duplicating)
 - **When in doubt:** read this file, read LOOKUP.md, pick the most conservative tier, ask the user
 - **Prior art:** Anthropic Agent Skills (description-based triggering), Cline `.clinerules/` directory. [web reference: `~/.claude/assets/research/20260424-agent-instructions-best-practices.md`]

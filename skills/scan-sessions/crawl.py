@@ -195,10 +195,16 @@ def _extract_tool_results(content):
     return results
 
 
-def crawl(conn, rescan=False, projects_dir=None):
+def crawl(conn, rescan=False, projects_dir=None, prune_orphans=False):
     """Crawl JSONL files and index into SQLite.
 
     Returns (new_sessions, updated_sessions, skipped).
+
+    prune_orphans: if True, delete DB rows for sessions whose JSONL is gone from
+    disk. DEFAULT FALSE — the index is now the ONLY surviving record of sessions
+    older than Claude Code's cleanupPeriodDays (which permanently deletes old
+    transcripts). Pruning would destroy that history. Keep orphaned rows; they
+    are the archive.
     """
     pdir = projects_dir or PROJECTS_DIR
     if not os.path.isdir(pdir):
@@ -245,19 +251,20 @@ def crawl(conn, rescan=False, projects_dir=None):
 
         _index_session(conn, filepath, mtime, size)
 
-    # Prune sessions whose files no longer exist
-    live_files = set(jsonl_files)
-    all_db_files = conn.execute("SELECT filepath FROM sessions").fetchall()
-    pruned = 0
-    for row in all_db_files:
-        if row["filepath"] not in live_files:
-            sid = conn.execute("SELECT id FROM sessions WHERE filepath = ?",
-                               (row["filepath"],)).fetchone()
-            if sid:
-                conn.execute("DELETE FROM turns WHERE session_id = ?", (sid["id"],))
-                conn.execute("DELETE FROM signals WHERE session_id = ?", (sid["id"],))
-                conn.execute("DELETE FROM sessions WHERE id = ?", (sid["id"],))
-                pruned += 1
+    # Prune sessions whose files no longer exist — OPT-IN ONLY. By default the
+    # index retains orphaned rows as the permanent archive of history that
+    # cleanupPeriodDays has deleted from disk (see the docstring).
+    if prune_orphans:
+        live_files = set(jsonl_files)
+        all_db_files = conn.execute("SELECT filepath FROM sessions").fetchall()
+        for row in all_db_files:
+            if row["filepath"] not in live_files:
+                sid = conn.execute("SELECT id FROM sessions WHERE filepath = ?",
+                                   (row["filepath"],)).fetchone()
+                if sid:
+                    conn.execute("DELETE FROM turns WHERE session_id = ?", (sid["id"],))
+                    conn.execute("DELETE FROM signals WHERE session_id = ?", (sid["id"],))
+                    conn.execute("DELETE FROM sessions WHERE id = ?", (sid["id"],))
 
     conn.commit()
     return new_count, updated_count, skipped

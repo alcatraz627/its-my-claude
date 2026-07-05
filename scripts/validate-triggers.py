@@ -69,6 +69,8 @@ def main():
             errors += 1
             continue
         for f in sorted(d.glob("*.md")):
+            if f.name == "README.md":
+                continue  # folder index, not a triggerable sub-file
             files_checked += 1
             rel = f.relative_to(HOME_CLAUDE)
             text = f.read_text()

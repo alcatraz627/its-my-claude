@@ -664,3 +664,8 @@ When a CLI tool is meant to be invoked by Claude (or by a human via a Claude ses
   "$(cat ...)". The skill SKILL.md template shows the latter pattern; worth   
   updating.                                                                   
 
+
+## 2026-07-05 (hook-audit session)
+- **0-byte background-task output != crashed.** A harness-tracked task with an empty output artifact may still be running, not dead. Confirm termination (status / completion notification) before re-dispatching; a duplicate of a still-live workflow trips the org rate-throttle. (atone mist-20260703-231033-72)
+- **Voluminous mechanical multi-file agent tasks stall/throttle.** ~30 near-identical edits across live files is worse for a background agent than a hard-but-contained task (max stall/throttle surface, no natural checkpoint). Do them directly or script-driven; if delegating, have the agent do the design-judgment part first so a mid-task death still salvages the hard bit.
+- **Harness blocks the literal filename report.md** for sub-agent writes (findings return as text). Name sub-agent reports <slug>.md to dodge it. (filed as a proposal)

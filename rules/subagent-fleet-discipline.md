@@ -11,6 +11,12 @@ related:
   - rules/sub-agent-outputs.md
   - rules/api-error-recovery.md
   - features/claudew.md
+paths:
+  # autoload opt-out trial (2026-07-05): disclosed on demand, not always-on. Niche
+  # (only when a parallel Agent/Workflow fleet hits a throttle); the agent Reads it
+  # from rules/00-index.md when a fleet dies. Sentinel below never matches a real file.
+  # Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
 updated: 2026-06-18

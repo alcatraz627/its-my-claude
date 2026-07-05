@@ -10,6 +10,12 @@ related:
   - rules/subagent-fleet-discipline.md
   - features/context-retention.md
   - rules/todo-discipline.md
+paths:
+  # autoload opt-out trial (2026-07-05): disclosed on demand, not always-on. Its hook
+  # scripts/hooks/api-recovery-nudge.sh injects a pointer when an API-error turn is
+  # detected; also in rules/00-index.md. Sentinel below never matches a real file.
+  # Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
 updated: 2026-06-18

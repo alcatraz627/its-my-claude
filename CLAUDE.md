@@ -2,7 +2,7 @@
 
 <!-- sessions: impr-cfg-7a@2026-04-24 -->
 
-> **Indices:** `~/.claude/LOOKUP.md` (address book) · `~/.claude/NAMESPACE.md` (std::claude::\* clusters) · `~/.claude/GLOSSARY.md` (terms) · `~/.claude/PLACEMENT.md` (**where new rules/features/conventions go — read before adding any file**) · `~/.claude/FOLDERS.md` (per-folder map: owner, purpose, what-goes-here)
+> **Indices:** `~/.claude/LOOKUP.md` (address book) · `~/.claude/NAMESPACE.md` (std::claude::\* clusters) · `~/.claude/GLOSSARY.md` (terms) · `~/.claude/PLACEMENT.md` (**where new rules/features/conventions go — read before adding any file**) · `~/.claude/FOLDERS.md` (per-folder map: owner, purpose, what-goes-here) · `~/.claude/rules/00-index.md` (menu of all behavioral rules; scan it, Read a `scoped` rule when it applies)
 
 ---
 

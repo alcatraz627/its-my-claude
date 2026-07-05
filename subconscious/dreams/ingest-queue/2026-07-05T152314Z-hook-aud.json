@@ -1,0 +1,20 @@
+{
+  "ts": "2026-07-05T15:23:14Z",
+  "session_id": "hook-audit",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260705-hook-audit.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#37 (only open task): shared .claude config across the 3 enhancement-product git worktrees.** Design is done: symlink shared config (settings.json + future CLAUDE.md/rules) from a canonical location, via an idempotent `share-worktree-config.sh` that discovers worktrees via `git worktree list`. Decision needed from user: canonical = `~/Code/Versable/.claude-shared/` sibling (recommended, branch-invariant) vs promote main worktree's `.claude/`. Key finding: the 3 worktrees are on DIFFERENT branches, so git-tracking the config is wrong (config would flip per branch); symlinks are branch-invariant.",
+    "**Maturing on their own (no action):** the 4 new gates ARM NEXT SESSION (settings wiring is snapshot at start); gate-efficacy verdicts for the reworked gates mature ~2026-07-23; the 2026-07-28 review session fires automatically.",
+    "**Incremental follow-up (documented, self-visible):** the warn-log richer-context retrofit is PARTIAL \u2014 only 5 file-scoped gates enriched; ~18 call sites (high-volume prefer-*, session Stop gates, credential guards) log fires but not cwd/project/target yet. `hook-health.sh` shows `-` in top-project for un-enriched hooks. The 2026-07-28 review can complete whichever its data shows need it.",
+    "**Deferred by design:** per-domain `[[detector]]` blocks (i-dream parser tolerance); flesh out `ta` tag/mining; the `ledger.sh search` matches titles-only gap."
+  ],
+  "tags": []
+}
