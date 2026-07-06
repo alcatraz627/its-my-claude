@@ -2,14 +2,13 @@
 # Open a Ghostty window that resumes a Claude Code session — safely, from a
 # scheduled (launchd) context.
 #
-# Why this wrapper exists: a launchd job runs with a bare PATH, and a login
-# shell (`zsh -l -c`) does NOT source ~/.zshrc — which is the only place
-# ~/.local/bin (the home of the `claude` binary) is added to PATH. A scheduled
-# `claude --resume` launched the naive way therefore dies with
-# "command not found: claude". This wrapper sources the path env, then runs
-# claude by absolute path with permissions pre-skipped (an unattended window
-# has nobody to answer a permission prompt) — so any cron can launch a resume
-# by calling this one audited script instead of re-inventing the quoting.
+# Why this wrapper exists: a scheduled launch goes through `open … zsh -lc`, whose
+# login shell sources ~/.zprofile (brew shellenv + ~/.local/bin → the full PATH).
+# We still exec claude by ABSOLUTE PATH (never relying on a PATH lookup) with
+# permissions pre-skipped (an unattended window has nobody to answer a prompt) — so
+# any cron can launch a resume by calling this one audited script instead of
+# re-inventing the quoting. The ~/.local/bin/env source is defensive; the Ghostty
+# login shell is what actually restores PATH (launchd's own env is bare).
 #
 # Usage:  launch-claude-resume.sh <session-uuid> [first-turn-prompt] [workdir]
 # Set DRYRUN=1 to print the composed launch command instead of opening Ghostty.

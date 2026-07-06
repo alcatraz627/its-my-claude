@@ -4,11 +4,12 @@
 # of launch-claude-resume.sh; that one resumes an existing session by UUID, this
 # one boots a new session (no --resume) and pins the model (e.g. claude-fable-5).
 #
-# Why this wrapper exists: a launchd job runs with a bare PATH, and a login shell
-# (`zsh -l -c`) does NOT source ~/.zshrc — the only place ~/.local/bin (home of
-# the `claude` binary) is added to PATH. A scheduled `claude` launched naively
-# dies with "command not found: claude". This sources the path env, then execs
-# claude by absolute path.
+# Why this wrapper exists: a scheduled launch goes through `open … zsh -lc`, whose
+# login shell sources ~/.zprofile (brew shellenv + ~/.local/bin → the full PATH the
+# session's hooks/tools need). We still exec claude by ABSOLUTE PATH (never relying
+# on a PATH lookup) and source ~/.local/bin/env defensively/idempotently, so nothing
+# breaks even if the profile changes. (launchd's own env is bare; the Ghostty login
+# shell is what restores PATH — not this env-source, which is belt-and-suspenders.)
 #
 # Permission mode is a REQUIRED arg (no silent default): pass acceptEdits for an
 # audit-style run (auto-accepts edits, still gates Bash), or default / plan.
