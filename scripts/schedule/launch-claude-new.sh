@@ -39,7 +39,11 @@ if ! { [[ -d /Applications/Ghostty.app ]] || [[ -d "$HOME/Applications/Ghostty.a
 fi
 
 # printf %q keeps every argument a single token when zsh re-parses the string.
-inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && exec $(printf %q "$CLAUDE") --permission-mode $(printf %q "$PERM") --model $(printf %q "$MODEL")"
+# exec -a claude: force argv[0]="claude" even though we exec the ABSOLUTE binary
+# path (needed so a launchd job finds it, §PATH note above). Without this, the
+# process presents as `/…/.local/bin/claude …`, and tools that key on argv[0] —
+# notably the claude-instances widget's scanner — don't recognise it as a session.
+inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && exec -a claude $(printf %q "$CLAUDE") --permission-mode $(printf %q "$PERM") --model $(printf %q "$MODEL")"
 [[ -n "$PROMPT" ]] && inner+=" $(printf %q "$PROMPT")"
 
 if [[ -n "${DRYRUN:-}" ]]; then

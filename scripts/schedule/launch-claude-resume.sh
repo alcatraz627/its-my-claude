@@ -43,7 +43,10 @@ fi
 # bit ~/.zshrc normally does, which a non-interactive login shell skips), then
 # exec claude by absolute path. printf %q keeps every argument a single token
 # when zsh re-parses the string.
-inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && exec $(printf %q "$CLAUDE") --allow-dangerously-skip-permissions --resume $(printf %q "$UUID")"
+# exec -a claude: force argv[0]="claude" even though we exec the ABSOLUTE binary
+# path — so tools that key on argv[0] (e.g. the claude-instances widget scanner)
+# recognise a scheduled session the same as a hand-launched `claude`.
+inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && exec -a claude $(printf %q "$CLAUDE") --allow-dangerously-skip-permissions --resume $(printf %q "$UUID")"
 [[ -n "$PROMPT" ]] && inner+=" $(printf %q "$PROMPT")"
 
 if [[ -n "${DRYRUN:-}" ]]; then

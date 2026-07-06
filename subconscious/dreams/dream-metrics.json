@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-05T15:06:42Z",
-  "events_analyzed": 79104,
-  "sessions_analyzed": 210,
+  "generated_at": "2026-07-06T04:05:03Z",
+  "events_analyzed": 79446,
+  "sessions_analyzed": 211,
   "session_quality": {
     "average_score": 68.2,
     "top_sessions": [
@@ -172,21 +172,17 @@
   "topic_drift": {
     "primary_focus": "staging-enhancement-product",
     "recent_projects": {
-      ".claude": 2,
       "staging-enhancement-product": 3,
       "walmart-mvp": 1,
       "claude-instances": 1,
       "two-enhancement-product": 2,
-      "tmp": 1
+      "tmp": 1,
+      ".claude": 1,
+      "i-dream": 1
     },
-    "drift_rate": 0.736,
-    "total_switches": 153,
+    "drift_rate": 0.737,
+    "total_switches": 154,
     "recent_switches": [
-      {
-        "ts": "2026-07-02T15:25:49Z",
-        "from": "staging-enhancement-product",
-        "to": "two-enhancement-product"
-      },
       {
         "ts": "2026-07-02T21:43:39Z",
         "from": "two-enhancement-product",
@@ -198,24 +194,29 @@
         "to": "staging-enhancement-product"
       },
       {
-        "ts": "2026-07-03T22:36:50Z",
+        "ts": "2026-07-03T22:49:50Z",
         "from": "staging-enhancement-product",
+        "to": ".claude"
+      },
+      {
+        "ts": "2026-07-05T15:55:59Z",
+        "from": ".claude",
         "to": "two-enhancement-product"
       },
       {
-        "ts": "2026-07-03T22:49:50Z",
+        "ts": "2026-07-05T16:46:11Z",
         "from": "two-enhancement-product",
-        "to": ".claude"
+        "to": "i-dream"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6619,
-    "corrections": 1449,
-    "confirmations": 1170,
-    "directives": 225,
-    "terse_messages": 529,
-    "correction_rate": 0.219,
+    "total_prompts": 6653,
+    "corrections": 1452,
+    "confirmations": 1176,
+    "directives": 226,
+    "terse_messages": 531,
+    "correction_rate": 0.218,
     "confirmation_rate": 0.177,
     "directive_rate": 0.034,
     "terse_rate": 0.08,

@@ -212,7 +212,7 @@ UPPER/ctrl = destructive**, `?` = help.
 | `colors.sh` | `source` + `tui_colors_init` | TTY-gated palette; exports both `B/R` and `BLD/RST` dialects; empty strings when not a terminal (both-fd gate). |
 | `tty.sh` | `source` | `tui_have_tty` (honest open-probe); `tui_read_tty [-t N] [-p P] VAR` (bounded, never hangs headless). |
 | `require.sh` | `source` | `tui_have DEP` (boolean); `tui_require DEP...` (install hint to stderr, returns 1, does not exit). |
-| `pick.sh` | `source` | `tui_pick_one` (one from stdin, fzf→gum→read); `tui_pick_many` (multi); `tui_choose OPT...` (one from a static arg list); `tui_confirm PROMPT` (yes=0, no/headless=1). |
+| `pick.sh` | `source` | `tui_pick_one` (one from stdin, fzf→gum→read); `tui_pick_many` (multi); `tui_choose OPT...` (static arg list); `tui_confirm PROMPT` (yes=0, no/headless=1). **Enriched (§10):** `tui_pick_key` (colored `key⇥display` in, clean key out); `tui_pick_or_add` (seeded suggestions + accept a typed-new value); `tui_strip_ansi` (filter). |
 | `file-preview.sh` | `exec` (`bash .../file-preview.sh F`) | rich bounded preview (jq/bat/xlsx-sheets→head), always exits 0. **Deliberate exception to the §4-A8 color gate: color is forced ON** — a preview pane always wants ANSI. |
 
 **Discover live:** `bash ~/.claude/scripts/tui/list.sh` prints this catalog scanned straight from the modules' doc-headers — it can't drift from the code the way a hand-kept list does. Run it before building a TUI to see what's already available.
@@ -222,6 +222,48 @@ UPPER/ctrl = destructive**, `?` = help.
 > `if tui_have_tty; then act; fi`, `tui_read_tty v || v=default`. A bare non-zero return
 > aborts a `set -e` caller (standard bash); the functions return status precisely
 > so you branch on it.
+
+## §10 · Enriched pickers — the interactive-CLI standard
+
+The default for any interactive selector a HUMAN drives (a `-i` mode, a wizard, a
+chooser). Three shared `pick.sh` primitives give a colored, arrow-navigable,
+suggest-don't-restrict picker whose selection still parses cleanly — while the
+both-fd color gate keeps the same tool's piped/agent calls plain automatically.
+
+**The three moves:**
+
+1. **Colored list, clean value — `tui_pick_key`.** Emit candidates as
+   `key<TAB>display`, where `display` may carry ANSI color. fzf renders the color
+   (`--ansi`), searches only the display, hides the key column, and you get the
+   **clean key** back — no ANSI to strip, no `awk`-slicing a colored token. THE
+   idiom for a colored menu or list.
+   ```bash
+   key=$(printf '%s\t%sshow%s — run it\n' show "$CYN" "$RST" | tui_pick_key --prompt 'action > ')  # -> "show"
+   ```
+   The preview `{}` is the whole line, so slice the key with `cut -f1`:
+   `--preview 'echo {} | cut -f1 | xargs mytool show'`.
+
+2. **Suggest without restricting — `tui_pick_or_add`.** Seed the existing options
+   (paths, names) but let the user type a brand-new value; the typed query is
+   returned when nothing matches (fzf `--print-query`). Use for any "pick one of
+   these OR enter your own" selector — never a blind `read` when candidates exist.
+
+3. **Arrow-nav + enter is the default.** fzf already gives ↑↓ to move, type to
+   filter, enter to open, esc/ctrl-c to leave — identical on every screen. Don't
+   hand-roll navigation; use the pickers and it's uniform for free.
+
+**Keep it agent-safe + testable** (the other half of the standard):
+- Colors come from `colors.sh` (both-fd gate) → the tool's piped/headless call is
+  plain, so a colored picker never leaks ANSI into an agent's capture.
+- Build the mode as a **thin tty layer over pure functions** — candidate
+  generators (`key<TAB>display`), an action router keyed on the clean key, an
+  arg-composer — so the logic is unit-tested headless (§5) while only the fzf
+  keystroke drive needs a terminal. Gate the whole mode on `tui_have_tty` with a
+  clean refusal that points at the text subcommands.
+
+**Reference implementation:** `gcc-schedule -i` (`scripts/schedule/schedule.sh`,
+the `_i_*` functions) + its criteria harness `scripts/schedule/test-interactive.sh`
+(A: agent-plain · C: feature coverage · E: enriched-picker contracts).
 
 ## Cross-link index
 

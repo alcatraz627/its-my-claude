@@ -29,12 +29,22 @@ USER_UID=$(id -u)
 mkdir -p "$SCHED_HOME" "$LOG_HOME"
 [[ -f "$REGISTRY" ]] || echo '{}' > "$REGISTRY"
 
-# ── Colors / output ────────────────────────────────────────────────────────
-if [[ -t 1 ]]; then
-  BLD=$'\033[1m'; RST=$'\033[0m'; DIM=$'\033[2m'
-  RED=$'\033[31m'; GRN=$'\033[32m'; YLW=$'\033[33m'; CYN=$'\033[36m'
+# ── Colors / output — std::claude::tui shared palette (both-fd TTY-gated) ────
+# Sourcing colors.sh gives the BOTH-fd gate: every color var is blank whenever
+# stdout OR stderr is not a real terminal (a pipe, a log, Claude's headless
+# call), so no ANSI ever leaks into a captured stream. The fallback keeps the
+# tool standalone if the shared lib is ever missing.
+if [[ -r "$HOME/.claude/scripts/tui/colors.sh" ]]; then
+  # shellcheck source=/dev/null
+  . "$HOME/.claude/scripts/tui/colors.sh"; tui_colors_init
+  YLW="$YEL"                                    # this tool's historical name for yellow
 else
-  BLD=''; RST=''; DIM=''; RED=''; GRN=''; YLW=''; CYN=''
+  if [[ -t 1 && -t 2 && -z "${NO_COLOR:-}" && "${TERM:-dumb}" != dumb ]]; then
+    BLD=$'\033[1m'; RST=$'\033[0m'; DIM=$'\033[2m'
+    RED=$'\033[31m'; GRN=$'\033[32m'; YLW=$'\033[1;33m'; CYN=$'\033[36m'
+  else
+    BLD=''; RST=''; DIM=''; RED=''; GRN=''; YLW=''; CYN=''
+  fi
 fi
 say()  { printf '%s\n' "$*"; }
 ok()   { printf '%s✓%s %s\n' "$GRN" "$RST" "$*"; }
@@ -50,22 +60,23 @@ ${BLD}gcc-schedule${RST} — manage launchd schedules with Calendar companion
 ${DIM}Claude-facing usage contract: ~/.claude/scripts/schedule/INSTRUCTIONS.md${RST}
 
 ${BLD}USAGE${RST}
-  $PROG add     --name <slug> <schedule-mode> --command <shell> [opts]
+  $PROG ${CYN}-i${RST}${DIM}|--interactive${RST}          ${DIM}colored fuzzy browser — every command, for humans (needs a terminal)${RST}
+  $PROG ${CYN}add${RST}     --name <slug> <schedule-mode> --command <shell> [opts]
                 schedule-mode: --at <ISO> | --daily-at <HH:MM> | --weekly <dow> <HH:MM> | --monthly <day> <HH:MM>
-  $PROG list    [--all]
-  $PROG inventory                  survey ALL launchd plists + user crontab (read-only audit)
-  $PROG doctor [--check-calendar]  drift audit (+ sweeps missed one-shots into history)
-  $PROG history [--name N] [--outcome ok|failed|unknown|missed] [--ev added|modified|removed|run] [--limit N]
-  $PROG status                     live count + all-time fire outcomes + recent fires
-  $PROG reconcile                  log+retire one-shots that should have fired but never ran
-  $PROG show    <name>             pretty-print details, state, next-fire countdown
-  $PROG run     <name>             execute the user command now (no date guard, no self-unload)
-  $PROG logs    <name> [--lines N] [--no-follow]   tail out + err logs
-  $PROG enable  <name>             bootstrap a loaded-out plist (alias: resume)
-  $PROG disable <name>             bootout the launchd agent, keep plist (alias: pause)
-  $PROG duplicate <src> <new> [overrides...]  copy a schedule with optional --at/--command/etc.
-  $PROG register <plist-path>      adopt an existing user LaunchAgent into the registry
-  $PROG rm      <name>             retire fully (bootout + delete plist/script/Calendar event)
+  $PROG ${CYN}list${RST}    [--all]
+  $PROG ${CYN}inventory${RST}                  survey ALL launchd plists + user crontab (read-only audit)
+  $PROG ${CYN}doctor${RST} [--check-calendar]  drift audit (+ sweeps missed one-shots into history)
+  $PROG ${CYN}history${RST} [--name N] [--outcome ok|failed|unknown|missed] [--ev added|modified|removed|run] [--limit N]
+  $PROG ${CYN}status${RST}                     live count + all-time fire outcomes + recent fires
+  $PROG ${CYN}reconcile${RST}                  log+retire one-shots that should have fired but never ran
+  $PROG ${CYN}show${RST}    <name>             pretty-print details, state, next-fire countdown
+  $PROG ${CYN}run${RST}     <name>             execute the user command now (no date guard, no self-unload)
+  $PROG ${CYN}logs${RST}    <name> [--lines N] [--no-follow]   tail out + err logs
+  $PROG ${CYN}enable${RST}  <name>             bootstrap a loaded-out plist (alias: resume)
+  $PROG ${CYN}disable${RST} <name>             bootout the launchd agent, keep plist (alias: pause)
+  $PROG ${CYN}duplicate${RST} <src> <new> [overrides...]  copy a schedule with optional --at/--command/etc.
+  $PROG ${CYN}register${RST} <plist-path>      adopt an existing user LaunchAgent into the registry
+  $PROG ${CYN}rm${RST}      <name>             retire fully (bootout + delete plist/script/Calendar event)
 
 ${BLD}add FLAGS${RST}
   --name <slug>            label = com.alcatraz.<slug> (required)
@@ -94,6 +105,7 @@ ${BLD}NOTES${RST}
   for non-fitting patterns in INSTRUCTIONS.md).
 
 ${BLD}EXAMPLES${RST}
+  $PROG ${CYN}-i${RST}                                    ${DIM}# browse + act on schedules, or build one, interactively${RST}
   $PROG add --name backup-pull --at 2026-06-02T15:00 \\
     --command 'open -na Ghostty.app --args -e zsh -lc "rsync …"' \\
     --description 'Pull mac-migration backup before flight'
@@ -1482,9 +1494,18 @@ cmd_status() {
   printf '  live schedules : %s\n' "$live"
   if [[ -f "$HIST" ]]; then
     printf '  fire outcomes  :\n'
-    jq -s -r '
-      [.[]|select(.ev=="run")] as $r
-      | "    ok=\($r|map(select(.outcome=="ok"))|length)  failed=\($r|map(select(.outcome=="failed"))|length)  unknown=\($r|map(select(.outcome=="unknown"))|length)  missed=\($r|map(select(.outcome=="missed"))|length)"' "$HIST" 2>/dev/null
+    # Counts computed in bash so the color lives in printf (TTY-gated), not in
+    # jq's output (which would emit raw ANSI into a pipe). failed/missed light up
+    # only when non-zero; everything blanks when piped (Claude) or NO_COLOR.
+    local _ok _fail _unk _miss cf="$DIM" cm="$DIM"
+    _ok=$(jq -s -r   '[.[]|select(.ev=="run" and .outcome=="ok")]|length'      "$HIST" 2>/dev/null || echo 0)
+    _fail=$(jq -s -r '[.[]|select(.ev=="run" and .outcome=="failed")]|length'  "$HIST" 2>/dev/null || echo 0)
+    _unk=$(jq -s -r  '[.[]|select(.ev=="run" and .outcome=="unknown")]|length' "$HIST" 2>/dev/null || echo 0)
+    _miss=$(jq -s -r '[.[]|select(.ev=="run" and .outcome=="missed")]|length'  "$HIST" 2>/dev/null || echo 0)
+    [ "${_fail:-0}" -gt 0 ] && cf="$RED"
+    [ "${_miss:-0}" -gt 0 ] && cm="$YLW"
+    printf '    %sok=%s%s  %sfailed=%s%s  %sunknown=%s%s  %smissed=%s%s\n' \
+      "$GRN" "$_ok" "$RST" "$cf" "$_fail" "$RST" "$DIM" "$_unk" "$RST" "$cm" "$_miss" "$RST"
     local recent; recent=$(jq -s -r '[.[]|select(.ev=="run")]|.[-5:]|reverse|.[]|"    \(.ts)  \(.outcome)  \(.name)\(if .reason then "  ("+.reason+")" else "" end)"' "$HIST" 2>/dev/null)
     [[ -n "$recent" ]] && { printf '  recent fires   :\n'; printf '%s\n' "$recent"; }
   else
@@ -1493,9 +1514,270 @@ cmd_status() {
   printf '  %stip: '\''%s reconcile'\'' sweeps any missed one-shots into history%s\n' "$DIM" "$PROG" "$RST"
 }
 
+# ═══ Interactive mode (gcc-schedule -i) ══════════════════════════════════════
+# A colored, fuzzy front-end to EVERY subcommand, for a human at a terminal.
+# Design contract: this layer only PICKS and PROMPTS — every action routes back
+# through the same cmd_* functions the text CLI uses, so the interactive path can
+# never drift from the scripted one. The logic-bearing helpers (_i_schedule_rows,
+# _i_do_action, _i_compose_add_args) are pure and unit-tested headless; the tty
+# layer on top gets a non-tty refusal test plus a pty smoke test.
+
+# Load the std::claude::tui libs -i needs. Returns 1 if the shared lib is missing.
+_i_source_tui() {
+  local d="$HOME/.claude/scripts/tui"
+  [ -r "$d/tty.sh" ] && [ -r "$d/require.sh" ] && [ -r "$d/pick.sh" ] || return 1
+  . "$d/tty.sh"; . "$d/require.sh"; . "$d/pick.sh"
+}
+
+# _i_recent_outcomes <name> — last 3 run outcomes from the ledger ("ok ok missed").
+_i_recent_outcomes() {
+  jq -r --arg n "$1" 'select(.name==$n and .ev=="run") | .outcome // "?"' "$HIST" 2>/dev/null \
+    | tail -3 | tr '\n' ' ' | sed 's/[[:space:]]*$//'
+}
+
+# _i_outcomes_colored <name> — recent outcomes, each token semantically colored
+# (ok green · missed yellow · failed red). Blank of color when piped (both-fd gate).
+_i_outcomes_colored() {
+  local o out=""
+  for o in $(_i_recent_outcomes "$1"); do
+    case "$o" in
+      ok)     out="${out}${GRN}ok${RST} " ;;
+      missed) out="${out}${YLW}missed${RST} " ;;
+      failed) out="${out}${RED}failed${RST} " ;;
+      *)      out="${out}${DIM}${o}${RST} " ;;
+    esac
+  done
+  printf '%s' "${out% }"
+}
+
+# _i_schedule_rows — one row per schedule as `name<TAB>colored aligned display`,
+# for tui_pick_key (shows the colored display, returns the clean name). Name cyan,
+# kind dim, recent outcomes semantically colored. Pure: registry + ledger, no tty.
+# Manual %-*s padding (not `column -t`) so ANSI codes don't skew the alignment.
+_i_schedule_rows() {
+  local name kind fire w=4
+  while IFS=$'\t' read -r name kind fire; do [ "${#name}" -gt "$w" ] && w="${#name}"; done \
+    < <(jq -r 'to_entries[] | "\(.key)\t\(.value.kind)\t\(.value.fire_at)"' "$REGISTRY" 2>/dev/null)
+  while IFS=$'\t' read -r name kind fire; do
+    [ -n "$name" ] || continue
+    printf '%s\t%s%-*s%s  %s%-8s%s  %-18s  %s\n' \
+      "$name" "$CYN" "$w" "$name" "$RST" "$DIM" "$kind" "$RST" "$fire" "$(_i_outcomes_colored "$name")"
+  done < <(jq -r 'to_entries[] | "\(.key)\t\(.value.kind)\t\(.value.fire_at)"' "$REGISTRY" 2>/dev/null)
+}
+
+# _i_actions — per-schedule actions as `verb<TAB>colored display` for tui_pick_key.
+# Field 1 (the verb) is the clean key _i_do_action routes on; field 2 is the
+# colored label shown. Verb color carries meaning (rm red, disable yellow).
+_i_actions() {
+  printf '%s\t%sshow%s — details, state, next fire\n'      show      "$CYN" "$RST"
+  printf '%s\t%slogs%s — tail out+err\n'                   logs      "$CYN" "$RST"
+  printf '%s\t%srun%s — test-fire now (no date guard)\n'   run       "$CYN" "$RST"
+  printf '%s\t%sdisable%s — bootout, keep plist (pause)\n' disable   "$YLW" "$RST"
+  printf '%s\t%senable%s — reload plist (resume)\n'        enable    "$GRN" "$RST"
+  printf '%s\t%sduplicate%s — copy to a new name\n'        duplicate "$CYN" "$RST"
+  printf '%s\t%srm%s — retire fully (destructive)\n'       rm        "$RED" "$RST"
+  printf '%s\t%sback%s\n'                                  back      "$DIM" "$RST"
+}
+
+# _i_do_action <name> <label> — route a chosen action to the SAME cmd_* the text
+# CLI uses. Returns 2 for "back". ACTION_DRYRUN=1 prints the route and runs
+# nothing, so routing is unit-testable headless.
+_i_do_action() {
+  local name="$1" label="$2" route="" nn=""
+  case "$label" in
+    show*)      route="show $name" ;;
+    logs*)      route="logs $name --no-follow" ;;
+    run*)       route="run $name" ;;
+    disable*)   route="disable $name" ;;
+    enable*)    route="enable $name" ;;
+    duplicate*) route="duplicate $name <new>" ;;
+    rm*)        route="rm $name" ;;
+    *)          return 2 ;;
+  esac
+  if [ -n "${ACTION_DRYRUN:-}" ]; then printf 'ROUTE: %s\n' "$route"; return 0; fi
+  case "$label" in
+    show*)      cmd_show    "$name" ;;
+    logs*)      cmd_logs    "$name" --no-follow ;;
+    run*)       if tui_confirm "Test-fire '$name' now?"; then cmd_run "$name"; else warn "not fired"; fi ;;
+    disable*)   cmd_disable "$name" ;;
+    enable*)    cmd_enable  "$name" ;;
+    duplicate*) if tui_read_tty -p "new name: " nn && [ -n "$nn" ]; then cmd_duplicate "$name" "$nn"; else warn "cancelled"; fi ;;
+    rm*)        if tui_confirm "PERMANENTLY retire '$name' (plist + Calendar + registry)?"; then cmd_rm "$name"; else warn "kept"; fi ;;
+  esac
+}
+
+# _i_compose_add_args — PURE. Emit the argv for cmd_add (one per line, NO leading
+# 'add'), so an interactively-built schedule is identical to a hand-typed one.
+#   $1 name  $2 mode(at|daily|weekly|monthly)  $3 when  $4 dow/day  $5 command  $6 desc  $7 nocal(1|"")
+_i_compose_add_args() {
+  local name="$1" mode="$2" when="$3" dow="$4" cmd="$5" desc="$6" nocal="$7"
+  printf '%s\n' --name "$name"
+  case "$mode" in
+    at)      printf '%s\n' --at "$when" ;;
+    daily)   printf '%s\n' --daily-at "$when" ;;
+    weekly)  printf '%s\n' --weekly "$dow" "$when" ;;
+    monthly) printf '%s\n' --monthly "$dow" "$when" ;;
+  esac
+  printf '%s\n' --command "$cmd"
+  [ -n "$desc" ]  && printf '%s\n' --description "$desc"
+  [ -n "$nocal" ] && printf '%s\n' --no-calendar
+  return 0
+}
+
+# ── interactive sub-flows (tty only) ────────────────────────────────────────
+_i_pause() { tui_read_tty -p "$(printf '%s↵ enter to continue%s ' "$DIM" "$RST")" _p 2>/dev/null || true; }
+
+_i_browse() {
+  local rows key act rc SELF
+  SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)/$(basename "${BASH_SOURCE[0]}")"
+  while :; do
+    rows=$(_i_schedule_rows)
+    [ -n "$rows" ] || { warn "no schedules yet — pick 'Create' from the main menu."; return 0; }
+    # up/down to browse, live preview shows the schedule's `show`, enter opens
+    # its details; tui_pick_key renders the colored row and returns the clean name.
+    key=$(printf '%s\n' "$rows" | tui_pick_key --prompt 'schedule > ' \
+          --preview "echo {} | cut -f1 | xargs $SELF show") || return 0
+    [ -n "$key" ] || return 0
+    say; cmd_show "$key"; say
+    while :; do
+      act=$(_i_actions | tui_pick_key --prompt "$key > ") || break
+      _i_do_action "$key" "$act"; rc=$?
+      [ "$rc" = 2 ] && break
+      _i_pause
+    done
+  done
+}
+
+_i_add_wizard() {
+  local name="" mode="" when="" dow="" cmd="" desc="" nocal="" line
+  tui_read_tty -p "name (slug): " name || return 0; [ -n "$name" ] || { warn "cancelled"; return 0; }
+  mode=$( { printf 'at\t%sone-shot%s — fires once at an ISO datetime\n' "$CYN" "$RST"
+            printf 'daily\t%sdaily%s — every day at HH:MM\n'            "$CYN" "$RST"
+            printf 'weekly\t%sweekly%s — every <dow> at HH:MM\n'        "$CYN" "$RST"
+            printf 'monthly\t%smonthly%s — on day-of-month at HH:MM\n'  "$CYN" "$RST"; } \
+          | tui_pick_key --prompt 'when > ') || return 0
+  case "$mode" in
+    at)      tui_read_tty -p "ISO datetime (YYYY-MM-DDTHH:MM): " when || return 0 ;;
+    daily)   tui_read_tty -p "time (HH:MM): " when || return 0 ;;
+    weekly)  dow=$(printf '%s\n' mon tue wed thu fri sat sun | tui_pick_one --prompt 'day > ') || return 0
+             tui_read_tty -p "time (HH:MM): " when || return 0 ;;
+    monthly) tui_read_tty -p "day of month (1-31): " dow || return 0
+             tui_read_tty -p "time (HH:MM): " when || return 0 ;;
+    *) return 0 ;;
+  esac
+  tui_read_tty -p "command (shell to run): " cmd || return 0; [ -n "$cmd" ] || { warn "cancelled"; return 0; }
+  tui_read_tty -p "description (calendar note, optional): " desc || desc=""
+  tui_confirm "Add a Calendar companion event?" || nocal=1
+  local -a argv=()
+  while IFS= read -r line; do argv+=("$line"); done < <(_i_compose_add_args "$name" "$mode" "$when" "$dow" "$cmd" "$desc" "$nocal")
+  [ "${#argv[@]}" -gt 0 ] || { warn "nothing to create"; return 0; }
+  say; say "${BLD}Preview (PLANNED):${RST}"
+  cmd_add "${argv[@]}" --dry-run
+  if tui_confirm "Create this schedule?"; then cmd_add "${argv[@]}"; else warn "cancelled"; fi
+  _i_pause
+}
+
+_i_audit_menu() {
+  local a
+  a=$( { printf 'inventory\t%sinventory%s — all launchd plists + crontab\n' "$CYN" "$RST"
+         printf 'doctor\t%sdoctor%s — drift audit\n'                        "$CYN" "$RST"
+         printf 'reconcile\t%sreconcile%s — retire missed one-shots\n'      "$CYN" "$RST"
+         printf 'back\t%sback%s\n'                                          "$DIM" "$RST"; } \
+       | tui_pick_key --prompt 'audit > ') || return 0
+  case "$a" in inventory) cmd_inventory ;; doctor) cmd_doctor ;; reconcile) cmd_reconcile ;; *) return 0 ;; esac
+  _i_pause
+}
+
+_i_status_menu() {
+  local a o
+  a=$( { printf 'status\t%sstatus%s — live count + all-time outcomes\n' "$CYN" "$RST"
+         printf 'history\t%shistory%s — recent events\n'                "$CYN" "$RST"
+         printf 'filter\t%shistory%s — filter by outcome\n'             "$CYN" "$RST"
+         printf 'back\t%sback%s\n'                                      "$DIM" "$RST"; } \
+       | tui_pick_key --prompt 'status > ') || return 0
+  case "$a" in
+    status)  cmd_status ;;
+    history) cmd_history ;;
+    filter)  o=$( { printf 'ok\t%sok%s\n' "$GRN" "$RST";       printf 'failed\t%sfailed%s\n'   "$RED" "$RST"
+                    printf 'missed\t%smissed%s\n' "$YLW" "$RST"; printf 'unknown\t%sunknown%s\n' "$DIM" "$RST"; } \
+                 | tui_pick_key --prompt 'outcome > ') && [ -n "$o" ] && cmd_history --outcome "$o" ;;
+    *) return 0 ;;
+  esac
+  _i_pause
+}
+
+# _i_plist_rows — existing com.alcatraz.*.plist under LaunchAgents as
+# `fullpath<TAB>colored basename`, to seed the register picker. Pure (glob only).
+_i_plist_rows() {
+  local f
+  for f in "$LAUNCHAGENTS"/com.alcatraz.*.plist; do
+    [ -e "$f" ] || continue
+    printf '%s\t%s%s%s\n' "$f" "$CYN" "$(basename "$f")" "$RST"
+  done
+}
+
+_i_register_flow() {
+  local p="" rows=""
+  # tui_pick_or_add lets you arrow-pick a seeded plist OR type a brand-new path —
+  # the typed query is returned when it matches nothing.
+  rows=$(_i_plist_rows)
+  if [ -n "$rows" ]; then
+    p=$(printf '%s\n' "$rows" | tui_pick_or_add --prompt 'plist to adopt (pick or type a path) > ') || { warn "cancelled"; _i_pause; return 0; }
+  else
+    tui_read_tty -p "plist path to adopt: " p || { warn "cancelled"; _i_pause; return 0; }
+  fi
+  if [ -n "$p" ]; then cmd_register "$p"; else warn "cancelled"; fi
+  _i_pause
+}
+
+# _i_main_menu — top-level options as `key<TAB>colored display`; every subcommand
+# family is reachable from here. tui_pick_key returns the clean key.
+_i_main_menu() {
+  printf '%s\t%sBrowse%s & act on schedules\n'                  browse "$CYN" "$RST"
+  printf '%s\t%sCreate%s a new schedule (wizard)\n'             create "$CYN" "$RST"
+  printf '%s\t%sAdopt%s an existing plist (register)\n'         adopt  "$CYN" "$RST"
+  printf '%s\t%sAudit%s & health (inventory/doctor/reconcile)\n' audit "$CYN" "$RST"
+  printf '%s\t%sStatus%s & history\n'                           status "$CYN" "$RST"
+  printf '%s\t%sHelp%s\n'                                       help   "$DIM" "$RST"
+  printf '%s\t%sQuit%s\n'                                       quit   "$DIM" "$RST"
+}
+
+cmd_interactive() {
+  local pick
+  if ! _i_source_tui; then
+    err "interactive mode needs ~/.claude/scripts/tui/ (colors/tty/require/pick)."
+    say "Use the text subcommands instead: ${CYN}$PROG help${RST}"
+    return 1
+  fi
+  if ! tui_have_tty; then
+    err "gcc-schedule -i is the human front-end and needs a real terminal."
+    say "Headless? Everything is a text subcommand: ${CYN}$PROG list${RST} · ${CYN}status${RST} · ${CYN}show <name>${RST} · ${CYN}add …${RST}  (${CYN}$PROG help${RST})"
+    return 1
+  fi
+  say "${BLD}gcc-schedule${RST} ${DIM}interactive — ↑↓ to move, type to filter, enter to pick, esc/ctrl-c to leave${RST}"
+  while :; do
+    pick=$(_i_main_menu | tui_pick_key --prompt 'gcc-schedule > ') || break
+    case "$pick" in
+      browse)  _i_browse ;;
+      create)  _i_add_wizard ;;
+      adopt)   _i_register_flow ;;
+      audit)   _i_audit_menu ;;
+      status)  _i_status_menu ;;
+      help)    cmd_help ;;
+      quit|"") break ;;
+      *)       break ;;
+    esac
+  done
+  say "${DIM}bye${RST}"
+}
+
 # ── Dispatch ───────────────────────────────────────────────────────────────
+# Guarded so the script can be SOURCED (test harness, shell completion) without
+# executing a command: dispatch only when run directly, never when sourced.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 sub="${1:-help}"; shift 2>/dev/null || true
 case "$sub" in
+  -i|--interactive|i) cmd_interactive "$@" ;;
   add)              cmd_add      "$@" ;;
   list|ls)          cmd_list     "$@" ;;
   rm|remove|retire) cmd_rm       "$@" ;;
@@ -1516,3 +1798,4 @@ case "$sub" in
   help|--help|-h)   cmd_help ;;
   *) err "unknown subcommand: $sub"; cmd_help; exit 1 ;;
 esac
+fi

@@ -141,3 +141,94 @@ tui_confirm() {
   fi
   return 1
 }
+
+# ── Enriched pickers (colored display, clean value; suggest-or-add) ──────────
+# The reusable half of the "interactive CLI standard": a colored list whose
+# selection still parses cleanly, and a selector that suggests existing options
+# without forbidding a new one. See conventions/tui-handbook.md § Enriched pickers.
+
+# tui_strip_ansi — filter: drop SGR color escapes from stdin. The clean way to get
+# a plain value back out of a colored display.
+tui_strip_ansi() { sed $'s/\033\\[[0-9;]*m//g'; }
+
+# tui_pick_key [--prompt P] [--preview CMD] [--non-tty POLICY] — pick from
+# `key<TAB>display` lines on stdin; SHOWS the (possibly colored) display, RETURNS
+# the clean key. This is THE idiom for a colored list: fzf renders the color
+# (--ansi) and searches only the display column, the key column never shows, and
+# the caller gets a plain key back with no ANSI to strip. Falls to gum / a numbered
+# read, both showing the display and returning the key. Preview {} is the FULL
+# line, so a preview command extracts its key with `cut -f1`.
+tui_pick_key() {
+  local prompt='pick> ' preview='' nontty='fail'
+  while [ $# -gt 0 ]; do case "$1" in
+    --prompt)  prompt="$2"; shift 2 ;;
+    --preview) preview="$2"; shift 2 ;;
+    --non-tty) nontty="$2"; shift 2 ;;
+    *) shift ;;
+  esac; done
+  [ -t 0 ] && { echo "tui_pick_key: candidates must be piped on stdin" >&2; return 2; }
+  local input; input="$(command cat)"
+  if tui_have_tty && tui_have fzf; then
+    local fa=(--height="${TUI_PICK_HEIGHT:-40%}" --reverse --ansi --delimiter='\t' --with-nth='2..' --nth='2..' --prompt "$prompt")
+    [ -n "$preview" ] && fa+=(--preview "$preview")
+    printf '%s\n' "$input" | fzf "${fa[@]}" | cut -f1
+    return "${PIPESTATUS[1]}"
+  elif tui_have_tty && tui_have gum; then
+    local disp sel rc
+    disp="$(printf '%s\n' "$input" | cut -f2- | tui_strip_ansi)"
+    sel="$(printf '%s\n' "$disp" | gum filter --placeholder "$prompt")"; rc=$?
+    stty sane 2>/dev/null || true
+    [ "$rc" = 0 ] && [ -n "$sel" ] || return 1
+    printf '%s\n' "$input" | while IFS=$'\t' read -r k d; do
+      [ "$(printf '%s' "$d" | tui_strip_ansi)" = "$sel" ] && { printf '%s\n' "$k"; break; }
+    done
+  elif tui_have_tty; then
+    local i=1 k d choice n
+    while IFS=$'\t' read -r k d; do printf '%2d) %s\n' "$i" "$(printf '%s' "$d" | tui_strip_ansi)" >&2; i=$((i+1)); done <<< "$input"
+    n=$((i-1)); tui_read_tty -p "$prompt" choice || return 1
+    case "$choice" in ''|*[!0-9]*) return 1 ;; esac
+    { [ "$choice" -ge 1 ] && [ "$choice" -le "$n" ]; } || return 1
+    printf '%s\n' "$input" | sed -n "${choice}p" | cut -f1
+  else
+    case "$nontty" in
+      first)       printf '%s\n' "$input" | head -1 | cut -f1 ;;
+      passthrough) case "$input" in ''|*$'\n'*) return 1 ;; *) printf '%s\n' "$input" | cut -f1 ;; esac ;;
+      *)           return 1 ;;
+    esac
+  fi
+}
+
+# tui_pick_or_add [--prompt P] — pick one of the seeded candidates (stdin, may be
+# `key<TAB>display`) OR type a NEW value. Returns the chosen key, or the typed
+# query verbatim when it matches nothing. For path / name selectors that should
+# SUGGEST without RESTRICTING. fzf --print-query gives the typed query even when
+# no row matches; the numbered fallback treats a number as a seed pick and any
+# other text as the new value.
+tui_pick_or_add() {
+  local prompt='pick or type> '
+  while [ $# -gt 0 ]; do case "$1" in --prompt) prompt="$2"; shift 2 ;; *) shift ;; esac; done
+  [ -t 0 ] && { echo "tui_pick_or_add: candidates must be piped on stdin" >&2; return 2; }
+  local input; input="$(command cat)"
+  if tui_have_tty && tui_have fzf; then
+    local out q sel
+    out="$(printf '%s\n' "$input" | fzf --height="${TUI_PICK_HEIGHT:-40%}" --reverse --ansi --print-query \
+            --delimiter='\t' --with-nth='2..' --nth='2..' --prompt "$prompt")"
+    q="$(printf '%s\n' "$out" | sed -n 1p)"
+    sel="$(printf '%s\n' "$out" | sed -n 2p | cut -f1)"
+    if [ -n "$sel" ]; then printf '%s\n' "$sel"
+    elif [ -n "$q" ]; then printf '%s\n' "$q"
+    else return 1; fi
+  elif tui_have_tty; then
+    local i=1 k d choice n
+    while IFS=$'\t' read -r k d; do printf '%2d) %s\n' "$i" "$(printf '%s' "${d:-$k}" | tui_strip_ansi)" >&2; i=$((i+1)); done <<< "$input"
+    n=$((i-1)); printf '   %s(or type a new value)%s\n' "${DIM:-}" "${RST:-}" >&2
+    tui_read_tty -p "$prompt" choice || return 1
+    [ -n "$choice" ] || return 1
+    case "$choice" in
+      *[!0-9]*) printf '%s\n' "$choice" ;;
+      *) if { [ "$choice" -ge 1 ] && [ "$choice" -le "$n" ]; }; then printf '%s\n' "$input" | sed -n "${choice}p" | cut -f1; else printf '%s\n' "$choice"; fi ;;
+    esac
+  else
+    return 1
+  fi
+}

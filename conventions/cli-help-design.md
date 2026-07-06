@@ -95,6 +95,8 @@ An fzf/gum tool can't be driven by a headless test harness — but its *logic* c
 
 The interactive shell (the menus, the fzf loop) stays the thin part you verify by hand; everything underneath is exercised by tests.
 
+For the enriched interactive form — colored lists whose selection parses cleanly (`tui_pick_key`), suggest-don't-restrict selectors (`tui_pick_or_add`), arrow-nav-by-default, and the both-fd color gate that keeps the same tool's agent calls plain — follow the standard in [`tui-handbook.md`](tui-handbook.md) §10. Reference build: `gcc-schedule -i`.
+
 ## Robustness for tools that own files, symlinks, or a registry
 
 Graduated from `zcmd` (a TSV manifest + PATH-symlink registry):
