@@ -9687,6 +9687,30 @@
     ]
   },
   {
+    "id": "2c51c4e5-2d9a-4b4e-968d-6f8578a6384d",
+    "pattern": "When the user explicitly defers an expensive multi-agent review step (e.g., magi debate) until all prerequisite content is complete, the agent must not start that review early — running a heated multi-model debate over partial information produces low-quality output and wastes significant tokens.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      "715e63b3-20b6-4c6f-9755-e17a9c7cfaef",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-07T05:38:55.650374+00:00",
+    "last_seen": "2026-07-07T05:38:55.650374+00:00",
+    "occurrence_history": [
+      "2026-07-07T05:38:55.650374+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -13392,6 +13416,63 @@
     ]
   },
   {
+    "id": "d7d19afc-2450-4cb9-9558-6465e45a17ab",
+    "pattern": "The agent referenced a command ('probe') as if it already existed when it had only been planned but not yet implemented, causing user confusion. Planned tooling must not be treated as available until it is built and verified.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "approach",
+    "source_sessions": [
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "4db86d3c-8bcd-4ba8-9419-d2fbae22fa83",
+      "e180a046-64a2-429b-ae9f-df77792c3872",
+      "a7dedbb4-0d21-4529-9a13-b8c4fbf4b611",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-fastfetch-explorer",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-06T09:23:59.332465+00:00",
+    "last_seen": "2026-07-06T09:23:59.332465+00:00",
+    "occurrence_history": [
+      "2026-07-06T09:23:59.332465+00:00"
+    ]
+  },
+  {
+    "id": "3bf2de89-b533-4697-8bbd-783c530a7f68",
+    "pattern": "Despite having project-specific doc-writing guidelines loaded, the agent produced flowery/AI-smell prose ('Why this page matters', 'The User' capitalization, show-off language) that violated tone rules — doc-writing guidelines must be actively consulted at write time, not just acknowledged at session start.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      "715e63b3-20b6-4c6f-9755-e17a9c7cfaef",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-07T05:38:55.650374+00:00",
+    "last_seen": "2026-07-07T05:38:55.650374+00:00",
+    "occurrence_history": [
+      "2026-07-07T05:38:55.650374+00:00"
+    ]
+  },
+  {
     "id": "8a48f2a3-05bc-4565-b05e-00d28a1af177",
     "pattern": "User prefers terse, minimal communication - very short messages like 'please', 'just', 'number', 'those', 'once' are common directives",
     "valence": "positive",
@@ -13728,72 +13809,6 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T17:33:18.082842+00:00",
     "last_seen": "2026-05-01T17:33:18.082842+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "fcaf3837-95f9-43ac-ba27-f4bcff350589",
-    "pattern": "Repeated edit-run-fail cycles on the same function (3+) indicate lack of root cause understanding — stop and re-read surrounding context before the next edit",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "c64c4bfc-db28-4e60-97dc-e40241afff56",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "eec81882-243e-4b3f-9d90-c256307e3a21"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-02T14:07:24.493847+00:00",
-    "last_seen": "2026-05-02T14:07:24.493847+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "973559ac-e1fe-473b-ae48-4cdc28c4d5b2",
-    "pattern": "When a sync script fails repeatedly across many sessions, the issue is likely a structural assumption (auth, ID format, ordering) not a transient error — treat as architecture bug not a flake",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "domain",
-    "source_sessions": [
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-02T20:39:50.215588+00:00",
-    "last_seen": "2026-05-02T20:39:50.215588+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "3d6b0c76-3a6d-4c0b-9d8c-4ce28ec9861c",
-    "pattern": "Before implementing any utility function (e.g., auth checks, permission guards), the agent must search for an existing equivalent in the codebase and reuse it rather than writing a new one.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "eec81882-243e-4b3f-9d90-c256307e3a21"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-03T12:03:30.121983+00:00",
-    "last_seen": "2026-05-03T12:03:30.121983+00:00",
     "occurrence_history": []
   }
 ]

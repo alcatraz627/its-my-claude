@@ -1,0 +1,42 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.284496200515232,
+    "unit_count": 51
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 3/3 tool-using units (100% this batch, consistent with 80-84% prior cycles); subvariants: ls-for-directory-listing (unit 0: ls -la backend/lib/providers/gemini/ in compound Bash; unit 5: ls .../docs-review/ && ls .../docs-tools/; unit 6: ls frontend/.env* backend/.env*, ls src/utils/env/, ls .github/workflows/), cat-instead-of-read (unit 0: cat lib/config/helpers.py 2>/dev/null | head -60; unit 5: cat USAGE.md | head -40; unit 6: cat src/utils/env/env.utils.ts | head -80), sed-instead-of-read-with-offset (unit 5: sed -n '15,35p'; unit 6: sed -n '60,140p' and sed -n '36,80p'), cat-heredoc-file-write (unit 5: cat >> batch-1-tracker.md; unit 6: cat >> improvements-flags.md); no improvement from baseline across 5+ consecutive tracked cycles",
+      "rg_replace_flag_bundle:RECURRING:STABLE — unit 6: rg -o ... -r '$1' executed twice during env-var audit, mangling output identifiers to 'process.env.n'; self-caught from improbable output before any data write; 4th confirmed recurrence in full tracked history; atone filed with ATONE_NO_JUROR=1 and hook proposal prop-20260612-110331-da cited; mechanical gate structurally absent; self-catch as sole mitigation is identical to all prior occurrences",
+      "mandatory_doc_guidelines_not_loaded_before_authoring:RECURRING — unit 5: authored tech/frontend/job-creation-upload.md (~310 lines) and edited product/jobs/create-upload.md without loading frontend/.claude/doc-writing-guidelines.md or global doc-writing guidelines before writing; was classified NEW in the most recent prior cycle (2026-07-06) for session e25e3b92 unit 12 where atone was filed; this batch includes the actual authoring unit (unit 5) where the violation originated, confirming the issue is cross-unit within the same session",
+      "re_edit_thrash:RECURRING:IMPROVING — unit 5: ~5 Edit failures across 29 Edit attempts on create-upload.md (~17% failure rate); agent interleaved Read calls after early failures and pivoted to python3 string-splice for large structural replacement rather than retrying Edit sequentially; self-correction earlier than 7-consecutive-failure peak recorded in 2026-07-03 history; improvement trend sustained for 3 consecutive cycles",
+      "atone_tool_interface_uncertainty:NEW — unit 6: 4 sequential Bash probes of atone.sh interface (--help, bare invocation, help with section-filter pipe, show to verify result) before successfully filing the event; despite atone.sh being used in prior sessions, flag schema must be re-discovered per context window; not previously classified as a distinct pattern; adds ~3 extra tool calls per atone invocation"
+    ],
+    "calibration_score": 0.28,
+    "overconfident_count": 2,
+    "recommendations": [
+      "rg_replace_flag_bundle: 4 recurrences with self-catch as sole mitigation confirms spec-level rules cannot prevent this at typing time; hook proposal prop-20260612-110331-da remains the only structural fix; a PreToolUse hook rejecting rg invocations where flag groups contain the letter r not preceded by -- would make the pattern impossible without requiring advisory recall",
+      "mandatory_doc_guidelines: has now recurred across a session boundary (NEW in prior cycle, confirmed again here); a PreToolUse hook on Write calls targeting docs/ paths that injects the guidelines path as additionalContext would convert this from an advisory load to a mechanical prompt; alternatively a PostToolUse hook after Write to docs/ that warns if the guidelines file was not Read this turn",
+      "shell_tool_preference_violations: rate unchanged at ~75-100% for 6+ consecutive cycles; the argv[0]-only hook interception gap (pipe-grep, cat-in-pipe, heredoc-write invisible to hook) is structurally unaddressed; highest-yield fix is expanding the hook to intercept compound Bash patterns containing 'cat ... | head' and 'ls ' targeting known directory paths, since these two subvariants account for the majority of violations"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "715e63b3-20b6-4c6f-9755-e17a9c7cfaef",
+      654712
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      41949937
+    ]
+  ],
+  "timestamp": "2026-07-06T19:35:36.830532Z",
+  "tokens_used": 13938,
+  "units_analyzed": 5,
+  "units_total": 51
+}

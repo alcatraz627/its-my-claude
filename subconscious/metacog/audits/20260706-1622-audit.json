@@ -1,0 +1,38 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.2600571312000928,
+    "unit_count": 50
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — units 5 and 6; ls-for-directory-listing (unit 5: ls docs-review/ && ls docs-tools/ in compound Bash; unit 6: ls frontend/.env* backend/.env*, ls src/utils/env/, ls .github/workflows/ — 3 distinct calls), cat-instead-of-read+head (unit 5: cat USAGE.md | head -40; unit 6: cat src/utils/env/env.utils.ts | head -80), sed-instead-of-read-with-offset (unit 5: sed -n '15,35p'; unit 6: sed -n '60,140p' and sed -n '36,80p'), cat-heredoc-file-write (unit 6: cat >> batch-1-tracker.md << 'EOF'); rate and subvariant distribution consistent with 2026-07-05 and 2026-07-06 cycles at ~80% of tool-using units affected; no improvement from baseline",
+      "rg-replace-flag-bundle:RECURRING:STABLE — unit 6: agent ran rg -o ... -r '$1' (replace flag) twice during env-var audit, mangling output identifiers to 'process.env.n'; self-caught from improbable output before any data write; 4th confirmed recurrence; atone filed with ATONE_NO_JUROR=1 and hook proposal prop-20260612-110331-da cited; mechanical gate remains absent; pattern structurally identical to all prior occurrences with self-catch as sole mitigation",
+      "re-edit-thrash:RECURRING:MILD_IMPROVING — unit 5: approximately 5-6 Edit failures across ~20 Edit calls on create-upload.md (success:false scattered through sequence); agent interspersed Read calls after early failures and pivoted to python3 string-splice for the large structural replacement rather than continuing to retry Edit; earlier self-correction than the 7-consecutive-failure peak in 2026-07-04; magnitude improvement trend continues",
+      "mandatory-doc-guidelines-not-loaded-before-authoring:NEW — unit 12 (S3 self-atone filed): agent authored tech/frontend/job-creation-upload.md (~310 lines) and edited data-history.md in unit 5 without loading frontend/.claude/doc-writing-guidelines.md or ~/.claude/doc-writing-guidelines.md, both marked MANDATORY in CLAUDE.md for any docs/ edit; result was em dashes throughout prose, flowery 'Why this page matters' framing, theatrical section intros — the anti-ChatGPT-voice catalog violations the guidelines exist to prevent; user correction triggered unit 12 remediation; not present in any prior calibration cycle; first appearance"
+    ],
+    "calibration_score": 0.32,
+    "overconfident_count": 2,
+    "recommendations": [
+      "mandatory-doc-guidelines-not-loaded-before-authoring is NEW and S3 — highest priority for next batch monitoring; structural fix (pre-edit gate added to docs-review PLAN.md requiring both guideline files be loaded, anti-pattern rg made part of per-doc close-out checklist) was applied in unit 12; watch for cross-session recurrence since this is a mandatory-load skip that survived the existing memory-tier reminders",
+      "rg-replace-flag-bundle has hit 4 occurrences with zero between-cycle improvement; prop-20260612-110331-da should be escalated to the user for implementation rather than remaining open — advisory atone entries are demonstrably insufficient; a PreToolUse hook intercepting Bash commands containing rg with a flag bundle including 'r' is the only structural fix",
+      "shell_tool_preference_violations remain structurally unaddressed at the argv[0]-only interception layer; de-prioritize new recommendations — pattern is STABLE not worsening and prior cycles have already enumerated the subvariants",
+      "re-edit-thrash shows genuine magnitude reduction (scattered failures with Read recovery vs 7-consecutive in 2026-07-04); no new intervention recommended — trend is moving in the right direction"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      41512445
+    ]
+  ],
+  "timestamp": "2026-07-06T16:22:41.242391Z",
+  "tokens_used": 14087,
+  "units_analyzed": 5,
+  "units_total": 50
+}

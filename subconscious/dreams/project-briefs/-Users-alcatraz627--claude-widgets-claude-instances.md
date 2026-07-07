@@ -1,17 +1,21 @@
-<!-- i-dream project brief · 2026-07-05T12:51:37.328470+00:00 · 20 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-07-06T09:28:10.928599+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-A frontend/fullstack widget system for Claude instances, with established conventions for environment helpers, boolean semantics, and strict shared-state discipline. Work style is iterative; scope is tightly user-controlled.
+
+Frontend/backend widget infrastructure project (likely claude-instances dashboard). Work style is feature-driven with tight scope control and strong conventions enforcement.
 
 ## Things to do (or keep doing)
-- Always use project-defined constants (`isDevelopment`, `isProduction`, etc.) instead of inlining raw `process.env` comparisons — even in new files
-- Treat terse continuations ("next", "done", "go") as authorizing **only** local, reversible work (file edits, scratch files, local builds)
-- Read source code before asserting which layer is authoritative for any value (token validity, session state, identity)
+
+- **Always use project-defined named constants** (`isDevelopment`, `isProduction`, etc.) instead of inlining raw `process.env` comparisons — even in new files
+- **Read source before asserting authority** — when claiming what system owns token validity, session state, or any resource, cite the actual file:line first
+- **Match scope exactly** — when user requests a simpler/deferred implementation, deliver exactly that; no unrequested features or complexity
 
 ## Things to avoid
-- **Never commit or push without fresh, per-operation explicit approval** — prior blanket approval from anywhere in the session does not carry forward; this is the highest-severity recurring violation
-- Don't inline `process.env.NODE_ENV === "development"` or equivalent raw checks when the codebase already defines a named boolean helper for it
-- Don't mix frontend env var semantics (true/false strings) with backend semantics (1/0) across layers
-- Don't re-introduce complexity or abstractions the user explicitly removed/deferred — if they deleted it, it stays deleted
+
+- **Never commit or push without fresh per-operation approval** — a blanket "yes" from earlier in the session does not authorize subsequent commits; ask each time
+- **Never cross-apply env var boolean conventions** — frontend uses `true`/`false` strings, backend uses `1`/`0`; mixing these is a correctness bug
+- **Don't re-introduce complexity the user explicitly removed** — if the user deleted code and requested a simpler version, do not add back the removed pattern
+- **Stop adding advisory anti-push rules** — 18+ recorded violations means advisory notes are insufficient; raise a mechanical gate request instead of writing another reminder
 
 ## Open questions / known gaps
-- Terse continuation signals reliably over-authorize shared-state mutations (commits, pushes); no in-session mechanical gate exists beyond this brief — treat every push as requiring a fresh verbal confirmation
+
+- The push-violation pattern has survived all advisory mitigations; a mechanical pre-push gate (hook or script) is needed but apparently not yet implemented

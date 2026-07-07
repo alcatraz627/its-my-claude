@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-06T04:05:03Z",
-  "events_analyzed": 79446,
-  "sessions_analyzed": 211,
+  "generated_at": "2026-07-07T06:34:58Z",
+  "events_analyzed": 80921,
+  "sessions_analyzed": 216,
   "session_quality": {
     "average_score": 68.2,
     "top_sessions": [
@@ -172,52 +172,52 @@
   "topic_drift": {
     "primary_focus": "staging-enhancement-product",
     "recent_projects": {
-      "staging-enhancement-product": 3,
-      "walmart-mvp": 1,
-      "claude-instances": 1,
-      "two-enhancement-product": 2,
-      "tmp": 1,
+      "staging-enhancement-product": 2,
       ".claude": 1,
-      "i-dream": 1
+      "two-enhancement-product": 1,
+      "i-dream": 1,
+      "enhancement-product": 2,
+      "tmp": 2,
+      "versable-builder": 1
     },
-    "drift_rate": 0.737,
-    "total_switches": 154,
+    "drift_rate": 0.738,
+    "total_switches": 158,
     "recent_switches": [
       {
-        "ts": "2026-07-02T21:43:39Z",
-        "from": "two-enhancement-product",
-        "to": "tmp"
+        "ts": "2026-07-06T12:41:52Z",
+        "from": "i-dream",
+        "to": "enhancement-product"
       },
       {
-        "ts": "2026-07-03T17:57:01Z",
-        "from": "tmp",
+        "ts": "2026-07-06T17:15:55Z",
+        "from": "enhancement-product",
         "to": "staging-enhancement-product"
       },
       {
-        "ts": "2026-07-03T22:49:50Z",
+        "ts": "2026-07-06T21:15:05Z",
         "from": "staging-enhancement-product",
-        "to": ".claude"
+        "to": "tmp"
       },
       {
-        "ts": "2026-07-05T15:55:59Z",
-        "from": ".claude",
-        "to": "two-enhancement-product"
+        "ts": "2026-07-06T22:12:22Z",
+        "from": "tmp",
+        "to": "versable-builder"
       },
       {
-        "ts": "2026-07-05T16:46:11Z",
-        "from": "two-enhancement-product",
-        "to": "i-dream"
+        "ts": "2026-07-06T22:16:13Z",
+        "from": "versable-builder",
+        "to": "enhancement-product"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6653,
-    "corrections": 1452,
-    "confirmations": 1176,
-    "directives": 226,
-    "terse_messages": 531,
+    "total_prompts": 6725,
+    "corrections": 1466,
+    "confirmations": 1181,
+    "directives": 231,
+    "terse_messages": 537,
     "correction_rate": 0.218,
-    "confirmation_rate": 0.177,
+    "confirmation_rate": 0.176,
     "directive_rate": 0.034,
     "terse_rate": 0.08,
     "style_label": "corrective"

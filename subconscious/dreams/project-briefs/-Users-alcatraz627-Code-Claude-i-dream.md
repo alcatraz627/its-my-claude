@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-06-21T16:46:50.221937+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-06T09:28:58.683471+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Dream-tracking dashboard (iDream) with widgets, pm2 services, and Anthropic API integration. Sessions are long, multi-day, and frequently span context compaction boundaries — session continuity is the dominant operational concern.
+A dream-insight and memory consolidation system for Claude Code sessions (`i-dream`), built and extended across many long multi-session runs with heavy use of `/catchup` and `/core-dump` for continuity.
 
 ## Things to do (or keep doing)
-- Write `/core-dump` at milestones (every ~30 tool calls, before risky ops, before area switches) — not only at session end; `/catchup` is the primary recovery path
-- Treat single-word or two-word user messages (`next`, `keep going`, `ahead`, `started`) as autonomous-continue signals; reconstruct intent from WAL/checkpoint state and emit a one-line ack, then execute
-- Write WAL entries as JSONL (canonical since 2026-04-17); never revert to markdown format
-- Scale execution depth on terse signals, never scope — "keep going" means continue the declared task, not expand it
+- Write `/core-dump` at milestones, not just at session end — compaction can happen at any point and strips prohibitions while preserving task momentum
+- Treat single-word continuations (`keep going`, `next`, `ahead`) as autonomous-resume signals: reconstruct intent from WAL/checkpoint, emit a one-line acknowledgment, then proceed
+- WAL format is JSONL (migrated from markdown as of 2026-04-17); always write JSONL, never markdown entries
+- Re-derive all push/deploy/shared-state-mutation prohibitions from CLAUDE.md immediately after any compaction — prohibitions do not survive context compression
 
 ## Things to avoid
-- Never `git commit` or `git push` without fresh, per-operation explicit approval — prior approval in the same session does not carry over
-- Never infer, extrapolate, or hallucinate data values in structured data processing; only output values directly traceable to source data (user called this a "serious trust killer")
-- Never write shared credentials or session-provided secrets to any file, even temporarily
-- Never expand scope beyond what was explicitly requested, even for "obvious" improvements
+- **Never push or commit without explicit per-push approval** — prior approval in the same session does not carry over; this has been violated repeatedly and is a critical trust failure
+- Don't expand scope beyond what's explicitly requested, even for "obvious improvements" — the user corrects scope creep consistently
+- Never infer or extrapolate values in structured data processing; only output values directly traceable to source data — hallucinated values are a "serious trust killer"
+- Don't increase response verbosity when the user sends terse input; match their density
 
 ## Open questions / known gaps
-- Tension between terse-continuation = "execute autonomously" and scope-as-ceiling = "never expand" — when a task requires a non-trivial scope pivot, pause and surface it rather than guessing which way the signal points
+- Context compaction structurally strips negative constraints (prohibitions) — there is no mechanical enforcement preventing push violations from recurring across compaction boundaries; advisory rules alone have not held across 18+ recorded incidents

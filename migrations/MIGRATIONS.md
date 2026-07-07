@@ -65,6 +65,8 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0022 | Persona activation + efficacy logging — persona-log.sh, persona-suggest/persona-log-nudge hooks, dispatch wiring | ✅ | 2026-06-18 | 2026-06-18 | [0022-persona-activation-logging.md](0022-persona-activation-logging.md) |
 | 0023 | Session-scoped /tmp jail — PreToolUse confine hook + run/ dir + tmp-jail CLI (off user-only) | ✅ | 2026-06-25 | 2026-06-25 | [0023-tmp-jail-session-confine.md](0023-tmp-jail-session-confine.md) |
 | 0024 | Atone-recurrence-loop fixes — stakes tiering, events.jsonl +stakes/+juror_health, session counter, circuit breaker, stakes-gated hook blocks, efficacy metric | ✅ | 2026-06-25 | 2026-06-25 | [0024-atone-recurrence-loop-fixes.md](0024-atone-recurrence-loop-fixes.md) |
+| 0025 | Event-ledger system bootstrap — spec, shared writer, proposals domain, alert layer (P0-P3) | ✅ | 2026-06-27 | 2026-07-02 | [0025-ledger-system-bootstrap.md](0025-ledger-system-bootstrap.md) |
+| 0026 | Extend ::ledger facet with scheduler + hook-telemetry streams (history.jsonl, warn-events, hooks-feedback-domain) | ✅ | 2026-07-07 | 2026-07-07 | [0026-ledger-facet-telemetry-streams.md](0026-ledger-facet-telemetry-streams.md) |
 
 ---
 

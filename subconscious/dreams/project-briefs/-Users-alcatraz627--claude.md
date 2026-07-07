@@ -1,21 +1,18 @@
-<!-- i-dream project brief · 2026-07-05T12:50:35.414639+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-06T09:27:59.660194+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-
-This is the `~/.claude` configuration and tooling project — the agent's own infrastructure: WAL, memory, hooks, skills, scripts, and session continuity tooling. Work style is iterative multi-session feature development with heavy use of `/catchup` and `/core-dump` across compaction boundaries.
+This is the `~/.claude` configuration repository — the agent's own ruleset, skills, hooks, and WAL infrastructure. Work is predominantly meta: improving the agent's own behavior, adding/refining rules, building tooling that future sessions run.
 
 ## Things to do (or keep doing)
-
-- **Write JSONL WAL, not markdown** — the format migrated as of 2026-04-17; use `scripts/wal/wal.sh`, never hand-compose entries
-- **Treat terse single-word messages as SIGCONT** — "next", "ahead", "looks", "done" mean continue the active task autonomously; increase execution depth, never scope
-- **Checkpoint proactively at milestones**, not just at session end — `/core-dump mini` every ~15-20 actions; `/catchup` is the primary recovery path after compaction
-- **Use TUI/gum tools for structured terminal output** — tables and comparisons go through `std::claude::tui`; never plain markdown tables in terminal contexts
+- **Always write WAL entries as JSONL** — the markdown format is deprecated; use `scripts/wal/wal.sh`, not hand-composed lines
+- **Treat terse single-word messages as execution directives** — "next", "ahead", "done" mean continue autonomously, never ask for clarification
+- **Checkpoint proactively** — run `/core-dump` at milestones and before context-destroying operations; `/catchup` is the primary recovery path after `/clear`
+- **Match scope exactly to what was asked** — this repo's sessions frequently correct scope creep; if the user says "help me understand", don't implement
 
 ## Things to avoid
-
-- **Never commit or push without fresh per-operation approval** — prior session approval does not carry forward; re-derive push authorization from CLAUDE.md after every compaction
-- **Don't thrash on repeated fix attempts** — if the same fix fails twice, stop and produce a one-line root-cause hypothesis before touching code again
-- **Never infer or synthesize data values** not explicitly present in source — flag gaps as inferred or stop and ask; hallucinated pipeline values are a critical failure here
+- **Never commit or push without fresh per-operation approval** — prior session approval does not carry forward; this is the single most-repeated violation in this project's history and survives compaction cycles because it's a negative constraint
+- **Don't thrash on fix attempts** — stop after 2 failed attempts, form a root-cause hypothesis before the next edit
+- **Don't hallucinate or infer values in data pipelines** — only surface what is traceable to source; flag inferred values explicitly or don't include them
 
 ## Open questions / known gaps
-
-- **Context compaction systematically strips push prohibitions** — negative constraints have no positive artifact to anchor recall; every resume after compaction must explicitly re-check `rules/git.md` before any push
+- **Push prohibition survives poorly through compaction** — negative constraints strip while positive task state persists; no mechanical enforcement exists yet (proposed but not implemented)
+- **Pattern deduplication in the extraction pipeline is broken** — the WAL migration appears 4× in the pattern log; the system lacks semantic-similarity dedup before insert

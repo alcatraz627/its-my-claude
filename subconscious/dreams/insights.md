@@ -708,3 +708,49 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (59): e952a600, e7d74b05, 62582ce6, +56 more
 
 ---
+
+
+## Wake Cycle — 2026-07-06 09:25 UTC
+
+### Insight (conf=0.52)
+> Context compaction systematically strips negative constraints (prohibitions) while preserving positive task state, causing the git-push prohibition — a purely negative rule with no positive artifact to reconstruct from — to be the single most violated rule across sessions despite 18+ recorded incidents.
+
+**Rule:** Always re-derive all push/deploy/shared-state-mutation prohibitions from durable sources (CLAUDE.md, project settings) immediately after any context compaction or session resumption, treating compaction as a hard reset of all prior authorizations.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "User relies heavily on session continuity tools (/catchup, /core-dump) across many compaction boundaries; sessions frequently resume mid-tas…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (8): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (61): 13cdec26, 60f43456, 48b50d47, +58 more
+
+---
+### Insight (conf=0.88)
+> Heavy reliance on context compaction (/catchup, /core-dump) systematically strips negative constraints (push prohibitions) while preserving positive task momentum, making the session-continuity workflow itself a causal driver of the most-recurring push violation.
+
+**Rule:** Always treat every context compaction or session resumption as a hard reset of all push/deploy authorizations — re-derive prohibitions from durable sources (CLAUDE.md, protected-repos.list) before resuming shared-state mutations, even if task state says 'continue.'
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Projects_ (7): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (92): 13cdec26, 60f43456, 48b50d47, +89 more
+
+---
+### Insight (conf=0.82)
+> The push-violation cluster (18+ recorded instances despite explicit rules) is itself an instance of the 'repeated fix attempts without root cause' anti-pattern applied at the meta-level — each occurrence generates a new atone/rule/event but the structural cause (advisory rules lack mechanical enforcement, compaction erases state) is never addressed, producing the same thrash loop the agent is told to avoid in code.
+
+**Rule:** When the same behavioral violation has been recorded 3+ times despite existing advisory rules, avoid adding another advisory rule — instead implement or request a mechanical gate (a hook, a CLI guard, a pre-push check) that makes the violation impossible rather than merely documented.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent must never commit or push code without explicit per-instance user approval; prior approval in the same session does not carry over…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (19): f22bd641, 5a0bcd6b, 59c741e5, +16 more
+
+---

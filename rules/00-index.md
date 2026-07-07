@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-07-05
+updated: 2026-07-07
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-05 22:35.
+Regenerated 2026-07-07 06:41.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -33,6 +33,7 @@ Regenerated 2026-07-05 22:35.
 | `cache-externally-mutated-state` | always | Don't cache a value that something outside your process can change — a TTL longer than "now" on externally-mutated state is a staleness bug. |
 | `comments` | always | Comments are for humans first, AI agents second, machines never; first sentence of a non-trivial docstring is code-agnostic; keep [claude@] agent-notes separate from human comments; no plan-refs or archeology |
 | `communication` | always | Terse protocol, scope control, state verification — how Claude talks, scopes, and verifies before side-effects |
+| `contain-subagent-token-sprawl` | always | Orchestration (sub-agents, fan-out workflows) has real cumulative token cost — right-size it. Inline small/mechanical work, reserve fan-out for genuinely large/parallel/verification-heavy work, and watch cumulative spend across a session. Even under ultracode, right-size rather than reflexively orchestrate. |
 | `corrections` | always | After user corrections: state mistake, identify pattern, update mistake-patterns.md, check for hook, fix |
 | `cron-calendar-companion` | always | Every recurring scheduled job (launchd plist, crontab line, or harness CronCreate) MUST get a companion recurring macOS Calendar event so the human can SEE the automation exists and notice when it silently stops firing. Retiring a cron means removing its event too. |
 | `env-var-config-pattern` | scoped | Before adding a raw env var read, grep how existing vars are read in the project — route through the central config module/schema if one exists, don't scatter raw reads |
@@ -57,6 +58,7 @@ Regenerated 2026-07-05 22:35.
 | `structure-over-one-shotting` | always | Default to plan→implement→review on non-trivial work; a failed one-shot wastes more than structure would have. One-shotting is fine only for genuinely trivial one-offs. |
 | `sub-agent-outputs` | always | Sub-agents producing material content (research, analysis, audit, synthesis) MUST write the full output to disk before returning. Their summary is not a substitute for the artifact. |
 | `subagent-fleet-discipline` | scoped | When a parallel sub-agent fleet hits a transient API throttle, salvage finished work, re-dispatch only the dead, and throttle to batches on a second outage. |
+| `subagent-model-ceiling` | always | Sub-agents are NEVER dispatched on the session flagship model (Fable/Mythos-class) — Opus is the hard ceiling for any sub-agent at any nesting depth; every dispatch pins model explicitly (sonnet default, opus only for judgment-heavy work) and must gate nested spawns |
 | `surface-hook-nudges-to-user` | always | When a PreToolUse hook injects an advisory nudge (additionalContext), surface it to the user in your reply as a bordered callout — it's invisible to them otherwise |
 | `testing` | always | Test every non-trivial change scaled to task size; clean-slate checklist; verify each change independently |
 | `todo-discipline` | always | Live todos live in the Task tool (source of truth + TUI); session-notes/memory are auto-mirrors, never hand-edited; plans in docs are complementary not the status surface |

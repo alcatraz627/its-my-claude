@@ -88,7 +88,7 @@
       "4c0579e1-d7c2-4721-a6d7-22008fe10322"
     ],
     "hypothesis": "Context compaction systematically strips negative constraints (prohibitions) while preserving positive task state, causing the git-push prohibition — a purely negative rule with no positive artifact to reconstruct from — to be the single most violated rule across sessions despite 18+ recorded incidents.",
-    "confidence": 0.92,
+    "confidence": 0.5200000000000001,
     "actionable": true,
     "suggested_rule": "Always re-derive all push/deploy/shared-state-mutation prohibitions from durable sources (CLAUDE.md, project settings) immediately after any context compaction or session resumption, treating compaction as a hard reset of all prior authorizations.",
     "promoted": true,
@@ -296,6 +296,22 @@
     "confidence": 0.88,
     "actionable": true,
     "suggested_rule": "Before generating any output that fills a gap (fix attempt, data value, inferred state), the agent must first produce a one-line hypothesis about WHY the gap exists. If the hypothesis can't be stated, the agent doesn't understand enough to generate — read more first.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "bc74bdf7-ccd2-44be-a46b-12e548b78ea9",
+    "patterns_linked": [
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "e218ac38-3844-4295-a972-c9dc01b22d13",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+    ],
+    "hypothesis": "Heavy reliance on context compaction (/catchup, /core-dump) systematically strips negative constraints (push prohibitions) while preserving positive task momentum, making the session-continuity workflow itself a causal driver of the most-recurring push violation.",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "Always treat every context compaction or session resumption as a hard reset of all push/deploy authorizations — re-derive prohibitions from durable sources (CLAUDE.md, protected-repos.list) before resuming shared-state mutations, even if task state says 'continue.'",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -676,10 +692,10 @@
       "13526387-e655-41c3-a4e8-bbcca038e4c2"
     ],
     "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') are correctly interpreted as execution directives for local work, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'momentum' that correctly drives file edits incorrectly drives git pushes, because the authorization taxonomy lacks a clean local-vs-shared distinction.",
-    "confidence": 0.85,
+    "confidence": 0.45000000000000007,
     "actionable": true,
     "suggested_rule": "Always treat terse continuation signals as authorizing only local, reversible side-effects (file edits, local builds, scratch files); never interpret them as authorization for shared-state mutations (git push, deploy, external messages) regardless of task momentum.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null
   },
@@ -1379,19 +1395,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "833d53b0-d89e-4891-a23f-64d271c25513",
+    "id": "29e30231-9778-4ed0-90d3-7f4294d7ce51",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d"
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "9a083747-313b-49ab-86ed-3d75731e07d5",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
     ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next') are explicitly designated as autonomous-execute directives, but the agent over-generalizes this autonomy past the shared-state mutation boundary (git push), and frequent context compactions via /catchup strip the ephemeral 'not yet approved to push' state — creating a self-reinforcing loop where the very workflow that enables efficient long sessions also erases the guardrail memory that prevents the most recurring violation.",
-    "confidence": 0.0,
+    "hypothesis": "The push-violation cluster (18+ recorded instances despite explicit rules) is itself an instance of the 'repeated fix attempts without root cause' anti-pattern applied at the meta-level — each occurrence generates a new atone/rule/event but the structural cause (advisory rules lack mechanical enforcement, compaction erases state) is never addressed, producing the same thrash loop the agent is told to avoid in code.",
+    "confidence": 0.82,
     "actionable": true,
-    "suggested_rule": "Always re-derive git-push authorization from scratch after any context compaction or session resumption — never carry forward implicit approval from pre-compaction context, even if the terse continuation signal implies 'keep going autonomously'.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "When the same behavioral violation has been recorded 3+ times despite existing advisory rules, avoid adding another advisory rule — instead implement or request a mechanical gate (a hook, a CLI guard, a pre-push check) that makes the violation impossible rather than merely documented.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -4585,21 +4601,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "After any context boundary (compaction, session resume, catchup), treat all prior state as unverified — re-read files and re-check git status before acting, just as you would require source references before emitting data values.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "5008bca9-514f-4075-a6a1-b16038c952c3",
-    "patterns_linked": [
-      "251ad081-8d9e-4dd2-9d5a-f46891e0b3a0",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262",
-      "00fb690c-b719-4a18-ad08-94adf937ae00"
-    ],
-    "hypothesis": "Project-specific conventions (config systems, push rules) are most likely to be violated in sessions that required context reconstruction, because convention knowledge is implicit and distributed — it lives in the agent's understanding of the project, not in a single checkpointable artifact, making it the first casualty of any state-restoration gap.",
-    "confidence": 0.68,
-    "actionable": true,
-    "suggested_rule": "Always include project-specific prohibitions and convention overrides (no-push rules, config-system mandates, naming conventions) as explicit items in core-dump checkpoints, not just task progress — conventions that survive only in conversation context will not survive compaction.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-05T12:50:52.201219+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-06T09:29:25.270805+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A Next.js/TypeScript enhancement product (Versable) with a strongly opinionated working style: the user enforces strict scope ceilings and rejects any complexity beyond what was explicitly requested.
+A full-stack product enhancement application (Versable) where the dominant working style is tight scope control — the user aggressively rejects unrequested complexity and enforces strict git-push discipline.
 
 ## Things to do (or keep doing)
-- When the user says "opt-in," default to including everything and require an explicit signal to exclude — never implement opt-out by default
-- Replicate existing patterns exactly when the user says "the same way you would for X" — read the reference implementation before writing new code
-- Translate research/design phases into lean, behavior-focused implementation docs — professional and direct, neither academic nor enterprise-heavy
-- Hand the user exact git commands and stop before pushing; repo-specific CLAUDE.md git rules take absolute precedence over default behavior
+- When the user says "same way as X", replicate that exact pattern — no novel abstractions
+- Translate research/design output into lean, behavior-focused implementation docs before closing a phase
+- Write docs in formal, direct prose: no "why this matters" openers, no em-dashes, no promotional framing
+- Surface the exact git commands for the user to run manually; never push without fresh per-push confirmation
 
 ## Things to avoid
-- Don't re-introduce deferred scope: if the user said "not now" or deleted something, it stays out even when the implementation is "trivially easy"
-- Don't add abstractions, wrappers, or new infrastructure when existing code already handles the request — check first, build only if nothing fits
-- Don't write em-dashes, "why this matters" intros, or promotional framing in any human-facing prose; docs open with a direct statement of fact
-- Don't treat verbal acknowledgment of correct semantics as verification — confirm the implemented logic matches the agreed behavior before declaring done
+- Don't re-introduce deferred scope — if the user said "not now", treat it as a hard exclusion even when implementation is trivial
+- Don't add abstractions, wrappers, or new infrastructure when existing code already handles the case; check first
+- Don't mistake verbal acknowledgment for correct implementation — verify the code matches the stated semantics (opt-in vs opt-out, inclusion vs exclusion default)
+- Stop touching adjacent patterns when asked to simplify one part; scope ceiling applies to the exact surface named
 
 ## Open questions / known gaps
-- Scope ceiling enforcement is the single most recurring failure: verbal agreement + wrong code happens repeatedly, suggesting a missing pre-commit self-check habit
-- The boundary between "deferred" and "just not yet wired" is consistently ambiguous; the user's intent on deferral needs to be surfaced and confirmed explicitly before implementation begins
+- Recurring tension between "professional but lean" doc style and the agent's default toward enterprise-heavy or academic framing — needs active suppression each session
+- Atone RCA files must begin with `---` YAML frontmatter on line 1; the agent repeatedly forgets this, causing silent event-write failures

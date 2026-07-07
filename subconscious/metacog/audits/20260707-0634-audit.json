@@ -1,0 +1,49 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.030303030303030304,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.17656313884811992,
+    "unit_count": 66
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 7 of 9 tool-using units (~78%); subvariants: ls-for-directory-listing (unit 16: ls docs/plan/ in final Bash; unit 20: ls .fiber-snatcher/auth/; unit 27: head -1 proposal-*.md glob via Bash; unit 28: ls -la *.json; 715e63b3-0: ls -la backend/lib/providers/gemini/, ls -la ~/Downloads/...); cat-instead-of-read+head (unit 20: cat install.sh 2>/dev/null | head -30; 715e63b3-0: cat lib/config/helpers.py 2>/dev/null | head -60); sed-instead-of-read-with-offset (e25e3b92-5: sed -n '15,35p' _index.md); cat-heredoc-file-write (unit 27: cat > _anon-map.json <<'EOF'; e25e3b92-5: cat >> batch-1-tracker.md <<'EOF'); head-in-pipe (unit 15: glow ... | head -8); rate consistent with prior 80-84% baseline; zero improvement across 5+ consecutive tracked cycles",
+      "subagent_model_ceiling:NEW_TO_CALIBRATION_HISTORY — units 20 and 27 dispatched sub-agents (Agent tool in unit 20; 5x SendMessage in unit 27) using the flagship Fable model without explicit model pins; user correction in unit 29 ('calling agents fable opus highest') explicitly named the violation; rule was graduated on 2026-07-07 directly from this session's occurrences; not present in any prior calibration cycle batch; high severity: fan-out multiplies cost blast radius; mechanical fix requires explicit model: param on every Agent and SendMessage dispatch; not present as tracked pattern in prior calibration history — classify NEW",
+      "re_edit_thrash:RECURRING:IMPROVING — e25e3b92-5: 6 Edit failures out of 29 attempts (~21% failure rate); agent interleaved Read calls after early failures and pivoted to python3 string-splice for large structural section replacement rather than retrying Edit sequentially; self-correction cadence earlier than prior peak; third consecutive batch showing improvement — deprioritize recommendation",
+      "mandatory_doc_guidelines_not_loaded_before_authoring:RECURRING — e25e3b92-5: this unit is the origin authoring unit identified in the 2026-07-06 prior cycle; authored tech/frontend/job-creation-upload.md (~310 lines) and edited product/jobs/create-upload.md without loading frontend doc-writing guidelines; consistent with prior cycle classification; no improvement trajectory detected"
+    ],
+    "calibration_score": 0.3,
+    "overconfident_count": 1,
+    "recommendations": [
+      "subagent_model_ceiling is the highest-priority new finding this batch: every Agent tool dispatch and every SendMessage to a sub-agent must carry an explicit model param pinned at opus or below; absence of a model pin is the exact mechanical failure mode the rule identifies; propose a PreToolUse hook that inspects Agent tool calls for missing model field and blocks with a reminder — advisory-layer coverage has already proven insufficient (two same-session occurrences triggered rule graduation)",
+      "shell_tool_preference_violations remain at 78-89% of tool-using units with zero improvement across 5+ consecutive cycles; advisory treatment is exhausted; mechanical PreToolUse hooks are the only remaining lever — specifically: (1) block cat+head patterns and redirect to Read with limit param; (2) block ls-for-file-existence in favor of stat or test -f; (3) block cat-heredoc-file-write patterns in favor of Write tool; file one proposal per subvariant via scripts/propose.sh to keep hook scope narrow",
+      "mandatory_doc_guidelines_not_loaded_before_authoring shows no improvement; propose a PreToolUse hook on Write calls targeting paths matching docs/**/*.md that checks whether the doc-writing guidelines file appears in recent Read calls the current turn; if absent, inject a blocking reminder to load guidelines before proceeding"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 15
+  },
+  "sessions": [
+    [
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      7194628
+    ],
+    [
+      "715e63b3-20b6-4c6f-9755-e17a9c7cfaef",
+      655926
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      45104865
+    ],
+    [
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4",
+      2703839
+    ]
+  ],
+  "timestamp": "2026-07-07T06:34:44.285116Z",
+  "tokens_used": 13118,
+  "units_analyzed": 16,
+  "units_total": 66
+}

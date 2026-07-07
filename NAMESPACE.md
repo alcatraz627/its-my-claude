@@ -74,11 +74,11 @@ std::claude
 │   ├── ::improvement::proposals    cross-session proposal JSONL
 │   ├── ::improvement::insights     post-skill runtime notes
 │   └── ::improvement::dreams       subconscious daemon outputs
-├── ::ledger      [facet]    Event-ledger: system-of-record streams + alerts → atone/affirm/pinned/proposals/personas + ledger/ + scripts/ledger/ + skills/shared/ledger-format.md
+├── ::ledger      [facet]    Event-ledger: system-of-record streams + alerts → atone/affirm/pinned/proposals/personas + scheduled/history.jsonl + hooks/warn-events.jsonl (+ scripts/hooks/warn-log.sh) + hooks-feedback-domain/ + ledger/ + scripts/ledger/ + skills/shared/ledger-format.md
 └── ::migrations          Structural change log                  → ~/.claude/migrations/
 ```
 
-Eight facets: `::mcp`, `::tui`, `::vision`, `::widgets`, `::todos`, `::backups`, `::improvement`, `::ledger`. A facet's artifacts are deliberately distributed; do not create a single directory to "consolidate" them. (`::ledger` relabels the existing judgment streams — atone/affirm/pinned/proposals/personas — as one system-of-record family with a shared writer (`scripts/ledger/ledger-common.sh`), reader (`ledger.sh`), and alert layer (`ledger/`); it does NOT move them. The `::logs` boundary — high-volume operational exhaust like wal/metacog firehoses — is deliberately NOT promoted.)
+Eight facets: `::mcp`, `::tui`, `::vision`, `::widgets`, `::todos`, `::backups`, `::improvement`, `::ledger`. A facet's artifacts are deliberately distributed; do not create a single directory to "consolidate" them. (`::ledger` relabels the existing judgment streams — atone/affirm/pinned/proposals/personas — as one system-of-record family with a shared writer (`scripts/ledger/ledger-common.sh`), reader (`ledger.sh`), and alert layer (`ledger/`); it does NOT move them. Migration 0026 added the scheduler + hook-telemetry streams — `scheduled/history.jsonl`, `hooks/warn-events.jsonl` (writer `scripts/hooks/warn-log.sh`), `hooks-feedback-domain/` — same family, same no-move rule. The `::logs` boundary — high-volume operational exhaust like wal/metacog firehoses — is deliberately NOT promoted.)
 
 ---
 
@@ -586,7 +586,7 @@ To retire a namespace:
 These may become namespaces later but are not promoted yet:
 
 - `::config` — CLAUDE.md, LOOKUP.md, settings.json, settings.local.json. Currently just "the root". Promotes if config surface area grows.
-- `::observability` — `events.jsonl`, `wal.jsonl`, runtime-notes viewed through the "what happened?" lens. Currently covered by `::scripts` (emit-event) + `::improvement::insights` + `::backups` (archives). Could promote if a telemetry dashboard emerges.
+- `::observability` — `events.jsonl`, `wal.jsonl`, runtime-notes viewed through the "what happened?" lens. Partially resolved by migration 0026 (2026-07-07): the system-of-record telemetry streams (scheduled/history.jsonl, hooks/warn-events.jsonl, hooks-feedback-domain/) now live under `::ledger`, whose `scripts/ledger/` readers are the telemetry dashboard this entry was waiting for. The remainder (wal/metacog firehoses, i-dream operational logs) stays deliberately unpromoted per the `::logs` boundary note in the tree.
 - `::agents` — custom agent definitions at `~/.claude/agents/`. Sibling candidate; currently too small.
 - `::hooks` — subset of `::scripts` filtered by "registered in settings.json hooks". Facet candidate if hook catalog grows distinct from CLI scripts.
 
