@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-07 06:41.
+Regenerated 2026-07-07 22:56.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -44,6 +44,7 @@ Regenerated 2026-07-07 06:41.
 | `grep-scope-before-claiming-absence` | always | Grep the FULL relevant tree (not just one subdir) before claiming a module/function/helper doesn't exist or proposing to create one |
 | `helper-return-type-assumption` | always | Before calling a method on a helper's return value, grep the helper's definition — don't assume its shape |
 | `js-escape-sequences-in-template-literals` | scoped | JS inside server-side backtick template literals needs DOUBLE escapes; `node --check` won't catch it; verify in a real browser |
+| `model-tier-routing` | always | Route every piece of work to the smallest adequate lane (local lm / gemini / haiku→sonnet→opus; fable = main-only) with right-sized effort; every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan; never switch models without explicit user confirmation. Enforced by guard-model-tier.sh. |
 | `never-modify-anthropic-credentials` | always | NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential — a bad value crashes EVERY Claude instance at once. Stop and ask the user to do it by hand. |
 | `performative-self-criticism` | always | Under pushback, a structured self-critical reply (ranked table, insight block, named-pattern list) is not the work — it's a description of the work. Run the checks it names before sending, or you're performing thoroughness instead of doing it. |
 | `prescribed-flattery-as-fix-for-pushback` | always | Don't prescribe softer agreement as a "fix" for user-perceived pushback unless the user explicitly asked for softer framing — capitulation is the failure, not the fix |

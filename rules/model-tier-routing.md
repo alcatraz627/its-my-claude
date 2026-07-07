@@ -1,0 +1,106 @@
+---
+brief: Route every piece of work to the smallest adequate lane (local lm / gemini / haiku→sonnet→opus; fable = main-only) with right-sized effort; every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan; never switch models without explicit user confirmation. Enforced by guard-model-tier.sh.
+triggers:
+  - tool:Agent
+  - tool:Workflow
+  - tool:lm-gemini
+  - topic:model-tier
+  - topic:sub-agents
+  - topic:gemini
+  - phrase:"which model"
+related:
+  - subagent-model-ceiling
+  - contain-subagent-token-sprawl
+  - structure-over-one-shotting
+tier: 0
+category: rules
+updated: 2026-07-07
+stale_after_days: 180
+---
+
+# Model-tier routing — the smallest adequate lane, chosen out loud
+
+Every piece of work runs on some lane — cloud Claude, the local lm suite, or gemini — and
+the choice is made **proactively at plan time**, not by default-inertia. This
+operationalizes standing doctrine (efficacy-over-speed, the ease–effort–output triad,
+[[contain-subagent-token-sprawl]], [[subagent-model-ceiling]]): default conservative on
+tokens; spend more only when efficacy measurably demands it. Full spec + provenance:
+`~/Code/local-models/.claude/output/20260707-model-tier-harness/proposal.md`.
+
+## The lanes
+
+| Lane | Cost | Right for | Trust posture |
+|---|---|---|---|
+| **local lm** (`q`/`see`/`review`/`imagine`/`lm fleet`/`lm index`) | ~$0, throttle-immune | volume audit/verify/recon, vision reads, imagegen, judged batch work | trust = a passing gate, never model confidence |
+| **gemini** (`lm gemini`, pinned gemini-3.5-flash) | separate, abundant budget | massive context ingestion, breadth ideation, throughput | untrusted content — Claude verifies before load-bearing use |
+| **haiku** | ¢ | trivial sub-agent lookups | low |
+| **sonnet** | $ | DEFAULT sub-agent: research, inventory, mechanical multi-step | verify what matters |
+| **opus** | $$ | main daily driver; judgment/review sub-agent seats | high |
+| **fable/mythos** | $$$$ uncapped | main agent ONLY, for genuinely vague+complex tasks | NEVER a sub-agent (hard block; priced per-token outside the subscription) |
+
+**Effort axis:** sub-agent effort ≤ a high/xhigh main. Sonnet is cheap — be liberal
+(`high` when it helps; `low` for wide/numerous fan-outs). Opus stays at `medium` unless
+the seat is genuine judgment. `xhigh` on a sub-agent needs explicit user sanction.
+Tool-call count is NOT effort — a low-effort agent may make many calls.
+
+## Decision rules (task class → lane)
+
+trivial lookup → `q`/haiku · mechanical sweep → sonnet-low or `lm fleet` ·
+recon/inventory → sonnet (use `lm index` for symbols) · volume audit/verify → `lm fleet`
+(judge-gated) · web research → sonnet · **large-context ingestion / mass ideation →
+`lm gemini` session, digest back** · judgment/adversarial seat → opus · synthesis + final
+calls + user-facing writing → main agent, never delegated · vision → complementary lanes
+(`see` free-first for standalone reads, native fine in-conversation, gemini abundant) ·
+imagegen → `imagine` · code changes → main/opus seat; local coder only behind a Judge.
+
+**Escalate one step on evidence** (failed gate, >2 retries, user correction, irreversible
+stakes) — never on anticipation. De-escalate when work decomposes scoped-verifiable.
+
+## The Model Plan (mandatory, every qualifying plan)
+
+Any plan involving (a) sub-agents/workflows, (b) large-context ingestion, or (c) a
+modality tool MUST include a Model Plan block — one line per stage:
+
+```
+Model plan:
+  recon   → sonnet · low  · read-only, no nesting
+  ingest  → lm gemini · session proj-x · digest back
+  verify  → lm fleet · judge: pytest
+  review  → opus · medium · judgment seat
+```
+
+Even when the instinct doesn't change, the explicit thought is the point. Dispatches are
+logged (`~/.claude/logs/model-dispatch.jsonl`) and reviewed (tier-telemetry-review).
+
+## Edge cases
+
+Mixed task → split lanes per stage. Nested spawns → ceiling AND effort bounds propagate in
+every delegation prompt. gemini unavailable → structured failure, FLAG to the user, fall
+back to sonnet/lm — never block on it. Local server down → cloud fallback, note the cost.
+No secrets to gemini (work-account auth; standing secret rules apply). Ultracode raises
+fan-out width, never the ceiling/effort rules. Old gemini-session claims = stale-cache
+suspect ([[cache-externally-mutated-state]]). A missing model falls back one lane DOWN,
+never up to fable.
+
+## Escape hatches
+
+- **Explicit user instruction wins — after honest deliberation.** Push back once with a
+  concrete alternative ("sonnet-high covers this because X — want that?"), then execute
+  their call. **NEVER switch models without the user's explicit confirmation.**
+- Mid-task suggest-a-switch is encouraged; silent-switch never (lane-internal choices —
+  which intent, which judge — stay autonomous).
+- Warn-path mutes: `touch ~/.claude/.model-tier-off` · `MODEL_TIER_OFF=1`. The
+  fable-as-sub-agent block has **no self-mute** — only the human lifts it.
+- Everything degraded → main agent does it inline and records the miss.
+
+## Diagnostic signal
+
+You're composing an `Agent`/`Workflow` dispatch without a `model:` pin, a plan with
+sub-agents and no Model Plan block, or you're about to hand fable a sub-agent seat or
+switch models on your own judgment. Stop — route it out loud.
+
+## Related
+
+- [[subagent-model-ceiling]] — the ceiling this rule extends (adds effort + local/gemini lanes)
+- [[contain-subagent-token-sprawl]] — the width axis (how many agents), sibling decision
+- `features/model-tier-harness.md` — mechanics: hook, telemetry, reviews, lm gemini

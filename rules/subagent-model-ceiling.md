@@ -8,6 +8,7 @@ triggers:
   - phrase:"spawn an agent"
 related:
   - rules/sub-agent-outputs.md
+  - rules/model-tier-routing.md
   - memory/global/feedback_subagent_model_never_fable.md
 tier: 0
 category: rules
@@ -46,3 +47,9 @@ on flagship pricing multiplies a cheap sweep into a large bill with zero quality
 You are composing an `Agent`/`workflow.agent()` call and the `model` field is absent —
 or your dispatch prompt allows delegation and says nothing about the delegate's model.
 Stop and pin both.
+
+## Related
+
+- [[model-tier-routing]] — extends this ceiling with the effort axis, the local-lm and
+  gemini lanes, the Model Plan obligation, and the mechanical enforcement
+  (`guard-model-tier.sh`: hard block on fable/mythos dispatch, warn on missing pin).

@@ -683,6 +683,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-subagent-output.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-model-tier.sh"
           }
         ]
       },
