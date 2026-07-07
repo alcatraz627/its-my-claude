@@ -37,6 +37,13 @@ GEM=$(recent "$LM/logs/gem-history.jsonl")
   echo "## gemini vision (via wrapper, once built)"
   printf '%s\n' "$GEM" | jq -rs 'if length == 0 then "- no gem-history yet (wrapper not built or unused)" else "- calls: \(length)" end'
   echo
+  echo "## model dispatches (sub-agent tier telemetry, once guard-model-tier logs)"
+  DISPATCH=$(recent ~/.claude/logs/model-dispatch.jsonl)
+  printf '%s\n' "$DISPATCH" | jq -rs 'if length == 0 then "- no model-dispatch.jsonl yet (Phase A hook not built or no dispatches)" else
+    "- dispatches: \(length)",
+    (group_by(.model // "unpinned") | sort_by(-length) | .[] |
+     "  - \(.[0].model // "UNPINNED"): \(length)") end'
+  echo
   echo "## Suggested judgment frame"
   echo "- Native reads inside a conversation are fine (already in context, highest fidelity)."
   echo "- Standalone 'what does this image say' → see first (free), verify exact strings."
