@@ -37,6 +37,25 @@ case "$MODE" in
     safe=$(printf '%s' "$SESSION_ID" | LC_ALL=C tr -c 'A-Za-z0-9._-' '_')
     f="$CKPT_DIR/$safe.json"
     if [[ -f "$f" ]]; then cat "$f"; exit 0; fi
+    # Collision-preserved pointers: <slug>.<uuid8>.json (written by write.sh when
+    # a later session reused the slug). Serve the newest whose recorded session_id
+    # actually equals the query — the glob alone would also match the PRIMARY
+    # pointer of a different session whose dotted slug starts with "$safe."
+    # (querying "web" must not silently serve "web.api").
+    newest=""; n=0
+    for f in $(ls -t "$CKPT_DIR/$safe".*.json 2>/dev/null); do
+      [[ -f "$f" ]] || continue
+      fsid=$(python3 -c 'import json,sys
+try: print(json.load(open(sys.argv[1])).get("session_id",""))
+except Exception: print("")' "$f" 2>/dev/null)
+      [[ "$fsid" == "$SESSION_ID" ]] || continue
+      n=$((n+1))
+      [[ -z "$newest" ]] && newest="$f"
+    done
+    if [[ -n "$newest" ]]; then
+      (( n > 1 )) && printf 'note: %s collision-preserved pointers exist for "%s" — use --pick to reach older ones\n' "$n" "$SESSION_ID" >&2
+      cat "$newest"; exit 0
+    fi
     # Fallback: maybe legacy holds it
     if [[ -f "$LEGACY" ]] && grep -q "\"$SESSION_ID\"" "$LEGACY"; then
       cat "$LEGACY"; exit 0

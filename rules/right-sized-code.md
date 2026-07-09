@@ -17,7 +17,7 @@ related:
   - rules/communication.md
   - rules/audit-file-character-before-applying-global-rule.md
   - rules/structure-over-one-shotting.md
-  - rules/prescribed-flattery-as-fix-for-pushback.md
+  - rules/pushback-and-self-criticism.md
   - skills/skeptical-review/SKILL.md
 tier: 2
 category: rules
@@ -75,7 +75,7 @@ it's the wrong one.
 - **The user wants the local version.** Build it. Don't push back toward "use the
   existing solution" on a shape they explicitly asked for. Pushing the rule
   against stated intent is the bidirectional failure
-  [[prescribed-flattery-as-fix-for-pushback]] warns about — capitulating *to the
+  [[pushback-and-self-criticism]] warns about — capitulating *to the
   rule* against the user is still capitulation.
 - **Reuse would couple to a wrong-fit abstraction.** When the existing util fits
   awkwardly and adapting it costs more than a clean local version, the local

@@ -181,12 +181,12 @@ Note: scheduling artifacts (`schedule/schedule.sh`, `schedule/INSTRUCTIONS.md`) 
 **Surface:** Cross-cutting (executable + docs + rules)
 **Paths:**
 - `~/.claude/scripts/schedule/` — tool + Claude-facing instructions
-- `~/.claude/rules/` (scheduling-discipline.md, cron-calendar-companion.md)
+- `~/.claude/rules/` (scheduling-discipline.md — includes the calendar-companion contract)
 - `~/.claude/scheduled/` — registry + per-name state
 - `~/Library/LaunchAgents/com.alcatraz.*.plist` — launchd entries (outside `~/.claude/` by necessity)
 - Calendar.app "Automations" calendar — companion events
 
-The "fire shell commands on a schedule on this Mac" cluster. Conceptually unifies what's otherwise scattered across `::scripts` (the gcc-schedule tool), `::rules` (the two discipline rules), launchd's plist directory, and Calendar.app.
+The "fire shell commands on a schedule on this Mac" cluster. Conceptually unifies what's otherwise scattered across `::scripts` (the gcc-schedule tool), `::rules` (the discipline rule), launchd's plist directory, and Calendar.app.
 
 Member artifacts:
 
@@ -194,8 +194,7 @@ Member artifacts:
 |---|---|---|
 | `gcc-schedule` (the tool) | `scripts/schedule/schedule.sh` | CLI: add/list/inventory/show/run/logs/enable/disable/duplicate/register/doctor/rm |
 | Claude-facing usage contract | `scripts/schedule/INSTRUCTIONS.md` | Read by Claude before invoking the tool — modes, PLANNED-block discipline, when to halt |
-| Cross-tool scheduling discipline | `rules/scheduling-discipline.md` | Naming, retire-after-fire, no-secrets-in-command, when-to-use-which-scheduler |
-| Mechanical companion rule | `rules/cron-calendar-companion.md` | Every cron gets a Calendar event for observability |
+| Cross-tool scheduling discipline | `rules/scheduling-discipline.md` | Naming, retire-after-fire, no-secrets-in-command, when-to-use-which-scheduler, calendar-companion contract (absorbed cron-calendar-companion.md 2026-07-09) |
 | Runtime state | `~/.claude/scheduled/registry.json` + per-name `<dir>/{script.sh,meta.json}` | Source of truth gcc-schedule manages |
 | Audit lens | `gcc-schedule inventory` + `gcc-schedule doctor` | Read-only views; doctor catches drift |
 

@@ -9,8 +9,9 @@ Background and research sub-agents must never run on the flagship model (Fable /
 whatever the session's top-tier model is). Recorded 2026-07-07 after the user caught a
 Fable-billed agent during the versable-builder planning session ("for bg sub agents for
 research do NOT CALL FABLE"). **Recurred same day** despite top-level pins (nested
-delegation leak) → graduated to a hard rule: [[subagent-model-ceiling]] in
-~/.claude/rules/ — Opus is the ceiling for ANY sub-agent at ANY nesting depth.
+delegation leak) → graduated to a hard rule: the sub-agent ceiling section of
+[[model-tier-routing]] in ~/.claude/rules/ (absorbed subagent-model-ceiling.md,
+2026-07-09) — Opus is the ceiling for ANY sub-agent at ANY nesting depth.
 
 **Why:** research/inventory/fan-out agents are volume work; flagship pricing turns a
 cheap sweep into a large bill with no quality gain. The flagship is for the supervisor

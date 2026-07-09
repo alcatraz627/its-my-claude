@@ -9,7 +9,7 @@ triggers:
   - skill:commit
   - skill:readme
   - skill:write-docs
-related: [rules/comments.md, rules/performative-self-criticism.md, rules/prescribed-flattery-as-fix-for-pushback.md, conventions/doc-writing.md]
+related: [rules/comments.md, rules/pushback-and-self-criticism.md, conventions/doc-writing.md]
 tier: 2
 category: rules
 updated: 2026-06-20
@@ -56,7 +56,7 @@ Scan a draft for a human and cut these tells before sending:
 - **Over-bulleting and bold-spam.** If every line is a bolded bullet, nothing is
   emphasized. Prefer prose; cap bold near one phrase per message.
 - **Decoration as rigor.** No star insight boxes, traffic-light or section emoji to
-  perform thoroughness. See [[performative-self-criticism]].
+  perform thoroughness. See [[pushback-and-self-criticism]].
 - **Distrust after a settled decision.** If the user explicitly confirmed a call, do
   not re-file it as a "blocker" or "confirm this". Say it once if a doc needs the
   update, then drop it.
@@ -66,7 +66,7 @@ Scan a draft for a human and cut these tells before sending:
   would want it, not its module list ("composable measure/drive/logs primitives").
 - **Flattery or unrequested agenda.** No "you're absolutely right" without evidence,
   no option-menus the user did not ask for. Answer and stop. See
-  [[prescribed-flattery-as-fix-for-pushback]].
+  [[pushback-and-self-criticism]].
 
 ## You cannot see your own AI-smell; route the final voice pass to a fresh reviewer
 

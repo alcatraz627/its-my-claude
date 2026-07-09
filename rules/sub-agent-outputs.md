@@ -1,5 +1,5 @@
 ---
-brief: Sub-agents producing material content (research, analysis, audit, synthesis) MUST write the full output to disk before returning. Their summary is not a substitute for the artifact.
+brief: Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST include an absolute output path + "write your full output there BEFORE returning", and the parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires.
 triggers:
   - tool:Agent
   - phrase:dispatch sub-agent
@@ -9,9 +9,17 @@ triggers:
 related:
   - features/context-retention.md
   - features/wal.md
-tier: 0
+paths:
+  # autoload opt-out (2026-07-09 demotion pass): only fires when dispatching material
+  # sub-agent work, and the directive already lives in CLAUDE.md's Tier-0 brief plus
+  # the PreToolUse guard hook that blocks persistence-free material dispatches. This
+  # file is the depth (incident history, path schemes, sub-agent-side contract) —
+  # Read it on demand from rules/00-index.md. Sentinel never matches a real file;
+  # revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
+tier: 2
 category: rules
-updated: 2026-05-06
+updated: 2026-07-09
 stale_after_days: 365
 ---
 

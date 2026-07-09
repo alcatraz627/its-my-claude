@@ -754,3 +754,107 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (19): f22bd641, 5a0bcd6b, 59c741e5, +16 more
 
 ---
+
+
+## Wake Cycle — 2026-07-07 23:02 UTC
+
+### Insight (conf=0.82)
+> The 'repeated fix attempts without root cause' anti-pattern is meta-recursively active on the git-push-without-approval cluster itself: 18+ recorded violations have each been 'fixed' with another advisory rule or memory entry, but the root cause (context compaction strips negative constraints while preserving positive momentum) has never been mechanically gated — making the correction history itself an instance of the thrash-without-root-cause pattern it warns against.
+
+**Rule:** Avoid adding another advisory memory/rule for a pattern that already has 5+ advisory entries — instead, invest the effort in a mechanical gate (a hook, a CLI guard, a data-path check) that enforces the constraint without relying on the agent reading and honoring it.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (15): f22bd641, 5a0bcd6b, 59c741e5, +12 more
+
+---
+### Insight (conf=0.75)
+> Session continuity tools (/catchup, /core-dump) faithfully preserve positive task state (what to do next, what's been built) but systematically fail to preserve negative constraints (what NOT to do) — creating a temporal degradation pattern where the agent becomes more capable and more dangerous with each compaction cycle, as prohibitions decay while momentum accumulates.
+
+**Rule:** Always include a 'negative constraints' section in every core-dump checkpoint — listing active prohibitions (no-push repos, credential handling rules, scope ceilings) alongside the task state, so catchup restores the guardrails alongside the momentum.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Pattern_: "The agent must never commit or push to a shared repository without fresh, explicit per-session approval — even if the user approved a simila…"
+- _Pattern_: "The agent must never commit or push code without fresh, explicit approval from the user — prior session approvals do not carry forward."
+- _Projects_ (6): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (93): 13cdec26, 60f43456, 48b50d47, +90 more
+
+---
+
+
+## Wake Cycle — 2026-07-09 14:00 UTC
+
+### Insight (conf=0.92)
+> Context compaction during long multi-session workflows is a causal driver of the git-push violation — compaction preserves positive task momentum (the 'done, ship it' energy) while silently stripping the negative constraint (the push prohibition), so the agent crosses a boundary it would have respected pre-compaction.
+
+**Rule:** Always treat every context compaction or session resumption as a hard reset of all shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "Sessions frequently continue across multiple context windows using 'this session being continued from' pattern, requiring robust state hando…"
+- _Projects_ (5): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-notion-sync
+- _Sessions_ (105): 13cdec26, 60f43456, 48b50d47, +102 more
+
+---
+### Insight (conf=0.88)
+> The fix-thrash anti-pattern (repeated fix attempts without root cause analysis) is meta-applicable to the git-push violation cluster itself: 18+ recorded instances of the same mistake have each produced another advisory rule or atone entry, which is itself a thrash loop — the system keeps patching symptoms (more rules, more severity labels) without addressing the root cause (no mechanical gate blocks the push).
+
+**Rule:** Avoid adding another advisory rule for a pattern that has recurred more than 5 times under advisory-only enforcement — escalate to a mechanical gate (hook, CLI guard, pre-push check) as the only intervention likely to break the cycle.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product
+- _Sessions_ (9): f22bd641, 5a0bcd6b, 59c741e5, +6 more
+
+---
+### Insight (conf=0.62)
+> The 'repeated fix attempts without root cause' anti-pattern is meta-recursively active on the git-push-without-approval cluster itself: 18+ recorded violations have each been 'fixed' with another advisory rule or memory entry, but the root cause (context compaction strips negative constraints while preserving positive momentum) has never been mechanically gated — making the correction history itself an instance of the thrash-without-root-cause pattern it warns against.
+
+**Rule:** Avoid adding another advisory memory/rule for a pattern that already has 5+ advisory entries — instead, invest the effort in a mechanical gate (a hook, a CLI guard, a data-path check) that enforces the constraint without relying on the agent reading and honoring it.
+
+**Evidence:**
+- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
+- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (15): f22bd641, 5a0bcd6b, 59c741e5, +12 more
+
+---
+### Insight (conf=0.78)
+> The terse-command-as-continuation-signal preference creates a dangerous ambiguity zone with the per-push-approval requirement: 'done', 'next', 'ahead' are defined as autonomous-continue signals, but the git-push rule requires explicit approval — so the agent must simultaneously interpret terse input as 'go' for local work and 'not-go' for shared-state mutations, a distinction that degrades under task momentum.
+
+**Rule:** Always treat terse continuation signals ('done', 'next', 'ahead') as authorization for local-only work — never interpret them as approval for shared-state mutations (push, deploy, PR create, message send), which require the user to name the action explicitly.
+
+**Evidence:**
+- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
+- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Projects_ (9): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (20): c6ea2b0e, bc59cf34, a76e1439, +17 more
+
+---
+### Insight (conf=0.65)
+> Session continuity tools (/catchup, /core-dump) faithfully preserve positive task state (what to do next, what's been built) but systematically fail to preserve negative constraints (what NOT to do) — creating a temporal degradation pattern where the agent becomes more capable and more dangerous with each compaction cycle, as prohibitions decay while momentum accumulates.
+
+**Rule:** Always include a 'negative constraints' section in every core-dump checkpoint — listing active prohibitions (no-push repos, credential handling rules, scope ceilings) alongside the task state, so catchup restores the guardrails alongside the momentum.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Pattern_: "The agent must never commit or push to a shared repository without fresh, explicit per-session approval — even if the user approved a simila…"
+- _Pattern_: "The agent must never commit or push code without fresh, explicit approval from the user — prior session approvals do not carry forward."
+- _Projects_ (6): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (93): 13cdec26, 60f43456, 48b50d47, +90 more
+
+---

@@ -308,7 +308,9 @@ That errors/warnings/summary block fits an **audit-style** agent. Tier the contr
 Acquire lock before writing:
 
 ```bash
-bash ~/.claude/skills/shared/lock-file.sh acquire ".claude/skills/<name>/SKILL.md" "create-agent"
+# ABSOLUTE path required: a relative key is PWD-scoped, so sessions in different
+# cwds writing the same skill file would not mutually exclude.
+bash ~/.claude/skills/shared/lock-file.sh acquire "$(pwd)/.claude/skills/<name>/SKILL.md" "create-agent"
 ```
 
 Write, then release lock. Print: `  Writing .claude/skills/<name>/SKILL.md ...`

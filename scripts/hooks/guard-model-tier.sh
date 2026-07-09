@@ -9,11 +9,13 @@
 #      per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped
 #      spend (user decision 2026-07-07 — the block keys on pricing, not flagship-ness).
 #   3. WARN (muteable): dispatch carries no model pin — an unpinned spawn can inherit
-#      the session flagship (rules/subagent-model-ceiling.md).
+#      the session flagship (rules/model-tier-routing.md § sub-agent ceiling).
 #
 # Mute (warn path only): touch ~/.claude/.model-tier-off   One-shot: MODEL_TIER_OFF=1
 
 set -uo pipefail
+
+
 
 INPUT=$(cat 2>/dev/null || echo "{}")
 command -v jq >/dev/null 2>&1 || exit 0
@@ -25,20 +27,31 @@ case "$TOOL" in Agent | Task) ;; *) exit 0 ;; esac
 MODEL=$(echo "$INPUT" | jq -r '.tool_input.model // empty')
 SID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 
-# 1 — telemetry, unconditional (mutes silence nudges, never data).
+# 1 — telemetry, unconditional (mutes silence nudges, never data). Appends are
+# flock-serialized (best-effort, same pattern as ledger_append) — concurrent
+# sessions dispatch agents simultaneously and share this stream.
 mkdir -p "$HOME/.claude/logs"
-echo "$INPUT" | jq -c '{ts: (now | todate), session_id: (.session_id // "unknown"),
+DISPATCH_LOG="$HOME/.claude/logs/model-dispatch.jsonl"
+TLINE=$(echo "$INPUT" | jq -c '{ts: (now | todate), session_id: (.session_id // "unknown"),
   tool: .tool_name, model: (.tool_input.model // null),
-  prompt_head: ((.tool_input.prompt // .tool_input.description // "") | .[0:160])}' \
-  >> "$HOME/.claude/logs/model-dispatch.jsonl" 2>/dev/null || true
+  prompt_head: ((.tool_input.prompt // .tool_input.description // "") | .[0:160])}' 2>/dev/null)
+[ -n "$TLINE" ] && ( flock -x 9 2>/dev/null || true; printf '%s\n' "$TLINE" >> "$DISPATCH_LOG" ) 9>>"$DISPATCH_LOG.lock" 2>/dev/null || true
 
 # 2 — the hard block. No mute file, no env override: only the human lifts this,
 # by changing the rule (same posture as guard-anthropic-credentials.sh).
 if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
-  reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED — '$MODEL' is priced per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped spend for no quality gain (rules/model-tier-routing.md + rules/subagent-model-ceiling.md; user decision 2026-07-07). Re-dispatch on sonnet (default) or opus (judgment seats). The flagship is for the supervising main loop only. This block has no self-mute."
-  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block --heeded unknown >/dev/null 2>&1 || true
-  jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
-  exit 0
+  # TEMP (human-authorized 2026-07-10, promo window): bypass active until
+  # 2026-07-17 while the consent file exists. Self-expires by date even if the
+  # file is forgotten; delete the file to end early. Telemetry above still logs
+  # every dispatch, so promo-week spend stays reviewable.
+  if [ -f "$HOME/.claude/.fable-subagent-promo" ] && [ "$(date +%Y%m%d)" -le 20260717 ]; then
+    :
+  else
+    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED — '$MODEL' is priced per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped spend for no quality gain (rules/model-tier-routing.md § sub-agent ceiling; user decision 2026-07-07). Re-dispatch on sonnet (default) or opus (judgment seats). The flagship is for the supervising main loop only. This block has no self-mute."
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block --heeded unknown >/dev/null 2>&1 || true
+    jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+    exit 0
+  fi
 fi
 
 # 3 — the missing-pin warn (muteable).

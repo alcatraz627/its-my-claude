@@ -67,3 +67,24 @@ Ranking hooks by raw FP rate and disabling the top of the list. That optimizes
 the wrong quantity. A 40%-FP warn-nudge that catches a costly slip beats a
 2%-FP block that mutes the whole hook the first time it false-fires on a push.
 Weigh FP by cost-of-false-fire; design the consequence to the cost tolerance.
+
+## Mute scope — file mutes are MACHINE-WIDE, not per-session
+
+Every mute file in the hook set (`~/.claude/.no-<gate>`, `.model-tier-off`,
+`.allow-cred-write`, `.no-postcompact-check`, `.no-sessionstart-inject`, …) is a
+bare global path with no session or PID component (confirmed across 20+ hooks,
+2026-07-09 multi-agent audit). Touching one
+silences that hook for **every concurrent and future session on the machine**
+until the file is removed — a session that mutes a gate for one gnarly edge case
+and forgets to clean up strips the safety net from unrelated sessions with no
+visible signal. Design and usage consequences:
+
+- Prefer an env-var mute (`MODEL_TIER_OFF=1`-style, process-local) for one-shot
+  needs when the hook offers one; reach for the file mute only when you really
+  mean "off everywhere".
+- If you touch a mute file, remove it in the same session — treat it like a held
+  lock, not a setting.
+- When building a new hook, offer both: an env var for process-scope and the
+  file for machine-scope. A session-scoped file variant
+  (`.no-<gate>.$SESSION_ID` checked before the global) is a filed proposal, not
+  yet standard.

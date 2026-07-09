@@ -8,7 +8,7 @@ user-invokable: true
 
 ## Brief
 
-Resume a cleared session from a `/core-dump` checkpoint with minimum exploration overhead. Parses the four-section checkpoint format, presents pending items first, loads only targeted file sections referenced by pending tasks — no full file reads, no broad codebase scans — then hands off cleanly for immediate work.
+Resume a cleared session from a `/core-dump` checkpoint with minimum exploration overhead. Parses the six-section checkpoint format (Resume Contract first, when present), presents the resume contract and pending items first, loads only targeted file sections referenced by pending tasks — no full file reads, no broad codebase scans — then hands off cleanly for immediate work.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
@@ -56,7 +56,7 @@ If `resolve.sh` exits non-zero from `--session-id` or `--pick`, fall through to 
 
 ## Phase 0.3 — Direct Resolution (when `--session-id` or `--pick` was used)
 
-The JSON entry returned by `resolve.sh` contains `checkpoint_path`, `project_root`, `name`, `summary`, `ts`. Run the Phase 0.4.4 validation + announce sequence on it (same checks as the picker path), then skip to Phase 1.3 (parse the checkpoint file).
+The JSON entry returned by `resolve.sh` contains `checkpoint_path`, `project_root`, `name`, `summary`, `ts`. It may be preceded by a `note:` line on stderr (collision-preserved pointers exist) — parse only the `{…}` JSON object, or invoke with `2>/dev/null`. Run the Phase 0.4.4 validation + announce sequence on it (same checks as the picker path), then skip to Phase 1.3 (parse the checkpoint file).
 
 ## Phase 0.4 — Global Checkpoint Resolution (CHECK FIRST when CWD is `~/.claude/` OR no filename arg)
 
@@ -220,22 +220,55 @@ Run /core-dump first to create one, then re-run /catchup.
 
 ### 1.3 Parse the checkpoint
 
-Read the checkpoint file. Extract the four sections produced by `/core-dump`:
+Read the checkpoint file. Extract the sections produced by `/core-dump`:
 
-1. **Initial Goal** — what the session was originally trying to accomplish
-2. **Agent Actions** — sequential log of what was done (with file references)
-3. **Current Expectation** — what the user expected to happen next at dump time
-4. **Pending Items** — what still needs to be done
+1. **Resume Contract** — the act-on-this-first block: next action, blocked-on,
+   expired authorizations, verification state, key anchor
+2. **Initial Goal** — what the session was originally trying to accomplish
+3. **Agent Actions** — sequential log of what was done (with file references)
+4. **Current Expectation** — what the user expected to happen next at dump time
+5. **Pending Items** — what still needs to be done
+6. **Session Insights** — gotchas, dead ends, decisions, notes for future agents
 
-If any section is missing or the file does not match the expected structure, warn the user and present whatever content exists. Do not fail silently.
+Resume Contract and Session Insights are OPTIONAL on mini / precompact /
+pre-2026-07 checkpoints — their absence there is normal, not a warning. The
+middle four are mandatory: if one of those is missing or the file does not match
+the expected structure, warn the user and present whatever content exists. Do
+not fail silently.
+
+**Expired authorizations are binding:** anything the Resume Contract lists there
+needs fresh user confirmation before you act on it — a checkpoint is never a
+carrier of push/deploy/destructive-op approval across a clear or compact.
+
+### 1.4 Cross-check against git reality (take with a grain of salt)
+
+When the checkpoint is older than ~1 hour and `project_root` is a git repo,
+snapshot present state before briefing:
+
+```bash
+cd "$PROJECT_ROOT" && git branch --show-current && git status --short | head -20 && git log -1 --oneline
+```
+
+Compare against the checkpoint's **Working surface** line and the edits claimed
+in Agent Actions.
+
+**"Grain of salt", defined:** a mismatch does NOT mean the checkpoint is wrong —
+it means the world moved after the dump (another session, the user, a revert, a
+merge). The checkpoint stays authoritative about what happened and what was
+intended *at dump time*; git is authoritative about what is true *now*. On
+mismatch: list each discrepancy in the briefing under **▸ Reality drift**,
+re-verify any pending item that depends on the drifted surface before acting on
+it, and never auto-reconcile — no reverts, no branch switches, no silently
+assuming either side is the truth.
 
 ## Phase 2 — Extract File References
 
-Scan the **Agent Actions** and **Pending Items** sections for file path references — tokens that look like file paths (contain `/`, end in `.ts`, `.tsx`, `.py`, `.md`, etc.).
+Scan the **Resume Contract**, **Agent Actions**, and **Pending Items** sections for file path references — tokens that look like file paths (contain `/`, end in `.ts`, `.tsx`, `.py`, `.md`, etc.).
 
 Build an ordered reference list:
 
-- Rank paths that appear in **Pending Items** first (most relevant to continuing work)
+- The Resume Contract's **Key anchor** ranks first when present — it is by definition the single most load-bearing location
+- Then rank paths that appear in **Pending Items** (most relevant to continuing work)
 - Then paths from **Agent Actions** that relate to pending items
 - Exclude paths from actions that are clearly already resolved
 
@@ -253,6 +286,13 @@ Present sections in this order — start from "what's next", not "where we start
 ─────────────────────────────────────────────────────
   Session Catchup
 ─────────────────────────────────────────────────────
+
+  ▸ Resume Contract            (when present — act from this first)
+    Next action / Blocked on / Expired authorizations /
+    Verification state / Key anchor
+
+  ▸ Reality drift              (only when Phase 1.4 found mismatches)
+    [discrepancy list — checkpoint claim vs git-now]
 
   ▸ Pending Items
     [bullet list from checkpoint]
@@ -276,9 +316,11 @@ For each file in the ranked reference list (Phase 2), load **only the relevant s
 
 Print each loaded snippet with its source path and why it was loaded.
 
-### 3.3 Load relevant runtime notes
+### 3.3 Load relevant runtime notes and checkpoint insights
 
 Scan `.claude/skills/runtime-notes.md` for entries relevant to the task domain (match by skill names, file paths, or keywords mentioned in the checkpoint). Print any matching entries as "Learnings from previous runs" — these may prevent repeating past mistakes.
+
+Fold the checkpoint's own **Session Insights** section (parsed in 1.3) into the same "Learnings" block — its gotchas and decisions were written by the session you're resuming and routinely carry the highest-value continuation context (model-routing choices, dead ends already explored, non-obvious traps).
 
 ### 3.4 Surface live subsystem state
 
@@ -338,7 +380,7 @@ Wait for the user's response before beginning any work. Do not make assumptions 
 
 ## Notes
 
-- **Input contract:** expects the four-section `_*.claude.md` format written by `/core-dump`. Sections are identified by `## Initial Goal`, `## Agent Actions`, `## Current Expectation`, `## Pending Items` headings.
+- **Input contract:** expects the `_*.claude.md` format written by `/core-dump`. Sections are identified by `## Resume Contract`, `## Initial Goal`, `## Agent Actions`, `## Current Expectation`, `## Pending Items`, `## Session Insights` headings (first and last optional on mini/precompact/older dumps).
 - **Inverted presentation order is deliberate:** pending items → expectation → goal. The user knows their goal; they need to know what's left.
 - **Targeted Grep over full Read:** reduces token usage for large referenced files. The checkpoint's agent actions log provides enough location context (file + symbol) to scope the Grep correctly.
 - **Do not begin work autonomously:** always hand off with a question. The user may want to reprioritize or provide new context before continuing.

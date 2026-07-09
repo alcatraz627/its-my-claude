@@ -17,14 +17,17 @@ artifact `/catchup` consumes after `/clear`.
 
 Two outputs make this skill work, and both are load-bearing:
 
-1. The **checkpoint file** with its four parse-critical sections (below).
+1. The **checkpoint file** with its parse-critical sections (below).
 2. The **global pointer write** in Phase 3.6 — without it, `/catchup` cannot
    locate the checkpoint and the file is orphaned.
 
-> **Parse contract — do not rename.** `/catchup` parses the checkpoint by four
-> exact headings: `## Initial Goal`, `## Agent Actions`, `## Current
-> Expectation`, `## Pending Items`. Keep them verbatim. The default filename
-> `_checkpoint.claude.md` is also a contract — `/catchup` falls back to it.
+> **Parse contract — do not rename.** `/catchup` parses the checkpoint by exact
+> headings: `## Resume Contract`, `## Initial Goal`, `## Agent Actions`,
+> `## Current Expectation`, `## Pending Items`, `## Session Insights`. Keep them
+> verbatim. (Resume Contract + Session Insights are tolerated-missing on mini /
+> precompact / pre-2026-07 checkpoints; the middle four are mandatory.) The
+> default filename `_checkpoint.claude.md` is also a contract — `/catchup`
+> falls back to it.
 
 ## Step 0 — Load shared guidelines and runtime context
 
@@ -76,10 +79,12 @@ Produce a flat, scannable checkpoint — no deep analysis, no insights section, 
 `improvement-ideas.md` update. Just the essentials for `/catchup`:
 
 1. **Goal** — 1-2 sentences: what the user originally asked for.
-2. **Done** — what was accomplished (files modified, features added, bugs fixed).
-3. **Not Done** — what remains incomplete.
-4. **Next Steps** — numbered immediate actions for the next agent, in priority order.
-5. **Key Files** — file paths central to the work.
+2. **Resume** — ONE imperative sentence: the very first move on resume. Add a
+   `**Blocked on:**` line only when something actually blocks (USER: / external).
+3. **Done** — what was accomplished (files modified, features added, bugs fixed).
+4. **Not Done** — what remains incomplete.
+5. **Next Steps** — numbered immediate actions for the next agent, in priority order.
+6. **Key Files** — file paths central to the work.
 
 Write using this template:
 
@@ -87,6 +92,8 @@ Write using this template:
 # Mini Core Dump — <ISO timestamp>
 
 **Goal:** <1-2 sentences>
+
+**Resume:** <one imperative sentence — the first move>
 
 **Done:**
 
@@ -188,7 +195,28 @@ effort), gotchas (non-obvious traps), notes for future agents, user feedback
 Broadly-applicable insights also get a dated entry in
 `~/.claude/improvement-ideas.md`.
 
-### 2.6 Apply style instructions
+### 2.6 Resume Contract
+
+Synthesize the one block the next agent can act on without reading anything else
+— this is the standardized "continue prompt" (it exists because users had to ask
+for one by hand). Five fields, one line each; write `none` rather than omitting
+a field, so absence is legible:
+
+- **Next action** — ONE imperative sentence, the first move. Distinct from
+  Pending Items (the backlog): this is what to do right now.
+- **Blocked on** — `USER: <what>` · `AGENT: none — go` · external actor + what.
+- **Expired authorizations** — approvals that die at compact/clear/resume
+  (pushes, deploys, destructive ops, account or identity switches). Listing them
+  is what makes the fresh-confirmation rule mechanical instead of remembered.
+- **Verification state** — last real run + result + the command that produced it
+  ("`pnpm typecheck` green after action #7" · "UNCONFIRMED — nothing run").
+- **Key anchor** — the single most load-bearing file:line, or `—`.
+
+Keep it 5-8 lines total. Pull the continuation-critical Session Insights here
+(the 2.5 section keeps the full detail); under "be terse" instructions compress
+the values, never drop the field labels.
+
+### 2.7 Apply style instructions
 
 If Phase 1 extracted instructions, adapt the sections: "focus on design decisions
 only" → collapse 2.2 to decisions; "be terse" → compress each section; "include
@@ -214,8 +242,8 @@ edits the wrong tree. Resolve via `git rev-parse --show-toplevel` +
 bash ~/.claude/skills/shared/lock-file.sh acquire "_checkpoint.claude.md" "core-dump"
 ```
 
-Write to `<project-root>/<resolved-filename>` using the Write tool. The four
-`##` section headings below are parsed verbatim by `/catchup` — keep them exact:
+Write to `<project-root>/<resolved-filename>` using the Write tool. The `##`
+section headings below are parsed verbatim by `/catchup` — keep them exact:
 
 ```markdown
 # Quick Summary (for LLMs) — <ISO timestamp>
@@ -230,6 +258,14 @@ Write to `<project-root>/<resolved-filename>` using the Write tool. The four
 > this file first and decides what to read in detail below.>
 
 # Core Dump — <ISO timestamp>
+
+## Resume Contract
+
+- **Next action:** <one imperative sentence>
+- **Blocked on:** <USER: … | AGENT: none — go>
+- **Expired authorizations:** <list | none>
+- **Verification state:** <last run + result + command | UNCONFIRMED — nothing run>
+- **Key anchor:** <file:line | —>
 
 ## Initial Goal
 
@@ -455,8 +491,8 @@ macOS bash 3.2 compatible.
 
 - `~/.claude/skills/core-dump/EXAMPLES.md` — visual-summary JSON schema,
   workspace-proposal schema, and the five render-validation scenarios.
-- `~/.claude/skills/catchup/SKILL.md` — the resume consumer; parses the four
-  section headings above and restores task context.
+- `~/.claude/skills/catchup/SKILL.md` — the resume consumer; parses the section
+  headings above (Resume Contract first) and restores task context.
 - `~/.claude/skills/forgotten-todos/SKILL.md` — consumes this checkpoint's
   **Pending Items** (ingested into `dreams/pending-todos.jsonl`) to surface the
   cross-session backlog.

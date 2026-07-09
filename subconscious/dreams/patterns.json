@@ -2825,6 +2825,44 @@
     ]
   },
   {
+    "id": "bf095985-92af-4339-aa74-89516b572333",
+    "pattern": "When a file path appears at the end of a sentence in terminal output, placing a period immediately after the path causes it to be swallowed into the auto-linked URL, making the path unclickable; file paths must always be followed by a space, comma, word, or sentence restructured so the path is not the last token before punctuation.",
+    "valence": "negative",
+    "confidence": 0.93,
+    "category": "user-preference",
+    "source_sessions": [
+      "50cd9d58-acf1-4610-914b-e3a982cd33fb",
+      "bb47e17d-3a9b-49ca-b805-45afa560de69",
+      "7d064123-e5ba-4184-aba8-ef49c9c20c30",
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      "b4950d1a-b525-440f-b488-b6a1f1b1bfb7",
+      "6c871757-b20d-4aaa-b69e-68ff26e8bfec",
+      "79c1d286-48e7-4f91-9c9d-29e3262f5cc9",
+      "d4950f0d-c421-4f4c-aba6-5ff971a368c6",
+      "e9c3c82a-42fb-4c4a-9941-f910a411d766",
+      "d2995f9e-b516-462b-81a1-0f8dd0503da2",
+      "bd8d2dd0-cd75-49ab-b679-b18eeb16e6cf",
+      "7f57388d-da83-49df-994e-1a24d195aea9",
+      "71f9d42e-5138-4a99-8165-531b4e6a52a2",
+      "51eb548b-78ff-46c0-9a0b-d554a7437040",
+      "2036f03f-da21-4950-8288-a149a81bd919"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-litellm-gemini-proxy",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-08T16:24:49.320376+00:00",
+    "last_seen": "2026-07-08T16:24:49.320376+00:00",
+    "occurrence_history": [
+      "2026-07-08T16:24:49.320376+00:00"
+    ]
+  },
+  {
     "id": "2bca0a46-6579-4af7-a41c-44bfabdd7e70",
     "pattern": "User frequently uses 'catchup' command at session start to re-orient the assistant to ongoing project context",
     "valence": "positive",
@@ -5296,6 +5334,33 @@
     "last_seen": "2026-07-04T07:08:53.367433+00:00",
     "occurrence_history": [
       "2026-07-04T07:08:53.367433+00:00"
+    ]
+  },
+  {
+    "id": "682edcf1-9b87-431b-9660-096052b416b8",
+    "pattern": "A file path placed as the final token before a sentence-ending period continues to trigger the auto-link stop hook despite the rule being documented; the agent must restructure sentences so no file path is immediately followed by a period.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "tool-use",
+    "source_sessions": [
+      "bb47e17d-3a9b-49ca-b805-45afa560de69",
+      "7d064123-e5ba-4184-aba8-ef49c9c20c30",
+      "d1e2e289-98bb-495f-a83b-ac7ab1cda365",
+      "26f499f6-5af3-4e7d-9c85-a1be367f6f8e",
+      "14f37399-5093-4a91-9228-3cab317bd1ab",
+      "6c871757-b20d-4aaa-b69e-68ff26e8bfec"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-litellm-gemini-proxy"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-09T13:59:07.651344+00:00",
+    "last_seen": "2026-07-09T13:59:07.651344+00:00",
+    "occurrence_history": [
+      "2026-07-09T13:59:07.651344+00:00"
     ]
   },
   {
@@ -9711,6 +9776,36 @@
     ]
   },
   {
+    "id": "c7452b6e-235c-415c-b2ec-413e42beafd0",
+    "pattern": "Do not launch expensive multi-agent consensus or debate workflows until all prerequisite research, documentation, and user Q&A is complete — running a high-cost debate over incomplete information is wasteful and the user will explicitly stop it.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "5f021e2d-0cdc-4b1a-8d1e-fcae627de795",
+      "50cd9d58-acf1-4610-914b-e3a982cd33fb",
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4",
+      "948a0ac3-e751-47ae-b005-6184c6909ab3",
+      "79c1d286-48e7-4f91-9c9d-29e3262f5cc9",
+      "d4950f0d-c421-4f4c-aba6-5ff971a368c6"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-data-forge"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-07T23:01:13.082146+00:00",
+    "last_seen": "2026-07-07T23:01:13.082146+00:00",
+    "occurrence_history": [
+      "2026-07-07T23:01:13.082146+00:00"
+    ]
+  },
+  {
     "id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
     "pattern": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
     "valence": "negative",
@@ -13734,81 +13829,6 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:36:38.713082+00:00",
     "last_seen": "2026-04-29T20:36:38.713082+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "5a31f651-dfb6-41b3-96bd-a2113cfc088b",
-    "pattern": "Before claiming a set of changes is complete, show a concrete diff or summary of what changed; skipping this step leads to user corrections demanding visibility into the actual edits.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "user-preference",
-    "source_sessions": [
-      "c6ea2b0e-8702-4e3a-baa0-dcb04a64b35f",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "0ce8b4ef-4c3f-46a7-82a8-44910272f188",
-      "034ab126-3696-40e8-850c-eca712dc9b47",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "3fad6b88-13af-495f-802a-26110c36e2f5"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-29T23:27:34.887451+00:00",
-    "last_seen": "2026-04-29T23:27:34.887451+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "07aa3303-4317-45df-89a5-5c5542336250",
-    "pattern": "When implementing new code in an existing backend project, the agent must scan for established project conventions (env var access patterns, auth module structure, naming conventions) before writing any code — missing this context produces code that requires rewrite.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
-      "8d9169bc-4efb-48d8-8efb-9464d064c10a",
-      "5a0bcd6b-0c99-4759-b653-13ccfb801f63",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-scripts",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-01T00:42:04.323851+00:00",
-    "last_seen": "2026-05-01T00:42:04.323851+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "87376811-cdac-4f76-8eab-358ca848ad97",
-    "pattern": "When copying or migrating a project directory, all files including hidden files (.env, dotfiles) must be transferred — omitting configuration files breaks the destination environment and violates explicit transfer instructions.",
-    "valence": "negative",
-    "confidence": 0.87,
-    "category": "approach",
-    "source_sessions": [
-      "f22bd641-a8b1-473c-bf97-1ccfa4202a70",
-      "2527f606-d551-49f6-b14a-b081914964a2",
-      "59c741e5-a33d-48a3-89ab-297f42413dfd",
-      "24d14c20-a606-467c-9ec0-cbe0bcd82726",
-      "214184c4-51e4-4a39-a1de-be2ca38e253b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-scripts",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-notion-sync",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-01T17:33:18.082842+00:00",
-    "last_seen": "2026-05-01T17:33:18.082842+00:00",
     "occurrence_history": []
   }
 ]

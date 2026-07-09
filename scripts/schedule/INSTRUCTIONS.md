@@ -81,7 +81,7 @@ If you're uncertain about how the human's intent will be parsed (timezone, DOW, 
 --alert <minutes>        Calendar alarm minutes before (default 10; 0 = none)
 --env KEY=VAL            EnvironmentVariables plist key (repeatable)
 --working-dir <abs>      WorkingDirectory plist key
---no-calendar            skip Calendar event (against cron-calendar-companion rule)
+--no-calendar            skip Calendar event (against the calendar-companion contract, rules/scheduling-discipline.md)
 --no-bootstrap           write files but don't launchctl bootstrap
 --force                  overwrite existing schedule
 --dry-run                print PLANNED block + exit, NO state created
@@ -141,7 +141,7 @@ gcc-schedule resume morning-digest
 |---|---|---|
 | Pass `--cron "0 9 * * 1-5"` | Intentionally rejected | Use `--weekly` once per day, or ask the human about adding a `--weekdays-at` flag |
 | Skip `--description` for crons that fire weeks/months later | Future-you won't remember what it was for; Calendar event notes are searchable | Always include `--description` for delayed/recurring schedules |
-| Use `--no-calendar` without a good reason | Breaks the `rules/cron-calendar-companion.md` rule that every cron gets a companion Calendar event for visibility | Only pass `--no-calendar` for transient test schedules |
+| Use `--no-calendar` without a good reason | Breaks the calendar-companion contract (`rules/scheduling-discipline.md`) that every cron gets a companion Calendar event for visibility | Only pass `--no-calendar` for transient test schedules |
 | Edit the registry JSON directly | Bypasses gcc-schedule's atomicity — can leave plist/sched_dir/registry out of sync | Always go through `add` / `rm` / `register` |
 | Run `add` to "fix" an existing schedule | `add` refuses if name exists (unless `--force`); even with `--force` you lose the Calendar event UID linkage | Use `rm` + `add`, or `disable` + edit script directly + `enable` |
 
@@ -194,6 +194,6 @@ Calendar.app "Automations" calendar            companion events
 
 ## See also
 
-- `rules/cron-calendar-companion.md` — every cron gets a Calendar event
+- `rules/scheduling-discipline.md` — cross-tool discipline, incl. the every-cron-gets-a-Calendar-event contract
 - `LOOKUP.md` § Hook Scripts — schedule.sh entry with use-case triggers
 - `NAMESPACE.md` § std::claude::scripts — conceptual home

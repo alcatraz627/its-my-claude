@@ -32,8 +32,14 @@ set -euo pipefail
 SKILL_NAME="${1:-}"
 ENTRY_FILE="${2:-}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-NOTES_FILE="$SCRIPT_DIR/../runtime-notes.md"
-NOTES_REL=".claude/skills/runtime-notes.md"
+# Canonical absolute path, used BOTH as the write target and the lock key. The key
+# must be a deterministic function of the file being protected: this script is
+# invoked from arbitrary project cwds but always writes THIS one global file, so a
+# relative lock key (PWD-scoped since lock-file.sh's 2026-07-09 change) would give
+# two projects different locks for the same file and silently lose prepends.
+# Canonicalizing (no "..") also makes the key identical to the one
+# inject-dream-insights.sh locks for the same file.
+NOTES_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/runtime-notes.md"
 
 if [[ -z "$SKILL_NAME" || -z "$ENTRY_FILE" ]]; then
   echo "Usage: prepend-runtime-note.sh <skill-name> <entry-file>" >&2
@@ -46,7 +52,7 @@ if [[ ! -f "$ENTRY_FILE" ]]; then
 fi
 
 # Acquire write lock — exits 1 with instructions if lock cannot be obtained
-bash "$SCRIPT_DIR/lock-file.sh" acquire "$NOTES_REL" "$SKILL_NAME"
+bash "$SCRIPT_DIR/lock-file.sh" acquire "$NOTES_FILE" "$SKILL_NAME"
 
 # Create runtime-notes.md with a standard header if it does not exist yet
 if [[ ! -f "$NOTES_FILE" ]]; then
@@ -79,6 +85,6 @@ TMP_FILE="${NOTES_FILE}.prepend.tmp"
 mv "$TMP_FILE" "$NOTES_FILE"
 
 # Release write lock
-bash "$SCRIPT_DIR/lock-file.sh" release "$NOTES_REL" "$SKILL_NAME"
+bash "$SCRIPT_DIR/lock-file.sh" release "$NOTES_FILE" "$SKILL_NAME"
 
-echo "PREPENDED: runtime note for [$SKILL_NAME] written to $NOTES_REL"
+echo "PREPENDED: runtime note for [$SKILL_NAME] written to $NOTES_FILE"

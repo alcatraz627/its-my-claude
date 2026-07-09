@@ -1,14 +1,16 @@
-<!-- i-dream project brief · 2026-07-07T06:36:02.074821+00:00 · 2 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-09T14:03:53.927314+00:00 · 5 patterns / 0 insights -->
 ## What this project is about
-A product-builder tooling project (Versable) with heavy emphasis on structured multi-agent workflows, documentation generation, and staged review processes. Work style is deliberate and gated — prerequisites must complete before downstream steps fire.
+Versable-builder is a product/feature development codebase. Sessions focus on docs, architecture reviews, and multi-agent workflows — with recurring emphasis on prose quality and sequencing discipline.
 
 ## Things to do (or keep doing)
-- Honor explicit deferral signals: when the user says to skip an expensive step (magi debate, multi-agent review) until content is ready, hold the gate and track it in tasks — don't run it early
-- Follow `frontend/docs/boring-technical-stuff/comment-style.md` doc conventions specifically, not just global rules — the local rubric overrides
+- Always restructure sentences so no file path is the final token before a period — trail it with a word, comma, or clause to preserve terminal auto-linking
+- Complete all prerequisite research, doc writing, and user Q&A before launching any expensive multi-agent consensus or debate workflow (magi, orchestration, etc.)
+- Load `frontend/docs/boring-technical-stuff/comment-style.md` before writing any user-facing prose for this project — it overrides global style rules
 
 ## Things to avoid
-- Don't generate AI-smell prose in docs even when guidelines are loaded — scan for: "Why this page matters", capitalized "The User", show-off language, and em-dashes before writing any user-facing doc
-- Don't conflate "all prerequisites are done" with "deferred review is now authorized" — the user must explicitly re-authorize expensive fan-out steps, not just complete the content they depend on
+- Don't place a file path immediately before a sentence-ending period, even in backtick code spans — the Ghostty auto-linker swallows the trailing period
+- Don't run a high-cost multi-agent review (magi debate, consensus panel) until ALL prerequisite content is finalized — running it over incomplete material wastes tokens and produces low-quality decisions
+- Don't produce flowery/AI-smell prose ("Why this page matters", "The User" with capitalization, show-off language) — this project's doc standard is plain, dense, developer-register prose even when guidelines are loaded
 
 ## Open questions / known gaps
-- No signal yet on which multi-agent patterns (magi, review suites) are considered "expensive enough" to require explicit re-authorization vs implicit on-completion triggers — the boundary is fuzzy
+- The file-path-before-period rule keeps firing despite being documented at Tier 0 — mechanical restructuring habit is not yet automatic; treat every sentence ending in a path as a required rewrite

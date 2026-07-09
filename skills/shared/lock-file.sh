@@ -44,6 +44,18 @@ if [[ "$ACTION" != "cleanup" && -z "$FILE_PATH" ]]; then
   exit 2
 fi
 
+# Scope the lock key by project: a relative filepath resolves against $PWD at
+# call time, so "_checkpoint.claude.md" in two different projects yields two
+# different locks (they were colliding in one global namespace before, stalling
+# unrelated projects against each other). Callers that cd between acquire and
+# release must pass an absolute path so both calls compute the same key.
+# Keys are NOT path-canonicalized: "./x", "x", and "dir/../x" yield different
+# keys for the same file — a caller protecting a fixed/global file must pass one
+# canonical absolute path everywhere (see prepend-runtime-note.sh).
+if [[ "$ACTION" != "cleanup" && "${FILE_PATH:0:1}" != "/" ]]; then
+  FILE_PATH="$PWD/$FILE_PATH"
+fi
+
 # Sanitize the file path into a safe lock-directory name
 SAFE_NAME="${FILE_PATH//\//_}"
 SAFE_NAME="${SAFE_NAME//\./_}"

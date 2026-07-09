@@ -3,7 +3,8 @@
 #
 # Why this exists: every one-shot we build needs a launchd plist + a shell
 # script + a date-guard + self-unload + a Calendar event with retirement
-# notes (per rules/cron-calendar-companion.md). Doing that by hand is ~5
+# notes (per the calendar-companion contract in rules/scheduling-discipline.md).
+# Doing that by hand is ~5
 # files and ~30 lines of osascript every time. This tool collapses it to
 # one command and guarantees the pieces stay in sync.
 #
@@ -92,7 +93,7 @@ ${BLD}add FLAGS${RST}
   --alert <minutes>        Calendar alarm minutes before (default 10; 0 = none)
   --env KEY=VAL            inject into plist EnvironmentVariables (repeatable)
   --working-dir <path>     plist WorkingDirectory (must be absolute)
-  --no-calendar            skip Calendar event (against cron-calendar-companion rule)
+  --no-calendar            skip Calendar event (against the calendar-companion contract)
   --no-bootstrap           write files but don't load into launchd
   --force                  overwrite existing schedule with same name
   --dry-run                print the PLANNED block + exit without creating anything
@@ -785,7 +786,7 @@ $desc}"
       ok "Calendar event: $cal_uid${cal_rrule:+ (recurrence: $cal_rrule)}"
     fi
   else
-    warn "Calendar event skipped per --no-calendar (against cron-calendar-companion rule)"
+    warn "Calendar event skipped per --no-calendar (against the calendar-companion contract)"
   fi
 
   # ── Bootstrap ─────────────────────────────────────────────────────────────

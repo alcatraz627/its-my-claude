@@ -96,7 +96,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5[1m]",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -741,6 +741,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/session-mgmt/sessionstart-inject.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/gemini-mode-inject.sh"
           }
         ]
       }

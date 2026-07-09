@@ -8,7 +8,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-04-24
+updated: 2026-07-10
 stale_after_days: 90
 ---
 
@@ -30,6 +30,8 @@ When the user sends a short continuation message (`keep going`, `yes`, `do it`, 
 ## Scope Control
 
 Treat user requests as a **ceiling** on scope, not a floor. Never add unsolicited "enhancements", refactors, or "while I'm here" improvements. Before any change, ask: "Did the user explicitly request this?" If no, don't do it.
+
+**Intent over literal wording.** Before implementing a label/message/string exactly as given, ask: is this the goal or just the example? Diagnostic signal: the given string conflicts with existing naming conventions or the flow's visible state, or is clearly shorthand. When the literal wording conflicts with visible intent, surface the divergence in one sentence before implementing. Escape hatch: if the user says "exactly this" or repeats the string after pushback, the literal IS the intent — implement it as given.
 
 **Autonomy calibration:** Scale autonomy on the **execution** axis (more tool calls, deeper investigation) but never on the **scope** axis. High-autonomy execution within tight scope boundaries.
 

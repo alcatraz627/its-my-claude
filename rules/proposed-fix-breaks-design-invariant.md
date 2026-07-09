@@ -1,5 +1,5 @@
 ---
-brief: Treat a design doc's goals/constraints section as a checklist, not background — before writing "mode A trades X for Y" framing, verify no consumer-rendered field diverges against a stated constraint
+brief: Before writing any "mode A trades X for Y" design framing (lean/enriched, cached/live, fast/correct), re-check the doc's OWN goals/constraints section as a checklist — if a consumer-rendered state field diverges between modes without an explicitly approved constraint, STOP and align the modes or surface the conflict. Read this rule when authoring a multi-mode design.
 triggers:
   - topic:design-doc
   - topic:design-invariant
@@ -9,9 +9,15 @@ triggers:
 related:
   - rules/structural-claim-without-reading-code.md
   - rules/grep-scope-before-claiming-absence.md
-tier: 1
+paths:
+  # autoload opt-out (2026-07-09 demotion pass): only fires when authoring a
+  # multi-mode design doc; the failure mode is caught by downstream human review,
+  # not silent-catastrophic. Read on demand from rules/00-index.md. Sentinel never
+  # matches a real file; revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
+tier: 2
 category: rules
-updated: 2026-05-20
+updated: 2026-07-09
 stale_after_days: 90
 ---
 

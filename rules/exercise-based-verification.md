@@ -62,8 +62,9 @@ exercise-by-default becomes the path of least resistance instead of a tax.
 `scripts/hooks/declared-ready-stop.sh` (Stop hook) blocks a turn that edited
 source/test files and claims success when no run signal appears that turn. It is
 loop-safe (blocks once per claim, then steps aside) and proportional (silent on
-docs-only edits, renames, pure conversation). Mute for a session:
-`touch ~/.claude/.no-declared-ready-gate`. Design:
+docs-only edits, renames, pure conversation). Mute:
+`touch ~/.claude/.no-declared-ready-gate` — **machine-wide, not per-session**: it
+silences the gate for every concurrent and future session until removed. Design:
 [`features/declared-ready-stop-hook.md`](../features/declared-ready-stop-hook.md).
 
 ## What this rule does NOT mean

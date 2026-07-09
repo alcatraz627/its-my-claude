@@ -1,0 +1,36 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.03370459909270543,
+    "unit_count": 3
+  },
+  "response": {
+    "biases_detected": [
+      "anchoring — unit 3 accepted gemini-generated file paths as the frame for verification rather than building the file inventory independently first; the anchor shaped which files were checked"
+    ],
+    "calibration_score": 0.72,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Gemini hallucination detection is working: unit 3 correctly caught the fabricated invite route and the uncited adoption plans; continue this adversarial pattern for any AI-authored doc before treating it as a source of truth",
+      "Unit 2 context-recovery strategy is efficient — reading WAL then checkpoint then plan docs in descending recency is the right order; no adjustment needed",
+      "Unit 1 zero-length output on a clear/reset command is appropriate restraint; no over-explanation pattern detected",
+      "The one failed Read (GUIDELINES.md) in unit 2 was silently absorbed with no retry or user notice; low risk here but worth surfacing absent files to the user when they are named in a plan doc",
+      "No sunk-cost or authority bias detected across the three units"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "7d064123-e5ba-4184-aba8-ef49c9c20c30",
+      1526456
+    ]
+  ],
+  "timestamp": "2026-07-09T01:17:15.412392Z",
+  "tokens_used": 2864,
+  "units_analyzed": 3,
+  "units_total": 3
+}

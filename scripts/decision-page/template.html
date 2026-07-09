@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision page</title>
+<style>
+:root, :root[data-theme="dark"] {
+  --bg: #101418; --surface: #1a2027; --surface-2: #232b34; --text: #e8edf2;
+  --dim: #93a1af; --border: #2e3843; --accent: #5b9dd9; --ok: #4fc08d;
+  --warn: #d9a05b; --rec: #2c4a63; --flip: #63363b;
+}
+:root[data-theme="light"] {
+  --bg: #f4f2ee; --surface: #ffffff; --surface-2: #f0ede8; --text: #22262a;
+  --dim: #6b7580; --border: #ddd8d0; --accent: #2563a8; --ok: #1d7a4f;
+  --warn: #9a6a1f; --rec: #dbe9f5; --flip: #f5dbde;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 -apple-system, "Segoe UI", system-ui, sans-serif; }
+header { position: sticky; top: 0; z-index: 5; background: var(--bg);
+  border-bottom: 1px solid var(--border); padding: 8px 22px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+header h1 { font-size: 15px; margin: 0; flex: 1; min-width: 200px; }
+#progress { font-size: 12.5px; color: var(--dim); white-space: nowrap; }
+#progress b { color: var(--warn); }
+button { background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 7px; padding: 6px 12px;
+  cursor: pointer; font-size: 13px; }
+button:hover { border-color: var(--accent); }
+button.on { border-color: var(--accent); background: var(--rec); }
+#copy { background: var(--accent); color: #fff; border: none; font-weight: 600; }
+main { max-width: 1060px; margin: 0 auto; padding: 20px 22px 120px; }
+section.card { background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 20px; margin: 14px 0; scroll-margin: 90px; }
+section.card.focused { outline: 2px solid var(--accent); outline-offset: 1px; }
+section.card.flipped { border-left: 4px solid var(--warn); }
+body.flip-only section.card:not(.flipped) { display: none; }
+body.flip-only .group:not(:has(.card.flipped)) h2 { display: none; }
+.group h2 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--dim); margin: 24px 0 4px; cursor: pointer; user-select: none; }
+.group h2 .n { font-weight: 400; opacity: .7; }
+.group.collapsed section.card { display: none; }
+.group h2::before { content: "▾ "; }
+.group.collapsed h2::before { content: "▸ "; }
+h3 { font-size: 16px; margin: 0 0 4px; }
+h3 .idtag { color: var(--dim); font-size: 12px; font-weight: 500; }
+.read { color: var(--dim); font-size: 13.5px; margin: 2px 0 10px; }
+.shots { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+.shots img { max-width: 236px; width: 100%; border: 1px solid var(--border);
+  border-radius: 8px; cursor: zoom-in; background: #fff; }
+.shots img.big { max-width: 100%; cursor: zoom-out; }
+.slots { font-size: 13.5px; margin: 8px 0; }
+.slots b { display: inline-block; min-width: 62px; color: var(--dim);
+  font-weight: 600; font-size: 12px; letter-spacing: .05em; }
+.slots div { margin: 3px 0; }
+.opt { display: block; padding: 8px 12px; border: 1px solid var(--border);
+  border-radius: 8px; margin: 6px 0; cursor: pointer; font-size: 13.5px;
+  position: relative; }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--rec); }
+.opt input { margin-right: 8px; }
+.opt .num { display: none; position: absolute; right: 10px; top: 8px;
+  color: var(--dim); font-size: 11px; border: 1px solid var(--border);
+  border-radius: 4px; padding: 0 5px; }
+section.card.focused .opt .num { display: inline-block; }
+.rec-tag { color: var(--ok); font-size: 11px; font-weight: 700;
+  letter-spacing: .05em; margin-left: 6px; }
+.react { display: flex; gap: 10px; align-items: center; margin-top: 10px;
+  flex-wrap: wrap; }
+.react label { font-size: 13px; display: flex; gap: 6px; align-items: center; }
+.react input[type=text] { flex: 1; min-width: 240px; background: var(--surface-2);
+  color: var(--text); border: 1px solid var(--border); border-radius: 7px;
+  padding: 6px 10px; font-size: 13px; }
+.prio { color: var(--warn); font-size: 12px; font-weight: 700; }
+#toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #fff; padding: 10px 18px; border-radius: 8px;
+  opacity: 0; transition: opacity .25s; pointer-events: none; font-size: 14px;
+  z-index: 20; }
+#toast.on { opacity: 1; }
+.note { font-size: 13px; color: var(--dim); }
+#drawer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  background: var(--surface); border-top: 1px solid var(--border);
+  max-height: 40vh; overflow: auto; padding: 10px 22px; display: none; }
+#drawer.on { display: block; }
+#drawer pre { margin: 4px 0; font: 12.5px/1.5 ui-monospace, Menlo, monospace;
+  white-space: pre-wrap; }
+#drawer .cap { font-size: 11px; color: var(--dim); letter-spacing: .05em;
+  text-transform: uppercase; }
+#overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 30;
+  display: none; align-items: center; justify-content: center; }
+#overlay.on { display: flex; }
+#overlay .box { background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 22px 28px; max-width: 460px; font-size: 13.5px; }
+#overlay table { border-collapse: collapse; }
+#overlay td { padding: 3px 12px 3px 0; }
+kbd { background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px; font: 12px ui-monospace, Menlo, monospace; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Decision page</h1>
+  <span id="progress"></span>
+  <button id="flip" title="show only flipped items (f)">flipped</button>
+  <button id="preview" title="answer preview (p)">preview</button>
+  <button id="reset" title="back to drafted answers">reset</button>
+  <button id="theme" title="theme (t)">☀ / ☾</button>
+  <button id="help" title="shortcuts (?)">?</button>
+  <button id="copy" title="copy the answer string (c)">Copy answers</button>
+</header>
+<main id="main"><p class="note">Loading config.json…</p></main>
+<div id="drawer"><span class="cap">answer preview — this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
+<div id="overlay"><div class="box">
+  <h3 style="margin-top:0">Keyboard</h3>
+  <table>
+    <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>next / previous item</td></tr>
+    <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>pick option in the focused decision</td></tr>
+    <tr><td><kbd>a</kbd></td><td>toggle agree on the focused item</td></tr>
+    <tr><td><kbd>n</kbd></td><td>write a note on the focused item (<kbd>Esc</kbd> to leave)</td></tr>
+    <tr><td><kbd>f</kbd></td><td>show only flipped items</td></tr>
+    <tr><td><kbd>p</kbd></td><td>answer preview drawer</td></tr>
+    <tr><td><kbd>c</kbd></td><td>copy the answer string</td></tr>
+    <tr><td><kbd>g</kbd> / <kbd>G</kbd></td><td>first / last item</td></tr>
+    <tr><td><kbd>t</kbd></td><td>theme</td></tr>
+    <tr><td><kbd>?</kbd></td><td>this help (<kbd>Esc</kbd> closes)</td></tr>
+  </table>
+  <p class="note">Untouched = agreed. Only flips and notes end up in the paste.</p>
+</div></div>
+<div id="toast">Copied — paste it in chat</div>
+<script>
+/* Generic decision page. Reads ./config.json (same folder, must be served over
+   http). Renders decision radio-groups + item cards with agree/note reactions,
+   persists to localStorage (incl. a ts the hub reads), and builds a compact
+   answer string. Schema: ~/.claude/features/decision-pages.md */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+let CFG = null, FOCUS = -1;
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render() {
+  document.title = CFG.title || "Decision page";
+  $("#title").textContent = CFG.title || "Decision page";
+  const M = $("#main");
+  let h = "";
+  if (CFG.intro) h += `<p class="note">${esc(CFG.intro)} If you agree with it
+    all: hit <b>Copy answers</b> and paste it in chat. Press <kbd>?</kbd> for keyboard.</p>`;
+  if ((CFG.decisions || []).length) {
+    h += `<div class="group" data-g="__decisions"><h2>Decisions <span class="n">· ${CFG.decisions.length}</span></h2>`;
+    CFG.decisions.forEach(d => {
+      h += `<section class="card decision" data-d="${esc(d.id)}" tabindex="-1">
+        <h3>${esc(d.id)} · ${esc(d.question)}</h3>`;
+      if (d.context) h += `<p class="read">${esc(d.context)}</p>`;
+      d.options.forEach((o, i) => {
+        h += `<label class="opt"><input type="radio" name="${esc(d.id)}"
+          value="${esc(o.code)}" ${o.rec ? "checked" : ""}><b>${esc(o.code)}</b> ·
+          ${esc(o.label)}${o.rec ? '<span class="rec-tag">RECOMMENDED</span>' : ""}
+          <span class="num">${i + 1}</span></label>`;
+      });
+      h += `</section>`;
+    });
+    h += `</div>`;
+  }
+  let group = null, open = false;
+  (CFG.sections || []).forEach(s => {
+    if ((s.group || "Items") !== group) {
+      if (open) h += `</div>`;
+      group = s.group || "Items";
+      const n = CFG.sections.filter(x => (x.group || "Items") === group).length;
+      h += `<div class="group" data-g="${esc(group)}"><h2>${esc(group)} <span class="n">· ${n}</span></h2>`;
+      open = true;
+    }
+    h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
+      <h3>${esc(s.title)} <span class="idtag">${esc(s.id)}</span>${s.prio ? ` <span class="prio">${esc(s.prio)}</span>` : ""}</h3>`;
+    if (s.read) h += `<p class="read">${esc(s.read)}</p>`;
+    if ((s.images || []).length) h += `<div class="shots">` +
+      s.images.map(im => `<img src="${esc(im)}" alt="${esc(s.title)}" loading="lazy">`).join("") + `</div>`;
+    if (s.slots) {
+      h += `<div class="slots">` + Object.entries(s.slots).map(([k, v]) =>
+        `<div><b>${esc(k)}</b> ${esc(v)}</div>`).join("") + `</div>`;
+    }
+    h += `<div class="react"><label><input type="checkbox" class="agree" checked>agree</label>
+      <input type="text" class="notes" placeholder="exception / note…"></div></section>`;
+  });
+  if (open) h += `</div>`;
+  M.innerHTML = h;
+  $$(".group h2").forEach(t => t.onclick = () => { t.parentElement.classList.toggle("collapsed"); save(); });
+}
+
+/* which option is the drafted recommendation, per decision id */
+const recOf = id => (CFG.decisions.find(d => d.id === id)?.options.find(o => o.rec) || {}).code;
+
+function state() {
+  const s = { theme: document.documentElement.dataset.theme, ts: Date.now(),
+              d: {}, screens: {}, collapsed: [] };
+  (CFG.decisions || []).forEach(d =>
+    s.d[d.id] = $(`input[name="${d.id}"]:checked`)?.value);
+  $$("section.screen").forEach(sec => {
+    s.screens[sec.dataset.s] = {
+      agree: $(".agree", sec).checked, note: $(".notes", sec).value.trim() };
+  });
+  s.collapsed = $$(".group.collapsed").map(g => g.dataset.g);
+  return s;
+}
+const KEY = () => "decision-page:" + (CFG.storageKey || CFG.title || "default");
+function save() { localStorage.setItem(KEY(), JSON.stringify(state())); refresh(); }
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY()) || "null"); if (!s) return;
+    if (s.theme) document.documentElement.dataset.theme = s.theme;
+    Object.entries(s.d || {}).forEach(([d, v]) => {
+      const el = $(`input[name="${d}"][value="${v}"]`); if (el) el.checked = true; });
+    Object.entries(s.screens || {}).forEach(([k, v]) => {
+      const sec = $(`section[data-s="${k}"]`); if (!sec) return;
+      $(".agree", sec).checked = v.agree; $(".notes", sec).value = v.note || ""; });
+    (s.collapsed || []).forEach(g => {
+      const el = $(`.group[data-g="${CSS.escape(g)}"]`); if (el) el.classList.add("collapsed"); });
+  } catch {}
+}
+
+/* the single source for "what deviates from the draft" — drives the flipped
+   styling, the progress line, the copy badge, and the answer string */
+function flips() {
+  const s = state(), out = { d: [], screens: [] };
+  (CFG.decisions || []).forEach(d => { if (s.d[d.id] !== recOf(d.id)) out.d.push(d.id); });
+  Object.entries(s.screens).forEach(([k, v]) => { if (!v.agree || v.note) out.screens.push(k); });
+  return out;
+}
+function answerString() {
+  const s = state();
+  const lines = [(CFG.copyHeader || CFG.title || "answers") + ":"];
+  if ((CFG.decisions || []).length)
+    lines.push(CFG.decisions.map(d => d.id + (s.d[d.id] || "?")).join(" "));
+  Object.entries(s.screens).forEach(([k, v]) => {
+    if (!v.agree || v.note) lines.push(
+      `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? " — " + v.note : ""}`);
+  });
+  if (!lines.some((l, i) => i > 1)) lines.push("all items: agree as drafted");
+  return lines.join("\n");
+}
+
+function refresh() {
+  const f = flips();
+  $$("section.decision").forEach(sec =>
+    sec.classList.toggle("flipped", f.d.includes(sec.dataset.d)));
+  $$("section.screen").forEach(sec =>
+    sec.classList.toggle("flipped", f.screens.includes(sec.dataset.s)));
+  const total = (CFG.decisions || []).length + (CFG.sections || []).length;
+  const n = f.d.length + f.screens.length;
+  $("#progress").innerHTML = n
+    ? `${total} items · <b>${n} flipped</b>` : `${total} items · all as drafted`;
+  $("#copy").textContent = n ? `Copy answers (${n})` : "Copy answers";
+  if ($("#drawer").classList.contains("on")) $("#drawertext").textContent = answerString();
+}
+
+/* ── focus / keyboard ─────────────────────────────────────────────────── */
+const cards = () => $$("section.card").filter(c => c.offsetParent !== null);
+function focusCard(i) {
+  const cs = cards(); if (!cs.length) return;
+  FOCUS = Math.max(0, Math.min(i, cs.length - 1));
+  $$("section.card.focused").forEach(c => c.classList.remove("focused"));
+  const c = cs[FOCUS];
+  c.classList.add("focused");
+  c.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+document.addEventListener("keydown", e => {
+  const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName || "");
+  if (e.key === "Escape") {
+    if ($("#overlay").classList.contains("on")) return $("#overlay").classList.remove("on");
+    if (typing) return document.activeElement.blur();
+  }
+  if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+  const cs = cards(), cur = cs[FOCUS];
+  switch (e.key) {
+    case "j": case "ArrowDown": e.preventDefault(); focusCard(FOCUS + 1); break;
+    case "k": case "ArrowUp":   e.preventDefault(); focusCard(FOCUS - 1); break;
+    case "g": focusCard(0); break;
+    case "G": focusCard(cards().length - 1); break;
+    case "a": if (cur?.classList.contains("screen")) {
+        const cb = $(".agree", cur); cb.checked = !cb.checked; save(); } break;
+    case "n": if (cur?.classList.contains("screen")) { e.preventDefault(); $(".notes", cur).focus(); } break;
+    case "f": $("#flip").click(); break;
+    case "p": $("#preview").click(); break;
+    case "c": $("#copy").click(); break;
+    case "t": $("#theme").click(); break;
+    case "?": $("#overlay").classList.add("on"); break;
+    default:
+      if (/^[1-9]$/.test(e.key) && cur?.classList.contains("decision")) {
+        const opt = $$(".opt input", cur)[Number(e.key) - 1];
+        if (opt) { opt.checked = true; save(); }
+      }
+  }
+});
+
+document.body.addEventListener("click", e => {
+  if (e.target.matches(".shots img")) e.target.classList.toggle("big");
+  const card = e.target.closest("section.card");
+  if (card) { const cs = cards(); FOCUS = cs.indexOf(card);
+    $$("section.card.focused").forEach(c => c.classList.remove("focused"));
+    card.classList.add("focused"); }
+});
+document.body.addEventListener("change", save);
+document.body.addEventListener("input", save);
+$("#theme").onclick = () => {
+  const r = document.documentElement;
+  r.dataset.theme = r.dataset.theme === "dark" ? "light" : "dark";
+  save();
+};
+$("#flip").onclick = () => { document.body.classList.toggle("flip-only");
+  $("#flip").classList.toggle("on"); FOCUS = -1; };
+$("#preview").onclick = () => { const d = $("#drawer"); d.classList.toggle("on");
+  $("#preview").classList.toggle("on"); refresh(); };
+$("#help").onclick = () => $("#overlay").classList.add("on");
+$("#overlay").onclick = e => { if (e.target.id === "overlay") e.target.classList.remove("on"); };
+$("#reset").onclick = () => {
+  if (!confirm("Reset every answer back to the drafted recommendation?")) return;
+  localStorage.removeItem(KEY()); location.reload();
+};
+$("#copy").onclick = async () => {
+  const txt = answerString();
+  try { await navigator.clipboard.writeText(txt); }
+  catch { prompt("Copy this:", txt); }
+  $("#toast").classList.add("on");
+  setTimeout(() => $("#toast").classList.remove("on"), 1800);
+};
+
+fetch("config.json").then(r => r.json()).then(c => { CFG = c; render(); load(); refresh(); })
+  .catch(e => { $("#main").innerHTML =
+    `<p class="note">Failed to load config.json — serve this folder over http
+    (decision-page.sh serve) and check the JSON. ${esc(e)}</p>`; });
+</script>
+</body>
+</html>

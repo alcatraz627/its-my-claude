@@ -113,7 +113,7 @@ Output in this order, prose-first, no scores:
 
 Do not pad: a UI with one real problem gets one finding. If the gripe is not supported
 by the evidence (the UI is fine, the user is tired), say that plainly — with the
-evidence — rather than inventing findings. See `rules/pushback-honesty.md`.
+evidence — rather than inventing findings. See `rules/pushback-and-self-criticism.md` § 3.
 
 ## Anti-patterns
 

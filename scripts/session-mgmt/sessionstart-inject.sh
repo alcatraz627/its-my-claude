@@ -30,6 +30,7 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 # The injectors, in display order. Each is a script that reads the SessionStart
 # payload on stdin and prints {additionalContext|hookSpecificOutput} or nothing.
 INJECTORS=(
+  "$HOME/.claude/scripts/session-mgmt/post-compact-reality-check.sh"
   "$HOME/.claude/scripts/dream/dream-insights.sh"
   "$HOME/.claude/scripts/pending-proposals.sh"
   "$HOME/.claude/scripts/dream/dream-metrics-context.sh"
@@ -56,7 +57,9 @@ for inj in "${INJECTORS[@]}"; do
   pids+=($!)
   i=$((i + 1))
 done
-for p in "${pids[@]}"; do wait "$p" 2>/dev/null; done
+# ${pids[@]+…} — macOS bash 3.2 treats an empty array as unset under set -u
+# (latent here: only if every injector file were missing).
+for p in ${pids[@]+"${pids[@]}"}; do wait "$p" 2>/dev/null; done
 
 # Merge each injector's additionalContext (accept either schema), in order.
 merged=""

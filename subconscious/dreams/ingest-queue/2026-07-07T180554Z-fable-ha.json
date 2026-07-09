@@ -1,0 +1,24 @@
+{
+  "ts": "2026-07-07T18:05:54Z",
+  "session_id": "fable-hand-3e",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260707-fable-hand-3e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "[USER, top] Rotate + strip committed credential defaults in `backend/lib/config/__init__.py` (PartDB URI :98, Logfire :108, Sentry DSN :161, Pinecone :164, Slack webhook below) \u2014 deliberately NOT a GH issue.",
+    "[USER] Screenshot pass: 49 callouts / 31 docs, session-grouped in `frontend/.claude/notes/screenshot-shotlist.md`.",
+    "[USER] Five decisions: credits-arch dedicated-vs-fold (recommend dedicated, as written); product/system pointer-vs-summaries; tech/frontend/flows fold-or-write; widgets-v2 doc promotion timing; ratify the external pass's relabels.",
+    "[USER] Prune pass per `frontend/.claude/notes/prune-candidates.md` (+ ~20 stale `_*.claude.md` checkpoints under frontend/); commit the uncommitted work tree.",
+    "[USER] docs-inbox D1 still unclaimed: fresh review of PR #209 non-doc code changes + placing the docs pulled from development.",
+    "[AGENT] Check `claude-ipc inbox fable-hand-3e` for the 05:43-pass authorship answer; reconcile the addendum if it wasn't fable-docs.",
+    "[AGENT] Residual state-of-union backlog: tree-wide docs-vs-code drift sweep (item 1 residual); document individual-user-limits (new gap item); ops runbooks dlq-recovery/secrets-rotation/backend-set-up (need user facts); 5 conventions stubs; team-scaling-guide currency pass.",
+    "[AGENT] Product-visible bug list (useQ `||`, useM race, useLocalStorage, useData, 402-vs-400) awaiting product triage \u2014 Linear scope, not agent-filed."
+  ],
+  "tags": []
+}

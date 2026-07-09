@@ -67,6 +67,8 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0024 | Atone-recurrence-loop fixes — stakes tiering, events.jsonl +stakes/+juror_health, session counter, circuit breaker, stakes-gated hook blocks, efficacy metric | ✅ | 2026-06-25 | 2026-06-25 | [0024-atone-recurrence-loop-fixes.md](0024-atone-recurrence-loop-fixes.md) |
 | 0025 | Event-ledger system bootstrap — spec, shared writer, proposals domain, alert layer (P0-P3) | ✅ | 2026-06-27 | 2026-07-02 | [0025-ledger-system-bootstrap.md](0025-ledger-system-bootstrap.md) |
 | 0026 | Extend ::ledger facet with scheduler + hook-telemetry streams (history.jsonl, warn-events, hooks-feedback-domain) | ✅ | 2026-07-07 | 2026-07-07 | [0026-ledger-facet-telemetry-streams.md](0026-ledger-facet-telemetry-streams.md) |
+| 0027 | Rules payload restructure — 3 merges (scheduling, pushback doctrine, model ceiling) + 5 sentinel-paths autoload demotions; ~42.9k → ~33.8k always-on tokens | ✅ | 2026-07-09 | 2026-07-09 | [0027-rules-payload-restructure.md](0027-rules-payload-restructure.md) |
+| 0028 | Checkpoint pointer collision-preservation — `<slug>.<uuid8>.json` siblings + identity-checked resolve fallback | ✅ | 2026-07-10 | 2026-07-10 | [0028-checkpoint-pointer-collision-schema.md](0028-checkpoint-pointer-collision-schema.md) |
 
 ---
 

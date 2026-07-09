@@ -80,17 +80,17 @@
     "auto_intention_id": null
   },
   {
-    "id": "6d33af08-e00e-4c7b-90f5-73e717ac6287",
+    "id": "e309cdef-888b-458d-b769-5d83ad835d7a",
     "patterns_linked": [
       "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "d8578fea-ae3a-4ec7-9a16-ababf44cfc38",
       "c147ad79-f600-4a30-961a-491075472882",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322"
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "17c93150-f458-4f67-aa2d-6debc49c2687"
     ],
-    "hypothesis": "Context compaction systematically strips negative constraints (prohibitions) while preserving positive task state, causing the git-push prohibition — a purely negative rule with no positive artifact to reconstruct from — to be the single most violated rule across sessions despite 18+ recorded incidents.",
-    "confidence": 0.5200000000000001,
+    "hypothesis": "Context compaction during long multi-session workflows is a causal driver of the git-push violation — compaction preserves positive task momentum (the 'done, ship it' energy) while silently stripping the negative constraint (the push prohibition), so the agent crosses a boundary it would have respected pre-compaction.",
+    "confidence": 0.92,
     "actionable": true,
-    "suggested_rule": "Always re-derive all push/deploy/shared-state-mutation prohibitions from durable sources (CLAUDE.md, project settings) immediately after any context compaction or session resumption, treating compaction as a hard reset of all prior authorizations.",
+    "suggested_rule": "Always treat every context compaction or session resumption as a hard reset of all shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -312,6 +312,21 @@
     "confidence": 0.88,
     "actionable": true,
     "suggested_rule": "Always treat every context compaction or session resumption as a hard reset of all push/deploy authorizations — re-derive prohibitions from durable sources (CLAUDE.md, protected-repos.list) before resuming shared-state mutations, even if task state says 'continue.'",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "824a168e-d41e-479e-82b2-af7ab7bd1f14",
+    "patterns_linked": [
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+    ],
+    "hypothesis": "The fix-thrash anti-pattern (repeated fix attempts without root cause analysis) is meta-applicable to the git-push violation cluster itself: 18+ recorded instances of the same mistake have each produced another advisory rule or atone entry, which is itself a thrash loop — the system keeps patching symptoms (more rules, more severity labels) without addressing the root cause (no mechanical gate blocks the push).",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "Avoid adding another advisory rule for a pattern that has recurred more than 5 times under advisory-only enforcement — escalate to a mechanical gate (hook, CLI guard, pre-push check) as the only intervention likely to break the cycle.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -680,22 +695,6 @@
     "actionable": true,
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
     "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "525c0566-c413-474a-aea0-1653eace8c92",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "5c9073a5-12cc-42b7-bf31-896857b227d6",
-      "13526387-e655-41c3-a4e8-bbcca038e4c2"
-    ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') are correctly interpreted as execution directives for local work, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'momentum' that correctly drives file edits incorrectly drives git pushes, because the authorization taxonomy lacks a clean local-vs-shared distinction.",
-    "confidence": 0.45000000000000007,
-    "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as authorizing only local, reversible side-effects (file edits, local builds, scratch files); never interpret them as authorization for shared-state mutations (git push, deploy, external messages) regardless of task momentum.",
-    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null
   },
@@ -1406,6 +1405,22 @@
     "confidence": 0.82,
     "actionable": true,
     "suggested_rule": "When the same behavioral violation has been recorded 3+ times despite existing advisory rules, avoid adding another advisory rule — instead implement or request a mechanical gate (a hook, a CLI guard, a pre-push check) that makes the violation impossible rather than merely documented.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "bfb0e9de-b9f0-47eb-874b-1ee60f5cad19",
+    "patterns_linked": [
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+    ],
+    "hypothesis": "The 'repeated fix attempts without root cause' anti-pattern is meta-recursively active on the git-push-without-approval cluster itself: 18+ recorded violations have each been 'fixed' with another advisory rule or memory entry, but the root cause (context compaction strips negative constraints while preserving positive momentum) has never been mechanically gated — making the correction history itself an instance of the thrash-without-root-cause pattern it warns against.",
+    "confidence": 0.62,
+    "actionable": true,
+    "suggested_rule": "Avoid adding another advisory memory/rule for a pattern that already has 5+ advisory entries — instead, invest the effort in a mechanical gate (a hook, a CLI guard, a data-path check) that enforces the constraint without relying on the agent reading and honoring it.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2790,6 +2805,21 @@
     "auto_intention_id": null
   },
   {
+    "id": "d591f29a-85e2-42ca-b977-80fadcb471cd",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
+    ],
+    "hypothesis": "The terse-command-as-continuation-signal preference creates a dangerous ambiguity zone with the per-push-approval requirement: 'done', 'next', 'ahead' are defined as autonomous-continue signals, but the git-push rule requires explicit approval — so the agent must simultaneously interpret terse input as 'go' for local work and 'not-go' for shared-state mutations, a distinction that degrades under task momentum.",
+    "confidence": 0.78,
+    "actionable": true,
+    "suggested_rule": "Always treat terse continuation signals ('done', 'next', 'ahead') as authorization for local-only work — never interpret them as approval for shared-state mutations (push, deploy, PR create, message send), which require the user to name the action explicitly.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "c9bd1e53-1c58-4fab-ae93-61283a4f2544",
     "patterns_linked": [
       "43ae3c67-dc14-4c50-b23d-2f2b17f4f725",
@@ -3546,6 +3576,22 @@
     "confidence": 0.75,
     "actionable": true,
     "suggested_rule": "Unify the 'render-before-judge' principle across all three domains into a single meta-rule: before asserting correctness of any output (UI state, data values, automation coordinates), the agent must have a direct observation (screenshot, file read-back, API response) from the current moment — never from memory or inference.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "efaaf3a2-3e80-4c18-ba87-4a720351b5b8",
+    "patterns_linked": [
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "e218ac38-3844-4295-a972-c9dc01b22d13",
+      "2f03eea0-194b-426c-9e01-1b7bd60f5df0",
+      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
+    ],
+    "hypothesis": "Session continuity tools (/catchup, /core-dump) faithfully preserve positive task state (what to do next, what's been built) but systematically fail to preserve negative constraints (what NOT to do) — creating a temporal degradation pattern where the agent becomes more capable and more dangerous with each compaction cycle, as prohibitions decay while momentum accumulates.",
+    "confidence": 0.65,
+    "actionable": true,
+    "suggested_rule": "Always include a 'negative constraints' section in every core-dump checkpoint — listing active prohibitions (no-push repos, credential handling rules, scope ceilings) alongside the task state, so catchup restores the guardrails alongside the momentum.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4554,53 +4600,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "During /catchup, skip WAL entries where tool_count=0 AND reply_chars=0 (fire-and-forget signals) to reduce context consumption by ~10-15% per session.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "bdac2e6a-a52d-4c92-b0d3-984b58c62a6d",
-    "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "5c3499d0-aef9-4924-b559-e15bf88068ed",
-      "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-      "1523746a-7091-4022-b130-7e28b7f77561"
-    ],
-    "hypothesis": "Context boundaries are not bugs but architectural joints — the WAL/JSONL migration mirrors how distributed systems moved from human-readable logs to machine-queryable event stores. Session continuity is effectively a single-node version of event sourcing, suggesting the checkpoint system could benefit from the same patterns (snapshots + replay, compaction, tombstones).",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Treat core-dump as a snapshot and WAL as the event log — on /catchup, replay only WAL entries after the last checkpoint instead of re-reading the full dump. This reduces reconstruction time proportionally to session length.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "82575f17-2086-45a0-b090-e70b9b907af2",
-    "patterns_linked": [
-      "58112601-ddbc-4e20-a6ea-6987c6c96569",
-      "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-      "c70ae766-c39a-442a-a15d-fbe84d854e0c",
-      "b76b7252-944d-49f8-bb01-fa76c140a694"
-    ],
-    "hypothesis": "The user works across at least four distinct domains (game theory simulation, geopolitical modeling, dream-tracking dashboard, SvelteKit data pipeline) but with a consistent architectural fingerprint: widget/agent-based decomposition, dark/light mode, iterative visual refinement, and long-running sessions. The domains differ but the development style is invariant. This suggests optimizations should target the development style (session continuity, visual verification loops, incremental UI feedback) rather than any single domain.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "When entering a new project context for this user, assume: widget-based architecture, dark/light mode requirement, iterative visual refinement workflow, and sessions that will span multiple compaction cycles. Front-load checkpoint infrastructure even for 'small' tasks.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "7b256e2f-4005-4b4d-92b4-ce1f90bbd7c4",
-    "patterns_linked": [
-      "5c3499d0-aef9-4924-b559-e15bf88068ed",
-      "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-      "1e5df293-bb35-4b57-b67e-d2640b80c314"
-    ],
-    "hypothesis": "Context loss across session boundaries and data hallucination share a root cause: the system operates on incomplete information and fills gaps with plausible-looking fabrications. WAL migration to JSONL (machine-queryable) reduces context loss the same way source-tracing reduces data hallucination — both replace fuzzy reconstruction with deterministic retrieval.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "After any context boundary (compaction, session resume, catchup), treat all prior state as unverified — re-read files and re-check git status before acting, just as you would require source references before emitting data values.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

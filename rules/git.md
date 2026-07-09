@@ -8,7 +8,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-04-24
+updated: 2026-07-10
 stale_after_days: 90
 ---
 
@@ -18,6 +18,8 @@ Commit cadence, push discipline, repo defaults, and gitignore patterns.
 ## Frequent commits — MANDATORY
 
 Commit after each logical unit, before switching areas, before risky operations, and if ~15-20 min of work accumulates. Batch related small changes (rename + imports = one commit) but never let 3-4+ changes pile up. Push after every 2-3 commits.
+
+Cadence is timing, not authorization: the guidance above applies only once commits are already in scope for the task (explicit request, or a task framing that includes committing). Without that, don't commit even if the 15-20 min window has passed.
 
 ## Never push to main without explicit approval
 

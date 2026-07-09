@@ -101,5 +101,10 @@ esac
 
 [ -z "$LINE" ] && exit 0
 
-printf '%s\n' "$LINE" >> "$TARGET" 2>/dev/null || true
+# Concurrent sessions in one project share this file — serialize appends with a
+# best-effort flock (no flock binary → plain O_APPEND, as before). Long lines
+# (checkpoint kind) can exceed PIPE_BUF, where bare >> may interleave. The lock
+# object is the SIDECAR "$TARGET.lock", matching rotate-wal.sh — so appends also
+# serialize against rotation's gzip-then-truncate window, not just each other.
+( flock -x 9 2>/dev/null || true; printf '%s\n' "$LINE" >> "$TARGET" ) 9>>"$TARGET.lock" 2>/dev/null || true
 exit 0

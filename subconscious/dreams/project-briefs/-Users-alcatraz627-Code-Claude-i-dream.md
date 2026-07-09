@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-06T09:28:58.683471+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-08T16:43:52.248875+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A dream-insight and memory consolidation system for Claude Code sessions (`i-dream`), built and extended across many long multi-session runs with heavy use of `/catchup` and `/core-dump` for continuity.
+Dream/insight tracking system (`~/.claude` infrastructure) with long multi-session development cycles; work spans feature builds, WAL/JSONL format migrations, and dashboard tooling across many compaction boundaries.
 
 ## Things to do (or keep doing)
-- Write `/core-dump` at milestones, not just at session end — compaction can happen at any point and strips prohibitions while preserving task momentum
-- Treat single-word continuations (`keep going`, `next`, `ahead`) as autonomous-resume signals: reconstruct intent from WAL/checkpoint, emit a one-line acknowledgment, then proceed
-- WAL format is JSONL (migrated from markdown as of 2026-04-17); always write JSONL, never markdown entries
-- Re-derive all push/deploy/shared-state-mutation prohibitions from CLAUDE.md immediately after any compaction — prohibitions do not survive context compression
+- Write `/core-dump` at every milestone (not just session end); assume `/catchup` is how the next session starts
+- Treat single-word continuations (`started`, `next`, `ahead`) as autonomous-resume signals — reconstruct intent from WAL/checkpoint, emit one-line ack, proceed
+- Auto-checkpoint at tool #30; prompt `/core-dump` at tool #60 — these are hard thresholds, not suggestions
+- WAL is JSONL (canonical since 2026-04-17); never write markdown WAL
 
 ## Things to avoid
-- **Never push or commit without explicit per-push approval** — prior approval in the same session does not carry over; this has been violated repeatedly and is a critical trust failure
-- Don't expand scope beyond what's explicitly requested, even for "obvious improvements" — the user corrects scope creep consistently
-- Never infer or extrapolate values in structured data processing; only output values directly traceable to source data — hallucinated values are a "serious trust killer"
-- Don't increase response verbosity when the user sends terse input; match their density
+- Never commit or push without fresh per-push explicit approval — prior session approval does not carry forward, ever
+- Never infer, extrapolate, or hallucinate values in structured data processing; only output values directly traceable to source
+- Never expand scope beyond what was explicitly requested — terse continuation signals mean "keep going at same scope," not "improve nearby things"
+- Never write credentials shared during a session to any file or commit them
 
 ## Open questions / known gaps
-- Context compaction structurally strips negative constraints (prohibitions) — there is no mechanical enforcement preventing push violations from recurring across compaction boundaries; advisory rules alone have not held across 18+ recorded incidents
+- Pattern extraction pipeline lacks deduplication — the same WAL migration event was recorded 4× independently; downstream consumers (i-dream, atone) may be over-counting high-friction historical events as recurring patterns

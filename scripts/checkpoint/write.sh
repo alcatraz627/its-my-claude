@@ -105,6 +105,31 @@ json_escape() {
 # 1. Session-keyed pointer (refresh in place, atomic).
 SAFE_SID=$(printf '%s' "$SESSION_ID" | LC_ALL=C tr -c 'A-Za-z0-9._-' '_')
 SESSION_FILE="$CKPT_DIR/$SAFE_SID.json"
+
+# Collision guard: slugs are only 2-hex disambiguated, so recurring project names
+# reuse them across genuinely different sessions (live example: "local-models",
+# two UUIDs). If the existing pointer belongs to a DIFFERENT session UUID,
+# preserve it under a uuid-suffixed name instead of silently last-writer-winning
+# — the older session stays reachable via <slug>.<uuid8>.json (resolve.sh falls
+# back to those) or via --pick from the append-only index.
+if [[ -f "$SESSION_FILE" ]]; then
+  OLD_UUID=$(python3 -c 'import json,sys
+try: print(json.load(open(sys.argv[1])).get("session_uuid") or "")
+except Exception: print("")' "$SESSION_FILE" 2>/dev/null)
+  if [[ -n "$OLD_UUID" && "$OLD_UUID" != "${SESSION_UUID:-}" ]]; then
+    # Covers a uuid-less NEW writer too (headless runs without
+    # CLAUDE_CODE_SESSION_ID): "" != old uuid → the old pointer is still preserved.
+    /bin/mv -f "$SESSION_FILE" "$CKPT_DIR/$SAFE_SID.${OLD_UUID:0:8}.json"
+    printf 'pointer-collision: slug "%s" was held by uuid %s… — preserved as %s.%s.json\n' \
+      "$SESSION_ID" "${OLD_UUID:0:8}" "$SAFE_SID" "${OLD_UUID:0:8}"
+  elif [[ -z "$OLD_UUID" && -n "${SESSION_UUID:-}" ]]; then
+    # Old pointer predates uuid recording — sessions are indistinguishable, so we
+    # overwrite (old checkpoint stays reachable via --pick in the append-only
+    # index). Warn so the no-op is legible instead of silent.
+    printf 'pointer-collision-guard: existing "%s" pointer has no session_uuid — cannot distinguish sessions; overwriting (older reachable via --pick)\n' "$SESSION_ID" >&2
+  fi
+fi
+
 TMP=$(mktemp)
 cat > "$TMP" <<EOF
 {

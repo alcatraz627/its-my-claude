@@ -9,12 +9,11 @@ triggers:
   - topic:gemini
   - phrase:"which model"
 related:
-  - subagent-model-ceiling
   - contain-subagent-token-sprawl
   - structure-over-one-shotting
 tier: 0
 category: rules
-updated: 2026-07-07
+updated: 2026-07-09
 stale_after_days: 180
 ---
 
@@ -23,7 +22,7 @@ stale_after_days: 180
 Every piece of work runs on some lane — cloud Claude, the local lm suite, or gemini — and
 the choice is made **proactively at plan time**, not by default-inertia. This
 operationalizes standing doctrine (efficacy-over-speed, the ease–effort–output triad,
-[[contain-subagent-token-sprawl]], [[subagent-model-ceiling]]): default conservative on
+[[contain-subagent-token-sprawl]], the sub-agent ceiling below): default conservative on
 tokens; spend more only when efficacy measurably demands it. Full spec + provenance:
 `~/Code/local-models/.claude/output/20260707-model-tier-harness/proposal.md`.
 
@@ -42,6 +41,19 @@ tokens; spend more only when efficacy measurably demands it. Full spec + provena
 (`high` when it helps; `low` for wide/numerous fan-outs). Opus stays at `medium` unless
 the seat is genuine judgment. `xhigh` on a sub-agent needs explicit user sanction.
 Tool-call count is NOT effort — a low-effort agent may make many calls.
+
+## The sub-agent ceiling (absorbed from rules/subagent-model-ceiling.md, 2026-07-09)
+
+Opus is the hard ceiling for sub-agents at ANY nesting depth; the flagship
+(fable/mythos-class) is for the supervising main loop only. Graduated 2026-07-07 from two
+same-day flagship-dispatch occurrences in the versable-builder planning session.
+
+1. **Every `Agent`/`workflow.agent()` dispatch carries an explicit `model:` pin.** An
+   unpinned spawn can inherit the session model — the flagship.
+2. **Close the nesting leak** (how the ceiling was breached despite top-level pins):
+   every delegation prompt includes ONE of "Do NOT spawn sub-agents" (preferred for
+   bounded tasks) or "any sub-agent you spawn must pin sonnet or lower."
+3. In-flight agents are let to finish; the rule governs new dispatches.
 
 ## Decision rules (task class → lane)
 
@@ -89,7 +101,8 @@ never up to fable.
   their call. **NEVER switch models without the user's explicit confirmation.**
 - Mid-task suggest-a-switch is encouraged; silent-switch never (lane-internal choices —
   which intent, which judge — stay autonomous).
-- Warn-path mutes: `touch ~/.claude/.model-tier-off` · `MODEL_TIER_OFF=1`. The
+- Warn-path mutes: `touch ~/.claude/.model-tier-off` (machine-wide — ALL sessions
+  until removed) · `MODEL_TIER_OFF=1` (this process only). The
   fable-as-sub-agent block has **no self-mute** — only the human lifts it.
 - Everything degraded → main agent does it inline and records the miss.
 
@@ -101,6 +114,5 @@ switch models on your own judgment. Stop — route it out loud.
 
 ## Related
 
-- [[subagent-model-ceiling]] — the ceiling this rule extends (adds effort + local/gemini lanes)
 - [[contain-subagent-token-sprawl]] — the width axis (how many agents), sibling decision
 - `features/model-tier-harness.md` — mechanics: hook, telemetry, reviews, lm gemini

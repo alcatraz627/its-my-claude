@@ -15,6 +15,9 @@ build_tldr() {
       local sev_int days score
       sev_int=$(_sev_max_to_int "$sev_str")
       days=$(_days_since "${ts:0:10}")
+      # Dormancy gate: a pattern with no event in >30d has landed — stop
+      # spending a top-5 reminder slot on it every session.
+      (( days > 30 )) && continue
       score=$(_score_for "$sev_int" "$days" "$cnt")
       printf '%s\t%s\t%dx\t%s\t%s\n' "$score" "$sev_str" "$cnt" "$slug" "$title"
     done | sort -rn | head -5 | awk -F'\t' '{

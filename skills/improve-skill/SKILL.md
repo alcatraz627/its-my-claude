@@ -247,11 +247,11 @@ Use `Edit` for targeted changes (single section replacements). Use `Write` only 
 
 For each edit:
 
-- Acquire lock: `bash ~/.claude/skills/shared/lock-file.sh acquire ".claude/skills/<name>/SKILL.md" "improve-skill"`
+- Acquire lock: `bash ~/.claude/skills/shared/lock-file.sh acquire "<ABSOLUTE path of the SKILL.md being edited>" "improve-skill"` — always the absolute path (e.g. `~/.claude/skills/<name>/SKILL.md` for a global skill, `$(pwd)/.claude/skills/<name>/SKILL.md` for a project skill); a relative key is PWD-scoped and two sessions editing the same global skill from different cwds would not mutually exclude
   - If exit 1 (locked): print the owner, skip this skill, continue to next
 - Print: `  [✎] Updating <section name> in <name>/SKILL.md ...`
 - Apply the edit
-- Release lock: `bash ~/.claude/skills/shared/lock-file.sh release ".claude/skills/<name>/SKILL.md" "improve-skill"`
+- Release lock: `bash ~/.claude/skills/shared/lock-file.sh release "<same ABSOLUTE path>" "improve-skill"`
 - Print: `  ✓ Done`
 
 **Inserting ## Brief (if missing):**
@@ -432,9 +432,9 @@ with `mcp__inputs__confirm` ("Save these validation examples to <name>/SKILL.md?
 
 If confirmed:
 
-1. Acquire lock: `bash ~/.claude/skills/shared/lock-file.sh acquire ".claude/skills/<name>/SKILL.md" "improve-skill"`
+1. Acquire lock: `bash ~/.claude/skills/shared/lock-file.sh acquire "<ABSOLUTE path of the SKILL.md>" "improve-skill"` (absolute, per the locking note above)
 2. Append the `## Validation Examples` section to the end of the SKILL.md (before `## Notes` if it exists)
-3. Release lock: `bash ~/.claude/skills/shared/lock-file.sh release ".claude/skills/<name>/SKILL.md" "improve-skill"`
+3. Release lock: `bash ~/.claude/skills/shared/lock-file.sh release "<same ABSOLUTE path>" "improve-skill"`
 4. Run `npx prettier --write .claude/skills/<name>/SKILL.md`
 
 ---

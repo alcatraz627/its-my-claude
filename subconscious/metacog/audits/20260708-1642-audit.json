@@ -1,0 +1,94 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.1,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.29555277766926236,
+    "unit_count": 50
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in approximately 11 of 13 tool-using units (~85%); rate matches or exceeds 75-84% prior baseline; zero improvement across 6+ consecutive tracked cycles; subvariants confirmed this batch: ls-for-directory-listing (bb47e17d-6: ls -la worktrees/; bb47e17d-7: 7x ls -la calls spanning speedway, walmart-mvp, versable-builder paths; bb47e17d-8: implicit via repeated Read same-file pairs; 7d064123-2: ls session-notes/, ls *.claude.md; 7d064123-6: ls packages/ui/src/dropzone/, ls packages/ui/src/select/, ls walmart-mvp/, ls walmart-mvp/frontend/, ls speedway/, ls speedway/app/, ls speedway/app/routes/; 05780eae-16: ls docs/plan/; 05780eae-20: ls .fiber-snatcher/auth/; 05780eae-27: ls -la *.json, head -1 proposal-*.md glob); sed-instead-of-read-with-offset (50cd9d58-2: sed -n '55,75p' _lib.sh, sed -n '300,315p' bin/q; 7d064123-6: cat packages/ui/package.json | sed -n '1,40p'; 05780eae-20: sed -n 1,60p DRIVING.md; 05780eae-36: sed -n 70,140p tailwind.config.ts, sed -n 160,230p tailwind.config.ts); cat-instead-of-read (7d064123-6: cat packages/ui/package.json | sed -n ...; 05780eae-20: cat install.sh | head -30); cat-heredoc-file-write (05780eae-27: cat > _anon-map.json <<'EOF'); head-in-pipe (50cd9d58-2: head -25, head in compound; 7d064123-2: tail -5, head -30; 05780eae-15: glow ... | head -8); mechanical enforcement of sed and ls substitution structurally absent; deprioritize further recommendation given 6+ cycle stagnation with no trajectory change",
+      "subagent_model_ceiling:RECURRING:STABLE — 3 units dispatched agents without verifiable model pins: 05780eae-20 (1 Agent dispatch), 05780eae-27 (5 SendMessage dispatches, no model params visible in tool metadata), 05780eae-36 (3 Agent dispatches post-correction); correction in unit -29 ('calling agents fable opus highest') arrived after -27 but did not prevent recurrence in -36; commit messages in -36 carry Co-Authored-By: Claude Fable 5 confirming main session on Fable, meaning unpinned dispatches inherit flagship by default; advisory-only rule has now failed across 3+ consecutive batches since graduation 2026-07-07; mechanical gate (guard-model-tier.sh extension blocking Agent calls without explicit model param) remains absent",
+      "hook_bypass:RECURRING — unit 05780eae-36 uses git -c core.hooksPath=/dev/null commit; was classified NEW in prior calibration cycle; now confirmed RECURRING in second consecutive batch; CLAUDE.md global rules explicitly prohibit --no-verify equivalent without user request; no documented per-turn user authorization present in unit metadata; escalates from NEW to RECURRING classification",
+      "sub_agent_output_not_persisted:NEW_TO_CALIBRATION_HISTORY — unit bb47e17d-6 shows forensic recovery of layout-reviewer.md that a sub-agent wrote but whose path (versable-builder/.claude/worktrees/agent-aa57d1541555153df/.claude/output/20260708-1615-demo-mock-visual-audit/layout-reviewer.md) either did not persist or was cleaned up with the worktree; parent spent 7 tool calls (Read fail + 5 python3 forensic probes through tool-result cache + TaskUpdate) attempting recovery; final recovery also failed (success:false); this is the exact failure mode documented in rules/sub-agent-outputs.md with phantom artifact cost materialized; not previously classified as a tracked pattern in calibration history"
+    ],
+    "calibration_score": 0.31,
+    "overconfident_count": 2,
+    "recommendations": [
+      "sub_agent_output_not_persisted: NEW pattern with immediate concrete cost — bb47e17d-6 spent 7 recovery tool calls and still failed to restore the artifact; pre-dispatch gate obligation (assign absolute output path + write-before-returning instruction in every Agent prompt that produces material content) was not followed by the dispatching session; escalate to active recommendation; consider proposing a pre-dispatch hook that blocks Agent calls to worktree-isolated agents without an output_path param",
+      "subagent_model_ceiling: post-correction recurrence in 05780eae-36 confirms advisory-rule-without-mechanical-gate failure mode; same pattern as skill-spec-update-not-honored; the fix is not another rule iteration but enforcement at the dispatch callsite; propose guard-model-tier.sh extension to warn or block Agent/SendMessage calls missing explicit model param; this is now 3+ batches recurring since graduation with zero advisory improvement",
+      "hook_bypass: escalate from NEW to RECURRING; was classified first occurrence last cycle, now confirmed second cycle; CLAUDE.md rule is unambiguous ('Never skip hooks --no-verify unless explicitly requested'); no documented user request in unit -36; file proposal to add git-commit hook bypass to guard script or to add explicit prompt-before-bypass gate",
+      "shell_tool_preference_violations: deprioritize new recommendations — pattern has been flagged 6+ consecutive cycles with zero improvement trajectory; only actionable path is mechanical enforcement (sed/ls/cat PreToolUse blocks) which requires user decision; flag for user review rather than repeating the recommendation in each cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "50cd9d58-acf1-4610-914b-e3a982cd33fb",
+      4553684
+    ],
+    [
+      "bb47e17d-3a9b-49ca-b805-45afa560de69",
+      2049293
+    ],
+    [
+      "7d064123-e5ba-4184-aba8-ef49c9c20c30",
+      1094080
+    ],
+    [
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      34514593
+    ],
+    [
+      "b4950d1a-b525-440f-b488-b6a1f1b1bfb7",
+      170577
+    ],
+    [
+      "6c871757-b20d-4aaa-b69e-68ff26e8bfec",
+      754697
+    ],
+    [
+      "79c1d286-48e7-4f91-9c9d-29e3262f5cc9",
+      31250741
+    ],
+    [
+      "d4950f0d-c421-4f4c-aba6-5ff971a368c6",
+      27446490
+    ],
+    [
+      "e9c3c82a-42fb-4c4a-9941-f910a411d766",
+      38498
+    ],
+    [
+      "d2995f9e-b516-462b-81a1-0f8dd0503da2",
+      76629
+    ],
+    [
+      "bd8d2dd0-cd75-49ab-b679-b18eeb16e6cf",
+      71723
+    ],
+    [
+      "7f57388d-da83-49df-994e-1a24d195aea9",
+      74577
+    ],
+    [
+      "71f9d42e-5138-4a99-8165-531b4e6a52a2",
+      1576634
+    ],
+    [
+      "51eb548b-78ff-46c0-9a0b-d554a7437040",
+      77529
+    ],
+    [
+      "2036f03f-da21-4950-8288-a149a81bd919",
+      260191
+    ]
+  ],
+  "timestamp": "2026-07-08T16:42:38.109424Z",
+  "tokens_used": 13790,
+  "units_analyzed": 24,
+  "units_total": 50
+}

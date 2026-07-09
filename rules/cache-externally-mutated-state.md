@@ -1,5 +1,5 @@
 ---
-brief: Don't cache a value that something outside your process can change — a TTL longer than "now" on externally-mutated state is a staleness bug.
+brief: Never cache/TTL a status, availability, or liveness value that an external writer (another CLI, daemon, sibling service, the user) can change — read it live or invalidate on the real event; a TTL on externally-mutated state is a plausible-but-wrong staleness bug. Read this rule before adding any cache, memoization, or TTL.
 triggers:
   - topic:caching
   - topic:stale-state
@@ -8,9 +8,15 @@ triggers:
 related:
   - rules/testing.md
   - rules/error-classification.md
+paths:
+  # autoload opt-out (2026-07-09 demotion pass): only fires when writing caching/TTL
+  # logic; failure mode is a testable correctness bug, not irreversible. Read on
+  # demand from rules/00-index.md. Sentinel never matches a real file; revert by
+  # deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
-updated: 2026-06-15
+updated: 2026-07-09
 stale_after_days: 365
 ---
 

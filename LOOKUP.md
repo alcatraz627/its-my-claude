@@ -45,8 +45,7 @@
 | `rules/shell.md` | Project-root-first grep, `trash` not `rm`, non-interactive flags | `topic:shell`, `tool:trash` |
 | `rules/git.md` | Frequent commits, public by default, gitignore, no main push | `topic:git-commits`, `topic:github-repos` |
 | `rules/corrections.md` | After-correction ritual: state mistake → invoke /atone → fix | `topic:user-corrections`, `phrase:"revert this"` |
-| `rules/cron-calendar-companion.md` | Every cron (launchd/crontab/CronCreate) gets a companion `Automations` calendar event for human visibility; retire both together (sibling of `scheduling-discipline.md`; both in `std::claude::schedule`) | `topic:cron`, `topic:launchd`, `tool:CronCreate` |
-| `rules/scheduling-discipline.md` | Cross-tool scheduling practice (`std::claude::schedule`): which scheduler for which job, --description required, naming, retire-after-fire, no-secrets-in-command, audit cadence, pause-vs-rm | `topic:scheduling`, `topic:cron`, `topic:launchd`, `tool:gcc-schedule` |
+| `rules/scheduling-discipline.md` | Cross-tool scheduling practice (`std::claude::schedule`): which scheduler for which job, --description required, naming, retire-after-fire, no-secrets-in-command, audit cadence, pause-vs-rm, AND the calendar-companion contract (every cron gets an `Automations` event; retire both together — absorbed cron-calendar-companion.md 2026-07-09) | `topic:scheduling`, `topic:cron`, `topic:launchd`, `tool:CronCreate`, `tool:gcc-schedule` |
 
 ### `features/` — tool/subsystem/integration docs
 

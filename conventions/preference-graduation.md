@@ -73,7 +73,7 @@ to GLOSSARY/memory/rules (those require judgment). The harvester
 candidate list to `~/.claude/topics/preference-candidates-YYYY-MM-DD.md`. It is
 wired into an existing scheduled mechanism (the atone-consolidate / i-dream review
 cadence) rather than a standalone daemon, and — like every scheduled job here —
-carries an `Automations` calendar companion (see `rules/cron-calendar-companion.md`).
+carries an `Automations` calendar companion (see `rules/scheduling-discipline.md` § calendar companion).
 The human reviews the candidate list and runs the manual pass for anything real.
 
 ## Related

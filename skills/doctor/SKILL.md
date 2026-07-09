@@ -28,6 +28,8 @@ and adds on-demand extended diagnostics that would be too noisy to emit on every
 | **Events log** | exists, recent entries, size, 24h event-kind histogram, top projects, 10-line tail | `/doctor`-only |
 | **Hook integrity** | all hook scripts referenced in `settings.json` exist and are executable | `/doctor`-only |
 | **MCP config** | `.mcp.json` valid JSON, no obvious issues | `/doctor`-only |
+| **Config sub-files** | STALE per `updated` + `stale_after_days` frontmatter | `/doctor`-only |
+| **Runtime notes** | active `runtime-notes.md` >800 lines (archival overdue) | `/doctor`-only |
 
 ---
 
@@ -58,6 +60,39 @@ fi
 ```
 
 If there are warnings, they will print here. If clean, one green success line.
+
+---
+
+## Step 1b: Config hygiene canaries
+
+Two staleness checks on `~/.claude/` itself: sub-file freshness and runtime-notes size.
+
+```bash
+source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
+gum_divider "Config Hygiene"
+
+# Stale sub-files. validate-triggers prints:
+#   ⚠ <file>: STALE — <age>d since update (threshold <N>d)
+stale_lines=$(bash ~/.claude/scripts/validate-triggers.sh 2>&1 | rg "STALE")
+if [ -n "$stale_lines" ]; then
+  echo "$stale_lines" | while IFS= read -r line; do gum_warn "$line"; done
+  gum_info "Refresh each file's content (or just its 'updated:' field if still accurate)"
+else
+  gum_success "No stale rules/features/conventions sub-files"
+fi
+
+# Runtime-notes size: >800 lines means archival is overdue.
+# Rule: features/context-retention.md · archiver: scripts/archive-runtime-notes.sh
+for nf in ~/.claude/skills/runtime-notes.md "$PWD/.claude/skills/runtime-notes.md"; do
+  [ -f "$nf" ] || continue
+  lines=$(wc -l < "$nf" | tr -d ' ')
+  if [ "$lines" -gt 800 ]; then
+    gum_warn "runtime-notes over budget: $nf (${lines} lines > 800) — run /archive-notes or scripts/archive-runtime-notes.sh"
+  else
+    gum_success "runtime-notes within budget: $nf (${lines} lines)"
+  fi
+done
+```
 
 ---
 

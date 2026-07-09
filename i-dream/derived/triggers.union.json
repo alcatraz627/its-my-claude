@@ -1,23 +1,13 @@
 [
   {
-    "id": "trig-ai-smell-prose-against-stored-voice",
-    "from_slug": "ai-smell-prose-against-stored-voice",
+    "id": "trig-agent-internal-ids-in-user-facing-comms",
+    "from_slug": "agent-internal-ids-in-user-facing-comms",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "default-LLM prose register against the user's stored human-voice preference",
+    "instruction": "Referred to internal Task-tool IDs (#12/#13/#14) in user-facing messages",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260619-194539-c9"
-  },
-  {
-    "id": "trig-ascii-art-tables-instead-of-gum-tools",
-    "from_slug": "ascii-art-tables-instead-of-gum-tools",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "use std::claude::shared/gum-tui.sh, never hand-rolled ASCII",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260610-101333-89"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260706-222138-84"
   },
   {
     "id": "trig-committing-without-explicit-request",
@@ -37,27 +27,17 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-113302-e8"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260707-201301-55"
   },
   {
-    "id": "trig-file-referenced-without-full-path",
-    "from_slug": "file-referenced-without-full-path",
+    "id": "trig-flagship-model-leaked-via-unpinned-nested-subagents",
+    "from_slug": "flagship-model-leaked-via-unpinned-nested-subagents",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Named a file by basename in a report instead of its full clickable path",
+    "instruction": "Flagship (Fable) billed on research sub-agents via unpinned nested delegation",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-141452-f5"
-  },
-  {
-    "id": "trig-filename-followed-by-period",
-    "from_slug": "filename-followed-by-period",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Ended a file path with a period, breaking terminal clickability (recurred despite the hook)",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-141452-84"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260707-011402-8f"
   },
   {
     "id": "trig-infra-before-grep",
@@ -78,6 +58,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-093928-bd"
+  },
+  {
+    "id": "trig-literal-request-over-intent",
+    "from_slug": "literal-request-over-intent",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Implemented literal UI request wording instead of modeling its intent",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260709-144639-fc"
   },
   {
     "id": "trig-manufactured-problem-by-removing-own-solution",
@@ -130,16 +120,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-195732-91"
   },
   {
-    "id": "trig-self-permitting-exception-to-an-adr-hard-rule",
-    "from_slug": "self-permitting-exception-to-an-adr-hard-rule",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Self-permitting exception to an ADR / hard rule",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-100904-83"
-  },
-  {
     "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
     "from_slug": "speculative-abstractions-without-a-load-bearing-caller",
     "from_source": "atone",
@@ -150,34 +130,14 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260624-071907-d0"
   },
   {
-    "id": "trig-status-verdict-from-stale-mental-model-no-re-check",
-    "from_slug": "status-verdict-from-stale-mental-model-no-re-check",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Status verdict from stale mental model (no re-check)",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260609-104640-ef"
-  },
-  {
     "id": "trig-structural-claim-without-reading-code",
     "from_slug": "structural-claim-without-reading-code",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "structural-claim-without-reading-code",
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-112025-2c"
-  },
-  {
-    "id": "trig-tui-primitive-without-required-affordances",
-    "from_slug": "tui-primitive-without-required-affordances",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Shipped zconvert -i on gum file, which lacks the search + full-path entry the user asked for",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-141452-03"
   },
   {
     "id": "trig-unprompted-infra-scope-creep",
@@ -190,6 +150,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-095334-62"
   },
   {
+    "id": "trig-intelligent-disobedience-over-sycophancy",
+    "from_slug": "intelligent-disobedience-over-sycophancy",
+    "from_source": "affirm",
+    "weight": "medium",
+    "instruction": "Push back on a default assumption when evidence supports a smarter path",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260709-184108-c3"
+  },
+  {
     "id": "trig-scope-derived-metric-to-declared-schema",
     "from_slug": "scope-derived-metric-to-declared-schema",
     "from_source": "affirm",
@@ -198,16 +168,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#aff-20260629-135117-4f"
-  },
-  {
-    "id": "trig-test-feature-when-dependency-lands",
-    "from_slug": "test-feature-when-dependency-lands",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Run a feature the instant its blocking dependency lands — don't assume wired = works",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260621-135213-c5"
   },
   {
     "id": "trig-weigh-fp-metric-by-cost-of-false-fire",

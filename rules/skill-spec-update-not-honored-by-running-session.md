@@ -1,5 +1,5 @@
 ---
-brief: A mid-session SKILL.md change that adds a mandatory phase is advisory-only to sessions started before it — enforce at the data-write CLI, not the spec, or it's silently bypassable
+brief: SKILL.md mandates are advisory to already-running sessions (specs are cached at discovery, never re-read) — when adding a mandatory phase to a skill, add enforcement at the data-write CLI in the same change, or it's silently bypassable. Read this rule when editing SKILL.md mandates or debugging a skipped skill phase.
 triggers:
   - topic:skill-loading
   - topic:spec-enforcement
@@ -8,9 +8,15 @@ triggers:
   - skill:migrate
 related:
   - rules/sub-agent-outputs.md
-tier: 1
+paths:
+  # autoload opt-out (2026-07-09 demotion pass): only fires when editing a SKILL.md
+  # mandate or debugging a skipped phase — a narrow authoring domain. Read on demand
+  # from rules/00-index.md. Sentinel never matches a real file; revert by deleting
+  # this paths: block.
+  - "zz-on-demand--never-autoloads"
+tier: 2
 category: rules
-updated: 2026-05-20
+updated: 2026-07-09
 stale_after_days: 120
 ---
 

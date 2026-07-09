@@ -1,26 +1,36 @@
 ---
-brief: Cross-tool scheduling practice — discipline that applies whether you use gcc-schedule, hand-built launchd plists, or other schedulers. Naming, retire-after-fire, secrets, calendar companion, when-to-use-which-scheduler. Distinct from INSTRUCTIONS.md which is gcc-schedule-tool-specific.
+brief: Scheduling contract, read BEFORE creating or retiring ANY scheduled job — every recurring cron (launchd plist / crontab / CronCreate) ALSO gets an `Automations` calendar event with label+command+plist in the notes, and retiring a cron deletes its event in the same change; always pass --description; no secrets in commands; prefer gcc-schedule for "fire shell command X at time Y".
 triggers:
   - topic:scheduling
   - topic:cron
   - topic:launchd
+  - topic:scheduled-job
   - phrase:schedule this
   - phrase:set up a cron
   - phrase:fire at
+  - phrase:"StartCalendarInterval"
+  - phrase:"crontab"
   - tool:CronCreate
   - tool:gcc-schedule
 related:
-  - rules/cron-calendar-companion.md
   - scripts/schedule/INSTRUCTIONS.md
-tier: 1
+  - rules/never-modify-anthropic-credentials.md
+paths:
+  # autoload opt-out (2026-07-09 demotion pass): disclosed on demand, not always-on.
+  # Only fires when creating/retiring a scheduled job — a small minority of sessions;
+  # a missed calendar companion is caught later by `gcc-schedule doctor`/`inventory`.
+  # The agent Reads this from rules/00-index.md when scheduling comes up. Sentinel
+  # below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
+tier: 2
 category: rules
-updated: 2026-06-01
+updated: 2026-07-09
 stale_after_days: 365
 ---
 
 # Scheduling discipline
 
-Cross-tool practice for any scheduled job on this machine — applies to `gcc-schedule`, hand-built launchd plists, `crontab`, and the harness `CronCreate` tool. Pairs with `rules/cron-calendar-companion.md` (which is specifically about Calendar event companions) and `scripts/schedule/INSTRUCTIONS.md` (which is gcc-schedule-specific operational contract).
+Cross-tool practice for any scheduled job on this machine — applies to `gcc-schedule`, hand-built launchd plists, `crontab`, and the harness `CronCreate` tool. The calendar-companion contract (formerly its own rule, `cron-calendar-companion.md`, merged 2026-07-09) lives in this file too. `scripts/schedule/INSTRUCTIONS.md` remains the gcc-schedule-specific operational contract.
 
 ## Choose the right scheduler
 
@@ -45,19 +55,49 @@ Every schedule that fires more than a few hours out — daily, weekly, one-shot 
 
 If you're tempted to skip `--description` "because it's obvious", remember: it won't be obvious in 3 weeks when you see `[cron-once] mystery-cron — fires …` in Calendar.
 
-## Calendar companion is the default
+## Every cron gets a companion calendar event (MANDATORY)
 
-Per `rules/cron-calendar-companion.md`, every recurring or delayed cron gets an `Automations` calendar event. The discipline rule reinforces it from the scheduler side: **passing `--no-calendar` requires a reason in the description**. Acceptable reasons:
+When creating ANY recurring scheduled job, **also create a recurring event in the user's macOS Calendar** that mirrors the schedule. This is a hard step, not a nicety: the job is not "done" until its calendar companion exists. (`gcc-schedule` does this automatically — **passing `--no-calendar` requires a reason in the description**. Acceptable reasons: test schedules cleaned up within minutes, or a schedule whose Calendar event would itself be load-bearing — rare; that usually means it should be a manual Reminder instead. "It's just a small thing" and "I'll add the event later" are not reasons.)
 
-- Test schedules being cleaned up within minutes
-- Schedules whose Calendar event would itself be load-bearing (rare; usually means the schedule should be a manual Reminder instead)
+Why: on 2026-05-27 the user discovered `com.alcatraz.philosophy-prompt-tuesday` had **never fired once** — and they had forgotten it existed. launchd and cron fail silently by design; a recurring calendar event with an alert is the cheapest human-facing signal that the automation exists and is (or isn't) firing. The event is an **observability backstop**, not a second scheduler.
 
-Unacceptable reasons:
+All three mechanisms need a companion:
 
-- "It's just a small thing"
-- "I'll set up the Calendar event later"
+| Mechanism | Recognise it by |
+|-----------|-----------------|
+| launchd LaunchAgent in `~/Library/LaunchAgents/` | `StartCalendarInterval` / `StartInterval` key |
+| crontab | a `* * * * * cmd` line |
+| harness cron | the `CronCreate` tool call itself |
 
-If you can't articulate why `--no-calendar` is correct, don't pass it.
+How: use a dedicated calendar named `Automations` (create once if missing). The event recurrence mirrors the cron schedule (daily → `FREQ=DAILY`; weekly on a day → `FREQ=WEEKLY;BYDAY=xx`; every-N-days `StartInterval` → `FREQ=DAILY;INTERVAL=N`). Set an alert if the job's firing is important to observe.
+
+```bash
+# Runs in the USER's session (Calendar.app needs the login GUI session + Automation permission).
+osascript <<'APPLESCRIPT'
+tell application "Calendar"
+  if not (exists calendar "Automations") then make new calendar with properties {name:"Automations"}
+  tell calendar "Automations"
+    set startDate to (current date)
+    set hours of startDate to 9
+    set minutes of startDate to 0
+    make new event with properties {
+      summary:"[cron] atone-consolidate (Mon/Wed/Fri 09:00)",
+      start date:startDate,
+      end date:(startDate + 5 * minutes),
+      description:"label: com.alcatraz.atone-consolidate" & return & ¬
+        "runs: ~/.claude/scripts/atone-consolidate.sh" & return & ¬
+        "plist: ~/Library/LaunchAgents/com.alcatraz.atone-consolidate.plist" & return & ¬
+        "log: <path>",
+      recurrence:"FREQ=WEEKLY;BYDAY=MO,WE,FR"
+    }
+  end tell
+end tell
+APPLESCRIPT
+```
+
+The event notes MUST contain: the launchd **label** (or "crontab" / "CronCreate id"), the **command/script**, the **plist path** (or crontab line), and the **log path** if any — so a future agent can retire it. Retiring a cron is a two-step delete: the job AND its calendar event, in the same change. An orphan event lying about a dead automation is worse than no event.
+
+Not required for: one-shot / `at`-style single-fire jobs (a single reminder is fine but optional), and ephemeral `run_in_background` tasks within a session (not crons).
 
 ## Naming
 
@@ -132,9 +172,12 @@ If the human's intent is ambiguous in any of these ways, ask before scheduling:
 - **Command runs as root or affects shared state** — confirm the scope
 - **Schedule replaces an existing one** with `--force` — confirm the intent and check if `disable` + `add new` is cleaner
 
+## Diagnostic signal
+
+You just wrote a `StartCalendarInterval` plist, a crontab line, or called `CronCreate`, and you have NOT created an `Automations` calendar event — or you're retiring a cron without deleting its event. Stop; the job isn't done.
+
 ## See also
 
-- `rules/cron-calendar-companion.md` — every cron gets a Calendar event (the mechanical companion rule)
 - `scripts/schedule/INSTRUCTIONS.md` — gcc-schedule operational contract (the tool-specific how-to)
 - `rules/never-modify-anthropic-credentials.md` — credential hygiene
 - `NAMESPACE.md` § `std::claude::schedule` — the cluster's namespace

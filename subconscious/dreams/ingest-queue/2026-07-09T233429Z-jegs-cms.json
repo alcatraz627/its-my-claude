@@ -1,0 +1,24 @@
+{
+  "ts": "2026-07-09T23:34:29Z",
+  "session_id": "jegs-cms-7e",
+  "project_root": "/Users/alcatraz627/Code/Versable/staging-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/staging-enhancement-product/_20260710-jegs-cms-7e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: commit/push unstaged: `backend/lib/providers/gemini/__init__.py` (Sentry, hardened tag), `frontend/src/db/fixtures/jegs-enh-template.data.ts` (accuracy rules), `frontend/src/db/fixtures/jegs-content-standards.md` (E9/H9/H10), runtime-notes.",
+    "USER: development\u2192release PR so prod's worker gets the flash repin (prod still has the dead pin; deploy note: v2 Args change + repin bust the enhancement + research caches \u2014 first runs regenerate).",
+    "AGENT next: regenerate customer PDF (compact, no cover) from final CUSTOMER-SUMMARY.md; the delivered 7-page professional PDF is stale.",
+    "OPTIONAL (one clause each, awaiting user's word): \"Chevy\"-style make abbreviation allowed in MT when needed for 60; add Q8 (per-vehicle years vs blanket range in PN) to the customer doc.",
+    "JEGS: Q1 quantity line \u00b7 Q2 material/finish line \u00b7 Q3 qty/config brackets \u00b7 Q4 Fits Select vs 60 (their FS=Y titles run 76/77) \u00b7 reference materials (master standards, SEO/EEAT, sidewall tab, sheet-metal note, emissions HTML, lug-nut chart) \u00b7 Alternate/Superseded PN columns.",
+    "Unresolved review findings by decision: #2 wrap-and-reraise double Sentry event (v3-only, dormant); #8 admin list/getById asymmetry (pre-existing); #6 kit-branch rule asymmetry (structurally justified).",
+    "Declined-by-silence offers: lib/logging file sink (LOG_TO_FILE), research-cache ledger CLI, disable module toggle for pinned templates (moot post-unwind).",
+    "Session artifacts (all in `frontend/.claude/output/20260709-jegs-feedback-diagnosis/`): CUSTOMER-SUMMARY.md (final), REPORT.md, SUMMARY.md, in-app-verification.md, adversarial-verify.md, voice-notes.md, conformance files; runner inputs/outputs in the session scratchpad."
+  ],
+  "tags": []
+}

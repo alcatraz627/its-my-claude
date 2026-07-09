@@ -7,7 +7,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-04-24
+updated: 2026-07-10
 stale_after_days: 90
 ---
 
@@ -43,6 +43,8 @@ Code with `NOTE(by human)`, `HACK`, `IMPORTANT`, or similar comments reflects a 
 ## UI/frontend verification
 
 For UI or frontend changes, start the dev server and use the feature in a browser. Test golden path AND edge cases. Type checking and test suites verify code correctness, not feature correctness — if you can't test the UI, say so explicitly rather than claim success. For a *verified* UI claim, **read the screenshot back and judge it visually** — drive headless Chrome (puppeteer / Chrome-for-Testing) and inspect the rendered image, not just the assertion count. A green test run with a zero exit code is not the same as having seen the pixels.
+
+**Multi-state surfaces: one state is not verification.** If the surface has theme/appearance states (dark AND light), open/closed variants, or responsive breakpoints, exercise the changed surface in EACH state before claiming verified — or scope the claim to what you actually saw ("verified in dark only"). Dark-only sign-offs that shipped a broken light theme are a recurring S3 (`declared-ready-without-runtime-exercise`, 2026-07-02 and 2026-07-07). Cheap second reader: run `lm see` on the screenshot alongside your own judgment.
 
 ## Topic-tagged rules (from recurring mistake patterns)
 

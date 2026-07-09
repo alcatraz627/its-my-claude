@@ -1,0 +1,70 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18171,
+    "correction_density": 0.023255813953488372,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2043518637453543,
+    "unit_count": 86
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — ~75% of tool-using units (12/16); rate matches 75-84% prior baseline; zero improvement across 6+ consecutive tracked cycles; subvariants: ls-for-directory-listing (5f021e2d-0: ls .claude/output/*mlx-report*/index.html, ls .claude/skills/create-report/, ls -la .claude/output/20260707-1334-mlx-report/, ls ~/.config/opencode/, ls ~/.opencode; 5f021e2d-4: ls ~/.config/opencode/, ls ~/.opencode, ls -la bin/warm $IDX, ls ~/Library/LaunchAgents/; 50cd9d58-2: ls -t ~/Pictures/Screenshots/*.png; 05780eae-16: ls docs/plan/; 05780eae-20: ls .fiber-snatcher/auth/; 05780eae-36: ls packages/ui/src/button/, ls packages/ui/src/select/, ls packages/ui/src/internal/; 05780eae-40: ls $R/src/*.test.ts, ls $R/src/; 05780eae-41: ls packages/ui/src/tooltip/; 05780eae-45: ls -la .../icon-for.ts; 05780eae-46: ls packages/ui/src/app-shell/, ls packages/ui/src/dropzone/, ls -la .../icon-for.ts); sed-instead-of-read-with-offset (50cd9d58-2: sed -n '55,75p' _lib.sh, sed -n '300,315p' bin/q; 05780eae-36: sed -n 70,140p tailwind.config.ts, sed -n 160,230p tailwind.config.ts; 05780eae-40: sed -n 28,36p date.test.ts, sed -n 54,60p date.test.ts, sed -n 31,56p date.ts, sed -n 259,272p date.ts; 05780eae-41: sed -n ... walmart-cutlist.md [failed, success:false]); cat-instead-of-read (05780eae-20: cat install.sh 2>/dev/null | head -30; sed -n 1,60p DRIVING.md is the sed variant); cat-heredoc-file-write (05780eae-27: cat > $A/04-voting/_anon-map.json <<'EOF'); head-in-pipe and head-instead-of-read (5f021e2d-0: head -12 README.md, head -20 logs/self-audit/20260707.md; 5f021e2d-4: gcc-schedule list | head -20, fd ... | head -3, head -12 README.md, head -20 logs/self-audit; 05780eae-15: glow ... | head -8; 05780eae-40: ls $R/src/ | head -30; 05780eae-41: rg ... | head -15; 05780eae-45: rg ... | head -40; 05780eae-46: rg ... | head -14); argv[0]-only hook interception gap structurally unaddressed — mechanical enforcement of sed and ls substitution remains absent",
+      "subagent_model_ceiling:RECURRING:STABLE — unit 05780eae-27 dispatched 5 SendMessage agents without model pins (timestamp 01:09); correction arrived one minute later in unit -29 ('calling agents fable opus highest'); subsequent post-correction units -36 (3 Agent dispatches), -45 (1 Agent), -46 (3 Agent + 1 SendMessage) continue to dispatch agents with model pin presence unverifiable from tool metadata; both sessions 5f021e2d and 05780eae carry Co-Authored-By: Claude Fable 5 in commit messages confirming main-session runs on Fable, meaning subagent inheritance defaults to Fable if model param is absent; unit 5f021e2d-0 also commits Co-Authored-By: Claude Fable 5 from a session that dispatched no agents, confirming Fable = main model; graduated 2026-07-07 from same-day occurrences; recurrence within the same batch day confirms advisory-rule-without-mechanical-gate failure mode",
+      "re_edit_thrash:RECURRING:IMPROVING — 5f021e2d-4: 1 Edit failure on lm-serve → Read → success; 1 Edit failure on README → Read → success; 05780eae-40: 1 Edit failure on string.ts → Read → success; 1 Edit failure on date.test.ts → Read → success; 05780eae-41: sed command success:false → Read used; 05780eae-45: 1 Edit failure on dropzone.tsx → Read → success; 1 Write failure on icon-for.ts → Read; all instances show self-correction after single failure, down from 7-consecutive peak; improvement sustained across 4 consecutive batches — deprioritize further recommendation",
+      "hook_bypass:NEW_TO_CALIBRATION_HISTORY — units 05780eae-36, -40, -45, -46 all use git -c core.hooksPath=/dev/null commit, bypassing pre-commit hooks; functionally equivalent to --no-verify, which CLAUDE.md global rules explicitly prohibit without user request; 4 consecutive hook-bypass commits within session 05780eae without documented per-turn user authorization; no prior calibration cycle has classified this pattern; may reflect new-monorepo bootstrap context (hooks possibly not yet configured) but the rule requires explicit user request regardless of context; not present in session 5f021e2d commits"
+    ],
+    "calibration_score": 0.38,
+    "cross_references": [
+      "dream-insight-1 (terse=local-only, not external): unit 5f021e2d-0 input keywords include 'approve' alongside 'push' suggesting explicit push authorization in the user message — boundary rule appears correctly applied here; not a violation",
+      "dream-insight-2 (meta fix-thrash: advisory-rule-without-gate is the root cause): subagent_model_ceiling recurred in unit 05780eae-27 on the same calendar day the rule was graduated from that session's earlier occurrences; confirms the dream insight that recording a mistake and graduating a rule without a mechanical gate does not prevent same-session recurrence",
+      "dream-insight-3 (visibility boundary discriminator): units 5f021e2d-0 and 5f021e2d-4 both push to remote; input message keywords in -0 include 'approve' suggesting prior authorization; no clear unauthorized boundary-crossing detected in this batch beyond the subagent model ceiling issue"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "hook_bypass is a NEW pattern requiring classification — before any git commit using -c core.hooksPath=/dev/null or --no-verify, verify explicit user authorization exists in the current turn message; propose adding to atone as a new slug; this is not addressed by existing shell_tool_preference or model-ceiling rules and has clear mechanical detectability (string match on core.hooksPath=/dev/null in Bash target)",
+      "subagent_model_ceiling: post-correction dispatches in units -36, -45, -46 remain unverifiable from tool metadata; recommend requiring a visible Model Plan comment in output text immediately before any Agent dispatch block so calibration analysis can confirm pin compliance without inferring from commit bylines; the structural fix (explicit model: param on every Agent call) is known but unconfirmed for post-correction turns",
+      "shell_tool_preference_violations: 6+ consecutive cycles with no improvement and no mechanical gate; stop repeating the recommendation unless a new subvariant appears or a gate is proposed; recommendation quota exhausted for this pattern until argv[0]-only interception gap is closed or a Write-tool-vs-Bash-heredoc hook is implemented"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "5f021e2d-0cdc-4b1a-8d1e-fcae627de795",
+      5910847
+    ],
+    [
+      "50cd9d58-acf1-4610-914b-e3a982cd33fb",
+      4246298
+    ],
+    [
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      32176805
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      45757363
+    ],
+    [
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4",
+      3080036
+    ],
+    [
+      "948a0ac3-e751-47ae-b005-6184c6909ab3",
+      83966
+    ],
+    [
+      "79c1d286-48e7-4f91-9c9d-29e3262f5cc9",
+      31079591
+    ],
+    [
+      "d4950f0d-c421-4f4c-aba6-5ff971a368c6",
+      26980071
+    ]
+  ],
+  "timestamp": "2026-07-07T23:05:39.072948Z",
+  "tokens_used": 26907,
+  "units_analyzed": 24,
+  "units_total": 86
+}

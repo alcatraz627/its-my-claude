@@ -22,6 +22,12 @@
 
 set -uo pipefail
 
+# launchd runs LaunchAgents with the bare default PATH (/usr/bin:/bin:/usr/sbin:/sbin).
+# The claude binary lives in ~/.local/bin and homebrew tools in /opt/homebrew/bin —
+# without this, task 30's retro-dump spawns a bare `claude` and dies command-not-found.
+# (Manual shell runs mask this: the interactive PATH already carries both dirs.)
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 LOG="${HOME}/.claude/logs/startup.log"
 mkdir -p "${LOG%/*}"
 
@@ -64,7 +70,9 @@ run_task() {
   printf '\n--- task: %s ---\n' "$name" | tee -a "$LOG"
   local args=()
   (( DRY_RUN )) && args+=(--dry-run)
-  if bash "$task_file" "${args[@]}" 2>&1 | tee -a "$LOG"; then
+  # ${args[@]+...} — macOS bash 3.2 treats an empty array as unset under set -u,
+  # so a bare "${args[@]}" aborts every live (non-dry-run) task.
+  if bash "$task_file" ${args[@]+"${args[@]}"} 2>&1 | tee -a "$LOG"; then
     printf '[OK]  %s\n' "$name" | tee -a "$LOG"
   else
     printf '[FAIL] %s (exit non-zero — see log above)\n' "$name" | tee -a "$LOG"

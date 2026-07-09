@@ -700,3 +700,60 @@ When a CLI tool is meant to be invoked by Claude (or by a human via a Claude ses
   menu-bar                                                                    
   widget gotchas now canonical in features/macos-menubar-widget.md.           
 
+
+## 2026-07-07 — local-models / model-tier session (local-agent-9c)
+- **Trailing `[ -t 2 ] && printf` exit-code class:** a bash script whose LAST statement is a TTY-gated stats line exits 1 for non-TTY success. Bit two tools the same day (lib/gemini, bin/see). End such scripts with explicit `exit 0`. Grep candidates: `rg -l '\[ -t 2 \] &&' <repo>/bin`.
+- **zsh aliases are invisible to bash scripts** — `gcc-schedule` works interactively, silently returns nothing in a script. Scripts must call `~/.claude/scripts/schedule/schedule.sh` by path. Any alias-only tool has this trap.
+- **gemini-cli gotchas (v0.43):** `~/.gemini/settings.json` `selectedType` GATES auth — with `oauth-personal`, GEMINI_API_KEY is silently ignored (IneligibleTierError). Sessions: `--session-id` CREATES (errors if exists), `-r <uuid>` RESUMES, `--session-file` only IMPORTS. Headless needs `--skip-trust`; `--approval-mode plan` is read-only but CAN read the cwd workspace.
+- **Verify-battery pattern paid off:** a ~30s `scripts/verify.sh` (syntax + one real call per surface + hook pipe-tests + schedule presence) caught 2 real bugs at authoring time and gives the next agent a single run-and-observe affordance (rules/run-and-observe-affordance.md made concrete).
+
+## 2026-07-09 — A schema default is not the effective default
+
+Reading `faithfulness_check: bool = Field(False, ...)` off a Pydantic model, I told the
+user the feature was off by default. It wasn't: the only caller always passed `true`.
+A schema default tells you what happens when nobody passes the arg; it says nothing
+about whether anybody passes it. Before asserting "X is off/on by default," grep the
+callers, not just the declaration. Same family as `helper-return-type-assumption`
+(the name/declaration lies, the code doesn't).
+
+Corollary that also bit this session: `extra="ignore"` is Pydantic v2's default, so a
+model silently drops fields it doesn't declare. An arg sent to the wrong version of an
+agent is a no-op, not an error. Silent-drop beats loud-fail for compatibility and
+loses badly for debuggability.
+
+## 2026-07-09 — Don't over-read a measurement you took yourself
+
+I measured that every generated bullet fell 15-38 chars above a 100-char minimum, then
+built a causal story on the minimum "forcing" the model's behaviour. A binding
+constraint leaves fingerprints at its boundary; nothing sat at the floor. Having real
+numbers made the wrong inference feel earned. An adversarial reviewer killed it in one
+line by re-reading my own table. When a measurement supports a hypothesis, check what
+the measurement would look like if the hypothesis were false.
+
+## 2026-07-09 — prepend-runtime-note.sh always writes GLOBAL, and its success message lies
+
+`~/.claude/skills/shared/prepend-runtime-note.sh:35` sets
+`NOTES_FILE="$SCRIPT_DIR/../runtime-notes.md"`, resolved against the *script's* directory,
+so it always targets `~/.claude/skills/runtime-notes.md` no matter the CWD. Line 36's
+`NOTES_REL=".claude/skills/runtime-notes.md"` is cosmetic: used only for the lock name and
+the "PREPENDED: ... written to .claude/skills/runtime-notes.md" message. That message reads
+as a project-relative path, so a project-specific note silently lands in the global log and
+the agent believes it filed correctly. Bit me twice in one session before I grepped the file
+instead of trusting the success line.
+
+Two more traps found while unwinding it:
+- Do NOT wrap the helper in your own `lock-file.sh acquire`. It acquires the same lock
+  internally and deadlocks against you, backgrounding the command.
+- Repos whose notes live in a subdir (Versable keeps them in `frontend/.claude/`) need a
+  manual prepend. The helper's "insert after the first `---`" logic also assumes the global
+  file's header shape and is wrong for a file whose first `---` closes the first entry.
+
+Fix worth shipping: take an optional `--notes-file` / resolve upward from CWD, and print the
+absolute path it actually wrote.
+
+## 2026-07-10 — jegs-cms session (versable staging worktree)
+
+- **Validated artifact ≠ committed artifact.** All quality evidence for a feature ran against the working tree; a one-token model-id swap entered in the manual pre-commit window and shipped unexercised (first execution = customer's job, 4 days later). Single end-of-work commits hide which state was tested. Cheap countermeasure when evidence matters: re-anchor claims to the committed SHA, or diff the commit against what the tests saw.
+- **Cache keys as forensic ledger.** S3 research-cache keys embedding `{model}-{input}` + timestamps conclusively answered "which model actually served run X and when" — better than logs (retention) or transcripts. When designing caches, an identity-bearing key doubles as an audit trail for free.
+- **Sibling-module drift needs a parity test, not runtime guards.** Two deliberately-cloned modules (v2/v3 agents) drifted (rule registered in one only → KeyError). The fix that stuck was a one-assertion pytest pinning registry equality; the runtime versioning machinery built first (pins + compiler guard + propagation) was pure sprawl and got unwound.
+- **Telemetry classification: read the SDK's structured fields, never str(e).** `"404" in str(e)` mis-tags when echoed model output contains "404" (real risk in parts-catalog domains). google.genai APIError carries `.code`/`.status`; `getattr(e, "code", None) == 404` is exact and poison-proof.

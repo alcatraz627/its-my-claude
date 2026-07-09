@@ -1,17 +1,16 @@
-<!-- i-dream project brief · 2026-07-02T23:55:10.626377+00:00 · 5 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-09T14:04:45.289548+00:00 · 6 patterns / 0 insights -->
 ## What this project is about
-Versable frontend (Next.js/React enhancement-product). Dominant working style: careful, convention-following feature work with strong opinions on prose quality and git discipline.
+Frontend of the Versable enhancement product — a Next.js/React codebase with strict conventions around auth, env vars, and component architecture. Work style is correctness-first, minimal-blast-radius, with tight scope control.
 
 ## Things to do (or keep doing)
-- **Hand git commands to the user** — repo CLAUDE.md prohibits agent-executed commits/pushes; always produce the exact command for manual execution
-- **Write developer-register prose** — PR descriptions and docs want dense, code-referenced, scannable text (file:line, flags, numbers); match the engineering register, not a warm narrative
-- **Confirm decisions once, then drop them** — after the user validates a call, treat it as settled; never re-raise it in artifacts as something needing validation
+- Check `CLAUDE.md` for a repo-specific commit/push gate before any git operation; hand the user exact commands rather than running them
+- Prefer the smallest targeted change; propose focused fixes before any refactor that puts prior work under suspicion
+- Write human-facing prose (PR descriptions, commit messages, docs) plain and dense — file:line citations, no em-dashes, no label:fragment rows, no over-bolding
 
 ## Things to avoid
-- **Don't use em-dashes or AI-smell phrasing** in any human-facing output (PRs, docs, comments); explicit rule exists and keeps being violated — slow down and scan before sending
-- **Don't overcorrect into narrative warmth** — fixing em-dashes by rewriting as flowing prose is a lateral failure; target plain engineering sentences, not social-science paragraphs
-- **Don't re-raise settled decisions** in written artifacts (phrases like "confirm this", "validate that", "ensure X is intended" after the user already confirmed X)
+- Don't re-raise decisions the user has already confirmed in written artifacts; settled calls don't belong in PR descriptions or reports as open items
+- Don't overcorrect AI-smell by swinging into warm narrative prose — aim for plain engineering writing, not social-science essay register
+- Don't place a file path as the final token before a sentence-ending period; restructure the sentence so the path isn't immediately followed by `.`
 
 ## Open questions / known gaps
-- Em-dash / AI-smell slip persists across corrections within the same session — a mechanical pre-send scan (`rg " — "`) before any human-facing prose output may be needed as a habit
-- _(no further signal)_
+- Prose register calibration is a persistent failure mode even within a single session — mechanical em-dash/label-fragment checks pass while the overall voice still reads as AI-generated; route final voice passes to a fresh reviewer
