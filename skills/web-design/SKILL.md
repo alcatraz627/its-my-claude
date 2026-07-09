@@ -110,6 +110,14 @@ the surrounding code rather than reaching for the default here.
   ```
 - Also capture at mobile width (375px) if responsive review is relevant
 
+**Local structural pre-pass ($0, optional):** if `see` is on PATH, run
+`see <screenshot-path> --ui` (or `--ui --json | jq .data` for a structured
+elements array) to get a free on-device inventory of regions, elements, hierarchy,
+and coarse palette before spending native vision. Use it as a structural checklist
+so the scoring below doesn't miss an element; keep the aesthetic and contrast
+judgment on your own visual read, and verify any exact string before quoting it
+(local OCR near-misses). Skip silently if `see` isn't installed.
+
 ### Phase 2 — Analyze
 
 Score the UI on 6 dimensions (1-10 each):

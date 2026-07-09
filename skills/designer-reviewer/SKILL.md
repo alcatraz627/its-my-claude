@@ -90,7 +90,25 @@ If no argument was given, ask the user:
 
 Validate the path exists and is a supported image type (`.png`, `.jpg`, `.jpeg`, `.webp`).
 
-### 1.2 — Read Screenshot
+### 1.2 — Local structural pre-pass ($0, optional)
+
+If `see` is on PATH (the local-models vision tool), run it first to get a cheap,
+local inventory of the UI's structure — elements, hierarchy, coarse palette —
+before spending native-vision judgment:
+
+```bash
+command -v see >/dev/null 2>&1 && see "<screenshot-path>" --ui
+```
+
+This enumerates the regions, elements (with their labels and states), icon
+shapes, and a light/dark + dominant-color read, all on-device at no API cost. Use
+it as a **structural checklist** so the aesthetic scoring below doesn't overlook
+an element — not as the judgment itself. Treat its exact strings as
+good-but-verify (local OCR substitutes near-miss words); the palette is coarse.
+The scoring in Phase 2 stays on your own visual read. Skip silently if `see`
+isn't installed.
+
+### 1.3 — Read Screenshot
 
 Use the `Read` tool on the resolved file path. The image will be rendered visually for multimodal analysis.
 
