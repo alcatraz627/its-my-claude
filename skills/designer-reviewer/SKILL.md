@@ -108,6 +108,10 @@ good-but-verify (local OCR substitutes near-miss words); the palette is coarse.
 The scoring in Phase 2 stays on your own visual read. Skip silently if `see`
 isn't installed.
 
+Before quoting any exact label/value in a finding, verify it with
+`see "<screenshot-path>" --ocr` (Apple Vision verbatim text, ~300ms, no model) —
+the exactness lane the `--ui` read is not.
+
 ### 1.3 — Read Screenshot
 
 Use the `Read` tool on the resolved file path. The image will be rendered visually for multimodal analysis.

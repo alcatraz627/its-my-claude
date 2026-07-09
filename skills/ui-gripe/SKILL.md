@@ -70,6 +70,18 @@ evidence is revisitable. Record intermediate observations with `see note "..."`.
 Skip this phase silently if `see` is not installed (the diagnosis then rests on the
 native read alone; say so in the report).
 
+Two more evidence lanes; reach for whichever the case calls for:
+
+- **Exact text (any pixels):** `see <shot> --ocr` — Apple Vision verbatim text,
+  ~300ms, no model. Run it before quoting any label/value in a finding: the `--ui`
+  read's strings are good-but-verify, OCR is the verifier.
+- **Native Mac apps (the gripe is about a RUNNING app, not a web page/screenshot):**
+  the accessibility tree is exact and semantic — `ax tree --app <Name> -d 6 --json`
+  for structure, `lm ui-verify --app <Name> "claim"` to rule on specific facts
+  (element present, state, label). Prefer it over pixels whenever the app exposes a
+  real AX tree; fall back to screenshot lanes when it doesn't (many Electron/web
+  views expose little).
+
 ## Phase 3 — Native judgment read
 
 `Read` the screenshot yourself. The inventory says WHAT is there; you decide what it

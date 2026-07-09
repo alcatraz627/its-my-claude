@@ -116,7 +116,8 @@ elements array) to get a free on-device inventory of regions, elements, hierarch
 and coarse palette before spending native vision. Use it as a structural checklist
 so the scoring below doesn't miss an element; keep the aesthetic and contrast
 judgment on your own visual read, and verify any exact string before quoting it
-(local OCR near-misses). Skip silently if `see` isn't installed.
+with `see <shot> --ocr` (Apple Vision verbatim, ~300ms, no model — the exactness
+lane). Skip silently if `see` isn't installed.
 
 ### Phase 2 — Analyze
 
