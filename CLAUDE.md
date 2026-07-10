@@ -133,7 +133,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `features/claudew.md`            | `tool:claudew`, rate-limit recovery, auto-resume             | Plugin-based claude CLI wrapper                                       |
 | `features/fiber-snatcher.md`     | `tool:fiber-snatcher`, React/Next.js debugging               | Deterministic dev-app state reads + dispatch + shoots                 |
 | `features/desktop-automation.md` | screenshot, click, macOS windows, `tool:desktop.sh`          | macOS GUI automation (with MANDATORY focus-confirm + hard-stop rules) |
-| `features/dev-servers.md`        | pm2, port setup, `topic:dev-servers`                         | pm2 + 30xx/50xx ports + nginx `.test` domains                         |
+| `features/dev-servers.md`        | pm2, port setup, `topic:dev-servers`, starting any dev server | Three-tier port policy: mature=user-pinned · local-persistent=pm2+51xx · one-off=62xx+24h-TTL; `ports.sh` scan/claim/reap/revive; launches without a proper port are BLOCKED by guard-dev-server-port.sh |
 | `features/hinter-pipeline.md`    | autocorrect, UserPromptSubmit hints                          | Hint injector + active hinters + autocorrect dictionaries             |
 | `features/shared-library.md`     | `tool:gum-tui.sh`, `tool:lock-file.sh`, styled output        | std::claude::shared Python + Bash utilities                           |
 | `features/plugins.md`            | plugin vs skill decision, disabled plugins registry          | Plugin registry + plugin-vs-custom-skill rule                         |

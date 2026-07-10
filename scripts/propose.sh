@@ -206,6 +206,12 @@ mutate_status() {
   local reason="${3:-}"
 
   [ -z "$id" ] && { echo "propose $new_status: <id> required" >&2; exit 2; }
+  # A reason that IS a flag means the caller used a syntax this tool doesn't
+  # have (e.g. --resolution) — the real text would be silently dropped. Refuse
+  # loudly; nine audit-trail entries were lost this way on 2026-07-10.
+  case "$reason" in
+    --*) echo "propose $new_status: reason looks like a flag ('$reason') — pass the text positionally: propose.sh $new_status <id> \"<reason text>\"" >&2; exit 2 ;;
+  esac
 
   if ! jq -e --arg id "$id" 'select(.id == $id)' "$STORE" >/dev/null 2>&1; then
     echo "propose $new_status: no proposal with id=$id" >&2

@@ -88,6 +88,23 @@ Two cheap gates come first, but neither replaces the fresh read:
   bold-phrase-colon bullet armies, over-bolding, precision theater, defensive
   meta-framing) is the detailed version of the checklist above; read it for docs.
 
+## Enforcement (mechanical, since 2026-07-10 — measure-first dry-run)
+
+`scripts/hooks/prose-smell-stop.sh` (Stop hook) scans the final assistant message
+(fenced code, inline code, blockquotes, and table rows stripped; <200-char
+messages skipped). Two or more high-signal tells co-occurring (em-dash,
+decoration-emoji headers, ≥3 Label:fragment rows, >5 bold spans, praise opener)
+raise a visible WOULD-BLOCK note and a `block-dry` telemetry record; a real
+`decision:block` fires only with `PROSE_SMELL_ENFORCE=1`. Both source RCAs asked
+to "flag", and hook-design doctrine reserves blocking for high cost-of-miss, so
+promotion to enforcement waits on fire-rate telemetry (review:
+`assets/reports/20260710-queue-reviews/1.5a-prose-smell.md`). Single tells get a
+plain note; ★ boxes and option-menu closers are warn-tier only (the Explanatory
+output style and genuine forks are legitimate). Loop-safe and heed-tracked: an
+identical message never re-fires, and a cleaned message records `heeded:true`.
+Mute: `PROSE_SMELL_OFF=1` (process) · `touch ~/.claude/.no-prose-smell-gate`
+(machine-wide until removed).
+
 ## Same root cause, other atones (reuse their notes)
 
 - [[comments.md]]: comments are for humans first; the first sentence is

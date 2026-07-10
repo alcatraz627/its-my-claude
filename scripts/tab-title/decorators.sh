@@ -14,7 +14,7 @@
 # Decorators run on every Stop hook. Keep them cheap (no network, no `find`).
 
 # ── Active decorator list (edit to enable/reorder) ───────────────────────────
-TAB_DECORATORS=(ssh perm agents cost)
+TAB_DECORATORS=(ipc ssh perm agents cost)
 
 # ── ssh: present when the session is over SSH ────────────────────────────────
 # Glyph is configurable via:  tab-title.sh glyph ssh <name-or-emoji>
@@ -63,6 +63,25 @@ dec_agents() {
     ) ))
   done
   (( n > 0 )) && printf '⚙×%d' "$n"
+}
+
+# ── ipc: pending claude-ipc message count ────────────────────────────────────
+# 📨N when this session has N unread cross-session messages. Ambient inbox
+# awareness so you don't need to be told "check your inbox" (claude-ipc P2).
+# Cheap + gated: only fires for sessions that actually registered an ipc alias
+# (the side-file exists), reads the count via the compiled binary's one indexed
+# `count` op, and degrades to nothing on any failure (broker down, no alias, no
+# binary) — never blocks the tab render.
+dec_ipc() {
+  local sid="${TAB_SESSION_ID:-}"
+  [[ -n "$sid" ]] || return 0
+  local afile="$HOME/.claude-ipc/alias-by-sid/$sid"
+  [[ -f "$afile" ]] || return 0                 # not an ipc session → no spawn
+  local alias; alias=$(cat "$afile" 2>/dev/null); [[ -n "$alias" ]] || return 0
+  local bin="$HOME/Code/Claude/claude-ipc/dist/claude-ipc"
+  [[ -x "$bin" ]] || return 0
+  local n; n=$("$bin" count "$alias" 2>/dev/null | tr -cd '0-9')
+  [[ -n "$n" ]] && [ "$n" -gt 0 ] 2>/dev/null && printf '📨%s' "$n"
 }
 
 # ── cost: spend tier indicator (SCAFFOLD — no integration wired yet) ─────────

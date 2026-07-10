@@ -199,10 +199,13 @@ bash ~/.claude/scripts/atone.sh add \
   --project "$(pwd)"
 ```
 
-For S3, also build the RCA content and pass `--rca-content`:
+For S3, also build the RCA and pass it via `--rca-file` (NOT `--rca-content
+"$(cat …)"` — the argv/shell layer has mangled leading whitespace in transit
+twice, failing the RCA's own lint; a file path reads the bytes directly. Write
+the file with the Write tool, not a heredoc — heredocs reflow content in this
+environment). Template for the file:
 
-```bash
-RCA_CONTENT=$(cat <<'RCA_EOF'
+```markdown
 ---
 date: 2026-MM-DD
 severity: S3
@@ -241,14 +244,17 @@ The single at-action-time check that would have prevented this:
 ## Cross-references
 - Related slugs: <list>
 - Possible hook: <regex on what tool>
-RCA_EOF
-)
+```
 
+Write that to a scratch path (e.g. `/tmp/rca-<slug>.md`) with the Write tool,
+then:
+
+```bash
 bash ~/.claude/scripts/atone.sh add \
   --slug "..." --title "..." --issue "..." --cause "..." \
   --fix "..." --what-not "..." --precheck "..." \
   --severity S3 --tags "..." \
-  --rca-content "$RCA_CONTENT"
+  --rca-file /tmp/rca-<slug>.md
 ```
 
 ## Phase 6 — Refresh triggers + record feedback + report

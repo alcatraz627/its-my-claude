@@ -1,6 +1,7 @@
 ---
 name: type-audit
 description: Scans the TypeScript codebase for unsafe type patterns — explicit `any`, implicit `any`, non-null assertions (`!`), and unsafe casts — reports them with file:line references, and offers targeted fixes.
+disable-model-invocation: true
 allowed-tools: Read, Bash, Glob, Grep, Edit
 user-invokable: true
 argument-hint: "[--fix] [path]"

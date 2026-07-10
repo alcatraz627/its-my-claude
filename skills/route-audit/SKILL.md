@@ -1,6 +1,7 @@
 ---
 name: route-audit
 description: Scans all Next.js App Router route files for missing auth guards, missing input validation on mutation handlers, and non-standard response shapes — reports findings with file:line references, confidence, and severity. Project-specific: requires Next.js App Router.
+disable-model-invocation: true
 allowed-tools: Read, Glob, Grep
 user-invokable: true
 argument-hint: "[path]"

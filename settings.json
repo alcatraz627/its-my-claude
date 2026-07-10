@@ -716,6 +716,24 @@
             "command": "~/.claude/scripts/hooks/tmp-jail-guard.sh"
           }
         ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/nudge-model-plan.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-dev-server-port.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -840,6 +858,14 @@
           {
             "type": "command",
             "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prose-smell-stop.sh"
           }
         ]
       }

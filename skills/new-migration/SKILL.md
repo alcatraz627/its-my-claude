@@ -1,6 +1,7 @@
 ---
 name: new-migration
 description: Generates a Drizzle ORM migration from a plain-English schema change description — updates the schema file and runs db:generate to produce the SQL migration. Project-specific: requires Drizzle ORM setup.
+disable-model-invocation: true
 allowed-tools: Read, Edit, Write, Bash, Glob, Grep
 user-invokable: true
 argument-hint: "<description>"

@@ -56,15 +56,26 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 [ "${ATONE_JUROR_SESSION:-}" = "1" ] && exit 0
 [ "${CLAUDE_CODE_CHILD_SESSION:-}" = "1" ] && exit 0
 
-# Marker key derived IDENTICALLY to the writer (30-atone-nudge.sh) and the
-# sibling check (atone-stop-check.sh) so all three agree on the path. NOTE:
-# CLAUDE_SESSION_ID is typically unset (the live id is in CLAUDE_CODE_SESSION_ID),
-# so this falls back to a date key — matching the existing convention. Upgrading
-# the whole subsystem to session-keying is a separate change.
-SESSION_KEY="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"
+# Marker key: stdin session_id first (the authoritative per-session identity a
+# hook receives), then the env ids, then the legacy UTC-date key. Sanitized to a
+# filename-safe token and capped — a polluted env var once produced a marker
+# literally named after an error message. Derivation is MIRRORED in
+# atone-stop-check.sh and atone.sh:_add_exit_trap; all writers/readers must
+# agree. Session-keying fixes the cross-session collision (two same-day sessions
+# sharing one marker; observed cross-fire 2026-06-25, prop-20260625-172436-8b).
+_sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+[ -n "$_sid" ] || _sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
+[ -n "$_sid" ] || _sid="$(date +%Y-%m-%d)"
+SESSION_KEY=$(printf '%s' "$_sid" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 STATE_DIR="$HOME/.claude/atone/.session-state"
 PMARK="$STATE_DIR/$SESSION_KEY.pending-atone"
 FMARK="$STATE_DIR/$SESSION_KEY.atone-add-failed"
+# Transition fallback: a marker armed under the legacy date key (by an older
+# writer, or a session where no id was derivable) is still honored. The 1h
+# freshness window retires stragglers naturally.
+_legacy_key="$(date +%Y-%m-%d)"
+[ -f "$PMARK" ] || { [ -f "$STATE_DIR/$_legacy_key.pending-atone" ] && PMARK="$STATE_DIR/$_legacy_key.pending-atone"; }
+[ -f "$FMARK" ] || { [ -f "$STATE_DIR/$_legacy_key.atone-add-failed" ] && FMARK="$STATE_DIR/$_legacy_key.atone-add-failed"; }
 EVENTS="$HOME/.claude/atone/events.jsonl"
 MAX_BLOCKS="${ATONE_GATE_MAX_BLOCKS:-2}"
 FRESH_SECONDS="${ATONE_GATE_FRESH_SECONDS:-3600}"   # ignore markers older than 1h

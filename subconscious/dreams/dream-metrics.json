@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-09T14:03:36Z",
-  "events_analyzed": 85042,
-  "sessions_analyzed": 231,
+  "generated_at": "2026-07-10T08:37:59Z",
+  "events_analyzed": 88593,
+  "sessions_analyzed": 247,
   "session_quality": {
-    "average_score": 68.2,
+    "average_score": 68.4,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,52 +170,53 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": "versable-builder",
+    "primary_focus": "tmp",
     "recent_projects": {
-      "versable-builder": 3,
-      "gemini-proxy": 3,
-      "tmp": 1,
-      "staging-enhancement-product": 2,
-      "frontend": 1
+      ".claude": 2,
+      "versable-builder": 1,
+      "two-enhancement-product": 2,
+      "tmp": 3,
+      "i-dream": 1,
+      "staging-enhancement-product": 1
     },
-    "drift_rate": 0.738,
-    "total_switches": 169,
+    "drift_rate": 0.739,
+    "total_switches": 181,
     "recent_switches": [
       {
-        "ts": "2026-07-08T12:53:00Z",
-        "from": "gemini-proxy",
-        "to": "versable-builder"
+        "ts": "2026-07-09T20:16:30Z",
+        "from": ".claude",
+        "to": "two-enhancement-product"
       },
       {
-        "ts": "2026-07-08T21:15:05Z",
-        "from": "versable-builder",
+        "ts": "2026-07-09T21:15:06Z",
+        "from": "two-enhancement-product",
         "to": "tmp"
       },
       {
-        "ts": "2026-07-09T08:24:23Z",
+        "ts": "2026-07-09T21:35:11Z",
+        "from": "tmp",
+        "to": "i-dream"
+      },
+      {
+        "ts": "2026-07-10T08:27:00Z",
+        "from": "i-dream",
+        "to": "tmp"
+      },
+      {
+        "ts": "2026-07-10T08:28:07Z",
         "from": "tmp",
         "to": "staging-enhancement-product"
-      },
-      {
-        "ts": "2026-07-09T11:07:49Z",
-        "from": "staging-enhancement-product",
-        "to": "frontend"
-      },
-      {
-        "ts": "2026-07-09T14:02:26Z",
-        "from": "frontend",
-        "to": "versable-builder"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 6944,
-    "corrections": 1515,
-    "confirmations": 1244,
-    "directives": 241,
-    "terse_messages": 550,
-    "correction_rate": 0.218,
-    "confirmation_rate": 0.179,
+    "total_prompts": 7114,
+    "corrections": 1542,
+    "confirmations": 1268,
+    "directives": 247,
+    "terse_messages": 559,
+    "correction_rate": 0.217,
+    "confirmation_rate": 0.178,
     "directive_rate": 0.035,
     "terse_rate": 0.079,
     "style_label": "corrective"

@@ -41,6 +41,12 @@ case "$cmd" in
   add)
     note="${2:-}"; scope="${3:-all}"
     [ -n "$note" ] || { echo "usage: guidance.sh add \"<note>\" [\"<scope-keywords>\"]" >&2; exit 2; }
+    # A note that IS a flag means the caller invented a syntax this tool doesn't
+    # have (e.g. --scope) — the real directive would be silently dropped. Two
+    # entries were lost exactly this way (2026-06-25, 2026-07-10) pre-guard.
+    case "$note" in
+      --*) echo "guidance add: note looks like a flag ('$note') — args are POSITIONAL: guidance.sh add \"<note>\" [\"<scope-keywords>\"]" >&2; exit 2 ;;
+    esac
     mkdir -p "$(dirname "$NOTES")"
     [ -f "$NOTES" ] || init_notes
     printf -- '- %s [%s] %s\n' "$(date +%F)" "$scope" "$note" >> "$NOTES"

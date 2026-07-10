@@ -326,11 +326,34 @@ else
   else
     gum_success "No ledger detectors firing"
   fi
-  lints=$(jq -r 'select(.tier=="find") | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -3)
+  lints=$(jq -r 'select(.tier=="find") | select(.subject | test("-lint: ")) | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -3)
   if [ -n "$lints" ]; then
     gum_error "Detector-lint findings (a broken detector goes silently quiet — fix):"
     echo "$lints" | sed 's/^/  /'
   fi
+  findings=$(jq -r 'select(.tier=="find") | select(.subject | test("-lint: ") | not) | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -3)
+  if [ -n "$findings" ]; then
+    gum_warn "Substantive find-tier alerts (real signals, not broken detectors):"
+    echo "$findings" | sed 's/^/  /'
+  fi
+fi
+```
+
+### 5.8 Port discipline (three-tier policy, migration 0029)
+
+Surface what `ports.sh scan` flags — untracked listeners and expired one-offs
+are exactly the "losing track of what is where" failure the policy exists for:
+
+```bash
+PSCAN=$(bash ~/.claude/scripts/dev-servers/ports.sh scan 2>/dev/null)
+untracked=$(echo "$PSCAN" | rg -c "UNTRACKED" || true)
+expired=$(echo "$PSCAN" | rg -c "EXPIRED" || true)
+if [ "${untracked:-0}" -gt 0 ] || [ "${expired:-0}" -gt 0 ]; then
+  gum_warn "Ports: ${untracked:-0} untracked listener(s), ${expired:-0} expired one-off claim(s)"
+  echo "$PSCAN" | rg "UNTRACKED|EXPIRED" | sed 's/^/  /'
+  gum_muted "  claim: ports.sh claim <name> --tier 2|3 · kill expired: ports.sh reap"
+else
+  gum_success "Ports: every listener tracked, no expired one-offs"
 fi
 ```
 

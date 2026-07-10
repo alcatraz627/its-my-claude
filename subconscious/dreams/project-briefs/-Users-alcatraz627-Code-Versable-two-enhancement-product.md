@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-06T09:29:25.270805+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-10T08:25:45.847660+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A full-stack product enhancement application (Versable) where the dominant working style is tight scope control — the user aggressively rejects unrequested complexity and enforces strict git-push discipline.
+Versable enhancement product — a TypeScript/React codebase. Work style is scope-constrained feature development where the user enforces strict "ceiling not floor" discipline on every task.
 
 ## Things to do (or keep doing)
-- When the user says "same way as X", replicate that exact pattern — no novel abstractions
-- Translate research/design output into lean, behavior-focused implementation docs before closing a phase
-- Write docs in formal, direct prose: no "why this matters" openers, no em-dashes, no promotional framing
-- Surface the exact git commands for the user to run manually; never push without fresh per-push confirmation
+- When the user says "same way as X", replicate that exact pattern — no new abstractions
+- Translate research/design phases into lean, behavior-focused implementation docs before starting code
+- Confirm push permissions fresh per-push; repo CLAUDE.md git gates take absolute precedence over default behavior
+- Check whether existing code already handles a request before building new infrastructure
 
 ## Things to avoid
-- Don't re-introduce deferred scope — if the user said "not now", treat it as a hard exclusion even when implementation is trivial
-- Don't add abstractions, wrappers, or new infrastructure when existing code already handles the case; check first
-- Don't mistake verbal acknowledgment for correct implementation — verify the code matches the stated semantics (opt-in vs opt-out, inclusion vs exclusion default)
-- Stop touching adjacent patterns when asked to simplify one part; scope ceiling applies to the exact surface named
+- Don't re-introduce deferred scope under any guise — "not now", "defer", "for later" is a hard stop, even when implementing it would be trivial
+- Don't verbally acknowledge the correct semantics then implement the inverse in code; verbal agreement is not verification
+- Stop writing em-dashes, "Why this matters" openers, or promotional framing in docs — formal, direct, factually grounded only
+- Never add complexity adjacent to a scoped simplification request; touching unrequested patterns causes the user to discard the entire output
 
 ## Open questions / known gaps
-- Recurring tension between "professional but lean" doc style and the agent's default toward enterprise-heavy or academic framing — needs active suppression each session
-- Atone RCA files must begin with `---` YAML frontmatter on line 1; the agent repeatedly forgets this, causing silent event-write failures
+- Opt-in/opt-out polarity is a recurring slip even after explicit correction — treat any "opt-in" feature description as "default-on, explicit signal to exclude" before writing a line
+- Scope ceiling violations correlate with the agent "completing" a partial spec; when a spec feels incomplete, stop and ask rather than fill gaps autonomously

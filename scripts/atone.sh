@@ -55,7 +55,7 @@ show_help() {
   _exd 'Log a new event (all required fields enforced)'
   echo
   _ex  'atone list --severity S3 --since 7d'
-  _exd 'All S3 events from the last week (--since not yet wired)'
+  _exd 'All S3 events from the last week'
   echo
   _ex  'atone list --slug generalize-before-enumerate'
   _exd 'All occurrences of one slug (recurrence trail)'
@@ -89,7 +89,7 @@ show_help() {
   _opt '--severity S'    'S1 | S2 | S3'
   _opt '--cluster X'     'A | B | C | D | E'
   _opt '--slug S'        'one specific slug'
-  _opt '--since SPEC'    '(not yet wired)'
+  _opt '--since SPEC'    '7d | 24h | 2w | YYYY-MM-DD'
 
   _section "FILES"
   _dim "raw log     ~/.claude/atone/events.jsonl  (chflags uappnd post-lock)"
@@ -124,7 +124,11 @@ _add_exit_trap() {
   local code=$?
   [ "${_ATONE_ADD_ATTEMPTED:-0}" = "1" ] || return 0   # never reached the record attempt
   local sd="$HOME/.claude/atone/.session-state"
-  local key="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"   # same derivation as the hooks
+  # Same derivation as the gate hooks (stdin unavailable here, so env-first),
+  # SANITIZED: a polluted env id once produced a marker literally named after an
+  # error message, which then blocked nothing and confused everyone.
+  local key="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}}"
+  key=$(printf '%s' "$key" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
   local fmark="$sd/$key.atone-add-failed"
   local pmark="$sd/$key.pending-atone"
   mkdir -p "$sd" 2>/dev/null || true
@@ -334,7 +338,7 @@ PY
       if ! lint_out=$(bash "$lint_script" "$rca_tmp" 2>&1); then
         printf '%s\n' "$lint_out" >&2
         rm -f "$rca_tmp" 2>/dev/null || true
-        _die "RCA failed lint — fix the issues above and retry, or set ATONE_NO_RCA_LINT=1 to bypass."
+        _die "RCA failed lint — fix the issues above and retry, or set ATONE_NO_RCA_LINT=1 to bypass. If you passed --rca-content \"\$(cat …)\" and the source file is clean, the shell layer mangled it in transit (a known trap) — Write the RCA to a file and pass --rca-file PATH instead; that path reads the bytes directly."
       fi
       [ "${ATONE_VERBOSE:-0}" = "1" ] && printf '%s\n' "$lint_out" >&2
     fi
@@ -747,6 +751,19 @@ cmd_list() {
   [ -n "$f_sev" ]     && filter="$filter | select(.severity == \"$f_sev\")"
   [ -n "$f_cluster" ] && filter="$filter | select(.cluster == \"$f_cluster\")"
   [ -n "$f_slug" ]    && filter="$filter | select(.slug == \"$f_slug\")"
+  if [ -n "$f_since" ]; then
+    # Accept 7d / 24h / 2w relative specs or a literal YYYY-MM-DD prefix.
+    # RFC3339-Z timestamps compare lexically, so a date prefix works as a cutoff.
+    local cutoff=""
+    case "$f_since" in
+      *d) cutoff=$(date -u -v-"${f_since%d}"d '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null) ;;
+      *h) cutoff=$(date -u -v-"${f_since%h}"H '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null) ;;
+      *w) cutoff=$(date -u -v-$(( ${f_since%w} * 7 ))d '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null) ;;
+      [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]*) cutoff="$f_since" ;;
+    esac
+    [ -n "$cutoff" ] || _die "list: bad --since spec: $f_since (use 7d, 24h, 2w, or YYYY-MM-DD)"
+    filter="$filter | select(.ts >= \"$cutoff\")"
+  fi
 
   # Header (color only on TTY)
   if [ "$ATONE_TTY" = "1" ]; then

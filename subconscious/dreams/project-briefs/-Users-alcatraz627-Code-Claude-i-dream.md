@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-08T16:43:52.248875+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-10T08:31:40.147964+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Dream/insight tracking system (`~/.claude` infrastructure) with long multi-session development cycles; work spans feature builds, WAL/JSONL format migrations, and dashboard tooling across many compaction boundaries.
+A meta-agent memory and session-continuity infrastructure project (`i-dream`) — long-running, multi-compaction sessions building tooling for the Claude Code harness itself (WAL, catchup, core-dump, pattern extraction, dashboard).
 
 ## Things to do (or keep doing)
-- Write `/core-dump` at every milestone (not just session end); assume `/catchup` is how the next session starts
-- Treat single-word continuations (`started`, `next`, `ahead`) as autonomous-resume signals — reconstruct intent from WAL/checkpoint, emit one-line ack, proceed
-- Auto-checkpoint at tool #30; prompt `/core-dump` at tool #60 — these are hard thresholds, not suggestions
-- WAL is JSONL (canonical since 2026-04-17); never write markdown WAL
+- **Checkpoint proactively** — write `/core-dump` at milestones, not just session end; `/catchup` is the primary recovery path after every compaction
+- **Treat terse commands as job-resumption signals** — reconstruct intent from WAL/checkpoint state, emit a one-line ack, continue executing; never ask clarifying questions
+- **Write WAL in JSONL** — the markdown format is deprecated; all new entries use `scripts/wal/wal.sh` for machine-queryable JSONL output
 
 ## Things to avoid
-- Never commit or push without fresh per-push explicit approval — prior session approval does not carry forward, ever
-- Never infer, extrapolate, or hallucinate values in structured data processing; only output values directly traceable to source
-- Never expand scope beyond what was explicitly requested — terse continuation signals mean "keep going at same scope," not "improve nearby things"
-- Never write credentials shared during a session to any file or commit them
+- **Never commit or push without explicit per-push approval** — prior approval in the same session does not carry over; each `git push` needs fresh user confirmation
+- **Don't expand scope on terse continuations** — "keep going" increases execution depth only, never scope; always ask "did the user explicitly request this?" before adding unsolicited changes
+- **Never infer or extrapolate data values** — only output values directly traceable to source data; hallucinated values in structured processing are a critical trust violation
+- **Don't write credentials to any file** — even temporarily, even for testing; stop and ask the user to handle it manually
 
 ## Open questions / known gaps
-- Pattern extraction pipeline lacks deduplication — the same WAL migration event was recorded 4× independently; downstream consumers (i-dream, atone) may be over-counting high-friction historical events as recurring patterns
+- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event appears 4+ times as independent patterns; the i-dream system needs a semantic-similarity merge pass before persisting new patterns
+- Tension between "scope = ceiling" rule and multi-session autonomous work: terse continuation signals can be misread as scope expansion authorization; no mechanical gate exists for this boundary yet

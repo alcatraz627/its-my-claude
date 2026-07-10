@@ -12,7 +12,7 @@ related:
   - local-models
 tier: 2
 category: features
-updated: 2026-07-07
+updated: 2026-07-10
 stale_after_days: 180
 ---
 
@@ -41,6 +41,17 @@ LLM calls. Three behaviors, in order:
 Fires log via `warn-log.sh` (`--hook model-tier --action block|nudge`) for FP-rate audits
 per `features/hook-design.md`. A mis-tier heuristic (research-verbs on opus-high, etc.) is
 deliberately NOT nudging yet — telemetry accumulates first, revisit at the reviews below.
+
+## The plan-time nudge — `scripts/hooks/nudge-model-plan.sh` (PreToolUse · ExitPlanMode)
+
+The Phase C half: a plan whose text signals sub-agents / workflows / large ingestion /
+modality tools but carries no `Model plan:` block gets one `additionalContext` nudge
+citing the rule. Advisory only, never a block (a false fire costs one line; a missing
+Model Plan costs an unrouted fleet). Shares the model-tier mutes
+(`.model-tier-off` / `MODEL_TIER_OFF=1`); telemetry via `warn-log.sh`
+(`--hook model-plan --action nudge`), folded into the same reviews. Shipped 2026-07-10;
+verified with sandboxed-HOME pipe-tests (signal→nudge, block-present→silent,
+no-signal→silent, muted→silent).
 
 ## Telemetry + reviews
 

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-09T14:04:29.002323+00:00 · 17 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-10T08:39:07.171482+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-A Next.js/TypeScript enhancement product (Versable staging) with strict scope discipline — the dominant working style is incremental, user-directed changes where the user actively culls complexity the agent tries to add.
+A TypeScript/React enhancement product (Versable staging) with heavy emphasis on strict scope discipline and professional customer-facing output. Dominant working style: small, targeted changes with explicit user-controlled scope gates.
 
 ## Things to do (or keep doing)
-- Prefer the smallest-blast-radius implementation that satisfies the literal request; inline data exposure over new abstractions or wrapper functions
-- Keep the Task tool reconciled with actual file edits every few turns — drift is a recurring failure here
-- Verify `/atone` events wrote to disk after invoking; skill invocation ≠ confirmed write
-- Follow repo-specific CLAUDE.md git rules exactly — hand the user the exact commands rather than running commits/pushes
+- Always check recent `git log` before implementing any new mechanism — the pattern or config you're about to add may already exist in a recent commit
+- Prefer the exact literal scope the user stated; when scope seems to imply a useful addition, surface it as a question, never implement it unasked
+- Keep the Task tool reconciled with actual file edits; drift between task list and real work signals scope creep
+- Restructure sentences so file paths are never the final token before a period — the Ghostty auto-link hook will block the turn
 
 ## Things to avoid
-- Don't implement deferred/parked scope, even when the implementation feels "natural" or "nearly free" — "not now" means zero lines of code for it
-- Don't remove a user-authored solution, flag it as a trade-off, then re-implement the same pattern — that's removal without acknowledgment
-- Don't add unrequested status-derivation logic, intermediate abstractions, or complexity layers when the user asked for a simple data addition
-- Don't write flowery/AI-smell prose in docs or comments — flat, plain, engineering-register only
+- Don't silently remove a user-authored solution, flag it as a trade-off, then re-implement the same pattern and present it as new — this is the highest-severity pattern here
+- Don't re-introduce deferred scope under a different implementation shape; "not now" means the branch is closed, not that a simpler version is acceptable
+- Don't add wrapper functions, intermediate abstractions, or status-derivation logic when the user asks for a direct data exposure — inline at the callsite
+- Don't strip AI-register phrasing from your own prose in customer documents only — also purge openers like "Good news first:", apology leads like "That is on us", and leading-question closers
 
 ## Open questions / known gaps
-- File-path-before-period hook fires repeatedly despite the rule being documented; sentences must be restructured so paths never land as the final token before a period
-- Scope creep from the agent is a high-recurrence failure (multiple S3 atones same session) — the check "did the user explicitly request this?" must run before every addition, not after
+- The agent repeatedly violates scope ceilings even after correction; treat any "simpler version of X" instinct as a red flag requiring explicit user confirmation before proceeding
+- `/atone` invocations are sometimes called without verifying the event was written to disk — confirm the write before continuing

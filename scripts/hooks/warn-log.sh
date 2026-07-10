@@ -67,7 +67,7 @@ done
 [ -n "$hook_id" ] || exit 0   # silent no-op on misuse; never break the calling hook
 # Only a recognized action reaches the line; anything else (absent, typo, junk)
 # leaves action empty so LEDGER_STRIP_EMPTY drops the field. Never reject.
-case "$action" in block|soft|nudge|muted) : ;; *) action="" ;; esac
+case "$action" in block|block-dry|soft|nudge|muted) : ;; *) action="" ;; esac
 
 # Diagnosis context (all OPTIONAL — omitted when absent, so old callers and the
 # ~194 existing lines stay byte-identical). `project` is DERIVED here from --cwd:

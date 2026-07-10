@@ -21,10 +21,16 @@ set -uo pipefail
 INPUT=$(cat 2>/dev/null || echo "{}")
 command -v jq >/dev/null 2>&1 || exit 0
 
-# Resolve session marker
-SESSION_KEY="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"
+# Resolve session marker — stdin session_id first, sanitized; derivation
+# MIRRORED in atone-stop-gate.sh and atone.sh:_add_exit_trap (all must agree).
+# Legacy date-keyed markers are still honored during the transition.
+_sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+[ -n "$_sid" ] || _sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
+[ -n "$_sid" ] || _sid="$(date +%Y-%m-%d)"
+SESSION_KEY=$(printf '%s' "$_sid" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 STATE_DIR="$HOME/.claude/atone/.session-state"
 MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
+[ -f "$MARKER" ] || { [ -f "$STATE_DIR/$(date +%Y-%m-%d).pending-atone" ] && MARKER="$STATE_DIR/$(date +%Y-%m-%d).pending-atone"; }
 
 [ -f "$MARKER" ] || exit 0  # nothing pending → nothing to do
 

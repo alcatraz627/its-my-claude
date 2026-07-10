@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-07-08T16:43:30.741177+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-10T08:38:27.530560+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Local LLM infrastructure suite (`q`/`see`/`review`/`imagine`/`lm fleet`/`lm index`) — research, tooling, and documentation for on-device model orchestration. Work alternates between exploratory sub-tasks and concrete deliverables; the user values decisive, focused execution over thorough peripheral coverage.
+Local LLM tooling suite (`q`/`imagine`/`warm`/`lm fleet`) — CLI-first, agent-drivable tools. Sessions mix research, persona/model design, and tooling work; primary deliverables are lean, behavior-focused implementation docs and working scripts.
 
 ## Things to do (or keep doing)
-- Always surface the **actual raw output** when claiming a test or feature succeeded — "it works" without evidence is treated as a failure, not a courtesy
-- Translate research and design phases into **lean, behavior-focused implementation docs** — professional and direct, neither enterprise-heavyweight nor hacky
-- Execute explicitly invoked skills (`/atone`, `/core-dump`, etc.) **immediately and completely** — deferring them mid-correction compounds the original mistake
-- Use the **Task tool** (not a file) whenever updating todos; the TUI is the user's status surface
+- Always surface actual command output when claiming a test or feature succeeded; the user judges correctness from raw output, not your assertion.
+- Hand exact git commands for the user to run manually — this repo has a `guard-user-commit.sh` gate; never execute commits or pushes directly.
+- Translate research/analysis phases into lean, behavior-focused implementation docs before the session ends; raw synthesis is not a deliverable.
+- Execute explicitly invoked skills (`/atone`, `/affirm`) immediately and completely before continuing other work — deferral compounds the mistake.
 
 ## Things to avoid
-- Don't re-introduce deleted complexity or add unrequested features when the user asks for a simpler replacement
-- Don't open docs with "why this matters" or motivational framing — use formal, direct, factually grounded language; no em-dashes, no AI-smell phrasing
-- Don't use `rm` — `trash` only; this is hard-blocked and has no exceptions
-- Don't complete peripheral exploratory work first and deliver the main task last — bias toward the primary deliverable
+- Don't re-introduce complexity the user explicitly deleted; when asked for a simpler replacement, deliver exactly that and nothing more.
+- Don't open docs with "Why this matters" framing, em-dashes, or motivational phrasing — formal, direct, factually grounded only; no AI-smell.
+- Don't use `rm` (hook blocks it; use `trash`). Don't write todos to a file when "update todos" is said — call the Task tool.
+- Don't declare test success without showing output; asserting success without evidence is treated as a failure.
 
 ## Open questions / known gaps
-- Recurring pattern: mandatory skills (`/atone`) skipped or silently deferred mid-session even after explicit invocation — treat the invocation as a hard interrupt, not a queued item
-- Session focus discipline is fragile on multi-sub-task sessions; risk of peripheral completion crowding out the main deliverable
+- Sessions risk completing peripheral exploratory sub-tasks (research, design, persona work) before the primary ask; pin the primary deliverable at session start to avoid drift.

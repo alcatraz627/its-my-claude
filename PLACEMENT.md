@@ -13,6 +13,28 @@ Frontier LLMs reliably follow ~150–200 instructions. Claude Code burns ~50 on 
 
 ---
 
+## First: which MECHANISM? (situation → extension)
+
+Before the two-axis rule (which decides *where a doc goes*), decide *what kind of
+thing to build at all*. Each mechanism has a recognizable trigger moment — build it
+when the moment arrives, not preemptively. (Adapted from Anthropic's official
+"build your setup over time" guidance; the enforcement column is this account's
+own doctrine.)
+
+| The moment you notice… | Build a… | Because |
+|---|---|---|
+| Claude got a convention wrong **twice** | CLAUDE.md line / `rules/` entry | Prose is advisory — fine for a preference, but only ~70% adhered |
+| A rule **must hold every time, zero exceptions** | **hook** (PreToolUse/Stop) | Hooks are deterministic; prose is a request, a hook is a guarantee ([[features/hook-design.md]]) |
+| You typed the same multi-step prompt a **third** time | user-invocable **skill** | Captures the playbook; loads on demand, near-zero always-on cost |
+| A side task floods the conversation with output | **sub-agent** | Isolated context; returns a distilled summary ([[rules/sub-agent-outputs.md]]) |
+| You keep copying data from a browser tab / external system | **MCP server** | A tool beats manual paste; deferred-loaded so cheap |
+| A second repo needs the same setup | **plugin** | Portable across repos |
+
+Key line: **if it must hold every time, make it a hook, not a prompt instruction.**
+A rule in prose that silently gets skipped 30% of the time is the exact failure the
+hook layer exists to close ([[rules/skill-spec-update-not-honored-by-running-session.md]]).
+Only once you've chosen "a rule/feature/convention doc" do the two axes below apply.
+
 ## The two-axis rule
 
 Every piece of config answers BOTH axes.

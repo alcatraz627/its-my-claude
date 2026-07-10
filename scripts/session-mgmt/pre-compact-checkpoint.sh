@@ -111,13 +111,23 @@ for notes_path in "$cwd/.claude/skills/runtime-notes.md" "$HOME/.claude/skills/r
 done
 
 # --- User goals from previous checkpoint ---
+# _checkpoint.claude.md is a symlink that, with concurrent same-dir sessions, can
+# point at ANOTHER session's checkpoint (multi-agent audit 2026-07-09). So flag
+# whether it actually belongs to THIS session; a cross-session goal must not be
+# presented as the current one (the stale-goal bug: props 140836 + 141219).
 prev_goal=""
+prev_goal_is_current="unknown"
 prev_checkpoint="${cwd:-$HOME/.claude}/_checkpoint.claude.md"
 if [[ -f "$prev_checkpoint" ]]; then
-  # Extract Initial Goal section (between ## Initial Goal and next ##)
   prev_goal=$(awk '/^## Initial Goal/{found=1; next} /^## /{if(found) exit} found{print}' "$prev_checkpoint" 2>/dev/null | head -10) || true
-  # Trim leading/trailing blank lines
   prev_goal=$(echo "$prev_goal" | sed '/^$/d') || true
+  # Session-match via the checkpoint's own `<!-- sessions: id@date -->` tag.
+  if [[ -n "$session_id" ]]; then
+    ck_sessions=$(grep -m1 '<!-- sessions:' "$prev_checkpoint" 2>/dev/null) || true
+    if [[ -n "$ck_sessions" ]]; then
+      [[ "$ck_sessions" == *"$session_id"* ]] && prev_goal_is_current="yes" || prev_goal_is_current="no"
+    fi
+  fi
 fi
 
 # --- User goals from WAL ---
@@ -204,10 +214,16 @@ dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 
 ## User Goals
 
-**From WAL:** ${wal_goal:-_(no WAL session header found)_}
-**From previous checkpoint:** ${prev_goal:-_(no prior checkpoint goal found)_}
+> **Authoritative current state = the Workspace Notes section below** (session-id
+> keyed, this session's own doc). The two goal lines here are best-effort text
+> scrapes that can belong to a PRIOR session — verify against Workspace Notes
+> before resuming, don't lead with them.
 
-> If these differ, the user likely pivoted mid-session. Resume the most recent goal.
+**From WAL (may be a prior session's goal — verify):** ${wal_goal:-_(no WAL session header found)_}
+**From previous checkpoint$([[ "$prev_goal_is_current" == "no" ]] && echo " — ⚠ belongs to a DIFFERENT session, likely stale" || { [[ "$prev_goal_is_current" == "yes" ]] && echo " — confirmed this session"; }):** ${prev_goal:-_(no prior checkpoint goal found)_}
+
+> If these differ from each other or from Workspace Notes, trust Workspace Notes
+> (it is keyed to this session); the scrapes above may be a prior session's goal.
 
 ## Working Directory
 

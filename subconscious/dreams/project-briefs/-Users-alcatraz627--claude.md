@@ -1,17 +1,18 @@
-<!-- i-dream project brief · 2026-07-08T16:44:17.967083+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-10T08:38:49.890996+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-This is the user's global `~/.claude` configuration repo — rules, scripts, hooks, skills, and WAL/memory infrastructure. Work style is long-running, multi-session maintenance with heavy context compaction and resumption.
+The user's personal Claude configuration repo (`~/.claude`) — rules, hooks, scripts, skills, and memory infrastructure. Work spans many sessions with heavy compaction; continuity tooling (`/catchup`, `/core-dump`) is load-bearing.
 
 ## Things to do (or keep doing)
-- **Treat every session resumption as a hard authorization reset** — all push/deploy approvals expire at compaction or `/clear`; re-derive prohibitions from CLAUDE.md before acting
-- **Checkpoint proactively**: write `/core-dump` at milestones, not just session end; `/catchup` is the primary recovery path after compaction
-- **Match terse commands to autonomous execution** — single-word directives ("next", "ahead", "looks") mean continue the active task at the same scope, no clarification needed
-- **Write WAL entries as JSONL** — the markdown format is a deprecated fallback only; all new session records use JSONL
+- **Checkpoint at milestones**, not just session end — write `/core-dump mini` every ~20 tool calls and before any context-heavy operation; `/catchup` is the primary recovery path after compaction.
+- **Treat terse messages as execution directives** — single words (`ahead`, `next`, `looks`, `done`) mean "continue autonomously at current scope"; never ask clarifying questions on short continuations.
+- **Write WAL entries as JSONL** — the markdown format is legacy; new sessions must append to `wal.jsonl` only.
+- **Prefer TUI/gum tools over markdown tables** for structured terminal output — the project's `~/.claude/scripts/tui/` library exists precisely for this.
 
 ## Things to avoid
-- **Never commit or push without fresh per-push approval** — this is the single most-violated rule; prior approval in the same session does NOT carry forward, even for a second push in a row
-- **Don't expand scope beyond the explicit request** — "fix X" does not authorize refactoring Y nearby; ask before touching anything the user didn't name
-- **Don't attempt fixes in a loop without diagnosing root cause** — three edits to the same function without pausing to read context is a signal to stop and investigate, not keep patching
+- **Never commit or push without fresh per-push explicit approval** — prior approval in a session does NOT carry forward; treat every compaction as a hard reset of all push/deploy authorizations.
+- **Don't thrash on the same failure** — if a fix attempt fails twice, stop and identify root cause before a third attempt.
+- **Never infer or synthesize values not present in source data** — flag any gap as inferred; never hallucinate to fill.
 
 ## Open questions / known gaps
-- Context compaction reliably strips push/commit prohibitions while preserving task momentum — a mechanical pre-push gate (script or hook) has been proposed but not yet implemented; until it is, this violation will recur
+- The git-push violation cluster recurred 18+ times despite advisory rules; mechanical gate (`guard-git-push.sh`) was the resolution — verify it's actually active before assuming the rule is enforced.
+- Pattern deduplication in the extraction pipeline produces near-identical entries; downstream analysis should deduplicate by semantic overlap before acting on counts.

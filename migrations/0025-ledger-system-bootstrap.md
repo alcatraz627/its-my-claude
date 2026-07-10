@@ -86,7 +86,14 @@ marked in-progress.
 ## Still owed (deferred, out of the MVP arc)
 
 - Per-domain `[[detector]]` blocks once i-dream parser tolerance is confirmed.
-- P3.5 efficacy proof (needs a 2nd detector to be observable).
+- ~~P3.5 efficacy proof (needs a 2nd detector to be observable).~~ Closed 2026-07-10:
+  the detector population grew (atone-s3-burn, gate-efficacy, 3 hook-burn, and the
+  new `plug-acted` archetype with its `acted.toml` registry), a goals-lint now
+  guards goals.toml's own review_after/provenance drift, and the acted detector
+  produced its first true-positive finding on live data (persona-suggest: 81 fires
+  across 73 sessions, 0 same-session conversions). The efficacy loop is observable
+  end to end: fires → conversions → findings → (for graduate-to-mechanism tickets)
+  auto-filed proposals.
 
 ## Gotchas for the runbook
 

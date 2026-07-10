@@ -1,6 +1,7 @@
 ---
 name: statusline-config
 description: Interactively toggle statusline segments and profiles
+disable-model-invocation: true
 allowed-tools: [Read, Edit, Glob, mcp__inputs__pick_one, mcp__inputs__pick_many, mcp__inputs__confirm, mcp__inputs__form]
 ---
 

@@ -60,9 +60,18 @@ else
   echo '{}' > "$TMP/efficacy.json"
 fi
 
+# Same pre-conversion for the acted registry (plug fired→acted mappings).
+ACT_PATH=$(jq -r '.detector[]? | select(.archetype=="acted") | .registry // empty' "$TMP/det.json" 2>/dev/null | head -1)
+ACT_PATH_EXP="${ACT_PATH/#\~/$HOME}"
+if [ -n "$ACT_PATH_EXP" ] && [ -f "$ACT_PATH_EXP" ]; then
+  yq -p toml -o json "$ACT_PATH_EXP" > "$TMP/acted.json" 2>/dev/null || echo '{}' > "$TMP/acted.json"
+else
+  echo '{}' > "$TMP/acted.json"
+fi
+
 # Python computes decisions + lints; emits one JSON object (no id/ts — bash stamps
 # those via ledger_id so the alert ids match the ledger format).
-RESULT=$(python3 - "$NOW" "$TMP/goals.json" "$TMP/det.json" "$TMP/state.json" "$TMP/efficacy.json" <<'PY'
+RESULT=$(python3 - "$NOW" "$TMP/goals.json" "$TMP/det.json" "$TMP/state.json" "$TMP/efficacy.json" "$TMP/acted.json" <<'PY'
 import json, sys, os, datetime
 
 now = datetime.datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
@@ -72,8 +81,10 @@ state = json.load(open(sys.argv[4]))
 # The efficacy registry (slug→gate mappings), pre-converted TOML→JSON by bash.
 # Absent for a run with no efficacy detector; the efficacy branch lints if empty.
 efficacy_reg = json.load(open(sys.argv[5])) if len(sys.argv) > 5 and os.path.exists(sys.argv[5]) else {}
+# The acted registry (plug fired→acted conversion mappings), same convention.
+acted_reg = json.load(open(sys.argv[6])) if len(sys.argv) > 6 and os.path.exists(sys.argv[6]) else {}
 
-KNOWN = {"burn_rate", "we_run_rule", "heartbeat", "robust_outlier", "efficacy"}
+KNOWN = {"burn_rate", "we_run_rule", "heartbeat", "robust_outlier", "efficacy", "acted"}
 TIER_ORDER = ["log", "find", "ticket", "page"]
 
 def expand(p): return os.path.expanduser(p or "")
@@ -93,6 +104,44 @@ def cap_tier(req, ceiling):
 alerts, summary = [], []
 new_state = dict(state)
 nowiso = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+# ---- GOALS-LINT (loud) ----
+# The anti-drift guard goals.toml promises in its own header: a goal is a value
+# claim, and value claims rot. Two mechanical checks, one optional:
+#   - review_after past due → the goal must be re-justified or retired.
+#   - a provenance entry that is an explicit repo path (contains "/" before any
+#     annotation and ends in a known extension) but no longer exists → the
+#     encoding drifted. Prose refs ("live intention …", bare filenames with
+#     commentary) are exempt — resolving them reliably isn't possible, and a
+#     false "missing" here would teach readers to ignore the lint.
+#   - reviewed_on (optional field): an existing provenance file modified after
+#     the last review → flag for a re-check.
+GOAL_EXT = (".md", ".sh", ".toml", ".py", ".json", ".jsonl")
+for gname, g in goals.items():
+    gproblems = []
+    ra = parse_date(g.get("review_after"))
+    if ra is None:
+        gproblems.append("missing/unparseable review_after")
+    elif now >= ra:
+        gproblems.append(f"review_after {g.get('review_after')} is past due — re-justify or retire the goal")
+    reviewed = parse_date(g.get("reviewed_on"))
+    for ref in str(g.get("provenance", "")).split(";"):
+        tok = ref.strip().split()[0] if ref.strip() else ""
+        if "/" not in tok or not tok.endswith(GOAL_EXT):
+            continue
+        cand = os.path.expanduser(tok if tok.startswith(("~", "/")) else os.path.join("~/.claude", tok))
+        if not os.path.exists(cand):
+            gproblems.append(f"provenance file missing: {tok}")
+        elif reviewed is not None:
+            mtime = datetime.datetime.fromtimestamp(os.path.getmtime(cand), tz=datetime.timezone.utc)
+            if mtime > reviewed:
+                gproblems.append(f"provenance {tok} changed after reviewed_on {g.get('reviewed_on')} — re-check the goal still matches")
+    if gproblems:
+        alerts.append({"detector": "goals-lint", "tier": "find", "kind": "alert", "goal_ref": gname,
+                       "actionable": True, "subject": f"goals-lint: {gname}",
+                       "instruction": f"goal '{gname}' is drifting: {'; '.join(gproblems)}",
+                       "idempotence_key": f"goalslint|{gname}|{now.strftime('%Y-%m-%d')}"})
+        summary.append(f"GOALS-LINT {gname}: {'; '.join(gproblems)}")
 
 for det in dets:
     name = det.get("name", "?")
@@ -333,6 +382,98 @@ for det in dets:
                         fired_months[mkey] = month
                         summary.append(f"{name} {slug}/{gate}: ALERT regressing tier={tier}")
             st["fired_months"] = fired_months
+
+    # ---- ACTED eval (registry-driven) ----
+    # The other half of plug efficacy: FIRED is already measured (plug-events,
+    # warn-events); this asks whether anything ACTS on a fire. Per mapping:
+    # sessions where the plug fired in the window vs those with ≥1 same-session
+    # acted event. A mature, high-volume mapping with ZERO conversions means the
+    # injection spends attention/context for nothing — that's an attention-
+    # scarcity finding, not a badge. Sessions are joined on the first 8 chars of
+    # the session id (streams disagree on full-vs-short ids). Idempotent per
+    # (plug, month).
+    elif det.get("archetype") == "acted":
+        mappings = acted_reg.get("mapping", []) if isinstance(acted_reg, dict) else []
+        if not mappings:
+            alerts.append({"detector": name, "tier": "find", "kind": "alert", "goal_ref": gref,
+                           "actionable": True, "subject": f"acted-lint: {name}",
+                           "instruction": f"acted detector '{name}' has no readable registry mappings (registry '{det.get('registry')}' missing/empty/unparseable). It would go silently quiet — fix the registry.",
+                           "idempotence_key": f"actlint|{name}|{now.strftime('%Y-%m-%d')}"})
+            summary.append(f"{name}: LINT no registry mappings")
+        else:
+            ceiling  = goals[gref].get("tier_ceiling", "log")
+            req_tier = det.get("tier", "find")
+            month    = now.strftime("%Y-%m")
+            fired_months = dict(st.get("fired_months", {}))
+
+            def stream_events(path, field, value, kind, ts_key, sess_key, cutoff):
+                """Yield session-id-prefix8 of matching events after cutoff."""
+                p = expand(path)
+                if not p or not os.path.exists(p):
+                    return None
+                out = []
+                for line in open(p):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        d = json.loads(line)
+                    except Exception:
+                        continue
+                    if kind and d.get("kind") != kind:
+                        continue
+                    if str(d.get(field)) != str(value):
+                        continue
+                    t = parse_ts(d.get(ts_key, ""))
+                    if t is None or t < cutoff:
+                        continue
+                    out.append(str(d.get(sess_key) or "")[:8])
+                return out
+
+            for m in mappings:
+                plug = m.get("plug", "?")
+                wdays = int(m.get("window_days", 30))
+                min_fires = int(m.get("min_fires", 10))
+                conf = (m.get("confidence", "high") or "high").lower()
+                cutoff = now - datetime.timedelta(days=wdays)
+
+                fired = stream_events(m.get("fired_stream", ""), m.get("fired_field", ""),
+                                      m.get("fired_value", ""), m.get("fired_kind"),
+                                      "ts", m.get("fired_session_key", "sid"), cutoff)
+                acted = stream_events(m.get("acted_stream", ""), m.get("acted_field", ""),
+                                      m.get("acted_value", ""), None,
+                                      "ts", m.get("acted_session_key", "session"), cutoff)
+                if fired is None or acted is None:
+                    summary.append(f"{name} {plug}: LINT fired/acted stream missing")
+                    continue
+
+                fired_sessions = {s for s in fired if s}
+                acted_sessions = {s for s in acted if s}
+                converted = fired_sessions & acted_sessions
+                ratio = f"{len(converted)}/{len(fired_sessions)}"
+                cflag = "" if conf == "high" else f" [{conf}]"
+                summary.append(f"{name} {plug}: fires={len(fired)} sessions={len(fired_sessions)} converted={ratio}{cflag} ({wdays}d)")
+
+                if len(fired) >= min_fires and not converted and conf == "high":
+                    if fired_months.get(plug) == month:
+                        summary.append(f"{name} {plug}: zero-conversion but already alerted this month -> suppressed")
+                    else:
+                        tier = cap_tier(req_tier, ceiling)
+                        det_instr = str(det.get("instruction") or "").strip()
+                        alerts.append({"detector": name, "tier": tier, "kind": "alert", "goal_ref": gref,
+                                       "actionable": True,
+                                       "subject": f"plug fires, nothing acts: {plug}",
+                                       "plug": plug, "fires": len(fired),
+                                       "fired_sessions": len(fired_sessions), "converted": 0,
+                                       "window_days": wdays, "deep_link": m.get("fired_stream", ""),
+                                       "idempotence_key": f"{name}|{plug}|{month}",
+                                       "instruction": (f"{plug} fired {len(fired)}x across {len(fired_sessions)} sessions "
+                                                       f"in {wdays}d with ZERO same-session conversions. "
+                                                       f"{goals[gref].get('statement','')}"
+                                                       + (f" || {det_instr}" if det_instr else ""))})
+                        fired_months[plug] = month
+                        summary.append(f"{name} {plug}: ALERT zero-conversion tier={tier}")
+            st["fired_months"] = fired_months
     else:
         summary.append(f"{name}: archetype '{det.get('archetype')}' not implemented in v1 -> skipped")
 
@@ -374,6 +515,6 @@ done
 # Persist state atomically.
 echo "$RESULT" | jq -c '.new_state' > "$STATE.tmp" 2>/dev/null && mv "$STATE.tmp" "$STATE"
 
-# The pull surface: print the summary (read by /doctor + the daily digest).
+# The pull surface: print the summary (read by /doctor step 5.7 + ledger.sh).
 echo "$RESULT" | jq -r '.summary[]? | "  ledger-alert: " + .'
 exit 0

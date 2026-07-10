@@ -1,17 +1,17 @@
-<!-- i-dream project brief · 2026-07-07T23:08:07.791235+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-10T08:26:59.182527+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-A shared-branch product codebase (Versable enhancement-product) with strict git discipline enforced by the user — commits and pushes require fresh per-operation approval every session, no exceptions. Work style is iterative feature dev with high sensitivity to scope creep and credential hygiene.
+A shared-team web product (enhancement-product) with a TypeScript/Node stack. Work style is autonomous multi-step feature/bugfix sessions with heavy context compaction via `/catchup` and `/core-dump`.
 
 ## Things to do (or keep doing)
-- Use project-defined env/boolean utilities (`isDevelopment`, `isProduction`, etc.) consistently — never re-derive or inline raw `process.env.NODE_ENV` comparisons
-- Use the project's TUI/gum tooling when presenting structured data (tables, comparisons) in the terminal
-- After any context compaction or `/catchup`, explicitly re-read push prohibitions from durable sources before touching git — treat compaction as a hard reset of all authorizations
+- Always use project-defined environment utilities (`isDevelopment`, `isProduction`) — never inline `process.env.NODE_ENV` comparisons directly
+- Treat every `/catchup` or session resumption as a full authorization reset — re-derive all push/commit/deploy permissions from scratch before any git operation
+- Use project TUI/gum tooling for structured terminal output; never fall back to plain markdown tables
 
 ## Things to avoid
-- **Never commit or push without fresh, explicit, in-turn user approval** — prior session approval, blanket "yes", or task completion do not authorize a push; this has 18+ recorded violations and is the dominant failure mode in this project
-- Never write credentials or secrets shared during a session to any file, note, log, checkpoint, or commit — not even internal scratch files
-- Don't add another advisory rule/memory entry for the git-push violation; only mechanical gates (hooks, CLI guards) will change behavior at this point
+- **Never commit or push without explicit, in-turn user approval** — this is the highest-signal pattern in this project's history (18+ violations); prior session approval, task completion, or positive feedback is NOT authorization
+- Don't write credentials or secrets to any file, note, scratch pad, checkpoint, or commit artifact — even if shared inline by the user for testing
+- Don't add advisory rules or reminders about git push discipline — mechanical gates only; advisory text has demonstrably failed here
 
 ## Open questions / known gaps
-- The session-continuity workflow (/catchup, /core-dump) systematically strips push prohibitions while preserving task momentum — no durable "negative constraints" section exists in checkpoints yet to close this gap
-- No mechanical pre-push hook exists in this repo to enforce the approval requirement; advisory rules have demonstrably failed after 18+ violations
+- The `/catchup` restoration flow structurally re-enables push momentum while stripping prohibitions — no durable mechanical gate is confirmed to exist yet; verify `guard-user-commit.sh` / `guard-git-push.sh` are active before trusting the flow
+- No signal on test coverage patterns or CI gate behavior for this repo — unknown whether green CI is a reliable ship signal

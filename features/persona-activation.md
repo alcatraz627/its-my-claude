@@ -107,6 +107,39 @@ pass can add a human rating per persona (affirm-style higher bar) on top of the 
 - ▢ Stop nudge hook (working-mode enforcement)
 - ▢ working-mode convention line in each persona / README
 
+## Efficacy read (2026-07-10, three weeks of data)
+
+The telemetry settles the design question migration 0022 left open: **the only
+persona activations that happen are the mechanically-logged dispatches.**
+
+- `usage/events.jsonl`: 29 events — skeptical-reviewer 18, juror 11, all
+  `mode: dispatched`. Every persona other than those two dispatch seats
+  recorded **zero** adoptions.
+- `persona-suggest` fired **81 nudges** in the same window
+  (`hooks/warn-events.jsonl`), every one pointing at a persona *file to read*.
+  Recorded conversions: zero. Whether any were silently followed is unknowable —
+  which is the point: unlogged adoption is invisible adoption.
+- Outcome backfill is weak everywhere: 23 of 29 events still say
+  `outcome: unknown`.
+- Migration 0022's "not exercised end-to-end" caveat is now closed by
+  production use: 11 live juror dispatches logged through the real
+  `atone-juror-dispatch.sh` path.
+
+Consequences shipped 2026-07-10:
+
+1. **`/persona` skill** (`skills/persona/SKILL.md`) — adoption becomes a
+   one-command, logged act: resolve persona → load in full → mandatory
+   `persona-log.sh record --mode adopted` → honest outcome update at task end.
+   The same data-path pattern that makes /skeptical-review's logging reliable.
+2. **persona-suggest messages now point at `/persona <name>`** (or the owning
+   flow for dispatch personas) instead of "consider reading the file".
+3. Suggestion→adoption heed-tracking (did a suggested persona get adopted this
+   session?) is deferred to the ledger ACTED-side detector work
+   (prop-20260630-085101-30) — same measurement shape, one home.
+4. The never-used personas stay: they are dispatch/adoption *contexts*, not
+   dead code, and several (`doc-writer`, `translator`) are named by rules as
+   dispatch targets. Revisit after `/persona` has a month of data.
+
 ## See Also
 
 - `scripts/persona-log.sh` — the recorder/summarizer (`persona-log.sh help`)

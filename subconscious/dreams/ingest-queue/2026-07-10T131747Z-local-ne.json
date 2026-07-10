@@ -1,0 +1,22 @@
+{
+  "ts": "2026-07-10T13:17:47Z",
+  "session_id": "local-next-a4",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260710-local-next-a4.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Visual-compare Phase A (fixtures-first: F2 icon pair, F3 identical pair, then E0/E4/E5/E3/E6, pack schema + cost/failures + nudges + slice reruns, contact sheet, battery F1\u2013F8) \u2014 per proposal \u00a75.",
+    "Phase B (/vis-compare gcc skill + policy.md v1 drafted-then-user-edited + suppressions + --revisit + announce-before-spend), then D calibration on the user's real login + icon pairs; C (loop) after one manual round-trip.",
+    "USER: fable-promo bypass ruling (self-expires 2026-07-17; battery reminds each run).",
+    "USER: gcc push (~6 held commits) \u00b7 `feat/q-adaptive` merge decision (12 commits, pushed).",
+    "Quiet-machine full verify.sh run (33 checks; contention timeouts twice today were environmental).",
+    "Standing (STATE \u00a7 PENDING): fleet-over-code-task \u00b7 governor table \u00b7 MTP measurement (rerank findings raise its value) \u00b7 D-lane voice (researched, user unsure) \u00b7 gap-menu leftovers: none \u2014 items 2-6 done."
+  ],
+  "tags": []
+}

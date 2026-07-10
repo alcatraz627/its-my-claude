@@ -131,6 +131,7 @@
 | `shared/wal-format.md` | WAL session header, action log, and checkpoint format | Writing WAL entries or parsing WAL for `/catchup` |
 | `shared/gum-guide.md` | Interactive TUI patterns with `gum` (choose, filter, spin) | Building skill UIs with terminal prompts |
 | `assets/docs/gum-rendering-examples.md` | Visual output gallery: tables, boxes, architecture diagrams, flowcharts, dashboards, color reference — all TTY-safe | Writing `gum_table`/`gum style`/`gum join` output; styling terminal results; composing diagram layouts |
+| `assets/docs/port-system-architecture.md` | Port-discipline internals: event-log fold semantics, allocation mutex, owner-boundary rules, fail-open rationale, known edges, sandbox test recipe | UPGRADING ports.sh or guard-dev-server-port.sh (everyday use needs only features/dev-servers.md) |
 | `shared/desktop-automation.md` | macOS GUI automation v1: screencapture, osascript, cliclick patterns, usage examples, Phase 2 upgrade spec | Any desktop automation task — screenshots, clicks, window management, Space switching |
 | `shared/bash-gotchas.md` | Bash pitfalls: `cat\|jq` pipe hangs, `\|\|`/`&&`/`\|` precedence, when to use Read vs Bash | Before writing any multi-step shell pipeline or file inspection command |
 | `shared/lock-file.sh` | File lock acquire/release/check for parallel agent safety | Before any write to shared files (runtime-notes, SKILL.md) |

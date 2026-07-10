@@ -41,16 +41,16 @@ elif m '\b(review|audit) (my|the|this) (code|change|changes|diff|pr|branch)|is t
   msg="This looks like a code review — run /skeptical-review (it dispatches the skeptical-reviewer persona: coverage-first, grounded findings)."
 elif m '\b(plan|decompose|sequence|break (this|it) down)\b|how should (i|we) approach|roadmap'; then
   persona="task-goal-planner"
-  msg="This is a planning/decomposition task — consider adopting ~/.claude/personas/task-goal-planner.md (bounded plan that seeds the Task tool)."
+  msg="This is a planning/decomposition task — run /persona task-goal-planner (bounded plan that seeds the Task tool; logged adoption)."
 elif m 'write (the )?docs?|document (this|the)|technical doc|\badr\b|architecture doc|data-pattern doc'; then
   persona="technical-doc-writer"
-  msg="This is doc authoring — consider ~/.claude/personas/technical-doc-writer.md (Diátaxis + ground-in-code + route the voice pass)."
+  msg="This is doc authoring — run /persona technical-doc-writer (Diátaxis + ground-in-code + route the voice pass; logged adoption)."
 elif m 'research|look (it|this) up|find out (about|whether)|compare .*(options|tools|libraries|vendors)|state of the|sources for'; then
   persona="web-researcher"
-  msg="This is web research — consider ~/.claude/personas/web-researcher.md (cite-everything, ≥2 sources) or /deep-research for a heavy deliverable."
+  msg="This is web research — run /persona web-researcher (cite-everything, ≥2 sources), or /deep-research for a heavy deliverable."
 elif m 'make an? image|generate (art|an image|a picture)|art[- ]direct|design (a|the|my) (logo|poster|visual|cover)'; then
   persona="art-director"
-  msg="This is image generation — consider ~/.claude/personas/art-director.md (guided brief → generate→critique→refine)."
+  msg="This is image generation — run /persona art-director (guided brief → generate→critique→refine)."
 fi
 
 [[ -z "$persona" ]] && exit 0

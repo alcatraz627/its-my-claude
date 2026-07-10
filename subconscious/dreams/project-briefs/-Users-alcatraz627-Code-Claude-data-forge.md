@@ -1,19 +1,16 @@
-<!-- i-dream project brief · 2026-07-08T16:45:29.042260+00:00 · 2 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-10T08:39:19.699155+00:00 · 8 patterns / 0 insights -->
 ## What this project is about
-
-Data transformation/ETL tooling project (data-forge), worked on iteratively with a focus on pipeline correctness and careful agent orchestration before committing to expensive operations.
+A data-engineering toolchain (data-forge) built and iterated via Claude Code sessions, with heavy autonomous operation and iterative draft-feedback loops as the dominant working style.
 
 ## Things to do (or keep doing)
-
-- Prefer completing all prerequisite research and user Q&A before launching multi-agent workflows — running consensus debates over incomplete specs wastes tokens and produces noise
-- Always follow file path mentions in terminal output with a space, comma, or word — never a period directly after the path (Ghostty auto-links break on trailing periods)
-- Gate expensive fan-out orchestration on a complete problem statement; if ambiguity remains, resolve it inline first
+- Always check `git log` before introducing any new mechanism, config value, or version change — recent commits frequently contain the very thing you're about to reinvent or revert
+- Defer expensive multi-agent workflows until all prerequisite research and user Q&A is complete; running debates over incomplete specs wastes tokens and produces stale conclusions
+- When augmenting personal workflow tools, ask what the user's actual pain point is — default to user-facing utility metrics, not throughput/hardware metrics
 
 ## Things to avoid
-
-- Don't launch multi-agent consensus/debate workflows until the input spec is fully locked — incomplete specs produce low-signal debates that need to be redone
-- Don't place periods immediately after file paths in any output (backtick or bare) — restructure the sentence so the path is not last before punctuation
+- Don't place file paths immediately before sentence-terminating periods in any reply — Ghostty auto-links paths and swallows the trailing period, breaking the link; restructure the sentence or follow the path with a comma or word
+- Don't open PRs or push commits between feedback cycles during iterative draft sessions, even when running autonomously — PR creation is a terminal gate requiring explicit user sign-off
+- Don't produce customer-facing documents with AI-register phrasing (`Good news first:`, reflexive apologies, leading-question closers) — purge these before delivery
 
 ## Open questions / known gaps
-
-- _(no signal yet)_ on preferred testing patterns or data validation conventions specific to this project — scan existing pipeline code before assuming a pattern
+- Recurring tension between autonomous execution speed and the need for explicit user confirmation at scope boundaries (PRs, commits, version changes) — the right pause points are not always obvious mid-session

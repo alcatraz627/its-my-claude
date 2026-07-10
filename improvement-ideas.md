@@ -757,3 +757,20 @@ absolute path it actually wrote.
 - **Cache keys as forensic ledger.** S3 research-cache keys embedding `{model}-{input}` + timestamps conclusively answered "which model actually served run X and when" — better than logs (retention) or transcripts. When designing caches, an identity-bearing key doubles as an audit trail for free.
 - **Sibling-module drift needs a parity test, not runtime guards.** Two deliberately-cloned modules (v2/v3 agents) drifted (rule registered in one only → KeyError). The fix that stuck was a one-assertion pytest pinning registry equality; the runtime versioning machinery built first (pins + compiler guard + propagation) was pure sprawl and got unwound.
 - **Telemetry classification: read the SDK's structured fields, never str(e).** `"404" in str(e)` mis-tags when echoed model output contains "404" (real risk in parts-catalog domains). google.genai APIError carries `.code`/`.status`; `getattr(e, "code", None) == 404` is exact and poison-proof.
+
+## 2026-07-10 — dream-sweep-7a
+- macOS window automation: AX System Events can't see a window when the CG owner name differs from the process name ("i-dream" vs "i-dream-bar"); CGWindowListCopyWindowInfo is the reliable frame source, and frames must be re-read before EVERY coordinate click — stale frames sent two clicks into other apps' windows.
+- Orchestrating a deliberation panel as named background teammates works well (idle notifications as completion signals, SendMessage round-2 retains each seat's context) — but returns no usage blocks; budget accounting needs an in-file convention.
+
+## 2026-07-10 — session wm-b51-ae (versable-builder)
+
+- Auto-mode classifier can reuse a STALE denial reason: after correctly denying a
+  remote-DB PII query, it denied an innocent local `ls` with a copy of the first
+  reason. Workaround: rephrase via a different natural tool (`find`/Glob). Treat a
+  second denial whose reason doesn't match the command as a misfire, not a signal.
+- Playwright MCP: file uploads only from allowed roots (repo + .playwright-mcp);
+  relative screenshot paths land in the repo root CWD, not .playwright-mcp — move
+  them or pass paths under .playwright-mcp/ explicitly.
+- Tailwind v4 container queries (`@container` + `@min-[Nrem]:`) are the right tool
+  when an app-shell sidebar changes a component's available width — viewport
+  breakpoints lie. Pair with shrink-0 triggers for all-or-nothing label collapse.

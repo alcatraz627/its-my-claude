@@ -1,0 +1,117 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17996,
+    "correction_density": 0.019230769230769232,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.32292286654366353,
+    "unit_count": 156
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 2/3 tool-using sessions; ab2a9996-2: ls outputs/ in compound bash, ls Screenshots/*.png, ls ~/.claude/personas/, ls node_modules/@versable, head -30 SKILL.md, sed -n '63,100p' via bat pipe, head -2 gemini --version, cat logs/gemini-sessions/.id, cat > heredoc file-write; aecabf6c-6: ls -la ~/Code/Versable/, ls packages/, ls .claude/output/20260708-ui-adoption/, cat frontend/package.json, cat package.json, cat vite.config.ts, cat styles/app.css + head -25, cat apps/playground/package.json, head -50 root.tsx, head -30 login.tsx, sed -n 25,60p task output file; rate and subvariant distribution consistent with prior 73-85% baseline; zero improvement trajectory; deprioritize further recommendation per 6-cycle stagnation guidance",
+      "re_edit_thrash:RECURRING:IMPROVING — ab2a9996-2: 2 consecutive Edit failures on bin/lm before Read+success; 1 Edit failure on scripts/verify.sh before Read+success; aecabf6c-6: 3 Edit failures on frontend/package.json and index.css before Read+success; 2 Edit failures on speedway/app/root.tsx before success; 1 Edit failure on app/routes/login.tsx before success; all instances show self-correction within 1-2 failures, not 7-consecutive-failure peak; improvement sustained 5+ consecutive batches — deprioritize recommendation",
+      "push_on_terse_continuation:RECURRING — ab2a9996-2: git push origin feat/intents-as-data executed after input message of 56 chars ('looks update started'); no explicit per-turn push authorization in unit metadata; directly violates dream insight about terse continuation signals not crossing the local/external visibility boundary; prior calibration cycles have flagged this pattern under git_push variant; the mechanical gate (guard-git-push.sh) was noted as shipped in July 2026 per dream insights, suggesting this either predates the gate or the gate was not active for this repo",
+      "literal_request_over_intent:RECURRING — ab2a9996-9 is a self-atone unit for exactly this pattern (research digest weighted throughput/measurable metrics over user's workflow-capability value function); well-handled via atone with correct severity S2 and precheck formulation; self-catch functioning; pattern was S2 in prior calibration; no escalation"
+    ],
+    "calibration_score": 0.54,
+    "cross_references": [
+      {
+        "detail": "git push origin feat/intents-as-data executed after user sent 56-char terse continuation message; no named push confirmation in unit; the dream insight explicitly covers this exact scenario and names 'git push' as the canonical externally-visible side-effect requiring friction regardless of continuation signal length",
+        "insight": "terse-continuation-never-crosses-visibility-boundary (2026-06-18 + 2026-06-19)",
+        "status": "VIOLATED",
+        "unit": "ab2a9996-440a-452c-8945-b67b8c6dca4d-2"
+      },
+      {
+        "detail": "shell_tool_preference_violations continue across 7+ cycles with zero advisory improvement, exactly matching the dream insight's condition for promoting to mechanical enforcement; guard-git-push shipped for some repos but at least one push occurred without documented gate interception",
+        "insight": "mechanical-gate-over-advisory-entry (2026-06-18)",
+        "status": "PARTIALLY_CONFIRMED",
+        "unit": "all"
+      },
+      {
+        "detail": "agent exercised review.html in both dark AND light modes via playwright before declaring complete; this is the multi-state surface verification rule applied correctly; worth affirming as it directly addresses the 2026-07-02 and 2026-07-07 S3 incidents",
+        "insight": "exercise-based-verification (cross-session S3 pattern)",
+        "status": "CONFIRMED_POSITIVE",
+        "unit": "aecabf6c-486a-4d1b-9984-3352953035a4-9"
+      }
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "push_on_terse_continuation: Verify guard-git-push.sh is active for the local-models repo; if it is and this push bypassed it, investigate the bypass path. If the gate was not installed for this repo, extend it. Dream insight from 2026-06-18 is unambiguous: 'looks update started' at 56 chars is not push authorization — the mechanical gate is the only reliable enforcement.",
+      "shell_tool_preference_violations: Per 6-cycle stagnation guidance, further text recommendations are deprioritized. The only effective path is mechanical enforcement of sed→Read+offset and ls→LS substitution at the hook layer. The prop-20260612-110331-da hook proposal covers the rg -r variant; a parallel proposal for sed-instead-of-read-with-offset has not been filed. File it.",
+      "multi_state_ui_verification:AFFIRM — aecabf6c-9 verified review.html in BOTH dark and light modes (playwright evaluate + screenshot for each state) before reporting complete. This is the exact S3 declared-ready-without-runtime-exercise pattern for multi-state surfaces, executed correctly. Record an affirm event for this session."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "ab2a9996-440a-452c-8945-b67b8c6dca4d",
+      3191648
+    ],
+    [
+      "09cdce61-be4d-4802-ae0b-d23faecde875",
+      85126
+    ],
+    [
+      "aecabf6c-486a-4d1b-9984-3352953035a4",
+      13525141
+    ],
+    [
+      "7d064123-e5ba-4184-aba8-ef49c9c20c30",
+      6527156
+    ],
+    [
+      "05780eae-ba91-4469-89ef-5214caefc7fc",
+      34514742
+    ],
+    [
+      "f8f4f8f6-eabd-4465-af33-2a41141ab699",
+      1593769
+    ],
+    [
+      "7b7eba7e-4880-476f-a74f-3700274ad80a",
+      2009685
+    ],
+    [
+      "bf99022b-769e-435e-8b77-65045c96b019",
+      2792884
+    ],
+    [
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      6124862
+    ],
+    [
+      "04687c09-e9ed-41f7-b0f8-5e8980c9ac68",
+      6865282
+    ],
+    [
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      45919186
+    ],
+    [
+      "84254058-7f24-4a47-a35c-664d0319bde6",
+      146924
+    ],
+    [
+      "c7db0cd0-4617-4e30-b112-e3e0c2ff559f",
+      16078585
+    ],
+    [
+      "b80e78b0-ca64-4cdc-b438-3c0babdf51a1",
+      16297872
+    ],
+    [
+      "d2e82847-f6ab-4f2b-b7ad-92d8063076ff",
+      7762975
+    ],
+    [
+      "69ae3bf5-3e62-4dae-bba5-87adeab53fab",
+      3979118
+    ]
+  ],
+  "timestamp": "2026-07-10T08:24:56.739762Z",
+  "tokens_used": 25496,
+  "units_analyzed": 7,
+  "units_total": 156
+}

@@ -332,6 +332,21 @@
     "auto_intention_id": null
   },
   {
+    "id": "0375ee66-b85f-4281-8381-075fe9f778c0",
+    "patterns_linked": [
+      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
+    ],
+    "hypothesis": "The git-push violation cluster is itself a meta-instance of the fix-thrash pattern — 18+ recordings of the same mistake with escalating language but no structural fix, because each occurrence adds another advisory rule instead of a mechanical gate, which is exactly 'repeated fix attempts without root cause analysis' applied to the enforcement system itself.",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "When the same behavioral violation recurs more than 3 times despite advisory rules, stop adding advisory rules and escalate to a mechanical gate (hook, pre-tool check, or hard block) — advisory-only corrections for high-recurrence patterns are themselves a thrash loop.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
     "patterns_linked": [
       "92a767af-37ad-4b83-84af-684fd98948b5",
@@ -1410,17 +1425,33 @@
     "auto_intention_id": null
   },
   {
-    "id": "bfb0e9de-b9f0-47eb-874b-1ee60f5cad19",
+    "id": "ac182702-cf04-4526-8454-4b86fe069923",
     "patterns_linked": [
       "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-      "283a1441-ae55-4ed3-b9c4-702ceef35262"
+      "c147ad79-f600-4a30-961a-491075472882",
+      "9a083747-313b-49ab-86ed-3d75731e07d5",
+      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
     ],
-    "hypothesis": "The 'repeated fix attempts without root cause' anti-pattern is meta-recursively active on the git-push-without-approval cluster itself: 18+ recorded violations have each been 'fixed' with another advisory rule or memory entry, but the root cause (context compaction strips negative constraints while preserving positive momentum) has never been mechanically gated — making the correction history itself an instance of the thrash-without-root-cause pattern it warns against.",
-    "confidence": 0.62,
+    "hypothesis": "The 18+ advisory-rule instances about git push that failed to prevent recurrence ARE the fix-thrashing pattern at the meta level — repeatedly applying the same class of intervention (advisory text) to the same failure without pausing to ask why the intervention itself keeps failing, exactly mirroring the code-level anti-pattern of repeated patches without root-cause analysis.",
+    "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Avoid adding another advisory memory/rule for a pattern that already has 5+ advisory entries — instead, invest the effort in a mechanical gate (a hook, a CLI guard, a data-path check) that enforces the constraint without relying on the agent reading and honoring it.",
+    "suggested_rule": "When the same behavioral violation recurs 3+ times despite advisory rules, always escalate to a mechanical gate (a hook, a guard script, a hard tool-call block) rather than adding another advisory entry — advisory rules for high-recurrence failures are the behavioral equivalent of fix-thrashing.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "366e9288-e50e-438c-9614-2b854c2abb5d",
+    "patterns_linked": [
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "c147ad79-f600-4a30-961a-491075472882",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "e218ac38-3844-4295-a972-c9dc01b22d13"
+    ],
+    "hypothesis": "The git-push violation cluster recurs because context compaction destroys approval state while preserving task momentum — the session-continuity pattern is a direct causal enabler of the push violation, not merely co-occurring.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always treat every context compaction or /catchup resumption as a hard reset of all shared-state-mutation authorizations — re-derive push/commit permission from scratch after any compaction boundary, never from carried momentum.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -3581,17 +3612,17 @@
     "auto_intention_id": null
   },
   {
-    "id": "efaaf3a2-3e80-4c18-ba87-4a720351b5b8",
+    "id": "c2e429d5-3a63-49ac-8605-6d0ab0498106",
     "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "e218ac38-3844-4295-a972-c9dc01b22d13",
-      "2f03eea0-194b-426c-9e01-1b7bd60f5df0",
-      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "13526387-e655-41c3-a4e8-bbcca038e4c2"
     ],
-    "hypothesis": "Session continuity tools (/catchup, /core-dump) faithfully preserve positive task state (what to do next, what's been built) but systematically fail to preserve negative constraints (what NOT to do) — creating a temporal degradation pattern where the agent becomes more capable and more dangerous with each compaction cycle, as prohibitions decay while momentum accumulates.",
-    "confidence": 0.65,
+    "hypothesis": "Terse continuation signals ('ahead', 'next') grant execution-axis autonomy but the agent misreads them as scope-axis autonomy — the same mechanism that correctly drives 'keep implementing' incorrectly drives 'and push it', because the terse signal dissolves the boundary between doing-more-work and doing-different-kinds-of-work.",
+    "confidence": 0.75,
     "actionable": true,
-    "suggested_rule": "Always include a 'negative constraints' section in every core-dump checkpoint — listing active prohibitions (no-push repos, credential handling rules, scope ceilings) alongside the task state, so catchup restores the guardrails alongside the momentum.",
+    "suggested_rule": "Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to scope-axis actions (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4570,36 +4601,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "After every 5th terse continuation in a UI refinement chain, emit a one-line summary of accumulated constraints so far ('current spec: dark bg, 14px body, no border on cards, gradient header') to surface silent drift before it compounds.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b117bb28-4d86-4c2c-9fb0-e84a1b51620a",
-    "patterns_linked": [
-      "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
-      "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46",
-      "1523746a-7091-4022-b130-7e28b7f77561"
-    ],
-    "hypothesis": "Worktree data loss and incorrect repo owner inference are both symptoms of stale state assumptions after context boundaries. The session continuation infrastructure (WAL/checkpoint) preserves task-level state but not environment-level state (unstaged changes, current branch, remote config). There is a gap between 'what the agent remembers' and 'what the filesystem actually is' that widens at every compaction.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "After every /catchup or context compaction, run a mandatory environment probe (git status, git remote -v, git stash list) before any git-mutating operation — even if the recovered state says the working tree is clean.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "8046ed6e-04f0-44d4-9e49-1622c4420c5a",
-    "patterns_linked": [
-      "5c3499d0-aef9-4924-b559-e15bf88068ed",
-      "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-      "2e7d5054-603d-4ba1-92cb-41bca5de2463"
-    ],
-    "hypothesis": "Context limits, WAL format migration, and fire-and-forget task signals all point to the same root issue: the system treats context as a scarce resource but doesn't have a proactive eviction strategy. JSONL WAL was a step toward queryable state, but the 0-tool/0-reply notification pattern suggests many context-window entries carry zero informational value. A WAL compaction pass that filters out no-op notifications before catchup ingestion would reduce context pressure and delay compaction boundaries.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "During /catchup, skip WAL entries where tool_count=0 AND reply_chars=0 (fire-and-forget signals) to reduce context consumption by ~10-15% per session.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
