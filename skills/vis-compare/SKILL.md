@@ -24,6 +24,7 @@ a number the pack does not contain, and never disputes one it does.
 ```
 /vis-compare <reference-A> <candidate-B> [focus...]
 /vis-compare --revisit <divergence-id|all> --feedback "..."   # re-judge one slice
+/vis-compare --loop <reference-A> <candidate-B>               # drive fix rounds to convergence
 ```
 
 - `reference-A` / `candidate-B`: image paths. A is the original/reference, B the
@@ -32,6 +33,32 @@ a number the pack does not contain, and never disputes one it does.
   Steers ranking; the judge still completes the full pass.
 - `--revisit`: re-judge a named divergence (or `all`) with feedback in context — for
   when a verdict was wrong. Patches the verdict; records the re-ruling in the ledger.
+- `--loop`: iterate fix → re-render → re-compare with the L3 ledger until converged
+  (see "Loop mode" below). For candidates YOU can rebuild (CSS/code in hand).
+
+## Loop mode (--loop) — L3, for Claude-built candidates
+
+The round protocol; the mechanical half lives lm-side (`~/Code/local-models`):
+
+1. **Open a loop dir**: `outputs/see/loops/<slug>/` (lm repo). Round 1 must be a
+   comparable pair — the ledger rejects a `comparable: poor` pack outright.
+2. **Each round**: apply the fixes the last verdict's `fix_hint`s name (exact values
+   are on YOUR side — you built B) → re-render B → run
+   `see diff <A> <B-new> --no-read --json` (the loop default: evidence only, ~1s,
+   no VLM seat) → judge ONLY at nudged moments (see 4) → feed the ledger:
+   `.venv/bin/python lib/vis-ledger.py add outputs/see/loops/<slug>/ <verdict.json> --pack <evidence.json>`
+   (bare `python3` also works; `--pack` enables the poor-pair block + score trend).
+3. **Obey the signals** in the add/status output: `stop: "policy-pass"` → converged,
+   the ledger is the acceptance record. `stall: true` (2 consecutive rounds, zero
+   `fixed`) → escalate: run the full native judgment or stop and rethink the fixes.
+   `pass-with-notes` → converged is the USER's call; surface it, don't decide it.
+4. **Judge sparse** (§5.7 of the design): loop rounds iterate on machine evidence —
+   the native-vision judgment (Phase 3 below) fires only on: ledger stall, all
+   machine scores under the policy floor (candidate ready for final verdict), or
+   an explicit user ask. Announce before each judge invocation, as always.
+5. Status words (new/persisting/fixed/regressed) come from the ledger, never from
+   you — do not re-derive or dispute them (same contract as extractor numbers).
+   Rounds are sequential: one add at a time, no parallel rounds into one loop dir.
 
 ## Step 0 — Load guidelines, policy, and memory
 
