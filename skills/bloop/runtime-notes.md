@@ -1,3 +1,15 @@
+## bloop: V2 M2 lint+editor (ghostty-themes) — 2026-07-11 16:05
+
+**Purpose:** Second live /bloop run — M2 of the ghostty config manager (lint module + POST endpoint + editor UI). Gate verdict: ISSUES-FOUND, 2 majors, both fixed same-day.
+
+**Insights:**
+
+1. Gate now 4/4 and 5/5 on real bugs across runs: it found (a) spawn-failure → "invalid, 0 problems" UI lie, (b) legit embedded-newline-in-quoted-value spoofing diagnostic keys. Naming CONCRETE malformed-input classes in the dispatch prompt keeps paying — the newline spoof came straight from that list.
+2. My first fix for (b) was a charset check on the key — WRONG, the spoof key was numeric and passed. The robust fix used ground truth the module already had (cross-check reported key against the parsed submitted line). Lesson: when sanitizing echoed text, anchor to what the caller submitted, not to a character class.
+3. Injectable {bin, timeoutMs} params on lint() made the spawn-failure path testable in 100ms instead of 10s — test-only params are justified when the test IS the caller.
+4. ghostty binary QUIRK worth reusing: writing to an fd shared with other shell writers produces NUL-padded clobbering; always give it a private pipe/file (Node spawnSync is safe; multi-command shell captures are not).
+
+---
 ## bloop: First live run — E1 numeric position deltas (local-models) — 2026-07-11 15:10
 
 **Purpose:** First-ever exercise of /bloop, on a real deferred item (E1 numeric moved

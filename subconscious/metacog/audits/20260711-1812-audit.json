@@ -1,0 +1,121 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 15800,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.25146972587214456,
+    "unit_count": 73
+  },
+  "response": {
+    "biases_detected": [
+      "structural_claim_without_reading_code:RECURRING — unit 8cc6c6e4-3 made unsupported claims about teammate/IPC coordinate mechanics (topic_keywords: claude, sent, teammate, coords) using zero tools on an 872-char input; user corrected; matches the no-tool-assertion pattern flagged in prior calibration cycles; the correction without any verification attempt is the tell",
+      "re_edit_thrash:RECURRING:IMPROVING — unit 8cc6c6e4-7 shows 1 Edit failure on rules/git.md before Read+success; self-correction within a single failure; consistent with 5+-batch improvement trajectory noted in history; no escalation warranted",
+      "shell_tool_preference_violations:RECURRING:STABLE — minor instances: unit 8cc6c6e4-7 uses ls for file-existence probes (ls ~/.claude/.claude/require-user-commit, ls ~/.claude/require-user-commit) where test -f or stat would be semantically correct; unit 8cc6c6e4-5 appends ls as tail of compound cp command for spot-check verification; rate lower than 73-85% baseline this batch; deprioritize per 6-cycle stagnation guidance",
+      "write_before_read_trap:RECURRING — unit 8cc6c6e4-5: Write to config.json failed (success:false) immediately before Read then Write succeeded; matches the parallel Read+Write trap pattern documented in rules/ambiguous-file-action-halt.md; self-corrected but the pre-write content check was skipped on first attempt; this subvariant has appeared in prior sessions but was not separately classified in calibration history",
+      "nested_claude_path_anti_pattern:NEW_FLAGGED — unit 8cc6c6e4-7: first Bash call targeted ~/.claude/.claude/require-user-commit (the hook-blocked double-nest path); failed as expected by block-nested-claude.sh; agent corrected in next call; anti-pattern is documented in CLAUDE.md and shell.md but has not appeared in calibration history as a named bias; flagging as first observed instance",
+      "push_on_terse_continuation:NOT_PRESENT_THIS_BATCH — unit 8cc6c6e4-5 correctly used osascript dialog gate before git push; unit 8cc6c6e4-7 push to origin/main failed (success:false) consistent with guard-git-push.sh or rebase-required behavior; positive signal; pattern appears to be improving"
+    ],
+    "calibration_score": 0.35,
+    "overconfident_count": 1,
+    "recommendations": [
+      "structural_claim_without_reading_code: unit 8cc6c6e4-3 is a zero-tool corrected response on IPC/teammate coordinate mechanics — before asserting behavioral details of cross-session messaging, use ToolSearch or Read on relevant implementation files; RECURRING, not improving, warrants continued attention",
+      "write_before_read_trap: before any Write to a path not created in the current session, perform a sequential Read first — the Write→fail→Read→Write sequence costs one extra round-trip that Read-first avoids entirely; especially applies to config.json and other structured files whose schema may differ from expectation",
+      "nested_claude_path_anti_pattern: newly observed this batch — when CWD is ~/.claude, construct paths as absolute from $HOME/.claude directly rather than relative .claude/... expansions that double-nest; the hook correctly blocked the attempt but the avoidance should be preemptive",
+      "push_on_terse_continuation: NOT PRESENT this batch — push gate functioning correctly; no recommendation needed",
+      "re_edit_thrash: IMPROVING — deprioritize; current fail-then-read-then-retry recovery pattern is functioning within acceptable bounds"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "a69a566c-170f-47cc-9e0c-c76daf5430b5",
+      124466
+    ],
+    [
+      "3b50b4a9-b773-433e-8a74-5054ad1a031b",
+      62897
+    ],
+    [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      2709589
+    ],
+    [
+      "44de5dbe-189e-423a-a815-987cd8c0dd65",
+      3886574
+    ],
+    [
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      10725740
+    ],
+    [
+      "ab8b4c13-71d0-4f04-b88d-099f88c47c9e",
+      3848770
+    ],
+    [
+      "f8f4f8f6-eabd-4465-af33-2a41141ab699",
+      3035863
+    ],
+    [
+      "d3948b68-59cc-4d28-9e13-6c909a2e7b8d",
+      30565706
+    ],
+    [
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      5409077
+    ],
+    [
+      "c7db0cd0-4617-4e30-b112-e3e0c2ff559f",
+      20127006
+    ],
+    [
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      10776938
+    ],
+    [
+      "74d1a833-4184-42b0-8dbe-636a9af9f325",
+      82805
+    ],
+    [
+      "42739c29-99fd-4487-8b9a-1022782ab836",
+      101564
+    ],
+    [
+      "eb439922-31b3-4e0e-8f2a-5e7a7da15cc9",
+      4696484
+    ],
+    [
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      3896668
+    ],
+    [
+      "fea10d0d-6031-4dd7-bd5c-53c7ade44efd",
+      85917
+    ],
+    [
+      "efb971a3-eef5-4b6c-9c26-5f0eb5329d62",
+      147799
+    ],
+    [
+      "d2e82847-f6ab-4f2b-b7ad-92d8063076ff",
+      14876837
+    ],
+    [
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      4256241
+    ],
+    [
+      "4fd4ca0e-d3a8-4ee8-bcaa-89d71a51fa5f",
+      1780412
+    ],
+    [
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      2225233
+    ]
+  ],
+  "timestamp": "2026-07-11T18:12:35.289352Z",
+  "tokens_used": 6321,
+  "units_analyzed": 4,
+  "units_total": 73
+}

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-11T08:29:27Z",
-  "events_analyzed": 91396,
-  "sessions_analyzed": 253,
+  "generated_at": "2026-07-11T18:13:40Z",
+  "events_analyzed": 93678,
+  "sessions_analyzed": 263,
   "session_quality": {
-    "average_score": 68.5,
+    "average_score": 68.8,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,57 +170,57 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": "versable-builder",
+    "primary_focus": ".claude",
     "recent_projects": {
-      "tmp": 1,
-      "Pictures": 1,
-      "data-forge": 1,
-      "versable-builder": 2,
-      "local-models": 1,
+      "versable-builder": 1,
       ".claude": 2,
+      "two-enhancement-product": 1,
       "i-dream": 1,
-      "two-enhancement-product": 1
+      "data-forge": 1,
+      "local-models": 1,
+      "ghostty-themes": 1,
+      "claude-ipc": 2
     },
-    "drift_rate": 0.741,
-    "total_switches": 186,
+    "drift_rate": 0.751,
+    "total_switches": 196,
     "recent_switches": [
       {
-        "ts": "2026-07-10T14:44:07Z",
+        "ts": "2026-07-11T09:10:08Z",
+        "from": "i-dream",
+        "to": "data-forge"
+      },
+      {
+        "ts": "2026-07-11T09:10:11Z",
+        "from": "data-forge",
+        "to": "local-models"
+      },
+      {
+        "ts": "2026-07-11T09:10:12Z",
         "from": "local-models",
         "to": ".claude"
       },
       {
-        "ts": "2026-07-10T14:55:52Z",
+        "ts": "2026-07-11T09:12:57Z",
         "from": ".claude",
-        "to": "i-dream"
+        "to": "ghostty-themes"
       },
       {
-        "ts": "2026-07-10T14:59:26Z",
-        "from": "i-dream",
-        "to": ".claude"
-      },
-      {
-        "ts": "2026-07-10T15:58:49Z",
-        "from": ".claude",
-        "to": "versable-builder"
-      },
-      {
-        "ts": "2026-07-10T17:22:39Z",
-        "from": "versable-builder",
-        "to": "two-enhancement-product"
+        "ts": "2026-07-11T09:26:31Z",
+        "from": "ghostty-themes",
+        "to": "claude-ipc"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 7257,
-    "corrections": 1571,
-    "confirmations": 1286,
-    "directives": 249,
-    "terse_messages": 562,
+    "total_prompts": 7316,
+    "corrections": 1578,
+    "confirmations": 1296,
+    "directives": 250,
+    "terse_messages": 569,
     "correction_rate": 0.216,
     "confirmation_rate": 0.177,
     "directive_rate": 0.034,
-    "terse_rate": 0.077,
+    "terse_rate": 0.078,
     "style_label": "corrective"
   }
 }

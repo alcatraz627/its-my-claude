@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-11T04:42:14.962463+00:00 · 11 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-11T18:16:06.030118+00:00 · 13 patterns / 0 insights -->
 ## What this project is about
-A customer-facing SaaS builder product (Versable) with heavy emphasis on document quality, UI verification, and coordinated multi-agent workflows. Work style is iterative with strict "verified done" standards.
+Versable Builder is a professional-facing product codebase worked on with a high bar for production quality — UI changes require real browser verification, docs require human-register prose, and scope discipline is strict.
 
 ## Things to do (or keep doing)
-- **Verify UI changes by navigating to the actual URL and exercising the primary flow** before claiming anything works — screenshots and type-checks are not substitutes
-- **Scan recent git log before introducing any new mechanism** (ID storage, config value, version change) to avoid reinventing what a recent commit already solved
-- **Wait for all prerequisite research/Q&A to complete before launching expensive multi-agent debates** — partial inputs produce wasted consensus rounds
+- Always navigate to the actual URL and exercise the primary flow before claiming a UI or server-side change works — no exceptions
+- Check recent git log before introducing any new mechanism for storing IDs, config values, or version pins; reinvention of recently-committed work is a critical failure
+- Sequence edits to the same file serially, never in parallel — parallel Edit calls silently clobber each other
+- Clarify "runtime variables" vs "deploy-time env vars" vs "on-the-fly app globals" before implementing; the user means different things
 
 ## Things to avoid
-- **Never end a sentence with a file path followed by a period** — Ghostty auto-links paths and swallows the trailing period, breaking the link; restructure the sentence so the path is not the final token before a period
-- **Don't produce AI-register prose in customer-facing documents** — strip openers like "Good news first:", reflexive apologies, leading-question closers, and capitalized "The User"; write plain professional prose
-- **Don't suggest version changes (upgrade/revert) without checking git history first** — version decisions in recent commits are deliberate; overriding them silently causes regressions
-- **Don't default to hardware/throughput metrics when asked for workflow augmentations** — focus on user-facing utility improvements, not system internals
+- Don't place file paths immediately before sentence-ending periods — restructure the sentence so the path is not the last token before `.`
+- Don't launch expensive multi-agent workflows (magi, consensus debate) until all prerequisite research, docs, and user Q&A is complete — running them over incomplete inputs wastes tokens and produces bad output
+- Don't let AI-register phrasing into customer-facing documents: no "Good news first:", no reflexive apologies, no leading-question closers, no "The User" capitalization
+- Don't default to hardware/throughput metrics when the user asks for workflow-relevant augmentations — ask what utility dimension they actually care about
 
 ## Open questions / known gaps
-- File-path-period stop hook keeps firing across sessions despite documentation — the mechanical enforcement isn't landing reliably mid-turn
-- Multi-agent review timing (when prerequisites are "complete enough" to start) remains judgment-call territory with no clear threshold
+- When doc-writing guidelines are loaded, the agent still produces AI-smell prose; the guidelines aren't reliably applied without an explicit fresh-reviewer pass

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-11T04:26:13.595262+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-11T18:36:49.404006+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Product enhancement feature work on Versable — a collaborative SaaS codebase with strict scope discipline and human-reviewed implementation docs. Working style is incremental, tightly scoped, with frequent scope-ceiling checks.
+A Versable enhancement product (full-stack, likely Next.js + backend) where the dominant working style is iterative, scope-controlled feature development with strong opt-in/defer discipline.
 
 ## Things to do (or keep doing)
-- Replicate exact existing patterns when the user says "the same way you would for X" — never introduce new abstractions when a model already exists
-- Translate research/design phases into lean, behavior-focused implementation docs before coding — product-focused and factually direct, not academic or enterprise-heavy
-- Stop and hand the user exact git commands for manual execution when repo-specific CLAUDE.md rules require it — those rules take absolute precedence
-- Write docs in formal, direct language — no "why this matters" openers, no em-dashes, no promotional framing
+- **Replicate exact existing patterns** when the user says "do it the same way as X" — never introduce new abstractions where a copy of the existing approach suffices
+- **Translate research/design outputs into lean, behavior-focused implementation docs** — professional and direct, no "why this matters" framing
+- **Stop before each push** and request fresh per-push explicit confirmation; prior approval does not carry forward
+- **Follow repo-specific CLAUDE.md git rules absolutely** — hand the user exact commands when they require manual execution
 
 ## Things to avoid
-- Don't re-introduce deferred, deleted, or explicitly excluded complexity — if the user said "not now", it means never in this session; re-adding it under any framing is a hard scope violation
-- Don't claim UI or server changes are working without navigating to the actual URL and exercising the primary flow — unverified UI claims are treated as critical failures
-- Don't implement "opt-out" when the user said "opt-in" — verbal acknowledgment of correct semantics does not substitute for implementing those semantics correctly; double-check the default behavior direction in code
-- Never inherit push approval from a prior statement; each `git push` requires fresh per-push confirmation
+- **Don't re-introduce deferred or deleted complexity** — when the user says "not now", "defer", or deletes your code, it's gone; implementing it "since it's trivial" is a scope violation
+- **Don't claim UI or server changes work without exercising the actual URL** — navigating to localhost and triggering the flow is mandatory before declaring done
+- **Don't use em-dashes or promotional framing in any human-facing prose** — docs and PR descriptions must be formal, direct, and grounded
+- **Don't implement the inverse of a stated semantic** — if the user says "opt-in", default-include everything and gate on an explicit exclusion signal, not the reverse
 
 ## Open questions / known gaps
-- Scope ceiling enforcement is a recurring failure mode even mid-session — the agent agrees on scope verbally then violates it in code; this has happened multiple times and has not been mechanically gated
-- Em-dash / AI-smell prose violations recur despite explicit in-session rules existing — prose output for this project needs an extra self-review pass before sending
+- Repeated scope-ceiling violations (re-adding deferred features, adjacent-pattern touching) suggest the agent isn't treating "simplify X" as a hard boundary on the blast radius — needs mechanical discipline, not just intent
+- Verbal acknowledgment of correct semantics followed by inverted implementation suggests a gap between planning and code generation that isn't caught before the turn ends

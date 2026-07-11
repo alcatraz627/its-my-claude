@@ -5,6 +5,29 @@ signal that misled the judgment, a suppression worth graduating to policy.md.
 
 ---
 
+## run 2026-07-11 — Phase D run #2: real icon pair (512 source vs 30px tray size)
+
+Purpose: calibration on data-forge tray icons; verdict `pass-with-notes` — structure
+fully survives (dhash/ahash 0), both accents drift hard (dE 22.7 / 33.6 at weight
+0.111 each) and edges soften across 82.8% of cells; one fix (sharper 30px regen).
+Insights:
+- POLICY GAP (v3 candidate): no ladder class for resolution/render-fidelity loss —
+  pixelation/softness had to file under `[texture]` with a manual "graduates because
+  legibility" note. Candidate: `[render-fidelity]`, default mid-ladder for icons.
+- POLICY GAP (v3 candidate): no derived-size leniency rule. A pipeline-derived 30px
+  asset arguably should be judged against "best achievable at 30px", not the source
+  verbatim — without it, every small icon rung reads as looks-worse x3.
+- The pack's local-VLM prose is NOT an anchor: it claimed the mark "occupies a much
+  smaller area" in B while dhash 0 + grid_delta 4.7% said otherwise. Trust extractors
+  and native eyes; treat the VLM's LAYOUT SHIFTS section as a hint, never evidence.
+- Equal-weight twin palette pairs (0.111 / 0.111) with big dE on BOTH accents +
+  edge_shape hot_cell_pct >80% is the downscale-blend signature — one root cause,
+  group the fix, don't report three independent recolors.
+- `shared/prepend-runtime-note.sh` writes the GLOBAL runtime-notes.md, not this
+  skill's file — prepend here manually (locked) instead.
+
+---
+
 ## run 2026-07-11 — fixture pair diff-a/diff-b (first real invocation)
 
 Purpose: full-skill run on the canonical fixture pair; verdict `diverges` on the
