@@ -1,4 +1,4 @@
-# vis-compare taste policy (v2 — calibrated 2026-07-11, Phase D run 1)
+# vis-compare taste policy (v3 — calibrated 2026-07-12, Phase D runs 1–2)
 
 > This file is the durable home of "which divergences matter to me." The judge reads
 > it every run. It was drafted from the design's divergence-class ladder; **it is
@@ -48,15 +48,22 @@ fingerprint and suppression match key on it verbatim, so a prose synonym breaks 
    that moved corner-to-corner, a panel that reflowed). Low-to-mid by default: often
    `neutral` or an `improvement` toward convention; rises only if the new spot hurts
    findability or breaks a scan order.
-6. `[brand-color]` **brand / accent color drift** — the accent or a brand-locked color
+6. `[render-fidelity]` **render / resample fidelity** — pixelation, blur, aliasing, or
+   downscale blending that softens the mark (calibrated, run 2). Looks-worse when it
+   costs legibility or crispness at the asset's actual display size. **Derived-size
+   leniency:** judge a pipeline-derived rung against the best achievable AT that size,
+   never the source verbatim — a good 30px render can't keep every edge. Hue gets NO
+   such leniency: a competent resample keeps color identity, so accent drift still
+   files as `brand-color` against the source.
+7. `[brand-color]` **brand / accent color drift** — the accent or a brand-locked color
    moved (ΔE above the floor). Matters more when a project pins exact brand hexes.
-7. `[spacing-rhythm]` **spacing / rhythm** — padding, gaps, alignment, inter-row rhythm.
+8. `[spacing-rhythm]` **spacing / rhythm** — padding, gaps, alignment, inter-row rhythm.
    Matters when it breaks a grid the design otherwise keeps; small shifts are usually low.
-8. `[micro-type]` **micro-typography** — weight, tracking, size within a step. Rarely
+9. `[micro-type]` **micro-typography** — weight, tracking, size within a step. Rarely
    worth chasing unless it changes legibility or hierarchy (then it graduates up).
-9. `[texture]` **texture / decoration** — shadows, gradients, borders, ornament. Lowest
-   by default; free-hand territory unless it carries meaning (a shadow that signals
-   elevation/state).
+10. `[texture]` **texture / decoration** — shadows, gradients, borders, ornament. Lowest
+    by default; free-hand territory unless it carries meaning (a shadow that signals
+    elevation/state).
 
 ## The floor (what is not-worth-chasing by default)
 
