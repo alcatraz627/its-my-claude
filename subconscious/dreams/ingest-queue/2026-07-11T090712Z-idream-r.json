@@ -1,0 +1,22 @@
+{
+  "id": "eb439922-31b3-4e0e-8f2a-5e7a7da15cc9",
+  "ts": "2026-07-11T09:07:12Z",
+  "session_id": "idream-rot",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260711-idream-rot.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**BLOCKED on the parallel session** (owns insight_digest.rs / cli.rs / main.rs uncommitted): W0.4 truthful digest header, W0.1e widget digest-header R/Y/G, doctor CLI contract check. Coordinate via claude-ipc or wait; NEVER commit their files.",
+    "**Wave 1:** real queue drain (needs the `id`-namespace bridge surfaced by W0.5 + the gcc-side producer fix), engine-driven cadence, universal retention. Then Waves 2-3 per docs/24.",
+    "**USER (their calls, do not do without asking):** push the 3 Wave-0 commits + docs/24 244c8fa (per-push sentinel); `i-dream prune`; retire the resume-i-dream-sweep schedule + its Calendar event; dark-mode + Journal-indigo eyeball verdicts; #34 topbar-review acceptance; the 4-week keep-criteria review.",
+    "**OFFERS (optional, unrequested \u2014 user hasn't decided):** harden the first-open menu race (health shows on first open post-restart); write an env-access convention doc to silence the recurring env-access hook.",
+    "**Milestone decision (the live fork):** 1 push+stop (agent's lean) \u00b7 2 start Wave 1 \u00b7 3 coordinate blocked items."
+  ],
+  "tags": []
+}

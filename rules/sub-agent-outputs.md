@@ -1,5 +1,5 @@
 ---
-brief: Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST include an absolute output path + "write your full output there BEFORE returning", and the parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires.
+brief: Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST pin an absolute output path AND how it gets persisted — either the sub-agent writes before returning (write-capable agent types only; never a file literally named report.md, the harness blocks it), or the sub-agent returns full text and the PARENT writes it. Parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires.
 triggers:
   - tool:Agent
   - phrase:dispatch sub-agent
@@ -19,7 +19,7 @@ paths:
   - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
-updated: 2026-07-09
+updated: 2026-07-11
 stale_after_days: 365
 ---
 
@@ -82,12 +82,19 @@ When in doubt, write it.
    to produce)
    - YES → assign an absolute output path now, before writing the dispatch prompt
    - NO → proceed without the path requirement
-2. Have you written the output path and a "write before returning" instruction
-   into the Agent prompt? If no — stop and add them.
-3. Have you added `test -f <path> && wc -l <path>` as a verification step after
-   the dispatch? If no — add it.
+2. Pick the persistence mode, gated on the agent type:
+   - **Write-capable agent** (general-purpose, claude, custom types with Write):
+     instruct "write your full output to `<path>` BEFORE returning".
+   - **Read-only agent** (Explore, Plan — no Write tool): the sub-agent CANNOT
+     persist. Instruct "return your FULL findings as text; I will persist them
+     to `<path>`" — then the parent writes the file itself. Do not tell a
+     read-only agent to write; it fails after the substantive work is done.
+3. Have you written the path and the chosen persistence instruction into the
+   Agent prompt? If no — stop and add them.
+4. Have you added `test -f <path> && wc -l <path>` as a verification step after
+   the dispatch (it runs after PARENT-persist too)? If no — add it.
 
-Do not write the dispatch prompt until all three pass.
+Do not write the dispatch prompt until all four pass.
 
 When dispatching a sub-agent that will produce material content, the dispatch
 prompt **must include**:
@@ -100,12 +107,22 @@ prompt **must include**:
      directly under the relevant `docs/` subdir, with a sensible filename
    - **Global (cross-project) findings:**
      `~/.claude/assets/reports/<YYYYMMDD>-<slug>/<agent>.md`
-2. **The instruction to write before returning:** "Before returning, write
-   your full output to `<path>`. Your return summary should be a 5-bullet
-   abstract + the absolute path."
+
+   **Filename trap:** never name the file literally `report.md`. The Claude
+   Code harness blocks a sub-agent writing that exact name ("Subagents should
+   return findings as text") and the work comes back as a giant inline return.
+   Use a descriptive `<slug>.md` / `<agent>.md` (confirmed 2026-07-04/05, ~5
+   blocked dispatches).
+2. **The persistence instruction** (mode chosen in the pre-dispatch gate):
+   - Write-capable agent: "Before returning, write your full output to
+     `<path>`. Your return summary should be a 5-bullet abstract + the
+     absolute path."
+   - Read-only agent (Explore/Plan): "Return your FULL findings as text —
+     do not truncate; I will persist them to `<path>`." The parent then
+     writes the file before using the findings.
 3. **A verification step after the sub-agent returns:** parent runs
    `test -f <path> && wc -l <path>` (or equivalent Read) before using the
-   sub-agent's findings.
+   sub-agent's findings — in BOTH modes.
 
 If multiple sub-agents run in parallel, give each a **distinct path** under the
 same dated folder so their outputs are colocated and easy to consolidate.
@@ -121,6 +138,11 @@ you an output path, **ask for one** before doing the substantive work, OR
 default to writing under `<project_root>/.claude/output/<YYYYMMDD>-<HHMM>-<slug>/`
 and tell the parent the path you chose. Do not produce material content that
 exists only in your return string.
+
+If the harness **refuses your file write** (or you have no Write tool):
+return your FULL content — not just the abstract — and open the return with
+`WRITE-BLOCKED: <intended path>` so the parent knows to persist it verbatim.
+A refused write plus an abstract-only return loses the artifact twice.
 
 Your return summary structure:
 

@@ -1,0 +1,23 @@
+{
+  "ts": "2026-05-28T14:12:50Z",
+  "session_id": "guard-sl-7c",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260528-guard-sl-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**User (next session start):** export `STATUSLINE_WIDTH_DEBUG=1` (e.g. in `~/.zshrc` or per-session); `tail -f ~/.claude/logs/statusline-width.log` while working; reproduce a split/resize scenario.",
+    "**User (housekeeping):** commit the now-executable guard hook so `+x` persists across machines:",
+    "`git add scripts/hooks/guard-anthropic-credentials.sh && git commit -m \"Make guard-anthropic-credentials hook executable (was 644, never ran)\"`",
+    "The hook had been advisory-only since 2026-05-25 \u2014 same failure pattern as `rules/skill-spec-update-not-honored-by-running-session.md` (spec without enforcement). Worth a brief atone or at least the commit message naming it.",
+    "**Future agent (when corruption recurs with debug log on):**",
+    "**Optional follow-up:** if the user later wants the cell-aware truncation guard implemented anyway (belt-and-suspenders for future emoji-bearing segments), it'd go as a final per-line clamp in pure bash counting wide glyphs from a known list. Currently SKIPPED because char \u2248 cell in Ghostty default.",
+    "**Backup file:** `scripts/statusline/statusline.sh.bak-cellwidth-20260528` exists from the safety copy I made before editing \u2014 can be removed once the user is confident in the new behavior."
+  ],
+  "tags": []
+}

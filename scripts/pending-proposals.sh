@@ -1,58 +1,25 @@
 #!/bin/bash
-# pending-proposals.sh — SessionStart hook that checks for pending dream-learned
-# config proposals and injects them into Claude's context for user review.
+# pending-proposals.sh — RETIRED (migration 0031, 2026-07-11). No longer wired.
 #
-# Output: JSON {"additionalContext": "..."} to stdout if proposals exist, else silent exit.
+# This was a SessionStart hook that injected the pending rows of
+# ~/.claude/claudew/pending-config-proposals.jsonl into every session's context
+# for review. It ran for weeks and produced zero decisions, for a structural
+# reason: that file was a SECOND proposal store that nothing triaged. Its rows
+# never entered proposals.jsonl, never accrued corroboration, never appeared in
+# /backlog-triage, and the only lifecycle the injected text offered was "hand-edit
+# the JSONL" — which no rule permits and no session did.
 #
-# Reads: ~/.claude/claudew/pending-config-proposals.jsonl
-# This script never modifies the proposals file — only reads and presents.
-
-PROPOSALS_FILE="$HOME/.claude/claudew/pending-config-proposals.jsonl"
-
-[ -f "$PROPOSALS_FILE" ] || exit 0
-
-python3 - "$PROPOSALS_FILE" <<'PYEOF'
-import sys, json
-
-proposals_file = sys.argv[1]
-
-pending = []
-try:
-    with open(proposals_file, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                obj = json.loads(line)
-                if obj.get('status') == 'pending':
-                    pending.append(obj)
-            except json.JSONDecodeError:
-                pass
-except OSError:
-    sys.exit(0)
-
-if not pending:
-    sys.exit(0)
-
-# Build context message
-lines = [
-    "## Pending Config Proposals (Dream-Learned)",
-    f"_{len(pending)} rule(s) extracted from dream insights with high confidence._",
-    "_These were auto-generated from i-dream memory consolidation. Present each to the user for approval before adding to CLAUDE.md._",
-    ""
-]
-
-for i, p in enumerate(pending, 1):
-    conf = p.get('conf', 0)
-    rule = p.get('rule', '(unknown)')
-    approved = " (user-upvoted insight)" if p.get('user_approved_insight') else ""
-    lines.append(f"**{i}.** (conf={conf:.2f}{approved}) {rule}")
-
-lines.append("")
-lines.append("_To act on these: present each rule to the user, ask if they want it added to CLAUDE.md. "
-             "If accepted, add it under a '## Dream-Learned Rules' section. "
-             "Then update the proposal status from 'pending' to 'accepted' or 'rejected' in the JSONL file._")
-
-print(json.dumps({"additionalContext": "\n".join(lines)}))
-PYEOF
+# The same five rules were therefore re-injected at every single SessionStart,
+# indefinitely: an advisory surface with no conversion path, which is exactly the
+# failure mode the account has already logged elsewhere (persona-suggest,
+# 0/73 conversions).
+#
+# Dream insights now file onto the ONE backlog via propose-config-from-insights.sh
+# (tagged link:dream:<id> + src:dream-consolidation) and are decided at
+# /backlog-triage alongside every other proposal. They are surfaced by the same
+# backlog surfacer as everything else — no bespoke channel.
+#
+# The old JSONL is kept as a read-only archive for history. Nothing writes it.
+# This script is left in place, inert, so any stale settings.json reference
+# degrades to a silent no-op rather than a hook error.
+exit 0

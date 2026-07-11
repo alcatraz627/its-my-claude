@@ -1,0 +1,53 @@
+{
+  "ts": "2026-05-18T09:36:40Z",
+  "session_id": "docs-pr-29",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260518-docs-pr-29.claude.md",
+  "insights": {
+    "worked": [
+      "**Two-file split for the report** (REPORT.md punch-list + EXPERIMENT-NOTES.md meta) turned a \"convoluted\" deliverable into two focused docs serving distinct audiences. The user-explicit choice via `AskUserQuestion` got the right shape in one round instead of iterating.",
+      "**Per-doc imperative checkboxes** (`- [ ] Add X`) read as a TODO list \u2014 the user can pick off items without re-reading meta-context.",
+      "**Validator-driven cleanup**: running `docs-validator` after each round of edits gave a clear stop signal (0 MUST = stable baseline). Without it, \"stable\" would have been judgement-call territory.",
+      "**`AskUserQuestion` with `preview` options** worked well for both decision points (report shape, BTS handling) \u2014 user saw concrete examples and picked decisively.",
+      "**Investigating mechanical drift via `git status` + `rg` + Python link-resolver** caught structural drift quickly (10 broken links in `structure.md`)."
+    ],
+    "didnt_work": [
+      "**Sub-agent rendering markdown through TTY renderer** (`gum format`-style) \u2014 produced 2-space indented + 78-col hard-wrapped output with broken bold pairs. Saved as source = unusable. **Lesson:** when dispatching a sub-agent to produce a `.md` file, explicitly say \"write raw markdown \u2014 no rendering, no piping through gum/bat/glow/mdcat\" AND verify by reading raw bytes (`awk '{print length, $0}'`) before declaring done. Render-check beats trust.",
+      "**First REPORT.md was structurally OK but rhetorically wrong** \u2014 buried the lede, was 30% meta-experiment content, leaned on verdict-bingo instead of synthesis. Verifying file integrity (bold pairs, indentation) is NOT the same as verifying it serves the reader. **Lesson:** always read the artifact end-to-end with fresh eyes before claiming done.",
+      "**Sub-agent claimed writes were blocked** when re-dispatched for the two-file split. Almost certainly false (no such guard exists for general-purpose sub-agents with Write access). Sub-agent returned content inline; parent persisted it via Write. **Lesson:** when a sub-agent reports a \"harness blocking write\" issue, take the inline content and write it yourself \u2014 don't re-dispatch.",
+      "**My \"3 gum-rendered \\_index.md files need cleanup\" finding was a false alarm** \u2014 the Read tool's display rendering of those files made them look 2-space-indented, but raw bytes are clean. Cost: ~5 mins investigating + a Bash spot-check to disprove. **Lesson:** when Read shows leading-space indents, verify with `awk 'NR<=10 {printf \"[%d:%d] %s\\n\", NR, length($0), $0}' <path>` (raw bytes) before declaring the file broken."
+    ],
+    "gotchas": [
+      "**Rate-limiting on parallel sub-agent dispatch** held throughout. Empirical sweet spot: 3 concurrent Agent calls (had been hitting limits at 4+). Used 3-at-a-time batches for Group C; all succeeded first try.",
+      "**Validator `_(planned)_` soft-broken-link convention is not yet supported** \u2014 the `by-role/_index.md`, `learning-paths/_index.md`, and `onboarding-router.md` all use `[text](path) _(planned)_` for forward-references. Validator counts them as broken. Worth wiring up.",
+      "**`docs/boring-technical-stuff/` partial migration** \u2014 restructure didn't drain BTS fully (`system/`, `testing/`, `vendors/`, `workflows/` moved into `tech/`; everything else remains in BTS). Documented in `structure.md` as \"draining\" per user's chosen handling."
+    ],
+    "notes": [
+      "The persona trio (`greybeard`, `translator`, `pager-holder`) at `~/.claude/personas/` can be reused on any future doc batch via `Agent` tool dispatch. Convention: write reviews to `frontend/.claude/output/<date>-<slug>/reviews/` (mirror the 20260517-persona-review/ layout).",
+      "`frontend/.claude/output/20260517-persona-review/REPORT.md` is the canonical user-facing punch-list (139 lines, action-oriented). `EXPERIMENT-NOTES.md` (110 lines) holds the methodology + per-persona behavior + lens-divergence content.",
+      "`docs/structure.md` is now the canonical 1-page tour; the embedded INTERNAL maintenance comment lists update triggers + reconciliation order. Mirror that pattern when writing other meta-docs.",
+      "The `_(planned)_` link suffix is becoming a project convention for forward-references in scaffolds (3 docs use it now). Don't strip it; downstream tooling should learn it.",
+      "BTS is **draining, not deleted**. Don't auto-mass-move BTS files. The drain is opportunistic \u2014 moves happen when an author is touching the file anyway, OR when a sub-cluster has a clear new home. Forced wholesale migration risks breaking every cross-link in the tree."
+    ],
+    "feedback": [
+      "\"The report is so convoluted and makes no fucking sense\" \u2192 drove the two-file split + per-doc imperative-checkbox punch-list pattern.",
+      "\"Just get the docs to a somewhat-stable structure state, I'll do the rest\" \u2192 confirmed scope discipline: fix MUST validator violations, don't touch persona-REPORT punch-list items or tooling improvements.",
+      "User explicitly chose: (a) two-file split for the report; (b) public onboarding-router (vs private checklist or per-hire template); (c) BTS draining (vs documenting dual reality vs skipping structure.md)."
+    ]
+  },
+  "pending": [
+    "Backfill `owner:` frontmatter on every doc (10/10 reviewed docs lack it; validator hint, not yet enforced)",
+    "Resolve live `[VERIFY]` / `TODO(human)` markers in `status: stable` docs (7 of 10 reviewed docs flagged in REPORT.md)",
+    "The 3 remaining validator findings (2 SHOULD heading-jumps in `product/admin/{parts-list,scraper-success}.md`, 1 MAY `superseded_by:` in `product/jobs/create-other-modules.md`)",
+    "Per-role onboarding files: `by-role/{junior-eng,senior-eng,cs,ops}.md` (scaffold linked from `onboarding-router.md`, content pending)",
+    "The deeper REPORT.md rewrites: `credits-architecture.md` invariants hoist, `create-upload.md` split into product/engineering siblings, `info-routes-no-admin-check-at-proxy.md` runbook sibling",
+    "Wire `[VERIFY]` / `TODO(human)` + `status: stable` co-occurrence check into the docs-validator (the persona experiment's top mechanical-leverage finding)",
+    "Add a soft-broken-link convention to docs-validator: links suffixed with `_(planned)_` warn instead of erroring (would unblock the by-role scaffold from false-positive failures)",
+    "Add a required `owner:` field check to docs-validator + backfill the field across all 388 docs",
+    "`docs/boring-technical-stuff/backend/cron-jobs.md` (M, uncommitted)",
+    "`docs/boring-technical-stuff/frontend/services/cron-tick/index.md` (M, uncommitted)",
+    "`docs/boring-technical-stuff/frontend/data-patterns/job-state.md` (??, untracked)",
+    "`docs/boring-technical-stuff/frontend/services/expiring-cycles-cron.md` (??, untracked)"
+  ],
+  "tags": []
+}

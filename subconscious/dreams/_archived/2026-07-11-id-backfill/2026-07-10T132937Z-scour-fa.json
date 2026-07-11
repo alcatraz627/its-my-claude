@@ -1,0 +1,22 @@
+{
+  "ts": "2026-07-10T13:29:37Z",
+  "session_id": "scour-fable-a3",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260710-scour-fable-a3.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: rescope the 3 unscoped tier-1 pins with `--cwd` (block message teaches the exact command; first session hitting it can also do it from the app root).",
+    "USER: commit today's ~/.claude work (COMMIT.md flow: secret-scan, multi-session fetch/rebase) \u2014 port system + all of today's earlier queue work is uncommitted; pushes for i-dream (~20) and data-forge (5) also still awaiting approval.",
+    "USER: paste the backlog-triage answer string (http://localhost:5197/backlog-triage-jul10/ \u2014 39 pre-answered calls) so proposal state changes can be applied.",
+    "Scheduled: 2026-07-21 15:00 opus review session (brief at ~/.claude/scheduled/port-system-review-brief.md).",
+    "Open review edges deliberately deferred (catalogued with fix shapes in the arch doc): F5 fold identity bleed on port reuse (false MIS-TIERED risk), F7 reap doesn't identity-match the PID it kills, F11 launcher regex false negatives (turbo/nx/ng/rails/docker), F12 strict ts parsing, F13 blocklist triplication, F15 event-log rotation.",
+    "The versable session must relaunch walmart backend on :5102 (told via IPC; guidance entry reinforces)."
+  ],
+  "tags": []
+}

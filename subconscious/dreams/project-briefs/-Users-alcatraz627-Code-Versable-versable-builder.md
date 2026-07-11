@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-10T08:39:36.744032+00:00 · 11 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-11T04:42:14.962463+00:00 · 11 patterns / 0 insights -->
 ## What this project is about
-A customer-facing B2B product (Versable Builder) with iterative doc-writing and multi-agent review workflows. Working style mixes autonomous implementation bursts with explicit human feedback gates before terminal actions.
+A customer-facing SaaS builder product (Versable) with heavy emphasis on document quality, UI verification, and coordinated multi-agent workflows. Work style is iterative with strict "verified done" standards.
 
 ## Things to do (or keep doing)
-- Always restructure sentences so file paths are never the final token before a period — place a word, comma, or space after every path reference to avoid Ghostty auto-link truncation
-- Before implementing any mechanism to store/retrieve an ID or config value, scan `git log --oneline -10` for recent commits that may have already introduced it
-- Check git history before suggesting any version change (upgrade, revert, pin) — a recent deliberate revert in the log outranks your read of the docs
-- When asked for workflow augmentations to a personal tool, prioritize user-facing utility over hardware/throughput metrics
+- **Verify UI changes by navigating to the actual URL and exercising the primary flow** before claiming anything works — screenshots and type-checks are not substitutes
+- **Scan recent git log before introducing any new mechanism** (ID storage, config value, version change) to avoid reinventing what a recent commit already solved
+- **Wait for all prerequisite research/Q&A to complete before launching expensive multi-agent debates** — partial inputs produce wasted consensus rounds
 
 ## Things to avoid
-- Don't start expensive multi-agent consensus or magi-debate workflows until all prerequisite research, documentation, and user Q&A is complete — running debate over incomplete content wastes tokens and produces wrong outputs
-- Don't open PRs or push commits between feedback cycles in iterative draft-and-review sessions; PR creation is a terminal action requiring explicit user approval, not implied by "keep going"
-- Don't produce AI-register prose in customer-facing documents — no "Good news first:", no "That is on us", no "Why this page matters", no capitalized "The User"; treat these as S3 violations on this project
+- **Never end a sentence with a file path followed by a period** — Ghostty auto-links paths and swallows the trailing period, breaking the link; restructure the sentence so the path is not the final token before a period
+- **Don't produce AI-register prose in customer-facing documents** — strip openers like "Good news first:", reflexive apologies, leading-question closers, and capitalized "The User"; write plain professional prose
+- **Don't suggest version changes (upgrade/revert) without checking git history first** — version decisions in recent commits are deliberate; overriding them silently causes regressions
+- **Don't default to hardware/throughput metrics when asked for workflow augmentations** — focus on user-facing utility improvements, not system internals
 
 ## Open questions / known gaps
-- The path-before-period stop hook fires repeatedly despite the rule being documented — consider whether a stronger pre-send mechanical scan is needed beyond the advisory rule
-- Iterative draft sessions have no clear signal for when the feedback loop ends and terminal actions (PR, push) become authorized; an explicit "ready to ship?" gate phrase may help
+- File-path-period stop hook keeps firing across sessions despite documentation — the mechanical enforcement isn't landing reliably mid-turn
+- Multi-agent review timing (when prerequisites are "complete enough" to start) remains judgment-call territory with no clear threshold

@@ -38,8 +38,13 @@ _emit() {
   _streams | while IFS=$'\t' read -r dom path cls sum; do
     [ -n "$only" ] && [ "$only" != "$dom" ] && continue
     [ -f "$path" ] || continue
+    # Session key: the family never actually agreed on one name. personas writes
+    # `session`, warn-events writes `sid`, everyone else writes `session_id` — so
+    # reading only .session_id made 2 of 8 domains silently invisible to every
+    # session-scoped `list`/`timeline` query (they returned empty, not an error).
+    # Accept all three rather than migrate on-disk history.
     jq -rc --arg dom "$dom" \
-      "select(.id != null) | [(.ts//\"\"), \$dom, (.id//\"?\"), (.session_id//\"\"), ($cls), ($sum)] | @tsv" \
+      "select(.id != null) | [(.ts//\"\"), \$dom, (.id//\"?\"), (.session_id // .session // .sid // \"\"), ($cls), ($sum)] | @tsv" \
       "$path" 2>/dev/null
   done
 }
@@ -52,10 +57,17 @@ cmd_list() {  # list [--src D] [--session S] [--since ISO] [--limit N]
   while [ $# -gt 0 ]; do case "$1" in
     --src) src="$2"; shift 2;; --session) session="$2"; shift 2;;
     --since) since="$2"; shift 2;; --limit) limit="$2"; shift 2;;
+    # An unknown flag would silently narrow (or fail to narrow) the query and the
+    # caller would read the wrong rows as if they were the answer. Refuse loudly.
+    --*|-?*) echo "ledger list: unknown flag '$1' (valid: --src, --session, --since, --limit)" >&2; exit 2;;
     *) shift;; esac; done
+  # `head` closes the pipe once it has $limit rows, which kills the upstream
+  # readers with SIGPIPE; under `set -o pipefail` that made a SUCCESSFUL listing
+  # exit 141, so `ledger list … && …` and any `set -e` caller read it as failure.
+  # The rows are right either way — only the status was lying.
   _emit "$src" | awk -F'\t' -v s="$session" -v d="$since" \
     '($1!="") && (s=="" || $4==s) && (d=="" || $1>=d)' \
-    | sort -rt$'\t' -k1 | head -n "$limit" | _trunc | _tbl
+    | sort -rt$'\t' -k1 | head -n "$limit" | _trunc | _tbl || true
 }
 
 cmd_timeline() {  # timeline <session> — every domain's events in one session, in order
@@ -67,7 +79,7 @@ cmd_search() {  # search <query> [--src D]
   local q="${1:-}"; shift || true; local src=""
   [ "${1:-}" = "--src" ] && src="$2"
   [ -n "$q" ] || { echo "usage: ledger search <query> [--src D]" >&2; return 2; }
-  _emit "$src" | rg -i --no-config -- "$q" 2>/dev/null | sort -rt$'\t' -k1 | head -30 | _trunc | _tbl
+  _emit "$src" | rg -i --no-config -- "$q" 2>/dev/null | sort -rt$'\t' -k1 | head -30 | _trunc | _tbl || true
 }
 
 cmd_show() {  # show <id> — full record from whichever stream holds it

@@ -16,6 +16,9 @@
 # allow-list missed (project-CLI run → soft note).
 #
 #   Gate0  source/test file edited this session
+#   Det1a  the turn-final message ADVERTISES a localhost URL whose port no tool
+#          touched this turn → block once (an advertised URL is an implicit
+#          success claim; atone 2026-07-10 "user's first click failed on both")
 #   Det1   the turn-final message makes a co-located OR opening success claim
 #   ── pipeline (first branch decides) ──
 #   B  comment/docs-only diff (added lines all comment/blank)  → SILENT
@@ -93,6 +96,45 @@ last_asst=$(printf '%s\n' "$turn_json" | jq -rc 'select(.type=="assistant")' 2>/
 [ -n "$last_asst" ] || exit 0
 claim_text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
 [ -n "$claim_text" ] || exit 0
+
+# ── Detection 1a: localhost URL advertised → its port must have been exercised ─
+# Handing the user a clickable localhost link asserts "this is up" even when no
+# success word appears, so this branch runs BEFORE the success-word eligibility
+# exits. Exempt when the message itself says the target is down/unverified/
+# conditional. Exercise credit: the port token appears in ANY tool_use input or
+# tool_result this turn (curl, lsof, browser navigation, server logs).
+adv_urls=$(printf '%s' "$claim_text" | rg -o 'https?://(localhost|127\.0\.0\.1):[0-9]+' 2>/dev/null | sort -u || true)
+if [ -n "$adv_urls" ] \
+   && ! printf '%s' "$claim_text" | rg -qiP '\b(down|dead|stale|dormant|not (running|up|live|serving|reachable)|no (listener|server)|unreachable|not (yet )?(verified|checked|exercised|tested)|once (you|it|the)|after you|when you (start|run|launch)|relaunch|restart)\b' 2>/dev/null; then
+  turn_tool_text=$(printf '%s\n' "$turn_json" | jq -r '
+    (select(.type=="assistant") | .message.content[]? | select(.type=="tool_use") | (.input | tostring)),
+    (select(.type=="user") | .message.content[]? | select(.type=="tool_result")
+      | (.content // "") | if type=="array" then (map(.text? // "")|join("\n")) else . end)
+  ' 2>/dev/null)
+  bad_ports=""
+  for p in $(printf '%s\n' "$adv_urls" | rg -o '[0-9]+$' 2>/dev/null | sort -u); do
+    printf '%s' "$turn_tool_text" | rg -q "(:|%3A)${p}\b" 2>/dev/null || bad_ports="$bad_ports$p "
+  done
+  if [ -n "$bad_ports" ]; then
+    URLMARK="/tmp/claude-declared-ready-url-${sid8}"
+    usig=$(printf '%s' "$adv_urls" | shasum 2>/dev/null | awk '{print $1}')
+    uprev=""; [ -f "$URLMARK" ] && uprev=$(cat "$URLMARK" 2>/dev/null)
+    if [ "$usig" != "$uprev" ] && [ -n "$usig" ]; then
+      printf '%s' "$usig" > "$URLMARK" 2>/dev/null || true
+      reason="⚠ LOCALHOST URL ADVERTISED WITHOUT EXERCISING IT — your message hands the user localhost link(s) on port(s) ${bad_ports}but no tool activity this turn touched them. The last time this happened the user's first click failed on both links (atone 2026-07-10, S3, recurs 9×).
+
+  Before advertising a localhost URL: navigate to it and exercise its primary action, and run 'lsof -nP -iTCP:<port> -sTCP:LISTEN' to confirm exactly ONE owner across IPv4+IPv6. If the server is deliberately not running, say that instead of linking it.
+
+Loop-safe: won't re-fire for this URL set. Mute: touch ~/.claude/.no-declared-ready-gate"
+      jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+      [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --action block --heeded unknown --detail "url-ports:${bad_ports}" >/dev/null 2>&1 || true
+      exit 0
+    fi
+    # Same URL set already blocked once → step aside; the success-word pipeline
+    # below still gets its look.
+    [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready-url:$sid8" --heeded false >/dev/null 2>&1 || true
+  fi
+fi
 
 SUCCESS_RE='\b(done|works|working|shipped|fixed|passing|passes|verified|complete|completed|good to go|all set|ready to (ship|go|commit))\b'
 SUBJECT_RE='\b(the (fix|feature|change|bug|test|tests|build|code|implementation|patch|hook|script)|it|this|everything|all (the )?(tests|of it))\b'
@@ -328,7 +370,7 @@ printf '%s' "$sig" > "$MARK" 2>/dev/null || true
 if [ "$is_tsx_next" = 1 ]; then
   reason="⚠ DECLARED READY WITHOUT EXERCISING IT (frontend) — you edited a .tsx/.jsx in a Next/RSC app and your message claims success, but the only checks this turn were type/unit-level (tsc/vitest/jest) — nothing rendered the page.
 
-  Unit tests and tsc run RSC in Node; they structurally CANNOT see hydration mismatches, the client/server boundary, or a cursor/keyboard/toggle interaction. The value of this change is exactly what tsc can't see. Exercise it: 'next build' (catches RSC/hydration) or a dev-server page load + the actual interaction, and read the result before declaring done.
+  Unit tests and tsc run RSC in Node; they structurally CANNOT see hydration mismatches, the client/server boundary, or a cursor/keyboard/toggle interaction. The value of this change is exactly what tsc can't see. Exercise it: 'next build' (catches RSC/hydration) or a dev-server page load + the actual interaction, and read the result before declaring done. And if the surface has states — dark AND light theme, open/closed, breakpoints — exercise EACH state you sign off on, or scope the claim to what you saw (dark-only sign-offs shipped a broken light theme twice: 2026-07-02, 2026-07-07).
 
 This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6×). If you drove it out-of-band, or this is a false positive, say so and proceed — this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
 elif [ "$cov_decision" = "uncovered" ]; then

@@ -1,0 +1,25 @@
+{
+  "ts": "2026-06-22T08:38:17Z",
+  "session_id": "claude-instances",
+  "project_root": "/Users/alcatraz627/.claude/widgets/claude-instances",
+  "checkpoint_path": "/Users/alcatraz627/.claude/widgets/claude-instances/_20260622-claude-instances.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [
+      "All work is on `main`, pushed (e5bf61b \u2192 ef89f92). 153 Swift tests green; transcript is a single self-contained HTML file served live from disk (no build step)."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Fold claude design's transcript UI proposal when it returns (keep my implementation, borrow its ideas).",
+    "**Dropdown dark-mode validation** \u2014 light is validated (user screenshot); dark still unchecked.",
+    "**T4 mobile diffs** \u2014 word-level intra-line highlight + unchanged-region collapse (not started).",
+    "Activity-ribbon slimming / fuller continuous-scroll for huge transcripts \u2014 **deferred** (user said hold off virtualization).",
+    "**Commit the filename-dot hook + CLAUDE.md rule to `~/.claude`** (its-my-claude repo, COMMIT.md ritual) \u2014 asked the user, awaiting go.",
+    "Phone-side hub test \u2014 needs Tailscale up on this Mac (it was down all session; localhost path fully tested).",
+    "Final dropdown validation behaviour axis (dark) closes the redesign umbrella."
+  ],
+  "tags": []
+}

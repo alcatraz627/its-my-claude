@@ -1,0 +1,19 @@
+{
+  "ts": "2026-05-17T20:59:55Z",
+  "session_id": "juror-bypass-1f",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260518-juror-bypass-1f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Decision needed**: bump the synthetic-juror gap threshold from 10s \u2192 30s as a quick follow-up, OR defer to the dispatch-ownership redesign (`prop-20260517-172942-05`). Real-flow gap measured at 11s during this session's verification \u2014 current threshold is one second too lenient to flag a fast-typing fabricator.",
+    "**`prop-20260517-172942-05`** (large effort, filed) \u2014 invert juror dispatch ownership. Have `atone.sh` internally run `claude -p --persona=juror < case.json > verdict.json` so the agent is removed from verdict-composition entirely. Open sub-questions in the proposal body: `claude -p` reliability + JSON parseability, timeout fallback (`juror_unavailable:true`?), case-file lifecycle, whether to keep the manual `atone juror` subcommand for user-driven recording.",
+    "Smoke-test row `mist-20260517-174004-ea` remains in the production log per user's choice \u2014 no cleanup pending, but worth a note in any future audit script that this row was an unintended verification artifact, not a real mistake event."
+  ],
+  "tags": []
+}

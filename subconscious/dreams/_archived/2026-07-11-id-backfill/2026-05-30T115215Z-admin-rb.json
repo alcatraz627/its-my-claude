@@ -1,0 +1,45 @@
+{
+  "ts": "2026-05-30T11:52:15Z",
+  "session_id": "admin-rbac-30",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260530-admin-rbac.claude.md",
+  "insights": {
+    "worked": [
+      "The `rg \"case \\\"pending\\\"|case \\\"completed\\\"\"` exhaustiveness audit for NEW-025",
+      "Reading `proxy.ts` before answering 014 instead of guessing \u2014 the `isAdminPath`",
+      "Existing `rbac.allowed` convention check (`rg 'rbac\\.allowed' src/`) confirmed"
+    ],
+    "didnt_work": [
+      "Prettier silently rewrapped `slow-query` to multi-line during the Edit sequence,",
+      "The 169-entry TaskList from prior sessions is noise for any current scope; user"
+    ],
+    "gotchas": [],
+    "notes": [
+      "`withServer` is the ONLY place application-level RBAC is enforced in this codebase.",
+      "`isAdminPath` at `src/proxy.ts:94` is for **page navigation**, not server actions.",
+      "The convention for `rbac.allowed` values is inline literal `[\"versable-admin\"]`,",
+      "`JobStatus` exhaustive switches in this codebase are all `default`-safe or"
+    ],
+    "feedback": [
+      "Wanted rbac on every admin action, no `withAdminServer` wrapper (explicit scope ceiling).",
+      "Refused 008 (toggle browser-only verification) \u2014 defer entirely.",
+      "Defer 009 (cache schema-version) to post-PR-merge follow-up.",
+      "\"Your todos are out of sync, let's do a refreshed list\" \u2014 wants TaskList kept current,"
+    ]
+  },
+  "pending": [
+    "Step 5 \u2014 comment hygiene sweep: 8 `[claude@]` tags in `admin/jobs/page.tsx`,",
+    "Step 6 \u2014 log 4 sub-slug atone recurrence bumps: `structural-claim-without-reading-code`,",
+    "Browser smoke tests \u2014 10 URL flows enumerated earlier (jobs preview close, team-jobs",
+    "Confirm intent: `data-history-row-actions.tsx:116` change (unconditional `teamId`,",
+    "File-archive 8 S3 actions need `rbac.allowed: [\"versable-admin\"]` (high priority \u2014",
+    "`users/invite.utils.ts:sendInviteToEmail` doesn't use `withServer` at all \u2014 bypasses",
+    "Phase 3 \u2014 namespace-mandatory dev warn for shared widget instances.",
+    "Pre-existing modalKey/modalArgs disconnect at admin/jobs/page.tsx:208+443.",
+    "Job-output cache: `CACHE_SCHEMA_VERSION` segment + TTL=60 first deploy (NEW-009).",
+    "NEW-010 chaos guard runtime check after deploy.",
+    "NEW-024 mass-cancel UX guards: pre-delete confirm count + audit event + Slack >100.",
+    "NEW-005 refundCreditsDb non-cache audit: `creditsPerPart` bucket-rate accuracy,"
+  ],
+  "tags": []
+}

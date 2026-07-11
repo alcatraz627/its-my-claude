@@ -78,7 +78,7 @@ if [ "$material_verb" -eq 1 ] && [ "$has_write" -eq 0 ]; then
   if [ "$stakes" = "high" ]; then
     reason="⛔ MATERIAL SUB-AGENT DISPATCH WITH NO PERSISTENCE (high-stakes repo) — this prompt asks for material work (research / audit / analysis / design / review) but never tells the agent to write its output to a file. The return summary is a pointer, not the artifact; once this context compacts an un-written result is gone (rules/sub-agent-outputs.md).
 
-  Add to the dispatch prompt: (1) an absolute output path, e.g. <project>/.claude/output/<date>-<slug>/<agent>.md, and (2) 'write your full output to that path BEFORE returning; return a short abstract + the path'. Then verify the file exists before relying on the findings.
+  Add to the dispatch prompt: (1) an absolute output path, e.g. <project>/.claude/output/<date>-<slug>/<agent>.md (never literally report.md — the harness blocks that name), and (2) 'write your full output to that path BEFORE returning; return a short abstract + the path' — or, for a read-only agent type (Explore/Plan): 'return your FULL findings as text; I will persist them to <path>'. Then verify the file exists before relying on the findings.
 
 A genuine quick lookup mis-flagged as material? Mute: touch ~/.claude/.subagent-output-off"
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-subagent-output --action block --heeded unknown >/dev/null 2>&1 || true
@@ -87,7 +87,7 @@ A genuine quick lookup mis-flagged as material? Mute: touch ~/.claude/.subagent-
   fi
 fi
 
-msg="[subagent-output] This dispatch looks like it produces material content (research / audit / analysis / design / review) but the prompt doesn't tell the agent to persist it. The return summary is a pointer, not the artifact — once this context compacts an un-written result is gone (rules/sub-agent-outputs.md). Add to the dispatch prompt: (1) an absolute output path e.g. <project>/.claude/output/<date>-<slug>/<agent>.md, (2) 'write your full output to that path BEFORE returning; return a short abstract + the path' — then verify the file exists before relying on the findings. (mute: touch ~/.claude/.subagent-output-off)"
+msg="[subagent-output] This dispatch looks like it produces material content (research / audit / analysis / design / review) but the prompt doesn't tell the agent to persist it. The return summary is a pointer, not the artifact — once this context compacts an un-written result is gone (rules/sub-agent-outputs.md). Add to the dispatch prompt: (1) an absolute output path e.g. <project>/.claude/output/<date>-<slug>/<agent>.md (never literally report.md — the harness blocks that name), (2) 'write your full output to that path BEFORE returning; return a short abstract + the path' — or for a read-only agent (Explore/Plan): 'return FULL text; I will persist to <path>' — then verify the file exists before relying on the findings. (mute: touch ~/.claude/.subagent-output-off)"
 
 # additionalContext (stdout JSON) → the agent — the only non-blocking channel
 # any audience reads (user-transcript channels are all invisible; see

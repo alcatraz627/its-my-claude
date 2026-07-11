@@ -1,0 +1,23 @@
+{
+  "ts": "2026-06-17T13:22:38Z",
+  "session_id": "s3-redesign-9bc4",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/_20260617-s3-redesign-shipped.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**A1 (HIGH, security):** `/files/imagegen/download` (authed, key not team-checked) and",
+    "**A2 (MED):** every imagegen presign caller passes `expires_in=S3_EXPIRY_DEFAULT` (1h), overriding",
+    "I0 provision buckets+IAM (incl. `s3:PutObjectTagging` + `s3:ListBucket` \u2014 the 403-not-404 trap),",
+    "COPY backfill (all classes except CACHE, keys-as-is, re-key REFERENCE), checksum parity.",
+    "PR4 cutover = env-flip + fallback on + create-on-init off + swap to no-CreateBucket IAM. **Needs a",
+    "Build the real-S3 integration suite (`tests/integration_s3`, referenced as \"when built\") and run",
+    "PR5 lifecycle generator (tag-filtered, gated, +zero-rule test). OPS retirement \u224860d later."
+  ],
+  "tags": []
+}

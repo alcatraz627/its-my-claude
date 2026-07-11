@@ -1,0 +1,23 @@
+{
+  "id": "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+  "ts": "2026-07-11T11:57:04Z",
+  "session_id": "speed-mvp-c4",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260711-sw-adoption.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Speedway residual (opus-grade, from doc 15 build order):** G-4",
+    "**Kit backprop queue:** Input label\u2194control a11y association (review #4,",
+    "**Review build:** R-02 owner verdict, then speedway review re-skin (consumer",
+    "**Walmart deferred chrome + data layer** (task #4, unchanged).",
+    "**End-game:** kit backprop consolidation \u2192 final adversarial review \u2192 owner",
+    "**Dates:** Jul 15 backend go/no-go \u00b7 ~Jul 23 2nd subscription cancel"
+  ],
+  "tags": []
+}

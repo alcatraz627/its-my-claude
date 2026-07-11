@@ -1,0 +1,28 @@
+{
+  "ts": "2026-05-21T14:00:42Z",
+  "session_id": "gh-ci-pr180",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/.claude/_20260521-gh-ci-pr180.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [
+      "GitHub PR comments do NOT render `ansi` color blocks (they print raw escapes) \u2014 only `diff`",
+      "`next-env.d.ts` is gitignored, so a bare `tsc` in CI lacks Next's asset/route types \u2192 asset",
+      "`ts:build`'s `|| node -e \"<fail>\"` swallowed tsc's exit \u2192 the type leg was silently green on",
+      "Workflow `permissions:` is allowlist-only; PR comments need `pull-requests: write`.",
+      "Tree-level report retention \u2260 git-history retention \u2014 only orphan-reset shrinks a clone."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**User: merge PR #180** \u2014 with the known `static-analysis (unit)` red.",
+    "**Unit-test failures** \u2014 7 tests in the logger subsystem (`src/db/connection.test.ts`,",
+    "**Task #2 (docs migration)** \u2014 parked on a decision: separate repo vs `<root>/docs`. Full",
+    "**Task #3 (.claude sprawl consolidation)** \u2014 not started.",
+    "**Uncommitted:** the `runtime-notes.md` edit + this checkpoint (both under `frontend/.claude/`).",
+    "Declined/optional: colored +/- LOC in the PR body (safe via `diff` block, marginal value)."
+  ],
+  "tags": []
+}

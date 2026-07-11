@@ -10,6 +10,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --profile|-p) PROFILE="$2"; shift 2 ;;
     --raw)        RAW=1; shift ;;
+    --*|-?*)      echo "sl-config: unknown flag '$1' (valid: --profile/-p, --raw)" >&2; exit 2 ;;
     *)            shift ;;
   esac
 done

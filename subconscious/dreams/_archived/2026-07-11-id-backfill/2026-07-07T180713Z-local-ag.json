@@ -1,0 +1,23 @@
+{
+  "ts": "2026-07-07T18:07:13Z",
+  "session_id": "local-agent-9c",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260707-local-agent-9c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**User, 30s:** remove the `export GEMINI_API_KEY=\u2026` line from `~/.zenv` (key now lives in",
+    "**Fleet at real volume** (top of STATE.md \u00a7 PENDING): first genuine Claude-called sweep",
+    "**Governor policy table** \u2014 unblocked now that `rules/model-tier-routing.md` exists.",
+    "**Scheduled, no action needed:** Jul-28 `image-tools-review` + Aug-04",
+    "**~Nov 2026:** gemini-cli EOL (Dec-18) backend decision \u2014 swap inside `lib/gemini` only",
+    "Deferred by user triage: RAG/embedder \u00b7 `procedures/*.toml` + `lm run` (needs a 2nd real",
+    "Branch `feat/intents-as-data` is ~25 commits ahead of main \u2014 PR whenever the user wants."
+  ],
+  "tags": []
+}

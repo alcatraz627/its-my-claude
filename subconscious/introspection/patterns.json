@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-07-04T07:13:59.562562Z",
-  "average_depth": 27.2,
-  "average_breadth": 1.4,
-  "fixation_rate": 0.1,
-  "assumption_rate": 0.6,
-  "overconfidence_rate": 0.28,
+  "last_updated": "2026-07-11T08:29:10.675107Z",
+  "average_depth": 26.4,
+  "average_breadth": 1.3,
+  "fixation_rate": 0.23,
+  "assumption_rate": 0.62,
+  "overconfidence_rate": 0.27,
   "common_assumptions": [
-    "Current file state matches last-read version without re-reading between edits",
-    "Compilation or type-check success implies behavioral correctness",
-    "PATH tools (node, npm, tsc, pm2, rg) are available at expected versions",
-    "Prior session context from WAL or checkpoints accurately reflects current disk state",
-    "Single-file edits will resolve bugs that span multiple files or runtime interactions"
+    "File contents have not changed since last read within the same session",
+    "Truncated tool output (head -N lines) represents the complete picture",
+    "TypeScript noEmit compile success equals feature working correctly at runtime",
+    "Previous session process state and port ownership are still valid without re-verification",
+    "A single narrow-scope grep confirms global absence of a pattern or module"
   ],
   "strength_patterns": [
-    "Systematic multi-command diagnostic sequencing before attempting fixes, narrowing problem space methodically",
-    "Post-change verification via type checks, server health probes, and log inspection",
-    "Thorough file exploration and reading for context before editing in unfamiliar areas"
+    "Iterative diagnostic approach: writes and runs probe scripts to isolate unknowns before applying fixes rather than guessing",
+    "Reads existing code structure before modifying and references specific file targets in tool calls",
+    "Constructs structured verification scripts that emit explicit PASS/FAIL/ALL-MATCH signals"
   ],
   "weakness_patterns": [
-    "Fixation loops on single files with incremental edits without stepping back to verify system-level behavior — f3ddfd2f ran 30+ statusline.sh read/write cycles, fc4190a7 made 17+ edits to +layout.svelte",
-    "Substituting compile or collect passes (tsc --noEmit, npx tsc) for runtime exercise and reporting success without observing actual behavior",
-    "Low exploration breadth — chains are predominantly linear sequential tool calls with minimal branching; alternative approaches are rarely generated and compared before committing to a path"
+    "High-step chains exhibit strong fixation: same file edited 20-60+ times in a single chain (e.g. +page.svelte, statusline.sh, generate-html.ts) without stepping back to rethink the strategy",
+    "Thinking steps appear in only 4 of 30 chains; most chains jump directly to tool use with no explicit reasoning phase, treating first-read output as sufficient to act on",
+    "Verification is frequently substituted with compile-only checks (tsc --noEmit, --collect-only) or truncated output, then progress is declared without exercising the actual code path"
   ],
   "trend": {
     "calibration_improving": false,

@@ -1,0 +1,63 @@
+{
+  "ts": "2026-05-17T17:33:04Z",
+  "session_id": "claude-audit-2e",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260518-magi-system-2e.claude.md",
+  "insights": {
+    "worked": [
+      "The supervisor-pre-vote-nomination ritual surfaced its own meta-flaw via jester (audit-trail comparison was the actual structural defense, not the ritual itself). The self-critique meta-loop genuinely improved the system.",
+      "Cheap Sonnet test battery validated jester-disruption hypothesis empirically \u2014 partial validation + honest pushback better than speculation.",
+      "Iterative user calibration (jester quality gate, diversity policy, lite-as-default) was load-bearing \u2014 design doc shifted significantly each turn based on real feedback. Don't ship without that loop for non-trivial features.",
+      "Filing proposals as I go (24 opened, all closed by end) kept the followup queue tractable instead of remembering threads."
+    ],
+    "didnt_work": [
+      "Bash sandbox-mangled JSON heredoc test infrastructure (markdown-fenced voter-1 test file ended up as valid JSON). Test infrastructure has its own bugs; don't infer system bugs from test setup bugs.",
+      "Initial mcp-catalog audit (earlier in thread) used wrong JSON key \u2014 self-corrected, but illustrates: when jq says \"no result,\" verify the key name before concluding the file is broken.",
+      "Bash tool subprocess sandbox blocks `find /tmp` traversal \u2014 startup-script dry-run from inside Claude reports 0 files even when there ARE files. Real execution outside sandbox works correctly.",
+      "My pre-vote nomination of voter-3 vs panel's unanimous voter-4 \u2014 builder's-investment bias toward \"actionable bugs I can fix today\" over \"literature undercut that changes design.\" Both valid; panel's pick was the more durable.",
+      "Tab-title prepend bug: idempotency is easy to forget when adding a prefix to a value that becomes input to the next iteration of the same function. Always check \"would this run twice without breakage?\""
+    ],
+    "gotchas": [],
+    "notes": [
+      "MAGI default IS lite mode. Don't surprise the user with a $2 run by reaching for full mode silently. Auto-escalation hint requires user confirm.",
+      "The retry-on-malformed loop (Phase 6.2) needs first-real-wild-fire to validate end-to-end. Until then, assume the unit-level aggregator behavior is what we know works.",
+      "Cost-capture parses `<usage>` from Agent tool output text \u2014 there's a documented schema in skill but not unit-tested yet. First real run is the test.",
+      "The supervisor self-bias matrix is INSTRUMENTATION, not enforcement. High self-bias (\u0394 > 1.5) requires supervisor to cite specific reasoning when ruling for that voter \u2014 NOT to drop their vote.",
+      "`assets/magi/<YYYYMMDD-HHMM-slug>/` is the archive root. Never moves; one dir per run. If you see hundreds of dirs accumulate, that's expected \u2014 write a `assets/magi/INDEX.md` regenerable view (file as proposal if user asks).",
+      "The \"jester unnecessarily disruptive\" hypothesis is PARTIALLY validated. On routine tool-compare questions: yes, marginal. On consequential design / \"should we\" / rewrite: jester earns its keep. Auto-on heuristic now skips tool-compare patterns.",
+      "`personas/_proposed/` is where MAGI drafts new personas inline. After 3+ reuses, graduate to `~/.claude/personas/` proper \u2014 future automation."
+    ],
+    "feedback": [
+      "\"Intelligent disobedience > sycophancy > lazy work-skipping\" \u2014 confirmed as load-bearing operational preference. Affirm event captured + flows to dreaming.",
+      "\"We want SOME diversity, not a typical MUN summit\" \u2014 diversity policy default to same-model with knobs for variance; cross-family opt-in only via --diverse.",
+      "\"Pessimists right, optimists get things done\" \u2014 partially validated as why jester defaults to off for routine; partially pushed-back where jester earns its keep on consequential decisions.",
+      "\"Maintaining workspace + TodoWrite + memory redundantly is intentional, sync is a chore\" \u2014 captured as memory entry; sync protocol filed as proposal (not yet built).",
+      "\"Cost should be shown EVERY time, %-weekly limit, per-step breakdown\" \u2014 landed in Phase 11 mandatory end-of-run cost block."
+    ]
+  },
+  "pending": [
+    "All MAGI phases \u2713",
+    "All MAGI P0/P1/P2/P3 enhancements \u2713",
+    "Tab-title prepend bug \u2713",
+    "End-to-end retry-on-malformed loop in SKILL.md Phase 6.2 \u2014 documented + ready; not yet exercised by an actual wild malformed-voter scenario. Will validate on first real /magi --mode full invocation.",
+    "Cost-capture parsing of `<usage>` blocks from Agent tool returns \u2014 implementation deferred to first real wild run (currently uses byte-size proxy; design doc says use real `<usage>` parse).",
+    "Empirical data on `--diverse` flag \u2014 needs real-world use.",
+    "Empirical data on `--blind-vote` flag \u2014 needs comparative use.",
+    "Persona-delta measurement (whether persona runs produce materially-different proposals at same temp spread) \u2014 separate follow-up.",
+    "`prop-20260517-080212-0d` \u2014 Notes/TodoWrite/memory implicit sync protocol (medium ~3h)",
+    "`prop-20260517-080220-2d` \u2014 Selective CLI access gating (render/vercel/gh/kubectl prod-write ASK) (medium ~3h)",
+    "`prop-20260517-080221-8b` \u2014 Audit dreaming + shell-mem integration; identify cross-cutting patterns (small ~1.5h)",
+    "`prop-20260517-080221-5c` \u2014 Audit + improve TUI input tool usage frequency (small ~1h)",
+    "`prop-20260517-080221-66` \u2014 Workspace skill edge case (~/.claude as project breaks nested-claude) (small ~30m)",
+    "`prop-20260517-170933-e7` \u2014 Investigate Claude Code terminal output distortion on resize (medium ~1-2h)",
+    "`prop-20260515-141140-44` \u2014 Checkpoint v2 migration cutover (remove legacy _last-checkpoint.json) \u2014 scheduled 2 weeks out",
+    "`prop-20260515-124516-d0` \u2014 Skills sweep (classify, scope, dedupe \u2014 58 top-level skills, expected ~30% rationalizable) (large)",
+    "`prop-20260515-124516-ff` \u2014 Personas system build-out (medium)",
+    "`prop-20260515-124516-a1` \u2014 llm-mini batch/pipeline mode (medium)",
+    "`prop-20260515-124517-7c` \u2014 Manual: disable claude.ai connector MCPs via web UI (small, user action only)",
+    "`prop-20260515-124517-14` \u2014 Drifting systems follow-up review (medium)",
+    "Disable claude.ai Sentry + Gmail connectors via web UI (no CLI path)",
+    "Verify tab-title emit log after a few sessions: `tail ~/.claude/logs/tab-title-emit.log`"
+  ],
+  "tags": []
+}

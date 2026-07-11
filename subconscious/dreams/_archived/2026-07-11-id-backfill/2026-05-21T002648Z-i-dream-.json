@@ -1,0 +1,45 @@
+{
+  "ts": "2026-05-21T00:26:48Z",
+  "session_id": "i-dream-1c",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260521-i-dream-1c.claude.md",
+  "insights": {
+    "worked": [
+      "**Strawman-then-react spec sessions** \u2014 for the consolidation + pinned designs, presenting a concrete (possibly-wrong) architecture + 3-4 concrete options via AskUserQuestion extracted decisions far faster than open-ended questions.",
+      "**BUILD.md template discipline** \u2014 every design (14, 16, 18) used the atone BUILD.md 9-section shape (Goals/Architecture/FS/Components/Build-order/Acceptance/Failure-modes/Open-questions/Cost/Pointers). Made staged implementation + handoff clean.",
+      "**Bisectable per-stage commits** \u2014 committing each stage separately meant the skeptical review could pinpoint exactly which change introduced each bug.",
+      "**The skeptical-review fork** \u2014 caught 4 real bugs an in-context self-review would have rationalized. The standout: I changed shared `parse_json_codeblock` to fix ONE caller (pinned) without checking the other 4 (audit/introspection/metacog/dreaming)."
+    ],
+    "didnt_work": [
+      "**`cargo install` lag** \u2014 every new CLI subcommand (`domain`, `pin`, `audit`) hit \"unrecognized subcommand\" because the user's shell ran the stale installed binary. `cargo run` works in-tree but the installed `~/.cargo/bin/i-dream` (+ duplicate `~/.local/bin/`) needs `cargo install --path .` after any cli.rs change. Recurred 3\u00d7.",
+      "**First real dream-pass surfaced 3 parser bugs** synthetic tests missed \u2014 real LLM output quotes numbers as strings, omits required fields, and prefixes JSON with prose. Lesson: tolerant deserialization is non-optional for LLM-output parsing.",
+      "**Pipe-buffer deadlock** in process-spawning code \u2014 draining stdout only after exit deadlocks on >64KB output. Always drain concurrently (reader threads / wait_with_output).",
+      "**Test temp-dir races** \u2014 `std::process::id()` is constant within a test binary; using it as a \"unique\" temp dir name + a shared cleanup() causes parallel tests to clobber each other. Use per-call atomic counters.",
+      "**The widget icon BTM cache** is genuinely stubborn \u2014 a correct bundle in a Spotlight-indexed location + full user-cache purge still showed the generic icon. Unresolved."
+    ],
+    "gotchas": [],
+    "notes": [
+      "The 5 external domains live in the user's home (`~/.claude/{atone,affirm,memory-domain,sessions-domain,pinned}/`), each with `.i-dream-domain.toml` + `dream/prompt.md` \u2014 NOT in this repo. The repo only knows them via `DomainRegistry`'s sibling-discovery list (`src/modules/registry.rs`).",
+      "`dream-pass` advances a domain's cursor only on success; failed domains retry on next run (cheap \u2014 successful domains skip with 0 delta).",
+      "The daily digest's richness depends on `dream-pass` having run recently; the briefing depends on the same.",
+      "All BUILD docs are at `docs/14`\u2013`docs/19`; roadmap at `docs/15` is the status source of truth."
+    ],
+    "feedback": [
+      "Wants per-push approval for `git push origin master` (never blanket \u2014 asked every time).",
+      "Aggressive over conservative for the L3 audit dials (confidence floor 0.5, max 6/lens).",
+      "\"Keep going / proceed\" = continue autonomously through the queue; only halt at genuine blockers.",
+      "Cares about doc/memory/task triple-persistence staying in sync."
+    ]
+  },
+  "pending": [
+    "**Operational (user-side, optional):** run `i-dream cron install` (daily digest at 03:00); add a weekly `i-dream dream-pass` + the two `extract-events.sh` scripts to a schedule so the briefing stays rich automatically.",
+    "**The widget icon** still renders generic in System Settings \u2014 5 untried fixes documented in `docs/rcas/20260521-\u2026` postscript (sudo iconservices cache wipe, bump CFBundleIdentifier, sfltool resetbtm, Developer-ID signing). Cosmetic; widget functions fine.",
+    "**V2 refinements (deferred, documented in roadmap + review report):**",
+    "L3 audit literal multi-Agent dispatch (v1 ships a single richer prompt structured as 7 voices)",
+    "Apply-time `[e]dit-in-$EDITOR` option for audit proposals (v1 is y/c only)",
+    "Weekly audit cron plist (waits for user-acceptance of the audit cadence)",
+    "`i-dream board` TUI (B Stage 4's deferred half)",
+    "**Lower-confidence review observations left intentionally** (per the user's aggressive-tolerance posture): `de_flexible_u32` silently coerces malformed versions to 1; all-default Insight fields swallow typo'd keys; `NoPrompt` status unreachable for external domains; ts\u2192now() fallback non-determinism."
+  ],
+  "tags": []
+}

@@ -1,0 +1,43 @@
+{
+  "ts": "2026-06-12T22:13:04Z",
+  "session_id": "catch-local-7f",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260613-catch-local-7f.claude.md",
+  "insights": {
+    "worked": [
+      "**Gotchas (load-bearing)**:",
+      "Ollama `keep_alive` is **last-writer-wins per request** \u2014 EVERY API callsite needs the",
+      "`awk -v var=` C-escape-processes values \u2014 never pass JSON through it (corrupts `\\\"`, `\\n`).",
+      "GUI hosts signal the process they spawned: any bash wrapper between host and handler eats",
+      "Bash heredocs through the harness can get whitespace-mangled \u2192 use Write tool for files.",
+      "cli-gating approval nonce = sha256 of the EXACT command string (vary the command \u2192 new nonce).",
+      "`nl`-numbered JSONL display breaks on multiline fields \u2192 `gsub(\"\\\\s+\";\" \")` in the jq fmt.",
+      "Stable entry numbers (display N == JSONL line N) is a CONTRACT \u2014 protect it in every list view.",
+      "**User constraints captured**: local LLM quality bar = \u226590% as good as Opus (85% floor) or",
+      "**Architecture now**: histories (q/imagine JSONL) are the integration API; q-spec \u00a7API is a"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "Ollama `keep_alive` is **last-writer-wins per request** \u2014 EVERY API callsite needs the",
+      "`awk -v var=` C-escape-processes values \u2014 never pass JSON through it (corrupts `\\\"`, `\\n`).",
+      "GUI hosts signal the process they spawned: any bash wrapper between host and handler eats",
+      "Bash heredocs through the harness can get whitespace-mangled \u2192 use Write tool for files.",
+      "cli-gating approval nonce = sha256 of the EXACT command string (vary the command \u2192 new nonce).",
+      "`nl`-numbered JSONL display breaks on multiline fields \u2192 `gsub(\"\\\\s+\";\" \")` in the jq fmt.",
+      "Stable entry numbers (display N == JSONL line N) is a CONTRACT \u2014 protect it in every list view.",
+      "**User constraints captured**: local LLM quality bar = \u226590% as good as Opus (85% floor) or",
+      "**Architecture now**: histories (q/imagine JSONL) are the integration API; q-spec \u00a7API is a"
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**GOALS item 8 leftovers** (small): `WARM_KEEP_ALIVE` not env-overridable; `--strength`",
+    "**Deferred-knowingly** (documented in GOALS.md): star-vs-append race (no JSONL locking);",
+    "**June 24 Tue 3PM calendar review** \u2014 prioritizes Task 13 imagegen upgrades (`ideogram4` +",
+    "**q `--web`** (Task 6) \u2014 still deferred, needs search-backend decision.",
+    "**Extension-side** (not ours): native host build; they may send follow-up IPC requests.",
+    "**Unrecorded atone from another session** (failed add 2026-06-12 16:30 IST) \u2014 that session's"
+  ],
+  "tags": []
+}

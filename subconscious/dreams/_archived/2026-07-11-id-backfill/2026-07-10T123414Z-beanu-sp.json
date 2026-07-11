@@ -1,0 +1,27 @@
+{
+  "ts": "2026-07-10T12:34:14Z",
+  "session_id": "beanu-space-c3",
+  "project_root": "/Users/alcatraz627/Pictures",
+  "checkpoint_path": "/Users/alcatraz627/Pictures/_20260710-beanu-space-c3.claude.md",
+  "insights": {
+    "worked": [
+      "**What failed / gotcha:** mflux img2img is CONSERVATIVE \u2014 even at strength 0.82 it barely changes a coherent source scene, and effective steps \u2248 base_steps \u00d7 strength so it silently runs very few steps (~6-7). It is a refine/style tool, NOT a scene-swap tool. Do not use plain img2img to relocate a subject to a new environment.",
+      "**Core finding:** plain img2img's single `--image-strength` knob couples \"how much to change\" with \"what to keep\" \u2014 it cannot preserve subject identity while re-posing/re-scening. The fix needs a SEPARATE identity channel: LoRA weights, IP-Adapter/Redux embedding, or instruction-conditioning (Kontext/Qwen-Edit). All are installed in `~/Code/local-models/.venv/bin` but unused by `imagine`.",
+      "**Tradeoff learned:** a low-strength img2img harmonize of a composite integrates edges but redraws the face \u2014 identity and seamless integration are in direct tension without a dedicated identity method.",
+      "**User preferences:** wants the SPECIFIC cat, not a genre match; pushed back correctly on the lookalike; comfortable with a \"visibly composited look\" in exchange for real likeness. Values understanding the WHY (asked how to fix the gap, not just for another attempt).",
+      "**Constraint:** account is local-only for image gen by design (no cloud). Model downloads are user-authorized STOP-and-ask actions."
+    ],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER decision: capability path A / B / C (my recommendation: A now, then B if liked).",
+    "If A or B: authorize + run the multi-GB model download (STOP-and-ask; not autonomous).",
+    "Optional cleanup: `trash` the dead-end files \u2014 `beanu-boss-spaceship-1783678945.png`, `beanu-boss-spaceship-v2-1783679146.png` (bedroom img2img), `beanu-boss-spaceship-v3-1783679343.png` (lookalike). Awaiting user OK.",
+    "Optional: fix Variant A's slight paw-float by re-compositing (seconds, no download) if user wants to refine the current best.",
+    "Reusable (not this session's ask): wire kontext/qwen-edit/train/fill/redux into the `imagine` CLI as first-class subcommands."
+  ],
+  "tags": []
+}

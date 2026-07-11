@@ -1,0 +1,44 @@
+{
+  "ts": "2026-05-29T15:12:45Z",
+  "session_id": "worker-profiler",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/backend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/backend/_20260529-worker-profiler.claude.md",
+  "insights": {
+    "worked": [
+      "Render metrics + instance-roster-timestamp clustering correctly identified the OOM without needing to read app logs. Peak=limit / last=much-lower per Render instance is the OOM signature when log retention is short.",
+      "Skeptical-review with a fresh sonnet agent grounded findings in `rg` evidence (cited `preflight.py:475` for `Literal[\"api\",\"worker\"]`, `sentry/__init__.py:47` and `preflight.py:478` for naked `Config.ENV` convention). My design lost 90% of its volume to the reviewer's cuts and ended up better.",
+      "Iterating from `is_production() + tier enum + matrix wrapper + validate_matrix + module-global runtime state` \u2192 `Config.ENV == \"production\"` inline + matrix lookup is a textbook case of \"the simpler version is the correct version once the abstractions are unmotivated.\""
+    ],
+    "didnt_work": [
+      "**Initial Render `text=[...]` filter was too broad** \u2014 matched \"memory\" inside LLM grounding payloads (ignition-coil snippets) and returned 1MB of irrelevant logs. Lesson: when querying Render logs for OOM, use `level=[\"error\",\"critical\"]` filter + narrow regex, NOT free-text. OOM doesn't appear in app logs anyway \u2014 needs metrics, not logs.",
+      "**I introduced 4 cargo-culted inline imports** while wiring. Original code had a flag-gated lazy import (`from worker._memory_profile import run_memory_profile_loop` inside `if Config.WORKER_MEMORY_PROFILE:` \u2014 load-bearing: don't import tracemalloc unless enabled). At the new call sites my flag-gating moved INSIDE the called function, eliminating the lazy-load reason. I mirrored the legacy SHAPE without checking the legacy JUSTIFICATION. Atone recorded. User then corrected the shape by re-introducing the flag-gated lazy pattern at the call sites.",
+      "**My `feedback_no_inline_imports.md` is overcorrected**: it says \"never inline-import.\" But the user's actual rule is \"lazy-import inside a flag block IS the pattern; don't propagate it without the flag.\" Needs amending."
+    ],
+    "gotchas": [
+      "`RCA --rca-content \"$(cat file)\"` heredoc/shell-quoting failed at the atone lint (mysteriously claimed leading-indent + ellipsis that wasn't in source). `--rca-file PATH` works cleanly. Documented in atone CLI but easy to miss.",
+      "The atone juror gate requires a `judg-*` row in `judgments.jsonl` whose `related_atone_slugs` contains the slug being added, within 15 min. The juror dispatch returns JSON but you must ALSO call `atone.sh juror --verdict ...` to record the judgment row, with the slug in `--related-slugs`. Missing step \u2192 exit 4 from `atone add`.",
+      "Render's checkpoint index referenced a file that didn't exist on disk (`_20260527-pipeline-hardening.claude.md`). The `/catchup` `resolve.sh --pick` works but the file may be gone. Reconstructed scope from git + tree instead."
+    ],
+    "notes": [
+      "The actual policy for inline imports in this Python backend is: **flag-gated lazy imports of heavy/optional modules are intentional**; mirror that pattern when adding new flag-gated features. Cargo-culted inline imports with no flag justification are the failure mode. See `feedback_no_inline_imports.md` (needs update to reflect this nuance).",
+      "Cheap RSS watcher loop already lives in `worker/_memory_profile.py:64`; the tracemalloc one at `:78`. To diagnose a new memory issue, set `WORKER_MEMORY_PROFILE=1` on a dev service (per-pod sampled at 25% workers / 50% API) and grep Render logs for `[mem]` and `[rss]` prefixes.",
+      "Render `RENDER_INSTANCE_ID` is the trustworthy per-pod seed for stable sampling. Per-pod stability holds across in-place Python restarts AND OOM-respawns within the same instance ID; new pod (deploy/scale) re-rolls.",
+      "The fitment_search_agent peak-memory hypothesis (lines 67-105: building `all_fitments + products_out` in a Python loop without streaming) is unproven. Empirical confirmation would come from enabling `WORKER_MEMORY_PROFILE=1` on dev for 48h and grepping the tracemalloc top-allocator output."
+    ],
+    "feedback": [
+      "ENV classification: `{local: DEBUG=1+ENV=local, dev: ENV=development+BRANCH=development, staging: ENV=staging+BRANCH=main, prod: ENV=production+BRANCH=release}`. BRANCH=release is the trustworthy prod signal because Render-injected.",
+      "Designed-rejected: `DeployEnv.UNKNOWN`, `(bool, str)` tuples with reason strings, `diagnostics_allowed()` wrapper, panic-on-ENV-vs-BRANCH-disagreement, raw per-env rate env vars.",
+      "Saved memory entries: `feedback_no_inline_imports.md` (needs nuance update). Atone: `mist-20260529-120704-1d` (S3, cluster E, slug `propagating-legacy-inline-imports-in-python-backend`).",
+      "Voice/tone: no em-dashes in source code or log strings. /cleanup-comments scoped to MY added comments, not pre-existing ones in touched files."
+    ]
+  },
+  "pending": [
+    "**Decide commit**: 4-file working-tree change is ready. User has not approved commit. Likely targets: amend onto current notify-jobs work, or new commit `feat(profiler): API + worker runtime gating + per-env sampling matrix`.",
+    "**Update `feedback_no_inline_imports.md`**: current text is too broad. Should distinguish flag-gated lazy imports (allowed \u2014 see workerv2.py:184-187 pattern) from cargo-culted inline imports (banned). The atone RCA also needs this nuance.",
+    "**Validate the staging=0 policy**: user dropped staging rates to 0; means staging will never profile. Likely intentional (staging is small, profiling adds noise) but worth confirming the env vars on staging service are coherent.",
+    "**Potential follow-up: auto-promote watcher**: I sketched a cheap-watcher-that-triggers-tracemalloc-on-threshold but deferred it. Could file as a /proposal.",
+    "**Tier-2 mitigations from the OOM analysis**: streaming `products_out` in fitment, dropping `result.output` early via `del`, lowering `FITMENT_MAX_PRODUCTS` from 10 \u2192 5-7. None are part of this commit; they live in conversation only. Worth a separate doc if user wants to act.",
+    "**Cron-checks block from prior session**: still uncommitted (`backend/cron/checks/`, `backend/tests/cron/test_checks.py`, `backend/cron/notify_jobs.py` wire-up). Separate logical unit from this work."
+  ],
+  "tags": []
+}

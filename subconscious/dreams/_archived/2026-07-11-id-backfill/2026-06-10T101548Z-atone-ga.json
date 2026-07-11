@@ -1,0 +1,27 @@
+{
+  "ts": "2026-06-10T10:15:48Z",
+  "session_id": "atone-gate-82",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260610-atone-gate-82.claude.md",
+  "insights": {
+    "worked": [
+      "**Gotcha \u2014 the fix was nearly DOA:** `.nudge-off` gated the very detection meant to fix the",
+      "**Gotcha \u2014 `protect-atone-raw.sh` matches command *strings*:** inlining an atone path (even a",
+      "**Design principle reused:** bounded blocking (per-marker counter + freshness window) is how a",
+      "**For future agents:** mute switches are now split \u2014 `.nudge-off` (heuristic) vs `.gate-off`"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "**Gotcha \u2014 `protect-atone-raw.sh` matches command *strings*:** inlining an atone path (even a",
+      "**Design principle reused:** bounded blocking (per-marker counter + freshness window) is how a",
+      "**For future agents:** mute switches are now split \u2014 `.nudge-off` (heuristic) vs `.gate-off`"
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "None. All 4 session tasks completed; feature shipped end-to-end.",
+    "(Optional, not requested) Separate cross-cutting change: the atone session-state subsystem"
+  ],
+  "tags": []
+}

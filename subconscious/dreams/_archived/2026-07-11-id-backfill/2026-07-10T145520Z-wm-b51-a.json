@@ -1,0 +1,27 @@
+{
+  "ts": "2026-07-10T14:55:20Z",
+  "session_id": "wm-b51-ae",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260710-wm-b51-ae.claude.md",
+  "insights": {
+    "worked": [
+      "**Dev stack:** vite `[::1]:5100` (IPv6 single owner), API `127.0.0.1:5102`; taxonomy auto-run may sit at 0/3 if the worker lacks Gemini progress \u2014 not a chrome bug.",
+      "**Tangential, unaddressed:** the demo/mock replica files in `docs/reference/mock-replicas/` + untracked walmart `ARCHITECTURE.md`/`frontend/.gitignore`/`frontend/.mcp.json` (not mine, left untracked); playground `/components` index route 404s (pre-existing)."
+    ],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**B5.2 (next, agent):** P-01 recipe (StatTiles \u2192 dismissible hint w/ M-09 `hint:<step>` localStorage \u2192 content cards \u2192 sticky bar) applied per step; P-02 Items & Mapping merge table (staged commit model \u2014 Select changes accumulate, one `Apply mapping` behind ConfirmModal w/ invalidation list; NEVER instant-apply); P-03 Taxonomy (bulk accept = high-confidence AND NOT flagged; flagged untouchable); P-04 Enrichment (per-item rows + cache-TTL StatTile); P-05 Attributes (P-01 chrome only); F-06 re-run ConfirmModals listing downstream invalidations; M-07 failed-stage Retry surfaces; F-05 upgrade header name to kit InlineEdit (component landed `814e706`); G-12 drawer before items tables; serial: elevated useQ wrapper on `src/data/*` (auth-gated, error\u2192toast, unreachable messaging, stale-deploy reload), 401 sticky-toast, disconnect-invalidates-me nit.",
+    "**B5.3:** Export & Submit step body (E-01 manifest/`_misc.xlsx` explainer; E-02 Submit-primary-when-connected hierarchy).",
+    "**B8 tail:** FileDetail + Admin re-chrome. Then delete `ShellProbe.tsx` + probe route (committed at walmart `0d7d319`).",
+    "**Review build LAST** \u2014 OWNER owes R-02 verdict (audit rec: side inspector). REMIND before starting. ST-03: Review2/3/4 tabs removed only after R-02 synthesis ships.",
+    "**9 authed spot-checks** from `.claude/output/20260710-query-rollout/changes.md` \u00a7\"reviewer spot-check list\" (cache-on-nav, poll gating, org switch, 401 drop, etc.).",
+    "**OWNER:** source-file cross-org scoping backend check (flag from this session); Jul-15 backend go/no-go (+ `/health` endpoint bundling); 2nd subscription cancel ~Jul-23 (reminder still unset).",
+    "**Deferred tracks:** Dispatch B (useQSync into kit) once UI stable; Dispatch C (data-density pack) when wizard/review tables deepen; speedway reactivation (inherits kit); poll/ETA refinements (optional).",
+    "**End of everything:** kit backprop consolidation \u2192 final adversarial review \u2192 owner gate \u2192 PRs (all three repos)."
+  ],
+  "tags": []
+}

@@ -1,0 +1,23 @@
+{
+  "ts": "2026-06-29T20:11:38Z",
+  "session_id": "parttype-classifier-4b",
+  "project_root": "/Users/alcatraz627/Code/Versable/staging-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/staging-enhancement-product/_20260629-parttype-classifier-4b.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [
+      "**Gotcha \u2014 the atone Stop gate.** Its block message tells you to mute via `~/.claude/atone/.nudge-off`, but the code checks `~/.claude/atone/.gate-off`; and Condition 2 fires on a `.atone-add-failed` marker even when the same mistake was already recorded by a prior successful add. Resolved by clearing the false marker; filed `prop-20260629-142846-fd`.",
+      "**A fast model beat the strong ones.** `gemini-3.5-flash` tied or beat every OpenAI option including `gpt-5.5` on this closed-set pick, at lower cost. The real accuracy ceiling is the product data (14% of rows unsolvable by any model), not the model choice."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**jegs config** (`backend/lib/pipeline/seed/data/job_configs/jegs/jegs_part_type_classify.json`) \u2014 may still carry dead Pinecone options (`catalog_namespace`, `shortlist_size`, `use_pinecone`, `namespace`, `index_name`, `match_fields`). Safe and behavior-unchanged (it was already flat: `use_pinecone` default False, has `catalog_filename` = `jegs-part-types.json`), but they are now dead config. The commit `b07f5c67` (\"remove pinecone and relate configs\") may already cover it \u2014 **verify, clean if not.**",
+    "**Eval harness** (`backend/scripts/sweep_part_type_classifier.py`) \u2014 still has dead Pinecone scaffolding: `ensure_pinecone_index`, the `use_pinecone`/`shortlist_size` defaults in `base_args`, the recall-miss escalation in `next_overrides`, and `recall_at_k` logic. Clean to make the Pinecone removal complete. (Currently harmless \u2014 the method ignores the extra args via pydantic `extra='ignore'`.)",
+    "**Push** \u2014 `a3b2f9b6` is on the remote; the four later commits (`20093b60` sentry, `c187ff43` correction-removal, `99d5b2eb` comment cleanup, `b07f5c67` pinecone-removal) are local-only and may need a push to sync. Push is the user's call (per the atone).",
+    "Optional: open the PR for the branch."
+  ],
+  "tags": []
+}

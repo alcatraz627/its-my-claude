@@ -1,0 +1,31 @@
+{
+  "ts": "2026-06-25T22:10:01Z",
+  "session_id": "atone-fixes-2b",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260626-atone-fixes-2b.claude.md",
+  "insights": {
+    "worked": [
+      "**Dogfooding, repeatedly:** the `rg -rn` guard blocked my own footgun before it could",
+      "**Gotcha (real bug, filed):** when `CLAUDE_SESSION_ID` is unset, atone session-keying",
+      "**Gotcha:** `protect-atone-raw.sh` blocks COMPOUND jq/grep pipes referencing atone",
+      "**Honest framing held throughout (user's explicit constraint):** the efficacy metric",
+      "**Note for future agents:** the three escalated hooks + the breaker can only be"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "**Gotcha:** `protect-atone-raw.sh` blocks COMPOUND jq/grep pipes referencing atone",
+      "**Honest framing held throughout (user's explicit constraint):** the efficacy metric",
+      "**Note for future agents:** the three escalated hooks + the breaker can only be"
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "(Recommended, not required) In a FRESH session, live-confirm the blocking paths that",
+    "(Optional) Run `bash ~/.claude/scripts/atone-consolidate.sh --force` to materialize",
+    "(Backlog) `prop-20260625-172436-8b` \u2014 session-key collision when CLAUDE_SESSION_ID",
+    "`scripts/atone-juror-dispatch.sh` was committed but not re-run this session (prior-",
+    "Uncommitted other-session churn remains in the tree (NAMESPACE.md, scripts/desktop.sh,"
+  ],
+  "tags": []
+}

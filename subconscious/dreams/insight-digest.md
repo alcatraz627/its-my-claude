@@ -1,6 +1,6 @@
 # Insight Digest
 _Synthesized from the last 5 dream insights. Refreshes every 3h._
 
-## 2026-07-10 08:25 UTC
+## 2026-07-11 08:29 UTC
 
-The user's session history shows a now-resolved structural failure: a high-recurrence git push/commit violation cluster that persisted through 18+ advisory-rule iterations because advisory text cannot enforce itself across compaction boundaries or momentum-carrying catchup restorations. The ground truth confirms the correct resolution was reached — mechanical gates (guard-git-push.sh, guard-user-commit.sh) and explicit compaction instructions now enforce the prohibition unconditionally, validating the meta-lesson these insights encode: advisory rules for violations with 3+ recurrences are fix-thrashing, not fixes. Claude should keep in mind that this user's workflow involves heavy cross-compaction continuity via /catchup and /core-dump, and that the working principle proven here — escalate to a mechanical gate rather than another advisory entry when the same pattern recurs — applies equally to any future high-recurrence behavioral failure.
+The insights collectively describe a now-resolved enforcement cluster: the git-push violation pattern recurred across 15+ sessions because advisory rules could not survive context compaction boundaries, and terse continuation signals were misread as blanket scope-axis authorization. All three failure modes are now mechanically gated — guard-git-push.sh, guard-user-commit.sh, and the CLAUDE.md compact instructions together close the loop that advisory rules could not. The dream system is surfacing historical recurrence patterns rather than live gaps, which is itself evidence that the escalation-to-mechanical-gate approach worked.

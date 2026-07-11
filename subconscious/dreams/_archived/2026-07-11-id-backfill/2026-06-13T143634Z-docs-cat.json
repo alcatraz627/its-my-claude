@@ -1,0 +1,32 @@
+{
+  "ts": "2026-06-13T14:36:34Z",
+  "session_id": "docs-catch-7f",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260613-docs-catch-7f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [
+      "**MANDATORY-pointer blindness (the big miss):** resumed onto PLAN.md, treated the program spine as the complete ruleset, never loaded the doc-writing-guidelines that CLAUDE.md marks MANDATORY. A mandate with no data-path gate is advisory. Fix: PLAN step 2 now forces the load; candidate PreToolUse hook named in the RCA.",
+      "`rg -r*` flag bundle recurred **5\u00d7 total** (2\u00d7 this session, both self-caught from mangled output). `rg -rn` = `--replace n`. A hook is the only real fix; advisory rules don't bind it.",
+      "CLI-gate quirk: `gh workflow list --all` (read-only) gets gated; the approval `touch` and the command must be in SEPARATE Bash calls (gate fires before the touch runs in a compound command).",
+      "Render env-group GET is `/v1/env-groups/<id>` returns 404 for the per-service evm- IDs; the real group IDs come from `/v1/env-groups?limit=N` (Development/Production), separate from per-service `/services/<id>/env-vars`.",
+      "Global guidelines file is a symlink: `~/.claude/doc-writing-guidelines.md` \u2192 `~/.claude/conventions/doc-writing.md`. Edit the target; the symlink path refuses writes."
+    ],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Gate B: screenshot-sherpa session, ~13 \ud83d\udcf8 markers (12 in batch-1-PARCEL.md + 1 new project-set-up re-capture)",
+    "Gate C: review + commit ~44-file docs diff (1102 ins / 1512 del); then close vs rebase PR #181",
+    "#25 dictation (not time-bound): release-checklist \u2605 / hotfix (Sept) / feature-merge (Aug) \u2014 I assist live",
+    "Optional: 1 open [VERIFY] in github-conventions (branch-direction); 8 name-only Slack channel IDs in comms.md",
+    "FYI: prod committed-webhook + unused topic-routing (fix = Render env change, their call)",
+    "Decide: start Batch 2 now (overlap) vs hold for clean per-batch diffs",
+    "**#23 Batch 2** (`product/` rest ~50 docs) \u2014 starts on user go; now inherits voice rules via PLAN step 2",
+    "Audits #3\u2013#4 of the split-rule calibration (surface during Batch 2; then it graduates to a gate)",
+    "#8: absorb any further create-upload split review from Aakarsh",
+    "Deferred: create-scraper \"## Under the hood \u2014\" heading contains a 3.2 trigger phrase, rename needs anchor-rewire (next content pass); `product/todos.md` April-era table refresh (Batch 2)"
+  ],
+  "tags": []
+}

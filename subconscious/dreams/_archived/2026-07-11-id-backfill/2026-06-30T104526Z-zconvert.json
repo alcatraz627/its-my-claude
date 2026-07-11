@@ -1,0 +1,19 @@
+{
+  "ts": "2026-06-30T10:45:26Z",
+  "session_id": "zconvert-zcmd",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260630-zconvert-zcmd.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Task #30 (next, not started):** consolidate claude-built TUIs (zap, `zconvert -i`, statusline, desktop.sh, sl-playground, others) into a shared TUI library + handbook + features catalog (each feature: what / when / how-to-implement-bug-free). Precede with DEEP RESEARCH: (1) scan existing built TUIs in `~/.claude` + `its-my-config`, (2) online TUI best-practices, (3) ~10 popular TUI tools (fzf, lazygit, k9s, htop, gum, btop, fx, atuin, television, yazi). Seed: `scripts/tui/file-preview.sh` + the `std::claude::tui` notes written this session. Likely needs a `/skeptical-review` and possibly a workflow for the research fan-out.",
+    "**Task #8 (user):** `zap` interactive fzf/gum smoke test in a real terminal.",
+    "**User smoke test of `zconvert -i` v2** \u2014 the `^O`/`^T` toggles + preview pane render only verifiable live; logic is verified + reviewed."
+  ],
+  "tags": []
+}

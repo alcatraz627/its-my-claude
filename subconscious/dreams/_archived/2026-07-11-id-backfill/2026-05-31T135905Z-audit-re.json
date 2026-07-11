@@ -1,0 +1,29 @@
+{
+  "ts": "2026-05-31T13:59:05Z",
+  "session_id": "audit-recon-7c",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260531-audit-recon-7c.claude.md",
+  "insights": {
+    "worked": [
+      "**What didn't work / gotchas:** (1) The migration trap \u2014 `rsync -a` preserves modes but `git clone/pull` restores *committed* modes, so a never-committed `chmod +x` survives a file-copy but dies on the next clone. Git tracks only the exec bit; stage the mode change (`git add` after chmod, or `git update-index --chmod=+x`). (2) Substring `permissions.deny` rules (`Bash(* /dev*)`) are read-blocking tyranny \u2014 they fired on my own grep, commit message, and IPC reply. (3) `permissions.deny` is cached at session-start while PreToolUse **hook scripts are re-read per call** \u2014 so a removed deny rule lingers this session but a newly-registered hook is live immediately. (4) Heredoc-composed JSON/markdown injects whitespace/newlines \u2192 use the Write tool for structured fixtures (bit me on the visual JSON; same stub-fixture trap that gave mistakes-infra a false bug).",
+      "**User feedback / preferences:** A \"too noisy/aggressive\" complaint = tune down, NOT turn off (request is a ceiling). Reassurance (\"I trust claude\") \u2260 removal mandate. Don't blind-`reset --hard`; do a deliberate, lossless branch merge. Per-session, server-independent, simplest-thing-that-works for auto-continue. Always values honesty about non-involvement over capitulation.",
+      "**Notes for future agents:** New-machine git is reconciled (`main`=`origin/main`=`8fbf134`, ahead 0/behind 0). Auto-continue is opt-in per session via `auto-continue.sh on [max_retries] [cooldown]` \u2014 inert otherwise. The system-dir guard mutes via `touch ~/.claude/.allow-system-writes`; the cred guard via `.allow-cred-write`."
+    ],
+    "didnt_work": [
+      "**User feedback / preferences:** A \"too noisy/aggressive\" complaint = tune down, NOT turn off (request is a ceiling). Reassurance (\"I trust claude\") \u2260 removal mandate. Don't blind-`reset --hard`; do a deliberate, lossless branch merge. Per-session, server-independent, simplest-thing-that-works for auto-continue. Always values honesty about non-involvement over capitulation.",
+      "**Notes for future agents:** New-machine git is reconciled (`main`=`origin/main`=`8fbf134`, ahead 0/behind 0). Auto-continue is opt-in per session via `auto-continue.sh on [max_retries] [cooldown]` \u2014 inert otherwise. The system-dir guard mutes via `touch ~/.claude/.allow-system-writes`; the cred guard via `.allow-cred-write`."
+    ],
+    "gotchas": [],
+    "notes": [],
+    "feedback": [
+      "**Notes for future agents:** New-machine git is reconciled (`main`=`origin/main`=`8fbf134`, ahead 0/behind 0). Auto-continue is opt-in per session via `auto-continue.sh on [max_retries] [cooldown]` \u2014 inert otherwise. The system-dir guard mutes via `touch ~/.claude/.allow-system-writes`; the cred guard via `.allow-cred-write`."
+    ]
+  },
+  "pending": [
+    "**None blocking.** Tasks #73\u201379 all complete + pushed (`origin/main` = `8fbf134`).",
+    "(User-side, empirical) When a real rate-limit next hits a flagged session, check `~/.claude/auto-continue/<sid8>.log` to confirm CC emits the `Stop` event on error-exhaustion \u2014 the one link untestable synthetically.",
+    "(Open, deferred) Two systemic IPC gaps surfaced but NOT fixed (unprompted): no presence-heartbeat (busy session looks \"offline\" to peers); bug-handoff-by-mailbox assumes one owner per alias (two \"audit\"-ish sessions collided).",
+    "(Carried, not this session) The `CLAUDE.md` atone-section + `settings.json` deny-list were edited by the user/linter mid-session \u2014 left untouched intentionally."
+  ],
+  "tags": []
+}

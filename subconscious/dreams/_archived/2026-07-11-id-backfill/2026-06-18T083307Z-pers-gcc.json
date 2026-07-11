@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-18T08:33:07Z",
+  "session_id": "pers-gcc-a7",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260618-pers-gcc-a7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**LOW-tier cross-link sweep** (~30 skills) \u2014 one-line `See Also` grafts from the batch triage files; deliberately deferred (bucket 3).",
+    "**4 LOW doc-drift fixes** from the overall review (deferred per user's \"fix MEDs only\"): `features/persona-activation.md` Status table is stale (marks shipped items \u25a2/\u25d1); `personas/README.md:22-30` \"Structure\" section documents an old persona taxonomy no persona uses; `juror.md:130` \"no fence\" vs its own json-fenced example; `persona-log.sh` `session` field is heterogeneous (working-mode full UUID vs juror short id) \u2192 breaks future cross-session group-by.",
+    "**`guard-allowed-tools.sh` proposal** \u2014 offered (a PreToolUse/CI check diffing a skill's tool references against its `allowed-tools:` line), NOT yet filed via `propose.sh`. The allowed-tools mismatch hit 14 skills this session \u2014 it's a missing invariant, not one-off slips.",
+    "**gitignore `personas/usage/events.jsonl`** \u2014 it's a runtime append-only log (like wal.jsonl) but currently tracked; will churn the repo each session. Consider `git rm --cached` + `.gitignore`.",
+    "**designer-reviewer Phase-6 ASCII output** \u2014 flagged twice as \"gum-under-fork\"; I HELD (it's plain ASCII the parent can parse, not a real gum render). Revisit only if the user disagrees."
+  ],
+  "tags": []
+}

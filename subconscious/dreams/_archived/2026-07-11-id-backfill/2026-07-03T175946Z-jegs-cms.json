@@ -1,0 +1,23 @@
+{
+  "ts": "2026-07-03T17:59:46Z",
+  "session_id": "jegs-cms-4e",
+  "project_root": "/Users/alcatraz627/Code/Versable/staging-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/staging-enhancement-product/_20260703-jegs-cms-4e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**When the full export lands:** run the batch conformance report (extend",
+    "**#21 (PARKED, do at end of core work):** extract the new v3 rules to an adjacent pluggable module",
+    "**#5:** resolve wheels \"Chart field\" (lug-nut chart HTML) \u2014 placeholder now.",
+    "**#6:** stub minimal standards rules pending JEGS master files (`JEGS_Master_Content_Standards.xlsx`",
+    "**#7:** add scrape/research source-log as an admin-only output column.",
+    "Small builds deferred: JEGS-vs-scraped conflict flag; download-template for exact A\u2013I column export",
+    "Open style question for JEGS: kit quantity placement (spec self-contradicts: quantity-last vs"
+  ],
+  "tags": []
+}

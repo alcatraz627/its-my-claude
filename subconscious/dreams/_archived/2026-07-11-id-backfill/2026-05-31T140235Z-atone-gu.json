@@ -1,0 +1,22 @@
+{
+  "ts": "2026-05-31T14:02:35Z",
+  "session_id": "atone-guards-c5",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260531-atone-guards-c5.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": [
+      "**Key fix mechanics for future agents:** A4 forge-guard uses bash *dynamic scoping* \u2014 `local _ATONE_INTERNAL_DISPATCH=1` in cmd_add/cmd_resweep is visible inside the cmd_juror they call, but NOT when `atone juror` is invoked directly from the CLI, so hand-recorded provenance is rejected. A5 pre-generates the judgment id so the event row can reference it and be appended FIRST (no orphan window). The A1 retry loop is genuinely useful for real transient claude hiccups."
+    ]
+  },
+  "pending": [
+    "**NONE blocking.** All 10 gaps fixed + verified with real claude; A8 cron loaded.",
+    "**Uncommitted:** atone.sh has ~317 insertions vs last commit (2026-05-24); `atone-juror-dispatch.sh` is untracked. The whole atone redesign (this + prior sessions) is uncommitted \u2014 worth a commit to the `~/.claude/atone/.git` and the main `~/.claude` repo when ready (not pushed without approval).",
+    "**OPTIONAL carryover:** prune synthetic-slug proposals already in `proposals.jsonl`; the i-dream-side severity\u2194confidence calibration (their domain); the dispatch-ownership was the proposal this whole arc shipped.",
+    "**Reports on disk:** `assets/reports/20260531-1338-atone-system-audit/{audit.md,ANALYSIS.md}` (the audit + diagram + gap plan)."
+  ],
+  "tags": []
+}

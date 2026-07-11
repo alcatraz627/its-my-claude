@@ -33,9 +33,12 @@ Scope note: corroboration is computed from the link:* tags already on each propo
 pools — those enter the backlog via the contribution/auto-stub link tags. Wiring them as
 direct feeders is a later enhancement, intentionally deferred to avoid churn.
 
-Usage: backlog-consolidate.py [--force] [--read-only] [--stale-days N] [--help]
+Usage: backlog-consolidate.py [--force] [--read-only] [--no-content] [--explain]
+                              [--stale-days N] [--help]
   --force       ignore the weekly idempotency guard
   --read-only   compute and print the summary, write nothing
+  --no-content  cluster on link:* tags only (disable content-similarity edges)
+  --explain     print every content edge drawn, and why (audit the merges)
   Idempotency: skips if it ran < 6 days ago (weekly cadence) unless --force.
 """
 import json
@@ -64,7 +67,8 @@ def now_utc():
 
 
 def parse_cli(argv):
-    opts = {"force": False, "read_only": False, "stale_days": DEFAULT_STALE_DAYS}
+    opts = {"force": False, "read_only": False, "stale_days": DEFAULT_STALE_DAYS,
+            "content": True, "explain": False}
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -74,6 +78,10 @@ def parse_cli(argv):
             opts["read_only"] = True
         elif a == "--stale-days":
             opts["stale_days"] = int(argv[i + 1]); i += 1
+        elif a == "--no-content":
+            opts["content"] = False
+        elif a == "--explain":
+            opts["explain"] = True
         elif a in ("--help", "-h"):
             print(__doc__)
             sys.exit(0)
@@ -156,8 +164,149 @@ def provenance(item):
     return out
 
 
-def cluster(items):
-    """Connected components over shared link targets. Returns list of lists of items."""
+STOPWORDS = {
+    "the", "a", "an", "and", "or", "but", "if", "then", "than", "that", "this",
+    "these", "those", "is", "are", "was", "were", "be", "been", "being", "to",
+    "of", "in", "on", "at", "by", "for", "with", "from", "into", "as", "it",
+    "its", "not", "no", "so", "do", "does", "did", "can", "could", "should",
+    "would", "will", "when", "while", "where", "which", "who", "what", "how",
+    "why", "there", "their", "they", "them", "we", "our", "you", "your", "i",
+    "my", "me", "he", "she", "his", "her", "one", "two", "all", "any", "each",
+    "every", "some", "more", "most", "other", "such", "only", "own", "same",
+    "too", "very", "just", "now", "also", "up", "out", "over", "under", "again",
+    "here", "after", "before", "because", "about", "against", "between", "via",
+    "use", "used", "using", "make", "makes", "made", "get", "gets", "got",
+    "should", "must", "may", "might", "shall", "have", "has", "had", "proposal",
+    "propose", "fix", "add", "adds", "added", "hook", "claude", "gcc", "session",
+}
+TOKEN_RE = None  # compiled lazily in tokens()
+
+# A token appearing in more than this fraction of open proposals is treated as
+# template boilerplate and excluded from similarity. Auto-filed proposals share a
+# generated body; without this, unrelated ones score as near-identical.
+BOILERPLATE_DF = 0.25
+
+# Below this many distinctive tokens, a proposal is too thin for a ratio to mean
+# anything — it can still be joined by a shared rare phrase, never by Jaccard.
+MIN_TOKENS = 8
+
+# A shared rare phrase only draws an edge when the two proposals ALSO have this
+# much baseline vocabulary overlap. Without it, one common hyphenated word
+# ("follow-up", "sub-agent") merges unrelated items.
+#
+# Measured on this backlog (n=59, shared DF cutoff): the real duplicate pair
+# (the task-sync bug, filed twice) scores 0.116, while the two false merges
+# score 0.022 and 0.021 — a 5x gap. 0.06 sits clear of both. Re-measure before
+# moving it; the number is evidence, not taste.
+PHRASE_SUPPORT_MIN = 0.06
+
+
+def tokens(item):
+    """Content tokens for similarity: title + body, lowercased, stopworded.
+
+    Deliberately cheap and local — this runs in a cron path, so no LLM and no
+    embedding model. Identifier-ish tokens (guard-git-push, task-sync) survive
+    intact because the split keeps hyphens/dots/underscores inside a word."""
+    global TOKEN_RE
+    if TOKEN_RE is None:
+        import re as _re
+        TOKEN_RE = _re.compile(r"[a-z0-9][a-z0-9._/-]*")
+    text = ((item.get("title") or "") + " " + (item.get("body") or "")).lower()
+    return {t for t in TOKEN_RE.findall(text)
+            if len(t) > 2 and t not in STOPWORDS}
+
+
+def content_edges(items, jaccard_min=0.55, rare_max_df=0.05):
+    """Edges between proposals describing the same friction without linking to it.
+
+    The link:* graph only joins proposals whose filer remembered a provenance tag,
+    so two sessions that independently hit one bug each stay at corroboration 1 —
+    scoring rediscovery, the strongest available signal, as noise.
+
+    Edge when token Jaccard >= jaccard_min, or on a shared rare bigram (a cheap
+    IDF proxy for "guard-git-push" appearing in both). Returns (edges, why): this
+    is the one rule here that can OVER-merge, and an over-merge silently buries a
+    distinct idea, so every edge is auditable via --explain.
+
+    Scope: ONLY items with no link:* edge. Content matching is the fallback for
+    proposals the link graph cannot see — an auto-filed one already carries a
+    precise link:atone:<slug> identity and must not be fuzzy-matched. Their bodies
+    come from one template, so scoring them fused unrelated slugs at 0.81 (they
+    share 12 template tokens and differ only in the slug). Excluding them removes
+    the over-merge at its source instead of tuning a threshold against it.
+
+    Rationale + thresholds: assets/reports/20260711-proposals-pipeline/design.md"""
+    n = len(items)
+    eligible = {i for i, it in enumerate(items) if not link_targets(it)}
+    raw = {i: tokens(items[i]) for i in eligible}
+
+    # Drop template furniture even among the eligible: a token carried by a quarter
+    # of them says nothing about what a proposal is ABOUT.
+    df = defaultdict(int)
+    for t in raw.values():
+        for w in t:
+            df[w] += 1
+    cutoff = max(2, int(len(eligible) * BOILERPLATE_DF))
+    toks = {i: {w for w in t if df[w] <= cutoff} for i, t in raw.items()}
+
+    # Distinctive phrases: title bigrams, plus any identifier-shaped token
+    # (guard-git-push, task-sync). "Rare" = appears in few proposals, a cheap IDF.
+    bigram_df = defaultdict(set)
+    bigrams = {}
+    for i in eligible:
+        title = (items[i].get("title") or "").lower()
+        bg = set()
+        seq = title.split()
+        for a, b in zip(seq, seq[1:]):
+            a2, b2 = a.strip(".,:;()[]"), b.strip(".,:;()[]")
+            if len(a2) > 2 and len(b2) > 2 and a2 not in STOPWORDS and b2 not in STOPWORDS:
+                bg.add(a2 + " " + b2)
+        for w in tokens({"title": title, "body": ""}):
+            if ("-" in w or "_" in w or "." in w) and len(w) > 6:
+                bg.add(w)
+        bigrams[i] = bg
+        for g in bg:
+            bigram_df[g].add(i)
+
+    # A phrase is distinctive when few proposals carry it — but the floor must be 2,
+    # not 1: an edge needs the phrase in BOTH endpoints, so a "rare = appears in <=1"
+    # rule can never draw one. That off-by-one made the whole feature a silent no-op
+    # (the task-sync pair it exists to catch shared "task-sync" and still didn't merge).
+    rare_cutoff = max(2, int(len(eligible) * rare_max_df))
+    rare = {g for g, idxs in bigram_df.items() if 2 <= len(idxs) <= rare_cutoff}
+
+    # Jaccard over a tiny token set is unstable (3 tokens, 2 shared = 0.67), so a
+    # thin proposal can only be joined by a shared phrase, never by ratio.
+    #
+    # A shared phrase alone is NOT enough. "task-sync", "follow-up" and "sub-agent"
+    # are structurally identical (one hyphen, 9 chars) — no shape rule can tell the
+    # system's hook-name from an ordinary English compound, and matching on shape
+    # alone falsely merged "Drifting systems follow-up" with "[follow-up] Migrate
+    # ref-points". So a phrase edge additionally requires baseline topical overlap:
+    # two proposals about the same bug share a phrase AND vocabulary; two unrelated
+    # ones merely share a word.
+    edges, why = [], {}
+    order = sorted(eligible)
+    for a in range(len(order)):
+        for b in range(a + 1, len(order)):
+            i, j = order[a], order[b]
+            ti, tj = toks[i], toks[j]
+            union_ = ti | tj
+            jac = len(ti & tj) / len(union_) if union_ else 0.0
+            if len(ti) >= MIN_TOKENS and len(tj) >= MIN_TOKENS and jac >= jaccard_min:
+                edges.append((i, j))
+                why[(i, j)] = f"jaccard={jac:.2f}"
+                continue
+            shared = (bigrams[i] & bigrams[j]) & rare
+            if shared and jac >= PHRASE_SUPPORT_MIN:
+                edges.append((i, j))
+                why[(i, j)] = (f"shared-phrase={', '.join(sorted(shared)[:2])}"
+                               f" (support jaccard={jac:.2f})")
+    return edges, why
+
+
+def cluster(items, use_content=True, explain=False):
+    """Connected components over shared link targets, plus content-similarity edges."""
     parent = list(range(len(items)))
 
     def find(x):
@@ -178,6 +327,20 @@ def cluster(items):
     for idxs in target_to_idx.values():
         for j in range(1, len(idxs)):
             union(idxs[0], idxs[j])
+
+    if use_content:
+        edges, why = content_edges(items)
+        for (i, j) in edges:
+            if explain:
+                print(f"  content-edge  [{why[(i, j)]}]\n"
+                      f"      A: {items[i].get('id')} {(items[i].get('title') or '')[:64]}\n"
+                      f"      B: {items[j].get('id')} {(items[j].get('title') or '')[:64]}",
+                      file=sys.stderr)
+            union(i, j)
+        # Mark the items so corroboration can tell a content edge from a link edge.
+        for (i, j) in edges:
+            items[i].setdefault("_content_linked", True)
+            items[j].setdefault("_content_linked", True)
 
     groups = defaultdict(list)
     for i in range(len(items)):
@@ -202,10 +365,10 @@ def bucket_order(b):
     return {"PROMOTE": 2, "WATCH": 1, "DROP-REVIEW": 0}.get(b, 0)
 
 
-def assess(items, triggers, stale_days):
+def assess(items, triggers, stale_days, use_content=True, explain=False):
     """Return ranked list of triage rows with bucket PROMOTE / WATCH / DROP-REVIEW."""
     rows = []
-    for grp in cluster(items):
+    for grp in cluster(items, use_content=use_content, explain=explain):
         types = set()       # distinct residue-system types across the cluster
         prov = set()        # display-only provenance (src + link types)
         atone_severity = ""
@@ -335,7 +498,8 @@ def main():
 
     items = load_open_proposals()
     triggers = load_atone_triggers()
-    rows = assess(items, triggers, opts["stale_days"])
+    rows = assess(items, triggers, opts["stale_days"],
+                  use_content=opts["content"], explain=opts["explain"])
     content = render(rows, opts["stale_days"])
 
     promote = sum(1 for r in rows if r["bucket"] == "PROMOTE")
@@ -353,15 +517,23 @@ def main():
     with open(MARKER, "w") as f:
         f.write(now_utc().strftime("%Y-%m-%dT%H:%M:%SZ") + "\n")
         f.write(hashlib.sha256(content.encode()).hexdigest()[:16] + "\n")
-    # Machine-readable sidecar for the SessionStart surfacer (no markdown parsing).
+    # Machine-readable sidecar for the SessionStart surfacer and /backlog-triage
+    # (no markdown parsing). It carries EVERY promote row: this used to cap at 5
+    # while the report listed all of them, so a skill reading the sidecar saw a
+    # truncated decision set with nothing marking it as truncated. If a cap is
+    # ever wanted, set `truncated` and `dropped` so the consumer can say so.
     promote_rows = [r for r in rows if r["bucket"] == "PROMOTE"]
     sidecar = {
         "date": today,
         "report": outpath,
         "counts": {b: sum(1 for r in rows if r["bucket"] == b)
                    for b in ("PROMOTE", "WATCH", "DROP-REVIEW")},
-        "promote": [{"title": r["title"], "value": r["value"], "ids": r["ids"]}
-                    for r in promote_rows[:5]],
+        "promote": [{"title": r["title"], "value": r["value"], "ids": r["ids"],
+                     "corroboration": r.get("corroboration"),
+                     "streams": sorted(r.get("streams", []))}
+                    for r in promote_rows],
+        "truncated": False,
+        "dropped": 0,
     }
     with open(SIDECAR, "w", encoding="utf-8") as f:
         json.dump(sidecar, f)

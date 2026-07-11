@@ -1,0 +1,20 @@
+{
+  "ts": "2026-06-11T16:39:57Z",
+  "session_id": "local-models",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260611-local-models.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Task 6** \u2014 `--web` for `q` (deferred per MAGI; needs a search-backend decision).",
+    "**Task 13** (4 of 5 left) \u2014 add `ideogram4` + `z-image-turbo` to the `imagine` registry; a `--good`",
+    "**Proper dev-based ControlNet** for a \"minecraft you\" (needs gated FLUX.1-dev + a voxel LoRA + a real",
+    "**V2 deferred:** llm-mini/MCP fold (Claude\u2192local), LAN M4-Pro offload."
+  ],
+  "tags": []
+}

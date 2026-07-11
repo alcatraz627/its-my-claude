@@ -1,0 +1,21 @@
+{
+  "ts": "2026-06-18T16:26:38Z",
+  "session_id": "catch-proj-3f",
+  "project_root": "/Users/alcatraz627/Code/better-file-browser",
+  "checkpoint_path": "/Users/alcatraz627/Code/better-file-browser/.claude/_20260618-catch-proj-3f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#21 [PARKED] \u2014 Apply Fable-run audit findings to gcc** (`~/.claude`). NONE",
+    "**#34 [PARKED] \u2014 Chrome Web Store launch prep.** BLOCKER: de-personalize",
+    "**#37 [DEFER] \u2014 Two refactors needing e2e**: M5 = typed `el<T>(id)` replacing",
+    "Highlighter **S2.3 P3/P4** (regex literals, type/fn accents, more languages) \u2014",
+    "**Restore the e2e harness** \u2014 unblocks #37 and all future UI verification."
+  ],
+  "tags": []
+}

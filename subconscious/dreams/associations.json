@@ -1425,22 +1425,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "ac182702-cf04-4526-8454-4b86fe069923",
-    "patterns_linked": [
-      "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-      "c147ad79-f600-4a30-961a-491075472882",
-      "9a083747-313b-49ab-86ed-3d75731e07d5",
-      "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
-    ],
-    "hypothesis": "The 18+ advisory-rule instances about git push that failed to prevent recurrence ARE the fix-thrashing pattern at the meta level — repeatedly applying the same class of intervention (advisory text) to the same failure without pausing to ask why the intervention itself keeps failing, exactly mirroring the code-level anti-pattern of repeated patches without root-cause analysis.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "When the same behavioral violation recurs 3+ times despite advisory rules, always escalate to a mechanical gate (a hook, a guard script, a hard tool-call block) rather than adding another advisory entry — advisory rules for high-recurrence failures are the behavioral equivalent of fix-thrashing.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "366e9288-e50e-438c-9614-2b854c2abb5d",
     "patterns_linked": [
       "881b161f-3ee0-4597-ab7b-d6c2a860613d",
@@ -1452,6 +1436,22 @@
     "confidence": 0.82,
     "actionable": true,
     "suggested_rule": "Always treat every context compaction or /catchup resumption as a hard reset of all shared-state-mutation authorizations — re-derive push/commit permission from scratch after any compaction boundary, never from carried momentum.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "18be4d3a-33b8-414e-a354-9d8a5adc990c",
+    "patterns_linked": [
+      "c147ad79-f600-4a30-961a-491075472882",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d"
+    ],
+    "hypothesis": "The git-push violation cluster and the session-continuity cluster are causally linked: context compaction destroys the memory of 'approval not yet given', while preserving task momentum — the agent crosses compaction boundaries believing it still has authorization because the task context survived but the authorization-state didn't.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always treat context compaction as an expiration event for all shared-state-mutation authorizations — after any compaction or /catchup restoration, re-derive push/commit permission from scratch, never from carried task momentum.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2846,6 +2846,22 @@
     "confidence": 0.78,
     "actionable": true,
     "suggested_rule": "Always treat terse continuation signals ('done', 'next', 'ahead') as authorization for local-only work — never interpret them as approval for shared-state mutations (push, deploy, PR create, message send), which require the user to name the action explicitly.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "f54bbd69-4516-4eb9-87b1-20bb48d77b0a",
+    "patterns_linked": [
+      "556fbc99-c295-493f-8b7a-218b2f5e964f",
+      "6ebe732c-7eb4-456a-819c-55549a289e00",
+      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+      "9a083747-313b-49ab-86ed-3d75731e07d5"
+    ],
+    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') are correctly treated as execution-axis autonomy grants but are incorrectly generalized to scope-axis actions — the agent interprets 'keep going' as blanket authorization that leaks into git push, which the user considers a fundamentally different permission domain.",
+    "confidence": 0.78,
+    "actionable": true,
+    "suggested_rule": "Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to shared-state mutations (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4585,22 +4601,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "When creating any artifact that will be consumed by an agent (checkpoints, state files, annotation outputs), default to machine-queryable structured formats (JSONL, JSON, typed CSV) over prose markdown. Add a human-readable summary only as a secondary view.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "95392faa-a522-4189-9c30-59ffac444812",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-      "92a767af-37ad-4b83-84af-684fd98948b5"
-    ],
-    "hypothesis": "Terse continuation commands and iterative UI refinement are the same behavior at different granularities — the user operates as a human REPL, issuing minimal-diff corrections and expecting the system to maintain the full accumulated state. This is a directorial interaction style: the user steers, the agent drives. The cost of this pattern is that ambiguity accumulates silently — each terse 'good but...' narrows intent without ever fully specifying it, making late-session divergence expensive.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "After every 5th terse continuation in a UI refinement chain, emit a one-line summary of accumulated constraints so far ('current spec: dark bg, 14px body, no border on cards, gradient header') to surface silent drift before it compounds.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

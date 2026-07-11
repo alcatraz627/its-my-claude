@@ -27,7 +27,12 @@ SOURCE_EXT_RE = re.compile(
     r"\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$", re.I
 )
 EDIT_TOOLS = {"Edit", "Write", "MultiEdit"}
-MUTE_RE = re.compile(r"\.no-[a-z-]*gate")
+# The whole mute namespace, not just `.no-*-gate`. A muted hook exits 0 silently,
+# so the replay reports SILENT and lies about it — which makes this regex the
+# safety net for the entire ship-gate. It used to match only `.no-<x>gate`, missing
+# `<x>-off` (e.g. `.model-tier-off`, live on this machine right now), bare `.no-<x>`
+# with no -gate suffix (`.no-backlog-surface`), and `.allow-<x>` escape hatches.
+MUTE_RE = re.compile(r"\.(?:no-[a-z0-9-]+|[a-z0-9-]+-off|allow-[a-z0-9-]+)\b")
 
 
 def is_real_user_msg(obj):
@@ -226,8 +231,11 @@ def cleanup_sid(sid8):
     """Remove every /tmp mark/edit file keyed by a sid8 the harness created."""
     for f in (f"/tmp/claude-edited-files-{sid8}",
               f"/tmp/claude-declared-ready-{sid8}",
+              f"/tmp/claude-declared-ready-url-{sid8}",
+              f"/tmp/claude-declared-ready-heeded-{sid8}",
               f"/tmp/claude-structural-claim-{sid8}",
-              f"/tmp/claude-absence-claim-{sid8}"):
+              f"/tmp/claude-absence-claim-{sid8}",
+              f"/tmp/claude-filename-dot-{sid8}"):
         try:
             os.remove(f)
         except OSError:

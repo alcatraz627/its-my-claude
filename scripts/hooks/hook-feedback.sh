@@ -23,6 +23,9 @@ while [ $# -gt 0 ]; do
     --kind) kind="$2"; shift 2 ;;
     --note) note="$2"; shift 2 ;;
     --cmd)  cmd="$2"; shift 2 ;;
+    # An unknown flag means the caller used a syntax this tool doesn't have, so
+    # its text would be silently dropped from the record. Refuse loudly instead.
+    --*|-?*) echo "hook-feedback: unknown flag '$1' (valid: --hook, --kind, --note, --cmd)" >&2; exit 2 ;;
     *) shift ;;
   esac
 done

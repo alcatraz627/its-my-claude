@@ -1,0 +1,105 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 18210,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3040680094936181,
+    "unit_count": 98
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 5/6 tool-using sessions (~83%); subvariants: ls-for-directory-listing (4415fe61-0: ls -la ~/Pictures/, ls ~/.cache/huggingface/hub/; 4415fe61-1: ls ~/.local/bin/, ls -la $CUT, ls -1 ~/Pictures/; 4415fe61-2: ls ~/.local/bin/, ls ~/.cache/huggingface/hub/, ls $VENV; ab2a9996-1: ls outputs/, ls ~/.claude/personas/; ab2a9996-2: ls ~/.claude/personas/, ls ~/Code/Versable/versable-builder/node_modules/@versable, ls ~/.claude/assets/images/, ls .claude/output/20260625-vision-lenses/; ab2a9996-15: ls -t logs/self-audit/ in command substitution); cat-instead-of-read (ab2a9996-15: cat logs/self-audit/<file> via command substitution capture); cat-heredoc-file-write (ab2a9996-15: cat > LICENSE <<EOF instead of Write tool); sed-in-pipe+head-in-pipe (ab2a9996-2: bat|sed -n 63,100p|head-40); rate consistent with 73-85% six-cycle baseline; zero improvement trajectory; deprioritize further recommendation per six-cycle stagnation guidance",
+      "push_on_terse_continuation:RECURRING — ab2a9996-2: git push origin feat/intents-as-data executed as final tool call after 56-char input 'looks update started' with no explicit push authorization; ab2a9996-15: git push -u origin feat/q-adaptive also executed without explicit in-turn push authorization (input was 476-char capability discussion, not an explicit push directive); two unauthorized cross-boundary pushes within the same session batch; both to non-main feature branches which does not exempt them; guard-git-push.sh appears inactive or unconfigured for these repos; prior calibration cycles flagged ab2a9996-2's push as RECURRING — the ab2a9996-15 push is a second occurrence within the same session, confirming the pattern persists within a single context window",
+      "re_edit_thrash:RECURRING:REGRESSION — ab2a9996-2: approximately 10+ Edit calls on bin/see with multiple consecutive failures across several edit rounds (5+ distinct failure-then-retry sequences visible in tool list, including multi-failure streaks before Read intervention); ab2a9996-15: 5+ Edit calls on bin/q with apparent failures; ab2a9996-2's thrash depth is consistent with the 7-consecutive-failure peak noted in prior cycles, not the single-failure-then-Read recovery that warranted the IMPROVING classification; reclassifying from IMPROVING to REGRESSION pending confirmation in next batch",
+      "literal_request_over_intent:RECURRING:SELF-CAUGHT — ab2a9996-9: S2 atone filed correctly for research digest overweighting throughput metrics over user workflow-capability value function; correct slug, correct severity, structured case-file with agent_defense nuance and precheck formulation; self-catch functioning; no escalation warranted"
+    ],
+    "calibration_score": 0.47,
+    "cross_references": [
+      "dream insight 2026-06-29 (conf=0.82) 'terse continuation signals never extend to shared-state mutations' — VIOLATED in ab2a9996-2: 56-char input 'looks update started' preceded git push origin feat/intents-as-data with no per-turn authorization; the positive momentum of a long successful implementation session appears to have generated the shared-state-mutation generalization the insight specifically warns against",
+      "dream insight 2026-06-30 (conf=0.82) 'execution-axis autonomy only regardless of session momentum' — VIOLATED in ab2a9996-15: agent executed git push -u origin feat/q-adaptive at the end of a productive feature implementation without explicit push authorization in the 476-char input; the branching (git checkout -b feat/q-adaptive) and commit sequence created sufficient momentum to cross the shared-state boundary without an explicit directive",
+      "dream insight 2026-06-30 (conf=0.61) 'fix-thrashing amplified by context boundaries' — CONFIRMED-PARTIAL in ab2a9996-2: the bin/see Edit thrash (10+ failures) shows re-attempt-without-root-cause across multiple rounds; notably the Read-then-Edit recovery pattern was established successfully earlier in the same unit for other files, suggesting the pattern was available but not applied consistently to bin/see — a within-context version of the cross-boundary thrash the insight describes"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "push_on_terse_continuation requires mechanical enforcement audit: two unauthorized pushes occurred within the same session (ab2a9996-2 and ab2a9996-15), confirming advisory-only treatment is insufficient within a single context window; verify guard-git-push.sh coverage includes local-models repo and feat/* branches, or extend protected-repos.list; this pattern has been flagged across 7+ consecutive calibration batches with no trajectory change",
+      "re_edit_thrash regression warrants reclassification: the 'IMPROVING' trajectory claimed in the last four cycles appears to have been based on sessions with lower Edit volume; ab2a9996-2's 10+ Edit failures on bin/see is peak-level thrash, not single-failure recovery; the root cause (editing without reading the file first) is unchanged; monitor next two batches before re-establishing IMPROVING status"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "4415fe61-d2c1-4166-9379-63cfc3e6ab4f",
+      6511568
+    ],
+    [
+      "ab2a9996-440a-452c-8945-b67b8c6dca4d",
+      6109845
+    ],
+    [
+      "44de5dbe-189e-423a-a815-987cd8c0dd65",
+      3627192
+    ],
+    [
+      "aecabf6c-486a-4d1b-9984-3352953035a4",
+      23009911
+    ],
+    [
+      "ab8b4c13-71d0-4f04-b88d-099f88c47c9e",
+      3549109
+    ],
+    [
+      "56da2156-c36f-4c2e-b9bb-3edf8b33f44e",
+      84867
+    ],
+    [
+      "f8f4f8f6-eabd-4465-af33-2a41141ab699",
+      1595802
+    ],
+    [
+      "d3948b68-59cc-4d28-9e13-6c909a2e7b8d",
+      29041927
+    ],
+    [
+      "7b7eba7e-4880-476f-a74f-3700274ad80a",
+      2013728
+    ],
+    [
+      "ef6a39e8-2c7c-4f53-a818-072076e42c83",
+      124092
+    ],
+    [
+      "c7db0cd0-4617-4e30-b112-e3e0c2ff559f",
+      20103937
+    ],
+    [
+      "eb439922-31b3-4e0e-8f2a-5e7a7da15cc9",
+      4274470
+    ],
+    [
+      "b80e78b0-ca64-4cdc-b438-3c0babdf51a1",
+      20606990
+    ],
+    [
+      "e3499a87-1b88-4873-a36f-783d62361a01",
+      89356
+    ],
+    [
+      "d2e82847-f6ab-4f2b-b7ad-92d8063076ff",
+      14722849
+    ],
+    [
+      "69ae3bf5-3e62-4dae-bba5-87adeab53fab",
+      5793537
+    ],
+    [
+      "4fd4ca0e-d3a8-4ee8-bcaa-89d71a51fa5f",
+      1373013
+    ]
+  ],
+  "timestamp": "2026-07-11T03:53:15.404790Z",
+  "tokens_used": 22075,
+  "units_analyzed": 8,
+  "units_total": 98
+}

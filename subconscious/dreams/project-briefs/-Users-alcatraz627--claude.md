@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-10T08:38:49.890996+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-11T04:41:56.736908+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-The user's personal Claude configuration repo (`~/.claude`) — rules, hooks, scripts, skills, and memory infrastructure. Work spans many sessions with heavy compaction; continuity tooling (`/catchup`, `/core-dump`) is load-bearing.
+Meta-project: the `~/.claude` configuration repo itself — behavioral rules, skills, hooks, WAL infrastructure, and the i-dream/atone systems. Work here is almost entirely tooling, scripting, and convention maintenance.
 
 ## Things to do (or keep doing)
-- **Checkpoint at milestones**, not just session end — write `/core-dump mini` every ~20 tool calls and before any context-heavy operation; `/catchup` is the primary recovery path after compaction.
-- **Treat terse messages as execution directives** — single words (`ahead`, `next`, `looks`, `done`) mean "continue autonomously at current scope"; never ask clarifying questions on short continuations.
-- **Write WAL entries as JSONL** — the markdown format is legacy; new sessions must append to `wal.jsonl` only.
-- **Prefer TUI/gum tools over markdown tables** for structured terminal output — the project's `~/.claude/scripts/tui/` library exists precisely for this.
+- Write WAL entries as JSONL (never markdown); use `scripts/wal/wal.sh` — the markdown format is deprecated and the catchup tooling expects JSONL
+- Treat terse single-word messages (`ahead`, `next`, `looks`, `done`) as autonomous-continue signals; increase execution depth, never scope
+- Run `/core-dump` at each major milestone, not just session end — `/catchup` is the primary recovery path after compaction
+- Always re-derive push/deploy prohibitions from CLAUDE.md and guard hooks immediately after any context compaction; compaction resets all shared-state authorizations
 
 ## Things to avoid
-- **Never commit or push without fresh per-push explicit approval** — prior approval in a session does NOT carry forward; treat every compaction as a hard reset of all push/deploy authorizations.
-- **Don't thrash on the same failure** — if a fix attempt fails twice, stop and identify root cause before a third attempt.
-- **Never infer or synthesize values not present in source data** — flag any gap as inferred; never hallucinate to fill.
+- Don't commit or push without fresh, explicit per-operation approval — prior session approvals never carry forward, and the guard hooks exist precisely because advisory rules alone failed 5+ times
+- Don't attempt repeated fixes on the same failure without first producing a one-line hypothesis about the root cause; fix-thrash is the dominant failure mode here
+- Don't infer or synthesize data values that aren't traceable to source — flag gaps as unresolved rather than filling them
+- Don't use plain markdown tables for structured terminal output; prefer the project's TUI/gum tools
 
 ## Open questions / known gaps
-- The git-push violation cluster recurred 18+ times despite advisory rules; mechanical gate (`guard-git-push.sh`) was the resolution — verify it's actually active before assuming the rule is enforced.
-- Pattern deduplication in the extraction pipeline produces near-identical entries; downstream analysis should deduplicate by semantic overlap before acting on counts.
+- The pattern-extraction pipeline lacks deduplication — the same WAL migration event appears 4× as separate patterns, suggesting the dream/insight consolidation step needs a semantic-similarity gate before persisting new entries

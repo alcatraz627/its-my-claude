@@ -1,0 +1,23 @@
+{
+  "ts": "2026-06-19T20:12:19Z",
+  "session_id": "guard-sl-7c",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260620-guard-sl-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**File the Anthropic TUI bug report** (task #10). Final draft at `~/.claude/assets/reports/20260618-anthropic-tui-corruption/REPORT.md` \u2014 105 lines, venue-voice-matched, cross-refs to `#68755`, `#46834`, `#68461`, `#60069`, `#29937`, `#68943`. Cached scan findings at `~/.claude/cache/github-issue-scans/anthropics-claude-code/20260619-tui-corruption-search/` (dup_analysis.md + voice_patterns.md are the high-value reads). Recommendation: file new (no exact duplicate), title is the H1 of the report.",
+    "**w3 fires 2026-06-25 15:00 IST** \u2014 `statusline-debug-review-w3` one-shot launchd. Resumes this UUID, reads the directive at `~/.claude/assets/scheduled-prompts/statusline-debug-weekly-directive.md`, scans w3 window for divergence, writes verdict, retires self.",
+    "**w4 fires 2026-07-02 15:00 IST** \u2014 final review. Decides whether to disable `STATUSLINE_WIDTH_DEBUG=1`.",
+    "`STATUSLINE_WIDTH_DEBUG=1` \u2014 log at `~/.claude/logs/statusline-width.log` (3.6 MB / 21,086 entries as of 2026-06-18, will be larger now). Manual disable expected after w4 verdict.",
+    "`STATUSLINE_RATELIMIT_DEBUG=1` \u2014 log at `~/.claude/logs/statusline-ratelimit.log` (new \u2014 capture started today). Useful for characterising within-window lag empirically if the cross-session merge ever can't keep up. No retirement date set; user can disable when they want.",
+    "**claude-instances v1 widget regression** (61% \u2192 57%) is its own bug. The widget reads `.limits.json` but seems to have own cache/logic that can show lower-than-file values. Not investigated this round. User said it's \"fixed too\" after the cross-session propagation landed, but mechanism unclear \u2014 possibly the widget's cache picked up the higher value when `.limits.json` got refreshed.",
+    "**`resets_at` semantics empirical test** \u2014 when `STATUSLINE_RATELIMIT_DEBUG` accumulates a few days, check whether `rate_7d_resets` actually shifts between fetches or stays constant for a window. The v2 fix is defensive (handles both), but knowing the truth would let future fixes be more precise."
+  ],
+  "tags": []
+}

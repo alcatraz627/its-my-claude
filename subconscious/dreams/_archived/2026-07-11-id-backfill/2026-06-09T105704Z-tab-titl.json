@@ -1,0 +1,31 @@
+{
+  "ts": "2026-06-09T10:57:04Z",
+  "session_id": "tab-title-fix",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260609-tab-title-fix.claude.md",
+  "insights": {
+    "worked": [
+      "**What didn't:** ~5 wrong conclusions from stale on-disk snapshots (mtime\u2260live, a 4-day-dead",
+      "**Gotchas:** (a) launchd clean env + `zsh -l -c` skips `.zshrc` \u2192 PATH gaps; use absolute",
+      "**Notes for future agents:** four independent processes can write a terminal title"
+    ],
+    "didnt_work": [
+      "**Gotchas:** (a) launchd clean env + `zsh -l -c` skips `.zshrc` \u2192 PATH gaps; use absolute",
+      "**Notes for future agents:** four independent processes can write a terminal title"
+    ],
+    "gotchas": [
+      "**Notes for future agents:** four independent processes can write a terminal title"
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**(optional) Commit the work** \u2014 `~/.claude` changes are uncommitted: `schedule.sh` ledger,",
+    "**(optional) Badge redesign** \u2014 claude-ipc badge is OFF globally (it was stamping raw",
+    "**(optional) Regenerate existing schedules** \u2014 `todo-sync-review`, `statusline-debug-review-w1..w4`,",
+    "**(optional) Hinter proposal** \u2014 for the stale-snapshot atone: nudge when an assertion verb",
+    "**(known, accepted) Tab-title ~2-turn lag** \u2014 a change (rename/cwd) shows after ~1\u20132 turns",
+    "**(untested) gcc-schedule ledger on a REAL launchd fire** \u2014 only isolated-tested so far; the"
+  ],
+  "tags": []
+}

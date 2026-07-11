@@ -1,16 +1,16 @@
-<!-- i-dream project brief · 2026-07-10T08:39:50.000555+00:00 · 6 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-11T04:41:31.483236+00:00 · 6 patterns / 0 insights -->
 ## What this project is about
-Personal tooling and document-production work under `~/.claude`; sessions mix iterative drafting with autonomous file operations, with strong editorial standards on any customer-facing output.
+Personal developer tooling and dashboard work (`i-dream` insight pipeline, tab-title/status systems, session analytics). Work style is iterative, preference-heavy, and correctness-gated — the user runs the UI and verifies live, not via tests alone.
 
 ## Things to do (or keep doing)
-- Always check `git log --oneline -10` before introducing any new mechanism for storing or retrieving an ID, config value, or module version — the commit may already have settled it
-- Prefer user-facing utility metrics (workflow value, time saved) over hardware/throughput metrics when suggesting augmentations to personal tools
-- Follow the filename-dot-stop rule: always place a word, comma, or space after any file path — never let a sentence period immediately follow a backtick-wrapped path
+- Always navigate to the actual URL and exercise the primary flow before reporting a UI or server change as working; the user treats unexercised claims as critical failures
+- Check `git log` for recent commits before introducing any new mechanism to store or retrieve an ID/config value — reinventing something committed in the same week is an automatic correction
+- Check `git log` for deliberate version decisions before suggesting any version change (upgrade, revert, new dep); a recent revert is a load-bearing choice, not a candidate for re-reverting
 
 ## Things to avoid
-- Don't open PRs or push commits mid-session during iterative draft-and-feedback cycles; PR creation is a terminal act requiring explicit user sign-off, not a continuation step
-- Don't suggest version changes (upgrade, revert, pin) without first scanning recent git history for deliberate version decisions — a recent revert is a hard constraint, not a candidate for re-reverting
-- Don't let AI-register phrasing survive in any customer-facing or professional document — strip openers like "Good news first:", apologies like "That is on us", and leading-question closers before sending
+- Don't place file paths immediately before sentence-terminating periods in replies — Ghostty auto-links paths and a trailing period breaks the link (use a space, comma, or restructure the sentence)
+- Don't default to hardware/throughput metrics when the user asks for workflow-relevant augmentations to a personal tool — ask what utility dimension they actually care about before proposing
+- Don't use AI-register phrasing in any user-facing or professional output: no `Good news first:`, no reflexive apologies, no leading-question closers
 
 ## Open questions / known gaps
-- Iterative sessions frequently leave PRs or pushes queued mid-feedback-loop; no lightweight checkpoint signal exists to distinguish "autonomous continuation" from "terminal shared-state action"
+- Tension between autonomous execution and the user's expectation of live verification — the agent consistently over-claims readiness without running the affected path

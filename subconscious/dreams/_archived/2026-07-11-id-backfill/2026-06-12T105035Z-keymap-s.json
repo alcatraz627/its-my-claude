@@ -1,0 +1,31 @@
+{
+  "ts": "2026-06-12T10:50:35Z",
+  "session_id": "keymap-setup",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260612-keymap-setup.claude.md",
+  "insights": {
+    "worked": [
+      "**Gotcha (migration class):** per-machine macOS keyboard settings (`fnState`, key",
+      "**Gotcha (doctor skill):** chaining a `while \u2026 done < <(process substitution)` block into",
+      "**Karabiner architecture note:** with Karabiner-Elements running, it owns a virtual HID",
+      "**User preference (still live, from 1pc-karab-3b):** terse over verbose; drop \u2605 Insight",
+      "**Stack shape learned:** 1Piece is the window-manager + double-press-modifier + hot-corner"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "**Gotcha (doctor skill):** chaining a `while \u2026 done < <(process substitution)` block into",
+      "**Karabiner architecture note:** with Karabiner-Elements running, it owns a virtual HID",
+      "**User preference (still live, from 1pc-karab-3b):** terse over verbose; drop \u2605 Insight",
+      "**Stack shape learned:** 1Piece is the window-manager + double-press-modifier + hot-corner"
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Offered, not yet accepted** (user must okay): dedupe the two Karabiner numpad keys that",
+    "**Enhancement candidates** (research delivered, not applied): faster key repeat",
+    "**Verify** (one quick test): `keypad_4`/`keypad_6` \u2192 right-mod \u2192 arrow is a two-hop",
+    "**Pre-existing, unrelated:** 69 uncommitted files in `~/.claude` (per COMMIT.md ritual"
+  ],
+  "tags": []
+}

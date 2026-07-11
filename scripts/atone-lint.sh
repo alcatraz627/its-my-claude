@@ -135,9 +135,10 @@ fi
 
 # ── R5  raw-process-env  (WARN) ───────────────────────────────────────────
 # Reading process.env directly instead of the project's config/flag layer.
-# Skip genuine config/env modules where direct reads are expected.
+# Skip genuine config/env/flag modules where direct reads are expected — a
+# flags.ts IS the config layer this rule points everyone else toward.
 case "$path_hint" in
-  *config*|*env*|*.config.*|*settings*) : ;;
+  *config*|*env*|*.config.*|*settings*|*flag*) : ;;
   *)
     if [ "$is_jsts" = "1" ] && printf '%s' "$body" | rg -q 'process\.env\.'; then
       emit warn raw-process-env raw-process-env-instead-of-project-flag \

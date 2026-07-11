@@ -14,21 +14,23 @@ updated: 2026-06-01
 stale_after_days: 365
 ---
 
-# Env-access convention hook (DESIGN — not built)
+# Env-access convention hook
 
 > Generalizes `warn-raw-process-env.sh` into a **run-once-and-cache-meta-code**
 > pattern: the first time any session touches env vars in a project, establish
 > *how this project does env access* (ask the user, persist the answer), then
 > every later access is nudged to follow that one cached convention.
 >
-> **Status:** designed 2026-06-01, **not built.** Replaces a live wired hook —
-> build deliberately, not at the tail of a long session. From the Phase-1
-> hook-graduation work (atone `adding-env-var-reads-without-checking-config`, S3,
-> worsening despite the narrow existing hook).
+> **Status:** BUILT 2026-07-03 as `scripts/hooks/guard-env-access.sh` — advisory
+> (always exits 0), wired PreToolUse on Edit/Write/MultiEdit, mute via
+> `.env-access-off`. It replaced the old `warn-raw-process-env.sh`. The sections
+> below are the built spec; the one deferred piece is the block-after-convention
+> escalation (see Decisions). From the Phase-1 hook-graduation work (atone
+> `adding-env-var-reads-without-checking-config`, S3).
 
-## Why the current hook fails (diagnosed)
+## Why the old hook failed (diagnosed — motivated this generalization)
 
-`warn-raw-process-env.sh` is wired but the pattern keeps worsening because it is:
+`warn-raw-process-env.sh` was wired but the pattern kept worsening because it was:
 1. **Advisory only** (`always exits 0`) — the nudge is ignorable.
 2. **TS/TSX only** — every Python `os.getenv`/`os.environ` slips through.
 3. **A narrow allowlist** — matches only `process.env.(NODE_ENV|NEXT_*|VERCEL_*)`.
@@ -76,17 +78,17 @@ Walk up from `file_path` to the nearest `.git`/`.claude` dir = project root.
 Convention lives at `<root>/.claude/conventions/env-access.md`. Absent → the
 "establish once" nudge; present → the "follow the accessor" nudge.
 
-## Open decisions (resolve at build time)
+## Decisions (resolved at build)
 
-- **Advisory vs block?** The current advisory is ignored → escalate. Likely:
-  advisory when *establishing* (asking the user can't be forced mid-write), but
-  a louder/blocking nudge for raw reads *after* a convention exists (the agent
-  has no excuse then). User leaned toward block for env in the Phase-1 convo.
-- **Replace vs sit alongside `warn-raw-process-env.sh`?** Replace — it's a strict
-  subset. Retire the old one in the same change (don't leave two env hooks).
-- **Convention file schema** — freeform markdown the agent reads, or a structured
-  header the hook can parse to verify the accessor name? Start freeform; the hook
-  only checks *existence* + nudges, doesn't parse.
+- **Advisory vs block?** Shipped **advisory** (always exits 0) — asking the user
+  can't be forced mid-write. **Deferred:** the louder/blocking nudge for raw
+  reads *after* a convention exists (the agent has no excuse then; the user
+  leaned toward block for env in the Phase-1 convo). That escalation is the one
+  unbuilt piece — gate it on nudge-heed telemetry, the way prose-smell shipped.
+- **Replace vs sit alongside `warn-raw-process-env.sh`?** Replaced — it was a
+  strict subset. The old hook is gone; `guard-env-access.sh` is the only env hook.
+- **Convention file schema** — shipped **freeform** markdown the agent reads. The
+  hook only checks *existence* + nudges, it doesn't parse the accessor name.
 
 ## This is one of a family — "process-adherence" hooks
 

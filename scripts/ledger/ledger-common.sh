@@ -39,18 +39,42 @@ ledger_id() {
 
 # ─── append + commit ─────────────────────────────────────────────
 
-# Append one JSONL line to a store, serialized against concurrent writers by a
-# flock on a separate lock file. The lock is best-effort: a missing flock never
-# blocks the write (matches every existing ledger writer). Append works even when
-# the store is kernel-sealed with `chflags uappnd` — that is the whole point of
-# the append-only seal.
+# Append one JSONL line to a store, serialized against concurrent writers.
+#
+# There is NO `flock` on macOS — `command -v flock` fails on this machine — so the
+# original `flock -x 9 2>/dev/null || true` idiom silently degraded to a bare
+# unlocked `>>` in every ledger that used it, and in the seven scripts that
+# copy-pasted it. It read as protected and wasn't. With many concurrent sessions
+# and lines longer than PIPE_BUF (a WAL checkpoint row easily is), that risks a
+# genuinely interleaved, corrupt line — the one failure an append-only ledger
+# cannot tolerate, because there is no rewrite path to repair it.
+#
+# So the lock is a mkdir (atomic on every POSIX filesystem, no external binary),
+# the shape persona-log.sh already used — the only writer on this machine whose
+# locking actually worked. flock is still preferred when present, for the
+# platforms that have it.
+#
+# Still best-effort by design: after ~2s of contention it gives up and writes
+# anyway. A dropped log beats a hung hook, and a hook must never block the agent.
+# Append works even when the store is kernel-sealed with `chflags uappnd` — that
+# is the whole point of the append-only seal.
 #   ledger_append <store-path> <lock-path> <line>
 ledger_append() {
   local store="$1" lock="$2" line="$3"
-  (
-    flock -x 9 2>/dev/null || true
-    printf '%s\n' "$line" >> "$store"
-  ) 9>>"$lock"
+  if command -v flock >/dev/null 2>&1; then
+    ( flock -x 9 2>/dev/null || true; printf '%s\n' "$line" >> "$store"; ) 9>>"$lock"
+    return 0
+  fi
+  local dirlock="${lock}.d" i=0 held=0
+  while ! mkdir "$dirlock" 2>/dev/null; do
+    i=$((i + 1))
+    if [ "$i" -ge 20 ]; then break; fi   # gave up: write unlocked rather than hang
+    sleep 0.1
+  done
+  [ "$i" -lt 20 ] && held=1
+  printf '%s\n' "$line" >> "$store"
+  [ "$held" = 1 ] && rmdir "$dirlock" 2>/dev/null
+  return 0
 }
 
 # Commit a ledger's files to its repo, but only if something actually changed —

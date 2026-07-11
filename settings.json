@@ -40,7 +40,10 @@
       "Bash(touch /Users/alcatraz627/.claude/.render-approve-*)",
       "Bash(touch ~/.claude/.render-approve-*)",
       "Bash(touch ~/.claude/.cli-approve-*)",
-      "Bash(touch /Users/alcatraz627/.claude/.cli-approve-*)"
+      "Bash(touch /Users/alcatraz627/.claude/.cli-approve-*)",
+      "Bash(claude-ipc inbox *)",
+      "Bash(claude-ipc reply *)",
+      "Bash(claude-ipc snooze *)"
     ],
     "deny": [
       "Bash(*rm -rf /*)",
@@ -1101,6 +1104,7 @@
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "verbose": true,
   "preferredNotifChannel": "ghostty",

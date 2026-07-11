@@ -125,13 +125,21 @@ EOF
         ;;
     esac
 
-    # File the proposal via propose.sh
+    # File the proposal via propose.sh.
+    #
+    # The `link:atone:<slug>` tag is load-bearing, not decoration: the backlog
+    # consolidator builds its corroboration graph from `link:*` edges ONLY. The
+    # original tag here was a bare "atone-prevention <target> <slug>" string,
+    # which carried no edge — so every atone-graduated proposal was born
+    # uncorroborated, could never cluster with the gcc-signal-capture auto-stub
+    # naming the SAME slug, and aged out into DROP-REVIEW as "stale, no
+    # corroboration". Keep this in the link:<stream>:<id> shape.
     bash "$HOME/.claude/scripts/propose.sh" add \
       --title "$prop_title" \
       --body "$prop_body" \
       --category "hooks" \
       --effort "small" \
-      --tags "atone-prevention $target $slug" \
+      --tags "link:atone:$slug src:atone-graduation target:$target" \
       --session "atone-consolidate" \
       >/dev/null 2>&1
 

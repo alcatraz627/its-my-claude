@@ -32,7 +32,10 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 INJECTORS=(
   "$HOME/.claude/scripts/session-mgmt/post-compact-reality-check.sh"
   "$HOME/.claude/scripts/dream/dream-insights.sh"
-  "$HOME/.claude/scripts/pending-proposals.sh"
+  # pending-proposals.sh retired (migration 0031). Dream-learned rules used to be
+  # injected here from their own untriaged store, every session, with no path to a
+  # decision. They now file onto the one backlog and surface via backlog-surface.sh
+  # (last in this list) with every other proposal.
   "$HOME/.claude/scripts/dream/dream-metrics-context.sh"
   "$HOME/.claude/scripts/session-mgmt/detect-stale-session.sh"
   "$HOME/.claude/scripts/health-check.sh"

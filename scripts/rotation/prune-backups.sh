@@ -28,6 +28,9 @@ while [ $# -gt 0 ]; do
     -h|--help)
       sed -n '2,16p' "$0"
       exit 0 ;;
+    --*|-?*)
+      echo "prune-backups: unknown flag '$1' (valid: --preview/-n, --apply, --help)" >&2
+      exit 2 ;;
     *) shift ;;
   esac
 done

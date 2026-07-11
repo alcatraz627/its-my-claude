@@ -40,7 +40,7 @@ Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 l
             │
    ════ MUTABILITY BOUNDARY ════════════════════════════════════════
             │
-   RAW (kernel uappnd, git-tracked, snapshot-backed)
+   RAW (kernel uappnd, snapshot-backed; NOT git-tracked — data moves by rsync)
    ├── ~/.claude/atone/events.jsonl      append-only
    ├── ~/.claude/atone/rca/<id>.md       chflags uchg per file
    └── ~/.claude/affirm/events.jsonl     append-only

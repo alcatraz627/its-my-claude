@@ -1,0 +1,33 @@
+{
+  "ts": "2026-06-17T12:37:03Z",
+  "session_id": "transcript-widget-a8",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260617-transcript-widget.claude.md",
+  "insights": {
+    "worked": [
+      "Data-first inversion was the right call: no-truncation, deep search, and cheap incremental live all fell out of one architecture change. Pagination (vs virtualization) made it simpler still \u2014 only ~50 DOM nodes at a time, no `content-visibility` quirks.",
+      "Verifying against the REAL 10 MB file at each step caught the 3\u00d7 token bug and surfaced the duplicate-turn structure. Headless Chrome DOM probes (`--dump-dom` + injected probe writing JSON into a hidden `#probe` div) gave deterministic UI verification; screenshots confirmed pixels."
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "One assistant `message.id` spans MULTIPLE JSONL lines (one per content block: thinking/text/tool_use), with `usage` repeated identically on each \u2014 never sum usage per line.",
+      "Sub-agent transcripts are separate files under `<session>/subagents/`; the parent has `isSidechain:false` and no inline sidechain content in this CC version. Join key is `toolUseId`. Some sessions' metas LACK `toolUseId` (notion-sync: 9 of 13) \u2192 count from the file list, not the join map.",
+      "`content-visibility: auto` renders BLANK in headless single-shot screenshots (no scroll/compositor pass) \u2014 looks broken but isn't; real browsers paint on scroll. This is why I moved off it (plus the user's UX complaint).",
+      "Headless `--dump-dom` ignores `--window-size` (defaults ~800px); pass it to the `--screenshot` invocation, judge full-width by ratio not absolute px."
+    ],
+    "notes": [],
+    "feedback": [
+      "Don't drop existing features during a rewrite \u2014 inventory them as a parity checklist and flag any removal. (ribbon regression)",
+      "Don't implement the literal wording of a request; model its INTENT. \"Highlight\" \u2260 \"replace the fill\"; \"max 20/row\" \u2260 \"cap the width\"; \"improve the pager\" \u2260 \"rearrange the same buttons.\" (cluster-C atone)",
+      "The user wants real debate/depth, not cosmetic motion called improvement."
+    ]
+  },
+  "pending": [
+    "**Phase 5 (task #6, pending):** delete the ~1,450-line legacy HTML generator in `detail.sh` (the heredoc before the `cp`), remove the now-dead 800 KB seek + `messages[-100:]` cap, drop the old `data-search` path, update file header comments, and write a migration note under `~/.claude/migrations/` (structural change to a canonical widget). **HELD until the user confirms the new viewer in a real browser** \u2014 do not delete the legacy path before that.",
+    "**Phase 4 (task #5, pending but largely DONE in code):** sub-agent cards, lazy drill-in (`/data?agent=`), per-turn telemetry, typed events are all implemented in `transcript-app.html`. Remaining/optional: exercise the drill-in click in a live browser; add inter-turn duration + cumulative cost; surface the 9 unlinked sub-agents (count is fixed, but metas without `toolUseId` still can't be drilled into).",
+    "**Deferred from skeptical-review:** `/data` has no mtime cache \u2014 re-parses the full file each poll (~64 ms now, grows with size). 40% perf smell, not correctness. Add a `(path, mtime)`-keyed parse cache if polling cost matters.",
+    "**Search occurrence/mark mismatch** \u2014 guarded (falls back to first mark) but not fully fixed: occurrence count is over raw text, highlights are over rendered markdown DOM. Proper fix = count over post-render text.",
+    "**Restart the live server** so the user can see it (offered, not yet done)."
+  ],
+  "tags": []
+}

@@ -1,0 +1,36 @@
+{
+  "ts": "2026-05-25T13:29:39Z",
+  "session_id": "cred-rgate-b8",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260525-cred-rgate-b8.claude.md",
+  "insights": {
+    "worked": [
+      "**What didn't work:** `atone.sh add --rca-content \"$(cat \u2026)\"` mangles leading whitespace in the argv path and fails the RCA lint; `--rca-file` is the reliable path. Cost two rejected attempts before switching.",
+      "**Gotchas (general \u2192 improvement-ideas):** (1) Disabling a hook needs **two** edits \u2014 the script AND its `settings.json` registration; renaming the script alone is strictly worse than leaving it on (a missing sync command emits `exit 127` every turn). (2) When CWD is `~/.claude`, the project root *is* `~/.claude`; checkpoints write to `~/.claude/_*.claude.md` (gitignored, won't pollute the cleaned repo). (3) The `protect-atone-raw.sh` PreToolUse hook pattern-matches any Bash command string containing raw atone paths \u2014 even read-only ones can trip it; scope commands narrowly.",
+      "**User feedback / preferences:** A \"too aggressive / too noisy\" complaint means **tune down, not turn off** \u2014 a request is a ceiling. \"I generally trust claude\" is reassurance, not a removal mandate. The user values honesty about non-involvement (declined the false API-key self-atone explicitly: \"Thanks for this honesty, appreciate\"). Secrets are scanned before every push (the `bulk-sync-without-secret-scan` lesson is live).",
+      "**Notes for future agents:** review-gate-stop is now ON in its softened form (concrete-risk only: recurring block-smell or new exported API; step-aside after one block; never volume). Mutes: `.no-review-gate` (Gate 1), `.no-review-required` (Gate 2). The Anthropic-credential guard is mechanical (`guard-anthropic-credentials.sh`, PreToolUse) \u2014 never try to set/rotate the key; hand it to the user."
+    ],
+    "didnt_work": [
+      "**Gotchas (general \u2192 improvement-ideas):** (1) Disabling a hook needs **two** edits \u2014 the script AND its `settings.json` registration; renaming the script alone is strictly worse than leaving it on (a missing sync command emits `exit 127` every turn). (2) When CWD is `~/.claude`, the project root *is* `~/.claude`; checkpoints write to `~/.claude/_*.claude.md` (gitignored, won't pollute the cleaned repo). (3) The `protect-atone-raw.sh` PreToolUse hook pattern-matches any Bash command string containing raw atone paths \u2014 even read-only ones can trip it; scope commands narrowly.",
+      "**User feedback / preferences:** A \"too aggressive / too noisy\" complaint means **tune down, not turn off** \u2014 a request is a ceiling. \"I generally trust claude\" is reassurance, not a removal mandate. The user values honesty about non-involvement (declined the false API-key self-atone explicitly: \"Thanks for this honesty, appreciate\"). Secrets are scanned before every push (the `bulk-sync-without-secret-scan` lesson is live).",
+      "**Notes for future agents:** review-gate-stop is now ON in its softened form (concrete-risk only: recurring block-smell or new exported API; step-aside after one block; never volume). Mutes: `.no-review-gate` (Gate 1), `.no-review-required` (Gate 2). The Anthropic-credential guard is mechanical (`guard-anthropic-credentials.sh`, PreToolUse) \u2014 never try to set/rotate the key; hand it to the user."
+    ],
+    "gotchas": [
+      "**User feedback / preferences:** A \"too aggressive / too noisy\" complaint means **tune down, not turn off** \u2014 a request is a ceiling. \"I generally trust claude\" is reassurance, not a removal mandate. The user values honesty about non-involvement (declined the false API-key self-atone explicitly: \"Thanks for this honesty, appreciate\"). Secrets are scanned before every push (the `bulk-sync-without-secret-scan` lesson is live).",
+      "**Notes for future agents:** review-gate-stop is now ON in its softened form (concrete-risk only: recurring block-smell or new exported API; step-aside after one block; never volume). Mutes: `.no-review-gate` (Gate 1), `.no-review-required` (Gate 2). The Anthropic-credential guard is mechanical (`guard-anthropic-credentials.sh`, PreToolUse) \u2014 never try to set/rotate the key; hand it to the user."
+    ],
+    "notes": [],
+    "feedback": [
+      "**Notes for future agents:** review-gate-stop is now ON in its softened form (concrete-risk only: recurring block-smell or new exported API; step-aside after one block; never volume). Mutes: `.no-review-gate` (Gate 1), `.no-review-required` (Gate 2). The Anthropic-credential guard is mechanical (`guard-anthropic-credentials.sh`, PreToolUse) \u2014 never try to set/rotate the key; hand it to the user."
+    ]
+  },
+  "pending": [
+    "**None blocking.** All requested work is complete and pushed.",
+    "(User-side, new machine) Pull the three repos; `~/.claude` lives as `its-my-claude` checked out in place.",
+    "(User-side) `its-my-config` (shell/git/ssh dotfiles) is a *separate* repo with its own `sync.sh` \u2014 not touched this session; sync it on the new machine.",
+    "(Deferred, not for this machine) `config-sync` LaunchAgent remains unloaded (user declined `launchctl load`).",
+    "(Background, self-healing) Two daemon-churn files stay dirty each turn (`subconscious/metacog/activity.jsonl`, atone `.session-state/*.refresh-turn`) \u2014 expected, reconciled by daemon/next pull.",
+    "(Open proposal) `prop-20260525-132203-b4` \u2014 fix or document the atone `--rca-content` argv indentation bug."
+  ],
+  "tags": []
+}

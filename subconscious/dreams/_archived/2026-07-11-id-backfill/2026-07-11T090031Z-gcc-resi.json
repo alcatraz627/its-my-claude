@@ -1,0 +1,22 @@
+{
+  "ts": "2026-07-11T09:00:31Z",
+  "session_id": "gcc-residue-sync",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260711-gcc-residue-sync.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: rescope the 3 tier-1 pins `ports.sh pin 3003|3006|8001 <name> --cwd <app-root>` (carried from port-discipline).",
+    "USER/AGENT: commit the 2 dirty doc edits (`features/env-access-convention-hook.md`, `improvement-ideas.md`) \u2014 the bi-weekly `repo-sync` will catch them, or push sooner.",
+    "OPTIONAL BUILD: env-access **block-after-convention** escalation (advisory \u2192 block once a project has an `env-access.md`), telemetry-gated like prose-smell.",
+    "OPTIONAL FIX: `warn-log.sh:70` allowlist to accept the `block-dry` action label (prose-smell would-block fires currently log with no action field). Filed as a proposal this dump.",
+    "Carried (may be stale): backlog-triage paste at localhost:5197; i-dream ~20 + data-forge \u00d75 unpushed.",
+    "Scheduled (unchanged): 2026-07-21 15:00 opus port-system review."
+  ],
+  "tags": []
+}

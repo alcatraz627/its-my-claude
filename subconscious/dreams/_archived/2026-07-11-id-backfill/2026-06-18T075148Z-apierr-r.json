@@ -1,0 +1,27 @@
+{
+  "ts": "2026-06-18T07:51:48Z",
+  "session_id": "apierr-recover-5f",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260618-apierr-recover-5f.claude.md",
+  "insights": {
+    "worked": [
+      "**Self-caught `structural-claim-without-reading-code`:** the reviewer flagged I'd",
+      "**User corrections honored:** retracted the claude-resilient alias recommendation on",
+      "**Gotcha for future agents:** a logged synthetic `API Error` means Claude Code's",
+      "**Key artifacts:** `assets/reports/20260618-api-error-48h-analysis/findings.md`,"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "**Key artifacts:** `assets/reports/20260618-api-error-48h-analysis/findings.md`,"
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "None blocking \u2014 all session tasks completed.",
+    "Optional: verify `api-recovery-nudge.sh` fires in a *fresh* live session",
+    "Optional: report recommendation #3 (does a Claude Code env knob raise the internal",
+    "Optional: bump `its-my-config` aggregate pointer (`~/Code/Claude/its-my-config/sync.sh`)"
+  ],
+  "tags": []
+}

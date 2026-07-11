@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-10T08:37:59Z",
-  "events_analyzed": 88593,
-  "sessions_analyzed": 247,
+  "generated_at": "2026-07-11T08:29:27Z",
+  "events_analyzed": 91396,
+  "sessions_analyzed": 253,
   "session_quality": {
-    "average_score": 68.4,
+    "average_score": 68.5,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,55 +170,57 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": "tmp",
+    "primary_focus": "versable-builder",
     "recent_projects": {
+      "tmp": 1,
+      "Pictures": 1,
+      "data-forge": 1,
+      "versable-builder": 2,
+      "local-models": 1,
       ".claude": 2,
-      "versable-builder": 1,
-      "two-enhancement-product": 2,
-      "tmp": 3,
       "i-dream": 1,
-      "staging-enhancement-product": 1
+      "two-enhancement-product": 1
     },
-    "drift_rate": 0.739,
-    "total_switches": 181,
+    "drift_rate": 0.741,
+    "total_switches": 186,
     "recent_switches": [
       {
-        "ts": "2026-07-09T20:16:30Z",
+        "ts": "2026-07-10T14:44:07Z",
+        "from": "local-models",
+        "to": ".claude"
+      },
+      {
+        "ts": "2026-07-10T14:55:52Z",
         "from": ".claude",
-        "to": "two-enhancement-product"
-      },
-      {
-        "ts": "2026-07-09T21:15:06Z",
-        "from": "two-enhancement-product",
-        "to": "tmp"
-      },
-      {
-        "ts": "2026-07-09T21:35:11Z",
-        "from": "tmp",
         "to": "i-dream"
       },
       {
-        "ts": "2026-07-10T08:27:00Z",
+        "ts": "2026-07-10T14:59:26Z",
         "from": "i-dream",
-        "to": "tmp"
+        "to": ".claude"
       },
       {
-        "ts": "2026-07-10T08:28:07Z",
-        "from": "tmp",
-        "to": "staging-enhancement-product"
+        "ts": "2026-07-10T15:58:49Z",
+        "from": ".claude",
+        "to": "versable-builder"
+      },
+      {
+        "ts": "2026-07-10T17:22:39Z",
+        "from": "versable-builder",
+        "to": "two-enhancement-product"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 7114,
-    "corrections": 1542,
-    "confirmations": 1268,
-    "directives": 247,
-    "terse_messages": 559,
-    "correction_rate": 0.217,
-    "confirmation_rate": 0.178,
-    "directive_rate": 0.035,
-    "terse_rate": 0.079,
+    "total_prompts": 7257,
+    "corrections": 1571,
+    "confirmations": 1286,
+    "directives": 249,
+    "terse_messages": 562,
+    "correction_rate": 0.216,
+    "confirmation_rate": 0.177,
+    "directive_rate": 0.034,
+    "terse_rate": 0.077,
     "style_label": "corrective"
   }
 }

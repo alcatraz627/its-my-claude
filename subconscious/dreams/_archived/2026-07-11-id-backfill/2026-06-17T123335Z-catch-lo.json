@@ -1,0 +1,34 @@
+{
+  "ts": "2026-06-17T12:33:35Z",
+  "session_id": "catch-local-7f",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260617-catch-local-7f.claude.md",
+  "insights": {
+    "worked": [
+      "**Load-bearing gotchas (carry forward):**",
+      "Ollama `keep_alive` is **last-writer-wins per request** \u2014 every API caller needs the",
+      "`awk -v var=` C-escape-mangles JSON \u2014 never pass JSON through it (use file surgery / jq).",
+      "GUI hosts SIGTERM the process they spawn \u2192 `exec` the real process + `trap` the bash phase.",
+      "**Heredocs AND `cat |` pipes through the harness whitespace/control-char-mangle** (hit ~4\u00d7:",
+      "cli-gating approval nonce = sha256 of the EXACT command string (regenerates each fire).",
+      "The sandbox routes **pty stdout through `glow`** \u2014 can't cleanly verify TTY-gated stderr output",
+      "Model match patterns must use `name == X or startswith(X + \":\")` (handles `:latest`), not bare",
+      "This Mac is **bandwidth-bound (307 GB/s, half of M5 Max)** \u2192 MoE (small active set) >> dense.",
+      "**User constraints (stable):** local capability must be \u2265~90% of Opus (85% floor) or not worth it;",
+      "**Architecture now:** q stays the thin snappy companion; q/imagine JSONL histories + `q-spec \u00a7API`"
+    ],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Stray `glow` file** \u2014 untracked (accidental `lm > glow` capture from a pre-session shell",
+    "**Unrecorded atone from another session** (failed `atone.sh add`, 2026-06-12) \u2014 that session's to",
+    "**GOALS.md item-8 hygiene crumbs** (small): `WARM_KEEP_ALIVE` not env-overridable; `--strength`",
+    "**June 24 Tue 3PM calendar review** \u2014 imagegen \u00a78 upgrades (Task 13: ideogram4/z-image-turbo",
+    "**q `--web`** (deferred, needs search-backend decision); imagine ControlNet \"minecraft you\".",
+    "**Better-file-browser** native host (theirs); may send follow-up IPC."
+  ],
+  "tags": []
+}

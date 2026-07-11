@@ -26,7 +26,7 @@ The goal is to externalize the learning so future agents (including yourself aft
 
 ## How `/atone` writes the event
 
-`~/.claude/atone/events.jsonl` is **append-only**, kernel-locked (`chflags uappnd`), and git-tracked. Each event is one JSON line:
+`~/.claude/atone/events.jsonl` is **append-only**, kernel-locked (`chflags uappnd`), and snapshot-backed. It is deliberately **not** git-tracked: `.gitignore` runs an allowlist model (ignore everything, un-ignore only the config/code layer), so data ledgers travel by rsync per `mac-migration/MANIFEST.md` §6 rather than in the repo. Each event is one JSON line:
 
 ```json
 {"id": "mist-YYYYMMDD-HHMMSS-NN", "slug": "kebab-case-pattern",

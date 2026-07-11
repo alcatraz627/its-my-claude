@@ -1,0 +1,37 @@
+{
+  "ts": "2026-06-17T19:33:15Z",
+  "session_id": "fable-eulogy",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260618-fable-eulogy.claude.md",
+  "insights": {
+    "worked": [
+      "**Fresh-context `/skeptical-review` earned its keep 3\u00d7** \u2014 caught my own analysis over-reach (flattening nuance the sub-files preserved \u2014 the *exact* bias the audit was about) and 5 concrete script bugs incl. `cost-estimate.sh`-can-never-exit-0 (would've silently broken every magi finalize).",
+      "**Artifact-grounded skeptical method**: cross-checking each run's *self-report* against its on-disk artifacts (CONFIRMED/UNVERIFIABLE/CONTRADICTED) + putting the burden of proof on the labor-saving deviation. This is what surfaced \"voting skipped 4/4\" and \"convergence manufactured.\"",
+      "**Enforcement-at-the-data-write** is the session's through-line: every gate (declared-ready hook, conformance gate riding `cost-estimate.sh`, init-archive `--params`) binds where advisory SKILL/spec prose did NOT (`rules/skill-spec-update-not-honored`).",
+      "Sub-agent fan-out for transcript mining + per-archive audits (all disk-persisted per `rules/sub-agent-outputs.md`)."
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "My **own `guard-rg-replace-bundle.sh` blocks legit `rg -r '$1'`** (capture-group replacement) in debug commands, AND trips on heredocs whose body contains `rg -r`. Workaround: build the test script with the **Write tool** then `bash file` (the command string `bash /tmp/x.sh` has no `rg -r`), or use `--replace`.",
+      "**Guard mute-files are session-transient and linger**: a sub-agent dropped `~/.claude/.no-dup-symbol-guard`, which silently disabled the dup-symbol guard for my whole test run \u2014 the exact \"muted guard stops working\" failure the better-file-browser audit flagged. Check `~/.claude/.no-*` mutes when a guard seems inert.",
+      "**zsh does NOT word-split unquoted `$VAR`** (unlike bash) \u2014 broke a `for f in $LIST` diffstat loop; quote or use arrays."
+    ],
+    "notes": [
+      "`assets/` is **gitignored** in this repo \u2192 all the reports (efficacy study, magi audits, redesign, skeptical-reviews) are **local-only**, never pushed. The committed surface is canon (rules/hooks/conventions/migrations/SKILL/settings).",
+      "Committing `~/.claude` follows `COMMIT.md` (NOT a normal repo): lock \u2192 secret-scan-before-add \u2192 fetch/rebase \u2192 commit \u2192 push \u2192 release. **Push to main needs fresh explicit approval every time.**",
+      "The two magi gates mirror the audit's two layers: **0020 conformance** catches the *symptom* (skipped vote) at finalize; **0021 setup-independence** catches the *cause* (echo-prone setup) pre-dispatch."
+    ],
+    "feedback": [
+      "Pushed me to **\"go deeper than surface guards\"** on magi \u2014 which produced the real root cause (manufactured convergence), not just the voting-skip symptom.",
+      "\"Make CLAUDE.md/related updates **ONLY IF STRICTLY NEEDED**\" \u2014 I verified nothing was (made 1 accuracy fix to a stale doc). Keep always-load lean.",
+      "Strong on review-before-ship: \"Review, commit, and push\" \u2014 wants the skeptical pass before commits land."
+    ]
+  },
+  "pending": [
+    "**Validate the magi gates on a REAL `/magi` run** \u2014 isolation-tested only; the live dispatch\u2192setup-check\u2192voters\u2192finalize chain is unexercised (billed, so not triggered here). First real run will demand `voter_evidence` slices + gate on voting.",
+    "**Un-built (scoped, deferred):** the **finalize-backstop** \u2014 warn the user when a *shipped* magi result is echo-tainted (setup-check post-hoc at finalize).",
+    "**Un-built:** the D5 `>X%`-overlap metric \u2014 needs the `voter_evidence` manifest (now introduced); tighten on first real run.",
+    "**Deferred from the efficacy report** (filed, not built): mode-gated construction-prime hinter (JIT verify pressure); prune the 26 `rules/*.md` (de-dilution). Both are judgment/risk-heavy next increments."
+  ],
+  "tags": []
+}

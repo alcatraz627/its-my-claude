@@ -1,0 +1,27 @@
+{
+  "ts": "2026-05-21T12:39:28Z",
+  "session_id": "atone-guards-c5",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260521-atone-guards-c5.claude.md",
+  "insights": {
+    "worked": [
+      "**The recurring lesson (now atoned S3):** I asserted \"the daemon consumes the queue\" in a handoff without reading the consumer (the daemon source isn't even on this machine). schema-parity \u2260 consumption-proof. Verified the cheap claim, asserted the load-bearing one. Caught by the i-dream agent, not by me or my own review (which grounds _code_, not _cross-system architectural premises_ \u2014 a real boundary of the review system). Precheck recorded: before writing \"X consumes/reads/produces Y\", grep for the actual reader; if absent, mark UNVERIFIED, never assert.",
+      "**\"Fix the class, not the named instances\":** review pass 1 named 3 leaking builders; I fixed those 3, pass 2 found a 4th (`build-proposals.sh`). Grep the whole class.",
+      "**Reviewer safety gap (fixed):** the skeptical-review agent mutated a live store (`guidance.sh add` against the real notes file) while testing. Skill now mandates read-only + /tmp-copy testing. No real data lost (file had no real directives yet).",
+      "**User preferences reaffirmed:** wants real teeth not theater; prose mistakes can stay forensic, code mistakes are the priority; terse/qualitative comments; a neutral guidance channel read by the agent AND all homework-checkers; records atone to prevent recurrence.",
+      "**Gotcha:** the Bash tool render corrupts the string \"ingest-queue\" \u2192 \"ln\" in some grep output \u2014 trust Read/ls over grep for that path. bash 3.2 chokes on heredoc-inside-`$()`; use Python subprocess list-args for quote-heavy CLI calls."
+    ],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**i-dream side (handoff, not mine):** severity\u2194confidence calibration (the one genuinely-new joint piece); de-dup atone across the two surfaces (`_tldr` staple + plugin associations). Full handoff in `assets/reports/20260521-atone-dream-bridge/report.md` \u00a73 (report carries a RETIRED correction banner).",
+    "**OPTIONAL:** dispatch-ownership proposal `prop-20260517-172942-05` (juror dispatch via `claude -p`) \u2014 pre-existing, untouched.",
+    "**OPTIONAL:** prune synthetic-slug proposals already in `proposals.jsonl` (test-filter only stops new ones).",
+    "**OPTIONAL:** extend `atone-lint.sh` as new code-smells recur.",
+    "**NONE blocking.** All guards live; all 4 mute files absent (system armed)."
+  ],
+  "tags": []
+}

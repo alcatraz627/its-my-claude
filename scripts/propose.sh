@@ -241,10 +241,13 @@ cmd_reject() {
   local id="${1:-}"
   shift || true
   local reason=""
+  # Reason is positional (matching cmd_done and the documented usage);
+  # --reason kept for back-compat. Unknown --flags still refuse loudly.
   while [ $# -gt 0 ]; do
     case "$1" in
       --reason) reason="$2"; shift 2 ;;
-      *)        echo "propose reject: unknown flag: $1" >&2; exit 2 ;;
+      --*)      echo "propose reject: unknown flag: $1" >&2; exit 2 ;;
+      *)        reason="$1"; shift ;;
     esac
   done
   mutate_status "rejected" "$id" "$reason"

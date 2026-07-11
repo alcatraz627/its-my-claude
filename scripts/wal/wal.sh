@@ -17,7 +17,10 @@
 # Environment:
 #   WAL_FILE     — path to target file (default: ./.claude/wal.jsonl or $HOME/.claude/wal.jsonl if ~/.claude is CWD)
 #
-# Exits 0 always; failure is silent so this never blocks an agent.
+# Exits 0 on write-path failures (silent, never blocks an agent). Malformed
+# calls are the exception: unknown kinds and blob-in-session_id checkpoints
+# exit non-zero with usage, because a silently-empty checkpoint is worse for
+# the caller than a loud error (/catchup's fast path depends on the fields).
 
 set -uo pipefail
 
@@ -80,6 +83,18 @@ case "$KIND" in
     ;;
   checkpoint)
     SID="${1:-}"; GOAL="${2:-}"; DONE="${3:-}"; CUR="${4:-}"; NEXT="${5:-}"; BLK="${6:-}"; LEARN="${7:-}"
+    # A summary blob passed as the only arg lands in session_id and writes an
+    # empty checkpoint the /catchup fast path can't use. Refuse and show the
+    # corrected call instead of recording garbage.
+    BAD=""
+    [ -z "$GOAL" ] && BAD="needs at least <session_id> and <goal>"
+    [ ${#SID} -gt 64 ] && BAD="session_id is ${#SID} chars — that's a summary blob, not an id"
+    case "$SID" in *[[:space:]]*) BAD="session_id ('${SID:0:40}...') contains spaces — prose belongs in goal/done/current/next" ;; esac
+    if [ -n "$BAD" ]; then
+      echo "wal.sh checkpoint: $BAD" >&2
+      echo "usage: wal.sh checkpoint <session_id> \"<goal>\" \"<done|pipe|list>\" \"<current>\" \"<next>\" \"<blockers|list>\" \"<learnings|list>\"" >&2
+      exit 2
+    fi
     DONE_JSON=$(split_json_array "$DONE")
     BLK_JSON=$(split_json_array "$BLK")
     LEARN_JSON=$(split_json_array "$LEARN")

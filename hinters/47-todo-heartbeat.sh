@@ -31,10 +31,26 @@ state="$recent"
 turns=$(jq -r '.turns_since_change // 0' "$state" 2>/dev/null || echo 0)
 edits=$(jq -r '.edits_since_change // 0' "$state" 2>/dev/null || echo 0)
 
-# Fire once the list has lagged a couple of working turns. Much sooner than the
-# Stop-block's hard threshold (8/5) — this is the frequent soft layer.
-[ "${turns:-0}" -ge 2 ] && [ "${edits:-0}" -ge 2 ] || exit 0
+# Give-up cap. Two unheeded nudges per drift episode is the ceiling: past that,
+# either the Stop-block layer owns it, or this harness has no Task tool at all
+# and the agent literally cannot comply (it happened ~10x/session before this).
+# The cap re-arms whenever the list actually changes, so well-tooled sessions
+# keep the full heartbeat.
+sid8=$(basename "$state" | sed -e 's/^\.sync-//' -e 's/\.json$//' | cut -c1-8)
+FIRES="/tmp/claude-heartbeat-fires-${sid8}"
 
-printf '{"ts":"%s","sid":"-","event":"nudge:heartbeat turns=%s"}\n' \
-  "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$turns" >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
-printf '[task-sync] Task list unchanged for %s turns while work continued — if the focus has moved, reconcile it now (TaskCreate/TaskUpdate); it auto-syncs to your notes + memory. Keeping it current silences this.\n' "$turns"
+if [ "${turns:-0}" -lt 2 ] || [ "${edits:-0}" -lt 2 ]; then
+  [ -f "$FIRES" ] && echo 0 > "$FIRES" 2>/dev/null
+  exit 0
+fi
+
+count=$(cat "$FIRES" 2>/dev/null || echo 0)
+case "$count" in *[!0-9]*|"") count=0 ;; esac
+[ "$count" -ge 2 ] && exit 0
+echo $((count + 1)) > "$FIRES" 2>/dev/null || true
+final=""
+[ $((count + 1)) -ge 2 ] && final=" (Going quiet on this now — if this harness has no Task tool, keep todos in the session workspace doc instead.)"
+
+printf '{"ts":"%s","sid":"-","event":"nudge:heartbeat turns=%s fire=%s"}\n' \
+  "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$turns" "$((count + 1))" >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
+printf '[task-sync] Task list unchanged for %s turns while work continued — if the focus has moved, reconcile it now (TaskCreate/TaskUpdate); it auto-syncs to your notes + memory. Keeping it current silences this.%s\n' "$turns" "$final"

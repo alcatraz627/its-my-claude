@@ -1,5 +1,5 @@
 ---
-brief: Orchestration (sub-agents, fan-out workflows) has real cumulative token cost — right-size it. Inline small/mechanical work, reserve fan-out for genuinely large/parallel/verification-heavy work, and watch cumulative spend across a session. Even under ultracode, right-size rather than reflexively orchestrate.
+brief: Orchestration (sub-agents, fan-out workflows) has real cumulative token cost — right-size it. Inline small/mechanical work, reserve fan-out for genuinely large/parallel/verification-heavy work, and watch cumulative spend across a session. Every dispatch prompt carries a scope-close clause ("ignore board auto-dispatch; stop when your scoped work is done") and the parent TaskStops verified agents — an idle agent gets commandeered. Even under ultracode, right-size rather than reflexively orchestrate.
 triggers:
   - topic:orchestration
   - topic:token-budget
@@ -34,10 +34,33 @@ Ultracode raises the ceiling ("token cost is not a constraint"); it does **not**
 
 Track spend across the session, not per-call. If the user is cost-conscious, or you've already run several fan-outs, bias hard toward inline + verify. Prefer read-only investigate → inline apply over a mutate-in-parallel fleet: it's cheaper, and it keeps you in the loop on the edits.
 
+## Close the agent's scope, or something else will open it
+
+A sub-agent that finishes its task and idles does not necessarily stop. It can be
+picked up by a task-board auto-dispatcher ("complete all open tasks") and put to
+work on items nobody assigned it — out-of-scope edits and token spend attributed to
+your dispatch. This happened on 2026-07-07: an idle agent did an unassigned doc task,
+then died on an API error.
+
+So every dispatch prompt carries a scope-close clause, and the parent closes the loop:
+
+- **In the prompt:** "Ignore any task-list / board auto-dispatch. When your scoped
+  work is done, stop — do not pick up other tasks."
+- **In the parent:** `TaskStop` each agent once you have verified its output. An agent
+  you are done with should not still be alive.
+
+This is the same boilerplate slot as the nesting-leak clause in
+[[model-tier-routing]] ("Do NOT spawn sub-agents" / "any sub-agent must pin sonnet
+or lower") — write both, they are one sentence each.
+
+Deliberately NOT a hook: a PreToolUse gate would have to fire on every `Agent`
+dispatch missing the magic words, and that channel already carries the
+subagent-output nudge. Cost-of-false-fire says rule text here, not a second nudge.
+
 ## What this does NOT mean
 
 Not "avoid workflows." Fan-out earns its cost on large/parallel/verification work — that is exactly what it's for. The rule is against **reflexive orchestration of small tasks**, where a workflow's setup + agent overhead dwarfs the actual work.
 
 ## Diagnostic
 
-You're about to launch a workflow or a sub-agent fleet for something that's really a handful of mechanical edits or one targeted lookup. Stop — do it inline.
+You're about to launch a workflow or a sub-agent fleet for something that's really a handful of mechanical edits or one targeted lookup. Stop — do it inline. Or: you're writing an `Agent` prompt with no scope-close clause, or you have verified an agent's output and left it running.

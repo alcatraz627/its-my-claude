@@ -1,0 +1,19 @@
+{
+  "ts": "2026-06-18T06:24:42Z",
+  "session_id": "catch-proj-3f",
+  "project_root": "/Users/alcatraz627/Code/better-file-browser",
+  "checkpoint_path": "/Users/alcatraz627/Code/better-file-browser/.claude/_20260618-catch-proj-3f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Task #21 (the only real backlog item):** apply the Fable-run audit findings to `~/.claude` \u2014 NONE applied yet. Highest-leverage: fix `scripts/hooks/guard-duplicate-symbol.sh` to ignore build artifacts (it false-positived on `content.js` ~12\u00d7 this session); block the decorative-banner subset in `guard-comment-hygiene.sh`; new `rules/cache-externally-mutated-state.md`; `testing.md` amendments (screenshot read-back, probe-before-fix); `features/cross-agent-spec-protocol.md`. Full verdicts in the audit doc Part 3.",
+    "Highlighter S2.3 **P3/P4 deferred** (regex literals + type/fn accents; more languages) \u2014 optional, needs a direction.",
+    "**e2e harness is broken**: `/tmp/bfb-e2e` puppeteer is out of sync with Chrome-for-Testing 149 (\"Requesting main frame too early\" at launch). Image-dimensions (v2.7.1) shipped **without browser verification** as a result \u2014 worth a visual confirm + pinning a compatible puppeteer before future UI work."
+  ],
+  "tags": []
+}

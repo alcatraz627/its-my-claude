@@ -15,14 +15,20 @@
 #     ~/.claude/protected-repos.list, or a tracked .claude/require-user-commit marker).
 # Feature-branch pushes in unprotected repos pass freely — no friction on normal work.
 #
-# APPROVAL is a single-use, session-scoped sentinel the USER creates:
-#   ~/.claude/.push-approved-<session_id>
+# APPROVAL has two user-owned channels, both single-use per push:
+#   1. Native macOS dialog (GUI sessions): the gate pops an osascript modal
+#      (Cancel default, 30s timeout = cancel) that only the human at the screen
+#      can click — it works even under skip-permissions where the harness
+#      ask-path is inert. A decline is remembered per session so retries don't
+#      re-pop the modal.
+#   2. Sentinel fallback (headless/SSH/declined): ~/.claude/.push-approved-<session_id>
 # The block message prints the exact command. It MUST be run by the user with the
 # `! ` prefix (which runs in the user's own shell and bypasses PreToolUse hooks) —
 # NOT by the agent. The gate consumes (deletes) the sentinel on the allowed push,
 # so every gated push needs a fresh approval. That single-use property is also what
 # makes it survive compaction correctly: a stale approval can authorise at most one
-# push, never a blanket session.
+# push, never a blanket session. (Dialogs are single-use by construction — each
+# push re-enters the hook.)
 #
 # DELIBERATE DEVIATION (mirrors guard-user-commit): NO self-liftable mute file. A
 # `touch ~/.claude/.no-*-gate` a would let the very agent this gate exists to stop
@@ -123,11 +129,42 @@ fi
 
 [ "$gated" = 1 ] || exit 0   # feature-branch push in an unprotected repo → allow
 
-# ── Gated: consume a valid approval, or block ────────────────────────────────
+# ── Gated: consume a valid approval, or ask via native dialog, or block ──────
 if [ -f "$SENTINEL" ]; then
   rm -f "$SENTINEL"   # single-use: this approval authorises exactly one push
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action allow-approved --heeded yes >/dev/null 2>&1 || true
   exit 0
+fi
+
+# Native GUI approval (prop-20260706-070113-7d): a macOS modal only the USER can
+# click — works even where the harness ask-path is inert (skip-permissions).
+# Cancel is the default; a 30s timeout counts as cancel; an explicit decline is
+# remembered for this session so retried pushes go straight to the sentinel
+# block instead of re-popping the modal. Headless / no GUI / no Automation
+# permission → osascript fails → the sentinel path below, unchanged. The
+# PUSHGATE_NO_DIALOG=1 escape only picks the sentinel CHANNEL; it never lifts
+# the gate. Approval stays single-use by construction: every push re-enters
+# this hook and pops a fresh dialog.
+DECLINED="/tmp/claude-pushgate-dialog-declined-${sid_safe}"
+if [ ! -f "$DECLINED" ] && [ "${PUSHGATE_NO_DIALOG:-0}" != "1" ]; then
+  safe_why=$(printf '%s' "$why" | tr -cd 'A-Za-z0-9 ._/:@()~-' | cut -c1-120)
+  safe_repo=$(printf '%s' "$target" | tr -cd 'A-Za-z0-9 ._/:@()~-' | cut -c1-80)
+  dlg=$(osascript -e "display dialog \"Claude Code wants to run: git push
+
+Repo: ${safe_repo}
+Gate: ${safe_why}
+
+Approve this ONE push? (Cancel is safe - the agent cannot click this.)\" with title \"Claude push gate\" buttons {\"Cancel\", \"Approve this push\"} default button \"Cancel\" cancel button \"Cancel\" giving up after 30 with icon caution" 2>&1)
+  case "$dlg" in
+    *"gave up:true"*)
+      : > "$DECLINED" 2>/dev/null || true ;;                 # timeout = decline
+    *"Approve this push"*)
+      bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action allow-approved --heeded yes --detail "dialog" >/dev/null 2>&1 || true
+      exit 0 ;;
+    *-128*|*[Cc]anceled*)
+      : > "$DECLINED" 2>/dev/null || true ;;                 # explicit cancel
+    *) : ;;                                                   # no GUI → sentinel path
+  esac
 fi
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action block --heeded unknown >/dev/null 2>&1 || true

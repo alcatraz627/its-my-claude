@@ -1,0 +1,19 @@
+{
+  "ts": "2026-06-24T21:45:57Z",
+  "session_id": "tmp-jail-gate",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260625-tmp-jail.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Live-verify in a fresh session:** `tmp-jail on` \u2192 attempt a write outside `/tmp` (expect block) \u2192 `tmp-jail off <session_id>`. The 31/31 tests prove the hook LOGIC; the live PreToolUse integration is confirmed-by-design (registered like the other 27 working hooks) but not exercised in a real session yet.",
+    "**Optional:** gate interpreter-eval (`python -c` / `node -e` / `perl -e` carrying write hints) while jailed \u2014 closes the one remaining common escape vector. Offered; user hasn't decided.",
+    "Orphan markers under `run/tmpjail/` only accumulate on a hard crash (SessionEnd didn't fire); harmless (keyed to dead session_ids)."
+  ],
+  "tags": []
+}

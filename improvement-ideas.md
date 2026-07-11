@@ -4,6 +4,20 @@ Broadly applicable insights from sessions — not project-specific.
 
 ---
 
+## 2026-07-11 (session jegs-cleanup-d3)
+
+- **fiber-snatcher `navigate` to a reloading URL closes the daemon's browser page context.** After a nav that triggers a full reload, the next `eval`/`shoot` may fail with `E_EVAL_FAILED: Target page, context or browser has been closed`. Recover with `fiber-snatcher stop` then `fiber-snatcher start <url>` (re-auths from `.fiber-snatcher/config.json`), then re-drive. Don't keep retrying evals against the dead context.
+- **Driving a React controlled `<select>` programmatically needs the native setter + a bubbling `change` event.** `sel.value = x` alone won't fire React's `onChange`. Use `Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(sel, x); sel.dispatchEvent(new Event('change',{bubbles:true}))`. Same trick for controlled `<input>` via `HTMLInputElement.prototype`.
+- **DRY-fixes-the-bug**: when a review finds "view A and view B disagree about a derived status/count", the fix is usually to delete the second inline implementation and route both through the one shared function — not to patch both sides. Verify by watching the two surfaces move together after the change.
+
+## 2026-07-11 (session gcc-residue-sync)
+
+- **Residue audits need scope-correct existence checks — "no callers" ≠ "dead".** Two "residue" findings this session were both wrong on closer look. `pm2-register.sh` looked dead (no script invocations) but is a live user/agent-invoked CLI documented in `LOOKUP`/`GLOSSARY`/`NAMESPACE` with a full usage guide, plus a legit back-compat symlink from its pre-mig-0007 path. And `env-access-convention-hook.md` said "DESIGN — not built" but the hook exists as `guard-env-access.sh` — I'd checked the *old* name (`warn-raw-process-env.sh`) from the prose, not the built name in the frontmatter. Lesson: for a CLI, check docs/usage-guides, not just script-callers; for a "not built" doc, verify the actual built filename before believing it.
+- **Hook-wiring audits must check the orchestrator dispatch, not just `settings.json`.** `rotate-events.sh` + `rotate-wal.sh` look unwired (`rg settings.json` = 0 refs) but are dispatched by `hook-orchestrator/Stop.tasks` (lines 20/23). A settings-only wiring check yields a false "orphaned infra" finding. Grep `scripts/hook-orchestrator/*.tasks` too.
+- **`lm fleet` is a poor fit for doc-rot; save it for code audits.** Fanning a residue intent across ~80 config docs gave 166 raw dead-ref candidates → 2 real after verification. Config docs are dense with `<placeholder>`, `skill:`/`tool:` triggers, tool names (Agent/CronCreate), shell commands, and event IDs that a per-file extractor misreads as refs. A targeted `rg 'not built|predates|superseded|absorbed'` found the same 2 findings faster. Reserve the fleet for reasoning-per-file work.
+- **Append-only logs here self-rotate at a size threshold, not by "last N".** `events.jsonl` (50MB) and `wal.jsonl` (5MB) rotate via the orchestrator when they cross threshold. A big file under threshold is healthy, not residue — don't force-rotate against the policy.
+- **Actionable, not yet done (graduate to `propose.sh` when picked up):** (1) `warn-log.sh:70` allowlist drops the `block-dry` action label, so prose-smell would-block fires log with no `action` field — one-line add. (2) env-access block-after-convention escalation (advisory → block once a project has a convention file), telemetry-gated the way prose-smell shipped.
+
 ## 2026-06-30 (session gcc-plugs-a7)
 
 - **AppleScript `delete` silently fails on iCloud-synced recurring Calendar events.** It reports success (returns the event), but the event re-syncs back from the server, so it persists across retries. Non-recurring/one-shot events delete fine. Fix: use EventKit via a Swift script — `EKEventStore.removeEvent(ev, span: .futureEvents, commit: true)` on any occurrence deletes the whole series server-side. Worth folding into `gcc-schedule rm`'s Calendar-companion cleanup (it likely has the same AppleScript blind spot for recurring jobs).

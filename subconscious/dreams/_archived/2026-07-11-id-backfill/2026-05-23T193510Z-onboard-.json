@@ -1,0 +1,48 @@
+{
+  "ts": "2026-05-23T19:35:10Z",
+  "session_id": "onboard-proc-3f",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260524-onboard-proc-3f.claude.md",
+  "insights": {
+    "worked": [
+      "**Convention-decision-table before bulk-editing** \u2014 when standardizing the 7 onboarding docs, I laid out an 8-row decision table (H1 prefix, blockquote, See-also, tags, trailing-line removal, etc.) with rationale per choice, then applied uniformly. Made the bulk edit auditable.",
+      "**Goal-blockquote-only stubs** \u2014 for the 6 scaffolds, writing ONLY the `> **Goal:**` line as prose + `TODO(human):` one-liners per section gives a doc that renders cleanly, signals intent, and is valid markdown \u2014 without fabricating content the user hasn't decided yet. Matches the user's \"just titles + a goal\" instruction exactly.",
+      "**Cross-link graph thinking** \u2014 designed the workflows hub as the center, with 3 onboarding entry points (router\u2192hub, plan\u2192specific docs, comms\u2192slack-automation), so a new hire reaches engineering processes from whichever onboarding doc they enter. Verified all 64 links resolve.",
+      "**Whole-tree search before curating concept doc-lists** \u2014 searched the full `docs/` tree per concept rather than guessing paths; favored `_index`/`PRIMER`/`overview`/ADR docs over deep internals to match \"high-level + introductory + referential\"."
+    ],
+    "didnt_work": [
+      "**Read-tool display vs raw bytes (recurring)** \u2014 `cat` and the Read tool both rendered the `team/onboarding/_index.md` + `tech/workflows/_index.md` + `team/runbooks/_index.md` files with 2-space leading indents + line-wrapped absolute paths, making them LOOK gum-rendered/corrupted. Raw-byte inspection (`awk 'NR<=20 {printf \"[%d:%d] %s\", NR, length($0), $0}'`) confirmed the FILES ARE CLEAN \u2014 it's a display artifact, not file content. This is the SECOND time this fooled me this session. Rule reinforced: when a doc looks 2-space-indented via Read/cat, verify raw bytes before declaring it broken.",
+      "**Date drift across turns** \u2014 system reminders advanced the date 2026-05-18 \u2192 -19 \u2192 -20 \u2192 -24 across turns. New docs got `last_updated: 2026-05-19`; onboarding standardization got `2026-05-18`. Not wrong (reflects when each was touched) but a future audit might wonder why sibling docs differ by a day."
+    ],
+    "gotchas": [],
+    "notes": [
+      "The `tech/workflows/` folder is now the canonical engineering-process hub. Its `_index.md` has a \"when to use which workflow\" matrix. New process docs go here as `status: stub` first.",
+      "`tech/conventions/` = rules (reference, prescriptive); `tech/workflows/` = processes (procedural); `team/runbooks/` = reactive incident response. The hotfix doc lives in workflows (process defined ahead of time) but cross-links to runbooks (execution under pressure).",
+      "Onboarding H1 convention: indices/routers/plans keep \"Onboarding\" in the title; specific content docs (comms, project-set-up, team-intro) use bare titles.",
+      "The user makes intentional inline edits between turns (caught: Node version `22.11+`\u2192`22.20+` in project-set-up.md; `Extractor`\u2192`Extractor / Scraper`; added a Day-2 daily-sync bullet; `von@versable.ai` roster cleanup). Always re-read before editing; preserve their edits."
+    ],
+    "feedback": [
+      "\"Just files + structure + titles, write a goal per doc\" \u2014 don't fabricate body content for scaffolds.",
+      "\"Ignore the human todos\" (from the standardization turn) \u2014 leave `[VERIFY]`/`TODO(human)` markers in place when restructuring.",
+      "The `scrape-success.modal.tsx` props-sprawl question was a WRONG PASTE \u2014 not a task.",
+      "Per memory `feedback_writing_is_user_interface.md` (added this session by user): no flattery openers, no unrequested option-menus, answer-and-stop."
+    ]
+  },
+  "pending": [
+    "`tech/conventions/github-conventions.md` \u2014 highest leverage, reference content (branch naming, commit format, brand capitalization, labels). Mostly writable without team sync.",
+    "`tech/workflows/release-checklist.md` \u2014 the checkbox doc usable on next deploy.",
+    "`tech/workflows/hotfix-process.md` \u2014 pairs with release-checklist (defines what's skipped).",
+    "`tech/workflows/feature-merge-process.md` \u2014 branch flow that wraps the checklist.",
+    "`tech/workflows/post-release-checks.md` \u2014 verification + rollback rules.",
+    "`tech/workflows/slack-automation.md` \u2014 automated-poster reference table, fill incrementally.",
+    "Backfill `owner:` frontmatter across the tree (validator hint, not yet enforced).",
+    "Resolve live `[VERIFY]` / `TODO(human)` markers in `status: stable` docs (7 docs flagged in the persona REPORT.md).",
+    "The 3 standing validator findings: 2 SHOULD heading-jumps (`product/admin/{parts-list,scraper-success}.md`), 1 MAY `superseded_by:` (`product/jobs/create-other-modules.md`).",
+    "Per-role onboarding files (`by-role/{junior-eng,senior-eng,cs,ops}.md`) \u2014 scaffold linked, content pending.",
+    "Deeper REPORT.md rewrites (split `create-upload.md`, build `info-routes` runbook, hoist `credits-architecture` invariants).",
+    "Wire `[VERIFY]`+`status:stable` co-occurrence check into the docs-validator.",
+    "Add `_(planned)_` / `_(stub)_` soft-broken-link convention to the validator (currently scaffolds with forward-refs would false-positive if those links targeted nonexistent files; today they don't because stubs exist).",
+    "Align the `[pipeline.md](jobs.md)` link-text/href mismatch in `onboarding-plan-may-2026.md` Jobs concept (user's intentional edit \u2014 flagged, not reverted)."
+  ],
+  "tags": []
+}

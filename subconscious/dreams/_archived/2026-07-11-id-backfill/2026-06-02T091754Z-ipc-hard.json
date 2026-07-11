@@ -1,0 +1,33 @@
+{
+  "ts": "2026-06-02T09:17:54Z",
+  "session_id": "ipc-harden-f2",
+  "project_root": "/Users/alcatraz627/Code/Claude/claude-ipc",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/claude-ipc/_20260602-ipc-harden-f2.claude.md",
+  "insights": {
+    "worked": [
+      "**Dogfooding caught what 99 tests missed** \u2014 twice. The empty-`tail` hang and the CLI",
+      "**A fresh adversarial reviewer caught 2 HIGH bugs I'd just written** (MCP broker-down crash;",
+      "**Holding independent judgment paid off**: the reviewer's \"`replayInflight` is a crash-recovery"
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "**Tokens authenticate; they don't curate the roster.** The 35-peer flood was a GC problem",
+      "**The incremental-reply capability already existed in the data model** \u2014 a non-terminal",
+      "**Deploy model**: the broker runs the **compiled binary** (`dist/claude-ipc serve`) via",
+      "**Config/env**: all tunables route through `src/config.ts`; per-session identity reads"
+    ],
+    "notes": [],
+    "feedback": [
+      "Strongly values **minimalism** \u2014 rejected threads/topics and honker; wants stateful comms",
+      "Wants me to **hold independent judgment and debate**, not capitulate (reflected in the",
+      "Treats commit+push as the norm **for this repo only**; still confirms `main` pushes."
+    ]
+  },
+  "pending": [
+    "**Nothing material is open.** The system is shipped, deployed live, and intent-audited.",
+    "**By-design deferrals (not debt):** Claude `--channels` push rung (lights up if the host",
+    "**Cosmetic edges (audit-rated low, intentionally not fixed):** `cancel` skips `requireOwner`",
+    "**User-side:** the gcc memory file `project_claude_ipc.md` was updated locally and rides"
+  ],
+  "tags": []
+}

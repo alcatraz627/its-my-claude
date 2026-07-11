@@ -1,0 +1,19 @@
+{
+  "ts": "2026-06-18T15:25:37Z",
+  "session_id": "export-improve",
+  "project_root": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/two-enhancement-product/_20260618-export-improve.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**C (DEFERRED, not started):** filtered export in the preview-job-output modal \u2014 export only the on-screen (locally-filtered) rows; needs server-side filter scoping. Hold until requested.",
+    "**B4 browser smoke (unverified by me):** single-job export, bulk export (now styled), source-file download \u2014 I can't click in this env; user may have verified post-push.",
+    "**Optional / low-value:** route the legacy `ExcelExporter` (`lib/exporter/__init__.py`, reached via `/export` for bulk-as-input + XML) through `write_data_to_excel`, or retire it for Excel. `// TODO: Bulk generate on backend` \u2014 a future batched bulk-export endpoint (bulk currently = one pipeline run per job)."
+  ],
+  "tags": []
+}

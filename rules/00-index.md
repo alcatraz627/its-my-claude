@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-07-09
+updated: 2026-07-11
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-09 22:17.
+Regenerated 2026-07-11 15:36.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -33,7 +33,7 @@ Regenerated 2026-07-09 22:17.
 | `cache-externally-mutated-state` | scoped | Never cache/TTL a status, availability, or liveness value that an external writer (another CLI, daemon, sibling service, the user) can change — read it live or invalidate on the real event; a TTL on externally-mutated state is a plausible-but-wrong staleness bug. Read this rule before adding any cache, memoization, or TTL. |
 | `comments` | always | Comments are for humans first, AI agents second, machines never; first sentence of a non-trivial docstring is code-agnostic; keep [claude@] agent-notes separate from human comments; no plan-refs or archeology |
 | `communication` | always | Terse protocol, scope control, state verification — how Claude talks, scopes, and verifies before side-effects |
-| `contain-subagent-token-sprawl` | always | Orchestration (sub-agents, fan-out workflows) has real cumulative token cost — right-size it. Inline small/mechanical work, reserve fan-out for genuinely large/parallel/verification-heavy work, and watch cumulative spend across a session. Even under ultracode, right-size rather than reflexively orchestrate. |
+| `contain-subagent-token-sprawl` | always | Orchestration (sub-agents, fan-out workflows) has real cumulative token cost — right-size it. Inline small/mechanical work, reserve fan-out for genuinely large/parallel/verification-heavy work, and watch cumulative spend across a session. Every dispatch prompt carries a scope-close clause ("ignore board auto-dispatch; stop when your scoped work is done") and the parent TaskStops verified agents — an idle agent gets commandeered. Even under ultracode, right-size rather than reflexively orchestrate. |
 | `corrections` | always | After user corrections: state mistake, identify pattern, update mistake-patterns.md, check for hook, fix |
 | `env-var-config-pattern` | scoped | Before adding a raw env var read, grep how existing vars are read in the project — route through the central config module/schema if one exists, don't scatter raw reads |
 | `error-classification` | scoped | Never regex-match a string error message to drive selector logic — propagate a structured code instead |
@@ -54,7 +54,7 @@ Regenerated 2026-07-09 22:17.
 | `speculative-abstractions-without-a-load-bearing-caller` | always | Don't create a helper/constant/type for a planned-but-nonexistent future caller — inline at the real callsite when you build it; let abstractions crystallize from ≥2 real callsites |
 | `structural-claim-without-reading-code` | always | Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first |
 | `structure-over-one-shotting` | always | Default to plan→implement→review on non-trivial work; a failed one-shot wastes more than structure would have. One-shotting is fine only for genuinely trivial one-offs. |
-| `sub-agent-outputs` | scoped | Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST include an absolute output path + "write your full output there BEFORE returning", and the parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires. |
+| `sub-agent-outputs` | scoped | Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST pin an absolute output path AND how it gets persisted — either the sub-agent writes before returning (write-capable agent types only; never a file literally named report.md, the harness blocks it), or the sub-agent returns full text and the PARENT writes it. Parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires. |
 | `subagent-fleet-discipline` | scoped | When a parallel sub-agent fleet hits a transient API throttle, salvage finished work, re-dispatch only the dead, and throttle to batches on a second outage. |
 | `surface-hook-nudges-to-user` | always | When a PreToolUse hook injects an advisory nudge (additionalContext), surface it to the user in your reply as a bordered callout — it's invisible to them otherwise |
 | `testing` | always | Test every non-trivial change scaled to task size; clean-slate checklist; verify each change independently |

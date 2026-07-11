@@ -1,0 +1,24 @@
+{
+  "id": "ab8b4c13-71d0-4f04-b88d-099f88c47c9e",
+  "ts": "2026-07-11T08:47:45Z",
+  "session_id": "wm-b52-pivot",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260711-wm-b52-pivot.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**SPEEDWAY PIVOT (next, agent):** boot speedway (5101); port the /login-when-authed bounce FIRST (owner parity ask); then re-skin workspace screens (`app/routes/workspaces.$id*.tsx`, review, export/loadsheet, upload, settings) onto `@versable/ui`, deleting bespoke `.btn`/`.btn-primary` per-screen (25 collision sites). Reuse: P-01 recipe (StepStats/StepHint), staged-commit + ConfirmModal interaction, InlineEdit, confidence mark, retry surface, kit API gotchas. NOTE the SSR/loader paradigm \u2014 the walmart client-Query data layer does NOT port.",
+    "**Walmart remaining B5.2 chrome (deferred behind speedway):** P-03 bulk \"Accept N unflagged\" (BACKEND-BLOCKED \u2014 no accept endpoint); P-04 Enrichment cache-TTL StatTile + per-item rows (likely needs backend cache stats \u2014 verify); F-06 confirms on the taxonomy Re-match + enrichment overwrite re-runs (verify each downstream-invalidation set first); G-12 slide-over drawer (fresh app-local component); elevate the Taxonomy/Enrichment/Attributes bespoke stat headers to kit StatTiles (coupled to the G-01 global token migration).",
+    "**Walmart data-layer (explicitly deferred by the seam):** elevated useQ wrapper on `src/data/*`, 401 sticky-toast, disconnect-invalidates nit, the 9 authed spot-checks (`.claude/output/20260710-query-rollout/changes.md`), B5.3 Export step, B8 tail (FileDetail/Admin re-chrome, delete ShellProbe).",
+    "**Review build LAST \u2014 OWNER owes R-02 verdict** (side inspector vs inline expansion; audit rec: inspector). REMIND before building. Review2/3/4 tabs removed only after R-02 synthesis ships.",
+    "**OWNER decisions flagged this session:** (1) G-08 tone tiers \u2014 spec says ok/warn/err (<50%=err) but the app's incumbent ConfidenceChip uses good/mid/warn and there's no err token; I matched the app convention. (2) Apply-when-not-dirty still opens the confirm (re-runs pipeline for a no-op) \u2014 keep or disable? (3) Consolidate the 3 confidence renderers (ConfidenceChip/ConfidenceBand/ConfidenceMark) now or in the G-01 pass?",
+    "**OWNER / backend flags:** cross-org file-scoping is **list-visibility only** (Files list shows another org's bosch/keizer and hides this org's own sample-parts.csv; the detail endpoint correctly 404s cross-org) \u2014 backend check owed before Jul-15 go/no-go. Auto-confidence is discarded on save (all persisted mappings \u2192 is_auto:false/confidence:1), so the numeric confidence pill only shows pre-save; persisting original confidence is a backend item. Jul-15 backend go/no-go (+ `/health` bundling). 2nd subscription cancel ~Jul-23 (reminder still unset).",
+    "**End of everything:** kit backprop consolidation \u2192 final adversarial review \u2192 owner gate \u2192 PRs (all three repos)."
+  ],
+  "tags": []
+}

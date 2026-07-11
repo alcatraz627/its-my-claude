@@ -2281,6 +2281,47 @@
     ]
   },
   {
+    "id": "24c09a3b-5857-4555-a6fb-eaa54d1cd7b9",
+    "pattern": "When the agent claims a UI or server-side change is working without navigating to the actual URLs and exercising the primary flow, the user treats it as a critical failure — not a minor omission. Claiming success off static analysis or code inspection alone is treated as actively harmful.",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "approach",
+    "source_sessions": [
+      "4415fe61-d2c1-4166-9379-63cfc3e6ab4f",
+      "ab2a9996-440a-452c-8945-b67b8c6dca4d",
+      "44de5dbe-189e-423a-a815-987cd8c0dd65",
+      "aecabf6c-486a-4d1b-9984-3352953035a4",
+      "ab8b4c13-71d0-4f04-b88d-099f88c47c9e",
+      "56da2156-c36f-4c2e-b9bb-3edf8b33f44e",
+      "f8f4f8f6-eabd-4465-af33-2a41141ab699",
+      "d3948b68-59cc-4d28-9e13-6c909a2e7b8d",
+      "7b7eba7e-4880-476f-a74f-3700274ad80a",
+      "ef6a39e8-2c7c-4f53-a818-072076e42c83",
+      "c7db0cd0-4617-4e30-b112-e3e0c2ff559f",
+      "eb439922-31b3-4e0e-8f2a-5e7a7da15cc9",
+      "b80e78b0-ca64-4cdc-b438-3c0babdf51a1",
+      "e3499a87-1b88-4873-a36f-783d62361a01",
+      "d2e82847-f6ab-4f2b-b7ad-92d8063076ff",
+      "69ae3bf5-3e62-4dae-bba5-87adeab53fab",
+      "4fd4ca0e-d3a8-4ee8-bcaa-89d71a51fa5f"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Pictures",
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-11T02:43:49.156883+00:00",
+    "last_seen": "2026-07-11T02:43:49.156883+00:00",
+    "occurrence_history": [
+      "2026-07-11T02:43:49.156883+00:00"
+    ]
+  },
+  {
     "id": "f1057a8d-e978-416c-b52e-7ea8fd28e770",
     "pattern": "Sessions frequently continue across multiple context windows using 'this session being continued from' handoff pattern with many tools (10-100+)",
     "valence": "neutral",
@@ -13744,37 +13785,6 @@
     "last_seen": "2026-07-10T08:21:23.843429+00:00",
     "occurrence_history": [
       "2026-07-10T08:21:23.843429+00:00"
-    ]
-  },
-  {
-    "id": "2da2b3dd-3f73-47a5-b39d-bb30cb14814f",
-    "pattern": "During iterative draft-and-feedback sessions, the agent must not open pull requests or push commits between feedback cycles even when operating autonomously; PR creation is a terminal action that belongs only when the user explicitly closes the feedback loop.",
-    "valence": "negative",
-    "confidence": 0.88,
-    "category": "user-preference",
-    "source_sessions": [
-      "ab2a9996-440a-452c-8945-b67b8c6dca4d",
-      "aecabf6c-486a-4d1b-9984-3352953035a4",
-      "d3948b68-59cc-4d28-9e13-6c909a2e7b8d",
-      "6d119046-2002-4f20-8d9b-f82f6089dfc5",
-      "04687c09-e9ed-41f7-b0f8-5e8980c9ac68",
-      "c7db0cd0-4617-4e30-b112-e3e0c2ff559f",
-      "b80e78b0-ca64-4cdc-b438-3c0babdf51a1",
-      "69ae3bf5-3e62-4dae-bba5-87adeab53fab"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-07-10T08:34:03.448673+00:00",
-    "last_seen": "2026-07-10T08:34:03.448673+00:00",
-    "occurrence_history": [
-      "2026-07-10T08:34:03.448673+00:00"
     ]
   }
 ]

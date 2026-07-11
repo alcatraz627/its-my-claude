@@ -1,0 +1,23 @@
+{
+  "id": "44de5dbe-189e-423a-a815-987cd8c0dd65",
+  "ts": "2026-07-11T09:06:50Z",
+  "session_id": "vis-compare-A",
+  "project_root": "/Users/alcatraz627/Code/local-models",
+  "checkpoint_path": "/Users/alcatraz627/Code/local-models/_20260711-vis-compare-AB.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Test `/bloop`** on a small real task \u2014 it has never run; it's a prose skill that hasn't",
+    "**Commit the two gcc skills** (`vis-compare`, `bloop`) \u2014 secret-scanned clean, uncommitted.",
+    "**USER:** bless/rename `/vis-compare` \u00b7 edit `policy.md` (their taste \u2014 I drafted v1,",
+    "**Phase C** (`--loop`/ledger convergence) \u2014 design says AFTER one manual round-trip.",
+    "**visual-compare deferred** (docs/10 \u00a79, honest gaps): E0 letterboxing, E2 spacing, E3",
+    "Standing (STATE \u00a7PENDING): fleet-over-real-code-task \u00b7 governor table \u00b7 MTP measurement."
+  ],
+  "tags": []
+}

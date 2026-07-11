@@ -1,0 +1,23 @@
+{
+  "ts": "2026-05-22T00:40:56Z",
+  "session_id": "enh-search-agent",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/backend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/backend/_20260522-enh-search-agent.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": [
+      "**Repo rule**: NEVER commit/push in this repo. Backend env vars via `lib.config.Config`.",
+      "Review reports: `frontend/.claude/output/20260521-1940-skeptical-review/`,"
+    ]
+  },
+  "pending": [
+    "**Job config investigation** (next): find the JobConfig schema in BE (likely `lib/types`",
+    "**Build the job config**: pipeline steps (taxonomy \u2192 join \u2192 fitment \u2192 vcdb_enrich) +",
+    "**Test via API**: pipeline_manager API (`api/pipelines.py`: `POST /pipeline_manager/",
+    "Deferred (not now): generic shared-research module; surfacing `$vcdb_enriched` in the"
+  ],
+  "tags": []
+}

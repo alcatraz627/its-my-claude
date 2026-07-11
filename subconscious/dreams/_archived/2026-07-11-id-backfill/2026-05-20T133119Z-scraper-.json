@@ -1,0 +1,33 @@
+{
+  "ts": "2026-05-20T13:31:19Z",
+  "session_id": "scraper-success-refactor-bc27",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260520-scraper-success-refactor.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**`utils/use-scraper-parts.ts:116-122`** \u2014 auto-select effect on `[rawParts]` dep clobbers user de-selection any time the upstream dep set flaps (cycle seeding, excludedRows Map identity, creditCosts ref change). Design call needed: when should auto-select re-fire?",
+    "**`components/scraper-cycle-panel.tsx:77`** \u2014 `jobTagStr` string-glue bug. Currently outputs `\"LatestCycle\"` / `\"JobCycle\"` / bare `\"Cycle\"` instead of `\"Latest + Job Cycle\"`. 0.95 confidence.",
+    "**`utils/use-scraper-parts.ts:85`** \u2014 dep array uses `!!parseFileData` (boolean coercion). Second file upload silently keeps the FIRST file's parts because the memo doesn't recompute on reference change while truthy. 0.90 confidence.",
+    "**`scrape-success.modal.tsx:103-109`** \u2014 cycle default-seed effect re-fires on `selectedCycleId === undefined` \u2192 admin cannot clear-to-empty (always springs back to \"Latest\"). User explicitly wanted clear-to-empty to surface warning + block submit. 0.75 confidence.",
+    "**`scrape-review.modal.tsx:79-83`** \u2014 auto-refresh dep array misses the hook's new internal `partsKey`-based reset. After refund + invalidation, panel may show \"Not checked\" without auto-refiring. 0.70 confidence.",
+    "**`utils/use-scraper-submit.ts:128-131`** \u2014 `callUploadFile` has no `invalidateKey`. The post-submit jobs-list staleness is being investigated by user as a BE problem; FE-side this might still want invalidate of `GetJobDetails(jobId)`.",
+    "**`scrape-review.modal.tsx:128`** \u2014 `totalCredits` reduces treating each row as 1 unit. If schema allows >1 quantity per row, displayed credit count in confirm dialog is wrong. 0.60 confidence.",
+    "**`utils/use-scraper-parts.ts:201-205`** \u2014 `resetParts` clears `selectedMinus` (refund picks) on new file upload. Refund is file-independent \u2014 likely a UX regression.",
+    "**`utils/use-scraper-submit.ts:326`** \u2014 vestigial `hasFileChanges` return; no consumer reads it.",
+    "**`steps/s2-map-and-review.tsx`** \u2014 `TransformEditorProps` carries `_excludedRows`/`_updateExcludedRows`/`_columnRenames`/`_setColumnRename` that S2 doesn't consume (row-exclusion UI disabled).",
+    "**`components/section-card.tsx`** + `stat-card.tsx` + `flow-stat.tsx` \u2014 the MANDATORY `docs/boring-technical-stuff/frontend/ui-widgets/_index.md` lookup (per CLAUDE.md) was skipped. Reviewer's spot-check found no obvious existing primitive, but the rule was bypassed.",
+    "**[BE-handoff]** Jobs-list cache invalidation. After `apply_metadata` PATCH, the BE jobs-list endpoint serves stale `scraper_success_stats`. Needs BE-side cache key invalidation when `/jobs/<id>/apply_metadata/` writes.",
+    "**Manual S1\u2192S2\u2192S3\u2192S4 browser exercise** \u2014 tsc + tests confirm code correctness, not UX. Not done.",
+    "**`useScraperSubmit` state machine tests** \u2014 task #75, still pending.",
+    "Comment audit per `comment-style.md` \u2014 task #41.",
+    "`[claude@...]` tags sweep across `scrape-success/` per repo convention (user said later).",
+    "Commented-out blocks removal (user said later)."
+  ],
+  "tags": []
+}

@@ -1,0 +1,40 @@
+{
+  "ts": "2026-06-03T10:03:26Z",
+  "session_id": "cligating-aws",
+  "project_root": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/enhancement-product/frontend/_20260603-cligating-aws.claude.md",
+  "insights": {
+    "worked": [
+      "**`/skeptical-review` was the highest-leverage step.** The CRITICAL finding (`aws --region x s3 rm`",
+      "**Enumerate-by-action, not by-noun** (a recurring correct pattern this session): vercel `<noun> ls`",
+      "**Test the production entry point, not just the brain.** The shim pre-filter divergence (classifier"
+    ],
+    "didnt_work": [
+      "Introduced a **critical security inversion**: defaulted the *unidentifiable* AWS command to *allow*",
+      "**\"Fixed the instance, missed the class\"** (twice): added `aws` to the fallback policy AND wrote its"
+    ],
+    "gotchas": [
+      "`gate_for()` returns `None` \u2192 `allow` for an unknown CLI. So a gated CLI MUST appear in BOTH the",
+      "Hook **scripts** re-exec per call (instant effect); hook **config/permissions** in settings.json",
+      "vercel `auth.json` `expiresAt` is in **seconds** (not ms); macOS path is"
+    ],
+    "notes": [
+      "All cli-gating work is GLOBAL (`~/.claude/scripts/cli-gating/` + `~/.claude/conventions/cli-gating.json`).",
+      "The nonce flow is CLI-agnostic in `gate-cli-actions.sh` (keyed on command hash) \u2014 new CLIs get it free.",
+      "Nonce-forge protection in bypass mode is **behavioral** (user-accepted): agent must SHOW the exact",
+      "Full state: memory `project_cloud_access_gate.md` + `frontend/.claude/notes/cloud-access-scoping-audit.md`."
+    ],
+    "feedback": [
+      "\"Every write to any env asks\" (all CLIs, incl. preview deploys). Raw SQL is write-grade.",
+      "Credentials boundary absolute: **user mints/places/revokes every token; agent specifies scope +",
+      "Vercel token scoping deferred (\"browser auth is fine for now\")."
+    ]
+  },
+  "pending": [
+    "**Mongo Atlas Admin API gating** \u2014 cluster mutations (delete/scale/pause). mongosh + MCP read tools",
+    "**Cloudflare** \u2014 deferred (no `wrangler` installed, no Cloudflare resource yet).",
+    "**(User-side, optional) Vercel token hygiene** \u2014 revoke ~5 stale full-account tokens",
+    "**(Optional) cold-review the E2 sensitive-read code** \u2014 it landed after the skeptical-review pass;"
+  ],
+  "tags": []
+}

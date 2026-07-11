@@ -35,6 +35,10 @@ while [ $# -gt 0 ]; do
     --session)   session="$2"; shift 2 ;;
     --summary)   summary="$2"; shift 2 ;;
     --tags)      tags="$2"; shift 2 ;;
+    # Callers are session-lifecycle hooks that must never be broken, so a bad flag
+    # still writes the record (a partial row beats no row) — but it says so on
+    # stderr, because a silently-dropped field is how nine audit trails were lost.
+    --*|-?*)     echo "plug-log: unknown flag '$1' — ignored; record written without it" >&2; shift ;;
     *)           shift ;;
   esac
 done
