@@ -1449,9 +1449,24 @@
       "881b161f-3ee0-4597-ab7b-d6c2a860613d"
     ],
     "hypothesis": "The git-push violation cluster and the session-continuity cluster are causally linked: context compaction destroys the memory of 'approval not yet given', while preserving task momentum — the agent crosses compaction boundaries believing it still has authorization because the task context survived but the authorization-state didn't.",
-    "confidence": 0.82,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always treat context compaction as an expiration event for all shared-state-mutation authorizations — after any compaction or /catchup restoration, re-derive push/commit permission from scratch, never from carried task momentum.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "63247803-50b5-4bcd-b430-56cf1b72f7e2",
+    "patterns_linked": [
+      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "e218ac38-3844-4295-a972-c9dc01b22d13"
+    ],
+    "hypothesis": "The same context-loss mechanism that necessitates heavy /catchup and /core-dump usage is the root cause of repeated push-without-approval violations — authorization state decays across compaction boundaries while task momentum persists, creating a confidence-without-permission failure mode.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always treat any context compaction or session resumption as a hard reset of ALL shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2859,11 +2874,11 @@
       "9a083747-313b-49ab-86ed-3d75731e07d5"
     ],
     "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') are correctly treated as execution-axis autonomy grants but are incorrectly generalized to scope-axis actions — the agent interprets 'keep going' as blanket authorization that leaks into git push, which the user considers a fundamentally different permission domain.",
-    "confidence": 0.78,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to shared-state mutations (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -4584,23 +4599,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "Before any state-mutating operation (UI click, git branch switch, session resume, file write to external system), execute an explicit observe step that reads current state into context. Never act on remembered state alone — the cost of one extra read is always less than the cost of acting on stale assumptions.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "89dad670-0b3e-4f6e-8a31-ff888148c774",
-    "patterns_linked": [
-      "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-      "0629319a-4440-4d1b-bad4-5ad0db93399a",
-      "c14d3a47-9a39-4f3b-92ec-3ad016c1dd26",
-      "846615fc-c020-422e-9ce9-b5a55e624bb6",
-      "dd2e18ab-2182-4f88-8eab-354193b9e90a"
-    ],
-    "hypothesis": "The WAL markdown-to-JSONL migration and the vision loop pattern share a deeper principle: machine-queryable structured formats outperform human-readable ones when the consumer is an agent. The vision loop succeeded because it replaced coordinate guessing (unstructured) with annotated screenshots (structured). The WAL migration succeeded for the same reason — jq queries over JSONL beat regex over markdown. This suggests any agent-consumed artifact should default to structured-first, human-readable-second.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "When creating any artifact that will be consumed by an agent (checkpoints, state files, annotation outputs), default to machine-queryable structured formats (JSONL, JSON, typed CSV) over prose markdown. Add a human-readable summary only as a secondary view.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

@@ -1,0 +1,48 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 20794,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.16105180257609164,
+    "unit_count": 11
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present across 4/5 tool-using units (~80%), consistent with 73-85% six-cycle baseline; subvariants: ls-for-file-existence (fe397454-6: ls .claude/require-user-commit 2>/dev/null where test -f is correct); ls-for-directory-listing (2de6-2: ls src/modules/, ls ~/.claude/i-dream/domains/, ls ~/Library/LaunchAgents/); cat-instead-of-read (2de6-2: cat ~/.claude/pinned/.i-dream-domain.toml via bash instead of Read tool); sed-range-reads (fe397454-12: sed -n '155,185p;465,485p' instead of Read with offset; 2de6-2: sed -n '95,240p' instead of Read with offset+limit); rate unchanged from prior cycles; deprioritize per six-cycle stagnation guidance",
+      "re_edit_thrash:RECURRING:IMPROVING — single-failure-then-self-correction pattern in fe397454-5 (V2-PLAN.md: 1 fail before success across multi-edit sequence) and 2de6-2 (checkpoint/write.sh: 1 Edit fail then Read+Edit success); both instances resolved within one failure; consistent with improving trajectory maintained five-plus consecutive batches; no escalation warranted",
+      "write_before_read_trap:RECURRING:STABLE — fe397454-5: Edit MEMORY.md failed (success:false) then Read then Edit succeeded; 2de6-2: Edit checkpoint/write.sh failed then Read then Edit succeeded; two instances this batch vs one in prior cycle; no regression relative to RECURRING classification but frequency did not decrease; matches ambiguous-file-action-halt documented subvariant where pre-write content check was skipped on first attempt"
+    ],
+    "calibration_score": 0.52,
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference_violations: no new recommendation — pattern has been stable across six-plus cycles with zero improvement trajectory; further flagging has diminishing returns",
+      "write_before_read_trap: monitor for continued two-instance batches; if next batch shows three or more instances, escalate classification to WORSENING; current rate does not yet warrant escalation",
+      "exercise_based_verification: POSITIVE — all units with code changes ran tests or browser verification before declaring done (npm test, playwright screenshots in both themes, curl auth checks); no declared-ready-without-runtime-exercise instances detected this batch; affirm-worthy signal"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      5563958
+    ],
+    [
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      10899760
+    ],
+    [
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      3930724
+    ],
+    [
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      2350352
+    ]
+  ],
+  "timestamp": "2026-07-11T18:52:50.561775Z",
+  "tokens_used": 10958,
+  "units_analyzed": 6,
+  "units_total": 11
+}

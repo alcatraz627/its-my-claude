@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-11T18:13:40Z",
-  "events_analyzed": 93678,
-  "sessions_analyzed": 263,
+  "generated_at": "2026-07-11T18:52:51Z",
+  "events_analyzed": 93767,
+  "sessions_analyzed": 264,
   "session_quality": {
-    "average_score": 68.8,
+    "average_score": 68.7,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -83,19 +83,19 @@
     ],
     "bottom_sessions": [
       {
-        "session_id": "1cd43636-5afc-492a-a149-e18690310270",
-        "project": "enhancement-product",
+        "session_id": "8109df11-e8a5-43b4-ac8f-0c4e915bf7c2",
+        "project": "i-dream",
         "score": 56.2,
-        "tool_count": 730,
+        "tool_count": 5,
         "error_count": 0,
         "error_rate": 0.0,
-        "diversity": 0.005,
-        "efficiency": 4.8,
-        "prompts": 153,
-        "compactions": 5,
+        "diversity": 0.2,
+        "efficiency": 5.0,
+        "prompts": 1,
+        "compactions": 0,
         "duration_min": 0,
-        "completed": true,
-        "start": "2026-05-28T13:21:44Z"
+        "completed": false,
+        "start": "2026-07-11T18:49:52Z"
       },
       {
         "session_id": "71f9d42e-5138-4a99-8165-531b4e6a52a2",
@@ -172,23 +172,17 @@
   "topic_drift": {
     "primary_focus": ".claude",
     "recent_projects": {
-      "versable-builder": 1,
       ".claude": 2,
       "two-enhancement-product": 1,
-      "i-dream": 1,
+      "i-dream": 2,
       "data-forge": 1,
       "local-models": 1,
       "ghostty-themes": 1,
       "claude-ipc": 2
     },
-    "drift_rate": 0.751,
-    "total_switches": 196,
+    "drift_rate": 0.752,
+    "total_switches": 197,
     "recent_switches": [
-      {
-        "ts": "2026-07-11T09:10:08Z",
-        "from": "i-dream",
-        "to": "data-forge"
-      },
       {
         "ts": "2026-07-11T09:10:11Z",
         "from": "data-forge",
@@ -208,14 +202,19 @@
         "ts": "2026-07-11T09:26:31Z",
         "from": "ghostty-themes",
         "to": "claude-ipc"
+      },
+      {
+        "ts": "2026-07-11T18:49:52Z",
+        "from": "claude-ipc",
+        "to": "i-dream"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 7316,
-    "corrections": 1578,
-    "confirmations": 1296,
-    "directives": 250,
+    "total_prompts": 7335,
+    "corrections": 1581,
+    "confirmations": 1297,
+    "directives": 251,
     "terse_messages": 569,
     "correction_rate": 0.216,
     "confirmation_rate": 0.177,

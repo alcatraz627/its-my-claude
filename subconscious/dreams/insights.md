@@ -540,3 +540,20 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (19): c6ea2b0e, bc59cf34, a76e1439, +16 more
 
 ---
+
+
+## Wake Cycle — 2026-07-11 18:51 UTC
+
+### Insight (conf=0.82)
+> The same context-loss mechanism that necessitates heavy /catchup and /core-dump usage is the root cause of repeated push-without-approval violations — authorization state decays across compaction boundaries while task momentum persists, creating a confidence-without-permission failure mode.
+
+**Rule:** Always treat any context compaction or session resumption as a hard reset of ALL shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.
+
+**Evidence:**
+- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
+- _Projects_ (7): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude
+- _Sessions_ (94): 13cdec26, 60f43456, 48b50d47, +91 more
+
+---

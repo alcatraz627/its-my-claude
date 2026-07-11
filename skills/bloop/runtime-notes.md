@@ -1,3 +1,15 @@
+## bloop: V2 M3 schema+form (ghostty-themes) — 2026-07-12 00:40
+
+**Purpose:** Third live /bloop run — M3 of the ghostty config manager. Gate verdict: ISSUES-FOUND (2 blockers, 3 majors), all fixed same-day.
+
+**Insights:**
+
+1. Gate keeps paying: CRLF silent-corruption (edits appended orphan duplicates; "reset" resurrected stale values) was invisible to an all-green 22-test suite — only a hostile CRLF fixture run end-to-end caught it. Add "CRLF variant of every fixture" to default validator prompts for file-format tools.
+2. Validator mutation-testing (flip last→first occurrence) proved the anchor-recovery logic had ZERO coverage while the suite stayed green — "tests pass" says nothing about untested branches. Ask validators to mutation-test every guard they audit, always.
+3. A permission denial on writing the user's live config file mid-acceptance forced a pivot to GHOSTTY_MGR_CONFIG/STATE env overrides — strictly better design (hermetic tests forever). Treat permission denials as design feedback, not obstacles.
+4. Anchor recovery lesson generalizes: when upstream output loses provenance (ghostty drops path:line when a theme is present), recover it ONLY when unambiguous from ground truth you hold; guessing (last-wins) actively misleads (pointed errors at valid lines).
+
+---
 ## bloop: V2 M2 lint+editor (ghostty-themes) — 2026-07-11 16:05
 
 **Purpose:** Second live /bloop run — M2 of the ghostty config manager (lint module + POST endpoint + editor UI). Gate verdict: ISSUES-FOUND, 2 majors, both fixed same-day.

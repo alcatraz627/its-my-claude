@@ -306,6 +306,21 @@ Present sections in this order — start from "what's next", not "where we start
 ─────────────────────────────────────────────────────
 ```
 
+### 3.1b Surface waiting ipc mail (project + predecessor)
+
+The session being resumed may have mail waiting that is part of the work. Two cheap
+checks (both best-effort — a down broker skips silently, never blocks the briefing):
+
+```bash
+claude-ipc inbox --project 2>/dev/null   # project mailbox for this cwd (peek, non-consuming)
+claude-ipc orphans --project 2>/dev/null # dead predecessor sessions here still holding mail
+```
+
+If either returns messages, add a `▸ Waiting ipc mail` section to the briefing: one line
+per message/orphan (`kind from <alias>: <body head>` / `<dead-alias> holds N — peek:
+claude-ipc inbox <dead-alias>`). The predecessor session named by the checkpoint is the
+first inbox worth peeking.
+
 ### 3.2 Load targeted file context
 
 For each file in the ranked reference list (Phase 2), load **only the relevant section** using Grep:
