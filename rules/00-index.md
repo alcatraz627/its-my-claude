@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-07-11
+updated: 2026-07-12
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-11 15:36.
+Regenerated 2026-07-12 03:17.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -46,13 +46,13 @@ Regenerated 2026-07-11 15:36.
 | `model-tier-routing` | always | Route every piece of work to the smallest adequate lane (local lm / gemini / haiku→sonnet→opus; fable = main-only) with right-sized effort; every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan; never switch models without explicit user confirmation. Enforced by guard-model-tier.sh. |
 | `never-modify-anthropic-credentials` | always | NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential — a bad value crashes EVERY Claude instance at once. Stop and ask the user to do it by hand. |
 | `proposed-fix-breaks-design-invariant` | scoped | Before writing any "mode A trades X for Y" design framing (lean/enriched, cached/live, fast/correct), re-check the doc's OWN goals/constraints section as a checklist — if a consumer-rendered state field diverges between modes without an explicitly approved constraint, STOP and align the modes or surface the conflict. Read this rule when authoring a multi-mode design. |
-| `pushback-and-self-criticism` | always | One doctrine for disagreement — (1) under pushback, a structured self-critical reply is not the work, run the checks it names BEFORE sending; (2) never prescribe softer agreement as a fix for pushback the user didn't ask for; (3) when the user states a demonstrably false, load-bearing premise, contradict it with evidence (file:line / measurement) before complying. Evidence-based agreement only. |
+| `pushback-and-self-criticism` | always | One doctrine for disagreement — (1) under pushback, a structured self-critical reply is not the work, run the checks it names BEFORE sending; (2) never prescribe softer agreement as a fix for pushback the user didn't ask for; (3) when the user states a demonstrably false, load-bearing premise, contradict it with evidence (file:line / measurement) before complying. Evidence-based agreement only. Face 3 is affirm-backed (intelligent-disobedience, 4 distinct contexts 2026-05→07) — don't weaken it. |
 | `right-sized-code` | always | Right-size code to the task, don't blindly minimize — gate the decision on goal shape, scope, stated intent, and total-cost fit, then climb the laziness ladder inside that gate. Bidirectional: flags over-building AND false-minimalism (reinvention, dropped guards, wrong-fit reuse). |
 | `scheduling-discipline` | scoped | Scheduling contract, read BEFORE creating or retiring ANY scheduled job — every recurring cron (launchd plist / crontab / CronCreate) ALSO gets an `Automations` calendar event with label+command+plist in the notes, and retiring a cron deletes its event in the same change; always pass --description; no secrets in commands; prefer gcc-schedule for "fire shell command X at time Y". |
 | `shell` | always | Resolve project root before Glob/Grep; trash not rm; non-interactive flags; background task hygiene |
 | `skill-spec-update-not-honored-by-running-session` | scoped | SKILL.md mandates are advisory to already-running sessions (specs are cached at discovery, never re-read) — when adding a mandatory phase to a skill, add enforcement at the data-write CLI in the same change, or it's silently bypassable. Read this rule when editing SKILL.md mandates or debugging a skipped skill phase. |
 | `speculative-abstractions-without-a-load-bearing-caller` | always | Don't create a helper/constant/type for a planned-but-nonexistent future caller — inline at the real callsite when you build it; let abstractions crystallize from ≥2 real callsites |
-| `structural-claim-without-reading-code` | always | Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first |
+| `structural-claim-without-reading-code` | always | Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first; same precheck for process-completion claims ("the migration ran", "the deploy succeeded") — name the artifact that proves it |
 | `structure-over-one-shotting` | always | Default to plan→implement→review on non-trivial work; a failed one-shot wastes more than structure would have. One-shotting is fine only for genuinely trivial one-offs. |
 | `sub-agent-outputs` | scoped | Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST pin an absolute output path AND how it gets persisted — either the sub-agent writes before returning (write-capable agent types only; never a file literally named report.md, the harness blocks it), or the sub-agent returns full text and the PARENT writes it. Parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires. |
 | `subagent-fleet-discipline` | scoped | When a parallel sub-agent fleet hits a transient API throttle, salvage finished work, re-dispatch only the dead, and throttle to batches on a second outage. |
@@ -60,3 +60,4 @@ Regenerated 2026-07-11 15:36.
 | `testing` | always | Test every non-trivial change scaled to task size; clean-slate checklist; verify each change independently |
 | `todo-discipline` | always | Live todos live in the Task tool (source of truth + TUI); session-notes/memory are auto-mirrors, never hand-edited; plans in docs are complementary not the status surface |
 | `trusted-linter-reminder` | always | A "file modified by linter" system-reminder still needs a diff check — linters reformat; they don't change runtime semantics |
+| `unprompted-infra-scope-creep` | always | Never add CI workflows, git hooks, cron jobs, or other automation infrastructure the user did not explicitly request in this task — a feasibility question is not a build order |

@@ -1,5 +1,5 @@
 ---
-brief: Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first
+brief: Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first; same precheck for process-completion claims ("the migration ran", "the deploy succeeded") — name the artifact that proves it
 triggers:
   - topic:architectural-claim
   - topic:authority
@@ -9,9 +9,10 @@ triggers:
   - phrase:"just a JWT"
 related:
   - rules/communication.md
+  - rules/exercise-based-verification.md
 tier: 1
 category: rules
-updated: 2026-05-15
+updated: 2026-07-12
 stale_after_days: 90
 ---
 
@@ -39,6 +40,20 @@ Before typing any of these phrasings, **pause and require a file:line citation i
 If you cannot name a file:line that proves it, **read the code that decides X first**. Don't type the claim until you have.
 
 **Precheck (answer before typing the claim):** Can I name the exact file:line that proves this statement right now? YES → include the citation. NO → read the code first, then type the claim. This is the same gate the atone event format records as `precheck`; treat it as a decision point, not a reminder.
+
+## Process-completion claims get the same precheck
+
+The rule above covers *how a subsystem works*. The same verification failure
+happens one layer up, on *what a process did*: "the migration ran", "the deploy
+succeeded", "the test passed", "the cron fired". Before writing that a step is
+done / succeeded / passed, **name the artifact that proves it** — a log line, an
+exit code, a row count, a file timestamp — or run the check first.
+
+Boundary with `rules/exercise-based-verification.md`: that rule binds when *you*
+changed code and must run the changed path before claiming done. This clause
+binds when you assert the outcome of any process — yours, a cron's, a deploy
+pipeline's, another agent's — without holding the evidence. Same precheck, same
+gate: can I name what proves this right now?
 
 ## What this rule does NOT mean
 

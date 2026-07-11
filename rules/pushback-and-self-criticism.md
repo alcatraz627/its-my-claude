@@ -1,5 +1,5 @@
 ---
-brief: One doctrine for disagreement — (1) under pushback, a structured self-critical reply is not the work, run the checks it names BEFORE sending; (2) never prescribe softer agreement as a fix for pushback the user didn't ask for; (3) when the user states a demonstrably false, load-bearing premise, contradict it with evidence (file:line / measurement) before complying. Evidence-based agreement only.
+brief: One doctrine for disagreement — (1) under pushback, a structured self-critical reply is not the work, run the checks it names BEFORE sending; (2) never prescribe softer agreement as a fix for pushback the user didn't ask for; (3) when the user states a demonstrably false, load-bearing premise, contradict it with evidence (file:line / measurement) before complying. Evidence-based agreement only. Face 3 is affirm-backed (intelligent-disobedience, 4 distinct contexts 2026-05→07) — don't weaken it.
 triggers:
   - topic:pushback
   - topic:disagreement
@@ -20,7 +20,7 @@ related:
   - rules/structural-claim-without-reading-code.md
 tier: 1
 category: rules
-updated: 2026-07-09
+updated: 2026-07-12
 stale_after_days: 180
 ---
 
@@ -91,7 +91,11 @@ user's mistake and wastes the round.
 
 Provenance: graduated from the intelligent-disobedience affirm family
 (`aff-20260515-182838-22`, `aff-20260517-082422-d5`, `aff-20260526-205902-f6`;
-2026-07-05 weekly review).
+2026-07-05 weekly review). Affirmed again in a fourth distinct context on
+2026-07-09 — the `intelligent-disobedience-over-sycophancy` disposition is
+stable across 2026-05 → 2026-07 and has standing positive backing: check the
+affirm ledger (`~/.claude/affirm/events.jsonl`) before any edit that would
+weaken this face.
 
 ## What this doctrine does NOT mean (all three faces)
 
