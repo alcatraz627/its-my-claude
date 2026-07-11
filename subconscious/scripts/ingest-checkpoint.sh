@@ -17,7 +17,14 @@
 #   - Current Expectation (transient)
 #
 # Usage:
-#   ingest-checkpoint.sh <checkpoint-path> [--session-id ID] [--project-root PATH]
+#   ingest-checkpoint.sh <checkpoint-path> [--session-id ID] [--session-uuid UUID]
+#                        [--project-root PATH]
+#
+# `--session-uuid` is the Claude Code transcript UUID and becomes the entry's
+# `id` — the contract-required canonical id (docs/20 §2) that lets the drain
+# dedup against dreams/processed.json, whose keys are transcript UUIDs. The
+# friendly `--session-id` stays for display; it lives in a different namespace
+# and can never join the transcript lane.
 #
 # Writes: ~/.claude/subconscious/dreams/ingest-queue/<ts>-<sid8>.json
 
@@ -25,11 +32,13 @@ set -uo pipefail
 
 CHECKPOINT_PATH=""
 SESSION_ID=""
+SESSION_UUID=""
 PROJECT_ROOT=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --session-id)   SESSION_ID="$2"; shift ;;
+    --session-uuid) SESSION_UUID="$2"; shift ;;
     --project-root) PROJECT_ROOT="$2"; shift ;;
     *)              CHECKPOINT_PATH="$1" ;;
   esac
@@ -45,10 +54,10 @@ TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 SID_SHORT="${SESSION_ID:0:8}"
 OUT="$QUEUE_DIR/${TS//:/}-${SID_SHORT:-unknown}.json"
 
-python3 - "$CHECKPOINT_PATH" "$SESSION_ID" "$PROJECT_ROOT" "$TS" "$OUT" <<'PY'
+python3 - "$CHECKPOINT_PATH" "$SESSION_ID" "$SESSION_UUID" "$PROJECT_ROOT" "$TS" "$OUT" <<'PY'
 import json, sys, re, os
 
-ckpt_path, sid, project, ts, out = sys.argv[1:6]
+ckpt_path, sid, uuid, project, ts, out = sys.argv[1:7]
 
 with open(ckpt_path) as f:
     text = f.read()
@@ -95,6 +104,7 @@ feedback  = extract_subsection(insight_text, "feedback received") or extract_sub
 pending   = extract_bullets(pending_text)
 
 entry = {
+    "id":            uuid or None,   # transcript UUID; null when the writer ran headless
     "ts":            ts,
     "session_id":    sid,
     "project_root":  project,

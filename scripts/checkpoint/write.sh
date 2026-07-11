@@ -224,6 +224,7 @@ printf 'back-compat: %s\n' "$HOME/.claude/_last-checkpoint.json"
 if [[ "$KIND" == "core-dump" && -f "$CHECKPOINT_PATH" ]]; then
   "$HOME/.claude/subconscious/scripts/ingest-checkpoint.sh" "$CHECKPOINT_PATH" \
     --session-id "$SESSION_ID" \
+    --session-uuid "$SESSION_UUID" \
     --project-root "$PROJECT_ROOT" \
     >/dev/null 2>&1 &
   disown 2>/dev/null || true
