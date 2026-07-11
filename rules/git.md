@@ -8,7 +8,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-07-10
+updated: 2026-07-11
 stale_after_days: 90
 ---
 
@@ -19,11 +19,15 @@ Commit cadence, push discipline, repo defaults, and gitignore patterns.
 
 Commit after each logical unit, before switching areas, before risky operations, and if ~15-20 min of work accumulates. Batch related small changes (rename + imports = one commit) but never let 3-4+ changes pile up. Push after every 2-3 commits.
 
-Cadence is timing, not authorization: the guidance above applies only once commits are already in scope for the task (explicit request, or a task framing that includes committing). Without that, don't commit even if the 15-20 min window has passed.
+Authorization is the repo's protection status (user ruling 2026-07-11), cadence is only timing:
+
+- **Protected repo** (entry in `~/.claude/protected-repos.list`, or a tracked `.claude/require-user-commit` marker; enforced by guard-user-commit.sh): the agent NEVER commits — prepare the change, present the diff, hand the commit to the user.
+- **Unprotected repo**: the agent may commit per logical unit and push as part of in-scope work — no per-commit ask. Don't commit speculatively outside the task's scope.
+- Projects usually start unprotected and occasionally graduate to protected as they mature (e.g. versable-builder and its two MVPs are deliberately unprotected today; enhancement-product has graduated). Graduation is the user's edit to the list, never the agent's.
 
 ## Never push to main without explicit approval
 
-One approval ≠ blanket approval. Each push to `main` or `master` requires fresh confirmation.
+One approval ≠ blanket approval. Each push to `main` or `master` requires fresh confirmation (guard-git-push.sh pops the native dialog / sentinel flow). Protected repos gate ALL pushes the same way; unprotected feature-branch pushes flow freely.
 
 ## GitHub repos — public by default
 

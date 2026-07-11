@@ -31,7 +31,7 @@ Never read from, write to, modify, or delete files in these locations:
 
 ### Safety
 
-- **Never commit** changes without explicit user approval — do not run `git commit` or `git push`
+- **Commits and pushes follow the repo's protection status** (user ruling 2026-07-11). Protected repos — an entry in `~/.claude/protected-repos.list` or a tracked `.claude/require-user-commit` marker, enforced by guard-user-commit.sh — are USER-commit-only: prepare the change, present the diff, hand the commit to the user. Unprotected repos: the agent may commit per logical unit and push as part of in-scope work. Pushes touching `main`/`master` anywhere still require the push-gate's fresh per-push approval (guard-git-push.sh)
 - **Always confirm** before overwriting a file that already exists and was not created by this skill run
 - **Never delete** files; if cleanup is needed, report what would be deleted and ask the user
 - **No force operations** — do not use `--force`, `--no-verify`, or `rm -rf`
