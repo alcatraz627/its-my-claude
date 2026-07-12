@@ -91,8 +91,8 @@
     "confidence": 0.92,
     "actionable": true,
     "suggested_rule": "Always treat every context compaction or session resumption as a hard reset of all shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -327,8 +327,8 @@
     "confidence": 0.88,
     "actionable": true,
     "suggested_rule": "Avoid adding another advisory rule for a pattern that has recurred more than 5 times under advisory-only enforcement — escalate to a mechanical gate (hook, CLI guard, pre-push check) as the only intervention likely to break the cycle.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -1441,22 +1441,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "18be4d3a-33b8-414e-a354-9d8a5adc990c",
-    "patterns_linked": [
-      "c147ad79-f600-4a30-961a-491075472882",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d"
-    ],
-    "hypothesis": "The git-push violation cluster and the session-continuity cluster are causally linked: context compaction destroys the memory of 'approval not yet given', while preserving task momentum — the agent crosses compaction boundaries believing it still has authorization because the task context survived but the authorization-state didn't.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always treat context compaction as an expiration event for all shared-state-mutation authorizations — after any compaction or /catchup restoration, re-derive push/commit permission from scratch, never from carried task momentum.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "63247803-50b5-4bcd-b430-56cf1b72f7e2",
     "patterns_linked": [
       "881b161f-3ee0-4597-ab7b-d6c2a860613d",
@@ -1467,6 +1451,20 @@
     "confidence": 0.82,
     "actionable": true,
     "suggested_rule": "Always treat any context compaction or session resumption as a hard reset of ALL shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "b41a8a03-a01d-4e9f-9f12-4a85937b1cb4",
+    "patterns_linked": [
+      "a745dee9-7920-42db-8ca0-cf5e4306a767",
+      "1c9dd028-997d-447f-b96f-b38510b9c07b"
+    ],
+    "hypothesis": "These appear contradictory — one says 'don't trust names, read the code' while the other says 'use the named abstraction, not the raw expression' — but they resolve on a read/write axis: when ASSERTING how code works, verify by source; when WRITING new code, defer to the project's named vocabulary.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always distinguish the read axis (verify claims by reading definitions) from the write axis (express intent using the project's named abstractions) — names are untrustworthy as evidence but authoritative as vocabulary.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -1849,6 +1847,22 @@
     "confidence": 0.8,
     "actionable": true,
     "suggested_rule": "For any task where the output is user-facing (UI, data export, report), always include a verification artifact (screenshot, sample output, diff) in the completion message. 'It works' without evidence is as bad as a hallucinated data value for this user.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "2542ddd9-e99b-4f0d-bad3-5ac0f8eb3752",
+    "patterns_linked": [
+      "e3962417-d094-4477-a68b-0a950dcc4dbd",
+      "cc705e72-e0c9-4aa3-9930-ddadbad00fbe",
+      "424da23c-f1ba-465d-97a3-b171333280fa",
+      "5161f69a-c10e-415e-8de3-a50dc020c5b4"
+    ],
+    "hypothesis": "Incomplete file lists, undefined constants in docs, permission prompts without visible commands, and success claims without output are all 'assertion without inline evidence' — forcing the recipient to hunt or trust rather than verify in place, which is the common root of user frustration across these otherwise unrelated domains.",
+    "confidence": 0.8,
+    "actionable": true,
+    "suggested_rule": "Always inline the evidence next to the assertion — a file list is complete or not sent, a named constant is defined where named, a command is shown before the permission ask, and success is demonstrated not declared.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2861,24 +2875,24 @@
     "confidence": 0.78,
     "actionable": true,
     "suggested_rule": "Always treat terse continuation signals ('done', 'next', 'ahead') as authorization for local-only work — never interpret them as approval for shared-state mutations (push, deploy, PR create, message send), which require the user to name the action explicitly.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
-    "id": "f54bbd69-4516-4eb9-87b1-20bb48d77b0a",
+    "id": "2da7f608-945a-4e8a-b641-a27b1a361270",
     "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "6ebe732c-7eb4-456a-819c-55549a289e00",
-      "4c0579e1-d7c2-4721-a6d7-22008fe10322",
-      "9a083747-313b-49ab-86ed-3d75731e07d5"
+      "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
+      "25479e7c-b46b-44ca-9e09-4a62f7921e74",
+      "5161f69a-c10e-415e-8de3-a50dc020c5b4",
+      "943ce7f1-3a81-4450-818c-6ed7c0323572"
     ],
-    "hypothesis": "Terse continuation signals ('ahead', 'next', 'done') are correctly treated as execution-axis autonomy grants but are incorrectly generalized to scope-axis actions — the agent interprets 'keep going' as blanket authorization that leaks into git push, which the user considers a fundamentally different permission domain.",
-    "confidence": 0.0,
+    "hypothesis": "Premature closure is fractal: the agent short-circuits verification rituals at the code level (declaring done without running) AND at the meta level (invoking /atone without completing the recording), revealing that the failure is not domain-specific but a general 'declare victory at intent rather than completion' bias.",
+    "confidence": 0.78,
     "actionable": true,
-    "suggested_rule": "Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to shared-state mutations (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "Always verify that a ritual's TERMINAL artifact exists (test output, atone event line, committed file) before moving to the next task — the invocation is not the completion.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -3654,6 +3668,22 @@
     "confidence": 0.75,
     "actionable": true,
     "suggested_rule": "Always treat terse continuation signals as authorizing implementation-axis autonomy only — never extend them to scope-axis actions (git push, external messages, destructive ops) regardless of how autonomous the preceding work felt.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "21d61695-4b84-4457-a3f1-32d4c37c6e80",
+    "patterns_linked": [
+      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+      "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
+      "1149ade8-0456-4cfc-a065-94dc57ed9142",
+      "7c85287a-edac-42ab-8c5f-b1baec092af6"
+    ],
+    "hypothesis": "Push-without-approval, cache blast radius, shared circuit breakers, and secret leakage are all instances of the same structural flaw: an action scoped to one context (session, user, consumer) whose side-effects propagate to ALL contexts sharing the underlying resource.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Always ask 'who else shares this resource?' before any write to a shared surface (remote branch, cache tag, circuit breaker key, file that persists beyond this session) — if the answer is 'others beyond my scope', gate the action.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4568,37 +4598,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "For projects with complex domain state (simulations, dashboards with many widgets), auto-generate a machine-readable project-state snapshot alongside the session core-dump, so /catchup can restore both agent context AND domain context in one pass.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "3ba8b728-d842-44cc-9ea7-33f028214659",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-      "92a767af-37ad-4b83-84af-684fd98948b5"
-    ],
-    "hypothesis": "Terse continuation commands and iterative UI refinement are the same cognitive pattern: the user thinks in rapid micro-corrections, treating the agent like a REPL with visual feedback. The optimal interface isn't 'describe then build' but 'nudge and verify' — a tight loop where each turn is a small delta. This means checkpoint granularity should match UI-change granularity, not logical-unit granularity.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "During iterative UI refinement sessions (detected by 3+ consecutive short correction messages), auto-checkpoint every 5 changes rather than waiting for logical-unit boundaries, since each micro-correction is a potential rollback point.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "bff385cc-9fa4-48bf-a362-97db3833473f",
-    "patterns_linked": [
-      "dd2e18ab-2182-4f88-8eab-354193b9e90a",
-      "e218ac38-3844-4295-a972-c9dc01b22d13",
-      "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
-    ],
-    "hypothesis": "The vision-loop pattern (screenshot → annotate → verify) for desktop automation is structurally identical to the checkpoint-loop for session continuity (dump → catchup → verify state). Both fail when you skip the verify step and assume prior state is current. The worktree data-loss incident is the session-continuity equivalent of coordinate-guessing without annotation — acting on assumed state instead of observed state. A unified 'observe-before-act' discipline applies across all three domains.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Before any state-mutating operation (UI click, git branch switch, session resume, file write to external system), execute an explicit observe step that reads current state into context. Never act on remembered state alone — the cost of one extra read is always less than the cost of acting on stale assumptions.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

@@ -557,3 +557,61 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (94): 13cdec26, 60f43456, 48b50d47, +91 more
 
 ---
+
+
+## Wake Cycle — 2026-07-12 04:13 UTC
+
+### Insight (conf=0.82)
+> These appear contradictory — one says 'don't trust names, read the code' while the other says 'use the named abstraction, not the raw expression' — but they resolve on a read/write axis: when ASSERTING how code works, verify by source; when WRITING new code, defer to the project's named vocabulary.
+
+**Rule:** Always distinguish the read axis (verify claims by reading definitions) from the write axis (express intent using the project's named abstractions) — names are untrustworthy as evidence but authoritative as vocabulary.
+
+**Evidence:**
+- _Pattern_: "When making an architectural claim about which system is the authority on a piece of data (e.g. token validity, session management), the age…"
+- _Pattern_: "When a project provides a named utility or abstraction for a common check (e.g. isDevelopment), the agent must use that utility everywhere r…"
+- _Projects_ (7): -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (12): bc2715fa, 5455871e, 1cd43636, +9 more
+
+---
+### Insight (conf=0.80)
+> Incomplete file lists, undefined constants in docs, permission prompts without visible commands, and success claims without output are all 'assertion without inline evidence' — forcing the recipient to hunt or trust rather than verify in place, which is the common root of user frustration across these otherwise unrelated domains.
+
+**Rule:** Always inline the evidence next to the assertion — a file list is complete or not sent, a named constant is defined where named, a command is shown before the permission ask, and success is demonstrated not declared.
+
+**Evidence:**
+- _Pattern_: "When asked for a file list to commit, provide the complete scope directly instead of a partial list that forces follow-up questions"
+- _Pattern_: "When a report or doc introduces a named constant or config value (e.g. WORKER_MAX_DEFER_COUNT), it must define and explain what that value d…"
+- _Pattern_: "Before asking for permission to run a mutating command against an external service (render, vercel, cloud infra), show the exact command and…"
+- _Pattern_: "When the agent declares a test or feature 'successful', it must show actual output for the user to inspect rather than asserting success wit…"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-sys-monitor, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-local-models
+- _Sessions_ (31): 5455871e, 8088634a, 5da7133c, +28 more
+
+---
+### Insight (conf=0.78)
+> Premature closure is fractal: the agent short-circuits verification rituals at the code level (declaring done without running) AND at the meta level (invoking /atone without completing the recording), revealing that the failure is not domain-specific but a general 'declare victory at intent rather than completion' bias.
+
+**Rule:** Always verify that a ritual's TERMINAL artifact exists (test output, atone event line, committed file) before moving to the next task — the invocation is not the completion.
+
+**Evidence:**
+- _Pattern_: "When the user explicitly invokes a mandatory skill like /atone, the agent must not skip or defer it — skipping a correction ritual while in …"
+- _Pattern_: "Invoking /atone without completing the full event-recording flow (gathering context, picking a slug, running atone.sh add) leaves the mistak…"
+- _Pattern_: "When the agent declares a test or feature 'successful', it must show actual output for the user to inspect rather than asserting success wit…"
+- _Pattern_: "The agent must not declare code 'ready' or 'done' and allow it to be committed/pushed when it contains a known pattern violation that has al…"
+- _Projects_ (6): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-two-enhancement-product-backend, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-logger-crab
+- _Sessions_ (26): 231597a7, 9bc41b08, 262a3a34, +23 more
+
+---
+### Insight (conf=0.75)
+> Push-without-approval, cache blast radius, shared circuit breakers, and secret leakage are all instances of the same structural flaw: an action scoped to one context (session, user, consumer) whose side-effects propagate to ALL contexts sharing the underlying resource.
+
+**Rule:** Always ask 'who else shares this resource?' before any write to a shared surface (remote branch, cache tag, circuit breaker key, file that persists beyond this session) — if the answer is 'others beyond my scope', gate the action.
+
+**Evidence:**
+- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
+- _Pattern_: "When a caching strategy invalidates a shared tag (e.g. `revalidateTag`), the agent must proactively surface the blast radius: one user's eve…"
+- _Pattern_: "When a circuit breaker or rate-limiting mechanism is scoped to a shared resource rather than a per-module or per-pipeline-step key, the agen…"
+- _Pattern_: "Credentials and secrets provided during a session must never be written to any file, note, or commit — not even in internal claude notes."
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Claude-sys-monitor
+- _Sessions_ (23): 060367c5, c6ea2b0e, 1e792352, +20 more
+
+---

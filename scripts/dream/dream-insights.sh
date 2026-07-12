@@ -1,31 +1,52 @@
 #!/bin/bash
-# dream-insights.sh — inject high-confidence behavioral rules into each session's
-# system context via the SessionStart additionalContext hook field.
+# dream-insights.sh — inject the atone mistake-pattern TL;DR (always), and
+# optionally the dream digest + top rules, into each session via SessionStart.
 #
 # Sources:
-#   1. insight-digest.md — synthesized summary (refreshed every 3h by daemon)
-#   2. associations.json — top rules by confidence, deduplicated
+#   1. atone/derived/_tldr.txt — mistake patterns to watch (the load-bearing part)
+#   2. insight-digest.md — synthesized dream summary (refreshed every 3h by daemon)
+#   3. associations.json — top dream rules by confidence, deduplicated
 #
-# Output: JSON {"additionalContext": "..."} to stdout, or nothing (silent exit)
-#         if no data is available.
+# The dream half (sources 2+3) is OFF BY DEFAULT. It was ~1800 chars every session
+# at a measured ~0 of ~922 promoted insights ever becoming a gcc change, it cannot
+# be conversion-measured (acting on it leaves no machine residue — see
+# ledger/acted.toml, which excludes it for exactly this reason), and it is now
+# redundant: migration 0031 routes high-confidence dream insights onto the
+# improvement backlog, where they get a real decision at /backlog-triage. The
+# atone TL;DR (source 1) is unaffected — it is action-shaped and load-bearing, and
+# has its own separate mute at atone/.tldr-off.
+#
+# Re-enable ambient dream injection (opt-in, default off):
+#   touch ~/.claude/subconscious/dreams/.inject-on
+# Polarity is deliberately an ENABLE flag, not a mute: the default is OFF, so
+# presence = inject (guards against the inverted-opt-in-polarity trap).
+#
+# Output: JSON {"additionalContext": "..."} to stdout, or nothing (silent exit).
 
 SUBCON="$HOME/.claude/subconscious/dreams"
 DIGEST_FILE="$SUBCON/insight-digest.md"
 ASSOC_FILE="$SUBCON/associations.json"
+DREAM_ON_FLAG="$SUBCON/.inject-on"
 
-# Need at least one source
-[ -f "$DIGEST_FILE" ] || [ -f "$ASSOC_FILE" ] || exit 0
+DREAM_ENABLED=0
+[ -f "$DREAM_ON_FLAG" ] && DREAM_ENABLED=1
 
-python3 - "$DIGEST_FILE" "$ASSOC_FILE" <<'PYEOF'
+python3 - "$DIGEST_FILE" "$ASSOC_FILE" "$DREAM_ENABLED" <<'PYEOF'
 import sys, json, os
 
 digest_path = sys.argv[1]
 assoc_path = sys.argv[2]
+dream_enabled = sys.argv[3] == "1"
 
 parts = []
 
+# Parts 1 & 2 (the dream half) are gated OFF by default — see the header. The
+# atone TL;DR (Part 3) below always runs. When the dream half is disabled we skip
+# straight to it, so a session pays for the mistake-pattern reminder and nothing
+# more.
+
 # Part 1: Digest summary (compact, pre-synthesized)
-if os.path.isfile(digest_path):
+if dream_enabled and os.path.isfile(digest_path):
     try:
         with open(digest_path, 'r', encoding='utf-8', errors='replace') as f:
             digest = f.read().strip()
@@ -35,7 +56,7 @@ if os.path.isfile(digest_path):
         pass
 
 # Part 2: Top behavioral rules from associations (structured, deduplicated)
-if os.path.isfile(assoc_path):
+if dream_enabled and os.path.isfile(assoc_path):
     try:
         with open(assoc_path, 'r', encoding='utf-8', errors='replace') as f:
             assocs = json.load(f)

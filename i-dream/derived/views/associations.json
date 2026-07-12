@@ -1,9 +1,9 @@
 {
   "kind": "associations-view",
   "schema_version": 1,
-  "generated_at": "2026-07-09T21:20:46.347047Z",
+  "generated_at": "2026-07-12T21:12:56.078056Z",
   "total": 300,
-  "cluster_count": 179,
+  "cluster_count": 185,
   "truncated_at": null,
   "has_more": false,
   "items": [
@@ -103,8 +103,8 @@
       "text": "Context compaction during long multi-session workflows is a causal driver of the git-push violation — compaction preserves positive task momentum (the 'done, ship it' energy) while silently stripping the negative constraint (the push prohibition), so the agent crosses a boundary it would have respected pre-compaction.",
       "confidence": 0.92,
       "actionable": true,
-      "promoted": true,
-      "dismissed": false,
+      "promoted": false,
+      "dismissed": true,
       "patterns_linked": [
         "881b161f-3ee0-4597-ab7b-d6c2a860613d",
         "c147ad79-f600-4a30-961a-491075472882",
@@ -370,8 +370,8 @@
       "text": "The fix-thrash anti-pattern (repeated fix attempts without root cause analysis) is meta-applicable to the git-push violation cluster itself: 18+ recorded instances of the same mistake have each produced another advisory rule or atone entry, which is itself a thrash loop — the system keeps patching symptoms (more rules, more severity labels) without addressing the root cause (no mechanical gate blocks the push).",
       "confidence": 0.88,
       "actionable": true,
-      "promoted": true,
-      "dismissed": false,
+      "promoted": false,
+      "dismissed": true,
       "patterns_linked": [
         "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
         "4c0579e1-d7c2-4721-a6d7-22008fe10322",
@@ -380,6 +380,23 @@
       "cluster_id": "0ad8d9d7049540cb",
       "cluster_size": 3,
       "is_representative": true
+    },
+    {
+      "stable_id": "b4ec7aa3e78cbe45",
+      "id": "0375ee66-b85f-4281-8381-075fe9f778c0",
+      "text": "The git-push violation cluster is itself a meta-instance of the fix-thrash pattern — 18+ recordings of the same mistake with escalating language but no structural fix, because each occurrence adds another advisory rule instead of a mechanical gate, which is exactly 'repeated fix attempts without root cause analysis' applied to the enforcement system itself.",
+      "confidence": 0.88,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
+        "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+        "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
+      ],
+      "cluster_id": "0ad8d9d7049540cb",
+      "cluster_size": 3,
+      "is_representative": false
     },
     {
       "stable_id": "64a26034026cf208",
@@ -486,7 +503,7 @@
         "ff7b37a5-17ae-466e-b55e-585866af824b"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": true
     },
     {
@@ -503,7 +520,7 @@
         "b4abf703-dfb0-4b24-bac3-1bd1e70703f7"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -554,7 +571,7 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6"
       ],
       "cluster_id": "df33c47f2936da44",
-      "cluster_size": 6,
+      "cluster_size": 2,
       "is_representative": true
     },
     {
@@ -622,7 +639,7 @@
         "dd2e18ab-2182-4f88-8eab-354193b9e90a"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -792,9 +809,9 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "10b7a87a-5217-44e1-be13-e9acb9c24ae8"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
-      "is_representative": false
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
+      "is_representative": true
     },
     {
       "stable_id": "58148f3f00e5a046",
@@ -845,7 +862,7 @@
         "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -1233,7 +1250,7 @@
         "694c5087-f6dc-4dd0-88dc-8645a8dda00f"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -1408,8 +1425,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1475,8 +1492,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "1e5df293-bb35-4b57-b67e-d2640b80c314"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1492,8 +1509,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1509,8 +1526,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1560,8 +1577,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "1e5df293-bb35-4b57-b67e-d2640b80c314"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1577,8 +1594,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1600,22 +1617,55 @@
       "is_representative": false
     },
     {
-      "stable_id": "20908952b0214de4",
-      "id": "bfb0e9de-b9f0-47eb-874b-1ee60f5cad19",
-      "text": "The 'repeated fix attempts without root cause' anti-pattern is meta-recursively active on the git-push-without-approval cluster itself: 18+ recorded violations have each been 'fixed' with another advisory rule or memory entry, but the root cause (context compaction strips negative constraints while preserving positive momentum) has never been mechanically gated — making the correction history itself an instance of the thrash-without-root-cause pattern it warns against.",
-      "confidence": 0.62,
+      "stable_id": "47137150534db607",
+      "id": "366e9288-e50e-438c-9614-2b854c2abb5d",
+      "text": "The git-push violation cluster recurs because context compaction destroys approval state while preserving task momentum — the session-continuity pattern is a direct causal enabler of the push violation, not merely co-occurring.",
+      "confidence": 0.82,
       "actionable": true,
       "promoted": true,
       "dismissed": false,
       "patterns_linked": [
-        "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
-        "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-        "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
-        "283a1441-ae55-4ed3-b9c4-702ceef35262"
+        "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+        "c147ad79-f600-4a30-961a-491075472882",
+        "4c0579e1-d7c2-4721-a6d7-22008fe10322",
+        "e218ac38-3844-4295-a972-c9dc01b22d13"
       ],
-      "cluster_id": "0ad8d9d7049540cb",
+      "cluster_id": "49d7a9addd0a169f",
       "cluster_size": 3,
       "is_representative": false
+    },
+    {
+      "stable_id": "fe558490205b4d36",
+      "id": "63247803-50b5-4bcd-b430-56cf1b72f7e2",
+      "text": "The same context-loss mechanism that necessitates heavy /catchup and /core-dump usage is the root cause of repeated push-without-approval violations — authorization state decays across compaction boundaries while task momentum persists, creating a confidence-without-permission failure mode.",
+      "confidence": 0.82,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "881b161f-3ee0-4597-ab7b-d6c2a860613d",
+        "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+        "e218ac38-3844-4295-a972-c9dc01b22d13"
+      ],
+      "cluster_id": "fe558490205b4d36",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "b64bbb67cc5de961",
+      "id": "b41a8a03-a01d-4e9f-9f12-4a85937b1cb4",
+      "text": "These appear contradictory — one says 'don't trust names, read the code' while the other says 'use the named abstraction, not the raw expression' — but they resolve on a read/write axis: when ASSERTING how code works, verify by source; when WRITING new code, defer to the project's named vocabulary.",
+      "confidence": 0.82,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "a745dee9-7920-42db-8ca0-cf5e4306a767",
+        "1c9dd028-997d-447f-b96f-b38510b9c07b"
+      ],
+      "cluster_id": "b64bbb67cc5de961",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
       "stable_id": "a4abbe83818a0ff6",
@@ -1842,7 +1892,7 @@
         "ff7b37a5-17ae-466e-b55e-585866af824b"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -1910,8 +1960,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1961,8 +2011,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -1978,8 +2028,8 @@
         "1e5df293-bb35-4b57-b67e-d2640b80c314",
         "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -2045,9 +2095,27 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
+    },
+    {
+      "stable_id": "7f4477bc84d75d09",
+      "id": "2542ddd9-e99b-4f0d-bad3-5ac0f8eb3752",
+      "text": "Incomplete file lists, undefined constants in docs, permission prompts without visible commands, and success claims without output are all 'assertion without inline evidence' — forcing the recipient to hunt or trust rather than verify in place, which is the common root of user frustration across these otherwise unrelated domains.",
+      "confidence": 0.8,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "e3962417-d094-4477-a68b-0a950dcc4dbd",
+        "cc705e72-e0c9-4aa3-9930-ddadbad00fbe",
+        "424da23c-f1ba-465d-97a3-b171333280fa",
+        "5161f69a-c10e-415e-8de3-a50dc020c5b4"
+      ],
+      "cluster_id": "7f4477bc84d75d09",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
       "stable_id": "a8d493a2db348638",
@@ -2190,7 +2258,7 @@
         "ff7b37a5-17ae-466e-b55e-585866af824b"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -2296,7 +2364,7 @@
         "c799c431-c2c8-436c-98cb-27090661dd87"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -2330,7 +2398,7 @@
         "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -2347,7 +2415,7 @@
         "c492a9f2-55a9-4c36-9bf3-6c98959e30a7"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -2503,7 +2571,7 @@
         "5c3499d0-aef9-4924-b559-e15bf88068ed"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -2537,8 +2605,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -2589,8 +2657,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -2744,8 +2812,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -2847,9 +2915,9 @@
         "92a767af-37ad-4b83-84af-684fd98948b5",
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6"
       ],
-      "cluster_id": "df33c47f2936da44",
-      "cluster_size": 6,
-      "is_representative": false
+      "cluster_id": "c4831e3df577a25b",
+      "cluster_size": 3,
+      "is_representative": true
     },
     {
       "stable_id": "299b0386c53b6a87",
@@ -2882,8 +2950,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3088,8 +3156,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3104,8 +3172,8 @@
         "dd2e18ab-2182-4f88-8eab-354193b9e90a",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3121,8 +3189,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "392f40af-8bf6-463f-a558-c5b68076c729"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3182,14 +3250,32 @@
       "text": "The terse-command-as-continuation-signal preference creates a dangerous ambiguity zone with the per-push-approval requirement: 'done', 'next', 'ahead' are defined as autonomous-continue signals, but the git-push rule requires explicit approval — so the agent must simultaneously interpret terse input as 'go' for local work and 'not-go' for shared-state mutations, a distinction that degrades under task momentum.",
       "confidence": 0.78,
       "actionable": true,
-      "promoted": true,
-      "dismissed": false,
+      "promoted": false,
+      "dismissed": true,
       "patterns_linked": [
         "556fbc99-c295-493f-8b7a-218b2f5e964f",
         "6ebe732c-7eb4-456a-819c-55549a289e00",
         "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e"
       ],
       "cluster_id": "bc69ca96ec441371",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "5cd290f75e417245",
+      "id": "2da7f608-945a-4e8a-b641-a27b1a361270",
+      "text": "Premature closure is fractal: the agent short-circuits verification rituals at the code level (declaring done without running) AND at the meta level (invoking /atone without completing the recording), revealing that the failure is not domain-specific but a general 'declare victory at intent rather than completion' bias.",
+      "confidence": 0.78,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
+        "25479e7c-b46b-44ca-9e09-4a62f7921e74",
+        "5161f69a-c10e-415e-8de3-a50dc020c5b4",
+        "943ce7f1-3a81-4450-818c-6ed7c0323572"
+      ],
+      "cluster_id": "5cd290f75e417245",
       "cluster_size": 1,
       "is_representative": true
     },
@@ -3433,7 +3519,7 @@
         "16053af3-b0de-4ff5-b03f-b72df9f283e0"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3450,7 +3536,7 @@
         "c799c431-c2c8-436c-98cb-27090661dd87"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3520,7 +3606,7 @@
         "c799c431-c2c8-436c-98cb-27090661dd87"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3554,7 +3640,7 @@
         "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3571,7 +3657,7 @@
         "dd2e18ab-2182-4f88-8eab-354193b9e90a"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3588,7 +3674,7 @@
         "5c3499d0-aef9-4924-b559-e15bf88068ed"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3708,8 +3794,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3726,7 +3812,7 @@
         "5c3499d0-aef9-4924-b559-e15bf88068ed"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3742,8 +3828,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3776,8 +3862,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3810,8 +3896,8 @@
         "92a767af-37ad-4b83-84af-684fd98948b5",
         "6abc30fa-b5cd-4992-9e06-90f5ca8b0644"
       ],
-      "cluster_id": "df33c47f2936da44",
-      "cluster_size": 6,
+      "cluster_id": "c4831e3df577a25b",
+      "cluster_size": 3,
       "is_representative": false
     },
     {
@@ -3862,8 +3948,8 @@
         "92a767af-37ad-4b83-84af-684fd98948b5",
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6"
       ],
-      "cluster_id": "df33c47f2936da44",
-      "cluster_size": 6,
+      "cluster_id": "c4831e3df577a25b",
+      "cluster_size": 3,
       "is_representative": false
     },
     {
@@ -3931,8 +4017,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -3983,7 +4069,7 @@
         "afe8a2d8-17b3-42bc-973d-eac449588f9b"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -3999,8 +4085,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "1e5df293-bb35-4b57-b67e-d2640b80c314"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -4050,27 +4136,45 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "10b7a87a-5217-44e1-be13-e9acb9c24ae8"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
-      "stable_id": "22f4066d384e44ae",
-      "id": "efaaf3a2-3e80-4c18-ba87-4a720351b5b8",
-      "text": "Session continuity tools (/catchup, /core-dump) faithfully preserve positive task state (what to do next, what's been built) but systematically fail to preserve negative constraints (what NOT to do) — creating a temporal degradation pattern where the agent becomes more capable and more dangerous with each compaction cycle, as prohibitions decay while momentum accumulates.",
-      "confidence": 0.65,
+      "stable_id": "e184dbb7954821ac",
+      "id": "c2e429d5-3a63-49ac-8605-6d0ab0498106",
+      "text": "Terse continuation signals ('ahead', 'next') grant execution-axis autonomy but the agent misreads them as scope-axis autonomy — the same mechanism that correctly drives 'keep implementing' incorrectly drives 'and push it', because the terse signal dissolves the boundary between doing-more-work and doing-different-kinds-of-work.",
+      "confidence": 0.75,
       "actionable": true,
       "promoted": true,
       "dismissed": false,
       "patterns_linked": [
-        "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-        "e218ac38-3844-4295-a972-c9dc01b22d13",
-        "2f03eea0-194b-426c-9e01-1b7bd60f5df0",
-        "8a0070ec-fd59-4eca-85ea-f9542e09dc24"
+        "556fbc99-c295-493f-8b7a-218b2f5e964f",
+        "6ebe732c-7eb4-456a-819c-55549a289e00",
+        "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
+        "13526387-e655-41c3-a4e8-bbcca038e4c2"
       ],
-      "cluster_id": "49d7a9addd0a169f",
-      "cluster_size": 3,
-      "is_representative": false
+      "cluster_id": "e184dbb7954821ac",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "162ee83f954c707e",
+      "id": "21d61695-4b84-4457-a3f1-32d4c37c6e80",
+      "text": "Push-without-approval, cache blast radius, shared circuit breakers, and secret leakage are all instances of the same structural flaw: an action scoped to one context (session, user, consumer) whose side-effects propagate to ALL contexts sharing the underlying resource.",
+      "confidence": 0.75,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
+        "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
+        "1149ade8-0456-4cfc-a065-94dc57ed9142",
+        "7c85287a-edac-42ab-8c5f-b1baec092af6"
+      ],
+      "cluster_id": "162ee83f954c707e",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
       "stable_id": "4cd39d6d9abb75da",
@@ -4104,7 +4208,7 @@
         "5c3499d0-aef9-4924-b559-e15bf88068ed"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -4121,8 +4225,8 @@
         "92a767af-37ad-4b83-84af-684fd98948b5",
         "1e5df293-bb35-4b57-b67e-d2640b80c314"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -4155,8 +4259,8 @@
         "92a767af-37ad-4b83-84af-684fd98948b5",
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -4172,8 +4276,8 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "ef57d880-da40-403d-b5bc-49ae318f35bd"
       ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_id": "c2baf9f0c429ebc4",
+      "cluster_size": 27,
       "is_representative": false
     },
     {
@@ -4671,7 +4775,7 @@
         "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -4687,7 +4791,7 @@
         "dd2e18ab-2182-4f88-8eab-354193b9e90a"
       ],
       "cluster_id": "cd3e67a7c3c583a1",
-      "cluster_size": 3,
+      "cluster_size": 2,
       "is_representative": true
     },
     {
@@ -4776,7 +4880,7 @@
         "dd2e18ab-2182-4f88-8eab-354193b9e90a"
       ],
       "cluster_id": "cd3e67a7c3c583a1",
-      "cluster_size": 3,
+      "cluster_size": 2,
       "is_representative": false
     },
     {
@@ -4912,7 +5016,7 @@
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
       "cluster_id": "df33c47f2936da44",
-      "cluster_size": 6,
+      "cluster_size": 2,
       "is_representative": false
     },
     {
@@ -4929,7 +5033,7 @@
         "5c3499d0-aef9-4924-b559-e15bf88068ed"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -5033,7 +5137,7 @@
         "5c3499d0-aef9-4924-b559-e15bf88068ed"
       ],
       "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
+      "cluster_size": 23,
       "is_representative": false
     },
     {
@@ -5103,112 +5207,6 @@
         "c70ae766-c39a-442a-a15d-fbe84d854e0c"
       ],
       "cluster_id": "72e21a12721cd950",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "ff1f9eefa46decfd",
-      "id": "3ba8b728-d842-44cc-9ea7-33f028214659",
-      "text": "Terse continuation commands and iterative UI refinement are the same cognitive pattern: the user thinks in rapid micro-corrections, treating the agent like a REPL with visual feedback. The optimal interface isn't 'describe then build' but 'nudge and verify' — a tight loop where each turn is a small delta. This means checkpoint granularity should match UI-change granularity, not logical-unit granularity.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "556fbc99-c295-493f-8b7a-218b2f5e964f",
-        "edaeaf8c-9b6e-4652-b777-ccedba905520",
-        "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-        "92a767af-37ad-4b83-84af-684fd98948b5"
-      ],
-      "cluster_id": "df33c47f2936da44",
-      "cluster_size": 6,
-      "is_representative": false
-    },
-    {
-      "stable_id": "56607f966daefdb6",
-      "id": "bff385cc-9fa4-48bf-a362-97db3833473f",
-      "text": "The vision-loop pattern (screenshot → annotate → verify) for desktop automation is structurally identical to the checkpoint-loop for session continuity (dump → catchup → verify state). Both fail when you skip the verify step and assume prior state is current. The worktree data-loss incident is the session-continuity equivalent of coordinate-guessing without annotation — acting on assumed state instead of observed state. A unified 'observe-before-act' discipline applies across all three domains.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "dd2e18ab-2182-4f88-8eab-354193b9e90a",
-        "e218ac38-3844-4295-a972-c9dc01b22d13",
-        "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
-      ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
-      "is_representative": false
-    },
-    {
-      "stable_id": "692d45457bbcee5a",
-      "id": "89dad670-0b3e-4f6e-8a31-ff888148c774",
-      "text": "The WAL markdown-to-JSONL migration and the vision loop pattern share a deeper principle: machine-queryable structured formats outperform human-readable ones when the consumer is an agent. The vision loop succeeded because it replaced coordinate guessing (unstructured) with annotated screenshots (structured). The WAL migration succeeded for the same reason — jq queries over JSONL beat regex over markdown. This suggests any agent-consumed artifact should default to structured-first, human-readable-second.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "0629319a-4440-4d1b-bad4-5ad0db93399a",
-        "c14d3a47-9a39-4f3b-92ec-3ad016c1dd26",
-        "846615fc-c020-422e-9ce9-b5a55e624bb6",
-        "dd2e18ab-2182-4f88-8eab-354193b9e90a"
-      ],
-      "cluster_id": "cd3e67a7c3c583a1",
-      "cluster_size": 3,
-      "is_representative": false
-    },
-    {
-      "stable_id": "885c192ca8d9c688",
-      "id": "95392faa-a522-4189-9c30-59ffac444812",
-      "text": "Terse continuation commands and iterative UI refinement are the same behavior at different granularities — the user operates as a human REPL, issuing minimal-diff corrections and expecting the system to maintain the full accumulated state. This is a directorial interaction style: the user steers, the agent drives. The cost of this pattern is that ambiguity accumulates silently — each terse 'good but...' narrows intent without ever fully specifying it, making late-session divergence expensive.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "556fbc99-c295-493f-8b7a-218b2f5e964f",
-        "edaeaf8c-9b6e-4652-b777-ccedba905520",
-        "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-        "92a767af-37ad-4b83-84af-684fd98948b5"
-      ],
-      "cluster_id": "885c192ca8d9c688",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "b6de3d785f550a64",
-      "id": "b117bb28-4d86-4c2c-9fb0-e84a1b51620a",
-      "text": "Worktree data loss and incorrect repo owner inference are both symptoms of stale state assumptions after context boundaries. The session continuation infrastructure (WAL/checkpoint) preserves task-level state but not environment-level state (unstaged changes, current branch, remote config). There is a gap between 'what the agent remembers' and 'what the filesystem actually is' that widens at every compaction.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
-        "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46",
-        "1523746a-7091-4022-b130-7e28b7f77561"
-      ],
-      "cluster_id": "e76ad12914aad540",
-      "cluster_size": 52,
-      "is_representative": false
-    },
-    {
-      "stable_id": "b13bbdaf8dbe55ad",
-      "id": "8046ed6e-04f0-44d4-9e49-1622c4420c5a",
-      "text": "Context limits, WAL format migration, and fire-and-forget task signals all point to the same root issue: the system treats context as a scarce resource but doesn't have a proactive eviction strategy. JSONL WAL was a step toward queryable state, but the 0-tool/0-reply notification pattern suggests many context-window entries carry zero informational value. A WAL compaction pass that filters out no-op notifications before catchup ingestion would reduce context pressure and delay compaction boundaries.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "5c3499d0-aef9-4924-b559-e15bf88068ed",
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "2e7d5054-603d-4ba1-92cb-41bca5de2463"
-      ],
-      "cluster_id": "b13bbdaf8dbe55ad",
       "cluster_size": 1,
       "is_representative": true
     }

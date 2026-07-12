@@ -1,14 +1,15 @@
-<!-- i-dream project brief · 2026-07-11T18:14:43.215027+00:00 · 2 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-12T04:39:41.962572+00:00 · 5 patterns / 0 insights -->
 ## What this project is about
-A Ghostty terminal theme management tool — scripts or config for generating, previewing, or applying color themes. Working style: targeted, sequential file edits with preference verification before assuming intent.
+A Ghostty terminal theme browser/picker tool — shell scripts or a TUI that lets users preview and apply Ghostty color themes. Work style: interactive CLI with explicit save semantics.
 
 ## Things to do (or keep doing)
-- Always sequence edits to the same file; never batch parallel `Edit` calls targeting the same path — only one survives
-- Verify what "runtime" means in context before proceeding: deploy-time env vars vs. live-configurable globals are distinct
+- Prefer explicit save/apply actions — selection previews only; never auto-commit a theme change on cursor movement or single keystroke
+- Sequence edits to the same file serially; parallel `Edit` calls to one file silently clobber each other (only the last write survives)
+- Use fenced `diff` blocks for any color output in PR comments — ANSI escape codes render as literal text on GitHub
 
 ## Things to avoid
-- Don't parallelize writes to the same file even when changes look independent — silent clobber, both calls return success
-- Don't assume "runtime variables" means environment variables; ask if the distinction matters before designing the solution
+- Don't conflate "runtime variables" with deploy-time env vars — ask whether the user means live-configurable globals or build-time config before proceeding
+- Don't fabricate stub doc body content — scaffold with goal statement + `TODO(human)` placeholders only; never fill sections to look complete
 
 ## Open questions / known gaps
 - _(no signal yet)_

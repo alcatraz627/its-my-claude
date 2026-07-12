@@ -4246,42 +4246,35 @@
     "last_seen": "2026-07-10T08:34:03.448673+00:00"
   },
   {
-    "id": "cee749fad3d0ce06",
-    "text": "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures",
-    "category": "approach",
+    "id": "7033f96a0bb9ec65",
+    "text": "Parallel Edit calls targeting the same file silently clobber each other — both return 'updated successfully' but only one change survives; always sequence edits to the same file rather than batching them in parallel.",
+    "category": "tool-use",
     "valence": "negative",
-    "confidence": 0.88,
+    "confidence": 0.9,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "ef6f1e5e-411d-4460-919d-a15b9d09cb2f",
+    "rep_pattern_id": "e870c6e9-5694-476b-b7bb-e030fd5dc143",
     "member_ids": [
-      "ef6f1e5e-411d-4460-919d-a15b9d09cb2f"
+      "e870c6e9-5694-476b-b7bb-e030fd5dc143"
     ],
     "member_texts": [
-      "User corrected single-source verification of current events - multiple sources should be checked before reporting on news/political figures"
+      "Parallel Edit calls targeting the same file silently clobber each other — both return 'updated successfully' but only one change survives; always sequence edits to the same file rather than batching them in parallel."
     ],
-    "source_projects": [],
-    "first_seen": "2026-04-14T16:11:44.033788+00:00",
-    "last_seen": "2026-04-14T16:11:44.033788+00:00"
-  },
-  {
-    "id": "03a4c9ea29e8c9a8",
-    "text": "User uses 'sorry continue' to resume after interruptions, expecting the assistant to pick up exactly where it left off",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "ddce5474-8599-409f-a1fd-31f73445b461",
-    "member_ids": [
-      "ddce5474-8599-409f-a1fd-31f73445b461"
+    "source_projects": [
+      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "claude-instances-v2"
     ],
-    "member_texts": [
-      "User uses 'sorry continue' to resume after interruptions, expecting the assistant to pick up exactly where it left off"
-    ],
-    "source_projects": [],
-    "first_seen": "2026-04-14T16:11:44.033788+00:00",
-    "last_seen": "2026-04-14T16:11:44.033788+00:00"
+    "first_seen": "2026-07-11T18:09:29.392095+00:00",
+    "last_seen": "2026-07-11T18:09:29.392095+00:00"
   },
   {
     "id": "2529ba3754ed5d5c",
@@ -6168,344 +6161,227 @@
     "last_seen": "2026-07-11T18:09:29.392095+00:00"
   },
   {
-    "id": "7033f96a0bb9ec65",
-    "text": "Parallel Edit calls targeting the same file silently clobber each other — both return 'updated successfully' but only one change survives; always sequence edits to the same file rather than batching them in parallel.",
-    "category": "tool-use",
+    "id": "55282e316ab4d7a7",
+    "text": "When building a selection or picker UI, choosing an option must only preview it — an explicit save or apply action is required to commit the change; auto-applying on selection is a UX correctness bug, not a design choice",
+    "category": "user-preference",
     "valence": "negative",
-    "confidence": 0.9,
+    "confidence": 0.95,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "e870c6e9-5694-476b-b7bb-e030fd5dc143",
+    "rep_pattern_id": "e965a4bd-c7f6-41a7-93f4-142335d941e9",
     "member_ids": [
-      "e870c6e9-5694-476b-b7bb-e030fd5dc143"
+      "e965a4bd-c7f6-41a7-93f4-142335d941e9"
     ],
     "member_texts": [
-      "Parallel Edit calls targeting the same file silently clobber each other — both return 'updated successfully' but only one change survives; always sequence edits to the same file rather than batching them in parallel."
+      "When building a selection or picker UI, choosing an option must only preview it — an explicit save or apply action is required to commit the change; auto-applying on selection is a UX correctness bug, not a design choice"
     ],
     "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
       "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
       ".claude",
-      "claude-instances-v2"
+      "frontend",
+      "backend"
     ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
   },
   {
-    "id": "f2e2a682d798747b",
-    "text": "IIFE / scope-wrappers in JSX are a recurring smell the agent introduces; before adding any inline wrapper in JSX, check surrounding siblings for the prevailing pattern (inline prop or plain const) and conform to it.",
-    "category": "domain",
-    "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "14e1a726-2090-47bb-a4aa-3906a36d56dc",
-    "member_ids": [
-      "14e1a726-2090-47bb-a4aa-3906a36d56dc"
-    ],
-    "member_texts": [
-      "IIFE / scope-wrappers in JSX are a recurring smell the agent introduces; before adding any inline wrapper in JSX, check surrounding siblings for the prevailing pattern (inline prop or plain const) and conform to it."
-    ],
-    "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "claude-instances-v2"
-    ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
-  },
-  {
-    "id": "67b9e527107e1ed0",
-    "text": "Silently zero-defaulting missing fields in structured data (e.g., bounding-box coordinates defaulting to 0) produces fabricated downstream values that look valid; missing or partial data must be explicitly flagged rather than filled with silent defaults.",
+    "id": "1326101dfc565890",
+    "text": "When designing inter-agent messaging for inactive sessions, the correct pattern is inbox persistence so a resuming agent can discover queued messages — do not attempt to resurrect or re-awaken dead sessions to deliver messages",
     "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.83,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "069b6fc3-3d0a-4297-937e-d233c50edc74",
+    "member_ids": [
+      "069b6fc3-3d0a-4297-937e-d233c50edc74"
+    ],
+    "member_texts": [
+      "When designing inter-agent messaging for inactive sessions, the correct pattern is inbox persistence so a resuming agent can discover queued messages — do not attempt to resurrect or re-awaken dead sessions to deliver messages"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "frontend",
+      "backend"
+    ],
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+  },
+  {
+    "id": "f8f22a508884d91a",
+    "text": "When scaffolding stub documentation, write only the goal statement and TODO(human) placeholders per section — never fabricate body content to fill structural completeness",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "3478a8b2-e714-4a18-b680-7a004e6ef0b0",
+    "member_ids": [
+      "3478a8b2-e714-4a18-b680-7a004e6ef0b0"
+    ],
+    "member_texts": [
+      "When scaffolding stub documentation, write only the goal statement and TODO(human) placeholders per section — never fabricate body content to fill structural completeness"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "frontend",
+      "backend"
+    ],
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+  },
+  {
+    "id": "8b6101fa56812c02",
+    "text": "When restructuring or standardizing existing documentation, preserve [VERIFY] and TODO(human) markers exactly in place — do not remove, resolve, or rewrite them unless the user explicitly directs it",
+    "category": "user-preference",
     "valence": "negative",
     "confidence": 0.87,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "97836890-1e16-4e3a-a9e9-ddb85490be9e",
+    "rep_pattern_id": "f196c4d9-c50c-420a-a4b3-9ebe3ccd4d52",
     "member_ids": [
-      "97836890-1e16-4e3a-a9e9-ddb85490be9e"
+      "f196c4d9-c50c-420a-a4b3-9ebe3ccd4d52"
     ],
     "member_texts": [
-      "Silently zero-defaulting missing fields in structured data (e.g., bounding-box coordinates defaulting to 0) produces fabricated downstream values that look valid; missing or partial data must be explicitly flagged rather than filled with silent defaults."
+      "When restructuring or standardizing existing documentation, preserve [VERIFY] and TODO(human) markers exactly in place — do not remove, resolve, or rewrite them unless the user explicitly directs it"
     ],
     "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
       "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
       ".claude",
-      "claude-instances-v2"
+      "frontend",
+      "backend"
     ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
   },
   {
-    "id": "a380382ba15137f5",
-    "text": "A terse 'keep going' continuation message after a frustrating turn does not grant license to advance to the next planned scope or phase; it resumes the current task only and carries the affect of the prior turn.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.85,
+    "id": "84a32345bcd10d79",
+    "text": "GitHub PR comment bodies do not render ANSI escape color codes — only fenced 'diff' blocks produce colored output in PR comments",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.9,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "cffd76f7-37c6-4cae-997c-37bc93994ced",
+    "rep_pattern_id": "dc552406-0f41-478f-b195-230dadf97ddd",
     "member_ids": [
-      "cffd76f7-37c6-4cae-997c-37bc93994ced"
+      "dc552406-0f41-478f-b195-230dadf97ddd"
     ],
     "member_texts": [
-      "A terse 'keep going' continuation message after a frustrating turn does not grant license to advance to the next planned scope or phase; it resumes the current task only and carries the affect of the prior turn."
+      "GitHub PR comment bodies do not render ANSI escape color codes — only fenced 'diff' blocks produce colored output in PR comments"
     ],
     "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
       "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
       ".claude",
-      "claude-instances-v2"
+      "frontend",
+      "backend"
     ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
   },
   {
-    "id": "5e37096a3a2f2fa9",
-    "text": "The user strongly prefers auto-generated or derived indices over hand-maintained ones; where a file has both policy and census sections, a marker-based split (e.g., '<!-- AUTO-GENERATED BELOW -->') lets the hand-written portion stay stable while the generated portion refreshes cleanly.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "ed5f53f8-9b7b-4b08-9f53-5234555ce06a",
-    "member_ids": [
-      "ed5f53f8-9b7b-4b08-9f53-5234555ce06a"
-    ],
-    "member_texts": [
-      "The user strongly prefers auto-generated or derived indices over hand-maintained ones; where a file has both policy and census sections, a marker-based split (e.g., '<!-- AUTO-GENERATED BELOW -->') lets the hand-written portion stay stable while the generated portion refreshes cleanly."
-    ],
-    "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "claude-instances-v2"
-    ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
-  },
-  {
-    "id": "e32ed1707664dc1a",
-    "text": "When formalizing a repeated manual workflow loop into a skill, implement the logic as testable shell scripts first and have SKILL.md call those scripts — this keeps the skill prompt readable and makes the logic independently verifiable.",
+    "id": "fa445b55925f2054",
+    "text": "When asked to plan multi-phase work, each step should include its intent, concrete validation criteria, and failure-detection signals, then be codified into a persistent reference document the system can use for future validation",
     "category": "approach",
     "valence": "positive",
-    "confidence": 0.75,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "50c964ba-7b7a-46ab-b975-cde26168a01a",
-    "member_ids": [
-      "50c964ba-7b7a-46ab-b975-cde26168a01a"
-    ],
-    "member_texts": [
-      "When formalizing a repeated manual workflow loop into a skill, implement the logic as testable shell scripts first and have SKILL.md call those scripts — this keeps the skill prompt readable and makes the logic independently verifiable."
-    ],
-    "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "claude-instances-v2"
-    ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
-  },
-  {
-    "id": "a6e52ec80ff3cb85",
-    "text": "Spawning a dedicated adversarial sub-agent (validator or skeptical-reviewer role) before declaring complex multi-phase work done consistently surfaces real blockers that the implementing agent missed; treat the adversarial pass as a required step, not an optional sanity check.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "2eddb51a-a3a2-491d-ba9e-bf5d6fcf61e0",
-    "member_ids": [
-      "2eddb51a-a3a2-491d-ba9e-bf5d6fcf61e0"
-    ],
-    "member_texts": [
-      "Spawning a dedicated adversarial sub-agent (validator or skeptical-reviewer role) before declaring complex multi-phase work done consistently surfaces real blockers that the implementing agent missed; treat the adversarial pass as a required step, not an optional sanity check."
-    ],
-    "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "claude-instances-v2"
-    ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
-  },
-  {
-    "id": "77801d22b1ab2d4a",
-    "text": "Framing each fix batch as 'this will fix it' or 'this addresses the gap' when the prior ship also made that claim and failed is a sycophantic pattern that erodes trust; if structural gaps have recurred, say so explicitly and describe the structural change, not just the additive fix.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b34f3ec7-8729-4dff-8839-b93bd19d2ea3",
-    "member_ids": [
-      "b34f3ec7-8729-4dff-8839-b93bd19d2ea3"
-    ],
-    "member_texts": [
-      "Framing each fix batch as 'this will fix it' or 'this addresses the gap' when the prior ship also made that claim and failed is a sycophantic pattern that erodes trust; if structural gaps have recurred, say so explicitly and describe the structural change, not just the additive fix."
-    ],
-    "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "claude-instances-v2"
-    ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
-  },
-  {
-    "id": "c9442fa84cf50838",
-    "text": "High-cost agent modes (full multi-agent runs, expensive fan-outs) should default to a cheaper tier and require explicit user confirmation before escalating — surprising the user with a costly run when a lite mode would have sufficed breaks trust on cost.",
-    "category": "user-preference",
-    "valence": "negative",
     "confidence": 0.78,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "acddf071-7dfd-4db9-b356-397dce20e6d3",
+    "rep_pattern_id": "6155da09-45cb-44f2-8082-a12d791fe17d",
     "member_ids": [
-      "acddf071-7dfd-4db9-b356-397dce20e6d3"
+      "6155da09-45cb-44f2-8082-a12d791fe17d"
     ],
     "member_texts": [
-      "High-cost agent modes (full multi-agent runs, expensive fan-outs) should default to a cheaper tier and require explicit user confirmation before escalating — surprising the user with a costly run when a lite mode would have sufficed breaks trust on cost."
+      "When asked to plan multi-phase work, each step should include its intent, concrete validation criteria, and failure-detection signals, then be codified into a persistent reference document the system can use for future validation"
     ],
     "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
       "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
       ".claude",
-      "claude-instances-v2"
+      "frontend",
+      "backend"
     ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
   },
   {
-    "id": "cef12b24181d9bd8",
-    "text": "When a user's repeated manual workflow becomes the de facto development loop across multiple sessions, that loop is a strong signal to formalize it as a named skill rather than re-establishing it from scratch each session.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.73,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "3abfceb0-daa2-44b6-868e-b48abbe31f33",
-    "member_ids": [
-      "3abfceb0-daa2-44b6-868e-b48abbe31f33"
-    ],
-    "member_texts": [
-      "When a user's repeated manual workflow becomes the de facto development loop across multiple sessions, that loop is a strong signal to formalize it as a named skill rather than re-establishing it from scratch each session."
-    ],
-    "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "claude-instances-v2"
-    ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
-  },
-  {
-    "id": "933d9290665c178f",
-    "text": "When proposing a new storage backend (e.g., Redis) for a feature when an existing store (e.g., Mongo) is already in use, proactively justify the new dependency rather than waiting for the user to push back — the default should be 'use what's already there unless there's a concrete reason not to'.",
-    "category": "architecture",
+    "id": "567453f1bfb2e60e",
+    "text": "System-supplied date values can drift across turns within a single session; documents created in later turns may receive different dates than earlier ones — re-read the current date rather than reusing one captured at session start",
+    "category": "tool-use",
     "valence": "negative",
     "confidence": 0.72,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "99313638-9a18-47e7-bb39-538e9abc8ab6",
+    "rep_pattern_id": "dd51c8f6-d6f4-4519-8ed3-9ba56d3045d4",
     "member_ids": [
-      "99313638-9a18-47e7-bb39-538e9abc8ab6"
+      "dd51c8f6-d6f4-4519-8ed3-9ba56d3045d4"
     ],
     "member_texts": [
-      "When proposing a new storage backend (e.g., Redis) for a feature when an existing store (e.g., Mongo) is already in use, proactively justify the new dependency rather than waiting for the user to push back — the default should be 'use what's already there unless there's a concrete reason not to'."
+      "System-supplied date values can drift across turns within a single session; documents created in later turns may receive different dates than earlier ones — re-read the current date rather than reusing one captured at session start"
     ],
     "source_projects": [
-      "-private-tmp-claude-501--Users-alcatraz627--claude-2685fe2f-f018-4924-ade0-9e8de1122fa8-scratchpad-probe-cwd",
       "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
       ".claude",
-      "claude-instances-v2"
+      "frontend",
+      "backend"
     ],
-    "first_seen": "2026-07-11T18:09:29.392095+00:00",
-    "last_seen": "2026-07-11T18:09:29.392095+00:00"
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+  },
+  {
+    "id": "89b9d6000228d63d",
+    "text": "Building a UI that looks structurally correct (tabs, config sections, renders) but reads as a form viewer rather than an interactive tool means the user's intent — live customization with immediate feedback — was not modeled; implement the intent, not the structural shape",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b055bf08-3584-432c-8b5b-16f07d5b55e4",
+    "member_ids": [
+      "b055bf08-3584-432c-8b5b-16f07d5b55e4"
+    ],
+    "member_texts": [
+      "Building a UI that looks structurally correct (tabs, config sections, renders) but reads as a form viewer rather than an interactive tool means the user's intent — live customization with immediate feedback — was not modeled; implement the intent, not the structural shape"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "frontend",
+      "backend"
+    ],
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00"
   }
 ]

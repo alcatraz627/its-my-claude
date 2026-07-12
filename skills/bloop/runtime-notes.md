@@ -1,3 +1,43 @@
+## bloop: Run 2 — visual-compare Phase C loop ledger (local-models) — 2026-07-12
+
+**Purpose:** Second /bloop run, first with the improved SKILL.md (delivery clause,
+scope-close, mutation-test mandate, TaskStop step). Shipped L3: vis-ledger.py +
+see diff --no-read + the /vis-compare --loop protocol.
+
+**Insights:**
+
+1. **The run-1 fixes all paid off in run 2**: the validator delivered its findings
+   without a chase-up ping (delivery clause), mutation-tested the guard unprompted
+   and found F10 blind to de-atomized writes, and the protection-status commit flow
+   ran without the GUIDELINES conflict stall.
+2. **Gate is now 4/4 on real findings self-review missed.** This run: syntax-guarded
+   JSON but not SHAPE-guarded (valid-JSON-wrong-structure tracebacked), and add vs
+   status disagreeing on a corrupt ledger (status fabricated an empty loop). Lesson
+   for validator prompts: "malformed input" must enumerate wrong-SHAPE cases, not
+   just wrong-syntax; and name cross-command consistency as an attack surface.
+3. **Testing atomicity deterministically**: import the module, poison json.dump to
+   write partial bytes then raise — the pre-existing target must survive
+   byte-identical. Discriminates tmp+os.replace from direct write with no timing
+   games. Reusable pattern for any atomic-write claim.
+4. **Guard helpers in fixtures need their own failure honesty**: the first F10
+   comparability check crashed the battery (unconditional read of a file the
+   absent tool never wrote) instead of FAILing — a fixture must report red cleanly
+   against missing tooling, or the red run proves nothing.
+
+---
+## bloop: V2 M4-M6 (ghostty-themes) — 2026-07-12 03:30
+
+**Purpose:** Runs 4-6 of /bloop (history, profiles, customize view). Gates: M4 ISSUES-FOUND (2 blockers), M5 PASS-WITH-NOTES, M6 ISSUES-FOUND (3 majors) — plus one USER-caught S2 no gate caught.
+
+**Insights:**
+
+1. THE GATE'S BLIND SPOT: validators verify the SPEC, not the user's mental model. M6's instant-apply-on-preview was in my own acceptance spec, passed the gate, and enraged the user (atone instant-apply-on-preview-surface). Consider a validator lens: "does any interaction's side effect contradict what its surface label implies?"
+2. A dead validator (API error mid-response) is recoverable: SendMessage to its name resumes it from transcript; it delivered salvaged findings that cross-confirmed my pre-fixes. Pre-fixing predicted findings while a validator runs pays off — M5's two majors were already fixed when the report landed.
+3. Concurrent validators sharing the Playwright MCP browser cross-contaminate DOM state (foreign navigations in one sandbox's history). Validators should curl-verify anything load-bearing, or claim exclusive tab ownership.
+4. Recurring falsy-default trap: `Number(v) || fallback` swallows explicit zeros (opacity 0 → 1). Grep for `|| <default>` around numeric config reads in any review.
+5. mkdir-as-mutex + re-capture-before-rename closed both M4 blockers (cross-process lost updates, hand-edit TOCTOU) in ~60 lines — cheaper than any external lock dep.
+
+---
 ## bloop: V2 M3 schema+form (ghostty-themes) — 2026-07-12 00:40
 
 **Purpose:** Third live /bloop run — M3 of the ghostty config manager. Gate verdict: ISSUES-FOUND (2 blockers, 3 majors), all fixed same-day.

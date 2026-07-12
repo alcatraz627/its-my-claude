@@ -1,0 +1,22 @@
+{
+  "id": "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+  "ts": "2026-07-12T00:08:52Z",
+  "session_id": "ipc-hand-7f",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260712-ipc-hand-7f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "2026-07-26 (automated): `ipc-metrics-recheck` fires \u2192 `~/.claude/assets/reports/20260726-ipc-metrics-recheck.md`; compare vs 67% stuck / 30% ask-success baseline.",
+    "2026-07-28 (user session): `claude-ipc-review` \u2014 BRIEF at `~/.claude/assets/reports/20260728-claude-ipc-review/BRIEF.md` carries 5 items: UPS drain-guard residual (per-turn drain unguarded, tokens per-alias), snooze-quiets-reminder semantics, 2 trivia (stale \"6 chars\" test comment, plugin 0.1.0 vs package 0.2.0), machine-notice expiry, registry prune/broadcast hygiene.",
+    "Retire-after-fire: both one-shots need `gcc-schedule rm` after firing (doctor habit).",
+    "Sessions running before 2026-07-11 have no wake monitor until restarted (self-resolving).",
+    "Repo docs chain (`docs/01\u201305`) not yet updated with project mailboxes/orphans \u2014 likely a review item."
+  ],
+  "tags": []
+}

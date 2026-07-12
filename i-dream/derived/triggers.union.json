@@ -20,6 +20,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-202559-fe"
   },
   {
+    "id": "trig-critique-loops-cannot-produce-design-gestalt",
+    "from_slug": "critique-loops-cannot-produce-design-gestalt",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Three critique-fix rounds polished mechanics but never designed a gestalt",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-085221-7a"
+  },
+  {
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
@@ -27,7 +37,7 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260707-201301-55"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-091934-42"
   },
   {
     "id": "trig-flagship-model-leaked-via-unpinned-nested-subagents",
@@ -40,6 +50,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260707-011402-8f"
   },
   {
+    "id": "trig-handoff-without-naming-decaying-prereqs",
+    "from_slug": "handoff-without-naming-decaying-prereqs",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Halt report pointed owner at live demo without naming its known-decaying credential prereq",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260712-210531-07"
+  },
+  {
     "id": "trig-infra-before-grep",
     "from_slug": "infra-before-grep",
     "from_source": "atone",
@@ -47,7 +67,17 @@
     "instruction": "infra-before-grep",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-130808-88"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-082421-1a"
+  },
+  {
+    "id": "trig-instant-apply-on-preview-surface",
+    "from_slug": "instant-apply-on-preview-surface",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Customize view wrote live config on selection; surface was framed as preview",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260711-214932-dc"
   },
   {
     "id": "trig-inverted-user-defined-opt-in-polarity",
@@ -70,16 +100,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260709-144639-fc"
   },
   {
-    "id": "trig-manufactured-problem-by-removing-own-solution",
-    "from_slug": "manufactured-problem-by-removing-own-solution",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Removed user's satisfies-typed registry, flagged the gap as a cost, then re-proposed satisfies as my own fix",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-103857-b0"
-  },
-  {
     "id": "trig-mis-triaged-inflight-task-as-crashed",
     "from_slug": "mis-triaged-inflight-task-as-crashed",
     "from_source": "atone",
@@ -88,16 +108,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260703-231033-72"
-  },
-  {
-    "id": "trig-propagating-legacy-inline-imports-in-python-backend",
-    "from_slug": "propagating-legacy-inline-imports-in-python-backend",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Propagated legacy lazy-import pattern across 4 sites despite standing rule",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260615-144939-d5"
   },
   {
     "id": "trig-pushed-to-remote-without-explicit-go",
@@ -110,14 +120,14 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260629-142001-3d"
   },
   {
-    "id": "trig-reusable-tooling-left-in-tmp-not-promoted-to-repo",
-    "from_slug": "reusable-tooling-left-in-tmp-not-promoted-to-repo",
+    "id": "trig-spec-fidelity-over-user-legibility",
+    "from_slug": "spec-fidelity-over-user-legibility",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Built reusable test-infra in /tmp instead of promoting to the repo next to its sibling",
+    "instruction": "Shipped a spec's hidden-settings dogma + deferred the visible differentiators",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260626-195732-91"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-123038-62"
   },
   {
     "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
@@ -140,14 +150,24 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-112025-2c"
   },
   {
+    "id": "trig-synthetic-repro-dismissal-without-workload-repro",
+    "from_slug": "synthetic-repro-dismissal-without-workload-repro",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Closed a bug report after synthetic-only repro attempts; the real workload reproduced it next day",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260709-232322-0d"
+  },
+  {
     "id": "trig-unprompted-infra-scope-creep",
     "from_slug": "unprompted-infra-scope-creep",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "adding CI / hooks / automation in",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260625-095334-62"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-092934-4e"
   },
   {
     "id": "trig-intelligent-disobedience-over-sycophancy",

@@ -90,6 +90,16 @@ Before handing to the gate, review your own work — but as **exercise, not insp
 Dispatch **one adversarial sub-agent** to independently verify. Its job is to BREAK the
 work, not bless it.
 
+0. **Optional $0 pre-gate** (lm suite, when the repo is on this machine): pipe the diff
+   through the local reviewer and the mechanical gate, and fix cheap survivors BEFORE
+   spending the paid seat:
+   `git diff <range> | ~/Code/local-models/bin/review --findings --json -m small | jq '.data // empty' | ~/Code/local-models/.venv/bin/python ~/Code/local-models/lib/findings-gate.py --root <repo>`
+   The gate mechanically drops findings whose file:line doesn't exist; survivors are
+   OPINIONS to triage (verify each against the battery/code before acting), never
+   verdicts. Pin a format-honoring tier (`-m small` — the 35b code tier ignores Ollama
+   format constraints, discovered 2026-07-13). First-diff measured yield: 3 valid-location
+   opinions, 0 real. This complements the adversarial gate below; it never replaces it.
+
 1. **Right-size** (`rules/contain-subagent-token-sprawl.md`): one validator for a normal
    change; a small fleet only for a genuinely large/parallel surface. Not a reflex fleet.
 2. **Pin the model** (`rules/model-tier-routing.md`) — sonnet is the default validator

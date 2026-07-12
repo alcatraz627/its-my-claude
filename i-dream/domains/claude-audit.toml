@@ -1,8 +1,9 @@
 # i-dream domain manifest — claude-audit (hook-usage feedback)
 #
-# STAGED, NOT LIVE. Do not copy into ~/.claude/i-dream/domains/ until the
-# hook-feedback system is built and ~/.claude/hooks-feedback-domain/events.jsonl
-# has accrued real events. See ACTIVATION.md in this dir.
+# LIVE since ~2026-07 (header corrected 2026-07-13): the activation gate in
+# integration-requests/claude-audit-staged/ACTIVATION.md is satisfied — the
+# events stream has real, ongoing data. Canonical copy is THIS file; the one
+# under integration-requests/ is the historical staging artifact.
 #
 # Derived from the filled integration request (../claude-audit.md) + two owner
 # decisions: (1) synthesized join — an extractor merges vents ⋈ telemetry on

@@ -788,3 +788,18 @@ absolute path it actually wrote.
 - Tailwind v4 container queries (`@container` + `@min-[Nrem]:`) are the right tool
   when an app-shell sidebar changes a component's available width — viewport
   breakpoints lie. Pair with shrink-0 triggers for all-or-nothing label collapse.
+
+## 2026-07-12 (session claude-ipc / ipc-hand-7f)
+
+- **`bun test` green is not type-safe.** bun transpiles without typechecking; a missing
+  union member sailed through 142 passing tests and only `tsc --noEmit` caught it. In bun
+  repos, "done" requires the project's own `typecheck`/`lint` script, not just the suite.
+- **The push gate blocks the whole Bash compound at PreToolUse** — in an
+  add-commit-push chain the commit silently never runs. Commit and publish in separate
+  tool calls; after any gated compound, verify HEAD moved before claiming the commit
+  landed. (The gate also pattern-matches the literal command name in PROSE — this very
+  entry tripped it while being written; keep the two words apart in documentation text.)
+- **Plugin monitors wake idle agents** (CC ≥2.1.105, verified 2.1.207): each stdout line
+  re-invokes the agent, auto-arms at session start + resume, `CLAUDE_CODE_SESSION_ID` is
+  set fresh in the monitor's env. The basis of the claude-ipc wake plugin — reusable for
+  any "react to external events while idle" need.

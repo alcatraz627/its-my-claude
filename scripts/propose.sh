@@ -221,11 +221,18 @@ mutate_status() {
   local tmp
   tmp=$(mktemp "${STORE}.XXXXXX")
 
+  # decided_ts makes drain-rate measurable: without it a status flip leaves no
+  # timestamp trail (census 2026-07-12 finding #10 — 24% of open items >30d old
+  # and no way to compute how fast the backlog drains).
+  local decided_ts
+  decided_ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
   (
     flock -x 9 2>/dev/null || true
-    jq -c --arg id "$id" --arg new_status "$new_status" --arg reason "$reason" '
+    jq -c --arg id "$id" --arg new_status "$new_status" --arg reason "$reason" --arg dts "$decided_ts" '
       if .id == $id then
         .status = $new_status
+        | .decided_ts = $dts
         | (if $reason != "" then .reason = $reason else . end)
       else . end
     ' "$STORE" > "$tmp" && mv "$tmp" "$STORE"

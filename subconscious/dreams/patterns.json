@@ -19,7 +19,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.7192259419519998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
@@ -45,7 +48,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.4137935336861388,
+    "ease": 1.6999999999999995,
+    "reactivations": 0
   },
   {
     "id": "881b161f-3ee0-4597-ab7b-d6c2a860613d",
@@ -111,7 +117,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.5581308760932945,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "5705bdea-d98b-4d38-b9ab-f4a0ca1cbe07",
@@ -133,7 +142,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T20:56:36.364036+00:00",
     "last_seen": "2026-05-03T20:56:36.364036+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9a083747-313b-49ab-86ed-3d75731e07d5",
@@ -159,7 +171,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2dca4eda-6e89-4790-9526-80053ff1ed47",
@@ -185,7 +200,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:31:03.730862+00:00",
     "last_seen": "2026-05-03T21:31:03.730862+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1483f109-345c-47ee-b240-39f99a3f6523",
@@ -213,7 +231,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T05:51:25.900092+00:00",
     "last_seen": "2026-05-04T05:51:25.900092+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "54aadeff-86aa-49a2-b929-90a5591315e7",
@@ -232,7 +253,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4c0579e1-d7c2-4721-a6d7-22008fe10322",
@@ -254,7 +278,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T22:16:37.096378+00:00",
     "last_seen": "2026-05-05T22:16:37.096378+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2f03eea0-194b-426c-9e01-1b7bd60f5df0",
@@ -274,7 +301,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "db35c073-5b2c-4a40-9051-9f1db1c51355",
@@ -295,7 +325,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T05:06:02.547566+00:00",
     "last_seen": "2026-05-07T05:06:02.547566+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "13526387-e655-41c3-a4e8-bbcca038e4c2",
@@ -317,7 +350,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8a0070ec-fd59-4eca-85ea-f9542e09dc24",
@@ -341,7 +377,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "44207d0e-ca03-4a77-993d-aa1a92f03e08",
@@ -363,7 +402,10 @@
     "last_seen": "2026-05-29T15:36:44.456233+00:00",
     "occurrence_history": [
       "2026-05-29T15:36:44.456233+00:00"
-    ]
+    ],
+    "strength": 0.711886901728,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "584e7697-e747-48e6-9cd8-274ccffd99d8",
@@ -427,7 +469,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5c3499d0-aef9-4924-b559-e15bf88068ed",
@@ -494,7 +539,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:12:22.674979+00:00",
     "last_seen": "2026-04-14T16:12:22.674979+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "00fb690c-b719-4a18-ad08-94adf937ae00",
@@ -560,7 +608,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "17c93150-f458-4f67-aa2d-6debc49c2687",
@@ -624,7 +675,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "da2de271-e256-4cf3-b667-f87f371bcf02",
@@ -688,7 +742,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ef9a0ad9-13be-470f-9881-2b6c679d640b",
@@ -752,7 +809,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "58112601-ddbc-4e20-a6ea-6987c6c96569",
@@ -818,7 +878,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e218ac38-3844-4295-a972-c9dc01b22d13",
@@ -875,7 +938,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.5439816836734693,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "d8578fea-ae3a-4ec7-9a16-ababf44cfc38",
@@ -902,7 +968,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ed1c9186-a2d5-41f8-bbe6-7e24ebed352d",
@@ -919,7 +988,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:22:22.725950+00:00",
     "last_seen": "2026-04-15T13:22:22.725950+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c89a0cb9-2fda-4c3b-82c6-14ea5ad9871e",
@@ -936,7 +1008,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:22:42.766438+00:00",
     "last_seen": "2026-04-15T13:22:42.766438+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "32a71715-924d-433b-8e7b-cac646fea9e2",
@@ -958,7 +1033,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T23:35:33.217995+00:00",
     "last_seen": "2026-04-15T23:35:33.217995+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c892fa80-f5af-4270-9e16-9225249062cc",
@@ -980,7 +1058,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T04:34:36.842156+00:00",
     "last_seen": "2026-04-16T04:34:36.842156+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2ff536b4-f4b3-41b3-a3ae-bb588aad3e73",
@@ -1005,7 +1086,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:18:50.154511+00:00",
     "last_seen": "2026-04-16T21:18:50.154511+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
@@ -1029,7 +1113,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0629319a-4440-4d1b-bad4-5ad0db93399a",
@@ -1053,7 +1140,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T06:03:41.624388+00:00",
     "last_seen": "2026-04-18T06:03:41.624388+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c14d3a47-9a39-4f3b-92ec-3ad016c1dd26",
@@ -1076,7 +1166,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T03:46:31.899213+00:00",
     "last_seen": "2026-04-21T03:46:31.899213+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e181d5f7-4435-4c76-a1a4-82f3536aac19",
@@ -1100,7 +1193,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T18:35:57.952217+00:00",
     "last_seen": "2026-04-21T18:35:57.952217+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "556fbc99-c295-493f-8b7a-218b2f5e964f",
@@ -1129,7 +1225,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-23T01:09:19.720599+00:00",
     "last_seen": "2026-04-23T01:09:19.720599+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1e5df293-bb35-4b57-b67e-d2640b80c314",
@@ -1153,7 +1252,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T01:37:32.551708+00:00",
     "last_seen": "2026-05-01T01:37:32.551708+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "afe8a2d8-17b3-42bc-973d-eac449588f9b",
@@ -1177,7 +1279,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T01:37:32.551708+00:00",
     "last_seen": "2026-05-01T01:37:32.551708+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "10b7a87a-5217-44e1-be13-e9acb9c24ae8",
@@ -1196,7 +1301,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T03:14:57.437127+00:00",
     "last_seen": "2026-05-01T03:14:57.437127+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ef57d880-da40-403d-b5bc-49ae318f35bd",
@@ -1215,7 +1323,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T03:14:57.437127+00:00",
     "last_seen": "2026-05-01T03:14:57.437127+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6abc30fa-b5cd-4992-9e06-90f5ca8b0644",
@@ -1240,7 +1351,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T13:32:17.144212+00:00",
     "last_seen": "2026-05-01T13:32:17.144212+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "392f40af-8bf6-463f-a558-c5b68076c729",
@@ -1265,7 +1379,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T16:51:27.618893+00:00",
     "last_seen": "2026-05-01T16:51:27.618893+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6fb0360d-b78d-4d97-ab65-325d2338ee68",
@@ -1290,7 +1407,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T17:33:18.082842+00:00",
     "last_seen": "2026-05-01T17:33:18.082842+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6ebe732c-7eb4-456a-819c-55549a289e00",
@@ -1314,7 +1434,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1b2d6ebc-acff-415e-86bd-c4d1985d5eaa",
@@ -1340,7 +1463,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:50.034009+00:00",
     "last_seen": "2026-05-03T21:30:50.034009+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b730b33a-0444-4a59-8596-e17f2529439d",
@@ -1366,7 +1492,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "dd69b4f8-7ee7-46ea-9465-46aa3a06dc4a",
@@ -1392,7 +1521,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:56.945974+00:00",
     "last_seen": "2026-05-03T21:30:56.945974+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "251ad081-8d9e-4dd2-9d5a-f46891e0b3a0",
@@ -1417,7 +1549,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T22:04:08.958103+00:00",
     "last_seen": "2026-05-03T22:04:08.958103+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8d83bdb4-a8b6-40fb-ae63-02d5562b774f",
@@ -1437,7 +1572,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T11:40:16.049334+00:00",
     "last_seen": "2026-05-05T11:40:16.049334+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7b66b6a4-3f2e-40be-b1fd-a6bfbf6d94f2",
@@ -1457,7 +1595,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "283a1441-ae55-4ed3-b9c4-702ceef35262",
@@ -1477,7 +1618,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T03:33:46.994159+00:00",
     "last_seen": "2026-05-06T03:33:46.994159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5c9073a5-12cc-42b7-bf31-896857b227d6",
@@ -1499,7 +1643,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1d4dd42d-f42a-452e-972c-f660522c0376",
@@ -1519,7 +1666,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cf9ca343-0f9b-4d9f-a339-ff728fcede8e",
@@ -1539,7 +1689,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8890c6db-dc18-4f42-a0a6-45c9fe25e99d",
@@ -1559,7 +1712,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7762a60f-9354-4d67-b96e-a0b70da3ce05",
@@ -1581,7 +1737,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T17:02:33.524510+00:00",
     "last_seen": "2026-05-07T17:02:33.524510+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "26d4bef3-0d51-4285-9601-a52ce7b689aa",
@@ -1603,7 +1762,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f73afa32-8e48-4d03-828b-e1e195651520",
@@ -1625,7 +1787,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T10:11:13.599469+00:00",
     "last_seen": "2026-05-08T10:11:13.599469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7c85287a-edac-42ab-8c5f-b1baec092af6",
@@ -1651,7 +1816,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.5439816836734693,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "8b18984f-1442-4a19-80a8-ef2536dfcb65",
@@ -1671,7 +1839,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T16:09:07.243289+00:00",
     "last_seen": "2026-05-08T16:09:07.243289+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "84d14077-06af-4f81-a10b-b521e06aa75d",
@@ -1691,7 +1862,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "dc1144bf-78ff-4d2d-be8a-c9a07a446e7f",
@@ -1715,7 +1889,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "70cb157c-6880-4be9-908f-98a5b502251f",
@@ -1741,7 +1918,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "65c26009-9089-4c05-a158-38be1b21e667",
@@ -1767,7 +1947,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "77fa3b53-6b0c-4496-9d4d-fbeba5dd1aee",
@@ -1791,7 +1974,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1b255cd0-64da-4b19-9ced-e79472e98bf0",
@@ -1813,7 +1999,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7156ccd1-1008-42c3-98ef-1b9d624ed78e",
@@ -1835,7 +2024,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4e4b59b3-b934-4626-99b2-ea3af1991e9b",
@@ -1857,7 +2049,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "53f3d8d2-ae09-46f4-9c47-ea28cfc363f7",
@@ -1879,7 +2074,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "760d3197-1bc9-4e51-986c-a381d3e6ac7f",
@@ -1906,7 +2104,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1c9dd028-997d-447f-b96f-b38510b9c07b",
@@ -1934,7 +2135,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.46836514980317834,
+    "ease": 1.8999999999999997,
+    "reactivations": 0
   },
   {
     "id": "0e0ba733-22e7-4e50-816c-8f6ab8e14728",
@@ -1962,7 +2166,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ea130505-f53f-4f0e-a95f-9fab83e2a0dc",
@@ -1990,7 +2197,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ca24dca7-089a-42be-8b06-18ebc21ed11a",
@@ -2010,7 +2220,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "03c213f9-6f9a-4613-a7f5-7615ddc6faef",
@@ -2036,7 +2249,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "54fe93b7-1b4f-4248-9280-9ea7a34587c7",
@@ -2064,7 +2280,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a745dee9-7920-42db-8ca0-cf5e4306a767",
@@ -2092,7 +2311,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.46836514980317834,
+    "ease": 1.8999999999999997,
+    "reactivations": 0
   },
   {
     "id": "57367c94-9e57-451d-b357-ce783fc87b52",
@@ -2118,7 +2340,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-25T00:52:28.628818+00:00",
     "last_seen": "2026-05-25T00:52:28.628818+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e3962417-d094-4477-a68b-0a950dcc4dbd",
@@ -2144,7 +2369,10 @@
     "last_seen": "2026-05-28T12:59:20.926295+00:00",
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
-    ]
+    ],
+    "strength": 0.46836514980317834,
+    "ease": 1.8999999999999997,
+    "reactivations": 0
   },
   {
     "id": "b6beb31a-db39-4e8a-90f5-35c93c65b5a2",
@@ -2170,7 +2398,10 @@
     "last_seen": "2026-05-28T18:21:56.157796+00:00",
     "occurrence_history": [
       "2026-05-28T18:21:56.157796+00:00"
-    ]
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e6bbd57f-afbc-40be-bb87-3ce9e7bcc42c",
@@ -2195,7 +2426,10 @@
     "last_seen": "2026-05-29T00:24:12.419994+00:00",
     "occurrence_history": [
       "2026-05-29T00:24:12.419994+00:00"
-    ]
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "acbd39b8-a002-4c84-bca0-cbae9f8500aa",
@@ -2226,7 +2460,10 @@
     "last_seen": "2026-05-29T15:35:50.196071+00:00",
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
-    ]
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "710a1dea-b73c-41fd-9e39-71ad115ba538",
@@ -2250,7 +2487,10 @@
     "last_seen": "2026-06-28T12:32:18.420032+00:00",
     "occurrence_history": [
       "2026-06-28T12:32:18.420032+00:00"
-    ]
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7e227751-1141-4781-8c0d-8a182a046dd8",
@@ -2278,7 +2518,10 @@
     "last_seen": "2026-07-04T07:08:53.367433+00:00",
     "occurrence_history": [
       "2026-07-04T07:08:53.367433+00:00"
-    ]
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "24c09a3b-5857-4555-a6fb-eaa54d1cd7b9",
@@ -2319,7 +2562,10 @@
     "last_seen": "2026-07-11T02:43:49.156883+00:00",
     "occurrence_history": [
       "2026-07-11T02:43:49.156883+00:00"
-    ]
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f1057a8d-e978-416c-b52e-7ea8fd28e770",
@@ -2383,7 +2629,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5ac572b8-2860-4b61-b617-5214c9898c3a",
@@ -2449,7 +2698,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f1b15033-a4e3-4a70-84fa-4de726a42926",
@@ -2515,7 +2767,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1523746a-7091-4022-b130-7e28b7f77561",
@@ -2572,7 +2827,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "07e91a34-f2bd-4d49-8ac8-b81f1d0cd808",
@@ -2594,7 +2852,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T04:34:36.842156+00:00",
     "last_seen": "2026-04-16T04:34:36.842156+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4099be7e-c387-4301-94c9-3ff468eddfee",
@@ -2620,7 +2881,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f8729e32-b8b6-4809-b014-796e84458c3c",
@@ -2647,7 +2911,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a62f0e40-371d-43d4-94a4-d4b4d975fb94",
@@ -2667,7 +2934,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b76ed612-afc4-41a0-bfff-d4da84a21836",
@@ -2695,7 +2965,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d542be04-7c3d-4d9f-a1a9-7616930895f1",
@@ -2724,7 +2997,10 @@
     "last_seen": "2026-06-24T10:24:10.726316+00:00",
     "occurrence_history": [
       "2026-06-24T10:24:10.726316+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "dcabdb8f-3c2e-4e52-9b8b-d429072e6111",
@@ -2752,7 +3028,10 @@
     "last_seen": "2026-06-27T18:11:13.741084+00:00",
     "occurrence_history": [
       "2026-06-27T18:11:13.741084+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "30352339-cab8-4874-9b1d-884830e42d3b",
@@ -2776,7 +3055,10 @@
     "last_seen": "2026-06-29T17:59:02.583896+00:00",
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "aa0d2ba0-4719-4273-957a-54b094336c40",
@@ -2800,7 +3082,10 @@
     "last_seen": "2026-06-29T17:59:02.583896+00:00",
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "27352a7b-8a7e-4395-a897-3bb1f9117318",
@@ -2839,7 +3124,10 @@
     "last_seen": "2026-07-02T23:49:07.272682+00:00",
     "occurrence_history": [
       "2026-07-02T23:49:07.272682+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2f88ac60-2d7f-45ed-b286-4fdaef0ff359",
@@ -2863,7 +3151,10 @@
     "last_seen": "2026-07-04T23:51:52.289152+00:00",
     "occurrence_history": [
       "2026-07-04T23:51:52.289152+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bf095985-92af-4339-aa74-89516b572333",
@@ -2901,7 +3192,10 @@
     "last_seen": "2026-07-08T16:24:49.320376+00:00",
     "occurrence_history": [
       "2026-07-08T16:24:49.320376+00:00"
-    ]
+    ],
+    "strength": 0.6825307408319998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2bca0a46-6579-4af7-a41c-44bfabdd7e70",
@@ -2965,7 +3259,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "48d98c46-03d4-43f1-a85f-b355ec92e845",
@@ -3031,7 +3328,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2e7d5054-603d-4ba1-92cb-41bca5de2463",
@@ -3097,7 +3397,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46",
@@ -3154,7 +3457,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "694c5087-f6dc-4dd0-88dc-8645a8dda00f",
@@ -3180,7 +3486,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T12:11:40.733270+00:00",
     "last_seen": "2026-04-15T12:11:40.733270+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c70ae766-c39a-442a-a15d-fbe84d854e0c",
@@ -3207,7 +3516,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "54f4b4e1-6216-4a39-9484-1d6618b8e901",
@@ -3226,7 +3538,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T19:36:29.897823+00:00",
     "last_seen": "2026-04-15T19:36:29.897823+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "dd2e18ab-2182-4f88-8eab-354193b9e90a",
@@ -3250,7 +3565,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "846615fc-eeb8-4a44-bf0a-bf06c723fde8",
@@ -3273,7 +3591,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T19:28:55.953507+00:00",
     "last_seen": "2026-04-18T19:28:55.953507+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
@@ -3301,7 +3622,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-19T13:05:21.883347+00:00",
     "last_seen": "2026-04-19T13:05:21.883347+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7afe9252-1435-4ae4-8141-9fb51d2187f6",
@@ -3324,7 +3648,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "21f20909-472b-4445-9477-c0605accbe55",
@@ -3355,7 +3682,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-25T00:15:30.738596+00:00",
     "last_seen": "2026-04-25T00:15:30.738596+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9e8b9158-842f-449f-8e35-5be120ba3e88",
@@ -3379,7 +3709,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8a148c96-b879-495a-a1be-5c9ab42374d6",
@@ -3401,7 +3734,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T12:03:30.121983+00:00",
     "last_seen": "2026-05-03T12:03:30.121983+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "39a4b9b9-8002-40d6-99f2-736b3bb9ff4f",
@@ -3423,7 +3759,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8af2d36c-2965-4e8d-a486-03720fbd3e15",
@@ -3443,7 +3782,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a895f9a6-27eb-46fa-bb69-ab5a29431dfe",
@@ -3465,7 +3807,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f5a8cb32-5798-4c0b-b773-11a5d198b426",
@@ -3486,7 +3831,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T05:06:02.547566+00:00",
     "last_seen": "2026-05-07T05:06:02.547566+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6725d022-1ba6-4dd7-a233-61833f30077c",
@@ -3508,7 +3856,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7f411c71-2e1d-4ef6-9e14-13291f214109",
@@ -3528,7 +3879,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "30b097a3-70c1-4cac-be58-40842fc026dc",
@@ -3552,7 +3906,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7be11296-2c5e-473e-9c56-9e9f107d7347",
@@ -3574,7 +3931,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7018f995-e12e-4007-a250-851d1d14546a",
@@ -3600,7 +3960,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f2fc70ba-1b95-47b7-8a89-cce8c2ea109a",
@@ -3624,7 +3987,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T05:04:55.715359+00:00",
     "last_seen": "2026-05-09T05:04:55.715359+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "db6e9827-e8f6-4072-b86e-e2af72c0790f",
@@ -3644,7 +4010,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "63996922-0353-46b0-9362-07c6204c495e",
@@ -3666,7 +4035,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T13:03:20.913554+00:00",
     "last_seen": "2026-05-09T13:03:20.913554+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "941decd0-cfd6-4d79-b6c6-ec32f5aabc13",
@@ -3690,7 +4062,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "372cf3a2-440e-4159-b54e-44979cf83994",
@@ -3714,7 +4089,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b2f0ea5f-a2ef-4dbf-b2ef-6d010fb0aee4",
@@ -3740,7 +4118,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "87ef8dbc-c801-425c-a648-e97b112d528f",
@@ -3764,7 +4145,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c5e872f5-b64a-43c8-b13e-b2b2ce0e54ab",
@@ -3786,7 +4170,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cca963f1-5f2c-4796-b2a5-9fd9d1758629",
@@ -3806,7 +4193,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0858da01-31c3-43ed-a323-6f4fa279da70",
@@ -3826,7 +4216,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "943ce7f1-3a81-4450-818c-6ed7c0323572",
@@ -3848,7 +4241,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.5227578950437319,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "dd9245a9-4785-407b-90cf-35d553649e64",
@@ -3870,7 +4266,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "411c519d-81b7-4865-b2a6-dcf77cf84092",
@@ -3897,7 +4296,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5139f378-6ee2-40a2-9cef-c9c8910747c8",
@@ -3924,7 +4326,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b1dae36a-9075-4129-aee6-26fb164d3a91",
@@ -3955,7 +4360,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "51a95ab2-c3d1-4cc5-8454-c5c3df6e40b4",
@@ -3982,7 +4390,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4f3aa521-262e-443f-815f-077a06bb3112",
@@ -4010,7 +4421,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e72d0dd6-3a5b-4c04-9e47-f5ff15ec6497",
@@ -4038,7 +4452,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ebdeedf9-9fd1-418a-9165-822a46a50238",
@@ -4066,7 +4483,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9b0a3223-723e-482c-995f-120c0d7cb0c1",
@@ -4094,7 +4514,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e5f92547-7162-439b-9808-012d17d13483",
@@ -4114,7 +4537,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "90a0fde8-bd5a-4a89-845d-efcff4d77dec",
@@ -4134,7 +4560,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f921458d-e515-49b2-a89e-fc9e1e6dae3e",
@@ -4155,7 +4584,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-19T23:04:24.585142+00:00",
     "last_seen": "2026-05-19T23:04:24.585142+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ae30f340-d36a-4d20-8fbc-da8305562520",
@@ -4181,7 +4613,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c0cfc843-9949-4f9a-a0fc-426061715754",
@@ -4207,7 +4642,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b82408b5-e34f-4a9a-ab18-09692ceb5ff9",
@@ -4231,7 +4669,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T00:01:34.471553+00:00",
     "last_seen": "2026-05-21T00:01:34.471553+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d6f69c86-2492-4ebd-bc1d-6103bf7a6edd",
@@ -4254,7 +4695,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "24751e99-cd36-40e8-8e6f-06e0ccfddb36",
@@ -4282,7 +4726,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d147935f-417c-426b-9e42-0b4796a87cbd",
@@ -4310,7 +4757,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-26T00:52:14.270827+00:00",
     "last_seen": "2026-05-26T00:52:14.270827+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4848b5b9-6219-46ca-900d-f6defabff428",
@@ -4336,7 +4786,10 @@
     "last_seen": "2026-05-28T12:59:20.926295+00:00",
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7b0e8fe8-ac49-49ee-ba60-cb82453e4557",
@@ -4362,7 +4815,10 @@
     "last_seen": "2026-05-28T18:21:56.157796+00:00",
     "occurrence_history": [
       "2026-05-28T18:21:56.157796+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "eee639d6-fddf-4ef3-817e-9374f01e13d4",
@@ -4387,7 +4843,10 @@
     "last_seen": "2026-05-29T00:24:12.419994+00:00",
     "occurrence_history": [
       "2026-05-29T00:24:12.419994+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fd34e4af-d931-439d-a82f-40e3148832c0",
@@ -4418,7 +4877,10 @@
     "last_seen": "2026-05-29T15:35:50.196071+00:00",
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ca66325c-702d-4f15-8cb0-073c2db87dac",
@@ -4440,7 +4902,10 @@
     "last_seen": "2026-05-29T15:36:44.456233+00:00",
     "occurrence_history": [
       "2026-05-29T15:36:44.456233+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5b63867a-ef66-4873-9f4a-0f91183f8317",
@@ -4472,7 +4937,10 @@
     "last_seen": "2026-05-29T23:21:48.497946+00:00",
     "occurrence_history": [
       "2026-05-29T23:21:48.497946+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7be594c9-4787-4cd4-8c85-76fed3baac94",
@@ -4495,7 +4963,10 @@
     "last_seen": "2026-05-30T03:03:51.470363+00:00",
     "occurrence_history": [
       "2026-05-30T03:03:51.470363+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fc16ff18-da13-4e3b-8011-aec04713fce0",
@@ -4527,7 +4998,10 @@
     "last_seen": "2026-05-30T17:00:01.159958+00:00",
     "occurrence_history": [
       "2026-05-30T17:00:01.159958+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ea7881c9-ff4e-4f56-b2c7-c4d8d6f5a736",
@@ -4552,7 +5026,10 @@
     "last_seen": "2026-06-02T13:28:33.968421+00:00",
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "01d3fb21-ff72-45da-a347-09cc09bf7bc3",
@@ -4574,7 +5051,10 @@
     "last_seen": "2026-06-03T17:45:18.122629+00:00",
     "occurrence_history": [
       "2026-06-03T17:45:18.122629+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "09fa752e-c873-4d73-bf03-578c298b51c5",
@@ -4598,7 +5078,10 @@
     "last_seen": "2026-06-04T13:18:21.538564+00:00",
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3fdd0476-64bb-4f54-bf69-cbdd5509a8e2",
@@ -4622,7 +5105,10 @@
     "last_seen": "2026-06-05T12:42:12.279426+00:00",
     "occurrence_history": [
       "2026-06-05T12:42:12.279426+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "19829fef-d0b6-4252-ac33-e6aa8f55b7cf",
@@ -4645,7 +5131,10 @@
     "last_seen": "2026-06-05T19:55:30.751415+00:00",
     "occurrence_history": [
       "2026-06-05T19:55:30.751415+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e8e21ffe-87a1-4e36-879c-97c626126f52",
@@ -4667,7 +5156,10 @@
     "last_seen": "2026-06-08T12:01:12.819262+00:00",
     "occurrence_history": [
       "2026-06-08T12:01:12.819262+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5161f69a-c10e-415e-8de3-a50dc020c5b4",
@@ -4703,7 +5195,10 @@
     "last_seen": "2026-06-09T15:32:59.350960+00:00",
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
-    ]
+    ],
+    "strength": 0.3010128480000001,
+    "ease": 1.4999999999999998,
+    "reactivations": 0
   },
   {
     "id": "ae0d3209-7f64-4bd8-8ad8-f2917de6655a",
@@ -4739,7 +5234,10 @@
     "last_seen": "2026-06-09T15:32:59.350960+00:00",
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "733f7ef5-26a2-4847-9686-420650fc1712",
@@ -4761,7 +5259,10 @@
     "last_seen": "2026-06-09T20:11:13.524350+00:00",
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3997f470-7155-47a3-af60-10dbf9e1220b",
@@ -4783,7 +5284,10 @@
     "last_seen": "2026-06-09T20:11:13.524350+00:00",
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
@@ -4808,7 +5312,10 @@
     "last_seen": "2026-06-10T14:16:55.017090+00:00",
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
-    ]
+    ],
+    "strength": 0.5227578950437319,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "10d41879-99d3-4892-8a2e-855e87d8fd6e",
@@ -4833,7 +5340,10 @@
     "last_seen": "2026-06-10T14:16:55.017090+00:00",
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a9078414-0b67-42b8-ac1a-b78ac978c653",
@@ -4858,7 +5368,10 @@
     "last_seen": "2026-06-11T18:41:28.565308+00:00",
     "occurrence_history": [
       "2026-06-11T18:41:28.565308+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "34db8031-e2e2-4d23-ba2d-8d5c5c1b5e99",
@@ -4891,7 +5404,10 @@
     "last_seen": "2026-06-12T19:52:36.457017+00:00",
     "occurrence_history": [
       "2026-06-12T19:52:36.457017+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3f087fba-55c2-4807-8ede-036b16b0c63d",
@@ -4916,7 +5432,10 @@
     "last_seen": "2026-06-13T17:02:59.417794+00:00",
     "occurrence_history": [
       "2026-06-13T17:02:59.417794+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8b87806a-2797-4205-99f9-09b432e63afe",
@@ -4949,7 +5468,10 @@
     "last_seen": "2026-06-17T17:04:47.577262+00:00",
     "occurrence_history": [
       "2026-06-17T17:04:47.577262+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7f022cb2-1fcf-4dce-a903-06f63fe73234",
@@ -4977,7 +5499,10 @@
     "last_seen": "2026-06-19T17:49:46.984809+00:00",
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6a32912f-3a09-4e09-9819-0b0d351feede",
@@ -5014,7 +5539,10 @@
     "last_seen": "2026-06-20T02:01:59.851749+00:00",
     "occurrence_history": [
       "2026-06-20T02:01:59.851749+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ddd5965e-1aa9-4523-b4f9-e79a7e3a89ae",
@@ -5039,7 +5567,10 @@
     "last_seen": "2026-06-21T12:16:04.148972+00:00",
     "occurrence_history": [
       "2026-06-21T12:16:04.148972+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bf6d7fd7-40be-4413-bbce-37df1772f289",
@@ -5066,7 +5597,10 @@
     "last_seen": "2026-06-21T16:43:27.454214+00:00",
     "occurrence_history": [
       "2026-06-21T16:43:27.454214+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "631c93bf-f3db-461c-a669-9073719a8b85",
@@ -5095,7 +5629,10 @@
     "last_seen": "2026-06-22T13:05:50.557852+00:00",
     "occurrence_history": [
       "2026-06-22T13:05:50.557852+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3bc376bc-88ce-421b-9988-ca5f9c5e8da8",
@@ -5118,7 +5655,10 @@
     "last_seen": "2026-06-23T00:15:19.177245+00:00",
     "occurrence_history": [
       "2026-06-23T00:15:19.177245+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6452711e-4c1d-4149-ab38-88c4ed584e6f",
@@ -5140,7 +5680,10 @@
     "last_seen": "2026-06-24T17:05:25.884606+00:00",
     "occurrence_history": [
       "2026-06-24T17:05:25.884606+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ee92bf40-2b6c-42ca-99bf-36db1063437c",
@@ -5166,7 +5709,10 @@
     "last_seen": "2026-06-26T16:44:28.714927+00:00",
     "occurrence_history": [
       "2026-06-26T16:44:28.714927+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a58b9974-5aa6-4138-8ad8-11af415c8feb",
@@ -5192,7 +5738,10 @@
     "last_seen": "2026-06-26T16:44:28.714927+00:00",
     "occurrence_history": [
       "2026-06-26T16:44:28.714927+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "08bb0a75-ffc6-4ca9-a910-20ed52f849e7",
@@ -5219,7 +5768,10 @@
     "last_seen": "2026-06-27T00:58:04.925103+00:00",
     "occurrence_history": [
       "2026-06-27T00:58:04.925103+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ca4d6447-baa3-433c-93f7-54fe279ccfab",
@@ -5246,7 +5798,10 @@
     "last_seen": "2026-06-29T12:49:50.137015+00:00",
     "occurrence_history": [
       "2026-06-29T12:49:50.137015+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "55d07445-fe30-479a-9fd9-709d9c6eac8d",
@@ -5270,7 +5825,10 @@
     "last_seen": "2026-06-29T17:59:02.583896+00:00",
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ac7395ea-01ca-4d95-af41-ca8c3cf0c4dc",
@@ -5297,7 +5855,10 @@
     "last_seen": "2026-06-30T02:08:56.095422+00:00",
     "occurrence_history": [
       "2026-06-30T02:08:56.095422+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3b08feb7-ed95-487d-b692-81cf62efa129",
@@ -5324,7 +5885,10 @@
     "last_seen": "2026-06-30T23:43:44.791641+00:00",
     "occurrence_history": [
       "2026-06-30T23:43:44.791641+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7b9d98ab-bd0e-41fd-991d-716ce789878a",
@@ -5347,7 +5911,10 @@
     "last_seen": "2026-07-03T17:41:29.756336+00:00",
     "occurrence_history": [
       "2026-07-03T17:41:29.756336+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0d769a7b-7054-4415-8fb5-ae854ff9caf0",
@@ -5375,7 +5942,10 @@
     "last_seen": "2026-07-04T07:08:53.367433+00:00",
     "occurrence_history": [
       "2026-07-04T07:08:53.367433+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "682edcf1-9b87-431b-9660-096052b416b8",
@@ -5402,7 +5972,10 @@
     "last_seen": "2026-07-09T13:59:07.651344+00:00",
     "occurrence_history": [
       "2026-07-09T13:59:07.651344+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a4de9ca4-d8f1-44ac-a1f2-0a44019b2293",
@@ -5445,7 +6018,10 @@
     "last_seen": "2026-07-10T08:21:23.843429+00:00",
     "occurrence_history": [
       "2026-07-10T08:21:23.843429+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2bb1afbb-e5c0-4ee0-a483-e164c33b1471",
@@ -5476,7 +6052,10 @@
     "last_seen": "2026-07-10T08:34:03.448673+00:00",
     "occurrence_history": [
       "2026-07-10T08:34:03.448673+00:00"
-    ]
+    ],
+    "strength": 0.6751917006079998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
@@ -5542,7 +6121,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6678526603839998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1172c8e4-f8cc-437b-a534-f3999ad7b23b",
@@ -5566,7 +6148,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T00:01:34.471553+00:00",
     "last_seen": "2026-05-21T00:01:34.471553+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6678526603839998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "09da9723-bc89-4eb7-bae9-8c7c6f3c6844",
@@ -5590,7 +6175,10 @@
     "last_seen": "2026-07-04T23:51:52.289152+00:00",
     "occurrence_history": [
       "2026-07-04T23:51:52.289152+00:00"
-    ]
+    ],
+    "strength": 0.6678526603839998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b76b7252-944d-49f8-bb01-fa76c140a694",
@@ -5654,7 +6242,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a",
@@ -5718,7 +6309,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2682c169-967f-49be-8dc5-eb5e693370bb",
@@ -5785,7 +6379,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:12:22.674979+00:00",
     "last_seen": "2026-04-14T16:12:22.674979+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "28b1145a-8c28-478d-8c2a-bc25d7da5eab",
@@ -5852,7 +6449,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:12:22.674979+00:00",
     "last_seen": "2026-04-14T16:12:22.674979+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "92a767af-37ad-4b83-84af-684fd98948b5",
@@ -5918,7 +6518,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ff7b37a5-17ae-466e-b55e-585866af824b",
@@ -5982,7 +6585,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "edaeaf8c-9b6e-4652-b777-ccedba905520",
@@ -6046,7 +6652,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
@@ -6112,7 +6721,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2dfa1a6e-03f6-473e-8476-8a5da501300e",
@@ -6178,7 +6790,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5e7ccf60-ef19-4c14-b9c8-76e931755a30",
@@ -6202,7 +6817,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T05:11:49.550024+00:00",
     "last_seen": "2026-04-15T05:11:49.550024+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c492a9f2-55a9-4c36-9bf3-6c98959e30a7",
@@ -6221,7 +6839,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T08:21:44.107444+00:00",
     "last_seen": "2026-04-15T08:21:44.107444+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c1405960-924b-4896-b075-e8de0d9868d1",
@@ -6248,7 +6869,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3d9745f8-ff2e-4e94-be3c-89586e47cd3a",
@@ -6265,7 +6889,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:22:42.766438+00:00",
     "last_seen": "2026-04-15T13:22:42.766438+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f52074f5-e86f-46bf-9b6e-a07c743963b6",
@@ -6282,7 +6909,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:23:15.385168+00:00",
     "last_seen": "2026-04-15T13:23:15.385168+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "42e3c2e2-b3bb-4e00-8b53-e4a9e3e3e9d2",
@@ -6299,7 +6929,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:23:15.385168+00:00",
     "last_seen": "2026-04-15T13:23:15.385168+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c799c431-c2c8-436c-98cb-27090661dd87",
@@ -6316,7 +6949,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:25:11.209337+00:00",
     "last_seen": "2026-04-15T13:25:11.209337+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "16053af3-b0de-4ff5-b03f-b72df9f283e0",
@@ -6333,7 +6969,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:25:11.209337+00:00",
     "last_seen": "2026-04-15T13:25:11.209337+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bcec004b-2886-4d93-ba81-2de6d1348a63",
@@ -6359,7 +6998,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T19:41:19.129368+00:00",
     "last_seen": "2026-04-16T19:41:19.129368+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0da89570-65b9-4bc5-8a0c-9cbf130314c9",
@@ -6384,7 +7026,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:18:50.154511+00:00",
     "last_seen": "2026-04-16T21:18:50.154511+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1c39c2de-8ccf-477a-8fb4-0d47a81b02f5",
@@ -6409,7 +7054,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:18:50.154511+00:00",
     "last_seen": "2026-04-16T21:18:50.154511+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f34c00a8-b5be-4fc3-b371-0f9cd5baa88a",
@@ -6433,7 +7081,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d9a0b2c4-58f0-4292-a51c-ce33539fe7ed",
@@ -6457,7 +7108,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6e4a0aed-6b9d-441c-a95f-1a577859544d",
@@ -6481,7 +7135,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b674c079-5441-4cde-870e-0537c612e2d5",
@@ -6504,7 +7161,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T22:19:22.401702+00:00",
     "last_seen": "2026-04-16T22:19:22.401702+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "33223dad-8c2e-4de1-8ccc-da3885432ab8",
@@ -6527,7 +7187,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T22:19:22.401702+00:00",
     "last_seen": "2026-04-16T22:19:22.401702+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "dc93085e-e0b1-4bcd-9ede-7e32482c6dae",
@@ -6551,7 +7214,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "277a34f3-8e04-4b06-95f3-ef5af822fa56",
@@ -6575,7 +7241,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9a827075-12fc-4281-96bf-5e6c9fb6d465",
@@ -6601,7 +7270,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T01:39:27.568403+00:00",
     "last_seen": "2026-04-18T01:39:27.568403+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "220568d4-7983-4b44-a722-5b5b8d83e09b",
@@ -6627,7 +7299,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T01:39:27.568403+00:00",
     "last_seen": "2026-04-18T01:39:27.568403+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "db3706f7-7c8b-4478-a69f-fd8f19b512e8",
@@ -6653,7 +7328,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T01:39:27.568403+00:00",
     "last_seen": "2026-04-18T01:39:27.568403+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "58b2db13-017d-473b-a3a3-9d0629fcffa8",
@@ -6677,7 +7355,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T06:03:41.624388+00:00",
     "last_seen": "2026-04-18T06:03:41.624388+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "60437524-ebe2-49dd-847c-7ad2bc4d6063",
@@ -6701,7 +7382,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T06:03:41.624388+00:00",
     "last_seen": "2026-04-18T06:03:41.624388+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "27bfca87-8798-44c0-b571-0d4c638ea8d6",
@@ -6724,7 +7408,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T19:28:55.953507+00:00",
     "last_seen": "2026-04-18T19:28:55.953507+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "26066f53-fde8-424b-8482-763eff219d30",
@@ -6752,7 +7439,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-19T13:05:21.883347+00:00",
     "last_seen": "2026-04-19T13:05:21.883347+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "425f7e4a-c2ea-4840-8a1d-153e85c0e518",
@@ -6776,7 +7466,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-20T01:50:49.158599+00:00",
     "last_seen": "2026-04-20T01:50:49.158599+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "82b07e5e-ed37-48b4-aea6-b3503e852b81",
@@ -6800,7 +7493,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-20T01:50:49.158599+00:00",
     "last_seen": "2026-04-20T01:50:49.158599+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a87ef6a6-8f24-4bbc-8b04-58d4f9e3ebb5",
@@ -6823,7 +7519,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-20T19:49:02.800099+00:00",
     "last_seen": "2026-04-20T19:49:02.800099+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b4549f15-21e4-423d-951e-19d57ce21ae5",
@@ -6846,7 +7545,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-20T19:49:02.800099+00:00",
     "last_seen": "2026-04-20T19:49:02.800099+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "56d0a768-8f61-403b-8371-7fc23b020738",
@@ -6869,7 +7571,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-20T19:49:02.800099+00:00",
     "last_seen": "2026-04-20T19:49:02.800099+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "08873616-a714-4064-b3f6-4be841efd028",
@@ -6892,7 +7597,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T03:46:31.899213+00:00",
     "last_seen": "2026-04-21T03:46:31.899213+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9a65b1b0-6529-4746-b4ec-c158c04b0f7a",
@@ -6915,7 +7623,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T03:46:31.899213+00:00",
     "last_seen": "2026-04-21T03:46:31.899213+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "95514d69-87e5-4046-a940-2250ffad2e87",
@@ -6939,7 +7650,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T18:35:57.952217+00:00",
     "last_seen": "2026-04-21T18:35:57.952217+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "207bf4f1-93c9-4b5a-9507-1b5357f22ba5",
@@ -6962,7 +7676,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6000c08b-f9b6-4a61-b15d-35e3617078a3",
@@ -6985,7 +7702,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "65e1856d-a9b4-462f-bb11-310dd14211ea",
@@ -7023,7 +7743,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-24T01:11:32.574020+00:00",
     "last_seen": "2026-04-24T01:11:32.574020+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "eb044f60-a5bb-4042-92db-f584372b16d5",
@@ -7045,7 +7768,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-24T07:51:12.510232+00:00",
     "last_seen": "2026-04-24T07:51:12.510232+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8d2ffc45-1d3f-4074-9a01-971fedb882ab",
@@ -7067,7 +7793,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-24T07:51:12.510232+00:00",
     "last_seen": "2026-04-24T07:51:12.510232+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d4040b5a-2cac-406a-b270-188b131bd869",
@@ -7098,7 +7827,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-25T00:15:30.738596+00:00",
     "last_seen": "2026-04-25T00:15:30.738596+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bebdfe52-b120-4854-a31a-5211cc4ae86a",
@@ -7123,7 +7855,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-28T03:53:28.327361+00:00",
     "last_seen": "2026-04-28T03:53:28.327361+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f19ac5b6-bdb3-4f1f-8145-8c2dd4c8ddaa",
@@ -7147,7 +7882,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T19:09:55.040940+00:00",
     "last_seen": "2026-04-29T19:09:55.040940+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "98d6c335-c513-415b-a8ec-b784dc5758b0",
@@ -7171,7 +7909,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T19:09:55.040940+00:00",
     "last_seen": "2026-04-29T19:09:55.040940+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2262d03b-c07e-4514-84ce-5b47ad61da7d",
@@ -7192,7 +7933,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:36:38.713082+00:00",
     "last_seen": "2026-04-29T20:36:38.713082+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2cbab085-803a-42e9-bf29-2069301ab7c8",
@@ -7212,7 +7956,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:37:40.856354+00:00",
     "last_seen": "2026-04-29T20:37:40.856354+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "db942dcf-5770-4bc8-a435-93d426fb09a1",
@@ -7232,7 +7979,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:37:40.856354+00:00",
     "last_seen": "2026-04-29T20:37:40.856354+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "439bf9eb-7f92-48e3-a517-d47d31784655",
@@ -7252,7 +8002,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:37:40.856354+00:00",
     "last_seen": "2026-04-29T20:37:40.856354+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9bf93370-4a51-4e0d-b195-9c6120242d76",
@@ -7277,7 +8030,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:55:48.416999+00:00",
     "last_seen": "2026-04-29T20:55:48.416999+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ca74d3de-7f77-4b3a-8f3c-cdcaeea40ee7",
@@ -7302,7 +8058,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:55:48.416999+00:00",
     "last_seen": "2026-04-29T20:55:48.416999+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "15abfe04-0611-4a19-9ff4-7dcbec4c4de6",
@@ -7325,7 +8084,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-30T12:39:15.256464+00:00",
     "last_seen": "2026-04-30T12:39:15.256464+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "880c78fe-703a-4455-948d-1c733b696e5c",
@@ -7349,7 +8111,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T01:37:32.551708+00:00",
     "last_seen": "2026-05-01T01:37:32.551708+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "77198448-a620-430e-881e-f7bfd8b696c9",
@@ -7374,7 +8139,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T13:32:17.144212+00:00",
     "last_seen": "2026-05-01T13:32:17.144212+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9d2e8314-8398-46a8-855c-84b15b4df210",
@@ -7399,7 +8167,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T13:32:17.144212+00:00",
     "last_seen": "2026-05-01T13:32:17.144212+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e7993048-9b9f-4ad3-91e3-b027509c1a80",
@@ -7424,7 +8195,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T16:51:27.618893+00:00",
     "last_seen": "2026-05-01T16:51:27.618893+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9a1bb913-f337-43d2-8174-51d098396528",
@@ -7452,7 +8226,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T21:47:48.375687+00:00",
     "last_seen": "2026-05-01T21:47:48.375687+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "48df9d8e-4d4d-4fcf-9289-0126f73efeea",
@@ -7473,7 +8250,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T01:53:53.205143+00:00",
     "last_seen": "2026-05-02T01:53:53.205143+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "13ad1c72-8307-4118-a893-fdc9e632db3a",
@@ -7497,7 +8277,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ab523075-048e-4974-a4d7-0b6c7566e98a",
@@ -7517,7 +8300,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T20:39:50.215588+00:00",
     "last_seen": "2026-05-02T20:39:50.215588+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "544d84ab-e353-4add-9f77-a18d4cf82cd9",
@@ -7539,7 +8325,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T09:07:15.464654+00:00",
     "last_seen": "2026-05-03T09:07:15.464654+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d8782976-0566-4c3d-965f-b98b90fc8459",
@@ -7558,7 +8347,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T10:42:27.182851+00:00",
     "last_seen": "2026-05-03T10:42:27.182851+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0497a250-8dff-486a-a83a-f5acdf6ba354",
@@ -7580,7 +8372,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T12:03:30.121983+00:00",
     "last_seen": "2026-05-03T12:03:30.121983+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7dd1f553-8b2e-42d9-ab75-4a78b7df11b6",
@@ -7597,7 +8392,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T13:06:47.310275+00:00",
     "last_seen": "2026-05-03T13:06:47.310275+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3d717a91-e803-47d4-a794-de826f977b51",
@@ -7617,7 +8415,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T14:24:42.007557+00:00",
     "last_seen": "2026-05-03T14:24:42.007557+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "945c7cee-7996-4a68-a0a1-4a8d86cd5b67",
@@ -7637,7 +8438,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T14:24:42.007557+00:00",
     "last_seen": "2026-05-03T14:24:42.007557+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "95dbcb8e-ede3-44c1-a14c-4f19228138c7",
@@ -7654,7 +8458,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T20:27:10.511902+00:00",
     "last_seen": "2026-05-03T20:27:10.511902+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b3deec86-13fa-40d6-9947-170010a0c77e",
@@ -7680,7 +8487,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "159590f6-4e56-4ca1-8a9e-d074f69d0f60",
@@ -7706,7 +8516,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:56.945974+00:00",
     "last_seen": "2026-05-03T21:30:56.945974+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "de115f4b-027e-4c7d-bd65-147186747859",
@@ -7732,7 +8545,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:31:03.730862+00:00",
     "last_seen": "2026-05-03T21:31:03.730862+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "17925d75-e9c5-4f9d-94ec-86ef4903269a",
@@ -7751,7 +8567,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "18633e14-3c7c-43c4-a900-d50e87e93631",
@@ -7770,7 +8589,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b48c1212-0df9-4c48-9722-cd5aa14457bf",
@@ -7792,7 +8614,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "514dd64f-c794-418d-9400-7bb928104b78",
@@ -7814,7 +8639,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0e79814b-47ac-4be4-adc2-7a8822de5740",
@@ -7834,7 +8662,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T11:40:16.049334+00:00",
     "last_seen": "2026-05-05T11:40:16.049334+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "53378b5c-fb9a-463f-9c52-3f767c812e33",
@@ -7854,7 +8685,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T11:40:16.049334+00:00",
     "last_seen": "2026-05-05T11:40:16.049334+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6c97da82-bb35-4c45-90a2-681cc4831bc4",
@@ -7874,7 +8708,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6bb5ca3f-eb90-46f6-894e-2cdbdbf92212",
@@ -7894,7 +8731,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b8868261-05df-4146-891c-1a84d107f909",
@@ -7914,7 +8754,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T03:33:46.994159+00:00",
     "last_seen": "2026-05-06T03:33:46.994159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e1ba0d93-60e0-4487-8a34-d787e6cbfc39",
@@ -7936,7 +8779,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "01912bb8-71ef-45f6-857b-bdb940ac4bc1",
@@ -7958,7 +8804,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0bb860ca-e3a1-4606-9e20-3433f02c1417",
@@ -7978,7 +8827,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T12:53:25.184755+00:00",
     "last_seen": "2026-05-06T12:53:25.184755+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b5e71fec-cde3-4661-a820-4e2992553f48",
@@ -7998,7 +8850,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9c5a2ae7-aa29-47f0-9da4-3d86375d92c6",
@@ -8019,7 +8874,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T05:06:02.547566+00:00",
     "last_seen": "2026-05-07T05:06:02.547566+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "88db9449-faef-47d1-8c14-73ea05ef8030",
@@ -8041,7 +8899,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "864f5442-c281-4b71-bb84-a33c0ddfe69a",
@@ -8061,7 +8922,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9f0db7db-891a-474c-ab3a-130f54c5872a",
@@ -8083,7 +8947,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T17:02:33.524510+00:00",
     "last_seen": "2026-05-07T17:02:33.524510+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c151fdb9-4087-4f4b-aba2-5d6f56190a3b",
@@ -8107,7 +8974,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f0378bd4-62c6-4a5d-84f2-40a9f059752e",
@@ -8129,7 +8999,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "12e84c63-c19c-4cc2-b7f1-b7bc0c99a0e5",
@@ -8151,7 +9024,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T10:11:13.599469+00:00",
     "last_seen": "2026-05-08T10:11:13.599469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ca223e19-d970-4eee-8aa7-5ac877ec4dcc",
@@ -8177,7 +9053,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b70c34a8-e77f-4531-930d-1734fb1b03c1",
@@ -8203,7 +9082,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2b76cee2-7735-46ef-b34d-fc4e688dd6e8",
@@ -8223,7 +9105,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T16:09:07.243289+00:00",
     "last_seen": "2026-05-08T16:09:07.243289+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4206fe32-0dad-4b5a-b786-9270ccdb9f9d",
@@ -8243,7 +9128,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ce0b72ea-6ae9-4e23-bf26-4ef3a9225ac7",
@@ -8269,7 +9157,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "20c8cc2d-84af-4566-bf40-374e6ac172cc",
@@ -8293,7 +9184,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "926f7097-168f-4915-9db8-20d4236a78e1",
@@ -8315,7 +9209,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "46ac7d90-248a-44c6-b14f-d68dde645b6a",
@@ -8337,7 +9234,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d3308844-418a-4329-8355-3e8cfd61ddd5",
@@ -8359,7 +9259,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "da69741b-beac-4f41-9491-9ab6b485b781",
@@ -8381,7 +9284,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "33107d83-6874-4e4f-b938-708d5eef5252",
@@ -8401,7 +9307,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e2918d3e-b635-4bc0-a85b-3f4324e55464",
@@ -8428,7 +9337,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "562f5065-c5b3-4bca-9092-76d88b4b5cb3",
@@ -8455,7 +9367,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "400d2bd3-85a7-4c89-a207-6798c4c6ed75",
@@ -8486,7 +9401,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cad07811-7eef-4bdf-afbe-ceb6fd4c60d3",
@@ -8513,7 +9431,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d6a5852d-0aa8-4c0e-8e46-3a5df0245b14",
@@ -8541,7 +9462,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "954a6e93-44a8-4d75-8451-247f305c38b7",
@@ -8569,7 +9493,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a20fd69b-8903-448e-9fd7-333e2291b5d2",
@@ -8589,7 +9516,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9998eb97-faf8-42f3-aa17-373530957069",
@@ -8610,7 +9540,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-19T23:04:24.585142+00:00",
     "last_seen": "2026-05-19T23:04:24.585142+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1d19ac2f-30a3-49d4-947b-18577d28900f",
@@ -8631,7 +9564,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-19T23:04:24.585142+00:00",
     "last_seen": "2026-05-19T23:04:24.585142+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "37de41f7-0e53-4ea0-a312-4053fa4cc0dd",
@@ -8657,7 +9593,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "03f0e79e-9f66-4741-aaaa-a8ada704e073",
@@ -8681,7 +9620,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T00:01:34.471553+00:00",
     "last_seen": "2026-05-21T00:01:34.471553+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "914eaf3c-14c1-4b39-9bd6-2ed65a8e7bb4",
@@ -8704,7 +9646,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T21:26:21.748062+00:00",
     "last_seen": "2026-05-21T21:26:21.748062+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6cbcf84e-80dd-4423-9cb9-c582909333fe",
@@ -8727,7 +9672,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-22T22:11:01.161963+00:00",
     "last_seen": "2026-05-22T22:11:01.161963+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "03d51076-26b5-4cde-8d4a-42c0e1c2a6b7",
@@ -8748,7 +9696,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-23T00:57:28.593838+00:00",
     "last_seen": "2026-05-23T00:57:28.593838+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a7a5128d-c7ce-4375-ab58-b242dc74fbae",
@@ -8776,7 +9727,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
@@ -8804,7 +9758,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.5086087026239068,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "27319b7b-5561-47f5-ba90-08af6849125c",
@@ -8830,7 +9787,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-25T00:52:28.628818+00:00",
     "last_seen": "2026-05-25T00:52:28.628818+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6ccc5618-5f1f-4fd3-8498-48a8b6fcfbb9",
@@ -8856,7 +9816,10 @@
     "last_seen": "2026-05-28T12:59:20.926295+00:00",
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cc705e72-e0c9-4aa3-9930-ddadbad00fbe",
@@ -8887,7 +9850,10 @@
     "last_seen": "2026-05-29T15:35:50.196071+00:00",
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
-    ]
+    ],
+    "strength": 0.4338444926374107,
+    "ease": 1.8999999999999997,
+    "reactivations": 0
   },
   {
     "id": "06e71509-ed19-4adf-a551-49133821f088",
@@ -8919,7 +9885,10 @@
     "last_seen": "2026-05-29T23:21:48.497946+00:00",
     "occurrence_history": [
       "2026-05-29T23:21:48.497946+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "75f160c6-4fa6-4b19-9102-ee9ac13c261a",
@@ -8942,7 +9911,10 @@
     "last_seen": "2026-05-30T03:03:51.470363+00:00",
     "occurrence_history": [
       "2026-05-30T03:03:51.470363+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1a05c6f6-487e-4f81-8d1d-de48fe52fec8",
@@ -8971,7 +9943,10 @@
     "last_seen": "2026-05-31T12:19:18.005053+00:00",
     "occurrence_history": [
       "2026-05-31T12:19:18.005053+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4b200823-84f1-4636-9400-fc5c7faa9611",
@@ -8997,7 +9972,10 @@
     "last_seen": "2026-05-31T12:55:33.511377+00:00",
     "occurrence_history": [
       "2026-05-31T12:55:33.511377+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "16c3b9a9-ded7-4568-be23-5b4e9a5dce40",
@@ -9021,7 +9999,10 @@
     "last_seen": "2026-06-01T12:36:50.386274+00:00",
     "occurrence_history": [
       "2026-06-01T12:36:50.386274+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c752d34f-2ac5-412b-81b4-657675008674",
@@ -9046,7 +10027,10 @@
     "last_seen": "2026-06-02T13:28:33.968421+00:00",
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "424da23c-f1ba-465d-97a3-b171333280fa",
@@ -9071,7 +10055,10 @@
     "last_seen": "2026-06-02T13:28:33.968421+00:00",
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
-    ]
+    ],
+    "strength": 0.4338444926374107,
+    "ease": 1.8999999999999997,
+    "reactivations": 0
   },
   {
     "id": "8ca1eece-c402-4e2a-af0d-a99318a70f3c",
@@ -9093,7 +10080,10 @@
     "last_seen": "2026-06-03T17:45:18.122629+00:00",
     "occurrence_history": [
       "2026-06-03T17:45:18.122629+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e990832b-a1d1-4253-af68-fbb93308a1ca",
@@ -9117,7 +10107,10 @@
     "last_seen": "2026-06-04T13:18:21.538564+00:00",
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "85712843-e4a4-43b5-b314-65dbedb446a3",
@@ -9141,7 +10134,10 @@
     "last_seen": "2026-06-04T13:18:21.538564+00:00",
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a2c3e5c8-714e-4d37-832d-0e14ab8e570e",
@@ -9177,7 +10173,10 @@
     "last_seen": "2026-06-09T15:32:59.350960+00:00",
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4b2a41ff-e68a-4c04-825c-8018d0ed416c",
@@ -9213,7 +10212,10 @@
     "last_seen": "2026-06-09T15:32:59.350960+00:00",
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fd654fbe-e68f-4713-bb80-ae6cf423cf9f",
@@ -9235,7 +10237,10 @@
     "last_seen": "2026-06-09T20:11:13.524350+00:00",
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1b2c58b7-9289-4b1f-acea-5d0831cb36a3",
@@ -9260,7 +10265,10 @@
     "last_seen": "2026-06-10T14:16:55.017090+00:00",
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f9318462-0de6-43a3-9197-604ce7a44576",
@@ -9285,7 +10293,10 @@
     "last_seen": "2026-06-11T18:41:28.565308+00:00",
     "occurrence_history": [
       "2026-06-11T18:41:28.565308+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e495f8d3-d062-4402-bf4d-9beada33c55a",
@@ -9318,7 +10329,10 @@
     "last_seen": "2026-06-12T19:52:36.457017+00:00",
     "occurrence_history": [
       "2026-06-12T19:52:36.457017+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "96ab4d57-eebf-466e-baa2-60d9d347178c",
@@ -9344,7 +10358,10 @@
     "last_seen": "2026-06-13T00:38:00.014485+00:00",
     "occurrence_history": [
       "2026-06-13T00:38:00.014485+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6dd84ffd-79df-4fc4-bf61-d621af5ff9b5",
@@ -9370,7 +10387,10 @@
     "last_seen": "2026-06-13T00:38:00.014485+00:00",
     "occurrence_history": [
       "2026-06-13T00:38:00.014485+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bcfd25bd-eed6-4537-b00a-aa2fcb511bae",
@@ -9396,7 +10416,10 @@
     "last_seen": "2026-06-13T12:49:34.282589+00:00",
     "occurrence_history": [
       "2026-06-13T12:49:34.282589+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "57658cb7-ec35-4f4d-bad2-062d48edb27f",
@@ -9425,7 +10448,10 @@
     "last_seen": "2026-06-15T12:52:24.127634+00:00",
     "occurrence_history": [
       "2026-06-15T12:52:24.127634+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "05f3faa7-79bd-4d90-a0bf-8fe71c13c870",
@@ -9458,7 +10484,10 @@
     "last_seen": "2026-06-17T17:04:47.577262+00:00",
     "occurrence_history": [
       "2026-06-17T17:04:47.577262+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ba9296d3-0870-4456-a584-3b72cdb47f9a",
@@ -9488,7 +10517,10 @@
     "last_seen": "2026-06-18T00:38:06.338091+00:00",
     "occurrence_history": [
       "2026-06-18T00:38:06.338091+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "db931355-1310-4f06-bdca-e397c63b8f84",
@@ -9516,7 +10548,10 @@
     "last_seen": "2026-06-19T17:49:46.984809+00:00",
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5390e5ff-a040-47a2-bfce-ed3a2f42eef0",
@@ -9553,7 +10588,10 @@
     "last_seen": "2026-06-20T02:01:59.851749+00:00",
     "occurrence_history": [
       "2026-06-20T02:01:59.851749+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ca6b2dd2-c507-4fd3-a05a-3cf1e4750f03",
@@ -9578,7 +10616,10 @@
     "last_seen": "2026-06-20T15:12:03.208355+00:00",
     "occurrence_history": [
       "2026-06-20T15:12:03.208355+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8d097f70-ea28-44d0-a97b-45663e89dbb0",
@@ -9603,7 +10644,10 @@
     "last_seen": "2026-06-21T00:26:17.390298+00:00",
     "occurrence_history": [
       "2026-06-21T00:26:17.390298+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f4c1a909-e14e-43f8-9e19-5c4782d1c42f",
@@ -9630,7 +10674,10 @@
     "last_seen": "2026-06-21T16:43:27.454214+00:00",
     "occurrence_history": [
       "2026-06-21T16:43:27.454214+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "de981112-0b3f-46ce-9a25-60db6cae7653",
@@ -9659,7 +10706,10 @@
     "last_seen": "2026-06-22T13:05:50.557852+00:00",
     "occurrence_history": [
       "2026-06-22T13:05:50.557852+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1ffd1766-7c94-4d8e-9a35-635311d40991",
@@ -9682,7 +10732,10 @@
     "last_seen": "2026-06-23T00:15:19.177245+00:00",
     "occurrence_history": [
       "2026-06-23T00:15:19.177245+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cd2d63f6-867f-4712-bb59-550efba1be7c",
@@ -9711,7 +10764,10 @@
     "last_seen": "2026-06-25T00:47:19.884006+00:00",
     "occurrence_history": [
       "2026-06-25T00:47:19.884006+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "12cc151f-a94e-4b42-8747-f909317c6ce8",
@@ -9737,7 +10793,10 @@
     "last_seen": "2026-06-26T00:52:23.703135+00:00",
     "occurrence_history": [
       "2026-06-26T00:52:23.703135+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a8eab422-70e2-4400-b8e3-f64656407b1e",
@@ -9763,7 +10822,10 @@
     "last_seen": "2026-06-26T16:44:28.714927+00:00",
     "occurrence_history": [
       "2026-06-26T16:44:28.714927+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "17eca404-d918-4d1e-8ebc-b55af565f7ac",
@@ -9787,7 +10849,10 @@
     "last_seen": "2026-06-28T12:32:18.420032+00:00",
     "occurrence_history": [
       "2026-06-28T12:32:18.420032+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "25479e7c-b46b-44ca-9e09-4a62f7921e74",
@@ -9814,7 +10879,10 @@
     "last_seen": "2026-06-29T12:49:50.137015+00:00",
     "occurrence_history": [
       "2026-06-29T12:49:50.137015+00:00"
-    ]
+    ],
+    "strength": 0.5086087026239068,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "77e8ffb7-211e-4085-89a2-8d2662b66ab8",
@@ -9841,7 +10909,10 @@
     "last_seen": "2026-06-30T23:43:44.791641+00:00",
     "occurrence_history": [
       "2026-06-30T23:43:44.791641+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a2a0ffa2-efba-4bae-9335-b05c96109311",
@@ -9864,7 +10935,10 @@
     "last_seen": "2026-07-03T17:41:29.756336+00:00",
     "occurrence_history": [
       "2026-07-03T17:41:29.756336+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2c51c4e5-2d9a-4b4e-968d-6f8578a6384d",
@@ -9888,7 +10962,10 @@
     "last_seen": "2026-07-07T05:38:55.650374+00:00",
     "occurrence_history": [
       "2026-07-07T05:38:55.650374+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c7452b6e-235c-415c-b2ec-413e42beafd0",
@@ -9918,7 +10995,10 @@
     "last_seen": "2026-07-07T23:01:13.082146+00:00",
     "occurrence_history": [
       "2026-07-07T23:01:13.082146+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fa1107a4-bce7-4f0d-92fa-3fbdbeba8800",
@@ -9949,7 +11029,10 @@
     "last_seen": "2026-07-10T08:34:03.448673+00:00",
     "occurrence_history": [
       "2026-07-10T08:34:03.448673+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a0db953c-7f10-42ea-8402-30a53b6b6645",
@@ -9980,7 +11063,10 @@
     "last_seen": "2026-07-10T08:34:03.448673+00:00",
     "occurrence_history": [
       "2026-07-10T08:34:03.448673+00:00"
-    ]
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e870c6e9-5694-476b-b7bb-e030fd5dc143",
@@ -10031,205 +11117,10 @@
     "last_seen": "2026-07-11T18:09:29.392095+00:00",
     "occurrence_history": [
       "2026-07-11T18:09:29.392095+00:00"
-    ]
-  },
-  {
-    "id": "b4abf703-dfb0-4b24-bac3-1bd1e70703f7",
-    "pattern": "Animation/visual enhancement code was added as an unsolicited 'enhancement' and was flagged as incorrect/unwanted - adding unrequested visual effects to UI code is a mistake",
-    "valence": "negative",
-    "confidence": 0.88,
-    "category": "approach",
-    "source_sessions": [
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "6045f539-b5aa-4d1f-8927-a2f5f316a505",
-      "5b2a0ad6-5e9c-473e-8151-f092e018308f",
-      "50f6ef35-bd87-484f-b3b2-d6b2964fefa2",
-      "46a6732c-3554-4639-9a8b-c2fe6f8e42e8",
-      "4244fa57-10d7-4ed3-9caa-e03f1fd3ce17",
-      "395ace67-063c-440e-9d31-74e39870d932",
-      "32f8924a-4f4c-4adb-a5ec-93cd3b093898",
-      "1db5719f-b41a-4c6a-8017-ef461125586b",
-      "177b9977-412e-4e90-8210-312e297bc0c3",
-      "17336869-a7a2-43e0-96cb-f85a801c1242",
-      "132df131-8888-4882-bb57-fe136ce18188",
-      "0d66f582-3c44-4fcd-bc53-15841207f94a",
-      "0337ff18-532b-4817-8fe5-a4cd23fbc456",
-      "01a0c26f-a80b-4432-be87-cde2368ed9b0",
-      "fce0cfb0-3f7f-4096-be02-986f86af2d8c",
-      "fb686b5b-42d0-4bfd-a9e1-6e9fe36b6367",
-      "d97b1209-c6a0-4588-b1bb-b7090d41887d",
-      "c9f07d32-1667-4da6-abb7-7b8d33509bc5",
-      "ab88d258-e627-4cf9-9fb1-ba6db64c3e8c",
-      "a90f3d07-577d-4b5e-a02d-ce610242161e",
-      "9c5ac644-99b5-4672-b421-f3fe74b9f418",
-      "95888be1-250e-4ad6-ab8a-8a65d4ab7410",
-      "903bf1ee-1aef-44fe-880f-2c115ae4d6d4",
-      "7d536f5c-a537-4b63-9a17-cb4b10f52ba7",
-      "75980057-8b0b-401d-9774-0849be1cebaa",
-      "711760c5-570f-4609-a0eb-b8458bdc2be4",
-      "673ffaff-91ed-4f44-ad55-8e3ef8285ad1",
-      "63ddcde8-e9ef-48bd-b17c-8fdf48c52dbb",
-      "492ed652-39ad-44ae-9b58-d0fcd8b731c9",
-      "478ca83a-4dac-450f-8cc9-5f248788b3ec",
-      "41bb2d03-f83d-445b-9dba-3b27e95f1127",
-      "3c08619e-473e-49a1-b2e7-fd15f6b11e04",
-      "36abbb13-454d-408a-abb0-b00a76df6d02",
-      "2b5f4376-89de-4298-b74b-fcd6e35e3f9f",
-      "269c2b24-e923-4bbe-88db-ad576384cdad",
-      "04cb8e88-61c7-44a8-805f-efa58566f786",
-      "fc4190a7-4a9f-43f8-9f88-dc33a0f476bc",
-      "fa35f0f2-5779-4cdb-9a77-8416cd79c6a8",
-      "fa0b19cf-401e-4f16-9073-4dad791c0cd7",
-      "f30f14f2-0551-4509-ad65-afb3d7a4f125",
-      "ebe4cff7-314b-409c-9c90-9eb3d02609e5",
-      "e7efa79a-ce6d-408e-8344-1d6b97402f25",
-      "d4d7d724-59cd-4465-94fc-ef1c5c41b092",
-      "c791649f-3aef-4555-88a9-7c9027214f78",
-      "c45893b1-576f-4cc8-aa07-ab42ccb0157e",
-      "c0e02ead-244e-417b-a742-0fd55f5e61be",
-      "bef35823-b858-4982-a85b-d3d3330b024c"
     ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:27:03.749609+00:00",
-    "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "86e6683c-0a66-4f68-98ed-37c7e07c715e",
-    "pattern": "User runs very large tool-call sessions (50-150+ tools) for complex feature work, suggesting tolerance for long autonomous execution when given clear direction ('started with them', 'keep going')",
-    "valence": "positive",
-    "confidence": 0.88,
-    "category": "user-preference",
-    "source_sessions": [
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "6045f539-b5aa-4d1f-8927-a2f5f316a505",
-      "5b2a0ad6-5e9c-473e-8151-f092e018308f",
-      "50f6ef35-bd87-484f-b3b2-d6b2964fefa2",
-      "46a6732c-3554-4639-9a8b-c2fe6f8e42e8",
-      "4244fa57-10d7-4ed3-9caa-e03f1fd3ce17",
-      "395ace67-063c-440e-9d31-74e39870d932",
-      "32f8924a-4f4c-4adb-a5ec-93cd3b093898",
-      "1db5719f-b41a-4c6a-8017-ef461125586b",
-      "177b9977-412e-4e90-8210-312e297bc0c3",
-      "17336869-a7a2-43e0-96cb-f85a801c1242",
-      "132df131-8888-4882-bb57-fe136ce18188",
-      "0d66f582-3c44-4fcd-bc53-15841207f94a",
-      "0337ff18-532b-4817-8fe5-a4cd23fbc456",
-      "01a0c26f-a80b-4432-be87-cde2368ed9b0",
-      "fce0cfb0-3f7f-4096-be02-986f86af2d8c",
-      "fb686b5b-42d0-4bfd-a9e1-6e9fe36b6367",
-      "d97b1209-c6a0-4588-b1bb-b7090d41887d",
-      "c9f07d32-1667-4da6-abb7-7b8d33509bc5",
-      "ab88d258-e627-4cf9-9fb1-ba6db64c3e8c",
-      "a90f3d07-577d-4b5e-a02d-ce610242161e",
-      "9c5ac644-99b5-4672-b421-f3fe74b9f418",
-      "95888be1-250e-4ad6-ab8a-8a65d4ab7410",
-      "903bf1ee-1aef-44fe-880f-2c115ae4d6d4",
-      "7d536f5c-a537-4b63-9a17-cb4b10f52ba7",
-      "75980057-8b0b-401d-9774-0849be1cebaa",
-      "711760c5-570f-4609-a0eb-b8458bdc2be4",
-      "673ffaff-91ed-4f44-ad55-8e3ef8285ad1",
-      "63ddcde8-e9ef-48bd-b17c-8fdf48c52dbb",
-      "492ed652-39ad-44ae-9b58-d0fcd8b731c9",
-      "478ca83a-4dac-450f-8cc9-5f248788b3ec",
-      "41bb2d03-f83d-445b-9dba-3b27e95f1127",
-      "3c08619e-473e-49a1-b2e7-fd15f6b11e04",
-      "36abbb13-454d-408a-abb0-b00a76df6d02",
-      "2b5f4376-89de-4298-b74b-fcd6e35e3f9f",
-      "269c2b24-e923-4bbe-88db-ad576384cdad",
-      "04cb8e88-61c7-44a8-805f-efa58566f786",
-      "fc4190a7-4a9f-43f8-9f88-dc33a0f476bc",
-      "fa35f0f2-5779-4cdb-9a77-8416cd79c6a8",
-      "fa0b19cf-401e-4f16-9073-4dad791c0cd7",
-      "f30f14f2-0551-4509-ad65-afb3d7a4f125",
-      "ebe4cff7-314b-409c-9c90-9eb3d02609e5",
-      "e7efa79a-ce6d-408e-8344-1d6b97402f25",
-      "d4d7d724-59cd-4465-94fc-ef1c5c41b092",
-      "c791649f-3aef-4555-88a9-7c9027214f78",
-      "c45893b1-576f-4cc8-aa07-ab42ccb0157e",
-      "c0e02ead-244e-417b-a742-0fd55f5e61be",
-      "bef35823-b858-4982-a85b-d3d3330b024c"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:27:03.749609+00:00",
-    "last_seen": "2026-04-14T16:27:03.749609+00:00",
-    "occurrence_history": []
-  },
-  {
-    "id": "1db8913f-fb99-4f99-b283-177336d37471",
-    "pattern": "High tool-use sessions (50-157 tools) are common for continuation and complex implementation tasks; this is normal and expected for this project",
-    "valence": "neutral",
-    "confidence": 0.88,
-    "category": "approach",
-    "source_sessions": [
-      "13cdec26-23ef-42e8-89a6-10fc02ec02a5",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "48b50d47-1493-4f68-a1bd-444ba3c25a7e",
-      "76e79c84-e1a8-461e-bd30-0ab78b14496f",
-      "697d14fb-bfae-4650-ba16-6ebdad4e0b96",
-      "98296345-0f81-4d22-bccc-ed57bc792133",
-      "2fa7f794-d8be-4b93-8934-5b4edab278fd",
-      "cfc1d16f-0ff3-4e63-a275-199f7aaf8bee",
-      "4cc3b1d3-836f-441b-8217-76047f9564b1",
-      "605ac510-d84e-41d3-9d4a-235be41b0178",
-      "fd0787a0-a782-4a36-8138-9235fca18426",
-      "fa20ade0-3c96-44a4-a081-d95cf425e3df",
-      "f6813160-9037-4a12-b47e-f7a95913ea41",
-      "f4c49981-67e5-45de-ad40-ebe08b253019",
-      "de11f780-7e53-473b-8b39-f78455d1fc5e",
-      "da85a83b-098e-4bef-9522-b01541f9ac22",
-      "a4ebda4e-52c4-4f02-968f-14eb3f231e10",
-      "a0c85499-49d8-4a12-9229-2e05847914e2",
-      "a051a878-83b0-4dad-b9d1-9a384e143f75",
-      "940ec482-502c-42a7-b553-1371a5d3bac8",
-      "8659d11c-b4bf-4b7c-9b57-8519e582a02a",
-      "818391ae-f06f-4413-b1ac-e099c12544a7",
-      "7f78f87b-9dd5-42a6-9a58-c87141d5bb16",
-      "7ca7dd1a-b63d-4471-8e3d-bc36d1c8af1c",
-      "6eecdde3-a454-4d88-8fec-9737a22fd903",
-      "5a7a08d1-64e4-4353-bf42-60690df4e332",
-      "496d496c-4d95-4c75-b969-8fa1eee0cfa3",
-      "3a55a464-076b-4cf3-8433-685281e0f8d8",
-      "37641699-69c1-435c-ba46-9f4d5a85ed30",
-      "32ffecb4-78fa-4f85-890e-ae6ad940e61e",
-      "2f72c1cb-5beb-4e74-a03c-aa146abd11c7",
-      "0ec03eac-2f0f-425d-9c84-d2cd4cbae067",
-      "052c5615-8a54-41a0-a255-5dd45a16941e",
-      "04ae7075-5541-4a82-b0ef-3d21d348b3e1",
-      "979684bc-7e68-40d9-8b89-ed1b259ac534",
-      "6b3a756f-734f-4e3c-ab00-b6db2cd34220",
-      "26d5db46-6428-4102-8b6f-8b760e61796a",
-      "d12c2a59-b74e-4495-8f87-2e5c2d289021",
-      "fde6f24a-d0aa-4416-920a-dcb6cee8182f",
-      "fc6c438b-2d0a-40d8-9e65-a8f4e8283b52",
-      "f3ddfd2f-1f54-4313-96a7-a9a6af5854fe",
-      "d7e8dce2-6dc0-4304-a1da-42806edbd5af",
-      "d780bb16-90a7-46a7-9787-e5809c02a195",
-      "ccc9ccc9-5a5a-4611-919c-40d72e1fa6e9",
-      "cc6cb578-3076-4208-8c77-935dcf196675",
-      "bd2b33bb-4022-4180-abad-8d2509df56a9",
-      "b5c4743e-5e4c-417b-819b-986a3a1dcea2",
-      "a94a9f3a-c6b6-4197-825d-851590cc01a7",
-      "a6f721df-1e3b-4046-b90f-6286573fa069",
-      "92688780-4be8-4d93-a109-e9b0ea085d7b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:28:45.862163+00:00",
-    "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f070277f-8098-4fa2-841e-46ad12536415",
@@ -10295,7 +11186,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8dc7fecd-8bd3-4317-91d9-d90453e3364f",
@@ -10352,7 +11246,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7757b8a4-57cf-4a1a-b830-20d59c0de536",
@@ -10379,7 +11276,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d8fc1a82-6d6e-4df4-bb32-ca57ebed9616",
@@ -10398,7 +11298,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T19:36:29.897823+00:00",
     "last_seen": "2026-04-15T19:36:29.897823+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6296e11f-a088-4f66-b6cb-37748beaf713",
@@ -10420,7 +11323,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-15T23:35:33.217995+00:00",
     "last_seen": "2026-04-15T23:35:33.217995+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fedc5697-ebf0-4a89-9bfa-4634b6ae5984",
@@ -10442,7 +11348,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-16T04:34:36.842156+00:00",
     "last_seen": "2026-04-16T04:34:36.842156+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7aecb818-0a99-4542-a163-52ca0e2345e6",
@@ -10466,7 +11375,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3b6520e2-4e0a-4473-8abc-386dfce95cf8",
@@ -10489,7 +11401,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-18T19:28:55.953507+00:00",
     "last_seen": "2026-04-18T19:28:55.953507+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f1a178ec-cfe6-4cf6-9a48-a442b93c2f22",
@@ -10517,7 +11432,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-19T13:05:21.883347+00:00",
     "last_seen": "2026-04-19T13:05:21.883347+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8bfd86e3-ce40-44ce-81cf-0db9e1eb81df",
@@ -10541,7 +11459,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-20T01:50:49.158599+00:00",
     "last_seen": "2026-04-20T01:50:49.158599+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e5b36cf4-9b08-4663-847a-89f9e937458b",
@@ -10564,7 +11485,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d4f02404-898f-44df-b5df-d2ce794f1ebb",
@@ -10587,7 +11511,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8b084789-fe8a-40b5-9112-228335c10222",
@@ -10620,7 +11547,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-21T21:36:18.515068+00:00",
     "last_seen": "2026-04-21T21:36:18.515068+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "85ddc672-3bb0-4941-aa61-51085e7260fa",
@@ -10658,7 +11588,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-24T01:11:32.574020+00:00",
     "last_seen": "2026-04-24T01:11:32.574020+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d5cfda4b-35a6-4596-af59-aa2d9d556a91",
@@ -10680,7 +11613,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-24T07:51:12.510232+00:00",
     "last_seen": "2026-04-24T07:51:12.510232+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b07d0657-7953-4da3-8006-6df5124a1b28",
@@ -10711,7 +11647,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-25T00:15:30.738596+00:00",
     "last_seen": "2026-04-25T00:15:30.738596+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0ac0803f-27ac-443c-9efb-d76b243cdf8b",
@@ -10732,7 +11671,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T01:17:01.910367+00:00",
     "last_seen": "2026-04-29T01:17:01.910367+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cbc7e221-a0a4-46d9-9615-d93869754aed",
@@ -10753,7 +11695,10 @@
     "occurrences": 1,
     "first_seen": "2026-04-29T20:36:38.713082+00:00",
     "last_seen": "2026-04-29T20:36:38.713082+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6fe376a1-3700-4374-a9e6-b008b6df6d06",
@@ -10778,7 +11723,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T00:14:45.872053+00:00",
     "last_seen": "2026-05-01T00:14:45.872053+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e704443f-0480-494e-807a-9eb5c8ea7c8b",
@@ -10803,7 +11751,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T16:51:27.618893+00:00",
     "last_seen": "2026-05-01T16:51:27.618893+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "37c797e9-cbb5-46e4-95eb-de1033afbfc5",
@@ -10828,7 +11779,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-01T17:33:18.082842+00:00",
     "last_seen": "2026-05-01T17:33:18.082842+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "91d5bd58-c848-40ae-9ab1-b58ccff0c009",
@@ -10849,7 +11803,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T01:53:53.205143+00:00",
     "last_seen": "2026-05-02T01:53:53.205143+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d2c8316d-4aac-4db3-8fb6-6c29bfe6390d",
@@ -10873,7 +11830,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9444a031-8b46-44a9-9867-0383332033d0",
@@ -10893,7 +11853,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-02T20:39:50.215588+00:00",
     "last_seen": "2026-05-02T20:39:50.215588+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "65932e4c-140a-40bd-a72a-5531a5786651",
@@ -10915,7 +11878,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T12:03:30.121983+00:00",
     "last_seen": "2026-05-03T12:03:30.121983+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f69f5605-5020-4105-b2c3-9ace8926176a",
@@ -10937,7 +11903,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T20:56:36.364036+00:00",
     "last_seen": "2026-05-03T20:56:36.364036+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "912fa7f5-8821-4e53-8cb8-28bf19c34de3",
@@ -10963,7 +11932,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2f1d369a-d112-4ae1-a63c-c2011a97d934",
@@ -10989,7 +11961,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:30:56.945974+00:00",
     "last_seen": "2026-05-03T21:30:56.945974+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "35b34c38-233f-46a4-a66d-3064dfdd6733",
@@ -11015,7 +11990,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T21:31:03.730862+00:00",
     "last_seen": "2026-05-03T21:31:03.730862+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d87f81a8-75c0-43a1-8a2f-2697b5d50c17",
@@ -11040,7 +12018,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-03T22:04:08.958103+00:00",
     "last_seen": "2026-05-03T22:04:08.958103+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "44da8adc-ec60-42bc-b0a7-d7274dd38e27",
@@ -11068,7 +12049,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T05:51:25.900092+00:00",
     "last_seen": "2026-05-04T05:51:25.900092+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "329e1099-c7d5-40ce-890b-a719675910c1",
@@ -11087,7 +12071,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "47762cd2-2358-4213-854c-0f41cfb2bef8",
@@ -11109,7 +12096,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4e6f3ca2-52ce-4949-bec0-1d13a0ab93a4",
@@ -11129,7 +12119,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "581c6ce9-efb4-4608-b9da-a42aaf5ce528",
@@ -11149,7 +12142,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T12:53:25.184755+00:00",
     "last_seen": "2026-05-06T12:53:25.184755+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3a819ec6-b558-4e3a-83b2-4d553f400e3d",
@@ -11169,7 +12165,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "11fb984b-d2a7-446c-b609-b6b203e2b2c1",
@@ -11191,7 +12190,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "25566283-6477-4099-8a3e-534fb6e06ca3",
@@ -11211,7 +12213,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cd714df3-a38f-4be2-b114-1ca578b75b02",
@@ -11233,7 +12238,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T17:02:33.524510+00:00",
     "last_seen": "2026-05-07T17:02:33.524510+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "00de6bd3-d81d-4ad8-9be5-8af01bdd30c2",
@@ -11257,7 +12265,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "99998e3f-bf16-491d-ae0a-09fd50a2c0ec",
@@ -11279,7 +12290,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "022cb05d-31c3-492d-b72b-19b66a452e6d",
@@ -11301,7 +12315,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T10:11:13.599469+00:00",
     "last_seen": "2026-05-08T10:11:13.599469+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "41b15bf0-8c57-4133-b13f-0981848482d4",
@@ -11327,7 +12344,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8ed2a945-3374-4f1d-abe1-bb02e1112720",
@@ -11347,7 +12367,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-08T16:09:07.243289+00:00",
     "last_seen": "2026-05-08T16:09:07.243289+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b4d68ee1-3e60-4117-9eac-da3676b79c0a",
@@ -11371,7 +12394,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T05:04:55.715359+00:00",
     "last_seen": "2026-05-09T05:04:55.715359+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "38a4a0d0-6ea0-428d-8bcc-6fd5a7de97a9",
@@ -11391,7 +12417,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "849977bd-681f-4a3a-9611-7c711cd3bcfb",
@@ -11411,7 +12440,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "16f83378-6f80-42e2-93db-e68e75e3153c",
@@ -11433,7 +12465,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-09T13:03:20.913554+00:00",
     "last_seen": "2026-05-09T13:03:20.913554+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1b77db7a-f23d-4ebe-ba41-37ebcc5a2eb5",
@@ -11457,7 +12492,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b5de8186-f788-4443-a4f5-cf9b31f40614",
@@ -11483,7 +12521,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4ca0fa1d-73a8-4597-8756-9dbcd9138741",
@@ -11507,7 +12548,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9bd2e2a3-d21d-4ac7-8b41-179da28e938a",
@@ -11531,7 +12575,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1621becc-6ddf-483f-ae58-70ceecc98901",
@@ -11553,7 +12600,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cfb12d22-9879-4835-9b94-66fe120eded9",
@@ -11575,7 +12625,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0e717f55-ab8a-41b1-82f5-3bce73cfc8a6",
@@ -11595,7 +12648,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "e3be6635-19f8-4134-b745-bf34257d2973",
@@ -11617,7 +12673,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "936211a7-3267-45e9-86e6-173d4ef6517d",
@@ -11639,7 +12698,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6ff5e7d7-d1f4-4e96-b0b1-741e5d149044",
@@ -11661,7 +12723,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "525b7565-b25e-4d63-9a03-641c07030688",
@@ -11688,7 +12753,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fc0f5bec-27f4-4d8d-9d82-80392da2e0fe",
@@ -11715,7 +12783,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3eb7b886-b373-43c7-9b16-f3044a671ee9",
@@ -11742,7 +12813,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5d8b0226-cc36-4a6a-89b3-8641bb613e3c",
@@ -11769,7 +12843,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c2b043b4-404a-41c0-85ce-a9d6a1d1e5a6",
@@ -11800,7 +12877,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4d5bf3f8-e9dc-49fe-b018-301d34bae3ef",
@@ -11827,7 +12907,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "795deebb-7947-4aa6-ba39-5c847346c45b",
@@ -11854,7 +12937,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8a9f7bde-cefa-4af3-acf9-fb835789a0f1",
@@ -11882,7 +12968,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "891184d0-8c1b-408e-a375-5d121ba2cca4",
@@ -11910,7 +12999,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5bdf9a99-e792-4e73-8f44-9ac02aa23f47",
@@ -11938,7 +13030,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cffcc26c-b2ba-4111-b62d-6fb806a6cb6f",
@@ -11966,7 +13061,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9ec1a322-1905-4469-8d71-3e32b636f58c",
@@ -11994,7 +13092,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "760cb178-6ce6-41bd-83ed-43548a260979",
@@ -12014,7 +13115,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3384882a-c609-4141-8da1-6c2263ae64a7",
@@ -12034,7 +13138,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f38dd8aa-8f32-4578-ae4a-4ea2671f05cb",
@@ -12060,7 +13167,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "420df339-fe7c-41e6-b680-7655a2bc26fc",
@@ -12084,7 +13194,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T02:46:34.840647+00:00",
     "last_seen": "2026-05-21T02:46:34.840647+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "176c039a-a9a7-4b9f-8499-30fe7490a128",
@@ -12108,7 +13221,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-21T02:46:34.840647+00:00",
     "last_seen": "2026-05-21T02:46:34.840647+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "8f382c84-68ee-4307-aeac-34b4abb0d9f6",
@@ -12131,7 +13247,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f18d0c45-81f6-4063-b763-0eafa623a441",
@@ -12154,7 +13273,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "791dd508-850a-477c-a953-742c83ac5c77",
@@ -12175,7 +13297,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-22T13:46:09.917143+00:00",
     "last_seen": "2026-05-22T13:46:09.917143+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "300a953a-c8a3-44fc-aae0-19d8b918d091",
@@ -12196,7 +13321,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-23T00:57:28.593838+00:00",
     "last_seen": "2026-05-23T00:57:28.593838+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "ad0c0f75-3176-4d4c-b839-df8ec45943ac",
@@ -12223,7 +13351,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-23T23:26:55.700048+00:00",
     "last_seen": "2026-05-23T23:26:55.700048+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a4157e44-e148-49c6-8cc1-e579237ea9ec",
@@ -12251,7 +13382,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-26T00:52:14.270827+00:00",
     "last_seen": "2026-05-26T00:52:14.270827+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0f2c1986-8b07-4f55-b2cd-ef2e85252ac4",
@@ -12279,7 +13413,10 @@
     "occurrences": 1,
     "first_seen": "2026-05-26T00:52:14.270827+00:00",
     "last_seen": "2026-05-26T00:52:14.270827+00:00",
-    "occurrence_history": []
+    "occurrence_history": [],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "74fcecd1-c395-4d9f-afea-5207a53c6a58",
@@ -12305,7 +13442,10 @@
     "last_seen": "2026-05-28T12:59:20.926295+00:00",
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c0bda10f-5e4a-4c32-9dac-d958ce0eb18e",
@@ -12330,7 +13470,10 @@
     "last_seen": "2026-05-29T00:24:12.419994+00:00",
     "occurrence_history": [
       "2026-05-29T00:24:12.419994+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0a1b1e02-3212-4855-8dc4-4b2a81ace06c",
@@ -12361,7 +13504,10 @@
     "last_seen": "2026-05-29T15:35:50.196071+00:00",
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b9692618-7ef4-482a-869b-60dacf297deb",
@@ -12383,7 +13529,10 @@
     "last_seen": "2026-05-29T15:36:44.456233+00:00",
     "occurrence_history": [
       "2026-05-29T15:36:44.456233+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1149ade8-0456-4cfc-a065-94dc57ed9142",
@@ -12415,7 +13564,10 @@
     "last_seen": "2026-05-29T23:21:48.497946+00:00",
     "occurrence_history": [
       "2026-05-29T23:21:48.497946+00:00"
-    ]
+    ],
+    "strength": 0.49445951020408174,
+    "ease": 2.0999999999999996,
+    "reactivations": 0
   },
   {
     "id": "8c3714c9-4439-4dcb-8772-aeb1a82c22d0",
@@ -12438,7 +13590,10 @@
     "last_seen": "2026-05-30T03:03:51.470363+00:00",
     "occurrence_history": [
       "2026-05-30T03:03:51.470363+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c57d0a10-9b33-4e9d-945e-37d5b3c3500e",
@@ -12470,7 +13625,10 @@
     "last_seen": "2026-05-30T17:00:01.159958+00:00",
     "occurrence_history": [
       "2026-05-30T17:00:01.159958+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cb784bcd-eab7-4226-834d-2e2eb7181ca1",
@@ -12506,7 +13664,10 @@
     "last_seen": "2026-05-31T19:26:33.828505+00:00",
     "occurrence_history": [
       "2026-05-31T19:26:33.828505+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5d544782-05ce-4f09-b1d9-caf775d05d1d",
@@ -12542,7 +13703,10 @@
     "last_seen": "2026-05-31T19:26:33.828505+00:00",
     "occurrence_history": [
       "2026-05-31T19:26:33.828505+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f5e30f45-4331-448b-b47d-d52c2dd42fe6",
@@ -12566,7 +13730,10 @@
     "last_seen": "2026-06-01T12:36:50.386274+00:00",
     "occurrence_history": [
       "2026-06-01T12:36:50.386274+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "71bbd201-f5a7-4698-8bed-f3daa49989e2",
@@ -12591,7 +13758,10 @@
     "last_seen": "2026-06-02T13:28:33.968421+00:00",
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c5eb6e8d-a1b4-45ae-a862-3300dd24f8c7",
@@ -12616,7 +13786,10 @@
     "last_seen": "2026-06-02T13:28:33.968421+00:00",
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "97e87591-c85c-49fe-9df3-ce9f5fd4be7c",
@@ -12638,7 +13811,10 @@
     "last_seen": "2026-06-03T17:45:18.122629+00:00",
     "occurrence_history": [
       "2026-06-03T17:45:18.122629+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0756fdcd-6e75-4d16-b598-d7c96ff67e4d",
@@ -12662,7 +13838,10 @@
     "last_seen": "2026-06-04T13:18:21.538564+00:00",
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5ebf97d6-a016-4bad-b17d-156323fbb585",
@@ -12684,7 +13863,10 @@
     "last_seen": "2026-06-04T17:33:50.113929+00:00",
     "occurrence_history": [
       "2026-06-04T17:33:50.113929+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4f6ef0aa-14ae-4fa1-8577-cbc6a2e38bb6",
@@ -12708,7 +13890,10 @@
     "last_seen": "2026-06-05T12:42:12.279426+00:00",
     "occurrence_history": [
       "2026-06-05T12:42:12.279426+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "073c4555-d4a3-4e3e-b05d-4a5ff80c5a76",
@@ -12731,7 +13916,10 @@
     "last_seen": "2026-06-05T19:55:30.751415+00:00",
     "occurrence_history": [
       "2026-06-05T19:55:30.751415+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "5159b9d1-d1af-4f3b-a0f3-5e60e3ca0908",
@@ -12767,7 +13955,10 @@
     "last_seen": "2026-06-09T15:32:59.350960+00:00",
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "f9027528-ca89-407d-8d7f-bf8d648e721a",
@@ -12803,7 +13994,10 @@
     "last_seen": "2026-06-09T15:32:59.350960+00:00",
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7f6daaf0-8865-4951-8f52-59f42286c596",
@@ -12825,7 +14019,10 @@
     "last_seen": "2026-06-09T20:11:13.524350+00:00",
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "449180b8-aa65-4ae9-99db-6134930c3179",
@@ -12850,7 +14047,10 @@
     "last_seen": "2026-06-10T14:16:55.017090+00:00",
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a88b8efb-5ce6-4cb4-ae20-6432e2d4ced9",
@@ -12875,7 +14075,10 @@
     "last_seen": "2026-06-11T18:41:28.565308+00:00",
     "occurrence_history": [
       "2026-06-11T18:41:28.565308+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "99bdba14-3693-4eed-a298-ca3dd86b59a4",
@@ -12908,7 +14111,10 @@
     "last_seen": "2026-06-12T19:52:36.457017+00:00",
     "occurrence_history": [
       "2026-06-12T19:52:36.457017+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "983e6844-2182-44df-9912-cb38219eb8e9",
@@ -12934,7 +14140,10 @@
     "last_seen": "2026-06-13T12:49:34.282589+00:00",
     "occurrence_history": [
       "2026-06-13T12:49:34.282589+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c0e034f0-6af1-40f5-aea5-6b072578eeb0",
@@ -12959,7 +14168,10 @@
     "last_seen": "2026-06-13T17:02:59.417794+00:00",
     "occurrence_history": [
       "2026-06-13T17:02:59.417794+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1a548bd0-258b-457a-a817-b45313d25b5d",
@@ -12982,7 +14194,10 @@
     "last_seen": "2026-06-15T17:22:48.309579+00:00",
     "occurrence_history": [
       "2026-06-15T17:22:48.309579+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "236a7674-1187-412f-909e-679ba17651c2",
@@ -13005,7 +14220,10 @@
     "last_seen": "2026-06-15T17:22:48.309579+00:00",
     "occurrence_history": [
       "2026-06-15T17:22:48.309579+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "79cf26d2-7486-483c-9264-3dab2b2e1c39",
@@ -13038,7 +14256,10 @@
     "last_seen": "2026-06-17T17:04:47.577262+00:00",
     "occurrence_history": [
       "2026-06-17T17:04:47.577262+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "277d3794-8405-43c4-8d2c-daeac6af7bb7",
@@ -13068,7 +14289,10 @@
     "last_seen": "2026-06-18T00:38:06.338091+00:00",
     "occurrence_history": [
       "2026-06-18T00:38:06.338091+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "afbbd8d4-3985-4b93-a10d-e09643dcad9e",
@@ -13105,7 +14329,10 @@
     "last_seen": "2026-06-18T22:44:48.169152+00:00",
     "occurrence_history": [
       "2026-06-18T22:44:48.169152+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "7eb641d0-443b-4d13-bd31-de4d889ba7e6",
@@ -13128,7 +14355,10 @@
     "last_seen": "2026-06-19T01:37:39.440186+00:00",
     "occurrence_history": [
       "2026-06-19T01:37:39.440186+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "c936403e-826e-4456-a7b7-57833d137a76",
@@ -13156,7 +14386,10 @@
     "last_seen": "2026-06-19T17:49:46.984809+00:00",
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "9276c3fd-e1ef-4c55-a597-13407f7a91af",
@@ -13193,7 +14426,10 @@
     "last_seen": "2026-06-20T02:01:59.851749+00:00",
     "occurrence_history": [
       "2026-06-20T02:01:59.851749+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "6b4bfac3-33ea-444f-8e30-497e9b0e2ba7",
@@ -13218,7 +14454,10 @@
     "last_seen": "2026-06-21T00:26:17.390298+00:00",
     "occurrence_history": [
       "2026-06-21T00:26:17.390298+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "a156f368-3264-469a-86a2-eaa9fd0e9162",
@@ -13243,7 +14482,10 @@
     "last_seen": "2026-06-21T00:26:17.390298+00:00",
     "occurrence_history": [
       "2026-06-21T00:26:17.390298+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "70f7d61c-70c8-459c-aa42-5424f2d43e72",
@@ -13268,7 +14510,10 @@
     "last_seen": "2026-06-21T12:16:04.148972+00:00",
     "occurrence_history": [
       "2026-06-21T12:16:04.148972+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "1e5f398a-857f-42f5-9b39-895446dd75af",
@@ -13295,7 +14540,10 @@
     "last_seen": "2026-06-21T16:43:27.454214+00:00",
     "occurrence_history": [
       "2026-06-21T16:43:27.454214+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "fbd9adf4-56cf-4d44-88a6-b7d78651f0d2",
@@ -13324,7 +14572,10 @@
     "last_seen": "2026-06-24T10:24:10.726316+00:00",
     "occurrence_history": [
       "2026-06-24T10:24:10.726316+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "dd2f29e6-6054-4c69-8cb2-90e05c4af561",
@@ -13351,7 +14602,10 @@
     "last_seen": "2026-06-27T00:58:04.925103+00:00",
     "occurrence_history": [
       "2026-06-27T00:58:04.925103+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4ce186a0-760b-429d-9a66-7a80cbe9b1d4",
@@ -13379,7 +14633,10 @@
     "last_seen": "2026-06-27T18:11:13.741084+00:00",
     "occurrence_history": [
       "2026-06-27T18:11:13.741084+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bffe2176-9e5e-4255-bf14-4a90e54948ce",
@@ -13406,7 +14663,10 @@
     "last_seen": "2026-06-29T12:49:50.137015+00:00",
     "occurrence_history": [
       "2026-06-29T12:49:50.137015+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "4e340bf5-a7d7-4f4f-af46-3af34bd38f89",
@@ -13430,7 +14690,10 @@
     "last_seen": "2026-06-29T17:59:02.583896+00:00",
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b9173259-7160-4152-9180-26bb477fc081",
@@ -13457,7 +14720,10 @@
     "last_seen": "2026-06-30T02:08:56.095422+00:00",
     "occurrence_history": [
       "2026-06-30T02:08:56.095422+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "b187c33f-4c57-4b98-b1bb-02a6e897c32f",
@@ -13484,7 +14750,10 @@
     "last_seen": "2026-06-30T02:08:56.095422+00:00",
     "occurrence_history": [
       "2026-06-30T02:08:56.095422+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "cf13db26-0578-4cba-8a94-21e40196cedb",
@@ -13516,7 +14785,10 @@
     "last_seen": "2026-06-30T15:54:50.235965+00:00",
     "occurrence_history": [
       "2026-06-30T15:54:50.235965+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0cc91449-b434-4d58-9cfe-8fb31534f1df",
@@ -13543,7 +14815,10 @@
     "last_seen": "2026-06-30T23:43:44.791641+00:00",
     "occurrence_history": [
       "2026-06-30T23:43:44.791641+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "0bec250f-4071-41f8-be0e-2c4071601b01",
@@ -13582,7 +14857,10 @@
     "last_seen": "2026-07-02T23:49:07.272682+00:00",
     "occurrence_history": [
       "2026-07-02T23:49:07.272682+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "bcc3269c-b72b-4362-bba4-61ef9436e700",
@@ -13608,7 +14886,10 @@
     "last_seen": "2026-07-05T12:46:11.823427+00:00",
     "occurrence_history": [
       "2026-07-05T12:46:11.823427+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "d7d19afc-2450-4cb9-9558-6465e45a17ab",
@@ -13641,7 +14922,10 @@
     "last_seen": "2026-07-06T09:23:59.332465+00:00",
     "occurrence_history": [
       "2026-07-06T09:23:59.332465+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "3bf2de89-b533-4697-8bbd-783c530a7f68",
@@ -13665,7 +14949,10 @@
     "last_seen": "2026-07-07T05:38:55.650374+00:00",
     "occurrence_history": [
       "2026-07-07T05:38:55.650374+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "60fb6013-4db8-4112-9961-a160ce5a1eec",
@@ -13708,7 +14995,10 @@
     "last_seen": "2026-07-10T08:21:23.843429+00:00",
     "occurrence_history": [
       "2026-07-10T08:21:23.843429+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
   },
   {
     "id": "2b37ca32-d1fc-4263-a23e-c8b06fb56947",
@@ -13759,6 +15049,129 @@
     "last_seen": "2026-07-11T18:09:29.392095+00:00",
     "occurrence_history": [
       "2026-07-11T18:09:29.392095+00:00"
-    ]
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "e965a4bd-c7f6-41a7-93f4-142335d941e9",
+    "pattern": "When building a selection or picker UI, choosing an option must only preview it — an explicit save or apply action is required to commit the change; auto-applying on selection is a UX correctness bug, not a design choice",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "user-preference",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "8109df11-e8a5-43b4-ac8f-0c4e915bf7c2",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "claude-audit-2e",
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      "1cd43636-5afc-492a-a149-e18690310270"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "frontend",
+      "backend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00",
+    "occurrence_history": [
+      "2026-07-12T04:12:16.853268+00:00"
+    ],
+    "strength": 0.6972088212799998,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "3478a8b2-e714-4a18-b680-7a004e6ef0b0",
+    "pattern": "When scaffolding stub documentation, write only the goal statement and TODO(human) placeholders per section — never fabricate body content to fill structural completeness",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "8109df11-e8a5-43b4-ac8f-0c4e915bf7c2",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "claude-audit-2e",
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      "1cd43636-5afc-492a-a149-e18690310270"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "frontend",
+      "backend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00",
+    "occurrence_history": [
+      "2026-07-12T04:12:16.853268+00:00"
+    ],
+    "strength": 0.6458355397119998,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "dc552406-0f41-478f-b195-230dadf97ddd",
+    "pattern": "GitHub PR comment bodies do not render ANSI escape color codes — only fenced 'diff' blocks produce colored output in PR comments",
+    "valence": "neutral",
+    "confidence": 0.9,
+    "category": "domain",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "8109df11-e8a5-43b4-ac8f-0c4e915bf7c2",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "claude-audit-2e",
+      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
+      "eca50a22-6179-4267-8e51-a9fa6470346e",
+      "29d7d6be-ea4d-4510-90f2-9186c1407ad7",
+      "1cd43636-5afc-492a-a149-e18690310270"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "frontend",
+      "backend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-12T04:12:16.853268+00:00",
+    "last_seen": "2026-07-12T04:12:16.853268+00:00",
+    "occurrence_history": [
+      "2026-07-12T04:12:16.853268+00:00"
+    ],
+    "strength": 0.6605136201599998,
+    "ease": 2.5,
+    "reactivations": 0
   }
 ]

@@ -65,18 +65,27 @@ for ev in events:
     age_weeks = max(0, int((now - ev_ts) / WEEK))
 
     initial = (ev.get("decay") or {}).get("cycles_remaining", 2)
-    # cycles_remaining = initial - age_weeks. Floor at 0.
+    # cycles_remaining = initial - age_weeks. Floor at 0. A stored sidecar value
+    # acts as an override FLOOR (pin resolve forces 0) but never blocks age from
+    # advancing decay — the old stored-value-wins branch froze any pin first
+    # seen young at its initial value forever (found 2026-07-13: a 07-06 pin
+    # frozen at 3 cycles).
+    age_derived = max(0, initial - age_weeks)
     if pid in decay_state:
-        # User may have explicitly resolved → force to 0.
-        remaining = decay_state[pid]
+        remaining = min(decay_state[pid], age_derived)
     else:
-        remaining = max(0, initial - age_weeks)
+        remaining = age_derived
 
     # Persist computed remaining for visibility (overrideable by `i-dream pin resolve`).
+    prior = decay_state.get(pid)
     decay_state[pid] = remaining
 
     if remaining <= 0:
-        to_archive.append(ev)
+        # Archive only on the decay EDGE (prior run had cycles left, or the pin
+        # was never tracked). Re-appending every currently-decayed pin each run
+        # wrote duplicate dated buckets daily (24 lines for 12 pins, 2026-07-11).
+        if prior is None or prior > 0:
+            to_archive.append(ev)
     else:
         active.append(ev)
 

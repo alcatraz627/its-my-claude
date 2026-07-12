@@ -357,6 +357,37 @@ else
 fi
 ```
 
+### 5.9 i-dream pipeline health (nightly jobs fail silently otherwise)
+
+The nightly i-dream jobs can die with zero log output — a binary replaced
+in place invalidates its Mach-O signature cache and launchd's next spawn is
+SIGKILLed (OS_REASON_CODESIGNING) or exits 78/EX_CONFIG before writing a
+byte (2026-07-12 incident: audit + daily + dreampass all lost). launchctl's
+last-exit column and the digest date gap are the only observable traces:
+
+```bash
+gum_divider "i-dream pipeline"
+bad=$(launchctl list 2>/dev/null | rg "i-dream|idream" | awk '$2 != 0 && $2 != "-" {print $3" (exit "$2")"}')
+if [ -n "$bad" ]; then
+  gum_warn "i-dream jobs with nonzero last exit:"
+  echo "$bad" | sed 's/^/  /'
+  gum_muted "  78/-9 right after a rebuild = in-place binary copy poisoned the signature cache."
+  gum_muted "  Fix the install habit: bash ~/Code/Claude/i-dream/scripts/install.sh (tmp+mv, never cp-in-place)"
+else
+  gum_success "i-dream launchd jobs: all clean last exits"
+fi
+latest=$(ls ~/.claude/i-dream/daily/2*.md 2>/dev/null | sort | tail -1)
+if [ -n "$latest" ]; then
+  latest_date=$(basename "$latest" .md)
+  days_old=$(( ( $(date +%s) - $(date -j -f "%Y-%m-%d" "$latest_date" +%s 2>/dev/null || echo 0) ) / 86400 ))
+  if [ "$days_old" -ge 2 ]; then
+    gum_warn "Daily digest stale: newest is $latest_date (${days_old}d old) — the 03:00 job is silently failing"
+  else
+    gum_success "Daily digest current ($latest_date)"
+  fi
+fi
+```
+
 ---
 
 ## Step 6: Summary

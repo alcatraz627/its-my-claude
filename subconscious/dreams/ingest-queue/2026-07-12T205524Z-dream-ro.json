@@ -1,0 +1,23 @@
+{
+  "id": "2de6eab5-7269-4832-a9e8-91f331924e81",
+  "ts": "2026-07-12T20:55:24Z",
+  "session_id": "dream-rot-4e",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260712-dream-rot-4e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER decisions (do not do without asking):** push 7809f40 (per-push sentinel) \u00b7 retire the `com.alcatraz.atone-consolidate` launchd plist now double-running with engine cadence dispatch (delete its Calendar companion in the same change per rules/scheduling-discipline) \u00b7 gitignore `_processed/` + `_archived/` in ~/.claude before the queue drain churns 111 tracked deletions into its-my-claude.",
+    "**Wave 3 (docs/25):** the recommended build order starts with item 16 (inferred positive signal \u2014 small, fully-owned, lifts the reactivation metric everything else reads), then 14 (yield SLO), 13 (rejection memory), 12 (autonomous janitor \u2014 coordinate weekly_briefing.rs), 15 (query-conditioned injection \u2014 gcc-side dream-insights.sh, and it gates the docs/21 hook ladder). Pre-flight gate in docs/25 \u00a7 \"What has to be true before Wave 3 starts.\"",
+    "**Deferred W2 remainder (task #20, fully ownable):** per-cluster rejection suppression via merge-pass schema member_ids (reinforce.rs + schemas.rs). Amplifier, not foundation.",
+    "**Deferred to item 11's parallel-owned side:** digest/injection honoring `valid_until` (insight_digest.rs \u2014 parallel) \u00b7 pin-age decay unification (now rides cadence dispatch).",
+    "**Carried-over non-i-dream holds (tasks #1-3):** vitest crab-sink-shared, provision LOGGER_CRAB_DASHBOARD_TOKEN on Vercel, smoke-test /admin/logs Crab tab \u2014 belong to the logger project, not this one.",
+    "**2-week live measurements (docs/24 kill-criteria):** dream-yield delta, reactivation rate rising off 0%, re-downvote rate ~6\u00d7\u2192<1.5\u00d7, ingest-queue backlog draining."
+  ],
+  "tags": []
+}

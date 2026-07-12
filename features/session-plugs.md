@@ -41,8 +41,8 @@ Mute the whole lane: `~/.claude/.no-sessionstart-inject`.
 
 | Plug | Dir | Trigger | ~Cost | Mute | Observability today |
 |---|---|---|---|---|---|
-| dream-insights | inject | blanket | ~3700 ch | .tldr-off (atone part) | i-dream/injections.jsonl logs each injection |
-| pending-proposals | inject | conditional (pending exist) | ~2000 ch | none | none |
+| dream-insights (atone TL;DR) | inject | blanket | ~1650 ch | `atone/.tldr-off` | i-dream/injections.jsonl logs each injection |
+| dream-insights (dream digest+rules) | inject | opt-in, default OFF | ~1800 ch when on | on-flag: `subconscious/dreams/.inject-on` | ~0/922 conversion → gated off (mig 0031 routes insights to the backlog instead) |
 | dream-metrics-context | inject | blanket | ~290 ch | none | none |
 | detect-stale-session | inject | conditional (prior crash) | ~760 ch, 816ms | none | none |
 | health-check | inject | conditional (warnings) | ~65 ch | none | none |
@@ -93,8 +93,13 @@ sync-todos pull).
 
 Every **inject** plug spends tokens in the agent's context. The risk is noise: a
 blanket injector that fires every session but is rarely acted on costs tokens for
-no benefit (the prime suspect today is dream-insights — ~3700 ch every session,
-and the analysis found ~0 of ~922 promoted insights ever became a gcc change).
+no benefit. The prime suspect, dream-insights, was addressed 2026-07-13: its dream
+half (~1800 ch, ~0 of ~922 promoted insights ever became a gcc change) is now
+opt-in and default OFF, leaving only the load-bearing atone TL;DR. It could not be
+conversion-measured — acting on it leaves no machine residue, which is why
+`ledger/acted.toml` excludes it — so the call was made on the historical figure
+plus redundancy: migration 0031 now routes high-confidence dream insights onto the
+backlog, where they get a real decision.
 
 The defense is the value-system in `ledger/goals.toml` (`attention-scarcity`:
 precision over recall, single-digit interrupts/day) plus a measurement: per plug,

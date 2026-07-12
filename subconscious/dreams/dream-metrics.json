@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-11T18:52:51Z",
-  "events_analyzed": 93767,
+  "generated_at": "2026-07-12T20:00:14Z",
+  "events_analyzed": 94519,
   "sessions_analyzed": 264,
   "session_quality": {
-    "average_score": 68.7,
+    "average_score": 68.8,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -83,19 +83,19 @@
     ],
     "bottom_sessions": [
       {
-        "session_id": "8109df11-e8a5-43b4-ac8f-0c4e915bf7c2",
-        "project": "i-dream",
+        "session_id": "1cd43636-5afc-492a-a149-e18690310270",
+        "project": "enhancement-product",
         "score": 56.2,
-        "tool_count": 5,
+        "tool_count": 730,
         "error_count": 0,
         "error_rate": 0.0,
-        "diversity": 0.2,
-        "efficiency": 5.0,
-        "prompts": 1,
-        "compactions": 0,
+        "diversity": 0.005,
+        "efficiency": 4.8,
+        "prompts": 153,
+        "compactions": 5,
         "duration_min": 0,
-        "completed": false,
-        "start": "2026-07-11T18:49:52Z"
+        "completed": true,
+        "start": "2026-05-28T13:21:44Z"
       },
       {
         "session_id": "71f9d42e-5138-4a99-8165-531b4e6a52a2",
@@ -211,13 +211,13 @@
     ]
   },
   "collaboration_style": {
-    "total_prompts": 7335,
-    "corrections": 1581,
-    "confirmations": 1297,
+    "total_prompts": 7365,
+    "corrections": 1585,
+    "confirmations": 1299,
     "directives": 251,
-    "terse_messages": 569,
-    "correction_rate": 0.216,
-    "confirmation_rate": 0.177,
+    "terse_messages": 571,
+    "correction_rate": 0.215,
+    "confirmation_rate": 0.176,
     "directive_rate": 0.034,
     "terse_rate": 0.078,
     "style_label": "corrective"
