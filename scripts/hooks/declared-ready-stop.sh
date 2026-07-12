@@ -97,6 +97,11 @@ last_asst=$(printf '%s\n' "$turn_json" | jq -rc 'select(.type=="assistant")' 2>/
 claim_text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
 [ -n "$claim_text" ] || exit 0
 
+# Defined here (not at the eligibility gate) because Det1a's weak-credit branch
+# also consults SUCCESS_RE to stay out of the block pipeline's way.
+SUCCESS_RE='\b(done|works|working|shipped|fixed|passing|passes|verified|complete|completed|good to go|all set|ready to (ship|go|commit))\b'
+SUBJECT_RE='\b(the (fix|feature|change|bug|test|tests|build|code|implementation|patch|hook|script)|it|this|everything|all (the )?(tests|of it))\b'
+
 # ── Detection 1a: localhost URL advertised → its port must have been exercised ─
 # Handing the user a clickable localhost link asserts "this is up" even when no
 # success word appears, so this branch runs BEFORE the success-word eligibility
@@ -134,10 +139,22 @@ Loop-safe: won't re-fire for this URL set. Mute: touch ~/.claude/.no-declared-re
     # below still gets its look.
     [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready-url:$sid8" --heeded false >/dev/null 2>&1 || true
   fi
+  # Weak-credit nudge (audit 2026-07-12 #4): every advertised port WAS touched,
+  # but token-presence is weak evidence — the 2026-07-10 miss was a passing IPv4
+  # curl while the user's browser hit an IPv6 squatter on the same port. If the
+  # turn shows neither lsof nor a browser navigation, nudge once (soft). Gated on
+  # NO success words so a real over-claim still reaches the block pipeline below
+  # (soft_note exits, and a Stop hook emits one decision only).
+  if [ -z "$bad_ports" ] \
+     && ! printf '%s' "$claim_text" | rg -qiP "$SUCCESS_RE" 2>/dev/null \
+     && ! printf '%s' "$turn_tool_text" | rg -qi 'lsof|browser_navigate|navigate_page|browser_snapshot|take_screenshot' 2>/dev/null; then
+    URLSOFT="/tmp/claude-declared-ready-urlsoft-${sid8}"
+    if [ ! -f "$URLSOFT" ]; then
+      : > "$URLSOFT" 2>/dev/null || true
+      soft_note "✓ localhost URL (soft — weak exercise credit): the advertised port(s) appear in this turn's tool activity, but no lsof and no browser navigation. A passing curl is not the user's access path (2026-07-10: IPv4 curl passed, the browser hit an IPv6 squatter). Cheap check before handing over the link: lsof -nP -iTCP:<port> -sTCP:LISTEN → exactly ONE owner across both stacks, and exercise the primary action in a browser. Mute: touch ~/.claude/.no-declared-ready-gate"
+    fi
+  fi
 fi
-
-SUCCESS_RE='\b(done|works|working|shipped|fixed|passing|passes|verified|complete|completed|good to go|all set|ready to (ship|go|commit))\b'
-SUBJECT_RE='\b(the (fix|feature|change|bug|test|tests|build|code|implementation|patch|hook|script)|it|this|everything|all (the )?(tests|of it))\b'
 
 # Eligibility base (v1 parity): a success word AND a self-referential subject
 # somewhere in the message. Keeps "done reading the file" (no subject) out.
@@ -332,6 +349,20 @@ if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
   if [ -f "$MARK" ] && [ ! -f "$HEEDMARK" ]; then
     [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready:$sid8" --heeded true >/dev/null 2>&1 || true
     : > "$HEEDMARK" 2>/dev/null || true
+  fi
+  # Multi-state surfaces (audit 2026-07-12 #4): a run existed, but run-existence
+  # says nothing about STATE coverage. Both July theme misses (2026-07-02 ribbon,
+  # 2026-07-07 v3 dashboard) were Swift surfaces that took exactly this silent
+  # exit — the dark-AND-light reminder below only fires for tsx-in-Next. If the
+  # edit touched a UI surface and the claim doesn't scope a state, remind once
+  # per session (soft, never a block).
+  if rg -qi '\.(swift|tsx|jsx|css|scss|vue|svelte)$' "$EDITED" 2>/dev/null \
+     && ! printf '%s' "$claim_text" | rg -qiP '\b(dark|light)[- ](mode|theme|only)\b|\bboth themes\b|\beach (state|theme|mode)\b|\ball (states|themes|breakpoints)\b|\bverified in\b' 2>/dev/null; then
+    STATEMARK="/tmp/claude-declared-ready-states-${sid8}"
+    if [ ! -f "$STATEMARK" ]; then
+      : > "$STATEMARK" 2>/dev/null || true
+      soft_note "✓ declared-ready (soft — a run was observed, on a UI surface): if this surface has states — dark AND light theme, open/closed, breakpoints — exercise the changed surface in EACH state before the claim, or scope it explicitly ('verified in dark only'). Dark-only sign-offs shipped a broken light theme twice (2026-07-02, 2026-07-07). Mute: touch ~/.claude/.no-declared-ready-gate"
+    fi
   fi
   exit 0
 fi
