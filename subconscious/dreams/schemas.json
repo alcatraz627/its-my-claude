@@ -867,20 +867,16 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 4,
-    "member_count": 4,
+    "occurrences": 2,
+    "member_count": 2,
     "rep_pattern_id": "7e227751-1141-4781-8c0d-8a182a046dd8",
     "member_ids": [
       "7e227751-1141-4781-8c0d-8a182a046dd8",
-      "d542be04-7c3d-4d9f-a1a9-7616930895f1",
-      "2f88ac60-2d7f-45ed-b286-4fdaef0ff359",
-      "6452711e-4c1d-4149-ab38-88c4ed584e6f"
+      "d542be04-7c3d-4d9f-a1a9-7616930895f1"
     ],
     "member_texts": [
       "When the user explicitly requests a simpler or deferred scope, the agent must not add unrequested complexity — adding complexity the user deliberately asked to exclude is a scope violation, not a helpful enhancement.",
-      "When the user has explicitly deleted previously-written code and requests a simpler replacement, the agent must not re-introduce the removed complexity or add unrequested features — deliver only what the replacement request literally asked for.",
-      "When the user explicitly defers a feature or scope item ('not now', 'defer', 'for later', 'park that'), the agent must not implement any logic for it even when the implementation naturally leads there — building deferred complexity forces the user to delete the agent's work and is a scope ceiling violation.",
-      "When the user explicitly asks to defer or simplify a feature, the agent must not re-introduce that complexity under a different implementation — re-adding deferred scope is a scope violation even when the new version seems cleaner."
+      "When the user has explicitly deleted previously-written code and requests a simpler replacement, the agent must not re-introduce the removed complexity or add unrequested features — deliver only what the replacement request literally asked for."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-two-enhancement-product",
@@ -891,7 +887,7 @@
       "-Users-alcatraz627-Code-Versable-enhancement-product"
     ],
     "first_seen": "2026-06-24T10:24:10.726316+00:00",
-    "last_seen": "2026-07-04T23:51:52.289152+00:00"
+    "last_seen": "2026-07-04T07:08:53.367433+00:00"
   },
   {
     "id": "42e3da98da46c86f",
@@ -1025,6 +1021,31 @@
     ],
     "first_seen": "2026-07-02T23:49:07.272682+00:00",
     "last_seen": "2026-07-02T23:49:07.272682+00:00"
+  },
+  {
+    "id": "af406f3ac30e868e",
+    "text": "When the user explicitly defers a feature or scope item ('not now', 'defer', 'for later', 'park that'), the agent must not implement any logic for it even when the implementation naturally leads there — building deferred complexity forces the user to delete the agent's work and is a scope ceiling violation.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.93,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "2f88ac60-2d7f-45ed-b286-4fdaef0ff359",
+    "member_ids": [
+      "2f88ac60-2d7f-45ed-b286-4fdaef0ff359",
+      "6452711e-4c1d-4149-ab38-88c4ed584e6f"
+    ],
+    "member_texts": [
+      "When the user explicitly defers a feature or scope item ('not now', 'defer', 'for later', 'park that'), the agent must not implement any logic for it even when the implementation naturally leads there — building deferred complexity forces the user to delete the agent's work and is a scope ceiling violation.",
+      "When the user explicitly asks to defer or simplify a feature, the agent must not re-introduce that complexity under a different implementation — re-adding deferred scope is a scope violation even when the new version seems cleaner."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-06-24T17:05:25.884606+00:00",
+    "last_seen": "2026-07-04T23:51:52.289152+00:00"
   },
   {
     "id": "d615f88aab21dd74",
@@ -4277,69 +4298,6 @@
     "last_seen": "2026-07-11T18:09:29.392095+00:00"
   },
   {
-    "id": "2529ba3754ed5d5c",
-    "text": "Animation/visual enhancement code was added as an unsolicited 'enhancement' and was flagged as incorrect/unwanted - adding unrequested visual effects to UI code is a mistake",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b4abf703-dfb0-4b24-bac3-1bd1e70703f7",
-    "member_ids": [
-      "b4abf703-dfb0-4b24-bac3-1bd1e70703f7"
-    ],
-    "member_texts": [
-      "Animation/visual enhancement code was added as an unsolicited 'enhancement' and was flagged as incorrect/unwanted - adding unrequested visual effects to UI code is a mistake"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "first_seen": "2026-04-14T16:27:03.749609+00:00",
-    "last_seen": "2026-04-14T16:27:03.749609+00:00"
-  },
-  {
-    "id": "4866ecd79630af35",
-    "text": "User runs very large tool-call sessions (50-150+ tools) for complex feature work, suggesting tolerance for long autonomous execution when given clear direction ('started with them', 'keep going')",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "86e6683c-0a66-4f68-98ed-37c7e07c715e",
-    "member_ids": [
-      "86e6683c-0a66-4f68-98ed-37c7e07c715e"
-    ],
-    "member_texts": [
-      "User runs very large tool-call sessions (50-150+ tools) for complex feature work, suggesting tolerance for long autonomous execution when given clear direction ('started with them', 'keep going')"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend"
-    ],
-    "first_seen": "2026-04-14T16:27:03.749609+00:00",
-    "last_seen": "2026-04-14T16:27:03.749609+00:00"
-  },
-  {
-    "id": "4f753557a9c1a5ff",
-    "text": "High tool-use sessions (50-157 tools) are common for continuation and complex implementation tasks; this is normal and expected for this project",
-    "category": "approach",
-    "valence": "neutral",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "1db8913f-fb99-4f99-b283-177336d37471",
-    "member_ids": [
-      "1db8913f-fb99-4f99-b283-177336d37471"
-    ],
-    "member_texts": [
-      "High tool-use sessions (50-157 tools) are common for continuation and complex implementation tasks; this is normal and expected for this project"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "first_seen": "2026-04-14T16:28:45.862163+00:00",
-    "last_seen": "2026-04-14T16:28:45.862163+00:00"
-  },
-  {
     "id": "e6941bdf82a810eb",
     "text": "Multi-agent task orchestration generates large volumes of task notification events; most are silently acknowledged without substantive processing",
     "category": "architecture",
@@ -6161,19 +6119,21 @@
     "last_seen": "2026-07-11T18:09:29.392095+00:00"
   },
   {
-    "id": "55282e316ab4d7a7",
-    "text": "When building a selection or picker UI, choosing an option must only preview it — an explicit save or apply action is required to commit the change; auto-applying on selection is a UX correctness bug, not a design choice",
+    "id": "7b1ab50538c65c80",
+    "text": "When building any interactive selector or picker UI, default selection must preview the change without applying it — requiring an explicit save/apply action before state changes take effect; auto-applying on selection is a critical UX violation",
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "e965a4bd-c7f6-41a7-93f4-142335d941e9",
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "c536fa3a-027f-446d-8965-204f2c831a9b",
     "member_ids": [
-      "e965a4bd-c7f6-41a7-93f4-142335d941e9"
+      "e965a4bd-c7f6-41a7-93f4-142335d941e9",
+      "c536fa3a-027f-446d-8965-204f2c831a9b"
     ],
     "member_texts": [
-      "When building a selection or picker UI, choosing an option must only preview it — an explicit save or apply action is required to commit the change; auto-applying on selection is a UX correctness bug, not a design choice"
+      "When building a selection or picker UI, choosing an option must only preview it — an explicit save or apply action is required to commit the change; auto-applying on selection is a UX correctness bug, not a design choice",
+      "When building any interactive selector or picker UI, default selection must preview the change without applying it — requiring an explicit save/apply action before state changes take effect; auto-applying on selection is a critical UX violation"
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-local-models",
@@ -6183,38 +6143,12 @@
       "-Users-alcatraz627--claude",
       ".claude",
       "frontend",
-      "backend"
+      "backend",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "notion-sync"
     ],
     "first_seen": "2026-07-12T04:12:16.853268+00:00",
-    "last_seen": "2026-07-12T04:12:16.853268+00:00"
-  },
-  {
-    "id": "1326101dfc565890",
-    "text": "When designing inter-agent messaging for inactive sessions, the correct pattern is inbox persistence so a resuming agent can discover queued messages — do not attempt to resurrect or re-awaken dead sessions to deliver messages",
-    "category": "architecture",
-    "valence": "positive",
-    "confidence": 0.83,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "069b6fc3-3d0a-4297-937e-d233c50edc74",
-    "member_ids": [
-      "069b6fc3-3d0a-4297-937e-d233c50edc74"
-    ],
-    "member_texts": [
-      "When designing inter-agent messaging for inactive sessions, the correct pattern is inbox persistence so a resuming agent can discover queued messages — do not attempt to resurrect or re-awaken dead sessions to deliver messages"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "frontend",
-      "backend"
-    ],
-    "first_seen": "2026-07-12T04:12:16.853268+00:00",
-    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
   },
   {
     "id": "f8f22a508884d91a",
@@ -6230,34 +6164,6 @@
     ],
     "member_texts": [
       "When scaffolding stub documentation, write only the goal statement and TODO(human) placeholders per section — never fabricate body content to fill structural completeness"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Claude-ghostty-themes",
-      "-Users-alcatraz627-Code-Claude-data-forge",
-      "-Users-alcatraz627--claude-i-dream",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "frontend",
-      "backend"
-    ],
-    "first_seen": "2026-07-12T04:12:16.853268+00:00",
-    "last_seen": "2026-07-12T04:12:16.853268+00:00"
-  },
-  {
-    "id": "8b6101fa56812c02",
-    "text": "When restructuring or standardizing existing documentation, preserve [VERIFY] and TODO(human) markers exactly in place — do not remove, resolve, or rewrite them unless the user explicitly directs it",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.87,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "f196c4d9-c50c-420a-a4b3-9ebe3ccd4d52",
-    "member_ids": [
-      "f196c4d9-c50c-420a-a4b3-9ebe3ccd4d52"
-    ],
-    "member_texts": [
-      "When restructuring or standardizing existing documentation, preserve [VERIFY] and TODO(human) markers exactly in place — do not remove, resolve, or rewrite them unless the user explicitly directs it"
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-local-models",
@@ -6301,87 +6207,333 @@
     "last_seen": "2026-07-12T04:12:16.853268+00:00"
   },
   {
-    "id": "fa445b55925f2054",
-    "text": "When asked to plan multi-phase work, each step should include its intent, concrete validation criteria, and failure-detection signals, then be codified into a persistent reference document the system can use for future validation",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.78,
+    "id": "5e8f019b6811d28a",
+    "text": "Complex shell operations using process substitution, random selection, or chained pipes are fragile in agent-driven contexts — prone to SIGTERM and silent backgrounding; delegate to a Python script instead of composing shell pipelines",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.75,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "6155da09-45cb-44f2-8082-a12d791fe17d",
+    "rep_pattern_id": "030d397a-524b-4a21-8e09-dc9a9f65cb2b",
     "member_ids": [
-      "6155da09-45cb-44f2-8082-a12d791fe17d"
+      "030d397a-524b-4a21-8e09-dc9a9f65cb2b"
     ],
     "member_texts": [
-      "When asked to plan multi-phase work, each step should include its intent, concrete validation criteria, and failure-detection signals, then be codified into a persistent reference document the system can use for future validation"
+      "Complex shell operations using process substitution, random selection, or chained pipes are fragile in agent-driven contexts — prone to SIGTERM and silent backgrounding; delegate to a Python script instead of composing shell pipelines"
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
+      "notion-sync",
       ".claude",
-      "frontend",
-      "backend"
+      "backend",
+      "frontend"
     ],
-    "first_seen": "2026-07-12T04:12:16.853268+00:00",
-    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
   },
   {
-    "id": "567453f1bfb2e60e",
-    "text": "System-supplied date values can drift across turns within a single session; documents created in later turns may receive different dates than earlier ones — re-read the current date rather than reusing one captured at session start",
+    "id": "8bd3fefb2e9c013f",
+    "text": "Before building a new hook, nudge, or script for a concern, read any existing script that serves a similar purpose — prior design decisions and removal history directly constrain what the new implementation should do",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "367a9ca4-c118-40ba-a5fe-55b74a677a03",
+    "member_ids": [
+      "367a9ca4-c118-40ba-a5fe-55b74a677a03"
+    ],
+    "member_texts": [
+      "Before building a new hook, nudge, or script for a concern, read any existing script that serves a similar purpose — prior design decisions and removal history directly constrain what the new implementation should do"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "8b5eea788fdb0ff3",
+    "text": "Before replicating a code pattern from surrounding context, verify that it applies in the new location — some patterns (e.g. flag-gated lazy imports, IIFE wrappers) exist for a specific contextual reason that does not generalize to adjacent code",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "11547124-c7fe-477c-8bb4-150468c1440c",
+    "member_ids": [
+      "11547124-c7fe-477c-8bb4-150468c1440c"
+    ],
+    "member_texts": [
+      "Before replicating a code pattern from surrounding context, verify that it applies in the new location — some patterns (e.g. flag-gated lazy imports, IIFE wrappers) exist for a specific contextual reason that does not generalize to adjacent code"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "8f9a27e8542a7ff6",
+    "text": "When a correction yields a behavioral rule, define the precise boundary: a rule stated as absolute ('never do X') is often wrong — the nuance ('never do X except in established-pattern context Y') preserves intent without overcorrecting into a rule that breaks valid uses",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b4bef019-437e-4f08-aa77-29c883331f14",
+    "member_ids": [
+      "b4bef019-437e-4f08-aa77-29c883331f14"
+    ],
+    "member_texts": [
+      "When a correction yields a behavioral rule, define the precise boundary: a rule stated as absolute ('never do X') is often wrong — the nuance ('never do X except in established-pattern context Y') preserves intent without overcorrecting into a rule that breaks valid uses"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "083e057557fb8b44",
+    "text": "Splitting detection (deterministic, machine-verifiable regex/heuristic) from application (context-dependent agent judgment) produces more reliable tools than having a single pass do both — candidates are surfaced mechanically, acted on with judgment",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b62808f9-2460-4b5b-a690-d5cc54d39b31",
+    "member_ids": [
+      "b62808f9-2460-4b5b-a690-d5cc54d39b31"
+    ],
+    "member_texts": [
+      "Splitting detection (deterministic, machine-verifiable regex/heuristic) from application (context-dependent agent judgment) produces more reliable tools than having a single pass do both — candidates are surfaced mechanically, acted on with judgment"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "c2d784b0107f2a72",
+    "text": "In JSX, wrapping a conditional expression in an IIFE or scope-wrapper where sibling elements use inline props or plain const declarations is a recurring code smell; conform to the pattern already present in siblings instead",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "71bfd3f2-9470-4c8e-b966-7cf2f2e0368c",
+    "member_ids": [
+      "71bfd3f2-9470-4c8e-b966-7cf2f2e0368c"
+    ],
+    "member_texts": [
+      "In JSX, wrapping a conditional expression in an IIFE or scope-wrapper where sibling elements use inline props or plain const declarations is a recurring code smell; conform to the pattern already present in siblings instead"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "f8dc4d7e7eb9ed5e",
+    "text": "After implementing a mutation or write operation in a web app, explicitly verify that client-side caches holding the affected data are invalidated — cache staleness after a write is a high-impact but non-obvious failure that automated tests routinely miss",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "75818bc7-ae7c-4a8f-bef8-957d570cc78b",
+    "member_ids": [
+      "75818bc7-ae7c-4a8f-bef8-957d570cc78b"
+    ],
+    "member_texts": [
+      "After implementing a mutation or write operation in a web app, explicitly verify that client-side caches holding the affected data are invalidated — cache staleness after a write is a high-impact but non-obvious failure that automated tests routinely miss"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "33a1f2e70811118c",
+    "text": "Formatters (Prettier, Black, etc.) can silently reformat code during an edit sequence in ways that change logic structure; after edits to formatting-sensitive files, inspect the final saved state rather than assuming the edit applied as intended",
     "category": "tool-use",
     "valence": "negative",
     "confidence": 0.72,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "dd51c8f6-d6f4-4519-8ed3-9ba56d3045d4",
+    "rep_pattern_id": "2678f8be-85b2-46d2-ae06-de12f6bd9003",
     "member_ids": [
-      "dd51c8f6-d6f4-4519-8ed3-9ba56d3045d4"
+      "2678f8be-85b2-46d2-ae06-de12f6bd9003"
     ],
     "member_texts": [
-      "System-supplied date values can drift across turns within a single session; documents created in later turns may receive different dates than earlier ones — re-read the current date rather than reusing one captured at session start"
+      "Formatters (Prettier, Black, etc.) can silently reformat code during an edit sequence in ways that change logic structure; after edits to formatting-sensitive files, inspect the final saved state rather than assuming the edit applied as intended"
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
+      "notion-sync",
       ".claude",
-      "frontend",
-      "backend"
+      "backend",
+      "frontend"
     ],
-    "first_seen": "2026-07-12T04:12:16.853268+00:00",
-    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
   },
   {
-    "id": "89b9d6000228d63d",
-    "text": "Building a UI that looks structurally correct (tabs, config sections, renders) but reads as a form viewer rather than an interactive tool means the user's intent — live customization with immediate feedback — was not modeled; implement the intent, not the structural shape",
+    "id": "7ee683979f4fc110",
+    "text": "A UI reskin that applies styles mechanically without end-to-end UX validation — scroll behavior, background colors across states, responsive layout, navigation flow — is not releasable even if every individual style change was applied correctly",
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.75,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "b055bf08-3584-432c-8b5b-16f07d5b55e4",
+    "rep_pattern_id": "46ac9083-1042-40b4-92db-b3d206705352",
     "member_ids": [
-      "b055bf08-3584-432c-8b5b-16f07d5b55e4"
+      "46ac9083-1042-40b4-92db-b3d206705352"
     ],
     "member_texts": [
-      "Building a UI that looks structurally correct (tabs, config sections, renders) but reads as a form viewer rather than an interactive tool means the user's intent — live customization with immediate feedback — was not modeled; implement the intent, not the structural shape"
+      "A UI reskin that applies styles mechanically without end-to-end UX validation — scroll behavior, background colors across states, responsive layout, navigation flow — is not releasable even if every individual style change was applied correctly"
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
       "-Users-alcatraz627-Code-Claude-ghostty-themes",
       "-Users-alcatraz627-Code-Claude-data-forge",
       "-Users-alcatraz627--claude-i-dream",
       "-Users-alcatraz627--claude",
+      "notion-sync",
       ".claude",
-      "frontend",
-      "backend"
+      "backend",
+      "frontend"
     ],
-    "first_seen": "2026-07-12T04:12:16.853268+00:00",
-    "last_seen": "2026-07-12T04:12:16.853268+00:00"
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "39308604e83b7d6f",
+    "text": "Security and authorization checks should be explicit at each protected callsite rather than abstracted into a named wrapper function — a wrapper that appears to 'handle auth' can obscure whether a new callsite is actually protected or merely resembles one that is",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b0b94e41-e2c7-4bcc-ae25-af15e73db313",
+    "member_ids": [
+      "b0b94e41-e2c7-4bcc-ae25-af15e73db313"
+    ],
+    "member_texts": [
+      "Security and authorization checks should be explicit at each protected callsite rather than abstracted into a named wrapper function — a wrapper that appears to 'handle auth' can obscure whether a new callsite is actually protected or merely resembles one that is"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
+  },
+  {
+    "id": "5ade937beb487912",
+    "text": "When querying logs with text filters, overly broad keyword patterns match irrelevant payload content embedded in unrelated log lines; anchor filters to structural log-type identifiers, not bare keywords, to avoid returning megabytes of noise",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e49780d6-3e93-4636-8197-4de3125afd9c",
+    "member_ids": [
+      "e49780d6-3e93-4636-8197-4de3125afd9c"
+    ],
+    "member_texts": [
+      "When querying logs with text filters, overly broad keyword patterns match irrelevant payload content embedded in unrelated log lines; anchor filters to structural log-type identifiers, not bare keywords, to avoid returning megabytes of noise"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00"
   }
 ]

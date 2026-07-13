@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-12T05:06:28.886203+00:00 · 11 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-13T00:45:42.626513+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Personal dream-tracking dashboard with widgets, pm2 services, and Anthropic API integration. Working style is iterative and detail-oriented, with strong UX and verification standards.
+Dream-tracking dashboard and developer tooling project (`i-dream`), mixing web UI work with shell/agent tool authoring. Working style is iterative and verification-heavy — the user catches shallow "done" claims hard.
 
 ## Things to do (or keep doing)
-- Always exercise the actual flow in a real browser (navigate to the URL, interact with the UI) before claiming a change works — claiming done without live exercise is a critical failure
-- Sequence edits to the same file; never batch parallel `Edit` calls targeting the same path — only the last write survives, silently
-- Before adding any mechanism to store or retrieve a config/ID value, scan `git log` first — reinventing a recently-committed approach wastes a round-trip
-- When adding picker/selection UI, make selection preview-only; require an explicit save or apply action to commit
+- **Verify runtime before claiming working**: navigate to the actual URL and exercise the primary flow; `lsof` the port; don't report success off a compile or collect.
+- **Check git log before implementing**: scan recent commits for version decisions and already-landed mechanisms before reinventing them.
+- **Read existing scripts before writing new ones**: prior design decisions and removal history directly constrain what to build.
+- **Sequence edits to the same file**: parallel Edit calls silently clobber each other — only one survives despite both returning success.
 
 ## Things to avoid
-- Don't let file paths end immediately before a sentence period in replies — Ghostty auto-links paths and swallows the trailing dot, breaking clickability; follow every path with a space, word, or comma
-- Don't suggest version changes (upgrades, reverts) without checking git history for deliberate prior version decisions
-- Don't scaffold stub docs with fabricated body content — write goal statement and `TODO(human)` placeholders only
-- Don't default to hardware/throughput metrics when the user asks for workflow-relevant augmentations — clarify what user-facing utility they actually want
+- **Don't auto-apply on selection in picker UIs**: selection must preview; an explicit save/apply action is required to commit state changes.
+- **Don't put a file path immediately before a sentence-ending period**: Ghostty auto-links paths and swallows the trailing dot, breaking the link — follow every path with a space, word, or comma.
+- **Don't fabricate content in stub docs**: write only the goal statement and `TODO(human)` placeholders — never fill sections structurally.
+- **Don't suggest version changes without checking git history**: a recent deliberate revert is a hard veto.
 
 ## Open questions / known gaps
-- "Runtime variables" is ambiguous here: deploy-time env vars vs on-the-fly app globals — always clarify before implementing
-- Customer-facing document tone: AI-register openers and reflexive apologies must be caught before delivery, not after
+- "Runtime variables" is ambiguous here — always clarify whether the user means deploy-time env vars or on-the-fly app globals before proceeding.
+- UI reskins need end-to-end UX validation (scroll, backgrounds, responsive, nav flow) — mechanical style application alone is not releasable.

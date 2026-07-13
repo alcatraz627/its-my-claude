@@ -92,19 +92,51 @@ cluster_slug() {
 # Rejected slugs intentionally do NOT auto-re-draft (the user explicitly
 # said no). To re-enable proposing for a slug, re-open the prior proposal
 # manually via propose.sh (no auto-resurrection).
+#
+# Reads `link:atone:<slug>`, the tag shape proposals actually carry. It used to
+# key on a bare `atone-prevention` marker; migration 0030 rewrote every one of
+# those into the link: form (so they could corroborate in the backlog gate) and
+# did not update this reader. The function then matched nothing, reported "no
+# slug has ever been proposed", and the next consolidation re-drafted ~20 slugs
+# a human had just rejected — the exact auto-resurrection the docstring above
+# promises never happens. The legacy marker is still honored for any store that
+# predates the migration.
 already_proposed_slugs() {
   [ -f "$PROPOSALS_JSONL" ] || return 0
-  jq -r '
-    select(((.tags // []) | any(. == "atone-prevention")))
-    | (.tags // [])
-    | map(select(. != "atone-prevention"
-              and . != "hook-draft"
-              and . != "skill-enhancement"
-              and . != "project-claude-md"
-              and . != "claude-md-rule"
-              and . != "rules-entry"))
-    | .[0] // empty
-  ' "$PROPOSALS_JSONL" 2>/dev/null | sort -u
+  {
+    # Current shape: the slug travels inside the provenance edge.
+    jq -r '(.tags // [])[] | select(startswith("link:atone:")) | sub("^link:atone:"; "")' \
+      "$PROPOSALS_JSONL" 2>/dev/null
+    # Legacy shape (pre-migration-0030 stores).
+    jq -r '
+      select(((.tags // []) | any(. == "atone-prevention")))
+      | (.tags // [])
+      | map(select(. != "atone-prevention"
+                and . != "hook-draft"
+                and . != "skill-enhancement"
+                and . != "project-claude-md"
+                and . != "claude-md-rule"
+                and . != "rules-entry"))
+      | .[0] // empty
+    ' "$PROPOSALS_JSONL" 2>/dev/null
+  } | sort -u
+}
+
+# True when a shipped rule, hook, or CLAUDE.md already cites this slug by name.
+#
+# The drafter proposes "create rules/<slug>.md" for every recurring pattern but
+# never checked whether that rule already exists — so a pattern that HAS been
+# fixed keeps getting re-proposed, and its recurrence count (the thing that makes
+# it look urgent) keeps climbing precisely BECAUSE the fix works and events are
+# still being logged against it. Rules and hooks cite their originating atone slug
+# in a provenance line, which is what makes a name match a reliable signal here
+# rather than a guess.
+slug_is_covered() {
+  local slug="$1" gcc="${GCC_ROOT:-$HOME/.claude}"
+  [ -n "$slug" ] || return 1
+  rg --no-messages -q -F "$slug" \
+     "$gcc/rules" "$gcc/scripts/hooks" "$gcc/CLAUDE.md" \
+     --glob '!**/replay/fixtures/**' 2>/dev/null
 }
 
 # Decide the target type for a slug. Inputs: slug, severity, count, cluster, tags-json, has-project

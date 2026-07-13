@@ -243,5 +243,5 @@ Rule: rules/speculative-abstractions-without-a-load-bearing-caller.md
 Mute: touch ~/.claude/.no-speculative-export-gate"
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-speculative-export --action nudge --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 || true
-jq -nc --arg m "$msg" '{additionalContext:$m}' 2>/dev/null || true
+jq -nc --arg m "$msg" '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}' 2>/dev/null || true
 exit 0

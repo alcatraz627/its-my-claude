@@ -10,7 +10,11 @@
 # Advisory only — emits additionalContext (which reaches the agent mid-session),
 # never blocks. The user chose non-blocking deliberately; a Stop-time block was
 # rejected, and a Stop-time advisory would be swallowed (Stop non-block output is
-# not surfaced). PostToolUse additionalContext is the channel that actually lands.
+# not surfaced). PostToolUse additionalContext IS the channel that lands — but ONLY
+# inside the documented {hookSpecificOutput:{hookEventName,additionalContext}}
+# envelope. This hook emitted a BARE top-level {additionalContext} until 2026-07-13,
+# which the harness does not read: it never reached a single agent, and there is no
+# error or --debug signal when that happens. See assets/reports/20260713-hook-envelope/.
 #
 # Runtime contract: reads the PostToolUse payload on stdin (needs .session_id).
 # Fires at most once per session (sentinel in /tmp). Always exits 0.
@@ -43,7 +47,7 @@ task_count=0
 
 touch "$SENT" 2>/dev/null || true
 jq -nc --arg m "[todo-discipline] ${edits} edits so far but your Task list is empty. Live todos belong in the Task tool (TaskCreate/TaskUpdate) — that's the source of truth, what the TUI shows, and what sync-todos mirrors to notes/memory. If this is multi-step work, create tasks now; a plan in a doc file with an empty Task list leaves the TUI blind. (Advisory; fires once per session.)" \
-  '{additionalContext:$m}'
+  '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook no-task-nudge --action nudge --heeded unknown >/dev/null 2>&1 || true
 
 exit 0

@@ -90,7 +90,7 @@ if (( new_total > 0 && new_total % 30 == 0 )); then
     else
       msg="Tool count ${new_total} (long session) — consider /core-dump mini; context may auto-compact soon."
     fi
-    jq -nc --arg m "[auto-checkpoint] $msg" '{additionalContext:$m}'
+    jq -nc --arg m "[auto-checkpoint] $msg" '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
   fi
 fi
 

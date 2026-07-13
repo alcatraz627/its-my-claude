@@ -93,5 +93,5 @@ fi
 
 # Record the firing to the plug-events ledger (FIRED side of efficacy).
 bash "$HOME/.claude/scripts/ledger/plug-log.sh" --plug ctx-pressure --lifecycle turn --outcome fired --chars "${#msg}" --session "$sid" --tags "band:$band" >/dev/null 2>&1 || true
-jq -nc --arg m "$msg" '{additionalContext: $m}'
+jq -nc --arg m "$msg" '{hookSpecificOutput:{hookEventName:"UserPromptSubmit",additionalContext:$m}}'
 exit 0

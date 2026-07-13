@@ -1448,7 +1448,7 @@
       "e218ac38-3844-4295-a972-c9dc01b22d13"
     ],
     "hypothesis": "The same context-loss mechanism that necessitates heavy /catchup and /core-dump usage is the root cause of repeated push-without-approval violations — authorization state decays across compaction boundaries while task momentum persists, creating a confidence-without-permission failure mode.",
-    "confidence": 0.82,
+    "confidence": 0.62,
     "actionable": true,
     "suggested_rule": "Always treat any context compaction or session resumption as a hard reset of ALL shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.",
     "promoted": true,
@@ -1462,7 +1462,7 @@
       "1c9dd028-997d-447f-b96f-b38510b9c07b"
     ],
     "hypothesis": "These appear contradictory — one says 'don't trust names, read the code' while the other says 'use the named abstraction, not the raw expression' — but they resolve on a read/write axis: when ASSERTING how code works, verify by source; when WRITING new code, defer to the project's named vocabulary.",
-    "confidence": 0.82,
+    "confidence": 0.52,
     "actionable": true,
     "suggested_rule": "Always distinguish the read axis (verify claims by reading definitions) from the write axis (express intent using the project's named abstractions) — names are untrustworthy as evidence but authoritative as vocabulary.",
     "promoted": true,
@@ -1860,7 +1860,7 @@
       "5161f69a-c10e-415e-8de3-a50dc020c5b4"
     ],
     "hypothesis": "Incomplete file lists, undefined constants in docs, permission prompts without visible commands, and success claims without output are all 'assertion without inline evidence' — forcing the recipient to hunt or trust rather than verify in place, which is the common root of user frustration across these otherwise unrelated domains.",
-    "confidence": 0.8,
+    "confidence": 0.5000000000000001,
     "actionable": true,
     "suggested_rule": "Always inline the evidence next to the assertion — a file list is complete or not sent, a named constant is defined where named, a command is shown before the permission ask, and success is demonstrated not declared.",
     "promoted": true,
@@ -2888,7 +2888,7 @@
       "943ce7f1-3a81-4450-818c-6ed7c0323572"
     ],
     "hypothesis": "Premature closure is fractal: the agent short-circuits verification rituals at the code level (declaring done without running) AND at the meta level (invoking /atone without completing the recording), revealing that the failure is not domain-specific but a general 'declare victory at intent rather than completion' bias.",
-    "confidence": 0.78,
+    "confidence": 0.5800000000000001,
     "actionable": true,
     "suggested_rule": "Always verify that a ritual's TERMINAL artifact exists (test output, atone event line, committed file) before moving to the next task — the invocation is not the completion.",
     "promoted": true,
@@ -3681,9 +3681,25 @@
       "7c85287a-edac-42ab-8c5f-b1baec092af6"
     ],
     "hypothesis": "Push-without-approval, cache blast radius, shared circuit breakers, and secret leakage are all instances of the same structural flaw: an action scoped to one context (session, user, consumer) whose side-effects propagate to ALL contexts sharing the underlying resource.",
-    "confidence": 0.75,
+    "confidence": 0.55,
     "actionable": true,
     "suggested_rule": "Always ask 'who else shares this resource?' before any write to a shared surface (remote branch, cache tag, circuit breaker key, file that persists beyond this session) — if the answer is 'others beyond my scope', gate the action.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "ec56dc91-f282-476f-bc38-6eb12c7cf546",
+    "patterns_linked": [
+      "1c9dd028-997d-447f-b96f-b38510b9c07b",
+      "251ad081-8d9e-4dd2-9d5a-f46891e0b3a0",
+      "47762cd2-2358-4213-854c-0f41cfb2bef8",
+      "44207d0e-ca03-4a77-993d-aa1a92f03e08"
+    ],
+    "hypothesis": "The agent's failure to use existing project utilities, config systems, test patterns, and TUI tools are all the same blindness — it builds from its training-data mental model of 'how this kind of thing is usually done' rather than scanning the current project for 'how this project already does it', and this reuse-blindness gets worse under time pressure or when the existing solution lives in an unexpected location.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Before writing any utility call, config access, test setup, or formatted output, grep the project for how the same concern is already handled — the project's existing pattern is always the right answer, even when the agent's general-knowledge approach would also work.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4583,21 +4599,6 @@
     "confidence": 0.72,
     "actionable": true,
     "suggested_rule": "Treat single-word user messages as process signals, not conversational turns. Map: 'next/go/continue' → SIGCONT (resume), 'stop/wait' → SIGSTOP (pause and report), 'status' → SIGUSR1 (emit state). Respond with action, not acknowledgment.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "d6ee93f0-9dfc-4ba5-9daf-fb46f0afa104",
-    "patterns_linked": [
-      "58112601-ddbc-4e20-a6ea-6987c6c96569",
-      "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-      "c70ae766-c39a-442a-a15d-fbe84d854e0c"
-    ],
-    "hypothesis": "The user's projects (geopolitical simulation, dream dashboard) both model complex state machines with many actors/entities evolving over time — the same reason sessions themselves need robust state management. The domain complexity drives the session complexity; reducing domain state surface (e.g., serializable snapshots of simulation/dashboard state) would also reduce session continuation burden.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "For projects with complex domain state (simulations, dashboards with many widgets), auto-generate a machine-readable project-state snapshot alongside the session core-dump, so /catchup can restore both agent context AND domain context in one pass.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null

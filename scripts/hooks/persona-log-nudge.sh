@@ -63,6 +63,6 @@ fi
 
 { echo "persona=$persona"; echo "since=$since"; echo "nudged=1"; } > "$STATE"
 jq -nc --arg p "$persona" --arg m "[persona] You've been working under the ${persona} persona but haven't logged it. Before you wrap up, record it for the efficacy trail: bash ~/.claude/scripts/persona-log.sh record ${persona} --mode adopted --task \"<1-line>\" --outcome accepted|revised|discarded --loop converged|partial --note \"<what worked / what it missed>\". (Advisory; once per session. Mute: touch ~/.claude/personas/usage/.nudge-off)" \
-  '{additionalContext:$m}'
+  '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook persona-log-nudge --action nudge --heeded unknown >/dev/null 2>&1 || true
 exit 0

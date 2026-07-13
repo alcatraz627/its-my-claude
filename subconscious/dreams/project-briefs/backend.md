@@ -1,17 +1,18 @@
-<!-- i-dream project brief · 2026-07-12T04:39:28.616347+00:00 · 3 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-13T00:42:45.489207+00:00 · 15 patterns / 0 insights -->
 ## What this project is about
-Backend service with adjacent tooling for GitHub PR workflows and documentation scaffolding. Working style is precision-first: explicit user actions over convenience automation, real rendering over inferred output.
+Full-stack web application (JSX frontend, backend services) with active tooling/script development. Work spans UI interactions, cache management, GitHub integrations, and agent-driven shell operations.
 
 ## Things to do (or keep doing)
-- In any picker or selection UI, selecting an option **previews only** — always require a distinct save/apply action to commit the change
-- In GitHub PR comments, use fenced ` ```diff ``` ` blocks to produce colored output — ANSI escape codes do not render there
-- When generating stub docs, write only the goal statement and `TODO(human)` placeholders per section; never fabricate body content for structural completeness
+- **Split detection from application**: implement deterministic regex/heuristic detection separately from context-dependent agent judgment — produces more reliable and auditable tools
+- **Anchor log filters to structural identifiers**: use log-type fields, not broad keyword patterns that match payload content in unrelated lines
+- **Read existing scripts before building new hooks**: prior design decisions and removal history directly constrain what's appropriate
+- **Make auth checks explicit at each callsite**: never abstract into a named wrapper that appears to "handle auth" — wrapper opacity is a security gap
 
 ## Things to avoid
-- Don't auto-apply or commit a selection on click/enter — treat selection and confirmation as two separate events
-- Don't write populated placeholder content in stub documentation to make it "look complete" — fabricated content is harder to audit than an honest TODO
-- Don't use ANSI color codes in PR comment bodies expecting them to render
+- **Don't auto-apply on selection**: picker/selector UIs must preview only; require explicit save/apply before state changes take effect
+- **Don't skip cache invalidation after writes**: after any mutation, explicitly verify client-side caches holding affected data are invalidated
+- **Don't replicate surrounding code patterns without verifying applicability**: flag-gated lazy imports, IIFE wrappers, etc. exist for specific reasons that may not apply at the new callsite
+- **Don't trust formatter output as semantically inert**: after edits to formatting-sensitive files, inspect the diff — Prettier/Black can silently restructure logic
 
 ## Open questions / known gaps
-- Only one occurrence per pattern — confidence is early; these may not yet reflect deep project-wide conventions vs. one-off corrections
-_(no further signal)_
+- UI reskin/restyle work consistently ships without full cross-state validation (scroll, backgrounds, responsive, nav flow) — no lightweight checklist or smoke-test ritual has been established yet

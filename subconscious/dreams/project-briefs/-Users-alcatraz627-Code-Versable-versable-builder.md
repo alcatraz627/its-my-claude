@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-11T18:16:06.030118+00:00 · 13 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-13T00:42:20.375780+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Versable Builder is a professional-facing product codebase worked on with a high bar for production quality — UI changes require real browser verification, docs require human-register prose, and scope discipline is strict.
+A professional web application builder (likely SaaS/B2B) with customer-facing documents and complex UI state. Work style is iterative with heavy emphasis on runtime verification and document quality.
 
 ## Things to do (or keep doing)
-- Always navigate to the actual URL and exercise the primary flow before claiming a UI or server-side change works — no exceptions
-- Check recent git log before introducing any new mechanism for storing IDs, config values, or version pins; reinvention of recently-committed work is a critical failure
-- Sequence edits to the same file serially, never in parallel — parallel Edit calls silently clobber each other
-- Clarify "runtime variables" vs "deploy-time env vars" vs "on-the-fly app globals" before implementing; the user means different things
+- Always navigate to the actual URL and exercise the primary flow before claiming a UI or server-side change works — inspection is not verification
+- Sequence all edits to the same file; parallel Edit calls silently clobber each other
+- Check recent git log before introducing any new mechanism to store/retrieve IDs or config — the pattern may already exist
+- After any mutation/write, explicitly verify client-side caches for the affected data are invalidated
 
 ## Things to avoid
-- Don't place file paths immediately before sentence-ending periods — restructure the sentence so the path is not the last token before `.`
-- Don't launch expensive multi-agent workflows (magi, consensus debate) until all prerequisite research, docs, and user Q&A is complete — running them over incomplete inputs wastes tokens and produces bad output
-- Don't let AI-register phrasing into customer-facing documents: no "Good news first:", no reflexive apologies, no leading-question closers, no "The User" capitalization
-- Don't default to hardware/throughput metrics when the user asks for workflow-relevant augmentations — ask what utility dimension they actually care about
+- Don't start expensive multi-agent review (magi/debate) until all prerequisite research, docs, and user Q&A is complete — early consensus over incomplete material wastes tokens and misleads
+- Don't suggest version changes (upgrades, reverts) without scanning git history for deliberate version decisions first
+- Don't produce AI-register prose in customer-facing docs — strip openers like "Good news first:", reflexive apologies, leading-question closers, and "The User" capitalizations
+- Don't replicate surrounding code patterns without verifying they apply in the new location — IIFE wrappers, flag-gated lazy imports, and JSX scope-wrappers are context-specific, not defaults
 
 ## Open questions / known gaps
-- When doc-writing guidelines are loaded, the agent still produces AI-smell prose; the guidelines aren't reliably applied without an explicit fresh-reviewer pass
+- "Runtime variables" vs "deploy-time env vars" is a recurring ambiguity — always clarify before implementing
+- UI reskins need end-to-end UX validation (scroll, backgrounds, responsive, navigation) not just mechanical style application; this has shipped incomplete before

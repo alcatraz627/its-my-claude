@@ -10,14 +10,23 @@ build_proposals() {
   skip_slugs=$(already_proposed_slugs)
 
   local drafted=0
+  local skipped_covered=0
   local report_lines=""
 
   # Process atone (mistakes) only — affirm doesn't need prevention proposals
   while IFS=$'\t' read -r src slug cnt sev_str ts cluster title latest_id; do
     [ -z "$slug" ] && continue
 
-    # Skip if already proposed
+    # Skip if already proposed (open, done, OR rejected — no auto-resurrection).
     if echo "$skip_slugs" | grep -qFx "$slug"; then
+      continue
+    fi
+
+    # Skip if a rule/hook already ships the fix. A pattern keeps accruing events
+    # (and recurrence) even after it is prevented, so recurrence alone would keep
+    # re-proposing a rule that already exists.
+    if slug_is_covered "$slug"; then
+      skipped_covered=$((skipped_covered + 1))
       continue
     fi
 

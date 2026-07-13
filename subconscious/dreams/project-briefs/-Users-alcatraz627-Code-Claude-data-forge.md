@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-12T04:39:09.475368+00:00 · 13 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-13T00:44:56.066393+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Data pipeline and document tooling ("data-forge") with a web UI, GitHub PR integration, and multi-agent orchestration workflows. Work spans backend processing, frontend UI state, config management, and customer-facing document generation.
+A web app (JSX/React) for data transformation and document generation, with customer-facing outputs and GitHub PR integration. Work is UI-heavy with mutation flows, pickers, and document scaffolding.
 
 ## Things to do (or keep doing)
-- **Check `git log` before implementing** any new ID-storage, config retrieval, or version change — deliberate decisions are frequently already committed; reinvention wastes rounds.
-- **Sequence edits to the same file** — parallel `Edit` calls silently clobber each other; both return success but only one survives.
-- **Use fenced ` ```diff ` blocks** in GitHub PR comment bodies — ANSI escape codes do not render there.
-- **Clarify "runtime variables"** before proceeding — confirm whether the user means deploy-time env vars or on-the-fly application globals; they are treated as distinct here.
+- **Navigate to the actual URL and exercise the primary flow** before claiming any UI or server change works — inspection and type-checking are not verification.
+- **Sequence all edits to the same file** — parallel `Edit` calls silently clobber each other; both return success but only one survives.
+- **Check recent git log before implementing a new mechanism or changing a version** — deliberate decisions (reverts, pinned versions, recently added patterns) are invisible without a log scan.
+- **Invalidate client-side caches explicitly after any mutation** — cache staleness after a write is a silent correctness bug.
 
 ## Things to avoid
-- **Don't claim UI or server changes are working** without navigating to the actual URL and exercising the primary flow; the user treats unverified success claims as a critical failure.
-- **Don't auto-apply on selection** in picker/selection UIs — selection must preview only; an explicit save/apply action commits the change.
-- **Don't launch expensive multi-agent workflows** until prerequisite research, docs, and user Q&A are complete; running a debate over incomplete inputs wastes budget.
-- **Don't fabricate stub doc content** — scaffold with goal statement and `TODO(human)` placeholders only; never fill sections with invented body text.
+- **Don't auto-apply on picker selection** — selection must preview only; an explicit save/apply action is required before state commits.
+- **Don't place a period immediately after a file path** in terminal output — Ghostty swallows the period into the auto-link, breaking clickability.
+- **Don't launch expensive multi-agent workflows until research and user Q&A are complete** — running a debate over incomplete inputs wastes tokens and produces wrong answers.
+- **Don't use AI-register phrasing in customer-facing docs** (`Good news first:`, reflexive apologies, leading-question closers) — purge these on generation.
 
 ## Open questions / known gaps
-- "User-facing utility" vs "hardware/throughput metrics" is a recurring miss when augmenting personal tools — confirm the user's actual dimension of value before designing augmentations.
+- `"runtime variables"` is ambiguous between deploy-time env vars and on-the-fly app globals — always clarify before proceeding.
+- UI reskins validated on one state (e.g. dark only) repeatedly ship broken alternate states; end-to-end UX validation across scroll, background, responsive layout, and navigation is a recurring gap.

@@ -124,13 +124,26 @@ esac
 fi
 
 # ── R4  comment-essay  (WARN) ─────────────────────────────────────────────
-# A multi-line block / JSDoc comment opened on its own line — proxy for the
-# "dumped my working context into a comment" smell. The qualitative call
-# (restates-code vs explains-why, jargon-flexing) is left to the review LLM
-# pass; this only flags the shape. Slug: source-comment-hygiene (S3).
-if [ "$is_jsts" = "1" ] && printf '%s' "$body" | rg -q '^\s*/\*\*?\s*$'; then
-  emit warn comment-essay source-comment-hygiene \
-    "Multi-line block comment. Comments are for humans first: first sentence code-agnostic, WHY not WHAT, ≤8 lines, no jargon-flexing or code-restating (rules/comments.md). Trim to the qualitative point."
+# A block/JSDoc comment that runs past the essay bar — proxy for the "dumped my
+# working context into a comment" smell. The qualitative call (restates-code vs
+# explains-why, jargon-flexing) is left to the review LLM pass; this only flags
+# the shape. Slug: source-comment-hygiene (S3).
+#
+# The bar is rules/comments.md's own: >8 lines is an essay. This used to fire on
+# ANY `/*` opener, so a three-line JSDoc — the shape that rule explicitly blesses —
+# got flagged as an essay. A linter that fires on compliant code trains you to
+# dismiss it, which costs more than the rule earns.
+if [ "$is_jsts" = "1" ]; then
+  longest_block=$(printf '%s\n' "$body" | awk '
+    /^[[:space:]]*\/\*/ { inblk = 1; n = 0 }
+    inblk               { n++ }
+    inblk && /\*\//     { if (n > max) max = n; inblk = 0 }
+    END                 { print max + 0 }
+  ')
+  if [ "${longest_block:-0}" -gt "${COMMENT_ESSAY_MAX_LINES:-8}" ]; then
+    emit warn comment-essay source-comment-hygiene \
+      "Block comment runs ${longest_block} lines (>8). Comments are for humans first: first sentence code-agnostic, WHY not WHAT, no jargon-flexing or code-restating (rules/comments.md). Trim to the qualitative point, or move the depth to a doc and link it."
+  fi
 fi
 
 # ── R5  raw-process-env  (WARN) ───────────────────────────────────────────

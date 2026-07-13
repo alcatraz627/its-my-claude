@@ -1,16 +1,19 @@
-<!-- i-dream project brief · 2026-07-12T04:21:42.359441+00:00 · 3 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-13T00:42:03.311497+00:00 · 15 patterns / 0 insights -->
 ## What this project is about
-Frontend development work with emphasis on UI interaction design and documentation scaffolding. Working style is pattern-conscious and preference-driven.
+Frontend web application development (React/JSX), with recurring focus on UI component behavior, cache consistency, and tooling correctness. Working style is iterative with strong UX and code-style enforcement signals.
 
 ## Things to do (or keep doing)
-- Always separate preview from commit in picker/selection UIs — selecting an option previews it; only an explicit save/apply button persists the choice
-- Use fenced `diff` blocks for any colored output in GitHub PR comments — ANSI escape codes do not render there
-- When scaffolding stub docs, write only the goal statement and `TODO(human)` placeholders per section — structure without fabricated content
+- **Picker/selector UIs**: selection must preview only — require an explicit save/apply action before state commits; never auto-apply on selection change
+- **After any mutation or write op**: explicitly verify client-side caches holding affected data are invalidated — staleness after writes is a recurring bug class
+- **Separate detection from application**: deterministic regex/heuristic detection belongs in its own pass; context-dependent judgment runs after, not mixed in
+- **Before building a new hook or nudge**: read existing scripts serving similar concerns — prior design decisions and removal history directly constrain what to build
 
 ## Things to avoid
-- Don't auto-apply a selection on click; treat selection as ephemeral preview until the user explicitly confirms
-- Don't write invented body content to fill documentation structure — incomplete stubs with honest placeholders are preferred over plausible-but-wrong prose
-- Don't use ANSI codes in PR comment text expecting color — they render as literal escape sequences
+- **Don't copy surrounding code patterns without verifying they apply**: flag-gated lazy imports, IIFE wrappers, and similar idioms exist for specific reasons; replicating them blindly in new locations is a recurring smell
+- **Don't use IIFE wrappers in JSX** where sibling elements use inline props or plain `const` declarations — conform to the established style already present
+- **Don't anchor log filters to broad keywords** — overly wide patterns match irrelevant payload content; use structural log-type identifiers
+- **Don't call a UI reskin done without E2E UX validation** — scroll behavior, background colors across states, responsive layout, and navigation flow all require explicit verification
 
 ## Open questions / known gaps
-- Only 3 patterns recorded; confidence in domain conventions (component library, state management, test patterns) is low — grep the codebase before asserting conventions
+- Formatters (Prettier etc.) can silently restructure logic-sensitive files during edits — no consistent post-edit inspection discipline established yet
+- Auth/authz abstraction boundary is unresolved: wrapper functions that appear to "handle auth" have historically masked unprotected callsites; explicit per-callsite checks are preferred but not uniformly enforced

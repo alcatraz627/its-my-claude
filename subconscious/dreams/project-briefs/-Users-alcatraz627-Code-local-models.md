@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-12T04:50:44.780325+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-07-13T00:44:04.978007+00:00 · 20 patterns / 0 insights -->
 ## What this project is about
-Local model orchestration suite (`q`, `imagine`, `warm`, `lm fleet`) with a CLI-first working style. Sessions involve research, persona design, tooling setup, and documentation — all requiring delivery of the primary deliverable before peripheral tasks.
+Local LLM management tooling (`~/Code/local-models`) — CLI wrappers, model dispatch harness, and supporting infrastructure for running local and cloud models side-by-side. Working style is exploratory with strong CLI/TUI emphasis.
 
 ## Things to do (or keep doing)
-- Always surface actual output when claiming a test or feature works — raw terminal output, not an assertion of success
-- Execute invoked skills (e.g. `/atone`) immediately and completely; verify the terminal artifact (event line, committed file) before continuing
-- Use `trash` for all file deletion — no exceptions for "cleanup" or "temp" files
-- Call `TaskCreate`/`TaskUpdate` when asked to update todos; never write to a file instead
+- Always surface actual test/command output for the user to judge — declaring success without showing evidence is treated as a failure
+- Execute skill invocations (e.g. `/atone`) immediately and completely when requested; deferring them escalates
+- Use `trash` for all file deletion; the `rm` hook blocks exceptions without a manual override
+- Write docs in direct, formal, product-focused prose — no "why this matters" openers, no em-dashes, no promotional framing
 
 ## Things to avoid
-- Don't declare success on UI or server changes without navigating to the actual URL and exercising the primary flow
-- Don't re-introduce complexity the user explicitly deleted; scope is a ceiling — honor simplification requests exactly
-- Don't open docs or RCAs with promotional "why this matters" framing — direct, factual, formal only; no em-dashes
-- Don't skip or defer a correction ritual mid-correction — a skipped `/atone` while being corrected is a compounded failure
+- Don't declare a UI or server-side change working without navigating to the actual URL and exercising the primary flow
+- Don't re-introduce removed complexity after the user has explicitly deleted code and requested a simpler replacement
+- Don't write todos to files (TODO.md, plan.md) when "update todos" is requested — always call the Task tool
+- Don't place a period immediately after a file path in terminal output; it breaks Ghostty's auto-link
 
 ## Open questions / known gaps
-- Recurring fractal premature closure: agent short-circuits both code-level verification (no run) and ritual-level verification (invocation ≠ completion) in the same session — no single hook catches both layers
+- RCA files must begin with `---` YAML frontmatter on line 1 or `atone.sh` exits non-zero — this lint gate has been hit repeatedly and the template may not be enforcing it
+- Picker/selector UIs have a recurring pattern mismatch: selection must preview only, with an explicit save action required — this keeps being implemented as auto-apply

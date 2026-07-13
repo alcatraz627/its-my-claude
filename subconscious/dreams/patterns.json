@@ -20,7 +20,7 @@
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
     "occurrence_history": [],
-    "strength": 0.7192259419519998,
+    "strength": 0.43841779400688985,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -49,8 +49,8 @@
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
     "occurrence_history": [],
-    "strength": 0.4137935336861388,
-    "ease": 1.6999999999999995,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -118,8 +118,8 @@
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
     "occurrence_history": [],
-    "strength": 0.5581308760932945,
-    "ease": 2.0999999999999996,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -143,7 +143,7 @@
     "first_seen": "2026-05-03T20:56:36.364036+00:00",
     "last_seen": "2026-05-03T20:56:36.364036+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -172,7 +172,7 @@
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -201,7 +201,7 @@
     "first_seen": "2026-05-03T21:31:03.730862+00:00",
     "last_seen": "2026-05-03T21:31:03.730862+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -232,7 +232,7 @@
     "first_seen": "2026-05-04T05:51:25.900092+00:00",
     "last_seen": "2026-05-04T05:51:25.900092+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -254,7 +254,7 @@
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -279,7 +279,7 @@
     "first_seen": "2026-05-05T22:16:37.096378+00:00",
     "last_seen": "2026-05-05T22:16:37.096378+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -302,7 +302,7 @@
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -326,7 +326,7 @@
     "first_seen": "2026-05-07T05:06:02.547566+00:00",
     "last_seen": "2026-05-07T05:06:02.547566+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -351,7 +351,7 @@
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -378,7 +378,7 @@
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
     "occurrence_history": [],
-    "strength": 0.711886901728,
+    "strength": 0.433944143047636,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -403,8 +403,8 @@
     "occurrence_history": [
       "2026-05-29T15:36:44.456233+00:00"
     ],
-    "strength": 0.711886901728,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -470,7 +470,7 @@
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -540,7 +540,7 @@
     "first_seen": "2026-04-14T16:12:22.674979+00:00",
     "last_seen": "2026-04-14T16:12:22.674979+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -609,7 +609,7 @@
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -676,7 +676,7 @@
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -743,7 +743,7 @@
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -810,7 +810,7 @@
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -879,7 +879,7 @@
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -939,8 +939,8 @@
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
     "occurrence_history": [],
-    "strength": 0.5439816836734693,
-    "ease": 2.0999999999999996,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -969,7 +969,7 @@
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -989,7 +989,7 @@
     "first_seen": "2026-04-15T13:22:22.725950+00:00",
     "last_seen": "2026-04-15T13:22:22.725950+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1009,7 +1009,7 @@
     "first_seen": "2026-04-15T13:22:42.766438+00:00",
     "last_seen": "2026-04-15T13:22:42.766438+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1034,7 +1034,7 @@
     "first_seen": "2026-04-15T23:35:33.217995+00:00",
     "last_seen": "2026-04-15T23:35:33.217995+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1059,7 +1059,7 @@
     "first_seen": "2026-04-16T04:34:36.842156+00:00",
     "last_seen": "2026-04-16T04:34:36.842156+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1087,7 +1087,7 @@
     "first_seen": "2026-04-16T21:18:50.154511+00:00",
     "last_seen": "2026-04-16T21:18:50.154511+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1114,7 +1114,7 @@
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1141,7 +1141,7 @@
     "first_seen": "2026-04-18T06:03:41.624388+00:00",
     "last_seen": "2026-04-18T06:03:41.624388+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1167,7 +1167,7 @@
     "first_seen": "2026-04-21T03:46:31.899213+00:00",
     "last_seen": "2026-04-21T03:46:31.899213+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1194,7 +1194,7 @@
     "first_seen": "2026-04-21T18:35:57.952217+00:00",
     "last_seen": "2026-04-21T18:35:57.952217+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1226,7 +1226,7 @@
     "first_seen": "2026-04-23T01:09:19.720599+00:00",
     "last_seen": "2026-04-23T01:09:19.720599+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1253,7 +1253,7 @@
     "first_seen": "2026-05-01T01:37:32.551708+00:00",
     "last_seen": "2026-05-01T01:37:32.551708+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1280,7 +1280,7 @@
     "first_seen": "2026-05-01T01:37:32.551708+00:00",
     "last_seen": "2026-05-01T01:37:32.551708+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1302,7 +1302,7 @@
     "first_seen": "2026-05-01T03:14:57.437127+00:00",
     "last_seen": "2026-05-01T03:14:57.437127+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1324,7 +1324,7 @@
     "first_seen": "2026-05-01T03:14:57.437127+00:00",
     "last_seen": "2026-05-01T03:14:57.437127+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1352,7 +1352,7 @@
     "first_seen": "2026-05-01T13:32:17.144212+00:00",
     "last_seen": "2026-05-01T13:32:17.144212+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1380,7 +1380,7 @@
     "first_seen": "2026-05-01T16:51:27.618893+00:00",
     "last_seen": "2026-05-01T16:51:27.618893+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1408,7 +1408,7 @@
     "first_seen": "2026-05-01T17:33:18.082842+00:00",
     "last_seen": "2026-05-01T17:33:18.082842+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1435,7 +1435,7 @@
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1464,7 +1464,7 @@
     "first_seen": "2026-05-03T21:30:50.034009+00:00",
     "last_seen": "2026-05-03T21:30:50.034009+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1493,7 +1493,7 @@
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1522,7 +1522,7 @@
     "first_seen": "2026-05-03T21:30:56.945974+00:00",
     "last_seen": "2026-05-03T21:30:56.945974+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1550,8 +1550,8 @@
     "first_seen": "2026-05-03T22:04:08.958103+00:00",
     "last_seen": "2026-05-03T22:04:08.958103+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -1573,7 +1573,7 @@
     "first_seen": "2026-05-05T11:40:16.049334+00:00",
     "last_seen": "2026-05-05T11:40:16.049334+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1596,7 +1596,7 @@
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1619,7 +1619,7 @@
     "first_seen": "2026-05-06T03:33:46.994159+00:00",
     "last_seen": "2026-05-06T03:33:46.994159+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1644,7 +1644,7 @@
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1667,7 +1667,7 @@
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1690,7 +1690,7 @@
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1713,7 +1713,7 @@
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1738,7 +1738,7 @@
     "first_seen": "2026-05-07T17:02:33.524510+00:00",
     "last_seen": "2026-05-07T17:02:33.524510+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1763,7 +1763,7 @@
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1788,7 +1788,7 @@
     "first_seen": "2026-05-08T10:11:13.599469+00:00",
     "last_seen": "2026-05-08T10:11:13.599469+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1817,8 +1817,8 @@
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
     "occurrence_history": [],
-    "strength": 0.5439816836734693,
-    "ease": 2.0999999999999996,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -1840,7 +1840,7 @@
     "first_seen": "2026-05-08T16:09:07.243289+00:00",
     "last_seen": "2026-05-08T16:09:07.243289+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1863,7 +1863,7 @@
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1890,7 +1890,7 @@
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1919,7 +1919,7 @@
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1948,7 +1948,7 @@
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1975,7 +1975,7 @@
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2000,7 +2000,7 @@
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2025,7 +2025,7 @@
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2050,7 +2050,7 @@
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2075,7 +2075,7 @@
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2105,7 +2105,7 @@
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2136,8 +2136,8 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.46836514980317834,
-    "ease": 1.8999999999999997,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2167,7 +2167,7 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2198,7 +2198,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2221,7 +2221,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2250,7 +2250,7 @@
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2281,7 +2281,7 @@
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2312,8 +2312,8 @@
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
     "occurrence_history": [],
-    "strength": 0.46836514980317834,
-    "ease": 1.8999999999999997,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2341,7 +2341,7 @@
     "first_seen": "2026-05-25T00:52:28.628818+00:00",
     "last_seen": "2026-05-25T00:52:28.628818+00:00",
     "occurrence_history": [],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2370,8 +2370,8 @@
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
     ],
-    "strength": 0.46836514980317834,
-    "ease": 1.8999999999999997,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2399,7 +2399,7 @@
     "occurrence_history": [
       "2026-05-28T18:21:56.157796+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2427,7 +2427,7 @@
     "occurrence_history": [
       "2026-05-29T00:24:12.419994+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2461,7 +2461,7 @@
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2488,7 +2488,7 @@
     "occurrence_history": [
       "2026-06-28T12:32:18.420032+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2519,7 +2519,7 @@
     "occurrence_history": [
       "2026-07-04T07:08:53.367433+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2563,7 +2563,7 @@
     "occurrence_history": [
       "2026-07-11T02:43:49.156883+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2630,7 +2630,7 @@
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2699,7 +2699,7 @@
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2768,7 +2768,7 @@
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2828,7 +2828,7 @@
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2853,7 +2853,7 @@
     "first_seen": "2026-04-16T04:34:36.842156+00:00",
     "last_seen": "2026-04-16T04:34:36.842156+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2882,7 +2882,7 @@
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2912,7 +2912,7 @@
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2935,7 +2935,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2966,7 +2966,7 @@
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
     "occurrence_history": [],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2998,7 +2998,7 @@
     "occurrence_history": [
       "2026-06-24T10:24:10.726316+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3029,7 +3029,7 @@
     "occurrence_history": [
       "2026-06-27T18:11:13.741084+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3056,7 +3056,7 @@
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3083,7 +3083,7 @@
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3125,7 +3125,7 @@
     "occurrence_history": [
       "2026-07-02T23:49:07.272682+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3152,7 +3152,7 @@
     "occurrence_history": [
       "2026-07-04T23:51:52.289152+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3193,7 +3193,7 @@
     "occurrence_history": [
       "2026-07-08T16:24:49.320376+00:00"
     ],
-    "strength": 0.6825307408319998,
+    "strength": 0.41604953921062,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3260,7 +3260,7 @@
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3329,7 +3329,7 @@
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3398,7 +3398,7 @@
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3458,7 +3458,7 @@
     "first_seen": "2026-04-15T00:47:41.799910+00:00",
     "last_seen": "2026-04-15T00:47:41.799910+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3487,7 +3487,7 @@
     "first_seen": "2026-04-15T12:11:40.733270+00:00",
     "last_seen": "2026-04-15T12:11:40.733270+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3517,7 +3517,7 @@
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3539,7 +3539,7 @@
     "first_seen": "2026-04-15T19:36:29.897823+00:00",
     "last_seen": "2026-04-15T19:36:29.897823+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3566,7 +3566,7 @@
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3592,7 +3592,7 @@
     "first_seen": "2026-04-18T19:28:55.953507+00:00",
     "last_seen": "2026-04-18T19:28:55.953507+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3623,7 +3623,7 @@
     "first_seen": "2026-04-19T13:05:21.883347+00:00",
     "last_seen": "2026-04-19T13:05:21.883347+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3649,7 +3649,7 @@
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3683,7 +3683,7 @@
     "first_seen": "2026-04-25T00:15:30.738596+00:00",
     "last_seen": "2026-04-25T00:15:30.738596+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3710,7 +3710,7 @@
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3735,7 +3735,7 @@
     "first_seen": "2026-05-03T12:03:30.121983+00:00",
     "last_seen": "2026-05-03T12:03:30.121983+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3760,7 +3760,7 @@
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3783,7 +3783,7 @@
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3808,7 +3808,7 @@
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3832,7 +3832,7 @@
     "first_seen": "2026-05-07T05:06:02.547566+00:00",
     "last_seen": "2026-05-07T05:06:02.547566+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3857,7 +3857,7 @@
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3880,7 +3880,7 @@
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3907,7 +3907,7 @@
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3932,7 +3932,7 @@
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3961,7 +3961,7 @@
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3988,7 +3988,7 @@
     "first_seen": "2026-05-09T05:04:55.715359+00:00",
     "last_seen": "2026-05-09T05:04:55.715359+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4011,7 +4011,7 @@
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4036,7 +4036,7 @@
     "first_seen": "2026-05-09T13:03:20.913554+00:00",
     "last_seen": "2026-05-09T13:03:20.913554+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4063,7 +4063,7 @@
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4090,7 +4090,7 @@
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4119,7 +4119,7 @@
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4146,7 +4146,7 @@
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4171,7 +4171,7 @@
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4194,7 +4194,7 @@
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4217,33 +4217,8 @@
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "943ce7f1-3a81-4450-818c-6ed7c0323572",
-    "pattern": "The agent must not declare code 'ready' or 'done' and allow it to be committed/pushed when it contains a known pattern violation that has already been corrected in prior sessions.",
-    "valence": "negative",
-    "confidence": 0.92,
-    "category": "approach",
-    "source_sessions": [
-      "e7c8f9ae-956d-4158-9d7b-a77ad39049b4",
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-logger-crab",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-14T16:51:59.267171+00:00",
-    "last_seen": "2026-05-14T16:51:59.267171+00:00",
-    "occurrence_history": [],
-    "strength": 0.5227578950437319,
-    "ease": 2.0999999999999996,
     "reactivations": 0
   },
   {
@@ -4267,7 +4242,7 @@
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4297,7 +4272,7 @@
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4327,7 +4302,7 @@
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4361,7 +4336,7 @@
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4391,7 +4366,7 @@
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4422,7 +4397,7 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4453,7 +4428,7 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4484,7 +4459,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4515,7 +4490,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4538,7 +4513,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4561,7 +4536,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4585,7 +4560,7 @@
     "first_seen": "2026-05-19T23:04:24.585142+00:00",
     "last_seen": "2026-05-19T23:04:24.585142+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4614,7 +4589,7 @@
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4643,7 +4618,7 @@
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4670,7 +4645,7 @@
     "first_seen": "2026-05-21T00:01:34.471553+00:00",
     "last_seen": "2026-05-21T00:01:34.471553+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4696,7 +4671,7 @@
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4727,7 +4702,7 @@
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4758,7 +4733,7 @@
     "first_seen": "2026-05-26T00:52:14.270827+00:00",
     "last_seen": "2026-05-26T00:52:14.270827+00:00",
     "occurrence_history": [],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4787,7 +4762,7 @@
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4816,7 +4791,7 @@
     "occurrence_history": [
       "2026-05-28T18:21:56.157796+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4844,7 +4819,7 @@
     "occurrence_history": [
       "2026-05-29T00:24:12.419994+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4878,7 +4853,7 @@
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4903,7 +4878,7 @@
     "occurrence_history": [
       "2026-05-29T15:36:44.456233+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4938,7 +4913,7 @@
     "occurrence_history": [
       "2026-05-29T23:21:48.497946+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4964,7 +4939,7 @@
     "occurrence_history": [
       "2026-05-30T03:03:51.470363+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4999,7 +4974,7 @@
     "occurrence_history": [
       "2026-05-30T17:00:01.159958+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5027,7 +5002,7 @@
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5052,7 +5027,7 @@
     "occurrence_history": [
       "2026-06-03T17:45:18.122629+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5079,7 +5054,7 @@
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5106,7 +5081,7 @@
     "occurrence_history": [
       "2026-06-05T12:42:12.279426+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5132,7 +5107,7 @@
     "occurrence_history": [
       "2026-06-05T19:55:30.751415+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5157,47 +5132,8 @@
     "occurrence_history": [
       "2026-06-08T12:01:12.819262+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "5161f69a-c10e-415e-8de3-a50dc020c5b4",
-    "pattern": "When the agent declares a test or feature 'successful', it must show actual output for the user to inspect rather than asserting success without evidence.",
-    "valence": "negative",
-    "confidence": 0.92,
-    "category": "approach",
-    "source_sessions": [
-      "231597a7-7e58-4027-826c-711828888f93",
-      "09c88bba-e2f5-4d76-af3c-a6bd890ecfc9",
-      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
-      "7fdac5d3-98c5-476f-8c98-e7ebd8634075",
-      "ff0abb47-a054-4189-9344-ec22dbd6a6c6",
-      "db7b240a-6d4b-43df-ab61-a206fc9628b7",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "88816546-f50b-4439-a69f-11a0920af8d9",
-      "8335e1b4-ab7a-465c-88d5-df969fd37c9a",
-      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
-      "77a7c308-4982-40b1-90c4-e03ab43f0135",
-      "4f8b41d2-2394-4357-b62d-540a2f64b245",
-      "1bfd15e8-f866-4ae3-b86e-a1d71426bca3",
-      "1bbd5ba4-e3f0-4b41-a283-760ee90d4fc7"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-09T15:32:59.350960+00:00",
-    "last_seen": "2026-06-09T15:32:59.350960+00:00",
-    "occurrence_history": [
-      "2026-06-09T15:32:59.350960+00:00"
-    ],
-    "strength": 0.3010128480000001,
-    "ease": 1.4999999999999998,
     "reactivations": 0
   },
   {
@@ -5235,7 +5171,7 @@
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5260,7 +5196,7 @@
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5285,36 +5221,8 @@
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
-    "pattern": "When the user explicitly invokes a mandatory skill like /atone, the agent must not skip or defer it — skipping a correction ritual while in the middle of being corrected is a compounding failure that erodes trust.",
-    "valence": "negative",
-    "confidence": 0.92,
-    "category": "approach",
-    "source_sessions": [
-      "231597a7-7e58-4027-826c-711828888f93",
-      "9bc41b08-2ece-4ac2-bf5b-3a8c89eb2478",
-      "262a3a34-b043-48a6-bce6-c6fc97b092a9",
-      "8297eca4-5d4c-484c-9cf0-85a28215e67f",
-      "77a7c308-4982-40b1-90c4-e03ab43f0135"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-10T14:16:55.017090+00:00",
-    "last_seen": "2026-06-10T14:16:55.017090+00:00",
-    "occurrence_history": [
-      "2026-06-10T14:16:55.017090+00:00"
-    ],
-    "strength": 0.5227578950437319,
-    "ease": 2.0999999999999996,
     "reactivations": 0
   },
   {
@@ -5341,7 +5249,7 @@
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5369,7 +5277,7 @@
     "occurrence_history": [
       "2026-06-11T18:41:28.565308+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5405,7 +5313,7 @@
     "occurrence_history": [
       "2026-06-12T19:52:36.457017+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5433,7 +5341,7 @@
     "occurrence_history": [
       "2026-06-13T17:02:59.417794+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5469,7 +5377,7 @@
     "occurrence_history": [
       "2026-06-17T17:04:47.577262+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5500,7 +5408,7 @@
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5540,7 +5448,7 @@
     "occurrence_history": [
       "2026-06-20T02:01:59.851749+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5568,7 +5476,7 @@
     "occurrence_history": [
       "2026-06-21T12:16:04.148972+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5598,7 +5506,7 @@
     "occurrence_history": [
       "2026-06-21T16:43:27.454214+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5630,7 +5538,7 @@
     "occurrence_history": [
       "2026-06-22T13:05:50.557852+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5656,7 +5564,7 @@
     "occurrence_history": [
       "2026-06-23T00:15:19.177245+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5681,7 +5589,7 @@
     "occurrence_history": [
       "2026-06-24T17:05:25.884606+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5710,7 +5618,7 @@
     "occurrence_history": [
       "2026-06-26T16:44:28.714927+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5739,7 +5647,7 @@
     "occurrence_history": [
       "2026-06-26T16:44:28.714927+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5769,7 +5677,7 @@
     "occurrence_history": [
       "2026-06-27T00:58:04.925103+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5799,7 +5707,7 @@
     "occurrence_history": [
       "2026-06-29T12:49:50.137015+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5826,7 +5734,7 @@
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5856,7 +5764,7 @@
     "occurrence_history": [
       "2026-06-30T02:08:56.095422+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5886,7 +5794,7 @@
     "occurrence_history": [
       "2026-06-30T23:43:44.791641+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5912,7 +5820,7 @@
     "occurrence_history": [
       "2026-07-03T17:41:29.756336+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5943,7 +5851,7 @@
     "occurrence_history": [
       "2026-07-04T07:08:53.367433+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5973,7 +5881,7 @@
     "occurrence_history": [
       "2026-07-09T13:59:07.651344+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6019,7 +5927,7 @@
     "occurrence_history": [
       "2026-07-10T08:21:23.843429+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6053,7 +5961,7 @@
     "occurrence_history": [
       "2026-07-10T08:34:03.448673+00:00"
     ],
-    "strength": 0.6751917006079998,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6122,7 +6030,7 @@
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
     "occurrence_history": [],
-    "strength": 0.6678526603839998,
+    "strength": 0.40710223729211203,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6149,7 +6057,7 @@
     "first_seen": "2026-05-21T00:01:34.471553+00:00",
     "last_seen": "2026-05-21T00:01:34.471553+00:00",
     "occurrence_history": [],
-    "strength": 0.6678526603839998,
+    "strength": 0.40710223729211203,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6176,7 +6084,7 @@
     "occurrence_history": [
       "2026-07-04T23:51:52.289152+00:00"
     ],
-    "strength": 0.6678526603839998,
+    "strength": 0.40710223729211203,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6243,7 +6151,7 @@
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6310,7 +6218,7 @@
     "first_seen": "2026-04-14T16:11:44.033788+00:00",
     "last_seen": "2026-04-14T16:11:44.033788+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6380,7 +6288,7 @@
     "first_seen": "2026-04-14T16:12:22.674979+00:00",
     "last_seen": "2026-04-14T16:12:22.674979+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6450,7 +6358,7 @@
     "first_seen": "2026-04-14T16:12:22.674979+00:00",
     "last_seen": "2026-04-14T16:12:22.674979+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6519,7 +6427,7 @@
     "first_seen": "2026-04-14T16:27:03.749609+00:00",
     "last_seen": "2026-04-14T16:27:03.749609+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6586,7 +6494,7 @@
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6653,7 +6561,7 @@
     "first_seen": "2026-04-14T16:28:00.294341+00:00",
     "last_seen": "2026-04-14T16:28:00.294341+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6722,7 +6630,7 @@
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6791,7 +6699,7 @@
     "first_seen": "2026-04-14T16:28:45.862163+00:00",
     "last_seen": "2026-04-14T16:28:45.862163+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6818,7 +6726,7 @@
     "first_seen": "2026-04-15T05:11:49.550024+00:00",
     "last_seen": "2026-04-15T05:11:49.550024+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6840,7 +6748,7 @@
     "first_seen": "2026-04-15T08:21:44.107444+00:00",
     "last_seen": "2026-04-15T08:21:44.107444+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6870,7 +6778,7 @@
     "first_seen": "2026-04-15T13:20:18.468980+00:00",
     "last_seen": "2026-04-15T13:20:18.468980+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6890,7 +6798,7 @@
     "first_seen": "2026-04-15T13:22:42.766438+00:00",
     "last_seen": "2026-04-15T13:22:42.766438+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6910,7 +6818,7 @@
     "first_seen": "2026-04-15T13:23:15.385168+00:00",
     "last_seen": "2026-04-15T13:23:15.385168+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6930,7 +6838,7 @@
     "first_seen": "2026-04-15T13:23:15.385168+00:00",
     "last_seen": "2026-04-15T13:23:15.385168+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6950,7 +6858,7 @@
     "first_seen": "2026-04-15T13:25:11.209337+00:00",
     "last_seen": "2026-04-15T13:25:11.209337+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6970,7 +6878,7 @@
     "first_seen": "2026-04-15T13:25:11.209337+00:00",
     "last_seen": "2026-04-15T13:25:11.209337+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6999,7 +6907,7 @@
     "first_seen": "2026-04-16T19:41:19.129368+00:00",
     "last_seen": "2026-04-16T19:41:19.129368+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7027,7 +6935,7 @@
     "first_seen": "2026-04-16T21:18:50.154511+00:00",
     "last_seen": "2026-04-16T21:18:50.154511+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7055,7 +6963,7 @@
     "first_seen": "2026-04-16T21:18:50.154511+00:00",
     "last_seen": "2026-04-16T21:18:50.154511+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7082,7 +6990,7 @@
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7109,7 +7017,7 @@
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7136,7 +7044,7 @@
     "first_seen": "2026-04-16T21:37:14.476575+00:00",
     "last_seen": "2026-04-16T21:37:14.476575+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7162,7 +7070,7 @@
     "first_seen": "2026-04-16T22:19:22.401702+00:00",
     "last_seen": "2026-04-16T22:19:22.401702+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7188,7 +7096,7 @@
     "first_seen": "2026-04-16T22:19:22.401702+00:00",
     "last_seen": "2026-04-16T22:19:22.401702+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7215,7 +7123,7 @@
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7242,7 +7150,7 @@
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7271,7 +7179,7 @@
     "first_seen": "2026-04-18T01:39:27.568403+00:00",
     "last_seen": "2026-04-18T01:39:27.568403+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7300,7 +7208,7 @@
     "first_seen": "2026-04-18T01:39:27.568403+00:00",
     "last_seen": "2026-04-18T01:39:27.568403+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7329,7 +7237,7 @@
     "first_seen": "2026-04-18T01:39:27.568403+00:00",
     "last_seen": "2026-04-18T01:39:27.568403+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7356,7 +7264,7 @@
     "first_seen": "2026-04-18T06:03:41.624388+00:00",
     "last_seen": "2026-04-18T06:03:41.624388+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7383,7 +7291,7 @@
     "first_seen": "2026-04-18T06:03:41.624388+00:00",
     "last_seen": "2026-04-18T06:03:41.624388+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7409,7 +7317,7 @@
     "first_seen": "2026-04-18T19:28:55.953507+00:00",
     "last_seen": "2026-04-18T19:28:55.953507+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7440,7 +7348,7 @@
     "first_seen": "2026-04-19T13:05:21.883347+00:00",
     "last_seen": "2026-04-19T13:05:21.883347+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7467,7 +7375,7 @@
     "first_seen": "2026-04-20T01:50:49.158599+00:00",
     "last_seen": "2026-04-20T01:50:49.158599+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7494,7 +7402,7 @@
     "first_seen": "2026-04-20T01:50:49.158599+00:00",
     "last_seen": "2026-04-20T01:50:49.158599+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7520,7 +7428,7 @@
     "first_seen": "2026-04-20T19:49:02.800099+00:00",
     "last_seen": "2026-04-20T19:49:02.800099+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7546,7 +7454,7 @@
     "first_seen": "2026-04-20T19:49:02.800099+00:00",
     "last_seen": "2026-04-20T19:49:02.800099+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7572,7 +7480,7 @@
     "first_seen": "2026-04-20T19:49:02.800099+00:00",
     "last_seen": "2026-04-20T19:49:02.800099+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7598,7 +7506,7 @@
     "first_seen": "2026-04-21T03:46:31.899213+00:00",
     "last_seen": "2026-04-21T03:46:31.899213+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7624,7 +7532,7 @@
     "first_seen": "2026-04-21T03:46:31.899213+00:00",
     "last_seen": "2026-04-21T03:46:31.899213+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7651,7 +7559,7 @@
     "first_seen": "2026-04-21T18:35:57.952217+00:00",
     "last_seen": "2026-04-21T18:35:57.952217+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7677,7 +7585,7 @@
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7703,7 +7611,7 @@
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7744,7 +7652,7 @@
     "first_seen": "2026-04-24T01:11:32.574020+00:00",
     "last_seen": "2026-04-24T01:11:32.574020+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7769,7 +7677,7 @@
     "first_seen": "2026-04-24T07:51:12.510232+00:00",
     "last_seen": "2026-04-24T07:51:12.510232+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7794,7 +7702,7 @@
     "first_seen": "2026-04-24T07:51:12.510232+00:00",
     "last_seen": "2026-04-24T07:51:12.510232+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7828,7 +7736,7 @@
     "first_seen": "2026-04-25T00:15:30.738596+00:00",
     "last_seen": "2026-04-25T00:15:30.738596+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7856,7 +7764,7 @@
     "first_seen": "2026-04-28T03:53:28.327361+00:00",
     "last_seen": "2026-04-28T03:53:28.327361+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7883,7 +7791,7 @@
     "first_seen": "2026-04-29T19:09:55.040940+00:00",
     "last_seen": "2026-04-29T19:09:55.040940+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7910,7 +7818,7 @@
     "first_seen": "2026-04-29T19:09:55.040940+00:00",
     "last_seen": "2026-04-29T19:09:55.040940+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7934,7 +7842,7 @@
     "first_seen": "2026-04-29T20:36:38.713082+00:00",
     "last_seen": "2026-04-29T20:36:38.713082+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7957,7 +7865,7 @@
     "first_seen": "2026-04-29T20:37:40.856354+00:00",
     "last_seen": "2026-04-29T20:37:40.856354+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7980,7 +7888,7 @@
     "first_seen": "2026-04-29T20:37:40.856354+00:00",
     "last_seen": "2026-04-29T20:37:40.856354+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8003,7 +7911,7 @@
     "first_seen": "2026-04-29T20:37:40.856354+00:00",
     "last_seen": "2026-04-29T20:37:40.856354+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8031,7 +7939,7 @@
     "first_seen": "2026-04-29T20:55:48.416999+00:00",
     "last_seen": "2026-04-29T20:55:48.416999+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8059,7 +7967,7 @@
     "first_seen": "2026-04-29T20:55:48.416999+00:00",
     "last_seen": "2026-04-29T20:55:48.416999+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8085,7 +7993,7 @@
     "first_seen": "2026-04-30T12:39:15.256464+00:00",
     "last_seen": "2026-04-30T12:39:15.256464+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8112,7 +8020,7 @@
     "first_seen": "2026-05-01T01:37:32.551708+00:00",
     "last_seen": "2026-05-01T01:37:32.551708+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8140,7 +8048,7 @@
     "first_seen": "2026-05-01T13:32:17.144212+00:00",
     "last_seen": "2026-05-01T13:32:17.144212+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8168,7 +8076,7 @@
     "first_seen": "2026-05-01T13:32:17.144212+00:00",
     "last_seen": "2026-05-01T13:32:17.144212+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8196,7 +8104,7 @@
     "first_seen": "2026-05-01T16:51:27.618893+00:00",
     "last_seen": "2026-05-01T16:51:27.618893+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8227,7 +8135,7 @@
     "first_seen": "2026-05-01T21:47:48.375687+00:00",
     "last_seen": "2026-05-01T21:47:48.375687+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8251,7 +8159,7 @@
     "first_seen": "2026-05-02T01:53:53.205143+00:00",
     "last_seen": "2026-05-02T01:53:53.205143+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8278,7 +8186,7 @@
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8301,7 +8209,7 @@
     "first_seen": "2026-05-02T20:39:50.215588+00:00",
     "last_seen": "2026-05-02T20:39:50.215588+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8326,7 +8234,7 @@
     "first_seen": "2026-05-03T09:07:15.464654+00:00",
     "last_seen": "2026-05-03T09:07:15.464654+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8348,7 +8256,7 @@
     "first_seen": "2026-05-03T10:42:27.182851+00:00",
     "last_seen": "2026-05-03T10:42:27.182851+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8373,7 +8281,7 @@
     "first_seen": "2026-05-03T12:03:30.121983+00:00",
     "last_seen": "2026-05-03T12:03:30.121983+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8393,7 +8301,7 @@
     "first_seen": "2026-05-03T13:06:47.310275+00:00",
     "last_seen": "2026-05-03T13:06:47.310275+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8416,7 +8324,7 @@
     "first_seen": "2026-05-03T14:24:42.007557+00:00",
     "last_seen": "2026-05-03T14:24:42.007557+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8439,7 +8347,7 @@
     "first_seen": "2026-05-03T14:24:42.007557+00:00",
     "last_seen": "2026-05-03T14:24:42.007557+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8459,7 +8367,7 @@
     "first_seen": "2026-05-03T20:27:10.511902+00:00",
     "last_seen": "2026-05-03T20:27:10.511902+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8488,7 +8396,7 @@
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8517,7 +8425,7 @@
     "first_seen": "2026-05-03T21:30:56.945974+00:00",
     "last_seen": "2026-05-03T21:30:56.945974+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8546,7 +8454,7 @@
     "first_seen": "2026-05-03T21:31:03.730862+00:00",
     "last_seen": "2026-05-03T21:31:03.730862+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8568,7 +8476,7 @@
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8590,7 +8498,7 @@
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8615,7 +8523,7 @@
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8640,7 +8548,7 @@
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8663,7 +8571,7 @@
     "first_seen": "2026-05-05T11:40:16.049334+00:00",
     "last_seen": "2026-05-05T11:40:16.049334+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8686,7 +8594,7 @@
     "first_seen": "2026-05-05T11:40:16.049334+00:00",
     "last_seen": "2026-05-05T11:40:16.049334+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8709,7 +8617,7 @@
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8732,7 +8640,7 @@
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8755,7 +8663,7 @@
     "first_seen": "2026-05-06T03:33:46.994159+00:00",
     "last_seen": "2026-05-06T03:33:46.994159+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8780,7 +8688,7 @@
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8805,7 +8713,7 @@
     "first_seen": "2026-05-06T11:21:35.876948+00:00",
     "last_seen": "2026-05-06T11:21:35.876948+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8828,7 +8736,7 @@
     "first_seen": "2026-05-06T12:53:25.184755+00:00",
     "last_seen": "2026-05-06T12:53:25.184755+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8851,7 +8759,7 @@
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8875,7 +8783,7 @@
     "first_seen": "2026-05-07T05:06:02.547566+00:00",
     "last_seen": "2026-05-07T05:06:02.547566+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8900,7 +8808,7 @@
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8923,7 +8831,7 @@
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8948,7 +8856,7 @@
     "first_seen": "2026-05-07T17:02:33.524510+00:00",
     "last_seen": "2026-05-07T17:02:33.524510+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8975,7 +8883,7 @@
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9000,7 +8908,7 @@
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9025,7 +8933,7 @@
     "first_seen": "2026-05-08T10:11:13.599469+00:00",
     "last_seen": "2026-05-08T10:11:13.599469+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9054,7 +8962,7 @@
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9083,7 +8991,7 @@
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9106,7 +9014,7 @@
     "first_seen": "2026-05-08T16:09:07.243289+00:00",
     "last_seen": "2026-05-08T16:09:07.243289+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9129,7 +9037,7 @@
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9158,7 +9066,7 @@
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9185,7 +9093,7 @@
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9210,7 +9118,7 @@
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9235,7 +9143,7 @@
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9260,7 +9168,7 @@
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9285,7 +9193,7 @@
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9308,7 +9216,7 @@
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9338,7 +9246,7 @@
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9368,7 +9276,7 @@
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9402,7 +9310,7 @@
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9432,7 +9340,7 @@
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9463,7 +9371,7 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9494,7 +9402,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9517,7 +9425,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9541,7 +9449,7 @@
     "first_seen": "2026-05-19T23:04:24.585142+00:00",
     "last_seen": "2026-05-19T23:04:24.585142+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9565,7 +9473,7 @@
     "first_seen": "2026-05-19T23:04:24.585142+00:00",
     "last_seen": "2026-05-19T23:04:24.585142+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9594,7 +9502,7 @@
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9621,7 +9529,7 @@
     "first_seen": "2026-05-21T00:01:34.471553+00:00",
     "last_seen": "2026-05-21T00:01:34.471553+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9647,7 +9555,7 @@
     "first_seen": "2026-05-21T21:26:21.748062+00:00",
     "last_seen": "2026-05-21T21:26:21.748062+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9673,7 +9581,7 @@
     "first_seen": "2026-05-22T22:11:01.161963+00:00",
     "last_seen": "2026-05-22T22:11:01.161963+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9697,7 +9605,7 @@
     "first_seen": "2026-05-23T00:57:28.593838+00:00",
     "last_seen": "2026-05-23T00:57:28.593838+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9728,39 +9636,8 @@
     "first_seen": "2026-05-24T21:25:19.311959+00:00",
     "last_seen": "2026-05-24T21:25:19.311959+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
-    "pattern": "When a caching strategy invalidates a shared tag (e.g. `revalidateTag`), the agent must proactively surface the blast radius: one user's event invalidating cache state for all users is a critical design flaw that must be caught before implementation, not after.",
-    "valence": "negative",
-    "confidence": 0.9,
-    "category": "architecture",
-    "source_sessions": [
-      "bc2715fa-9f9a-4388-bb08-6ea723f5e0f0",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "1cd43636-5afc-492a-a149-e18690310270",
-      "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "b1e5a3c3-565b-4dfa-9764-731fbbffe0ab",
-      "adb2d57d-615e-4b80-a2a4-79c82d5f876c",
-      "2edcbebe-2a46-4b88-a456-8bb80359eeeb",
-      "531a3152-f535-4aab-b8f0-a72fb58d6ef0"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-24T21:25:19.311959+00:00",
-    "last_seen": "2026-05-24T21:25:19.311959+00:00",
-    "occurrence_history": [],
-    "strength": 0.5086087026239068,
-    "ease": 2.0999999999999996,
     "reactivations": 0
   },
   {
@@ -9788,7 +9665,7 @@
     "first_seen": "2026-05-25T00:52:28.628818+00:00",
     "last_seen": "2026-05-25T00:52:28.628818+00:00",
     "occurrence_history": [],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9817,42 +9694,8 @@
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "cc705e72-e0c9-4aa3-9930-ddadbad00fbe",
-    "pattern": "When a report or doc introduces a named constant or config value (e.g. WORKER_MAX_DEFER_COUNT), it must define and explain what that value does inline; naming a config without explaining it forces the reader to hunt for meaning.",
-    "valence": "negative",
-    "confidence": 0.9,
-    "category": "user-preference",
-    "source_sessions": [
-      "f0ba9f05-db25-4481-ace5-908884322f75",
-      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "1b3b250f-e4de-4613-bda0-64b8e9f77fa5",
-      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "eb261d0e-2786-443b-9b38-f154517825bf",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "7a4f64a4-6fc1-466f-ae1e-180f0f888a40",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715",
-      "0f9fee03-002e-467a-9a68-b49bef2ad1e6"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-29T15:35:50.196071+00:00",
-    "last_seen": "2026-05-29T15:35:50.196071+00:00",
-    "occurrence_history": [
-      "2026-05-29T15:35:50.196071+00:00"
-    ],
-    "strength": 0.4338444926374107,
-    "ease": 1.8999999999999997,
     "reactivations": 0
   },
   {
@@ -9886,7 +9729,7 @@
     "occurrence_history": [
       "2026-05-29T23:21:48.497946+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9912,7 +9755,7 @@
     "occurrence_history": [
       "2026-05-30T03:03:51.470363+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9944,7 +9787,7 @@
     "occurrence_history": [
       "2026-05-31T12:19:18.005053+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9973,7 +9816,7 @@
     "occurrence_history": [
       "2026-05-31T12:55:33.511377+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10000,7 +9843,7 @@
     "occurrence_history": [
       "2026-06-01T12:36:50.386274+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10028,36 +9871,8 @@
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "424da23c-f1ba-465d-97a3-b171333280fa",
-    "pattern": "Before asking for permission to run a mutating command against an external service (render, vercel, cloud infra), show the exact command and a plain-English description of its effect; never prompt first and explain second.",
-    "valence": "positive",
-    "confidence": 0.9,
-    "category": "user-preference",
-    "source_sessions": [
-      "781e356c-3e00-46fa-b981-b2bc599fbda0",
-      "6412e83a-274e-438c-8fba-24fa08185bb3",
-      "1c86d512-4824-4585-a2a3-aa107db3f4fe",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "431b5ec9-1588-48e6-b243-18e4dadadf49"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-02T13:28:33.968421+00:00",
-    "last_seen": "2026-06-02T13:28:33.968421+00:00",
-    "occurrence_history": [
-      "2026-06-02T13:28:33.968421+00:00"
-    ],
-    "strength": 0.4338444926374107,
-    "ease": 1.8999999999999997,
     "reactivations": 0
   },
   {
@@ -10081,7 +9896,7 @@
     "occurrence_history": [
       "2026-06-03T17:45:18.122629+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10108,7 +9923,7 @@
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10135,7 +9950,7 @@
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10174,7 +9989,7 @@
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10213,7 +10028,7 @@
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10238,7 +10053,7 @@
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10266,7 +10081,7 @@
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10294,7 +10109,7 @@
     "occurrence_history": [
       "2026-06-11T18:41:28.565308+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10330,7 +10145,7 @@
     "occurrence_history": [
       "2026-06-12T19:52:36.457017+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10359,7 +10174,7 @@
     "occurrence_history": [
       "2026-06-13T00:38:00.014485+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10388,7 +10203,7 @@
     "occurrence_history": [
       "2026-06-13T00:38:00.014485+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10417,7 +10232,7 @@
     "occurrence_history": [
       "2026-06-13T12:49:34.282589+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10449,7 +10264,7 @@
     "occurrence_history": [
       "2026-06-15T12:52:24.127634+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10485,7 +10300,7 @@
     "occurrence_history": [
       "2026-06-17T17:04:47.577262+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10518,7 +10333,7 @@
     "occurrence_history": [
       "2026-06-18T00:38:06.338091+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10549,7 +10364,7 @@
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10589,7 +10404,7 @@
     "occurrence_history": [
       "2026-06-20T02:01:59.851749+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10617,7 +10432,7 @@
     "occurrence_history": [
       "2026-06-20T15:12:03.208355+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10645,7 +10460,7 @@
     "occurrence_history": [
       "2026-06-21T00:26:17.390298+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10675,7 +10490,7 @@
     "occurrence_history": [
       "2026-06-21T16:43:27.454214+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10707,7 +10522,7 @@
     "occurrence_history": [
       "2026-06-22T13:05:50.557852+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10733,7 +10548,7 @@
     "occurrence_history": [
       "2026-06-23T00:15:19.177245+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10765,7 +10580,7 @@
     "occurrence_history": [
       "2026-06-25T00:47:19.884006+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10794,7 +10609,7 @@
     "occurrence_history": [
       "2026-06-26T00:52:23.703135+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10823,7 +10638,7 @@
     "occurrence_history": [
       "2026-06-26T16:44:28.714927+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10850,38 +10665,8 @@
     "occurrence_history": [
       "2026-06-28T12:32:18.420032+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "25479e7c-b46b-44ca-9e09-4a62f7921e74",
-    "pattern": "Invoking /atone without completing the full event-recording flow (gathering context, picking a slug, running atone.sh add) leaves the mistake unrecorded and triggers a stop-hook gate on the next turn; the invocation and the recording must happen in the same turn.",
-    "valence": "negative",
-    "confidence": 0.9,
-    "category": "tool-use",
-    "source_sessions": [
-      "4b1b8967-6e82-43ba-9004-5ab4166358c0",
-      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
-      "413d6f51-6e42-4650-b813-41227ea70271",
-      "d779620f-1a36-4f9d-9ad2-a096f95eff8b",
-      "73830bfe-99da-4f65-ab98-5fc5eff0c3ab",
-      "e0bc612e-dc0c-44ee-9b1e-60c6c9e214b7",
-      "69aeb3ea-3288-47e0-87e7-d1c639a4c438"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product-backend",
-      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-06-29T12:49:50.137015+00:00",
-    "last_seen": "2026-06-29T12:49:50.137015+00:00",
-    "occurrence_history": [
-      "2026-06-29T12:49:50.137015+00:00"
-    ],
-    "strength": 0.5086087026239068,
-    "ease": 2.0999999999999996,
     "reactivations": 0
   },
   {
@@ -10910,7 +10695,7 @@
     "occurrence_history": [
       "2026-06-30T23:43:44.791641+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10936,7 +10721,7 @@
     "occurrence_history": [
       "2026-07-03T17:41:29.756336+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10963,7 +10748,7 @@
     "occurrence_history": [
       "2026-07-07T05:38:55.650374+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10996,7 +10781,7 @@
     "occurrence_history": [
       "2026-07-07T23:01:13.082146+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11030,7 +10815,7 @@
     "occurrence_history": [
       "2026-07-10T08:34:03.448673+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11064,7 +10849,7 @@
     "occurrence_history": [
       "2026-07-10T08:34:03.448673+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11118,188 +10903,7 @@
     "occurrence_history": [
       "2026-07-11T18:09:29.392095+00:00"
     ],
-    "strength": 0.6605136201599998,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "f070277f-8098-4fa2-841e-46ad12536415",
-    "pattern": "Multi-agent task orchestration generates large volumes of task notification events; most are silently acknowledged without substantive processing",
-    "valence": "neutral",
-    "confidence": 0.88,
-    "category": "architecture",
-    "source_sessions": [
-      "13cdec26-23ef-42e8-89a6-10fc02ec02a5",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "48b50d47-1493-4f68-a1bd-444ba3c25a7e",
-      "76e79c84-e1a8-461e-bd30-0ab78b14496f",
-      "697d14fb-bfae-4650-ba16-6ebdad4e0b96",
-      "98296345-0f81-4d22-bccc-ed57bc792133",
-      "2fa7f794-d8be-4b93-8934-5b4edab278fd",
-      "cfc1d16f-0ff3-4e63-a275-199f7aaf8bee",
-      "4cc3b1d3-836f-441b-8217-76047f9564b1",
-      "605ac510-d84e-41d3-9d4a-235be41b0178",
-      "fd0787a0-a782-4a36-8138-9235fca18426",
-      "fa20ade0-3c96-44a4-a081-d95cf425e3df",
-      "f6813160-9037-4a12-b47e-f7a95913ea41",
-      "f4c49981-67e5-45de-ad40-ebe08b253019",
-      "de11f780-7e53-473b-8b39-f78455d1fc5e",
-      "da85a83b-098e-4bef-9522-b01541f9ac22",
-      "a4ebda4e-52c4-4f02-968f-14eb3f231e10",
-      "a0c85499-49d8-4a12-9229-2e05847914e2",
-      "a051a878-83b0-4dad-b9d1-9a384e143f75",
-      "940ec482-502c-42a7-b553-1371a5d3bac8",
-      "8659d11c-b4bf-4b7c-9b57-8519e582a02a",
-      "818391ae-f06f-4413-b1ac-e099c12544a7",
-      "7f78f87b-9dd5-42a6-9a58-c87141d5bb16",
-      "7ca7dd1a-b63d-4471-8e3d-bc36d1c8af1c",
-      "6eecdde3-a454-4d88-8fec-9737a22fd903",
-      "5a7a08d1-64e4-4353-bf42-60690df4e332",
-      "496d496c-4d95-4c75-b969-8fa1eee0cfa3",
-      "3a55a464-076b-4cf3-8433-685281e0f8d8",
-      "37641699-69c1-435c-ba46-9f4d5a85ed30",
-      "32ffecb4-78fa-4f85-890e-ae6ad940e61e",
-      "2f72c1cb-5beb-4e74-a03c-aa146abd11c7",
-      "0ec03eac-2f0f-425d-9c84-d2cd4cbae067",
-      "052c5615-8a54-41a0-a255-5dd45a16941e",
-      "04ae7075-5541-4a82-b0ef-3d21d348b3e1",
-      "979684bc-7e68-40d9-8b89-ed1b259ac534",
-      "6b3a756f-734f-4e3c-ab00-b6db2cd34220",
-      "26d5db46-6428-4102-8b6f-8b760e61796a",
-      "d12c2a59-b74e-4495-8f87-2e5c2d289021",
-      "fde6f24a-d0aa-4416-920a-dcb6cee8182f",
-      "fc6c438b-2d0a-40d8-9e65-a8f4e8283b52",
-      "f3ddfd2f-1f54-4313-96a7-a9a6af5854fe",
-      "d7e8dce2-6dc0-4304-a1da-42806edbd5af",
-      "d780bb16-90a7-46a7-9787-e5809c02a195",
-      "ccc9ccc9-5a5a-4611-919c-40d72e1fa6e9",
-      "cc6cb578-3076-4208-8c77-935dcf196675",
-      "bd2b33bb-4022-4180-abad-8d2509df56a9",
-      "b5c4743e-5e4c-417b-819b-986a3a1dcea2",
-      "a94a9f3a-c6b6-4197-825d-851590cc01a7",
-      "a6f721df-1e3b-4046-b90f-6286573fa069",
-      "92688780-4be8-4d93-a109-e9b0ea085d7b"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-14T16:28:45.862163+00:00",
-    "last_seen": "2026-04-14T16:28:45.862163+00:00",
-    "occurrence_history": [],
-    "strength": 0.6458355397119998,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "8dc7fecd-8bd3-4317-91d9-d90453e3364f",
-    "pattern": "When user instructs 'commit and push', proceed directly without showing diffs or prompting for confirmation — user expects silent execution",
-    "valence": "negative",
-    "confidence": 0.88,
-    "category": "user-preference",
-    "source_sessions": [
-      "f5a1fde7-ec25-47a3-bc9e-a8be91444530",
-      "e3e763ee-d507-4f49-8643-4e3fc7e437ec",
-      "d092c64c-6135-4852-91d6-c747a64615f0",
-      "7c83acb9-95cb-4c2b-a752-68226dbfbe53",
-      "720c3307-86e1-401c-a313-40e2250112b8",
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "52ec83f9-3cf1-446d-b369-3c8cc7de5eaa",
-      "41f81dda-888f-4050-b821-ec4e504e551a",
-      "0c2b41a8-de98-4884-956f-be508d7306cc",
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "b11385ce-1eda-4caa-a683-10ff7484fb58",
-      "8d669b1c-b0c3-46f2-9798-17391bbd69a6",
-      "86d18740-3024-4e69-87e9-4d23bea6ebf0",
-      "80b65086-2d1d-43ab-88b6-5a9708f72f3c",
-      "6bc14f4a-fdbe-446b-aeaf-b52ce840e6de",
-      "67dcd273-7231-4d0d-9d18-4924e861442b",
-      "58c2e5c6-ddd8-4796-9b46-db49e5cd2733",
-      "4badb0bc-2729-4d90-840d-048e402aeb06",
-      "44b56107-271d-4089-bec8-9932a97e8877",
-      "3e5d8fae-b9de-43b9-8397-6db77832f850",
-      "36c1c63f-fcd3-4159-ba3c-1ba691ac4432",
-      "331c917c-b0fe-4499-8144-5f871842b6a5",
-      "2f9a7f08-d0f1-46d6-9d06-ff6ae5165e9c",
-      "2c327b58-a114-48e6-a1c2-ff79f984bbbe",
-      "2b7de12f-4005-4355-81f2-d7825cf3b972",
-      "2ae312ff-0b07-4e3b-8424-fb19b96eee50",
-      "21fe929f-1817-4a14-9b0b-59332d6e9e9e",
-      "2005bc29-9168-4012-8ae8-13399ed8968f",
-      "110847f9-1e42-4bc3-8edf-bcc4a27b9e39",
-      "0e609988-6c4d-4123-8939-e075602d1b92",
-      "0bbf66a1-2068-4483-9a2c-1e39e84b7ef1",
-      "0b6a4a75-66f0-4bfc-b0c8-113172a124dc",
-      "016b3721-680c-4f02-9535-328fc0b97289",
-      "942b6492-d23a-4fc2-b44c-054d7bee389b",
-      "8dff36fc-ad36-4a15-b624-ba51bed76490",
-      "3180fb44-90f2-41b8-92bd-3da77c3a409a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T00:47:41.799910+00:00",
-    "last_seen": "2026-04-15T00:47:41.799910+00:00",
-    "occurrence_history": [],
-    "strength": 0.6458355397119998,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "7757b8a4-57cf-4a1a-b830-20d59c0de536",
-    "pattern": "User uses /core-dump proactively at session milestones and before exit, not just at end — treat it as a mid-session tool too",
-    "valence": "positive",
-    "confidence": 0.88,
-    "category": "user-preference",
-    "source_sessions": [
-      "6345a8d3-8645-40e5-a625-fe143f65702d",
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a",
-      "9f9971fe-62a3-4c3a-8628-b11c76b2a649",
-      "41f2bbe0-6c49-41c5-a2fe-d0c8cc0421d5",
-      "7c873488-a479-4458-a839-049dc0c8b4b0",
-      "6fda69f7-51c0-4793-8c01-14756242631a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-diy-claude-mem",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T13:20:18.468980+00:00",
-    "last_seen": "2026-04-15T13:20:18.468980+00:00",
-    "occurrence_history": [],
-    "strength": 0.6458355397119998,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "d8fc1a82-6d6e-4df4-bb32-ca57ebed9616",
-    "pattern": "Sessions with many continuations (high 'this session being continued from' frequency) indicate context compaction happening often — proactive checkpointing reduces recovery overhead",
-    "valence": "negative",
-    "confidence": 0.88,
-    "category": "approach",
-    "source_sessions": [
-      "0467461b-9bed-47f5-8a50-a44e2565dd97",
-      "60f43456-8086-4373-8d52-8685ee80c71a"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-i-dream"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-04-15T19:36:29.897823+00:00",
-    "last_seen": "2026-04-15T19:36:29.897823+00:00",
-    "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11324,7 +10928,7 @@
     "first_seen": "2026-04-15T23:35:33.217995+00:00",
     "last_seen": "2026-04-15T23:35:33.217995+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11349,7 +10953,7 @@
     "first_seen": "2026-04-16T04:34:36.842156+00:00",
     "last_seen": "2026-04-16T04:34:36.842156+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11376,7 +10980,7 @@
     "first_seen": "2026-04-17T04:41:55.982616+00:00",
     "last_seen": "2026-04-17T04:41:55.982616+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11402,7 +11006,7 @@
     "first_seen": "2026-04-18T19:28:55.953507+00:00",
     "last_seen": "2026-04-18T19:28:55.953507+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11433,7 +11037,7 @@
     "first_seen": "2026-04-19T13:05:21.883347+00:00",
     "last_seen": "2026-04-19T13:05:21.883347+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11460,7 +11064,7 @@
     "first_seen": "2026-04-20T01:50:49.158599+00:00",
     "last_seen": "2026-04-20T01:50:49.158599+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11486,7 +11090,7 @@
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11512,7 +11116,7 @@
     "first_seen": "2026-04-21T20:04:04.501066+00:00",
     "last_seen": "2026-04-21T20:04:04.501066+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11548,7 +11152,7 @@
     "first_seen": "2026-04-21T21:36:18.515068+00:00",
     "last_seen": "2026-04-21T21:36:18.515068+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11589,7 +11193,7 @@
     "first_seen": "2026-04-24T01:11:32.574020+00:00",
     "last_seen": "2026-04-24T01:11:32.574020+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11614,7 +11218,7 @@
     "first_seen": "2026-04-24T07:51:12.510232+00:00",
     "last_seen": "2026-04-24T07:51:12.510232+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11648,7 +11252,7 @@
     "first_seen": "2026-04-25T00:15:30.738596+00:00",
     "last_seen": "2026-04-25T00:15:30.738596+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11672,7 +11276,7 @@
     "first_seen": "2026-04-29T01:17:01.910367+00:00",
     "last_seen": "2026-04-29T01:17:01.910367+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11696,7 +11300,7 @@
     "first_seen": "2026-04-29T20:36:38.713082+00:00",
     "last_seen": "2026-04-29T20:36:38.713082+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11724,7 +11328,7 @@
     "first_seen": "2026-05-01T00:14:45.872053+00:00",
     "last_seen": "2026-05-01T00:14:45.872053+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11752,7 +11356,7 @@
     "first_seen": "2026-05-01T16:51:27.618893+00:00",
     "last_seen": "2026-05-01T16:51:27.618893+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11780,7 +11384,7 @@
     "first_seen": "2026-05-01T17:33:18.082842+00:00",
     "last_seen": "2026-05-01T17:33:18.082842+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11804,7 +11408,7 @@
     "first_seen": "2026-05-02T01:53:53.205143+00:00",
     "last_seen": "2026-05-02T01:53:53.205143+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11831,7 +11435,7 @@
     "first_seen": "2026-05-02T14:07:24.493847+00:00",
     "last_seen": "2026-05-02T14:07:24.493847+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11854,7 +11458,7 @@
     "first_seen": "2026-05-02T20:39:50.215588+00:00",
     "last_seen": "2026-05-02T20:39:50.215588+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11879,7 +11483,7 @@
     "first_seen": "2026-05-03T12:03:30.121983+00:00",
     "last_seen": "2026-05-03T12:03:30.121983+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11904,7 +11508,7 @@
     "first_seen": "2026-05-03T20:56:36.364036+00:00",
     "last_seen": "2026-05-03T20:56:36.364036+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11933,7 +11537,7 @@
     "first_seen": "2026-05-03T21:30:52.367152+00:00",
     "last_seen": "2026-05-03T21:30:52.367152+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11962,7 +11566,7 @@
     "first_seen": "2026-05-03T21:30:56.945974+00:00",
     "last_seen": "2026-05-03T21:30:56.945974+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11991,7 +11595,7 @@
     "first_seen": "2026-05-03T21:31:03.730862+00:00",
     "last_seen": "2026-05-03T21:31:03.730862+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12019,7 +11623,7 @@
     "first_seen": "2026-05-03T22:04:08.958103+00:00",
     "last_seen": "2026-05-03T22:04:08.958103+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12050,7 +11654,7 @@
     "first_seen": "2026-05-04T05:51:25.900092+00:00",
     "last_seen": "2026-05-04T05:51:25.900092+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12072,7 +11676,7 @@
     "first_seen": "2026-05-04T11:06:29.275600+00:00",
     "last_seen": "2026-05-04T11:06:29.275600+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12097,8 +11701,8 @@
     "first_seen": "2026-05-04T16:16:30.183531+00:00",
     "last_seen": "2026-05-04T16:16:30.183531+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -12120,7 +11724,7 @@
     "first_seen": "2026-05-05T19:09:15.753159+00:00",
     "last_seen": "2026-05-05T19:09:15.753159+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12143,7 +11747,7 @@
     "first_seen": "2026-05-06T12:53:25.184755+00:00",
     "last_seen": "2026-05-06T12:53:25.184755+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12166,7 +11770,7 @@
     "first_seen": "2026-05-06T14:38:53.017447+00:00",
     "last_seen": "2026-05-06T14:38:53.017447+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12191,7 +11795,7 @@
     "first_seen": "2026-05-07T11:23:19.834279+00:00",
     "last_seen": "2026-05-07T11:23:19.834279+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12214,7 +11818,7 @@
     "first_seen": "2026-05-07T13:11:39.996033+00:00",
     "last_seen": "2026-05-07T13:11:39.996033+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12239,7 +11843,7 @@
     "first_seen": "2026-05-07T17:02:33.524510+00:00",
     "last_seen": "2026-05-07T17:02:33.524510+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12266,7 +11870,7 @@
     "first_seen": "2026-05-07T18:02:40.138469+00:00",
     "last_seen": "2026-05-07T18:02:40.138469+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12291,7 +11895,7 @@
     "first_seen": "2026-05-08T09:15:20.978365+00:00",
     "last_seen": "2026-05-08T09:15:20.978365+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12316,7 +11920,7 @@
     "first_seen": "2026-05-08T10:11:13.599469+00:00",
     "last_seen": "2026-05-08T10:11:13.599469+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12345,7 +11949,7 @@
     "first_seen": "2026-05-08T14:29:59.676799+00:00",
     "last_seen": "2026-05-08T14:29:59.676799+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12368,7 +11972,7 @@
     "first_seen": "2026-05-08T16:09:07.243289+00:00",
     "last_seen": "2026-05-08T16:09:07.243289+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12395,7 +11999,7 @@
     "first_seen": "2026-05-09T05:04:55.715359+00:00",
     "last_seen": "2026-05-09T05:04:55.715359+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12418,7 +12022,7 @@
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12441,7 +12045,7 @@
     "first_seen": "2026-05-09T10:27:10.480086+00:00",
     "last_seen": "2026-05-09T10:27:10.480086+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12466,7 +12070,7 @@
     "first_seen": "2026-05-09T13:03:20.913554+00:00",
     "last_seen": "2026-05-09T13:03:20.913554+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12493,7 +12097,7 @@
     "first_seen": "2026-05-11T14:22:44.619647+00:00",
     "last_seen": "2026-05-11T14:22:44.619647+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12522,7 +12126,7 @@
     "first_seen": "2026-05-11T16:12:43.404309+00:00",
     "last_seen": "2026-05-11T16:12:43.404309+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12549,7 +12153,7 @@
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12576,7 +12180,7 @@
     "first_seen": "2026-05-11T19:22:03.715968+00:00",
     "last_seen": "2026-05-11T19:22:03.715968+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12601,7 +12205,7 @@
     "first_seen": "2026-05-12T03:38:59.822261+00:00",
     "last_seen": "2026-05-12T03:38:59.822261+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12626,7 +12230,7 @@
     "first_seen": "2026-05-12T16:28:13.376297+00:00",
     "last_seen": "2026-05-12T16:28:13.376297+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12649,7 +12253,7 @@
     "first_seen": "2026-05-13T11:23:43.336037+00:00",
     "last_seen": "2026-05-13T11:23:43.336037+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12674,7 +12278,7 @@
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12699,7 +12303,7 @@
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12724,7 +12328,7 @@
     "first_seen": "2026-05-14T16:51:59.267171+00:00",
     "last_seen": "2026-05-14T16:51:59.267171+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12754,7 +12358,7 @@
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12784,7 +12388,7 @@
     "first_seen": "2026-05-14T23:31:46.664557+00:00",
     "last_seen": "2026-05-14T23:31:46.664557+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12814,7 +12418,7 @@
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12844,7 +12448,7 @@
     "first_seen": "2026-05-15T11:41:18.707613+00:00",
     "last_seen": "2026-05-15T11:41:18.707613+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12878,7 +12482,7 @@
     "first_seen": "2026-05-16T20:58:08.369153+00:00",
     "last_seen": "2026-05-16T20:58:08.369153+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12908,7 +12512,7 @@
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12938,7 +12542,7 @@
     "first_seen": "2026-05-17T02:36:51.387315+00:00",
     "last_seen": "2026-05-17T02:36:51.387315+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12969,7 +12573,7 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13000,7 +12604,7 @@
     "first_seen": "2026-05-17T12:49:44.473348+00:00",
     "last_seen": "2026-05-17T12:49:44.473348+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13031,7 +12635,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13062,7 +12666,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13093,7 +12697,7 @@
     "first_seen": "2026-05-18T12:59:56.467743+00:00",
     "last_seen": "2026-05-18T12:59:56.467743+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13116,7 +12720,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13139,7 +12743,7 @@
     "first_seen": "2026-05-18T16:36:46.282196+00:00",
     "last_seen": "2026-05-18T16:36:46.282196+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13168,7 +12772,7 @@
     "first_seen": "2026-05-20T17:01:17.067197+00:00",
     "last_seen": "2026-05-20T17:01:17.067197+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13195,7 +12799,7 @@
     "first_seen": "2026-05-21T02:46:34.840647+00:00",
     "last_seen": "2026-05-21T02:46:34.840647+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13222,7 +12826,7 @@
     "first_seen": "2026-05-21T02:46:34.840647+00:00",
     "last_seen": "2026-05-21T02:46:34.840647+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13248,7 +12852,7 @@
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13274,7 +12878,7 @@
     "first_seen": "2026-05-22T02:56:40.033536+00:00",
     "last_seen": "2026-05-22T02:56:40.033536+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13298,7 +12902,7 @@
     "first_seen": "2026-05-22T13:46:09.917143+00:00",
     "last_seen": "2026-05-22T13:46:09.917143+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13322,7 +12926,7 @@
     "first_seen": "2026-05-23T00:57:28.593838+00:00",
     "last_seen": "2026-05-23T00:57:28.593838+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13352,7 +12956,7 @@
     "first_seen": "2026-05-23T23:26:55.700048+00:00",
     "last_seen": "2026-05-23T23:26:55.700048+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13383,7 +12987,7 @@
     "first_seen": "2026-05-26T00:52:14.270827+00:00",
     "last_seen": "2026-05-26T00:52:14.270827+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13414,7 +13018,7 @@
     "first_seen": "2026-05-26T00:52:14.270827+00:00",
     "last_seen": "2026-05-26T00:52:14.270827+00:00",
     "occurrence_history": [],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13443,7 +13047,7 @@
     "occurrence_history": [
       "2026-05-28T12:59:20.926295+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13471,7 +13075,7 @@
     "occurrence_history": [
       "2026-05-29T00:24:12.419994+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13505,7 +13109,7 @@
     "occurrence_history": [
       "2026-05-29T15:35:50.196071+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13530,43 +13134,8 @@
     "occurrence_history": [
       "2026-05-29T15:36:44.456233+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "1149ade8-0456-4cfc-a065-94dc57ed9142",
-    "pattern": "When a circuit breaker or rate-limiting mechanism is scoped to a shared resource rather than a per-module or per-pipeline-step key, the agent must proactively flag that a failure in one consumer will block all other consumers — even those using different logic on the same dependency.",
-    "valence": "negative",
-    "confidence": 0.88,
-    "category": "architecture",
-    "source_sessions": [
-      "5c5b1c2e-9a8e-4710-9cc0-72eaece9b003",
-      "f0ba9f05-db25-4481-ace5-908884322f75",
-      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4",
-      "8088634a-7726-41fa-a9ff-159ba4dcf3ba",
-      "dded3fcf-32db-49c8-b05f-bdc53bccd6f2",
-      "fe32f620-e28c-47a9-ad76-2d64e291d1b6",
-      "ed7207c0-4a0e-42cd-9f71-625179ebccca",
-      "c5baf85e-73ea-4410-a566-602ae4f4696f",
-      "be369ee7-96ba-4980-8857-71b83effeb5a",
-      "5da7133c-3e35-46de-95c2-f1d50b5fb715"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-05-29T23:21:48.497946+00:00",
-    "last_seen": "2026-05-29T23:21:48.497946+00:00",
-    "occurrence_history": [
-      "2026-05-29T23:21:48.497946+00:00"
-    ],
-    "strength": 0.49445951020408174,
-    "ease": 2.0999999999999996,
     "reactivations": 0
   },
   {
@@ -13591,7 +13160,7 @@
     "occurrence_history": [
       "2026-05-30T03:03:51.470363+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13626,7 +13195,7 @@
     "occurrence_history": [
       "2026-05-30T17:00:01.159958+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13665,7 +13234,7 @@
     "occurrence_history": [
       "2026-05-31T19:26:33.828505+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13704,7 +13273,7 @@
     "occurrence_history": [
       "2026-05-31T19:26:33.828505+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13731,7 +13300,7 @@
     "occurrence_history": [
       "2026-06-01T12:36:50.386274+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13759,7 +13328,7 @@
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13787,7 +13356,7 @@
     "occurrence_history": [
       "2026-06-02T13:28:33.968421+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13812,7 +13381,7 @@
     "occurrence_history": [
       "2026-06-03T17:45:18.122629+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13839,7 +13408,7 @@
     "occurrence_history": [
       "2026-06-04T13:18:21.538564+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13864,7 +13433,7 @@
     "occurrence_history": [
       "2026-06-04T17:33:50.113929+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13891,7 +13460,7 @@
     "occurrence_history": [
       "2026-06-05T12:42:12.279426+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13917,7 +13486,7 @@
     "occurrence_history": [
       "2026-06-05T19:55:30.751415+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13956,7 +13525,7 @@
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13995,7 +13564,7 @@
     "occurrence_history": [
       "2026-06-09T15:32:59.350960+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14020,7 +13589,7 @@
     "occurrence_history": [
       "2026-06-09T20:11:13.524350+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14048,7 +13617,7 @@
     "occurrence_history": [
       "2026-06-10T14:16:55.017090+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14076,7 +13645,7 @@
     "occurrence_history": [
       "2026-06-11T18:41:28.565308+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14112,7 +13681,7 @@
     "occurrence_history": [
       "2026-06-12T19:52:36.457017+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14141,7 +13710,7 @@
     "occurrence_history": [
       "2026-06-13T12:49:34.282589+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14169,7 +13738,7 @@
     "occurrence_history": [
       "2026-06-13T17:02:59.417794+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14195,7 +13764,7 @@
     "occurrence_history": [
       "2026-06-15T17:22:48.309579+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14221,7 +13790,7 @@
     "occurrence_history": [
       "2026-06-15T17:22:48.309579+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14257,7 +13826,7 @@
     "occurrence_history": [
       "2026-06-17T17:04:47.577262+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14290,7 +13859,7 @@
     "occurrence_history": [
       "2026-06-18T00:38:06.338091+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14330,7 +13899,7 @@
     "occurrence_history": [
       "2026-06-18T22:44:48.169152+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14356,7 +13925,7 @@
     "occurrence_history": [
       "2026-06-19T01:37:39.440186+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14387,7 +13956,7 @@
     "occurrence_history": [
       "2026-06-19T17:49:46.984809+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14427,7 +13996,7 @@
     "occurrence_history": [
       "2026-06-20T02:01:59.851749+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14455,7 +14024,7 @@
     "occurrence_history": [
       "2026-06-21T00:26:17.390298+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14483,7 +14052,7 @@
     "occurrence_history": [
       "2026-06-21T00:26:17.390298+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14511,7 +14080,7 @@
     "occurrence_history": [
       "2026-06-21T12:16:04.148972+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14541,7 +14110,7 @@
     "occurrence_history": [
       "2026-06-21T16:43:27.454214+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14573,7 +14142,7 @@
     "occurrence_history": [
       "2026-06-24T10:24:10.726316+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14603,7 +14172,7 @@
     "occurrence_history": [
       "2026-06-27T00:58:04.925103+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14634,7 +14203,7 @@
     "occurrence_history": [
       "2026-06-27T18:11:13.741084+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14664,7 +14233,7 @@
     "occurrence_history": [
       "2026-06-29T12:49:50.137015+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14691,7 +14260,7 @@
     "occurrence_history": [
       "2026-06-29T17:59:02.583896+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14721,7 +14290,7 @@
     "occurrence_history": [
       "2026-06-30T02:08:56.095422+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14751,7 +14320,7 @@
     "occurrence_history": [
       "2026-06-30T02:08:56.095422+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14786,7 +14355,7 @@
     "occurrence_history": [
       "2026-06-30T15:54:50.235965+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14816,7 +14385,7 @@
     "occurrence_history": [
       "2026-06-30T23:43:44.791641+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14858,7 +14427,7 @@
     "occurrence_history": [
       "2026-07-02T23:49:07.272682+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14887,7 +14456,7 @@
     "occurrence_history": [
       "2026-07-05T12:46:11.823427+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14923,7 +14492,7 @@
     "occurrence_history": [
       "2026-07-06T09:23:59.332465+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14950,7 +14519,7 @@
     "occurrence_history": [
       "2026-07-07T05:38:55.650374+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14996,7 +14565,7 @@
     "occurrence_history": [
       "2026-07-10T08:21:23.843429+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15050,7 +14619,7 @@
     "occurrence_history": [
       "2026-07-11T18:09:29.392095+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15090,7 +14659,7 @@
     "occurrence_history": [
       "2026-07-12T04:12:16.853268+00:00"
     ],
-    "strength": 0.6972088212799998,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15130,7 +14699,7 @@
     "occurrence_history": [
       "2026-07-12T04:12:16.853268+00:00"
     ],
-    "strength": 0.6458355397119998,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15170,7 +14739,511 @@
     "occurrence_history": [
       "2026-07-12T04:12:16.853268+00:00"
     ],
-    "strength": 0.6605136201599998,
+    "strength": 0.40262858633285803,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "c536fa3a-027f-446d-8965-204f2c831a9b",
+    "pattern": "When building any interactive selector or picker UI, default selection must preview the change without applying it — requiring an explicit save/apply action before state changes take effect; auto-applying on selection is a critical UX violation",
+    "valence": "negative",
+    "confidence": 0.95,
+    "category": "user-preference",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.5790904916140274,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "030d397a-524b-4a21-8e09-dc9a9f65cb2b",
+    "pattern": "Complex shell operations using process substitution, random selection, or chained pipes are fragile in agent-driven contexts — prone to SIGTERM and silent backgrounding; delegate to a Python script instead of composing shell pipelines",
+    "valence": "negative",
+    "confidence": 0.75,
+    "category": "tool-use",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.457176703905811,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "367a9ca4-c118-40ba-a5fe-55b74a677a03",
+    "pattern": "Before building a new hook, nudge, or script for a concern, read any existing script that serves a similar purpose — prior design decisions and removal history directly constrain what the new implementation should do",
+    "valence": "positive",
+    "confidence": 0.72,
+    "category": "approach",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.43888963574957857,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "11547124-c7fe-477c-8bb4-150468c1440c",
+    "pattern": "Before replicating a code pattern from surrounding context, verify that it applies in the new location — some patterns (e.g. flag-gated lazy imports, IIFE wrappers) exist for a specific contextual reason that does not generalize to adjacent code",
+    "valence": "negative",
+    "confidence": 0.82,
+    "category": "approach",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.49984652960368664,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "b4bef019-437e-4f08-aa77-29c883331f14",
+    "pattern": "When a correction yields a behavioral rule, define the precise boundary: a rule stated as absolute ('never do X') is often wrong — the nuance ('never do X except in established-pattern context Y') preserves intent without overcorrecting into a rule that breaks valid uses",
+    "valence": "negative",
+    "confidence": 0.78,
+    "category": "approach",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.4754637720620434,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "b62808f9-2460-4b5b-a690-d5cc54d39b31",
+    "pattern": "Splitting detection (deterministic, machine-verifiable regex/heuristic) from application (context-dependent agent judgment) produces more reliable tools than having a single pass do both — candidates are surfaced mechanically, acted on with judgment",
+    "valence": "positive",
+    "confidence": 0.72,
+    "category": "architecture",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.43888963574957857,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "71bfd3f2-9470-4c8e-b966-7cf2f2e0368c",
+    "pattern": "In JSX, wrapping a conditional expression in an IIFE or scope-wrapper where sibling elements use inline props or plain const declarations is a recurring code smell; conform to the pattern already present in siblings instead",
+    "valence": "negative",
+    "confidence": 0.8,
+    "category": "domain",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.4876551508328651,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "75818bc7-ae7c-4a8f-bef8-957d570cc78b",
+    "pattern": "After implementing a mutation or write operation in a web app, explicitly verify that client-side caches holding the affected data are invalidated — cache staleness after a write is a high-impact but non-obvious failure that automated tests routinely miss",
+    "valence": "negative",
+    "confidence": 0.78,
+    "category": "domain",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.4754637720620434,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "2678f8be-85b2-46d2-ae06-de12f6bd9003",
+    "pattern": "Formatters (Prettier, Black, etc.) can silently reformat code during an edit sequence in ways that change logic structure; after edits to formatting-sensitive files, inspect the final saved state rather than assuming the edit applied as intended",
+    "valence": "negative",
+    "confidence": 0.72,
+    "category": "tool-use",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.43888963574957857,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "46ac9083-1042-40b4-92db-b3d206705352",
+    "pattern": "A UI reskin that applies styles mechanically without end-to-end UX validation — scroll behavior, background colors across states, responsive layout, navigation flow — is not releasable even if every individual style change was applied correctly",
+    "valence": "negative",
+    "confidence": 0.75,
+    "category": "user-preference",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.457176703905811,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "b0b94e41-e2c7-4bcc-ae25-af15e73db313",
+    "pattern": "Security and authorization checks should be explicit at each protected callsite rather than abstracted into a named wrapper function — a wrapper that appears to 'handle auth' can obscure whether a new callsite is actually protected or merely resembles one that is",
+    "valence": "positive",
+    "confidence": 0.65,
+    "category": "architecture",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.39621981005170287,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "e49780d6-3e93-4636-8197-4de3125afd9c",
+    "pattern": "When querying logs with text filters, overly broad keyword patterns match irrelevant payload content embedded in unrelated log lines; anchor filters to structural log-type identifiers, not bare keywords, to avoid returning megabytes of noise",
+    "valence": "negative",
+    "confidence": 0.7,
+    "category": "domain",
+    "source_sessions": [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      "fb3fdce3-2dda-4e66-87ac-1f39c92c555d",
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      "2685fe2f-f018-4924-ade0-9e8de1122fa8",
+      "7bc36b38-0b8d-41eb-b897-9d8f7d901bd9",
+      "f0ba9f05-db25-4481-ace5-908884322f75",
+      "8e2d1072-622e-42b9-8971-89fe5f7b7978",
+      "5455871e-96ff-4a7d-ae55-a0617ed1ccf4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ghostty-themes",
+      "-Users-alcatraz627-Code-Claude-data-forge",
+      "-Users-alcatraz627--claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "notion-sync",
+      ".claude",
+      "backend",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-13T00:36:57.750918+00:00",
+    "last_seen": "2026-07-13T00:36:57.750918+00:00",
+    "occurrence_history": [
+      "2026-07-13T00:36:57.750918+00:00"
+    ],
+    "strength": 0.4266982569787569,
     "ease": 2.5,
     "reactivations": 0
   }

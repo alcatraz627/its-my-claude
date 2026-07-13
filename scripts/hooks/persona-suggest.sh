@@ -57,6 +57,6 @@ fi
 already "$persona" && exit 0
 mark "$persona"
 jq -nc --arg m "[persona] ${msg} (Advisory; once per session. Mute: touch ~/.claude/personas/usage/.suggest-off)" \
-  '{additionalContext:$m}'
+  '{hookSpecificOutput:{hookEventName:"UserPromptSubmit",additionalContext:$m}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook persona-suggest --action nudge --heeded unknown >/dev/null 2>&1 || true
 exit 0
