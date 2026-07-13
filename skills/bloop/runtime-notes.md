@@ -1,3 +1,149 @@
+## bloop: item 15 tail — first-prompt dream lane (gcc) — 2026-07-14
+
+**Purpose:** Twelfth run. Gate: ISSUES-FOUND (2 real bugs + a TOCTOU race) on a
+sync UserPromptSubmit hook. Streak 12/12.
+
+**Insights:**
+
+1. **API-crashed validator → SendMessage resume worked.** The seat died on a
+   server error mid-response; a resume message (it keeps its transcript) plus
+   one delivery chase-up recovered a complete report — cheaper than
+   re-dispatch. Order: resume-ping on `failed`, chase-up on `available`,
+   fresh seat only third.
+2. **Validator housekeeping swept the PARENT's scratch fixtures** (my hermetic
+   HOME died with its cleanup, silently breaking my re-exercise runs with
+   false failures). Namespace parent fixtures outside anything the dispatch
+   invites the validator to use, or rebuild before reuse.
+3. **Hermetic HOME-override testing is itself an attack probe**: it exposed the
+   wrapper resolving its engine path via $HOME (same split-resolution class as
+   the item-12 blocker) before the validator ever ran. Script-dir resolution
+   (BASH_SOURCE) is the pattern.
+4. **"Did I already deliver this" checks must be keyed by the receiving
+   session.** The gate's best find: a global-last dedupe silently starves
+   concurrent sessions — sid-scope the ledger scan, and make the upstream
+   writer stamp sid so there is something to scope by.
+
+---
+## bloop: F6 products redesign + poll sweep (versable) — 2026-07-13
+
+**Purpose:** Twelfth run. Gate: ISSUES-FOUND — a pre-existing bug (server
+"prefix" search was exact-match) that the new UI made load-bearing. Streak 12/12.
+
+**Insights:**
+
+1. **Gates catch bugs the DIFF didn't introduce.** The major was in untouched
+   code (`endAt(X + "")` — an EMPTY string where \uf8ff belonged); F6's
+   escalation link turned it into a broken promise. Attack prompts should name
+   the promises the UI makes, not just the lines the diff changed. Corollary:
+   during the build I "preserved exactly" what I assumed was an invisible
+   \uf8ff — preserving code faithfully preserves its bugs; verify suspicious
+   literals with a hexdump instead of assuming.
+2. **Store-driven kit modals match on elementId AND modalKey** — a keyless
+   `<Modal>` instance never renders when opened with a key. Every code path
+   "looked right" (handler fired, store updated); only a DOM probe (zero
+   `<dialog>` elements) exposed it. For invisible-until-open components,
+   probe the DOM, not the logic.
+3. **Red-proof before claiming resilience:** reverting to the pre-fix poll and
+   watching offline nuke the page to the ErrorBoundary (then green with the
+   hook) is cheap (~2 min) and turns "should survive" into "watched it fail
+   and survive." Also: the triage's proposed fetcher.load fix was WRONG
+   (fetcher errors also reach boundaries) — verify a teammate's mechanism
+   claim before building on it; probe-gated revalidation was the honest fix.
+4. **Shared-branch merges land mid-loop.** The coworker's usage work hit the
+   branch between my commit and push; the merge wanted a file where the
+   OWNER'S uncommitted fix lived. Pattern: stash theirs with a named message,
+   merge, re-apply their intent as an attributed commit, leave the stash as
+   the receipt.
+5. Python-heredoc regex swaps across N route files work well for identical
+   effect blocks, but import-list surgery needs all three positions (own-line,
+   leading/middle, trailing) and a per-file "did I orphan a hook use" count
+   check — my revert broke useEffect for two legit consumers by over-removing.
+
+---
+## bloop: F3.1 speedway dashboard (versable) — 2026-07-13
+
+**Purpose:** Eleventh run. Gate: ISSUES-FOUND — 1 major + 3 smaller, all
+found after a browser self-review that felt complete. Streak now 11/11.
+
+**Insights:**
+
+1. **Quote the owner's verbatim requirement in the attack claim.** The major
+   (label ellipsized at grid-floor margins) surfaced because the dispatch said
+   "owner demanded FIT, not truncate" — the validator then width-swept
+   scrollWidth vs clientWidth over stepped container widths and found five
+   truncating windows my fixed-viewport review never landed on. That sweep is
+   a cheap reusable truncation detector.
+2. **React Router single-fetch: delaying the whole .data request can NEVER
+   show a Suspense skeleton** — the router stays on the previous page until
+   the loader returns; the skeleton's only window is the deferred stream.
+   Exercise it with a TEMP server-side delay + goto waitUntil:'commit'.
+   Bonus: the deferred stream hard-times-out ~5s → error boundary, so keep
+   test delays under that.
+3. **Idle-without-delivery: 3rd occurrence, same cure.** Treat the idle
+   notification as the ping trigger; the chase-up produced a complete
+   high-quality report within one message.
+4. **Shared-browser handback protocol works:** IPC-ask the holding session to
+   browser_close (wake-on-message), then take over; killing its chrome is
+   classifier-blocked as cross-agent interference. Budget ~5 min for the
+   handback; verify with a cheap resize call.
+5. Validators given "no residue" constraints innovate honestly: markup-proxy
+   probes (inject the literal source class string, measure, remove) verified
+   a surface no fixture data could render, correctly labeled as proxy.
+
+---
+## bloop: item 12 — janitor accountability re-gate (i-dream) — 2026-07-13
+
+**Purpose:** Eleventh run; re-gate after the first validator hung 20 min and was
+killed. Gate: ISSUES-FOUND — 1 BLOCKER, 4 HIGH, 2 MAJOR; streak now 11/11.
+
+**Insights:**
+
+1. **Second consecutive idle-without-delivery** despite the verbatim delivery
+   clause; one chase-up ping again recovered a complete, high-quality report.
+   Two-for-two says: stop treating the clause as sufficient — ping on the idle
+   notification as standard procedure (or build the auto-nudge; proposal-worthy
+   if it happens a third time).
+2. **The fix pass found a defect the gate missed** (restore-dir tokens for
+   file-target retention rules named `<file>/_archived/<date>`, which never
+   exists — live since the insight-feedback rule shipped). Reading code to FIX
+   a finding is itself a discovery pass; budget a real read per finding, not
+   just the patch.
+3. **Re-run the gate's own failed mutation after adding the fixture.** The
+   validator proved idempotence-guard deletion stayed green; after
+   tests/revert_autonomous.rs the same mutation goes red. "Fixture added" is
+   unverified until the original mutation has been watched failing.
+4. **lm pre-gate cumulative: 9 valid-location opinions, 0 real** across two
+   diffs. Its value is cheap negative confirmation plus naming the surfaces to
+   read closely — the three clusters it flagged were exactly where the paid
+   gate's real findings clustered (same files, different defects).
+
+---
+## bloop: F5 speedway files restructure (versable) — 2026-07-13
+
+**Purpose:** Tenth run. Gate: PASS-WITH-NOTES — 2 minors found after a full
+browser self-review that felt complete.
+
+**Insights:**
+
+1. **Gate streak now 10/10.** Both minors were "default else branch" blind
+   spots: a param-sync effect whose else-chain never handled the
+   unresolvable-id case, and an empty state whose copy assumed one cause for
+   rows.length===0. Prompting validators with concrete malformed inputs
+   (garbage id, cross-workspace id, headers-only CSV) is what surfaced both.
+2. **Validators that exercise data-mutating UIs leave durable residue** — this
+   one uploaded 4 attack files into a live test workspace (no delete
+   affordance exists). Add to such dispatch prompts: "list every artifact you
+   created that you could not remove" — got that for free this time via its
+   housekeeping note; make it mandatory next time.
+3. **Idle-without-delivery happened again despite the verbatim delivery
+   clause.** One SendMessage chase-up ("deliver now, mark unexercised claims
+   UNCONFIRMED") resumed it and the report was complete and high-quality.
+   Treat the idle notification as a prompt to ping, not a failure.
+4. **The optional lm pre-gate silently no-ops on macOS** — `timeout` doesn't
+   exist, so the pipe fed empty stdin to findings-gate. Guard with
+   `command -v timeout` or drop the cap; the paid gate is unaffected.
+
+---
 ## bloop: item 13 — rejection memory (i-dream) — 2026-07-13
 
 **Purpose:** Ninth run. Gate: ISSUES-FOUND — the strongest gate result yet: it

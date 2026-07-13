@@ -952,6 +952,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/dream/dream-insights-prompt.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/user-prompt-submit.sh",
             "async": true
           }

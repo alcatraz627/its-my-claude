@@ -34,12 +34,15 @@ DREAM_ENABLED=0
 # without flipping the machine-wide flag.
 [ "${INJECT_DREAM:-}" = "1" ] && DREAM_ENABLED=1
 
-python3 - "$DIGEST_FILE" "$ASSOC_FILE" "$DREAM_ENABLED" <<'PYEOF'
+python3 - "$DIGEST_FILE" "$ASSOC_FILE" "$DREAM_ENABLED" "${INJECT_PART:-all}" <<'PYEOF'
 import sys, json, os
 
 digest_path = sys.argv[1]
 assoc_path = sys.argv[2]
 dream_enabled = sys.argv[3] == "1"
+# 'all' = the full SessionStart block; 'ranked' = ONLY the query-ranked lessons
+# section, for the first-prompt UserPromptSubmit lane (docs/25 item 15 tail).
+part_mode = sys.argv[4] if len(sys.argv) > 4 else 'all'
 
 parts = []
 
@@ -49,7 +52,7 @@ parts = []
 # more.
 
 # Part 1: Digest summary (compact, pre-synthesized)
-if dream_enabled and os.path.isfile(digest_path):
+if dream_enabled and part_mode != 'ranked' and os.path.isfile(digest_path):
     try:
         with open(digest_path, 'r', encoding='utf-8', errors='replace') as f:
             digest = f.read().strip()
@@ -85,6 +88,10 @@ if dream_enabled:
         # stdin carries cwd at SessionStart; env overrides serve tests and
         # the future prompt-conditioned lane.
         raw_query = os.environ.get('INJECT_QUERY', '')
+        # A byte-capped env value can arrive with a torn multibyte character
+        # (surrogateescape); normalize now so no later strict re-encode —
+        # logging, JSON round-trip — can ever throw on it.
+        raw_query = raw_query.encode('utf-8', 'replace').decode('utf-8', 'replace')
         cwd = os.environ.get('INJECT_CWD') or os.environ.get('PWD', '')
         query_tokens = set()
         for src in (raw_query, cwd.replace('/', ' ').replace('-', ' ')):
@@ -130,13 +137,44 @@ if dream_enabled:
                 continue
         scored.sort(key=lambda t: t[0], reverse=True)
         ranked = [it for (_s, it) in scored[:5]]
+        # The prompt lane only speaks when it has something NEW: if the
+        # re-ranked top-5 matches the last dream injection (either lane), it
+        # stays silent — SessionStart already delivered exactly this set.
+        # Tolerant per-line read: a malformed ledger line costs only itself.
+        ranked_ids = [it.get('stable_id', '') for it in ranked]
+        if ranked and part_mode == 'ranked':
+            try:
+                # Dedupe against what THIS session was shown — records are
+                # matched by sid, never globally: the last global entry may
+                # belong to a different concurrent session, and matching it
+                # would silently starve this one (gate finding 1, 2026-07-14).
+                # Records without sid (pre-change history) never match.
+                my_sid = os.environ.get('INJECT_SID', '')
+                inj_path = os.path.expanduser("~/.claude/i-dream/injections.jsonl")
+                last_ids = None
+                if my_sid and os.path.isfile(inj_path):
+                    with open(inj_path, 'r', encoding='utf-8', errors='replace') as f:
+                        for line in f:
+                            try:
+                                obj = json.loads(line)
+                            except Exception:
+                                continue
+                            if (isinstance(obj, dict)
+                                    and obj.get('kind') in (
+                                        'dream-ranked', 'dream-ranked-prompt')
+                                    and obj.get('sid') == my_sid):
+                                last_ids = obj.get('ids')
+                if last_ids == ranked_ids:
+                    ranked = []
+            except Exception:
+                pass
         if ranked:
             lines = [f"[{s:.2f}] {str(it.get('text','')).strip()}"
                      for (s, it) in scored[:5]]
-            parts.append(
-                "## Lessons ranked for this session (dream consolidation)\n"
-                + "\n".join(lines)
-            )
+            title = ("## Lessons re-ranked for this prompt (dream consolidation)"
+                     if part_mode == 'ranked'
+                     else "## Lessons ranked for this session (dream consolidation)")
+            parts.append(title + "\n" + "\n".join(lines))
             # Entropy health signal (docs/25 item 15): log WHICH lessons were
             # injected so `i-dream reflect` can measure injected-set variety.
             # Test runs stay out of the health data.
@@ -145,15 +183,19 @@ if dream_enabled:
                     import datetime as _dt
                     inj_dir = os.path.expanduser("~/.claude/i-dream")
                     os.makedirs(inj_dir, exist_ok=True)
-                    rec = json.dumps({
+                    rec = {
                         "ts": _dt.datetime.now(_dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-                        "kind": "dream-ranked",
-                        "ids": [it.get('stable_id', '') for it in ranked],
+                        "kind": ("dream-ranked-prompt" if part_mode == 'ranked'
+                                 else "dream-ranked"),
+                        "ids": ranked_ids,
                         "cwd_leaf": cwd_leaf,
-                    })
+                    }
+                    sid = os.environ.get('INJECT_SID', '')
+                    if sid:
+                        rec["sid"] = sid
                     with open(os.path.join(inj_dir, "injections.jsonl"), "a",
                               encoding="utf-8") as f:
-                        f.write(rec + "\n")
+                        f.write(json.dumps(rec) + "\n")
                 except Exception:
                     pass
     # Never break SessionStart: a ranking failure just skips the dream half.
@@ -173,7 +215,7 @@ import re
 _atone_dir = os.path.expanduser(os.environ.get('ATONE_DIR_OVERRIDE') or "~/.claude/atone")
 _atone_tldr = os.path.join(_atone_dir, "derived/_tldr.txt")
 _atone_tldr_off = os.path.join(_atone_dir, ".tldr-off")
-if os.path.isfile(_atone_tldr) and not os.path.isfile(_atone_tldr_off):
+if part_mode != 'ranked' and os.path.isfile(_atone_tldr) and not os.path.isfile(_atone_tldr_off):
     try:
         with open(_atone_tldr, 'r', encoding='utf-8', errors='replace') as f:
             tldr = f.read().strip()
@@ -385,7 +427,10 @@ header = (
     "patterns from the atone system. Behavioral directives — read once per session._\n\n"
 )
 
-content = header + "\n\n".join(parts)
+# The prompt lane emits only its own section — the SessionStart block already
+# delivered the header and the atone TL;DR.
+content = ("\n\n".join(parts) if part_mode == 'ranked'
+           else header + "\n\n".join(parts))
 
 # Hard cap at 3500 chars to stay lean
 if len(content) > 3500:

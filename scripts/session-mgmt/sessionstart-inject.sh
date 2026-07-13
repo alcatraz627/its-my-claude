@@ -27,6 +27,13 @@ command -v jq >/dev/null 2>&1 || exit 0
 
 INPUT=$(cat 2>/dev/null || echo '{}')
 
+# The session id rides to injectors as INJECT_SID: dream-insights stamps its
+# ledger records with it, so the first-prompt lane can dedupe against what
+# THIS session was shown — not whatever session happened to inject last
+# (item-15 gate finding 1, 2026-07-14).
+INJECT_SID=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+export INJECT_SID
+
 # The injectors, in display order. Each is a script that reads the SessionStart
 # payload on stdin and prints {additionalContext|hookSpecificOutput} or nothing.
 INJECTORS=(
