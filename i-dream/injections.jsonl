@@ -1275,3 +1275,8 @@
 {"ts": "2026-07-13T06:52:52Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "structural-claim-without-reading-code", "handoff-without-naming-decaying-prereqs"]}
 {"ts": "2026-07-13T06:59:59Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "structural-claim-without-reading-code"]}
 {"ts": "2026-07-13T07:02:11Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "structural-claim-without-reading-code"]}
+{"ts": "2026-07-13T07:38:53Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T07:50:46Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T08:00:08Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T08:06:25Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T08:07:31Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}

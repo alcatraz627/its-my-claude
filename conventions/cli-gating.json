@@ -22,7 +22,7 @@
     },
     {
       "cli": "gh",
-      "read_verbs": ["auth", "browse", "status", "repo view", "repo list", "pr view", "pr list", "pr diff", "pr checks", "issue view", "issue list", "run view", "run list", "release view", "release list", "search", "label list", "help", "--version"],
+      "read_verbs": ["auth", "browse", "status", "repo view", "repo list", "pr view", "pr list", "pr diff", "pr checks", "issue view", "issue list", "run view", "run list", "release view", "release list", "workflow view", "workflow list", "extension list", "search", "label list", "help", "--version"],
       "always_gate_verbs": ["repo delete", "release delete", "secret set", "secret delete"],
       "main_branch_gate_verbs": ["pr merge", "push", "release create", "release edit"],
       "main_branches": ["main", "master"]

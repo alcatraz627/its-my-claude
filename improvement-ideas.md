@@ -803,3 +803,17 @@ absolute path it actually wrote.
   re-invokes the agent, auto-arms at session start + resume, `CLAUDE_CODE_SESSION_ID` is
   set fresh in the monitor's env. The basis of the claude-ipc wake plugin — reusable for
   any "react to external events while idle" need.
+
+## 2026-07-13 — ghost-v2v3-a3 (ghostty-themes V2 build)
+- Ghostty binary NUL-clobbers stdout fds shared with other shell writers — give it a private pipe/file (Node spawnSync safe; multi-command shell captures not).
+- `Number(v) || fallback` swallows explicit zeros; use a Number.isFinite guard for numeric config reads.
+- Adversarial gates validate the SPEC, not the user's mental model — add a "does any side effect contradict the surface's own label?" lens to validator prompts.
+- glow hangs when piped under timeouts; use bat -l md or skip render-checks in scripts.
+- Permission denials can be design feedback: a denied live-file write during testing produced a better hermetic env-override architecture.
+
+## 2026-07-13 (data-forge, forge-ux-b4)
+
+- The meter can be the bug: a perf gate that picks its measured file by `ls | head -1` (verify.sh bundle check) and an error logger that keeps only the exec wrapper's first line (backup push) both hid real state for days. When wiring any gate/logger, name the artifact it must measure (the entry chunk index.html references; git's stderr), not a proxy that happens to exist.
+- PWA deploy staleness is a two-part fix — HTTP cache headers (immutable hashed assets + no-cache shell) AND un-precaching index.html (NetworkFirst navigations). Fixing either alone leaves "phone shows the old app" jank.
+- Hover-revealed state is invisible on touch (a check icon color:transparent-until-hover shipped unreadable on phones). Any mobile UI claim needs a touch-shaped verification, not a cursor-shaped one.
+- The push-gate hook pattern-matches the whole Bash command string: a `git commit` whose heredoc message mentions "git push" false-fires it. Clean workaround: `git commit -F <msgfile>`.

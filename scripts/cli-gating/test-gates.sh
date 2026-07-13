@@ -43,6 +43,13 @@ check ALLOW "command -v gh >/dev/null 2>&1 && echo ok"
 check ALLOW "command -V render"
 check ALLOW "gh auth status"
 check ALLOW "gh auth status 2>&1"
+# 2026-07-13: workflow/extension read verbs — blocked as FPs on 06-12, 07-06
+# (gh workflow list twice) and 05-23 (extension list); hooks-feedback events.
+check ALLOW "gh workflow list --all 2>&1"
+check ALLOW "gh workflow view deploy.yml"
+check ALLOW "gh extension list"
+check BLOCK "gh workflow run deploy.yml"
+check BLOCK "gh extension install foo/bar"
 # but `command <cli>` WITHOUT -v actually RUNS it — a write must still gate:
 check BLOCK "command gh pr merge 123"
 

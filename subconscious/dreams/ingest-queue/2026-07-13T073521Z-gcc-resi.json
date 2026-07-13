@@ -1,0 +1,21 @@
+{
+  "id": "529a8655-1857-43b5-ac9c-01322f607e2a",
+  "ts": "2026-07-13T07:35:21Z",
+  "session_id": "gcc-resi-b7",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260713-gcc-resi-b7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER (blocking):** approve the pending push \u2014 `! touch /Users/alcatraz627/.claude/.push-approved-529a8655-1857-43b5-ac9c-01322f607e2a`, then the agent re-runs `git push origin main`. Carries `f65de9c` (the fail-open fix). The agent must NOT create this sentinel.",
+    "**USER (carried, pre-existing):** rescope the 3 tier-1 port pins \u2014 `ports.sh pin 3003|3006|8001 <name> --cwd <app-root>`.",
+    "**Backlog (69 open \u00b7 7 PROMOTE):** filed but not built \u2014 `hook-common.sh` refactor (~150 duplicated lines of loop-safety across 6 hooks; stdin-read hand-copied 48\u00d7 in 3 non-equivalent failure modes); ~60MB of unbounded daemon-owned stores (needs an i-dream ownership decision first); `prop-20260713-073310-7f` (never re-enable a GUI approval channel without a real-osascript liveness proof).",
+    "**Re-measure persona-suggest** (128 fires / 0 conversions) now that its envelope is wrapped \u2014 it is UserPromptSubmit, so the envelope may not have been its problem; do not assume."
+  ],
+  "tags": []
+}

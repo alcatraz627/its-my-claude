@@ -16,6 +16,23 @@
 
 ---
 
+## session: backlog drain + pipeline rebuild + subsystem review [gcc-resi-b7] — 2026-07-13
+
+**Purpose:** Drain the gcc proposal backlog, rebuild how proposals are handled/logged/picked (atone + i-dream), review subsystems for common primitives.
+
+**Insights:**
+
+1. **Never test a security gate against a stub.** The push-gate GUI dialog passed all 8 branches against a stubbed `osascript` — and failed OPEN against the real one, which returns `button returned:Approve this push` in ~1s WITHOUT drawing the dialog. Two real pushes to main went through ungated. A stub only confirms the logic you already believe.
+2. **An approval channel must be one the agent CANNOT ACTUATE.** A dialog the agent's own process can make return "approved" is a rubber stamp the agent holds. The `! touch` sentinel is safe *because* it's created out-of-band where PreToolUse hooks don't run.
+3. **A gate's ALLOW path must be as visible as its BLOCK path.** warn-log.sh dropped the `allow-approved` label, so a gate waving pushes through logged `action=(none)`. Silent allows are how a fail-open survives unnoticed.
+4. **The recurring gcc failure is a primitive that doesn't BIND, not a primitive that's missing.** flock absent (every ledger lock a no-op — 14 torn lines reproduced); atone never emitting the tag the corroboration gate reads; `acted` detector registered for 1 of 13 plugs; ship-gate mute regex blind to half the namespace. Verify the mechanism is in force, not merely present.
+5. **Rename = contract change.** Migration 0030 renamed a tag; I never grepped for readers; the dedup that keyed on it silently returned empty and the cron re-drafted ~40 proposals, including human-rejected ones. S3, juror: very-wrong.
+6. **Bare `{additionalContext}` is silently dropped** by PreToolUse/PostToolUse — only the `hookSpecificOutput` envelope is read, with NO error and nothing in `--debug`. Four PostToolUse hooks had never reached an agent.
+
+---
+
+---
+
 ## catchup: resumed dream-rot-4e (Wave 1+2 engine, Wave 3 contract) — 2026-07-13 06:50
 
 **Purpose:** Restore context from `_20260712-dream-rot-4e.claude.md` after the user asked to catch up "on the recent i-dream-rot session".

@@ -1236,3 +1236,14 @@
 {"insight_id":"2da7f608-945a-4e8a-b641-a27b1a361270","intention_id":"0162ef79-03e7-47e1-8305-79881c315708","rating":"down","source":"auto-correction","ts":"2026-07-13T00:45:42.647736+00:00"}
 {"insight_id":"21d61695-4b84-4457-a3f1-32d4c37c6e80","intention_id":"e4a0e372-8678-4e70-b383-0760ea2451c6","rating":"down","source":"auto-correction","ts":"2026-07-13T00:45:42.647736+00:00"}
 {"insight_id":"ec56dc91-f282-476f-bc38-6eb12c7cf546","intention_id":"b641cf16-ceec-43df-84b7-fc503bdbbcd4","rating":"down","source":"auto-correction","ts":"2026-07-13T00:45:42.647736+00:00"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"6a32912f-3a09-4e09-9819-0b0d351feede","rating":"up","source":"graduation-backfill","rule":"audience-aware-writing"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"4ce186a0-760b-429d-9a66-7a80cbe9b1d4","rating":"up","source":"graduation-backfill","rule":"audience-aware-writing"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"fbd9adf4-56cf-4d44-88a6-b7d78651f0d2","rating":"up","source":"graduation-backfill","rule":"audience-aware-writing"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"79cf26d2-7486-483c-9264-3dab2b2e1c39","rating":"up","source":"graduation-backfill","rule":"cache-externally-mutated-state"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"6fe376a1-3700-4374-a9e6-b008b6df6d06","rating":"up","source":"graduation-backfill","rule":"env-var-config-pattern"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"24c09a3b-5857-4555-a6fb-eaa54d1cd7b9","rating":"up","source":"graduation-backfill","rule":"exercise-based-verification"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"372cf3a2-440e-4159-b54e-44979cf83994","rating":"up","source":"graduation-backfill","rule":"exercise-based-verification"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"03f0e79e-9f66-4741-aaaa-a8ada704e073","rating":"up","source":"graduation-backfill","rule":"structural-claim-without-reading-code"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"c0cfc843-9949-4f9a-a0fc-426061715754","rating":"up","source":"graduation-backfill","rule":"structural-claim-without-reading-code"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"f8729e32-b8b6-4809-b014-796e84458c3c","rating":"up","source":"graduation-backfill","rule":"structural-claim-without-reading-code"}
+{"ts":"2026-07-13T08:00:41Z","pattern_id":"d6a5852d-0aa8-4c0e-8e46-3a5df0245b14","rating":"up","source":"graduation-backfill","rule":"unprompted-infra-scope-creep"}
