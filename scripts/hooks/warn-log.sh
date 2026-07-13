@@ -71,7 +71,12 @@ done
 [ -n "$hook_id" ] || exit 0   # silent no-op on misuse; never break the calling hook
 # Only a recognized action reaches the line; anything else (absent, typo, junk)
 # leaves action empty so LEDGER_STRIP_EMPTY drops the field. Never reject.
-case "$action" in block|block-dry|soft|nudge|muted) : ;; *) action="" ;; esac
+# `allow-approved` is load-bearing, not cosmetic: it is how a GATE records that it
+# LET SOMETHING THROUGH. It was missing from this allowlist, so guard-git-push's
+# allow rows logged with no action at all — which is exactly why a push gate that
+# was failing open (2026-07-13, auto-answered GUI dialog) left no legible trace.
+# A gate's allow path must be as visible as its block path.
+case "$action" in block|block-dry|soft|nudge|muted|allow-approved) : ;; *) action="" ;; esac
 
 # Diagnosis context (all OPTIONAL — omitted when absent, so old callers and the
 # ~194 existing lines stay byte-identical). `project` is DERIVED here from --cwd:

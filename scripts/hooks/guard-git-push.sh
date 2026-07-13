@@ -136,36 +136,33 @@ if [ -f "$SENTINEL" ]; then
   exit 0
 fi
 
-# Native GUI approval (prop-20260706-070113-7d): a macOS modal only the USER can
-# click — works even where the harness ask-path is inert (skip-permissions).
-# Cancel is the default; a 30s timeout counts as cancel; an explicit decline is
-# remembered for this session so retried pushes go straight to the sentinel
-# block instead of re-popping the modal. Headless / no GUI / no Automation
-# permission → osascript fails → the sentinel path below, unchanged. The
-# PUSHGATE_NO_DIALOG=1 escape only picks the sentinel CHANNEL; it never lifts
-# the gate. Approval stays single-use by construction: every push re-enters
-# this hook and pops a fresh dialog.
-DECLINED="/tmp/claude-pushgate-dialog-declined-${sid_safe}"
-if [ ! -f "$DECLINED" ] && [ "${PUSHGATE_NO_DIALOG:-0}" != "1" ]; then
-  safe_why=$(printf '%s' "$why" | tr -cd 'A-Za-z0-9 ._/:@()~-' | cut -c1-120)
-  safe_repo=$(printf '%s' "$target" | tr -cd 'A-Za-z0-9 ._/:@()~-' | cut -c1-80)
-  dlg=$(osascript -e "display dialog \"Claude Code wants to run: git push
-
-Repo: ${safe_repo}
-Gate: ${safe_why}
-
-Approve this ONE push? (Cancel is safe - the agent cannot click this.)\" with title \"Claude push gate\" buttons {\"Cancel\", \"Approve this push\"} default button \"Cancel\" cancel button \"Cancel\" giving up after 30 with icon caution" 2>&1)
-  case "$dlg" in
-    *"gave up:true"*)
-      : > "$DECLINED" 2>/dev/null || true ;;                 # timeout = decline
-    *"Approve this push"*)
-      bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action allow-approved --heeded yes --detail "dialog" >/dev/null 2>&1 || true
-      exit 0 ;;
-    *-128*|*[Cc]anceled*)
-      : > "$DECLINED" 2>/dev/null || true ;;                 # explicit cancel
-    *) : ;;                                                   # no GUI → sentinel path
-  esac
-fi
+# ── DISABLED: the native-dialog approval channel is NOT SAFE here ────────────
+#
+# Shipped 2026-07-11 (prop-20260706-070113-7d), REMOVED as an approval channel
+# 2026-07-13 after it was caught failing OPEN on a live push to main.
+#
+# In this environment `osascript -e 'display dialog …'` returns in ~1 second with
+#   button returned:Approve this push, gave up:false
+# WITHOUT the dialog ever being drawn for a human. Something in the automation
+# layer answers it. The gate read that as "the user approved" and let the push
+# through — twice, on real pushes to main, silently.
+#
+# Why the tests missed it: every branch was exercised against a STUBBED osascript
+# on PATH. The stub behaved as documented; the real binary does not. A security
+# gate must be exercised against the real dependency, never a stub — the stub can
+# only confirm the logic you already believe.
+#
+# The invariant this violated: an approval channel must be one the AGENT CANNOT
+# ACTUATE. A dialog the agent's own process can cause to return "approved" is not
+# an approval — it is a rubber stamp the agent holds. The sentinel below is safe
+# precisely because the user must create it out-of-band with `! touch`, in their
+# own shell, where PreToolUse hooks do not run.
+#
+# Do not re-enable a GUI channel without first proving, on the target machine,
+# that an UNCLICKED dialog burns its full `giving up after N` timeout and returns
+# `gave up:true`. If it returns instantly, it is being auto-answered and cannot
+# carry authority. (`PUSHGATE_DIALOG_NOTIFY=1` may be added later for a
+# notify-only dialog that grants nothing — but it must never gate the exit.)
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action block --heeded unknown >/dev/null 2>&1 || true
 blockjson "⛔ PUSH GATE: this push needs fresh user approval ($why).
