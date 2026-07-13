@@ -1,3 +1,31 @@
+## bloop: 5-capability wave (local-models) — 2026-07-13
+
+**Purpose:** Five capabilities in one session, each through the loop: asset-verify,
+findings-gate, the fleet routing experiment, the E8 web lane, the imagegen loop.
+
+**Insights:**
+
+1. **The gate is 8/8 on real defects self-review missed** — and this wave's were the
+   scariest yet: a FALSE NEGATIVE (E8 dropped alpha, so transparent→opaque black read
+   as "negligible"), a fail-OPEN security gate (findings-gate let `/etc/hosts` validate
+   as evidence), and a lazy-decode traceback. Self-review never catches these.
+2. **A guard that cannot fail is worse than no guard.** TWICE this wave a validator
+   deleted a load-bearing mechanism and the battery stayed green: F11's fixture was
+   alpha=255 everywhere (so compositing was untestable), F10 had no torn-write test.
+   Always ask a validator to MUTATE the code the guard protects — a passing suite says
+   nothing until you've seen it go red.
+3. **Live > synthetic, every time.** The E8 fixture passed clean; the first real browser
+   run immediately exposed two defects it structurally could not (a phantom border-color
+   divergence from currentColor, and silent coverage gaps). Drive the real thing once
+   before believing a green fixture.
+4. **When a tool's own nudge tells you what to do, follow it** — E8's coverage note said
+   "mark them to include them"; doing so surfaced the third planted divergence. That's
+   the agent-first-tools contract paying off in the loop it was built for.
+5. **Diagnose stalls, don't wait them out.** A 38-minute "generation" at 2% CPU was a
+   half-downloaded model re-fetching from HuggingFace, not slow math. One bounded
+   diagnostic found it; the fix was a ~0s cache check in verify.sh, not patience.
+
+---
 ## bloop: Run 2 — visual-compare Phase C loop ledger (local-models) — 2026-07-12
 
 **Purpose:** Second /bloop run, first with the improved SKILL.md (delivery clause,

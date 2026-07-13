@@ -1,4 +1,4 @@
-# vis-compare taste policy (v3 — calibrated 2026-07-12, Phase D runs 1–2)
+# vis-compare taste policy (v4 — calibrated 2026-07-13, Phase D + the imagegen loop)
 
 > This file is the durable home of "which divergences matter to me." The judge reads
 > it every run. It was drafted from the design's divergence-class ladder; **it is
@@ -100,6 +100,37 @@ one real hierarchy problem. Say so, and rank it by the class it compounds into.
   worse than none.
 - The judge never disputes an extractor's measurement; if a number looks wrong, that is
   a `--revisit` with feedback, not a silent override.
+
+## Convergence: read progress from the LEDGER, never from the scores (binding)
+
+This is a **known limitation of the measurement layer, designed around** — not a taste
+call. L1's scores are region/pixel comparisons: they **saturate the moment the two
+frames' composition differs**, so they cannot see identity converging.
+
+Proven live (2026-07-13, imagine loop round 2): a seed-locked refine fixed **three of
+five** divergences — the cat came back the right colour, the right pose, the right
+render style — while the scores went *sideways or backwards* (dhash 28→24, grid-Δ
+**93.8% → 100.0%**, palette 25.7→24.5). A loop that stopped on "the scores plateaued"
+would have quit at the exact moment it was working.
+
+**The rules that follow from it:**
+
+1. **Progress = the ledger's `fixed` / `persisting` / `regressed` transitions.** Never a
+   score delta. `stall` means *two rounds with zero `fixed`* — it does not mean "scores
+   stopped falling".
+2. **Never write a divergence whose only evidence is "the score got worse".** A rising
+   `grid_delta_pct` between two rounds is not a finding; it is the metric saturating.
+   (Between A and B in a *single* comparison, scores remain valid evidence — this rule
+   is about comparing ROUNDS, not sides.)
+3. **L1's job in this lane is fabrication-proofing, not measurement.** It still forbids
+   you to assert a colour, size, or position the pixels don't support. That is all it is
+   for here.
+4. The `see diff` scores of an imagegen round are worth recording (the ledger stores
+   them) and worth *nothing* as a convergence signal. Record, don't reason from.
+
+Applies to any pair whose composition can move between rounds — imagegen above all, but
+also a UI rebuild that reflows. When in doubt, ask: *could the two frames' layouts
+differ?* If yes, the scores cannot measure progress.
 
 ## Per-project overrides (add sections as needed)
 
