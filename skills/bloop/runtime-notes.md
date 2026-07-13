@@ -1,3 +1,29 @@
+## bloop: item 16 tail — down-vote routing (i-dream) — 2026-07-13
+
+**Purpose:** Seventh live run: docs/25 item 16 tail (stale/known/wrong down-vote
+routing) + deploy. Gate: PASS-WITH-NOTES — 1 blocker + 3 majors self-review missed.
+
+**Insights:**
+
+1. **Worktree isolation doubles as a free clean-checkout build test.** The gate's
+   BLOCKER (grounding.rs never committed; repo unbuildable from history since 4
+   commits back) was invisible in the main checkout — untracked files masked it.
+   Every validator run in a worktree checks this class for free.
+2. **Timestamp-blind exoneration is a reusable attack shape**: any "mark X, then
+   treat matching events specially" design must order the mark against the event
+   (graduation-before-down). The validator found it by replaying old downs with
+   new marks in one catch-up batch.
+3. **In Rust, omission-mutations can be compile errors** (exhaustive enums) — pick
+   BEHAVIORAL mutations (re-apply penalty inside the skip arm) or the red-test
+   proof never runs.
+4. **The subagent-output guard wants its persistence clause verbatim** even when
+   bloop's Phase 4.4 parent-persists pattern applies — use the guard's own
+   read-only wording ("return FULL findings; I will persist to <path>") in the
+   dispatch prompt from the start.
+5. prefix-matching a provenance tag (starts_with("graduation")) is an immunity
+   hole — allowlist exact sources for anything that gates a penalty.
+
+---
 ## bloop: 5-capability wave (local-models) — 2026-07-13
 
 **Purpose:** Five capabilities in one session, each through the loop: asset-verify,

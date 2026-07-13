@@ -124,8 +124,22 @@ work, not bless it.
    validator — a finished agent left alive can be commandeered by a board auto-dispatcher
    and spend tokens on work nobody assigned it.
 
-The gate runs even when you are confident. In this loop's provenance, the gate caught a
-real bug on BOTH passes it ran — a self-review that felt done each time.
+The gate runs even when you are confident. Across its first 8 runs it caught a real defect
+**every single time**, always after a self-review that felt complete — including a
+fail-OPEN security gate (a fabricated `/etc/hosts` path validating as evidence) and a
+FALSE NEGATIVE (transparent→opaque black measured as "negligible"). Self-review does not
+find these.
+
+**The two lessons that cost the most (2026-07-13):**
+
+- **A passing suite proves nothing until you have watched it fail.** TWICE a validator
+  deleted a load-bearing mechanism — image compositing, atomic writes — and the battery
+  stayed green, because the fixture was structurally blind to the thing it claimed to
+  guard (an all-opaque fixture makes compositing untestable). Hence the mutation-test
+  mandate in the prompt below: *break the code the guard protects, and confirm it goes red.*
+- **Live beats synthetic.** Fixtures passed clean; the first run against a real browser
+  instantly exposed two defects they could not — a phantom divergence from a derived CSS
+  property, and a silent coverage gap. Drive the real thing once before believing green.
 
 ## Phase 5 — Fix
 
