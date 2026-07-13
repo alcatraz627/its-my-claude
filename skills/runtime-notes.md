@@ -16,6 +16,21 @@
 
 ---
 
+## core-dump: HDD NTFS read-only diagnosis session checkpoint — 2026-07-13 14:36
+
+**Purpose:** Checkpoint a home-directory (non-git, non-project) diagnostic session about a read-only-mounted NTFS "Elements" drive, before the user potentially continues into an actual FUSE-T install.
+
+**Insights:**
+
+1. When CWD has no git repo and no nested project `.claude/`, the skill's project-root resolution correctly falls back to `$HOME` itself (since `~/.claude` exists there) — checkpoint files land directly in the home directory root, which is expected but worth knowing for future home-dir sessions.
+2. No live Task-tool tasks existed for this session (`~/.claude/tasks/<uuid>/` was absent) — Pending Items had to be synthesized entirely from conversation content rather than seeded from the task list. Purely conversational/diagnostic sessions often won't have a Task list, which is fine per todo-discipline's "≥3 steps" bar, but core-dump should expect this and not treat an empty task dir as an error.
+3. `mcp__inputs__form` (Interactive Inputs MCP) was not connected this session — Phase 3.5's naming prompt fell back to computed defaults silently, as the skill spec allows. Worth checking MCP connectivity if the interactive form is expected to appear.
+4. No session workspace doc existed at `.claude/session-notes/<uuid>.md` for this session — Phase 3.7 skipped cleanly with no proposal, confirming the "skip silently if absent" path works as documented.
+
+---
+
+---
+
 ## session: backlog drain + pipeline rebuild + subsystem review [gcc-resi-b7] — 2026-07-13
 
 **Purpose:** Drain the gcc proposal backlog, rebuild how proposals are handled/logged/picked (atone + i-dream), review subsystems for common primitives.

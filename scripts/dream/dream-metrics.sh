@@ -297,6 +297,17 @@ output = {
     'collaboration_style': collab_style,
 }
 
+# Graduation-yield SLO (docs/25 item 14): fold the engine's verdict in so
+# dashboards read one file. The Rust side (yield_slo.rs) is the single writer
+# of yield-state.json; this is a read-only merge. No state file yet → omitted.
+import os
+yield_state_path = os.path.join(os.path.dirname(output_file), 'yield-state.json')
+try:
+    with open(yield_state_path) as yf:
+        output['graduation_yield'] = json.load(yf)
+except (FileNotFoundError, json.JSONDecodeError):
+    pass
+
 with open(output_file, 'w') as f:
     json.dump(output, f, indent=2)
 

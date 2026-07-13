@@ -1,3 +1,51 @@
+## bloop: item 13 — rejection memory (i-dream) — 2026-07-13
+
+**Purpose:** Ninth run. Gate: ISSUES-FOUND — the strongest gate result yet: it
+invalidated the parent's own acceptance test, not just the code.
+
+**Insights:**
+
+1. **Acceptance replays against historical data are tautology-prone**: my
+   date-only cutoff admitted rejection records written by the replayed batch's
+   own review (23:24 the night before), so every proposal "matched itself" at
+   1.0 and I claimed acceptance met. Cut replay memory at the exact write
+   INSTANT of the event under test, and have the validator check the cutoff.
+2. **When true and false positives score 0.332 vs 0.330, stop tuning the
+   threshold — the feature is missing a signal.** The discriminator was
+   structural (shared unsplit kebab compound), not statistical. Corollary:
+   hyphen-splitting tokenizers MANUFACTURE false overlap between different
+   slugs ("literal-request-over-intent" vs "over-corrected-tuning-request-…"
+   share 3 fragment words).
+3. **A mutation that stays green means the fixture is too rich** — my reworded
+   fixture also cleared the sim path, so killing the slug clause changed
+   nothing. The discriminating guard needs a case ONLY the clause under test
+   can catch (shared slug + low overlap).
+4. Validators told "the work is uncommitted, rsync a copy, main checkout
+   read-only" complied perfectly and even declined to run the binary because
+   dry-run writes a real audit log — instruction-level safety scoping works.
+
+---
+## bloop: item 14 — graduation-yield SLO (i-dream) — 2026-07-13
+
+**Purpose:** Eighth run, same session as item 16. Gate: PASS-WITH-NOTES, 1 HIGH.
+
+**Insights:**
+
+1. **Tolerant-vs-strict JSONL readers are a standing attack surface**: any
+   evaluate/verdict path that reads a ledger via a strict reader +
+   unwrap_or_default turns ONE malformed line into "no history" — which silently
+   flips whatever mode the history was holding. Ask validators to poison one
+   line of every ledger a verdict reads.
+2. **Free-hand writers named in an LLM prompt need an exact example line + a
+   parse-back step** in the prompt itself; schema prose alone invites the
+   malformed line from insight 1.
+3. **isolation:worktree can land in the WRONG repo** (its-my-claude instead of
+   the project; doubly-nested dot-claude path) — validators should verify repo
+   identity first and build their own worktree if wrong (proposal filed).
+4. Telling the validator about known pre-existing breakage (uncommitted module)
+   plus the exact unblock recipe saved the whole run from stalling on cargo.
+
+---
 ## bloop: item 16 tail — down-vote routing (i-dream) — 2026-07-13
 
 **Purpose:** Seventh live run: docs/25 item 16 tail (stale/known/wrong down-vote
