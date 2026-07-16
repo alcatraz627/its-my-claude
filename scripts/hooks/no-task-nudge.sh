@@ -29,6 +29,22 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
 SENT="/tmp/claude-notask-nudged-${sid:0:8}"
 [[ -f "$SENT" ]] && exit 0
 
+# After a /clear this hook cannot see the task list at all, so it must not talk.
+#
+# /clear rotates the session id we are handed but does not restart the Claude
+# process, and the Task store stays keyed to the PRE-clear id. Nothing here can
+# recover that id: the store's .lock is empty, there is no process-to-store index,
+# and picking the newest task dir would read a sibling session's list — the exact
+# cross-session collision removed from the atone fleet in 3432587. So the lookup
+# below returns "no tasks" for a session that may have a full list, which is how
+# this hook came to tell a session with 20 open tasks that its list was empty.
+#
+# A blind check has nothing to say. Staying silent costs a post-/clear session our
+# advisory; the harness's own todo reminder still fires there, and it reads the
+# list correctly. Sentinel written by the source==clear SessionStart injector,
+# scripts/session-mgmt/post-clear-counter-reset.sh.
+[[ -f "/tmp/claude-clear-reset-${sid:0:8}" ]] && exit 0
+
 # Substantial editing? Reuse tool-counter's per-process tallies (E=Edit, W=Write).
 # If that file isn't there yet, there's been no meaningful work — nothing to nudge.
 CF="/tmp/claude-tools-${PPID}"
