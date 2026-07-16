@@ -47,6 +47,15 @@ MIN_EDITS="${NOTASK_MIN_EDITS:-10}"
 # the current shape first, then the legacy one (a handful of pre-2026-07 dirs).
 TASK_DIR="$HOME/.claude/tasks/session-${sid:0:8}"
 [[ -d "$TASK_DIR" ]] || TASK_DIR="$HOME/.claude/tasks/$sid"
+
+# Ask ".highwatermark" — how many tasks this session EVER had — before counting
+# files. The store reaps a task's json once it completes, so a session that made a
+# list and finished it ends with zero *.json and only .highwatermark left. Counting
+# files alone would nag precisely the session that did everything right.
+hw=0
+[[ -f "$TASK_DIR/.highwatermark" ]] && hw=$(tr -dc '0-9' < "$TASK_DIR/.highwatermark" 2>/dev/null)
+(( ${hw:-0} > 0 )) && exit 0
+
 task_count=0
 [[ -d "$TASK_DIR" ]] && task_count=$(ls "$TASK_DIR"/*.json 2>/dev/null | wc -l | tr -d ' ')
 (( task_count > 0 )) && exit 0
