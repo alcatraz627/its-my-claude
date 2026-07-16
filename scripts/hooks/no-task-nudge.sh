@@ -39,8 +39,14 @@ edits=$(( e + w ))
 MIN_EDITS="${NOTASK_MIN_EDITS:-10}"
 (( edits < MIN_EDITS )) && exit 0
 
-# Zero tasks for this session? One <N>.json per task under ~/.claude/tasks/<sid>/.
-TASK_DIR="$HOME/.claude/tasks/$sid"
+# Zero tasks for this session? One <N>.json per task under the session's task dir.
+# The store names that dir session-<first-8-of-sid>; it used to be the bare session
+# id, and this hook was still looking for the bare id long after the store moved on.
+# The count therefore came back 0 for every session, so the "they already have a
+# list" exit below never fired and the nudge went to diligent sessions too. Check
+# the current shape first, then the legacy one (a handful of pre-2026-07 dirs).
+TASK_DIR="$HOME/.claude/tasks/session-${sid:0:8}"
+[[ -d "$TASK_DIR" ]] || TASK_DIR="$HOME/.claude/tasks/$sid"
 task_count=0
 [[ -d "$TASK_DIR" ]] && task_count=$(ls "$TASK_DIR"/*.json 2>/dev/null | wc -l | tr -d ' ')
 (( task_count > 0 )) && exit 0
