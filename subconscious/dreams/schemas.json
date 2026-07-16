@@ -1343,19 +1343,21 @@
     "last_seen": "2026-07-15T18:43:23.465951+00:00"
   },
   {
-    "id": "9a43dcfeaf3f37a9",
-    "text": "IPC message delivery should be confirmed by waiting for an actual round-trip reply from the peer, not by inspecting the sending agent's own logs; the user will reject log-based assurance and insist on a verified reply.",
-    "category": "tool-use",
+    "id": "6b8bd99ecff3f70f",
+    "text": "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs or send-side telemetry — a successful send does not prove the message arrived or was acted on.",
+    "category": "approach",
     "valence": "negative",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b767f5de-ba1a-4231-865c-b028d79cc007",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
     "member_ids": [
-      "b767f5de-ba1a-4231-865c-b028d79cc007"
+      "b767f5de-ba1a-4231-865c-b028d79cc007",
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f"
     ],
     "member_texts": [
-      "IPC message delivery should be confirmed by waiting for an actual round-trip reply from the peer, not by inspecting the sending agent's own logs; the user will reject log-based assurance and insist on a verified reply."
+      "IPC message delivery should be confirmed by waiting for an actual round-trip reply from the peer, not by inspecting the sending agent's own logs; the user will reject log-based assurance and insist on a verified reply.",
+      "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs or send-side telemetry — a successful send does not prove the message arrived or was acted on."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -1369,10 +1371,14 @@
       "sys-monitor",
       "its-my-config",
       "frontend",
-      "staging-enhancement-product"
+      "staging-enhancement-product",
+      "-Users-alcatraz627",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers"
     ],
     "first_seen": "2026-07-15T18:43:23.465951+00:00",
-    "last_seen": "2026-07-15T18:43:23.465951+00:00"
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
   },
   {
     "id": "12a814f4c9163088",
@@ -1407,19 +1413,21 @@
     "last_seen": "2026-07-15T18:43:23.465951+00:00"
   },
   {
-    "id": "4010cebbcc946e65",
-    "text": "The user prefers the agent to batch sequential work and only halt at genuine decision points or critical reviews, not at every short distance for lightweight go-aheads that force the user to context-switch repeatedly.",
+    "id": "464e86ec3a58a107",
+    "text": "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into autonomous runs and halt only at genuine decision points, blocking reviews, or missing user input.",
     "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "3e65b552-28c9-477a-b4f3-d81ac422342a",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "6e0419e3-4fc4-492d-be7f-ba6f18976030",
     "member_ids": [
-      "3e65b552-28c9-477a-b4f3-d81ac422342a"
+      "3e65b552-28c9-477a-b4f3-d81ac422342a",
+      "6e0419e3-4fc4-492d-be7f-ba6f18976030"
     ],
     "member_texts": [
-      "The user prefers the agent to batch sequential work and only halt at genuine decision points or critical reviews, not at every short distance for lightweight go-aheads that force the user to context-switch repeatedly."
+      "The user prefers the agent to batch sequential work and only halt at genuine decision points or critical reviews, not at every short distance for lightweight go-aheads that force the user to context-switch repeatedly.",
+      "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into autonomous runs and halt only at genuine decision points, blocking reviews, or missing user input."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -1433,10 +1441,14 @@
       "sys-monitor",
       "its-my-config",
       "frontend",
-      "staging-enhancement-product"
+      "staging-enhancement-product",
+      "-Users-alcatraz627",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers"
     ],
     "first_seen": "2026-07-15T18:43:23.465951+00:00",
-    "last_seen": "2026-07-15T18:43:23.465951+00:00"
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
   },
   {
     "id": "7be2c3212d486610",
@@ -1565,5 +1577,293 @@
     ],
     "first_seen": "2026-07-15T18:43:23.465951+00:00",
     "last_seen": "2026-07-15T18:43:23.465951+00:00"
+  },
+  {
+    "id": "5e4daed24d7eb7de",
+    "text": "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme — suggesting diverging names across sibling artifacts in the same namespace is wrong without an explicit reason.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "880920ef-e5dc-4201-beb6-37e7ca3ce620",
+    "member_ids": [
+      "880920ef-e5dc-4201-beb6-37e7ca3ce620"
+    ],
+    "member_texts": [
+      "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme — suggesting diverging names across sibling artifacts in the same namespace is wrong without an explicit reason."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "941ec9df107ed817",
+    "text": "CLI authentication commands (e.g. cloud provider logins) require an interactive terminal and cannot be automated; flag this to the user up front and hand off the auth step rather than attempting it and failing.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "38428655-aa74-48c8-b491-d727d6916ad0",
+    "member_ids": [
+      "38428655-aa74-48c8-b491-d727d6916ad0"
+    ],
+    "member_texts": [
+      "CLI authentication commands (e.g. cloud provider logins) require an interactive terminal and cannot be automated; flag this to the user up front and hand off the auth step rather than attempting it and failing."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "c882ade1abbaac2d",
+    "text": "In multi-agent IPC setups where sessions are cleared periodically, registered aliases become stale after the owning session restarts; fall back to bare sessionId addressing for reliable delivery rather than trusting previously-registered aliases.",
+    "category": "architecture",
+    "valence": "neutral",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e95ee8cd-6c8a-421e-8c50-79ab40b6e948",
+    "member_ids": [
+      "e95ee8cd-6c8a-421e-8c50-79ab40b6e948"
+    ],
+    "member_texts": [
+      "In multi-agent IPC setups where sessions are cleared periodically, registered aliases become stale after the owning session restarts; fall back to bare sessionId addressing for reliable delivery rather than trusting previously-registered aliases."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "209fcd3b0b7ca72b",
+    "text": "When a sub-agent fleet hits API errors mid-run, salvage all finished work and re-dispatch only the failed agents rather than restarting the entire fleet.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "92ef2275-c753-4a0f-9d1b-97d721788c11",
+    "member_ids": [
+      "92ef2275-c753-4a0f-9d1b-97d721788c11"
+    ],
+    "member_texts": [
+      "When a sub-agent fleet hits API errors mid-run, salvage all finished work and re-dispatch only the failed agents rather than restarting the entire fleet."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "5a72c9ae2556e456",
+    "text": "When the user wants broad review coverage over a large surface, a fleet of lower-cost agents covering more items is preferable to fewer high-cost agents; the user values coverage and total number of findings over per-finding depth.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "28c552de-aac0-48ad-8489-c807411b7026",
+    "member_ids": [
+      "28c552de-aac0-48ad-8489-c807411b7026"
+    ],
+    "member_texts": [
+      "When the user wants broad review coverage over a large surface, a fleet of lower-cost agents covering more items is preferable to fewer high-cost agents; the user values coverage and total number of findings over per-finding depth."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "681d03b299855ed7",
+    "text": "Keying each result in a batch job by (judge + item + discriminating labels) enables resuming mid-run on abort or API error without re-paying already-completed work — build resumable caches for expensive fan-out jobs.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "a52dc8a9-03d7-4909-8339-9e8192306e4f",
+    "member_ids": [
+      "a52dc8a9-03d7-4909-8339-9e8192306e4f"
+    ],
+    "member_texts": [
+      "Keying each result in a batch job by (judge + item + discriminating labels) enables resuming mid-run on abort or API error without re-paying already-completed work — build resumable caches for expensive fan-out jobs."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "e399f332739e1648",
+    "text": "Dispatching gemini sub-agents to scan historical session transcripts is an effective recovery pattern when the current session has lost context about prior task state or accumulated feedback across many past sessions.",
+    "category": "tool-use",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "81e21426-b95e-4527-8cc8-e83a980470f9",
+    "member_ids": [
+      "81e21426-b95e-4527-8cc8-e83a980470f9"
+    ],
+    "member_texts": [
+      "Dispatching gemini sub-agents to scan historical session transcripts is an effective recovery pattern when the current session has lost context about prior task state or accumulated feedback across many past sessions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "a1e401a1920987b0",
+    "text": "macOS ships without `timeout` or `gtimeout`; wrapping long-running scripts in a shell timeout on macOS silently orphans child processes and does not actually cap execution — use the script's own async timeout mechanism instead.",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "dd881c1f-5f4f-45bd-9b33-76770934ba07",
+    "member_ids": [
+      "dd881c1f-5f4f-45bd-9b33-76770934ba07"
+    ],
+    "member_texts": [
+      "macOS ships without `timeout` or `gtimeout`; wrapping long-running scripts in a shell timeout on macOS silently orphans child processes and does not actually cap execution — use the script's own async timeout mechanism instead."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "719d2e984e293ac0",
+    "text": "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without reflecting them in the task list causes the live status view to drift and confuses both the user and future turns.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "fbf0922a-6fa1-4c02-ac46-be9d438dbd95",
+    "member_ids": [
+      "fbf0922a-6fa1-4c02-ac46-be9d438dbd95"
+    ],
+    "member_texts": [
+      "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without reflecting them in the task list causes the live status view to drift and confuses both the user and future turns."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00"
   }
 ]

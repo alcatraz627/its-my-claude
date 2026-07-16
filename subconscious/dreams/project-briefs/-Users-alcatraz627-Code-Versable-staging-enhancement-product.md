@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-15T18:50:13.324814+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-16T07:37:01.668976+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-Versable's staging enhancement product — a multi-agent, multi-surface codebase with data extraction pipelines, access-control gates, and externally-shared documents. Protected repo: prepare diffs, hand commits to the user.
+A Versable enhancement product (staging environment) — a multi-agent, multi-surface codebase with IPC coordination between parallel agents, protected-repo commit discipline, and external stakeholder-facing documents generated from internal sessions.
 
 ## Things to do (or keep doing)
-- **Breadth-first before depth**: complete a v1 pass across all surfaces before polishing any single area; sweep, then refine.
-- **Explore and ground first**: read the relevant code, surface a recommendation, then edit — never jump to edits cold.
-- **Batch work, pause at real decision points only**: don't interrupt for lightweight go-aheads; halt at genuine forks or critical reviews.
-- **Runtime exercise over test-count**: dogfood the affected flow live; claimed correctness from 99+ tests without running the path is insufficient.
+- **Batch sequential work autonomously** — halt only at genuine decision points or critical reviews, never ask for lightweight go-aheads on short-distance progress
+- **Breadth-first v1 sweeps** — cover all surfaces before polishing any single one; pausing mid-sweep to perfect one area breaks the pass
+- **Treat state-ledger writes as blocking** — IPC replies, task updates, and commit handoffs execute immediately after completing a unit of work, never deferred as bookkeeping
+- **Dogfood over test coverage** — actually run the affected flow; 99+ passing tests don't substitute for exercising the live path
 
 ## Things to avoid
-- **Don't use `rg -rn`** — `-r` is `--replace`, not recursive; use `rg -n` for line numbers.
-- **Don't default-allow in access gates**: unrecognized commands must DENY; a default-allow fallback invalidates the entire gate.
-- **Don't patch the instance, fix the class**: adding one CLI to a fallback list while leaving the structural default-allow in place re-exposes the same vulnerability.
-- **Don't defer state-ledger writes**: `TaskUpdate`, IPC reply, and git commit are blocking obligations after each unit — not bookkeeping to batch later.
+- **Don't emit plausible defaults for unknown input** — access gates default DENY (not ALLOW), data extractors must fail visibly (not `get('x', 0)`), fallback paths need explicit failure modes
+- **Don't patch one instance of a structural problem** — adding one CLI to a fallback list without fixing the default-allow gate leaves the same bypass open for the next unknown
+- **Don't include internal banter or stakeholder critique in any drafted document** — external docs get stripped of all conversational framing before writing, not after
+- **Don't confirm IPC delivery from the sender's own logs** — wait for an actual round-trip reply; send-side telemetry proves nothing about receipt
 
 ## Open questions / known gaps
-- Multi-agent IPC coordination is a recurring friction point: parallel agents must pre-negotiate ownership via IPC before starting, and unanswered peer queries must be replied to before session end.
-- Enforcement placed at advisory/text layers is silently bypassable by agents that don't read them; gates belong at the data-write layer (hook, CLI, schema check).
+- IPC coordination discipline under high parallelism degrades: agents start overlapping claims without pre-negotiating ownership, producing muddy task state that compounds across the session
+- `rg -rn` silently mangles output (`-r` = `--replace`); shell quoting of IPC message bodies corrupts payloads — both are recurring tool-use failure modes with no mechanical guard yet

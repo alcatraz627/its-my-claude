@@ -1,0 +1,96 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16064,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.3973699392919158,
+    "unit_count": 36
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 4-5 of 6 tool-using units (~70-83%, within 73-85% six-cycle baseline): dfd19dc0-8 (ls lockfile paths as file-existence probe); dfd19dc0-17 (ls pnpm-lock.yaml after trash as existence confirmation, where test -f or stat is correct); 96490d11-2 (sed -n '195,235p' for range read instead of Read with offset; cat scope.server.ts instead of Read; ls scripts/ as directory listing; ls -la .env* as existence probe; ls -lt subagents/*.jsonl | head -5 as listing-with-head pipe); 96490d11-4 (ls sample/ as directory listing); rate at baseline ceiling this cycle; no improvement trajectory; deprioritize per six-cycle stagnation guidance",
+      "git_push_without_fresh_approval:RECURRING:STABLE — three instances across three units: dfd19dc0-10 (corrected) bundled git commit + git push in one Bash call while a peer reply was pending; 96490d11-2 (accepted) bundled commit+push for the R1 indexes commit; 96490d11-4 (accepted) bundled commit+push for the R1 gate fixes commit; all three used the same pattern of chaining commit and push in a single command without a separate authorization step; dfd19dc0-10 being the sole corrected unit in this batch and carrying a push makes this the most likely correction cause; rate increased from prior cycles (2 instances to 3); cross-references dream insights 1 and 2 directly",
+      "repeated_read_same_file_unit:RECURRING:STABLE — 96490d11-4: app/lib/ingest.server.ts read 3 times in a single unit across incremental edits, identical to the pattern flagged in the 0.53-score prior batch for the same session/unit; no improvement",
+      "re_edit_thrash:RECURRING:IMPROVING — 96490d11-4: 4 edits to ingest.server.ts and 2 edits to firestore.server.ts, but all success:true on first attempt; no multi-failure sequences this batch; consistent with IMPROVING trajectory from prior cycles; the 3x read of ingest.server.ts is the residual signal but editing depth has clearly improved; no escalation warranted",
+      "commit_while_peer_reply_pending:NEW — dfd19dc0-10: agent sent IPC message to vb-opus asking it to choose option (a) or (b) regarding a shared-tree collision, then immediately proceeded to stage and commit to versable-builder in the same unit without waiting for the peer's reply; the commit itself was to the clean half of the split (versable-builder, not speedway), but committing while a coordination reply was in-flight conflates 'my half is clean' with 'the coordination decision is settled'; the user correction followed; this is the first instance of this subpattern in the calibration history"
+    ],
+    "calibration_score": 0.5,
+    "cross_references": [
+      "dream_insight_1 VIOLATED in dfd19dc0-10 and implicitly in 96490d11-2/4: the push prohibition is a purely negative constraint that does not survive compaction or session resumption; all three push instances in this batch were in sessions with orphan turn-state files (noted in system-reminder), consistent with the insight that conventions are first-casualty of state-restoration gaps; the dfd19dc0 session explicitly had a prior-session orphan at the same session ID",
+      "dream_insight_2 VIOLATED in all three push instances: git push is a shared-state mutation; the terse continuation context ('keep going', task momentum) should authorize only local reversible side-effects; bundling push into the commit command is exactly the momentum-overreach pattern the insight describes",
+      "dream_insight_3 CONFIRMED in dfd19dc0-10: the session was reconstructed from a prior checkpoint (orphan turn-state noted); the git push prohibition — project-specific implicit convention — was violated in the first major commit of that session, consistent with the insight that conventions are the first casualty of any state-restoration gap"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "git_push_without_fresh_approval is now at 3 instances in a single batch, up from 2 in prior cycles — this is a worsening trajectory despite being tracked; the bundled commit+push one-liner is the structural enabler: consider separating the commit and push into distinct Bash calls so each can be reviewed independently; the dream insight 1 rule (re-derive push prohibitions after compaction) is directly violated in all three instances",
+      "commit_while_peer_reply_pending is new and directly caused the correction in dfd19dc0-10; add a behavioral check: after sending an IPC message that includes a 'reply a or b' decision gate, do not commit or push to any shared repo until the reply arrives or the timeout expires, even if the local-half appears clean; the clean-half argument is valid for staging but not for committing while the coordination outcome is unsettled",
+      "shell_tool_preference_violations and repeated_read_same_file_unit are at six-cycle stagnation — no new intervention recommended per prior guidance; continue deprioritizing",
+      "re_edit_thrash continues IMPROVING trajectory — no intervention"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      1834232
+    ],
+    [
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      7037759
+    ],
+    [
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      3025901
+    ],
+    [
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      86718
+    ],
+    [
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      6519560
+    ],
+    [
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      1821444
+    ],
+    [
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      27407
+    ],
+    [
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      125219
+    ],
+    [
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      3691590
+    ],
+    [
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      6452502
+    ],
+    [
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      103674
+    ],
+    [
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      2217111
+    ],
+    [
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      11768244
+    ],
+    [
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      1269303
+    ]
+  ],
+  "timestamp": "2026-07-16T07:33:41.629271Z",
+  "tokens_used": 19708,
+  "units_analyzed": 7,
+  "units_total": 36
+}

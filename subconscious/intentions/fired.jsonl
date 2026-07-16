@@ -1721,3 +1721,13 @@
 {"intention_id":"2ae25902-863b-4ed6-87e8-ff8ba53eafd8","fired_at":"2026-07-15T18:52:20.035660Z","session_id":"","was_relevant":null}
 {"intention_id":"e00b9d16-4482-4174-98a1-63f0310834de","fired_at":"2026-07-15T18:52:20.035660Z","session_id":"","was_relevant":null}
 {"intention_id":"0095a447-c22e-4a13-a200-ad2a0519e843","fired_at":"2026-07-15T18:52:20.035660Z","session_id":"","was_relevant":null}
+{"intention_id":"45c30a1c-c991-4322-af9f-6a41aff430d1","fired_at":"2026-07-16T07:31:51.717532Z","session_id":"","was_relevant":true}
+{"intention_id":"a687cf9a-7dc6-44ab-bd3d-eccf5802eaf5","fired_at":"2026-07-16T07:31:51.717532Z","session_id":"","was_relevant":true}
+{"intention_id":"45c30a1c-c991-4322-af9f-6a41aff430d1","fired_at":"2026-07-16T07:33:44.286206Z","session_id":"","was_relevant":null}
+{"intention_id":"a687cf9a-7dc6-44ab-bd3d-eccf5802eaf5","fired_at":"2026-07-16T07:33:44.286206Z","session_id":"","was_relevant":null}
+{"intention_id":"45c30a1c-c991-4322-af9f-6a41aff430d1","fired_at":"2026-07-16T07:34:30.703989Z","session_id":"","was_relevant":null}
+{"intention_id":"a687cf9a-7dc6-44ab-bd3d-eccf5802eaf5","fired_at":"2026-07-16T07:34:30.703989Z","session_id":"","was_relevant":null}
+{"intention_id":"45c30a1c-c991-4322-af9f-6a41aff430d1","fired_at":"2026-07-16T07:34:44.514857Z","session_id":"","was_relevant":null}
+{"intention_id":"a687cf9a-7dc6-44ab-bd3d-eccf5802eaf5","fired_at":"2026-07-16T07:34:44.514857Z","session_id":"","was_relevant":null}
+{"intention_id":"45c30a1c-c991-4322-af9f-6a41aff430d1","fired_at":"2026-07-16T07:35:03.390188Z","session_id":"","was_relevant":null}
+{"intention_id":"a687cf9a-7dc6-44ab-bd3d-eccf5802eaf5","fired_at":"2026-07-16T07:35:03.390188Z","session_id":"","was_relevant":null}

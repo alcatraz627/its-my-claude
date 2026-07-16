@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-15T18:48:44.746968+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-16T07:37:22.290839+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-Multi-agent coordination infrastructure with IPC-based session handoffs and document authoring for external stakeholders. Working style is parallel agent execution with frequent ownership contention and state synchronization requirements.
+Frontend codebase with multi-agent and IPC-adjacent tooling; dominant working style is breadth-first sweeps followed by targeted deep work, with the agent expected to run autonomously between genuine decision points.
 
 ## Things to do (or keep doing)
-- Pre-negotiate task ownership via IPC before any parallel agent starts writing; verify peer hasn't already completed an item before touching it
-- Treat TaskUpdate, IPC reply, and git commit as blocking obligations — execute immediately after completing a unit of work, never defer as bookkeeping
-- Re-verify task list, file contents, and config validity at action time, not plan time — external writers can mutate state between planning and execution
-- Breadth-first v1 across all surfaces before polishing any single item; batch sequential work and halt only at genuine decision points
+- Explore and ground in the existing codebase first; surface a recommendation before touching any code.
+- Prefer breadth-first v1 passes across all surfaces before polishing individual items — complete the sweep, then circle back.
+- Batch sequential work into autonomous runs; halt only at genuine decision points or blocking reviews, not at every short-distance progress step.
+- Treat state-ledger writes (TaskUpdate, IPC replies, commits) as blocking obligations — execute immediately after completing each unit of work, never defer as "bookkeeping."
 
 ## Things to avoid
-- Don't use `rg -rn` for line-number searches — `-r` is `--replace` and silently mangles output; use `rg -n` only
-- Don't confirm IPC delivery by reading your own send logs — wait for an actual round-trip reply from the peer
-- Don't patch one instance of a policy violation without fixing the structural default (e.g., adding one CLI to an allowlist leaves the bypass class open); access gates must default DENY for unrecognized input
-- Don't strip technical detail when correcting document tone for external audiences — target only inappropriate register, not engineering substance
+- Don't use `rg -rn` — `-r` is `--replace`, not recursive; use `rg -n` for line numbers in recursive searches.
+- Don't patch a specific instance of a structural problem (e.g., one CLI in a fallback list) without fixing the underlying class; instance patches leave the structural default intact and suppress investigation.
+- Don't include internal banter, critique of stakeholders, or conversational framing in any document that may be shared externally — strip those before writing.
+- Don't ask a decision question without enough background and tradeoffs to make it self-contained; questions that require follow-up before the user can answer are wasted round-trips.
 
 ## Open questions / known gaps
-- IPC alias persistence across context-clears is fragile; checkpoint must record peer alias but re-establishment protocol is not consistently followed
-- Enforcement of multi-agent behavioral constraints lands at advisory layer (SKILL.md, spec text) instead of data-write gates, making it bypassable by agents that skip startup reads
+- Task list hygiene degrades under parallelism; TaskUpdate calls lag edits, leaving the TUI blind. No structural fix confirmed yet.
+- Access-gate defaults (ALLOW vs DENY for unrecognized input) have been patched at instance level but the structural audit across all gate surfaces is unresolved.

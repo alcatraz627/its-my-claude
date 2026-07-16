@@ -1,19 +1,22 @@
-<!-- i-dream project brief · 2026-07-15T18:51:24.640087+00:00 · 12 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-07-16T07:34:42.014549+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-A multi-agent enhancement pipeline with heavy IPC coordination between peer sessions and sub-agent fleets for corpus analysis and document production. Dominant working style is parallel dispatch-heavy, with recurring context-clear cycles.
+Multi-agent orchestration and IPC coordination work, likely on a product codebase, with heavy use of parallel sub-agent fleets, review pipelines, and cross-session message passing.
 
 ## Things to do (or keep doing)
-- **Treat TaskUpdate, IPC reply, and git commit as blocking obligations** — execute immediately after completing a unit of work, not as deferred bookkeeping
-- **Confirm IPC delivery via actual round-trip reply**, not by reading the sending agent's own logs; peer silence is not confirmation
-- **Include core-dump checkpoints that explicitly capture peer IPC aliases and session IDs** so successor sessions can resume coordination without rediscovery
-- **Prefer small fast models (gemini-3.5-flash) for closed-set classification** — run a small test dispatch first before committing to a full fleet
+
+- **Batch sequential work autonomously** — halt only at genuine decision points or destructive ops; never ask for lightweight go-aheads mid-run
+- **Treat state writes as blocking obligations** — update tasks, reply to IPC peers, and commit agent edits immediately after completing each unit of work, not at session end
+- **Checkpoint peer IPC aliases and session IDs** in core-dump artifacts so successor sessions can resume messaging without re-discovery
+- **Prefer fleet coverage over per-item depth** on broad reviews — more agents at lower cost beats fewer expensive ones; salvage finished work and re-dispatch only failed agents on API errors
 
 ## Things to avoid
-- **Don't halt for lightweight go-aheads** on sequential sub-tasks; batch and only pause at genuine decision points or critical reviews
-- **Don't strip technical substance when adjusting document tone** — register correction only; engineers still need the technical meat
-- **Don't skip task-list reconciliation after sub-agent bursts** — high-parallelism phases are where task hygiene reliably degrades
-- **Don't use Interactive Input MCP tools while user is in TUI fullscreen** — they will be rejected; ask in prose instead
+
+- **Don't confirm IPC delivery from send-side logs** — wait for an actual round-trip reply; the user rejects log-based assertions of successful delivery
+- **Don't leave IPC peer queries unanswered at session end** — stop hooks fire repeatedly for each unreplied message; reply before closing
+- **Don't strip technical substance when toning a document** — adjust register only; overcorrecting toward accessible prose leaves engineers without implementation detail
+- **Don't defer task list reconciliation** — high-parallelism bursts silently stale the task list; reconcile explicitly after each sub-agent completion wave
 
 ## Open questions / known gaps
-- **Cross-agent nomenclature consistency is fragile** — a shared vocabulary doc as an explicit deliverable alongside each implementation plan has helped but isn't always established upfront
-- **External document cleanup is a repeated miss** — internal critique/stakeholder framing leaks into external-facing artifacts; needs an explicit strip pass before writing
+
+- IPC aliases become stale after a session restart; no clean fallback strategy is established — bare sessionId addressing works but isn't consistently used
+- Interactive MCP input tools fail silently in TUI fullscreen mode; no established pattern for detecting this and falling back to prose prompts

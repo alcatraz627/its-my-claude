@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-15T18:49:24.612415+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-16T07:38:01.487001+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A cross-session IPC broker for Claude Code agents, enabling message-passing and coordination between parallel agent instances. Dominant style: systems/infrastructure work with tight multi-agent coordination concerns.
+A multi-agent IPC broker for Claude Code sessions — cross-session messaging, peer registration, and delivery guarantees. Dominant style: infrastructure-first, parallel agent coordination, live-exercise verification over test-coverage claims.
 
 ## Things to do (or keep doing)
-- **Prefer explicit DENY over plausible defaults** for unknown commands/inputs — unrecognized CLIs must fail loud, never silently ALLOW
-- **Confirm IPC delivery via round-trip reply**, not by inspecting sender-side logs — log presence ≠ delivery
-- **Breadth-first sweep first**: wire all surfaces to a working v1 before polishing any single area
-- **Batch sequential work** and only halt at genuine decision points — not every minor step
+- **Breadth-first before polish**: sweep all surfaces on a v1 pass; pausing mid-sweep to perfect one item breaks coherence.
+- **Batch sequential steps autonomously**: halt only at genuine decision points or critical reviews — never for lightweight go-aheads.
+- **Confirm IPC delivery via round-trip reply**, not log inspection; a successful send is not a successful delivery.
+- **Treat state-ledger writes as blocking obligations**: IPC replies, task updates, and commit steps execute immediately after completing a unit of work — deferring them as bookkeeping compounds under parallelism.
 
 ## Things to avoid
-- **Don't assume parallel agents are coordinated** — they must pre-negotiate task ownership via IPC before touching shared code; uncoordinated edits produce conflicting changes
-- **Don't use `rg -rn`** — `-r` is `--replace`, silently mangles output; use `rg -n` for line numbers in recursive searches
-- **Don't quote special characters carelessly in IPC message bodies** — backticks get shell-consumed and produce zero-byte or corrupted messages; always use heredoc or single-quote wrapping
-- **Don't patch the specific instance** (add one CLI to a fallback) without fixing the structural class (the default-allow policy itself)
+- **Don't default-allow for unrecognized input**: access gates, CLI fallbacks, and data extractors must emit DENY/error on unknown input, never a plausible-looking default that suppresses investigation.
+- **Don't use `rg -rn`**: `-r` is `--replace`, not recursive+line-numbers; use `rg -n` for line numbers.
+- **Don't pass IPC message bodies through unquoted shell**: backticks and special characters corrupt or zero the payload — quote or heredoc the body.
+- **Don't patch a specific instance without fixing the structural default**: one-off CLI additions to a fallback list leave the same class of gap open for the next caller.
 
 ## Open questions / known gaps
-- **Stop hooks fire repeatedly for unreplied IPC messages** — no clear ownership protocol for who must reply before session end; a reply discipline needs to be defined and enforced at the broker layer, not just advisory
-- **Enforcement is advisory-layer only** — behavioral constraints in SKILL.md or mute files are bypassable by any agent that doesn't read them; safe gates belong at the data-write CLI, not in spec text
+- Pre-negotiation protocol for parallel agents claiming overlapping task ownership is referenced but not formalized — coordination races have caused muddy diffs.
+- CLI auth steps (cloud logins) require an interactive terminal; no automated fallback path exists yet.

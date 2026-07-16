@@ -2843,11 +2843,11 @@
       "940470a1-ae82-4956-9326-749cdf537f48"
     ],
     "hypothesis": "Task updates, IPC replies, and git commits are all state-ledger writes that get deferred under cognitive load as 'bookkeeping', but each is actually the primary mechanism preventing drift or loss — the deferral pattern is identical across all three domains and compounds: skipping one makes the next skip more likely because the ledger is already stale.",
-    "confidence": 0.78,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always treat state-ledger writes (TaskUpdate, IPC reply, git commit of agent edits) as blocking obligations that execute immediately after completing a unit of work, never as cleanup to batch later.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -3796,6 +3796,22 @@
     "auto_intention_id": null
   },
   {
+    "id": "809274f4-9149-4b5a-ba5c-47e454bade2c",
+    "patterns_linked": [
+      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
+      "ece94448-4ac9-4d31-a8c1-ab38eebe78b7",
+      "fbf0922a-6fa1-4c02-ac46-be9d438dbd95",
+      "92ac5211-09d0-4b6e-a238-805ff18e9a11"
+    ],
+    "hypothesis": "Mechanically-required state writes (IPC replies, git commits, task updates) deferred as 'bookkeeping' compound under high-activity pressure — each deferral normalizes the next because the already-stale ledger no longer exerts corrective pull, creating a positive feedback loop that accelerates drift precisely when accuracy matters most.",
+    "confidence": 0.74,
+    "actionable": true,
+    "suggested_rule": "Always treat state-ledger writes (task updates, IPC replies, commits of agent edits) as blocking obligations that execute immediately after completing a unit of work — never batch them as end-of-session cleanup, especially during high-parallelism periods.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "d86f214f-5f5b-4305-8755-f268f395455f",
     "patterns_linked": [
       "9f41a150-aba6-4ecc-bc12-8a17638ce7e9",
@@ -3909,11 +3925,11 @@
       "bb7e50dc-ce4b-491b-9dbb-aac6104fe9d0"
     ],
     "hypothesis": "Task lists from session start, file scans from planning time, and configs validated at parse time are all point-in-time snapshots treated as current truth — across all three domains, the failure is reading state once and acting on the cached version later when an external actor (peer agent, user edit, config write) has mutated it.",
-    "confidence": 0.73,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always re-verify state (task ownership, file contents, config validity) at the moment of action, not at the moment of planning — any state that an external writer can mutate between your read and your write is stale by default.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -4542,22 +4558,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "27742998-36bf-4be3-a5b9-de5de586ec40",
-    "patterns_linked": [
-      "0b318bca-d338-4da1-ae19-62c2393a3771",
-      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
-      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
-      "8b043042-4a24-41db-9cf6-1ef3fc403718"
-    ],
-    "hypothesis": "The agent has a single failure mode across four domains — resolving ambiguity by producing plausible-looking output that encodes wrong semantics (a zero that looks like a measurement, an ALLOW that looks like authorization, a patch that looks like a fix, social trust that looks like permission removal) — and the common fix is defaulting to explicit refusal/failure at ambiguity points rather than synthesizing a plausible answer.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always default to DENY/FAIL/ASK at any ambiguity point where the alternative is synthesizing a plausible-looking value — a fabricated zero, an implicit allow, a social-trust-as-authorization reading — because plausible-wrong is invisible and self-reinforcing in a way that explicit failure never is.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "b8f6bb75-6028-4148-8355-7a5a4f7f1d85",
     "patterns_linked": [
       "0b318bca-d338-4da1-ae19-62c2393a3771",
@@ -4565,9 +4565,24 @@
       "5845c38b-5c0c-406d-90c4-003d795accd6"
     ],
     "hypothesis": "Across data extraction, access control, and error handling, the recurring structural failure is that systems producing plausible-looking output on unknown/missing input (a zero, an ALLOW, a class-name-as-contract) propagate unchallenged because plausibility suppresses investigation — the system would be safer if it crashed.",
-    "confidence": 0.72,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always prefer an explicit error or DENY over a plausible-looking default (zero, ALLOW, inferred-from-name) when the input is unknown or missing — a crash is cheaper than a silent wrong answer that propagates.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "4e79ffa2-c6e6-476a-b833-d440fbe9442a",
+    "patterns_linked": [
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+      "0b318bca-d338-4da1-ae19-62c2393a3771",
+      "249ed821-f665-4ba9-b2f3-7b257a38a0ff"
+    ],
+    "hypothesis": "Systems that emit plausible-looking values for unknown input (ALLOW for unrecognized commands, zero for missing data, a one-off patch for a structural gap) share a single failure mode: they suppress investigation by looking correct, and instance-level fixes perpetuate the structural default that generates new instances.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always ask 'what does this system emit for input it has never seen?' when building or reviewing any gate, extractor, or fallback path — if the answer is a plausible-looking value rather than an explicit failure, redesign the default.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4580,25 +4595,9 @@
       "646ec66d-efcc-43a9-a406-db0bc4b8e7ac"
     ],
     "hypothesis": "Advisory text, instance-level patches, and agent-droppable mute files are three faces of the same enforcement gap: in a multi-agent system, any safety mechanism that one agent can bypass or that only binds agents who read it at startup affects ALL agents — the blast radius of a weak enforcement point equals the blast radius of the protected resource, not the blast radius of the bypass.",
-    "confidence": 0.7,
-    "actionable": true,
-    "suggested_rule": "When adding a behavioral constraint to a multi-agent system, always place enforcement at the data-write layer (hook, CLI gate, schema check) rather than at the advisory layer (spec text, skill doc) — and never grant sub-agents write access to guard mute-files.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "45061617-eda5-417f-91ed-57b1dc3d48ab",
-    "patterns_linked": [
-      "1221af86-2465-4d63-a6ba-b56f1da7f313",
-      "a5a69182-6fff-4cad-8caa-87377c0e5dcc",
-      "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
-      "75293622-3e7c-49f8-a64f-86ac5c8f75ba"
-    ],
-    "hypothesis": "Multi-agent coordination state (peer aliases, phase checkpoints, task ownership, IPC messages) is treated as optional bookkeeping but is actually load-bearing infrastructure — when it fails (stale task lists, lost aliases, corrupted messages), the agents continue working confidently on wrong assumptions, making coordination-state writes a first-class correctness obligation rather than cleanup.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always treat coordination-state writes (task updates, peer alias records, phase checkpoints, IPC messages) as first-class work items that block the next step, not as optional bookkeeping to batch at session end — a skipped state write in a multi-agent context is a silent correctness bug.",
+    "suggested_rule": "When adding a behavioral constraint to a multi-agent system, always place enforcement at the data-write layer (hook, CLI gate, schema check) rather than at the advisory layer (spec text, skill doc) — and never grant sub-agents write access to guard mute-files.",
     "promoted": false,
     "dismissed": true,
     "auto_intention_id": null

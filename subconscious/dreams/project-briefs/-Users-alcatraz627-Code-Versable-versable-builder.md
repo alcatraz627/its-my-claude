@@ -1,23 +1,19 @@
-<!-- i-dream project brief · 2026-07-15T18:47:57.494528+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-16T07:36:03.118269+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-
-Versable Builder is a multi-agent product-building system where parallel Claude sessions coordinate via IPC to build features. Work sessions are frequent, concurrent, and stateful — the dominant style is agent-coordinated implementation with the human as approver, not driver.
+A multi-agent collaborative codebase (versable-builder) where parallel agent sessions coordinate via IPC; the dominant working style is breadth-first sweeps with autonomous batched execution and protected-repo commit discipline.
 
 ## Things to do (or keep doing)
-
-- **Always pre-negotiate task ownership via IPC before touching shared files** — overlapping edits without coordination produces conflicts the user must untangle.
-- **Breadth-first pass before polish** — complete a v1 sweep across all surfaces, then circle back to deepen individual items.
-- **Batch sequential work; halt only at genuine decision points** — don't interrupt the user for lightweight go-aheads; save pauses for critical reviews or ambiguous choices requiring tradeoffs.
-- **Run the affected code path live before claiming done** — test coverage (even 99+ tests) does not substitute for runtime dogfooding.
+- **Breadth-first first**: complete a full v1 pass across all surfaces before polishing any single area; pausing mid-sweep to perfect one item wastes the sweep's momentum
+- **Batch autonomously**: run sequential steps without halting for lightweight go-aheads; only pause at genuine decision points or destructive/irreversible operations
+- **Confirm IPC via round-trip**: wait for an actual reply from the peer before asserting delivery — send-side logs prove transmission, not receipt
+- **Treat state writes as blocking**: IPC replies, task updates, commit staging — execute immediately after completing a unit of work, never defer as bookkeeping
 
 ## Things to avoid
-
-- **Don't use `rg -rn`** — `-r` means `--replace`, silently mangling output; use `rg -n` for line numbers.
-- **Don't default to ALLOW or zero on unknown/missing input** — unrecognized commands must DENY; missing data must error, not silently produce a plausible-looking `0`.
-- **Don't defer TaskUpdate calls** — a task list that accumulates edits without updates drifts into uselessness; mark tasks done immediately on completion.
-- **Don't jump to edits without grounding first** — read the codebase, surface a recommendation, then touch code.
+- **Never commit or push**: this is a protected repo; prepare the diff, show it, hand the commit to the user explicitly
+- **Don't use `rg -rn`**: `-r` is `--replace`, silently corrupts output; use `rg -n` for line numbers
+- **Don't emit plausible defaults for unknown input**: gates must default to DENY; extractors must error on missing data, not return zero — a plausible-looking default suppresses investigation
+- **Strip internal commentary before any external doc**: no conversational framing, critique, or stakeholder banter in documents the user may share directly
 
 ## Open questions / known gaps
-
-- IPC round-trip reliability is unresolved: delivery confirmation via sender logs gets rejected; only actual peer reply counts, but unreplied messages trigger stop-hook loops.
-- Enforcement placed at advisory layers (SKILL.md text, mute files) is silently bypassable by agents that don't read them — data-write-layer gates are the intent but not yet consistently applied.
+- Multi-agent task ownership negotiation via IPC is required but the pre-negotiation protocol isn't fully codified; overlapping parallel claims still produce muddle
+- Decision questions posed to the user have recurrently lacked enough background to be self-contained; always include tradeoffs inline so the user can answer without a follow-up

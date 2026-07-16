@@ -1,0 +1,23 @@
+{
+  "id": "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+  "ts": "2026-07-16T09:57:43Z",
+  "session_id": "vb-opus-deploy",
+  "project_root": "/Users/alcatraz627/Code/Versable/speedway",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/speedway/_20260716-vb-opus-deploy.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#18 (IN PROGRESS)** \u2014 Fold usage-pricing into `usage-fold-in` (the PR target branch, not main",
+    "**#13 (NEXT)** \u2014 Consolidate speedway `data/` + `documents/` folders (analysis done pre-doc-22).",
+    "**#12 (AFTER #13)** \u2014 Prove exceljs covers the Excel needs before committing that dependency.",
+    "**#17 (deferred)** \u2014 Walmart FULL deploy migration: adopt the published kit + Cloud Build secret in",
+    "**#6, #14 (parked, may be stale post-doc-22)** \u2014 PR #3 review; code-standardization phases 2\u20133.",
+    "**Owner-side:** push versable-builder (`27780e9`, `1ce84f4`) + merge to main to activate the publish CI."
+  ],
+  "tags": []
+}

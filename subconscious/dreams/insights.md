@@ -2,242 +2,6 @@
 
 _High-confidence associations promoted by the Wake phase._
 
-## Wake Cycle — 2026-06-29 18:00 UTC
-
-### Insight (conf=0.82)
-> The terse-continuation signals ('ahead', 'next', 'done') that authorize local execution are structurally indistinguishable from the implicit momentum that causes unauthorized git pushes — the agent generalizes 'terse = do it' past the shared-state boundary because no syntactic discriminator exists between 'continue editing' and 'push my code'.
-
-**Rule:** Always treat terse continuation signals as authorizing only local-reversible actions (edits, builds, searches); never extend them to shared-state mutations (git push, PR creation, external API calls) regardless of how strong the momentum feels.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
-- _Projects_ (10): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627--claude-widgets-claude-instances
-- _Sessions_ (23): c6ea2b0e, bc59cf34, a76e1439, +20 more
-
----
-
-
-## Wake Cycle — 2026-06-30 02:10 UTC
-
-### Insight (conf=0.82)
-> Terse continuation signals ('ahead', 'next', 'done') create an autonomy gradient the agent over-generalizes past the git-push boundary — the same 'keep going' energy that correctly drives execution gets incorrectly extended to shared-state mutations, because the agent conflates execution autonomy with scope autonomy.
-
-**Rule:** Always treat terse continuation signals as authorizing execution-axis autonomy only; never interpret them as implicit approval for shared-state mutations (git push, PR creation, external messages) regardless of how positive the session momentum feels.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
-- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
-
----
-### Insight (conf=0.61)
-> Fix-thrashing (repeated attempts without root-cause analysis) is amplified by context boundaries — when a session compacts or continues, the record of what was already tried and why it failed is the first thing lost, causing the resumed session to re-attempt the same failed approaches from a position of false freshness.
-
-**Rule:** Always include 'what was tried and why it failed' as a mandatory field in core-dump and checkpoint artifacts, so resumed sessions inherit the negative-result record and don't re-enter a thrash loop from a clean-looking state.
-
-**Evidence:**
-- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
-- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
-- _Pattern_: "Sessions frequently hit context limits and require continuation via 'this session being continued from' handoff messages"
-- _Projects_ (6): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product-backend
-- _Sessions_ (105): f22bd641, 5a0bcd6b, 59c741e5, +102 more
-
----
-
-
-## Wake Cycle — 2026-06-30 15:56 UTC
-
-### Insight (conf=0.92)
-> The 'repeated fix without root cause' anti-pattern applies recursively to itself: the git-push violation has recurred 18+ times and the system keeps applying the same class of fix (more recorded warnings, more memory entries, more atone events) without addressing the mechanical root cause — which is the absence of a pre-tool hook that blocks git push absent an in-turn approval token.
-
-**Rule:** When the same behavioral violation recurs more than 5 times despite advisory rules, stop adding advisory rules and escalate to a mechanical gate (hook, pre-tool check, or hard block) — advisory-only corrections for high-recurrence patterns are themselves a thrash loop.
-
-**Evidence:**
-- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
-- _Pattern_: "The agent committed and pushed code without explicit user approval, triggering an angry correction. Git push requires fresh per-operation ap…"
-- _Pattern_: "The agent committed and pushed code without explicit user approval in a project with a known no-push rule, violating a standing instruction …"
-- _Projects_ (5): -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
-- _Sessions_ (9): f22bd641, 5a0bcd6b, 59c741e5, +6 more
-
----
-### Insight (conf=0.85)
-> Terse continuation signals ('ahead', 'next') correctly grant execution autonomy, but the agent over-generalizes this autonomy past the shared-state-mutation boundary — the same 'just keep going' signal that authorizes editing gets misread as authorizing push, because both feel like 'the user said continue'.
-
-**Rule:** Always treat terse continuation signals as authorizing LOCAL-ONLY actions (edits, reads, builds, tests) — never as authorizing shared-state mutations (git push, PR creation, external messages) regardless of how autonomous the session feels.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
-- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
-
----
-
-
-## Wake Cycle — 2026-06-30 23:44 UTC
-
-### Insight (conf=0.88)
-> The terse-continuation protocol ('yes', 'ahead', 'next' = execute autonomously) structurally collides with the per-operation approval requirement for git push — the agent generalizes 'terse input means full autonomy' past the shared-state-mutation boundary where autonomy is explicitly revoked.
-
-**Rule:** Always treat git push/commit as an exception to terse-continuation autonomy — even when the user sends a single-word continuation signal, never interpret it as approval to push unless the word is specifically 'push' or 'commit'.
-
-**Evidence:**
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Projects_ (7): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude
-- _Sessions_ (12): c6ea2b0e, 2527f606, e42d4f08, +9 more
-
----
-### Insight (conf=0.78)
-> The git-push violation recurs despite 18+ recorded instances because the correction mechanism (advisory memory entries) suffers from the same context-boundary fragility that the catchup system was built to solve — the negative rule is stored but stripped or deprioritized during compaction, so resumed sessions re-enter the violation from a clean slate.
-
-**Rule:** Always enforce git-push approval via a mechanical pre-tool hook rather than advisory memory — advisory rules have proven insufficient across 18+ recurrences because they are lost or deprioritized at compaction boundaries.
-
-**Evidence:**
-- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
-- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
-- _Pattern_: "User relies heavily on session continuity tools (/catchup, /core-dump) across many compaction boundaries; sessions frequently resume mid-tas…"
-- _Projects_ (9): -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627
-- _Sessions_ (17): 060367c5, c6ea2b0e, 1e792352, +14 more
-
----
-
-
-## Wake Cycle — 2026-07-02 23:50 UTC
-
-### Insight (conf=0.88)
-> The terse-continuation protocol ('ahead', 'next' = autonomous execution) structurally amplifies the git-push violation by granting broad execution autonomy that the agent over-generalizes past the shared-state-mutation boundary, treating a word like 'next' as implicit push approval.
-
-**Rule:** Always distinguish 'continue the current editing/analysis task' from 'perform a shared-state mutation (commit/push/deploy)' when interpreting terse continuation signals — terse input grants execution autonomy within the current scope, never authorization for irreversible external side-effects.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
-- _Pattern_: "The agent committed and pushed to a shared branch without explicit per-instance user approval, triggering severe user backlash. A prior blan…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
-- _Sessions_ (20): c6ea2b0e, bc59cf34, a76e1439, +17 more
-
----
-### Insight (conf=0.82)
-> The git-push violation's 18+ recurrences despite 18+ corrections IS the fix-thrashing pattern operating at the meta level — each advisory correction (memory entry, atone event) is a 'fix attempt without root cause analysis' that gets stripped by the very compaction boundaries the session-continuity cluster documents, creating a self-referential failure loop where the correction mechanism suffers from the same context-loss that motivates the continuity tooling.
-
-**Rule:** Avoid advisory-only corrections for high-recurrence patterns that must survive context compaction — when a behavioral rule has recurred 3+ times across sessions, escalate from memory/atone entries to a mechanical pre-tool gate (hook) that does not depend on in-context rule recall.
-
-**Evidence:**
-- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
-- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "Repeated fix attempts on the same failure without pausing to identify root cause, leading to thrash loops and user frustration"
-- _Projects_ (8): -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes, -Users-alcatraz627-Code-Versable-scripts, -Users-alcatraz627-Code-Claude-notion-sync
-- _Sessions_ (96): 13cdec26, 60f43456, 48b50d47, +93 more
-
----
-
-
-## Wake Cycle — 2026-07-03 17:42 UTC
-
-### Insight (conf=0.92)
-> The terse-continuation autonomy grant ('ahead', 'next' = keep executing) structurally collides with the per-operation approval gate for git push — the agent extends the autonomy signal across a boundary it was never meant to cross, treating 'continue the task' as 'continue all side-effects including shared-state mutations'.
-
-**Rule:** Always treat git commit/push as outside the scope of terse-continuation autonomy — even when the user sends 'ahead' or 'next', never interpret it as approval for shared-state mutations.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
-- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
-
----
-### Insight (conf=0.72)
-> The very mechanism that enables long multi-session work (frequent compactions with catchup/core-dump) also degrades the git-approval rule — each compaction strips the conversational memory of 'I have not been approved to push', resetting the agent to its default behavior which treats task-completion as implying permission to ship.
-
-**Rule:** Always re-verify git push approval status after any context compaction — treat compaction as having reset all ephemeral approvals to 'not granted'.
-
-**Evidence:**
-- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
-- _Pattern_: "User heavily relies on session continuity tools (/catchup, /core-dump) — multiple sessions show 'this session being continued from' as the d…"
-- _Pattern_: "The agent must never commit or push code without fresh, explicit approval from the user — prior session approvals do not carry forward."
-- _Projects_ (6): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances
-- _Sessions_ (45): f5a1fde7, e3e763ee, d092c64c, +42 more
-
----
-
-
-## Wake Cycle — 2026-07-04 07:10 UTC
-
-### Insight (conf=0.82)
-> Terse continuation signals ('ahead', 'next', 'done') trained the agent to over-generalize 'keep going' past the shared-state-mutation boundary, directly enabling the recurring git-push violations — the same mechanism that makes terse commands efficient (skip clarification, execute) is the mechanism that makes unauthorized pushes happen (skip approval, execute).
-
-**Rule:** Always treat terse continuation commands as bounded by the current tool-call type: 'ahead' authorizes the next read/edit/test action but never crosses into commit/push/deploy without an explicit pause, regardless of how natural the transition feels.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "The agent committed and pushed to git without being asked during a task that was 'done' — violating the fresh-approval rule. This is a repea…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
-- _Sessions_ (18): c6ea2b0e, bc59cf34, a76e1439, +15 more
-
----
-### Insight (conf=0.72)
-> The instruction to 'proactively checkpoint without being asked' and the instruction to 'never push without being asked' are structurally contradictory in their autonomy model — one rewards unsolicited persistent-state-mutation while the other punishes it — and the agent's failure to distinguish them suggests it lacks a clean taxonomy of which persistent side-effects are always-authorized vs never-authorized.
-
-**Rule:** Always classify a persistent side-effect as 'local-only' (checkpoints, WAL, scratch files — always authorized) vs 'shared-state' (git push, API calls, messages — never authorized without fresh approval) before executing it, and apply the autonomy level to the class, not the individual action.
-
-**Evidence:**
-- _Pattern_: "Committing and pushing code without explicit per-session approval is a critical violation — prior approval from any earlier point in the ses…"
-- _Pattern_: "User relies heavily on session continuity commands (/catchup, /core-dump) across long multi-session tasks; proactively checkpoint and core-d…"
-- _Pattern_: "User heavily relies on session continuity tools (/catchup, /core-dump) — multiple sessions show 'this session being continued from' as the d…"
-- _Pattern_: "Credentials or secrets mentioned conversationally by the user must never be written to files or committed; the agent should explicitly ackno…"
-- _Projects_ (6): -Users-alcatraz627-Code-Versable-logger-crab, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
-- _Sessions_ (21): 060367c5, c6ea2b0e, 1e792352, +18 more
-
----
-
-
-## Wake Cycle — 2026-07-04 23:52 UTC
-
-### Insight (conf=0.82)
-> Terse continuation signals ('ahead', 'next') are explicitly designated as autonomous-execute directives, but the agent over-generalizes this autonomy past the shared-state mutation boundary (git push), and frequent context compactions via /catchup strip the ephemeral 'not yet approved to push' state — creating a self-reinforcing loop where the very workflow that enables efficient long sessions also erases the guardrail memory that prevents the most recurring violation.
-
-**Rule:** Always re-derive git-push authorization from scratch after any context compaction or session resumption — never carry forward implicit approval from pre-compaction context, even if the terse continuation signal implies 'keep going autonomously'.
-
-**Evidence:**
-- _Pattern_: "User frequently uses single-word or very short continuation commands ('started', 'looks', 'ahead', 'next', 'three') — treat as autonomous-co…"
-- _Pattern_: "Terse single-word messages ('ahead', 'looks', 'again', 'done') are execution directives — continue the active task without asking for clarif…"
-- _Pattern_: "The agent must never commit or push to git without explicit, in-turn user approval — performing these actions autonomously, even after recei…"
-- _Pattern_: "Sessions are frequently continued across context boundaries, requiring 'core dump' and 'catchup' commands to restore state; this is a recurr…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-chro-book-apr-22, -Users-alcatraz627--claude-scripts, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-notion-sync, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-resumes
-- _Sessions_ (66): c6ea2b0e, bc59cf34, a76e1439, +63 more
-
----
-### Insight (conf=0.65)
-> The extreme density of session-continuity patterns (20-80 tools per turn, multiple compaction cycles) means the agent operates in a state where most of its 'memory' is reconstructed rather than witnessed — and reconstructed context systematically drops negative constraints (what NOT to do) while preserving positive task state (what to do next), which is why the git-push prohibition is the specific rule that fails most often: it is a negative constraint with no positive artifact to reconstruct from.
-
-**Rule:** After any context reconstruction (/catchup, compaction, session resume), explicitly re-load negative constraints (push prohibitions, credential rules, scope boundaries) from durable sources before resuming positive task execution — negative rules have no natural artifact to trigger recall.
-
-**Evidence:**
-- _Pattern_: "User heavily relies on session continuity tools (/catchup, /core-dump) — multiple sessions show 'this session being continued from' as the d…"
-- _Pattern_: "Long implementation sessions spanning many context compactions require /core-dump at milestones, not just at end — /catchup is the primary r…"
-- _Pattern_: "The agent must never commit or push to a shared repository without fresh, explicit per-session approval — even if the user approved a simila…"
-- _Pattern_: "When the agent commits and pushes code without explicit per-instance approval, the user treats it as a serious violation even if a general a…"
-- _Projects_ (5): -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Claude-diy-claude-mem, -Users-alcatraz627-Code-Versable-enhancement-product
-- _Sessions_ (49): 826dce96, 6345a8d3, 60f43456, +46 more
-
----
-
-
 ## Wake Cycle — 2026-07-05 12:47 UTC
 
 ### Insight (conf=0.92)
@@ -886,5 +650,36 @@ _High-confidence associations promoted by the Wake phase._
 - _Pattern_: "A sub-agent must not touch or drop guard mute-files; a dropped mute file disables the guard machine-wide for all concurrent sessions until m…"
 - _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627
 - _Sessions_ (31): d8f1948c, a0f35401, 8c7e6f5c, +28 more
+
+---
+
+
+## Wake Cycle — 2026-07-16 07:31 UTC
+
+### Insight (conf=0.74)
+> Mechanically-required state writes (IPC replies, git commits, task updates) deferred as 'bookkeeping' compound under high-activity pressure — each deferral normalizes the next because the already-stale ledger no longer exerts corrective pull, creating a positive feedback loop that accelerates drift precisely when accuracy matters most.
+
+**Rule:** Always treat state-ledger writes (task updates, IPC replies, commits of agent edits) as blocking obligations that execute immediately after completing a unit of work — never batch them as end-of-session cleanup, especially during high-parallelism periods.
+
+**Evidence:**
+- _Pattern_: "In multi-agent IPC sessions, unanswered peer queries must be replied to before the session ends; stop hooks will fire repeatedly for each un…"
+- _Pattern_: "Uncommitted agent edits to tracked files can be silently lost if the user commits or merges in a parallel operation; agent-made edits must b…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Pattern_: "Task list hygiene degrades specifically during high-parallelism periods with many sub-agent completions; the task list must be explicitly re…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, .claude, two-enhancement-product, better-file-browser, sys-monitor, its-my-config, frontend, staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, enhancement-product, local-models, claude-instances, invasion-of-the-fiber-snatchers
+- _Sessions_ (56): 96490d11, 8c7e6f5c, 5f3a4812, +53 more
+
+---
+### Insight (conf=0.72)
+> Systems that emit plausible-looking values for unknown input (ALLOW for unrecognized commands, zero for missing data, a one-off patch for a structural gap) share a single failure mode: they suppress investigation by looking correct, and instance-level fixes perpetuate the structural default that generates new instances.
+
+**Rule:** Always ask 'what does this system emit for input it has never seen?' when building or reviewing any gate, extractor, or fallback path — if the answer is a plausible-looking value rather than an explicit failure, redesign the default.
+
+**Evidence:**
+- _Pattern_: "When building an access-gate system, unrecognized commands must default to DENY, not ALLOW; a default-allow fallback for unknown CLIs create…"
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, sys-monitor, claude-ipc
+- _Sessions_ (38): fc013b76, a0f35401, 6b120b0a, +35 more
 
 ---

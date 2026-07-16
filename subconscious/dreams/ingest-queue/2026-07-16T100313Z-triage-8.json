@@ -1,0 +1,27 @@
+{
+  "id": "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+  "ts": "2026-07-16T10:03:13Z",
+  "session_id": "triage-86",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260716-triage-86.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": [
+      "**`/heartbeat` is a name collision** \u2014 `scripts/session-mgmt/heartbeat.sh` already exists as a WAL-breadcrumb PostToolUse hook, unrelated to the proposed wake monitor.",
+      "Standing user mode: **\"keep rolling, keep committing\"** \u2014 commit per logical unit without asking (unprotected repo); do NOT push without a fresh ask."
+    ]
+  },
+  "pending": [
+    "**(agent) D5b** \u2014 `atone-nudge` fires on a memory-consolidation system-prompt fragment mistaken for the agent's prior turn (`prop-20260712-210425-79`). Split out of the D5 cluster; untouched. Most concrete of the four.",
+    "**(agent) Task #14** \u2014 D13+D17 Playwright concurrency (isolatedContext + per-agent profile). User note: get feedback from the vb-opus / vb-fable sessions FIRST.",
+    "**(agent) Task #16** \u2014 D15 todo-discipline across harness variants; user wants a WIDER review of how todo discipline survives across sessions for a given session name.",
+    "**(agent) Task #18** \u2014 R1 `/doctor` stale-sub-file flagging: \"look at this once even if we then reject it.\"",
+    "**(agent) Task #7** \u2014 D9 magi voter token capture: QUEUED for a focused magi session, must ship with a validation test.",
+    "**(user)** Push the 4 unpushed commits (`e665d20`, `7278adb`, `b0cb774`, `4ad0194`) when ready.",
+    "**(user, optional)** 3 filed proposals await triage \u2014 two of them (`\u2026053647-37`, `\u2026094714-2f`) fix the triage gate itself."
+  ],
+  "tags": []
+}

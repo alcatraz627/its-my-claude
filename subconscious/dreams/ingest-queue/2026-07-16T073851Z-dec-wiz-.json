@@ -1,0 +1,20 @@
+{
+  "id": "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+  "ts": "2026-07-16T07:38:51Z",
+  "session_id": "dec-wiz-7a",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260716-dec-wiz-7a.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "(non-blocking) Proposals changes are bundled under commit `43a90fa`, not their own message \u2014 cosmetic; shared history left intact deliberately.",
+    "`dw-selftest` demo page still live at `http://localhost:5197/dw-selftest/` (holds the user's in-page feedback); `decision-page.sh rm dw-selftest` clears it.",
+    "Backlog tasks 7/8/14/15 (proposals) are DONE. No open tasks from this session."
+  ],
+  "tags": []
+}

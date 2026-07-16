@@ -491,7 +491,7 @@
     "occurrence_history": [
       "2026-07-14T03:14:51.838744+00:00"
     ],
-    "strength": 0.24078818013911307,
+    "strength": 0.22634088933076627,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -615,7 +615,7 @@
     "occurrence_history": [
       "2026-07-14T03:14:51.838744+00:00"
     ],
-    "strength": 0.22918393049385455,
+    "strength": 0.21543289466422327,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -677,7 +677,7 @@
     "occurrence_history": [
       "2026-07-14T03:14:51.838744+00:00"
     ],
-    "strength": 0.1972722439693938,
+    "strength": 0.18543590933123016,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -739,7 +739,7 @@
     "occurrence_history": [
       "2026-07-14T03:14:51.838744+00:00"
     ],
-    "strength": 0.2349860553164838,
+    "strength": 0.22088689199749478,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -801,8 +801,8 @@
     "occurrence_history": [
       "2026-07-14T03:14:51.838744+00:00"
     ],
-    "strength": 0.2088764936146523,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -846,7 +846,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3936812844143501,
+    "strength": 0.37006040734948903,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -936,7 +936,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3668393786588262,
+    "strength": 0.3448290159392966,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -981,7 +981,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3668393786588262,
+    "strength": 0.3448290159392966,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1161,7 +1161,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3802603315365882,
+    "strength": 0.3574447116443929,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1206,8 +1206,8 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3578920767403184,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -1251,7 +1251,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3578920767403184,
+    "strength": 0.3364185521358993,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1341,7 +1341,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3355238219440484,
+    "strength": 0.3153923926274055,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1386,7 +1386,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3221028690662865,
+    "strength": 0.3027766969223093,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1431,7 +1431,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.3131555671477785,
+    "strength": 0.29436623311891175,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1476,7 +1476,7 @@
     "occurrence_history": [
       "2026-07-14T14:23:51.941558+00:00"
     ],
-    "strength": 0.34894477482181024,
+    "strength": 0.3280080883325016,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1569,7 +1569,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.4378466896291128,
+    "strength": 0.411575888251366,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1617,7 +1617,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.41880987703654265,
+    "strength": 0.3936812844143501,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1713,7 +1713,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.45212429907354046,
+    "strength": 0.424996841129128,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1761,7 +1761,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.40453226759211514,
+    "strength": 0.3802603315365882,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1809,7 +1809,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.42832828333282774,
+    "strength": 0.40262858633285803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1857,7 +1857,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.38073625185140253,
+    "strength": 0.3578920767403184,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -1953,8 +1953,8 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.40453226759211514,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2001,8 +2001,8 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.3712178455551173,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2049,7 +2049,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.38073625185140253,
+    "strength": 0.3578920767403184,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2145,8 +2145,8 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.39025465814768745,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2197,7 +2197,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.8648,
+    "strength": 0.812912,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2249,7 +2249,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.7989999999999999,
+    "strength": 0.7510599999999998,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2301,7 +2301,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.8271999999999999,
+    "strength": 0.7775679999999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2353,8 +2353,8 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.846,
-    "ease": 2.5,
+    "strength": 0.0,
+    "ease": 1.3,
     "reactivations": 0
   },
   {
@@ -2405,7 +2405,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.8271999999999999,
+    "strength": 0.7775679999999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2457,7 +2457,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.752,
+    "strength": 0.70688,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2509,8 +2509,8 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.7707999999999999,
-    "ease": 2.5,
+    "strength": 0.6445519999999999,
+    "ease": 2.3,
     "reactivations": 0
   },
   {
@@ -2561,7 +2561,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.8271999999999999,
+    "strength": 0.7775679999999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2613,7 +2613,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.7332,
+    "strength": 0.6892079999999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2665,7 +2665,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.6768,
+    "strength": 0.6361919999999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2717,7 +2717,7 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
-    "strength": 0.6861999999999999,
+    "strength": 0.6450279999999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2769,8 +2769,646 @@
     "occurrence_history": [
       "2026-07-15T18:43:23.465951+00:00"
     ],
+    "strength": 0.6185199999999998,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+    "pattern": "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs or send-side telemetry — a successful send does not prove the message arrived or was acted on.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.8648,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "6e0419e3-4fc4-492d-be7f-ba6f18976030",
+    "pattern": "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into autonomous runs and halt only at genuine decision points, blocking reviews, or missing user input.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.846,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "880920ef-e5dc-4201-beb6-37e7ca3ce620",
+    "pattern": "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme — suggesting diverging names across sibling artifacts in the same namespace is wrong without an explicit reason.",
+    "valence": "negative",
+    "confidence": 0.85,
+    "category": "approach",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.7989999999999999,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "38428655-aa74-48c8-b491-d727d6916ad0",
+    "pattern": "CLI authentication commands (e.g. cloud provider logins) require an interactive terminal and cannot be automated; flag this to the user up front and hand off the auth step rather than attempting it and failing.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "tool-use",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.8271999999999999,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "e95ee8cd-6c8a-421e-8c50-79ab40b6e948",
+    "pattern": "In multi-agent IPC setups where sessions are cleared periodically, registered aliases become stale after the owning session restarts; fall back to bare sessionId addressing for reliable delivery rather than trusting previously-registered aliases.",
+    "valence": "neutral",
+    "confidence": 0.8,
+    "category": "architecture",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.752,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "92ef2275-c753-4a0f-9d1b-97d721788c11",
+    "pattern": "When a sub-agent fleet hits API errors mid-run, salvage all finished work and re-dispatch only the failed agents rather than restarting the entire fleet.",
+    "valence": "positive",
+    "confidence": 0.78,
+    "category": "approach",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.7332,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "28c552de-aac0-48ad-8489-c807411b7026",
+    "pattern": "When the user wants broad review coverage over a large surface, a fleet of lower-cost agents covering more items is preferable to fewer high-cost agents; the user values coverage and total number of findings over per-finding depth.",
+    "valence": "positive",
+    "confidence": 0.8,
+    "category": "user-preference",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.752,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "a52dc8a9-03d7-4909-8339-9e8192306e4f",
+    "pattern": "Keying each result in a batch job by (judge + item + discriminating labels) enables resuming mid-run on abort or API error without re-paying already-completed work — build resumable caches for expensive fan-out jobs.",
+    "valence": "positive",
+    "confidence": 0.75,
+    "category": "architecture",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.705,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "81e21426-b95e-4527-8cc8-e83a980470f9",
+    "pattern": "Dispatching gemini sub-agents to scan historical session transcripts is an effective recovery pattern when the current session has lost context about prior task state or accumulated feedback across many past sessions.",
+    "valence": "positive",
+    "confidence": 0.7,
+    "category": "tool-use",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
     "strength": 0.6579999999999999,
     "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "dd881c1f-5f4f-45bd-9b33-76770934ba07",
+    "pattern": "macOS ships without `timeout` or `gtimeout`; wrapping long-running scripts in a shell timeout on macOS silently orphans child processes and does not actually cap execution — use the script's own async timeout mechanism instead.",
+    "valence": "neutral",
+    "confidence": 0.85,
+    "category": "domain",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.7989999999999999,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "fbf0922a-6fa1-4c02-ac46-be9d438dbd95",
+    "pattern": "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without reflecting them in the task list causes the live status view to drift and confuses both the user and future turns.",
+    "valence": "negative",
+    "confidence": 0.85,
+    "category": "approach",
+    "source_sessions": [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      "68fa3c9f-5e9f-48a1-86ae-3982587a7f15",
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a",
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      "3385b572-ddfa-415d-93ab-79f8f3db33df",
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      "ba8c6f2e-cebb-4470-881b-e19064315a42",
+      "f1deb5b4-ea6e-4a7e-a654-9499277da021",
+      "e1b029b8-5f1b-4ed3-8b1e-d9a69510cad3",
+      "413d6f51-6e42-4650-b813-41227ea70271",
+      "991e631f-5637-410d-a0b9-7c153cbc0618",
+      "69aeb3ea-3288-47e0-87e7-d1c639a4c438",
+      "70e41b6a-fa99-4856-aa9d-71c284213a4b",
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      "460e2aa4-f7b3-4359-89e6-dedbed53b472",
+      "6ec6743c-c045-4612-b3a4-a3cfe285e6ce",
+      "e25e3b92-7a15-4d27-8b20-93a3d0cfebdb",
+      "1940ca9d-aa15-4a1b-869f-3cda319fc8c4"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "staging-enhancement-product",
+      ".claude",
+      "two-enhancement-product",
+      "claude-instances",
+      "local-models",
+      "invasion-of-the-fiber-snatchers",
+      "frontend"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-07-16T07:29:34.966880+00:00",
+    "last_seen": "2026-07-16T07:29:34.966880+00:00",
+    "occurrence_history": [
+      "2026-07-16T07:29:34.966880+00:00"
+    ],
+    "strength": 0.719,
+    "ease": 2.3,
     "reactivations": 0
   }
 ]
