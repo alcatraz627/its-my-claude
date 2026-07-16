@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-16 16:47.
+Regenerated 2026-07-16 17:50.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -31,6 +31,7 @@ Regenerated 2026-07-16 16:47.
 | `audience-aware-writing` | always | Writing is a UI surface with an audience. Identify the reader (human for comments/docs/PRs, agent for internal notes) and write meaning-first, never default-LLM register. |
 | `audit-file-character-before-applying-global-rule` | always | Before applying a global rule or convention to a specific file/case, audit whether it actually applies — a file's character (or a load-bearing local difference) can correctly exempt it. Name the tension, don't silently apply or skip. |
 | `browser-mcp-async-eval` | scoped | Browser-MCP eval returns immediately — never put a polling/wait loop inside browser_evaluate (it hangs the MCP server); poll state from the shell between calls, and let the page settle after navigate before acting. |
+| `browser-mcp-isolation` | scoped | A browser MCP shares one profile across every agent AND across sessions — give each sub-agent an isolated context/profile, or logins, cookies and navigations bleed between them; screenshots need absolute paths or they vanish. |
 | `cache-externally-mutated-state` | scoped | Never cache/TTL a status, availability, or liveness value that an external writer (another CLI, daemon, sibling service, the user) can change — read it live or invalidate on the real event; a TTL on externally-mutated state is a plausible-but-wrong staleness bug. Read this rule before adding any cache, memoization, or TTL. |
 | `comments` | always | Comments are for humans first, AI agents second, machines never; first sentence of a non-trivial docstring is code-agnostic; keep [claude@] agent-notes separate from human comments; no plan-refs or archeology |
 | `communication` | always | Terse protocol, scope control, state verification — how Claude talks, scopes, and verifies before side-effects |
