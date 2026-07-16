@@ -20,6 +20,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REG="$HOME/.claude/assets/decision-pages"
+PEND="$REG/.pending.txt"          # one slug per line = "handed off, awaiting the human"
 PORT=5197
 NAME="decision-pages"
 BASE="http://localhost:$PORT"
@@ -70,17 +71,20 @@ PY
 
 ensure_server() {
   mkdir -p "$REG"
+  # server.py: static GET (index.html on dir URLs) + POST /_submit/<slug> so a page
+  # can hand its answer straight back to the agent. Not `pm2 serve` (EISDIRs on dir
+  # URLs), not `-m http.server` (GET-only, no submit endpoint).
   if pm2 describe "$NAME" >/dev/null 2>&1; then
-    printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"
-  else
-    if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
-      die "port $PORT is taken by another process" "lsof -nP -iTCP:$PORT -sTCP:LISTEN   # see who; then free it or change PORT in $0"
+    if pm2 describe "$NAME" 2>/dev/null | grep -q "server.py"; then
+      printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"; return
     fi
-    # python http.server (not `pm2 serve`): pm2's static server EISDIRs on
-    # directory URLs instead of resolving index.html.
-    pm2 start python3 --name "$NAME" -- -m http.server "$PORT" -d "$REG" >/dev/null
-    printf 'server: started — %s%s/%s\n' "$C" "$BASE" "$R"
+    # an older static (http.server) instance is running — upgrade it in place
+    pm2 delete "$NAME" >/dev/null 2>&1
+  elif lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
+    die "port $PORT is taken by another process" "lsof -nP -iTCP:$PORT -sTCP:LISTEN   # see who; then free it or change PORT in $0"
   fi
+  DP_PORT="$PORT" pm2 start "$HERE/server.py" --name "$NAME" --interpreter python3 >/dev/null
+  printf 'server: started — %s%s/%s\n' "$C" "$BASE" "$R"
 }
 
 age_of() { # humanize mtime of a path
@@ -96,10 +100,12 @@ PY
 # ── commands ────────────────────────────────────────────────────────────────
 cmd_new() {
   local slug="${1:-}"; shift || true
-  local title=""
+  local title="" topic="" sess=""
   while [ $# -gt 0 ]; do case "$1" in
-    --title) title="${2:?--title needs a value}"; shift 2 ;;
-    *) die "unknown flag for new: $1" "decision-page.sh new <slug> [--title \"…\"]" ;;
+    --title)   title="${2:?--title needs a value}"; shift 2 ;;
+    --topic)   topic="${2:?--topic needs a value}"; shift 2 ;;
+    --session) sess="${2:?--session needs a value}"; shift 2 ;;
+    *) die "unknown flag for new: $1" "decision-page.sh new <slug> [--title \"…\"] [--topic \"…\"] [--session <id>]" ;;
   esac; done
   [ -n "$slug" ] || die "new needs a slug" "decision-page.sh new <slug> [--title \"…\"]"
   printf '%s' "$slug" | grep -qE '^[a-z0-9][a-z0-9._-]*$' \
@@ -114,20 +120,29 @@ cmd_new() {
   # NB: no ${title:-…} here — bash honors quotes INSIDE ${…} even under double
   # quotes, so an apostrophe in the default text breaks the parse of the file.
   [ -n "$title" ] || title="TITLE — every answer drafted; flip what needs changing"
-  T="$title" SLUG="$slug" python3 - "$dir/config.json" <<'PY'
+  T="$title" SLUG="$slug" TOPIC="$topic" SESS="${sess:-${CLAUDE_SESSION_ID:-}}" \
+  PROJ="${PWD/#$HOME/~}" CREATED="$(date +%Y-%m-%d)" \
+  python3 - "$dir/config.json" <<'PY'
 import json, os, sys
-json.dump({
+# origin: which session/project/topic created this page — shown on the page + hub
+origin = {k: v for k, v in {
+  "session": os.environ.get("SESS", ""), "project": os.environ.get("PROJ", ""),
+  "topic": os.environ.get("TOPIC", ""), "created": os.environ.get("CREATED", ""),
+}.items() if v}
+cfg = {
   "title": os.environ["T"], "storageKey": os.environ["SLUG"],
   "copyHeader": "feedback", "intro": "Everything is pre-answered with a recommendation. Untouched = agreed.",
-  "decisions": [
+}
+if origin: cfg["origin"] = origin
+cfg["decisions"] = [
     {"id": "D1", "question": "The big call?", "context": "why it matters",
      "options": [{"code": "a", "label": "recommended option", "rec": True},
-                  {"code": "b", "label": "alternative"}]}],
-  "sections": [
+                  {"code": "b", "label": "alternative"}]}]
+cfg["sections"] = [
     {"id": "item-01", "group": "Group A", "title": "First item", "prio": "MUST",
      "read": "my read of it", "images": [],
-     "slots": {"KEEP": "…", "CHANGE": "…"}}],
-}, open(sys.argv[1], "w"), indent=2)
+     "slots": {"KEEP": "…", "CHANGE": "…"}}]
+json.dump(cfg, open(sys.argv[1], "w"), indent=2)
 PY
   ensure_server; regen_manifest
   cat <<EOT
@@ -159,11 +174,20 @@ except Exception as e:
 probs = []
 if not c.get("title"): probs.append("missing 'title'")
 if not (c.get("decisions") or c.get("sections")): probs.append("needs at least one of 'decisions' / 'sections'")
+if "notes" in c and not isinstance(c["notes"], bool):
+    probs.append("'notes' must be true/false (omit for the default: notes available on-demand)")
+if "accent" in c and not isinstance(c["accent"], str):
+    probs.append("'accent' must be a CSS color string, e.g. \"#7c3aed\"")
+if "origin" in c and not isinstance(c["origin"], dict):
+    probs.append("'origin' must be an object {session,project,topic,created}")
+if "groups" in c and not isinstance(c["groups"], dict):
+    probs.append("'groups' must be an object of group-name -> {context,color}")
 ids = set()
 for d in c.get("decisions") or []:
     if not d.get("id"): probs.append("a decision has no 'id'"); continue
     if d["id"] in ids: probs.append(f"duplicate id '{d['id']}'")
     ids.add(d["id"])
+    if "note" in d and not isinstance(d["note"], str): probs.append(f"{d['id']}: 'note' must be a string")
     recs = [o for o in d.get("options") or [] if o.get("rec")]
     if not d.get("options"): probs.append(f"{d['id']}: no options")
     elif len(recs) != 1: probs.append(f"{d['id']}: needs exactly one option with rec:true (has {len(recs)})")
@@ -172,6 +196,7 @@ for s in c.get("sections") or []:
     if not s.get("id"): probs.append("a section has no 'id'"); continue
     if s["id"] in ids: probs.append(f"duplicate id '{s['id']}'")
     ids.add(s["id"])
+    if "note" in s and not isinstance(s["note"], str): probs.append(f"{s['id']}: 'note' must be a string")
     for im in s.get("images") or []:
         if not os.path.exists(os.path.join(os.path.dirname(p), im)): missing.append(f"{s['id']}: {im}")
 for m in probs: print(f"FAIL schema: {m}")
@@ -215,6 +240,10 @@ cmd_status() {
   else printf 'server: %sdown%s — start: decision-page.sh serve\n' "$RED" "$R"; fi
   local n; n=$(ls -d "$REG"/*/ 2>/dev/null | wc -l | tr -d ' ')
   printf 'pages:  %s  ·  hub: %s%s/%s\n' "$n" "$C" "$BASE" "$R"
+  local pend=0; [ -f "$PEND" ] && pend=$(grep -cv '^[[:space:]]*$' "$PEND" 2>/dev/null); pend=${pend:-0}
+  if [ "$pend" -gt 0 ]; then
+    printf 'await:  %s%s awaiting an answer%s — %s\n' "$Y" "$pend" "$R" "$(grep -v '^[[:space:]]*$' "$PEND" 2>/dev/null | tr '\n' ' ')"
+  fi
 }
 
 cmd_prune() {
@@ -235,6 +264,74 @@ cmd_prune() {
   regen_manifest
 }
 
+# ── pending ledger ──────────────────────────────────────────────────────────
+# "handed off, awaiting the human's answer" — the answered/unanswered state
+# lives in the human's browser localStorage, which a shell can't read, so the
+# agent maintains this ledger explicitly: `pending add <slug>` on handoff,
+# `pending clear <slug>` once the answer is pasted back. The statusline reads
+# the line count of $PEND directly (no server, no python) to show a waiting chip.
+cmd_pending() {
+  local sub="${1:-list}"; shift 2>/dev/null || true
+  mkdir -p "$REG"; touch "$PEND"
+  case "$sub" in
+    add)   local slug="${1:?usage: decision-page.sh pending add <slug>}"
+           grep -qxF "$slug" "$PEND" || printf '%s\n' "$slug" >> "$PEND"
+           printf 'pending: %s%s%s — clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug" ;;
+    clear) local slug="${1:?usage: decision-page.sh pending clear <slug>}"
+           local tmp="$PEND.$$.tmp"
+           grep -vxF "$slug" "$PEND" > "$tmp" 2>/dev/null; mv -f "$tmp" "$PEND"
+           printf 'cleared: %s\n' "$slug" ;;
+    list)  grep -v '^[[:space:]]*$' "$PEND" 2>/dev/null || printf 'no pages awaiting an answer\n' ;;
+    count) local n; n=$(grep -cv '^[[:space:]]*$' "$PEND" 2>/dev/null); printf '%s\n' "${n:-0}" ;;
+    *)     die "unknown pending subcommand: $sub" "decision-page.sh pending add|clear|list|count [slug]" ;;
+  esac
+}
+
+# ── answer (submit-to-wake) ──────────────────────────────────────────────────
+# The server writes <slug>/.answer.json when the human clicks Submit. After
+# handoff the agent watches for that file (Monitor tool or a poll of this command)
+# and reads the answer here — no copy-paste needed. Exits non-zero until submitted.
+cmd_answer() {
+  local slug="${1:?usage: decision-page.sh answer <slug> [--consume] [--notify]}"; shift 2>/dev/null || true
+  local consume=0 notify=0
+  while [ $# -gt 0 ]; do case "$1" in
+    --consume) consume=1 ;;
+    --notify)  notify=1 ;;   # macOS banner confirming the read (no-op off macOS)
+    *) die "unknown flag for answer: $1" "decision-page.sh answer <slug> [--consume] [--notify]" ;;
+  esac; shift; done
+  local f="$REG/$slug/.answer.json"
+  [ -f "$f" ] || { printf 'no answer yet for %s%s%s — the human has not hit Submit\n' "$Y" "$slug" "$R" >&2; exit 1; }
+  python3 - "$f" "$consume" "$notify" <<'PY'
+import json, os, platform, shutil, subprocess, sys
+f, consume, notify = sys.argv[1], sys.argv[2] == "1", sys.argv[3] == "1"
+ans = json.load(open(f)).get("answer", "")
+# macOS notification: title = originating session, subtitle = "answers read",
+# body = the page topic. Built-in osascript banner — temporary, auto-dismisses.
+if notify and platform.system() == "Darwin" and shutil.which("osascript"):
+    origin = {}
+    try:
+        origin = (json.load(open(os.path.join(os.path.dirname(f), "config.json"))) or {}).get("origin") or {}
+    except (OSError, ValueError):
+        pass
+    slug = os.path.basename(os.path.dirname(f))
+    topic, session = origin.get("topic") or "", origin.get("session") or ""
+    # lead with the topic (the "which decision"); show the session for
+    # multi-session disambiguation without repeating it in the title.
+    title = topic or session or slug
+    body = f"from {session}" if session and session != title else ""
+    esc = lambda s: str(s).replace("\\", "\\\\").replace('"', '\\"')
+    script = (f'display notification "{esc(body)}" with title "{esc(title)}" '
+              f'subtitle "Claude read your answers"')
+    try:
+        subprocess.run(["osascript", "-e", script], timeout=5, check=False)
+    except (OSError, subprocess.SubprocessError):
+        pass
+print(ans)
+if consume:
+    os.remove(f)   # read-once so a later Submit is detectable as a new file
+PY
+}
+
 usage() {
   cat <<EOT
 ${B}decision-page.sh${R} — pre-answered feedback pages a human can answer in one paste
@@ -244,8 +341,10 @@ ${Y}commands${R}
   ${B}check${R} <slug>               verify: schema · images · renders  ${D}(run before handoff)${R}
   ${B}list${R}                       pages: slug · items · age · url · title
   ${B}open${R} [slug]                open the page (or the hub) in the browser
-  ${B}status${R}                     server + page count
+  ${B}status${R}                     server + page count + pages awaiting an answer
   ${B}serve${R}                      ensure the registry server (pm2, :$PORT)
+  ${B}pending${R} <add|clear|list|count> [slug]   mark/unmark "handed off, awaiting the human"
+  ${B}answer${R} <slug> [--consume] [--notify]  print the answer the human Submitted (exits 1 until they do); --notify pops a macOS banner
   ${B}rm${R} <slug>                  trash a page
   ${B}prune${R} --older-than <days>  trash old pages (confirms on a TTY)
 
@@ -264,8 +363,11 @@ case "${1:-help}" in
   list)   cmd_list ;;
   status) cmd_status ;;
   open)   ensure_server >/dev/null; regen_manifest >/dev/null; open "$BASE/${2:+$2/}" ;;
+  pending) shift; cmd_pending "$@" ;;
+  answer) shift; cmd_answer "$@" ;;
   rm)     slug="${2:?usage: decision-page.sh rm <slug>}"
           trash "$REG/$slug" 2>/dev/null && echo "trashed: $slug" || echo "not found: $REG/$slug"
+          [ -f "$PEND" ] && { grep -vxF "$slug" "$PEND" > "$PEND.$$.tmp" 2>/dev/null; mv -f "$PEND.$$.tmp" "$PEND"; }
           regen_manifest ;;
   prune)  shift; cmd_prune "$@" ;;
   help|-h|--help) usage ;;

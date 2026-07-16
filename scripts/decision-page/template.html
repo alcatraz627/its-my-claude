@@ -4,48 +4,74 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Decision page</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%235b9dd9'/%3E%3Cpath d='M9 16.4l4.6 4.6L23 11' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
+/* One neutral-slate hue family, depth by lightness (bg < surface < surface-2),
+   a single blue accent. Dark and light share hues; light just raises L, lowers C.
+   Borders are intentionally faint — depth comes from the surface steps, not lines. */
 :root, :root[data-theme="dark"] {
-  --bg: #101418; --surface: #1a2027; --surface-2: #232b34; --text: #e8edf2;
-  --dim: #93a1af; --border: #2e3843; --accent: #5b9dd9; --ok: #4fc08d;
-  --warn: #d9a05b; --rec: #2c4a63; --flip: #63363b;
+  --bg: #0f1216; --surface: #171b21; --surface-2: #1e232b; --text: #e6eaf0;
+  --dim: #97a1ad; --border: #232830; --accent: #62a0e4; --ok: #52bd8a;
+  --warn: #d3a15f; --rec: #1b2a3b; --focus: rgba(98,160,228,.20);
 }
 :root[data-theme="light"] {
-  --bg: #f4f2ee; --surface: #ffffff; --surface-2: #f0ede8; --text: #22262a;
-  --dim: #6b7580; --border: #ddd8d0; --accent: #2563a8; --ok: #1d7a4f;
-  --warn: #9a6a1f; --rec: #dbe9f5; --flip: #f5dbde;
+  --bg: #f5f6f8; --surface: #ffffff; --surface-2: #eef1f4; --text: #1b1f24;
+  --dim: #626b76; --border: #e5e8ec; --accent: #2e6fc7; --ok: #1d7a4f;
+  --warn: #8a6417; --rec: #e9f1fb; --focus: rgba(46,111,199,.16);
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text);
   font: 15px/1.55 -apple-system, "Segoe UI", system-ui, sans-serif; }
 header { position: sticky; top: 0; z-index: 5; background: var(--bg);
   border-bottom: 1px solid var(--border); padding: 8px 22px;
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-header h1 { font-size: 15px; margin: 0; flex: 1; min-width: 200px; }
-#progress { font-size: 12.5px; color: var(--dim); white-space: nowrap; }
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+header h1 { font-size: 15px; margin: 0; flex: 1; min-width: 180px; }
+#progress { font-size: 12.5px; color: var(--dim); white-space: nowrap;
+  margin-right: 4px; }
 #progress b { color: var(--warn); }
 button { background: var(--surface-2); color: var(--text);
   border: 1px solid var(--border); border-radius: 7px; padding: 6px 12px;
   cursor: pointer; font-size: 13px; }
 button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 button.on { border-color: var(--accent); background: var(--rec); }
 #copy { background: var(--accent); color: #fff; border: none; font-weight: 600; }
-main { max-width: 1060px; margin: 0 auto; padding: 20px 22px 120px; }
+#submit { background: var(--ok); color: #08130d; border: none; font-weight: 700; }
+#submit:disabled { opacity: .6; cursor: default; }
+main { max-width: 1060px; margin: 0 auto; padding: 20px 22px 140px; }
+.intro { color: var(--dim); font-size: 13.5px; margin: 0 0 6px;
+  padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; }
+.intro kbd { color: var(--text); }
+/* provenance line — which session/project/topic created this page */
+.origin { font-size: 12.5px; color: var(--dim); margin: 0 0 12px; padding: 2px 2px;
+  display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.origin .badge { background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 2px 9px; color: var(--text); font-weight: 600; }
+.origin .sep { opacity: .5; }
+/* per-cluster helper context + optional color tint on the group heading */
+.gctx { font-size: 12.5px; color: var(--dim); margin: -2px 0 6px; padding: 0 2px; }
+.group.tinted h2 { color: var(--gcol); }
+.group.tinted h2::before { color: var(--gcol); }
 section.card { background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 18px 20px; margin: 14px 0; scroll-margin: 90px; }
-section.card.focused { outline: 2px solid var(--accent); outline-offset: 1px; }
-section.card.flipped { border-left: 4px solid var(--warn); }
-body.flip-only section.card:not(.flipped) { display: none; }
-body.flip-only .group:not(:has(.card.flipped)) h2 { display: none; }
+  border-radius: 12px; padding: 16px 18px; margin: 12px 0; scroll-margin: 92px; }
+section.card.focused { border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus); }
+section.card.flipped { border-left: 3px solid var(--warn); }
+section.card.noted:not(.flipped) { border-left: 3px solid var(--accent); }
+body.flip-only section.card:not(.flipped):not(.noted) { display: none; }
+body.flip-only .group:not(:has(.card.flipped)):not(:has(.card.noted)) h2 { display: none; }
 .group h2 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
   color: var(--dim); margin: 24px 0 4px; cursor: pointer; user-select: none; }
 .group h2 .n { font-weight: 400; opacity: .7; }
 .group.collapsed section.card { display: none; }
 .group h2::before { content: "▾ "; }
 .group.collapsed h2::before { content: "▸ "; }
-h3 { font-size: 16px; margin: 0 0 4px; }
-h3 .idtag { color: var(--dim); font-size: 12px; font-weight: 500; }
-.read { color: var(--dim); font-size: 13.5px; margin: 2px 0 10px; }
+h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; display: flex;
+  align-items: baseline; gap: 8px; flex-wrap: wrap; letter-spacing: -.005em; }
+h3 .idtag { color: var(--dim); font-size: 11px; font-weight: 500;
+  font-family: ui-monospace, Menlo, monospace; letter-spacing: 0;
+  background: var(--surface-2); border-radius: 5px; padding: 1px 7px; }
+.read { color: var(--dim); font-size: 13.5px; margin: 0 0 12px; }
 .shots { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
 .shots img { max-width: 236px; width: 100%; border: 1px solid var(--border);
   border-radius: 8px; cursor: zoom-in; background: #fff; }
@@ -58,6 +84,7 @@ h3 .idtag { color: var(--dim); font-size: 12px; font-weight: 500; }
   border-radius: 8px; margin: 6px 0; cursor: pointer; font-size: 13.5px;
   position: relative; }
 .opt:has(input:checked) { border-color: var(--accent); background: var(--rec); }
+.opt:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px var(--focus); }
 .opt input { margin-right: 8px; }
 .opt .num { display: none; position: absolute; right: 10px; top: 8px;
   color: var(--dim); font-size: 11px; border: 1px solid var(--border);
@@ -68,10 +95,34 @@ section.card.focused .opt .num { display: inline-block; }
 .react { display: flex; gap: 10px; align-items: center; margin-top: 10px;
   flex-wrap: wrap; }
 .react label { font-size: 13px; display: flex; gap: 6px; align-items: center; }
-.react input[type=text] { flex: 1; min-width: 240px; background: var(--surface-2);
+.prio { color: var(--warn); font-size: 10.5px; font-weight: 700;
+  letter-spacing: .06em; background: var(--surface-2); border-radius: 5px;
+  padding: 1px 7px; }
+/* ── notes: hidden by default, revealed per-card (n / chip) or globally (notes) ── */
+.addnote { display: none; background: none; border: 1px dashed var(--border);
+  color: var(--dim); border-radius: 6px; padding: 2px 8px; font-size: 12px;
+  cursor: pointer; }
+.addnote:hover { border-color: var(--accent); color: var(--text); }
+section.card.focused .addnote { display: inline-block; }
+.notewrap { display: none; margin-top: 8px; }
+body.notes-on .notewrap, section.card.shownote .notewrap { display: block; }
+body.notes-on .addnote, section.card.shownote .addnote { display: none; }
+.notewrap textarea { width: 100%; background: var(--surface-2);
   color: var(--text); border: 1px solid var(--border); border-radius: 7px;
-  padding: 6px 10px; font-size: 13px; }
-.prio { color: var(--warn); font-size: 12px; font-weight: 700; }
+  padding: 7px 10px; font: 13px/1.5 -apple-system, system-ui, sans-serif;
+  resize: vertical; }
+.notewrap.filled textarea { border-color: var(--border);
+  border-left: 2px solid var(--accent); background: var(--surface-2); }
+/* notes:false hard-disables the surface — hide the toggle, the +note buttons,
+   and every note field (JS also blocks the n/m keys). */
+body.notes-off #notes, body.notes-off .addnote,
+body.notes-off .notewrap, body.notes-off #endnotes { display: none; }
+.notelabel { font-size: 11px; color: var(--dim); letter-spacing: .04em;
+  text-transform: uppercase; margin-bottom: 3px; }
+/* end-of-form notes */
+#endnotes { margin: 26px 0 0; }
+#endnotes .card { border-style: dashed; }
+#endnotes textarea { min-height: 64px; }
 #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
   background: var(--accent); color: #fff; padding: 10px 18px; border-radius: 8px;
   opacity: 0; transition: opacity .25s; pointer-events: none; font-size: 14px;
@@ -80,7 +131,7 @@ section.card.focused .opt .num { display: inline-block; }
 .note { font-size: 13px; color: var(--dim); }
 #drawer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
   background: var(--surface); border-top: 1px solid var(--border);
-  max-height: 40vh; overflow: auto; padding: 10px 22px; display: none; }
+  max-height: 44vh; overflow: auto; padding: 10px 22px; display: none; }
 #drawer.on { display: block; }
 #drawer pre { margin: 4px 0; font: 12.5px/1.5 ui-monospace, Menlo, monospace;
   white-space: pre-wrap; }
@@ -90,7 +141,7 @@ section.card.focused .opt .num { display: inline-block; }
   display: none; align-items: center; justify-content: center; }
 #overlay.on { display: flex; }
 #overlay .box { background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 22px 28px; max-width: 460px; font-size: 13.5px; }
+  border-radius: 12px; padding: 22px 28px; max-width: 480px; font-size: 13.5px; }
 #overlay table { border-collapse: collapse; }
 #overlay td { padding: 3px 12px 3px 0; }
 kbd { background: var(--surface-2); border: 1px solid var(--border);
@@ -101,12 +152,14 @@ kbd { background: var(--surface-2); border: 1px solid var(--border);
 <header>
   <h1 id="title">Decision page</h1>
   <span id="progress"></span>
-  <button id="flip" title="show only flipped items (f)">flipped</button>
+  <button id="flip" title="show only what you changed (f)">flagged</button>
+  <button id="notes" title="show note fields on every item (m)">notes</button>
   <button id="preview" title="answer preview (p)">preview</button>
   <button id="reset" title="back to drafted answers">reset</button>
   <button id="theme" title="theme (t)">☀ / ☾</button>
   <button id="help" title="shortcuts (?)">?</button>
   <button id="copy" title="copy the answer string (c)">Copy answers</button>
+  <button id="submit" title="send answers straight to Claude (s)">Submit to Claude</button>
 </header>
 <main id="main"><p class="note">Loading config.json…</p></main>
 <div id="drawer"><span class="cap">answer preview — this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
@@ -116,22 +169,26 @@ kbd { background: var(--surface-2); border: 1px solid var(--border);
     <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>next / previous item</td></tr>
     <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>pick option in the focused decision</td></tr>
     <tr><td><kbd>a</kbd></td><td>toggle agree on the focused item</td></tr>
-    <tr><td><kbd>n</kbd></td><td>write a note on the focused item (<kbd>Esc</kbd> to leave)</td></tr>
-    <tr><td><kbd>f</kbd></td><td>show only flipped items</td></tr>
+    <tr><td><kbd>n</kbd></td><td>add a note to the focused item (<kbd>Esc</kbd> to leave)</td></tr>
+    <tr><td><kbd>m</kbd></td><td>notes mode — show a note field on every item</td></tr>
+    <tr><td><kbd>N</kbd></td><td>jump to the end-of-form notes for Claude</td></tr>
+    <tr><td><kbd>f</kbd></td><td>show only items you changed or noted</td></tr>
     <tr><td><kbd>p</kbd></td><td>answer preview drawer</td></tr>
     <tr><td><kbd>c</kbd></td><td>copy the answer string</td></tr>
+    <tr><td><kbd>s</kbd></td><td>submit answers straight to Claude</td></tr>
     <tr><td><kbd>g</kbd> / <kbd>G</kbd></td><td>first / last item</td></tr>
     <tr><td><kbd>t</kbd></td><td>theme</td></tr>
     <tr><td><kbd>?</kbd></td><td>this help (<kbd>Esc</kbd> closes)</td></tr>
   </table>
-  <p class="note">Untouched = agreed. Only flips and notes end up in the paste.</p>
+  <p class="note">Untouched = agreed. Only your changes and notes end up in the paste — notes are optional.</p>
 </div></div>
 <div id="toast">Copied — paste it in chat</div>
 <script>
-/* Generic decision page. Reads ./config.json (same folder, must be served over
-   http). Renders decision radio-groups + item cards with agree/note reactions,
-   persists to localStorage (incl. a ts the hub reads), and builds a compact
-   answer string. Schema: ~/.claude/features/decision-pages.md */
+/* Generic decision page. Reads ./config.json (same folder, served over http).
+   Renders decision radio-groups + item cards with agree/note reactions, plus an
+   optional end-of-form note, persists to localStorage (incl. a ts the hub reads),
+   and builds a compact answer string. Notes are OFF by default — the payload
+   stays lean until you actually write one. Schema: ~/.claude/features/decision-pages.md */
 const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 let CFG = null, FOCUS = -1;
@@ -139,18 +196,39 @@ let CFG = null, FOCUS = -1;
 const esc = s => String(s ?? "").replace(/[&<>"]/g,
   c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+/* a note field, collapsed by default. Present on every card + the end-of-form
+   card, so the human can annotate anything without the agent pre-seeding it. */
+function noteField(cls, seed, ph) {
+  return `<div class="notewrap"><div class="notelabel">note (optional)</div>
+    <textarea class="${cls}" rows="1" placeholder="${esc(ph)}">${esc(seed || "")}</textarea></div>`;
+}
+
 function render() {
   document.title = CFG.title || "Decision page";
   $("#title").textContent = CFG.title || "Decision page";
+  // notes:false hard-disables the whole notes surface (rare — agent opts out)
+  if (CFG.notes === false) document.body.classList.add("notes-off");
+  // per-page accent override — lets the authoring agent theme a page
+  if (CFG.accent) document.documentElement.style.setProperty("--accent", CFG.accent);
   const M = $("#main");
   let h = "";
-  if (CFG.intro) h += `<p class="note">${esc(CFG.intro)} If you agree with it
-    all: hit <b>Copy answers</b> and paste it in chat. Press <kbd>?</kbd> for keyboard.</p>`;
+  // provenance: which session/project/topic this page is from (multi-session aid)
+  if (CFG.origin) {
+    const o = CFG.origin;
+    const tail = [o.session, o.project, o.created].filter(Boolean)
+      .map(esc).join(`<span class="sep"> · </span>`);
+    h += `<p class="origin">${o.topic ? `<span class="badge">${esc(o.topic)}</span>` : ""}${tail}</p>`;
+  }
+  if (CFG.intro) h += `<p class="intro">${esc(CFG.intro)} When you're done, hit
+    <b>Submit to Claude</b> (or <b>Copy answers</b> to paste it yourself). Press
+    <kbd>?</kbd> for keyboard.</p>`;
   if ((CFG.decisions || []).length) {
-    h += `<div class="group" data-g="__decisions"><h2>Decisions <span class="n">· ${CFG.decisions.length}</span></h2>`;
+    const dm = (CFG.groups || {})["Decisions"] || {};
+    h += `<div class="group${dm.color ? " tinted" : ""}" data-g="__decisions"${dm.color ? ` style="--gcol:${esc(dm.color)}"` : ""}><h2>Decisions <span class="n">· ${CFG.decisions.length}</span></h2>`;
+    if (dm.context) h += `<p class="gctx">${esc(dm.context)}</p>`;
     CFG.decisions.forEach(d => {
       h += `<section class="card decision" data-d="${esc(d.id)}" tabindex="-1">
-        <h3>${esc(d.id)} · ${esc(d.question)}</h3>`;
+        <h3><span class="idtag">${esc(d.id)}</span> ${esc(d.question)}</h3>`;
       if (d.context) h += `<p class="read">${esc(d.context)}</p>`;
       d.options.forEach((o, i) => {
         h += `<label class="opt"><input type="radio" name="${esc(d.id)}"
@@ -158,6 +236,10 @@ function render() {
           ${esc(o.label)}${o.rec ? '<span class="rec-tag">RECOMMENDED</span>' : ""}
           <span class="num">${i + 1}</span></label>`;
       });
+      if (CFG.notes !== false) {
+        h += `<div class="react"><button class="addnote" tabindex="-1">＋ note</button></div>`;
+        h += noteField("dnote", d.note, "why you picked differently, a caveat, a question…");
+      }
       h += `</section>`;
     });
     h += `</div>`;
@@ -168,7 +250,9 @@ function render() {
       if (open) h += `</div>`;
       group = s.group || "Items";
       const n = CFG.sections.filter(x => (x.group || "Items") === group).length;
-      h += `<div class="group" data-g="${esc(group)}"><h2>${esc(group)} <span class="n">· ${n}</span></h2>`;
+      const gm = (CFG.groups || {})[group] || {};
+      h += `<div class="group${gm.color ? " tinted" : ""}" data-g="${esc(group)}"${gm.color ? ` style="--gcol:${esc(gm.color)}"` : ""}><h2>${esc(group)} <span class="n">· ${n}</span></h2>`;
+      if (gm.context) h += `<p class="gctx">${esc(gm.context)}</p>`;
       open = true;
     }
     h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
@@ -180,10 +264,22 @@ function render() {
       h += `<div class="slots">` + Object.entries(s.slots).map(([k, v]) =>
         `<div><b>${esc(k)}</b> ${esc(v)}</div>`).join("") + `</div>`;
     }
-    h += `<div class="react"><label><input type="checkbox" class="agree" checked>agree</label>
-      <input type="text" class="notes" placeholder="exception / note…"></div></section>`;
+    h += `<div class="react"><label><input type="checkbox" class="agree" checked>agree</label>`;
+    if (CFG.notes !== false) h += `<button class="addnote" tabindex="-1">＋ note</button>`;
+    h += `</div>`;
+    if (CFG.notes !== false) h += noteField("notes", s.note, "exception / note…");
+    h += `</section>`;
   });
   if (open) h += `</div>`;
+  // end-of-form notes for Claude — the escape hatch for anything the form can't hold
+  if (CFG.notes !== false)
+    h += `<div id="endnotes"><section class="card endnote" data-s="__end" tabindex="-1">
+      <h3>Notes for Claude <span class="idtag">optional</span></h3>
+      <p class="read">Anything the form above can't capture — extra context, a
+        constraint, a follow-up. Leave blank to keep the payload lean.</p>
+      <div class="notewrap" style="display:block"><textarea class="endnotes"
+        rows="2" placeholder="e.g. do the Walmart ones first; ping me before the DB migration…"></textarea></div>
+    </section></div>`;
   M.innerHTML = h;
   $$(".group h2").forEach(t => t.onclick = () => { t.parentElement.classList.toggle("collapsed"); save(); });
 }
@@ -193,13 +289,18 @@ const recOf = id => (CFG.decisions.find(d => d.id === id)?.options.find(o => o.r
 
 function state() {
   const s = { theme: document.documentElement.dataset.theme, ts: Date.now(),
-              d: {}, screens: {}, collapsed: [] };
-  (CFG.decisions || []).forEach(d =>
-    s.d[d.id] = $(`input[name="${d.id}"]:checked`)?.value);
+              d: {}, dnotes: {}, screens: {}, endnotes: "",
+              notesOn: document.body.classList.contains("notes-on"), collapsed: [] };
+  (CFG.decisions || []).forEach(d => {
+    s.d[d.id] = $(`input[name="${d.id}"]:checked`)?.value;
+    const dn = $(`section[data-d="${d.id}"] .dnote`);
+    if (dn && dn.value.trim()) s.dnotes[d.id] = dn.value.trim();
+  });
   $$("section.screen").forEach(sec => {
     s.screens[sec.dataset.s] = {
-      agree: $(".agree", sec).checked, note: $(".notes", sec).value.trim() };
+      agree: $(".agree", sec).checked, note: ($(".notes", sec)?.value || "").trim() };
   });
+  s.endnotes = ($(".endnotes")?.value || "").trim();
   s.collapsed = $$(".group.collapsed").map(g => g.dataset.g);
   return s;
 }
@@ -209,47 +310,78 @@ function load() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY()) || "null"); if (!s) return;
     if (s.theme) document.documentElement.dataset.theme = s.theme;
+    if (s.notesOn) document.body.classList.add("notes-on"), $("#notes").classList.add("on");
     Object.entries(s.d || {}).forEach(([d, v]) => {
       const el = $(`input[name="${d}"][value="${v}"]`); if (el) el.checked = true; });
+    Object.entries(s.dnotes || {}).forEach(([d, v]) => {
+      const el = $(`section[data-d="${d}"] .dnote`); if (el) el.value = v; });
     Object.entries(s.screens || {}).forEach(([k, v]) => {
       const sec = $(`section[data-s="${k}"]`); if (!sec) return;
-      $(".agree", sec).checked = v.agree; $(".notes", sec).value = v.note || ""; });
+      $(".agree", sec).checked = v.agree;
+      const nt = $(".notes", sec); if (nt) nt.value = v.note || ""; });
+    if (s.endnotes && $(".endnotes")) $(".endnotes").value = s.endnotes;
     (s.collapsed || []).forEach(g => {
       const el = $(`.group[data-g="${CSS.escape(g)}"]`); if (el) el.classList.add("collapsed"); });
   } catch {}
 }
 
-/* the single source for "what deviates from the draft" — drives the flipped
-   styling, the progress line, the copy badge, and the answer string */
+/* the single source for "what deviates from the draft" — drives flagged styling,
+   the progress line, the copy badge, and the answer string. A note counts as a
+   deviation (the human went out of their way to add it). */
 function flips() {
-  const s = state(), out = { d: [], screens: [] };
-  (CFG.decisions || []).forEach(d => { if (s.d[d.id] !== recOf(d.id)) out.d.push(d.id); });
+  const s = state(), out = { d: [], dnote: [], screens: [], end: !!s.endnotes };
+  (CFG.decisions || []).forEach(d => {
+    if (s.d[d.id] !== recOf(d.id)) out.d.push(d.id);
+    if (s.dnotes[d.id]) out.dnote.push(d.id);
+  });
   Object.entries(s.screens).forEach(([k, v]) => { if (!v.agree || v.note) out.screens.push(k); });
   return out;
 }
 function answerString() {
-  const s = state();
+  const s = state(), f = flips();
   const lines = [(CFG.copyHeader || CFG.title || "answers") + ":"];
   if ((CFG.decisions || []).length)
-    lines.push(CFG.decisions.map(d => d.id + (s.d[d.id] || "?")).join(" "));
+    lines.push(CFG.decisions.map(d => d.id + (s.d[d.id] || recOf(d.id) || "?")).join(" "));
+  (CFG.decisions || []).forEach(d => {
+    if (s.dnotes[d.id]) lines.push(`${d.id} note — ${s.dnotes[d.id]}`);
+  });
   Object.entries(s.screens).forEach(([k, v]) => {
     if (!v.agree || v.note) lines.push(
       `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? " — " + v.note : ""}`);
   });
-  if (!lines.some((l, i) => i > 1)) lines.push("all items: agree as drafted");
+  if (s.endnotes) lines.push("notes:", s.endnotes);
+  // "agreed with everything" only when nothing actually deviates (a flipped
+  // option, a note, or end notes) — the decisions line alone is not a deviation.
+  if (!f.d.length && !f.dnote.length && !f.screens.length && !f.end)
+    lines.push("all items: agree as drafted");
   return lines.join("\n");
 }
 
 function refresh() {
   const f = flips();
-  $$("section.decision").forEach(sec =>
-    sec.classList.toggle("flipped", f.d.includes(sec.dataset.d)));
-  $$("section.screen").forEach(sec =>
-    sec.classList.toggle("flipped", f.screens.includes(sec.dataset.s)));
+  $$("section.decision").forEach(sec => {
+    sec.classList.toggle("flipped", f.d.includes(sec.dataset.d));
+    sec.classList.toggle("noted", !f.d.includes(sec.dataset.d) && f.dnote.includes(sec.dataset.d));
+  });
+  $$("section.screen").forEach(sec => {
+    const dis = f.screens.includes(sec.dataset.s);
+    const noteOnly = dis && $(".agree", sec).checked;   // agreed but noted
+    sec.classList.toggle("flipped", dis && !noteOnly);
+    sec.classList.toggle("noted", noteOnly);
+  });
+  // mark filled note wrappers so a written note never hides when notes-mode is off.
+  // shownote is add-only here: a manually-opened empty note (openNote) must stay
+  // open — recomputing it from `filled` on every keystroke would collapse it.
+  $$(".notewrap").forEach(w => {
+    const t = $("textarea", w); const filled = t && t.value.trim();
+    w.classList.toggle("filled", !!filled);
+    if (filled) w.closest("section.card")?.classList.add("shownote");
+  });
   const total = (CFG.decisions || []).length + (CFG.sections || []).length;
-  const n = f.d.length + f.screens.length;
+  const n = f.d.length + f.screens.length
+          + f.dnote.filter(id => !f.d.includes(id)).length + (f.end ? 1 : 0);
   $("#progress").innerHTML = n
-    ? `${total} items · <b>${n} flipped</b>` : `${total} items · all as drafted`;
+    ? `${total} items · <b>${n} flagged</b>` : `${total} items · all as drafted`;
   $("#copy").textContent = n ? `Copy answers (${n})` : "Copy answers";
   if ($("#drawer").classList.contains("on")) $("#drawertext").textContent = answerString();
 }
@@ -263,6 +395,12 @@ function focusCard(i) {
   const c = cs[FOCUS];
   c.classList.add("focused");
   c.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+/* reveal + focus the note on a card (works even with notes-mode off) */
+function openNote(card) {
+  if (!card || document.body.classList.contains("notes-off")) return;
+  card.classList.add("shownote");
+  const t = $(".notewrap textarea", card); if (t) { t.focus(); }
 }
 document.addEventListener("keydown", e => {
   const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName || "");
@@ -279,10 +417,14 @@ document.addEventListener("keydown", e => {
     case "G": focusCard(cards().length - 1); break;
     case "a": if (cur?.classList.contains("screen")) {
         const cb = $(".agree", cur); cb.checked = !cb.checked; save(); } break;
-    case "n": if (cur?.classList.contains("screen")) { e.preventDefault(); $(".notes", cur).focus(); } break;
+    case "n": if (cur) { e.preventDefault(); openNote(cur); } break;
+    case "N": { const end = $("#endnotes .endnotes");
+        if (end) { e.preventDefault(); end.scrollIntoView({block:"center"}); end.focus(); } } break;
+    case "m": $("#notes").click(); break;
     case "f": $("#flip").click(); break;
     case "p": $("#preview").click(); break;
     case "c": $("#copy").click(); break;
+    case "s": $("#submit").click(); break;
     case "t": $("#theme").click(); break;
     case "?": $("#overlay").classList.add("on"); break;
     default:
@@ -295,6 +437,8 @@ document.addEventListener("keydown", e => {
 
 document.body.addEventListener("click", e => {
   if (e.target.matches(".shots img")) e.target.classList.toggle("big");
+  if (e.target.matches(".addnote")) { e.preventDefault();
+    openNote(e.target.closest("section.card")); return; }
   const card = e.target.closest("section.card");
   if (card) { const cs = cards(); FOCUS = cs.indexOf(card);
     $$("section.card.focused").forEach(c => c.classList.remove("focused"));
@@ -309,6 +453,9 @@ $("#theme").onclick = () => {
 };
 $("#flip").onclick = () => { document.body.classList.toggle("flip-only");
   $("#flip").classList.toggle("on"); FOCUS = -1; };
+$("#notes").onclick = () => { if (document.body.classList.contains("notes-off")) return;
+  document.body.classList.toggle("notes-on");
+  $("#notes").classList.toggle("on"); save(); };
 $("#preview").onclick = () => { const d = $("#drawer"); d.classList.toggle("on");
   $("#preview").classList.toggle("on"); refresh(); };
 $("#help").onclick = () => $("#overlay").classList.add("on");
@@ -317,15 +464,35 @@ $("#reset").onclick = () => {
   if (!confirm("Reset every answer back to the drafted recommendation?")) return;
   localStorage.removeItem(KEY()); location.reload();
 };
+const toast = (m, ms=1800) => { $("#toast").textContent = m;
+  $("#toast").classList.add("on");
+  clearTimeout(toast._t); toast._t = setTimeout(() => $("#toast").classList.remove("on"), ms); };
 $("#copy").onclick = async () => {
   const txt = answerString();
   try { await navigator.clipboard.writeText(txt); }
   catch { prompt("Copy this:", txt); }
-  $("#toast").classList.add("on");
-  setTimeout(() => $("#toast").classList.remove("on"), 1800);
+  toast("Copied — paste it in chat");
+};
+/* Submit sends the answer string to the server (POST /_submit/<slug>), which
+   hands it to the agent that made the page. Falls back to clipboard if the
+   server has no submit endpoint or the network fails. */
+$("#submit").onclick = async () => {
+  const slug = location.pathname.split("/").filter(Boolean)[0];
+  const txt = answerString();
+  try {
+    const r = await fetch(`/_submit/${encodeURIComponent(slug)}`, { method: "POST",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answer: txt }) });
+    if (!r.ok) throw new Error("http " + r.status);
+    toast("Sent to Claude ✓ — you can close this tab", 2600);
+    $("#submit").textContent = "Sent ✓";
+    setTimeout(() => { $("#submit").textContent = "Submit to Claude"; }, 2600);
+  } catch (e) {
+    try { await navigator.clipboard.writeText(txt); } catch { prompt("Copy this:", txt); }
+    toast("Submit unavailable — copied instead, paste it in chat", 2800);
+  }
 };
 
-fetch("config.json").then(r => r.json()).then(c => { CFG = c; render(); load(); refresh(); })
+fetch("config.json", { cache: "no-store" }).then(r => r.json()).then(c => { CFG = c; render(); load(); refresh(); })
   .catch(e => { $("#main").innerHTML =
     `<p class="note">Failed to load config.json — serve this folder over http
     (decision-page.sh serve) and check the JSON. ${esc(e)}</p>`; });
