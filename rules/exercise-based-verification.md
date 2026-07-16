@@ -50,7 +50,14 @@ Before writing/saying done · works · fixed · passing · verified · shipped:
    condition (warning-level memory pressure, a network fault, an empty list,
    warm-vs-cold), induce that condition and observe — don't assert the happy path
    and infer the rest.
-5. **Mark the un-exercisable honestly.** If you genuinely cannot run something
+5. **A guard needs the opposite proof.** "I ran it and it passed" is evidence
+   about the CODE, never about a GUARD — a guard that has never fired is
+   untested. Break the thing it protects, watch THAT test go red, restore
+   (copy-based), watch it go green. Mutation-test each guard individually; a
+   mutation that stays green means the test is the bug. Four guards passed their
+   own tests while the thing they guarded was broken in one session — see
+   `rules/testing.md` § `[mutation-test-the-guard]` for the five ways it hides.
+6. **Mark the un-exercisable honestly.** If you genuinely cannot run something
    (throttled sandbox, missing hardware), write `UNCONFIRMED — <reason>`, not a
    checkmark. An honest gap is worth more than a false pass.
 

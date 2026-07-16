@@ -132,6 +132,13 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 >    humans first, first sentence code-agnostic, WHY-not-WHAT, ≤8 lines, no
 >    jargon-flexing, no restating the code. Flag any comment that just narrates
 >    what the next line literally does.
+> 7. **Mutation-test any guard the change adds or modifies** — a guard nobody has
+>    watched fail is untested, and a green suite only says it did not fire
+>    (`rules/testing.md` § `[mutation-test-the-guard]`). COPY the guard plus the
+>    code it protects into `/tmp`, break the protected behaviour THERE, and
+>    confirm the guard goes red on the copy — never mutate the live file, the
+>    read-only rule above still binds. If the mutation stays green, the TEST is
+>    the bug: report that as a finding.
 >
 > Write the full report to `<output_path>` before returning, as a table ranked by
 > suspicion: `| confidence | severity | file:line | check | what's suspect | how to verify |`.
