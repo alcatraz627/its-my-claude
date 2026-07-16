@@ -1,0 +1,16 @@
+{
+  "id": "a0f35401-be5e-4b00-bca6-dbdfe4b6ee46",
+  "ts": "2026-07-14T14:17:34Z",
+  "session_id": "catch-ckpt-9d",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260714-catch-ckpt-9d.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [],
+  "tags": []
+}

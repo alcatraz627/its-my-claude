@@ -8,7 +8,7 @@ triggers:
 related: [rules/corrections.md]
 tier: 1
 category: features
-updated: 2026-04-24
+updated: 2026-07-16
 stale_after_days: 90
 ---
 
@@ -23,8 +23,16 @@ bash ~/.claude/scripts/propose.sh add \
   --body "Rationale, context, pointers to files/lines" \
   --category hooks|scripts|skills|config|docs|other \
   --effort small|medium|large \
+  --tier minor|moderate|project \
+  --project <scope> --links "features/x.md rules/y.md" \
   --tags "tag1 tag2"
 ```
+
+`tier` is the kind/ambition of the item — a passing note (`minor`), a
+feedback-capture with little plan (`moderate`), or a full build (`project`) —
+distinct from `effort` (work-size). `project` scopes the item so a successor
+agent can focus on just that project's backlog; `links` point at the
+folders/docs/rules it touches (queryable via `--link`).
 
 ## What to file
 
@@ -42,13 +50,27 @@ One-off bug fixes (just fix them), user preferences (save to memory), project-sp
 When the user asks "what else can be improved?" / "give me a list of improvements" — **start by reading open proposals.** They were filed with full context the current session lacks:
 
 ```bash
-bash ~/.claude/scripts/propose.sh list --status open
-bash ~/.claude/scripts/propose.sh show <id>
+bash ~/.claude/scripts/propose.sh list --status open               # the query table
+bash ~/.claude/scripts/propose.sh list --project gcc --tier project  # filters compose
+bash ~/.claude/scripts/propose.sh list --since 2026-07-01 --tag ipc
+bash ~/.claude/scripts/propose.sh search "dashboard"               # full-text
+bash ~/.claude/scripts/propose.sh show <id>                        # full detail + updates
 ```
+
+`list` filters compose: `--status --tier --project --category --since --tag --link`
+(`--since` is a zero-padded ISO date, e.g. `2026-07-01`).
+`propose.sh` is the single query surface (the role atone.sh and gcc-schedule play
+for their ledgers) — there is no separate query script.
 
 ## Lifecycle
 
-`add` → `done` (implemented) or `reject --reason "..."` (obsolete). Never delete — rejection preserves audit trail.
+`add` → accumulate context with `update <id> "note"` (append-only; keeps the
+original body) → close with `retire <id> --as <status> "reason"` (`--as` defaults
+to `done` if omitted). Terminal statuses: `done | rejected | superseded | deferred
+| obsolete` (`--by <id>` links a superseding item). `done` and `reject` remain as
+shortcuts. Re-weight any time with `tier <id> <minor|moderate|project>`. Never
+delete — a closed item preserves the audit trail and feeds drain-rate metrics
+(`decided_ts`). Quote multi-word reasons/notes.
 
 ## Self-feedback → canon promotion
 

@@ -1,0 +1,27 @@
+{
+  "id": "e5807cfc-ef18-4890-8d5f-cd1abee8f27a",
+  "ts": "2026-07-13T11:57:40Z",
+  "session_id": "vers-catch-7f",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260713-vers-catch-7f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "#23 F5 files restructure (NEXT) \u2014 modal-with-DataTable preview, kit",
+    "#24 F6 products redesign \u2014 dispatch /design-reviewer sub-agent (opus,",
+    "#25 F7 product detail \u2014 cache opt-in, tile hierarchy, titled cards,",
+    "#26 F8 jobs FULL re-run + BUILD backend outputs ledger (owner decision).",
+    "#27 F9 sweeps \u2014 icon per button, mono audit (nav/topbar already de-mono'd).",
+    "#34 round-1 review package (screenshots + verbatim walkthrough) \u2192 PR#2.",
+    "#4 walmart chrome \u00b7 #5 owner gates \u00b7 #6 endgame (kit backprop, adversarial",
+    "#35 [feedback-backlog] data/documents consolidation (post-round; scan",
+    "#36 [feedback-backlog] dashboard data sources r2 (exported-once tracking,",
+    "USER side: Jul 15 backend go/no-go; owner\u2192coworker go-ahead (scaffold in);"
+  ],
+  "tags": []
+}

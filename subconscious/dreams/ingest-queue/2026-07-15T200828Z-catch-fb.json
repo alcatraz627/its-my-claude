@@ -1,0 +1,28 @@
+{
+  "id": "5f3a4812-e290-4253-a186-e035cb357bb4",
+  "ts": "2026-07-15T20:08:28Z",
+  "session_id": "catch-fbl-7c",
+  "project_root": "/Users/alcatraz627/Code/Versable/speedway",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/speedway/_20260716-catch-fbl-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Owner: add the authToken line to `~/.npmrc`, confirm \"done\".",
+    "Agent: `npm publish` from `versable-builder/packages/ui` (scope test). If it rejects",
+    "Agent: wire speedway deploy \u2014 swap `@versable/ui` to the published version for the",
+    "Owner: run the gated deploy (`./scripts/deploy-preview.sh` \u2014 password-interactive).",
+    "**Live-test Fable's R2** (task #16, read-only): restart 5105 first (34 route files",
+    "My Tier-A speedway items (ProductsToolbar\u2192FilterBar, streamTimeout build, dropzone",
+    "Folder consolidation #35 \u2014 at Fable's done-ping or hand to Fable.",
+    "exceljs proof (task #12), route modularization (Fable's R2), job-detail header, PR#3",
+    "The A/B on client-nav skeleton was A-with-proof (build proof, owner tests before sweep).",
+    "Folder consolidation: me-at-ping vs hand-to-Fable.",
+    "The optional firebase projects:addfirebase."
+  ],
+  "tags": []
+}

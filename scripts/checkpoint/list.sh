@@ -81,8 +81,12 @@ def fmt_proj(p):
     if p.startswith(home): p = "~" + p[len(home):]
     return p[-32:]
 
+# Number newest-first (#1 = most recent) so a picker row N lines up with
+# `resolve.sh --pick N`, which counts from the most recent entry. Following the
+# /catchup picker verbatim used to load the opposite checkpoint. The --json
+# branch above stays chronological for machine consumers.
 print(f"  {'#':<3} {'NAME':<22} {'PROJECT':<34} {'AGE':<9}  SUMMARY")
-for i, r in enumerate(rows, 1):
+for i, r in enumerate(reversed(rows), 1):
     name = (r.get("name") or r.get("session_id") or "?")[:22]
     proj = fmt_proj(r.get("project_root"))
     age = fmt_age(r.get("ts", ""))

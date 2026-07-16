@@ -1,0 +1,21 @@
+{
+  "id": "921e2f94-4b89-401d-aaa2-b3407edbe62f",
+  "ts": "2026-07-13T09:06:40Z",
+  "session_id": "hdd-ntfs-dc",
+  "project_root": "/Users/alcatraz627",
+  "checkpoint_path": "/Users/alcatraz627/_20260713-hdd-ntfs-dc.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "No installation has happened yet (Homebrew tap, ntfs-3g build, Mounty setup) \u2014 all still to-do if the user proceeds with Option B.",
+    "Before any real write attempt: verify the Elements drive isn't in a Windows \"dirty\"/hibernated state (check on the Windows side, or trust ntfs-3g's own mount-time refusal once installed).",
+    "User may instead choose Option A (copy via a different Windows/Linux machine) \u2014 no follow-up needed on this Mac if so; confirm which path before doing more work.",
+    "No git repo / no code changes are involved in this task \u2014 it's a system-configuration walkthrough, not a coding task."
+  ],
+  "tags": []
+}

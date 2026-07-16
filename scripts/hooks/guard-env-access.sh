@@ -61,6 +61,13 @@ esac
 ENV_RE='process\.env|import\.meta\.env|Deno\.env\.get|os\.getenv|os\.environ|os\.Getenv|os\.LookupEnv|System\.getenv|std::env::var|ENV\[|\$_ENV\[|[^A-Za-z_]getenv\('
 printf '%s' "$NEW_CONTENT" | grep -qE "$ENV_RE" || exit 0
 
+# Rust keeps tests inline in the production .rs file (#[cfg(test)] / #[test] /
+# #[ignore]), so the filename-based test skip above never sees them. When the
+# added code is Rust test scaffolding, the env read is test-only — don't nag.
+case "$FP" in
+  *.rs) printf '%s' "$NEW_CONTENT" | grep -qE '#\[(cfg\(test\)|test|ignore)' && exit 0 ;;
+esac
+
 # Walk up from the file to the project root (nearest .git or .claude dir) so the
 # convention is scoped per-project. No root → can't scope; stay silent.
 dir=$(dirname "$FP")
@@ -70,6 +77,35 @@ while [ "$dir" != "/" ] && [ -n "$dir" ]; do
   dir=$(dirname "$dir")
 done
 [ -z "$root" ] && exit 0
+
+# Established-idiom: if every env var this edit reads is ALREADY read in the
+# existing file, the convention was settled here — a read following the file's
+# own pattern introduces nothing to nudge about (the reported noise was
+# #[ignore] probes re-reading a var the file's production code already reads).
+if [ -f "$FP" ]; then
+  ESTABLISHED=$(NEW_CONTENT="$NEW_CONTENT" python3 - "$FP" <<'PY'
+import os, re, sys
+accessor = re.compile(
+    r'''env::var(?:_os)?\(\s*["']([A-Za-z_]\w*)["']'''
+    r'''|getenv\(\s*["']([A-Za-z_]\w*)["']'''
+    r'''|environ(?:\.get\()?\[?\s*["']([A-Za-z_]\w*)["']'''
+    r'''|env\.get\(\s*["']([A-Za-z_]\w*)["']'''
+    r'''|(?:process\.env|import\.meta\.env)\.([A-Za-z_]\w*)'''
+    r'''|(?:process\.env|import\.meta\.env)\[\s*["']([A-Za-z_]\w*)["']'''
+    r'''|(?:ENV|_ENV)\[\s*["']([A-Za-z_]\w*)["']''')
+def names(s):
+    return {g for m in accessor.finditer(s) for g in m.groups() if g}
+new = names(os.environ.get("NEW_CONTENT", ""))
+try:
+    existing = names(open(sys.argv[1], encoding="utf-8", errors="replace").read())
+except Exception:
+    existing = set()
+# Skip only if we parsed at least one var AND all are already present.
+print("skip" if (new and new <= existing) else "")
+PY
+)
+  [ "$ESTABLISHED" = "skip" ] && exit 0
+fi
 
 CONV="$root/.claude/conventions/env-access.md"
 

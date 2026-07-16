@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-13T00:42:03.311497+00:00 · 15 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-15T18:48:44.746968+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-Frontend web application development (React/JSX), with recurring focus on UI component behavior, cache consistency, and tooling correctness. Working style is iterative with strong UX and code-style enforcement signals.
+Multi-agent coordination infrastructure with IPC-based session handoffs and document authoring for external stakeholders. Working style is parallel agent execution with frequent ownership contention and state synchronization requirements.
 
 ## Things to do (or keep doing)
-- **Picker/selector UIs**: selection must preview only — require an explicit save/apply action before state commits; never auto-apply on selection change
-- **After any mutation or write op**: explicitly verify client-side caches holding affected data are invalidated — staleness after writes is a recurring bug class
-- **Separate detection from application**: deterministic regex/heuristic detection belongs in its own pass; context-dependent judgment runs after, not mixed in
-- **Before building a new hook or nudge**: read existing scripts serving similar concerns — prior design decisions and removal history directly constrain what to build
+- Pre-negotiate task ownership via IPC before any parallel agent starts writing; verify peer hasn't already completed an item before touching it
+- Treat TaskUpdate, IPC reply, and git commit as blocking obligations — execute immediately after completing a unit of work, never defer as bookkeeping
+- Re-verify task list, file contents, and config validity at action time, not plan time — external writers can mutate state between planning and execution
+- Breadth-first v1 across all surfaces before polishing any single item; batch sequential work and halt only at genuine decision points
 
 ## Things to avoid
-- **Don't copy surrounding code patterns without verifying they apply**: flag-gated lazy imports, IIFE wrappers, and similar idioms exist for specific reasons; replicating them blindly in new locations is a recurring smell
-- **Don't use IIFE wrappers in JSX** where sibling elements use inline props or plain `const` declarations — conform to the established style already present
-- **Don't anchor log filters to broad keywords** — overly wide patterns match irrelevant payload content; use structural log-type identifiers
-- **Don't call a UI reskin done without E2E UX validation** — scroll behavior, background colors across states, responsive layout, and navigation flow all require explicit verification
+- Don't use `rg -rn` for line-number searches — `-r` is `--replace` and silently mangles output; use `rg -n` only
+- Don't confirm IPC delivery by reading your own send logs — wait for an actual round-trip reply from the peer
+- Don't patch one instance of a policy violation without fixing the structural default (e.g., adding one CLI to an allowlist leaves the bypass class open); access gates must default DENY for unrecognized input
+- Don't strip technical detail when correcting document tone for external audiences — target only inappropriate register, not engineering substance
 
 ## Open questions / known gaps
-- Formatters (Prettier etc.) can silently restructure logic-sensitive files during edits — no consistent post-edit inspection discipline established yet
-- Auth/authz abstraction boundary is unresolved: wrapper functions that appear to "handle auth" have historically masked unprotected callsites; explicit per-callsite checks are preferred but not uniformly enforced
+- IPC alias persistence across context-clears is fragile; checkpoint must record peer alias but re-establishment protocol is not consistently followed
+- Enforcement of multi-agent behavioral constraints lands at advisory layer (SKILL.md, spec text) instead of data-write gates, making it bypassable by agents that skip startup reads

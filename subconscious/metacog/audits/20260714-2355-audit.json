@@ -1,0 +1,83 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16429,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.14352736679604727,
+    "unit_count": 40
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit a0f35401-2: ls /speedway/app/routes/ as directory-listing (LS tool is correct); ls -la ~/Downloads/versable_speedway_app.html as file-existence probe (test -f or stat is correct); consistent with pattern appearing in a0f35401-2 in the 2026-07-14 0.65-score batch; rate in this two-unit sample is 1/1 tool-using units (100%), above the 73-85% six-cycle baseline; however small sample limits confidence; no escalation recommended, pattern already at stagnation threshold per prior guidance"
+    ],
+    "calibration_score": 0.58,
+    "overconfident_count": 0,
+    "recommendations": [
+      "shell_tool_preference_violations has now appeared in a0f35401-2 across at least two consecutive calibration batches with no improvement; the six-cycle stagnation threshold guidance recommends deprioritizing new interventions for this bias unless rate worsens — current cycle rate (1/1 tool-using units) is not meaningfully higher than baseline given N=1 denominator; maintain existing tracking without new intervention",
+      "structural_claim_without_reading_code, re_edit_thrash, write_before_read_trap, and nested_claude_path_anti_pattern — all RECURRING:STABLE or RECURRING:REGRESSION in prior cycles — produced zero instances in this two-unit batch; tentatively positive signal but sample is too small (N=2) to confirm improvement; continue tracking in next batch before reclassifying trajectory",
+      "unit d8f1948c-0 (juror/second-opinion, 5720-char input, zero tools, 1633-char output, Unknown outcome) is unclassifiable for calibration accuracy; zero-tool response on a pure-analysis task is strategy-appropriate; flag for outcome follow-up if the session record becomes available",
+      "batch size of two units is below the minimum for reliable calibration estimation; overall score of 0.58 should be treated as provisional pending a larger batch"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "d8f1948c-91e4-4557-9d1d-f463aeccc793",
+      83091
+    ],
+    [
+      "a0f35401-be5e-4b00-bca6-dbdfe4b6ee46",
+      16760993
+    ],
+    [
+      "8c7e6f5c-9b2d-4995-829a-f13969e5370e",
+      2732580
+    ],
+    [
+      "7cc90a45-c41e-4b34-9f05-f1090e6fe102",
+      82723
+    ],
+    [
+      "6b120b0a-b384-43e0-b962-243938dc68b3",
+      12990920
+    ],
+    [
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      3828027
+    ],
+    [
+      "7c520f34-be41-4703-8754-6c213809f661",
+      931866
+    ],
+    [
+      "37d08f61-e1d5-4a2b-a7fd-e71ff079f6f6",
+      49047
+    ],
+    [
+      "b088ebb3-87bc-43f4-8769-c0d1fa4e6d41",
+      10046798
+    ],
+    [
+      "8b93756c-850b-465f-bf43-af9c6a96ad7e",
+      8334923
+    ],
+    [
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      4070663
+    ],
+    [
+      "08cc5dfc-601b-49be-a30b-0a04d1adb93a",
+      8325358
+    ],
+    [
+      "872d3443-1f59-4820-b0f8-9dcd3ed4f1db",
+      892872
+    ]
+  ],
+  "timestamp": "2026-07-14T23:55:40.922720Z",
+  "tokens_used": 2674,
+  "units_analyzed": 2,
+  "units_total": 40
+}

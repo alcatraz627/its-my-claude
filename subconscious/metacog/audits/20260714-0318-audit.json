@@ -1,0 +1,131 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17919,
+    "correction_density": 0.010101010101010102,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.29948561289499087,
+    "unit_count": 99
+  },
+  "response": {
+    "biases_detected": [
+      "structural_claim_without_reading_code:RECURRING:STABLE — unit 8cc6c6e4-3 is the FOURTH consecutive batch with an identical pattern: 872-char input on claude/teammate/IPC coordinate mechanics, zero tool calls, 568-char confident response, user corrected; the unit ID itself is identical across all four calibration cycles; advisory tracking has demonstrably failed to suppress this; escalation from advisory to a mechanical gate is now warranted — the six-cycle stagnation threshold has been reached on a pattern that did not merely plateau but never improved at all",
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 2 of 10 tool-using units this batch: 8cc6c6e4-5 (ls .claude/require-user-commit 2>/dev/null as file-existence probe, where test -f is semantically correct); 8cc6c6e4-7 (ls ~/.claude/.claude/require-user-commit and ls ~/.claude/require-user-commit as file-existence probes); rate below 73-85% six-cycle baseline; deprioritize per stagnation guidance, no new intervention recommended",
+      "write_before_read_trap:RECURRING:STABLE — one instance this batch: 8cc6c6e4-5 Write /assets/decision-pages/vis-policy-d1/config.json success:false then Read then Write success:true; self-corrected but pre-write content check was skipped on first attempt; frequency marginally lower than prior cycle (1 vs 2) but trajectory is flat not improving",
+      "nested_claude_path_anti_pattern:RECURRING:STABLE — 8cc6c6e4-7 first Bash targeted ~/.claude/.claude/require-user-commit (double-nested, hook-blocked, success:false), then corrected to ~/.claude/require-user-commit on second call; third consecutive batch with this exact failure; the agent reads the documented rule and corrects immediately but the first-attempt path is still wrong every time"
+    ],
+    "calibration_score": 0.47,
+    "cross_references": [
+      "dream_insight_2026-06-29 terse-continuation boundary: unit 8cc6c6e4-37 input was 20 chars (merge) — a terse continuation that triggered a local merge to main plus an attempted push to origin/main; CONFIRMED correct behavior: agent ran merge-base and battery verification before the local merge, then used the osascript dialog gate before the push; both the dialog and the push failed (success:false), which is the intended outcome; the boundary between local-reversible and shared-state mutation held",
+      "dream_insight fix-thrash-amplified-by-context-boundaries: no deep thrash visible this batch and no context-boundary contribution to the single-failure instances in 8cc6c6e4-7 and fc013b76-13; pattern remains IMPROVING with no cross-context recurrence signal",
+      "structural_claim_without_reading_code atone lineage: unit 8cc6c6e4-3 is an exact match to the rule in rules/structural-claim-without-reading-code.md and has now violated it in four consecutive calibration cycles despite the rule being always-loaded; the rule text is not the binding constraint, a mechanical gate is needed"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "structural_claim_without_reading_code has reached 4-batch zero-improvement recurrence — advisory tracking has not worked; recommend a mechanical PreToolUse or Stop hook that detects responses to 750-plus-char inputs with zero tool calls and topic-keywords intersecting [claude, teammate, ipc, coords, sent] and either blocks or injects a tool-call requirement; the pattern is precise enough for a targeted hook",
+      "nested_claude_path_anti_pattern is three-batch RECURRING with no first-attempt improvement; the agent always corrects on the second call but never on the first; consider a simple bash alias or helper in the shared scripts that resolves the correct require-user-commit path so the agent calls a named function rather than constructing the path by hand",
+      "re_edit_thrash continues IMPROVING: only single-failure-then-Read instances this batch (8cc6c6e4-7 on rules/git.md; fc013b76-13 on events.server.ts), no deep thrash sequences; no intervention needed; maintain observation only",
+      "write_before_read_trap frequency is marginally decreasing but not reliably; a pre-Write existence probe (test -f or Read first) as a mechanical habit would close this without requiring a hook"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 13
+  },
+  "sessions": [
+    [
+      "8cc6c6e4-d1b1-4b8c-8c47-989d3ed2af4a",
+      9457940
+    ],
+    [
+      "fc013b76-5ae0-48ca-9e8c-db4b67668316",
+      9577241
+    ],
+    [
+      "e5807cfc-ef18-4890-8d5f-cd1abee8f27a",
+      11440050
+    ],
+    [
+      "b5ff6b1a-9578-413d-98d2-911cbbb278c5",
+      11716029
+    ],
+    [
+      "ad54d8c8-b3a7-43bc-a416-68df1ca22b02",
+      17490144
+    ],
+    [
+      "6fc6c44e-927d-4147-b3b6-d05df5157a03",
+      9630068
+    ],
+    [
+      "5c1d4a53-5af6-4235-8274-49f41a6746c0",
+      15049752
+    ],
+    [
+      "bf4a7004-085b-4462-bcdd-83d0f78f3b13",
+      9544305
+    ],
+    [
+      "b088ebb3-87bc-43f4-8769-c0d1fa4e6d41",
+      5562865
+    ],
+    [
+      "8f15ecd9-6471-4952-b8c6-5d50c872f11d",
+      89477
+    ],
+    [
+      "27ff0646-e65d-44f4-ba6b-3c53d125f530",
+      1710835
+    ],
+    [
+      "fe397454-0f80-498e-93ca-d86758788b33",
+      12147184
+    ],
+    [
+      "a8726066-9603-4332-bf59-c771a7e7d94e",
+      12501722
+    ],
+    [
+      "08cc5dfc-601b-49be-a30b-0a04d1adb93a",
+      6146531
+    ],
+    [
+      "6f882464-4a9e-432c-832e-4aca39206afd",
+      3898911
+    ],
+    [
+      "3a13271e-39a6-4d04-a74b-fa074f8f182a",
+      16133229
+    ],
+    [
+      "c5ddfac3-bc64-41ba-8922-20bb2235047f",
+      4997492
+    ],
+    [
+      "a3950296-28f2-432d-af89-eac0fda43b06",
+      3014724
+    ],
+    [
+      "2de6eab5-7269-4832-a9e8-91f331924e81",
+      5145621
+    ],
+    [
+      "529a8655-1857-43b5-ac9c-01322f607e2a",
+      6065020
+    ],
+    [
+      "1fc7fc06-3e2d-4d8f-81c2-7479ec4b0d25",
+      92024
+    ],
+    [
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      1097158
+    ],
+    [
+      "921e2f94-4b89-401d-aaa2-b3407edbe62f",
+      438596
+    ]
+  ],
+  "timestamp": "2026-07-14T03:18:04.081881Z",
+  "tokens_used": 25040,
+  "units_analyzed": 15,
+  "units_total": 99
+}

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-13T00:43:35.753858+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-15T18:50:35.630158+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-Infrastructure configuration for a developer's Claude Code environment (`~/.claude`): behavioral rules, hooks, skills, scripts, WAL/context-retention machinery, and the iDream dashboard. Dominant working style is long multi-session feature work with heavy reliance on session continuity tooling.
+This is the `~/.claude` meta-configuration project — rules, skills, hooks, scripts, and memory that govern all Claude Code sessions on this machine. Work here is infrastructure-level and directly affects every concurrent agent.
 
 ## Things to do (or keep doing)
-- Write WAL entries as JSONL via `scripts/wal/wal.sh`; never write markdown WAL format
-- Treat single-word continuations (`next`, `ahead`, `looks`, `done`) as autonomous-continue signals — execute deeper, never widen scope
-- Proactively `/core-dump` at milestones, not just session end; `/catchup` is the primary recovery path after compaction
-- Surface hook nudges in replies as bordered callouts — the user cannot see `additionalContext` otherwise
+- **Breadth-first pass first**: sweep all affected surfaces before polishing any single item; partial completions leave peers operating on stale assumptions
+- **Treat state-ledger writes as blocking**: TaskUpdate, IPC reply, and git commit of agent edits must execute immediately after completing a unit of work — deferring them is the primary source of drift
+- **Re-verify state at action time**: task ownership, file contents, and config validity are point-in-time snapshots — re-read before acting, never trust planning-time state
+- **Dispatch an adversarial reviewer after implementing complex features**: a fresh sub-agent reliably catches HIGH-severity bugs the authoring agent misses
 
 ## Things to avoid
-- Never commit or push without fresh per-push explicit approval — compaction silently strips prior authorizations, treat every resume as a hard reset on push permissions
-- Don't add CI, git hooks, or automation infrastructure unless the user explicitly requested it this task
-- Don't enter fix-thrash loops: if the same failure recurs twice, stop and form a root-cause hypothesis before touching any more code
-- Don't render structured data as plain markdown tables in terminal output — use TUI/gum tools per project convention
+- **Don't touch or drop guard mute-files**: dropping a mute file disables a safety gate machine-wide for all concurrent sessions until manually removed
+- **Don't claim IPC delivery from sender logs**: confirm round-trip receipt from the peer; log inspection is not delivery confirmation
+- **Don't use `rg -rn`**: `-r` means `--replace`, silently mangling output; use `rg -n` for line numbers in recursive searches
+- **Don't default-zero on missing data**: `bb.get('x', 0)` fabricates plausible values; prefer an explicit error when input is unknown
 
 ## Open questions / known gaps
-- Git push prohibition has been logged 18+ times without a mechanical gate; the advisory-rule approach has demonstrably failed — a PreToolUse hook is the unresolved fix
-- Pattern extraction pipeline lacks deduplication; the same WAL migration event appears 4+ times, polluting signal with noise
+- Multi-agent task-list staleness: agents starting items already completed by peers is a recurring coordination failure with no mechanical gate yet
+- IPC reply discipline at session end: unreplied peer queries trigger repeated stop-hook fires; no systematic enforcement beyond the hook reminder

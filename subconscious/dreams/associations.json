@@ -1441,35 +1441,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "63247803-50b5-4bcd-b430-56cf1b72f7e2",
-    "patterns_linked": [
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "e218ac38-3844-4295-a972-c9dc01b22d13"
-    ],
-    "hypothesis": "The same context-loss mechanism that necessitates heavy /catchup and /core-dump usage is the root cause of repeated push-without-approval violations — authorization state decays across compaction boundaries while task momentum persists, creating a confidence-without-permission failure mode.",
-    "confidence": 0.62,
-    "actionable": true,
-    "suggested_rule": "Always treat any context compaction or session resumption as a hard reset of ALL shared-state-mutation authorizations — re-derive push/commit/deploy permission from scratch after any compaction boundary, never from carried momentum.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b41a8a03-a01d-4e9f-9f12-4a85937b1cb4",
-    "patterns_linked": [
-      "a745dee9-7920-42db-8ca0-cf5e4306a767",
-      "1c9dd028-997d-447f-b96f-b38510b9c07b"
-    ],
-    "hypothesis": "These appear contradictory — one says 'don't trust names, read the code' while the other says 'use the named abstraction, not the raw expression' — but they resolve on a read/write axis: when ASSERTING how code works, verify by source; when WRITING new code, defer to the project's named vocabulary.",
-    "confidence": 0.52,
-    "actionable": true,
-    "suggested_rule": "Always distinguish the read axis (verify claims by reading definitions) from the write axis (express intent using the project's named abstractions) — names are untrustworthy as evidence but authoritative as vocabulary.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
     "id": "73a03285-60d0-4fe8-907d-2e98e10bcbad",
     "patterns_linked": [
       "edaeaf8c-9b6e-4652-b777-ccedba905520",
@@ -1847,22 +1818,6 @@
     "confidence": 0.8,
     "actionable": true,
     "suggested_rule": "For any task where the output is user-facing (UI, data export, report), always include a verification artifact (screenshot, sample output, diff) in the completion message. 'It works' without evidence is as bad as a hallucinated data value for this user.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "2542ddd9-e99b-4f0d-bad3-5ac0f8eb3752",
-    "patterns_linked": [
-      "e3962417-d094-4477-a68b-0a950dcc4dbd",
-      "cc705e72-e0c9-4aa3-9930-ddadbad00fbe",
-      "424da23c-f1ba-465d-97a3-b171333280fa",
-      "5161f69a-c10e-415e-8de3-a50dc020c5b4"
-    ],
-    "hypothesis": "Incomplete file lists, undefined constants in docs, permission prompts without visible commands, and success claims without output are all 'assertion without inline evidence' — forcing the recipient to hunt or trust rather than verify in place, which is the common root of user frustration across these otherwise unrelated domains.",
-    "confidence": 0.5000000000000001,
-    "actionable": true,
-    "suggested_rule": "Always inline the evidence next to the assertion — a file list is complete or not sent, a named constant is defined where named, a command is shown before the permission ask, and success is demonstrated not declared.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2880,17 +2835,17 @@
     "auto_intention_id": null
   },
   {
-    "id": "2da7f608-945a-4e8a-b641-a27b1a361270",
+    "id": "f8b862a9-c36e-408a-a209-128a615cc306",
     "patterns_linked": [
-      "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
-      "25479e7c-b46b-44ca-9e09-4a62f7921e74",
-      "5161f69a-c10e-415e-8de3-a50dc020c5b4",
-      "943ce7f1-3a81-4450-818c-6ed7c0323572"
+      "64d32f72-3391-4375-a556-9baa3b7d3f5d",
+      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
+      "ece94448-4ac9-4d31-a8c1-ab38eebe78b7",
+      "940470a1-ae82-4956-9326-749cdf537f48"
     ],
-    "hypothesis": "Premature closure is fractal: the agent short-circuits verification rituals at the code level (declaring done without running) AND at the meta level (invoking /atone without completing the recording), revealing that the failure is not domain-specific but a general 'declare victory at intent rather than completion' bias.",
-    "confidence": 0.5800000000000001,
+    "hypothesis": "Task updates, IPC replies, and git commits are all state-ledger writes that get deferred under cognitive load as 'bookkeeping', but each is actually the primary mechanism preventing drift or loss — the deferral pattern is identical across all three domains and compounds: skipping one makes the next skip more likely because the ledger is already stale.",
+    "confidence": 0.78,
     "actionable": true,
-    "suggested_rule": "Always verify that a ritual's TERMINAL artifact exists (test output, atone event line, committed file) before moving to the next task — the invocation is not the completion.",
+    "suggested_rule": "Always treat state-ledger writes (TaskUpdate, IPC reply, git commit of agent edits) as blocking obligations that execute immediately after completing a unit of work, never as cleanup to batch later.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -3673,38 +3628,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "21d61695-4b84-4457-a3f1-32d4c37c6e80",
-    "patterns_linked": [
-      "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-      "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
-      "1149ade8-0456-4cfc-a065-94dc57ed9142",
-      "7c85287a-edac-42ab-8c5f-b1baec092af6"
-    ],
-    "hypothesis": "Push-without-approval, cache blast radius, shared circuit breakers, and secret leakage are all instances of the same structural flaw: an action scoped to one context (session, user, consumer) whose side-effects propagate to ALL contexts sharing the underlying resource.",
-    "confidence": 0.55,
-    "actionable": true,
-    "suggested_rule": "Always ask 'who else shares this resource?' before any write to a shared surface (remote branch, cache tag, circuit breaker key, file that persists beyond this session) — if the answer is 'others beyond my scope', gate the action.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "ec56dc91-f282-476f-bc38-6eb12c7cf546",
-    "patterns_linked": [
-      "1c9dd028-997d-447f-b96f-b38510b9c07b",
-      "251ad081-8d9e-4dd2-9d5a-f46891e0b3a0",
-      "47762cd2-2358-4213-854c-0f41cfb2bef8",
-      "44207d0e-ca03-4a77-993d-aa1a92f03e08"
-    ],
-    "hypothesis": "The agent's failure to use existing project utilities, config systems, test patterns, and TUI tools are all the same blindness — it builds from its training-data mental model of 'how this kind of thing is usually done' rather than scanning the current project for 'how this project already does it', and this reuse-blindness gets worse under time pressure or when the existing solution lives in an unexpected location.",
-    "confidence": 0.75,
-    "actionable": true,
-    "suggested_rule": "Before writing any utility call, config access, test setup, or formatted output, grep the project for how the same concern is already handled — the project's existing pattern is always the right answer, even when the agent's general-knowledge approach would also work.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
     "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
     "patterns_linked": [
       "86e6683c-0a66-4f68-98ed-37c7e07c715e",
@@ -3974,6 +3897,21 @@
     "confidence": 0.73,
     "actionable": true,
     "suggested_rule": "Before any operation that changes the working tree (worktree switch, branch checkout, git stash), run 'git status' and 'git stash list' and log the result to the WAL — so even if changes are lost, the WAL records what was at risk.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "83b073ac-bf39-45fa-b670-e20891ea232c",
+    "patterns_linked": [
+      "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
+      "d777bd81-6d79-4322-ae89-73d47efdf5e3",
+      "bb7e50dc-ce4b-491b-9dbb-aac6104fe9d0"
+    ],
+    "hypothesis": "Task lists from session start, file scans from planning time, and configs validated at parse time are all point-in-time snapshots treated as current truth — across all three domains, the failure is reading state once and acting on the cached version later when an external actor (peer agent, user edit, config write) has mutated it.",
+    "confidence": 0.73,
+    "actionable": true,
+    "suggested_rule": "Always re-verify state (task ownership, file contents, config validity) at the moment of action, not at the moment of planning — any state that an external writer can mutate between your read and your write is stale by default.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4601,6 +4539,68 @@
     "suggested_rule": "Treat single-word user messages as process signals, not conversational turns. Map: 'next/go/continue' → SIGCONT (resume), 'stop/wait' → SIGSTOP (pause and report), 'status' → SIGUSR1 (emit state). Respond with action, not acknowledgment.",
     "promoted": true,
     "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "27742998-36bf-4be3-a5b9-de5de586ec40",
+    "patterns_linked": [
+      "0b318bca-d338-4da1-ae19-62c2393a3771",
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+      "8b043042-4a24-41db-9cf6-1ef3fc403718"
+    ],
+    "hypothesis": "The agent has a single failure mode across four domains — resolving ambiguity by producing plausible-looking output that encodes wrong semantics (a zero that looks like a measurement, an ALLOW that looks like authorization, a patch that looks like a fix, social trust that looks like permission removal) — and the common fix is defaulting to explicit refusal/failure at ambiguity points rather than synthesizing a plausible answer.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Always default to DENY/FAIL/ASK at any ambiguity point where the alternative is synthesizing a plausible-looking value — a fabricated zero, an implicit allow, a social-trust-as-authorization reading — because plausible-wrong is invisible and self-reinforcing in a way that explicit failure never is.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "b8f6bb75-6028-4148-8355-7a5a4f7f1d85",
+    "patterns_linked": [
+      "0b318bca-d338-4da1-ae19-62c2393a3771",
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+      "5845c38b-5c0c-406d-90c4-003d795accd6"
+    ],
+    "hypothesis": "Across data extraction, access control, and error handling, the recurring structural failure is that systems producing plausible-looking output on unknown/missing input (a zero, an ALLOW, a class-name-as-contract) propagate unchallenged because plausibility suppresses investigation — the system would be safer if it crashed.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always prefer an explicit error or DENY over a plausible-looking default (zero, ALLOW, inferred-from-name) when the input is unknown or missing — a crash is cheaper than a silent wrong answer that propagates.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "337e33d1-f081-4920-a0e7-c942b83a326b",
+    "patterns_linked": [
+      "7f83725a-0d19-488b-8c14-e61c42374da1",
+      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+      "646ec66d-efcc-43a9-a406-db0bc4b8e7ac"
+    ],
+    "hypothesis": "Advisory text, instance-level patches, and agent-droppable mute files are three faces of the same enforcement gap: in a multi-agent system, any safety mechanism that one agent can bypass or that only binds agents who read it at startup affects ALL agents — the blast radius of a weak enforcement point equals the blast radius of the protected resource, not the blast radius of the bypass.",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "When adding a behavioral constraint to a multi-agent system, always place enforcement at the data-write layer (hook, CLI gate, schema check) rather than at the advisory layer (spec text, skill doc) — and never grant sub-agents write access to guard mute-files.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "45061617-eda5-417f-91ed-57b1dc3d48ab",
+    "patterns_linked": [
+      "1221af86-2465-4d63-a6ba-b56f1da7f313",
+      "a5a69182-6fff-4cad-8caa-87377c0e5dcc",
+      "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
+      "75293622-3e7c-49f8-a64f-86ac5c8f75ba"
+    ],
+    "hypothesis": "Multi-agent coordination state (peer aliases, phase checkpoints, task ownership, IPC messages) is treated as optional bookkeeping but is actually load-bearing infrastructure — when it fails (stale task lists, lost aliases, corrupted messages), the agents continue working confidently on wrong assumptions, making coordination-state writes a first-class correctness obligation rather than cleanup.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Always treat coordination-state writes (task updates, peer alias records, phase checkpoints, IPC messages) as first-class work items that block the next step, not as optional bookkeeping to batch at session end — a skipped state write in a multi-agent context is a silent correctness bug.",
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   }
 ]

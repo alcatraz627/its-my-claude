@@ -1,9 +1,9 @@
 {
   "kind": "associations-view",
   "schema_version": 1,
-  "generated_at": "2026-07-12T21:12:56.078056Z",
+  "generated_at": "2026-07-15T21:54:37.493809Z",
   "total": 300,
-  "cluster_count": 185,
+  "cluster_count": 186,
   "truncated_at": null,
   "has_more": false,
   "items": [
@@ -776,7 +776,7 @@
         "b76b7252-944d-49f8-bb01-fa76c140a694"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": true
     },
     {
@@ -793,7 +793,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -1146,7 +1146,7 @@
         "b76b7252-944d-49f8-bb01-fa76c140a694"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -1635,39 +1635,6 @@
       "is_representative": false
     },
     {
-      "stable_id": "fe558490205b4d36",
-      "id": "63247803-50b5-4bcd-b430-56cf1b72f7e2",
-      "text": "The same context-loss mechanism that necessitates heavy /catchup and /core-dump usage is the root cause of repeated push-without-approval violations — authorization state decays across compaction boundaries while task momentum persists, creating a confidence-without-permission failure mode.",
-      "confidence": 0.82,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "881b161f-3ee0-4597-ab7b-d6c2a860613d",
-        "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-        "e218ac38-3844-4295-a972-c9dc01b22d13"
-      ],
-      "cluster_id": "fe558490205b4d36",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "b64bbb67cc5de961",
-      "id": "b41a8a03-a01d-4e9f-9f12-4a85937b1cb4",
-      "text": "These appear contradictory — one says 'don't trust names, read the code' while the other says 'use the named abstraction, not the raw expression' — but they resolve on a read/write axis: when ASSERTING how code works, verify by source; when WRITING new code, defer to the project's named vocabulary.",
-      "confidence": 0.82,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "a745dee9-7920-42db-8ca0-cf5e4306a767",
-        "1c9dd028-997d-447f-b96f-b38510b9c07b"
-      ],
-      "cluster_id": "b64bbb67cc5de961",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
       "stable_id": "a4abbe83818a0ff6",
       "id": "73a03285-60d0-4fe8-907d-2e98e10bcbad",
       "text": "The user's terse command style ('keep going', 'more', 'better') and their iterative UI refinement pattern are two faces of the same coin: they treat the agent as a continuous executor with persistent intent, not a request-response system. Each short message is a delta on an implicit running task. This is why session continuity is so critical — the user's mental model assumes the agent remembers the full task even across compactions.",
@@ -2100,24 +2067,6 @@
       "is_representative": false
     },
     {
-      "stable_id": "7f4477bc84d75d09",
-      "id": "2542ddd9-e99b-4f0d-bad3-5ac0f8eb3752",
-      "text": "Incomplete file lists, undefined constants in docs, permission prompts without visible commands, and success claims without output are all 'assertion without inline evidence' — forcing the recipient to hunt or trust rather than verify in place, which is the common root of user frustration across these otherwise unrelated domains.",
-      "confidence": 0.8,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "e3962417-d094-4477-a68b-0a950dcc4dbd",
-        "cc705e72-e0c9-4aa3-9930-ddadbad00fbe",
-        "424da23c-f1ba-465d-97a3-b171333280fa",
-        "5161f69a-c10e-415e-8de3-a50dc020c5b4"
-      ],
-      "cluster_id": "7f4477bc84d75d09",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
       "stable_id": "a8d493a2db348638",
       "id": "9d8322d1-908f-4c25-b60f-4076942462a1",
       "text": "The user's choice of Claude Opus for complex sessions, combined with multi-window continuations and 50-103 tool turns, suggests they are pushing against the fundamental limits of context windows as an architectural constraint. The 'core dump' command is essentially a manual checkpointing system — the same pattern used in distributed computing when processes might be killed and need to resume. The user is treating the AI session like a long-running batch job that could crash at any time, and has built crash-recovery infrastructure around it.",
@@ -2312,7 +2261,7 @@
         "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -3262,20 +3211,20 @@
       "is_representative": true
     },
     {
-      "stable_id": "5cd290f75e417245",
-      "id": "2da7f608-945a-4e8a-b641-a27b1a361270",
-      "text": "Premature closure is fractal: the agent short-circuits verification rituals at the code level (declaring done without running) AND at the meta level (invoking /atone without completing the recording), revealing that the failure is not domain-specific but a general 'declare victory at intent rather than completion' bias.",
+      "stable_id": "11b05bde009f062f",
+      "id": "f8b862a9-c36e-408a-a209-128a615cc306",
+      "text": "Task updates, IPC replies, and git commits are all state-ledger writes that get deferred under cognitive load as 'bookkeeping', but each is actually the primary mechanism preventing drift or loss — the deferral pattern is identical across all three domains and compounds: skipping one makes the next skip more likely because the ledger is already stale.",
       "confidence": 0.78,
       "actionable": true,
       "promoted": true,
       "dismissed": false,
       "patterns_linked": [
-        "cd621f51-d28c-404f-a0e0-c29406b9f8c9",
-        "25479e7c-b46b-44ca-9e09-4a62f7921e74",
-        "5161f69a-c10e-415e-8de3-a50dc020c5b4",
-        "943ce7f1-3a81-4450-818c-6ed7c0323572"
+        "64d32f72-3391-4375-a556-9baa3b7d3f5d",
+        "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
+        "ece94448-4ac9-4d31-a8c1-ab38eebe78b7",
+        "940470a1-ae82-4956-9326-749cdf537f48"
       ],
-      "cluster_id": "5cd290f75e417245",
+      "cluster_id": "11b05bde009f062f",
       "cluster_size": 1,
       "is_representative": true
     },
@@ -3553,9 +3502,9 @@
         "c70ae766-c39a-442a-a15d-fbe84d854e0c",
         "b76b7252-944d-49f8-bb01-fa76c140a694"
       ],
-      "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
-      "is_representative": false
+      "cluster_id": "20cb1e389afab4db",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
       "stable_id": "cc5e26649a20c8d0",
@@ -3589,7 +3538,7 @@
         "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -3708,7 +3657,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -3726,7 +3675,7 @@
         "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -3744,7 +3693,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -4052,7 +4001,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -4159,24 +4108,6 @@
       "is_representative": true
     },
     {
-      "stable_id": "162ee83f954c707e",
-      "id": "21d61695-4b84-4457-a3f1-32d4c37c6e80",
-      "text": "Push-without-approval, cache blast radius, shared circuit breakers, and secret leakage are all instances of the same structural flaw: an action scoped to one context (session, user, consumer) whose side-effects propagate to ALL contexts sharing the underlying resource.",
-      "confidence": 0.75,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "d6d8dd1b-9c00-4b5d-a182-b26b7f13e89e",
-        "f5eb2193-5d8e-4ddf-8669-93cf31f7dcf7",
-        "1149ade8-0456-4cfc-a065-94dc57ed9142",
-        "7c85287a-edac-42ab-8c5f-b1baec092af6"
-      ],
-      "cluster_id": "162ee83f954c707e",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
       "stable_id": "4cd39d6d9abb75da",
       "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
       "text": "The user tolerates — and even expects — 50-150+ tool autonomous runs when given a clear imperative ('keep going', 'started'). This is the opposite extreme from the scope-creep patterns: here, high autonomy is explicitly authorized. The signal that distinguishes them is the presence of a clear imperative verb, not the length of work.",
@@ -4243,7 +4174,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -4487,6 +4418,23 @@
       "is_representative": true
     },
     {
+      "stable_id": "28949e9834a1eee3",
+      "id": "83b073ac-bf39-45fa-b670-e20891ea232c",
+      "text": "Task lists from session start, file scans from planning time, and configs validated at parse time are all point-in-time snapshots treated as current truth — across all three domains, the failure is reading state once and acting on the cached version later when an external actor (peer agent, user edit, config write) has mutated it.",
+      "confidence": 0.73,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
+        "d777bd81-6d79-4322-ae89-73d47efdf5e3",
+        "bb7e50dc-ce4b-491b-9dbb-aac6104fe9d0"
+      ],
+      "cluster_id": "28949e9834a1eee3",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
       "stable_id": "2e0a3dcb4c98a1e4",
       "id": "c9a6d971-852c-47d5-be27-ccb10096b5e9",
       "text": "The user's preferences for clickable index HTML docs, dark/light mode, and XLSX exports all serve the same goal as their 'catchup' command: rapid re-orientation to complex state. Index pages with links = navigable project memory. XLSX exports = portable data snapshots (a 'core dump' for data). Dark/light mode = reducing friction for long sessions. These are all manifestations of a user who spends extended periods in deep work and optimizes ruthlessly for context-switching cost.",
@@ -4642,7 +4590,7 @@
         "c70ae766-c39a-442a-a15d-fbe84d854e0c"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -4809,7 +4757,7 @@
         "881b161f-3ee0-4597-ab7b-d6c2a860613d"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 12,
       "is_representative": false
     },
     {
@@ -5194,19 +5142,72 @@
       "is_representative": true
     },
     {
-      "stable_id": "72e21a12721cd950",
-      "id": "d6ee93f0-9dfc-4ba5-9daf-fb46f0afa104",
-      "text": "The user's projects (geopolitical simulation, dream dashboard) both model complex state machines with many actors/entities evolving over time — the same reason sessions themselves need robust state management. The domain complexity drives the session complexity; reducing domain state surface (e.g., serializable snapshots of simulation/dashboard state) would also reduce session continuation burden.",
+      "stable_id": "ae7e27da931f2656",
+      "id": "27742998-36bf-4be3-a5b9-de5de586ec40",
+      "text": "The agent has a single failure mode across four domains — resolving ambiguity by producing plausible-looking output that encodes wrong semantics (a zero that looks like a measurement, an ALLOW that looks like authorization, a patch that looks like a fix, social trust that looks like permission removal) — and the common fix is defaulting to explicit refusal/failure at ambiguity points rather than synthesizing a plausible answer.",
+      "confidence": 0.0,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "0b318bca-d338-4da1-ae19-62c2393a3771",
+        "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+        "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+        "8b043042-4a24-41db-9cf6-1ef3fc403718"
+      ],
+      "cluster_id": "ae7e27da931f2656",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "e05527b09e7c37eb",
+      "id": "b8f6bb75-6028-4148-8355-7a5a4f7f1d85",
+      "text": "Across data extraction, access control, and error handling, the recurring structural failure is that systems producing plausible-looking output on unknown/missing input (a zero, an ALLOW, a class-name-as-contract) propagate unchallenged because plausibility suppresses investigation — the system would be safer if it crashed.",
       "confidence": 0.72,
       "actionable": true,
       "promoted": true,
       "dismissed": false,
       "patterns_linked": [
-        "58112601-ddbc-4e20-a6ea-6987c6c96569",
-        "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-        "c70ae766-c39a-442a-a15d-fbe84d854e0c"
+        "0b318bca-d338-4da1-ae19-62c2393a3771",
+        "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+        "5845c38b-5c0c-406d-90c4-003d795accd6"
       ],
-      "cluster_id": "72e21a12721cd950",
+      "cluster_id": "e05527b09e7c37eb",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "d52685d49b794585",
+      "id": "337e33d1-f081-4920-a0e7-c942b83a326b",
+      "text": "Advisory text, instance-level patches, and agent-droppable mute files are three faces of the same enforcement gap: in a multi-agent system, any safety mechanism that one agent can bypass or that only binds agents who read it at startup affects ALL agents — the blast radius of a weak enforcement point equals the blast radius of the protected resource, not the blast radius of the bypass.",
+      "confidence": 0.7,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "7f83725a-0d19-488b-8c14-e61c42374da1",
+        "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+        "646ec66d-efcc-43a9-a406-db0bc4b8e7ac"
+      ],
+      "cluster_id": "d52685d49b794585",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "94da9f1a6dda3665",
+      "id": "45061617-eda5-417f-91ed-57b1dc3d48ab",
+      "text": "Multi-agent coordination state (peer aliases, phase checkpoints, task ownership, IPC messages) is treated as optional bookkeeping but is actually load-bearing infrastructure — when it fails (stale task lists, lost aliases, corrupted messages), the agents continue working confidently on wrong assumptions, making coordination-state writes a first-class correctness obligation rather than cleanup.",
+      "confidence": 0.0,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "1221af86-2465-4d63-a6ba-b56f1da7f313",
+        "a5a69182-6fff-4cad-8caa-87377c0e5dcc",
+        "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
+        "75293622-3e7c-49f8-a64f-86ac5c8f75ba"
+      ],
+      "cluster_id": "94da9f1a6dda3665",
       "cluster_size": 1,
       "is_representative": true
     }

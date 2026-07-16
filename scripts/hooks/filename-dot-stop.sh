@@ -26,10 +26,14 @@ input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 command -v rg >/dev/null 2>&1 || exit 0
 
+HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"
+[ -r "$HOOK_COMMON" ] || exit 0
+. "$HOOK_COMMON"
+
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
-sid8="${sid:0:8}"
+sid8=$(hook_sid8 "$sid")
 
 # Last assistant message text (precise — not the whole tail).
 tail_json=$(tail -n 400 "$tp" 2>/dev/null) || exit 0
@@ -65,16 +69,13 @@ if [ -z "$hit" ]; then
   exit 0
 fi
 
-# Loop-safe: don't re-block the identical message.
-MARK="/tmp/claude-filename-dot-${sid8}"
-sig=$(printf '%s' "$prose" | shasum 2>/dev/null | awk '{print $1}')
-prev=""; [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
-if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
+# Loop-safe: don't re-block the identical message. hook_loop_check records the
+# new signature and returns non-zero on a repeat of the same offending message.
+if ! hook_loop_check "$MARK" "$prose"; then
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook filename-dot --heed-of "filename-dot:$sid8" --heeded false >/dev/null 2>&1 || true
   jq -cn '{systemMessage:"⚠ filename-dot (not re-blocking the identical message): a file path is still immediately followed by a period, so Ghostty cannot link it. Mute: touch ~/.claude/.no-filename-dot-gate"}' 2>/dev/null || true
   exit 0
 fi
-printf '%s' "$sig" > "$MARK" 2>/dev/null || true
 
 reason="⛔ FILE PATH FOLLOWED BY A PERIOD — Ghostty auto-links file paths in the terminal, and a period right after the path gets swallowed into the link, so the path is NOT clickable and the user has to ask for it again.
 

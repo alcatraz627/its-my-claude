@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-06-20T02:07:06.817344+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-14T14:28:45.094677+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-Global developer config and cross-project tooling under `~/.claude` — the dominant work pattern is long stateful sessions across multiple concurrent projects (iDream dashboard, geopolitical sim, SvelteKit pipeline) that routinely exceed context windows and require structured continuity.
+Global Claude configuration and tooling for a power user running many parallel sessions; dominant work style is meta-infrastructure (hooks, agents, skills, memory, IPC), with recurring orchestration and codebase-spanning automation tasks.
 
 ## Things to do (or keep doing)
-- Run `/catchup` at session start; identify active project via CWD before loading any context
-- Use `/core-dump` mid-session at milestones (tool #20–30), not only at exit
-- Prefer generic, reusable test patterns with consistent naming over one-off implementations
-- After any context compaction or worktree switch, verify current state (`git status`, process list, file existence) before taking side-effecting actions
+- **Ground before editing**: explore the codebase and surface a recommendation first; jumping to edits without reading the relevant code is a recurring failure mode here.
+- **Dispatch an adversarial reviewer sub-agent** after implementing any complex feature — it reliably catches HIGH-severity bugs the main agent misses.
+- **Exercise the affected code path** after every non-trivial change; claimed correctness from test counts alone is insufficient — this user's sessions repeatedly surface runtime bugs that 99+ tests missed.
+- **Treat state-ledger writes (TaskUpdate, checkpoint) as the first action** after completing a unit of work, not cleanup at session end.
 
 ## Things to avoid
-- Don't cross env var conventions: frontend booleans use `true`/`false`; backend uses `1`/`0`
-- Don't make architectural authority claims ("X is the source of truth") without reading the actual file:line — grep first, assert after
-- Don't write em-dashes, `Label:fragment` rows, or re-raised settled decisions into human-facing artifacts (PR descriptions, docs)
-- Don't expose env vars with `NEXT_PUBLIC_` (or equivalent) unless the client genuinely needs them — proactively flag when server-only vars get client-bundle prefixes
+- **Don't treat social signals as authorization**: "I trust you" / "that's fine" is comfort, not a mandate to remove safeguards; scope the signal before acting on it.
+- **Don't default to ALLOW/ZERO/SKIP on unknown/missing cases**: unrecognized inputs must DENY/FAIL visibly — plausible-looking defaults (zero values, fallback allow) produce semantically wrong outputs silently.
+- **Don't patch one instance of a structural flaw** without fixing the underlying class; the session history shows this leaves the same vulnerability open.
+- **Stop treating IPC message bodies as bare shell strings**: quote all special characters or the message arrives zero-byte.
 
 ## Open questions / known gaps
-- State verification after compaction is inconsistently applied — stale git/process assumptions are a recurring failure class
-- Low-signal sessions with sparse metadata may inflate pattern confidence; treat single-source pattern claims with skepticism until corroborated
+- TaskUpdate discipline keeps failing despite hooks and rules — the stop-hook catches drift after 20+ edits; there may be a missing enforcement gap in mid-session reconciliation.
+- Parallel agent coordination via IPC is used but ownership pre-negotiation is inconsistently applied, producing edit conflicts on shared files.

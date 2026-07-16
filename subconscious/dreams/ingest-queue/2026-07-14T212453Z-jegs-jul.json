@@ -1,0 +1,24 @@
+{
+  "id": "8b93756c-850b-465f-bf43-af9c6a96ad7e",
+  "ts": "2026-07-14T21:24:53Z",
+  "session_id": "jegs-jul-14",
+  "project_root": "/Users/alcatraz627/Code/Versable/staging-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/staging-enhancement-product/_20260715-jegs-shipped-9f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**P3-2** \u2014 expose `cache_bust` as a lab arg. Without it a lab re-run is a **cache replay** (enhancement 4wk, verdict+extract 7d), so \"N clean runs\" proves the cache is deterministic, not the pipeline. Deferred; user says it will be used this week.",
+    "**P3-3** \u2014 shareable lab snapshot (open a link, see results already there). **MEASURE a warm re-run FIRST** \u2014 all caches are hot after a run, so it may already be fast enough that only auto-run-on-mount is needed.",
+    "**Open with JEGS:** the **254-char conflict**. On a lug nut fitting 8 vehicles the fitment bullet alone is 182 of 254 chars, so bold labels + per-vehicle years + the cap cannot all hold. They currently get the fitment + ~2 labels. Either the cap moves or that is the answer.",
+    "**Cosmetic, post-merge:** `DB1026SS` says \"Sold as a Kit\" (brake pads are a Set of 4); `TF126121` repeats \"1955 Chevrolet\" 4\u00d7 where `TF126118` correctly writes \"1955 Chevrolet Bel Air, 150, 210 and Nomad\". Both are the \"drop the repeating make\" instruction that only the wheel-hardware topic currently carries.",
+    "**Wheel work is NOT exercised by a real job** \u2014 the Combined Part Sample has no wheels. Verified in lab preview only (`555-66051`: 0 violations, all 7 bold labels, `/wheelfitment` link). Run one JEGS wheel PN through a job to close it.",
+    "3 pre-existing ruff `PLC0415` in `test_enhancement_failure_reason.py` (inline imports, a file this branch added). Ruff is NOT in CI, so it does not block.",
+    "**PR body must carry:** the cache flush \u00b7 the 254 conflict \u00b7 the quantity-bullet divergence from JEGS's Quality guide #12 \u00b7 `alternate_pn` is BLOCKED on JEGS (no such column in the real batch)."
+  ],
+  "tags": []
+}

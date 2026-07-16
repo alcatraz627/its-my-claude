@@ -1,5 +1,5 @@
+📌 A /release-changelog run on PR #260 surfaced a class of trap worth generalizing:
+📌 Owner flagged a sub-agent review finding as weirdly worded, jargony, hard to und
+📌 Mutation-testing restore discipline: restoring a mutated file with `git checkout
 📌 V3 ghostty-fork plan retired the same day it was written, despite a positive fea
 📌 ipc-activation investigation (ultracode workflow: data-profile -> wake-primitive
-📌 The local `imagine` CLI (mflux/MLX Flux wrapper) only exposes plain img2img — a 
-📌 Revisit: generalize claude-instances from claude-only into a <agentic-runner> x 
-📌 Recommendations for integrating the local-models suite with Claude as a cheap, a

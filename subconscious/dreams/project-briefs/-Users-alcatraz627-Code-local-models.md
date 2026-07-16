@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-07-13T00:44:04.978007+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-14T03:22:45.304149+00:00 · 13 patterns / 3 insights -->
 ## What this project is about
-Local LLM management tooling (`~/Code/local-models`) — CLI wrappers, model dispatch harness, and supporting infrastructure for running local and cloud models side-by-side. Working style is exploratory with strong CLI/TUI emphasis.
+Local LLM suite (`~/Code/local-models`) — model runners, UI, data pipelines, and agent harness tooling. Work style is iterative with high emphasis on runtime correctness and safeguard integrity.
 
 ## Things to do (or keep doing)
-- Always surface actual test/command output for the user to judge — declaring success without showing evidence is treated as a failure
-- Execute skill invocations (e.g. `/atone`) immediately and completely when requested; deferring them escalates
-- Use `trash` for all file deletion; the `rm` hook blocks exceptions without a manual override
-- Write docs in direct, formal, product-focused prose — no "why this matters" openers, no em-dashes, no promotional framing
+- **Run the affected code path after every non-trivial change** — test suites (even 99+ tests) miss bugs that live execution catches; dogfood before claiming done
+- **Dispatch an adversarial reviewer sub-agent immediately after implementing complex features** — it reliably surfaces HIGH-severity bugs the implementing agent misses
+- **Restate the exact scope of any user signal before acting on it** — `'you said X, which I interpret as Y but not Z'` — social comfort ("I trust you") is never authorization to remove a gate; intensity complaints ("too noisy") set a ceiling, not a kill switch
+- **Surface the structural observation behind a local workaround** — inline CSS signals a UI kit gap, a silent zero-default signals missing data; name the systemic issue before applying the fix
 
 ## Things to avoid
-- Don't declare a UI or server-side change working without navigating to the actual URL and exercising the primary flow
-- Don't re-introduce removed complexity after the user has explicitly deleted code and requested a simpler replacement
-- Don't write todos to files (TODO.md, plan.md) when "update todos" is requested — always call the Task tool
-- Don't place a period immediately after a file path in terminal output; it breaks Ghostty's auto-link
+- **Don't use `dict.get('key', 0)` or similar zero-defaults when data may be absent** — fabricated zeros produce plausible-looking downstream values that suppress investigation
+- **Don't let the task list drift across many turns of editing** — reconcile completed/abandoned items before stopping; a stale list is fiction
+- **Don't add a new library dependency silently** — surface the constraint, offer a within-existing-deps alternative first, wait for approval
 
 ## Open questions / known gaps
-- RCA files must begin with `---` YAML frontmatter on line 1 or `atone.sh` exits non-zero — this lint gate has been hit repeatedly and the template may not be enforcing it
-- Picker/selector UIs have a recurring pattern mismatch: selection must preview only, with an explicit save action required — this keeps being implemented as auto-apply
+- Config validation only at parse time silently breaks unrelated features when fields are missing; no systematic write-time validation in place yet
+- Plausible-but-wrong state (fabricated values, passing-but-not-running tests) is the project's highest-recurrence failure class — no automated ground-truth verification gate exists

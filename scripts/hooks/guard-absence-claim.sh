@@ -65,12 +65,15 @@ set -uo pipefail
 
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
+HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"
+[ -r "$HOOK_COMMON" ] || exit 0
+. "$HOOK_COMMON"
 command -v rg >/dev/null 2>&1 || exit 0
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
-sid8="${sid:0:8}"
+sid8=$(hook_sid8 "$sid")
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 [ -z "$cwd" ] && cwd="$PWD"
 
@@ -264,15 +267,11 @@ emit_block() { jq -cn --arg r "⛔ absence-claim (grounding gate) — $body" '{d
   [ -x "$WARN" ] && bash "$WARN" --hook absence-claim --action block --heeded unknown >/dev/null 2>&1 || true; }
 
 MARK="/tmp/claude-absence-claim-${sid8}"
-sig=$(printf '%s' "$claim_sentence" | shasum 2>/dev/null | awk '{print $1}')
-prev=""; [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
-
-if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
+if ! hook_loop_check "$MARK" "$claim_sentence"; then
   # Same claim sentence as the last Stop — step aside (never trap).
   [ "$base" = "block" ] && emit_soft   # a would-be block demotes to a visible note
   exit 0                                # a would-be soft goes silent on repeat
 fi
-printf '%s' "$sig" > "$MARK" 2>/dev/null || true
 
 if [ "$base" = "block" ]; then emit_block; else emit_soft; fi
 exit 0

@@ -1,0 +1,21 @@
+{
+  "id": "27ff0646-e65d-44f4-ba6b-3c53d125f530",
+  "ts": "2026-07-13T13:39:55Z",
+  "session_id": "zconv-todo-3f",
+  "project_root": "/Users/alcatraz627/Code/Claude/its-my-config",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/its-my-config/_20260713-zconv-todo-3f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Live Task list: all 6 tasks completed \u2014 nothing open.",
+    "**Follow-up (user, 2026-07-13):** for lossy legs (html|epub\u2192md) the user may later want an agent-drivable config surface (e.g. per-conversion pandoc-args passthrough) \u2014 design as its own pass, recorded in zdoconvert.criteria.md \u00a7 Non-goals.",
+    "Deferred by decision (in the review doc): plugin/registry refactor until a 5th tabular format lands; csv\u2192markdown-table output (optional); zconvert help polish documenting extension aliases.",
+    "Leftover from the June session: user-side live smoke test of `zconvert -i` toggles (needs a real terminal)."
+  ],
+  "tags": []
+}

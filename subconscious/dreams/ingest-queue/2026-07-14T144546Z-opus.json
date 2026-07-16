@@ -1,0 +1,24 @@
+{
+  "id": "6b120b0a-b384-43e0-b962-243938dc68b3",
+  "ts": "2026-07-14T14:45:46Z",
+  "session_id": "opus",
+  "project_root": "/Users/alcatraz627/Code/Versable/speedway",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/speedway/_20260714-opus.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**THE A/B CALL on the client-nav skeleton.** See \u00a7 THE CACHE ISSUE. This is the only",
+    "**If A:** implement the non-blocking cache-miss path in `client-cache.ts` with a",
+    "**Route modularization** \u2014 a pure folder/file move, **only when Fable is idle and has",
+    "**Job detail's header** is the one header the static-header sweep does not reach \u2014 its",
+    "**`streamTimeout`**: a deferred loader taking >5s renders **\"Something went wrong /",
+    "**XLSX library** \u2014 SheetJS community `xlsx@0.18.5` silently drops fills/bold and emits",
+    "**The `link:` cure** \u2014 `file:` \u2192 `link:` would end the hard-link disease, but"
+  ],
+  "tags": []
+}

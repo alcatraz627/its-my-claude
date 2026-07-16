@@ -1,0 +1,24 @@
+{
+  "id": "c5ddfac3-bc64-41ba-8922-20bb2235047f",
+  "ts": "2026-07-13T12:08:59Z",
+  "session_id": "catch-rot-3d",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260713-catch-rot-3d.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**FIRST: re-run the item-12 adversarial gate** (fresh sonnet validator; rsync tree to /tmp \u2014 worktrees broken AND work uncommitted; attack: is_live gate vs real-ledger pollution by probes, revert consistency (evicted.jsonl replay, drain restore double-feed), revert-script jq edges (array payload, ViewFile-wrapper store, spaces/quotes in paths, mv -f clobber), unbounded _autonomous.jsonl growth vs RETENTION table, pre-image serialization cost, mutation: is_live always-true + idempotence-check removal). Then fix \u2192 docs/25 item-12 Shipped note.",
+    "**Commits to batch (user re-confirm first):** i-dream: views.rs + consolidation/mod.rs + autonomous.rs + reinforce.rs + dreaming.rs + registry.rs + scripts/revert-autonomous.sh + docs/25 (item 15 engine + item 12); gcc: scripts/dream/dream-insights.sh (item 15 + gate fixes). Enumerate adds \u2014 parallel-owned files still dirty in src/modules/.",
+    "**Deploy after commits:** bash scripts/install.sh (items 15-engine + 12 instrumentation are NOT in the running daemon; last deploy = item 13).",
+    "**USER review queue:** (1) two+ push sentinels when ready; (2) env-access convention for i-dream (hook nagged 4\u00d7 \u2014 existing idiom is direct `std::env::var(\"HOME\")` at registry.rs:784, views.rs:235, autonomous.rs; decide: keep idiom + convention doc, or central accessor); (3) flip `.inject-on` to enable the query-ranked dream half \u2014 starts item 15's kill-criteria clock (entropy up, recurrence down, 2 weeks); (4) the grounding.rs BLOCKER belongs to the parallel session (2 ipc notices unanswered) \u2014 nudge or hand-fix by taking ownership explicitly.",
+    "**Item 12 remainder:** briefing shortlist surface (parallel-owned; ipc sent); per-item retention revert tokens (coarse today); decay/merge ledger records (derived/recomputable \u2014 deliberately not recorded; document as design decision in the docs note).",
+    "**Deferred tails on the record (docs/25):** item 15 first-prompt/tool-signature query terms (needs UserPromptSubmit lane); item 16 noise reason; item 14 digest-header surfacing; item 13 cross-domain unlock (claude-audit ledger evidence).",
+    "**Carried non-i-dream holds:** 3 logger-project items (vitest crab-sink-shared, Vercel LOGGER_CRAB_DASHBOARD_TOKEN, /admin/logs smoke) \u2014 from dream-rot-4e, untouched."
+  ],
+  "tags": []
+}

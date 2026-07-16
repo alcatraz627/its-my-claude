@@ -1,0 +1,28 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.0729383301152419,
+    "unit_count": 4
+  },
+  "response": {
+    "biases_detected": [],
+    "calibration_score": 0,
+    "overconfident_count": 0,
+    "recommendations": [],
+    "underconfident_count": 0,
+    "well_calibrated_count": 0
+  },
+  "sessions": [
+    [
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      4441468
+    ]
+  ],
+  "timestamp": "2026-07-15T03:23:58.158293Z",
+  "tokens_used": 297,
+  "units_analyzed": 0,
+  "units_total": 4
+}

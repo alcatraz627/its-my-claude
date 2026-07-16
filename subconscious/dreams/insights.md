@@ -700,3 +700,191 @@ _High-confidence associations promoted by the Wake phase._
 - _Sessions_ (19): 29d7d6be, bc2715fa, 5455871e, +16 more
 
 ---
+
+
+## Wake Cycle — 2026-07-14 03:15 UTC
+
+### Insight (conf=0.72)
+> The agent systematically over-broadens the scope of user signals — treating social comfort as technical authorization, intensity complaints as removal orders, and general commit permission as universal — revealing a failure to parse the *boundary* of a directive, not just its direction.
+
+**Rule:** Always restate the exact scope of a user signal before acting on it — 'you said X, which I interpret as applying to Y but not Z' — when the signal could plausibly be read as broader than intended.
+
+**Evidence:**
+- _Pattern_: "User reassurance ('I trust you', 'that's fine') is not authorization to remove safeguards, gates, or confirmations — it is social comfort, n…"
+- _Pattern_: "When a user says a behavior is 'too noisy' or 'too aggressive', the correct response is to tune it down, not turn it off entirely — the comp…"
+- _Pattern_: "The agent should never commit or push for protected projects (those in an explicit protected-repos registry); it must prepare the change, sh…"
+- _Projects_ (14): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc
+- _Sessions_ (28): 8cc6c6e4, fc013b76, e5807cfc, +25 more
+
+---
+### Insight (conf=0.68)
+> Plausible-looking-but-wrong state is the most dangerous failure class because it suppresses investigation: fabricated zero-defaults look like real data, passing test suites look like working code, and stale task lists look like current status — all three succeed at *appearing* correct while being structurally disconnected from ground truth.
+
+**Rule:** Avoid trusting any state representation (data value, test result, status list) that has not been verified against its ground truth within the current action window — plausibility is not evidence.
+
+**Evidence:**
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Pattern_: "Runtime dogfooding and live exercise catch bugs that a large test suite (99+ tests) misses; claimed correctness from test coverage alone is …"
+- _Pattern_: "When a task list has not been updated across many turns but significant editing has occurred, the list has drifted from reality and must be …"
+- _Projects_ (14): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc
+- _Sessions_ (28): 8cc6c6e4, fc013b76, e5807cfc, +25 more
+
+---
+### Insight (conf=0.58)
+> Quick local fixes (inline CSS, zero-defaults, silently adding a dependency) share a structural shape: they resolve the immediate symptom while hiding a systemic signal (UI kit gap, missing data, architectural constraint) that would be more valuable surfaced than silenced.
+
+**Rule:** Always surface the structural observation behind a local workaround before applying it — 'this works, but the reason I need it suggests X is missing from the system.'
+
+**Evidence:**
+- _Pattern_: "One-off inline styling for a UI element (instead of reusing the existing component hover/interactive patterns) is a signal that there is a g…"
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Pattern_: "When a feature unexpectedly requires adding a new library or dependency, the agent should surface this constraint to the user and offer a wi…"
+- _Projects_ (14): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc
+- _Sessions_ (28): 8cc6c6e4, fc013b76, e5807cfc, +25 more
+
+---
+
+
+## Wake Cycle — 2026-07-14 14:25 UTC
+
+### Insight (conf=0.82)
+> The agent systematically over-broadens the scope of verbal/social signals — treating reassurance as authorization removal, intensity complaints as feature removal, and general commit permission as protected-repo override — revealing a single underlying failure to parse signal SCOPE separately from signal VALENCE.
+
+**Rule:** When a user signal (reassurance, complaint, permission) arrives, always ask 'what is the SCOPE of this signal?' separately from 'what is the DIRECTION?' — a positive signal scoped to comfort does not extend to authorization, and a negative signal scoped to intensity does not extend to existence.
+
+**Evidence:**
+- _Pattern_: "User reassurance ('I trust you', 'that's fine') is not authorization to remove safeguards, gates, or confirmations — it is social comfort, n…"
+- _Pattern_: "When a user says a behavior is 'too noisy' or 'too aggressive', the correct response is to tune it down, not turn it off entirely — the comp…"
+- _Pattern_: "The agent should never commit or push for protected projects (those in an explicit protected-repos registry); it must prepare the change, sh…"
+- _Projects_ (14): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc
+- _Sessions_ (28): 8cc6c6e4, fc013b76, e5807cfc, +25 more
+
+---
+### Insight (conf=0.78)
+> Three different domains (access control, policy enforcement, data extraction) share an identical structural flaw: when encountering an unknown/missing case, the system produces a plausible default (allow, skip, zero) instead of failing explicitly — and in all three cases, the plausible default is more harmful than a crash because it's invisible.
+
+**Rule:** Always default to DENY/FAIL/ABSENT (not ALLOW/SKIP/ZERO) when a system encounters an unrecognized input or missing value — a visible failure is always cheaper than a plausible-looking wrong output that propagates silently.
+
+**Evidence:**
+- _Pattern_: "When building an access-gate system, unrecognized commands must default to DENY, not ALLOW; a default-allow fallback for unknown CLIs create…"
+- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, sys-monitor, claude-ipc
+- _Sessions_ (38): fc013b76, a0f35401, 6b120b0a, +35 more
+
+---
+### Insight (conf=0.72)
+> The most dangerous failures produce outputs that LOOK correct at surface level but encode wrong semantics — a zero that looks like a measurement, milliseconds that look like seconds, a class name that looks like a behavior guarantee — and the universal fix is reading the producing code rather than trusting the surface representation.
+
+**Rule:** Always read the producing code (return statement, write site, format spec) when a value's surface representation could be plausible-but-wrong — never infer semantics from names, types, or magnitudes alone.
+
+**Evidence:**
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Pattern_: "Vercel's auth.json stores `expiresAt` in seconds since epoch, not milliseconds; an off-by-1000x error in expiry calculations causes valid to…"
+- _Pattern_: "A Python exception class named 'NonRetryable' does not guarantee the framework skips retries; always read the error-handling code to confirm…"
+- _Projects_ (17): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc, frontend, enhancement-product, local-models
+- _Sessions_ (38): 8cc6c6e4, fc013b76, e5807cfc, +35 more
+
+---
+### Insight (conf=0.70)
+> State-ledger writes (task updates, checkpoints, reconciliation) are consistently treated as overhead and skipped under time pressure, but are actually the primary coordination mechanism — the pattern that makes checkpoints work (writing after each phase) is the exact inverse of the pattern that causes task-list drift (not writing during phases).
+
+**Rule:** Avoid treating state-ledger writes (TaskUpdate, checkpoint, reconciliation) as post-hoc cleanup — schedule them as the FIRST action after completing a unit of work, not the last action before stopping.
+
+**Evidence:**
+- _Pattern_: "A task list that accumulates many edits without corresponding TaskUpdate calls drifts into uselessness; the stop hook catching this after 20…"
+- _Pattern_: "When a task list has not been updated across many turns but significant editing has occurred, the list has drifted from reality and must be …"
+- _Pattern_: "In long parallel multi-agent sessions, writing a mini checkpoint after each discrete phase lets successor sessions restore context cheaply r…"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, sys-monitor, claude-ipc
+- _Sessions_ (38): fc013b76, a0f35401, 6b120b0a, +35 more
+
+---
+
+
+## Wake Cycle — 2026-07-14 23:55 UTC
+
+### Insight (conf=0.72)
+> The agent has a single failure mode across four domains — resolving ambiguity by producing plausible-looking output that encodes wrong semantics (a zero that looks like a measurement, an ALLOW that looks like authorization, a patch that looks like a fix, social trust that looks like permission removal) — and the common fix is defaulting to explicit refusal/failure at ambiguity points rather than synthesizing a plausible answer.
+
+**Rule:** Always default to DENY/FAIL/ASK at any ambiguity point where the alternative is synthesizing a plausible-looking value — a fabricated zero, an implicit allow, a social-trust-as-authorization reading — because plausible-wrong is invisible and self-reinforcing in a way that explicit failure never is.
+
+**Evidence:**
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Pattern_: "When building an access-gate system, unrecognized commands must default to DENY, not ALLOW; a default-allow fallback for unknown CLIs create…"
+- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
+- _Pattern_: "User reassurance ('I trust you', 'that's fine') is not authorization to remove safeguards, gates, or confirmations — it is social comfort, n…"
+- _Projects_ (17): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc, frontend, enhancement-product, local-models
+- _Sessions_ (38): 8cc6c6e4, fc013b76, e5807cfc, +35 more
+
+---
+### Insight (conf=0.68)
+> Multi-agent coordination state (peer aliases, phase checkpoints, task ownership, IPC messages) is treated as optional bookkeeping but is actually load-bearing infrastructure — when it fails (stale task lists, lost aliases, corrupted messages), the agents continue working confidently on wrong assumptions, making coordination-state writes a first-class correctness obligation rather than cleanup.
+
+**Rule:** Always treat coordination-state writes (task updates, peer alias records, phase checkpoints, IPC messages) as first-class work items that block the next step, not as optional bookkeeping to batch at session end — a skipped state write in a multi-agent context is a silent correctness bug.
+
+**Evidence:**
+- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
+- _Pattern_: "In long parallel multi-agent sessions, writing a mini checkpoint after each discrete phase lets successor sessions restore context cheaply r…"
+- _Pattern_: "In a multi-agent parallel workflow, each agent's task list can become stale; before starting any item, verify it has not already been comple…"
+- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
+- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627
+- _Sessions_ (31): d8f1948c, a0f35401, 8c7e6f5c, +28 more
+
+---
+
+
+## Wake Cycle — 2026-07-15 18:45 UTC
+
+### Insight (conf=0.78)
+> Task updates, IPC replies, and git commits are all state-ledger writes that get deferred under cognitive load as 'bookkeeping', but each is actually the primary mechanism preventing drift or loss — the deferral pattern is identical across all three domains and compounds: skipping one makes the next skip more likely because the ledger is already stale.
+
+**Rule:** Always treat state-ledger writes (TaskUpdate, IPC reply, git commit of agent edits) as blocking obligations that execute immediately after completing a unit of work, never as cleanup to batch later.
+
+**Evidence:**
+- _Pattern_: "A task list that accumulates many edits without corresponding TaskUpdate calls drifts into uselessness; the stop hook catching this after 20…"
+- _Pattern_: "In multi-agent IPC sessions, unanswered peer queries must be replied to before the session ends; stop hooks will fire repeatedly for each un…"
+- _Pattern_: "Uncommitted agent edits to tracked files can be silently lost if the user commits or merges in a parallel operation; agent-made edits must b…"
+- _Pattern_: "When a task list has not been updated across many turns but significant editing has occurred, the list has drifted from reality and must be …"
+- _Projects_ (22): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627--claude, two-enhancement-product, better-file-browser, sys-monitor, its-my-config, staging-enhancement-product, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627--claude-i-dream, claude-ipc
+- _Sessions_ (58): fc013b76, a0f35401, 6b120b0a, +55 more
+
+---
+### Insight (conf=0.73)
+> Task lists from session start, file scans from planning time, and configs validated at parse time are all point-in-time snapshots treated as current truth — across all three domains, the failure is reading state once and acting on the cached version later when an external actor (peer agent, user edit, config write) has mutated it.
+
+**Rule:** Always re-verify state (task ownership, file contents, config validity) at the moment of action, not at the moment of planning — any state that an external writer can mutate between your read and your write is stale by default.
+
+**Evidence:**
+- _Pattern_: "In a multi-agent parallel workflow, each agent's task list can become stale; before starting any item, verify it has not already been comple…"
+- _Pattern_: "Code and docs can diverge between triage-time and edit-time; re-verify the specific file or function at the moment of writing the edit, not …"
+- _Pattern_: "Config tools that perform validation only at parse time (not at write time) can silently break unrelated features when a required field is m…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627, sys-monitor, claude-ipc
+- _Sessions_ (45): d8f1948c, a0f35401, 8c7e6f5c, +42 more
+
+---
+### Insight (conf=0.72)
+> Across data extraction, access control, and error handling, the recurring structural failure is that systems producing plausible-looking output on unknown/missing input (a zero, an ALLOW, a class-name-as-contract) propagate unchallenged because plausibility suppresses investigation — the system would be safer if it crashed.
+
+**Rule:** Always prefer an explicit error or DENY over a plausible-looking default (zero, ALLOW, inferred-from-name) when the input is unknown or missing — a crash is cheaper than a silent wrong answer that propagates.
+
+**Evidence:**
+- _Pattern_: "Silent zero-defaults in data extraction (e.g. `bb.get('x', 0)`) fabricate plausible-looking numeric values when source data is missing or pa…"
+- _Pattern_: "When building an access-gate system, unrecognized commands must default to DENY, not ALLOW; a default-allow fallback for unknown CLIs create…"
+- _Pattern_: "A Python exception class named 'NonRetryable' does not guarantee the framework skips retries; always read the error-handling code to confirm…"
+- _Projects_ (17): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-its-my-config, -Users-alcatraz627-Code-Claude-ghostty-themes, -Users-alcatraz627-Code-Claude-data-forge, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627, sys-monitor, .claude, claude-ipc, frontend, enhancement-product, local-models
+- _Sessions_ (38): 8cc6c6e4, fc013b76, e5807cfc, +35 more
+
+---
+### Insight (conf=0.70)
+> Advisory text, instance-level patches, and agent-droppable mute files are three faces of the same enforcement gap: in a multi-agent system, any safety mechanism that one agent can bypass or that only binds agents who read it at startup affects ALL agents — the blast radius of a weak enforcement point equals the blast radius of the protected resource, not the blast radius of the bypass.
+
+**Rule:** When adding a behavioral constraint to a multi-agent system, always place enforcement at the data-write layer (hook, CLI gate, schema check) rather than at the advisory layer (spec text, skill doc) — and never grant sub-agents write access to guard mute-files.
+
+**Evidence:**
+- _Pattern_: "Advisory specs and skill docs only bind agents that read them at startup; to make a behavioral constraint effective across sub-agents and in…"
+- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
+- _Pattern_: "A sub-agent must not touch or drop guard mute-files; a dropped mute file disables the guard machine-wide for all concurrent sessions until m…"
+- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627
+- _Sessions_ (31): d8f1948c, a0f35401, 8c7e6f5c, +28 more
+
+---

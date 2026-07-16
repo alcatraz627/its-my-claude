@@ -1,0 +1,24 @@
+{
+  "id": "529a8655-1857-43b5-ac9c-01322f607e2a",
+  "ts": "2026-07-13T08:32:43Z",
+  "session_id": "gcc-resi-b7",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260713-gcc-resi-b7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER (carried, pre-existing, not mine):** rescope the 3 tier-1 port pins \u2014 `ports.sh pin 3003|3006|8001 <name> --cwd <app-root>`.",
+    "**Backlog (70 open \u00b7 7 PROMOTE)** \u2014 filed, not built:",
+    "`hook-common.sh` refactor \u2014 ~150 duplicated lines of loop-safety across 6 hooks; stdin-read hand-copied in all 48 hooks across 3 non-equivalent failure modes. Highest-value next item.",
+    "~60MB of unbounded daemon-owned stores (`metacog/samples.jsonl` 16MB, `introspection/chains/` 23MB across 495 never-archived files). Needs an i-dream daemon-vs-external ownership decision FIRST \u2014 the shell rotation scripts cannot reach the write path.",
+    "`prop-20260713-073310-7f` \u2014 never re-enable a GUI approval channel without proving, on the target machine, that an unclicked dialog burns its full timeout and returns `gave up:true`.",
+    "**Re-measure persona-suggest** (128 fires / 0 conversions) now its envelope is wrapped. It is UserPromptSubmit, NOT PostToolUse \u2014 so the envelope may never have been its problem. Do not assume it was.",
+    "**NOT mine:** `3a2e22e` (cli-gating) is a concurrent session's unpushed commit sitting on local `main`. Leave it; it is theirs to push."
+  ],
+  "tags": []
+}

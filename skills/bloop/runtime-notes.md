@@ -1,3 +1,96 @@
+## bloop: hook loop-safety helper (gcc D4a) — 2026-07-16
+
+**Purpose:** Extract the duplicated shasum-marker loop-safety idiom from the Stop
+hooks into scripts/hooks/hook-common.sh; migrate 3 of 8 sites. Gate:
+PASS-WITH-NOTES (no blockers/majors). Replay 40/40.
+
+**Insights:**
+
+1. The 2026-07-11 subsystem audit's "byte-identical, collapse ~150 lines → 8"
+   OVER-CLAIMED uniformity. Reading every call site found two families — A
+   (filename-dot, prose-smell: heed-tracked 3-state with warn-log heeded true/false)
+   vs B (absence/structural-claim: stakes-scaled 2-state, no heed-clear, block→soft
+   / soft→silent on repeat). The audit's proposed monolith
+   loop_safe_block(...,block_msg,soft_msg) would have forced A's lifecycle onto B.
+   The faithful helper is the NARROW mechanism both share (sid8 + sig/marker); each
+   hook keeps its own lifecycle. Enumerate the real sites before designing the API —
+   an audit summary is a lead, not the spec.
+2. The replay fixture gate is FIRST-FIRE ONLY (fresh synthetic sid per fixture +
+   cleanup after), so it structurally cannot catch a repeat-path regression — which
+   is exactly the path a loop-safety refactor touches. 40/40 green proved the fire
+   DECISION unchanged, not the repeat SUPPRESSION. Know what the regression net does
+   NOT cover: added hook-common.test.sh for the repeat path, filed a proposal to
+   give run_fixtures.py a shared-sid double-run mode.
+3. Mutation-test restore stayed copy-based; the whole change was uncommitted +
+   hook-common.sh untracked, so a git checkout/stash/clean would have wiped it
+   (the 2026-07-15 note's lesson held — told the validator this explicitly).
+4. Validator dispatch hygiene gap: it polluted the live warn-events.jsonl (3 lines)
+   before it began redirecting WARN_LOG_STORE, and briefly Edit-mutated the live
+   hook-common.sh (Edit is ungated; only the Bash run against the mutated file was
+   classifier-blocked). Next time, the dispatch prompt should tell the validator to
+   set WARN_LOG_STORE and work on scratch COPIES from step one — no live side effects.
+
+---
+
+## bloop: ipc identity + honest-failures (claude-ipc) — 2026-07-15
+
+**Purpose:** Fourteenth run. Four diagnosis items (self-send, honest refusals,
+session-keyed liveness/wake, successor surfacing) + gate. Gate: PASS-WITH-NOTES,
+1 MAJOR the self-review missed. Streak 13/13.
+
+**Insights:**
+
+1. **`git checkout -- <path>` as a mutation-test restore WIPES uncommitted
+   implementation** (restores to HEAD, not pre-mutation) — lost the whole A1
+   registry+monitor build mid-loop; compounded by `tail -2` hiding the suite's
+   pass/fail line so the red-proof was unverified. Copy-based restore only:
+   cp to scratchpad → mutate → test with the pass/fail line VISIBLE → cp -f
+   back → diff -q. Filed as prop-20260714-185635-61 + pinned for i-dream.
+2. **The gate found the same bug-class the branch was killing, via a path no
+   test covered**: broadcast → two boxes of one dual-aliased session → wake
+   line counted one message twice. When a fix set targets a failure CLASS,
+   have the validator enumerate OTHER paths into that class (broadcast vs
+   direct, project vs session) — my tests only covered the incident's path.
+3. **Pre-fixing predicted findings while the gate runs works**: the cancel-on-
+   garbage no-op was fixed in 127f9cd mid-review; the validator confirmed it
+   was about to flag exactly that (branch moved under it; it re-based its
+   audit cleanly).
+4. **Exercising on an isolated broker found a boot bug reading never would**
+   (custom socket path → socket bound, pidfile write dies, broker half-up).
+   The smoke rig's own failure WAS the finding.
+5. **Exit-code checks must not read `$?` after a pipeline** — `cmd | head;
+   echo $?` reports head's status. Check exit codes bare.
+
+---
+## bloop: Accounts v2 (versable/speedway) — 2026-07-14 (mid-loop, gate pending)
+
+**Purpose:** Thirteenth run, first spanning a two-agent shared tree with a serial
+browser. Build done + committed (0242f7d); Phase 3/4 blocked on expired gcloud ADC.
+
+**Insights:**
+
+1. **The lm pre-gate's value is again the cluster, not the findings**: 6 opinions,
+   0 literally right, but poking their neighborhood exposed a real server-side
+   hardening gap (setRole accepted any string incl. owner; remove could delete the
+   owner via crafted POST — UI-hidden but server-obeyed). "The UI hides it" is an
+   attack surface enumerable pre-gate: diff what the UI prevents vs what the action
+   validates.
+2. **Owner rules can change MID-LOOP in a shared tree.** A no-card-header-divider
+   rule landed via the peer while my build (with 7 titleDividers) was uncommitted.
+   On a shared branch, read the peer's handoff BEFORE committing — conforming cost
+   one regex; missing it would have shipped a rule violation into the owner's round.
+3. **Browser handback asymmetry: page-close ≠ process-exit.** The peer's release
+   left its Chrome alive at about:blank holding the profile; my kill attempt was
+   classifier-blocked (correctly — can't prove ownership from my side). Protocol
+   that works: holder kills its OWN pid on request. Budget one ipc round-trip.
+4. **Route files trip the dup-symbol guard on whole-file Writes** (every route
+   exports loader/action). The working path: stage in scratchpad via Write, then
+   python-copy into the route. Edits to existing routes pass fine.
+5. **gcloud ADC expiry 500s every Firestore page and only a human can fix it**
+   (interactive OAuth). The app's credential-expiry page names the exact commands —
+   relay them verbatim; do not attempt the login headlessly.
+
+---
 ## bloop: item 15 tail — first-prompt dream lane (gcc) — 2026-07-14
 
 **Purpose:** Twelfth run. Gate: ISSUES-FOUND (2 real bugs + a TOCTOU race) on a

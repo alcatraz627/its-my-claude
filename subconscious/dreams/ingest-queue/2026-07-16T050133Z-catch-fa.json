@@ -1,0 +1,25 @@
+{
+  "id": "96490d11-67ea-445c-9c1a-d8cadd812068",
+  "ts": "2026-07-16T05:01:33Z",
+  "session_id": "catch-fable-7c",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260716-catch-fable-7c.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: final index deploy (4 pruned composites) \u2014 audit tag filters unproven",
+    "#6 Q4 owner-display build (scoping in hand; include RunDoc.triggeredBy",
+    "#8 Re-run adversarial gate: Accounts v2 + Review page (post-surgery).",
+    "#9 Owner review package \u2192 close PR#2 (github PR #2, phase0-kit-wiring \u2192",
+    "#10 Endgame: kit backprop, PRs \u00d73, walmart follow-up (B5.2 queue), kit",
+    "#7 Accounts + usage redo \u2014 WAITS on owner feedback batch.",
+    "Deferred by design: events/rail tag filters + their composites (ship with",
+    "Opus lane live-test findings may arrive via ipc (peek catch-fable-7c inbox"
+  ],
+  "tags": []
+}

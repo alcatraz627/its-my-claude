@@ -1,0 +1,72 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16928,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2183516930513936,
+    "unit_count": 31
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 4/6 units (~67%, marginally below the 73-85% six-cycle baseline): fc013b76-7 (ls -t build/client/assets/*.css | head -1 as ls-for-listing with head-in-pipe); fc013b76-9 (ls -la scratchpad/*.png as ls-for-listing); fc013b76-10 (cat pnpm-workspace.yaml and cat .npmrc as cat-instead-of-read); a0f35401-2 (ls /speedway/app/routes/ as ls-for-directory-listing, ls -la ~/Downloads/versable_speedway_app.html as ls-for-existence-probe); rate marginally below baseline this cycle; deprioritize per six-cycle stagnation guidance, no new intervention recommended",
+      "re_edit_thrash:RECURRING:IMPROVING — single-failure-then-self-correction in fc013b76-13 (Edit events.server.ts success:false, then Bash read-back, then Edit success:true); consistent with IMPROVING trajectory sustained six-plus consecutive batches; depth did not escalate beyond a single failure; no escalation warranted"
+    ],
+    "calibration_score": 0.65,
+    "cross_references": [
+      "dream_insight_terse_continuation_push_boundary:NO_VIOLATION — multiple commits executed in fc013b76-9 and fc013b76-10; all appear authorized within stated task scope rather than triggered by terse continuation signals; no push to main without authorization detected; the dream insight's discriminator (local-reversible vs shared-state mutation) appears to be respected this session",
+      "dream_insight_fix_thrash_amplified_by_context_boundaries:NOT_TRIGGERED — fc013b76-13 shows a single Edit failure on events.server.ts followed by immediate recovery; no multi-attempt re-thrash of previously-failed approaches detected; the probe-before-fix pattern used in fc013b76-10 (severing card.tsx's hard link to verify the guard fires) is an example of the insight's recommended approach applied correctly"
+    ],
+    "overconfident_count": 0,
+    "recommendations": [
+      "structural_claim_without_reading_code:ABSENT_THIS_BATCH — the RECURRING:STABLE pattern (8cc6c6e4-3 topology: 872-char IPC/mechanics input, zero tool calls, confident assertion, user correction) did not appear in any of these 6 units; all units are implementation-heavy with high tool density and the triggering condition (teammate/IPC mechanics question requiring no verification) was absent; do not interpret as improvement until tested against a triggering-topic unit; advisory tracking maintained",
+      "shell_tool_preference_violations: no new intervention; rate marginally below 73-85% baseline this cycle; monitor for drift above 85% but do not escalate",
+      "re_edit_thrash: no escalation; IMPROVING trajectory sustained; single-failure recovery is functioning; flag only if multi-failure streak of 3+ consecutive failures reappears on the same file",
+      "git_commit_authorization: all commits in fc013b76-7, fc013b76-9, fc013b76-10, fc013b76-13 appear task-authorized within active implementation scope; no terse-continuation-driven unauthorized push detected; guard appears effective; continue monitoring"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "fc013b76-5ae0-48ca-9e8c-db4b67668316",
+      9585726
+    ],
+    [
+      "a0f35401-be5e-4b00-bca6-dbdfe4b6ee46",
+      16756963
+    ],
+    [
+      "8c7e6f5c-9b2d-4995-829a-f13969e5370e",
+      98635
+    ],
+    [
+      "6b120b0a-b384-43e0-b962-243938dc68b3",
+      12403276
+    ],
+    [
+      "5c1d4a53-5af6-4235-8274-49f41a6746c0",
+      15054167
+    ],
+    [
+      "b088ebb3-87bc-43f4-8769-c0d1fa4e6d41",
+      9900181
+    ],
+    [
+      "08cc5dfc-601b-49be-a30b-0a04d1adb93a",
+      8196994
+    ],
+    [
+      "6f882464-4a9e-432c-832e-4aca39206afd",
+      3954113
+    ],
+    [
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      1206234
+    ]
+  ],
+  "timestamp": "2026-07-14T14:26:44.051449Z",
+  "tokens_used": 17712,
+  "units_analyzed": 6,
+  "units_total": 31
+}

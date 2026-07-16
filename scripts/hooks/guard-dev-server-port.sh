@@ -40,7 +40,18 @@ printf '%s' "$CMD" | rg -q '^\s*pm2\s[^;&|]*$' 2>/dev/null && exit 0
 # Launch detection — the common local dev-server spawners. Env-var prefixes
 # (PORT=… NODE_ENV=…) before the launcher are part of the launch form.
 LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run\s+)?dev\b|vite\b|next\s+(dev|start)\b|react-router\s+dev\b|remix\s+(vite:)?dev\b|astro\s+dev\b|nuxt\s+dev\b|webpack\s+serve\b|python3?\s+-m\s+http\.server\b|serve\b|uvicorn\b|flask\s+run\b)'
-printf '%s' "$CMD" | rg -q "$LAUNCH_RE" 2>/dev/null || exit 0
+# Scan a quote-blanked copy: a dev-server name that only appears INSIDE a
+# quoted grep/rg/ps/awk pattern (e.g. `ps … | rg 'next-server|next dev'`) is
+# a read-only inspection, not a launch — but the `|`/`;`/`&` inside those
+# quotes would otherwise read as a real command separator. Real launches are
+# unquoted, so blanking quoted spans leaves them intact. Port extraction below
+# still runs on the original command.
+if command -v perl >/dev/null 2>&1; then
+  SCAN=$(printf '%s' "$CMD" | perl -pe "s/'[^']*'//g; s/\"[^\"]*\"//g")
+else
+  SCAN="$CMD"
+fi
+printf '%s' "$SCAN" | rg -q "$LAUNCH_RE" 2>/dev/null || exit 0
 
 CWD=$(printf '%s' "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
 PORTS="$HOME/.claude/scripts/dev-servers/ports.sh"

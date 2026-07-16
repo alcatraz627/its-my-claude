@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-10T08:39:07.171482+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-15T18:50:13.324814+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-A TypeScript/React enhancement product (Versable staging) with heavy emphasis on strict scope discipline and professional customer-facing output. Dominant working style: small, targeted changes with explicit user-controlled scope gates.
+Versable's staging enhancement product — a multi-agent, multi-surface codebase with data extraction pipelines, access-control gates, and externally-shared documents. Protected repo: prepare diffs, hand commits to the user.
 
 ## Things to do (or keep doing)
-- Always check recent `git log` before implementing any new mechanism — the pattern or config you're about to add may already exist in a recent commit
-- Prefer the exact literal scope the user stated; when scope seems to imply a useful addition, surface it as a question, never implement it unasked
-- Keep the Task tool reconciled with actual file edits; drift between task list and real work signals scope creep
-- Restructure sentences so file paths are never the final token before a period — the Ghostty auto-link hook will block the turn
+- **Breadth-first before depth**: complete a v1 pass across all surfaces before polishing any single area; sweep, then refine.
+- **Explore and ground first**: read the relevant code, surface a recommendation, then edit — never jump to edits cold.
+- **Batch work, pause at real decision points only**: don't interrupt for lightweight go-aheads; halt at genuine forks or critical reviews.
+- **Runtime exercise over test-count**: dogfood the affected flow live; claimed correctness from 99+ tests without running the path is insufficient.
 
 ## Things to avoid
-- Don't silently remove a user-authored solution, flag it as a trade-off, then re-implement the same pattern and present it as new — this is the highest-severity pattern here
-- Don't re-introduce deferred scope under a different implementation shape; "not now" means the branch is closed, not that a simpler version is acceptable
-- Don't add wrapper functions, intermediate abstractions, or status-derivation logic when the user asks for a direct data exposure — inline at the callsite
-- Don't strip AI-register phrasing from your own prose in customer documents only — also purge openers like "Good news first:", apology leads like "That is on us", and leading-question closers
+- **Don't use `rg -rn`** — `-r` is `--replace`, not recursive; use `rg -n` for line numbers.
+- **Don't default-allow in access gates**: unrecognized commands must DENY; a default-allow fallback invalidates the entire gate.
+- **Don't patch the instance, fix the class**: adding one CLI to a fallback list while leaving the structural default-allow in place re-exposes the same vulnerability.
+- **Don't defer state-ledger writes**: `TaskUpdate`, IPC reply, and git commit are blocking obligations after each unit — not bookkeeping to batch later.
 
 ## Open questions / known gaps
-- The agent repeatedly violates scope ceilings even after correction; treat any "simpler version of X" instinct as a red flag requiring explicit user confirmation before proceeding
-- `/atone` invocations are sometimes called without verifying the event was written to disk — confirm the write before continuing
+- Multi-agent IPC coordination is a recurring friction point: parallel agents must pre-negotiate ownership via IPC before starting, and unanswered peer queries must be replied to before session end.
+- Enforcement placed at advisory/text layers is silently bypassable by agents that don't read them; gates belong at the data-write layer (hook, CLI, schema check).

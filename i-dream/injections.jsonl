@@ -1280,3 +1280,227 @@
 {"ts": "2026-07-13T08:00:08Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
 {"ts": "2026-07-13T08:06:25Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
 {"ts": "2026-07-13T08:07:31Z", "slugs": ["infra-before-grep", "declared-ready-without-runtime-exercise", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T11:37:00Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T11:37:00Z", "slugs": ["infra-before-grep"]}
+{"ts": "2026-07-13T12:13:43Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T12:18:48Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T12:19:45Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T12:29:49Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T12:31:58Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T13:37:23Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T14:08:22Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T17:48:55Z", "kind": "dream-ranked", "ids": ["7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72", "8f9a27e8542a7ff6", "f8dc4d7e7eb9ed5e"], "cwd_leaf": "i-dream"}
+{"ts": "2026-07-13T17:48:55Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T17:48:55Z", "kind": "dream-ranked", "ids": ["7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72", "8f9a27e8542a7ff6", "f8dc4d7e7eb9ed5e"], "cwd_leaf": "i-dream"}
+{"ts": "2026-07-13T17:48:55Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T17:49:10Z", "kind": "dream-ranked", "ids": ["7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72", "8f9a27e8542a7ff6", "f8dc4d7e7eb9ed5e"], "cwd_leaf": "i-dream"}
+{"ts": "2026-07-13T17:49:10Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T19:42:32Z", "kind": "dream-ranked", "ids": ["7033f96a0bb9ec65", "355ecf22a1e5fd15", "7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72"], "cwd_leaf": "claude-ipc"}
+{"ts": "2026-07-13T19:42:32Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T20:25:17Z", "kind": "dream-ranked", "ids": ["7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72", "33a1f2e70811118c", "8f9a27e8542a7ff6"], "cwd_leaf": "versable-builder"}
+{"ts": "2026-07-13T20:25:17Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T20:34:49Z", "kind": "dream-ranked", "ids": ["667cb99628e35a32", "a27e2f6c73cf050f", "3ea4714aacb979a7", "26b2aa08e89d391f", "bbbe1a3e2a0d9593"], "cwd_leaf": "staging-enhancement-product"}
+{"ts": "2026-07-13T20:34:49Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T20:35:09Z", "kind": "dream-ranked", "ids": ["7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72", "33a1f2e70811118c", "8f9a27e8542a7ff6"], "cwd_leaf": "versable-builder"}
+{"ts": "2026-07-13T20:35:09Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T21:15:06Z", "kind": "dream-ranked", "ids": ["7033f96a0bb9ec65", "355ecf22a1e5fd15", "7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72"], "cwd_leaf": "tmp", "sid": "3107cdcb-157f-4efa-b632-e34264e784e9"}
+{"ts": "2026-07-13T21:15:06Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T21:16:42Z", "kind": "dream-ranked", "ids": ["7033f96a0bb9ec65", "355ecf22a1e5fd15", "7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72"], "cwd_leaf": "tmp", "sid": "f587fbb6-6cfa-4d1b-adab-d7816e1dedbc"}
+{"ts": "2026-07-13T21:16:42Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T21:16:44Z", "kind": "dream-ranked-prompt", "ids": ["7033f96a0bb9ec65", "355ecf22a1e5fd15", "8b5eea788fdb0ff3", "7b1ab50538c65c80", "083e057557fb8b44"], "cwd_leaf": "tmp", "sid": "f587fbb6-6cfa-4d1b-adab-d7816e1dedbc"}
+{"ts": "2026-07-13T21:17:55Z", "kind": "dream-ranked", "ids": ["7033f96a0bb9ec65", "355ecf22a1e5fd15", "7b1ab50538c65c80", "8b5eea788fdb0ff3", "c2d784b0107f2a72"], "cwd_leaf": "tmp", "sid": "a388c7d3-c4aa-476f-8a30-5a4b294a26b3"}
+{"ts": "2026-07-13T21:17:55Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-13T21:17:56Z", "kind": "dream-ranked-prompt", "ids": ["355ecf22a1e5fd15", "7033f96a0bb9ec65", "7b1ab50538c65c80", "083e057557fb8b44", "c2d784b0107f2a72"], "cwd_leaf": "tmp", "sid": "a388c7d3-c4aa-476f-8a30-5a4b294a26b3"}
+{"ts": "2026-07-13T22:32:38Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:13:48Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:14:53Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:15:56Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:18:06Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:19:35Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:19:56Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:20:19Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:20:39Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:21:00Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:21:20Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:21:40Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:22:00Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:22:21Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:22:46Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:23:09Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:23:31Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:23:53Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T03:24:15Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T06:27:57Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T08:36:57Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T08:37:06Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:22:35Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:23:52Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:24:53Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:25:30Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:26:44Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:27:10Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:27:38Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:27:58Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:28:16Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:28:45Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:03Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:19Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:35Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:53Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:46:19Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:47:12Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T15:10:59Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T18:17:41Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T20:01:35Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:03:36Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:15:05Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:17:36Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:17:53Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:19:38Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:21:23Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:22:04Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:23:24Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:24:07Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:24:19Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:49:51Z", "kind": "dream-ranked-prompt", "ids": ["2117cf47d22ba394", "c07158042266d7c4", "091b1300d401c515", "8fc0716f4e291f71", "722869794527508a"], "cwd_leaf": "frontend", "sid": "7c520f34-be41-4703-8754-6c213809f661"}
+{"ts": "2026-07-14T23:51:28Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "4c7a31df-bf1e-45ea-b00d-7df49143e5c6"}
+{"ts": "2026-07-14T23:51:28Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:51:31Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "f4aac665c21073f8", "138cca29ededf2c4", "8fc0716f4e291f71"], "cwd_leaf": "tmp", "sid": "4c7a31df-bf1e-45ea-b00d-7df49143e5c6"}
+{"ts": "2026-07-14T23:52:56Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "e35e0ecf-ce27-4c61-957c-9545ab822bea"}
+{"ts": "2026-07-14T23:52:56Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:53:00Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "722869794527508a", "fc5f989722a6c091", "2117cf47d22ba394", "c07158042266d7c4"], "cwd_leaf": "tmp", "sid": "e35e0ecf-ce27-4c61-957c-9545ab822bea"}
+{"ts": "2026-07-14T23:55:01Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "82ce768b-f2cd-4542-b6df-294d743ffab9"}
+{"ts": "2026-07-14T23:55:01Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:55:04Z", "kind": "dream-ranked-prompt", "ids": ["f4aac665c21073f8", "ff487caeb5c36a16", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a"], "cwd_leaf": "tmp", "sid": "82ce768b-f2cd-4542-b6df-294d743ffab9"}
+{"ts": "2026-07-14T23:55:42Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "320e9698-31a0-4613-a08c-06a75270d5fc"}
+{"ts": "2026-07-14T23:55:42Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:55:45Z", "kind": "dream-ranked-prompt", "ids": ["722869794527508a", "091b1300d401c515", "2117cf47d22ba394", "138cca29ededf2c4", "100523f5e29d987f"], "cwd_leaf": "tmp", "sid": "320e9698-31a0-4613-a08c-06a75270d5fc"}
+{"ts": "2026-07-14T23:56:16Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "cf5795fc-9248-436e-8913-82c6fc0a07ac"}
+{"ts": "2026-07-14T23:56:16Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:56:19Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "cf5795fc-9248-436e-8913-82c6fc0a07ac"}
+{"ts": "2026-07-14T23:56:34Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "06933fab-41f9-4102-bbcd-fa18ab56b682"}
+{"ts": "2026-07-14T23:56:34Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:56:37Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "06933fab-41f9-4102-bbcd-fa18ab56b682"}
+{"ts": "2026-07-14T23:56:53Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "9040134b-2d15-4690-99fe-43a94bf558b2"}
+{"ts": "2026-07-14T23:56:53Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:56:56Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "9040134b-2d15-4690-99fe-43a94bf558b2"}
+{"ts": "2026-07-14T23:57:14Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "fac76118-6964-4029-8d84-9e8e68c5a0d1"}
+{"ts": "2026-07-14T23:57:14Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:57:17Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "fac76118-6964-4029-8d84-9e8e68c5a0d1"}
+{"ts": "2026-07-14T23:57:35Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "d04396e2-3aed-472a-9041-12e1ab6ffec3"}
+{"ts": "2026-07-14T23:57:35Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:57:38Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "d04396e2-3aed-472a-9041-12e1ab6ffec3"}
+{"ts": "2026-07-14T23:57:55Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "474f5893-2c61-4466-8f6c-4c603a868884"}
+{"ts": "2026-07-14T23:57:55Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:57:59Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "474f5893-2c61-4466-8f6c-4c603a868884"}
+{"ts": "2026-07-14T23:58:16Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "e738a416-ba1a-4f15-8f7c-177d7145d321"}
+{"ts": "2026-07-14T23:58:16Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:58:19Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "e738a416-ba1a-4f15-8f7c-177d7145d321"}
+{"ts": "2026-07-14T23:58:39Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "274f7362-cec9-4689-b1d5-b8ff29f186e4"}
+{"ts": "2026-07-14T23:58:39Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:58:42Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "274f7362-cec9-4689-b1d5-b8ff29f186e4"}
+{"ts": "2026-07-14T23:59:00Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "a53ec20c-2740-414d-8500-777954355bac"}
+{"ts": "2026-07-14T23:59:00Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T23:59:02Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "a53ec20c-2740-414d-8500-777954355bac"}
+{"ts": "2026-07-15T03:23:45Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "1b3deccf-4014-41fe-8031-e86f1211ae18"}
+{"ts": "2026-07-15T03:23:46Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T03:23:49Z", "kind": "dream-ranked-prompt", "ids": ["f4aac665c21073f8", "ff487caeb5c36a16", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a"], "cwd_leaf": "tmp", "sid": "1b3deccf-4014-41fe-8031-e86f1211ae18"}
+{"ts": "2026-07-15T03:24:01Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "5e6c2827-0ca6-4cef-8b53-cdd28873355e"}
+{"ts": "2026-07-15T03:24:01Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T03:24:04Z", "kind": "dream-ranked-prompt", "ids": ["722869794527508a", "091b1300d401c515", "2117cf47d22ba394", "138cca29ededf2c4", "100523f5e29d987f"], "cwd_leaf": "tmp", "sid": "5e6c2827-0ca6-4cef-8b53-cdd28873355e"}
+{"ts": "2026-07-15T06:27:41Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "7163a63c-61e9-4878-b5a9-894e34f2233a"}
+{"ts": "2026-07-15T06:27:41Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T06:27:46Z", "kind": "dream-ranked-prompt", "ids": ["722869794527508a", "091b1300d401c515", "2117cf47d22ba394", "138cca29ededf2c4", "100523f5e29d987f"], "cwd_leaf": "tmp", "sid": "7163a63c-61e9-4878-b5a9-894e34f2233a"}
+{"ts": "2026-07-15T14:27:00Z", "kind": "dream-ranked", "ids": ["2117cf47d22ba394", "091b1300d401c515", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "versable-builder", "sid": "96490d11-67ea-445c-9c1a-d8cadd812068"}
+{"ts": "2026-07-15T14:27:00Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T14:42:59Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": ".claude", "sid": "6e3acc8c-f38e-4f38-90d7-bf44ff150462"}
+{"ts": "2026-07-15T14:42:59Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T14:47:08Z", "kind": "dream-ranked-prompt", "ids": ["2117cf47d22ba394", "8fc0716f4e291f71", "f88fb5209375e9c2", "138cca29ededf2c4", "722869794527508a"], "cwd_leaf": ".claude", "sid": "6e3acc8c-f38e-4f38-90d7-bf44ff150462"}
+{"ts": "2026-07-15T14:50:23Z", "kind": "dream-ranked", "ids": ["2117cf47d22ba394", "091b1300d401c515", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "staging-enhancement-product", "sid": "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8"}
+{"ts": "2026-07-15T14:50:23Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:42:09Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "3cd56079-c0b8-4f55-8217-7e86dae2c5d3"}
+{"ts": "2026-07-15T18:42:09Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:42:12Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "f4aac665c21073f8", "138cca29ededf2c4", "8fc0716f4e291f71"], "cwd_leaf": "tmp", "sid": "3cd56079-c0b8-4f55-8217-7e86dae2c5d3"}
+{"ts": "2026-07-15T18:43:24Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "c1b67c4c-c690-4299-bcd5-2bed1b35acea"}
+{"ts": "2026-07-15T18:43:24Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:43:27Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "722869794527508a", "fc5f989722a6c091", "2117cf47d22ba394", "c07158042266d7c4"], "cwd_leaf": "tmp", "sid": "c1b67c4c-c690-4299-bcd5-2bed1b35acea"}
+{"ts": "2026-07-15T18:45:23Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "bf3f7f1c-2a5a-4fec-bb46-c99dca954838"}
+{"ts": "2026-07-15T18:45:23Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:45:26Z", "kind": "dream-ranked-prompt", "ids": ["f4aac665c21073f8", "ff487caeb5c36a16", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a"], "cwd_leaf": "tmp", "sid": "bf3f7f1c-2a5a-4fec-bb46-c99dca954838"}
+{"ts": "2026-07-15T18:47:08Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "94c99655-55c9-4308-b977-74be1af2855c"}
+{"ts": "2026-07-15T18:47:08Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:47:11Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "722869794527508a", "2117cf47d22ba394", "138cca29ededf2c4", "100523f5e29d987f"], "cwd_leaf": "tmp", "sid": "94c99655-55c9-4308-b977-74be1af2855c"}
+{"ts": "2026-07-15T18:47:36Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "b6961fb6-ab95-4a23-82ec-3468a3438323"}
+{"ts": "2026-07-15T18:47:36Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:47:40Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "b6961fb6-ab95-4a23-82ec-3468a3438323"}
+{"ts": "2026-07-15T18:47:58Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "5490fa2c-d190-4768-9d99-6b6ef4608735"}
+{"ts": "2026-07-15T18:47:58Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:48:02Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "5490fa2c-d190-4768-9d99-6b6ef4608735"}
+{"ts": "2026-07-15T18:48:21Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "6746c526-63ad-4e1d-bbd6-87dd1a45de94"}
+{"ts": "2026-07-15T18:48:21Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:48:24Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "6746c526-63ad-4e1d-bbd6-87dd1a45de94"}
+{"ts": "2026-07-15T18:48:46Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "62f91009-b46f-4b86-a2cf-3962c3ed939e"}
+{"ts": "2026-07-15T18:48:46Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:48:49Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "62f91009-b46f-4b86-a2cf-3962c3ed939e"}
+{"ts": "2026-07-15T18:49:05Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "6fa030d4-ebdd-43c3-9d0f-a04a454f0000"}
+{"ts": "2026-07-15T18:49:05Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:49:08Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "6fa030d4-ebdd-43c3-9d0f-a04a454f0000"}
+{"ts": "2026-07-15T18:49:25Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "bc25ede8-55fc-4a99-a631-d5fecaa1f4d3"}
+{"ts": "2026-07-15T18:49:25Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:49:29Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "bc25ede8-55fc-4a99-a631-d5fecaa1f4d3"}
+{"ts": "2026-07-15T18:49:47Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "7d6b0ae2-6264-4e41-9312-544bff46eddf"}
+{"ts": "2026-07-15T18:49:47Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:49:50Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "7d6b0ae2-6264-4e41-9312-544bff46eddf"}
+{"ts": "2026-07-15T18:50:14Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "3d405ba3-29b6-4795-ab23-b2276a0cd077"}
+{"ts": "2026-07-15T18:50:14Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:50:17Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "3d405ba3-29b6-4795-ab23-b2276a0cd077"}
+{"ts": "2026-07-15T18:50:36Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "c88aca4d-8266-4714-8c91-3b6f1d72fe6c"}
+{"ts": "2026-07-15T18:50:36Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:50:40Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "c88aca4d-8266-4714-8c91-3b6f1d72fe6c"}
+{"ts": "2026-07-15T18:51:02Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "f8062b60-11ca-4425-9bdb-f50d94d1c43d"}
+{"ts": "2026-07-15T18:51:02Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:51:06Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "f8062b60-11ca-4425-9bdb-f50d94d1c43d"}
+{"ts": "2026-07-15T18:51:25Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "f77c812b-c78f-4d9e-9389-2f4259cacb5e"}
+{"ts": "2026-07-15T18:51:25Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:51:28Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "f77c812b-c78f-4d9e-9389-2f4259cacb5e"}
+{"ts": "2026-07-15T18:51:51Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "89470622-bd20-4926-a694-102ec322481d"}
+{"ts": "2026-07-15T18:51:51Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T18:51:54Z", "kind": "dream-ranked-prompt", "ids": ["091b1300d401c515", "2117cf47d22ba394", "c07158042266d7c4", "f88fb5209375e9c2", "f4aac665c21073f8"], "cwd_leaf": "tmp", "sid": "89470622-bd20-4926-a694-102ec322481d"}
+{"ts": "2026-07-15T20:28:59Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "722869794527508a", "8fc0716f4e291f71", "48ca81f722f28a0a"], "cwd_leaf": "claude-ipc", "sid": "3385b572-ddfa-415d-93ab-79f8f3db33df"}
+{"ts": "2026-07-15T20:28:59Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T20:29:46Z", "kind": "dream-ranked", "ids": ["2117cf47d22ba394", "091b1300d401c515", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "versable-builder", "sid": "dfd19dc0-00da-4fb3-9a44-73ec95fef70c"}
+{"ts": "2026-07-15T20:29:46Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T21:15:03Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "ae6cced6-9c43-4339-bd40-c596057259f8"}
+{"ts": "2026-07-15T21:15:03Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T21:15:04Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "722869794527508a", "ff487caeb5c36a16", "c07158042266d7c4", "3ef302f180af818f"], "cwd_leaf": "tmp", "sid": "ae6cced6-9c43-4339-bd40-c596057259f8"}
+{"ts": "2026-07-15T21:27:42Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "b03424c2-3804-4eff-92e7-e84848a49976"}
+{"ts": "2026-07-15T21:27:42Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T21:27:43Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "100523f5e29d987f", "2117cf47d22ba394", "3ef302f180af818f", "091b1300d401c515"], "cwd_leaf": "tmp", "sid": "b03424c2-3804-4eff-92e7-e84848a49976"}
+{"ts": "2026-07-15T21:27:53Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "518ec5b1-442b-4d2e-bd32-e4532738060b"}
+{"ts": "2026-07-15T21:27:53Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T21:27:54Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "100523f5e29d987f", "2117cf47d22ba394", "3ef302f180af818f", "091b1300d401c515"], "cwd_leaf": "tmp", "sid": "518ec5b1-442b-4d2e-bd32-e4532738060b"}
+{"ts": "2026-07-15T21:28:40Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "b391722c-96b1-4e11-8976-d08e5e8ef437"}
+{"ts": "2026-07-15T21:28:40Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T21:28:41Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "48ca81f722f28a0a", "c07158042266d7c4", "091b1300d401c515", "2117cf47d22ba394"], "cwd_leaf": "tmp", "sid": "b391722c-96b1-4e11-8976-d08e5e8ef437"}
+{"ts": "2026-07-15T21:49:15Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "84ae01c8-81ce-4c5e-9e2b-568c5a725a15"}
+{"ts": "2026-07-15T21:49:15Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-15T21:49:16Z", "kind": "dream-ranked-prompt", "ids": ["8fc0716f4e291f71", "722869794527508a", "ff487caeb5c36a16", "091b1300d401c515", "100523f5e29d987f"], "cwd_leaf": "tmp", "sid": "84ae01c8-81ce-4c5e-9e2b-568c5a725a15"}
+{"ts": "2026-07-16T04:59:39Z", "kind": "dream-ranked", "ids": ["a09cd282996abcfe", "94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65"], "cwd_leaf": "staging-enhancement-product", "sid": "e2c1ce29-a4c8-4122-88ab-687354ef33f3"}
+{"ts": "2026-07-16T04:59:39Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T04:59:40Z", "kind": "dream-ranked", "ids": ["a09cd282996abcfe", "94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65"], "cwd_leaf": ".claude", "sid": "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1"}
+{"ts": "2026-07-16T04:59:40Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T05:31:18Z", "kind": "dream-ranked", "ids": ["a09cd282996abcfe", "94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65"], "cwd_leaf": "versable-builder", "sid": "895cfd88-628e-49b8-9d5d-192bbf6b911f"}
+{"ts": "2026-07-16T05:31:18Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T05:31:19Z", "kind": "dream-ranked-prompt", "ids": ["94e46a2528a2f3ba", "9a43dcfeaf3f37a9", "0865c79b287ee474", "12a814f4c9163088", "a09cd282996abcfe"], "cwd_leaf": "versable-builder", "sid": "895cfd88-628e-49b8-9d5d-192bbf6b911f"}
+{"ts": "2026-07-16T05:32:18Z", "kind": "dream-ranked", "ids": ["94e46a2528a2f3ba", "9a43dcfeaf3f37a9", "a09cd282996abcfe", "a22b486c1ecc63c1", "4010cebbcc946e65"], "cwd_leaf": "claude-ipc", "sid": "a510cc5f-bad7-47a5-91b6-a23abab6269d"}
+{"ts": "2026-07-16T05:32:18Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T05:33:46Z", "kind": "dream-ranked-prompt", "ids": ["94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65", "7be2c3212d486610"], "cwd_leaf": "claude-ipc", "sid": "a510cc5f-bad7-47a5-91b6-a23abab6269d"}
+{"ts": "2026-07-16T06:13:11Z", "kind": "dream-ranked", "ids": ["a09cd282996abcfe", "94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65"], "cwd_leaf": "versable-builder", "sid": "68fa3c9f-5e9f-48a1-86ae-3982587a7f15"}
+{"ts": "2026-07-16T06:13:11Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T06:13:12Z", "kind": "dream-ranked-prompt", "ids": ["a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65", "a09cd282996abcfe", "7be2c3212d486610"], "cwd_leaf": "versable-builder", "sid": "68fa3c9f-5e9f-48a1-86ae-3982587a7f15"}
+{"ts": "2026-07-16T06:42:39Z", "kind": "dream-ranked", "ids": ["a09cd282996abcfe", "94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65"], "cwd_leaf": "staging-enhancement-product", "sid": "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a"}
+{"ts": "2026-07-16T06:42:39Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T06:42:40Z", "kind": "dream-ranked-prompt", "ids": ["a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65", "a09cd282996abcfe", "7be2c3212d486610"], "cwd_leaf": "staging-enhancement-product", "sid": "2609c1d0-e1d5-4200-8d2c-467a9d2b1b8a"}
+{"ts": "2026-07-16T07:28:32Z", "kind": "dream-ranked", "ids": ["a09cd282996abcfe", "94e46a2528a2f3ba", "a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "4010cebbcc946e65"], "cwd_leaf": "tmp", "sid": "5e47eca2-f217-45cb-9f3d-4efb8eca5c0d"}
+{"ts": "2026-07-16T07:28:32Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-16T07:28:33Z", "kind": "dream-ranked-prompt", "ids": ["a22b486c1ecc63c1", "9a43dcfeaf3f37a9", "94e46a2528a2f3ba", "4010cebbcc946e65", "7be2c3212d486610"], "cwd_leaf": "tmp", "sid": "5e47eca2-f217-45cb-9f3d-4efb8eca5c0d"}

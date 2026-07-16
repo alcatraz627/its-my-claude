@@ -817,3 +817,66 @@ absolute path it actually wrote.
 - PWA deploy staleness is a two-part fix — HTTP cache headers (immutable hashed assets + no-cache shell) AND un-precaching index.html (NetworkFirst navigations). Fixing either alone leaves "phone shows the old app" jank.
 - Hover-revealed state is invisible on touch (a check icon color:transparent-until-hover shipped unreadable on phones). Any mobile UI claim needs a touch-shaped verification, not a cursor-shaped one.
 - The push-gate hook pattern-matches the whole Bash command string: a `git commit` whose heredoc message mentions "git push" false-fires it. Clean workaround: `git commit -F <msgfile>`.
+
+## 2026-07-13 — hand-trans-e7 (claude-instances R2 port)
+
+- Self-contained HTML prototypes served from disk by a long-lived server: if the
+  server process predates a `Cache-Control: no-store` code change, browsers cache
+  the PAGE document while fetch()'d data stays fresh — symptom is "functions
+  undefined but page renders" (stale document, live data). Hard-reload before
+  debugging phantom code.
+- Playwright MCP blocks file:// URLs and confines screenshots to project roots;
+  chrome-devtools MCP's browser profile is exclusive per Claude session — when two
+  sessions run browsers, the second must use playwright.
+- A `?since=<seq>` incremental API doubles as a tail API for free: probe with an
+  impossibly high since to get meta-only (total count), then since=total-N for the
+  last N records. No server change needed for peek/tail features.
+
+## 2026-07-13 — zconv-todo-3f
+
+- bash `case` patterns with an unquoted space (`*no effect*)`) are a hard syntax error, not a non-match — quote the phrase or drop the space. Bit a test file mid-suite; the error surfaces only when bash reaches that line.
+- Backend-orchestrating CLIs: capture backend stdout+stderr to a temp log, replay only on failure. Chatty-on-success tools (ebook-convert) stay silent; real errors stay complete.
+
+## 2026-07-14 (catch-agent-a7)
+
+- **`glow` hangs headless** — it blocks waiting for a TTY and will eat a whole Bash batch to timeout. Agent-side render checks: `bat --paging=never -l md` or a mechanical pipe-count check. (The tui library's no-headless-hang discipline applies to *viewers* too, not just pickers.)
+- **Grep patterns vs `json.dumps` output:** Python's default separators write `"key": "value"` (space after colon), so `rg '"kind":"dream-ranked"'` finds nothing in a ledger Python wrote. Grep the bare value, or match both spacings. Cost me a false "no records exist" mid-debug.
+- **Sub-agent validator lifecycle (3 occurrences, now a playbook):** `failed` idle → SendMessage resume (keeps its transcript, cheaper than re-dispatch); `available` idle without delivery → one chase-up; fresh seat only third. Also: validators may sweep the PARENT's scratch fixtures during their housekeeping — keep parent fixtures out of any path the dispatch mentions.
+- **Never schedule far-future `claude --resume`** — default 30-day transcript cleanup breaks it. `launch-claude-new.sh` (fresh session + a docs anchor in the first-turn prompt) is the durable pattern; the anchor doc carries the context instead of the transcript.
+
+## 2026-07-14 — canvas contrast probes lie on modern CSS colors
+
+An in-browser contrast check that paints `getComputedStyle().color` into a canvas
+and reads the pixel back is **silently wrong** for `oklch()`/`oklab()` with alpha:
+`ctx.fillStyle` rejects the value, keeps the PREVIOUS fill, and the readback
+reports a fabricated ratio. It told me text that truly measures 2.80:1 was
+16.53:1 — i.e. it says "pass" on a hard fail. Composite the alpha yourself
+(fg over bg in code) instead of round-tripping through canvas. Bites any Tailwind
+v4 / daisyUI app, where every `text-foo/45` opacity utility compiles to oklab+alpha.
+
+## 2026-07-14 — a shared browser profile is a serial resource, and close ≠ exit
+
+Two agents sharing one Playwright MCP Chrome profile: `browser_close` closes the
+PAGE, not the PROCESS, so the profile stays locked and the next agent cannot
+launch. Neither agent can kill the other's Chrome (the permission classifier
+blocks it, correctly — ownership is unprovable from outside). The only protocol
+that works: the HOLDER kills its own pid on request. Also, a naive
+`pgrep -f <profile>` matches your own polling shell and lies. The real fix is one
+profile per agent.
+
+## 2026-07-16 — from claude-ipc session ipc-dr-4e
+
+- **Generalizing a keyed model? Grep EVERY keyed site, not just the one that motivated the change.**
+  claude-ipc keyed liveness by sessionId (heartbeat/roster/wake) but left reply-obligation tracking
+  per-alias. A gate pass AND an independent owed-review both missed it; a real peer using two aliases
+  across sessions hit it in the field. When you change an identity/keying model, enumerate all sites
+  that key on the old unit (liveness, obligations, consumption, nudge-targeting, dedup) and fix them
+  together — a partial generalization is a "claim the system can't back" waiting to surface.
+- **Field feedback from real multi-actor peers beats synthetic tests for identity/session bugs.** The
+  residual bug survived both automated adversarial passes because no test exercised the exact cross-
+  session multi-alias case. For anything about identity across sessions, get a real peer to use it.
+- **Shell `cmd | head; echo $?` reports head's exit, not cmd's.** Bit twice this session verifying CLI
+  exit codes. Check exit codes on a bare command, never after a pipe.
+- **Mutation-test restore must be copy-based, never `git checkout --`** (reverts to HEAD, wiping
+  uncommitted work): cp to scratchpad → mutate → test with the pass/fail line VISIBLE → `cp -f` back →
+  `diff -q`. (Already pinned + proposed prop-20260714-185635-61.)

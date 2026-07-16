@@ -1,0 +1,23 @@
+{
+  "id": "8c7e6f5c-9b2d-4995-829a-f13969e5370e",
+  "ts": "2026-07-15T12:23:23Z",
+  "session_id": "vb-fable",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260715-vb-fable.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**R1-U6 (next)**: indexes.json \u00b7 reset script + wipe (confirm first) \u00b7",
+    "**R1 leftovers folded forward (R2/R3)**: preview/debug/window routes",
+    "**R2**: runners/orchestrator/runs/review per job + stepper + standalone",
+    "**R3**: dashboard on job aggregates (onboardedAt), audit/activity tags + 8",
+    "**R4**: retirement + semantic part-key grep + full circuit + /ui-gripe +",
+    "**Standing**: Q4 owner-display build (pre-accounts; scoping in hand); task"
+  ],
+  "tags": []
+}

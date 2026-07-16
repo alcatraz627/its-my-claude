@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-13T00:45:42.626513+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-14T03:21:39.336654+00:00 · 13 patterns / 3 insights -->
 ## What this project is about
-Dream-tracking dashboard and developer tooling project (`i-dream`), mixing web UI work with shell/agent tool authoring. Working style is iterative and verification-heavy — the user catches shallow "done" claims hard.
+A developer tooling / meta-infrastructure project (`i-dream`) focused on dream-pass orchestration, memory consolidation, and agent insight pipelines. Work style is adversarial-verify-first with a strong preference for evidence over claimed correctness.
 
 ## Things to do (or keep doing)
-- **Verify runtime before claiming working**: navigate to the actual URL and exercise the primary flow; `lsof` the port; don't report success off a compile or collect.
-- **Check git log before implementing**: scan recent commits for version decisions and already-landed mechanisms before reinventing them.
-- **Read existing scripts before writing new ones**: prior design decisions and removal history directly constrain what to build.
-- **Sequence edits to the same file**: parallel Edit calls silently clobber each other — only one survives despite both returning success.
+- Always dispatch a fresh adversarial reviewer sub-agent immediately after implementing any complex feature — it reliably catches HIGH-severity bugs the main agent misses.
+- Dogfood every change by actually running the affected code path; test-suite green is not sufficient, exercise the live flow.
+- Surface the structural observation behind any local workaround before applying it ("this works, but the reason I need it suggests X is missing from the system").
+- Push back with evidence when a design decision seems wrong; the user explicitly values independent judgment over capitulation.
 
 ## Things to avoid
-- **Don't auto-apply on selection in picker UIs**: selection must preview; an explicit save/apply action is required to commit state changes.
-- **Don't put a file path immediately before a sentence-ending period**: Ghostty auto-links paths and swallows the trailing dot, breaking the link — follow every path with a space, word, or comma.
-- **Don't fabricate content in stub docs**: write only the goal statement and `TODO(human)` placeholders — never fill sections structurally.
-- **Don't suggest version changes without checking git history**: a recent deliberate revert is a hard veto.
+- Don't treat user reassurance ("I trust you", "that's fine") as authorization to remove safeguards, gates, or confirmations — it is social comfort, not a blanket mandate.
+- Don't use silent zero-defaults (`bb.get('x', 0)`) in data extraction; fabricated plausible-looking values suppress investigation and corrupt downstream metrics.
+- Don't interpret an intensity complaint ("too noisy") as a removal order — tune it down, don't turn it off.
+- Don't let the task list drift while editing; reconcile completed vs. pending items before stopping, not in a batch at the end.
 
 ## Open questions / known gaps
-- "Runtime variables" is ambiguous here — always clarify whether the user means deploy-time env vars or on-the-fly app globals before proceeding.
-- UI reskins need end-to-end UX validation (scroll, backgrounds, responsive, nav flow) — mechanical style application alone is not releasable.
+- Recurring tension between "user said it's fine" signals and actual scope authorization — the boundary between social comfort and technical permission keeps being mis-parsed.
+- Config validation happens at parse time only; write-time validation gaps can silently break unrelated features when a required field is absent.

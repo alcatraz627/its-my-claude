@@ -1,0 +1,20 @@
+{
+  "id": "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+  "ts": "2026-07-16T07:29:05Z",
+  "session_id": "jegs-gcc-e2",
+  "project_root": "/Users/alcatraz627/Code/Versable/staging-enhancement-product",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/staging-enhancement-product/_20260716-jegs-gcc-e2.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Report artifacts in `~/.claude/assets/reports/20260715-jegs-transcript-mining/` (FINDINGS.md, REFINED-PROPOSALS.md, skeptical-review.md, jegs-mining-writeup.md) are UNCOMMITTED. User can commit them or leave them.",
+    "Harmless duplicate `jegs-mining-writeup.md` (the miner's guard workaround copy of FINDINGS) still in the report dir \u2014 offered to trash, declined for now.",
+    "The F1\u2013F5 filed proposals are owned by a SEPARATE triage session. Cross-session note stamped in REFINED-PROPOSALS.md: RP4a already added the mutation-test Stop nudge, so triage must NOT add a second one when acting on the F1 proposal \u2014 extend that branch instead."
+  ],
+  "tags": []
+}

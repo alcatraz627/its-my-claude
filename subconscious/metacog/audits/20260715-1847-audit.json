@@ -1,0 +1,71 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 15790,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.41838845429716176,
+    "unit_count": 21
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in 4/7 tool-using units (~57%, below 73-85% six-cycle baseline): 96490d11-2 (sed -n '195,235p' for range reads instead of Read with offset; cat scope.server.ts instead of Read tool; ls scripts/ as directory listing; ls -la .env* as file-existence probe); 8c7e6f5c-0 (cat > heredoc to write runtime-note-entry.md instead of Write tool; ls ~/.claude/skills/GUIDELINES.md as file-existence probe); 8c7e6f5c-13 (sed -n pipeline for range reads); rate marginally below six-cycle baseline this cycle; deprioritize per stagnation guidance, no new intervention recommended",
+      "re_edit_thrash:RECURRING:IMPROVING — 8c7e6f5c-13 shows 2 Edit failures out of 10+ attempts on 22-job-siloed-catalog.md, both self-corrected within one failure before success; depth did not escalate beyond single-failure recovery; consistent with IMPROVING trajectory sustained six-plus consecutive batches; no escalation warranted",
+      "pipeline_exit_code_masking:NEW — unit 8c7e6f5c-17: compound Bash call chained `npx tsc --noEmit 2>&1 | head -8; echo TS-DONE && git add ... && git commit` causing tsc's non-zero exit to be consumed by the pipe; commit went out with type errors despite agent messaging implying typecheck was green; agent self-caught within the same unit (follow-up commit message explicitly names 'a head pipeline ate tsc's exit code'); this is a subvariant of the declared-ready atone slug distinct from collect-not-run: the verification step ran but its failure signal was structurally silenced by pipeline composition; the overconfident commit is the sole overconfident_count this batch",
+      "write_before_read_trap:RECURRING:STABLE — 8c7e6f5c-15: Write to speedway/app/lib/scope.server.ts failed (success:false), Write to scope.ts succeeded, trash used to remove wrong-path artifact; self-corrected but pre-write path check was skipped on first attempt; one instance this batch, frequency matches prior cycles; no improvement trajectory",
+      "repeated_read_same_file_unit:RECURRING — 96490d11-4: app/lib/ingest.server.ts read 3 times in a single unit across incremental edits; confirmed RECURRING from prior batch; low severity, pattern stable"
+    ],
+    "calibration_score": 0.53,
+    "cross_references": [
+      "dream:terse-continuation-over-generalisation — not violated in these units; commits and pushes across 8c7e6f5c-9, 8c7e6f5c-13, 8c7e6f5c-17, 96490d11-2, 96490d11-4 all appear to be in-scope authorized work within established task plans, not terse-continuation-triggered shared-state mutations; no instance detected this batch",
+      "dream:fix-thrash-amplified-by-context-boundaries — 8c7e6f5c-17 pushes a broken commit and immediately follows with a fix commit; the error is contained within a single context window and the agent correctly diagnoses the pipeline composition cause rather than re-attempting blindly; insight partially confirmed (the error reached the remote before self-correction) but does not meet the full cross-boundary amplification pattern; the pipeline_exit_code_masking finding captures this more precisely"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "pipeline_exit_code_masking (NEW): when verifying tsc or any build tool before committing, run the check in a dedicated Bash call and inspect the exit code with `echo \"exit: $?\"` on a separate line before staging; never chain tsc with git add/commit in one compound command where a pipe or semicolon-echo can mask a non-zero exit",
+      "shell_tool_preference_violations: deprioritize — rate is at or below the six-cycle stagnation threshold (57% vs 73-85% baseline); no new intervention warranted this cycle",
+      "re_edit_thrash: maintain IMPROVING classification; depth stayed at single-failure-then-correct for large markdown files; no escalation warranted",
+      "write_before_read_trap: no regression, no improvement; consider using test -f or stat before a Write when the target path is not a freshly-planned new file"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "96490d11-67ea-445c-9c1a-d8cadd812068",
+      2161336
+    ],
+    [
+      "8c7e6f5c-9b2d-4995-829a-f13969e5370e",
+      4694690
+    ],
+    [
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      6039388
+    ],
+    [
+      "7c520f34-be41-4703-8754-6c213809f661",
+      933329
+    ],
+    [
+      "94d8676d-a7af-4b6e-bef3-bb64e9a7a1f8",
+      26340
+    ],
+    [
+      "35180b8d-45e5-4133-a5d5-1da47c6e5631",
+      5767366
+    ],
+    [
+      "872d3443-1f59-4820-b0f8-9dcd3ed4f1db",
+      1174142
+    ],
+    [
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      309641
+    ]
+  ],
+  "timestamp": "2026-07-15T18:47:06.385008Z",
+  "tokens_used": 22728,
+  "units_analyzed": 8,
+  "units_total": 21
+}

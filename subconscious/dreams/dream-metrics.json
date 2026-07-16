@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-13T06:01:37Z",
-  "events_analyzed": 95061,
-  "sessions_analyzed": 266,
+  "generated_at": "2026-07-15T18:47:35Z",
+  "events_analyzed": 103743,
+  "sessions_analyzed": 298,
   "session_quality": {
     "average_score": 68.9,
     "top_sessions": [
@@ -83,19 +83,19 @@
     ],
     "bottom_sessions": [
       {
-        "session_id": "1cd43636-5afc-492a-a149-e18690310270",
-        "project": "enhancement-product",
+        "session_id": "ce7a1f10-3e17-4d2e-ba22-65fdf585c129",
+        "project": "tmp",
         "score": 56.2,
-        "tool_count": 730,
+        "tool_count": 5,
         "error_count": 0,
         "error_rate": 0.0,
-        "diversity": 0.005,
-        "efficiency": 4.8,
-        "prompts": 153,
-        "compactions": 5,
+        "diversity": 0.2,
+        "efficiency": 5.0,
+        "prompts": 1,
+        "compactions": 0,
         "duration_min": 0,
-        "completed": true,
-        "start": "2026-05-28T13:21:44Z"
+        "completed": false,
+        "start": "2026-07-13T08:06:25Z"
       },
       {
         "session_id": "71f9d42e-5138-4a99-8165-531b4e6a52a2",
@@ -170,56 +170,62 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": "i-dream",
+    "primary_focus": "tmp",
     "recent_projects": {
-      "i-dream": 2,
-      "data-forge": 1,
-      "local-models": 1,
-      ".claude": 1,
-      "ghostty-themes": 1,
-      "claude-ipc": 2,
-      "tmp": 2
+      "claude-ipc": 1,
+      ".claude": 2,
+      "tmp": 4,
+      "frontend": 1,
+      "versable-builder": 1,
+      "staging-enhancement-product": 1
     },
-    "drift_rate": 0.75,
-    "total_switches": 198,
+    "drift_rate": 0.757,
+    "total_switches": 224,
     "recent_switches": [
       {
-        "ts": "2026-07-11T09:10:12Z",
-        "from": "local-models",
+        "ts": "2026-07-14T21:15:05Z",
+        "from": ".claude",
+        "to": "tmp"
+      },
+      {
+        "ts": "2026-07-14T21:24:07Z",
+        "from": "tmp",
+        "to": "frontend"
+      },
+      {
+        "ts": "2026-07-15T14:27:00Z",
+        "from": "frontend",
+        "to": "versable-builder"
+      },
+      {
+        "ts": "2026-07-15T14:42:59Z",
+        "from": "versable-builder",
         "to": ".claude"
       },
       {
-        "ts": "2026-07-11T09:12:57Z",
+        "ts": "2026-07-15T14:50:23Z",
         "from": ".claude",
-        "to": "ghostty-themes"
-      },
-      {
-        "ts": "2026-07-11T09:26:31Z",
-        "from": "ghostty-themes",
-        "to": "claude-ipc"
-      },
-      {
-        "ts": "2026-07-11T18:49:52Z",
-        "from": "claude-ipc",
-        "to": "i-dream"
-      },
-      {
-        "ts": "2026-07-12T21:04:26Z",
-        "from": "i-dream",
-        "to": "tmp"
+        "to": "staging-enhancement-product"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 7399,
-    "corrections": 1589,
-    "confirmations": 1302,
-    "directives": 252,
-    "terse_messages": 572,
-    "correction_rate": 0.215,
-    "confirmation_rate": 0.176,
-    "directive_rate": 0.034,
-    "terse_rate": 0.077,
+    "total_prompts": 7804,
+    "corrections": 1669,
+    "confirmations": 1348,
+    "directives": 261,
+    "terse_messages": 588,
+    "correction_rate": 0.214,
+    "confirmation_rate": 0.173,
+    "directive_rate": 0.033,
+    "terse_rate": 0.075,
     "style_label": "corrective"
+  },
+  "graduation_yield": {
+    "maintenance": false,
+    "latest_yield": null,
+    "judged_window": [],
+    "reviews_counted": 0,
+    "updated_at": "2026-07-15T18:45:21.889242Z"
   }
 }
