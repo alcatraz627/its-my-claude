@@ -22,7 +22,7 @@ Segments are grouped by category:
 | Core | `dir`, `git`, `model`, `context`, `agent`, `session_id` |
 | Display | `icons` (0=text, 1=nerd font) |
 | Cost/Performance | `cost`, `duration`, `lines`, `rate`, `countdown`, `cpu`, `warn_200k` |
-| Agent-decided | `tools`, `wal`, `ctx_comp`, `uncommitted`, `ext_changes`, `scratchpad`, `complexity`, `turns`, `network` |
+| Agent-decided | `tools`, `wal`, `decwait`, `ctx_comp`, `uncommitted`, `ext_changes`, `scratchpad`, `complexity`, `turns`, `network` |
 | Contextual | `pm2`, `ports`, `mcp`, `pr` |
 | Analytics | `sparkline`, `depletion`, `subagents`, `timeline` |
 | System/Environment | `mem`, `disk`, `tok_speed`, `git_stash`, `uptime` |

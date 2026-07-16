@@ -79,6 +79,8 @@ seg_cache_hit=auto; seg_merge_conflicts=auto; seg_cloud=auto
 seg_cache_write=auto; seg_out_ratio=auto; seg_runtime_ver=auto; seg_files_touched=auto; seg_sudo=auto
 # Batch 5 — environment context + tool telemetry
 seg_tmux=auto; seg_docker=auto; seg_exit_code=auto; seg_latency=auto
+# Batch 6 — decision-wizard: pages handed to the user, awaiting an answer
+seg_decwait=auto
 
 # Parse config
 if [[ -f "$CONF" ]]; then
@@ -514,6 +516,17 @@ fi
 # Cost: show when above $0.05 (skip trivial early-session costs)
 has_cost=0; [[ -n "${cost_usd:-}" && "$cost_usd" != "null" && "$cost_usd" != "0" ]] && has_cost=1
 has_lines=0; [[ -n "${lines_add:-}" && "${lines_add:-}" != "null" && ( "${lines_add:-0}" != "0" || "${lines_rm:-0}" != "0" ) ]] && has_lines=1
+# ── Decision pages awaiting the user's answer (decision-wizard pending ledger) ──
+# Pure-bash read of the ledger — no subprocess on the render hot path. Counts
+# non-blank slug lines; the file is maintained by decision-page.sh pending.
+has_decwait=0; decwait_n=0
+_decfile="$HOME/.claude/assets/decision-pages/.pending.txt"
+if [[ -f "$_decfile" ]]; then
+  while IFS= read -r _dl || [[ -n "$_dl" ]]; do
+    [[ -n "${_dl//[[:space:]]/}" ]] && decwait_n=$((decwait_n+1))
+  done < "$_decfile"
+  (( decwait_n > 0 )) && has_decwait=1 || true
+fi
 r5=0; has_rate=0; [[ -n "${rate_5h:-}" && "$rate_5h" != "null" ]] && { r5=$(printf "%.0f" "$rate_5h" 2>/dev/null || echo 0); has_rate=1; }
 # Note: (( expr )) returns exit code 1 when false, which kills set -e.
 # Use [[ ]] for all conditions, or guard with || true.
@@ -929,6 +942,11 @@ if seg_on wal "$has_wal" && (( wal_since_checkpoint > 8 )); then
   _l2_segs+=("${_wc}${ic_wal:+$ic_wal}ckpt:${wal_since_checkpoint}${rst}")
 fi
 
+# P1: Decision page(s) awaiting the user's answer (actionable — /decision-wizard)
+if seg_on decwait "$has_decwait" && (( has_decwait )); then
+  _l2_segs+=("${ylw}decide:${decwait_n}${rst}")
+fi
+
 # P2: Active subagents
 if seg_on subagents "$has_subagents" && (( subagent_count > 0 )); then
   _dn="$subagent_names"
@@ -1217,6 +1235,18 @@ _l4_segs=()
 # P1: Session ID (first 8 chars to keep it compact)
 if seg_on session_id 1 && [[ -n "${sid_short:-}" ]]; then
   _l4_segs+=("\033[2;36msid:${sid_short}${rst}")
+fi
+
+# P1b: claude-ipc alias — the name this session is ADDRESSABLE by right now, which
+# is not the raw sid: a session that ran `claude-ipc register <name>` (or renamed)
+# is reached by that name, and the sid alone won't find it. Read live from the
+# alias-by-sid side-file (the same source every ipc hook resolves through), so it
+# always reflects the latest registration. Dim magenta to read apart from the sid.
+if seg_on ipc 1 && [[ -n "${session_id:-}" ]]; then
+  _ipc_alias="$(tr -d '\r\n' < "${CLAUDE_IPC_HOME:-$HOME/.claude-ipc}/alias-by-sid/${session_id}" 2>/dev/null)"
+  if [[ -n "${_ipc_alias:-}" ]]; then
+    _l4_segs+=("\033[2;35mipc:${_ipc_alias}${rst}")
+  fi
 fi
 
 # P2: Active ports (dim green — running services)
