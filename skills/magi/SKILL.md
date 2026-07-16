@@ -289,7 +289,24 @@ This is THE ANSWER to the user's question. Markdown. Self-contained. May referen
 $ARCHIVE/07-final-report.md
 ```
 
-Human-readable summary. Sections:
+Human-readable summary — a `heavy`-tier user-facing artifact
+(`~/.claude/style/scope-map.json`). Two tone rules bind here and nowhere else
+in the run:
+
+1. **Derive tone from the ledger, not the intermediates.** Voter proposals and
+   supervisor digests are tier `off` — write however serves the deliberation —
+   but their register must NOT leak into this report. Before drafting, load
+   `~/.claude/style/derived/prose.md` + `structure.md` and write to those
+   verdicts (per finding: symptom → impact → path → detail; caveats verbatim —
+   `conventions/report-writing.md`).
+2. **Gate before the user sees it.** Dispatch the readers-advocate persona
+   (`~/.claude/personas/readers-advocate.md`, sonnet) on the drafted report,
+   apply or consciously reject its findings, and log the pass via
+   `bash ~/.claude/scripts/style/style-log.sh --kind critic-pass --surface
+   magi-final/heavy --artifact $ARCHIVE/07-final-report.md --model sonnet
+   --tokens <subagent tokens> --findings <N>`.
+
+Sections:
 
 ```markdown
 # MAGI report — <task title>

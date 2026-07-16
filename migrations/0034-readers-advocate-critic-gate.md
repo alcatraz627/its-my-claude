@@ -37,10 +37,8 @@ Additive; no labels; no moves. `logs/style-watch.jsonl` is a data ledger
 ## Phases
 
 1. ✅ 2026-07-16 — all of the above.
-2. ⏳ /magi SKILL.md: final-synthesis critic gate + "derive tone from thesaurus
-   digest, not intermediates" clause (scope-map rows already encode the policy;
-   deliberate deferred edit rather than a blind anchor edit under context
-   pressure).
+2. ✅ 2026-07-16 (later same day) — /magi SKILL.md Phase 10: ledger-derived tone
+   + readers-advocate gate + critic-pass logging; intermediates stay tier off.
 3. ⏳ Advisory→hook rung for the pre-commit comment pass if it gets skipped in
    practice (same pattern as mig 0032 phase 2).
 
