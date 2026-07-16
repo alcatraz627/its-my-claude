@@ -46,6 +46,28 @@ When creating repositories via `gh` CLI or GitHub MCP, always use `--public` or 
 - `_*.claude.md` — root-level scratch/checkpoint files
 - `claude/_*.claude.md` — claude-subdir scratch files
 
+## Pre-commit comment pass (implementation sessions)
+
+Before committing code changes, run `/cleanup-comments --changed` in preview
+mode and apply the confirmed strips/rewrites in the same commit. The write-time
+hooks catch noise and essays; this pass is the fresh-eyes read that catches the
+wordy middle band (`style/derived/comment.md` holds the user's verdicts: minimum
+words, never the WHAT). Skip for docs-only or non-code commits.
+
+## Review contract — all review surfaces (/skeptical-review, /code-review, /review, PR reviews)
+
+- **Extraneous words are defects.** In comments and prose alike, wordage that
+  could be cut without losing meaning is a finding framed as a reader's-time
+  violation, cited with its one-line rewrite — not a style aside. The seeded
+  verdicts live in `style/derived/` (see `personas/readers-advocate.md`).
+- **Scope is the diff plus its direct callers/callees.** Findings outside that
+  union go into a one-line "out-of-scope observations" appendix, never the
+  findings list; widening scope requires the user's explicit ask. A 3-file
+  change never earns a 30-file review.
+- **Review reports end with a Dispositions table** (fixed / deferred-with-owner
+  / rejected-with-reason); the undispositioned count rides the Resume
+  Contract's Standing caveats (`conventions/report-writing.md`).
+
 ## Commit message style
 
 Follow the repo's existing convention. Default: imperative present tense. Describe "why" more than "what" (the diff already shows what). Keep subject line under 72 chars.

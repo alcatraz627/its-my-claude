@@ -93,8 +93,13 @@ When in doubt, write it.
    Agent prompt? If no — stop and add them.
 4. Have you added `test -f <path> && wc -l <path>` as a verification step after
    the dispatch (it runs after PARENT-persist too)? If no — add it.
+5. Is the output a REPORT (findings, audit, RCA, analysis for a reader)? Then
+   the dispatch prompt also carries one line: "Follow
+   `~/.claude/conventions/report-writing.md`: per finding symptom → impact →
+   path → detail; caveats carry verbatim." Reports inherit the genre contract
+   at birth, not at review time.
 
-Do not write the dispatch prompt until all four pass.
+Do not write the dispatch prompt until all five pass.
 
 When dispatching a sub-agent that will produce material content, the dispatch
 prompt **must include**:

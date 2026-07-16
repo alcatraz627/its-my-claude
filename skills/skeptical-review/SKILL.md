@@ -37,8 +37,10 @@ For each changed file, run the shared smell catalog (all severities, not just
 block-level):
 ```bash
 ~/.claude/scripts/atone-lint.sh --file <path>
+python3 ~/.claude/skills/cleanup-comments/detect.py <path>
 ```
-Collect the hits — they seed the review with already-documented smells.
+Collect the hits — atone-lint seeds documented smells; the comment detector
+seeds the reader's-time lane (heuristic #6) deterministically.
 
 ### 3. Dispatch the fresh adversarial reviewer
 Pick an output path:
@@ -51,9 +53,23 @@ the report to disk before returning and returns only a short abstract + the path
 (per `rules/sub-agent-outputs.md`).
 
 ### 4. Present
+The review report is itself a user-facing artifact at tier `heavy`
+(`style/scope-map.json`): before presenting, dispatch the readers-advocate
+persona (`personas/readers-advocate.md`, sonnet) on the report file, apply its
+findings, and log the pass via `scripts/style/style-log.sh --kind critic-pass`.
+Reviewers write violations into their own reviews; the fresh pass is not
+optional at this tier.
+
 Read the report. Show the user a ranked summary (highest-suspicion first), each
 line: `severity · file:line · one-line claim · which check failed`. Offer to
 deep-dive any item. Don't start fixing unless the user picks items to fix.
+
+**Dispositions close the loop:** record the user's verdict per finding (fixed /
+deferred-with-owner / rejected-with-reason) in the report's Dispositions table.
+Findings left undispositioned are debt — their count rides the Resume
+Contract's Standing caveats until zero (`conventions/report-writing.md`; the
+claude-ipc sprint left ~50 of 54 findings unactioned, including the one that
+predicted the fire).
 
 ### 5. Record coverage
 Mark this change-set reviewed so the Stop review-required gate stops blocking:
@@ -128,10 +144,16 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 > 5. **Documented code smells** — confirm/expand the pre-pass hits; check the
 >    well-known ones for the stack (error-string matching for flow, raw env
 >    reads, missing precondition guards on destructive UI, effect dep arrays).
-> 6. **Comment quality** — against `~/.claude/rules/comments.md`: comments are for
->    humans first, first sentence code-agnostic, WHY-not-WHAT, ≤8 lines, no
->    jargon-flexing, no restating the code. Flag any comment that just narrates
->    what the next line literally does.
+> 6. **Comment quality — harsh, as reader's-time violations** — against
+>    `~/.claude/rules/comments.md` and the user's seeded verdicts in
+>    `~/.claude/style/derived/comment.md`. Extraneous words in a comment are
+>    DEFECTS, not style asides: flag any comment that restates the WHAT, any
+>    comment past one line without a non-obvious constraint, and any wording
+>    that could shrink without losing meaning — each finding cites the wordy
+>    text and gives the one-line rewrite. Scope discipline still binds: only
+>    comments inside the diff and its direct callers/callees; anything else is
+>    a one-line out-of-scope appendix item, never a finding (`rules/git.md`
+>    § Review contract).
 > 7. **Mutation-test any guard the change adds or modifies** — a guard nobody has
 >    watched fail is untested, and a green suite only says it did not fire
 >    (`rules/testing.md` § `[mutation-test-the-guard]`). COPY the guard plus the
