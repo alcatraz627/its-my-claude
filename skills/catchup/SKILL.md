@@ -10,6 +10,26 @@ user-invokable: true
 
 Resume a cleared session from a `/core-dump` checkpoint with minimum exploration overhead. Parses the six-section checkpoint format (Resume Contract first, when present), presents the resume contract and pending items first, loads only targeted file sections referenced by pending tasks — no full file reads, no broad codebase scans — then hands off cleanly for immediate work.
 
+## The session-resume surfaces
+
+A resume is not just "read the checkpoint". A cleared session drops several
+independent kinds of state, each restored by a different phase below. This is the
+map, so none of them is silently skipped — if you only do the checkpoint, you
+resume with the wrong todo list, an unreachable mailbox, and a false picture of
+what is still running.
+
+| surface | what it restores | owner |
+|---|---|---|
+| **Checkpoint file** | goal · actions · pending items · Resume Contract (incl. decaying prerequisites) | 0.4 resolve → 1 parse |
+| **WAL** | a fresher last-known-good than the checkpoint, when <24h | 0.5 (fast path) |
+| **Workspace todos** | the user-curated list — rehydrated into the LIVE Task tool | 0.8 |
+| **ipc identity + mail** | your alias, the dead predecessor's mail, peers owed a reply | 3.1b |
+| **Live subsystem state** | servers / watchers / jobs still running from before | 3.4 |
+| **Git reality** | what moved under you since the dump | 1.4 |
+
+Session-scoped counters (tool count, ctx %) need no action here — a `source==clear`
+SessionStart injector resets them on the first tool call (`scripts/session-mgmt/post-clear-counter-reset.sh`).
+
 ## Step 0: Load Shared Guidelines and Runtime Context
 
 Read `.claude/skills/GUIDELINES.md`. Apply all rules — forbidden paths, retry logic,
@@ -306,20 +326,46 @@ Present sections in this order — start from "what's next", not "where we start
 ─────────────────────────────────────────────────────
 ```
 
-### 3.1b Surface waiting ipc mail (project + predecessor)
+### 3.1b ipc — register, peek, then answer what the predecessor owes
 
-The session being resumed may have mail waiting that is part of the work. Two cheap
-checks (both best-effort — a down broker skips silently, never blocks the briefing):
+A resumed session is a NEW ipc identity. The alias peers were talking to died with
+the old session, so anyone holding an unanswered query cannot reach you — and
+because `send` carries a `--reply-by` contract, that sender gets chased and then
+told nobody answered, for a question you are in fact now able to answer. Three
+steps, all best-effort: a down broker skips silently and never blocks the briefing.
+
+**1 — Be reachable.** The session-start ritual normally registers; re-running is a
+harmless no-op and cheap insurance on a resumed session:
 
 ```bash
-claude-ipc inbox --project 2>/dev/null   # project mailbox for this cwd (peek, non-consuming)
-claude-ipc orphans --project 2>/dev/null # dead predecessor sessions here still holding mail
+claude-ipc register <this-session-id>
 ```
 
-If either returns messages, add a `▸ Waiting ipc mail` section to the briefing: one line
-per message/orphan (`kind from <alias>: <body head>` / `<dead-alias> holds N — peek:
-claude-ipc inbox <dead-alias>`). The predecessor session named by the checkpoint is the
-first inbox worth peeking.
+**2 — Peek what is waiting** (non-consuming; the predecessor named by the
+checkpoint is the first inbox worth opening):
+
+```bash
+claude-ipc inbox --project 2>/dev/null    # project mailbox for this cwd
+claude-ipc orphans --project 2>/dev/null  # dead sessions here still holding mail
+claude-ipc inbox <predecessor-alias> 2>/dev/null   # what your predecessor never answered
+```
+
+**3 — Close the loop on anything owed.** For each unanswered `query`/`request` in
+the predecessor's inbox, reply on its correlation id — you inherit the obligation,
+the sender is still waiting on it:
+
+```bash
+claude-ipc reply <corr-id> --from <this-session-id> <answer, or the hand-off>
+```
+
+Answer it if the checkpoint gives you the answer. If it does not, say exactly that —
+that the predecessor ended and you have taken over as `<alias>` — so their chase
+resolves instead of dangling. Use `snooze <msg-id> --as <alias>` if it is real work
+you will do later (it stays pending + owed rather than vanishing).
+
+Surface all of it in the briefing under `▸ Waiting ipc mail`: one line per
+message/orphan (`kind from <alias>: <body head>` · `<dead-alias> holds N — peek:
+claude-ipc inbox <dead-alias>`), and say which ones you answered.
 
 ### 3.2 Load targeted file context
 
