@@ -906,9 +906,15 @@ if seg_on rate "$has_rate" && (( has_rate )); then
     else _re=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${rate_5h_resets%%.*}" "+%s" 2>/dev/null \
            || date -d "${rate_5h_resets%%.*}" "+%s" 2>/dev/null \
            || echo "0"); fi
-    if (( _re > _NOW )); then
-      _d=$(( _re - _NOW ))
-      if (( _d >= 3600 )); then _rf="$(( _d / 3600 ))h$(( (_d % 3600) / 60 ))m"; else _rf="$(( _d / 60 ))m"; fi
+    _d=$(( _re - _NOW ))
+    # A real 5h/7d reset is at most days out. A value centuries away is a sentinel
+    # (Claude Code sends resets_at "9999999999" when the reset time is unknown) or
+    # a bad unit — showing it produced a 260-year "~2282168h56m". Skip it, and
+    # render anything genuinely over a day in days, not a huge hour count.
+    if (( _re > _NOW && _d <= 1209600 )); then
+      if   (( _d >= 86400 )); then _rf="$(( _d / 86400 ))d$(( (_d % 86400) / 3600 ))h"
+      elif (( _d >= 3600 ));  then _rf="$(( _d / 3600 ))h$(( (_d % 3600) / 60 ))m"
+      else                         _rf="$(( _d / 60 ))m"; fi
       _rl_str+=" ~${_rf}"
       if (( wtier <= 1 )); then
         _rt=$(date -r "$_re" "+%-I:%M%p" 2>/dev/null || date -d "@$_re" "+%-I:%M%p" 2>/dev/null || true)
