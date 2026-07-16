@@ -30,8 +30,12 @@ command -v jq >/dev/null 2>&1 || exit 0
 
 INPUT=$(cat 2>/dev/null || echo "{}")
 sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
-# Same key derivation as atone.sh add uses when writing the counter.
-SESSION_KEY="${sid:-${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}}"
+# Same key derivation as atone.sh add uses when writing the counter. Stdin's
+# session_id is the reliable source here; the env fallback matters only when it is
+# absent, and it must name CLAUDE_CODE_SESSION_ID — CLAUDE_SESSION_ID is never set,
+# so the old chain silently landed on a date key no counter is ever written under.
+SESSION_KEY="${sid:-${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}}}"
+SESSION_KEY=$(printf '%s' "$SESSION_KEY" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 
 SDIR="$HOME/.claude/.session-atone-slugs"
 COUNTER="$SDIR/${SESSION_KEY}.json"

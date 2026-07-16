@@ -27,7 +27,17 @@ set -uo pipefail
 PROMPT=$(cat)
 [ -z "$PROMPT" ] && exit 0
 
-SESSION_KEY="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"
+# Which session's marker this is. CLAUDE_SESSION_ID is never set by the harness —
+# the real variable is CLAUDE_CODE_SESSION_ID — so reading it alone always fell
+# through to the date, and every session running that day then shared ONE marker:
+# one session's correction snippet surfaced in an unrelated session's escalation,
+# quoted as if it were that agent's own prior turn. Env-first (not stdin) because
+# a hinter is fed the prompt text, not the hook's JSON. Keep this derivation in
+# step with atone-stop-check.sh, atone-stop-gate.sh and atone.sh:_add_exit_trap;
+# sanitized because a polluted env id once named a marker after an error message.
+_sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
+[ -n "$_sid" ] || _sid="$(date +%Y-%m-%d)"
+SESSION_KEY=$(printf '%s' "$_sid" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 STATE_DIR="$HOME/.claude/atone/.session-state"
 MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
 mkdir -p "$STATE_DIR" 2>/dev/null || true

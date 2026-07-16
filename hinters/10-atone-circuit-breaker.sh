@@ -40,7 +40,16 @@ PROMPT=$(cat)
 command -v jq >/dev/null 2>&1 || exit 0
 [ -f "$HOME/.claude/atone/.breaker-off" ] && exit 0
 
-SESSION_KEY="${CLAUDE_SESSION_ID:-$(date +%Y-%m-%d)}"
+# Which session's slug counter to read. This MUST match the key atone.sh writes
+# the counter under (its own session_id, i.e. CLAUDE_CODE_SESSION_ID). Reading
+# CLAUDE_SESSION_ID — a variable the harness never sets — fell through to a date,
+# so this looked for <date>.json while every counter on disk is <uuid>.json: the
+# breaker found no counter, concluded nothing had been recorded, and exited
+# silently on every turn since it was written. Env-first because a hinter is fed
+# the prompt text, not the hook's JSON.
+_sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
+[ -n "$_sid" ] || _sid="$(date +%Y-%m-%d)"
+SESSION_KEY=$(printf '%s' "$_sid" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 SDIR="$HOME/.claude/.session-atone-slugs"
 COUNTER="$SDIR/${SESSION_KEY}.json"
 FIRED="$SDIR/${SESSION_KEY}.breaker-fired"
