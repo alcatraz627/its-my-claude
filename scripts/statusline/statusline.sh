@@ -462,13 +462,24 @@ if [[ -f "$_limits_file" ]]; then
   ' "$_limits_file" 2>/dev/null)"
 fi
 # Parse a resets timestamp (empty, epoch int, or ISO datetime) to epoch.
+#
+# Returns 0 for "unknown", and a reset date more than ~14 days out counts as
+# unknown: Claude Code sends 9999999999 when it does not know the reset time, and
+# that is a sentinel, not a timestamp. Taken literally it parses to the year 2286
+# — the largest epoch in play — so it always wins the "later resets_at is fresher"
+# merge below, and a stale local value can override a genuinely fresher cached one
+# indefinitely. Same 14-day plausibility bound the countdown guard uses.
 _rl_to_epoch() {
-  local v="$1"
+  local v="$1" e now
   [[ -z "$v" || "$v" == "null" ]] && { echo 0; return; }
-  if [[ "$v" =~ ^[0-9]+$ ]]; then echo "$v"
-  else date -j -f "%Y-%m-%dT%H:%M:%S" "${v%%.*}" "+%s" 2>/dev/null \
+  if [[ "$v" =~ ^[0-9]+$ ]]; then e="$v"
+  else e=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${v%%.*}" "+%s" 2>/dev/null \
        || date -d "${v%%.*}" "+%s" 2>/dev/null \
-       || echo 0; fi
+       || echo 0); fi
+  [[ "$e" =~ ^[0-9]+$ ]] || { echo 0; return; }
+  now=$(date +%s)
+  (( e > now + 1209600 )) && { echo 0; return; }
+  echo "$e"
 }
 # 7d merge: pick freshest by two signals in priority order.
 #
