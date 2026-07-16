@@ -869,6 +869,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/prose-smell-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/style-watch-stop.sh"
           }
         ]
       }

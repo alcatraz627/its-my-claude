@@ -128,6 +128,13 @@ case "$cmd" in
             | "\(.id)  \(.pattern)"' "$LEDGER"
     echo "-- candidates awaiting your verdict (promote: edit status→active; reject: →pruned) --"
     jq -rs 'map(select(.status=="candidate"))[] | "\(.id)  [\(.source)] \(.verdict): \(.pattern)"' "$LEDGER"
+    WLOG="$HOME/.claude/logs/style-watch.jsonl"
+    if [ -f "$WLOG" ]; then
+      echo "-- watcher/critic telemetry (kill-or-keep evidence) --"
+      jq -rs 'group_by(.kind)[] | "\(.[0].kind): \(length) instance(s), \(map(.tokens) | add // 0) tokens"' "$WLOG"
+      echo "-- heed rate (watcher-fire) --"
+      jq -rs 'map(select(.kind=="watcher-fire")) | group_by(.heeded)[] | "\(.[0].heeded): \(length)"' "$WLOG"
+    fi
     ;;
 
   *)
