@@ -81,6 +81,9 @@ Produce a flat, scannable checkpoint — no deep analysis, no insights section, 
 1. **Goal** — 1-2 sentences: what the user originally asked for.
 2. **Resume** — ONE imperative sentence: the very first move on resume. Add a
    `**Blocked on:**` line only when something actually blocks (USER: / external).
+   Add a `**Standing constraints:**` line (verbatim, with checks) and a
+   `**Standing caveats:**` line (verbatim) whenever any exist — mini mode is not
+   exempt from carrying them; omit the lines entirely only when there are none.
 3. **Done** — what was accomplished (files modified, features added, bugs fixed).
 4. **Not Done** — what remains incomplete.
 5. **Next Steps** — numbered immediate actions for the next agent, in priority order.
@@ -199,9 +202,25 @@ Broadly-applicable insights also get a dated entry in
 
 Synthesize the one block the next agent can act on without reading anything else
 — this is the standardized "continue prompt" (it exists because users had to ask
-for one by hand). Six fields, one line each; write `none` rather than omitting
-a field, so absence is legible:
+for one by hand). Eight fields, one line each; write `none` rather than omitting
+a field, so absence is legible. The two conservative fields lead — they fence
+everything below them:
 
+- **Standing constraints** — plan-level invariants and protected assets that
+  bind every next step: "existing UI is reused, not rebuilt", an API contract
+  that must hold, an asset worth days of iteration — each with the check that
+  would catch its loss (parity ledger, baseline screenshots, a named flow).
+  Copy each constraint VERBATIM from its source (doc line, user message);
+  paraphrase is where laundering starts. Carry the full list forward into every
+  later checkpoint until the user retires an entry. Provenance: doc-22
+  (constraints dropped while task momentum survived — see
+  `rules/invariant-graduation.md`).
+- **Standing caveats** — the honest qualifications that must survive
+  summarization: unverified claims, `UNCONFIRMED — <reason>` markers,
+  "N commits unreviewed", undispositioned review findings (count + ledger
+  path). Copied verbatim, never compressed. A summary that drops a caveat is
+  wrong, not shorter ("checkpoint compression laundered the debt" — claude-ipc
+  RCA, 2026-07-16).
 - **Next action** — ONE imperative sentence, the first move. Distinct from
   Pending Items (the backlog): this is what to do right now.
 - **Blocked on** — `USER: <what>` · `AGENT: none — go` · external actor + what.
@@ -218,9 +237,11 @@ a field, so absence is legible:
   ("`pnpm typecheck` green after action #7" · "UNCONFIRMED — nothing run").
 - **Key anchor** — the single most load-bearing file:line, or `—`.
 
-Keep it 6-9 lines total. Pull the continuation-critical Session Insights here
+Keep it 8-12 lines total. Pull the continuation-critical Session Insights here
 (the 2.5 section keeps the full detail); under "be terse" instructions compress
-the values, never drop the field labels.
+the values, never drop the field labels — and never "compress" a Standing
+constraint or caveat into a paraphrase; those two fields carry verbatim or not
+at all.
 
 ### 2.7 Apply style instructions
 
@@ -267,6 +288,8 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 
 ## Resume Contract
 
+- **Standing constraints:** <each verbatim, with its check | none>
+- **Standing caveats:** <each verbatim | none>
 - **Next action:** <one imperative sentence>
 - **Blocked on:** <USER: … | AGENT: none — go>
 - **Expired authorizations:** <list | none>

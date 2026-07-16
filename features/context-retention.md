@@ -47,6 +47,8 @@ When approaching 70% context usage, proactively offer to generate a structured s
 
 Always preserve: modified file paths with line numbers, pending task IDs, architectural decisions, test commands, user-specified constraints. Use `/compact <instructions>` (targeted) over bare `/compact`.
 
+**Standing constraints + caveats carry verbatim.** Every summarizing surface (checkpoint, compaction, catchup briefing, away-recap) copies Standing constraints and Standing caveats forward word-for-word — never paraphrased, never dropped for brevity. Summarization dropping them while task momentum survives is the documented cross-session drift engine (`rules/invariant-graduation.md`).
+
 ## Documentation layers (don't duplicate)
 
 - **WAL** = what happened (for next agent) — see `features/wal.md`

@@ -242,8 +242,10 @@ Run /core-dump first to create one, then re-run /catchup.
 
 Read the checkpoint file. Extract the sections produced by `/core-dump`:
 
-1. **Resume Contract** — the act-on-this-first block: next action, blocked-on,
-   expired authorizations, decaying prerequisites, verification state, key anchor
+1. **Resume Contract** — the act-on-this-first block: standing constraints,
+   standing caveats, next action, blocked-on, expired authorizations, decaying
+   prerequisites, verification state, key anchor (the first two are absent on
+   pre-2026-07-16 checkpoints; their absence there is normal)
 2. **Initial Goal** — what the session was originally trying to accomplish
 3. **Agent Actions** — sequential log of what was done (with file references)
 4. **Current Expectation** — what the user expected to happen next at dump time
@@ -259,6 +261,14 @@ not fail silently.
 **Expired authorizations are binding:** anything the Resume Contract lists there
 needs fresh user confirmation before you act on it — a checkpoint is never a
 carrier of push/deploy/destructive-op approval across a clear or compact.
+
+**Standing constraints are binding scope fences:** surface them FIRST in the
+briefing, restate them verbatim (never paraphrased), and re-read the relevant
+entry before any change touching a surface it names. **Standing caveats transfer
+debt:** repeat them verbatim in the briefing; never launder them into a rosier
+summary — checkpoint compression dropping constraints and caveats while task
+momentum survives is the documented cross-session drift engine
+(`rules/invariant-graduation.md`, doc-22 + claude-ipc hardening evidence).
 
 ### 1.4 Cross-check against git reality (take with a grain of salt)
 
@@ -308,6 +318,8 @@ Present sections in this order — start from "what's next", not "where we start
 ─────────────────────────────────────────────────────
 
   ▸ Resume Contract            (when present — act from this first)
+    Standing constraints (verbatim, binding fences) /
+    Standing caveats (verbatim, inherited debt) /
     Next action / Blocked on / Expired authorizations /
     Decaying prerequisites / Verification state / Key anchor
 

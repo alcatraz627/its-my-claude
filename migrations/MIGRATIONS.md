@@ -70,6 +70,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0027 | Rules payload restructure — 3 merges (scheduling, pushback doctrine, model ceiling) + 5 sentinel-paths autoload demotions; ~42.9k → ~33.8k always-on tokens | ✅ | 2026-07-09 | 2026-07-09 | [0027-rules-payload-restructure.md](0027-rules-payload-restructure.md) |
 | 0028 | Checkpoint pointer collision-preservation — `<slug>.<uuid8>.json` siblings + identity-checked resolve fallback | ✅ | 2026-07-10 | 2026-07-10 | [0028-checkpoint-pointer-collision-schema.md](0028-checkpoint-pointer-collision-schema.md) |
 | 0029 | Three-tier port policy — ports.sh ledger + blocking guard + registry move | ✅ | 2026-07-10 | 2026-07-10 | [0029-three-tier-port-policy.md](0029-three-tier-port-policy.md) |
+| 0032 | Resume Contract: Standing constraints + Standing caveats fields | ✅ | 2026-07-16 | 2026-07-16 | [0032-resume-contract-standing-constraints.md](0032-resume-contract-standing-constraints.md) |
 
 ---
 
