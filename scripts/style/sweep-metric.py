@@ -24,15 +24,16 @@ IMPERATIVE = re.compile(r"\b(do not|don't|stop|never|always|keep|make|avoid|reme
 EVALUATIVE = re.compile(r"\b(this is|that is|that's|it's|feels|looks|seems|reads as|i like|i hate|i prefer|good|bad|wrong|right|fine|great|terrible|annoying)\b")
 STOPEDGE = {'the','and','for','you','that','this','with','are','was','not','but','have','has','had','can','will','its','all','our','your','out','use','get','one','two','how','what','when','where','why','who','which','should','would','could','than','then','them','they','there','here','from','into','onto','over','under','about','just','also','been','being','because','while','after','before','only','same','some','any','each','very','more','most','less','least','too','own','off','per','via','let','lets'}
 
-# Gate re-spec (calibration finding, 2026-07-16): lexically-distinctive
-# positives must survive the cut HERE; contextually-defined positives (whose
-# steering sense is a minority of common usage: intent, stupid, one-shot)
-# CANNOT be isolated by any word-level metric and are re-homed as planted
-# tracers for P3/P4 — the semantic layers built for exactly that job.
+# Gate checks only lexical positives; contextual words (intent, stupid,
+# one-shot) are unreachable at word level — planted as P3/P4 tracers.
 POSITIVES = ['efficacy', 'overindex']
 POSITIVES_TRACER = ['intent', 'stupid', 'one-shot']
 POSITIVES_INFO = ['pragmatic', 'one-shotting', 'waste my time']
-NEGATIVES = ['the', 'month', 'transcript', 'more', 'better']
+# User verdict 2026-07-16 (option 1): ultra-common words gate P2; the
+# transcript-class (domain nouns lexically twinned with steering words) is a
+# planted NEGATIVE tracer for P4 — P4 must classify it domain-jargon or halt.
+NEGATIVES = ['the', 'month', 'more', 'better']
+NEGATIVES_TRACER = ['transcript']
 
 def known_terms():
     known = set()
@@ -148,6 +149,8 @@ for p in POSITIVES_TRACER:
 for p in POSITIVES_INFO:
     ns = len(stats[p]['sessions']) if p in stats else 0
     lines.append(f'- info `{p}`: {ns} session(s) in corpus; rank {ranks.get(p, "unscored")}')
+for p in NEGATIVES_TRACER:
+    lines.append(f'- negative-tracer `{p}`: rank {ranks.get(p, "unscored")} — planted for P4 (must be classified domain-jargon there; user verdict 2026-07-16)')
 for n in NEGATIVES:
     r = ranks.get(n)
     ok = r is None or r > TOP
@@ -165,6 +168,15 @@ if not gate_ok:
 prod = score_all(novelty_on=True)[:TOP]
 with open(f'{RUN}/candidates/candidates.jsonl', 'w') as f:
     for c in prod: f.write(json.dumps(c) + '\n')
+# tracer threads: known-story words followed through every later phase
+cal_by_term = {c['term']: c for c in cal}
+with open(f'{RUN}/candidates/tracers.jsonl', 'w') as f:
+    for t, kind in [('efficacy', 'positive'), ('intent', 'contextual-positive'),
+                    ('stupid', 'contextual-positive'), ('one-shot', 'contextual-positive'),
+                    ('transcript', 'negative')]:
+        c = cal_by_term.get(t)
+        if c: f.write(json.dumps({**c, 'tracer': kind}) + '\n')
+print(f'wrote {sum(1 for _ in open(f"{RUN}/candidates/tracers.jsonl"))} tracer threads')
 print(f'\nwrote {len(prod)} candidates; top 25 preview:')
 for c in prod[:25]:
     print(f"  {c['score']:6.2f}  {c['term']:28s} sess={c['sessions']:3d} n={c['count']:4d} zipf={c['zipf']:4.1f} ctx={c['avg_ctx']:.2f}")
