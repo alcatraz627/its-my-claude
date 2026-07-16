@@ -223,7 +223,7 @@ Run /core-dump first to create one, then re-run /catchup.
 Read the checkpoint file. Extract the sections produced by `/core-dump`:
 
 1. **Resume Contract** — the act-on-this-first block: next action, blocked-on,
-   expired authorizations, verification state, key anchor
+   expired authorizations, decaying prerequisites, verification state, key anchor
 2. **Initial Goal** — what the session was originally trying to accomplish
 3. **Agent Actions** — sequential log of what was done (with file references)
 4. **Current Expectation** — what the user expected to happen next at dump time
@@ -289,7 +289,7 @@ Present sections in this order — start from "what's next", not "where we start
 
   ▸ Resume Contract            (when present — act from this first)
     Next action / Blocked on / Expired authorizations /
-    Verification state / Key anchor
+    Decaying prerequisites / Verification state / Key anchor
 
   ▸ Reality drift              (only when Phase 1.4 found mismatches)
     [discrepancy list — checkpoint claim vs git-now]

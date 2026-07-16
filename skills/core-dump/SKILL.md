@@ -199,7 +199,7 @@ Broadly-applicable insights also get a dated entry in
 
 Synthesize the one block the next agent can act on without reading anything else
 — this is the standardized "continue prompt" (it exists because users had to ask
-for one by hand). Five fields, one line each; write `none` rather than omitting
+for one by hand). Six fields, one line each; write `none` rather than omitting
 a field, so absence is legible:
 
 - **Next action** — ONE imperative sentence, the first move. Distinct from
@@ -208,11 +208,17 @@ a field, so absence is legible:
 - **Expired authorizations** — approvals that die at compact/clear/resume
   (pushes, deploys, destructive ops, account or identity switches). Listing them
   is what makes the fresh-confirmation rule mechanical instead of remembered.
+- **Decaying prerequisites** — environment state you had to fix or start this
+  session for a surface to work, which rots silently between write and read:
+  credentials/tokens on a timer (gcloud ADC, a refreshed login), tunnels, dev
+  daemons/servers, seeded or mutated data. List each with its fix command, so the
+  next agent re-arms it instead of hitting a stale failure. Prompt: "what did I
+  have to fix or start this session for this to work?"
 - **Verification state** — last real run + result + the command that produced it
   ("`pnpm typecheck` green after action #7" · "UNCONFIRMED — nothing run").
 - **Key anchor** — the single most load-bearing file:line, or `—`.
 
-Keep it 5-8 lines total. Pull the continuation-critical Session Insights here
+Keep it 6-9 lines total. Pull the continuation-critical Session Insights here
 (the 2.5 section keeps the full detail); under "be terse" instructions compress
 the values, never drop the field labels.
 
@@ -264,6 +270,7 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 - **Next action:** <one imperative sentence>
 - **Blocked on:** <USER: … | AGENT: none — go>
 - **Expired authorizations:** <list | none>
+- **Decaying prerequisites:** <each with its fix command — creds/tunnels/daemons/seeded data | none>
 - **Verification state:** <last run + result + command | UNCONFIRMED — nothing run>
 - **Key anchor:** <file:line | —>
 
