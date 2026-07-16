@@ -29,7 +29,19 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
 # (`> /etc/hosts`), whereas a path named inside a string literal (a commit
 # message, an echo, a comment) is data, not a write. Stripping single/double
 # quoted spans first prevents false positives like `git commit -m "...tee /etc..."`.
-scan=$(printf '%s' "$cmd" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
+#
+# Heredoc BODIES need the same treatment and quotes can't reach them: prose fed
+# through `<<EOF` (an RCA describing a system path, a doc block) is data, and it
+# false-fired this guard on --rca-content passed to atone.sh. Drop body lines but
+# KEEP the opener, so a real `cat <<EOF > /etc/hosts` is still caught by its
+# redirect. Order matters: de-quoting first would eat the <<'EOF' marker and
+# orphan the body. No perl → skip the strip (conservative: still blocks).
+if command -v perl >/dev/null 2>&1; then
+  cmd_nohd=$(printf '%s' "$cmd" | perl -ne 'if ($h) { $h="" if /^\s*\Q$h\E\s*$/; next } print; $h=$2 if /<<-?\s*(["\x27]?)([A-Za-z_]\w*)\1/;')
+else
+  cmd_nohd="$cmd"
+fi
+scan=$(printf '%s' "$cmd_nohd" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
 
 # Protected system roots (regex alternation). Each followed by / or word-end so
 # "/etcetera" or "/booth" do NOT match — only the real dir.
