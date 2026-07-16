@@ -56,9 +56,12 @@ rather than mute-and-forget.
 3. ⏳ Tier-1 lm/gemini screen between regex and sonnet (worker goes straight
    regex→sonnet today; add `llm-mini` screen if fire volume makes sonnet spend
    material).
-4. ⏳ prose-smell P6 verdict: the parked telemetry review
-   (`assets/reports/20260710-queue-reviews/1.5a-prose-smell.md`) — user decision
-   still owed; the watcher does not change chat-lane enforcement.
+4. ✅ 2026-07-16 — prose-smell P6 verdict (user): STAYS DRY-RUN. Grounds: heed
+   metric only accurate since the C1 fix (61 fires/July, 6 heeded:true post-fix),
+   both source RCAs asked flag-not-block, file lane now covered by the critic
+   gate. Re-review ~2026-08-16 with a clean month of heed data; escalation path
+   if heed <~30%: review option (b), block on two structural tells, em-dash
+   demoted to warn.
 
 ## Recovery
 
