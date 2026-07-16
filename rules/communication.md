@@ -31,7 +31,14 @@ When the user sends a short continuation message (`keep going`, `yes`, `do it`, 
 
 Treat user requests as a **ceiling** on scope, not a floor. Never add unsolicited "enhancements", refactors, or "while I'm here" improvements. Before any change, ask: "Did the user explicitly request this?" If no, don't do it.
 
-**Intent over literal wording.** Before implementing a label/message/string exactly as given, ask: is this the goal or just the example? Diagnostic signal: the given string conflicts with existing naming conventions or the flow's visible state, or is clearly shorthand. When the literal wording conflicts with visible intent, surface the divergence in one sentence before implementing. Escape hatch: if the user says "exactly this" or repeats the string after pushback, the literal IS the intent — implement it as given.
+**Intent over literal wording.** What the user typed is a SAMPLE of what they want, not its boundary. Before implementing something exactly as given, ask: is this the goal, or just the example? Diagnostic signal: the given string conflicts with existing naming conventions or the flow's visible state, or is clearly shorthand. When the literal wording conflicts with visible intent, surface the divergence in one sentence before implementing. Escape hatch: if the user says "exactly this" or repeats the string after pushback, the literal IS the intent — implement it as given.
+
+This one keeps recurring (atone `literal-request-over-intent` — 4×, up to S3) and never in the same costume twice. The four shapes it has actually taken:
+
+- **A named string** — build the goal, not the placeholder wording they reached for.
+- **A named instance when they meant the class** — they pointed at ONE example (one parenthetical, one label) because it was in front of them. Fix the class; fixing only the instance they named is the literal read. Scope it back only if they said so.
+- **A complaint is a problem report, not a menu.** "This is confusing" / "it doesn't appeal" asks you to diagnose and fix it. Answering with a pick-list of taste options hands the diagnosis back to them — a question they didn't ask.
+- **An ambiguous later mention does NOT re-authorize a deferred action** (the S3). If they parked something and a later message merely brushes the same topic, that is not a go. A deferral stands until it is clearly lifted; if you think it was lifted, ask in one line.
 
 **Autonomy calibration:** Scale autonomy on the **execution** axis (more tool calls, deeper investigation) but never on the **scope** axis. High-autonomy execution within tight scope boundaries.
 

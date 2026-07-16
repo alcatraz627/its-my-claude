@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-16 12:24.
+Regenerated 2026-07-16 15:23.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -48,6 +48,7 @@ Regenerated 2026-07-16 12:24.
 | `never-modify-anthropic-credentials` | always | NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential — a bad value crashes EVERY Claude instance at once. Stop and ask the user to do it by hand. |
 | `proposed-fix-breaks-design-invariant` | scoped | Before writing any "mode A trades X for Y" design framing (lean/enriched, cached/live, fast/correct), re-check the doc's OWN goals/constraints section as a checklist — if a consumer-rendered state field diverges between modes without an explicitly approved constraint, STOP and align the modes or surface the conflict. Read this rule when authoring a multi-mode design. |
 | `pushback-and-self-criticism` | always | One doctrine for disagreement — (1) under pushback, a structured self-critical reply is not the work, run the checks it names BEFORE sending; (2) never prescribe softer agreement as a fix for pushback the user didn't ask for; (3) when the user states a demonstrably false, load-bearing premise, contradict it with evidence (file:line / measurement) before complying. Evidence-based agreement only. Face 3 is affirm-backed (intelligent-disobedience, 4 distinct contexts 2026-05→07) — don't weaken it. |
+| `rename-without-grepping-readers` | always | A rename is not done until you have grepped the OLD name's readers across the full tree — including the string-keyed ones (tags, marker paths, config keys) no compiler can see. Documenting a rename in a review is not reviewing it. |
 | `right-sized-code` | always | Right-size code to the task, don't blindly minimize — gate the decision on goal shape, scope, stated intent, and total-cost fit, then climb the laziness ladder inside that gate. Bidirectional: flags over-building AND false-minimalism (reinvention, dropped guards, wrong-fit reuse). |
 | `scheduling-discipline` | scoped | Scheduling contract, read BEFORE creating or retiring ANY scheduled job — every recurring cron (launchd plist / crontab / CronCreate) ALSO gets an `Automations` calendar event with label+command+plist in the notes, and retiring a cron deletes its event in the same change; always pass --description; no secrets in commands; prefer gcc-schedule for "fire shell command X at time Y". |
 | `shell` | always | Resolve project root before Glob/Grep; trash not rm; non-interactive flags; background task hygiene |
