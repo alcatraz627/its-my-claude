@@ -58,6 +58,25 @@ is_generic() {
   esac
 }
 
+# Framework route files export a fixed contract (loader/action/meta/…) in EVERY
+# route by design — those are not reinvented duplicates. This pair skips them,
+# but ONLY for route-convention paths, so a `loader` helper elsewhere in the tree
+# is still checked. Without it the guard blocks every new React Router route and
+# gets bypassed via a bash-heredoc that skips ALL Write-path hooks.
+is_route_file() {
+  case "$1" in
+    */app/routes/*|*/app/routes.*|*/routes/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+is_route_export() {
+  case "$1" in
+    loader|action|meta|links|headers|handle|default|shouldRevalidate|ErrorBoundary|\
+    HydrateFallback|clientLoader|clientAction|generateMetadata|generateStaticParams) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 # Is this path a BUILD ARTIFACT (a bundle/compiled output), not hand-authored
 # source? A git-TRACKED bundle (e.g. esbuild's content.js) holds a compiled twin
 # of every src/ export, so without this every new export collides with itself and
@@ -106,6 +125,7 @@ while IFS= read -r name; do
   [ -z "$name" ] && continue
   [ "${#name}" -lt 5 ] && continue
   is_generic "$name" && continue
+  is_route_file "$file_path" && is_route_export "$name" && continue
   case "$name" in *'$'*) continue ;; esac   # `$` would mis-anchor the rg regex below
   if [ "$lang" = js ]; then
     def_re="(export\s+)?(async\s+)?function\s+${name}\b|(export\s+)?(const|class)\s+${name}\b"
