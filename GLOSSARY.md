@@ -97,6 +97,11 @@
 | **one-shotting** | Hoping a task lands in a single unplanned attempt. User treats it as a fantasy — a *failed* one-shot wastes more than structured plan→implement→review. Default to structure. | Non-trivial/agentic work. Canonical: `memory/global/feedback_structure_over_oneshot.md` |
 | **ease–effort–output triad** | The user's mental model for routing a task to a tool, weighing ease of invoking, their own effort, and the output quality the task needs. | Drives "just use chatgpt" vs "use the agent". Canonical: `memory/global/user_work_routing_triad.md` |
 | **"just use chatgpt" (mode)** | The light-path escape hatch: route a low-stakes one-off to ChatGPT / a small local `lm`. Signals the *task* is light — not that the agent is bad. | Tool routing. Canonical: `memory/global/user_work_routing_triad.md` |
+| **overindex** | To over-weight a single example, detail, or metric and generalize from it. "Do not overindex" = treat the instance as one sample of its class; respond to the class. | Feedback on examples in requests/reports. Baked 2026-07-16 (gcc-drift-3e) |
+| **pragmatic** | Prefer the practically-fitting move over the formally-complete one. Ceremony, exhaustive coverage, and process for its own sake are costs, not virtues. | Scoping and approach choices. Baked 2026-07-16 |
+| **intent** | Requests name goals, not specs — the literal phrasing is one sample of the intent; model the goal before implementing the words. | Canonical: `rules/communication.md` §Intent over literal wording · atone `literal-request-over-intent` |
+| **stupid (as feedback)** | "This output ignored context it demonstrably had." A derivable-context failure signal; respond by root-causing which context was ignored, not by apologizing. | Venting/feedback interpretation. Baked 2026-07-16 |
+| **waste my time** | The efficacy metric violated: output that costs more of the user's attention than it saves (rework, re-explaining, reading filler). | Links to **efficacy**. Baked 2026-07-16 |
 
 ---
 

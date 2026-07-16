@@ -404,6 +404,16 @@ See `~/.claude/memory/global/MEMORY.md` for the full index.
 
 ---
 
+### `std::claude::style` — Qualitative-writing control plane
+
+**Surface:** State (ledger + config) + Executable (CLI, hinter)
+**Paths:** `~/.claude/style/` (thesaurus.jsonl, scope-map.json, glossary-hints.tsv, derived/ digests) · `~/.claude/scripts/style/` · `~/.claude/hinters/01-glossary.sh` · `~/.claude/skills/thesaurus/`
+
+**In scope:** the user's verdicts on how Claude writes (thesaurus), enforcement tiers per artifact class (scope map), steering-term activation (glossary hints). Consumers read `derived/` digests, never the raw ledger.
+**Out of scope:** the meanings of the user's own words (GLOSSARY.md), mistake patterns (`::improvement`), doc-writing canon (conventions/). Migration: 0033.
+
+---
+
 ### `std::claude::todos` — Weekly / monthly task lists **[facet]**
 
 **Surface:** State

@@ -1,0 +1,20 @@
+{
+  "_doc": "Which artifacts get how much tone/style attention from the critic persona and the watcher. First matching rule wins. Tiers set by the user verbatim, 2026-07-16 (session gcc-drift-3e). Consumed by personas/readers-advocate.md and the style-watch stack.",
+  "tiers": {
+    "heavy": "full thesaurus enforcement: prose + structure + vocab digests, harsh on extraneous words, WHY/WHAT chain required on findings",
+    "medium": "understandability without being boring: flair allowed, structure + clarity enforced, wordiness flagged only when it obscures",
+    "comment-minimal": "comments only: minimum word count; never convey the WHAT; payload is the non-obvious WHY/HOW; one line unless a docstring contract",
+    "off": "no tone enforcement; agent writes however it outputs"
+  },
+  "rules": [
+    { "match": "path:~/Code/Versable/**",                                        "tier": "heavy",  "note": "user: 'My versable projects need it HEAVILY'" },
+    { "match": "artifact:user-facing-report",                                    "tier": "heavy",  "note": "reports shown to the user or filed as a 'main' thing; includes assets/reports/** and .claude/output/** report deliverables" },
+    { "match": "path:**/{README,USAGE,MIGRATION,GUIDEBOOK}*.md",                 "tier": "heavy",  "note": "user: claude-owned projects mostly exempt, 'but for their README.md / USAGE.md / MIGRATION.md / GUIDEBOOK.md, I absolutely care'" },
+    { "match": "artifact:magi-final-synthesis",                                  "tier": "heavy",  "note": "user: 'absolutely needs to be tone curated'; synthesis prompt derives tone from thesaurus digest, never from intermediate artifacts" },
+    { "match": "artifact:magi-intermediate",                                     "tier": "off",    "note": "user: 'however the agent outputs them' — unless they would inform the final report's tone" },
+    { "match": "artifact:code-comments",                                         "tier": "comment-minimal" },
+    { "match": "path:**/docs/**",                                                "tier": "medium", "note": "user: 'can have some flair but understandability without being boring'" },
+    { "match": "project:claude-owned",                                           "tier": "off",    "note": "user: 'Projects where claude owns it mostly, I really don't care' (doc exceptions matched above)" },
+    { "match": "*",                                                              "tier": "medium" }
+  ]
+}

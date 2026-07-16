@@ -27,6 +27,12 @@
 !/personas/
 !/migrations/
 !/hooks-feedback-domain/
+# style/: config layer tracked; thesaurus.jsonl (data ledger) + derived/
+# (machine-written digests) travel by rsync like every other ledger (mig 0033)
+!/style/
+/style/*
+!/style/scope-map.json
+!/style/glossary-hints.tsv
 
 # accumulated LEARNED state — real value, version it (all tiny unless noted)
 !/memory/

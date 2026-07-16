@@ -1,0 +1,13 @@
+# glossary-hints.tsv — steering terms injected per-prompt by hinters/01-glossary.sh
+# Format: term<TAB>one-line canonical meaning<TAB>pointer
+# Keep meanings under ~120 chars; the hinter emits at most 2 per prompt.
+# Source of truth for definitions: GLOSSARY.md §User Shorthand — keep in sync.
+efficacy	result per unit of THEIR effort, counting rework; not raw speed	GLOSSARY.md + memory/global/feedback_efficacy_over_speed.md
+one-shotting	hoping a task lands in one unplanned pass; treat as fantasy, default to plan→implement→review	rules/structure-over-one-shotting.md
+overindex	don't over-weight one example/detail/metric; treat it as one sample of its class, respond to the class	GLOSSARY.md §User Shorthand
+pragmatic	the practically-fitting move over the formally-complete one; ceremony and exhaustive coverage are costs	GLOSSARY.md §User Shorthand
+intent	requests name goals, not specs; model the goal behind the words before implementing the words	rules/communication.md §Intent over literal wording
+stupid	output ignored context it demonstrably had; root-cause WHICH context was ignored, don't apologize	GLOSSARY.md §User Shorthand
+waste my time	efficacy violated: output costs more user attention than it saves (rework, re-explaining, filler)	GLOSSARY.md §User Shorthand
+waste of my time	efficacy violated: output costs more user attention than it saves (rework, re-explaining, filler)	GLOSSARY.md §User Shorthand
+just use chatgpt	the task is light-lane; route to a quick tool, signals task weight not agent quality	memory/global/user_work_routing_triad.md
