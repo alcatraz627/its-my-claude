@@ -41,11 +41,16 @@ Before writing/saying done · works · fixed · passing · verified · shipped:
    a lint, a dry-compile — **none of these execute a single assertion.** They
    tell you the code *parses*, not that it *works*. Never report a suite
    "green"/"validated" off a collect or a compile.
-3. **Induce the state that matters.** If the behavior only manifests under a
+3. **A cached re-run is one run.** If the path is memoized (an LLM-call cache, a
+   build cache, a saved verdict/result), runs 2..N replay the cache, not the code
+   — "ran it N times, all green" is one run. Know what invalidates the cache and
+   bust it (or vary the key) before you count a re-run as evidence; an edit that
+   does not change the cache key changed nothing you just verified.
+4. **Induce the state that matters.** If the behavior only manifests under a
    condition (warning-level memory pressure, a network fault, an empty list,
    warm-vs-cold), induce that condition and observe — don't assert the happy path
    and infer the rest.
-4. **Mark the un-exercisable honestly.** If you genuinely cannot run something
+5. **Mark the un-exercisable honestly.** If you genuinely cannot run something
    (throttled sandbox, missing hardware), write `UNCONFIRMED — <reason>`, not a
    checkmark. An honest gap is worth more than a false pass.
 

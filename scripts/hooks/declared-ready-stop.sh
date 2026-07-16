@@ -364,6 +364,18 @@ if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
       soft_note "✓ declared-ready (soft — a run was observed, on a UI surface): if this surface has states — dark AND light theme, open/closed, breakpoints — exercise the changed surface in EACH state before the claim, or scope it explicitly ('verified in dark only'). Dark-only sign-offs shipped a broken light theme twice (2026-07-02, 2026-07-07). Mute: touch ~/.claude/.no-declared-ready-gate"
     fi
   fi
+  # Mutation-test reminder (jegs 2026-07-15): a test RAN green, but a green test
+  # never shown it CAN fail proves nothing — four such tests shipped as decoration
+  # that session. Fires only when a TEST FILE was edited this session and the agent
+  # didn't already say it mutation-tested; soft, once per session, never a block.
+  if rg -qiP '(\.test\.|\.spec\.|_test\.|(^|/)test_)' "$EDITED" 2>/dev/null \
+     && ! printf '%s' "$claim_text" | rg -qiP '\b(mutation[- ]?test|saw it (go )?red|watch(ed)? .{0,20}(fail|red)|revert(ed)? the (fix|guard|code)|broke the (fix|guard))\b' 2>/dev/null; then
+    MUTMARK="/tmp/claude-declared-ready-mutation-${sid8}"
+    if [ ! -f "$MUTMARK" ]; then
+      : > "$MUTMARK" 2>/dev/null || true
+      soft_note "✓ declared-ready (soft — a test ran, and you edited a test): a passing test proves nothing until you've seen it FAIL. Mutation-test the guard — revert the code it protects, confirm the test goes RED, restore. A test that stays green when the fix is reverted is the bug, not coverage (four shipped as decoration 2026-07-15). Mute: touch ~/.claude/.no-declared-ready-gate"
+    fi
+  fi
   exit 0
 fi
 

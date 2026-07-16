@@ -47,7 +47,8 @@ The rule above covers *how a subsystem works*. The same verification failure
 happens one layer up, on *what a process did*: "the migration ran", "the deploy
 succeeded", "the test passed", "the cron fired". Before writing that a step is
 done / succeeded / passed, **name the artifact that proves it** — a log line, an
-exit code, a row count, a file timestamp — or run the check first.
+exit code, a row count, a file timestamp, elapsed time (the clock, not your sense
+of how long it felt) — or run the check first.
 
 Boundary with `rules/exercise-based-verification.md`: that rule binds when *you*
 changed code and must run the changed path before claiming done. This clause
