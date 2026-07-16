@@ -53,3 +53,23 @@ hook_loop_check() {
   printf '%s' "$sig" > "$marker" 2>/dev/null || true
   return 0
 }
+
+# hook_clear_reset <sid8> <counter_file> — reset a per-process counter after /clear.
+#
+# The per-process counters keyed by ${PPID} (the tool tally, ctx %) survive a
+# /clear because /clear does not restart the Claude process — so their pre-clear
+# values leak into the fresh session (false auto-checkpoint / ctx-pressure /
+# todo-discipline nudges). The SessionStart source==clear injector cannot reach
+# those PPID files (its own PPID is the orchestrator's), so it drops a session-
+# keyed sentinel `/tmp/claude-clear-reset-<sid8>`; the reader — which DOES know
+# the right PPID — calls this at the top to drop a stale counter. Idempotent:
+# once the reader rewrites its counter, the counter's mtime beats the sentinel,
+# so it will not reset again this session.
+hook_clear_reset() {
+  local sid8="${1:-}" counter="${2:-}"
+  [ -n "$sid8" ] && [ -n "$counter" ] || return 0
+  local sentinel="/tmp/claude-clear-reset-${sid8}"
+  if [ -f "$sentinel" ] && [ -f "$counter" ] && [ "$sentinel" -nt "$counter" ]; then
+    rm -f "$counter" 2>/dev/null || true
+  fi
+}

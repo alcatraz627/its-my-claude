@@ -39,6 +39,34 @@ hook_loop_check "$M2" 'x`touch '"$CANARY"'`; $(touch '"$CANARY"') & end'
 [ -e "$CANARY" ]; ok "content is hashed, never eval'd (no injection)" "$?" "1"
 rm -f "$M2" "$CANARY"
 
+# ── hook_clear_reset (post-/clear counter reset) ─────────────────────────────
+CR="$(mktemp "${TMPDIR:-/tmp}/hccr-XXXXXX")"; SENT="/tmp/claude-clear-reset-hcrtest0"; rm -f "$SENT"
+echo "n=1" > "$CR"; sleep 1; : > "$SENT"
+hook_clear_reset "hcrtest0" "$CR"; [ -f "$CR" ] && r=kept || r=reset; ok "clear_reset: sentinel newer -> reset" "$r" "reset"
+: > "$SENT"; sleep 1; echo "n=2" > "$CR"
+hook_clear_reset "hcrtest0" "$CR"; [ -f "$CR" ] && r=kept || r=reset; ok "clear_reset: sentinel older -> kept" "$r" "kept"
+rm -f "$SENT"
+hook_clear_reset "hcrtest0" "$CR"; [ -f "$CR" ] && r=kept || r=reset; ok "clear_reset: no sentinel -> kept" "$r" "kept"
+rm -f "$CR" "$SENT"
+
+# ── injector integration: post-clear-counter-reset.sh source-gating ──────────
+# Exercises the script that reads a real .source payload + derives sid8 — the gap
+# the skeptical review flagged (only the primitive was covered). Note: this proves
+# the injector's LOGIC given source=="clear"; that the harness actually SENDS
+# "clear" on /clear is a separate, harness-level fact (see the script header).
+INJ="$HERE/../session-mgmt/post-clear-counter-reset.sh"
+if [ -f "$INJ" ] && command -v jq >/dev/null 2>&1; then
+  ISENT="/tmp/claude-clear-reset-injtest1"; rm -f "$ISENT"
+  printf '%s' '{"source":"clear","session_id":"injtest1-abcd-efgh"}' | bash "$INJ" 2>/dev/null
+  [ -f "$ISENT" ] && ir=yes || ir=no; ok "injector: source==clear writes sentinel" "$ir" "yes"
+  rm -f "$ISENT"
+  printf '%s' '{"source":"startup","session_id":"injtest1-abcd-efgh"}' | bash "$INJ" 2>/dev/null
+  [ -f "$ISENT" ] && ir=yes || ir=no; ok "injector: source==startup no sentinel" "$ir" "no"
+  rm -f "$ISENT"
+else
+  echo "  SKIP injector integration: script / jq unavailable"
+fi
+
 # ── repeat-path integration: real migrated hook, twice on one message ─────────
 # filename-dot-stop.sh (Family A): first fire blocks, identical message steps
 # aside. This is the exact path the replay corpus cannot reach.

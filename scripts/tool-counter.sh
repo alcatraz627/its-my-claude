@@ -28,6 +28,18 @@ esac
 
 # Counter file keyed by the Claude process
 COUNTER_FILE="/tmp/claude-tools-${PPID}"
+
+# Drop the tally if a /clear happened this process. /clear does not restart the
+# process, so PPID (hence this file) persists — a source==clear SessionStart
+# injector leaves a session-keyed sentinel that hook_clear_reset acts on here,
+# where the correct PPID is known. Idempotent (the rewrite below beats it).
+_hc="$HOME/.claude/scripts/hooks/hook-common.sh"
+if [ -r "$_hc" ]; then
+  . "$_hc"
+  _sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null) || true
+  hook_clear_reset "$(hook_sid8 "$_sid")" "$COUNTER_FILE"
+fi
+
 LOCK_DIR="${COUNTER_FILE}.lockdir"
 
 # mkdir-based lock (portable, atomic on all filesystems)

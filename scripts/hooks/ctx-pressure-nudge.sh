@@ -40,6 +40,10 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
 rem=$(printf '%s' "$input" | jq -r '.context_window.remaining_percentage // empty' 2>/dev/null)
 if [[ -z "$rem" || "$rem" == "null" ]]; then
   ctx_file="/tmp/claude-ctx-${PPID}"
+  # After a /clear this fallback file still holds the pre-clear %; drop it if a
+  # clear sentinel is newer (the statusline rewrites it fresh next render).
+  _hc="$HOME/.claude/scripts/hooks/hook-common.sh"
+  [[ -r "$_hc" ]] && . "$_hc" && hook_clear_reset "$(hook_sid8 "$sid")" "$ctx_file"
   [[ -f "$ctx_file" ]] && rem=$(tr -dc '0-9.' < "$ctx_file" 2>/dev/null)
 fi
 [[ -z "$rem" ]] && exit 0

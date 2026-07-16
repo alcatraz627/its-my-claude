@@ -2,6 +2,8 @@
 
 > **Mandatory for all skills.** Every skill must read this file as its **first step** and apply all rules for the entire run. These rules override any conflicting instructions in individual SKILL.md files.
 >
+> **Fallback (which GUIDELINES.md to read).** This GLOBAL file, `~/.claude/skills/GUIDELINES.md`, is the canonical default. When a skill's Step 0 says to read `.claude/skills/GUIDELINES.md` and the project has no local copy — most projects don't, and that is expected, not an error — read THIS global file instead. Never skip the rules because a project-local copy is absent, and never scaffold one just to satisfy the step.
+>
 > **Need a reference file?** See `~/.claude/LOOKUP.md` — the address book for all config, shared references, hooks, and scripts.
 
 ---
@@ -371,9 +373,12 @@ Every SKILL.md workflow must begin with this section:
 ```markdown
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md`. Apply all rules — forbidden paths, retry logic,
-tool preferences, verbosity, timeouts, post-run insights, and the **file lock protocol**
-— for the entire duration of this skill run before proceeding.
+Read the shared guidelines — `<project>/.claude/skills/GUIDELINES.md` if the project
+has one, otherwise the global default `~/.claude/skills/GUIDELINES.md` (most projects
+have no local copy; use the global one and say so in one line, never skip the rules).
+Apply all rules — forbidden paths, retry logic, tool preferences, verbosity, timeouts,
+post-run insights, and the **file lock protocol** — for the entire duration of this
+skill run before proceeding.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.

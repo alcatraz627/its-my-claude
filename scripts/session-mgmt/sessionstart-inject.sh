@@ -38,6 +38,10 @@ export INJECT_SID
 # payload on stdin and prints {additionalContext|hookSpecificOutput} or nothing.
 INJECTORS=(
   "$HOME/.claude/scripts/session-mgmt/post-compact-reality-check.sh"
+  # Side-effect-only exception to the "side-effects belong in async" note above:
+  # the sentinel it writes must exist BEFORE the first PostToolUse, and only this
+  # synchronous lane guarantees that ordering. See the script's own header.
+  "$HOME/.claude/scripts/session-mgmt/post-clear-counter-reset.sh"
   "$HOME/.claude/scripts/dream/dream-insights.sh"
   # pending-proposals.sh retired (migration 0031). Dream-learned rules used to be
   # injected here from their own untriaged store, every session, with no path to a
