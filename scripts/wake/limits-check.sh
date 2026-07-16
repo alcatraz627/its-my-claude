@@ -69,17 +69,25 @@ command -v jq >/dev/null 2>&1 || {
 pct=$(jq -r '(."5h".pct | tonumber? | floor) // empty' "$LIMITS" 2>/dev/null)
 [ -n "$pct" ] || { say UNKNOWN "" "no numeric 5h.pct in $LIMITS"; exit 2; }
 
-# Length is the only other filter needed, and it must run before any arithmetic:
-# an operand `[` cannot parse makes it error, the `if` reads false, and control
-# falls through to the OPEN at the bottom — confident headroom off a comparison
-# that never ran. Four characters covers every real percentage ("-0".."100").
+# State what a reading LOOKS like, and reject everything else. Not the reverse.
 #
-# It also subsumes shape-checking. Measured what jq can actually emit here: the
-# shortest non-digit output it produces is "1e+16" (5 chars) — it renders >=16-digit
-# numbers in scientific notation and huge floats as 1.79…e+308 (23). So there is no
-# reachable input that is non-numeric-looking AND short. An earlier character-class
-# check sat here alongside this one and was pure shadow: nothing could reach it, so
-# no test could pin it, which is exactly how the validator found it (2026-07-17).
+# Nothing below can run on a value that is not an integer: `[` errors on an operand
+# it cannot parse, which reads as false, and control falls through to the OPEN at
+# the bottom — confident headroom off a comparison that never happened. So the shape
+# check has to come first and has to be positive.
+#
+# It was briefly a list of prohibitions instead, on the strength of a measurement
+# that jq's shortest non-digit output is "1e+16" (5 chars) and a length bound could
+# therefore cover it. That measurement enumerated large integers and generalised to
+# every input. It is false: `jq -rn 'nan|floor'` emits `null` — four characters,
+# under the bound — and `{"5h":{"pct":"nan"}}` fell straight through to exit 0.
+# A deny-list is only ever as good as the author's imagination; an allow-list says
+# what is true. (Skeptical review, 2026-07-17.)
+[[ "$pct" =~ ^-?[0-9]+$ ]] || {
+  say UNKNOWN "" "5h.pct in $LIMITS is not an integer (got '${pct}')"; exit 2; }
+
+# Four characters covers every real percentage ("-0".."100"); longer is a broken
+# writer, and also what would overflow the comparison below.
 if [ "${#pct}" -gt 4 ]; then
   say UNKNOWN "" "implausible 5h.pct '${pct}' in $LIMITS — a percentage has at most 3 digits"
   exit 2
@@ -94,7 +102,11 @@ if [ "$pct" -lt 0 ]; then
 fi
 
 # Normalise -0 (a real jq output) to 0 so the detail line doesn't read "-0%".
-pct=$((pct))
+# String comparison, not `$((pct))`: arithmetic context evaluates a variable's
+# CONTENTS as an expression, so a value that happens to be a name dereferences it
+# (`pct=evil; evil=7; echo $((pct))` prints 7). The shape check above makes that
+# unreachable today, which is not a reason to leave the construct sitting here.
+[ "$pct" = "-0" ] && pct=0
 
 if [ "$pct" -ge "$THRESHOLD" ]; then
   say NEAR-FULL "$pct" "5h window ${pct}% spent (>= ${THRESHOLD}%) — leave the rest for real work"

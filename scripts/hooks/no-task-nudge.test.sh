@@ -65,9 +65,23 @@ fire() {
 
 nudged() { printf '%s' "$1" | rg -q 'todo-discipline'; }
 
+# Text alone is not delivery. The harness reads additionalContext ONLY inside
+# {hookSpecificOutput:{hookEventName,additionalContext}}; a bare {additionalContext}
+# is silently ignored, with no error and no --debug signal. This hook emitted the
+# bare form until 2026-07-13 and reached zero agents the whole time. Grepping the
+# message would have passed throughout — so assert the envelope, not the words.
+delivered() {
+  printf '%s' "$1" | jq -e '
+    .hookSpecificOutput.hookEventName == "PostToolUse"
+    and (.hookSpecificOutput.additionalContext | type) == "string"
+    and (.hookSpecificOutput.additionalContext | length) > 0
+  ' >/dev/null 2>&1
+}
+
 echo "== it SHOULD nudge: real work, no list ever kept =="
 o=$(fire "no dir" "" 0 "")
 nudged "$o" && ok "no task dir at all -> nudges" || bad "stayed silent when it should nudge"
+delivered "$o" && ok "  ...in the envelope the harness actually reads" || bad "  ...but in an envelope the harness ignores (the pre-2026-07-13 bug)"
 
 echo
 echo "== it should stay quiet: a list exists =="

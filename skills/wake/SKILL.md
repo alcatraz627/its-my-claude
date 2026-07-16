@@ -74,48 +74,57 @@ approximate, and a wake interval always is. The 15m default uses
 `7,22,37,52 * * * *`. For a custom N that divides 60, offset similarly; otherwise
 `*/N * * * *` is fine.
 
-Arm it with **exactly this payload**. Do not redesign cases (a) and (b) — the
-halt-check is the whole reason it is safe to leave running, and it has been fired
-for real.
+Arm it with **exactly this payload**. Do not redesign step 2 — the halt-check is
+the whole reason it is safe to leave running, and it has been fired for real.
 
 What that claim covers, precisely, because the difference matters:
 
-- **Cases (a)/(b), the idle-fire, and the self-delete are live-validated.** Job
-  `584b5f20`, 2026-07-16: armed at 18:33, fired on its own at 18:39 into an idle
-  session, correctly classified the work as finished, reported one line, called
-  `CronDelete`. Evidence is in the session transcript, not a memory of it.
-- **Case (c) is NOT live-validated.** The payload that actually fired carried a
-  prose version of (c) ("if you are blocked on the 5h usage cap, note it and end
-  the loop") with no script behind it. `limits-check.sh` was written *after* that
-  test and folded in here. It has 26 tests and every guard is mutation-pinned, but
-  no wake has ever taken the (c) branch for real. Treat it as unit-tested, not
-  proven. (Caught by the validation gate, 2026-07-17 — the original wording claimed
-  the whole payload was validated.)
+- **Step 2 (the cut-off/done triage), the idle-fire, and the self-delete are
+  live-validated.** Job `584b5f20`, 2026-07-16: armed at 18:33, fired on its own at
+  18:39 into an idle session, correctly classified the work as finished, reported
+  one line, called `CronDelete`. Evidence is in the session transcript, not a memory
+  of it.
+- **Step 1 (the budget check) is NOT live-validated.** The payload that actually
+  fired carried a prose gesture at the budget ("if you are blocked on the 5h usage
+  cap, note it and end the loop") with no script behind it. `limits-check.sh` was
+  written _after_ that test and folded in here. It has 30 tests and every guard is
+  mutation-pinned, but no wake has ever run step 1 for real. Treat it as
+  unit-tested, not proven. (Caught by the validation gate, 2026-07-17 — the original
+  wording claimed the whole payload was validated.)
 
 ```
-Wake check. Decide which case you are in FIRST, and do not skip this.
+Wake check. Two steps, in this order. Do not skip step 1.
 
-(a) CUT OFF — the previous turn died mid-task (API error, outage). Re-orient per
+STEP 1 — Can you afford to be awake?
+
+Run: bash ~/.claude/scripts/wake/limits-check.sh
+It prints one line and sets the exit code. Branch on the code:
+
+  exit 1  NEAR-FULL — the 5h window is nearly spent. STOP HERE: say so in one
+          line, CronDelete this job, and do nothing else. Do not keep poking a
+          closing window; leave what is left for the user's real work. Re-arming
+          is their call, not yours.
+  exit 0  OPEN    — there is headroom. Go to step 2.
+  exit 2  UNKNOWN — no usable reading. Say so in one line, then go to step 2.
+          Not knowing is not permission to burn budget, but it is not a reason
+          to stall either.
+
+STEP 2 — Were you cut off, or are you done?
+
+  CUT OFF — the previous turn died mid-task (API error, outage). Re-orient per
     rules/api-error-recovery.md: restate the goal, verify what is actually done
-    (Task list, git status, files on disk), find the in-flight step, roll back if
-    it is half-done. Then continue from there.
+    (Task list, git status, files on disk), find the in-flight step, roll back
+    if it is half-done. Then continue from there.
 
-(b) DONE — the session's work is genuinely complete. Do NOT invent work to fill the
-    wake. Do NOT re-explain what was already done. Report in ONE line that the wake
-    fired and the halt-check held, then CronDelete this job. The user is away; a
-    wake that re-animates a finished session is worse than no wake at all.
-
-(c) BUDGET — run `bash ~/.claude/scripts/wake/limits-check.sh`. On NEAR-FULL (exit
-    1), the 5h window is nearly spent: say so in one line and CronDelete. Do not
-    keep poking a closing window — leave what's left for real work. On UNKNOWN
-    (exit 2), say the reading was unavailable and continue with (a)/(b); an absent
-    reading is not permission to burn budget, but it is not a reason to stall
-    either.
+  DONE — the work is genuinely complete. Do NOT invent work to fill the wake.
+    Do NOT re-explain what was already done. Report in ONE line that the wake
+    fired and the halt-check held, then CronDelete this job. The user is away;
+    a wake that re-animates a finished session is worse than no wake at all.
 ```
 
 **Do not execute the payload now.** `/loop` tells you to run the parsed prompt
 immediately rather than wait for the first fire; here that is a trap — the payload
-would hit case (b), find the session mid-conversation with the user present, and
+would reach step 2, find the session mid-conversation with the user present, and
 delete the job you just armed. The first real fire is the first run.
 
 ## Phase 3 — Confirm
@@ -128,7 +137,7 @@ and dies when Claude exits, that recurring jobs auto-expire after 7 days, and th
 
 ### Why a percentage and not a timer
 
-Case (c) polls how _full_ the 5h window is rather than waiting for it to reset,
+Step 1 polls how _full_ the 5h window is rather than waiting for it to reset,
 because the reset time is not knowable: Claude Code sends
 `resets_at="9999999999"` when it doesn't know one — the sentinel **is** the
 message. There is no clock to schedule against, so `limits-check.sh` reads
@@ -156,9 +165,9 @@ routine), that form needs a companion and this reasoning does not transfer.
 
 ### Built vs deferred
 
-- **Built and live-fired**: the halt-check, cases (a)/(b), the idle-fire, the
+- **Built and live-fired**: the halt-check (step 2), the idle-fire, the
   self-delete. Job `584b5f20` did all of it unattended.
-- **Built but never fired**: the budget backoff, case (c). `limits-check.sh` has 26
+- **Built but never fired**: the budget backoff, step 1. `limits-check.sh` has 30
   tests and all six of its guards are individually mutation-pinned (revert any one
   and the suite goes red), but that is bench evidence. No real wake has hit a
   near-full window yet. The first one that does is the actual test.
@@ -172,7 +181,7 @@ routine), that form needs a companion and this reasoning does not transfer.
 
 ## See also
 
-- `rules/api-error-recovery.md` — the re-orientation ritual case (a) invokes
+- `rules/api-error-recovery.md` — the re-orientation ritual step 2 invokes
 - `rules/scheduling-discipline.md` — the companion rule, and why it's waived here
 - `features/claudew.md` — the other half: process death, not turn abort
 - `scripts/wake/limits-check.sh` — the budget reading, with its own test beside it

@@ -90,6 +90,21 @@ r=$(run '{"5h":{"pct":999999999999999},"resets_at":"9999999999"}')
 [ "${r%% *}" = "UNKNOWN" ] && ok "15 digits (stays plain) -> UNKNOWN" || bad "15 digits gave '$r', want UNKNOWN — no percentage has 15 digits"
 
 echo
+echo "== jq's own non-numbers (the deny-list's blind spot) =="
+# `jq -rn 'nan|floor'` emits `null` — FOUR characters, under the length bound. The
+# shipped script fell through this to exit 0 with no verdict at all: the length
+# guard was written believing jq's shortest non-digit output was "1e+16" (5 chars).
+# It enumerated big integers and generalised. Every case here is one that
+# generalisation missed.
+r=$(run '{"5h":{"pct":"nan"}}')
+[ "${r%% *}" = "UNKNOWN" ] && ok "\"nan\" (jq -> null, 4 chars) -> UNKNOWN" || bad "\"nan\" gave '$r' — FAIL-OPEN"
+[ "${r##* }" = "2" ] && ok "  ...and exits 2, not 0" || bad "  ...exited ${r##* }, want 2"
+r=$(run '{"5h":{"pct":"infinity"}}')
+[ "${r%% *}" = "UNKNOWN" ] && ok "\"infinity\" -> UNKNOWN" || bad "infinity gave '$r'"
+r=$(run '{"5h":{"pct":"-nan"}}')
+[ "${r%% *}" = "UNKNOWN" ] && ok "\"-nan\" -> UNKNOWN" || bad "-nan gave '$r'"
+
+echo
 echo "== -0 is zero, not '-0' =="
 T=$(mktemp -d); printf '{"5h":{"pct":-0}}' > "$T/.limits.json"
 d=$(WAKE_LIMITS_FILE="$T/.limits.json" bash "$CHECK" 2>/dev/null | cut -f2)
