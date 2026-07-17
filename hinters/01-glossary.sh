@@ -60,7 +60,7 @@ END {
 HITTERMS=${RESULT%%$'\t'*}
 echo "${RESULT#*$'\t'}"
 
-# usage ledger: one line per injected term (ts, term, session) — read by
+# usage ledger: one line per matched term (ts, term, session) — read by
 # glossary-decay.sh for the dormancy review. Never let it break hinting.
 {
     HITLOG="${GLOSSARY_HITLOG:-$HOME/.claude/style/glossary-hit-log.tsv}"

@@ -53,6 +53,18 @@ Run dir: `~/.claude/style/sweep/<YYYYMMDD>-<session>/` with subdirs
 synth-input/ synthesis/ vetted/ final/` and `run-meta.json` (append an event
 per phase transition, gate result, halt — it is the run's black box).
 
+## What transfers vs. what is vocabulary-bound
+
+Reusable across domains: the phase ladder, all gates, and the fleet mechanics
+(done-ledgers, canary-first, budget-halt, prompt-in-script). Rebuild per
+domain: P1 extraction (what counts as a candidate), P2's metric (lexical
+wordfreq here; embedding-similarity, frequency, or regex-hit elsewhere), and
+the P3 label set + P4 gauge buckets (the `steering/domain-term/quoted/
+incidental` contract is vocabulary-only). Keep the spine; replace the four
+instruments. The skill is *proven* on one vocabulary run and *designed* to
+generalize — know which is which before spending millions of tokens on a
+second domain.
+
 ## The gates (non-skippable — the ladder is only as true as its gates)
 
 - **P2 calibration:** the metric must re-find the already-known positives

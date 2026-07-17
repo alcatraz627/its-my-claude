@@ -3,12 +3,12 @@
 ## Summary
 
 The injected steering vocabulary gains a usage-measurement and decay loop
-(task #24 of the vocab-sweep arc). Three coupled pieces: `hinters/01-glossary.sh`
-now appends one line per MATCHED term to `style/glossary-hit-log.tsv`
-(`ts<TAB>term<TAB>session`, append-only, failure never breaks hinting) — the
-ledger deliberately records a superset of the ≤2 displayed hints, because
-usage evidence gated by display slots would show cluster siblings and 3rd+
-matches as dormant while in active use (gate 24 finding 2);
+(part of the 2026-07 vocab-sweep). Three coupled pieces: `hinters/01-glossary.sh`
+appends one line per MATCHED term to `style/glossary-hit-log.tsv`
+(`ts<TAB>term<TAB>session`, append-only, failure never breaks hinting).
+The ledger deliberately records a superset of the ≤2 displayed hints: usage
+gated by display slots would mark cluster siblings and 3rd+ matches dormant
+while in active use (proven by the decay gate).
 `style/glossary-hints.tsv` gains an optional 4th column `pin` (human-set only)
 exempting a term from dormancy; `scripts/style/glossary-decay.sh` reports
 active/dormant/pinned splits over a trailing window (28d default) and is wired
