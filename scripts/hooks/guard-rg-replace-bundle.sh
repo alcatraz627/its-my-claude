@@ -25,8 +25,17 @@ command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/nul
 # Scope the check to the rg invocation ONLY. A `-r` flag elsewhere in a compound
 # command (`jq -r`, `sort -r`, `tail -r`, `ls -lr`) is not ripgrep's. Split the
 # command into pipeline/sequence segments and inspect only segments that ARE an
-# rg invocation. (A pattern containing a literal `|` may split mid-quote, at most
-# causing an under-fire — the safe direction.)
+# rg invocation.
+#
+# Blank quoted spans FIRST, because rg's own PATTERN is data, not flags. Two
+# distinct over-fires come from skipping this, both verified: `rg "jq -r .cwd" f`
+# read the pattern's -r as rg's, and a `|` inside a pattern split the segment and
+# stranded that -r in what looked like rg's args. An earlier version of this
+# comment claimed a mid-quote split could "at most cause an under-fire — the safe
+# direction". It over-fired instead. Blanking keeps flag positions intact while
+# emptying the pattern, so both directions are settled here rather than reasoned about.
+blank_quotes() { printf '%s' "$1" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g"; }
+scan=$(blank_quotes "$command")
 footgun=0
 while IFS= read -r seg; do
   s="${seg#"${seg%%[![:space:]]*}"}"                          # ltrim
@@ -47,7 +56,7 @@ while IFS= read -r seg; do
   if [[ "$rgargs" =~ (^|[[:space:]\(])-[A-Za-z]*r[A-Za-z]*([[:space:]=]|$) ]]; then
     footgun=1; break
   fi
-done < <(printf '%s\n' "$command" | tr ';|&' '\n')
+done < <(printf '%s\n' "$scan" | tr ';|&' '\n')
 
 if [ "$footgun" = 1 ]; then
   reason="⚡ rg -r IS --replace, NOT recursive. In ripgrep, -r consumes the next token as a REPLACEMENT string and prints transformed output — it does NOT mean recursive (rg recurses by default). This silently mangles output that LOOKS plausible (the metadata→mnidata incident).
