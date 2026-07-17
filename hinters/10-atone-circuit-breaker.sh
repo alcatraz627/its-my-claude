@@ -47,8 +47,12 @@ command -v jq >/dev/null 2>&1 || exit 0
 # breaker found no counter, concluded nothing had been recorded, and exited
 # silently on every turn since it was written. Env-first because a hinter is fed
 # the prompt text, not the hook's JSON.
+# No id, no reading. A date key here would point at a counter atone.sh never writes
+# (it keys on the session id), so the breaker would "find" nothing and conclude
+# nothing had been recorded — a confident answer from a file that cannot exist.
+# Exiting is the same outcome, honestly arrived at.
 _sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
-[ -n "$_sid" ] || _sid="$(date +%Y-%m-%d)"
+[ -n "$_sid" ] || exit 0
 SESSION_KEY=$(printf '%s' "$_sid" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 SDIR="$HOME/.claude/.session-atone-slugs"
 COUNTER="$SDIR/${SESSION_KEY}.json"

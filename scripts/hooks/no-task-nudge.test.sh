@@ -96,6 +96,16 @@ o=$(fire "reaped" "session-$SID8" 0 "20")
 nudged "$o" && bad "nagged the session that completed all 20 of its tasks" || ok "reaped list (hw=20, 0 json) -> quiet"
 
 echo
+echo "== live tasks but NO highwatermark — only task_count can save this one =="
+# Not hypothetical: tasks/session-05780eae on this machine holds 72 task files and
+# no .highwatermark at all. Every other fixture here sets hw, so they all exit at
+# the highwatermark guard and task_count is never the thing under test — deleting
+# it left the suite green (skeptical review, 2026-07-17). This is the shape that
+# actually exists on disk.
+o=$(fire "json, no hw" "session-$SID8" 3 "")
+nudged "$o" && bad "nudged a session holding 3 live tasks with no highwatermark" || ok "3 json + no hw -> quiet (task_count is load-bearing here)"
+
+echo
 echo "== it must stay quiet after a /clear: it cannot see the store at all =="
 # The store keeps the pre-clear id; this hook gets the new one and can never map
 # between them. Its count is meaningless here, so it must not speak.

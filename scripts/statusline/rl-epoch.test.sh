@@ -57,5 +57,39 @@ else
 fi
 
 echo
+echo "== the merge itself, not just the function =="
+# Everything above calls _rl_to_epoch directly, so it stays green even on a
+# statusline whose merge never calls it (skeptical review, 2026-07-17). This drives
+# the real script: stdin carries the SENTINEL, the cache carries a REAL timestamp.
+# Pre-fix, the sentinel parsed to year 2286, won "later resets_at is fresher", and
+# the stale stdin value pinned itself. The cached reading must win.
+T=$(mktemp -d); mkdir -p "$T/.claude/widgets"
+REAL=$((NOW + 3600))
+printf '{"5h":{"pct":11},"week":{"pct":22},"resets_at":"%s","resets_at_weekly":"%s"}' "$REAL" "$REAL" \
+  > "$T/.claude/widgets/.limits.json"
+payload=$(jq -nc --arg cwd "$T" '{
+  session_id:"aaaabbbb-1111-2222-3333-444455556666",
+  model:{display_name:"Test"}, workspace:{current_dir:$cwd}, transcript_path:"/dev/null",
+  rate_limits:{ five_hour:{used_percentage:99, resets_at:"9999999999"},
+                seven_day:{used_percentage:88, resets_at:"9999999999"} }}')
+printf '%s' "$payload" > "$T/payload.json"
+out=$(PJ="$T/payload.json" SL="$SL" HOME="$T" perl -e 'my $p=fork; if($p==0){setpgrp(0,0); open(STDIN,"<",$ENV{PJ}); exec("bash",$ENV{SL}) or exit 127}
+               local $SIG{ALRM}=sub{kill "KILL",-$p; exit 9}; alarm 25; waitpid($p,0); exit($?>>8)' 2>/dev/null)
+clean=$(printf '%s' "$out" | sed 's/\x1b\[[0-9;]*m//g')
+if printf '%s' "$clean" | rg -q '7d:22%'; then
+  ok "merge took the cached 22% over the sentinel-stamped 88%"
+elif printf '%s' "$clean" | rg -q '7d:88%'; then
+  bad "merge kept the stale 88% — the sentinel still wins"
+else
+  bad "could not read a 7d pct from the render (got: $(printf '%s' "$clean" | tr '\n' ' ' | cut -c1-90))"
+fi
+if printf '%s' "$clean" | rg -q '[0-9]{5,}h'; then
+  bad "an absurd countdown rendered — the sentinel reached the display"
+else
+  ok "no year-2286 countdown in the render"
+fi
+rm -rf "$T"
+
+echo
 printf 'passed %d, failed %d\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

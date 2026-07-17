@@ -109,5 +109,42 @@ fi
 rm -rf "$T"
 
 echo
+echo "== with no session id at all, every reader does nothing =="
+# The old chain ended in `date +%Y-%m-%d`. That is not a fallback, it is the bug:
+# a key every session running that day shares. All three readers now exit instead.
+# Nothing here asserts the date key "works" — the point is that it is gone.
+T=$(mktemp -d); mkdir -p "$T/.claude/atone" "$T/.claude/.session-atone-slugs"
+noenv() { env -u CLAUDE_CODE_SESSION_ID -u CLAUDE_SESSION_ID HOME="$T" "$@"; }
+
+printf 'you did this wrong, revert that' | noenv bash "$GCC/hinters/30-atone-nudge.sh" >/dev/null 2>&1
+if [ -z "$(ls -A "$T/.claude/atone/.session-state" 2>/dev/null)" ]; then
+  ok "30-atone-nudge writes no marker without an id"
+else
+  bad "30-atone-nudge still wrote: $(ls "$T/.claude/atone/.session-state" | tr '\n' ' ')"
+fi
+
+printf 'hello' | noenv bash "$GCC/hinters/10-atone-circuit-breaker.sh" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "10-atone-circuit-breaker exits clean without an id" || bad "breaker errored without an id"
+
+# #8: named in 3432587 as one of the three fixed readers, never exercised until now.
+FI="$GCC/scripts/hooks/atone-fired-and-ignored-check.sh"
+printf '{}' | noenv bash "$FI" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "atone-fired-and-ignored-check exits clean with no id in stdin or env" || bad "fired-and-ignored errored with no id"
+
+# and that it reads the key atone.sh WRITES, not a date
+printf '{"slug":"x","ts":"2026-07-17T00:00:00Z","severity":"S3","stakes":"a","event_id":"e1"}\n' \
+  > "$T/.claude/.session-atone-slugs/$SID.json"
+KEY=$(printf '{"session_id":"%s"}' "$SID" | env HOME="$T" bash -x "$FI" 2>&1 \
+      | rg -o "\.session-atone-slugs/[^\"']*\.json" | head -1)
+if printf '%s' "$KEY" | rg -q "$SID"; then
+  ok "atone-fired-and-ignored-check resolves the counter to <session-id>.json"
+elif printf '%s' "$KEY" | rg -q "$TODAY"; then
+  bad "atone-fired-and-ignored-check reads <date>.json — the counter is never written there"
+else
+  bad "could not observe its counter path (got '$KEY')"
+fi
+rm -rf "$T"
+
+echo
 printf 'passed %d, failed %d\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

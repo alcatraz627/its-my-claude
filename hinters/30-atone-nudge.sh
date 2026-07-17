@@ -35,8 +35,13 @@ PROMPT=$(cat)
 # a hinter is fed the prompt text, not the hook's JSON. Keep this derivation in
 # step with atone-stop-check.sh, atone-stop-gate.sh and atone.sh:_add_exit_trap;
 # sanitized because a polluted env id once named a marker after an error message.
+# No id, no marker. The old fallback here keyed on the date, which every session
+# running that day then shared — that IS the 2026-05-24 bug, not a safety net for
+# it. Degrade to doing nothing: a nudge this session misses costs one advisory,
+# while a marker keyed on today's date leaks one session's correction into another
+# session's escalation. Silence is the safe direction.
 _sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
-[ -n "$_sid" ] || _sid="$(date +%Y-%m-%d)"
+[ -n "$_sid" ] || exit 0
 SESSION_KEY=$(printf '%s' "$_sid" | tr -c 'A-Za-z0-9._-' '-' | cut -c1-64)
 STATE_DIR="$HOME/.claude/atone/.session-state"
 MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
