@@ -181,7 +181,9 @@ The cluster letter lets recurrence be measured at the **family** level (several 
 
 If the slug is already in `~/.claude/atone/cluster-map.tsv`, use that letter. If it's a new slug that fits a family, add it to the map too (one line) so the consolidation overlay and write-time assignment stay in sync. Leave `--cluster` empty only when the mistake genuinely fits no family.
 
-For S2 / S1:
+For S1 only (S2 now goes through the case-file path — the CLI refuses a
+jurorless S2, widened 2026-07-17 because the flag path let agents through
+scot-free; an S2 add looks exactly like the S3 form above minus the RCA):
 
 ```bash
 bash ~/.claude/scripts/atone.sh add \
@@ -192,7 +194,7 @@ bash ~/.claude/scripts/atone.sh add \
   --fix "<...>" \
   --what-not "<...>" \
   --precheck "<...>" \
-  --severity S2 \
+  --severity S1 \
   --tags "<space-separated>" \
   --cluster "<A|B|C|D|E — see cluster-map.tsv; empty only if no family fits>" \
   --files "<file1:line file2:line>" \

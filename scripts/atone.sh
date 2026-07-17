@@ -238,8 +238,8 @@ cmd_add() {
   # Require an explicit reason: every bypass is then recorded (juror_bypassed:true
   # + the reason in suspect_fields) and countable via events.jsonl. Next lever if
   # this is abused: a human-only token, per the graduated-approval model.
-  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" = "1" ] && [ -z "${ATONE_NO_JUROR_REASON:-}" ]; then
-    _die "ATONE_NO_JUROR=1 on an S3 requires ATONE_NO_JUROR_REASON=\"why the juror can't run\". The juror is reliable now — silent self-bypass is not allowed. Legit reasons: migration/test isolation, or claude -p genuinely down."
+  if { [ "$severity" = "S3" ] || [ "$severity" = "S2" ]; } && [ "${ATONE_NO_JUROR:-0}" = "1" ] && [ -z "${ATONE_NO_JUROR_REASON:-}" ]; then
+    _die "ATONE_NO_JUROR=1 on an S2/S3 requires ATONE_NO_JUROR_REASON=\"why the juror can't run\". The juror is reliable now — silent self-bypass is not allowed. Legit reasons: migration/test isolation, or claude -p genuinely down."
   fi
 
   # Fuzzy-slug check: warn if a near-duplicate slug already exists.
@@ -373,7 +373,7 @@ PY
   # the agent makes ONE call (`atone add --case-file …`) instead of dispatching a
   # sub-agent, relaying its verdict, and re-typing ~10 fields — and the verdict
   # survives on disk, so a lost context never forces a juror re-run.
-  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" != "1" ] && [ -n "$case_file" ]; then
+  if { [ "$severity" = "S3" ] || [ "$severity" = "S2" ]; } && [ "${ATONE_NO_JUROR:-0}" != "1" ] && [ -n "$case_file" ]; then
     [ -f "$case_file" ] || _die "add: --case-file not found: $case_file"
     local dispatch verdict_json dverdict dconf dreason dslips dconstraints dshould dscope djid
     # A5: pre-generate the judgment id so the EVENT row can reference it and be
@@ -464,7 +464,7 @@ EOF
   # the agent hand-recorded). The owned --case-file path already set
   # matched_judgment_id/matched_verdict from the dispatch and defers recording to
   # after the event, so it skips this lookup (atone_owned guard).
-  if [ "$severity" = "S3" ] && [ "${ATONE_NO_JUROR:-0}" != "1" ] && [ "$juror_unavailable" != "1" ] && [ "$atone_owned" != "1" ]; then
+  if { [ "$severity" = "S3" ] || [ "$severity" = "S2" ]; } && [ "${ATONE_NO_JUROR:-0}" != "1" ] && [ "$juror_unavailable" != "1" ] && [ "$atone_owned" != "1" ]; then
     local cutoff
     cutoff="$(date -u -v-15M '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -d '15 minutes ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo '')"
     # STRICT slug match only — the old OR-clause `.linked_atone_event_id != null`
@@ -481,12 +481,14 @@ EOF
       cat >&2 <<EOF
 ${C_RED:-}atone add: REFUSED${C_RESET:-}
 
-This is an S3 event but no recent juror judgment was found whose
+This is an $severity event but no recent juror judgment was found whose
 related_atone_slugs contains "$slug" (checked last 15 min of
 ~/.claude/atone/judgments.jsonl).
 
-S3 events MUST have a linked juror verdict — anti-sycophancy gate. The juror
-must be an INDEPENDENT second opinion, not composed by the atoning agent.
+S2 and S3 events MUST have a linked juror verdict — anti-sycophancy gate
+(widened from S3-only 2026-07-17: jurorless S2 flag-path writes were the
+scot-free hole). The juror must be an INDEPENDENT second opinion, not
+composed by the atoning agent.
 
 Options:
 
