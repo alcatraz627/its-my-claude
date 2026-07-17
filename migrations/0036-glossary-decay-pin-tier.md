@@ -4,8 +4,11 @@
 
 The injected steering vocabulary gains a usage-measurement and decay loop
 (task #24 of the vocab-sweep arc). Three coupled pieces: `hinters/01-glossary.sh`
-now appends one line per injected term to `style/glossary-hit-log.tsv`
-(`ts<TAB>term<TAB>session`, append-only, failure never breaks hinting);
+now appends one line per MATCHED term to `style/glossary-hit-log.tsv`
+(`ts<TAB>term<TAB>session`, append-only, failure never breaks hinting) — the
+ledger deliberately records a superset of the ≤2 displayed hints, because
+usage evidence gated by display slots would show cluster siblings and 3rd+
+matches as dormant while in active use (gate 24 finding 2);
 `style/glossary-hints.tsv` gains an optional 4th column `pin` (human-set only)
 exempting a term from dormancy; `scripts/style/glossary-decay.sh` reports
 active/dormant/pinned splits over a trailing window (28d default) and is wired
@@ -26,6 +29,15 @@ makes recency a continuously-collected signal instead of a one-off mining job.
 Backward-compatible: the hinter's awk reads columns 1–2 only; absent col 4 = auto
 (decayable). New ledger file `style/glossary-hit-log.tsv` (data, not git-tracked
 by the allowlist; travels by rsync like the other ledgers).
+
+## Known limitations (accepted at migration time)
+
+Hinter runs without `CLAUDE_CODE_SESSION_ID` log an empty session field, so
+the distinct-session count merges them into one bucket. The ledger append has
+no lock (safe on local APFS, not on a network filesystem). Terms must not
+contain commas (the hinter's internal join). Env overrides for testing:
+`GLOSSARY_HINTS` + `GLOSSARY_HITLOG`, honored by both the hinter and the
+decay script.
 
 ## Rollback
 
