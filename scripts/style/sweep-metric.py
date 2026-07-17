@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
-"""P2 of the vocab sweep: score candidate steering terms and cut to the top N.
+"""P2 of the vocab sweep: score candidate terms, gate on calibration, cut to top N.
 
-Reads the P1 corpus, scores every unigram/bigram/trigram by
-spread x context-weight x rarity x novelty, and writes the top candidates with
-their occurrence pointers. Runs the calibration gate first: with novelty
-disabled, the known-baked positives must land in the top decile and the named
-common-word negatives must be rejected, or the run must stop here (a metric
-that cannot re-find hand-found words has no business proposing new ones).
-
+Algorithm + gate contract: assets/reports/20260716-vocab-sweep/PLAN.md section P2.
 Usage: .venv-sweep/bin/python sweep-metric.py <run-dir> [--top 300]
 """
 import json, math, os, re, sys, glob
@@ -72,9 +66,7 @@ for r in rows:
     # vocabulary lives; long spec messages are where domain nouns live
     fb = 1 if (r.get('lookback') and len(r['text']) < 300) else 0
     w += 0.75 * fb
-    # sentence-level steering signal: a term inside an imperative or
-    # evaluative SENTENCE is steering-shaped no matter how long the message
-    # is (the user writes long feedback essays; message length lies)
+    # score by the steering sentence, not the message: length lies (long feedback essays)
     steer_toks = set()
     sents = SENT_SPLIT.split(text)
     for sent in sents:
