@@ -77,6 +77,15 @@ escalated haiku→sonnet without ever trying the local lane). Judge yield by
 the decay ledger's hit counts over the following weeks, not by row count on
 bake day.
 
+Local-lane status (benchmarked 2026-07-17 against 200 stratified
+ground-truth rows): the SMALL warm tier is REJECTED for unsupervised P3 —
+κ=0.35, domain-term catch-all bias, drops ~68% of true steering signal.
+Untried and worth it next: the big/code tiers (still $0, slower). Lane
+qualification MUST use a stratified sample against prior-run ground truth —
+the run's own planted controls passed 3/3 on this same biased model;
+controls are clean examples and cannot catch systemic bias
+(`assets/reports/20260717-residue-batch-a/a1-local-lane-benchmark.md`).
+
 ## The gates (non-skippable — the ladder is only as true as its gates)
 
 - **P2 calibration:** the metric must re-find the already-known positives
