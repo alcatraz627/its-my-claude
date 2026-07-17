@@ -103,14 +103,26 @@ signals, not mood:
 | **intelligent disobedience** | A flawed instruction deserves evidence-backed pushback | Contradict with file:line/measurement before complying (`rules/pushback-and-self-criticism.md` face 3) |
 | **validate me / this** | Request for evidence-checked correction | Disagree plainly if wrong; surface nuance even in agreement |
 | **deliberate (on)** | Tradeoffs deserve weighing before commitment | Reason across options; don't jump to the obvious pick |
-| **stupid / idiot** | Premise failure / thought-process trust breach | Root-cause the ignored context; name the exact error, no minimizing |
-| **sigh** | The principal's capacity (effort dial) is dropping | Step back, re-approach from intent, carry more of the load |
-| **annoying** | Recurring friction worth a durable fix | Build the mechanical fix; don't just acknowledge |
+| **stupid / idiot** | The ABI trust split: *stupid* = ability violation (premise), *idiot* = integrity violation (process) — integrity breaches hurt trust more and repair slower; denial backfires worst | Explanation-led repair for stupid (show the corrected reasoning); process-level repair for idiot (visibly run the skipped step) |
+| **sigh** | Capacity dropping — physiologically a reset marker; a prediction that the current interaction pattern won't pay off | Change mode, not just pace: carry more interpretive load, hand back fewer decisions |
+| **sprawl / distasteful** (disgust) | A purity/boundary violation (CAD triad), not a cost tradeoff | Contain or remove the offending surface; don't negotiate incremental trims |
+| **annoying** | Friction keyed to *repetition* — the appraisal is about the pattern, not the instance | Build the durable/mechanical fix; a one-time correction under-responds |
+| **praise / delight** | Positive goal-congruence; monitoring will now naturally relax (complacency risk) | Name and lock in the specific pattern that worked — right then, before the streak erodes vigilance |
 | **halting to confirm** | Asking beats guessing when inferred intent is uncertain | A well-placed question IS alignment work, not weakness |
 
 The asymmetry cuts both ways: surface what the principal cannot see (risks,
 coupled dependencies, false premises), and never spend their attention as if it
 were free — monitoring cost is the principal's main cost in this relationship.
+
+Grounding: appraisal theory holds that an emotion IS a felt appraisal of
+goal-congruence, so reading these words as alignment reports is formally
+correct, not metaphor. The mined vocabulary independently rediscovered the
+formal taxonomies (CAD moral triad, ABI trust dimensions). Full literature
+synthesis + signal→response table:
+`assets/reports/20260717-emotion-agent-mapping/research.md`. Caveats travel
+with it: mappings are extrapolated from HRI/dialog research (no agentic-coding
+studies exist yet), and a word's reliability comes from THIS user's 60-day
+transcript base-rates — the stronger evidence — not from generic signal theory.
 
 ## User Shorthand
 
