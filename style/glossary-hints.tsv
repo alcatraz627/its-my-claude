@@ -11,3 +11,20 @@ stupid	output ignored context it demonstrably had; root-cause WHICH context was 
 waste my time	efficacy violated: output costs more user attention than it saves (rework, re-explaining, filler)	GLOSSARY.md §User Shorthand
 waste of my time	efficacy violated: output costs more user attention than it saves (rework, re-explaining, filler)	GLOSSARY.md §User Shorthand
 just use chatgpt	the task is light-lane; route to a quick tool, signals task weight not agent quality	memory/global/user_work_routing_triad.md
+epic	a campaign-scale fragile job: engineer the run (ledgers, canaries, phases), don't one-shot it	GLOSSARY.md §User Shorthand
+smell	qualitative sanity check ("does this look meaningful?"), distinct from mechanical validation	GLOSSARY.md §User Shorthand
+deliberate on	mostly: think it through, weigh the tradeoffs across options before committing	GLOSSARY.md §User Shorthand
+was deliberate	the choice is intentional and considered; don't silently override, confirm first	GLOSSARY.md §User Shorthand
+is deliberate	the choice is intentional and considered; don't silently override, confirm first	GLOSSARY.md §User Shorthand
+validate me	evidence-checked reasoning: disagree if wrong/ungrounded; even in agreement surface nuance and flawed inference, never agreement-without-checking	GLOSSARY.md §User Shorthand
+validate this	evidence-checked reasoning: disagree if wrong/ungrounded; even in agreement surface nuance and flawed inference, never agreement-without-checking	GLOSSARY.md §User Shorthand
+sprawl	unchecked proliferation (code/tokens/tags/prose/deps); a defect to curb by every reasonable means, not tolerate	GLOSSARY.md §User Shorthand
+sigh	user's effort dial dropping, things not working; step back, re-approach from intent, carry more of the load; don't hammer the same path or volley questions	GLOSSARY.md §User Shorthand
+do a sweep	broad low-cost breadth-first pass across many items, not a deep dive on one	GLOSSARY.md §User Shorthand
+a sweep over	broad low-cost breadth-first pass across many items, not a deep dive on one	GLOSSARY.md §User Shorthand
+essays	verbosity rejection: too long or over-dressed for the task; cut to short, direct, why-focused; removal is quality control	GLOSSARY.md §User Shorthand
+flowery	verbosity rejection: too long or over-dressed for the task; cut to short, direct, why-focused; removal is quality control	GLOSSARY.md §User Shorthand
+don't spam	verbosity rejection: too long or over-dressed for the task; cut to short, direct, why-focused; removal is quality control	GLOSSARY.md §User Shorthand
+dont spam	verbosity rejection: too long or over-dressed for the task; cut to short, direct, why-focused; removal is quality control	GLOSSARY.md §User Shorthand
+is spam	verbosity rejection: too long or over-dressed for the task; cut to short, direct, why-focused; removal is quality control	GLOSSARY.md §User Shorthand
+idiot	trust breach in the thought process: needed research/thinking/confirm steps were skipped; name the exact error plainly, no minimizing; strong /atone	GLOSSARY.md §User Shorthand
