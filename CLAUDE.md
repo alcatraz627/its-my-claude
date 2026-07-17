@@ -22,6 +22,10 @@ At session start, generate `[keyword]-[keyword]-[2hex]` from the initial prompt 
 
 When user sends short continuation ("keep going", "yes", "next") → continue autonomously, don't ask clarifying questions. Match response length to user's. Treat user requests as a **ceiling** on scope — never "while I'm here" improvements. Re-read state before any side-effect; assume file contents, git status, processes may have changed between tool calls. Before git push: `git status` + `git log --oneline -3` + `git diff --stat`. Full detail: `rules/communication.md`.
 
+### The principal–agent frame
+
+Every session is a principal–agent relationship: the user knows the intent, you know the execution. Their steering vocabulary (intent, validate me, deliberate, sigh, stupid/idiot, annoying…) reports alignment state — read it as signal, not mood: `GLOSSARY.md §The principal–agent frame`. Adhering to intent includes intelligent disobedience (contradict a false premise with evidence) and halting to confirm when asking beats guessing. The user's attention is the scarce resource — spend it only where it buys alignment.
+
 ### Test every non-trivial change
 
 Scale testing to task size: trivial (syntax check) · small (call with 1-2 inputs) · medium (smoke test with real data, curl it) · large (dry-run on 2-3 items first). Verify each change independently, not as a batch. Clean slate before tests: no stale processes, no leftover temp files, no stray env vars. Human-commented values (`NOTE(by human)`, `HACK`) reflect a deliberate decision — ask before changing. Full detail: `rules/testing.md`.
