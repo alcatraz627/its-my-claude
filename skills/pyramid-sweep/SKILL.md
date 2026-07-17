@@ -20,19 +20,38 @@ next tier spends. The instance that proved it: `style/sweep/20260716-gcc-drift-3
 
 | Phase | What | Lane | Tooling (all in `scripts/style/`) |
 |---|---|---|---|
-| P0 inventory | manifest the corpus (path, mtime, size, lines per transcript) | inline $0 | inline `fd`/`jq` → `manifest/transcripts.jsonl` |
+| P0 inventory | manifest the corpus (path, mtime, size, lines per transcript) | inline $0 | concrete block below → `manifest/transcripts.jsonl` |
 | P1 extract | pure human text only — strip tool results, hook injections, command scaffolding | inline $0 | `sweep-extract.py <run-dir>` |
 | P2 score+cut | lexical metric over all terms, calibration gate, cut to top N | `.venv-sweep` $0 | `.venv-sweep/bin/python sweep-metric.py <run-dir> [--top 300]` |
-| P3 classify | per-occurrence semantic labels, control rows planted per shard | sonnet fleet | `sweep-shard.py <run-dir> [--per-shard 180] [--max-occ 30]` → agents |
+| P3 classify | per-occurrence labels — exactly `steering` / `domain-term` / `quoted` / `incidental` (see traps) | sonnet fleet | `sweep-shard.py <run-dir> [--per-shard 180] [--max-occ 30]` → agents |
 | P4 gauge | mechanical bucketing + judgment only on real signal | inline + sonnet | `sweep-gauge-prep.py <run-dir>` → agents |
-| P5 synthesize | FULL-occurrence read per survivor → complete proposals + recency | sonnet-high | `.venv-sweep/bin/python sweep-synth-prep.py <run-dir>` → agents |
+| P5 synthesize | FULL-occurrence read per survivor → complete proposals + recency | sonnet-high | `sweep-synth-prep.py <run-dir>` → agents |
+
+P0 concretely (what the proven run did — transcript corpus rooted at
+`~/.claude/projects/`, project = the dir name, window ~60 days):
+
+```bash
+RUN=~/.claude/style/sweep/$(date +%Y%m%d)-<slug>; mkdir -p "$RUN/manifest"
+python3 - "$RUN" <<'EOF'
+import glob, json, os, sys, time
+run = sys.argv[1]; cutoff = time.time() - 60*86400
+with open(f"{run}/manifest/transcripts.jsonl", "w") as out:
+    for p in glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl")):
+        st = os.stat(p)
+        if st.st_mtime < cutoff: continue
+        rec = {"path": p, "project": os.path.basename(os.path.dirname(p)),
+               "mtime": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(st.st_mtime)),
+               "size": st.st_size, "lines": sum(1 for _ in open(p, errors="replace"))}
+        out.write(json.dumps(rec) + "\n")
+EOF
+```
 | P6 vet | one adversarial cross-item pass: merge/reject/injection-safety | opus | agent over `synthesis/` → `vetted/` |
 | P7 decide+bake | numbered approve/edit/reject surface, human picks, bake, commit | main agent | decision surface in chat; bake per targets below |
 
 Run dir: `~/.claude/style/sweep/<YYYYMMDD>-<session>/` with subdirs
 `manifest/ corpus/ candidates/ contexts[-input]/ gauge[d,-input]/
-synth-input/ synthesis/ vetted/` and `run-meta.json` (append an event per
-phase transition, gate result, halt — it is the run's black box).
+synth-input/ synthesis/ vetted/ final/` and `run-meta.json` (append an event
+per phase transition, gate result, halt — it is the run's black box).
 
 ## The gates (non-skippable — the ladder is only as true as its gates)
 
@@ -56,8 +75,10 @@ phase transition, gate result, halt — it is the run's black box).
 ## Fleet discipline (what made the run survivable)
 
 - **Done-ledgers on disk.** Every fleet phase writes `<shard>.done.json`
-  sentinels; a crash/outage re-runs ONLY the shards without sentinels. An API
-  outage killed 1 of 19 P3 shards; recovery cost zero re-spend on survivors.
+  sentinels; a crash/outage re-runs ONLY the shards without sentinels. The
+  vocab run's P3 was 20 shards (a solo canary, then a 19-shard fleet); an API
+  outage killed one fleet shard and recovery re-ran only it — zero re-spend on
+  survivors. (Disk shows 22 files: 20 shards + 2 boundary-re-audit patches.)
 - **Canary-first.** Run ONE shard at the cheapest plausible lane and grade its
   controls before fan-out. Escalate the lane on failed canaries, never on
   anticipation — haiku failed 3 canary attempts before the lane escalated to
@@ -81,8 +102,12 @@ For a non-vocabulary sweep, name the equivalent targets in the plan before P0.
 
 ## Known traps
 
-- `sweep-metric.py` and `sweep-synth-prep.py` need `scripts/style/.venv-sweep`
-  (wordfreq lives there); the other scripts run on system python3.
+- Only `sweep-metric.py` needs `scripts/style/.venv-sweep` (wordfreq lives
+  there); every other script runs on system python3.
+- The P3 label vocabulary is a hard contract: `sweep-gauge-prep.py` buckets on
+  exactly `steering` / `domain-term` / `quoted` / `incidental`, and an
+  off-vocabulary label FAILS SILENTLY (the term falls into low-signal reject
+  with no error). The P3 shard prompt must pin these four strings verbatim.
 - Frequency inflates on self-reference: a term the sweep itself uses (the vocab
   run's own word "sweep", 32 occ) must be weighted down at P6, and the
   deflation noted in the baked row so later decay passes read it honestly.

@@ -5,7 +5,7 @@ synthesis agent judges the full evidence and the proposal table can show
 staleness. Already-baked terms are dropped (they have glossary rows); the
 novel + borderline survivors get bundles.
 
-Usage: .venv-sweep/bin/python sweep-synth-prep.py <run-dir>
+Usage: sweep-synth-prep.py <run-dir>
 """
 import json, os, sys, glob, re
 from collections import defaultdict

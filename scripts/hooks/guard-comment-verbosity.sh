@@ -82,7 +82,7 @@ bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-comment-verbosity --
 
 msg="[comment-verbosity] the content just written to $(basename "$FP") carries an over-long comment block:
 $body
-rules/comments.md: a docstring over ~8 lines is an essay — move the depth to a doc and link it; strip WHAT-restates-the-code prose, keep the WHY. This is a nudge (never a block); trim it or leave it. Banners/plan-refs are a separate gate. (mute: touch ~/.claude/.no-comment-verbosity-gate)
+rules/comments.md: a docstring over ~8 lines is an essay — move the depth to a doc and link it; strip WHAT-restates-the-code prose, keep the non-obvious WHY or HOW. This is a nudge (never a block); trim it or leave it. Banners/plan-refs are a separate gate. (mute: touch ~/.claude/.no-comment-verbosity-gate)
 →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PostToolUse", additionalContext: $c}}' 2>/dev/null || true
