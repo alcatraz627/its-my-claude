@@ -33,7 +33,7 @@ Scripts that stay at the top level have high reference counts and/or are registe
 | Script | Purpose |
 |--------|---------|
 | `safe-delete.sh` | PreToolUse hook — blocks `rm`, suggests `trash` |
-| `block-nested-claude.sh` | PreToolUse hook — blocks `~/.claude/.claude/` paths |
+| `block-nested-claude.sh` | PreToolUse hook — blocks *writes* that would land in `~/.claude/.claude/` (reads are fine) |
 | `emit-event.sh` | Writes events to `events.jsonl` on hook firings |
 | `hint-injector.sh` | UserPromptSubmit — runs `~/.claude/hinters/*` chain |
 | `notify.sh` / `notification-context.sh` / `permission-notify.sh` | macOS notification helpers |

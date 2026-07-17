@@ -153,6 +153,6 @@ If no script fits and the work is multi-step, write a temp script under `/tmp/` 
 
 **Promotion rule:** if a temp script proves useful in 2+ sessions, ask the user whether to promote it to `~/.claude/scripts/` (global) or to the project's local `.claude/scripts/` (project-specific). Don't promote unilaterally.
 
-## Anti-pattern — `~/.claude/.claude/` paths
+## Anti-pattern — a relative `.claude/…` write while CWD is `~/.claude`
 
-When CWD is `~/.claude` itself, relative paths like `.claude/output/X` resolve to `~/.claude/.claude/X` — a broken double-nest. A hook (`scripts/block-nested-claude.sh`) blocks tool calls containing `/.claude/.claude/`. Full redirect table: [`conventions/asset-management.md`](../conventions/asset-management.md).
+When CWD is `~/.claude` itself, relative paths like `.claude/output/X` resolve to `~/.claude/.claude/X` — a broken double-nest. A hook (`scripts/block-nested-claude.sh`) blocks the **write**, judging it against CWD rather than by matching command text, so reading, grepping, or testing that path is not blocked. The directory itself is legitimate: it is this project's own project-scoped `.claude/`, holding `settings.local.json` and `worktrees/`. The accident is the relative resolution, never the path. Full redirect table: [`conventions/asset-management.md`](../conventions/asset-management.md).

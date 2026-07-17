@@ -167,7 +167,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | File | Hook type | Brief | Read when... |
 |------|-----------|-------|-------------|
 | `scripts/safe-delete.sh` | PreToolUse (Bash) | Blocks `rm`, suggests `trash` with yellow warning | Debugging blocked `rm` commands |
-| `scripts/block-nested-claude.sh` | PreToolUse (Write\|Edit\|MultiEdit\|NotebookEdit\|Bash) | Blocks any tool call whose path contains `/.claude/.claude/` — prevents the relative-path double-nest bug when CWD is `~/.claude` | Debugging a blocked nested-path rejection; writing skills that default to `.claude/output/...` |
+| `scripts/block-nested-claude.sh` | PreToolUse (Write\|Edit\|MultiEdit\|NotebookEdit\|Bash) | Blocks a **write** that would land in `~/.claude/.claude/` — a declared nested target, or a relative `.claude/…` write judged against CWD. Reads/greps/tests of that path are allowed; the directory itself is legitimate project-scoped config. Tests: `scripts/block-nested-claude.test.sh` | Debugging a blocked nested-path rejection; writing skills that default to `.claude/output/...` |
 | `scripts/emit-event.sh` | Multiple hooks (SessionStart, Stop, UserPromptSubmit, PostToolUse, PreCompact, PostCompact) | Appends one JSONL line per hook firing to `~/.claude/events.jsonl`; flock-guarded, async, fails soft | Debugging event log gaps; querying `events.jsonl` for cross-project activity |
 | `scripts/find-events-log.sh` | Utility | Resolves path to the global `events.jsonl` so skills don't hardcode | Writing a skill that reads the event log |
 | `assets/asset.sh` | CLI tool | Register, find, expire, cleanup managed assets | Creating or finding non-source files |

@@ -39,7 +39,7 @@ Always save to `~/.claude/assets/diagrams/` as the **canonical copy**. If the us
 
 Skill templates (e.g. `/create-report`) often use relative paths like `.claude/output/...` assuming CWD is a project root with a `.claude/` subdirectory. When CWD is `~/.claude` itself, these relative paths resolve to `~/.claude/.claude/...` — a broken double-nest.
 
-**Never create `~/.claude/.claude/` paths.** (Anti-pattern also cross-referenced in [`rules/shell.md`](../rules/shell.md) and [CLAUDE.md quick-rules](../CLAUDE.md) — watch for it whenever CWD is `~/.claude`.)
+**Never let a relative `.claude/…` output path resolve into `~/.claude/.claude/`.** The accident is the relative resolution, not the directory: `~/.claude/.claude/` is this project's own project-scoped `.claude/` and legitimately holds `settings.local.json` and `worktrees/`. Redirect your *outputs*; leave the directory alone. (Cross-referenced in [`rules/shell.md`](../rules/shell.md) and [CLAUDE.md quick-rules](../CLAUDE.md) — watch for it whenever CWD is `~/.claude`.)
 
 Correct targets when CWD is `~/.claude`:
 
@@ -50,7 +50,7 @@ Correct targets when CWD is `~/.claude`:
 | `.claude/skills/` | `~/.claude/skills/` |
 | any other `.claude/X` | `~/.claude/X` (drop the redundant prefix) |
 
-A PreToolUse hook (`~/.claude/scripts/block-nested-claude.sh`) blocks any tool call whose path or command contains `/.claude/.claude/`. If you see that rejection, use an absolute path under `~/.claude/assets/` or the appropriate root instead.
+A PreToolUse hook (`~/.claude/scripts/block-nested-claude.sh`) blocks the **write**, judging a Bash command against CWD rather than by matching command text. Reading, grepping, or testing that path is not blocked. If you see the rejection, use an absolute path under `~/.claude/assets/` or the appropriate root instead.
 
 ## Full reference
 

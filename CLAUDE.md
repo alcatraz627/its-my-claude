@@ -171,7 +171,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 
 ## MANDATORY quick-rules (never-miss bar)
 
-- **Never write to `~/.claude/.claude/` paths.** A hook blocks it. When CWD is `~/.claude`, redirect `.claude/output/X` → `~/.claude/assets/reports/X`, `.claude/skills/X` → `~/.claude/skills/X`, etc.
+- **Never let a relative `.claude/…` path resolve into `~/.claude/.claude/`.** When CWD is `~/.claude`, `.claude/output/X` does NOT mean `~/.claude/output/X` — it lands one level deeper, where nothing reads it. Redirect `.claude/output/X` → `~/.claude/assets/reports/X`, `.claude/skills/X` → `~/.claude/skills/X`, etc. A hook blocks the write; reading, grepping, or testing that path is fine. The directory itself is legitimate — it is this project's own project-scoped `.claude/` (it holds `settings.local.json` and `worktrees/`), so the accident is the relative resolution, never the path.
 - **Every HTML output needs a dark/light toggle button.** Dark is default. Use CSS vars (`--bg`, `--surface`, `--text`, `--dim`, `--border`), not hardcoded colors. See `conventions/html-output.md` for the pattern.
 - **Desktop automation: confirm before focus-steal, HARD STOP on any failure.** `mcp__inputs__confirm` before `click`/`type`/`key`/`space`/`focus` unless user pre-approved the sequence. On any failure — empty screenshot, command non-zero, window-bounds empty — stop and report, never hallucinate state. See `features/desktop-automation.md`.
 - **Never `rm`; `trash` only.** Hook blocks `rm` unconditionally.
