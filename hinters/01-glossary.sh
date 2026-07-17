@@ -21,7 +21,9 @@ HINTS="${GLOSSARY_HINTS:-$HOME/.claude/style/glossary-hints.tsv}"
 PROMPT=$(cat 2>/dev/null || echo "")
 [ -z "$PROMPT" ] && exit 0
 
-printf '%s' "$PROMPT" | awk -F'\t' -v hints="$HINTS" '
+# awk emits "terms<TAB>hint" on match; bash splits so the hint alone reaches
+# stdout and the terms feed the usage ledger (decay evidence, migration 0036).
+RESULT=$(printf '%s' "$PROMPT" | awk -F'\t' -v hints="$HINTS" '
 BEGIN {
     n = 0
     while ((getline line < hints) > 0) {
@@ -35,7 +37,7 @@ BEGIN {
 END {
     # trailing pad so a term at the very end of the prompt still has a boundary
     prompt = prompt " "
-    out = ""; count = 0
+    out = ""; hitterms = ""; count = 0
     for (i = 1; i <= n && count < 2; i++) {
         t = tolower(term[i])
         # word-boundary-ish match: term surrounded by non-alphanumerics
@@ -44,8 +46,24 @@ END {
             seen[meaning[i]] = 1
             entry = term[i] " = " meaning[i]
             out = (out == "" ? entry : out " · " entry)
+            hitterms = (hitterms == "" ? term[i] : hitterms "," term[i])
             count++
         }
     }
-    if (out != "") print "[glossary] " out
-}'
+    if (out != "") print hitterms "\t[glossary] " out
+}')
+
+[ -z "$RESULT" ] && exit 0
+HITTERMS=${RESULT%%$'\t'*}
+echo "${RESULT#*$'\t'}"
+
+# usage ledger: one line per injected term (ts, term, session) — read by
+# glossary-decay.sh for the dormancy review. Never let it break hinting.
+{
+    HITLOG="$HOME/.claude/style/glossary-hit-log.tsv"
+    TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    IFS=',' read -ra HT <<< "$HITTERMS"
+    for t in "${HT[@]}"; do
+        printf '%s\t%s\t%s\n' "$TS" "$t" "${CLAUDE_CODE_SESSION_ID:-}" >> "$HITLOG"
+    done
+} 2>/dev/null || true

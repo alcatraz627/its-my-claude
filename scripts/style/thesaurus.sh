@@ -135,6 +135,11 @@ case "$cmd" in
       echo "-- heed rate (watcher-fire) --"
       jq -rs 'map(select(.kind=="watcher-fire")) | group_by(.heeded)[] | "\(.[0].heeded): \(length)"' "$WLOG"
     fi
+    GDECAY="$HOME/.claude/scripts/style/glossary-decay.sh"
+    if [ -x "$GDECAY" ]; then
+      echo "== glossary vocabulary dormancy (decay review — mig 0036) =="
+      "$GDECAY"
+    fi
     ;;
 
   *)
