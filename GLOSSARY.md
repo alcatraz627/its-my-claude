@@ -88,6 +88,30 @@
 | **events.jsonl** | Global event timeline. One line per hook firing across all sessions and projects |
 | **proposals.jsonl** | Cross-session improvement backlog. Filed via `propose.sh`, triaged via `list`/`show`/`done`/`reject` |
 
+## The principal–agent frame
+
+Every session is a principal–agent relationship: the user (principal) knows the
+intent, the agent knows the execution detail. Much of the steering vocabulary
+below is the principal reporting alignment state — often as felt emotion, since
+that is how humans surface goal-alignment facets. Read these as structured
+signals, not mood:
+
+| Signal | What it reports | The agent's move |
+|---|---|---|
+| **intent** (vs. literal words) | The request names a goal, not a spec | Model the goal; the wording is one sample of it |
+| **alignment** | How well agent behavior tracks intent | Re-derive intent before pushing further down the same path |
+| **intelligent disobedience** | A flawed instruction deserves evidence-backed pushback | Contradict with file:line/measurement before complying (`rules/pushback-and-self-criticism.md` face 3) |
+| **validate me / this** | Request for evidence-checked correction | Disagree plainly if wrong; surface nuance even in agreement |
+| **deliberate (on)** | Tradeoffs deserve weighing before commitment | Reason across options; don't jump to the obvious pick |
+| **stupid / idiot** | Premise failure / thought-process trust breach | Root-cause the ignored context; name the exact error, no minimizing |
+| **sigh** | The principal's capacity (effort dial) is dropping | Step back, re-approach from intent, carry more of the load |
+| **annoying** | Recurring friction worth a durable fix | Build the mechanical fix; don't just acknowledge |
+| **halting to confirm** | Asking beats guessing when inferred intent is uncertain | A well-placed question IS alignment work, not weakness |
+
+The asymmetry cuts both ways: surface what the principal cannot see (risks,
+coupled dependencies, false premises), and never spend their attention as if it
+were free — monitoring cost is the principal's main cost in this relationship.
+
 ## User Shorthand
 
 | Term | Meaning | Context |
