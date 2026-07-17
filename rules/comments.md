@@ -75,9 +75,15 @@ prose at all. Every comment-style decision follows from this.
 4. **Docstrings >8 lines are essays** — break out to a doc and link.
    Per-field comments stay one line each.
 
-5. **Inline comments explain WHY, not WHAT.** Self-documenting code
-   makes most WHAT-comments redundant. Use inline comments for
-   non-obvious constraints, workarounds, deliberate surprises.
+5. **Inline comments never restate WHAT; the payload is the non-obvious
+   WHY or HOW.** Self-documenting code makes WHAT-comments redundant. WHY
+   (the constraint, the workaround's reason, the deliberate surprise) is
+   the usual payload, and a non-obvious HOW earns a comment too — the
+   mechanism a reader could not infer from the code (the trick, the
+   ordering dependency, the protocol). The test is never "WHY versus HOW"
+   but "could the next reader derive this from the code alone?"
+   (Ruling 2026-07-17 reconciling "WHY not WHAT" with the user's "not
+   WHAT but HOW"; verdict ledger: thes-20260716-165411-99.)
 
 6. **Stale comments are worse than missing ones.** After modifying
    code, scan nearby comments and delete or update — TODOs that
