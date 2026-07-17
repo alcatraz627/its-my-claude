@@ -46,15 +46,25 @@ printf '%s' "$TURN_NUM" > "$COUNTER_FILE" 2>/dev/null || true
 TMP_FILE=$(mktemp "$STATE_DIR/.tmp.XXXXXX" 2>/dev/null) || exit 0
 STATE_FILE="$STATE_DIR/$SAFE_SID.json"
 
+# A state file still present here means the PREVIOUS turn died mid-flight (a
+# clean turn is cleared by the Stop hook). Preserve it as prev_aborted inside
+# the new file — /wake's halted-on-purpose-vs-cut-off triage reads it, and
+# overwriting would destroy the only evidence. del(.prev_aborted) keeps the
+# chain one level deep.
+PREV_ABORTED=$(jq -c 'del(.prev_aborted)' "$STATE_FILE" 2>/dev/null || echo "null")
+[ -z "$PREV_ABORTED" ] && PREV_ABORTED="null"
+
 jq -cn --arg ts "$TS" --arg sid "$SESSION_ID" --arg cwd "$CWD" \
        --arg prompt "$PROMPT" --argjson turn "$TURN_NUM" \
+       --argjson prev "$PREV_ABORTED" \
   '{
     ts: $ts,
     session_id: $sid,
     cwd: $cwd,
     prompt_preview: $prompt,
     turn: $turn,
-    status: "in_progress"
+    status: "in_progress",
+    prev_aborted: $prev
   }' > "$TMP_FILE" 2>/dev/null || { rm -f "$TMP_FILE"; exit 0; }
 
 mv -f "$TMP_FILE" "$STATE_FILE" 2>/dev/null || { rm -f "$TMP_FILE"; exit 0; }

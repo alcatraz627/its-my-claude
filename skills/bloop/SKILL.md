@@ -112,9 +112,15 @@ work, not bless it.
    mutation-test any guard it audits (break the code deliberately, confirm the guard goes
    red, revert, confirm a clean tree); require every finding grounded in a file:line or a
    repro it ran; and ask for a one-line verdict (PASS / PASS-WITH-NOTES / ISSUES-FOUND)
-   then ranked findings with severity. **End with the delivery clause: "send your full
-   findings as a message back to the parent as your FINAL act."** A validator that goes
-   idle without delivering stalls the loop (first live run needed a chase-up ping).
+   then ranked findings with severity. **End with the delivery clause — and keep the two
+   channels asymmetric: the FILE carries the findings; the return message carries ONLY
+   "one-line verdict + the file path."** A validator that goes idle without delivering
+   stalls the loop (first live run needed a chase-up ping), but a message restating the
+   findings creates a second, slower copy that lands stale — mailbox deliveries routinely
+   arrive 1-2 turns after the parent already read the report from disk and TaskStopped
+   the agent. Treat any delivery referencing an already-consumed artifact (or arriving
+   post-stop) as a receipt to acknowledge, never content to re-triage
+   (prop-20260717-104030-3e).
 4. **Persist the findings.** `rules/sub-agent-outputs.md` wants the agent to write its
    report to an absolute path — but a gcc guard currently BLOCKS sub-agents from writing
    report files, so instruct it to return findings inline and **the parent (you) writes

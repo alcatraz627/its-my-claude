@@ -91,6 +91,14 @@ What that claim covers, precisely, because the difference matters:
   mutation-pinned, but no wake has ever run step 1 for real. Treat it as
   unit-tested, not proven. (Caught by the validation gate, 2026-07-17 — the original
   wording claimed the whole payload was validated.)
+- **Step 2's mechanical halt-check (prev_aborted) is exercised, not live-fired.**
+  Added 2026-07-17 after a real complaint: wakes were re-animating sessions that
+  had HALTED ON PURPOSE, because the old triage asked the woken agent to guess
+  cut-off-vs-done from context. The discriminator is now evidence: the Stop hook
+  clears turn-state on every clean end, and `turn-start.sh` preserves an
+  uncleared (= aborted) turn as `prev_aborted` when the wake's own arrival
+  overwrites the file. Abort/clean-halt/chain-depth all exercised synthetically;
+  no live wake has branched on it yet.
 
 ```
 Wake check. Two steps, in this order. Do not skip step 1.
@@ -109,18 +117,27 @@ It prints one line and sets the exit code. Branch on the code:
           Not knowing is not permission to burn budget, but it is not a reason
           to stall either.
 
-STEP 2 — Were you cut off, or are you done?
+STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
 
-  CUT OFF — the previous turn died mid-task (API error, outage). Re-orient per
-    rules/api-error-recovery.md: restate the goal, verify what is actually done
-    (Task list, git status, files on disk), find the in-flight step, roll back
-    if it is half-done. Then continue from there.
+  Run: jq -r '.prev_aborted.prompt_preview // "CLEAN-HALT"' ~/.claude/.turn-state/<SESSION_ID>.json
 
-  DONE — the work is genuinely complete. Do NOT invent work to fill the wake.
-    Do NOT re-explain what was already done. Report in ONE line that the wake
-    fired and the halt-check held, then CronDelete this job. The user is away;
-    a wake that re-animates a finished session is worse than no wake at all.
+  CLEAN-HALT — the turn before this wake ended through the Stop hook: the
+    session finished, or DELIBERATELY halted (parked on a decision, ended its
+    loop, hit a gate). A halt is a decision, not an outage — do not re-animate
+    it, do not invent work, do not re-explain. Report in ONE line that the
+    halt-check held, then CronDelete this job. The user is away; a wake that
+    re-animates a finished or deliberately-parked session is worse than none.
+
+  anything else — that output is the prompt of a turn that DIED mid-flight
+    (only an abort leaves turn-state behind; turn-start preserves it as
+    prev_aborted when this wake's own turn overwrites the file). CUT OFF:
+    re-orient per rules/api-error-recovery.md — restate the goal, verify what
+    is actually done (Task list, git status, files on disk), find the
+    in-flight step, roll back if it is half-done. Then continue from there.
 ```
+
+When arming, substitute `<SESSION_ID>` in the payload with the actual
+`$CLAUDE_CODE_SESSION_ID` — cron payloads don't expand env vars.
 
 **Do not execute the payload now.** `/loop` tells you to run the parsed prompt
 immediately rather than wait for the first fire; here that is a trap — the payload
