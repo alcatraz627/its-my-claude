@@ -65,6 +65,18 @@ instruments. The skill is *proven* on one vocabulary run and *designed* to
 generalize — know which is which before spending millions of tokens on a
 second domain.
 
+## Cost calibration (the proven run's honest ledger)
+
+~7.8M tokens end-to-end, 85% of it in P3's per-occurrence classify, for a
+TAIL harvest: 7 rows, because the head of the vocabulary was already
+hand-baked for ~$0. The user's verdict on that ratio: enriching, but thin
+for the spend. Before a second run: tighten the P2 cut (500 candidates were
+~97% noise by P4), sample fewer occurrences per term, and canary the $0
+local `lm fleet` lane for P3 bulk before defaulting to sonnet (the run
+escalated haiku→sonnet without ever trying the local lane). Judge yield by
+the decay ledger's hit counts over the following weeks, not by row count on
+bake day.
+
 ## The gates (non-skippable — the ladder is only as true as its gates)
 
 - **P2 calibration:** the metric must re-find the already-known positives
