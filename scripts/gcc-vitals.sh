@@ -25,10 +25,14 @@ set -uo pipefail
 G="$HOME/.claude"
 ATONE="${GCC_VITALS_ATONE:-$G/atone/events.jsonl}"
 JSON=0; [ "${1:-}" = "--json" ] && JSON=1
-# Heed-trend (from hooks/warn-events.jsonl, WS1's sensor) is a documented LEARNING
-# vital, deliberately not computed yet: a trend needs weeks of accumulated heed
-# lines, and Phase 1's instrument only just started producing them. Add it here once
-# the data spans enough time to read a direction rather than a single noisy point.
+# HONEST SCOPE (final-review R5): this dashboard does NOT yet read the two efficacy
+# sensors built this arc — the nudge heed-rate (hooks/warn-events.jsonl, from commit
+# e6e75b2) and skill efficacy (skills/usage/events.jsonl, from skill-log.sh). Both are
+# real sensors and both are documented LEARNING vitals, but wiring them in is
+# deliberately deferred: a TREND needs weeks of accumulated lines, and both instruments
+# only just started producing data. So the sensor→dashboard chain is sensors-built +
+# dashboard-built + wiring-pending, not a live pipe. Add these two vitals here once the
+# streams span enough time to read a direction rather than one noisy point.
 
 # All the number-crunching + date math lives in Python (macOS bash 3.2 has no
 # ergonomic date arithmetic). One temp script, per shell-safety + the very
@@ -72,10 +76,13 @@ if len(month_keys) >= 2:
 
 # ---- Metabolic: backlog velocity + retirement-blind fraction ---------------
 def prop_count(status):
+    # Count only real proposal rows (their id starts "prop-"), never "lines minus a
+    # guessed header count" — propose.sh list has a 3-line header, and assuming 1
+    # over-counted every status by 2 (final-review R1).
     try:
         out = subprocess.run(["bash", f"{G}/scripts/propose.sh", "list", "--status", status],
                              capture_output=True, text=True, timeout=20).stdout
-        return max(0, len([l for l in out.splitlines() if l.strip()]) - 1)  # minus header
+        return sum(1 for l in out.splitlines() if l.lstrip().startswith("prop-"))
     except Exception: return None
 p_open, p_done, p_rej = prop_count("open"), prop_count("done"), prop_count("rejected")
 metabolized = (p_done or 0) + (p_rej or 0)
@@ -139,10 +146,15 @@ print("─"*66)
 
 print("\n▸ LEARNING — is the config getting smarter?")
 if len(last3) >= 2:
-    vals = [months[k] for k in last3]
-    a = arrow(vals[-1], vals[-2])
-    line("mistakes / month", a, "  ".join(f"{k.split('-')[1]}:{months[k]}" for k in last3),
-         "rising = new blind spots · falling = rules landing OR atone used less (a question, not a verdict)")
+    # The current calendar month is INCOMPLETE — comparing its partial count to a
+    # full prior month points the arrow the wrong way (final-review R7). Mark it
+    # *partial and base the arrow on the two most recent COMPLETE months.
+    this_month = datetime.now(timezone.utc).strftime("%Y-%m")
+    complete = [k for k in month_keys if k != this_month]
+    a = arrow(months[complete[-1]], months[complete[-2]]) if len(complete) >= 2 else "→"
+    disp = "  ".join(f"{k.split('-')[1]}:{months[k]}" + ("*partial" if k == this_month else "") for k in last3)
+    line("mistakes / month", a, disp,
+         "arrow = last two COMPLETE months · rising = new blind spots · falling = rules landing OR atone used less (a question, not a verdict)")
 if clusters_recent or clusters_prior:
     rising = [c for c in clusters_recent if clusters_recent[c] > clusters_prior.get(c,0)]
     falling = [c for c in clusters_prior if clusters_prior[c] > clusters_recent.get(c,0)]

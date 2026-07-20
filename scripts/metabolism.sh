@@ -68,8 +68,10 @@ cmd_retire() {
   # extra steps, which is the thing this ceremony exists to prevent.
   [ -n "$disposition" ] || { echo "metabolism retire: --disposition required (absorbed|superseded-by-hook|obsoleted-by-change|retired-no-value)" >&2; exit 2; }
   _valid_disposition "$disposition" || { echo "metabolism retire: invalid disposition '$disposition'" >&2; exit 2; }
-  [ -n "$reason" ]   || { echo "metabolism retire: --reason required (why, in plain words)" >&2; exit 2; }
-  [ -n "$evidence" ] || { echo "metabolism retire: --evidence required (the signal that justifies it)" >&2; exit 2; }
+  # Presence AND substance: a whitespace-only reason/evidence is the same evasion as
+  # an empty one (final-review R8). Strip and require real content.
+  case "$(printf '%s' "$reason" | tr -d '[:space:]')" in "") echo "metabolism retire: --reason required (why, in plain words)" >&2; exit 2;; esac
+  case "$(printf '%s' "$evidence" | tr -d '[:space:]')" in "") echo "metabolism retire: --evidence required (the signal that justifies it)" >&2; exit 2;; esac
 
   # The rule file should exist (you cannot retire what is not there) — warn, don't block.
   [ -f "$RULES_DIR/$slug.md" ] || echo "metabolism: warning — no rule file $slug.md at $RULES_DIR (recording anyway)" >&2
