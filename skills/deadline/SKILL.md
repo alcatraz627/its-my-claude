@@ -185,6 +185,27 @@ At T, at DONE, or on `/deadline off`: render the final state block, disarm
 - If measured user-turns are not falling across uses, the skill is failing
   its one job — flag for design revisit.
 
+Then emit the same numbers as a structured efficacy event, so the trend is
+queryable and not only prose (the retro above is the human read; this is the
+machine one):
+
+Substitute your real values (this is copy-safe as written — the pipes below are in
+comments, not the command):
+
+```bash
+bash ~/.claude/scripts/skill-log.sh record deadline \
+  --task "ship the Q3 billing migration" \
+  --outcome revised \
+  --corrections 2 \
+  --metrics '{"turns_planned":5,"turns_used":6,"hit":true,"drift":1.3}'
+```
+
+`--outcome` is one of `accepted` (hit T on the plan the user signed off), `revised`
+(hit it but with cuts they had to approve), or `discarded` (missed T). `--corrections`
+is the assumptions-vetoed count. `turns_used` is the real success metric —
+`bash ~/.claude/scripts/skill-log.sh summary --skill deadline` shows whether it is
+falling across runs.
+
 ## Acceptance bar (all must hold on a real run)
 
 - [ ] Away-time utilization ≈ 100% — never idle-blocked during an absence

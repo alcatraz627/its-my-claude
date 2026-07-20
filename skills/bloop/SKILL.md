@@ -175,6 +175,28 @@ Close the loop legibly.
    commit, follow `~/.claude/COMMIT.md` (lock → secret-scan → commit); flag that its
    `git add -A` sweeps concurrent churn, so scope or hand it to the user.
 4. Update the Task list to completed; write the post-run note (below).
+5. **Emit an efficacy event** — /bloop knows its own gate outcome and fix-round count,
+   which is exactly what makes it worth measuring. Record one event so the trend
+   (does the gate keep finding real defects? do runs get accepted?) surfaces over time:
+
+   Substitute your real values (copy-safe as written — one option per flag, quoted):
+
+   ```bash
+   bash ~/.claude/scripts/skill-log.sh record bloop \
+     --task "add efficacy sensor to two skills" \
+     --outcome accepted \
+     --loop converged \
+     --iterations 1 \
+     --corrections 0 \
+     --gate issues-found \
+     --note "gate found an empty-metrics crash and a dangling-flag bug"
+   ```
+
+   `--outcome` is `accepted`/`revised`/`discarded`; `--loop` is `converged`/`partial`;
+   `--gate` is the Phase-4 verdict `pass`/`pass-with-notes`/`issues-found`. Note that
+   `--gate issues-found` with `--outcome accepted` is the HEALTHY signal — the gate
+   earned its cost. `bash ~/.claude/scripts/skill-log.sh summary --skill bloop` reads
+   the trend.
 
 ## Notes
 
