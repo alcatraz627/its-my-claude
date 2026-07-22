@@ -35,7 +35,7 @@ tokens; spend more only when efficacy measurably demands it. Full spec + provena
 | **haiku** | ¢ | trivial sub-agent lookups | low |
 | **sonnet** | $ | DEFAULT sub-agent: research, inventory, mechanical multi-step | verify what matters |
 | **opus** | $$ | main daily driver; judgment/review sub-agent seats | high |
-| **fable/mythos** | $$$$ uncapped | main agent ONLY, for genuinely vague+complex tasks | NEVER a sub-agent (hard block; priced per-token outside the subscription) |
+| **fable/mythos** | $$$$ uncapped | main agent ONLY, for genuinely vague+complex tasks | sub-agent seats ALLOWED since 2026-07-23 (owner lift, sentinel-gated + telemetry-logged; still priced per-token outside the subscription — a deliberate Model-Plan choice, never a default) |
 
 **Effort axis:** sub-agent effort ≤ a high/xhigh main. Sonnet is cheap — be liberal
 (`high` when it helps; `low` for wide/numerous fan-outs). Opus stays at `medium` unless
@@ -44,9 +44,12 @@ Tool-call count is NOT effort — a low-effort agent may make many calls.
 
 ## The sub-agent ceiling (absorbed from rules/subagent-model-ceiling.md, 2026-07-09)
 
-Opus is the hard ceiling for sub-agents at ANY nesting depth; the flagship
-(fable/mythos-class) is for the supervising main loop only. Graduated 2026-07-07 from two
-same-day flagship-dispatch occurrences in the versable-builder planning session.
+Opus is the default ceiling for sub-agents at ANY nesting depth. Fable/mythos seats
+are permitted since 2026-07-23 (owner: "lift the fable hard-block altogether"; guard
+sentinel `~/.claude/.allow-fable-subagents`, trash it to re-arm) — deliberate,
+Model-Plan-declared choices with uncapped per-token cost, never defaults. The ceiling
+graduated 2026-07-07 from two same-day flagship-dispatch occurrences in the
+versable-builder planning session.
 
 1. **Every `Agent`/`workflow.agent()` dispatch carries an explicit `model:` pin.** An
    unpinned spawn can inherit the session model — the flagship.
@@ -103,14 +106,16 @@ never up to fable.
   which intent, which judge — stay autonomous).
 - Warn-path mutes: `touch ~/.claude/.model-tier-off` (machine-wide — ALL sessions
   until removed) · `MODEL_TIER_OFF=1` (this process only). The
-  fable-as-sub-agent block has **no self-mute** — only the human lifts it.
+  fable-as-sub-agent block is LIFTED (owner, 2026-07-23) while
+  `~/.claude/.allow-fable-subagents` exists; the human re-arms it by trashing
+  that file — an agent never touches the sentinel.
 - Everything degraded → main agent does it inline and records the miss.
 
 ## Diagnostic signal
 
 You're composing an `Agent`/`Workflow` dispatch without a `model:` pin, a plan with
-sub-agents and no Model Plan block, or you're about to hand fable a sub-agent seat or
-switch models on your own judgment. Stop — route it out loud.
+sub-agents and no Model Plan block, or you're seating fable as a sub-agent without the
+Model Plan naming it, or switching models on your own judgment. Stop — route it out loud.
 
 ## Related
 

@@ -86,7 +86,7 @@ When the user says "drop X" and other features they want to keep depend on X, **
 
 ### Model-tier routing — smallest adequate lane, chosen out loud
 
-Route work across the lanes (local `lm` suite ≈ $0 · `lm gemini` = abundant/huge-ctx · haiku → sonnet → opus; **fable = main-agent only, NEVER a sub-agent** — hard-blocked by `guard-model-tier.sh`, uncapped per-token pricing). Sub-agents: sonnet default (liberal effort, it's cheap), opus medium for judgment seats, effort ≤ a high-effort main. **Every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan** (stage → lane · model · effort · why). Never switch models without explicit user confirmation — deliberate and propose, don't silently swap. Escalate one step on evidence, never anticipation. Full rule: `rules/model-tier-routing.md` · mechanics: `features/model-tier-harness.md`.
+Route work across the lanes (local `lm` suite ≈ $0 · `lm gemini` = abundant/huge-ctx · haiku → sonnet → opus; **fable sub-agent seats allowed since 2026-07-23** — owner lifted the hard block (sentinel `~/.claude/.allow-fable-subagents`, trash to re-arm); uncapped per-token pricing, so declare every fable seat in the Model Plan). Sub-agents: sonnet default (liberal effort, it's cheap), opus medium for judgment seats, effort ≤ a high-effort main. **Every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan** (stage → lane · model · effort · why). Never switch models without explicit user confirmation — deliberate and propose, don't silently swap. Escalate one step on evidence, never anticipation. Full rule: `rules/model-tier-routing.md` · mechanics: `features/model-tier-harness.md`.
 
 ### Prefer structured plan+review over one-shotting
 

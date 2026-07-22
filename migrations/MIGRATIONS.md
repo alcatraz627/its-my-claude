@@ -75,6 +75,9 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0033 | style/ subsystem: thesaurus ledger, scope map, glossary activation | 🔄 | 2026-07-16 | 2026-07-16 | [0033-style-thesaurus-subsystem.md](0033-style-thesaurus-subsystem.md) |
 | 0034 | readers-advocate critic persona + report/review/comment consumers | 🔄 | 2026-07-16 | 2026-07-16 | [0034-readers-advocate-critic-gate.md](0034-readers-advocate-critic-gate.md) |
 | 0035 | async style watcher — Stop-hook stack, internal surfaces only | ✅ | 2026-07-16 | 2026-07-16 | [0035-style-watch-stack.md](0035-style-watch-stack.md) |
+| 0036 | glossary vocabulary decay — hit ledger, pin tier, dormancy review | ✅ | 2026-07-16 | 2026-07-16 | [0036-glossary-decay-pin-tier.md](0036-glossary-decay-pin-tier.md) |
+| 0037 | pr-review demoted from a global skill to a project skill | ✅ | 2026-07-23 | 2026-07-23 | [0037-pr-review-demoted-to-project-skill.md](0037-pr-review-demoted-to-project-skill.md) |
+| 0038 | fable-as-sub-agent hard block lifted (sentinel-gated) | ✅ | 2026-07-23 | 2026-07-23 | [0038-fable-subagent-hard-block-lifted.md](0038-fable-subagent-hard-block-lifted.md) |
 
 ---
 

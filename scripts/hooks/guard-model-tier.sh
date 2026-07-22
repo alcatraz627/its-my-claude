@@ -37,17 +37,14 @@ TLINE=$(echo "$INPUT" | jq -c '{ts: (now | todate), session_id: (.session_id // 
   prompt_head: ((.tool_input.prompt // .tool_input.description // "") | .[0:160])}' 2>/dev/null)
 [ -n "$TLINE" ] && ( flock -x 9 2>/dev/null || true; printf '%s\n' "$TLINE" >> "$DISPATCH_LOG" ) 9>>"$DISPATCH_LOG.lock" 2>/dev/null || true
 
-# 2 — the hard block. No mute file, no env override: only the human lifts this,
-# by changing the rule (same posture as guard-anthropic-credentials.sh).
+# 2 — the hard block. No agent self-mute, no env override: the human lifts it
+# by holding the consent sentinel below, and re-arms it by trashing the file.
+# LIFTED since 2026-07-23 (owner instruction: "lift the fable hard-block
+# altogether"). Telemetry above logs every dispatch either way, so flagship
+# sub-agent spend stays reviewable (tier-telemetry-review).
 if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
-  # TEMP (human-authorized 2026-07-10, promo window): bypass active until
-  # 2026-07-17 while the consent file exists. Self-expires by date even if the
-  # file is forgotten; delete the file to end early. Telemetry above still logs
-  # every dispatch, so promo-week spend stays reviewable.
-  if [ -f "$HOME/.claude/.fable-subagent-promo" ] && [ "$(date +%Y%m%d)" -le 20260717 ]; then
-    :
-  else
-    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED — '$MODEL' is priced per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped spend for no quality gain (rules/model-tier-routing.md § sub-agent ceiling; user decision 2026-07-07). Re-dispatch on sonnet (default) or opus (judgment seats). The flagship is for the supervising main loop only. This block has no self-mute."
+  if [ ! -f "$HOME/.claude/.allow-fable-subagents" ]; then
+    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED — '$MODEL' is priced per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped spend for no quality gain (rules/model-tier-routing.md § sub-agent ceiling; user decision 2026-07-07). Re-dispatch on sonnet (default) or opus (judgment seats). The flagship is for the supervising main loop only. The human lifts this by creating ~/.claude/.allow-fable-subagents; an agent never does."
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0

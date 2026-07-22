@@ -31,7 +31,9 @@ LLM calls. Three behaviors, in order:
 1. **Telemetry, always:** every dispatch appends
    `{ts, session_id, tool, model (null if unpinned), prompt_head}` to
    `~/.claude/logs/model-dispatch.jsonl`. This is the efficacy-review data feed.
-2. **Hard block, no self-mute:** `model` matching fable/mythos → `decision:block`.
+2. **Hard block (LIFTED 2026-07-23):** `model` matching fable/mythos → `decision:block`
+   unless the human-owned sentinel `~/.claude/.allow-fable-subagents` exists (it does,
+   per the owner's "lift the fable hard-block altogether"; trash it to re-arm).
    Rationale: that tier is priced per-token OUTSIDE the subscription cap; a sub-agent on
    it multiplies uncapped spend (user decision 2026-07-07 — when the flagship was
    cap-covered Opus, this didn't matter; the block keys on pricing, not flagship-ness).
