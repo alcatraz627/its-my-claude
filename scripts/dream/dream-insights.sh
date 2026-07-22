@@ -169,12 +169,18 @@ if dream_enabled:
             except Exception:
                 pass
         if ranked:
-            lines = [f"[{s:.2f}] {str(it.get('text','')).strip()}"
+            def _ltag(it):
+                sid8 = str(it.get('stable_id', ''))[:8]
+                return f"[L:{sid8}] " if sid8 else ""
+            lines = [f"[{s:.2f}] {_ltag(it)}{str(it.get('text','')).strip()}"
                      for (s, it) in scored[:5]]
             title = ("## Lessons re-ranked for this prompt (dream consolidation)"
                      if part_mode == 'ranked'
                      else "## Lessons ranked for this session (dream consolidation)")
-            parts.append(title + "\n" + "\n".join(lines))
+            cite = ("_When a lesson above changes what you do, cite its "
+                    "[L:xxxxxxxx] tag in your reply — cited lessons are "
+                    "reinforced; silent ones decay._")
+            parts.append(title + "\n" + "\n".join(lines) + "\n" + cite)
             # Entropy health signal (docs/25 item 15): log WHICH lessons were
             # injected so `i-dream reflect` can measure injected-set variety.
             # Test runs stay out of the health data.

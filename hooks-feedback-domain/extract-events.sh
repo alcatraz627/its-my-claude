@@ -87,5 +87,49 @@ with open(out, "w") as f:
         f.write(json.dumps(ev) + "\n")
         written += 1
 
-print(f"extract-events: {written} events -> {out} (vents={len(vents)}, telemetry={len(tel)})")
+# A2 auto-vents (felt-metabolism, 2026-07-22): the vent join above only
+# speaks when a human gripes. Telemetry itself is the continuous behavioral
+# signal — which guards fire, how often, and whether they were heeded — so
+# emit one aggregate "telemetry-pulse" event per hook per ISO week (last 12
+# weeks). Ids are deterministic (pulse-<hook>-<week>), preserving the
+# stable-cursor invariant across passes.
+pulse = {}
+for t in tel:
+    h = t.get("hook_id")
+    ts = parse_ts(t.get("ts", ""))
+    if not h or not ts or (now - ts).days > 84:
+        continue
+    iso = ts.isocalendar()
+    week = f"{iso[0]}-W{iso[1]:02d}"
+    k = (h, week)
+    rec = pulse.setdefault(k, {"fires": 0, "heeded_true": 0, "heeded_false": 0, "last_ts": ""})
+    rec["fires"] += 1
+    if str(t.get("heeded")) == "true":
+        rec["heeded_true"] += 1
+    elif str(t.get("heeded")) == "false":
+        rec["heeded_false"] += 1
+    tss = t.get("ts", "")
+    if tss > rec["last_ts"]:
+        rec["last_ts"] = tss
+
+pulses = 0
+with open(out, "a") as f:
+    for (h, week), rec in sorted(pulse.items()):
+        f.write(json.dumps({
+            "id": f"pulse-{h}-{week}",
+            "ts": rec["last_ts"],
+            "slug": h,
+            "kind": "telemetry-pulse",
+            "impact": "low",
+            "hook_id": h,
+            "note": (f"auto-pulse {week}: {rec['fires']} fires, "
+                     f"heeded {rec['heeded_true']}/{rec['heeded_true'] + rec['heeded_false']} of tracked"),
+            "command_or_context": "",
+            "heeded": None,
+            "fire_count_14d": fire_14d.get(h, 0),
+            "fires_week": rec["fires"],
+        }) + "\n")
+        pulses += 1
+
+print(f"extract-events: {written} vents + {pulses} pulses -> {out} (vents={len(vents)}, telemetry={len(tel)})")
 PY
