@@ -64,35 +64,34 @@ for t in tel:
     last_heeded[h] = t.get("heeded", "unknown")
 
 written = 0
-with open(out, "w") as f:
-    for v in vents:
-        h = v.get("hook_id")
-        kind = v.get("kind", "")
-        if not v.get("id") or not h:
-            continue
-        heeded_raw = last_heeded.get(h, "unknown")
-        heeded = {"true": True, "false": False}.get(heeded_raw, None)
-        ev = {
-            "id": v["id"],                       # STABLE cursor key = vent id
-            "ts": v.get("ts", ""),
-            "slug": h,                            # slug = hook_id (no domain prefix)
-            "kind": kind,
-            "impact": IMPACT.get(kind, "med"),
-            "hook_id": h,
-            "note": v.get("note", ""),
-            "command_or_context": v.get("command_or_context", ""),
-            "heeded": heeded,
-            "fire_count_14d": fire_14d.get(h, 0),
-        }
-        f.write(json.dumps(ev) + "\n")
-        written += 1
+vent_events = []
+for v in vents:
+    h = v.get("hook_id")
+    kind = v.get("kind", "")
+    if not v.get("id") or not h:
+        continue
+    heeded_raw = last_heeded.get(h, "unknown")
+    heeded = {"true": True, "false": False}.get(heeded_raw, None)
+    vent_events.append({
+        "id": v["id"],                       # STABLE cursor key = vent id
+        "ts": v.get("ts", ""),
+        "slug": h,                            # slug = hook_id (no domain prefix)
+        "kind": kind,
+        "impact": IMPACT.get(kind, "med"),
+        "hook_id": h,
+        "note": v.get("note", ""),
+        "command_or_context": v.get("command_or_context", ""),
+        "heeded": heeded,
+        "fire_count_14d": fire_14d.get(h, 0),
+    })
+    written += 1
 
 # A2 auto-vents (felt-metabolism, 2026-07-22): the vent join above only
 # speaks when a human gripes. Telemetry itself is the continuous behavioral
-# signal — which guards fire, how often, and whether they were heeded — so
-# emit one aggregate "telemetry-pulse" event per hook per ISO week (last 12
-# weeks). Ids are deterministic (pulse-<hook>-<week>), preserving the
-# stable-cursor invariant across passes.
+# signal, so emit one aggregate "telemetry-pulse" event per hook per ISO week
+# (last 12 weeks). Ids are deterministic (pulse-<hook>-<week>) and each
+# pulse's ts is its week's MONDAY 00:00Z — fixed, so a pulse can never
+# out-sort a real vent from its own week (see the cursor note below).
 pulse = {}
 for t in tel:
     h = t.get("hook_id")
@@ -101,35 +100,48 @@ for t in tel:
         continue
     iso = ts.isocalendar()
     week = f"{iso[0]}-W{iso[1]:02d}"
-    k = (h, week)
-    rec = pulse.setdefault(k, {"fires": 0, "heeded_true": 0, "heeded_false": 0, "last_ts": ""})
+    monday = (ts - datetime.timedelta(days=iso[2] - 1)).date().isoformat() + "T00:00:00Z"
+    rec = pulse.setdefault((h, week), {"fires": 0, "heeded_true": 0,
+                                       "heeded_false": 0, "monday": monday})
     rec["fires"] += 1
     if str(t.get("heeded")) == "true":
         rec["heeded_true"] += 1
     elif str(t.get("heeded")) == "false":
         rec["heeded_false"] += 1
-    tss = t.get("ts", "")
-    if tss > rec["last_ts"]:
-        rec["last_ts"] = tss
 
 pulses = 0
-with open(out, "a") as f:
-    for (h, week), rec in sorted(pulse.items()):
-        f.write(json.dumps({
-            "id": f"pulse-{h}-{week}",
-            "ts": rec["last_ts"],
-            "slug": h,
-            "kind": "telemetry-pulse",
-            "impact": "low",
-            "hook_id": h,
-            "note": (f"auto-pulse {week}: {rec['fires']} fires, "
-                     f"heeded {rec['heeded_true']}/{rec['heeded_true'] + rec['heeded_false']} of tracked"),
-            "command_or_context": "",
-            "heeded": None,
-            "fire_count_14d": fire_14d.get(h, 0),
-            "fires_week": rec["fires"],
-        }) + "\n")
-        pulses += 1
+pulse_events = []
+for (h, week), rec in sorted(pulse.items()):
+    pulse_events.append({
+        "id": f"pulse-{h}-{week}",
+        "ts": rec["monday"],
+        "slug": h,
+        "kind": "telemetry-pulse",
+        "impact": "low",
+        "hook_id": h,
+        "note": (f"auto-pulse {week}: {rec['fires']} fires, "
+                 f"heeded {rec['heeded_true']}/{rec['heeded_true'] + rec['heeded_false']} of tracked"),
+        "command_or_context": "",
+        "heeded": None,
+        "fire_count_14d": fire_14d.get(h, 0),
+        "fires_week": rec["fires"],
+    })
+    pulses += 1
+
+# The downstream delta cursor is POSITION-based (i-dream external_domain.rs
+# finds the cursor id in file order and takes everything after it, then
+# anchors on the stream's LAST id). Appending pulses after vents anchored the
+# cursor on a trailing pulse and shadowed every future vent (validation
+# finding 1, 2026-07-22). The stream is therefore written ts-sorted in one
+# pass, and pulse ts is a fixed past boundary (week Monday) — so the newest
+# element is always a real vent, or a pulse no same-week vent can sort
+# behind. Known bounded cost: a week-in-progress pulse that updates after
+# the cursor passes its position re-delivers only via the next week's pulse.
+all_events = vent_events + pulse_events
+all_events.sort(key=lambda e: e.get("ts") or "")
+with open(out, "w") as f:
+    for ev in all_events:
+        f.write(json.dumps(ev) + "\n")
 
 print(f"extract-events: {written} vents + {pulses} pulses -> {out} (vents={len(vents)}, telemetry={len(tel)})")
 PY
