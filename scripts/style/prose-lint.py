@@ -1,18 +1,7 @@
 #!/usr/bin/env python3
-"""Score prose for the account's language-quality defects: two-split structure,
-verdict-first reporting, overclaim futures, contrastive scaffolds, and the
-thesaurus word bans. Weighted violations per 100 words; lower is cleaner.
-
-Derived from the 2026-07 language-quality sweep (style/sweep/20260727-simple-lang/,
-user-ratified taxonomy). Not ste-lint: the lexicons are thesaurus-aligned, dashes
-count only in connective form, style-system meta-traffic is excluded, and the
-category set is the sweep's, not ASD-STE100's.
-
-Usage:
-  prose-lint.py FILE [FILE...]      one summary line per file
-  prose-lint.py --json FILE...      full per-file JSON (score, violations, spans)
-  cmd | prose-lint.py [-]           lint stdin
-Exit 0 always (a linter reports; gates decide elsewhere). Errors name the fix.
+"""Score prose for this account's language-quality defects (thesaurus-aligned
+lexicons; taxonomy + provenance: style/sweep/20260727-simple-lang/).
+CLI: FILE(s) | --json | stdin '-'; exits 0 always (a linter reports; gates decide).
 """
 import json, os, re, sys
 

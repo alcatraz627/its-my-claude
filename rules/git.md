@@ -75,6 +75,20 @@ on the changed .md files and fix what it flags in earnest prose
 
 Follow the repo's existing convention. Default: imperative present tense. Describe "why" more than "what" (the diff already shows what). Keep subject line under 72 chars.
 
+**No Claude signatures — any model, any repo.** Never append the harness's
+trailer lines to a commit message: no `Co-Authored-By: Claude …`, no
+`Claude-Session: …`, no "Generated with Claude Code" footer. This user ruling
+overrides the harness default that asks for them (graduated from memory
+`feedback_no-claude-commit-trailers`; mechanical strip-hook tracked as
+prop-20260722-123329-41 in the backlog).
+
+**Commit prose gets the comment hygiene bar.** Minimum words that still carry
+the why; no bullet-spam restating the diff, no plan-phase references, no
+decoration. One plain subject; a body only when the diff cannot explain
+itself. When a body is warranted, prose-lint applies
+(`conventions/language-quality.md`): facts before conclusions, no two-split
+chains, no verdict-first openers.
+
 ## Dangerous operations — CONFIRM EACH TIME
 
 These never inherit prior approval. Confirm for every invocation, naming the target branch/file:
