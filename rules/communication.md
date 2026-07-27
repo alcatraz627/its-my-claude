@@ -8,7 +8,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-07-10
+updated: 2026-07-28
 stale_after_days: 90
 ---
 
@@ -71,3 +71,7 @@ Terse protocol + autonomous execution are defaults, not absolutes. Pause when th
 - It's a cheap-to-revert local change (new branch, temp file, scoped edit)
 
 **Format:** one line stating the ambiguity, 2–3 numbered options, wait. Don't pad.
+
+## Arm the receiver before ending the turn
+
+When a turn sets up an async handoff (IPC listener, Monitor, scheduled wakeup, sub-agent completion notice), confirm the receiver is armed before stopping. A wake signal that fires to no listener forces a re-run and may require a full context restore. (Graduated from the arm-the-receiver affirm cluster, weekly review 2026-07-26.)

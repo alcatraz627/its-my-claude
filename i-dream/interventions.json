@@ -4,25 +4,29 @@
     "slug": "infra-before-grep",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Write"
     },
     "body": "If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-07-27T22:09:22.336973Z",
+    "promoted_by": "owner-flip"
   },
   {
     "id": "8923583f5c7a27d2",
     "slug": "declared-ready-without-runtime-exercise",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "git\\s+commit\\b"
     },
     "body": "Before this commit message claims fixed/covers/handles X: confirm the staged diff contains the file:line implementing X. If not, drop the claim.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-07-27T22:00:58.348252Z",
+    "promoted_by": "owner-flip"
   },
   {
     "id": "2c5dedd9d8a2b605",
@@ -55,12 +59,14 @@
     "slug": "file-referenced-without-full-path",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Write"
     },
     "body": "When you mention this file to the user, make the first mention an absolute path starting with / or ~, not a bare filename.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-07-27T22:09:22.344024Z",
+    "promoted_by": "owner-flip"
   },
   {
     "id": "44a5d9b7187585b2",
@@ -80,26 +86,30 @@
     "slug": "ascii-art-tables-instead-of-gum-tools",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Write",
       "input_pattern": "\\.md$"
     },
     "body": "Write source markdown, never renderer output. Scan the first ~20 lines: uniform 2-space indent or '…' inside table rows means rendered-output-saved-as-source — rewrite it.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-07-27T22:09:22.350713Z",
+    "promoted_by": "owner-flip"
   },
   {
     "id": "fbbe2e1ac4733ec2",
     "slug": "source-comment-hygiene",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs|swift)$"
     },
     "body": "For any comment over 3 lines: name the single load-bearing fact, write only that in 1-2 lines. Still longer? It's an essay — move it to a doc and link.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-07-27T22:09:22.357518Z",
+    "promoted_by": "owner-flip"
   },
   {
     "id": "7a32a10e40ad8079",

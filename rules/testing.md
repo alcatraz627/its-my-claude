@@ -7,7 +7,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-07-10
+updated: 2026-07-28
 stale_after_days: 90
 ---
 
@@ -44,6 +44,8 @@ Code with `NOTE(by human)`, `HACK`, `IMPORTANT`, or similar comments reflects a 
 
 For UI or frontend changes, start the dev server and use the feature in a browser. Test golden path AND edge cases. Type checking and test suites verify code correctness, not feature correctness — if you can't test the UI, say so explicitly rather than claim success. For a *verified* UI claim, **read the screenshot back and judge it visually** — drive headless Chrome (puppeteer / Chrome-for-Testing) and inspect the rendered image, not just the assertion count. A green test run with a zero exit code is not the same as having seen the pixels.
 
+**[design-mocks] Before implementing any user-facing UI feature** (labels, creation flows, module structure, form layouts), grep for design mocks or Figma specs for the surface. If they exist, consult them before writing a line of UI code. Shipped UI that ignores existing mocks is a known S3 recurrence.
+
 **Multi-state surfaces: one state is not verification.** If the surface has theme/appearance states (dark AND light), open/closed variants, or responsive breakpoints, exercise the changed surface in EACH state before claiming verified — or scope the claim to what you actually saw ("verified in dark only"). Dark-only sign-offs that shipped a broken light theme are a recurring S3 (`declared-ready-without-runtime-exercise`, 2026-07-02 and 2026-07-07). Cheap second reader: run `lm see` on the screenshot alongside your own judgment.
 
 ## Topic-tagged rules (from recurring mistake patterns)
@@ -64,3 +66,4 @@ Scanned from `~/.claude/mistake-patterns.md`. Each rule has happened enough time
 - `[test-as-spec]` — When a test simulates a process that will run for real elsewhere (a migration, a batch job, a protocol), make the simulator encode the REAL decision rules so the test doubles as the executable spec, and derive its magic numbers from the fixtures (`len([x for x in SEED if x.copies])`, not `== 6`). MANDATORY guardrail: the simulator's docstring must state what it deliberately does NOT model (delta passes, >5GB branches, real checksums) — a simulator that hides its own scope is worse than none, because "the test passed" gets misread as "the real job is proven."
 - `[negative-checker-blind-to-omission]` — A validator built only of prohibitions (`should_not_contain`, "must not", deny-lists) is vacuously true on empty, missing, or truncated output: it detects bad-presence, never good-absence. Any gate that must actually hold a line needs at least one positive assertion (a required field is present, a value is in range), not only "X must not appear." A config entry that only shapes and never gates is the same trap. This is about the check's *shape*; testing against unrepresentative data is a separate failure.
 - `[mutation-test-the-guard]` — A guard is not done until you have **watched it fail**. A green suite says nothing about a guard — only that it didn't fire. Break the exact thing it protects, confirm THAT test goes red, restore (copy-based — never `git checkout`/`stash`, which wipes uncommitted work), confirm green again. Mutation-test each guard **individually**: if reverting one fix alone stays green, that fix is unpinned. A mutation that stays green means the TEST is the bug, not the code. Five ways a guard passes while broken (four in one session, jegs-jul-14): the test calls the helper directly so the real call site is never exercised; two fixes cover one case so neither is individually pinned; the test row errors either way so it cannot tell fix from bug; a "drift guard" pins a constant against a literal in the SAME file, so it only agrees with itself instead of READING the other side; and a no-op mutation (a term that could never match) is read as a pass. A fixture can make the guarded behavior untestable BY CONSTRUCTION (an all-opaque alpha fixture makes compositing and alpha-drop byte-identical) — that is not bad luck, it is a blind fixture.
+- `[generated-artifact-scan]` — After generating a CSS file, codegen output, migration artifact, or any file other code references by content: read the generated output against the referencing code before calling done. A green build proves the generation ran, not that the output is correct.

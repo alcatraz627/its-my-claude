@@ -8,14 +8,15 @@
 <style>
   /* The fleet glance (M1): the morning read starts HERE, so rows are weighted
      attention-first — blocked and unread lead, motion follows, identity stays. */
-  :root{--bg:#0a0c0e;--surface:#12161b;--text:#d8dee6;--dim:#7c8590;--faint:#4d5560;--rule:#1f242b;--accent:#8fbf6a;--amber:#e0b04c;--mono:"SF Mono",ui-monospace,Menlo,monospace}
-  [data-theme="light"]{--bg:#f2f4f6;--surface:#fbfcfd;--text:#20262d;--dim:#5a636d;--faint:#98a1ab;--rule:#d5dae0;--accent:#4a7d2a;--amber:#a97c14}
+  :root{--bg:#0a0c0e;--surface:#12161b;--text:#d8dee6;--dim:#8f99a5;--faint:#828c97;--rule:#1f242b;--accent:#8fbf6a;--amber:#e0b04c;--mono:"SF Mono",ui-monospace,Menlo,monospace}
+  [data-theme="light"]{--bg:#f2f4f6;--surface:#fbfcfd;--text:#20262d;--dim:#5a636d;--faint:#616b76;--rule:#d5dae0;--accent:#4a7d2a;--amber:#8f6a10}
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--rule) transparent} body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 -apple-system,"SF Pro Text",system-ui,sans-serif}
   ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px} ::-webkit-scrollbar-track{background:transparent}
   header{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--rule)}
   h1{font:600 14px/1 var(--mono);margin:0;flex:1}
-  button{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;padding:4px 10px;cursor:pointer;font:inherit;font-size:11.5px}
-  main{max-width:760px;margin:18px auto;padding:0 16px;display:flex;flex-direction:column;gap:8px}
+  button{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;padding:3px 9px;cursor:pointer;font:inherit;font-size:11.5px}
+  main{max-width:980px;margin:18px auto;padding:0 16px;display:flex;flex-direction:column;gap:8px}
+  #huberr{border:1px solid color-mix(in srgb,var(--amber) 55%,transparent);border-radius:3px;padding:6px 10px;color:var(--amber);font-size:12px}
   a.board{display:block;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:3px;padding:10px 14px;text-decoration:none;color:var(--text)}
   a.board:hover{border-color:var(--accent)}
   a.board.attn{border-left-color:var(--amber)}
@@ -47,10 +48,20 @@ document.getElementById("theme").onclick = () =>
 
 const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
 
+// tail-keep truncation: the varying end of a path is the distinguishing part
+function tailTrim(el) {
+  el.title = el.title || el.textContent;
+  let guard = 200;
+  while (el.scrollWidth > el.clientWidth && el.textContent.length > 14 && guard--) {
+    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(8);
+  }
+}
+
 async function load() {
   const list = document.getElementById("list");
   try {
     const { boards } = await (await fetch("/api/boards")).json();
+    document.getElementById("huberr")?.remove(); // recovered: clear the failure note
     if (!boards.length) { list.innerHTML = `<div class="empty">no boards yet — run: kanban.sh init in a project</div>`; return; }
     // attention first: blocked or unread outranks quiet; freshest sync breaks ties
     const score = (b) => (b.counts.blocked > 0 ? 2 : 0) + ((b.unread || 0) + (b.reviewMe || 0) > 0 ? 1 : 0);
@@ -71,10 +82,24 @@ async function load() {
         <div class="root"></div>
         <div class="counts">active <b>${b.counts.active}</b> · open <b>${open}</b> · done ${b.counts.done}${b.counts.stale ? ` · stale ${b.counts.stale}` : ""} · synced ${b.syncedAt ? new Date(b.syncedAt).toLocaleString() : "never"}${staleMark}</div>`;
       a.querySelector(".name").textContent = b.name;
-      a.querySelector(".root").textContent = b.root;
+      const rootEl = a.querySelector(".root");
+      rootEl.title = b.root; rootEl.textContent = b.root;
       return a;
     }));
-  } catch (e) { list.innerHTML = `<div class="empty">hub failed to load: ${e.message}</div>`; }
+    list.querySelectorAll(".root").forEach(tailTrim);
+  } catch (e) {
+    // one failed poll must not delete the fleet view (C13): keep last known
+    // rows, surface the failure as a banner; a blank list only when we never
+    // had data at all
+    if (list.querySelector(".board")) {
+      if (!document.getElementById("huberr")) {
+        list.insertAdjacentHTML("afterbegin", `<div id="huberr"></div>`);
+      }
+      document.getElementById("huberr").textContent = `hub poll failed: ${e.message} — showing last known state`;
+    } else {
+      list.innerHTML = `<div class="empty">hub failed to load: ${e.message} — is the server up? kanban.sh check</div>`;
+    }
+  }
 }
 load();
 setInterval(load, 10000);

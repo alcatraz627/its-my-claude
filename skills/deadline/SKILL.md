@@ -111,6 +111,11 @@ future blocked ones. In order:
   cuts deeper than the pre-authorization (into CORE), compose the
   regret-ranked cut list for approval — and while it pends, keep executing
   the surviving CORE parts; a pending decision never idles the run.
+- **Verify-in-flight (undeclared-slip sweep):** before a ring closes, list
+  every active item from the current ring and require each to carry either a
+  build-artifact pointer or an explicit NOT-BUILT deferral note in the shed
+  log. Items with neither are flagged as undeclared slips — queued and
+  believed-built is the failure the ring/shed ledger cannot see on its own.
 - **Fan-out is in scope.** Independent parts (blocks-others: no) may run as
   parallel sub-agents under the standing model-tier and sprawl rules —
   deadline raises parallelism, never the tier ceiling or the gates.

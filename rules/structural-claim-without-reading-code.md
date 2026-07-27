@@ -12,7 +12,7 @@ related:
   - rules/exercise-based-verification.md
 tier: 1
 category: rules
-updated: 2026-07-12
+updated: 2026-07-28
 stale_after_days: 90
 ---
 
@@ -55,6 +55,13 @@ changed code and must run the changed path before claiming done. This clause
 binds when you assert the outcome of any process — yours, a cron's, a deploy
 pipeline's, another agent's — without holding the evidence. Same precheck, same
 gate: can I name what proves this right now?
+
+## Document provenance gets the same precheck
+
+When asserting a document is "the spec", "the contract", or "the source of
+truth": also check its provenance — is it human-authored, or Claude-generated
+documentation downstream of the application? A Claude-authored doc treated as a
+spec produces a circular review.
 
 ## What this rule does NOT mean
 

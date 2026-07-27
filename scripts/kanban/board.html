@@ -11,15 +11,15 @@
      every usability affordance serve the six stories + messy composites in
      assets/reports/20260727-kanban-ui-stories/STORIES.md. */
   :root{
-    --bg:#0a0c0e; --text:#d8dee6; --dim:#7c8590; --faint:#4d5560; --rule:#1f242b;
+    --bg:#0a0c0e; --text:#d8dee6; --dim:#8f99a5; --faint:#828c97; --rule:#1f242b;
     --surface:#0d0f12; --surface2:#12161b; --accent:#8fbf6a; --amber:#e0b04c; --stale:#6d7680;
     --seg-active:#8fbf6a; --seg-blocked:#e0b04c; --seg-inbox:#6d7680;
     --seg-backlog:#565e66; --seg-done:#3d5a4c; --seg-stale:#3a4149;
     --mono:"SF Mono",ui-monospace,Menlo,monospace;
   }
   [data-theme="light"]{
-    --bg:#f2f4f6; --text:#20262d; --dim:#5a636d; --faint:#98a1ab; --rule:#d5dae0;
-    --surface:#eaedf0; --surface2:#fbfcfd; --accent:#4a7d2a; --amber:#a97c14; --stale:#8b939c;
+    --bg:#f2f4f6; --text:#20262d; --dim:#5a636d; --faint:#616b76; --rule:#d5dae0;
+    --surface:#eaedf0; --surface2:#fbfcfd; --accent:#4a7d2a; --amber:#8f6a10; --stale:#8b939c;
     --seg-active:#4a7d2a; --seg-blocked:#a97c14; --seg-inbox:#7e8791;
     --seg-backlog:#9aa2ab; --seg-done:#7fa090; --seg-stale:#aab1b8;
   }
@@ -38,8 +38,17 @@
   #stalebar code{font-family:var(--mono);font-size:11px}
 
   .meter{display:flex;height:18px;margin:11px 18px 3px;border-radius:3px;overflow:hidden;border:1px solid var(--rule);flex:none}
-  .meter .seg{display:flex;align-items:center;gap:5px;padding:0 8px;min-width:0;cursor:pointer;font:650 10px/1 var(--mono);letter-spacing:.05em;color:var(--bg);overflow:hidden;white-space:nowrap}
+  /* tinted segs, live text color: labels stay readable in BOTH themes and the
+     theme toggle restyles them without a re-render (classes, never inline) */
+  .meter .seg{display:flex;align-items:center;gap:5px;padding:0 8px;min-width:0;cursor:pointer;font:650 10px/1 var(--mono);letter-spacing:.05em;color:var(--text);overflow:hidden;white-space:nowrap}
+  .seg-inbox{background:color-mix(in srgb,var(--seg-inbox) 30%,var(--bg))}
+  .seg-backlog{background:color-mix(in srgb,var(--seg-backlog) 30%,var(--bg))}
+  .seg-active{background:color-mix(in srgb,var(--seg-active) 55%,var(--bg))}
+  .seg-blocked{background:color-mix(in srgb,var(--seg-blocked) 55%,var(--bg))}
+  .seg-done{background:color-mix(in srgb,var(--seg-done) 30%,var(--bg))}
+  .seg-stale{background:color-mix(in srgb,var(--seg-stale) 30%,var(--bg))}
   .meter .seg i{font-style:normal;opacity:.85;font-weight:500}
+  .scrollhint{color:var(--faint)}
   .legend{color:var(--dim);font-size:11px;margin:0 18px 8px;flex:none}
   .legend b{color:var(--text)}
 
@@ -50,17 +59,25 @@
   #delta b{color:var(--text);font-weight:600}
   #delta .grp{white-space:nowrap}
   #delta .grp.blk{color:var(--amber)}
-  #delta button{margin-left:auto;padding:1px 7px;font-size:10.5px;color:var(--dim)}
+  #delta button{margin-left:auto;color:var(--dim)}
 
   main{flex:1;display:flex;gap:10px;padding:0 18px 14px;overflow-x:auto;align-items:flex-start}
-  .lane{background:var(--surface);border:1px solid var(--rule);border-radius:4px;min-width:246px;width:246px;max-height:100%;display:flex;flex-direction:column}
+  #state{display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--dim);padding:60px 0;text-align:center}
+  #state.on{display:flex}
+  #state .big{font-size:15px;color:var(--text)}
+  #state code{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  #state.err .big{color:var(--amber)}
+  .lane{background:var(--surface);border:1px solid var(--rule);border-radius:4px;flex:1 1 246px;min-width:220px;max-width:340px;max-height:100%;display:flex;flex-direction:column}
+  .lane.archive{flex:.75 1 190px;min-width:170px;max-width:250px}
+  .lane-empty{color:var(--faint);text-align:center;padding:14px 0 10px;font-size:11px}
   .lane h2{font:650 11px/1 var(--mono);letter-spacing:.02em;color:var(--dim);margin:0;padding:9px 11px;display:flex;justify-content:space-between}
   .lane h2 .n{color:var(--text)}
   .lane h2 .n::before{content:"×";color:var(--faint);margin-right:1px}
   .lane.attn h2{color:var(--text)}
   .lane.attn h2::after{content:"";order:-1}
-  .lane.archive{min-width:190px;width:190px}
   details.lane summary{cursor:pointer;list-style:none}
+  details.lane summary h2::before{content:"▸ ";color:var(--dim)}
+  details.lane[open] summary h2::before{content:"▾ "}
   .cards{overflow-y:auto;padding:0 7px 7px;display:flex;flex-direction:column;gap:6px}
   .card{position:relative;background:var(--surface2);border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:2px;padding:7px 9px 6px 10px;cursor:pointer;outline:none}
   .card:focus,.card.sel{border-color:var(--accent);box-shadow:inset 2px 0 0 var(--accent)}
@@ -97,11 +114,13 @@
   .src .age{margin-left:auto;padding-left:8px}
   /* archive lanes compress to single-line rows (story S6) */
   .lane.archive .card{padding:4px 8px 4px 9px;border-left-width:2px}
-  .lane.archive .card .t{font-size:11.5px;font-weight:480;color:var(--dim);-webkit-line-clamp:1;margin-bottom:0}
-  .lane.archive .card .t .age{float:right;font:10px var(--mono);color:var(--faint);margin-left:8px}
+  /* single-line contract held by flex, not float — a float escapes line-clamp (C9/F14) */
+  .lane.archive .card .t{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:480;color:var(--dim);margin-bottom:0;-webkit-line-clamp:unset}
+  .lane.archive .card .t .txt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lane.archive .card .t .age{flex:none;font:10px var(--mono);color:var(--faint)}
   .lane.archive .card .chips,.lane.archive .card .src,.lane.archive .card .whynote{display:none}
   /* the one chip archive rows keep: "needs your testing" matters MOST on done (M3) */
-  .lane.archive .card .t .a-needs{float:right;font:600 9.5px/1.8 var(--mono);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 50%,transparent);border-radius:2px;padding:0 4px;margin-left:6px}
+  .lane.archive .card .t .a-needs{flex:none;font:600 9.5px/1.8 var(--mono);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 50%,transparent);border-radius:2px;padding:0 4px}
   .lane.archive .card.changed::after{display:none}
   .empty-board{color:var(--dim);padding:40px}
 
@@ -121,13 +140,17 @@
   #drawer textarea{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;min-height:110px;padding:9px;font:12.5px/1.5 var(--mono);resize:vertical}
   #drawer .rowx{display:flex;gap:8px;align-items:center}
   #dInsert{display:flex;gap:5px;flex-wrap:wrap}
-  .tagbtn{background:var(--surface);color:var(--dim);border:1px solid var(--rule);border-radius:2px;padding:1px 7px;cursor:pointer;font:600 10.5px/1.7 var(--mono)}
+  /* insert chips share the preview chips' metrics — same token, same size (C2/F11) */
+  .tagbtn{background:var(--surface);color:var(--dim);border:1px solid var(--rule);border-radius:2px;padding:0 5px;cursor:pointer;font:600 10.5px/1.8 var(--mono)}
   .tagbtn:hover{color:var(--text);border-color:var(--accent)}
+  #dTags .chip{font-size:10.5px;line-height:1.8}
+  .copyid{cursor:pointer;border-bottom:1px dotted var(--faint)}
+  .copyid:hover{color:var(--text)}
   #dTags{display:flex;gap:4px;flex-wrap:wrap;min-height:14px}
   #dLegend{color:var(--faint);font-size:10px;font-family:var(--mono)}
-  #toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--rule);border-radius:3px;padding:6px 14px;display:none}
+  #toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--dim);border-radius:3px;padding:6px 14px;display:none;box-shadow:0 4px 18px rgb(0 0 0/.4)}
   #help{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 78%,transparent);display:none;align-items:center;justify-content:center}
-  #help .box{background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:18px 22px;min-width:280px}
+  #help .box{background:var(--surface2);border:1px solid var(--dim);border-radius:4px;padding:18px 22px;min-width:280px;box-shadow:0 12px 40px rgb(0 0 0/.45)}
   #help td{padding:2px 10px 2px 0;color:var(--dim)} #help td:first-child{color:var(--text);font-family:var(--mono)}
 </style>
 </head>
@@ -145,6 +168,7 @@
 <div class="legend" id="legend"></div>
 <div id="delta" role="status"></div>
 <main id="lanes" aria-label="board lanes"></main>
+<div id="state"></div>
 
 <aside id="drawer" aria-label="card detail">
   <button class="close" onclick="closeDrawer()" title="close (Esc)">✕</button>
@@ -204,17 +228,38 @@ let anchor = +localStorage.getItem(VISIT_KEY) || 0;
 const since = (iso) => anchor > 0 && Date.parse(iso) > anchor;
 const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
 
+// Loading, error, and empty get their own identifiable surface (C11/C13):
+// a blank board and a dead server must never look alike, and a recovered poll
+// must clear the error it replaced.
+function showState(kind, msg) {
+  const s = $("state");
+  const hint = kind === "err"
+    ? "the board server may be down — check: <code>kanban.sh check</code>"
+    : kind === "empty" ? "run: <code>kanban.sh sync</code> in the project" : "";
+  s.innerHTML = `<div class="big">${kind === "err" ? "board failed to load" : kind === "empty" ? "no cards yet" : "loading board…"}</div>` +
+    (msg ? `<div>${msg}</div>` : "") + (hint ? `<div>${hint}</div>` : "");
+  s.className = "on" + (kind === "err" ? " err" : "");
+  for (const id of ["lanes", "meter", "legend", "delta"]) $(id).style.display = "none";
+}
+function hideState() {
+  $("state").className = "";
+  $("lanes").style.display = ""; $("meter").style.display = ""; $("legend").style.display = "";
+  $("delta").style.display = "";
+}
+
+let lastError = false;
 async function load() {
   if (dirty || document.activeElement === $("dNote")) return; // never clobber typing
   try {
     const res = await fetch(`/api/board?slug=${slug}`);
     const text = await res.text();
     if (!res.ok) throw new Error(JSON.parse(text).error || res.status);
+    if (lastError) { lastError = false; lastPayload = ""; } // recovery must re-render, not latch
     if (text === lastPayload) return; // unchanged: no re-render, keeps focus stable
     lastPayload = text;
     data = JSON.parse(text);
     render();
-  } catch (e) { $("meta").textContent = `load failed: ${e.message}`; }
+  } catch (e) { lastError = true; showState("err", e.message); }
 }
 
 const labelHue = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 6; };
@@ -274,8 +319,10 @@ function cardEl(c) {
       ${c.staleReason ? '<span class="chip why"></span>' : ""}
     </div><span class="src"></span>`;
   const tEl = el.querySelector(".t");
-  tEl.textContent = c.title;
   if (isArchive) {
+    const tx = document.createElement("span");
+    tx.className = "txt"; tx.textContent = c.title;
+    tEl.appendChild(tx);
     const a = document.createElement("span");
     a.className = "age"; a.textContent = ago(Date.parse(c.updatedAt));
     tEl.appendChild(a);
@@ -286,6 +333,8 @@ function cardEl(c) {
       tEl.appendChild(nh);
     }
     el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
+  } else {
+    tEl.textContent = c.title;
   }
   const wn = el.querySelector(".whynote");
   // raw first line, tags included — humans write tags as part of the sentence,
@@ -376,9 +425,20 @@ function renderStale() {
   } else bar.style.display = "none";
 }
 
+// Keep the varying TAIL of a path visible; the head is boilerplate (C9/F8).
+function tailTrim(el) {
+  el.title = el.title || el.textContent;
+  let guard = 200;
+  while (el.scrollWidth > el.clientWidth && el.textContent.length > 14 && guard--) {
+    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(8);
+  }
+}
+
 function render() {
+  hideState();
   $("name").textContent = data.name;
   document.title = `${data.name} · kanban`;
+  $("root").title = data.root;
   $("root").textContent = data.root;
   const cards = data.board.cards;
   const by = (k) => cards.filter((c) => c.lane === k);
@@ -394,8 +454,7 @@ function render() {
     const n = by(k).length;
     if (!n) continue;
     const seg = document.createElement("div");
-    seg.className = "seg";
-    seg.style.background = cs.getPropertyValue(`--seg-${k}`);
+    seg.className = `seg seg-${k}`; // class, never inline: theme toggle must restyle without a re-render (C12)
     seg.style.flex = `${n} 1 0`;
     seg.innerHTML = `${k} <i>${n}</i>`;
     seg.onclick = () => document.getElementById(`lane-${k}`)?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
@@ -407,7 +466,9 @@ function render() {
   flat = [];
   const laneEl = (lane) => {
     const cardsIn = by(lane);
-    if (cardsIn.length === 0) return null; // empty lanes pay no layout
+    // empty lanes render (dim, cheap): "nothing active" must be representable
+    // (C5/F10); only an empty STALE lane pays no layout
+    if (cardsIn.length === 0 && lane === "stale") return null;
     const isStale = lane === "stale";
     const wrap = document.createElement(isStale ? "details" : "section");
     wrap.className = `lane${lane === "blocked" || lane === "active" ? " attn" : ""}${ARCHIVE.has(lane) ? " archive" : ""}`;
@@ -417,14 +478,20 @@ function render() {
     wrap.appendChild(head);
     const list = document.createElement("div");
     list.className = "cards";
+    if (!cardsIn.length) list.innerHTML = '<div class="lane-empty">—</div>';
     cardsIn.forEach((c) => list.appendChild(cardEl(c)));
     wrap.appendChild(list);
     return wrap;
   };
   const main = $("lanes");
+  if (!cards.length) { showState("empty"); return; }
   main.replaceChildren(...LANE_ORDER.map(laneEl).filter(Boolean));
-  if (!main.children.length) main.innerHTML = '<div class="empty-board">no cards yet — run: kanban.sh sync</div>';
   markSel();
+  tailTrim($("root"));
+  requestAnimationFrame(() => {
+    if (main.scrollWidth > main.clientWidth + 8 && !$("legend").querySelector(".scrollhint"))
+      $("legend").insertAdjacentHTML("beforeend", ' · <span class="scrollhint">→ scroll for more lanes</span>');
+  });
   localStorage.setItem(VISIT_KEY, String(Date.now()));
 }
 
@@ -474,7 +541,11 @@ function openDrawer(id) {
   $("dTitle").textContent = c.title;
   const src = c.source.kind === "manual" ? "manually added" :
     `<a href="/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}" target="_blank" rel="noopener">${c.source.path}${c.source.line ? ":" + c.source.line : ""}</a>`;
-  $("dMeta").innerHTML = `${c.id} · ${c.lane}${c.tag ? ` · ${c.tag}` : ""}${c.heading ? ` · ${c.heading}` : ""} · ${src}${c.via ? ` · via session ${c.via}` : ""}<br>created ${new Date(c.createdAt).toLocaleString()} · updated ${new Date(c.updatedAt).toLocaleString()}${c.verify ? `<br>verified: ${c.verify.grade}${c.verify.needsHuman ? " + needs your testing" : ""}${c.verify.note ? " — " + c.verify.note.replace(/</g, "&lt;") : ""} (${new Date(c.verify.at).toLocaleString()})` : ""}`;
+  $("dMeta").innerHTML = `<code class="copyid" title="card id — click to copy">${c.id}</code> · ${c.lane}${c.tag ? ` · ${c.tag}` : ""}${c.heading ? ` · ${c.heading}` : ""} · ${src}${c.via ? ` · via session ${c.via}` : ""}<br>created ${new Date(c.createdAt).toLocaleString()} · updated ${new Date(c.updatedAt).toLocaleString()}${c.verify ? `<br>verified: ${c.verify.grade}${c.verify.needsHuman ? " + needs your testing" : ""}${c.verify.note ? " — " + c.verify.note.replace(/</g, "&lt;") : ""} (${new Date(c.verify.at).toLocaleString()})` : ""}`;
+  $("dMeta").querySelector(".copyid").onclick = async () => {
+    try { await navigator.clipboard.writeText(c.id); toast("card id copied"); }
+    catch { toast("copy failed — clipboard blocked", 3000); }
+  };
   $("dMirror").textContent = `mirror: harvested from docs, synced ${data.board.syncedAt ? new Date(data.board.syncedAt).toLocaleString() : "never"} — not live code state`;
   $("dDocs").innerHTML = c.docs.length
     ? "docs: " + c.docs.map((d) => `<a href="/doc?path=${encodeURIComponent(data.root + "/" + d)}" target="_blank" rel="noopener">${d}</a>`).join(" · ")
@@ -525,6 +596,7 @@ $("helpBtn").onclick = () => ($("help").style.display = "flex");
 $("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display = "none"; };
 window.addEventListener("beforeunload", (e) => { if (dirty) e.preventDefault(); });
 
+showState("loading");
 load();
 setInterval(load, 5000);
 </script>

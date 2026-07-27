@@ -1,44 +1,41 @@
-# Dream-pass prompt — memory domain
+You are dreaming over the memory-domain event stream — a log of CLAUDE.md
+memory files across all projects. Each event represents one memory file:
+its project, word count, title heading, and when it was last updated.
 
-You are dreaming over a corpus of auto-memory entries — user-context notes
-the agent saved during prior Claude Code sessions across multiple projects.
-Each event represents one memory entry (with frontmatter name/description/
-type + body preview).
-
-Your value-add over a passive read:
-
-- **Surface cross-project echoes** — when the same theme shows up in
-  memory entries from different projects, that's a candidate for a
-  global rule (`~/.claude/rules/*.md`).
-- **Spot stale memories** — entries whose body references things the
-  user no longer does (old projects, abandoned tools, obsolete
-  conventions). Emit `decay_candidate`.
-- **Spot promotion candidates** — memories that have re-occurred in
-  ≥3 projects or have very high specificity. Emit `graduation_candidate`
-  with `target` pointing at a rules file.
-- **Spot associations with atone/affirm** — memory entries that describe
-  a behavior the user later affirmed (good) or made a mistake about
-  (atone). When the cross-domain pass runs, these are gold.
+Your task: find non-obvious patterns in how memory is being used. Think about:
+which projects invest in memory vs which are memoryless, whether certain
+memory titles recur across projects (shared concerns), whether memory files
+are growing or shrinking, and what the titles reveal about recurring themes.
 
 ## Delta
 
-{{delta_count}} memory entries to consider:
+{{delta_count}} new or updated memory file(s) since last pass:
 
 {{delta_events}}
 
-## Output (strict JSON, DreamOutput v1)
+## Output
 
-- schemaVersion: 1
-- domain: "memory"
-- summary: 2-3 sentence prose synthesis
-- insights[]:
-  - type=pattern → name + evidence_event_ids + confidence (≥0.55 floor;
-    memory is lower-signal than atone, slightly lower bar) + instruction
-  - type=association → from/to slugs (when linking memory entries by
-    theme; cross-domain associations get a separate pass)
-  - type=graduation_candidate → slug + rationale + target (rules/X.md)
-  - type=decay_candidate → slug + rationale + action="demote_or_archive"
+Return strict JSON matching DreamOutput v1. No markdown fences. No prose
+outside the JSON.
 
-Max 5 insights. Each pattern.evidence_event_ids MUST reference actual
-event IDs from above. No hallucinating IDs. No markdown fences. Parseable
-JSON only.
+{
+  "schemaVersion": 1,
+  "domain": "memory-domain",
+  "summary": "one sentence describing the dominant pattern in this batch",
+  "insights": [
+    {
+      "type": "pattern",
+      "slug": "short-kebab-label",
+      "description": "what the pattern is and why it matters",
+      "confidence": 0.0,
+      "evidence_event_ids": ["id-1", "id-2"]
+    }
+  ]
+}
+
+Rules:
+- insight.type ∈ {pattern, association, graduation_candidate, decay_candidate, summary}
+- confidence < 0.6 → drop
+- max 5 insights
+- evidence_event_ids must be real IDs from the delta above
+- return parseable JSON, no markdown fences
