@@ -899,3 +899,25 @@ echo '{"cwd":"'"$PROJECT"'"}' | bash ~/.claude/scripts/kanban/session-start-line
 All verified green 2026-07-27 (bun parse rc=0 ×3, live server, browser dark+light,
 forced stale + forced delta, UI note round-trip). NOT yet run: /ui-categorical-check
 on the rebuilt board — deferred to next pickup, run it against the live fixture board.
+
+## Phase 14 — data increment probes: verify grades · docs survival · via (added 2026-07-27)
+
+```bash
+# P1 verify lifecycle (grades: executed|cited|reasoned; board.json is CLI-owned)
+KSH verify "$ID" executed --note "probes green" --project "$PROJECT"   # sets
+KSH show "$ID" --json --project "$PROJECT" | jq -r '.card.verify.grade' # "executed"
+KSH sync --project "$PROJECT"                                           # …
+KSH show "$ID" --json --project "$PROJECT" | jq -r '.card.verify.grade' # STILL "executed"
+KSH verify "$ID" --clear --project "$PROJECT"                           # removes (null)
+# P2 agent-linked docs survive sync (latent loss bug fixed in mergeSync: old.docs union)
+KSH link "$ID" TODO.md --project "$PROJECT"; KSH sync --project "$PROJECT"
+KSH show "$ID" --json --project "$PROJECT" | jq -c '.card.docs'         # contains TODO.md
+# P3 via attribution: "$PROJECT"/.claude/session-notes/_active.md symlinked to <uuid>.md
+# with a "## Todos" checkbox → sync → card carries via:<uuid8>; drawer "via session …"
+# board render: ✓ executed / ✓ cited chips + amber needs-you; archive rows suppress chips
+# EXCEPT the needs-you marker (M3: it matters most on done)
+```
+
+All verified green 2026-07-27 (incl. --clear null check, post-sync survival of BOTH
+grade and linked doc, deadbeef via probe, archive needs-you render). Plan + reasoning:
+assets/reports/20260727-kanban-data-increment/PLAN.md

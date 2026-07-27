@@ -23,7 +23,7 @@ function flag(name: string): string | undefined {
 const hasFlag = (name: string) => rest.includes(`--${name}`);
 // Boolean flags never consume the next token, so flag order can't silently
 // swallow a positional (the sim + skeptic both flagged the old behavior).
-const BOOL_FLAGS = new Set(["json", "force", "undo", "keep-data", "cards", "unread", "ack"]);
+const BOOL_FLAGS = new Set(["json", "force", "undo", "keep-data", "cards", "unread", "ack", "needs-human", "clear"]);
 const positional = rest.filter((a, i) => {
   if (a.startsWith("--")) return false;
   const prev = rest[i - 1];
@@ -117,6 +117,31 @@ switch (verb) {
       board.overrides[id] = { lane };
       atomicWrite(path.join(boardDir, "board.json"), board, "move", `card=${id}`);
       console.log(`moved ${id} → ${lane} (override recorded; survives sync)`);
+    });
+    break;
+  }
+  case "verify": {
+    // Grade what "done" means (M3): how was this card's claimed state checked.
+    const [id, gradeRaw] = positional;
+    const GRADES = ["executed", "cited", "reasoned"] as const;
+    if (!id) die("verify needs a card id", `kanban.sh verify <id> <${GRADES.join("|")}> [--needs-human] [--note "…"] · clear: kanban.sh verify <id> --clear`);
+    const { slug, boardDir } = boardFor(projectDir());
+    withBoardLock(boardDir, () => {
+      const board = loadBoard(boardDir);
+      const card = board.cards.find((c) => c.id === id);
+      if (!card) die(`no card ${id} on ${slug}`, `kanban.sh status --cards lists ids`);
+      if (hasFlag("clear")) {
+        delete card.verify;
+        atomicWrite(path.join(boardDir, "board.json"), board, "verify", `card=${id} cleared`);
+        console.log(`verification cleared on ${id}`);
+        return;
+      }
+      const grade = gradeRaw as (typeof GRADES)[number];
+      if (!GRADES.includes(grade)) die(`grade must be one of ${GRADES.join("|")}`, `executed = ran the path · cited = file:line evidence · reasoned = argument only`);
+      card.verify = { grade, ...(hasFlag("needs-human") ? { needsHuman: true } : {}), ...(flag("note") ? { note: flag("note")! } : {}), at: new Date().toISOString() };
+      card.updatedAt = new Date().toISOString();
+      atomicWrite(path.join(boardDir, "board.json"), board, "verify", `card=${id} ${grade}`);
+      console.log(`verified ${id}: ${grade}${hasFlag("needs-human") ? " + needs-human" : ""} (survives sync)`);
     });
     break;
   }
@@ -249,7 +274,8 @@ switch (verb) {
     }
     console.log(`${card.id} · ${card.lane}${card.tag ? ` · ${card.tag}` : ""}${card.heading ? ` · ${card.heading}` : ""}`);
     console.log(card.title);
-    console.log(`source: ${card.source.kind === "manual" ? "manual" : `${card.source.path}${card.source.line ? ":" + card.source.line : ""}`}`);
+    console.log(`source: ${card.source.kind === "manual" ? "manual" : `${card.source.path}${card.source.line ? ":" + card.source.line : ""}`}${card.via ? ` · via ${card.via}` : ""}`);
+    if (card.verify) console.log(`verified: ${card.verify.grade}${card.verify.needsHuman ? " + needs-human" : ""}${card.verify.note ? ` — ${card.verify.note}` : ""} (${card.verify.at})`);
     for (const s of card.subs ?? []) console.log(`  [${s.done ? "x" : " "}] ${s.title}`);
     if (card.docs.length) console.log(`docs: ${card.docs.join(" · ")}`);
     if (note?.note) console.log(`note (${note.updatedAt}): ${note.note}`);
@@ -336,7 +362,10 @@ switch (verb) {
   sync [--project dir]     re-harvest; prints the delta digest
   add "<title>" [--lane l] manual card (model-driven lifecycle, D4a)
   move <id> <lane>         override lane (survives sync)
-  link <id> <doc.md>       attach a doc to a card
+  verify <id> <grade>      grade the card's claimed state: executed (ran it) ·
+                           cited (file:line evidence) · reasoned (argument only);
+                           [--needs-human] [--note "…"] [--clear]; survives sync
+  link <id> <doc.md>       attach a doc to a card (survives sync)
   show <id> [--json]       one card: lane, tag, subs, docs, note
   notes [--unread] [--ack] human notes (D5a pull); --ack also displays, so plain
                            --unread is the read-only re-peek; --ack marks read.

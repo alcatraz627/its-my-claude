@@ -47,8 +47,20 @@ function docLinks(line: string, sourceDir: string, root: string): string[] {
   return out;
 }
 
+// Which session's workspace fed a session-notes card: _active.md is a symlink
+// to <session-uuid>.md, so the resolved basename names the author session (M1
+// buddy attribution). Non-symlink or non-uuid targets just yield no via.
+function viaOf(abs: string): string | undefined {
+  try {
+    const real = fs.realpathSync(abs);
+    const base = path.basename(real, ".md");
+    return /^[0-9a-f]{8}/.test(base) ? base.slice(0, 8) : undefined;
+  } catch { return undefined; }
+}
+
 function parseCheckboxFile(abs: string, root: string, kind: "checkbox" | "session-notes"): HarvestedCard[] {
   const rel = path.relative(root, abs);
+  const via = kind === "session-notes" ? viaOf(abs) : undefined;
   const lines = fs.readFileSync(abs, "utf8").split("\n");
   const cards: HarvestedCard[] = [];
   let heading = "";
@@ -84,7 +96,7 @@ function parseCheckboxFile(abs: string, root: string, kind: "checkbox" | "sessio
     const card: HarvestedCard = {
       id: cardId(rel, title), title: clean, tag, subs: [], lane,
       source: { path: rel, line: i + 1, kind },
-      docs: docLinks(line, path.dirname(abs), root), heading,
+      docs: docLinks(line, path.dirname(abs), root), heading, via,
     };
     cards.push(card);
     stack.push({ indent, card });

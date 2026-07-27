@@ -40,6 +40,10 @@ export interface Card {
   docs: string[];        // repo-relative linked docs
   heading?: string;      // section context at harvest time
   staleReason?: string;
+  // How trustworthy is this card's claimed state — agent-set via `verify` verb,
+  // survives sync. Grades reuse the adversarial-review evidence vocabulary.
+  verify?: { grade: "executed" | "cited" | "reasoned"; needsHuman?: boolean; note?: string; at: string };
+  via?: string;          // session id (8 chars) whose workspace the card was harvested from
   createdAt: string;
   updatedAt: string;
 }
@@ -209,7 +213,15 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
       if (!old) delta.new++;
       else if (old.lane !== lane) delta.moved++;
       else delta.kept++;
-      return { ...h, lane, createdAt: old?.createdAt ?? now, updatedAt: old && old.lane === lane ? old.updatedAt : now };
+      return {
+        ...h, lane,
+        // Agent-set state must survive the rebuild-from-harvest: linked docs
+        // union in (harvest only knows doc-inline links), verify carries over.
+        docs: old ? [...new Set([...h.docs, ...old.docs])] : h.docs,
+        verify: old?.verify,
+        createdAt: old?.createdAt ?? now,
+        updatedAt: old && old.lane === lane ? old.updatedAt : now,
+      };
     });
 
     const seen = new Set(cards.map((c) => c.id));

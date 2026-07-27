@@ -81,6 +81,10 @@
   .chip.nt-move{color:var(--text)}
   .chip.nt-review{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
   .chip.nt-me,.chip.nt-free{color:var(--faint)}
+  .chip.vf-executed{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+  .chip.vf-cited{color:color-mix(in srgb,var(--accent) 70%,var(--dim))}
+  .chip.vf-reasoned{color:var(--stale)}
+  .chip.vf-human{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent)}
   .whynote{margin:3px 0 2px;font-size:11px;line-height:1.35;color:var(--amber);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
   .lh0{color:#9fb56a;border-color:#3a4429}.lh1{color:#6aada5;border-color:#28403d}.lh2{color:#7d94ad;border-color:#28323d}
   .lh3{color:#a284a2;border-color:#3a2d3a}.lh4{color:#b3826a;border-color:#40302a}.lh5{color:#8b93c9;border-color:#2e3350}
@@ -96,6 +100,8 @@
   .lane.archive .card .t{font-size:11.5px;font-weight:480;color:var(--dim);-webkit-line-clamp:1;margin-bottom:0}
   .lane.archive .card .t .age{float:right;font:10px var(--mono);color:var(--faint);margin-left:8px}
   .lane.archive .card .chips,.lane.archive .card .src,.lane.archive .card .whynote{display:none}
+  /* the one chip archive rows keep: "needs your testing" matters MOST on done (M3) */
+  .lane.archive .card .t .a-needs{float:right;font:600 9.5px/1.8 var(--mono);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 50%,transparent);border-radius:2px;padding:0 4px;margin-left:6px}
   .lane.archive .card.changed::after{display:none}
   .empty-board{color:var(--dim);padding:40px}
 
@@ -263,6 +269,8 @@ function cardEl(c) {
       ${c.tag ? '<span class="chip xtag"></span>' : ""}
       ${c.heading ? '<span class="chip label"></span>' : ""}
       ${subs.length ? `<span class="chip subs${subsDone === subs.length ? " alldone" : ""}" title="sub-items">${subsDone}/${subs.length}</span>` : ""}
+      ${c.verify ? `<span class="chip vf-${c.verify.grade}" title="how this state was verified${c.verify.note ? ": " + c.verify.note.replace(/"/g, "&quot;") : ""}">✓ ${c.verify.grade}</span>` : ""}
+      ${c.verify?.needsHuman ? '<span class="chip vf-human" title="needs your own testing">needs-you</span>' : ""}
       ${c.staleReason ? '<span class="chip why"></span>' : ""}
     </div><span class="src"></span>`;
   const tEl = el.querySelector(".t");
@@ -271,6 +279,12 @@ function cardEl(c) {
     const a = document.createElement("span");
     a.className = "age"; a.textContent = ago(Date.parse(c.updatedAt));
     tEl.appendChild(a);
+    if (c.verify?.needsHuman) {
+      const nh = document.createElement("span");
+      nh.className = "a-needs"; nh.textContent = "needs-you";
+      nh.title = "graded " + c.verify.grade + " but needs your own testing";
+      tEl.appendChild(nh);
+    }
     el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
   }
   const wn = el.querySelector(".whynote");
@@ -460,7 +474,7 @@ function openDrawer(id) {
   $("dTitle").textContent = c.title;
   const src = c.source.kind === "manual" ? "manually added" :
     `<a href="/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}" target="_blank" rel="noopener">${c.source.path}${c.source.line ? ":" + c.source.line : ""}</a>`;
-  $("dMeta").innerHTML = `${c.id} · ${c.lane}${c.tag ? ` · ${c.tag}` : ""}${c.heading ? ` · ${c.heading}` : ""} · ${src}<br>created ${new Date(c.createdAt).toLocaleString()} · updated ${new Date(c.updatedAt).toLocaleString()}`;
+  $("dMeta").innerHTML = `${c.id} · ${c.lane}${c.tag ? ` · ${c.tag}` : ""}${c.heading ? ` · ${c.heading}` : ""} · ${src}${c.via ? ` · via session ${c.via}` : ""}<br>created ${new Date(c.createdAt).toLocaleString()} · updated ${new Date(c.updatedAt).toLocaleString()}${c.verify ? `<br>verified: ${c.verify.grade}${c.verify.needsHuman ? " + needs your testing" : ""}${c.verify.note ? " — " + c.verify.note.replace(/</g, "&lt;") : ""} (${new Date(c.verify.at).toLocaleString()})` : ""}`;
   $("dMirror").textContent = `mirror: harvested from docs, synced ${data.board.syncedAt ? new Date(data.board.syncedAt).toLocaleString() : "never"} — not live code state`;
   $("dDocs").innerHTML = c.docs.length
     ? "docs: " + c.docs.map((d) => `<a href="/doc?path=${encodeURIComponent(data.root + "/" + d)}" target="_blank" rel="noopener">${d}</a>`).join(" · ")
