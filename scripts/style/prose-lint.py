@@ -32,8 +32,8 @@ HEDGE_ASSERT = ["typically","generally","usually","in most cases","for the most 
 UNVERIFIED = ["should now work","should work now","should be fixed","that should do it",
     "this should fix","should be working"]
 VERDICT_OPENER = re.compile(
-    r"^\W*(?:\*\*)?(?:Done|Perfect|Great|Excellent|Awesome|Fantastic|Beautiful|Complete[d]?|"
-    r"All (?:done|set|good)|Everything (?:is |works )|Release is live|Shipped)\b", re.I)
+    r"^\W*(?:\*\*)?(?:(?:Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\s*[.!:—]|"
+    r"All (?:done|set|good)\b|Everything (?:is|works)\b|Release is live\b)", re.I)
 META_ID = re.compile(r"\b(?:thes|mist|aff|pin)-\d{8}")
 # connective dashes only; digit ranges (L15-L36, 2024-2026) never count
 DASH = re.compile(r"\s[—–]\s|(?<=[A-Za-z])[—–](?=[A-Za-z])")
@@ -66,6 +66,7 @@ def _count(text, phrases, spans, label):
 
 def strip_code(text):
     text = re.sub(r"```.*?```", " ", text, flags=re.S)
+    text = "\n".join(l for l in text.split("\n") if not l.lstrip().startswith((">", "|")))
     return re.sub(r"`[^`]*`", " CODEREF ", text)
 
 def lint(text):
@@ -99,7 +100,7 @@ def lint(text):
     v["semicolon"] = prose.count(";")
     weighted = sum(WEIGHTS[k] * n for k, n in v.items())
     score = weighted * 100.0 / words
-    if words < 60:
+    if words < 60:                      # short texts inflate per-100w; damp linearly under 60 words
         score *= words / 60.0
     return {"score": round(score, 2), "words": words,
             "violations": {k: n for k, n in v.items() if n},

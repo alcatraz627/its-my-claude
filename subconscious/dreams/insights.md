@@ -2,37 +2,6 @@
 
 _High-confidence associations promoted by the Wake phase._
 
-## Wake Cycle — 2026-07-20 17:08 UTC
-
-### Insight (conf=0.75)
-> Patching one CLI in a default-allow fallback, sweeping only the pages the user named, and fixing only the immediate callsite after a correction are all the same error applied at different altitudes: the agent fixes the INSTANCE the user pointed at rather than the CLASS it belongs to, because the instance is concrete and the class requires enumeration the agent skips.
-
-**Rule:** When the user points at a specific instance of a problem, always ask 'what class does this belong to and how many other members does that class have?' before scoping the fix — the named instance is a sample, not the boundary.
-
-**Evidence:**
-- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
-- _Pattern_: "When a UI standardization request arrives as a list of issues across multiple pages, the agent should sweep ALL pages that use the affected …"
-- _Pattern_: "After a correction that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in th…"
-- _Projects_ (19): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, speedway, versable-builder, staging-enhancement-product, karabiner, i-dream, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, claude-ipc, claude-instances
-- _Sessions_ (119): fc013b76, a0f35401, 6b120b0a, +116 more
-
----
-### Insight (conf=0.72)
-> Per-page UI blindness and send-log-as-delivery-proof are the same cognitive shortcut: substituting what is immediately visible (the current page, the send log) for the full truth (all sibling pages, actual receipt), because the proximal signal is always available and always green.
-
-**Rule:** Always ask 'what would falsify this claim that I cannot see from where I am standing?' before asserting completeness or success — the answer names the distal check the proximal signal hides.
-
-**Evidence:**
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When an agent edits source files and then claims success using words like 'done', 'works', 'fixed', or 'passing' without actually executing …"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, local-models, invasion-of-the-fiber-snatchers, frontend
-- _Sessions_ (164): efd2a3ab, 95f1a846, 003ab6d4, +161 more
-
----
-
-
 ## Wake Cycle — 2026-07-21 00:16 UTC
 
 ### Insight (conf=0.55)
@@ -1326,5 +1295,89 @@ _High-confidence associations promoted by the Wake phase._
 - _Pattern_: "When the user sets an explicit narrow scope for a feature ('only for X, not Y'), the implementation must enforce that scope literally withou…"
 - _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
 - _Sessions_ (48): fc013b76, a0f35401, 6b120b0a, +45 more
+
+---
+
+
+## Wake Cycle — 2026-07-27 19:59 UTC
+
+### Insight (conf=0.82)
+> The agent has a consistent 'internal model substitution' failure across three unrelated domains — it derives UI labels from code patterns instead of design mocks, estimates completion from memory instead of reading source, and treats its own formalizations as authoritative instead of the user's spec — all three are the same shortcut of trusting an internally-derived approximation over the canonical external source.
+
+**Rule:** Always consult the canonical external source (design mocks for UI, source code for gap assessments, user-authored specs for authority) before generating any claim that could be derived from it — never substitute an internal approximation for a readable original.
+
+**Evidence:**
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc, versable-builder
+- _Sessions_ (84): f9b3d568, f1fc3b91, eee8d695, +81 more
+
+---
+### Insight (conf=0.76)
+> Instance-level fix myopia (patching one callsite, one page, one policy violation) and one-sided verification (checking only the sender, only one visual mode) share the same attention-boundary failure: the agent's working context is anchored to the immediate site of the change and does not follow the reference outward to all consumers or all states — the fix in both cases is an explicit fan-out audit before declaring done.
+
+**Rule:** When fixing a pattern instance or verifying a change, always enumerate all other consumers/pages/states that share the same pattern or component before declaring the fix complete — a fix scoped to the triggering instance is half a fix.
+
+**Evidence:**
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
+- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models
+- _Sessions_ (119): ff8aef13, f95e5eb7, efd2a3ab, +116 more
+
+---
+### Insight (conf=0.74)
+> The agent inverts the optimal question distribution: it asks too often for trivial sequential go-aheads (low-value interrupts), yet when it does surface a real product decision, the question lacks enough context to be self-contained — the fix is a single policy: ask less frequently but ask better, with the threshold set at 'does this require information only the user has?'
+
+**Rule:** Avoid halting for sequential progress confirmation unless a genuine decision point requires user-held information; when halting, always include prior context, concrete options, and tradeoffs so the question is answerable in one reply.
+
+**Evidence:**
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "When asking the user a decision question, include enough background and tradeoffs to make the question self-contained and answerable without…"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, better-file-browser, sys-monitor, its-my-config, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
+- _Sessions_ (91): dfd19dc0, 96490d11, 895cfd88, +88 more
+
+---
+### Insight (conf=0.72)
+> Mistaking a locally-observable artifact for ground truth about a remote system is one failure with two costumes: send-side telemetry substitutes for delivery proof (IPC/notifications), and agent-authored formalizations substitute for user-authored authority — both trust proximity over correctness.
+
+**Rule:** Always identify the canonical remote source (the peer's ack, the user's spec, the running app) before treating any locally-produced artifact (a send log, a derived doc, a notification) as evidence of the remote state.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "When a sub-agent performing a gap or capability audit independently selects an agent-authored formalization document as its authority (rathe…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, versable-builder
+- _Sessions_ (112): dfd19dc0, 96490d11, 895cfd88, +109 more
+
+---
+### Insight (conf=0.71)
+> The user's breadth-first preference, the sibling-page pagination miss, and the mock-consultation failure are all temporal-ordering errors with the same shape: the agent dives deep into implementation on the first item it touches instead of surveying the full surface (all pages, all mocks, all surfaces) before writing any code — depth-first is the agent's default, but the correct sequence is always survey-then-implement.
+
+**Rule:** Always survey the full affected surface (all sibling pages, design mocks, existing patterns) before implementing any change — depth-first on the first item encountered consistently misses patterns and context that a breadth-first scan would have revealed.
+
+**Evidence:**
+- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, i-dream, claude-ipc, versable-builder
+- _Sessions_ (117): d8f1948c, a0f35401, 8c7e6f5c, +114 more
+
+---
+### Insight (conf=0.70)
+> When the agent hits a hard capability boundary (auth wall, harness block, interactive terminal requirement), the correct behavior converges to one shape regardless of domain: package what you have into the most useful form and hand it off explicitly with the exact next step — the failure mode is always the same (stall, workaround, or silently give up), and the fix is always the same (structured handoff).
+
+**Rule:** When hitting any capability boundary that cannot be crossed autonomously, immediately package completed findings and the exact user-actionable command into a structured handoff rather than attempting workarounds or stalling.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "CLI authentication commands (e.g. cloud provider logins) require an interactive terminal and cannot be automated; flag this to the user up f…"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend
+- _Sessions_ (48): faeb2f37, efd2a3ab, ed1b2d1b, +45 more
 
 ---

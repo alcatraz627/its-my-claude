@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T00:44:07.430186+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-27T20:05:23.948481+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A full-stack product builder (versable-builder) where the dominant work is UI feature implementation and multi-agent coordination; sessions involve parallel sub-agents, design mock compliance, and protected-repo commit discipline.
+A UI-heavy web application (versable-builder) with multiple pages sharing shell components (sidebar, drawer, modal); work involves frequent parallel sub-agent coordination, protected-repo discipline, and design-mock-driven UI implementation.
 
 ## Things to do (or keep doing)
-- **Audit ALL pages before touching any shared UI component** (sidebar, drawer, modal) — per-page implementations are always wrong; implement once, globally
-- **Consult design mocks before naming or building any UI surface** — internal naming conventions and prior code patterns do not substitute for the canonical mock
-- **Always cite files with full paths** — a basename alone forces the user to hunt; this is treated as a mistake worth atoning for
-- **Require a positive round-trip proof before claiming delivery** — IPC sends, test passes, and sub-agent notifications are proxy signals, not verification
+- **Always audit every page in the app** before implementing or patching any shared shell component (sidebar, drawer, modal) — per-page variants are the recurring mistake; implement one shared component and fix all instances in the same response.
+- **Consult design mocks before writing any UI** — labels, module names, and creation flows must match the mocks, not be inferred from code patterns or internal naming.
+- **Verify on the actual running dev server** before claiming a UI or runtime fix is done — exercise the changed code path and observe the result; a green build or test pass is not sufficient.
+- **Include prior decision context and concrete options** whenever surfacing a deferred decision — never surface a choice without the framing the user needs to answer in one response.
 
 ## Things to avoid
-- **Don't claim a UI or runtime fix is done without exercising it on the running dev server** — false assurance is worse than silence and breaks trust fast
-- **Don't default to ALLOW or zero when a lookup returns empty** — emit UNCERTAIN or DENY; fabricated defaults bypass gates and corrupt data pipelines
-- **Don't commit or push** — this is a protected repo; prepare the diff, show it, and hand the commit to the user
-- **Don't write internal commentary, banter, or stakeholder critique in documents** — output may go directly to external stakeholders; strip all of it before writing
+- **Don't patch only the reported instance** when the same component/pattern exists across multiple pages — absence of a grep sweep means the fix is incomplete.
+- **Don't treat send-side telemetry as delivery proof** — for IPC or notifications, wait for the peer's ack; a successful send log does not confirm receipt.
+- **Don't commit or push** — this is a protected repo; prepare the diff and hand it to the user.
+- **Don't synthesize a default when lookup returns empty** — emit UNCERTAIN or DENY, never fabricate a plausible value from structural absence.
 
 ## Open questions / known gaps
-- Parallelism consistently degrades state bookkeeping (task lists, branch state, file ownership) — no settled sync protocol for post-burst reconciliation
-- Agent-authored derivative docs (schema captures, concept docs) have repeatedly drifted from the user's canonical spec; no gate currently enforces re-reading the upstream before publishing a derivative
+- Multi-agent parallelism consistently degrades task-list and git-state bookkeeping; no stable coordination protocol yet.
+- Design mocks are the canonical source for UI but aren't always consulted proactively — unclear where mocks live or how to surface them at session start.

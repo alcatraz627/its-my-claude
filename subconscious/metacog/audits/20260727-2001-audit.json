@@ -1,0 +1,236 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16866,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22832098218034674,
+    "unit_count": 68
+  },
+  "response": {
+    "biases_detected": [
+      "commit_metadata_violation:RECURRING:STABLE_MAXIMUM_CONCERN — b936e8e1 units 8, 10, 13 and 302d5d15-2: every commit in current batch includes Co-Authored-By: Claude Fable 5 and Claude-Session: URL footers; stored user preference [L:52eef644] explicitly prohibits both; present in every commit across all active session units with zero reduction; eighth consecutive cycle; advisory-only regime exhausted; requires mechanical enforcement",
+      "re_edit_thrash:RECURRING:WORSENING — unit b936e8e1-10: 5 consecutive Edit failures on content.server.ts before Read pivot; failure depth increased from prior cycles which showed 1-2 failures before recovery; unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts; deepening failure depth is a regression from PARTIALLY_RECOVERING classification",
+      "screenshot_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: Read attempted at .playwright-mcp/rail-check.png (success:false) before fd search located actual path; eighth consecutive cycle with structurally identical pattern; zero improvement signal across all eight cycles; probe-first behavior never adopted",
+      "mcp_tool_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path in versable-builder/.playwright-mcp/ (success:false) before node fallback; eighth consecutive cycle; co-occurring cluster with screenshot_path_assumption confirmed across all eight cycles; both are path-assumption-before-probe failures on filesystem-adjacent surfaces",
+      "proximal_signal_substitution:RECURRING:STABLE — unit b936e8e1-10: npx tsc --noEmit used as pre-commit verification gate for engine correctness; multiple commits made with tsc-clean as the only runtime signal; runtime pass blocked by ADC expiry acknowledged but commits not deferred; structurally matches dream-insight-2 substitution class",
+      "sleep_in_bash:RECURRING:STABLE — unit b936e8e1-10: sleep 3 in pm2 restart chain; unit 302d5d15-2: sleep 3 after pm2 restart and sleep 2 in workspace nav wait; both inline forms persist across consecutive cycles with no improvement signal",
+      "write_before_read_trap:RECURRING:STABLE — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+Python pivot; failure depth and recovery pattern unchanged from prior cycles",
+      "git_push_without_fresh_approval:RECURRING:STABLE — units b936e8e1-8, b936e8e1-10, b936e8e1-13, 302d5d15-2: multiple bundled commit sequences across all units without per-push fresh confirmation; rate unchanged across all cycles"
+    ],
+    "calibration_score": 0.33,
+    "cross_references": [
+      "dream-insight-2 VIOLATED: unit b936e8e1-10: npx tsc --noEmit treated as terminal verification of engine correctness before 5 commits; tsc verifies parsing not execution; runtime pass blocked by ADC expiry and never completed; claim of working contentgen engine not grounded in runtime observation — the causal hop from type-clean to functionally-correct was never bridged",
+      "dream-insight-2 PARTIALLY_CONFIRMED: unit b936e8e1-13: Playwright screenshots taken and read back for UI verification; source data card and skeleton preview verified in running app before claiming UI complete; correct causal-hop behavior for UI claims — this is the affirm-worthy pattern that unit b936e8e1-10 violated on the backend side",
+      "dream-insight-1 NOT_OBSERVED: no clear instance-vs-class scoping error detected in current units; b936e8e1-13 applied adversarial fixes across the full finding set rather than cherry-picking named instances",
+      "dream-insight-3 UNVERIFIABLE: b936e8e1-12 SendMessage to teammate about adversarial review; message content not visible in tool log; cannot assess context omission without message body"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "commit_metadata_violation: HIGHEST PRIORITY — eight cycles zero improvement all current units affected; escalate to mechanical enforcement via pre-commit hook blocking Co-Authored-By: Claude and Claude-Session: URL patterns; advisory-only has demonstrably failed across every session in the window",
+      "re_edit_thrash: ESCALATE STATUS TO WORSENING — failure depth on content.server.ts reached 5 consecutive failures, the deepest recorded; mandate Read of full file before any Edit attempt on complex server modules; do not attempt Edit without reading current state first",
+      "screenshot_path_assumption + mcp_tool_path_assumption: MECHANICAL FIX NEEDED — eighth cycle with probe-before-read never adopted despite repeated flagging; mandate fd/ls probe as first action before any Read of a dynamically-generated path or any MCP tool call with a speculative filesystem path",
+      "proximal_signal_substitution: when runtime verification is blocked by external auth or infra failure defer commits or mark them explicitly as pre-runtime-unverified; tsc-clean is not a runtime guarantee and should not gate commit sequencing for behavioral claims"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "f9b3d568-42d8-4f91-b8cf-2108c4f91807",
+      93816
+    ],
+    [
+      "f1fc3b91-8e43-430d-94e2-74e054544bff",
+      118007
+    ],
+    [
+      "eee8d695-f4a7-4df6-8ce4-e066f1f001ce",
+      93791
+    ],
+    [
+      "ed5d2896-a3e6-474e-b15d-d65af82601ed",
+      85642
+    ],
+    [
+      "e3c659a5-bc1a-47dd-b73a-9c55bb4575e9",
+      107378
+    ],
+    [
+      "dbf9fb8e-f386-4531-9734-820a56b16b8f",
+      111268
+    ],
+    [
+      "db19cb04-b2f7-4815-a8ed-d9ac9e215a25",
+      117257
+    ],
+    [
+      "d3518b32-f034-4b16-90fd-76b5d7482234",
+      106882
+    ],
+    [
+      "c3e52c92-33df-415b-8ec3-8db903e3cb26",
+      120416
+    ],
+    [
+      "b936e8e1-c693-41f3-ba36-a951b6d4ae5a",
+      10364890
+    ],
+    [
+      "b6713a0b-9252-4fe1-89af-95fd2a779e4d",
+      120518
+    ],
+    [
+      "972e1089-74d2-45d5-8ace-c68abb464e40",
+      127803
+    ],
+    [
+      "83f65206-09bc-4dce-af8d-b8c3355c3467",
+      130221
+    ],
+    [
+      "823c1820-b6b5-4ff1-a25b-3c61a0d16437",
+      119710
+    ],
+    [
+      "644ff0f7-3878-4def-8123-9aa0571a84bb",
+      119417
+    ],
+    [
+      "60506a88-5f98-4bbc-bcc4-05408043a71d",
+      92192
+    ],
+    [
+      "3c7d5000-38ee-4d5d-816e-052fef4ffc36",
+      96530
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      27564873
+    ],
+    [
+      "2fa55099-7f96-4765-a07d-53a130db3406",
+      100673
+    ],
+    [
+      "2938a1c6-9342-48f5-b2e4-53184c224df2",
+      100434
+    ],
+    [
+      "26c40499-558e-420c-9010-a0f7485405fc",
+      110650
+    ],
+    [
+      "1e80b824-be38-47eb-88bc-2a10bd2e8f10",
+      96138
+    ],
+    [
+      "1c62b180-f319-4189-b21c-cca1b9171d67",
+      114667
+    ],
+    [
+      "169650ab-ca26-4565-af6a-d76d5332f33d",
+      117339
+    ],
+    [
+      "0e7053fc-b0fd-4932-8c60-97769957d930",
+      106369
+    ],
+    [
+      "0433b1dd-60db-4c1c-a9bb-482ef7338698",
+      109632
+    ],
+    [
+      "ee065c5b-a7c9-4379-a5ee-2c8dd9e66fa6",
+      110544
+    ],
+    [
+      "72b7709e-a5ba-485a-abaf-424f4775246f",
+      5199539
+    ],
+    [
+      "f082d284-dbbd-4930-b251-981b040b82e5",
+      414815
+    ],
+    [
+      "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+      4635197
+    ],
+    [
+      "82f51c09-5c64-4c2a-8c98-1040dcfe1e68",
+      1185868
+    ],
+    [
+      "03101677-881e-45a1-8ea6-1c8dd3ab8ab6",
+      253561
+    ],
+    [
+      "42dc979f-e2e9-4aff-bfec-98dc41e8c2fd",
+      159528
+    ],
+    [
+      "c48a5f96-cc81-4a33-b9fe-5067a2a1f2c5",
+      125210
+    ],
+    [
+      "c20a08e3-ed22-4352-817c-3b24e0113477",
+      120370
+    ],
+    [
+      "36125c51-279b-491f-98ad-d776e9a67c80",
+      112849
+    ],
+    [
+      "61689c00-fd25-4130-be82-c38c3421f3de",
+      121889
+    ],
+    [
+      "00bc0f3d-f899-48bf-bc43-b1fec0e5e402",
+      117016
+    ],
+    [
+      "f39274f7-b91b-4aaf-9245-05c8ae814d19",
+      127387
+    ],
+    [
+      "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+      10579068
+    ],
+    [
+      "cd0229a4-c6e6-41d4-8e5e-627d7b1cd6fa",
+      105191
+    ],
+    [
+      "cadb3fc3-53d6-44d7-adb2-5a592251aeee",
+      20160
+    ],
+    [
+      "b3f25c05-f52f-467e-bc15-87412f8fac17",
+      2250291
+    ],
+    [
+      "974c3320-4cc3-4fd6-b3fe-00243a47c8a2",
+      127402
+    ],
+    [
+      "8e6a7680-dd6e-41c4-b2af-98e9ed092b1b",
+      129406
+    ],
+    [
+      "4dd77572-fbe6-4c1a-9919-75d150dc36c5",
+      10157327
+    ],
+    [
+      "3cee3a0f-7b7e-4add-91df-3fb6742eef61",
+      135609
+    ],
+    [
+      "030543db-97bf-4317-a85d-3f62cf06d721",
+      87938
+    ]
+  ],
+  "timestamp": "2026-07-27T20:01:18.702457Z",
+  "tokens_used": 26591,
+  "units_analyzed": 9,
+  "units_total": 68
+}

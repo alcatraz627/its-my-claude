@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T00:45:33.818518+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-27T20:02:45.091416+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A multi-agent IPC broker for Claude Code sessions — enabling cross-session messaging, peer discovery, and coordinated parallel work. Development style is exploratory and multi-agent-heavy, with repeated corrections around verification discipline and parallelism hygiene.
+Cross-session IPC broker for Claude Code: agents communicate via message-passing, coordinate task ownership, and relay state across concurrent sessions. Dominant style is multi-agent coordination with shell-based tooling.
 
 ## Things to do (or keep doing)
-- **Verify IPC delivery via round-trip reply**, not send-side logs or telemetry — a successful send proves nothing about receipt.
-- **Reply to all unanswered peer messages before ending a session** — stop hooks fire repeatedly for each unreplied message; this is enforced, not advisory.
-- **After any burst of parallel work**, treat all cached state (task lists, branch, file contents) as stale and re-read before acting.
-- **Default gates to DENY for unrecognized inputs** — default-ALLOW on unknown CLIs/commands silently bypasses the entire access control layer.
+- **Verify delivery via round-trip ack**, not send-side telemetry — a successful send does not prove the peer received; wait for an explicit reply or poll the peer's inbox
+- **Default-DENY on unrecognized commands** in any access-gate — a default-allow fallback for unknown CLIs renders the gate bypassable
+- **Pre-negotiate task ownership via IPC** before parallel agents start work — overlapping edits without coordination produces conflicts that are expensive to untangle
+- **Quote all IPC message bodies with printf/heredoc**, never bare backticks — special characters get shell-consumed and produce zero-byte or corrupted messages
 
 ## Things to avoid
-- **Don't treat absence of failure as success** — zero-defaults fabricate plausible data, send-success masks non-delivery, clean diff ≠ working code; require a positive existence proof.
-- **Don't claim a UI or runtime bug fixed without running the dev server** — inspection and diff review are not verification.
-- **Don't use `rg -rn`** — `-r` means `--replace` in ripgrep, not recursive; it silently mangles output. Use `rg -n` for line numbers.
-- **Don't route low-value go-aheads through the user** — batch sequential work autonomously and halt only at genuine branch points with enough context to answer in one shot.
+- **Don't treat send-success as delivery proof** — locally-produced artifacts (send logs, telemetry) are not ground truth about remote state; the peer's ack is
+- **Don't leave peer queries unanswered at session end** — stop hooks fire repeatedly for each unreplied message; reply before exiting
+- **Don't use `rg -rn`** — `-r` is `--replace`, not recursive; use `rg -n` for line numbers in recursive searches
+- **Don't halt for sequential go-aheads** — batch autonomous progress and interrupt only at genuine decision points that require user-held information
 
 ## Open questions / known gaps
-- Multi-agent ownership negotiation via IPC before parallel work begins is the stated solution to edit conflicts, but no pre-negotiation protocol is yet enforced mechanically.
-- Orchestrator death leaving sub-agents blocked is a known failure mode with no dead-peer self-report timeout implemented yet.
+- After parallel bursts, task lists and branch state go stale simultaneously — no single sync point owns the reconciliation step; this is a recurring coordination gap
+- Absence-of-signal is sometimes emitted as a definite result (zero, false, ALLOW) rather than UNCERTAIN/DENY — fabricated defaults have caused gate bypasses in this codebase

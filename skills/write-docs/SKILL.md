@@ -66,6 +66,11 @@ These rules govern all text this skill produces.
 
 ### Anti-fluff voice — defer to the canon
 
+Before delivering, run `python3 ~/.claude/scripts/style/prose-lint.py` on each
+authored .md and fix what it flags in earnest prose (taxonomy:
+`conventions/language-quality.md` — two-split chains, verdict-first openers,
+fused sentences). Quoted examples and tables are exempt by the linter itself.
+
 The canonical anti-AI-voice catalog lives in
 [`conventions/doc-writing.md`](../../conventions/doc-writing.md) §3 — a maintained
 list of ~30 prose and structural tells, plus the find-and-flag `rg` in §4. Read it

@@ -11074,3 +11074,34 @@ _Patterns: b76b7252-944d-49f8-bb01-fa76c140a694, fd4cfcfc-edaf-4570-9dc1-a742ee5
 
 ---
 
+
+## Wake Cycle — 2026-07-20 17:08 UTC
+
+### Insight (conf=0.75)
+> Patching one CLI in a default-allow fallback, sweeping only the pages the user named, and fixing only the immediate callsite after a correction are all the same error applied at different altitudes: the agent fixes the INSTANCE the user pointed at rather than the CLASS it belongs to, because the instance is concrete and the class requires enumeration the agent skips.
+
+**Rule:** When the user points at a specific instance of a problem, always ask 'what class does this belong to and how many other members does that class have?' before scoping the fix — the named instance is a sample, not the boundary.
+
+**Evidence:**
+- _Pattern_: "Patching a specific instance of a policy violation (e.g., adding one CLI to a fallback list) without fixing the underlying class of problem …"
+- _Pattern_: "When a UI standardization request arrives as a list of issues across multiple pages, the agent should sweep ALL pages that use the affected …"
+- _Pattern_: "After a correction that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in th…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627, frontend, enhancement-product, .claude, local-models, speedway, versable-builder, staging-enhancement-product, karabiner, i-dream, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, claude-ipc, claude-instances
+- _Sessions_ (119): fc013b76, a0f35401, 6b120b0a, +116 more
+
+---
+### Insight (conf=0.72)
+> Per-page UI blindness and send-log-as-delivery-proof are the same cognitive shortcut: substituting what is immediately visible (the current page, the send log) for the full truth (all sibling pages, actual receipt), because the proximal signal is always available and always green.
+
+**Rule:** Always ask 'what would falsify this claim that I cannot see from where I am standing?' before asserting completeness or success — the answer names the distal check the proximal signal hides.
+
+**Evidence:**
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "When an agent edits source files and then claims success using words like 'done', 'works', 'fixed', or 'passing' without actually executing …"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, local-models, invasion-of-the-fiber-snatchers, frontend
+- _Sessions_ (164): efd2a3ab, 95f1a846, 003ab6d4, +161 more
+
+---
+

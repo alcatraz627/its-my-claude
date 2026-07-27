@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-26T20:23:55.946655+00:00 · 20 patterns / 7 insights -->
+<!-- i-dream project brief · 2026-07-27T20:04:07.363960+00:00 · 20 patterns / 7 insights -->
 ## What this project is about
-versable-builder is a product-building UI platform with shared shell components (sidebar, drawer, modal), paginated list pages, design-mock-driven labels, and multi-agent IPC coordination. Work runs in high-velocity autonomous sessions with significant parallelism.
+A full-stack product builder (versable-builder) with multi-page UI, design-mock-driven development, and multi-agent coordination via IPC. Work is high-velocity, parallel, and detail-sensitive — the user holds design mocks as the authoritative source of truth for all UI.
 
 ## Things to do (or keep doing)
-- Always read design mocks before implementing any UI element name, label, or structure — internal naming conventions are not the authority here
-- Audit ALL pages sharing a component before writing any code; apply fixes simultaneously across every user of the component
-- Exercise every fix on the actual running dev server before declaring it done — code inspection is not verification
-- Increase task-list sync frequency during parallel or burst work, not decrease it; anchor sync after every completed logical unit
+- **Consult design mocks before writing any UI** — labels, page names, module names, and creation flows must come from the mocks, never inferred from code patterns or prior sessions.
+- **Survey all sibling pages before touching any one page** — sidebar, pagination, drawer, modal shell changes must be applied everywhere simultaneously; find all consumers first.
+- **Use full relative or absolute paths** in all output and reports — basename-only references force the user to hunt.
+- **Update the task list after each logical unit of work** — never batch at session end; under parallelism, increase sync frequency, not decrease it.
 
 ## Things to avoid
-- Don't treat agent-authored summaries, gap analyses, or derivative docs as ground truth — trace every authority claim back to running code, user spec, or actual output
-- Don't convert absent data into a definite answer (zero, false, ALLOW); emit UNCERTAIN or DENY when a lookup returns empty
-- Don't route through the user what the agent can resolve autonomously; when deferral is needed, include the prior decision context plus ≥2 concrete options
-- Don't confirm an IPC message delivered from send-side logs alone — a round-trip reply is required
+- **Don't claim a fix is done without exercising it on the running dev server** — inspection and type-check are not verification; run the path, read the result.
+- **Don't synthesize a value when a lookup returns empty** — emit UNCERTAIN/DENY, never a fabricated default; absence is not a negative signal.
+- **Don't treat send-side IPC telemetry as delivery proof** — only a round-trip ack from the peer confirms receipt.
+- **Don't route go-aheads or status polls through the user** when the agent can resolve autonomously; ask once with full context and concrete options, then wait.
 
 ## Open questions / known gaps
-- Design mock consultation is repeatedly skipped despite being a stated authority; needs to be the literal first action before any UI naming or labeling work
-- No stable rhythm for state-sync during high-parallelism bursts; git state, task lists, and peer ownership regularly drift under velocity
+- Design mocks are referenced as authority but the workflow for consulting them mid-session is not locked in — agents consistently skip this step under velocity pressure.
+- Gap-assessment accuracy is a recurring failure: completion claims based on memory or derived docs routinely overestimate what is actually built; no canonical pre-assessment checklist exists yet.

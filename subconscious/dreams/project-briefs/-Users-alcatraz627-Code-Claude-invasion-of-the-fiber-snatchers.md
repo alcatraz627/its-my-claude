@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-07-27T00:45:50.440869+00:00 · 14 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-07-27T20:05:47.548201+00:00 · 19 patterns / 3 insights -->
 ## What this project is about
-A React/Next.js fiber-snatcher dev tool with a multi-surface UI; dominant work is feature shipping under time pressure with design mocks as the authoritative source of truth.
+A React/Node app (fiber-snatchers) with multi-surface UI and job creation flows. Primary working mode is iterative feature implementation against user-authored design mocks and product specs.
 
 ## Things to do (or keep doing)
-- Read design mocks before implementing any UI label, module name, or creation flow — internal naming conventions are not a substitute
-- Read actual source files before producing gap tables or completion assessments; code beats inference
-- When a bugfix pattern is confirmed working, extract it into a shared standard across all affected surfaces
-- Proceed autonomously on reversible work when the user explicitly signals deadline pressure and grants autonomy
+- **Consult design mocks before writing any UI label, page name, or creation flow** — labels derived from code patterns always mismatch; mocks are the canonical source.
+- **Survey the full affected surface (all sibling pages, sidebar, row expansion) before implementing** — breadth-first first, then depth.
+- **Route completed non-critical items to the deferred review backlog automatically** — don't interrupt flow to seek immediate review unless user asks.
+- **When user signals time pressure and explicit autonomy, proceed on reversible work without confirmation pauses.**
 
 ## Things to avoid
-- Don't claim a UI bug is fixed without exercising the fix on the running dev server — false assurance cycles damage trust fast
-- Don't resolve product-level behavioral decisions (e.g. "can users add files to existing jobs?") implicitly in code; surface them as explicit questions first
-- Don't use agent-authored definition docs (concepts, formal specs) as the authoritative source when the user-authored upstream doc exists and conflicts
-- Stop proceeding past a direct user question mid-stream; answer it before continuing other work
+- **Don't declare a UI bug fixed without exercising the fix on the running dev server** — false assurance from inspection alone is a trust-damaging pattern here.
+- **Don't produce gap tables or completion estimates without reading actual source files** — memory-based assessments consistently overestimate what's built.
+- **Don't use agent-authored downstream definition docs as the authority** — when user-authored spec and agent formalization conflict, the user-authored source wins.
+- **Don't halt for sequential progress confirmation on low-stakes next steps** — interrupt only when you need user-held information to make a real product decision.
 
 ## Open questions / known gaps
-- Recurring tension between "deferred review backlog" workflow and the agent's instinct to gate on immediate review — clarify the default trigger condition once and encode it
-- Multi-surface UI features (page view, row expansion, sidebar) are consistently shipped incomplete; no pre-implementation surface enumeration step exists yet
+- Product-level behavioral decisions embedded in implementation (e.g. can users add files to an existing job?) must be surfaced as explicit questions rather than silently resolved from code patterns — recurring gap.

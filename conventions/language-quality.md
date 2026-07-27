@@ -13,7 +13,7 @@ related:
   - skills/ste-writing/SKILL.md
 tier: 2
 category: conventions
-updated: 2026-07-27
+updated: 2026-07-28
 stale_after_days: 365
 ---
 
@@ -22,27 +22,33 @@ stale_after_days: 365
 What actually degrades this account's agent prose, measured rather than assumed.
 Source: the 2026-07-27 pyramid sweep over 60 days of transcripts (2,106
 transcripts, 32,991 assistant messages, 2.5M words), user-ratified via two
-decision pages, adversarially vetted (full artifacts and event log:
-`~/.claude/style/sweep/20260727-simple-lang/`). Lint any human-facing draft
-with `python3 ~/.claude/scripts/style/prose-lint.py FILE` (or pipe stdin);
-score is weighted violations per 100 words, lower is cleaner.
+decision pages, adversarially vetted. Full artifacts and event log:
+`~/.claude/style/sweep/20260727-simple-lang/`, rulings in
+`vetted/p7-rulings.json`.
+
+Lint any human-facing draft with
+`python3 ~/.claude/scripts/style/prose-lint.py FILE` (stdin works). The score
+is weighted violations per 100 words; lower is cleaner. One caveat before you
+lint style docs: a file that quotes banned words and defect examples (this
+file, the ste-writing skill) scores on its own material, because no regex can
+tell mention from use. Read those scores accordingly.
 
 The headline finding: the classic banned-word tells are extinct here (3 hits in
-2.5M words). The surviving slop is structural, and its two worst genera are
+2.5M words). The surviving slop is structural. Its two worst genera are
 invisible to any word ban.
 
 ## The categories (kept after adversarial vet)
 
 ### structure — the two-split chain and the fused sentence
-The reader must read a sentence twice. The core defect is fusion: the two-split
-pattern (a clause, then a dash-elaboration) overused, stacked parentheticals
-interrupting the main clause, several distinct actions welded into one
-sentence. The em-dash is the loudest marker, but comma and colon splices of the
-same shape count. Length alone never triggers it; a 40-word sentence that
-parses linearly is fine. Evidence-density never excuses it (user ruling D1a/D2a:
-no report exemption).
 
-Real instance, and the rewrite shape:
+The reader must read a sentence twice. The core defect is fusion: the
+two-split pattern (a clause, then a dash-elaboration) overused, stacked
+parentheticals interrupting the main clause, several distinct actions welded
+into one sentence. The em-dash is the loudest marker, but comma and colon
+splices of the same shape count. Length alone never triggers it; a 40-word
+sentence that parses linearly is fine. Evidence-density never excuses it
+(user rulings D1a and D2a: no report exemption).
+
 > Before: "The review agent is a fable seat named X, now auditing the app
 > against the CPRD with a structured brief: extract every user-facing
 > capability (numbered, section-cited), verify each adversarially in code
@@ -55,17 +61,14 @@ Real instance, and the rewrite shape:
 > 2. Verify each in code (file:line) and in the live app at :5101, read-only.
 > 3. Classify each item: BUILT, PARTIAL, or MISSING. …"
 
-Detection: mechanical for the length tiers (>25/>35/>50 words) and connective
-dashes (spaced or letter-joined only; digit ranges like L15-L36 never count);
-judgment for parenthetical-interruption severity.
-
 ### verdict-first — the conclusion before the facts
+
 A verdict or done-state placed before the status facts that would justify it,
 even when those facts follow and are true. Shapes: a "Done."/"Perfect." opener
 with the evidence below; a PASS headline whose own details contradict it; the
-agent declaring the overall task done. The done-verdict belongs to the user:
-report what is done, what is not, what needs their review, then advise,
-clearly marked as advice (user rulings D3-D7 + the standing memory
+agent declaring the overall task done. The done-verdict belongs to the user.
+Report what is done, what is not, and what needs their review; then advise,
+clearly marked as advice (user rulings D3-D7 and the standing memory
 `feedback_verdict-last-status-reports`). Distinguish from overclaim: here the
 evidence exists but is placed after the verdict.
 
@@ -75,26 +78,38 @@ evidence exists but is placed after the verdict.
 > After: "The write call returned. Now I check that the file exists and is
 > complete."
 
-Detection: mechanical opener check (verdict token in the first sentence) at
-good precision; the verdict-contradicted-by-details case is judgment-only.
-
 ### overclaim — the claim without its evidence
-Kept standalone by user ruling (A5b) despite rarity (~14 clear matches in 33k
-messages): completion claims with no evidence token anywhere, celebration
-before the verification has run, "should now work" futures. Owned behaviorally
-by `rules/exercise-based-verification.md` and the declared-ready Stop hook;
-this category is its prose-level name.
 
-Detection: the future-phrase list is mechanical; claim-versus-evidence matching
-is judgment-only.
+The message asserts what nothing in it shows: a completion claim with no
+evidence token anywhere, celebration before the verification has run, a
+"should now work" future. It is rare (about 14 clear matches in 33k messages).
+The user kept it standalone anyway (ruling A5b). The behavioral rule lives in
+`rules/exercise-based-verification.md` and the declared-ready Stop hook; this
+category is the prose-level name for the same failure.
+
+> Before: "Updated the config. This should fix the flaky startup."
+>
+> After: "I updated the config. I have not re-run the startup path, so the
+> fix is unverified."
 
 ### contrastive-scaffold — "not X, but Y"
-The negation frame the thesaurus already bans (thes-…-80), promoted to a
-category after the vet found it in ~8% of scored messages with no category
-home. State what the thing is; drop the "not X" preamble. Detection:
-mechanical for the two validated high-precision forms ("not X, but Y" and
-"— it's"); the bare "not X —" form was tested and rejected (fires on plain
-negation).
+
+The negation frame the thesaurus already bans (thes-20260716-165410-80),
+promoted to a category after the vet found it in ~8% of scored messages with
+no category home. State what the thing is; drop the "not X" preamble.
+
+> Before: "This isn't a cache problem, but a race in the loader."
+>
+> After: "The bug is a race in the loader."
+
+## Detection at a glance
+
+| category | mechanical (prose-lint catches it) | judgment-only (review-time) |
+|---|---|---|
+| structure | word tiers >25/>35/>50; connective dashes (digit ranges like L15-L36 never count) | parenthetical-interruption severity |
+| verdict-first | verdict token opening the first sentence | verdict contradicted by its own details |
+| overclaim | the "should now work" phrase family | claim-versus-evidence matching |
+| contrastive-scaffold | "not X, but Y" and "— it's" (the bare "not X —" form fires on plain negation; rejected) | none observed |
 
 ## Merged and demoted (do not re-add as categories)
 
@@ -103,27 +118,27 @@ negation).
   jargon/marketing words), not new classes. The rows live in
   `style/thesaurus.jsonl`; prose-lint carries the aligned lexicons.
 - **reference** (ambiguous actors, name-churn: calling one thing "the script",
-  "the sim", "the tool") is real but rare and judgment-only; it is a
+  "the sim", "the tool") is real but rare and judgment-only. It is a
   review-time check in /skeptical-review's lane, not a linter category. The
-  fleet's mechanical proxies for it were 97% noise; do not trust naked-this
-  counts as evidence of it.
+  fleet's mechanical proxies for it (sentence-initial this/it counts) were 97%
+  noise; treat such counts as unreliable evidence.
 
 ## The register this taxonomy protects
 
-Dense, evidenced, code-referenced prose is the house style and is NOT a defect.
-The line: each sentence parses in one pass, facts precede conclusions, the
-reader never has to guess an antecedent, and no claim outruns its evidence.
-Chat replies keep a voice (`rules/audience-aware-writing.md` stays the
-router); strict controlled English (`/ste-writing`, strict mode) is for docs,
-error messages, runbooks, and hook text only.
+Dense, evidenced, code-referenced prose is the house style and is NOT a
+defect. The line: each sentence parses in one pass, facts precede conclusions,
+the reader never has to guess an antecedent, and no claim outruns its
+evidence. Chat replies keep a voice (`rules/audience-aware-writing.md` stays
+the router). Strict controlled English (`/ste-writing`, strict mode) is for
+docs, error messages, runbooks, and hook text only.
 
 ## Provenance and the method note
 
-Built recall-first, precision-late: mechanical scoring over the corpus, a
-recall-biased local-model flagging fleet ($0), per-category adversarial
-confirm seats, an opus vet that overturned two categories and vetoed six
-detection rules, and two user decision pages as the only truth-bearers. The
-STE kit (asd-ste100.org, the "cure for AI slop" episode) contributed the
-sentence-cap and active-voice core; its linter was derived from, not adopted
-(its word list conflicted with house vocabulary, and it cannot see either of
-the two worst categories here).
+The method was recall-first, precision-late. Mechanical scoring ranked the
+corpus. A recall-biased local-model fleet flagged candidates at $0. Six
+per-category seats confirmed or refuted each sampled flag adversarially. An
+opus vet overturned two categories and vetoed six detection rules. Two user
+decision pages were the only truth-bearers. The STE kit (asd-ste100.org, the
+"cure for AI slop" episode) contributed the sentence-cap and active-voice
+core. Its linter was derived from, not adopted: its word list conflicted with
+house vocabulary, and it cannot see either of the two worst categories here.

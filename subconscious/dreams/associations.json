@@ -347,22 +347,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "2b749149-7dc5-4180-8598-c3f293daa9bd",
-    "patterns_linked": [
-      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
-      "9113aef2-e381-4f24-9264-9a4051333d8e",
-      "752ed245-a2b8-462e-b642-556dba6017f5",
-      "0540dc17-768a-45e2-a13e-3789706ff154"
-    ],
-    "hypothesis": "The agent substitutes an outbound signal (sending code, sending a message, sending a notification) for proof of an outcome (feature works, message arrived, file exists) — the same epistemic error manifests identically across IPC verification, development completion claims, and sub-agent coordination.",
-    "confidence": 0.18000000000000013,
-    "actionable": true,
-    "suggested_rule": "Always require a reception-side proof artifact (a round-trip reply, a rendered screenshot, a file-existence check) before treating any outbound action as successful — sending is never arriving.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
     "patterns_linked": [
       "92a767af-37ad-4b83-84af-684fd98948b5",
@@ -727,21 +711,6 @@
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
     "promoted": true,
     "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "d92e0708-572d-4a30-ac04-2372ba7e8dec",
-    "patterns_linked": [
-      "893cfff0-185e-4553-9a56-ced4a90d43ec",
-      "d5356f3e-ac78-4aab-b95f-ec6e405953f4",
-      "3d41539a-3bb0-4f00-a71c-9238dbeaffc5"
-    ],
-    "hypothesis": "The agent treats its own summaries and derivative documents as ground truth — gap analyses cite agent-authored formalizations, completion assessments reference their own reports rather than the running code, and sub-agents select agent-authored docs as authority — all instances of a self-referential loop where the map replaces the territory.",
-    "confidence": 0.1500000000000001,
-    "actionable": true,
-    "suggested_rule": "Always trace any authority claim back to a non-agent-authored source (user spec, running code, actual output) before acting on it — if the only evidence is something this agent or a sibling agent wrote, it is circular and must be re-grounded.",
-    "promoted": false,
-    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -1488,21 +1457,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "3b704290-9240-48d5-ab4e-8aa7f130e02a",
-    "patterns_linked": [
-      "2e635af7-73fc-4c58-815a-07aee8c2d1cf",
-      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
-      "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
-    ],
-    "hypothesis": "The user's preference for deferred review staging areas directly contradicts the agent's tendency to omit decision context — deferred items are designed to be acted on LATER without the session's working memory, yet the agent writes them as if the reader shares current context, making the deferred queue unusable without follow-up.",
-    "confidence": 0.12000000000000005,
-    "actionable": true,
-    "suggested_rule": "Always write deferred items as self-contained decision packets (what, options, tradeoffs, recommended default) that a reader with zero session context can act on without asking a follow-up question.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "d6b4371d-43bb-4fdf-ab2c-3021967dc8da",
     "patterns_linked": [
       "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
@@ -1511,9 +1465,24 @@
       "0b318bca-d338-4da1-ae19-62c2393a3771"
     ],
     "hypothesis": "The agent has a single epistemic failure that manifests across unrelated domains: treating the absence of a failure signal (successful send, clean diff, sub-agent notification, zero-default) as the presence of a success signal — fabricating positive evidence from the void rather than requiring an end-to-end existence proof.",
-    "confidence": 0.82,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always require a positive existence proof (round-trip reply, running output, file-on-disk check, non-default value) before reporting success — never infer success from the absence of a failure signal.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "c2452f67-5aa1-4f83-be43-c891fc68d9d4",
+    "patterns_linked": [
+      "80495565-80e4-4f6e-b0d2-41b6095773fb",
+      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
+      "893cfff0-185e-4553-9a56-ced4a90d43ec"
+    ],
+    "hypothesis": "The agent has a consistent 'internal model substitution' failure across three unrelated domains — it derives UI labels from code patterns instead of design mocks, estimates completion from memory instead of reading source, and treats its own formalizations as authoritative instead of the user's spec — all three are the same shortcut of trusting an internally-derived approximation over the canonical external source.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always consult the canonical external source (design mocks for UI, source code for gap assessments, user-authored specs for authority) before generating any claim that could be derived from it — never substitute an internal approximation for a readable original.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2952,11 +2921,11 @@
       "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
     ],
     "hypothesis": "Every handoff artifact the agent produces — deferred decision items, IPC checkpoints, file citations, decision questions — is authored for a receiver who shares the sender's full context, systematically requiring one extra round-trip before the receiver can act; the agent optimizes for authoring speed over receiver autonomy.",
-    "confidence": 0.78,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always include enough context in any handoff artifact (decision question, citation, checkpoint, deferred item) that the receiver can act on it without a follow-up question — test by asking 'could someone who just walked in act on this?'",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -3015,6 +2984,22 @@
     "confidence": 0.76,
     "actionable": true,
     "suggested_rule": "Before any operation that crosses a trust boundary (local→remote, memory→disk, branch→branch), run a domain-specific pre-flight: git ops get the verification triad, file ops get a existence check, auth ops get a 'is this the right target' confirmation. Never inherit verification from a prior tool call.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "1a95c5e8-5f8c-4862-896b-cf87c0988e49",
+    "patterns_linked": [
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+      "6ff96e77-dcbb-4bd6-819c-4c74af97fa60",
+      "249ed821-f665-4ba9-b2f3-7b257a38a0ff"
+    ],
+    "hypothesis": "Instance-level fix myopia (patching one callsite, one page, one policy violation) and one-sided verification (checking only the sender, only one visual mode) share the same attention-boundary failure: the agent's working context is anchored to the immediate site of the change and does not follow the reference outward to all consumers or all states — the fix in both cases is an explicit fan-out audit before declaring done.",
+    "confidence": 0.76,
+    "actionable": true,
+    "suggested_rule": "When fixing a pattern instance or verifying a change, always enumerate all other consumers/pages/states that share the same pattern or component before declaring the fix complete — a fix scoped to the triggering instance is half a fix.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -3767,21 +3752,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "72eda443-e287-4d34-a9f6-8d4dcafa7396",
-    "patterns_linked": [
-      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
-      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
-      "1221af86-2465-4d63-a6ba-b56f1da7f313"
-    ],
-    "hypothesis": "Multi-agent architectures fail at the same point as distributed systems: when one node dies or stalls, peers waiting on it have no timeout, no self-report, and no way to be re-queued — the dead-letter problem recurs because the design assumes the happy-path lifecycle and never models node failure.",
-    "confidence": 0.1500000000000001,
-    "actionable": true,
-    "suggested_rule": "Always design multi-agent coordination with a liveness contract: every waiting agent must have a maximum idle duration after which it self-reports blocked state, and every checkpoint must record enough peer identity to re-establish contact after a session clear.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "d900ceaa-87a2-477a-b3f5-60ba7d8b61bc",
     "patterns_linked": [
       "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
@@ -3789,11 +3759,11 @@
       "9113aef2-e381-4f24-9264-9a4051333d8e"
     ],
     "hypothesis": "The agent consistently mistakes partial observation for complete verification — a gap assessment without reading code, a UI review in only one visual mode, a completion claim without running the code — and the temporal pattern is that this gets worse under complexity, because the number of states to observe grows while the agent's verification effort stays fixed at 'one pass seemed fine.'",
-    "confidence": 0.75,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always enumerate the observable states (code paths, visual modes, runtime conditions) before claiming verification — a single-state observation is partial verification and must be scoped as such in the claim.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -3992,6 +3962,21 @@
     "actionable": false,
     "suggested_rule": null,
     "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "242d8b2d-3606-4136-a228-9f3a2a78df0c",
+    "patterns_linked": [
+      "6e0419e3-4fc4-492d-be7f-ba6f18976030",
+      "60b247fe-db1a-4f0d-be26-c95cb386a1e2",
+      "77862baa-35de-4372-9bbf-56525b5cc07a"
+    ],
+    "hypothesis": "The agent inverts the optimal question distribution: it asks too often for trivial sequential go-aheads (low-value interrupts), yet when it does surface a real product decision, the question lacks enough context to be self-contained — the fix is a single policy: ask less frequently but ask better, with the threshold set at 'does this require information only the user has?'",
+    "confidence": 0.74,
+    "actionable": true,
+    "suggested_rule": "Avoid halting for sequential progress confirmation unless a genuine decision point requires user-held information; when halting, always include prior context, concrete options, and tradeoffs so the question is answerable in one reply.",
+    "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   },
@@ -4513,22 +4498,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "56298559-1755-43ca-b09f-8afc6f505123",
-    "patterns_linked": [
-      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
-      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
-      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
-      "9d416236-26cb-4b6d-b3aa-feaa714f20e2"
-    ],
-    "hypothesis": "Treating a global concern as instance-scoped and treating an unknown case as allowed are the same structural error: the agent handles what it can see and implicitly passes everything else — whether that's unvisited pages sharing a drawer, sibling lists missing pagination, unpatched instances of a policy violation, or unrecognized commands defaulting to ALLOW.",
-    "confidence": 0.12000000000000005,
-    "actionable": true,
-    "suggested_rule": "When fixing any concern that could have siblings (pages, instances, commands, cases), always enumerate the full population first and default-DENY/default-include the unseen members rather than treating only the visible instance.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "08dd35f8-012a-4264-ab8b-9dba7f9f15a9",
     "patterns_linked": [
       "893cfff0-185e-4553-9a56-ced4a90d43ec",
@@ -4536,26 +4505,41 @@
       "fa33ba9a-2df7-4970-9a80-bbe772854f42"
     ],
     "hypothesis": "The agent substitutes its own derived model for the canonical upstream source across three unrelated domains — an agent-authored doc replaces the user spec, internal naming conventions replace design mocks, and a familiar technical pattern (env vars) replaces the user's actual conceptual model (runtime config) — all three are the same 'map to nearest familiar pattern' shortcut that silently discards the user's actual authority.",
-    "confidence": 0.72,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always identify and consult the user's canonical upstream source (product spec, design mock, stated intent) before deriving from internal patterns — when your derived understanding conflicts with the upstream, the upstream wins.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "f4d32044-fc70-433e-af5f-18e8136bc48e",
+    "patterns_linked": [
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "0540dc17-768a-45e2-a13e-3789706ff154",
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "3d41539a-3bb0-4f00-a71c-9238dbeaffc5"
+    ],
+    "hypothesis": "Mistaking a locally-observable artifact for ground truth about a remote system is one failure with two costumes: send-side telemetry substitutes for delivery proof (IPC/notifications), and agent-authored formalizations substitute for user-authored authority — both trust proximity over correctness.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always identify the canonical remote source (the peer's ack, the user's spec, the running app) before treating any locally-produced artifact (a send log, a derived doc, a notification) as evidence of the remote state.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   },
   {
-    "id": "1091abb1-a383-4ada-9451-ca6105558ab6",
+    "id": "08e065c9-7352-475b-b3e2-804a2ba4312d",
     "patterns_linked": [
-      "939866a0-afe6-43f0-a5a0-205c40be4c99",
-      "d5bc576c-df72-4310-b5f9-5fac6ca83b93",
-      "893cfff0-185e-4553-9a56-ced4a90d43ec",
-      "fc400953-746f-4d74-b1d4-5783c0d50505"
+      "7d60b10c-5dc5-4aba-85d5-7d98090863d0",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+      "80495565-80e4-4f6e-b0d2-41b6095773fb"
     ],
-    "hypothesis": "Every output artifact has an audience boundary, and the recurring failure is metadata/commentary appropriate for one audience leaking across that boundary in BOTH directions — internal banter leaks into external docs, agent-internal formalizations get cited as user-facing authority, co-authorship metadata pollutes commit messages, and machine-formatted dumps replace human-readable reports.",
-    "confidence": 0.20000000000000004,
+    "hypothesis": "The user's breadth-first preference, the sibling-page pagination miss, and the mock-consultation failure are all temporal-ordering errors with the same shape: the agent dives deep into implementation on the first item it touches instead of surveying the full surface (all pages, all mocks, all surfaces) before writing any code — depth-first is the agent's default, but the correct sequence is always survey-then-implement.",
+    "confidence": 0.71,
     "actionable": true,
-    "suggested_rule": "Before finalizing any artifact, explicitly name its audience and strip anything that belongs to a different audience layer — the question is never 'is this true' but 'does this reader need to see it'.",
-    "promoted": false,
+    "suggested_rule": "Always survey the full affected surface (all sibling pages, design mocks, existing patterns) before implementing any change — depth-first on the first item encountered consistently misses patterns and context that a breadth-first scan would have revealed.",
+    "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
   },
@@ -4567,9 +4551,24 @@
       "e7987094-0e0d-48d1-998a-980249e28daa"
     ],
     "hypothesis": "Multi-agent architectures degrade ungracefully at their boundaries: orchestrators die leaving sub-agents blocked, unanswered IPC messages become mechanical debt, and auth failures stall silently — the common structural gap is that every agent assumes its counterpart will complete normally, with no protocol for the counterpart's death or incapacity.",
-    "confidence": 0.7,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always design multi-agent interactions with a dead-peer protocol: sub-agents self-report idle state after a timeout, unanswered messages get replied to before session end, and auth blocks are surfaced immediately with the user command to unblock — never assume the counterpart will complete normally.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "e1b703ae-5fd0-4242-af30-142f03cfb078",
+    "patterns_linked": [
+      "e7987094-0e0d-48d1-998a-980249e28daa",
+      "38428655-aa74-48c8-b491-d727d6916ad0",
+      "ba3d6f55-e0a2-408a-8af7-602e6a04df66"
+    ],
+    "hypothesis": "When the agent hits a hard capability boundary (auth wall, harness block, interactive terminal requirement), the correct behavior converges to one shape regardless of domain: package what you have into the most useful form and hand it off explicitly with the exact next step — the failure mode is always the same (stall, workaround, or silently give up), and the fix is always the same (structured handoff).",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "When hitting any capability boundary that cannot be crossed autonomously, immediately package completed findings and the exact user-actionable command into a structured handoff rather than attempting workarounds or stalling.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4597,11 +4596,11 @@
       "1f3ee51e-bcdb-4055-b50e-a6041d6a7489"
     ],
     "hypothesis": "The agent has a systematic bias toward adding implicit flexibility (default-allow fallbacks, self-gating generalization, instance-level patches) when the user's actual intent is explicit constraint — the agent treats boundaries as suggestions to be softened rather than invariants to be enforced.",
-    "confidence": 0.68,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always default to DENY/RESTRICT for boundaries and enforce stated scope literally — never add fallback flexibility, generalization, or softening to a constraint the user stated as hard.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   }
 ]

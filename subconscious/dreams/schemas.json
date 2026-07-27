@@ -3466,8 +3466,8 @@
     "category": "user-preference",
     "valence": "positive",
     "confidence": 0.78,
-    "occurrences": 8,
-    "member_count": 8,
+    "occurrences": 9,
+    "member_count": 9,
     "rep_pattern_id": "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
     "member_ids": [
       "e366abd7-89e3-4f79-8efc-c760ceb2036e",
@@ -3477,7 +3477,8 @@
       "fff706ff-927f-4145-affa-5a07ccc0896e",
       "6b578aaf-8219-43b4-8aae-b4589a7340d2",
       "26437926-dfe2-424c-8e47-c7e0f163b5d5",
-      "a67f5569-5c3e-4cd4-a2d8-7770834f382c"
+      "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
+      "d5edcd6c-fa28-428f-8335-43f903762147"
     ],
     "member_texts": [
       "The user prefers completed, non-critical work to be queued in an async 'to be reviewed' list rather than prompting an immediate review — only critical items warrant blocking for user attention.",
@@ -3487,7 +3488,8 @@
       "The user prefers a deferred 'to-be-reviewed' queue in the project backlog for non-critical completed work, rather than requesting immediate review after each item — work lands there by default and gets crossed off when the user actually checks it, enabling uninterrupted work flow.",
       "The user prefers maintaining a 'to be reviewed' backlog for completed non-critical work rather than pausing for immediate review; completed items go to that queue unless the user explicitly asks for immediate review.",
       "The user prefers completed non-critical items to be added to a deferred 'to be reviewed' backlog rather than surfaced for immediate review. Items in the backlog are crossed off when the user personally verifies them, not when the agent completes them.",
-      "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than triggering an immediate review unless explicitly asked."
+      "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than triggering an immediate review unless explicitly asked.",
+      "When the user establishes an explicit deferred-review queue for completed non-critical work, route finished items there automatically rather than interrupting flow to seek immediate review confirmation after each task."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -3508,10 +3510,15 @@
       "-Users-alcatraz627--claude",
       "-Users-alcatraz627--claude-widgets-claude-instances",
       "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627--claude-style-sweep-20260727-simple-lang",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries",
+      ".claude"
     ],
     "first_seen": "2026-07-22T18:48:21.553951+00:00",
-    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+    "last_seen": "2026-07-27T19:57:22.058976+00:00"
   },
   {
     "id": "021163176318f4da",
@@ -4184,53 +4191,81 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.92,
-    "occurrences": 3,
-    "member_count": 3,
+    "occurrences": 4,
+    "member_count": 4,
     "rep_pattern_id": "893cfff0-185e-4553-9a56-ced4a90d43ec",
     "member_ids": [
       "893cfff0-185e-4553-9a56-ced4a90d43ec",
       "45f66753-1e57-45f0-a260-459fab0d7feb",
-      "5225d9af-6378-4293-82f8-2d2e83062ba9"
+      "5225d9af-6378-4293-82f8-2d2e83062ba9",
+      "b6810ac4-ce09-4054-947c-f4c3434d469b"
     ],
     "member_texts": [
       "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from the codebase), that derivative document must never be used as the authoritative specification in gap audits or feature planning — the original user-authored product spec remains the upstream authority, and citing agent-authored formalizations as the source inverts the derivation chain.",
       "When conducting a gap audit against product requirements, the agent must use the user-authored upstream source document as authoritative, not a downstream technical-definitions doc the agent itself generated from that source.",
-      "When dispatching a sub-agent to audit feature completeness or capability gaps, the agent must verify which document is the authoritative user-authored source before dispatching — not a downstream AI-generated derived artifact. Reviewing gaps against a derived doc instead of the originating spec produces systematically wrong verdicts."
+      "When dispatching a sub-agent to audit feature completeness or capability gaps, the agent must verify which document is the authoritative user-authored source before dispatching — not a downstream AI-generated derived artifact. Reviewing gaps against a derived doc instead of the originating spec produces systematically wrong verdicts.",
+      "When an agent has authored a downstream formalization document from a user-authored product spec, feature gap audits must be grounded in the original user-authored document; using the agent-generated derivative as the authoritative reference produces incorrect completeness verdicts."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
       "versable-builder",
       "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-style-sweep-20260727-simple-lang",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude",
+      "claude-ipc"
     ],
     "first_seen": "2026-07-23T17:15:26.290227+00:00",
-    "last_seen": "2026-07-26T20:18:56.056799+00:00"
+    "last_seen": "2026-07-27T19:57:22.058976+00:00"
   },
   {
-    "id": "2ac44bfdf449f23e",
-    "text": "When the agent ships UI features (labels, flows, module names) without consulting design mocks, the result mismatches user expectations; the agent must read the design mocks before implementing any named UI element.",
+    "id": "7fc3f00eaa80a4bb",
+    "text": "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and complete rework; the mocks must be consulted before any UI label or flow is shipped, not derived from internal naming conventions.",
     "category": "approach",
     "valence": "negative",
     "confidence": 0.92,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "9c30a950-b658-4f8f-a800-c1f095749cdf",
+    "occurrences": 5,
+    "member_count": 5,
+    "rep_pattern_id": "80495565-80e4-4f6e-b0d2-41b6095773fb",
     "member_ids": [
       "746d0edf-6465-4f49-b8fe-2f74cf730413",
-      "9c30a950-b658-4f8f-a800-c1f095749cdf"
+      "9c30a950-b658-4f8f-a800-c1f095749cdf",
+      "fefe6016-599b-420d-a1de-8425490b0a1e",
+      "05d9df9c-1cdf-4d8b-acea-b99ba94fcd88",
+      "80495565-80e4-4f6e-b0d2-41b6095773fb"
     ],
     "member_texts": [
       "When design mocks are referenced as the design authority throughout a codebase, the agent must read them before implementing any UI element names, labels, or structures — skipping this step produces naming that diverges from the agreed design and requires manual correction by the user.",
-      "When the agent ships UI features (labels, flows, module names) without consulting design mocks, the result mismatches user expectations; the agent must read the design mocks before implementing any named UI element."
+      "When the agent ships UI features (labels, flows, module names) without consulting design mocks, the result mismatches user expectations; the agent must read the design mocks before implementing any named UI element.",
+      "UI module labels, naming, and creation flows must be validated against the design mocks before shipping, not derived from internal naming conventions or prior code patterns alone.",
+      "UI module labels, naming, and job-creation flows must be validated against design mocks before shipping, not derived from internal naming conventions or prior code patterns.",
+      "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and complete rework; the mocks must be consulted before any UI label or flow is shipped, not derived from internal naming conventions."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
       "versable-builder",
       "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627--claude-style-sweep-20260727-simple-lang",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries",
+      "i-dream",
+      ".claude",
+      "claude-ipc"
     ],
     "first_seen": "2026-07-23T17:15:26.290227+00:00",
-    "last_seen": "2026-07-25T04:58:05.474329+00:00"
+    "last_seen": "2026-07-27T19:57:22.058976+00:00"
   },
   {
     "id": "9731727e864e0a58",
@@ -4436,34 +4471,6 @@
     "last_seen": "2026-07-27T00:39:47.279020+00:00"
   },
   {
-    "id": "0b1bff62f1f3640b",
-    "text": "UI module labels, naming, and creation flows must be validated against the design mocks before shipping, not derived from internal naming conventions or prior code patterns alone.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.92,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "fefe6016-599b-420d-a1de-8425490b0a1e",
-    "member_ids": [
-      "fefe6016-599b-420d-a1de-8425490b0a1e",
-      "05d9df9c-1cdf-4d8b-acea-b99ba94fcd88"
-    ],
-    "member_texts": [
-      "UI module labels, naming, and creation flows must be validated against the design mocks before shipping, not derived from internal naming conventions or prior code patterns alone.",
-      "UI module labels, naming, and job-creation flows must be validated against design mocks before shipping, not derived from internal naming conventions or prior code patterns."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-claude-ipc",
-      "-Users-alcatraz627--claude"
-    ],
-    "first_seen": "2026-07-26T20:18:56.056799+00:00",
-    "last_seen": "2026-07-27T00:39:47.279020+00:00"
-  },
-  {
     "id": "5f6ad973a370737c",
     "text": "When a bug repro is confirmed to be narrower than originally described (e.g., triggers in one entry point but not another), collecting that discriminating detail before starting the fix substantially reduces the risk of patching the wrong code path.",
     "category": "approach",
@@ -4584,5 +4591,71 @@
     ],
     "first_seen": "2026-07-27T00:39:47.279020+00:00",
     "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "6195b141bec6df67",
+    "text": "A mutation test on a guard that stays green often means a redundant upstream check is absorbing the mutation, hiding that the guard itself is unpinned; the redundant check must be removed before the guard can be independently verified.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "61a88d4e-df12-4b3e-b7c5-27458d25833a",
+    "member_ids": [
+      "61a88d4e-df12-4b3e-b7c5-27458d25833a"
+    ],
+    "member_texts": [
+      "A mutation test on a guard that stays green often means a redundant upstream check is absorbing the mutation, hiding that the guard itself is unpinned; the redundant check must be removed before the guard can be independently verified."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-style-sweep-20260727-simple-lang",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude",
+      "claude-ipc",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-27T19:57:22.058976+00:00",
+    "last_seen": "2026-07-27T19:57:22.058976+00:00"
+  },
+  {
+    "id": "64291f43ce8de0c6",
+    "text": "When the user explicitly signals extreme time pressure and requests autonomous progress on non-irreversible work, proceed without pausing for low-risk confirmations; the explicit autonomy grant overrides the usual check-in cadence for that session.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.62,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ae9529de-62b4-4452-99d3-71e25af32d66",
+    "member_ids": [
+      "ae9529de-62b4-4452-99d3-71e25af32d66"
+    ],
+    "member_texts": [
+      "When the user explicitly signals extreme time pressure and requests autonomous progress on non-irreversible work, proceed without pausing for low-risk confirmations; the explicit autonomy grant overrides the usual check-in cadence for that session."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-style-sweep-20260727-simple-lang",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final",
+      "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude",
+      "claude-ipc",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-27T19:57:22.058976+00:00",
+    "last_seen": "2026-07-27T19:57:22.058976+00:00"
   }
 ]

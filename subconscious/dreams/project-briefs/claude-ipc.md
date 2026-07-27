@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-23T00:58:16.447772+00:00 · 20 patterns / 8 insights -->
+<!-- i-dream project brief · 2026-07-27T20:03:20.551429+00:00 · 20 patterns / 6 insights -->
 ## What this project is about
-`claude-ipc` is an inter-process communication broker between Claude Code sessions. Work is coordination-heavy: message routing, delivery verification, ownership negotiation, and multi-agent task handoff.
+claude-ipc is a cross-session IPC broker for Claude Code instances — named-session registration, message delivery, and peer discovery. Work style is verification-heavy with a hard boundary between "sent" and "received."
 
 ## Things to do (or keep doing)
-- Verify from the **consumer's** perspective — check delivery not send-success, observe in the user's mode not dev mode, run the path not the suite.
-- Emit explicit `UNCERTAIN`/`DENY` when input is absent; never zero-default or default-ALLOW a missing lookup — absence must propagate, not collapse to a plausible value.
-- Dispatch a fresh adversarial reviewer sub-agent immediately after implementing any complex feature; it reliably catches HIGH-severity bugs the main agent misses.
-- When a complaint says "too noisy / too aggressive," tune intensity — don't disable; reconstruct original intent before sizing the correction.
+- **Survey the full affected surface before writing any code** — enumerate all sibling pages, consumers, or states that share a pattern; depth-first on the first item encountered is the recurring failure shape here
+- **Run the actual code path to confirm delivery** — send-success is a proxy, not proof; dogfood the IPC path end-to-end before claiming a message flow works
+- **Propagate uncertainty on empty lookups** — when a probe returns nothing, emit UNCERTAIN/DENY, never a synthesized zero or default-ALLOW
+- **State blocking conditions explicitly** — if pausing mid-task, name the stopping reason and what the user must do; silent pauses cost a check-in round-trip
 
 ## Things to avoid
-- Don't treat proxy evidence (send-success log, test exit code, single-mode screenshot) as verification — proxy confirms the action was performed, not that the consumer experienced the outcome.
-- Don't commit or push — this is a protected repo; prepare the change, show the diff, hand it to the user.
-- Don't apply a partial fix when told a component must be global — audit the full codebase and fix ALL instances in the same response.
-- Don't let task lists drift silently across many turns; reconcile completed/dropped items before stopping.
+- **Don't treat send-success as delivery confirmation** — the failure mode is a plausible-looking positive (exit 0, success status) that masks non-delivery; verify the receiver side
+- **Don't patch one instance of a pattern** — when fixing a bug or applying a convention, find all callsites/pages that share the same shape before declaring done
+- **Don't commit or push without explicit user instruction** — this project is in the protected-repos registry; prepare the diff and hand it to the user
+- **Don't source UI labels or flows from code conventions** — consult design mocks first; internal naming patterns have caused complete rework
 
 ## Open questions / known gaps
-- Multi-agent ownership negotiation has no authoritative single source — parallel agents make conflicting assumptions about who owns which task; this manifests repeatedly.
-- Test pipeline caches produce false-positive verification; busting caches explicitly before claiming a code change is confirmed is not yet habitual.
+- Recurring tension between proxy evidence (test-pass, send-log) and direct evidence (actual peer receipt) — verification gates may need architectural reinforcement
+- Task lists drift silently across long sessions; reconcile with the Task tool before stopping on any multi-turn change

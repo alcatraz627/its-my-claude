@@ -52,7 +52,10 @@ Before committing code changes, run `/cleanup-comments --changed` in preview
 mode and apply the confirmed strips/rewrites in the same commit. The write-time
 hooks catch noise and essays; this pass is the fresh-eyes read that catches the
 wordy middle band (`style/derived/comment.md` holds the user's verdicts: minimum
-words, never the WHAT). Skip for docs-only or non-code commits.
+words, never the WHAT). Skip for docs-only or non-code commits. For commits
+that touch human-facing docs, run `python3 ~/.claude/scripts/style/prose-lint.py`
+on the changed .md files and fix what it flags in earnest prose
+(`conventions/language-quality.md` is the taxonomy behind the scores).
 
 ## Review contract — all review surfaces (/skeptical-review, /code-review, /review, PR reviews)
 

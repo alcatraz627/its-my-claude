@@ -40,6 +40,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260702-202559-fe"
   },
   {
+    "id": "trig-critique-loops-cannot-produce-design-gestalt",
+    "from_slug": "critique-loops-cannot-produce-design-gestalt",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Three critique-fix rounds polished mechanics but never designed a gestalt",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260727-092416-a9"
+  },
+  {
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
@@ -53,7 +63,7 @@
     "id": "trig-design-mocks-never-consulted",
     "from_slug": "design-mocks-never-consulted",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Shipped module labels + creation flow without ever consulting the design mocks",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -98,16 +108,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260717-200208-8d"
-  },
-  {
-    "id": "trig-instant-apply-on-preview-surface",
-    "from_slug": "instant-apply-on-preview-surface",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Customize view wrote live config on selection; surface was framed as preview",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260711-214932-dc"
   },
   {
     "id": "trig-literal-request-over-intent",
@@ -180,16 +180,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260714-101802-bd"
   },
   {
-    "id": "trig-speculative-abstractions-without-a-load-bearing-caller",
-    "from_slug": "speculative-abstractions-without-a-load-bearing-caller",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Speculative abstractions without a load-bearing caller",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260624-071907-d0"
-  },
-  {
     "id": "trig-structural-claim-without-reading-code",
     "from_slug": "structural-claim-without-reading-code",
     "from_source": "atone",
@@ -228,6 +218,16 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-092934-4e"
+  },
+  {
+    "id": "trig-untriaged-decision-surface-for-away-principal",
+    "from_slug": "untriaged-decision-surface-for-away-principal",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Decision ledger for away user mixed 3 real asks into 19 flat entries",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260726-220526-44"
   },
   {
     "id": "trig-wrong-authority-doc-handed-to-subagent",

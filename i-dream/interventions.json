@@ -4,7 +4,7 @@
     "slug": "infra-before-grep",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Write"
     },
@@ -55,7 +55,7 @@
     "slug": "file-referenced-without-full-path",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Write"
     },
@@ -80,7 +80,7 @@
     "slug": "ascii-art-tables-instead-of-gum-tools",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Write",
       "input_pattern": "\\.md$"
@@ -93,7 +93,7 @@
     "slug": "source-comment-hygiene",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs|swift)$"
@@ -138,5 +138,17 @@
     },
     "body": "Persist juror/sub-agent verdicts through the data layer: use `atone add --case-file <path>` so the output lands on disk. Never relay a verdict by hand from a return string.",
     "created": "2026-07-25T05:00:11.590362Z"
+  },
+  {
+    "id": "21c3c4770c14faf1",
+    "slug": "critique-loops-cannot-produce-design-gestalt",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(redesign|design questionnaire|design review round|rework the (ui|ux|design)|revamp the (ui|ux|design))\\b"
+    },
+    "body": "Before drafting design questions: name the 3-5 composite user stories this surface serves and tie each question to one. Don't emit a list of independent taste option-picks.",
+    "created": "2026-07-27T19:59:36.977558Z"
   }
 ]

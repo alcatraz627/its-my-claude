@@ -1,5 +1,36 @@
 # ui-gripe — runtime notes
 
+## ui-gripe: Speedway CG setup re-audit (s2e-final-dark/light.png) — 2026-07-27
+
+**Purpose:** No-args re-audit of the revised CG setup form ("final" pair, minutes old);
+diffed against the same-day prior entry's findings before running the full rubric.
+
+**Insights:**
+
+1. Re-audits pay off by diffing the prior entry first: 3 of 5 morning findings were
+   verifiably fixed (dark button token — crop-confirmed; composite caption; Min
+   placeholder collision), which shrank the fresh pass to the truly-new surface.
+2. When the audited app's source is on disk, grep converts UNCONFIRMED pixel claims
+   into verdicts. Two resolved here: row-3's scope caption exists below the fold
+   (setup.tsx:459 "characters per bullet · N bullets" — killed a false finding), and
+   the template button label is a state-switching ternary (setup.tsx:375). The page
+   lived in a SIBLING repo (speedway/, not the repo holding the screenshots) — locate
+   it by grepping a distinctive caption string across the parent dir.
+3. Viewport-fold vs container-clipping disambiguation: crop the bottom strip; a
+   control whose border truncates exactly at the image boundary with page background
+   continuing beside it is a fold cut, not a UI bug. Don't cite absence of anything
+   whose home is below that line.
+4. New reusable check: when a button verb disagrees with a sibling placeholder's verb
+   ("Update template" beside "New template name"), grep the button's JSX for a
+   label ternary — morphing labels are invisible in static shots and change the
+   finding from "wrong label" to "undiscoverable state machine".
+5. Guard-asymmetry check for actions targeting a default/system entity: grep the
+   server lib for delete-guard vs update-guard. Here delete of the default template
+   is refused but one-click overwrite is allowed (content-templates.server.ts:147
+   vs :132) — a footgun finding grounded in file:line, invisible to pixels alone.
+
+---
+
 ## ui-gripe: Speedway CG setup page (s2e-dark.png / s2e-light.png) — 2026-07-27
 
 **Purpose:** General confusion audit (no args) of the Content Generation setup form,

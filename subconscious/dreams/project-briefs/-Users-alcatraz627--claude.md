@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T00:44:37.967809+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-27T20:03:44.725231+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-The `~/.claude` meta-configuration project: behavioral rules, scripts, hooks, and tooling that govern every Claude Code session on this machine. Work is often multi-agent (IPC-coordinated parallel sessions) and involves both the config infrastructure itself and downstream product sessions it governs.
+This is the user's global Claude configuration and tooling repo (`~/.claude`) — behavioral rules, scripts, hooks, skills, and agent-facing conventions. Work here directly shapes every future Claude session; changes have machine-wide blast radius.
 
 ## Things to do (or keep doing)
-- **Require a round-trip reply, not a send-success log, to confirm IPC message delivery** — successful send is not successful receipt.
-- **Audit every page/surface that could trigger a shared UI component before writing any code** — per-page variants are the recurring failure mode.
-- **Include full context in every handoff artifact** (deferred decision, citation, checkpoint) so the receiver can act without a follow-up question.
-- **Prefer breadth-first v1 passes** — sweep all surfaces before polishing any one item.
+- **Always consult the canonical source before claiming anything**: design mocks for UI labels, source code for gap assessments, running app for bug verification — never derive from memory or internal naming.
+- **Enumerate all consumers before fixing a pattern instance**: one callsite, one page, one rule file is never the full surface — grep and fix the class, not the example.
+- **Batch sequential work autonomously**; halt only at genuine decision forks with full prior context + concrete options included in the question.
+- **Verify round-trip, not send-side**: IPC delivery is proven by the peer's ack, not the sender's log; a fix is proven by exercising the running path, not by it compiling.
 
 ## Things to avoid
-- **Don't claim a UI or runtime fix is done without exercising it on the actual running dev server** — "looks right" is not verification; false assurance here is a trust-damaging anti-pattern.
-- **Don't use `rg -rn`** — `-r` means `--replace`, silently mangling output; use `rg -n` for line numbers in recursive searches.
-- **Don't route low-value traffic through the user** (rubber-stamp go-aheads, underspecified decision questions) — batch sequential autonomous work and halt only at genuine forks.
-- **Don't emit zero-defaults when source data is missing** — fabricated numeric values produce plausible-looking but wrong downstream results.
+- **Don't treat absence of signal as a definite value**: missing data → emit UNCERTAIN/DENY, never fabricate a zero-default or plausible positive.
+- **Don't patch one instance when the class is broken**: after any correction that a component must be global or shared, search and fix ALL instances in the same response.
+- **Don't commit or push for protected repos** — prepare the diff, show it, hand the commit to the user explicitly.
+- **Don't use `rg -r`** for recursive search — `-r` is `--replace` in ripgrep; use `rg -n` for line numbers.
 
 ## Open questions / known gaps
-- **Partial-observation verification is a persistent blind spot**: single visual mode, single code path, or proxy evidence (compile pass, send-success) is treated as full verification — multi-state enumeration before claiming done is not yet habitual.
-- **State-sync degrades exactly when parallelism is highest**: task lists, git state, and peer ownership all drift during bursts of parallel work — the sync rules are known but deprioritized under velocity.
+- Multi-agent parallel sessions consistently degrade state bookkeeping (task lists, branch state, ownership) — no reliable sync protocol established yet.
+- IPC reply discipline (unreplied peer queries at session end) fires stop hooks repeatedly; a clean shutdown contract is still unresolved.
