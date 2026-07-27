@@ -47,6 +47,12 @@ surface the next agent extends.
 - *Proposing* infra is fine and encouraged: a one-line offer, or file it via
   `bash ~/.claude/scripts/propose.sh` for the backlog. The line is between
   proposing and provisioning.
+- When the deferred infra is the ENFORCEMENT of a ban or mandate you are
+  recording, say so to the user in the same reply: "the ban is recorded but
+  advisory-only until the gate is built — want the gate now?" A ban whose gate
+  sits in the backlog is a decision the user must see, not a silent default
+  (learned 2026-07-28: the commit-trailer ban ran advisory for 6 days and 14
+  tainted commits because its gate waited in the backlog unannounced).
 - Repo-required scaffolding named by the task (a migration the schema change
   needs) is in scope; a "while I'm here" pre-commit hook is not.
 
