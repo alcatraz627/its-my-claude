@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-16T07:36:22.651968+00:00 · 11 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-07-23T00:59:36.877719+00:00 · 20 patterns / 9 insights -->
 ## What this project is about
-Multi-agent IPC orchestration on macOS — coordinating Claude instances via a message-passing broker, with fleet dispatch, session aliasing, and context recovery as dominant working patterns.
+Multi-agent Claude IPC infrastructure — sessions communicating via aliases, coordinating task ownership, and driving a shared UI dashboard. Work is typically orchestrated across parallel agents with high edit velocity.
 
 ## Things to do (or keep doing)
-- **Verify IPC delivery by round-trip reply**, not send-side logs; a successful send is not a confirmed receive
-- **Batch sequential work into autonomous runs**; halt only at genuine decision points or irreversible ops, not routine progress checks
-- **Treat task updates, IPC replies, and commits as blocking obligations** — execute immediately after each unit of work, never defer as bookkeeping
-- **Salvage finished sub-agent work on API errors**; re-dispatch only failed agents, keyed by (judge + item + labels) for resumable runs
+- **Verify from the consumer's side**: for IPC, confirm the peer received the message (round-trip reply), not just that the send succeeded; for UI, check the rendered state, not the emit log
+- **Resolve peer aliases against live IDs before sending**: aliases go stale across session restarts — fall back to bare sessionId for reliability-critical messages
+- **Update the Task tool after each logical unit**, not at milestones or session end — parallelism is exactly when staleness hurts most
+- **State your stopping condition explicitly** when pausing — blocker, decision needed, or genuine handoff; never silently halt and wait for a go-ahead
 
 ## Things to avoid
-- **Don't use shell `timeout`/`gtimeout` wrappers on macOS** — they orphan child processes and don't cap execution; use the pgid-kill pattern instead
-- **Don't address IPC peers by registered alias in long-running sessions** — aliases go stale after session restarts; fall back to bare sessionId
-- **Don't propose diverging names for sibling artifacts** in the same org; default to the established naming scheme before suggesting alternatives
-- **Don't dispatch fewer high-cost agents for broad review coverage** — a fleet of lower-cost agents covering more items is preferred
+- **Don't treat send-success as delivery proof** — a successful send can mask non-delivery when the peer alias is stale or the session was cleared
+- **Don't patch one instance when a correction exposes a class** — after any "this should be shared/consistent" correction, grep the full codebase and fix all callsites in the same response
+- **Don't route rubber-stamp go-aheads through the user** — batch sequential autonomous work and halt only at genuine decisions with self-contained context (blocker, ≥2 concrete options, prior constraint stated)
+- **Don't place runtime feature flags in env config** — the project treats runtime-adjustable globals as a separate config system; flag the distinction before implementing
 
 ## Open questions / known gaps
-- No established pattern for detecting alias staleness proactively — sessions discover it at send time, not before
-- CLI auth steps (cloud provider logins) block automation; no consistent handoff protocol documented for the human auth gap
+- **Coordination metadata durability under session churn**: peer aliases and orchestrator liveness are not checkpointed with the same discipline as task artifacts, causing orphaned sub-agents and stale address books after clears
+- **Proxy-evidence creep**: test-pass, CSS class presence, and send-log success are repeatedly accepted as verification — no enforcement gate exists yet to force consumer-side confirmation

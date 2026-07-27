@@ -1,0 +1,30 @@
+{
+  "id": "f8f4f8f6-eabd-4465-af33-2a41141ab699",
+  "ts": "2026-07-22T22:06:40Z",
+  "session_id": "enh-runtime-flags",
+  "project_root": "/Users/alcatraz627/Code/Versable/two-enhancement-product/frontend",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/two-enhancement-product/frontend/.claude/_20260722-enh-runtime-flags.claude.md",
+  "insights": {
+    "worked": [
+      "**Gotchas (reusable):** crab `/logs` severity floor param is `level`, not `min_severity` (internal name); crab has no top-level `team_id` (fold into payload both directions); FE `Severity` enum exactly matches crab's `trace..fatal` so `fatal` is not downgraded; the index-manipulation hook blocks ANY compound bash containing the substring `git stash` (even read-only `git stash list`) \u2014 run status/list separately; backend `.env` `LOG_LEVEL` filters INFO, so a sink smoke test must force `_configure(level=\"DEBUG\")`.",
+      "**Architecture note for future agent:** the BE crab sink ships via the ONE loguru-singleton wiring point, so every existing `logger.error/.warning` across ~65 files now reaches crab with zero per-module work. ADR-008 (`frontend/docs/tech/decisions/ADR-008-backend-logging-consolidation.md`) is authoritative but we deliberately did REDUCED scope for the preview proof (skipped L2 per-request/per-task ctx binding and L4 level discipline).",
+      "**User feedback/preferences:** proof on crab's dashboard (not the admin tab); backend as `service=versable-backend`; UI logging structural-only (no PII); wants evidence not assertion; never commits in this repo."
+    ],
+    "didnt_work": [],
+    "gotchas": [
+      "**Architecture note for future agent:** the BE crab sink ships via the ONE loguru-singleton wiring point, so every existing `logger.error/.warning` across ~65 files now reaches crab with zero per-module work. ADR-008 (`frontend/docs/tech/decisions/ADR-008-backend-logging-consolidation.md`) is authoritative but we deliberately did REDUCED scope for the preview proof (skipped L2 per-request/per-task ctx binding and L4 level discipline).",
+      "**User feedback/preferences:** proof on crab's dashboard (not the admin tab); backend as `service=versable-backend`; UI logging structural-only (no PII); wants evidence not assertion; never commits in this repo."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Task #3 (pending):** provision preview env + verify FE/BE proof on crab dashboard.",
+    "FE runtime browser-exercise of `ui.click` + `ui.error.*` (the open verification gap).",
+    "Set 5 **Render backend** env vars: `LOGGER_CRAB_ENABLED=true`, `LOGGER_CRAB_URL`, `LOGGER_CRAB_TOKEN` (ingest, same value as Vercel/.env.local), `LOGGER_CRAB_SERVICE=versable-backend`, `LOGGER_CRAB_ENV=<preview label>`.",
+    "Deploy this branch to a Vercel preview (FE send-path already provisioned).",
+    "(Deferred, post-proof) add `LOGGER_CRAB_DASHBOARD_TOKEN` to Vercel (only for the in-app read tab); admin-tab env/service pickers; ADR-008 L2 ctx binding + L4 level discipline.",
+    "(Parked) Arc-1 runtime-flags stages 3-6 (BE flags API, FE `/api/config` read layer + `getRuntimeFlag` singleton, rewire ~12 model-key call sites, admin view) \u2014 resume from the stash if the user returns to it."
+  ],
+  "tags": []
+}

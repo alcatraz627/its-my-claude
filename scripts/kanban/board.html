@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kanban</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1' fill='%238fbf6a'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1' fill='%237c8590'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1' fill='%232b3138'/%3E%3C/svg%3E">
+<style>
+  /* Terminal-dense skin (owner pick D1c, 2026-07-27). The class anatomy —
+     columns, labels, sub-items — is the spec (ruling 2026-07-24); the skin and
+     every usability affordance serve the six stories + messy composites in
+     assets/reports/20260727-kanban-ui-stories/STORIES.md. */
+  :root{
+    --bg:#0a0c0e; --text:#d8dee6; --dim:#7c8590; --faint:#4d5560; --rule:#1f242b;
+    --surface:#0d0f12; --surface2:#12161b; --accent:#8fbf6a; --amber:#e0b04c; --stale:#6d7680;
+    --seg-active:#8fbf6a; --seg-blocked:#e0b04c; --seg-inbox:#6d7680;
+    --seg-backlog:#565e66; --seg-done:#3d5a4c; --seg-stale:#3a4149;
+    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  }
+  [data-theme="light"]{
+    --bg:#f2f4f6; --text:#20262d; --dim:#5a636d; --faint:#98a1ab; --rule:#d5dae0;
+    --surface:#eaedf0; --surface2:#fbfcfd; --accent:#4a7d2a; --amber:#a97c14; --stale:#8b939c;
+    --seg-active:#4a7d2a; --seg-blocked:#a97c14; --seg-inbox:#7e8791;
+    --seg-backlog:#9aa2ab; --seg-done:#7fa090; --seg-stale:#aab1b8;
+  }
+  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+  ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px} ::-webkit-scrollbar-track{background:transparent}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--text);font:13px/1.45 -apple-system,"SF Pro Text",system-ui,sans-serif;display:flex;flex-direction:column}
+  header{display:flex;align-items:baseline;gap:14px;padding:13px 18px 0;flex:none}
+  header h1{font:600 15px/1 var(--mono);margin:0;letter-spacing:.01em}
+  header .root{color:var(--faint);font-size:10.5px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+  header .meta{color:var(--dim);font-size:11px;white-space:nowrap}
+  button{background:none;color:var(--text);border:1px solid var(--rule);border-radius:3px;padding:3px 9px;cursor:pointer;font:inherit;font-size:11.5px}
+  button:hover{border-color:var(--dim)}
+
+  #stalebar{display:none;margin:10px 18px 0;border:1px solid color-mix(in srgb,var(--amber) 55%,transparent);border-radius:3px;padding:6px 10px;color:var(--amber);font-size:12px;flex:none}
+  #stalebar code{font-family:var(--mono);font-size:11px}
+
+  .meter{display:flex;height:18px;margin:11px 18px 3px;border-radius:3px;overflow:hidden;border:1px solid var(--rule);flex:none}
+  .meter .seg{display:flex;align-items:center;gap:5px;padding:0 8px;min-width:0;cursor:pointer;font:650 10px/1 var(--mono);letter-spacing:.05em;color:var(--bg);overflow:hidden;white-space:nowrap}
+  .meter .seg i{font-style:normal;opacity:.85;font-weight:500}
+  .legend{color:var(--dim);font-size:11px;margin:0 18px 8px;flex:none}
+  .legend b{color:var(--text)}
+
+  /* since-you-left delta strip (M2: the human read cursor) */
+  #delta{display:none;margin:0 18px 9px;border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:3px;padding:6px 10px;font-size:12px;flex:none;align-items:baseline;gap:10px}
+  #delta.on{display:flex;flex-wrap:wrap}
+  #delta .lead{color:var(--dim)}
+  #delta b{color:var(--text);font-weight:600}
+  #delta .grp{white-space:nowrap}
+  #delta .grp.blk{color:var(--amber)}
+  #delta button{margin-left:auto;padding:1px 7px;font-size:10.5px;color:var(--dim)}
+
+  main{flex:1;display:flex;gap:10px;padding:0 18px 14px;overflow-x:auto;align-items:flex-start}
+  .lane{background:var(--surface);border:1px solid var(--rule);border-radius:4px;min-width:246px;width:246px;max-height:100%;display:flex;flex-direction:column}
+  .lane h2{font:650 11px/1 var(--mono);letter-spacing:.02em;color:var(--dim);margin:0;padding:9px 11px;display:flex;justify-content:space-between}
+  .lane h2 .n{color:var(--text)}
+  .lane h2 .n::before{content:"×";color:var(--faint);margin-right:1px}
+  .lane.attn h2{color:var(--text)}
+  .lane.attn h2::after{content:"";order:-1}
+  .lane.archive{min-width:190px;width:190px}
+  details.lane summary{cursor:pointer;list-style:none}
+  .cards{overflow-y:auto;padding:0 7px 7px;display:flex;flex-direction:column;gap:6px}
+  .card{position:relative;background:var(--surface2);border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:2px;padding:7px 9px 6px 10px;cursor:pointer;outline:none}
+  .card:focus,.card.sel{border-color:var(--accent);box-shadow:inset 2px 0 0 var(--accent)}
+  .card .t{font-size:12.5px;font-weight:570;line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card.blocked .t::after{content:" ●";color:var(--amber);font-size:8px;vertical-align:2px}
+  .card.changed::after{content:"";position:absolute;top:6px;right:7px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+  .chips{display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:10px}
+  .chips .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+  .chips .dot.selfnote{background:var(--faint)}
+  .chip{font:600 10px/1.6 var(--mono);letter-spacing:.02em;border:1px solid var(--rule);border-radius:2px;padding:0 4px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+  .chip.tag{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+  .chip.state{color:var(--dim)}
+  .chip.subs{color:var(--text);background:var(--surface)}
+  .chip.subs.alldone{color:var(--dim)}
+  .chip.why{color:var(--stale)}
+  .chip.nt-act{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent)}
+  .chip.nt-skill{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+  .chip.nt-move{color:var(--text)}
+  .chip.nt-review{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .chip.nt-me,.chip.nt-free{color:var(--faint)}
+  .whynote{margin:3px 0 2px;font-size:11px;line-height:1.35;color:var(--amber);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  .lh0{color:#9fb56a;border-color:#3a4429}.lh1{color:#6aada5;border-color:#28403d}.lh2{color:#7d94ad;border-color:#28323d}
+  .lh3{color:#a284a2;border-color:#3a2d3a}.lh4{color:#b3826a;border-color:#40302a}.lh5{color:#8b93c9;border-color:#2e3350}
+  [data-theme="light"] .lh0{color:#5c7330;border-color:#ccd6ae}[data-theme="light"] .lh1{color:#2f6d64;border-color:#bed6d1}
+  [data-theme="light"] .lh2{color:#3f5a75;border-color:#c3d0dc}[data-theme="light"] .lh3{color:#71486f;border-color:#d6c6d5}
+  [data-theme="light"] .lh4{color:#84503a;border-color:#dcc8bc}[data-theme="light"] .lh5{color:#42508e;border-color:#c6cce8}
+  .card.slh0{border-left-color:#9fb56a}.card.slh1{border-left-color:#6aada5}.card.slh2{border-left-color:#7d94ad}
+  .card.slh3{border-left-color:#a284a2}.card.slh4{border-left-color:#b3826a}.card.slh5{border-left-color:#8b93c9}
+  .src{display:flex;margin-top:4px;color:var(--faint);font:10px var(--mono);white-space:nowrap;overflow:hidden}
+  .src .age{margin-left:auto;padding-left:8px}
+  /* archive lanes compress to single-line rows (story S6) */
+  .lane.archive .card{padding:4px 8px 4px 9px;border-left-width:2px}
+  .lane.archive .card .t{font-size:11.5px;font-weight:480;color:var(--dim);-webkit-line-clamp:1;margin-bottom:0}
+  .lane.archive .card .t .age{float:right;font:10px var(--mono);color:var(--faint);margin-left:8px}
+  .lane.archive .card .chips,.lane.archive .card .src,.lane.archive .card .whynote{display:none}
+  .lane.archive .card.changed::after{display:none}
+  .empty-board{color:var(--dim);padding:40px}
+
+  #drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,92vw);background:var(--bg);border-left:1px solid var(--rule);padding:16px 20px;display:none;flex-direction:column;gap:10px;overflow-y:auto;box-shadow:-12px 0 30px rgb(0 0 0/.35)}
+  #drawer.open{display:flex}
+  #drawer .close{align-self:flex-end}
+  #drawer h3{margin:0;font:600 15.5px/1.35 -apple-system,system-ui,sans-serif}
+  #drawer .meta{color:var(--dim);font-size:11px;font-family:var(--mono)}
+  #drawer .mirror{color:var(--faint);font-size:10.5px;font-family:var(--mono)}
+  #drawer a{color:var(--accent);text-decoration:none}
+  #drawer .subs{margin:0;padding:0;list-style:none;font-size:12.5px}
+  #drawer .subs li{padding:3px 0;color:var(--text)}
+  #drawer .subs li.done{color:var(--dim);text-decoration:line-through}
+  #drawer .subs li::before{content:"☐ ";font-family:var(--mono)}
+  #drawer .subs li.done::before{content:"☑ "}
+  #drawer label{color:var(--dim);font-size:11px}
+  #drawer textarea{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;min-height:110px;padding:9px;font:12.5px/1.5 var(--mono);resize:vertical}
+  #drawer .rowx{display:flex;gap:8px;align-items:center}
+  #dInsert{display:flex;gap:5px;flex-wrap:wrap}
+  .tagbtn{background:var(--surface);color:var(--dim);border:1px solid var(--rule);border-radius:2px;padding:1px 7px;cursor:pointer;font:600 10.5px/1.7 var(--mono)}
+  .tagbtn:hover{color:var(--text);border-color:var(--accent)}
+  #dTags{display:flex;gap:4px;flex-wrap:wrap;min-height:14px}
+  #dLegend{color:var(--faint);font-size:10px;font-family:var(--mono)}
+  #toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--rule);border-radius:3px;padding:6px 14px;display:none}
+  #help{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 78%,transparent);display:none;align-items:center;justify-content:center}
+  #help .box{background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:18px 22px;min-width:280px}
+  #help td{padding:2px 10px 2px 0;color:var(--dim)} #help td:first-child{color:var(--text);font-family:var(--mono)}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="name">kanban</h1>
+  <span class="root" id="root"></span>
+  <span class="meta" id="meta"></span>
+  <button id="digestBtn" title="copy status digest (c)">⧉ digest</button>
+  <button id="theme" title="toggle theme (t)">◐</button>
+  <button id="helpBtn" title="shortcuts (?)">?</button>
+</header>
+<div id="stalebar"></div>
+<div class="meter" id="meter"></div>
+<div class="legend" id="legend"></div>
+<div id="delta" role="status"></div>
+<main id="lanes" aria-label="board lanes"></main>
+
+<aside id="drawer" aria-label="card detail">
+  <button class="close" onclick="closeDrawer()" title="close (Esc)">✕</button>
+  <h3 id="dTitle"></h3>
+  <div class="meta" id="dMeta"></div>
+  <div class="mirror" id="dMirror"></div>
+  <div class="meta" id="dDocs"></div>
+  <ul class="subs" id="dSubs"></ul>
+  <label for="dNote">your note (the agent pulls these on request)</label>
+  <textarea id="dNote" placeholder="free text + tags — click the chips below to insert one, no syntax to remember"></textarea>
+  <div id="dInsert" title="click to insert into the note"></div>
+  <div id="dTags"></div>
+  <div id="dLegend">@me self · @agent (default) · !now act · /skill run · &gt;lane move · #defer park · #review-me your queue · #word free tag</div>
+  <div class="rowx">
+    <button id="dSave">Save note</button>
+    <span class="meta" id="dSaved"></span>
+  </div>
+</aside>
+
+<div id="toast" role="status"></div>
+<div id="help"><div class="box"><table>
+  <tr><td>j / k</td><td>next / previous card</td></tr>
+  <tr><td>Enter or o</td><td>open card</td></tr>
+  <tr><td>n</td><td>edit note on open card</td></tr>
+  <tr><td>c</td><td>copy status digest</td></tr>
+  <tr><td>t</td><td>toggle theme</td></tr>
+  <tr><td>?</td><td>this help</td></tr>
+  <tr><td>Esc</td><td>close</td></tr>
+  <tr><td colspan="2" style="padding-top:8px;color:var(--dim)">note tags (click chips in the card drawer to insert)</td></tr>
+  <tr><td>@me</td><td>note to self — the agent isn't nagged</td></tr>
+  <tr><td>!now</td><td>agent acts on next pickup</td></tr>
+  <tr><td>/skill</td><td>run that skill on the card (e.g. /skeptical-review)</td></tr>
+  <tr><td>&gt;lane</td><td>agent applies the move (e.g. &gt;backlog)</td></tr>
+  <tr><td>#defer</td><td>park it</td></tr>
+  <tr><td>#review-me</td><td>flag for YOUR review queue</td></tr>
+  <tr><td>#word</td><td>anything else — free tag, searchable</td></tr>
+</table></div></div>
+
+<script>
+const slug = location.pathname.split("/")[2];
+const LANE_ORDER = ["inbox","backlog","active","blocked","done","stale"];
+const ARCHIVE = new Set(["done","stale"]);
+let data = null, flat = [], sel = -1, openId = null, dirty = false, lastPayload = "";
+
+const $ = (id) => document.getElementById(id);
+const applyTheme = (t) => { document.documentElement.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
+applyTheme(localStorage.getItem("kanban-theme") || "dark");
+const toggleTheme = () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+$("theme").onclick = toggleTheme;
+
+function toast(msg, ms = 1800) { const t = $("toast"); t.textContent = msg; t.style.display = "block"; setTimeout(() => (t.style.display = "none"), ms); }
+
+// The human read cursor (M2): anchor = last visit, captured once per page load;
+// every render bumps the stored cursor so the NEXT visit diffs against now.
+const VISIT_KEY = `kanban-visit-${slug}`;
+let anchor = +localStorage.getItem(VISIT_KEY) || 0;
+const since = (iso) => anchor > 0 && Date.parse(iso) > anchor;
+const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
+
+async function load() {
+  if (dirty || document.activeElement === $("dNote")) return; // never clobber typing
+  try {
+    const res = await fetch(`/api/board?slug=${slug}`);
+    const text = await res.text();
+    if (!res.ok) throw new Error(JSON.parse(text).error || res.status);
+    if (text === lastPayload) return; // unchanged: no re-render, keeps focus stable
+    lastPayload = text;
+    data = JSON.parse(text);
+    render();
+  } catch (e) { $("meta").textContent = `load failed: ${e.message}`; }
+}
+
+const labelHue = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 6; };
+
+// Tagged notes v1 (STORIES.md sketch): tags live inside free-form note text,
+// parsed at read time. Mirrored by parseNoteTags in lib.ts — keep in sync.
+function parseTags(text) {
+  const t = { me:false, act:false, skills:[], moves:[], defer:false, review:false, free:[] };
+  if (!text) return t;
+  for (const m of text.matchAll(/(^|[\s(])(@me|@agent|!now|#[a-z][\w-]*|>[a-z]+|\/[a-z][a-z0-9-]{2,})(?=[\s).,;:]|$)/gim)) {
+    const tok = m[2].toLowerCase();
+    if (tok === "@me") t.me = true;
+    else if (tok === "!now") t.act = true;
+    else if (tok === "#review-me") t.review = true;
+    else if (tok === "#defer") t.defer = true;
+    else if (tok.startsWith("#")) t.free.push(tok);
+    else if (tok.startsWith(">")) { if (LANE_ORDER.includes(tok.slice(1))) t.moves.push(tok.slice(1)); }
+    else if (tok.startsWith("/")) t.skills.push(tok);
+  }
+  return t;
+}
+function tagChips(nt) {
+  const chips = [];
+  const add = (cls, txt, title) => chips.push(`<span class="chip ${cls}" title="${title}">${txt}</span>`);
+  if (nt.me) add("nt-me", "@me", "note to self — agent not nagged");
+  if (nt.act) add("nt-act", "!now", "act on next agent pickup");
+  nt.skills.slice(0, 2).forEach((s) => add("nt-skill", s, "capability requested on this card"));
+  nt.moves.slice(0, 1).forEach((l) => add("nt-move", "&gt;" + l, "move requested — agent applies via CLI"));
+  if (nt.defer) add("nt-free", "#defer", "parked");
+  if (nt.review) add("nt-review", "review-me", "flagged for YOUR review");
+  nt.free.slice(0, 2).forEach((f) => add("nt-free", f, "tag"));
+  return chips.join("");
+}
+
+function cardEl(c) {
+  const el = document.createElement("div");
+  const hue = c.heading ? labelHue(c.heading) : null;
+  el.className = "card" + (c.lane === "blocked" ? " blocked" : "") +
+    (hue !== null ? ` slh${hue}` : "") + (since(c.updatedAt) ? " changed" : "");
+  el.tabIndex = 0; el.dataset.id = c.id;
+  const note = data.notes[c.id]?.note;
+  const nt = parseTags(note);
+  const subs = c.subs ?? [];
+  const subsDone = subs.filter((s) => s.done).length;
+  const sp = c.source.kind === "manual" ? "manual" : `${c.source.path}${c.source.line ? ":" + c.source.line : ""}`;
+  const isArchive = ARCHIVE.has(c.lane);
+  el.innerHTML = `<div class="t"></div>
+    ${!isArchive && c.lane === "blocked" && note ? '<div class="whynote"></div>' : ""}
+    <div class="chips">
+      ${note ? `<span class="dot${nt.me ? " selfnote" : ""}" title="${nt.me ? "self-note" : "has note"}"></span>` : ""}
+      ${tagChips(nt)}
+      ${c.tag ? '<span class="chip xtag"></span>' : ""}
+      ${c.heading ? '<span class="chip label"></span>' : ""}
+      ${subs.length ? `<span class="chip subs${subsDone === subs.length ? " alldone" : ""}" title="sub-items">${subsDone}/${subs.length}</span>` : ""}
+      ${c.staleReason ? '<span class="chip why"></span>' : ""}
+    </div><span class="src"></span>`;
+  const tEl = el.querySelector(".t");
+  tEl.textContent = c.title;
+  if (isArchive) {
+    const a = document.createElement("span");
+    a.className = "age"; a.textContent = ago(Date.parse(c.updatedAt));
+    tEl.appendChild(a);
+    el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
+  }
+  const wn = el.querySelector(".whynote");
+  // raw first line, tags included — humans write tags as part of the sentence,
+  // so stripping them breaks the grammar (tried 2026-07-27, reverted)
+  if (wn) { wn.textContent = note.split("\n")[0]; wn.title = note; }
+  if (c.tag) {
+    const b = el.querySelector(".xtag");
+    b.textContent = c.tag;
+    b.classList.add(c.tag.startsWith("#") ? "tag" : "state"); // gold = id, muted = state word
+  }
+  if (c.heading) {
+    const l = el.querySelector(".label");
+    l.textContent = c.heading;
+    l.title = c.heading;
+    l.classList.add(`lh${labelHue(c.heading)}`);
+  }
+  if (c.staleReason) el.querySelector(".why").textContent = c.staleReason;
+  const srcEl = el.querySelector(".src");
+  srcEl.innerHTML = `<span class="p"></span><span class="age"></span>`;
+  const pEl = srcEl.querySelector(".p");
+  pEl.textContent = sp.length > 26 ? "…" + sp.slice(-25) : sp; // varying tail stays visible
+  srcEl.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
+  srcEl.title = c.source.path;
+  el.onclick = () => openDrawer(c.id);
+  el.onkeydown = (e) => { if (e.key === "Enter") openDrawer(c.id); };
+  flat.push(c.id);
+  return el;
+}
+
+// One-paragraph plain-text status for a standup message (M2).
+function digestText() {
+  const cards = data.board.cards;
+  const by = (k) => cards.filter((c) => c.lane === k);
+  const titles = (arr, n = 4) => arr.slice(0, n).map((c) => c.title).join("; ") + (arr.length > n ? ` (+${arr.length - n})` : "");
+  const lines = [`${data.name} — status ${new Date().toLocaleString()}`];
+  if (anchor > 0) {
+    const chg = cards.filter((c) => since(c.updatedAt));
+    const doneSince = chg.filter((c) => c.lane === "done");
+    const blockedSince = chg.filter((c) => c.lane === "blocked");
+    const newSince = chg.filter((c) => since(c.createdAt));
+    lines.push(`since ${new Date(anchor).toLocaleString()}:`);
+    if (doneSince.length) lines.push(`  done: ${titles(doneSince)}`);
+    if (blockedSince.length) lines.push(`  blocked: ${titles(blockedSince.map((c) => ({ title: c.title + (data.notes[c.id]?.note ? ` (${data.notes[c.id].note.split("\n")[0]})` : "") })))}`);
+    if (newSince.length) lines.push(`  new: ${titles(newSince)}`);
+    if (!doneSince.length && !blockedSince.length && !newSince.length) lines.push("  no card movement");
+  }
+  const open = cards.length - by("done").length - by("stale").length;
+  lines.push(`in motion ${open} · blocked ${by("blocked").length} · settled ${cards.length - open}`);
+  const active = by("active");
+  if (active.length) lines.push(`active now: ${titles(active)}`);
+  return lines.join("\n");
+}
+async function copyDigest() {
+  try { await navigator.clipboard.writeText(digestText()); toast("status digest copied"); }
+  catch { toast("copy failed — clipboard blocked", 3000); }
+}
+$("digestBtn").onclick = copyDigest;
+
+function renderDelta() {
+  const bar = $("delta");
+  if (anchor <= 0) { bar.className = ""; return; }
+  const cards = data.board.cards;
+  const chg = cards.filter((c) => since(c.updatedAt));
+  const doneSince = chg.filter((c) => c.lane === "done").length;
+  const blockedSince = chg.filter((c) => c.lane === "blocked").length;
+  const newSince = chg.filter((c) => since(c.createdAt)).length;
+  const reviewMe = cards.filter((c) => parseTags(data.notes[c.id]?.note).review).length;
+  if (!chg.length && !reviewMe) { bar.className = ""; return; }
+  const grp = [];
+  if (doneSince) grp.push(`<span class="grp"><b>${doneSince}</b> done</span>`);
+  if (blockedSince) grp.push(`<span class="grp blk"><b>${blockedSince}</b> newly blocked</span>`);
+  if (newSince) grp.push(`<span class="grp"><b>${newSince}</b> new</span>`);
+  const other = chg.length - doneSince - blockedSince - newSince;
+  if (other > 0) grp.push(`<span class="grp"><b>${other}</b> moved</span>`);
+  if (reviewMe) grp.push(`<span class="grp"><b>${reviewMe}</b> for your review</span>`);
+  bar.innerHTML = `<span class="lead">since your last visit (${ago(anchor)} ago):</span> ${grp.join(" · ")}
+    <button id="deltaDismiss" title="clear halos">dismiss</button>`;
+  bar.className = "on";
+  $("deltaDismiss").onclick = () => { anchor = 0; render(); };
+}
+
+function renderStale() {
+  const bar = $("stalebar");
+  const ts = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
+  if (ts && Date.now() - ts > 24 * 36e5) {
+    bar.innerHTML = `⚠ this mirror was synced ${ago(ts)} ago — it reflects the docs THEN, not the code now. refresh: <code>kanban.sh sync</code>`;
+    bar.style.display = "block";
+  } else bar.style.display = "none";
+}
+
+function render() {
+  $("name").textContent = data.name;
+  document.title = `${data.name} · kanban`;
+  $("root").textContent = data.root;
+  const cards = data.board.cards;
+  const by = (k) => cards.filter((c) => c.lane === k);
+  const noteCount = Object.values(data.notes).filter((n) => n.note).length;
+  $("meta").textContent = `${cards.length} cards · ${noteCount} notes · synced ${data.board.syncedAt ? new Date(data.board.syncedAt).toLocaleString() : "never"}`;
+  renderStale();
+  renderDelta();
+
+  const meter = $("meter");
+  meter.replaceChildren();
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of LANE_ORDER) {
+    const n = by(k).length;
+    if (!n) continue;
+    const seg = document.createElement("div");
+    seg.className = "seg";
+    seg.style.background = cs.getPropertyValue(`--seg-${k}`);
+    seg.style.flex = `${n} 1 0`;
+    seg.innerHTML = `${k} <i>${n}</i>`;
+    seg.onclick = () => document.getElementById(`lane-${k}`)?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+    meter.appendChild(seg);
+  }
+  const open = cards.length - by("done").length - by("stale").length;
+  $("legend").innerHTML = `<b>${open}</b> in motion · <b>${by("blocked").length}</b> blocked · ${cards.length - open} settled`;
+
+  flat = [];
+  const laneEl = (lane) => {
+    const cardsIn = by(lane);
+    if (cardsIn.length === 0) return null; // empty lanes pay no layout
+    const isStale = lane === "stale";
+    const wrap = document.createElement(isStale ? "details" : "section");
+    wrap.className = `lane${lane === "blocked" || lane === "active" ? " attn" : ""}${ARCHIVE.has(lane) ? " archive" : ""}`;
+    wrap.id = `lane-${lane}`;
+    const head = document.createElement(isStale ? "summary" : "div");
+    head.innerHTML = `<h2>${lane} <span class="n">${cardsIn.length}</span></h2>`;
+    wrap.appendChild(head);
+    const list = document.createElement("div");
+    list.className = "cards";
+    cardsIn.forEach((c) => list.appendChild(cardEl(c)));
+    wrap.appendChild(list);
+    return wrap;
+  };
+  const main = $("lanes");
+  main.replaceChildren(...LANE_ORDER.map(laneEl).filter(Boolean));
+  if (!main.children.length) main.innerHTML = '<div class="empty-board">no cards yet — run: kanban.sh sync</div>';
+  markSel();
+  localStorage.setItem(VISIT_KEY, String(Date.now()));
+}
+
+function markSel() {
+  document.querySelectorAll(".card.sel").forEach((e) => e.classList.remove("sel"));
+  if (sel >= 0 && flat[sel]) {
+    const el = document.querySelector(`.card[data-id="${flat[sel]}"]`);
+    if (el) { el.classList.add("sel"); el.scrollIntoView({ block: "nearest", inline: "nearest" }); }
+  }
+}
+
+function drawerTagPreview() {
+  const nt = parseTags($("dNote").value);
+  $("dTags").innerHTML = tagChips(nt);
+}
+
+// Insert-chips: the human shouldn't have to remember the grammar — click to
+// insert the token at the cursor; the live preview below confirms the parse.
+const INSERT_TOKENS = [
+  ["@me", "note to self — the agent isn't nagged"],
+  ["!now", "agent acts on next pickup"],
+  ["/skeptical-review", "run this skill on the card — edit the name for another"],
+  [">backlog", "ask the agent to move it (edit the lane)"],
+  ["#defer", "park it"],
+  ["#review-me", "flag for YOUR review queue"],
+];
+for (const [tok, tip] of INSERT_TOKENS) {
+  const b = document.createElement("button");
+  b.className = "tagbtn"; b.textContent = tok; b.title = tip; b.type = "button";
+  b.onclick = () => {
+    const ta = $("dNote");
+    const at = ta.selectionStart ?? ta.value.length;
+    const before = ta.value.slice(0, at), after = ta.value.slice(at);
+    const ins = (before && !/\s$/.test(before) ? " " : "") + tok + (after.startsWith(" ") || !after ? "" : " ");
+    ta.value = before + ins + after;
+    const pos = (before + ins).length;
+    ta.setSelectionRange(pos, pos); ta.focus();
+    ta.dispatchEvent(new Event("input"));
+  };
+  $("dInsert").appendChild(b);
+}
+
+function openDrawer(id) {
+  const c = data.board.cards.find((x) => x.id === id);
+  if (!c) return;
+  openId = id; dirty = false;
+  $("dTitle").textContent = c.title;
+  const src = c.source.kind === "manual" ? "manually added" :
+    `<a href="/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}" target="_blank" rel="noopener">${c.source.path}${c.source.line ? ":" + c.source.line : ""}</a>`;
+  $("dMeta").innerHTML = `${c.id} · ${c.lane}${c.tag ? ` · ${c.tag}` : ""}${c.heading ? ` · ${c.heading}` : ""} · ${src}<br>created ${new Date(c.createdAt).toLocaleString()} · updated ${new Date(c.updatedAt).toLocaleString()}`;
+  $("dMirror").textContent = `mirror: harvested from docs, synced ${data.board.syncedAt ? new Date(data.board.syncedAt).toLocaleString() : "never"} — not live code state`;
+  $("dDocs").innerHTML = c.docs.length
+    ? "docs: " + c.docs.map((d) => `<a href="/doc?path=${encodeURIComponent(data.root + "/" + d)}" target="_blank" rel="noopener">${d}</a>`).join(" · ")
+    : "";
+  const subsEl = $("dSubs");
+  subsEl.replaceChildren(...(c.subs ?? []).map((s) => {
+    const li = document.createElement("li");
+    li.className = s.done ? "done" : "";
+    li.textContent = s.title;
+    return li;
+  }));
+  $("dNote").value = data.notes[id]?.note || "";
+  $("dSaved").textContent = data.notes[id]?.updatedAt ? `saved ${new Date(data.notes[id].updatedAt).toLocaleString()}` : "";
+  drawerTagPreview();
+  $("drawer").classList.add("open");
+}
+function closeDrawer() {
+  if (dirty && !confirm("Discard unsaved note?")) return;
+  dirty = false; openId = null; $("drawer").classList.remove("open");
+}
+
+$("dNote").addEventListener("input", () => { dirty = true; $("dSaved").textContent = "unsaved"; drawerTagPreview(); });
+$("dSave").onclick = async () => {
+  try {
+    const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId: openId, note: $("dNote").value }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    dirty = false; $("dSaved").textContent = "saved just now"; toast("note saved");
+    load();
+  } catch (e) { toast(`save failed: ${e.message}`, 4000); }
+};
+
+document.addEventListener("keydown", (e) => {
+  if (e.target === $("dNote")) { if (e.key === "Escape") e.target.blur(); return; }
+  if ($("help").style.display === "flex" && e.key !== "?") { $("help").style.display = "none"; return; }
+  switch (e.key) {
+    case "j": sel = Math.min(sel + 1, flat.length - 1); markSel(); break;
+    case "k": sel = Math.max(sel - 1, 0); markSel(); break;
+    case "Enter": case "o": if (flat[sel]) openDrawer(flat[sel]); break;
+    case "n": if (openId) $("dNote").focus(); else if (flat[sel]) { openDrawer(flat[sel]); $("dNote").focus(); } e.preventDefault(); break;
+    case "c": copyDigest(); break;
+    case "t": toggleTheme(); break;
+    case "?": $("help").style.display = $("help").style.display === "flex" ? "none" : "flex"; break;
+    case "Escape": closeDrawer(); break;
+  }
+});
+$("helpBtn").onclick = () => ($("help").style.display = "flex");
+$("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display = "none"; };
+window.addEventListener("beforeunload", (e) => { if (dirty) e.preventDefault(); });
+
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>

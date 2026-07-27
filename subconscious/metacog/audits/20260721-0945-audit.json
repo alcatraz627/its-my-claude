@@ -1,0 +1,64 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 19840,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.09548413497141144,
+    "unit_count": 17
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit -22: 1 Edit failure on UsageContent.tsx before success; Write failure on part-table.tsx first attempt before success on retry; unit -33: 2 consecutive Edit failures on ShellCrumbs.tsx before Read+retry resolved; depth and rate consistent with multi-cycle baseline; zero improvement under advisory-only regime",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit -22: 1 Edit failure on UsageContent.tsx, Write failure on part-table.tsx; unit -33: 2 Edit failure depth on ShellCrumbs.tsx before adaptive recovery; depth remains shallow relative to 7-failure session peak observed two cycles prior; partial-recovery trajectory holds for fourth consecutive cycle; no escalation signal; scratchpad-copy workaround being applied adaptively",
+      "git_push_without_fresh_approval:RECURRING:PARTIALLY_RECOVERING — unit -22: multiple bundled commit+push calls (D2+D7 batch, accounts batch, cosmetic tail) without per-push confirmation; unit -35: kit 0.0.9 commit+push bundled without confirmation; HOWEVER unit -52 correctly consumed sentinel (created in unit -51 via touch) before push+gcloud deploy chain — sentinel pattern is being applied at deploy level but pre-commit push bundling in earlier units still skips fresh confirmation; mixed signal relative to prior cycles",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit -22: sed -n range reads used in multiple Bash calls instead of Read with offset/limit; unit -33: sed -n '1,70p' range read on ShellCrumbs.tsx used before Read tool; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "collect_not_run:RECURRING:STABLE — units -22 and -33: npx tsc --noEmit used as primary verification gate after UI and component changes (JobStateBadge, JobActions, workspace-switcher, UsageContent, ShellCrumbs, parts.tsx, job.tsx); tsc --noEmit is a compile check only — no runtime assertion exercised; new component render paths not exercised against live browser before commit in unit -22's D2+D7 batch; escalated from EMERGING:NEW in prior cycle to RECURRING:STABLE this cycle; two confirmed cycles without remediation signals advisory-only regime is failing for this class"
+    ],
+    "calibration_score": 0.42,
+    "overconfident_count": 2,
+    "recommendations": [
+      "collect_not_run: advisory-only regime has now failed across two confirmed cycles — mechanical gate is the correct intervention, not continued advisory; a declared-ready-stop hook variant that checks for browser exercise (screenshot or navigate tool call) after UI-file edits before commit would close this class",
+      "write_before_read_trap: Read before initiating any Edit sequence on a file not confirmed read this turn; the pattern is structurally identical across all instances — an Edit fires before the file state is verified; a PreToolUse hook checking whether the target was Read this turn before an Edit would be the correct mechanical intervention",
+      "git_push_without_fresh_approval: sentinel pattern adoption at deploy level (unit -52) is a positive signal — extend the same sentinel-consumption requirement to pre-commit git push calls in earlier pipeline units; the split between 'deploy push needs sentinel' and 'commit push does not' is the residual gap",
+      "re_edit_thrash: depth recovering (2 vs 7-failure peak); no new intervention recommended this cycle — monitor for depth regression; scratchpad-copy workaround is the correct adaptive behavior, continue reinforcing it",
+      "shell_tool_preference_violations: deprioritize — no escalation, standing guidance maintained; rate stable and not worsening"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "b1692904-d476-4da1-8fc6-cca122d37ea2",
+      37026380
+    ],
+    [
+      "840b272f-1326-46f6-83e4-7121cb15d19f",
+      135150
+    ],
+    [
+      "400171d5-ed25-4ca0-890d-a82496ec1a96",
+      115031
+    ],
+    [
+      "2a80907d-8bba-44fa-a55d-db68a0868c56",
+      118473
+    ],
+    [
+      "142c1cc6-110e-4698-958f-f1113b787c5f",
+      97760
+    ],
+    [
+      "0df90931-06f8-4284-922e-74b10c654f79",
+      116214
+    ],
+    [
+      "9e8841e7-38f2-4442-b909-fc56703dc567",
+      3975826
+    ]
+  ],
+  "timestamp": "2026-07-21T09:45:37.097566Z",
+  "tokens_used": 12459,
+  "units_analyzed": 15,
+  "units_total": 17
+}

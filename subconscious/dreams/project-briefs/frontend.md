@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-16T07:37:22.290839+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-07-23T00:59:10.005597+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Frontend codebase with multi-agent and IPC-adjacent tooling; dominant working style is breadth-first sweeps followed by targeted deep work, with the agent expected to run autonomously between genuine decision points.
+Multi-agent frontend development with heavy IPC coordination between parallel sessions; the dominant pattern is concurrent work on shared surfaces requiring explicit ownership negotiation and consumer-side verification.
 
 ## Things to do (or keep doing)
-- Explore and ground in the existing codebase first; surface a recommendation before touching any code.
-- Prefer breadth-first v1 passes across all surfaces before polishing individual items — complete the sweep, then circle back.
-- Batch sequential work into autonomous runs; halt only at genuine decision points or blocking reviews, not at every short-distance progress step.
-- Treat state-ledger writes (TaskUpdate, IPC replies, commits) as blocking obligations — execute immediately after completing each unit of work, never defer as "bookkeeping."
+- **Ground first**: explore and map the codebase, surface a recommendation, then touch code — jumping to edits without grounding wastes a round-trip
+- **Breadth before depth**: complete a v1 pass across all surfaces before polishing or validating any individual item; the user will redirect if scope narrows prematurely
+- **Batch sequential work**: halt only at genuine decision points or blockers; supply enough context in decision questions for the user to answer in one response without follow-up
+- **Verify from the consumer side**: confirm IPC delivery via round-trip reply, not send-side logs; confirm UI changes in the user's mode (light+dark), not just dev mode
 
 ## Things to avoid
-- Don't use `rg -rn` — `-r` is `--replace`, not recursive; use `rg -n` for line numbers in recursive searches.
-- Don't patch a specific instance of a structural problem (e.g., one CLI in a fallback list) without fixing the underlying class; instance patches leave the structural default intact and suppress investigation.
-- Don't include internal banter, critique of stakeholders, or conversational framing in any document that may be shared externally — strip those before writing.
-- Don't ask a decision question without enough background and tradeoffs to make it self-contained; questions that require follow-up before the user can answer are wasted round-trips.
+- **Don't emit plausible defaults from absent input**: when a lookup, gate, or probe returns empty/unknown, emit UNCERTAIN or DENY — never synthesize a zero, false, or ALLOW from missing data
+- **Don't use `rg -rn`**: `-r` is `--replace`, not recursive; use `rg -n` for line numbers; recursive search is the default
+- **Don't patch the instance**: when the user cites a specific CLI, page, or field as an example, grep the full tree for the class before scoping the fix
+- **Don't use backticks in IPC message bodies**: shell consumes them; pass the body via a heredoc or escaped argument
 
 ## Open questions / known gaps
-- Task list hygiene degrades under parallelism; TaskUpdate calls lag edits, leaving the TUI blind. No structural fix confirmed yet.
-- Access-gate defaults (ALLOW vs DENY for unrecognized input) have been patched at instance level but the structural audit across all gate surfaces is unresolved.
+- TaskUpdate discipline degrades under high parallel velocity — state sync is being deferred exactly when it's most needed
+- Access-gate default posture (DENY vs ALLOW for unrecognized commands) has been a recurring structural miss; confirm gate default on any new permission surface

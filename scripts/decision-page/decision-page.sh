@@ -276,7 +276,8 @@ cmd_pending() {
   case "$sub" in
     add)   local slug="${1:?usage: decision-page.sh pending add <slug>}"
            grep -qxF "$slug" "$PEND" || printf '%s\n' "$slug" >> "$PEND"
-           printf 'pending: %s%s%s — clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug" ;;
+           printf 'pending: %s%s%s — clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug"
+           printf '  arm the wake path in THIS turn: Monitor/poll "decision-page.sh answer %s" — an ended turn never wakes (this chip is visibility, not a wake). Deliberately deferring? Tell the human pickup is next-session.\n' "$slug" ;;
     clear) local slug="${1:?usage: decision-page.sh pending clear <slug>}"
            local tmp="$PEND.$$.tmp"
            grep -vxF "$slug" "$PEND" > "$tmp" 2>/dev/null; mv -f "$tmp" "$PEND"

@@ -1,0 +1,121 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17577,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2163053612506301,
+    "unit_count": 24
+  },
+  "response": {
+    "biases_detected": [
+      "re_edit_thrash:RECURRING:WORSENING — unit efd2a3ab-36: 7 consecutive Edit failures (success:false) on docs/e2e-testing-guidebook.md before Read+scratchpad-copy workaround resolved; matches worst-ever single-file thrash depth from 26e38703-4 (2026-07-19 cycle); worsening trajectory confirmed — this is the second session reaching 7-failure peak depth; partially-recovering assessment from prior cycles has reversed; advisory-only regime has demonstrably failed to improve this pattern across all recorded cycles",
+      "write_before_read_trap:RECURRING:STABLE — unit efd2a3ab-2: ShellCrumbs.tsx 2 consecutive Edit failures (success:false) before Read+retry resolved; unit efd2a3ab-36: 7 consecutive Edit failures before Read+scratchpad workaround; ninth-plus confirmed instance class across session history; zero improvement trajectory under advisory-only regime",
+      "git_push_without_fresh_approval:RECURRING:STABLE — units efd2a3ab-2 (three bundled commit+push Bash calls: JobsTable ledger pass, sub-row fullWidth fix, schemas+export+entry.server batch), efd2a3ab-11 (lockfile fix commit+push without confirmation), efd2a3ab-15 (owner batch commit+push+deploy chain), efd2a3ab-18 (Dockerfile fix commit+push+deploy chain): all bundled without per-push confirmation; twelfth-plus confirmed batch instance across recorded session history; zero improvement across all advisory cycles — mechanical gate is the correct intervention, not continued advisory",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit efd2a3ab-2: sed -n '147,152p;185,188p', sed -n '195,300p', sed -n '1,40p', sed -n '80,110p', sed -n '1,60p' range reads used instead of Read with offset/limit; cat-pipe on page-title.tsx; rate consistent with multi-cycle baseline; deprioritized per standing guidance — no new advisory entry warranted",
+      "symlink_write_blind:RECURRING:STABLE — unit efd2a3ab-2: Write to _checkpoint.claude.md (success:false), Read on same path succeeded and returned content (false write-safe signal), second Write attempt (success:false), symlink nature only discovered via explicit readlink probe on third attempt; promoted from EMERGING:NEW in prior cycle to RECURRING:STABLE this cycle; root failure is treating Read-success as evidence of write-path validity on a path the Write tool cannot follow; symlink semantics differ between Read and Write tools and this difference was not internalized despite prior flagging",
+      "collect_not_run:EMERGING:NEW — units efd2a3ab-2 and efd2a3ab-15: npx tsc --noEmit used as the primary verification gate after backend changes to jobs.server.ts, review.server.ts, and types.ts (new Firestore query aggregates for missingCount, reviewKindCounts.missing); tsc --noEmit is a compile check only — no runtime assertion is exercised; the new backend query paths were not run against real Firestore data before commit; browser verification covered the UI layer but not the new data query layer; not previously flagged in calibration history as a distinct bias class"
+    ],
+    "calibration_score": 0.38,
+    "cross_references": [
+      "dream-insight-state-ledger-writes PARTIAL VIOLATION: unit efd2a3ab-2 deferred WAL checkpoint until late in a 120+ tool-call unit; the WAL write did eventually occur but only after deploy launch, not at each logical milestone boundary (viewers built, export fixed, schemas committed are distinct completable units each warranting an immediate WAL write per the insight's rule)",
+      "dream-insight-re-verify-at-moment-of-action VIOLATED unit efd2a3ab-36: 7 consecutive Edit failures on e2e-testing-guidebook.md confirm the agent acted on stale/cached file state throughout; the insight's rule 'always re-verify state at the moment of action' was not applied — a Read before the first Edit attempt would have prevented all 7 failure iterations; this is the clearest in-session violation of the insight's core claim",
+      "dream-insight-re-verify-at-moment-of-action VIOLATED unit efd2a3ab-2 symlink_write_blind: Read-success on _checkpoint.claude.md was treated as a durable signal that Write would also succeed; this is exactly the point-in-time snapshot treated as current truth failure the insight names; the Write tool and Read tool have different symlink-following semantics that require re-verification at write time, not inference from read-time success"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "re_edit_thrash: advisory-only regime has failed — two independent sessions have now reached the 7-failure worst-case depth; mechanical intervention is warranted: a PreToolUse hook that fires after two consecutive Edit failures on the same file and requires a Read call before the next Edit attempt on that file; this pattern is not self-correcting under any number of advisory reminders",
+      "git_push_without_fresh_approval: advisory-only regime has failed across 12+ batch instances spanning every recorded session; the guard-git-push.sh mechanical gate should be audited to confirm it is active and blocking rather than warning-only; if bypassed via Bash chain composition (git add && git commit && git push in one Bash call), the hook may need to intercept at the Bash level rather than only on direct git push calls",
+      "symlink_write_blind: now confirmed RECURRING — a pre-Write symlink probe (readlink or stat) should be added for any Write target that is not a file the agent created in the current session; for the specific versable-builder checkpoint pattern, routing through the resolved symlink target path from the first attempt would eliminate all three wasted Write calls",
+      "collect_not_run: newly emerging — when tsc --noEmit passes after backend changes that introduce new Firestore query calls, add a smoke-run step exercising the server loader with a test workspace id before committing; the missingCount denormalization was committed with only compile verification; a query-count mismatch or permission error would only surface on first real user hit in the deployed preview"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "fec503b8-acba-46e7-b8e9-57f61db5f358",
+      106232
+    ],
+    [
+      "f0f35a7e-2432-416e-9088-f54d9ff15d4d",
+      119881
+    ],
+    [
+      "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+      36607532
+    ],
+    [
+      "c75006f5-3dab-4a09-99ab-e0a93aceed11",
+      121111
+    ],
+    [
+      "c4bbc239-d577-4b10-9c10-48bb83e9ae15",
+      119743
+    ],
+    [
+      "b4552b41-84b2-4101-84eb-a4b2e695a8e6",
+      118216
+    ],
+    [
+      "b1692904-d476-4da1-8fc6-cca122d37ea2",
+      30021746
+    ],
+    [
+      "a301430f-354a-43ab-9ee1-6f418e8d64c7",
+      105947
+    ],
+    [
+      "9bc4f254-a2c7-4a2f-9aa1-06875933197f",
+      114696
+    ],
+    [
+      "68488821-6de9-40dd-bc0d-534eacb1f00a",
+      129385
+    ],
+    [
+      "67275329-6354-4458-afb8-7c3eb865f189",
+      116080
+    ],
+    [
+      "62db06e2-7ca2-4c7e-b8c4-c00d9dc01035",
+      101166
+    ],
+    [
+      "5a96524b-4c7e-48a6-90fb-32e9fde74f1b",
+      89599
+    ],
+    [
+      "5445ac4c-c944-421b-bb21-7dbf413ddf29",
+      91581
+    ],
+    [
+      "49226785-7e7f-48bf-a761-41f106680ea8",
+      108427
+    ],
+    [
+      "1db0154c-0fdc-427d-86f7-9937a8d2c616",
+      104147
+    ],
+    [
+      "10871711-5903-40c2-94fe-9ef5303bd2c0",
+      96320
+    ],
+    [
+      "d643d584-27a3-47ea-b3db-65a2449777ec",
+      7594048
+    ],
+    [
+      "cdb61c70-b9be-46d2-99b2-5eaee11c4ee9",
+      109401
+    ],
+    [
+      "8e11254e-7b18-44e4-8878-1bc2ee7e9f8b",
+      133330
+    ]
+  ],
+  "timestamp": "2026-07-20T17:10:15.149839Z",
+  "tokens_used": 23089,
+  "units_analyzed": 9,
+  "units_total": 24
+}

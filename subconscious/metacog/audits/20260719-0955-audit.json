@@ -1,0 +1,233 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17877,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15642180282339338,
+    "unit_count": 28
+  },
+  "response": {
+    "biases_detected": [
+      "re_edit_thrash:RECURRING:WORSENING — 26e38703-4: 7 consecutive Edit failures (success:false) on content.server.ts before multiple Reads then success; this is the worst single-file thrash depth in recorded session history, exceeding prior cycle peaks of 1-2 failures; adaptive recovery (Read+retry) eventually resolved it but only after 7 wasted attempts; trajectory has reversed from partially-recovering to worsening — advisory-only regime no longer adequate",
+      "git_push_without_fresh_approval:RECURRING:STABLE — 26e38703-4: bundled git add + commit + commit-F + push origin phase0-kit-wiring in a single Bash call without per-push authorization; user Accepted; eighth or ninth confirmed batch instance across session history; zero improvement across six-plus advisory cycles — mechanical gate is the correct next intervention",
+      "shell_tool_preference_violations:RECURRING:STABLE — 26e38703-4: git show HEAD:app/lib/modules/content.server.ts | sed -n '62,69p' is a range-read via sed on file content (git-mediated variant of the pattern); rate and form consistent with 42-83% multi-cycle baseline; deprioritized per standing guidance — do not add new advisory entry"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 1,
+    "recommendations": [
+      "re_edit_thrash has crossed from partially-recovering to worsening (7 failures vs 1-2 in prior cycles) — file mechanical gate proposal: block Edit when target file has not been Read this turn, or when same target has failed Edit twice consecutively without an intervening Read",
+      "git_push_without_fresh_approval has accumulated 8+ confirmed instances with zero improvement across six advisory cycles — file mechanical gate proposal: require explicit per-push confirmation token before any git push in a Bash call; bundled add+commit+push pattern is the primary surface",
+      "shell_tool_preference_violations: no new recommendation — stagnation confirmed, mechanical gate already in backlog per prior cycle guidance; deprioritize further advisory entries for this bias class",
+      "six short background subprocess units (units 0-5) and one empty unit (-9) contribute no calibration signal; future analysis batches should filter zero-tool zero-reaction units to avoid inflating well_calibrated_count"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "3412dd99-cf90-4bc8-bb95-a80e74d63746",
+      100976
+    ],
+    [
+      "34071bdf-832f-4b89-829d-6ef0686a9e15",
+      117057
+    ],
+    [
+      "33dc37bd-8544-4478-b1b0-ecde7287eee2",
+      131067
+    ],
+    [
+      "33d884b3-0d71-4a0e-b819-c4429d53ba75",
+      112722
+    ],
+    [
+      "338a75e0-5022-401e-9985-2359c0529549",
+      95980
+    ],
+    [
+      "3330e7f1-3215-4d0c-8c18-daf793c039f3",
+      121561
+    ],
+    [
+      "3252fca3-12d9-4cbd-b57d-c74b8152e1ff",
+      111949
+    ],
+    [
+      "31eba934-f8e6-4180-9ccb-8b0bb0da78f1",
+      121011
+    ],
+    [
+      "31760fce-c0dc-49db-bf7b-1ab890467627",
+      114702
+    ],
+    [
+      "31599b0a-ff8a-449b-a0e8-2cc92190462f",
+      136920
+    ],
+    [
+      "31095f52-33d9-419a-97f0-a8115dc70ab7",
+      112952
+    ],
+    [
+      "30922508-2d3d-445c-8c4d-f4d6d76395ac",
+      105017
+    ],
+    [
+      "3001c6ac-7900-49fb-bdad-7e534031e6b5",
+      118662
+    ],
+    [
+      "2f709a65-185c-4051-b4e8-5bb58d00c3ca",
+      124273
+    ],
+    [
+      "2d100f5b-a4f2-427a-b502-a264ad24200c",
+      95297
+    ],
+    [
+      "2c45ef12-8830-4299-a5a1-bceecae65261",
+      110844
+    ],
+    [
+      "2bc79873-5bbc-48e8-849e-2683652c0c8c",
+      137449
+    ],
+    [
+      "2ac1ed85-71eb-4821-8c18-eb10feabe8b5",
+      98563
+    ],
+    [
+      "2aa5762c-bee2-4cd6-9421-1881ef5b8718",
+      89332
+    ],
+    [
+      "2a68b665-c105-4c9f-ac3e-e7f827d7754a",
+      117172
+    ],
+    [
+      "287e7bea-e321-4265-aa9a-56eff9d0dbc3",
+      93289
+    ],
+    [
+      "276b0991-7486-4d3e-b9c1-425cf0753f74",
+      117769
+    ],
+    [
+      "27024a6c-1448-46de-968d-897ce6376ab2",
+      119803
+    ],
+    [
+      "26e38703-c86f-47af-b804-817b34442713",
+      9733489
+    ],
+    [
+      "26c1ebe1-fb11-48b7-9646-0d6497eaa54e",
+      93007
+    ],
+    [
+      "262c4fb7-45c9-450b-b351-b60a917fcac2",
+      126529
+    ],
+    [
+      "26064c4d-d9bd-4be4-8f95-6b660716deec",
+      126024
+    ],
+    [
+      "25e348ed-8fd4-4f0d-a527-40603a42d6aa",
+      115761
+    ],
+    [
+      "2422f8b9-a586-4913-bd2c-62b805eea77d",
+      124901
+    ],
+    [
+      "23bd1b18-e896-436c-9729-e5ed52e5eb70",
+      129191
+    ],
+    [
+      "2326ec83-ada7-42a7-acb1-ef6e287a1603",
+      129966
+    ],
+    [
+      "23028492-0a77-43d5-a0f5-ace4c34f3151",
+      110976
+    ],
+    [
+      "22c91e7f-e962-455f-9856-c9ff87a9cd3a",
+      131983
+    ],
+    [
+      "22a98bf0-9f84-4325-9106-7abc571a71d3",
+      105788
+    ],
+    [
+      "2296206c-d6ce-4a2d-bedc-8a886bfd9757",
+      91090
+    ],
+    [
+      "22730282-0646-478f-881e-338b32bc1503",
+      90819
+    ],
+    [
+      "2216614e-4b96-48cc-8b80-3c3cd614572e",
+      135913
+    ],
+    [
+      "21735873-e167-4801-a928-27a935c94e43",
+      103718
+    ],
+    [
+      "216d6217-8fd4-439c-84da-a683b6bd9e35",
+      110840
+    ],
+    [
+      "21691bbb-7b7a-488f-9ca3-166768cf0d57",
+      85732
+    ],
+    [
+      "214fb11f-1d79-4de9-8c5f-a590b1c73c3c",
+      115967
+    ],
+    [
+      "210bd996-1890-4a2b-8131-f2df15ad46da",
+      16804143
+    ],
+    [
+      "208e2d69-78a0-4fdd-9c6f-1c734948461e",
+      92686
+    ],
+    [
+      "1f5455ae-8b0d-40b9-b91b-03f5abb1a47e",
+      95670
+    ],
+    [
+      "1f3c2e33-e2cb-4268-bbd0-0b877196e6da",
+      83411
+    ],
+    [
+      "1e946a29-b1d7-42cf-a128-623182e48616",
+      94285
+    ],
+    [
+      "1da8dadd-5484-41b5-a03e-ee546369f6b1",
+      127899
+    ],
+    [
+      "1d979144-ba81-4b39-a0d5-ba2e1e7da145",
+      93314
+    ],
+    [
+      "1d47321c-abed-49d3-9a27-94ed6edf3e55",
+      114762
+    ],
+    [
+      "1d3370c1-9dc8-400c-9bc3-a8b192b74c73",
+      89389
+    ]
+  ],
+  "timestamp": "2026-07-19T09:55:47.793786Z",
+  "tokens_used": 11145,
+  "units_analyzed": 8,
+  "units_total": 28
+}

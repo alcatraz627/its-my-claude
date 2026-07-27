@@ -1,0 +1,70 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 21040,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.05946427498927403,
+    "unit_count": 2
+  },
+  "response": {
+    "biases_detected": [
+      "unknown-outcome-bias"
+    ],
+    "calibration_score": 0.0,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Insufficient outcome data to assess calibration — both units have user_reaction:Unknown",
+      "No tool calls in either unit limits strategy quality assessment",
+      "Topic keywords overlap exactly across both units suggests possible duplicate or near-duplicate prompts — check for session replay or caching artifact"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "537d3ee4-6030-48fe-861c-83ec8bb8cf92",
+      124850
+    ],
+    [
+      "4607954c-3c6d-4625-89bd-0794ba43edc4",
+      121057
+    ],
+    [
+      "45e9f8fa-477d-462a-b378-0bba29a4187f",
+      136207
+    ],
+    [
+      "42d1db99-4971-47d3-9f18-578db4a719df",
+      131560
+    ],
+    [
+      "428f6a7e-714c-4e4f-9446-10414c0a5580",
+      118102
+    ],
+    [
+      "330cac2d-be34-4c2c-9431-463fbc59e42b",
+      130607
+    ],
+    [
+      "2a810092-2054-4fed-8c26-d99de1c94c33",
+      182232
+    ],
+    [
+      "288aad3a-d4ee-4d65-9d30-8f2306b3329e",
+      123125
+    ],
+    [
+      "09c853ef-b690-41d6-8241-770675a18d1b",
+      129196
+    ],
+    [
+      "02f33a6e-578d-46e1-aed7-5bfd789fc9fb",
+      125356
+    ]
+  ],
+  "timestamp": "2026-07-25T07:06:01.189152Z",
+  "tokens_used": 577,
+  "units_analyzed": 2,
+  "units_total": 2
+}

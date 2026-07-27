@@ -1,0 +1,140 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17852,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.25273802572120035,
+    "unit_count": 16
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n '1,60p', sed -n '440,465p', sed -n '245,275p', sed -n '350,380p' range reads in Bash instead of Read with offset/limit; rate consistent with prior cycles; deprioritized per standing guidance",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-2: inline sleep 3 in pm2 restart chain; unit 302d5d15-3: standalone sleep 45 (success:false, blocked by hook); both inline and standalone forms present across both units; no improvement signal",
+      "write_before_read_trap:RECURRING:PARTIALLY_IMPROVING — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+pivot resolved; Python script workaround avoided further thrash; failure depth shallow and recovery adaptive; trajectory continues at same level as prior cycle",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry; 2 Edit failures on uploadtemplate.server.ts before Read+Python pivot; depth remains shallow; PARTIALLY_RECOVERING trajectory holds for eighth consecutive cycle",
+      "screenshot_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: Read attempted at /Users/alcatraz627/Code/Versable/versable-builder/.playwright-mcp/rail-check.png (success:false) before fd search located actual path; was NEW last cycle, now second consecutive cycle with identical pattern; upgrading from NEW to RECURRING:WORSENING — no improvement signal across two cycles",
+      "mcp_tool_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path in versable-builder/.playwright-mcp/ (success:false) before node fallback; was NEW last cycle, now second consecutive cycle; structurally identical to screenshot_path_assumption (assume-first on MCP/Read path without prior probe); upgrading from NEW to RECURRING:WORSENING",
+      "git_push_without_fresh_approval:RECURRING:STABLE — unit 302d5d15-2: three bundled commit sequences without per-push fresh confirmation; unit 302d5d15-3: TRACKING commit without per-push confirmation; rate unchanged from prior cycles",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 302d5d15-3: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; third consecutive cycle with identical pattern",
+      "agent_dispatch_failures:RECURRING:STABLE — unit 302d5d15-3: 3 consecutive Agent tool failures (success:false) before 3 subsequent calls succeeded; was NEW_OBSERVATION last cycle, now confirmed RECURRING; no explicit retry strategy, backoff, or liveness probe applied between failure and re-dispatch; upgraded from NEW_OBSERVATION to RECURRING",
+      "task_output_failures:NEW — unit 302d5d15-3: TaskOutput called twice with success:false before falling back to direct Bash inspection; structurally similar to agent_dispatch_failures (tool call attempted without verifying task/agent readiness); not previously classified in calibration history"
+    ],
+    "calibration_score": 0.46,
+    "overconfident_count": 2,
+    "recommendations": [
+      "screenshot_path_assumption + mcp_tool_path_assumption: both now RECURRING after two consecutive cycles — highest-priority new signal; probe output path with fd or ls before any Read/MCP file access when path was not returned explicitly by the generating tool call; the fix is one ls/fd probe, not assumption-first",
+      "task_output_failures: NEW — investigate why TaskOutput calls are failing (task not yet completed, wrong task ID, task expired); add a readiness check (TaskGet or wait-for-completion signal) before TaskOutput; do not dispatch TaskOutput speculatively",
+      "agent_dispatch_failures: now confirmed RECURRING — implement at minimum a linear backoff between failed Agent dispatches; consider a liveness probe (claude-ipc peers or similar) before re-dispatch on the third consecutive failure",
+      "Deprioritize (stable, per standing guidance): shell_tool_preference_violations, sleep_in_bash, git_push_without_fresh_approval, confirmation_bias_style_log — all rate-stable with no worsening signal; flagging again adds noise without improvement leverage"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "eb07961e-9186-4c78-b0ca-32ae75b82cbf",
+      119602
+    ],
+    [
+      "e3bde638-4ca7-40b0-9db6-6c565b9f9864",
+      90321
+    ],
+    [
+      "e01b73ba-9a55-48a6-be44-0e8943ac336d",
+      113435
+    ],
+    [
+      "dee2ba2e-5949-4f6d-bbc0-ce9d474cef98",
+      91774
+    ],
+    [
+      "d31a6f5a-13a8-4cc1-8ca3-29b0ae6cec44",
+      118898
+    ],
+    [
+      "ba9cf7b4-6a9c-4a73-bd7b-7a4ceeac5ff7",
+      104588
+    ],
+    [
+      "b7cd9f24-956f-42d2-8341-8e8dbba194b3",
+      106579
+    ],
+    [
+      "9d06328c-9674-4aac-a5f9-5e3d05e807de",
+      125261
+    ],
+    [
+      "9bc4591a-a68a-4dfb-b5e8-ef5aa10a5831",
+      130305
+    ],
+    [
+      "832b6ef6-c56c-4763-ada3-ec037c992ec4",
+      120720
+    ],
+    [
+      "7d272fee-e6af-4990-8673-6f523694d68e",
+      119481
+    ],
+    [
+      "75712cc6-e96c-466f-a8b4-cb025d50c47e",
+      90899
+    ],
+    [
+      "713db49a-5bb6-446a-b62b-5b2d2db64c8c",
+      141535
+    ],
+    [
+      "6a7c2ef0-3323-4e73-bfbe-a4745b86f3d9",
+      121721
+    ],
+    [
+      "63617605-ed51-4446-b0f4-e35136605f91",
+      108386
+    ],
+    [
+      "4c103af1-84dc-4df8-b052-0a0d08880ad9",
+      126923
+    ],
+    [
+      "434d7c58-77ab-4538-a403-ea1dc4898130",
+      117697
+    ],
+    [
+      "307ea0c0-6c27-48f5-964c-0495c911b66d",
+      119796
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      8213969
+    ],
+    [
+      "2841cccb-01ba-4d21-9db6-c4e13df7e925",
+      109542
+    ],
+    [
+      "23e12674-0439-4678-ace9-693125267624",
+      103568
+    ],
+    [
+      "2382b87e-a983-455e-b525-448674b9d98d",
+      153405
+    ],
+    [
+      "1fc18730-d3a8-46d3-a531-13669ce5a63f",
+      100985
+    ],
+    [
+      "0f9f26ed-9248-4235-b171-dca13fbce34f",
+      127851
+    ],
+    [
+      "0ce3fe35-0b78-4e67-979c-1e7916910f39",
+      255225
+    ]
+  ],
+  "timestamp": "2026-07-23T17:18:17.957022Z",
+  "tokens_used": 11709,
+  "units_analyzed": 7,
+  "units_total": 16
+}

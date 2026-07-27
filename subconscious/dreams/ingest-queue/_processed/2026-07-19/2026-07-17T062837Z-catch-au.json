@@ -1,0 +1,29 @@
+{
+  "id": "7f66b053-c1ee-4c36-a996-d04630ae2004",
+  "ts": "2026-07-17T06:28:37Z",
+  "session_id": "catch-audit-7f",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260717-catch-audit-7f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "[ ] 1. `status` shows lane health: `Lanes: 12 green \u00b7 2 red (ingest-queue: oldest 9d \u00b7 ipc: store absent)` \u2014 read the last lane-health.jsonl line; red lanes named with reasons. (Highest value; zero new computation.)",
+    "[ ] 2. Receipt lines on every mutating verb: end with `\u2192 wrote <path> (N items, M new)` \u2014 dream-pass, views, brief-projects, audit, insight-digest, prune*.",
+    "[ ] 3. Cycle summary after `dream`/`dream-pass`: `cycle N: X sessions + Y checkpoints in \u00b7 Z patterns updated \u00b7 T tok \u00b7 Ds`.",
+    "[ ] 4. Next-step hints after verbs: dream-pass \u2192 snapshot-diff/insight-digest; audit \u2192 review. (Discoverability for board/reflect/snapshot-diff/drift.)",
+    "[ ] 5. `status -v` tier: per-module last-run/last-error, queue depth + oldest, next launchd fires, recent warning counts from log, build-hash-vs-source check (catches stale binary AND the 1311\u21921310 restart step-back).",
+    "[ ] 6. `--json` on read verbs (status, domain list, lanes) per the pipe-friendly convention.",
+    "[ ] 7. LLM receipts on \u2726 verbs: model + tokens vs budget per call (per-domain for dream-pass).",
+    "[ ] 8. `domain list` enrichment: last pass, pending delta, insights count, next cadence fire per domain.",
+    "[ ] Push i-dream `3fdf2c6` (colored help) \u2014 needs one fresh sentinel.",
+    "[ ] Carried from earlier arcs: widget-sweep #34 (topbar review verdict) \u2014 user undecided whether this session-line or a dedicated one.",
+    "[ ] Deferred observations (chase only if picked): daemon restart cycle step-back; broken-pipe root cause; intention-fire-counts race; stale wal lock cleanup; pre-existing unused imports.",
+    "[ ] Self-firing, no action: reviews 07-27 / 08-14 / 09-14; weekly audit Sun 02:30 / review Mon 09:00 (their first post-reload fires 07-19/07-20 double as the UNCONFIRMED-cron health check)."
+  ],
+  "tags": []
+}

@@ -99,7 +99,11 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
    to skim, flip what's wrong, then hit **Submit to Claude** (or **Copy answers**
    to paste it themselves). Also set the tab-title (Subsystem links below).
 5. **Get the answer back — two paths:**
-   - **Submit-to-wake (preferred):** after the handoff, watch for the human's
+   - **Submit-to-wake (preferred):** arm the watcher **in the same turn as the
+     handoff, before ending it** — a turn that ends with no Monitor/poll armed
+     never wakes, whatever the page promises; the pending chip is visibility,
+     not a wake path (atone `promised-async-wake-without-arming-receiver`,
+     2026-07-22: the answer sat unread for half a day). Watch for the human's
      Submit with the **Monitor** tool (or poll), keyed on the answer file:
      ```bash
      bash ~/.claude/scripts/decision-page/decision-page.sh answer "$S" --consume --notify
@@ -112,6 +116,10 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
    - **Manual paste (fallback):** if they paste the string into chat instead,
      apply it and clear the marker yourself:
      `decision-page.sh pending clear "$S"`.
+   - **Next-session pickup (deliberate):** if you are ending the session rather
+     than watching, say so — "your Submit will be read at the next session
+     start" — and never use the word "wake". Promising a wake while nothing
+     watches is the recorded failure this step exists to prevent.
 
 The page is keyboard-first (`j`/`k` move, `1`–`9` pick, `a` agree, `n` note,
 `m` notes-mode, `f` show-only-changed, `c` copy, `s` submit, `?` help).

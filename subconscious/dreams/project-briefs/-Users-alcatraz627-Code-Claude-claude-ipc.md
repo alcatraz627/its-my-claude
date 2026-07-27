@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-16T07:38:01.487001+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-07-27T00:45:33.818518+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A multi-agent IPC broker for Claude Code sessions — cross-session messaging, peer registration, and delivery guarantees. Dominant style: infrastructure-first, parallel agent coordination, live-exercise verification over test-coverage claims.
+A multi-agent IPC broker for Claude Code sessions — enabling cross-session messaging, peer discovery, and coordinated parallel work. Development style is exploratory and multi-agent-heavy, with repeated corrections around verification discipline and parallelism hygiene.
 
 ## Things to do (or keep doing)
-- **Breadth-first before polish**: sweep all surfaces on a v1 pass; pausing mid-sweep to perfect one item breaks coherence.
-- **Batch sequential steps autonomously**: halt only at genuine decision points or critical reviews — never for lightweight go-aheads.
-- **Confirm IPC delivery via round-trip reply**, not log inspection; a successful send is not a successful delivery.
-- **Treat state-ledger writes as blocking obligations**: IPC replies, task updates, and commit steps execute immediately after completing a unit of work — deferring them as bookkeeping compounds under parallelism.
+- **Verify IPC delivery via round-trip reply**, not send-side logs or telemetry — a successful send proves nothing about receipt.
+- **Reply to all unanswered peer messages before ending a session** — stop hooks fire repeatedly for each unreplied message; this is enforced, not advisory.
+- **After any burst of parallel work**, treat all cached state (task lists, branch, file contents) as stale and re-read before acting.
+- **Default gates to DENY for unrecognized inputs** — default-ALLOW on unknown CLIs/commands silently bypasses the entire access control layer.
 
 ## Things to avoid
-- **Don't default-allow for unrecognized input**: access gates, CLI fallbacks, and data extractors must emit DENY/error on unknown input, never a plausible-looking default that suppresses investigation.
-- **Don't use `rg -rn`**: `-r` is `--replace`, not recursive+line-numbers; use `rg -n` for line numbers.
-- **Don't pass IPC message bodies through unquoted shell**: backticks and special characters corrupt or zero the payload — quote or heredoc the body.
-- **Don't patch a specific instance without fixing the structural default**: one-off CLI additions to a fallback list leave the same class of gap open for the next caller.
+- **Don't treat absence of failure as success** — zero-defaults fabricate plausible data, send-success masks non-delivery, clean diff ≠ working code; require a positive existence proof.
+- **Don't claim a UI or runtime bug fixed without running the dev server** — inspection and diff review are not verification.
+- **Don't use `rg -rn`** — `-r` means `--replace` in ripgrep, not recursive; it silently mangles output. Use `rg -n` for line numbers.
+- **Don't route low-value go-aheads through the user** — batch sequential work autonomously and halt only at genuine branch points with enough context to answer in one shot.
 
 ## Open questions / known gaps
-- Pre-negotiation protocol for parallel agents claiming overlapping task ownership is referenced but not formalized — coordination races have caused muddy diffs.
-- CLI auth steps (cloud logins) require an interactive terminal; no automated fallback path exists yet.
+- Multi-agent ownership negotiation via IPC before parallel work begins is the stated solution to edit conflicts, but no pre-negotiation protocol is yet enforced mechanically.
+- Orchestrator death leaving sub-agents blocked is a known failure mode with no dead-peer self-report timeout implemented yet.

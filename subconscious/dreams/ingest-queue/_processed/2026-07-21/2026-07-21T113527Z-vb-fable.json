@@ -1,0 +1,26 @@
+{
+  "id": "b1692904-d476-4da1-8fc6-cca122d37ea2",
+  "ts": "2026-07-21T11:35:27Z",
+  "session_id": "vb-fable-sp",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260721-vb-fable-sp.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**[owner go] Add `aakarsh@versable.ai` to prod `STAFF_EMAILS`** for the admin",
+    "**[owner provides secret] Wire `RESEND_API_KEY`** (+ verify sender domain in",
+    "**[owner provides secret] Optional: `OXYLABS_USERNAME`/`PASSWORD`** if Scrape",
+    "Wipe the 2 \"(wipe me)\" junk jobs + ~30 junk review items in flip-sweep.",
+    "`.platforms.com` mapping \u2014 owner going with `.ai`; likely delete/ignore the",
+    "**D5b** \u2014 build TRUE per-part criticals % (owner DECIDED, post-V1 slice).",
+    "**D8** \u2014 review-as-workflow-gate: a focused follow-up session (verify orchestrator",
+    "Doc-triage not-done delta in DEFERRED-COMBINED.md awaits owner review (conflict",
+    "vb-fable's DEPLOYMENT.md prod-deploy command omits the `--update-env-vars` canary"
+  ],
+  "tags": []
+}

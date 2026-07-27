@@ -1,0 +1,168 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.12793600067238536,
+    "unit_count": 49
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n '1,60p', sed -n '440,465p', sed -n '245,275p', sed -n '350,380p' range reads in Bash instead of Read with offset/limit; rate consistent with prior cycles; deprioritized per standing guidance",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-2: inline sleep 3 in pm2 restart chain, sleep 2 in workspace nav wait; unit 302d5d15-3: standalone sleep 45 (success:false, blocked); both inline and standalone forms persist; no improvement signal across three cycles",
+      "write_before_read_trap:RECURRING:PARTIALLY_IMPROVING — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+Python pivot; recovery adaptive and failure depth shallow; trajectory unchanged from prior cycle",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry; 2 Edit failures on uploadtemplate.server.ts before Read+Python workaround; depth remains shallow; PARTIALLY_RECOVERING holds for ninth consecutive cycle",
+      "screenshot_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: Read attempted at .playwright-mcp/rail-check.png (success:false) before fd search located actual path; third consecutive cycle with identical pattern; no improvement signal; trajectory worsening",
+      "mcp_tool_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path in versable-builder/.playwright-mcp/ (success:false) before node fallback; third consecutive cycle with structurally identical assume-first pattern on MCP/Read path; no improvement signal; trajectory worsening",
+      "git_push_without_fresh_approval:RECURRING:STABLE — unit 302d5d15-2: three bundled commit sequences without per-push fresh confirmation; unit 302d5d15-3: TRACKING commit without per-push confirmation; rate unchanged",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 302d5d15-3: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; fourth consecutive cycle with identical pattern",
+      "agent_dispatch_failures:RECURRING:STABLE — unit 302d5d15-3: 3 consecutive Agent tool failures (success:false) before 3 subsequent calls succeeded; third consecutive cycle with identical burst pattern; no explicit retry strategy, backoff, or liveness probe between failure and re-dispatch",
+      "task_output_failures:RECURRING — unit 302d5d15-3: TaskOutput called twice with success:false before falling back to direct Bash inspection; was NEW last cycle, now second consecutive cycle; upgrading from NEW to RECURRING; structurally identical to agent_dispatch_failures (tool assumed ready without liveness check)"
+    ],
+    "calibration_score": 0.44,
+    "overconfident_count": 3,
+    "recommendations": [
+      "PRIORITY: screenshot_path_assumption and mcp_tool_path_assumption have now recurred across three consecutive cycles with no improvement — both share the same root: assume-first on a path without a probe (fd/ls) before issuing the Read or MCP call; add a probe step before any Read or MCP file-tool call targeting a path created by an external tool (playwright, browser MCP, node script) rather than a path known to exist",
+      "PRIORITY: task_output_failures has graduated from NEW to RECURRING — before calling TaskOutput or reading agent output, verify the task/agent has actually completed (e.g., check task status or wait for notification) rather than calling blind; structurally identical backoff gap as agent_dispatch_failures",
+      "agent_dispatch_failures remains at three cycles with no backoff strategy applied between failure burst and re-dispatch — add an explicit wait or liveness probe (pm2 status, API ping, or brief pause) before re-dispatching after consecutive failures rather than firing immediately",
+      "Deprioritize: shell_tool_preference_violations, sleep_in_bash, git_push_without_fresh_approval, confirmation_bias_style_log — all STABLE with no worsening signal; already flagged in multiple prior cycles; addressing higher-priority worsening biases first"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "f5b7d271-d112-42a8-8f87-ac9132ea4a1e",
+      128849
+    ],
+    [
+      "cbcaed1b-5ac1-4f6b-8e44-4f02816127ae",
+      114029
+    ],
+    [
+      "c737ce15-92ee-4fd6-997e-4a7158306eec",
+      128321
+    ],
+    [
+      "c684c4d3-6f75-4eed-8127-d0e5fa01d9d1",
+      121771
+    ],
+    [
+      "b59df93a-781c-476c-b5dc-1be33963a787",
+      140813
+    ],
+    [
+      "b58256ec-d3e2-429c-bbb5-68903eee7f26",
+      113962
+    ],
+    [
+      "acb692da-5530-47a5-a051-755ee8817180",
+      107669
+    ],
+    [
+      "9807db99-3b2b-4a55-a661-bee9504910cf",
+      120898
+    ],
+    [
+      "93ee6696-645c-416a-b6c7-50d62474b136",
+      141647
+    ],
+    [
+      "89e0b85a-26d5-4eb8-807d-e3c8380cd65d",
+      129356
+    ],
+    [
+      "87809439-3b2f-41e4-ba9c-88f57345c44d",
+      124828
+    ],
+    [
+      "75e5052f-b1cf-40ae-a8d7-92b72d72340f",
+      104774
+    ],
+    [
+      "73435bb5-892a-4c26-9807-ed04918e716c",
+      107727
+    ],
+    [
+      "71d1456f-020f-4af7-a1b1-7f4bbc096755",
+      118916
+    ],
+    [
+      "6bf4b499-8892-404f-9737-88a137a5e7b4",
+      102140
+    ],
+    [
+      "672503ae-6f46-4fea-afa7-1acb92b7f355",
+      145214
+    ],
+    [
+      "594df142-9d75-4485-acfd-3717a2a88997",
+      112053
+    ],
+    [
+      "515b2c95-428b-42ea-b80a-0a34e8f556e6",
+      122394
+    ],
+    [
+      "50d71513-5f28-4755-90c4-f1c0ba01a2b1",
+      94377
+    ],
+    [
+      "3faa05d8-cc45-4eeb-a90a-b6124383e0d2",
+      123144
+    ],
+    [
+      "32a3619e-ea64-4f74-9b8e-368518146b10",
+      100909
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      11329408
+    ],
+    [
+      "2b810984-057b-4684-98f1-d2a2e27d807a",
+      131399
+    ],
+    [
+      "17f15989-d26e-4271-919e-0019c0775df5",
+      122406
+    ],
+    [
+      "0ac7b2c8-fd52-48c8-8e2e-a407a3267adf",
+      114303
+    ],
+    [
+      "08da9ce5-ffac-4967-af9c-9075650f0418",
+      124559
+    ],
+    [
+      "0823ad66-ffb9-499f-8c22-4097e31462a6",
+      122087
+    ],
+    [
+      "a538f247-bcea-4bea-adb0-1b54f5085a05",
+      118974
+    ],
+    [
+      "0ab0035c-3186-4dbf-bf58-1c4342f077d5",
+      7119966
+    ],
+    [
+      "082323a0-411f-44f7-a29b-0152d9c43dea",
+      39867323
+    ],
+    [
+      "c152922c-216d-48b7-8fed-7620617d95ca",
+      99485
+    ],
+    [
+      "8ae207bd-3c95-49c1-bb9e-62b53ff22eae",
+      119621
+    ]
+  ],
+  "timestamp": "2026-07-24T10:13:20.093519Z",
+  "tokens_used": 11807,
+  "units_analyzed": 7,
+  "units_total": 49
+}

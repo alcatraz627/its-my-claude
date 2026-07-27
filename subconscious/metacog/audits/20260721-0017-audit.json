@@ -1,0 +1,104 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17673,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15896551715870766,
+    "unit_count": 31
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit efd2a3ab-2: ShellCrumbs.tsx 2 consecutive Edit failures (success:false) before Read+retry resolved; taxonomy.tsx 1 Edit failure before scratchpad-copy workaround; ninth-plus confirmed instance class across session history; rate and depth consistent with multi-cycle baseline; zero improvement under advisory-only regime",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit efd2a3ab-2: ShellCrumbs.tsx 2-failure depth, taxonomy.tsx 1-failure depth before adaptive scratchpad recovery; shallow relative to prior 7-failure session peak; partially-recovering trajectory holds for third consecutive cycle; no escalation signal",
+      "git_push_without_fresh_approval:RECURRING:STABLE — unit efd2a3ab-2: three bundled commit+push Bash calls (JobsTable ledger pass, sub-row fullWidth fix, schemas+export batch) without per-push confirmation; unit efd2a3ab-11: lockfile fix commit+push+deploy bundled without per-push confirmation; thirteenth-plus confirmed batch instance across recorded session history; zero improvement across all advisory cycles",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit efd2a3ab-2: sed -n '147,152p;185,188p', sed -n '195,300p', sed -n '1,40p', sed -n '80,110p', sed -n '1,60p' range reads used instead of Read with offset/limit; cat-pipe on page-title.tsx; rate consistent with multi-cycle baseline; standing guidance deprioritizes re-flagging",
+      "symlink_write_blind:RECURRING:STABLE — unit efd2a3ab-2: Write to _checkpoint.claude.md (success:false), Read on same path succeeded returning content (false write-safe signal), second Write attempt (success:false), symlink nature only discovered via explicit readlink probe on third attempt; confirmed RECURRING:STABLE from prior cycle; pattern structurally identical to prior occurrence — Read-success is still being treated as evidence of write-path validity; no sign of adaptation",
+      "collect_not_run:RECURRING:STABLE — unit efd2a3ab-2: npx tsc --noEmit used as primary verification gate after new schema routes and entry.server.tsx changes; tsc --noEmit is a compile check only, no runtime assertion exercised; new xlsx parse boot-path and schema viewer loader paths not run against real Firestore or Cloud Run before commit+push; escalated from EMERGING:NEW in prior cycle to RECURRING:STABLE this cycle; two cycles of occurrence without remediation signals advisory-only regime is failing for this class"
+    ],
+    "calibration_score": 0.35,
+    "overconfident_count": 1,
+    "recommendations": [
+      "collect_not_run has graduated from EMERGING:NEW to RECURRING:STABLE in a single cycle — backend query paths and new server-side loading logic are being committed and deployed with only tsc --noEmit as the gate; runtime exercise (curl the loader, verify non-error response against real data layer) is required before claiming backend changes verified; mechanical gate on this bias class is now indicated given the two-cycle escalation trajectory",
+      "symlink_write_blind remains RECURRING:STABLE with structurally identical failure sequence (Write fail, Read success, Write fail, readlink) — a pre-write probe (readlink or stat before any Write to a path not created this session) would break the three-step failure chain; the current recovery (readlink on third attempt) shows the agent can find the fix but is not applying it preemptively",
+      "git_push_without_fresh_approval continues with zero improvement across thirteenth-plus instances — deprioritize advisory re-recommendation; mechanical gate is the indicated and overdue intervention",
+      "deprioritize write_before_read_trap and re_edit_thrash recommendations — both show partially-recovering trajectories (shallow failure depths, adaptive scratchpad recovery) and are already covered by prior advisory cycles; escalation signal is absent"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 1
+  },
+  "sessions": [
+    [
+      "faeb2f37-0102-4d63-abf7-db1b59e857f1",
+      112835
+    ],
+    [
+      "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+      36616218
+    ],
+    [
+      "ed1b2d1b-7a99-4791-a4ac-a5fca6dfe0a7",
+      116029
+    ],
+    [
+      "eb5745c0-cfba-40ea-98de-57f9c178407b",
+      122684
+    ],
+    [
+      "ba975bee-d7be-403c-8d98-ffa2418884be",
+      105852
+    ],
+    [
+      "b1692904-d476-4da1-8fc6-cca122d37ea2",
+      33277814
+    ],
+    [
+      "21a84dd8-2b00-4adc-858c-613e2082492f",
+      109279
+    ],
+    [
+      "133f98cd-11d7-4dd0-a786-b64461023d28",
+      102559
+    ],
+    [
+      "05571982-79cb-487b-beb4-a5ed83cbbd69",
+      122106
+    ],
+    [
+      "048f5411-131e-4084-8a74-766fd91ddf40",
+      125079
+    ],
+    [
+      "0147c6bc-1dce-48a4-8154-9b440beb4338",
+      135375
+    ],
+    [
+      "d643d584-27a3-47ea-b3db-65a2449777ec",
+      7920601
+    ],
+    [
+      "d1022cb4-af1b-43bb-8834-abe2cc3e40f6",
+      136407
+    ],
+    [
+      "9b6bdd67-a61c-4842-b574-9965f4d1ed79",
+      138869
+    ],
+    [
+      "6afd58a8-df3c-436d-a9f6-e8d681dca70d",
+      103810
+    ],
+    [
+      "9e8841e7-38f2-4442-b909-fc56703dc567",
+      3957343
+    ],
+    [
+      "858463b9-ed70-4163-bc06-0db55479dcd7",
+      104166
+    ]
+  ],
+  "timestamp": "2026-07-21T00:17:09.390989Z",
+  "tokens_used": 12853,
+  "units_analyzed": 2,
+  "units_total": 31
+}

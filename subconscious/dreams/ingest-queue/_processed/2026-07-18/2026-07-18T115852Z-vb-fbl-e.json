@@ -1,0 +1,21 @@
+{
+  "id": "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+  "ts": "2026-07-18T11:58:52Z",
+  "session_id": "vb-fbl-ef",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260718-vb-fbl-ef-evening.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "VALIDATE opus's work on its ping: overlap fix spot-check (module pages at",
+    "BUILD: taxonomy\u2192attributes sidebar-peek prototype (pane-peek-row +",
+    "Owner-gated: opus Variant-B nod; over-limit warn render on real data;",
+    "Ledgered small: \"no UI path to run a module standalone on a non-matching"
+  ],
+  "tags": []
+}

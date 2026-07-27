@@ -1,0 +1,37 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.05276362383309166,
+    "unit_count": 2
+  },
+  "response": {
+    "biases_detected": [
+      "process-anchoring: applied full release-skill methodology to a 2-file +36/-8 diff; the agent's own runtime note acknowledged the fan-out was heavier than warranted",
+      "response-length inflation: unit 2 produced 5645-char output in response to a 19-char terse input, violating density-matching protocol",
+      "investigative-sunk-cost: 25 tool calls including mechanism deep-dives (resolve_brand_code, get_item_result chain) for a diff the agent later classified as inline-readable in ~10 calls"
+    ],
+    "calibration_score": 0.3,
+    "overconfident_count": 0,
+    "recommendations": [
+      "enforce terse-in/terse-out at the response-composition stage, not just as a stated rule — unit 2's large output to minimal input is a systematic leak",
+      "add a diff-size gate at release-skill entry: <5 changed files skips the per-theme fan-out and works inline, consistent with the agent's own post-hoc insight",
+      "track tool-call count relative to diff size as a calibration signal; >20 tool calls on a 2-file diff suggests process-anchoring rather than task-proportionate investigation",
+      "unit 2 outcome is Unknown — flag terse-input/verbose-output turns for follow-up review to assess whether the density mismatch correlates with user friction"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 1
+  },
+  "sessions": [
+    [
+      "624bf7c3-417b-42f6-80ed-e5a6eafb3f90",
+      446037
+    ]
+  ],
+  "timestamp": "2026-07-24T21:05:24.225342Z",
+  "tokens_used": 2541,
+  "units_analyzed": 2,
+  "units_total": 2
+}

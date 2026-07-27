@@ -880,3 +880,60 @@ profile per agent.
 - **Mutation-test restore must be copy-based, never `git checkout --`** (reverts to HEAD, wiping
   uncommitted work): cp to scratchpad → mutate → test with the pass/fail line VISIBLE → `cp -f` back →
   `diff -q`. (Already pinned + proposed prop-20260714-185635-61.)
+
+## 2026-07-23 — dream-catch-14 (i-dream felt-metabolism)
+
+- Injection-efficacy gradient (measured over 10 real transcripts): mechanical
+  hooks > task-scoped memory (checkpoints fired preventively with citations) >
+  ambient session-start prose (zero visible uptake). When building any
+  "teach the agent" surface, deliver at the moment of action, not at session
+  start — and instrument firings, or you cannot tell teaching from paperwork.
+- Event streams consumed via position-based cursors make ORDER load-bearing:
+  never append categorized/aggregate blocks after real events. Give aggregate
+  rows FIXED period-boundary timestamps (e.g. ISO-week Monday) — "sort by ts"
+  alone fails while an aggregate's ts tracks now.
+- Identity layers must outlive store rewrite cadence: feedback keyed on UUIDs
+  that remint every ~2 days orphaned 95% of history silently. Prefer
+  content-derived stable ids for anything cross-referenced across time.
+- Pipeline-masked exit codes (`cmd | head; echo $?`) bit twice in one session
+  despite being a known trap — the countermeasure is the re-run-bare REFLEX
+  before trusting any gate, not the knowledge.
+
+## 2026-07-23 — claude-ipc dashboard + broker program (catch-cowrk-b7)
+- **Fixture-blindness generalizes:** a dual-backend abstraction where one backend spreads `{...obj}` passes fields the other's explicit column list drops — "test both backends" only counts when the test can EXPRESS the divergence (e.g. a restart over the real persistent store).
+- **Backticks in double-quoted `git commit -m` execute as command substitution** and silently corrupt the message — write to a file, commit with `-F`.
+- **freeze (charmbracelet, ANSI→PNG) drops background SGR and tints dim-after-color spans** — use it for structure only; color truth = raw `tmux capture-pane -e` or a real terminal.
+- **ink-terminal alpha:** `inverse` renders as nothing; attr-only cell changes can miss the damage diff (make selection/carets printed characters); `width=%` needs `flexShrink={0}` to hold under content pressure.
+- **Adversarial-gate prompt pattern that paid:** name the exact mutation to run (revert THIS expression, watch THIS test go red, restore by editing) and enumerate the allowed keys for any live-surface exercise — validators complied exactly both times.
+
+## 2026-07-23 — perf work: browser-measure first, burst-settle as the metric (cl-instances)
+
+Server endpoints curl'd at 1-14ms while the page burned 13.6s — the real cost
+was a request storm (2 fetches x ~20 cards) against a thrashing 8-entry FIFO
+plus Chrome's 6-connections-per-origin queueing. Two reusable lessons: (1)
+measure perf complaints in the browser with PerformanceResourceTiming before
+designing a fix — server-side curls of individual endpoints can all be fast
+while the composition is terrible; (2) cumulative request-duration is
+queue-skewed and overstates after fixes too — the honest before/after metric
+is burst-settle wall time (max responseEnd of the boot burst). Also: any
+cache-cap raise on entries holding big parsed objects needs a second bound in
+bytes; the small old cap may have been the only thing capping memory.
+
+## 2026-07-27 — dream-catch-14 (i-dream felt-metabolism, deployed)
+
+- Voluntary agent behavior does not happen: 5 days after shipping a [L:] lesson-tag
+  cite-contract ("cite the tag when a lesson changes what you do"), firings stayed at
+  exactly ZERO across all tagged sessions. Uptake of any "teach the agent" mechanism
+  must be STRUCTURAL (a trigger that fires regardless of agent cooperation), never
+  voluntary. This is the single strongest cross-project lesson of the arc.
+- LLM-authored regex is its own input class: a 6-char compiler-drafted pattern that
+  passed every syntactic/shape check ((a+)+$) hung a BLOCKING hook 12s via catastrophic
+  backtracking. Any surface running model-generated patterns needs a wall-clock bound
+  (signal.alarm) + subject-length cap, not just try/except-on-compile.
+- Negative caches keyed by CONTENT VERSION self-invalidate: keying "already attempted"
+  by stable_id(slug|precheck) instead of slug alone means a refined precheck naturally
+  re-qualifies with zero manual purge path — avoids the forever-loop-to-LLM bug where a
+  skipped/rejected item is re-sent every cycle.
+- The adversarial gate's best findings both rounds were in CONSUMER code the diff never
+  touched (a position-based domain cursor; a blocking-hook's latency). Always hand a
+  validator the consumers of every file the batch writes, not just the diff.

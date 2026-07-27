@@ -1,0 +1,214 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17387,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.12858696547411805,
+    "unit_count": 38
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit b1692904-22: Write failure on part-table.tsx (success:false) before retry succeeded; unit b1692904-33: 2 consecutive Edit failures on ShellCrumbs.tsx before Read+retry resolved; depth and rate consistent with multi-cycle baseline; zero improvement under advisory-only regime across all recorded cycles",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit b1692904-22: 1 Edit failure on UsageContent.tsx before success; unit b1692904-33: 2-failure depth on ShellCrumbs.tsx; depth remains within partially-recovering baseline (peak 2, well below prior 7-failure session peak); no escalation signal; partially-recovering trajectory holds for fifth consecutive cycle",
+      "git_push_without_fresh_approval:RECURRING:MIXED — unit b1692904-22: bundled commit+push calls (D2+D7 batch, accounts batch, cosmetic tail) without per-push confirmation; unit b1692904-35: kit 0.0.9 commit+push bundled without per-push confirmation; HOWEVER unit b1692904-52 correctly consumed sentinel before push+gcloud deploy chain; sentinel pattern landing at deploy level but pre-commit bundled push sequences in same session still skip per-push confirmation; split-behavior signal unchanged from prior cycle",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit b1692904-22: sed -n range reads used instead of Read with offset/limit on multiple calls; unit b1692904-33: sed -n '1,70p' used before Read tool on ShellCrumbs.tsx; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "collect_not_run:RECURRING:STABLE — units b1692904-22, b1692904-33, b1692904-35: npx tsc --noEmit used as primary verification gate after UI and component changes (JobStateBadge, JobActions, workspace-switcher, UsageContent, ShellCrumbs, part-table, job.tsx); tsc --noEmit is a compile check only — no runtime assertion exercised; new component render paths not exercised against live browser before commit in b1692904-22 bundled batches; third consecutive cycle RECURRING:STABLE confirms advisory-only regime has failed for this class"
+    ],
+    "calibration_score": 0.4,
+    "overconfident_count": 2,
+    "recommendations": [
+      "collect_not_run has been RECURRING:STABLE for three consecutive cycles with zero remediation signal — advisory intervention has demonstrably failed; escalate to a mechanical gate: a Stop hook that detects a TSC:0 claim in the same unit as a UI-file commit but no Chrome screenshot tool call, blocking and requiring at least one browser screenshot before marking done",
+      "git_push_without_fresh_approval shows a structural asymmetry: sentinel consumption is landing at the gcloud deploy stage (unit -52 correct) but bundled commit+push sequences earlier in the same session bypass the sentinel pattern entirely; the sentinel scope needs to extend to the commit+push stage, not only the deploy stage; surface this asymmetry explicitly in the next session that touches push discipline",
+      "write_before_read_trap and re_edit_thrash remain within partially-recovering bounds across five consecutive cycles with no escalation; existing advisory regime appears sufficient to contain depth; continue monitoring but no new intervention warranted at current trajectory"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "e6e1b603-2b5c-43ad-8953-d702c8ef350d",
+      102627
+    ],
+    [
+      "e43cf671-d5e1-4c6a-84e2-8c5e4653fca8",
+      137731
+    ],
+    [
+      "e1cd77b0-9081-48ae-a768-b2b9576c6d1f",
+      106137
+    ],
+    [
+      "d143a5b6-27e0-4928-ba85-477efd028b22",
+      125628
+    ],
+    [
+      "c242f15a-0b10-40f8-9372-a24a4097f777",
+      108098
+    ],
+    [
+      "bed084a6-aadc-43d0-9d26-68cd0e202224",
+      102381
+    ],
+    [
+      "bd66f409-04d7-46ca-90a9-a4901a893f5b",
+      97380
+    ],
+    [
+      "b4d7f215-3a72-426c-bf44-52035a6813ae",
+      108741
+    ],
+    [
+      "b1692904-d476-4da1-8fc6-cca122d37ea2",
+      37181043
+    ],
+    [
+      "acdec0a2-f11c-453e-afad-1b837939240f",
+      115408
+    ],
+    [
+      "ac0fbe72-7483-4481-8544-7a144deb56df",
+      124083
+    ],
+    [
+      "a8b9caf4-82a6-4f43-b8dc-460538dfadd3",
+      120225
+    ],
+    [
+      "8679617d-bdaf-435a-b546-eb8676d73b79",
+      118036
+    ],
+    [
+      "7f8280e0-30c0-47ca-9159-9b506c3eee98",
+      96341
+    ],
+    [
+      "7288dd08-f77d-4405-b478-60d11137a5b1",
+      113378
+    ],
+    [
+      "6e393da5-259b-4f96-861d-34a666f34018",
+      107710
+    ],
+    [
+      "5feb78c7-5df7-4f12-90dc-d0da6702222d",
+      109195
+    ],
+    [
+      "5fdd6f11-36b5-4f50-9fe6-2adbd93157d9",
+      102438
+    ],
+    [
+      "543e6d43-4465-4031-9c4e-9607034547a7",
+      120980
+    ],
+    [
+      "470655af-99a0-4cff-9925-7af7a2ca0840",
+      131378
+    ],
+    [
+      "45b58885-b840-40b9-a3bc-7064aeee6cc6",
+      128240
+    ],
+    [
+      "417fc0e0-5f73-4478-8c92-fc5106dce808",
+      101194
+    ],
+    [
+      "3e8f7967-dd93-4134-9f57-1aabb9b6c25a",
+      94779
+    ],
+    [
+      "3e385295-72c9-4f30-9310-4d9756edbc13",
+      119694
+    ],
+    [
+      "3a6e1524-dc55-478d-8ebb-3c78c0eba1a3",
+      103412
+    ],
+    [
+      "33d1d54f-1d42-4b4e-9caf-894e27ffd1f7",
+      101916
+    ],
+    [
+      "2bf7b2f4-ab03-4468-acdf-8a8a1cd19541",
+      116572
+    ],
+    [
+      "26aeade2-2bb9-4b5a-a031-dc804380a9eb",
+      97828
+    ],
+    [
+      "2536ef4b-ab0b-4825-8745-03582194dd89",
+      106586
+    ],
+    [
+      "213106ca-977a-4b6e-b25a-08800ea1b734",
+      126533
+    ],
+    [
+      "02afc00a-932b-4d07-859a-47df068b2c2b",
+      126666
+    ],
+    [
+      "00310590-8403-4402-8f70-e7a8684eb0b6",
+      17624348
+    ],
+    [
+      "aed87e4c-ae47-4990-9ee1-410cc31999eb",
+      149142
+    ],
+    [
+      "96f60af5-9aa3-4f83-96cb-de95b2330911",
+      135141
+    ],
+    [
+      "5c5aad65-bfbe-4e04-b4f4-8f41eec31bc5",
+      135366
+    ],
+    [
+      "1ddfbc55-d002-46cf-9854-45c787846122",
+      129920
+    ],
+    [
+      "0ab0035c-3186-4dbf-bf58-1c4342f077d5",
+      3765621
+    ],
+    [
+      "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+      601163
+    ],
+    [
+      "d643d584-27a3-47ea-b3db-65a2449777ec",
+      8904041
+    ],
+    [
+      "74cd379c-60ca-436b-b73e-71ccadb4ca29",
+      142221
+    ],
+    [
+      "2b7e191c-f240-441f-ad72-afed6e0a7736",
+      132109
+    ],
+    [
+      "9e8841e7-38f2-4442-b909-fc56703dc567",
+      4002119
+    ],
+    [
+      "16e7d0f2-cc3b-453d-9c80-63bdf5989ace",
+      131705
+    ],
+    [
+      "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+      754366
+    ],
+    [
+      "890cd7af-a5d2-486e-a421-75a43ee26d0b",
+      4453096
+    ]
+  ],
+  "timestamp": "2026-07-21T17:51:13.448568Z",
+  "tokens_used": 13143,
+  "units_analyzed": 21,
+  "units_total": 38
+}

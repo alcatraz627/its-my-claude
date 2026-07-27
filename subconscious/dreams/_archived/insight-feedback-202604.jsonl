@@ -1,0 +1,7 @@
+{"ts":"2026-04-18T01:19:46Z","insight_id":"881b161f-3ee0-4597-ab7b-d6c2a860613d","rating":"up"}
+{"rating":"up","ts":"2026-04-18T01:19:47Z","insight_id":"881b161f-3ee0-4597-ab7b-d6c2a860613d"}
+{"insight_id":"881b161f-3ee0-4597-ab7b-d6c2a860613d","rating":"up","ts":"2026-04-18T01:19:48Z"}
+{"source":"widget","ts":"2026-04-18T01:37:29.065Z","pattern_id":"Sessions frequently hit context limits and require continuation via 'this session being continued from' handoff messages","rating":1}
+{"pattern_id":"User uses 'core dump' command to save session state\/progress for continuity across sessions","ts":"2026-04-18T01:37:36.038Z","source":"widget","rating":1}
+{"ts":"2026-04-19T18:45:31Z","rating":"up","insight_id":"9817b4dd2daf5654"}
+{"ts":"2026-04-19T18:45:41Z","insight_id":"9817b4dd2daf4dda","rating":"up"}

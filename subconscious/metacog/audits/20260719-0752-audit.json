@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17648,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.0517791007748822,
+    "unit_count": 22
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 3cb749d1-2: sed -n '353,362p', sed -n '315,326p', sed -n '60,72p', sed -n '70,80p', sed -n '1585,1602p', sed -n '1602,1632p', sed -n '35,50p' range reads used instead of Read with offset/limit; rate consistent with 42-83% multi-cycle baseline; stagnation confirmed across six prior cycles — mechanical gate is the correct next intervention",
+      "write_before_read_trap:RECURRING:STABLE — 3cb749d1-2: Edit failures (success:false) on export/export.tsx and account/accounts.tsx before Read+retry resolved both; classic pattern where edit target was not read before mutation attempt; sixth confirmed instance class across session history; symlink and stale-match variants both present historically; advisory-only regime shows zero improvement trajectory",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — 3cb749d1-2: ActivityRail.tsx had one Edit failure (success:false) followed by Read then success; thrash depth shallow (1 failure) relative to prior regression peaks; adaptive recovery behavior consistent with partially-recovering trajectory across three prior cycle assessments",
+      "git_push_without_fresh_approval:RECURRING:STABLE — not directly visible as explicit git push tool calls in these units; IPC coordination message in 3cb749d1-19 references prior commits (99377ed, 868b411) deployed without per-push confirmation visible in this session's tool trace; cannot confirm new batch instances from available data; prior cycle count of 7-8 confirmed instances stands unchanged"
+    ],
+    "calibration_score": 0.44,
+    "overconfident_count": 1,
+    "recommendations": [
+      "shell_tool_preference_violations: DEPRIORITIZE advisory entries — stagnation confirmed across six cycles with zero improvement; escalate to mechanical PreToolUse gate blocking sed -n range reads when Read tool is available",
+      "write_before_read_trap: DEPRIORITIZE advisory — six-plus confirmed instances with no improvement trajectory under advisory-only regime; mechanical gate at Edit tool blocking edits to files not Read this turn is the correct intervention",
+      "re_edit_thrash: CONTINUE MONITORING — partially recovering trajectory holds; thrash depth at 1 failure per file is lower than regression peaks; no new intervention warranted this cycle",
+      "git_push_without_fresh_approval: DEPRIORITIZE advisory — insufficient new evidence in these units to escalate; prior cycle assessment (7-8 batch instances, mechanical gate warranted) stands; no new instances confirmed or denied"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 17
+  },
+  "sessions": [
+    [
+      "50656423-90ea-4a74-a12b-ed6c6f666bec",
+      88968
+    ],
+    [
+      "4eaa2db5-43d3-4ff7-a248-a721bbe46182",
+      106693
+    ],
+    [
+      "4db8f746-849c-437a-92f1-7e711cbb0aa2",
+      82957
+    ],
+    [
+      "4d402baa-991f-40e5-846c-3c757583359d",
+      121220
+    ],
+    [
+      "4d39d895-318d-4802-a3ec-cdbb382b73ff",
+      133487
+    ],
+    [
+      "4cde6a19-6c35-4c9b-b1c2-4356e0020c82",
+      128700
+    ],
+    [
+      "4c89d9f8-3972-4a40-aed0-0b23cdb6e877",
+      101715
+    ],
+    [
+      "4c39bb31-2134-4ba9-a363-7d254d9d9175",
+      89579
+    ],
+    [
+      "4b8c706a-bf96-45a8-88de-d96074854219",
+      115741
+    ],
+    [
+      "4ae23f69-4a4b-4cb4-8398-b7aa9813f29f",
+      114318
+    ],
+    [
+      "4a4402e5-9700-45a1-b6bf-225016ac6dc6",
+      123155
+    ],
+    [
+      "4964d55d-15a8-45ef-a6f4-ffb5c9698b9b",
+      115396
+    ],
+    [
+      "48e99c2a-aef6-4f45-a113-3c02e175293b",
+      109323
+    ],
+    [
+      "48a81668-6da8-44a9-8016-db9eb702ba1c",
+      117837
+    ],
+    [
+      "482ccd39-7f1d-4d40-9178-97b9d65d909c",
+      92587
+    ],
+    [
+      "46f91ff9-38ee-4490-b22e-4a5d09a46cd3",
+      118652
+    ],
+    [
+      "4645babd-63f8-42eb-b7a7-f9c057e32a96",
+      114234
+    ],
+    [
+      "460ce61b-9998-40c5-8aa0-9c7ed87772f7",
+      103712
+    ],
+    [
+      "46054ddd-4ec6-433b-bff7-61732c32aa8c",
+      115482
+    ],
+    [
+      "4501bd6f-2551-4e39-85fe-d07d5f91156b",
+      122635
+    ],
+    [
+      "448d5f73-de60-48ea-984e-b36ec28294cf",
+      106882
+    ],
+    [
+      "447b46c5-5e8b-4e0e-93da-6c3c31a68fde",
+      116197
+    ],
+    [
+      "4429ef33-146b-431d-81f2-280ef3d37323",
+      112464
+    ],
+    [
+      "43cca907-55e5-4803-b69c-0d6777f3c877",
+      128690
+    ],
+    [
+      "4372a2e5-799f-4e47-bde4-594976870064",
+      109707
+    ],
+    [
+      "429e68ce-53c2-4387-abd8-49b1e78b055b",
+      109757
+    ],
+    [
+      "428c1edb-4429-4db8-9ae1-ce947699639d",
+      128652
+    ],
+    [
+      "41fbe4dd-0da4-4c20-bcea-b858b674adc2",
+      123073
+    ],
+    [
+      "41633238-2d6b-4895-b11c-f08671680e15",
+      120036
+    ],
+    [
+      "4026643f-a29b-4b89-918b-30dd300bb307",
+      110632
+    ],
+    [
+      "3fa410f0-ff15-410f-8159-f4e78185ad2c",
+      105358
+    ],
+    [
+      "3f85409b-f690-4351-b4ed-c0f663e0612e",
+      101994
+    ],
+    [
+      "3f3c4e77-f320-4432-936b-ed4e05b28e46",
+      123929
+    ],
+    [
+      "3ecd530f-c392-461c-86f0-4e0f1ad651ae",
+      100656
+    ],
+    [
+      "3e80bcc7-cd61-4790-9571-fa173991708d",
+      95604
+    ],
+    [
+      "3e43158c-b2f2-4ace-999c-74d681271d0c",
+      121542
+    ],
+    [
+      "3cb749d1-3940-4b15-9e43-f2f01c9066c7",
+      16817870
+    ],
+    [
+      "3c2fa575-4f25-48d4-98d4-e46605b0a32d",
+      125045
+    ],
+    [
+      "3c0324da-679b-4af1-9450-7cc8f4556cbf",
+      117298
+    ],
+    [
+      "3b19241e-fee0-4630-a6a7-0c3fd2c6646e",
+      111364
+    ],
+    [
+      "3a6bb555-ca45-40ff-b2d2-c0fc9a49a4cc",
+      113385
+    ],
+    [
+      "3a60ffcf-b9a4-41ee-bd8c-b4361f264241",
+      121844
+    ],
+    [
+      "3a43e97b-5255-401c-b386-6ea7317932ed",
+      112104
+    ],
+    [
+      "3a2dcc61-8607-445e-9041-b89deef3dc24",
+      95211
+    ],
+    [
+      "39995502-7ffb-42e1-bd87-dc2141f3ac83",
+      90042
+    ],
+    [
+      "394bdef0-786b-4857-8135-d41c6481bf7f",
+      112177
+    ],
+    [
+      "37323adb-5d83-4590-a1ce-4bfcb2da7523",
+      111573
+    ],
+    [
+      "3668e3c3-31ed-4ae7-8b0d-a770a58e8dd3",
+      102495
+    ],
+    [
+      "357f37da-a2d9-4dee-abe6-a7f36c4025d8",
+      91396
+    ],
+    [
+      "347c68ef-a842-491a-8a06-a5246891fb5f",
+      122294
+    ]
+  ],
+  "timestamp": "2026-07-19T07:52:00.776038Z",
+  "tokens_used": 12045,
+  "units_analyzed": 16,
+  "units_total": 22
+}

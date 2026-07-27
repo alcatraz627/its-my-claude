@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>i-dream · interventions</title>
+<style>
+:root, :root[data-theme="dark"] {
+  --bg:#0d1117; --surface:#161b22; --text:#c9d1d9; --dim:#8b949e; --border:#30363d;
+  --live:#3fb950; --candidate:#d29922; --shadow:#8b949e;
+}
+:root[data-theme="light"] {
+  --bg:#f7f8fa; --surface:#ffffff; --text:#1f2328; --dim:#656d76; --border:#d0d7de;
+}
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--text); font:14px/1.5 -apple-system,system-ui,sans-serif; padding:24px; max-width:880px; margin:0 auto; }
+h1 { font-size:18px; margin-bottom:4px; }
+.sub { color:var(--dim); font-size:12px; margin-bottom:16px; }
+.chips { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.chip { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:16px; padding:4px 12px; font-size:12px; cursor:pointer; }
+.chip.on { border-color:var(--live); color:var(--live); }
+#theme { margin-left:auto; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+.card header { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+.pill { font-size:11px; padding:2px 8px; border-radius:10px; border:1px solid var(--border); color:var(--dim); text-transform:uppercase; letter-spacing:.04em; }
+.pill.live { color:var(--live); border-color:var(--live); }
+.pill.candidate { color:var(--candidate); border-color:var(--candidate); }
+.fires { font-size:12px; color:var(--dim); }
+.id { margin-left:auto; color:var(--dim); font-size:11px; }
+h3 { font-size:13px; font-family:ui-monospace,Menlo,monospace; margin-bottom:6px; }
+.body { margin-bottom:8px; }
+.trigger { font-size:12px; color:var(--dim); font-family:ui-monospace,Menlo,monospace; overflow-x:auto; margin-bottom:10px; }
+.card footer { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.flip { font-size:12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:4px 8px; cursor:pointer; }
+.flip.copied { border-color:var(--live); color:var(--live); }
+.meta { font-size:11px; color:var(--dim); }
+</style></head><body>
+<h1>Compiled interventions</h1>
+<div class="sub">11 intervention(s) — 1 live · 0 candidate · 10 shadow · evidence bar 5 distinct sessions · generated 2026-07-26 22:18 UTC</div>
+<div class="chips">
+  <button class="chip on" data-k="state" data-v="">all states</button>
+  <button class="chip" data-k="state" data-v="live">live</button>
+  <button class="chip" data-k="state" data-v="candidate">candidate</button>
+  <button class="chip" data-k="state" data-v="shadow">shadow</button>
+  <button class="chip on" data-k="form" data-v="">all forms</button>
+  <button class="chip" data-k="form" data-v="hint">hints</button>
+  <button class="chip" data-k="form" data-v="nudge">nudges</button>
+  <button class="chip" id="theme">☀︎/☾</button>
+</div>
+<article class="card" data-state="live" data-form="hint">
+  <header><span class="pill live">live</span><span class="pill form">hint</span>
+    <span class="fires" title="32 total match rows">31 sessions · 32 fires</span>
+    <code class="id">2c5dedd9</code></header>
+  <h3>structural-claim-without-reading-code</h3>
+  <p class="body">Every non-trivial verdict in this audit needs a file:line or this-session runtime evidence pointer, added at write time. Verify uncited rows before sending.</p>
+  <p class="trigger">prompt~/\b(audit|gap analysis|gap table|coverage report|compliance (check|matrix))\b/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --demote 2c5dedd9</code>
+    <span class="meta">born Jul 24 · promoted Jul 25 (evidence-auto)</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="179 total match rows">4 sessions · 179 fires</span>
+    <code class="id">fbbe2e1a</code></header>
+  <h3>source-comment-hygiene</h3>
+  <p class="body">For any comment over 3 lines: name the single load-bearing fact, write only that in 1-2 lines. Still longer? It's an essay — move it to a doc and link.</p>
+  <p class="trigger">tool=Edit · input~/\.(ts|tsx|js|jsx|py|go|rs|swift)$/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote fbbe2e1a</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="36 total match rows">3 sessions · 36 fires</span>
+    <code class="id">91c2e2e7</code></header>
+  <h3>infra-before-grep</h3>
+  <p class="body">If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.</p>
+  <p class="trigger">tool=Write</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote 91c2e2e7</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="38 total match rows">3 sessions · 38 fires</span>
+    <code class="id">8923583f</code></header>
+  <h3>declared-ready-without-runtime-exercise</h3>
+  <p class="body">Before this commit message claims fixed/covers/handles X: confirm the staged diff contains the file:line implementing X. If not, drop the claim.</p>
+  <p class="trigger">tool=Bash · input~/git\s+commit\b/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote 8923583f</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="36 total match rows">3 sessions · 36 fires</span>
+    <code class="id">3c40a861</code></header>
+  <h3>file-referenced-without-full-path</h3>
+  <p class="body">When you mention this file to the user, make the first mention an absolute path starting with / or ~, not a bare filename.</p>
+  <p class="trigger">tool=Write</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote 3c40a861</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="23 total match rows">3 sessions · 23 fires</span>
+    <code class="id">8f2469b9</code></header>
+  <h3>ascii-art-tables-instead-of-gum-tools</h3>
+  <p class="body">Write source markdown, never renderer output. Scan the first ~20 lines: uniform 2-space indent or '…' inside table rows means rendered-output-saved-as-source — rewrite it.</p>
+  <p class="trigger">tool=Write · input~/\.md$/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote 8f2469b9</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="9 total match rows">2 sessions · 9 fires</span>
+    <code class="id">44a5d9b7</code></header>
+  <h3>speculative-abstractions-without-a-load-bearing-caller</h3>
+  <p class="body">Name the current caller for every new exported function/type here. No caller, or an existing primitive already fits? Don't create it.</p>
+  <p class="trigger">tool=Write · input~/\.(ts|tsx|js|jsx|py|go|rs)$/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote 44a5d9b7</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="hint">
+  <header><span class="pill shadow">shadow</span><span class="pill form">hint</span>
+    <span class="fires" title="1 total match rows">1 session · 1 fires</span>
+    <code class="id">e454d031</code></header>
+  <h3>literal-request-over-intent</h3>
+  <p class="body">Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.</p>
+  <p class="trigger">prompt~/^\s*(ok|okay|sure|yes|yeah|go|go ahead|continue|keep going|next|do it|proceed)\b[\s.!]*$/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote e454d031</code>
+    <span class="meta">born Jul 24</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="1 total match rows">1 session · 1 fires</span>
+    <code class="id">b26957e5</code></header>
+  <h3>sub-agent-material-output-left-in-conversation-only</h3>
+  <p class="body">Persist juror/sub-agent verdicts through the data layer: use `atone add --case-file &lt;path&gt;` so the output lands on disk. Never relay a verdict by hand from a return string.</p>
+  <p class="trigger">tool=Bash · input~/atone(\.sh)?\s+add\b/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote b26957e5</code>
+    <span class="meta">born Jul 25</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="hint">
+  <header><span class="pill shadow">shadow</span><span class="pill form">hint</span>
+    <span class="fires" title="0 total match rows">0 sessions · 0 fires</span>
+    <code class="id">7a32a10e</code></header>
+  <h3>review-missed-stale-caller-after-rename</h3>
+  <p class="body">Before renaming: run `rg -F '&lt;old-name&gt;'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.</p>
+  <p class="trigger">prompt~/\b(rename|renaming|rename it|change the name of)\b.*\b(field|tag|key|column|flag|constant|filename|file name|env var|status)\b/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote 7a32a10e</code>
+    <span class="meta">born Jul 25</span></footer>
+</article>
+<article class="card" data-state="shadow" data-form="nudge">
+  <header><span class="pill shadow">shadow</span><span class="pill form">nudge</span>
+    <span class="fires" title="0 total match rows">0 sessions · 0 fires</span>
+    <code class="id">d76985ac</code></header>
+  <h3>status-verdict-from-stale-mental-model-no-re-check</h3>
+  <p class="body">This is a cached artifact, not live state. Re-derive the claim from a live source (ps, process tree, env, sourcing the file) before asserting which session/tty/writer is real.</p>
+  <p class="trigger">tool=Read · input~/(\.current-session-id|/tmp/.*(session|registry|state|lock))/</p>
+  <footer><code class="flip" onclick="navigator.clipboard.writeText(this.textContent);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),900)" title="click to copy">i-dream promotions --promote d76985ac</code>
+    <span class="meta">born Jul 25</span></footer>
+</article>
+
+<script>
+const f = { state:"", form:"" };
+function apply() {
+  document.querySelectorAll(".card").forEach(c => {
+    const ok = (!f.state || c.dataset.state === f.state) && (!f.form || c.dataset.form === f.form);
+    c.style.display = ok ? "" : "none";
+  });
+}
+document.querySelectorAll(".chip[data-k]").forEach(ch => ch.onclick = () => {
+  f[ch.dataset.k] = ch.dataset.v;
+  document.querySelectorAll(`.chip[data-k="${ch.dataset.k}"]`).forEach(o => o.classList.toggle("on", o === ch));
+  apply();
+});
+const root = document.documentElement;
+document.getElementById("theme").onclick = () => {
+  const next = root.dataset.theme === "dark" ? "light" : "dark";
+  root.dataset.theme = next; localStorage.setItem("idream-theme", next);
+};
+const saved = localStorage.getItem("idream-theme"); if (saved) root.dataset.theme = saved;
+</script>
+</body></html>

@@ -1,18 +1,17 @@
-<!-- i-dream project brief · 2026-05-31T19:29:45.769932+00:00 · 12 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-23T00:57:41.329996+00:00 · 8 patterns / 1 insights -->
 ## What this project is about
-Python backend for a B2B SaaS product (Versable enhancement); work is stateful, multi-session, and context-exhaustion-prone with heavy emphasis on data integrity, optional integrations, and production-safe migrations.
+Backend for a SaaS enhancement product (Versable); work centers on feature-flag/runtime config systems, third-party integrations, and careful incremental delivery with deferred review cycles.
 
 ## Things to do (or keep doing)
-- Run `/core-dump` proactively at milestones and before risky ops — treat it as a standard workflow step, not a user-requested one
-- After any `catchup` or context reconstruction, re-read key files before acting — treat recalled state as unverified
-- Design optional feature modules (telemetry, profilers, integrations) to fail gracefully across all failure modes: exception, missing env var, import error
-- Log costs as a first-class concern; design storage schemas to capture them from the start
+- **Deliver runtime config as a complete unit:** storage/retrieval mechanism + frontend admin UI ship together — never half-deliver one side.
+- **Verify third-party integrations via the vendor's own dashboard** as primary evidence; internal admin tabs are not authoritative.
+- **Park non-critical completed work in a "to be reviewed later" queue** rather than requesting immediate review; stash partially-staged pivots with `git stash`.
+- **Write commit messages and PR descriptions in a human register**; the user runs a style-review tool and treats AI-prose as a defect.
 
 ## Things to avoid
-- Don't assume env vars present in dev are set in prod — verify at implementation time that the module degrades gracefully when absent
-- Don't let migration scripts bypass explicit review for data-destructive edge cases; missing these while flagging lower-priority issues is a critical reviewer failure
-- Don't expand response length during high-tool-count sessions — keep inter-tool narration ≤15 words to delay compaction
+- **Don't place runtime flags or feature toggles in backend env config** — the user treats these as a separate runtime config system, not env-layer concerns.
+- **Don't apply corrections beyond the symptom boundary** — reconstruct original intent first; a tone complaint is not permission to strip technical substance or disable a feature.
+- **UI-side logging must never include PII** — this is a hard architectural constraint, not a per-feature default.
 
 ## Open questions / known gaps
-- Widget text truncation is a recurring regression — no systematic rendering verification step exists in the workflow yet
-- Context exhaustion is a structural pressure: sessions routinely exceed 50–100 tool calls; the checkpoint cadence (every ~25 tools) is established but not yet enforced mechanically
+- Recurring tension: correction scope tends to overshoot (fix blast radius exceeds what the complaint actually named) — slow down and check intent before applying any rollback or change reversal.

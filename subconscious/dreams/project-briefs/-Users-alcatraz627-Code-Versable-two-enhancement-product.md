@@ -1,19 +1,17 @@
-<!-- i-dream project brief · 2026-07-11T18:36:49.404006+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-23T01:00:27.000424+00:00 · 8 patterns / 1 insights -->
 ## What this project is about
-A Versable enhancement product (full-stack, likely Next.js + backend) where the dominant working style is iterative, scope-controlled feature development with strong opt-in/defer discipline.
+Enhancement-product is a deployed web app (Versable) with a React/Next.js frontend and a backend API. Work spans feature flags, runtime config systems, UI logging, and third-party integrations — all under tight style and architecture constraints.
 
 ## Things to do (or keep doing)
-- **Replicate exact existing patterns** when the user says "do it the same way as X" — never introduce new abstractions where a copy of the existing approach suffices
-- **Translate research/design outputs into lean, behavior-focused implementation docs** — professional and direct, no "why this matters" framing
-- **Stop before each push** and request fresh per-push explicit confirmation; prior approval does not carry forward
-- **Follow repo-specific CLAUDE.md git rules absolutely** — hand the user exact commands when they require manual execution
+- **Deliver runtime config as a full stack**: when asked for feature flags or runtime variables, always ship both storage/retrieval backend AND a frontend admin UI in the same task.
+- **Target the vendor dashboard as verification proof**: for any third-party integration (analytics, logging, monitoring), the pass criterion is an event visible in the vendor's own UI — not an internal admin tab.
+- **Park uncommitted pivots via `git stash`**: when work is interrupted or deprioritized mid-session, stash (don't commit or discard) so the work survives.
+- **Write commit messages and PR descriptions in plain human prose**: the user style-audits these artifacts; AI-register (em-dashes, label:fragment rows, over-bullets) is treated as a defect.
 
 ## Things to avoid
-- **Don't re-introduce deferred or deleted complexity** — when the user says "not now", "defer", or deletes your code, it's gone; implementing it "since it's trivial" is a scope violation
-- **Don't claim UI or server changes work without exercising the actual URL** — navigating to localhost and triggering the flow is mandatory before declaring done
-- **Don't use em-dashes or promotional framing in any human-facing prose** — docs and PR descriptions must be formal, direct, and grounded
-- **Don't implement the inverse of a stated semantic** — if the user says "opt-in", default-include everything and gate on an explicit exclusion signal, not the reverse
+- **Don't put runtime/feature flags in env config**: env vars and runtime config are separate systems; conflating them is an architecture violation, not a judgment call.
+- **Don't include PII in frontend logging**: UI-side logging is structural-event-only — this is a hard constraint, never relax it per feature.
+- **Don't reconstruct intent from the complaint alone**: corrections overshoot when you fix the symptom surface rather than reconstructing the original goal; match blast radius to intent, not to the literal wording of the pushback.
 
 ## Open questions / known gaps
-- Repeated scope-ceiling violations (re-adding deferred features, adjacent-pattern touching) suggest the agent isn't treating "simplify X" as a hard boundary on the blast radius — needs mechanical discipline, not just intent
-- Verbal acknowledgment of correct semantics followed by inverted implementation suggests a gap between planning and code generation that isn't caught before the turn ends
+- **Review cadence is deferred**: completed non-critical work parks in a "to be reviewed later" queue — the agent should not prompt for immediate review of each deliverable; wait for an explicit request.

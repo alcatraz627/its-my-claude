@@ -1,0 +1,32 @@
+{
+  "id": "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+  "ts": "2026-07-27T09:05:11Z",
+  "session_id": "adrev-kanbn-4b",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260727-adrev-kanbn-4b.claude.md",
+  "insights": {
+    "worked": [
+      "**What didn't (the recurring blind spot):** twice the UI work drifted from the product's core: v2 abandoned the kanban class for a \"prettier\" ledger, and labels/sub-items were missing from every version because the design doc never specified card anatomy. Root: optimizing the frontend-design distinctiveness brief instead of the named product class. The user's frustration (\"looks ass\", \"not there\", \"did you lose track of the core goal\") is the signal \u2014 for a thing named after a known artifact class, the class anatomy IS the spec, and every redesign OPTION must preserve it. The board still isn't satisfying.",
+      "**Gotchas:** (a) a mutation test that stays GREEN means the fix STRUCTURE is the bug \u2014 a belt-and-braces pre-lock check masked the throw-based lock release and had to be REMOVED to make the guard pinnable. (b) Bun `process.exit()` skips `finally` even nested inside try \u2014 the whole lock-leak class. (c) `2>/dev/null` on a probe converts \"helper broken\" into a misleading \"server down\" diagnosis. (d) the subagent-output guard needs the literal persist-contract phrasing (named path + who writes).",
+      "**Notes for future agents:** kanban verbs now include show/drop/unregister/--json; `agent-experience-actions.md` is the standing regression test (re-run after any kanban change). PLAN.md carries full dispositions. The board is a column kanban in ink/gold; the user is not yet happy with the look \u2014 the UI narrowing page is the disciplined path, do NOT redesign freehand."
+    ],
+    "didnt_work": [
+      "**Gotchas:** (a) a mutation test that stays GREEN means the fix STRUCTURE is the bug \u2014 a belt-and-braces pre-lock check masked the throw-based lock release and had to be REMOVED to make the guard pinnable. (b) Bun `process.exit()` skips `finally` even nested inside try \u2014 the whole lock-leak class. (c) `2>/dev/null` on a probe converts \"helper broken\" into a misleading \"server down\" diagnosis. (d) the subagent-output guard needs the literal persist-contract phrasing (named path + who writes).",
+      "**Notes for future agents:** kanban verbs now include show/drop/unregister/--json; `agent-experience-actions.md` is the standing regression test (re-run after any kanban change). PLAN.md carries full dispositions. The board is a column kanban in ink/gold; the user is not yet happy with the look \u2014 the UI narrowing page is the disciplined path, do NOT redesign freehand."
+    ],
+    "gotchas": [
+      "**Notes for future agents:** kanban verbs now include show/drop/unregister/--json; `agent-experience-actions.md` is the standing regression test (re-run after any kanban change). PLAN.md carries full dispositions. The board is a column kanban in ink/gold; the user is not yet happy with the look \u2014 the UI narrowing page is the disciplined path, do NOT redesign freehand."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER-side:** answer decision page `kanban-ui-0727` \u2014 U1 (worst offender), U2 (reference direction), U3 (density), U4 (label treatment), U5 (variants-first?), P4 (build session-start surfacing?).",
+    "**Agent-side, blocked on above:** build the picked UI direction as 2-3 side-by-side variant screenshots; apply the winner to `board.html`; re-run /ui-gripe + /ui-categorical-check on the result.",
+    "**P4 (if approved):** one SessionStart line surfacing board slug + unread note count; headless smoke in a board + non-board project.",
+    "**Deferred (in PLAN.md):** registry read-modify-write lock; CLI-side docs[] path validation.",
+    "**Not started:** committing the session's work (COMMIT.md flow; large churn).",
+    "**Standing offers:** run `/adversarial-review` on kanban v3 for a fresh indictment; the ipc interface-papercuts proposal (P1-P4) awaits the user in the claude-ipc lane."
+  ],
+  "tags": []
+}

@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-13T00:42:45.489207+00:00 · 15 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-17T06:24:46.825819+00:00 · 7 patterns / 2 insights -->
 ## What this project is about
-Full-stack web application (JSX frontend, backend services) with active tooling/script development. Work spans UI interactions, cache management, GitHub integrations, and agent-driven shell operations.
+Backend development with heavy multi-agent and IPC coordination patterns. Work frequently involves parallel sub-agent bursts, cross-session messaging, and branch-sensitive git operations.
 
 ## Things to do (or keep doing)
-- **Split detection from application**: implement deterministic regex/heuristic detection separately from context-dependent agent judgment — produces more reliable and auditable tools
-- **Anchor log filters to structural identifiers**: use log-type fields, not broad keyword patterns that match payload content in unrelated lines
-- **Read existing scripts before building new hooks**: prior design decisions and removal history directly constrain what's appropriate
-- **Make auth checks explicit at each callsite**: never abstract into a named wrapper that appears to "handle auth" — wrapper opacity is a security gap
+- **Re-read git branch state immediately before any branch-sensitive operation** — state captured at session start drifts silently during parallel work; never act on a cached branch assumption.
+- **Treat all cached state as stale after any parallel burst** — task lists, file contents, ownership claims all drift when concurrent agents are in flight; reload before acting.
+- **Run an adversarial review pass on your own design proposals and specs** — self-review within the same context misses motivated reasoning; a second-pass skeptic catches it.
+- **Apply consistent naming across sibling artifacts** — packages, repos, and identifiers in the same org should follow the same scheme; flag divergence before proposing names.
 
 ## Things to avoid
-- **Don't auto-apply on selection**: picker/selector UIs must preview only; require explicit save/apply before state changes take effect
-- **Don't skip cache invalidation after writes**: after any mutation, explicitly verify client-side caches holding affected data are invalidated
-- **Don't replicate surrounding code patterns without verifying applicability**: flag-gated lazy imports, IIFE wrappers, etc. exist for specific reasons that may not apply at the new callsite
-- **Don't trust formatter output as semantically inert**: after edits to formatting-sensitive files, inspect the diff — Prettier/Black can silently restructure logic
+- **Don't treat a sent IPC message as delivered until a round-trip reply arrives** — send-side telemetry and logs prove nothing about receipt or action.
+- **Don't poll or nudge the user while waiting on IPC** — ask once, then wait for the reply channel; repeated nudges route low-value traffic through the user as middleware.
+- **Don't surface context-window anxiety when the session is well under half full** — suppress it; it reads as unnecessary noise to the user.
+- **Don't use `@`-prefixed scoped identifiers directly in gemini prompts** — the CLI parses them as image-attach tokens and silently corrupts the request.
 
 ## Open questions / known gaps
-- UI reskin/restyle work consistently ships without full cross-state validation (scroll, backgrounds, responsive, nav flow) — no lightweight checklist or smoke-test ritual has been established yet
+- Recurring tension: parallel sub-agent work degrades all bookkeeping simultaneously — no single owned mechanism for re-syncing task/branch/file state after a burst.

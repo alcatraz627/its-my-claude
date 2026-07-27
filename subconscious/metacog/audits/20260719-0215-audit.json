@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16304,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1837009258174105,
+    "unit_count": 27
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — efd2a3ab-2: Write to _checkpoint.claude.md failed twice (success:false) without prior Read to verify destination; readlink revealed symlink; workaround was writing to differently-named file; fifth confirmed instance of this class across session history; symlink-as-destination variant re-confirmed; no improvement trajectory across four prior cycle advisories — mechanical gate is the correct next intervention",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — efd2a3ab-2: ShellCrumbs.tsx had 2 consecutive Edit failures (success:false) before fresh Read then success; taxonomy.tsx had 1 Edit failure followed by scratchpad workaround (cp to /tmp scratchpad, edit there, cp back); thrash depth remains shallow relative to regression peak at c37b0f17-4; scratchpad workaround shows adaptive behavior but adds latency and obscures root cause; trajectory remains partially recovering, consistent with prior three cycle assessments",
+      "shell_tool_preference_violations:RECURRING:STABLE — efd2a3ab-2: sed -n range reads (sed -n '147,152p;185,188p;235,238p;310,316p', sed -n '195,300p', sed -n '80,110p' page-title.tsx, sed -n '1,40p' ShellCrumbs.tsx); ls -la@ schemas/ and ls -la review/review.tsx as existence/info probes; head -c 80 schemas/taxonomy.tsx | cat -v; cat via fd subshell; rate consistent with 42-83% multi-cycle baseline; stagnation threshold confirmed across four prior cycles — deprioritize further advisory per standing guidance",
+      "git_push_without_fresh_approval:RECURRING:STABLE — efd2a3ab-2: three bundled git add+commit+push chains (JobsTable commit, sub-row fix commit, dual schemas+export commit) in single Bash calls without per-push authorization; efd2a3ab-11: lockfile commit+push bundled similarly; all Accepted; now five and six confirmed batch instances across session history; advisory-only enforcement has accumulated six-plus cycles with zero improvement trajectory — mechanical gate warranted"
+    ],
+    "calibration_score": 0.41,
+    "overconfident_count": 1,
+    "recommendations": [
+      "write_before_read_trap: escalate from advisory to mechanical gate; five confirmed instances with no improvement trajectory; the pattern (Write to unfamiliar destination without prior Read) is bounded enough for a PreToolUse hook that requires a Read on the same path within the same turn before a Write that touches an existing file the session did not create",
+      "git_push_without_fresh_approval: escalate from advisory to mechanical gate; six confirmed batch instances; all were Accepted which suggests the user is comfortable with the cadence but the pattern violates the stated rule; a guard-git-push.sh enforcement that prompts per-push rather than blocking the whole chain would add friction without killing velocity",
+      "re_edit_thrash: no escalation; trajectory is partially recovering and shallow thrash depth continues; scratchpad workaround pattern is adaptive; continue monitoring for regression to c37b0f17-4 depth",
+      "shell_tool_preference_violations: continue deprioritizing per stagnation guidance; no new variants detected this cycle; rate is stable not worsening"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "fbef9eae-5c43-4060-b661-b090dcb92cec",
+      106857
+    ],
+    [
+      "fbe65161-20ea-4eb9-a297-a8719854bb7f",
+      103423
+    ],
+    [
+      "f6c67e60-8b7c-4863-b3b1-210b431b7acb",
+      115709
+    ],
+    [
+      "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+      33108018
+    ],
+    [
+      "ec9ad613-4373-4699-8d48-fadeeb558961",
+      118193
+    ],
+    [
+      "dc055f37-e5b2-42a5-bc37-4570e86760f3",
+      118381
+    ],
+    [
+      "d94712f2-1a79-47f0-9c47-31e65d212276",
+      117731
+    ],
+    [
+      "d9358edb-f4d1-4e00-8564-da835bddfef9",
+      100693
+    ],
+    [
+      "d48255cd-09f6-4db8-9fe7-a35877f22223",
+      100050
+    ],
+    [
+      "cfb875bf-73d9-47f4-a83b-bdbf743272cb",
+      132550
+    ],
+    [
+      "cc19b6c5-985f-4a6c-8bbd-62818fd85781",
+      97059
+    ],
+    [
+      "c61d9f18-e8a5-4ec6-96fa-7326d215c81b",
+      95655
+    ],
+    [
+      "bf67692c-4720-4082-b3aa-97d3e8b62d88",
+      106744
+    ],
+    [
+      "b450d086-8156-472e-ae9b-36bd86591251",
+      102176
+    ],
+    [
+      "b31ff780-fb62-4301-9a4b-ff7a511b133b",
+      116461
+    ],
+    [
+      "afce7181-127f-427b-b733-f27adfad0b3a",
+      16705586
+    ],
+    [
+      "abe94360-d0df-4662-864d-df485b8b4f0a",
+      94477
+    ],
+    [
+      "aaa488dd-ead2-47b1-854a-db4ef6646a9c",
+      117027
+    ],
+    [
+      "aa796088-52f2-4aa7-80bd-34aaaf7961ed",
+      143873
+    ],
+    [
+      "a76522a9-88e1-448f-b5e4-0cf707a42a7b",
+      110832
+    ],
+    [
+      "a61fc5c8-f20c-4c9e-ba0d-48d8df93cb19",
+      117192
+    ],
+    [
+      "a3977fbe-a514-43d7-8a89-2e1ecac5d488",
+      92192
+    ],
+    [
+      "9f403a81-741e-486c-b816-00860c9232b7",
+      116865
+    ],
+    [
+      "9e86cdb3-05eb-471f-9005-1a51fa4bd392",
+      95114
+    ],
+    [
+      "9d69b4a3-79b0-49df-9fdd-d48f889ef753",
+      90368
+    ],
+    [
+      "9c61eb35-6de3-432b-97fc-18e98113d429",
+      102100
+    ],
+    [
+      "9062ece6-b5c9-4f8c-a6eb-39d7d572bbf4",
+      92103
+    ],
+    [
+      "864f4a66-a67f-4046-8eb6-23e22061b0a6",
+      109737
+    ],
+    [
+      "85a2c67d-9c73-421d-bbb2-f3605c807175",
+      92116
+    ],
+    [
+      "8599bca2-03d8-4a58-800d-faaf35726313",
+      94480
+    ],
+    [
+      "851a9571-77be-403a-94af-5b7dba97eecc",
+      124454
+    ],
+    [
+      "85158afe-5456-4086-91f4-e67064ada4d4",
+      89707
+    ],
+    [
+      "83f2eeb4-f8e6-4fd7-ad8e-c53a556af1aa",
+      119128
+    ],
+    [
+      "8345f405-cc16-4527-8e19-0f31a4496f62",
+      107669
+    ],
+    [
+      "82f33430-76b6-4fd8-af23-2b9baddb9284",
+      125578
+    ],
+    [
+      "8296e49e-ffc9-400a-a969-a0d3804bfd47",
+      89100
+    ],
+    [
+      "81e97329-66f7-4646-b37b-882980a6ff18",
+      100819
+    ],
+    [
+      "815bbef6-e90c-43ca-9044-e2fea7218650",
+      102335
+    ],
+    [
+      "80a7ffb5-b55e-42ec-b807-ceddaf07634f",
+      108107
+    ],
+    [
+      "80128d9f-da04-4918-a293-5e551c53017c",
+      129105
+    ],
+    [
+      "7fe2f8e0-92e1-4c8b-b637-74dfd4e7557e",
+      101781
+    ],
+    [
+      "7e1a066c-1ffb-4b4a-b95d-d6963039afd2",
+      109217
+    ],
+    [
+      "7d5b6b2b-43e9-4805-bdf0-bff9647dcdf8",
+      85365
+    ],
+    [
+      "7cf2c40a-467b-4231-8e3d-c6e37499f401",
+      128780
+    ],
+    [
+      "7bea5c99-cf3d-4ba9-a947-4005e7890513",
+      99866
+    ],
+    [
+      "7a638963-1094-44e2-bf40-93749b812ed6",
+      123620
+    ],
+    [
+      "78b5c401-d0e4-4c88-a934-cb5481c17ec5",
+      87882
+    ],
+    [
+      "78b0d35a-6560-4ec6-8bc3-211b65b724cc",
+      123929
+    ],
+    [
+      "775f93a7-ddff-43b5-9c6f-ff36a3ba7e34",
+      112448
+    ],
+    [
+      "7653e1b5-5bf6-445b-8b65-feabf06ffa5b",
+      125761
+    ]
+  ],
+  "timestamp": "2026-07-19T02:15:13.802502Z",
+  "tokens_used": 12553,
+  "units_analyzed": 2,
+  "units_total": 27
+}

@@ -1,0 +1,243 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16979,
+    "correction_density": 0.038461538461538464,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22636646503954513,
+    "unit_count": 26
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry; 2 consecutive Edit failures on uploadtemplate.server.ts before Read+retry resolved; 302d5d15-13: 1 Edit failure on guard-model-tier.sh before Python-based atomic-write workaround; f8f4f8f6-6: 1 Write failure on __init__.py before retry succeeded; depth shallow (1-2 failures) and adaptive recovery continues; rate consistent with multi-cycle baseline; zero improvement under advisory-only regime but no escalation signal",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — 302d5d15-2: 1-2 failure depth across JobsTable.tsx and uploadtemplate.server.ts before recovery; 302d5d15-13: 1-failure depth on guard-model-tier.sh before Python workaround pivoted away from repeated Edit; shallow relative to 7-failure session peak; partially-recovering trajectory holds for sixth consecutive cycle; scratchpad-copy and Python-script workarounds being applied adaptively on second failure",
+      "collect_not_run:RECURRING:PARTIALLY_IMPROVING — 302d5d15-2: npx tsc --noEmit used as intermediate gate BUT followed by Playwright browser navigation (jobs page, export button click), node XLSX.read verification of downloaded xlsx content, activity rail screenshot read-back, and npm run build; f8f4f8f6-6: actual Python uv run test execution with PASS/FAIL output read back, not collect-only; second consecutive cycle with confirmed runtime exercise following compile check; improvement signal strengthening — two cycles with browser/runtime exercise corroborates prior cycle's single instance",
+      "shell_tool_preference_violations:RECURRING:STABLE — 302d5d15-2: sed -n '1,60p', sed -n '440,465p', sed -n '245,275p', sed -n '350,380p' range reads in Bash calls instead of Read with offset/limit; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "git_push_without_fresh_approval:RECURRING:STABLE — 302d5d15-2: three bundled commit sequences (exports commit 20761ce, preflight commit, budget-hide commit) without explicit per-push fresh confirmation; 302d5d15-3: TRACKING.md commit without per-push confirmation; 302d5d15-13: guard-model-tier commit to ~/.claude repo without confirmation (though its-my-claude repo has its own cadence rules per COMMIT.md); no sentinel consumption observed in these units; pattern unchanged from prior cycles",
+      "sleep_in_bash:RECURRING:STABLE — 302d5d15-2: inline sleep 3 in pm2 restart && sleep && curl chain; 302d5d15-3: standalone sleep 45 Bash call (success:false, naturally blocked by hook); pattern recurs despite shell.md prohibition; naturally blocked in -3 case but attempt still present",
+      "agent_dispatch_failures:NEW_OBSERVATION — 302d5d15-3: 3 consecutive Agent tool calls all returned success:false before 3 subsequent Agent calls succeeded; 2 TaskOutput calls also success:false; likely environmental (API throttle or rate limit) rather than a strategy error; not previously classified as a distinct bias class in calibration history; note for future tracking"
+    ],
+    "calibration_score": 0.45,
+    "cross_references": [
+      "dream_insight_state_tracking_PARTIALLY_CONFIRMED — 302d5d15-3 had 2 TaskOutput failures suggesting state-tracking breakdown under agent-dispatch pressure; however WAL checkpoint call was made and overall session state was maintained; mixed signal consistent with insight that bookkeeping degrades under parallelism",
+      "dream_insight_instance_vs_class_CONFIRMED_POSITIVE — 302d5d15-2 export migration touched all surfaces (JobsTable.tsx download action, export page stub with redirect, WorkspaceNav.tsx nav entry removed, workspace.tsx dashboard tile removed, routes.ts, ActivityRail.tsx); class fix was applied rather than patching only the named instance; counter-evidence to the instance-scoping failure mode",
+      "dream_insight_absence_to_assertion_COUNTER_EVIDENCE — 302d5d15-2: mcp__file-tools__list_sheets call failed (success:false) on the downloaded xlsx; agent immediately followed with a node XLSX.read Bash call that actually verified sheet names and row counts; did NOT promote the failed tool call to a positive claim; demonstrates absence-to-assertion bias being actively avoided in this cycle"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "write_before_read_trap has been advisory-only across 10+ cycles with no reduction in occurrence rate; mechanical intervention (Pre-Edit Read requirement or hook enforcement) is warranted — continued advisory flagging is not producing improvement; this is the highest-priority recommendation unchanged from prior cycles",
+      "collect_not_run shows genuine improvement signal across two consecutive cycles; reinforce by preserving the pattern of: tsc as intermediate gate THEN actual runtime exercise (browser/curl/node script reading real output); do not revert to tsc-only verification",
+      "mutation_testing pattern is a new positive: 302d5d15-2 correctly mutation-tested the preflight guard (file removed → expect fail, spec tampered → expect fail, restore → expect pass); 302d5d15-13 correctly mutation-tested the sentinel gate (sentinel present → allow, sentinel absent → block); this pattern should be reinforced and noted as an affirm-worthy behavior",
+      "agent_dispatch_failures in 302d5d15-3 suggest no salvage logic for partial fleet completion; when Agents fail, salvaged finished work (the 3 that succeeded) should be checkpointed before retrying failed ones; add explicit scope-close clauses in dispatch prompts per contain-subagent-token-sprawl rule",
+      "sleep_in_bash: the hook blocked the standalone sleep 45 in -3, but inline sleep within compound commands (sleep 3 in pm2 chain) passes through; if the prohibition should cover inline sleeps, the hook scope needs widening; otherwise document the inline-compound exception explicitly"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "e7e75998-7183-4911-9c0e-b23c1195b5f8",
+      132584
+    ],
+    [
+      "e7a200c9-555c-4eee-bf7f-6107109bbffb",
+      137735
+    ],
+    [
+      "e3d61734-9ef8-4e43-bd65-931ec9bdc792",
+      103185
+    ],
+    [
+      "ba5f87d2-78ec-4e6c-bfe7-ac7c167a0634",
+      152816
+    ],
+    [
+      "ad2b5a2c-9b6d-4e73-ba6d-f32ed077faf5",
+      125061
+    ],
+    [
+      "937d105b-1287-47b4-a9a1-57c170607231",
+      117573
+    ],
+    [
+      "9131645b-a8fd-4129-9ca1-93d09a07de0b",
+      129754
+    ],
+    [
+      "8fd5d6fa-fb49-4bbf-a82d-2268da97fb4b",
+      132387
+    ],
+    [
+      "81acccdc-66d3-487b-9d67-24cdbde4da7a",
+      122664
+    ],
+    [
+      "80faec18-0752-4cce-aec7-20d11d7f3c5b",
+      118735
+    ],
+    [
+      "791de047-0248-4a41-957e-dbb02f530542",
+      134876
+    ],
+    [
+      "707fa60a-6531-43a4-89d5-482b2d83d3f2",
+      25614
+    ],
+    [
+      "63cd3e49-7e99-4d42-a2d4-e606854596ba",
+      129113
+    ],
+    [
+      "5c729972-f89e-488e-9bde-6d43b1f9167e",
+      131221
+    ],
+    [
+      "4c7633f8-ad46-412e-b735-3a4d2de3e06c",
+      146018
+    ],
+    [
+      "367c2c4e-16a3-4a0b-a510-286131d581a8",
+      25538
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      4002246
+    ],
+    [
+      "1697b9e2-28f4-40c9-abd1-65f45ef8c74e",
+      130444
+    ],
+    [
+      "6ec3dcae-e853-43f7-9bdd-25f1753bab75",
+      134139
+    ],
+    [
+      "f8f4f8f6-eabd-4465-af33-2a41141ab699",
+      3303021
+    ],
+    [
+      "1551df9f-0e95-4d12-a0a9-3b244ea6f9d0",
+      2388489
+    ],
+    [
+      "26ef3fcb-e1ab-4fd0-8c82-a7a4f065a8df",
+      127607
+    ],
+    [
+      "beeccf79-63b4-4eb7-96be-ef1e27eacbb1",
+      115096
+    ],
+    [
+      "bbc7e7bd-2bc9-4335-aa6b-ee7d9bf3a734",
+      117579
+    ],
+    [
+      "7564231c-62e6-49fd-9160-5c37fd3ea9c9",
+      122469
+    ],
+    [
+      "07cbfe84-2e13-47b4-b836-c8b013e243b0",
+      98077
+    ],
+    [
+      "3aef53dc-119b-46ee-b71c-0c5cc194cc2b",
+      119181
+    ],
+    [
+      "f42c8d51-1049-4fda-b5c2-ca59161fde75",
+      135523
+    ],
+    [
+      "e95175d8-8635-442e-a647-51f8abb4d171",
+      114150
+    ],
+    [
+      "e73403c7-1c02-4212-b21c-b75f5a7f7ab6",
+      105322
+    ],
+    [
+      "e52fe32b-0887-4fad-8167-47290f760740",
+      111181
+    ],
+    [
+      "d6c757c3-4ddc-4838-8cdc-0cac89dc25d8",
+      125137
+    ],
+    [
+      "d48c66d6-8550-45cc-aca0-4bd03031fc4e",
+      136126
+    ],
+    [
+      "c1e98b37-066e-4d31-b4f0-d591e59fa575",
+      91721
+    ],
+    [
+      "c0505407-c067-40de-aecd-244d2b73e81a",
+      143462
+    ],
+    [
+      "b05a0453-512f-427d-9cb3-d2471231f0fc",
+      112004
+    ],
+    [
+      "9c287302-ca4b-4c2e-807a-ae6d652cf815",
+      133825
+    ],
+    [
+      "9b3a036e-9b5a-4d86-9e42-30040124ab73",
+      149033
+    ],
+    [
+      "961161bf-6830-4e49-a764-960502857afe",
+      91249
+    ],
+    [
+      "932ba00a-9aa9-4120-bd1c-5ce6a29fd251",
+      114699
+    ],
+    [
+      "77237ef2-a663-4307-9630-b0fd9afa605f",
+      101923
+    ],
+    [
+      "731757c8-930e-46ed-a19e-95c55a5a0932",
+      120971
+    ],
+    [
+      "51fdc000-0b6e-4c7c-886e-b6c52015bd31",
+      135593
+    ],
+    [
+      "4526b0fa-c3dd-4105-b895-d776c34e9196",
+      123557
+    ],
+    [
+      "3f2bfce4-2389-4c65-968c-1a59af4f0d5f",
+      120584
+    ],
+    [
+      "3dfd9cab-67b2-4637-80d8-4ae176bc6228",
+      142651
+    ],
+    [
+      "37e0b4d6-d514-4666-ba10-29597fd78ca8",
+      126684
+    ],
+    [
+      "24b38f90-ffef-4aca-931d-68052ab9e2aa",
+      115032
+    ],
+    [
+      "2482e308-f7c9-4172-b3d9-907a208d756f",
+      115378
+    ],
+    [
+      "1f974d01-c226-49fd-a40e-bc3a0dc3e47e",
+      118173
+    ]
+  ],
+  "timestamp": "2026-07-23T00:56:01.868413Z",
+  "tokens_used": 25620,
+  "units_analyzed": 12,
+  "units_total": 26
+}

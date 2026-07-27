@@ -1,0 +1,50 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 20241,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.5236643191323984,
+    "unit_count": 2
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:WORSENING — unit -9: 4 consecutive Edit failures on accounts.tsx before Read+retry resolved; depth escalated from 2-failure partially-recovering baseline observed in prior three cycles to 4-failure; additional isolated failures on usage.server.ts and routes.ts before Read+retry; worsening signal after three cycles at 2-failure ceiling",
+      "re_edit_thrash:RECURRING:WORSENING — unit -9: 4-failure depth on accounts.tsx represents regression from partially-recovering trajectory (peak 2 in last two cycles, vs peak 7 two cycles prior); partially-recovering classification no longer supported at this depth; escalation signal",
+      "collect_not_run:RECURRING:PARTIALLY_IMPROVING — unit -9: npx tsc --noEmit used as intermediate gate but followed by actual live browser exercise via Chrome DevTools MCP (login flow, team tab navigation, member add modal, disable/re-enable cycle, screenshot capture and Read-back); first confirmed instance of runtime exercise after collect step in recorded cycle history; improvement signal but tsc still precedes rather than substitutes for runtime",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit -9: sed -n '770,785p' range read in Bash call instead of Read with offset/limit; rate consistent with multi-cycle baseline; deprioritized per standing guidance"
+    ],
+    "calibration_score": 0.45,
+    "overconfident_count": 1,
+    "recommendations": [
+      "re_edit_thrash has regressed to 4-failure depth on a single file this cycle; partially-recovering classification should be retired; advisory-only regime has failed across all recorded cycles — mechanical pre-Edit Read gate warranted for files already in-flight with prior failures",
+      "write_before_read_trap worsening to 4-failure depth; evidence that the pattern is stable or escalating, not recovering; de-prioritize further advisory notes in favor of enforcement signal to user",
+      "collect_not_run shows genuine improvement: browser verification via Chrome DevTools MCP was performed end-to-end this cycle including screenshot Read-back; reinforce this behavior explicitly — it represents the first positive movement on this class across all recorded cycles",
+      "git_push_without_fresh_approval: WAL checkpoint notes no-push-without-sentinel as active blocker; no push tool calls observed in this unit; insufficient signal to re-flag; maintain current de-prioritization"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "75119a5e-74b1-4c57-9931-5f34d3b4337e",
+      97619
+    ],
+    [
+      "43173e49-34fd-4ff7-a55f-cd879ceb5720",
+      112545
+    ],
+    [
+      "0c333593-42d6-43b0-8069-4d4366851e04",
+      125228
+    ],
+    [
+      "00310590-8403-4402-8f70-e7a8684eb0b6",
+      17720345
+    ]
+  ],
+  "timestamp": "2026-07-22T11:29:34.091106Z",
+  "tokens_used": 7161,
+  "units_analyzed": 2,
+  "units_total": 2
+}

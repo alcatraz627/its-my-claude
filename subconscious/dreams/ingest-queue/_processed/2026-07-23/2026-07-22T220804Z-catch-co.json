@@ -1,0 +1,29 @@
+{
+  "id": "d643d584-27a3-47ea-b3db-65a2449777ec",
+  "ts": "2026-07-22T22:08:04Z",
+  "session_id": "catch-cowrk-b7",
+  "project_root": "/Users/alcatraz627/Code/Claude/claude-ipc",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/claude-ipc/_20260723-catch-cowrk-b7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER: deploy + push decision** \u2014 `bun run build` (gate runs first) + `launchctl kickstart -k gui/$(id -u)/com.alcatraz.claude-ipc`, push feat/i-dashboard. Activates: dashboard waves, who/errors, viewer, count-absence + ipc-await exit-4, service persistence.",
+    "**USER: 5-minute manual never-trap walk** \u2014 `bun run src/cli.ts -i` (Esc from every screen, compose flow carets, copy menu, quit guard).",
+    "**MELD PHASE-0 (oldest debt, owed cl-inst-ce since 07-18):** author docs/contracts/hub-digest.md per their meld plan v2 \u00a75.1/\u00a75.2; reply on msg-0bcfbeca9ee04512.",
+    "Live D1 shakedown: one authorized real send to watch queued\u2192surfaced\u2192settled in the dashboard ledger.",
+    "P3b seq cursor (fresh-context design; restart-monotonicity constraint documented in the papercuts doc).",
+    "E4 events firehose \u2014 build only when a second standing consumer exists.",
+    "R10/R11 color-depth degradation + auto theme (own pass; no framework support). R8 clickable keybar, R13 sparkline, R14 wrap-toggle (wave-4 candidates).",
+    "Phase-4b whole-dashboard adversarial review + D10 gcc V3-dashboard convention extraction (~/.claude/conventions/tui-design.md) \u2014 still owed from the original build plan.",
+    "Promote the tmux+freeze capture pipeline into `scripts/` (currently session-scratchpad only).",
+    "Inform adrev-kanbn-4b post-deploy that P1/P2/P3a shipped beyond the proposal (their watcher gains exit-4; they were told to re-register-on-wake).",
+    "Style-watch debt: router.ts docstring \"the broker's whole decision surface for Phase 2... Phase 3\" \u2192 cut to one code-agnostic line (ledger thes-20260716-165411-e4, logged heeded=no this turn).",
+    "Old backlog: #9 `/ipc` skill, #10 gcc V3-dashboard convention (= D10 above), #11 `.jsonl` fallback proposal."
+  ],
+  "tags": []
+}

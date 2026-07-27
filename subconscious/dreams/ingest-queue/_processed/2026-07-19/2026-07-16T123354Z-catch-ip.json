@@ -1,0 +1,23 @@
+{
+  "id": "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+  "ts": "2026-07-16T12:33:54Z",
+  "session_id": "catch-ipc-9e",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260716-catch-ipc-9e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "#20 review page mock parity (spec in Next action; jobs.tsx is the pattern donor).",
+    "Owner ruling: review filing decouple (then: exercise queue \u2014 resolve/dismiss/",
+    "Owner Workflow feedback (file ends mid-sentence \u2014 expect job-creation clarity",
+    "Sweep fix queue (22, top-5 small+high-stakes) \u00b7 #3 gate re-run \u00b7 #4 PR2 package",
+    "recordUsage emission check (one Firestore query, closes a caveat).",
+    "vb-opus (NEW agent): handshake by sessionId; usage-fold-in verification plan"
+  ],
+  "tags": []
+}

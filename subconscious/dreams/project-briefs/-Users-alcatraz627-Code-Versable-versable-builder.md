@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-16T07:36:03.118269+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-07-27T00:44:07.430186+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A multi-agent collaborative codebase (versable-builder) where parallel agent sessions coordinate via IPC; the dominant working style is breadth-first sweeps with autonomous batched execution and protected-repo commit discipline.
+A full-stack product builder (versable-builder) where the dominant work is UI feature implementation and multi-agent coordination; sessions involve parallel sub-agents, design mock compliance, and protected-repo commit discipline.
 
 ## Things to do (or keep doing)
-- **Breadth-first first**: complete a full v1 pass across all surfaces before polishing any single area; pausing mid-sweep to perfect one item wastes the sweep's momentum
-- **Batch autonomously**: run sequential steps without halting for lightweight go-aheads; only pause at genuine decision points or destructive/irreversible operations
-- **Confirm IPC via round-trip**: wait for an actual reply from the peer before asserting delivery — send-side logs prove transmission, not receipt
-- **Treat state writes as blocking**: IPC replies, task updates, commit staging — execute immediately after completing a unit of work, never defer as bookkeeping
+- **Audit ALL pages before touching any shared UI component** (sidebar, drawer, modal) — per-page implementations are always wrong; implement once, globally
+- **Consult design mocks before naming or building any UI surface** — internal naming conventions and prior code patterns do not substitute for the canonical mock
+- **Always cite files with full paths** — a basename alone forces the user to hunt; this is treated as a mistake worth atoning for
+- **Require a positive round-trip proof before claiming delivery** — IPC sends, test passes, and sub-agent notifications are proxy signals, not verification
 
 ## Things to avoid
-- **Never commit or push**: this is a protected repo; prepare the diff, show it, hand the commit to the user explicitly
-- **Don't use `rg -rn`**: `-r` is `--replace`, silently corrupts output; use `rg -n` for line numbers
-- **Don't emit plausible defaults for unknown input**: gates must default to DENY; extractors must error on missing data, not return zero — a plausible-looking default suppresses investigation
-- **Strip internal commentary before any external doc**: no conversational framing, critique, or stakeholder banter in documents the user may share directly
+- **Don't claim a UI or runtime fix is done without exercising it on the running dev server** — false assurance is worse than silence and breaks trust fast
+- **Don't default to ALLOW or zero when a lookup returns empty** — emit UNCERTAIN or DENY; fabricated defaults bypass gates and corrupt data pipelines
+- **Don't commit or push** — this is a protected repo; prepare the diff, show it, and hand the commit to the user
+- **Don't write internal commentary, banter, or stakeholder critique in documents** — output may go directly to external stakeholders; strip all of it before writing
 
 ## Open questions / known gaps
-- Multi-agent task ownership negotiation via IPC is required but the pre-negotiation protocol isn't fully codified; overlapping parallel claims still produce muddle
-- Decision questions posed to the user have recurrently lacked enough background to be self-contained; always include tradeoffs inline so the user can answer without a follow-up
+- Parallelism consistently degrades state bookkeeping (task lists, branch state, file ownership) — no settled sync protocol for post-burst reconciliation
+- Agent-authored derivative docs (schema captures, concept docs) have repeatedly drifted from the user's canonical spec; no gate currently enforces re-reading the upstream before publishing a derivative

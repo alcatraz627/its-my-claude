@@ -166,6 +166,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `conventions/dashboard-tools.md`  | `topic:dashboard-tool`, single-user Node + watcher + JSON-state tools | Build template: mutex on load-mutate-save, GETs never write, atomic + rotated writes, anti-patterns, Sherpa skeleton |
 | `conventions/preference-graduation.md` | `topic:preferences`, `topic:workflow-vocabulary`, `phrase:"bake this in"`, `phrase:"remember how I work"` | How recurring preference/vocabulary signals graduate from post-insight streams (i-dream/atone/affirm/core-dump/runtime-notes) → GLOSSARY/memory/rules. Harvester: `scripts/preference-harvest.sh` |
 | `conventions/agent-first-tools.md` | `topic:agent-first-tools`, `topic:cli-for-agents`, `phrase:"tool for an agent"`, building ANY tool Claude itself will drive | MANDATORY read before building tools whose primary user is Claude: 5 obligations (digest deltas, output budgets, fix-proposing errors, one-round-trip ambiguity, built-in waits) + 15 researched principles + lived evidence from the fiber-snatcher V2 build |
+| `conventions/language-quality.md` | `topic:language-quality`, `topic:slop`, `tool:prose-lint.py`, `phrase:"de-slop"`, writing/reviewing human-facing prose | The ratified prose-defect taxonomy (two-split structure · verdict-first · overclaim · contrastive-scaffold) from the 2026-07 transcript sweep, with worked rewrites + `scripts/style/prose-lint.py`; verdict-last reporting is the standing rule |
 
 ---
 

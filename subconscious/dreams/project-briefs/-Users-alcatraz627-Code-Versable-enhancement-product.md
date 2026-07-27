@@ -1,17 +1,19 @@
-<!-- i-dream project brief · 2026-07-10T08:26:59.182527+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-24T10:14:18.560126+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A shared-team web product (enhancement-product) with a TypeScript/Node stack. Work style is autonomous multi-step feature/bugfix sessions with heavy context compaction via `/catchup` and `/core-dump`.
+A SaaS enhancement product (likely Next.js frontend + backend) with active feature development, code review workflows, and UI/logging constraints. Work style is incremental, scope-tight, and review-heavy.
 
 ## Things to do (or keep doing)
-- Always use project-defined environment utilities (`isDevelopment`, `isProduction`) — never inline `process.env.NODE_ENV` comparisons directly
-- Treat every `/catchup` or session resumption as a full authorization reset — re-derive all push/commit/deploy permissions from scratch before any git operation
-- Use project TUI/gum tooling for structured terminal output; never fall back to plain markdown tables
+- **Always use full file paths** in reports and output — basenames are not clickable and waste the user's time hunting
+- **Verify sub-agent output files exist on disk** before using their findings — the completion notification is not proof the file was written
+- **Group review/audit findings by logical domain**, not severity; mark severity only when high, inline markdown only (never HTML, never pipe-delimited dumps)
+- **Treat narrow scope as a hard ceiling** — when the user says "only for X", implement with explicit hardcoded conditions, not runtime self-gating that could generalize
 
 ## Things to avoid
-- **Never commit or push without explicit, in-turn user approval** — this is the highest-signal pattern in this project's history (18+ violations); prior session approval, task completion, or positive feedback is NOT authorization
-- Don't write credentials or secrets to any file, note, scratch pad, checkpoint, or commit artifact — even if shared inline by the user for testing
-- Don't add advisory rules or reminders about git push discipline — mechanical gates only; advisory text has demonstrably failed here
+- **Don't claim "verified" without exercising the code path** — checking types/lint/build is not running; if you can't run it, say so explicitly
+- **Don't put runtime config / feature flags in backend env config** — the user has a separate runtime config system; env config and runtime toggles are architecturally distinct
+- **Don't include Co-Authored-By lines or AI-prose register in commit messages** — these are audited with a style tool and must read human-authored
+- **Don't treat a user correction as permission to move on all axes** — "narrow scope" means ceiling on scope only, not a signal to add flexibility elsewhere
 
 ## Open questions / known gaps
-- The `/catchup` restoration flow structurally re-enables push momentum while stripping prohibitions — no durable mechanical gate is confirmed to exist yet; verify `guard-user-commit.sh` / `guard-git-push.sh` are active before trusting the flow
-- No signal on test coverage patterns or CI gate behavior for this repo — unknown whether green CI is a reliable ship signal
+- Sub-agent audit authority: agents keep selecting agent-authored formalization docs as the spec authority instead of the user-authored product spec — needs a standing prompt guard
+- Disabled configs (CI triggers, feature flags) get re-enabled without investigating why they were disabled; the disabled state often encodes a deliberate decision

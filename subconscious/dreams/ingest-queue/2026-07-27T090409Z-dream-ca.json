@@ -1,0 +1,24 @@
+{
+  "id": "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+  "ts": "2026-07-27T09:04:09Z",
+  "session_id": "dream-catch-14",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260727-dream-catch-14.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "[ ] Show Human Briefing with refreshed numbers (next agent, first move).",
+    "[ ] USER optional: flip the declared-ready candidate (`i-dream promotions --promote 8923583f`) \u00b7 walk the staged weekly review (`i-dream review`, apply manually) \u00b7 confirm a redeploy to put --html in the installed binary.",
+    "[ ] Verify today's 15:00 IST smell fire matches the schedule (caveat: first pass fired off-schedule Sat 18:15 UTC \u2014 launchd calendar config unproven).",
+    "[ ] Verify the grounding trace note renders in a post-deploy cycle trace (one rg over the newest traces/*.jsonl for \"grounding:\").",
+    "[ ] Pushes when sentineled: i-dream 98100cb \u00b7 local-models cf3bb3a.",
+    "[ ] Next build frontier (user go required): B3 fire\u2192potentiation wiring \u00b7 B4 diet activation (smell history now exists) \u00b7 D3 autopsy divergence \u00b7 missed-review counter for nudge auto-promotion \u00b7 \"already covered\" label fix (cosmetic).",
+    "[ ] Self-firing: reviews 08-14 / 09-14; smell Sun+Wed 15:00."
+  ],
+  "tags": []
+}

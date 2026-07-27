@@ -1,0 +1,20 @@
+{
+  "id": "302d5d15-d477-4231-8a9d-3831d62209c5",
+  "ts": "2026-07-27T09:07:48Z",
+  "session_id": "catch-vb-5b",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260727-catch-vb-5b.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "OWNER (blocking): UI-review triage \u00b7 parked rulings (stage order \u00b7 conflict",
+    "NEXT BUILD QUEUE (on owner go): A1 ingestion template registry + per-file",
+    "SMALL FOLLOW-UPS: narrate battery shots 24-42 (or owner click-through);"
+  ],
+  "tags": []
+}

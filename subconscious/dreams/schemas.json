@@ -1348,16 +1348,18 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.92,
-    "occurrences": 2,
-    "member_count": 2,
+    "occurrences": 3,
+    "member_count": 3,
     "rep_pattern_id": "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
     "member_ids": [
       "b767f5de-ba1a-4231-865c-b028d79cc007",
-      "1a6d83a5-1b16-40df-a576-06d6c100ce7f"
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "f87cadd0-c542-4bc2-b5c9-50c27ea1a4c7"
     ],
     "member_texts": [
       "IPC message delivery should be confirmed by waiting for an actual round-trip reply from the peer, not by inspecting the sending agent's own logs; the user will reject log-based assurance and insist on a verified reply.",
-      "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs or send-side telemetry — a successful send does not prove the message arrived or was acted on."
+      "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs or send-side telemetry — a successful send does not prove the message arrived or was acted on.",
+      "A sent IPC message is not confirmed until an actual round-trip reply arrives from the peer; inspecting send-side logs, send telemetry, or the sending agent's own turn output does not prove the message was received or acted on."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -1375,10 +1377,14 @@
       "-Users-alcatraz627",
       "claude-instances",
       "local-models",
-      "invasion-of-the-fiber-snatchers"
+      "invasion-of-the-fiber-snatchers",
+      "data-forge",
+      "versable-builder",
+      "backend",
+      "Pictures"
     ],
     "first_seen": "2026-07-15T18:43:23.465951+00:00",
-    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
   },
   {
     "id": "12a814f4c9163088",
@@ -1579,19 +1585,21 @@
     "last_seen": "2026-07-15T18:43:23.465951+00:00"
   },
   {
-    "id": "5e4daed24d7eb7de",
-    "text": "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme — suggesting diverging names across sibling artifacts in the same namespace is wrong without an explicit reason.",
-    "category": "approach",
+    "id": "7f6b66930ce8912c",
+    "text": "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme across sibling artifacts — suggesting diverging names in the same namespace without an explicit justification draws immediate pushback.",
+    "category": "user-preference",
     "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "880920ef-e5dc-4201-beb6-37e7ca3ce620",
+    "confidence": 0.88,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "bea82320-7c03-4021-abc5-d5fd5dfd0030",
     "member_ids": [
-      "880920ef-e5dc-4201-beb6-37e7ca3ce620"
+      "880920ef-e5dc-4201-beb6-37e7ca3ce620",
+      "bea82320-7c03-4021-abc5-d5fd5dfd0030"
     ],
     "member_texts": [
-      "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme — suggesting diverging names across sibling artifacts in the same namespace is wrong without an explicit reason."
+      "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme — suggesting diverging names across sibling artifacts in the same namespace is wrong without an explicit reason.",
+      "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme across sibling artifacts — suggesting diverging names in the same namespace without an explicit justification draws immediate pushback."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -1605,10 +1613,14 @@
       "claude-instances",
       "local-models",
       "invasion-of-the-fiber-snatchers",
-      "frontend"
+      "frontend",
+      "data-forge",
+      "versable-builder",
+      "backend",
+      "Pictures"
     ],
     "first_seen": "2026-07-16T07:29:34.966880+00:00",
-    "last_seen": "2026-07-16T07:29:34.966880+00:00"
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
   },
   {
     "id": "941ec9df107ed817",
@@ -1865,5 +1877,2712 @@
     ],
     "first_seen": "2026-07-16T07:29:34.966880+00:00",
     "last_seen": "2026-07-16T07:29:34.966880+00:00"
+  },
+  {
+    "id": "68798804c0da4c21",
+    "text": "While waiting for a peer agent to send information over an IPC channel, the agent should not repeatedly nudge the user for context or status updates — ask once, then wait for the real message rather than turning the user into a polling proxy.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0c5e0cc9-c444-45f1-a715-fb6c6a4939aa",
+    "member_ids": [
+      "0c5e0cc9-c444-45f1-a715-fb6c6a4939aa"
+    ],
+    "member_texts": [
+      "While waiting for a peer agent to send information over an IPC channel, the agent should not repeatedly nudge the user for context or status updates — ask once, then wait for the real message rather than turning the user into a polling proxy."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "local-models",
+      "data-forge",
+      "versable-builder",
+      "staging-enhancement-product",
+      "backend",
+      "Pictures"
+    ],
+    "first_seen": "2026-07-17T06:17:02.395030+00:00",
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
+  },
+  {
+    "id": "c4c1acf491d7929b",
+    "text": "Expressing concern about context window pressure when the session is well under half full reads as unnecessary anxiety to the user and should be suppressed — context warnings are appropriate only when actually approaching limits.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "833b058c-adac-41f0-8bc2-39e744005237",
+    "member_ids": [
+      "833b058c-adac-41f0-8bc2-39e744005237"
+    ],
+    "member_texts": [
+      "Expressing concern about context window pressure when the session is well under half full reads as unnecessary anxiety to the user and should be suppressed — context warnings are appropriate only when actually approaching limits."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "local-models",
+      "data-forge",
+      "versable-builder",
+      "staging-enhancement-product",
+      "backend",
+      "Pictures"
+    ],
+    "first_seen": "2026-07-17T06:17:02.395030+00:00",
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
+  },
+  {
+    "id": "6855ea677baad416",
+    "text": "Git branch state captured at session start can silently drift during the session; always re-read current branch state immediately before any branch-sensitive operation rather than relying on the value observed at session open.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "3808a375-a2dc-479b-8fb5-c97e9e073e03",
+    "member_ids": [
+      "3808a375-a2dc-479b-8fb5-c97e9e073e03"
+    ],
+    "member_texts": [
+      "Git branch state captured at session start can silently drift during the session; always re-read current branch state immediately before any branch-sensitive operation rather than relying on the value observed at session open."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "local-models",
+      "data-forge",
+      "versable-builder",
+      "staging-enhancement-product",
+      "backend",
+      "Pictures"
+    ],
+    "first_seen": "2026-07-17T06:17:02.395030+00:00",
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
+  },
+  {
+    "id": "857eed18377b52e6",
+    "text": "Running an adversarial review pass against the agent's own synthesis documents (design proposals, plans, specs) catches motivated reasoning that self-review within the same context misses — independent skeptic framing on your own output is a reliable quality gate.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "a861c842-3eab-4d0f-aee5-2de2832c3c28",
+    "member_ids": [
+      "a861c842-3eab-4d0f-aee5-2de2832c3c28"
+    ],
+    "member_texts": [
+      "Running an adversarial review pass against the agent's own synthesis documents (design proposals, plans, specs) catches motivated reasoning that self-review within the same context misses — independent skeptic framing on your own output is a reliable quality gate."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "local-models",
+      "data-forge",
+      "versable-builder",
+      "staging-enhancement-product",
+      "backend",
+      "Pictures"
+    ],
+    "first_seen": "2026-07-17T06:17:02.395030+00:00",
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
+  },
+  {
+    "id": "e440afa18cb103be",
+    "text": "When prompting the gemini lane, avoid `@`-prefixed package names or scoped identifiers directly in the prompt body — the CLI parses them as image-attach tokens and silently corrupts the intended text.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0d666452-b8fa-45d4-9665-382292424f1a",
+    "member_ids": [
+      "0d666452-b8fa-45d4-9665-382292424f1a"
+    ],
+    "member_texts": [
+      "When prompting the gemini lane, avoid `@`-prefixed package names or scoped identifiers directly in the prompt body — the CLI parses them as image-attach tokens and silently corrupts the intended text."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "local-models",
+      "data-forge",
+      "versable-builder",
+      "staging-enhancement-product",
+      "backend",
+      "Pictures"
+    ],
+    "first_seen": "2026-07-17T06:17:02.395030+00:00",
+    "last_seen": "2026-07-17T06:17:02.395030+00:00"
+  },
+  {
+    "id": "35d27bc5e06de67d",
+    "text": "When sending IPC messages between peer agents, the agent must verify the peer alias maps to the intended recipient by checking live peer IDs before sending — a descriptive alias name does not guarantee it identifies the correct session.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "28cb150a-c1cd-44e8-87ae-95c87d464549",
+    "member_ids": [
+      "28cb150a-c1cd-44e8-87ae-95c87d464549"
+    ],
+    "member_texts": [
+      "When sending IPC messages between peer agents, the agent must verify the peer alias maps to the intended recipient by checking live peer IDs before sending — a descriptive alias name does not guarantee it identifies the correct session."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      ".claude",
+      "alcatraz627",
+      "local-models",
+      "versable-builder",
+      "claude-instances",
+      "its-my-config"
+    ],
+    "first_seen": "2026-07-18T06:18:38.213947+00:00",
+    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+  },
+  {
+    "id": "9cc1f4ee06cfedec",
+    "text": "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "86ce33bc-2781-45bd-9d9b-85766878626e",
+    "member_ids": [
+      "86ce33bc-2781-45bd-9d9b-85766878626e"
+    ],
+    "member_texts": [
+      "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      ".claude",
+      "alcatraz627",
+      "local-models",
+      "versable-builder",
+      "claude-instances",
+      "its-my-config"
+    ],
+    "first_seen": "2026-07-18T06:18:38.213947+00:00",
+    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+  },
+  {
+    "id": "00075594dc41687d",
+    "text": "Shared UI elements such as navigation shells must be implemented from a single shared source component, not replicated per-page, so that all authenticated pages remain consistent without manual propagation.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "97ceffd0-f6b0-48d5-a89d-47b481d1e061",
+    "member_ids": [
+      "97ceffd0-f6b0-48d5-a89d-47b481d1e061"
+    ],
+    "member_texts": [
+      "Shared UI elements such as navigation shells must be implemented from a single shared source component, not replicated per-page, so that all authenticated pages remain consistent without manual propagation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      ".claude",
+      "alcatraz627",
+      "local-models",
+      "versable-builder",
+      "claude-instances",
+      "its-my-config"
+    ],
+    "first_seen": "2026-07-18T06:18:38.213947+00:00",
+    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+  },
+  {
+    "id": "e07567670d2bd7a7",
+    "text": "When resuming work after a significant project phase, verify that planning and handoff documents are current before working from them — superseded plans silently redirect effort onto stale tracks when the living state has moved on.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "865633fb-e332-4b94-a48e-604d359166b1",
+    "member_ids": [
+      "865633fb-e332-4b94-a48e-604d359166b1"
+    ],
+    "member_texts": [
+      "When resuming work after a significant project phase, verify that planning and handoff documents are current before working from them — superseded plans silently redirect effort onto stale tracks when the living state has moved on."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      ".claude",
+      "alcatraz627",
+      "local-models",
+      "versable-builder",
+      "claude-instances",
+      "its-my-config"
+    ],
+    "first_seen": "2026-07-18T06:18:38.213947+00:00",
+    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+  },
+  {
+    "id": "341190b557b62c0d",
+    "text": "When working in a shared local repository with concurrent sibling sessions, commits created by those sessions should be identified and left alone rather than absorbed or pushed — ownership of a commit determines who publishes it.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ec95e981-06e1-489b-8595-9f06361b66f6",
+    "member_ids": [
+      "ec95e981-06e1-489b-8595-9f06361b66f6"
+    ],
+    "member_texts": [
+      "When working in a shared local repository with concurrent sibling sessions, commits created by those sessions should be identified and left alone rather than absorbed or pushed — ownership of a commit determines who publishes it."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      ".claude",
+      "alcatraz627",
+      "local-models",
+      "versable-builder",
+      "claude-instances",
+      "its-my-config"
+    ],
+    "first_seen": "2026-07-18T06:18:38.213947+00:00",
+    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+  },
+  {
+    "id": "a5ee8365d35e9424",
+    "text": "When a hook has a high fire-rate but zero conversions, verify the hook is attached to the correct event type before attributing the failure to implementation — an event type mismatch means the hook fires on unintended triggers while the intended events are never caught.",
+    "category": "tool-use",
+    "valence": "neutral",
+    "confidence": 0.62,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "2d9c9eaa-5ba0-4281-8748-ddd4e55b1ea1",
+    "member_ids": [
+      "2d9c9eaa-5ba0-4281-8748-ddd4e55b1ea1"
+    ],
+    "member_texts": [
+      "When a hook has a high fire-rate but zero conversions, verify the hook is attached to the correct event type before attributing the failure to implementation — an event type mismatch means the hook fires on unintended triggers while the intended events are never caught."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      ".claude",
+      "alcatraz627",
+      "local-models",
+      "versable-builder",
+      "claude-instances",
+      "its-my-config"
+    ],
+    "first_seen": "2026-07-18T06:18:38.213947+00:00",
+    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+  },
+  {
+    "id": "f0091d583a1c8097",
+    "text": "When a component returns no data, downstream derivation logic must emit an empty or uncertain result rather than converting the absence into a fabricated negative claim; treating an empty result as evidence of non-existence produces false negatives that are indistinguishable from real negative evidence.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "4bcce8e1-edd8-4eda-af2e-43fd83be0d7a",
+    "member_ids": [
+      "4bcce8e1-edd8-4eda-af2e-43fd83be0d7a"
+    ],
+    "member_texts": [
+      "When a component returns no data, downstream derivation logic must emit an empty or uncertain result rather than converting the absence into a fabricated negative claim; treating an empty result as evidence of non-existence produces false negatives that are indistinguishable from real negative evidence."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-18T16:18:31.026250+00:00"
+  },
+  {
+    "id": "181ef81e5c10617b",
+    "text": "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to ask a follow-up question before they can act.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 6,
+    "member_count": 6,
+    "rep_pattern_id": "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+    "member_ids": [
+      "370578b8-b3aa-449a-aaf2-e1beb0b81e02",
+      "961f7658-649b-488b-9972-601a5ed78184",
+      "606ae0d6-3938-4763-8443-23ffc5656991",
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+      "1e8a942d-9bb0-4301-ac4f-ec501f04e291",
+      "ce615335-2a74-4bc1-9a80-4ed4be0fac0c"
+    ],
+    "member_texts": [
+      "When presenting a list of deferred decision items to the user, each item must include the exact prior decision or constraint and concrete options; items without that context force a follow-up round-trip before the user can answer and are experienced as an incomplete handoff.",
+      "When presenting deferred decision items to the user, each item must include the exact prior decision or constraint plus concrete selectable options; items without that context force a follow-up round-trip before the user can act.",
+      "When presenting deferred decision items to the user, each item must include the exact prior decision or constraint and at least two concrete options; items without that context force an unnecessary follow-up round-trip and are experienced as an incomplete handoff.",
+      "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to ask a follow-up question before they can act.",
+      "Deferred decision items presented to the user must include the exact prior decision or constraint and at least two concrete options to choose from — items without that context force a follow-up round-trip and are experienced as an incomplete handoff.",
+      "When presenting deferred decision items to the user, each item must include the exact prior decision context that triggered the deferral and at least two concrete options — items without that context force an unnecessary follow-up round-trip."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc",
+      ".claude",
+      "karabiner",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-style",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-20T17:06:22.563838+00:00"
+  },
+  {
+    "id": "de32a41df251bb16",
+    "text": "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must apply the same pagination before returning — treating each page in isolation when the pattern is already proven nearby is a systematic miss.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 6,
+    "member_count": 6,
+    "rep_pattern_id": "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+    "member_ids": [
+      "40d27886-e733-42c6-a598-194712b8d36a",
+      "ab073471-5242-495f-bcf6-41675b2db6aa",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+      "53edbc92-c8bf-41c3-afb0-8d4aafcef693",
+      "6adf4907-4728-41b0-8285-aab79af8253c",
+      "caeca8c4-fe26-431d-8336-18a0369b3211"
+    ],
+    "member_texts": [
+      "When a list page is missing pagination and sibling list pages in the same session already display the paginated pattern, the agent should recognise and apply that pattern rather than treating each page in isolation; in-session context that directly proves the pattern is available evidence the agent must use.",
+      "When a list page lacks pagination and other list pages in the same codebase already implement it, the agent must apply the pagination pattern without being explicitly told; the sibling-page pattern is available in-session evidence that must be used.",
+      "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must apply the same pagination before returning — treating each page in isolation when the pattern is already proven nearby is a systematic miss.",
+      "When a list page is missing standard pagination while sibling list pages already implement it, the agent leaves the gap uncorrected and waits for the user to point it out explicitly.",
+      "When a list page is missing pagination and sibling list pages in the same application already display a paginated pattern, the agent must apply the same pattern before returning rather than treating each page in isolation.",
+      "List pages missing pagination when sibling list pages in the same codebase already implement it should be flagged and fixed proactively — treating each list page in isolation when the pattern is proven nearby is a systematic miss."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc",
+      ".claude",
+      "karabiner",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-style",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-20T17:06:22.563838+00:00"
+  },
+  {
+    "id": "9c280bc8629d2d75",
+    "text": "A function return type annotation that silently diverges from the actual return arity (e.g., annotated as 2-tuple but returning 3-tuple) is invisible without a configured static type checker and will crash callers at runtime; projects without mypy or pyright have no backstop and are especially vulnerable to this class of bug.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "13015261-2737-4e75-be00-dd1ebb4cee6f",
+    "member_ids": [
+      "13015261-2737-4e75-be00-dd1ebb4cee6f"
+    ],
+    "member_texts": [
+      "A function return type annotation that silently diverges from the actual return arity (e.g., annotated as 2-tuple but returning 3-tuple) is invisible without a configured static type checker and will crash callers at runtime; projects without mypy or pyright have no backstop and are especially vulnerable to this class of bug."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-18T16:18:31.026250+00:00"
+  },
+  {
+    "id": "93afcdb3b85f9967",
+    "text": "Adding a new parameter to a cached function changes the cache key, causing all existing cache entries to become stale on the next run; before making this change silently, surface the one-time cache-flush implication to the user and ask whether to accept it or exclude the new parameter from the key.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.77,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "21eb5a62-86dd-40eb-8af2-be267b2a7e49",
+    "member_ids": [
+      "21eb5a62-86dd-40eb-8af2-be267b2a7e49"
+    ],
+    "member_texts": [
+      "Adding a new parameter to a cached function changes the cache key, causing all existing cache entries to become stale on the next run; before making this change silently, surface the one-time cache-flush implication to the user and ask whether to accept it or exclude the new parameter from the key."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-18T16:18:31.026250+00:00"
+  },
+  {
+    "id": "375bf0fbb9a941cd",
+    "text": "When a test lab or pipeline has long-lived caches, re-running it after a code change exercises the cache layer rather than the changed code; confirming a code change requires a cache-bust parameter or explicit cache invalidation before treating re-run results as evidence the fix works.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.83,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ba1cf3e5-ce2b-45d8-ada0-a77f0bc39b2a",
+    "member_ids": [
+      "ba1cf3e5-ce2b-45d8-ada0-a77f0bc39b2a"
+    ],
+    "member_texts": [
+      "When a test lab or pipeline has long-lived caches, re-running it after a code change exercises the cache layer rather than the changed code; confirming a code change requires a cache-bust parameter or explicit cache invalidation before treating re-run results as evidence the fix works."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-18T16:18:31.026250+00:00"
+  },
+  {
+    "id": "04c09049af88c3cc",
+    "text": "When a system distinguishes between multiple failure modes using different fields (e.g., partial-failure writes to field A while error-failure writes to field B), guards that only check one field silently pass the other failure mode through as a success; all failure-mode fields must be included in any guard that blocks downstream derivation.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "43c30f72-94f2-4442-a281-4049d31e530c",
+    "member_ids": [
+      "43c30f72-94f2-4442-a281-4049d31e530c"
+    ],
+    "member_texts": [
+      "When a system distinguishes between multiple failure modes using different fields (e.g., partial-failure writes to field A while error-failure writes to field B), guards that only check one field silently pass the other failure mode through as a success; all failure-mode fields must be included in any guard that blocks downstream derivation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-18T16:18:31.026250+00:00"
+  },
+  {
+    "id": "1fb24117fefcf1a5",
+    "text": "Hardcoded character-length filters on domain strings (minimum word length, substring count thresholds) silently exclude legitimate short values from the real data population; filter constants must be validated against the actual corpus before being committed.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9cb0f3b0-b398-4902-a39f-ed6613d5af54",
+    "member_ids": [
+      "9cb0f3b0-b398-4902-a39f-ed6613d5af54"
+    ],
+    "member_texts": [
+      "Hardcoded character-length filters on domain strings (minimum word length, substring count thresholds) silently exclude legitimate short values from the real data population; filter constants must be validated against the actual corpus before being committed."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "staging-enhancement-product",
+      "i-dream",
+      "versable-builder",
+      "speedway",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-18T16:18:31.026250+00:00",
+    "last_seen": "2026-07-18T16:18:31.026250+00:00"
+  },
+  {
+    "id": "d3c4790d5c18a071",
+    "text": "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the same component before writing any code — per-page variants of a globally-shared shell are an architectural error, not a scoped fix.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.95,
+    "occurrences": 6,
+    "member_count": 6,
+    "rep_pattern_id": "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+    "member_ids": [
+      "0d96ce5b-1ade-42d3-996c-b8f2dc471fd0",
+      "09de109f-429f-4f2f-a0d3-d94ee8be57af",
+      "ba393d2d-0765-4a44-96cb-223c92eb392b",
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "0f571d85-56b6-421d-af08-00fc1162cd45",
+      "b48329e1-c4c6-42a2-8714-d5cd45d49604"
+    ],
+    "member_texts": [
+      "When the user reports a UI component inconsistency on one page (sidebar, drawer, modal shell), the fix must be applied to all pages using that component simultaneously; treating it as a single-page fix while sibling pages still use incompatible variants is a failure the user experiences as a missed-obvious pattern.",
+      "When implementing a UI shell component (sidebar, drawer, modal) on one page, the agent must audit all sibling pages for the same component before writing any code — implementing per-page variants of a globally-shared shell is a systematic error, not an isolated miss.",
+      "When implementing a UI shell component (sidebar, drawer, modal) on one page, the agent builds per-page variants instead of a single globally-shared component, requiring the user to explicitly correct this systematic error multiple times in the same session.",
+      "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the same component before writing any code — per-page variants of a globally-shared shell are an architectural error, not a scoped fix.",
+      "When implementing a shared UI shell component (sidebar, drawer, modal), the agent must audit ALL pages in the application for the same component before writing any code — implementing per-page variants of a globally-shared shell requires a costly full-app refactor to fix and is a recurring systematic miss.",
+      "A sidebar or drawer that appears on multiple pages is a candidate for a single shared shell component; the agent should check for sibling usages before writing a page-local implementation and flag divergence proactively."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway",
+      "versable-builder",
+      "staging-enhancement-product",
+      ".claude",
+      "karabiner",
+      "i-dream",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-style",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "claude-ipc",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-19T02:12:47.219599+00:00",
+    "last_seen": "2026-07-21T00:14:09.164059+00:00"
+  },
+  {
+    "id": "67a750f3e4cc2f24",
+    "text": "In long-running multi-agent sprints, individual sub-agents hitting session limits can silently block orchestration; the coordinating agent should detect sub-agent session exhaustion in idle notifications and surface it to the user immediately rather than waiting for a timeout.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9527a342-f2c3-47f5-8fbe-ebc16544bf81",
+    "member_ids": [
+      "9527a342-f2c3-47f5-8fbe-ebc16544bf81"
+    ],
+    "member_texts": [
+      "In long-running multi-agent sprints, individual sub-agents hitting session limits can silently block orchestration; the coordinating agent should detect sub-agent session exhaustion in idle notifications and surface it to the user immediately rather than waiting for a timeout."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway",
+      "versable-builder",
+      "staging-enhancement-product",
+      ".claude",
+      "karabiner",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-19T02:12:47.219599+00:00",
+    "last_seen": "2026-07-19T02:12:47.219599+00:00"
+  },
+  {
+    "id": "d5ae357672c525df",
+    "text": "Strong frustration language from the user ('idiot', expletives) is a high-confidence signal that the agent missed a pattern that was already established and visible in the existing codebase — the error is almost always about failing to read sibling context, not about intent misunderstanding.",
+    "category": "user-preference",
+    "valence": "neutral",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d3b2bef4-418e-499b-829a-3e12b8bba350",
+    "member_ids": [
+      "d3b2bef4-418e-499b-829a-3e12b8bba350"
+    ],
+    "member_texts": [
+      "Strong frustration language from the user ('idiot', expletives) is a high-confidence signal that the agent missed a pattern that was already established and visible in the existing codebase — the error is almost always about failing to read sibling context, not about intent misunderstanding."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway",
+      "versable-builder",
+      "staging-enhancement-product",
+      ".claude",
+      "karabiner",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-19T02:12:47.219599+00:00",
+    "last_seen": "2026-07-19T02:12:47.219599+00:00"
+  },
+  {
+    "id": "8331f4f6ea4c8cac",
+    "text": "When a UI standardization request arrives as a list of issues across multiple pages, the agent should sweep ALL pages that use the affected component, not only the pages named in the user's message — the named examples are a sample, not an exhaustive scope.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ae44ef9e-c31d-480b-b889-df355f424717",
+    "member_ids": [
+      "ae44ef9e-c31d-480b-b889-df355f424717"
+    ],
+    "member_texts": [
+      "When a UI standardization request arrives as a list of issues across multiple pages, the agent should sweep ALL pages that use the affected component, not only the pages named in the user's message — the named examples are a sample, not an exhaustive scope."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway",
+      "versable-builder",
+      "staging-enhancement-product",
+      ".claude",
+      "karabiner",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-19T02:12:47.219599+00:00",
+    "last_seen": "2026-07-19T02:12:47.219599+00:00"
+  },
+  {
+    "id": "b7d497cae65ebdff",
+    "text": "Heartbeat/wake monitors in autonomous long-running sessions should verify remaining session budget before continuing work and self-terminate when budget is nearly exhausted rather than starting new work that will be cut off mid-flight.",
+    "category": "tool-use",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "5f5d1797-cdd2-49e0-8f23-28853d168054",
+    "member_ids": [
+      "5f5d1797-cdd2-49e0-8f23-28853d168054"
+    ],
+    "member_texts": [
+      "Heartbeat/wake monitors in autonomous long-running sessions should verify remaining session budget before continuing work and self-terminate when budget is nearly exhausted rather than starting new work that will be cut off mid-flight."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway",
+      "versable-builder",
+      "staging-enhancement-product",
+      ".claude",
+      "karabiner",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-19T02:12:47.219599+00:00",
+    "last_seen": "2026-07-19T02:12:47.219599+00:00"
+  },
+  {
+    "id": "a8066f9920819faf",
+    "text": "When the agent pauses mid-task without surfacing a reason, the user must ask why, consuming a check-in round-trip; agents should explicitly state the stopping condition (blocker, phase boundary, question needed) before halting execution.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7eff9f33-956d-490e-b00f-8386ac24b707",
+    "member_ids": [
+      "7eff9f33-956d-490e-b00f-8386ac24b707"
+    ],
+    "member_texts": [
+      "When the agent pauses mid-task without surfacing a reason, the user must ask why, consuming a check-in round-trip; agents should explicitly state the stopping condition (blocker, phase boundary, question needed) before halting execution."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "claude-ipc",
+      ".claude",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T05:36:04.979734+00:00",
+    "last_seen": "2026-07-19T05:36:04.979734+00:00"
+  },
+  {
+    "id": "11f26274eab3fddd",
+    "text": "CSS utility class names used in implementations should be confirmed as present in the project's actual stylesheet or framework configuration before use; names that look like valid defaults may not be available in a project using a custom subset.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "75318674-1618-4a29-a9aa-5cf817be045b",
+    "member_ids": [
+      "75318674-1618-4a29-a9aa-5cf817be045b"
+    ],
+    "member_texts": [
+      "CSS utility class names used in implementations should be confirmed as present in the project's actual stylesheet or framework configuration before use; names that look like valid defaults may not be available in a project using a custom subset."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "claude-ipc",
+      ".claude",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T05:36:04.979734+00:00",
+    "last_seen": "2026-07-19T05:36:04.979734+00:00"
+  },
+  {
+    "id": "5a2825bcff0a79ef",
+    "text": "Hard-stopping on a genuine quality or safety concern even when the user explicitly pushes for completion velocity is correct and affirmed; the user values that the agent does not silently accept known risks under schedule pressure.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7ce12a81-44e0-4aa0-9c87-4cc53f1c3824",
+    "member_ids": [
+      "7ce12a81-44e0-4aa0-9c87-4cc53f1c3824"
+    ],
+    "member_texts": [
+      "Hard-stopping on a genuine quality or safety concern even when the user explicitly pushes for completion velocity is correct and affirmed; the user values that the agent does not silently accept known risks under schedule pressure."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "claude-ipc",
+      ".claude",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T05:36:04.979734+00:00",
+    "last_seen": "2026-07-19T05:36:04.979734+00:00"
+  },
+  {
+    "id": "07a8dd1cc54ce057",
+    "text": "The absence of standard tooling such as linting, CI checks, or type enforcement in a project may be a deliberate decision to ship first and standardize later; the agent should probe whether a missing tool is an oversight or an intentional deferral before suggesting its addition.",
+    "category": "user-preference",
+    "valence": "neutral",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bc57e71e-5d87-4284-8f0c-76c05dc91eca",
+    "member_ids": [
+      "bc57e71e-5d87-4284-8f0c-76c05dc91eca"
+    ],
+    "member_texts": [
+      "The absence of standard tooling such as linting, CI checks, or type enforcement in a project may be a deliberate decision to ship first and standardize later; the agent should probe whether a missing tool is an oversight or an intentional deferral before suggesting its addition."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "claude-ipc",
+      ".claude",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T05:36:04.979734+00:00",
+    "last_seen": "2026-07-19T05:36:04.979734+00:00"
+  },
+  {
+    "id": "7242f5cf5a7a64e5",
+    "text": "In multi-agent workflows where one agent waits on a sibling for input, the user prefers the waiting agent to set an explicit time-to-live and proceed autonomously rather than blocking indefinitely, prioritizing pipeline velocity over synchronization completeness.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "37d262bf-22ac-4e6f-942b-a0bdf8694779",
+    "member_ids": [
+      "37d262bf-22ac-4e6f-942b-a0bdf8694779"
+    ],
+    "member_texts": [
+      "In multi-agent workflows where one agent waits on a sibling for input, the user prefers the waiting agent to set an explicit time-to-live and proceed autonomously rather than blocking indefinitely, prioritizing pipeline velocity over synchronization completeness."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "claude-ipc",
+      ".claude",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T05:36:04.979734+00:00",
+    "last_seen": "2026-07-19T05:36:04.979734+00:00"
+  },
+  {
+    "id": "e4ff107716f31465",
+    "text": "When the user makes manual corrections and asks the agent to derive a heuristic from them, the deliverable is a general sweep rule extracted from the class of changes, not a catalogue of individual edits; pattern extraction is the goal, not change summarization.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d023873a-b6a6-40a4-b869-cb2e0285fcd0",
+    "member_ids": [
+      "d023873a-b6a6-40a4-b869-cb2e0285fcd0"
+    ],
+    "member_texts": [
+      "When the user makes manual corrections and asks the agent to derive a heuristic from them, the deliverable is a general sweep rule extracted from the class of changes, not a catalogue of individual edits; pattern extraction is the goal, not change summarization."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "claude-ipc",
+      ".claude",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T05:36:04.979734+00:00",
+    "last_seen": "2026-07-19T05:36:04.979734+00:00"
+  },
+  {
+    "id": "46d4d41349253cc7",
+    "text": "When an agent edits source files and then claims success using words like 'done', 'works', 'fixed', or 'passing' without actually executing the changed code path, it constitutes a false completion claim — type-checking, linting, and collecting tests are not substitutes for running the code.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9113aef2-e381-4f24-9264-9a4051333d8e",
+    "member_ids": [
+      "9113aef2-e381-4f24-9264-9a4051333d8e"
+    ],
+    "member_texts": [
+      "When an agent edits source files and then claims success using words like 'done', 'works', 'fixed', or 'passing' without actually executing the changed code path, it constitutes a false completion claim — type-checking, linting, and collecting tests are not substitutes for running the code."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T07:49:17.855968+00:00",
+    "last_seen": "2026-07-19T07:49:17.855968+00:00"
+  },
+  {
+    "id": "bcbe434cc6c5cb63",
+    "text": "When the user orchestrates multiple parallel agents with distinct roles, each agent should stay within its assigned workload and coordinate via inter-agent messaging rather than picking up tasks assigned to the peer agent.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1a2aba76-44ce-449a-bdb3-50831425bb8f",
+    "member_ids": [
+      "1a2aba76-44ce-449a-bdb3-50831425bb8f"
+    ],
+    "member_texts": [
+      "When the user orchestrates multiple parallel agents with distinct roles, each agent should stay within its assigned workload and coordinate via inter-agent messaging rather than picking up tasks assigned to the peer agent."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T07:49:17.855968+00:00",
+    "last_seen": "2026-07-19T07:49:17.855968+00:00"
+  },
+  {
+    "id": "e04b46d6367cb714",
+    "text": "When the user provides UI feedback via screenshots repeatedly across multiple turns, the preferred workflow is direct visual analysis and immediate implementation of visible changes without asking for clarification on visually obvious issues.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0d30d542-96fe-4942-befb-852bfa7f6f3f",
+    "member_ids": [
+      "0d30d542-96fe-4942-befb-852bfa7f6f3f"
+    ],
+    "member_texts": [
+      "When the user provides UI feedback via screenshots repeatedly across multiple turns, the preferred workflow is direct visual analysis and immediate implementation of visible changes without asking for clarification on visually obvious issues."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T07:49:17.855968+00:00",
+    "last_seen": "2026-07-19T07:49:17.855968+00:00"
+  },
+  {
+    "id": "1d3785c8fda42967",
+    "text": "When a standardization or normalization task spans multiple similar items (pages, components), the agent tends to complete it partially without creating discrete tasks for remaining items, leaving incomplete work the user must discover and flag themselves.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1d1b7d3b-9a73-45cb-bdf9-2e71cd159e7f",
+    "member_ids": [
+      "1d1b7d3b-9a73-45cb-bdf9-2e71cd159e7f"
+    ],
+    "member_texts": [
+      "When a standardization or normalization task spans multiple similar items (pages, components), the agent tends to complete it partially without creating discrete tasks for remaining items, leaving incomplete work the user must discover and flag themselves."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T09:53:20.380638+00:00",
+    "last_seen": "2026-07-19T09:53:20.380638+00:00"
+  },
+  {
+    "id": "1d843419bfd9a163",
+    "text": "Under high edit velocity (many file changes per turn), the agent's task list drifts from actual work done — the discipline that holds at low throughput is the first to slip when editing pace accelerates, requiring external hooks to force reconciliation.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0384d1cb-6b38-467a-902c-827b69502a06",
+    "member_ids": [
+      "0384d1cb-6b38-467a-902c-827b69502a06"
+    ],
+    "member_texts": [
+      "Under high edit velocity (many file changes per turn), the agent's task list drifts from actual work done — the discipline that holds at low throughput is the first to slip when editing pace accelerates, requiring external hooks to force reconciliation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T09:53:20.380638+00:00",
+    "last_seen": "2026-07-19T09:53:20.380638+00:00"
+  },
+  {
+    "id": "419a76ab11a4ddd1",
+    "text": "When the user asks for a specific UI feature, they often explicitly want a 'pluggable general capability' usable across multiple routes or surfaces — the agent defaults to implementing the single instance without flagging the extensibility question or offering a registration pattern.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "353b337b-d73d-4ff9-848d-0785cd99fedf",
+    "member_ids": [
+      "353b337b-d73d-4ff9-848d-0785cd99fedf"
+    ],
+    "member_texts": [
+      "When the user asks for a specific UI feature, they often explicitly want a 'pluggable general capability' usable across multiple routes or surfaces — the agent defaults to implementing the single instance without flagging the extensibility question or offering a registration pattern."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T09:53:20.380638+00:00",
+    "last_seen": "2026-07-19T09:53:20.380638+00:00"
+  },
+  {
+    "id": "cfff5685845c07d2",
+    "text": "The user places high priority on navigation feel when implementing URL-synced tab state and expects the agent to proactively evaluate whether path params will cause noticeable latency before committing to that approach.",
+    "category": "user-preference",
+    "valence": "neutral",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "12a9ee5b-3f2b-43dc-bea4-75b8be7bfc28",
+    "member_ids": [
+      "12a9ee5b-3f2b-43dc-bea4-75b8be7bfc28"
+    ],
+    "member_texts": [
+      "The user places high priority on navigation feel when implementing URL-synced tab state and expects the agent to proactively evaluate whether path params will cause noticeable latency before committing to that approach."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-19T09:53:20.380638+00:00",
+    "last_seen": "2026-07-19T09:53:20.380638+00:00"
+  },
+  {
+    "id": "ad1729a58436028a",
+    "text": "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command the user needs to run and hold explicitly — not attempt workarounds or stall silently.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.85,
+    "occurrences": 5,
+    "member_count": 5,
+    "rep_pattern_id": "e7987094-0e0d-48d1-998a-980249e28daa",
+    "member_ids": [
+      "fd88cfde-7262-48b4-a956-295612accb39",
+      "6d755ad6-96a0-4df6-beaa-08095893c8b4",
+      "47605008-2499-4129-bece-efe8fa689900",
+      "e2c79764-de14-4ffb-bc18-8179fe2f6936",
+      "e7987094-0e0d-48d1-998a-980249e28daa"
+    ],
+    "member_texts": [
+      "When a sub-agent hits a credential or auth block that is outside its own scope to fix, it should surface the exact command the user needs to run and hold — not attempt workarounds — so the human can unblock it in one action.",
+      "When a sub-agent hits a credential or authentication block outside its own scope, surfacing the exact command the user must run and then holding (not attempting workarounds) unblocks the human in one action.",
+      "When a sub-agent hits a credential or auth block that is outside its own scope to fix, it should surface the exact command the user needs to run and hold explicitly — not attempt workarounds or silently stall.",
+      "A sub-agent that hits a credential or auth block outside its own scope should surface the exact unblocking command the user needs to run and hold — not attempt workarounds — enabling the user to unblock the flow in one action and the sub-agent to resume cleanly.",
+      "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command the user needs to run and hold explicitly — not attempt workarounds or stall silently."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-style",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances",
+      "speedway",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-19T15:55:57.754658+00:00",
+    "last_seen": "2026-07-21T00:14:09.164059+00:00"
+  },
+  {
+    "id": "8584524dae822b95",
+    "text": "PR comments and inline docstrings should be stripped to the minimum non-obvious WHY; essay-length comments on small or self-evident changes are treated as noise and removed, not appreciated as thoroughness.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "55c845f5-773b-44af-8dd9-d36bc87e5873",
+    "member_ids": [
+      "55c845f5-773b-44af-8dd9-d36bc87e5873"
+    ],
+    "member_texts": [
+      "PR comments and inline docstrings should be stripped to the minimum non-obvious WHY; essay-length comments on small or self-evident changes are treated as noise and removed, not appreciated as thoroughness."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc"
+    ],
+    "first_seen": "2026-07-19T15:55:57.754658+00:00",
+    "last_seen": "2026-07-19T15:55:57.754658+00:00"
+  },
+  {
+    "id": "10c86f86d1a7fabc",
+    "text": "When the user says 'do not pick stupid fields' or similar judgment constraints, the agent must apply genuine editorial judgment — only surfacing fields with clear user value — rather than enumerating every technically-editable field.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "caab5688-9820-4845-b407-fcfe204a70ff",
+    "member_ids": [
+      "caab5688-9820-4845-b407-fcfe204a70ff"
+    ],
+    "member_texts": [
+      "When the user says 'do not pick stupid fields' or similar judgment constraints, the agent must apply genuine editorial judgment — only surfacing fields with clear user value — rather than enumerating every technically-editable field."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc"
+    ],
+    "first_seen": "2026-07-19T15:55:57.754658+00:00",
+    "last_seen": "2026-07-19T15:55:57.754658+00:00"
+  },
+  {
+    "id": "5ad67ba39c6ae2c6",
+    "text": "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitely; the architecture must anticipate this by having sub-agents self-report idle state so they can be re-queued on resume.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 3,
+    "member_count": 3,
+    "rep_pattern_id": "af2af195-611b-4ae9-8785-5ec9aaaf5532",
+    "member_ids": [
+      "e06fa816-ccc0-4338-a55c-1fd0f8c2800c",
+      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
+      "612b3785-df60-4fab-b97a-db5e34738f46"
+    ],
+    "member_texts": [
+      "When a session hits its usage limit while coordinating multiple sub-agents via IPC, sub-agents are left waiting without a response; the architecture should anticipate this by having sub-agents self-report idle state so the orchestrator can re-queue them on resume.",
+      "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitely; the architecture must anticipate this by having sub-agents self-report idle state so they can be re-queued on resume.",
+      "When a multi-agent orchestration session hits its usage limit mid-coordination, sub-agents left waiting have no path to notify the orchestrator; the architecture should include idle-notification so the orchestrator can re-queue them on resume rather than leaving them hanging."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-style",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-19T15:55:57.754658+00:00",
+    "last_seen": "2026-07-20T11:33:27.621372+00:00"
+  },
+  {
+    "id": "8f86b560a96a29af",
+    "text": "When designing a new UI component variant or layout, the agent proceeds directly to implementation without showing the user a visual mock or sample first, losing the opportunity for early feedback before code is written.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "074ebf2c-ddab-4350-ab79-cd837b9f346a",
+    "member_ids": [
+      "074ebf2c-ddab-4350-ab79-cd837b9f346a"
+    ],
+    "member_texts": [
+      "When designing a new UI component variant or layout, the agent proceeds directly to implementation without showing the user a visual mock or sample first, losing the opportunity for early feedback before code is written."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-style",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627"
+    ],
+    "first_seen": "2026-07-19T23:16:50.118471+00:00",
+    "last_seen": "2026-07-19T23:16:50.118471+00:00"
+  },
+  {
+    "id": "2da55bbf6b044d4b",
+    "text": "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in the same response — patching only the immediate callsite while leaving sibling pages broken is experienced as gaslighting, not progress.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "6ff96e77-dcbb-4bd6-819c-4c74af97fa60",
+    "member_ids": [
+      "2dcbc909-a51a-4437-a96a-eb6d5bb4cee5",
+      "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
+    ],
+    "member_texts": [
+      "After a correction that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in the same response — patching only the immediate callsite while leaving sibling pages broken is experienced as gaslighting, not progress.",
+      "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in the same response — patching only the immediate callsite while leaving sibling pages broken is experienced as gaslighting, not progress."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-20T11:33:27.621372+00:00",
+    "last_seen": "2026-07-21T00:14:09.164059+00:00"
+  },
+  {
+    "id": "2c4a19261afa3741",
+    "text": "A UI review or verification performed only in one theme state (dark or light) is a partial verification; findings should be scoped to what was actually exercised rather than presented as a complete audit.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "3226f10c-3775-4e22-a624-d5b0ef585919",
+    "member_ids": [
+      "3226f10c-3775-4e22-a624-d5b0ef585919"
+    ],
+    "member_texts": [
+      "A UI review or verification performed only in one theme state (dark or light) is a partial verification; findings should be scoped to what was actually exercised rather than presented as a complete audit."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances",
+      "speedway"
+    ],
+    "first_seen": "2026-07-20T11:33:27.621372+00:00",
+    "last_seen": "2026-07-20T11:33:27.621372+00:00"
+  },
+  {
+    "id": "b6083efe10485ede",
+    "text": "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review findings must be annotated with which mode was observed, or the review must cover both modes before reporting.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
+    "member_ids": [
+      "d6abb0ae-f32c-4de2-9005-7a2584d3d1d4",
+      "41f9da83-00ac-41ed-9a8b-a021f91f6b51"
+    ],
+    "member_texts": [
+      "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce false positives that waste the user's triage time; review findings should be annotated with which mode was observed, or the review should cover both modes before reporting.",
+      "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review findings must be annotated with which mode was observed, or the review must cover both modes before reporting."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "first_seen": "2026-07-20T17:06:22.563838+00:00",
+    "last_seen": "2026-07-21T00:14:09.164059+00:00"
+  },
+  {
+    "id": "67dfb88266922c90",
+    "text": "After a long-running feature branch completes its work, the agent should proactively flag that the branch has not been merged to main rather than leaving the user to notice it themselves.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "70398652-971b-46b7-818b-24b06cf8f24d",
+    "member_ids": [
+      "70398652-971b-46b7-818b-24b06cf8f24d"
+    ],
+    "member_texts": [
+      "After a long-running feature branch completes its work, the agent should proactively flag that the branch has not been merged to main rather than leaving the user to notice it themselves."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "first_seen": "2026-07-21T00:14:09.164059+00:00",
+    "last_seen": "2026-07-21T00:14:09.164059+00:00"
+  },
+  {
+    "id": "581fc44200e7ee98",
+    "text": "When the user's UI feedback describes multiple overlapping issues with a component (spacing, width, card layout, field arrangement), the agent should enumerate its planned changes against ALL the named issues before implementing, rather than acting on a subset.",
+    "category": "user-preference",
+    "valence": "neutral",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "557bdc1d-e295-40c2-b2b5-8830875e052d",
+    "member_ids": [
+      "557bdc1d-e295-40c2-b2b5-8830875e052d"
+    ],
+    "member_texts": [
+      "When the user's UI feedback describes multiple overlapping issues with a component (spacing, width, card layout, field arrangement), the agent should enumerate its planned changes against ALL the named issues before implementing, rather than acting on a subset."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "first_seen": "2026-07-21T00:14:09.164059+00:00",
+    "last_seen": "2026-07-21T00:14:09.164059+00:00"
+  },
+  {
+    "id": "25d1aa1c8aa66f81",
+    "text": "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so the parent session can persist them — the harness block is not a failure, it is an enforced handoff point.",
+    "category": "tool-use",
+    "valence": "positive",
+    "confidence": 0.85,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "ba3d6f55-e0a2-408a-8af7-602e6a04df66",
+    "member_ids": [
+      "ba3d6f55-e0a2-408a-8af7-602e6a04df66",
+      "330276fe-c649-4a4b-9224-29753213a68c"
+    ],
+    "member_texts": [
+      "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so the parent session can persist them — the harness block is not a failure, it is an enforced handoff point.",
+      "Workflow sub-agents dispatched by a harness that blocks their Write tool must return findings as text; the parent agent is responsible for persisting them to disk — the sub-agent cannot write directly."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "versable-builder",
+      ".claude"
+    ],
+    "first_seen": "2026-07-21T09:42:16.271918+00:00",
+    "last_seen": "2026-07-21T17:48:48.066578+00:00"
+  },
+  {
+    "id": "260cfc6eddf0d948",
+    "text": "When an IPC peer agent misses a reply-by deadline, the orchestrating session should detect the timeout via inbox check and proceed on available work rather than stalling — non-response is a recoverable state, not a blocker.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "331a1951-78a6-4df4-b886-a7e68b4fc51d",
+    "member_ids": [
+      "331a1951-78a6-4df4-b886-a7e68b4fc51d"
+    ],
+    "member_texts": [
+      "When an IPC peer agent misses a reply-by deadline, the orchestrating session should detect the timeout via inbox check and proceed on available work rather than stalling — non-response is a recoverable state, not a blocker."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "first_seen": "2026-07-21T09:42:16.271918+00:00",
+    "last_seen": "2026-07-21T09:42:16.271918+00:00"
+  },
+  {
+    "id": "33fd4e5a5f77732a",
+    "text": "Spawning an independent adversarial validation sub-agent to produce a structured PASS/FAIL verdict before committing to a design is a reliable gate pattern — the validator's explicit verdict ('PASS-WITH-NOTES') gives the orchestrator a clear signal to act on.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "07739508-a535-4068-9e12-b1ae10fbd9c5",
+    "member_ids": [
+      "07739508-a535-4068-9e12-b1ae10fbd9c5"
+    ],
+    "member_texts": [
+      "Spawning an independent adversarial validation sub-agent to produce a structured PASS/FAIL verdict before committing to a design is a reliable gate pattern — the validator's explicit verdict ('PASS-WITH-NOTES') gives the orchestrator a clear signal to act on."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "first_seen": "2026-07-21T09:42:16.271918+00:00",
+    "last_seen": "2026-07-21T09:42:16.271918+00:00"
+  },
+  {
+    "id": "e40aa551f05a5339",
+    "text": "Style-ledger enforcement (prose smell, thesaurus checks) works well as a fleet of isolated single-turn sub-sessions rather than inline work — each session receives the text on stdin, applies a scoped ledger, and returns violations without polluting the main context.",
+    "category": "tool-use",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e91b79f4-e74a-4919-9641-8b9e58d1d59f",
+    "member_ids": [
+      "e91b79f4-e74a-4919-9641-8b9e58d1d59f"
+    ],
+    "member_texts": [
+      "Style-ledger enforcement (prose smell, thesaurus checks) works well as a fleet of isolated single-turn sub-sessions rather than inline work — each session receives the text on stdin, applies a scoped ledger, and returns violations without polluting the main context."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances"
+    ],
+    "first_seen": "2026-07-21T09:42:16.271918+00:00",
+    "last_seen": "2026-07-21T09:42:16.271918+00:00"
+  },
+  {
+    "id": "f6b15a1750c37cdb",
+    "text": "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is treated as a mistake worth atoning for.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "85ad7652-14a2-491e-849d-890369621fec",
+    "member_ids": [
+      "334c10f8-0ac6-460f-b733-c1ce7c0587a0",
+      "85ad7652-14a2-491e-849d-890369621fec"
+    ],
+    "member_texts": [
+      "When referencing a file in any output or report, always use the full relative or absolute path — a basename alone is not clickable and forces the user to hunt for the file.",
+      "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is treated as a mistake worth atoning for."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "versable-builder",
+      ".claude"
+    ],
+    "first_seen": "2026-07-21T17:48:48.066578+00:00",
+    "last_seen": "2026-07-22T11:26:36.005664+00:00"
+  },
+  {
+    "id": "f37c3f884ed34d5f",
+    "text": "When the user asks for a tracking artifact for their own reference, provide a human-facing doc they can independently consult, explicitly separate from agent-internal memory or task state.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "dc30be8b-cae5-42d4-9817-43badad3f5d8",
+    "member_ids": [
+      "d17948e1-eab4-4f65-bac5-ef46c4e34372",
+      "dc30be8b-cae5-42d4-9817-43badad3f5d8"
+    ],
+    "member_texts": [
+      "When the user asks for a tracking artifact for their own reference, provide a human-facing doc they can independently consult, separate from any agent-internal state or memory files.",
+      "When the user asks for a tracking artifact for their own reference, provide a human-facing doc they can independently consult, explicitly separate from agent-internal memory or task state."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "versable-builder",
+      ".claude"
+    ],
+    "first_seen": "2026-07-21T17:48:48.066578+00:00",
+    "last_seen": "2026-07-22T11:26:36.005664+00:00"
+  },
+  {
+    "id": "9c46a38b879ab75d",
+    "text": "Route-critical, non-secret identifiers (team IDs, entity slugs) belong in the URL as path or query params rather than in client state or dropdowns — the user frames this as a 'robust' practice that unlocks deep-linking and shareable URLs.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.8,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "019406f2-c407-4d36-8f31-a60a5610fb98",
+    "member_ids": [
+      "6585ae1d-e53f-432d-a59a-9cbacb10dfc4",
+      "019406f2-c407-4d36-8f31-a60a5610fb98"
+    ],
+    "member_texts": [
+      "Route-critical, non-secret identifiers (team IDs, entity slugs) belong in the URL as path or query params, not hidden in client state — this enables deep linking, sharing, and browser-native navigation.",
+      "Route-critical, non-secret identifiers (team IDs, entity slugs) belong in the URL as path or query params rather than in client state or dropdowns — the user frames this as a 'robust' practice that unlocks deep-linking and shareable URLs."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "versable-builder",
+      ".claude"
+    ],
+    "first_seen": "2026-07-21T17:48:48.066578+00:00",
+    "last_seen": "2026-07-22T11:26:36.005664+00:00"
+  },
+  {
+    "id": "cb91a8844efe9f03",
+    "text": "Acknowledging a routing or structural pattern in one place but implementing a workaround elsewhere (e.g., dropdown instead of path param for the same semantic concept) is treated as an inconsistency failure, not a judgment call.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "5f66c3c8-92ce-4f15-9c51-0287888d2e73",
+    "member_ids": [
+      "5f66c3c8-92ce-4f15-9c51-0287888d2e73"
+    ],
+    "member_texts": [
+      "Acknowledging a routing or structural pattern in one place but implementing a workaround elsewhere (e.g., dropdown instead of path param for the same semantic concept) is treated as an inconsistency failure, not a judgment call."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-22T11:26:36.005664+00:00",
+    "last_seen": "2026-07-22T11:26:36.005664+00:00"
+  },
+  {
+    "id": "d504070195b631fa",
+    "text": "Conceptual role or label terminology the user supplies to aid understanding (e.g., 'a:b' notation) should not be interpreted as implementation literals or string constants in code.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "15738fa9-d22a-451a-82f6-b76fdbf47143",
+    "member_ids": [
+      "15738fa9-d22a-451a-82f6-b76fdbf47143"
+    ],
+    "member_texts": [
+      "Conceptual role or label terminology the user supplies to aid understanding (e.g., 'a:b' notation) should not be interpreted as implementation literals or string constants in code."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-22T11:26:36.005664+00:00",
+    "last_seen": "2026-07-22T11:26:36.005664+00:00"
+  },
+  {
+    "id": "e480823397c62e77",
+    "text": "When the user uses shorthand notation in requirements to convey a concept (e.g., 'a:b' style role labels, pseudo-syntax), treat it as an explanatory mental model — not a code specification; use idiomatic domain naming in actual implementation rather than literalizing the user's convenient notation.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1573fd5f-3826-41d4-9adc-cd4769445c0e",
+    "member_ids": [
+      "1573fd5f-3826-41d4-9adc-cd4769445c0e"
+    ],
+    "member_texts": [
+      "When the user uses shorthand notation in requirements to convey a concept (e.g., 'a:b' style role labels, pseudo-syntax), treat it as an explanatory mental model — not a code specification; use idiomatic domain naming in actual implementation rather than literalizing the user's convenient notation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-22T18:48:21.553951+00:00",
+    "last_seen": "2026-07-22T18:48:21.553951+00:00"
+  },
+  {
+    "id": "b6f8d181230fafad",
+    "text": "Once a navigational or architectural pattern is established (e.g., placing route-critical identifiers in URL path or query params), the user expects it applied consistently across all surfaces — partial adoption that applies it in some pages but not others draws explicit correction.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.73,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "92a171d4-7edd-43d6-89a4-31c8173eba5e",
+    "member_ids": [
+      "92a171d4-7edd-43d6-89a4-31c8173eba5e"
+    ],
+    "member_texts": [
+      "Once a navigational or architectural pattern is established (e.g., placing route-critical identifiers in URL path or query params), the user expects it applied consistently across all surfaces — partial adoption that applies it in some pages but not others draws explicit correction."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-22T18:48:21.553951+00:00",
+    "last_seen": "2026-07-22T18:48:21.553951+00:00"
+  },
+  {
+    "id": "c315fabb7e332ddb",
+    "text": "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than triggering an immediate review unless explicitly asked.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 8,
+    "member_count": 8,
+    "rep_pattern_id": "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
+    "member_ids": [
+      "e366abd7-89e3-4f79-8efc-c760ceb2036e",
+      "27a3fd44-0532-4d76-b6ed-8578a2679577",
+      "2e635af7-73fc-4c58-815a-07aee8c2d1cf",
+      "b39471cc-0ff5-45e2-8547-7ec37f02509e",
+      "fff706ff-927f-4145-affa-5a07ccc0896e",
+      "6b578aaf-8219-43b4-8aae-b4589a7340d2",
+      "26437926-dfe2-424c-8e47-c7e0f163b5d5",
+      "a67f5569-5c3e-4cd4-a2d8-7770834f382c"
+    ],
+    "member_texts": [
+      "The user prefers completed, non-critical work to be queued in an async 'to be reviewed' list rather than prompting an immediate review — only critical items warrant blocking for user attention.",
+      "The user prefers a 'to be reviewed later' queue for completed non-critical work rather than requesting immediate review of each deliverable; items park there until the user explicitly checks them off.",
+      "The user prefers a deferred 'to be reviewed' staging area for completed non-critical work rather than requesting immediate review for every change; items get crossed off once actually inspected, not when the agent marks them done.",
+      "In high-throughput sessions where the user cannot review each completed item immediately, maintaining a named staging queue (e.g., 'to-be-reviewed') for completed non-critical work allows the user to batch-verify at their own pace rather than being interrupted for review after each task.",
+      "The user prefers a deferred 'to-be-reviewed' queue in the project backlog for non-critical completed work, rather than requesting immediate review after each item — work lands there by default and gets crossed off when the user actually checks it, enabling uninterrupted work flow.",
+      "The user prefers maintaining a 'to be reviewed' backlog for completed non-critical work rather than pausing for immediate review; completed items go to that queue unless the user explicitly asks for immediate review.",
+      "The user prefers completed non-critical items to be added to a deferred 'to be reviewed' backlog rather than surfaced for immediate review. Items in the backlog are crossed off when the user personally verifies them, not when the agent completes them.",
+      "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than triggering an immediate review unless explicitly asked."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+    ],
+    "first_seen": "2026-07-22T18:48:21.553951+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "021163176318f4da",
+    "text": "When the user explicitly defines domain terminology (role names, status labels, naming conventions), write the definitions to a canonical reference document immediately rather than keeping them in conversation context only — named terminology that is not recorded will drift across sessions.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.67,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "8f482ef6-4d54-4f8e-a1be-818e3654f242",
+    "member_ids": [
+      "8f482ef6-4d54-4f8e-a1be-818e3654f242"
+    ],
+    "member_texts": [
+      "When the user explicitly defines domain terminology (role names, status labels, naming conventions), write the definitions to a canonical reference document immediately rather than keeping them in conversation context only — named terminology that is not recorded will drift across sessions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-22T18:48:21.553951+00:00",
+    "last_seen": "2026-07-22T18:48:21.553951+00:00"
+  },
+  {
+    "id": "2a1b2d73ab914274",
+    "text": "When a user asks to set up 'runtime variables' or 'runtime config' in an already-deployed app, they typically mean dynamically-adjustable application-level globals (feature flags, model keys, prompts, thresholds) — not deployment-time environment variables or secret managers. Proposing env-var or external secret solutions to this request is a category error.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "fa33ba9a-2df7-4970-9a80-bbe772854f42",
+    "member_ids": [
+      "fa33ba9a-2df7-4970-9a80-bbe772854f42"
+    ],
+    "member_texts": [
+      "When a user asks to set up 'runtime variables' or 'runtime config' in an already-deployed app, they typically mean dynamically-adjustable application-level globals (feature flags, model keys, prompts, thresholds) — not deployment-time environment variables or secret managers. Proposing env-var or external secret solutions to this request is a category error."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "202c39d9c0908a81",
+    "text": "Feature toggles and runtime flags should not be placed in backend environment config when the user has indicated they want a separate runtime config system; env config and runtime config are distinct systems with fundamentally different change mechanisms.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d7616b27-9651-4573-8875-97d7757b49b3",
+    "member_ids": [
+      "d7616b27-9651-4573-8875-97d7757b49b3"
+    ],
+    "member_texts": [
+      "Feature toggles and runtime flags should not be placed in backend environment config when the user has indicated they want a separate runtime config system; env config and runtime config are distinct systems with fundamentally different change mechanisms."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "70878c6d854270c5",
+    "text": "When implementing a runtime config or feature-flag system, the user expects both a storage/retrieval mechanism and a frontend admin UI for editing values as part of the same deliverable — not as a follow-up phase.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0d173e95-4f31-4f1b-a07e-52d0a784bb9f",
+    "member_ids": [
+      "0d173e95-4f31-4f1b-a07e-52d0a784bb9f"
+    ],
+    "member_texts": [
+      "When implementing a runtime config or feature-flag system, the user expects both a storage/retrieval mechanism and a frontend admin UI for editing values as part of the same deliverable — not as a follow-up phase."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "c7f29fb98f01eef3",
+    "text": "When pivoting away from partially-staged changes mid-session, the user prefers parking them via git stash rather than committing or discarding them, preserving the work for potential resumption.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "da9b5a08-0102-46a0-8b97-56e7da5804e1",
+    "member_ids": [
+      "da9b5a08-0102-46a0-8b97-56e7da5804e1"
+    ],
+    "member_texts": [
+      "When pivoting away from partially-staged changes mid-session, the user prefers parking them via git stash rather than committing or discarding them, preserving the work for potential resumption."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "d24bc8295a130337",
+    "text": "Commit messages and PR descriptions must be concise and human-sounding; the user explicitly audits these artifacts with a style review tool and treats AI-prose register in commits as a defect on par with code issues.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "8485fda7-6dab-49b4-a1cb-3e43c31a5ee5",
+    "member_ids": [
+      "8485fda7-6dab-49b4-a1cb-3e43c31a5ee5"
+    ],
+    "member_texts": [
+      "Commit messages and PR descriptions must be concise and human-sounding; the user explicitly audits these artifacts with a style review tool and treats AI-prose register in commits as a defect on par with code issues."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "fcf49b7b1887c53c",
+    "text": "When verifying a third-party service integration (logging, analytics, monitoring), the primary evidence target is the vendor's own dashboard — not an internal admin tab or agent-built view, which may succeed in isolation while the real integration is broken.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ff0424c1-13b0-4874-9ffa-a5d1797c9af9",
+    "member_ids": [
+      "ff0424c1-13b0-4874-9ffa-a5d1797c9af9"
+    ],
+    "member_texts": [
+      "When verifying a third-party service integration (logging, analytics, monitoring), the primary evidence target is the vendor's own dashboard — not an internal admin tab or agent-built view, which may succeed in isolation while the real integration is broken."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "164f1a5d96c1a949",
+    "text": "UI-side logging must be structural-event-only and must never include personally identifiable information; this is a hard constraint, not a default that can be relaxed per feature.",
+    "category": "domain",
+    "valence": "positive",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "f64a83aa-f9bd-42b7-9148-81fdfc9ebae8",
+    "member_ids": [
+      "f64a83aa-f9bd-42b7-9148-81fdfc9ebae8"
+    ],
+    "member_texts": [
+      "UI-side logging must be structural-event-only and must never include personally identifiable information; this is a hard constraint, not a default that can be relaxed per feature."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-two-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend--claude-output-20260723-pr264-review",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-backend",
+      "-Users-alcatraz627-Code-Versable-enhancement-product--github-workflows",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "frontend",
+      "claude-ipc",
+      "i-dream",
+      "claude-instances"
+    ],
+    "first_seen": "2026-07-23T00:52:30.941313+00:00",
+    "last_seen": "2026-07-23T00:52:30.941313+00:00"
+  },
+  {
+    "id": "3c4c9d4ac3357ecb",
+    "text": "When the user explicitly calls out an output format as bad, the correction applies to the entire class of that format (pipe-delimited dumps, wire-format leaks) — not just the one instance named; fix the format class, not the specimen.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7389a7ce-f487-4af8-ac19-a3f4ebd6123b",
+    "member_ids": [
+      "7389a7ce-f487-4af8-ac19-a3f4ebd6123b"
+    ],
+    "member_texts": [
+      "When the user explicitly calls out an output format as bad, the correction applies to the entire class of that format (pipe-delimited dumps, wire-format leaks) — not just the one instance named; fix the format class, not the specimen."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "b9dbe0b5292f0bcb",
+    "text": "When a PR review or code audit output is delivered as a pipe-delimited dump or HTML artifact, the user prefers inline markdown organized by logical/functional category, with severity only explicitly marked for high-severity findings rather than used as the primary sorting axis.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.87,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "fc400953-746f-4d74-b1d4-5783c0d50505",
+    "member_ids": [
+      "bfadce4b-b9ae-4f69-aa39-5fbe83267fd7",
+      "fc400953-746f-4d74-b1d4-5783c0d50505"
+    ],
+    "member_texts": [
+      "For review and audit reports, the user prefers grouping findings by logical domain or category rather than by severity; severity should be surfaced only as a label when high, not as the primary organizing axis.",
+      "When a PR review or code audit output is delivered as a pipe-delimited dump or HTML artifact, the user prefers inline markdown organized by logical/functional category, with severity only explicitly marked for high-severity findings rather than used as the primary sorting axis."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "7c8908d6c4e9b2b5",
+    "text": "Multi-level agent fan-out for review or reporting skills is over-engineering when a simpler, single-pass approach produces the same output; prefer the simpler path unless the task is genuinely parallel.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bd816cce-03f4-48e8-bb05-8200a7ee3fa5",
+    "member_ids": [
+      "bd816cce-03f4-48e8-bb05-8200a7ee3fa5"
+    ],
+    "member_texts": [
+      "Multi-level agent fan-out for review or reporting skills is over-engineering when a simpler, single-pass approach produces the same output; prefer the simpler path unless the task is genuinely parallel."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "57204daf748eb2c2",
+    "text": "When a skill or tool is only relevant to one specific project or context, it should live as a project-local skill rather than a global one; the agent should not make project-specific tooling available globally.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "5e9ea02b-f0d6-453d-ac66-587607a7c065",
+    "member_ids": [
+      "5e9ea02b-f0d6-453d-ac66-587607a7c065"
+    ],
+    "member_texts": [
+      "When a skill or tool is only relevant to one specific project or context, it should live as a project-local skill rather than a global one; the agent should not make project-specific tooling available globally."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "0ebe21f1da3da562",
+    "text": "When the user sets an explicit narrow scope for a feature ('only for X, not Y'), the implementation must enforce that scope literally without adding self-gating flexibility or generalizing beyond what was stated.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1f3ee51e-bcdb-4055-b50e-a6041d6a7489",
+    "member_ids": [
+      "1f3ee51e-bcdb-4055-b50e-a6041d6a7489"
+    ],
+    "member_texts": [
+      "When the user sets an explicit narrow scope for a feature ('only for X, not Y'), the implementation must enforce that scope literally without adding self-gating flexibility or generalizing beyond what was stated."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "e180cf821d87246c",
+    "text": "Before proposing to re-enable or expand a disabled configuration (CI trigger, feature flag, auto-run), investigate why it was disabled — the existing disabled state may represent a deliberate architectural or cost decision.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e03d6c21-d832-4d1b-a91d-17df6c7783ac",
+    "member_ids": [
+      "e03d6c21-d832-4d1b-a91d-17df6c7783ac"
+    ],
+    "member_texts": [
+      "Before proposing to re-enable or expand a disabled configuration (CI trigger, feature flag, auto-run), investigate why it was disabled — the existing disabled state may represent a deliberate architectural or cost decision."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "20fa5c94ab42820a",
+    "text": "A skill or sub-agent tasked with critiquing a particular output defect can produce output that suffers from the same defect it was meant to catch; verify the critic's own output format before treating its findings as authoritative.",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bb98f67f-1795-4d79-a3ae-d2f77c6d6131",
+    "member_ids": [
+      "bb98f67f-1795-4d79-a3ae-d2f77c6d6131"
+    ],
+    "member_texts": [
+      "A skill or sub-agent tasked with critiquing a particular output defect can produce output that suffers from the same defect it was meant to catch; verify the critic's own output format before treating its findings as authoritative."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "04043abc0881eff5",
+    "text": "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification is not proof the file was written.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "0540dc17-768a-45e2-a13e-3789706ff154",
+    "member_ids": [
+      "0540dc17-768a-45e2-a13e-3789706ff154",
+      "4d26d262-ea40-4a52-82db-1691cb6cc018"
+    ],
+    "member_texts": [
+      "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification is not proof the file was written.",
+      "When a sub-agent finishes and sends an idle notification, the agent should verify the output file actually exists before reading findings from it rather than trusting the notification summary."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "50378624c436840b",
+    "text": "When the user asks for an optional component to be 'separate and independent,' they mean architecturally decoupled — disabling or breaking one component must not degrade the other.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "55aa3210-b920-49c1-b3ad-678378351d0c",
+    "member_ids": [
+      "55aa3210-b920-49c1-b3ad-678378351d0c"
+    ],
+    "member_texts": [
+      "When the user asks for an optional component to be 'separate and independent,' they mean architecturally decoupled — disabling or breaking one component must not degrade the other."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "c1e7ad836efc3872",
+    "text": "A background system whose effects are invisible to the user — even when it is working correctly and producing measurable traces — will fail to feel useful; background learning or automation systems need explicit, surface-visible feedback loops.",
+    "category": "user-preference",
+    "valence": "neutral",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "eea5402b-4b0f-4f45-bb50-c92d77295185",
+    "member_ids": [
+      "eea5402b-4b0f-4f45-bb50-c92d77295185"
+    ],
+    "member_texts": [
+      "A background system whose effects are invisible to the user — even when it is working correctly and producing measurable traces — will fail to feel useful; background learning or automation systems need explicit, surface-visible feedback loops."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T03:02:34.799609+00:00",
+    "last_seen": "2026-07-23T03:02:34.799609+00:00"
+  },
+  {
+    "id": "a4b37c7c171c08e4",
+    "text": "The user explicitly rejects HTML artifacts for code review reports in favor of inline markdown rendered directly in the conversation.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d64e51c4-6949-4473-9b79-0c585ed14055",
+    "member_ids": [
+      "d64e51c4-6949-4473-9b79-0c585ed14055"
+    ],
+    "member_texts": [
+      "The user explicitly rejects HTML artifacts for code review reports in favor of inline markdown rendered directly in the conversation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "d725c3d08efc369c",
+    "text": "When a feature is explicitly scoped to a narrow use case (e.g., only one template type or region), implement it with hardcoded explicit conditions rather than runtime self-gating logic that could be silently bypassed or broadened by future callers.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "c0e3cbf3-6b3f-4279-baa3-5c9748f31144",
+    "member_ids": [
+      "c0e3cbf3-6b3f-4279-baa3-5c9748f31144"
+    ],
+    "member_texts": [
+      "When a feature is explicitly scoped to a narrow use case (e.g., only one template type or region), implement it with hardcoded explicit conditions rather than runtime self-gating logic that could be silently bypassed or broadened by future callers."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "52eef64416b7bd8c",
+    "text": "The user expects commit messages to exclude model co-authorship metadata (Co-Authored-By lines, session URL footers) and wants a comment hygiene pass applied at commit time.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d5bc576c-df72-4310-b5f9-5fac6ca83b93",
+    "member_ids": [
+      "d5bc576c-df72-4310-b5f9-5fac6ca83b93"
+    ],
+    "member_texts": [
+      "The user expects commit messages to exclude model co-authorship metadata (Co-Authored-By lines, session URL footers) and wants a comment hygiene pass applied at commit time."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "fe8b958f3b71d8ec",
+    "text": "An adversarial review mode should operate from an active hostile starting premise — that the main agent made fundamental errors — rather than a balanced skeptical stance; it should seek out untested paths and produce evidence of failure, not merely raise concerns.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b16967c4-1689-425e-bd83-800c80bd0273",
+    "member_ids": [
+      "b16967c4-1689-425e-bd83-800c80bd0273"
+    ],
+    "member_texts": [
+      "An adversarial review mode should operate from an active hostile starting premise — that the main agent made fundamental errors — rather than a balanced skeptical stance; it should seek out untested paths and produce evidence of failure, not merely raise concerns."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "f4915e66095d3b60",
+    "text": "When an output format or report structure has been refined through meta-review (e.g., applying /skeptical-review to a review report), the user expects the improvements to be codified back into the reusable skill template, not applied only to the one-off instance.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "34a5de0a-bc4d-4a74-80d6-a1cade2e7da1",
+    "member_ids": [
+      "34a5de0a-bc4d-4a74-80d6-a1cade2e7da1"
+    ],
+    "member_texts": [
+      "When an output format or report structure has been refined through meta-review (e.g., applying /skeptical-review to a review report), the user expects the improvements to be codified back into the reusable skill template, not applied only to the one-off instance."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "7a767dfcdd02142d",
+    "text": "When infrastructure components (monitors, IPC handlers) can serve multiple purposes without added complexity, the user prefers consolidation over adding dedicated single-purpose components, citing session monitor budget constraints.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1558dbd2-f74a-42b2-a44a-e792926a89e4",
+    "member_ids": [
+      "1558dbd2-f74a-42b2-a44a-e792926a89e4"
+    ],
+    "member_texts": [
+      "When infrastructure components (monitors, IPC handlers) can serve multiple purposes without added complexity, the user prefers consolidation over adding dedicated single-purpose components, citing session monitor budget constraints."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "659efda3d4002209",
+    "text": "When context or time is limited, the user accepts proceeding with non-irreversible foundational changes and deferring context-dependent decisions to a follow-up session rather than blocking entirely.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ac1cfb67-70a2-4c45-942e-5e14f2e641bf",
+    "member_ids": [
+      "ac1cfb67-70a2-4c45-942e-5e14f2e641bf"
+    ],
+    "member_texts": [
+      "When context or time is limited, the user accepts proceeding with non-irreversible foundational changes and deferring context-dependent decisions to a follow-up session rather than blocking entirely."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-23T12:05:03.780113+00:00",
+    "last_seen": "2026-07-23T12:05:03.780113+00:00"
+  },
+  {
+    "id": "2a2bbd34179ad177",
+    "text": "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from the codebase), that derivative document must never be used as the authoritative specification in gap audits or feature planning — the original user-authored product spec remains the upstream authority, and citing agent-authored formalizations as the source inverts the derivation chain.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 3,
+    "member_count": 3,
+    "rep_pattern_id": "893cfff0-185e-4553-9a56-ced4a90d43ec",
+    "member_ids": [
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "45f66753-1e57-45f0-a260-459fab0d7feb",
+      "5225d9af-6378-4293-82f8-2d2e83062ba9"
+    ],
+    "member_texts": [
+      "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from the codebase), that derivative document must never be used as the authoritative specification in gap audits or feature planning — the original user-authored product spec remains the upstream authority, and citing agent-authored formalizations as the source inverts the derivation chain.",
+      "When conducting a gap audit against product requirements, the agent must use the user-authored upstream source document as authoritative, not a downstream technical-definitions doc the agent itself generated from that source.",
+      "When dispatching a sub-agent to audit feature completeness or capability gaps, the agent must verify which document is the authoritative user-authored source before dispatching — not a downstream AI-generated derived artifact. Reviewing gaps against a derived doc instead of the originating spec produces systematically wrong verdicts."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+    ],
+    "first_seen": "2026-07-23T17:15:26.290227+00:00",
+    "last_seen": "2026-07-26T20:18:56.056799+00:00"
+  },
+  {
+    "id": "2ac44bfdf449f23e",
+    "text": "When the agent ships UI features (labels, flows, module names) without consulting design mocks, the result mismatches user expectations; the agent must read the design mocks before implementing any named UI element.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "9c30a950-b658-4f8f-a800-c1f095749cdf",
+    "member_ids": [
+      "746d0edf-6465-4f49-b8fe-2f74cf730413",
+      "9c30a950-b658-4f8f-a800-c1f095749cdf"
+    ],
+    "member_texts": [
+      "When design mocks are referenced as the design authority throughout a codebase, the agent must read them before implementing any UI element names, labels, or structures — skipping this step produces naming that diverges from the agreed design and requires manual correction by the user.",
+      "When the agent ships UI features (labels, flows, module names) without consulting design mocks, the result mismatches user expectations; the agent must read the design mocks before implementing any named UI element."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+    ],
+    "first_seen": "2026-07-23T17:15:26.290227+00:00",
+    "last_seen": "2026-07-25T04:58:05.474329+00:00"
+  },
+  {
+    "id": "9731727e864e0a58",
+    "text": "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as explicit questions to the user rather than resolved silently as implementation choices.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "77862baa-35de-4372-9bbf-56525b5cc07a",
+    "member_ids": [
+      "547893ed-dd89-4b3a-bf7c-ba1bdbbddc71",
+      "77862baa-35de-4372-9bbf-56525b5cc07a"
+    ],
+    "member_texts": [
+      "Product-level decisions embedded in implementation (e.g., which items enter a review queue, which workflow stages apply to a feature) are owner decisions that must be flagged explicitly for user sign-off rather than resolved silently by the agent as implementation details.",
+      "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as explicit questions to the user rather than resolved silently as implementation choices."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+    ],
+    "first_seen": "2026-07-23T17:15:26.290227+00:00",
+    "last_seen": "2026-07-25T04:58:05.474329+00:00"
+  },
+  {
+    "id": "debf04c57be05422",
+    "text": "When the agent announces a UI or runtime fix and the user tests it on the actual running app, discovering it still fails, the agent had claimed success without exercising the code path in the browser — the fix is not done until it is verified on the live dev server, not just by reading code or applying a diff.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b4c7e3df-9209-4f21-9737-11a9e6d498d9",
+    "member_ids": [
+      "b4c7e3df-9209-4f21-9737-11a9e6d498d9"
+    ],
+    "member_texts": [
+      "When the agent announces a UI or runtime fix and the user tests it on the actual running app, discovering it still fails, the agent had claimed success without exercising the code path in the browser — the fix is not done until it is verified on the live dev server, not just by reading code or applying a diff."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-24T04:27:10.033623+00:00",
+    "last_seen": "2026-07-24T04:27:10.033623+00:00"
+  },
+  {
+    "id": "df63cfecebdcfd9a",
+    "text": "When a sub-agent performing a gap or capability audit independently selects an agent-authored formalization document as its authority (rather than the user-authored product spec), the parent agent must validate what ground-truth document the sub-agent used before consuming or acting on the audit findings — acting on a report grounded in a derived, agent-authored doc inverts the authority chain.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "3d41539a-3bb0-4f00-a71c-9238dbeaffc5",
+    "member_ids": [
+      "3d41539a-3bb0-4f00-a71c-9238dbeaffc5"
+    ],
+    "member_texts": [
+      "When a sub-agent performing a gap or capability audit independently selects an agent-authored formalization document as its authority (rather than the user-authored product spec), the parent agent must validate what ground-truth document the sub-agent used before consuming or acting on the audit findings — acting on a report grounded in a derived, agent-authored doc inverts the authority chain."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-24T04:27:10.033623+00:00",
+    "last_seen": "2026-07-24T04:27:10.033623+00:00"
+  },
+  {
+    "id": "9bf566fe85d7b5a6",
+    "text": "When writing a session checkpoint or core-dump during work driven by multiple simultaneous sources (user requests, sub-agent adversarial reviews, product specs), each task entry must explicitly label its driving authority; omitting this forces the next session to re-derive which items came from which source and risks attributing adversarial-review-driven work as user-directed work.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "c27abe44-3ee7-4984-85e7-ba71763ef556",
+    "member_ids": [
+      "c27abe44-3ee7-4984-85e7-ba71763ef556"
+    ],
+    "member_texts": [
+      "When writing a session checkpoint or core-dump during work driven by multiple simultaneous sources (user requests, sub-agent adversarial reviews, product specs), each task entry must explicitly label its driving authority; omitting this forces the next session to re-derive which items came from which source and risks attributing adversarial-review-driven work as user-directed work."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-24T04:27:10.033623+00:00",
+    "last_seen": "2026-07-24T04:27:10.033623+00:00"
+  },
+  {
+    "id": "8497e3402f00fc3b",
+    "text": "Declaring implementation work done without verifying on the actual running dev server leads to issues (wrong labels still showing, removed pages still present) that only surface when the user manually checks.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "752ed245-a2b8-462e-b642-556dba6017f5",
+    "member_ids": [
+      "752ed245-a2b8-462e-b642-556dba6017f5"
+    ],
+    "member_texts": [
+      "Declaring implementation work done without verifying on the actual running dev server leads to issues (wrong labels still showing, removed pages still present) that only surface when the user manually checks."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers"
+    ],
+    "first_seen": "2026-07-25T04:58:05.474329+00:00",
+    "last_seen": "2026-07-25T04:58:05.474329+00:00"
+  },
+  {
+    "id": "fdbd3fdae9ed9002",
+    "text": "When the user explicitly grants permission to proceed autonomously on reversible work due to time pressure or personal constraints, the agent should proceed without seeking further clarification — waiting is the wrong move.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.82,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "f3799b06-d516-4e63-815e-390afdeb6a59",
+    "member_ids": [
+      "a5544cd3-61c4-4ae2-a73a-7d380bf1f8b9",
+      "f3799b06-d516-4e63-815e-390afdeb6a59"
+    ],
+    "member_texts": [
+      "When the user explicitly signals deadline pressure and asks the agent to proceed autonomously on reversible work without their context, the agent should proceed without waiting for missing clarifications.",
+      "When the user explicitly grants permission to proceed autonomously on reversible work due to time pressure or personal constraints, the agent should proceed without seeking further clarification — waiting is the wrong move."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-25T04:58:05.474329+00:00",
+    "last_seen": "2026-07-26T20:18:56.056799+00:00"
+  },
+  {
+    "id": "1133590d31e85031",
+    "text": "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the user experiences as wasted time and broken trust. The agent must verify on the real app before declaring any UI or runtime bug resolved.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.95,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "b0f92cff-426e-40e9-a742-316b5f747588",
+    "member_ids": [
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "eba56488-6290-49f6-8f86-a17bce9ff4f1"
+    ],
+    "member_texts": [
+      "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the user experiences as wasted time and broken trust. The agent must verify on the real app before declaring any UI or runtime bug resolved.",
+      "Claiming to have fixed a UI or runtime bug without actually exercising the fix on the running dev server leads to repeated false assurance cycles that damage trust."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-26T20:18:56.056799+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "e270b81c61a62a44",
+    "text": "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read code before producing a gap table.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
+    "member_ids": [
+      "d5356f3e-ac78-4aab-b95f-ec6e405953f4",
+      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5"
+    ],
+    "member_texts": [
+      "Gap analysis and completion assessments that have not been grounded in actual code reads tend to overestimate how much is built. The agent should default to checking the running app or source before claiming an item is complete in a status report.",
+      "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read code before producing a gap table."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-26T20:18:56.056799+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "0b1bff62f1f3640b",
+    "text": "UI module labels, naming, and creation flows must be validated against the design mocks before shipping, not derived from internal naming conventions or prior code patterns alone.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "fefe6016-599b-420d-a1de-8425490b0a1e",
+    "member_ids": [
+      "fefe6016-599b-420d-a1de-8425490b0a1e",
+      "05d9df9c-1cdf-4d8b-acea-b99ba94fcd88"
+    ],
+    "member_texts": [
+      "UI module labels, naming, and creation flows must be validated against the design mocks before shipping, not derived from internal naming conventions or prior code patterns alone.",
+      "UI module labels, naming, and job-creation flows must be validated against design mocks before shipping, not derived from internal naming conventions or prior code patterns."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-26T20:18:56.056799+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "5f6ad973a370737c",
+    "text": "When a bug repro is confirmed to be narrower than originally described (e.g., triggers in one entry point but not another), collecting that discriminating detail before starting the fix substantially reduces the risk of patching the wrong code path.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "26f5b174-890b-4368-83c4-bc19b85ad649",
+    "member_ids": [
+      "26f5b174-890b-4368-83c4-bc19b85ad649"
+    ],
+    "member_texts": [
+      "When a bug repro is confirmed to be narrower than originally described (e.g., triggers in one entry point but not another), collecting that discriminating detail before starting the fix substantially reduces the risk of patching the wrong code path."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "versable-builder"
+    ],
+    "first_seen": "2026-07-26T20:18:56.056799+00:00",
+    "last_seen": "2026-07-26T20:18:56.056799+00:00"
+  },
+  {
+    "id": "7446c6c69fa91b81",
+    "text": "When the user asks a direct question mid-stream, the agent must answer that question before continuing other work; proceeding without answering reads as ignoring the user.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "6d165237-e1fc-4d25-a11b-65d0098182ad",
+    "member_ids": [
+      "6d165237-e1fc-4d25-a11b-65d0098182ad"
+    ],
+    "member_texts": [
+      "When the user asks a direct question mid-stream, the agent must answer that question before continuing other work; proceeding without answering reads as ignoring the user."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-27T00:39:47.279020+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "f325734e13a76206",
+    "text": "Agent-authored documentation (e.g., formal definitions, concept files) is downstream of user-authored source documents; when a conflict arises, the user-authored source is the authority.",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "648081bf-48e1-48f3-91bc-16b1afca8129",
+    "member_ids": [
+      "648081bf-48e1-48f3-91bc-16b1afca8129"
+    ],
+    "member_texts": [
+      "Agent-authored documentation (e.g., formal definitions, concept files) is downstream of user-authored source documents; when a conflict arises, the user-authored source is the authority."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-27T00:39:47.279020+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "941d9a5da48fec3b",
+    "text": "When a bugfix pattern is discovered and confirmed working, the user prefers extracting it into a shared standard pattern across the app rather than leaving duplicated point-fixes.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9924ee66-4531-4ebc-b02f-2d3f9d41563f",
+    "member_ids": [
+      "9924ee66-4531-4ebc-b02f-2d3f9d41563f"
+    ],
+    "member_texts": [
+      "When a bugfix pattern is discovered and confirmed working, the user prefers extracting it into a shared standard pattern across the app rather than leaving duplicated point-fixes."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-27T00:39:47.279020+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
+  },
+  {
+    "id": "fd2d026913f6a283",
+    "text": "Before implementing a multi-surface UI feature, identify all surfaces (page view, row expansion, sidebar, etc.) that should share the component, so nothing is shipped incomplete.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "37b947d3-9a53-41d8-9e46-12fb1e62b058",
+    "member_ids": [
+      "37b947d3-9a53-41d8-9e46-12fb1e62b058"
+    ],
+    "member_texts": [
+      "Before implementing a multi-surface UI feature, identify all surfaces (page view, row expansion, sidebar, etc.) that should share the component, so nothing is shipped incomplete."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-27T00:39:47.279020+00:00",
+    "last_seen": "2026-07-27T00:39:47.279020+00:00"
   }
 ]

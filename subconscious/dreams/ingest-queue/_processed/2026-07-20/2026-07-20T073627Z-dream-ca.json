@@ -1,0 +1,24 @@
+{
+  "id": "50373a65-8509-4969-a6de-54ac63fe374a",
+  "ts": "2026-07-20T07:36:27Z",
+  "session_id": "dream-catch-e2",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260720-dream-catch-e2.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "[ ] USER decision \u2014 widget #34 acceptance: verdict \"keep the NSMenu, diet it \u2014 do NOT switch to a panel\" (.claude/output/20260707-widget-redo/topbar-review.md); the dieted menu is what the menubar has run since 07-10. Accept or gripe.",
+    "[ ] USER decision \u2014 briefing-lane wiring: socket briefing is now deliverable but the orchestrator invokes it async:true (output discarded) while the daemon logs SURFACED_LOG rows as if surfaced (valence poisoning). Retire socket briefing + its SURFACED_LOG write in favor of the file-based injector, or make the wiring sync.",
+    "[ ] USER decision \u2014 review --findings default tier: -m code (35b) fails schema persistently, small succeeds (proposal filed, local-models). Route default or probe first.",
+    "[ ] Record the rg -rn atone (replace-flag mangled evidence twice on 07-18, self-caught; blocked once 07-17 \u2014 recurrence worth the ledger) + consider extending the rg-replace guard to catch compound -rn/-nr (proposal filed prop from this dump, see Insights).",
+    "[ ] Optional: re-measure EPIPE rate in the daily log after a full post-deploy day (expect ~0 vs ~75/day).",
+    "[ ] Self-firing: Mon 09:00 review (TODAY \u2014 may already be open); scheduled reviews 07-27 / 08-14 / 09-14.",
+    "[ ] Carried, untouched: grounding filter live-behavior verification (needs watching a fresh LLM call)."
+  ],
+  "tags": []
+}

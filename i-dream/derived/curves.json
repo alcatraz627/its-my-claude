@@ -1,0 +1,1954 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-22T20:45:46.288417Z",
+  "window_weeks": 26,
+  "events_in_window": 194,
+  "slugs": [
+    {
+      "slug": "declared-ready-without-runtime-exercise",
+      "total": 12,
+      "first": "2026-05-08",
+      "last": "2026-07-16",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W22",
+          "count": 2
+        },
+        {
+          "week": "2026-W24",
+          "count": 2
+        },
+        {
+          "week": "2026-W26",
+          "count": 1
+        },
+        {
+          "week": "2026-W27",
+          "count": 1
+        },
+        {
+          "week": "2026-W28",
+          "count": 2
+        },
+        {
+          "week": "2026-W29",
+          "count": 3
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "infra-before-grep",
+      "total": 11,
+      "first": "2026-04-23",
+      "last": "2026-07-17",
+      "weekly": [
+        {
+          "week": "2026-W17",
+          "count": 1
+        },
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W20",
+          "count": 2
+        },
+        {
+          "week": "2026-W21",
+          "count": 1
+        },
+        {
+          "week": "2026-W25",
+          "count": 1
+        },
+        {
+          "week": "2026-W27",
+          "count": 2
+        },
+        {
+          "week": "2026-W28",
+          "count": 1
+        },
+        {
+          "week": "2026-W29",
+          "count": 2
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "structural-claim-without-reading-code",
+      "total": 11,
+      "first": "2026-05-08",
+      "last": "2026-06-25",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W20",
+          "count": 1
+        },
+        {
+          "week": "2026-W21",
+          "count": 2
+        },
+        {
+          "week": "2026-W24",
+          "count": 4
+        },
+        {
+          "week": "2026-W25",
+          "count": 2
+        },
+        {
+          "week": "2026-W26",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "ascii-art-tables-instead-of-gum-tools",
+      "total": 4,
+      "first": "2026-04-30",
+      "last": "2026-06-10",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        },
+        {
+          "week": "2026-W19",
+          "count": 2
+        },
+        {
+          "week": "2026-W24",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "file-referenced-without-full-path",
+      "total": 4,
+      "first": "2026-06-25",
+      "last": "2026-07-21",
+      "weekly": [
+        {
+          "week": "2026-W26",
+          "count": 1
+        },
+        {
+          "week": "2026-W29",
+          "count": 2
+        },
+        {
+          "week": "2026-W30",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "literal-request-over-intent",
+      "total": 4,
+      "first": "2026-06-17",
+      "last": "2026-07-14",
+      "weekly": [
+        {
+          "week": "2026-W25",
+          "count": 1
+        },
+        {
+          "week": "2026-W28",
+          "count": 1
+        },
+        {
+          "week": "2026-W29",
+          "count": 2
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "source-comment-hygiene",
+      "total": 4,
+      "first": "2026-05-09",
+      "last": "2026-05-29",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W20",
+          "count": 2
+        },
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "speculative-abstractions-without-a-load-bearing-caller",
+      "total": 4,
+      "first": "2026-05-04",
+      "last": "2026-06-24",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W20",
+          "count": 1
+        },
+        {
+          "week": "2026-W26",
+          "count": 2
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "added-scope-without-checking-siblings",
+      "total": 3,
+      "first": "2026-05-20",
+      "last": "2026-07-18",
+      "weekly": [
+        {
+          "week": "2026-W21",
+          "count": 1
+        },
+        {
+          "week": "2026-W29",
+          "count": 2
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "generalize-before-enumerate",
+      "total": 3,
+      "first": "2026-05-07",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W20",
+          "count": 2
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "proposed-fix-breaks-design-invariant",
+      "total": 3,
+      "first": "2026-05-14",
+      "last": "2026-05-31",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 2
+        },
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "self-permitting-exception-to-an-adr-hard-rule",
+      "total": 3,
+      "first": "2026-05-13",
+      "last": "2026-06-09",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 2
+        },
+        {
+          "week": "2026-W24",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "unprompted-infra-scope-creep",
+      "total": 3,
+      "first": "2026-05-15",
+      "last": "2026-07-10",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        },
+        {
+          "week": "2026-W26",
+          "count": 1
+        },
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "adding-env-var-reads-without-checking-the-project-s-config-pattern",
+      "total": 2,
+      "first": "2026-05-01",
+      "last": "2026-05-28",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        },
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "committing-without-explicit-request",
+      "total": 2,
+      "first": "2026-04-06",
+      "last": "2026-07-02",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        },
+        {
+          "week": "2026-W27",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "inverted-user-defined-opt-in-polarity",
+      "total": 2,
+      "first": "2026-06-26",
+      "last": "2026-06-26",
+      "weekly": [
+        {
+          "week": "2026-W26",
+          "count": 2
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "js-escape-sequences-inside-server-side-template-literals",
+      "total": 2,
+      "first": "2026-05-01",
+      "last": "2026-05-17",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        },
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "propagating-legacy-inline-imports-in-python-backend",
+      "total": 2,
+      "first": "2026-05-29",
+      "last": "2026-06-15",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        },
+        {
+          "week": "2026-W25",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "rebuild-replaced-accumulated-ux-without-parity-audit",
+      "total": 2,
+      "first": "2026-07-16",
+      "last": "2026-07-16",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 2
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "review-missed-stale-caller-after-rename",
+      "total": 2,
+      "first": "2026-05-31",
+      "last": "2026-07-13",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        },
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "shipping-css-ui-changes-without-visual-verification",
+      "total": 2,
+      "first": "2026-04-06",
+      "last": "2026-05-09",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        },
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "status-verdict-from-stale-mental-model-no-re-check",
+      "total": 2,
+      "first": "2026-04-30",
+      "last": "2026-06-09",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        },
+        {
+          "week": "2026-W24",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "string-message-regex-match-for-selector-flow",
+      "total": 2,
+      "first": "2026-05-04",
+      "last": "2026-05-08",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 2
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "sub-agent-material-output-left-in-conversation-only",
+      "total": 2,
+      "first": "2026-05-06",
+      "last": "2026-05-29",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        },
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "added-replacement-without-retiring-predecessor",
+      "total": 1,
+      "first": "2026-07-17",
+      "last": "2026-07-17",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "agent-internal-ids-in-user-facing-comms",
+      "total": 1,
+      "first": "2026-07-06",
+      "last": "2026-07-06",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "ai-smell-prose-against-stored-voice",
+      "total": 1,
+      "first": "2026-06-19",
+      "last": "2026-06-19",
+      "weekly": [
+        {
+          "week": "2026-W25",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "ascii-art-table-instead-of-gum",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "ascii-art-tables-instead-gum-tools",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "ascii-art-tables-instead-gum-tools-v2",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "assumed-prior-context",
+      "total": 1,
+      "first": "2026-05-07",
+      "last": "2026-05-07",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "batch-verification-skip",
+      "total": 1,
+      "first": "2026-04-06",
+      "last": "2026-04-06",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "batched-past-explicit-stop-checkpoints",
+      "total": 1,
+      "first": "2026-05-29",
+      "last": "2026-05-29",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "blank-lines-inside-markdown-tables",
+      "total": 1,
+      "first": "2026-04-08",
+      "last": "2026-04-08",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "brand-new-slug-no-repeat-10415",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "bulk-sync-without-secret-scan",
+      "total": 1,
+      "first": "2026-05-25",
+      "last": "2026-05-25",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "bypass-abstraction-instead-of-extending",
+      "total": 1,
+      "first": "2026-05-12",
+      "last": "2026-05-12",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "catchup-loaded-stale-checkpoint-from-claude-after-clear",
+      "total": 1,
+      "first": "2026-05-02",
+      "last": "2026-05-02",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "chesterton-fence",
+      "total": 1,
+      "first": "2026-05-11",
+      "last": "2026-05-11",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "cli-convention-guess-instead-of-read",
+      "total": 1,
+      "first": "2026-05-13",
+      "last": "2026-05-13",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "cli-flag-assumed-without-help-check",
+      "total": 1,
+      "first": "2026-07-16",
+      "last": "2026-07-16",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "concurrent-load-mutate-save-without-a-mutex",
+      "total": 1,
+      "first": "2026-04-28",
+      "last": "2026-04-28",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "conflating-type-only-emission-with-type-check-time-path",
+      "total": 1,
+      "first": "2026-05-05",
+      "last": "2026-05-05",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "critique-loops-cannot-produce-design-gestalt",
+      "total": 1,
+      "first": "2026-07-10",
+      "last": "2026-07-10",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "defaulting-to-the-conventional-source-when-authoring-around-a-domain-noun",
+      "total": 1,
+      "first": "2026-05-05",
+      "last": "2026-05-05",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "defensive-style-coercion-that-crashes-on-real-inputs",
+      "total": 1,
+      "first": "2026-05-13",
+      "last": "2026-05-13",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "delta-drift-in-derived-counts",
+      "total": 1,
+      "first": "2026-05-12",
+      "last": "2026-05-12",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "dismissing-user-reported-symptoms-with-partial-verification",
+      "total": 1,
+      "first": "2026-04-28",
+      "last": "2026-04-28",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "display-label-as-state-key",
+      "total": 1,
+      "first": "2026-05-06",
+      "last": "2026-05-06",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "disproportionate-fix-without-measuring-cost",
+      "total": 1,
+      "first": "2026-05-25",
+      "last": "2026-05-25",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "dropped-existing-feature-during-rewrite",
+      "total": 1,
+      "first": "2026-06-17",
+      "last": "2026-06-17",
+      "weekly": [
+        {
+          "week": "2026-W25",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "duplicate-type-declarations-across-files",
+      "total": 1,
+      "first": "2026-05-09",
+      "last": "2026-05-09",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "env-mutating-tool-saves-its-own-override-as-the-prior-value",
+      "total": 1,
+      "first": "2026-04-28",
+      "last": "2026-04-28",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "escaped-selector-grep-false-negative",
+      "total": 1,
+      "first": "2026-07-17",
+      "last": "2026-07-17",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "feature-built-without-precondition-guard",
+      "total": 1,
+      "first": "2026-05-19",
+      "last": "2026-05-19",
+      "weekly": [
+        {
+          "week": "2026-W21",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "filename-followed-by-period",
+      "total": 1,
+      "first": "2026-06-25",
+      "last": "2026-06-25",
+      "weekly": [
+        {
+          "week": "2026-W26",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "fix-attempt-without-root-cause-fix-attempt",
+      "total": 1,
+      "first": "2026-04-24",
+      "last": "2026-04-24",
+      "weekly": [
+        {
+          "week": "2026-W17",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "fix-committed-but-binary-not-rebuilt",
+      "total": 1,
+      "first": "2026-04-17",
+      "last": "2026-04-17",
+      "weekly": [
+        {
+          "week": "2026-W16",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "flagship-model-leaked-via-unpinned-nested-subagents",
+      "total": 1,
+      "first": "2026-07-07",
+      "last": "2026-07-07",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "flattery-and-unrequested-agenda",
+      "total": 1,
+      "first": "2026-05-21",
+      "last": "2026-05-21",
+      "weekly": [
+        {
+          "week": "2026-W21",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "getanimations-vs-transitions",
+      "total": 1,
+      "first": "2026-05-06",
+      "last": "2026-05-06",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "ghost-test-server-processes-from-port-reuse-broad-pkill",
+      "total": 1,
+      "first": "2026-05-02",
+      "last": "2026-05-02",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "hallucinated-values-in-interactive-wizard-options",
+      "total": 1,
+      "first": "2026-05-01",
+      "last": "2026-05-01",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "handoff-without-naming-decaying-prereqs",
+      "total": 1,
+      "first": "2026-07-12",
+      "last": "2026-07-12",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "helper-return-type-assumption",
+      "total": 1,
+      "first": "2026-05-07",
+      "last": "2026-05-07",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "html-outputs-missing-dark-light-mode-toggle",
+      "total": 1,
+      "first": "2026-04-08",
+      "last": "2026-04-08",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "hypothesis-without-validation-when-the-fix-looks-obvious",
+      "total": 1,
+      "first": "2026-05-14",
+      "last": "2026-05-14",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "instant-apply-on-preview-surface",
+      "total": 1,
+      "first": "2026-07-11",
+      "last": "2026-07-11",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "interaction-default-without-usage-loop-walkthrough",
+      "total": 1,
+      "first": "2026-06-12",
+      "last": "2026-06-12",
+      "weekly": [
+        {
+          "week": "2026-W24",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "live-test-against-protected-log-without-isolation",
+      "total": 1,
+      "first": "2026-05-17",
+      "last": "2026-05-17",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "mandatory-doc-guidelines-not-loaded-before-authoring",
+      "total": 1,
+      "first": "2026-06-12",
+      "last": "2026-06-12",
+      "weekly": [
+        {
+          "week": "2026-W24",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "manufactured-problem-by-removing-own-solution",
+      "total": 1,
+      "first": "2026-06-26",
+      "last": "2026-06-26",
+      "weekly": [
+        {
+          "week": "2026-W26",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "mcp-server-silently-shadowed-by-plugin",
+      "total": 1,
+      "first": "2026-04-24",
+      "last": "2026-04-24",
+      "weekly": [
+        {
+          "week": "2026-W17",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "mirroring-server-owned-constants-on-the-client",
+      "total": 1,
+      "first": "2026-05-05",
+      "last": "2026-05-05",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "mis-triaged-inflight-task-as-crashed",
+      "total": 1,
+      "first": "2026-07-03",
+      "last": "2026-07-03",
+      "weekly": [
+        {
+          "week": "2026-W27",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "missed-skill-invocation-after-compaction-resume",
+      "total": 1,
+      "first": "2026-04-12",
+      "last": "2026-04-12",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "name-without-meaning",
+      "total": 1,
+      "first": "2026-05-08",
+      "last": "2026-05-08",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "narrow-param-not-folded-into-its-generalization",
+      "total": 1,
+      "first": "2026-06-18",
+      "last": "2026-06-18",
+      "weekly": [
+        {
+          "week": "2026-W25",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "omit-intersection-drops-generic-propagation-through-function",
+      "total": 1,
+      "first": "2026-05-06",
+      "last": "2026-05-06",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "open-question-dismissed-without-explaining-what-it-means",
+      "total": 1,
+      "first": "2026-05-11",
+      "last": "2026-05-11",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "orphaned-background-test-processes",
+      "total": 1,
+      "first": "2026-06-18",
+      "last": "2026-06-18",
+      "weekly": [
+        {
+          "week": "2026-W25",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "over-corrected-tuning-request-into-disable",
+      "total": 1,
+      "first": "2026-05-25",
+      "last": "2026-05-25",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "overriding-user-commented-preferences",
+      "total": 1,
+      "first": "2026-04-06",
+      "last": "2026-04-06",
+      "weekly": [
+        {
+          "week": "2026-W15",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "parse-output-without-row-sample",
+      "total": 1,
+      "first": "2026-05-31",
+      "last": "2026-05-31",
+      "weekly": [
+        {
+          "week": "2026-W22",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "patching-surface-symptoms-across-multiple-commits",
+      "total": 1,
+      "first": "2026-04-28",
+      "last": "2026-04-28",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "personal-convention-presented-as-org-process",
+      "total": 1,
+      "first": "2026-06-12",
+      "last": "2026-06-12",
+      "weekly": [
+        {
+          "week": "2026-W24",
+          "count": 1
+        }
+      ],
+      "trend": "falling",
+      "interventions": []
+    },
+    {
+      "slug": "position-shift-remount",
+      "total": 1,
+      "first": "2026-05-06",
+      "last": "2026-05-06",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "prescribed-flattery-as-fix-for-pushback",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "promised-async-wake-without-arming-receiver",
+      "total": 1,
+      "first": "2026-07-22",
+      "last": "2026-07-22",
+      "weekly": [
+        {
+          "week": "2026-W30",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "pushed-to-remote-without-explicit-go",
+      "total": 1,
+      "first": "2026-06-29",
+      "last": "2026-06-29",
+      "weekly": [
+        {
+          "week": "2026-W27",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "raw-process-env-instead-of-project-flag",
+      "total": 1,
+      "first": "2026-05-08",
+      "last": "2026-05-08",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "re-edit-same-location-re-edit",
+      "total": 1,
+      "first": "2026-04-24",
+      "last": "2026-04-24",
+      "weekly": [
+        {
+          "week": "2026-W17",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "recommended-disabling-the-feature-being-built",
+      "total": 1,
+      "first": "2026-05-19",
+      "last": "2026-05-19",
+      "weekly": [
+        {
+          "week": "2026-W21",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "registered-by-import-only-assumption",
+      "total": 1,
+      "first": "2026-05-13",
+      "last": "2026-05-13",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "repeat-request-dropped-across-sessions",
+      "total": 1,
+      "first": "2026-07-17",
+      "last": "2026-07-17",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "repeatedly-emphasizing-ops-setup-that-user-already-addressed",
+      "total": 1,
+      "first": "2026-05-11",
+      "last": "2026-05-11",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "reusable-tooling-left-in-tmp-not-promoted-to-repo",
+      "total": 1,
+      "first": "2026-06-26",
+      "last": "2026-06-26",
+      "weekly": [
+        {
+          "week": "2026-W26",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "scope-exclusion-drift-during-long-staging",
+      "total": 1,
+      "first": "2026-05-13",
+      "last": "2026-05-13",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "self-heal-becomes-the-write-path",
+      "total": 1,
+      "first": "2026-04-28",
+      "last": "2026-04-28",
+      "weekly": [
+        {
+          "week": "2026-W18",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "shared-index-committed-blind",
+      "total": 1,
+      "first": "2026-07-14",
+      "last": "2026-07-14",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "shipping-surface-without-utility-check",
+      "total": 1,
+      "first": "2026-05-18",
+      "last": "2026-05-18",
+      "weekly": [
+        {
+          "week": "2026-W21",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "skill-spec-update-not-honored-by-running-session",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "skip-existing-usage-check",
+      "total": 1,
+      "first": "2026-05-06",
+      "last": "2026-05-06",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "smoke-bypass-1779039604",
+      "total": 1,
+      "first": "2026-05-17",
+      "last": "2026-05-17",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "spec-fidelity-over-user-legibility",
+      "total": 1,
+      "first": "2026-07-10",
+      "last": "2026-07-10",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "stop-hook-test-1",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "stop-test-s1",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "suspect-without-import-grep",
+      "total": 1,
+      "first": "2026-05-07",
+      "last": "2026-05-07",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "sycophantic-deference-on-coupled-decisions",
+      "total": 1,
+      "first": "2026-05-08",
+      "last": "2026-05-08",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "synthetic-repro-dismissal-without-workload-repro",
+      "total": 1,
+      "first": "2026-07-09",
+      "last": "2026-07-09",
+      "weekly": [
+        {
+          "week": "2026-W28",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "test-final-exit-5758",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "test-gate-bypass-22045",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "test-gate-bypass-debug",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "test-gate-bypass-debug-2",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "test-harness-bypasses-production-entry-path",
+      "total": 1,
+      "first": "2026-05-21",
+      "last": "2026-05-21",
+      "weekly": [
+        {
+          "week": "2026-W21",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "test-juror-gate-bypass-6137",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "test-s2-not-gated-6137",
+      "total": 1,
+      "first": "2026-05-16",
+      "last": "2026-05-16",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "totally-unique-pattern-no-overlap-xyz123",
+      "total": 1,
+      "first": "2026-05-15",
+      "last": "2026-05-15",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "treating-truncated-api-data-as-complete",
+      "total": 1,
+      "first": "2026-04-13",
+      "last": "2026-04-13",
+      "weekly": [
+        {
+          "week": "2026-W16",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "trusted-linter-reminder-without-diffing",
+      "total": 1,
+      "first": "2026-05-08",
+      "last": "2026-05-08",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "tui-primitive-without-required-affordances",
+      "total": 1,
+      "first": "2026-06-25",
+      "last": "2026-06-25",
+      "weekly": [
+        {
+          "week": "2026-W26",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "tunnel-vision-debug-target",
+      "total": 1,
+      "first": "2026-05-06",
+      "last": "2026-05-06",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "twin-opt-in-opt-out-flags-for-one-gate",
+      "total": 1,
+      "first": "2026-05-04",
+      "last": "2026-05-04",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "uniform-feature-promise-not-swept-across-surfaces",
+      "total": 1,
+      "first": "2026-07-17",
+      "last": "2026-07-17",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    },
+    {
+      "slug": "unsolicited-index-manipulation",
+      "total": 1,
+      "first": "2026-05-14",
+      "last": "2026-05-14",
+      "weekly": [
+        {
+          "week": "2026-W20",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "wrapper-hook-that-delegates-the-work-it-s-supposed-to-absorb",
+      "total": 1,
+      "first": "2026-05-09",
+      "last": "2026-05-09",
+      "weekly": [
+        {
+          "week": "2026-W19",
+          "count": 1
+        }
+      ],
+      "trend": "flat",
+      "interventions": []
+    },
+    {
+      "slug": "x",
+      "total": 1,
+      "first": "2026-07-17",
+      "last": "2026-07-17",
+      "weekly": [
+        {
+          "week": "2026-W29",
+          "count": 1
+        }
+      ],
+      "trend": "rising",
+      "interventions": []
+    }
+  ]
+}

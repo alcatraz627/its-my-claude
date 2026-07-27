@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-14T14:29:35.173730+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-07-24T10:14:45.324764+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A multi-agent Claude Code orchestration and widget system — tooling that Claude instances use to coordinate, gate access, and share state across sessions. Work style is infrastructure-heavy with frequent parallel agent coordination.
+A multi-instance Claude widget dashboard with IPC coordination, live runtime state, and UI components — worked in parallel sub-agent bursts with frequent scope and verification failures.
 
 ## Things to do (or keep doing)
-- Always read the existing codebase and surface a grounding recommendation before touching code — explore first, edit second.
-- Dispatch an adversarial reviewer sub-agent immediately after implementing any complex feature; test coverage alone does not confirm correctness.
-- Exercise the affected code path at runtime to validate claims — dogfooding catches what 99 tests miss.
-- Treat user reassurance ("I trust you", "that's fine") as social comfort only, never as authorization to remove safeguards or gates.
+- **Always exercise the live running app** before claiming a fix works — test coverage alone is insufficient; runtime dogfooding catches what 99+ tests miss
+- **Audit every page** before writing a new UI drawer, sidebar, or shell component — build one globally-shared component, not per-page variants
+- **Emit DENY/UNCERTAIN** when a gate or probe returns empty/unknown — never synthesize a zero-default or ALLOW from absent data
+- **Update TaskUpdate at each state change** — after parallel work bursts, treat all cached state (task lists, branch state, file contents) as stale and re-verify before acting
 
 ## Things to avoid
-- Don't default to ALLOW/ZERO/SKIP when encountering an unrecognized input or missing value — default to DENY/FAIL/ABSENT; visible failures are cheaper than plausible-looking corruptions.
-- Don't patch one instance of a policy violation without fixing the structural class — adding one CLI to a fallback list while leaving the default-allow gap open recreates the same bypass.
-- Don't treat TaskUpdate calls as post-hoc cleanup — write state-ledger entries as the first action after completing each unit of work, not batched at session end.
-- Don't use shell backtick-captured output for IPC message bodies — special characters corrupt the message; use the Read tool or quote payloads explicitly.
+- **Don't patch one instance of a structural violation** — fixing one CLI in a fallback list while the default-ALLOW bypass remains open leaves the gate broken; fix the class
+- **Don't present deferred decisions without prior context and concrete options** — forcing the user to ask a follow-up to reconstruct what was already decided wastes a round-trip
+- **Don't claim UI verified if only one visual mode was tested** — annotate findings with which mode was observed; dark-only sign-offs that miss light-mode are invalid
+- **Don't treat a directional correction as an absolute** — "too noisy" means tune down, not off; "only for X" means scope it, not add self-gating flexibility
 
 ## Open questions / known gaps
-- Parallel agent coordination via IPC requires pre-negotiated task ownership, but the ownership protocol itself is not yet standardized — overlapping claims on the same files remain a live risk.
-- Uncommitted agent edits to tracked files are silently lost on parallel user commits; no reliable stash/commit gate enforces this consistently across sessions.
+- **Parallel sub-agent coordination is brittle** — agents must pre-negotiate task ownership via IPC before starting; no enforcement mechanism is in place yet
+- **Derived artifacts displace upstream authority** — agent-authored formalizations and instance-level patches silently become the working spec; the user's product spec must stay the authority

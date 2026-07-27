@@ -1,0 +1,41 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.03655133376499412,
+    "unit_count": 10
+  },
+  "response": {
+    "biases_detected": [
+      "anchoring: assumed playwright would accept a file:// URL before attempting http server (unit -2, first browser_navigate failed, required workaround)",
+      "availability heuristic: assumed screenshot would land at .playwright-mcp/ path without verifying first (unit -2, Read failed, required fd search to locate actual path)",
+      "confirmation bias: style-log call in unit -18 assumes the watcher-fire classification without surfacing evidence it is the correct slug"
+    ],
+    "calibration_score": 0.58,
+    "overconfident_count": 1,
+    "recommendations": [
+      "Probe playwright transport capability (file:// vs http) before building a multi-step review artifact flow; the http.server workaround was correct but arrived after a failed tool call that could have been anticipated",
+      "Verify screenshot output directory once at session start rather than discovering the actual path reactively via fd after a failed Read",
+      "Unit -7 emitted zero output for a 61-char accepted message; if this was a terse acknowledgment it is appropriate, but if it was a tool-gating pause the empty output is an invisible signal that provides no calibration surface — prefer one-line state summaries even for no-op turns",
+      "Consider consolidating port-claim probes in unit -2 (four separate ports.sh invocations to discover correct flag syntax) into a single -h read before the first claim attempt"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "0ab0035c-3186-4dbf-bf58-1c4342f077d5",
+      6868075
+    ],
+    [
+      "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+      3371255
+    ]
+  ],
+  "timestamp": "2026-07-23T07:09:07.199826Z",
+  "tokens_used": 3308,
+  "units_analyzed": 4,
+  "units_total": 10
+}

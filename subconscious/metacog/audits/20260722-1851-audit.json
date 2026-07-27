@@ -1,0 +1,240 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17732,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.20797181621011368,
+    "unit_count": 23
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:WORSENING — unit 00310590-9: 4 consecutive Edit failures on accounts.tsx before Read+retry resolved; depth escalated from 2-failure partially-recovering baseline in prior three cycles to 4-failure; additional isolated failures on usage.server.ts (1) and routes.ts (1) before Read+retry; worsening signal confirmed; unit 302d5d15-2: 2 Edit failures on JobsTable.tsx before retry succeeded, 2 Edit failures on uploadtemplate.server.ts before Read+retry; depth on non-accounts files consistent with prior multi-cycle baseline; accounts.tsx is the escalation site",
+      "re_edit_thrash:RECURRING:STABLE — unit 00310590-9: 4-failure depth on accounts.tsx (regression); unit 302d5d15-2: 2-failure depth on JobsTable.tsx and uploadtemplate.server.ts (within partially-recovering baseline); no escalation on non-accounts files; scratchpad-copy workaround applied adaptively in 302d5d15-2 export stub case",
+      "collect_not_run:RECURRING:PARTIALLY_IMPROVING — unit 302d5d15-2: npx tsc --noEmit as intermediate gate followed by Playwright browser exercise (jobs navigation, export button click, xlsx content verification via node XLSX.read, activity rail, budget page, npm run build); unit 00310590-9: npx tsc --noEmit followed by Chrome DevTools MCP browser exercise (login flow, team tab, member add modal, disable/re-enable cycle, screenshot Read-back); two consecutive cycles with confirmed runtime exercise following tsc; improvement signal strengthening relative to prior stable-baseline cycles",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n range reads in multiple Bash calls instead of Read with offset/limit (events.server.ts, uploadtemplate.server.ts, WorkspaceNav.tsx, workspace.tsx, select.tsx, usage.tsx); unit 00310590-9: sed -n '770,785p' range read in Bash instead of Read with offset/limit; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "git_push_without_fresh_approval:RECURRING:STABLE — unit 302d5d15-2: three bundled commit sequences (exports commit 20761ce, preflight commit, budget-hide commit) without explicit per-push fresh confirmation visible in tool sequence; unit 302d5d15-3: TRACKING.md commit without confirmation; no sentinel consumption observed in these units unlike the partially-recovering deploy-level sentinel in prior cycle",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-3: sleep 45 Bash call attempted and failed (success:false); pattern recurs across cycles despite shell.md prohibition; naturally blocked this instance but attempt still present"
+    ],
+    "calibration_score": 0.38,
+    "cross_references": [
+      "dream-insight-multi-agent-parallelism-degrades-shared-state: VIOLATED in unit 302d5d15-3 — TaskOutput tool calls both failed after agent completion, indicating agent output state was not verified before use; 3 initial Agent dispatch failures then re-dispatch suggests stale harness state read without re-verification; sub-agent-outputs rule requires absolute output path and existence verification before using findings — not observed in tool sequence",
+      "dream-insight-ipc-alias-staleness: NOT APPLICABLE — no IPC alias usage in these units",
+      "dream-insight-user-as-status-relay: NOT VIOLATED — autonomous execution maintained throughout major units; no unnecessary status polling or go-ahead requests routed through user"
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "write_before_read_trap on accounts.tsx has escalated to 4-failure depth (regression from 2-failure partially-recovering baseline); advisory-only regime has failed across all recorded cycles — a Read-before-Edit mechanical reflex specifically for large files in speedway/app/routes/account/ is the correct intervention; scratchpad-copy pattern already working on smaller files (302d5d15-2 export stub) and should be applied proactively to accounts.tsx rather than reactively after 2+ failures",
+      "collect_not_run trajectory is improving with confirmed runtime exercise in both major units this cycle; no new recommendation warranted; monitor that tsc continues as intermediate rather than terminal gate",
+      "git_push_without_fresh_approval: sentinel pattern confirmed working at deploy level in prior cycle but pre-commit bundled push sequences still skip confirmation; enforcement at commit+push bundling level (not just deploy) is the remaining gap"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "ff7ec896-bca6-410c-bc1d-df0033ef325a",
+      108100
+    ],
+    [
+      "f5c0106a-63d6-49ec-9719-ced67944984b",
+      100202
+    ],
+    [
+      "ef1ac2d6-a4f6-4173-9af7-0206b67ce9d8",
+      118991
+    ],
+    [
+      "ebf33b18-29db-44bf-ba26-848af12f6a88",
+      94193
+    ],
+    [
+      "ea30aaae-18df-4ffb-935e-d320c7a74b15",
+      120409
+    ],
+    [
+      "dc526d6a-06c7-48b0-8513-69daee29f870",
+      93116
+    ],
+    [
+      "db54d341-b7b6-40bc-9869-8502af05eda0",
+      110269
+    ],
+    [
+      "d8da9415-8f30-4dd6-b8eb-1e709ad798d5",
+      101004
+    ],
+    [
+      "d2c2622c-981f-418d-8795-18d5ced977de",
+      105685
+    ],
+    [
+      "ccc5e984-ff15-481e-b459-925866f0a099",
+      88410
+    ],
+    [
+      "bded33d1-d48f-4717-9dad-8f150032d542",
+      339294
+    ],
+    [
+      "aebeda5d-6870-484d-ad37-2a5e07205475",
+      91452
+    ],
+    [
+      "aa5a146e-b455-45b5-87a3-8076b5e7ccf7",
+      121708
+    ],
+    [
+      "9756d616-fa24-4b31-a014-dc509b3a9688",
+      133212
+    ],
+    [
+      "9594db8d-5a44-4a62-9794-f818b3b9a10b",
+      94565
+    ],
+    [
+      "933369ed-a531-476a-87ad-2ed1d4b03569",
+      118093
+    ],
+    [
+      "90ed6540-65e9-421d-b3bd-d3baacd94593",
+      100795
+    ],
+    [
+      "8e9ddf08-0807-4223-a72d-aaca96e74e95",
+      108403
+    ],
+    [
+      "7ea576ef-1842-47b5-ba7c-89866225530c",
+      108454
+    ],
+    [
+      "75f3b12d-3a5d-47fb-b8b2-a2d5e86a88e8",
+      117548
+    ],
+    [
+      "671c244a-e222-4474-878f-727baa7c8e85",
+      145763
+    ],
+    [
+      "636a9165-c2be-4ac0-861f-62e0b3b93c20",
+      121791
+    ],
+    [
+      "61ff2bd9-d2d2-4a7a-be8c-48472eb6f301",
+      128985
+    ],
+    [
+      "5c3fe93a-d329-4821-a7eb-2514ff30b565",
+      115074
+    ],
+    [
+      "4b59ae41-8ff7-4fe7-89a7-068e6982be26",
+      118061
+    ],
+    [
+      "44486cb0-0bac-4649-85ce-2189640c4b89",
+      139601
+    ],
+    [
+      "42947aef-2985-4207-92f7-3615a5a6fde2",
+      129883
+    ],
+    [
+      "3d5647eb-bd43-4c24-9425-fbf9f8f2ac1f",
+      101929
+    ],
+    [
+      "3a5cf16d-ff01-413b-9284-210b92975ab3",
+      127660
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      2616429
+    ],
+    [
+      "24ca66bb-daab-437b-b991-8ad53dc5aefa",
+      121215
+    ],
+    [
+      "248bc9dc-67f6-441c-a4fe-dfc602ea4821",
+      128671
+    ],
+    [
+      "1401dd51-411f-4c85-840d-a4ba0716bcc0",
+      87034
+    ],
+    [
+      "0eef7642-6a85-48a6-b996-8a9ba7789796",
+      102179
+    ],
+    [
+      "0041112e-79a3-446b-891e-62369b8bd92a",
+      141240
+    ],
+    [
+      "00310590-8403-4402-8f70-e7a8684eb0b6",
+      19102873
+    ],
+    [
+      "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+      2746651
+    ],
+    [
+      "f86c2a9a-4cc1-470f-8d0d-7f553cebfbd8",
+      135405
+    ],
+    [
+      "e8a5a1bd-2379-4680-9e85-84214855ef11",
+      112741
+    ],
+    [
+      "d643d584-27a3-47ea-b3db-65a2449777ec",
+      10315637
+    ],
+    [
+      "ca91bdba-b3eb-4416-adb1-3767af7d2aa0",
+      146637
+    ],
+    [
+      "c316e580-529b-4b41-8dea-30067a21cdae",
+      182335
+    ],
+    [
+      "b8876c9a-19e5-4ccb-bbff-4fe209aef401",
+      144817
+    ],
+    [
+      "b85db265-875f-4c2d-b8db-f796113aa79d",
+      119631
+    ],
+    [
+      "b7b65527-079f-4430-abfc-0cacb3050d7b",
+      148680
+    ],
+    [
+      "b5288f46-c9ec-4aed-89c9-c76308c03f22",
+      123995
+    ],
+    [
+      "ac7bb0ed-691f-4fd2-85d3-8801c793ee34",
+      152290
+    ],
+    [
+      "9933c1a8-cff0-457c-8a70-9207c4b05ad7",
+      169217
+    ],
+    [
+      "76fc80d9-d58a-4614-9dc4-72afd2327025",
+      150493
+    ],
+    [
+      "6f2bfe06-815d-4678-946f-14033c930ba8",
+      131224
+    ]
+  ],
+  "timestamp": "2026-07-22T18:51:53.933067Z",
+  "tokens_used": 20030,
+  "units_analyzed": 12,
+  "units_total": 23
+}

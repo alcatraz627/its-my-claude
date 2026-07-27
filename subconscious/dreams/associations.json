@@ -347,6 +347,22 @@
     "auto_intention_id": null
   },
   {
+    "id": "2b749149-7dc5-4180-8598-c3f293daa9bd",
+    "patterns_linked": [
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "9113aef2-e381-4f24-9264-9a4051333d8e",
+      "752ed245-a2b8-462e-b642-556dba6017f5",
+      "0540dc17-768a-45e2-a13e-3789706ff154"
+    ],
+    "hypothesis": "The agent substitutes an outbound signal (sending code, sending a message, sending a notification) for proof of an outcome (feature works, message arrived, file exists) — the same epistemic error manifests identically across IPC verification, development completion claims, and sub-agent coordination.",
+    "confidence": 0.18000000000000013,
+    "actionable": true,
+    "suggested_rule": "Always require a reception-side proof artifact (a round-trip reply, a rendered screenshot, a file-existence check) before treating any outbound action as successful — sending is never arriving.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
     "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
     "patterns_linked": [
       "92a767af-37ad-4b83-84af-684fd98948b5",
@@ -711,6 +727,21 @@
     "suggested_rule": "Unify render-before-judge across all domains: data values need source citations, UI changes need screenshots, desktop automation needs coordinate verification, and post-compaction state needs fresh reads. The common abstraction is: 'no assertion without observation at the same temporal scope'.",
     "promoted": true,
     "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "d92e0708-572d-4a30-ac04-2372ba7e8dec",
+    "patterns_linked": [
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "d5356f3e-ac78-4aab-b95f-ec6e405953f4",
+      "3d41539a-3bb0-4f00-a71c-9238dbeaffc5"
+    ],
+    "hypothesis": "The agent treats its own summaries and derivative documents as ground truth — gap analyses cite agent-authored formalizations, completion assessments reference their own reports rather than the running code, and sub-agents select agent-authored docs as authority — all instances of a self-referential loop where the map replaces the territory.",
+    "confidence": 0.1500000000000001,
+    "actionable": true,
+    "suggested_rule": "Always trace any authority claim back to a non-agent-authored source (user spec, running code, actual output) before acting on it — if the only evidence is something this agent or a sibling agent wrote, it is circular and must be re-grounded.",
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -1441,6 +1472,53 @@
     "auto_intention_id": null
   },
   {
+    "id": "81018ee9-375e-432b-8ec3-11c44dc2a477",
+    "patterns_linked": [
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "65ad5227-8103-4cb4-97fb-240346fb74d7",
+      "5845c38b-5c0c-406d-90c4-003d795accd6",
+      "7f83725a-0d19-488b-8c14-e61c42374da1"
+    ],
+    "hypothesis": "A recurring structural failure across IPC, testing, naming, and spec enforcement: a convenient proxy signal (send-success, test-pass, class-name, advisory doc) is treated as equivalent to the thing it represents (delivery, runtime correctness, actual behavior, enforced constraint), when the proxy is structurally disconnected from the ground truth it stands in for.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always distinguish proxy evidence from direct evidence before claiming verification — if the check did not observe the actual outcome (message received, code path executed, behavior triggered, constraint enforced), label the claim as 'proxy-verified only' and identify what direct check is missing.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "3b704290-9240-48d5-ab4e-8aa7f130e02a",
+    "patterns_linked": [
+      "2e635af7-73fc-4c58-815a-07aee8c2d1cf",
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+      "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
+    ],
+    "hypothesis": "The user's preference for deferred review staging areas directly contradicts the agent's tendency to omit decision context — deferred items are designed to be acted on LATER without the session's working memory, yet the agent writes them as if the reader shares current context, making the deferred queue unusable without follow-up.",
+    "confidence": 0.12000000000000005,
+    "actionable": true,
+    "suggested_rule": "Always write deferred items as self-contained decision packets (what, options, tradeoffs, recommended default) that a reader with zero session context can act on without asking a follow-up question.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "d6b4371d-43bb-4fdf-ab2c-3021967dc8da",
+    "patterns_linked": [
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "0540dc17-768a-45e2-a13e-3789706ff154",
+      "0b318bca-d338-4da1-ae19-62c2393a3771"
+    ],
+    "hypothesis": "The agent has a single epistemic failure that manifests across unrelated domains: treating the absence of a failure signal (successful send, clean diff, sub-agent notification, zero-default) as the presence of a success signal — fabricating positive evidence from the void rather than requiring an end-to-end existence proof.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always require a positive existence proof (round-trip reply, running output, file-on-disk check, non-default value) before reporting success — never infer success from the absence of a failure signal.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "73a03285-60d0-4fe8-907d-2e98e10bcbad",
     "patterns_linked": [
       "edaeaf8c-9b6e-4652-b777-ccedba905520",
@@ -1818,6 +1896,22 @@
     "confidence": 0.8,
     "actionable": true,
     "suggested_rule": "For any task where the output is user-facing (UI, data export, report), always include a verification artifact (screenshot, sample output, diff) in the completion message. 'It works' without evidence is as bad as a hallucinated data value for this user.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "d65639e1-2b0f-4d29-a555-71a1c2e2d1cc",
+    "patterns_linked": [
+      "92ac5211-09d0-4b6e-a238-805ff18e9a11",
+      "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
+      "ece94448-4ac9-4d31-a8c1-ab38eebe78b7",
+      "3808a375-a2dc-479b-8fb5-c97e9e073e03"
+    ],
+    "hypothesis": "Parallelism degrades every form of bookkeeping simultaneously — task lists drift, git state becomes stale, edits get clobbered, and ownership becomes ambiguous — not because any single mechanism fails but because the implicit assumption underlying all of them (that state is stable between reads) becomes false as concurrency increases; this is temporal degradation of a correctness assumption, not of any tool.",
+    "confidence": 0.8,
+    "actionable": true,
+    "suggested_rule": "After any burst of parallel work (sub-agent completions, concurrent edits, multi-session coordination), treat ALL cached state — task lists, branch state, file contents, ownership claims — as potentially stale and explicitly reconcile each before the next action.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -2835,19 +2929,34 @@
     "auto_intention_id": null
   },
   {
-    "id": "f8b862a9-c36e-408a-a209-128a615cc306",
+    "id": "094a0ede-69a0-47e0-bbb0-0792c6a79566",
     "patterns_linked": [
-      "64d32f72-3391-4375-a556-9baa3b7d3f5d",
-      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
-      "ece94448-4ac9-4d31-a8c1-ab38eebe78b7",
-      "940470a1-ae82-4956-9326-749cdf537f48"
+      "0b318bca-d338-4da1-ae19-62c2393a3771",
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f"
     ],
-    "hypothesis": "Task updates, IPC replies, and git commits are all state-ledger writes that get deferred under cognitive load as 'bookkeeping', but each is actually the primary mechanism preventing drift or loss — the deferral pattern is identical across all three domains and compounds: skipping one makes the next skip more likely because the ledger is already stale.",
-    "confidence": 0.0,
+    "hypothesis": "Systems that emit plausible-looking success from structural absence — zero-defaults fabricating data, default-ALLOW bypassing gates, send-success masking non-delivery — share the property that the failure mode is invisible because it produces output that looks correct; the absence of a real signal is indistinguishable from a positive signal, suppressing investigation.",
+    "confidence": 0.78,
     "actionable": true,
-    "suggested_rule": "Always treat state-ledger writes (TaskUpdate, IPC reply, git commit of agent edits) as blocking obligations that execute immediately after completing a unit of work, never as cleanup to batch later.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "When a system returns a plausible-looking positive result (a number, a success status, an ALLOW), always verify that the result was computed from real input rather than falling through a default path — plausible defaults are the most dangerous failure mode because they suppress the investigation reflex.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "ef5d5c4d-bd52-4fd6-9181-8da3ca7dc6e4",
+    "patterns_linked": [
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+      "1221af86-2465-4d63-a6ba-b56f1da7f313",
+      "85ad7652-14a2-491e-849d-890369621fec",
+      "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
+    ],
+    "hypothesis": "Every handoff artifact the agent produces — deferred decision items, IPC checkpoints, file citations, decision questions — is authored for a receiver who shares the sender's full context, systematically requiring one extra round-trip before the receiver can act; the agent optimizes for authoring speed over receiver autonomy.",
+    "confidence": 0.78,
+    "actionable": true,
+    "suggested_rule": "Always include enough context in any handoff artifact (decision question, citation, checkpoint, deferred item) that the receiver can act on it without a follow-up question — test by asking 'could someone who just walked in act on this?'",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -3628,6 +3737,66 @@
     "auto_intention_id": null
   },
   {
+    "id": "6dfd5b06-d265-418f-b4f8-0360d4cf8940",
+    "patterns_linked": [
+      "0c5e0cc9-c444-45f1-a715-fb6c6a4939aa",
+      "6e0419e3-4fc4-492d-be7f-ba6f18976030",
+      "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
+    ],
+    "hypothesis": "Three seemingly different user-friction complaints share a single shape: the agent routes low-value traffic through the user (polling proxy for IPC, rubber-stamp go-aheads, underspecified decision questions), turning them into middleware between the agent and the thing it actually needs — the agent should either resolve the need autonomously or present a complete, self-contained decision surface.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Avoid routing any request through the user that the agent could resolve autonomously or that lacks enough context for the user to answer in one response — if you must involve the user, the prompt must be self-contained and decision-grade, never a status relay or a bare confirmation.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "53db7ae6-e31e-4ab6-a146-774fbe84582a",
+    "patterns_linked": [
+      "4bcce8e1-edd8-4eda-af2e-43fd83be0d7a",
+      "0b318bca-d338-4da1-ae19-62c2393a3771",
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2"
+    ],
+    "hypothesis": "The system converts 'I have no information' into a definite answer (zero, false, ALLOW) rather than propagating uncertainty — absence of signal is treated as a specific signal across data extraction, derivation logic, and access control.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "When a lookup, probe, or gate returns empty/unknown, always emit an UNCERTAIN or DENY result rather than synthesizing a plausible default value — fabricated defaults are indistinguishable from real data downstream.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "72eda443-e287-4d34-a9f6-8d4dcafa7396",
+    "patterns_linked": [
+      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
+      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
+      "1221af86-2465-4d63-a6ba-b56f1da7f313"
+    ],
+    "hypothesis": "Multi-agent architectures fail at the same point as distributed systems: when one node dies or stalls, peers waiting on it have no timeout, no self-report, and no way to be re-queued — the dead-letter problem recurs because the design assumes the happy-path lifecycle and never models node failure.",
+    "confidence": 0.1500000000000001,
+    "actionable": true,
+    "suggested_rule": "Always design multi-agent coordination with a liveness contract: every waiting agent must have a maximum idle duration after which it self-reports blocked state, and every checkpoint must record enough peer identity to re-establish contact after a session clear.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "d900ceaa-87a2-477a-b3f5-60ba7d8b61bc",
+    "patterns_linked": [
+      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
+      "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
+      "9113aef2-e381-4f24-9264-9a4051333d8e"
+    ],
+    "hypothesis": "The agent consistently mistakes partial observation for complete verification — a gap assessment without reading code, a UI review in only one visual mode, a completion claim without running the code — and the temporal pattern is that this gets worse under complexity, because the number of states to observe grows while the agent's verification effort stays fixed at 'one pass seemed fine.'",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Always enumerate the observable states (code paths, visual modes, runtime conditions) before claiming verification — a single-state observation is partial verification and must be scoped as such in the claim.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
     "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
     "patterns_linked": [
       "86e6683c-0a66-4f68-98ed-37c7e07c715e",
@@ -3796,18 +3965,33 @@
     "auto_intention_id": null
   },
   {
-    "id": "809274f4-9149-4b5a-ba5c-47e454bade2c",
+    "id": "8094f90d-fc67-4e99-a92c-3e572c245835",
     "patterns_linked": [
-      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
-      "ece94448-4ac9-4d31-a8c1-ab38eebe78b7",
-      "fbf0922a-6fa1-4c02-ac46-be9d438dbd95",
-      "92ac5211-09d0-4b6e-a238-805ff18e9a11"
+      "86ce33bc-2781-45bd-9d9b-85766878626e",
+      "92ac5211-09d0-4b6e-a238-805ff18e9a11",
+      "c0b2e889-4a7a-4bd3-ba3f-b8a7b53aa619",
+      "89739cf0-d4e9-4895-b11c-25cdd2354ad5"
     ],
-    "hypothesis": "Mechanically-required state writes (IPC replies, git commits, task updates) deferred as 'bookkeeping' compound under high-activity pressure — each deferral normalizes the next because the already-stale ledger no longer exerts corrective pull, creating a positive feedback loop that accelerates drift precisely when accuracy matters most.",
+    "hypothesis": "State-coordination hygiene (task lists, peer ownership, item status) degrades specifically under parallelism and velocity — the rules are known but deprioritized when throughput is high, which is exactly when their value is greatest because multiple actors rely on shared state being current.",
     "confidence": 0.74,
     "actionable": true,
-    "suggested_rule": "Always treat state-ledger writes (task updates, IPC replies, commits of agent edits) as blocking obligations that execute immediately after completing a unit of work — never batch them as end-of-session cleanup, especially during high-parallelism periods.",
+    "suggested_rule": "When parallelism increases (multiple sub-agents, burst of completions, high edit velocity), INCREASE state-sync frequency rather than deferring it — anchor sync triggers to edit/event counts, not conceptual milestones.",
     "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "684ce96b-f9bb-4c2b-ab44-9701bd0e1836",
+    "patterns_linked": [
+      "ba1cf3e5-ce2b-45d8-ada0-a77f0bc39b2a",
+      "65ad5227-8103-4cb4-97fb-240346fb74d7",
+      "9113aef2-e381-4f24-9264-9a4051333d8e"
+    ],
+    "hypothesis": "Three distinct verification failures (cache-hit counted as fresh evidence, test suite green counted as runtime-correct, type-check green counted as working) all share the property that the verification INFRASTRUCTURE is functioning correctly while proving nothing about the CHANGE — the infrastructure's own green signal becomes the false-positive.",
+    "confidence": 0.74,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null
   },
@@ -3915,21 +4099,6 @@
     "suggested_rule": "Before any operation that changes the working tree (worktree switch, branch checkout, git stash), run 'git status' and 'git stash list' and log the result to the WAL — so even if changes are lost, the WAL records what was at risk.",
     "promoted": true,
     "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "83b073ac-bf39-45fa-b670-e20891ea232c",
-    "patterns_linked": [
-      "89739cf0-d4e9-4895-b11c-25cdd2354ad5",
-      "d777bd81-6d79-4322-ae89-73d47efdf5e3",
-      "bb7e50dc-ce4b-491b-9dbb-aac6104fe9d0"
-    ],
-    "hypothesis": "Task lists from session start, file scans from planning time, and configs validated at parse time are all point-in-time snapshots treated as current truth — across all three domains, the failure is reading state once and acting on the cached version later when an external actor (peer agent, user edit, config write) has mutated it.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always re-verify state (task ownership, file contents, config validity) at the moment of action, not at the moment of planning — any state that an external writer can mutate between your read and your write is stale by default.",
-    "promoted": false,
-    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -4344,262 +4513,95 @@
     "auto_intention_id": null
   },
   {
-    "id": "1e1f891a-048d-47bb-b747-1be0feafeeb6",
+    "id": "56298559-1755-43ca-b09f-8afc6f505123",
     "patterns_linked": [
-      "ff7b37a5-17ae-466e-b55e-585866af824b",
-      "556fbc99-c295-493f-8b7a-218b2f5e964f"
-    ],
-    "hypothesis": "Tension between 'don't exceed requested scope' and 'treat terse input as autonomous-continue' creates an ambiguity zone: a short command like 'more' could mean 'continue what you're doing' (autonomous) or 'show me more of what exists' (read-only). The user has been burned by both failure modes. The resolution is directional: terse input expands execution depth but never scope width.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Terse continuation commands ('next', 'more', 'keep going') authorize deeper execution of the current task but never lateral scope expansion. If continuing requires touching a new subsystem or file group not yet in play, pause and name it before proceeding.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "4e79c9b8-1b0d-424a-8172-ac6fd623c546",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "92a767af-37ad-4b83-84af-684fd98948b5"
-    ],
-    "hypothesis": "Terse continuation commands and iterative UI refinement are the same cognitive pattern: the user treats the agent as a real-time collaborator with shared working memory, not a request-response API. The short messages aren't lazy — they're high-bandwidth communication that relies on implicit shared context. This is why context loss (compaction) is so disruptive: it breaks the 'shared memory' illusion that enables terse interaction.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "After any compaction or context loss, proactively echo back the current task state in one sentence before continuing — this restores the shared-context contract that enables the user's terse communication style.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "42818594-e389-4afe-be3f-7773d7c93042",
-    "patterns_linked": [
-      "dd2e18ab-2182-4f88-8eab-354193b9e90a",
-      "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
-      "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46"
-    ],
-    "hypothesis": "Vision-loop desktop automation, git worktree state loss, and repo owner misidentification share a root cause: acting on stale mental models of external state. All three fail when the agent assumes the world matches its last observation. The vision loop succeeded precisely because it re-observes before each action — the same discipline should be applied to git and repo operations.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Before any side-effecting operation on external state (git, filesystem, desktop UI, API), re-observe the current state within the same tool call sequence — never rely on state observed more than 2 tool calls ago.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "4bcf5a4d-ddf1-4309-814c-9c7b5e7fdb70",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-      "92a767af-37ad-4b83-84af-684fd98948b5"
-    ],
-    "hypothesis": "The terse command style and iterative UI refinement are the same cognitive pattern: the user thinks in rapid delta-corrections, not upfront specifications. They treat Claude like a REPL — issue a small input, observe the output, adjust. This means the optimal interaction unit is not a task but a tight feedback loop, and latency (context reconstruction time) is the primary bottleneck to their productivity.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Minimize round-trip latency above all else. When the user is in iterative-refinement mode (short messages, UI tweaks, 'keep going'), prefer instant partial results over comprehensive but slow responses. Cache intermediate state aggressively so delta-corrections don't require full re-computation.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "045b2610-31f1-48b2-801f-2c1735202d69",
-    "patterns_linked": [
-      "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
-      "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46",
-      "5c3499d0-aef9-4924-b559-e15bf88068ed"
-    ],
-    "hypothesis": "Context boundary crossings (session continuity, worktree switches, repo owner inference) all fail the same way: stale assumptions from a previous context are carried into a new one without re-verification. Worktree switching lost unstaged changes because it assumed clean state; repo pushes went to wrong owners because of stale context; session continuations lose task state because of compaction. The common root cause is 'context transition without state snapshot.'",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "At every context boundary (session resume, worktree switch, branch change, compaction), execute a mandatory state snapshot before proceeding: git status + diff for code contexts, WAL checkpoint for session contexts. Never carry assumptions across boundaries.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "1746749f-d3c8-4e9a-91b5-a4d6533cc05d",
-    "patterns_linked": [
-      "58112601-ddbc-4e20-a6ea-6987c6c96569",
-      "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-      "881b161f-3ee0-4597-ab7b-d6c2a860613d"
-    ],
-    "hypothesis": "The user's geopolitical simulation project mirrors their own workflow: both are multi-agent systems requiring robust state handoff across context boundaries. The simulation's agents need state persistence between turns just as the user's Claude sessions need core-dump/catchup cycles. The domain expertise in designing agent state machines likely informed the sophistication of their session continuity infrastructure.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "When working on the geopolitical simulation's agent state management, cross-reference patterns from the session continuity infrastructure (WAL, checkpoints, handoff messages) — the two systems solve isomorphic problems and improvements to one may transfer to the other.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "4c3b7ceb-a0ff-4d27-865e-3ccfd402a707",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-      "92a767af-37ad-4b83-84af-684fd98948b5"
-    ],
-    "hypothesis": "The terse-command pattern and the iterative-UI-refinement pattern are the same behavior at different granularities: the user treats the agent as a REPL. Short commands are keystrokes in a tight feedback loop. This means latency-to-first-visible-change matters more than completeness-of-response — the user will iterate anyway.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Optimize for fast first-visible-change over comprehensive response. When the user sends a terse continuation, make one change, show the result, and wait — don't batch three improvements into one turn.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "5099d02e-9458-4ffd-87c7-7b5e15673f3b",
-    "patterns_linked": [
-      "1523746a-7091-4022-b130-7e28b7f77561",
-      "694c5087-f6dc-4dd0-88dc-8645a8dda00f",
-      "e218ac38-3844-4295-a972-c9dc01b22d13"
-    ],
-    "hypothesis": "WAL and checkpoints have become the primary state management layer — ahead of git in importance for this user's workflow. Git tracks code state; WAL/checkpoints track cognitive state (what was being worked on, what decisions were made, what's next). This is effectively a two-tier persistence model: git for artifacts, WAL for intent. Most tooling assumes git is the single source of truth, but this user needs both.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Treat WAL/checkpoint writes with the same discipline as git commits: never skip them before context switches, never assume they can be reconstructed from git history alone. A git log shows what changed; only WAL shows why and what was planned next.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "cb264fd1-43f7-4bf4-85eb-33d03e8cfeeb",
-    "patterns_linked": [
-      "58112601-ddbc-4e20-a6ea-6987c6c96569",
-      "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-      "c70ae766-c39a-442a-a15d-fbe84d854e0c"
-    ],
-    "hypothesis": "The user builds complex stateful simulations (geopolitical, dream-tracking) that mirror the stateful nature of their own development sessions — both the software and the workflow are fundamentally about persisting and resuming rich state across boundaries. The session continuity tooling (WAL, core-dump, catchup) is essentially the same architectural problem as save/load in their simulation projects. This suggests the user has deep intuition for state machines and could benefit from unifying the persistence abstraction.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "When working on simulation save/load or state-persistence features in user projects, cross-reference patterns from the session continuity infrastructure (WAL, JSONL checkpoints) — the user already thinks in these terms and the abstractions may be directly portable.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "f8e87b73-ec8e-4f23-b453-72f66f16bce1",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-      "92a767af-37ad-4b83-84af-684fd98948b5"
-    ],
-    "hypothesis": "The terse-command style and iterative UI refinement are the same cognitive pattern: the user thinks in rapid incremental deltas, not upfront specs. This is a 'REPL-driven design' mindset — small mutations with immediate feedback. The session continuity obsession exists precisely because this workflow generates enormous context through many small steps, exhausting windows faster than batch-style work would.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "For this user, optimize for minimal-latency feedback loops: prefer instant visual verification (screenshot) over verbal confirmation, and auto-checkpoint every N terse commands (not just every N minutes), since terse-command density correlates with context burn rate.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "37e3df3c-e727-44d0-9456-7d8a9b225892",
-    "patterns_linked": [
-      "5287886b-6995-4b9f-a22f-38e91d2a0ce4",
-      "bda13cf9-0a49-4aa1-b81e-c5bd2f877f46",
-      "5c3499d0-aef9-4924-b559-e15bf88068ed"
-    ],
-    "hypothesis": "Context boundary crossings (session continuations, worktree switches, repo transitions) all share the same failure mode: stale assumptions from the previous context causing destructive actions in the new one. The worktree data loss and wrong-org push are specific instances of a general 'context teleportation' hazard.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "After any context boundary crossing (session continuation, worktree switch, branch switch, or repo change), run a mandatory 3-command state audit (git status, git remote -v, git stash list) before any mutating operation. Treat context boundaries like privilege boundaries — re-authenticate state.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "2a4d9abf-b17a-446c-9637-2efa142271dc",
-    "patterns_linked": [
-      "58112601-ddbc-4e20-a6ea-6987c6c96569",
-      "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-      "c70ae766-c39a-442a-a15d-fbe84d854e0c"
-    ],
-    "hypothesis": "The user gravitates toward complex simulation/visualization projects (geopolitical sim, dream dashboard, globe/terrain) that inherently exceed single-session context windows. The domain choice itself drives the heavy session-continuity needs — these aren't just big projects, they're projects whose state is hard to reconstruct from code alone because they involve rich runtime state (widget layouts, simulation parameters, visual aesthetics).",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "For simulation/dashboard/visualization projects, core-dump should capture not just code state but runtime configuration state (active widget configs, simulation parameters, dev server ports, current visual iteration number) since these are not recoverable from git diff alone.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "1ddc70ec-eef7-4c4f-8110-a2962ee85036",
-    "patterns_linked": [
-      "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-      "0629319a-4440-4d1b-bad4-5ad0db93399a",
-      "c14d3a47-9a39-4f3b-92ec-3ad016c1dd26",
-      "2e7d5054-603d-4ba1-92cb-41bca5de2463"
-    ],
-    "hypothesis": "The WAL migration from markdown to JSONL and the fire-and-forget task notification pattern share a design philosophy: prefer machine-parseable, append-only formats over human-readable ones when the primary consumer is automation. The user is systematically replacing 'pretty but fragile' with 'ugly but queryable' across their toolchain — a maturation arc from artisanal to industrial session management.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "When proposing new persistence or signaling mechanisms, default to JSONL/structured formats over markdown. The user's trajectory is toward machine-first, human-second data formats for infrastructure (while keeping human-first for UI/dashboards).",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "c0cc6fdd-4548-4f9a-ba7b-19d69a567332",
-    "patterns_linked": [
-      "556fbc99-c295-493f-8b7a-218b2f5e964f",
-      "edaeaf8c-9b6e-4652-b777-ccedba905520",
-      "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-      "2e7d5054-603d-4ba1-92cb-41bca5de2463"
-    ],
-    "hypothesis": "Terse continuation commands and fire-and-forget task notifications are two sides of the same coin: the user treats the agent as a background coprocessor with minimal-bandwidth signaling. The interaction model resembles Unix process signals (SIGCONT, SIGHUP) more than conversation.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Treat single-word user messages as process signals, not conversational turns. Map: 'next/go/continue' → SIGCONT (resume), 'stop/wait' → SIGSTOP (pause and report), 'status' → SIGUSR1 (emit state). Respond with action, not acknowledgment.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b8f6bb75-6028-4148-8355-7a5a4f7f1d85",
-    "patterns_linked": [
-      "0b318bca-d338-4da1-ae19-62c2393a3771",
-      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
-      "5845c38b-5c0c-406d-90c4-003d795accd6"
-    ],
-    "hypothesis": "Across data extraction, access control, and error handling, the recurring structural failure is that systems producing plausible-looking output on unknown/missing input (a zero, an ALLOW, a class-name-as-contract) propagate unchallenged because plausibility suppresses investigation — the system would be safer if it crashed.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always prefer an explicit error or DENY over a plausible-looking default (zero, ALLOW, inferred-from-name) when the input is unknown or missing — a crash is cheaper than a silent wrong answer that propagates.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "4e79ffa2-c6e6-476a-b833-d440fbe9442a",
-    "patterns_linked": [
-      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
-      "0b318bca-d338-4da1-ae19-62c2393a3771",
-      "249ed821-f665-4ba9-b2f3-7b257a38a0ff"
-    ],
-    "hypothesis": "Systems that emit plausible-looking values for unknown input (ALLOW for unrecognized commands, zero for missing data, a one-off patch for a structural gap) share a single failure mode: they suppress investigation by looking correct, and instance-level fixes perpetuate the structural default that generates new instances.",
-    "confidence": 0.72,
-    "actionable": true,
-    "suggested_rule": "Always ask 'what does this system emit for input it has never seen?' when building or reviewing any gate, extractor, or fallback path — if the answer is a plausible-looking value rather than an explicit failure, redesign the default.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "337e33d1-f081-4920-a0e7-c942b83a326b",
-    "patterns_linked": [
-      "7f83725a-0d19-488b-8c14-e61c42374da1",
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
       "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
-      "646ec66d-efcc-43a9-a406-db0bc4b8e7ac"
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2"
     ],
-    "hypothesis": "Advisory text, instance-level patches, and agent-droppable mute files are three faces of the same enforcement gap: in a multi-agent system, any safety mechanism that one agent can bypass or that only binds agents who read it at startup affects ALL agents — the blast radius of a weak enforcement point equals the blast radius of the protected resource, not the blast radius of the bypass.",
-    "confidence": 0.0,
+    "hypothesis": "Treating a global concern as instance-scoped and treating an unknown case as allowed are the same structural error: the agent handles what it can see and implicitly passes everything else — whether that's unvisited pages sharing a drawer, sibling lists missing pagination, unpatched instances of a policy violation, or unrecognized commands defaulting to ALLOW.",
+    "confidence": 0.12000000000000005,
     "actionable": true,
-    "suggested_rule": "When adding a behavioral constraint to a multi-agent system, always place enforcement at the data-write layer (hook, CLI gate, schema check) rather than at the advisory layer (spec text, skill doc) — and never grant sub-agents write access to guard mute-files.",
+    "suggested_rule": "When fixing any concern that could have siblings (pages, instances, commands, cases), always enumerate the full population first and default-DENY/default-include the unseen members rather than treating only the visible instance.",
     "promoted": false,
     "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "08dd35f8-012a-4264-ab8b-9dba7f9f15a9",
+    "patterns_linked": [
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "fefe6016-599b-420d-a1de-8425490b0a1e",
+      "fa33ba9a-2df7-4970-9a80-bbe772854f42"
+    ],
+    "hypothesis": "The agent substitutes its own derived model for the canonical upstream source across three unrelated domains — an agent-authored doc replaces the user spec, internal naming conventions replace design mocks, and a familiar technical pattern (env vars) replaces the user's actual conceptual model (runtime config) — all three are the same 'map to nearest familiar pattern' shortcut that silently discards the user's actual authority.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always identify and consult the user's canonical upstream source (product spec, design mock, stated intent) before deriving from internal patterns — when your derived understanding conflicts with the upstream, the upstream wins.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "1091abb1-a383-4ada-9451-ca6105558ab6",
+    "patterns_linked": [
+      "939866a0-afe6-43f0-a5a0-205c40be4c99",
+      "d5bc576c-df72-4310-b5f9-5fac6ca83b93",
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "fc400953-746f-4d74-b1d4-5783c0d50505"
+    ],
+    "hypothesis": "Every output artifact has an audience boundary, and the recurring failure is metadata/commentary appropriate for one audience leaking across that boundary in BOTH directions — internal banter leaks into external docs, agent-internal formalizations get cited as user-facing authority, co-authorship metadata pollutes commit messages, and machine-formatted dumps replace human-readable reports.",
+    "confidence": 0.20000000000000004,
+    "actionable": true,
+    "suggested_rule": "Before finalizing any artifact, explicitly name its audience and strip anything that belongs to a different audience layer — the question is never 'is this true' but 'does this reader need to see it'.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "d420e69f-139f-4d0d-b350-2f567e370155",
+    "patterns_linked": [
+      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
+      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
+      "e7987094-0e0d-48d1-998a-980249e28daa"
+    ],
+    "hypothesis": "Multi-agent architectures degrade ungracefully at their boundaries: orchestrators die leaving sub-agents blocked, unanswered IPC messages become mechanical debt, and auth failures stall silently — the common structural gap is that every agent assumes its counterpart will complete normally, with no protocol for the counterpart's death or incapacity.",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "Always design multi-agent interactions with a dead-peer protocol: sub-agents self-report idle state after a timeout, unanswered messages get replied to before session end, and auth blocks are surfaced immediately with the user command to unblock — never assume the counterpart will complete normally.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "85e2a58a-99df-4574-bb47-48e0dc47a9ec",
+    "patterns_linked": [
+      "1f3ee51e-bcdb-4055-b50e-a6041d6a7489",
+      "e03d6c21-d832-4d1b-a91d-17df6c7783ac",
+      "489dda88-4ab6-4a43-a40c-ca206cf2f302"
+    ],
+    "hypothesis": "The agent has a generalizing reflex that fights explicit constraints in three forms: widening narrow scope with 'flexibility', re-enabling deliberately disabled configs, and binary-switching behaviors the user asked to tune — all are the same impulse to 'improve' a deliberate restriction by loosening it, experienced by the user as not listening.",
+    "confidence": 0.68,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "ac55a073-8ed2-4bfc-83a6-cb70e2c9b6bd",
+    "patterns_linked": [
+      "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+      "1f3ee51e-bcdb-4055-b50e-a6041d6a7489"
+    ],
+    "hypothesis": "The agent has a systematic bias toward adding implicit flexibility (default-allow fallbacks, self-gating generalization, instance-level patches) when the user's actual intent is explicit constraint — the agent treats boundaries as suggestions to be softened rather than invariants to be enforced.",
+    "confidence": 0.68,
+    "actionable": true,
+    "suggested_rule": "Always default to DENY/RESTRICT for boundaries and enforce stated scope literally — never add fallback flexibility, generalization, or softening to a constraint the user stated as hard.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   }
 ]

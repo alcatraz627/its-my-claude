@@ -1,3 +1,384 @@
+## bloop: kanban fix-plan P0-P3 [adrev-kanbn-4b] — 2026-07-27
+
+**Purpose:** behavior-anchored fix plan executed through the loop; every fix measured against a journaled friction moment.
+
+**Insights:**
+
+1. Running /skeptical-review and the validation gate in PARALLEL paid off: they converged independently on the same destructive blocker (unregister wrong-target), which is the strongest possible confirmation a finding is real.
+2. A mutation test that stays green means the fix structure is the bug: a belt-and-braces pre-lock check masked the throw-based release and had to be REMOVED to make the guard pinnable. One mechanism, verified, beats two half-verified.
+3. The subagent-output guard requires the literal persist-contract phrasing (path + who writes); "the parent persists it" without a named path gets blocked.
+4. Give the validator its own isolated HOME and it will find what fixtures cannot: it hit the blocker organically by nuking its own test board with a typo probe.
+
+---
+
+## bloop: adapter enablement wave 1 — playground (fiber-snatcher) — 2026-07-25
+
+**Purpose:** 23rd run. Project-adapter injection + generalized settle activity +
+native-dialog surfaces + a mid-loop stop-race fix. Gate: ISSUES-FOUND (2 BLOCKER
+classes, 2 MAJOR). Streak 23/23.
+
+**Insights:**
+
+1. Reserved names are an attack surface the moment third-party code can
+   register into a namespace built-in discovery also populates: an init-script
+   adapter registers BEFORE hydration, so `!adapters.has("queries")` saw it as
+   already-discovered and silently skipped the real TanStack wiring. Any
+   registry shared between discovery and user code needs an explicit RESERVED
+   set at the register() door (same lesson as claude-ipc run 18's RESERVED).
+2. Summing values from arbitrary project code without Number.isFinite+clamp
+   is a page-wide DoS: one NaN pending made settle time out forever (NaN===0
+   never true), and `0 += "0"` string-concats. Validate at the aggregation
+   point, not per-source promises.
+3. The mid-loop live detour (stop→verb losing its navigation) burned two wrong
+   hypotheses before the journal's run-file TIMESTAMPS discriminated: three
+   daemon boots in 90s = double-spawn, not slow-boot. Count boots, don't stare
+   at teardown code. The fix was three coupled holes (ack-before-shutdown,
+   probe-without-lock, unconditional pidfile rm) — fixing only the reproduced
+   one would have left the class alive.
+4. Editing the file that LOOKS like the verb's implementation is not enough:
+   `fs stop` never routed through src/cli/stop.ts (V1, frozen) — the V2 CLI
+   special-cases stop as a wire `close`. Trace the dispatch table before
+   editing; the `{closing:true}` output shape was the tell.
+5. Resume-after-API-stall (SendMessage to the dead seat) worked again; one
+   wake-triggered chase-up ping got a complete high-quality report. The
+   verdict+findings-inline/parent-persists delivery contract ran clean.
+
+---
+
+## bloop: felt-metabolism Phase 2 — compiler + interpreters (i-dream) — 2026-07-24
+
+**Purpose:** 22nd run. Intervention compiler (opus-drafted triggers), hook
+interpreters on both surfaces, smell panel, promotions flip. Gate:
+ISSUES-FOUND, 2 MAJOR + 2 MINOR + 2 NIT. Streak 22/22.
+
+**Insights:**
+
+1. LLM-authored REGEX is a new input class: syntactic validation (compiles?)
+   misses catastrophic backtracking entirely. Any surface running
+   model-drafted patterns needs a wall-clock bound (SIGALRM) + subject cap,
+   not just try/except — the gate hung the blocking hook 12s with a 6-char
+   pattern that passed every shape check.
+2. Negative caches need a version key, not a boolean: keying attempted-slugs
+   by stable_id(slug|precheck) makes refinement re-qualify naturally, so the
+   cache never needs manual invalidation.
+3. "Silently null the invalid field" is quietly WIDENING validation: a
+   dropped input_pattern turned a scoped nudge into fire-on-every-Bash-call.
+   Provided-but-invalid must reject the record.
+4. Fuzz the generated artifact, not the generator: the gate extracted the
+   real scripts and drove 21 hostile inputs through actual bash+python —
+   that's what proved the stdout/exit contract, not the Rust tests.
+5. Pre-fixing predicted findings (demote-veto latch, would-fire retention)
+   before dispatch kept the gate's budget on the unknown unknowns — both
+   MAJORs were things self-review had NOT predicted.
+
+---
+
+## bloop: felt-metabolism Phase 1 — identity + instrumentation (i-dream) — 2026-07-22
+
+**Purpose:** 21st run. Seven units (stable-id reinforce, feedback retention,
+surfaced-claim removal, assay panel, curves, firings scan, telemetry pulses)
+as one gated batch. Gate: ISSUES-FOUND, 1 MAJOR + 7 MINOR. Streak 21/21.
+
+**Insights:**
+
+1. The MAJOR was in the interaction between MY new writer and an untouched
+   consumer: appending pulse events after vents anchored a position-based
+   delta cursor on a trailing pulse, shadowing all future vents. When a batch
+   changes a FILE another system cursors over, hand the validator the
+   consumer's cursor logic explicitly — it found this in external_domain.rs,
+   a file the diff never touched.
+2. Naive ts-sorting was NOT the fix (a current-week aggregate updating its ts
+   to now re-shadows forever). Fixed timestamps at period boundaries (week
+   Monday) make aggregates sortable-but-never-newest. Reusable for any
+   aggregate row merged into an event stream.
+3. Two pipeline-masked exit codes in one session (secret-scan | head, the
+   known trap) — caught by re-running bare before trusting. The lesson keeps
+   needing the re-run reflex, not just the knowledge.
+4. Validator dispatch that names the live-mutation hazard precisely (never
+   run the binary against real HOME; build real, run HOME-overridden) got
+   full compliance plus a clean-worktree restore, mutation cycle included.
+5. Exercising the new verb against live data mid-build (curves: 127 slugs)
+   produced the arc's best receipt for free: the one slug with a mechanical
+   rule is the one with a falling curve.
+
+---
+
+## bloop: hub repeat-nav latency, SWR at every layer (claude-instances) — 2026-07-22
+
+**Purpose:** 21st run. 13.6s of cumulative /data per index navigation → 31ms
+boot settle (LRU+byte-bound parse cache, single-flight scan SWR, ETag/304,
+path memo). Gate: PASS-WITH-NOTES (2 coverage gaps, 4 latent edges). 21/21.
+
+**Insights:**
+
+1. Measure in the BROWSER before designing: server endpoints curl'd at 1-14ms
+   while the page burned 13.6s — the punishment was a 43-request peek storm
+   thrashing an 8-slot FIFO plus Chrome's 6-connection queueing. And measure
+   AGAIN after each layer: the "fixed" repeat nav still showed 700ms waves
+   (queueing behind live parses), and the final 31ms only landed once the
+   gate's out-of-scope appendix (a per-request recursive tree glob) was fixed.
+   Cumulative request-duration is queue-skewed; burst-settle wall time is the
+   honest metric.
+2. A coverage gap can sit on the exact commit that exists to be a guard: the
+   finally-guard commit had zero test holding it, and the gate proved its
+   trigger REACHABLE (invalid UTF-8 → UnicodeDecodeError is a ValueError,
+   outside the caught tuple). Fixes whose whole point is resilience need
+   their failure induced, not just their code merged.
+3. N-entries-under-cap tests cannot pin ORDERING: 20 entries under a 48 cap
+   never evict, so LRU vs FIFO was indistinguishable until a cap-3 re-touch
+   case discriminated. When a change's value is a POLICY (LRU, debounce,
+   single-flight), the test must construct the case where policies diverge.
+4. Growing caps widens blast radius: FIFO-8 accidentally capped memory; LRU-48
+   of parsed transcripts needed an explicit byte bound. Any cap raise on
+   entries-holding-big-objects needs a second bound in bytes.
+5. An owner-flagged design comment (prime-before-paint, 1800ms cap) is a
+   scope fence for perf work: the fix was making the existing design fast,
+   not reordering it. Dropped the snapshot-paint-first unit for exactly this.
+
+---
+
+## bloop: dashboard wave 3 — D1/D2/D3 surfacing (claude-ipc) — 2026-07-21
+
+**Purpose:** 20th run. Six build units surfacing the broker's honesty data in
+the -i TUI + power features. Gate: ISSUES-FOUND, 1 MAJOR. Streak 20/20.
+
+**Insights:**
+
+1. Self-review and the gate caught the SAME bug-class in different places:
+   self-review found freshness rendered off the wrong clock (snapshot vs
+   render); the gate found the vocabulary gap (3 of 6 delivery states
+   unmapped — including `surfaced`, the state the feature exists to show).
+   When a change's value is an honesty claim, enumerate the FULL state
+   space of what you're relabeling — the unmapped tail is where the claim
+   quietly breaks. `grep the producer's enum before writing a label map.`
+2. Telling the validator to mutation-test a NAMED fix (revert this exact
+   expression, watch this exact test go red, restore by editing) got a
+   clean red→green cycle with no git-checkout risk. Name the mutation in
+   the dispatch prompt; don't leave it to validator invention.
+3. A validator on a LIVE shared broker needs the read-only key-list spelled
+   out (nav keys enumerated, action keys forbidden). It complied exactly;
+   the walk still verified input-gating, sort, triage, filters live.
+## bloop: meld PH2 instances-side digest wiring (claude-instances) — 2026-07-20
+
+**Purpose:** 19th run. Wired the ipc digest contract onto the PH0-tested
+consumer (per-cwd capped spawn, dark fallback, §8.4 disagreement pass, HTML).
+Gate: PASS-WITH-NOTES, 1 MAJOR. Streak 19/19 — the major was in the exact
+mechanism whose comment documented the threat it failed against.
+
+**Insights:**
+
+1. A mitigation can fail precisely for its own documented case: the killpg
+   used getpgid at KILL time, but the child that fast-exits leaving a
+   grandchild on the pipe is a zombie by then — getpgid raises, the kill
+   never fires, the grandchild leaks per scan. Capture the pgid at SPAWN
+   (start_new_session makes pgid == pid, valid while any member lives).
+   Prompt validators to attack the mitigation's own motivating scenario.
+2. `isinstance(x, int)` admits JSON `true` (bool is int; true+1 == 2) — a
+   poisoned counter file skipped a 2-scan debounce on scan one. Any int
+   guard on external data needs `not isinstance(x, bool)` + a range cap;
+   grep for bare isinstance-int on anything a file feeds.
+3. Dark-launch consumer-first worked end-to-end: the verb-absent probe (real
+   binary exits 2 instantly) pins the fallback BYTE-shape, so the live page
+   was provably unchanged while the scratch hub showed the full feature.
+   Verifying "feature invisible" is as test-worthy as "feature works".
+4. The stub-inside-python trap: embedding json.dumps output into generated
+   PYTHON source dies on null/true at stub runtime — and `echo EXIT=$?`
+   after a pipeline masked it (head's status). Stubs read a JSON sidecar;
+   exit codes checked bare. (Both were known lessons; they still fired.)
+5. Parent-persist delivery worked cleanly again: verdict via teammate
+   message, parent wrote the report + dispositions table, TaskStop'd the
+   seat. A 2-day-stale idle notification from a DEAD sibling arrived
+   mid-loop — check the running-teammates list before chasing ghosts.
+
+---
+
+## bloop: ipc coworker-layer step 0 — push spine + 8 fixes (claude-ipc) — 2026-07-17
+
+**Purpose:** 18th run. Built the survey-driven boot obligations digest + B7
+closure + 8 harvested fixes as one gated batch on feat/i-dashboard. Gate:
+PASS-WITH-NOTES (2 MAJOR, 2 MINOR), all fixed. Streak intact — the gate found
+security holes contradicting the code's OWN docstrings that self-review + a live
+smoke both missed.
+
+**Insights:**
+
+1. The gate's two MAJORs were both "the docstring claims X is protected; it
+   isn't." neutralizeFrame's own comment named bracket-forging as the threat and
+   defended exactly that — while a NEWLINE in the same string walked straight
+   through into a peer's rendered frame. And RESERVED's comment said "a peer
+   holding 'ipc' could mint any broker notice" — the set blocked REGISTERING it
+   but not SENDING as it. Lesson for validator prompts: point them at every
+   in-code security CLAIM and have them attack the claim's negative space, not
+   just the diff.
+2. A design survey is a load-bearing build artifact. Six peers surveyed at boot
+   converged unanimously on "identity first, obligations second, inventory never"
+   — that became the digest's literal acceptance spec (test asserts the first
+   line startsWith "You are"). Surveying the users of the thing you're building,
+   through the thing you're building, produced a sharper spec than the design
+   review had.
+3. B7 (unverifiable platform-resume wiring) closed by DESIGN, not by testing the
+   wire: make the fallback deliver the SAME payload as the primary, gate both on
+   one marker, and the wire being untrustworthy stops mattering. Cheaper and more
+   robust than proving the platform re-fires SessionStart.
+4. The worktree validator sat at an ANCESTOR commit (c2f065c, behind a30b162)
+   while my Read tool served the real shared checkout (fac4a36) — it caught the
+   mismatch itself via git hash-object and re-pinned. Worth telling worktree
+   validators up front: "verify HEAD == <target sha> before trusting any file
+   read; the worktree base may lag."
+5. Red-first tests ARE the mutation proof for a new guard when they were red on
+   the unmutated-old code and green after the fix — the gate independently
+   mutation-tested all four and confirmed. Two layers agreeing (my red-first +
+   its mutation) is the cheap version of the guard-needs-opposite-proof rule.
+
+---
+## bloop: 3x run — vocab-sweep promotions (gcc-stupidity) — 2026-07-17
+
+**Purpose:** Three bloops in one session (pyramid-sweep skill, vocab decay
+loop, WHY-vs-HOW ruling) + an opus collection review over all output docs.
+Gates: PASS-WITH-NOTES / ISSUES-FOUND / PASS-WITH-NOTES; collection review
+PASS-WITH-NOTES. 18/18 streak of gates finding something real.
+
+**Insights:**
+
+1. Display caps must never gate telemetry: gate 24 proved the hinter's
+   2-per-prompt cap + cluster dedup was also capping the usage LEDGER, so
+   cluster siblings read dormant while actively used. Log matches, show caps.
+2. Verdict+path-only return contract (proposed prop-20260717-104030-3e)
+   worked on first live use — the collection reviewer's message was one line;
+   no stale-findings double-channel to reconcile.
+3. An API death mid-review left ZERO salvage because the report was written
+   at the end; the re-dispatch added "write incrementally per section" and
+   that should be standard in every material-output dispatch prompt.
+4. Gate-found deferred items are cheapest to close in the same fix pass while
+   the author context is hot — both ruling-gate deferrals cost one line each;
+   "owner: whoever next touches it" usually means "never".
+## bloop: R3 seven small truths (claude-instances) — 2026-07-17
+
+**Purpose:** Seventeenth run, third in one session. Seven self-contained
+dashboard fixes as one gated batch. Gate: PASS-WITH-NOTES (first non-ISSUES
+verdict in three runs; the batch's guards were red-first from the start).
+Streak: 17/17 — even a PASS carried a real MAJOR-class robustness gap.
+
+**Insights:**
+
+1. "Safe by ordering accident" is a finding class worth naming: codex None
+   survived estimate_cost only because the unpriced-model check fires before
+   isfinite(None) would TypeError. The gate distinguished works-today from
+   structurally-safe; the fix is making the guard explicit at every call site,
+   not trusting evaluation order.
+2. A validator's throwaway probe can be better than the shipped guard —
+   promote it. The gate wrote an in-process HTTP probe for the parse cache and
+   proved it catches an in-place-mutation regression the t_grep guard cannot;
+   it is now tests/fixtures/hub-cache-probe.py. Ask validators to leave their
+   probes in the scratchpad for exactly this reason.
+3. Validators can damage the live system while testing the code that guards
+   it: this one deleted the live hub's pidfile+log during a race test, then
+   disclosed, repaired, and re-isolated — but the log history is gone to an
+   unlinked inode. Dispatch prompts for anything touching /tmp control files
+   need the same "fake names only" clause tpath/cost files already get
+   (claude-hub-*.pid was not on the forbidden list; enumerate the CLASS, not
+   the instances).
+4. One-shot migration shims (legacy pidfile adoption) are testable by racing
+   N concurrent copies against scratch paths — 20x concurrent mv -f gave one
+   consistent winner. Cheap pattern for any rename-with-compat change.
+5. The cheap version of a deferred hardening item (tpath mtime vs primed
+   etime — zero new subprocesses) beat the doc's assumption that it needed a
+   subprocess per pid. Re-derive the cost from what the code ALREADY primes
+   before accepting a "not worth it" from an earlier pass.
+
+---
+## bloop: R2 stable record identity (claude-instances) — 2026-07-17
+
+**Purpose:** Sixteenth run, same session as the fifteenth. Record ids + id
+cursor across parser/server/client. Gate: ISSUES-FOUND — a pre-existing
+silent-drop path (grow-and-close) and an under-stated design limit.
+Streak 16/16.
+
+**Insights:**
+
+1. Live data corrected the design twice before the gate even ran: mode lines
+   carry no uuid AND no timestamp (identity collided as mode::auto on real
+   data), and a 5th-from-last cursor slice returned 237 records because
+   first-match-by-id landed on the duplicate. Exercise every new contract
+   against a REAL artifact the moment it parses — fixtures modeled the design,
+   not the data.
+2. When a change turns a trusted-by-construction value (integer seq) into one
+   that originates in untrusted bytes (uuid from a transcript), every sink
+   inherits a new threat model — the DOM attributes needed esc() the ints
+   never did. Grep the sinks whenever a value's PROVENANCE changes.
+3. The gate's best find was a protocol hole, not a code bug: a group that
+   grows AND closes between two polls fell out of both resend buckets. The
+   fixed-cadence probe could never land on it; the validator constructed the
+   interleaving deliberately. Ask validators to enumerate EVENT INTERLEAVINGS
+   between polls, not just malformed inputs.
+4. For repeated identical events with no distinguishing content, position-free
+   identity is impossible in principle — say so in the design doc as a bounded
+   honest limit instead of hiding it behind "changes one id" (the gate proved
+   ids REASSIGN, which reads much worse until bounded).
+5. Probe-as-executable-spec drifted from the implementation within one session
+   (shrink-adopt semantics) — when the spec and code live in two languages,
+   diff their SEMANTICS in the gate prompt explicitly.
+
+---
+## bloop: CLI verbosity ×8, 3 batches (i-dream) — 2026-07-17
+
+**Purpose:** Fifteenth+ run. Three build batches, two gates. A: ISSUES-FOUND
+(3 MAJOR). B+C: PASS-WITH-NOTES (2 MAJOR). Streak intact — every seat found
+real defects self-review missed.
+
+**Insights:**
+
+1. **One seat per 2-3 related batches right-sizes the gate.** Two validators
+   covered five commits; each got a worktree pinned to its commit so the
+   parent kept building on master underneath — no re-base drama, and the
+   B+C seat never saw the A-fix commit (by design: audit the commit, not
+   the moving tree).
+2. **Ask the validator to weigh NEW-vs-OLD failure modes when a fix changes
+   a contract.** The insight-digest budget fix traded silent overspend for
+   a truncation→overwrite path; the dispatch prompt named "tiny budget" as
+   an attack and the seat graded the regression explicitly (worth-it, needs
+   a floor). That framing produced the best finding of the run.
+3. **Idle-without-delivery again (4th time); the chase ping again recovered
+   a complete report in minutes.** Ping-on-idle is now standard procedure,
+   not a fallback.
+4. **Gate mutations re-run red→green after the fix, both times** — the
+   freshness-verdict pin and the appended_since identity guard each failed
+   against the exact mutation that had stayed green pre-fix. Cheap, decisive.
+5. **The lm pre-gate can be degenerate (1-token output + stdout banner
+   breaking the findings-gate pipe)** — skip honestly and lean on the paid
+   seat; don't burn time debugging the free lane mid-loop.
+
+---
+
+## bloop: R1 truthful aggregates (claude-instances) — 2026-07-17
+
+**Purpose:** Fifteenth run. Dashboard aggregates decoupled from the 20-row
+display list via a (mtime_ns, size) summary cache. Gate: ISSUES-FOUND — 2
+MAJOR the self-review missed. Streak 15/15.
+
+**Insights:**
+
+1. Ground-truth checks need INDEPENDENT traversal code: scan-vs-itself agreed
+   at "644 sessions/week" because both shared one recursive iterator; a flat
+   glob disagreed and exposed 379 sub-agent transcripts counted as sessions.
+   Agreement between a system and itself is not verification.
+2. Unit guards were all structurally blind to the assemble-block wiring — only
+   a whole-scan e2e probe (HOME redirected to a temp root) could catch a
+   revert to compute_aggregates(history). Mutation-testing proved it: the
+   revert left every unit guard green and only the e2e went red.
+3. A validated SHAPE is not a validated VALUE: isinstance(int) admitted
+   negative and 10**300 counts from the untrusted cache into the day's totals
+   (gate MAJOR). Range-check at the same boundary that type-checks.
+4. When widening a data window, grep every consumer of every field in the
+   struct for implicit bucket assumptions — model_breakdown was day-agnostic
+   in the data but rendered under a "Today" label by native/Bar.swift (gate
+   MAJOR; the validator read the Swift consumer, I had only grepped the HTML).
+5. Validator idle-without-delivery again; one chase-up ping recovered a
+   complete report. New dispatch clause that earned its place: "never run a
+   mutated scan against real $HOME" — the live dashboard's cache would have
+   persisted poisoned entries keyed by real (mtime_ns, size).
+
+---
 ## bloop: hook loop-safety helper (gcc D4a) — 2026-07-16
 
 **Purpose:** Extract the duplicated shasum-marker loop-safety idiom from the Stop

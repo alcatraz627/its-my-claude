@@ -99,7 +99,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -737,6 +737,48 @@
             "command": "~/.claude/scripts/hooks/guard-dev-server-port.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/pre-tool-use.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/session-end-checkpoint.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/enqueue-auto-coredump.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/tmp-jail-cleanup.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/gcc-signal-capture.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -770,6 +812,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/gemini-mode-inject.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh"
           }
         ]
       }
@@ -873,6 +923,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/style-watch-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/stop.sh"
           }
         ]
       }
@@ -1024,40 +1082,6 @@
             "type": "command",
             "command": "~/.claude/scripts/tab-title/hooks/auto-base.sh",
             "async": true
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/session-mgmt/session-end-checkpoint.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/session-mgmt/enqueue-auto-coredump.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/tmp-jail-cleanup.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/gcc-signal-capture.sh"
           }
         ]
       }

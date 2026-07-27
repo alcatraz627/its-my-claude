@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-16T07:34:28Z",
-  "events_analyzed": 105923,
-  "sessions_analyzed": 305,
+  "generated_at": "2026-07-27T08:47:40Z",
+  "events_analyzed": 127239,
+  "sessions_analyzed": 391,
   "session_quality": {
-    "average_score": 68.9,
+    "average_score": 69.6,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,61 +170,63 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": "versable-builder",
+    "primary_focus": "tmp",
     "recent_projects": {
-      "versable-builder": 3,
-      ".claude": 2,
-      "staging-enhancement-product": 2,
-      "tmp": 2,
-      "claude-ipc": 1
+      "claude-ipc": 1,
+      "claude-instances": 1,
+      ".claude": 1,
+      "frontend": 1,
+      "versable-builder": 2,
+      "tmp": 3,
+      "invasion-of-the-fiber-snatchers": 1
     },
-    "drift_rate": 0.759,
-    "total_switches": 230,
+    "drift_rate": 0.743,
+    "total_switches": 289,
     "recent_switches": [
       {
-        "ts": "2026-07-15T21:15:03Z",
+        "ts": "2026-07-24T15:07:05Z",
+        "from": "frontend",
+        "to": "versable-builder"
+      },
+      {
+        "ts": "2026-07-24T21:15:01Z",
         "from": "versable-builder",
         "to": "tmp"
       },
       {
-        "ts": "2026-07-16T04:59:39Z",
+        "ts": "2026-07-24T21:52:55Z",
         "from": "tmp",
-        "to": "staging-enhancement-product"
+        "to": "invasion-of-the-fiber-snatchers"
       },
       {
-        "ts": "2026-07-16T04:59:41Z",
-        "from": "staging-enhancement-product",
-        "to": ".claude"
-      },
-      {
-        "ts": "2026-07-16T05:31:18Z",
-        "from": ".claude",
+        "ts": "2026-07-25T00:56:33Z",
+        "from": "invasion-of-the-fiber-snatchers",
         "to": "versable-builder"
       },
       {
-        "ts": "2026-07-16T05:32:19Z",
+        "ts": "2026-07-25T21:15:05Z",
         "from": "versable-builder",
-        "to": "claude-ipc"
+        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 7892,
-    "corrections": 1684,
-    "confirmations": 1356,
-    "directives": 262,
-    "terse_messages": 595,
-    "correction_rate": 0.213,
-    "confirmation_rate": 0.172,
-    "directive_rate": 0.033,
-    "terse_rate": 0.075,
-    "style_label": "corrective"
+    "total_prompts": 9914,
+    "corrections": 1900,
+    "confirmations": 1446,
+    "directives": 298,
+    "terse_messages": 671,
+    "correction_rate": 0.192,
+    "confirmation_rate": 0.146,
+    "directive_rate": 0.03,
+    "terse_rate": 0.068,
+    "style_label": "conversational"
   },
   "graduation_yield": {
     "maintenance": false,
     "latest_yield": null,
     "judged_window": [],
     "reviews_counted": 0,
-    "updated_at": "2026-07-16T07:31:49.157106Z"
+    "updated_at": "2026-07-27T00:41:28.409039Z"
   }
 }

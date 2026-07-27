@@ -1,5 +1,83 @@
 # ui-gripe — runtime notes
 
+## ui-gripe: Speedway CG setup page (s2e-dark.png / s2e-light.png) — 2026-07-27
+
+**Purpose:** General confusion audit (no args) of the Content Generation setup form,
+dark + light; target resolved by mtime-sorting project-root PNGs — the s2e pair was
+2 days newer than everything else.
+
+**Insights:**
+
+1. Zoom-cropping the SAME button region from both theme shots side by side caught a
+   token-level bug a single-theme read would misdiagnose as taste: dark theme rendered
+   secondary buttons as white-label-on-light-gray. The tell is MIXED foreground contrast
+   within one control — the floppy icon had the correct dark foreground while the text
+   label stayed white. Icon-vs-label contrast disagreement inside one button = an
+   unadapted color token, not a design choice.
+2. OCR lowercased button labels ("cancel", "save" for Cancel/Save) — Apple Vision case
+   is not trustworthy; never build a capitalization finding on OCR, only on native read.
+3. `--ui` invented "Bell icon + Bell with dot icon" for what is natively one stamp-like
+   icon plus one bell. Icon-glyph identity claims from `--ui` need native confirmation
+   before citing — it hallucinates plausible glyph pairs.
+4. New recurring shape: a composite caption decoding multiple unlabeled inputs
+   ("per line + line count" under three bare number boxes). Scan any form table for
+   captions that name N concepts over M unlabeled inputs with N != M.
+5. A placeholder ("Min") sitting beside a filled sibling value ("65") at identical
+   visual weight reads as a value at a glance. Check number-input groups for
+   placeholder/value weight collisions.
+
+---
+
+## ui-gripe: claude-ipc kanban v2 ledger (kanban-v2-ledger-dark.png) — 2026-07-24
+
+**Purpose:** General confusion audit (no args) of the 1200x806 v2 ledger view, dark +
+light; target resolved from newest screenshot pair + the active kanban-prosecutor agent.
+
+**Insights:**
+
+1. Mid-sentence truncation with no ellipsis was the top finding and the OCR pass is the
+   cheap detector: scan row endings for a trailing comma, preposition, or article
+   ("Talk to the", "spawn only at"). `--ui` re-flows text and hides where lines end;
+   only `--ocr` + native show the actual cut points.
+2. New scan worth keeping: count the DISTINCT numbering systems per row (ordinal, #id
+   badge, source-line ref = 3 here). More than two numbers on a row with no visual
+   role separation is a finding by itself.
+3. Badge-slot semantic overload has a mechanical check: list every badge value from
+   ELEMENTS and type them (id vs word). `#3…#9` + `USER` in the same visual slot = one
+   slot, two meanings. Also check the same word rendered multiple ways ("USER" appeared
+   as badge, `USER —` prefix, and `USER:` prefix on one screen).
+4. Spec/annotation copy shipped in the UI ("one bar = the whole board, segments jump")
+   reads exactly like a designer note. Any status-bar clause that describes the UI's
+   own behavior instead of the data is suspect — OCR-verify then flag.
+5. Light-theme pass earned its cost again: `DONE 4` bar label was fine in dark,
+   near-invisible in light. One native Read of the sibling theme is cheap; keep doing it.
+
+---
+
+## ui-gripe: claude-ipc kanban board (kanban-board-real-dark.png) — 2026-07-22
+
+**Purpose:** General confusion audit (no args passed) of a 1200x862 dark-theme kanban
+board; target disambiguated from newest screenshots + the active kanban-prosecutor agent.
+
+**Insights:**
+
+1. A full-width `--crop` (1200x50+0+812 on a 1200px image) silently returned the FULL
+   frame, same failure shape as `--region`. Inset the geometry (1100x50+50+800 worked).
+   Verify every crop by reading the artifact's source.png before citing it.
+2. The constant-column scan generalizes from table columns to card footers: every card
+   carried the character-identical truncated chip ".claude/session-notes/0..." — zero
+   information at a line of height per card. Compare card footers across cards on any
+   board/list shot.
+3. Unthemed native scrollbars were the single most visually dominant element on the dark
+   board (near-white full-height bar) and are INVISIBLE to `--ui` — no mention in
+   ELEMENTS or PALETTE. Always natively eyeball the chrome (scrollbars, viewport edges),
+   not just content.
+4. Column-header counts are a cheap taxonomy-truth check: INBOX 0 / BACKLOG 0 /
+   BLOCKED 0 vs ACTIVE 43 / DONE 97 exposed a dead five-stage workflow in one glance.
+   On any kanban/pipeline UI, read the counts row as a claim and test it.
+
+---
+
 ## ui-gripe: Versable Speedway Review page (review-gripe.png) — 2026-07-14
 
 **Purpose:** General confusion audit (no gripe text passed) of a 1500x900 light-theme

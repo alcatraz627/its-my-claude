@@ -1,17 +1,18 @@
-<!-- i-dream project brief · 2026-06-18T22:48:39.264561+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-25T05:02:52.724020+00:00 · 6 patterns / 2 insights -->
 ## What this project is about
-Frontend of the Versable enhancement product — a multi-session, long-running feature development context where the dominant working style is autonomous execution within tight scope gates, with heavy reliance on session continuity tooling.
+Frontend of the Versable enhancement product — feature-driven UI work with strong design-fidelity expectations and an explicit autonomy contract where execution pace is high but product decisions require user sign-off.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively**: run `/core-dump` at milestones and whenever context approaches 70% — don't wait to be asked; `/catchup` is the primary recovery path after compaction
-- **Confirm the task boundary at session start**, then execute autonomously and aggressively within it — terse user messages ("keep going", "move") mean "resume from WAL/checkpoint state, don't ask again"
-- **Reconstruct from WAL/checkpoint first** when resuming via "this session being continued from" — re-read task state before taking any action
+- **Always read design mocks before implementing any UI surface** (labels, flows, module names, creation flows) — the mocks are authoritative; mismatch surfaces only at user review time
+- **Verify on the live dev server** after every UI change — wrong labels and removed pages survive diffs; only a browser run catches them
+- **Surface product-level behavioral decisions as explicit questions** before proceeding (e.g. "can a user add files to an existing job?") — don't embed the answer in implementation
+- **Queue completed non-critical work to the 'to be reviewed' backlog** rather than pausing for immediate review; only block on user-critical decisions
 
 ## Things to avoid
-- **Never commit or push without explicit, fresh, per-operation approval** — prior session approval does not carry forward, ever; this is the single highest-severity recurring violation in this project's history
-- **Don't expand scope beyond what was explicitly requested** — no "while I'm here" improvements; the user has corrected this pattern multiple times across sessions
-- **Don't re-run sub-agents that already wrote output to disk** — triage before re-dispatching after failures
+- **Don't use downstream technical-definitions docs for gap audits** — use the user-authored upstream product requirements doc as the authoritative source
+- **Don't claim a feature done after a green build or diff read** — completion claims require runtime exercise on the actual running app
+- **Don't make product-behavioral calls unilaterally** even under deadline pressure — batch the questions, ask once, then execute autonomously on reversible work
 
 ## Open questions / known gaps
-- Pattern deduplication in session memory is unreliable — the same WAL migration event appears 4+ times as separate entries; treat repeated pattern signals as noise until deduplicated
-- Scope-gating vs. autonomous execution creates ongoing tension: confirm the gate once at session start, then don't re-ask mid-task
+- Recurring tension: agent conflates "autonomous execution" with "autonomous product decision authority" — the autonomy contract is speed on mechanics, not latitude on UX choices
+- Design mocks are not always consulted proactively; no mechanical gate exists to enforce it before first implementation commit

@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17923,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.04715930449020639,
+    "unit_count": 26
+  },
+  "response": {
+    "biases_detected": [
+      "cli_flag_fumble:EMERGING:NEW — 055da09b-0: claude-ipc send with --body flag tried inside a for-loop and failed (success:false); immediately retried as positional arg and succeeded; 055da09b-19: --body-file flag also failed on claude-ipc send in a cat-redirect-then-send sequence; pattern is assuming a CLI flag is valid from intent or help-text mention without exercising it first on a live broker; intersects with structural-claim-without-reading-code class (CLI surface variant); not previously flagged in calibration history across any prior cycle",
+      "corrected_outcome_without_visible_cause:055da09b-14 — unit outcome=Corrected on two successful Bash calls (inbox jq read + style-log heeded=no); tool trace shows no explicit failure signal; the style-log heeded=no entry (thes-20260716-165411-e4) for a watcher-fire is the most likely correction surface — agent declined a nudge and user overruled; overconfidence in the judgment call to log heeded=no",
+      "no_tool_style_subprocess_sessions:RECURRING:STABLE — units 4e90b56b-0, 49ea52f2-0, 46bbf280-0, 2e20025c-0, 14b4d9f2-0 are structurally zero-mutation enforcement subprocesses; all prior recurring bias classes (re_edit_thrash, write_before_read_trap, git_push_without_fresh_approval, shell_tool_preference_violations) are inapplicable by construction; pattern consistent with 2026-07-19 0.52-score batch"
+    ],
+    "calibration_score": 0.46,
+    "overconfident_count": 2,
+    "recommendations": [
+      "cli_flag_fumble is NEW — not present in any prior calibration cycle; before using a claude-ipc flag (--body, --body-file, --reply-by with duration suffix) in a batch loop or critical path, verify the flag via --help or a dry single send first; this is the structural-claim-without-reading-code rule applied to CLI surfaces",
+      "re_edit_thrash is ABSENT this batch (zero consecutive Edit failures on any file) — an improvement relative to the 2026-07-19 worsening trajectory (7-failure peak); no additional advisory entry needed; trend is recovering",
+      "write_before_read_trap is ABSENT — no Edit preceding a Read on an unfamiliar file; the single Read failure in 055da09b-0 (GUIDELINES.md) was a file-existence probe not a mutation sequence; no advisory needed",
+      "git_push_without_fresh_approval and shell_tool_preference_violations are ABSENT in the mutation-bearing 055da09b session — consistent with deprioritized standing guidance; no new advisory entries added",
+      "heeded=no style-log entries that result in Corrected outcomes should be reviewed: if the watcher-fire nudge was load-bearing (a standing rule, not a false positive), the correct disposition is heeded=yes with a note on why the rule was not applied, not heeded=no"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "7d77ea9c-571b-4381-a8e0-04f3a45d1cd8",
+      127389
+    ],
+    [
+      "761d1227-7d87-4ffa-8b65-49176aa7d8cf",
+      113469
+    ],
+    [
+      "72585e42-65b9-4b4f-955e-5654d41d8d70",
+      126905
+    ],
+    [
+      "6eb3a188-4011-4cb1-a560-6f33e9146a21",
+      159628
+    ],
+    [
+      "684656a4-751e-4d84-bfb0-7a4074bc36b0",
+      112705
+    ],
+    [
+      "65a32990-92f7-4cf2-8ca7-a0c350cae144",
+      106367
+    ],
+    [
+      "63b14fb1-506b-4f11-b861-a66926bdab8f",
+      118122
+    ],
+    [
+      "632a9233-1279-47b2-9569-159b8d684a01",
+      116851
+    ],
+    [
+      "5b1af81a-f8eb-4a5a-a8b6-d3dffa9058fc",
+      142358
+    ],
+    [
+      "5a44b2af-23ca-4e13-951f-8056e6a7d94d",
+      109369
+    ],
+    [
+      "4e90b56b-2882-4c75-bded-c0bd7fdd2a68",
+      138929
+    ],
+    [
+      "4d0b1fa0-ca58-4a46-8e3b-bbaf3583abe2",
+      128434
+    ],
+    [
+      "49ea52f2-9b46-485a-a1dd-7b3fc0e2e4a4",
+      116564
+    ],
+    [
+      "47200771-9cc6-489f-87ff-adea81463c15",
+      122035
+    ],
+    [
+      "46bbf280-6903-48bc-ac64-d86c10e30cd1",
+      136946
+    ],
+    [
+      "449d0228-b099-4614-ae89-d182449d324c",
+      132872
+    ],
+    [
+      "3e570468-e061-48d4-ae9a-6ac66b6c9163",
+      123354
+    ],
+    [
+      "3dcdea50-e1aa-40e8-a615-24a8f2eeb21a",
+      101892
+    ],
+    [
+      "33b937ad-356a-4fe2-ad28-d8f262025bc3",
+      125640
+    ],
+    [
+      "32298453-7c82-4437-b23f-ada5323b80fe",
+      149667
+    ],
+    [
+      "2e20025c-bb9f-4862-bf7b-558cf0f425aa",
+      119709
+    ],
+    [
+      "29730356-ccf9-4ceb-9d75-cc025513bfec",
+      124324
+    ],
+    [
+      "294ae306-a6a7-410a-8e14-c1d9c597f727",
+      98977
+    ],
+    [
+      "2338f144-0447-4206-847b-d9815d82d071",
+      122998
+    ],
+    [
+      "21ca28e9-0290-4f5a-9f52-7dd04f98fc99",
+      178396
+    ],
+    [
+      "14b4d9f2-6c36-43fc-a447-33b43c5713d0",
+      121425
+    ],
+    [
+      "0f5b2f34-87db-4ddd-8bf4-8eb227fb6c08",
+      144563
+    ],
+    [
+      "09e0344f-1625-4bb9-9133-b61c55b202cd",
+      136875
+    ],
+    [
+      "05666f96-d0e9-4b25-bd54-4741ece70e20",
+      121374
+    ],
+    [
+      "055da09b-662c-4add-83ff-f10bc6984658",
+      6914427
+    ],
+    [
+      "049e8649-8854-4dd2-b901-37c72685c5c9",
+      121611
+    ],
+    [
+      "f0783f9b-f698-4ee5-88df-ebf9be9d836f",
+      123502
+    ],
+    [
+      "ddc91ce8-2510-40c3-b13b-05f6407359c1",
+      132466
+    ],
+    [
+      "dbc51a26-0102-4222-a77d-660380500c08",
+      113983
+    ],
+    [
+      "db3d9adf-d7a5-4863-ada0-709320ae6f8c",
+      134755
+    ],
+    [
+      "ceadd908-f226-4096-8dcb-6c20dc76bfdf",
+      7635253
+    ],
+    [
+      "b2490db9-6444-458c-adeb-653dcb94ca7d",
+      110216
+    ],
+    [
+      "9f7cbacf-d584-4626-8bb0-0aae3aa7dda8",
+      128206
+    ],
+    [
+      "99206913-2e09-4878-b370-32ad72fea502",
+      120327
+    ],
+    [
+      "7d8ba9d9-1cab-4d72-b8fd-adbeff0b8c5d",
+      130938
+    ],
+    [
+      "6f882464-4a9e-432c-832e-4aca39206afd",
+      3956206
+    ],
+    [
+      "6a1e7646-183a-4da5-a5a8-6c43c4c3f8bc",
+      136222
+    ],
+    [
+      "5e3f5a8e-2f63-4809-b66e-6216087efa15",
+      149396
+    ],
+    [
+      "5db87be1-8c46-4d25-82c4-9364c975f730",
+      134116
+    ],
+    [
+      "5bab3c06-15be-4c7e-a333-d34770356445",
+      142849
+    ],
+    [
+      "5ae3c3ab-4d0f-49f2-b044-e816a696c493",
+      125541
+    ],
+    [
+      "51c63498-0350-4d18-8a6b-1b4968e356c1",
+      119758
+    ],
+    [
+      "509335dd-fdbb-485c-8df2-3694fb302f79",
+      127771
+    ],
+    [
+      "4ca60e02-662f-44c4-92b0-1c84a2edef8a",
+      119085
+    ],
+    [
+      "3edd1d36-cc02-4d76-94af-f67a25aded62",
+      131513
+    ]
+  ],
+  "timestamp": "2026-07-19T18:05:09.656981Z",
+  "tokens_used": 9176,
+  "units_analyzed": 14,
+  "units_total": 26
+}

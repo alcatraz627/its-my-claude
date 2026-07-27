@@ -1,0 +1,215 @@
+/*
+ * colors.css — a drop-in colour system for a generated HTML page.
+ *
+ * Copy this into a <style> block (or link it) and the page has a full palette,
+ * a dark and a light mode, and the five variables the dark/light toggle in
+ * conventions/html-output.md expects. Dark is the default, per that rule.
+ *
+ * HOW IT IS PUT TOGETHER — two layers, and the split is the whole point:
+ *
+ *   Layer 0   the ramps. Raw colour, every family 50 -> 950. Nothing outside
+ *             this file's Layer 1 should ever name a ramp step directly.
+ *   Layer 1   the slots. --bg, --text, --brand, --ok-soft and friends. This is
+ *             what your markup uses. Both modes set the same slot names to
+ *             different ramp steps, which is why the toggle is one class flip
+ *             and not a second stylesheet.
+ *
+ * TO REBRAND: change the hue numbers in Layer 0 and stop. Every slot, both
+ * modes, and every element follow, because nothing downstream hardcodes a
+ * colour. That is the property worth protecting — the moment a page writes
+ * `color: #4a9` somewhere, dark mode has a hole in it.
+ *
+ * The hues here are deliberate placeholders (brand 250, accent 190), not any
+ * real product's identity. Swap them.
+ *
+ * Ramps are OKLCH: oklch(lightness chroma hue). Lightness falls evenly down the
+ * ramp; chroma peaks around 500 and eases off both ends, which is what keeps a
+ * 50 from looking muddy and a 950 from looking neon.
+ */
+
+/* ── Layer 0 — ramps (never name these in your markup) ─────────────────── */
+:root {
+  /* neutral — chrome, text, borders, surfaces */
+  --p-neutral-50: oklch(0.985 0.002 255);
+  --p-neutral-100: oklch(0.96 0.004 255);
+  --p-neutral-200: oklch(0.92 0.006 255);
+  --p-neutral-300: oklch(0.86 0.01 255);
+  --p-neutral-400: oklch(0.7 0.018 255);
+  --p-neutral-500: oklch(0.55 0.025 255);
+  --p-neutral-600: oklch(0.45 0.028 255);
+  --p-neutral-700: oklch(0.37 0.03 255);
+  --p-neutral-800: oklch(0.29 0.028 255);
+  --p-neutral-900: oklch(0.22 0.022 255);
+  --p-neutral-950: oklch(0.15 0.016 255);
+
+  /* brand — the one colour a reader should associate with the page */
+  --p-brand-50: oklch(0.97 0.02 250);
+  --p-brand-100: oklch(0.94 0.04 250);
+  --p-brand-200: oklch(0.88 0.07 250);
+  --p-brand-300: oklch(0.81 0.1 250);
+  --p-brand-400: oklch(0.72 0.13 250);
+  --p-brand-500: oklch(0.63 0.15 250);
+  --p-brand-600: oklch(0.55 0.145 250);
+  --p-brand-700: oklch(0.47 0.125 251);
+  --p-brand-800: oklch(0.4 0.1 251);
+  --p-brand-900: oklch(0.33 0.078 252);
+  --p-brand-950: oklch(0.25 0.05 252);
+
+  /* accent — a second voice, for highlights the brand shouldn't claim */
+  --p-accent-50: oklch(0.97 0.02 190);
+  --p-accent-100: oklch(0.94 0.042 190);
+  --p-accent-200: oklch(0.89 0.068 190);
+  --p-accent-300: oklch(0.83 0.092 190);
+  --p-accent-400: oklch(0.75 0.108 190);
+  --p-accent-500: oklch(0.66 0.115 191);
+  --p-accent-600: oklch(0.57 0.108 192);
+  --p-accent-700: oklch(0.48 0.092 193);
+  --p-accent-800: oklch(0.4 0.076 193);
+  --p-accent-900: oklch(0.33 0.058 194);
+  --p-accent-950: oklch(0.25 0.04 194);
+
+  /* success */
+  --p-success-50: oklch(0.97 0.02 150);
+  --p-success-100: oklch(0.94 0.045 150);
+  --p-success-200: oklch(0.88 0.072 150);
+  --p-success-300: oklch(0.81 0.1 150);
+  --p-success-400: oklch(0.72 0.118 150);
+  --p-success-500: oklch(0.63 0.13 150);
+  --p-success-600: oklch(0.55 0.12 150);
+  --p-success-700: oklch(0.47 0.104 150);
+  --p-success-800: oklch(0.4 0.086 150);
+  --p-success-900: oklch(0.33 0.068 150);
+  --p-success-950: oklch(0.25 0.045 150);
+
+  /* warning */
+  --p-warning-50: oklch(0.98 0.025 85);
+  --p-warning-100: oklch(0.95 0.055 85);
+  --p-warning-200: oklch(0.91 0.09 83);
+  --p-warning-300: oklch(0.86 0.125 81);
+  --p-warning-400: oklch(0.81 0.148 78);
+  --p-warning-500: oklch(0.76 0.155 75);
+  --p-warning-600: oklch(0.67 0.142 70);
+  --p-warning-700: oklch(0.58 0.125 65);
+  --p-warning-800: oklch(0.49 0.105 60);
+  --p-warning-900: oklch(0.41 0.085 55);
+  --p-warning-950: oklch(0.32 0.06 50);
+
+  /* danger */
+  --p-danger-50: oklch(0.97 0.018 25);
+  --p-danger-100: oklch(0.93 0.04 25);
+  --p-danger-200: oklch(0.87 0.08 25);
+  --p-danger-300: oklch(0.8 0.12 25);
+  --p-danger-400: oklch(0.73 0.165 26);
+  --p-danger-500: oklch(0.65 0.2 27);
+  --p-danger-600: oklch(0.58 0.195 27);
+  --p-danger-700: oklch(0.5 0.175 27);
+  --p-danger-800: oklch(0.43 0.15 27);
+  --p-danger-900: oklch(0.36 0.12 27);
+  --p-danger-950: oklch(0.28 0.085 27);
+
+  /* info */
+  --p-info-50: oklch(0.97 0.018 230);
+  --p-info-100: oklch(0.94 0.04 230);
+  --p-info-200: oklch(0.88 0.065 230);
+  --p-info-300: oklch(0.81 0.09 230);
+  --p-info-400: oklch(0.72 0.11 230);
+  --p-info-500: oklch(0.63 0.125 230);
+  --p-info-600: oklch(0.55 0.115 230);
+  --p-info-700: oklch(0.47 0.1 230);
+  --p-info-800: oklch(0.4 0.082 230);
+  --p-info-900: oklch(0.33 0.065 230);
+  --p-info-950: oklch(0.25 0.045 230);
+}
+
+/* ── Layer 1 — slots, dark (the default) ───────────────────────────────── */
+:root {
+  /* The five the toggle in html-output.md depends on. Keep these names. */
+  --bg: var(--p-neutral-950);
+  --surface: var(--p-neutral-900);
+  --text: var(--p-neutral-100);
+  --dim: var(--p-neutral-400);
+  --border: var(--p-neutral-800);
+
+  /* Room to build with: a raised surface for cards on cards, and two quieter
+     text tiers, so hierarchy comes from the palette instead of from opacity. */
+  --surface-2: var(--p-neutral-800);
+  --text-2: var(--p-neutral-300);
+  --text-3: var(--p-neutral-500);
+
+  --brand: var(--p-brand-400);
+  --brand-content: var(--p-neutral-950);
+  --brand-hover: var(--p-brand-300);
+  --accent: var(--p-accent-400);
+  --accent-content: var(--p-neutral-950);
+
+  /* Status comes in pairs: -soft backs a pill or a row tint, -line is the ink
+     or rule that sits on it. Using them together is what keeps a status
+     readable in both modes without a per-mode override at the callsite. */
+  --ok-soft: oklch(0.28 0.05 150);
+  --ok-line: var(--p-success-300);
+  --warn-soft: oklch(0.3 0.06 75);
+  --warn-line: var(--p-warning-300);
+  --err-soft: oklch(0.29 0.06 27);
+  --err-line: var(--p-danger-300);
+  --info-soft: oklch(0.28 0.05 230);
+  --info-line: var(--p-info-300);
+
+  --shadow-sm: 0 2px 5px -1px oklch(0 0 0 / 0.45), 0 1px 2px -1px oklch(0 0 0 / 0.4);
+  --shadow-md: 0 8px 18px -4px oklch(0 0 0 / 0.55), 0 3px 6px -3px oklch(0 0 0 / 0.4);
+  --shadow-lg: 0 22px 44px -10px oklch(0 0 0 / 0.65), 0 8px 16px -8px oklch(0 0 0 / 0.45);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  color-scheme: dark;
+}
+
+/* ── Layer 1 — slots, light ────────────────────────────────────────────── */
+/* `body.light` is the toggle's contract (html-output.md). The [data-theme]
+   selector is here too so this file also works on pages that theme from the
+   root element; drop whichever one your page doesn't use. */
+body.light,
+:root[data-theme="light"] {
+  --bg: var(--p-neutral-50);
+  --surface: oklch(1 0 0);
+  --text: var(--p-neutral-900);
+  --dim: var(--p-neutral-500);
+  --border: var(--p-neutral-200);
+
+  --surface-2: var(--p-neutral-100);
+  --text-2: var(--p-neutral-700);
+  --text-3: var(--p-neutral-500);
+
+  /* A step deeper than dark's brand: filled controls read light text here, and
+     the airy 400 that works on a near-black page cannot hold white. */
+  --brand: var(--p-brand-600);
+  --brand-content: oklch(1 0 0);
+  --brand-hover: var(--p-brand-700);
+  --accent: var(--p-accent-600);
+  --accent-content: oklch(1 0 0);
+
+  --ok-soft: var(--p-success-100);
+  --ok-line: var(--p-success-700);
+  /* 900, not 700: the mid warning ink drops under 4.5:1 on its own soft tint at
+     pill sizes. Warning is the one family where the obvious pairing fails. */
+  --warn-soft: var(--p-warning-100);
+  --warn-line: var(--p-warning-900);
+  --err-soft: var(--p-danger-100);
+  --err-line: var(--p-danger-700);
+  --info-soft: var(--p-info-100);
+  --info-line: var(--p-info-700);
+
+  --shadow-sm: 0 2px 4px -1px oklch(0.3 0.02 255 / 0.12), 0 1px 2px -1px oklch(0.3 0.02 255 / 0.1);
+  --shadow-md: 0 6px 14px -3px oklch(0.3 0.02 255 / 0.18), 0 3px 6px -3px oklch(0.3 0.02 255 / 0.12);
+  --shadow-lg: 0 18px 36px -8px oklch(0.3 0.02 255 / 0.26), 0 6px 12px -6px oklch(0.3 0.02 255 / 0.14);
+
+  color-scheme: light;
+}
+
+/* A floor to build on, so a page that just includes this file already reads
+   correctly in both modes instead of inheriting the browser's white. */
+body {
+  background: var(--bg);
+  color: var(--text);
+}

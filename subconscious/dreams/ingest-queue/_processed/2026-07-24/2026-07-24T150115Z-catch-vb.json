@@ -1,0 +1,27 @@
+{
+  "id": "302d5d15-d477-4231-8a9d-3831d62209c5",
+  "ts": "2026-07-24T15:01:15Z",
+  "session_id": "catch-vb-3f",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260724-catch-vb-3f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Workflow testing+improvement round: exercise proceed/ignore FROM THE ROW",
+    "Per-kind open-count denormalization in `settle()`/`refreshFlaggedCount` \u2192",
+    "Run-completion counters (values written / filled / fields) for summaries.",
+    "Skipped-stage labeling (\"skipped \u2014 scraping not configured\").",
+    "Normalize-only SELF-TEST per owner spec (real-data multi-sheet sample).",
+    "PCdb review fix: per-job-vocabulary suggestions + rich single-select.",
+    "Jobs-table G tasks (parts click-through, progress bar, drop Unfilled).",
+    "Owner rulings pending: stage order (answer delivered) \u00b7 conflict near-miss \u00b7",
+    "Audit finding 6 (job.status lag) investigation.",
+    "Later phases per doc-36: ingestion templates+validation, Content S2E (2-3d),"
+  ],
+  "tags": []
+}

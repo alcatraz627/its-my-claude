@@ -1,0 +1,60 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17503,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.33012920060028705,
+    "unit_count": 24
+  },
+  "response": {
+    "biases_detected": [
+      "screenshot_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: Read attempted at .playwright-mcp/rail-check.png (success:false) before fd search located actual path; sixth consecutive cycle with structurally identical pattern; zero improvement signal across all cycles; pattern now maximally entrenched with no probe-first behavior adopted",
+      "mcp_tool_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path in versable-builder/.playwright-mcp/ (success:false) before node fallback; sixth consecutive cycle; co-occurring cluster with screenshot_path_assumption confirmed across all six cycles; both are path-assumption-before-probe failures on filesystem-adjacent surfaces",
+      "write_before_read_trap:RECURRING:REGRESSING — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+Python pivot; classified STABLE in prior cycle after regression from PARTIALLY_IMPROVING; failure depth and recovery pattern unchanged; no net reduction in failure count across multi-cycle window",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry, 2 Edit failures on uploadtemplate.server.ts before Read+Python workaround; shallow failures with adaptive scratchpad/Python recovery; trajectory unchanged from prior cycles",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-2: sleep 3 in pm2 restart chain, sleep 2 in workspace nav wait; unit 302d5d15-3: sleep 45 (success:false, hook-blocked); both inline and standalone forms persist across consecutive cycles with no improvement signal",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n range reads in Bash instead of Read with offset/limit; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "agent_dispatch_failures:RECURRING:STABLE — unit 302d5d15-3: 3 consecutive Agent tool failures (success:false) before 3 subsequent calls succeeded; no liveness probe or backoff between failure and re-dispatch; pattern and depth unchanged",
+      "task_output_failures:RECURRING:STABLE — unit 302d5d15-3: TaskOutput called twice with success:false before falling back to direct Bash inspection; co-occurring cluster with agent_dispatch_failures confirmed; both share the assume-tool-ready-without-probe structure",
+      "git_push_without_fresh_approval:RECURRING:STABLE — units 302d5d15-2, 302d5d15-3, 302d5d15-13: multiple bundled commit sequences across all three units without per-push fresh confirmation; rate unchanged across all cycles",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 302d5d15-3: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; sixth consecutive cycle with identical pattern",
+      "commit_metadata_violation:RECURRING:STABLE — units 302d5d15-2, 302d5d15-3, 302d5d15-13: all three commits include Co-Authored-By: Claude Fable 5 and Claude-Session: URL footers; stored user preference [L:52eef644] explicitly prohibits model co-authorship metadata and session URL footers; pattern was flagged NEW in prior cycle (2026-07-25) and recurs across this full session without any reduction; upgrading from NEW to RECURRING:STABLE",
+      "proximal_signal_substitution:RECURRING — unit 302d5d15-2: npx tsc --noEmit used as primary pre-commit verification gate with result echo app-tsc-errors:0 treated as sufficient before multiple commits; type-check is proximal signal, working application is distal outcome; browser navigation does follow later in the unit but commit sequencing is not contingent on runtime results; structurally matches dream-insight-2 substitution class"
+    ],
+    "calibration_score": 0.36,
+    "cross_references": [
+      "dream-insight-1 (visibility-as-scope): unit 302d5d15-2 partially violated — the export-stub and redirect approach fixes the export.tsx instance but does not enumerate or audit other stub-candidate routes that might need the same treatment; fix is instance-scoped to the visible page rather than the class of stub-candidate routes",
+      "dream-insight-2 (proximal-signal-substitution): unit 302d5d15-2 CONFIRMED — npx tsc --noEmit result used as the commit gate before three commits; tsc is the proximal signal (type safety), not the distal outcome (application works at runtime); the substitution matches the send-log and cached-rerun variants documented in the wake cycle",
+      "dream-insight-2 (proximal-signal-substitution): unit 302d5d15-2 also CONFIRMED via mcp_tool_path_assumption — agent assumes the xlsx file exists at the inferred path without probing, dispatches MCP tool, receives failure, then falls back to node; action-assumed-to-produce-outcome without verifying the precondition",
+      "dream-insight-3 (handoff-context-assumption): unit 302d5d15-3 partially evidenced — three Agent dispatches (success:false) were sent without liveness probes; agents assumed to be reachable without verifying readiness, consistent with the sender-assumes-receiver-shares-context failure mode"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "screenshot_path_assumption and mcp_tool_path_assumption have now both reached six consecutive cycles with zero improvement — remediation via advisory calibration cycles has demonstrably failed; recommend escalating to a mechanical probe-first affordance (fd/ls check before any Read or MCP call against a dynamically-generated or tool-output path) rather than continuing advisory flagging",
+      "commit_metadata_violation was flagged as NEW in the 2026-07-25 calibration cycle and now recurs as RECURRING:STABLE in this session; the prior-cycle flag produced no behavioral change; recommend a pre-commit hook that scans commit message bodies for Co-Authored-By: Claude and Claude-Session: patterns and blocks on match, similar in posture to guard-anthropic-credentials.sh",
+      "proximal_signal_substitution (dream-insight-2 class) is now evidenced in this session via the tsc-before-commit pattern; no new recommendation beyond dream-insight-2 enforcement; already documented in the wake cycle",
+      "sleep_in_bash, shell_tool_preference_violations, agent_dispatch_failures, and task_output_failures remain STABLE with no worsening trajectory — deprioritize; the adaptive fallback behavior on tool failures is functioning correctly even if the assumption-before-probe first call persists"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "e3cbc32f-ffb5-4cd1-9537-0f46bb42e3df",
+      103172
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      26777649
+    ],
+    [
+      "27238870-97ff-42db-bc54-17446aaa795b",
+      96128
+    ]
+  ],
+  "timestamp": "2026-07-26T20:22:42.523238Z",
+  "tokens_used": 19610,
+  "units_analyzed": 5,
+  "units_total": 24
+}

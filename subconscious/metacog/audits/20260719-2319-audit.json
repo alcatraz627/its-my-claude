@@ -1,0 +1,235 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17623,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.14630334761116093,
+    "unit_count": 80
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — efd2a3ab-2: ShellCrumbs.tsx 2 consecutive Edit failures (success:false) before Read+retry resolved; taxonomy.tsx 1 Edit failure before scratchpad-copy workaround resolved; eighth-plus confirmed instance class across session history; zero improvement trajectory across advisory-only regime",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — efd2a3ab-2: ShellCrumbs.tsx 2-failure depth, taxonomy.tsx 1-failure depth before adaptive recovery; shallow relative to 7-failure session peak; partially-recovering trajectory consistent with prior cycle assessment",
+      "git_push_without_fresh_approval:RECURRING:STABLE — efd2a3ab-2: three bundled commit+push Bash calls (JobsTable ledger pass, sub-row fullWidth fix, schemas+export+entry.server batch) without per-push confirmation; efd2a3ab-11: one bundled commit+push for lockfile fix; eleventh-plus confirmed batch instance across session history; zero improvement across advisory cycles",
+      "shell_tool_preference_violations:RECURRING:STABLE — efd2a3ab-2: sed -n '147,152p', sed -n '195,300p', sed -n '1,40p', sed -n '80,110p', sed -n '1,60p' range reads used instead of Read with offset/limit; deprioritized per standing guidance — no new advisory entry added",
+      "symlink_write_blind:EMERGING:NEW — efd2a3ab-2: attempted Write to _checkpoint.claude.md (success:false), then Read on the same path succeeded and returned content (creating false write-safe signal), then attempted Write again (success:false), only discovering symlink nature via explicit readlink probe on third attempt; the Write tool does not follow symlinks while Read does — content visibility via Read was incorrectly treated as evidence of write-path validity; pattern not flagged in any prior calibration cycle; intersects with write_before_read_trap class but is a distinct failure mode: Read was performed between the two Write failures and still did not resolve the issue"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 1,
+    "recommendations": [
+      "symlink_write_blind (NEW — act on this): before writing to any path not created this session, especially paths at known-active locations like project root _checkpoint.claude.md, probe with readlink or stat first; Read success is not sufficient evidence of Write safety when symlinks are in play — the two-step should be readlink-then-write, not read-then-write",
+      "write_before_read_trap (RECURRING:STABLE — already advisory 8+ cycles): no new recommendation; zero improvement trajectory indicates advisory-only regime is ineffective; deprioritized per standing protocol — mechanical gate is the appropriate next escalation, not another advisory entry",
+      "git_push_without_fresh_approval (RECURRING:STABLE — already advisory 11+ cycles): no new recommendation; deprioritized per standing protocol",
+      "dual_lockfile_deploy_trap (efd2a3ab-11, worth banking as a one-time lesson): project uses pnpm for dev (pnpm-lock.yaml) but deploy image runs npm ci against package-lock.json; the two lockfiles diverge silently after package.json changes; well-diagnosed and efficiently resolved in unit 11 — this specific failure mode is unlikely to recur now that the lesson is explicit"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 1
+  },
+  "sessions": [
+    [
+      "f4686e13-ed0e-42f6-9e4e-4ab9868035f9",
+      125015
+    ],
+    [
+      "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+      35034403
+    ],
+    [
+      "e6c58221-a502-4ab5-bc79-ad3f01278d4e",
+      139350
+    ],
+    [
+      "e3da97e2-b4f2-4240-b938-7688f54d4ee5",
+      133866
+    ],
+    [
+      "d75b2ff0-dd1d-4580-bbb4-e1cdbacaede2",
+      107988
+    ],
+    [
+      "d44b2902-4edb-45fe-9e84-77fc8368c19a",
+      118010
+    ],
+    [
+      "b0dd3a8d-3b03-4cef-ab86-63ba856401e9",
+      130328
+    ],
+    [
+      "afce7181-127f-427b-b733-f27adfad0b3a",
+      16931662
+    ],
+    [
+      "9144a110-4842-47d9-8096-0cec4eaf56cb",
+      82743
+    ],
+    [
+      "90a25432-7053-4d24-a179-56e3f20b1ba7",
+      123941
+    ],
+    [
+      "874a0608-f058-4007-a34a-d4880c026ac4",
+      109207
+    ],
+    [
+      "6b17fecb-cea6-424c-889e-75396ca680c1",
+      118787
+    ],
+    [
+      "56cb9ff6-783a-4746-a780-c7daf3cfdbeb",
+      102039
+    ],
+    [
+      "55b5937f-a197-430b-847b-c9d097fa0913",
+      123122
+    ],
+    [
+      "3c80cb76-a34b-4fd7-8a3e-89952be53e55",
+      82393
+    ],
+    [
+      "3076a6b4-aa17-4878-9b08-a994120c9f1a",
+      108022
+    ],
+    [
+      "16251a30-5871-483b-b86d-8c8629dffbe4",
+      116854
+    ],
+    [
+      "1078edf2-ac4a-48a2-a6d3-a7732ed547c0",
+      116522
+    ],
+    [
+      "069ab3cb-2e8b-4314-85a7-cf57468e8ef4",
+      125979
+    ],
+    [
+      "fb5b034d-a18d-4ecd-987a-9a7ec30f4b83",
+      111046
+    ],
+    [
+      "f4e401ef-18b1-4614-806c-3106963e6d85",
+      133218
+    ],
+    [
+      "ce236031-6e78-4afc-b686-d7af978c646b",
+      139866
+    ],
+    [
+      "1551df9f-0e95-4d12-a0a9-3b244ea6f9d0",
+      1762865
+    ],
+    [
+      "2e2ebb27-9a5b-4d7b-a167-c5c5a2a37772",
+      155799
+    ],
+    [
+      "2d14fccf-2dae-46b9-8f29-cf174e405fa6",
+      117372
+    ],
+    [
+      "211c3a8c-64b2-49e4-a1f3-a00901df66af",
+      160663
+    ],
+    [
+      "17942087-c9f9-4054-9053-3968e1335864",
+      141665
+    ],
+    [
+      "1649ea62-f1cd-42cd-928f-c6dab9575823",
+      5750367
+    ],
+    [
+      "103242c0-a0a4-4949-86cf-c373af6e3bbd",
+      126762
+    ],
+    [
+      "dcfda0e1-d24b-4d18-b44a-5696374d9198",
+      123400
+    ],
+    [
+      "9a941fd8-13b7-436b-8a26-234761de802f",
+      129576
+    ],
+    [
+      "6e6bab57-5704-4022-aa18-66851e28a5f2",
+      148700
+    ],
+    [
+      "6a9d5fb6-6a20-4948-bc1b-f4e6be478d40",
+      127242
+    ],
+    [
+      "32dcc282-d22d-4d16-8af2-5c9905453ed3",
+      141786
+    ],
+    [
+      "e3f11826-d33a-4876-9c86-b7cec72b0523",
+      82533
+    ],
+    [
+      "dca798c4-58c1-4d48-80ab-7e57f7b02b72",
+      89166
+    ],
+    [
+      "c3fdb4b1-1327-4b04-8ab0-d031e4237385",
+      72439
+    ],
+    [
+      "96205e4c-0d92-4ac9-869a-a55de79f960a",
+      5298406
+    ],
+    [
+      "890cd7af-a5d2-486e-a421-75a43ee26d0b",
+      3092307
+    ],
+    [
+      "86f5f8bd-fc06-44d0-b97e-85c08c7db3b1",
+      4683323
+    ],
+    [
+      "73868db9-0cc8-4870-8983-d6da089733cc",
+      160808
+    ],
+    [
+      "6e3acc8c-f38e-4f38-90d7-bf44ff150462",
+      11943011
+    ],
+    [
+      "604a112e-3c6d-4dd2-a800-ecf3da756215",
+      126136
+    ],
+    [
+      "49be4524-9af8-4b84-9ad5-b91edcd55d63",
+      115192
+    ],
+    [
+      "4796b202-63c6-4003-9453-ed90584e535f",
+      3315301
+    ],
+    [
+      "1c02507e-cd51-4859-baa7-ffc0ad1f9408",
+      86101
+    ],
+    [
+      "1576181c-47ac-4dd6-ae1d-40775c30d421",
+      91515
+    ],
+    [
+      "1093515a-bff4-4f2c-9995-c537c91f94d7",
+      5174670
+    ],
+    [
+      "f9d6e38e-4d7e-4c44-82ea-c218bb34554b",
+      1401775
+    ],
+    [
+      "8552c7c1-1375-443d-bdcd-eb06934bc9b1",
+      19951
+    ]
+  ],
+  "timestamp": "2026-07-19T23:19:58.236084Z",
+  "tokens_used": 11727,
+  "units_analyzed": 2,
+  "units_total": 80
+}

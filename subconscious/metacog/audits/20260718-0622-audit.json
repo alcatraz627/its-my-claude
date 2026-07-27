@@ -1,0 +1,241 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16230,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.34696787711932686,
+    "unit_count": 39
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in both substantive tool-using units: a310ee4f-4 has sed -n range reads (multiple: sed -n '835,855p', sed -n '190,205p', sed -n '135,160p', sed -n '65,80p' etc.), ls .playwright-mcp/*.csv as existence probe, ls -ld node_modules/.vite as existence probe, ls data/ and ls documents/ as directory listings, ls -t ...console-*.log | head -1 | xargs as listing-with-pipe; a310ee4f-25 has sed -n range reads throughout plus sed -i '' 's/.../g' multi-file bulk replacement bypassing Edit tool entirely, ls for directory existence; rate consistent with 57-83% six-cycle baseline; stagnation threshold already reached — deprioritize further advisory intervention per standing guidance",
+      "re_edit_thrash:RECURRING:IMPROVING — a310ee4f-4: normalize.server.ts had 2 consecutive Edit failures (success:false) at the filing-gate section before a successful edit; a preceding compound sed bash command also failed (success:false) before being decomposed into a successful split; thrash depth remains shallow (single-failure-then-recovery); consistent with IMPROVING trajectory sustained across prior cycles; no escalation warranted",
+      "git_push_without_fresh_approval:RECURRING:STABLE — a310ee4f-4: at least two bundled git add+commit+push chains (a8a575e and 8847066) executed without per-push authorization prompts; a310ee4f-25: at least two more bundled commit+push chains (be0ca67 and subsequent commits); all Accepted; fifth and sixth confirmed batch instances; per dream insight 2, advisory-only enforcement has now accumulated 6+ cycles with no improvement trajectory — mechanical gate is the correct next intervention, not another advisory entry",
+      "gh_cli_approval_gate_thrash:NEW — a310ee4f-25: gh pr edit failed success:false three consecutive times; agent's workaround was cycling through different .cli-approve-* touch files (touch .cli-approve-4bd37f06d3ac85b1, touch .cli-approve-fd5b174c945004c0, touch .cli-approve-4bd37f06d3ac85b1 again) without diagnosing why the gate kept re-arming; this is a novel failure mode not in the six-cycle history — not the same as re_edit_thrash (which is Edit tool match-string failure) but shares the repeated-attempt-without-root-cause structure; the outcome was eventually Corrected, suggesting this unit contributed to the correction",
+      "sed_i_bulk_replace_bypasses_edit_tool:NEW variant — a310ee4f-25: sed -i '' 's/listJobs(wid, 50)/listJobs(wid, 500)/g' applied across six files simultaneously, bypassing the Edit tool entirely; this is a scope and auditability concern (no per-file diff visible, no success:false feedback loop); distinguishable from the sed-for-range-read variant of shell_tool_preference_violations already in history; first confirmed instance of in-place shell mutation as a multi-file substitute for Edit"
+    ],
+    "calibration_score": 0.4,
+    "cross_references": [
+      "dream_insight_1 (conf=0.92, compaction strips negative constraints): a310ee4f-25's multiple bundled pushes with Corrected outcome is consistent with the compaction-strips-prohibition mechanism — this session ran long enough that the no-push constraint was deprioritized; the same pattern the insight predicts",
+      "dream_insight_2 (conf=0.88, fix-thrash applies to the push-violation cluster itself): the gh_cli_approval_gate_thrash in a310ee4f-25 is a direct instance — three failed gh pr edit attempts addressed by repeating the same .cli-approve touch approach rather than diagnosing the gate; the dream insight's prescription (mechanical gate over advisory rule) applies here too",
+      "dream_insight_2 confirms git_push_without_fresh_approval has now crossed the 5-advisory threshold where escalation to a hook is the only recommended action; this batch adds instances 5 and 6 to the Corrected/Accepted record with no behavioral change"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "git_push_without_fresh_approval has now appeared in 6+ consecutive cycles under advisory-only enforcement with zero improvement — per dream insight 2 (the pattern is itself an instance of fix-thrash-without-root-cause), the correct intervention is a mechanical pre-push gate (hook or CLI guard), not another advisory rule; the advisory entries are actively not working",
+      "gh_cli_approval_gate_thrash is new and merits investigation: the .cli-approve touch-file pattern suggests the agent does not understand why the approval gate re-arms between attempts; diagnosing the gate's re-arm condition would eliminate the loop; watch for recurrence before classifying severity",
+      "shell_tool_preference_violations is at stagnation threshold across 6+ cycles; deprioritize per standing guidance — no new intervention recommended",
+      "re_edit_thrash continues its IMPROVING trajectory; monitoring only",
+      "the sed -i '' multi-file bulk replace pattern should be flagged as a new variant of shell_tool_preference_violations in the next consolidation pass — it carries higher audit risk than range reads because failures are silent and scope is unbounded"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "c250f2e7-255f-4713-adba-1c8938232e66",
+      143096
+    ],
+    [
+      "c1ff831f-2d33-414e-9649-fa0b4dcb27ea",
+      96532
+    ],
+    [
+      "bf8b308d-7252-49cd-855b-f68c2334da80",
+      114712
+    ],
+    [
+      "be199257-79ec-4054-986f-5c1b5707c28a",
+      113504
+    ],
+    [
+      "bdd4ad28-42ff-45cd-876c-fcba6fa26f48",
+      108520
+    ],
+    [
+      "bad65445-bbeb-4160-baba-6af629bfa9de",
+      92060
+    ],
+    [
+      "ba0c28d7-51c4-4bfe-a860-5b1d7a32a501",
+      110230
+    ],
+    [
+      "b6e47adc-5123-453f-b1a3-0edbbe650268",
+      99080
+    ],
+    [
+      "b49a3157-660c-48c8-b0a1-24e5a64195be",
+      95643
+    ],
+    [
+      "b3d129f0-f02b-4a4a-aefe-6b651d7d16a1",
+      87204
+    ],
+    [
+      "b3696c20-4562-4904-af03-55b8d4aaaedb",
+      114816
+    ],
+    [
+      "b256aa78-211f-451a-b130-94709f66a9a2",
+      114378
+    ],
+    [
+      "ad79c3ab-0121-41d3-a749-ce85d13612ca",
+      110512
+    ],
+    [
+      "ab665757-0436-4ba5-b083-c82e4f2d4b76",
+      90797
+    ],
+    [
+      "a6872012-fae5-45e5-9cd4-a683d98d1d28",
+      101721
+    ],
+    [
+      "a45e52a2-e238-465a-8181-2f067311c90e",
+      106767
+    ],
+    [
+      "a310ee4f-5709-4d54-897f-7404f7580998",
+      8021972
+    ],
+    [
+      "a1f3aa27-3603-4a20-a534-25c92fbad1cc",
+      103750
+    ],
+    [
+      "a18dcedd-a031-4842-8470-13c57e5bf0d2",
+      94544
+    ],
+    [
+      "9f76a221-6cc4-4351-a911-d158d52e686c",
+      97685
+    ],
+    [
+      "9d67b8c6-ecbb-4265-9c38-1985acc7994e",
+      128835
+    ],
+    [
+      "9d5b247f-2a4e-48f4-bc5b-88099b82362b",
+      111422
+    ],
+    [
+      "9cdc6267-6db9-4d7a-aeda-37f13c4595f1",
+      110069
+    ],
+    [
+      "9b173f0a-8466-4983-bc25-85281a29a873",
+      98833
+    ],
+    [
+      "9a134a5f-b69e-4288-857a-d1df3001fded",
+      87275
+    ],
+    [
+      "9916d88b-2bd8-476c-beaf-68f9c9aefd3f",
+      119013
+    ],
+    [
+      "98836982-8036-44d0-9113-6b48e21931e2",
+      99658
+    ],
+    [
+      "97a95062-9146-465e-b052-955b04795519",
+      115753
+    ],
+    [
+      "96f396d8-a104-4b45-b82b-cee80a37940d",
+      108133
+    ],
+    [
+      "966fa10c-fd42-4def-a39b-f2565d34575f",
+      137094
+    ],
+    [
+      "94c20384-ab37-403d-8807-9cf1f6408032",
+      120697
+    ],
+    [
+      "9486a130-e89a-43d3-8bc2-b05f251aa442",
+      102986
+    ],
+    [
+      "933f9978-52e8-4c59-b33b-4ef687d9a72d",
+      126592
+    ],
+    [
+      "92e02083-0f25-48b7-a1ef-6a7a7b53974e",
+      100461
+    ],
+    [
+      "929f1e6f-0385-4016-a553-fb70445f1d74",
+      117857
+    ],
+    [
+      "9063d9ea-d8f5-474f-a881-5d4e206752e4",
+      82496
+    ],
+    [
+      "8fd5eb91-1dea-4a70-a253-10d07782ae97",
+      94953
+    ],
+    [
+      "8f6b1f03-fdc1-44e9-a2a1-ef273b581c71",
+      13992329
+    ],
+    [
+      "8f3d5d70-4d9f-46a5-b7be-79c0dd19dd4e",
+      97421
+    ],
+    [
+      "8db2cf14-0736-4f74-9cbf-cb303a52ffb7",
+      102076
+    ],
+    [
+      "8a0799a4-b3a9-404e-b7a7-c1b5e9f38094",
+      100080
+    ],
+    [
+      "89a72473-0aff-4110-a044-0c04f4ca7210",
+      117936
+    ],
+    [
+      "895cfd88-628e-49b8-9d5d-192bbf6b911f",
+      10556839
+    ],
+    [
+      "89366a57-5487-43f4-90e5-c2c810aa5e7f",
+      87897
+    ],
+    [
+      "88d706e6-db74-4ae7-8e15-de5dd2080cca",
+      109476
+    ],
+    [
+      "88744df9-1b45-405b-870c-facdeaa8e4a2",
+      113494
+    ],
+    [
+      "881d4ee7-a881-46ea-8e57-b06c3e1080bf",
+      120182
+    ],
+    [
+      "87d9d0c5-424a-44bd-b1fe-93aa7ce3512e",
+      94618
+    ],
+    [
+      "8771e5c8-bd01-4bf7-95ce-2bfaffb88c18",
+      96800
+    ],
+    [
+      "866bd1df-0460-41be-9c24-9b159a67bf0c",
+      105585
+    ]
+  ],
+  "timestamp": "2026-07-18T06:22:15.759325Z",
+  "tokens_used": 22948,
+  "units_analyzed": 15,
+  "units_total": 39
+}

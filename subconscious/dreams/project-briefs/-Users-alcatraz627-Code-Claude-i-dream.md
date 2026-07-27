@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-07-10T08:31:40.147964+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-27T00:45:05.826722+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-A meta-agent memory and session-continuity infrastructure project (`i-dream`) — long-running, multi-compaction sessions building tooling for the Claude Code harness itself (WAL, catchup, core-dump, pattern extraction, dashboard).
+A dream-tracking dashboard (i-dream) with widgets, pm2 services, and Anthropic API integration; dominant work is UI feature building and multi-agent orchestration with a strong emphasis on correctness over speed.
 
 ## Things to do (or keep doing)
-- **Checkpoint proactively** — write `/core-dump` at milestones, not just session end; `/catchup` is the primary recovery path after every compaction
-- **Treat terse commands as job-resumption signals** — reconstruct intent from WAL/checkpoint state, emit a one-line ack, continue executing; never ask clarifying questions
-- **Write WAL in JSONL** — the markdown format is deprecated; all new entries use `scripts/wal/wal.sh` for machine-queryable JSONL output
+- **Always exercise the fix on the running dev server** before claiming done — false assurance on UI bugs compounds trust debt faster than anything else
+- **Audit all sibling pages/routes before touching any shared UI component** (sidebar, drawer, modal) — per-page patches always turn into global fixes in the next message
+- **Use full relative or absolute paths in every output and report** — basenames are not clickable in this user's terminal
+- **Surface the exact command the user must run when hitting an auth/credential block** — hold explicitly, never attempt workarounds
 
 ## Things to avoid
-- **Never commit or push without explicit per-push approval** — prior approval in the same session does not carry over; each `git push` needs fresh user confirmation
-- **Don't expand scope on terse continuations** — "keep going" increases execution depth only, never scope; always ask "did the user explicitly request this?" before adding unsolicited changes
-- **Never infer or extrapolate data values** — only output values directly traceable to source data; hallucinated values in structured processing are a critical trust violation
-- **Don't write credentials to any file** — even temporarily, even for testing; stop and ask the user to handle it manually
+- **Don't produce gap assessments or completion tables without reading the source first** — code-ungrounded assessments consistently overestimate what's built
+- **Don't add fallback flexibility or self-gating generalization to an explicit scope constraint** — when the user says "only X, not Y," enforce it literally with no softening
+- **Don't verify a multi-state UI surface in only one theme or mode** — dark-only sign-offs ship broken light themes; scope the claim to what was actually exercised
+- **Don't patch the named instance when the user corrects a class of output** (pipe-delimited dumps, essay comments, format leaks) — apply the correction to the whole class
 
 ## Open questions / known gaps
-- Pattern deduplication in the extraction pipeline is broken — the same WAL migration event appears 4+ times as independent patterns; the i-dream system needs a semantic-similarity merge pass before persisting new patterns
-- Tension between "scope = ceiling" rule and multi-session autonomous work: terse continuation signals can be misread as scope expansion authorization; no mechanical gate exists for this boundary yet
+- Design mocks are repeatedly skipped before shipping module labels and creation flows — unclear where mocks live or how to surface them at implementation time
+- Review grouping preference (by domain, not severity) is affirmed but not yet mechanically enforced — findings drift back to severity-ordered tables under time pressure

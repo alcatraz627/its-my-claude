@@ -1,0 +1,51 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18276,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.6649307323229917,
+    "unit_count": 5
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n '1,60p', sed -n '440,465p', sed -n '245,275p', sed -n '350,380p' range reads in Bash instead of Read with offset/limit; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "write_before_read_trap:RECURRING:PARTIALLY_IMPROVING — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+retry resolved; Python script pivot avoided further Edit thrash; shallow failure depth and adaptive recovery continue; trajectory holds",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry; 2 Edit failures on uploadtemplate.server.ts before Read+Python workaround pivoted away from repeated Edit; depth shallow and recovery via scratchpad/Python pattern; trajectory holds for seventh consecutive cycle",
+      "screenshot_path_assumption:RECURRING — unit 302d5d15-2: Read attempted at /Users/alcatraz627/Code/Versable/versable-builder/.playwright-mcp/rail-check.png (success:false) before fd search located actual path; was NEW last cycle, now second consecutive cycle with identical pattern; no improvement signal",
+      "mcp_tool_path_assumption:NEW — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path at versable-builder/.playwright-mcp/ that failed (success:false) before node --input-type=module fallback; structurally identical to screenshot_path_assumption but on the file-tools MCP surface rather than a Read call; adaptive recovery present but assumption-first wastes a tool call; not previously classified in calibration history",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-2: inline sleep 3 in pm2 restart chain and inline sleep 2 in workspace navigation wait; unit 302d5d15-3: sleep 45 standalone Bash call (success:false, naturally blocked by hook); pattern recurs across both inline and standalone forms",
+      "agent_dispatch_failures:RECURRING — unit 302d5d15-3: 3 consecutive Agent tool failures before 3 subsequent calls succeeded; was NEW_OBSERVATION last cycle, now second consecutive cycle with identical 3-failure burst pattern; likely environmental API throttle but no explicit retry strategy applied; re-dispatch happened without a liveness probe or backoff",
+      "git_push_without_fresh_approval:RECURRING:STABLE — unit 302d5d15-2: three bundled commit sequences (exports, preflight, budget-hide) without per-push fresh confirmation; unit 302d5d15-3: TRACKING commit without per-push confirmation; rate unchanged from prior cycles",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 302d5d15-3: style-log.sh called with watcher-fire slug classification without surfacing evidence for the slug choice; third consecutive cycle with identical pattern"
+    ],
+    "calibration_score": 0.5,
+    "overconfident_count": 3,
+    "recommendations": [
+      "agent_dispatch_failures is now RECURRING (second consecutive cycle): add an explicit liveness probe or single-agent test before bulk Agent dispatch; the 3-consecutive-failure burst pattern suggests the first wave should validate dispatch availability before fanning out — a simple sequential probe Agent before the parallel fleet would short-circuit the wasted calls",
+      "mcp_tool_path_assumption is NEW and shares the same root cause as screenshot_path_assumption: before calling any file-tools MCP tool or Read with a path assumed to be an MCP output directory, first verify the path exists via Bash fd/ls; consolidate both tells into a single pre-call path-existence check habit",
+      "collect_not_run shows continued PARTIALLY_IMPROVING trajectory: tsc followed by Playwright browser exercise and npm run build in unit 302d5d15-2 is the target pattern; no regression in this cycle; reinforce rather than redirect",
+      "shell_tool_preference_violations, sleep_in_bash, git_push_without_fresh_approval, screenshot_path_assumption: all STABLE across 3+ cycles with no escalation; deprioritize per-cycle nudging; flag for batch remediation review rather than individual-session pressure"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "e4f1ae12-f2be-4336-8f51-4cf46c94e170",
+      98778
+    ],
+    [
+      "57eea2f5-35ce-4c5c-886f-04477a1c4079",
+      143349
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      4186435
+    ]
+  ],
+  "timestamp": "2026-07-23T12:08:13.523420Z",
+  "tokens_used": 11463,
+  "units_analyzed": 4,
+  "units_total": 5
+}

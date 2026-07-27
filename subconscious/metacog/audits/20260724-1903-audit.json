@@ -1,0 +1,233 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17866,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.12996483695560276,
+    "unit_count": 49
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n '1,60p', sed -n '440,465p', sed -n '245,275p', sed -n '350,380p' range reads in Bash instead of Read with offset/limit; rate consistent with prior cycles; deprioritized per standing guidance",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-2: inline sleep 3 in pm2 restart chain, sleep 2 in workspace nav wait; unit 302d5d15-3: standalone sleep 45 (success:false, blocked); pattern persists across both inline and standalone forms; no improvement signal across four consecutive cycles",
+      "write_before_read_trap:RECURRING:STABLE — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+Python pivot; recovery adaptive; trajectory unchanged; downgraded from PARTIALLY_IMPROVING to STABLE as failure depth and recovery pattern are now consistent across multiple cycles with no net reduction in failure count",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry; 2 Edit failures on uploadtemplate.server.ts before Read+Python workaround; depth remains shallow and recovery via scratchpad/Python pattern; trajectory holds for tenth consecutive cycle",
+      "screenshot_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: Read attempted at .playwright-mcp/rail-check.png (success:false) before fd search located actual path; fourth consecutive cycle with identical pattern; no improvement signal; probe-before-read assumption not adopted",
+      "mcp_tool_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path in versable-builder/.playwright-mcp/ (success:false) before node fallback; fourth consecutive cycle with structurally identical assume-first pattern on MCP path without prior probe; screenshot_path_assumption and mcp_tool_path_assumption are co-occurring as a cluster — both are path-assumption-before-probe failures on filesystem-adjacent surfaces",
+      "git_push_without_fresh_approval:RECURRING:STABLE — unit 302d5d15-2: multiple bundled commit sequences without per-push fresh confirmation; rate unchanged across all cycles",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 302d5d15-3: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; fifth consecutive cycle with identical pattern",
+      "agent_dispatch_failures:RECURRING:STABLE — unit 302d5d15-3: 3 consecutive Agent tool failures (success:false) before 3 subsequent calls succeeded; no liveness probe or backoff between failure and re-dispatch; pattern unchanged",
+      "task_output_failures:RECURRING:STABLE — unit 302d5d15-3: TaskOutput called twice with success:false before falling back to direct Bash inspection; second consecutive cycle; now confirmed RECURRING:STABLE; structurally identical to agent_dispatch_failures (tool assumed ready without readiness check)"
+    ],
+    "calibration_score": 0.44,
+    "overconfident_count": 2,
+    "recommendations": [
+      "screenshot_path_assumption and mcp_tool_path_assumption are now a co-occurring cluster across four cycles with worsening trajectory — the underlying behavior is assume-path-first on any filesystem-adjacent tool call (Read, mcp__file-tools__*, playwright screenshot output); a single probe pattern (fd or ls before Read/MCP) would address both; this is the highest-priority actionable finding given the worsening signal",
+      "agent_dispatch_failures and task_output_failures share the same root: tool call issued without verifying the target (agent/task) is ready; neither has improved across two-plus cycles; a liveness probe or readiness check before re-dispatch would address both and is a single behavioral change",
+      "write_before_read_trap improvement trajectory has stalled; downgraded from PARTIALLY_IMPROVING to STABLE; recovery via Python workaround is adaptive but does not reduce the initial failed Edit attempts; the pre-edit read habit has not been adopted",
+      "sleep_in_bash has shown zero improvement across four cycles in both inline and standalone forms; deprioritize further recommendation unless hook-enforcement changes — the pattern appears resistant to advisory guidance alone",
+      "deprioritize shell_tool_preference_violations, git_push_without_fresh_approval, confirmation_bias_style_log, re_edit_thrash — all STABLE across multiple cycles with no worsening trend and standing guidance already applied"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "fe4a7b1c-9fcb-437e-b186-43463fe4f2e5",
+      134010
+    ],
+    [
+      "fd576607-638a-4211-a828-a279a22549c5",
+      124802
+    ],
+    [
+      "f16758a3-e11a-4d7d-9600-669e3cec4087",
+      128072
+    ],
+    [
+      "ebd226e7-61b2-40c3-b057-0544e5ab435b",
+      149727
+    ],
+    [
+      "e221e7af-7172-4a0e-9198-54bfcda309ab",
+      142367
+    ],
+    [
+      "d1e3f482-a171-453f-b7ec-cad93a8e5f4e",
+      135784
+    ],
+    [
+      "cd84e8dc-758a-436b-b966-800d59600c6e",
+      131002
+    ],
+    [
+      "c64e1d0d-d116-412b-a651-d616345e7204",
+      118465
+    ],
+    [
+      "c4ba8699-d3b3-45ae-8155-99ef98bb0b79",
+      107885
+    ],
+    [
+      "be65eb43-3047-49d1-b6ef-7e3976b9db7e",
+      121390
+    ],
+    [
+      "abe5458e-8b1f-4c18-82fc-85920cd7395f",
+      122399
+    ],
+    [
+      "aa0b1fef-9210-4a80-8355-c5e5a2421431",
+      143591
+    ],
+    [
+      "a55e333c-da5a-413e-ae82-46f959a1a652",
+      99451
+    ],
+    [
+      "a2ef948b-7914-4eb7-a7ca-5905990ac0f0",
+      125812
+    ],
+    [
+      "9ff2e792-ae8f-4b3a-b6d0-63f6c44dab02",
+      135957
+    ],
+    [
+      "969f22ee-0c6f-47bf-a3fb-1b8b424dac7d",
+      123999
+    ],
+    [
+      "9304b3d0-de16-4d8b-802d-90f3fca4fae7",
+      142727
+    ],
+    [
+      "864a060d-dfcf-40bb-9249-b7e7fb1b4195",
+      127077
+    ],
+    [
+      "7e27ced5-6214-4a76-92aa-36f60ce239ec",
+      129142
+    ],
+    [
+      "7d43bd16-ae97-4017-ae27-d56a7ab7f063",
+      131123
+    ],
+    [
+      "6de16efe-a04d-4dfe-bb25-4e223ced6d6b",
+      132830
+    ],
+    [
+      "6d3faf3e-624e-4cc2-b126-8579f930484b",
+      130793
+    ],
+    [
+      "67c7cbcc-9571-410d-8b35-b81ea6895841",
+      124098
+    ],
+    [
+      "5eaace9e-2bb6-4403-bcb2-29a900f20d00",
+      118384
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      15478426
+    ],
+    [
+      "2df296c9-9933-41f4-92ba-d16753a67687",
+      119046
+    ],
+    [
+      "2b663114-0a5f-40b0-bb5f-fc84e41156cd",
+      126919
+    ],
+    [
+      "25dbc216-328c-4479-865e-d2bcfe87dfb6",
+      122626
+    ],
+    [
+      "13fc2869-8e9e-4dda-9476-c6aba169f7d4",
+      122128
+    ],
+    [
+      "0eb330be-107b-4390-a50e-aed9dd1b8b99",
+      124774
+    ],
+    [
+      "0aa908a8-035b-4387-96c5-7e4dc74ef145",
+      148805
+    ],
+    [
+      "624bf7c3-417b-42f6-80ed-e5a6eafb3f90",
+      444739
+    ],
+    [
+      "151f174c-300a-4f52-b295-c5c7488628c7",
+      116792
+    ],
+    [
+      "1a22e4d1-4649-4720-9b11-5053b17b9a21",
+      117217
+    ],
+    [
+      "0ab0035c-3186-4dbf-bf58-1c4342f077d5",
+      7316866
+    ],
+    [
+      "58f48712-326c-43bc-b74a-5c15e69f88a6",
+      130501
+    ],
+    [
+      "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+      4291245
+    ],
+    [
+      "0711ad06-465f-4204-82a3-075ebe804d98",
+      105853
+    ],
+    [
+      "82f51c09-5c64-4c2a-8c98-1040dcfe1e68",
+      932895
+    ],
+    [
+      "02f3129c-c918-4f4e-aa29-841e4474966a",
+      332885
+    ],
+    [
+      "fa1b9cc0-8c8c-48b1-a560-3c195b466717",
+      139136
+    ],
+    [
+      "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+      9201543
+    ],
+    [
+      "d0dc3793-7ada-4aa3-8f00-e3abccdbb67d",
+      134819
+    ],
+    [
+      "c5b3564f-7ecd-4a2d-a1d5-c21f8548a0f5",
+      124496
+    ],
+    [
+      "68d96e95-995f-4b7e-8616-ce336f2ccec2",
+      106774
+    ],
+    [
+      "436174b5-3946-4398-bb6b-9d0cb7636800",
+      144216
+    ],
+    [
+      "2d056d01-cb0c-4fcb-ab43-a1ec20fd7e9b",
+      118814
+    ],
+    [
+      "2770a749-a52a-4b0d-bdee-f5010b9d5f85",
+      131985
+    ]
+  ],
+  "timestamp": "2026-07-24T19:03:22.994510Z",
+  "tokens_used": 12843,
+  "units_analyzed": 11,
+  "units_total": 49
+}

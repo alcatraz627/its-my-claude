@@ -1,0 +1,164 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17440,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.027568097504180444,
+    "unit_count": 39
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 0ab0035c-13: sed -n '160,170p' range read in Bash instead of Read with offset/limit; unit 0ab0035c-22: awk 'NR>=170 && NR<=200' range scan and sed -n '10,40p' filter instead of Read with offset/limit; unit 0ab0035c-29: sed -n '1,30p' range read in Bash instead of Read with offset/limit; rate consistent with multi-cycle baseline; deprioritized per standing guidance",
+      "collect_not_run:RECURRING:STABLE_SLIGHT_REGRESSION — unit 0ab0035c-29: npx tsc --noEmit used after Edit on enhancement.utils.ts with no subsequent runtime exercise visible in the unit; prior two cycles showed PARTIALLY_IMPROVING signal with browser/node runtime exercise following tsc; this unit reverts to tsc-only verification; regression from PARTIALLY_IMPROVING to STABLE; not a dramatic escalation but improvement trajectory interrupted",
+      "screenshot_path_assumption:NEW — unit 0ab0035c-2: Read attempted at /Users/alcatraz627/Code/Versable/enhancement-product/.playwright-mcp/pr262-light-top.png (success:false) before falling back to fd search and Read at correct path /Users/alcatraz627/Code/Versable/enhancement-product/pr262-light-top.png; pattern of assuming MCP screenshot output directory without prior verification; adaptive recovery present but assumption-first approach wastes a Read call; not previously classified in calibration history",
+      "sleep_in_bash:RECURRING:STABLE — unit 0ab0035c-2: inline sleep 1.5 in http.server startup command chain and sleep 0.5 in cleanup chain; both inline (not standalone Bash calls), distinguishing from prior standalone sleep 45 that was naturally blocked; inline variant not blocked by hook; pattern recurs across cycles; milder form than prior instances but structurally the same anti-pattern",
+      "write_before_read_trap:RECURRING:PARTIALLY_IMPROVING — no Edit-before-Read failures observed in these units; unit 0ab0035c-29 shows Read then Edit sequence on enhancement.utils.ts; unit 0ab0035c-22 uses rg/awk reads before Edit calls on workflow yaml; zero failure depth across all edits in these units; PARTIALLY_IMPROVING trajectory continues for seventh consecutive cycle",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — no consecutive Edit failures on same target observed; unit 0ab0035c-2 has four consecutive Edit calls on pr-262-review.html but all succeeded (not thrash); unit 0ab0035c-22 has three consecutive Edit calls on frontend-e2e-test.yaml all succeeding; PARTIALLY_RECOVERING trajectory holds"
+    ],
+    "calibration_score": 0.48,
+    "overconfident_count": 1,
+    "recommendations": [
+      "collect_not_run: slight regression signal in unit 0ab0035c-29 where tsc-only verification follows a code edit with no runtime exercise; per two-cycle improvement streak now interrupted, watch next cycle; if collect-only pattern recurs without browser/node exercise, escalate classification",
+      "screenshot_path_assumption: new pattern requiring tracking; verify MCP screenshot output path (via fd or ls) before issuing Read, rather than attempting Read at assumed path and recovering on failure; low-cost fix: one fd call before each screenshot Read",
+      "shell_tool_preference_violations and sleep_in_bash: already flagged multiple cycles without improvement; deprioritize further recommendations per standing guidance — advisory-only regime not moving these",
+      "write_before_read_trap and re_edit_thrash: positive signal; no action needed beyond maintaining current recovery patterns"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "0b097155-94fd-4d7d-b5f3-0e1dc4b55fc8",
+      120151
+    ],
+    [
+      "0ab0035c-3186-4dbf-bf58-1c4342f077d5",
+      6867929
+    ],
+    [
+      "049cca9c-094d-42a1-98ea-d331636c99b4",
+      121137
+    ],
+    [
+      "037b9815-2dd9-47d3-bd45-f61d815dc5b2",
+      1876943
+    ],
+    [
+      "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+      2955561
+    ],
+    [
+      "d643d584-27a3-47ea-b3db-65a2449777ec",
+      10503583
+    ],
+    [
+      "790d8dad-74c4-4908-a427-494c1eaf8cc8",
+      143900
+    ],
+    [
+      "65fa85ea-40a5-4592-afe7-11d8b0e2db3f",
+      142530
+    ],
+    [
+      "5eca1769-b790-46bb-805c-68e114510143",
+      152878
+    ],
+    [
+      "5a6f93cd-2079-46c4-ba82-9e9d32f1e2ae",
+      148301
+    ],
+    [
+      "53259d71-5631-4787-b6e5-afd3bfda88a0",
+      191786
+    ],
+    [
+      "51b4c1d6-798c-4aff-8bba-02866b1bef96",
+      138180
+    ],
+    [
+      "5188155a-4d70-404d-b4d5-3cb2ace1877f",
+      120205
+    ],
+    [
+      "4e24362a-d665-4cd3-b149-e7c46c37d753",
+      113750
+    ],
+    [
+      "3aaee360-0d72-470f-87ca-5a74b5a216e4",
+      155312
+    ],
+    [
+      "012a3e32-64f7-4aa0-befb-cc10c72932cc",
+      88676
+    ],
+    [
+      "fafb9588-7e8e-496c-b5df-fe61f2774d4a",
+      100227
+    ],
+    [
+      "e449f919-e094-4aa0-8739-832de877d860",
+      130147
+    ],
+    [
+      "c2ccf095-ffc3-4d57-baec-5fd1b7642870",
+      122689
+    ],
+    [
+      "b54c6284-22f2-4c90-b3f4-432a8646bc67",
+      136743
+    ],
+    [
+      "adfdecc3-7b1d-4dbc-a30f-506ae70208fb",
+      121885
+    ],
+    [
+      "9e8841e7-38f2-4442-b909-fc56703dc567",
+      5385921
+    ],
+    [
+      "5ee72365-94cb-44a3-8887-c00888c64180",
+      134212
+    ],
+    [
+      "3e814c4e-77d1-415e-9ff4-8c12757277f2",
+      102626
+    ],
+    [
+      "f4f6d545-87a4-45ba-92bf-922a710f70e6",
+      110297
+    ],
+    [
+      "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+      3371109
+    ],
+    [
+      "e1daf61f-2460-400a-b988-8e37cad41873",
+      91438
+    ],
+    [
+      "7df23079-1e83-466d-ad79-284fa02a1425",
+      109728
+    ],
+    [
+      "794e7b41-cea2-4877-8243-5580c0e08b5e",
+      127362
+    ],
+    [
+      "53fb6eee-6edf-4502-a125-f0f252254fb8",
+      105744
+    ],
+    [
+      "4aba0c28-b334-4f41-9128-d46e9cd09134",
+      93519
+    ],
+    [
+      "2975d32b-31b7-4023-8a17-2fbdb5670cc7",
+      89564
+    ]
+  ],
+  "timestamp": "2026-07-23T03:05:54.426559Z",
+  "tokens_used": 8626,
+  "units_analyzed": 9,
+  "units_total": 39
+}

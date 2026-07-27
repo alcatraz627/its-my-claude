@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kanban · all boards</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1' fill='%238fbf6a'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1' fill='%237c8590'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1' fill='%232b3138'/%3E%3C/svg%3E">
+<style>
+  /* The fleet glance (M1): the morning read starts HERE, so rows are weighted
+     attention-first — blocked and unread lead, motion follows, identity stays. */
+  :root{--bg:#0a0c0e;--surface:#12161b;--text:#d8dee6;--dim:#7c8590;--faint:#4d5560;--rule:#1f242b;--accent:#8fbf6a;--amber:#e0b04c;--mono:"SF Mono",ui-monospace,Menlo,monospace}
+  [data-theme="light"]{--bg:#f2f4f6;--surface:#fbfcfd;--text:#20262d;--dim:#5a636d;--faint:#98a1ab;--rule:#d5dae0;--accent:#4a7d2a;--amber:#a97c14}
+  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--rule) transparent} body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 -apple-system,"SF Pro Text",system-ui,sans-serif}
+  ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px} ::-webkit-scrollbar-track{background:transparent}
+  header{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--rule)}
+  h1{font:600 14px/1 var(--mono);margin:0;flex:1}
+  button{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;padding:4px 10px;cursor:pointer;font:inherit;font-size:11.5px}
+  main{max-width:760px;margin:18px auto;padding:0 16px;display:flex;flex-direction:column;gap:8px}
+  a.board{display:block;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:3px;padding:10px 14px;text-decoration:none;color:var(--text)}
+  a.board:hover{border-color:var(--accent)}
+  a.board.attn{border-left-color:var(--amber)}
+  .row1{display:flex;align-items:baseline;gap:10px}
+  .name{font-weight:600}
+  .badges{margin-left:auto;display:flex;gap:6px;font:600 10.5px/1.7 var(--mono)}
+  .badge{border:1px solid var(--rule);border-radius:2px;padding:0 6px;color:var(--dim)}
+  .badge.blk{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent)}
+  .badge.unread{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+  .badge.review{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .root{color:var(--faint);font-size:10.5px;font-family:var(--mono);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .counts{color:var(--dim);font-size:11.5px;margin-top:3px}
+  .counts b{color:var(--text);font-weight:500}
+  .counts .stale{color:var(--amber)}
+  .empty{color:var(--dim);text-align:center;padding:40px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>kanban · all boards</h1>
+  <button id="theme" title="toggle theme">◐</button>
+</header>
+<main id="list"><div class="empty">loading…</div></main>
+<script>
+const applyTheme = (t) => { document.documentElement.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
+applyTheme(localStorage.getItem("kanban-theme") || "dark");
+document.getElementById("theme").onclick = () =>
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+
+const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
+
+async function load() {
+  const list = document.getElementById("list");
+  try {
+    const { boards } = await (await fetch("/api/boards")).json();
+    if (!boards.length) { list.innerHTML = `<div class="empty">no boards yet — run: kanban.sh init in a project</div>`; return; }
+    // attention first: blocked or unread outranks quiet; freshest sync breaks ties
+    const score = (b) => (b.counts.blocked > 0 ? 2 : 0) + ((b.unread || 0) + (b.reviewMe || 0) > 0 ? 1 : 0);
+    boards.sort((a, b) => score(b) - score(a) || Date.parse(b.syncedAt || 0) - Date.parse(a.syncedAt || 0));
+    list.replaceChildren(...boards.map((b) => {
+      const a = document.createElement("a");
+      const attn = b.counts.blocked > 0 || (b.unread || 0) > 0;
+      a.className = "board" + (attn ? " attn" : ""); a.href = `/b/${b.slug}`;
+      const open = b.counts.inbox + b.counts.backlog + b.counts.active + b.counts.blocked;
+      const syncTs = b.syncedAt ? Date.parse(b.syncedAt) : 0;
+      const staleMark = syncTs && Date.now() - syncTs > 24 * 36e5 ? ` <span class="stale">⚠ ${ago(syncTs)} stale</span>` : "";
+      const badges = [
+        b.counts.blocked ? `<span class="badge blk">${b.counts.blocked} blocked</span>` : "",
+        b.unread ? `<span class="badge unread">${b.unread} unread</span>` : "",
+        b.reviewMe ? `<span class="badge review">${b.reviewMe} review-me</span>` : "",
+      ].join("");
+      a.innerHTML = `<div class="row1"><span class="name"></span><span class="badges">${badges}</span></div>
+        <div class="root"></div>
+        <div class="counts">active <b>${b.counts.active}</b> · open <b>${open}</b> · done ${b.counts.done}${b.counts.stale ? ` · stale ${b.counts.stale}` : ""} · synced ${b.syncedAt ? new Date(b.syncedAt).toLocaleString() : "never"}${staleMark}</div>`;
+      a.querySelector(".name").textContent = b.name;
+      a.querySelector(".root").textContent = b.root;
+      return a;
+    }));
+  } catch (e) { list.innerHTML = `<div class="empty">hub failed to load: ${e.message}</div>`; }
+}
+load();
+setInterval(load, 10000);
+</script>
+</body>
+</html>

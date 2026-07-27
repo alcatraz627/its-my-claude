@@ -92,7 +92,11 @@ The registry server (`scripts/decision-page/server.py`, started by `serve`) adds
 button posts the answer string there; the server writes `<slug>/.answer.json` and
 clears the pending marker. After handoff the authoring agent watches for that file
 (the **Monitor** tool, or polling `decision-page.sh answer <slug>`) and wakes when
-the human clicks Submit — no copy-paste round-trip. **Copy answers** remains the
+the human clicks Submit — no copy-paste round-trip. **The watcher must be armed in
+the same turn as the handoff, before the turn ends** — an ended turn with no
+Monitor/poll never wakes, and the pending marker is a statusline chip, not a wake
+path. Ending the session instead? Say "read at next session start", never "wake"
+(atone `promised-async-wake-without-arming-receiver`). **Copy answers** remains the
 fallback (and the page falls back to clipboard automatically if the server has no
 submit endpoint). Editing `template.html` only reaches new pages; existing pages
 carry their own `index.html` copy (re-copy to refresh — see the authoring rules).

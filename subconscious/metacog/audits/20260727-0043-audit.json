@@ -1,0 +1,114 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17620,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2622664827375328,
+    "unit_count": 46
+  },
+  "response": {
+    "biases_detected": [
+      "screenshot_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: Read attempted at .playwright-mcp/rail-check.png (success:false) before fd search located actual path; seventh consecutive cycle with structurally identical pattern; zero improvement signal across all seven cycles; probe-first behavior never adopted; cluster now maximally entrenched with advisory-only interventions exhausted",
+      "mcp_tool_path_assumption:RECURRING:WORSENING — unit 302d5d15-2: mcp__file-tools__list_sheets called with xlsx path in versable-builder/.playwright-mcp/ (success:false) before node fallback; seventh consecutive cycle; co-occurring cluster with screenshot_path_assumption confirmed across all seven cycles; both are path-assumption-before-probe failures on filesystem-adjacent surfaces",
+      "write_before_read_trap:RECURRING:STABLE — unit 302d5d15-2: 2 Edit failures on uploadtemplate.server.ts before Read+Python pivot; failure depth and recovery pattern unchanged from prior cycles; trajectory not improving",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — unit 302d5d15-2: 1 Edit failure on JobsTable.tsx before retry, 2 Edit failures on uploadtemplate.server.ts before Read+Python workaround; shallow failures with adaptive scratchpad/Python recovery; trajectory stable across multi-cycle window",
+      "sleep_in_bash:RECURRING:STABLE — unit 302d5d15-2: sleep 3 in pm2 restart chain, sleep 2 in workspace nav wait; unit 302d5d15-3: sleep 45 (success:false, hook-blocked); both inline and standalone forms persist with no improvement signal",
+      "shell_tool_preference_violations:RECURRING:STABLE — unit 302d5d15-2: sed -n range reads in Bash instead of Read with offset/limit; rate consistent with prior cycles; deprioritized per standing guidance",
+      "agent_dispatch_failures:RECURRING:STABLE — unit 302d5d15-3: 3 consecutive Agent tool failures (success:false) before 3 subsequent calls succeeded; no liveness probe or backoff between failure and re-dispatch; pattern and depth unchanged",
+      "task_output_failures:RECURRING:STABLE — unit 302d5d15-3: TaskOutput called twice with success:false before falling back to direct Bash inspection; co-occurring cluster with agent_dispatch_failures; both share assume-tool-ready-without-probe structure",
+      "git_push_without_fresh_approval:RECURRING:STABLE — units 302d5d15-2, 302d5d15-3, 302d5d15-13: multiple bundled commit sequences across all three units without per-push fresh confirmation; rate unchanged across all cycles",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 302d5d15-3: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; seventh consecutive cycle with identical pattern",
+      "commit_metadata_violation:RECURRING:STABLE — units 302d5d15-2, 302d5d15-3, 302d5d15-13: all three commits include Co-Authored-By: Claude Fable 5 and Claude-Session: URL footers; stored user preference [L:52eef644] explicitly prohibits model co-authorship metadata and session URL footers; was upgraded to RECURRING:STABLE last cycle and recurs this cycle without any reduction; no corrective action observed between cycles",
+      "proximal_signal_substitution:RECURRING:STABLE — unit 302d5d15-2: npx tsc --noEmit used as primary pre-commit verification gate with result treated as sufficient before multiple commits; browser navigation follows commits rather than preceding them; type-check is proximal signal, working application is distal outcome; structurally matches dream-insight-2 substitution class"
+    ],
+    "calibration_score": 0.35,
+    "cross_references": [
+      "dream-insight-1 (fix CLASS not INSTANCE) violated by proximal_signal_substitution in unit 302d5d15-2: treating tsc-clean as the complete class of pre-commit verification rather than recognizing it as one instance of the broader class runtime-correctness-checks; applying the insight's rule would have surfaced browser verification as another required class member before commits were staged",
+      "dream-insight-2 (proximal vs distal signal, per-page UI blindness) directly confirmed in unit 302d5d15-2: npx tsc --noEmit output (app-tsc-errors:0) is the proximal signal substituted for the distal outcome (application running correctly in browser); commit sequencing is not contingent on runtime results, exactly matching the send-log-as-delivery-proof anti-pattern the insight names",
+      "dream-insight-2 also confirmed by screenshot_path_assumption in unit 302d5d15-2: Read attempted at an assumed path is a proximal-signal substitution (assumed file location) for the distal check (fd probe to locate actual path); the insight rule asking what would falsify this claim from where I am standing was not applied before the Read attempt, which is structurally identical to asserting completeness from a single visible state"
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "screenshot_path_assumption and mcp_tool_path_assumption have now reached seven consecutive cycles WORSENING with zero improvement across any cycle; advisory flagging has demonstrably failed as an intervention; a mechanical probe-first gate (fd or ls check before any Read or MCP call targeting a path that was not returned by a prior tool result) is the only remaining intervention that can break this entrenched cluster",
+      "commit_metadata_violation completed its second consecutive RECURRING cycle with no reduction; the stored preference [L:52eef644] is being structurally ignored across every commit in every unit of this session; a PreToolUse hook or commit-message linting gate on the specific patterns (Co-Authored-By: Claude Fable and Claude-Session:) is now warranted given advisory flagging has not produced behavior change",
+      "proximal_signal_substitution remains stable with commits preceding browser verification in unit 302d5d15-2; no new recommendation beyond prior cycle — the fix is to treat browser navigation as a prerequisite gate for commit eligibility rather than a post-commit confirmation step"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "9ed3de6d-474d-4ff4-9e88-a40f5424c28d",
+      111880
+    ],
+    [
+      "849b6ec8-61b3-45e4-8ea8-7e980e29163c",
+      110665
+    ],
+    [
+      "302d5d15-d477-4231-8a9d-3831d62209c5",
+      27279488
+    ],
+    [
+      "e9859e2e-3d08-4d38-a296-0109f5d7d44f",
+      98749
+    ],
+    [
+      "d0b9b21a-b827-42b3-bcfb-b55c5c10c2fe",
+      94494
+    ],
+    [
+      "a43e23e3-1066-4651-8c7b-3cbb60da0d97",
+      139511
+    ],
+    [
+      "72b7709e-a5ba-485a-abaf-424f4775246f",
+      5151641
+    ],
+    [
+      "5978988c-5f28-46ed-b19e-272804e256b6",
+      110550
+    ],
+    [
+      "14c7f115-4762-4ea3-83cb-21d6028e29ed",
+      4466465
+    ],
+    [
+      "82f51c09-5c64-4c2a-8c98-1040dcfe1e68",
+      999915
+    ],
+    [
+      "f3a8a925-ad16-4ecc-94cd-07bee17963b0",
+      129053
+    ],
+    [
+      "e61c6e7a-0b4d-466c-ad39-d1ca0e46220c",
+      10385715
+    ],
+    [
+      "e4f733ba-27f1-43f7-a735-266c55ce941b",
+      130820
+    ],
+    [
+      "d9bd0cb3-4029-4435-ac44-00bf20f5b918",
+      113587
+    ],
+    [
+      "9382db00-65d3-4028-8e78-b07c0151ca84",
+      168217
+    ],
+    [
+      "8129e076-cfd6-41c3-80e5-400d974fbb76",
+      112432
+    ],
+    [
+      "26c9590a-a034-46b9-bde5-7071bed4774d",
+      136708
+    ]
+  ],
+  "timestamp": "2026-07-27T00:43:03.389185Z",
+  "tokens_used": 19735,
+  "units_analyzed": 5,
+  "units_total": 46
+}

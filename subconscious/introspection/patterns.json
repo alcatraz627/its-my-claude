@@ -1,29 +1,29 @@
 {
-  "last_updated": "2026-07-11T08:29:10.675107Z",
-  "average_depth": 26.4,
+  "last_updated": "2026-07-25T17:09:49.053435Z",
+  "average_depth": 10.8,
   "average_breadth": 1.3,
-  "fixation_rate": 0.23,
-  "assumption_rate": 0.62,
-  "overconfidence_rate": 0.27,
+  "fixation_rate": 0.19,
+  "assumption_rate": 0.37,
+  "overconfidence_rate": 0.26,
   "common_assumptions": [
-    "File contents have not changed since last read within the same session",
-    "Truncated tool output (head -N lines) represents the complete picture",
-    "TypeScript noEmit compile success equals feature working correctly at runtime",
-    "Previous session process state and port ownership are still valid without re-verification",
-    "A single narrow-scope grep confirms global absence of a pattern or module"
+    "File contents are current and unchanged between successive tool calls",
+    "Truncated tool output (head -N pattern) is sufficient for decision-making",
+    "TypeScript type-check passing implies feature-level correctness",
+    "First grep from a scoped directory is comprehensive — no need to widen scope",
+    "Single-path implementation is correct without evaluating alternatives first"
   ],
   "strength_patterns": [
-    "Iterative diagnostic approach: writes and runs probe scripts to isolate unknowns before applying fixes rather than guessing",
-    "Reads existing code structure before modifying and references specific file targets in tool calls",
-    "Constructs structured verification scripts that emit explicit PASS/FAIL/ALL-MATCH signals"
+    "Systematic read→edit→test→verify cycles with intermediate checkpoints in complex chains",
+    "Consistent and reliable mechanical execution on bounded single-step tasks (style enforcement)",
+    "Multi-stage validation before declaring completion — repeated tsc and test-runner passes in long chains"
   ],
   "weakness_patterns": [
-    "High-step chains exhibit strong fixation: same file edited 20-60+ times in a single chain (e.g. +page.svelte, statusline.sh, generate-html.ts) without stepping back to rethink the strategy",
-    "Thinking steps appear in only 4 of 30 chains; most chains jump directly to tool use with no explicit reasoning phase, treating first-read output as sufficient to act on",
-    "Verification is frequently substituted with compile-only checks (tsc --noEmit, --collect-only) or truncated output, then progress is declared without exercising the actual code path"
+    "Fixation loops on individual files — repeated reads and edits of the same file without stepping back to re-assess the broader state",
+    "Shallow alternative exploration — complex implementation chains commit to one approach rather than evaluating competing paths",
+    "Silent truncation acceptance — widespread head -N usage without verifying whether critical output was cut off"
   ],
   "trend": {
-    "calibration_improving": false,
+    "calibration_improving": true,
     "depth_trend": "stable",
     "breadth_trend": "stable"
   }

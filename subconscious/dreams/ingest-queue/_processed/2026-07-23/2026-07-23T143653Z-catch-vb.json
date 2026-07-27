@@ -1,0 +1,27 @@
+{
+  "id": "302d5d15-d477-4231-8a9d-3831d62209c5",
+  "ts": "2026-07-23T14:36:53Z",
+  "session_id": "catch-vb-3f",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260723-catch-vb-3f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "PCdb 39K-vocabulary guard (source: my measurement + R-C scope) \u2014 URGENT,",
+    "Fix: partType dismiss durability + jobs-page reviewed/touched signal",
+    "Fix: modal-close nav-loading holds the preview open (source: owner bug",
+    "doc-33 runtime pass \u2014 exercise all 15 stories on :5101 (source: owner",
+    "Adversarial behavior review \u2014 judge the app against doc-33's USER STORIES",
+    "Mock-vs-app audit \u2014 every screen vs `user_docs/versable_speedway_app.mock.html`",
+    "Follow-ups (doc-32 notes): scrape site notes \u2192 extractor; PCdb typing",
+    "CPRD-sourced backlog (real CPRD): add-approved-value cascade + \u00a77",
+    "Owner-side: cross off To-be-reviewed; commit their todo edits; push vb",
+    "Parked: URL cleanup (last), CPRD \u00a78.3 (deferred), prod bring-up."
+  ],
+  "tags": []
+}

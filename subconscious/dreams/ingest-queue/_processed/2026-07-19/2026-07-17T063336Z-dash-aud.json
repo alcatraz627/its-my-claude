@@ -1,0 +1,22 @@
+{
+  "id": "ceadd908-f226-4096-8dcb-6c20dc76bfdf",
+  "ts": "2026-07-17T06:33:36Z",
+  "session_id": "dash-audit-ce",
+  "project_root": "/Users/alcatraz627/.claude/widgets/claude-instances",
+  "checkpoint_path": "/Users/alcatraz627/.claude/widgets/claude-instances/_20260717-dash-audit-ce.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**#16 R1** \u2014 aggregates cover 20 sessions and call it \"today\" (148 real). Needs the per-file summary cache first. **Highest value.**",
+    "**#17 R2** \u2014 `seq` is positional; give records a stable identity. Needs design across 3 files.",
+    "**#18 R3** \u2014 seven small known fixes (hub.sh loopback co-bind, PID_FILE not port-scoped, `/data` uncached, `read_tab_title` listdir, codex `tokens_in: 0`, `transcript.py --since` parity, stale tpath).",
+    "**USER** \u2014 the push sentinel (see Blocked on).",
+    "Open proposal `prop-20260717-062223-81`: extend `filename-dot-stop.sh` to also catch non-absolute paths (filed after an S2 atone, `mist-20260717-061515-8e`, recurrence #3)."
+  ],
+  "tags": []
+}

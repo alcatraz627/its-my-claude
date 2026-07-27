@@ -56,6 +56,14 @@ body.light {
 }
 ```
 
+Those five greys are the floor. They carry a report, but there is nothing here to
+build a status pill or a filled button out of. When the page needs real colour, use
+[`html-assets/colors.css`](html-assets/colors.css) rather than extending this block.
+It defines these same five names, so the toggle above keeps working untouched, and
+adds ramps, brand/accent, and status pairs on top. Rebrand it by editing the hues in
+its Layer 0. Don't reach past the slots into a ramp from your markup, or the next
+theme change stops being one edit.
+
 ## Complexity tiers
 
 Pick the lightest tier that does the job. Complexity escalates only on evidence.
@@ -104,6 +112,7 @@ When generating HTML (via `/create-report`, by hand, or in a skill), if a snippe
 | Dark/light toggle button | MANDATORY — see top of file | inline above |
 | Searchable data dashboard | Summary cards + live text filter + click-to-expand rows with nested sub-entity detail tables; self-contained, dark/light persists. For "counts at a glance + drill into specifics" over entity→sub-entities→detail data. Adapt `cards()`/`row()`/detail render + the summary grid columns. | `conventions/html-assets/data-dashboard.html` |
 | Color-palette picker | Per-group color chooser: a full design-system palette in `<optgroup>` dropdowns (header + body per group), live mock preview, auto white/dark header text by WCAG contrast (reddens below 4.5:1), and a copy-paste summary of the picks. For letting a human dial in colors before you hard-code them. `.build.py` regenerates the HTML from a palette dict — edit the `TW` map / `COLS` / `GROUPS` for a different palette or preview shape. | `conventions/html-assets/color-palette-picker.{html,build.py}` |
+| Theming system (colors.css) | The palette-variables + scheme-switcher component this file's TODO used to ask for. Two layers: seven OKLCH ramps at full 50→950 (neutral/brand/accent/success/warning/danger/info), then the semantic slots your markup actually uses. It defines the five vars the mandatory toggle above needs (`--bg`, `--surface`, `--text`, `--dim`, `--border`), so dropping it in satisfies the dark/light rule instead of restating it. Dark is default; `body.light` flips it, and `:root[data-theme="light"]` works too. Also ships `--surface-2`, three text tiers, brand/accent with `-content` pairs, status soft/line pairs, shadows and radii. **To rebrand, change the hue numbers in Layer 0 and stop**, since nothing downstream hardcodes a color. Ported from the versable-builder kit's Layer-0/Layer-1 split with brand-neutral placeholder hues. Verified in both modes. | `conventions/html-assets/colors.css` |
 | _(add entries as they're promoted)_ | | |
 
 When the index grows past ~8 rows, break snippets out to their own file per category (`buttons.html`, `tables.html`, `modals.html`, etc.) and keep this table as the directory.
@@ -115,7 +124,6 @@ Capture this for future reference. Build out when repeated use justifies the con
 - Reference navbar + footer (dark-mode aware)
 - Button component variants (primary/secondary/danger, sizes)
 - JS-embed icon collection (single-file icon set, bundled or CDN) → may branch to sub-doc
-- Theming system (palette variables, scheme switcher, accent colors)
 - Basic modal + dialog pattern
 - Code-block component with syntax coloring for: markdown, JSON, TypeScript, YAML, TOML, `.env`, Python, Rust
 - Print stylesheet baseline

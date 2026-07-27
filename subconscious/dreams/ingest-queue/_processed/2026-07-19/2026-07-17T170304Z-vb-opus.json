@@ -1,0 +1,24 @@
+{
+  "id": "63575fc2-8868-47e4-a5c6-2253f63f0b53",
+  "ts": "2026-07-17T17:03:04Z",
+  "session_id": "vb-opus",
+  "project_root": "/Users/alcatraz627/Code/Versable/speedway",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/speedway/_20260717-vb-opus.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**[BLOCKER] Apply the Tailwind scan fix** from sub-agent a6a06cf9",
+    "**Re-deploy + VERIFY DEPLOYED CSS** (KIT_VERSION=0.0.5, --branch=phase0-kit-wiring);",
+    "**parts.tsx peek regression** (my Phase-3 de-shell): wrap its pane in",
+    "**titleFor 6 fable routes** (job/jobs/review/workspace/modules/files) \u2014 fable folds",
+    "**Owner queue (docs/plan/BACKLOG.md)**: main-branch merge (snapshot v1-von, then",
+    "**Owner ask via fable**: after activity-sidebar validated, look at the PART sidebar",
+    "**Backlog filed**: opacity-as-shade\u2192tier sweep, H1/H2/H3 UI heuristics, other 6"
+  ],
+  "tags": []
+}

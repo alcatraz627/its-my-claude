@@ -1,0 +1,23 @@
+{
+  "id": "9e8841e7-38f2-4442-b909-fc56703dc567",
+  "ts": "2026-07-22T22:08:11Z",
+  "session_id": "cl-inst-9e",
+  "project_root": "/Users/alcatraz627/.claude/widgets/claude-instances",
+  "checkpoint_path": "/Users/alcatraz627/.claude/widgets/claude-instances/_20260723-cl-inst-9e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: touch the push sentinel \u2192 agent re-runs `git push origin main`",
+    "USER taste call (deferred, not decided): a subtle \"refreshing\u2026\" cue for",
+    "PEER: canonical digest spec + verb (msg-0bcfbeca, parked-owed). When it",
+    "PH4 instances half (viewer not-found for dead #r anchors) \u2014 ungated,",
+    "PH5 role chips (after ipc 0.5 AND owner asks) \u00b7 Oracle (plan \u00a713",
+    "Scratchpad gate-probe files (perf-gate-probes/, gate-probes/) hold"
+  ],
+  "tags": []
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "91c2e2e7f756ba2b",
+    "slug": "infra-before-grep",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write"
+    },
+    "body": "If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "8923583f5c7a27d2",
+    "slug": "declared-ready-without-runtime-exercise",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "candidate",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "git\\s+commit\\b"
+    },
+    "body": "Before this commit message claims fixed/covers/handles X: confirm the staged diff contains the file:line implementing X. If not, drop the claim.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "2c5dedd9d8a2b605",
+    "slug": "structural-claim-without-reading-code",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "\\b(audit|gap analysis|gap table|coverage report|compliance (check|matrix))\\b"
+    },
+    "body": "Every non-trivial verdict in this audit needs a file:line or this-session runtime evidence pointer, added at write time. Verify uncited rows before sending.",
+    "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-07-25T05:00:11.592526Z",
+    "promoted_by": "evidence-auto"
+  },
+  {
+    "id": "e454d031fa4afcf4",
+    "slug": "literal-request-over-intent",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "^\\s*(ok|okay|sure|yes|yeah|go|go ahead|continue|keep going|next|do it|proceed)\\b[\\s.!]*$"
+    },
+    "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "3c40a861cd0842a7",
+    "slug": "file-referenced-without-full-path",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write"
+    },
+    "body": "When you mention this file to the user, make the first mention an absolute path starting with / or ~, not a bare filename.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "44a5d9b7187585b2",
+    "slug": "speculative-abstractions-without-a-load-bearing-caller",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs)$"
+    },
+    "body": "Name the current caller for every new exported function/type here. No caller, or an existing primitive already fits? Don't create it.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "8f2469b9c91895c0",
+    "slug": "ascii-art-tables-instead-of-gum-tools",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "\\.md$"
+    },
+    "body": "Write source markdown, never renderer output. Scan the first ~20 lines: uniform 2-space indent or '…' inside table rows means rendered-output-saved-as-source — rewrite it.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "fbbe2e1ac4733ec2",
+    "slug": "source-comment-hygiene",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs|swift)$"
+    },
+    "body": "For any comment over 3 lines: name the single load-bearing fact, write only that in 1-2 lines. Still longer? It's an essay — move it to a doc and link.",
+    "created": "2026-07-24T14:54:37.875879Z"
+  },
+  {
+    "id": "7a32a10e40ad8079",
+    "slug": "review-missed-stale-caller-after-rename",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(rename|renaming|rename it|change the name of)\\b.*\\b(field|tag|key|column|flag|constant|filename|file name|env var|status)\\b"
+    },
+    "body": "Before renaming: run `rg -F '<old-name>'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.",
+    "created": "2026-07-25T05:00:11.590362Z"
+  },
+  {
+    "id": "d76985ac119aa0bb",
+    "slug": "status-verdict-from-stale-mental-model-no-re-check",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Read",
+      "input_pattern": "(\\.current-session-id|/tmp/.*(session|registry|state|lock))"
+    },
+    "body": "This is a cached artifact, not live state. Re-derive the claim from a live source (ps, process tree, env, sourcing the file) before asserting which session/tty/writer is real.",
+    "created": "2026-07-25T05:00:11.590362Z"
+  },
+  {
+    "id": "b26957e5af923ced",
+    "slug": "sub-agent-material-output-left-in-conversation-only",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "atone(\\.sh)?\\s+add\\b"
+    },
+    "body": "Persist juror/sub-agent verdicts through the data layer: use `atone add --case-file <path>` so the output lands on disk. Never relay a verdict by hand from a return string.",
+    "created": "2026-07-25T05:00:11.590362Z"
+  }
+]

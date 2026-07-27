@@ -1,0 +1,24 @@
+{
+  "id": "3cb749d1-3940-4b15-9e43-f2f01c9066c7",
+  "ts": "2026-07-18T09:43:05Z",
+  "session_id": "vb-opus",
+  "project_root": "/Users/alcatraz627/Code/Versable/speedway",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/speedway/_20260718-vb-opus.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Workflow Defaults layout:** owner viewed both \u2192 Variant-A (narrow) is RULED OUT (breaks",
+    "**Job-detail title:** BUILD inline rename (add `InlineEdit` to job.tsx JobHeader; parity with",
+    "**Add-to-schema:** DEFER (needs a schema write path + versioning + a global-vs-per-workspace",
+    "**Criticals meter:** BUILD the per-job unfilled-criticals COUNT on the jobs list (extend",
+    "**Static-copy fixes** (from C-static-copy-review.md, ranked): job.tsx:75 raw status \u2192 polished",
+    "**JobActions double-status** (minor follow-up): JobStateBadge AND JobActions now both say",
+    "**Review:** after the builds, get owner + an adversarial sub-agent review, then done-enough check."
+  ],
+  "tags": []
+}

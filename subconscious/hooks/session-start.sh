@@ -10,7 +10,10 @@ else
     PAYLOAD='{"event":"session_start","ts":'$(date +%s)'}'
 fi
 if [ -S "$SOCKET" ]; then
-    RESPONSE=$(printf '%s' "$PAYLOAD" \
+    # The daemon reads with read_line: the trailing newline is what lets it
+    # parse BEFORE this client's 2s recv timeout, instead of only at EOF —
+    # without it every briefing died as a broken pipe (root-caused 2026-07-18).
+    RESPONSE=$(printf '%s\n' "$PAYLOAD" \
         | python3 -c "
 import sys, socket as S
 s = S.socket(S.AF_UNIX)

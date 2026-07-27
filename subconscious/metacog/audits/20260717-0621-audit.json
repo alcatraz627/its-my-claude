@@ -1,0 +1,239 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16089,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.27330431472932515,
+    "unit_count": 24
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — present in ~4/8 tool-using units (~50%, below 73-85% six-cycle baseline): dfd19dc0-8 (ls for lockfile presence check at end of compound rg command); dfd19dc0-17 (ls pnpm-lock.yaml after trash as deletion-confirmation probe where test -f or stat is semantically correct); c37b0f17-4 (multiple: ls -d data documents as directory existence probe, ls -dt .claude/output/*/ as directory listing, ls scripts/ as directory listing, ls -la node_modules/@versable-git/ui as existence/info probe, ls -d node_modules/exceljs as existence check); c37b0f17-8 (ls documents/ after git mv for emptiness verification, ls data/*.xlsx data/*.csv as presence confirmation); rate marginally below six-cycle baseline this cycle; deprioritize per stagnation guidance, no new intervention recommended",
+      "commit_while_peer_reply_pending:RECURRING — dfd19dc0-10 (flagged NEW in prior cycle, now confirmed RECURRING): agent sent IPC collision query to catch-fable-7c with --reply-by 5m asking Fable to choose option a or b regarding shared-tree collision in speedway; in the same unit, immediately staged and committed versable-builder without waiting for the peer reply; the commit was structurally clean (versable-builder only, contamination guard passed) but the coordination decision was still in-flight; second confirmed instance of this exact pattern; escalated from NEW to RECURRING; cross-references dream insight 2 (task momentum drove shared-state commit past coordination boundary)",
+      "re_edit_thrash:RECURRING:REGRESSION — c37b0f17-4: at least 6 Edit calls to export.server.ts with 3 success:false interspersed with 4+ Read calls and Bash rg probes before reaching stable success; uploadtemplate.server.ts also required 3 Read + 2 Edit cycles; regression from IMPROVING trajectory sustained six-plus prior batches; this is the deepest thrash depth since the b5ff6b1a-3 regression (2026-07-13); the file was Read multiple times yet match strings still failed on subsequent Edit attempts, suggesting read window is not covering the exact edit region; reclassifying from IMPROVING back to REGRESSION",
+      "repeated_read_same_file_unit:RECURRING:STABLE — c37b0f17-4: export.server.ts read 4+ times in single unit across failed Edit attempts; uploadtemplate.server.ts read 3 times in same unit; confirmed RECURRING from prior cycles; co-occurring with re_edit_thrash regression, suggesting the two patterns compound: each thrash failure triggers an additional read instead of a targeted offset read; low severity individually, but compounding cost in c37b0f17-4 is high",
+      "git_push_without_fresh_approval:BORDERLINE — c37b0f17-8: git push origin phase0-kit-wiring executed after input 'fine update refs comments fable' (101 chars, terse continuation); user Accepted so no correction; prior cycles flagged this at RECURRING:STABLE (3 instances); this batch adds a fourth instance where the authorization signal was terse continuation rather than explicit per-push approval; cross-references dream insight 1 and 2; no escalation recommended given Accepted outcome, but pattern persists"
+    ],
+    "calibration_score": 0.44,
+    "cross_references": [
+      "dream_insight_1 (git-push prohibition most violated rule, compaction strips it): c37b0f17-8 pushed to shared branch on terse continuation 'fine update refs comments fable' without explicit per-push authorization; c37b0f17 session appears continuous (not post-compaction), so this is the inertia/momentum variant; the insight's compaction-strip mechanism is not the driver here but the authorization-blur mechanism is identical",
+      "dream_insight_2 (terse continuation does not authorize shared-state mutations): dfd19dc0-10 is the clearest instantiation this batch — commit executed on task momentum while IPC coordination reply was outstanding; the 'my half is clean' reasoning substituted for 'coordination is settled'; c37b0f17-8 git push on 'fine update refs' is a softer second instantiation in the same batch; both confirm the insight's core claim that the local-vs-shared authorization boundary is not being enforced at commit/push time"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "commit_while_peer_reply_pending has escalated from NEW to RECURRING (2 confirmed instances in consecutive cycles); advisory tracking has not suppressed it; recommend explicit precheck before any stage/commit operation when a claude-ipc --reply-by message is in-flight: treat outstanding reply-by as a blocking coordination signal equivalent to a pending merge conflict, not a background task",
+      "re_edit_thrash regression in c37b0f17-4 breaks the IMPROVING trajectory sustained six-plus cycles; root cause appears to be match-string precision failure on large files read in full rather than at offset; calibration fix: before any Edit on a file >200 lines that has failed once, read with offset+limit bracketing the exact edit region, extract the match string verbatim from that read, then edit; do not re-read the full file and retry with the same match string",
+      "shell_tool_preference_violations and repeated_read_same_file remain at stagnation threshold across six-plus cycles with no improvement trajectory; per prior stagnation guidance, deprioritize new interventions for these patterns; rate this cycle is below baseline ceiling, confirming no escalation needed",
+      "git_push_without_fresh_approval: fourth instance in pattern history; all prior instances were either corrected or borderline-accepted; recommend adding explicit push-authorization checkpoint sentence to task completion flow before any git push call, even when task authorization was given earlier in the unit"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 27
+  },
+  "sessions": [
+    [
+      "ff1ba24e-bf75-498c-94b3-5471a3b923e4",
+      122317
+    ],
+    [
+      "fec3c9a6-6361-4bc3-b1ef-26b75e16ad6e",
+      122702
+    ],
+    [
+      "fea7b99e-199b-478f-bb43-067997349c34",
+      93369
+    ],
+    [
+      "fe66c4f7-98a0-4eae-8601-bfc3d5e42609",
+      81262
+    ],
+    [
+      "fca0d379-a2f4-4ab3-b7d0-e969520e20c7",
+      102853
+    ],
+    [
+      "fb3fba00-331f-48c5-933a-8057e1f3d9dc",
+      124710
+    ],
+    [
+      "fb05e9bb-52ab-44f8-8011-86295b67794a",
+      106610
+    ],
+    [
+      "f7f53f6b-75bc-4125-8edc-48ccb70257bb",
+      122256
+    ],
+    [
+      "f6ce533d-7789-476c-a748-163f452a3a40",
+      118789
+    ],
+    [
+      "f28f37ea-30a5-48a1-a5fe-0cd1b96242d3",
+      96501
+    ],
+    [
+      "f21657f7-4234-4dec-b1bf-33f762ccea26",
+      115073
+    ],
+    [
+      "ef7d4e3b-31da-40f1-a6c8-668c13857abc",
+      117661
+    ],
+    [
+      "eb98c3f5-1f8e-4416-a134-2b847ea3c72b",
+      84786
+    ],
+    [
+      "ea0f297c-6edd-4cf1-ac10-b46877e6627d",
+      121695
+    ],
+    [
+      "e928659b-aadc-4a9d-943e-0e739a14149e",
+      100670
+    ],
+    [
+      "e6c5b99a-b125-472a-8201-7d6667a4690e",
+      102996
+    ],
+    [
+      "e5d65373-eb38-4388-8cac-d0fa7a98260d",
+      118013
+    ],
+    [
+      "e49833e6-1db5-4a8c-8b8c-6532d8352c1a",
+      114624
+    ],
+    [
+      "e12034b9-a883-4199-b9c8-a67073c1f2a3",
+      115581
+    ],
+    [
+      "e06a9bfc-5475-4693-bd8c-116b98782830",
+      130676
+    ],
+    [
+      "dfd19dc0-00da-4fb3-9a44-73ec95fef70c",
+      3693402
+    ],
+    [
+      "dfc077d7-b675-4066-a1aa-1a68faeedb02",
+      110407
+    ],
+    [
+      "d99442eb-c7fa-484a-ab5d-f0106d6c6170",
+      101069
+    ],
+    [
+      "d7f2216e-05af-4468-ae9b-dbe7d73c6ebf",
+      97093
+    ],
+    [
+      "d3763dbc-87c6-433f-9667-3ae55e3558de",
+      113661
+    ],
+    [
+      "d0321319-f1e3-4350-94ce-8cc929dda076",
+      121346
+    ],
+    [
+      "cf95c9d6-1299-480e-9dde-44aebf4a12ba",
+      116281
+    ],
+    [
+      "cbef755f-1f95-4136-95bc-bd154160656e",
+      114727
+    ],
+    [
+      "c89f5e2e-8232-40cc-bd82-3ca17092cd68",
+      102385
+    ],
+    [
+      "c6588bcd-2a89-4fce-91fe-94b62ff760e8",
+      116126
+    ],
+    [
+      "c4d9dd30-e39a-4518-ab1b-95be0795f82d",
+      113156
+    ],
+    [
+      "c37b0f17-c8b4-48fb-af4c-c79534e6eb43",
+      4278682
+    ],
+    [
+      "c2458031-d20c-43c3-9b76-a60410210e71",
+      121716
+    ],
+    [
+      "be2b806c-e3e8-4835-b020-8a2cd6fde877",
+      98931
+    ],
+    [
+      "bdbd0891-328e-44b2-8717-a19840881124",
+      127092
+    ],
+    [
+      "bcfc6dff-bb36-4548-a8d0-553d214e3017",
+      88885
+    ],
+    [
+      "bcb2457e-b8ea-482a-b084-c798d55b31a1",
+      114802
+    ],
+    [
+      "bab7477d-53d1-4ca9-a725-478fd451f36c",
+      91538
+    ],
+    [
+      "ba88cb4e-5687-43ef-9a67-cc32c9d33889",
+      93128
+    ],
+    [
+      "b9566720-0946-4f7c-bce5-1029d8584698",
+      106554
+    ],
+    [
+      "b84975b0-74d9-4213-ab2e-cc060d190b51",
+      118169
+    ],
+    [
+      "b3b4c543-7d30-4316-95c2-d246e0361166",
+      126910
+    ],
+    [
+      "af3015bf-5733-4cd9-b7d7-67dc4b502352",
+      113013
+    ],
+    [
+      "af1a36d1-9373-4e2f-a1df-db37a2dc7594",
+      121242
+    ],
+    [
+      "af17aaf6-62df-41e4-985a-e7fc4ca28851",
+      106583
+    ],
+    [
+      "ad7b0dc0-8a07-4d22-bb0a-288aad5ee26a",
+      111311
+    ],
+    [
+      "a8ff749c-7148-4652-b5f7-a5850e25ffef",
+      119211
+    ],
+    [
+      "a8d9d676-d960-4dc8-9186-2479fd9f6336",
+      101469
+    ],
+    [
+      "a78c5a57-2746-4f75-b887-12f369c5a136",
+      86483
+    ],
+    [
+      "a427e457-19ab-4601-9fff-b681b04dce4c",
+      96556
+    ]
+  ],
+  "timestamp": "2026-07-17T06:21:38.188982Z",
+  "tokens_used": 19958,
+  "units_analyzed": 24,
+  "units_total": 24
+}

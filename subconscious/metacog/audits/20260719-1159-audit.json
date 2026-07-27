@@ -1,0 +1,231 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18132,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.018973665961010275,
+    "unit_count": 14
+  },
+  "response": {
+    "biases_detected": [
+      "no_new_biases_detected:all_recurring_bias_classes_absent — zero tool calls across all 14 units means shell_tool_preference_violations, re_edit_thrash, write_before_read_trap, and git_push_without_fresh_approval classes are structurally inapplicable; these are read-only style-enforcement subprocess sessions with no mutation surface"
+    ],
+    "calibration_score": 0.52,
+    "overconfident_count": 0,
+    "recommendations": [
+      "low_signal_batch:all_14_units_have_zero_tool_calls_and_unknown_outcomes — calibration inference is structurally limited; no confidence claims can be verified or falsified without tool outcomes or user reactions; do not weight this batch heavily in trajectory calculations",
+      "scope_appropriate:tool_abstention_consistent_with_task_type — enforce/style/ledger/file/content sessions correctly produced text-only analysis without invoking edit or bash tools; this matches expected behavior for hook-driven style analysis subprocesses",
+      "output_length_variance_within_normal_range — response lengths span 53 to 428 chars across sessions with input lengths 3201 to 13326; no systematic over- or under-response pattern detected relative to input size",
+      "no_regression_from_prior_cycles:recurring_bias_trajectory_unchanged — shell_tool_preference_violations, re_edit_thrash, and git_push_without_fresh_approval remain the dominant recurring classes but are not observable in this zero-tool-call batch; prior cycle scores (0.38, 0.41, 0.44) are more representative of active coding sessions and should anchor trend analysis over this batch"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 14
+  },
+  "sessions": [
+    [
+      "1ced44b1-52be-421c-a897-b6b0851d9f60",
+      101121
+    ],
+    [
+      "1a658539-e81c-44ed-9a19-3efb6dfd86db",
+      119393
+    ],
+    [
+      "1a5558cd-a7aa-4b59-ac92-2e922b212e81",
+      89189
+    ],
+    [
+      "1a45595b-9adf-4543-b1fc-6458745f9f10",
+      102316
+    ],
+    [
+      "18e8f6ef-a179-4d40-ba06-d6028c7131c7",
+      99242
+    ],
+    [
+      "186559c2-e8c2-4bae-8c2d-7996a50f5321",
+      99415
+    ],
+    [
+      "16df6afa-9f84-474a-aad5-75c69b7e5239",
+      105517
+    ],
+    [
+      "16138727-8635-49aa-8fe9-f8bb28209d0f",
+      112981
+    ],
+    [
+      "13eafd61-10e7-44ea-b738-6b8b3fbb2aed",
+      86855
+    ],
+    [
+      "13e95479-75be-4ec0-9baa-a04db0f6a0fa",
+      111612
+    ],
+    [
+      "13915c5a-e1f0-4153-bc8c-459970e18ca6",
+      98293
+    ],
+    [
+      "130efd87-36c1-43f6-b2f4-4383ade18187",
+      126027
+    ],
+    [
+      "127abd04-a318-4443-bb2a-b43a404b2933",
+      122650
+    ],
+    [
+      "1274f08a-a6e7-4216-90bd-e90211daca25",
+      102057
+    ],
+    [
+      "126ffb02-d107-4f1b-b350-f60b0147ee11",
+      99308
+    ],
+    [
+      "11a7b0dd-8f0c-48f8-81ac-dc8da35b3fc9",
+      115982
+    ],
+    [
+      "10400be9-15ff-4daf-b97e-77ad5acfc5a1",
+      111271
+    ],
+    [
+      "0f606f98-ede9-436d-b446-616a963125c7",
+      111986
+    ],
+    [
+      "0eeeeda3-b36b-47b0-a66d-1bb04437c33c",
+      122759
+    ],
+    [
+      "0e3c0fa4-e4b6-46f7-ac6f-280b94e5d216",
+      93833
+    ],
+    [
+      "0e2b35de-a1bd-4e5a-8c09-df397f9fc0e9",
+      123799
+    ],
+    [
+      "0e241142-d46a-495e-ae5f-158430a22da1",
+      116857
+    ],
+    [
+      "0d99230d-06c3-46e2-8172-9450b8e1adb0",
+      122732
+    ],
+    [
+      "0d05d13a-b400-487d-a7ac-7df2f2723009",
+      107563
+    ],
+    [
+      "0c29c3d7-000b-4117-bc2a-36ec4b1158f9",
+      80150
+    ],
+    [
+      "0bb581bd-6e33-4617-81d1-b276a26af627",
+      113402
+    ],
+    [
+      "0bb48422-f063-491b-8329-5da5f7190965",
+      106434
+    ],
+    [
+      "0a8de9b0-7ee1-4cbd-b61c-7873d92a7251",
+      94919
+    ],
+    [
+      "0a28fa23-1a0d-4117-9353-5538be53c352",
+      109844
+    ],
+    [
+      "09a65c9f-fc13-46ab-948d-38cc996f81ed",
+      97913
+    ],
+    [
+      "09144c31-a5c5-4cf9-9006-3a9f99fa5447",
+      107698
+    ],
+    [
+      "08f9b67b-a40e-42b4-a5d7-835751a0546a",
+      108794
+    ],
+    [
+      "080ad6b1-cdd3-46db-a191-19ee2125c241",
+      110848
+    ],
+    [
+      "07ee6d37-a852-4c32-997c-5cb3a00e879f",
+      113235
+    ],
+    [
+      "0773b946-bfda-4af3-99c2-c0b74fcbaeb8",
+      99829
+    ],
+    [
+      "076686d3-2e8a-4ac4-a1b0-2ba205bd005d",
+      110698
+    ],
+    [
+      "070ff209-9fed-489e-9887-d61e91a291e8",
+      125629
+    ],
+    [
+      "068a8357-cf73-4355-98b4-44c8e6163322",
+      108821
+    ],
+    [
+      "05fff95d-b780-41ea-87bc-f44e4cd32940",
+      130278
+    ],
+    [
+      "054090de-3cf4-4466-b9f5-73282c4f6855",
+      114046
+    ],
+    [
+      "04a0c8e4-aa64-496a-9ab8-6059b8113f82",
+      113324
+    ],
+    [
+      "04983d42-c9b8-4737-8f0d-d117412d265c",
+      97027
+    ],
+    [
+      "04331da3-f624-47f8-a04d-b5ec486b8466",
+      119401
+    ],
+    [
+      "0425030a-aef0-4cff-b3b7-6fe1594371a7",
+      107948
+    ],
+    [
+      "03d6a236-05ef-45b9-9330-401759d3f161",
+      134558
+    ],
+    [
+      "02dadadb-d11b-4488-b8e4-ff15ec9bffae",
+      136305
+    ],
+    [
+      "02978221-3d4f-4dde-918b-484dd99f04c2",
+      114757
+    ],
+    [
+      "012a3e08-b5f1-4b73-8257-a09f4a75750a",
+      118210
+    ],
+    [
+      "01129132-3c1b-4a53-ae5f-2c0b25a43d90",
+      90255
+    ],
+    [
+      "00c07f2f-23b5-4aa3-81fe-810c71dbbb17",
+      128587
+    ]
+  ],
+  "timestamp": "2026-07-19T11:59:41.639012Z",
+  "tokens_used": 3156,
+  "units_analyzed": 14,
+  "units_total": 14
+}

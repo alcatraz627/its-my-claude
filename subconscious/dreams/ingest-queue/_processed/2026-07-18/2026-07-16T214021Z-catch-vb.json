@@ -1,0 +1,24 @@
+{
+  "id": "a310ee4f-5709-4d54-897f-7404f7580998",
+  "ts": "2026-07-16T21:40:21Z",
+  "session_id": "catch-vb-a7",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260717-catch-vb-a7.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "OWNER asks (block PR #2 closure): gh-write OK for the drafted description \u00b7",
+    "#10 endgame arc (next agent work): walmart follow-up (B5.2 step-page recipes",
+    "#7 Accounts + usage redo \u2014 waits on the owner feedback batch (pairs with",
+    "22 systemic-sweep findings \u2014 owner sequencing.",
+    "#11 housekeeping \u2014 mock-speedway reap ONLY when the mock stops being the",
+    "clade-ipc threads: usage-fold-in real merge (cleared, after its re-verify on",
+    "Re-arm the heartbeat Monitor on resume (recipe in Decaying prerequisites)."
+  ],
+  "tags": []
+}

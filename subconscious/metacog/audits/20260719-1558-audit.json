@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17707,
+    "correction_density": 0.03389830508474576,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.16656066199945394,
+    "unit_count": 59
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — efd2a3ab-2: ShellCrumbs.tsx had 2 consecutive Edit failures (success:false) before Read+retry resolved; taxonomy.tsx had 1 Edit failure before scratchpad workaround resolved; sixth-plus confirmed instance class across session history; advisory-only regime shows zero improvement trajectory",
+      "re_edit_thrash:RECURRING:PARTIALLY_RECOVERING — efd2a3ab-2: ShellCrumbs.tsx 2-failure depth, taxonomy.tsx 1-failure depth before adaptive recovery; shallow relative to 7-failure peak in 26e38703-4; partially-recovering trajectory holds consistent with prior cycle assessment",
+      "git_push_without_fresh_approval:RECURRING:STABLE — efd2a3ab-2: three bundled commit+push Bash calls (JobsTable commit, sub-row commit, schemas+export commits) without per-push confirmation; efd2a3ab-11: one bundled commit+push for lockfile fix; ninth-plus confirmed batch instance across session history; zero improvement across eight-plus advisory cycles",
+      "shell_tool_preference_violations:RECURRING:STABLE — efd2a3ab-2: sed -n '147,152p', sed -n '195,300p', sed -n '1,40p', sed -n '80,110p', sed -n '1,60p' range reads used instead of Read with offset/limit; rate consistent with 42-83% multi-cycle baseline; deprioritized per standing guidance — no new advisory entry added"
+    ],
+    "calibration_score": 0.42,
+    "overconfident_count": 1,
+    "recommendations": [
+      "write_before_read_trap and re_edit_thrash share root cause (Edit attempted without reading current file content in same turn); a PreToolUse hook gating Edit on whether the target path was Read in the current turn would address both classes with one mechanical intervention — advisory regime is exhausted for this class",
+      "git_push_without_fresh_approval: eighth-plus advisory cycle produced zero improvement; mechanical gate preventing bundled commit+push in single Bash calls (or requiring explicit per-push sentinel) is the only remaining path to improvement",
+      "shell_tool_preference_violations: deprioritized per standing guidance — do not add new advisory entry; plateau confirmed, correct intervention already in backlog",
+      "NEW OBSERVATION (environment): Write to _checkpoint.claude.md failed twice due to symlink at a well-known path; agent recovered correctly via readlink probe then alternative path write — not a calibration failure but pattern suggests adding readlink probe before Write to canonical checkpoint paths as a lightweight convention"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 1
+  },
+  "sessions": [
+    [
+      "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+      33546029
+    ],
+    [
+      "95f1a846-cf31-477a-9624-a66474069594",
+      97964
+    ],
+    [
+      "003ab6d4-e79d-4b84-9135-1ae52e4e5756",
+      99157
+    ],
+    [
+      "e2c1ce29-a4c8-4122-88ab-687354ef33f3",
+      1824352
+    ],
+    [
+      "9431f286-bcbb-4e09-b1c4-8dcc52999162",
+      619678
+    ],
+    [
+      "1551df9f-0e95-4d12-a0a9-3b244ea6f9d0",
+      1251407
+    ],
+    [
+      "7f66b053-c1ee-4c36-a996-d04630ae2004",
+      2205494
+    ],
+    [
+      "50373a65-8509-4969-a6de-54ac63fe374a",
+      4224005
+    ],
+    [
+      "3b1bb996-32de-46bc-92c9-4cea3270f7a2",
+      100264
+    ],
+    [
+      "17888f2b-4800-434f-ac9a-d0340abc67be",
+      114570
+    ],
+    [
+      "fcbf6242-3d04-4af5-a685-7ed8a323b2df",
+      134589
+    ],
+    [
+      "fb71b842-7aeb-4ebb-aa6a-df4ea2d9dfa1",
+      140333
+    ],
+    [
+      "fac96022-ad9e-468e-8c9e-fde08b018395",
+      107861
+    ],
+    [
+      "fa797843-b89f-4789-b7d3-8b296811515e",
+      120617
+    ],
+    [
+      "f24954f1-4ff2-45f6-95a7-d4c3d64055ed",
+      206078
+    ],
+    [
+      "f070fefe-a0b8-46f1-b4da-fda6b07cbf28",
+      92744
+    ],
+    [
+      "eb80ef53-6b93-4325-8761-562f935ad235",
+      169532
+    ],
+    [
+      "e8bac5c5-3183-451a-86d4-de84fc141c35",
+      133142
+    ],
+    [
+      "e8508cda-a9d7-44e8-9b31-02b936163909",
+      107813
+    ],
+    [
+      "df91af37-ae6c-4392-a2b1-fd0e8dd73c85",
+      137240
+    ],
+    [
+      "dcfb21dc-4b5a-4afd-b5a4-4163e28de226",
+      119064
+    ],
+    [
+      "d88d7ebc-175c-4042-80ba-bfb023668bb0",
+      112946
+    ],
+    [
+      "cd426403-55bf-4153-a91a-ae9f4df189c3",
+      134197
+    ],
+    [
+      "c9bb561b-c442-442b-b6eb-51d57db1bcd4",
+      131597
+    ],
+    [
+      "c9b0c87b-8852-4123-9c98-20664691fb03",
+      148704
+    ],
+    [
+      "c680ef5a-9e19-4537-b90b-16d9916ec654",
+      137673
+    ],
+    [
+      "c5465a36-cf4a-4d5a-933c-26dc803d146f",
+      151318
+    ],
+    [
+      "bfcfc174-5480-4bb8-9967-6412aa4cf5b3",
+      114577
+    ],
+    [
+      "bf222de1-fd84-449c-a7b5-bc818c9032a4",
+      109899
+    ],
+    [
+      "bc9799a7-09d2-4ad3-9e4f-06ccf872cae4",
+      109540
+    ],
+    [
+      "b566d26c-5a30-443b-a95b-b56b9d909874",
+      111754
+    ],
+    [
+      "b3e4d2a7-1020-4a46-ae1e-6d5513118f99",
+      137529
+    ],
+    [
+      "b0f45804-f90c-47f2-889f-aec297ccd9fb",
+      162110
+    ],
+    [
+      "b014d52c-f980-4f93-a6a4-d4a0c98cbd69",
+      130461
+    ],
+    [
+      "af0894e4-5189-42d3-a9ce-fbd7792a4cd7",
+      112407
+    ],
+    [
+      "adc15f8c-25b0-4017-90c8-565cdcc7e34d",
+      125310
+    ],
+    [
+      "ada268e1-78c4-4680-8328-e0f1a044630c",
+      117523
+    ],
+    [
+      "ad7933ce-4fb3-4365-a130-abe4efe2e018",
+      111473
+    ],
+    [
+      "ac6f8742-a98e-442c-98a1-0a9802a1faf7",
+      124624
+    ],
+    [
+      "a90b9fed-4ea8-4678-9d9f-74f041181c6a",
+      116197
+    ],
+    [
+      "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+      8715023
+    ],
+    [
+      "a3fd8410-075e-4887-89cd-e82de4683203",
+      143951
+    ],
+    [
+      "a130c4a3-6159-47b1-8bfc-2acd76b7face",
+      140803
+    ],
+    [
+      "a12ab222-5b1a-4514-ba4a-5b67f266e1fa",
+      106629
+    ],
+    [
+      "a079b223-f516-4d33-88e0-8d147cd327a9",
+      130056
+    ],
+    [
+      "92a65182-1880-46d7-bfcc-deba46c833da",
+      174557
+    ],
+    [
+      "926d67dc-f749-4bb1-857f-a97d2c6a9175",
+      126554
+    ],
+    [
+      "8ec85785-7f23-449f-9674-304a76bdf9dc",
+      130336
+    ],
+    [
+      "8ab8b92a-984e-4048-9a49-4d8ffc4bf6dc",
+      110766
+    ],
+    [
+      "896b5554-1049-4899-b031-d79b312a27a0",
+      139526
+    ]
+  ],
+  "timestamp": "2026-07-19T15:58:55.516196Z",
+  "tokens_used": 11550,
+  "units_analyzed": 2,
+  "units_total": 59
+}

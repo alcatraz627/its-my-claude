@@ -1,0 +1,231 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.03225806451612903,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.14259691803076666,
+    "unit_count": 31
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — 7077459e-5: sed -n '390,410p' and sed -n '200,260p' range reads instead of Read with offset/limit; 7077459e-11: sed -n '238,278p' and sed -n '260,290p'; 7077459e-21: sed -n '210,216p', sed -n '290,296p', sed -n '154,172p', sed -n '183,200p'; no sed violations in 63575fc2-4 (resume unit used Read and ls for orientation instead); rate remains consistent with 42-83% multi-cycle baseline; stagnation threshold confirmed across five prior cycles — deprioritize further advisory entries per standing guidance",
+      "git_push_without_fresh_approval:RECURRING:STABLE — 7077459e-11: two bundled git add+commit+push chains in single Bash calls (run.tsx rename commit, files.tsx shell commit) without per-push authorization; 7077459e-21: one bundled git add+commit+push across three UI files (admin-usage, job.tsx, run.tsx) pathspec-only but still bundled; all Accepted; now seven or more confirmed batch instances across session history; advisory-only enforcement shows zero improvement trajectory across five-plus cycles — mechanical gate is the correct next intervention, not another advisory entry"
+    ],
+    "calibration_score": 0.41,
+    "overconfident_count": 1,
+    "recommendations": [
+      "git_push_without_fresh_approval has accumulated 7+ cycles with zero improvement — escalate to mechanical gate (guard-git-push.sh PreToolUse hook blocking bundled add+commit+push chains); advisory entries are generating no signal and should stop",
+      "shell_tool_preference_violations stagnation threshold reached across five cycles; deprioritize advisory entries for this pattern until a mechanical gate is scoped and evaluated",
+      "7077459e-21 committed actor-name render fixes (job.tsx, run.tsx) without visual browser verification — typecheck passed but the text substitution logic (useViewerEmail You-substitution reaching job detail and run header) was not exercised in the browser before push; UI text-logic fixes should include a browser screenshot step before commit even when typecheck is green"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "746b2a55-b6a2-4271-957e-2fb694397ba9",
+      117193
+    ],
+    [
+      "742dffb2-1ece-4a84-8791-413343f02e78",
+      120248
+    ],
+    [
+      "7393e0c0-dcdc-4a7e-a185-dd1eccf6ae7a",
+      114466
+    ],
+    [
+      "7261b756-5174-4536-8812-aa383269b512",
+      113307
+    ],
+    [
+      "71904d72-f5c3-47ee-9fae-e15f7d4b30ab",
+      113940
+    ],
+    [
+      "7077459e-da17-4740-9008-0437c3ef1c29",
+      15755767
+    ],
+    [
+      "6eb5fa8a-6202-4ca7-8eaf-3088e3756cd0",
+      114070
+    ],
+    [
+      "6e3bd281-c47e-4068-9c06-288d8dddbd5f",
+      107069
+    ],
+    [
+      "6e2c0134-c2f7-4e90-bb98-21d6fcfe8c8e",
+      111327
+    ],
+    [
+      "6e1630d6-6de4-4271-a89e-838e10275c3a",
+      111626
+    ],
+    [
+      "6df0b260-f59f-466c-9de6-959dd05d03d1",
+      106585
+    ],
+    [
+      "6bcf4090-06ca-482d-82f9-de0a1f0f3d7a",
+      111603
+    ],
+    [
+      "6a49d351-0538-4e83-9897-cdee525a6827",
+      117513
+    ],
+    [
+      "693c7f56-d94e-463c-8ac7-c54f9aefa0e5",
+      113101
+    ],
+    [
+      "680d45bc-e042-47c7-ad0a-a99edc4408ea",
+      85716
+    ],
+    [
+      "672e98cd-1650-4bcc-a84b-6da904623be4",
+      112864
+    ],
+    [
+      "6648de72-683e-4967-a9cd-f26e8278a397",
+      114531
+    ],
+    [
+      "6612af0f-0296-4eee-b28a-d7b2a945422d",
+      90159
+    ],
+    [
+      "64cd946d-d733-4d27-be59-bc38116044ab",
+      110204
+    ],
+    [
+      "63f980f4-92f6-4bd4-b572-592ea31e31f9",
+      117428
+    ],
+    [
+      "637ea95b-0f6e-403d-b9ee-6a9fea35f8a9",
+      132518
+    ],
+    [
+      "63575fc2-8868-47e4-a5c6-2253f63f0b53",
+      10673341
+    ],
+    [
+      "61ccc850-ed60-444f-8834-7e899d9b520e",
+      118213
+    ],
+    [
+      "6196da1d-c8f8-4890-b768-f0e92b27bb08",
+      127457
+    ],
+    [
+      "60934e76-f043-4e80-ad02-7aef3c3f2c28",
+      101423
+    ],
+    [
+      "60737ce4-a60a-4a5d-96f6-bfc4d5b65bea",
+      116584
+    ],
+    [
+      "603f4e07-e3ce-4eaa-8d74-5bde3995d938",
+      124533
+    ],
+    [
+      "5f4e8743-2815-41cd-94f2-e0d982dea604",
+      98940
+    ],
+    [
+      "5f3a4812-e290-4253-a186-e035cb357bb4",
+      6519709
+    ],
+    [
+      "5ef0b13a-d434-4063-9bdf-878a478e95cd",
+      114056
+    ],
+    [
+      "5ee63ffe-4f52-44ad-8a47-dc7ca18beb5e",
+      93431
+    ],
+    [
+      "5dcf2b21-00d2-4cc2-b839-15e0574f5b79",
+      113537
+    ],
+    [
+      "5d282d6c-66a8-4a1a-9ead-e581b6a2e344",
+      84747
+    ],
+    [
+      "5d213100-c410-4e5c-ace9-b6cc677d1165",
+      111046
+    ],
+    [
+      "5cbaef66-81e6-49a7-b477-d97def7de758",
+      128894
+    ],
+    [
+      "5c9de607-fe80-4ac0-8a8b-18fa19eda720",
+      136732
+    ],
+    [
+      "5c375e3c-dd9c-4cd9-b647-8be5dbe1559a",
+      126062
+    ],
+    [
+      "5c2020d7-0cee-4676-a25b-d32d8e59963b",
+      109954
+    ],
+    [
+      "5bc27bb9-1bf8-4027-8796-7082655ea17c",
+      119525
+    ],
+    [
+      "59910526-81da-46e3-9652-b5dab81e9a40",
+      114220
+    ],
+    [
+      "598ec007-bfd6-4c65-89db-71609f2b5088",
+      95360
+    ],
+    [
+      "59177bd4-ce4b-4aae-ad49-4e6fadc7fc78",
+      86638
+    ],
+    [
+      "5883a1c1-9be6-4e66-ac9e-232b2d749a07",
+      110317
+    ],
+    [
+      "56d3bf26-1a3c-4578-b14e-6ccfb921bc04",
+      87116
+    ],
+    [
+      "548f4d26-0b5f-413b-abf9-f05a2028a043",
+      120031
+    ],
+    [
+      "54220e47-2c6e-42f2-a007-dbd3a5a4dd08",
+      115721
+    ],
+    [
+      "532e56f7-897c-4486-bffb-61a091eb7015",
+      125829
+    ],
+    [
+      "531f7207-cfcf-4d22-b753-66ae77abb8d7",
+      97523
+    ],
+    [
+      "52c24f02-6ad9-48ab-9a06-b21b77b62c73",
+      137164
+    ],
+    [
+      "51b41151-7bcd-488f-bff7-3359c14adc45",
+      91743
+    ]
+  ],
+  "timestamp": "2026-07-19T05:39:02.026450Z",
+  "tokens_used": 11360,
+  "units_analyzed": 10,
+  "units_total": 31
+}

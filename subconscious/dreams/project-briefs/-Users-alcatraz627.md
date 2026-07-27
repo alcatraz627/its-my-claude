@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-16T07:35:18.603578+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-07-19T23:22:54.476621+00:00 · 20 patterns / 8 insights -->
 ## What this project is about
-A personal Claude Code harness and tooling environment (`~/.claude`) — infrastructure, scripts, hooks, and agents for the user's own dev workflow. Work is iterative, multi-agent, and frequently involves IPC between sessions.
+`~/.claude` global configuration and tooling for a heavy multi-agent, multi-session Claude Code setup. Dominant work style: orchestration, hook/script authoring, IPC coordination, and iterative dogfooding of the harness itself.
 
 ## Things to do (or keep doing)
-- **Ground before touching code**: explore the codebase and surface a recommendation first; jumping to edits without that grounding misses context
-- **Dispatch an adversarial reviewer sub-agent** immediately after implementing any complex feature — it reliably catches HIGH-severity bugs the main agent misses
-- **Prefer breadth-first v1 sweeps** across all surfaces before polishing individual items; pause a sweep to perfect one area only if the user explicitly redirects
-- **Treat social reassurance as comfort, not authorization** — "I trust you" / "that's fine" does not remove safeguards or confirmations
+- **Verify at the output layer**, not the send/compile/cache layer — a successful send, green test, or cached re-run proves nothing about the actual outcome; require a round-trip reply or observed artifact.
+- **Explore and ground in the existing codebase before editing** — surface a recommendation first; jumping directly to edits without that grounding is the primary friction trigger.
+- **Default to DENY for unknown inputs in any gate** — access gates, command dispatchers, and fallback handlers must treat unrecognized input as DENY, never ALLOW.
+- **Run the affected code path to claim it works** — runtime exercise catches bugs that 99+ test suites miss; coverage is not correctness.
 
 ## Things to avoid
-- **Don't defer task updates** — update the Task tool after each completed unit, not at milestones; a drifted list caught by the stop hook at turn 20 is a failure, not a recovery
-- **Don't patch specific instances of structural defaults** (one CLI added to a fallback list, one zero-default silenced) — fix the class of problem or the structural default regenerates
-- **Don't verify delivery by inspecting send-side logs** — IPC and async delivery require an actual round-trip reply from the peer to count as confirmed
-- **Don't batch sequential short-distance progress into confirmation prompts** — halt only at genuine decision points or destructive/irreversible actions
+- **Don't build per-page variants of globally-shared shell components** — audit sibling pages before writing any shell/sidebar/modal code.
+- **Don't convert absence into a concrete value** — missing fields, empty results, and unknown commands must emit UNCERTAIN/DENY, never a zero-default or success.
+- **Don't let the Task list drift** — call `TaskUpdate` incrementally; 20 edits with no task update is a session failure, not a milestone.
+- **Don't present deferred decisions without prior context + two concrete options** — omitting that forces a follow-up round-trip.
 
 ## Open questions / known gaps
-- **Task list hygiene under parallel agents**: concurrent sub-agent bursts consistently cause task-list drift; no durable reconciliation ritual exists yet
-- **IPC shell quoting**: backticks and special chars in message bodies produce zero-byte or corrupted IPC sends — a standing footgun with no automated guard
+- IPC architecture has no budget-exhaustion escape hatch: when the orchestrator hits its usage limit, waiting sub-agents block indefinitely — no recovery path designed yet.
+- Proxy-evidence substitution recurs across unrelated domains (IPC, gates, data, tests) suggesting the pattern isn't landing from rules alone; a mechanical gate may be needed.

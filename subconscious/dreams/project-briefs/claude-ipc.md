@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-14T03:20:17.852187+00:00 · 13 patterns / 3 insights -->
+<!-- i-dream project brief · 2026-07-23T00:58:16.447772+00:00 · 20 patterns / 8 insights -->
 ## What this project is about
-A cross-session IPC messaging broker for Claude Code instances; dominant style is infrastructure/tooling with real-time inter-agent coordination and live exercise as the verification standard.
+`claude-ipc` is an inter-process communication broker between Claude Code sessions. Work is coordination-heavy: message routing, delivery verification, ownership negotiation, and multi-agent task handoff.
 
 ## Things to do (or keep doing)
-- Dispatch an adversarial reviewer sub-agent immediately after implementing any complex feature — it catches HIGH-severity bugs the main agent misses
-- Dogfood every change by actually running the affected code path; test-suite green is not verification
-- Surface the structural signal behind any local workaround before applying it ("this works, but suggests X is missing from the system")
-- Prefer within-existing-dependency solutions when a feature would require a new library; surface the constraint first
+- Verify from the **consumer's** perspective — check delivery not send-success, observe in the user's mode not dev mode, run the path not the suite.
+- Emit explicit `UNCERTAIN`/`DENY` when input is absent; never zero-default or default-ALLOW a missing lookup — absence must propagate, not collapse to a plausible value.
+- Dispatch a fresh adversarial reviewer sub-agent immediately after implementing any complex feature; it reliably catches HIGH-severity bugs the main agent misses.
+- When a complaint says "too noisy / too aggressive," tune intensity — don't disable; reconstruct original intent before sizing the correction.
 
 ## Things to avoid
-- Don't treat user reassurance ("I trust you", "that's fine") as authorization to remove safeguards or gates — it's social comfort, not a removal mandate
-- Don't use silent zero-defaults (`dict.get('k', 0)`) when source data is absent; fabricated values produce plausible-looking but wrong downstream state
-- Don't mark tasks complete without reconciling the task list against actual edits — drifted lists must be reconciled before stopping
-- Don't broaden the scope of a user signal without restating your interpretation first; intensity complaints are a ceiling, not a removal order
+- Don't treat proxy evidence (send-success log, test exit code, single-mode screenshot) as verification — proxy confirms the action was performed, not that the consumer experienced the outcome.
+- Don't commit or push — this is a protected repo; prepare the change, show the diff, hand it to the user.
+- Don't apply a partial fix when told a component must be global — audit the full codebase and fix ALL instances in the same response.
+- Don't let task lists drift silently across many turns; reconcile completed/dropped items before stopping.
 
 ## Open questions / known gaps
-- Recurring tension between "minimize noise" requests and the desire to preserve safeguard gates — needs a calibration pattern, not binary on/off
-- Config validation happens at parse time only; write-time validation gaps silently break unrelated features when required fields are missing
+- Multi-agent ownership negotiation has no authoritative single source — parallel agents make conflicting assumptions about who owns which task; this manifests repeatedly.
+- Test pipeline caches produce false-positive verification; busting caches explicitly before claiming a code change is confirmed is not yet habitual.

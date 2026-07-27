@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16711,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.29328570888550465,
+    "unit_count": 12
+  },
+  "response": {
+    "biases_detected": [
+      "shell_tool_preference_violations:RECURRING:STABLE — efd2a3ab-2: sed -n range reads (3 instances: lines 147-238, 80-110, 195-300) instead of Read with offset; cat via fd subshell instead of Read tool; head -40 for file read instead of Read; ls -la@ for file-info probe; ls server* for existence check; head -c 80 with cat -v for partial file read; rate consistent with 50-85% six-cycle baseline; no improvement trajectory; deprioritize per stagnation guidance",
+      "re_edit_thrash:RECURRING — efd2a3ab-2: ShellCrumbs.tsx had 2 consecutive Edit failures (success:false) before a fresh Read then success; taxonomy.tsx had 1 Edit failure followed by scratchpad-copy workaround (cp to /tmp scratchpad, edit there, cp back) rather than re-read and retry; thrash depth lower than c37b0f17-4 regression peak; scratchpad workaround shows adaptive behavior but adds latency and obscures the root cause (match-string mismatch without sufficient pre-read); trajectory partially recovering from regression",
+      "write_before_read_trap:RECURRING:STABLE — efd2a3ab-2: Write to _checkpoint.claude.md failed twice (success:false) without a prior Read to verify the destination; readlink then revealed the path was a symlink; workaround was writing to a differently-named file; same ambiguous-destination class flagged in prior cycles on different surfaces; symlink as the failure mode is a new variant",
+      "git_push_without_fresh_approval:RECURRING:STABLE — efd2a3ab-2: three separate git add+commit+push chains bundled in single Bash calls without per-push authorization; all Accepted; consistent with prior cycle pattern; fourth confirmed batch instance; no escalation given Accepted outcomes"
+    ],
+    "calibration_score": 0.42,
+    "overconfident_count": 1,
+    "recommendations": [
+      "re_edit_thrash: No new intervention — partial recovery from c37b0f17-4 regression observed; scratchpad workaround is adaptive but not a root-cause fix; root cause (match-string mismatch without targeted offset read of the exact edit region) persists; monitor next cycle for regression or further improvement before intervening",
+      "shell_tool_preference_violations: Deprioritize — six-plus cycles at 50-85% rate with no improvement; mechanical enforcement appears the only effective lever; advisory recommendations are not landing",
+      "write_before_read_trap: Monitor for frequency increase — symlink destination is a new surface variant not previously flagged; pre-Write existence check plus Read before overwriting any file not created this session should be standard; consider whether a hook targeting Write-on-unread paths would reduce frequency",
+      "git_push_without_fresh_approval: No escalation — all four instances Accepted; pattern entrenched but not causing corrections; consistent with prior cycle assessment"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "7eb9ad9b-35c0-4a5d-8120-92a192a68bb0",
+      136290
+    ],
+    [
+      "f66b7a99-aba0-4553-a472-e3686d2097d4",
+      102742
+    ],
+    [
+      "31506d2e-352a-4a6b-b34f-598958820fd7",
+      96528
+    ],
+    [
+      "27b83b13-6027-47bf-ba52-2ff159df71f9",
+      112907
+    ],
+    [
+      "ffe2e2e6-5fc4-4b46-a0d8-5dd7237ad2ad",
+      132636
+    ],
+    [
+      "fd70e655-aedc-4b65-9ac7-7bbecca72149",
+      91205
+    ],
+    [
+      "fb8f7e17-d672-47dd-b8e0-2d30dbcb057a",
+      124223
+    ],
+    [
+      "fa03af0b-1964-4c8b-ae35-5bd26f5334c1",
+      109353
+    ],
+    [
+      "f9f8f3df-bd98-435f-8c3e-0f9a38ad26c4",
+      112160
+    ],
+    [
+      "f95d1223-d17c-4587-81d9-58e75d7b8dd0",
+      110981
+    ],
+    [
+      "f7f88bf4-3f9a-4b0c-b62a-0356120f6a2d",
+      99940
+    ],
+    [
+      "f374ddbf-b13a-4ca1-9d8e-2a15c7bfaeee",
+      104391
+    ],
+    [
+      "efd2a3ab-afed-430d-a50e-7b2f0dbc7bec",
+      9506843
+    ],
+    [
+      "efa3fb31-5b6e-4ea7-b2b9-00d2823f43c4",
+      136631
+    ],
+    [
+      "ef7efe2d-9f9d-460b-bf21-59befb64bc91",
+      112731
+    ],
+    [
+      "eef7b952-e4ba-4702-a9bf-dedf16a56c04",
+      117061
+    ],
+    [
+      "ee9539d2-f8e0-44e2-88da-0dd9f45df339",
+      114134
+    ],
+    [
+      "ea4af972-095e-4b7e-9394-e440072aa449",
+      100419
+    ],
+    [
+      "e8f2ec91-cde5-4616-948a-3a03880601a7",
+      119808
+    ],
+    [
+      "e78161eb-4a99-444d-95a3-f676a5556b01",
+      111834
+    ],
+    [
+      "e714d00b-08c0-48b2-a2d5-b9ed6482d2cc",
+      105548
+    ],
+    [
+      "e653f311-33c6-4b28-9e92-ce2b9e7143b3",
+      113934
+    ],
+    [
+      "e4f347a6-6b21-4f9b-9615-c551d3afe88a",
+      93177
+    ],
+    [
+      "e4533e88-9f5e-4e0d-b9ee-81fbd7d81665",
+      104747
+    ],
+    [
+      "e44ae942-8dd1-4724-b303-85ab3d8c0d31",
+      112200
+    ],
+    [
+      "e41464e2-31b8-43e8-bfd3-8682538d3976",
+      112467
+    ],
+    [
+      "e25bb16a-90ec-4b4e-bf07-0088072341f2",
+      109991
+    ],
+    [
+      "ded0d72e-5711-42e0-8210-492259b6fdad",
+      121945
+    ],
+    [
+      "de44b022-e0e4-4f9a-b488-f749920ee1c0",
+      113521
+    ],
+    [
+      "dde13bed-3990-40e3-8c99-2ff873baf570",
+      105890
+    ],
+    [
+      "dd4f5303-ec9f-4a1f-afc9-f18f55dd84bf",
+      110251
+    ],
+    [
+      "dc4f62f3-55c4-4efd-9e50-30496bd73557",
+      110471
+    ],
+    [
+      "da9a3c1d-2eca-4f7a-a0ee-fb55ef4ed826",
+      114032
+    ],
+    [
+      "da77c805-4443-49cf-a8d1-6223a7caa904",
+      101522
+    ],
+    [
+      "da498381-0e94-4463-986f-f4c7d93e5ec8",
+      108861
+    ],
+    [
+      "da293406-c7a2-4c1b-b8b9-0c7a0f19e9fb",
+      98373
+    ],
+    [
+      "d7c272b0-7dac-4191-a67e-4b2c1e22b4e9",
+      88653
+    ],
+    [
+      "d79a1774-682e-461e-9895-329e2c985383",
+      106323
+    ],
+    [
+      "d6cbaa96-4394-4fbb-92ed-38739fdb994d",
+      111538
+    ],
+    [
+      "d61c0390-a589-4386-8fd6-f6aa61f86ffb",
+      114826
+    ],
+    [
+      "d58d34ae-1ed1-42a7-813e-078a36330841",
+      98785
+    ],
+    [
+      "d4d8f53f-ee0a-4252-8554-eeb2f8e191f3",
+      96582
+    ],
+    [
+      "d45db3f8-d3a9-4f49-94e3-04fab9d4d5db",
+      87737
+    ],
+    [
+      "d20b463a-8042-4fe8-a257-bee37df4718a",
+      109789
+    ],
+    [
+      "cfee57de-3c7d-4123-8f75-a9abd61d7ffc",
+      128192
+    ],
+    [
+      "cc2b437d-f7cf-4dcc-9b77-dfa4143bd2cf",
+      116799
+    ],
+    [
+      "c9d2d2b2-8acb-4318-9aad-81bfaa7dfcbe",
+      111678
+    ],
+    [
+      "c97ba43a-bcf3-4c19-abc6-e47979a32e4d",
+      114117
+    ],
+    [
+      "c4fef659-a894-40bc-bfa4-cdaf05fcd650",
+      91293
+    ],
+    [
+      "c37049a9-8551-4e51-beaf-22293241c017",
+      86694
+    ]
+  ],
+  "timestamp": "2026-07-18T03:33:21.518141Z",
+  "tokens_used": 13001,
+  "units_analyzed": 9,
+  "units_total": 12
+}

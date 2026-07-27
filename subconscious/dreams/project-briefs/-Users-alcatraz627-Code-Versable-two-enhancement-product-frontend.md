@@ -1,16 +1,18 @@
-<!-- i-dream project brief · 2026-07-09T14:04:45.289548+00:00 · 6 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-07-23T01:01:14.724305+00:00 · 8 patterns / 1 insights -->
 ## What this project is about
-Frontend of the Versable enhancement product — a Next.js/React codebase with strict conventions around auth, env vars, and component architecture. Work style is correctness-first, minimal-blast-radius, with tight scope control.
+Frontend of a multi-tenant SaaS enhancement product (Versable); dominant work is feature implementation across UI, runtime config systems, and third-party service integrations with a strict code-quality bar on commits and prose.
 
 ## Things to do (or keep doing)
-- Check `CLAUDE.md` for a repo-specific commit/push gate before any git operation; hand the user exact commands rather than running them
-- Prefer the smallest targeted change; propose focused fixes before any refactor that puts prior work under suspicion
-- Write human-facing prose (PR descriptions, commit messages, docs) plain and dense — file:line citations, no em-dashes, no label:fragment rows, no over-bolding
+- Prefer delivering runtime config / feature-flag work as a complete unit: storage mechanism + frontend admin UI together, not sequentially.
+- Always verify third-party integrations (logging, analytics) against the vendor's own dashboard — internal tabs or agent-built checks are not sufficient evidence.
+- Park mid-session staged-but-incomplete work via `git stash`; never commit or discard without asking.
+- Queue completed non-critical deliverables for the user's later review rather than requesting immediate sign-off.
 
 ## Things to avoid
-- Don't re-raise decisions the user has already confirmed in written artifacts; settled calls don't belong in PR descriptions or reports as open items
-- Don't overcorrect AI-smell by swinging into warm narrative prose — aim for plain engineering writing, not social-science essay register
-- Don't place a file path as the final token before a sentence-ending period; restructure the sentence so the path isn't immediately followed by `.`
+- Don't put runtime feature flags in backend env config — the user treats these as separate systems with a distinct runtime config mechanism.
+- Don't use AI-prose register in commit messages or PR descriptions; the user runs a style audit on these artifacts and treats LLM tone as a defect.
+- Never log PII in UI-side event logging — structural events only, hard constraint, not per-feature.
+- When applying a correction, don't overshoot by stripping substance — reconstruct the original intent first; the complaint names the symptom, not the fix boundary.
 
 ## Open questions / known gaps
-- Prose register calibration is a persistent failure mode even within a single session — mechanical em-dash/label-fragment checks pass while the overall voice still reads as AI-generated; route final voice passes to a fresh reviewer
+- No established pattern yet for where the runtime config admin UI lives in the component hierarchy — resolve before next feature that touches it.

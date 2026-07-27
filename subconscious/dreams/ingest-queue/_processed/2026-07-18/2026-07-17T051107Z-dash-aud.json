@@ -1,0 +1,25 @@
+{
+  "id": "a510cc5f-bad7-47a5-91b6-a23abab6269d",
+  "ts": "2026-07-17T05:11:07Z",
+  "session_id": "dash-audit-09",
+  "project_root": "/Users/alcatraz627/Code/Claude/claude-ipc",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/claude-ipc/_20260717-coworker-build.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Build Step 0: push-surfacing spine + close B7 (SessionStart wiring end-to-end test incl. resume path).",
+    "Build Step 1: priority (fyi/normal/high/urgent; drives replyByS+nudge only, never TTL; urgent two-shot louder+badge, competes-never-preempts; chase scoped to directed asks).",
+    "Build Step 2: kind:other (unknown --kind \u2192 other + neutralized kindLabel; default stays inform).",
+    "Build Step 3: topic (REQUIRED topics table both backends; broker-allocated unique 3-hex canonical `<hex>-<slug>`; exact-normalized reuse; response echoes canonical; `topics` verb; --topic filter by hex or slug; PUSH \"active topics here\" at wake; dedupe by sessionId).",
+    "Build Step 4: lane: as a resolution MODE of proj: (live-first FAN-OUT to all live in cwd, else durable proj:<cwd>, never a dead alias box); `successor` verb; integrate into /core-dump + /catchup skills.",
+    "Build Step 5: same-folder claims (`claim`/`claims`/`release`; validity = holder sessionId live at READ time, no TTL; auto-surface at SessionStart; dedupe by sessionId). git-status auto-warn = FUTURE.",
+    "FINAL: runtime-hunting `/skeptical-review` (races, sweeper interactions, multi-agent concurrency, injection, TTL/reply-by invariant, lane fan-out edges) \u2192 deploy \u2192 agent round-trip verify.",
+    "Owner-facing: main not pushed to origin (offer). Open non-blocking tasks from earlier: #9 `/ipc` skill, #10 gcc V3-dashboard convention (D10), #11 `.jsonl` fallback proposal."
+  ],
+  "tags": []
+}
