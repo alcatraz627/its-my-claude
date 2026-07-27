@@ -1,0 +1,9 @@
+#!/bin/sh
+# Chain-forward to the repo's own hook. This dir is a global core.hooksPath
+# (migration 0039); without this wrapper, git would silently skip per-repo
+# hooks of this name. No behavior of its own.
+REPO_HOOK="$(echo "$(git rev-parse --git-dir)/hooks/$(basename "$0")" 2>/dev/null)"
+if [ -n "$REPO_HOOK" ] && [ -x "$REPO_HOOK" ] && [ "$REPO_HOOK" != "$0" ]; then
+  exec "$REPO_HOOK" "$@"
+fi
+exit 0

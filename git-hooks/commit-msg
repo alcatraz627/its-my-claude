@@ -1,0 +1,32 @@
+#!/bin/sh
+# Strip AI-assistant signature trailers from every commit message, machine-wide.
+# The user's standing ruling (rules/git.md § Commit message style, memory
+# feedback_no-claude-commit-trailers): no Co-Authored-By Claude, no
+# Claude-Session, no "Generated with Claude Code" footer, any model, any repo.
+# Also warns (never blocks) on a subject line over 72 chars.
+#
+# Installed via `git config --global core.hooksPath ~/.claude/git-hooks`
+# (migration 0039). Repos that set their own core.hooksPath locally (husky,
+# lefthook) override global config and never reach this. Plain repos chain to
+# their own .git/hooks/commit-msg below, so nothing is silently swallowed.
+# Rollback: git config --global --unset core.hooksPath
+
+MSG_FILE="$1"
+
+TMP="${MSG_FILE}.strip-tmp"
+grep -v -E '^[[:space:]]*(Co-Authored-By:[[:space:]]*Claude|Claude-Session:|🤖 Generated with \[Claude Code\]|Generated with \[Claude Code\]|https://claude\.ai/code/)' "$MSG_FILE" > "$TMP" || true
+# collapse the trailing blank lines the strip can leave behind
+awk 'NF {blank=0} !NF {blank++} blank<2' "$TMP" | sed -e :a -e '/^[[:space:]]*$/{$d;N;ba' -e '}' > "$MSG_FILE"
+rm -f "$TMP"
+
+SUBJECT=$(sed -n '1p' "$MSG_FILE")
+if [ ${#SUBJECT} -gt 72 ]; then
+  echo "commit-msg: subject is ${#SUBJECT} chars (>72) — consider shortening" >&2
+fi
+
+# chain to the repo's own hook so global hooksPath never swallows it
+REPO_HOOK="$(echo "$(git rev-parse --git-dir)/hooks/commit-msg" 2>/dev/null)"
+if [ -n "$REPO_HOOK" ] && [ -x "$REPO_HOOK" ] && [ "$REPO_HOOK" != "$0" ]; then
+  exec "$REPO_HOOK" "$@"
+fi
+exit 0

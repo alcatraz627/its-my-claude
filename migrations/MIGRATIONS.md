@@ -78,6 +78,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0036 | glossary vocabulary decay — hit ledger, pin tier, dormancy review | ✅ | 2026-07-16 | 2026-07-16 | [0036-glossary-decay-pin-tier.md](0036-glossary-decay-pin-tier.md) |
 | 0037 | pr-review demoted from a global skill to a project skill | ✅ | 2026-07-23 | 2026-07-23 | [0037-pr-review-demoted-to-project-skill.md](0037-pr-review-demoted-to-project-skill.md) |
 | 0038 | fable-as-sub-agent hard block lifted (sentinel-gated) | ✅ | 2026-07-23 | 2026-07-23 | [0038-fable-subagent-hard-block-lifted.md](0038-fable-subagent-hard-block-lifted.md) |
+| 0039 | global git hooksPath: commit-msg trailer strip + chain wrappers | ✅ | 2026-07-28 | 2026-07-28 | [0039-global-git-hooks-commit-msg-strip.md](0039-global-git-hooks-commit-msg-strip.md) |
 
 ---
 
