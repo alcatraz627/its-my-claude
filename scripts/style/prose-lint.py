@@ -72,6 +72,9 @@ def lint(text):
         v[key] = len(hit)
         spans[key] = [s[:100] for _, s in hit[:3]]
     v["two_split_dash"] = len(DASH.findall(prose))
+    for m in DASH.finditer(prose):
+        if len(spans["two_split_dash"]) < 3:
+            spans["two_split_dash"].append(prose[max(0, m.start()-40):m.end()+40].strip())
     v["contrastive_scaffold"] = len(CONTRASTIVE.findall(prose))
     for m in CONTRASTIVE.finditer(prose):
         if len(spans["contrastive_scaffold"]) < 3:

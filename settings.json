@@ -754,6 +754,15 @@
             "command": "~/.claude/scripts/hooks/guard-commit-signature.sh"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-prose-quality.sh"
+          }
+        ]
       }
     ],
     "SessionEnd": [
