@@ -16,9 +16,14 @@ set -uo pipefail
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 fp=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
+mode=""
 case "$fp" in
-  *.md|*.html|*.txt) ;;
+  *.md|*.html|*.txt) mode="prose" ;;
+  *.ts|*.tsx|*.js|*.jsx|*.vue|*.svelte|*.py) mode="code" ;;
   *) exit 0 ;;
+esac
+case "$fp" in
+  *test*|*spec*|*__tests__*|*fixture*|*mock*) exit 0 ;;
 esac
 case "$fp" in
   */style/*|*/atone/*|*/i-dream/*|*/sweep/*|*language-quality*|*/ste-writing/*|*/node_modules/*|*/derived/*|*thesaurus*) exit 0 ;;
@@ -26,6 +31,16 @@ esac
 
 content=$(printf '%s' "$input" | jq -r '.tool_input.content // .tool_input.new_string // empty' 2>/dev/null)
 [ -n "$content" ] || exit 0
+
+if [ "$mode" = "code" ]; then
+  findings=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/code-copy-lint.py" --json - 2>/dev/null | jq -r '.findings[:3] | map("  [" + (.tells|join("|")) + "] " + .text) | join("\n")' 2>/dev/null)
+  if [ -n "$findings" ]; then
+    jq -n --arg r "COPY BLOCKED for $fp — user-facing string literals carry banned language tells:
+$findings
+UI copy follows the same rules as prose (conventions/language-quality.md): no connective dashes, no unverified claims, no marketing words. Reword the strings and retry. Placeholder glyphs and comments are not counted." '{decision:"block", reason:$r}'
+  fi
+  exit 0
+fi
 
 report=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/prose-lint.py" --json - 2>/dev/null) || exit 0
 dashes=$(printf '%s' "$report" | jq -r '.violations.two_split_dash // 0' 2>/dev/null)

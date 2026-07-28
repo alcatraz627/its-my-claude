@@ -132,6 +132,22 @@ evidence. Chat replies keep a voice (`rules/audience-aware-writing.md` stays
 the router). Strict controlled English (`/ste-writing`, strict mode) is for
 docs, error messages, runbooks, and hook text only.
 
+## Coverage map: every surface agent language ships through
+
+| surface | gate | tier |
+|---|---|---|
+| chat final message | prose-smell-stop.sh (Stop) | warn; enforce is env-gated pending telemetry |
+| commit message trailers | git-hooks/commit-msg + guard-commit-signature | hard block (mig 0040) |
+| commit message prose | rules/git.md hygiene bar + prose-lint | rule, advisory |
+| PR bodies (gh pr) | guard-commit-signature | hard block: signature + connective dash (mig 0042) |
+| prose files (.md .html .txt) | guard-prose-quality + prose-lint | hard block: dash, verdict-first, score>8 (mig 0041) |
+| code-file string copy (ts tsx js jsx vue svelte py) | guard-prose-quality + code-copy-lint | hard block: dash, unverified, jargon (mig 0042) |
+| code comments | rules/comments.md + style-watch | advisory by choice; dash in comments is an unruled surface |
+| test / fixture / mock files | exempt by design (they quote bad prose deliberately) | none |
+| style-system docs | exempt (mention-vs-use is regex-undecidable) | none |
+| server-side commits and squash-merges | unreachable from machine hooks | ungated; needs CI or branch protection if ever wanted |
+| decision-page configs and other JSON string copy | not yet scanned | known gap, smallest surviving surface |
+
 ## Provenance and the method note
 
 The method was recall-first, precision-late. Mechanical scoring ranked the

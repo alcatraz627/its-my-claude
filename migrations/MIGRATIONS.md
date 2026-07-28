@@ -81,6 +81,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0039 | global git hooksPath: commit-msg trailer strip + chain wrappers | ✅ | 2026-07-28 | 2026-07-28 | [0039-global-git-hooks-commit-msg-strip.md](0039-global-git-hooks-commit-msg-strip.md) |
 | 0040 | commit signature gate: hard block (git layer + PreToolUse guard, no-verify closed) | ✅ | 2026-07-28 | 2026-07-28 | [0040-commit-signature-hard-block.md](0040-commit-signature-hard-block.md) |
 | 0041 | prose-quality write gate: em-dash/verdict-first/score blocked on Write+Edit of prose files | ✅ | 2026-07-28 | 2026-07-28 | [0041-prose-quality-write-gate.md](0041-prose-quality-write-gate.md) |
+| 0042 | language gates extended: code-file string copy + PR bodies; coverage map | ✅ | 2026-07-28 | 2026-07-28 | [0042-universal-language-gates.md](0042-universal-language-gates.md) |
 
 ---
 
