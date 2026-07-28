@@ -1,3 +1,34 @@
+## bloop: B3 decay economy (i-dream phase-3 batch 1) — dream-catch-9f — 2026-07-28
+
+**Purpose:** 25th run. Interventions join the decay economy (strength recompute,
+undeliverable compost) + receipt label split. Gate: ISSUES-FOUND, 4 MAJOR + 5
+MINOR + 3 NIT. Streak 25/25.
+
+**Insights:**
+
+1. Moving a store from records-are-permanent to records-get-REMOVED must
+   re-audit every latch stored ON the record: compost deleted the owner-demote
+   veto, and content-stable ids + an unpruned evidence ledger let a recompiled
+   twin resurrect straight to live with pre-veto evidence (gate repro'd it with
+   production functions). Fix was tombstones, not a smarter compost.
+2. A silent-empty load (`unwrap_or_default` on parse error) composes with any
+   read-modify-write caller into a destructive rewrite — the gate walked
+   `promotions` → "run compile" → live records dropped, in a sandboxed HOME.
+   Parse failure must be an Err distinct from "empty store".
+3. The headline fix of a commit can be its least-tested line: the receipt
+   arithmetic sign-flip mutation SURVIVED the full suite because run_compile
+   needs a ClaudeClient. Pure-seam extraction (with_batch) made it pinnable.
+4. Validator exercised the INSTALLED hook interpreters against a real post-B3
+   file in a sandboxed HOME — the consumer sweep where this repo's MAJORs
+   historically live came back clean this time, and that negative result is
+   itself the evidence the field addition is safe.
+5. A freshly-promoted comment-hygiene nudge fired on ~every Edit of the build;
+   it genuinely tightened 4 doc comments, then became repeat-noise — surfaced
+   once, dismissed thereafter. Live interventions shaping the session that
+   ships their own economy is the system working.
+
+---
+
 ## bloop: kanban fix-plan P0-P3 [adrev-kanbn-4b] — 2026-07-27
 
 **Purpose:** behavior-anchored fix plan executed through the loop; every fix measured against a journaled friction moment.

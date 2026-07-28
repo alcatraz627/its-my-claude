@@ -16,6 +16,9 @@
 
 ---
 
+
+---
+
 ## session: content-gen sprint close [speed-catch-7e] — 2026-07-28
 
 Purpose: build Content Generation v1 against a written charter, fix the job/

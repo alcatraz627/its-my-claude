@@ -51,14 +51,38 @@ parts = []
 # straight to it, so a session pays for the mistake-pattern reminder and nothing
 # more.
 
-# Part 1: Digest summary (compact, pre-synthesized)
+# Part 1: Digest summary — dieted to ~2 sentences + pointer (B4 subtraction
+# experiment, owner ruling; A3 curves measure the expectation of no degradation).
 if dream_enabled and part_mode != 'ranked' and os.path.isfile(digest_path):
     try:
         with open(digest_path, 'r', encoding='utf-8', errors='replace') as f:
             digest = f.read().strip()
         if digest:
-            parts.append(digest)
-    except OSError:
+            # First real paragraph: skip headings and _subtitle_ lines, join
+            # wrapped lines BEFORE sentence-splitting (gate BLOCKER-1).
+            paras, cur = [], []
+            for l in digest.splitlines():
+                s = l.strip()
+                if not s or s.startswith('#'):
+                    if cur:
+                        paras.append(' '.join(cur))
+                        cur = []
+                    continue
+                if s.startswith('_') and s.endswith('_'):
+                    continue
+                cur.append(s)
+            if cur:
+                paras.append(' '.join(cur))
+            first_para = paras[0] if paras else ''
+            brief = '. '.join(first_para.split('. ')[:2]).strip()
+            if len(brief) > 400:
+                brief = brief[:397].rsplit(' ', 1)[0] + '…'
+            elif brief and not brief.endswith('.'):
+                brief += '.'
+            if brief:
+                parts.append("# Insight Digest (dieted — full: " + digest_path + ")\n"
+                             + brief)
+    except Exception:
         pass
 
 # Part 2: query-conditioned lesson ranking over the derived patterns view
@@ -136,7 +160,9 @@ if dream_enabled:
             except Exception:
                 continue
         scored.sort(key=lambda t: t[0], reverse=True)
-        ranked = [it for (_s, it) in scored[:5]]
+        # B4 diet: session lane carries 3; the prompt lane keeps 5 (delta-gated).
+        top_n = 5 if part_mode == 'ranked' else 3
+        ranked = [it for (_s, it) in scored[:top_n]]
         # The prompt lane only speaks when it has something NEW: if the
         # re-ranked top-5 matches the last dream injection (either lane), it
         # stays silent — SessionStart already delivered exactly this set.
@@ -164,7 +190,10 @@ if dream_enabled:
                                         'dream-ranked', 'dream-ranked-prompt')
                                     and obj.get('sid') == my_sid):
                                 last_ids = obj.get('ids')
-                if last_ids == ranked_ids:
+                # Speak only when something is NEW vs the last injection this
+                # session saw — a subset re-delivery is noise (gate MAJOR-2:
+                # exact-match dedupe died when session/prompt lane sizes split).
+                if last_ids and not [i for i in ranked_ids if i not in last_ids]:
                     ranked = []
             except Exception:
                 pass
@@ -173,7 +202,7 @@ if dream_enabled:
                 sid8 = str(it.get('stable_id', ''))[:8]
                 return f"[L:{sid8}] " if sid8 else ""
             lines = [f"[{s:.2f}] {_ltag(it)}{str(it.get('text','')).strip()}"
-                     for (s, it) in scored[:5]]
+                     for (s, it) in scored[:top_n]]
             title = ("## Lessons re-ranked for this prompt (dream consolidation)"
                      if part_mode == 'ranked'
                      else "## Lessons ranked for this session (dream consolidation)")
