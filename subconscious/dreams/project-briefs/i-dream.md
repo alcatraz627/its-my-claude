@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T20:06:56.152886+00:00 · 20 patterns / 5 insights -->
+<!-- i-dream project brief · 2026-07-28T01:06:00.877280+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-A dream-tracking dashboard (i-dream) with multiple authenticated pages, shared navigation shell, widgets, and runtime configuration. Work style is multi-page UI feature development with frequent parallel sessions.
+A dream-tracking dashboard with multi-agent orchestration (i-dream), Anthropic API integration, and a React frontend with multiple list/detail pages. Work style is multi-session, autonomous, with peer IPC between live agents.
 
 ## Things to do (or keep doing)
-- **Survey all sibling pages before touching any shared UI component** (sidebar, drawer, nav shell) — every page using the component must be updated in the same change, not the one page named in the ticket
-- **Consult design mocks before writing any UI label, module name, or creation flow** — never derive naming from code patterns or prior session memory
-- **Apply existing pagination patterns automatically** when a list page lacks them and sibling pages in the same codebase already implement it
-- **Update the task list after each logical unit**, not at session end — under parallelism, increase sync frequency, don't defer it
+- **Before any UI implementation, enumerate ALL input sources** (design mocks, specs, sibling pages) AND all output surfaces (every page using the component) — build the explicit checklist before writing a line of code
+- **Apply UI fixes globally in the same response** — when a sidebar, drawer, or shared shell is corrected on one page, sweep every page that mounts it before returning
+- **Apply pagination and list patterns from sibling pages automatically** — if other list pages already implement it, add it without waiting to be told
+- **Update the task list after each logical unit** — never let it drift stale during high-velocity or parallel work; that's exactly when sync matters most
 
 ## Things to avoid
-- **Don't treat absence of data as a known negative** — when a lookup/probe returns empty, emit UNCERTAIN or DENY, never fabricate a plausible default (zero, false, ALLOW)
-- **Don't fix one instance of a shared-component issue** — IPC peers, nav shells, drawers are globally shared; patching one page and calling it done is always wrong here
-- **Don't put runtime/feature-flag config in env vars** — user distinguishes env config from runtime-adjustable globals; they're separate systems
-- **Don't use AI-prose register in commit messages** — user runs a style audit tool on commits; write terse, human-sounding imperatives
+- **Don't skip mandatory skill gate phases** — adversarial validation and similar documented phases cannot be silently dropped while marking tasks complete
+- **Don't fabricate defaults when a lookup returns empty** — absence of signal must propagate as UNCERTAIN or DENY, never converted into zero/false/ALLOW
+- **Don't put runtime config toggles in env config** — user has a separate runtime config system; feature flags belong there
+- **Don't send IPC messages without verifying the peer alias maps to a live session ID** first
 
 ## Open questions / known gaps
-- Design mock location and access pattern not yet established in memory — confirm canonical mock source at session start before any new UI work
-- Auth/credential blocks in sub-agents: surface exact user-run command and hold; no pattern yet for where credentials live
+- Deferred decision items repeatedly surface without enough context (no prior constraint, no concrete options) — structure these before presenting them to the user
+- Design mocks are consulted inconsistently; no reliable gate enforces mock-first UI work at the start of each feature

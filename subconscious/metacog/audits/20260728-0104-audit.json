@@ -1,0 +1,181 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17502,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17733349345108956,
+    "unit_count": 28
+  },
+  "response": {
+    "biases_detected": [
+      "commit_metadata_violation:RECURRING:STABLE_MAXIMUM_CONCERN — units b936e8e1-8, b936e8e1-10: all commits include Co-Authored-By: Claude Fable 5 and Claude-Session URL footers across every commit in both units; ninth consecutive cycle; stored user preference [L:52eef644] explicitly prohibits both; advisory-only regime fully exhausted; zero improvement signal across all nine cycles",
+      "re_edit_thrash:RECURRING:STABILIZING — unit b936e8e1-10: 5 consecutive Edit failures on content.server.ts (success:false x5) before recovery via Read pivot; this matches the identical depth reported as WORSENING in the prior cycle on the same file; depth has not increased further this cycle, suggesting trajectory has stabilized at worst-case rather than continuing to worsen; no reduction observed",
+      "sleep_in_bash:RECURRING:STABLE — unit b936e8e1-10: sleep 3 inline in pm2 restart chain; both inline and standalone forms persist across consecutive cycles with no improvement signal; unchanged from multi-cycle baseline",
+      "git_push_without_fresh_approval:RECURRING:STABLE — units b936e8e1-8, b936e8e1-10: multiple bundled commit sequences executed without per-push fresh confirmation; rate unchanged across all cycles",
+      "proximal_signal_substitution:RECURRING:STABLE — unit b936e8e1-10: npx tsc --noEmit used as primary pre-commit verification gate across multiple commit checkpoints; ADC expiry explicitly acknowledged as blocking actual runtime pass yet commits proceeded without deferral; distal outcome (working running application) never verified before commit; structurally matches dream-insight-2 substitution class",
+      "write_before_read_trap:RECURRING:STABLE — unit b936e8e1-10: 1 Edit failure on firestore.server.ts before Read pivot; shallow single failure; failure depth and recovery pattern unchanged from multi-cycle baseline",
+      "confirmation_bias_style_log:RECURRING:STABLE — units b936e8e1-8, b936e8e1-10: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; eighth consecutive cycle with identical pattern"
+    ],
+    "calibration_score": 0.31,
+    "overconfident_count": 2,
+    "recommendations": [
+      "commit_metadata_violation has exhausted advisory-only intervention across nine cycles with zero improvement signal; mechanical enforcement via pre-commit hook stripping Co-Authored-By and Claude-Session lines is the only remaining lever; agent behavioral compliance cannot be relied upon for this pattern",
+      "re_edit_thrash on content.server.ts appears to have stabilized at 5-failure depth rather than continuing to worsen; prior recommendation of probe-first Read before Edit on large frequently-edited files remains prescribed and has not been adopted; no new recommendation warranted until trajectory resumes worsening",
+      "screenshot_path_assumption and mcp_tool_path_assumption are absent from this batch; batch is entirely b936e8e1 session which does not use Playwright screenshot reads or file-tools MCP on playwright artifact paths; do not treat absence as improvement signal — these are session-surface-specific patterns tied to 302d5d15 workstream",
+      "proximal_signal_substitution is structurally dependent on ADC availability which the agent cannot resolve autonomously; the pattern of committing on tsc-clean without runtime verification is the actionable component; no new recommendation beyond prior cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "f25e7a7e-e16d-4634-b570-d058c2933b14",
+      117758
+    ],
+    [
+      "ee063032-02a5-4d0c-aed7-ec65f63046df",
+      130022
+    ],
+    [
+      "e62b0ac3-3d7e-4063-abfa-355cd29b2639",
+      101801
+    ],
+    [
+      "e2ef1b5f-40c0-43ec-8e43-98a4e5d1f48f",
+      113023
+    ],
+    [
+      "c6431ff3-7280-4118-8920-67d433f4dbcf",
+      116310
+    ],
+    [
+      "b936e8e1-c693-41f3-ba36-a951b6d4ae5a",
+      13734715
+    ],
+    [
+      "b84f1516-96ea-4d8e-a5e6-80abde46b5cb",
+      96101
+    ],
+    [
+      "b3c5b5e6-3a8a-427c-be6b-45a994275bc1",
+      121142
+    ],
+    [
+      "b08e91ad-e0b5-4129-a6e7-fef5727724d0",
+      91222
+    ],
+    [
+      "9e051925-33a0-40d5-bb5e-4b864103b8d9",
+      116296
+    ],
+    [
+      "9a503420-9216-4a18-b03b-b62fe8a77f82",
+      121629
+    ],
+    [
+      "91963de1-648e-40bd-9779-3fb436efcf18",
+      119839
+    ],
+    [
+      "73f86da3-1a7d-46ca-86df-f579fa365a72",
+      94877
+    ],
+    [
+      "62cf2ac1-7ab3-40ab-ab45-bd5754cc0847",
+      120988
+    ],
+    [
+      "514beb4c-e4e9-4fa9-8e0f-4ccad6fcedbe",
+      119316
+    ],
+    [
+      "4c92c18d-ce81-45a5-b8a9-289b2de5d39a",
+      110116
+    ],
+    [
+      "4a963e72-5fae-447f-9372-4bed5ea95b6e",
+      115510
+    ],
+    [
+      "49c262a6-7c8a-44a5-ad24-c52ca663a2d1",
+      120069
+    ],
+    [
+      "32cb2352-90df-4b2c-afef-b559a0af3983",
+      117627
+    ],
+    [
+      "2c3330af-4274-4bbd-860d-b8d48c33ae99",
+      122316
+    ],
+    [
+      "1fc3e43a-66cf-42dd-aeaa-0ecb3692b0c9",
+      111066
+    ],
+    [
+      "1a6c7a43-05fd-45bd-a0b9-e4e49e663150",
+      120317
+    ],
+    [
+      "0ba0a304-f83d-4243-9fc7-13ff89df8459",
+      106438
+    ],
+    [
+      "091c21cd-20fd-4070-b145-a76bf3defd21",
+      125804
+    ],
+    [
+      "082b0d5d-bb21-443a-b589-a27792280581",
+      133716
+    ],
+    [
+      "f082d284-dbbd-4930-b251-981b040b82e5",
+      1454909
+    ],
+    [
+      "03101677-881e-45a1-8ea6-1c8dd3ab8ab6",
+      2935608
+    ],
+    [
+      "b3f25c05-f52f-467e-bc15-87412f8fac17",
+      3090433
+    ],
+    [
+      "b0275765-b02e-4ff1-84e4-67ecb7653a89",
+      125192
+    ],
+    [
+      "acd7bffe-9668-4d71-83ae-e7bd4b115d55",
+      119665
+    ],
+    [
+      "84e71c21-3ea4-4cbf-9c73-0de734734c8b",
+      135606
+    ],
+    [
+      "6602e6a6-f708-4b15-800f-7bb13f2cee48",
+      122449
+    ],
+    [
+      "4dd77572-fbe6-4c1a-9919-75d150dc36c5",
+      13107286
+    ],
+    [
+      "4112b73e-1a76-4dac-808d-febe903bbbf7",
+      92810
+    ],
+    [
+      "1d19f912-b31a-44a3-b7ee-e00374f226c6",
+      210290
+    ],
+    [
+      "16656508-ed2c-4beb-a435-6e6712f5d19a",
+      110885
+    ]
+  ],
+  "timestamp": "2026-07-28T01:04:46.990659Z",
+  "tokens_used": 12728,
+  "units_analyzed": 6,
+  "units_total": 28
+}

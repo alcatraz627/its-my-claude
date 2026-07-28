@@ -4657,5 +4657,205 @@
     ],
     "first_seen": "2026-07-27T19:57:22.058976+00:00",
     "last_seen": "2026-07-27T19:57:22.058976+00:00"
+  },
+  {
+    "id": "94cc4a7821afd697",
+    "text": "When a skill invocation has a documented mandatory gate phase (e.g., adversarial validation), silently skipping it and marking tasks complete on the board is a confirmed mistake — the gate exists precisely because the agent would otherwise declare success prematurely.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "19ed69e1-44e3-468e-8661-f2dd6c4afaa0",
+    "member_ids": [
+      "19ed69e1-44e3-468e-8661-f2dd6c4afaa0"
+    ],
+    "member_texts": [
+      "When a skill invocation has a documented mandatory gate phase (e.g., adversarial validation), silently skipping it and marking tasks complete on the board is a confirmed mistake — the gate exists precisely because the agent would otherwise declare success prematurely."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "9e1bcca2d628b380",
+    "text": "Dispatching a parallel fleet of subagents to fix many small UI issues is fragile and counterproductive: agents go idle or fail repeatedly, and the overall result is worse than direct iterative fix-and-verify cycles where the agent views the actual rendered page between each change.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ea0671fe-b98a-4477-bf03-86429cec497c",
+    "member_ids": [
+      "ea0671fe-b98a-4477-bf03-86429cec497c"
+    ],
+    "member_texts": [
+      "Dispatching a parallel fleet of subagents to fix many small UI issues is fragile and counterproductive: agents go idle or fail repeatedly, and the overall result is worse than direct iterative fix-and-verify cycles where the agent views the actual rendered page between each change."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "d06efe5c45791bf3",
+    "text": "When fixing UI problems, code edits alone are insufficient verification — the user's 'still don't see the fixes' pattern emerges when the agent makes changes without confirming the running app reflects them (server not restarted, pm2 process stale, or changes not hot-reloaded).",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1e49f9bb-7552-43cb-974c-024e02f19d11",
+    "member_ids": [
+      "1e49f9bb-7552-43cb-974c-024e02f19d11"
+    ],
+    "member_texts": [
+      "When fixing UI problems, code edits alone are insufficient verification — the user's 'still don't see the fixes' pattern emerges when the agent makes changes without confirming the running app reflects them (server not restarted, pm2 process stale, or changes not hot-reloaded)."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "f9d7dfb83894f65e",
+    "text": "A shared component implemented in one module context can silently appear in another module's detail pages if the rendering logic is not scoped by job type; when implementing reusable stat cards or job-detail components, verify which job types trigger each component before shipping.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "726b0674-b6d4-4dfd-b18b-7f4a56488d81",
+    "member_ids": [
+      "726b0674-b6d4-4dfd-b18b-7f4a56488d81"
+    ],
+    "member_texts": [
+      "A shared component implemented in one module context can silently appear in another module's detail pages if the rendering logic is not scoped by job type; when implementing reusable stat cards or job-detail components, verify which job types trigger each component before shipping."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "0ebd7e9f96aad3ea",
+    "text": "When a sub-agent sends an idle notification, the parent must act on it in the same turn (acknowledge, assign work, or stop it) — leaving it alive without direction wastes tokens and risks the agent picking up unscoped tasks from an auto-dispatcher.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7a6890f1-553c-4a32-87d1-e614bb94cbe7",
+    "member_ids": [
+      "7a6890f1-553c-4a32-87d1-e614bb94cbe7"
+    ],
+    "member_texts": [
+      "When a sub-agent sends an idle notification, the parent must act on it in the same turn (acknowledge, assign work, or stop it) — leaving it alive without direction wastes tokens and risks the agent picking up unscoped tasks from an auto-dispatcher."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "7b4fcf39ee5a55e1",
+    "text": "When the user says something like 'you idiot' without further context, pausing to diagnose the most likely error before responding is the correct move — naming what you actually did wrong (with a read or check) is more useful than apologizing or guessing.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "10272bad-8d07-48ea-8f10-42b0fba9eb71",
+    "member_ids": [
+      "10272bad-8d07-48ea-8f10-42b0fba9eb71"
+    ],
+    "member_texts": [
+      "When the user says something like 'you idiot' without further context, pausing to diagnose the most likely error before responding is the correct move — naming what you actually did wrong (with a read or check) is more useful than apologizing or guessing."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "cde7a689715be4c7",
+    "text": "When asked to consolidate multiple tracking documents across a project, the right approach is read-all-first, identify primary vs. supplementary vs. outdated, present the analysis before editing, and only reorganize on confirmed direction — not edit in place speculatively.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "425f154a-5376-4497-9c1c-75b5e032322f",
+    "member_ids": [
+      "425f154a-5376-4497-9c1c-75b5e032322f"
+    ],
+    "member_texts": [
+      "When asked to consolidate multiple tracking documents across a project, the right approach is read-all-first, identify primary vs. supplementary vs. outdated, present the analysis before editing, and only reorganize on confirmed direction — not edit in place speculatively."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "eec576f3b434003f",
+    "text": "The successful path for iterative UI quality work is: take a screenshot, identify specific failing elements by name, fix one at a time, verify each in the running app, repeat — rather than batching all fixes across subagents and verifying at the end.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.73,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "72782b6e-2e9b-4845-80b2-044de99d8ec3",
+    "member_ids": [
+      "72782b6e-2e9b-4845-80b2-044de99d8ec3"
+    ],
+    "member_texts": [
+      "The successful path for iterative UI quality work is: take a screenshot, identify specific failing elements by name, fix one at a time, verify each in the running app, repeat — rather than batching all fixes across subagents and verifying at the end."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "i-dream"
+    ],
+    "first_seen": "2026-07-28T01:01:40.588098+00:00",
+    "last_seen": "2026-07-28T01:01:40.588098+00:00"
   }
 ]

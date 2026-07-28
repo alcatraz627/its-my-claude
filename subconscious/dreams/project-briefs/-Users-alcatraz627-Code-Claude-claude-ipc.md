@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T20:02:45.091416+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-28T01:06:54.234726+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Cross-session IPC broker for Claude Code: agents communicate via message-passing, coordinate task ownership, and relay state across concurrent sessions. Dominant style is multi-agent coordination with shell-based tooling.
+Cross-session IPC broker for Claude Code agents — enabling peer discovery, message routing, and multi-agent coordination. Work is typically multi-agent: concurrent sessions coordinating via this system while also dogfooding it.
 
 ## Things to do (or keep doing)
-- **Verify delivery via round-trip ack**, not send-side telemetry — a successful send does not prove the peer received; wait for an explicit reply or poll the peer's inbox
-- **Default-DENY on unrecognized commands** in any access-gate — a default-allow fallback for unknown CLIs renders the gate bypassable
-- **Pre-negotiate task ownership via IPC** before parallel agents start work — overlapping edits without coordination produces conflicts that are expensive to untangle
-- **Quote all IPC message bodies with printf/heredoc**, never bare backticks — special characters get shell-consumed and produce zero-byte or corrupted messages
+- **Pre-negotiate task ownership via IPC before parallel work begins** — overlapping claims without coordination produces clobbered edits and drift.
+- **Verify IPC delivery with a round-trip reply**, not send-side logs or telemetry — a successful send is not proof of receipt.
+- **Default access-gate decisions to DENY on unknown input** — a default-ALLOW fallback for unrecognized CLIs renders the entire gate bypassable.
+- **After any parallel burst, treat all cached state as stale** — task lists, branch state, file contents all drift; re-sync before acting.
 
 ## Things to avoid
-- **Don't treat send-success as delivery proof** — locally-produced artifacts (send logs, telemetry) are not ground truth about remote state; the peer's ack is
-- **Don't leave peer queries unanswered at session end** — stop hooks fire repeatedly for each unreplied message; reply before exiting
-- **Don't use `rg -rn`** — `-r` is `--replace`, not recursive; use `rg -n` for line numbers in recursive searches
-- **Don't halt for sequential go-aheads** — batch autonomous progress and interrupt only at genuine decision points that require user-held information
+- **Don't use `rg -rn`** — `-r` is `--replace`, not recursive; use `rg -n` for line numbers.
+- **Don't quote IPC message bodies with backticks in shell** — special characters get consumed, producing zero-byte or corrupted messages; escape or use a heredoc.
+- **Don't claim a bug is fixed without exercising the fix on the running dev server** — repeated false-assurance cycles are a known trust-damager here.
+- **Never commit or push** — this repo is protected; prepare the diff and hand it to the user.
 
 ## Open questions / known gaps
-- After parallel bursts, task lists and branch state go stale simultaneously — no single sync point owns the reconciliation step; this is a recurring coordination gap
-- Absence-of-signal is sometimes emitted as a definite result (zero, false, ALLOW) rather than UNCERTAIN/DENY — fabricated defaults have caused gate bypasses in this codebase
+- Unanswered peer queries at session end trigger repeated stop-hook fires — there's no clean session-teardown handshake yet.
+- Default-open bias (re-enabling disabled configs, over-generalizing scope) recurs across sessions; the gate infrastructure exists but enforcement is incomplete.

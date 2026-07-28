@@ -8,8 +8,8 @@
 <style>
   /* The fleet glance (M1): the morning read starts HERE, so rows are weighted
      attention-first — blocked and unread lead, motion follows, identity stays. */
-  :root{--bg:#0a0c0e;--surface:#12161b;--text:#d8dee6;--dim:#8f99a5;--faint:#828c97;--rule:#1f242b;--accent:#8fbf6a;--amber:#e0b04c;--mono:"SF Mono",ui-monospace,Menlo,monospace}
-  [data-theme="light"]{--bg:#f2f4f6;--surface:#fbfcfd;--text:#20262d;--dim:#5a636d;--faint:#616b76;--rule:#d5dae0;--accent:#4a7d2a;--amber:#8f6a10}
+  :root{--bg:#0a0c0e;--surface:#12161b;--text:#d8dee6;--dim:#9aa4b0;--faint:#78828d;--rule:#1f242b;--accent:#8fbf6a;--amber:#e0b04c;--mono:"SF Mono",ui-monospace,Menlo,monospace}
+  [data-theme="light"]{--bg:#f2f4f6;--surface:#fbfcfd;--text:#20262d;--dim:#4a535d;--faint:#69737e;--rule:#d5dae0;--accent:#4a7d2a;--amber:#8f6a10}
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--rule) transparent} body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 -apple-system,"SF Pro Text",system-ui,sans-serif}
   ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px} ::-webkit-scrollbar-track{background:transparent}
   header{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--rule)}
@@ -48,14 +48,22 @@ document.getElementById("theme").onclick = () =>
 
 const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
 
-// tail-keep truncation: the varying end of a path is the distinguishing part
+// tail-keep truncation: the varying end of a path is the distinguishing part.
+// Restores from the full string, so it is width-correct in both directions.
 function tailTrim(el) {
-  el.title = el.title || el.textContent;
+  const full = el.title || el.textContent;
+  el.title = full;
+  el.textContent = full;
   let guard = 200;
   while (el.scrollWidth > el.clientWidth && el.textContent.length > 14 && guard--) {
     el.textContent = "…" + el.textContent.replace(/^…/, "").slice(8);
   }
 }
+let trimTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(trimTimer);
+  trimTimer = setTimeout(() => document.querySelectorAll(".board .root").forEach(tailTrim), 150);
+});
 
 async function load() {
   const list = document.getElementById("list");

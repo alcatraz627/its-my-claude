@@ -73,7 +73,7 @@
     "slug": "speculative-abstractions-without-a-load-bearing-caller",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Write",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs)$"

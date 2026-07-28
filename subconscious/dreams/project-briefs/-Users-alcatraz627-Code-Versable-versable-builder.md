@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T20:05:23.948481+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-28T01:07:21.869052+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A UI-heavy web application (versable-builder) with multiple pages sharing shell components (sidebar, drawer, modal); work involves frequent parallel sub-agent coordination, protected-repo discipline, and design-mock-driven UI implementation.
+Versable Builder is a multi-page UI application (React/Next.js) with shared shell components, access-gate systems, and multi-agent/multi-session coordination. Work style is iterative with high parallelism and external-stakeholder-facing document output.
 
 ## Things to do (or keep doing)
-- **Always audit every page in the app** before implementing or patching any shared shell component (sidebar, drawer, modal) — per-page variants are the recurring mistake; implement one shared component and fix all instances in the same response.
-- **Consult design mocks before writing any UI** — labels, module names, and creation flows must match the mocks, not be inferred from code patterns or internal naming.
-- **Verify on the actual running dev server** before claiming a UI or runtime fix is done — exercise the changed code path and observe the result; a green build or test pass is not sufficient.
-- **Include prior decision context and concrete options** whenever surfacing a deferred decision — never surface a choice without the framing the user needs to answer in one response.
+- **Audit ALL pages** before implementing any shared UI shell component (sidebar, drawer, modal) — never build per-page variants; the fix applies to every sibling page simultaneously.
+- **Exercise the fix on the running dev server** before claiming done/works/fixed — a code edit that looks correct is not verified until the actual code path fires on localhost.
+- **Pre-negotiate task ownership via IPC** before parallel sub-agent work; overlapping edits without coordination produces silent clobbers.
+- **Embed decision context** when creating deferred items — a backlog entry or question to the user must carry enough rationale for the consumer to act without a follow-up.
 
 ## Things to avoid
-- **Don't patch only the reported instance** when the same component/pattern exists across multiple pages — absence of a grep sweep means the fix is incomplete.
-- **Don't treat send-side telemetry as delivery proof** — for IPC or notifications, wait for the peer's ack; a successful send log does not confirm receipt.
-- **Don't commit or push** — this is a protected repo; prepare the diff and hand it to the user.
-- **Don't synthesize a default when lookup returns empty** — emit UNCERTAIN or DENY, never fabricate a plausible value from structural absence.
+- **Don't treat send-success as delivery** — IPC verification requires an actual round-trip reply from the peer, not inspection of the sender's own logs.
+- **Don't default-ALLOW unknown inputs** in access gates — unrecognized CLIs/commands must DENY; default-open makes the entire gate bypassable.
+- **Don't include internal banter or stakeholder critique** in any document that may be shared externally; strip all conversational framing before writing the file.
+- **Don't cite file basenames alone** — always include the full path; a basename forces the user to hunt.
 
 ## Open questions / known gaps
-- Multi-agent parallelism consistently degrades task-list and git-state bookkeeping; no stable coordination protocol yet.
-- Design mocks are the canonical source for UI but aren't always consulted proactively — unclear where mocks live or how to surface them at session start.
+- Recurring tension: agent claims UI fix is done, user tests on real app, still broken — the declared-ready gate is known but the pattern persists under velocity.
+- Design mocks exist for UI surfaces but are not always consulted before shipping labels/flows — establish a pre-implementation grep for mocks as a standard step.

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-27T20:01:57Z",
-  "events_analyzed": 128436,
-  "sessions_analyzed": 396,
+  "generated_at": "2026-07-28T06:38:33Z",
+  "events_analyzed": 129349,
+  "sessions_analyzed": 400,
   "session_quality": {
-    "average_score": 69.7,
+    "average_score": 69.6,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -173,30 +173,14 @@
     "primary_focus": "tmp",
     "recent_projects": {
       "tmp": 3,
-      "invasion-of-the-fiber-snatchers": 1,
-      "versable-builder": 2,
-      ".claude": 2,
+      ".claude": 3,
       "claude-ipc": 1,
-      "i-dream": 1
+      "i-dream": 1,
+      "versable-builder": 2
     },
     "drift_rate": 0.746,
-    "total_switches": 294,
+    "total_switches": 297,
     "recent_switches": [
-      {
-        "ts": "2026-07-27T09:08:56Z",
-        "from": "tmp",
-        "to": ".claude"
-      },
-      {
-        "ts": "2026-07-27T09:08:59Z",
-        "from": ".claude",
-        "to": "claude-ipc"
-      },
-      {
-        "ts": "2026-07-27T09:09:11Z",
-        "from": "claude-ipc",
-        "to": "i-dream"
-      },
       {
         "ts": "2026-07-27T09:10:12Z",
         "from": "i-dream",
@@ -206,17 +190,32 @@
         "ts": "2026-07-27T09:10:25Z",
         "from": "versable-builder",
         "to": ".claude"
+      },
+      {
+        "ts": "2026-07-27T21:15:28Z",
+        "from": ".claude",
+        "to": "tmp"
+      },
+      {
+        "ts": "2026-07-27T21:49:00Z",
+        "from": "tmp",
+        "to": "versable-builder"
+      },
+      {
+        "ts": "2026-07-27T22:19:23Z",
+        "from": "versable-builder",
+        "to": ".claude"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 9991,
-    "corrections": 1911,
-    "confirmations": 1451,
+    "total_prompts": 10071,
+    "corrections": 1919,
+    "confirmations": 1453,
     "directives": 298,
-    "terse_messages": 672,
+    "terse_messages": 676,
     "correction_rate": 0.191,
-    "confirmation_rate": 0.145,
+    "confirmation_rate": 0.144,
     "directive_rate": 0.03,
     "terse_rate": 0.067,
     "style_label": "conversational"
@@ -226,6 +225,6 @@
     "latest_yield": null,
     "judged_window": [],
     "reviews_counted": 0,
-    "updated_at": "2026-07-27T19:59:24.924125Z"
+    "updated_at": "2026-07-28T01:03:30.245467Z"
   }
 }

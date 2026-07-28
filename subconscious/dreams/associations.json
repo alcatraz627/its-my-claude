@@ -1457,22 +1457,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "d6b4371d-43bb-4fdf-ab2c-3021967dc8da",
-    "patterns_linked": [
-      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
-      "b0f92cff-426e-40e9-a742-316b5f747588",
-      "0540dc17-768a-45e2-a13e-3789706ff154",
-      "0b318bca-d338-4da1-ae19-62c2393a3771"
-    ],
-    "hypothesis": "The agent has a single epistemic failure that manifests across unrelated domains: treating the absence of a failure signal (successful send, clean diff, sub-agent notification, zero-default) as the presence of a success signal — fabricating positive evidence from the void rather than requiring an end-to-end existence proof.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always require a positive existence proof (round-trip reply, running output, file-on-disk check, non-default value) before reporting success — never infer success from the absence of a failure signal.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "c2452f67-5aa1-4f83-be43-c891fc68d9d4",
     "patterns_linked": [
       "80495565-80e4-4f6e-b0d2-41b6095773fb",
@@ -1480,11 +1464,11 @@
       "893cfff0-185e-4553-9a56-ced4a90d43ec"
     ],
     "hypothesis": "The agent has a consistent 'internal model substitution' failure across three unrelated domains — it derives UI labels from code patterns instead of design mocks, estimates completion from memory instead of reading source, and treats its own formalizations as authoritative instead of the user's spec — all three are the same shortcut of trusting an internally-derived approximation over the canonical external source.",
-    "confidence": 0.82,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always consult the canonical external source (design mocks for UI, source code for gap assessments, user-authored specs for authority) before generating any claim that could be derived from it — never substitute an internal approximation for a readable original.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -2913,22 +2897,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "ef5d5c4d-bd52-4fd6-9181-8da3ca7dc6e4",
-    "patterns_linked": [
-      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
-      "1221af86-2465-4d63-a6ba-b56f1da7f313",
-      "85ad7652-14a2-491e-849d-890369621fec",
-      "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
-    ],
-    "hypothesis": "Every handoff artifact the agent produces — deferred decision items, IPC checkpoints, file citations, decision questions — is authored for a receiver who shares the sender's full context, systematically requiring one extra round-trip before the receiver can act; the agent optimizes for authoring speed over receiver autonomy.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always include enough context in any handoff artifact (decision question, citation, checkpoint, deferred item) that the receiver can act on it without a follow-up question — test by asking 'could someone who just walked in act on this?'",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "c9bd1e53-1c58-4fab-ae93-61283a4f2544",
     "patterns_linked": [
       "43ae3c67-dc14-4c50-b23d-2f2b17f4f725",
@@ -2997,11 +2965,11 @@
       "249ed821-f665-4ba9-b2f3-7b257a38a0ff"
     ],
     "hypothesis": "Instance-level fix myopia (patching one callsite, one page, one policy violation) and one-sided verification (checking only the sender, only one visual mode) share the same attention-boundary failure: the agent's working context is anchored to the immediate site of the change and does not follow the reference outward to all consumers or all states — the fix in both cases is an explicit fan-out audit before declaring done.",
-    "confidence": 0.76,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "When fixing a pattern instance or verifying a change, always enumerate all other consumers/pages/states that share the same pattern or component before declaring the fix complete — a fix scoped to the triggering instance is half a fix.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -3752,21 +3720,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "d900ceaa-87a2-477a-b3f5-60ba7d8b61bc",
-    "patterns_linked": [
-      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
-      "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
-      "9113aef2-e381-4f24-9264-9a4051333d8e"
-    ],
-    "hypothesis": "The agent consistently mistakes partial observation for complete verification — a gap assessment without reading code, a UI review in only one visual mode, a completion claim without running the code — and the temporal pattern is that this gets worse under complexity, because the number of states to observe grows while the agent's verification effort stays fixed at 'one pass seemed fine.'",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always enumerate the observable states (code paths, visual modes, runtime conditions) before claiming verification — a single-state observation is partial verification and must be scoped as such in the claim.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "8a95c802-5a5b-4c35-acea-891ea95b12f3",
     "patterns_linked": [
       "86e6683c-0a66-4f68-98ed-37c7e07c715e",
@@ -3973,11 +3926,11 @@
       "77862baa-35de-4372-9bbf-56525b5cc07a"
     ],
     "hypothesis": "The agent inverts the optimal question distribution: it asks too often for trivial sequential go-aheads (low-value interrupts), yet when it does surface a real product decision, the question lacks enough context to be self-contained — the fix is a single policy: ask less frequently but ask better, with the threshold set at 'does this require information only the user has?'",
-    "confidence": 0.74,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Avoid halting for sequential progress confirmation unless a genuine decision point requires user-held information; when halting, always include prior context, concrete options, and tradeoffs so the question is answerable in one reply.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -4498,21 +4451,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "08dd35f8-012a-4264-ab8b-9dba7f9f15a9",
-    "patterns_linked": [
-      "893cfff0-185e-4553-9a56-ced4a90d43ec",
-      "fefe6016-599b-420d-a1de-8425490b0a1e",
-      "fa33ba9a-2df7-4970-9a80-bbe772854f42"
-    ],
-    "hypothesis": "The agent substitutes its own derived model for the canonical upstream source across three unrelated domains — an agent-authored doc replaces the user spec, internal naming conventions replace design mocks, and a familiar technical pattern (env vars) replaces the user's actual conceptual model (runtime config) — all three are the same 'map to nearest familiar pattern' shortcut that silently discards the user's actual authority.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always identify and consult the user's canonical upstream source (product spec, design mock, stated intent) before deriving from internal patterns — when your derived understanding conflicts with the upstream, the upstream wins.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
     "id": "f4d32044-fc70-433e-af5f-18e8136bc48e",
     "patterns_linked": [
       "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
@@ -4521,9 +4459,25 @@
       "3d41539a-3bb0-4f00-a71c-9238dbeaffc5"
     ],
     "hypothesis": "Mistaking a locally-observable artifact for ground truth about a remote system is one failure with two costumes: send-side telemetry substitutes for delivery proof (IPC/notifications), and agent-authored formalizations substitute for user-authored authority — both trust proximity over correctness.",
-    "confidence": 0.72,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "Always identify the canonical remote source (the peer's ack, the user's spec, the running app) before treating any locally-produced artifact (a send log, a derived doc, a notification) as evidence of the remote state.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "31b9ea4d-82a2-4ecf-96f3-e66d68e700a0",
+    "patterns_linked": [
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "0540dc17-768a-45e2-a13e-3789706ff154",
+      "9113aef2-e381-4f24-9264-9a4051333d8e"
+    ],
+    "hypothesis": "A single cognitive shortcut — trusting the nearest derivative artifact instead of the canonical source — manifests identically across four unrelated domains: IPC delivery (send log as proof of receipt), document authority (agent-authored doc as spec), artifact verification (notification as proof of file), and code verification (diff as proof of behavior).",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always identify the canonical source for any claim (the running process, the user-authored spec, the file on disk, the actual output) and verify against it directly — never against an intermediate that merely records intent to produce it.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4536,24 +4490,9 @@
       "80495565-80e4-4f6e-b0d2-41b6095773fb"
     ],
     "hypothesis": "The user's breadth-first preference, the sibling-page pagination miss, and the mock-consultation failure are all temporal-ordering errors with the same shape: the agent dives deep into implementation on the first item it touches instead of surveying the full surface (all pages, all mocks, all surfaces) before writing any code — depth-first is the agent's default, but the correct sequence is always survey-then-implement.",
-    "confidence": 0.71,
-    "actionable": true,
-    "suggested_rule": "Always survey the full affected surface (all sibling pages, design mocks, existing patterns) before implementing any change — depth-first on the first item encountered consistently misses patterns and context that a breadth-first scan would have revealed.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "d420e69f-139f-4d0d-b350-2f567e370155",
-    "patterns_linked": [
-      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
-      "1b2e4c1c-d0d6-4b75-90d4-5207ace6f9c5",
-      "e7987094-0e0d-48d1-998a-980249e28daa"
-    ],
-    "hypothesis": "Multi-agent architectures degrade ungracefully at their boundaries: orchestrators die leaving sub-agents blocked, unanswered IPC messages become mechanical debt, and auth failures stall silently — the common structural gap is that every agent assumes its counterpart will complete normally, with no protocol for the counterpart's death or incapacity.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always design multi-agent interactions with a dead-peer protocol: sub-agents self-report idle state after a timeout, unanswered messages get replied to before session end, and auth blocks are surfaced immediately with the user command to unblock — never assume the counterpart will complete normally.",
+    "suggested_rule": "Always survey the full affected surface (all sibling pages, design mocks, existing patterns) before implementing any change — depth-first on the first item encountered consistently misses patterns and context that a breadth-first scan would have revealed.",
     "promoted": false,
     "dismissed": true,
     "auto_intention_id": null
@@ -4566,11 +4505,11 @@
       "ba3d6f55-e0a2-408a-8af7-602e6a04df66"
     ],
     "hypothesis": "When the agent hits a hard capability boundary (auth wall, harness block, interactive terminal requirement), the correct behavior converges to one shape regardless of domain: package what you have into the most useful form and hand it off explicitly with the exact next step — the failure mode is always the same (stall, workaround, or silently give up), and the fix is always the same (structured handoff).",
-    "confidence": 0.7,
+    "confidence": 0.0,
     "actionable": true,
     "suggested_rule": "When hitting any capability boundary that cannot be crossed autonomously, immediately package completed findings and the exact user-actionable command into a structured handoff rather than attempting workarounds or stalling.",
-    "promoted": true,
-    "dismissed": false,
+    "promoted": false,
+    "dismissed": true,
     "auto_intention_id": null
   },
   {
@@ -4589,18 +4528,77 @@
     "auto_intention_id": null
   },
   {
-    "id": "ac55a073-8ed2-4bfc-83a6-cb70e2c9b6bd",
+    "id": "deb4374a-b777-4d44-b747-cc423c28d393",
+    "patterns_linked": [
+      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+      "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
+    ],
+    "hypothesis": "Patching a specific policy violation without fixing the structural default is the architectural-level version of fixing one page's pagination without applying the proven pattern to sibling pages — the agent resolves problems at the encountered instance rather than recognizing the instance as a member of an already-solved class.",
+    "confidence": 0.68,
+    "actionable": true,
+    "suggested_rule": "When fixing an instance of a problem, always ask whether the fix addresses only THIS instance or the CLASS — if a sibling fix or structural default already exists, apply the class-level solution rather than a point patch.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "40883656-70af-4fb6-9280-ca4b21e3e932",
+    "patterns_linked": [
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+      "1221af86-2465-4d63-a6ba-b56f1da7f313",
+      "60b247fe-db1a-4f0d-be26-c95cb386a1e2"
+    ],
+    "hypothesis": "Context that exists at creation time but isn't packaged to travel with the item it describes produces the same failure across three domains: deferred decisions lose their rationale, checkpoints lose peer aliases, and decision questions lose their background — all requiring the receiver to re-derive what the sender already knew.",
+    "confidence": 0.65,
+    "actionable": true,
+    "suggested_rule": "When creating any deferred item (a backlog entry, a checkpoint, a question to the user), always embed the minimum context needed for the consumer to act without a round-trip — treat the handoff boundary as a context cliff.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "048cb83b-a376-48b4-90fa-26164a459060",
     "patterns_linked": [
       "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
-      "249ed821-f665-4ba9-b2f3-7b257a38a0ff",
+      "e03d6c21-d832-4d1b-a91d-17df6c7783ac",
       "1f3ee51e-bcdb-4055-b50e-a6041d6a7489"
     ],
-    "hypothesis": "The agent has a systematic bias toward adding implicit flexibility (default-allow fallbacks, self-gating generalization, instance-level patches) when the user's actual intent is explicit constraint — the agent treats boundaries as suggestions to be softened rather than invariants to be enforced.",
-    "confidence": 0.0,
+    "hypothesis": "The agent has a systematic default-open bias: it defaults to ALLOW on unknown access-gate inputs, defaults to RE-ENABLE on disabled configs without investigating why, and defaults to GENERALIZE beyond stated narrow scope — three domains, one posture of assuming openness is safe when the correct default is closed.",
+    "confidence": 0.62,
     "actionable": true,
-    "suggested_rule": "Always default to DENY/RESTRICT for boundaries and enforce stated scope literally — never add fallback flexibility, generalization, or softening to a constraint the user stated as hard.",
-    "promoted": false,
-    "dismissed": true,
+    "suggested_rule": "When encountering an unknown input, a disabled state, or a narrow scope directive, always default to the restrictive interpretation (deny, keep disabled, enforce literally) — openness requires explicit evidence, not absence of prohibition.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "87956835-e4ff-475e-9331-a45afeef7ffa",
+    "patterns_linked": [
+      "80495565-80e4-4f6e-b0d2-41b6095773fb",
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "41f9da83-00ac-41ed-9a8b-a021f91f6b51"
+    ],
+    "hypothesis": "The agent's anchoring bias has a mirror structure: failing to fan out to all *inputs* before building (ignoring design mocks) is the same depth-first anchoring as failing to fan out to all *outputs* after building (testing one page, one visual mode) — the audit surface is incomplete in both directions because the agent locks onto the first thing it touches.",
+    "confidence": 0.58,
+    "actionable": true,
+    "suggested_rule": "Before any UI implementation, enumerate both input sources (mocks, specs, sibling pages) AND output verification surfaces (all pages, all visual modes) as an explicit checklist — the anchoring bias attacks both ends identically.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "7895c2a8-1074-4303-9d5c-eccd6fe7b7f6",
+    "patterns_linked": [
+      "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
+      "7d60b10c-5dc5-4aba-85d5-7d98090863d0"
+    ],
+    "hypothesis": "The user's breadth-first-v1 preference and deferred-review preference are phase-dependent faces of the same principle — breadth over depth — but an agent that conflates them will either over-polish during the build phase (violating breadth-first) or under-review during the ship phase (misapplying deferred-review as skip-review).",
+    "confidence": 0.52,
+    "actionable": true,
+    "suggested_rule": "Apply breadth-first during the BUILD phase (cover all surfaces before polishing any) and deferred-review during the REVIEW phase (queue non-critical findings rather than blocking) — never cross the phases.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   }
 ]

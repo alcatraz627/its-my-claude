@@ -1,0 +1,27 @@
+{
+  "id": "b936e8e1-c693-41f3-ba36-a951b6d4ae5a",
+  "ts": "2026-07-28T06:54:58Z",
+  "session_id": "speed-catch-7e",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260728-speed-catch-7e.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "OWNER (blocking): push both repos \u00b7 the three charter amendments (doc-38 \u00a7",
+    "Task #14 \u2014 Content Gen v1: close it once the owner accepts the amendments.",
+    "Task #16 \u2014 `<<llm>>` / `<<llm:topic=\u2026>>` tokens, CORE, not yet built.",
+    "Task #20 \u2014 13 deferred adversarial findings + 4 rulings; ALSO the categorical",
+    "Task #21 \u2014 S2E polish round 3: the kit PageTitle icon treatment, scrollbar",
+    "Task #23 \u2014 the module card's re-run control could become a circular icon",
+    "Task #25 \u2014 run-page implementation, after the spec is read.",
+    "Tasks #15, #17, #18, #19 \u2014 conditions branching, lexical editor, OpenAI",
+    "Tasks #3-#6 \u2014 the four parked modules await the owner's click-through.",
+    "Old business: #1 (scrape config rides the S2 machinery, coworker), #2 export"
+  ],
+  "tags": []
+}

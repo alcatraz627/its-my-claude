@@ -1,21 +1,23 @@
 ---
-brief: Functional (not aesthetic) TUI design patterns + the fzf-as-runtime launcher blueprint, approach-selection (fzf > gum > framework), and a graceful-degradation ladder. For building interactive terminal browsers/launchers.
+brief: Functional (not aesthetic) TUI design patterns + the fzf-as-runtime launcher blueprint, approach-selection (fzf > gum > framework), a graceful-degradation ladder, and the earned ink-dashboard patterns for when the framework tier is justified. For building interactive terminal browsers/launchers/dashboards.
 triggers:
   - topic:tui
   - topic:fzf
   - topic:launcher
   - topic:interactive-explorer
+  - topic:ink
   - phrase:"interactive explorer"
   - phrase:"fzf"
   - phrase:"command palette"
   - phrase:"terminal UI"
+  - phrase:"terminal dashboard"
 related:
   - conventions/cli-help-design.md
   - conventions/dashboard-tools.md
   - features/hooks-tui-limits.md
 tier: 2
 category: conventions
-updated: 2026-06-19
+updated: 2026-07-28
 stale_after_days: 180
 ---
 
@@ -46,10 +48,12 @@ need multi-pane / mouse click-targets / persistent in-app model?
   `confirm` are best-in-class for the **arg-prompt** and confirmations, but
   `gum filter` has no preview-on-hover and no in-session reload. Use it for
   dialogs and as the first fallback rung — never as the main list.
-- **Framework (Bubbletea/Textual/Ratatui)** buys true multi-pane + mouse targets
-  + an in-process app model. None are load-bearing for a TSV browser, and each
-  breaks "minimal deps / graceful degradation." Reach for it only when the tool
-  becomes a persistent multi-pane dashboard.
+- **Framework (Bubbletea/Textual/Ratatui/ink)** buys true multi-pane + mouse
+  targets + an in-process app model. None are load-bearing for a TSV browser, and
+  each breaks "minimal deps / graceful degradation." Reach for it only when the
+  tool becomes a persistent multi-pane dashboard — and then follow
+  [§ ink-dashboard patterns](#when-the-framework-tier-is-justified-ink-dashboard-patterns)
+  below.
 
 **Graceful-degradation ladder** (honor it): `fzf` (full) → `gum filter` +
 `gum pager` + `gum input` (degraded) → pure-bash numbered `select` (always
@@ -134,3 +138,49 @@ contextual action keys, layout toggle, `fzf`-absent → `kit` fallback. State in
   (`--nth` it, or just omit `--nth` and let whole-line search hit the hidden
   clean column), and put color only in the **display** field (`--with-nth`).
   Symptom: typing in the picker yields zero results though the list renders fine.
+
+## When the framework tier is justified: ink-dashboard patterns
+
+Earned on the claude-ipc `-i` dashboard build (2026-07: ink + React fullscreen
+viewer over a local message broker; design history in that repo's
+`docs/notes/`). Every rule below broke something before it became a rule.
+
+**Input**
+- **One central dispatcher, strict precedence.** ink `useInput` is *broadcast*,
+  not bubbling — every active handler sees every key, so per-widget handlers
+  double-fire Esc. Route everything through one dispatcher ordered
+  filter-edit → modal → global → view.
+- **Replay key-runs per char, functional updates only.** A fast key-run
+  coalesces into ONE multi-char input event, and React batches a chunk's events
+  into one commit — dispatchers must loop per character AND use functional
+  `setState`, or keystrokes silently vanish.
+- **Queue refetches via a latest-callback ref.** A refresh requested while a
+  fetch is in flight silently misses unless queued; toggles then eat state.
+
+**Process boundaries**
+- **`$EDITOR` from a fullscreen app:** unmount the alternate screen (render a
+  static fallback), pause every interval, guard in-flight state writes, spawn
+  with stdio inherit, remount = full repaint. No suspend API needed.
+- **Never build into the deployed artifact from tests** — a compile-gate builds
+  to a temp dir; a stray rebuild of the served `dist/` stages unreviewed code
+  into the next daemon restart.
+
+**Honesty (generalizes beyond ipc)**
+- **A dashboard is a viewer: display never mutates.** Peeks must be invisible —
+  no consume, no notify, no heartbeat/register. A monitoring surface that
+  repaints state (a tab badge, a read-marker) fights the owner of that state.
+- **No fabricated liveness.** Render liveness as the inference it is
+  ("live — seen 280s ago"), never as a process claim; unknown renders as
+  labeled unknown, not a plausible zero.
+
+**Verifying a TUI**
+- **Check the framework's components DIR, not its docs page, before trusting a
+  claim** — ink-terminal ships no text-input component; a one-line design
+  decision ("in-app textarea") silently implied hand-rolling an editable widget.
+- **pty capture is damage-diffed:** unchanged cells never rewrite, so captured
+  words glue together and prefixes vanish. Assert on freshly-painted rows or
+  force a full-frame oracle (open a modal); compare space-stripped; give every
+  test message a distinct timestamp or list order is nondeterministic.
+- **PNG renders lie about color:** `freeze` (ANSI→PNG) drops background colors
+  and dim tints. Raw ANSI (`tmux capture-pane -e`) or a real terminal is color
+  truth; judge color only there.
