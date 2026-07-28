@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Find banned language tells in the user-facing string copy of a code file.
+Reads quoted string literals AND same-line JSX text children (>copy<).
 
 Extracts single-line string literals from code (js/ts/jsx/tsx/vue/svelte/py),
 keeps the ones that read as prose copy, and judges them with prose-lint's own
@@ -16,7 +17,8 @@ _pl = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_pl)
 
 STRING_RE = re.compile(r'"((?:[^"\\\n]|\\.){8,300})"'
                        r"|'((?:[^'\\\n]|\\.){8,300})'"
-                       r"|`((?:[^`\\\n]|\\.){8,300})`")
+                       r"|`((?:[^`\\\n]|\\.){8,300})`"
+                       r"|>([^<>{}\n]{8,300})<")   # JSX text children: >copy<
 COMMENT_LINE = re.compile(r"^\s*(//|#|\*|/\*|\{\s*/\*)")
 NOT_COPY = re.compile(r"^https?://|^[./~]|\{.*\}.*\{.*\}")   # urls, paths, dense templating
 
