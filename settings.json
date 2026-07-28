@@ -745,6 +745,15 @@
             "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/pre-tool-use.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-commit-signature.sh"
+          }
+        ]
       }
     ],
     "SessionEnd": [

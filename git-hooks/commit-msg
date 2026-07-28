@@ -1,5 +1,5 @@
 #!/bin/sh
-# Strip AI-assistant signature trailers from every commit message, machine-wide.
+# Hard-block AI-assistant signature trailers in every commit message, machine-wide.
 # The user's standing ruling (rules/git.md § Commit message style, memory
 # feedback_no-claude-commit-trailers): no Co-Authored-By Claude, no
 # Claude-Session, no "Generated with Claude Code" footer, any model, any repo.
@@ -13,11 +13,16 @@
 
 MSG_FILE="$1"
 
-TMP="${MSG_FILE}.strip-tmp"
-grep -v -E '^[[:space:]]*(Co-Authored-By:[[:space:]]*Claude|Claude-Session:|🤖 Generated with \[Claude Code\]|Generated with \[Claude Code\]|https://claude\.ai/code/)' "$MSG_FILE" > "$TMP" || true
-# collapse the trailing blank lines the strip can leave behind
-awk 'NF {blank=0} !NF {blank++} blank<2' "$TMP" | sed -e :a -e '/^[[:space:]]*$/{$d;N;ba' -e '}' > "$MSG_FILE"
-rm -f "$TMP"
+# hard block (owner ruling 2026-07-28, migration 0040): a trailer ABORTS the
+# commit — no silent strip. The agent fixes the message and reruns.
+OFFENDING=$(grep -n -i -E '(co-.uthored-.y:[[:space:]]*claude|claude-session:|generated with .?claude code|https://claude\.ai/code/)' "$MSG_FILE" || true)
+if [ -n "$OFFENDING" ]; then
+  echo "COMMIT BLOCKED — AI signature trailer(s) in the message:" >&2
+  echo "$OFFENDING" | sed 's/^/  line /' >&2
+  echo "Owner ruling: no Claude signatures in any repo, any model (rules/git.md § Commit message style)." >&2
+  echo "Remove these lines and rerun the commit." >&2
+  exit 1
+fi
 
 SUBJECT=$(sed -n '1p' "$MSG_FILE")
 if [ ${#SUBJECT} -gt 72 ]; then
