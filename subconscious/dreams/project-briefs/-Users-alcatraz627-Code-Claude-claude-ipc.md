@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-28T01:06:54.234726+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-29T02:41:43.918244+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Cross-session IPC broker for Claude Code agents — enabling peer discovery, message routing, and multi-agent coordination. Work is typically multi-agent: concurrent sessions coordinating via this system while also dogfooding it.
+Cross-session IPC broker for Claude Code agents — a CLI tool enabling peer messaging, session registration, and multi-agent coordination. Work is predominantly Go/shell, with parallel-agent workflows as a first-class concern.
 
 ## Things to do (or keep doing)
-- **Pre-negotiate task ownership via IPC before parallel work begins** — overlapping claims without coordination produces clobbered edits and drift.
-- **Verify IPC delivery with a round-trip reply**, not send-side logs or telemetry — a successful send is not proof of receipt.
-- **Default access-gate decisions to DENY on unknown input** — a default-ALLOW fallback for unrecognized CLIs renders the entire gate bypassable.
-- **After any parallel burst, treat all cached state as stale** — task lists, branch state, file contents all drift; re-sync before acting.
+- Verify IPC delivery at the **reception point** (round-trip reply or peer-confirmed receipt), never at send-side telemetry alone
+- Default gates to **DENY** for unrecognized commands; absence of a match is never ALLOW
+- Pre-negotiate task ownership via IPC before parallel agents begin overlapping work
+- Quote IPC message bodies with `printf %q` or heredocs — backticks and special characters are consumed by the shell and produce zero-byte messages
 
 ## Things to avoid
-- **Don't use `rg -rn`** — `-r` is `--replace`, not recursive; use `rg -n` for line numbers.
-- **Don't quote IPC message bodies with backticks in shell** — special characters get consumed, producing zero-byte or corrupted messages; escape or use a heredoc.
-- **Don't claim a bug is fixed without exercising the fix on the running dev server** — repeated false-assurance cycles are a known trust-damager here.
-- **Never commit or push** — this repo is protected; prepare the diff and hand it to the user.
+- Don't use `rg -rn` expecting recursive+line-numbers — `-r` is `--replace`; use `rg -n` for line numbers
+- Don't treat send-success as delivery-confirmed; a successful enqueue proves nothing about the peer reading the message
+- Don't synthesize a plausible default (zero, false, ALLOW) when a lookup returns empty — emit UNCERTAIN or DENY and surface the gap
+- Don't leave unanswered peer queries at session end; stop hooks fire repeatedly for each unreplied IPC message
 
 ## Open questions / known gaps
-- Unanswered peer queries at session end trigger repeated stop-hook fires — there's no clean session-teardown handshake yet.
-- Default-open bias (re-enabling disabled configs, over-generalizing scope) recurs across sessions; the gate infrastructure exists but enforcement is incomplete.
+- Multi-agent parallel edits to shared state (task lists, branch state) consistently go stale under burst conditions — no coordination protocol yet enforced at the harness level
+- The line between "implementation detail" and "product decision" gets drawn too broadly; naming and behavioral choices need an upstream authority check before being resolved as code conventions

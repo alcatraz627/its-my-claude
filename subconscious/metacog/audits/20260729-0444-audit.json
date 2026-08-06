@@ -1,0 +1,46 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 20820,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.041665333311999314,
+    "unit_count": 9
+  },
+  "response": {
+    "biases_detected": [
+      "literal_request_over_intent:RECURRING:STABLE — 4dd77572-23: ran /designer-reviewer scoring skill when owner intent was a self-contained design handoff document for a separate Claude session; same-session self-correction via atone S2 event filed in unit -28 with correct fix delivered; pattern count now 6x in atone history per session-start context; self-correction is consistent with prior cycles but the initial mis-read recurred despite the July-10 lesson being cited twice earlier in the same session; no improvement trend",
+      "write_before_read_trap:RECURRING:STABLE — 4dd77572-28: Write to HANDOFF.md failed (success:false x1) before second attempt succeeded; 4dd77572-29: Write to project memory path failed twice before success, Edit to MEMORY.md failed before Bash workaround recovery, Write to scratchpad failed before success; four distinct write failures across two units; depth slightly elevated versus single-failure baseline from prior cycles but recovery pattern unchanged; no regression classification warranted"
+    ],
+    "calibration_score": 0.44,
+    "overconfident_count": 1,
+    "recommendations": [
+      "literal_request_over_intent has accumulated 6+ atone events with zero elimination; advisory self-correction is insufficient; promote a pre-skill-dispatch probe: before invoking any review or critique skill on a surface with 2+ prior critique rounds, check whether the owner's wording implies a receiver or destination session; if yes, confirm handoff vs critique before dispatching",
+      "write_before_read_trap: depth slightly elevated this cycle but within stable band; no new intervention recommended; continue tracking"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "921a2d83-a1c7-4fe0-8028-a4d7de3ed930",
+      103979
+    ],
+    [
+      "5ff0aeb3-dd2a-45c4-8f33-0bd8fced0fb7",
+      91959
+    ],
+    [
+      "5d79e36c-b38f-4ab2-a2f8-7b439d7cda60",
+      106992
+    ],
+    [
+      "4dd77572-fbe6-4c1a-9919-75d150dc36c5",
+      14725528
+    ]
+  ],
+  "timestamp": "2026-07-29T04:44:53.463381Z",
+  "tokens_used": 6813,
+  "units_analyzed": 9,
+  "units_total": 9
+}

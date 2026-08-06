@@ -1,0 +1,29 @@
+{
+  "id": "f1378236-5720-441b-8493-d63f40a4f24f",
+  "ts": "2026-07-28T19:02:55Z",
+  "session_id": "catch-task-9f",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_20260728-catch-task-9f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: run `! touch /Users/alcatraz627/.claude/.push-approved-f1378236-5720-441b-8493-d63f40a4f24f`, then the agent pushes both repos.",
+    "USER: ruling on migrating workspaces that hold a saved default template so",
+    "USER: ruling on whether PR #5's mandatory-loadsheet ingest rule stays this",
+    "Task #34: export truncation at 2000 parts, preview-while-ingesting, and the",
+    "Task #36: an idempotency key on the extractor request, to close the",
+    "Task #33: carry the field spec's limits into the review item so the editor's",
+    "Tasks #31, #32: dedupe part-context entries case-insensitively; the job-page",
+    "Task #20: 13 deferred adversarial round-1 findings plus the categorical UI",
+    "Task #18: S2E polish round 3.",
+    "Tasks #12, #14, #15, #16: conditions branching, lexical editor, OpenAI",
+    "Tasks #4 to #7: the four parked modules await the owner's click-through.",
+    "The two remaining user-facing em-dashes, now unblocked by the PR #5 merge."
+  ],
+  "tags": []
+}

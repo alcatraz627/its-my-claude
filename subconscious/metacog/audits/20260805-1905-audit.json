@@ -1,0 +1,40 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.11232096865679177,
+    "unit_count": 1
+  },
+  "response": {
+    "biases_detected": [
+      "template_anchoring: proceeded with H1 em-dash lines despite prose-lint gate being a known constraint at budget zero",
+      "insufficient_precondition_check: did not dry-run or predict prose-lint rejection before the first Write attempt",
+      "recovery_optimism: filed proposal and continued cleanly, but the initial failure was structurally predictable"
+    ],
+    "calibration_score": -0.15,
+    "overconfident_count": 1,
+    "recommendations": [
+      "add a prose-lint pre-check step before any template-generated Write in core-dump to avoid guaranteed retry loop",
+      "cross-reference active Stop hook constraints against template output before first Write attempt, not after failure",
+      "the proposal filing (prop-20260804-140342-20) is good metacognitive behavior and should be reinforced; the root cause identification was accurate"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 0
+  },
+  "sessions": [
+    [
+      "dac333f4-ee8d-4184-a07d-68af8edbf74b",
+      1029291
+    ],
+    [
+      "0c64e0da-b067-45fd-a01e-c8fffa0b5647",
+      1881188
+    ]
+  ],
+  "timestamp": "2026-08-05T19:05:33.953945Z",
+  "tokens_used": 2308,
+  "units_analyzed": 1,
+  "units_total": 1
+}

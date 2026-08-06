@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-28T01:07:21.869052+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-07-30T12:37:51.481419+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-Versable Builder is a multi-page UI application (React/Next.js) with shared shell components, access-gate systems, and multi-agent/multi-session coordination. Work style is iterative with high parallelism and external-stakeholder-facing document output.
+A multi-page web application (versable-builder) with complex shared UI shell components (sidebars, drawers, modals). Work is system-breadth-first: the user expects fixes applied across all pages simultaneously, not one page at a time.
 
 ## Things to do (or keep doing)
-- **Audit ALL pages** before implementing any shared UI shell component (sidebar, drawer, modal) — never build per-page variants; the fix applies to every sibling page simultaneously.
-- **Exercise the fix on the running dev server** before claiming done/works/fixed — a code edit that looks correct is not verified until the actual code path fires on localhost.
-- **Pre-negotiate task ownership via IPC** before parallel sub-agent work; overlapping edits without coordination produces silent clobbers.
-- **Embed decision context** when creating deferred items — a backlog entry or question to the user must carry enough rationale for the consumer to act without a follow-up.
+- **Audit ALL sibling pages** before writing any shared UI shell component (sidebar, drawer, modal) — implement once globally, never per-page.
+- **Verify at the consumer side** (running dev server, rendered browser page) before claiming any fix is done — send-side success, test-pass, and code edits are not verification.
+- **Always include full file paths** when citing any document or file — basenames force the user to hunt.
+- **Include decision context when deferring** review items — concrete options, prior reasoning, and what information the user needs to decide must travel with the deferred item.
 
 ## Things to avoid
-- **Don't treat send-success as delivery** — IPC verification requires an actual round-trip reply from the peer, not inspection of the sender's own logs.
-- **Don't default-ALLOW unknown inputs** in access gates — unrecognized CLIs/commands must DENY; default-open makes the entire gate bypassable.
-- **Don't include internal banter or stakeholder critique** in any document that may be shared externally; strip all conversational framing before writing the file.
-- **Don't cite file basenames alone** — always include the full path; a basename forces the user to hunt.
+- **Don't commit or push** — this is a protected repo; prepare the diff and hand it to the user.
+- **Don't patch only the reported instance** of a UI or pattern issue — fix all instances across the codebase in the same response.
+- **Don't fabricate defaults** when a lookup returns empty — emit UNCERTAIN or DENY, never synthesize a plausible zero/false/ALLOW.
+- **Don't include internal banter or stakeholder commentary** in any document that may be shared externally — strip it before writing.
 
 ## Open questions / known gaps
-- Recurring tension: agent claims UI fix is done, user tests on real app, still broken — the declared-ready gate is known but the pattern persists under velocity.
-- Design mocks exist for UI surfaces but are not always consulted before shipping labels/flows — establish a pre-implementation grep for mocks as a standard step.
+- Parallel sub-agent coordination repeatedly causes state drift (task lists, file ownership, git state) — no stable ownership-negotiation protocol is in place yet.
+- Access-gate default behavior (DENY vs ALLOW for unknown cases) has been a recurring structural gap; verify gate posture whenever building or reviewing any guard/policy component.

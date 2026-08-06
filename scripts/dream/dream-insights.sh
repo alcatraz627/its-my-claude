@@ -415,14 +415,29 @@ if part_mode != 'ranked' and os.path.isfile(_atone_tldr) and not os.path.isfile(
                 pc = entry[1] if entry else None
                 weak = (desc == slug or len(desc) <= len(slug) + 3)
                 guidance = pc if (pc and weak) else desc
+                # A description says what went wrong; a precheck says what to ask
+                # before acting. Until now only a degenerate description (slug
+                # repeated) surfaced the precheck, so a well-described pattern
+                # kept its actionable gate hidden no matter how often it recurred
+                # (literal-request-over-intent sat at S3 5x that way). Past a high
+                # recurrence bar the gate earns its line alongside the description.
+                sev_m = re.match(r'\s*(S\d)\s*,\s*(\d+)\s*x', bracket)
+                high_recurrence = bool(
+                    sev_m and sev_m.group(1) == 'S3' and int(sev_m.group(2)) >= 5
+                )
+                pc_suffix = ''
+                if high_recurrence and pc and pc != guidance:
+                    pc_suffix = f" · precheck: {pc}"
                 if rc >= 2:
                     ln = (
                         f"{indent}🔴 [{bracket} · {rc}× THIS WEEK, still recurring "
                         f"despite this reminder — this is a blind spot, slow down] "
-                        f"{slug} → {guidance}"
+                        f"{slug} → {guidance}{pc_suffix}"
                     )
                 elif pc and weak:
                     ln = f"{indent}⚠️  [{bracket}] {slug} → {pc}"
+                elif pc_suffix:
+                    ln = f"{indent}⚠️  [{bracket}] {slug} — {desc}{pc_suffix}"
             out_lines.append(ln)
         if enforced_omitted:
             out_lines.append(

@@ -1,0 +1,21 @@
+{
+  "id": "03101677-881e-45a1-8ea6-1c8dd3ab8ab6",
+  "ts": "2026-07-28T19:02:56Z",
+  "session_id": "ipc-debug",
+  "project_root": "/Users/alcatraz627/Code/Claude/claude-ipc",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/claude-ipc/_20260729-ipc-debug.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**Validate next session (in order):**",
+    "**Open minors** (review out-of-scope appendix): the tokenless-alias peek gate, `status`'s unfiltered history scan, the daemonCtl stale-socket claim.",
+    "**Deliberately parked:** E4 firehose (rides the Cowork-bridge gcc proposal, its gating second consumer); the 5 pushed commits carrying banned trailers (history rewrite offered, not requested).",
+    "**Owner decisions available:** the three questions inside `docs/notes/20260729-jsonl-fallback-spec.md`."
+  ],
+  "tags": []
+}

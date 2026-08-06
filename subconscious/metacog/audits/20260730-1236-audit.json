@@ -1,0 +1,117 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 18447,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.40186421669285294,
+    "unit_count": 14
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — 131197df-0: Write to scratchpad path failed twice before success (success:false x2), Edit on runtime-notes.md failed before Bash workaround recovery; failure depth and recovery pattern unchanged from prior cycle baseline; no regression, no improvement",
+      "confirmation_bias_style_log:RECURRING:STABLE — 131197df-0: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; twelfth consecutive cycle with identical pattern; zero corrective signal across all cycles",
+      "excessive_task_creation:RECURRING:STABLE — 131197df-0: 22 consecutive TaskCreate calls in a single orientation unit; second consecutive cycle with same volume pattern; was classified NEW in prior cycle, now RECURRING; appropriateness remains ambiguous from metadata alone but structural anomaly is confirmed across two cycles"
+    ],
+    "calibration_score": 0.45,
+    "overconfident_count": 1,
+    "recommendations": [
+      "write_before_read_trap and confirmation_bias_style_log are fully entrenched at this advisory-only signal level; deprioritize re-recommending mechanical fixes unless an escalation path (hook or gating change) is available; track trend only",
+      "excessive_task_creation is now confirmed RECURRING across two sessions; worth investigating whether 22-task orientation passes represent a consistent over-decomposition pattern or a legitimate backlog catch-up shape; a volume cap nudge in the orientation flow may be warranted if a third cycle repeats",
+      "unit 47982210-0 shows a positive signal: agent read code files before making structural claims (structural_claim_without_reading_code pattern NOT triggered), acknowledged a false premise in the peer framing before complying, and used prose-lint self-check before sending; reinforce these as affirmed behaviors",
+      "five no-tool minimal-output units (ea90e429, 34278bd1, d6f5a146, 8c98ef23, 19f798ce) with identical or near-identical large inputs and Unknown outcomes represent background subprocess spawning; no calibration signal extractable but the volume suggests potential over-spawning of short-lived subprocesses in the same task window"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "dac333f4-ee8d-4184-a07d-68af8edbf74b",
+      1001125
+    ],
+    [
+      "ea90e429-c3d4-4bd8-a5aa-06823c23b32c",
+      108880
+    ],
+    [
+      "97eb0d92-bb7b-462a-9c39-63291cbab1a4",
+      101212
+    ],
+    [
+      "4d203fa6-24e4-4c71-bc67-cb9c1c434838",
+      127012
+    ],
+    [
+      "47982210-9fed-494a-a1a8-69bd94fa598d",
+      516094
+    ],
+    [
+      "34278bd1-a8d3-46c9-88ba-c3acd196f9a1",
+      108724
+    ],
+    [
+      "16d759b9-6a12-400f-aeae-192b33d4b615",
+      409242
+    ],
+    [
+      "0c64e0da-b067-45fd-a01e-c8fffa0b5647",
+      1574413
+    ],
+    [
+      "d6f5a146-8731-4c1f-9434-b00b23c5a884",
+      123826
+    ],
+    [
+      "cf206dd5-3a29-4a6f-a86b-a09579b934fb",
+      130526
+    ],
+    [
+      "cb6a7a6c-1e82-4bcf-867f-c4a5b1f9e149",
+      121584
+    ],
+    [
+      "bbeee5a7-f8d8-4141-83b1-0157d3d3b5ab",
+      117047
+    ],
+    [
+      "ab62fd6a-9b25-4e76-b12c-1139fbd49205",
+      117563
+    ],
+    [
+      "96f7f6db-6f0f-4373-829a-57cbf05b2156",
+      89258
+    ],
+    [
+      "8c98ef23-12a9-4e71-bee6-ee274cabb852",
+      122445
+    ],
+    [
+      "8150ce07-2722-4973-8997-686683366bdf",
+      119241
+    ],
+    [
+      "3b4f0697-dc98-4f58-9b69-6a83c7458f00",
+      150446
+    ],
+    [
+      "273f2306-e965-4fea-aa7b-2794af134abb",
+      121559
+    ],
+    [
+      "19f798ce-6e31-46b4-902d-9e355033b0ef",
+      121627
+    ],
+    [
+      "139deea6-149d-431c-a5ca-495eb2c7762d",
+      136634
+    ],
+    [
+      "131197df-0740-4015-b6ad-fba9aedc1400",
+      15019884
+    ]
+  ],
+  "timestamp": "2026-07-30T12:36:36.838393Z",
+  "tokens_used": 6338,
+  "units_analyzed": 7,
+  "units_total": 14
+}

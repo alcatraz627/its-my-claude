@@ -79,6 +79,33 @@ nginx `.test` domains: `scripts/dev-servers/gen-nginx-conf.sh`. The older
 `pm2-register.sh` predates the tier system; prefer `ports.sh claim` + explicit
 pm2 start.
 
+## Idle lifecycle: `scripts/dev-servers/svc.sh` (migration 0043)
+
+Anything pm2 runs is stopped after **12 hours with no new connections**, at any
+tier. pm2 is the ownership boundary, not the tier: the tier says who owns the
+PORT, this says who owns the PROCESS. A server started by hand in a terminal is
+never touched, because svc cannot see it.
+
+**Before using any pm2 service, call `svc up <name>`.** It is idempotent, so run
+it unconditionally instead of checking first. It starts the app if stopped,
+waits for a real listening socket, prints the URL, and marks the service used.
+Assuming a service is live is now wrong, because it may have been reaped
+overnight.
+
+```
+svc status              # what is running, its ports, how long unused
+svc up <name>           # start if stopped, wait for its port (call this first)
+svc down <name>         # stop now
+svc reap --dry-run      # what would be stopped
+```
+
+Idle means "no NEW connection", not "nothing connected". A Vite HMR websocket
+held by a forgotten browser tab would otherwise read as use forever, which is
+the exact failure this replaced. Tuning lives in env vars (`SVC_IDLE_HOURS`,
+`SVC_GRACE_MIN`) and `~/.claude/dev-servers/svc-never-reap`.
+
+Reap is not deletion here either. Every reap records `svc up <name>`.
+
 ## /doctor
 
 The doctor ports step runs `ports.sh scan` and flags UNTRACKED listeners,

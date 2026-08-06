@@ -8,7 +8,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-07-28
+updated: 2026-08-06
 stale_after_days: 90
 ---
 
@@ -39,6 +39,9 @@ This one keeps recurring (atone `literal-request-over-intent` — 4×, up to S3)
 - **A named instance when they meant the class** — they pointed at ONE example (one parenthetical, one label) because it was in front of them. Fix the class; fixing only the instance they named is the literal read. Scope it back only if they said so.
 - **A complaint is a problem report, not a menu.** "This is confusing" / "it doesn't appeal" asks you to diagnose and fix it. Answering with a pick-list of taste options hands the diagnosis back to them — a question they didn't ask.
 - **An ambiguous later mention does NOT re-authorize a deferred action** (the S3). If they parked something and a later message merely brushes the same topic, that is not a go. A deferral stands until it is clearly lifted; if you think it was lifted, ask in one line.
+- **Urgency is a tone signal, not a scope definition.** "Just do it", "quickly", "don't overthink it" ask you to stop deliberating, not to shrink the goal to whatever is nearest. Re-read what was asked before implementing the fast version of it.
+
+**Precheck:** does the literal wording describe the *goal*, or an *example* of the goal? If an example, serve the goal.
 
 **Autonomy calibration:** Scale autonomy on the **execution** axis (more tool calls, deeper investigation) but never on the **scope** axis. High-autonomy execution within tight scope boundaries.
 
@@ -51,6 +54,8 @@ Before any side-effecting operation (git push, file write to external system, AP
 **Verification triad before git operations:** `git status` + `git log --oneline -3` + `git diff --stat` before any push, branch creation, or merge.
 
 **Treat all state as ephemeral.** File contents, process state, git status, environment variables — all can change between tool calls. When in doubt, re-read rather than assuming.
+
+**Expand paths at the reader boundary.** Internal surfaces (notes, checkpoints, WAL entries, sub-agent prompts) may carry repo-relative paths, because the agent holds the working directory that resolves them. The user does not. Any path in a reply they will read must be absolute on its first mention, starting with `/` or `~`. A bare basename, or a repo-relative path like `.claude/output/20260728-run-page-spec/experience-spec.md`, forces them to come back and ask where it lives. Expand it before sending.
 
 ## Escape hatch — when to pause and ask
 
@@ -71,6 +76,12 @@ Terse protocol + autonomous execution are defaults, not absolutes. Pause when th
 - It's a cheap-to-revert local change (new branch, temp file, scoped edit)
 
 **Format:** one line stating the ambiguity, 2–3 numbered options, wait. Don't pad.
+
+## Context-load claims need the instrument, not a feeling
+
+Before recommending `/clear`, `/compact`, or `/core-dump`, or asserting that context is near capacity: has the ctx-pressure hook fired this session? It posts a notice at 70%, 80%, and 90%. If no notice has appeared, you are under 70%. Drop the ceremony and keep working. A felt sense of fullness is not evidence, and the hook is the only thing that measures.
+
+One exception, because the notice lives in the transcript and the transcript is what gets summarized: after a `/compact` you may have lost a notice that did fire. If context was compacted this session, treat the absence of a notice as unknown rather than as proof you are under 70%, and say which of the two you mean when you raise it.
 
 ## Arm the receiver before ending the turn
 

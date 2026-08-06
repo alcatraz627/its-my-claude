@@ -1,0 +1,146 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17502,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17057096531032168,
+    "unit_count": 29
+  },
+  "response": {
+    "biases_detected": [
+      "commit_metadata_violation:RECURRING:PARTIALLY_IMPROVING — b936e8e1-8 (2026-07-27) contains both Co-Authored-By: Claude Fable 5 and Claude-Session URL footers on both commits; however f1378236 units 2 and 3 (2026-07-28) produce three commits with zero trailer violations; this is the first session-split improvement signal across ten cycles, suggesting temporal improvement rather than elimination; older session unit still fully violated",
+      "confirmation_bias_style_log:RECURRING:STABLE — style-log.sh called with watcher-fire slug in f1378236-2 (via wal checkpoint compound), f1378236-3 (explicit --heeded no call), and b936e8e1-8 (--heeded yes); no evidence for slug classification surfaced in any call; ninth consecutive cycle with identical pattern; deprioritized per standing guidance",
+      "proximal_signal_substitution:RECURRING:STABLE — f1378236-2: npx tsc --noEmit run as pre-commit gate before content.server.ts commit; tsc-clean treated as sufficient; no runtime exercise before commit; pattern and depth unchanged; deprioritized per standing guidance",
+      "write_before_read_trap:RECURRING:STABLE — b936e8e1-8: Edit on app/styles/app.css failed (success:false) before Read pivot; single shallow failure with recovery; depth unchanged from prior cycles; deprioritized per standing guidance",
+      "relative_path_citation_in_owner_facing_reply:NEW — f1378236-2: owner had to ask where to find the spec after a briefing reply cited .claude/output/20260728-run-page-spec/experience-spec.md as a repo-relative path; correction documented in atone event mist-20260728-085613-a1 under dense-briefing-instead-of-a-direct-answer slug; root cause is audience-boundary path expansion failure: internal-doc citation conventions (repo-relative) applied to owner-facing reply surface without expansion; self-corrected within same session via atone; NEW pattern distinct from the dense-briefing slug it was filed under"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 1,
+    "recommendations": [
+      "commit_metadata_violation: first split-improvement signal across sessions — monitor next two cycles to distinguish temporal learning from session-context dependence; if f1378236-style clean commits persist while older session patterns fade, classify as RESOLVING and reduce intervention weight",
+      "relative_path_citation_in_owner_facing_reply: NEW pattern self-corrected within session; promote to monitored list; precheck: before any owner-facing mention of a file path, expand to absolute path starting with / or ~; audience boundary is the trigger, not file type or doc type",
+      "sleep_in_bash: not observed in current cycle units; no recommendation this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "f1378236-5720-441b-8493-d63f40a4f24f",
+      2609963
+    ],
+    [
+      "ef0c57bc-e10a-4a1b-beb2-42c381015ed2",
+      102400
+    ],
+    [
+      "e380462f-0103-417a-9504-f7dab1814f0b",
+      126951
+    ],
+    [
+      "dc6ead3b-881f-401e-9202-627770d2cb17",
+      127817
+    ],
+    [
+      "da662148-ae92-4bf8-ab7c-bcd32c6ce887",
+      117831
+    ],
+    [
+      "c57a4459-ba8b-40b7-bad7-fe3eef9f4fa8",
+      111021
+    ],
+    [
+      "bf6e7de5-9696-45aa-b4e9-34f12aec2afe",
+      146931
+    ],
+    [
+      "b9bc9a0d-0d23-4068-86ce-b7ed0caf1ef6",
+      100404
+    ],
+    [
+      "b99374a7-9cfa-4c05-9771-094518fc6876",
+      105424
+    ],
+    [
+      "b936e8e1-c693-41f3-ba36-a951b6d4ae5a",
+      15518611
+    ],
+    [
+      "a9b79eeb-8d17-480b-9138-28cbd821f8ce",
+      137627
+    ],
+    [
+      "9252dd2f-cf6c-4f11-a885-67251ff1146d",
+      160442
+    ],
+    [
+      "65162d50-e31d-4672-915f-d0cdd7ad5904",
+      91093
+    ],
+    [
+      "295c919d-3307-452b-a3cf-cc4e926fc652",
+      118444
+    ],
+    [
+      "16729263-2fb5-4356-a85a-18147202f7b3",
+      105898
+    ],
+    [
+      "0fde7fdb-6abc-43c8-b8ff-5fd991b294fa",
+      106938
+    ],
+    [
+      "06616f2b-8382-497d-aa61-a2fce2790df5",
+      117858
+    ],
+    [
+      "f46052c2-cde8-45ef-8c3c-33cff59f9de1",
+      95699
+    ],
+    [
+      "f082d284-dbbd-4930-b251-981b040b82e5",
+      3751332
+    ],
+    [
+      "759b5ea6-b336-49e9-bd76-fd679e7c492e",
+      117933
+    ],
+    [
+      "afe5f664-6e94-4448-8e88-52bcc72fd85b",
+      125266
+    ],
+    [
+      "956eaeb0-eacf-4878-b36c-2eb6e7316718",
+      149943
+    ],
+    [
+      "8336cbcc-9137-452b-a492-d6c7cb676291",
+      143600
+    ],
+    [
+      "7c60e359-73dc-4a37-9468-52f5ae917d1a",
+      145183
+    ],
+    [
+      "56a77e17-b549-4990-a053-b375b3a4acf6",
+      177879
+    ],
+    [
+      "03101677-881e-45a1-8ea6-1c8dd3ab8ab6",
+      3402348
+    ],
+    [
+      "b3f25c05-f52f-467e-bc15-87412f8fac17",
+      3354117
+    ],
+    [
+      "4dd77572-fbe6-4c1a-9919-75d150dc36c5",
+      14264329
+    ]
+  ],
+  "timestamp": "2026-07-28T13:02:05.023957Z",
+  "tokens_used": 10067,
+  "units_analyzed": 6,
+  "units_total": 29
+}

@@ -4857,5 +4857,652 @@
     ],
     "first_seen": "2026-07-28T01:01:40.588098+00:00",
     "last_seen": "2026-07-28T01:01:40.588098+00:00"
+  },
+  {
+    "id": "86c1bbbe73cd6f54",
+    "text": "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, or evaluative judgments to a simple factual answer",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.95,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d431ead9-2125-482c-ae45-34676488fe61",
+    "member_ids": [
+      "d431ead9-2125-482c-ae45-34676488fe61"
+    ],
+    "member_texts": [
+      "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, or evaluative judgments to a simple factual answer"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-28T12:58:29.179552+00:00",
+    "last_seen": "2026-07-28T12:58:29.179552+00:00"
+  },
+  {
+    "id": "b95a18b9d0581f21",
+    "text": "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work immediately without pausing to ask clarifying questions — pausing on a terse continuation at low context is a confirmed mistake, not a safe default.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "f75137b7-b42f-4b6c-86cc-0036d7e1d613",
+    "member_ids": [
+      "a475ee25-f32e-4e9b-88ac-1e66e635f2cd",
+      "f75137b7-b42f-4b6c-86cc-0036d7e1d613"
+    ],
+    "member_texts": [
+      "Do not pause to ask for clarification on terse continuation signals ('proceed', 'keep going', 'yes') when context is well below pressure thresholds and there is clearly pending work on the task list",
+      "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work immediately without pausing to ask clarifying questions — pausing on a terse continuation at low context is a confirmed mistake, not a safe default."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Code-Versable-speedway"
+    ],
+    "first_seen": "2026-07-28T12:58:29.179552+00:00",
+    "last_seen": "2026-07-29T02:36:45.860747+00:00"
+  },
+  {
+    "id": "6ef83dbd278e82fd",
+    "text": "Claiming UI fixes are done without exercising the actual rendered page leads to multiple issues surviving — UI work is only verified when the page is visually inspected in a running browser, not when the code change looks correct",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "43088138-4e54-46fe-84d9-cce2bae866a8",
+    "member_ids": [
+      "43088138-4e54-46fe-84d9-cce2bae866a8"
+    ],
+    "member_texts": [
+      "Claiming UI fixes are done without exercising the actual rendered page leads to multiple issues surviving — UI work is only verified when the page is visually inspected in a running browser, not when the code change looks correct"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-28T12:58:29.179552+00:00",
+    "last_seen": "2026-07-28T12:58:29.179552+00:00"
+  },
+  {
+    "id": "5f368b1a5817c7ee",
+    "text": "For UI bug-fixing sessions with many small issues, direct iterative in-process fixes outperform parallel subagent fan-out — the user can give surgical feedback only after a coherent baseline is reached",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ad098529-d349-408b-a909-fe1d107986b7",
+    "member_ids": [
+      "ad098529-d349-408b-a909-fe1d107986b7"
+    ],
+    "member_texts": [
+      "For UI bug-fixing sessions with many small issues, direct iterative in-process fixes outperform parallel subagent fan-out — the user can give surgical feedback only after a coherent baseline is reached"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-28T12:58:29.179552+00:00",
+    "last_seen": "2026-07-28T12:58:29.179552+00:00"
+  },
+  {
+    "id": "a9b00f3a82e9a334",
+    "text": "When presenting an architectural ambiguity or tradeoff decision to the user, lead with a one-sentence plain-English framing of the choice, concrete codebase examples of each option, and the specific tradeoffs — never present the problem in abstract technical terms without grounding",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "a3b58836-81e9-460f-8947-6830a362ddda",
+    "member_ids": [
+      "a3b58836-81e9-460f-8947-6830a362ddda"
+    ],
+    "member_texts": [
+      "When presenting an architectural ambiguity or tradeoff decision to the user, lead with a one-sentence plain-English framing of the choice, concrete codebase examples of each option, and the specific tradeoffs — never present the problem in abstract technical terms without grounding"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-28T12:58:29.179552+00:00",
+    "last_seen": "2026-07-28T12:58:29.179552+00:00"
+  },
+  {
+    "id": "ed8ec046c62f6081",
+    "text": "Job-type-scoped UI components must gate their display on the actual job type at render time — rendering a component designed for one job type inside a different job type's detail view is a filtering bug, not a styling bug",
+    "category": "architecture",
+    "valence": "neutral",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0d53040b-5881-4903-b5f0-0fc164258394",
+    "member_ids": [
+      "0d53040b-5881-4903-b5f0-0fc164258394"
+    ],
+    "member_texts": [
+      "Job-type-scoped UI components must gate their display on the actual job type at render time — rendering a component designed for one job type inside a different job type's detail view is a filtering bug, not a styling bug"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-28T12:58:29.179552+00:00",
+    "last_seen": "2026-07-28T12:58:29.179552+00:00"
+  },
+  {
+    "id": "212ce232ce2317be",
+    "text": "When a project-specific UI verification checklist is available, the agent must run it during any browser verification pass — skipping a context-specific checklist while doing browser verification on the same page is treated as a serious failure, not a minor omission.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "fbd61511-bb4e-4309-90a4-839756887329",
+    "member_ids": [
+      "fbd61511-bb4e-4309-90a4-839756887329"
+    ],
+    "member_texts": [
+      "When a project-specific UI verification checklist is available, the agent must run it during any browser verification pass — skipping a context-specific checklist while doing browser verification on the same page is treated as a serious failure, not a minor omission."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "9af38cf5f4e6338f",
+    "text": "Claiming a specific UI sub-issue is fixed without verifying the full rendered state of the containing element leads to adjacent problems surviving — the agent fixed one thing (copy) while breaking another (title) and leaving a third (padding) untouched, then reported success.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.93,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "73c135a1-529d-45ca-a60f-73556cb412c3",
+    "member_ids": [
+      "73c135a1-529d-45ca-a60f-73556cb412c3"
+    ],
+    "member_texts": [
+      "Claiming a specific UI sub-issue is fixed without verifying the full rendered state of the containing element leads to adjacent problems surviving — the agent fixed one thing (copy) while breaking another (title) and leaving a third (padding) untouched, then reported success."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "9da76ebb41ec1614",
+    "text": "User-facing UI banner copy written in formal, structured agent-style language ('This job has not started — it needs its setup.') reads as AI-generated and is rejected; the user expects short, natural human phrasing even for system-state messages.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "019b3c46-4886-4ef3-a1ef-a50350f7d45e",
+    "member_ids": [
+      "019b3c46-4886-4ef3-a1ef-a50350f7d45e"
+    ],
+    "member_texts": [
+      "User-facing UI banner copy written in formal, structured agent-style language ('This job has not started — it needs its setup.') reads as AI-generated and is rejected; the user expects short, natural human phrasing even for system-state messages."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "3e981d6040dcd9b0",
+    "text": "Shipping code and reporting a visual feature as complete without rendering and viewing the actual target state (not just green tests) produces undetected visual regressions that are discovered only when the user looks at the page.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e3336ee2-0318-4070-bdaa-9a094f0dbd15",
+    "member_ids": [
+      "e3336ee2-0318-4070-bdaa-9a094f0dbd15"
+    ],
+    "member_texts": [
+      "Shipping code and reporting a visual feature as complete without rendering and viewing the actual target state (not just green tests) produces undetected visual regressions that are discovered only when the user looks at the page."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "0cdbd7a7b3793351",
+    "text": "CSS color-mix computed styles serialize as color(srgb …) values with 0–1 range, not hex; any contrast-ratio calculation that divides channel values by 255 will produce garbage results in both directions.",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "4e6f610d-2da5-4999-8f20-04c5bd644f9c",
+    "member_ids": [
+      "4e6f610d-2da5-4999-8f20-04c5bd644f9c"
+    ],
+    "member_texts": [
+      "CSS color-mix computed styles serialize as color(srgb …) values with 0–1 range, not hex; any contrast-ratio calculation that divides channel values by 255 will produce garbage results in both directions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "b8cc81461ab19856",
+    "text": "When relaying sub-agent findings to the user, use the parent session's numbering and framing, not the sub-agent's internal numbering — the user reads the parent's reply, not the sub-agent's report.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "16765e80-0b93-4892-8d51-a1efeb9441e5",
+    "member_ids": [
+      "16765e80-0b93-4892-8d51-a1efeb9441e5"
+    ],
+    "member_texts": [
+      "When relaying sub-agent findings to the user, use the parent session's numbering and framing, not the sub-agent's internal numbering — the user reads the parent's reply, not the sub-agent's report."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "10f11485bbeaf130",
+    "text": "Conflating two similarly-named domain concepts operating at different pipeline layers (e.g. an ingest-time presence check vs. a normalization/registry step) leads to incorrect architectural analysis and mis-scoped fixes; the user will call out the conflation as a framing error, not a detail correction.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "13c73aaf-6274-4236-8487-6a0e10728e2b",
+    "member_ids": [
+      "13c73aaf-6274-4236-8487-6a0e10728e2b"
+    ],
+    "member_texts": [
+      "Conflating two similarly-named domain concepts operating at different pipeline layers (e.g. an ingest-time presence check vs. a normalization/registry step) leads to incorrect architectural analysis and mis-scoped fixes; the user will call out the conflation as a framing error, not a detail correction."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "db7c12cb1e058270",
+    "text": "When the user frames an ambiguous behavior (fail vs. best-effort) as a controllable feature with a threshold, the preferred implementation is a flag-gated confidence-threshold mechanism rather than hardcoding either behavior — the user values the ability to tune without code changes.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "94ceccb8-641c-439f-95c3-2ee874a42fa9",
+    "member_ids": [
+      "94ceccb8-641c-439f-95c3-2ee874a42fa9"
+    ],
+    "member_texts": [
+      "When the user frames an ambiguous behavior (fail vs. best-effort) as a controllable feature with a threshold, the preferred implementation is a flag-gated confidence-threshold mechanism rather than hardcoding either behavior — the user values the ability to tune without code changes."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      ".claude",
+      "i-dream",
+      "versable-builder",
+      "claude-ipc"
+    ],
+    "first_seen": "2026-07-29T00:27:22.281627+00:00",
+    "last_seen": "2026-07-29T00:27:22.281627+00:00"
+  },
+  {
+    "id": "924e64d5051ef7d1",
+    "text": "IIFE and scope-wrapper expressions inside JSX are a recurring code smell in this codebase; when sibling elements use inline props or plain const declarations, the agent should conform to that existing pattern rather than introducing a wrapper function.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "6b975180-d4b3-429f-8c89-840b41d26ca0",
+    "member_ids": [
+      "069dbe8e-e335-42ea-8cf7-c3a4d0f449f9",
+      "6b975180-d4b3-429f-8c89-840b41d26ca0"
+    ],
+    "member_texts": [
+      "When inserting conditional rendering logic into a JSX file, check the 10 surrounding lines for sibling patterns (inline prop, plain const) before wrapping logic in an IIFE or scope-wrapper — the sibling pattern is the conformant choice, and IIFE wrapping in JSX is a recurring smell caught by hooks.",
+      "IIFE and scope-wrapper expressions inside JSX are a recurring code smell in this codebase; when sibling elements use inline props or plain const declarations, the agent should conform to that existing pattern rather than introducing a wrapper function."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-speedway",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-claude-ipc",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "speedway"
+    ],
+    "first_seen": "2026-07-29T02:36:45.860747+00:00",
+    "last_seen": "2026-07-30T12:34:00.691978+00:00"
+  },
+  {
+    "id": "f8fc93b88a74f347",
+    "text": "When presenting UI or design variants to the user, lead with functional and usability differences rather than aesthetic variation — the user redirects to 'usability over looks' when the agent's framing emphasizes visual polish.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bdcff76c-83e0-4268-9393-b04c862b0509",
+    "member_ids": [
+      "bdcff76c-83e0-4268-9393-b04c862b0509"
+    ],
+    "member_texts": [
+      "When presenting UI or design variants to the user, lead with functional and usability differences rather than aesthetic variation — the user redirects to 'usability over looks' when the agent's framing emphasizes visual polish."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-29T04:42:18.693585+00:00",
+    "last_seen": "2026-07-29T04:42:18.693585+00:00"
+  },
+  {
+    "id": "b4698cca1f854c81",
+    "text": "When building tools the user will operate directly, embed inline syntax hints and contextual help at the point of use rather than relying on separate documentation — the user explicitly notes they won't remember syntax without in-context guidance.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "198a1d2e-72d5-4361-916a-5b36884a2615",
+    "member_ids": [
+      "198a1d2e-72d5-4361-916a-5b36884a2615"
+    ],
+    "member_texts": [
+      "When building tools the user will operate directly, embed inline syntax hints and contextual help at the point of use rather than relying on separate documentation — the user explicitly notes they won't remember syntax without in-context guidance."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-29T04:42:18.693585+00:00",
+    "last_seen": "2026-07-29T04:42:18.693585+00:00"
+  },
+  {
+    "id": "8880276abdb8f0d2",
+    "text": "When the user describes a UI layout problem in terms of space distribution and element priority, they are asking for hierarchy and constraint redesign — not raw size adjustment — and the agent should respond at that level of abstraction.",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7c93f94d-a620-488a-96e3-e9a268915e8f",
+    "member_ids": [
+      "7c93f94d-a620-488a-96e3-e9a268915e8f"
+    ],
+    "member_texts": [
+      "When the user describes a UI layout problem in terms of space distribution and element priority, they are asking for hierarchy and constraint redesign — not raw size adjustment — and the agent should respond at that level of abstraction."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-07-29T04:42:18.693585+00:00",
+    "last_seen": "2026-07-29T04:42:18.693585+00:00"
+  },
+  {
+    "id": "cab740dfd60d7c54",
+    "text": "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the other's blueprint; the agent should execute this faithfully without collapsing the outputs into a single merged recommendation",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.92,
+    "occurrences": 3,
+    "member_count": 2,
+    "rep_pattern_id": "c504de59-e425-4b9a-b808-d1697aaae11d",
+    "member_ids": [
+      "137496b2-d826-402f-b4c2-8b8b0d9b1561",
+      "c504de59-e425-4b9a-b808-d1697aaae11d"
+    ],
+    "member_texts": [
+      "When the user sets up two independent agents to produce parallel plans and then routes each agent's blueprint to the other for a mutual peer-grade step, this is a deliberate validation workflow the user employs intentionally and values; the agent should execute it faithfully without second-guessing the coordination overhead.",
+      "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the other's blueprint; the agent should execute this faithfully without collapsing the outputs into a single merged recommendation"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "studio_search_jul_26",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-07-30T12:34:00.691978+00:00",
+    "last_seen": "2026-08-06T03:09:18.470604+00:00"
+  },
+  {
+    "id": "8829e7edb6798231",
+    "text": "When the user says to get something to 'a good enough state,' they are explicitly signaling that exhaustive edge-case handling and thorough validation coverage are out of scope for that task; the agent should stop at a functional baseline and not over-engineer.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "6f794fa0-1cd8-4e2e-a3c7-5de8ff52e2a6",
+    "member_ids": [
+      "6f794fa0-1cd8-4e2e-a3c7-5de8ff52e2a6"
+    ],
+    "member_texts": [
+      "When the user says to get something to 'a good enough state,' they are explicitly signaling that exhaustive edge-case handling and thorough validation coverage are out of scope for that task; the agent should stop at a functional baseline and not over-engineer."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway"
+    ],
+    "first_seen": "2026-07-30T12:34:00.691978+00:00",
+    "last_seen": "2026-07-30T12:34:00.691978+00:00"
+  },
+  {
+    "id": "453fd483344650d4",
+    "text": "When a coworker takes primary ownership of a shared branch mid-session, the agent should immediately and permanently adapt to a PR-based workflow for all subsequent pushes in that project without needing reminders on each task.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "f1e8c5b4-0a9e-4249-80ef-30876b9bdf21",
+    "member_ids": [
+      "f1e8c5b4-0a9e-4249-80ef-30876b9bdf21"
+    ],
+    "member_texts": [
+      "When a coworker takes primary ownership of a shared branch mid-session, the agent should immediately and permanently adapt to a PR-based workflow for all subsequent pushes in that project without needing reminders on each task."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway"
+    ],
+    "first_seen": "2026-07-30T12:34:00.691978+00:00",
+    "last_seen": "2026-07-30T12:34:00.691978+00:00"
+  },
+  {
+    "id": "893e24ab304fa24b",
+    "text": "After completing a round of work on a multi-round project, the agent should write a board or tracking entry for that round before moving on; this step is frequently left pending at session end and represents a recurring task-management gap.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "15e6b988-45ad-4930-94cd-4891bb2de8cf",
+    "member_ids": [
+      "15e6b988-45ad-4930-94cd-4891bb2de8cf"
+    ],
+    "member_texts": [
+      "After completing a round of work on a multi-round project, the agent should write a board or tracking entry for that round before moving on; this step is frequently left pending at session end and represents a recurring task-management gap."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "speedway"
+    ],
+    "first_seen": "2026-07-30T12:34:00.691978+00:00",
+    "last_seen": "2026-07-30T12:34:00.691978+00:00"
+  },
+  {
+    "id": "4150862173f7781b",
+    "text": "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging is a distinct operation that requires explicit instruction",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.95,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+    "member_ids": [
+      "564a0f21-cd55-432f-aa9e-4289476e1822",
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771"
+    ],
+    "member_texts": [
+      "When the user asks the agent to compare two plans or outputs, the agent must produce a side-by-side contrast — not a merged synthesis; merging is a distinct operation that requires explicit instruction",
+      "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging is a distinct operation that requires explicit instruction"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "studio_search_jul_26",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-08-04T17:19:53.933941+00:00",
+    "last_seen": "2026-08-06T03:09:18.470604+00:00"
+  },
+  {
+    "id": "8f4d377c412d9956",
+    "text": "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale adopting it; the user's framing 'only where worth it' signals selective, not additive, integration",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "80f18129-4311-48d3-92ae-ba450dac48f1",
+    "member_ids": [
+      "80f18129-4311-48d3-92ae-ba450dac48f1"
+    ],
+    "member_texts": [
+      "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale adopting it; the user's framing 'only where worth it' signals selective, not additive, integration"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-08-06T03:09:18.470604+00:00",
+    "last_seen": "2026-08-06T03:09:18.470604+00:00"
+  },
+  {
+    "id": "e7886cb03131844c",
+    "text": "Adding a scheduled warm-up or pre-load job for a tool (e.g. ollama warm-morning) without explicit user request is unprompted infra scope creep; the user expects models and services to load on first use, never on boot unless explicitly configured",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7d4bae60-5608-46de-a621-ce302851497b",
+    "member_ids": [
+      "7d4bae60-5608-46de-a621-ce302851497b"
+    ],
+    "member_texts": [
+      "Adding a scheduled warm-up or pre-load job for a tool (e.g. ollama warm-morning) without explicit user request is unprompted infra scope creep; the user expects models and services to load on first use, never on boot unless explicitly configured"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-08-06T03:09:18.470604+00:00",
+    "last_seen": "2026-08-06T03:09:18.470604+00:00"
+  },
+  {
+    "id": "ca5d9d48e804dcb4",
+    "text": "Optional local background services (Redis, Ollama, etc.) should be designed as explicit start with auto-off after an idle threshold rather than always-on; the user prefers hands-off resource management for services they did not deliberately leave running",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7955502e-6331-47f2-83c8-5dbe56f111ed",
+    "member_ids": [
+      "7955502e-6331-47f2-83c8-5dbe56f111ed"
+    ],
+    "member_texts": [
+      "Optional local background services (Redis, Ollama, etc.) should be designed as explicit start with auto-off after an idle threshold rather than always-on; the user prefers hands-off resource management for services they did not deliberately leave running"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Documents-studio-search-jul-26",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-08-06T03:09:18.470604+00:00",
+    "last_seen": "2026-08-06T03:09:18.470604+00:00"
   }
 ]

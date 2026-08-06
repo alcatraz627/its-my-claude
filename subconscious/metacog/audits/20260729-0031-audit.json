@@ -1,0 +1,248 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17008,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.20598427376537096,
+    "unit_count": 22
+  },
+  "response": {
+    "biases_detected": [
+      "screenshot_path_assumption:RECURRING:WORSENING — f1378236-8: Read attempted at /Users/alcatraz627/Code/Versable/speedway/.playwright-mcp/t1-jobs-list.png (success:false) before fd search located actual path under versable-builder/; ninth consecutive cycle with structurally identical pattern; probe-first behavior never adopted; zero improvement signal across all cycles; cluster now fully entrenched under advisory-only regime",
+      "write_before_read_trap:RECURRING:WORSENING — f1378236-8: cluster of three simultaneous Edit failures (firestore.server.ts, app.css, ShellCrumbs.tsx all success:false) before sequential Read pivots, plus one failure on job-status.ts, plus two on setup.tsx; total five distinct Edit-before-Read failures in a single unit; failure count significantly exceeds prior cycles which showed one to two failures per unit; depth is a clear regression from STABLE classification",
+      "re_edit_thrash:RECURRING:STABLE — f1378236-8: two consecutive Edit failures on setup.tsx (success:false x2) before Bash rg probe plus successful Edit; failure depth unchanged from multi-cycle baseline; recovery pattern consistent with prior cycles",
+      "proximal_signal_substitution:RECURRING:PARTIALLY_IMPROVING — f1378236-2, f1378236-3, f1378236-8: npx tsc --noEmit used as primary pre-commit verification gate across multiple commit checkpoints; however f1378236-8 conducted actual browser testing with Playwright screenshots, Firestore node script queries, and export curl verification after commits; runtime exercise DID occur this cycle, representing a partial improvement signal not seen in prior cycles on this pattern",
+      "confirmation_bias_style_log:RECURRING:STABLE — f1378236-2, f1378236-3, f1378236-6: style-log.sh called with watcher-fire slug classification in three separate units without surfacing evidence for slug choice; tenth consecutive cycle with identical pattern; no corrective action between cycles",
+      "commit_metadata_violation:RECURRING:PARTIALLY_IMPROVING — f1378236-2, f1378236-3, f1378236-6, f1378236-8: all visible commit commands across all four units show plain -m messages with no Co-Authored-By or Claude-Session footers; improvement signal from prior 2026-07-28 assessment continues and extends to the later units (-6 and -8) not yet reflected in history; four clean-commit units in a row within the same session strengthens the PARTIALLY_IMPROVING classification",
+      "git_push_without_fresh_approval:RECURRING:STABLE — f1378236-2, f1378236-3, f1378236-8: multiple bundled commit sequences executed without per-push fresh confirmation; rate and structure unchanged across all cycles",
+      "mcp_file_upload_failure_recovery:NEW — f1378236-8: mcp__plugin_playwright__browser_file_upload failed (success:false) because file lived outside the MCP-accessible directory; agent recovered by cp to versable-builder/.playwright-mcp/ before re-attempting; recovery was adaptive and successful; this is a distinct pattern from mcp_tool_path_assumption and represents appropriate fault tolerance rather than a calibration failure; flagged for tracking, not as a defect"
+    ],
+    "calibration_score": 0.42,
+    "cross_references": [
+      "dream_insight_1 (absence-of-signal-as-positive-signal) CONFIRMED by write_before_read_trap cluster in f1378236-8: agent issued three Edit calls to firestore.server.ts, app.css, and ShellCrumbs.tsx without prior Read in the same unit, treating recalled string context as positive signal that current file state matches the remembered string; all three failed; the insight rule (treat absence of direct verification as UNKNOWN) was violated across a three-file batch",
+      "dream_insight_3 (working-set-is-world-model) CONFIRMED by screenshot_path_assumption in f1378236-8: agent assumed screenshot saved by Playwright MCP would be at speedway/.playwright-mcp/t1-jobs-list.png because speedway was CWD; actual path was versable-builder/t1-jobs-list.png because Playwright MCP output root is tied to the versable-builder project directory; agent's world model (CWD equals MCP output root) diverged from actual MCP behavior; the same divergence has occurred in nine consecutive cycles without a probe-first correction",
+      "dream_insight_2 (instance-vs-class fixes) NOT triggered in this batch; the style-log slug classification pattern is a confirmation bias failure distinct from the instance-generalization failure class described in insight_2"
+    ],
+    "notes": {
+      "browser_testing_positive": "f1378236-8 conducted substantive runtime exercise including Playwright login flow, screenshot reads, Firestore direct queries via node, export curl validation, and rerun-button exercise; this is the most thorough in-session verification observed across all cycles and should be reinforced as an affirm candidate",
+      "unit_f1378236_1": "zero-length output, no tools, accepted; no calibration signal; excluded from counts",
+      "unit_f8ed0416_0": "no tools, unknown reaction, 335-char output for 13603-char input on style/ledger/file/content topics; insufficient signal for calibration assessment; excluded from counts"
+    },
+    "overconfident_count": 2,
+    "recommendations": [
+      "screenshot_path_assumption: advisory-only regime is exhausted at nine consecutive cycles; a PreToolUse hook intercepting Read calls targeting .playwright-mcp/ paths relative to a CWD that differs from the Playwright MCP output root would catch this at the decision point; alternatively a probe-first wrapper that runs fd before the first screenshot Read would eliminate the failure; no further advisory recommendations — only mechanical enforcement will move this metric",
+      "write_before_read_trap: depth worsened to five failures in a single unit in f1378236-8, with a three-file simultaneous cluster (firestore, css, ShellCrumbs) suggesting the agent carries stale string matches from early-session reads into late-session edits without re-reading; a PostToolUse hook that increments a counter on Edit success:false and fires a block-or-warn after two consecutive failures on different files would break the cluster earlier than the current Read-pivot recovery",
+      "proximal_signal_substitution: partial improvement signal from browser testing in f1378236-8 should be reinforced; the gap is that browser navigation and screenshot exercise happen after commits rather than as a commit gate; no new recommendation beyond monitoring whether post-deploy browser exercise becomes a pre-commit gate",
+      "commit_metadata_violation: maintain current monitoring; the PARTIALLY_IMPROVING classification is confirmed across all four units in this batch; the trajectory from 2026-07-27 STABLE_MAXIMUM_CONCERN through 2026-07-28 PARTIALLY_IMPROVING to this cycle's continued clean commits suggests the correction is holding; no intervention required this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "ff780782-9987-46d3-9abf-ad389c524f86",
+      133501
+    ],
+    [
+      "fb3008e7-6010-4fa1-82a5-c2dcab4f7ec0",
+      108675
+    ],
+    [
+      "fa1dc4a5-74a1-41cb-a603-becc8437a055",
+      117149
+    ],
+    [
+      "f8ed0416-2d23-4bb6-8733-1c04ffdfb4db",
+      119554
+    ],
+    [
+      "f6c89ede-a32f-4a6f-a8d2-41a536ebe410",
+      105018
+    ],
+    [
+      "f1378236-5720-441b-8493-d63f40a4f24f",
+      13903855
+    ],
+    [
+      "f0b70186-7d1f-4809-aff6-7996a665d54e",
+      122866
+    ],
+    [
+      "eff4f143-c043-45d1-bdd5-c6584b90235b",
+      117905
+    ],
+    [
+      "efbd7d86-fb60-42cb-a327-4583b6e34d4e",
+      89560
+    ],
+    [
+      "eecbd21e-746d-4db9-9e46-5e8dcc239c2f",
+      119682
+    ],
+    [
+      "e66d1777-568f-42fe-a6e1-f2704d160861",
+      120186
+    ],
+    [
+      "e549fd3e-a206-43db-b8e9-fe15e03c3573",
+      121712
+    ],
+    [
+      "e3c001c8-80df-47c3-8140-8755a4bee415",
+      117325
+    ],
+    [
+      "def8f1ec-e3cc-42cd-918c-088ccd5c7e6f",
+      106955
+    ],
+    [
+      "de96fa2e-4f13-4ad6-a4e0-39c722d71655",
+      122333
+    ],
+    [
+      "d76818e2-6e73-4ea9-9532-03c1e5dc35cf",
+      120747
+    ],
+    [
+      "d5c53ed0-0c72-41cf-9ab9-955d8b148eb8",
+      86481
+    ],
+    [
+      "d4b2cbdf-9727-4859-84a2-435f9fc46000",
+      122860
+    ],
+    [
+      "d29909d1-5bf9-4bd7-9945-91dcda93a4eb",
+      95202
+    ],
+    [
+      "cf7011f6-dc5a-4e3d-bb50-9bca2886d155",
+      132441
+    ],
+    [
+      "cae6d536-8bf1-4986-b84c-6373fc67cb42",
+      98095
+    ],
+    [
+      "c7c1d327-00be-4c8c-8eba-c0d769ab8d08",
+      117184
+    ],
+    [
+      "c555d1d2-d81d-48e1-a2bb-f12d8b64299e",
+      130164
+    ],
+    [
+      "c4c764ea-745c-40a8-9d2f-998192701503",
+      104725
+    ],
+    [
+      "c2b30289-cbf2-440b-9e67-2029edfd8e36",
+      110697
+    ],
+    [
+      "bb59bbf8-ddba-461f-a2df-0bdae53e2313",
+      133277
+    ],
+    [
+      "b6ef35ef-15b9-42fb-8dfd-9d0dcb866354",
+      118252
+    ],
+    [
+      "b40e22ae-5135-4af6-84f2-261011ead548",
+      170102
+    ],
+    [
+      "ad6905c0-8f1f-4efe-bfbc-a6f612268e61",
+      120707
+    ],
+    [
+      "ac38d7d0-025f-43b4-bd52-230be8565b42",
+      121899
+    ],
+    [
+      "a663055b-90c3-4634-870b-db624e1bb1a6",
+      123405
+    ],
+    [
+      "a63df9a4-43e2-424a-9dce-53a68e75fbb7",
+      122691
+    ],
+    [
+      "a5c53496-abec-47ec-bcbd-a96d00de15ec",
+      105356
+    ],
+    [
+      "a42145e0-a787-4465-a94e-9a4af200fcaf",
+      129506
+    ],
+    [
+      "9ee6c6b0-1a09-49a9-8459-90198fe3accf",
+      115898
+    ],
+    [
+      "9981fae7-894b-44eb-851a-8e285940aafb",
+      124980
+    ],
+    [
+      "958fa026-e9d0-445b-9aaf-2b92a6714ea8",
+      111114
+    ],
+    [
+      "8f5760ad-57fd-4f62-8236-be926d5ef901",
+      109029
+    ],
+    [
+      "8c6aea34-1e31-4525-8a08-155ee2657c47",
+      146355
+    ],
+    [
+      "8ac8a7d7-355b-4742-b7cf-3ab9b8b9bc74",
+      121186
+    ],
+    [
+      "89a33fbc-f3a4-4faf-b98e-9710fb23da9c",
+      90256
+    ],
+    [
+      "87653c29-5466-4bef-b4a8-bb14a31c2d1d",
+      116486
+    ],
+    [
+      "827760e4-daeb-4fa7-b701-426704de450d",
+      120086
+    ],
+    [
+      "7a68771e-13c5-48d6-92c8-af16c967c703",
+      120085
+    ],
+    [
+      "76dd0e9a-d48a-4717-821d-19376e8a9e15",
+      111863
+    ],
+    [
+      "6e1f1619-bd1c-47e2-a635-c3b9467afa22",
+      119903
+    ],
+    [
+      "6d112a6e-dd78-4272-a56c-db20b0433b05",
+      115514
+    ],
+    [
+      "6ae0bf4c-2fba-4a42-88a7-705e74782baa",
+      103939
+    ],
+    [
+      "664ddb0c-1238-4dab-8029-4e4edc0a9f00",
+      112823
+    ],
+    [
+      "622ee8e4-6597-4f01-b6cf-ecfcc82620ad",
+      25777
+    ]
+  ],
+  "timestamp": "2026-07-29T00:31:37.718138Z",
+  "tokens_used": 22535,
+  "units_analyzed": 6,
+  "units_total": 22
+}

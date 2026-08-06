@@ -937,3 +937,75 @@ bytes; the small old cap may have been the only thing capping memory.
 - The adversarial gate's best findings both rounds were in CONSUMER code the diff never
   touched (a position-based domain cursor; a blocking-hook's latency). Always hand a
   validator the consumers of every file the batch writes, not just the diff.
+
+## 2026-07-29 — dream-catch-9f (i-dream phase-3)
+
+- zsh does NOT word-split unquoted $VAR: a multi-file list in one variable reaches rg as a single bogus filename, and 2>/dev/null upgrades that to a confident false negative. Loop over files or pass a glob.
+- `cmd | tail` exit status is tail's, not cmd's — a failed `git commit | tail -2 && deploy.sh` still deploys. Guard with pipefail or split the chain.
+- PreToolUse hooks block the ENTIRE compound Bash command: `triad && gated-push` means the triad never ran either. Run verification separately from the gated operation.
+- launchd StartCalendarInterval runs a missed fire once on wake — a right-day/late-hour timestamp means the calendar is fine; verify config by reading the plist, not inferring from one timestamp.
+- Tool-count checkpoint nudges are cadence reminders, never context measurements; the ctx-pressure hook (70/80/90%) is the only live gauge and its silence means <70% (S3 atone mist-20260728-065548-09).
+
+## 2026-07-29 (gcc-kanban session)
+
+- Contrast math on computed styles: `color-mix` results serialize as `color(srgb 0.81 …)` with 0-1 floats, while plain colors give `rgb(207,…)`. A ratio function that always divides by 255 silently produces garbage in BOTH directions. Branch on the prefix.
+- chrome-devtools `resize_page` can be inert on a tab that carries another isolated context's device-metrics override, and no resize event fires. Verify `innerWidth` actually changed before trusting any post-resize measurement; prove element-level responsive behavior with a dispatched `resize` event + element width forcing instead.
+- A pseudo-element (`::before`/`::after`, even with empty content) on a `space-between` flex container becomes a third anonymous flex item and shifts the real children. Markers belong inside a child span.
+- Forked background skills can start without their invocation args; resume them via SendMessage with explicit absolute paths rather than re-dispatching.
+
+## 2026-08-06 (slug-ui-7c)
+
+**Diagnosing "the machine feels slow": read the hang reports first.**
+macOS writes a timestamped `.diag` to `/Library/Logs/DiagnosticReports/` every
+time a process stops responding. In this session it named the culprit (a Steam
+download plus bsdtar/unzip extraction) in one step, after CPU, memory, thermal,
+disk, Karabiner, spindump and Low Power Mode had all been checked and cleared.
+Make it the opening move, not the sixth.
+
+**`ps` %CPU is a lifetime average, not current load.**
+On a process older than a few minutes it answers "how busy has this been since
+it started". WindowServer read 34.6% in `ps` and 0.0% in `top` at the same
+moment, because it had been up 30 days. Use `top -l` or repeated sampling for
+anything long-lived.
+
+**A single sample of a fluctuating counter is a rate you invented.**
+WindowServer's mach-port count looked like a +1/sec leak across two readings.
+Over a 10-second window it went down. Two points are not a trend.
+
+**Two macOS shell hangs that look like product bugs.**
+`pmset -g thermlog` streams forever rather than printing and exiting.
+And `VAR=$(fn)` where `fn` backgrounds a child that inherits stdout will block
+until that child exits, because the command substitution waits on the pipe, not
+the process. Redirect the background child's stdout to /dev/null.
+
+**Connection presence is not evidence of use.**
+Any idle-detection over HTTP services has to measure connection *identity*, not
+count. A Vite HMR websocket held by a forgotten browser tab keeps one endpoint
+alive indefinitely; real traffic arrives on new ephemeral source ports.
+
+## 2026-08-06 (slug-ui-7c, addendum after launchd activation)
+
+**A launchd job's exit code says the wrapper ran, not that the work happened.**
+The first `launchctl load` of a new cron exited 0, wrote empty logs, registered
+cleanly in `launchctl list`, and destroyed its own state file. launchd hands jobs
+a minimal PATH; `pm2`'s shebang is `#!/usr/bin/env node`, so neither resolved and
+the command produced nothing. Any cron invoking a homebrew binary needs an
+explicit `EnvironmentVariables.PATH` including `/opt/homebrew/bin`.
+
+**`launchctl list` cannot show you this; `launchctl print` can.**
+A broken job and a working one both read as status 0. Only
+`launchctl print gui/$UID/<label>` shows the loaded definition. It distinguishes
+`inherited environment` (from the session) from `environment` (what the job
+actually gets) and the second is the one that matters.
+
+**`launchctl load` snapshots the plist.** Editing the file afterward does not
+touch the running job. An unload/load cycle is required, and nothing in the
+status output hints that the loaded definition is stale.
+
+**Any job that overwrites state must distinguish "read nothing" from
+"read empty".** They are identical in the data and opposite in meaning. Treating
+an unreadable upstream response as an empty result set is how good state gets
+persisted away. Fail and leave the file alone instead.
+
+**A wrapper that swallows its child's exit code converts a hard failure into a
+green cron.** Propagate the code, or the scheduler reports success forever.

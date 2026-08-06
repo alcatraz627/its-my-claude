@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17665,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15632521803515684,
+    "unit_count": 34
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 131197df-0: style-log.sh called with watcher-fire slug without surfacing evidence for slug classification; eleventh consecutive cycle with identical pattern; no corrective signal between cycles",
+      "write_before_read_trap:RECURRING:STABLE — 131197df-0: Write attempted twice to scratchpad path before success (success:false x2) before third attempt succeeded; Edit on runtime-notes.md failed before Bash workaround recovery; shallow failures with consistent recovery; depth and recovery pattern unchanged from multi-cycle baseline",
+      "excessive_task_creation:NEW — 131197df-0: 22 consecutive TaskCreate calls issued in a single catchup/orientation unit; no prior cycles in history show task-creation volume at this scale in a single orientation pass; appropriateness cannot be determined from metadata alone but represents a structural anomaly worth tracking"
+    ],
+    "calibration_score": 0.4,
+    "overconfident_count": 0,
+    "recommendations": [
+      "confirmation_bias_style_log has appeared in eleven consecutive cycles with zero improvement signal; standing guidance is to deprioritize recommending fixes for fully-entrenched advisory-only patterns; no change recommended",
+      "write_before_read_trap remains stable at shallow depth with consistent recovery across all cycles; no regression this cycle; no change recommended",
+      "excessive_task_creation is newly observed and should be monitored across future cycles to determine if it is a one-off artifact of a large catchup scope or an emerging pattern of over-decomposition during orientation passes"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "5d07ffa1-8ab2-4db6-ab20-b847329af892",
+      134843
+    ],
+    [
+      "5b904ac8-1bb3-423f-b775-83f8637f542c",
+      129444
+    ],
+    [
+      "5774c57d-7cb9-4f7e-bddc-3610b5d9437e",
+      119202
+    ],
+    [
+      "543d56f1-2a71-4e2d-9961-d1410869e451",
+      121721
+    ],
+    [
+      "53af5fae-b04f-41f8-8bf6-f72cc4bc95d4",
+      109015
+    ],
+    [
+      "4f097062-0b3d-4884-9fdc-1bcd0eeec3ea",
+      122592
+    ],
+    [
+      "4451bc38-8b68-42e1-b098-aa8a7ad9c137",
+      118424
+    ],
+    [
+      "443c41ab-b0cc-4620-bc70-e9c99c5a49a8",
+      117627
+    ],
+    [
+      "4134251a-4fd6-4b89-8d0e-2e023074a03b",
+      87797
+    ],
+    [
+      "3f93ed41-2ca6-434e-b63f-a6711b1e298a",
+      122893
+    ],
+    [
+      "3eba264b-62f3-499b-9b67-86a2b824efc2",
+      127488
+    ],
+    [
+      "36f15f0d-6af4-4bee-97bb-91ed83c9ce98",
+      92578
+    ],
+    [
+      "2e84abbb-3c7b-4fdd-96f5-6cd6d0b8be98",
+      124164
+    ],
+    [
+      "2dceecc2-5de9-4ab3-9a49-9c5ac815b4e2",
+      112328
+    ],
+    [
+      "27e2f6f0-9dbc-40ed-b065-3c4a851091fd",
+      134560
+    ],
+    [
+      "1e2a7ba2-7776-46a9-b4b1-a6d5497433c7",
+      85885
+    ],
+    [
+      "1abb9a74-c466-4f3c-aee2-2ec413cedd25",
+      119935
+    ],
+    [
+      "1a1e528b-7575-4a02-ba9c-e5c77302a042",
+      120047
+    ],
+    [
+      "19471d40-5889-4e0e-8c41-a6705d3b46bb",
+      119088
+    ],
+    [
+      "1902ffdf-42de-42c7-9463-eba08f027556",
+      124472
+    ],
+    [
+      "14752dca-305c-40a5-a47a-de8e6d446948",
+      86773
+    ],
+    [
+      "13e69d80-5edd-42eb-a02d-f21f5d272c72",
+      106658
+    ],
+    [
+      "133f8522-51be-421c-ad5b-9c2130277aa8",
+      118867
+    ],
+    [
+      "131197df-0740-4015-b6ad-fba9aedc1400",
+      10922404
+    ],
+    [
+      "10ce8bf4-3388-4c6f-a14b-bd39faa3a6bc",
+      123133
+    ],
+    [
+      "10c07cc9-f254-4b6e-bd96-4ec35a191fe5",
+      120853
+    ],
+    [
+      "0e80232e-01d9-45b5-bfd7-3995592cf005",
+      93626
+    ],
+    [
+      "0c5ad297-8d43-44d8-b296-7227539d2eb5",
+      125161
+    ],
+    [
+      "0b01ae04-ff52-483a-ad95-eaf36b07120f",
+      140168
+    ],
+    [
+      "074a856c-9b86-4780-80f0-2f78939fe28a",
+      142827
+    ],
+    [
+      "05b5244b-b811-481f-86c5-3a42a0cb0cda",
+      95845
+    ],
+    [
+      "690c7305-5a52-4246-93f3-a236a570c04e",
+      93661
+    ],
+    [
+      "f082d284-dbbd-4930-b251-981b040b82e5",
+      4279418
+    ],
+    [
+      "f31ce027-cb1e-4331-b84a-80c1badfdba8",
+      141475
+    ],
+    [
+      "dfecbb6a-845e-4185-82e7-cb59da5d0983",
+      141823
+    ],
+    [
+      "ad369870-2ab0-4673-a5e1-95110bf0d2c7",
+      108191
+    ],
+    [
+      "865bf793-6763-4841-8e87-ec00c0da99e8",
+      114567
+    ],
+    [
+      "5f15ac6e-edae-4108-ac4c-5533c1030d01",
+      121406
+    ],
+    [
+      "5d688909-882f-41e7-a12f-7c6fbeb31fc7",
+      106882
+    ],
+    [
+      "4c6e70b5-b297-4a86-a737-326af25baee3",
+      122808
+    ],
+    [
+      "4354992c-815c-427e-949b-cdf66729994b",
+      146173
+    ],
+    [
+      "39c08381-5ffc-437d-af6e-c655ad5ee99a",
+      131061
+    ],
+    [
+      "2c748ea0-b9ea-4362-adfc-05ff951211f7",
+      132696
+    ],
+    [
+      "14a80b90-0135-4e44-b9a5-e0fe5772bae6",
+      111488
+    ],
+    [
+      "03101677-881e-45a1-8ea6-1c8dd3ab8ab6",
+      5468996
+    ],
+    [
+      "f218ac3b-9fc5-4369-b727-0970527d001a",
+      149165
+    ],
+    [
+      "db1a50c9-ac90-4cbf-81d2-1ee6b6dc3540",
+      117830
+    ],
+    [
+      "d8448f6f-767d-4cc5-b45a-c9d14e27eb52",
+      105536
+    ],
+    [
+      "b3f25c05-f52f-467e-bc15-87412f8fac17",
+      4213032
+    ],
+    [
+      "b1e20d3a-2057-48fc-baa9-217b47f98491",
+      113443
+    ]
+  ],
+  "timestamp": "2026-07-29T02:39:27.821204Z",
+  "tokens_used": 4840,
+  "units_analyzed": 8,
+  "units_total": 34
+}

@@ -1,29 +1,29 @@
 {
-  "last_updated": "2026-07-25T17:09:49.053435Z",
-  "average_depth": 10.8,
+  "last_updated": "2026-08-02T01:12:50.716283Z",
+  "average_depth": 10.3,
   "average_breadth": 1.3,
-  "fixation_rate": 0.19,
-  "assumption_rate": 0.37,
-  "overconfidence_rate": 0.26,
+  "fixation_rate": 0.07,
+  "assumption_rate": 0.65,
+  "overconfidence_rate": 0.58,
   "common_assumptions": [
-    "File contents are current and unchanged between successive tool calls",
-    "Truncated tool output (head -N pattern) is sufficient for decision-making",
-    "TypeScript type-check passing implies feature-level correctness",
-    "First grep from a scoped directory is comprehensive — no need to widen scope",
-    "Single-path implementation is correct without evaluating alternatives first"
+    "Style enforcement rules are fully specified and require no additional context",
+    "File paths and directory structures match expected locations without verification",
+    "Build success or typecheck-pass implies runtime correctness",
+    "Task scope is fully defined from the prompt alone",
+    "Prior session state is as expected without re-reading"
   ],
   "strength_patterns": [
-    "Systematic read→edit→test→verify cycles with intermediate checkpoints in complex chains",
-    "Consistent and reliable mechanical execution on bounded single-step tasks (style enforcement)",
-    "Multi-stage validation before declaring completion — repeated tsc and test-runner passes in long chains"
+    "Systematic probe-then-act tool sequencing in multi-step investigation tasks",
+    "Thorough verification steps in audit chains (fingerprint validation, config diffing, test runs)",
+    "Targeted file reads before edits to confirm structure before modifying"
   ],
   "weakness_patterns": [
-    "Fixation loops on individual files — repeated reads and edits of the same file without stepping back to re-assess the broader state",
-    "Shallow alternative exploration — complex implementation chains commit to one approach rather than evaluating competing paths",
-    "Silent truncation acceptance — widespread head -N usage without verifying whether critical output was cut off"
+    "Repetitive access to the same files in large editing chains without measurable forward progress (fixation in layout/page components)",
+    "Direct single-step responses on bounded tasks with no alternative consideration or edge-case exploration",
+    "Treating build-green or typecheck-pass as runtime verification without exercising actual code paths"
   ],
   "trend": {
-    "calibration_improving": true,
+    "calibration_improving": false,
     "depth_trend": "stable",
     "breadth_trend": "stable"
   }

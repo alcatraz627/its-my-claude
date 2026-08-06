@@ -1,0 +1,22 @@
+{
+  "id": "3f970b78-6a6a-4f4e-9fd0-ab54eb0166e8",
+  "ts": "2026-08-05T19:34:44Z",
+  "session_id": "i-dream-3f970b78",
+  "project_root": "/Users/alcatraz627/Code/Claude/i-dream",
+  "checkpoint_path": "/Users/alcatraz627/Code/Claude/i-dream/_20260806-i-dream-3f970b78.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER decision:** harden the style-only branch of `declared-ready-stop.sh` from a",
+    "**USER decision:** commit the `~/.claude` edits (`rules/communication.md`,",
+    "**Open, not started:** the newest-precheck selection heuristic",
+    "**Open, inherited:** pin questions (b) and (c) about sub-agent absence-claims",
+    "Agent-side: nothing. All six session tasks are `completed`."
+  ],
+  "tags": []
+}

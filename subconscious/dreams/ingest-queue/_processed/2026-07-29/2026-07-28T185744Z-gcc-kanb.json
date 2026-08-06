@@ -1,0 +1,32 @@
+{
+  "id": "4dd77572-fbe6-4c1a-9919-75d150dc36c5",
+  "ts": "2026-07-28T18:57:44Z",
+  "session_id": "gcc-kanban",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260729-gcc-kanban.claude.md",
+  "insights": {
+    "worked": [
+      "**What didn't:** shipped code twice without rendering its target state (stale marker, tail-trim) and got indicted for both. Relayed a sub-agent report to the owner in the report's internal numbering \u2014 user-facing messages must resolve every reference from the message itself. Ran the skill the words named instead of hearing \"handoff for another agent\" (5th literal-over-intent recurrence): when a surface has had 2+ critique rounds and the owner mentions another agent, the deliverable is a handoff document.",
+      "**Gotchas:** (a) `color-mix` computed styles serialize as `color(srgb 0-1)` \u2014 contrast math dividing by 255 twice produces garbage both directions. (b) A payload-dedup guard + inline styles = theme toggles that silently don't restyle (catalog C12). (c) A pseudo-element on a space-between flex container is a third anonymous item \u2014 markers go inside a child span. (d) chrome-devtools `resize_page` can be inert on a tab carrying another context's device-metrics override; prove element-level behavior with dispatched resize events instead. (e) `jq`: inside `($x | f(...))` the dot rebinds to $x. (f) A concurrent session's `git add -A` can sweep your uncommitted files into its commit \u2014 state true provenance in your next commit message. (g) Forked background skills can drop their invocation args; resume them via SendMessage with explicit paths.",
+      "**Notes for future agents:** the kanban system is fully live \u2014 verbs: init/sync/add/move/verify/link/show/notes/drop/unregister/status/check; tagged notes grammar in lib.ts `parseNoteTags` (mirrored in board.html and session-start-line.sh \u2014 keep in sync); `agent-experience-actions.md` Phases 8.1b-14 is the standing regression suite, re-run after ANY kanban change; the session-start line announces boards + unread notes in board projects automatically. The board data model now carries verify grades and via attribution. HANDOFF.md is the single design entry point; do not restart design work from this checkpoint."
+    ],
+    "didnt_work": [
+      "**Gotchas:** (a) `color-mix` computed styles serialize as `color(srgb 0-1)` \u2014 contrast math dividing by 255 twice produces garbage both directions. (b) A payload-dedup guard + inline styles = theme toggles that silently don't restyle (catalog C12). (c) A pseudo-element on a space-between flex container is a third anonymous item \u2014 markers go inside a child span. (d) chrome-devtools `resize_page` can be inert on a tab carrying another context's device-metrics override; prove element-level behavior with dispatched resize events instead. (e) `jq`: inside `($x | f(...))` the dot rebinds to $x. (f) A concurrent session's `git add -A` can sweep your uncommitted files into its commit \u2014 state true provenance in your next commit message. (g) Forked background skills can drop their invocation args; resume them via SendMessage with explicit paths.",
+      "**Notes for future agents:** the kanban system is fully live \u2014 verbs: init/sync/add/move/verify/link/show/notes/drop/unregister/status/check; tagged notes grammar in lib.ts `parseNoteTags` (mirrored in board.html and session-start-line.sh \u2014 keep in sync); `agent-experience-actions.md` Phases 8.1b-14 is the standing regression suite, re-run after ANY kanban change; the session-start line announces boards + unread notes in board projects automatically. The board data model now carries verify grades and via attribution. HANDOFF.md is the single design entry point; do not restart design work from this checkpoint."
+    ],
+    "gotchas": [
+      "**Notes for future agents:** the kanban system is fully live \u2014 verbs: init/sync/add/move/verify/link/show/notes/drop/unregister/status/check; tagged notes grammar in lib.ts `parseNoteTags` (mirrored in board.html and session-start-line.sh \u2014 keep in sync); `agent-experience-actions.md` Phases 8.1b-14 is the standing regression suite, re-run after ANY kanban change; the session-start line announces boards + unread notes in board projects automatically. The board data model now carries verify grades and via attribution. HANDOFF.md is the single design entry point; do not restart design work from this checkpoint."
+    ],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "USER: route `/Users/alcatraz627/.claude/assets/reports/20260728-kanban-design-handoff/HANDOFF.md` to the design session.",
+    "On design delivery: Sacred-list audit + agent-experience-actions.md probes (Phases 8.1b-14) + both-theme screenshots before accepting.",
+    "Small debt: dedupe duplicate tag-token chips (one-line Set in tagChips, both the board and preview).",
+    "Parked increments: checkpoint-harvested verification grades; shared-board ownership/claim semantics; note threading (explicit non-goal for now); registry write lock; docs[] CLI-side validation.",
+    "Never started: /ui-gripe on the v7 board (only categorical + adversarial + designer lanes ran).",
+    "pm2 reboot survival still needs the user's `pm2 startup` + `pm2 save`."
+  ],
+  "tags": []
+}

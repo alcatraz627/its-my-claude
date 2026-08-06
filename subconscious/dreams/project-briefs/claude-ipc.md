@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-27T20:03:20.551429+00:00 · 20 patterns / 6 insights -->
+<!-- i-dream project brief · 2026-07-29T00:35:25.595771+00:00 · 20 patterns / 7 insights -->
 ## What this project is about
-claude-ipc is a cross-session IPC broker for Claude Code instances — named-session registration, message delivery, and peer discovery. Work style is verification-heavy with a hard boundary between "sent" and "received."
+Cross-session IPC broker for Claude Code — routes messages between live and dead sessions, manages peer discovery, and enforces delivery guarantees. Primary working style: correctness-first CLI tooling with strong gate/deny semantics.
 
 ## Things to do (or keep doing)
-- **Survey the full affected surface before writing any code** — enumerate all sibling pages, consumers, or states that share a pattern; depth-first on the first item encountered is the recurring failure shape here
-- **Run the actual code path to confirm delivery** — send-success is a proxy, not proof; dogfood the IPC path end-to-end before claiming a message flow works
-- **Propagate uncertainty on empty lookups** — when a probe returns nothing, emit UNCERTAIN/DENY, never a synthesized zero or default-ALLOW
-- **State blocking conditions explicitly** — if pausing mid-task, name the stopping reason and what the user must do; silent pauses cost a check-in round-trip
+- **Treat send-success as proxy evidence only** — always verify the message was actually received, not just enqueued or accepted by the broker
+- **Emit DENY/UNCERTAIN on absent input** — when a peer is unknown, a session is dead, or a lookup returns empty, the gate must deny/flag, never default-allow or synthesize a zero-equivalent
+- **Dogfood live** — the 99+ test suite misses delivery bugs that exercising the actual IPC path catches; run it against real sessions before claiming a fix works
+- **When a sub-agent hits an auth or credential block, surface the exact command** and hold — never attempt self-rescue or silently skip
 
 ## Things to avoid
-- **Don't treat send-success as delivery confirmation** — the failure mode is a plausible-looking positive (exit 0, success status) that masks non-delivery; verify the receiver side
-- **Don't patch one instance of a pattern** — when fixing a bug or applying a convention, find all callsites/pages that share the same shape before declaring done
-- **Don't commit or push without explicit user instruction** — this project is in the protected-repos registry; prepare the diff and hand it to the user
-- **Don't source UI labels or flows from code conventions** — consult design mocks first; internal naming patterns have caused complete rework
+- **Don't treat absence of a session as ALLOW** — missing, unrecognized, or timed-out peers must be flagged, not routed through with a permissive default
+- **Don't fix one instance of a class-level bug** — if a gate, a naming scheme, or a delivery path has the same flaw in multiple places, fix all of them in one pass or explicitly enumerate what was left
+- **Don't commit or push without user hand-off** — this repo is in the protected registry; prepare the diff and stop
+- **Don't tune a noisy behavior to zero** — "too aggressive" means reduce intensity, not disable
 
 ## Open questions / known gaps
-- Recurring tension between proxy evidence (test-pass, send-log) and direct evidence (actual peer receipt) — verification gates may need architectural reinforcement
-- Task lists drift silently across long sessions; reconcile with the Task tool before stopping on any multi-turn change
+- Delivery confirmation channel is structurally ambiguous — send-success and actual receipt conflated in at least one recurring pattern; needs explicit receipt-ACK or dead-letter path
+- Stale session detection relies on heartbeat recency, but old mail in dead sessions (32+ orphans noted) suggests the reap/revive boundary isn't consistently enforced

@@ -1,0 +1,43 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 20944,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.025612496949731396,
+    "unit_count": 1
+  },
+  "response": {
+    "biases_detected": [
+      "template-anchoring: proceeded with Write using the mandated em-dash H1 template without pre-checking prose-lint gate compatibility",
+      "availability-bias: relied on template as authoritative without verifying it against all active Stop hooks"
+    ],
+    "calibration_score": 0.15,
+    "overconfident_count": 1,
+    "recommendations": [
+      "pre-flight check skill templates against active Stop hooks before first Write attempt — the prose-lint em-dash conflict is deterministic and could be caught by a one-line rg scan of the template content",
+      "cache the catchup parse contract scope (only ## headings matter) in the core-dump SKILL.md so future agents do not need a reactive read of catchup/SKILL.md:456 to resolve the H1 separator question",
+      "the runtime note correctly identified that the Task tool captured only 2 of 11 real pending items — consider adding a structured conversation-scan phase to core-dump before the Pending Items section is written, not after"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "dac333f4-ee8d-4184-a07d-68af8edbf74b",
+      1028379
+    ],
+    [
+      "0c64e0da-b067-45fd-a01e-c8fffa0b5647",
+      1880350
+    ],
+    [
+      "1a66d7a8-6eac-4eb4-93cb-402a18e936e6",
+      76568
+    ]
+  ],
+  "timestamp": "2026-08-04T17:22:17.221108Z",
+  "tokens_used": 2345,
+  "units_analyzed": 1,
+  "units_total": 1
+}

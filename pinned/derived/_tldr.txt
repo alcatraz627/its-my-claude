@@ -1,5 +1,4 @@
+📌 Owner correction 2026-07-28: when a file needs the owner's review, the FIRST men
+📌 What finally made a UI round land after several failed ones (owner: 'THIS is goo
+📌 Consumed-but-unpersisted approvals break the evidence chain. A skeptical review'
 📌 Wrong-authority-doc incident (2026-07-23, atone mist-20260723-100023-c1): an exp
-📌 The /adversarial-review skill (built 2026-07-21, skills/adversarial-review/ + pe
-📌 Deadline machinery vs task-completion compliance: under /deadline the ring/shed 
-📌 Owner asked to pin this entire chunk-1 sweep plus their feedback for alignment a
-📌 Behavioral correction (user-flagged, sharp): this session repeatedly flagged 'co

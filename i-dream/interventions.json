@@ -11,7 +11,8 @@
     "body": "If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:09:22.336973Z",
-    "promoted_by": "owner-flip"
+    "promoted_by": "owner-flip",
+    "strength": 1.0
   },
   {
     "id": "8923583f5c7a27d2",
@@ -26,7 +27,8 @@
     "body": "Before this commit message claims fixed/covers/handles X: confirm the staged diff contains the file:line implementing X. If not, drop the claim.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:00:58.348252Z",
-    "promoted_by": "owner-flip"
+    "promoted_by": "owner-flip",
+    "strength": 1.0
   },
   {
     "id": "2c5dedd9d8a2b605",
@@ -40,7 +42,8 @@
     "body": "Every non-trivial verdict in this audit needs a file:line or this-session runtime evidence pointer, added at write time. Verify uncited rows before sending.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-25T05:00:11.592526Z",
-    "promoted_by": "evidence-auto"
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "e454d031fa4afcf4",
@@ -52,7 +55,8 @@
       "prompt_pattern": "^\\s*(ok|okay|sure|yes|yeah|go|go ahead|continue|keep going|next|do it|proceed)\\b[\\s.!]*$"
     },
     "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "strength": 0.8
   },
   {
     "id": "3c40a861cd0842a7",
@@ -66,7 +70,8 @@
     "body": "When you mention this file to the user, make the first mention an absolute path starting with / or ~, not a bare filename.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:09:22.344024Z",
-    "promoted_by": "owner-flip"
+    "promoted_by": "owner-flip",
+    "strength": 1.0
   },
   {
     "id": "44a5d9b7187585b2",
@@ -79,7 +84,8 @@
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs)$"
     },
     "body": "Name the current caller for every new exported function/type here. No caller, or an existing primitive already fits? Don't create it.",
-    "created": "2026-07-24T14:54:37.875879Z"
+    "created": "2026-07-24T14:54:37.875879Z",
+    "strength": 1.0
   },
   {
     "id": "8f2469b9c91895c0",
@@ -94,7 +100,8 @@
     "body": "Write source markdown, never renderer output. Scan the first ~20 lines: uniform 2-space indent or '…' inside table rows means rendered-output-saved-as-source — rewrite it.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:09:22.350713Z",
-    "promoted_by": "owner-flip"
+    "promoted_by": "owner-flip",
+    "strength": 1.0
   },
   {
     "id": "fbbe2e1ac4733ec2",
@@ -109,7 +116,8 @@
     "body": "For any comment over 3 lines: name the single load-bearing fact, write only that in 1-2 lines. Still longer? It's an essay — move it to a doc and link.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:09:22.357518Z",
-    "promoted_by": "owner-flip"
+    "promoted_by": "owner-flip",
+    "strength": 1.0
   },
   {
     "id": "7a32a10e40ad8079",
@@ -121,7 +129,8 @@
       "prompt_pattern": "\\b(rename|renaming|rename it|change the name of)\\b.*\\b(field|tag|key|column|flag|constant|filename|file name|env var|status)\\b"
     },
     "body": "Before renaming: run `rg -F '<old-name>'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.",
-    "created": "2026-07-25T05:00:11.590362Z"
+    "created": "2026-07-25T05:00:11.590362Z",
+    "strength": 0.15714285714285714
   },
   {
     "id": "d76985ac119aa0bb",
@@ -134,20 +143,22 @@
       "input_pattern": "(\\.current-session-id|/tmp/.*(session|registry|state|lock))"
     },
     "body": "This is a cached artifact, not live state. Re-derive the claim from a live source (ps, process tree, env, sourcing the file) before asserting which session/tty/writer is real.",
-    "created": "2026-07-25T05:00:11.590362Z"
+    "created": "2026-07-25T05:00:11.590362Z",
+    "strength": 0.15714285714285714
   },
   {
     "id": "b26957e5af923ced",
     "slug": "sub-agent-material-output-left-in-conversation-only",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "atone(\\.sh)?\\s+add\\b"
     },
     "body": "Persist juror/sub-agent verdicts through the data layer: use `atone add --case-file <path>` so the output lands on disk. Never relay a verdict by hand from a return string.",
-    "created": "2026-07-25T05:00:11.590362Z"
+    "created": "2026-07-25T05:00:11.590362Z",
+    "strength": 1.0
   },
   {
     "id": "21c3c4770c14faf1",
@@ -159,6 +170,35 @@
       "prompt_pattern": "\\b(redesign|design questionnaire|design review round|rework the (ui|ux|design)|revamp the (ui|ux|design))\\b"
     },
     "body": "Before drafting design questions: name the 3-5 composite user stories this surface serves and tie each question to one. Don't emit a list of independent taste option-picks.",
-    "created": "2026-07-27T19:59:36.977558Z"
+    "created": "2026-07-27T19:59:36.977558Z",
+    "strength": 0.2
+  },
+  {
+    "id": "ab332bca10f938fc",
+    "slug": "shipping-css-ui-changes-without-visual-verification",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "\\.(css|scss|sass|less|styl)$|\\.(tsx|jsx|vue|svelte)$"
+    },
+    "body": "Before calling this UI change fixed, screenshot the changed element this turn and open the component that owns its padding. No screenshot read back = not fixed.",
+    "created": "2026-07-29T00:29:17.608852Z",
+    "strength": 0.5
+  },
+  {
+    "id": "6ac96d0a5866cf77",
+    "slug": "ai-smell-prose-against-stored-voice",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "\\.(tsx|jsx|vue|svelte|html)$"
+    },
+    "body": "User-facing copy: render it and read the words back before shipping. Strip em-dashes and two-sentence explainers; keep the owner's voice, not default card padding.",
+    "created": "2026-07-29T00:29:17.608852Z",
+    "strength": 0.5
   }
 ]

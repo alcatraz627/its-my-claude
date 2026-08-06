@@ -1,0 +1,49 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.1111111111111111,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.5649709813959918,
+    "unit_count": 9
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — c71644cf-4: Write to plan.md failed (success:false x1) before second attempt succeeded; dd5be1d9-8: Write to svc-sample.py failed (success:false x1), Write to migrations/0043 failed twice (success:false x2) before success, Write to checkpoint scratchpad failed (success:false x1), Edit to dev-servers.md failed (success:false x1); five distinct write failures across two units; depth slightly elevated in dd5be1d9-8 versus prior cycles but recovery pattern unchanged; no regression warranted",
+      "cli_interface_assumption_without_read:NEW — dd5be1d9-8: prepend-runtime-note.sh was invoked via stdin pipe (bash here-doc piped to the script) as if it accepted stdin; the script silently no-oped because it requires positional arguments <skill-name> <file>; agent had to Read the script source to discover the correct interface before re-invoking successfully; pattern is a CLI-level analogue of helper_return_type_assumption — interface assumed from usage context rather than verified from the tool's signature; the silent no-op followed by a downstream 'NOT in runtime-notes.md' check is a one-sided confidence failure matching the send-side confidence dream insight",
+      "scheduling_discipline_miss_then_correct:NEW — dd5be1d9-8: agent built and registered two LaunchAgent plists (svc-watch, svc-reap) without creating calendar companion events required by scheduling-discipline.md ('every recurring cron ALSO gets an Automations calendar event with label+command+plist in the notes'); user correction in dd5be1d9-24 (is_correction:true, topic_keywords:['calendar']) triggered full recovery — schedule.sh register, companion event creation via osascript, uid write-back, recurrence verification, and doctor audit; omission was structural (rule requirement missed during implementation) rather than a per-step calibration failure; distinct from write_before_read_trap family"
+    ],
+    "calibration_score": 0.38,
+    "cross_references": [
+      "Dream Insight 1 (send-side confidence, conf=0.72) VIOLATED in dd5be1d9-8: prepend-runtime-note.sh was called with a stdin pipe as the send side; no receive-side verification was performed until the note was found missing downstream; matches the insight's core pattern of treating a partial signal (the pipe executed without error) as complete evidence without requiring the second half of verification (note actually landed in runtime-notes.md).",
+      "Dream Insight 1 (conf=0.72) CONFIRMED in dd5be1d9-8: svc up's port-check guard was exercised by mutation (empty service list on fresh state) which revealed it was silently blind; agent caught this via live exercise rather than inspection alone; this is the correct two-sided verification pattern the insight describes — both the send side (guard code present) and the receive side (guard actually fires on the boundary case) were tested.",
+      "Dream Insight 2 (multi-agent state volatility, conf=0.68) NOT APPLICABLE to these units — no multi-agent coordination present in any unit; all sessions are single-agent."
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "cli_interface_assumption_without_read is NEW and not in prior history. Before calling any ~/.claude/skills/shared/*.sh or ~/.claude/scripts/**/*.sh tool with a novel invocation pattern (especially when piping stdin), read the script's usage block or first 20 lines to verify the argument interface. Do not infer stdin-accepting behavior from context when the interface has not been confirmed this session.",
+      "scheduling_discipline_miss_then_correct is NEW. After registering any launchd plist, add an inline post-registration checklist: (1) schedule.sh register completed, (2) calendar companion event created with label+command+plist in notes, (3) meta.json calendar_uid non-empty. The recovery in dd5be1d9-24 was thorough and clean but required a user correction that was structurally predictable from the rule text.",
+      "write_before_read_trap is RECURRING:STABLE across many cycles. Deprioritize new recommendations. The slightly elevated failure count in dd5be1d9-8 (five failures versus prior single-failure baseline) warrants monitoring for trend over the next two cycles before reclassifying from STABLE."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "c71644cf-6c7d-491d-ab51-b18fcaf2832a",
+      899341
+    ],
+    [
+      "b6809eaf-8353-482b-8c8e-c969d3bd335b",
+      109759
+    ],
+    [
+      "dd5be1d9-3c00-4a02-9484-7cd4cbf7fd64",
+      2768656
+    ]
+  ],
+  "timestamp": "2026-08-06T07:39:46.501819Z",
+  "tokens_used": 14209,
+  "units_analyzed": 9,
+  "units_total": 9
+}

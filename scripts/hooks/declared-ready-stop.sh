@@ -69,8 +69,18 @@ soft_note() {  # $1 = message text
 # session edit-list maintained by track-edits-session.sh.
 EDITED="/tmp/claude-edited-files-${sid8}"
 [ -s "$EDITED" ] || exit 0
-if ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$' "$EDITED" 2>/dev/null; then
+if ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh|css|scss|sass|less|vue|svelte)$' "$EDITED" 2>/dev/null; then
   exit 0
+fi
+
+# A style-only turn (css/scss/vue/svelte and nothing else) used to exit above, which
+# made the dark-AND-light reminder further down unreachable for exactly the surfaces
+# it names. Those turns are admitted now, but they get a soft screenshot nudge rather
+# than a block: this file class has no fire-rate history yet, and a colour-variable
+# tweak does not deserve the same consequence as an unexercised code path.
+style_only=0
+if ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$' "$EDITED" 2>/dev/null; then
+  style_only=1
 fi
 
 # ── Turn boundary: slice the tail at the LAST REAL USER MESSAGE, not a blind tail ──
@@ -395,6 +405,16 @@ fi
 #    that the static allow-list missed; can't prove sufficiency → SOFT (not block).
 if [ "$has_nonharmless" = 1 ] && [ "$substantial" = 1 ] && [ "$cov_decision" != "uncovered" ]; then
   soft_note "✓ declared-ready (soft — a run was observed): you edited source and claimed success, and a command that is not pure inspection produced output this turn (a project CLI / script the run allow-list doesn't name). Something ran, but I can't prove it exercised the exact lines you changed. If it did, carry on; if it was adjacent scope, exercise the change itself. Mute: touch ~/.claude/.no-declared-ready-gate"
+fi
+
+# S) style-only edit, nothing rendered it → SOFT (never block; see Gate 0 note).
+if [ "$style_only" = 1 ]; then
+  STYLEMARK="/tmp/claude-declared-ready-style-${sid8}"
+  if [ ! -f "$STYLEMARK" ]; then
+    : > "$STYLEMARK" 2>/dev/null || true
+    soft_note "✓ declared-ready (soft — style-only edit): you changed only stylesheet/markup-style files and claimed success, and nothing rendered the surface this turn. CSS is the one change class you cannot read off the diff — a rule that looks right still collapses a layout. Take a screenshot and look at it (headless Chrome, or mcp__plugin_chrome-devtools__take_screenshot), in dark AND light if the surface has a theme. This is the 'shipping-css-ui-changes-without-visual-verification' pattern (S3, 3×). Mute: touch ~/.claude/.no-declared-ready-gate"
+  fi
+  exit 0
 fi
 
 # E / nothing) nothing exercised the change → BLOCK (loop-safe).

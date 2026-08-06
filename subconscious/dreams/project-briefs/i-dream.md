@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-28T01:06:00.877280+00:00 · 20 patterns / 3 insights -->
+<!-- i-dream project brief · 2026-08-06T03:57:22.421908+00:00 · 20 patterns / 5 insights -->
 ## What this project is about
-A dream-tracking dashboard with multi-agent orchestration (i-dream), Anthropic API integration, and a React frontend with multiple list/detail pages. Work style is multi-session, autonomous, with peer IPC between live agents.
+i-dream is a dream-tracking/memory-consolidation system with a multi-widget dashboard UI, background agents, and IPC-coordinated peer-review workflows. Work is predominantly UI-heavy with concurrent sub-agent sessions operating in parallel.
 
 ## Things to do (or keep doing)
-- **Before any UI implementation, enumerate ALL input sources** (design mocks, specs, sibling pages) AND all output surfaces (every page using the component) — build the explicit checklist before writing a line of code
-- **Apply UI fixes globally in the same response** — when a sidebar, drawer, or shared shell is corrected on one page, sweep every page that mounts it before returning
-- **Apply pagination and list patterns from sibling pages automatically** — if other list pages already implement it, add it without waiting to be told
-- **Update the task list after each logical unit** — never let it drift stale during high-velocity or parallel work; that's exactly when sync matters most
+- Prefer the two-agent mutual peer-review pattern: each agent produces an independent plan, then grades the other's — never collapse outputs into a merged recommendation without explicit instruction
+- Always enumerate ALL instances of a class (all pages using a component, all list pages needing pagination) before marking a fix done — one-instance fixes are incomplete by default
+- Always update the task list after each logical unit; never batch updates at session end, especially under parallelism when drift is most costly
+- When a lookup or probe returns empty/unknown, emit UNCERTAIN or propagate absence — never synthesize a plausible default (zero, false, ALLOW) from silence
 
 ## Things to avoid
-- **Don't skip mandatory skill gate phases** — adversarial validation and similar documented phases cannot be silently dropped while marking tasks complete
-- **Don't fabricate defaults when a lookup returns empty** — absence of signal must propagate as UNCERTAIN or DENY, never converted into zero/false/ALLOW
-- **Don't put runtime config toggles in env config** — user has a separate runtime config system; feature flags belong there
-- **Don't send IPC messages without verifying the peer alias maps to a live session ID** first
+- Don't skip mandatory skill gate phases (adversarial validation, checklist passes) silently and mark tasks complete — if a gate is documented, run it or surface the skip explicitly
+- Don't ship UI copy in formal agent-style language; UI banner text must read as human-written ("Set it up first" not "This job has not started — it needs its setup")
+- Don't treat agent-generated documents, naming conventions, or default values as authoritative upstream sources — always trace provenance before citing something as canonical
+- Don't add warm-up jobs, infra, or automation without explicit user request; scope creep is a confirmed recurring pattern here
 
 ## Open questions / known gaps
-- Deferred decision items repeatedly surface without enough context (no prior constraint, no concrete options) — structure these before presenting them to the user
-- Design mocks are consulted inconsistently; no reliable gate enforces mock-first UI work at the start of each feature
+- IPC peer-alias resolution is fragile: aliases don't reliably map to live peer IDs without a live lookup — no stable mechanism yet
+- UI verification discipline under velocity degrades: visual regression catches are deprioritized exactly when parallelism is highest, which is when they matter most
