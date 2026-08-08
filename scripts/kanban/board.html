@@ -4,275 +4,455 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>kanban</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1' fill='%238fbf6a'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1' fill='%237c8590'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1' fill='%232b3138'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
 <style>
-  /* Terminal-dense skin (owner pick D1c, 2026-07-27). The class anatomy —
-     columns, labels, sub-items — is the spec (ruling 2026-07-24); the skin and
-     every usability affordance serve the six stories + messy composites in
-     assets/reports/20260727-kanban-ui-stories/STORIES.md. */
+  /* ============================================================
+     kanban — v10. Product-grade skin: system UI type, crisp
+     saturated accents, 6px geometry, state icons, label pills.
+     Six equal kanban columns; labels and sub-items intact.
+     Read + notes only — every mutation still goes through the CLI.
+     ============================================================ */
   :root{
-    --bg:#0a0c0e; --text:#d8dee6; --dim:#9aa4b0; --faint:#78828d; --rule:#1f242b;
-    --surface:#0d0f12; --surface2:#12161b; --accent:#8fbf6a; --amber:#e0b04c; --stale:#6d7680;
-    --seg-active:#8fbf6a; --seg-blocked:#e0b04c; --seg-inbox:#6d7680;
-    --seg-backlog:#565e66; --seg-done:#3d5a4c; --seg-stale:#3a4149;
-    --mono:"SF Mono",ui-monospace,Menlo,monospace;
+    --canvas:#0a0a0c; --well:#0f1013; --well-attn:#141519; --card:#17181c; --card-hover:#1d1f24;
+    --border:#26282e; --border-2:#353941; --ring:#5b9dff;
+    --text:#e9ebee; --text-2:#a4a9b1; --text-3:#838a94;
+    --blue:#5b9dff; --blue-bg:rgb(91 157 255/.14); --blue-br:rgb(91 157 255/.32);
+    --amber:#e8b84b; --amber-bg:rgb(232 184 75/.14); --amber-br:rgb(232 184 75/.34);
+    --green:#4bbd63; --green-bg:rgb(75 189 99/.14); --green-br:rgb(75 189 99/.30);
+    --shadow:0 1px 2px rgb(0 0 0/.4);
+    --l0:#6aa5ff; --l1:#4cba6a; --l2:#b08cff; --l3:#ff8ab0; --l4:#f0a35e; --l5:#4fc3c0;
+    --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
   }
   [data-theme="light"]{
-    --bg:#f2f4f6; --text:#20262d; --dim:#4a535d; --faint:#69737e; --rule:#d5dae0;
-    --surface:#eaedf0; --surface2:#fbfcfd; --accent:#4a7d2a; --amber:#8f6a10; --stale:#8b939c;
-    --seg-active:#4a7d2a; --seg-blocked:#a97c14; --seg-inbox:#7e8791;
-    --seg-backlog:#9aa2ab; --seg-done:#7fa090; --seg-stale:#aab1b8;
+    --canvas:#f3f4f6; --well:#fafbfc; --well-attn:#ffffff; --card:#ffffff; --card-hover:#f7f8fa;
+    --border:#dfe1e6; --border-2:#c4c9d0; --ring:#0b6bcb;
+    --text:#191c20; --text-2:#565d66; --text-3:#6a717a;
+    --blue:#0b6bcb; --blue-bg:rgb(11 107 203/.09); --blue-br:rgb(11 107 203/.26);
+    --amber:#8a5d05; --amber-bg:rgb(190 141 20/.15); --amber-br:rgb(150 108 12/.34);
+    --green:#17752f; --green-bg:rgb(26 127 55/.10); --green-br:rgb(26 127 55/.26);
+    --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
+    --l0:#0b62c4; --l1:#197b34; --l2:#6f42c1; --l3:#b32b6e; --l4:#8a5312; --l5:#0e7570;
   }
-  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
-  ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px} ::-webkit-scrollbar-track{background:transparent}
+  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:6px;border:3px solid transparent;background-clip:content-box}
+  ::-webkit-scrollbar-track{background:transparent}
   html,body{margin:0;height:100%}
-  body{background:var(--bg);color:var(--text);font:13px/1.45 -apple-system,"SF Pro Text",system-ui,sans-serif;display:flex;flex-direction:column}
-  header{display:flex;align-items:baseline;gap:14px;padding:13px 18px 0;flex:none}
-  header h1{font:600 15px/1 var(--mono);margin:0;letter-spacing:.01em}
-  header .root{color:var(--faint);font-size:10.5px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-  header .meta{color:var(--dim);font-size:11px;white-space:nowrap}
-  button{background:none;color:var(--text);border:1px solid var(--rule);border-radius:3px;padding:3px 9px;cursor:pointer;font:inherit;font-size:11.5px}
-  button:hover{border-color:var(--dim)}
+  body{background:var(--canvas);color:var(--text);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+       font-variant-numeric:tabular-nums;display:flex;flex-direction:column}
+  h1,h2,h3{margin:0}
+  svg{display:block;flex:none}
 
-  #stalebar{display:none;margin:10px 18px 0;border:1px solid color-mix(in srgb,var(--amber) 55%,transparent);border-radius:3px;padding:6px 10px;color:var(--amber);font-size:12px;flex:none}
-  #stalebar code{font-family:var(--mono);font-size:11px}
+  /* ---------- masthead ---------- */
+  header.top{flex:none;padding:14px 24px 11px;display:flex;flex-direction:column;gap:11px;border-bottom:1px solid var(--border)}
+  .crumb{display:flex;align-items:center;gap:7px;flex:none;font-size:12.5px;color:var(--text-3)}
+  .crumb a{color:var(--text-3);text-decoration:none;border-radius:5px;padding:2px 5px;margin-left:-5px}
+  .crumb a:hover{color:var(--text);background:var(--well)}
+  .brow{display:flex;align-items:center;gap:10px;min-width:0}
+  .btitle{font:600 15.5px/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap}
+  .bpath{color:var(--text-3);font:11.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+  .actions{display:flex;gap:6px;flex:none}
+  button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
+         padding:5px 10px;font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:background .12s,border-color .12s,color .12s}
+  button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  button:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
+  button.icon{padding:5px 8px}
+  .summary{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13px;color:var(--text-2);min-height:24px}
+  .summary b{color:var(--text);font-weight:600}
+  .summary .dotsep{width:3px;height:3px;border-radius:50%;background:var(--border-2)}
+  .summary .blocked{color:var(--amber);font-weight:500}
+  .summary .delta{color:var(--text-3)}
+  .summary .delta b{color:var(--text-2)}
+  .linkish{background:none;border:none;padding:0 2px;height:auto;color:var(--text-3);text-decoration:underline;font-size:12.5px}
+  .linkish:hover{background:none;border:none;color:var(--text)}
 
-  .meter{display:flex;height:18px;margin:11px 18px 3px;border-radius:3px;overflow:hidden;border:1px solid var(--rule);flex:none}
-  /* tinted segs, live text color: labels stay readable in BOTH themes and the
-     theme toggle restyles them without a re-render (classes, never inline) */
-  .meter .seg{display:flex;align-items:center;gap:5px;padding:0 8px;min-width:0;cursor:pointer;font:650 10px/1 var(--mono);letter-spacing:.05em;color:var(--text);overflow:hidden;white-space:nowrap}
-  .seg-inbox{background:color-mix(in srgb,var(--seg-inbox) 38%,var(--bg))}
-  .seg-backlog{background:color-mix(in srgb,var(--seg-backlog) 38%,var(--bg))}
-  .seg-active{background:color-mix(in srgb,var(--seg-active) 45%,var(--bg))}
-  .seg-blocked{background:color-mix(in srgb,var(--seg-blocked) 45%,var(--bg))}
-  .seg-done{background:color-mix(in srgb,var(--seg-done) 38%,var(--bg))}
-  .seg-stale{background:color-mix(in srgb,var(--seg-stale) 38%,var(--bg))}
-  /* hard divider: the proportion read survives any tint pairing (count 2) */
-  .meter .seg + .seg{border-left:1px solid var(--bg)}
-  .meter .seg i{font-style:normal;font-weight:500}
-  .scrollhint{color:var(--faint)}
-  .legend{color:var(--dim);font-size:11px;margin:0 18px 8px;flex:none}
-  .legend b{color:var(--text)}
+  /* inline notices — one grammar for delta / stale / errors */
+  .notice{display:none;align-items:center;gap:10px;border:1px solid var(--border);background:var(--well);
+          border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text-2)}
+  .notice.on{display:flex}
+  .notice b{color:var(--text);font-weight:600}
+  .notice .bar{width:3px;align-self:stretch;border-radius:2px;background:var(--blue);flex:none}
+  .notice .grow{flex:1;min-width:0}
+  .notice.warn{border-color:var(--amber-br);background:var(--amber-bg);color:var(--amber)}
+  .notice.warn .bar{background:var(--amber)}
+  .notice.warn code{font:12px var(--mono);background:rgb(0 0 0/.16);border-radius:4px;padding:1px 5px}
+  .notice .blk{color:var(--amber)}
+  .notice button{background:none;border-color:transparent;color:var(--text-3);padding:3px 8px}
+  .notice button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
-  /* since-you-left delta strip (M2: the human read cursor) */
-  #delta{display:none;margin:0 18px 9px;border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:3px;padding:6px 10px;font-size:12px;flex:none;align-items:baseline;gap:10px}
-  #delta.on{display:flex;flex-wrap:wrap}
-  #delta .lead{color:var(--dim)}
-  #delta b{color:var(--text);font-weight:600}
-  #delta .grp{white-space:nowrap}
-  #delta .grp.blk{color:var(--amber)}
-  #delta button{margin-left:auto;color:var(--dim)}
+  /* ---------- board ---------- */
+  main{flex:1;min-height:0;display:flex;gap:14px;padding:15px 24px 22px;overflow-x:auto;align-items:stretch}
+  .col{flex:1 1 284px;min-width:232px;max-width:400px;max-height:100%;display:flex;flex-direction:column;min-height:0;
+       background:var(--well);border:1px solid var(--border);border-radius:10px;padding:10px 10px 4px}
+  .col.archive{flex:.68 1 204px;min-width:196px;max-width:280px}
+  .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 10px;flex:none}
+  .chead h2{font:600 13px/1.4 var(--sans);letter-spacing:-.006em;color:var(--text)}
+  .chead .count{margin-left:auto;font-size:12px;font-weight:550;color:var(--text-3);background:var(--card);
+                border:1px solid var(--border);border-radius:20px;padding:1px 8px;min-width:24px;text-align:center}
+  .col.attn .chead .count{color:var(--text);border-color:var(--border-2)}
+  details.col{align-self:flex-start}
+  details.col > summary{list-style:none;cursor:pointer}
+  details.col > summary::-webkit-details-marker{display:none}
+  .cards{overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:1px 1px 8px;flex:1;min-height:0}
+  .empty-col{color:var(--text-3);font-size:12.5px;padding:6px 5px 12px}
+  /* the two columns that need you sit on a lighter well — weight, not hue */
+  .col.attn{background:var(--well-attn);border-color:var(--border-2)}
 
-  main{flex:1;display:flex;gap:10px;padding:0 18px 14px;overflow-x:auto;align-items:flex-start}
-  #state{display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--dim);padding:60px 0;text-align:center}
+  /* ---------- card ---------- */
+  .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 13px 10px;
+        cursor:pointer;outline:none;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;
+        transition:background .12s,border-color .12s}
+  .card:hover{background:var(--card-hover);border-color:var(--border-2)}
+  .card:focus-visible,.card.sel{border-color:var(--ring);box-shadow:0 0 0 2px rgb(91 157 255/.22),var(--shadow)}
+  [data-theme="light"] .card:focus-visible,[data-theme="light"] .card.sel{box-shadow:0 0 0 2px rgb(11 107 203/.16),var(--shadow)}
+  .card .stripe{position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0}
+  .card .title{font:500 13.5px/1.45 var(--sans);letter-spacing:-.008em;color:var(--text);
+               display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  /* changed since your last visit: the whole card is marked, not a 6px dot */
+  .card.changed{border-color:var(--blue-br)}
+  .card.changed .title{padding-right:14px}
+  .card .newdot{position:absolute;top:11px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--blue);
+                box-shadow:0 0 0 2px var(--card)}
+  /* the human's note, verbatim, with its tags lit in place */
+  .note{font-size:12.5px;line-height:1.45;color:var(--text-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card.blocked .note{color:var(--amber)}
+  .note .tk{font:500 11.5px/1 var(--mono);background:var(--blue-bg);color:var(--blue);border-radius:4px;padding:2px 4px}
+
+  /* fixed slots: identity on the left, status on the right. position is the
+     first thing you learn about a card, so it must not move card to card */
+  /* two grid cells, not a wrapping flex row with a spacer: identity stays left
+     and status stays right even when either one wraps to a second line */
+  .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+  .pills .ident,.pills .stat{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
+  /* one auto margin holds the two slots apart — no spacer element, and it
+     survives wrapping: the status group moves down but stays right */
+  .pills .stat{margin-left:auto;justify-content:flex-end}
+  .pill{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:20px;
+        font:500 11.5px/1 var(--sans);border:1px solid var(--border);color:var(--text-2);background:none;white-space:nowrap;max-width:100%}
+  .pill .nm{overflow:hidden;text-overflow:ellipsis}
+  .pill .sw{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+  .pill.mono{font:500 11.5px/1 var(--mono);padding:0 7px}
+  .pill.verify{color:var(--green);border-color:var(--green-br);background:var(--green-bg)}
+  .pill.verify.soft{color:var(--text-2);border-color:var(--border);background:none}
+  .pill.needs{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg);font-weight:600}
+  .pill.tag{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg);font-family:var(--mono);font-size:11.5px}
+  .pill.tag.quiet{color:var(--text-3);border-color:var(--border);background:none}
+  .pill.prog{gap:6px;padding-left:6px;color:var(--text-2)}
+  .l0{color:var(--l0)}.l1{color:var(--l1)}.l2{color:var(--l2)}.l3{color:var(--l3)}.l4{color:var(--l4)}.l5{color:var(--l5)}
+  .pill.label{border-color:currentColor;background:color-mix(in srgb,currentColor 12%,transparent)}
+  .pill.label .nm{color:var(--text)}
+  [data-theme="light"] .pill.label{background:color-mix(in srgb,currentColor 8%,transparent)}
+  .s0 .stripe{background:var(--l0)}.s1 .stripe{background:var(--l1)}.s2 .stripe{background:var(--l2)}
+  .s3 .stripe{background:var(--l3)}.s4 .stripe{background:var(--l4)}.s5 .stripe{background:var(--l5)}
+
+  .foot{display:flex;align-items:center;gap:10px;font:11.5px/1.4 var(--mono);color:var(--text-3);min-width:0}
+  .foot .src{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .foot .age{flex:none}
+
+  /* archive: one line. title, whether it still wants you, and how old it is */
+  .col.archive .card{flex-direction:row;align-items:center;gap:9px;padding:7px 11px}
+  .col.archive .card .title{flex:1;min-width:0;font-size:12.5px;font-weight:450;color:var(--text-2);
+                            display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .col.archive .card .note,.col.archive .card .pills{display:none}
+  .col.archive .card .pills.keep{display:flex;flex:none}
+  .col.archive .card .foot{flex:none}
+  .col.archive .card .foot .src{display:none}
+  .col.archive .card .newdot{display:none}
+  /* the row is title-first: the marker shrinks so the title keeps its width */
+  .col.archive .pills.keep .pill.needs{height:18px;padding:0 6px;font-size:11px}
+  /* 152px of row cannot hold title + marker + age. the marker wins over the age;
+     the age survives in the row's tooltip and in the drawer */
+  .col.archive .card .pills.keep ~ .foot{display:none}
+
+  /* ---------- states ---------- */
+  #state{display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-2);padding:80px 0;text-align:center}
   #state.on{display:flex}
-  #state .big{font-size:15px;color:var(--text)}
-  #state code{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  #state .big{font-size:16px;font-weight:600;color:var(--text)}
+  #state code{font:12.5px var(--mono);color:var(--text-3);background:var(--well);border:1px solid var(--border);border-radius:6px;padding:2px 7px}
   #state.err .big{color:var(--amber)}
-  .lane{background:var(--surface);border:1px solid var(--rule);border-radius:4px;flex:1 1 246px;min-width:220px;max-width:340px;max-height:100%;display:flex;flex-direction:column}
-  .lane.archive{flex:.75 1 190px;min-width:170px;max-width:250px}
-  .lane-empty{color:var(--faint);text-align:center;padding:14px 0 10px;font-size:11px}
-  .lane h2{font:650 11px/1 var(--mono);letter-spacing:.02em;color:var(--dim);margin:0;padding:9px 11px;display:flex;justify-content:space-between}
-  .lane h2 .n{color:var(--text)}
-  .lane h2 .n::before{content:"×";color:var(--faint);margin-right:1px}
-  .lane.attn h2{color:var(--text)}
-  /* markers live INSIDE the name span: h2 is space-between flex, so any pseudo
-     directly on the h2 becomes a third anonymous item and shoves the name off
-     the left edge (adversarial count 3; the attn ::after had the same defect) */
-  details.lane summary{cursor:pointer;list-style:none}
-  details.lane summary .lname::before{content:"▸ ";color:var(--dim)}
-  details.lane[open] summary .lname::before{content:"▾ "}
-  .cards{overflow-y:auto;padding:0 7px 7px;display:flex;flex-direction:column;gap:6px}
-  .card{position:relative;background:var(--surface2);border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:2px;padding:7px 9px 6px 10px;cursor:pointer;outline:none}
-  .card:focus,.card.sel{border-color:var(--accent);box-shadow:inset 2px 0 0 var(--accent)}
-  .card .t{font-size:12.5px;font-weight:570;line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .card.blocked .t::after{content:" ●";color:var(--amber);font-size:8px;vertical-align:2px}
-  .card.changed::after{content:"";position:absolute;top:6px;right:7px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
-  .chips{display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:10px}
-  .chips .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
-  .chips .dot.selfnote{background:var(--faint)}
-  .chip{font:600 10px/1.6 var(--mono);letter-spacing:.02em;border:1px solid var(--rule);border-radius:2px;padding:0 4px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
-  .chip.tag{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
-  .chip.state{color:var(--dim)}
-  .chip.subs{color:var(--text);background:var(--surface)}
-  .chip.subs.alldone{color:var(--dim)}
-  .chip.why{color:var(--stale)}
-  .chip.nt-act{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent)}
-  .chip.nt-skill{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
-  .chip.nt-move{color:var(--text)}
-  .chip.nt-review{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
-  .chip.nt-me,.chip.nt-free{color:var(--faint)}
-  .chip.vf-executed{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
-  .chip.vf-cited{color:color-mix(in srgb,var(--accent) 70%,var(--dim))}
-  .chip.vf-reasoned{color:var(--stale)}
-  .chip.vf-human{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent)}
-  .whynote{margin:3px 0 2px;font-size:11px;line-height:1.35;color:var(--amber);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-  .lh0{color:#9fb56a;border-color:#3a4429}.lh1{color:#6aada5;border-color:#28403d}.lh2{color:#7d94ad;border-color:#28323d}
-  .lh3{color:#a284a2;border-color:#3a2d3a}.lh4{color:#b3826a;border-color:#40302a}.lh5{color:#8b93c9;border-color:#2e3350}
-  [data-theme="light"] .lh0{color:#5c7330;border-color:#ccd6ae}[data-theme="light"] .lh1{color:#2f6d64;border-color:#bed6d1}
-  [data-theme="light"] .lh2{color:#3f5a75;border-color:#c3d0dc}[data-theme="light"] .lh3{color:#71486f;border-color:#d6c6d5}
-  [data-theme="light"] .lh4{color:#84503a;border-color:#dcc8bc}[data-theme="light"] .lh5{color:#42508e;border-color:#c6cce8}
-  .card.slh0{border-left-color:#9fb56a}.card.slh1{border-left-color:#6aada5}.card.slh2{border-left-color:#7d94ad}
-  .card.slh3{border-left-color:#a284a2}.card.slh4{border-left-color:#b3826a}.card.slh5{border-left-color:#8b93c9}
-  .src{display:flex;margin-top:4px;color:var(--faint);font:10px var(--mono);white-space:nowrap;overflow:hidden}
-  .src .age{margin-left:auto;padding-left:8px}
-  /* archive lanes compress to single-line rows (story S6) */
-  .lane.archive .card{padding:4px 8px 4px 9px;border-left-width:2px}
-  /* single-line contract held by flex, not float — a float escapes line-clamp (C9/F14) */
-  .lane.archive .card .t{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:480;color:var(--dim);margin-bottom:0;-webkit-line-clamp:unset}
-  .lane.archive .card .t .txt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .lane.archive .card .t .age{flex:none;font:10px var(--mono);color:var(--faint)}
-  .lane.archive .card .chips,.lane.archive .card .src,.lane.archive .card .whynote{display:none}
-  /* the one chip archive rows keep: "needs your testing" matters MOST on done (M3) */
-  .lane.archive .card .t .a-needs{flex:none;font:600 9.5px/1.5 var(--mono);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 50%,transparent);border-radius:2px;padding:0 4px}
-  .lane.archive .card.changed::after{display:none}
-  .empty-board{color:var(--dim);padding:40px}
 
-  #drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,92vw);background:var(--bg);border-left:1px solid var(--rule);padding:16px 20px;display:none;flex-direction:column;gap:10px;overflow-y:auto;box-shadow:-12px 0 30px rgb(0 0 0/.35)}
+  /* ---------- drawer ---------- */
+  #scrim{position:fixed;inset:0;background:rgb(0 0 0/.34);display:none;backdrop-filter:blur(1px)}
+  #scrim.open{display:block}
+  #drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,96vw);background:var(--canvas);border-left:1px solid var(--border);
+          display:none;flex-direction:column;box-shadow:-24px 0 60px rgb(0 0 0/.28);z-index:2}
   #drawer.open{display:flex}
-  #drawer .close{align-self:flex-end}
-  #drawer h3{margin:0;font:600 15.5px/1.35 -apple-system,system-ui,sans-serif}
-  #drawer .meta{color:var(--dim);font-size:11px;font-family:var(--mono)}
-  #drawer .mirror{color:var(--faint);font-size:10.5px;font-family:var(--mono)}
-  #drawer a{color:var(--accent);text-decoration:none}
-  #drawer .subs{margin:0;padding:0;list-style:none;font-size:12.5px}
-  #drawer .subs li{padding:3px 0;color:var(--text)}
-  #drawer .subs li.done{color:var(--dim);text-decoration:line-through}
-  #drawer .subs li::before{content:"☐ ";font-family:var(--mono)}
-  #drawer .subs li.done::before{content:"☑ "}
-  #drawer label{color:var(--dim);font-size:11px}
-  #drawer textarea{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;min-height:110px;padding:9px;font:12.5px/1.5 var(--mono);resize:vertical}
-  #drawer .rowx{display:flex;gap:8px;align-items:center}
-  #dInsert{display:flex;gap:5px;flex-wrap:wrap}
-  /* insert chips share the preview chips' metrics — same token, same size (C2/F11) */
-  .tagbtn{background:var(--surface);color:var(--dim);border:1px solid var(--rule);border-radius:2px;padding:0 5px;cursor:pointer;font:600 10.5px/1.8 var(--mono)}
-  .tagbtn:hover{color:var(--text);border-color:var(--accent)}
-  #dTags .chip{font-size:10.5px;line-height:1.8}
-  .copyid{cursor:pointer;border-bottom:1px dotted var(--faint)}
-  .copyid:hover{color:var(--text)}
-  #dTags{display:flex;gap:4px;flex-wrap:wrap;min-height:14px}
-  #dLegend{color:var(--faint);font-size:10px;font-family:var(--mono)}
-  #toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--dim);border-radius:3px;padding:6px 14px;display:none;box-shadow:0 4px 18px rgb(0 0 0/.4)}
-  #help{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 78%,transparent);display:none;align-items:center;justify-content:center}
-  #help .box{background:var(--surface2);border:1px solid var(--dim);border-radius:4px;padding:18px 22px;min-width:280px;box-shadow:0 12px 40px rgb(0 0 0/.45)}
-  #help td{padding:2px 10px 2px 0;color:var(--dim)} #help td:first-child{color:var(--text);font-family:var(--mono)}
+  /* the card's label colour follows you into the drawer */
+  .dtint{height:2px;flex:none;background:var(--border-2)}
+  .dhead{display:flex;align-items:center;gap:8px;padding:10px 12px 10px 18px;border-bottom:1px solid var(--border);flex:none}
+  .dhead .lane{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--text-2)}
+  .dhead .sp{flex:1}
+  .navgrp{display:flex;gap:4px}
+  .dbody{overflow-y:auto;padding:18px 18px 24px;display:flex;flex-direction:column;gap:22px;flex:1 1 auto;min-height:0}
+  .dtitle{margin:0;font:600 19px/1.32 var(--sans);letter-spacing:-.019em}
+  .dpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .dsub{margin-top:9px;font-size:12.5px;color:var(--text-3)}
+  .grp{display:flex;flex-direction:column;gap:10px}
+  .ghead{display:flex;align-items:center;gap:8px;font:600 11px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3)}
+  .ghead .gsp{flex:1}
+  .ghead .gval{font:500 11.5px/1 var(--mono);letter-spacing:0;text-transform:none;color:var(--text-2)}
+  /* verification is a CLAIM, not metadata: it gets a container you can be
+     skeptical at — the grade, the agent's own words, and who said them */
+  .claim{border:1px solid var(--border);border-radius:10px;background:var(--well);padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+  .claim .crow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .claim .cq{font-size:13px;line-height:1.5;color:var(--text)}
+  .claim .cwho{font-size:11.5px;line-height:1.45;color:var(--text-3)}
+  .claim .cwho code{font:11.5px var(--mono)}
+  #dSrc{display:flex;flex-direction:column;gap:6px}
+  .srcrow{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:8px;
+          background:var(--card);text-decoration:none;color:var(--text)}
+  .srcrow:hover{background:var(--card-hover);border-color:var(--border-2);text-decoration:none}
+  .srcrow .path{flex:1;min-width:0;font:12.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .srcrow .ln{font:11.5px/1 var(--mono);color:var(--text-3);flex:none}
+  .srcrow .go{color:var(--text-3);flex:none;font-size:11.5px}
+  .mirror{font-size:11.5px;line-height:1.6;color:var(--text-3)}
+  .subs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+  .subs li{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;padding:2px 0;color:var(--text)}
+  .subs li.done{color:var(--text-3);text-decoration:line-through}
+  #drawer a{color:var(--blue);text-decoration:none}
+  #drawer a:hover{text-decoration:underline}
+  .idbtn{font:12.5px/1 var(--mono);gap:8px;height:28px}
+  .idbtn:hover{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
+
+  /* the note is this product's only input, so it is docked — never scrolled to.
+     it takes a comfortable share of the height and no more; drag to grow */
+  .composer{flex:none;border-top:1px solid var(--border);background:var(--well);padding:12px 16px 14px;display:flex;flex-direction:column;gap:9px}
+  .chead{display:flex;align-items:baseline;gap:8px}
+  .chead .t{font:600 11.5px/1 var(--sans);color:var(--text)}
+  .chead .h{font-size:11.5px;color:var(--text-3);flex:1}
+  .chead .st{font-size:11.5px;color:var(--text-3)}
+  .chead .st.unsaved{color:var(--amber);font-weight:600}
+  .restored{display:none;align-items:center;gap:8px;font-size:11.5px;color:var(--amber);background:var(--amber-bg);
+            border:1px solid var(--amber-br);border-radius:7px;padding:6px 10px}
+  .restored.on{display:flex}
+  .restored span{flex:1}
+  .restored button{background:none;border:none;color:inherit;text-decoration:underline;padding:0 2px;font-size:11.5px;height:auto}
+  /* write conflict: last-write-wins, but never silently */
+  .conflict{display:none;flex-direction:column;gap:7px;font-size:11.5px;color:var(--amber);background:var(--amber-bg);
+            border:1px solid var(--amber-br);border-radius:7px;padding:8px 10px}
+  .conflict.on{display:flex}
+  .conflict .crow2{display:flex;align-items:center;gap:8px}
+  .conflict .grow{flex:1}
+  .conflict button{background:none;border:1px solid var(--amber-br);color:inherit;padding:1px 8px;height:22px;font-size:11px;border-radius:20px}
+  .conflict button:hover{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+  .conflict .ctheirs{font:12.5px/1.5 var(--sans);color:var(--text);background:var(--card);border:1px solid var(--border);
+                     border-radius:6px;padding:8px 10px;white-space:pre-wrap}
+  textarea{width:100%;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;
+           height:clamp(76px,15vh,200px);padding:10px 12px;font:13px/1.55 var(--sans);resize:vertical}
+  textarea:focus{outline:none;border-color:var(--ring);box-shadow:0 0 0 3px rgb(91 157 255/.16)}
+  .cbar{display:flex;align-items:center;gap:8px}
+  .inserts{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+  .tagbtn{font:500 11.5px/1 var(--mono);padding:0 9px;height:24px;border-radius:20px;color:var(--text-2)}
+  .tagbtn:hover{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
+  /* not a duplicate of the note: a parse receipt — what the agent will ACT on */
+  .parsed{display:none;align-items:center;gap:6px;flex-wrap:wrap;font-size:11.5px;color:var(--text-3)}
+  .parsed.on{display:flex}
+  .hint{font-size:11.5px;color:var(--text-3);line-height:1.6}
+  .hint code{font:11.5px var(--mono);color:var(--text-2)}
+  .primary{background:var(--blue);border-color:transparent;color:#fff;font-weight:600;height:30px}
+  .primary:hover{background:var(--blue);border-color:transparent;color:#fff;filter:brightness(1.08)}
+  .primary .k{font:11.5px/1 var(--mono);opacity:.75}
+  [data-theme="light"] .primary{color:#fff}
+
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
+         border-radius:8px;padding:9px 16px;font-size:13px;display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:3}
+  #help{position:fixed;inset:0;background:rgb(0 0 0/.4);display:none;align-items:center;justify-content:center;z-index:4}
+  #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:20px 24px;min-width:340px;
+             box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
+  #help h3{font:600 14px/1 var(--sans);margin-bottom:14px}
+  #help table{border-collapse:collapse}
+  #help td{padding:3px 14px 3px 0;color:var(--text-2);font-size:12.5px}
+  #help td:first-child{white-space:nowrap}
+  #help kbd{font:500 11.5px/1 var(--mono);background:var(--card);border:1px solid var(--border);border-bottom-width:2px;
+            border-radius:5px;padding:3px 6px;color:var(--text)}
+  #help .grouphead{padding-top:14px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
 </style>
 </head>
 <body>
-<header>
-  <h1 id="name">kanban</h1>
-  <span class="root" id="root"></span>
-  <span class="meta" id="meta"></span>
-  <button id="digestBtn" title="copy status digest (c)">⧉ digest</button>
-  <button id="theme" title="toggle theme (t)">◐</button>
-  <button id="helpBtn" title="shortcuts (?)">?</button>
+<header class="top">
+  <div class="brow">
+    <span class="crumb"><a href="/" title="all boards">All boards</a><span>/</span></span>
+    <h1 class="btitle" id="name">kanban</h1>
+    <span class="bpath" id="root"></span>
+    <div class="actions">
+      <button id="digestBtn" title="copy status digest (c)">Copy status</button>
+      <button class="icon" id="theme" title="toggle theme (t)" aria-label="toggle theme">◐</button>
+      <button class="icon" id="helpBtn" title="shortcuts (?)" aria-label="shortcuts">?</button>
+    </div>
+  </div>
+  <div class="summary" id="summary"></div>
+  <div class="notice warn" id="stalebar"></div>
 </header>
-<div id="stalebar"></div>
-<div class="meter" id="meter"></div>
-<div class="legend" id="legend"></div>
-<div id="delta" role="status"></div>
-<main id="lanes" aria-label="board lanes"></main>
+<main id="lanes" aria-label="board columns"></main>
 <div id="state"></div>
 
+<div id="scrim" onclick="closeDrawer()"></div>
 <aside id="drawer" aria-label="card detail">
-  <button class="close" onclick="closeDrawer()" title="close (Esc)">✕</button>
-  <h3 id="dTitle"></h3>
-  <div class="meta" id="dMeta"></div>
-  <div class="mirror" id="dMirror"></div>
-  <div class="meta" id="dDocs"></div>
-  <ul class="subs" id="dSubs"></ul>
-  <label for="dNote">your note (the agent pulls these on request)</label>
-  <textarea id="dNote" placeholder="free text + tags — click the chips below to insert one, no syntax to remember"></textarea>
-  <div id="dInsert" title="click to insert into the note"></div>
-  <div id="dTags"></div>
-  <div id="dLegend">@me self · @agent (default) · !now act · /skill run · &gt;lane move · #defer park · #review-me your queue · #word free tag</div>
-  <div class="rowx">
-    <button id="dSave">Save note</button>
-    <span class="meta" id="dSaved"></span>
+  <div class="dtint" id="dTint"></div>
+  <div class="dhead">
+    <span class="lane" id="dLane"></span>
+    <span class="sp"></span>
+    <div class="navgrp">
+      <button class="icon" id="dPrev" title="previous card (k)" aria-label="previous card">↑</button>
+      <button class="icon" id="dNext" title="next card (j)" aria-label="next card">↓</button>
+    </div>
+    <button class="icon" onclick="closeDrawer()" title="close (Esc)" aria-label="close">✕</button>
+  </div>
+  <div class="dbody">
+    <div>
+      <h3 class="dtitle" id="dTitle"></h3>
+      <div class="dpills" id="dPills"></div>
+      <div class="dsub" id="dSub"></div>
+    </div>
+    <div class="grp" id="dClaimWrap">
+      <div class="ghead">What the agent claims</div>
+      <div class="claim" id="dClaim"></div>
+    </div>
+    <div class="grp" id="dSubsWrap">
+      <div class="ghead">Sub-items<span class="gsp"></span><span class="gval" id="dSubsCount"></span></div>
+      <ul class="subs" id="dSubs"></ul>
+    </div>
+    <div class="grp">
+      <div class="ghead">Where this came from</div>
+      <div id="dSrc"></div>
+      <div class="mirror" id="dMirror"></div>
+    </div>
+    <div class="grp">
+      <div class="ghead">For the CLI</div>
+      <div class="cbar">
+        <button class="idbtn" id="dId" title="copy the card id"></button>
+        <span class="mirror" id="dVia"></span>
+      </div>
+    </div>
+  </div>
+  <div class="composer">
+    <div class="chead">
+      <span class="t">Your note</span>
+      <span class="h">the agent reads this on its next pickup</span>
+      <span class="st" id="dSaved"></span>
+    </div>
+    <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
+    <div class="conflict" id="dConflict"></div>
+    <textarea id="dNote" placeholder="Write for the agent…"></textarea>
+    <div class="hint" id="dLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
+    <div class="parsed" id="dTags"></div>
+    <div class="cbar">
+      <div class="inserts" id="dInsert"></div>
+      <button class="primary" id="dSave">Save note <span class="k">⌘↵</span></button>
+    </div>
   </div>
 </aside>
 
 <div id="toast" role="status"></div>
-<div id="help"><div class="box"><table>
-  <tr><td>j / k</td><td>next / previous card</td></tr>
-  <tr><td>Enter or o</td><td>open card</td></tr>
-  <tr><td>n</td><td>edit note on open card</td></tr>
-  <tr><td>c</td><td>copy status digest</td></tr>
-  <tr><td>t</td><td>toggle theme</td></tr>
-  <tr><td>?</td><td>this help</td></tr>
-  <tr><td>Esc</td><td>close</td></tr>
-  <tr><td colspan="2" style="padding-top:8px;color:var(--dim)">note tags (click chips in the card drawer to insert)</td></tr>
-  <tr><td>@me</td><td>note to self — the agent isn't nagged</td></tr>
-  <tr><td>!now</td><td>agent acts on next pickup</td></tr>
-  <tr><td>/skill</td><td>run that skill on the card (e.g. /skeptical-review)</td></tr>
-  <tr><td>&gt;lane</td><td>agent applies the move (e.g. &gt;backlog)</td></tr>
-  <tr><td>#defer</td><td>park it</td></tr>
-  <tr><td>#review-me</td><td>flag for YOUR review queue</td></tr>
-  <tr><td>#word</td><td>anything else — free tag, searchable</td></tr>
-</table></div></div>
+<div id="help"><div class="box">
+  <h3>Keyboard</h3>
+  <table>
+    <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card</td></tr>
+    <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open card</td></tr>
+    <tr><td><kbd>n</kbd></td><td>write a note on the open card</td></tr>
+    <tr><td><kbd>⌘</kbd> <kbd>↵</kbd></td><td>save the note, stay on the card</td></tr>
+    <tr><td><kbd>c</kbd></td><td>copy status digest</td></tr>
+    <tr><td><kbd>t</kbd></td><td>toggle theme</td></tr>
+    <tr><td><kbd>?</kbd></td><td>this help</td></tr>
+    <tr><td><kbd>esc</kbd></td><td>close</td></tr>
+    <tr><td colspan="2" class="grouphead">Note tags</td></tr>
+    <tr><td><kbd>@me</kbd></td><td>note to self — the agent isn't nagged</td></tr>
+    <tr><td><kbd>!now</kbd></td><td>agent acts on next pickup</td></tr>
+    <tr><td><kbd>/skill</kbd></td><td>run that skill on the card</td></tr>
+    <tr><td><kbd>&gt;lane</kbd></td><td>agent applies the move via CLI</td></tr>
+    <tr><td><kbd>#defer</kbd></td><td>park it</td></tr>
+    <tr><td><kbd>#review-me</kbd></td><td>flag for your own review queue</td></tr>
+    <tr><td colspan="2" class="grouphead">Verification</td></tr>
+    <tr><td>executed</td><td>the agent ran it and read the result</td></tr>
+    <tr><td>cited</td><td>evidence quoted, not re-run</td></tr>
+    <tr><td>reasoned</td><td>argued, not observed</td></tr>
+    <tr><td>needs you</td><td>graded, but wants your own testing</td></tr>
+  </table>
+</div></div>
 
 <script>
 const slug = location.pathname.split("/")[2];
 const LANE_ORDER = ["inbox","backlog","active","blocked","done","stale"];
+const LANE_NAME = { inbox:"Inbox", backlog:"Backlog", active:"Active", blocked:"Blocked", done:"Done", stale:"Stale" };
 const ARCHIVE = new Set(["done","stale"]);
 let data = null, flat = [], sel = -1, openId = null, dirty = false, lastPayload = "";
 
 const $ = (id) => document.getElementById(id);
-const applyTheme = (t) => { document.documentElement.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
+// theme attribute on BOTH root and body: vars resolve in any cloned subtree,
+// and the toggle restyles by class alone — no re-render, nothing inlined
+const applyTheme = (t) => { document.documentElement.dataset.theme = t; document.body.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
 applyTheme(localStorage.getItem("kanban-theme") || "dark");
 const toggleTheme = () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 $("theme").onclick = toggleTheme;
 
-function toast(msg, ms = 1800) { const t = $("toast"); t.textContent = msg; t.style.display = "block"; setTimeout(() => (t.style.display = "none"), ms); }
+function toast(msg, ms = 1900) { const t = $("toast"); t.textContent = msg; t.style.display = "block"; setTimeout(() => (t.style.display = "none"), ms); }
 
-// The human read cursor (M2): anchor = last visit, captured once per page load;
-// every render bumps the stored cursor so the NEXT visit diffs against now.
 const VISIT_KEY = `kanban-visit-${slug}`;
 let anchor = +localStorage.getItem(VISIT_KEY) || 0;
 const since = (iso) => anchor > 0 && Date.parse(iso) > anchor;
 const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
 
-// Loading, error, and empty get their own identifiable surface (C11/C13):
-// a blank board and a dead server must never look alike, and a recovered poll
-// must clear the error it replaced.
+// lane state icons — the state's identity is a shape, so a label that happens
+// to be named "In progress" can never be mistaken for one
+function laneIcon(lane, size = 14) {
+  const s = size, c = s / 2, r = s / 2 - 1.4;
+  const wrap = (inner, color) => `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" fill="none" style="color:${color}">${inner}</svg>`;
+  const ring = (dash) => `<circle cx="${c}" cy="${c}" r="${r}" stroke="currentColor" stroke-width="1.5"${dash ? ` stroke-dasharray="${dash}"` : ""}/>`;
+  switch (lane) {
+    case "inbox": return wrap(ring("1.6 2.4"), "var(--text-3)");
+    case "backlog": return wrap(ring(), "var(--text-3)");
+    case "active": return wrap(ring() + `<circle cx="${c}" cy="${c}" r="${r / 2}" fill="currentColor"/>`, "var(--blue)");
+    case "blocked": return wrap(ring() + `<rect x="${c - 2}" y="${c - 2}" width="4" height="4" rx="1" fill="currentColor"/>`, "var(--amber)");
+    case "done": return wrap(`<circle cx="${c}" cy="${c}" r="${r + .6}" fill="currentColor"/><path d="M${c - 3} ${c} l2.2 2.2 L${c + 3.2} ${c - 2.4}" stroke="var(--well)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`, "var(--green)");
+    default: return wrap(ring("1.6 2.4"), "var(--border-2)");
+  }
+}
+// sub-item progress as a ring — a proportion you read without parsing digits
+function progRing(done, total) {
+  const r = 5, C = 2 * Math.PI * r, p = total ? done / total : 0;
+  return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="${r}" stroke="var(--border-2)" stroke-width="2"/>` +
+    (p > 0 ? `<circle cx="7" cy="7" r="${r}" stroke="${p === 1 ? "var(--green)" : "var(--blue)"}" stroke-width="2" stroke-linecap="round"
+       stroke-dasharray="${(C * p).toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 7 7)"/>` : "") + `</svg>`;
+}
+const CHECK = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 L4.8 8.5 L9.5 3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 function showState(kind, msg) {
   const s = $("state");
-  const hint = kind === "err"
-    ? "the board server may be down — check: <code>kanban.sh check</code>"
-    : kind === "empty" ? "run: <code>kanban.sh sync</code> in the project" : "";
-  s.innerHTML = `<div class="big">${kind === "err" ? "board failed to load" : kind === "empty" ? "no cards yet" : "loading board…"}</div>` +
+  const hint = kind === "err" ? `the board server may be down — check <code>kanban.sh check</code>`
+    : kind === "empty" ? `run <code>kanban.sh sync</code> in the project` : "";
+  s.innerHTML = `<div class="big">${kind === "err" ? "Board failed to load" : kind === "empty" ? "No cards yet" : "Loading board…"}</div>` +
     (msg ? `<div class="statemsg"></div>` : "") + (hint ? `<div>${hint}</div>` : "");
   if (msg) s.querySelector(".statemsg").textContent = msg; // never innerHTML an error string
   s.className = "on" + (kind === "err" ? " err" : "");
-  for (const id of ["lanes", "meter", "legend", "delta", "stalebar"]) $(id).style.display = "none";
-  // the header must not assert live data beside a failure surface (count 5)
-  if (kind === "err") $("meta").textContent = "disconnected — retrying every 5s";
+  $("lanes").style.display = "none";
+  if (kind === "err") { $("summary").innerHTML = ""; $("stalebar").className = "notice warn"; }
 }
-function hideState() {
-  $("state").className = "";
-  $("lanes").style.display = ""; $("meter").style.display = ""; $("legend").style.display = "";
-  $("delta").style.display = "";
-}
+function hideState() { $("state").className = ""; $("lanes").style.display = ""; }
 
 let lastError = false;
 async function load() {
-  if (dirty || document.activeElement === $("dNote")) return; // never clobber typing
   try {
     const res = await fetch(`/api/board?slug=${slug}`);
     const text = await res.text();
     if (!res.ok) throw new Error(JSON.parse(text).error || res.status);
     if (lastError) { lastError = false; lastPayload = ""; } // recovery must re-render, not latch
     if (text === lastPayload) return; // unchanged: no re-render, keeps focus stable
+    const parsed = JSON.parse(text);
+    // never clobber typing — but still look for a conflicting write, and leave
+    // lastPayload alone so the render happens as soon as the field is idle
+    if (dirty || document.activeElement === $("dNote")) { checkConflict(parsed); return; }
     lastPayload = text;
-    data = JSON.parse(text);
+    data = parsed;
     render();
   } catch (e) { lastError = true; showState("err", e.message); }
 }
 
 const labelHue = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 6; };
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-// Tagged notes v1 (STORIES.md sketch): tags live inside free-form note text,
-// parsed at read time. Mirrored by parseNoteTags in lib.ts — keep in sync.
+// Tagged notes: tags live inside free-form note text, parsed at read time.
+// Mirrored by parseNoteTags in lib.ts — keep in sync.
 function parseTags(text) {
   const t = { me:false, act:false, skills:[], moves:[], defer:false, review:false, free:[] };
   if (!text) return t;
@@ -288,91 +468,89 @@ function parseTags(text) {
   }
   return t;
 }
-function tagChips(nt) {
-  const chips = [];
-  const add = (cls, txt, title) => chips.push(`<span class="chip ${cls}" title="${title}">${txt}</span>`);
-  if (nt.me) add("nt-me", "@me", "note to self — agent not nagged");
-  if (nt.act) add("nt-act", "!now", "act on next agent pickup");
-  nt.skills.slice(0, 2).forEach((s) => add("nt-skill", s, "capability requested on this card"));
-  nt.moves.slice(0, 1).forEach((l) => add("nt-move", "&gt;" + l, "move requested — agent applies via CLI"));
-  if (nt.defer) add("nt-free", "#defer", "parked");
-  if (nt.review) add("nt-review", "review-me", "flagged for YOUR review");
-  nt.free.slice(0, 2).forEach((f) => add("nt-free", f, "tag"));
-  return chips.join("");
+const MARK_RE = /(^|[\s(])(@me|@agent|!now|#[a-z][\w-]*|&gt;[a-z]+|\/[a-z][a-z0-9-]{2,})(?=[\s).,;:]|$)/gim;
+const markTokens = (line) => esc(line).replace(MARK_RE, (m, pre, tok) => `${pre}<span class="tk">${tok}</span>`);
+function tokensIn(line) {
+  const set = new Set();
+  for (const m of esc(line).matchAll(MARK_RE)) set.add(m[2].toLowerCase().replace("&gt;", ">"));
+  return set;
 }
+// tag pills are OVERFLOW: a token already visible in the shown note line never
+// gets rendered a second time
+function tagPills(nt, shown, max) {
+  const out = [];
+  const has = (tok) => shown && shown.has(tok);
+  const add = (cls, txt, title) => out.push(`<span class="pill tag ${cls}" title="${title}">${txt}</span>`);
+  if (nt.act && !has("!now")) add("", "!now", "act on next agent pickup");
+  nt.skills.slice(0, 2).forEach((s) => { if (!has(s)) add("", s, "capability requested on this card"); });
+  nt.moves.slice(0, 1).forEach((l) => { if (!has(">" + l)) add("", "&gt;" + l, "move requested — the agent applies it via CLI"); });
+  if (nt.review && !has("#review-me")) add("", "#review-me", "flagged for your own review queue");
+  if (nt.defer && !has("#defer")) add("quiet", "#defer", "parked");
+  nt.free.slice(0, 2).forEach((f) => { if (!has(f)) add("quiet", f, "tag"); });
+  if (max && out.length > max) {
+    const hidden = out.length - max; // the card shows what fits and says how much it hid
+    return out.slice(0, max).join("") + `<span class="pill quiet" title="${hidden} more tag${hidden > 1 ? "s" : ""} in the note">+${hidden}</span>`;
+  }
+  return out.join("");
+}
+const VF = { executed: "executed", cited: "cited", reasoned: "reasoned" };
+const VF_TIP = { executed: "the agent ran it and read the result", cited: "evidence quoted, not re-run", reasoned: "argued, not observed" };
 
 function cardEl(c) {
-  const el = document.createElement("div");
+  const el = document.createElement("article");
   const hue = c.heading ? labelHue(c.heading) : null;
-  el.className = "card" + (c.lane === "blocked" ? " blocked" : "") +
-    (hue !== null ? ` slh${hue}` : "") + (since(c.updatedAt) ? " changed" : "");
+  const isArchive = ARCHIVE.has(c.lane);
+  el.className = "card" + (c.lane === "blocked" ? " blocked" : "") + (hue !== null ? ` s${hue}` : "") + (since(c.updatedAt) ? " changed" : "");
   el.tabIndex = 0; el.dataset.id = c.id;
   const note = data.notes[c.id]?.note;
   const nt = parseTags(note);
   const subs = c.subs ?? [];
-  const subsDone = subs.filter((s) => s.done).length;
+  const done = subs.filter((s) => s.done).length;
   const sp = c.source.kind === "manual" ? "manual" : `${c.source.path}${c.source.line ? ":" + c.source.line : ""}`;
-  const isArchive = ARCHIVE.has(c.lane);
-  el.innerHTML = `<div class="t"></div>
-    ${!isArchive && c.lane === "blocked" && note ? '<div class="whynote"></div>' : ""}
-    <div class="chips">
-      ${note ? `<span class="dot${nt.me ? " selfnote" : ""}" title="${nt.me ? "self-note" : "has note"}"></span>` : ""}
-      ${tagChips(nt)}
-      ${c.tag ? '<span class="chip xtag"></span>' : ""}
-      ${c.heading ? '<span class="chip label"></span>' : ""}
-      ${subs.length ? `<span class="chip subs${subsDone === subs.length ? " alldone" : ""}" title="sub-items">${subsDone}/${subs.length}</span>` : ""}
-      ${c.verify ? `<span class="chip vf-${c.verify.grade}" title="how this state was verified${c.verify.note ? ": " + c.verify.note.replace(/"/g, "&quot;") : ""}">✓ ${c.verify.grade}</span>` : ""}
-      ${c.verify?.needsHuman ? '<span class="chip vf-human" title="needs your own testing">needs-you</span>' : ""}
-      ${c.staleReason ? '<span class="chip why"></span>' : ""}
-    </div><span class="src"></span>`;
-  const tEl = el.querySelector(".t");
-  if (isArchive) {
-    const tx = document.createElement("span");
-    tx.className = "txt"; tx.textContent = c.title;
-    tx.title = c.title; // truncation recovery: hover shows the TITLE, not the path (count 7)
-    tEl.appendChild(tx);
-    const a = document.createElement("span");
-    a.className = "age"; a.textContent = ago(Date.parse(c.updatedAt));
-    tEl.appendChild(a);
-    if (c.verify?.needsHuman) {
-      const nh = document.createElement("span");
-      nh.className = "a-needs"; nh.textContent = "needs-you";
-      nh.title = "graded " + c.verify.grade + " but needs your own testing";
-      tEl.appendChild(nh);
-    }
-    el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
-  } else {
-    tEl.textContent = c.title;
-  }
-  const wn = el.querySelector(".whynote");
-  // raw first line, tags included — humans write tags as part of the sentence,
-  // so stripping them breaks the grammar (tried 2026-07-27, reverted)
-  if (wn) { wn.textContent = note.split("\n")[0]; wn.title = note; }
-  if (c.tag) {
-    const b = el.querySelector(".xtag");
-    b.textContent = c.tag;
-    b.classList.add(c.tag.startsWith("#") ? "tag" : "state"); // gold = id, muted = state word
-  }
+  // show the sentence wherever it answers "why is this card here?"
+  const actionable = nt.act || nt.moves.length || nt.skills.length || nt.review;
+  const line = !isArchive && note && (c.lane === "blocked" || actionable) ? note.split("\n")[0] : null;
+  const shown = line ? tokensIn(line) : null;
+  const needs = c.verify?.needsHuman;
+  const statParts = [
+    subs.length ? `<span class="pill prog" title="sub-items">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "",
+    c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" title="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? " — " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
+    needs && !isArchive ? `<span class="pill needs" title="graded ${c.verify.grade}, but wants your own testing">${c.verify.grade} · needs you</span>` : "",
+    tagPills(nt, shown, 2),
+    c.staleReason ? '<span class="pill why" title="why this went stale"></span>' : "",
+  ].filter(Boolean);
+  const statHTML = statParts.length ? `<span class="stat">${statParts.join("")}</span>` : "";
+  el.innerHTML =
+    (hue !== null ? '<span class="stripe"></span>' : "") +
+    (since(c.updatedAt) && !isArchive ? '<span class="newdot" title="changed since your last visit"></span>' : "") +
+    `<div class="title"></div>` +
+    (line ? `<div class="note">${markTokens(line)}</div>` : "") +
+    `<div class="pills"><span class="ident">
+      ${note && !line ? `<span class="pill mono" title="${nt.me ? "note to self" : "has a note"}">${nt.me ? "@me note" : "note"}</span>` : ""}
+      ${c.tag ? '<span class="pill mono xtag" title="source tag"></span>' : ""}
+      ${c.heading ? `<span class="pill label l${hue}"><i class="sw"></i><span class="nm"></span></span>` : ""}
+      </span>${statHTML}
+    </div>` +
+    (needs && isArchive ? `<div class="pills keep"><span class="pill needs" title="graded, but wants your own testing">Needs you</span></div>` : "") +
+    `<div class="foot"><span class="src"></span><span class="age"></span></div>`;
+  el.querySelector(".title").textContent = c.title;
+  if (c.tag) el.querySelector(".xtag").textContent = c.tag; // "(#7)" / "OWNER REMINDER" prefix from the doc
   if (c.heading) {
-    const l = el.querySelector(".label");
-    l.textContent = c.heading;
-    l.title = c.heading;
-    l.classList.add(`lh${labelHue(c.heading)}`);
+    const p = el.querySelector(".pill.label");
+    p.querySelector(".nm").textContent = c.heading;
+    p.title = "label · " + c.heading;
   }
-  if (c.staleReason) el.querySelector(".why").textContent = c.staleReason;
+  if (c.staleReason) el.querySelector(".pill.why").textContent = c.staleReason;
   const srcEl = el.querySelector(".src");
-  srcEl.innerHTML = `<span class="p"></span><span class="age"></span>`;
-  const pEl = srcEl.querySelector(".p");
-  pEl.textContent = sp.length > 26 ? "…" + sp.slice(-25) : sp; // varying tail stays visible
-  srcEl.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
-  srcEl.title = c.source.path;
+  srcEl.textContent = sp; srcEl.title = sp;
+  el.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
+  if (isArchive) el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
   el.onclick = () => openDrawer(c.id);
   el.onkeydown = (e) => { if (e.key === "Enter") openDrawer(c.id); };
   flat.push(c.id);
   return el;
 }
 
-// One-paragraph plain-text status for a standup message (M2).
 function digestText() {
   const cards = data.board.cards;
   const by = (k) => cards.filter((c) => c.lane === k);
@@ -390,124 +568,114 @@ function digestText() {
     if (!doneSince.length && !blockedSince.length && !newSince.length) lines.push("  no card movement");
   }
   const open = cards.length - by("done").length - by("stale").length;
-  lines.push(`in motion ${open} · blocked ${by("blocked").length} · settled ${cards.length - open}`);
+  lines.push(`${open} in motion, ${by("blocked").length} of them blocked · ${cards.length - open} settled`);
   const active = by("active");
   if (active.length) lines.push(`active now: ${titles(active)}`);
   return lines.join("\n");
 }
 async function copyDigest() {
-  try { await navigator.clipboard.writeText(digestText()); toast("status digest copied"); }
-  catch { toast("copy failed — clipboard blocked", 3000); }
+  try { await navigator.clipboard.writeText(digestText()); toast("Status digest copied"); }
+  catch { toast("Copy failed — clipboard blocked", 3000); }
 }
 $("digestBtn").onclick = copyDigest;
 
-function renderDelta() {
-  const bar = $("delta");
-  if (anchor <= 0) { bar.className = ""; return; }
+function renderSummary() {
+  const cards = data.board.cards;
+  const by = (k) => cards.filter((c) => c.lane === k);
+  const open = cards.length - by("done").length - by("stale").length;
+  const nblk = by("blocked").length;
+  const sep = '<span class="dotsep"></span>';
+  $("summary").innerHTML =
+    `<span><b>${open}</b> in motion${nblk ? `, <span class="blocked"><b>${nblk}</b> of them blocked</span>` : ""}</span>${sep}` +
+    `<span><b>${cards.length - open}</b> settled</span>${sep}` +
+    `<span>synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"}</span>` +
+    deltaClause();
+  const d = $("deltaDismiss");
+  if (d) d.onclick = () => { anchor = 0; render(); };
+}
+
+// returns the "since your last visit" clause appended to the summary sentence
+function deltaClause() {
+  if (anchor <= 0 || !data) return "";
   const cards = data.board.cards;
   const chg = cards.filter((c) => since(c.updatedAt));
   const doneSince = chg.filter((c) => c.lane === "done").length;
   const blockedSince = chg.filter((c) => c.lane === "blocked").length;
   const newSince = chg.filter((c) => since(c.createdAt)).length;
   const reviewMe = cards.filter((c) => parseTags(data.notes[c.id]?.note).review).length;
-  if (!chg.length && !reviewMe) { bar.className = ""; return; }
-  const grp = [];
-  if (doneSince) grp.push(`<span class="grp"><b>${doneSince}</b> done</span>`);
-  if (blockedSince) grp.push(`<span class="grp blk"><b>${blockedSince}</b> newly blocked</span>`);
-  if (newSince) grp.push(`<span class="grp"><b>${newSince}</b> new</span>`);
+  if (!chg.length && !reviewMe) return "";
+  const bits = [];
+  if (doneSince) bits.push(`<b>${doneSince}</b> done`);
+  if (blockedSince) bits.push(`<span class="blocked"><b>${blockedSince}</b> newly blocked</span>`);
+  if (newSince) bits.push(`<b>${newSince}</b> new`);
   const other = chg.length - doneSince - blockedSince - newSince;
-  if (other > 0) grp.push(`<span class="grp"><b>${other}</b> moved</span>`);
-  if (reviewMe) grp.push(`<span class="grp"><b>${reviewMe}</b> for your review</span>`);
-  bar.innerHTML = `<span class="lead">since your last visit (${ago(anchor)} ago):</span> ${grp.join(" · ")}
-    <button id="deltaDismiss" title="clear halos">dismiss</button>`;
-  bar.className = "on";
-  $("deltaDismiss").onclick = () => { anchor = 0; render(); };
+  if (other > 0) bits.push(`<b>${other}</b> moved`);
+  if (reviewMe) bits.push(`<b>${reviewMe}</b> waiting on your review`);
+  return `<span class="dotsep"></span><span class="delta">since your last visit ${ago(anchor)} ago — ${bits.join(", ")}` +
+    ` <button class="linkish" id="deltaDismiss" title="clear the markers">clear</button></span>`;
 }
 
 function renderStale() {
   const bar = $("stalebar");
   const ts = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
   if (ts && Date.now() - ts > 24 * 36e5) {
-    bar.innerHTML = `⚠ this mirror was synced ${ago(ts)} ago — it reflects the docs THEN, not the code now. refresh: <code>kanban.sh sync</code>`;
-    bar.style.display = "block";
-  } else bar.style.display = "none";
+    bar.innerHTML = `<span class="bar"></span><span class="grow">This mirror was synced ${ago(ts)} ago — it reflects the docs then, not the code now. Refresh with <code>kanban.sh sync</code>.</span>`;
+    bar.className = "notice warn on";
+  } else bar.className = "notice warn";
 }
 
-// Keep the varying TAIL of a path visible; the head is boilerplate (C9/F8).
-// Restores from the full string first, so it is correct in BOTH resize
-// directions, and re-runs on window resize (adversarial count 4).
+// keep the varying TAIL of a path visible; the head is boilerplate. restores
+// from the full string first, so it is correct in both resize directions.
 function tailTrim(el) {
   const full = el.title || el.textContent;
-  el.title = full;
-  el.textContent = full;
-  let guard = 200;
-  while (el.scrollWidth > el.clientWidth && el.textContent.length > 14 && guard--) {
-    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(8);
+  el.title = full; el.textContent = full;
+  let guard = 300;
+  while (el.scrollWidth > el.clientWidth && el.textContent.length > 12 && guard--) {
+    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(3);
   }
 }
 let trimTimer = null;
 window.addEventListener("resize", () => {
   clearTimeout(trimTimer);
-  trimTimer = setTimeout(() => tailTrim($("root")), 150);
+  trimTimer = setTimeout(() => { tailTrim($("root")); document.querySelectorAll(".foot .src").forEach(tailTrim); }, 150);
 });
 
 function render() {
   hideState();
   $("name").textContent = data.name;
   document.title = `${data.name} · kanban`;
-  $("root").title = data.root;
-  $("root").textContent = data.root;
+  $("root").title = data.root; $("root").textContent = data.root;
   const cards = data.board.cards;
+  if (!cards.length) { showState("empty"); return; }
   const by = (k) => cards.filter((c) => c.lane === k);
-  const noteCount = Object.values(data.notes).filter((n) => n.note).length;
-  $("meta").textContent = `${cards.length} cards · ${noteCount} notes · synced ${data.board.syncedAt ? new Date(data.board.syncedAt).toLocaleString() : "never"}`;
+  renderSummary();
   renderStale();
-  renderDelta();
-
-  const meter = $("meter");
-  meter.replaceChildren();
-  for (const k of LANE_ORDER) {
-    const n = by(k).length;
-    if (!n) continue;
-    const seg = document.createElement("div");
-    seg.className = `seg seg-${k}`; // class, never inline: theme toggle must restyle without a re-render (C12)
-    seg.style.flex = `${n} 1 0`;
-    seg.innerHTML = `${k} <i>${n}</i>`;
-    seg.onclick = () => document.getElementById(`lane-${k}`)?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-    meter.appendChild(seg);
-  }
-  const open = cards.length - by("done").length - by("stale").length;
-  $("legend").innerHTML = `<b>${open}</b> in motion · <b>${by("blocked").length}</b> blocked · ${cards.length - open} settled`;
 
   flat = [];
-  const laneEl = (lane) => {
+  const colEl = (lane) => {
     const cardsIn = by(lane);
-    // empty lanes render (dim, cheap): "nothing active" must be representable
-    // (C5/F10); only an empty STALE lane pays no layout
-    if (cardsIn.length === 0 && lane === "stale") return null;
-    const isStale = lane === "stale";
-    const wrap = document.createElement(isStale ? "details" : "section");
-    wrap.className = `lane${lane === "blocked" || lane === "active" ? " attn" : ""}${ARCHIVE.has(lane) ? " archive" : ""}`;
+    // an empty column still renders — "nothing is active" must be visible.
+    // only an empty stale column pays no layout.
+    if (!cardsIn.length && lane === "stale") return null;
+    const collapsible = lane === "stale";
+    const wrap = document.createElement(collapsible ? "details" : "section");
+    wrap.className = "col" + (lane === "blocked" || lane === "active" ? " attn" : "") + (ARCHIVE.has(lane) ? " archive" : "");
     wrap.id = `lane-${lane}`;
-    const head = document.createElement(isStale ? "summary" : "div");
-    head.innerHTML = `<h2><span class="lname">${lane}</span> <span class="n">${cardsIn.length}</span></h2>`;
+    const head = document.createElement(collapsible ? "summary" : "div");
+    head.className = "chead";
+    head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2><span class="count">${cardsIn.length}</span>`;
     wrap.appendChild(head);
     const list = document.createElement("div");
     list.className = "cards";
-    if (!cardsIn.length) list.innerHTML = '<div class="lane-empty">—</div>';
+    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">Nothing here</div>`;
     cardsIn.forEach((c) => list.appendChild(cardEl(c)));
     wrap.appendChild(list);
     return wrap;
   };
-  const main = $("lanes");
-  if (!cards.length) { showState("empty"); return; }
-  main.replaceChildren(...LANE_ORDER.map(laneEl).filter(Boolean));
+  $("lanes").replaceChildren(...LANE_ORDER.map(colEl).filter(Boolean));
   markSel();
   tailTrim($("root"));
-  requestAnimationFrame(() => {
-    if (main.scrollWidth > main.clientWidth + 8 && !$("legend").querySelector(".scrollhint"))
-      $("legend").insertAdjacentHTML("beforeend", ' · <span class="scrollhint">→ scroll for more lanes</span>');
-  });
+  document.querySelectorAll(".foot .src").forEach(tailTrim);
   localStorage.setItem(VISIT_KEY, String(Date.now()));
 }
 
@@ -519,20 +687,72 @@ function markSel() {
   }
 }
 
-function drawerTagPreview() {
+// the parse receipt: not the note repeated, but what the agent will ACT on.
+// free tags and @me are excluded — they ask the agent for nothing.
+function renderParse() {
   const nt = parseTags($("dNote").value);
-  $("dTags").innerHTML = tagChips(nt);
+  const pills = tagPills({ ...nt, defer: false, free: [] }, null);
+  const box = $("dTags");
+  box.innerHTML = pills ? `<span>Agent will act on</span>${pills}` : "";
+  box.className = "parsed" + (pills ? " on" : "");
+  $("dLegend").style.display = $("dNote").value.trim() ? "none" : ""; // syntax help only while the note is empty
 }
+const DRAFT_KEY = (id) => `kanban-draft-${slug}-${id}`;
+const DRAFT_TTL = 30 * 864e5; // drafts keep for 30 days, then they are noise
+let draftTimer = null;
+function readDraft(id) {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY(id));
+    if (!raw) return null;
+    const o = JSON.parse(raw);
+    if (!o || typeof o.v !== "string") return null;
+    if (Date.now() - o.t > DRAFT_TTL) { localStorage.removeItem(DRAFT_KEY(id)); return null; }
+    return o.v;
+  } catch { return null; }
+}
+const writeDraft = (id, v) => localStorage.setItem(DRAFT_KEY(id), JSON.stringify({ t: Date.now(), v }));
+function sweepDrafts() {
+  const pre = `kanban-draft-${slug}-`;
+  for (const k of Object.keys(localStorage)) {
+    if (!k.startsWith(pre)) continue;
+    try { const o = JSON.parse(localStorage.getItem(k)); if (!o || Date.now() - o.t > DRAFT_TTL) localStorage.removeItem(k); }
+    catch { localStorage.removeItem(k); }
+  }
+}
+// last-write-wins, but never silently: if the agent rewrites the note while you
+// are typing, say so and offer their version
+let baseNote = "", conflictNote = null;
+function checkConflict(parsed) {
+  if (!openId) return;
+  const theirs = parsed.notes[openId]?.note ?? "";
+  if (theirs !== baseNote && theirs !== $("dNote").value) {
+    conflictNote = theirs;
+    renderConflict(parsed.notes[openId]?.updatedAt);
+  }
+}
+function renderConflict(at) {
+  const el = $("dConflict");
+  if (conflictNote === null) { el.className = "conflict"; el.innerHTML = ""; return; }
+  el.innerHTML = `<div class="crow2"><span class="grow">The agent rewrote this note${at ? " " + ago(Date.parse(at)) + " ago" : ""}. Saving keeps yours.</span>` +
+    `<button type="button" id="cShow">show theirs</button><button type="button" id="cUse">use theirs</button></div>` +
+    `<div class="ctheirs" id="cTheirs" hidden></div>`;
+  $("cTheirs").textContent = conflictNote || "(they cleared the note)";
+  el.className = "conflict on";
+  $("cShow").onclick = () => { const t = $("cTheirs"); t.hidden = !t.hidden; $("cShow").textContent = t.hidden ? "show theirs" : "hide theirs"; };
+  $("cUse").onclick = () => {
+    $("dNote").value = conflictNote; baseNote = conflictNote; conflictNote = null; renderConflict();
+    $("dNote").dispatchEvent(new Event("input"));
+  };
+}
+const FILE_ICON = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="color:var(--text-3)"><rect x="2.5" y="1.5" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4.7 5h3.6M4.7 7.4h3.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 
-// Insert-chips: the human shouldn't have to remember the grammar — click to
-// insert the token at the cursor; the live preview below confirms the parse.
 const INSERT_TOKENS = [
   ["@me", "note to self — the agent isn't nagged"],
   ["!now", "agent acts on next pickup"],
   ["/skeptical-review", "run this skill on the card — edit the name for another"],
   [">backlog", "ask the agent to move it (edit the lane)"],
   ["#defer", "park it"],
-  ["#review-me", "flag for YOUR review queue"],
+  ["#review-me", "flag for your own review queue"],
 ];
 for (const [tok, tip] of INSERT_TOKENS) {
   const b = document.createElement("button");
@@ -554,52 +774,122 @@ function openDrawer(id) {
   const c = data.board.cards.find((x) => x.id === id);
   if (!c) return;
   openId = id; dirty = false;
+  const i = flat.indexOf(id); if (i >= 0) { sel = i; markSel(); }
+  const hue = c.heading ? labelHue(c.heading) : null;
+  $("dTint").style.background = hue === null ? "var(--border-2)" : `var(--l${hue})`;
+  $("dLane").innerHTML = `${laneIcon(c.lane, 13)}<span>${LANE_NAME[c.lane]}</span>`;
   $("dTitle").textContent = c.title;
-  const src = c.source.kind === "manual" ? "manually added" :
-    `<a href="/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}" target="_blank" rel="noopener">${c.source.path}${c.source.line ? ":" + c.source.line : ""}</a>`;
-  $("dMeta").innerHTML = `<code class="copyid" title="card id — click to copy">${c.id}</code> · ${c.lane}${c.tag ? ` · ${c.tag}` : ""}${c.heading ? ` · ${c.heading}` : ""} · ${src}${c.via ? ` · via session ${c.via}` : ""}<br>created ${new Date(c.createdAt).toLocaleString()} · updated ${new Date(c.updatedAt).toLocaleString()}${c.verify ? `<br>verified: ${c.verify.grade}${c.verify.needsHuman ? " + needs your testing" : ""}${c.verify.note ? " — " + c.verify.note.replace(/</g, "&lt;") : ""} (${new Date(c.verify.at).toLocaleString()})` : ""}`;
-  $("dMeta").querySelector(".copyid").onclick = async () => {
-    try { await navigator.clipboard.writeText(c.id); toast("card id copied"); }
-    catch { toast("copy failed — clipboard blocked", 3000); }
-  };
-  $("dMirror").textContent = `mirror: harvested from docs, synced ${data.board.syncedAt ? new Date(data.board.syncedAt).toLocaleString() : "never"} — not live code state`;
-  $("dDocs").innerHTML = c.docs.length
-    ? "docs: " + c.docs.map((d) => `<a href="/doc?path=${encodeURIComponent(data.root + "/" + d)}" target="_blank" rel="noopener">${d}</a>`).join(" · ")
-    : "";
-  const subsEl = $("dSubs");
-  subsEl.replaceChildren(...(c.subs ?? []).map((s) => {
+  const subs = c.subs ?? [];
+  const done = subs.filter((s) => s.done).length;
+  $("dPills").innerHTML =
+    (c.heading ? `<span class="pill label l${hue}" title="label"><i class="sw"></i><span class="nm">${esc(c.heading)}</span></span>` : "") +
+    (c.tag ? `<span class="pill mono" title="source tag">${esc(c.tag)}</span>` : "") +
+    (subs.length ? `<span class="pill prog">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "") +
+    (c.staleReason ? `<span class="pill" title="why this went stale">${esc(c.staleReason)}</span>` : "");
+  $("dSub").textContent = `Updated ${ago(Date.parse(c.updatedAt))} ago · created ${ago(Date.parse(c.createdAt))} ago`;
+  $("dSub").title = `${new Date(c.updatedAt).toLocaleString()} · created ${new Date(c.createdAt).toLocaleString()}`;
+
+  $("dClaimWrap").style.display = c.verify ? "" : "none";
+  if (c.verify) {
+    const v = c.verify;
+    $("dClaim").innerHTML =
+      `<div class="crow"><span class="pill verify${v.grade === "executed" ? "" : " soft"}">${v.grade === "executed" ? CHECK : ""}${esc(v.grade)}</span>` +
+      (v.needsHuman ? `<span class="pill needs">Needs you</span>` : "") + `</div>` +
+      (v.note ? `<div class="cq">“${esc(v.note)}”</div>` : "") +
+      `<div class="cwho">${VF_TIP[v.grade] || ""}${v.at ? " · " + ago(Date.parse(v.at)) + " ago" : ""}${c.via ? " · session <code>" + esc(c.via) + "</code>" : ""}</div>`;
+  }
+
+  $("dSubsWrap").style.display = subs.length ? "" : "none";
+  $("dSubsCount").textContent = subs.length ? `${done}/${subs.length} done` : "";
+  $("dSubs").replaceChildren(...subs.map((s) => {
     const li = document.createElement("li");
     li.className = s.done ? "done" : "";
-    li.textContent = s.title;
+    li.innerHTML = s.done
+      ? `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top:2px;color:var(--green)"><circle cx="7" cy="7" r="6" fill="currentColor"/><path d="M4 7.2 L6.1 9.3 L10 5.2" stroke="var(--card)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span></span>`
+      : `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-top:2px;color:var(--border-2)"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/></svg><span></span>`;
+    li.querySelector("span").textContent = s.title;
     return li;
   }));
-  $("dNote").value = data.notes[id]?.note || "";
-  $("dSaved").textContent = data.notes[id]?.updatedAt ? `saved ${new Date(data.notes[id].updatedAt).toLocaleString()}` : "";
-  drawerTagPreview();
-  $("drawer").classList.add("open");
+
+  const srcRow = (p, line) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
+    `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}<span class="go">↗</span></a>`;
+  $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually — no source document.</div>` : srcRow(c.source.path, c.source.line)) +
+    (c.docs?.length ? c.docs.map((d) => srcRow(d, null)).join("") : "");
+  $("dMirror").textContent = `Mirrored from your docs, synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"} — not live code state.`;
+
+  $("dId").innerHTML = `<span></span><span style="opacity:.6">⧉</span>`;
+  $("dId").querySelector("span").textContent = c.id;
+  $("dId").onclick = async () => {
+    try { await navigator.clipboard.writeText(c.id); toast("Card id copied"); }
+    catch { toast("Copy failed — clipboard blocked", 3000); }
+  };
+  $("dVia").textContent = c.via ? `authored by session ${c.via}` : "";
+
+  // the note survives a closed drawer, a reload and a crashed tab: drafts are
+  // written locally per card and restored on open (the human's only input
+  // channel must never lose text)
+  const saved = data.notes[id]?.note || "";
+  const draft = readDraft(id);
+  const hasDraft = draft !== null && draft !== saved;
+  baseNote = saved; conflictNote = null; renderConflict();
+  $("dNote").value = hasDraft ? draft : saved;
+  $("dRestored").className = "restored" + (hasDraft ? " on" : "");
+  dirty = hasDraft;
+  $("dSaved").textContent = hasDraft ? "unsaved" : (data.notes[id]?.updatedAt ? `saved ${ago(Date.parse(data.notes[id].updatedAt))} ago` : "");
+  $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
+  renderParse();
+  $("drawer").classList.add("open"); $("scrim").classList.add("open");
 }
+function stepCard(d) {
+  if (!flat.length) return;
+  sel = Math.min(Math.max((sel < 0 ? 0 : sel) + d, 0), flat.length - 1);
+  openDrawer(flat[sel]);
+}
+$("dPrev").onclick = () => stepCard(-1);
+$("dNext").onclick = () => stepCard(1);
+$("dDiscard").onclick = () => {
+  if (!openId) return;
+  localStorage.removeItem(DRAFT_KEY(openId));
+  const c = openId; openId = null; dirty = false;
+  openDrawer(c);
+};
 function closeDrawer() {
-  if (dirty && !confirm("Discard unsaved note?")) return;
-  dirty = false; openId = null; $("drawer").classList.remove("open");
+  // no confirm dialog: the draft is already on disk, so closing can never lose it
+  if (dirty) toast("Draft kept — it will be here when you come back");
+  dirty = false; openId = null;
+  $("drawer").classList.remove("open"); $("scrim").classList.remove("open");
 }
 
-$("dNote").addEventListener("input", () => { dirty = true; $("dSaved").textContent = "unsaved"; drawerTagPreview(); });
+$("dNote").addEventListener("input", () => {
+  dirty = true;
+  $("dSaved").textContent = "unsaved"; $("dSaved").className = "st unsaved";
+  renderParse();
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(() => { if (openId) writeDraft(openId, $("dNote").value); }, 350);
+});
+$("dNote").addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); $("dSave").click(); }
+});
 $("dSave").onclick = async () => {
   try {
     const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ slug, cardId: openId, note: $("dNote").value }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
-    dirty = false; $("dSaved").textContent = "saved just now"; toast("note saved");
+    dirty = false; $("dSaved").textContent = "saved just now"; $("dSaved").className = "st";
+    $("dRestored").className = "restored";
+    baseNote = $("dNote").value; conflictNote = null; renderConflict();
+    localStorage.removeItem(DRAFT_KEY(openId));
+    toast("Note saved");
     load();
-  } catch (e) { toast(`save failed: ${e.message}`, 4000); }
+  } catch (e) { toast(`Save failed: ${e.message}`, 4000); }
 };
 
 document.addEventListener("keydown", (e) => {
   if (e.target === $("dNote")) { if (e.key === "Escape") e.target.blur(); return; }
   if ($("help").style.display === "flex" && e.key !== "?") { $("help").style.display = "none"; return; }
   switch (e.key) {
-    case "j": sel = Math.min(sel + 1, flat.length - 1); markSel(); break;
-    case "k": sel = Math.max(sel - 1, 0); markSel(); break;
+    case "j": sel = Math.min(sel + 1, flat.length - 1); markSel(); if (openId) openDrawer(flat[sel]); break;
+    case "k": sel = Math.max(sel - 1, 0); markSel(); if (openId) openDrawer(flat[sel]); break;
     case "Enter": case "o": if (flat[sel]) openDrawer(flat[sel]); break;
     case "n": if (openId) $("dNote").focus(); else if (flat[sel]) { openDrawer(flat[sel]); $("dNote").focus(); } e.preventDefault(); break;
     case "c": copyDigest(); break;
@@ -610,9 +900,9 @@ document.addEventListener("keydown", (e) => {
 });
 $("helpBtn").onclick = () => ($("help").style.display = "flex");
 $("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display = "none"; };
-window.addEventListener("beforeunload", (e) => { if (dirty) e.preventDefault(); });
 
 showState("loading");
+sweepDrafts();
 load();
 setInterval(load, 5000);
 </script>

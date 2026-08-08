@@ -4,108 +4,153 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>kanban · all boards</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1' fill='%238fbf6a'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1' fill='%237c8590'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1' fill='%232b3138'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
 <style>
-  /* The fleet glance (M1): the morning read starts HERE, so rows are weighted
-     attention-first — blocked and unread lead, motion follows, identity stays. */
-  :root{--bg:#0a0c0e;--surface:#12161b;--text:#d8dee6;--dim:#9aa4b0;--faint:#78828d;--rule:#1f242b;--accent:#8fbf6a;--amber:#e0b04c;--mono:"SF Mono",ui-monospace,Menlo,monospace}
-  [data-theme="light"]{--bg:#f2f4f6;--surface:#fbfcfd;--text:#20262d;--dim:#4a535d;--faint:#69737e;--rule:#d5dae0;--accent:#4a7d2a;--amber:#8f6a10}
-  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--rule) transparent} body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 -apple-system,"SF Pro Text",system-ui,sans-serif}
-  ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:4px} ::-webkit-scrollbar-track{background:transparent}
-  header{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--rule)}
-  h1{font:600 14px/1 var(--mono);margin:0;flex:1}
-  button{background:var(--surface);color:var(--text);border:1px solid var(--rule);border-radius:3px;padding:3px 9px;cursor:pointer;font:inherit;font-size:11.5px}
-  main{max-width:980px;margin:18px auto;padding:0 16px;display:flex;flex-direction:column;gap:8px}
-  #huberr{border:1px solid color-mix(in srgb,var(--amber) 55%,transparent);border-radius:3px;padding:6px 10px;color:var(--amber);font-size:12px}
-  a.board{display:block;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rule);border-radius:3px;padding:10px 14px;text-decoration:none;color:var(--text)}
-  a.board:hover{border-color:var(--accent)}
-  a.board.attn{border-left-color:var(--amber)}
-  .row1{display:flex;align-items:baseline;gap:10px}
-  .name{font-weight:600}
-  .badges{margin-left:auto;display:flex;gap:6px;font:600 10.5px/1.7 var(--mono)}
-  .badge{border:1px solid var(--rule);border-radius:2px;padding:0 6px;color:var(--dim)}
-  .badge.blk{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent)}
-  .badge.unread{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
-  .badge.review{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
-  .root{color:var(--faint);font-size:10.5px;font-family:var(--mono);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .counts{color:var(--dim);font-size:11.5px;margin-top:3px}
-  .counts b{color:var(--text);font-weight:500}
+  /* kanban — v10 hub. Same skin as the board: system UI type, crisp accents,
+     6px geometry, pills. Boards that want something from you sort first. */
+  :root{
+    --canvas:#0a0a0c; --well:#0f1013; --card:#17181c; --card-hover:#1d1f24;
+    --border:#26282e; --border-2:#353941; --ring:#5b9dff;
+    --text:#e9ebee; --text-2:#a4a9b1; --text-3:#838a94;
+    --blue:#5b9dff; --blue-bg:rgb(91 157 255/.14); --blue-br:rgb(91 157 255/.32);
+    --amber:#e8b84b; --amber-bg:rgb(232 184 75/.14); --amber-br:rgb(232 184 75/.34);
+    --green:#4bbd63;
+    --shadow:0 1px 2px rgb(0 0 0/.4);
+    --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
+  }
+  [data-theme="light"]{
+    --canvas:#f3f4f6; --well:#fafbfc; --card:#ffffff; --card-hover:#f7f8fa;
+    --border:#dfe1e6; --border-2:#c4c9d0; --ring:#0b6bcb;
+    --text:#191c20; --text-2:#565d66; --text-3:#6a717a;
+    --blue:#0b6bcb; --blue-bg:rgb(11 107 203/.09); --blue-br:rgb(11 107 203/.26);
+    --amber:#8a5d05; --amber-bg:rgb(190 141 20/.15); --amber-br:rgb(150 108 12/.34);
+    --green:#17752f;
+    --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
+  }
+  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
+  body{margin:0;background:var(--canvas);color:var(--text);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+  svg{display:block;flex:none}
+  header{display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--border)}
+  h1{margin:0;font:600 14.5px/1.3 var(--sans);letter-spacing:-.011em;flex:1}
+  button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
+         padding:5px 9px;font-size:12.5px;font-weight:500;transition:background .12s,border-color .12s,color .12s}
+  button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  main{max-width:900px;margin:24px auto;padding:0 24px;display:flex;flex-direction:column;gap:22px}
+  .group{display:flex;flex-direction:column;gap:9px}
+  .glabel{font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+  #huberr{border:1px solid var(--amber-br);background:var(--amber-bg);border-radius:8px;padding:9px 12px;color:var(--amber);font-size:13px}
+  a.board{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;
+          text-decoration:none;color:var(--text);box-shadow:var(--shadow);transition:background .12s,border-color .12s}
+  a.board:hover{background:var(--card-hover);border-color:var(--border-2)}
+  .row1{display:flex;align-items:center;gap:10px}
+  .name{font-weight:600;font-size:14px;letter-spacing:-.008em}
+  .badges{margin-left:auto;display:flex;gap:6px}
+  .pill{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 9px;border-radius:20px;
+        font:500 11.5px/1 var(--sans);border:1px solid var(--border);color:var(--text-2);white-space:nowrap}
+  .pill.blk{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg);font-weight:600}
+  .pill.unread{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
+  .root{color:var(--text-3);font:11.5px/1.5 var(--mono);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .counts{color:var(--text-2);font-size:12.5px;margin-top:7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .counts b{color:var(--text);font-weight:600}
+  .counts .dotsep{width:3px;height:3px;border-radius:50%;background:var(--border-2)}
   .counts .stale{color:var(--amber)}
-  .empty{color:var(--dim);text-align:center;padding:40px 0}
+  /* quiet boards: a row, not a card */
+  a.quiet{display:flex;align-items:center;gap:12px;padding:8px 16px;text-decoration:none;color:var(--text-2);
+          border:1px solid transparent;border-radius:8px}
+  a.quiet:hover{background:var(--well);border-color:var(--border)}
+  a.quiet .name{font-weight:550;font-size:13px;color:var(--text-2)}
+  a.quiet .root{margin:0;flex:1;min-width:0}
+  a.quiet .mini{font-size:12px;color:var(--text-3);white-space:nowrap}
+  .empty{color:var(--text-2);text-align:center;padding:60px 0}
 </style>
 </head>
 <body>
 <header>
-  <h1>kanban · all boards</h1>
+  <h1>All boards</h1>
   <button id="theme" title="toggle theme">◐</button>
 </header>
-<main id="list"><div class="empty">loading…</div></main>
+<main id="list"><div class="empty">Loading…</div></main>
 <script>
-const applyTheme = (t) => { document.documentElement.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
+const applyTheme = (t) => { document.documentElement.dataset.theme = t; document.body.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
 applyTheme(localStorage.getItem("kanban-theme") || "dark");
 document.getElementById("theme").onclick = () =>
   applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
 const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
 
-// tail-keep truncation: the varying end of a path is the distinguishing part.
-// Restores from the full string, so it is width-correct in both directions.
+// tail-keep truncation: the varying end of a path is the distinguishing part
 function tailTrim(el) {
   const full = el.title || el.textContent;
-  el.title = full;
-  el.textContent = full;
-  let guard = 200;
-  while (el.scrollWidth > el.clientWidth && el.textContent.length > 14 && guard--) {
-    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(8);
+  el.title = full; el.textContent = full;
+  let guard = 300;
+  while (el.scrollWidth > el.clientWidth && el.textContent.length > 12 && guard--) {
+    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(3);
   }
 }
 let trimTimer = null;
 window.addEventListener("resize", () => {
   clearTimeout(trimTimer);
-  trimTimer = setTimeout(() => document.querySelectorAll(".board .root").forEach(tailTrim), 150);
+  trimTimer = setTimeout(() => document.querySelectorAll(".root").forEach(tailTrim), 150);
 });
+
+function boardEl(b, quiet) {
+  const a = document.createElement("a");
+  a.href = `/b/${b.slug}`;
+  const open = b.counts.inbox + b.counts.backlog + b.counts.active + b.counts.blocked;
+  const ts = b.syncedAt ? Date.parse(b.syncedAt) : 0;
+  const stale = ts && Date.now() - ts > 24 * 36e5;
+  const sep = '<span class="dotsep"></span>';
+  if (quiet) {
+    a.className = "quiet";
+    a.innerHTML = `<span class="name"></span><span class="root"></span><span class="mini">${b.counts.active} active · ${open} in motion · synced ${ts ? ago(ts) + " ago" : "never"}</span>`;
+  } else {
+    a.className = "board";
+    a.innerHTML = `<div class="row1"><span class="name"></span><span class="badges">
+        ${b.counts.blocked ? `<span class="pill blk">${b.counts.blocked} blocked</span>` : ""}
+        ${b.unread ? `<span class="pill unread">${b.unread} unread</span>` : ""}
+        ${b.reviewMe ? `<span class="pill">${b.reviewMe} for your review</span>` : ""}
+      </span></div>
+      <div class="root"></div>
+      <div class="counts"><span><b>${b.counts.active}</b> active</span>${sep}<span><b>${open}</b> in motion${b.counts.blocked ? `, ${b.counts.blocked} of them blocked` : ""}</span>${sep}<span>${b.counts.done} done${b.counts.stale ? ` · ${b.counts.stale} stale` : ""}</span>${sep}<span${stale ? ' class="stale"' : ""}>synced ${ts ? ago(ts) + " ago" : "never"}${stale ? " — stale mirror" : ""}</span></div>`;
+  }
+  a.querySelector(".name").textContent = b.name;
+  const rootEl = a.querySelector(".root");
+  rootEl.title = b.root; rootEl.textContent = b.root;
+  return a;
+}
 
 async function load() {
   const list = document.getElementById("list");
   try {
     const { boards } = await (await fetch("/api/boards")).json();
     document.getElementById("huberr")?.remove(); // recovered: clear the failure note
-    if (!boards.length) { list.innerHTML = `<div class="empty">no boards yet — run: kanban.sh init in a project</div>`; return; }
-    // attention first: blocked or unread outranks quiet; freshest sync breaks ties
-    const score = (b) => (b.counts.blocked > 0 ? 2 : 0) + ((b.unread || 0) + (b.reviewMe || 0) > 0 ? 1 : 0);
-    boards.sort((a, b) => score(b) - score(a) || Date.parse(b.syncedAt || 0) - Date.parse(a.syncedAt || 0));
-    list.replaceChildren(...boards.map((b) => {
-      const a = document.createElement("a");
-      const attn = b.counts.blocked > 0 || (b.unread || 0) > 0;
-      a.className = "board" + (attn ? " attn" : ""); a.href = `/b/${b.slug}`;
-      const open = b.counts.inbox + b.counts.backlog + b.counts.active + b.counts.blocked;
-      const syncTs = b.syncedAt ? Date.parse(b.syncedAt) : 0;
-      const staleMark = syncTs && Date.now() - syncTs > 24 * 36e5 ? ` <span class="stale">⚠ ${ago(syncTs)} stale</span>` : "";
-      const badges = [
-        b.counts.blocked ? `<span class="badge blk">${b.counts.blocked} blocked</span>` : "",
-        b.unread ? `<span class="badge unread">${b.unread} unread</span>` : "",
-        b.reviewMe ? `<span class="badge review">${b.reviewMe} review-me</span>` : "",
-      ].join("");
-      a.innerHTML = `<div class="row1"><span class="name"></span><span class="badges">${badges}</span></div>
-        <div class="root"></div>
-        <div class="counts">active <b>${b.counts.active}</b> · open <b>${open}</b> · done ${b.counts.done}${b.counts.stale ? ` · stale ${b.counts.stale}` : ""} · synced ${b.syncedAt ? new Date(b.syncedAt).toLocaleString() : "never"}${staleMark}</div>`;
-      a.querySelector(".name").textContent = b.name;
-      const rootEl = a.querySelector(".root");
-      rootEl.title = b.root; rootEl.textContent = b.root;
-      return a;
+    if (!boards.length) { list.innerHTML = `<div class="empty">No boards yet — run <code>kanban.sh init</code> in a project</div>`; return; }
+    // a board that asks something of you is a card; the rest are rows
+    const wants = (b) => b.counts.blocked > 0 || (b.unread || 0) > 0 || (b.reviewMe || 0) > 0;
+    const bySync = (a, b) => Date.parse(b.syncedAt || 0) - Date.parse(a.syncedAt || 0);
+    const hot = boards.filter(wants).sort((a, b) => (b.counts.blocked > 0) - (a.counts.blocked > 0) || bySync(a, b));
+    const cold = boards.filter((b) => !wants(b)).sort(bySync);
+    const groups = [];
+    if (hot.length) groups.push(["Wants you", hot, false]);
+    if (cold.length) groups.push(["Quiet", cold, true]);
+    list.replaceChildren(...groups.map(([label, arr, quiet]) => {
+      const g = document.createElement("div");
+      g.className = "group";
+      const l = document.createElement("div");
+      l.className = "glabel"; l.textContent = label;
+      g.appendChild(l);
+      arr.forEach((b) => g.appendChild(boardEl(b, quiet)));
+      return g;
     }));
     list.querySelectorAll(".root").forEach(tailTrim);
   } catch (e) {
-    // one failed poll must not delete the fleet view (C13): keep last known
-    // rows, surface the failure as a banner; a blank list only when we never
-    // had data at all
-    if (list.querySelector(".board")) {
-      if (!document.getElementById("huberr")) {
-        list.insertAdjacentHTML("afterbegin", `<div id="huberr"></div>`);
-      }
-      document.getElementById("huberr").textContent = `hub poll failed: ${e.message} — showing last known state`;
+    // one failed poll must not delete the fleet view: keep the last known rows
+    if (list.querySelector("a")) {
+      if (!document.getElementById("huberr")) list.insertAdjacentHTML("afterbegin", `<div id="huberr"></div>`);
+      document.getElementById("huberr").textContent = `Hub poll failed: ${e.message} — showing last known state`;
     } else {
-      list.innerHTML = `<div class="empty">hub failed to load: ${e.message} — is the server up? kanban.sh check</div>`;
+      list.innerHTML = `<div class="empty">Hub failed to load: ${e.message} — is the server up? kanban.sh check</div>`;
     }
   }
 }
