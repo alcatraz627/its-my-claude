@@ -27,7 +27,7 @@
   [data-theme="light"]{
     --canvas:#f3f4f6; --well:#fafbfc; --well-attn:#ffffff; --card:#ffffff; --card-hover:#f7f8fa;
     --border:#dfe1e6; --border-2:#c4c9d0; --ring:#0b6bcb;
-    --text:#191c20; --text-2:#565d66; --text-3:#6a717a;
+    --text:#191c20; --text-2:#565d66; --text-3:#666d76;
     --blue:#0b6bcb; --blue-bg:rgb(11 107 203/.09); --blue-br:rgb(11 107 203/.26);
     --amber:#8a5d05; --amber-bg:rgb(190 141 20/.15); --amber-br:rgb(150 108 12/.34);
     --green:#17752f; --green-bg:rgb(26 127 55/.10); --green-br:rgb(26 127 55/.26);
@@ -711,6 +711,12 @@ function readDraft(id) {
   } catch { return null; }
 }
 const writeDraft = (id, v) => localStorage.setItem(DRAFT_KEY(id), JSON.stringify({ t: Date.now(), v }));
+// every exit from a card (close, j/k step, prev/next) flushes the pending
+// debounced write, so typing within its 350ms window is never dropped
+function flushDraft() {
+  clearTimeout(draftTimer);
+  if (dirty && openId) writeDraft(openId, $("dNote").value);
+}
 function sweepDrafts() {
   const pre = `kanban-draft-${slug}-`;
   for (const k of Object.keys(localStorage)) {
@@ -773,6 +779,7 @@ for (const [tok, tip] of INSERT_TOKENS) {
 function openDrawer(id) {
   const c = data.board.cards.find((x) => x.id === id);
   if (!c) return;
+  if (openId !== id) flushDraft();
   openId = id; dirty = false;
   const i = flat.indexOf(id); if (i >= 0) { sel = i; markSel(); }
   const hue = c.heading ? labelHue(c.heading) : null;
@@ -854,7 +861,8 @@ $("dDiscard").onclick = () => {
   openDrawer(c);
 };
 function closeDrawer() {
-  // no confirm dialog: the draft is already on disk, so closing can never lose it
+  // no confirm dialog: closing flushes the pending draft write, so it can never lose it
+  flushDraft();
   if (dirty) toast("Draft kept — it will be here when you come back");
   dirty = false; openId = null;
   $("drawer").classList.remove("open"); $("scrim").classList.remove("open");
@@ -878,6 +886,7 @@ $("dSave").onclick = async () => {
     dirty = false; $("dSaved").textContent = "saved just now"; $("dSaved").className = "st";
     $("dRestored").className = "restored";
     baseNote = $("dNote").value; conflictNote = null; renderConflict();
+    clearTimeout(draftTimer);
     localStorage.removeItem(DRAFT_KEY(openId));
     toast("Note saved");
     load();
