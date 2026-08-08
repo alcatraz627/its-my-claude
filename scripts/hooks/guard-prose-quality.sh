@@ -20,6 +20,13 @@ mode=""
 case "$fp" in
   *.md|*.html|*.txt) mode="prose" ;;
   *.ts|*.tsx|*.js|*.jsx|*.vue|*.svelte|*.py) mode="code" ;;
+  *.json)
+    # Only user-facing-copy JSON is gated; internal configs, catalogs, and
+    # caches carry conventions of their own (mcp-catalog's dashes, report data).
+    case "$fp" in
+      *decision-page*|*/decision-pages/*|*locale*|*i18n*|*/lang/*|*strings.json|*copy.json) mode="code" ;;
+      *) exit 0 ;;
+    esac ;;
   *) exit 0 ;;
 esac
 case "$fp" in

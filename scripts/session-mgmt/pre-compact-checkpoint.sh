@@ -333,10 +333,36 @@ FOOTER
 echo "  Checkpoint written to $dump_file" >&2
 
 # ── 4. Symlink _checkpoint.claude.md → _precompact-checkpoint.claude.md ──────
-# /catchup defaults to _checkpoint.claude.md — this makes it find our file
+# /catchup defaults to _checkpoint.claude.md — this makes it find our file.
+# Guard (mirror of the step-7 index guard): a fresh (<30 min) NON-precompact
+# target is a real /core-dump; this shell-only snapshot must not shadow it.
 symlink="$dump_dir/_checkpoint.claude.md"
-ln -sf "_precompact-checkpoint.claude.md" "$symlink" 2>/dev/null || true
-echo "  Symlink: $symlink → _precompact-checkpoint.claude.md" >&2
+skip_link=""
+cur_target=""
+if [[ -e "$symlink" && ! -L "$symlink" ]]; then
+  # A REGULAR file at this path is not ours to destroy (hand-authored note,
+  # foreign artifact). ln -sf would unlink it silently; skip and warn instead.
+  skip_link=1
+  cur_target="(regular file, not a symlink — left untouched)"
+fi
+if [[ -L "$symlink" ]]; then
+  cur_target=$(readlink "$symlink" 2>/dev/null) || true
+  if [[ -n "$cur_target" && "$cur_target" != "_precompact-checkpoint.claude.md" ]]; then
+    abs_target="$cur_target"
+    [[ "$abs_target" != /* ]] && abs_target="$dump_dir/$cur_target"
+    if [[ -f "$abs_target" ]]; then
+      now_s=$(date +%s)
+      tgt_s=$(stat -f %m "$abs_target" 2>/dev/null || echo 0)
+      (( now_s - tgt_s < 1800 )) && skip_link=1
+    fi
+  fi
+fi
+if [[ -n "$skip_link" ]]; then
+  echo "  _checkpoint.claude.md not retargeted: $cur_target" >&2
+else
+  ln -sf "_precompact-checkpoint.claude.md" "$symlink" 2>/dev/null || true
+  echo "  Symlink: $symlink → _precompact-checkpoint.claude.md" >&2
+fi
 
 # ── 5. Preservation instructions for the compaction summary ───────────────────
 echo "" >&2

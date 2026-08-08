@@ -1,0 +1,23 @@
+{
+  "id": "4af22037-9360-4cbb-8f27-5fb2a8c1ed3c",
+  "ts": "2026-08-07T10:19:51Z",
+  "session_id": "wm-ship-4a",
+  "project_root": "/Users/alcatraz627/Code/Versable/walmart-mvp",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/walmart-mvp/_20260807-wm-ship-4a.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Task #8 (burn baseline tracking): keep ledger through the tail; Task #17 (W9 Admin/local-component retirement); Task #19 (Settings catch-up, workspace picker onCreate polish, tooltip sweep).",
+    "Cat-check structural: table-route row skeletons + dash tab counts; facets serialized to URL; route error boundary.",
+    "Kit follow-ups (versable-builder): `--warning-ink` slot; col.mono/col.number dash fallback; possible reselectable-select primitive.",
+    "Deferred skeptical: #5 pill refresh on mutations, #7 kit Modal for org dialog, #9 distinct-count auto-resolutions, #13 override-key validation, #15 server_default, #18 skips-not-resolutions invariant test (top of tail).",
+    "/ui-gripe pass per screen; per-goal e2e criteria authoring + runs; second categorical round after tail fixes.",
+    "Owner-side: three run-report decisions; Seller Center access for the analytics columns (G3c.4/R-39 remainder); /adversarial-review if wanted."
+  ],
+  "tags": []
+}

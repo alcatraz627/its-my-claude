@@ -6,7 +6,8 @@
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alcatraz627/.cargo/bin:/Users/alcatraz627/.pyenv/shims:/Users/alcatraz627/.pyenv/bin:/Users/alcatraz627/.bun/bin:/Users/alcatraz627/.codeium/windsurf/bin:/Users/alcatraz627/Code/my-gcp-tools:/Users/alcatraz627/.local/bin",
-    "STATUSLINE_PROFILE": "custom"
+    "STATUSLINE_PROFILE": "custom",
+    "PROSE_SMELL_ENFORCE": "1"
   },
   "permissions": {
     "allow": [
@@ -99,7 +100,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "fable",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [

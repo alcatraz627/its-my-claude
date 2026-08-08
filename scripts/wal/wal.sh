@@ -88,8 +88,12 @@ case "$KIND" in
     # corrected call instead of recording garbage.
     BAD=""
     [ -z "$GOAL" ] && BAD="needs at least <session_id> and <goal>"
+    [ -z "$SID" ] && BAD="needs at least <session_id> and <goal>"
     [ ${#SID} -gt 64 ] && BAD="session_id is ${#SID} chars — that's a summary blob, not an id"
     case "$SID" in *[[:space:]]*) BAD="session_id ('${SID:0:40}...') contains spaces — prose belongs in goal/done/current/next" ;; esac
+    # Flag-style calls (wal.sh checkpoint --goal "..." ...) shift every field by
+    # one and land '--goal' here; the args are positional, so refuse loudly.
+    case "$SID" in --*) BAD="session_id is '$SID' — this writer takes POSITIONAL args, not flags" ;; esac
     if [ -n "$BAD" ]; then
       echo "wal.sh checkpoint: $BAD" >&2
       echo "usage: wal.sh checkpoint <session_id> \"<goal>\" \"<done|pipe|list>\" \"<current>\" \"<next>\" \"<blockers|list>\" \"<learnings|list>\"" >&2

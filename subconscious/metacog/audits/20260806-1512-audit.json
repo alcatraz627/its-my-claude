@@ -1,0 +1,76 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 19022,
+    "correction_density": 0.05555555555555555,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.5070897922907553,
+    "unit_count": 18
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — c71644cf-4: Write to plan.md failed (success:false x1) before Read then successful Write; c71644cf-6: Edit to taste-profile.md failed (success:false x1) before successful Edit; c71644cf-8: pass_b_worktype.py executed with missing listing_id field (two Bash failures before inline patch); server startup attempted three ways before http.server succeeded; c71644cf-9: Bash with wrong cwd (no cd prefix) before c71644cf-10 corrected it; dd5be1d9-8: Write to svc-sample.py failed x1, Write to migrations/0043 failed x2, Edit to dev-servers.md failed x1, Write to checkpoint scratchpad failed x1 — five distinct write failures; depth and recovery pattern unchanged from prior cycle; no regression, no improvement",
+      "cli_interface_assumption_without_read:RECURRING — dd5be1d9-8: prepend-runtime-note.sh invoked via stdin here-doc (bash ... <<'EOF') as if it accepted stdin; script silently no-oped because it requires positional arguments <skill-name> <file>; agent verified the failure via rg, then did a partial header scan, then Read the full script before re-invoking correctly; this pattern was classified NEW in the 2026-08-06 prior cycle entry for dd5be1d9-8 and is confirmed again in this same unit's evidence; now RECURRING with zero improvement signal",
+      "scheduling_discipline_miss_then_correct:RECURRING:STABLE — dd5be1d9-8 built and registered svc-watch and svc-reap LaunchAgent plists without creating the Automations calendar companion events required by scheduling-discipline.md; dd5be1d9-24 (is_correction:true, topic_keywords:['calendar']) triggered full recovery: schedule.sh register for all three jobs, osascript event creation, uid write-back to meta+registry, recurrence and notes verification, doctor audit; pattern structure unchanged from prior cycle classification"
+    ],
+    "calibration_score": 0.43,
+    "cross_references": [
+      "Dream Insight 1 (partial observation as complete verification) — CONTRADICTED (positive signal): c71644cf-8 read render-dark.png and render-light.png as separate Read calls after explicit browser_evaluate toggle; c71644cf-10 repeated the same dark+light screenshot cycle; c71644cf-15 repeated it a third time. Three consecutive units in the same session exercised both visual modes with actual pixel reads rather than single-mode claims. This is a meaningful positive departure from the historical pattern and the prior-cycle shipping_css_ui_changes_without_visual_verification atone warning.",
+      "Dream Insight 2 (silent defaults for missing data) — PARTIALLY CONFIRMED: c71644cf-8 discovered that careers-page listings had no listing_id set (null) at dedup time; the fix required patching both merged files and the source script. The original dedup_merge.py had a silent null assignment that propagated through two downstream stages before surfacing as a KeyError in pass_b_worktype.py. The agent fixed it but did not flag the absence as a gap marker at merge time — the null traveled silently until it broke downstream, which matches the dream insight's 'absence silently becomes a plausible-looking default' pattern."
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "write_before_read_trap already flagged in prior cycles with no improvement trend; no new recommendation warranted — pattern is entrenched and STABLE",
+      "cli_interface_assumption_without_read is now RECURRING (was NEW in prior cycle): before invoking any shared script with a novel call signature (especially non-obvious stdin vs positional-args contracts), Read the first ~20 lines or run with --help before dispatching; the silent no-op failure mode makes this costlier than a tool not found error",
+      "scheduling_discipline_miss_then_correct has now appeared in two consecutive cycles with identical structure (implementation without calendar event, correction, full recovery); consider adding a self-check at the end of any LaunchAgent plist creation: verify schedule.sh list shows the job AND osascript confirms the calendar event exists before calling the step done"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "93761b90-60e8-4ea8-9e4a-ccd7c766d99e",
+      102697
+    ],
+    [
+      "f34cf57b-0fe9-4377-a0e0-b9b721255f49",
+      107438
+    ],
+    [
+      "f2ebd703-2d0f-404d-8dc3-379ed830bb0d",
+      99188
+    ],
+    [
+      "c71644cf-6c7d-491d-ab51-b18fcaf2832a",
+      7392366
+    ],
+    [
+      "9c38b9af-3843-4a64-8064-20f981cdafbe",
+      113369
+    ],
+    [
+      "6dc045d6-736b-4129-be32-f98340054bdc",
+      116820
+    ],
+    [
+      "4693826f-47d2-40af-bde1-81e3f4ce080e",
+      109963
+    ],
+    [
+      "03f7911e-b827-47da-b61d-a3bacc50e4b7",
+      106048
+    ],
+    [
+      "dd5be1d9-3c00-4a02-9484-7cd4cbf7fd64",
+      2875772
+    ],
+    [
+      "3a26a865-52b5-4508-97d5-6819bd33cd31",
+      221645
+    ]
+  ],
+  "timestamp": "2026-08-06T15:12:54.911138Z",
+  "tokens_used": 21653,
+  "units_analyzed": 18,
+  "units_total": 18
+}

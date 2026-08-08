@@ -136,7 +136,7 @@ docs, error messages, runbooks, and hook text only.
 
 | surface | gate | tier |
 |---|---|---|
-| chat final message | prose-smell-stop.sh (Stop) | warn; enforce is env-gated pending telemetry |
+| chat final message | prose-smell-stop.sh (Stop) | hard block since mig 0044 (PROSE_SMELL_ENFORCE=1 in settings env; ≥2 block-tier tells; loop-safe, fires once per message). Promoted on 29d dry-run telemetry: 57 would-blocks, ~2/day |
 | commit message trailers | git-hooks/commit-msg + guard-commit-signature | hard block (mig 0040) |
 | commit message prose | rules/git.md hygiene bar + prose-lint | rule, advisory |
 | PR bodies (gh pr) | guard-commit-signature | hard block: signature + connective dash (mig 0042) |
@@ -146,7 +146,7 @@ docs, error messages, runbooks, and hook text only.
 | test / fixture / mock files | exempt by design (they quote bad prose deliberately) | none |
 | style-system docs | exempt (mention-vs-use is regex-undecidable) | none |
 | server-side commits and squash-merges | unreachable from machine hooks | ungated; needs CI or branch protection if ever wanted |
-| decision-page configs and other JSON string copy | not yet scanned | known gap, smallest surviving surface |
+| user-facing-copy JSON (decision-pages, locale/i18n/strings/copy.json) | guard-prose-quality + code-copy-lint | hard block: dash, unverified, jargon (mig 0044, scope narrowed after validation: blanket .json blocked mcp-catalog and report caches). Other .json stays ungated by choice; MultiEdit-shaped writes are unmatched (theoretical on this build, which has no MultiEdit tool) |
 
 ## Provenance and the method note
 

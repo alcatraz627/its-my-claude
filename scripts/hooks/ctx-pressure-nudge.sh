@@ -47,6 +47,9 @@ if [[ -z "$rem" || "$rem" == "null" ]]; then
   [[ -f "$ctx_file" ]] && rem=$(tr -dc '0-9.' < "$ctx_file" 2>/dev/null)
 fi
 [[ -z "$rem" ]] && exit 0
+# Non-numeric remaining % (a corrupt file, a payload oddity) must no-op, not
+# read as 0 remaining and fabricate a 90-band nudge.
+[[ "$rem" =~ ^[0-9]+(\.[0-9]+)?$ ]] || exit 0
 
 # used % = 100 - remaining %
 used=$(awk -v r="$rem" 'BEGIN { printf "%d", 100 - r }' 2>/dev/null)
@@ -88,9 +91,9 @@ fi
 { echo "ts=$now"; echo "band=$band"; } > "$state"
 
 if (( used >= 90 )); then
-  msg="[ctx-pressure] Context is ~${used}% full. On the 1M-token tier there is no early autocompact, and this is deep in the rate-limit zone (most transient 429s strike above 80% fill). Checkpoint now: /core-dump (Resume Contract included) then /clear, or land and wrap up the current thread.${enq}"
+  msg="[ctx-pressure] Context is ~${used}% full. On the 1M-token tier there is no early autocompact, and this is deep in the rate-limit zone (most transient 429s strike above 80% fill). Checkpoint now: /core-dump (Resume Contract included) then /clear as the default; mid-task with conversational nuance worth keeping, /core-dump mini then /compact. Recommend one to the user out loud.${enq}"
 elif (( used >= 80 )); then
-  msg="[ctx-pressure] Context is ~${used}% full — entering the rate-limit danger zone (the large majority of past 429s occurred above 80% fill). Update the session workspace notes now, then /core-dump + /clear if you're switching focus, or finish the current step before it grows.${enq}"
+  msg="[ctx-pressure] Context is ~${used}% full — entering the rate-limit danger zone (the large majority of past 429s occurred above 80% fill). Update the session workspace notes now. If continuation is expected, recommend a path to the user: /core-dump + /clear at a task boundary (default), or /core-dump mini + /compact when mid-task conversational nuance matters.${enq}"
 else
   msg="[ctx-pressure] Context is ~${used}% full — notes-hygiene checkpoint. Update the session workspace notes (/workspace) with milestones completed so far, and consider /core-dump mini with a fresh Resume Contract while synthesis is still cheap: auto-compact strips whatever isn't written down.${enq}"
 fi

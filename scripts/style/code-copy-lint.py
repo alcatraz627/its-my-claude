@@ -15,10 +15,12 @@ _spec = importlib.util.spec_from_file_location(
     "prose_lint", os.path.join(os.path.dirname(os.path.abspath(__file__)), "prose-lint.py"))
 _pl = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_pl)
 
-STRING_RE = re.compile(r'"((?:[^"\\\n]|\\.){8,300})"'
-                       r"|'((?:[^'\\\n]|\\.){8,300})'"
-                       r"|`((?:[^`\\\n]|\\.){8,300})`"
-                       r"|>([^<>{}\n]{8,300})<")   # JSX text children: >copy<
+STRING_RE = re.compile(r'"((?:[^"\\\n]|\\.){8,2000})"'
+                       r"|'((?:[^'\\\n]|\\.){8,2000})'"
+                       r"|`((?:[^`\\\n]|\\.){8,2000})`"
+                       r"|>([^<>{}\n]{8,2000})<")   # JSX text children: >copy<
+# The 2000 cap exists because an over-cap literal evades silently; real
+# decision-page copy exceeds 300 chars.
 COMMENT_LINE = re.compile(r"^\s*(//|#|\*|/\*|\{\s*/\*)")
 NOT_COPY = re.compile(r"^https?://|^[./~]|\{.*\}.*\{.*\}")   # urls, paths, dense templating
 

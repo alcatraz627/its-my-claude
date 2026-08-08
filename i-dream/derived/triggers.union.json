@@ -1,15 +1,5 @@
 [
   {
-    "id": "trig-added-replacement-without-retiring-predecessor",
-    "from_slug": "added-replacement-without-retiring-predecessor",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Review pagination added while old load-more path left in place",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260717-124558-ae"
-  },
-  {
     "id": "trig-added-scope-without-checking-siblings",
     "from_slug": "added-scope-without-checking-siblings",
     "from_source": "atone",
@@ -23,21 +13,21 @@
     "id": "trig-ai-smell-prose-against-stored-voice",
     "from_slug": "ai-smell-prose-against-stored-voice",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "default-LLM prose register against the user's stored human-voice preference",
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260728-180931-99"
   },
   {
-    "id": "trig-cli-flag-assumed-without-help-check",
-    "from_slug": "cli-flag-assumed-without-help-check",
+    "id": "trig-backend-constraint-shaped-product-scope",
+    "from_slug": "backend-constraint-shaped-product-scope",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "Invented a --body flag for claude-ipc send; silent accept emptied every message for hours",
+    "instruction": "Descoped mock-required fields because they need backend work, against workflow-first ruling",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260716-072741-f4"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260806-221406-63"
   },
   {
     "id": "trig-critique-loops-cannot-produce-design-gestalt",
@@ -50,6 +40,16 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260727-092416-a9"
   },
   {
+    "id": "trig-decision-request-without-decision-grade-context",
+    "from_slug": "decision-request-without-decision-grade-context",
+    "from_source": "atone",
+    "weight": "high",
+    "instruction": "Asked owner to approve 13h scope via shorthand labels from an unseen document",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260806-221330-ed"
+  },
+  {
     "id": "trig-declared-ready-without-runtime-exercise",
     "from_slug": "declared-ready-without-runtime-exercise",
     "from_source": "atone",
@@ -57,17 +57,27 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260727-223552-da"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260807-142844-a2"
   },
   {
     "id": "trig-dense-briefing-instead-of-a-direct-answer",
     "from_slug": "dense-briefing-instead-of-a-direct-answer",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Answered a two-line scoping question with a 450-word briefing + diagram",
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260728-085613-a1"
+  },
+  {
+    "id": "trig-deny-list-filter-defaults-junk-into-trusted-surface",
+    "from_slug": "deny-list-filter-defaults-junk-into-trusted-surface",
+    "from_source": "atone",
+    "weight": "medium",
+    "instruction": "Ranked job report shipped with radiologists: deny-list filter, unclassified rows defaulted in",
+    "match_keywords": [],
+    "match_tool_signatures": [],
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260806-101259-13"
   },
   {
     "id": "trig-design-mocks-never-consulted",
@@ -80,16 +90,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260724-141200-12"
   },
   {
-    "id": "trig-escaped-selector-grep-false-negative",
-    "from_slug": "escaped-selector-grep-false-negative",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Escalated a phantom build bug from an escaped-selector grep false-negative",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260717-172423-a0"
-  },
-  {
     "id": "trig-file-referenced-without-full-path",
     "from_slug": "file-referenced-without-full-path",
     "from_source": "atone",
@@ -100,20 +100,10 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260721-121411-c8"
   },
   {
-    "id": "trig-handoff-without-naming-decaying-prereqs",
-    "from_slug": "handoff-without-naming-decaying-prereqs",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Halt report pointed owner at live demo without naming its known-decaying credential prereq",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260712-210531-07"
-  },
-  {
     "id": "trig-infra-before-grep",
     "from_slug": "infra-before-grep",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "infra-before-grep",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -123,7 +113,7 @@
     "id": "trig-literal-request-over-intent",
     "from_slug": "literal-request-over-intent",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Implemented literal UI request wording instead of modeling its intent",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -140,34 +130,14 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260727-223728-20"
   },
   {
-    "id": "trig-promised-async-wake-without-arming-receiver",
-    "from_slug": "promised-async-wake-without-arming-receiver",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Promised submit-to-wake but ended the turn with no watcher armed",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260722-121439-98"
-  },
-  {
     "id": "trig-rebuild-replaced-accumulated-ux-without-parity-audit",
     "from_slug": "rebuild-replaced-accumulated-ux-without-parity-audit",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "doc-22 rebuilds replaced feedback-hardened UX; purge finished it; no parity gate ever ran",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260724-112145-13"
-  },
-  {
-    "id": "trig-repeat-request-dropped-across-sessions",
-    "from_slug": "repeat-request-dropped-across-sessions",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Top loading bar requested many times across sessions, still not delivered",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260717-124821-5f"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260807-115856-c7"
   },
   {
     "id": "trig-reply-keyed-to-labels-the-reader-never-saw",
@@ -203,7 +173,7 @@
     "id": "trig-shipping-css-ui-changes-without-visual-verification",
     "from_slug": "shipping-css-ui-changes-without-visual-verification",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Shipping CSS/UI changes without visual verification",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -213,7 +183,7 @@
     "id": "trig-status-verdict-from-stale-mental-model-no-re-check",
     "from_slug": "status-verdict-from-stale-mental-model-no-re-check",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Status verdict from stale mental model (no re-check)",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -228,26 +198,6 @@
     "match_keywords": [],
     "match_tool_signatures": [],
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260728-082426-51"
-  },
-  {
-    "id": "trig-symptom-fix-claimed-from-mechanism-fix-on-wrong-surface",
-    "from_slug": "symptom-fix-claimed-from-mechanism-fix-on-wrong-surface",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Led with 'fixed' for owner symptoms verified only as mechanism fixes on the agent's own surface",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260723-220852-64"
-  },
-  {
-    "id": "trig-uniform-feature-promise-not-swept-across-surfaces",
-    "from_slug": "uniform-feature-promise-not-swept-across-surfaces",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Shell arc shipped Activity-everywhere with dead bell on unconverted pages",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260717-124713-36"
   },
   {
     "id": "trig-unprompted-infra-scope-creep",
@@ -270,26 +220,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260726-220526-44"
   },
   {
-    "id": "trig-wrong-authority-doc-handed-to-subagent",
-    "from_slug": "wrong-authority-doc-handed-to-subagent",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Fable audit dispatched against the wrong contract doc; absence claim relayed unverified",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260723-100023-c1"
-  },
-  {
-    "id": "trig-x",
-    "from_slug": "x",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "y",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260717-124523-ba"
-  },
-  {
     "id": "trig-arm-the-receiver-before-ending-the-turn",
     "from_slug": "arm-the-receiver-before-ending-the-turn",
     "from_source": "affirm",
@@ -300,33 +230,13 @@
     "deep_link": "~/.claude/atone/events.jsonl#aff-20260724-104351-d2"
   },
   {
-    "id": "trig-check-existing-surfaces-before-authoring",
-    "from_slug": "check-existing-surfaces-before-authoring",
+    "id": "trig-scope-justified-deviation-from-reference-parity",
+    "from_slug": "scope-justified-deviation-from-reference-parity",
     "from_source": "affirm",
     "weight": "medium",
-    "instruction": "Grep + read existing infra before drafting a new skill/design, so it composes instead of duplicating",
+    "instruction": "Breadcrumbs in topbar instead of speedway-exact placement; owner called it a good contrary call",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260717-194812-a9"
-  },
-  {
-    "id": "trig-intelligent-disobedience-over-sycophancy",
-    "from_slug": "intelligent-disobedience-over-sycophancy",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Push back on a default assumption when evidence supports a smarter path",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260709-184108-c3"
-  },
-  {
-    "id": "trig-verify-generated-output-not-green-build",
-    "from_slug": "verify-generated-output-not-green-build",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Checked generated CSS against referencing JS before calling a deploy done; caught a prod-scan gap three green signals missed",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260717-164643-59"
+    "deep_link": "~/.claude/atone/events.jsonl#aff-20260807-120355-ea"
   }
 ]

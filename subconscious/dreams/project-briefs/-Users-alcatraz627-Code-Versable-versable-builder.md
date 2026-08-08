@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-30T12:37:51.481419+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-08-07T03:55:44.553986+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A multi-page web application (versable-builder) with complex shared UI shell components (sidebars, drawers, modals). Work is system-breadth-first: the user expects fixes applied across all pages simultaneously, not one page at a time.
+A SaaS builder product (versable-builder) with a Next.js frontend and multiple pages sharing shell UI components; work involves multi-agent coordination, feature implementation, and protected-repo commit discipline.
 
 ## Things to do (or keep doing)
-- **Audit ALL sibling pages** before writing any shared UI shell component (sidebar, drawer, modal) — implement once globally, never per-page.
-- **Verify at the consumer side** (running dev server, rendered browser page) before claiming any fix is done — send-side success, test-pass, and code edits are not verification.
-- **Always include full file paths** when citing any document or file — basenames force the user to hunt.
-- **Include decision context when deferring** review items — concrete options, prior reasoning, and what information the user needs to decide must travel with the deferred item.
+- Before touching any shared UI component (sidebar, drawer, modal), grep ALL sibling pages for consumers and fix every instance in the same change
+- Verify fixes by exercising the actual running dev server — send-side logs and test-pass signals are not delivery proof; check what rendered
+- When surfacing any deferred or embedded decision, include the original context, concrete options, and prior reasoning — never present a bare label
+- Treat all cached state (task list, branch, file contents) as stale after any burst of parallel or multi-session work; re-read before acting
 
 ## Things to avoid
-- **Don't commit or push** — this is a protected repo; prepare the diff and hand it to the user.
-- **Don't patch only the reported instance** of a UI or pattern issue — fix all instances across the codebase in the same response.
-- **Don't fabricate defaults** when a lookup returns empty — emit UNCERTAIN or DENY, never synthesize a plausible zero/false/ALLOW.
-- **Don't include internal banter or stakeholder commentary** in any document that may be shared externally — strip it before writing.
+- Don't claim a UI fix is done without verifying the full rendered state across all affected pages AND both light/dark modes
+- Don't derive UI copy, labels, or banner text from internal code identifiers — consult design mocks or existing copy first
+- Don't include internal banter, safety verdicts, or evaluative commentary in any document that may be shared externally; identify the final audience before writing
+- Don't commit or push — this is a protected repo; prepare the diff and hand it to the user
 
 ## Open questions / known gaps
-- Parallel sub-agent coordination repeatedly causes state drift (task lists, file ownership, git state) — no stable ownership-negotiation protocol is in place yet.
-- Access-gate default behavior (DENY vs ALLOW for unknown cases) has been a recurring structural gap; verify gate posture whenever building or reviewing any guard/policy component.
+- Autonomy calibration is inverted in practice: the agent pauses on terse continuations but proceeds silently on product-level decisions — pause on scope expansions, never on "keep going"
+- Agent-generated docs (schema docs, gap assessments) get cited as authoritative specs; always trace any cited doc back to whether it was human-authored or agent-derived before using it as ground truth

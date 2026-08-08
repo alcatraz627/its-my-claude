@@ -50,13 +50,15 @@
     "slug": "literal-request-over-intent",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "^\\s*(ok|okay|sure|yes|yeah|go|go ahead|continue|keep going|next|do it|proceed)\\b[\\s.!]*$"
     },
     "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.",
     "created": "2026-07-24T14:54:37.875879Z",
-    "strength": 0.8
+    "promoted": "2026-08-07T03:41:35.632523Z",
+    "promoted_by": "evidence-auto",
+    "strength": 0.9
   },
   {
     "id": "3c40a861cd0842a7",
@@ -130,7 +132,7 @@
     },
     "body": "Before renaming: run `rg -F '<old-name>'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.",
     "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.15714285714285714
+    "strength": 0.1285714285714286
   },
   {
     "id": "d76985ac119aa0bb",
@@ -144,7 +146,7 @@
     },
     "body": "This is a cached artifact, not live state. Re-derive the claim from a live source (ps, process tree, env, sourcing the file) before asserting which session/tty/writer is real.",
     "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.15714285714285714
+    "strength": 0.1285714285714286
   },
   {
     "id": "b26957e5af923ced",
@@ -171,7 +173,7 @@
     },
     "body": "Before drafting design questions: name the 3-5 composite user stories this surface serves and tie each question to one. Don't emit a list of independent taste option-picks.",
     "created": "2026-07-27T19:59:36.977558Z",
-    "strength": 0.2
+    "strength": 0.15714285714285714
   },
   {
     "id": "ab332bca10f938fc",
@@ -185,7 +187,7 @@
     },
     "body": "Before calling this UI change fixed, screenshot the changed element this turn and open the component that owns its padding. No screenshot read back = not fixed.",
     "created": "2026-07-29T00:29:17.608852Z",
-    "strength": 0.5
+    "strength": 0.6000000000000001
   },
   {
     "id": "6ac96d0a5866cf77",
@@ -199,6 +201,19 @@
     },
     "body": "User-facing copy: render it and read the words back before shipping. Strip em-dashes and two-sentence explainers; keep the owner's voice, not default card padding.",
     "created": "2026-07-29T00:29:17.608852Z",
-    "strength": 0.5
+    "strength": 0.6000000000000001
+  },
+  {
+    "id": "d70ac4ce6f871434",
+    "slug": "rebuild-replaced-accumulated-ux-without-parity-audit",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(rewrite|rebuild|re-?implement|replace|redesign|revamp|port)\\b.{0,40}\\b(ui|ux|screen|page|component|dashboard|form|view|flow)\\b"
+    },
+    "body": "Before replacing this surface, write out every interaction the current version supports, then exercise each on the replacement. Restore or explicitly report each dropped capability.",
+    "created": "2026-08-07T03:41:35.625173Z",
+    "strength": 0.3
   }
 ]

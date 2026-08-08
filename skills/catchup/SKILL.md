@@ -74,6 +74,37 @@ Inspect the args string before any resolution work:
 
 If `resolve.sh` exits non-zero from `--session-id` or `--pick`, fall through to Phase 0.4 (the user's chosen reference is stale; let them pick fresh).
 
+## Phase 0.2: Detect the resume mode (post-clear vs post-compact)
+
+`/clear` and `/compact` leave different wreckage, and the restore must match. Decide
+the mode from signals already in front of you, with no tool calls:
+
+| signal | post-clear (fresh session) | post-compact (same session) |
+|---|---|---|
+| conversation before /catchup | empty | a compaction summary survives |
+| `[post-compact]` SessionStart injection | absent | present this session |
+| live Task list | empty | still populated |
+| ipc identity | new; the predecessor alias is dead | unchanged; peers still reach you |
+
+Announce the mode in one line, then let it gate the later phases:
+
+- **post-clear → FULL path.** Run every phase below as written.
+- **post-compact → LIGHT path.** The session keeps its id, its Task list, and its
+  ipc alias, so "restoring" them again duplicates live state. Run checkpoint
+  resolution (the fresh `_precompact-checkpoint.claude.md` is usually the right
+  target), the Phase 1.3/1.4 parse and reality drift, and the briefing. Three cuts
+  apply:
+  - **SKIP Phase 0.8's TaskCreate rehydration.** The live Task list survived
+    compaction; re-creating workspace todos duplicates every open task. Read the
+    workspace doc for drift only.
+  - **SKIP Phase 3.1b entirely.** Your ipc identity is unchanged; no mail was
+    orphaned by a compaction.
+  - **Trust the checkpoint over the summary.** Compaction reliably preserves task
+    momentum while stripping constraints, caveats, and the not-yet-approved state
+    of gated actions. Where the compaction summary and the checkpoint's Resume
+    Contract disagree, the Resume Contract wins, and every push/deploy/destructive
+    approval is expired regardless of what the summary implies.
+
 ## Phase 0.3 — Direct Resolution (when `--session-id` or `--pick` was used)
 
 The JSON entry returned by `resolve.sh` contains `checkpoint_path`, `project_root`, `name`, `summary`, `ts`. It may be preceded by a `note:` line on stderr (collision-preserved pointers exist) — parse only the `{…}` JSON object, or invoke with `2>/dev/null`. Run the Phase 0.4.4 validation + announce sequence on it (same checks as the picker path), then skip to Phase 1.3 (parse the checkpoint file).
@@ -181,7 +212,19 @@ The WAL may be in either format — prefer JSONL, fall back to markdown:
        ```bash
        jq -c 'select(.kind == "checkpoint")' .claude/wal.jsonl | tail -1
        ```
+     - **Validate before trusting.** WAL checkpoint entries are written by callers
+       that sometimes shift or misname arguments (live example: a checkpoint whose
+       `session_id` held the literal string `--goal`). Sanity-check the object:
+       `goal` and `current` must be non-empty prose, and no field value may look
+       like a flag token (`--goal`, `--done`, …). A malformed entry disqualifies
+       the fast path: fall through to Phase 1 instead of presenting garbage.
      - Present `goal` / `done` / `current` / `next` / `blockers` fields from that object
+     - **The WAL carries no Resume Contract.** Constraints, caveats, and expired
+       authorizations live only in the checkpoint file. If any `_*.claude.md`
+       checkpoint exists for this project, extract its `## Resume Contract` section
+       (a targeted Grep, not a full read) and surface it in the briefing's NOW tier
+       even on the fast path. The fast path saves the read of the checkpoint's
+       narrative sections, never the contract.
      - Print: `Resumed from WAL (JSONL fast path). Last checkpoint at [ts].`
      - Skip directly to Phase 2 (targeted file loading), driving Phase 2 from the
        `next` field and any file paths referenced in recent `action` entries:
@@ -308,35 +351,70 @@ Print the reference list so the user can see what will be loaded.
 
 ## Phase 3 — Present Briefing
 
-### 3.1 Print the briefing in inverted order
+### 3.0 Assemble first, render once
 
-Present sections in this order — start from "what's next", not "where we started":
+Phases 3.1b through 3.4 are **collectors**, not printers. Run them (ipc, targeted
+file context, learnings, live subsystem state) before rendering, keeping any
+intermediate output to one-line status notes. Then print ONE briefing. A briefing
+that dribbles out across six tool calls buries the next action under scrollback;
+the whole point of the resume surface is that the user reads a single screen.
+
+### 3.1 Render the briefing in three tiers
+
+The tiers are ordered by what the reader must do with them: **NOW** is binding
+(act from it), **STATE** is situational (check what moved), **CONTEXT** is
+optional (read if unfamiliar). Within a tier, omit any row with nothing to show.
+`Next action` is the only mandatory row in the whole briefing; never render an
+empty section header just to show the skeleton.
 
 ```
-─────────────────────────────────────────────────────
-  Session Catchup
-─────────────────────────────────────────────────────
+═════════════════════════════════════════════════════
+  CATCHUP · <name> · <project, ~-abbreviated> · <age>
+  <one-line summary from the checkpoint index>
+  mode: <post-clear FULL | post-compact LIGHT> · source: <checkpoint | WAL fast path>
+═════════════════════════════════════════════════════
 
-  ▸ Resume Contract            (when present — act from this first)
-    Standing constraints (verbatim, binding fences) /
-    Standing caveats (verbatim, inherited debt) /
-    Next action / Blocked on / Expired authorizations /
-    Decaying prerequisites / Verification state / Key anchor
+  NOW — act from this
+    Next action    <ONE imperative sentence>
+    Blocked on     <USER: … | external actor | omit when none>
+    Constraints    <verbatim, one per line, each with its check>
+    Caveats        <verbatim, one per line>
+    Expired auth   <each item needs fresh user confirmation>
+    Decaying       <prerequisite + its re-arm command, one per line>
 
-  ▸ Reality drift              (only when Phase 1.4 found mismatches)
-    [discrepancy list — checkpoint claim vs git-now]
+  STATE — what moved, what's live
+    Pending        <workspace todos first, checkpoint backlog after;
+                    number them — the hand-off question refers to these>
+    Drift          <checkpoint claim vs git-now, one line per mismatch>
+    Running        <verified processes/ports only — never unverified claims>
+    Mail           <ipc: one line per waiting message or orphan inbox>
 
-  ▸ Pending Items
-    [bullet list from checkpoint]
-
-  ▸ Current Expectation
-    [from checkpoint]
-
-  ▸ Initial Goal
-    [from checkpoint]
-
-─────────────────────────────────────────────────────
+  CONTEXT — read if unfamiliar
+    Goal           <1-2 lines, incl. any mid-session pivot>
+    Expectation    <what the user was waiting for at dump time>
+    Learnings      <2-4 one-line insights, highest continuation value first>
+    Key files      <ranked refs from Phase 2, anchor first, one line each>
+═════════════════════════════════════════════════════
 ```
+
+Rendering rules:
+
+1. **Nothing prints above NOW.** The header identifies the checkpoint (so a wrong
+   pick is caught immediately); NOW is the first content the user reads.
+2. **Constraints and Caveats stay verbatim** (never paraphrased) and always land
+   in NOW when present. This is the anti-laundering rule from
+   `rules/invariant-graduation.md`; it survives every render decision.
+3. **Verification state** from the Resume Contract folds into `Next action` or
+   `Drift` (whichever it qualifies) rather than getting its own row: "UNCONFIRMED,
+   nothing run" belongs next to the action it taints.
+4. **Budget CONTEXT to roughly a dozen lines.** The full checkpoint stays on disk;
+   this tier is orientation, not a reproduction. Cite the checkpoint path once in
+   the header region instead of quoting more of it.
+5. **Number the Pending rows.** The Phase 4 hand-off asks "which item"; numbers
+   make the answer a single keystroke.
+6. **Snippets loaded in 3.2 do not appear in the briefing.** They are working
+   context for you; the briefing cites the file:line and why it matters, one line
+   each, under Key files.
 
 ### 3.1b ipc — register, peek, then answer what the predecessor owes
 
@@ -375,9 +453,10 @@ that the predecessor ended and you have taken over as `<alias>` — so their cha
 resolves instead of dangling. Use `snooze <msg-id> --as <alias>` if it is real work
 you will do later (it stays pending + owed rather than vanishing).
 
-Surface all of it in the briefing under `▸ Waiting ipc mail`: one line per
+Surface all of it in the briefing's `Mail` row: one line per
 message/orphan (`kind from <alias>: <body head>` · `<dead-alias> holds N — peek:
-claude-ipc inbox <dead-alias>`), and say which ones you answered.
+claude-ipc inbox <dead-alias>`), and say which ones you answered. Post-compact
+LIGHT path: this whole subsection is skipped (Phase 0.2).
 
 ### 3.2 Load targeted file context
 
@@ -387,11 +466,13 @@ For each file in the ranked reference list (Phase 2), load **only the relevant s
 - If no specific location is cited: use Grep for the relevant symbol/function name
 - Never read the full file — targeted context only
 
-Print each loaded snippet with its source path and why it was loaded.
+Keep the snippets as working context. In the briefing they surface only as
+one-line `Key files` citations (path:line + why); never paste snippet bodies into
+the briefing.
 
 ### 3.3 Load relevant runtime notes and checkpoint insights
 
-Scan `.claude/skills/runtime-notes.md` for entries relevant to the task domain (match by skill names, file paths, or keywords mentioned in the checkpoint). Print any matching entries as "Learnings from previous runs" — these may prevent repeating past mistakes.
+Scan `.claude/skills/runtime-notes.md` for entries relevant to the task domain (match by skill names, file paths, or keywords mentioned in the checkpoint). Distill matches into the briefing's `Learnings` row, one line each and 2-4 max; these may prevent repeating past mistakes.
 
 Fold the checkpoint's own **Session Insights** section (parsed in 1.3) into the same "Learnings" block — its gotchas and decisions were written by the session you're resuming and routinely carry the highest-value continuation context (model-routing choices, dead ends already explored, non-obvious traps).
 
@@ -409,7 +490,7 @@ WAL="$HOME/.claude/wal.md"; [ -f "$WAL" ] || WAL="$PWD/.claude/wal.md"
 [ -f "$WAL" ] && awk '/=== SHELL SNAPSHOT/{buf=""} {buf=buf $0 "\n"} /Resume with/{snap=buf} END{printf "%s", snap}' "$WAL"
 ```
 
-If any active background processes are found, surface them in the briefing under a **▸ Live subsystem state** heading: list each command and its port if known. Do **not** assert a process is still running — verify the load-bearing ones (e.g. `lsof -ti :<port>` or a quick curl) before relying on or restarting them, since the prior session may have exited and taken its children with it. Silently skip this step when there is no active background state (the common case).
+If any active background processes are found, surface them in the briefing's **Running** row: list each command and its port if known. Do **not** assert a process is still running — verify the load-bearing ones (e.g. `lsof -ti :<port>` or a quick curl) before relying on or restarting them, since the prior session may have exited and taken its children with it. Silently skip this step when there is no active background state (the common case).
 
 ### 3.5 Contribute a gcc-improvement proposal (post-catchup, only when reusable friction surfaced)
 
@@ -445,7 +526,7 @@ Print:
 Then ask:
 
 ```
-Which pending item should we start with?
+Which pending item should we start with? (number from the Pending list, or say)
 →
 ```
 
@@ -454,7 +535,7 @@ Wait for the user's response before beginning any work. Do not make assumptions 
 ## Notes
 
 - **Input contract:** expects the `_*.claude.md` format written by `/core-dump`. Sections are identified by `## Resume Contract`, `## Initial Goal`, `## Agent Actions`, `## Current Expectation`, `## Pending Items`, `## Session Insights` headings (first and last optional on mini/precompact/older dumps).
-- **Inverted presentation order is deliberate:** pending items → expectation → goal. The user knows their goal; they need to know what's left.
+- **The tier order is deliberate:** NOW → STATE → CONTEXT. The user knows their goal; they need the next action and its fences first, situation second, orientation last.
 - **Targeted Grep over full Read:** reduces token usage for large referenced files. The checkpoint's agent actions log provides enough location context (file + symbol) to scope the Grep correctly.
 - **Do not begin work autonomously:** always hand off with a question. The user may want to reprioritize or provide new context before continuing.
 - **Malformed checkpoint:** if sections are missing, warn but do not stop — partial context is better than none.

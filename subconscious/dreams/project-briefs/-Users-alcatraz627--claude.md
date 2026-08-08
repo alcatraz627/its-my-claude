@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-06T03:34:29.434080+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-08-06T15:13:39.907538+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-The user's personal `~/.claude` configuration repository — behavioral rules, skills, hooks, memory systems, and agent tooling. Work here is meta: changes affect every Claude session on the machine.
+This is the user's global Claude configuration repo (`~/.claude`) — rules, skills, hooks, memory, and tooling that govern all Claude sessions. Work here is meta: writing behavioral rules, maintaining memory systems, building shell utilities, and orchestrating multi-agent workflows.
 
 ## Things to do (or keep doing)
-- **Prefer direct evidence over proxy signals** — verify at the consumer end (message received, code path exercised, file exists) before claiming success; send-success / test-pass / compile-clean are not verification.
-- **Always enumerate the full instance set** after finding or fixing one case — one page, one hook, one rule is never the whole class.
-- **Execute terse continuations immediately** — "proceed", "keep going", "yes" means continue the current task without clarifying questions when context pressure is below 70%.
-- **Strip all internal banter before writing any externally-shared document** — docs that leave this session may go directly to stakeholders.
+- **Always grep the full app/codebase before touching any component** — cross-page consistency is the rule, not the exception; sibling instances exist.
+- **Always preserve independently-produced outputs** (plans, reviews) as separate artifacts until the user explicitly requests a merge — two-agent peer-review means side-by-side contrast, never synthesis.
+- **Treat terse continuations as standing permission** to proceed; context below 70% pressure means keep working, no clarifying questions.
+- **Verify receiver state, not sender state** — for IPC, sub-agent output, or any inter-agent handoff, only end-to-end confirmation counts.
 
 ## Things to avoid
-- **Don't treat absence of data as a definite answer** — zero-defaults, ALLOW-on-empty, and fabricated plausible values all share the same failure shape; emit UNCERTAIN or DENY instead.
-- **Don't generalize from one instance without auditing the full class** — UI components, skill phases, rule enforcement, and IPC patterns all require a full-set sweep before declaring done.
-- **Don't defer items to a backlog without including decision context** — stripped-context deferrals force the user to reconstruct what was being decided before they can act.
-- **Don't claim a UI or runtime fix is done without exercising it on the running app** — repeated false-assurance cycles on dev-server behavior are an established trust-damaging pattern here.
+- **Don't claim UI/runtime fixes without exercising the running app** — diff-looks-right is not runtime-correct; open the dev server and visually confirm before using any completion word.
+- **Don't skip mandatory gate phases** (design mocks, adversarial validation, verification checklists) — completion drive overriding gate discipline is the single most repeated failure here.
+- **Don't use agent-authored docs as upstream authority** — trace any spec or assessment back to user-authored source or actual code before citing it as ground truth.
+- **Don't present deferred items without their original context** — include the prior reasoning and concrete options or the user must ask a follow-up question to proceed.
 
 ## Open questions / known gaps
-- **IPC coordination under parallelism** — multi-agent sessions routinely clobber state (task lists, edits, ownership) when throughput is high; a pre-negotiation protocol exists but isn't consistently enforced.
-- **Two-agent peer-review workflow** — user deliberately runs independent plan → grade cycles; the agent repeatedly collapses outputs into merged synthesis rather than maintaining the side-by-side contrast the workflow requires.
+- Parallel work bursts (multi-agent, concurrent edits) consistently leave task lists, branch state, and ownership ambiguous — no single recovery protocol is reliably followed after parallel bursts complete.
+- Mandatory gates exist in docs and skills but are bypassed in-flight by completion momentum; advisory text alone has proven insufficient to hold the gate.

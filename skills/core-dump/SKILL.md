@@ -21,6 +21,28 @@ Two outputs make this skill work, and both are load-bearing:
 2. The **global pointer write** in Phase 3.6 — without it, `/catchup` cannot
    locate the checkpoint and the file is orphaned.
 
+## Continuation advisory: recommending /core-dump + /clear vs /compact
+
+This skill is one half of a decision the agent should make OUT LOUD. When session
+continuation is expected (a ctx-pressure nudge fired, a natural task boundary was
+reached with more work queued, or the user says they'll come back to this),
+proactively recommend one of the two continuation paths in a single line, with
+the reason:
+
+| situation | recommend | why |
+|---|---|---|
+| task boundary reached; next work is separable | `/core-dump` then `/clear` | The checkpoint is auditable and cheap; `/catchup` restores exactly what was written, and a fresh window beats a lossy summary. This is the DEFAULT. |
+| mid-task, and the working state lives in conversation nuance (a long debugging thread, undistilled user decisions, an unfinished deliberation) | `/core-dump mini` then `/compact` | The summary preserves conversational momentum a checkpoint cannot; the mini dump backstops what compaction strips (constraints, caveats, approvals). Prefer a targeted `/compact <instructions>` over bare `/compact` (CLAUDE.md § Compact Instructions). |
+| context under 70% and no boundary | neither | The ctx-pressure hook is the instrument; without its notice, keep working (`rules/communication.md` § context-load claims). |
+
+Two facts anchor the recommendation. Compaction reliably preserves task momentum
+while stripping constraints, caveats, and not-yet-approved state (the documented
+drift engine behind `rules/invariant-graduation.md`), so anything that must
+survive belongs in a written checkpoint BEFORE compacting; the PreCompact hook's
+shell snapshot is a safety net, not a substitute, because it does no LLM
+synthesis. And approvals for pushes, deploys, and destructive ops expire across
+BOTH paths, so neither choice carries authorization forward.
+
 > **Parse contract — do not rename.** `/catchup` parses the checkpoint by exact
 > headings: `## Resume Contract`, `## Initial Goal`, `## Agent Actions`,
 > `## Current Expectation`, `## Pending Items`, `## Session Insights`. Keep them
@@ -184,8 +206,9 @@ waiting for, or about to do?
 A bullet list of what's needed to complete the current task — both agent-side and
 user-side.
 
-Seed this from the live Task list first: read `~/.claude/tasks/<session-id>/*.json`
-(each is `{id, subject, status}`) and treat every non-`completed` task as pending.
+Seed this from the live Task list first: read `~/.claude/tasks/session-<sid8>/*.json`
+(sid8 = first 8 hex of `$CLAUDE_CODE_SESSION_ID`; each file is `{id, subject,
+status}`) and treat every non-`completed` task as pending.
 Then add anything the conversation surfaced that the task list missed. The live
 Task list is the freshest record of what's open; the conversation fills gaps.
 

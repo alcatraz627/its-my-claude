@@ -1,0 +1,23 @@
+{
+  "id": "baa1f8e5-6bc4-4eb5-ae38-fc647f2c50ed",
+  "ts": "2026-08-07T14:40:37Z",
+  "session_id": "catch-all-9b",
+  "project_root": "/Users/alcatraz627/Code/Versable/walmart-mvp",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/walmart-mvp/_20260807-catch-all-9b.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Read functional-validation.md; fix criticals; mark task #51 complete.",
+    "Merge sequence (task #52): gh pr ready 28, merge, main, prod-migration.sh flow, deploy.sh prod, verify prod (domain walmart.versableplatforms.com per deploy.sh PROD_DOMAIN), tell owner.",
+    "After merge: refresh team-update.md when owner asks; write the disposition table reconciling sweep + adversarial findings (the validation goal-hook may need this to clear).",
+    "Board legacy: #8 burn ledger close-out, #19 Settings extras remainder (workspace picker polish, tooltip sweep).",
+    "versable-builder: repo unpushed (ask owner if/when to push); S3 placeholder PNGs cleanup on main; /ui-gripe pass + per-goal e2e criteria (round-1 tail, never run); dark theme still nonexistent (owner-deferred).",
+    "If a new kit change is needed: bump version + publish + lockfile (Docker builds need the registry; local dev needs node_modules sync + vite cache clear)."
+  ],
+  "tags": []
+}

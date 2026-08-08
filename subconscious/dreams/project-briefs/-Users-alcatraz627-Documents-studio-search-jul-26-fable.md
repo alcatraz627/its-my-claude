@@ -1,18 +1,19 @@
-<!-- i-dream project brief · 2026-08-06T03:50:16.068568+00:00 · 11 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-08-07T03:55:24.152034+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-A search-focused UI project (studio/search, Jul-26) built with React/JSX, using a deliberate two-agent mutual peer-review workflow where independent agents produce and grade each other's plans.
+A multi-agent collaborative workspace (likely a search/studio tool) where two agents independently draft and mutually peer-review plans; the dominant working style is parallel agent orchestration with explicit validation gates.
 
 ## Things to do (or keep doing)
-- **Honor the peer-review protocol**: when given another agent's blueprint to grade, produce a side-by-side contrast table — never collapse into a merged recommendation
-- **Respect "good enough" signals**: when the user says get it to a good enough state, stop at a functional baseline and skip exhaustive edge-case handling
-- **Design optional services with idle-off**: local background services (Redis, Ollama) should start explicitly and auto-off after an idle threshold — not always-on
-- **Triage dead peer outputs selectively**: when incorporating an unavailable agent's work, cherry-pick only the valuable parts rather than wholesale adopting it
+- Preserve independently-produced outputs as separate artifacts for grading; present side-by-side contrast when the user asks to compare — never auto-merge
+- When absorbing a dead peer agent's work, triage selectively: show which parts are worth integrating and why, not wholesale adoption
+- When a coworker takes primary ownership of a branch, immediately switch to a PR-based workflow for all subsequent pushes
+- Reconcile task list state before stopping — task drift during high-activity multi-agent sessions is a known failure point here
 
 ## Things to avoid
-- **Don't merge when asked to compare**: a side-by-side contrast and a synthesized recommendation are distinct operations — never substitute one for the other silently
-- **Don't add unprompted warm-up infra**: scheduled pre-load jobs (e.g. ollama warm-morning) without explicit user request are scope creep
-- **Don't use IIFE/scope-wrappers in JSX**: when siblings use inline props or plain const declarations, conform to that pattern instead
-- **Don't skip the round-tracking entry**: after completing a multi-round work cycle, write the board/tracking entry before moving on — this step is consistently missed at session end
+- Don't merge two plans or outputs unless the user explicitly says "merge" — the merging reflex is the top recurring defect in this project
+- Don't add background automation (pm2 warm-ups, cron jobs, scheduled preloads) that wasn't explicitly requested; models and services load on first use
+- Don't accept a sub-agent's scope reduction as settled without independently probing feasibility first — surface the narrowing to the user before treating it as decided
+- Don't deliver a filtered or ranked list without scanning it for entries that obviously violate the stated domain criteria; unexercised filters silently pass garbage
 
 ## Open questions / known gaps
-- Round-tracking discipline is a recurring gap — the board entry is frequently deferred and left pending at session end
+- Null/missing-field handling in the data pipeline is a recurring gap — numeric operations and display logic silently coerce nulls, distorting output
+- Multi-criteria filter/recommendation features repeatedly enforce only a subset of stated criteria; conjunctive enforcement is never verified before delivery

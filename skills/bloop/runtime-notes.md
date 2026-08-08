@@ -1,3 +1,37 @@
+## bloop: 3x run, gcc session-continuity + slop gates + ui toolbox (gcc-work) — 2026-08-08
+
+**Purpose:** 26th-28th runs, one session. A: catchup/core-dump clear+compact
+(ISSUES-FOUND, 1 major). B: prose-smell enforce + .json copy gate
+(ISSUES-FOUND, 2 blockers). C: opus judgment on the ui-toolbox proposal
+(SOUND-WITH-REVISIONS, 1 blocker). Streak 28/28.
+
+**Insights:**
+
+1. A validator reads the CUMULATIVE uncommitted diff, not your session's
+   delta: gate-loopB flagged a model flip that predated the session as a
+   bundled change. State the exact delta in the dispatch prompt, and treat
+   working-tree noise findings as free audits (this one surfaced a real
+   unconfirmed model switch).
+2. Blanket file-extension gates must be validated against the EXISTING tree,
+   not synthetic probes: *.json swept in mcp-catalog.json (32 legit dash
+   hits) whose direct edit another skill mandates. The killer test is "add
+   one new entry in the file's own house style"; if that blocks, the gate
+   fights the convention it lives beside.
+3. The guard-input-class blindness moved up a level: my symlink guard was
+   tested on every branch it had, and the major was the input class that
+   never entered it (a regular file fails -L). Enumerate inputs by what the
+   world contains, not what the code branches on.
+4. Editing prose-gated files: an Edit whose new_string includes an existing
+   em-dash heading (as anchor context) gets blocked for the heading it
+   preserves. End new_string before the dashed heading and anchor on the
+   preceding sentence instead.
+5. Proposal-shaped loops want the opus seat on the DOCUMENT, not the code:
+   the judgment found an architectural blocker (hand-off inadmissible to the
+   consumer's own rules) that no code exercise could see, plus 4 defects in
+   the audited skill the audit itself missed.
+
+---
+
 ## bloop: B3 decay economy (i-dream phase-3 batch 1) — dream-catch-9f — 2026-07-28
 
 **Purpose:** 25th run. Interventions join the decay economy (strength recompute,

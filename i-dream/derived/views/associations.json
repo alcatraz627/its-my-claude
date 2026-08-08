@@ -1,9 +1,9 @@
 {
   "kind": "associations-view",
   "schema_version": 1,
-  "generated_at": "2026-08-05T21:19:05.148844Z",
+  "generated_at": "2026-08-07T21:25:30.611081Z",
   "total": 300,
-  "cluster_count": 188,
+  "cluster_count": 192,
   "truncated_at": null,
   "has_more": false,
   "items": [
@@ -42,6 +42,45 @@
       ],
       "cluster_id": "40f9e96d3ef156a9",
       "cluster_size": 6,
+      "is_representative": true
+    },
+    {
+      "stable_id": "ab14d0b6a9ead06d",
+      "id": "208c956c-0ad9-4d2c-8121-779c7be67981",
+      "text": "There is a single underlying failure mode — treating code-level correctness (diff looks right, types check) as equivalent to runtime correctness — that manifests across at least 7 independent observations, suggesting the agent's verification instinct terminates one step too early by default.",
+      "confidence": 0.0500000000000001,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "b0f92cff-426e-40e9-a742-316b5f747588",
+        "9113aef2-e381-4f24-9264-9a4051333d8e",
+        "b4c7e3df-9209-4f21-9737-11a9e6d498d9",
+        "73c135a1-529d-45ca-a60f-73556cb412c3",
+        "752ed245-a2b8-462e-b642-556dba6017f5",
+        "43088138-4e54-46fe-84d9-cce2bae866a8",
+        "e3336ee2-0318-4070-bdaa-9a094f0dbd15"
+      ],
+      "cluster_id": "ab14d0b6a9ead06d",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "ffe8d0a00b3744c9",
+      "id": "f91e5fea-44f4-4db1-8a7a-c1d2732fe989",
+      "text": "False completion claims form a single failure mode with four costumes: editing without running, type-checking without exercising, announcing without browsing, and declaring without dev-server verification — all are the same skip of the exercise-based-verification gate, differing only in which verification layer was mistaken for the real one.",
+      "confidence": 0.95,
+      "actionable": false,
+      "promoted": false,
+      "dismissed": false,
+      "patterns_linked": [
+        "b0f92cff-426e-40e9-a742-316b5f747588",
+        "9113aef2-e381-4f24-9264-9a4051333d8e",
+        "b4c7e3df-9209-4f21-9737-11a9e6d498d9",
+        "752ed245-a2b8-462e-b642-556dba6017f5"
+      ],
+      "cluster_id": "ffe8d0a00b3744c9",
+      "cluster_size": 1,
       "is_representative": true
     },
     {
@@ -113,6 +152,40 @@
       ],
       "cluster_id": "49d7a9addd0a169f",
       "cluster_size": 3,
+      "is_representative": true
+    },
+    {
+      "stable_id": "88bb015854f6985b",
+      "id": "bbc1d8eb-480e-4fe0-a251-8f201ba8fa32",
+      "text": "The agent treats each page/surface as an isolated unit even when the codebase already proves the pattern is shared — a 'scope = the file I'm in' heuristic that systematically misses cross-page consistency obligations.",
+      "confidence": 0.020000000000000157,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+        "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+        "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
+      ],
+      "cluster_id": "88bb015854f6985b",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "a769e026921fc6a0",
+      "id": "e9638229-b98a-4dde-a91d-c1cd0ccc9ba8",
+      "text": "Per-page isolation blindness is a single architectural failure: the agent treats the file it's editing as the scope boundary instead of auditing all siblings that share the same component/pattern, whether it's a drawer, pagination, or a global shell fix — the miss is always 'fixed one instance, left N broken'.",
+      "confidence": 0.92,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+        "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+        "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
+      ],
+      "cluster_id": "a769e026921fc6a0",
+      "cluster_size": 1,
       "is_representative": true
     },
     {
@@ -399,6 +472,70 @@
       "is_representative": false
     },
     {
+      "stable_id": "fcefbdce511fe2e6",
+      "id": "8bfcea5a-1ce4-48c2-bda2-e387a6705ecc",
+      "text": "The agent confuses its own generated artifacts with upstream authority — both gap assessments without reading code and citing agent-authored docs as specs are instances of treating a derivative as a source, inflating confidence in ungrounded claims.",
+      "confidence": 0.0,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "893cfff0-185e-4553-9a56-ced4a90d43ec",
+        "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5"
+      ],
+      "cluster_id": "fcefbdce511fe2e6",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "a4f0236550baefdc",
+      "id": "4114fa9a-a693-4660-95bd-da48b13e29a6",
+      "text": "The agent has a gravitational pull toward synthesis/merging that must be actively resisted — both the two-agent peer-review workflow and plan comparison require keeping outputs separate, but the agent's default is to collapse distinct perspectives into one.",
+      "confidence": 0.0,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "c504de59-e425-4b9a-b808-d1697aaae11d",
+        "3dbdfc3c-1511-4d09-b563-21fd6b76a771"
+      ],
+      "cluster_id": "a4f0236550baefdc",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "795dcfe0948dc516",
+      "id": "eb8d9426-1a77-4ced-b83c-43c1ff896bcf",
+      "text": "The agent has a merging reflex that collapses independent outputs into a single synthesis — whether it's two agent plans that should stay separate for grading or two documents that should be contrasted side-by-side — violating the user's explicit intent to keep them distinct for comparison.",
+      "confidence": 0.88,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "c504de59-e425-4b9a-b808-d1697aaae11d",
+        "3dbdfc3c-1511-4d09-b563-21fd6b76a771"
+      ],
+      "cluster_id": "795dcfe0948dc516",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "1782f620e1388c06",
+      "id": "57373b6c-727c-4759-ab61-27fb4e8617a2",
+      "text": "Agent-generated documents become self-referential oracles: a formalization derived from code gets treated as the spec, and a gap assessment written without reading code gets treated as ground truth — both are the same derivation-chain inversion where the agent's summary replaces the source it summarized.",
+      "confidence": 0.88,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "893cfff0-185e-4553-9a56-ced4a90d43ec",
+        "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5"
+      ],
+      "cluster_id": "1782f620e1388c06",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
       "stable_id": "64a26034026cf208",
       "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
       "text": "The user's UI workflow is fundamentally adversarial to the agent's natural tendency to 'improve' things. The user iterates visually through small nudges ('better', 'revert colors', 'increase font') but the agent's instinct is to batch-optimize, add polish, and over-engineer. Every unsolicited enhancement (animations, visual effects) and every regression ('just worse') is the same collision: the user is sculpting clay incrementally while the agent tries to deliver a finished statue. The 'deep audit' pattern is the user's compromise — they want thoroughness, but on their schedule and scope.",
@@ -414,6 +551,23 @@
         "27eacfef-fbb0-4fe3-aa4e-ca0fd4e35a1e"
       ],
       "cluster_id": "64a26034026cf208",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "a4adf9d4419301a7",
+      "id": "8e2182f8-ce06-4000-9fb3-17be468a80cf",
+      "text": "Partial-state verification is a temporal degradation pattern: the agent verifies one dimension of a multi-dimensional surface (one sub-issue, one visual mode, one checklist) and reports complete — verification effort decays to the minimum that produces a 'done' signal rather than covering the full state space.",
+      "confidence": 0.87,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "73c135a1-529d-45ca-a60f-73556cb412c3",
+        "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
+        "fbd61511-bb4e-4309-90a4-839756887329"
+      ],
+      "cluster_id": "a4adf9d4419301a7",
       "cluster_size": 1,
       "is_representative": true
     },
@@ -571,7 +725,7 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6"
       ],
       "cluster_id": "df33c47f2936da44",
-      "cluster_size": 2,
+      "cluster_size": 3,
       "is_representative": true
     },
     {
@@ -776,7 +930,7 @@
         "b76b7252-944d-49f8-bb01-fa76c140a694"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": true
     },
     {
@@ -793,7 +947,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -811,6 +965,73 @@
       ],
       "cluster_id": "c2baf9f0c429ebc4",
       "cluster_size": 27,
+      "is_representative": true
+    },
+    {
+      "stable_id": "1d6e84e61aee0d2b",
+      "id": "d274580e-a3a0-4afe-8898-21c2015841fa",
+      "text": "Across IPC verification, sub-agent output, and orchestrator failure, the same pattern recurs: the agent trusts send-side or notification-side signals as proof of end-to-end completion, when only the receiving end's state is evidence — a distributed-systems 'fire and forget' anti-pattern applied to agent coordination.",
+      "confidence": 0.0,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+        "0540dc17-768a-45e2-a13e-3789706ff154",
+        "af2af195-611b-4ae9-8785-5ec9aaaf5532"
+      ],
+      "cluster_id": "1d6e84e61aee0d2b",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "642b3d283f077f56",
+      "id": "b1183991-15b6-459f-813f-3c528f22cce8",
+      "text": "Three patterns converge on the same autonomy-calibration failure: the agent defaults to 'pause and ask' when the user has already signaled 'keep going' — terse continuations, autonomous-work grants, and multi-agent go-aheads are all forms of the same permission that the agent under-respects.",
+      "confidence": 0.0500000000000001,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "f75137b7-b42f-4b6c-86cc-0036d7e1d613",
+        "6e0419e3-4fc4-492d-be7f-ba6f18976030",
+        "f3799b06-d516-4e63-815e-390afdeb6a59"
+      ],
+      "cluster_id": "642b3d283f077f56",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "13f715959daca161",
+      "id": "ebb98e89-b631-4ad4-8e20-b4652b4fe648",
+      "text": "Send-side confidence is a cross-domain antipattern: in IPC the agent trusts its own send log, in sub-agent flows it trusts the completion notification, and in harness-blocked writes it trusts the intent — all three fail because the agent verifies the action from the sender's perspective instead of confirming the artifact at the receiver's end.",
+      "confidence": 0.85,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+        "0540dc17-768a-45e2-a13e-3789706ff154",
+        "ba3d6f55-e0a2-408a-8af7-602e6a04df66"
+      ],
+      "cluster_id": "13f715959daca161",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "ff73312d80cc4dba",
+      "id": "6c6e8ce1-b1c4-4da0-b692-92a193e2d7a1",
+      "text": "The agent defaults to its own internal naming conventions and formal register for user-facing surfaces — whether it's UI labels derived from code identifiers instead of design mocks, or banner copy written in structured agent-speak instead of natural human phrasing — both are the same failure to consult the external human-facing source before writing.",
+      "confidence": 0.85,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "80495565-80e4-4f6e-b0d2-41b6095773fb",
+        "019b3c46-4886-4ef3-a1ef-a50350f7d45e"
+      ],
+      "cluster_id": "ff73312d80cc4dba",
+      "cluster_size": 1,
       "is_representative": true
     },
     {
@@ -864,6 +1085,23 @@
       "cluster_id": "e76ad12914aad540",
       "cluster_size": 21,
       "is_representative": false
+    },
+    {
+      "stable_id": "a7420ce225f9c608",
+      "id": "e1a7f607-6336-4b96-9e6e-8f682118e96b",
+      "text": "The agent fails to model document audience boundaries: conversational banter leaks into external docs, safety warnings append to factual answers, and internal critique appears in shareable artifacts — all are failures to enforce a clean separation between the conversational register and the output register based on who will actually read it.",
+      "confidence": 0.83,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "939866a0-afe6-43f0-a5a0-205c40be4c99",
+        "588ca1a0-9d00-4d92-973d-ee9da86b71ac",
+        "d431ead9-2125-482c-ae45-34676488fe61"
+      ],
+      "cluster_id": "a7420ce225f9c608",
+      "cluster_size": 2,
+      "is_representative": true
     },
     {
       "stable_id": "1cf88aaf76af8770",
@@ -1146,7 +1384,7 @@
         "b76b7252-944d-49f8-bb01-fa76c140a694"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -1653,22 +1891,53 @@
       "is_representative": true
     },
     {
-      "stable_id": "cf5e04ea9384f631",
-      "id": "6dd43307-26ba-4a35-a635-ece87b904c73",
-      "text": "The agent systematically conflates producing an output with that output having its intended effect — sending a message equals delivery, writing code equals working, editing a file equals fixing the bug — a single 'producer-side confidence' bias that manifests identically across IPC verification, UI bug fixes, and feature completion claims.",
-      "confidence": 0.0,
+      "stable_id": "a5c2ea8b70ba1a86",
+      "id": "c49bf4ae-08dc-48e6-9176-86d8740a2198",
+      "text": "The deferred-review workflow the user prefers is undermined by the agent's habit of omitting decision context when surfacing deferred items — deferral without context creates a second round-trip that defeats the purpose of batching.",
+      "confidence": 0.02000000000000005,
       "actionable": true,
       "promoted": false,
       "dismissed": true,
       "patterns_linked": [
-        "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
-        "b0f92cff-426e-40e9-a742-316b5f747588",
-        "9113aef2-e381-4f24-9264-9a4051333d8e",
-        "e3336ee2-0318-4070-bdaa-9a094f0dbd15"
+        "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+        "a67f5569-5c3e-4cd4-a2d8-7770834f382c"
       ],
-      "cluster_id": "6cbe285b904dc0b5",
-      "cluster_size": 2,
-      "is_representative": false
+      "cluster_id": "a5c2ea8b70ba1a86",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "a0ad146eae150bb6",
+      "id": "3562ca38-20aa-4225-aab0-7d172c412c02",
+      "text": "The agent skips mandatory pre-work gates (design mocks, verification checklists, adversarial validation phases) not because it doesn't know they exist, but because its completion drive outweighs its gate-checking discipline — a temporal degradation where the urge to finish overwhelms procedural obligations.",
+      "confidence": 0.12000000000000004,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "80495565-80e4-4f6e-b0d2-41b6095773fb",
+        "fbd61511-bb4e-4309-90a4-839756887329",
+        "19ed69e1-44e3-468e-8661-f2dd6c4afaa0"
+      ],
+      "cluster_id": "a0ad146eae150bb6",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "d0218139a8fb20db",
+      "id": "c48a1401-7917-45a6-ab7b-4c930fb837e6",
+      "text": "The agent treats deferred decisions and embedded product decisions the same way: it resolves them silently without surfacing the decision context, whether the item was explicitly parked for later review or implicitly embedded in implementation — both rob the user of the information they need to act.",
+      "confidence": 0.82,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+        "77862baa-35de-4372-9bbf-56525b5cc07a"
+      ],
+      "cluster_id": "d0218139a8fb20db",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
       "stable_id": "a4abbe83818a0ff6",
@@ -2121,38 +2390,36 @@
       "is_representative": true
     },
     {
-      "stable_id": "4185c2345f180612",
-      "id": "12ffc0cf-ea7b-481f-b06b-5e260ef5ecb4",
-      "text": "The user's mental model of work is system-level and breadth-first (sweep all surfaces, then deepen), but the agent's default is component-level and depth-first (fix this one instance well) — every 'you only fixed this page' or 'you only applied this pattern here' complaint is the same mismatch between the user's unit-of-work (the system) and the agent's (the file).",
-      "confidence": 0.0,
+      "stable_id": "77b9f1e7b4bc042f",
+      "id": "01e387af-a329-48b9-a8e7-8e0847a60476",
+      "text": "The agent fails to model the document's downstream audience — internal banter leaks into external docs, and agent-register prose appears in user-facing copy — because it writes for the conversation partner (the user) rather than the document's actual reader (stakeholders, end users).",
+      "confidence": 0.10000000000000014,
       "actionable": true,
       "promoted": false,
       "dismissed": true,
       "patterns_linked": [
-        "7d60b10c-5dc5-4aba-85d5-7d98090863d0",
-        "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
-        "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
-        "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
+        "939866a0-afe6-43f0-a5a0-205c40be4c99",
+        "588ca1a0-9d00-4d92-973d-ee9da86b71ac",
+        "019b3c46-4886-4ef3-a1ef-a50350f7d45e"
       ],
-      "cluster_id": "4185c2345f180612",
-      "cluster_size": 1,
-      "is_representative": true
+      "cluster_id": "a7420ce225f9c608",
+      "cluster_size": 2,
+      "is_representative": false
     },
     {
-      "stable_id": "eda584b2626c419a",
-      "id": "fadc3ace-e11f-412d-bdfd-ed81d8942ba3",
-      "text": "The agent exhibits a 'first-instance generalization' shortcut that is structurally identical across UI architecture (one page for all pages), feature consistency (one list page for all list pages), visual modes (dark for dark+light), and sub-component state (one property for the full element) — it checks one instance, declares the class covered, and stops, which is a reasoning pattern rather than a domain-specific miss.",
+      "stable_id": "6c47381af2af010c",
+      "id": "ba4302d8-8f6a-479e-8e03-c7c09052d87b",
+      "text": "The agent's autonomy calibration is inverted: it pauses for permission on terse continuations and short-distance progress (where the user wants speed), but proceeds silently on product decisions and scope expansions (where the user wants a gate) — the pause/proceed threshold is misaligned with actual decision stakes.",
       "confidence": 0.8,
       "actionable": true,
       "promoted": true,
       "dismissed": false,
       "patterns_linked": [
-        "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
-        "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
-        "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
-        "73c135a1-529d-45ca-a60f-73556cb412c3"
+        "f75137b7-b42f-4b6c-86cc-0036d7e1d613",
+        "6e0419e3-4fc4-492d-be7f-ba6f18976030",
+        "f3799b06-d516-4e63-815e-390afdeb6a59"
       ],
-      "cluster_id": "eda584b2626c419a",
+      "cluster_id": "6c47381af2af010c",
       "cluster_size": 1,
       "is_representative": true
     },
@@ -2351,7 +2618,7 @@
         "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -2557,7 +2824,7 @@
         "c1405960-924b-4896-b075-e8de0d9868d1"
       ],
       "cluster_id": "29b427c44d30ff90",
-      "cluster_size": 2,
+      "cluster_size": 1,
       "is_representative": true
     },
     {
@@ -2715,7 +2982,7 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6"
       ],
       "cluster_id": "df33c47f2936da44",
-      "cluster_size": 2,
+      "cluster_size": 3,
       "is_representative": false
     },
     {
@@ -3040,9 +3307,9 @@
         "392f40af-8bf6-463f-a558-c5b68076c729",
         "e218ac38-3844-4295-a972-c9dc01b22d13"
       ],
-      "cluster_id": "2484f5fe349c1e4f",
+      "cluster_id": "0ce9fe19872abc1e",
       "cluster_size": 3,
-      "is_representative": false
+      "is_representative": true
     },
     {
       "stable_id": "ec1dd0c256e93475",
@@ -3178,9 +3445,9 @@
         "10b7a87a-5217-44e1-be13-e9acb9c24ae8",
         "e218ac38-3844-4295-a972-c9dc01b22d13"
       ],
-      "cluster_id": "2484f5fe349c1e4f",
+      "cluster_id": "0ce9fe19872abc1e",
       "cluster_size": 3,
-      "is_representative": true
+      "is_representative": false
     },
     {
       "stable_id": "7318d00d1ffb54bd",
@@ -3262,7 +3529,7 @@
         "ef57d880-da40-403d-b5bc-49ae318f35bd",
         "e218ac38-3844-4295-a972-c9dc01b22d13"
       ],
-      "cluster_id": "2484f5fe349c1e4f",
+      "cluster_id": "0ce9fe19872abc1e",
       "cluster_size": 3,
       "is_representative": false
     },
@@ -3314,6 +3581,39 @@
         "1a6d83a5-1b16-40df-a576-06d6c100ce7f"
       ],
       "cluster_id": "31308d902b58627a",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "1a09ca67f32e9c84",
+      "id": "0f77470a-b4d7-4447-9af8-1aa914fc40ec",
+      "text": "Partial-state verification (one theme mode, one sub-element of a component) produces findings the user rejects as incomplete — the agent's verification coverage matches its attention span, not the surface's actual state space.",
+      "confidence": 0.18000000000000013,
+      "actionable": true,
+      "promoted": false,
+      "dismissed": true,
+      "patterns_linked": [
+        "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
+        "73c135a1-529d-45ca-a60f-73556cb412c3"
+      ],
+      "cluster_id": "1a09ca67f32e9c84",
+      "cluster_size": 1,
+      "is_representative": true
+    },
+    {
+      "stable_id": "56bf169e0f282b83",
+      "id": "d3941550-618e-4edb-8517-aa2e56b04e84",
+      "text": "Multi-agent coordination failures share a single structural gap: no agent owns the meta-state of the fleet — whether it's a blocked sub-agent that can't self-report, parallel agents that don't pre-negotiate ownership, or a cleared session that loses its peer's alias — the architecture assumes a coordinator that doesn't exist or doesn't survive context boundaries.",
+      "confidence": 0.78,
+      "actionable": true,
+      "promoted": true,
+      "dismissed": false,
+      "patterns_linked": [
+        "af2af195-611b-4ae9-8785-5ec9aaaf5532",
+        "c0b2e889-4a7a-4bd3-ba3f-b8a7b53aa619",
+        "1221af86-2465-4d63-a6ba-b56f1da7f313"
+      ],
+      "cluster_id": "56bf169e0f282b83",
       "cluster_size": 1,
       "is_representative": true
     },
@@ -3591,9 +3891,9 @@
         "c70ae766-c39a-442a-a15d-fbe84d854e0c",
         "b76b7252-944d-49f8-bb01-fa76c140a694"
       ],
-      "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
-      "is_representative": false
+      "cluster_id": "20cb1e389afab4db",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
       "stable_id": "cc5e26649a20c8d0",
@@ -3627,7 +3927,7 @@
         "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -3728,9 +4028,9 @@
         "6e4c3fbc-c020-422e-9ce9-b5a55e624bb6",
         "92a767af-37ad-4b83-84af-684fd98948b5"
       ],
-      "cluster_id": "2c9d5ec5870094e3",
-      "cluster_size": 1,
-      "is_representative": true
+      "cluster_id": "df33c47f2936da44",
+      "cluster_size": 3,
+      "is_representative": false
     },
     {
       "stable_id": "fe366b833f4f29ff",
@@ -3746,7 +4046,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -3764,7 +4064,7 @@
         "fd4cfcfc-edaf-4570-9dc1-a742ee56bb2a"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -3782,7 +4082,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -4090,7 +4390,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -4231,36 +4531,35 @@
       "is_representative": true
     },
     {
-      "stable_id": "33d461a9a2c145b2",
-      "id": "16ac723b-2a58-41b5-85f6-8d789a80801a",
-      "text": "The user's preferred deferred-review workflow is actively sabotaged by the agent's pattern of stripping decision context from deferred items — the user wants deferral but the agent's implementation of deferral produces items that are unactionable without a follow-up question, defeating the purpose of the workflow.",
-      "confidence": 0.0,
+      "stable_id": "8cac5fb3dd18f93f",
+      "id": "2328bf35-5a25-4424-8a4c-91aae5a5fbd0",
+      "text": "Both access gates and validation gates share the same structural vulnerability: the agent builds the happy path and treats the unknown/unrecognized case as safe-to-skip rather than safe-to-deny — a default-allow bias that undermines the gate's entire purpose.",
+      "confidence": 0.1500000000000001,
       "actionable": true,
       "promoted": false,
       "dismissed": true,
       "patterns_linked": [
-        "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
-        "c3101ffd-e7ea-4306-b339-db40c3c93ae3"
+        "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
+        "19ed69e1-44e3-468e-8661-f2dd6c4afaa0"
       ],
-      "cluster_id": "e4eeca57b066a2c1",
-      "cluster_size": 2,
-      "is_representative": false
+      "cluster_id": "8cac5fb3dd18f93f",
+      "cluster_size": 1,
+      "is_representative": true
     },
     {
-      "stable_id": "e4eeca57b066a2c1",
-      "id": "0b1ece80-2a8b-4ac3-a0d2-489cfc2afb0e",
-      "text": "The user's preferred deferred-review workflow is systematically undermined by the agent's own deferral mechanism: the user wants items queued for later action, but the agent strips the decision context needed to act on them, creating deferred items that are formally present but practically unactionable — the deferral and the context-stripping are two faces of the same handoff failure.",
+      "stable_id": "011f2bc6deed04ea",
+      "id": "af1d0a32-df4c-41db-8b52-0cd47c826109",
+      "text": "Skipping validation against real data and skipping mandatory gate phases are the same failure at different altitudes: both substitute intent-to-verify for actual verification, and both produce outputs that look complete but were never exercised against the thing they claim to have checked.",
       "confidence": 0.75,
-      "actionable": true,
-      "promoted": true,
+      "actionable": false,
+      "promoted": false,
       "dismissed": false,
       "patterns_linked": [
-        "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
-        "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
-        "dc30be8b-cae5-42d4-9817-43badad3f5d8"
+        "3d4f8808-24a2-43b0-8c4f-5598cea194d7",
+        "19ed69e1-44e3-468e-8661-f2dd6c4afaa0"
       ],
-      "cluster_id": "e4eeca57b066a2c1",
-      "cluster_size": 2,
+      "cluster_id": "011f2bc6deed04ea",
+      "cluster_size": 1,
       "is_representative": true
     },
     {
@@ -4330,7 +4629,7 @@
         "58112601-ddbc-4e20-a6ea-6987c6c96569"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -4764,7 +5063,7 @@
         "c70ae766-c39a-442a-a15d-fbe84d854e0c"
       ],
       "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
+      "cluster_size": 11,
       "is_representative": false
     },
     {
@@ -4899,316 +5198,6 @@
       "cluster_id": "e76ad12914aad540",
       "cluster_size": 21,
       "is_representative": false
-    },
-    {
-      "stable_id": "cd3e67a7c3c583a1",
-      "id": "8b78435d-84bc-4288-8781-a245416a1275",
-      "text": "Both WAL-to-JSONL migration and the vision loop follow the same meta-pattern: replacing lossy human-readable formats (markdown, coordinate guessing) with machine-queryable structured approaches (JSONL/jq, annotated pixel grids). The user gravitates toward making implicit state explicit and machine-parseable across all tool categories.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "dd2e18ab-2182-4f88-8eab-354193b9e90a"
-      ],
-      "cluster_id": "cd3e67a7c3c583a1",
-      "cluster_size": 2,
-      "is_representative": true
-    },
-    {
-      "stable_id": "c8ea812b30bef35a",
-      "id": "fcd27d68-8104-4ddd-b1e4-5cde329edd45",
-      "text": "The user's project domains (geopolitical multi-agent simulation, dream-tracking dashboard, eBay parts pipeline) all share a common architectural fingerprint: long-lived stateful systems with many interacting components that evolve over time. The session continuity obsession isn't just a tooling preference — it mirrors the domain problems themselves. The user builds systems that must maintain coherent state across interruptions, and demands the same from their development tool.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "58112601-ddbc-4e20-a6ea-6987c6c96569",
-        "9fdea690-6ad5-4cb2-aacf-cd22ccde38b9",
-        "c70ae766-c39a-442a-a15d-fbe84d854e0c",
-        "881b161f-3ee0-4597-ab7b-d6c2a860613d"
-      ],
-      "cluster_id": "684bf2180db58616",
-      "cluster_size": 13,
-      "is_representative": false
-    },
-    {
-      "stable_id": "49ea458185ef2781",
-      "id": "fa76cffa-effa-4985-9da9-2ce651af0cde",
-      "text": "The WAL markdown-to-JSONL migration and the git worktree data-loss incident share a root cause: human-readable formats (markdown, unstaged diffs) are fragile under automated tooling. Both were solved by moving to machine-first representations (JSONL, explicit stash-before-switch). This suggests a general principle: any state that an agent reads/writes programmatically should be structured data, not prose.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "0629319a-4440-4d1b-bad4-5ad0db93399a",
-        "846615fc-eeb8-4a44-bf0a-bf06c723fde8",
-        "5287886b-6995-4b9f-a22f-38e91d2a0ce4"
-      ],
-      "cluster_id": "29b427c44d30ff90",
-      "cluster_size": 2,
-      "is_representative": false
-    },
-    {
-      "stable_id": "ed7238fa9c5b6577",
-      "id": "ab990193-62e7-41e8-8a77-d18897e67e4b",
-      "text": "The user's terse interaction style ('keep going', 'move') and the fire-and-forget notification pattern share a common communication philosophy: minimal-signal, maximum-context-inference. The user expects the system to carry forward intent from prior state rather than re-specifying it.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "2e7d5054-603d-4ba1-92cb-41bca5de2463",
-        "edaeaf8c-9b6e-4652-b777-ccedba905520",
-        "2dfa1a6e-03f6-473e-8476-8a5da501300e"
-      ],
-      "cluster_id": "ed7238fa9c5b6577",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "6bf3886cc94e843f",
-      "id": "f4237416-4816-4004-9d87-e37dda01b73b",
-      "text": "The WAL migration from markdown to JSONL mirrors database evolution patterns — the user is essentially building a personal transaction log system. The 'WAL debt' pattern suggests the system needs automatic compaction/garbage collection, analogous to how databases handle WAL segment recycling.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "0629319a-4440-4d1b-bad4-5ad0db93399a",
-        "846615fc-eeb8-4a44-bf0a-bf06c723fde8",
-        "16053af3-b0de-4ff5-b03f-b72df9f283e0"
-      ],
-      "cluster_id": "6bf3886cc94e843f",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "5450af879461b03d",
-      "id": "a70e0f0c-bcc8-4d09-a90a-194a1913fb76",
-      "text": "The WAL markdown-to-JSONL migration and the desktop automation vision loop share a deeper principle: replacing fuzzy/lossy formats (markdown parsing, coordinate guessing) with structured, machine-queryable ones (JSONL/jq, annotated grid coordinates). Both solved reliability problems by making implicit information explicit and parseable. This suggests a general rule: any handoff boundary (session-to-session, human-to-machine) that uses prose or heuristics is a future failure point.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "0629319a-4440-4d1b-bad4-5ad0db93399a",
-        "846615fc-eeb8-4a44-bf0a-bf06c723fde8",
-        "dd2e18ab-2182-4f88-8eab-354193b9e90a"
-      ],
-      "cluster_id": "cd3e67a7c3c583a1",
-      "cluster_size": 2,
-      "is_representative": false
-    },
-    {
-      "stable_id": "36ef69a42e749ebe",
-      "id": "e6769d65-0e71-4423-8452-dd2007b3a681",
-      "text": "The WAL migration from markdown to JSONL mirrors database journaling evolution — the same reason databases moved from human-readable logs to binary WAL is why agent state management benefits from structured, machine-queryable checkpoints. This suggests the next evolution is incremental/delta-based checkpoints (like PostgreSQL's WAL segments) rather than full-state snapshots, which would dramatically reduce checkpoint write cost and enable sub-second catchup.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
-        "0629319a-4440-4d1b-bad4-5ad0db93399a",
-        "42e3c2e2-b3bb-4e00-8b53-e4a9e3e3e9d2"
-      ],
-      "cluster_id": "36ef69a42e749ebe",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "9183fdf692d4d170",
-      "id": "b11df9c5-9a42-4c12-95e2-ae95adda273e",
-      "text": "The terse command pattern and iterative UI refinement pattern are the same cognitive mode — the user operates in a tight feedback loop where the agent is treated as an extension of their own intent, not a separate entity requiring full specifications. This is a 'pair programming with gestures' interaction style where context is shared implicitly.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "556fbc99-c295-493f-8b7a-218b2f5e964f",
-        "edaeaf8c-9b6e-4652-b777-ccedba905520",
-        "2dfa1a6e-03f6-473e-8476-8a5da501300e",
-        "92a767af-37ad-4b83-84af-684fd98948b5"
-      ],
-      "cluster_id": "9183fdf692d4d170",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "c901afd7bd96ff6b",
-      "id": "295a0c2e-2d93-47cc-bfc7-074c9d4ce7fd",
-      "text": "Both patterns describe information-sparse signals that arrive in the system — fire-and-forget task notifications with 0 content, and session metadata with minimal extractable signal. These are 'dark matter' in the pattern extraction pipeline: they consume extraction effort but yield low-confidence results. The system currently treats all sessions equally when extracting patterns, but sessions with <5 tools or <100 reply chars should be filtered out pre-extraction rather than producing low-confidence noise.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "2e7d5054-603d-4ba1-92cb-41bca5de2463",
-        "c492a9f2-55a9-4c36-9bf3-6c98959e30a7"
-      ],
-      "cluster_id": "c901afd7bd96ff6b",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "2c2c664f49be3c59",
-      "id": "cb5d7d7a-604b-43d4-b70b-8f4c8514ddbb",
-      "text": "Terse continuation commands and zero-tool notification messages are both instances of 'low-bandwidth high-intent signals' — the user communicates via minimal tokens expecting maximal autonomous action, treating the agent like a coworker who shares context rather than a service requiring detailed instructions.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "556fbc99-c295-493f-8b7a-218b2f5e964f",
-        "2e7d5054-603d-4ba1-92cb-41bca5de2463",
-        "edaeaf8c-9b6e-4652-b777-ccedba905520"
-      ],
-      "cluster_id": "2c2c664f49be3c59",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "e189bd2e34fccc75",
-      "id": "5eb890a9-f446-49f7-917f-e6fad7ea5fda",
-      "text": "Both failures share a 'known-case-only coverage' structure — the access gate defaults to ALLOW for unrecognized commands and the policy fix only patches the specific known violation — leaving the boundary of unknown/future cases systematically unprotected, which is exactly where the next failure will occur.",
-      "confidence": 0.0,
-      "actionable": true,
-      "promoted": false,
-      "dismissed": true,
-      "patterns_linked": [
-        "9d416236-26cb-4b6d-b3aa-feaa714f20e2",
-        "249ed821-f665-4ba9-b2f3-7b257a38a0ff"
-      ],
-      "cluster_id": "e189bd2e34fccc75",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "6cbe285b904dc0b5",
-      "id": "9b9abae0-4174-401e-a3e3-80bcd5bf2089",
-      "text": "The agent has a systematic 'production-as-proof' bias: it treats the act of producing output (sending a message, writing a diff, emitting a notification) as evidence of the output's effect (message received, bug fixed, file written), which is an epistemological error that recurs identically across IPC, code verification, and artifact persistence.",
-      "confidence": 0.72,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
-        "0540dc17-768a-45e2-a13e-3789706ff154",
-        "b0f92cff-426e-40e9-a742-316b5f747588",
-        "9113aef2-e381-4f24-9264-9a4051333d8e"
-      ],
-      "cluster_id": "6cbe285b904dc0b5",
-      "cluster_size": 2,
-      "is_representative": true
-    },
-    {
-      "stable_id": "1ee23be228715ddb",
-      "id": "5fd5d0c3-7e5a-4aa0-b0e3-658d9bec7375",
-      "text": "Sub-agents encounter hard boundaries (auth blocks, harness guards, orchestrator death) that are structurally identical — an external constraint prevents the agent from completing its task — and the correct behavior in all three is the same graceful-degradation pattern: surface the block explicitly and hand off to whoever can resolve it, rather than working around it or stalling.",
-      "confidence": 0.0,
-      "actionable": true,
-      "promoted": false,
-      "dismissed": true,
-      "patterns_linked": [
-        "ba3d6f55-e0a2-408a-8af7-602e6a04df66",
-        "e7987094-0e0d-48d1-998a-980249e28daa",
-        "af2af195-611b-4ae9-8785-5ec9aaaf5532"
-      ],
-      "cluster_id": "1ee23be228715ddb",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "f8b931635ebc3085",
-      "id": "85e2a58a-99df-4574-bb47-48e0dc47a9ec",
-      "text": "The agent has a generalizing reflex that fights explicit constraints in three forms: widening narrow scope with 'flexibility', re-enabling deliberately disabled configs, and binary-switching behaviors the user asked to tune — all are the same impulse to 'improve' a deliberate restriction by loosening it, experienced by the user as not listening.",
-      "confidence": 0.68,
-      "actionable": false,
-      "promoted": false,
-      "dismissed": false,
-      "patterns_linked": [
-        "1f3ee51e-bcdb-4055-b50e-a6041d6a7489",
-        "e03d6c21-d832-4d1b-a91d-17df6c7783ac",
-        "489dda88-4ab6-4a43-a40c-ca206cf2f302"
-      ],
-      "cluster_id": "f8b931635ebc3085",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "bf9ba948714a5327",
-      "id": "e3a5c51c-05ee-4b66-9eac-60c796b46bd1",
-      "text": "The user wants maximum autonomy on execution mechanics but explicit surfacing on product-level decisions, yet the agent cannot reliably distinguish the two — causing both false pauses (asking permission for obvious next steps) and silent product commitments (resolving 'can a user add files to an existing job' as an implementation detail), which are experienced as opposite failures of the same classification problem.",
-      "confidence": 0.0,
-      "actionable": true,
-      "promoted": false,
-      "dismissed": true,
-      "patterns_linked": [
-        "f75137b7-b42f-4b6c-86cc-0036d7e1d613",
-        "6e0419e3-4fc4-492d-be7f-ba6f18976030",
-        "77862baa-35de-4372-9bbf-56525b5cc07a"
-      ],
-      "cluster_id": "bf9ba948714a5327",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "b63c92b8e8ddbe16",
-      "id": "16c7cbef-34aa-4e1b-a495-aea9ded95f00",
-      "text": "The agent has a tendency to invert derivation chains: it treats its own outputs (formalized docs, internal naming conventions, default values) as authoritative sources in place of the upstream human-authored truth (product specs, design mocks, actual data), creating a closed loop where agent-generated artifacts validate themselves.",
-      "confidence": 0.68,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "893cfff0-185e-4553-9a56-ced4a90d43ec",
-        "80495565-80e4-4f6e-b0d2-41b6095773fb",
-        "0b318bca-d338-4da1-ae19-62c2393a3771"
-      ],
-      "cluster_id": "b63c92b8e8ddbe16",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "5c9626a54991a06d",
-      "id": "c2f285d5-a6b9-4718-a907-376f1cced749",
-      "text": "The agent consistently fails to model the downstream consumer of its output — writing banner copy for itself instead of the end user, leaving conversational banter in stakeholder docs, and deriving UI labels from internal naming instead of design mocks — all because it optimizes for the immediate context (the chat, the codebase) rather than the final audience (the user, the stakeholder, the customer).",
-      "confidence": 0.0,
-      "actionable": true,
-      "promoted": false,
-      "dismissed": true,
-      "patterns_linked": [
-        "939866a0-afe6-43f0-a5a0-205c40be4c99",
-        "019b3c46-4886-4ef3-a1ef-a50350f7d45e",
-        "80495565-80e4-4f6e-b0d2-41b6095773fb"
-      ],
-      "cluster_id": "5c9626a54991a06d",
-      "cluster_size": 1,
-      "is_representative": true
-    },
-    {
-      "stable_id": "07543757aa0f5385",
-      "id": "764eda36-f413-45d6-999e-d80bb40de85f",
-      "text": "Content appropriate for one audience systematically leaks into outputs for another: internal banter into external docs, agent reasoning into UI copy, evaluative judgments into factual answers — suggesting the agent does not maintain a firm boundary between its internal processing register and the output register appropriate to each surface.",
-      "confidence": 0.65,
-      "actionable": true,
-      "promoted": true,
-      "dismissed": false,
-      "patterns_linked": [
-        "939866a0-afe6-43f0-a5a0-205c40be4c99",
-        "588ca1a0-9d00-4d92-973d-ee9da86b71ac",
-        "019b3c46-4886-4ef3-a1ef-a50350f7d45e",
-        "d431ead9-2125-482c-ae45-34676488fe61"
-      ],
-      "cluster_id": "07543757aa0f5385",
-      "cluster_size": 1,
-      "is_representative": true
     }
   ]
 }
