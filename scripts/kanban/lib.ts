@@ -86,7 +86,10 @@ export function deriveEntry(list: Note[], activeId?: string): NoteEntry | null {
   const kept = list.filter((n) => n.body.trim());
   if (!kept.length) return null;
   const visible = kept.filter((n) => !parseNoteTags(n.body).me);
-  const newest = kept.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b));
+  // compare as time, not as text: ISO strings of differing precision or offset
+  // sort against real order, and hand-edited data does carry both
+  const at = (n: Note) => Date.parse(n.updatedAt) || 0;
+  const newest = kept.reduce((a, b) => (at(a) >= at(b) ? a : b));
   return {
     note: (visible.length ? visible : kept).map((n) => n.body).join("\n\n"),
     updatedAt: newest.updatedAt,
@@ -282,7 +285,9 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
     for (const old of prev.cards) {
       if (seen.has(old.id)) continue;
       if (old.source.kind === "manual") { cards.push(old); continue; }
-      if (notes[old.id]?.note) {
+      // read the array, not the derived string: an entry can carry notes while
+      // its derived field is empty, and deleting that card would lose them
+      if (notesOf(notes[old.id]).length) {
         cards.push({ ...old, lane: "stale", staleReason: "source item no longer found", updatedAt: now });
         delta.stale++;
       } else {
@@ -295,6 +300,6 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
 
     const board: Board = { cards, overrides: prev.overrides, tombstones, syncedAt: now };
     atomicWrite(path.join(boardDir, "board.json"), board, by, `cards=${cards.length}`);
-    return { board, delta, overridesHeld, notesPreserved: Object.keys(notes).filter((id) => notes[id]?.note).length };
+    return { board, delta, overridesHeld, notesPreserved: Object.keys(notes).filter((id) => notesOf(notes[id]).length).length };
   });
 }

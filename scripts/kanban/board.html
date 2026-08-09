@@ -1003,7 +1003,7 @@ function openDrawer(id, wantNoteId) {
   // newest on open, unless the caller asked for one (a click in the stack)
   openNoteId = wantNoteId && list.some((n) => n.id === wantNoteId)
     ? wantNoteId
-    : list.length ? list.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b)).id : null;
+    : list.length ? list.reduce((a, b) => ((Date.parse(a.updatedAt) || 0) >= (Date.parse(b.updatedAt) || 0) ? a : b)).id : null;
   loadNoteIntoComposer(id);
   renderOtherNotes(id);
   $("drawer").classList.add("open"); $("scrim").classList.add("open");
