@@ -8,7 +8,7 @@ import { execFileSync } from "node:child_process";
 import {
   CliError, KROOT, REGISTRY, SERVER_INFO, LANES, type Lane, cardId, readJson, atomicWrite,
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
-  loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND,
+  loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -167,15 +167,24 @@ switch (verb) {
     const ack = loadAck(boardDir);
     const board = loadBoard(boardDir);
     const titles = new Map(board.cards.map((c) => [c.id, c.title]));
-    const entries = Object.entries(notes).filter(([, n]) => n.note);
+    // one row per NOTE, not per card: a card can carry several asks and each
+    // gets its own pickup state
+    const entries = Object.entries(notes).flatMap(([id, e]) =>
+      notesOf(e).map((n) => [id, n, parseNoteTags(n.body)] as const));
     // --unread is the AGENT's queue: @me self-notes never nag it (tagged notes v1)
-    const unread = entries.filter(([, n]) => Date.parse(n.updatedAt) > ack.lastAckTs && !parseNoteTags(n.note).me);
-    const show = hasFlag("unread") ? unread : entries;
-    const withTags = show.map(([id, n]) => [id, n, parseNoteTags(n.note)] as const);
+    const unread = entries.filter(([id, n, t]) => !t.me && !noteSeen(ack, id, n));
+    const withTags = hasFlag("unread") ? unread : entries;
+    const show = withTags;
+    const ackNow = () => {
+      const next = { ...ack, notes: { ...(ack.notes ?? {}) } };
+      for (const [id, n] of unread) next.notes[ackKey(id, n)] = Date.now();
+      next.lastAckTs = Date.now();
+      atomicWrite(path.join(boardDir, "ack.json"), next, "ack");
+    };
     if (hasFlag("json")) {
-      const out = withTags.map(([id, n, t]) => ({ id, title: titles.get(id) ?? null, note: n.note, updatedAt: n.updatedAt, unread: Date.parse(n.updatedAt) > ack.lastAckTs && !t.me, tags: t }));
+      const out = withTags.map(([id, n, t]) => ({ id, noteId: n.id, title: titles.get(id) ?? null, note: n.body, updatedAt: n.updatedAt, unread: !t.me && !noteSeen(ack, id, n), tags: t }));
       let acked = 0;
-      if (hasFlag("ack")) { atomicWrite(path.join(boardDir, "ack.json"), { lastAckTs: Date.now() }, "ack"); acked = unread.length; }
+      if (hasFlag("ack")) { ackNow(); acked = unread.length; }
       console.log(JSON.stringify({ slug, notes: out, acked, legend: TAG_LEGEND }, null, 2));
       break;
     }
@@ -184,7 +193,7 @@ switch (verb) {
     } else {
       for (const [id, n, t] of withTags.slice(0, 30)) {
         const marks = [t.act && "!now", ...t.skills, ...t.moves.map((l) => ">" + l), t.review && "#review-me", t.me && "@me"].filter(Boolean).join(" ");
-        console.log(`[${id}] ${titles.get(id) ?? "(card gone)"}${marks ? `  [${marks}]` : ""}\n  ${n.note.split("\n").join("\n  ")} (${n.updatedAt})`);
+        console.log(`[${id}#${n.id}] ${titles.get(id) ?? "(card gone)"}${marks ? `  [${marks}]` : ""}\n  ${n.body.split("\n").join("\n  ")} (${n.updatedAt})`);
       }
       if (show.length > 30) console.log(`… ${show.length - 30} more (open the board for all)`);
       const acts = withTags.filter(([, , t]) => t.act).length;
@@ -193,7 +202,7 @@ switch (verb) {
       console.log(TAG_LEGEND);
     }
     if (hasFlag("ack")) {
-      atomicWrite(path.join(boardDir, "ack.json"), { lastAckTs: Date.now() }, "ack");
+      ackNow();
       console.log(`acked ${unread.length} unread`);
     }
     break;
@@ -299,8 +308,14 @@ switch (verb) {
     // membership check (correctly) refuses notes on nonexistent cards.
     const preNote = loadNotes(boardDir)[id];
     if (preNote?.note) {
+      // the card may hold several notes and --force deletes all of them, so
+      // say how many rather than quoting 48 characters of the first
+      const held = notesOf(preNote);
       if (!hasFlag("force")) {
-        die(`card ${id} carries a human note ("${preNote.note.slice(0, 48)}…")`, `kanban.sh drop ${id} --force drops card AND note`);
+        const what = held.length > 1
+          ? `${held.length} human notes (first: "${held[0].body.slice(0, 40)}…")`
+          : `a human note ("${preNote.note.slice(0, 48)}…")`;
+        die(`card ${id} carries ${what}`, `kanban.sh drop ${id} --force drops the card AND ${held.length > 1 ? `all ${held.length} notes` : "the note"}`);
       }
       const port = serverPort();
       if (!port) die(`--force needs the server (single-writer: notes are server-owned) and none is configured`, `start the kanban pm2 service, then retry`);
