@@ -228,7 +228,11 @@ const server = Bun.serve({
       // every note on every board, so the hub can answer "what did I ask for"
       if (p === "/api/notes") {
         const reg = registry();
+        // one unreadable board must not blank the fleet view, so it degrades to
+        // a row that names itself broken
+        const broken: string[] = [];
         const rows = Object.entries(reg.boards).flatMap(([slug, b]) => {
+          try {
           const bdir = path.join(KROOT, "boards", slug);
           const titles = new Map(loadBoard(bdir).cards.map((c) => [c.id, { title: c.title, lane: c.lane }]));
           const ack = loadAck(bdir);
@@ -241,14 +245,16 @@ const server = Bun.serve({
               tags: parseNoteTags(n.body),
               pickedUp: noteSeen(ack, cardId, n),
             })));
+          } catch { broken.push(b.name || slug); return []; }
         });
         rows.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
-        return json({ notes: rows });
+        return json({ notes: rows, broken });
       }
       if (p === "/api/boards") {
         const reg = registry();
         return json({
           boards: Object.entries(reg.boards).map(([slug, b]) => {
+            try {
             const bdir = path.join(KROOT, "boards", slug);
             const board = loadBoard(bdir);
             const counts = Object.fromEntries(LANES.map((l) => [l, board.cards.filter((c) => c.lane === l).length]));
@@ -268,6 +274,13 @@ const server = Bun.serve({
             }, { graded: 0, needsHuman: 0 });
             return { slug, name: b.name, root: b.root, counts, unread, reviewMe, verify, ackTs,
               live: livePeers(b.root), syncedAt: board.syncedAt };
+            } catch {
+              // unreadable board data: say so in place rather than 500 the fleet
+              return { slug, name: b.name, root: b.root, broken: true,
+                counts: Object.fromEntries(LANES.map((l) => [l, 0])),
+                unread: 0, reviewMe: 0, verify: { graded: 0, needsHuman: 0 },
+                ackTs: 0, live: [], syncedAt: null };
+            }
           }),
         });
       }

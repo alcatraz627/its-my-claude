@@ -134,6 +134,14 @@ function boardEl(b, quiet) {
   const ts = b.syncedAt ? Date.parse(b.syncedAt) : 0;
   const stale = ts && Date.now() - ts > 24 * 36e5;
   const sep = '<span class="dotsep"></span>';
+  if (b.broken) {
+    a.className = "board";
+    a.innerHTML = `<div class="row1"><span class="name"></span><span class="badges"><span class="pill blk">unreadable</span></span></div><div class="root"></div>` +
+      `<div class="counts"><span class="stale">This board's data will not parse. Nothing else is affected. Fix or trash <code>~/.claude/kanban/boards/${b.slug}</code>.</span></div>`;
+    a.querySelector(".name").textContent = b.name;
+    const re = a.querySelector(".root"); re.title = b.root; re.textContent = b.root;
+    return a;
+  }
   if (quiet) {
     a.className = "quiet";
     a.innerHTML = `<span class="name"></span><span class="root"></span><span class="mini">${b.counts.active} active · ${open} in motion · synced ${ts ? ago(ts) + " ago" : "never"}</span>`;
