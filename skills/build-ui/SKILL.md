@@ -1,7 +1,26 @@
 ---
 name: build-ui
 description: Plans a page-level UI build or renovation and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the work (surface conversion, trait sweep, or primitive promotion), picks the goal from the decision the user leaves with, derives environment context by measurement rather than memory, states problems as falsifiable triples, assigns a value-add profile that generates loading law, inherits layout by sweeping siblings, then specifies a structural skeleton and a living embryo. Can and must output "no build" when nothing warrants work. Use when asked to build, renovate, restyle, or bring a page up to the design language; when a page "feels dated" or "off"; or before writing UI code for a surface that already exists. Not for single-component fixes or one-line copy changes.
+allowed-tools: Read, Grep, Glob, Bash
+argument-hint: "<page or surface> [trait-only scope]"
+user-invokable: true
 ---
+
+## Brief
+
+Plans a page-level UI build or renovation and emits ONE execution plan a
+different engineer can run cold. Every clause carries a command, a `file:line`,
+or a named artifact. The skill plans; it does not implement. That is enforced
+by `allowed-tools` above, which withholds Write and Edit: the ruling gate in
+Phase 11 is mechanical, not a promise.
+
+## Step 0: Load shared guidelines and runtime context
+
+Read `~/.claude/skills/GUIDELINES.md` and apply its rules for the whole run:
+forbidden paths, retry logic, tool preferences, verbosity, timeouts, and
+post-run insights. Also read `~/.claude/skills/build-ui/runtime-notes.md` for
+past runs; continue without it if absent. This skill holds no file locks
+because it writes only its own plan.
 
 # build-ui
 
@@ -48,7 +67,12 @@ repo**, never inline here:
 
 If `<app>/.claude/ui/primer.md` does not exist, Phase 2 creates it from what you
 measure and asks the owner to confirm the law section. Do not proceed on a
-primer whose recorded SHA is not an ancestor of HEAD; regenerate instead.
+primer whose recorded SHA is not an ancestor of HEAD; regenerate instead. The
+check, so it is a command and not a sentiment:
+
+```bash
+git -C <app> merge-base --is-ancestor <primer-sha> HEAD && echo current || echo regenerate
+```
 
 ---
 
@@ -62,13 +86,17 @@ Stop and say so, before anything else, if:
 
 ## Phase 1. Classify the renovation
 
-**Do this first. It decides the plan's whole shape.** The two shapes are axes,
-not sizes.
+**Do this first. It decides the plan's whole shape.** These are directions of
+travel, not sizes of job.
 
 | Class | Shape | Done-condition |
 |---|---|---|
 | **Surface conversion** | vertical: one page, many traits | the page satisfies every row of its directive table |
 | **Trait sweep** | horizontal: one trait, many pages | a named grep returns zero across the whole tree |
+| **Primitive promotion** | design in the shared kit, release, consume, sweep consumers | the kit exports it, every consumer that should use it does, and none still hand-rolls it |
+
+Three classes, two axes: conversion and sweep are the axes, promotion is the
+kit-shaped case that runs along both.
 
 > **State which direction correct work moves the metric, and reject any metric
 > where correct work and regression move it the same way.** A migration toward a
@@ -78,7 +106,14 @@ not sizes.
 > found to carry the owner ruling that the new dialect was the target. The metric
 > that survives is usually the mixed one: count the files speaking BOTH, and
 > require it to only ever decrease.
-| **Primitive promotion** | design in the shared kit, release, consume, sweep consumers | the kit exports it, every consumer that should use it does, and none still hand-rolls it |
+>
+> **Corollary, and it has cost real work: state checks as a rule plus an
+> enumeration, never as a bare count.** A count is a proxy, and the cheapest way
+> to satisfy a proxy is to damage what it counts. A pilot check demanded one
+> token appear on exactly four elements; it appeared on seven, all of them
+> correct, and meeting the number would have meant deleting real affordances.
+> Write "every use of X is in set S, and here is the list", so a mismatch sends
+> the reader to the list instead of to the delete key.
 
 > **Count consumers through the app's indirection layer, not by the export
 > name.** A well-behaved consumer routes kit exports through a single-source
@@ -132,15 +167,35 @@ current goal is legal but never silent. Write `goal: inherited, unchanged`.
 **Then run the three work triggers.** At least one must fire:
 
 1. **Dialect drift**, mechanical. A grep for superseded tokens or primitives
-   returns hits. Record the count.
+   returns hits. Record the count. **Run the census here, in this phase.** Do
+   not wait for the Phase 3 state primer: this gate decides `no build`, and a
+   gate that consumes a measurement produced one phase later is deciding on
+   nothing. The primer reuses this census; it does not supply it.
 2. **Affordance gap**. Something carries meaning or action without saying so.
 3. **Mock or law divergence**. The surface contradicts the mock, or breaks the
    owner's UI law.
 
 **If none fires, the plan says `no build` and stops.** This is binding, not
 advisory. A builder skill that can never recommend doing nothing is a
-rationalization engine. Log every `no build` so the rate can be audited; an
-instrument that always says no is as useless as one that always says yes.
+rationalization engine.
+
+Log the outcome so the rate can be audited; an instrument that always says no
+is as useless as one that always says yes. One line per run, appended to
+`<app>/.claude/ui/build-log.jsonl`:
+
+```bash
+printf '%s\n' "$(jq -nc --arg ts "$(date -u +%FT%TZ)" --arg s "<surface>" \
+  --arg o "<build|no-build>" --arg t "<trigger that fired, or none>" \
+  '{ts:$ts, surface:$s, outcome:$o, trigger:$t}')" \
+  >> "<app>/.claude/ui/build-log.jsonl"
+```
+
+**Record the outcome per problem, not per run.** A brief usually carries
+several problems and they rarely share a verdict. A pilot run found three of
+seven already solved by a version that landed after the brief was written; a
+single verdict could not say so, and re-solving them would have been the
+literal-request failure. Give each problem its own `build` or `no-build`, and
+say which already-shipped change closed the ones you are declining.
 
 The trigger also sizes the job. Trigger 1 alone is a sweep. Triggers 2 or 3 mean
 a conversion.
@@ -158,6 +213,22 @@ One document with two rot rates is stale by definition. Produce three things.
 who uses it, the shell contract, the token source, the component library, and the
 owner's UI law. Lives in the repo; the plan **cites it and never copies it**,
 because a copy is a fork that rots invisibly.
+
+**Model plan.** The sweeps in this phase and Phase 6 are mechanical grep work,
+so route them and say so (`rules/model-tier-routing.md`). Four lines in the
+plan:
+
+```
+census + sibling sweep → sonnet · low  · read-only, no nesting
+outward reference      → sonnet · medium
+judgment and synthesis → main agent (never delegated)
+validation seat        → sonnet · medium · no nesting (opus if the surface is contested)
+```
+
+**Colour verified on the shipped value.** Any colour specified in a wide space
+(OKLCH, LCH, P3) is checked AFTER conversion to what the browser will serve.
+Clipping to sRGB moves hue, not only chroma: on the pilot it rotated two label
+hues under their separation rule while the specification said they complied.
 
 **State primer.** Regenerated at plan time from fixed commands, never stored, so
 it cannot rot. Kit version and export list; a legacy-token census; the
@@ -300,8 +371,20 @@ The nine trait families, their classes of use, and worked rules live in
 
 > **Promotion rule.** A directive that must hold on **every** page does not
 > belong in a per-page plan at all. Promote it into the repo's permanent gate
-> catalog (`/ui-categorical-check`'s, or a lint rule). The per-page plan carries
-> only what is page-specific.
+> catalog. The procedure, since "promote it" is not a check: append the class
+> to `<catalog>/patterns.md` in that file's own shape (name · what it looks
+> like · why assertions miss it · the mechanical check), where `<catalog>` is
+> the directory `/ui-categorical-check` Phase 1 resolves for this project. The
+> per-page plan then cites the class id instead of restating the rule.
+
+> **Directives outlive the plan only if they become a script.** On approval,
+> the page-specific directive checks are written to
+> `<app>/.claude/ui/checks/<slug>.sh`, exiting non-zero on any violation, and
+> committed with the change. A plan document binds nobody: on the pilot surface
+> a shipped colour contract was violated within hours by a new element whose
+> author reasoned correctly from the law the plan had just replaced, and no
+> mechanism noticed. The script is what turns a directive into something a
+> future change can fail.
 
 ## Phase 9. Specify the skeleton
 
@@ -365,7 +448,9 @@ grep done-conditions.
 
 ## Phase 11. Emit the plan, then stop for the ruling
 
-Write to `<app>/.claude/output/<YYYYMMDD>-<slug>-renovation/PLAN.md`.
+Write to `<app>/.claude/output/<YYYYMMDD>-<HHMM>-<slug>-renovation/PLAN.md`.
+The time segment is not decoration: two plans for one slug on one day collide
+without it, and the second silently overwrites the first.
 
 **Required sections, in this order, none renamed or dropped:**
 
@@ -385,6 +470,26 @@ Then **stop and present to the owner.** No implementation code before the ruling
 Batch every judgment the plan needs into one surface; `/decision-wizard` handles
 more than about three.
 
+**The hand-off block, written into "Other instructions" before you stop.** The
+plan names its own executor and the terms, or the loop ends at the ruling:
+
+- **Executor:** on approval, run the build through `/bloop`, seeding the
+  Phase 4 validator's attack list from this plan's directive checks verbatim.
+  Every D-* row is a named claim to attack.
+- **Post-build gate:** `/ui-categorical-check` runs on the built surface, over
+  the FULL catalog rather than the classes this plan happens to name. On the
+  pilot, every serious finding came from a class the plan did not name; the
+  author's own checks confirmed the author's own design.
+- **Evidence:** the validation report's path lands in this plan's dispositions
+  table. A plan whose dispositions carry no report path is not done.
+- **Commit scope:** name the files this change owns, and commit them with a
+  scoped `git add`. Never `git add -A` in a repo other sessions are editing.
+  On the pilot another session's blanket add swept an entire colour conversion
+  into a commit whose message never mentioned it, so the history records work
+  that appears never to have happened.
+- **Surface claim:** say who holds these files. If another session is editing
+  them, the plan says so and the build uses targeted edits only.
+
 ## Done-condition for this skill
 
 `build-ui` has finished when:
@@ -401,6 +506,8 @@ more than about three.
 - [ ] The embryo names why its region exercises the most state classes
 - [ ] A fresh reader who has never seen the app can name the goal, the regions,
       and the first thing to build
+- [ ] The hand-off block names the executor, the post-build gate, the evidence
+      path, the commit scope, and who holds the files
 
 Anything less is a draft, not a plan.
 
