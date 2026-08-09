@@ -215,6 +215,7 @@
   .srcrow:hover{background:var(--card-hover);border-color:var(--border-2);text-decoration:none}
   .srcrow .path{flex:1;min-width:0;font:12.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .srcrow .ln{font:11.5px/1 var(--mono);color:var(--text-3);flex:none}
+  .srcrow .ln.attached{font-family:var(--sans);border:1px solid var(--border);border-radius:20px;padding:1px 7px}
   .srcrow .go{color:var(--text-3);flex:none;font-size:11.5px}
   .livepeers{display:none;align-items:center;gap:6px;font-size:11.5px;color:var(--text-2);white-space:nowrap}
   .livepeers.on{display:inline-flex}
@@ -449,6 +450,8 @@
 
 <script>
 const slug = location.pathname.split("/")[2];
+// ?card=&note= arrives from the hub's notes view: open that card on that note
+const deepLink = new URLSearchParams(location.search);
 const LANE_ORDER = ["inbox","backlog","active","blocked","done","stale"];
 const LANE_NAME = { inbox:"Inbox", backlog:"Backlog", active:"Active", blocked:"Blocked", done:"Done", stale:"Stale" };
 const ARCHIVE = new Set(["done","stale"]);
@@ -523,6 +526,12 @@ async function load() {
     lastPayload = text;
     data = parsed;
     render();
+    const wantCard = deepLink.get("card");
+    if (wantCard && data.board.cards.some((c) => c.id === wantCard)) {
+      deepLink.delete("card");                        // first paint only
+      openDrawer(wantCard, deepLink.get("note"));
+      history.replaceState(null, "", location.pathname);
+    }
   } catch (e) { lastError = true; showState("err", e.message); }
 }
 
@@ -969,11 +978,14 @@ function openDrawer(id, wantNoteId) {
     return li;
   }));
 
-  const srcRow = (p, line) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
-    `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}<span class="go">↗</span></a>` +
-    `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" hidden></button>`;
-  $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually — no source document.</div>` : srcRow(c.source.path, c.source.line)) +
-    (c.docs?.length ? c.docs.map((d) => srcRow(d, null)).join("") : "");
+  // a linked doc has no line, so its preview is the top of the file. Say that,
+  // or it reads as the harvested excerpt showing the wrong card's content.
+  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
+    `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
+    `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">↗</span></a>` +
+    `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;
+  $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually — no source document.</div>` : srcRow(c.source.path, c.source.line, false)) +
+    (c.docs?.length ? c.docs.map((d) => srcRow(d, null, true)).join("") : "");
   $("dMirror").textContent = `Mirrored from your docs, synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"} — not live code state.`;
 
   $("dId").innerHTML = `<span></span><span style="opacity:.6">⧉</span>`;
@@ -1073,7 +1085,8 @@ async function fillSegs() {
         return s;
       }));
       const hint = document.createElement("span");
-      hint.className = "seghint"; hint.textContent = "click to read the document";
+      hint.className = "seghint";
+      hint.textContent = b.dataset.head ? "the start of an attached document" : "click to read the document";
       b.appendChild(hint);
       b.onclick = () => openDocModal(p, line);
       b.hidden = shown.length === 0;
@@ -1088,9 +1101,10 @@ async function fillSegs() {
 }
 function openDocModal(p, line) {
   const q = `/doc?path=${encodeURIComponent(p)}${line ? `&line=${line}` : ""}`;
+  const framed = `${q}&embed=1`;   // the modal supplies the chrome
   $("dmPath").title = p; $("dmPath").textContent = p;
-  $("dmOpen").href = q;
-  $("dmFrame").src = q;
+  $("dmOpen").href = q;          // a real tab keeps its own theme control
+  $("dmFrame").src = framed;
   $("docmodal").classList.add("on");
   tailTrim($("dmPath")); // keep the filename, drop the leading directories
   $("dmClose").focus();

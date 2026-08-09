@@ -72,11 +72,29 @@
   a.quiet .root{margin:0;flex:1;min-width:0}
   a.quiet .mini{font-size:12.5px;color:var(--text-3);white-space:nowrap}
   .empty{color:var(--text-2);text-align:center;padding:60px 0}
+  .views{display:flex;gap:4px}
+  .views button.on{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  /* a note row: the ask reads in full, its provenance stays quiet */
+  a.note{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;
+         text-decoration:none;color:var(--text);box-shadow:var(--shadow)}
+  a.note:hover{background:var(--card-hover);border-color:var(--border-2)}
+  a.note .nb{font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+  a.note .nf{margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--text-3)}
+  a.note .nf .card{color:var(--text-2)}
+  a.note .nf .wait{color:var(--amber)}
+  .bone{background:var(--card);border:1px solid var(--border);border-radius:10px;height:62px;opacity:.55}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+  .filters button{font-family:var(--mono);font-size:11.5px}
+  .filters button.on{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
 </style>
 </head>
 <body>
 <header>
-  <h1>All boards</h1>
+  <h1 id="htitle">All boards</h1>
+  <div class="views">
+    <button id="vBoards" class="on" type="button">Boards</button>
+    <button id="vNotes" type="button">Notes</button>
+  </div>
   <button id="theme" title="toggle theme">◐</button>
 </header>
 <main id="list"><div class="empty">Loading…</div></main>
@@ -137,8 +155,78 @@ function boardEl(b, quiet) {
   return a;
 }
 
+// Boards stays the default view; Notes answers "what have I asked for" across
+// every project without opening each board.
+let view = "boards", tagFilter = null;
+const FILTERS = [["!now", "act"], ["/skill", "skills"], [">lane", "moves"], ["#review-me", "review"], ["@me", "me"]];
+
+function noteRow(r) {
+  const a = document.createElement("a");
+  a.className = "note";
+  a.href = `/b/${r.slug}?card=${r.cardId}&note=${r.noteId}`;
+  const b = document.createElement("div");
+  b.className = "nb"; b.textContent = r.body;
+  const f = document.createElement("div");
+  f.className = "nf";
+  const card = document.createElement("span");
+  card.className = "card"; card.textContent = r.card ?? "(card gone)";
+  f.append(card, sep(), text(`${r.lane ?? "?"}`), sep(), text(`${ago(Date.parse(r.updatedAt))} ago`));
+  if (!r.pickedUp && !r.tags.me) { f.append(sep()); const w = text("awaiting pickup"); w.className = "wait"; f.append(w); }
+  a.append(b, f);
+  return a;
+}
+const text = (t) => { const s = document.createElement("span"); s.textContent = t; return s; };
+const sep = () => { const s = document.createElement("span"); s.className = "dotsep"; return s; };
+
+async function loadNotes() {
+  const list = document.getElementById("list");
+  list.replaceChildren(...Array.from({ length: 3 }, () => {
+    const d = document.createElement("div"); d.className = "bone"; return d;   // genuinely unknown until fetched
+  }));
+  const { notes } = await (await fetch("/api/notes")).json();
+  const shown = tagFilter ? notes.filter((r) => r.tags[tagFilter]?.length || r.tags[tagFilter] === true) : notes;
+  const bar = document.createElement("div");
+  bar.className = "filters";
+  FILTERS.forEach(([label, key]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = label;
+    b.className = tagFilter === key ? "on" : "";
+    b.onclick = () => { tagFilter = tagFilter === key ? null : key; loadNotes(); };
+    bar.appendChild(b);
+  });
+  if (!shown.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = tagFilter ? `No note carries ${FILTERS.find((f) => f[1] === tagFilter)[0]}.` : "No notes yet. Write one on a card.";
+    list.replaceChildren(bar, e);
+    return;
+  }
+  const byBoard = new Map();
+  for (const r of shown) { if (!byBoard.has(r.board)) byBoard.set(r.board, []); byBoard.get(r.board).push(r); }
+  list.replaceChildren(bar, ...[...byBoard].map(([board, rows]) => {
+    const g = document.createElement("div");
+    g.className = "group";
+    const l = document.createElement("div");
+    l.className = "glabel"; l.textContent = `${board} · ${rows.length}`;
+    g.appendChild(l);
+    rows.forEach((r) => g.appendChild(noteRow(r)));
+    return g;
+  }));
+}
+
+function setView(v) {
+  view = v;
+  document.getElementById("vBoards").className = v === "boards" ? "on" : "";
+  document.getElementById("vNotes").className = v === "notes" ? "on" : "";
+  document.getElementById("htitle").textContent = v === "boards" ? "All boards" : "All notes";
+  load();
+}
+document.getElementById("vBoards").onclick = () => setView("boards");
+document.getElementById("vNotes").onclick = () => setView("notes");
+
 async function load() {
   const list = document.getElementById("list");
+  if (view === "notes") { try { await loadNotes(); } catch (e) { list.innerHTML = `<div class="empty">Notes failed to load: ${e.message}</div>`; } return; }
   try {
     const { boards } = await (await fetch("/api/boards")).json();
     document.getElementById("huberr")?.remove(); // recovered: clear the failure note

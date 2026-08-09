@@ -170,7 +170,9 @@ function docSegment(reqPath: string, line: number): Response {
   return json({ path: r.real, start, total: all.length, lines });
 }
 
-function docResponse(reqPath: string, line = 0): Response {
+// embed=1 is the in-drawer modal, which already has the board's chrome around
+// it: a second theme toggle inside the document reads as a document action.
+function docResponse(reqPath: string, line = 0, embed = false): Response {
   const r = resolveDocPath(reqPath);
   if ("error" in r) {
     if (r.status !== 404) return json({ error: r.error }, r.status);
@@ -200,8 +202,8 @@ th,td{border:1px solid var(--border);padding:5px 10px;text-align:left;vertical-a
 .hit{background:var(--surface);outline:2px solid var(--accent);outline-offset:6px;border-radius:3px}
 #theme{position:fixed;top:12px;right:12px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font:inherit}
 *{scrollbar-width:thin;scrollbar-color:var(--border) transparent}</style>
-<button id="theme" title="toggle theme">◐</button>
-<p style="color:var(--dim)">${real} · read-only</p>${body}
+${embed ? "" : `<button id="theme" title="toggle theme">◐</button>`}
+${embed ? "" : `<p style="color:var(--dim)">${real} · read-only</p>`}${body}
 <script>const applyTheme=t=>{document.documentElement.dataset.theme=t;localStorage.setItem("kanban-theme",t)};
 applyTheme(localStorage.getItem("kanban-theme")||"dark");
 const want=${line || 0};
@@ -223,6 +225,26 @@ const server = Bun.serve({
     if (req.method === "GET" || req.method === "HEAD") {
       if (p === "/") return html("hub.html");
       if (p.startsWith("/b/")) return boardDirOf(p.slice(3)) ? html("board.html") : json({ error: `unknown board ${p.slice(3)} — kanban.sh status lists boards` }, 404);
+      // every note on every board, so the hub can answer "what did I ask for"
+      if (p === "/api/notes") {
+        const reg = registry();
+        const rows = Object.entries(reg.boards).flatMap(([slug, b]) => {
+          const bdir = path.join(KROOT, "boards", slug);
+          const titles = new Map(loadBoard(bdir).cards.map((c) => [c.id, { title: c.title, lane: c.lane }]));
+          const ack = loadAck(bdir);
+          return Object.entries(loadNotes(bdir)).flatMap(([cardId, e]) =>
+            notesOf(e).map((n) => ({
+              board: b.name, slug, cardId, noteId: n.id,
+              card: titles.get(cardId)?.title ?? null,
+              lane: titles.get(cardId)?.lane ?? null,
+              body: n.body, updatedAt: n.updatedAt,
+              tags: parseNoteTags(n.body),
+              pickedUp: noteSeen(ack, cardId, n),
+            })));
+        });
+        rows.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
+        return json({ notes: rows });
+      }
       if (p === "/api/boards") {
         const reg = registry();
         return json({
@@ -259,7 +281,10 @@ const server = Bun.serve({
         return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir),
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root) });
       }
-      if (p === "/doc") return docResponse(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0));
+      if (p === "/doc") {
+        return docResponse(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0),
+          url.searchParams.get("embed") === "1");
+      }
       if (p === "/api/docseg") return docSegment(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0));
       return json({ error: `no route ${p}` }, 404);
     }
