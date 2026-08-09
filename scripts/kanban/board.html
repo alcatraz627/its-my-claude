@@ -13,33 +13,35 @@
      Read + notes only — every mutation still goes through the CLI.
      ============================================================ */
   :root{
-    --canvas:#0a0a0c; --well:#0f1013; --well-attn:#141519; --card:#17181c; --card-hover:#1d1f24;
-    --border:#26282e; --border-2:#353941; --ring:#5b9dff;
-    --text:#e9ebee; --text-2:#a4a9b1; --text-3:#838a94;
-    --blue:#5b9dff; --blue-bg:rgb(91 157 255/.14); --blue-br:rgb(91 157 255/.32);
-    --amber:#e8b84b; --amber-bg:rgb(232 184 75/.14); --amber-br:rgb(232 184 75/.34);
-    --green:#4bbd63; --green-bg:rgb(75 189 99/.14); --green-br:rgb(75 189 99/.30);
+    --canvas:#131417; --well:#191b1f; --card:#212329; --card-hover:#282b32;
+    --border:#2f333b; --border-2:#414651; --ring:#5b9dff;
+    --text:#e9ebee; --text-2:#a4a9b1; --text-3:#8c939d;
+    --blue:#5b9dff; --blue-bg:rgb(91 157 255/.12); --blue-br:rgb(91 157 255/.32);
+    --amber:#e8b84b; --amber-bg:rgb(232 184 75/.12); --amber-br:rgb(232 184 75/.34);
+    --green:#4bbd63; --green-bg:rgb(75 189 99/.12); --green-br:rgb(75 189 99/.30);
+    --red:#ed7666; --red-bg:rgb(237 118 102/.12); --red-br:rgb(237 118 102/.32);
     --shadow:0 1px 2px rgb(0 0 0/.4);
-    --l0:#6aa5ff; --l1:#4cba6a; --l2:#b08cff; --l3:#ff8ab0; --l4:#f0a35e; --l5:#4fc3c0;
+    --l0:#33bda5; --l1:#14bbc2; --l2:#33b5da; --l3:#a497ea; --l4:#c18dd8; --l5:#d686bc;
     --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
     --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
   }
   [data-theme="light"]{
-    --canvas:#f3f4f6; --well:#fafbfc; --well-attn:#ffffff; --card:#ffffff; --card-hover:#f7f8fa;
-    --border:#dfe1e6; --border-2:#c4c9d0; --ring:#0b6bcb;
-    --text:#191c20; --text-2:#565d66; --text-3:#666d76;
-    --blue:#0b6bcb; --blue-bg:rgb(11 107 203/.09); --blue-br:rgb(11 107 203/.26);
-    --amber:#8a5d05; --amber-bg:rgb(190 141 20/.15); --amber-br:rgb(150 108 12/.34);
-    --green:#17752f; --green-bg:rgb(26 127 55/.10); --green-br:rgb(26 127 55/.26);
+    --canvas:#e9ebef; --well:#f4f5f8; --card:#ffffff; --card-hover:#f7f8fa;
+    --border:#d7dae1; --border-2:#b6bcc6; --ring:#0961bb;
+    --text:#191c20; --text-2:#565d66; --text-3:#5f666f;
+    --blue:#0961bb; --blue-bg:rgb(9 97 187/.12); --blue-br:rgb(9 97 187/.26);
+    --amber:#8a5d05; --amber-bg:rgb(190 141 20/.12); --amber-br:rgb(150 108 12/.34);
+    --green:#17752f; --green-bg:rgb(26 127 55/.12); --green-br:rgb(26 127 55/.26);
+    --red:#a1271e; --red-bg:rgb(161 39 30/.12); --red-br:rgb(161 39 30/.28);
     --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
-    --l0:#0b62c4; --l1:#197b34; --l2:#6f42c1; --l3:#b32b6e; --l4:#8a5312; --l5:#0e7570;
+    --l0:#007863; --l1:#006d77; --l2:#006e8f; --l3:#59459f; --l4:#753a8d; --l5:#883170;
   }
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
   ::-webkit-scrollbar{width:10px;height:10px}
   ::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:6px;border:3px solid transparent;background-clip:content-box}
   ::-webkit-scrollbar-track{background:transparent}
   html,body{margin:0;height:100%}
-  body{background:var(--canvas);color:var(--text);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  body{background:var(--canvas);color:var(--text);font:13px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
        font-variant-numeric:tabular-nums;display:flex;flex-direction:column}
   h1,h2,h3{margin:0}
   svg{display:block;flex:none}
@@ -76,7 +78,10 @@
   .notice .grow{flex:1;min-width:0}
   .notice.warn{border-color:var(--amber-br);background:var(--amber-bg);color:var(--amber)}
   .notice.warn .bar{background:var(--amber)}
-  .notice.warn code{font:12px var(--mono);background:rgb(0 0 0/.16);border-radius:4px;padding:1px 5px}
+  .notice.warn code{font:12.5px var(--mono);background:rgb(0 0 0/.16);border-radius:4px;padding:1px 5px}
+  .notice.warn button{flex:none;height:24px;background:none;border:1px solid var(--amber-br);color:var(--amber);
+                      border-radius:20px;padding:0 10px;font-size:11.5px}
+  .notice.warn button:hover{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
   .notice .blk{color:var(--amber)}
   .notice button{background:none;border-color:transparent;color:var(--text-3);padding:3px 8px}
   .notice button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
@@ -88,7 +93,7 @@
   .col.archive{flex:.68 1 204px;min-width:196px;max-width:280px}
   .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 10px;flex:none}
   .chead h2{font:600 13px/1.4 var(--sans);letter-spacing:-.006em;color:var(--text)}
-  .chead .count{margin-left:auto;font-size:12px;font-weight:550;color:var(--text-3);background:var(--card);
+  .chead .count{margin-left:auto;font-size:12.5px;font-weight:550;color:var(--text-3);background:var(--card);
                 border:1px solid var(--border);border-radius:20px;padding:1px 8px;min-width:24px;text-align:center}
   .col.attn .chead .count{color:var(--text);border-color:var(--border-2)}
   details.col{align-self:flex-start}
@@ -97,27 +102,29 @@
   .cards{overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:1px 1px 8px;flex:1;min-height:0}
   .empty-col{color:var(--text-3);font-size:12.5px;padding:6px 5px 12px}
   /* the two columns that need you sit on a lighter well — weight, not hue */
-  .col.attn{background:var(--well-attn);border-color:var(--border-2)}
+  /* attention is width and border weight, never a tint: a hue here would be a
+     fourth claimant on a closed palette, and the light tint measured 1.000 */
+  .col.attn{flex:1.25 1 340px;max-width:460px;border-color:var(--border-2);border-width:1.5px}
 
   /* ---------- card ---------- */
   .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 13px 10px;
         cursor:pointer;outline:none;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;
         transition:background .12s,border-color .12s}
   .card:hover{background:var(--card-hover);border-color:var(--border-2)}
-  .card:focus-visible,.card.sel{border-color:var(--ring);box-shadow:0 0 0 2px rgb(91 157 255/.22),var(--shadow)}
-  [data-theme="light"] .card:focus-visible,[data-theme="light"] .card.sel{box-shadow:0 0 0 2px rgb(11 107 203/.16),var(--shadow)}
+  .card:focus-visible,.card.sel{border-color:var(--ring);box-shadow:0 0 0 2px color-mix(in srgb,var(--ring) 24%,transparent),var(--shadow)}
+  [data-theme="light"] .card:focus-visible,[data-theme="light"] .card.sel{box-shadow:0 0 0 2px color-mix(in srgb,var(--ring) 18%,transparent),var(--shadow)}
   .card .stripe{position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0}
-  .card .title{font:500 13.5px/1.45 var(--sans);letter-spacing:-.008em;color:var(--text);
+  .card .title{font:500 13px/1.45 var(--sans);letter-spacing:-.008em;color:var(--text);
                display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  /* changed since your last visit: the whole card is marked, not a 6px dot */
-  .card.changed{border-color:var(--blue-br)}
+  /* changed since your last visit: the dot alone. The border used to be blue
+     too, which made "this moved" and "your keyboard is here" identical */
   .card.changed .title{padding-right:14px}
   .card .newdot{position:absolute;top:11px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--blue);
                 box-shadow:0 0 0 2px var(--card)}
   /* the human's note, verbatim, with its tags lit in place */
   .note{font-size:12.5px;line-height:1.45;color:var(--text-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .card.blocked .note{color:var(--amber)}
-  .note .tk{font:500 11.5px/1 var(--mono);background:var(--blue-bg);color:var(--blue);border-radius:4px;padding:2px 4px}
+  .note .tk{font:500 11.5px/1 var(--mono);background:var(--well);color:var(--text-2);border-radius:4px;padding:2px 4px}
 
   /* fixed slots: identity on the left, status on the right. position is the
      first thing you learn about a card, so it must not move card to card */
@@ -136,13 +143,14 @@
   .pill.verify{color:var(--green);border-color:var(--green-br);background:var(--green-bg)}
   .pill.verify.soft{color:var(--text-2);border-color:var(--border);background:none}
   .pill.needs{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg);font-weight:600}
-  .pill.tag{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg);font-family:var(--mono);font-size:11.5px}
+  .pill.tag{color:var(--text-2);border-color:var(--border);background:var(--well);font-family:var(--mono);font-size:11.5px}
   .pill.tag.quiet{color:var(--text-3);border-color:var(--border);background:none}
   .pill.prog{gap:6px;padding-left:6px;color:var(--text-2)}
   .l0{color:var(--l0)}.l1{color:var(--l1)}.l2{color:var(--l2)}.l3{color:var(--l3)}.l4{color:var(--l4)}.l5{color:var(--l5)}
-  .pill.label{border-color:currentColor;background:color-mix(in srgb,currentColor 12%,transparent)}
+  /* a label is identity, so it wears the swatch and nothing else; only status
+     is allowed to be a filled pill, which is what keeps the two readable */
+  .pill.label{border-color:var(--border);background:transparent}
   .pill.label .nm{color:var(--text)}
-  [data-theme="light"] .pill.label{background:color-mix(in srgb,currentColor 8%,transparent)}
   .s0 .stripe{background:var(--l0)}.s1 .stripe{background:var(--l1)}.s2 .stripe{background:var(--l2)}
   .s3 .stripe{background:var(--l3)}.s4 .stripe{background:var(--l4)}.s5 .stripe{background:var(--l5)}
 
@@ -160,7 +168,7 @@
   .col.archive .card .foot .src{display:none}
   .col.archive .card .newdot{display:none}
   /* the row is title-first: the marker shrinks so the title keeps its width */
-  .col.archive .pills.keep .pill.needs{height:18px;padding:0 6px;font-size:11px}
+  .col.archive .pills.keep .pill.needs{height:18px;padding:0 6px;font-size:11.5px}
   /* 152px of row cannot hold title + marker + age. the marker wins over the age;
      the age survives in the row's tooltip and in the drawer */
   .col.archive .card .pills.keep ~ .foot{display:none}
@@ -168,9 +176,9 @@
   /* ---------- states ---------- */
   #state{display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-2);padding:80px 0;text-align:center}
   #state.on{display:flex}
-  #state .big{font-size:16px;font-weight:600;color:var(--text)}
+  #state .big{font-size:15.5px;font-weight:600;color:var(--text)}
   #state code{font:12.5px var(--mono);color:var(--text-3);background:var(--well);border:1px solid var(--border);border-radius:6px;padding:2px 7px}
-  #state.err .big{color:var(--amber)}
+  #state.err .big{color:var(--red)}
 
   /* ---------- drawer ---------- */
   #scrim{position:fixed;inset:0;background:rgb(0 0 0/.34);display:none;backdrop-filter:blur(1px)}
@@ -189,7 +197,7 @@
   .dpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .dsub{margin-top:9px;font-size:12.5px;color:var(--text-3)}
   .grp{display:flex;flex-direction:column;gap:10px}
-  .ghead{display:flex;align-items:center;gap:8px;font:600 11px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3)}
+  .ghead{display:flex;align-items:center;gap:8px;font:600 11.5px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3)}
   .ghead .gsp{flex:1}
   .ghead .gval{font:500 11.5px/1 var(--mono);letter-spacing:0;text-transform:none;color:var(--text-2)}
   /* verification is a CLAIM, not metadata: it gets a container you can be
@@ -206,6 +214,35 @@
   .srcrow .path{flex:1;min-width:0;font:12.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .srcrow .ln{font:11.5px/1 var(--mono);color:var(--text-3);flex:none}
   .srcrow .go{color:var(--text-3);flex:none;font-size:11.5px}
+  .livepeers{display:none;align-items:center;gap:6px;font-size:11.5px;color:var(--text-2);white-space:nowrap}
+  .livepeers.on{display:inline-flex}
+  /* blue, not green: the law reserves green for verification, and "active" is blue */
+  .livepeers i{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  .livepeers b{font-weight:550;font-family:var(--mono);font-size:11.5px;color:var(--text)}
+  #filter{width:190px;height:28px;padding:0 10px;border-radius:6px;border:1px solid var(--border);
+          background:var(--card);color:var(--text);font:12.5px/1 var(--sans)}
+  #filter::placeholder{color:var(--text-3)}
+  #filter:focus{outline:2px solid var(--ring);outline-offset:1px;border-color:transparent}
+  .fnone{color:var(--text-2);font-size:13px;padding:14px 2px}
+  /* the pickup receipt is neither verification nor an alarm, so it stays grey */
+  .chead .h.seen{color:var(--text-2)}
+  .chead .h.waiting{color:var(--text-3)}
+  .card .waiting{color:var(--text-3);font-size:11.5px;display:inline-flex;align-items:center;gap:4px}
+  .seg{display:block;width:100%;text-align:left;padding:7px 11px;border:1px solid var(--border);border-radius:8px;
+       background:var(--well);color:var(--text-2);font:12.5px/1.5 var(--sans);cursor:pointer}
+  .seg:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  .seg .segln{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:11.5px/1.55 var(--mono)}
+  .seg .seghint{display:block;margin-top:4px;font-size:11.5px;color:var(--text-3)}
+  .seg.gone{cursor:default;color:var(--text-3);font-size:11.5px}
+  .seg.gone:hover{background:var(--well);border-color:var(--border);color:var(--text-3)}
+  #docmodal{position:fixed;inset:0;background:rgb(0 0 0/.5);display:none;align-items:center;justify-content:center;z-index:4}
+  #docmodal.on{display:flex}
+  #docmodal .dbox{background:var(--canvas);border:1px solid var(--border);border-radius:12px;
+       width:min(880px,92vw);height:min(720px,86vh);display:flex;flex-direction:column;overflow:hidden}
+  #docmodal .dbar{flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+  #docmodal .dbar .dmp{flex:1;min-width:0;font:12.5px/1.4 var(--mono);color:var(--text-2);
+       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl;text-align:left}
+  #docmodal iframe{flex:1;width:100%;border:0}
   .mirror{font-size:11.5px;line-height:1.6;color:var(--text-3)}
   .subs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
   .subs li{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;padding:2px 0;color:var(--text)}
@@ -222,25 +259,27 @@
   .chead .t{font:600 11.5px/1 var(--sans);color:var(--text)}
   .chead .h{font-size:11.5px;color:var(--text-3);flex:1}
   .chead .st{font-size:11.5px;color:var(--text-3)}
-  .chead .st.unsaved{color:var(--amber);font-weight:600}
-  .restored{display:none;align-items:center;gap:8px;font-size:11.5px;color:var(--amber);background:var(--amber-bg);
-            border:1px solid var(--amber-br);border-radius:7px;padding:6px 10px}
+  /* the composer describing itself is not an alarm, so it carries weight, not
+     amber; amber now means one thing only, that the board waits on you */
+  .chead .st.unsaved{color:var(--text);font-weight:600}
+  .restored{display:none;align-items:center;gap:8px;font-size:11.5px;color:var(--text-2);background:var(--well);
+            border:1px solid var(--border-2);border-radius:7px;padding:6px 10px}
   .restored.on{display:flex}
   .restored span{flex:1}
   .restored button{background:none;border:none;color:inherit;text-decoration:underline;padding:0 2px;font-size:11.5px;height:auto}
   /* write conflict: last-write-wins, but never silently */
-  .conflict{display:none;flex-direction:column;gap:7px;font-size:11.5px;color:var(--amber);background:var(--amber-bg);
-            border:1px solid var(--amber-br);border-radius:7px;padding:8px 10px}
+  .conflict{display:none;flex-direction:column;gap:7px;font-size:11.5px;color:var(--red);background:var(--red-bg);
+            border:1px solid var(--red-br);border-radius:7px;padding:8px 10px}
   .conflict.on{display:flex}
   .conflict .crow2{display:flex;align-items:center;gap:8px}
   .conflict .grow{flex:1}
-  .conflict button{background:none;border:1px solid var(--amber-br);color:inherit;padding:1px 8px;height:22px;font-size:11px;border-radius:20px}
-  .conflict button:hover{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+  .conflict button{background:none;border:1px solid var(--red-br);color:inherit;padding:1px 8px;height:22px;font-size:11.5px;border-radius:20px}
+  .conflict button:hover{background:var(--red-bg);border-color:var(--red);color:var(--red)}
   .conflict .ctheirs{font:12.5px/1.5 var(--sans);color:var(--text);background:var(--card);border:1px solid var(--border);
                      border-radius:6px;padding:8px 10px;white-space:pre-wrap}
   textarea{width:100%;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;
            height:clamp(76px,15vh,200px);padding:10px 12px;font:13px/1.55 var(--sans);resize:vertical}
-  textarea:focus{outline:none;border-color:var(--ring);box-shadow:0 0 0 3px rgb(91 157 255/.16)}
+  textarea:focus{outline:none;border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 18%,transparent)}
   .cbar{display:flex;align-items:center;gap:8px}
   .inserts{display:flex;gap:5px;flex-wrap:wrap;flex:1}
   .tagbtn{font:500 11.5px/1 var(--mono);padding:0 9px;height:24px;border-radius:20px;color:var(--text-2)}
@@ -260,13 +299,13 @@
   #help{position:fixed;inset:0;background:rgb(0 0 0/.4);display:none;align-items:center;justify-content:center;z-index:4}
   #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:20px 24px;min-width:340px;
              box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
-  #help h3{font:600 14px/1 var(--sans);margin-bottom:14px}
+  #help h3{font:600 13px/1 var(--sans);margin-bottom:14px}
   #help table{border-collapse:collapse}
   #help td{padding:3px 14px 3px 0;color:var(--text-2);font-size:12.5px}
   #help td:first-child{white-space:nowrap}
   #help kbd{font:500 11.5px/1 var(--mono);background:var(--card);border:1px solid var(--border);border-bottom-width:2px;
             border-radius:5px;padding:3px 6px;color:var(--text)}
-  #help .grouphead{padding-top:14px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+  #help .grouphead{padding-top:14px;font:600 11.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
 </style>
 </head>
 <body>
@@ -275,7 +314,9 @@
     <span class="crumb"><a href="/" title="all boards">All boards</a><span>/</span></span>
     <h1 class="btitle" id="name">kanban</h1>
     <span class="bpath" id="root"></span>
+    <span class="livepeers" id="live"></span>
     <div class="actions">
+      <input id="filter" type="search" placeholder="Filter cards  /" aria-label="filter cards" autocomplete="off">
       <button id="digestBtn" title="copy status digest (c)">Copy status</button>
       <button class="icon" id="theme" title="toggle theme (t)" aria-label="toggle theme">◐</button>
       <button class="icon" id="helpBtn" title="shortcuts (?)" aria-label="shortcuts">?</button>
@@ -329,7 +370,7 @@
   <div class="composer">
     <div class="chead">
       <span class="t">Your note</span>
-      <span class="h">the agent reads this on its next pickup</span>
+      <span class="h" id="dPickup">the agent reads this on its next pickup</span>
       <span class="st" id="dSaved"></span>
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
@@ -345,6 +386,14 @@
 </aside>
 
 <div id="toast" role="status"></div>
+<div id="docmodal" role="dialog" aria-modal="true" aria-label="document preview"><div class="dbox">
+  <div class="dbar">
+    <span class="dmp" id="dmPath"></span>
+    <a id="dmOpen" href="#" target="_blank" rel="noopener">open in tab ↗</a>
+    <button type="button" id="dmClose">close</button>
+  </div>
+  <iframe id="dmFrame" title="document preview" src="about:blank"></iframe>
+</div></div>
 <div id="help"><div class="box">
   <h3>Keyboard</h3>
   <table>
@@ -402,7 +451,7 @@ function laneIcon(lane, size = 14) {
   switch (lane) {
     case "inbox": return wrap(ring("1.6 2.4"), "var(--text-3)");
     case "backlog": return wrap(ring(), "var(--text-3)");
-    case "active": return wrap(ring() + `<circle cx="${c}" cy="${c}" r="${r / 2}" fill="currentColor"/>`, "var(--blue)");
+    case "active": return wrap(ring() + `<circle cx="${c}" cy="${c}" r="${r / 2}" fill="currentColor"/>`, "var(--text)");
     case "blocked": return wrap(ring() + `<rect x="${c - 2}" y="${c - 2}" width="4" height="4" rx="1" fill="currentColor"/>`, "var(--amber)");
     case "done": return wrap(`<circle cx="${c}" cy="${c}" r="${r + .6}" fill="currentColor"/><path d="M${c - 3} ${c} l2.2 2.2 L${c + 3.2} ${c - 2.4}" stroke="var(--well)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`, "var(--green)");
     default: return wrap(ring("1.6 2.4"), "var(--border-2)");
@@ -412,7 +461,7 @@ function laneIcon(lane, size = 14) {
 function progRing(done, total) {
   const r = 5, C = 2 * Math.PI * r, p = total ? done / total : 0;
   return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="${r}" stroke="var(--border-2)" stroke-width="2"/>` +
-    (p > 0 ? `<circle cx="7" cy="7" r="${r}" stroke="${p === 1 ? "var(--green)" : "var(--blue)"}" stroke-width="2" stroke-linecap="round"
+    (p > 0 ? `<circle cx="7" cy="7" r="${r}" stroke="${p === 1 ? "var(--green)" : "var(--text-2)"}" stroke-width="2" stroke-linecap="round"
        stroke-dasharray="${(C * p).toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 7 7)"/>` : "") + `</svg>`;
 }
 const CHECK = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 L4.8 8.5 L9.5 3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -532,7 +581,10 @@ function cardEl(c) {
       </span>${statHTML}
     </div>` +
     (needs && isArchive ? `<div class="pills keep"><span class="pill needs" title="graded, but wants your own testing">Needs you</span></div>` : "") +
-    `<div class="foot"><span class="src"></span><span class="age"></span></div>`;
+    `<div class="foot"><span class="src"></span>` +
+    (note && !nt.me && Date.parse(data.notes[c.id].updatedAt) > (data.ackTs || 0)
+      ? `<span class="waiting" title="written after the agent last read this board's notes">awaiting pickup</span>` : "") +
+    `<span class="age"></span></div>`;
   el.querySelector(".title").textContent = c.title;
   if (c.tag) el.querySelector(".xtag").textContent = c.tag; // "(#7)" / "OWNER REMINDER" prefix from the doc
   if (c.heading) {
@@ -619,8 +671,11 @@ function renderStale() {
   const bar = $("stalebar");
   const ts = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
   if (ts && Date.now() - ts > 24 * 36e5) {
-    bar.innerHTML = `<span class="bar"></span><span class="grow">This mirror was synced ${ago(ts)} ago — it reflects the docs then, not the code now. Refresh with <code>kanban.sh sync</code>.</span>`;
+    const cmd = `kanban.sh sync --project ${data.root}`;
+    bar.innerHTML = `<span class="bar"></span><span class="grow">This mirror was synced ${ago(ts)} ago — it reflects the docs then, not the code now. Refresh with <code>kanban.sh sync</code>.</span>` +
+      `<button type="button" id="copySync">copy command</button>`;
     bar.className = "notice warn on";
+    $("copySync").onclick = () => { navigator.clipboard.writeText(cmd); toast("Sync command copied"); };
   } else bar.className = "notice warn";
 }
 
@@ -645,11 +700,13 @@ function render() {
   $("name").textContent = data.name;
   document.title = `${data.name} · kanban`;
   $("root").title = data.root; $("root").textContent = data.root;
-  const cards = data.board.cards;
-  if (!cards.length) { showState("empty"); return; }
+  const all = data.board.cards;
+  if (!all.length) { showState("empty"); return; }
+  const cards = all.filter(matchFilter);
   const by = (k) => cards.filter((c) => c.lane === k);
   renderSummary();
   renderStale();
+  renderLive();
 
   flat = [];
   const colEl = (lane) => {
@@ -663,7 +720,9 @@ function render() {
     wrap.id = `lane-${lane}`;
     const head = document.createElement(collapsible ? "summary" : "div");
     head.className = "chead";
-    head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2><span class="count">${cardsIn.length}</span>`;
+    const total = all.filter((c) => c.lane === lane).length;
+    head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2>` +
+      `<span class="count">${filterText ? `${cardsIn.length}/${total}` : total}</span>`;
     wrap.appendChild(head);
     const list = document.createElement("div");
     list.className = "cards";
@@ -672,6 +731,13 @@ function render() {
     wrap.appendChild(list);
     return wrap;
   };
+  if (filterText && !cards.length) {
+    const none = document.createElement("div");
+    none.className = "fnone";
+    none.textContent = `No card matches “${filterText}”. Press Esc in the filter to clear it.`;
+    $("lanes").replaceChildren(none);
+    return;
+  }
   $("lanes").replaceChildren(...LANE_ORDER.map(colEl).filter(Boolean));
   markSel();
   tailTrim($("root"));
@@ -739,7 +805,7 @@ function checkConflict(parsed) {
 function renderConflict(at) {
   const el = $("dConflict");
   if (conflictNote === null) { el.className = "conflict"; el.innerHTML = ""; return; }
-  el.innerHTML = `<div class="crow2"><span class="grow">The agent rewrote this note${at ? " " + ago(Date.parse(at)) + " ago" : ""}. Saving keeps yours.</span>` +
+  el.innerHTML = `<div class="crow2"><span class="grow">This note changed elsewhere${at ? " " + ago(Date.parse(at)) + " ago" : ""}, maybe in another tab. Saving keeps yours.</span>` +
     `<button type="button" id="cShow">show theirs</button><button type="button" id="cUse">use theirs</button></div>` +
     `<div class="ctheirs" id="cTheirs" hidden></div>`;
   $("cTheirs").textContent = conflictNote || "(they cleared the note)";
@@ -819,7 +885,8 @@ function openDrawer(id) {
   }));
 
   const srcRow = (p, line) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
-    `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}<span class="go">↗</span></a>`;
+    `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}<span class="go">↗</span></a>` +
+    `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" hidden></button>`;
   $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually — no source document.</div>` : srcRow(c.source.path, c.source.line)) +
     (c.docs?.length ? c.docs.map((d) => srcRow(d, null)).join("") : "");
   $("dMirror").textContent = `Mirrored from your docs, synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"} — not live code state.`;
@@ -844,8 +911,10 @@ function openDrawer(id) {
   dirty = hasDraft;
   $("dSaved").textContent = hasDraft ? "unsaved" : (data.notes[id]?.updatedAt ? `saved ${ago(Date.parse(data.notes[id].updatedAt))} ago` : "");
   $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
+  renderPickup(id);
   renderParse();
   $("drawer").classList.add("open"); $("scrim").classList.add("open");
+  fillSegs();
 }
 function stepCard(d) {
   if (!flat.length) return;
@@ -854,6 +923,103 @@ function stepCard(d) {
 }
 $("dPrev").onclick = () => stepCard(-1);
 $("dNext").onclick = () => stepCard(1);
+
+// A stale mirror reads differently when someone is still working the project,
+// so name who is here now. Absent broker means no badge, never a wrong one.
+function renderLive() {
+  const el = $("live");
+  const who = data.live ?? [];
+  if (!who.length) { el.className = "livepeers"; el.replaceChildren(); return; }
+  el.replaceChildren();
+  const dot = document.createElement("i");
+  const label = document.createElement("span");
+  label.textContent = who.length === 1 ? "session live:" : `${who.length} sessions live:`;
+  const names = document.createElement("b");
+  names.textContent = who.join(", ");
+  el.append(dot, label, names);
+  el.title = "agent sessions working in this project right now";
+  el.className = "livepeers on";
+}
+
+// Filtering is a view over the mirror, never a mutation of it: it narrows what
+// renders and the column counts say visible/total so nothing looks lost.
+let filterText = "";
+function matchFilter(c) {
+  if (!filterText) return true;
+  const hay = [c.title, c.heading, c.tag, c.source?.path, data.notes[c.id]?.note,
+    ...(c.subs ?? []).map((s) => s.title)].filter(Boolean).join(" ").toLowerCase();
+  return filterText.split(/\s+/).every((t) => hay.includes(t));
+}
+$("filter").addEventListener("input", (e) => {
+  filterText = e.target.value.trim().toLowerCase();
+  if (data) render();
+});
+$("filter").addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { e.stopPropagation(); e.target.value = ""; filterText = ""; e.target.blur(); if (data) render(); }
+});
+
+// The note loop has two halves. This is the half the board used to hide: when
+// an agent last ran `notes --ack`, and whether this note has been picked up.
+function renderPickup(id) {
+  const el = $("dPickup");
+  const n = data.notes[id];
+  const ack = data.ackTs || 0;
+  if (!n?.note) { el.textContent = "the agent reads this on its next pickup"; el.className = "h"; return; }
+  const written = Date.parse(n.updatedAt);
+  if (ack >= written) { el.textContent = `picked up by an agent ${ago(ack)} ago`; el.className = "h seen"; return; }
+  el.textContent = ack ? `not picked up yet (agent last read ${ago(ack)} ago)` : "not picked up yet";
+  el.className = "h waiting";
+}
+
+// Source rows carry a few lines of the doc they point at, fetched per open.
+// A row whose doc has since moved says so instead of staying a blind link.
+let segRun = 0;
+async function fillSegs() {
+  const run = ++segRun;
+  for (const b of document.querySelectorAll("#dSrc .seg")) {
+    const p = b.dataset.path, line = b.dataset.line;
+    try {
+      const res = await fetch(`/api/docseg?path=${encodeURIComponent(p)}&line=${line || 0}`);
+      if (run !== segRun) return;
+      if (!res.ok) throw new Error(String(res.status));
+      const seg = await res.json();
+      if (run !== segRun) return;
+      const shown = seg.lines.filter((l) => l.trim()).slice(0, 3);
+      b.className = "seg";
+      b.replaceChildren(...shown.map((t) => {
+        const s = document.createElement("span");
+        s.className = "segln"; s.textContent = t;
+        return s;
+      }));
+      const hint = document.createElement("span");
+      hint.className = "seghint"; hint.textContent = "click to read the document";
+      b.appendChild(hint);
+      b.onclick = () => openDocModal(p, line);
+      b.hidden = shown.length === 0;
+    } catch {
+      if (run !== segRun) return;
+      b.className = "seg gone";
+      b.textContent = "This document has moved or been deleted. Re-sync with kanban.sh sync";
+      b.onclick = null;
+      b.hidden = false;
+    }
+  }
+}
+function openDocModal(p, line) {
+  const q = `/doc?path=${encodeURIComponent(p)}${line ? `&line=${line}` : ""}`;
+  $("dmPath").textContent = p;
+  $("dmOpen").href = q;
+  $("dmFrame").src = q;
+  $("docmodal").classList.add("on");
+  $("dmClose").focus();
+}
+function closeDocModal() {
+  $("docmodal").classList.remove("on");
+  $("dmFrame").src = "about:blank";
+}
+const docModalOpen = () => $("docmodal").classList.contains("on");
+$("dmClose").onclick = closeDocModal;
+$("docmodal").onclick = (e) => { if (e.target === $("docmodal")) closeDocModal(); };
 $("dDiscard").onclick = () => {
   if (!openId) return;
   localStorage.removeItem(DRAFT_KEY(openId));
@@ -863,7 +1029,9 @@ $("dDiscard").onclick = () => {
 function closeDrawer() {
   // no confirm dialog: closing flushes the pending draft write, so it can never lose it
   flushDraft();
-  if (dirty) toast("Draft kept — it will be here when you come back");
+  // dirty means "typed", not "changed": reverting to the saved text leaves
+  // nothing to keep, so promising a kept draft would be a lie.
+  if (dirty && $("dNote").value !== baseNote) toast("Draft kept — it will be here when you come back");
   dirty = false; openId = null;
   $("drawer").classList.remove("open"); $("scrim").classList.remove("open");
 }
@@ -895,6 +1063,10 @@ $("dSave").onclick = async () => {
 
 document.addEventListener("keydown", (e) => {
   if (e.target === $("dNote")) { if (e.key === "Escape") e.target.blur(); return; }
+  if (e.target === $("filter")) return;
+  if (e.key === "/") { e.preventDefault(); $("filter").focus(); $("filter").select(); return; }
+  // the modal is the topmost layer, so it consumes Escape before help or drawer
+  if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
   if ($("help").style.display === "flex" && e.key !== "?") { $("help").style.display = "none"; return; }
   switch (e.key) {
     case "j": sel = Math.min(sel + 1, flat.length - 1); markSel(); if (openId) openDrawer(flat[sel]); break;

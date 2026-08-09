@@ -43,15 +43,23 @@ function renderMd(src: string): string {
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, `<a href="$2" rel="noopener">$1</a>`);
   const out: string[] = [];
+  // Blocks carry the source line they started on, so /doc?line=N can scroll to
+  // the place a card was harvested from. The fence split eats one line per ```.
+  let srcLine = 1;
+  const anchor = (n: number) => ` id="L${n}"`;
   src.replace(/<!--[\s\S]*?-->/g, "").split(/```/).forEach((block, i) => {
-    if (i % 2 === 1) { out.push(`<pre><code>${esc(block.replace(/^[a-z]*\n/, ""))}</code></pre>`); return; }
+    const blockStart = srcLine;
+    srcLine += block.split("\n").length - 1;
+    if (i % 2 === 1) { out.push(`<pre${anchor(blockStart)}><code>${esc(block.replace(/^[a-z]*\n/, ""))}</code></pre>`); return; }
     const lines = esc(block).split("\n");
     let para: string[] = [];
+    let paraLine = blockStart;
+    let listLine = blockStart;
     let list: { tag: "ul" | "ol"; items: string[] } | null = null;
     let table: string[][] | null = null;
-    const flushPara = () => { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
+    const flushPara = () => { if (para.length) { out.push(`<p${anchor(paraLine)}>${inline(para.join(" "))}</p>`); para = []; } };
     const flushList = () => {
-      if (list) { out.push(`<${list.tag}>` + list.items.map((x) => `<li>${inline(x)}</li>`).join("") + `</${list.tag}>`); list = null; }
+      if (list) { out.push(`<${list.tag}${anchor(listLine)}>` + list.items.map((x) => `<li>${inline(x)}</li>`).join("") + `</${list.tag}>`); list = null; }
     };
     const flushTable = () => {
       if (!table) return;
@@ -63,9 +71,12 @@ function renderMd(src: string): string {
       table = null;
     };
     const flushAll = () => { flushPara(); flushList(); flushTable(); };
-    for (const l of lines) {
+    for (const [idx, l] of lines.entries()) {
+      const here = blockStart + idx;
+      if (!para.length) paraLine = here;
+      if (!list) listLine = here;
       const h = l.match(/^(#{1,6}) (.*)$/);
-      if (h) { flushAll(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); continue; }
+      if (h) { flushAll(); out.push(`<h${h[1].length}${anchor(here)}>${inline(h[2])}</h${h[1].length}>`); continue; }
       if (/^\s*\|.*\|\s*$/.test(l)) {
         flushPara(); flushList();
         const cells = l.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
@@ -93,19 +104,84 @@ function renderMd(src: string): string {
   return out.join("\n");
 }
 
-function docResponse(reqPath: string): Response {
-  // Owner-ratified scope (F6a): board projects + reports + scratchpad — never
-  // the whole ~/.claude, which holds private ledgers.
+// Shared gate for every doc-reading route. Owner-ratified scope (F6a): board
+// projects + reports + scratchpad — never the whole ~/.claude, which holds
+// private ledgers.
+// Which agent sessions are working in a board's project right now, read from
+// the claude-ipc registry. Liveness is never cached: a stale "live" is worse
+// than no badge, so every call re-reads, and any failure means no badge at all.
+const IPC_DB = path.join(os.homedir(), ".claude-ipc", "data", "ipc.sqlite");
+let ipcMissing = false;
+function livePeers(root: string): string[] {
+  if (ipcMissing) return [];
+  let db: any = null;
+  try {
+    if (!fs.existsSync(IPC_DB)) { ipcMissing = true; return []; }
+    // lazy: a machine with no ipc broker never pays for the sqlite driver
+    const { Database } = require("bun:sqlite");
+    // opened per call on purpose: a kept handle pins a WAL snapshot, so
+    // last_seen freezes while the clock moves and every peer ages out to dead.
+    db = new Database(IPC_DB, { readonly: true });
+    // the broker's own status is authoritative; this window only discards rows
+    // a dead broker left behind. Heartbeats run every few minutes, so 15 is safe.
+    const cutoff = Date.now() / 1000 - 900;
+    const rows = db.query(
+      "select alias, cwd from registry_snapshot where status in ('live','idle') and last_seen > ?1",
+    ).all(cutoff) as { alias: string; cwd: string }[];
+    const real = fs.realpathSync(root);
+    const named = rows
+      .filter((r) => r.cwd === real || r.cwd?.startsWith(real + path.sep))
+      .map((r) => r.alias)
+      // a uuid-shaped alias is a session that never named itself; it is noise
+      .filter((a) => !/^[0-9a-f-]{8,}$/i.test(a) && !/-[0-9a-f]{8}$/i.test(a));
+    return [...new Set(named)].sort();
+  } catch { return []; }
+  finally { try { db?.close(); } catch { /* nothing to do */ } }
+}
+
+function resolveDocPath(reqPath: string): { real: string } | { error: string; status: number } {
   const roots = [
     ...Object.values(registry().boards).map((b) => b.root),
     path.join(os.homedir(), ".claude", "assets", "reports"),
     path.join(os.homedir(), ".claude", "scratchpad"),
   ];
   let real: string;
-  try { real = fs.realpathSync(path.resolve(reqPath)); } catch { return json({ error: `no such file: ${reqPath}` }, 404); }
+  try { real = fs.realpathSync(path.resolve(reqPath)); } catch { return { error: `no such file: ${reqPath}`, status: 404 }; }
   const allowed = roots.some((r) => { try { const rr = fs.realpathSync(r); return real === rr || real.startsWith(rr + path.sep); } catch { return false; } });
-  if (!allowed) return json({ error: `path outside allowlisted roots (board projects + ~/.claude/assets/reports + ~/.claude/scratchpad)` }, 403);
-  if (!/\.(md|txt|markdown)$/i.test(real)) return json({ error: "doc viewer renders .md/.txt only" }, 415);
+  if (!allowed) return { error: `path outside allowlisted roots (board projects + ~/.claude/assets/reports + ~/.claude/scratchpad)`, status: 403 };
+  if (!/\.(md|txt|markdown)$/i.test(real)) return { error: "doc viewer renders .md/.txt only", status: 415 };
+  return { real };
+}
+
+// A few lines of a source doc around the harvested line, for the drawer's
+// inline preview. Same allowlist as /doc; JSON because the board consumes it.
+function docSegment(reqPath: string, line: number): Response {
+  const r = resolveDocPath(reqPath);
+  if ("error" in r) return json({ error: r.error }, r.status);
+  const all = fs.readFileSync(r.real, "utf8").split("\n");
+  const center = line >= 1 && line <= all.length ? line : 1;
+  const start = Math.max(1, center - 2);
+  const lines = all.slice(start - 1, Math.min(all.length, start + 10));
+  return json({ path: r.real, start, total: all.length, lines });
+}
+
+function docResponse(reqPath: string, line = 0): Response {
+  const r = resolveDocPath(reqPath);
+  if ("error" in r) {
+    if (r.status !== 404) return json({ error: r.error }, r.status);
+    // a human lands here from a stale card link; JSON is the wrong shape
+    return new Response(
+      `<!doctype html><meta charset="utf-8"><title>doc not found</title>
+<style>body{background:#14161a;color:#d8dde4;font:15px/1.6 -apple-system,sans-serif;max-width:640px;margin:18vh auto;padding:0 1rem}
+code{background:#1b1e24;border:1px solid #2a2f37;border-radius:4px;padding:1px 5px}p{color:#8a93a0}</style>
+<h2>This document is gone</h2>
+<p><code>${reqPath.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] ?? c))}</code></p>
+<p>The board is a mirror of your docs at sync time; this source file has since moved
+or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</code></p>`,
+      { status: 404, headers: { "content-type": "text/html; charset=utf-8" } },
+    );
+  }
+  const real = r.real;
   const body = renderMd(fs.readFileSync(real, "utf8"));
   return new Response(
     `<!doctype html><meta charset="utf-8"><title>${path.basename(real)}</title>
@@ -116,12 +192,17 @@ code,pre{background:var(--surface);border:1px solid var(--border);border-radius:
 pre{padding:10px;overflow-x:auto}h1,h2,h3{line-height:1.3}a{color:var(--accent)}hr{border:0;border-top:1px solid var(--border)}
 table{border-collapse:collapse;margin:10px 0;display:block;overflow-x:auto;max-width:100%}
 th,td{border:1px solid var(--border);padding:5px 10px;text-align:left;vertical-align:top}th{background:var(--surface)}
+.hit{background:var(--surface);outline:2px solid var(--accent);outline-offset:6px;border-radius:3px}
 #theme{position:fixed;top:12px;right:12px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font:inherit}
 *{scrollbar-width:thin;scrollbar-color:var(--border) transparent}</style>
 <button id="theme" title="toggle theme">◐</button>
 <p style="color:var(--dim)">${real} · read-only</p>${body}
 <script>const applyTheme=t=>{document.documentElement.dataset.theme=t;localStorage.setItem("kanban-theme",t)};
 applyTheme(localStorage.getItem("kanban-theme")||"dark");
+const want=${line || 0};
+if(want){const els=[...document.querySelectorAll("[id^=L]")].filter(e=>/^L\\d+$/.test(e.id));
+ const hit=els.filter(e=>+e.id.slice(1)<=want).pop()||els[0];
+ if(hit){hit.classList.add("hit");hit.scrollIntoView({block:"center"});}}
 document.getElementById("theme").onclick=()=>applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark");</script>`,
     { headers: { "content-type": "text/html; charset=utf-8" } },
   );
@@ -150,7 +231,13 @@ const server = Bun.serve({
             const ackTs = loadAck(bdir).lastAckTs;
             const unread = notes.filter((n) => Date.parse(n.updatedAt) > ackTs && !parseNoteTags(n.note).me).length;
             const reviewMe = notes.filter((n) => parseNoteTags(n.note).review).length;
-            return { slug, name: b.name, root: b.root, counts, unread, reviewMe, syncedAt: board.syncedAt };
+            const verify = board.cards.reduce((a, c) => {
+              if (c.verify?.needsHuman) a.needsHuman++;
+              else if (c.verify?.grade) a.graded++;
+              return a;
+            }, { graded: 0, needsHuman: 0 });
+            return { slug, name: b.name, root: b.root, counts, unread, reviewMe, verify, ackTs,
+              live: livePeers(b.root), syncedAt: board.syncedAt };
           }),
         });
       }
@@ -159,9 +246,13 @@ const server = Bun.serve({
         const dir = boardDirOf(slug);
         if (!dir) return json({ error: `unknown board ${slug}` }, 404);
         const reg = registry().boards[slug];
-        return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir), notes: loadNotes(dir) });
+        // ackTs closes the note loop in the UI: it is when an agent last ran
+        // `notes --ack`, so a note newer than it has not been picked up yet.
+        return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir),
+          notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root) });
       }
-      if (p === "/doc") return docResponse(url.searchParams.get("path") ?? "");
+      if (p === "/doc") return docResponse(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0));
+      if (p === "/api/docseg") return docSegment(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0));
       return json({ error: `no route ${p}` }, 404);
     }
 
