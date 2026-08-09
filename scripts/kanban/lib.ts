@@ -65,7 +65,19 @@ export const noteId = (): string => Math.random().toString(36).slice(2, 10);
 // One note per legacy string, so nothing on disk is rewritten to be readable.
 export function notesOf(e: NoteEntry | undefined): Note[] {
   if (!e) return [];
-  if (e.notes?.length) return e.notes;
+  // shape, not truthiness: a string has .length too, and hand-edited data does
+  // reach here. A note missing its id or timestamp is repaired, never dropped.
+  if (Array.isArray(e.notes) && e.notes.length) {
+    const seen = new Set<string>();
+    return e.notes
+      .filter((n): n is Note => !!n && typeof n.body === "string")
+      .map((n, i) => {
+        let id = typeof n.id === "string" && n.id ? n.id : `n${i}`;
+        while (seen.has(id)) id = `${id}-${i}`;
+        seen.add(id);
+        return { ...n, id, updatedAt: typeof n.updatedAt === "string" ? n.updatedAt : (e.updatedAt ?? new Date(0).toISOString()) };
+      });
+  }
   return e.note ? [{ id: "legacy", body: e.note, updatedAt: e.updatedAt }] : [];
 }
 

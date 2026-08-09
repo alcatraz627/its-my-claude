@@ -80,6 +80,26 @@ d=json.load(open('$dir/notes.json'))
 sys.exit(0 if d.get('$card',{}).get('notes') else 1)" \
   && ok "sync preserved notes[]" || no "sync dropped notes[]"
 
+# 5. malformed stores reach these readers by hand-edit, and a string has
+#    .length, so a shape check is the only thing between them and a crash
+python3 - "$dir/notes.json" "$card" <<'PY'
+import json, sys
+path, card = sys.argv[1], sys.argv[2]
+json.dump({
+  card: {"note": "derived", "updatedAt": "2026-01-01T00:00:00.000Z", "notes": [
+      {"id": "ok", "body": "!now a normal one", "updatedAt": "2099-01-01T00:00:00.000Z"},
+      {"body": "missing id", "updatedAt": "2099-01-01T00:00:00.000Z"},
+      {"id": "noTs", "body": "missing updatedAt"},
+      {"id": "ok", "body": "duplicate id", "updatedAt": "2099-01-01T00:00:00.000Z"}]},
+  "zzznotarray": {"note": "fallback", "updatedAt": "2099-01-01T00:00:00.000Z", "notes": "not an array"},
+}, open(path, "w"), indent=2)
+PY
+cli2=$(bun "$HERE/cli.ts" notes --project "$ROOT" 2>&1)
+printf '%s' "$cli2" | rg -q "TypeError|is not a function" \
+  && no "malformed notes crash the CLI" || ok "malformed notes do not crash the CLI"
+printf '%s' "$cli2" | rg -q "duplicate id" && ok "a duplicate id is kept, not dropped" || no "a duplicate id was dropped"
+printf '%s' "$cli2" | rg -q "fallback" && ok "a non-array notes field falls back to the legacy string" || no "non-array notes lost the legacy string"
+
 bun "$HERE/cli.ts" unregister "$slug" >/dev/null 2>&1
 rm -rf "$ROOT" 2>/dev/null
 echo "  ---- $pass passed, $fail failed"
