@@ -109,12 +109,8 @@ function renderMd(input: string): string {
   return out.join("\n");
 }
 
-// Shared gate for every doc-reading route. Owner-ratified scope (F6a): board
-// projects + reports + scratchpad — never the whole ~/.claude, which holds
-// private ledgers.
-// Which agent sessions are working in a board's project right now, read from
-// the claude-ipc registry. Liveness is never cached: a stale "live" is worse
-// than no badge, so every call re-reads, and any failure means no badge at all.
+// Which agent sessions are working in a board's project right now, from the
+// claude-ipc registry. A stale "live" is worse than no badge, so nothing caches.
 const IPC_DB = path.join(os.homedir(), ".claude-ipc", "data", "ipc.sqlite");
 let ipcMissing = false;
 function livePeers(root: string): string[] {
@@ -146,6 +142,8 @@ function livePeers(root: string): string[] {
   finally { try { db?.close(); } catch { /* nothing to do */ } }
 }
 
+// Doc routes serve only board projects, ~/.claude/assets/reports and scratchpad,
+// never all of ~/.claude (F6a). Every doc-reading route goes through here.
 function resolveDocPath(reqPath: string): { real: string } | { error: string; status: number } {
   const roots = [
     ...Object.values(registry().boards).map((b) => b.root),
