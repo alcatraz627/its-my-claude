@@ -216,8 +216,9 @@
   .srcrow .go{color:var(--text-3);flex:none;font-size:11.5px}
   .livepeers{display:none;align-items:center;gap:6px;font-size:11.5px;color:var(--text-2);white-space:nowrap}
   .livepeers.on{display:inline-flex}
-  /* blue, not green: the law reserves green for verification, and "active" is blue */
-  .livepeers i{width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+  /* neutral, not blue: blue now means "you and your controls" and active is
+     carried by width and weight, so a peer-liveness dot is information */
+  .livepeers i{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex:none}
   .livepeers b{font-weight:550;font-family:var(--mono);font-size:11.5px;color:var(--text)}
   #filter{width:190px;height:28px;padding:0 10px;border-radius:6px;border:1px solid var(--border);
           background:var(--card);color:var(--text);font:12.5px/1 var(--sans)}

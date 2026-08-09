@@ -39,6 +39,35 @@ esac
 content=$(printf '%s' "$input" | jq -r '.tool_input.content // .tool_input.new_string // empty' 2>/dev/null)
 [ -n "$content" ] || exit 0
 
+# An .html file is often an application, not a document. Its <style> and
+# <script> bodies are code and score as gibberish prose (a CSS token block
+# measured 14.95 against a block line of 8). Judge only the markup's text.
+if [ "$mode" = "prose" ]; then
+  case "$fp" in
+    *.html)
+      content=$(printf '%s' "$content" | python3 -c 'import re,sys
+s=sys.stdin.read()
+s=re.sub(r"(?is)<style\b.*?(</style>|\Z)"," ",s)
+s=re.sub(r"(?is)<script\b.*?(</script>|\Z)"," ",s)
+# An Edit payload is a bare fragment, so tag-stripping alone misses it. Drop
+# lines whose shape is code: braces, arrows, var(), a selector head, or a
+# declaration. A bare semicolon is NOT a marker; house prose is full of them.
+# A statement ending in a semicolon AND carrying an assignment or a call is
+# code though, which is what a braceless JS line looks like. Comments stay:
+# they carry no terminator, so they still reach the linter as the prose they are.
+CODE = re.compile(r"[{}]|=>|var\(--|^\s*[.#@][\w-]+[\s,{]|^\s*:root|[\w-]+\s*:\s*\S+;|[=(].*;\s*$")
+# A dash is the owner zero-budget tell, and a UI string carrying one IS prose,
+# so no shape rule may strip that line. Without this, prose ending in ";"
+# escapes scoring entirely.
+KEEP = re.compile(r"[–—]")
+sys.stdout.write("\n".join(l for l in s.split("\n") if KEEP.search(l) or not CODE.search(l)))' 2>/dev/null)
+      # A pure code/markup edit leaves no prose worth judging.
+      words=$(printf '%s' "$content" | tr -cs "[:alpha:]" " " | wc -w | tr -d " ")
+      [ "${words:-0}" -ge 25 ] 2>/dev/null || exit 0
+      ;;
+  esac
+fi
+
 if [ "$mode" = "code" ]; then
   findings=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/code-copy-lint.py" --json - 2>/dev/null | jq -r '.findings[:3] | map("  [" + (.tells|join("|")) + "] " + .text) | join("\n")' 2>/dev/null)
   if [ -n "$findings" ]; then
