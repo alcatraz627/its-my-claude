@@ -309,7 +309,16 @@ const server = Bun.serve({
       if (!body.noteId && body.note.trim() !== "" && existing.length > 1) {
         return json({ error: "this card has several notes and your page is out of date; reload and try again" }, 409);
       }
-      let result: { ok: true; savedAt: string; noteId?: string } | { error: string } = { error: "unwritten" };
+      // creating an empty note does nothing, so do not pretend it worked
+      if (body.noteId === "new" && body.note.trim() === "") {
+        return json({ error: "an empty note is not saved; write something first" }, 400);
+      }
+      // an id that is not on the card means the note was deleted under the
+      // client. Appending a duplicate would hide that; say so instead.
+      if (body.noteId && body.noteId !== "new" && !existing.some((n) => n.id === body.noteId)) {
+        return json({ error: "that note is no longer on this card; reload to see the current ones" }, 409);
+      }
+      let result: { ok: true; savedAt: string; noteId?: string } | { error: string; status?: number } = { error: "unwritten" };
       await enqueueNote(() => {
         const all = loadNotes(dir);
         const list = notesOf(all[body.cardId!]).map((n) => ({ ...n }));
@@ -334,6 +343,8 @@ const server = Bun.serve({
             target.body = body.note!; target.updatedAt = now;
             if (body.title !== undefined) target.title = body.title;
             active = target.id;
+          } else if (blank) {
+            active = list[0]?.id;   // nothing to create, so report no id
           } else {
             const fresh = { id: noteId(), body: body.note!, updatedAt: now, ...(body.title ? { title: body.title } : {}) };
             list.push(fresh);

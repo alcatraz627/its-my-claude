@@ -1154,6 +1154,24 @@ $("dSave").onclick = async () => {
   try {
     const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ slug, cardId: openId, noteId: openNoteId ?? "new", note: $("dNote").value }) });
+    // a 409 means the card moved under this page. Reload it rather than
+    // leaving the human staring at a save that will keep failing.
+    if (res.status === 409) {
+      const { error } = await res.json();
+      const text = $("dNote").value;
+      // dirty blocks the poll from replacing data, so clear it before refreshing,
+      // then hand the text back as a new note so the typing is never the casualty
+      dirty = false; $("dNote").blur();
+      const c = openId; openId = null; lastPayload = "";
+      await load();
+      openDrawer(c);
+      openNoteId = null;
+      loadNoteIntoComposer(c); renderOtherNotes(c);
+      $("dNote").value = text; dirty = true;
+      $("dSaved").textContent = "unsaved"; $("dSaved").className = "st unsaved";
+      toast(`${error} Your text is kept and will save as a new note.`, 6000, "err");
+      return;
+    }
     if (!res.ok) throw new Error((await res.json()).error || res.status);
     const out = await res.json();
     dirty = false; $("dSaved").textContent = "saved just now"; $("dSaved").className = "st";
