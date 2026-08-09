@@ -7,7 +7,7 @@ import * as path from "node:path";
 import * as os from "node:os";
 import {
   KROOT, SERVER_INFO, LANES, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
-  loadAck, parseNoteTags,
+  loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
 } from "./lib.ts";
 
 const portArg = process.argv.indexOf("--port");
@@ -232,10 +232,13 @@ const server = Bun.serve({
             const counts = Object.fromEntries(LANES.map((l) => [l, board.cards.filter((c) => c.lane === l).length]));
             // hub attention-weighting (M1): agent-relevant unread (@me excluded,
             // same definition as cli notes --unread) + cards the human flagged
-            const notes = Object.values(loadNotes(bdir)).filter((n) => n.note);
-            const ackTs = loadAck(bdir).lastAckTs;
-            const unread = notes.filter((n) => Date.parse(n.updatedAt) > ackTs && !parseNoteTags(n.note).me).length;
-            const reviewMe = notes.filter((n) => parseNoteTags(n.note).review).length;
+            // counted per note, not per card: one card can hold several asks
+            const ack = loadAck(bdir);
+            const ackTs = ack.lastAckTs;
+            const flat = Object.entries(loadNotes(bdir))
+              .flatMap(([cid, e]) => notesOf(e).map((n) => ({ cid, n, t: parseNoteTags(n.body) })));
+            const unread = flat.filter((x) => !x.t.me && !noteSeen(ack, x.cid, x.n)).length;
+            const reviewMe = flat.filter((x) => x.t.review).length;
             const verify = board.cards.reduce((a, c) => {
               if (c.verify?.needsHuman) a.needsHuman++;
               else if (c.verify?.grade) a.graded++;
@@ -262,7 +265,8 @@ const server = Bun.serve({
     }
 
     if (req.method === "POST" && p === "/api/note") {
-      const body = (await req.json().catch(() => null)) as { slug?: string; cardId?: string; note?: string } | null;
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; cardId?: string; note?: string; noteId?: string; title?: string } | null;
       if (!body?.slug || !body.cardId || typeof body.note !== "string") {
         return json({ error: "need {slug, cardId, note} — empty note deletes" }, 400);
       }
@@ -273,13 +277,51 @@ const server = Bun.serve({
         return json({ error: `card ${body.cardId} is not on board ${body.slug}` }, 404);
       }
       if (body.note.length > 10_000) return json({ error: "note over 10k chars" }, 413);
+      // A client that sends no noteId is pre-multi-note. It seeded its textarea
+      // from the derived join, so honouring it would write the join into one
+      // note and lose the rest. Refuse instead of corrupting; a reload fixes it.
+      const existing = notesOf(loadNotes(dir)[body.cardId]);
+      if (!body.noteId && body.note.trim() !== "" && existing.length > 1) {
+        return json({ error: "this card has several notes and your page is out of date; reload and try again" }, 409);
+      }
+      let result: { ok: true; savedAt: string; noteId?: string } | { error: string } = { error: "unwritten" };
       await enqueueNote(() => {
-        const notes = loadNotes(dir);
-        if (body.note!.trim() === "") delete notes[body.cardId!];
-        else notes[body.cardId!] = { note: body.note!, updatedAt: new Date().toISOString() };
-        saveNotes(dir, notes, `note:${body.cardId}`);
+        const all = loadNotes(dir);
+        const list = notesOf(all[body.cardId!]).map((n) => ({ ...n }));
+        const now = new Date().toISOString();
+        const blank = body.note!.trim() === "";
+        let active = body.noteId;
+        if (blank && !body.noteId) {
+          delete all[body.cardId!];                       // legacy clear, drop --force relies on it
+        } else {
+          // noteId "new" appends. A missing noteId keeps the legacy meaning,
+          // which is to edit the card's one note, and is refused above when the
+          // card has several.
+          const target = body.noteId === "new"
+            ? undefined
+            : body.noteId
+              ? list.find((n) => n.id === body.noteId)
+              : list[0];
+          if (blank && target) {
+            list.splice(list.indexOf(target), 1);
+            active = list[0]?.id;
+          } else if (target) {
+            target.body = body.note!; target.updatedAt = now;
+            if (body.title !== undefined) target.title = body.title;
+            active = target.id;
+          } else {
+            const fresh = { id: noteId(), body: body.note!, updatedAt: now, ...(body.title ? { title: body.title } : {}) };
+            list.push(fresh);
+            active = fresh.id;
+          }
+          const entry = deriveEntry(list, active);
+          if (entry) all[body.cardId!] = entry; else delete all[body.cardId!];
+        }
+        saveNotes(dir, all, `note:${body.cardId}`);
+        result = { ok: true, savedAt: now, noteId: active };
       });
-      return json({ ok: true, savedAt: new Date().toISOString() });
+      if ("error" in result) return json(result, 500);
+      return json(result);
     }
 
     return json({ error: `method ${req.method} not supported on ${p}` }, 405);

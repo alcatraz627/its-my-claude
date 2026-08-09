@@ -53,8 +53,35 @@ export interface Board {
   tombstones?: Record<string, string>;       // dropped doc-sourced ids → drop ts; sync won't resurrect
   syncedAt: string | null;
 }
-export interface NoteEntry { note: string; updatedAt: string }
+// A card holds many notes. `note` stays populated as a derived join so every
+// legacy reader keeps working, and it EXCLUDES @me bodies: @me suppresses, so
+// joining one in would silence the unread signal for every other note here.
+export interface Note { id: string; title?: string; body: string; updatedAt: string }
+export interface NoteEntry { note: string; updatedAt: string; notes?: Note[]; activeId?: string }
 export type Notes = Record<string, NoteEntry>;
+
+export const noteId = (): string => Math.random().toString(36).slice(2, 10);
+
+// One note per legacy string, so nothing on disk is rewritten to be readable.
+export function notesOf(e: NoteEntry | undefined): Note[] {
+  if (!e) return [];
+  if (e.notes?.length) return e.notes;
+  return e.note ? [{ id: "legacy", body: e.note, updatedAt: e.updatedAt }] : [];
+}
+
+// Rebuild the legacy view from the array. Callers write this on every mutation.
+export function deriveEntry(list: Note[], activeId?: string): NoteEntry | null {
+  const kept = list.filter((n) => n.body.trim());
+  if (!kept.length) return null;
+  const visible = kept.filter((n) => !parseNoteTags(n.body).me);
+  const newest = kept.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b));
+  return {
+    note: (visible.length ? visible : kept).map((n) => n.body).join("\n\n"),
+    updatedAt: newest.updatedAt,
+    notes: kept,
+    activeId: activeId && kept.some((n) => n.id === activeId) ? activeId : kept[0].id,
+  };
+}
 export interface RegistryFile {
   boards: Record<string, { root: string; name: string; createdAt: string }>;
 }
@@ -97,20 +124,23 @@ export function readJson<T>(file: string, fallback: T): T {
 
 export function atomicWrite(file: string, obj: unknown, by: string, extra = ""): void {
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  const tmp = `${file}.tmp`;
+  // pid-unique: two servers across a pm2 restart would race one fixed path
+  const tmp = `${file}.tmp-${process.pid}`;
   fs.writeFileSync(tmp, JSON.stringify(obj, null, 2) + "\n", "utf8");
   fs.renameSync(tmp, file);
   // stderr: stdout belongs to the human-facing digest (UX-sim finding F6)
   console.error(`[state] save file=${path.basename(file)} by=${by} at=${new Date().toISOString()} ${extra}`);
 }
 
-// notes.json is the human lane: rotate a backup before every overwrite, keep 5.
+// notes.json is the human lane: rotate a backup before every overwrite. This
+// data is gitignored, so these copies plus any notes.json.premigrate-* are the
+// whole recovery surface. 20 is roughly a week of use; 5 was about two days.
 export function saveNotes(boardDir: string, notes: Notes, by: string): void {
   const file = path.join(boardDir, "notes.json");
   if (fs.existsSync(file)) {
     fs.copyFileSync(file, `${file}.prev-${Date.now()}.bak`);
     const baks = fs.readdirSync(boardDir).filter((f) => f.startsWith("notes.json.prev-")).sort();
-    for (const old of baks.slice(0, Math.max(0, baks.length - 5))) fs.unlinkSync(path.join(boardDir, old));
+    for (const old of baks.slice(0, Math.max(0, baks.length - 20))) fs.unlinkSync(path.join(boardDir, old));
   }
   atomicWrite(file, notes, by, `notes=${Object.keys(notes).length}`);
 }
@@ -158,8 +188,20 @@ export function registerBoard(dir: string): { slug: string; root: string; boardD
 export const loadBoard = (boardDir: string): Board =>
   readJson<Board>(path.join(boardDir, "board.json"), { cards: [], overrides: {}, tombstones: {}, syncedAt: null });
 export const loadNotes = (boardDir: string): Notes => readJson<Notes>(path.join(boardDir, "notes.json"), {});
-export const loadAck = (boardDir: string): { lastAckTs: number } =>
-  readJson(path.join(boardDir, "ack.json"), { lastAckTs: 0 });
+// Per-note pickup lives here, not in notes.json: ack is a CLI verb and notes
+// are server-owned, so routing ack through the server would break when it is down.
+export interface Ack { lastAckTs: number; notes?: Record<string, number> }
+export const loadAck = (boardDir: string): Ack =>
+  readJson<Ack>(path.join(boardDir, "ack.json"), { lastAckTs: 0 });
+
+export const ackKey = (cardId: string, n: Note): string => `${cardId}#${n.id}`;
+
+// lastAckTs stays the floor for any note the map has never seen.
+export function noteSeen(ack: Ack, cardId: string, n: Note): boolean {
+  const at = ack.notes?.[ackKey(cardId, n)];
+  if (at !== undefined) return at >= Date.parse(n.updatedAt);
+  return ack.lastAckTs >= Date.parse(n.updatedAt);
+}
 
 // Tagged notes v1 (design: assets/reports/20260727-kanban-ui-stories/STORIES.md).
 // Tags live inside free-form note text, parsed at read time — notes.json keeps
