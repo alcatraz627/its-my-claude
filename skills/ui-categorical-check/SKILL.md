@@ -38,6 +38,12 @@ that produced it:
   NOT versable-builder. speedway tracks `.claude/output/`; versable-builder gitignores
   it, so a catalog written there would not survive a clone. speedway is also where the
   UI being checked actually lives.
+- gcc tooling UIs (the kanban board and hub, the instances hub, decision pages,
+  anything served out of `~/.claude`):
+  `~/.claude/assets/reports/*-ui-categorical/patterns.md`, currently the
+  2026-07-28 catalog of 13 classes. It is NOT under `.claude/output/` because
+  the generic rule below would resolve to `~/.claude/.claude/output/`, a
+  double-nested path that matches nothing and that this account's hook blocks.
 - Otherwise: `<project>/.claude/output/*-ui-categorical/patterns.md`
 
 Read it. It is a checklist of categorical classes, each carrying: what it looks like ·

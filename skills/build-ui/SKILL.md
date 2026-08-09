@@ -184,6 +184,7 @@ is as useless as one that always says yes. One line per run, appended to
 `<app>/.claude/ui/build-log.jsonl`:
 
 ```bash
+mkdir -p "$(dirname "<app>/.claude/ui/build-log.jsonl")"
 printf '%s\n' "$(jq -nc --arg ts "$(date -u +%FT%TZ)" --arg s "<surface>" \
   --arg o "<build|no-build>" --arg t "<trigger that fired, or none>" \
   '{ts:$ts, surface:$s, outcome:$o, trigger:$t}')" \
@@ -307,6 +308,24 @@ Every placeholder in the plan carries its class, and a bone carries a written
 justification for why the value is genuinely unknown.
 
 ## Phase 6. Inherit by measurement, not memory
+
+**If a direction memo arrived with this work** (from `/ui-direction`, via `/ui`
+or by hand), read it before sweeping. It may legitimately carry two things, and
+neither one is an authored value:
+
+- **Sweep constraints**: which siblings count as precedent for this surface and
+  which are explicitly out of canon, with the reason. Apply them to the sweep's
+  scope. A constraint narrows where you look; it never supplies an answer.
+- **Candidate new precedents**: slots the memo predicts the sweep will return
+  empty on. A candidate is a prediction, not an authority. Run the sweep first.
+  Where it returns empty, the candidate becomes a new-precedent row needing the
+  owner's sign-off as usual. **Where the sweep returns a result, the candidate
+  is discarded rather than reconciled.** The sweep wins, which is this phase's
+  whole point. Say in the ledger which candidates died that way.
+
+Anything else a memo offers (a token value, a scale, a spacing rhythm) is an
+authored value and is inadmissible here. That is not a slight on the memo; it
+is what "inherit by measurement" means.
 
 Sweep the siblings and the shell before drafting. Emit an **inheritance ledger**,
 one row per decision, each with a majority count and a citation:
@@ -454,10 +473,20 @@ without it, and the second silently overwrites the first.
 
 **Required sections, in this order, none renamed or dropped:**
 
-1. **Directives** (Phase 8 tables, with IDs and checks)
-2. **Skeleton** (Phase 9, opening with the mandated disambiguation line)
-3. **Embryo** (Phase 10)
-4. **Other instructions** (sequencing, gates, coordination, what not to touch)
+1. **Parity ledger** (only when the surface already exists and works): one row
+   per user-visible capability it has today, each with a check, and a column
+   for the result after the build. A capability list written by the agent about
+   to change the surface is a check that cannot fail unless something later
+   forces it to fail, so this section is that forcing: **the build is not done
+   until every row carries a verified result.** Where the list arrived from
+   `/ui` or a research sheet, cite it rather than rewriting it, and say what
+   you added. This exists because rebuilds silently dropping accumulated UX is
+   this account's most frequent recent failure (atone
+   `rebuild-replaced-accumulated-ux-without-parity-audit`).
+2. **Directives** (Phase 8 tables, with IDs and checks)
+3. **Skeleton** (Phase 9, opening with the mandated disambiguation line)
+4. **Embryo** (Phase 10)
+5. **Other instructions** (sequencing, gates, coordination, what not to touch)
 
 **Optional sections**, included only when they carry weight:
 
@@ -508,6 +537,10 @@ plan names its own executor and the terms, or the loop ends at the ruling:
       and the first thing to build
 - [ ] The hand-off block names the executor, the post-build gate, the evidence
       path, the commit scope, and who holds the files
+- [ ] Existing surface: a parity ledger exists, and every row has a check the
+      build must satisfy before it is done
+- [ ] A direction memo, if one arrived, contributed only sweep constraints and
+      candidates, and the ledger says which candidates the sweep killed
 
 Anything less is a draft, not a plan.
 
@@ -520,6 +553,11 @@ on skeleton:
 
 ## See also
 
+- `/ui`: the front door. It routes here for a conversion and supplies the
+  parity ledger; when the taste question is still open it sends the work to
+  `/ui-direction` first, whose memo this skill reads in Phase 6.
+- `/ui-direction`: produces that memo. Its hand-off is sweep constraints and
+  candidate precedents, never authored values.
 - `/ui-categorical-check`: the permanent gate catalog that directives get promoted into
 - `/ui-gripe`: confusion forensics on one screenshot
 - `/skeptical-review`: grounded review after the build
