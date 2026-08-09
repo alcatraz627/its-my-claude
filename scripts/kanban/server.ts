@@ -36,7 +36,10 @@ function boardDirOf(slug: string): string | null {
 }
 
 // Hand-rolled markdown→html for the doc viewer — zero dependencies, not full CommonMark.
-function renderMd(src: string): string {
+function renderMd(input: string): string {
+  // \r is a line terminator in JS, so `.` never matches it: without this every
+  // heading, list and table in a CRLF file falls through to a paragraph.
+  const src = input.replace(/\r\n?/g, "\n");
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const inline = (s: string) =>
     s.replace(/`([^`]+)`/g, "<code>$1</code>")
@@ -47,7 +50,9 @@ function renderMd(src: string): string {
   // the place a card was harvested from. The fence split eats one line per ```.
   let srcLine = 1;
   const anchor = (n: number) => ` id="L${n}"`;
-  src.replace(/<!--[\s\S]*?-->/g, "").split(/```/).forEach((block, i) => {
+  // split on line-initial fences only: a ``` inside inline code is not a fence,
+  // and treating it as one swallowed the rest of the document into a <pre>
+  src.replace(/<!--[\s\S]*?-->/g, "").split(/^[ \t]*```[^\n]*$/m).forEach((block, i) => {
     const blockStart = srcLine;
     srcLine += block.split("\n").length - 1;
     if (i % 2 === 1) { out.push(`<pre${anchor(blockStart)}><code>${esc(block.replace(/^[a-z]*\n/, ""))}</code></pre>`); return; }
@@ -132,8 +137,10 @@ function livePeers(root: string): string[] {
     const named = rows
       .filter((r) => r.cwd === real || r.cwd?.startsWith(real + path.sep))
       .map((r) => r.alias)
-      // a uuid-shaped alias is a session that never named itself; it is noise
-      .filter((a) => !/^[0-9a-f-]{8,}$/i.test(a) && !/-[0-9a-f]{8}$/i.test(a));
+      // drop only auto-generated aliases: a bare uuid, or <project>-<8 hex>
+      // where the project half matches this board. "sprint-deadbeef" survives.
+      .filter((a) => !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(a))
+      .filter((a) => !new RegExp(`^${path.basename(real).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}-[0-9a-f]{8}$`, "i").test(a));
     return [...new Set(named)].sort();
   } catch { return []; }
   finally { try { db?.close(); } catch { /* nothing to do */ } }
