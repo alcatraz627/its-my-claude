@@ -18,6 +18,14 @@ mkdir -p "$ROOT/docs"
 # the registry stores the canonical root, and /tmp is a symlink on macOS, so a
 # cwd of /tmp/... never matches and every reader goes silently quiet
 ROOT="$(cd "$ROOT" && pwd -P)"
+
+# an early exit used to leave its board registered, so runs accumulated debris
+slug=""
+cleanup() {
+  [ -n "$slug" ] && bun "$HERE/cli.ts" unregister "$slug" >/dev/null 2>&1
+  rm -rf "$ROOT" 2>/dev/null
+}
+trap cleanup EXIT
 cat > "$ROOT/docs/plan.md" <<'EOF'
 # Plan
 
@@ -28,6 +36,7 @@ cat > "$ROOT/docs/plan.md" <<'EOF'
 EOF
 
 slug=$(bun "$HERE/cli.ts" init --project "$ROOT" 2>/dev/null | rg -o 'board ready: ([a-z0-9-]+)' -r '$1' | head -1)
+# shellcheck disable=SC2034
 [ -n "$slug" ] || { echo "SETUP FAILED: no board"; exit 1; }
 dir="$BOARDS/$slug"
 card=$(python3 -c "
