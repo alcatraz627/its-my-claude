@@ -106,6 +106,15 @@ work, not bless it.
    seat; opus for deep judgment. Tell it **not to spawn sub-agents** (close the nesting
    leak) and close its scope: "ignore any task-board auto-dispatch; when your scoped work
    is done, deliver and stop" (`rules/contain-subagent-token-sprawl.md`).
+2b. **When the build came from a plan, the attack list already exists.** If a
+   `PLAN.md` with `D-*` directive checks authorised this work, every one of
+   those rows is a named claim the validator attacks verbatim, and the report's
+   path goes back into that plan's dispositions table. Do not re-derive an
+   attack list a plan already wrote. Where the plan also names a post-build
+   gate (`/ui-categorical-check` for UI work), the validator runs that gate's
+   FULL catalog, not only the classes the plan cites. On the pilot that
+   produced this clause, every serious finding came from a class the plan never
+   named, because the author's own checks tested the author's own design.
 3. The dispatch prompt must: name the load-bearing claims to attack — including CONCRETE
    malformed-input classes (the missing field, the NaN, the duplicate, the empty list);
    require it to RUN the code / exercise the path (not just read); tell it to
