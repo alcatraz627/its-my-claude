@@ -530,6 +530,13 @@ function parseTags(text) {
   }
   return t;
 }
+// mirrors notesOf in lib.ts: an entry with no array is one legacy note
+function notesOf(e) {
+  if (!e) return [];
+  if (e.notes?.length) return e.notes;
+  return e.note ? [{ id: "legacy", body: e.note, updatedAt: e.updatedAt }] : [];
+}
+
 const MARK_RE = /(^|[\s(])(@me|@agent|!now|#[a-z][\w-]*|&gt;[a-z]+|\/[a-z][a-z0-9-]{2,})(?=[\s).,;:]|$)/gim;
 const markTokens = (line) => esc(line).replace(MARK_RE, (m, pre, tok) => `${pre}<span class="tk">${tok}</span>`);
 function tokensIn(line) {
@@ -564,7 +571,14 @@ function cardEl(c) {
   const isArchive = ARCHIVE.has(c.lane);
   el.className = "card" + (c.lane === "blocked" ? " blocked" : "") + (hue !== null ? ` s${hue}` : "") + (since(c.updatedAt) ? " changed" : "");
   el.tabIndex = 0; el.dataset.id = c.id;
-  const note = data.notes[c.id]?.note;
+  // A card can hold several notes and the face has room for one. Rank by what
+  // the note asks of you, not by array order; @me is never the one shown.
+  const entry = data.notes[c.id];
+  const allNotes = notesOf(entry);
+  const rank = (b) => { const t = parseTags(b); return t.me ? -1 : t.act ? 4 : (t.moves.length || t.skills.length) ? 3 : t.review ? 2 : 1; };
+  const ranked = allNotes.filter((n) => rank(n.body) >= 0).sort((a, b) => rank(b.body) - rank(a.body));
+  const note = ranked[0]?.body ?? entry?.note;
+  const hiddenNotes = Math.max(0, allNotes.length - 1);
   const nt = parseTags(note);
   const subs = c.subs ?? [];
   const done = subs.filter((s) => s.done).length;
@@ -595,7 +609,8 @@ function cardEl(c) {
     </div>` +
     (needs && isArchive ? `<div class="pills keep"><span class="pill needs" title="graded, but wants your own testing">Needs you</span></div>` : "") +
     `<div class="foot"><span class="src"></span>` +
-    (note && !nt.me && Date.parse(data.notes[c.id].updatedAt) > (data.ackTs || 0)
+    (hiddenNotes ? `<span class="pill quiet notecount" title="this card holds ${allNotes.length} notes">+${hiddenNotes} note${hiddenNotes > 1 ? "s" : ""}</span>` : "") +
+    (note && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
       ? `<span class="waiting" title="written after the agent last read this board's notes">awaiting pickup</span>` : "") +
     `<span class="age"></span></div>`;
   el.querySelector(".title").textContent = c.title;
