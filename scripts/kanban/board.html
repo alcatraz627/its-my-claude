@@ -250,6 +250,17 @@
        border:1px solid var(--border);border-radius:6px;padding:4px 9px}
   #docmodal .dbar a:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   #docmodal iframe{flex:1;width:100%;border:0}
+  /* other notes read at zero clicks, in the scrolling body so the composer
+     keeps its whole height. Clicking one swaps it into the editor. */
+  .notestack{display:flex;flex-direction:column;gap:6px}
+  .notestack button{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--border);
+       border-radius:8px;padding:8px 11px;color:var(--text-2);font:12.5px/1.5 var(--sans);cursor:pointer}
+  .notestack button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  .notestack .nbody{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .notestack .nmeta{display:block;margin-top:4px;font-size:11.5px;color:var(--text-3)}
+  .addnote{flex:none;height:22px;padding:0 9px;border-radius:20px;font-size:11.5px;
+       background:none;border:1px solid var(--border);color:var(--text-2)}
+  .addnote:hover{background:var(--card);border-color:var(--border-2);color:var(--text)}
   .mirror{font-size:11.5px;line-height:1.6;color:var(--text-3)}
   .subs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
   .subs li{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;padding:2px 0;color:var(--text)}
@@ -357,6 +368,10 @@
       <div class="dpills" id="dPills"></div>
       <div class="dsub" id="dSub"></div>
     </div>
+    <div class="grp" id="dOtherWrap">
+      <div class="ghead">Your other notes<span class="gsp"></span><span class="gval" id="dOtherCount"></span></div>
+      <div class="notestack" id="dOther"></div>
+    </div>
     <div class="grp" id="dClaimWrap">
       <div class="ghead">What the agent claims</div>
       <div class="claim" id="dClaim"></div>
@@ -380,9 +395,10 @@
   </div>
   <div class="composer">
     <div class="chead">
-      <span class="t">Your note</span>
+      <span class="t" id="dNoteLabel">Your note</span>
       <span class="h" id="dPickup">the agent reads this on its next pickup</span>
       <span class="st" id="dSaved"></span>
+      <button type="button" class="addnote" id="dAdd" title="start another note on this card">+ note</button>
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
     <div class="conflict" id="dConflict"></div>
@@ -436,7 +452,7 @@ const slug = location.pathname.split("/")[2];
 const LANE_ORDER = ["inbox","backlog","active","blocked","done","stale"];
 const LANE_NAME = { inbox:"Inbox", backlog:"Backlog", active:"Active", blocked:"Blocked", done:"Done", stale:"Stale" };
 const ARCHIVE = new Set(["done","stale"]);
-let data = null, flat = [], sel = -1, openId = null, dirty = false, lastPayload = "";
+let data = null, flat = [], sel = -1, openId = null, openNoteId = null, dirty = false, lastPayload = "";
 
 const $ = (id) => document.getElementById(id);
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
@@ -791,25 +807,26 @@ function renderParse() {
   box.className = "parsed" + (pills ? " on" : "");
   $("dLegend").style.display = $("dNote").value.trim() ? "none" : ""; // syntax help only while the note is empty
 }
-const DRAFT_KEY = (id) => `kanban-draft-${slug}-${id}`;
+// scoped per note: a draft on one note must not surface on its sibling
+const DRAFT_KEY = (id, nid) => `kanban-draft-${slug}-${id}${nid && nid !== "legacy" ? `-${nid}` : ""}`;
 const DRAFT_TTL = 30 * 864e5; // drafts keep for 30 days, then they are noise
 let draftTimer = null;
-function readDraft(id) {
+function readDraft(id, nid) {
   try {
-    const raw = localStorage.getItem(DRAFT_KEY(id));
+    const raw = localStorage.getItem(DRAFT_KEY(id, nid));
     if (!raw) return null;
     const o = JSON.parse(raw);
     if (!o || typeof o.v !== "string") return null;
-    if (Date.now() - o.t > DRAFT_TTL) { localStorage.removeItem(DRAFT_KEY(id)); return null; }
+    if (Date.now() - o.t > DRAFT_TTL) { localStorage.removeItem(DRAFT_KEY(id, nid)); return null; }
     return o.v;
   } catch { return null; }
 }
-const writeDraft = (id, v) => localStorage.setItem(DRAFT_KEY(id), JSON.stringify({ t: Date.now(), v }));
+const writeDraft = (id, nid, v) => localStorage.setItem(DRAFT_KEY(id, nid), JSON.stringify({ t: Date.now(), v }));
 // every exit from a card (close, j/k step, prev/next) flushes the pending
 // debounced write, so typing within its 350ms window is never dropped
 function flushDraft() {
   clearTimeout(draftTimer);
-  if (dirty && openId) writeDraft(openId, $("dNote").value);
+  if (dirty && openId) writeDraft(openId, openNoteId, $("dNote").value);
 }
 function sweepDrafts() {
   const pre = `kanban-draft-${slug}-`;
@@ -870,7 +887,47 @@ for (const [tok, tip] of INSERT_TOKENS) {
   $("dInsert").appendChild(b);
 }
 
-function openDrawer(id) {
+// The composer edits exactly one note. Its siblings render in the body above,
+// so every note on the card is readable without a click.
+function loadNoteIntoComposer(id) {
+  const list = notesOf(data.notes[id]);
+  const cur = list.find((n) => n.id === openNoteId);
+  const saved = cur?.body ?? "";
+  const draft = readDraft(id, openNoteId);
+  const hasDraft = draft !== null && draft !== saved;
+  baseNote = saved; conflictNote = null; renderConflict();
+  $("dNote").value = hasDraft ? draft : saved;
+  $("dRestored").className = "restored" + (hasDraft ? " on" : "");
+  dirty = hasDraft;
+  const at = list.findIndex((n) => n.id === openNoteId);
+  $("dNoteLabel").textContent = at < 0 ? "New note" : list.length > 1 ? `Note ${at + 1} of ${list.length}` : "Your note";
+  $("dSaved").textContent = hasDraft ? "unsaved" : (cur?.updatedAt ? `saved ${ago(Date.parse(cur.updatedAt))} ago` : "");
+  $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
+  renderPickup(id);
+  renderParse();
+}
+
+function renderOtherNotes(id) {
+  const others = notesOf(data.notes[id]).filter((n) => n.id !== openNoteId);
+  $("dOtherWrap").style.display = others.length ? "" : "none";
+  if (!others.length) { $("dOther").replaceChildren(); return; }
+  $("dOtherCount").textContent = String(others.length);
+  $("dOther").replaceChildren(...others.map((n) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.title = "edit this note";
+    const body = document.createElement("span");
+    body.className = "nbody"; body.textContent = n.body;
+    const meta = document.createElement("span");
+    meta.className = "nmeta";
+    meta.textContent = `saved ${ago(Date.parse(n.updatedAt))} ago`;
+    b.append(body, meta);
+    b.onclick = () => { flushDraft(); openNoteId = n.id; loadNoteIntoComposer(id); renderOtherNotes(id); $("dNote").focus(); };
+    return b;
+  }));
+}
+
+function openDrawer(id, wantNoteId) {
   const c = data.board.cards.find((x) => x.id === id);
   if (!c) return;
   if (openId !== id) flushDraft();
@@ -930,17 +987,13 @@ function openDrawer(id) {
   // the note survives a closed drawer, a reload and a crashed tab: drafts are
   // written locally per card and restored on open (the human's only input
   // channel must never lose text)
-  const saved = data.notes[id]?.note || "";
-  const draft = readDraft(id);
-  const hasDraft = draft !== null && draft !== saved;
-  baseNote = saved; conflictNote = null; renderConflict();
-  $("dNote").value = hasDraft ? draft : saved;
-  $("dRestored").className = "restored" + (hasDraft ? " on" : "");
-  dirty = hasDraft;
-  $("dSaved").textContent = hasDraft ? "unsaved" : (data.notes[id]?.updatedAt ? `saved ${ago(Date.parse(data.notes[id].updatedAt))} ago` : "");
-  $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
-  renderPickup(id);
-  renderParse();
+  const list = notesOf(data.notes[id]);
+  // newest on open, unless the caller asked for one (a click in the stack)
+  openNoteId = wantNoteId && list.some((n) => n.id === wantNoteId)
+    ? wantNoteId
+    : list.length ? list.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b)).id : null;
+  loadNoteIntoComposer(id);
+  renderOtherNotes(id);
   $("drawer").classList.add("open"); $("scrim").classList.add("open");
   fillSegs();
 }
@@ -1051,9 +1104,17 @@ $("dmClose").onclick = closeDocModal;
 $("docmodal").onclick = (e) => { if (e.target === $("docmodal")) closeDocModal(); };
 $("dDiscard").onclick = () => {
   if (!openId) return;
-  localStorage.removeItem(DRAFT_KEY(openId));
-  const c = openId; openId = null; dirty = false;
-  openDrawer(c);
+  localStorage.removeItem(DRAFT_KEY(openId, openNoteId));
+  const c = openId, n = openNoteId; openId = null; dirty = false;
+  openDrawer(c, n);
+};
+// a blank composer with no id: the next save creates a note rather than editing one
+$("dAdd").onclick = () => {
+  if (!openId) return;
+  flushDraft();
+  openNoteId = null; dirty = false;
+  loadNoteIntoComposer(openId); renderOtherNotes(openId);
+  $("dNote").focus();
 };
 function closeDrawer() {
   // no confirm dialog: closing flushes the pending draft write, so it can never lose it
@@ -1070,7 +1131,7 @@ $("dNote").addEventListener("input", () => {
   $("dSaved").textContent = "unsaved"; $("dSaved").className = "st unsaved";
   renderParse();
   clearTimeout(draftTimer);
-  draftTimer = setTimeout(() => { if (openId) writeDraft(openId, $("dNote").value); }, 350);
+  draftTimer = setTimeout(() => { if (openId) writeDraft(openId, openNoteId, $("dNote").value); }, 350);
 });
 $("dNote").addEventListener("keydown", (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); $("dSave").click(); }
@@ -1078,13 +1139,15 @@ $("dNote").addEventListener("keydown", (e) => {
 $("dSave").onclick = async () => {
   try {
     const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, cardId: openId, note: $("dNote").value }) });
+      body: JSON.stringify({ slug, cardId: openId, noteId: openNoteId ?? "new", note: $("dNote").value }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
+    const out = await res.json();
     dirty = false; $("dSaved").textContent = "saved just now"; $("dSaved").className = "st";
     $("dRestored").className = "restored";
     baseNote = $("dNote").value; conflictNote = null; renderConflict();
     clearTimeout(draftTimer);
-    localStorage.removeItem(DRAFT_KEY(openId));
+    localStorage.removeItem(DRAFT_KEY(openId, openNoteId));
+    if (out.noteId) openNoteId = out.noteId;   // a new note gets its id back
     toast("Note saved");
     load();
   } catch (e) { toast(`Save failed: ${e.message}`, 4000, "err"); }
