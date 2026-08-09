@@ -240,8 +240,12 @@
   #docmodal .dbox{background:var(--canvas);border:1px solid var(--border);border-radius:12px;
        width:min(880px,92vw);height:min(720px,86vh);display:flex;flex-direction:column;overflow:hidden}
   #docmodal .dbar{flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+  /* no direction:rtl here: it relocates a leading slash to the visual end */
   #docmodal .dbar .dmp{flex:1;min-width:0;font:12.5px/1.4 var(--mono);color:var(--text-2);
-       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl;text-align:left}
+       overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #docmodal .dbar a{flex:none;font-size:12.5px;color:var(--text-2);text-decoration:none;
+       border:1px solid var(--border);border-radius:6px;padding:4px 9px}
+  #docmodal .dbar a:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   #docmodal iframe{flex:1;width:100%;border:0}
   .mirror{font-size:11.5px;line-height:1.6;color:var(--text-3)}
   .subs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
@@ -1007,10 +1011,11 @@ async function fillSegs() {
 }
 function openDocModal(p, line) {
   const q = `/doc?path=${encodeURIComponent(p)}${line ? `&line=${line}` : ""}`;
-  $("dmPath").textContent = p;
+  $("dmPath").title = p; $("dmPath").textContent = p;
   $("dmOpen").href = q;
   $("dmFrame").src = q;
   $("docmodal").classList.add("on");
+  tailTrim($("dmPath")); // keep the filename, drop the leading directories
   $("dmClose").focus();
 }
 function closeDocModal() {
