@@ -304,7 +304,7 @@ const server = Bun.serve({
 
     if (req.method === "POST" && p === "/api/note") {
       const body = (await req.json().catch(() => null)) as
-        { slug?: string; cardId?: string; note?: string; noteId?: string; title?: string } | null;
+        { slug?: string; cardId?: string; note?: string; noteId?: string; title?: string; all?: boolean } | null;
       if (!body?.slug || !body.cardId || typeof body.note !== "string") {
         return json({ error: "need {slug, cardId, note} — empty note deletes" }, 400);
       }
@@ -319,7 +319,10 @@ const server = Bun.serve({
       // from the derived join, so honouring it would write the join into one
       // note and lose the rest. Refuse instead of corrupting; a reload fixes it.
       const existing = notesOf(loadNotes(dir)[body.cardId]);
-      if (!body.noteId && body.note.trim() !== "" && existing.length > 1) {
+      // A blank save used to share its wire shape with "wipe the card", so a
+      // stale page that cleared its box deleted every note. Wiping is now an
+      // explicit `all`, which only `drop` sends.
+      if (!body.noteId && existing.length > 1 && !body.all) {
         return json({ error: "this card has several notes and your page is out of date; reload and try again" }, 409);
       }
       // creating an empty note does nothing, so do not pretend it worked

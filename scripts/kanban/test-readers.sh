@@ -109,7 +109,28 @@ printf '%s' "$cli2" | rg -q "TypeError|is not a function" \
 printf '%s' "$cli2" | rg -q "duplicate id" && ok "a duplicate id is kept, not dropped" || no "a duplicate id was dropped"
 printf '%s' "$cli2" | rg -q "fallback" && ok "a non-array notes field falls back to the legacy string" || no "non-array notes lost the legacy string"
 
-bun "$HERE/cli.ts" unregister "$slug" >/dev/null 2>&1
-rm -rf "$ROOT" 2>/dev/null
+# 6. the write path, if the server is up: a blank save with no noteId must not
+#    wipe a multi-note card. This is the one that shipped as a blocker.
+port=$(rg -o '"port":\s*([0-9]+)' -r '$1' "$HOME/.claude/kanban/server.json" 2>/dev/null | head -1)
+if [ -n "$port" ] && curl -s -o /dev/null "http://localhost:$port/api/boards"; then
+  post() { curl -s -X POST "http://localhost:$port/api/note" -H 'Content-Type: application/json' -d "$1"; }
+  nc() { curl -s "http://localhost:$port/api/board?slug=$slug" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+if 'notes' not in d: sys.stderr.write('  (api said: '+str(d)[:90]+')\n'); print(-1)
+else: print(len(d['notes'].get('$card',{}).get('notes',[])))"; }
+  post "{\"slug\":\"$slug\",\"cardId\":\"$card\",\"noteId\":\"new\",\"note\":\"keep me one\"}" >/dev/null
+  post "{\"slug\":\"$slug\",\"cardId\":\"$card\",\"noteId\":\"new\",\"note\":\"keep me two\"}" >/dev/null
+  [ "$(nc)" -ge 2 ] || no "could not build a 2-note card for the wipe test"
+  post "{\"slug\":\"$slug\",\"cardId\":\"$card\",\"note\":\"\"}" >/dev/null
+  [ "$(nc)" -ge 2 ] && ok "a blank save without a noteId cannot wipe a multi-note card" \
+    || no "BLOCKER: a blank save without a noteId wiped a multi-note card"
+  post "{\"slug\":\"$slug\",\"cardId\":\"$card\",\"note\":\"\",\"all\":true}" >/dev/null
+  [ "$(nc)" -eq 0 ] && ok "an explicit all:true wipe still clears the card (drop needs it)" \
+    || no "an explicit wipe no longer clears the card, which breaks drop --force"
+else
+  echo "  SKIP  write-path checks (no server on :$port)"
+fi
+
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

@@ -321,7 +321,8 @@ switch (verb) {
       if (!port) die(`--force needs the server (single-writer: notes are server-owned) and none is configured`, `start the kanban pm2 service, then retry`);
       const res = await fetch(`http://localhost:${port}/api/note`, {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ slug, cardId: id, note: "" }),
+        // `all` is the explicit wipe: dropping a card takes every note with it
+        body: JSON.stringify({ slug, cardId: id, note: "", all: true }),
       }).catch(() => null);
       if (!res?.ok) die(`server would not delete the note (HTTP ${res?.status ?? "unreachable"})`, `check the kanban service, then retry`);
       console.error(`note deleted (via server, single-writer preserved)`);
