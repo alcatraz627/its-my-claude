@@ -66,6 +66,15 @@
   .summary b{color:var(--text);font-weight:600}
   .summary .dotsep{width:3px;height:3px;border-radius:50%;background:var(--border-2)}
   .summary .blocked{color:var(--amber);font-weight:500}
+  /* amber because it is on you; a button because it filters, not just informs */
+  /* the tint rides on the card colour, not the canvas: over the darker light
+     canvas the bare tint measures 4.36:1, over card it measures 5.11:1 */
+  .needsyou{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 9px;border-radius:20px;
+            color:var(--amber);border:1px solid var(--amber-br);font:600 12.5px/1 var(--sans);
+            background:linear-gradient(var(--amber-bg),var(--amber-bg)) var(--card)}
+  .needsyou b{color:inherit}
+  .needsyou:hover{filter:brightness(1.12)}
+  .needsyou.on{outline:2px solid var(--amber-br);outline-offset:1px}
   .summary .delta{color:var(--text-3)}
   .summary .delta b{color:var(--text-2)}
   .linkish{background:none;border:none;padding:0 2px;height:auto;color:var(--text-3);text-decoration:underline;font-size:12.5px}
@@ -274,6 +283,10 @@
   /* the note is this product's only input, so it is docked — never scrolled to.
      it takes a comfortable share of the height and no more; drag to grow */
   .composer{flex:none;border-top:1px solid var(--border);background:var(--well);padding:12px 16px 14px;display:flex;flex-direction:column;gap:9px}
+  /* empty and idle, the dock is one quiet line so the evidence above keeps the
+     height; text, focus, or a conflict expands it (a draft counts as text) */
+  .composer.min .hint,.composer.min .parsed,.composer.min .cbar,.composer.min .restored{display:none}
+  .composer.min textarea{height:38px;resize:none;overflow:hidden}
   .chead{display:flex;align-items:baseline;gap:8px}
   .chead .t{font:600 11.5px/1 var(--sans);color:var(--text)}
   .chead .h{font-size:11.5px;color:var(--text-3);flex:1}
@@ -455,6 +468,22 @@ const deepLink = new URLSearchParams(location.search);
 const LANE_ORDER = ["inbox","backlog","active","blocked","done","stale"];
 const LANE_NAME = { inbox:"Inbox", backlog:"Backlog", active:"Active", blocked:"Blocked", done:"Done", stale:"Stale" };
 const ARCHIVE = new Set(["done","stale"]);
+// a doc heading that just names the card's own column ("TODO" in Inbox,
+// "In progress" in Active) repeats what position already says; the card
+// face drops that pill, the stripe keeps the hue, the drawer keeps the name
+const LANE_ECHO = { inbox:["inbox","todo","to do"], backlog:["backlog"], active:["active","in progress","doing","wip"],
+                    blocked:["blocked"], done:["done","complete","completed","shipped"], stale:["stale"] };
+const echoesLane = (heading, lane) => !!heading && (LANE_ECHO[lane] ?? []).includes(heading.trim().toLowerCase());
+// a path's varying end is its identity, so shortening drops the head, never
+// the tail. Done in JS: direction:rtl relocates a leading slash to the visual
+// end (see the docmodal note), and CSS ellipsis can only clip the tail.
+function tailPath(s, max = 26) {
+  if (s.length <= max) return s;
+  let cut = s.slice(-(max - 1));
+  const b = cut.indexOf("/");
+  if (b > -1 && b <= 12) cut = cut.slice(b); // start at a segment boundary when one is near
+  return "…" + cut;
+}
 let data = null, flat = [], sel = -1, openId = null, openNoteId = null, dirty = false, lastPayload = "";
 
 const $ = (id) => document.getElementById(id);
@@ -629,25 +658,25 @@ function cardEl(c) {
     `<div class="pills"><span class="ident">
       ${note && !line ? `<span class="pill mono" title="${nt.me ? "note to self" : "has a note"}">${nt.me ? "@me note" : "note"}</span>` : ""}
       ${c.tag ? '<span class="pill mono xtag" title="source tag"></span>' : ""}
-      ${c.heading ? `<span class="pill label l${hue}"><i class="sw"></i><span class="nm"></span></span>` : ""}
+      ${c.heading && !echoesLane(c.heading, c.lane) ? `<span class="pill label l${hue}"><i class="sw"></i><span class="nm"></span></span>` : ""}
       </span>${statHTML}
     </div>` +
     (needs && isArchive ? `<div class="pills keep"><span class="pill needs" title="graded, but wants your own testing">Needs you</span></div>` : "") +
     `<div class="foot"><span class="src"></span>` +
     (hiddenNotes ? `<span class="pill quiet notecount" title="this card holds ${allNotes.length} notes">+${hiddenNotes} note${hiddenNotes > 1 ? "s" : ""}</span>` : "") +
-    (note && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
+    (note && !line && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
       ? `<span class="waiting" title="written after the agent last read this board's notes">awaiting pickup</span>` : "") +
     `<span class="age"></span></div>`;
   el.querySelector(".title").textContent = c.title;
   if (c.tag) el.querySelector(".xtag").textContent = c.tag; // "(#7)" / "OWNER REMINDER" prefix from the doc
-  if (c.heading) {
+  if (c.heading && !echoesLane(c.heading, c.lane)) {
     const p = el.querySelector(".pill.label");
     p.querySelector(".nm").textContent = c.heading;
     p.title = "label · " + c.heading;
   }
   if (c.staleReason) el.querySelector(".pill.why").textContent = c.staleReason;
   const srcEl = el.querySelector(".src");
-  srcEl.textContent = sp; srcEl.title = sp;
+  srcEl.textContent = tailPath(sp); srcEl.title = sp;
   el.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
   if (isArchive) el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
   el.onclick = () => openDrawer(c.id);
@@ -689,14 +718,21 @@ function renderSummary() {
   const by = (k) => cards.filter((c) => c.lane === k);
   const open = cards.length - by("done").length - by("stale").length;
   const nblk = by("blocked").length;
+  const needs = cards.filter((c) => c.verify?.needsHuman).length;
   const sep = '<span class="dotsep"></span>';
+  // the hub said "N needs you"; the count leads this sentence and clicking it
+  // scopes the board to those cards, closing that handoff
+  const needsOn = filterText === "needs-you";
   $("summary").innerHTML =
+    (needs ? `<button type="button" class="needsyou${needsOn ? " on" : ""}" id="needsBtn" title="${needsOn ? "show all cards again" : "show only the cards waiting on you"}"><b>${needs}</b> need${needs > 1 ? "" : "s"} you</button>${sep}` : "") +
     `<span><b>${open}</b> in motion${nblk ? `, <span class="blocked"><b>${nblk}</b> of them blocked</span>` : ""}</span>${sep}` +
     `<span><b>${cards.length - open}</b> settled</span>${sep}` +
     `<span>synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"}</span>` +
     deltaClause();
   const d = $("deltaDismiss");
   if (d) d.onclick = () => { anchor = 0; render(); };
+  const nb = $("needsBtn");
+  if (nb) nb.onclick = () => setFilter(filterText === "needs-you" ? "" : "needs-you");
 }
 
 // returns the "since your last visit" clause appended to the summary sentence
@@ -858,7 +894,8 @@ function checkConflict(parsed) {
 }
 function renderConflict(at) {
   const el = $("dConflict");
-  if (conflictNote === null) { el.className = "conflict"; el.innerHTML = ""; return; }
+  if (conflictNote === null) { el.className = "conflict"; el.innerHTML = ""; syncComposer(); return; }
+  syncComposer(); // a conflict must be seen, so it always expands the dock
   el.innerHTML = `<div class="crow2"><span class="grow">This note changed elsewhere${at ? " " + ago(Date.parse(at)) + " ago" : ""}, maybe in another tab. Saving keeps yours.</span>` +
     `<button type="button" id="cShow">show theirs</button><button type="button" id="cUse">use theirs</button></div>` +
     `<div class="ctheirs" id="cTheirs" hidden></div>`;
@@ -914,7 +951,18 @@ function loadNoteIntoComposer(id) {
   $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
   renderPickup(id);
   renderParse();
+  syncComposer();
 }
+
+// The delay lets a click on a control inside the dock land before the
+// collapse removes it from under the pointer.
+const composerBox = document.querySelector(".composer");
+function syncComposer() {
+  const ta = $("dNote");
+  composerBox.classList.toggle("min", !ta.value.trim() && document.activeElement !== ta && conflictNote === null);
+}
+$("dNote").addEventListener("focus", syncComposer);
+$("dNote").addEventListener("blur", () => setTimeout(syncComposer, 150));
 
 function renderOtherNotes(id) {
   const others = notesOf(data.notes[id]).filter((n) => n.id !== openNoteId);
@@ -1039,9 +1087,17 @@ function renderLive() {
 let filterText = "";
 function matchFilter(c) {
   if (!filterText) return true;
+  // "needs-you" is the header clause's scope, not a text search: the hub
+  // promises "N needs you" and this is where that promise lands
+  if (filterText === "needs-you") return !!c.verify?.needsHuman;
   const hay = [c.title, c.heading, c.tag, c.source?.path, data.notes[c.id]?.note,
     ...(c.subs ?? []).map((s) => s.title)].filter(Boolean).join(" ").toLowerCase();
   return filterText.split(/\s+/).every((t) => hay.includes(t));
+}
+function setFilter(v) {
+  const f = $("filter");
+  f.value = v; filterText = v;
+  if (data) render();
 }
 $("filter").addEventListener("input", (e) => {
   filterText = e.target.value.trim().toLowerCase();
@@ -1144,6 +1200,7 @@ $("dNote").addEventListener("input", () => {
   dirty = true;
   $("dSaved").textContent = "unsaved"; $("dSaved").className = "st unsaved";
   renderParse();
+  syncComposer();
   clearTimeout(draftTimer);
   draftTimer = setTimeout(() => { if (openId) writeDraft(openId, openNoteId, $("dNote").value); }, 350);
 });
