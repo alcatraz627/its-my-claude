@@ -273,7 +273,8 @@ const server = Bun.serve({
               return a;
             }, { graded: 0, needsHuman: 0 });
             return { slug, name: b.name, root: b.root, counts, unread, reviewMe, verify, ackTs,
-              live: livePeers(b.root), syncedAt: board.syncedAt };
+              live: livePeers(b.root), syncedAt: board.syncedAt,
+              stack: b.stack ?? [], branch: b.branch ?? null };
             } catch {
               // unreadable board data: say so in place rather than 500 the fleet
               return { slug, name: b.name, root: b.root, broken: true,

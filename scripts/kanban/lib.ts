@@ -97,8 +97,45 @@ export function deriveEntry(list: Note[], activeId?: string): NoteEntry | null {
     activeId: activeId && kept.some((n) => n.id === activeId) ? activeId : kept[0].id,
   };
 }
+// The one env read in this codebase. Named here so a second one has an obvious
+// home rather than scattering process.env through the modules.
+export const sessionId = (): string | undefined => process.env.CLAUDE_CODE_SESSION_ID || undefined;
+
+export interface BoardMeta {
+  root: string; name: string; createdAt: string;
+  // who opened it and what the project is, so the board reads as a project's
+  // own page rather than an anonymous list
+  createdBy?: string;      // the Claude session that opened it
+  title?: string;          // human title, defaults to the directory name
+  stack?: string[];        // detected from the repo's own manifest files
+  repo?: string;           // git remote, when there is one
+  branch?: string;
+}
 export interface RegistryFile {
-  boards: Record<string, { root: string; name: string; createdAt: string }>;
+  boards: Record<string, BoardMeta>;
+}
+
+// What this project IS, from files it already keeps. Cheap and best-effort:
+// a board with no stack line is better than an init that fails on a guess.
+export function projectFacts(root: string): Pick<BoardMeta, "stack" | "repo" | "branch"> {
+  const has = (f: string) => fs.existsSync(path.join(root, f));
+  const stack: string[] = [];
+  if (has("package.json")) stack.push("node");
+  if (has("bun.lockb") || has("bun.lock")) stack.push("bun");
+  if (has("pyproject.toml") || has("requirements.txt")) stack.push("python");
+  if (has("Cargo.toml")) stack.push("rust");
+  if (has("go.mod")) stack.push("go");
+  if (has("Gemfile")) stack.push("ruby");
+  if (has("Package.swift") || fs.existsSync(path.join(root, "Sources"))) stack.push("swift");
+  if (has("tsconfig.json")) stack.push("typescript");
+  let repo: string | undefined, branch: string | undefined;
+  try {
+    const head = fs.readFileSync(path.join(root, ".git", "HEAD"), "utf8").trim();
+    branch = head.startsWith("ref: refs/heads/") ? head.slice(16) : undefined;
+    const cfg = fs.readFileSync(path.join(root, ".git", "config"), "utf8");
+    repo = cfg.match(/url\s*=\s*(\S+)/)?.[1];
+  } catch { /* not a git repo, which is fine */ }
+  return { ...(stack.length ? { stack } : {}), ...(repo ? { repo } : {}), ...(branch ? { branch } : {}) };
 }
 export interface SyncDelta { new: number; moved: number; gone: number; stale: number; kept: number }
 
@@ -194,10 +231,27 @@ export function registerBoard(dir: string): { slug: string; root: string; boardD
   const slug = slugFor(root);
   const reg = registry();
   if (!reg.boards[slug]) {
-    reg.boards[slug] = { root, name: path.basename(root), createdAt: new Date().toISOString() };
+    reg.boards[slug] = {
+      root, name: path.basename(root), createdAt: new Date().toISOString(),
+      ...(sessionId() ? { createdBy: sessionId() } : {}),
+      ...projectFacts(root),
+    };
     atomicWrite(REGISTRY, reg, "register", `boards=${Object.keys(reg.boards).length}`);
   }
   return { slug, root, boardDir: path.join(KROOT, "boards", slug) };
+}
+
+// Boards created before facts existed have none, and a stack or branch can
+// change under a board anyway. Sync refreshes them.
+export function refreshFacts(slug: string): void {
+  const reg = registry();
+  const b = reg.boards[slug];
+  if (!b) return;
+  const facts = projectFacts(b.root);
+  const same = JSON.stringify([b.stack, b.branch, b.repo]) === JSON.stringify([facts.stack, facts.branch, facts.repo]);
+  if (same) return;
+  reg.boards[slug] = { ...b, ...facts };
+  atomicWrite(REGISTRY, reg, "facts", `board=${slug}`);
 }
 
 export const loadBoard = (boardDir: string): Board =>

@@ -8,7 +8,7 @@ import { execFileSync } from "node:child_process";
 import {
   CliError, KROOT, REGISTRY, SERVER_INFO, LANES, type Lane, cardId, readJson, atomicWrite,
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
-  loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey,
+  loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -61,6 +61,7 @@ function urlFor(slug: string): string {
 
 function doSync(dir: string, by: string) {
   const { slug, root, boardDir } = dir === "init" ? registerBoard(process.cwd()) : boardFor(dir);
+  refreshFacts(slug);
   const h = harvest(root);
   const { delta, overridesHeld, notesPreserved } = mergeSync(boardDir, h.cards, by);
   console.log(
