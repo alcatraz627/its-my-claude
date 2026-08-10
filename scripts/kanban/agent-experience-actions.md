@@ -921,3 +921,82 @@ KSH show "$ID" --json --project "$PROJECT" | jq -c '.card.docs'         # contai
 All verified green 2026-07-27 (incl. --clear null check, post-sync survival of BOTH
 grade and linked doc, deadbeef via probe, archive needs-you render). Plan + reasoning:
 assets/reports/20260727-kanban-data-increment/PLAN.md
+
+## Phase 15: notes as a first-class entity (added 2026-08-11)
+
+A card holds `notes[]` (many notes, each with id/body/updatedAt); the legacy
+`note` string is a derived join that EXCLUDES `@me` bodies. Per-note ack lives
+in `ack.json` as `{lastAckTs, notes: {<ackKey>: ts}}`; `lastAckTs` stays the
+floor for notes the map has never seen. The automated sweep for the reader-level
+guarantees is `bash test-readers.sh` (spins a fixture board, isolated from the
+real registry, and SKIPs its write checks silently if the server is down).
+
+```bash
+bash ~/.claude/scripts/kanban/test-readers.sh    # expect: 9 passed, 0 failed
+# POST /api/note ladder for the multi-note fields (server.ts:306-337):
+#   noteId:"new" + blank body        -> 400 (no phantom id)
+#   noteId not in notes[]            -> 409 (deleted under the client; never appends a duplicate)
+#   no noteId while notes[] > 1      -> 409 pre-multi-note client guard
+#   blank body, no noteId, 1 note    -> 200 legacy clear; wiping a MULTI-note card
+#                                       needs an explicit all:true (only drop sends it)
+# GET /api/notes -> every note across every board: {board, slug, cardId, noteId, ...};
+#   the hub Notes view filters it and deep-links /b/<slug>?card=<id>&note=<noteId>
+# CLI: notes --unread counts per-note via noteSeen(), not per-card; @me excluded
+# sync tombstones doc-gone cards off notes[] (the array), never the derived join
+```
+
+Reader sweep green 2026-08-11 (9/9, mutation-tested per guard); the API ladder,
+hub deep link, and drawer note stack were exercised live 2026-08-10 in the
+notes-entity build (commits abc6e01..980d16c, gate report:
+assets/reports/20260810-kanban-notes-entity/stage2-validation.md). Known
+unclosed edge: the 409 guard reads `existing` outside the enqueue chain, so two
+sub-millisecond POSTs can both pass it (reasoned, never reproduced; the write
+itself stays serialised).
+
+## Phase 16: board provenance + the proactive offer (added 2026-08-11)
+
+Boards record who made them and what they sit on: `via` (creating session),
+`stack` (detected from manifest files, lib.ts projectFacts), `branch`, `repo`.
+`sync` backfills these on boards that predate the fields. The session-start
+injector offers a board only where the project has already outlived a session
+(a prior checkpoint pointer for this cwd), and never where one was declined.
+
+```bash
+KSH show "$ID" --json --project "$PROJECT" | jq '.card.via'      # creating session id8
+curl -s localhost:$KPORT/api/boards | jq '.boards[0] | {stack, branch}'
+# offer: no board + prior checkpoint for cwd -> "[kanban] No board here, and <why>…"
+# suppression: touch "$PROJECT/.claude/kanban-declined" -> injector stays silent
+# machine-wide off switch: ~/.claude/kanban/.no-offer
+KSH unregister "$SLUG"   # closes Phase 10's known gap: registry + hub + /b/<slug> all clear
+```
+
+Verified green 2026-08-10 (commit 2c6c726). The unregister verb landed
+2026-07-27 (Phase 11) and is the teardown Phase 10 said didn't exist; use it
+instead of hand-editing registry.json.
+
+## Phase 17: ui-gripe closure probes (added 2026-08-11)
+
+The four findings left open from the 2026-08-10 ui-gripe pass, fixed in commit
+9541eb5. All are board.html render behavior; probe from the browser or via a
+headless page eval.
+
+```bash
+# needs-you handoff: header leads with an amber "<N> needs you" button when any
+#   card has verify.needsHuman; clicking sets the filter to the literal token
+#   "needs-you" (matchFilter special-cases it); Esc in the filter clears
+# lane-echo pill: a heading that names the card's own column (LANE_ECHO map,
+#   e.g. "TODO" in inbox, "In progress" in active) renders no label pill on the
+#   card face; the stripe keeps the hue and the drawer keeps the name. A
+#   non-echo pair ("In progress" heading on a done card) keeps its pill.
+# source path: tailPath() shortens from the head ("…/docs/plan.md:15"), title
+#   holds the full path; never direction:rtl (it relocates a leading slash)
+# composer: empty + unfocused + no conflict -> .composer.min (one-line dock);
+#   focus, text, a restored draft, or a conflict expands it; blur collapse is
+#   delayed 150ms so clicks on dock controls land
+# contrast: the needs-you chip tint rides on var(--card), not the canvas;
+#   measured 6.62:1 dark / 5.11:1 light from source tokens
+```
+
+Verified green 2026-08-11: live board dark+light screenshots, filter click
+scoping 1/2-per-column counts, all composer transitions asserted headless,
+contrast computed from the token set, reader sweep 9/9 after the change.
