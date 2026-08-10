@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-07-16
+updated: 2026-08-10
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-07-16 17:50.
+Regenerated 2026-08-10 13:05.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -62,6 +62,6 @@ Regenerated 2026-07-16 17:50.
 | `subagent-fleet-discipline` | scoped | When a parallel sub-agent fleet hits a transient API throttle, salvage finished work, re-dispatch only the dead, and throttle to batches on a second outage. |
 | `surface-hook-nudges-to-user` | always | When a PreToolUse hook injects an advisory nudge (additionalContext), surface it to the user in your reply as a bordered callout — it's invisible to them otherwise |
 | `testing` | always | Test every non-trivial change scaled to task size; clean-slate checklist; verify each change independently |
-| `todo-discipline` | always | Live todos live in the Task tool (source of truth + TUI); session-notes/memory are auto-mirrors, never hand-edited; plans in docs are complementary not the status surface |
+| `todo-discipline` | always | Live todos live in the Task tool, the source of truth FOR THIS SESSION and what the TUI shows; session-notes/memory are auto-mirrors of it, never hand-edited. A project outlives one session, so its longer-lived state belongs on its kanban board, an independent artifact and NOT a mirror. Plans in docs carry the reasoning. Three altitudes, not three copies. |
 | `trusted-linter-reminder` | always | A "file modified by linter" system-reminder still needs a diff check — linters reformat; they don't change runtime semantics |
 | `unprompted-infra-scope-creep` | always | Never add CI workflows, git hooks, cron jobs, or other automation infrastructure the user did not explicitly request in this task — a feasibility question is not a build order |
