@@ -43,7 +43,7 @@
     "id": "trig-decision-request-without-decision-grade-context",
     "from_slug": "decision-request-without-decision-grade-context",
     "from_source": "atone",
-    "weight": "high",
+    "weight": "medium",
     "instruction": "Asked owner to approve 13h scope via shorthand labels from an unseen document",
     "match_keywords": [],
     "match_tool_signatures": [],
@@ -57,7 +57,7 @@
     "instruction": "declared-ready-without-runtime-exercise",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260807-142844-a2"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260809-205143-5d"
   },
   {
     "id": "trig-dense-briefing-instead-of-a-direct-answer",
@@ -150,26 +150,6 @@
     "deep_link": "~/.claude/atone/events.jsonl#mist-20260728-181233-2f"
   },
   {
-    "id": "trig-review-missed-stale-caller-after-rename",
-    "from_slug": "review-missed-stale-caller-after-rename",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Release review documented a breaking rename but never grepped callers; inline import hid the stale caller until prod",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260713-065252-53"
-  },
-  {
-    "id": "trig-rg-replace-flag-mangles-evidence",
-    "from_slug": "rg-replace-flag-mangles-evidence",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "rg -rn treats -r as --replace, silently rewriting match evidence",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260724-104744-6b"
-  },
-  {
     "id": "trig-shipping-css-ui-changes-without-visual-verification",
     "from_slug": "shipping-css-ui-changes-without-visual-verification",
     "from_source": "atone",
@@ -183,11 +163,11 @@
     "id": "trig-status-verdict-from-stale-mental-model-no-re-check",
     "from_slug": "status-verdict-from-stale-mental-model-no-re-check",
     "from_source": "atone",
-    "weight": "medium",
+    "weight": "high",
     "instruction": "Status verdict from stale mental model (no re-check)",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260728-065548-09"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260809-145934-d9"
   },
   {
     "id": "trig-structural-claim-without-reading-code",
@@ -197,37 +177,17 @@
     "instruction": "structural-claim-without-reading-code",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260728-082426-51"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260808-070711-97"
   },
   {
-    "id": "trig-unprompted-infra-scope-creep",
-    "from_slug": "unprompted-infra-scope-creep",
+    "id": "trig-violated-a-constraint-i-authored-this-session",
+    "from_slug": "violated-a-constraint-i-authored-this-session",
     "from_source": "atone",
     "weight": "medium",
-    "instruction": "adding CI / hooks / automation in",
+    "instruction": "Rendered an em dash to UI hours after writing the zero-em-dash rule into canon",
     "match_keywords": [],
     "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260710-092934-4e"
-  },
-  {
-    "id": "trig-untriaged-decision-surface-for-away-principal",
-    "from_slug": "untriaged-decision-surface-for-away-principal",
-    "from_source": "atone",
-    "weight": "medium",
-    "instruction": "Decision ledger for away user mixed 3 real asks into 19 flat entries",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#mist-20260726-220526-44"
-  },
-  {
-    "id": "trig-arm-the-receiver-before-ending-the-turn",
-    "from_slug": "arm-the-receiver-before-ending-the-turn",
-    "from_source": "affirm",
-    "weight": "medium",
-    "instruction": "Armed the answer watcher in the handoff turn; wake survived 43h idle to user praise",
-    "match_keywords": [],
-    "match_tool_signatures": [],
-    "deep_link": "~/.claude/atone/events.jsonl#aff-20260724-104351-d2"
+    "deep_link": "~/.claude/atone/events.jsonl#mist-20260809-212124-e5"
   },
   {
     "id": "trig-scope-justified-deviation-from-reference-parity",

@@ -161,21 +161,25 @@ For whichever JSON entry was resolved (`--auto` or `--pick`):
 - `project_root` is NOT `$HOME/.claude` (would re-trigger the trap)
 - `ts` is younger than 7 days (older entries: warn but allow if user explicitly picked)
 
-If valid, **announce clearly** before loading:
+If valid, **announce clearly** before loading, in the same visual language the
+briefing itself uses. `--no-seal` gives the header alone, since an announce opens
+a run rather than closing one:
+
+```bash
+printf '{"session_id":"<name>","timestamp":"<ts>, <N>h ago",
+         "status":"loading","project_root":"<project_root>",
+         "checkpoint_path":"<checkpoint_path>"}' > /tmp/catchup-announce-<sid>.json
+/bin/bash ~/.claude/scripts/render/trace.sh /tmp/catchup-announce-<sid>.json \
+  --kind catchup --no-seal
+```
+
+With no tier data present, every tier is omitted and only the header renders.
+Follow it with one plain line carrying the summary, and one more only when the
+pick could be wrong:
 
 ```
-─────────────────────────────────────────────────────
-  Loading checkpoint
-─────────────────────────────────────────────────────
-  Name:       <name>
-  Project:    <project_root>
-  Checkpoint: <checkpoint_path>
-  Written:    <ts> (<N> hours ago)
-  Summary:    <summary>
-
-  If this is the wrong checkpoint, re-run as:
-    /catchup <explicit-filename>
-─────────────────────────────────────────────────────
+<summary>
+Wrong checkpoint? Re-run as: /catchup <explicit-filename>
 ```
 
 Then read `checkpoint_path` directly and skip to **Phase 1.3** (parse). Do NOT continue to Phase 0.5 / 1.1 — those would re-find the wrong file.
@@ -367,35 +371,51 @@ optional (read if unfamiliar). Within a tier, omit any row with nothing to show.
 `Next action` is the only mandatory row in the whole briefing; never render an
 empty section header just to show the skeleton.
 
+**Do not retype the layout.** Write the briefing data to
+`/tmp/catchup-data-<session-id>.json` and render it:
+
+```bash
+/bin/bash ~/.claude/scripts/render/trace.sh /tmp/catchup-data-<session-id>.json --kind catchup
 ```
-═════════════════════════════════════════════════════
-  CATCHUP · <name> · <project, ~-abbreviated> · <age>
-  <one-line summary from the checkpoint index>
-  mode: <post-clear FULL | post-compact LIGHT> · source: <checkpoint | WAL fast path>
-═════════════════════════════════════════════════════
 
-  NOW — act from this
-    Next action    <ONE imperative sentence>
-    Blocked on     <USER: … | external actor | omit when none>
-    Constraints    <verbatim, one per line, each with its check>
-    Caveats        <verbatim, one per line>
-    Expired auth   <each item needs fresh user confirmation>
-    Decaying       <prerequisite + its re-arm command, one per line>
+This is the same renderer `/core-dump` Phase 4 calls, so a briefing and the
+record it came from read as one house style. The briefing wears a teal accent
+against the dump's gold, so the two are never confused. A layout retyped by the
+model drifts every run, which is the defect this call exists to remove.
 
-  STATE — what moved, what's live
-    Pending        <workspace todos first, checkpoint backlog after;
-                    number them — the hand-off question refers to these>
-    Drift          <checkpoint claim vs git-now, one line per mismatch>
-    Running        <verified processes/ports only — never unverified claims>
-    Mail           <ipc: one line per waiting message or orphan inbox>
+The JSON keys, every one optional and omitted when empty:
 
-  CONTEXT — read if unfamiliar
-    Goal           <1-2 lines, incl. any mid-session pivot>
-    Expectation    <what the user was waiting for at dump time>
-    Learnings      <2-4 one-line insights, highest continuation value first>
-    Key files      <ranked refs from Phase 2, anchor first, one line each>
-═════════════════════════════════════════════════════
+```jsonc
+{
+  "session_id": "<checkpoint name>", "timestamp": "<age, e.g. 2h ago>",
+  "status": "<post-clear FULL | post-compact LIGHT>",
+  "project_root": "<absolute>", "checkpoint_path": "<file it came from>",
+
+  // NOW, act from this
+  "next_action": "<ONE imperative sentence>",
+  "blocked_on":  "<USER: … | external actor | omit when none>",
+  "constraints": ["<verbatim, with its check>"],
+  "caveats":     ["<verbatim>"],
+  "expired_auth":["<needs fresh user confirmation>"],
+  "decaying":    ["<prerequisite + its re-arm command>"],
+
+  // STATE, what moved and what is live
+  "pipeline": ["<pending, workspace todos first; the renderer numbers them>"],
+  "drift":    ["<checkpoint claim vs git-now, one per mismatch>"],
+  "running":  ["<verified processes/ports only, never unverified claims>"],
+  "mail":     ["<one per waiting message or orphan inbox>"],
+
+  // CONTEXT, read if unfamiliar
+  "goal": "<1-2 lines, incl. any mid-session pivot>",
+  "expectation": "<what the user was waiting for at dump time>",
+  "learnings": ["<2-4, highest continuation value first>"],
+  "files": [{"path": "<ranked ref, anchor first>", "change": "<why it matters>"}]
+}
 ```
+
+**Constraints and caveats go in verbatim.** The renderer reproduces the strings
+it is given, so a paraphrase here is a paraphrase in the briefing, and that is
+exactly how a constraint quietly stops binding across a resume.
 
 Rendering rules:
 
@@ -410,8 +430,9 @@ Rendering rules:
 4. **Budget CONTEXT to roughly a dozen lines.** The full checkpoint stays on disk;
    this tier is orientation, not a reproduction. Cite the checkpoint path once in
    the header region instead of quoting more of it.
-5. **Number the Pending rows.** The Phase 4 hand-off asks "which item"; numbers
-   make the answer a single keystroke.
+5. **Pending rows are numbered by the renderer**, so pass `pipeline` in priority
+   order and do not number the strings yourself. The Phase 4 hand-off asks
+   "which item"; numbers make the answer a single keystroke.
 6. **Snippets loaded in 3.2 do not appear in the briefing.** They are working
    context for you; the briefing cites the file:line and why it matters, one line
    each, under Key files.
@@ -513,15 +534,12 @@ bash ~/.claude/scripts/propose.sh add \
 
 Set only the `link:*` tags you actually have. Do not set a value/priority (computed at triage from corroboration). This must not delay the hand-off — it is a quick reflective check, not a research task. Skip silently if nothing reusable surfaced.
 
-## Phase 4 — Hand Off
+## Phase 4: hand off
 
-Print:
-
-```
-─────────────────────────────────────────────────────
-  Context restored. Ready to continue.
-─────────────────────────────────────────────────────
-```
+**The Phase 3.1 render is the hand-off.** Do not print a separate "context
+restored" box under it. The briefing's own seal already closes the document, and
+a plain ASCII block underneath undoes the visual and is the last thing the user
+reads.
 
 Then ask:
 

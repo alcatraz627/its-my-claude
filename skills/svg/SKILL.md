@@ -94,8 +94,8 @@ wrong-looking SVG.
 ## Phase 5 — Optimize (icons/logos/favicons: default on; illustrations: ask/skip)
 
 ```bash
-# macOS has no `timeout`; svgo via npx can take a few seconds on first (uncached) run.
-npx --yes svgo "<file>.svg" -o "<file>.svg"
+# svgo via npx can take a few seconds on its first (uncached) run, so cap it.
+timeout 120 npx --yes svgo "<file>.svg" -o "<file>.svg"
 ```
 
 Apply by default for icons/logos/favicons/patterns (byte size matters, geometry is

@@ -44,7 +44,10 @@
 !/subconscious/
 
 # 3) re-exclude scratch + data + transient INSIDE the allowlisted areas
-/_*.claude.md
+# Unanchored on purpose: a leading slash would pin this to the repo root, and
+# scratch checkpoints are written wherever a session is working (scripts/kanban/,
+# skills/<name>/). 14 of them reached the repo that way before this was widened.
+_*.claude.md
 /wal.md
 /wal.jsonl
 /weekly-todos.md

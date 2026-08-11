@@ -54,6 +54,46 @@ hook_loop_check() {
   return 0
 }
 
+# hook_box <title> [width] — wrap stdin in a titled box, echo it to stdout.
+#
+# Gives a blocking reason a shape the reader can scan instead of a wall of text.
+# The body arrives on stdin so a caller can build it with printf and pipe it in;
+# long lines are wrapped on word boundaries so nothing runs off the edge.
+#
+#   reason=$(printf 'line one\nline two\n' | hook_box "⛔ MY GATE")
+#
+# The box is deliberately open on the right — a top rule, a left rail, a bottom
+# rule, and no closing column. That is the shape rules/surface-hook-nudges-to-user.md
+# tells the agent to re-render hook output in, so a reason built here can be
+# pasted into a reply verbatim. It also sidesteps the alignment bug the closed
+# form invites: box-drawing characters and emoji occupy more display columns
+# than bash counts, so a right border drifts by a column or two per line and the
+# raggedness is exactly what the box was added to avoid.
+hook_box() {
+  local title="${1:-}" width="${2:-72}" line
+  local rule='' i=0
+  # Fill to `width` after the title, or a short tail if the title already runs long.
+  local fill=$(( width - ${#title} - 4 ))
+  [ "$fill" -lt 3 ] && fill=3
+  while [ "$i" -lt "$fill" ]; do rule="${rule}─"; i=$((i + 1)); done
+  printf '┌─ %s %s\n' "$title" "$rule"
+  # -s breaks on spaces so words stay whole; the 2 accounts for the "│ " rail.
+  # fold leaves the break space at the end of the line, so trim before printing.
+  # The `|| [ -n "$line" ]` is load-bearing: read reports failure on a final line
+  # with no newline, and callers build these bodies with printf, which routinely
+  # ends without one. Without it the last line of every reason is dropped.
+  fold -s -w $((width - 2)) 2>/dev/null | sed 's/[[:space:]]*$//' \
+  | while IFS= read -r line || [ -n "$line" ]; do
+      if [ -n "$line" ]; then printf '│ %s\n' "$line"; else printf '│\n'; fi
+    done
+  # width - 1 dashes, because the corner character is itself the first column.
+  # Counting a full `width` here made every box one character wider at the
+  # bottom than at the top, in every box this ever drew.
+  rule=''; i=0
+  while [ "$i" -lt $((width - 1)) ]; do rule="${rule}─"; i=$((i + 1)); done
+  printf '└%s\n' "$rule"
+}
+
 # hook_clear_reset <sid8> <counter_file> — reset a per-process counter after /clear.
 #
 # The per-process counters keyed by ${PPID} (the tool tally, ctx %) survive a

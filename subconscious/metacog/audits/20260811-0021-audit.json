@@ -1,0 +1,193 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17012,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.16017070916649062,
+    "unit_count": 91
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units e091ecf5-0, ac4110c6-0, 9b06a515-0, 7d3c35b0-0, 65b99358-0, 562341c3-0: six additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twenty-second+ consecutive cycle with identical pattern; count per cycle increased from 4-5 in prior batches to 6 this cycle, indicating worsening volume; no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit e2c47b29-13: Edit on ErrorManagement.tsx failed (success:false x1) before Read+Edit sequence succeeded; pattern shape and recovery unchanged from 13+ cycle baseline; zero improvement signal",
+      "server_startup_overconfidence:RECURRING:STABLE — unit e2c47b29-13: compound Bash command (sleep 20; gcloud builds list | tail) failed (success:false x1); agent pivoted to Read tool without diagnosing root cause of compound command failure; sixth consecutive cycle confirming this shape; no probe added between failed Bash and fallback tool use",
+      "task_output_failure_silent_recovery:NEW — unit e2c47b29-10: TaskOutput call failed (success:false x1); agent continued without investigating failure mode or surfacing the failure to the user; different from prior IPC send failures in that TaskOutput is a first-party tool whose failure mode was not probed before retry path was taken; single occurrence, insufficient for RECURRING classification"
+    ],
+    "calibration_score": 0.32,
+    "overconfident_count": 2,
+    "recommendations": [
+      "task_output_failure_silent_recovery is NEW this cycle — when a first-party task management tool (TaskOutput, TaskUpdate, TaskCreate) fails, the agent should probe the failure mode before continuing, as silent recovery masks state corruption risk; this is distinct from the IPC send length failures seen in prior cycles",
+      "server_startup_overconfidence remains unimproved after six consecutive cycles — the compound sleep+Bash pattern fails consistently; a pre-probe of port availability (lsof -ti :port) before compound server commands would eliminate the failure class without a recovery detour; no progress toward this fix observed across baseline period",
+      "write_before_read_trap remains STABLE with no improvement — the Edit-before-Read failure class is mechanically avoidable; pattern continues unchanged"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "4107d34c-85c6-41ca-b3b7-909c4515c06c",
+      149588
+    ],
+    [
+      "1da0f805-fa47-4f35-90cb-8aa2dddbb7f3",
+      146454
+    ],
+    [
+      "1c6b90e5-3d9e-4ed9-9ccd-a6c3480f028f",
+      149085
+    ],
+    [
+      "0c39a659-637f-40c6-9e08-ac6aabe4b22f",
+      6490522
+    ],
+    [
+      "e961c291-c301-4141-bb49-3dee1683e80f",
+      132774
+    ],
+    [
+      "e2c47b29-4bbf-45be-bd61-19b839882da3",
+      3386990
+    ],
+    [
+      "e091ecf5-c226-4107-85c0-a00098216fce",
+      135293
+    ],
+    [
+      "d9b73e9b-be20-4129-8ea8-cf4f76dfe3c2",
+      119485
+    ],
+    [
+      "ba78b51e-53a6-44f8-a68a-d563cf72b06b",
+      130648
+    ],
+    [
+      "b8023c09-3b9e-4481-bb93-6d8e25cef3e2",
+      131807
+    ],
+    [
+      "ac4110c6-d0e0-4538-9085-e3d8387d06d5",
+      135461
+    ],
+    [
+      "a858566e-9c65-47da-b0ca-ffaa51507899",
+      143426
+    ],
+    [
+      "9d4b51ef-fbe9-4de5-b167-997a1c684110",
+      131096
+    ],
+    [
+      "9b06a515-a8a2-48cf-b5a4-c23798bc66ef",
+      134609
+    ],
+    [
+      "7d3c35b0-99ea-4518-b07e-33571736f095",
+      133748
+    ],
+    [
+      "6727ae18-8256-4ef0-8dd4-bafb7cfe6d30",
+      146080
+    ],
+    [
+      "65b99358-e036-4cc3-a1a7-beb491cf711d",
+      135523
+    ],
+    [
+      "562341c3-31b0-4777-8177-fa51da0cdd1b",
+      140094
+    ],
+    [
+      "5015a554-b002-4eb3-bcf2-457f2375c4f8",
+      149811
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      23964979
+    ],
+    [
+      "2dd02998-18eb-4759-9bc3-74813cdaa6a1",
+      134217
+    ],
+    [
+      "20adb7cf-8b11-488a-96c0-f7080e12d683",
+      131739
+    ],
+    [
+      "0f150185-a7c9-4875-9f16-30ba008ac6b5",
+      140015
+    ],
+    [
+      "0af96b88-6e08-4e17-aefe-7ba887d9964e",
+      124159
+    ],
+    [
+      "09173976-81be-4eba-b78d-7220138f4c41",
+      116175
+    ],
+    [
+      "fcd74444-8e1a-42a5-99fd-ec32e7747202",
+      135795
+    ],
+    [
+      "b2622f8c-693d-46a7-b968-37e603e9c484",
+      124987
+    ],
+    [
+      "85ae630d-10fb-4b2f-9c02-6f8bec315944",
+      2556477
+    ],
+    [
+      "67cc805d-c9d7-497e-84b5-130bbf906f67",
+      3124907
+    ],
+    [
+      "021ab7b2-8011-40bc-a688-f6b96001cf41",
+      16982403
+    ],
+    [
+      "e9ffbbec-d4c2-4579-8369-7444cd5bbf1c",
+      31734
+    ],
+    [
+      "888ddc6d-b484-4892-802a-85c4c2d3fd7d",
+      4115827
+    ],
+    [
+      "68518953-80c7-4ebd-88ce-743e4bb98b57",
+      135540
+    ],
+    [
+      "251e36e7-5b04-45a4-b637-3e723d72b72b",
+      7658406
+    ],
+    [
+      "948db388-8436-473c-bef4-80fb2b415c36",
+      5018009
+    ],
+    [
+      "86f8dae9-fa03-42f7-9b63-b4d93a8471b1",
+      12868466
+    ],
+    [
+      "bdffbf31-2e55-4480-8b90-2d649f94f825",
+      2212898
+    ],
+    [
+      "ba32e8cd-6ab8-4d53-ac16-f44558f8b9f1",
+      1315505
+    ],
+    [
+      "81b94eea-0fa8-4544-9d27-092174526976",
+      154723
+    ],
+    [
+      "757d7e02-96a7-4225-8f6c-ca11f8fa8408",
+      8668999
+    ]
+  ],
+  "timestamp": "2026-08-11T00:21:03.601960Z",
+  "tokens_used": 8775,
+  "units_analyzed": 14,
+  "units_total": 91
+}

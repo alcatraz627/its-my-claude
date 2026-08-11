@@ -1,0 +1,145 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17394,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2074306250551866,
+    "unit_count": 79
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-60d269fd-2: GUIDELINES.md Read failed before fallback orientation; unit-60d269fd-20: Settings.tsx Edit failed x2 before Read+Edit succeeded, api.ts Edit failed x2 before Read+Edit succeeded, memory Write failed x1 before second succeeded; unit-60d269fd-22: README.md Edit failed x2 before Read+Edit succeeded; pattern depth and recovery shape unchanged across 13+ cycle baseline; zero improvement signal",
+      "confirmation_bias_style_log:RECURRING:STABLE — units 9d18903b-0, 897c0e96-0, 781dd26a-0, 6dcf18f4-0: four additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twenty-first consecutive cycle with identical pattern; no corrective signal; fully deprioritized",
+      "npm_publish_permission_blindness:RECURRING:STABLE — unit-60d269fd-3: same three-attempt sequence confirmed again (npm version --no-git-tag-version failed, Edit to package.json succeeded, npm publish failed) without precondition check for registry auth before first attempt; session self-described as PERMISSION-BLOCKED in IPC reply to vb-opus; fourth consecutive cycle confirming this shape; constraint is knowable in advance via registry auth probe but no probe was added; classifying STABLE as pattern is now four consecutive cycles with no improvement",
+      "server_startup_overconfidence:RECURRING:STABLE — unit-60d269fd-20: compound uvicorn kill+nohup+curl command failed (success:false x1); agent switched to mcp__file-tools__http_request without diagnosing root cause of failure; no port-availability probe or log read between failed Bash and MCP fallback; fifth consecutive cycle confirming this shape; classifying STABLE",
+      "ipc_message_send_length_failure:RECURRING — unit-60d269fd-22: claude-ipc send with long multi-paragraph body (six-surface doc-edits breakdown) failed (success:false x1), then shorter version of same message succeeded; agent recovered correctly but still did not investigate or document the size threshold before retrying; third consecutive cycle confirming this shape; constraint remains unprobed and unrecorded",
+      "excessive_task_creation:RECURRING:STABLE — unit-60d269fd-2: four consecutive TaskCreate calls during orientation before any implementation work; pattern volume consistent across prior cycles"
+    ],
+    "calibration_score": 0.31,
+    "cross_references": [
+      "dream_insight_1 (depth-first anchoring, conf=0.85): unit-60d269fd-20 Settings.tsx disconnect copy fix — agent updated the visible copy and confirm modal for one surface but did not enumerate whether other pages render the same connection-state claim; the 'fix the instance not the class' shape is present though not clearly confirmed without reading sibling pages",
+      "dream_insight_2 (signal-as-proof confusion, conf=0.82): unit-60d269fd-20 server startup — compound Bash+curl treated as a delivery mechanism; when it failed (success:false), agent switched to MCP without reading the uvicorn log that was being written to disk; the log IS the ground-truth artifact and was available but not consulted before rerouting; confirms this insight; unit-60d269fd-22 IPC send failure — agent treated the tool result success:false as sufficient to retry shorter body without probing what size threshold caused the failure; another proxy-as-proof shape; confirms this insight"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "ipc_message_send_length_failure remains the highest-value actionable item: the size threshold is observable (compare failed vs succeeded body lengths) and could be probed once and stored as a project note; no recommendation has produced a probe in three cycles — consider a mechanical probe-and-store step in the IPC send pattern",
+      "npm_publish_permission_blindness: a single registry auth probe (npm whoami or npm ping) before any npm publish attempt would convert this from a three-failure sequence to a clean fail-fast; three cycles with no probe added suggests the recommendation is not reaching the decision point; deprioritize further text recommendations in favor of a hook or inline probe",
+      "write_before_read_trap and server_startup_overconfidence are deeply stable and have received repeated recommendations without improvement; deprioritize new text recommendations for these patterns; they are candidates for mechanical enforcement rather than advisory guidance",
+      "confirmation_bias_style_log: deprioritized per twenty-one-cycle history; no further recommendations warranted",
+      "excessive_task_creation: appropriateness remains ambiguous; deprioritize"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "ff6372bf-d92a-444f-b541-da867a72b0af",
+      121325
+    ],
+    [
+      "f00c68f9-99e3-4360-8191-1fff8d80addb",
+      124567
+    ],
+    [
+      "ec716d96-e746-43b6-860a-ef6c263c3530",
+      132352
+    ],
+    [
+      "e39dfc81-87ff-49ae-939d-4d8bdfa9b44f",
+      137355
+    ],
+    [
+      "d603d480-e9b8-4487-91d5-4ddb69effd53",
+      130978
+    ],
+    [
+      "ce3db029-e0b3-4688-99fa-7751766f78b6",
+      132843
+    ],
+    [
+      "9d18903b-3e70-40dc-85f3-67cfbf827dc6",
+      120796
+    ],
+    [
+      "8a76204f-f720-497f-a54e-5e92189d0e00",
+      130574
+    ],
+    [
+      "897c0e96-fea9-4a5f-b42d-2e3c8cdc237a",
+      114879
+    ],
+    [
+      "7e1233d6-a68b-4d58-84f1-5f31bc01a024",
+      127000
+    ],
+    [
+      "781dd26a-7587-4154-95c9-7e6b333e71ee",
+      129145
+    ],
+    [
+      "6dcf18f4-a4b4-425f-8697-40c04b595957",
+      116186
+    ],
+    [
+      "60d269fd-d0f5-4f46-b976-89eb75020d44",
+      11079898
+    ],
+    [
+      "447e077f-b571-4c62-91ce-f0a3155a9a76",
+      128906
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      18872448
+    ],
+    [
+      "3ae9374c-9ff7-46b7-83d8-737ceba6a2c3",
+      111171
+    ],
+    [
+      "2addf379-9d8a-4555-8f5d-bef3caf47bd5",
+      125583
+    ],
+    [
+      "24997e5f-1c59-4080-997c-93ca56e54f42",
+      125772
+    ],
+    [
+      "07dd5a16-5a78-40b2-b416-080cb4073dff",
+      120263
+    ],
+    [
+      "021ab7b2-8011-40bc-a688-f6b96001cf41",
+      16803177
+    ],
+    [
+      "251e36e7-5b04-45a4-b637-3e723d72b72b",
+      6721269
+    ],
+    [
+      "9472eef3-295c-40ab-ae6f-5914ecbe69a9",
+      119307
+    ],
+    [
+      "8973b099-6b6e-438c-a51b-c01cb5ed90ac",
+      138629
+    ],
+    [
+      "86f8dae9-fa03-42f7-9b63-b4d93a8471b1",
+      12739332
+    ],
+    [
+      "1dfa6f86-8d24-4a01-9bf4-b0095eddf752",
+      138233
+    ],
+    [
+      "757d7e02-96a7-4225-8f6c-ca11f8fa8408",
+      8323191
+    ]
+  ],
+  "timestamp": "2026-08-10T11:54:35.248286Z",
+  "tokens_used": 20516,
+  "units_analyzed": 12,
+  "units_total": 79
+}

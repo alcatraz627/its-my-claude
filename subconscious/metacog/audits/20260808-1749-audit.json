@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17816,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17013364909125406,
+    "unit_count": 23
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-60d269fd-2: GUIDELINES.md Read failed before orientation succeeded via fallback reads; unit-60d269fd-3: npm version/publish attempted without checking registry auth or session permissions first (two failures before edit+third attempt, which also failed); unit-4af22037-3: two consecutive Bash failures (speedway path, walmart-mvp path) before correct roots discovered; pattern depth and recovery shape unchanged from all prior cycles across 10+ cycle baseline; no improvement signal",
+      "cwd_assumption_without_prefix:RECURRING:STABLE — unit-4af22037-3: Bash calls to /Users/alcatraz627/Code/Versable/speedway and /Users/alcatraz627/Code/Versable/walmart-mvp failed before explicit cd-prefixed variants succeeded; unit-60d269fd-3: multiple cd-prefixed Bash calls failed mid-stream; fourth consecutive cycle confirming this pattern; zero improvement",
+      "confirmation_bias_style_log:RECURRING:STABLE — seventeen zero-tool or near-zero-tool sessions across this batch all share identical topic_keywords (enforce, style, ledger, file, content) with Unknown user_reaction; no evidence of slug justification before style-log calls in the one observable instance (4af22037-20, style-log.sh with watcher-fire slug, no surfaced evidence for classification); sixteenth consecutive cycle with identical pattern; deprioritized per history guidance",
+      "excessive_task_creation:RECURRING:STABLE — unit-4af22037-3: six consecutive TaskCreate calls before Agent dispatches; unit-60d269fd-2: four TaskCreate calls during orientation before implementation begins; structural anomaly confirmed again; appropriateness remains ambiguous but volume is consistent across cycles",
+      "npm_publish_permission_blindness:NEW — unit-60d269fd-3: npm publish attempted twice (npm version --no-git-tag-version failed, then Edit to package.json succeeded, then npm publish failed again) without any precondition check for registry auth, session permissions, or npm login state before first attempt; the session's own IPC reply to vb-opus subsequently described the outcome as PERMISSION-BLOCKED for this session (classifier), indicating the constraint was knowable in advance; structurally identical to server_startup_overconfidence (try-A-fail-try-B without reading root cause) but in npm registry domain; three sequential attempts with no diagnostic step between failures"
+    ],
+    "calibration_score": 0.31,
+    "overconfident_count": 7,
+    "recommendations": [
+      "npm_publish_permission_blindness is NEW this cycle: before any npm publish or npm version bump, probe registry auth state (npm whoami, check .npmrc, verify session classifier permits registry writes) rather than attempting blind; the constraint surfaced post-hoc in the IPC message suggests it was derivable before the first attempt",
+      "write_before_read_trap and cwd_assumption_without_prefix remain STABLE with no improvement across 10+ cycles; mechanical enforcement (a PreToolUse guard that checks file existence before Write, or a path-prefix validator before Bash) is the only remaining lever; advisory reminders have saturated with no corrective signal",
+      "structural-claim-without-reading-code was self-caught this cycle via atone (unit-60d269fd-3 logged S2 event for declaring vb-opus dead despite heartbeat evidence); this is positive signal — the catch-and-log behavior is working even if the initial claim was wrong; reinforce the catch pattern rather than the prevention pattern given the recurring history"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "6b3e33e2-4cab-4518-8c0d-797481ecef28",
+      110761
+    ],
+    [
+      "6b1f0101-9c99-45bb-a02c-a3125d8295dd",
+      116515
+    ],
+    [
+      "6a670c68-595a-4775-9104-c204e9138448",
+      116644
+    ],
+    [
+      "69cb2ee8-e12e-4dc1-928b-3630421527d9",
+      117145
+    ],
+    [
+      "682ed19c-c577-42df-bef4-73ef8b4b3bb4",
+      112937
+    ],
+    [
+      "67510ace-1e4c-4598-8fa0-589e1fd703d2",
+      118423
+    ],
+    [
+      "636e7edc-3ec2-42b0-a308-6fe63b9564bb",
+      105679
+    ],
+    [
+      "634b4131-0a45-4000-89bf-d01fe2a196e2",
+      94711
+    ],
+    [
+      "6306584e-e351-408f-ac1b-c6611a764e10",
+      116839
+    ],
+    [
+      "611a338c-65e6-4de6-abd9-64c080caca0f",
+      115944
+    ],
+    [
+      "60d269fd-d0f5-4f46-b976-89eb75020d44",
+      2583861
+    ],
+    [
+      "5e731f80-b938-441c-8329-99c659139bbe",
+      105956
+    ],
+    [
+      "5b6bb2d4-0659-4587-bd6b-2d9d444b3cd0",
+      128349
+    ],
+    [
+      "5b033888-be88-4463-a638-08e6f272becb",
+      119783
+    ],
+    [
+      "5a7ce0df-6d2a-4909-a7fe-c0dd72904183",
+      115697
+    ],
+    [
+      "5a448366-e64e-4248-8e77-b23eab8346e0",
+      95714
+    ],
+    [
+      "5a1431ef-65be-49d6-b924-0e53b6f61bd4",
+      100142
+    ],
+    [
+      "5a047ef3-c4e9-4dcc-b368-d4e16c73cdac",
+      116786
+    ],
+    [
+      "595f12ad-82f9-4f0e-b0d0-e3a4c7f61eaa",
+      116162
+    ],
+    [
+      "5850a2b3-0f53-4704-a3b2-c56c6355f569",
+      117321
+    ],
+    [
+      "57fc0db7-c5ef-48f0-a491-7dbf195e2472",
+      116198
+    ],
+    [
+      "56964b26-a89a-48db-ac19-a69c5ee177bf",
+      103503
+    ],
+    [
+      "55bc1c79-8633-4e76-b3b8-3a3b319600c2",
+      96795
+    ],
+    [
+      "52440e19-a06f-4952-b42a-453fe12636f9",
+      107181
+    ],
+    [
+      "51dab276-2e0f-4748-b38a-1dc2ebfcaa41",
+      117886
+    ],
+    [
+      "51d5c8f9-96f4-4862-8799-960ca31a9bd0",
+      98182
+    ],
+    [
+      "50b4ac48-d97f-4877-b399-7729ee5e412a",
+      114241
+    ],
+    [
+      "508a58f9-4a97-470a-8db2-b086e514a3d2",
+      118308
+    ],
+    [
+      "5056b1b6-bd33-452e-af2f-809040dc32b6",
+      113728
+    ],
+    [
+      "4ec1d9ab-4c10-4076-aa0b-079de14fbad7",
+      98736
+    ],
+    [
+      "4dfa954e-65e0-4805-89e5-58329ad85025",
+      110335
+    ],
+    [
+      "4d3b82a3-6419-4533-94fe-d10a62865090",
+      129528
+    ],
+    [
+      "4af22037-9360-4cbb-8f27-5fb2a8c1ed3c",
+      10774075
+    ],
+    [
+      "4ac7b310-44e3-421d-ae6f-8ca051d1d83f",
+      123764
+    ],
+    [
+      "4aab83cb-ac3f-4316-b7f8-10168ed70594",
+      117831
+    ],
+    [
+      "48ff1fdc-b7aa-40af-bf52-355e7c3a8858",
+      120380
+    ],
+    [
+      "488e6a88-0044-460d-94af-e2fb1127806a",
+      117619
+    ],
+    [
+      "434a3b5b-1b95-42ec-8d10-f47cb63515ca",
+      95332
+    ],
+    [
+      "42804751-ee2b-446a-9440-12f22bdf01aa",
+      99725
+    ],
+    [
+      "4220f44c-8b9c-4e25-a558-5ba17556d68e",
+      120930
+    ],
+    [
+      "418e0fe9-327d-4024-a68e-6383ebe00cae",
+      122676
+    ],
+    [
+      "40dffdf8-1eef-4fea-9e23-173775dcd530",
+      123361
+    ],
+    [
+      "3e48d0ed-f6d9-46b2-a188-697fe677d257",
+      116951
+    ],
+    [
+      "3e3849a4-c09f-49cd-8ab3-cdaf2f7b466b",
+      124862
+    ],
+    [
+      "3cc6aa7c-2b0f-494e-a1b6-e5120ae5a34c",
+      120899
+    ],
+    [
+      "3c2177fe-dfcd-49a0-8113-6ff0dca3c9fc",
+      116201
+    ],
+    [
+      "3b4edc02-16c2-4906-ac50-52453a04527a",
+      117383
+    ],
+    [
+      "3a4bf425-39d6-4ed1-af06-83394a53d2ff",
+      116598
+    ],
+    [
+      "3a20d98d-102c-4bff-8a0b-d0fb46134675",
+      116436
+    ],
+    [
+      "34f00a98-ec11-4757-a5f1-17c53f99c412",
+      116856
+    ]
+  ],
+  "timestamp": "2026-08-08T17:49:30.521617Z",
+  "tokens_used": 10402,
+  "units_analyzed": 23,
+  "units_total": 23
+}

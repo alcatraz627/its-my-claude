@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-07T07:00:03Z",
-  "events_analyzed": 134001,
-  "sessions_analyzed": 420,
+  "generated_at": "2026-08-11T09:21:24Z",
+  "events_analyzed": 145131,
+  "sessions_analyzed": 457,
   "session_quality": {
-    "average_score": 69.7,
+    "average_score": 69.8,
     "top_sessions": [
       {
         "session_id": "130ecdff-573f-4589-9978-5959499fe437",
@@ -170,53 +170,54 @@
     "error_rate_overall": 0.0
   },
   "topic_drift": {
-    "primary_focus": "tmp",
+    "primary_focus": "versable-builder",
     "recent_projects": {
-      "studio_search_jul_26": 1,
-      "tmp": 3,
-      "i-dream": 1,
+      "versable-builder": 2,
+      "automation": 1,
       ".claude": 2,
-      "studio_search_jul_26-fable": 2,
-      "versable-builder": 1
+      "ig-download": 1,
+      "kanban": 1,
+      "claude-instances": 1,
+      "tmp": 2
     },
-    "drift_rate": 0.744,
-    "total_switches": 311,
+    "drift_rate": 0.749,
+    "total_switches": 341,
     "recent_switches": [
       {
-        "ts": "2026-08-05T21:09:17Z",
-        "from": "i-dream",
+        "ts": "2026-08-10T20:08:39Z",
+        "from": "versable-builder",
+        "to": "ig-download"
+      },
+      {
+        "ts": "2026-08-10T20:21:07Z",
+        "from": "ig-download",
+        "to": "kanban"
+      },
+      {
+        "ts": "2026-08-10T20:36:19Z",
+        "from": "kanban",
         "to": ".claude"
       },
       {
-        "ts": "2026-08-05T21:15:21Z",
+        "ts": "2026-08-10T20:44:49Z",
         "from": ".claude",
+        "to": "claude-instances"
+      },
+      {
+        "ts": "2026-08-10T21:15:05Z",
+        "from": "claude-instances",
         "to": "tmp"
-      },
-      {
-        "ts": "2026-08-05T22:07:03Z",
-        "from": "tmp",
-        "to": "studio_search_jul_26-fable"
-      },
-      {
-        "ts": "2026-08-06T10:30:06Z",
-        "from": "studio_search_jul_26-fable",
-        "to": ".claude"
-      },
-      {
-        "ts": "2026-08-06T20:29:16Z",
-        "from": ".claude",
-        "to": "versable-builder"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 10521,
-    "corrections": 1979,
-    "confirmations": 1472,
-    "directives": 310,
-    "terse_messages": 693,
-    "correction_rate": 0.188,
-    "confirmation_rate": 0.14,
+    "total_prompts": 11300,
+    "corrections": 2076,
+    "confirmations": 1519,
+    "directives": 333,
+    "terse_messages": 747,
+    "correction_rate": 0.184,
+    "confirmation_rate": 0.134,
     "directive_rate": 0.029,
     "terse_rate": 0.066,
     "style_label": "conversational"
@@ -228,6 +229,6 @@
       0.625
     ],
     "reviews_counted": 1,
-    "updated_at": "2026-08-07T03:41:22.550448Z"
+    "updated_at": "2026-08-11T00:20:07.437078Z"
   }
 }

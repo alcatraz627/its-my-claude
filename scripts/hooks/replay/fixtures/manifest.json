@@ -479,6 +479,66 @@
       "source_transcript": "SYNTHETIC",
       "turn_in_file": 0,
       "note": "Det1a: URL mentioned but message says it is DOWN / relaunch-when-needed -- disclosure, must stay silent"
+    },
+    {
+      "name": "prose-smell-tp-multi-tell",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-multi-tell.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "em-dash + bold-spam + Label:fragment = 3 block-tier categories. Expected 'soft' because the harness runs with a sanitized env: PROSE_SMELL_ENFORCE is unset here, so the hook emits its WOULD-BLOCK dry-run note. Under the live config (settings.json sets ENFORCE=1) the same input is a hard block. Both paths are the same detection.",
+      "source_transcript": "SYNTHETIC (F5, adversarial review 2026-08-11)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "prose-smell-fp-clean-prose",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/fp-clean-prose.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "clean prose well over the 200-char gate - must NOT fire",
+      "source_transcript": "SYNTHETIC (F5, adversarial review 2026-08-11)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "prose-smell-fp-emdash-in-fence",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/fp-emdash-in-fence.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "em-dashes appear ONLY inside a fenced code block; pins the prose stripper, not the tell",
+      "source_transcript": "SYNTHETIC (F5, adversarial review 2026-08-11)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "prose-smell-fp-under-length-gate",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/fp-under-length-gate.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "an em-dash but under the 200-char prose gate; the length gate must win",
+      "source_transcript": "SYNTHETIC (F5, adversarial review 2026-08-11)",
+      "turn_in_file": 0
+    },
+    {
+      "name": "prose-smell-tp-emdash-only",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-emdash-only.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "note": "EXACTLY ONE tell: a single em-dash, no bold, no Label:fragment. Pins the em-dash detector itself. The multi-tell fixture cannot do this - blinding one of its three detectors still leaves two categories, so it stays green and pins nothing.",
+      "source_transcript": "SYNTHETIC (F5 mutation gap, adversarial review 2026-08-11)",
+      "turn_in_file": 0
     }
   ]
 }

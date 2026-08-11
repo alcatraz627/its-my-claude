@@ -1,0 +1,241 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17317,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22680706933498979,
+    "unit_count": 33
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-60d269fd-2: GUIDELINES.md Read failed before fallback orientation succeeded; unit-60d269fd-20: Settings.tsx Edit failed x2 before Read+Edit succeeded, api.ts Edit failed x2 before Read+Edit succeeded, memory Write failed x1 before second succeeded; unit-60d269fd-22: README.md Edit failed x2 before Read+Edit succeeded; unit-60d269fd-30: compound git stash/log command failed x1 before simpler command succeeded; pattern depth and recurrence unchanged across 10+ cycle baseline, no improvement signal",
+      "confirmation_bias_style_log:RECURRING:STABLE — units 7ef10285-0, 7778fe9f-0, 66166283-0: three additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; eighteenth consecutive cycle with identical pattern; deprioritized per prior history guidance, zero corrective signal",
+      "npm_publish_permission_blindness:RECURRING — unit-60d269fd-3: same three-attempt sequence as prior cycle (npm version failed, Edit to package.json succeeded, npm publish failed) without any precondition check for registry auth or session permissions before first attempt; was classified NEW in 2026-08-08 cycle, now confirmed RECURRING; agent IPC reply to vb-opus self-described result as PERMISSION-BLOCKED for this session, confirming constraint was knowable in advance",
+      "excessive_task_creation:RECURRING:STABLE — unit-60d269fd-2: four consecutive TaskCreate calls during orientation before implementation begins; pattern volume consistent with prior cycles",
+      "server_startup_overconfidence:RECURRING — unit-60d269fd-20: Bash compound command for uvicorn startup failed (success:false x1), agent switched to mcp__file-tools__http_request without diagnosing root cause of failure; classified RECURRING in prior cycle, confirmed again",
+      "ipc_message_send_length_failure:NEW — unit-60d269fd-22: claude-ipc send with a long multi-paragraph body (detailed doc-edits summary) failed (success:false x1), then a shorter version of the same message succeeded; agent correctly recovered by trimming content but did not investigate or document the size constraint before retrying; distinct from server_startup_overconfidence in that the failure mode is a tool payload size limit rather than a startup sequencing issue; no prior cycle has classified this shape"
+    ],
+    "calibration_score": 0.31,
+    "cross_references": [
+      "dream-insight-1 (absence-of-failure != success): unit-60d269fd-3 npm_publish_permission_blindness directly violates this — two sequential failures were treated as 'not yet succeeded' rather than 'precondition unmet'; no positive existence proof (npm whoami, registry auth) was required before first attempt",
+      "dream-insight-1 (absence-of-failure != success): unit-60d269fd-22 IPC send failure and recovery is partial compliance — agent noticed the failure and retried with a shorter message rather than inferring success from silence, which is correct; however root cause (size limit) was not verified before retrying",
+      "dream-insight-2 (handoff artifacts need receiver-autonomy context): unit-60d269fd-3 and unit-60d269fd-30 IPC messages to vb-opus are notably detailed and include full context for receiver to act without follow-up — confirmed positive instances of dream-insight-2 being applied correctly; the long message that failed in unit-22 was also attempting to be receiver-complete, which is likely why it was large enough to hit the size limit"
+    ],
+    "overconfident_count": 5,
+    "recommendations": [
+      "npm_publish_permission_blindness is now RECURRING across two consecutive cycles — the precondition check (npm whoami, registry auth state, session permission level) should be wired before any npm publish or npm version attempt; no improvement since NEW classification",
+      "ipc_message_send_length_failure is NEW — investigate and document the claude-ipc message body size limit; add a size check or truncation strategy before sending large IPC payloads rather than discovering the limit via failure",
+      "structural_claim_without_reading_code in unit-60d269fd-3 was self-caught mid-session and an atone event was filed — the in-session recovery (halting before deploying, filing atone, correcting via IPC) is the desired behavior; this is a positive calibration signal worth reinforcing",
+      "write_before_read_trap and server_startup_overconfidence continue at stable depth with no improvement signal — no new recommendations; both remain well-covered by prior cycle guidance that has produced zero corrective effect across 10+ cycles"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "f097bc23-58da-47b6-970a-b92e2327160f",
+      119410
+    ],
+    [
+      "cdd0ad9e-a98f-4604-b2a8-08b48e11d1e0",
+      112946
+    ],
+    [
+      "c81ac4ce-8204-4cf1-8218-c3a4589a2eac",
+      104827
+    ],
+    [
+      "b351d631-451f-4e21-b79f-f6c8c11804ca",
+      111606
+    ],
+    [
+      "a9bcbf02-4d8d-4977-aff5-18e57a69a255",
+      111788
+    ],
+    [
+      "9bb7ff96-7512-45c4-975f-644fc511488a",
+      121108
+    ],
+    [
+      "99c6990b-7648-4efc-8447-1c0b8cb3dbe1",
+      114897
+    ],
+    [
+      "861a6e0b-c7e1-4804-9c38-00e237b4f9ac",
+      111567
+    ],
+    [
+      "7ef10285-6f52-4445-8261-a314c0093d5c",
+      171274
+    ],
+    [
+      "784edb0e-ac2d-4351-a6e2-2d3897d14340",
+      103239
+    ],
+    [
+      "7778fe9f-2afb-4899-964e-538cd4f93783",
+      126870
+    ],
+    [
+      "66166283-5d59-4b55-bb6a-15d3eeb7814f",
+      125053
+    ],
+    [
+      "61d0441b-e24b-49ef-a9b8-becec4e75854",
+      115126
+    ],
+    [
+      "60d269fd-d0f5-4f46-b976-89eb75020d44",
+      7876611
+    ],
+    [
+      "5f4133c8-30ab-4fc9-a17a-711045298699",
+      27211
+    ],
+    [
+      "5ef4d32d-a597-4670-9e8d-aa61fb2f0019",
+      116187
+    ],
+    [
+      "5d79fe1d-4ce8-4c2e-bd69-3a97c9a003c3",
+      148898
+    ],
+    [
+      "52757377-a757-40c8-be2c-df0f21844abe",
+      141236
+    ],
+    [
+      "526dded2-462b-441f-ac4a-9d58189c94e4",
+      152969
+    ],
+    [
+      "520599e2-78e2-4308-90a1-41fb8e25b276",
+      119743
+    ],
+    [
+      "48498c6c-51a5-4b06-8593-8514c5905fa8",
+      131808
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      6438211
+    ],
+    [
+      "36be8359-8455-4977-9e91-d755ea822a1a",
+      128751
+    ],
+    [
+      "344793bf-8185-408a-b73c-75abd309d3f1",
+      120300
+    ],
+    [
+      "339d8b3a-7e37-4163-b166-b711cfa187ae",
+      132910
+    ],
+    [
+      "33164dbc-ef27-44be-ad8d-a29956e5dd62",
+      116969
+    ],
+    [
+      "31f8e3f2-5163-4d5d-bae2-1dfa7d78b87a",
+      111388
+    ],
+    [
+      "31a45d84-46e0-4d25-9401-372c25a0e96e",
+      116913
+    ],
+    [
+      "30395ae4-79dd-4bbe-9b2b-4c40d6c15961",
+      107350
+    ],
+    [
+      "2af05b77-9392-4057-9389-4d453d69a38d",
+      111821
+    ],
+    [
+      "2acdf43e-911e-48f6-93e4-f22738dc6cb0",
+      96152
+    ],
+    [
+      "28ab7ad0-130f-456e-b459-d861c2048ad1",
+      113052
+    ],
+    [
+      "26fcf174-8631-4ab0-bfb6-60abb19f0088",
+      33677614
+    ],
+    [
+      "26315072-9111-4327-9ba0-aea5b5002ce4",
+      117476
+    ],
+    [
+      "250e4e35-976d-413d-bc9e-cfffa43a45fb",
+      111336
+    ],
+    [
+      "23d79e48-5b99-4498-86bb-c2c55d48b8ac",
+      101342
+    ],
+    [
+      "2311da51-c1b9-4a88-b035-db8d19d467ec",
+      114863
+    ],
+    [
+      "1dba447d-89fe-4301-82d0-1044eaf3669b",
+      107462
+    ],
+    [
+      "1ce52d1b-580a-4e75-956a-c89b6ac2b149",
+      116431
+    ],
+    [
+      "1b85ae55-e5b3-4337-918a-19726a13c3a5",
+      107482
+    ],
+    [
+      "1b3c8b04-c8b4-4d4a-9c54-d4da69f8f175",
+      113102
+    ],
+    [
+      "1a9dc1bb-7eff-4441-bdf8-cecd4b9bcd7b",
+      95045
+    ],
+    [
+      "1a81c100-5c73-439d-8a96-03e2aa7ce0d4",
+      124473
+    ],
+    [
+      "18a2fd24-9049-4ddb-88b3-65c05d6fce77",
+      112938
+    ],
+    [
+      "15f9f389-96b1-4a68-82dc-60f087c7392d",
+      108574
+    ],
+    [
+      "14205a1b-82af-4694-ac86-199bb8aecb4d",
+      121255
+    ],
+    [
+      "11a8ff4a-3e12-452f-b567-4df67cd8a586",
+      112923
+    ],
+    [
+      "0faef7c8-fb48-4957-bf2d-6095c6fcef3f",
+      116671
+    ],
+    [
+      "0f88a907-41bd-40cf-afd6-387d58537d6a",
+      152731
+    ],
+    [
+      "0f14da82-8efa-44ce-a4fb-f1fcae4b4837",
+      112842
+    ]
+  ],
+  "timestamp": "2026-08-09T19:27:50.947796Z",
+  "tokens_used": 25919,
+  "units_analyzed": 12,
+  "units_total": 33
+}

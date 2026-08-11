@@ -37,6 +37,10 @@ command -v jq >/dev/null 2>&1 || exit 0
 command -v rg >/dev/null 2>&1 || exit 0
 command -v shasum >/dev/null 2>&1 || exit 0
 
+HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"
+[ -r "$HOOK_COMMON" ] || exit 0
+. "$HOOK_COMMON"
+
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
@@ -131,7 +135,7 @@ if [ "$block_hits" -ge 2 ]; then
     exit 0
   fi
   printf '%s' "$sig" > "$MARK" 2>/dev/null || true
-  reason=$(printf '⛔ AI-SMELL PROSE — the final message reads as default-LLM register, against the stored voice preference (rules/audience-aware-writing.md; atone ai-smell-prose-against-stored-voice, S3 ×2).\n\nTells found:%b\n\nFix: re-emit the message in plain human voice — meaning first, complete sentences, technical terms spelled out. No em-dashes, minimal bold, no decoration, no praise openers, answer-and-stop.\n\nMute: touch ~/.claude/.no-prose-smell-gate (machine-wide) or PROSE_SMELL_OFF=1 (this process).' "$tells")
+  reason=$(printf 'The final message reads as default-LLM register, against the stored voice preference (rules/audience-aware-writing.md; atone ai-smell-prose-against-stored-voice, S3 x2).\n\nTells found:%b\n\nFix: re-emit the message in plain human voice. Meaning first, complete sentences, technical terms spelled out. No em-dashes, minimal bold, no decoration, no praise openers, answer-and-stop.\n\nMute: touch ~/.claude/.no-prose-smell-gate (machine-wide) or PROSE_SMELL_OFF=1 (this process).' "$tells" | hook_box '⛔ AI-SMELL PROSE')
   if [ "${PROSE_SMELL_ENFORCE:-0}" = "1" ]; then
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prose-smell --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true

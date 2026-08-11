@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-08-02T01:12:50.716283Z",
-  "average_depth": 10.3,
+  "last_updated": "2026-08-09T06:13:08.512731Z",
+  "average_depth": 9.1,
   "average_breadth": 1.3,
-  "fixation_rate": 0.07,
-  "assumption_rate": 0.65,
-  "overconfidence_rate": 0.58,
+  "fixation_rate": 0.06,
+  "assumption_rate": 0.38,
+  "overconfidence_rate": 0.22,
   "common_assumptions": [
-    "Style enforcement rules are fully specified and require no additional context",
-    "File paths and directory structures match expected locations without verification",
-    "Build success or typecheck-pass implies runtime correctness",
-    "Task scope is fully defined from the prompt alone",
-    "Prior session state is as expected without re-reading"
+    "File paths are valid and content is current without pre-read verification",
+    "Type-check or noEmit passes constitute runtime validation",
+    "Single-step response is sufficient for style enforcement tasks regardless of content complexity",
+    "Tool output represents complete untruncated state",
+    "Prior session context and file contents are unchanged between tool calls"
   ],
   "strength_patterns": [
-    "Systematic probe-then-act tool sequencing in multi-step investigation tasks",
-    "Thorough verification steps in audit chains (fingerprint validation, config diffing, test runs)",
-    "Targeted file reads before edits to confirm structure before modifying"
+    "Deep multi-step chains use diverse tool types reflecting genuine investigation before reporting completion",
+    "Sequential dependency ordering is respected — reads precede writes and verification follows edits",
+    "Iterative grep-then-read patterns in long chains narrow scope before acting rather than operating on assumptions"
   ],
   "weakness_patterns": [
-    "Repetitive access to the same files in large editing chains without measurable forward progress (fixation in layout/page components)",
-    "Direct single-step responses on bounded tasks with no alternative consideration or edge-case exploration",
-    "Treating build-green or typecheck-pass as runtime verification without exercising actual code paths"
+    "Bimodal depth distribution (42 of 63 chains at depth 1) indicates most tasks receive no reasoning depth at all",
+    "Repetitive reads of the same file within 68–135 step chains indicate fixation loops rather than progressive exploration",
+    "tsc --noEmit and collect-only verification used in lieu of runtime exercise in multi-step implementation chains"
   ],
   "trend": {
     "calibration_improving": false,

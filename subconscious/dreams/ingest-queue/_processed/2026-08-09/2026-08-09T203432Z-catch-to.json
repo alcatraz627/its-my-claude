@@ -1,0 +1,26 @@
+{
+  "id": "251e36e7-5b04-45a4-b637-3e723d72b72b",
+  "ts": "2026-08-09T20:34:32Z",
+  "session_id": "catch-todo-8f",
+  "project_root": "/Users/alcatraz627/.claude/widgets/claude-instances",
+  "checkpoint_path": "/Users/alcatraz627/.claude/widgets/claude-instances/_20260810-catch-todo-8f.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER:** Touch `~/.claude/.push-approved-251e36e7-5b04-45a4-b637-3e723d72b72b` so c3e7986 (test re-pins) can be pushed.",
+    "**USER:** Open the menu-bar widget and confirm the Switchboard reads as a rail and the kanban switch toggles. Black-on-green in the \"on\" badge is correct at 6.15:1 but remains a taste call.",
+    "Kanban smokes not run: j/k walking, source-row click, digest copy.",
+    "The kanban hub page has never had its eight-gate audit (handoff \u00a75.2).",
+    "`~/.claude` has an unpushed commit `cd12c8b` from the kanban design session, which is not this session's to push.",
+    "The peer owes a gate and a deploy for the 47 unreviewed broker lines on claude-ipc HEAD.",
+    "Worktree `claude-instances-v2` has sat since 2026-05-18 with 32 commits not in main, and needs merging or retiring.",
+    "Four dead sessions hold 16 messages. `claude-ipc orphans --project --triage` would fold what is stale.",
+    "Backlog proposal open: the prose gate classifies application HTML as prose and blocks CSS/JS edits there."
+  ],
+  "tags": []
+}

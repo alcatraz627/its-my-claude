@@ -1,0 +1,2 @@
+{"type": "user", "message": {"role": "user", "content": [{"type": "text", "text": "go on"}]}, "sessionId": "fixt0000-0000-0000-0000-000000000000", "cwd": "/tmp", "timestamp": "2026-08-11T00:00:00.000Z"}
+{"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": "Done \u2014 shipped."}]}, "sessionId": "fixt0000-0000-0000-0000-000000000000", "cwd": "/tmp", "timestamp": "2026-08-11T00:00:01.000Z"}

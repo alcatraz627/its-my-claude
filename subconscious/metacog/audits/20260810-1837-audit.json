@@ -1,0 +1,111 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17023,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.14125490196078433,
+    "unit_count": 51
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units 3818cca9-0, ee9beb3c-0, e45e9cbb-0, 74b0b9bb-0: four additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twenty-second+ consecutive cycle with identical pattern; no corrective signal; fully deprioritized",
+      "write_before_read_trap:RECURRING:STABLE — unit-60d269fd-2: GUIDELINES.md Read failed before fallback orientation; pattern depth and recovery shape unchanged across 14+ cycle baseline; zero improvement signal",
+      "excessive_task_creation:RECURRING:STABLE — unit-60d269fd-2: four consecutive TaskCreate calls during orientation before implementation; volume consistent with all prior cycles",
+      "npm_publish_permission_blindness:RECURRING:STABLE — unit-60d269fd-3: same three-attempt sequence confirmed again (npm version --no-git-tag-version failed x2, Edit to package.json succeeded, npm publish failed) without precondition check for registry auth; fifth consecutive cycle confirming this shape; no probe added; fully STABLE",
+      "ipc_message_send_length_failure:NOT_CONFIRMED_THIS_CYCLE — no IPC send failures observed in this batch; the long claude-ipc reply in unit-60d269fd-3 succeeded; pattern status remains RECURRING from prior cycles but not reinforced here"
+    ],
+    "calibration_score": 0.3,
+    "overconfident_count": 2,
+    "recommendations": [
+      "npm_publish_permission_blindness remains the highest-priority actionable pattern: a one-line registry auth probe before any npm version or npm publish invocation would prevent this entirely; now five consecutive cycles with no improvement; recommend escalating to a CLAUDE.md or hook-level gate rather than a soft recommendation",
+      "write_before_read_trap and excessive_task_creation are fully stable recurring patterns with no improvement signal across 14+ cycles; both appear to require mechanical enforcement (hook or session-start constraint) rather than advisory rules to break",
+      "confirmation_bias_style_log pattern is fully deprioritized; no new signal warrants revisiting",
+      "ipc_message_send_length_failure did not recur this cycle; continue monitoring but do not escalate"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "3818cca9-e5a7-45fd-aa6f-79d10ef99a73",
+      133971
+    ],
+    [
+      "0c39a659-637f-40c6-9e08-ac6aabe4b22f",
+      5427469
+    ],
+    [
+      "ee9beb3c-292e-459d-be0d-3ec444faa8c1",
+      126821
+    ],
+    [
+      "e45e9cbb-497d-4dae-bab0-24e81e184e88",
+      129390
+    ],
+    [
+      "e23f2e3f-e3e3-4194-b41a-7befa069cf09",
+      132197
+    ],
+    [
+      "da694a0f-f770-4d5b-82fd-f97df26fa4d2",
+      121765
+    ],
+    [
+      "d7935800-6b26-4f91-a47a-8554d3d1f422",
+      130656
+    ],
+    [
+      "d0ff872b-764c-44b9-94c1-8d03431e0f5c",
+      126943
+    ],
+    [
+      "c20e9a11-f820-4129-91a3-30d7d466027d",
+      130152
+    ],
+    [
+      "a3d548f9-d072-40c2-91e3-376f220c5e54",
+      104312
+    ],
+    [
+      "90d1b78a-bde6-47be-9c34-bb5798ccbdbc",
+      128408
+    ],
+    [
+      "74b0b9bb-f237-4ac2-bb22-b446158a8844",
+      121615
+    ],
+    [
+      "65288153-7c1a-4a18-a8e6-3d761a3f1411",
+      128278
+    ],
+    [
+      "60d269fd-d0f5-4f46-b976-89eb75020d44",
+      11615031
+    ],
+    [
+      "59a9531b-6238-4f67-9cfe-c06ab506cc22",
+      115570
+    ],
+    [
+      "53b26feb-da22-411c-9059-d052c127c7e9",
+      127951
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      22052125
+    ],
+    [
+      "12a3663c-222e-46dd-a649-eea41f5bee05",
+      127133
+    ],
+    [
+      "85ae630d-10fb-4b2f-9c02-6f8bec315944",
+      1278153
+    ]
+  ],
+  "timestamp": "2026-08-10T18:37:15.837773Z",
+  "tokens_used": 7376,
+  "units_analyzed": 10,
+  "units_total": 51
+}

@@ -1,3 +1,5 @@
-📌 Owner correction 2026-07-28: when a file needs the owner's review, the FIRST men
-📌 What finally made a UI round land after several failed ones (owner: 'THIS is goo
-📌 Consumed-but-unpersisted approvals break the evidence chain. A skeptical review'
+📌 Claude planning defect family, caught by a 3-reviewer adversarial audit of the s
+📌 Why Claude-authored plans produce a recurring defect family, evidenced by the IG
+📌 CLUSTER PIN 3 of N, build-ui skill framework cluster. Read with pin-202608072038
+📌 CLUSTER PIN 2 of N, build-ui skill framework cluster. Read with pin-202608072038
+📌 CLUSTER PIN 1 of N, build-ui skill framework. Read every pin in this cluster TOG

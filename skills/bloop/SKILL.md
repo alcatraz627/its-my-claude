@@ -49,6 +49,14 @@ skill. If it does not exist yet, continue without it.
 Surface a short plan BEFORE executing (`rules/structure-over-one-shotting.md`) — a
 failed one-shot wastes more than the plan would have.
 
+Consult `/plan` first, rather than writing a bare plan from instinct. It names which of
+the six planning needs this task actually has (orient, choose, learn, specify, sequence,
+gate) and enforces one precondition worth having: for a change to something that already
+exists, current behaviour gets written down before anything plans to alter it. That
+statement is what Phase 4's parity check is later measured against, so skipping it here
+leaves the gate with nothing to compare against. For a small task whose single need is
+obvious, say so in one line and carry on.
+
 1. State the task and its scope ceiling in one or two lines. Scope is a ceiling, not a
    floor (`rules/communication.md`) — no "while I'm here" additions.
 2. Put the steps in the live **Task list** (`TaskCreate`) — or, if the harness has no Task
@@ -89,6 +97,15 @@ Before handing to the gate, review your own work — but as **exercise, not insp
 
 Dispatch **one adversarial sub-agent** to independently verify. Its job is to BREAK the
 work, not bless it.
+
+**Derive the attack list with `/validate` instead of inventing one.** It walks the seven
+validation questions and forces the omissions into the open, which matters because the
+failure mode here is not attacking the wrong thing, it is never asking the third question
+at all. Two of the seven have no instrument and are the account's most-repeated failures:
+whether behaviour that already worked survived, and whether the built thing matches what
+the user actually asked for rather than the plan's paraphrase of it. Feed what it returns
+to the validator as its brief, and carry the skipped list into the report so a check
+nobody ran is visible rather than absent.
 
 0. **Optional $0 pre-gate** (lm suite, when the repo is on this machine): pipe the diff
    through the local reviewer and the mechanical gate, and fix cheap survivors BEFORE

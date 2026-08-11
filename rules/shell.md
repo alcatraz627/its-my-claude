@@ -1,14 +1,16 @@
 ---
-brief: Resolve project root before Glob/Grep; trash not rm; non-interactive flags; background task hygiene
+brief: Inline commands run zsh (never name a var `path`); trash not rm; no Glob from ~/; non-interactive flags
 triggers:
   - topic:shell
+  - topic:zsh
   - topic:file-deletion
   - tool:rm
   - tool:trash
+  - tool:timeout
 related: [features/shared-library.md]
 tier: 1
 category: rules
-updated: 2026-04-24
+updated: 2026-08-11
 stale_after_days: 90
 ---
 
@@ -39,14 +41,15 @@ Long multi-command chains (e.g., `echo ... && ls ... && find ... && wc ...`) can
 
 ## Sentinel values
 
-macOS `bash` is 3.2 — no associative arrays. Any script needing `declare -A` or bash-4 features must shebang `/opt/homebrew/bin/bash` if available, or delegate to Python.
+**Two different shells run your code, and they differ in what they support.** A Bash-tool command runs under **zsh 5.9** on this account, where `declare -A` works fine. A script you *write* with `#!/bin/bash` runs **bash 3.2**, which has no associative arrays. The 3.2 limit therefore binds scripts, not inline commands: a script needing `declare -A` or other bash-4 features must shebang `/opt/homebrew/bin/bash` if available, or delegate to Python. Confirm which you are in with `${ZSH_VERSION:-}` / `${BASH_VERSION:-}` rather than assuming.
 
 ## macOS shell gotchas (silent-failure class)
 
-Two macOS-specific traps that fail *silently* — the code looks right, runs without error, and quietly does nothing. Both bit a hook this session and only surfaced under test:
+Traps that fail *silently* on this machine. The code looks right, runs without error, and quietly does nothing. Each one surfaced only under test:
 
+- **`path` is a booby-trapped loop-variable name, because inline commands run zsh.** zsh binds the scalar `$PATH` to an array named `$path`, so `while read path; do …; done` and `for path in …` overwrite your PATH with a filename. Every later command in that same call then dies with `(eval):3: command not found: sed`, which reads like a broken machine rather than a naming collision. The blast radius is the single Bash call, so the next call looks healthy and the bug seems intermittent. Name the variable `p`, `f`, `file`, or `target` instead. Measured on zsh 5.9 (2026-08-11): `path` is the only common name that fails *silently*. `status`, `history`, `modules`, `jobstates`, `parameters`, `functions`, `commands`, `aliases` and `options` are reserved too, but they fail loudly with a read-only or associative-array error, so they announce themselves. Ordinary names (`file`, `dir`, `line`, `item`, `key`, `val`, `out`, `cmd`, `src`, `target`) are all safe. Scale of the problem: `sed`, `tr` and `basename` carry roughly 175 combined `command not found` hits across this account's transcripts despite all three being installed, and the sampled cases trace to this.
 - **`find /tmp …` descends nothing.** `/tmp` is a symlink to `/private/tmp`, and BSD `find` does not follow a symlink **start point** without a trailing slash. `find /tmp -name x` → 0 matches; `find /tmp/ -name x` (or `find /private/tmp …`, or `find -L /tmp …`) works. Any `find` rooted at a symlinked dir needs the trailing slash.
-- **There is no `timeout`/`gtimeout` by default**, and the obvious fallback `perl -e 'alarm N; exec @ARGV' cmd` **does not actually time out** — `alarm` kills the shell but its child (e.g. a `sleep`/hung subprocess) is orphaned and keeps the output pipe open, so a `$(…)` capture blocks the full duration anyway. A real cap must kill the whole **process group**: `perl -e 'my $p=fork; if($p==0){setpgrp(0,0); exec(@ARGV)} local $SIG{ALRM}=sub{kill "KILL",-$p}; alarm N; waitpid($p,0)' cmd` (verified: dies at the cap, no orphan). Prefer `timeout`/`gtimeout` when present.
+- **`timeout` is installed here, so use it instead of hand-rolling a cap.** macOS ships none of its own, which is why this note used to say there was none. GNU coreutils provides `/opt/homebrew/bin/timeout`, with `gtimeout` as a byte-identical second name. It returns 124 on expiry, passes the command's own exit code through otherwise, escalates TERM to KILL with `-k` (`timeout -k 5 30 cmd`), and signals the whole **process group**, so a backgrounded grandchild cannot hold a `$(…)` capture open after the cap fires. All six behaviours verified 2026-08-11. Restore it with `brew install coreutils`; it is tracked in the zcmd manifest. Without coreutils, the obvious fallback `perl -e 'alarm N; exec @ARGV' cmd` **does not actually time out**: `alarm` kills the shell, but its child (a `sleep`, a hung subprocess) is orphaned and keeps the output pipe open, so a `$(…)` capture blocks the full duration anyway. A real hand-rolled cap must kill the whole process group: `perl -e 'my $p=fork; if($p==0){setpgrp(0,0); exec(@ARGV)} local $SIG{ALRM}=sub{kill "KILL",-$p}; alarm N; waitpid($p,0)' cmd` (verified: dies at the cap, no orphan).
 
 ## Prefer dedicated tools over shell reimplementations
 

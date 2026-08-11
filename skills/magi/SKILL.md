@@ -2,7 +2,7 @@
 name: magi
 description: Multi-agent supervisor-led deliberation. DEFAULTS TO --mode lite (3 voters, no personas/jester/voting, ~$3-8/run with research on) for routine tradeoffs. Opt into --mode full (5 voters + jester + personas + voting + thorough rubric, ~$6-12/run) for architecture / design / "should we" / rewrite decisions. Sonnet downgrade cuts cost ~5x. Use when multiple perspectives + reasoned dismissal of dissent are valuable. Archive at ~/.claude/assets/magi/<task>/ for review. Token-aware. Per design doc 20260518-magi-design.md.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch, Agent, mcp__inputs__form
-argument-hint: "<task> [--voters N] [--model M] [--personas] [--jester] [--no-voting] [--temp-mode auto|shared|spread] [--no-research] [--validation light|thorough]"
+argument-hint: "<task> [--voters N] [--model M] [--model-mix \"m=n,...;jester=m\"] [--personas] [--jester] [--no-voting] [--temp-mode auto|shared|spread] [--no-research] [--validation light|thorough]"
 user-invokable: true
 ---
 
@@ -54,7 +54,7 @@ The default mode is `lite` — it keeps the floor low so /magi stays reachable f
 
 Cost estimates were revised 2026-05-19 after first wild-run data: the earlier "$0.15–0.50" figure ignored web-search token cost (6-7 searches per voter × 60K tokens each was real). Lite defaults to `min-searches=1` to keep the floor low; pass `--min-searches 2` for stronger grounding at higher cost. Full mode retains min-searches=2 since the ceremony already implies investment.
 
-Individual flags override mode defaults: `--voters N`, `--model M`, `--personas` / `--no-personas`, `--jester` / `--no-jester`, `--no-voting`, `--temp-mode auto|shared|spread`, `--no-research`, `--min-searches N`, `--validation light|thorough`.
+Individual flags override mode defaults: `--voters N`, `--model M`, `--model-mix "<spec>"`, `--personas` / `--no-personas`, `--jester` / `--no-jester`, `--no-voting`, `--temp-mode auto|shared|spread`, `--no-research`, `--min-searches N`, `--validation light|thorough`.
 
 Two extra knobs (added 2026-05-17):
 - `--diverse` — opt-in mixed-model main pool (rotate Opus/Sonnet/Haiku per voter; random persona↔model assignment to avoid confounding). Defaults off; same-model pool is the default. Use for genuinely-consequential decisions where same-model blind spots are likely load-bearing.
@@ -165,6 +165,10 @@ Each agent gets:
 
 - Default (no `--diverse`): all voters use `--model` (default opus). Jester opposite.
 - With `--diverse`: rotate Opus / Sonnet / Haiku per voter index. Randomize persona→model mapping per session to avoid confounding (record the permutation in meta.json `voters[].model`).
+- With `--model-mix "<model=count,...;jester=<model>>"` (example: `--model-mix "fable=1,opus5=2;jester=opus4.8"`): explicit per-seat assignment. Counts must sum to the main-pool size; the jester clause is separate. Overrides `--model` and `--diverse`. Randomize which persona gets which model unless the user pins seats; record every assignment in meta.json `voters[].model`.
+  - Bare aliases (`sonnet`, `opus`, `haiku`, `fable`) pass straight to the Agent tool's `model` param.
+  - Versioned names (`opus5`, `opus4.8`, or a full model id) need a thin agent definition at `~/.claude/agents/magi-voter-<slug>.md` whose frontmatter pins the exact model id; dispatch that voter with its `subagent_type`. If the harness rejects the pin, fall back one lane DOWN (never up) and log the substitution in meta.json.
+  - `fable` seats: allowed only while the owner sentinel `~/.claude/.allow-fable-subagents` exists, and every fable seat must be declared in the run's Model Plan (`rules/model-tier-routing.md`). Per-token cost is uncapped: name it in the Phase 1 cost line.
 
 ### 4.2 — Capture cost
 
@@ -409,6 +413,7 @@ Print the final report path to the user + the archive root.
 |---|---|
 | `--voters N` | Override voter count |
 | `--model M` | opus / sonnet for main pool |
+| `--model-mix "<m=n,...;jester=m>"` | Explicit per-seat models (overrides --model/--diverse; fable seats need the sentinel + a Model Plan declaration) |
 | `--personas` / `--no-personas` | Force on / off |
 | `--jester` / `--no-jester` | Force on / off |
 | `--no-voting` | Skip voting round |

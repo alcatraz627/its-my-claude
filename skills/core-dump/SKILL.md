@@ -478,11 +478,11 @@ headless / sub-agent runs. This is the deliberate, high-quality capture path; th
 `gcc-signal-capture` Stop hook is its data-path safety net (it auto-stubs a proposal
 on a strong signal if this step is skipped), so a missed contribution is never lost.
 
-## Phase 4 — Visual summary (optional, full mode only)
+## Phase 4 (optional, full mode only): visual summary
 
-A terminal-only convenience: render a CPU-dump style summary via
-`render-visual.sh`. It is **not** written to the checkpoint file and is **not**
-load-bearing — the checkpoint and the Phase 3.6 pointer are what matter. Skip it
+A terminal-only convenience: render the sealed record via the shared trace
+renderer. It is **not** written to the checkpoint file and is **not**
+load-bearing. The checkpoint and the Phase 3.6 pointer are what matter. Skip it
 entirely in mini mode, and feel free to skip it under headless/sub-agent runs.
 
 1. Write session data to `/tmp/core-dump-data-<session-id>.json` (per-session
@@ -490,35 +490,58 @@ entirely in mini mode, and feel free to skip it under headless/sub-agent runs.
    first. The full JSON schema and authoring notes are in `EXAMPLES.md`.
 2. Render:
    ```bash
-   /bin/bash ~/.claude/skills/core-dump/render-visual.sh /tmp/core-dump-data-<session-id>.json
+   /bin/bash ~/.claude/scripts/render/trace.sh /tmp/core-dump-data-<session-id>.json
    ```
 
-The script uses `gum` (via `gum-tui.sh`) for bordered panels and handles file
-truncation, stack compression, interrupt highlighting, and empty states. It is
-macOS bash 3.2 compatible.
+`/catchup` calls the same script with `--kind catchup`. That shared call is what
+makes the record and the briefing read as one house style. Section vocabulary is
+a court sitting: DECREE, DOCKET, OBJECTION, CHRONICLE, AMENDMENTS, COUNSEL, each
+carrying a one-word plain gloss so nothing needs decoding.
+
+Three regalia are kept and one is picked at random per render. Pass `--theme
+a|b|c` (or set `TRACE_THEME`) to pin one. `--width N` overrides the terminal
+width. Colour is forced by default because a skill's output always goes through
+a pipe, where `gum` and most tools strip it; `NO_COLOR` still wins. File rows are
+project-relative, with OSC 8 hyperlinks available behind `TRACE_LINKS=1`.
+
+The script is macOS bash 3.2 compatible. Every empty state omits its section
+rather than printing a placeholder.
 
 ---
 
-## Phase 5 — Verification
+## Phase 5: verification
 
 1. Read back the written file to confirm it exists and is non-empty.
 2. Confirm the Phase 3.6 pointer write succeeded (the writer prints a confirmation
    line; a non-zero exit means `/catchup` won't find this checkpoint).
-3. Print a final summary:
+3. Confirm the parse contract survived:
+   ```bash
+   rg -c '^## (Resume Contract|Initial Goal|Agent Actions|Current Expectation|Pending Items|Session Insights)$' <checkpoint>
+   ```
+   Six hits in full mode. Fewer means `/catchup` will not parse it.
 
+**The Phase 4 render IS the closing statement.** Do not follow it with a plain
+summary box: the rendered trace already carries the file path in its seal, the
+status in its header, and the pending work in its DOCKET. A dry ASCII box printed
+underneath undoes the whole point of the visual and is the last thing the user
+reads.
+
+In **mini mode**, or when Phase 4 was skipped, print the seal alone rather than a
+bare block, so even the abbreviated path closes in the same language:
+
+```bash
+printf '{"session_id":"<sid>","timestamp":"<ts>","status":"<status>",
+        "project_root":"<root>","checkpoint_path":"<file>"}' \
+  > /tmp/core-dump-seal-<sid>.json
+/bin/bash ~/.claude/scripts/render/trace.sh /tmp/core-dump-seal-<sid>.json
 ```
-─────────────────────────────────────────────────────
-  ✓ Core dump written (<full | mini>)
-─────────────────────────────────────────────────────
 
-  File:    <absolute path to checkpoint file>
-  Mode:    <full | mini>
-  Covers:  <one-line description of what was captured>
+With every section absent, the renderer emits a header and a seal and nothing
+between them, which is exactly the right shape for a receipt.
 
-  Resume with: /catchup
-
-─────────────────────────────────────────────────────
-```
+**Then keep the prose short.** The render did the reporting. Say only what the
+render cannot: an unverified claim, a blocker needing the user, or a decision
+awaiting them.
 
 ## Notes
 

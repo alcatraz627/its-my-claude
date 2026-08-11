@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-07T03:55:24.152034+00:00 · 20 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-08-11T00:24:33.991819+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-A multi-agent collaborative workspace (likely a search/studio tool) where two agents independently draft and mutually peer-review plans; the dominant working style is parallel agent orchestration with explicit validation gates.
+A multi-platform job/studio search tool with data scraping pipelines, multi-criteria filtering UI, and structured two-agent peer-review workflows. Dominant mode: pipeline correctness and autonomous session reliability.
 
 ## Things to do (or keep doing)
-- Preserve independently-produced outputs as separate artifacts for grading; present side-by-side contrast when the user asks to compare — never auto-merge
-- When absorbing a dead peer agent's work, triage selectively: show which parts are worth integrating and why, not wholesale adoption
-- When a coworker takes primary ownership of a branch, immediately switch to a PR-based workflow for all subsequent pushes
-- Reconcile task list state before stopping — task drift during high-activity multi-agent sessions is a known failure point here
+- **Execute the two-agent peer-review protocol** when requested: each agent produces an independent plan, then grades the other's blueprint — never skip the independent-production step.
+- **Always produce side-by-side contrast** when asked to compare plans or outputs — merging is a separate operation requiring explicit user request.
+- **Exercise filters against the full real dataset** before delivery and surface per-source diagnostics (which pages/endpoints were checked, counts per source) — shape-level verification is not enough.
+- **Surface blocking events immediately** (auth prompts, usage limits, orchestrator failures) with the exact action needed; never stall silently.
 
 ## Things to avoid
-- Don't merge two plans or outputs unless the user explicitly says "merge" — the merging reflex is the top recurring defect in this project
-- Don't add background automation (pm2 warm-ups, cron jobs, scheduled preloads) that wasn't explicitly requested; models and services load on first use
-- Don't accept a sub-agent's scope reduction as settled without independently probing feasibility first — surface the narrowing to the user before treating it as decided
-- Don't deliver a filtered or ranked list without scanning it for entries that obviously violate the stated domain criteria; unexercised filters silently pass garbage
+- **Don't emit AI-smell prose** (em-dashes, heavy bold spans) — the stop-hook fires repeatedly here; clean it before sending, not after being caught.
+- **Don't add unprompted background automation** (pm2 warm-up jobs, cron, ollama pre-loads) — user has explicitly rejected these; they must not reappear as implicit suggestions.
+- **Never claim a filter or output is verified** without naming the specific observable result you read — "I checked and it looked fine" is not verification; cite the row, count, or artifact.
+- **Don't accept a sub-agent's scope reduction as settled** without independently probing feasibility first.
 
 ## Open questions / known gaps
-- Null/missing-field handling in the data pipeline is a recurring gap — numeric operations and display logic silently coerce nulls, distorting output
-- Multi-criteria filter/recommendation features repeatedly enforce only a subset of stated criteria; conjunctive enforcement is never verified before delivery
+- **Filter conjunctiveness**: multi-criteria exclusions repeatedly ship enforcing only partial criteria; needs a checklist gate before delivery on any filter change.
+- **Null coercion in pipeline**: missing fields silently default to suspicious values; no systematic null-guard pattern yet established for this codebase.

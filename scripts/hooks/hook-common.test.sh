@@ -90,5 +90,69 @@ else
   echo "  SKIP integration: filename-dot-stop.sh / jq / rg unavailable"
 fi
 
+# ── hook_box ─────────────────────────────────────────────────────────────────
+B="$(printf 'alpha\nbravo\n' | hook_box 'MY TITLE')"
+printf '%s' "$B" | head -1 | grep -q 'MY TITLE'; ok "box: title in the top rule" "$?" "0"
+printf '%s' "$B" | grep -q '^│ alpha$';           ok "box: body gets the rail"   "$?" "0"
+printf '%s' "$B" | tail -1 | grep -q '^└─';       ok "box: bottom rule closes"   "$?" "0"
+
+# Regression: printf-built bodies usually end WITHOUT a newline, and a bare
+# `read` loop drops that final line. Caught by running the real hook, never by
+# reading it — the reason arrived one line short with no error anywhere.
+NL="$(printf 'first\nLASTLINE' | hook_box 'NO TRAILING NEWLINE')"
+printf '%s' "$NL" | grep -q 'LASTLINE'; ok "box: final line without newline survives" "$?" "0"
+
+# A blank body line is a bare rail, not a rail plus a stray space.
+BL="$(printf 'a\n\nb\n' | hook_box 'BLANKS')"
+printf '%s' "$BL" | grep -cq '^│ $'; ok "box: blank line leaves no trailing space" "$?" "1"
+
+# Wrapping breaks on spaces, so a word never splits across two rails.
+WR="$(printf 'antidisestablishmentarianism followed by many other words that push this line well past the wrap width limit\n' | hook_box 'WRAP' 40)"
+printf '%s' "$WR" | grep -q 'antidisestablishmentarianism'; ok "box: long word stays whole" "$?" "0"
+ok "box: wrapping actually happened" "$([ "$(printf '%s\n' "$WR" | wc -l | tr -d ' ')" -gt 3 ] && echo yes || echo no)" "yes"
+
+# A title longer than the width must not compute a negative fill and blow up.
+OT="$(printf 'body\n' | hook_box "$(printf 'X%.0s' 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0)" 40)"
+printf '%s' "$OT" | grep -q '^│ body$'; ok "box: overlong title still renders body" "$?" "0"
+
+# Geometry. The box is meant to be square, and nothing above checks that, which
+# is how it shipped one character wider at the bottom in every box it ever drew.
+# Count CHARACTERS, not bytes: each box-drawing glyph is 3 bytes in UTF-8, so
+# `${#s}` in some shells and awk's length() both lie here. `wc -m` is honest.
+boxw() { printf '%s' "$1" | wc -m | tr -d ' '; }
+G="$(printf 'body\n' | hook_box 'T' 40)"
+gtop="$(boxw "$(printf '%s\n' "$G" | head -1)")"
+gbot="$(boxw "$(printf '%s\n' "$G" | tail -1)")"
+ok "box: top rule is exactly the requested width"    "$gtop" "40"
+ok "box: bottom rule is exactly the requested width" "$gbot" "40"
+ok "box: the box is square"                          "$gtop" "$gbot"
+
+# Same check at a second width, so a fix that hardcodes one number cannot pass.
+G2="$(printf 'body\n' | hook_box 'LONGER TITLE' 66)"
+ok "box: square at another width" \
+   "$(boxw "$(printf '%s\n' "$G2" | head -1)")" \
+   "$(boxw "$(printf '%s\n' "$G2" | tail -1)")"
+ok "box: honours that width too" "$(boxw "$(printf '%s\n' "$G2" | head -1)")" "66"
+
+# ── integration: prose-smell-stop.sh emits a BOXED block reason ───────────────
+PS="$HERE/prose-smell-stop.sh"
+if [ -f "$PS" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&1; then
+  export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/hc-warnlog2-XXXXXX")"
+  PT="$(mktemp "${TMPDIR:-/tmp}/hc-prose-XXXXXX")"
+  # Trips em-dash + bold-spam + Label:fragment = 3 block-tier categories.
+  jq -cn '{type:"assistant",message:{content:[{type:"text",text:"Here is the summary — it covers everything.\n\n**One**: the loader resolves correctly and returns the parsed value now.\n**Two**: the cache was invalidated on every write which caused the stall.\n**Three**: the retry path is bounded so a failure cannot spin forever.\n**Four**: logging moved behind a flag to keep the hot path quiet here.\n**Five**: the tests cover the empty and the overflow case end to end.\n**Six**: documentation was regenerated to match the reference exactly.\n"}]}}' > "$PT"
+  # 9 chars, so sid8 truncates to a known 8 — a sid of exactly 8 makes the
+  # marker path the whole string and a hand-written cleanup path silently misses.
+  PSID="hcbox001x"; rm -f "/tmp/claude-prose-smell-hcbox001"
+  PIN="$(jq -cn --arg s "$PSID" --arg tp "$PT" '{session_id:$s, transcript_path:$tp}')"
+  po="$(printf '%s' "$PIN" | PROSE_SMELL_ENFORCE=1 bash "$PS" 2>/dev/null)"
+  pr="$(printf '%s' "$po" | jq -r '.reason // empty' 2>/dev/null)"
+  printf '%s' "$pr" | head -1 | grep -q '^┌─'; ok "integration: block reason is boxed" "$?" "0"
+  printf '%s' "$pr" | grep -q 'PROSE_SMELL_OFF=1'; ok "integration: reason keeps its last line" "$?" "0"
+  rm -f "/tmp/claude-prose-smell-hcbox001" "$PT" "$WARN_LOG_STORE"; unset WARN_LOG_STORE
+else
+  echo "  SKIP prose-smell integration: script / jq / rg unavailable"
+fi
+
 echo "---"; echo "pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

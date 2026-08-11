@@ -117,6 +117,31 @@ pipeline drifts from the original request one paraphrase at a time.
 
 Then stop. This skill produces no plan, no direction, and no code.
 
+## Phase 4: Record the routing
+
+One line, at hand-off, before you stop. A router's whole claim is that it saves
+a recall tax, and that claim is only checkable if each run leaves a trace of
+what came in and where it went.
+
+```bash
+bash ~/.claude/scripts/skill-log.sh record ui \
+  --task "<the user's ask, trimmed to a line>" \
+  --outcome unknown \
+  --corrections 0 \
+  --note "intent=<named intent> routed=<skill> precondition=<met|blocked|n-a>"
+```
+
+`--outcome unknown` is the honest value here and usually the right one: this
+skill stops at the hand-off, so whether the work was kept is decided by the
+receiving skill, not by this run. Use `revised` only when the user rejected the
+routing and named a different instrument, and `accepted` only when they
+confirmed the destination. Set `--corrections 1` in that rejection case, because
+a wrong route is precisely the rework this router exists to prevent.
+
+Read the trend with `bash ~/.claude/scripts/skill-log.sh summary --skill ui`.
+The signal worth watching is the rejection rate: a router that gets overridden
+often is mis-classifying, and its intent table is what needs the fix.
+
 ## When NOT to use
 
 - You already know the instrument. Type it. This router exists to remove a
@@ -132,6 +157,7 @@ Then stop. This skill produces no plan, no direction, and no code.
       another session holds the files
 - [ ] The user's verbatim ask travels with the hand-off
 - [ ] Exactly one skill invoked, and this one wrote nothing
+- [ ] The routing recorded via `skill-log.sh record ui`
 
 ## See also
 
@@ -140,3 +166,7 @@ Then stop. This skill produces no plan, no direction, and no code.
 - `/vis-compare` fidelity against a reference · `/visual-regression` baselines
 - `frontend-design` (plugin) greenfield execution · `/designer-reviewer` scored
   aesthetic critique, human-invoked by design
+- `/plan` the same shape for planning, routing on six needs · `/validate` the
+  same shape for checking a change, routing on seven questions
+- `/build-change` the non-UI sibling of `/build-ui`, when the ask turns out not
+  to be about a screen at all

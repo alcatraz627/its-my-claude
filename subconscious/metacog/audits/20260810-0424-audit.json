@@ -1,0 +1,189 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17580,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.21581664810688123,
+    "unit_count": 72
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-60d269fd-2: GUIDELINES.md Read failed before fallback orientation; unit-60d269fd-20: Settings.tsx Edit failed x2 before Read+Edit succeeded, api.ts Edit failed x2 before Read+Edit succeeded, Write to memory file failed x1 before second succeeded; unit-60d269fd-22: README.md Edit failed x2 before Read+Edit succeeded; unit-60d269fd-3: Settings.tsx Edit failed x2 before Read+Edit, api.ts Edit failed x2 before Read+Edit; pattern depth and recovery shape unchanged across 12+ cycle baseline; zero improvement signal across all cycles",
+      "confirmation_bias_style_log:RECURRING:STABLE — units ec7e7f48-0, ef8072ec-0, e0b79ae2-0, b13bab6a-0, 9d332868-0: five additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twentieth consecutive cycle with identical pattern; no corrective signal; fully deprioritized",
+      "npm_publish_permission_blindness:RECURRING — unit-60d269fd-3: same three-attempt sequence confirmed again (npm version --no-git-tag-version failed, Edit to package.json succeeded, npm publish failed) without precondition check for registry auth before first attempt; session self-described as PERMISSION-BLOCKED in IPC reply to vb-opus; third consecutive cycle confirming this shape; constraint is knowable in advance via registry auth probe but no probe was added",
+      "server_startup_overconfidence:RECURRING — unit-60d269fd-20: compound uvicorn kill+nohup+curl command failed (success:false x1); agent switched to mcp__file-tools__http_request without diagnosing root cause of failure; no port-availability probe or log read between failed Bash and MCP fallback; fourth consecutive cycle confirming this shape",
+      "ipc_message_send_length_failure:RECURRING — unit-60d269fd-22: claude-ipc send with long multi-paragraph body (six-surface doc-edits breakdown) failed (success:false x1), then shorter version of same message succeeded; agent recovered correctly but still did not investigate or document the size threshold before retrying; second consecutive cycle confirming this shape; constraint remains unprobed and unrecorded",
+      "excessive_task_creation:RECURRING:STABLE — unit-60d269fd-2: four consecutive TaskCreate calls during orientation before any implementation work; pattern volume consistent across prior cycles"
+    ],
+    "calibration_score": 0.31,
+    "cross_references": [
+      "dream-insight-trust-canonical-source: violated in write_before_read_trap instances across units 60d269fd-2, 60d269fd-20, 60d269fd-22 — agent trusts that Edit will succeed on an unread file (a derivative assumption about file state) rather than reading the canonical on-disk content first; this is structurally identical to the 'send log as proof of receipt' and 'notification as proof of file' failure modes described in the insight",
+      "dream-insight-trust-canonical-source: confirmed working correctly in unit-60d269fd-3 where the agent filed atone for asserting vb-opus was dead based on mail backlog (a derivative artifact) while the canonical liveness instrument (SessionStart heartbeat list) said otherwise; this is the exact insight pattern applied correctly",
+      "dream-insight-context-at-creation-not-packaged: partially confirmed in ipc_message_send_length_failure — the agent knew the doc-edits context at write time but did not know the transport constraint; the fix (trimming) discards context rather than packaging it to survive the constraint; the insight recommends embedding minimum context needed for the receiver, which the shorter IPC message did accomplish albeit by reduction not by design"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "npm_publish_permission_blindness: add a one-line registry auth probe (npm whoami 2>&1) before any npm publish or version bump attempt; this is the third consecutive cycle where the constraint was knowable in advance and no probe was added; the fix is a three-token shell check, not a design problem",
+      "server_startup_overconfidence: after a compound uvicorn/server startup command fails, read the log file before switching strategies; the log (already being written) contains the root cause; switching to MCP http_request without reading the log means the agent recovered by accident, not diagnosis",
+      "ipc_message_send_length_failure: after a successful short-message recovery, probe the size threshold once (binary search or check claude-ipc docs) and record it in the session notes; two consecutive cycles have now ended without this being documented, guaranteeing a third",
+      "write_before_read_trap: no new recommendation; fully stable across 12+ cycles with no improvement trend; this pattern appears structurally embedded in the agent's edit workflow and resists advisory-only intervention; mechanical gate (read-before-edit enforcement) is the only unexhausted lever"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "0c39a659-637f-40c6-9e08-ac6aabe4b22f",
+      295409
+    ],
+    [
+      "ec7e7f48-dd8b-488b-884f-817fba466635",
+      141705
+    ],
+    [
+      "d3e36a3a-68fd-4459-86b8-44ea729512e2",
+      138069
+    ],
+    [
+      "ac8e7bb4-fbd3-4de8-b423-90e7b32862c8",
+      120729
+    ],
+    [
+      "fdec5f68-b1ed-4602-9f4e-0cba76daa52a",
+      170413
+    ],
+    [
+      "fda2e68b-237e-4ef6-9666-3c04528119b1",
+      124766
+    ],
+    [
+      "ef8072ec-35a9-436a-ad44-42eec9f021a2",
+      133965
+    ],
+    [
+      "e4990b3d-3068-4c19-9245-414e7cc00f49",
+      106623
+    ],
+    [
+      "e0b79ae2-6fbb-4942-ac08-e7329cf1a8bb",
+      128089
+    ],
+    [
+      "bc9bcdaa-787a-46cd-8f95-edac3cececdb",
+      141478
+    ],
+    [
+      "b13bab6a-5946-40b4-8473-1e064411585c",
+      150826
+    ],
+    [
+      "af4d8806-6521-48ce-a806-e3db83abfa28",
+      158123
+    ],
+    [
+      "ad42a047-555c-4fe4-9052-1cc75f71b7a1",
+      141789
+    ],
+    [
+      "9d332868-9294-4fbb-ad57-2326deb3636d",
+      134366
+    ],
+    [
+      "8969d1dc-f462-4c91-aa5c-cf28a49f9dca",
+      137753
+    ],
+    [
+      "714e18c3-75f4-40b8-8bf6-915ec35b5ac4",
+      152334
+    ],
+    [
+      "6984ea81-61ca-4c7d-bfc5-e6e814ebd6fb",
+      136167
+    ],
+    [
+      "60d269fd-d0f5-4f46-b976-89eb75020d44",
+      9914513
+    ],
+    [
+      "541bad7f-0a09-44cc-b576-84050efecebe",
+      107461
+    ],
+    [
+      "5307f823-ec21-4802-b3a3-9b295219fb0a",
+      137144
+    ],
+    [
+      "421e1ee3-3052-4986-bc09-fc69ded45e1d",
+      130096
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      12326430
+    ],
+    [
+      "2cceeb9d-9a3a-4d77-aa56-a54be2390231",
+      148360
+    ],
+    [
+      "157b89ca-4608-423e-ab97-e7710313400a",
+      137283
+    ],
+    [
+      "09a99f8b-f176-4504-9786-39902680e692",
+      154964
+    ],
+    [
+      "0185ae35-c065-4ce0-a013-f59fdb39cfad",
+      127598
+    ],
+    [
+      "021ab7b2-8011-40bc-a688-f6b96001cf41",
+      12380864
+    ],
+    [
+      "b062eea8-0467-405c-957a-ba12aad36e9c",
+      109200
+    ],
+    [
+      "251e36e7-5b04-45a4-b637-3e723d72b72b",
+      6134673
+    ],
+    [
+      "f363a2e4-e399-4232-a6d3-0d3c85db1b8a",
+      141973
+    ],
+    [
+      "eae1340f-11de-46dd-925c-ecb536684d1b",
+      181877
+    ],
+    [
+      "b03807f7-f472-44cd-a36e-5624f41a38d3",
+      146511
+    ],
+    [
+      "ab9633cf-f79d-46ee-9c95-02733af3520a",
+      141206
+    ],
+    [
+      "86f8dae9-fa03-42f7-9b63-b4d93a8471b1",
+      11623843
+    ],
+    [
+      "842f30e7-ec0b-49a0-b7fd-9275b281693b",
+      174284
+    ],
+    [
+      "4350beaa-0106-4412-ac8b-db0252f7787e",
+      141904
+    ],
+    [
+      "757d7e02-96a7-4225-8f6c-ca11f8fa8408",
+      8144994
+    ]
+  ],
+  "timestamp": "2026-08-10T04:24:03.867765Z",
+  "tokens_used": 20647,
+  "units_analyzed": 14,
+  "units_total": 72
+}

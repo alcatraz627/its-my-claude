@@ -1,0 +1,24 @@
+{
+  "id": "60d269fd-d0f5-4f46-b976-89eb75020d44",
+  "ts": "2026-08-10T16:31:18Z",
+  "session_id": "deploy-a2",
+  "project_root": "/Users/alcatraz627/Code/Versable/walmart-mvp",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/walmart-mvp/_20260810-deploy-a2.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "Promote vb-opus's console.log removal to `release` once it lands on main. Two debug lines are live in production.",
+    "Push 3 walmart commits (docs and deploy config).",
+    "Fix the shared `:latest` image tag by tagging images per commit SHA.",
+    "Add an ancestry guard so a `deploy-prod-*` tag on a feature branch cannot reach production.",
+    "Consider a confirmation prompt on `./deploy.sh prod`, since the manual reflex is what moved prod unexpectedly.",
+    "USER: the three unowned files (`frontend/src/App.tsx` logo lockup, `.gitignore`, untracked `frontend/.mcp.json`) and the `ARCHITECTURE.md` disposal call.",
+    "Note: versable-builder is now on branch `toast-updates/aakarsh`, not main."
+  ],
+  "tags": []
+}

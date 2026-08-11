@@ -1,0 +1,241 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16800,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.35215126356802373,
+    "unit_count": 37
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-0: three Read/Bash failures (GUIDELINES.md, runtime-notes.md, wal.jsonl all absent) before precompact checkpoint resolved orientation; unit-4: Write to plan.md failed (success:false x1) before Read then successful Write; unit-6: Edit to taste-profile.md failed (success:false x1) before second Edit succeeded; pattern structure and depth unchanged from all prior cycles; no improvement signal across 10+ cycles",
+      "cwd_assumption_without_prefix:RECURRING:STABLE — unit-9: Bash to read pass-b-brand.jsonl with implicit cwd failed; unit-10: fixed with explicit cd prefix; same shape classified in prior 4 cycles; zero improvement",
+      "server_startup_overconfidence:RECURRING — unit-10: three sequential startup strategies (background pid+curl check failed, nohup retry failed, finally blocking python3 -m http.server succeeded) with no precondition check or port-availability probe before first attempt; classified NEW in prior cycle (2026-08-07), confirmed again this cycle; classified RECURRING",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit-23: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; fourteenth consecutive cycle with identical pattern; zero corrective signal across all cycles; deprioritize new recommendations",
+      "sub_agent_output_probe_by_path:NEW — unit-30: TaskOutput call failed; agent then manually probed 5+ paths sequentially (task output dir glob, multiple project jsonl candidates, subagents jsonl path) before locating correct file and persisting findings; structurally distinct from write_before_read (read-probe-for-output rather than write-before-read); the sub-agent return notification was treated as delivery confirmation before the artifact was verified on disk — emission-as-proof bias in sub-agent coordination domain",
+      "domain_filter_false_absence:NEW — unit-44: careers_from_maps.py used wrong DOM selectors for Maps place pages, producing false-absence results that wrote careers-page-saved status with no openings for employers that had them; only detected when a subsequent raw HTML scrape of the saved pages revealed hiring keywords the automated extractor missed; false-absence lines required an explicit purge pass before corrective re-run; aligns with L:b75e2a96 (domain-specific filtering must be spot-checked against real output data before delivery)"
+    ],
+    "calibration_score": 0.33,
+    "cross_references": [
+      "unit-30 confirms dream insight conf=0.82 (emission-as-proof): sub-agent completion notification was treated as delivery; artifact location required 5+ path probes to discover; the insight's rule ('name the verification artifact before claiming completion') was violated — TaskOutput was the first attempt, not a pre-flight assertion",
+      "unit-44 confirms L:b75e2a96 (domain-specific filtering must be spot-checked against real output): careers_from_maps.py extracted zero openings from saved pages that contained hiring keywords; false-absence only detected via separate manual HTML keyword scan after the pipeline had already committed the results",
+      "unit-10 partially confirms dream insight conf=0.82 via the server-side: agent ran three startup attempts and then verified with curl+playwright — the verification step was present and correct, but it came after three failed attempts rather than being used to inform the first attempt strategy; the insight's causal direction (verify before claiming, not after failing) applies here",
+      "unit-8 confirms L:c66bff91 (multi-criteria recommendation must enforce all criteria conjunctively): pass_b_worktype.py was executed without the listing_id field being present in all records; the field was required by the script's join logic but its absence was not pre-checked; two Bash failures before inline data surgery resolved it; the filter assumed a field that wasn't universally present"
+    ],
+    "overconfident_count": 7,
+    "recommendations": [
+      "sub_agent_output_probe_by_path is NEW and confirmed by the emit-as-proof dream insight (conf=0.82); rules/sub-agent-outputs.md already mandates output path in dispatch prompt and parent verification before use; unit-30 evidence shows the rule was not applied — the TaskOutput call failing was the first verification attempt, not a pre-flight check; recommend requiring file-existence check immediately after agent dispatch rather than at result-consumption time",
+      "domain_filter_false_absence is NEW and directly matches L:b75e2a96; recommend a spot-check affordance in any DOM scraper: after extraction, sample 3-5 saved raw files, run the extractor's own logic against them manually or via a debug flag, and compare against keyword scan of the raw HTML; the unit-44 pattern (save HTML then fail to extract what's in it) is the exact failure mode the lesson describes",
+      "write_before_read_trap, cwd_assumption, server_startup_overconfidence, confirmation_bias_style_log are all RECURRING:STABLE with no improvement trend across 9-14 cycles; new recommendations have already been made and are not being acted on; continue monitoring for trajectory change only; no new recommendations warranted for these patterns this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "eb618fff-6a3d-4107-a227-0bad60c853e0",
+      345948
+    ],
+    [
+      "c71644cf-6c7d-491d-ab51-b18fcaf2832a",
+      17260449
+    ],
+    [
+      "b449e2ee-dc08-46f6-b711-5d0e50edf84d",
+      99661
+    ],
+    [
+      "48ca5555-ad4e-43df-ad91-14148db5674f",
+      4244094
+    ],
+    [
+      "0c39a659-637f-40c6-9e08-ac6aabe4b22f",
+      282235
+    ],
+    [
+      "86436c26-0c1c-4d1d-bead-9531e7fa5e8c",
+      85722
+    ],
+    [
+      "65a3f7be-7aec-4dfc-b778-c4a8679d8aef",
+      98161
+    ],
+    [
+      "37e1f162-3a5e-44d2-84b1-1c4f7831c5ab",
+      88121
+    ],
+    [
+      "ff93fec2-d742-4511-b99f-bcc931244444",
+      97866
+    ],
+    [
+      "fae94902-2d9b-47cf-8ea5-aec58973e9a0",
+      120219
+    ],
+    [
+      "f9857c26-069f-485d-8756-6f3476423fc2",
+      116217
+    ],
+    [
+      "f7d75db2-c436-440e-b429-b5cdd0d524d6",
+      116533
+    ],
+    [
+      "f45dfe77-eb24-4895-bfe2-76564bf90c89",
+      108628
+    ],
+    [
+      "f35c13c8-2efa-4c93-a5f6-8df183f7105d",
+      123331
+    ],
+    [
+      "f29da5ce-2bf4-445c-bc10-df13ff4c6b8a",
+      116562
+    ],
+    [
+      "f1cf7fed-e8f3-4718-9017-98ad4cedada5",
+      127696
+    ],
+    [
+      "f1751d35-41d5-4486-b1d4-15f7e74487e5",
+      114458
+    ],
+    [
+      "f16c20f8-7101-4ba8-b02b-deb86293acee",
+      114494
+    ],
+    [
+      "ee166ad5-a435-4011-989f-1e073697a790",
+      114515
+    ],
+    [
+      "ed0dfa94-954a-4162-bcc0-fb7d11378786",
+      9263008
+    ],
+    [
+      "ebfbbf50-e788-4e90-8a10-85f61e256742",
+      105315
+    ],
+    [
+      "eb9de306-25c4-46e6-b7fa-7eb4e597ffaf",
+      116971
+    ],
+    [
+      "eb26cb83-14b1-43f1-9d58-f079d1ab6de1",
+      116126
+    ],
+    [
+      "eb0f39e8-2079-4f08-b7cf-496cdb8ea439",
+      116503
+    ],
+    [
+      "e5b89975-ecb5-42d4-b0b9-8c75557504e9",
+      100014
+    ],
+    [
+      "e4067b63-341c-4ce8-b048-faeeb76bf45e",
+      117126
+    ],
+    [
+      "e324a359-1824-45f4-8d8b-032906824d31",
+      114459
+    ],
+    [
+      "dfac95d9-999b-4030-98e5-3336ed7824eb",
+      119562
+    ],
+    [
+      "de717fde-461e-444e-9af1-451f16595b0b",
+      116702
+    ],
+    [
+      "dda2f0dd-531c-4cab-a1ec-e752a2b210b8",
+      116640
+    ],
+    [
+      "dd1a9aec-6bdc-48e5-b396-be8231204cea",
+      117026
+    ],
+    [
+      "dc06824c-b34b-4254-bbaf-329ddf967680",
+      123437
+    ],
+    [
+      "da7f0c12-afe8-4ab4-9130-8c696219dc21",
+      116215
+    ],
+    [
+      "d9b9b035-c4eb-4e68-b981-725e28fd811c",
+      134140
+    ],
+    [
+      "d9a59f24-1463-4d55-bf23-028d59ae6f83",
+      111571
+    ],
+    [
+      "d8f7af77-ea4d-41b7-8475-fa64e86ecd28",
+      117572
+    ],
+    [
+      "d8e7b974-a712-4d0d-bee8-52660ff67148",
+      113299
+    ],
+    [
+      "d4d0b0a8-ff22-41ab-8c9e-f2dfc485527e",
+      117921
+    ],
+    [
+      "d453bfd5-0d81-49a4-ba4a-b7cf3c0a9231",
+      116872
+    ],
+    [
+      "d3b24997-755e-4ac6-bf01-629031bc2530",
+      116139
+    ],
+    [
+      "cff05c72-9b9b-4b48-bc37-6471a181bf53",
+      108098
+    ],
+    [
+      "cea841b7-5680-4324-88f1-543fa833d2ab",
+      94756
+    ],
+    [
+      "cdf05fe3-b544-4c66-8e70-740eff32e1ce",
+      117056
+    ],
+    [
+      "cd6afb93-7557-4b1b-9848-75c447422c73",
+      120166
+    ],
+    [
+      "cb10dc8a-e718-42e9-9833-4c0e160782cc",
+      117476
+    ],
+    [
+      "c8cf7206-5420-482c-9261-9b23716413b1",
+      104304
+    ],
+    [
+      "c5c05c2e-ceb8-491b-915f-d6b8516aad42",
+      109569
+    ],
+    [
+      "c5713083-4461-47ce-97b8-416f621fcea5",
+      116065
+    ],
+    [
+      "c20b52a3-a465-41fe-9b1a-76aab983a59b",
+      113862
+    ],
+    [
+      "bf7c2892-1f5a-472a-8e4e-5fdf86a96748",
+      121273
+    ]
+  ],
+  "timestamp": "2026-08-08T10:25:59.525869Z",
+  "tokens_used": 23135,
+  "units_analyzed": 14,
+  "units_total": 37
+}

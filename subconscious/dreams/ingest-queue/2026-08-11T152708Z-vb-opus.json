@@ -1,0 +1,21 @@
+{
+  "id": "407286e9-c71c-4ec1-9b22-85e2db2db184",
+  "ts": "2026-08-11T15:27:08Z",
+  "session_id": "vb-opus",
+  "project_root": "/Users/alcatraz627/Code/Versable/versable-builder",
+  "checkpoint_path": "/Users/alcatraz627/Code/Versable/versable-builder/_checkpoint-vb-opus.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**43, docs render overhaul (MINE, next).** Sidebar typography and hierarchy are flat, content has too much vertical space, headers are not bold enough to establish rank, and table headers need a light background. Files: `walmart-mvp/mkdocs.yml` and `walmart-mvp/docs/stylesheets/brand.css` only. Site is live at https://versable-git.github.io/walmart-mvp/ so changes are checkable after a push.",
+    "**45, promote auto-pr-body as pipeline two (MINE).** Source is `enhancement-product/.github/workflows/auto-pr-body.yml` plus `.github/scripts/pr-context.js`, 184 lines with zero external requires. Copy into `pipelines/auto-pr-body/` with a README covering the type-to-section map, the classifier exports and required permissions; add rows to `pipelines/README.md` and `docs/app-patterns/README.md`; verify by running the classifier over a real commit range. Decide whether the `claude:` commit-type section survives, given the no-signature ruling.",
+    "**Owner decisions:** push the 8 versable-builder commits; bump the kit so the six fixes reach the apps; whether ghost's neutral hover should become its own colour; the sidebar rendering \"member\" for both an org and a person, which lives in the untouchable `App.tsx`; root `ARCHITECTURE.md` disposal.",
+    "**Not mine:** deploy trigger verification, reassigned to fable, including the refused-tag ancestry case."
+  ],
+  "tags": []
+}

@@ -562,3 +562,11 @@ on skeleton:
 - `/ui-gripe`: confusion forensics on one screenshot
 - `/skeptical-review`: grounded review after the build
 - `/decision-wizard`: batching the owner's ruling
+- `/build-change`: the general sibling of this skill, for a backend change, a
+  refactor, a migration or a CLI. Same machinery in domain-neutral vocabulary;
+  this skill is its UI specialisation and carries the parts that are genuinely
+  about surfaces (segment loading law, skeleton and embryo, the token census)
+- `/plan`: the planning front door. Its specify lane routes here for a page and
+  to `/build-change` otherwise
+- `/validate`: the checking front door after the build. It reads the parity
+  ledger this skill produces and runs every row

@@ -1,0 +1,224 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17281,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.2674561199656382,
+    "unit_count": 58
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-60d269fd-2: GUIDELINES.md Read failed before fallback orientation; unit-60d269fd-20: uvicorn compound Bash failed before MCP http_request switch (no root-cause diagnosis between attempts), Settings.tsx Edit failed x2 before Read+Edit, api.ts Edit failed x2 before Read+Edit, memory Write failed x1 then succeeded; unit-60d269fd-22: README.md Edit failed x2 before Read+Edit; pattern depth and recovery shape unchanged across 11+ cycle baseline; zero improvement signal",
+      "confirmation_bias_style_log:RECURRING:STABLE — units debd42da-0, 79b852cd-0, 648f20c2-0: three additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; nineteenth consecutive cycle with identical pattern; no corrective signal; deprioritized per prior cycle guidance",
+      "excessive_task_creation:RECURRING:STABLE — unit-60d269fd-2: four consecutive TaskCreate calls during orientation before any implementation work; pattern volume consistent with prior cycles",
+      "npm_publish_permission_blindness:RECURRING — unit-60d269fd-3: npm version --no-git-tag-version failed (success:false x1), Edit to package.json succeeded, npm publish failed (success:false x1); no precondition check for registry auth or session permissions before first attempt; confirmed RECURRING from prior cycle classification; session self-described outcome as PERMISSION-BLOCKED in IPC message to vb-opus",
+      "server_startup_overconfidence:RECURRING — unit-60d269fd-20: compound uvicorn kill+nohup+curl command failed (success:false x1); agent switched to mcp__file-tools__http_request without diagnosing failure root cause; no port-availability probe or log read between the failed Bash and the MCP fallback; confirmed RECURRING from prior two cycles",
+      "ipc_message_send_length_failure:RECURRING — unit-60d269fd-22: claude-ipc send with long multi-paragraph body (detailed doc-edits summary with six-surface breakdown) failed (success:false x1), then shorter version succeeded; was classified NEW in 2026-08-09 prior cycle, now confirmed RECURRING; agent recovered correctly but still did not investigate or document the size threshold before retrying; pattern has recurred without the constraint being probed or recorded"
+    ],
+    "calibration_score": 0.32,
+    "cross_references": [
+      "write_before_read_trap in units -20 and -22 directly instantiates the dream insight on internal model substitution (conf=0.82): the agent derives what a file contains from its prior edit context rather than consulting the canonical external source (the file on disk), producing the Edit-fail-Read-Edit cycle; the insight's rule ('always consult the canonical external source') maps exactly to the fix that always works here",
+      "unit-60d269fd-30 shows a POSITIVE confirmation of the instance-fan-out insight (conf=0.76): the aria-label sweep was conducted across all seven main routes rather than only the triggering surface (ImportParts), and the a11y probe spec explicitly covered the full route list; this is the correct shape the insight prescribes",
+      "unit-60d269fd-3 npm_publish_permission_blindness partially confirms the dream insight on inverted question distribution (conf=0.74, truncated in digest): the agent did not ask or probe about registry auth before attempting publish, a case where a single precondition question would have avoided two failure cycles; the insight predicts too few high-stakes precondition checks"
+    ],
+    "overconfident_count": 4,
+    "recommendations": [
+      "ipc_message_send_length_failure has graduated from NEW to RECURRING in one cycle; the agent should probe the size threshold (binary search or inspect broker source) and document the limit in a memory entry or the claude-ipc usage notes before the next IPC-heavy session; sending without knowing the constraint will continue producing one-failure-then-trim cycles",
+      "write_before_read_trap and server_startup_overconfidence are STABLE with no improvement across 11+ cycles; these are now structural rather than incidental; the next meaningful intervention would be a mechanical precondition gate (e.g. a PreToolUse hook that blocks Edit on files not yet Read this session) rather than another advisory recommendation",
+      "No new bias patterns detected this cycle; all detected patterns were classified in prior cycles; deprioritize recommendations for confirmation_bias_style_log, excessive_task_creation, and npm_publish_permission_blindness per prior cycle guidance — they show no trajectory and further recommendations have not produced corrective signal"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "ed269df4-4134-4a7f-8316-e0671bba1de1",
+      128553
+    ],
+    [
+      "e98b1d6b-b6a8-4578-a3a6-8cd0a83a5122",
+      135423
+    ],
+    [
+      "e68cf1e5-1604-4431-9b91-09040d779367",
+      139382
+    ],
+    [
+      "debd42da-4e82-4e78-8039-ffba314beba8",
+      134306
+    ],
+    [
+      "d5da540d-cb1c-4f1c-b193-d2d809fe8794",
+      132733
+    ],
+    [
+      "b644a707-5ee1-481d-a370-a9bcaa111065",
+      141727
+    ],
+    [
+      "b2f72e43-9b5a-4e01-9196-3a6728bcaaff",
+      134146
+    ],
+    [
+      "9de003b9-7cb3-4d23-9cc3-4606b230ab58",
+      139218
+    ],
+    [
+      "8ed0ecd5-1a73-4e36-9528-73466409103e",
+      121773
+    ],
+    [
+      "79b852cd-8b9b-4044-97b4-4ec2528c8519",
+      108323
+    ],
+    [
+      "648f20c2-9567-4c43-b2dc-6c9fcaefee38",
+      118216
+    ],
+    [
+      "60d269fd-d0f5-4f46-b976-89eb75020d44",
+      8397019
+    ],
+    [
+      "50312b1c-7970-4155-a160-89d8e037d075",
+      127446
+    ],
+    [
+      "425555c2-09b1-4fa8-86cc-0602bc3731ad",
+      117088
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      7862242
+    ],
+    [
+      "210d7edc-6744-4850-af96-5f6a3261b78b",
+      118605
+    ],
+    [
+      "20aa2207-ad0d-41a7-be98-c385e9c380b4",
+      134815
+    ],
+    [
+      "0e772db5-e2d5-4b37-ae93-70526f6b6a29",
+      105212
+    ],
+    [
+      "0cc19088-7441-4bc0-971c-de5d3a06c0cb",
+      124442
+    ],
+    [
+      "0ca1fff1-7d30-4ca5-8bb5-16a51a1d0fe5",
+      102159
+    ],
+    [
+      "0c8d6578-b00c-4156-bb4f-ab309b1a4ff5",
+      124473
+    ],
+    [
+      "0a4feeb4-b570-40bd-9f06-d8e56da2ca95",
+      99150
+    ],
+    [
+      "0a1deb03-38c8-451b-9e5b-86e339c0381b",
+      140081
+    ],
+    [
+      "07b484d5-af8b-4ca8-877a-592011512fad",
+      106879
+    ],
+    [
+      "05d04aca-8f54-4f5a-b5b9-f52fa6ca910c",
+      128511
+    ],
+    [
+      "04eca919-4b1b-4a91-b585-2f79b4828ef1",
+      101547
+    ],
+    [
+      "03ebc040-73aa-4fb5-acdc-dd0c6fdc9b2e",
+      116758
+    ],
+    [
+      "031e0cf2-ff93-46ff-a322-6dd2423eef8e",
+      112662
+    ],
+    [
+      "015bd8dd-5d7d-4a34-82c9-cd0cc19fe62f",
+      116367
+    ],
+    [
+      "013c6d71-d38f-4090-af0b-004a7478a2ad",
+      116999
+    ],
+    [
+      "00e87948-1982-4ea1-99e3-fdc58fb6c584",
+      98000
+    ],
+    [
+      "0005e5e6-19f4-403b-8ee0-bc2337f34546",
+      102872
+    ],
+    [
+      "021ab7b2-8011-40bc-a688-f6b96001cf41",
+      6995402
+    ],
+    [
+      "778317e5-e4f7-4d41-acca-51aa51936105",
+      105073
+    ],
+    [
+      "251e36e7-5b04-45a4-b637-3e723d72b72b",
+      4508102
+    ],
+    [
+      "f807b727-7282-480f-a6f7-c7281688a574",
+      153061
+    ],
+    [
+      "eececf7b-6082-4cb5-80ec-97831de20548",
+      136103
+    ],
+    [
+      "da79ccbb-9aa4-4981-ab60-5d054b4e4cbf",
+      144158
+    ],
+    [
+      "cbefe7fe-6c22-4110-b75f-14c8a12f8a11",
+      84124
+    ],
+    [
+      "86f8dae9-fa03-42f7-9b63-b4d93a8471b1",
+      8528105
+    ],
+    [
+      "7e8f5de0-2fe1-49e5-b076-72abf3aa3a3f",
+      114115
+    ],
+    [
+      "fea8b3a4-405b-45f4-af09-3908e4b6d76c",
+      105226
+    ],
+    [
+      "757d7e02-96a7-4225-8f6c-ca11f8fa8408",
+      6815069
+    ],
+    [
+      "445772ba-dc43-473d-a559-e1202c53ac03",
+      629074
+    ],
+    [
+      "3a26a865-52b5-4508-97d5-6819bd33cd31",
+      443513
+    ],
+    [
+      "2e20a4f4-3bff-4d87-9824-496f33336375",
+      112533
+    ]
+  ],
+  "timestamp": "2026-08-09T20:52:20.233045Z",
+  "tokens_used": 26425,
+  "units_analyzed": 12,
+  "units_total": 58
+}

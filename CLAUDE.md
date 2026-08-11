@@ -36,7 +36,7 @@ The live todo list **is** the Task tool (`TaskCreate`/`TaskUpdate`) — that's t
 
 ### Shell safety
 
-Never Glob/Grep from `~/` — resolve to project root first. **`trash` not `rm`** (hook blocks `rm`). Non-interactive flags mandatory: `npm install -y`, `cp -f`, `mv -f`. Don't use `run_in_background: true` unless asked — orphans on `/clear`. macOS bash is 3.2 (no associative arrays); delegate to Python if needed. Full detail: `rules/shell.md`.
+Never Glob/Grep from `~/` — resolve to project root first. **`trash` not `rm`** (hook blocks `rm`). Non-interactive flags mandatory: `npm install -y`, `cp -f`, `mv -f`. Don't use `run_in_background: true` unless asked — orphans on `/clear`. Inline commands run **zsh**, so never name a variable `path` (it silently overwrites `$PATH`; use `p`/`file`). Scripts you write with `#!/bin/bash` get bash 3.2, no associative arrays. Full detail: `rules/shell.md`.
 
 ### File paths in output: never directly followed by a period
 

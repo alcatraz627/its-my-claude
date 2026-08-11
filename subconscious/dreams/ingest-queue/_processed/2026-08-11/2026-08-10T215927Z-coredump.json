@@ -1,0 +1,23 @@
+{
+  "id": "888ddc6d-b484-4892-802a-85c4c2d3fd7d",
+  "ts": "2026-08-10T21:59:27Z",
+  "session_id": "coredump-visual-8d",
+  "project_root": "/Users/alcatraz627/.claude",
+  "checkpoint_path": "/Users/alcatraz627/.claude/_20260811-coredump-visual-8d.claude.md",
+  "insights": {
+    "worked": [],
+    "didnt_work": [],
+    "gotchas": [],
+    "notes": [],
+    "feedback": []
+  },
+  "pending": [
+    "**USER:** read the OSC 8 probe and say whether rows 1 and 2 rendered as clean short paths or as visible escape garbage. This is the only open blocker.",
+    "**AGENT:** once answered, either flip `TRACE_LINKS` to default on, or record OSC 8 as unsupported and close D4c.",
+    "**AGENT:** rasterize and visually inspect candidate C's SVG, the one capture never looked at.",
+    "**AGENT, optional:** commit the work. `~/.claude` is multi-session and has its own ritual in `~/.claude/COMMIT.md`, including a mandatory secret scan before `git add` and a fetch-plus-rebase before push. The tree carries unrelated i-dream ledger changes that must be excluded.",
+    "**AGENT, optional:** consider whether the theme should be seeded from the session id so a dump and its later catchup wear the same regalia, rather than being independently random. Raised with the owner, never answered.",
+    "**Unrelated, from a prior work stream:** task #12, merge `feat/switchboard-groups` to main and push, remains open and untouched by this session."
+  ],
+  "tags": []
+}

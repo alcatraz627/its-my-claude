@@ -2049,14 +2049,22 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.87,
-    "occurrences": 1,
-    "member_count": 1,
+    "occurrences": 5,
+    "member_count": 5,
     "rep_pattern_id": "86ce33bc-2781-45bd-9d9b-85766878626e",
     "member_ids": [
-      "86ce33bc-2781-45bd-9d9b-85766878626e"
+      "86ce33bc-2781-45bd-9d9b-85766878626e",
+      "d06bb7b1-5b4b-4196-b17a-7291574b658a",
+      "7686db6b-db42-4579-ba8b-924a719c6954",
+      "28b4f699-4fcd-472d-9a8e-4ad053ffa7e0",
+      "7e1cb31a-6e21-4c3a-8b9f-0bca6a01b8c9"
     ],
     "member_texts": [
-      "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless."
+      "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless.",
+      "During high-activity multi-agent sessions with many file edits, the task list frequently drifts from the actual work being done; task state must be reconciled before stopping rather than batched at session end.",
+      "In high-activity sessions with many sequential file edits, the task list must be reconciled before stopping rather than allowed to drift — a task list frozen across 50+ edits leaves the user's TUI blind and signals the agent has lost track of its own progress.",
+      "During extended autonomous work with a stop-hook condition, the task list drifts from actual work done; the agent should update task status proactively after each logical unit of work rather than batching updates at session end.",
+      "During autonomous multi-turn sessions with many sequential edits, the Task tool list drifts from actual work in progress; the agent should update task statuses within every 2-3 substantive edits, not batch updates at the end of a work block."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -2068,10 +2076,20 @@
       "local-models",
       "versable-builder",
       "claude-instances",
-      "its-my-config"
+      "its-my-config",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "studio_search_jul_26-fable",
+      "walmart-mvp",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Code-Versable-automation"
     ],
     "first_seen": "2026-07-18T06:18:38.213947+00:00",
-    "last_seen": "2026-07-18T06:18:38.213947+00:00"
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
   },
   {
     "id": "00075594dc41687d",
@@ -4191,17 +4209,19 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.92,
-    "occurrences": 4,
-    "member_count": 4,
+    "occurrences": 5,
+    "member_count": 5,
     "rep_pattern_id": "893cfff0-185e-4553-9a56-ced4a90d43ec",
     "member_ids": [
       "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "3d41539a-3bb0-4f00-a71c-9238dbeaffc5",
       "45f66753-1e57-45f0-a260-459fab0d7feb",
       "5225d9af-6378-4293-82f8-2d2e83062ba9",
       "b6810ac4-ce09-4054-947c-f4c3434d469b"
     ],
     "member_texts": [
       "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from the codebase), that derivative document must never be used as the authoritative specification in gap audits or feature planning — the original user-authored product spec remains the upstream authority, and citing agent-authored formalizations as the source inverts the derivation chain.",
+      "When a sub-agent performing a gap or capability audit independently selects an agent-authored formalization document as its authority (rather than the user-authored product spec), the parent agent must validate what ground-truth document the sub-agent used before consuming or acting on the audit findings — acting on a report grounded in a derived, agent-authored doc inverts the authority chain.",
       "When conducting a gap audit against product requirements, the agent must use the user-authored upstream source document as authoritative, not a downstream technical-definitions doc the agent itself generated from that source.",
       "When dispatching a sub-agent to audit feature completeness or capability gaps, the agent must verify which document is the authoritative user-authored source before dispatching — not a downstream AI-generated derived artifact. Reviewing gaps against a derived doc instead of the originating spec produces systematically wrong verdicts.",
       "When an agent has authored a downstream formalization document from a user-authored product spec, feature gap audits must be grounded in the original user-authored document; using the agent-generated derivative as the authoritative reference produces incorrect completeness verdicts."
@@ -4209,6 +4229,9 @@
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
       "versable-builder",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude",
       "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
       "-Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers",
       "-Users-alcatraz627-Code-Claude-i-dream",
@@ -4217,7 +4240,6 @@
       "-Users-alcatraz627--claude-scripts-kanban",
       "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final",
       "-Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries",
-      "-Users-alcatraz627--claude",
       "i-dream",
       ".claude",
       "claude-ipc"
@@ -4307,30 +4329,6 @@
     ],
     "member_texts": [
       "When the agent announces a UI or runtime fix and the user tests it on the actual running app, discovering it still fails, the agent had claimed success without exercising the code path in the browser — the fix is not done until it is verified on the live dev server, not just by reading code or applying a diff."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627--claude-widgets-claude-instances",
-      "-Users-alcatraz627--claude"
-    ],
-    "first_seen": "2026-07-24T04:27:10.033623+00:00",
-    "last_seen": "2026-07-24T04:27:10.033623+00:00"
-  },
-  {
-    "id": "df63cfecebdcfd9a",
-    "text": "When a sub-agent performing a gap or capability audit independently selects an agent-authored formalization document as its authority (rather than the user-authored product spec), the parent agent must validate what ground-truth document the sub-agent used before consuming or acting on the audit findings — acting on a report grounded in a derived, agent-authored doc inverts the authority chain.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "3d41539a-3bb0-4f00-a71c-9238dbeaffc5",
-    "member_ids": [
-      "3d41539a-3bb0-4f00-a71c-9238dbeaffc5"
-    ],
-    "member_texts": [
-      "When a sub-agent performing a gap or capability audit independently selects an agent-authored formalization document as its authority (rather than the user-authored product spec), the parent agent must validate what ground-truth document the sub-agent used before consuming or acting on the audit findings — acting on a report grounded in a derived, agent-authored doc inverts the authority chain."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -5206,21 +5204,23 @@
     "last_seen": "2026-07-29T00:27:22.281627+00:00"
   },
   {
-    "id": "924e64d5051ef7d1",
-    "text": "IIFE and scope-wrapper expressions inside JSX are a recurring code smell in this codebase; when sibling elements use inline props or plain const declarations, the agent should conform to that existing pattern rather than introducing a wrapper function.",
-    "category": "domain",
+    "id": "97f0305b58725669",
+    "text": "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform to whatever pattern siblings use (inline prop or plain const).",
+    "category": "approach",
     "valence": "negative",
     "confidence": 0.85,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "6b975180-d4b3-429f-8c89-840b41d26ca0",
+    "occurrences": 3,
+    "member_count": 3,
+    "rep_pattern_id": "0a0fae8b-8af0-4719-aefd-1130fdecc9db",
     "member_ids": [
       "069dbe8e-e335-42ea-8cf7-c3a4d0f449f9",
-      "6b975180-d4b3-429f-8c89-840b41d26ca0"
+      "6b975180-d4b3-429f-8c89-840b41d26ca0",
+      "0a0fae8b-8af0-4719-aefd-1130fdecc9db"
     ],
     "member_texts": [
       "When inserting conditional rendering logic into a JSX file, check the 10 surrounding lines for sibling patterns (inline prop, plain const) before wrapping logic in an IIFE or scope-wrapper — the sibling pattern is the conformant choice, and IIFE wrapping in JSX is a recurring smell caught by hooks.",
-      "IIFE and scope-wrapper expressions inside JSX are a recurring code smell in this codebase; when sibling elements use inline props or plain const declarations, the agent should conform to that existing pattern rather than introducing a wrapper function."
+      "IIFE and scope-wrapper expressions inside JSX are a recurring code smell in this codebase; when sibling elements use inline props or plain const declarations, the agent should conform to that existing pattern rather than introducing a wrapper function.",
+      "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform to whatever pattern siblings use (inline prop or plain const)."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -5233,7 +5233,7 @@
       "speedway"
     ],
     "first_seen": "2026-07-29T02:36:45.860747+00:00",
-    "last_seen": "2026-07-30T12:34:00.691978+00:00"
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
   },
   {
     "id": "f8fc93b88a74f347",
@@ -5436,16 +5436,18 @@
     "category": "approach",
     "valence": "positive",
     "confidence": 0.72,
-    "occurrences": 2,
-    "member_count": 2,
+    "occurrences": 3,
+    "member_count": 3,
     "rep_pattern_id": "80f18129-4311-48d3-92ae-ba450dac48f1",
     "member_ids": [
       "80f18129-4311-48d3-92ae-ba450dac48f1",
-      "be4deb6e-63dd-442c-ba0b-ff50fcdf9a20"
+      "be4deb6e-63dd-442c-ba0b-ff50fcdf9a20",
+      "51e6b3a7-7e51-4916-9187-3ec04711d5a5"
     ],
     "member_texts": [
       "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale adopting it; the user's framing 'only where worth it' signals selective, not additive, integration",
-      "When a dead peer agent's plan is being triaged for incorporation, the user expects the absorbing agent to evaluate selectively — showing which parts are worth merging and why, not wholesale importing the full plan."
+      "When a dead peer agent's plan is being triaged for incorporation, the user expects the absorbing agent to evaluate selectively — showing which parts are worth merging and why, not wholesale importing the full plan.",
+      "When a dead sibling agent's plan is handed to a new session for triage, the receiving agent should evaluate each item independently against the current plan rather than wholesale importing it — the user expects selective incorporation of only what is worth merging."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
@@ -5454,10 +5456,13 @@
       "i-dream",
       ".claude",
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
-      "-Users-alcatraz627-Code-Versable-versable-builder"
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
     ],
     "first_seen": "2026-08-06T03:09:18.470604+00:00",
-    "last_seen": "2026-08-07T03:20:34.526917+00:00"
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
   },
   {
     "id": "e7886cb03131844c",
@@ -5510,21 +5515,25 @@
     "last_seen": "2026-08-06T03:09:18.470604+00:00"
   },
   {
-    "id": "b75e2a9692faa8ed",
-    "text": "Domain-specific filtering pipelines must be spot-checked against real output data before delivery — if obviously out-of-scope items appear in the results, the filter logic was never exercised against the actual dataset.",
+    "id": "3857902477285b4d",
+    "text": "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctively against real output before delivery — a filter that passes obviously out-of-scope items was never exercised against the actual dataset.",
     "category": "approach",
     "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "3d4f8808-24a2-43b0-8c4f-5598cea194d7",
+    "confidence": 0.9,
+    "occurrences": 4,
+    "member_count": 4,
+    "rep_pattern_id": "079617d6-3ee2-40fe-9189-8788d283493c",
     "member_ids": [
       "31677636-0dc1-4a0d-a655-59d3c169e1c5",
-      "3d4f8808-24a2-43b0-8c4f-5598cea194d7"
+      "3d4f8808-24a2-43b0-8c4f-5598cea194d7",
+      "0ed19fef-075b-4423-8f2e-08cb32ec3532",
+      "079617d6-3ee2-40fe-9189-8788d283493c"
     ],
     "member_texts": [
       "When delivering a scored or filtered list to the user, the agent must scan the output for entries that obviously violate the stated domain criteria before handing it off — irrelevant entries that slip through signal the filter logic was never exercised against the real data.",
-      "Domain-specific filtering pipelines must be spot-checked against real output data before delivery — if obviously out-of-scope items appear in the results, the filter logic was never exercised against the actual dataset."
+      "Domain-specific filtering pipelines must be spot-checked against real output data before delivery — if obviously out-of-scope items appear in the results, the filter logic was never exercised against the actual dataset.",
+      "When implementing a multi-criteria recommendation or filter feature, verify that ALL stated criteria are enforced conjunctively — a feature that checks only a subset of required conditions silently mis-qualifies results.",
+      "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctively against real output before delivery — a filter that passes obviously out-of-scope items was never exercised against the actual dataset."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1",
@@ -5532,34 +5541,43 @@
       "-Users-alcatraz627--claude",
       ".claude",
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
-      "-Users-alcatraz627-Code-Versable-versable-builder"
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
     ],
     "first_seen": "2026-08-06T15:10:10.086567+00:00",
-    "last_seen": "2026-08-07T03:20:34.526917+00:00"
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
   },
   {
-    "id": "3e6cac08b165e138",
-    "text": "When the agent generates ranked or enumerated output, it must read through the produced list before delivery — claiming an output is ready without having personally read the rows is the same failure mode as claiming code works without running it.",
+    "id": "407fd09f81dc01d4",
+    "text": "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and acting on what is found — stating 'I noticed X but dismissed it as acceptable' after an explicit prior correction on X is the same failure mode as not reading at all.",
     "category": "approach",
     "valence": "negative",
     "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "adc6f3d6-79ba-4605-941a-3c4e4ab05b62",
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "c1ba2791-8b0b-419e-b191-4cc413a212f8",
     "member_ids": [
-      "adc6f3d6-79ba-4605-941a-3c4e4ab05b62"
+      "adc6f3d6-79ba-4605-941a-3c4e4ab05b62",
+      "c1ba2791-8b0b-419e-b191-4cc413a212f8"
     ],
     "member_texts": [
-      "When the agent generates ranked or enumerated output, it must read through the produced list before delivery — claiming an output is ready without having personally read the rows is the same failure mode as claiming code works without running it."
+      "When the agent generates ranked or enumerated output, it must read through the produced list before delivery — claiming an output is ready without having personally read the rows is the same failure mode as claiming code works without running it.",
+      "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and acting on what is found — stating 'I noticed X but dismissed it as acceptable' after an explicit prior correction on X is the same failure mode as not reading at all."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1",
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
       "-Users-alcatraz627--claude",
-      ".claude"
+      ".claude",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
     ],
     "first_seen": "2026-08-06T15:10:10.086567+00:00",
-    "last_seen": "2026-08-06T15:10:10.086567+00:00"
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
   },
   {
     "id": "f434a5e72d32305e",
@@ -5609,72 +5627,982 @@
     "last_seen": "2026-08-07T03:20:34.526917+00:00"
   },
   {
-    "id": "05a9587af9013faf",
-    "text": "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — allowing null to coerce to a default numeric value silently distorts aggregated patterns and scoring.",
-    "category": "domain",
+    "id": "abb64cf0054a3eb0",
+    "text": "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a null coercion producing a suspicious default value during a pre-delivery review, it must treat that as a blocker, not dismiss it as acceptable, even if it was previously corrected elsewhere in the pipeline.",
+    "category": "approach",
     "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "186a11a7-e7cb-4c48-91af-e66dae789b4d",
+    "confidence": 0.92,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "54883800-fbb6-4520-a38b-2be7da329d5b",
     "member_ids": [
-      "186a11a7-e7cb-4c48-91af-e66dae789b4d"
+      "186a11a7-e7cb-4c48-91af-e66dae789b4d",
+      "54883800-fbb6-4520-a38b-2be7da329d5b"
     ],
     "member_texts": [
-      "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — allowing null to coerce to a default numeric value silently distorts aggregated patterns and scoring."
+      "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — allowing null to coerce to a default numeric value silently distorts aggregated patterns and scoring.",
+      "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a null coercion producing a suspicious default value during a pre-delivery review, it must treat that as a blocker, not dismiss it as acceptable, even if it was previously corrected elsewhere in the pipeline."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder"
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
     ],
     "first_seen": "2026-08-07T03:20:34.526917+00:00",
-    "last_seen": "2026-08-07T03:20:34.526917+00:00"
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
   },
   {
-    "id": "c66bff91380cf3cd",
-    "text": "When implementing a multi-criteria recommendation or filter feature, verify that ALL stated criteria are enforced conjunctively — a feature that checks only a subset of required conditions silently mis-qualifies results.",
-    "category": "approach",
+    "id": "2575481da3682aa1",
+    "text": "Deferred actions explicitly named by the user (e.g. 'send these emails', 'post this') that appear repeatedly in PENDING lists without ever executing represent a systematic failure to close loops — the agent must either execute them or explicitly flag why they remain blocked, not silently carry them forward indefinitely.",
+    "category": "user-preference",
     "valence": "negative",
     "confidence": 0.8,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "0ed19fef-075b-4423-8f2e-08cb32ec3532",
+    "rep_pattern_id": "b180b28e-08bf-465d-a5f5-bfa03b3c585e",
     "member_ids": [
-      "0ed19fef-075b-4423-8f2e-08cb32ec3532"
+      "b180b28e-08bf-465d-a5f5-bfa03b3c585e"
     ],
     "member_texts": [
-      "When implementing a multi-criteria recommendation or filter feature, verify that ALL stated criteria are enforced conjunctively — a feature that checks only a subset of required conditions silently mis-qualifies results."
+      "Deferred actions explicitly named by the user (e.g. 'send these emails', 'post this') that appear repeatedly in PENDING lists without ever executing represent a systematic failure to close loops — the agent must either execute them or explicitly flag why they remain blocked, not silently carry them forward indefinitely."
     ],
     "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder"
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
     ],
-    "first_seen": "2026-08-07T03:20:34.526917+00:00",
-    "last_seen": "2026-08-07T03:20:34.526917+00:00"
+    "first_seen": "2026-08-08T10:23:04.235146+00:00",
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
   },
   {
-    "id": "e759774a50b9e0a3",
-    "text": "During high-activity multi-agent sessions with many file edits, the task list frequently drifts from the actual work being done; task state must be reconciled before stopping rather than batched at session end.",
-    "category": "user-preference",
+    "id": "d8cf2411dfcbabb2",
+    "text": "When a sub-agent is instructed to write output incrementally (per-item, per-record), the parent must verify the sub-agent honored the incremental contract rather than batching — a sub-agent that processes all items then appends in one shot violates the write pattern even if the final record count is correct.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9abd1a02-e4f1-4937-9a63-2937235bb53a",
+    "member_ids": [
+      "9abd1a02-e4f1-4937-9a63-2937235bb53a"
+    ],
+    "member_texts": [
+      "When a sub-agent is instructed to write output incrementally (per-item, per-record), the parent must verify the sub-agent honored the incremental contract rather than batching — a sub-agent that processes all items then appends in one shot violates the write pattern even if the final record count is correct."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-08T10:23:04.235146+00:00",
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
+  },
+  {
+    "id": "d64884fc1b2cd6a4",
+    "text": "Decision-page and report UI elements that reference scored data must include actionable links (to the original posting, company page) alongside scores — a ranked list with scores but no links forces the user to re-navigate manually and defeats the report's purpose.",
+    "category": "domain",
     "valence": "negative",
     "confidence": 0.75,
     "occurrences": 1,
     "member_count": 1,
-    "rep_pattern_id": "d06bb7b1-5b4b-4196-b17a-7291574b658a",
+    "rep_pattern_id": "71f5c539-990a-4418-90c7-06d9cd1fedc5",
     "member_ids": [
-      "d06bb7b1-5b4b-4196-b17a-7291574b658a"
+      "71f5c539-990a-4418-90c7-06d9cd1fedc5"
     ],
     "member_texts": [
-      "During high-activity multi-agent sessions with many file edits, the task list frequently drifts from the actual work being done; task state must be reconciled before stopping rather than batched at session end."
+      "Decision-page and report UI elements that reference scored data must include actionable links (to the original posting, company page) alongside scores — a ranked list with scores but no links forces the user to re-navigate manually and defeats the report's purpose."
     ],
     "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "studio_search_jul_26-fable",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-08T10:23:04.235146+00:00",
+    "last_seen": "2026-08-08T10:23:04.235146+00:00"
+  },
+  {
+    "id": "c88f39f04153dc34",
+    "text": "UI elements with content that is statically known at render time (sidebar navigation, topbar branding, page titles) must never receive skeleton loading states — skeletons are reserved for data that is asynchronously fetched.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "cb484df1-b6ac-4724-b93c-6a7a4d50d9ba",
+    "member_ids": [
+      "cb484df1-b6ac-4724-b93c-6a7a4d50d9ba"
+    ],
+    "member_texts": [
+      "UI elements with content that is statically known at render time (sidebar navigation, topbar branding, page titles) must never receive skeleton loading states — skeletons are reserved for data that is asynchronously fetched."
+    ],
+    "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder"
     ],
-    "first_seen": "2026-08-07T03:20:34.526917+00:00",
-    "last_seen": "2026-08-07T03:20:34.526917+00:00"
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "04f86c23926b095a",
+    "text": "When multiple pages each need a loading skeleton, each page must implement its own page-specific skeleton that mirrors that page's actual content structure; reusing a different page's skeleton component on the wrong route is a critical visual defect.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9ac392b5-580e-4f72-9188-c5cc15311be2",
+    "member_ids": [
+      "9ac392b5-580e-4f72-9188-c5cc15311be2"
+    ],
+    "member_texts": [
+      "When multiple pages each need a loading skeleton, each page must implement its own page-specific skeleton that mirrors that page's actual content structure; reusing a different page's skeleton component on the wrong route is a critical visual defect."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "7d03d093bff77c8b",
+    "text": "Before declaring a UI change complete, the agent must manually exercise every interactive surface touched — including modals, dropdowns, and navigation flows — not just the primary visible state; unexercised modals represent silent defects.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "772e997e-0e81-4109-a116-3714b0a42dd4",
+    "member_ids": [
+      "772e997e-0e81-4109-a116-3714b0a42dd4"
+    ],
+    "member_texts": [
+      "Before declaring a UI change complete, the agent must manually exercise every interactive surface touched — including modals, dropdowns, and navigation flows — not just the primary visible state; unexercised modals represent silent defects."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "5eca3f10d4d13e30",
+    "text": "When a sub-agent is about to modify shared component-library primitives used by files outside its assigned scope, it should flag the blast radius to the lead agent and await authorization before proceeding.",
+    "category": "tool-use",
+    "valence": "positive",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ef31a30a-d0fb-4ea9-98c6-59ce2ff4fa8b",
+    "member_ids": [
+      "ef31a30a-d0fb-4ea9-98c6-59ce2ff4fa8b"
+    ],
+    "member_texts": [
+      "When a sub-agent is about to modify shared component-library primitives used by files outside its assigned scope, it should flag the blast radius to the lead agent and await authorization before proceeding."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "31f626ce17920961",
+    "text": "The user treats visual consistency from the customer's perspective as an absolute requirement that overrides implementation differences between surfaces or tech stacks; framing an inconsistency as a tech-stack difference is not an acceptable justification.",
+    "category": "user-preference",
+    "valence": "neutral",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "a33c91bc-4698-4d40-8c7a-294b42e47440",
+    "member_ids": [
+      "a33c91bc-4698-4d40-8c7a-294b42e47440"
+    ],
+    "member_texts": [
+      "The user treats visual consistency from the customer's perspective as an absolute requirement that overrides implementation differences between surfaces or tech stacks; framing an inconsistency as a tech-stack difference is not an acceptable justification."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "d5ca0cdc6e66085e",
+    "text": "In multi-agent parallel work, a sub-agent that completes its scoped work should report its change log to a specific output file and send an idle notification to the lead agent rather than attempting to pick up additional tasks.",
+    "category": "tool-use",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e5022dbe-80b5-4356-a426-16cf95e17cbf",
+    "member_ids": [
+      "e5022dbe-80b5-4356-a426-16cf95e17cbf"
+    ],
+    "member_texts": [
+      "In multi-agent parallel work, a sub-agent that completes its scoped work should report its change log to a specific output file and send an idle notification to the lead agent rather than attempting to pick up additional tasks."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "d1111787652b6f0f",
+    "text": "When deploying multiple times during a session would waste time, the user prefers batching all changes into a single end-of-session deploy; the agent should surface this tradeoff proactively rather than triggering incremental redeploys.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "535beb12-e673-469d-85fc-20fdc1eb8f6b",
+    "member_ids": [
+      "535beb12-e673-469d-85fc-20fdc1eb8f6b"
+    ],
+    "member_texts": [
+      "When deploying multiple times during a session would waste time, the user prefers batching all changes into a single end-of-session deploy; the agent should surface this tradeoff proactively rather than triggering incremental redeploys."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder"
+    ],
+    "first_seen": "2026-08-08T12:29:58.307891+00:00",
+    "last_seen": "2026-08-08T12:29:58.307891+00:00"
+  },
+  {
+    "id": "ac73272fff0ca148",
+    "text": "When building a utility tool meant to simplify an existing workflow, the agent over-engineered the solution relative to comparable free alternatives; the user explicitly prioritized simplicity and immediate usability over technical sophistication.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "24c32d2d-c8f7-4d42-a947-29523017b7ef",
+    "member_ids": [
+      "24c32d2d-c8f7-4d42-a947-29523017b7ef"
+    ],
+    "member_texts": [
+      "When building a utility tool meant to simplify an existing workflow, the agent over-engineered the solution relative to comparable free alternatives; the user explicitly prioritized simplicity and immediate usability over technical sophistication."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-08-09T18:27:28.797801+00:00",
+    "last_seen": "2026-08-09T18:27:28.797801+00:00"
+  },
+  {
+    "id": "4c857dbfbdbf8781",
+    "text": "The user communicates bulk decisions using compact alphanumeric shorthand codes (e.g., D1a, D2c, D5c) mapped to pre-proposed options; the agent should implement all decisions directly without seeking re-clarification on each item.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "41e21a89-65cc-4a4d-b88d-2ca1e8cb4e1a",
+    "member_ids": [
+      "41e21a89-65cc-4a4d-b88d-2ca1e8cb4e1a"
+    ],
+    "member_texts": [
+      "The user communicates bulk decisions using compact alphanumeric shorthand codes (e.g., D1a, D2c, D5c) mapped to pre-proposed options; the agent should implement all decisions directly without seeking re-clarification on each item."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-08-09T18:27:28.797801+00:00",
+    "last_seen": "2026-08-09T18:27:28.797801+00:00"
+  },
+  {
+    "id": "f793ec46c4eb45c0",
+    "text": "Delegating adversarial validation to a peer Claude session via IPC and then integrating the ranked findings before proceeding is an effective multi-agent quality gate pattern for doc or code promotion workflows.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "5b3e1ed0-4722-4769-baf3-413bd5f7b0e8",
+    "member_ids": [
+      "5b3e1ed0-4722-4769-baf3-413bd5f7b0e8"
+    ],
+    "member_texts": [
+      "Delegating adversarial validation to a peer Claude session via IPC and then integrating the ranked findings before proceeding is an effective multi-agent quality gate pattern for doc or code promotion workflows."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-08-09T18:27:28.797801+00:00",
+    "last_seen": "2026-08-09T18:27:28.797801+00:00"
+  },
+  {
+    "id": "3758a031f83decd7",
+    "text": "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful notification and fallback, leaving pending work in an indeterminate state.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 4,
+    "member_count": 4,
+    "rep_pattern_id": "c5e6e199-2b45-4c4b-95c1-d5466e7c4711",
+    "member_ids": [
+      "6582ce88-6187-46bc-afb7-d4980126a23a",
+      "c5e6e199-2b45-4c4b-95c1-d5466e7c4711",
+      "bb1ffa9e-74c5-404b-9fc7-b1ff1ef5ecc4",
+      "c6bc6b93-86eb-4cfb-ad95-eb7e2f40f5e5"
+    ],
+    "member_texts": [
+      "During autonomous long-running sessions, hitting a model subscription or rate limit should result in graceful fallback with an explicit user notification rather than silent failure or repeated retries on the same model.",
+      "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful notification and fallback, leaving pending work in an indeterminate state.",
+      "When an autonomous session hits a model subscription or rate limit mid-task, the agent should surface the failure explicitly and attempt to switch to an available model rather than stalling or silently dropping the turn.",
+      "When model subscription limits or organization access restrictions are hit during autonomous long-running sessions, the agent should notify the user explicitly and stop gracefully rather than silently failing or retrying on the same blocked model."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp",
+      "claude-instances",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-09T18:27:28.797801+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "9cd460c16ea1e2e6",
+    "text": "When the user passes a handoff document without specifying which agent it targets, the receiving agent should confirm it is the intended recipient before consuming and acting on the document's instructions.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.62,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "f9c4bbbc-a844-466b-b780-2cf36dda4ee7",
+    "member_ids": [
+      "f9c4bbbc-a844-466b-b780-2cf36dda4ee7"
+    ],
+    "member_texts": [
+      "When the user passes a handoff document without specifying which agent it targets, the receiving agent should confirm it is the intended recipient before consuming and acting on the document's instructions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-08-09T18:27:28.797801+00:00",
+    "last_seen": "2026-08-09T18:27:28.797801+00:00"
+  },
+  {
+    "id": "cb4bda5cdcf978b9",
+    "text": "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions from completing deploy tasks; the user explicitly wants fully async deploy pipelines that do not require human credential intervention mid-session.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 4,
+    "member_count": 4,
+    "rep_pattern_id": "07eda8c3-f576-41f5-b42b-f838e34f8f83",
+    "member_ids": [
+      "948e8fbb-8521-48b0-8d74-fba120d89c15",
+      "ccc3b2ca-546e-4182-9a88-094041824b06",
+      "046c1de7-4ae8-4c07-a76e-1599e41faf78",
+      "07eda8c3-f576-41f5-b42b-f838e34f8f83"
+    ],
+    "member_texts": [
+      "For autonomous sessions that involve deployment steps requiring interactive authentication, the user prefers fully async deploy pipelines that do not block the agent session waiting for credential flows.",
+      "Autonomous deploy steps that require interactive browser-based authentication (OAuth flows) block the agent session and cannot be made truly async without pre-establishing credentials or using a service-account-based alternative.",
+      "When setting up deployment pipelines for autonomous sessions, the user prefers fully async flows that do not block the agent waiting for interactive authentication steps such as browser-based OAuth.",
+      "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions from completing deploy tasks; the user explicitly wants fully async deploy pipelines that do not require human credential intervention mid-session."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp",
+      "claude-instances",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-09T18:27:28.797801+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "27b3004d26716944",
+    "text": "When the user states requirements in an explicit order, skipping or deprioritizing the first requirement while completing later items is treated as a significant failure; user-stated ordering is a hard priority constraint, not a loose suggestion.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "44b4ecb0-87b8-4250-8312-fbc31bb36c5d",
+    "member_ids": [
+      "44b4ecb0-87b8-4250-8312-fbc31bb36c5d"
+    ],
+    "member_texts": [
+      "When the user states requirements in an explicit order, skipping or deprioritizing the first requirement while completing later items is treated as a significant failure; user-stated ordering is a hard priority constraint, not a loose suggestion."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-09T20:49:59.622004+00:00",
+    "last_seen": "2026-08-09T20:49:59.622004+00:00"
+  },
+  {
+    "id": "7573e629384f4fe3",
+    "text": "Shipping a UI component as complete when it reads as visually sparse or information-poor triggers strong user correction; visual completeness and density must be verified alongside code correctness before marking a UI task done.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "8868eced-a13e-49eb-9b96-601013555879",
+    "member_ids": [
+      "8868eced-a13e-49eb-9b96-601013555879"
+    ],
+    "member_texts": [
+      "Shipping a UI component as complete when it reads as visually sparse or information-poor triggers strong user correction; visual completeness and density must be verified alongside code correctness before marking a UI task done."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-09T20:49:59.622004+00:00",
+    "last_seen": "2026-08-09T20:49:59.622004+00:00"
+  },
+  {
+    "id": "37be0a563159d27d",
+    "text": "Long autonomous sessions can hit per-model usage caps mid-task, interrupting work and fragmenting outputs; proactive model-budget awareness checks should be included in recurring autonomous-wake loops.",
+    "category": "tool-use",
+    "valence": "neutral",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b75889eb-16b6-4080-82ec-5a354fac74df",
+    "member_ids": [
+      "b75889eb-16b6-4080-82ec-5a354fac74df"
+    ],
+    "member_texts": [
+      "Long autonomous sessions can hit per-model usage caps mid-task, interrupting work and fragmenting outputs; proactive model-budget awareness checks should be included in recurring autonomous-wake loops."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-09T20:49:59.622004+00:00",
+    "last_seen": "2026-08-09T20:49:59.622004+00:00"
+  },
+  {
+    "id": "42734cf6c1a0570f",
+    "text": "Splitting large audit or validation reports across sequential IPC messages (part 1 / part 2) is an effective pattern for sub-agents to deliver findings that exceed single-message size limits without losing any data.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "e10b3de3-51a6-470a-ab97-ac60cc359605",
+    "member_ids": [
+      "e10b3de3-51a6-470a-ab97-ac60cc359605"
+    ],
+    "member_texts": [
+      "Splitting large audit or validation reports across sequential IPC messages (part 1 / part 2) is an effective pattern for sub-agents to deliver findings that exceed single-message size limits without losing any data."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-09T20:49:59.622004+00:00",
+    "last_seen": "2026-08-09T20:49:59.622004+00:00"
+  },
+  {
+    "id": "a2fc19c331d7e164",
+    "text": "Content-quality enforcement gates that classify files by container type rather than actual content (e.g., a prose-style gate applied to HTML files containing CSS and JS) produce false positives that block legitimate non-prose edits; gate scope must target actual prose regions, not file extensions.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "7c0b3064-408d-4f84-92c7-e7c5f46b2442",
+    "member_ids": [
+      "7c0b3064-408d-4f84-92c7-e7c5f46b2442"
+    ],
+    "member_texts": [
+      "Content-quality enforcement gates that classify files by container type rather than actual content (e.g., a prose-style gate applied to HTML files containing CSS and JS) produce false positives that block legitimate non-prose edits; gate scope must target actual prose regions, not file extensions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-09T20:49:59.622004+00:00",
+    "last_seen": "2026-08-09T20:49:59.622004+00:00"
+  },
+  {
+    "id": "08a5f23d15f9d8f5",
+    "text": "When the agent authors a new constraint rule (e.g., a style ban, a UI invariant) in documentation within a session, it can immediately violate that same constraint in output produced later in the same session — writing the rule does not auto-apply it to concurrent in-flight work.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d2f01b41-61e8-42c8-8bb6-8350c13d2866",
+    "member_ids": [
+      "d2f01b41-61e8-42c8-8bb6-8350c13d2866"
+    ],
+    "member_texts": [
+      "When the agent authors a new constraint rule (e.g., a style ban, a UI invariant) in documentation within a session, it can immediately violate that same constraint in output produced later in the same session — writing the rule does not auto-apply it to concurrent in-flight work."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-08-10T02:38:08.926779+00:00",
+    "last_seen": "2026-08-10T02:38:08.926779+00:00"
+  },
+  {
+    "id": "e21bb9558aeef066",
+    "text": "Validating another agent's output against standing project constraints (e.g. style rules, UI invariants) before merging or shipping catches violations that the producing agent's own checks would miss.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 3,
+    "member_count": 3,
+    "rep_pattern_id": "f42335f8-b6c1-4cfd-ba40-cc9898ec87f0",
+    "member_ids": [
+      "02205fce-c41f-40c2-9932-9165bec73372",
+      "f42335f8-b6c1-4cfd-ba40-cc9898ec87f0",
+      "30cfff21-be1a-4f07-ae0b-78222dec4edf"
+    ],
+    "member_texts": [
+      "Running an explicit pre-deploy constraint check against a sub-agent's output (rather than trusting the sub-agent's self-report of correctness) catches style and invariant violations before they ship.",
+      "Validating another agent's output against standing project constraints (e.g. style rules, UI invariants) before merging or shipping catches violations that the producing agent's own checks would miss.",
+      "When verifying sub-agent output before shipping to production, cross-checking it against standing style and constraint rules (not just functional correctness) catches violations the sub-agent missed — this is a high-value pre-deploy gate."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-10T02:38:08.926779+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "8554c4f43c33cd4e",
+    "text": "On GCP Cloud Build, specifying a custom service account requires also specifying a logs bucket or using REGIONAL_USER_OWNED_BUCKET / CLOUD_LOGGING_ONLY options; omitting this causes build failures that are not obvious from the configuration.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "aeb5385a-c0d5-4c92-9b6d-4f83362d212b",
+    "member_ids": [
+      "aeb5385a-c0d5-4c92-9b6d-4f83362d212b",
+      "029db592-ba3d-4e70-b6f7-d25117893e72"
+    ],
+    "member_texts": [
+      "On GCP Cloud Build, specifying a custom service account requires also specifying a logs bucket or using REGIONAL_USER_OWNED_BUCKET / CLOUD_LOGGING_ONLY options; omitting this causes build failures that are not obvious from the configuration.",
+      "In GCP Cloud Build, specifying a custom service account requires also setting a logs bucket or a regional-user-owned-bucket behavior option; omitting this causes an immediate build failure that is not caught until the first trigger run."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-10T11:07:40.045832+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "359a7b62b76a4e55",
+    "text": "Infrastructure documentation such as deploy strategies and pipeline configurations should be written in project-visible locations, not only inside agent-internal directories, so the team can reference them independently of the agent.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.8,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "43cd3387-9eff-4e4a-ad26-7f760b20af49",
+    "member_ids": [
+      "43cd3387-9eff-4e4a-ad26-7f760b20af49",
+      "ccdb6373-5b89-4a60-8fbc-963922a94832"
+    ],
+    "member_texts": [
+      "Infrastructure documentation such as deploy strategies and pipeline configurations should be written in project-visible locations, not only inside agent-internal directories, so the team can reference them independently of the agent.",
+      "Deployment documentation written during an agent session should be placed in project-visible locations (not solely inside agent-scoped directories) so the broader team can discover and use it without agent mediation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-10T11:07:40.045832+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "1950ef5194ccedc1",
+    "text": "An explicit branch-to-environment mapping (e.g. main → preview, release → production) makes deploy intent clearer for teams previously using a single branch for all deploys; the agent should surface this pattern when setting up CI triggers.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "f88809d7-6faa-4df0-9169-976b86d3cc88",
+    "member_ids": [
+      "f88809d7-6faa-4df0-9169-976b86d3cc88"
+    ],
+    "member_texts": [
+      "An explicit branch-to-environment mapping (e.g. main → preview, release → production) makes deploy intent clearer for teams previously using a single branch for all deploys; the agent should surface this pattern when setting up CI triggers."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-10T11:07:40.045832+00:00",
+    "last_seen": "2026-08-10T11:07:40.045832+00:00"
+  },
+  {
+    "id": "de9dad2c1abd816f",
+    "text": "UI and flow states that have never been exercised in practice (empty states, edge conditions) should be explicitly flagged as unverified gaps rather than assumed correct, even when surrounding code is green.",
+    "category": "approach",
+    "valence": "neutral",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0c12843f-6e52-4399-8a95-293c4fb18a47",
+    "member_ids": [
+      "0c12843f-6e52-4399-8a95-293c4fb18a47"
+    ],
+    "member_texts": [
+      "UI and flow states that have never been exercised in practice (empty states, edge conditions) should be explicitly flagged as unverified gaps rather than assumed correct, even when surrounding code is green."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "claude-instances"
+    ],
+    "first_seen": "2026-08-10T11:07:40.045832+00:00",
+    "last_seen": "2026-08-10T11:07:40.045832+00:00"
+  },
+  {
+    "id": "fb7acedeb89f27b8",
+    "text": "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints were checked, not just the zero count — the user will ask for this detail as a separate follow-up otherwise.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "11a212c9-56ff-4bf3-995e-b85937fdd1e0",
+    "member_ids": [
+      "af898431-38ca-4c4b-805c-4d53b815e719",
+      "11a212c9-56ff-4bf3-995e-b85937fdd1e0"
+    ],
+    "member_texts": [
+      "When a data pipeline or scraping job produces zero results for a specific source, the agent should proactively surface which pages/endpoints were checked rather than just reporting the zero count — the user has to ask for this transparency separately, which adds a wasted round-trip.",
+      "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints were checked, not just the zero count — the user will ask for this detail as a separate follow-up otherwise."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-10T18:35:08.125096+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
+  },
+  {
+    "id": "0f34edeb4cd60169",
+    "text": "Using ':latest' as the only image tag in a container deploy pipeline loses per-commit traceability; images should be tagged with the commit SHA so any deployment can be traced back to its exact source revision.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "df8b4b76-3257-4700-bf70-16f79eaf00f1",
+    "member_ids": [
+      "df8b4b76-3257-4700-bf70-16f79eaf00f1"
+    ],
+    "member_texts": [
+      "Using ':latest' as the only image tag in a container deploy pipeline loses per-commit traceability; images should be tagged with the commit SHA so any deployment can be traced back to its exact source revision."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-10T18:35:08.125096+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "abd062322d9347a7",
+    "text": "When a data-source filtering UI is built over data aggregated from multiple heterogeneous platforms, omitting a per-source filter for any actively-scraped source is immediately noticed and criticized by the user — even if other filters exist.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "4f281a75-6127-4e59-9752-3390631fb6b4",
+    "member_ids": [
+      "2f72f9b9-4b26-497d-80f8-b42055bcfeed",
+      "4f281a75-6127-4e59-9752-3390631fb6b4"
+    ],
+    "member_texts": [
+      "When a data source filtering UI is built over heterogeneous data origins (scraped from multiple platforms), a per-source filter is a natural user expectation — omitting it for any active source will be noticed immediately by the user.",
+      "When a data-source filtering UI is built over data aggregated from multiple heterogeneous platforms, omitting a per-source filter for any actively-scraped source is immediately noticed and criticized by the user — even if other filters exist."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-10T18:35:08.125096+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
+  },
+  {
+    "id": "8e5d1179ff13add2",
+    "text": "A manual production deploy command that shares a surface with preview deploys creates the risk of accidentally promoting to production; adding an explicit confirmation prompt or branch guard on the prod deploy path prevents unintended promotions.",
+    "category": "architecture",
+    "valence": "neutral",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bbda7952-253d-4425-b0ef-3ed59ca7a265",
+    "member_ids": [
+      "bbda7952-253d-4425-b0ef-3ed59ca7a265"
+    ],
+    "member_texts": [
+      "A manual production deploy command that shares a surface with preview deploys creates the risk of accidentally promoting to production; adding an explicit confirmation prompt or branch guard on the prod deploy path prevents unintended promotions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "walmart-mvp"
+    ],
+    "first_seen": "2026-08-10T18:35:08.125096+00:00",
+    "last_seen": "2026-08-10T18:35:08.125096+00:00"
+  },
+  {
+    "id": "e611ba11b98b659f",
+    "text": "The agent generates AI-smell prose (em-dashes, excessive bold spans) even after a stop-hook explicitly flags it and demands a re-emission, requiring multiple correction cycles in the same session before the pattern clears.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "22199f96-33d2-4da1-a54d-dc10074b99c4",
+    "member_ids": [
+      "22199f96-33d2-4da1-a54d-dc10074b99c4"
+    ],
+    "member_texts": [
+      "The agent generates AI-smell prose (em-dashes, excessive bold spans) even after a stop-hook explicitly flags it and demands a re-emission, requiring multiple correction cycles in the same session before the pattern clears."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-11T00:18:53.847753+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
+  },
+  {
+    "id": "bbc11a70c082ec3a",
+    "text": "When dispatching a sub-agent with 'exclusive use' of a browser MCP resource, the dispatcher must first verify that no other session or sub-agent currently holds the resource; failing to do so leaves the new agent blocked for the entire wait period with no way to recover autonomously.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.82,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "19ec15e2-3986-4380-98ea-0ee192874652",
+    "member_ids": [
+      "19ec15e2-3986-4380-98ea-0ee192874652"
+    ],
+    "member_texts": [
+      "When dispatching a sub-agent with 'exclusive use' of a browser MCP resource, the dispatcher must first verify that no other session or sub-agent currently holds the resource; failing to do so leaves the new agent blocked for the entire wait period with no way to recover autonomously."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-11T00:18:53.847753+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
+  },
+  {
+    "id": "2e2de26c3c3545d8",
+    "text": "For fan-out scraping pipelines the user prefers routing the raw collection step to a lower-tier model (sonnet-high or gemini) while reserving higher-tier models for the analysis and judgment stages — this is a cost-optimization the user will explicitly request when the agent defaults to flagship models for everything.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "338bff85-e0ae-4cde-bc21-ada33d6116b8",
+    "member_ids": [
+      "338bff85-e0ae-4cde-bc21-ada33d6116b8"
+    ],
+    "member_texts": [
+      "For fan-out scraping pipelines the user prefers routing the raw collection step to a lower-tier model (sonnet-high or gemini) while reserving higher-tier models for the analysis and judgment stages — this is a cost-optimization the user will explicitly request when the agent defaults to flagship models for everything."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-11T00:18:53.847753+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
+  },
+  {
+    "id": "932b033a8b3221fe",
+    "text": "Before proposing a large fan-out or scraping operation when the user's usage quota is visibly constrained, the agent should proactively estimate whether the operation fits within the remaining budget and surface that estimate for user approval rather than proceeding or staying silent.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "939e0606-03f2-44a3-98c2-1ca1b3ca271b",
+    "member_ids": [
+      "939e0606-03f2-44a3-98c2-1ca1b3ca271b"
+    ],
+    "member_texts": [
+      "Before proposing a large fan-out or scraping operation when the user's usage quota is visibly constrained, the agent should proactively estimate whether the operation fits within the remaining budget and surface that estimate for user approval rather than proceeding or staying silent."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-11T00:18:53.847753+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
+  },
+  {
+    "id": "a51aa17e93b2377c",
+    "text": "Requesting a dedicated adversarial-review sub-agent explicitly tasked with finding why a plan will not work, identifying the core flawed assumption underneath, and proposing alternatives is a high-value planning step the user actively initiates before committing to implementation.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "eb56039c-2d1c-4dd1-8ea1-ae93973fe111",
+    "member_ids": [
+      "eb56039c-2d1c-4dd1-8ea1-ae93973fe111"
+    ],
+    "member_texts": [
+      "Requesting a dedicated adversarial-review sub-agent explicitly tasked with finding why a plan will not work, identifying the core flawed assumption underneath, and proposing alternatives is a high-value planning step the user actively initiates before committing to implementation."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "ig-download",
+      ".claude"
+    ],
+    "first_seen": "2026-08-11T00:18:53.847753+00:00",
+    "last_seen": "2026-08-11T00:18:53.847753+00:00"
   }
 ]

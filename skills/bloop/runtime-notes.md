@@ -1,3 +1,159 @@
+## bloop: switchboard groups, claude-instances (catch-todo-8f) · 2026-08-10
+
+**Purpose:** 32nd run. Four groups (Guards/Services/Cost/Session) added to the
+menu-bar Switchboard, over a new headless state layer. Gate: ISSUES-FOUND
+(2 major, 1 minor, 1 nit), all fixed same turn. Streak 32/32.
+
+**Insights:**
+
+1. A headless render affordance is what makes menu UI reviewable at all. Adding
+   `--dump-switchboard` (real snapshot, real row builder, printed as text) let
+   both me and the validator exercise rows without taking the owner's screen.
+   The prior ship of this same surface went out inert precisely because no such
+   affordance existed and "click it" was the only verification imagined.
+2. The mutation test found a blind fixture before the gate did. My
+   create-from-nothing check pointed at a MISSING directory, so the write failed
+   on the absent parent rather than on the guard; deleting the guard left it
+   green. The discriminating fixture is a directory that EXISTS with the file
+   missing. Ask what mechanism actually produced the pass.
+3. Fix the class the finding names, not its instance. The validator cited one
+   nested sentinel (atone/.gate-off); grepping the hooks for the pattern found
+   three. A regex fix aimed at the single cited path would have left two.
+4. When writing into a shared directory, check what else already writes there.
+   `~/.claude` holds settings backups from four other tools; a prune that
+   matched `.bak-` generically would have deleted them. Namespacing mine and
+   filtering on that tag is now mutation-pinned, because getting it wrong
+   destroys someone else's data rather than mine.
+
+---
+
+## bloop: kanban notes-as-entity stage 2 (gcc-kanban) · 2026-08-10
+
+**Purpose:** 32nd run. Multi-note per card: stacked drawer notes, hub notes
+view, per-note ack. Gate: ISSUES-FOUND (1 blocker), delivered ~40min after
+dispatch, long after I had written it off. Self-testing found 8 defects and
+still missed the blocker. Streak 32/32.
+
+**Insights:**
+
+1. **A slow gate is not a dead gate, and declaring it dead is a claim that can
+   be false.** I wrote "both seats died without delivering" into the validation
+   artifact and the efficacy log. The first seat then delivered, re-verified
+   against a later HEAD, and produced the run's only BLOCKER: my own 409 guard
+   only fired on a non-empty body, so a blank save with no note id fell through
+   to the wipe-the-whole-entry branch and destroyed every note on a card while
+   reporting success. Both records had to be corrected. Wait, or write "not yet
+   delivered", never "did not run".
+2. The blocker is the canonical shape of a guard bug: the condition I wrote
+   (`note.trim() !== ""`) silently EXEMPTED the most destructive input class
+   from the very guard meant to protect it. When adding a guard, enumerate what
+   the condition excludes, not only what it catches.
+3. Two paths sharing a wire shape is the root cause worth fixing, not the
+   symptom: `drop`'s legitimate wipe and an ordinary blank save were
+   indistinguishable requests. The fix was to make destructive intent explicit
+   (`all: true`), not to add another special case.
+4. Feeding a validator its own dispatch list and working it myself is a good
+   salvage while waiting: two of its unanswered claims were real (ISO
+   string-compare ordering, tombstoning off a derived field).
+5. `x?.length` is not a shape check. A hand-edited `notes: "not an array"`
+   passed the truthiness guard and crashed `.map`. Any field that could be
+   hand-edited needs `Array.isArray`, and repairing malformed records beats
+   dropping them when the data is a human's own writing.
+6. Test the endpoint's blast radius, not just its output: one corrupt
+   board.json 500'd BOTH fleet endpoints, so a single bad file hid every other
+   board. Per-item try/catch turns a fleet outage into one honest row.
+7. A test suite that creates real registry entries needs a trap: three test
+   boards had accumulated in the live registry from runs that exited early.
+
+---
+
+## bloop: kanban ideation build, all 10 candidates (gcc-kanban) · 2026-08-09
+
+**Purpose:** 31st run. /build-ui ideation then the whole appendix built: ack
+receipts, filter, doc preview + modal, line anchors, live presence, hub parity,
+type scale. Gate: ISSUES-FOUND (3 major, 1 minor, 1 nit). Streak 31/31.
+
+**Insights:**
+
+1. Verify a generated ATTRIBUTE against its source of truth, not against its
+   own presence. Line anchors all rendered, and 31 of 39 pointed at the wrong
+   line because the fence accounting over-counted. The check that found it
+   compared every `id="L<n>"` to the actual source line; "anchors exist" would
+   have shipped it.
+2. A read-only sqlite handle PINS a WAL snapshot. Liveness read through a kept
+   handle froze while the clock moved, so every peer aged out to dead within
+   seconds and the feature silently returned empty forever. Open per call for
+   any externally-written store; that IS the no-TTL rule in another costume.
+3. My own guard fix needed the same input-class audit I apply to others: the
+   first harness fixture was too small to trip the word floor, so it passed
+   pre-fix and proved nothing. Reproduce with the REAL payload that failed.
+4. Two of three gate majors were also found by the build itself, minutes
+   earlier. The gate's unique catch was the malformed-input case the build
+   never fed it (a triple-backtick inside inline code). Fixtures test what you
+   imagined; the gate tests what you did not.
+5. Check whether a shared file moved under you before editing: both pages had
+   an uncommitted palette revision from a concurrent session, and my earlier
+   committed token was superseded. Measure the new values rather than
+   reapplying yours.
+
+---
+
+## bloop: docs #83 core, vb-opus queue (versable-builder + walmart-mvp) — 2026-08-09
+
+**Purpose:** 30th run. Nine build units (residual kit commit, 47-msg inbox
+triage, owner decision bundle, 7 surface docs, product + technical trees,
+16-file consolidation) through the loop; opus gate. Gate: ISSUES-FOUND
+(1 blocker, 3 major, 7 minor, 5 nit), all dispositioned same day. Streak 30/30.
+
+**Insights:**
+
+1. Docs-shaped bloops have their own blocker class: trusting a NEARBY
+   docstring over the implementing code (api.ts's stale event docstring vs
+   the swr module listener the gate found). The dispatch clause that caught
+   it was naming "claims about what does NOT exist" as an attack class; keep
+   it in every docs gate.
+2. The report-write guard blocks validator writes even when the dispatch
+   pre-authorizes the path (mkdir succeeds, Write refused, seat idles).
+   Working pattern: two-part SendMessage delivery, parent persists as
+   BLOCKQUOTED text (the prose gate exempts quotations, and quoting marks
+   third-party provenance honestly). Two chase-ups; the idle notification is
+   the ping trigger, as ever.
+3. A derivability audit doubles as an accessibility audit: transcribing §5
+   action rows into role selectors exposed icon-only buttons with no
+   accessible name (kit label = content ?? children, no Icon fallback).
+   Cheap sweep worth prescribing in any UI-docs gate.
+4. rename-without-grepping-readers applies to DOC moves exactly as to code:
+   16 files git-mv'd cleanly still broke 4 live markdown links, the repo
+   front door among them. The reader sweep is part of the move.
+5. Bash sed/head views do not register as Reads for the Edit tool; six
+   fix-round edits bounced. Read files properly before an edit round.
+
+---
+
+## bloop: kanban v10 handoff follow-ups (gcc-kanban) · 2026-08-08
+
+**Purpose:** 29th run. Resolve the v10 design handoff's known gaps: conflict-banner
+liveness, hub gate pass, type-scale check, SPEC smoke. Gate: ISSUES-FOUND (1 major,
+2 minor). Streak 29/29.
+
+**Insights:**
+
+1. A fix whose comment claims an invariant invites the gate to falsify the COMMENT:
+   the closeDrawer flush was correct for its 3 exits, but j/k stepping bypassed it,
+   and the validator found it by attacking the "can never lose it" sentence. State
+   invariants as claims in the dispatch prompt; the gate hunts the uncovered exit.
+2. Synthetic input racing a debounce is a legitimate repro, not harness noise: the
+   type-then-instant-close draft loss only shows when actions land inside the 350ms
+   window; a human repros it by typing and closing fast. Verify with a realistic
+   pause FIRST to separate debounce artifacts from real races.
+3. Playwright MCP is the working fallback when chrome-devtools MCP dies with
+   "browser already running" (orphaned profile lock from a crashed session).
+4. Handoff docs' fears can be structurally moot: "does the server stamp agent note
+   writes" dissolved once grep showed notes.json has exactly one writer. Answer
+   architecture questions before designing the test for the feared case.
+
+---
+
 ## bloop: 3x run, gcc session-continuity + slop gates + ui toolbox (gcc-work) — 2026-08-08
 
 **Purpose:** 26th-28th runs, one session. A: catchup/core-dump clear+compact

@@ -1,0 +1,237 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17459,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.32863122975081566,
+    "unit_count": 35
+  },
+  "response": {
+    "biases_detected": [
+      "write_before_read_trap:RECURRING:STABLE — unit-2: GUIDELINES.md Read failed before successful orientation; unit-28: Write to scratchpad c1-c2-plan.md failed (success:false x1) before second attempt succeeded; unit-95: Edit to ImportParts.tsx failed (success:false x1) before investigation via rg+git diff; unit-106: Edit to TRACKING.md failed twice (success:false x2) before third attempt succeeded; pattern depth and recovery shape unchanged from all prior cycles across 10+ cycle baseline; no improvement signal",
+      "confirmation_bias_style_log:RECURRING:STABLE — unit-55: style-log.sh called with watcher-fire slug classification without surfacing evidence for slug choice; fifteenth consecutive cycle with identical pattern; zero corrective signal across all cycles; recommendation deprioritized per history guidance",
+      "excessive_task_creation:RECURRING:STABLE — unit-3: 10 consecutive TaskCreate calls before implementation begins; unit-47: 8 consecutive TaskCreate calls for defect board intake; structural anomaly persists across multiple cycles; appropriateness remains ambiguous but volume is consistent",
+      "agent_dispatch_retry_without_diagnosis:NEW — unit-3: 3 consecutive Agent calls with success:false before 3 successful Agent calls; no diagnostic Bash step or error investigation between failed dispatches; same structural failure as server_startup_overconfidence (try A, fail, try B without reading root cause) but in sub-agent dispatch domain; may be transient API errors but absence of any precondition check or error-read between retries is the calibration gap; structurally distinct from write_before_read_trap because the probe target is agent availability not file existence"
+    ],
+    "calibration_score": 0.32,
+    "cross_references": [
+      "Dream Insight 2 (absence-as-confirmation): unit-3 records atone event mist-20260807-111459-c5 for declaring UI parity without DOM-verifying computed font-family against the speedway reference — the root failure was 'assumed kit import gave font parity for free without one computed-style check'; this is the sub-agent notification treated as delivery confirmation analogue at the assumption level; the atone was self-identified (positive signal) but the core epistemic error matches the dream insight exactly",
+      "Dream Insight 1 (broken handoffs): unit-6 outcome is Corrected; the WAL checkpoint notes B2 did not apply the shade addendum because it arrived late; the sub-agent handoff did not carry the late-arriving instruction, leaving the parent with an incomplete picture of what B2 had done — matches the sender-assumes-receiver-retains-context failure shape; the Corrected outcome is attributable to this coordination gap"
+    ],
+    "overconfident_count": 6,
+    "recommendations": [
+      "write_before_read_trap: no new recommendation — 10+ cycle stable baseline with zero improvement under advisory regime; the pattern is not binding to corrective rules; escalation to mechanical enforcement is the only remaining lever",
+      "confirmation_bias_style_log: no new recommendation — 15 consecutive cycles with zero change; deprioritized",
+      "agent_dispatch_retry_without_diagnosis (NEW): before re-dispatching a failed Agent call, insert a diagnostic step — read the error reason if exposed, or emit a log call, before the retry; apply the same precondition-check discipline already classified under server_startup_overconfidence: probe first, then act"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "be09b94d-9762-4bdd-8755-0dc3342c8c89",
+      116999
+    ],
+    [
+      "bb714e4b-0b37-46f2-9a94-efeb478b4fde",
+      117147
+    ],
+    [
+      "baa1f8e5-6bc4-4eb5-ae38-fc647f2c50ed",
+      42591370
+    ],
+    [
+      "b7efe532-9937-43e8-a96c-8b6f16d1c585",
+      120402
+    ],
+    [
+      "b55fce5a-7fc4-45be-970b-aa977b52a2df",
+      117049
+    ],
+    [
+      "b50f3f1c-aab1-4c8b-9227-31979b9604ed",
+      100568
+    ],
+    [
+      "b417c859-2eec-45bd-938f-dbaf528bfea1",
+      116542
+    ],
+    [
+      "ab3e2edb-9fd5-4040-9bda-57a8e97ad54f",
+      122448
+    ],
+    [
+      "aa95989c-de73-4a53-9623-cadad4718a49",
+      116132
+    ],
+    [
+      "aa51a5a7-7381-4f11-84c7-d56a96239037",
+      116363
+    ],
+    [
+      "a875120e-52a1-4ed3-a52b-38af8fae74e3",
+      117190
+    ],
+    [
+      "a5252fec-aa37-4fab-86e3-45838ca9a35a",
+      110482
+    ],
+    [
+      "a489afa5-edc3-4606-9a37-7266e2c46837",
+      117055
+    ],
+    [
+      "9fdb08b5-046e-4a66-bdc1-0ec62c469956",
+      95401
+    ],
+    [
+      "9ed1bd19-9073-4fca-95f0-b794168a6be5",
+      100900
+    ],
+    [
+      "9ead767c-6559-4fdb-8f50-ab7e48f4103a",
+      117616
+    ],
+    [
+      "9dd6ba2d-848e-406b-b5ad-2b70148b0c40",
+      121818
+    ],
+    [
+      "9cf1a24a-0408-4ee6-a912-5c0c7b0e7cab",
+      116925
+    ],
+    [
+      "9aed5d77-d493-4bf9-a62b-c124e72f9b7a",
+      116746
+    ],
+    [
+      "9a759968-af33-4107-85db-9c6b3c8bd235",
+      116008
+    ],
+    [
+      "980e8984-aed4-475d-bab3-2bc2f561b586",
+      117016
+    ],
+    [
+      "93f74e5e-0300-4753-8de9-45a021d25a3f",
+      120699
+    ],
+    [
+      "90b8460e-7235-4372-b869-92a1aada0b24",
+      138176
+    ],
+    [
+      "903a30da-3fad-470f-af69-e942ffeead22",
+      99431
+    ],
+    [
+      "90222548-d5a8-4d9f-8116-d390a302f869",
+      116615
+    ],
+    [
+      "8f5790e0-e173-4393-8d35-14fc42708c88",
+      109601
+    ],
+    [
+      "8f1c983a-44f7-4f28-ae7c-c5ed9afcd0b2",
+      123444
+    ],
+    [
+      "8d631617-e681-464e-944a-845ee93b9cb2",
+      117913
+    ],
+    [
+      "8c9eb6ea-3aaf-4794-8d46-87d7791d7c14",
+      112124
+    ],
+    [
+      "8c17349d-d653-434b-b331-d1e58e647612",
+      117381
+    ],
+    [
+      "8a0a2e6a-d30b-4e0d-9d49-1da96cf593bb",
+      110729
+    ],
+    [
+      "8735ff36-3549-4ddb-b869-ac0df84ed8e4",
+      121889
+    ],
+    [
+      "86bb24b0-cc58-41f1-93d4-c817c4ad9818",
+      116731
+    ],
+    [
+      "84b1d184-0635-4e97-a974-68d9ec3de254",
+      113680
+    ],
+    [
+      "843bf061-3e45-41bb-b7a9-ab930ff4ac65",
+      121319
+    ],
+    [
+      "82c875f8-9f1d-4583-aca2-a213075267ad",
+      124918
+    ],
+    [
+      "7de9addc-a0c2-46e5-a7c2-0b839fb7df10",
+      109843
+    ],
+    [
+      "7d6504d9-c5fa-4f22-82f2-033d8da0b18b",
+      115550
+    ],
+    [
+      "7bc38a28-db57-4114-97a3-ad42248e1559",
+      129390
+    ],
+    [
+      "7911f8b0-2dfe-473a-9537-774fb1957eee",
+      120066
+    ],
+    [
+      "7818f4ee-7fa6-4c0c-b645-668fba735f91",
+      123579
+    ],
+    [
+      "77152b1e-9113-4644-8637-1484f1d57e6f",
+      92493
+    ],
+    [
+      "75ab42ad-a643-4ed2-a16e-af182c8cee30",
+      116072
+    ],
+    [
+      "748e6914-0691-418d-834d-454aec93112c",
+      100879
+    ],
+    [
+      "72650471-052d-4f8f-85a0-bcce336a26c3",
+      114656
+    ],
+    [
+      "6ffe2009-3364-47c8-812c-6dd7301a7a36",
+      117329
+    ],
+    [
+      "6cfe3a22-4a2f-4f5f-83ec-22efc192ae07",
+      122495
+    ],
+    [
+      "6cd928d3-860f-4bad-aecd-380ddca07697",
+      96384
+    ],
+    [
+      "6c84da93-f33f-4d78-a91d-33c42f45f8f0",
+      107005
+    ],
+    [
+      "6c3db4bf-05e3-47b9-8dbe-75c08d960cd7",
+      115201
+    ]
+  ],
+  "timestamp": "2026-08-08T12:33:43.806659Z",
+  "tokens_used": 24568,
+  "units_analyzed": 19,
+  "units_total": 35
+}

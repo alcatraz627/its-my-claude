@@ -1,5 +1,166 @@
 # ui-gripe — runtime notes
 
+## ui-gripe: kanban gripefix re-audit (20260811-kanban-gripefix-*.png x4), 2026-08-11
+
+**Purpose:** No-args re-audit of the agent-kanban board after a four-finding fix pass.
+Target resolved by mtime (newest set in assets/screenshots). Verified the four fixes
+in pixels across dark / light / filtered / drawer-min states, then walked the rubric
+for new findings.
+
+**Insights:**
+
+1. A "gripefix" shot set taken minutes BEFORE its commit is not stale, it is the
+   shoot-then-commit flow. The commit message (9541eb5) enumerated the four findings
+   being fixed, which made it the re-audit baseline when no findings doc existed.
+   Resolution: verify each named fix in the pixels; if they are present, the capture
+   depicts the committed tree and pixel findings write flat. Three of four were
+   pixel-verifiable; the fourth (tailPath shortening) had no demo path longer than
+   the 26-char threshold, so it stayed code-grounded only. Say which is which.
+2. I hit the `rg -rn` REPLACE-flag trap again, mid-run, despite these notes warning
+   about it (the warning was read at step 0 and still did not fire at typing time).
+   New tell worth keeping: match output where the matched word displays as a single
+   letter ("holding the n") means `-r` swallowed your flag as a replacement string.
+3. The kanban notes store is pixel ground truth for note text:
+   `~/.claude/kanban/boards/<board-slug>/notes.json` holds exact bodies. Reading it
+   converted a suspected two-notes-fused-on-one-line finding into an honest
+   single-note truncation (the body itself was stack-test gibberish).
+4. Reusable check for any UI that highlights command tokens: is the highlight
+   registry-gated or shape-gated? board.html:575 chips any `/[a-z][a-z0-9-]{2,}` by
+   shape, so a garbage `/skeptical-reviewasadasd` wears the same command styling as
+   a real one. Shape-gated highlighting lends authority to typos.
+5. Affordance census that generalizes: count pill-silhouette elements, then count
+   which are buttons. Here 9 pills, 1 button (the needs-you chip), and the button's
+   only distinguishers are hover brightness and a tooltip. One interactive element
+   dressed in the inert vocabulary is a finding shape to keep scanning for.
+
+---
+
+## ui-gripe: walmart-mvp Admin ops console (admin-full.png), 2026-08-10
+
+**Purpose:** No-gripe confusion audit of a 1280x2700 full-page light-theme staff ops
+console (metric grid, live workers band, external usage, org ledger, status
+distribution + recent activity).
+
+**Insights:**
+
+1. Read `<app>/docs/surfaces/<page>.md` before the rubric walk. It paid off in both
+   directions on one page. Section 5 revealed the grey outline "Disabled" pills in the
+   ledger are real `<Button onClick={toggleLiveSubmit}>` controls, which inverted a weak
+   finding ("these look clickable but aren't") into a top-3 one ("the switch deciding
+   whether publishes reach Walmart is dressed as an inert chip"). Its Known Gaps section
+   separately pre-logged the Time-column clipping, so I reported that as confirmation
+   instead of passing a known bug off as a discovery.
+2. **Grid-vs-table reconciliation is the highest-yield cheap check on any dashboard**
+   where a stat row sits above a per-row table. Sum every numeric table column and match
+   it to its card. Here Jobs, Parts, Published and Review matched exactly (17, 242, 9,
+   153) and Organizations matched the row count. Those four matches are the control
+   group, and they turned "Users 65 vs Members sum 19" from a hunch into a hard finding.
+   Without them it is just two unrelated numbers.
+3. Root-cause a color finding in the token file, never in the component. The chip bug
+   presented as "this app has no red". `index.css:30` showed `--color-signal-warn` is
+   `red-600`, and four other pages already use it. The real defect was a naming
+   collision: theme `signal-warn` means red, while component key `warn` resolves to
+   `text-warning`, the amber. That converts a vague design complaint into a one-line fix
+   with an in-file precedent sitting two rows above it.
+4. **A human comment can support a finding rather than pre-clear it.** `StatusChip.tsx:7-9`
+   explains why `warn` and `mid` are kept as separate keys and names the distinction the
+   author wanted ("needs a look" vs "still running"), then renders both identically. Read
+   the comment for intent first. Here it was evidence the collapse was unintended, not a
+   `NOTE(by human)` blessing.
+5. New reusable smell: **`?? []` or `?? 0` on polled data collapses "unreachable" into
+   "empty"**, so the error state silently inherits the empty state's calm copy.
+   `workers = activity?.workers ?? []` made a dead feed render "All workers idle."
+   underneath a hardcoded pulsing green "live" dot. Grep any live dashboard for that
+   pattern and ask what the empty branch asserts.
+6. `--ui` was materially wrong in both directions on this shot. It invented a "Revenue"
+   card, said four metric cards in LAYOUT while listing five in ELEMENTS (real answer:
+   six), and hallucinated an identical `2023-04-05` date onto all 13 ledger rows. OCR
+   plus native caught all three. Never let `--ui` supply a number, a date, or a count.
+7. The staleness gate cleared this shot by 70 seconds (capture 13:03:16, last
+   `Admin.tsx` commit 13:02:06, tree clean). Run it even when the shot looks obviously
+   fresh. Clearing is what licenses writing pixel findings flat instead of hedged.
+
+---
+
+## ui-gripe: walmart-mvp Settings re-shoot (settings-current.png), 2026-08-10
+
+**Purpose:** Re-audit of the same 1198x727 Settings page the previous entry abandoned as
+stale. The re-shoot arrived. This pass validated it, then ran the rubric with the page
+source in hand.
+
+**Insights:**
+
+1. The staleness gate paid off in the positive direction this time. Shot at 03:03:47,
+   last commit to `Settings.tsx` at 02:30:02, tree clean. That is 33 minutes newer than
+   the code, so every pixel finding was safe to write flat. Run the check to CLEAR a
+   shot, not only to kill one. It converts hedged findings into confident ones.
+2. New trap, and it nearly shipped a false finding. The playwright `page-*.yml` a11y
+   snapshot and the PNG share a capture timestamp but are different render moments. The
+   yml showed `main` holding only two headings, no member rows and no buttons, which
+   reads exactly like "this whole page is invisible to assistive tech". The tell that
+   saved it: the yml said `Members` while the PNG said `Members · 2`, and the source
+   makes that exact string conditional on data having loaded. Before trusting any
+   DOM versus pixel disagreement, find a string that differs between the two artifacts
+   and check whether the source makes it state-conditional. The snapshot was mid-load.
+3. Highest-damage shape this run, and a reusable check: a destructive action wearing a
+   benign universal glyph. Resolve every `Icon=` on a destructive control through the
+   kit's icon map to the real vendor glyph, then grep the app for what that glyph
+   normally triggers. Here `Icon='SignOut'` resolves to `MdLogout` (`icon-for.ts:121`)
+   and sits on "Leave this organization", while the app's actual Sign out
+   (`App.tsx:235`) carries no icon at all. The only drawn logout mark in the product
+   performs the one action that is not a logout.
+4. My own grep bug, worth never repeating. `rg -rn "pattern"` silently returns nothing,
+   because `-r` is ripgrep's REPLACE flag and it swallowed the `n`. It almost became a
+   false "this app has no logout control" claim, which would have inverted finding 3's
+   severity. ripgrep recurses by default, so `-r` never means recursive.
+5. A project's own capability list is the cheapest guard against flagging deliberate
+   design. `walmart-mvp/.claude/output/20260810-ui-renovation/CAPABILITIES.md` item 21
+   pre-cleared the single Remove/Leave control as owner-ruled, so I did not flag it.
+   Item 12 named the timestamp column "joined", which turned a vague hunch about a bare
+   "2d ago" into a grounded gap between intent and render. Grep for a CAPABILITIES or
+   parity doc before the rubric walk.
+6. `--ui` failing to identify a control is itself citable evidence. It described the
+   leave button only as "Icon (small red/white icon)" and left it out of its row PATTERN
+   summary entirely. The enumeration layer's blindness mirrored the first-time user's,
+   the same move as the 07-14 misparse insight.
+
+---
+
+## ui-gripe: walmart-mvp Settings page (settings-after.png), 2026-08-10
+
+**Purpose:** General confusion audit (no args) of a 1198x727 light-theme org settings
+page. Target resolved by mtime, the newest project PNG by a 2-day margin.
+
+**Insights:**
+
+1. **Check the screenshot's mtime against the source file's git log BEFORE writing any
+   pixel finding.** This shot was 2 commits stale (01:56 vs commits at 01:58 and 02:18).
+   Two "bugs" I had already confirmed by eye, a missing avatar circle and a missing
+   "you" marker on the self row, were features added 22 minutes AFTER the capture.
+   `stat -f %Sm` on the image plus `git log -3 -- <source>` is a two-command check that
+   killed two false findings. Run it right after locating the source, before the rubric.
+2. Corollary: once a shot is known stale, split findings into code-grounded (still true
+   at HEAD, safe to report) and pixel-only (needs a re-shoot). Lead the report with the
+   staleness. It is worth more to the caller than any single finding.
+3. Highest-damage shape on a permission-aware page: a card states a prerequisite
+   ("Publishing needs it"), reports it unmet ("Not connected"), then wraps the remedy in
+   a role gate (`{canManage && <Button/>}`) with no else branch. The user gets a blocked
+   capability, no remedy, and no reason. Grep every `{someCapability && (` that wraps a
+   primary action and ask what the false branch renders. Usually nothing.
+4. Copy redundancy has a mechanical check on Card components: diff the `subtitle` prop
+   against the body's status string. Here both carried "optional" and "anything already
+   live/published stays live", so 28 words delivered 2 facts, and the only token that
+   varies at runtime ("Not connected") sat at the head of the more redundant sentence.
+5. `--ui` again invented elements that were absent ("Avatar +" on both member rows).
+   Third run running where it hallucinates plausible but missing visual furniture. Never
+   cite an `--ui` element as PRESENT without native confirmation. It is trustworthy for
+   layout regions and text, not for the existence of small chrome.
+6. When the shot is stale and the dev server is down (all pinned ports returned 000), do
+   not start it. That is unprompted side-effecting scope. State the limit and hand the
+   re-shoot back to the caller.
+
+---
+
 ## ui-gripe: Speedway CG setup re-audit (s2e-final-dark/light.png) — 2026-07-27
 
 **Purpose:** No-args re-audit of the revised CG setup form ("final" pair, minutes old);
