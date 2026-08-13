@@ -102,9 +102,10 @@ new-precedent row rather than as an ordinary choice.
 
 ## Phase 5: The parity ledger
 
-This phase exists because the account's second-most-recurring serious failure is
-a rebuild that quietly replaced accumulated behaviour with no audit that anything
-survived. The general form of that failure is not UI specific at all.
+This phase exists because the account's most frequent recent serious failure
+(first in every recency window, fifth all-time) is a rebuild that quietly
+replaced accumulated behaviour with no audit that anything survived. The
+general form of that failure is not UI specific at all.
 
 Do not take the ranking on trust, including from this file. Re-derive it:
 

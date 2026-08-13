@@ -13,6 +13,7 @@ prepares inputs (the turn slice, the reconstructed edit-list, the stdin payload)
 and pipes them into the REAL hook script, then reads the hook's own stdout.
 """
 
+import glob
 import json
 import os
 import re
@@ -228,14 +229,13 @@ def write_edit_list(sid8, paths):
 
 
 def cleanup_sid(sid8):
-    """Remove every /tmp mark/edit file keyed by a sid8 the harness created."""
-    for f in (f"/tmp/claude-edited-files-{sid8}",
-              f"/tmp/claude-declared-ready-{sid8}",
-              f"/tmp/claude-declared-ready-url-{sid8}",
-              f"/tmp/claude-declared-ready-heeded-{sid8}",
-              f"/tmp/claude-structural-claim-{sid8}",
-              f"/tmp/claude-absence-claim-{sid8}",
-              f"/tmp/claude-filename-dot-{sid8}"):
+    """Remove every /tmp mark/edit file keyed by a sid8 the harness created.
+
+    One glob on the shared marker shape claude-*-<sid8> catches every hook's
+    markers, including future ones; an enumerated list here rots, and a missed
+    marker makes fixture runs 2..N replay loop-safety branches instead of hooks.
+    """
+    for f in glob.glob(f"/tmp/claude-*-{sid8}"):
         try:
             os.remove(f)
         except OSError:
@@ -272,6 +272,9 @@ def run_hook(hook_path, payload, timeout=45):
         "WARN_LOG_STORE",
         os.path.join(tempfile.gettempdir(), f"replay-warn-events-{os.getpid()}.jsonl"),
     )
+    # Pin enforce-mode so a fixture's outcome cannot flip with the caller's
+    # shell: live settings.json sets this, and fixtures assert live behavior.
+    env["PROSE_SMELL_ENFORCE"] = "1"
     try:
         proc = subprocess.run(
             ["bash", hook_path],

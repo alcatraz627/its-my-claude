@@ -63,9 +63,11 @@ by reading rather than by recall, and say plainly when you could not establish
 part of it.
 
 The reason is specific. A plan that never states current behaviour cannot carry
-a parity check, and the account's second-most-recurring serious failure is a
-rebuild that replaced working behaviour with nothing representing the old
-version, so no gate could fail on its absence. The statement written here is
+a parity check, and the account's most frequent recent serious failure (first
+in every recency window, fifth all-time; re-derive with
+`bash ~/.claude/scripts/atone.sh list`) is a rebuild that replaced working
+behaviour with nothing representing the old version, so no gate could fail on
+its absence. The statement written here is
 what `/build-ui` and `/build-change` turn into a parity ledger.
 
 Do not take the ranking on trust, including from this file. Re-derive it:

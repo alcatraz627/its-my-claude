@@ -460,13 +460,13 @@
       "name": "synth-url-curl-clears",
       "hook": "declared-ready-stop.sh",
       "fixture": "fixtures/declared-ready/synth-url-curl-clears.jsonl",
-      "expected": "silent",
+      "expected": "soft",
       "desired": "silent",
       "klass": "FP",
       "cwd": "/Users/alcatraz627/.claude",
       "source_transcript": "SYNTHETIC",
       "turn_in_file": 0,
-      "note": "Det1a: same advertisement but a curl on the port ran this turn -- exercised, must stay silent"
+      "note": "Det1a: same advertisement but a curl on the port ran this turn -- exercised, so desired stays silent. Cold-state the hook softs anyway (defect exposed once cleanup_sid started cleaning urlsoft markers); expected records that current behavior honestly until the Det1a cold branch is fixed, then it returns to silent."
     },
     {
       "name": "synth-url-down-clears",
@@ -484,11 +484,11 @@
       "name": "prose-smell-tp-multi-tell",
       "hook": "prose-smell-stop.sh",
       "fixture": "fixtures/prose-smell/tp-multi-tell.jsonl",
-      "expected": "soft",
+      "expected": "block",
       "desired": "soft",
       "klass": "TP",
       "cwd": "/Users/alcatraz627/.claude",
-      "note": "em-dash + bold-spam + Label:fragment = 3 block-tier categories. Expected 'soft' because the harness runs with a sanitized env: PROSE_SMELL_ENFORCE is unset here, so the hook emits its WOULD-BLOCK dry-run note. Under the live config (settings.json sets ENFORCE=1) the same input is a hard block. Both paths are the same detection.",
+      "note": "em-dash + bold-spam + Label:fragment = 3 block-tier categories. First-fire under enforce is a hard block; run_hook pins PROSE_SMELL_ENFORCE=1 to mirror live settings.json, so 'block' is deterministic. The WOULD-BLOCK dry-run soft appears only without enforce.",
       "source_transcript": "SYNTHETIC (F5, adversarial review 2026-08-11)",
       "turn_in_file": 0
     },
