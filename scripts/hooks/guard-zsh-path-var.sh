@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# guard-zsh-path-var.sh — PreToolUse[Bash], SYNCHRONOUS.
+# guard-zsh-path-var.sh — PreToolUse[Bash], SYNCHRONOUS, WARN tier.
 #
-# Stops the single most expensive silent footgun in this account's shell history.
 # Inline Bash-tool commands run zsh, and zsh binds the scalar $PATH to an array
 # named $path. So `while read path` or `for path in …` overwrites PATH with a
 # filename, and every command after it in that same call dies with
@@ -9,26 +8,30 @@
 # a naming collision, and the blast radius is one Bash call, so the next call
 # looks healthy and the bug seems intermittent.
 #
-# Measured 2026-08-11: sed, tr and basename carry ~175 combined "command not
-# found" hits across the transcript corpus despite all three being installed;
-# sampled cases trace here. Verified live: `printf 'a/b/c\n' | while read path;
-# do echo "$PATH"; done` prints a/b/c.
+# Evidence, re-derived from the full transcript corpus 2026-08-13: TWO organic
+# incidents in two months (2026-06-19, a `find | while read ts path` loop; and
+# 2026-07-07, a `local path=` function). An earlier version of this header cited
+# ~175 "hits", which counted matching strings rather than incidents and inflated
+# the real figure roughly 90x. The string count is self-inflating, because this
+# hook's own message contains the error text it counts.
 #
-# Why this BLOCKS rather than nudges, given hook-design.md reserves blocking for
-# irreversible actions: the asymmetry is unusual. A false block costs one rename
-# (path → p), which is harmless in every context. A miss costs a cascade of
-# misleading not-found errors, and worse, can hand the agent empty output that
-# reads like a real "no results" answer. Wrong-pass far exceeds wrong-stop.
+# WARN, not block. It shipped as a block on 2026-08-11 arguing that a false fire
+# "costs one rename, harmless in every context". That argument was wrong, and an
+# adversarial review proved it: the first organic fire, one day later, blocked a
+# legitimate `rg -n "path=\"/|path='/"` in a Versable session. That command never
+# assigned anything, so there was no rename available; the agent's only outs were
+# to contort a correct command or mute the guard machine-wide. A block whose only
+# real-world fire is a false positive is worse than no guard, and two incidents in
+# two months does not clear the cost-of-miss bar that features/hook-design.md
+# reserves blocking for.
 #
-# Precision comes from blanking quoted spans BEFORE matching, so another
-# language's `for path in` (python, awk, a jq filter) is invisible here, and from
-# skipping heredocs, where the text being written is usually a #!/bin/bash script
-# in which `path` is perfectly safe.
+# Matching lives in zsh-path-scan.py, because this cannot be done correctly in
+# sed. See that file's docstring for why.
 #
 # Mute: ZSH_PATH_GUARD_OFF=1 (this process) · touch ~/.claude/.no-zsh-path-guard
 # (MACHINE-WIDE, every concurrent and future session, until removed).
 
-set -euo pipefail
+set -uo pipefail
 [ -n "${ZSH_PATH_GUARD_OFF:-}" ] && exit 0
 [ -f "$HOME/.claude/.no-zsh-path-guard" ] && exit 0
 
@@ -37,64 +40,27 @@ tool_name=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 [ "$tool_name" = "Bash" ] || exit 0
 command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
 [ -n "$command" ] || exit 0
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 
-# A heredoc is usually authoring a script that will run under its own shebang,
-# where `path` is safe. Under-firing is the correct direction for a block.
-case "$command" in *'<<'*) exit 0 ;; esac
-
-# Quoted spans are data, not shell syntax. Blanking them first is what keeps
-# `python3 -c "for path in xs"` and `rg 'path=[^&]*'` from ever reaching a match.
-blank_quotes() { printf '%s' "$1" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g"; }
-scan=$(blank_quotes "$command")
-
-hit=""
-while IFS= read -r seg; do
-  s="${seg#"${seg%%[![:space:]]*}"}"                       # ltrim
-  # Peel the loop/conditional keywords that can lead a segment, so the shapes
-  # below only have to describe the statement itself.
-  while [[ "$s" =~ ^(while|until|do|then|else|if|elif)[[:space:]]+(.*)$ ]]; do
-    s="${BASH_REMATCH[2]}"
-  done
-
-  # for path in …
-  if [[ "$s" =~ ^for[[:space:]]+path([[:space:]]|$) ]]; then
-    hit="for path in …"; break
+SCAN="$HOME/.claude/scripts/hooks/zsh-path-scan.py"
+hit=$(printf '%s' "$command" | python3 "$SCAN" 2>/dev/null)
+rc=$?
+if [ "$rc" -ne 0 ]; then
+  # Fail-open must not be silent: a missing or broken scanner makes the guard a
+  # no-op, so record that once per day instead of never.
+  marker="${TMPDIR:-/tmp}/zsh-path-guard-scanfail-$(date +%Y%m%d)"
+  if [ ! -f "$marker" ]; then
+    : > "$marker"
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-zsh-path-var --action muted \
+      --detail "scanner failed rc=$rc; guard inactive" --heeded unknown >/dev/null 2>&1 || true
   fi
-  # read [-r] [-d x] … path …   (path anywhere in the variable list)
-  if [[ "$s" =~ ^read([[:space:]]+-[^[:space:]]+)*[[:space:]]+(.*)$ ]]; then
-    vars=" ${BASH_REMATCH[2]} "
-    if [[ "$vars" == *" path "* ]]; then hit="read … path"; break; fi
-  fi
-  # path=… , export/local/declare/typeset path=…
-  if [[ "$s" =~ ^(export|local|declare|typeset)?[[:space:]]*path= ]]; then
-    hit="path=…"; break
-  fi
-done < <(printf '%s\n' "$scan" | tr ';|&' '\n')
-
+  exit 0
+fi
 [ -n "$hit" ] || exit 0
 
-reason="⚡ \`path\` is bound to \$PATH in zsh, and this Bash tool runs zsh.
+msg="[zsh-path] Detected ${hit}. In zsh, which is what this Bash tool runs, \`path\` is bound to \$PATH, so assigning to it overwrites your PATH with that value. Every later command in THIS call will fail with \"command not found\" against tools that are installed; the next Bash call is unaffected, so it reads as intermittent. Rename the variable: p, f, file, dir, line, item and target are all safe, and nothing else needs to change. Reserved in zsh but harmless because they fail loudly: status, history, modules, functions, commands, aliases, options. Mute: ZSH_PATH_GUARD_OFF=1 (process) or touch ~/.claude/.no-zsh-path-guard (machine-wide)."
 
-Detected: ${hit}
-
-Assigning to \`path\` overwrites your PATH with that value. Every command later in
-THIS call then fails with \"(eval):N: command not found: sed\" — which looks like a
-broken machine, not a naming collision. The next Bash call is unaffected, so the
-bug reads as intermittent.
-
-Blocked command:
-  ${command}
-
-Fix: rename the variable. \`p\`, \`f\`, \`file\`, \`dir\`, \`line\`, \`item\` and \`target\` are
-all safe. Nothing else about the command needs to change.
-
-  while read p; do … done          for f in …; do … done
-
-Note: \`status\`, \`history\`, \`modules\`, \`functions\`, \`commands\`, \`aliases\` and
-\`options\` are reserved in zsh too, but they fail loudly, so they need no guard.
-
-Mute: ZSH_PATH_GUARD_OFF=1 (this process) · touch ~/.claude/.no-zsh-path-guard (machine-wide)"
-
-bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-zsh-path-var --action block --heeded unknown >/dev/null 2>&1 || true
-jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-zsh-path-var --action nudge \
+  --cwd "$cwd" --detail "$hit" --heeded unknown >/dev/null 2>&1 || true
+jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}' 2>/dev/null || true
 exit 0
