@@ -98,6 +98,21 @@ cmd_record() {
   done
   [ -n "$session" ] || session="${CLAUDE_CODE_SESSION_ID:-unknown}"
 
+  # A /validate record must name a real second seat and >=1 parity row run, or
+  # carry the owner's waiver; the SKILL.md mandate binds only at this write.
+  if [ "$skill" = "validate" ] && ! printf '%s' "$note" | rg -q 'seat-waived=owner'; then
+    local vseat vrows
+    vseat=$(printf '%s' "$note" | rg -o 'second-seat=[^ ]+' 2>/dev/null | head -1 | cut -d= -f2) || true
+    vrows=$(printf '%s' "$note" | rg -o 'rows-run=[0-9]+' 2>/dev/null | head -1 | cut -d= -f2) || true
+    case "$(printf '%s' "$vseat" | tr '[:upper:]' '[:lower:]')" in
+      ""|self*|none|n/a|na|yes|no|0|lol)
+        echo "skill-log record: validate needs second-seat=<real seat> in --note, or seat-waived=owner" >&2; exit 2;;
+    esac
+    if ! [ "${vrows:-0}" -ge 1 ] 2>/dev/null; then
+      echo "skill-log record: validate needs rows-run>=1 in --note, or seat-waived=owner" >&2; exit 2
+    fi
+  fi
+
   local id; id="skl-$(date -u +%Y%m%dT%H%M%SZ)-${RANDOM}"
   local line
   line=$(jq -nc \

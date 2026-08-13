@@ -117,8 +117,10 @@ So dispatch one seat that did not do the work. Give it the user's verbatim ask,
 the change scope, and the parity ledger with its per-row results, and ask it to
 answer two questions independently rather than to review your answers:
 
-- Vf: which ledger rows does the evidence actually support, and does any row's
-  check pass for a reason other than the behaviour surviving?
+- Vf: which ledger rows does the evidence actually support, does any row's
+  check pass for a reason other than the behaviour surviving, and what old
+  behaviour appears in no row at all? An absent row cannot fail, so the seat
+  names what the ledger never covered.
 - Vg: comparing the user's words against what was built, what was asked for and
   is missing, and what is present that was never asked for?
 
@@ -128,10 +130,12 @@ sub-agents and to stop when its answer is written. Its findings are reported as
 they came back; the author does not get to overrule them silently, and a
 disagreement is reported as a disagreement.
 
-The one case where you may answer Vf and Vg yourself is a change small enough
-that the whole diff fits in the seat's prompt anyway, and then say in the report
-that they were self-assessed. Naming it makes it a decision the user can weigh.
-Skipping the seat without saying so is the failure this phase exists to prevent.
+Self-assessment is never licensed by the size of the diff. A small diff shrinks
+the context, not the author's bias, and Vf and Vg are bias questions. The only
+exemption is the owner explicitly waiving the seat for this run: record it as
+seat-waived=owner in the Phase 7 note (the write refuses a validate record that
+carries neither a real seat nor that waiver) and say it in the report. An
+unrecorded skip is the failure this phase exists to prevent.
 
 ## Phase 6: Hand off
 
@@ -149,7 +153,7 @@ bash ~/.claude/scripts/skill-log.sh record validate \
   --task "<what changed, trimmed to a line>" \
   --outcome unknown \
   --corrections 0 \
-  --note "asked=<Va,Vb,...> ran=<n> skipped=<list with reasons> parity-rows=<n> rows-run=<n> second-seat=<yes|self:reason> found=<n>"
+  --note "asked=<Va,Vb,...> ran=<n> skipped=<list with reasons> parity-rows=<n> rows-run=<n> second-seat=<seat model or name, or seat-waived=owner> found=<n>"
 ```
 
 Watch the skipped list over time. If one question is skipped in most runs it is
@@ -181,7 +185,13 @@ someone counts.
 - `/plan` is the sibling front door for planning, and routes on needs rather
   than on questions
 - `/bloop` runs build and validation as one loop, and consults this skill in its
-  validation phase rather than inventing an attack list
+  validation phase rather than inventing an attack list. Loop bound, shared
+  with `/bloop`: a change that fails validation re-enters the loop at most
+  once, and a second failure returns to the owner, never to another automated
+  pass
+- A `/build-change` plan, when one exists, is pointed at by the project's
+  `.claude/output/latest-change-plan.txt`; read the parity ledger from there
+  rather than asking for it
 - `/skeptical-review` and `/adversarial-review` are the two code-review
   instruments, split by whether the work has already been called done
 - `rules/testing.md` for the scale-to-task ladder and the mutation-test rule

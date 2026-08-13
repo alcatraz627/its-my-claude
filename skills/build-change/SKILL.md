@@ -166,7 +166,12 @@ other.
 ```bash
 OUT="<project>/.claude/output/$(date +%Y%m%d-%H%M)-<slug>-change"
 mkdir -p "$OUT"        # plan.md, with the parity ledger as its own section
+printf '%s\n' "$OUT/plan.md" > "<project>/.claude/output/latest-change-plan.txt"
 ```
+
+The pointer file is the discovery contract: a consumer reads
+`.claude/output/latest-change-plan.txt` instead of guessing dated paths, which
+is what made earlier plans unfindable.
 
 Fall back to `~/.claude/assets/reports/<YYYYMMDD>-<HHMM>-<slug>-change/` when the
 project has no output directory. Never write a relative `.claude/...` path while

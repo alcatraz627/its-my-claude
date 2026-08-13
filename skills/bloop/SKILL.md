@@ -228,6 +228,9 @@ Close the loop legibly.
 
 - **The gate is the skill.** Skipping validate turns /bloop into an ordinary build. If the
   user wants speed over rigor for a trivial change, that change should not be in /bloop.
+- **The loop has a floor.** A change that fails the validation gate re-enters the loop at
+  most once; a second failure stops and returns to the owner. `/bloop` and `/validate`
+  share this bound, so neither can send work to the other forever.
 - **Right-sized, not maximal.** One validator, one feature branch, commits per unit. This
   is not "spawn a fleet"; it's structured single-threaded work with one adversarial check.
 - **No gated push on momentum.** On protected repos and on `main`/`master`, approvals

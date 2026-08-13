@@ -568,5 +568,5 @@ on skeleton:
   about surfaces (segment loading law, skeleton and embryo, the token census)
 - `/plan`: the planning front door. Its specify lane routes here for a page and
   to `/build-change` otherwise
-- `/validate`: the checking front door after the build. It reads the parity
-  ledger this skill produces and runs every row
+- `/validate`: the checking front door after the build. Hand it the parity
+  ledger this skill produces

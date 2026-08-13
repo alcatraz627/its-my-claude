@@ -539,6 +539,102 @@
       "note": "EXACTLY ONE tell: a single em-dash, no bold, no Label:fragment. Pins the em-dash detector itself. The multi-tell fixture cannot do this - blinding one of its three detectors still leaves two categories, so it stays green and pins nothing.",
       "source_transcript": "SYNTHETIC (F5 mutation gap, adversarial review 2026-08-11)",
       "turn_in_file": 0
+    },
+    {
+      "name": "prose-smell-tp-label-rows",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-label-rows.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: Label:fragment detector alone (3 rows, no other tell)."
+    },
+    {
+      "name": "prose-smell-tp-bold-spam",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-bold-spam.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: bold-span counter alone (6 spans, no colon after any span)."
+    },
+    {
+      "name": "prose-smell-tp-two-tells-block",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-two-tells-block.jsonl",
+      "expected": "block",
+      "desired": "block",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: the block_hits >= 2 escalation boundary (em-dash + bold-spam, exactly two categories). A mutation removing the escalation scored greener than the shipped hook; this row makes that mutation fail."
+    },
+    {
+      "name": "prose-smell-fp-emdash-inline-code",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/fp-emdash-inline-code.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: inline-code stripper (em-dashes only inside backtick spans)."
+    },
+    {
+      "name": "prose-smell-fp-emdash-blockquote",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/fp-emdash-blockquote.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: blockquote stripper (em-dashes only on quoted lines)."
+    },
+    {
+      "name": "prose-smell-fp-bold-table",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/fp-bold-table.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: markdown-table-row stripper; bolded first column is a legitimate doc shape (the recorded FP fix)."
+    },
+    {
+      "name": "prose-smell-tp-emoji-header",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-emoji-header.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: decoration-emoji header detector alone."
+    },
+    {
+      "name": "prose-smell-tp-praise-opener",
+      "hook": "prose-smell-stop.sh",
+      "fixture": "fixtures/prose-smell/tp-praise-opener.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
+      "turn_in_file": 0,
+      "note": "R3 pin: praise-without-evidence opener detector alone."
     }
   ]
 }
