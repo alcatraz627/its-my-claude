@@ -537,6 +537,13 @@ status in its header, and the pending work in its DOCKET. A dry ASCII box printe
 underneath undoes the whole point of the visual and is the last thing the user
 reads.
 
+**The render runs ALONE in its own Bash call, and last.** The terminal shows the
+raw command above its output, so any bookkeeping batched into the render call
+(a runtime-note heredoc, a WAL write) prints as a wall of command text above the
+visual, and its output trails inside the closing seal. Bookkeeping goes in
+earlier calls; the render call contains one command. Learned from the owner's
+own screen, 2026-08-14.
+
 In **mini mode**, or when Phase 4 was skipped, print the seal alone rather than a
 bare block, so even the abbreviated path closes in the same language:
 

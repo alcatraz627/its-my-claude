@@ -139,11 +139,15 @@ seal() {
       printf '%s║%s%s%s║%s\n' "$ACCENT" "$B" "$(pad "$(center "◆  $text  ◆" $I)" $I)" "$ACCENT" "$R"
       printf '%s╚%s╝%s\n' "$ACCENT" "$(repeat '═' $I)" "$R" ;;
     b)
+      # The closing rule matters most on a bare receipt (header + seal, no
+      # body): without it the seal reads as an unclosed box, not a footer.
       printf '%s◆%s◆%s\n' "$ACCENT" "$(repeat '─' $((W-2)))" "$R"
-      printf '%s%s%s\n' "$DIM" "$(center "$text" $W)" "$R" ;;
+      printf '%s%s%s\n' "$DIM" "$(center "$text" $W)" "$R"
+      printf '%s◆%s◆%s\n' "$ACCENT" "$(repeat '─' $((W-2)))" "$R" ;;
     c)
       printf '%s%s%s\n' "$DIM" "$(repeat '─' $W)" "$R"
-      printf '  %s%s%s\n' "$DIM" "$text" "$R" ;;
+      printf '  %s%s%s\n' "$DIM" "$text" "$R"
+      printf '%s%s%s\n' "$DIM" "$(repeat '─' $W)" "$R" ;;
   esac
 }
 
