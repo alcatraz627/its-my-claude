@@ -1,6 +1,6 @@
 ---
 name: type-audit
-description: Scans the TypeScript codebase for unsafe type patterns — explicit `any`, implicit `any`, non-null assertions (`!`), and unsafe casts — reports them with file:line references, and offers targeted fixes.
+description: Scans the TypeScript codebase for unsafe type patterns (explicit `any`, implicit `any`, non-null assertions, unsafe casts), reports them with file:line references, and offers targeted fixes. Project-specific: requires a Next.js TypeScript project (tsconfig.json plus next in package.json).
 disable-model-invocation: true
 allowed-tools: Read, Bash, Glob, Grep, Edit
 user-invokable: true
@@ -14,6 +14,18 @@ Scans the TypeScript codebase (or a sub-path) for unsafe type patterns: explicit
 # Type Audit
 
 A TypeScript safety audit skill that finds and optionally fixes common unsafe type patterns in this Next.js + Drizzle + TanStack Query codebase. Knows which patterns are acceptable (e.g., `as const`, framework-required `any` in dynamic route params) versus genuinely risky.
+
+## Project gate, before anything
+
+This audit describes one project shape, and it lives in the global config only
+until relocated. Confirm the marker from the current working directory first:
+
+```bash
+test -f tsconfig.json && rg -q '"next"' package.json || { echo "type-audit: wrong project shape (needs tsconfig.json + Next.js in package.json); stopping."; exit 1; }
+```
+
+If the marker is absent, stop with that one line. Never run the scan from an
+unmatched project, and never from ~/.claude itself.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 

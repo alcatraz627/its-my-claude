@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-08-13
+updated: 2026-08-14
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invokable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-08-13 23:54.
+Regenerated 2026-08-14 00:58.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -106,7 +106,7 @@ Regenerated 2026-08-13 23:54.
 | `tag` | user-only | Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct … |
 | `test` | yes | Run tests for the current folder using a cached per-folder framework detection. First run probes the folder for pyproject.toml/package.json/Cargo.toml/go.mod etc and … |
 | `thesaurus` | yes | Ten-second capture of a style verdict into the style thesaurus — the ledger of how the user wants Claude to write (word choice, comments, prose, report structure). … |
-| `type-audit` | user-only | Scans the TypeScript codebase for unsafe type patterns — explicit `any`, implicit `any`, non-null assertions (`!`), and unsafe casts — reports them with file:line … |
+| `type-audit` | user-only | Scans the TypeScript codebase for unsafe type patterns (explicit `any`, implicit `any`, non-null assertions, unsafe casts), reports them with file:line references, and … |
 | `ui` | yes | Routes a UI request to the one instrument that fits it, and refuses to start until an existing surface has a written capability list. The account holds a whole cluster … |
 | `ui-categorical-check` | yes | Checks a UI change for CATEGORICAL bug-classes — the non-primitive defects that pass every DOM/behavioral assertion and only a human notices (a transparent floating … |
 | `ui-direction` | yes | Finds and rules on a visual direction before anyone plans or builds. Grounds the work in a cited research sheet that reads the owner's rejection record FIRST, runs the … |

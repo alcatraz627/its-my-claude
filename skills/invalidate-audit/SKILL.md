@@ -16,6 +16,17 @@ Finds every `useM(` and `useMutation(` call in the codebase and checks whether i
 
 Prevents stale UI data by catching missing TanStack Query cache invalidation at development time. Scans all mutation hooks in the codebase and reports any that mutate data without subsequently invalidating the relevant query cache key.
 
+## Project gate, before anything
+
+Confirm the TanStack marker from the current working directory first:
+
+```bash
+rg -q '"@tanstack/react-query"' package.json 2>/dev/null || { echo "invalidate-audit: wrong project shape (needs @tanstack/react-query in package.json); stopping."; exit 1; }
+```
+
+If the marker is absent, stop with that one line. Never run the scan from an
+unmatched project, and never from ~/.claude itself.
+
 ## Step 0: Load Shared Guidelines and Runtime Context
 
 Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,

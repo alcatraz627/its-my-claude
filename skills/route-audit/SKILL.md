@@ -18,6 +18,17 @@ An API-route auditor for this Next.js App Router project. It judges each handler
 
 The audit reports findings; it does not fix them. A human (or `/skeptical-review`) takes the ranked list and decides what to change.
 
+## Project gate, before anything
+
+Confirm the App Router marker from the current working directory first:
+
+```bash
+ls next.config.* >/dev/null 2>&1 && [ -d src/app ] || { echo "route-audit: wrong project shape (needs next.config.* + src/app); stopping."; exit 1; }
+```
+
+If the marker is absent, stop with that one line. Never run the scan from an
+unmatched project, and never from ~/.claude itself.
+
 ## Coverage-first reporting (read this before judging anything)
 
 Report every handler you examine, including the ones that look fine and the ones you are unsure about. Do not raise the bar and drop low-severity or low-confidence findings during the scan — investigate fully, surface everything, and let the **severity + confidence ranking** push the minor items to the bottom. Dropping a finding because it "probably doesn't matter" hides exactly the gap a reviewer wants to see.
