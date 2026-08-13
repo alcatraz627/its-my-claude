@@ -385,9 +385,12 @@ Compute defaults first:
 - `DEFAULT_SUMMARY` = the first non-empty sentence of the 2.1 goal, ~80 chars.
 
 If skipping: set `CKPT_NAME=$DEFAULT_NAME`, `CKPT_SUMMARY=$DEFAULT_SUMMARY`,
-continue. Otherwise present `mcp__inputs__form` with two pre-filled fields (`name`
-required, `summary` optional). On submit, set `CKPT_NAME`/`CKPT_SUMMARY` from the
-result. On cancel or error, fall back to defaults silently — never block here.
+continue. Otherwise ask in PLAIN TEXT in the conversation, never through
+`mcp__inputs__form` or any dialog tool. The inputs dialogs are unusable in the
+owner's fullscreen TUI (memory `feedback_askuserquestion_tui_fullscreen`).
+Print both defaults and say "reply with overrides, or go". Any terse
+continuation (go, yes, ok, or the next instruction) accepts the defaults.
+Never block on this step.
 
 ### 3.6 Write the global pointers — the load-bearing step
 

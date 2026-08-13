@@ -142,16 +142,14 @@ When `--auto` returned exit 2, render the list and prompt the user to pick:
 ~/.claude/scripts/checkpoint/list.sh --limit 8
 ```
 
-This prints a numbered table with name / project / age / summary. Present via `mcp__inputs__pick_one`, with options labelled like:
+This prints a numbered table with name / project / age / summary. Show that
+table to the user AS PLAIN TEXT and ask for a number in the conversation, plus
+"or paste an explicit checkpoint path". Never present this through
+`mcp__inputs__pick_one` or any dialog tool: the inputs dialogs are unusable in
+the owner's fullscreen TUI (memory `feedback_askuserquestion_tui_fullscreen`),
+and a picker that hangs is a failed resume.
 
-```
-[claude-audit]  ~/.claude (2h ago)
-    Cleaning up ~/.claude folders, building FOLDERS.md
-```
-
-Plus a final "Enter a path manually" option (`text_input` follow-up).
-
-Resolve the chosen option via `~/.claude/scripts/checkpoint/resolve.sh --pick <N>` and use that JSON entry.
+Resolve the typed number via `~/.claude/scripts/checkpoint/resolve.sh --pick <N>` and use that JSON entry; a pasted path is used directly.
 
 ### 0.4.4 — Validate and load
 
@@ -299,11 +297,20 @@ Read the checkpoint file. Extract the sections produced by `/core-dump`:
 5. **Pending Items** — what still needs to be done
 6. **Session Insights** — gotchas, dead ends, decisions, notes for future agents
 
-Resume Contract and Session Insights are OPTIONAL on mini / precompact /
-pre-2026-07 checkpoints — their absence there is normal, not a warning. The
-middle four are mandatory: if one of those is missing or the file does not match
-the expected structure, warn the user and present whatever content exists. Do
-not fail silently.
+Get the structural verdict mechanically before parsing by hand:
+
+```bash
+bash ~/.claude/scripts/checkpoint/validate-checkpoint.sh <file>          # full dumps
+bash ~/.claude/scripts/checkpoint/validate-checkpoint.sh <file> --mini   # when line 1 is "# Mini Core Dump"
+```
+
+Mini dumps are a DIFFERENT shape by design: bold labels (Goal, Resume, Done,
+Not Done, Next Steps), no H2 sections. Parse those labels; do not warn about
+missing H2 headings on a mini. For full dumps, Resume Contract and Session
+Insights are OPTIONAL on precompact / pre-2026-07 checkpoints and their absence
+is normal. The middle four are mandatory: on a FAIL verdict, show the
+validator's missing-list, warn the user, and present whatever content exists.
+Do not fail silently, and do not refuse the resume; partial context beats none.
 
 **Expired authorizations are binding:** anything the Resume Contract lists there
 needs fresh user confirmation before you act on it — a checkpoint is never a

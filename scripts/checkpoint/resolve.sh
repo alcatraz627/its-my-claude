@@ -91,6 +91,7 @@ print(lines[-n] if n <= len(lines) else '', end='')
 import json, sys, os
 from datetime import datetime, timezone
 rows = []
+total = 0
 with open(sys.argv[1]) as f:
     for ln in f:
         ln = ln.strip()
@@ -100,16 +101,19 @@ with open(sys.argv[1]) as f:
         try:
             t = datetime.strptime(r["ts"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
         except: continue
+        total += 1
         age = (datetime.now(timezone.utc) - t).total_seconds()
         if age < 1800:  # 30 min
             rows.append((age, r))
 rows.sort()
 if len(rows) == 1:
     print(json.dumps(rows[0][1]))
-elif len(rows) == 0:
-    sys.exit(3)
-else:
+elif len(rows) > 1:
     sys.exit(2)
+elif total > 0:
+    sys.exit(2)   # stale entries exist: the caller shows the picker (contract rc=2)
+else:
+    sys.exit(3)   # genuinely nothing indexed
 PY
     ) || exit $?
     printf '%s\n' "$fresh"
