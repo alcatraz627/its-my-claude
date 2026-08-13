@@ -23,7 +23,7 @@
 set -o pipefail
 export PATH="/opt/homebrew/bin:$PATH"
 
-DATA=""; KIND="dump"; THEME="${TRACE_THEME:-random}"; WIDTH=""; NOSEAL=0
+DATA=""; KIND="dump"; THEME="${TRACE_THEME:-random}"; WIDTH=""; NOSEAL=0; RECEIPT=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --kind)  KIND="$2"; shift 2 ;;
@@ -32,12 +32,33 @@ while [ $# -gt 0 ]; do
     # An announce ("loading this checkpoint") opens a run rather than closing
     # one, so it wants the header without the seal that says finished.
     --no-seal) NOSEAL=1; shift ;;
+    # A bare header+seal receipt is legitimate ONLY when asked for by name
+    # (mini dumps, headless runs). Without this flag a sectionless dump JSON
+    # is refused: the owner agreed to a sealed record with the session inside
+    # it, and an empty frame silently shipped as the deliverable once.
+    --receipt) RECEIPT=1; shift ;;
     -h|--help) sed -n '2,20p' "$0"; exit 0 ;;
     *) DATA="$1"; shift ;;
   esac
 done
 [ -n "$DATA" ] && [ -f "$DATA" ] || { echo "trace.sh: need a readable DATA.json" >&2; exit 1; }
 command -v jq >/dev/null || { echo "trace.sh: jq required (brew install jq)" >&2; exit 1; }
+
+if [ "$KIND" = "dump" ] && [ "$RECEIPT" = "0" ]; then
+  if ! jq -e '((.goal // "")|length > 0)
+      or ((.pipeline // [])|length > 0) or ((.interrupts // [])|length > 0)
+      or ((.stack_trace // [])|length > 0) or ((.files // [])|length > 0)
+      or (((.coprocessor.worked // []) + (.coprocessor.failed // []))|length > 0)' \
+      "$DATA" >/dev/null 2>&1; then
+    {
+      echo "trace.sh: refusing a sectionless dump render. A full core-dump's"
+      echo "closing statement carries the session (goal/pipeline/stack_trace/"
+      echo "files/coprocessor). Pass --receipt only for an intentional bare seal"
+      echo "(mini mode, headless)."
+    } >&2
+    exit 2
+  fi
+fi
 
 # Width: the caller wins, else the terminal, else 80. Clamped so the layout
 # neither cramps nor sprawls.

@@ -489,12 +489,16 @@ headless / sub-agent runs. This is the deliberate, high-quality capture path; th
 `gcc-signal-capture` Stop hook is its data-path safety net (it auto-stubs a proposal
 on a strong signal if this step is skipped), so a missed contribution is never lost.
 
-## Phase 4 (optional, full mode only): visual summary
+## Phase 4 (full mode): visual summary
 
-A terminal-only convenience: render the sealed record via the shared trace
-renderer. It is **not** written to the checkpoint file and is **not**
-load-bearing. The checkpoint and the Phase 3.6 pointer are what matter. Skip it
-entirely in mini mode, and feel free to skip it under headless/sub-agent runs.
+Render the sealed record via the shared trace renderer, WITH the session's
+content in it: the owner-approved deliverable is the court-sitting record
+(decision page `coredump-visual`, rulings D1/D2/D7), never an empty frame. It
+is not written to the checkpoint file; the checkpoint and the Phase 3.6 pointer
+stay the load-bearing artifacts. Skip the render only in mini mode and
+headless/sub-agent runs, where the Phase 5 `--receipt` seal stands in. The
+renderer itself refuses a sectionless dump JSON without `--receipt`, so
+skipping the data file is a visible failure, not a quiet downgrade.
 
 1. Write session data to `/tmp/core-dump-data-<session-id>.json` (per-session
    naming avoids a parallel session's stale data). If the file exists, `trash` it
@@ -551,11 +555,12 @@ bare block, so even the abbreviated path closes in the same language:
 printf '{"session_id":"<sid>","timestamp":"<ts>","status":"<status>",
         "project_root":"<root>","checkpoint_path":"<file>"}' \
   > /tmp/core-dump-seal-<sid>.json
-/bin/bash ~/.claude/scripts/render/trace.sh /tmp/core-dump-seal-<sid>.json
+/bin/bash ~/.claude/scripts/render/trace.sh /tmp/core-dump-seal-<sid>.json --receipt
 ```
 
-With every section absent, the renderer emits a header and a seal and nothing
-between them, which is exactly the right shape for a receipt.
+`--receipt` names the bare header+seal shape as intentional; the renderer
+refuses a sectionless dump JSON without it. A FULL interactive dump never uses
+this path: its closing statement is the Phase 4 render with the session inside.
 
 **Then keep the prose short.** The render did the reporting. Say only what the
 render cannot: an unverified claim, a blocker needing the user, or a decision
