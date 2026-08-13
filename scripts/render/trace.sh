@@ -241,48 +241,94 @@ kvlist() { # label, jq path, colour — one row per element, label on the first
 }
 
 if [ "$KIND" = "catchup" ]; then
-  # A tier prints only when it holds something, matching the dump side where an
-  # empty section vanishes rather than leaving a bare rule.
+  # Redesign ratified by the owner 2026-08-14: the task list is first-class
+  # with priority glyphs, fences wear short heads over dim verbatim bodies,
+  # quiet rows merge, and the WHOLE briefing obeys a one-screen height law
+  # (~44 lines, 1.25x the approved mock) so the todos never scroll away.
+  # Overflow truncates LOUDLY with a checkpoint pointer, never silently.
   has() { local t; t=$(jqa "$1 // empty"); [ -n "$t" ] && return 0; return 1; }
-  hasl() { local n; n=$(jqa "$1 | length"); [ "$n" = "null" ] && n=0; [ "$n" -gt 0 ]; }
-  if has '.next_action' || has '.blocked_on' || hasl '.constraints' \
-     || hasl '.caveats' || hasl '.expired_auth' || hasl '.decaying'; then
-  rule "◆" "NOW" "act from this" "" "$ACCENT"
-  kv "Next action" "$(jqa '.next_action // ""')" "$B"
-  kv "Blocked on"  "$(jqa '.blocked_on // ""')" "$RED"
-  # Constraints and caveats are reproduced verbatim. Paraphrasing them here is
-  # how a constraint quietly stops binding between one session and the next.
-  kvlist "Constraints" '.constraints' "$GOLD"
-  kvlist "Caveats"     '.caveats'     "$GOLD"
-  kvlist "Expired auth" '.expired_auth' "$RED"
-  kvlist "Decaying"    '.decaying'    "$RED"
-  echo
+
+  # NEXT: the single imperative, then one dim line of fence state.
+  NEXT=$(jqa '.next_action // ""')
+  if [ -n "$NEXT" ]; then
+    rule "◆" "NEXT" "" "" "$ACCENT"
+    wrap_hang "$NEXT" $((W - 8)) 0 | { first=1; while IFS= read -r ln; do
+      if [ "$first" = 1 ]; then printf '  %s▶%s %s%s%s\n' "$GRN$B" "$R" "$B" "$ln" "$R"; first=0
+      else printf '    %s\n' "$ln"; fi; done; }
+    AN=$(jqa '.expired_auth | length'); [ "$AN" = "null" ] && AN=0
+    AUTH="none expired"; [ "$AN" -gt 0 ] && AUTH="EXPIRED x${AN}, fresh approval needed"
+    BLK=$(jqa '.blocked_on // ""'); [ -z "$BLK" ] && BLK="nothing, go"
+    printf '    %sauth: %s · blocked: %s%s\n' "$DIM" "$AUTH" "$BLK" "$R"
+    echo
   fi
-  if hasl '.pipeline' || hasl '.drift' || hasl '.running' || hasl '.mail'; then
-  rule "≡" "STATE" "what moved" "" "$DIM"
-  N=$(jqa '.pipeline | length'); [ "$N" = "null" ] && N=0
-  if [ "$N" -gt 0 ]; then
-    lbl="Pending"
-    jqa '.pipeline | to_entries[] | "\(.key+1). \(.value)"' | while IFS= read -r v; do
-      kv "$lbl" "$v" "$GRN"; lbl=""
+
+  # TODO: priority-classed rows. Classes: now ▶ · ready ○ · gate ◇ (needs the
+  # owner) · parked ·. Old-format JSONs carry .pipeline strings; they render
+  # as ready-class rows so pre-redesign checkpoints stay readable.
+  TSRC='(.todos // [.pipeline // [] | .[] | {p:"ready", text:., note:""}])'
+  TN=$(jqa "$TSRC | length"); [ "$TN" = "null" ] && TN=0
+  if [ "$TN" -gt 0 ]; then
+    rule "○" "TODO" "priority order" "$TN open" "$GRN"
+    jqa "[$TSRC[]][0:8] | to_entries[] | \"\(.key+1)\(.value.p // \"ready\")\(.value.text)\(.value.note // \"\")\"" \
+    | while IFS= read -r row; do
+      num="${row%%$'\001'*}"; rest="${row#*$'\001'}"
+      cls="${rest%%$'\001'*}"; rest="${rest#*$'\001'}"
+      txt="${rest%%$'\001'*}"; note="${rest#*$'\001'}"
+      case "$cls" in
+        now)    g="▶"; c="$GRN$B" ;;
+        gate)   g="◇"; c="$GOLD" ;;
+        parked) g="·"; c="$DIM" ;;
+        *)      g="○"; c="$GRN" ;;
+      esac
+      [ -n "$note" ] && txt="$txt · ${note}"
+      wrap_hang "$txt" $((W - 10)) 0 | { first=1; while IFS= read -r ln; do
+        if [ "$first" = 1 ]; then printf '  %s%s %s%s%s %s\n' "$c" "$num" "$g" "$R" "$c" "$ln$R"; first=0
+        else printf '       %s\n' "$ln"; fi; done; }
     done
+    [ "$TN" -gt 8 ] && printf '    %s… +%d more in checkpoint §Pending Items%s\n' "$DIM" $((TN - 8)) "$R"
+    echo
   fi
-  kvlist "Drift"   '.drift'   "$GOLD"
-  kvlist "Running" '.running' "$GRN"
-  kvlist "Mail"    '.mail'    "$BLU"
+
+  # FENCES: constraints and caveats, verbatim bodies under short bold heads.
+  # Old-format JSONs (constraints/caveats/decaying string arrays) map in.
+  FSRC='(.fences // ([ ((.constraints // []) | map({head:"constraint", body:.})), ((.caveats // []) | map({head:"caveat", body:.})), ((.decaying // []) | map({head:"decaying", body:.})) ] | add))'
+  FN=$(jqa "$FSRC | length"); [ "$FN" = "null" ] && FN=0
+  if [ "$FN" -gt 0 ]; then
+    rule "‡" "FENCES" "verbatim, full text in checkpoint §Resume Contract" "" "$GOLD"
+    jqa "[$FSRC[]][0:7] | .[] | \"\(.head)\(.body)\"" | while IFS= read -r row; do
+      hd="${row%%$'\001'*}"; bd="${row#*$'\001'}"
+      wrap_hang "$bd" $((W - 20)) 0 | { n=0; while IFS= read -r ln; do
+        n=$((n + 1))
+        if [ "$n" = 1 ]; then printf '  %s%s%s %s%s%s\n' "$GOLD$B" "$(pad "$hd" 15)" "$R" "$DIM" "$ln" "$R"
+        elif [ "$n" -le 3 ]; then printf '  %s %s%s%s\n' "$(pad '' 15)" "$DIM" "$ln" "$R"
+        elif [ "$n" = 4 ]; then printf '  %s %s… full text in checkpoint%s\n' "$(pad '' 15)" "$DIM" "$R"; fi; done; }
+    done
+    [ "$FN" -gt 7 ] && printf '    %s… +%d more fences in checkpoint%s\n' "$DIM" $((FN - 7)) "$R"
+    echo
+  fi
+
+  # QUIET: the situational rows merged to one line; detail lives in chat and
+  # in the checkpoint. First item of a busy list shows truncated with a count.
+  qsum() { # jq path -> "none" | "first item (+N)"
+    local n f; n=$(jqa "$1 | length"); [ "$n" = "null" ] && n=0
+    if [ "$n" -eq 0 ]; then printf 'none'; return; fi
+    f=$(jqa "$1[0]" | cut -c1-36)
+    if [ "$n" -gt 1 ]; then printf '%s (+%d)' "$f" $((n - 1)); else printf '%s' "$f"; fi
+  }
+  printf '%s≡ QUIET%s  %sdrift %s · mail %s · running %s%s\n' "$DIM$B" "$R" "$DIM" \
+    "$(qsum '.drift')" "$(qsum '.mail')" "$(qsum '.running')" "$R"
   echo
-  fi
-  if has '.goal' || has '.expectation' || hasl '.learnings' || hasl '.files'; then
-  rule "▤" "CONTEXT" "if unfamiliar" "" "$BLU"
-  kv "Goal"        "$(jqa '.goal // ""')" "$DIM"
-  kv "Expectation" "$(jqa '.expectation // ""')" "$DIM"
-  kvlist "Learnings" '.learnings' "$PARCH"
-  N=$(jqa '.files | length'); [ "$N" = "null" ] && N=0
-  if [ "$N" -gt 0 ]; then
-    lbl="Key files"
-    jqa '.files[] | "\(.path)  \(.change)"' | while IFS= read -r v; do kv "$lbl" "$v" "$BLU"; lbl=""; done
-  fi
-  echo
+
+  # CONTEXT: two lines. The checkpoint holds the rest; the header cites it.
+  GOALL=$(jqa '.goal // ""' | cut -c1-$((W - 16)))
+  ANCHOR=$(jqa '.files[0].path // ""'); FCN=$(jqa '.files | length'); [ "$FCN" = "null" ] && FCN=0
+  LN=$(jqa '.learnings | length'); [ "$LN" = "null" ] && LN=0
+  if [ -n "$GOALL" ] || [ "$FCN" -gt 0 ]; then
+    printf '%s▤ CONTEXT%s %sgoal: %s%s\n' "$BLU$B" "$R" "$DIM" "$GOALL" "$R"
+    extra=""
+    [ "$FCN" -gt 1 ] && extra=" +$((FCN - 1))"
+    printf '          %sfiles: %s%s · learnings: %d, both in checkpoint%s\n' "$DIM" "${ANCHOR:-none}" "$extra" "$LN" "$R"
+    echo
   fi
   seal "restored from $CKPT"
   echo

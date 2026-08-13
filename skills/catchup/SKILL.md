@@ -398,27 +398,42 @@ The JSON keys, every one optional and omitted when empty:
   "status": "<post-clear FULL | post-compact LIGHT>",
   "project_root": "<absolute>", "checkpoint_path": "<file it came from>",
 
-  // NOW, act from this
-  "next_action": "<ONE imperative sentence>",
+  // NEXT: one imperative; auth/blocked render as its one-line fence state
+  "next_action": "<ONE imperative sentence, hard-capped to the imperative>",
   "blocked_on":  "<USER: … | external actor | omit when none>",
-  "constraints": ["<verbatim, with its check>"],
-  "caveats":     ["<verbatim>"],
   "expired_auth":["<needs fresh user confirmation>"],
-  "decaying":    ["<prerequisite + its re-arm command>"],
 
-  // STATE, what moved and what is live
-  "pipeline": ["<pending, workspace todos first; the renderer numbers them>"],
+  // TODO: first-class, priority-classed. p: "now" (do first, usually the
+  // next_action restated as row 1) | "ready" (agent can run it) | "gate"
+  // (needs the owner) | "parked" (filed, not scheduled). Notes stay short.
+  "todos": [{"p": "now|ready|gate|parked", "text": "<the item>", "note": "<short>"}],
+
+  // FENCES: constraints + caveats. head = 2-3 word bold label the agent
+  // composes; body = the VERBATIM text (quotes carried as-is, never
+  // paraphrased INSTEAD of; the head sits beside, not in place of).
+  // Long caveat sets may roll into one fence whose body headlines each,
+  // with the full text remaining in the checkpoint (owner ruling 2026-08-14).
+  "fences": [{"head": "<2-3 words>", "body": "<verbatim>"}],
+
+  // QUIET: merged to one line by the renderer
   "drift":    ["<checkpoint claim vs git-now, one per mismatch>"],
   "running":  ["<verified processes/ports only, never unverified claims>"],
   "mail":     ["<one per waiting message or orphan inbox>"],
 
-  // CONTEXT, read if unfamiliar
-  "goal": "<1-2 lines, incl. any mid-session pivot>",
-  "expectation": "<what the user was waiting for at dump time>",
+  // CONTEXT: two rendered lines; the rest stays in the checkpoint
+  "goal": "<one line>",
   "learnings": ["<2-4, highest continuation value first>"],
   "files": [{"path": "<ranked ref, anchor first>", "change": "<why it matters>"}]
 }
 ```
+
+Pre-redesign keys (`pipeline`, `constraints`, `caveats`, `decaying`) still
+render, mapped into TODO ready-rows and FENCES respectively, so old data files
+stay readable. **The height law (owner ruling 2026-08-14):** the whole briefing
+fits one screen, roughly 44 lines (1.25x the ratified mock), so the task list
+never scrolls away. Width is free. The renderer enforces this with loud
+truncation rows ("… +N more in checkpoint"); never pre-trim silently to dodge
+them, and never move detail out of the checkpoint file, which stays complete.
 
 **Constraints and caveats go in verbatim.** The renderer reproduces the strings
 it is given, so a paraphrase here is a paraphrase in the briefing, and that is
