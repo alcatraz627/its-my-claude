@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
-"""
-replay_lib.py — shared core for the Stop-hook replay harness.
+"""Shared turn-model and hook-invocation core for the Stop-hook replay harness.
 
-Holds the turn model (how a transcript is split into turns and how each turn is
-reconstructed into the shape a Stop hook receives) plus the hook-invocation and
-mute-file-guard primitives. The driver (replay-corpus.py), the fixture seeder
-(seed-fixtures.py), and the regression runner (run_fixtures.py) all build on this
-so there is one definition of "a turn" across the harness.
-
-Faithfulness contract: this module never re-implements hook logic. It only
-prepares inputs (the turn slice, the reconstructed edit-list, the stdin payload)
-and pipes them into the REAL hook script, then reads the hook's own stdout.
+Never re-implements hook logic: it only feeds inputs to the real hook and
+reads the hook's own stdout, so there is one definition of "a turn" across
+the driver, the seeders, and the regression runner.
 """
 
 import glob

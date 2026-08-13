@@ -461,12 +461,12 @@
       "hook": "declared-ready-stop.sh",
       "fixture": "fixtures/declared-ready/synth-url-curl-clears.jsonl",
       "expected": "soft",
-      "desired": "silent",
+      "desired": "soft-or-silent",
       "klass": "FP",
       "cwd": "/Users/alcatraz627/.claude",
       "source_transcript": "SYNTHETIC",
       "turn_in_file": 0,
-      "note": "Det1a: same advertisement but a curl on the port ran this turn -- exercised, so desired stays silent. Cold-state the hook softs anyway (defect exposed once cleanup_sid started cleaning urlsoft markers); expected records that current behavior honestly until the Det1a cold branch is fixed, then it returns to silent."
+      "note": "Det1a: advertisement plus a curl on the port this turn. The one-time soft is DESIGNED, not a defect: curl alone is weak exercise credit (audit 2026-07-12 #4; the 2026-07-10 incident was a passing IPv4 curl while the browser hit an IPv6 squatter). First-fire silence requires lsof or a browser navigation in the turn. An earlier version of this note called the soft a cold-state defect; that was the fixture's older intent talking, not the hook."
     },
     {
       "name": "synth-url-down-clears",
