@@ -353,11 +353,18 @@ complete state. Then release the lock:
 bash ~/.claude/skills/shared/lock-file.sh release "_checkpoint.claude.md" "core-dump"
 ```
 
-### 3.3 Format
+### 3.3 Format, then validate the parse contract (mandatory)
 
 ```bash
 npx prettier --write <resolved-filename>
+bash ~/.claude/scripts/checkpoint/validate-checkpoint.sh <resolved-filename>   # add --mini in mini mode
 ```
+
+The validator refuses any dump missing the four mandatory exact headings, and
+its refusal is the gate, not this sentence: a 2026-08-13 dump with improvised
+headings ("Resume prompt", "Done, and verified") parsed as nothing and orphaned
+the /catchup that read it. On FAIL, rename the sections to the contract
+headings and re-run until OK; never proceed to 3.5 with a failing file.
 
 ### 3.4 Additional context files (rare)
 
