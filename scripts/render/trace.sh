@@ -420,10 +420,22 @@ emit_files() {
     printf '  %sfile%s  %s\n' "$DIM$B" "$R" "$f"
   fi
 }
+# The literal resume prompt, paste-ready, right under the file rows. Owner
+# ruling 2026-08-14: this line is how a dump is consumed 90% of the time, so
+# the render hands over the exact command instead of a hint. Optional trailing
+# instructions ride .resume_hint ("/catchup at <path> and <hint>").
+resume_line() {
+  local f h
+  [ -n "$CKPT" ] || return 0
+  case "$CKPT" in /*) f="$CKPT" ;; *) f="$ROOT/$CKPT" ;; esac
+  h=$(jqa '.resume_hint // empty'); [ "$h" = "null" ] && h=''
+  printf '  %sresume%s  /catchup at %s%s\n' "$DIM$B" "$R" "$f" "${h:+ and $h}"
+}
 if [ "$KIND" = "catchup" ]; then
   seal "restored from $CKPT"
 else
   emit_files
-  seal "sealed $TS  ·  revive with /catchup"
+  resume_line
+  seal "sealed $TS"
 fi
 echo

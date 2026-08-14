@@ -546,6 +546,21 @@ when it did not; the owner's screen falsified it on 2026-08-14, and the file
 rows are the fix. A dry ASCII box printed underneath undoes the whole point of
 the visual and is the last thing the user reads.
 
+**The render hands over the literal resume line.** Under the file rows the
+renderer prints a paste-ready `resume` row: `/catchup at <checkpoint path>`,
+plus ` and <resume_hint>` when the data JSON carries one. This line is how the
+owner consumes a dump 90% of the time (ruling 2026-08-14), so it is generated,
+never hand-typed. Set `resume_hint` to ONE short clause only when the next
+session needs steering the path alone cannot give (e.g. "open with the callout
+exploration"); omit it when the checkpoint's Next action already says it.
+
+**Every file the banner tags must be captured in the checkpoint too.** The
+`emitted` rows are scrollback; the checkpoint is the record. Any extra file
+that earns a `file` row (a workspace doc, a report, a design record, a data
+artifact) must also be named inside the checkpoint itself, in the Resume
+Contract's Key anchor, a Pending item, or the relevant Agent Actions line, so
+`/catchup` inherits it from the file rather than from a screen nobody kept.
+
 **The render runs ALONE in its own Bash call, and last.** The terminal shows the
 raw command above its output, so any bookkeeping batched into the render call
 (a runtime-note heredoc, a WAL write) prints as a wall of command text above the
