@@ -60,6 +60,18 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
     # (measured 2026-08-14: 14 fires for one probe); park one box per agent.
     if [ -n "$aid" ] && [ -f "$STASH_DIR/parked-$aid" ]; then exit 0; fi
     [ -n "$aid" ] && : > "$STASH_DIR/parked-$aid" 2>/dev/null
+    # Stop-only strays (task #18, diagnosed 2026-08-14): the harness runs an
+    # internal, unnamed agent roughly once per user turn; only its Stop reaches
+    # hooks (bare-hex id, never a SubagentStart, no dispatch of ours; 79
+    # stop-only vs 29 started machine-wide, while real seats always Start
+    # first). Boxing each one trained the reader to ignore landings, so an
+    # unmatched Stop goes to a ledger and the drain's deduped line-tag, never
+    # a box. A real landing always has a stash entry and keeps the full box.
+    if [ -n "$aid" ] && [ ! -f "$STASH_DIR/$aid" ]; then
+      echo "$(date +%s)|$aid|${typ:-?}" >> "$STASH_DIR/unmatched.log" 2>/dev/null || true
+      echo "$(date +%s)|SubagentStop-unmatched|$aid|rc0" >> "$STASH_DIR/fires.log" 2>/dev/null || true
+      exit 0
+    fi
     dur="unknown"
     if [ -n "$aid" ] && [ -f "$STASH_DIR/$aid" ]; then
       started=$(cut -d'|' -f2 "$STASH_DIR/$aid" 2>/dev/null)
@@ -78,10 +90,30 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
     ;;
   UserPromptSubmit)
     p="$STASH_DIR/pending-boxes"
+    boxes=''
     if [ -s "$p" ]; then
       boxes=$(cat "$p" 2>/dev/null); : > "$p" 2>/dev/null || true
-      emit_ctx "UserPromptSubmit" "$boxes
+    fi
+    # Unmatched-stray delta since the last drain: one ambient line-tag
+    # (conventions/callout-boxes.md: no action owed means no rails).
+    u="$STASH_DIR/unmatched.log"; ud="$STASH_DIR/unmatched.drained"
+    tag=''
+    if [ -s "$u" ]; then
+      total=$(wc -l < "$u" 2>/dev/null | tr -d ' ')
+      last=$(cat "$ud" 2>/dev/null); : "${last:=0}"
+      if [ "${total:-0}" -gt "$last" ]; then
+        tag="🛬 subagent · unmatched ×$((total - last)) (stop-only harness internals, not our dispatches, no action owed · ledger: $u · task #18)"
+        echo "$total" > "$ud" 2>/dev/null || true
+      fi
+    fi
+    if [ -n "$boxes" ]; then
+      ctx="$boxes
 Subagent landing(s) since your last turn. Surface each box verbatim to the user (rules/surface-hook-nudges-to-user.md), and verify each agent's output before acting on it."
+      [ -n "$tag" ] && ctx="$ctx
+$tag"
+      emit_ctx "UserPromptSubmit" "$ctx"
+    elif [ -n "$tag" ]; then
+      emit_ctx "UserPromptSubmit" "$tag"
     fi
     ;;
 esac
