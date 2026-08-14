@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invokable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-08-14 00:58.
+Regenerated 2026-08-14 15:18.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -85,6 +85,7 @@ Regenerated 2026-08-14 00:58.
 | `pin-for-dream` | yes | Pin a structured insight from the current Claude Code session for i-dream's next dream cycle to examine. Auto-gathers session context (cwd, recent files touched, … |
 | `plan` | yes | Routes a planning request to the instrument that fits it, by naming which of six needs the request actually has, and refuses to plan a change to something that already … |
 | `plugs` | yes | Show what context-injecting and learning-capturing "plugs" are wired into the session (start / per-turn / compact / end) — what's registered, what's muted, and the … |
+| `pr-description` | yes | Write a PR description that briefs the reviewer in the author's voice: content-model-first. Extracts the behavioral inventory from the ACTUAL diff (never commit … |
 | `preference-graduation` | user-only | Harvests recurring preference and vocabulary signals from the post-insight streams (atone, affirm, i-dream, runtime-notes, checkpoints), dedupes them against existing … |
 | `project-index` | yes | Scans the project structure, key files, dependencies, and architectural patterns — generates a comprehensive index markdown and optional HTML report. Runs in an isolated … |
 | `pyramid-sweep` | yes | Runs a pyramid-of-intelligence corpus sweep — mine a large transcript corpus for candidate items with cheap mechanical passes, then refine through progressively smarter … |
