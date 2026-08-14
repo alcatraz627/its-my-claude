@@ -64,8 +64,8 @@ Canonical source: `~/.claude/scripts/box/vocab.tsv`, read by both renderers;
 `box list` prints the live set. Illustration (drifts lose to the tsv):
 
 🪝 hook · ⛔ gate (heavy) · 🛫/🛬 subagent dispatch/landing · 📥/📤 ipc
-in/out · 🙏 atone · 🏅 affirm · 📏 rule · seal-only ✅ · tag-tier (never
-boxed): 🌙 dream · 🌡️ ctx · 📋 kanban
+in/out · 🙏 atone · 🏅 affirm · 📏 rule · 🏁 done · seal-only ✅ ·
+tag-tier (never boxed): 🌙 dream · 🌡️ ctx · 📋 kanban · 💡 insight
 
 Admission is deliberate: a new emoji or kind means a vocab.tsv row, a
 Ghostty render-check (emoji are double-width and font-dependent; the open
@@ -85,6 +85,22 @@ right edge is what makes their width safe), and a note here.
   │ "done" claimed with no run signal this turn
   ├ → ran the changed path: zsh suite 79/79 green
   └ ✅ re-claimed; gate satisfied
+  ```
+
+## Two absorbed dialects (owner ruling 2026-08-14, same day)
+
+- **Completion blocks are 🏁 done boxes.** The GUIDELINES.md §Output
+  templates (skill-run and user-goal) now prescribe the v2 shape: ledger
+  body for the stats, `▸` refs for the files that matter, and the arrow
+  line carrying "what needs the reader", which used to float in prose.
+- **Insights are 💡 tags, not ★ boxes.** An insight owes no action, so it
+  gets no rails, even under the Explanatory output style's ★ template; the
+  house dialect overrides the style's decoration. It is the one sanctioned
+  multi-line tag: continuation lines take a hanging indent.
+
+  ```
+  💡 insight · the guard was dead because Bash-tool stdin is never a tty;
+     gate on the actual input mode, not tty-ness
   ```
 
 ## Decisions route to the wizard
@@ -122,7 +138,8 @@ interactive TUI output, also separate.
 ## Migration notes
 
 subagent-box.sh and prose-smell-stop.sh moved to the v2 vocabulary on
-2026-08-14 (hook-common.test.sh pins both). Remaining boxless gate prose
+2026-08-14 (hook-common.test.sh pins both), and the two GUIDELINES.md
+completion-block templates were rewritten to the 🏁 shape the same day. Remaining boxless gate prose
 (rg-replace guard, review-gate, declared-ready Stop feedback) adopts
 `hook_box_kind` opportunistically, when each file is next edited for cause;
 no sweep commit.

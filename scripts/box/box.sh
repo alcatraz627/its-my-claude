@@ -129,6 +129,7 @@ cmd_template() {
     ipc-in)   attr='reply-by <hh:mm>' ;;
     ipc-out)  attr='corr-<id>' ;;
     atone)    attr='S<sev> · <recency>' ;;
+    done)     attr='commit <sha>, drop if none' ;;
   esac
   render_box "$kind" "<name>" "<what happened, 1-6 lines>" \
     "<who does what next>" "$attr" '' '' '' "<absolute-path-or-id, drop if none>"

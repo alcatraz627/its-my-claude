@@ -11,6 +11,8 @@ ipc-out	📤	ipc	light	box	outgoing send awaiting a reply
 atone	🙏	atone	light	box	mistake recorded; xN carries recurrence
 affirm	🏅	affirm	light	box	affirmed-good call recorded
 rule	📏	rule	light	box	standing rule invoked before acting
+done	🏁	done	light	box	completion report; arrow = what needs the reader
 dream	🌙	dream	-	tag	ambient lesson; line-tag only
+insight	💡	insight	-	tag	educational aside; multi-line hanging indent allowed
 ctx	🌡️	ctx	-	tag	context pressure notice; line-tag only
 kanban	📋	kanban	-	tag	unread board notes; line-tag only

@@ -49,46 +49,32 @@ Never read from, write to, modify, or delete files in these locations:
 
 ### Output
 
-- At the end of every skill run, print a completion block:
+- At the end of every skill run, print a completion box in the
+  `~/.claude/conventions/callout-boxes.md` v2 anatomy (render with
+  `box done "<skill> run" …` or compose by hand):
   ```
-  ─────────────────────────────────────────────────
-    ✓ [Skill name] complete
-  ─────────────────────────────────────────────────
-
-    What was done:   [1-2 sentence summary]
-    Files modified:  [absolute paths, one per line]
-    Files created:   [absolute paths, one per line]
-    Errors/skipped:  [any issues, or "none"]
-
-    Runtime stats:
-      Duration:      [wall-clock time from skill start to end]
-      Tools used:    [count of Read/Write/Edit/Bash/Glob/Grep calls]
-      Files touched: [total unique files read + written]
-      Lines changed: [approx insertions + deletions]
-
-  ─────────────────────────────────────────────────
+  ┌─ 🏁 done · [skill-name] run ─────────────── [key attr, optional] ──
+  │ did       [1-2 sentence summary]
+  │ modified  [N files]             created  [N files]
+  │ errors    [issues, or none]     stats    [duration · tools · lines]
+  │ ▸ [absolute path, one line per file that matters]
+  │ → [what the reader should do next, or: nothing needs you]
+  └─ ✅ [how the result was verified] ─────────────────────────────────
   ```
 - All file paths in output must be **absolute** — clickable in terminals and IDEs
 
 ### Task Completion Summary
 
-When a **user-defined goal** is completed (not every small edit — only when the user's stated objective is fulfilled), print a similar completion block:
+When a **user-defined goal** is completed (not every small edit, only when the user's stated objective is fulfilled), print the same 🏁 box at goal scope:
 
 ```
-─────────────────────────────────────────────────
-  ✓ Done: [goal description]
-─────────────────────────────────────────────────
-
-  What was done:   [1-3 sentence summary]
-  Files modified:  [absolute paths, one per line]
-  Files created:   [absolute paths, one per line]
-  Errors/skipped:  [any issues, or "none"]
-
-  Stats:
-    Files touched: [total unique files read + written]
-    Lines changed: [approx insertions + deletions]
-
-─────────────────────────────────────────────────
+┌─ 🏁 done · [goal description] ─────────────── [key attr, optional] ──
+│ did       [1-3 sentence summary]
+│ modified  [N files]             created  [N files]
+│ errors    [issues, or none]     stats    [files touched · lines]
+│ ▸ [absolute path, one line per file that matters]
+│ → [what the reader should do next, or: nothing needs you]
+└─ ✅ [how the result was verified] ─────────────────────────────────
 ```
 
 **When to print:** After the final action that resolves what the user asked for — feature implemented, bug fixed, refactor complete, config updated. Do not print for intermediate steps, clarifying questions, or exploratory reads.
