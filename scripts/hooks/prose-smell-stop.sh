@@ -135,7 +135,7 @@ if [ "$block_hits" -ge 2 ]; then
     exit 0
   fi
   printf '%s' "$sig" > "$MARK" 2>/dev/null || true
-  reason=$(printf 'The final message reads as default-LLM register, against the stored voice preference (rules/audience-aware-writing.md; atone ai-smell-prose-against-stored-voice, S3 x2).\n\nTells found:%b\n\nFix: re-emit the message in plain human voice. Meaning first, complete sentences, technical terms spelled out. No em-dashes, minimal bold, no decoration, no praise openers, answer-and-stop.\n\nMute: touch ~/.claude/.no-prose-smell-gate (machine-wide) or PROSE_SMELL_OFF=1 (this process).' "$tells" | hook_box '⛔ AI-SMELL PROSE')
+  reason=$(printf 'The final message reads as default-LLM register, against the stored voice preference (rules/audience-aware-writing.md; atone ai-smell-prose-against-stored-voice, S3 x2).\n\nTells found:%b\n\nFix: re-emit the message in plain human voice. Meaning first, complete sentences, technical terms spelled out. No em-dashes, minimal bold, no decoration, no praise openers, answer-and-stop.\n\nMute: touch ~/.claude/.no-prose-smell-gate (machine-wide) or PROSE_SMELL_OFF=1 (this process).' "$tells" | hook_box_kind gate prose-smell)
   if [ "${PROSE_SMELL_ENFORCE:-0}" = "1" ]; then
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prose-smell --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true

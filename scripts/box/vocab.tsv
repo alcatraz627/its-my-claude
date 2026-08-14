@@ -1,0 +1,16 @@
+# The callout vocabulary — single source of truth for conventions/callout-boxes.md v2.
+# Read by box.sh (agent side) and hook-common.sh hook_box_kind (hook side).
+# Admission = a row here + a Ghostty render-check + the spec table note.
+# kind	emoji	label	rail	tier	when
+hook	🪝	hook	light	box	advisory nudge from a hook; act or dismiss
+gate	⛔	gate	heavy	box	blocking gate; the turn cannot proceed as-is
+dispatch	🛫	subagent	light	box	something sent out; landing will follow
+landing	🛬	subagent	light	box	something came back; verify before trusting
+ipc-in	📥	ipc	light	box	incoming mail owed a reply
+ipc-out	📤	ipc	light	box	outgoing send awaiting a reply
+atone	🙏	atone	light	box	mistake recorded; xN carries recurrence
+affirm	🏅	affirm	light	box	affirmed-good call recorded
+rule	📏	rule	light	box	standing rule invoked before acting
+dream	🌙	dream	-	tag	ambient lesson; line-tag only
+ctx	🌡️	ctx	-	tag	context pressure notice; line-tag only
+kanban	📋	kanban	-	tag	unread board notes; line-tag only

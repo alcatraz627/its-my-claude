@@ -39,10 +39,10 @@ case "$event" in
     bg=$(printf '%s' "$input" | jq -r '.tool_input.run_in_background | if . == null then "default" else tostring end' 2>/dev/null)
     desc=$(ti description)
     goal=$(ti prompt | tr '\n' ' ' | cut -c1-150)
-    body=$(printf 'seat: %s · model: %s · bg: %s\ngoal: %s%s' \
-      "${typ:-general-purpose}${name:+ as $name}" "${model:-inherit}" "${bg:-default}" \
+    body=$(printf 'seat: %s · bg: %s\ngoal: %s%s\n→ dispatched; the landing box will follow' \
+      "${typ:-general-purpose}${name:+ as $name}" "${bg:-default}" \
       "${desc:+$desc — }" "$goal")
-    box=$(printf '%s\n' "$body" | hook_box "⇢ subagent dispatch" 72)
+    box=$(printf '%s\n' "$body" | hook_box_kind dispatch "${typ:-general-purpose}" "${model:-inherit}")
     emit_ctx "PreToolUse" "$box
 Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), then continue."
     ;;
@@ -66,9 +66,9 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
       [ -n "$started" ] && dur="$(( ($(date +%s) - started) / 60 ))m"
       rm -f "$STASH_DIR/$aid" 2>/dev/null || true
     fi
-    body=$(printf 'seat: %s · id: %s · ran: %s\nits report is data, not display: read the output file or final text before trusting completion' \
-      "${typ:-?}" "${aid:-?}" "$dur")
-    box=$(printf '%s\n' "$body" | hook_box "⇠ subagent landed" 72)
+    body=$(printf 'seat: %s · id: %s\n→ its report is data, not display: read the output file or final text before trusting completion' \
+      "${typ:-?}" "${aid:-?}")
+    box=$(printf '%s\n' "$body" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
     # SubagentStop context delivery is unrouted in this harness (verified
     # 2026-08-14: the box was emitted and never arrived). Park it for the
     # UserPromptSubmit drain below; the direct emit stays as cheap insurance.

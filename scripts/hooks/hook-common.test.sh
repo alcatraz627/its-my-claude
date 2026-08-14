@@ -147,12 +147,28 @@ if [ -f "$PS" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&
   PIN="$(jq -cn --arg s "$PSID" --arg tp "$PT" '{session_id:$s, transcript_path:$tp}')"
   po="$(printf '%s' "$PIN" | PROSE_SMELL_ENFORCE=1 bash "$PS" 2>/dev/null)"
   pr="$(printf '%s' "$po" | jq -r '.reason // empty' 2>/dev/null)"
-  printf '%s' "$pr" | head -1 | grep -q '^┌─'; ok "integration: block reason is boxed" "$?" "0"
+  # v2 anatomy: prose-smell is a gate, so the box wears heavy rails + the vocab title.
+  printf '%s' "$pr" | head -1 | grep -q '^┏━'; ok "integration: block reason is boxed (heavy)" "$?" "0"
+  printf '%s' "$pr" | head -1 | grep -q '⛔ gate · prose-smell'; ok "integration: vocab title on the gate" "$?" "0"
   printf '%s' "$pr" | grep -q 'PROSE_SMELL_OFF=1'; ok "integration: reason keeps its last line" "$?" "0"
   rm -f "/tmp/claude-prose-smell-hcbox001" "$PT" "$WARN_LOG_STORE"; unset WARN_LOG_STORE
 else
   echo "  SKIP prose-smell integration: script / jq / rg unavailable"
 fi
+
+# ── hook_box_kind (vocab bridge to box.sh) ───────────────────────────────────
+K="$(printf 'body\n→ act\n' | hook_box_kind gate prose-smell)"
+printf '%s' "$K" | head -1 | grep -q '⛔ gate · prose-smell'; ok "kind: vocab title composed"   "$?" "0"
+printf '%s' "$K" | head -1 | grep -q '^┏━';                   ok "kind: gate gets heavy rails"  "$?" "0"
+printf '%s' "$K" | grep -q '^┃ body$';                        ok "kind: body behind heavy rail" "$?" "0"
+K2="$(printf 'body\n→ act\n' | hook_box_kind landing probe 'ran 2m')"
+printf '%s' "$K2" | head -1 | grep -q '🛬 subagent · probe';  ok "kind: landing vocab title"    "$?" "0"
+printf '%s' "$K2" | head -1 | grep -q 'ran 2m ──$';           ok "kind: attr right-anchored"    "$?" "0"
+# The fallback is the load-bearing half: a hook on a half-installed tree must
+# still box its reason. BOX_SH points at nothing, so the delegate cannot run.
+KF="$(printf 'body\n' | BOX_SH=/nonexistent hook_box_kind gate prose-smell)"
+printf '%s' "$KF" | head -1 | grep -q '^┌─ gate · prose-smell'; ok "kind: falls back without box.sh" "$?" "0"
+printf '%s' "$KF" | grep -q '^│ body$';                         ok "kind: fallback keeps the body"   "$?" "0"
 
 echo "---"; echo "pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

@@ -94,6 +94,30 @@ hook_box() {
   printf '└%s\n' "$rule"
 }
 
+# hook_box_kind <kind> <name> [attr] [width] — vocab-aware hook_box.
+#
+# Composes the v2 anatomy (emoji emitter, kind · name title, heavy rails for
+# gates, right-anchored attr) by delegating to scripts/box/box.sh, so a
+# hook-composed box and an agent-composed box read one dialect from one
+# vocabulary (scripts/box/vocab.tsv). Body arrives on stdin exactly like
+# hook_box, and is captured BEFORE the delegate runs so a failed delegate
+# cannot eat it. Falls back to a plain hook_box title when box.sh is missing
+# or fails — a hook degrades, never dies, on a half-installed tree.
+hook_box_kind() {
+  local kind="${1:-}" name="${2:-}" attr="${3:-}" width="${4:-72}" body out
+  local boxsh="${BOX_SH:-$HOME/.claude/scripts/box/box.sh}"
+  body=$(cat)
+  if [ -x "$boxsh" ]; then
+    if [ -n "$attr" ]; then
+      out=$(printf '%s\n' "$body" | "$boxsh" "$kind" "$name" --attr "$attr" --width "$width" 2>/dev/null) || out=''
+    else
+      out=$(printf '%s\n' "$body" | "$boxsh" "$kind" "$name" --width "$width" 2>/dev/null) || out=''
+    fi
+    if [ -n "$out" ]; then printf '%s\n' "$out"; return 0; fi
+  fi
+  printf '%s\n' "$body" | hook_box "$kind · $name" "$width"
+}
+
 # hook_clear_reset <sid8> <counter_file> — reset a per-process counter after /clear.
 #
 # The per-process counters keyed by ${PPID} (the tool tally, ctx %) survive a
