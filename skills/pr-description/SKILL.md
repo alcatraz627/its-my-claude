@@ -80,6 +80,19 @@ contingent on the pick; skipping this gate is the root failure the skill
 exists to prevent. If the inventory is empty, say exactly that and stop:
 "no behavioral effect found" is a complete, correct answer.
 
+Two shapes the plain list mishandles (both from the first validation run,
+a 44-file PR that produced 19 items across 7 domains):
+
+- **Large inventories get triage, not a dump.** Past ~8 items, rank by the
+  axis the PR itself weights (billing, user impact, deploy risk) and mark a
+  suggested default set, so the pick is a confirm-or-amend rather than an
+  N-way sort the user must do.
+- **Split before the pick: describe / fix-first / drop.** Some items are
+  defects, not content. A claim in the PR's own docs or comments that is
+  false as written belongs in a commit, never in the body in any form.
+  Route those to a fix-first list presented beside the inventory, so the
+  call is a step in the skill, not a judgment left to whoever notices.
+
 ## Phase 3: Draft (only after the pick)
 
 Voice: the author briefing their reviewer, at the accepted corpus's density.
