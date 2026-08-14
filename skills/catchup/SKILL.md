@@ -397,6 +397,7 @@ The JSON keys, every one optional and omitted when empty:
   "session_id": "<checkpoint name>", "timestamp": "<age, e.g. 2h ago>",
   "status": "<post-clear FULL | post-compact LIGHT>",
   "project_root": "<absolute>", "checkpoint_path": "<file it came from>",
+  "ipc": "<this session's ipc alias>", "model": "<model name>",
 
   // NEXT: one imperative; auth/blocked render as its one-line fence state
   "next_action": "<ONE imperative sentence, hard-capped to the imperative>",

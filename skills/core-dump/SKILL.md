@@ -536,10 +536,15 @@ rather than printing a placeholder.
    Six hits in full mode. Fewer means `/catchup` will not parse it.
 
 **The Phase 4 render IS the closing statement.** Do not follow it with a plain
-summary box: the rendered trace already carries the file path in its seal, the
-status in its header, and the pending work in its DOCKET. A dry ASCII box printed
-underneath undoes the whole point of the visual and is the last thing the user
-reads.
+summary box: the render prints the emitted file path(s) as copyable `file` rows
+above its seal (populate `emitted` in the data JSON with every file the run
+wrote, the checkpoint first), the identity on its root line (`ipc` + `model`
+keys), the status in its header, and the pending work in its DOCKET. Timestamps
+in the data are HUMAN-readable ("Thu Aug 14 2026, 1:30 PM IST"), never raw ISO.
+An earlier version of this paragraph claimed the seal carried the file path
+when it did not; the owner's screen falsified it on 2026-08-14, and the file
+rows are the fix. A dry ASCII box printed underneath undoes the whole point of
+the visual and is the last thing the user reads.
 
 **The render runs ALONE in its own Bash call, and last.** The terminal shows the
 raw command above its output, so any bookkeeping batched into the render call

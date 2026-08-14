@@ -12,7 +12,10 @@ JSON file at `/tmp/core-dump-data-<session-id>.json`. Schema:
 ```json
 {
   "session_id": "<session-id>",
-  "timestamp": "<ISO timestamp>",
+  "timestamp": "<HUMAN datetime, e.g. Thu Aug 14 2026, 1:30 PM IST; never raw ISO>",
+  "ipc": "<ipc alias, e.g. gcc-work>",
+  "model": "<model name, e.g. claude-fable-5>",
+  "emitted": ["<absolute path of every file this run wrote; renders as copyable file rows above the seal>"],
   "goal": "<1-line original goal from Phase 2.1>",
   "status": "<in-progress | blocked | complete>",
   "project_root": "<absolute project root; file rows render relative to it>",

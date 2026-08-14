@@ -217,10 +217,17 @@ ROOT=$(jqa '.project_root // ""')
 CKPT=$(jqa '.checkpoint_path // ""')
 
 echo
+# Identity rides the root line: ipc alias and model name, when the data
+# carries them (owner ask 2026-08-14). The timestamp is whatever string the
+# data holds; contracts now ask for human-readable, not ISO.
+IPC=$(jqa '.ipc // ""'); MODEL=$(jqa '.model // ""')
+ROOTLINE="$ROOT"
+[ -n "$IPC" ] && ROOTLINE="$ROOTLINE · $IPC"
+[ -n "$MODEL" ] && ROOTLINE="$ROOTLINE · $MODEL"
 if [ "$KIND" = "catchup" ]; then
-  header "C A T C H U P" "$SID  ·  $TS  ·  $STATUS" "${ROOT:+$ROOT}"
+  header "C A T C H U P" "$SID  ·  $TS  ·  $STATUS" "${ROOTLINE:+$ROOTLINE}"
 else
-  header "C O R E · D U M P" "$SID  ·  $TS  ·  $STATUS" "${ROOT:+$ROOT}"
+  header "C O R E · D U M P" "$SID  ·  $TS  ·  $STATUS" "${ROOTLINE:+$ROOTLINE}"
 fi
 echo
 
@@ -397,9 +404,26 @@ if [ $((NW + NF)) -gt 0 ]; then
   echo
 fi
 
+# Emitted/used files print as plain absolute paths right above the seal, one
+# per line, copyable. Owner ruling 2026-08-14: every render, receipts included;
+# a record whose own path is not on screen forces a hunt through scrollback.
+emit_files() {
+  local n f
+  n=$(jqa '.emitted // [] | length'); [ "$n" = "null" ] && n=0
+  if [ "$n" -gt 0 ]; then
+    jqa '.emitted[]' | while IFS= read -r f; do
+      case "$f" in /*) : ;; *) f="$ROOT/$f" ;; esac
+      printf '  %sfile%s  %s\n' "$DIM$B" "$R" "$f"
+    done
+  elif [ -n "$CKPT" ]; then
+    case "$CKPT" in /*) f="$CKPT" ;; *) f="$ROOT/$CKPT" ;; esac
+    printf '  %sfile%s  %s\n' "$DIM$B" "$R" "$f"
+  fi
+}
 if [ "$KIND" = "catchup" ]; then
   seal "restored from $CKPT"
 else
+  emit_files
   seal "sealed $TS  ·  revive with /catchup"
 fi
 echo
