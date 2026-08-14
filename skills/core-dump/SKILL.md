@@ -218,6 +218,15 @@ Capture meta-observations: what worked well, what didn't (dead ends, wasted
 effort), gotchas (non-obvious traps), notes for future agents, user feedback
 (corrections/preferences/constraints), and tangential scope not addressed.
 
+**The session's atone record crosses the clear here.** Check whether /atone
+recorded events during this session
+(`rg "mist-$(date +%Y%m%d)" ~/.claude/atone/events.jsonl`, then keep only ids
+inside this session's time window) and name each in one line: slug, severity,
+and the fix applied or promised. A fresh wound is the highest-value insight a
+resume can inherit, and the SessionStart atone lane shows only the machine-wide
+top patterns, never what THIS session just did. Skip silently when the session
+recorded nothing.
+
 Broadly-applicable insights also get a dated entry in
 `~/.claude/improvement-ideas.md`.
 

@@ -518,7 +518,9 @@ the briefing.
 
 Scan `.claude/skills/runtime-notes.md` for entries relevant to the task domain (match by skill names, file paths, or keywords mentioned in the checkpoint). Distill matches into the briefing's `Learnings` row, one line each and 2-4 max; these may prevent repeating past mistakes.
 
-Fold the checkpoint's own **Session Insights** section (parsed in 1.3) into the same "Learnings" block — its gotchas and decisions were written by the session you're resuming and routinely carry the highest-value continuation context (model-routing choices, dead ends already explored, non-obvious traps).
+Fold the checkpoint's own **Session Insights** section (parsed in 1.3) into the same "Learnings" block: its gotchas and decisions were written by the session you're resuming and routinely carry the highest-value continuation context (model-routing choices, dead ends already explored, non-obvious traps).
+
+Third source, the atone register: read `~/.claude/atone/derived/_tldr.txt` (skip silently if absent). Pick AT MOST 2 patterns whose precheck plausibly binds the checkpoint's next action or pending items, and fold each into Learnings as `🙏 watch · <slug> ×N: <the tie to this resume's work>`. The SessionStart lane already shows the whole register, so the briefing's only job is the tie to the work being resumed; an unrelated top pattern is noise here, not diligence. Same-session atone events named in the checkpoint's Session Insights (core-dump 2.5 records them) outrank the register: a fresh wound beats a chronic one.
 
 ### 3.4 Surface live subsystem state
 
