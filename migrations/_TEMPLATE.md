@@ -6,7 +6,7 @@ status: planned | in-progress | complete | abandoned
 date: YYYY-MM-DD
 ---
 
-# Migration NNNN — Short Title
+# Migration NNNN: Short Title
 
 ## Why
 
