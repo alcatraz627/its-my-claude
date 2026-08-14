@@ -43,12 +43,16 @@
    `i-dream/`, `metacog/`) — committed normally. Confirm no secrets, no stray
    `_*.claude.md` scratch, no `wal.*` (those are gitignored).
 
-4. **Commit** with a descriptive message (pure learned-state churn may use
-   `Sync <date> — N files`):
+4. **Commit with a SCOPED add.** This repo is multi-session: `git add -A`
+   sweeps a sibling session's in-progress edits into your commit. Name the
+   files your change touched:
    ```bash
-   git -C ~/.claude add -A
+   git -C ~/.claude add <paths your change touched>
    git -C ~/.claude commit -m "<message>"
    ```
+   `add -A` is reserved for a deliberate learned-state sync commit
+   (`Sync <date>, N files`), made only when no sibling session is mid-edit
+   (`claude-ipc peers` shows who is live; when unsure, scope the add).
 
 5. **Push.** This is `its-my-claude`'s `main` — pushing is an explicit, per-request
    act; the human asking you to commit+push IS the approval for that push:

@@ -100,7 +100,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5[1m]",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -771,6 +771,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-prose-quality.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-ai-signature.sh"
           }
         ]
       },
@@ -1197,7 +1201,7 @@
   },
   "outputStyle": "Explanatory",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,

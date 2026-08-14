@@ -76,7 +76,22 @@ ensure_server() {
   # URLs), not `-m http.server` (GET-only, no submit endpoint).
   if pm2 describe "$NAME" >/dev/null 2>&1; then
     if pm2 describe "$NAME" 2>/dev/null | grep -q "server.py"; then
-      printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"; return
+      # A pm2 entry is not a live server: svc-reap leaves the entry STOPPED,
+      # and this branch once printed "up" while the port was dead (2026-08-14,
+      # mid-triage). The port is the truth; revive through svc.sh so the idle
+      # bookkeeping stays correct, pm2 restart only as the fallback.
+      if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
+        printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"; return
+      fi
+      bash "$HOME/.claude/scripts/dev-servers/svc.sh" up "$NAME" >/dev/null 2>&1 \
+        || pm2 restart "$NAME" >/dev/null 2>&1
+      local i
+      for i in 1 2 3 4 5; do
+        lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1 \
+          && { printf 'server: revived — %s%s/%s\n' "$C" "$BASE" "$R"; return; }
+        sleep 1
+      done
+      die "pm2 entry exists but port $PORT never came up" "pm2 logs $NAME --lines 20   # why it dies"
     fi
     # an older static (http.server) instance is running — upgrade it in place
     pm2 delete "$NAME" >/dev/null 2>&1

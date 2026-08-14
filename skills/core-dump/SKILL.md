@@ -305,7 +305,7 @@ Write to `<project-root>/<resolved-filename>` using the Write tool. The `##`
 section headings below are parsed verbatim by `/catchup` — keep them exact:
 
 ```markdown
-# Quick Summary (for LLMs) — <ISO timestamp>
+# Quick Summary (for LLMs), <ISO timestamp>
 
 **Working surface:** <absolute worktree/repo path> · branch `<branch>`
 <!-- Include this line whenever work lives in a git worktree or a non-default branch
@@ -316,7 +316,7 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 > the immediate next step, and any critical blockers. Written for an agent that loads
 > this file first and decides what to read in detail below.>
 
-# Core Dump — <ISO timestamp>
+# Core Dump, <ISO timestamp>
 
 ## Resume Contract
 

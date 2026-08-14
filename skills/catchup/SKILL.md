@@ -257,7 +257,7 @@ test -e "$DOC" && cat "$DOC"
 
 When rendering the briefing in Phase 2, surface the workspace's unchecked Todos as the **immediate next steps** above (or in place of) the checkpoint's Pending Items. The workspace is the user-curated truth; the checkpoint is the agent's synthesis. When they disagree, the workspace wins.
 
-On a revived session your live Task list starts empty, so these notes are the only record of open work. **Rehydrate them**: recreate the unchecked Todos (both the `## Todos` machine block — which mirrored the prior session's live task list — and any human-area items) as tasks via TaskCreate, so the session resumes with a populated, syncing task list rather than a stale doc.
+**TaskList first, rehydrate only what is missing.** The Task store has survived /clear on every observed resume since early August (four consecutive by 2026-08-14), so a blind rehydration duplicates every open task. Call TaskList before creating anything: if the store is populated, read the workspace doc for drift only and add just the items genuinely absent. Only when the store is empty (fresh harness, expired store) recreate the unchecked Todos (the `## Todos` machine block plus any human-area items) via TaskCreate, so the session resumes with a populated, syncing task list rather than a stale doc.
 
 Silently skip this phase if neither the session's own doc nor `_active.md` exists. (The `stop-sync` hook auto-creates `<sid>.md` once a session has more than a couple of tasks, so a substantive prior session will have left its own doc.)
 

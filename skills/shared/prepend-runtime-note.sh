@@ -7,12 +7,12 @@
 # Arguments:
 #   <skill-name>   Name of the skill writing the note (used for lock ownership)
 #   <entry-file>   Path to a file containing the full formatted markdown entry.
-#                  The entry must start with a "## Skill: description — YYYY-MM-DD HH:MM"
+#                  The entry must start with a "## Skill: description · YYYY-MM-DD HH:MM"
 #                  heading. Do NOT include a trailing "---" — the script adds it.
 #
 # Usage:
 #   cat > /tmp/note.md << 'ENTRY'
-#   ## my-skill: what this run did — 2026-02-20 14:30
+#   ## my-skill: what this run did · 2026-02-20 14:30
 #   **Purpose:** One sentence.
 #
 #   **Insights:**

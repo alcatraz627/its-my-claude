@@ -39,6 +39,24 @@ esac
 content=$(printf '%s' "$input" | jq -r '.tool_input.content // .tool_input.new_string // empty' 2>/dev/null)
 [ -n "$content" ] || exit 0
 
+# Lint only ADDED lines (D9, 2026-08-14). Carried context kept re-triggering
+# the gate on pre-existing dashes the edit never touched: old_string text
+# rides into new_string on an Edit, and a Write over an existing file
+# re-emits every line the file already had. Subtract the old line-set; a
+# line that already existed anywhere in the old text is not new prose.
+old=$(printf '%s' "$input" | jq -r '.tool_input.old_string // empty' 2>/dev/null)
+if [ -z "$old" ] && [ -f "$fp" ]; then
+  old=$(cat "$fp" 2>/dev/null)
+fi
+if [ -n "$old" ]; then
+  content=$(OLD="$old" NEW="$content" python3 -c '
+import os
+old = set(os.environ.get("OLD", "").splitlines())
+new = os.environ.get("NEW", "").splitlines()
+print("\n".join(l for l in new if l not in old))' 2>/dev/null)
+  [ -n "$content" ] || exit 0
+fi
+
 # An .html file is often an application, not a document. Its <style> and
 # <script> bodies are code and score as gibberish prose (a CSS token block
 # measured 14.95 against a block line of 8). Judge only the markup's text.
