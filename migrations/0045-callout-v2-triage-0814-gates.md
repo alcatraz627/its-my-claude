@@ -72,6 +72,16 @@ D9, D15, D18, D21 on the decision page backlog-triage-0814).
 - Mute files as circuit breakers, no revert needed: `.no-ai-signature-gate`,
   `.no-subagent-box`, `.no-prose-quality-gate`.
 
+## Known gap (added 2026-08-14, post-seal)
+
+The emitter census was never derived from the tree; this migration swept only
+the surfaces the v1 spec's own inventory named. pin-for-dream was caught
+emitting the legacy shape the same day (atone slug
+review-missed-stale-caller-after-rename, recurrence 3) and fixed alone at the
+owner's instruction. The tree-wide emitter sweep remains OPEN and belongs to
+the callout follow-up trail; until it runs, "one dialect for every inline
+callout" is a claim about the known emitters, not the tree.
+
 ## Cross-references
 
 - Commits: 81da802, 60337ce (pushed at 71a23f6) · 67ea894, 47fbc2c, 4944bc0,

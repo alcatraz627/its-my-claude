@@ -87,18 +87,22 @@ Capture stdout — it'll be the assigned pin id (e.g. `pin-20260517170135-6f`).
 
 ### 5. Confirm to the user
 
-Print:
+Close with the house 🏁 done box (`~/.claude/conventions/callout-boxes.md`
+v2; compose by hand or via `box done`):
 
 ```
-✓ Pinned as <id>
-  Framing: <framing>
-  Files: <count> referenced
-  Auto-archives after 2 dream cycles (~2 weeks)
-  See in tomorrow's: i-dream digest  (section "Pinned from sessions")
+┌─ 🏁 done · pinned for the next dream cycle ──────── <framing> ──
+│ pin      <id>
+│ files    <count> referenced
+│ ▸ <absolute path of each referenced file, one per line>
+│ → surfaces in tomorrow's i-dream digest ("Pinned from sessions");
+│   auto-archives after 2 dream cycles (~2 weeks)
+└─────────────────────────────────────────────────────────────────
 ```
 
-If anything in steps 1–4 failed gracefully, mention what was missing
-(e.g. "couldn't determine transcript path; pinned without it").
+If anything in steps 1-4 failed gracefully, name what was missing in the
+body (e.g. `degraded: no transcript path; pinned without it`), never
+outside the box.
 
 ## When NOT to invoke
 
