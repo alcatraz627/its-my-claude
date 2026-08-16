@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-08-14
+updated: 2026-08-16
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invokable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-08-14 15:18.
+Regenerated 2026-08-16 05:44.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -64,6 +64,7 @@ Regenerated 2026-08-14 15:18.
 | `doctor` | yes | On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirtiness, plus hook/event-log integrity. Use when the user asks "what's wrong", … |
 | `forgotten-todos` | yes | Browse the cross-session backlog of unfinished todos surfaced from /core-dump checkpoints. Reads ~/.claude/subconscious/dreams/pending-todos.jsonl (regenerated from all … |
 | `gated-plan` | yes | The planning process for owner-gated work, meaning anything that cannot correctly proceed until a human decides. Investigates until it can falsify its own proposal, … |
+| `gcc-explore` | yes | Sit down with the gcc and look around. Renders the config as three panels (SHAPE, what it is; MOVEMENT, which way it is drifting; CYCLE, the loops keeping it alive) from … |
 | `gcc-map` | user-only | Maps how instruction content actually loads into an agent and the CLAUDE.md doc graph, measuring ground truth first and diffing it against what the indices claim, then … |
 | `gcc-proposal` | yes | Files a ~/.claude improvement proposal into the backlog via propose.sh — derives the title, category, effort, and cross-links from a rough description or from the … |
 | `generate-image` | yes | Generates raster images from a text prompt using the LOCAL imagine model (mflux/MLX Flux on Apple Silicon — $0, offline, no cloud). Uses only models already cached on … |
@@ -100,11 +101,12 @@ Regenerated 2026-08-14 15:18.
 | `skeptical-review` | yes | Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling … |
 | `statusline` | yes | (no description; add frontmatter) |
 | `statusline-config` | user-only | Interactively toggle statusline segments and profiles |
-| `ste-writing` | yes | Rewrite prose (docs, READMEs, error messages, runbooks, hook text; never code, never chat) into Simplified Technical English adapted to this account's rules. Use when … |
+| `ste-writing` | yes | Rewrite prose into Simplified Technical English adapted to this account. Covers docs, READMEs, PR descriptions and their inventories, error messages, release notes, … |
 | `summarize-changes` | yes | Generates a categorized changelog of recent work, scoped by three orthogonal axes (time / topic / source) and rendered in a user-selected format. Treats git as ONE … |
 | `svg` | yes | Authors, edits, optimizes, and render-checks SVG graphics — icons, logos, diagrams, illustrations, patterns. Claude writes the SVG markup directly (no image-gen … |
 | `sync-api-types` | user-only | Reads FastAPI Pydantic models from ../backend/ and diffs their fields against the TypeScript types used in src/ to consume those endpoints — reports mismatches and … |
 | `tag` | user-only | Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct … |
+| `tasks` | yes | Show the current task list as a table, sized so it never has to be scrolled to. Width is free, height stays within 44 lines, and the rows the owner can act on come … |
 | `test` | yes | Run tests for the current folder using a cached per-folder framework detection. First run probes the folder for pyproject.toml/package.json/Cargo.toml/go.mod etc and … |
 | `thesaurus` | yes | Ten-second capture of a style verdict into the style thesaurus — the ledger of how the user wants Claude to write (word choice, comments, prose, report structure). … |
 | `type-audit` | user-only | Scans the TypeScript codebase for unsafe type patterns (explicit `any`, implicit `any`, non-null assertions, unsafe casts), reports them with file:line references, and … |

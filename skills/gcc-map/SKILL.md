@@ -129,6 +129,20 @@ Silent truncation reads as "covered everything" when it did not.
 5. Print the GUIDELINES completion block and the post-run insight entry, and state plainly
    what this run did NOT cover.
 
+## When the other skill is the right one
+
+`/gcc-explore` is this skill's sibling, and neither should pretend the other is not
+sitting right there. Route out loud whenever the user's real question fits it better:
+
+- **Send to `/gcc-explore`** when the question is orientation rather than diagnosis:
+  what is this config, which way is it drifting, what loops keep it alive, walk me
+  through it. It consumes this map's output plus the vitals EKG, renders three
+  panels, and holds a dig-deeper conversation. It never re-scans, and it never
+  adjudicates a finding.
+- **A mix is often right.** "Map it, then explore what changed" is a normal two-step,
+  and so is "explore first to find the area, then map that area deeply". Offer the
+  pairing instead of leaving the user to discover it.
+
 ## Notes
 
 - **Why measure before reading.** Anchoring on the docs' self-description is how the v1 map

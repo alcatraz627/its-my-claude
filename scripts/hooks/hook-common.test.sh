@@ -147,10 +147,19 @@ if [ -f "$PS" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&
   PIN="$(jq -cn --arg s "$PSID" --arg tp "$PT" '{session_id:$s, transcript_path:$tp}')"
   po="$(printf '%s' "$PIN" | PROSE_SMELL_ENFORCE=1 bash "$PS" 2>/dev/null)"
   pr="$(printf '%s' "$po" | jq -r '.reason // empty' 2>/dev/null)"
-  # v2 anatomy: prose-smell is a gate, so the box wears heavy rails + the vocab title.
-  printf '%s' "$pr" | head -1 | grep -q '^┏━'; ok "integration: block reason is boxed (heavy)" "$?" "0"
-  printf '%s' "$pr" | head -1 | grep -q '⛔ gate · prose-smell'; ok "integration: vocab title on the gate" "$?" "0"
-  printf '%s' "$pr" | grep -q 'PROSE_SMELL_OFF=1'; ok "integration: reason keeps its last line" "$?" "0"
+  # A block `reason` is NOT boxed. The harness renders it as one clipped
+  # "Stop hook error:" line, so a box arrives truncated mid-word with the
+  # actionable half past the clip (owner-reported live fire, 2026-08-15;
+  # conventions/callout-boxes.md "Match the shape to the channel"). These
+  # assertions are positive on purpose: proving the box is gone says nothing
+  # about whether the content survived, and the previous compaction silently
+  # dropped the process-scoped mute until this test caught it.
+  [ "$(printf '%s' "$pr" | wc -l | tr -d ' ')" -eq 0 ]; ok "integration: block reason is single-line" "$?" "0"
+  printf '%s' "$pr" | grep -q '[┏┃┗━]'; ok "integration: block reason carries no box glyphs" "$?" "1"
+  printf '%s' "$pr" | grep -q 'prose-smell'; ok "integration: reason names the emitter" "$?" "0"
+  printf '%s' "$pr" | grep -q 'em-dash'; ok "integration: reason names the tell that fired" "$?" "0"
+  printf '%s' "$pr" | grep -q 'no-prose-smell-gate'; ok "integration: reason keeps the machine-wide mute" "$?" "0"
+  printf '%s' "$pr" | grep -q 'PROSE_SMELL_OFF=1'; ok "integration: reason keeps the process mute" "$?" "0"
   rm -f "/tmp/claude-prose-smell-hcbox001" "$PT" "$WARN_LOG_STORE"; unset WARN_LOG_STORE
 else
   echo "  SKIP prose-smell integration: script / jq / rg unavailable"

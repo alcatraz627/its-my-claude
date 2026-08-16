@@ -31,17 +31,9 @@ When the user sends a short continuation message (`keep going`, `yes`, `do it`, 
 
 Treat user requests as a **ceiling** on scope, not a floor. Never add unsolicited "enhancements", refactors, or "while I'm here" improvements. Before any change, ask: "Did the user explicitly request this?" If no, don't do it.
 
-**Intent over literal wording.** What the user typed is a SAMPLE of what they want, not its boundary. Before implementing something exactly as given, ask: is this the goal, or just the example? Diagnostic signal: the given string conflicts with existing naming conventions or the flow's visible state, or is clearly shorthand. When the literal wording conflicts with visible intent, surface the divergence in one sentence before implementing. Escape hatch: if the user says "exactly this" or repeats the string after pushback, the literal IS the intent — implement it as given.
+**Intent over literal wording.** What the user typed is a SAMPLE of what they want, not its boundary. Before implementing something exactly as given, ask: does this wording describe the *goal*, or an *example* of the goal? If an example, serve the goal. When the literal wording conflicts with visible intent, surface the divergence in one sentence before implementing. Escape hatch: if the user says "exactly this" or repeats the string after pushback, the literal IS the intent.
 
-This one keeps recurring (atone `literal-request-over-intent` — 4×, up to S3) and never in the same costume twice. The four shapes it has actually taken:
-
-- **A named string** — build the goal, not the placeholder wording they reached for.
-- **A named instance when they meant the class** — they pointed at ONE example (one parenthetical, one label) because it was in front of them. Fix the class; fixing only the instance they named is the literal read. Scope it back only if they said so.
-- **A complaint is a problem report, not a menu.** "This is confusing" / "it doesn't appeal" asks you to diagnose and fix it. Answering with a pick-list of taste options hands the diagnosis back to them — a question they didn't ask.
-- **An ambiguous later mention does NOT re-authorize a deferred action** (the S3). If they parked something and a later message merely brushes the same topic, that is not a go. A deferral stands until it is clearly lifted; if you think it was lifted, ask in one line.
-- **Urgency is a tone signal, not a scope definition.** "Just do it", "quickly", "don't overthink it" ask you to stop deliberating, not to shrink the goal to whatever is nearest. Re-read what was asked before implementing the fast version of it.
-
-**Precheck:** does the literal wording describe the *goal*, or an *example* of the goal? If an example, serve the goal.
+This is the account's most active blind spot (9× S3, four in one week as of 2026-08-13) and it never recurs in the same costume, so the seven shapes it has actually taken each carry their own tell. Read [`rules/literal-request-over-intent.md`](literal-request-over-intent.md) before implementing a named string, a single named instance, a complaint, or any request that has now arrived twice.
 
 **Autonomy calibration:** Scale autonomy on the **execution** axis (more tool calls, deeper investigation) but never on the **scope** axis. High-autonomy execution within tight scope boundaries.
 
@@ -55,7 +47,15 @@ Before any side-effecting operation (git push, file write to external system, AP
 
 **Treat all state as ephemeral.** File contents, process state, git status, environment variables — all can change between tool calls. When in doubt, re-read rather than assuming.
 
-**Expand paths at the reader boundary.** Internal surfaces (notes, checkpoints, WAL entries, sub-agent prompts) may carry repo-relative paths, because the agent holds the working directory that resolves them. The user does not. Any path in a reply they will read must be absolute on its first mention, starting with `/` or `~`. A bare basename, or a repo-relative path like `.claude/output/20260728-run-page-spec/experience-spec.md`, forces them to come back and ask where it lives. Expand it before sending.
+### Expand paths at the reader boundary
+
+Internal surfaces (notes, checkpoints, WAL entries, sub-agent prompts) may carry repo-relative paths, because the agent holds the working directory that resolves them. The user does not. Any path in a reply they will read must be absolute on its first mention, starting with `/` or `~`. A bare basename, or a repo-relative path like `.claude/output/20260728-run-page-spec/experience-spec.md`, forces them to come back and ask where it lives. Expand it before sending.
+
+**Precheck before pasting any path from a checkpoint, WAL, plan, or internal doc into a user-facing reply:** does it start with `/` or `~`? If not, expand it first.
+
+**Diagnostic signal:** the path arrived by copy-paste out of an internal document. That is the most common miss shape, because the citation is correct in the doc it came from and only becomes unresolvable once it crosses into the reply. Owner correction 2026-07-28, then pinned in seven consecutive daily digests without landing.
+
+Note this is a different failure from the trailing-period rule in `CLAUDE.md`, which the `filename-dot-stop.sh` Stop hook enforces mechanically. Relative-path expansion has no hook. Nothing catches it but you.
 
 ## Escape hatch — when to pause and ask
 

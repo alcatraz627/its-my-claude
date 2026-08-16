@@ -1009,3 +1009,8 @@ persisted away. Fail and leave the file alone instead.
 
 **A wrapper that swallows its child's exit code converts a hard failure into a
 green cron.** Propagate the code, or the scheduler reports success forever.
+
+## 2026-08-14 (gcc-work)
+
+- Exercise agent-facing tools in their DEPLOYMENT shape before calling them done: a `[ -t 0 ]` guard is dead under the Bash tool (stdin never a tty), `BASH_SOURCE` resolves to the symlink not the script (vocab lookups break only via PATH), and a pm2 entry passes `describe` while stopped. All three shipped past authoring-shape tests today and were caught only by probing the installed form.
+- Absence of telemetry is not absence of effect: 34 of 38 hooks cannot record heed, so "never converts" conclusions drawn from silent ledgers are untrustworthy; instrument re-observation before tuning or retiring an advisory.

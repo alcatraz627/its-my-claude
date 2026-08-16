@@ -72,6 +72,33 @@ shortcuts. Re-weight any time with `tier <id> <minor|moderate|project>`. Never
 delete — a closed item preserves the audit trail and feeds drain-rate metrics
 (`decided_ts`). Quote multi-word reasons/notes.
 
+## Drain before you add
+
+The backlog grows faster than it closes. Measured 2026-08-13: **168 open, 48 of
+them filed more than 30 days ago, oldest 111 days** (`prop-20260424-141055-b5`).
+An unbounded backlog stops being a queue and becomes an archive nobody reads,
+and it trains the weekly audit to re-propose things that were already filed and
+forgotten.
+
+So before filing new proposals in a weekly audit, disposition the oldest open
+items. IDs are date-stamped and `list` returns them in ascending id order, so
+the oldest are simply the first rows:
+
+```bash
+bash ~/.claude/scripts/propose.sh list --status open | head -20
+bash ~/.claude/scripts/propose.sh show <id>            # read before deciding
+bash ~/.claude/scripts/propose.sh retire <id> --as rejected "OBE: <what changed>"
+```
+
+Every item you touch gets one of three outcomes: **rejected** (obsolete or
+superseded, say which), **deferred** with a stated reason, or **promoted** and
+acted on. Never delete; a closed item keeps the audit trail and feeds drain-rate
+metrics via `decided_ts`.
+
+Judgment call, not a quota: draining five real items beats rubber-stamping
+twenty. The goal is that the oldest item in the queue is old because it is still
+worth doing, not because nobody looked.
+
 ## Self-feedback → canon promotion
 
 High-confidence insights from runtime-notes/mistake-patterns/dream-mode (conf ≥ 0.85, 2+ occurrences) should graduate into rules or hooks, not remain in notes.

@@ -50,7 +50,23 @@ CWD=$(printf '%s' "$input" | jq -r '.cwd // ""' 2>/dev/null)
 STOP_ACTIVE=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)
 TX=$(printf '%s' "$input" | jq -r '.transcript_path // ""' 2>/dev/null)
 
+# The store is named for the session that CREATED the tasks, not the live one,
+# and a task list survives /clear, so "$HOME/.claude/tasks/$SID" names a
+# NONEXISTENT directory in most resumed sessions. This fallback was therefore
+# dead: it silently yielded no tasks whenever the transcript replay was
+# unavailable, and the replay itself only sees tasks touched since the clear
+# (which is why this hook once reported 3 tasks against a real store of 48).
+# Resolve through the pin written by task-table.sh --pin when one exists, and
+# keep the old path as the fallback so nothing regresses where it did work.
 TASK_DIR="$HOME/.claude/tasks/$SID"
+# Resolve by CONTENT, not by name. "$HOME/.claude/tasks/$SID" names a
+# nonexistent directory in any resumed session, because the store is named for
+# the session that CREATED the tasks. This fallback was silently dead, which is
+# why this hook once reported 3 tasks against a real store of 48.
+_r="$HOME/.claude/scripts/task-table/resolve-store.sh"
+if [ -x "$_r" ]; then
+  _d=$("$_r" 2>/dev/null) && [ -n "$_d" ] && [ -d "$_d" ] && TASK_DIR="$_d"
+fi
 STATE="$HOME/.claude/tasks/.sync-${SID}.json"
 CLEAN=$(printf '%s' "$SID" | tr -c 'A-Za-z0-9_-' '_')
 

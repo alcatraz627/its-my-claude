@@ -1,3 +1,225 @@
+## bloop: doc 53 G6 docs browser second pass (catch-title-8a) · 2026-08-16
+
+**Purpose:** 13 owner items in one loop: kit Breadcrumbs, kit Markdown (react-markdown + rehype-sanitize), CodeBlock shellMode, docs layout and subtitles; five commits, one sonnet gate.
+
+**Insights:**
+
+1. A seat's "verified live" without a browser hides RSC and hydration defects: kit
+   Chip inside <p> was invalid HTML and re-rendered every doc page; the fix was a
+   real <code> with the chip's classes, not a Chip prop.
+2. Frontmatter keys are shared with every other renderer of the same file:
+   mkdocs-material claims `icon:`, so the playground's key had to be `kit_icon`.
+   Grep the other consumer's meta keys before adding frontmatter.
+3. react-markdown's `pre` renderer receives the hast node; reading the code child
+   off it beats position-based inline-vs-block detection, which sanitize can drop.
+4. Owner feedback arrives mid-turn in bursts; recording each verbatim into the
+   feedback doc with an ID before building kept the gate's "did we build the ask"
+   check answerable.
+## bloop: plan 47 P1+P3+P4 close (vb-fable) · 2026-08-14
+
+**Purpose:** Three passes closed in one stretch; every gate found something
+real (hydration blocker, broken pagination demo, walmart-mirror wearing the
+ruled shape walmart never shipped, a measured 28px-vs-32px overclaim, five
+colon collisions from the mechanical sweep). Runbook complete.
+
+**Insights:**
+
+1. A mechanical copy transform needs a collision pass: swapping em dashes to
+   colons collides with colons already in the sentence, and an em dash at a
+   line's leading position leaves a space-before-colon after JSX whitespace
+   collapse. Grep the REPLACEMENT's neighborhood after any wholesale swap.
+2. Coverage-count honesty needs demo-quality teeth: the P1 gate's best brief
+   line was "an import that exists only to game the coverage count is a
+   major", and it found exactly that failure mode in the pagination demo.
+3. Mirrors of app code must match the app's real props, not the kit's ruled
+   ideal; the gate greps the mirrored file and diffs the JSX. State "mirrors
+   X" only after diffing against X.
+4. Fresh-context retrieval probes double as the D8 docs judgment cheaply:
+   fold them into the pass gate seat instead of a second dispatch.
+## bloop: plan 47 P2 patterns section (vb-fable) · 2026-08-14
+
+**Purpose:** 13 pattern pages + D5 reorder through the loop; gate
+PASS-WITH-NOTES (1 major, fixed). The shared-example-module mechanism survived
+a byte-diff of all 10 SSR source-render pairs.
+
+**Insights:**
+
+1. Provenance cites drift by FUNCTION, not just by line: the one gate major was
+   a range covering the child helper (RailRow) while the claim's behavior lived
+   in the parent (RailLink). Cite the function that implements the claim; split
+   ranges when a note names two behaviors.
+2. Gate-in-parallel-with-additive-build works: the gate audited the committed
+   range while the parent built new files; it noticed the concurrent nav growth
+   itself and scoped around it. Sequencing rule that made it safe: the parent
+   stops driving the shared browser while a gate holds it.
+3. RSC boundary defects are invisible to tsc: a server-component example
+   passing onFiles 500s at runtime. Interactive examples need "use client",
+   and exercising each page caught it in seconds.
+4. Two visual defects only pixels caught: a consumer-config-only tailwind token
+   (gap-xl) silently resolving to no gap, and a kit tone (amber file chip)
+   contradicting the shipped app's owner-ruled override. Read the render
+   against the page's own provenance claims.
+## bloop: plan 47 P0 coverage ledger (vb-fable) · 2026-08-14
+
+**Purpose:** First showcase pass. Ledger built inline (script over 2 sonnet
+seats, de-escalation paid), gate ISSUES-FOUND (2 blocker, 2 major, 2 minor),
+all fixed same turn, fix converged cell-exact with the gate's own scanner.
+
+**Insights:**
+
+1. Comment handling in import counting is one class with four faces: multi-line
+   // blocks, single-line `// import {...}`, inline comments INSIDE braces
+   (whose commas break comma-splitting), and docstring mentions. Per-piece
+   filtering catches only the first; a string-aware state-machine stripper is
+   the only sufficient mechanism. Two gate findings, one root cause.
+2. A totality claim about a route tree ("X is the only nav surface") requires
+   reading the segment LAYOUTS, not just pages: Next.js layout.tsx files are
+   invisible nav surfaces that wrap every page beneath them.
+3. When a gate disputes counts, the close condition is convergence between two
+   INDEPENDENT derivations (rebuilt counter vs the gate's scanner), cell-exact.
+   Also: name the mechanism for each corrected cell; the gate guessed "manual
+   miscount" for pushAlert and the true cause was the comma-in-comment defect.
+4. Idle-without-delivery again; one chase ping recovered the full report.
+   Standard procedure held.
+
+---
+## run: four-task goal sprint (#44/#51/#45/#48) [vb-fable] — 2026-08-14
+
+Purpose: bloop x4 under a session goal hook; every gate earned its seat.
+
+**Insights:**
+1. A wedged gate seat can still deliver: its transcript tail carried a real
+   C2 find (select.tsx false resolution); salvage via subagents jsonl, then
+   the parent completes the remaining checks and says so in the report.
+2. Two gates caught the same defect class: closing a documented gap needs a
+   reader sweep of the OLD claim (rename-without-grepping-readers applies
+   to capability closes, not just renames).
+3. A checker validating a corpus must be mutation-tested against planted
+   breakage AND probed for silent skips; the comma-list citations were
+   invisible until grepped for forms the regex could NOT match.
+
+---
+
+## bloop: 2x run, plan 44 + walmart parity (vb-fable) — 2026-08-14
+
+**Purpose:** Autonomous overnight pair. A: docs-shaped plan (44-showcase-refinement),
+gate ISSUES-FOUND (2 blocker, 5 major, 8 minor, 2 nit, 3 omissions). B: walmart
+parity round, gate ISSUES-FOUND (1 major, 3 minor, 2 nit). All dispositioned
+same night. Streak intact.
+
+**Insights:**
+
+1. Transcript-tail salvage beats re-dispatch: a seat that idles silent may have
+   already FINISHED. wm40's complete report sat in its subagents jsonl; jq
+   extraction of assistant text recovered it whole. Check the transcript mtime
+   and tail before assuming death (doc44's seat also delivered ~50min in, after
+   two pings).
+2. Either/both overgeneralization caught the parent AGAIN, post-correction: I
+   softened a NEITHER-app claim after self-review, and the gate still broke it
+   by grepping the repo the inventory never covered (JobNameCell). The fix is
+   not softer wording; it is running the missing grep in the other tree.
+3. Unifying duplicate definitions can delete the guard one dup carried. The
+   modal's map was Record<PartStatus, StatusKind>, the surviving canon
+   Record<string, hand-copied-union>; the dedup silently dropped compile-time
+   exhaustiveness AND the type-link to the kit. When killing dups, diff their
+   TYPES before picking the survivor; mutation-test the survivor (remove a key,
+   watch TS2741).
+4. The prose gate blocks verbatim seat reports (em dashes); blockquote-persist
+   with a provenance header worked twice and reads honestly.
+5. A scan's singular finding can name a class 30x bigger: "a String(e) unwrap"
+   was 31 sites in 12 files. Grep the class before scoping, then fix the class;
+   the gate's blind-spot check (unconverted twins) still found one more in
+   swr.ts.
+
+---
+
+## bloop: #106 qsync adapter, probe-first (versable-builder) — 2026-08-13
+
+**Purpose:** Third run this session. New workspace package (batching URL sync
+core + react-router + history adapters), playground consumer, doc graduation.
+Gate: ISSUES-FOUND (5 major, 7 minor). Live browser drive pending (dev-server
+launch denied); everything else exercised against real routers in jsdom.
+
+**Insights:**
+
+1. Probe-first earned its keep twice: it falsified the brief's central guess
+   (react-router's FUNCTIONAL setter also loses same-tick writes), and writing
+   probe assertions as hypotheses-to-correct made the wrong guess cost one
+   edit instead of a wrong adapter design.
+2. A pre-fix is itself a finding target. My dispose() pre-fix detached
+   listeners but left the write path live; the gate exploited it (a disposed
+   adapter stamped the NEXT page's URL). When pre-fixing mid-gate, attack the
+   pre-fix with the same input classes you predicted for the original.
+3. Fix the class the gate names, not the instance: dispose-vs-pending was
+   flagged on the history adapter only; the react-router entry had the same
+   teardown hazard unflagged. Core grew cancel(); both backends use it.
+4. The validator DISCLOSED two of its own harness false-positives (a
+   nonexistent vitest reporter flag made all 16 mutations read as survived).
+   Dispatch prompts should require positive-signal verdicts (refuse unless a
+   'Tests N passed' line parses) — this seat added that itself; make it
+   standard.
+5. Committed twice with a false 'clean' claim by piping typecheck through
+   tail and not reading exit codes bare. The bare-run-then-read discipline is
+   per-COMMAND, not per-session; the second slip came two minutes after the
+   first.
+
+---
+
+## bloop: #107 toolkit RCA (versable-builder) — 2026-08-13
+
+**Purpose:** Owner-facing RCA through the loop, same session as the #108 scan.
+Gate: ISSUES-FOUND (2 blocker, 4 major, 7 minor), all incorporated. Streak
+intact. Committed as doc 43 + evidence dir.
+
+**Insights:**
+
+1. RCA-shaped runs get a mandatory attack class: "read the spec's own
+   definition-of-done before claiming a requirement never existed." The gate
+   found the canary rule inside the archived spec; the corrected root cause
+   (gate existed, archiving never checked it) was SHARPER than my draft's, and
+   my draft would have understated the failure in front of the owner.
+2. The gate EXECUTED both formatters instead of reading them: zero matching
+   outputs across 12 inputs, plus a null bug (new Date(null) is epoch, renders
+   "1 Jan") that reading had missed. For any swap/move recommendation, run
+   both sides on a fixed clock first.
+3. A validated evidence pack still seeds errors downstream: the 7-9 line cite
+   came from the FIRST gate's own findings and propagated faithfully into the
+   RCA. Blame the line the claim cites, not the file, even when quoting your
+   own validated docs.
+4. Delivery lost to a mid-run ConnectionRefused needed a second chase ping;
+   the phrasing that worked said "your delivery never ARRIVED, resend" rather
+   than "deliver now" (the seat believed it had delivered).
+5. When a committed doc cites .claude/output evidence, commit the evidence
+   beside the doc instead; this repo already has one orphaned guidebook whose
+   READ FIRST sources rotted away.
+
+---
+
+## bloop: #108 toolkit evidence scan (versable-builder) — 2026-08-13
+
+**Purpose:** Docs-shaped run: 2 sonnet scans + fable synthesis into an RCA
+evidence report. Gate: ISSUES-FOUND (3 blocker, 5 major, 7 minor), all
+dispositioned same turn. Streak intact.
+
+**Insights:**
+
+1. "When was this written" claims need LINE-level git blame; my scans dated
+   FILES and got the timeline inverted (82% of duplication postdated the
+   package; the scan said the opposite for one repo). File birth dates are the
+   cross-check for blame reformat noise, not the primary instrument.
+2. Synthesis is where negatives over-generalize: one repo's negative finding
+   became "either app" in my report; the scan files never claimed it. Audit
+   every either/both sentence against which scan actually said it.
+3. Import-grep counts need -U (multi-line import blocks) AND a dynamic-import
+   pattern (await import(...)); two counts were wrong for exactly those two
+   reasons (7 vs 19, 8 vs 12).
+4. Pre-fixing the predicted finding paid again: the publishability pre-check
+   ran before the gate's B2 landed, so the rewrite direction was already known.
+5. Idle-without-delivery again; one chase-up ping recovered a complete,
+   high-quality report. Standard procedure held.
+
+---
+
 ## bloop: switchboard groups, claude-instances (catch-todo-8f) · 2026-08-10
 
 **Purpose:** 32nd run. Four groups (Guards/Services/Cost/Session) added to the

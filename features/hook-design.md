@@ -45,6 +45,36 @@ frequency and misses this.
    - **nudge / log-only** — for signals you want to measure before you trust,
      or that are advisory by nature.
 
+## The third question: what does the reader get when you DO block?
+
+Both questions above price the wrong-fire. This one prices the right one, and it
+is what decides whether the same defect should block on one surface and only
+advise on another.
+
+**Ask whether a fallback floor exists.** When the gate stops an artifact, does
+the reader still get something true, or do they get nothing?
+
+- **A floor exists, so blocking is cheap.** The CI PR-body path discards a bad
+  body and ships the previous good prose, or the mechanical commit summary. The
+  reviewer still gets a true, structured document. Blocking there costs a draft.
+- **No floor, so blocking is expensive.** A code review discarded for a style
+  violation loses a FINDING. There is no second copy and no degraded version,
+  nobody learns it existed, and a false negative in a defect report is invisible
+  by construction. Never block a review.
+
+The tempting formulation is content-type, that shape may block while judgment may
+not. That is not the line. The line is the floor. Two surfaces can carry the same
+check and correctly reach opposite answers because one degrades to something and
+the other degrades to silence.
+
+Corollary, and it is what makes the rule usable: a gate you want but cannot
+afford becomes affordable the moment you build a floor under it. Reach for the
+fallback before you weaken the check.
+
+Provenance: worked out with the CI PR-bot operator over IPC, 2026-08-15, after I
+argued never-block for reviews and they ruled block-on-both-missing for bodies.
+Neither of us had named the asymmetry until they did.
+
 ## Worked examples from this machine
 
 - `guard-structural-claim` measured **~98% FP** over 959 transcripts and was

@@ -32,7 +32,7 @@ mkdir -p "$ATONE_DIR" "$RCA_DIR" 2>/dev/null || true
 show_help() {
   printf '\n  %s%satone%s %s—%s Mistake-tracker CLI\n' \
     "$C_BOLD" "$C_MAGENTA" "$C_RESET" "$C_DIM" "$C_RESET"
-  printf '  %sAppend-only event log; auto-committed to git; kernel-locked after stage-2.%s\n' \
+  printf '  %sAppend-only event log; NOT git-tracked (gitignore allowlist); kernel-locked.%s\n' \
     "$C_DIM" "$C_RESET"
 
   _section "USAGE"
@@ -84,6 +84,7 @@ show_help() {
   _opt '--files "p:N"'   'space-separated file:line locations'
   _opt '--rca-content S' 'full RCA body (S3 path) — file is written with chflags uchg'
   _opt '--rca-file PATH' 'load RCA body from a file (alternative to --rca-content)'
+  _opt '--payload-file PATH' 'the prose fields as one JSON object (slug/title/issue/cause/fix/what_not/precheck/severity/tags/cluster/project/files). Flags still win; the file fills only what a flag did not set. Prefer this: inline prose flags echo in full into the caller transcript.'
 
   _section "LIST FILTERS"
   _opt '--severity S'    'S1 | S2 | S3'
@@ -155,6 +156,7 @@ cmd_add() {
   local project="" files_str="" rca_content="" rca_file=""
   local session_id="${CLAUDE_CODE_SESSION_ID:-}"   # --session overrides
   local case_file="" review_report=""              # atone-owned juror dispatch
+  local payload_file=""                            # bulk fields as JSON (see below)
   local _ATONE_INTERNAL_DISPATCH=1                 # authorizes cmd_juror provenance (A4)
 
   while [ $# -gt 0 ]; do
@@ -176,10 +178,38 @@ cmd_add() {
       --files)        files_str="$2"; shift 2 ;;
       --rca-content)  rca_content="$2"; shift 2 ;;
       --rca-file)     rca_file="$2"; shift 2 ;;
+      --payload-file) payload_file="$2"; shift 2 ;;
       -h|--help)      show_help; exit 0 ;;
       *) _die "add: unknown flag: $1" ;;
     esac
   done
+
+  # --payload-file: the event's prose fields as one JSON object, so an add is a
+  # short command instead of nine multi-line shell arguments. Every inline flag
+  # echoes into the caller's transcript verbatim, which turned a routine record
+  # into a wall of text for the human watching (owner, 2026-08-15). The file
+  # FILLS GAPS only: anything passed as a flag wins, so a payload can be reused
+  # and one field overridden inline.
+  if [ -n "$payload_file" ]; then
+    [ -r "$payload_file" ] || _die "add: --payload-file not readable: $payload_file"
+    jq -e 'type == "object"' "$payload_file" >/dev/null 2>&1 \
+      || _die "add: --payload-file must be a JSON object: $payload_file"
+    _pf() { jq -r --arg k "$1" '.[$k] // empty' "$payload_file" 2>/dev/null || true; }
+    if [ -z "$slug" ];      then slug=$(_pf slug); fi
+    if [ -z "$title" ];     then title=$(_pf title); fi
+    if [ -z "$issue" ];     then issue=$(_pf issue); fi
+    if [ -z "$cause" ];     then cause=$(_pf cause); fi
+    if [ -z "$fix" ];       then fix=$(_pf fix); fi
+    if [ -z "$what_not" ];  then what_not=$(_pf what_not); fi
+    if [ -z "$what_not" ];  then what_not=$(_pf "what-not"); fi
+    if [ -z "$precheck" ];  then precheck=$(_pf precheck); fi
+    if [ -z "$severity" ];  then severity=$(_pf severity); fi
+    if [ -z "$tags_str" ];  then tags_str=$(_pf tags); fi
+    if [ -z "$cluster" ];   then cluster=$(_pf cluster); fi
+    if [ -z "$project" ];   then project=$(_pf project); fi
+    if [ -z "$files_str" ]; then files_str=$(_pf files); fi
+    unset -f _pf
+  fi
 
   for f in slug title issue cause fix what_not severity; do
     if [ -z "${!f}" ]; then
@@ -658,7 +688,16 @@ EOF
   # "same slug twice in one session" precisely, and so the bypass/recurrence
   # signals are session-scoped. Best-effort: never break an atone write.
   if [ -n "$session_id" ]; then
+    # Follow ATONE_DIR when it is overridden, so ONE variable isolates a test
+    # run completely. This counter used to be pinned to $HOME while the store
+    # honoured the override, which meant a test with an isolated /tmp store
+    # still appended to the LIVE session counter and drove the live circuit
+    # breaker. That is a test mechanism that protects the ledger and leaks into
+    # session state, and it fired a false breaker on 2026-08-15.
     local _sdir="$HOME/.claude/.session-atone-slugs"
+    if [ "$ATONE_DIR" != "$HOME/.claude/atone" ]; then
+      _sdir="$ATONE_DIR/.session-atone-slugs"
+    fi
     mkdir -p "$_sdir" 2>/dev/null || true
     jq -cn --arg s "$slug" --arg ts "$ts" --arg sev "$severity" \
            --arg st "$stakes_tier" --arg eid "$id" \

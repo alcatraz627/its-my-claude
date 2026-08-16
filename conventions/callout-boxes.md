@@ -98,6 +98,14 @@ right edge is what makes their width safe), and a note here.
   house dialect overrides the style's decoration. It is the one sanctioned
   multi-line tag: continuation lines take a hanging indent.
 
+  **Fenced, two to three lines.** The fence is load-bearing, not decoration:
+  markdown collapses leading whitespace, so an unfenced tag loses its hanging
+  indent and reflows into the surrounding paragraph as an undifferentiated
+  block. The length cap is the other half. A tag owes no action, so it must be
+  skippable at a glance; past three lines it stops being an aside and starts
+  competing with the prose it sits beside. An insight that needs more room is
+  prose, not a tag. Both halves learned the hard way, 2026-08-15.
+
   ```
   💡 insight · the guard was dead because Bash-tool stdin is never a tty;
      gate on the actual input mode, not tty-ness
@@ -109,6 +117,35 @@ A box never grows its own option menu. When an event needs an owner call,
 the arrow line says "decision below" and the decision-wizard surface
 follows: an inline numbered menu for up to ~3 simple picks, the decision
 page on :5197 for batches. Dialog tools stay banned in the fullscreen TUI.
+
+## Match the shape to the channel, and route around a bad one
+
+A box is only a box on a channel that renders a block. Before composing one,
+name where it lands:
+
+| Channel | Renders | Shape |
+|---|---|---|
+| a reply you write | markdown block | box, fenced |
+| hook `systemMessage` | block | box |
+| hook `decision:block` `reason` | ONE clipped line | compact single-line string, never a box |
+| `additionalContext` | agent-only text | plain, no rails |
+
+The `reason` row is the one that has actually burned us. The harness prints it
+as a one-line `Stop hook error:` and clips it, so a multi-line box arrives cut
+mid-word with the actionable half (how to fix, how to mute) past the clip. Two
+hooks shipped that way and were fixed 2026-08-15: `prose-smell-stop.sh` and
+`guard-ai-signature.sh`. Both now emit one compact line.
+
+**When a channel cannot carry what the reader needs, route around it rather
+than truncating into it** (owner ruling, 2026-08-15). Write the full detail to
+a file and put the path in the compact line, or let the agent surface it in the
+reply. An intermediate artifact is a legitimate answer to a hostile output
+shape; a clipped box is not.
+
+The same rule governs a tool's own output. `atone.sh` grew `--payload-file`
+because nine prose fields passed as inline shell arguments echo verbatim into
+the caller's transcript, which turns recording one event into a wall of text.
+The fix was moving the payload into a file, not shortening the fields.
 
 ## Who renders what
 

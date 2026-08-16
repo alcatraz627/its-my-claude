@@ -53,11 +53,14 @@ hits=$(printf '%s' "$content" | rg -n -i \
 [ -n "$hits" ] || exit 0
 
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
-if type hook_box_kind >/dev/null 2>&1; then
-  reason=$(printf 'This write ADDS a harness signature to a document a human reads.\nOffending:\n%s\n→ remove the signature line(s), then retry; the ban covers every artifact surface, not just commits\nQuote in a policy doc? those paths are excluded; log a false positive via hook-feedback.sh.\nMute: touch ~/.claude/.no-ai-signature-gate' "$hits" | hook_box_kind gate ai-signature)
-else
-  reason="AI-SIGNATURE GATE: this write adds a harness signature line. Remove it and retry. Offending: $hits"
-fi
+# No box here. The harness renders a block `reason` as a one-line
+# "Stop hook error:" string and CLIPS it, so a multi-line box arrives truncated
+# and the actionable half (how to fix, how to mute) never reaches anyone. Boxes
+# belong on channels that render a block; a block reason stays compact and
+# single-line. Learned 2026-08-15 from a live prose-smell fire that cut off
+# mid-word. See conventions/callout-boxes.md, "Who renders what".
+hits_flat=$(printf '%s' "$hits" | tr '\n' ' ' | tr -s ' ' | sed 's/^ *//;s/ *$//')
+reason="ai-signature: this write adds a harness signature to a document a human reads. Offending: ${hits_flat}. Remove the signature line(s) and retry; the ban covers every artifact surface, not just commits. Quoting one in a policy doc is excluded, log a false positive via hook-feedback.sh. Mute: touch ~/.claude/.no-ai-signature-gate"
 
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}'
 exit 0

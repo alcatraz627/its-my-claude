@@ -63,6 +63,45 @@ truth": also check its provenance — is it human-authored, or Claude-generated
 documentation downstream of the application? A Claude-authored doc treated as a
 spec produces a circular review.
 
+## "Is this deliberate?" is answered by the tests, not by the comments
+
+A distinct question from how a subsystem works: whether some existing behavior
+was CHOSEN or merely landed. Reading the code is not enough here, because the
+artifact that holds the answer is usually the test.
+
+**A comment names the intent behind one line. A test names the contract.** A
+considered comment sitting next to a check tells you someone thought about why
+the check exists. It tells you nothing about whether its current tier, threshold,
+or placement was decided. Treating a thoughtful comment as evidence that the
+whole question was settled is the specific error.
+
+Before calling an existing behavior deliberate or accidental:
+
+1. Grep the test file for the behavior, not just the source.
+2. Read the test NAMES. A name like "a body missing the shape ships, with each
+   omission noted" states a contract outright.
+3. Only then read the comments, as intent rather than as ruling.
+
+**Worked case, 2026-08-15, and both parties made the same mistake.** A CI peer
+and I separately examined a guard where two positive shape assertions sat in the
+non-blocking tier. A comment three lines above justified why the assertions
+existed. I read that comment and withdrew a finding. They read it and ruled the
+tier was an open question. The test file pinned it as deliberate, in a test whose
+name said so, one grep away from both of us. They found out by implementing the
+change and watching three tests go red.
+
+Note the asymmetry that makes this worth a rule: the comment was accurate about
+what it described. It simply did not describe the thing either of us needed. A
+correct comment is not a wrong one, so nothing about it reads as a warning.
+
+**A weaker form to watch for.** In that same test, the case matching the contract
+asserted only that a note appeared, never that the body shipped. The contract
+lived in the test's NAME and in a neighbouring assertion. A test whose name
+carries a guarantee its assertions do not fully pin is a weaker guard than it
+looks, and it is the `[negative-checker-blind-to-omission]` shape wearing a
+different costume. When a test name is your evidence, check that an assertion
+backs it.
+
 ## What this rule does NOT mean
 
 - Don't bury every sentence in citations. The rule fires on *authority/control-flow* assertions, not on uncontroversial descriptive prose.

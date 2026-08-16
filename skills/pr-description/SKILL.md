@@ -25,6 +25,26 @@ NOT verified. The skill's law, graduated from a six-draft failure
 the content BEFORE writing prose, and A SECOND REJECTION BUYS A QUESTION,
 NOT A DRAFT.
 
+The gate takes three answers, not one: a pick, an empty inventory, or
+accepted-on-substance-rejected-on-register. The third routes through an
+optional register branch (Phase 2) and comes back for an explicit pick. Prose
+rules run in two tiers, and no linter may ever discard a draft.
+
+CI variant: `slack-automation/ci-kit/skills/pr-body/SKILL.md` adapts this
+skill for unattended runs (self-picked inventory default set, owner decision
+2026-08-14; lint stays advisory there too). It cites this file's rulings;
+change either spec only after checking the other.
+
+**The register branch does NOT transfer to CI** (checked 2026-08-15). It is
+triggered by a human rejecting an inventory's wording, and the CI run has no
+human at draft time, so the branch would have nobody to fire it. The traffic
+went the other way instead: the two-tier prose rules, kept-previous, the
+archetypes, cross-artifact contradiction hunting, and the machine-owns-the-facts
+split below were all learned FROM the CI variant and its operator. What this
+file keeps that CI cannot have is the human pick, which their operator called
+"the single most valuable thing you have; we amputated it out of necessity, not
+preference".
+
 ## Usage
 
 ```
@@ -68,6 +88,22 @@ title,baseRefName,headRefName,changedFiles,additions,deletions,body,url`.
      tradeoff and the alternative not taken.
    - The verification boundary: what ran, what cannot run, which bug was
      live vs latent.
+   - **Cross-artifact contradiction.** Read the docs, tests, and comments
+     the PR touches AGAINST its code. A doc that describes different
+     behavior than the code it ships with, a comment the code contradicts,
+     a still-passing test that exercises a helper the write path no longer
+     calls: each is a real finding no hunk shows on its own. Two live
+     catches from the CI reviewer (2026-08-14): a cron authenticating
+     against a different secret than its own new doc, and exactly that
+     stale-test case. Route a false claim to fix-first (Phase 2), never
+     into the body.
+5. **Let the machine own every fact it can.** Counts, file lists, commit
+   classification, size, and the changed-file census come from commands, not
+   from your reading of the diff. Compose those first and treat them as a
+   ledger you do not restate or contradict. Then write only what a command
+   cannot produce: behavior, tradeoff, risk. This split is why the CI variant
+   fabricates little, and the reason generalizes: every fact you assert by
+   hand is a fact you can get wrong.
 
 ## Phase 2: The inventory gate (present, then STOP)
 
@@ -93,10 +129,118 @@ a 44-file PR that produced 19 items across 7 domains):
   Route those to a fix-first list presented beside the inventory, so the
   call is a step in the skill, not a judgment left to whoever notices.
 
+### The three responses this gate must handle
+
+A pick is not the only valid answer. Model all three, because an unmodeled
+response gets improvised, and the likeliest improvisation is to read it as a
+pick and draft anyway, which is the exact failure this gate exists to prevent.
+
+1. **A pick** (including a confirm of the suggested default set). Go to Phase 3.
+2. **An empty inventory.** Say "no behavioral effect found" and stop. Complete
+   and correct.
+3. **Accepted on substance, rejected on register.** The content is right and
+   the WORDING is not: "this diff read is good, just simplify the language".
+   Take the register branch below, then come back here for an explicit pick.
+
+Response 3 is a real observed case, not a hypothetical (PR #274, 2026-08-14,
+owner rejecting an inventory's register with content explicitly frozen).
+
+### The register branch
+
+**Content is frozen.** This branch changes wording only. It may not add, drop,
+merge, or re-scope a single inventory item. If a register pass surfaces a
+content problem, stop and say so; do not fix it silently under cover of a
+wording pass.
+
+Two independent optional components. The user may take either, both, or
+neither, because they solve different problems:
+
+| Component | What it does | Why it exists |
+|---|---|---|
+| **feedback** | a mechanical register pass, `/ste-writing` flavored mode | fixes wording, density, sentence shape |
+| **reviewer** | a fresh reader that did not write the text (sub-agent, or `personas/doc-writer.md`) | `rules/audience-aware-writing.md:73-77`: you cannot see your own voice, so a rule set applied by the author cannot catch what the author cannot see |
+
+**The accepted corpus outranks both.** When `/ste-writing` or a reviewer wants
+a change the merged corpus contradicts, the corpus wins and you say so in one
+line. Worked case from #274: the register pass raised passive count from 6 to 9
+and that was left alone deliberately, because the merged PRs use passive freely
+and two instances were load-bearing. A register pass is not a licence to chase
+a score; Phase 1's ruling still stands.
+
+**Pick the default from scope, ask only when unsure:**
+
+| Scope | Default |
+|---|---|
+| 3 items or fewer, no archetype | neither. The corpus and the mechanical bans carry it. |
+| 4 to 8 items | feedback |
+| past 8 items (already the triage threshold above), or a release or hotfix archetype | both |
+| signals conflict, or the archetype is unclear | ASK |
+
+When asking, use the `std::claude::tui` library
+(`source ~/.claude/scripts/tui/pick.sh`, then `tui_choose`). Do NOT use
+`AskUserQuestion` or `mcp__inputs__*`: both are unusable in this owner's
+fullscreen TUI, and a picker that hangs is a failed run.
+
+```bash
+source ~/.claude/scripts/tui/pick.sh
+tui_choose --prompt "register pass? " --non-tty fail neither feedback both
+```
+
+Three things about that call, all verified 2026-08-15 rather than assumed:
+
+- **Flags go BEFORE the options.** `tui_choose` stops flag parsing at the first
+  non-flag argument (`scripts/tui/pick.sh:88-98`), so
+  `tui_choose --prompt p one two --non-tty first` treats `--non-tty` and
+  `first` as two more OPTIONS and returns empty with exit 1. It fails quietly,
+  which is the worst way to fail.
+- **It never hangs without a tty**, but it does not fall back to a numbered
+  prompt either: the numbered rung is itself tty-gated
+  (`_tui_numbered_menu` behind `tui_have_tty`). With no tty it selects nothing
+  and returns nonzero. `--non-tty first` takes the first option instead, and
+  `--non-tty fail` returns 1.
+- **Handle the nonzero yourself.** A nonzero exit means no answer was taken, so
+  ask in the conversation as plain numbered text. Never read a failed pick as a
+  default, and never let it silently become "neither".
+
+`tui_confirm` is for a yes or no and returns 1 without a tty by design, because
+a confirm must never auto-yes headless. That safe default is wrong for this
+gate, where "no answer" is not the same as "neither", so prefer `tui_choose`
+here.
+
+**Then re-present and take an explicit pick.** The register branch loops back
+into this gate; it never bypasses it. A revised inventory is still an
+inventory awaiting a pick.
+
 ## Phase 3: Draft (only after the pick)
 
 Voice: the author briefing their reviewer, at the accepted corpus's density.
 Scale to the PR: a two-file fix gets a few paragraphs, never ceremony.
+
+**Four archetypes change the READER, so they bend the shape.** Most PRs are
+features and fixes and the ordinary sections below fit them. These four do not:
+
+- **Release to production.** The reader decides "ship?", not "is this hunk
+  right?". Lead with the release scope, read the body as a changelog of
+  user-visible effects grouped by product domain, and let a deploy-risk
+  paragraph outrank everything else.
+- **Hotfix.** Symptom being stopped, then blast radius, then the shortcut
+  taken and what the proper fix would be. Maximum brevity.
+- **Merge, sync, or conflict resolution.** Legitimately mechanical. A lead
+  plus one behavioral sentence is often the whole body. The one reviewable
+  thing: files where the resolution made a CHOICE rather than taking both
+  sides. Name those.
+- **Revert.** What behavior returns, why, and what regression returns with it.
+
+Recognize an archetype by judgment across the title, the base branch, and the
+diff shape together. **Never parse a branch name to derive behavior.** Inside
+Versable repos that is an owner ruling
+(`~/.claude/projects/-Users-alcatraz627-Code-Versable-automation/memory/project_branch-naming-convention.md`,
+2026-08-13: branch names are advisory, and "NO deterministic data downflow is
+based on the branch name AT ALL"). Everywhere else it is simply true that a
+human renames a branch freely and any tooling keyed to it breaks.
+
+A PR that fits no archetype follows the master rule: name what it IS, and let
+the structure follow the content. Never force sections onto a PR without them.
 
 Sections, kept only when they have content:
 
@@ -118,10 +262,30 @@ Sections, kept only when they have content:
   TO CHAT ("I did not check production"): in the document they spend the
   user's credibility. This distinction, not "caveats out".
 
-Hard bans: no fabricated specifics (dev-database rows are not production
-customers); no em-dashes (owner budget zero, the prose gate blocks them);
-no Claude or harness trailers; UX-justification essays for form controls
-stay out of billing PRs.
+### Prose rules, in two tiers
+
+The tiers matter. Stated as one flat list, every rule reads equally severe,
+and the ones that are actually judgment calls start acting like hard gates.
+
+**Blocking. A draft that trips these is not shippable, fix it before handing
+it over.**
+
+- No fabricated specifics. Dev-database rows are not production customers, and
+  a number you did not compute does not appear.
+- No em-dashes. Owner budget is zero and the prose gate blocks the write.
+- No Claude or harness trailers, in the body or anywhere near it.
+- No homework in the author's own document. Decision menus belong in chat.
+
+**Advisory. These improve a draft and never discard one.**
+
+- Prose-lint's score. Phase 1's ruling governs: the accepted corpus outranks
+  it, and you never write to the number.
+- Density, section balance, and whether a UX-justification essay has crept
+  into a billing PR.
+- Anything a register pass suggests. See the Phase 2 register branch.
+
+**No linter may ever discard a draft.** This is a standing ruling, and it is
+the reason the tiers exist rather than a single list.
 
 **Output:** write to
 `<repo>/.claude/output/<YYYYMMDD>-pr-description/pr-<N>.md` and hand the
@@ -140,6 +304,16 @@ human pastes.
 3. **Deletion is not a fix.** When a sentence is called wrong, fix the
    claim. Cutting it is how load-bearing content (the design decision, a
    repo-fact caveat) leaks out across drafts.
+4. **Keep the previous draft.** A failed or rejected revision must never
+   destroy the draft it came from. Write draft N+1 beside draft N (suffix the
+   filename, `pr-<N>-v2.md`) and name both paths when you hand it over. Rule 3
+   says do not delete a sentence; this says do not lose a version. Without it,
+   revision 4 cannot recover the paragraph revision 2 got right.
+5. **A register rejection is counted separately.** Rule 2's tally exists to
+   stop DRAFT oscillation, and a register rejection accepts the content, so it
+   does not count toward it. It gets its own counter on the same law: a second
+   register rejection also buys a question, not a third rewording. Register
+   oscillation is the same failure wearing different clothes.
 
 ## Completion
 
