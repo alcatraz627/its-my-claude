@@ -166,6 +166,31 @@ if [[ -f "$TASK_FILE" ]]; then
   task_todos=$(cat "$TASK_FILE" 2>/dev/null) || true
 fi
 
+# --- Pending items, for the ## Pending Items contract heading ---
+# /catchup validates this file against the same four-heading parse contract a
+# /core-dump must satisfy (scripts/checkpoint/validate-checkpoint.sh). Before
+# 2026-08-16 this writer emitted none of them, so every post-compact resume that
+# reached for the precompact file got a FAIL and fell back to a partial read.
+# The section must therefore be UNCONDITIONAL: an empty todo list is a legitimate
+# state, and skipping the heading would break the contract exactly when a session
+# had nothing queued.
+pending_md=""
+if [[ -n "$task_todos" ]]; then
+  pending_md="**Live Task list** (source of truth, survives /clear):
+
+\`\`\`
+$task_todos
+\`\`\`"
+fi
+if [[ -n "$session_todos" ]]; then
+  pending_md="${pending_md:+$pending_md
+
+}**Workspace todos** (\`session-notes\`, human-curated):
+
+$session_todos"
+fi
+[[ -n "$pending_md" ]] || pending_md="- _(no tasks or workspace todos captured at compaction — run \`TaskList\` after resume)_"
+
 # --- Workspace session-notes (the live Todos/Notes/Decisions that survive /clear) ---
 # The richest semantic source: sync-todos mirrors the live Task list into it and
 # the human keeps Notes/Decisions there. Prefer this session's own file
@@ -212,7 +237,7 @@ dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 | Tools used   | ${tool_count:-unknown} |
 | Timestamp    | $(date -Iseconds) |
 
-## User Goals
+## Initial Goal
 
 > **Authoritative current state = the Workspace Notes section below** (session-id
 > keyed, this session's own doc). The two goal lines here are best-effort text
@@ -229,7 +254,7 @@ dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 
 \`$cwd\`
 
-## Recovery Sequence
+## Current Expectation
 
 After compaction, run \`/catchup\` — it will:
 1. Check WAL for the last CHECKPOINT block (fast path)
@@ -237,9 +262,15 @@ After compaction, run \`/catchup\` — it will:
 3. Load targeted file context from pending items
 4. Ask which pending item to resume
 
+## Pending Items
+
+$pending_md
+
 ---
 
-## Recently Modified Files
+## Agent Actions
+
+### Recently modified files
 
 $recent_files_md
 HEADER
@@ -299,21 +330,9 @@ HEADER
     echo
   fi
 
-  if [[ -n "$session_todos" ]]; then
-    echo "## Session Todos (from scratchpad)"
-    echo
-    echo "$session_todos"
-    echo
-  fi
-
-  if [[ -n "$task_todos" ]]; then
-    echo "## Agent Tasks"
-    echo
-    echo '```'
-    echo "$task_todos"
-    echo '```'
-    echo
-  fi
+  # Session todos and agent tasks used to be emitted here as their own H2s. They
+  # now feed ## Pending Items near the top, which is where the parse contract
+  # expects them; repeating them here would just duplicate the same lists.
 
   cat << FOOTER
 
