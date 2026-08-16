@@ -37,7 +37,20 @@ MARK="/tmp/claude-tmp-py-nudge-${sid8}"
 
 # Classify the current command's relationship to inline python. python3 itself
 # parses it, so multi-line -c bodies and quoting don't fool a bash regex.
-kind=$(python3 - "$CMD" <<'PY' 2>/dev/null
+#
+# Classify against a quote-blanked copy, so `echo "use python3 -c '...'"` reads
+# as other rather than as an inline invocation. The -c body's own quote chars
+# and its newlines both survive blanking, so the line count this hook keys on is
+# unaffected; only an outer-quoted MENTION is removed. Falls back to the raw
+# command when the helper is unreadable.
+SCAN="$CMD"
+if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+  . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+  if type hook_cmd_skeleton >/dev/null 2>&1; then
+    SCAN=$(printf '%s' "$CMD" | hook_cmd_skeleton)
+  fi
+fi
+kind=$(python3 - "$SCAN" <<'PY' 2>/dev/null
 import sys, re
 cmd = sys.argv[1]
 # inline: python3 -c '<body>' — capture the body to count newlines

@@ -36,7 +36,19 @@ echo "$CMD" | grep -qE '/\.claude/scripts/atone' && exit 0
 
 # Extract `git add <args>`. Skip if the command is something else entirely.
 # We allow leading env-vars (e.g. `FOO=bar git add ...`) but stop at && / | / ;.
-GIT_ADD_LINE=$(echo "$CMD" | grep -oE '\bgit\s+add\s+[^&|;]*' | head -1)
+#
+# Scan a quote-blanked copy so a git add enumerated INSIDE quotes — a commit
+# message describing one, a doc string, an echo — is not counted as a real
+# staging call. Falls back to the raw command when the helper is unreadable,
+# which is the pre-2026-08 behaviour.
+SCAN="$CMD"
+if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+  . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+  if type hook_cmd_skeleton >/dev/null 2>&1; then
+    SCAN=$(printf '%s' "$CMD" | hook_cmd_skeleton)
+  fi
+fi
+GIT_ADD_LINE=$(echo "$SCAN" | grep -oE '\bgit\s+add\s+[^&|;]*' | head -1)
 [ -z "$GIT_ADD_LINE" ] && exit 0
 
 # Count path-shaped args after `git add` (anything not starting with `-`).

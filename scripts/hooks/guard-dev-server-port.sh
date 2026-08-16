@@ -46,10 +46,18 @@ LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run
 # quotes would otherwise read as a real command separator. Real launches are
 # unquoted, so blanking quoted spans leaves them intact. Port extraction below
 # still runs on the original command.
-if command -v perl >/dev/null 2>&1; then
-  SCAN=$(printf '%s' "$CMD" | perl -pe "s/'[^']*'//g; s/\"[^\"]*\"//g")
-else
-  SCAN="$CMD"
+#
+# Uses the shared hook_cmd_skeleton rather than a local blanker. The previous
+# perl version DELETED quoted spans, which welds the surrounding tokens into
+# one (`vi'x'te` reads as `vite`); the helper blanks to spaces of equal length,
+# so token boundaries survive. Falls back to the raw command if unavailable,
+# which is the pre-2026-08 behaviour.
+SCAN="$CMD"
+if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+  . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+  if type hook_cmd_skeleton >/dev/null 2>&1; then
+    SCAN=$(printf '%s' "$CMD" | hook_cmd_skeleton)
+  fi
 fi
 printf '%s' "$SCAN" | rg -q "$LAUNCH_RE" 2>/dev/null || exit 0
 

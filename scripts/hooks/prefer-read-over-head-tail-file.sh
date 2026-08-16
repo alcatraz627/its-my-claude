@@ -26,6 +26,14 @@ echo "$CMD" | rg -q '<<\s*\w+' 2>/dev/null && exit 0
 
 # Match: head/tail with -N flag and a file path arg (not -, not -f)
 if echo "$CMD" | rg -q '(^|;|&&|\|\|)\s*(head|tail)\s+-\d+\s+[^-\s|>]\S*\s*(;|$|&&|\|\|)' 2>/dev/null; then
+  # Confirm this INVOKES head/tail rather than quoting it, e.g. prose advising
+  # `head -50 file`. Second stage only; fails open.
+  if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+    . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+    type hook_cmd_skeleton >/dev/null 2>&1 &&
+      ! printf '%s' "$CMD" | hook_cmd_skeleton \
+        | rg -q '(^|;|&&|\|\|)\s*(head|tail)\s+-\d+\s+[^-\s|>]\S*\s*(;|$|&&|\|\|)' 2>/dev/null && exit 0
+  fi
   msg="[hint] \`head -N <file>\` / \`tail -N <file>\` → consider the Read tool with offset+limit: line-numbered output (accurate file:line cites), respects token budget, no shell-quote/path issues. For 'cmd | head -N' (stream slicing) keep head/tail. (mute: touch ~/.claude/.no-head-tail-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 fi

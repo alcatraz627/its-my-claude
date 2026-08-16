@@ -21,6 +21,15 @@ echo "$CMD" | rg -q 'find\s.*-(mtime|exec|prune|delete|newer|size|type\s+[df])\b
 
 # Match simple `find <path> -name <pattern>` (Glob's exact use case)
 if echo "$CMD" | rg -q '(^|\s|;|&&|\|\|)\s*find\s+\S+\s+-name\s+\S+' 2>/dev/null; then
+  # Confirm this INVOKES find rather than merely quoting it, e.g. a message or a
+  # doc string that happens to read `find . -name '*.md'`. Second stage only, so
+  # the common path pays nothing. Fails open: no helper means nudge as before.
+  if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+    . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+    type hook_cmd_skeleton >/dev/null 2>&1 &&
+      ! printf '%s' "$CMD" | hook_cmd_skeleton \
+        | rg -q '(^|\s|;|&&|\|\|)\s*find\s+\S+\s+-name\s+\S+' 2>/dev/null && exit 0
+  fi
   msg="[hint] \`find -name\` → consider the Glob tool: faster for shallow patterns, sorts by mtime. Critical: the Bash sandbox SILENTLY no-ops find on /tmp + ~/ paths (0 results instead of erroring) — Glob works correctly there. (mute: touch ~/.claude/.no-find-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-glob-over-find --action nudge --heeded unknown >/dev/null 2>&1 || true

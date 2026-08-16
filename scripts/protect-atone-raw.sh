@@ -67,6 +67,29 @@ EOF
       exit 0
     fi
 
+    # Stage two: the raw match above cannot tell a MENTION from an INVOCATION.
+    # A command that merely carries the path inside a quoted string, such as a
+    # proposal body or an --issue field describing the ledger, is not touching
+    # it. Blank the quoted regions and re-check; if the path only lived inside
+    # quotes, this was prose and the command is allowed through.
+    #
+    # Ordering is deliberate. The cheap raw grep above runs on every Bash call
+    # and this second stage runs only on a candidate, so the common path pays
+    # nothing. See hook_cmd_skeleton in scripts/hooks/hook-common.sh for the
+    # helper's scope, including the heredoc limit.
+    #
+    # Provenance: this guard blocked two legitimate commands on 2026-08-15, both
+    # quoting the ledger path as text inside a JSON payload.
+    if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+      . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+      if type hook_cmd_skeleton >/dev/null 2>&1; then
+        if ! printf '%s' "$CMD" | hook_cmd_skeleton \
+             | grep -qE 'atone/(events|judgments)\.jsonl|atone/rca/'; then
+          exit 0
+        fi
+      fi
+    fi
+
     # Whitelist: if it's an atone-suite script, allow
     if echo "$CMD" | grep -qE '(^|[[:space:]]|;|&&|\|\|)bash[[:space:]]+(~|/Users/[^/]+|\$HOME)/\.claude/scripts/atone(\.sh|-[a-z-]+\.sh)'; then
       exit 0

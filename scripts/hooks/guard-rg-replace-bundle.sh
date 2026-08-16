@@ -34,7 +34,21 @@ command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/nul
 # comment claimed a mid-quote split could "at most cause an under-fire — the safe
 # direction". It over-fired instead. Blanking keeps flag positions intact while
 # emptying the pattern, so both directions are settled here rather than reasoned about.
-blank_quotes() { printf '%s' "$1" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g"; }
+# Blank quoted spans so a `-r` inside a search PATTERN is not read as rg's own
+# flag. Delegates to the shared hook_cmd_skeleton, which handles backslash
+# escapes the local sed version missed and preserves length so the segment
+# splitting below keeps its offsets. Falls back to the sed form if hook-common
+# is unreadable, which keeps the guard armed rather than open.
+blank_quotes() {
+  if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+    . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+    if type hook_cmd_skeleton >/dev/null 2>&1; then
+      printf '%s' "$1" | hook_cmd_skeleton
+      return
+    fi
+  fi
+  printf '%s' "$1" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g"
+}
 scan=$(blank_quotes "$command")
 footgun=0
 while IFS= read -r seg; do

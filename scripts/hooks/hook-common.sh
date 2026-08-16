@@ -137,3 +137,93 @@ hook_clear_reset() {
     rm -f "$counter" 2>/dev/null || true
   fi
 }
+
+# hook_cmd_skeleton — blank the CONTENTS of quoted regions in a shell command,
+# so a matcher sees what the command INVOKES rather than what it merely MENTIONS.
+#
+# The mention-versus-invocation bug is this account's standing hook defect class:
+# 17 hooks match against `.tool_input.command` raw, so any command carrying a
+# quoted string that happens to contain `gh`, `rm`, a protected path, or a banned
+# flag reads as an invocation of it. Three false fires landed in one session on
+# 2026-08-15 alone (cli-gating on a python string, protect-atone-raw twice on a
+# path quoted inside a JSON payload).
+#
+# USE IT AS THE SECOND STAGE, never the first. Match the raw command as before,
+# and only when that hits, re-check against the skeleton:
+#
+#     printf '%s' "$cmd" | rg -q "$PAT" || exit 0          # cheap, unchanged
+#     printf '%s' "$cmd" | hook_cmd_skeleton | rg -q "$PAT" || exit 0   # confirm
+#
+# That ordering keeps the cost at zero for the vast majority of commands, which
+# never match at all, and pays roughly 2ms only on a candidate. Do not invert it.
+#
+# Quote characters are preserved and their contents become spaces, so the command
+# skeleton keeps its token boundaries. Blanking to spaces rather than to a filler
+# character matters: it separates tokens instead of welding them into new ones.
+#
+# Scope, stated because a helper that hides its limits is worse than none: this
+# handles single quotes, double quotes, and backslash escapes. It does NOT parse
+# heredoc bodies, command substitution, or ANSI-C `$'...'` quoting. A heredoc body
+# is still raw text to a matcher, so a hook that must be right about heredocs
+# needs its own handling.
+#
+# QUOTE STATE DOES NOT CARRY ACROSS NEWLINES. awk resets per record, so in a
+# multi-line quoted argument only the FIRST line is blanked and lines 2..N are
+# treated as bare text. A `git commit -m "subject\n\nbody"` therefore keeps its
+# body visible to a matcher. This is why a guard whose whole job is to read the
+# CONTENTS of a quoted argument must not be migrated: see the note below on
+# guard-commit-signature, where a single-line trailer would be blanked away and
+# the guard silently disarmed while the multi-line form still matched. That
+# split behaviour is worse than either outcome alone, because the guard would
+# pass its own tests on whichever form the test happened to use.
+#
+# DO NOT MIGRATE A SECURITY GUARD TO THIS. The filter assumes quoted text is
+# inert prose, and for a guard protecting against a dangerous ACTION that
+# assumption is false: `eval "export ANTHROPIC_API_KEY=x"` and `bash -c "<destructive>"`
+# both put a real invocation inside quotes, so blanking would DISARM the guard
+# rather than de-noise it. The trade differs by guard:
+#
+#   nuisance guard  (prefer-rg, prefer-read, a path-mention notice)
+#       a false fire costs an interrupted turn, a miss costs nothing.
+#       Migrate. The filter only ever removes noise.
+#
+#   security guard  (credentials, destructive deletes, push gates, tmp-jail)
+#       a false fire costs an interrupted turn, a MISS can be unrecoverable.
+#       Do NOT migrate. Accept the false fires, or teach the guard to see
+#       through `eval` and `bash -c` explicitly before touching its matcher.
+#
+# There is a THIRD category the cost-of-miss split alone does not catch, found
+# 2026-08-16 while migrating the nuisance tier: a guard whose matcher targets the
+# CONTENTS of a quoted argument rather than the command being run. Blanking is
+# not de-noising there, it is deleting the only thing the guard reads.
+# guard-commit-signature is the live example: every banned trailer arrives inside
+# `commit -m "..."`, so the skeleton erases exactly what it exists to catch. Ask
+# not only "what does a miss cost" but "does this guard read the quotes?" — if it
+# does, it stays raw no matter how cheap its misses are.
+#
+# This is the cost-of-miss question from features/hook-design.md applied to the
+# matcher rather than to the consequence, and it is the reason this helper is
+# opt-in per hook instead of being wired into a shared reader.
+hook_cmd_skeleton() {
+  awk '
+  {
+    line = $0; out = ""; state = 0   # 0 bare, 1 single-quoted, 2 double-quoted
+    n = length(line)
+    for (i = 1; i <= n; i++) {
+      c = substr(line, i, 1)
+      if (state == 0) {
+        if (c == "\\" && i < n) { out = out c substr(line, i+1, 1); i++ }
+        else if (c == "'"'"'") { out = out c; state = 1 }
+        else if (c == "\"")    { out = out c; state = 2 }
+        else out = out c
+      } else if (state == 1) {
+        if (c == "'"'"'") { out = out c; state = 0 } else out = out " "
+      } else {
+        if (c == "\\" && i < n) { out = out "  "; i++ }
+        else if (c == "\"") { out = out c; state = 0 }
+        else out = out " "
+      }
+    }
+    print out
+  }'
+}

@@ -44,6 +44,14 @@ if echo "$CMD" | rg -q '(^|;|&&|\|\|)\s*cat\s+[^-<|>]\S*\s*(\||$|;|&&)' 2>/dev/n
   if echo "$CMD" | rg -q 'cat\s+\S+\s*\|\s*(jq|rg|grep|awk|sed|sort|uniq|cut|tr|xargs|python|node)' 2>/dev/null; then
     exit 0  # input-adapter use; legitimate
   fi
+  # Confirm this INVOKES cat rather than quoting it, e.g. a message describing
+  # `cat file`. Second stage only; fails open.
+  if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
+    . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+    type hook_cmd_skeleton >/dev/null 2>&1 &&
+      ! printf '%s' "$CMD" | hook_cmd_skeleton \
+        | rg -q '(^|;|&&|\|\|)\s*cat\s+[^-<|>]\S*\s*(\||$|;|&&)' 2>/dev/null && exit 0
+  fi
   msg="[hint] \`cat <file>\` floods context with the whole file. Prefer the Read tool: Read with offset+limit for partial views (replaces 'cat | head -N'), or Read alone for the full file (line-numbered output for accurate citing). Bash cat is still right for heredoc / redirect / stdin-adapter. (mute: touch ~/.claude/.no-cat-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
 fi
