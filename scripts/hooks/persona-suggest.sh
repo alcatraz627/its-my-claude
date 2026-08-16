@@ -59,4 +59,14 @@ mark "$persona"
 jq -nc --arg m "[persona] ${msg} (Advisory; once per session. Mute: touch ~/.claude/personas/usage/.suggest-off)" \
   '{hookSpecificOutput:{hookEventName:"UserPromptSubmit",additionalContext:$m}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook persona-suggest --action nudge --heeded unknown >/dev/null 2>&1 || true
+
+# Arm the heed check. This hook suggests in the hook channel and is answered in
+# personas/usage/events.jsonl, a ledger it never reads, so it accumulated 1381
+# fires and zero heed lines. That absence was then read as "it never converts" —
+# a conclusion drawn from missing instrumentation rather than from data, which is
+# why task #31 says to instrument BEFORE tuning. heed-writeback.sh re-reads the
+# usage log at each Stop and records the answer. One suggestion per session, so
+# the marker is armed at most once and names the persona actually suggested.
+bash "$HOME/.claude/scripts/hooks/heed-writeback.sh" arm \
+  persona-suggest persona-adopted "$persona" "$sid" >/dev/null 2>&1 || true
 exit 0

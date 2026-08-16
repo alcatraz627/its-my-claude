@@ -65,6 +65,25 @@ if [ "$has_write" -eq 1 ] && [ "$has_target" -eq 1 ]; then
   exit 0
 fi
 
+# Heuristic 2b — the SANCTIONED INVERSE: the sub-agent returns everything inline
+# and the PARENT persists it. rules/sub-agent-outputs.md allows this explicitly,
+# and it is the required shape for a read-only agent type that cannot write at
+# all. So the nudge was firing on prompts that had already done the right thing.
+#
+# Heuristic 2 misses it for a dull reason worth writing down, because the same
+# stemming gap will bite the next matcher: the verb arrives inflected and pointed
+# the other way. "the parent persists to <path>" does not match \bpersist\b,
+# because the \b after "persist" needs a non-word character and "s" is a word
+# character. "the parent will persist it" carries no to/into/at/disk/file within
+# range at all. Both are correct instructions the guard could not read.
+#
+# Observed live on all 3 adversarial-gate dispatches in one session
+# (prop-20260722-220830-c9), each using the phrasing the hook's own text
+# recommends.
+if printf '%s' "$PROMPT" | grep -qiE 'deliver.{0,30}inline|inline.{0,30}(deliver|return)|return.{0,20}full text|parent (will )?persists?|persist(s|ed)? (it|them|the (report|output|findings))'; then
+  exit 0
+fi
+
 # High-stakes + an explicit material verb + NO persist instruction at all →
 # BLOCK the dispatch. Tighter than the advisory: the bare >400-char trigger (a
 # long but non-material prompt) and the write-verb-but-no-path case (intent to

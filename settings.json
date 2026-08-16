@@ -903,6 +903,22 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/relpath-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/ctx-claim-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/guard-structural-claim.sh"
           }
         ]
@@ -972,6 +988,14 @@
           {
             "type": "command",
             "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/heed-writeback.sh resolve"
           }
         ]
       }
@@ -1149,6 +1173,14 @@
             "command": "/bin/bash ~/.claude/scripts/hooks/subagent-box.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/task-table-inject.sh"
+          }
+        ]
       }
     ]
   },
@@ -1183,7 +1215,8 @@
     "stripe@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": false,
-    "wd@wd-marketplace": false
+    "wd@wd-marketplace": false,
+    "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
     "awesome-claude-code-plugins": {
@@ -1197,11 +1230,17 @@
         "source": "github",
         "repo": "Para-FR/wd-framework"
       }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
     }
   },
   "outputStyle": "Explanatory",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,

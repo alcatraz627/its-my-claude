@@ -81,4 +81,15 @@ jq -nc --arg m "[todo-discipline] ${edits} edits so far but your Task list is em
   '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook no-task-nudge --action nudge --heeded unknown >/dev/null 2>&1 || true
 
+# Arm the heed check. This hook fires once per session, so it has no second fire
+# to judge from, and the answer (did they create tasks?) arrives through the Task
+# store rather than back through this hook. heed-writeback.sh re-reads the store
+# at each Stop and writes the kind:heed line.
+#
+# Pass the SID, never $TASK_DIR. TASK_DIR was resolved above under a store that
+# does not exist yet, so it holds the legacy bare-id fallback; the real store
+# appears later as session-<sid8> and the captured path would never see it.
+bash "$HOME/.claude/scripts/hooks/heed-writeback.sh" arm \
+  no-task-nudge task-store-nonempty "$sid" "$sid" >/dev/null 2>&1 || true
+
 exit 0
