@@ -3,10 +3,17 @@
 # dirs (transcripts, dream data, .turn-state, telemetry, caches) that a
 # blocklist would silently start tracking.
 #
-# Big data (projects/, assets/, subconscious/, widgets/, plugins/, i-dream/,
-# memory*/, sessions*/, .turn-state/, output/, telemetry/, …) is NOT here —
-# it moves via rsync per mac-migration/MANIFEST.md §6. Standalone sub-projects
-# become their own repos (see PORTABILITY.md). Secrets are never tracked.
+# Raw data (projects/, assets/, widgets/, plugins/, sessions*/, .turn-state/,
+# output/, telemetry/, …) is NOT tracked — it moves via rsync per
+# mac-migration/MANIFEST.md §6. Standalone sub-projects become their own repos
+# (see PORTABILITY.md). Secrets are never tracked.
+#
+# The learned-state dirs (subconscious/, i-dream/, pinned/, memory-domain/,
+# personas/) are DIFFERENT and are deliberately tracked, un-ignored below, then
+# carved back at the bottom of this file. The rule is: keep the curated insight,
+# drop the queues, cursors and derivations. This paragraph used to list them as
+# untracked, which contradicted the un-ignore lines twenty rows down and sent at
+# least one session hunting for a bug that was a stale comment.
 
 # 1) ignore everything by default
 /*
@@ -79,3 +86,33 @@ subconscious/introspection/chains/
 # domain runtime pointers (regenerated)
 sessions-domain/dream/cursor.json
 memory-domain/dream/cursor.json
+
+# Three kinds of churn that were tracked by accident, untracked 2026-08-16.
+# They fit the carve-out principle already above (keep curated insight, drop
+# raw churn) and were simply never added, so ~65 files reappeared in every
+# git status and buried the config layer.
+#
+#   queues      transient by definition; a queue's contents are never a record
+#   cursors     position files, meaningless outside the run that wrote them
+#   derived     regenerable from the inputs, which ARE tracked
+#
+# All still live on disk and still travel by rsync per mac-migration
+# MANIFEST.md §6. Nothing is lost, it stops being versioned.
+# Owner ruling 2026-08-16: the goal is a good-enough backup of the gcc without
+# dragging along large logs or intermediate state already captured in refined
+# form. Queues, cursors and derivations go; curated insight stays.
+#
+# Left TRACKED for now, though the same test arguably catches them:
+# subconscious/metacog/audits/ (2.3M, 320 files) and dreams/project-briefs/
+# (412K, 94 files). No code reads either — every reference is a transcript, WAL
+# or shell log — and their refined forms (metacog/calibration.jsonl,
+# metacog/activity.jsonl, dreams/insights.md, dreams/patterns.json) are tracked.
+# Untracking them is a one-line change here plus a git rm --cached.
+subconscious/dreams/ingest-queue/
+i-dream/derived/
+subconscious/dreams/yield-state.json
+subconscious/dreams/reinforce-state.json
+subconscious/dreams/processed.json
+subconscious/dreams/digest-meta.json
+subconscious/metacog/processed.json
+subconscious/state.json
