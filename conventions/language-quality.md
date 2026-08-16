@@ -111,6 +111,27 @@ no category home. State what the thing is; drop the "not X" preamble.
 | overclaim | the "should now work" phrase family | claim-versus-evidence matching |
 | contrastive-scaffold | "not X, but Y" and "— it's" (the bare "not X —" form fires on plain negation; rejected) | none observed |
 
+## Calibrate the metric before you let it steer
+
+Before any score guides an artifact, run it on an ACCEPTED artifact of the same
+class from the same repo. If accepted work scores badly, the metric is
+disqualified for that class, and you say so rather than optimizing against it.
+
+The failure this prevents is metric capture. On 2026-08-13 a PR description was
+driven to 0.20 on prose-lint and rejected anyway; the repo's own MERGED PR scored
+6.05 on the same linter. The score was anti-correlated with acceptance for that
+class and kept being used regardless.
+
+The mechanism is worth naming because it is not carelessness. Doctrine rightly
+demands run-signals over feelings, and a lint is the nearest runnable instrument
+to hand, so the demand for evidence quietly promotes whatever can be measured
+into an oracle. A calibration run is the cheap defence: one command against work
+that already passed the only judge that counts.
+
+Scope: this covers prose-lint here, and any lint, score, or automated rubric
+steering a subjective deliverable. The drafting-side companion lives in
+`/ste-writing` § Subjective deliverables.
+
 ## Merged and demoted (do not re-add as categories)
 
 - **hedge** and **register** merged into thesaurus enforcement: the sweep found
