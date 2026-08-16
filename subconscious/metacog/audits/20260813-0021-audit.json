@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16610,
+    "correction_density": 0.025,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.05748331477354789,
+    "unit_count": 40
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 8 zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] across units de69ccb7-0, 9d2dc6a5-0, d331e614-0, 74b64b54-0, 497fa470-0, fe558382-0, f8ff91b7-0, ee4202c8-0; per-cycle volume (8) is notably higher than recent cycles (3-4); reactions are Unknown or Accepted; twenty-sixth+ consecutive cycle with identical pattern; no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit 0c39a659-37: Write to scratchpad path failed (success:false x1) before second Write attempt succeeded; recovery shape (fail once, retry same path) unchanged from 15+ cycle baseline; co-occurs with atone-filing unit for the second consecutive cycle, indicating the pattern persists even in sessions explicitly focused on behavioral correction; zero improvement signal",
+      "screenshot_path_assumption_no_probe:NEW_SHAPE — unit 0c39a659-46: agent attempted Read at a hardcoded playwright screenshot path (studios-dark.png) without first verifying the MCP's actual output path; when Read failed, pivoted to Bash find / (root-level scan violating shell rule 'never Glob/Grep from ~/', success:false) rather than a scoped probe to the project or known output directory; a subsequent browser_take_screenshot also failed before a path-adjusted retry succeeded; structurally related to compound_bash_failure_no_probe (fail then pivot without diagnostic isolation) but the surface is screenshot path assumption rather than server startup, and a probe was technically attempted though both the probe and its target violated shell constraints; classified NEW_SHAPE rather than merging into compound_bash_failure_no_probe"
+    ],
+    "calibration_score": 0.33,
+    "overconfident_count": 2,
+    "recommendations": [
+      "confirmation_bias_style_log: Volume this cycle (8) is roughly double recent per-cycle averages (3-4); no recommendation change per history guidance — deprioritized unless a corrective signal or non-Accepted reaction cluster emerges; flag volume increase for monitoring",
+      "write_before_read_trap: Fifteen-plus consecutive cycles with no improvement at one failure per cycle; the pattern surviving even atone-focused sessions suggests advisory rules are insufficient; a PreToolUse hook that checks whether the target path has been Read this session before allowing Write would mechanically interrupt the pattern without requiring session-level behavior change",
+      "screenshot_path_assumption_no_probe: Before Reading a playwright MCP screenshot, verify the MCP's actual output path by checking browser_take_screenshot's response or listing .playwright-mcp/ contents; never hardcode assumed screenshot paths; Bash find / is banned by shell rules and should be scoped to the project directory or a known output location like .playwright-mcp/ when hunting for a missing screenshot"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "de69ccb7-12d3-4c08-8aec-8e46d858ef19",
+      190784
+    ],
+    [
+      "a57ee61f-cdf2-40eb-ace4-54c429d84f2c",
+      153488
+    ],
+    [
+      "9d2dc6a5-4500-42f3-84d8-c0f3bcae8c4d",
+      127148
+    ],
+    [
+      "0c39a659-637f-40c6-9e08-ac6aabe4b22f",
+      9743973
+    ],
+    [
+      "d331e614-ed85-4105-a452-31f4cf63d228",
+      105888
+    ],
+    [
+      "d2e6faba-80f7-44a4-963e-82e4b9d96a6d",
+      120455
+    ],
+    [
+      "74b64b54-e09e-4275-b441-82717c0e30b7",
+      121300
+    ],
+    [
+      "6780d281-5495-469a-a4cf-e602f3ee39e2",
+      121411
+    ],
+    [
+      "03369b6b-b2e3-4779-bb65-fdbdc4fe07dc",
+      127432
+    ],
+    [
+      "11ded63e-6ccb-4baa-acf0-2efec7d218d6",
+      145231
+    ],
+    [
+      "8f591e15-2b19-4192-9226-79534d58245d",
+      118990
+    ],
+    [
+      "81186e90-a3ae-4530-8805-01e1a10e681d",
+      136420
+    ],
+    [
+      "497fa470-1009-46cd-8d8f-601bd20f6f1a",
+      148246
+    ],
+    [
+      "4123e7ac-2943-44c7-ae46-9713436dee9a",
+      125686
+    ],
+    [
+      "71c40edd-1b82-48e5-b68d-7385a2db7c82",
+      135939
+    ],
+    [
+      "3cae9ee4-9b3f-4e98-ba15-f5625fd8186d",
+      140854
+    ],
+    [
+      "fed6e8be-dcee-48c5-93ed-fc74d24d8413",
+      159090
+    ],
+    [
+      "fe558382-04de-4a38-bf7d-26fd5b0b9da7",
+      134804
+    ],
+    [
+      "f8ff91b7-14ce-470f-89f2-c84bf0f587b5",
+      123562
+    ],
+    [
+      "ee4202c8-30d8-4085-ab5e-c05ae0770128",
+      136146
+    ],
+    [
+      "e498212e-232a-4891-971d-f2226c34a1ce",
+      115877
+    ],
+    [
+      "db59c755-f616-4de8-b2e4-df5e4a625037",
+      137162
+    ],
+    [
+      "c38fefe9-c1f2-402f-8d13-4315b3d63975",
+      8898618
+    ],
+    [
+      "b6526fbf-48d0-4e29-a191-736713f1bd15",
+      125760
+    ],
+    [
+      "b503c934-39a0-4e80-88e7-ce08f5da3355",
+      143460
+    ],
+    [
+      "ad7c182f-6f59-4f6c-a142-c43d3c730242",
+      142144
+    ],
+    [
+      "a8d45a53-c429-4486-9eaa-7cdc4f38bfb3",
+      150386
+    ],
+    [
+      "9ecd0a36-48be-4724-8229-2c31914dad9c",
+      144116
+    ],
+    [
+      "91775253-b428-4e1e-a643-0a3994598877",
+      119720
+    ],
+    [
+      "89b1fe1d-6f26-4b9d-a40b-1c5b77743458",
+      144273
+    ],
+    [
+      "876b6488-3055-4321-b722-72502eede95e",
+      129739
+    ],
+    [
+      "74151b8b-7dc4-4d74-92d2-fc5deae5b23d",
+      131409
+    ],
+    [
+      "738224fe-1ab0-43ac-8f58-b7af0c632907",
+      139069
+    ],
+    [
+      "6c3b3814-4200-4a27-99f1-fbf21c895356",
+      140024
+    ],
+    [
+      "6c125e72-108f-48dc-b11e-c4675ac631f7",
+      7022359
+    ],
+    [
+      "6b594279-66a6-4508-ae39-83e7c0431974",
+      137653
+    ],
+    [
+      "6a94bd7a-ec5e-45a2-a8ba-b9c415936ab1",
+      122212
+    ],
+    [
+      "5f209fc2-136c-42ec-a70f-f847184b837c",
+      121393
+    ],
+    [
+      "5aeff913-17e0-4860-8343-7e67c5051bdb",
+      127713
+    ],
+    [
+      "5795518c-f635-419a-93bb-325321c72f83",
+      127868
+    ],
+    [
+      "5532fe27-65e4-4a84-8a29-936cb89e5632",
+      160119
+    ],
+    [
+      "3cec1836-7c28-46d3-b675-5c4d54623a52",
+      153489
+    ],
+    [
+      "38400d1e-19c8-4d27-8396-8eb71c9cc3c3",
+      128344
+    ],
+    [
+      "3247c6f2-4dbd-4eac-b70c-78f044ec41f1",
+      123901
+    ],
+    [
+      "13247814-9779-41dc-90b7-68d3e71f36fc",
+      133224
+    ],
+    [
+      "056b2d76-cc75-4bd8-b851-87d982c45088",
+      117551
+    ],
+    [
+      "f17fd4e5-5fa0-40d9-bbcb-2777536198d1",
+      142093
+    ],
+    [
+      "c7ccfc9b-7571-424d-a9d9-84fff0e6aafb",
+      128385
+    ],
+    [
+      "1699a85f-0823-42f8-8c17-de280cb93555",
+      123710
+    ],
+    [
+      "da2a3158-c31d-4d03-ac42-1ba6f4056c68",
+      133651
+    ]
+  ],
+  "timestamp": "2026-08-13T00:21:41.887363Z",
+  "tokens_used": 12352,
+  "units_analyzed": 19,
+  "units_total": 40
+}

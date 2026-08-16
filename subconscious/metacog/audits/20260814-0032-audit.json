@@ -1,0 +1,233 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16773,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.13043942956411553,
+    "unit_count": 26
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units e891fc84-0 and 67521276-0: two more zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twenty-eighth+ consecutive cycle with identical pattern; per-cycle volume (2) within recent range (2-4); no corrective signal; fully deprioritized per history guidance",
+      "screenshot_path_assumption_no_probe:RECURRING:STABLE — unit 0a81cc14-9: agent invoked browser_take_screenshot then attempted Read at hardcoded path (.playwright-mcp/report-dark.png) which failed, then issued find / -name 'report-dark.png' (root filesystem scan violating shell rule 'never Glob/Grep from ~/'), then retried screenshot with a different filename; structural shape is identical to the 0c39a659-46 occurrence documented in the 2026-08-13 cycle (screenshot path assumption, failed probe that violated shell scope, modified retry); upgrading from NEW_SHAPE to RECURRING:STABLE; the root-scan (find /) is a second failure mode co-occurring with the path assumption — the recovery heuristic defaults to unconstrained search when the narrow path fails",
+      "write_before_read_trap:RECURRING:STABLE — unit 0a81cc14-4: Edit to portfolio email drafts file failed (success:false x1) before a second Edit attempt succeeded on the same path; recovery shape unchanged from 15+ cycle baseline; zero improvement signal"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 1,
+    "recommendations": [
+      "screenshot_path_assumption_no_probe is now RECURRING (two consecutive cycles, same structural shape). The hardcoded .playwright-mcp/<name>.png assumption before probing the MCP's actual output location should be addressed at the dispatch level — a probe step (ls or find scoped to the project root, not /) before reading a screenshot should be the standard pattern. Prior cycle recommendation was not acted on; escalate to a hook proposal or rules candidate via propose.sh.",
+      "The root-scan shell violation (find / -name ...) in unit 0a81cc14-9 co-occurred with screenshot path failure recovery. Fixing the path assumption upstream would prevent the scan, but the recovery-path heuristic (scope widens to / on failure) is an independent defect worth noting separately if the assumption fix doesn't land.",
+      "Unit 0a81cc14-9 (Corrected) declared the report 'structurally verified in both themes' while explicitly noting 'pixels were NOT read back' — honest about the gap but the WAL checkpoint still uses the word 'verified', which is the declared-ready pattern. Consider treating screenshot pixel-read as a required verification gate before using the word 'verified' for visual output, or scope the claim to 'HTML structure verified, visual appearance unconfirmed'.",
+      "confirmation_bias_style_log: fully deprioritized per history guidance — no new signal."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "ccdd5203-e76c-4de3-a0de-b098f712af2f",
+      149457
+    ],
+    [
+      "7dcb1ecf-d6e2-49d7-bc77-6a43887ff412",
+      126322
+    ],
+    [
+      "e891fc84-dc4a-479a-bda8-0c320eed844c",
+      122922
+    ],
+    [
+      "7a20730e-07e8-43a8-b41c-688d94d99093",
+      20211
+    ],
+    [
+      "6ede9418-aabf-4a9a-b3d7-a06ac65e3133",
+      164654
+    ],
+    [
+      "67521276-9c41-4956-ad1c-524a11448ae2",
+      139952
+    ],
+    [
+      "477473c7-44d8-4e05-9400-6a7341264447",
+      137601
+    ],
+    [
+      "0a81cc14-2539-4216-9f93-fc378bb65ec8",
+      3254512
+    ],
+    [
+      "7d888bb2-0bd9-4775-b425-bd45448a84ef",
+      95708
+    ],
+    [
+      "1c32fa7a-260f-4715-9fc4-87c0a497d288",
+      97759
+    ],
+    [
+      "fd9f8ef9-4021-4158-8327-66465dc05d4e",
+      29753488
+    ],
+    [
+      "fa4abf0e-cc46-4ff4-a01a-dc5439c9ae91",
+      137334
+    ],
+    [
+      "f2f249c6-bf1a-4c2f-ab69-0a45cbea3e9b",
+      134435
+    ],
+    [
+      "efe5fea4-580c-4c02-b6c5-2e2ac6d7dba9",
+      97806
+    ],
+    [
+      "ed6da523-278b-4b88-9237-b4a5792e38ef",
+      138335
+    ],
+    [
+      "ec449080-c939-4b24-a0c5-424658a58205",
+      100114
+    ],
+    [
+      "ebf9f26b-851a-4b6b-a902-90d1aa3109f9",
+      128412
+    ],
+    [
+      "eb693a97-0b95-495f-8cd2-8a5ebb92f3ca",
+      119598
+    ],
+    [
+      "e7840c11-33eb-4c3a-9337-966a0fe7bd47",
+      117624
+    ],
+    [
+      "e3bc95fa-0e6a-4718-9098-325dc0c4e30f",
+      191901
+    ],
+    [
+      "e3327593-0bc2-4fdb-b561-821e8ebdbc1e",
+      142985
+    ],
+    [
+      "dd4b87d0-eac0-4dbb-8f48-c442ed949ba3",
+      103576
+    ],
+    [
+      "daf87e57-01b3-4356-b9e1-9713c476e3cf",
+      94940
+    ],
+    [
+      "dab9d228-0181-4c5d-bf96-b6eea99c8563",
+      133977
+    ],
+    [
+      "d98355e7-5de2-481e-a67d-b627114e3e9c",
+      105321
+    ],
+    [
+      "cc76d6fa-eca8-4f8d-8930-100f085bf2ff",
+      136474
+    ],
+    [
+      "c6e0795c-1dbd-42d3-81c6-efac39b6a39f",
+      143975
+    ],
+    [
+      "c4c77a56-c584-4756-9f74-3c7462bbea9b",
+      137371
+    ],
+    [
+      "c3968bc7-0cdc-48f6-bedb-f0ce81a0a764",
+      150370
+    ],
+    [
+      "b4d6aabe-e526-4aa8-a9f2-b5f4a4200d78",
+      141978
+    ],
+    [
+      "b3533112-832d-4e3f-bf63-0d96cf185e20",
+      127601
+    ],
+    [
+      "ad003fd3-2554-4ab5-bd12-a2012930c8e2",
+      112444
+    ],
+    [
+      "a4fe7ac5-6564-4c73-80f5-823df0ab50cb",
+      108568
+    ],
+    [
+      "a4fe61c6-9f4a-4249-b701-2d2a5a948591",
+      146689
+    ],
+    [
+      "a28c0633-64b0-4059-8e01-478f0aab3924",
+      145657
+    ],
+    [
+      "a21740c6-723d-44c9-b69b-0d4fef970cfa",
+      166093
+    ],
+    [
+      "8f330224-6074-4d72-a690-c9da0e502e5b",
+      89937
+    ],
+    [
+      "8e39414d-84f0-4ced-a07c-86f4fd9d6395",
+      138940
+    ],
+    [
+      "8ad97693-034a-46d9-bc34-9112d37b35b5",
+      124949
+    ],
+    [
+      "8a4138a6-e213-4419-98a9-c1db9ea7503a",
+      119894
+    ],
+    [
+      "871a5e10-c973-49c7-92f2-14549aacc59c",
+      135559
+    ],
+    [
+      "84b23058-a233-4b67-b4a3-104c7689ab4a",
+      124341
+    ],
+    [
+      "83b4de86-7dbc-4456-b5a7-4850553e5e32",
+      5252523
+    ],
+    [
+      "80d09105-a227-4d87-ab15-b36be5e3bea2",
+      126472
+    ],
+    [
+      "80c3ceea-a5ee-4584-93e1-d39843ceb424",
+      3932394
+    ],
+    [
+      "7a2deb86-6aa7-44a1-a753-01f334644f8f",
+      93727
+    ],
+    [
+      "78f5e50f-3805-4257-b58c-f86af2b0fc3a",
+      103213
+    ],
+    [
+      "78d5590c-515b-4047-b9d1-74e8a75b2f99",
+      149297
+    ],
+    [
+      "779de98c-b2a0-458f-b47c-93cd0ae5f8c6",
+      139249
+    ],
+    [
+      "7758632d-7d5e-4f4a-b7f7-f5cb132b82da",
+      142118
+    ]
+  ],
+  "timestamp": "2026-08-14T00:32:33.501821Z",
+  "tokens_used": 12229,
+  "units_analyzed": 8,
+  "units_total": 26
+}

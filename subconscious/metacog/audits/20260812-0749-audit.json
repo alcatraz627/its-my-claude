@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17071,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1134674124631939,
+    "unit_count": 56
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 65a6da54-0: one additional zero-tool session with topic_keywords ['enforce','style','ledger','file','content'] and Accepted user_reaction; twenty-fourth+ consecutive cycle with identical pattern; no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit 407286e9-13: Write to findings.md failed (success:false x1) before Bash workaround succeeded; additionally, agent attempted Edit on README.md (x2 failures), SKILL.md (x1 failure), active-parts.md (x1 failure), unlisted-parts.md (x1 failure), settings.md (x1 failure) — six Edit failures across five distinct files before Read+retry sequence; this extends the established pattern into a bulk-Edit-without-prior-Read shape: agent attempted Edits to multiple files in sequence without reading any of them first, then pivoted to Read for all failed targets before retrying; prior cycle observations showed 1-failure-then-read; this cycle shows 6 failures across 5 files before reads — worsening volume",
+      "compound_bash_failure_no_probe:RECURRING:STABLE — unit 407286e9-50: compound Bash command (node -p + npm view + ls chains combined in one call) failed (success:false x1); agent pivoted to simplified Bash command without inserting a diagnostic probe between the failure and the fallback; eighth consecutive cycle confirming the shape (different surface from prior server_startup_overconfidence occurrences but identical failure-pivot-without-probe structure); no probe step added"
+    ],
+    "calibration_score": 0.32,
+    "overconfident_count": 3,
+    "recommendations": [
+      "write_before_read_trap: the pattern has worsened from single-file to multi-file bulk Edit attempts without prior reads — the fix must now cover bulk operations: before ANY series of Edits targeting files not yet read this session, Read all targets first in parallel, then Edit; the six-failure instance in 407286e9-13 would have been zero failures with a batch Read pass before the batch Edit pass",
+      "compound_bash_failure_no_probe: insert a minimal diagnostic probe (a single targeted command) between any compound Bash failure and the fallback tool choice — this has been flagged eight consecutive cycles with no improvement signal; the probe step appears to be dropped under time pressure rather than by design",
+      "confirmation_bias_style_log: fully deprioritized — no new corrective signal and no change in pattern volume; continue suppressing in future reports unless user_reaction shifts from Accepted to a correction"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "65a6da54-1a58-4058-b9db-c4212acb9c23",
+      160238
+    ],
+    [
+      "648d27c1-8983-4caf-9b9b-fd8de221db96",
+      132339
+    ],
+    [
+      "635f8284-b041-4451-9686-175fb26ceedd",
+      133067
+    ],
+    [
+      "5caf95ea-41fc-43a4-bd56-f8a469282fe3",
+      131359
+    ],
+    [
+      "5be54e6f-256c-4b11-bb21-4e0c228e2e1c",
+      131872
+    ],
+    [
+      "5b913913-d3be-469d-b200-e7ebad23997d",
+      133221
+    ],
+    [
+      "53fb0251-d8d3-4be8-b6d9-3e9f6e36e241",
+      147643
+    ],
+    [
+      "485a67dc-e52a-447e-a19b-31e4f3443c5b",
+      142485
+    ],
+    [
+      "434fc35e-869d-493b-a93f-c3597f411134",
+      123788
+    ],
+    [
+      "40c46b79-5c92-45e4-9f4f-81ffff58e0e0",
+      137073
+    ],
+    [
+      "407286e9-c71c-4ec1-9b22-85e2db2db184",
+      27072189
+    ],
+    [
+      "3d70a5e0-0275-4118-8838-7adc2db4962f",
+      128435
+    ],
+    [
+      "3b9722fa-5ca6-45dd-a8f9-2b7533bd0878",
+      122099
+    ],
+    [
+      "3835be8f-1981-48d5-8361-d8e573b0f002",
+      149658
+    ],
+    [
+      "3800872a-017c-4291-bf22-e0a9b1364b61",
+      132237
+    ],
+    [
+      "379ab032-e7e0-4034-8914-e982b33bea8b",
+      137761
+    ],
+    [
+      "36336e90-add8-4b8c-8557-78157a1233d3",
+      128283
+    ],
+    [
+      "35673079-4e94-4c6e-9a09-690c78f19d34",
+      122914
+    ],
+    [
+      "34822c0b-3c6a-46da-a295-f9324bed6ad4",
+      132105
+    ],
+    [
+      "2d72b017-a25a-47c3-9e35-a7901cdd48b2",
+      136879
+    ],
+    [
+      "29806354-34c5-4bc6-b029-ae7a3bb4877a",
+      137344
+    ],
+    [
+      "296040de-6fe8-4738-b85f-a6e5791f280b",
+      123698
+    ],
+    [
+      "28837ead-5256-4216-8df2-e5040f24c4d3",
+      3853916
+    ],
+    [
+      "265a3539-aa9c-4d7d-8143-e481094c8f7b",
+      127427
+    ],
+    [
+      "2626e99f-778b-4fb9-adc4-75db43961448",
+      137135
+    ],
+    [
+      "1ed69565-3938-49b4-a180-d8fe6458af62",
+      128627
+    ],
+    [
+      "1d106135-753e-4db1-915e-678750d563ce",
+      113642
+    ],
+    [
+      "1a77efe6-e363-460f-8e11-2c6f2a7b503e",
+      136945
+    ],
+    [
+      "1848f8b8-488f-467b-ba02-a3af2281a9f9",
+      137899
+    ],
+    [
+      "0ea6c44c-9d0a-4d4e-ae81-4013897807d5",
+      113045
+    ],
+    [
+      "04624bcb-d69d-42ae-82be-cc3e4c9d9f61",
+      138980
+    ],
+    [
+      "0045ce63-368d-4304-8669-711d2e2eae35",
+      131349
+    ],
+    [
+      "d7528452-6538-4497-a68a-79c25d94e774",
+      163194
+    ],
+    [
+      "d305c2d5-4726-48e2-aa73-1d15ee0a5dba",
+      130399
+    ],
+    [
+      "c9800feb-b232-493d-8408-ba2138379ee3",
+      125627
+    ],
+    [
+      "9b1abb34-4ffb-44bf-8bde-e96b2081a135",
+      110573
+    ],
+    [
+      "8a3576b7-8084-43ee-9620-4eef15b42ca8",
+      128426
+    ],
+    [
+      "85ae630d-10fb-4b2f-9c02-6f8bec315944",
+      6768353
+    ],
+    [
+      "6be347d0-022e-49e2-9aa3-d60b77ee929b",
+      122063
+    ],
+    [
+      "63f274c2-cce1-49a8-a21d-7464c92cc527",
+      133772
+    ],
+    [
+      "5fcc8aee-a0f0-4761-b5f9-a681a54e31b5",
+      121280
+    ],
+    [
+      "3b282954-3684-49c7-8338-a8b28d94d213",
+      113655
+    ],
+    [
+      "2fd53748-6928-44b9-a410-1de9ae4a549d",
+      133551
+    ],
+    [
+      "c6df1412-1317-4db7-8361-c588895f2215",
+      106652
+    ],
+    [
+      "67cc805d-c9d7-497e-84b5-130bbf906f67",
+      14026149
+    ],
+    [
+      "feaacf48-e3fb-42e8-af80-416fa00fe514",
+      109844
+    ],
+    [
+      "fac908bd-72e6-48b7-be32-25cd8289e8cb",
+      132153
+    ],
+    [
+      "f4726838-5174-4215-8065-6ed3f97f359c",
+      121050
+    ],
+    [
+      "ec23ea82-3de5-4778-bf0b-6b757e6e1376",
+      117116
+    ],
+    [
+      "cc3bb653-5fcb-48d9-861d-2f27ff1b8942",
+      1821853
+    ]
+  ],
+  "timestamp": "2026-08-12T07:49:50.055045Z",
+  "tokens_used": 12311,
+  "units_analyzed": 13,
+  "units_total": 56
+}

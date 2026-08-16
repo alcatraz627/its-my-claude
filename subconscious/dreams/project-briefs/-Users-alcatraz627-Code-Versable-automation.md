@@ -1,23 +1,19 @@
-<!-- i-dream project brief · 2026-08-11T00:23:21.939257+00:00 · 17 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-16T03:49:45.829211+00:00 · 20 patterns / 5 insights -->
 ## What this project is about
-
-Multi-platform data scraping and automation pipeline for Versable, with GCP Cloud Build deploys and autonomous multi-agent orchestration. Work style is long-running autonomous sessions with fan-out sub-agents and frequent pipeline verification cycles.
+A Versable automation project covering data scraping pipelines, multi-source filtering UIs, and deployment workflows. Working style is autonomous long-running sessions with high user intolerance for pauses, hedging, or performative rigor.
 
 ## Things to do (or keep doing)
-
-- Route raw scrape/collection steps to sonnet-high or gemini; reserve higher tiers for analysis and synthesis — explicit model plan per fan-out
-- Before any large fan-out or scraping operation, estimate quota consumption against visible usage limits and surface the estimate before proceeding
-- Run adversarial review sub-agents explicitly tasked with finding the core flawed assumption — not just functional review but constraint-compliance check against style rules before shipping
-- Tag container images with commit SHA alongside `:latest` so every deploy is traceable back to a commit
+- Before any structural claim ("X is not present", "this does not work"), read the relevant source file and cite file:line — pattern-matching without reading has been corrected repeatedly
+- Emit a coverage manifest alongside every filter/scrape result: list each source checked, each criterion evaluated, and every zero-result bucket
+- Inspect a named reference implementation before building anything ("like the one from project X" = go read it first)
+- Classify blocks as credential-gated (halt, surface exact user command) vs work-gated (proceed autonomously if reversible) — never stall silently
 
 ## Things to avoid
-
-- Don't embed browser-redirect OAuth or `gcloud auth login` in deploy scripts — autonomous sessions will stall silently; design for fully non-interactive credential flows
-- When a pipeline produces zero results for any source, don't just report the count — surface which exact pages/endpoints were checked; shape-level spot-checks on heterogeneous pipelines miss real failures
-- Don't omit a per-source filter in any data UI built over multiple scraped platforms — it is an immediate UX gap users notice
-- Don't write deployment docs only into agent-scoped output dirs; place them in project-visible locations the team can find independently
+- Don't regenerate AI-smell prose after a hook fires — em-dashes, bold-spam, and Label:fragment rows in rewrites are the standing failure mode here; produce structurally different output, not cosmetically reworded output
+- Don't append "Generated with Claude Code" or any harness trailer to PR descriptions — explicitly banned in this project
+- Don't name sub-agent output files `report.md` — the harness blocks that write; use a slug-qualified name
+- Don't brief the user before answering — direct answer first, structure only if requested
 
 ## Open questions / known gaps
-
-- Autonomous sessions have no graceful handling for external blocking events (auth prompts, quota exhaustion, orchestrator death) — failure mode is always silent stall; no established escalation path yet
-- Pipeline verification degrades to shape-inspection as complexity grows; no enforced "exercise against full real dataset" gate before delivery
+- Interactive auth flows (browser-redirect OAuth, `gcloud auth login`) in deployment scripts structurally block autonomous sessions; no resolved pattern yet for unattended deploys
+- Prose-smell regression persists across multi-turn sessions even with active hooks — the rewrite cycle is cosmetic, not behavioral

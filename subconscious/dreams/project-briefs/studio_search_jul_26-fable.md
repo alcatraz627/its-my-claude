@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-08T10:27:39.724263+00:00 · 8 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-16T03:50:35.290987+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-A studio/job search pipeline with scored output, decision-page UIs, and multi-agent sub-agent workflows — dominated by data filtering, ranked report generation, and incremental artifact delivery.
+A job/studio search pipeline with multi-stage data collection, filtering, scoring, and decision-page output. Work style is iterative and correction-heavy — the user expects tight, right-sized output and is cost-conscious about token spend.
 
 ## Things to do (or keep doing)
-- **Verify filter criteria conjunctively against real output rows** before calling any filter feature done — read actual results, not just the filter logic
-- **Trace decisions back to the original source** (raw data, upstream records) not to agent-produced summaries or self-reported reads; the agent's paraphrase is not the authority
-- **Reconcile the task list before stopping**, especially after 20+ sequential edits — a frozen task list signals invisible drift
-- **Include actionable links** (original posting, company page) alongside any scored/ranked list in reports or decision-page UIs
+- **Emit a coverage manifest with every filter/scrape result** — list sources checked, criteria enforced, and zero-result buckets; never deliver ranked output without it
+- **Lead with the direct answer or raw data** before any structure or synthesis; if the user wanted a briefing, they'd ask for one
+- **Split model tiers across pipeline stages** — cheap/fast models for bulk collection, capable models for analysis and scoring
+- **Right-size fan-out to the question** — a single targeted sub-agent beats a fleet when the scope is narrow; estimate token cost against any stated quota before launching
 
 ## Things to avoid
-- **Don't claim "I read through the output"** without actually reading rows and acting on what's found — the claim must be backed by observations, not stated as reassurance
-- **Don't batch sub-agent output** when the contract says per-item/incremental — verify the sub-agent honored the write contract before consuming results
-- **Don't handle null fields implicitly** — null coercion into numeric operations silently distorts scores and rankings; guard every missing field explicitly before arithmetic or display
-- **Don't wholesale-inherit a dead agent's pending list** — evaluate each inherited item independently against the current plan
+- **Don't re-raise deferred topics** — if the user skipped or ignored something across multiple turns, it stays parked until they surface it
+- **Don't deliver filter results without verifying ALL criteria fired conjunctively** against real output; zero results from a new source means investigate the filter, not proceed
+- **Don't emit structurally identical output after a correction** — a re-emission with different words but the same shape reads as performative acknowledgment, not change
+- **Don't instruct sub-agents to write a file named `report.md`** — the harness blocks it; use a slug-named path under `.claude/output/`
 
 ## Open questions / known gaps
-- Deferred user-named actions ("send these emails", "post this") accumulate in PENDING lists without ever executing — the mechanism for actually closing them is unresolved
-- Pattern-level fixes are applied to the immediate callsite only; the same broken pattern in sibling surfaces is routinely missed until a second correction
+- Deferred actions (send emails, post listings) accumulate in PENDING lists without ever executing — no clear trigger or owner handoff pattern established
+- Incremental sub-agent writes vs. batched delivery: the project has had repeated failures where sub-agents batch instead of writing per-record; no enforcement contract yet

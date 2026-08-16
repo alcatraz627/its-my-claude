@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-08-09T06:13:08.512731Z",
-  "average_depth": 9.1,
+  "last_updated": "2026-08-16T06:23:52.193675Z",
+  "average_depth": 7.6,
   "average_breadth": 1.3,
   "fixation_rate": 0.06,
-  "assumption_rate": 0.38,
-  "overconfidence_rate": 0.22,
+  "assumption_rate": 0.72,
+  "overconfidence_rate": 0.31,
   "common_assumptions": [
-    "File paths are valid and content is current without pre-read verification",
-    "Type-check or noEmit passes constitute runtime validation",
-    "Single-step response is sufficient for style enforcement tasks regardless of content complexity",
-    "Tool output represents complete untruncated state",
-    "Prior session context and file contents are unchanged between tool calls"
+    "Single-pass rule application is sufficient without re-verification",
+    "Tool output is complete and not truncated",
+    "File state matches what was last read earlier in the chain",
+    "Command success signals content correctness, not just execution success",
+    "Context supplied in the prompt is current and sufficient"
   ],
   "strength_patterns": [
-    "Deep multi-step chains use diverse tool types reflecting genuine investigation before reporting completion",
-    "Sequential dependency ordering is respected — reads precede writes and verification follows edits",
-    "Iterative grep-then-read patterns in long chains narrow scope before acting rather than operating on assumptions"
+    "Narrow scoped tasks (style enforcement, juror verdicts) are resolved efficiently in a single step with no wasted overhead",
+    "Complex multi-step chains systematically read files before edits and interleave test/build verification commands",
+    "High-step chains mix exploratory search (rg, head) with targeted edits, reducing blind-edit risk"
   ],
   "weakness_patterns": [
-    "Bimodal depth distribution (42 of 63 chains at depth 1) indicates most tasks receive no reasoning depth at all",
-    "Repetitive reads of the same file within 68–135 step chains indicate fixation loops rather than progressive exploration",
-    "tsc --noEmit and collect-only verification used in lieu of runtime exercise in multi-step implementation chains"
+    "Same files re-read many times in long chains (e.g., one doc read 9× in a single chain) indicates findings are not retained or integrated across steps",
+    "Approximately 70% of chains are single-step with zero externalized reasoning, making assumption failures and unconsidered alternatives invisible",
+    "Thinking steps appear in under 5% of chains; implicit reasoning makes overconfidence undetectable until output is wrong"
   ],
   "trend": {
     "calibration_improving": false,

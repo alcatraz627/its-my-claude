@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-11T00:23:45.783776+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-13T02:34:49.464452+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-A multi-source social media scraping and download pipeline (Instagram-focused) with a filtering UI, fan-out collection agents, and GCP Cloud Build deployment. Working style is autonomous long-running sessions with sub-agent orchestration.
+Instagram/social media scraping and download pipeline with a multi-source aggregation UI. Work runs in long autonomous sessions with external dependencies (auth, quotas, rate limits).
 
 ## Things to do (or keep doing)
-- Route raw collection fan-out to sonnet-high or gemini; reserve opus/main for analysis and synthesis — model tier matters at scale here
-- Surface per-source diagnostics on zero-result runs (which pages/endpoints were checked, not just the count)
-- Write deploy strategy and pipeline config in project-visible locations, not `.claude/` internal dirs
-- Pre-deploy: run an explicit constraint check against sub-agent output before merging — self-reported correctness is unreliable
+- Prefer fully async deployment flows; never block the session waiting on interactive auth steps
+- Always surface which pages/endpoints were checked when a scraper returns zero results — zero count alone forces a follow-up
+- Update Task tool status after each logical unit during autonomous sessions, not in batch at the end
+- When correcting any pattern (UI component, prose, data handling), enumerate sibling instances that share the same structure and apply the fix to all of them in the same turn
 
 ## Things to avoid
-- Don't build interactive-auth steps into autonomous deploy pipelines — browser-redirect OAuth blocks silently; pre-establish credentials before the session starts
-- Don't let task status drift during long autonomous runs; update after each logical unit, not in batch at the end
-- Don't omit per-source filter controls when the UI aggregates from multiple scraped sources — an actively-scraped source without its own filter is immediately noticed
-- On GCP Cloud Build with a custom service account, always specify a logs bucket or `CLOUD_LOGGING_ONLY` — omitting it fails the build non-obviously
+- Don't write em-dashes, excessive bold spans, or Label:fragment rows — the prose-smell hook will fire and the correction will stick; a surface-level rewrite that regenerates the same tells wastes a full round trip
+- Don't make structural claims about where functionality lives without reading the relevant source file:line first
+- Don't declare a page or endpoint "done" without an actual HTTP fetch confirming it renders; visual review of source is not verification
+- Don't silently stall when an external wall hits (quota, credential block, rate limit) — surface the exact blocker and the exact user action needed immediately
 
 ## Open questions / known gaps
-- Model usage/rate-limit handling during autonomous sessions is unresolved: hitting a limit currently causes silent stall rather than graceful fallback with user notification
-- UI edge states (empty scrape results, out-of-scope filter conditions) have not been exercised against real data — treat them as unverified gaps, not assumed correct
+- Multi-source filter UI has a known gap: any newly added scraping source must immediately get a per-source filter; the pattern has been missed once already
+- External-wall failures (usage limits, auth) go silent mid-autonomous-session; no reliable graceful-degradation pattern established yet

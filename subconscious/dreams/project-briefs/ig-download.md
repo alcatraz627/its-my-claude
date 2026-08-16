@@ -1,19 +1,18 @@
-<!-- i-dream project brief · 2026-08-11T00:24:07.271808+00:00 · 7 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-08-13T00:23:40.104349+00:00 · 15 patterns / 0 insights -->
 ## What this project is about
-A multi-platform scraping and download pipeline (Instagram-focused) with a data aggregation UI. Work style is fan-out pipelines, browser MCP automation, and filter/display surfaces over heterogeneous sources.
+Instagram content downloader and multi-source scraping pipeline; work centers on data collection, filtering UIs, and sub-agent fan-out orchestration over heterogeneous platforms.
 
 ## Things to do (or keep doing)
-- Route raw collection steps to sonnet-high or gemini; reserve higher-tier models for analysis and synthesis passes
-- Surface per-source diagnostics on zero-result scrapes — which pages/endpoints were checked, not just the count
-- Always exercise pipeline output against the full actual dataset before delivery; shape-level spot-checks miss cross-source filter bugs
-- Before large fan-out scraping operations, estimate whether the operation fits within the visible usage quota
+- **Surface zero-result diagnostics proactively**: when any pipeline stage returns 0 items, report which endpoints/pages were checked before moving on — a zero count alone is not actionable
+- **Estimate quota cost before fan-out**: if the user has mentioned a usage limit, compute whether the proposed scraping operation fits before launching; offer an explicit go/no-go
+- **Tier models by stage**: route bulk collection/raw scraping to sonnet-high or gemini; reserve higher-tier models for analysis, synthesis, and judgment seats
+- **Include per-source filters** in any filtering UI built over multi-platform aggregated data — omitting a source the pipeline actively scrapes is immediately noticed
 
 ## Things to avoid
-- Don't dispatch a sub-agent with exclusive browser MCP access without first verifying no other session holds it — resource conflicts cause silent failures
-- Don't build a source-filter UI that omits any actively-scraped platform; every live source needs a per-source filter control
-- Don't emit prose with em-dashes or excessive bold spans — the stop-hook will flag it and force a re-emission cycle; write plain sentences from the start
-- Don't declare a pipeline "verified" after shape-level checks alone; null coercions and out-of-scope items passing filters are real failure modes at scale
+- **Don't regenerate AI-smell prose after a hook flags it**: em-dashes, excessive bold spans, structured self-critical replies — rewrite plain on the first correction, not the third
+- **Don't one-shot a fan-out without a browser MCP exclusivity check**: verify no other session holds the resource before dispatching a sub-agent with exclusive browser use
+- **Don't answer indirect or verbose when the user asks a direct question**: state the point first; indirection reads as a communication failure here
+- **Don't launch a large scraping job and report findings count only**: show the filtering logic path and what was skipped
 
 ## Open questions / known gaps
-- No established adversarial-review gate before large fan-out plans — recurring tension between shipping speed and catching the core flawed assumption early
-- Pipeline verification discipline degrades as complexity grows; no standing one-command affordance to exercise the full dataset end-to-end
+- Recurring tension between thoroughness (fan-out, adversarial review) and quota cost — user wants the value of broad review but reacts negatively when the token spend feels disproportionate to the question size

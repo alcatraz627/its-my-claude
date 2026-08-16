@@ -1,0 +1,239 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17803,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.25646644394924123,
+    "unit_count": 30
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 9 zero-tool sessions (4923bb98-0, eb40e3b2-0, 9fe3effa-0, 96509ae8-0, 4060e4e3-0, 1fe9fe67-0, fa4d3dc8-0, e99d9706-0, d92aa05b-0) with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; thirty-second+ consecutive cycle; per-cycle volume (9) is above recent high of 8; no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit d064b887-43: Edit to checkpoint file failed (success:false) three times across interleaved attempts before eventual success via write.sh; pattern is structurally identical to 15+ prior cycle occurrences; co-occurs again with a behavioral-correction unit (checkpoint filing), confirming the pattern persists even in sessions explicitly focused on procedural correctness; zero improvement signal",
+      "hook_false_positive_checkpoint:NEW — unit d064b887-43: prose-smell hook (verdict_first_opener check) fired repeatedly on the mandatory **Done:** label required by validate-checkpoint.sh --mini template, creating a deadlock where compliance with one system requirement triggers a block by another; agent correctly diagnosed the false positive, filed hook-feedback via hook-feedback.sh, and eventually succeeded via write.sh bypass; this is a distinct shape from prior write_before_read failures — the blocker here is an inter-hook conflict, not a file-state assumption; the agent's recovery was well-calibrated (escalated to diagnosis rather than brute-force retry)",
+      "git_command_overconfidence:MILD — unit e38c701d-36: first git commit invocation used path-spec syntax (git commit -q -- file) that failed before correct invocation succeeded; unit d064b887-39: git stash + checkout + stash pop + commit chain failed twice (once on hook, once on atone index lock) before ATONE_INDEX_OK=1 workaround succeeded; both cases self-corrected within 1-2 retries with no user intervention required; classified mild rather than full overconfidence"
+    ],
+    "calibration_score": 0.47,
+    "cross_references": [
+      "dream_insight_1 (upstream-action≠downstream-state-achieved): CONFIRMED in unit d064b887-13 — CI run polling used an explicit loop checking status/conclusion before reporting completion, not a self-observation claim; also CONFIRMED in unit e38c701d-36 — git push to main failed (guard fired) and agent correctly held for user authorization (unit -37) rather than claiming push success from the commit alone",
+      "dream_insight_1: CONFIRMED in unit d064b887-43 — agent verified checkpoint file write by running validate-checkpoint.sh against the actual file path rather than treating the Write tool success as downstream proof",
+      "dream_insight_2 (mechanical-progress vs product-decision classification): CONFIRMED in unit d064b887-13 — AskUserQuestion was used for CI job rerun authorization (an external-system action requiring human judgment), while iterative edit/test/fix cycles ran without interruption; correctly classified the decision boundary"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "hook_false_positive_checkpoint (NEW, actionable): scope the verdict_first_opener check in prose-lint.py to not fire on structured template section headers like **Done:** or **Work done:** when they appear as required skeleton labels rather than as the opening claim of a prose passage; the validate-checkpoint.sh --mini template mandates this exact token, making the conflict a system design issue rather than a prose quality failure",
+      "write_before_read_trap: zero improvement across 15+ cycles — the pattern has not responded to documentation alone; recommend a mechanical intervention: a PreToolUse hook that warns when an Edit targets a path that was not Read in the current turn or that had a prior failed Edit in the same session",
+      "literal-request-over-intent: ZERO occurrences this cycle after 7× last week — this is a meaningful break in a high-frequency recurring pattern; no action required but worth noting as a positive signal to preserve; the pattern-specific precheck in rules/literal-request-over-intent.md appears to be taking hold",
+      "confirmation_bias_style_log: deprioritized as before; volume (9) is at a new high but reaction remains Unknown, so the severity signal is unchanged; continue to suppress recommendations on this bias"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 17
+  },
+  "sessions": [
+    [
+      "4923bb98-60c5-4b83-a1c5-340f5cd4f8c8",
+      116919
+    ],
+    [
+      "3630b5c0-5eda-464c-baf4-368f39b52cc6",
+      181699
+    ],
+    [
+      "1d4cf060-784c-4a74-ba89-880cb6443f3b",
+      123157
+    ],
+    [
+      "1685c0f3-39c4-4ec9-a870-b10566427650",
+      112220
+    ],
+    [
+      "13cec8a3-cb30-4b02-b9ea-707b88eebcd8",
+      104098
+    ],
+    [
+      "f09807ff-c7c3-4c8a-b867-4e26be13f3e7",
+      117304
+    ],
+    [
+      "eb40e3b2-3153-4afd-aa86-cfddc15076b2",
+      113426
+    ],
+    [
+      "e5426e13-b56e-4f82-8637-5ace574a11cd",
+      98257
+    ],
+    [
+      "e47e3809-89b4-4aaf-8d7b-92c8cb77956b",
+      114222
+    ],
+    [
+      "e38c701d-731b-4a3e-946a-339a0d9b9212",
+      7803301
+    ],
+    [
+      "e07fee81-50f3-4af5-9370-0ab4a80c84e7",
+      114791
+    ],
+    [
+      "d6eb68c2-d29f-419c-a381-5ea6ef12e800",
+      115977
+    ],
+    [
+      "d54ee5d0-32f6-468e-b047-99e7349f488a",
+      98638
+    ],
+    [
+      "bfb3dfd5-c7c0-4823-a025-c437e3e03a6b",
+      112228
+    ],
+    [
+      "bb5c6bc0-eb4e-455b-be44-0fc6eb0a4d3b",
+      78202
+    ],
+    [
+      "b0d63685-5deb-4315-8829-6d957b91672a",
+      102384
+    ],
+    [
+      "9fe3effa-fbd4-4413-b7f2-6f1dd51cea02",
+      103818
+    ],
+    [
+      "9d0f5f65-349c-436d-ae78-ad94121993bc",
+      108874
+    ],
+    [
+      "9c1efdba-6ff3-42b6-a850-a247e16f484a",
+      117447
+    ],
+    [
+      "96509ae8-23f3-4d17-ba29-9457c27aa351",
+      103580
+    ],
+    [
+      "622bedcb-f5f9-4bc4-a003-cb7282447857",
+      118115
+    ],
+    [
+      "54dda278-3d0e-4f75-97f3-61194f877d8d",
+      111509
+    ],
+    [
+      "4060e4e3-109e-4da8-aac3-414647478d61",
+      115862
+    ],
+    [
+      "3f29fef9-b260-45c4-8b7c-2b2f42f9921f",
+      117024
+    ],
+    [
+      "327e148c-ead7-4974-82e4-b9997b318375",
+      120555
+    ],
+    [
+      "309ea961-5845-4535-a3c3-9237d630040a",
+      118877
+    ],
+    [
+      "2b2235e5-e163-465f-9160-5bb4a1bfbe63",
+      117092
+    ],
+    [
+      "2603846b-059a-449b-b3d8-aa299932aa2f",
+      117437
+    ],
+    [
+      "1fe9fe67-a2fb-471f-891c-150151c898c1",
+      121895
+    ],
+    [
+      "1dfe4d27-c9dc-4d62-8bbf-0075953bbebc",
+      122663
+    ],
+    [
+      "154e684d-4ac8-4932-a8ee-32f1b9463afd",
+      115687
+    ],
+    [
+      "01ee7c05-2678-469a-aa33-1bd3bb9a48a2",
+      114199
+    ],
+    [
+      "fd4304dd-3976-490b-923a-84a84028cdd2",
+      135628
+    ],
+    [
+      "fb61e4ad-4e03-407b-98ec-c247d5521f1e",
+      107421
+    ],
+    [
+      "fa4d3dc8-7ad4-4579-b485-28c9e703a226",
+      122544
+    ],
+    [
+      "f68d92ca-a6ee-4373-8200-1d86abb37018",
+      128323
+    ],
+    [
+      "e99d9706-9d25-4fcf-9a80-a45d4e9631fc",
+      118008
+    ],
+    [
+      "e95df383-6741-484c-9863-ca5dfde4ec1a",
+      129908
+    ],
+    [
+      "e2b86696-b8fe-4262-a083-9571346b337d",
+      128565
+    ],
+    [
+      "e27daeee-5df5-4d92-abae-b5d78a7f0401",
+      105058
+    ],
+    [
+      "e0d7f68e-de7d-499d-b1a7-d2771a82e946",
+      130638
+    ],
+    [
+      "e02c9755-247c-4884-8b77-0a9dca5716e9",
+      172135
+    ],
+    [
+      "d92aa05b-1a11-460f-befe-2586224b798a",
+      123198
+    ],
+    [
+      "d6de8a48-a826-4dc6-8119-a54e49fddaaa",
+      24220
+    ],
+    [
+      "d2ff4f67-08cd-4d89-96ad-6755bfaccff8",
+      99333
+    ],
+    [
+      "d06ac345-60c3-4e22-a395-9fd753d280c4",
+      116858
+    ],
+    [
+      "d064b887-feb1-4568-9d8f-ce52d38c76de",
+      7101210
+    ],
+    [
+      "ce99d381-3e6c-422e-8691-03e189b260e9",
+      24020
+    ],
+    [
+      "c54158e9-40b3-4791-b826-89faadfe4b74",
+      138652
+    ],
+    [
+      "c0a4e02f-bc8d-4efe-8215-eff8a4d8699d",
+      131892
+    ]
+  ],
+  "timestamp": "2026-08-15T05:51:32.948433Z",
+  "tokens_used": 19619,
+  "units_analyzed": 30,
+  "units_total": 30
+}

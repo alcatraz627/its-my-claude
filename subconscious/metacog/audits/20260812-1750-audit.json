@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17184,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.08039998144021455,
+    "unit_count": 96
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units cf805a4c-0, cce5ea81-0, 9af61a3e-0: three additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twenty-fifth+ consecutive cycle with identical pattern; per-cycle volume (3) consistent with recent trend; no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit 0c39a659-37: Write to scratchpad path failed (success:false x1) before second Write attempt succeeded; recovery shape (fail once, retry same path) unchanged from 14+ cycle baseline; zero improvement signal; now also co-occurring with an atone-filing unit, suggesting the pattern survives even sessions explicitly focused on behavioral correction",
+      "compound_bash_failure_no_probe:RECURRING:STABLE — unit 8c1fca11-22: gcloud builds triggers export failed (success:false x1) then agent retried with gcloud beta builds triggers export (success:false x1) without inserting a diagnostic probe between the two attempts; ninth consecutive cycle confirming failure-pivot-without-probe structure; surface is different from prior server_startup occurrences (gcloud trigger export vs compound sleep+curl chains) but the structural shape — compound command fails, agent pivots to modified variant without a standalone diagnostic step — is identical; no probe step added between the two gcloud failures"
+    ],
+    "calibration_score": 0.31,
+    "overconfident_count": 2,
+    "recommendations": [
+      "compound_bash_failure_no_probe: RECURRING:STABLE across nine cycles with no improvement and worsening surface diversity; pattern now confirmed across server startup, gcloud CLI, and npm check surfaces; the fix is mechanical — insert a minimal diagnostic probe (e.g. 'gcloud --version', 'gcloud auth print-access-token') between a failed compound Bash and the retry to confirm the failure mode before changing the command; no new recommendation beyond prior cycles since there is no improvement signal",
+      "write_before_read_trap: RECURRING:STABLE across 14+ cycles with zero improvement signal; no new recommendation; pattern remains unchanged and has been noted in prior cycle recommendations without effect",
+      "confirmation_bias_style_log: fully deprioritized per guidance; no recommendation this cycle; volume (3 units) consistent with prior cycle trend"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 15
+  },
+  "sessions": [
+    [
+      "0c39a659-637f-40c6-9e08-ac6aabe4b22f",
+      7844074
+    ],
+    [
+      "fb13ca88-0b1b-47ba-be6d-fa6dc58e9dfd",
+      124745
+    ],
+    [
+      "f9f4c3b2-711c-438c-b864-778b70648b1b",
+      126423
+    ],
+    [
+      "cf805a4c-13a5-476d-889a-7979205c17ea",
+      130747
+    ],
+    [
+      "cce5ea81-2357-4b85-aaf5-f2f2c8c71267",
+      124921
+    ],
+    [
+      "c637900c-e77c-49be-8f93-7a57b354a0b2",
+      119697
+    ],
+    [
+      "c5db6eed-8524-46b3-be9a-9788b28970b6",
+      121205
+    ],
+    [
+      "c38fefe9-c1f2-402f-8d13-4315b3d63975",
+      6050108
+    ],
+    [
+      "bfc32d0d-d4f0-479e-99af-61036498dd3d",
+      127582
+    ],
+    [
+      "9ede7211-1bb4-4351-8e9c-f30dee49545c",
+      123942
+    ],
+    [
+      "9af61a3e-3b57-49f4-8c25-4314e1e2a357",
+      127459
+    ],
+    [
+      "8c1fca11-0fb6-409c-a059-b57206c429aa",
+      21435270
+    ],
+    [
+      "8269ec38-7126-4b47-845e-7df9c8f5e251",
+      124306
+    ],
+    [
+      "5081affb-8435-4352-871d-c14a73b0f27d",
+      130194
+    ],
+    [
+      "4ce597ea-975c-4b6a-8d6f-be32491cf95f",
+      128115
+    ],
+    [
+      "44223092-b1b8-4a71-b571-fe9fd5b42605",
+      101522
+    ],
+    [
+      "3e6bc4e1-b80e-40ac-90ad-5c98f71b5245",
+      124981
+    ],
+    [
+      "3dc8cecf-8c75-4cbe-b40e-76cefb6c6c86",
+      126336
+    ],
+    [
+      "39344c57-8f49-4a23-a7b0-1295dd42669b",
+      126776
+    ],
+    [
+      "319ecec3-8243-4f5a-a207-54721af34064",
+      119957
+    ],
+    [
+      "2a8f5eb4-0764-4297-bf82-c792b9ac774d",
+      117834
+    ],
+    [
+      "28837ead-5256-4216-8df2-e5040f24c4d3",
+      8347777
+    ],
+    [
+      "1e47e35e-89dc-4f60-8e62-a48eeebc9d61",
+      126249
+    ],
+    [
+      "11a55017-510c-47e7-b0c8-00950f38ed26",
+      129213
+    ],
+    [
+      "0adb9b37-a47f-4481-877e-76d3ce1a7d23",
+      114647
+    ],
+    [
+      "058668ee-60d4-4799-b1e6-4a552b6efc61",
+      1267573
+    ],
+    [
+      "f8a86d7d-e8d9-4f91-88b0-3765a47f6121",
+      132734
+    ],
+    [
+      "f0e18567-cf1c-4ab2-88e8-f4b40e2d37e3",
+      135000
+    ],
+    [
+      "ed8b82f2-a594-4450-8d3b-f4795271f710",
+      99595
+    ],
+    [
+      "e7cc9d14-197e-4dae-b811-aa4e196bff84",
+      126822
+    ],
+    [
+      "dca08adc-7214-4800-872f-f10f2483e561",
+      120196
+    ],
+    [
+      "d40e6a2a-3d48-4eae-bc1f-e04a99c1aa7f",
+      120906
+    ],
+    [
+      "bae72426-fa49-4f45-be44-11324aea6e02",
+      120295
+    ],
+    [
+      "9f1198cc-03e5-485a-a39f-5e7882eda75c",
+      130307
+    ],
+    [
+      "85ae630d-10fb-4b2f-9c02-6f8bec315944",
+      6929641
+    ],
+    [
+      "7e3bd9ed-ea6f-4ce2-a8a7-b5e9ad45a8ab",
+      119574
+    ],
+    [
+      "75cc7954-0ea3-4dc9-bbac-851dfb5d0784",
+      147476
+    ],
+    [
+      "656cdbca-b26b-4230-835f-4b0e9c142539",
+      3609665
+    ],
+    [
+      "3fe75ac3-1729-454c-82db-12e996be7b8c",
+      117116
+    ],
+    [
+      "3b9e16f0-b5f1-45cf-b35a-695ef80f1632",
+      118441
+    ],
+    [
+      "36f0c029-c30f-4694-ae5b-4dc42e9d7a38",
+      121495
+    ],
+    [
+      "2f9be20d-ae1d-4fc0-880d-a0850551a513",
+      110024
+    ],
+    [
+      "2bac147c-045b-40ae-bc88-85ca075c8bdd",
+      116466
+    ],
+    [
+      "67cc805d-c9d7-497e-84b5-130bbf906f67",
+      17180086
+    ],
+    [
+      "ed25b3fe-28d6-4856-8a2d-821172cc0730",
+      271168
+    ],
+    [
+      "cc3bb653-5fcb-48d9-861d-2f27ff1b8942",
+      1966181
+    ],
+    [
+      "bdffbf31-2e55-4480-8b90-2d649f94f825",
+      11305082
+    ],
+    [
+      "ba32e8cd-6ab8-4d53-ac16-f44558f8b9f1",
+      2978856
+    ],
+    [
+      "a8487f0a-57c9-455e-a8e2-95737a9d15b2",
+      118865
+    ],
+    [
+      "a136324a-078e-4641-89a6-c7fff8f47aaa",
+      128790
+    ]
+  ],
+  "timestamp": "2026-08-12T17:50:30.413115Z",
+  "tokens_used": 11486,
+  "units_analyzed": 20,
+  "units_total": 96
+}

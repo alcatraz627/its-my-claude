@@ -1,0 +1,228 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17681,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.05192301994298868,
+    "unit_count": 18
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 7379ca3a-0: twenty-ninth+ consecutive cycle with zero-tool session, topic_keywords ['enforce','style','ledger','file','content'], Unknown user_reaction; per-cycle volume (1) at low end of recent range (1-8); no corrective signal; fully deprioritized per history guidance"
+    ],
+    "calibration_score": 0.44,
+    "overconfident_count": 0,
+    "recommendations": [
+      "No new bias patterns detected this cycle. The two active 6c125e72 units show well-calibrated behavior: grepping before asserting absence (confirm() count correction in the primitives doc), exercising output before claiming done (Chrome headless render-check on hero SVG both modes), and verifying version pin semantics before writing FREE-section claims (speedway ^0.0.14 caret-on-0.0.x = exact pin in clean install). The cd-path bash failure (6c125e72-4, src/index.ts rg command) recovered correctly by dropping the cd prefix rather than retrying the broken form. The rsvg-convert → Chrome headless fallback is a legitimate tool-availability recovery, not a probe-failure pattern. The git --amend sequence (two amendments) operated on local unpushed commits and was structurally sound. No action recommended on the style_log pattern per standing deprioritization guidance."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "7379ca3a-7bd4-47d2-b932-482064ce2456",
+      152351
+    ],
+    [
+      "6c125e72-108f-48dc-b11e-c4675ac631f7",
+      7377350
+    ],
+    [
+      "663d5d34-657c-4e0e-8a13-d1d4fa094a6a",
+      120669
+    ],
+    [
+      "6556b8f6-d89e-4f82-9c33-4f8a9ab6e9f0",
+      125761
+    ],
+    [
+      "63c1e624-5f8c-474c-ac1a-509ce85bb1be",
+      150074
+    ],
+    [
+      "62a6e3f1-7994-43db-a97b-546389432b0d",
+      141809
+    ],
+    [
+      "600f5395-17f3-429b-bf01-cb9fed6105fe",
+      127791
+    ],
+    [
+      "5acad5b3-5899-46c8-b0bf-79ee05a86c98",
+      118961
+    ],
+    [
+      "55efa61b-ebaf-4c11-89a6-1c7dd7ec90e9",
+      98797
+    ],
+    [
+      "4fc1a966-ec11-4960-847a-33e68af03bfb",
+      164778
+    ],
+    [
+      "4c650fb8-52f4-4803-bc9d-8d652d2ddd74",
+      172222
+    ],
+    [
+      "4c490198-3a1a-480f-a2f6-1c3eca6b478a",
+      115121
+    ],
+    [
+      "4b811d95-d597-4930-b076-28c27a1e05ae",
+      175456
+    ],
+    [
+      "4a7816cc-d8bc-446b-99fd-6add5bec9e38",
+      101770
+    ],
+    [
+      "469edc03-ad2f-4d7e-88a1-ea973afcbbca",
+      132645
+    ],
+    [
+      "43d92de8-20e0-4e60-8a24-15c4f8bd2f65",
+      184853
+    ],
+    [
+      "43321e55-5f8f-4334-9406-ea0799f15ea7",
+      125576
+    ],
+    [
+      "42f1de3e-aaf8-42ef-9120-c7557193fa86",
+      113638
+    ],
+    [
+      "3fcd755e-d710-4261-a4db-76b6df162fbf",
+      89321
+    ],
+    [
+      "3c7b477a-c169-4289-8183-27976ed40861",
+      137431
+    ],
+    [
+      "3b1b5b1a-f227-4a19-b5e0-431023a82ed1",
+      117366
+    ],
+    [
+      "39248b88-8d28-4346-bc27-e917f6a03f74",
+      135511
+    ],
+    [
+      "377e1986-c262-4f2f-ac9b-496eb912b3c4",
+      126249
+    ],
+    [
+      "3108a08a-40a3-4b17-abe0-fe94ab81a9dc",
+      131851
+    ],
+    [
+      "2b8be50d-dc12-4a00-9a30-83cd9da94da7",
+      133163
+    ],
+    [
+      "28b67cbd-63b3-4f08-a88a-e05c489d4220",
+      130024
+    ],
+    [
+      "27bc2f29-1a3f-418d-957c-868f503b06f2",
+      169576
+    ],
+    [
+      "2773e26d-f56a-4b69-9785-3c5a7be40b2f",
+      133476
+    ],
+    [
+      "23e9e3c2-b770-4a6a-b3e8-4a4d5f230731",
+      146404
+    ],
+    [
+      "1de67428-153f-478a-b7a0-baba779fc2d0",
+      118148
+    ],
+    [
+      "19c90d94-90a7-4c64-a367-9ae20d0026c5",
+      140665
+    ],
+    [
+      "16d613c2-7d01-42d2-b2b9-e167b5f21ce9",
+      171188
+    ],
+    [
+      "162294c3-89b1-4a2d-bb7e-f113c28fa2a6",
+      123979
+    ],
+    [
+      "16214bb7-d17f-4526-97b2-c41914575f6a",
+      153072
+    ],
+    [
+      "12efb6cf-eaed-467a-afe5-e9c16c3000c9",
+      24403
+    ],
+    [
+      "12575cdf-26da-48ff-9069-b1c1b39a90fd",
+      137596
+    ],
+    [
+      "0e140a43-cdb2-4536-a4cc-596e56c90295",
+      132375
+    ],
+    [
+      "0ad8cf3b-85a8-435d-bbee-bb1ceb98188d",
+      146555
+    ],
+    [
+      "0ab24d51-410c-47ae-81e6-3186bcfd6168",
+      104482
+    ],
+    [
+      "07f21139-679d-43f8-bd41-a00bf01f4c79",
+      132706
+    ],
+    [
+      "078ff4e6-55ee-4005-9094-46eb6423e835",
+      133118
+    ],
+    [
+      "072fb610-44a3-47dd-8814-453adf624450",
+      121237
+    ],
+    [
+      "070e3a7e-f088-4d3a-8fab-1813d4998532",
+      106310
+    ],
+    [
+      "05809c3f-1127-48d5-ab73-9c9a0f5bac45",
+      146077
+    ],
+    [
+      "04162281-8c3d-4bda-adac-03727d0e47a1",
+      127613
+    ],
+    [
+      "030bc86c-af69-44b4-84f8-ef44d2fc5f67",
+      92448
+    ],
+    [
+      "ede69f48-2f98-4c52-9888-d9523e291028",
+      99380
+    ],
+    [
+      "ecf1d42f-1444-47c0-8ef9-d47d310c45e7",
+      123007
+    ],
+    [
+      "eaf9876e-4004-4324-9968-20447e9d709f",
+      125815
+    ],
+    [
+      "e75e69bb-7b23-466d-bc81-ef50db106a25",
+      109277
+    ]
+  ],
+  "timestamp": "2026-08-14T02:39:23.435135Z",
+  "tokens_used": 9502,
+  "units_analyzed": 3,
+  "units_total": 18
+}

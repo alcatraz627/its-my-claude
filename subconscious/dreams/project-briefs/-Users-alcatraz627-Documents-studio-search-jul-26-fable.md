@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-11T00:24:33.991819+00:00 · 20 patterns / 3 insights -->
+<!-- i-dream project brief · 2026-08-16T03:48:50.405326+00:00 · 20 patterns / 6 insights -->
 ## What this project is about
-A multi-platform job/studio search tool with data scraping pipelines, multi-criteria filtering UI, and structured two-agent peer-review workflows. Dominant mode: pipeline correctness and autonomous session reliability.
+A multi-source job-search aggregation tool with scraping pipelines, filtering UI, and a two-agent mutual peer-review workflow where agents independently produce plans and grade each other's blueprints.
 
 ## Things to do (or keep doing)
-- **Execute the two-agent peer-review protocol** when requested: each agent produces an independent plan, then grades the other's blueprint — never skip the independent-production step.
-- **Always produce side-by-side contrast** when asked to compare plans or outputs — merging is a separate operation requiring explicit user request.
-- **Exercise filters against the full real dataset** before delivery and surface per-source diagnostics (which pages/endpoints were checked, counts per source) — shape-level verification is not enough.
-- **Surface blocking events immediately** (auth prompts, usage limits, orchestrator failures) with the exact action needed; never stall silently.
+- **Emit a coverage manifest** alongside every filter/scrape result — list every source checked, every criterion evaluated, every zero-result bucket; the user notices omitted sources immediately
+- **Produce a side-by-side contrast** when asked to compare two plans or outputs — merging is a separate operation requiring explicit instruction
+- **Classify any block as credential-gated (halt, surface exact command) vs work-gated (proceed autonomously if reversible)** — never stall silently on either
+- **Exercise the changed path before claiming done** — the declared-ready hook has fired multiple times per session; run it, read the result line, then report
 
 ## Things to avoid
-- **Don't emit AI-smell prose** (em-dashes, heavy bold spans) — the stop-hook fires repeatedly here; clean it before sending, not after being caught.
-- **Don't add unprompted background automation** (pm2 warm-up jobs, cron, ollama pre-loads) — user has explicitly rejected these; they must not reappear as implicit suggestions.
-- **Never claim a filter or output is verified** without naming the specific observable result you read — "I checked and it looked fine" is not verification; cite the row, count, or artifact.
-- **Don't accept a sub-agent's scope reduction as settled** without independently probing feasibility first.
+- **Don't regenerate AI-smell prose after a hook correction** — em-dashes, excessive bold, label:fragment rows; if the re-emission is structurally identical to what the hook flagged, the correction didn't land
+- **Don't raise a deferred or skipped topic again without explicit user invitation** — three or more skip signals is a hard scope boundary
+- **Don't accept a sub-agent's scope reduction as settled without independently probing feasibility** — present the narrowed scope to the user only after verifying it holds
+- **Don't name a sub-agent output file `report.md`** — the harness blocks that write; use a slug or timestamped name
 
 ## Open questions / known gaps
-- **Filter conjunctiveness**: multi-criteria exclusions repeatedly ship enforcing only partial criteria; needs a checklist gate before delivery on any filter change.
-- **Null coercion in pipeline**: missing fields silently default to suspicious values; no systematic null-guard pattern yet established for this codebase.
+- Autonomous execution stretches stall silently on usage limits or auth blocks — no wall-clock heartbeat discipline established yet
+- Prose-style regressions persist across multi-turn sessions even after hook enforcement; a structural re-emission check (not just rewording) is not yet habitual

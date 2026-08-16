@@ -1,0 +1,120 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17132,
+    "correction_density": 0.041666666666666664,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.23818153004798198,
+    "unit_count": 48
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 857f9dd3-0: thirty-third+ consecutive zero-tool session with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; per-cycle volume (1) within recent range; no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit 0a81cc14-4: Edit to 20260807-portfolio-email-drafts.md failed (success:false x1) before second Edit succeeded on same path; structurally identical to 15+ prior cycle occurrences; zero improvement signal",
+      "screenshot_path_assumption_no_probe:RECURRING:STABLE — unit 0a81cc14-9: agent took screenshot, attempted Read at hardcoded path .playwright-mcp/report-dark.png (failed), then issued 'find / -name report-dark.png' (root filesystem scan, violating shell rule 'never Glob/Grep from ~/'), retried with filename ss-dark.png (also unlocatable); WAL checkpoint records 'screenshots would NOT be read back'; structurally identical to prior cycle occurrence with root-scan co-occurrence confirmed; no improvement signal",
+      "repeated-scope-nag-after-user-deferral:NEW — unit 0a81cc14-26 (Corrected, S3): user said 'Skip the parts where I have to draft an applicaton for now' and signalled deferral three additional ways (ignored across turns, prior 'wrong direction' correction); agent re-raised Phase 0 in four consecutive status-message closings then delivered an unrequested kill-criterion framing; user Corrected with strong language; agent correctly invoked atone (slug 'repeatedly-emphasizing-ops-setup-that-user-already-addressed', cluster C); distinct from prior literal-request-over-intent instances — this is a deferral-override shape where the project ROADMAP's stated priority was allowed to override the user's stated priority across multiple turns, with no session-level deferral tracker to suppress the closing-line template"
+    ],
+    "calibration_score": 0.45,
+    "cross_references": [
+      "dream_insight_2_confirmed — unit 0a81cc14-9: agent explicitly recorded 'screenshots would NOT be read back' in WAL checkpoint rather than claiming pixel verification succeeded; this matches the insight's recommended honest gap-marking ('UNCONFIRMED — reason') and is the correct behavior, though the root-scan violation during the search is a separate tool-safety failure the insight does not resolve",
+      "dream_insight_3_not_triggered — no blocking events (auth prompts, usage limits, orchestrator death) detected this session; sub-agent coordination in units 0a81cc14-31 and 0a81cc14-32 completed with explicit TaskStop calls on verified agents, consistent with the scope-close discipline the insight recommends"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "repeated-scope-nag-after-user-deferral (NEW — first occurrence this week): Implement a session-level deferral register. When a user signals 'skip for now', 'not now', or ignores an item across two consecutive turns, tag it 'deferred-by-user' in the Task list and add a precheck at any message-closing template slot: does this closing surface a user-deferred item? If yes, omit. The mechanical vector is the 'blocked on user: X' closing-line format; the check must fire at that specific slot, not at message composition generally.",
+      "screenshot_path_assumption_no_probe (RECURRING, no improvement signal across two cycles): Before issuing a browser_take_screenshot call, probe the MCP's actual screenshot save directory with a cheap ls or stat rather than assuming a path. This eliminates the path-assumption failure before it escalates to a root-scan violation. One read before the screenshot is cheaper than the root-scan + multi-retry + acknowledged failure chain seen in both occurrences."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "b6cdefcf-aa20-4b2d-86ee-6f1ddf2900b9",
+      1380796
+    ],
+    [
+      "8db1413b-c5dc-404e-97a9-f4514f1f32c9",
+      132856
+    ],
+    [
+      "857f9dd3-1855-4c24-93bb-4e1faf70ef43",
+      93153
+    ],
+    [
+      "7460956b-bc35-4730-ae96-0d4a1791a32a",
+      86926
+    ],
+    [
+      "0a81cc14-2539-4216-9f93-fc378bb65ec8",
+      7369258
+    ],
+    [
+      "aa25e181-ee15-4298-913b-c1c16c7ef888",
+      112470
+    ],
+    [
+      "9dcb05b6-6e90-4569-9c21-10da090c20ba",
+      86695
+    ],
+    [
+      "99d33150-7edf-43d0-be35-8014895aa550",
+      13754590
+    ],
+    [
+      "717b09c6-624c-4c46-96cd-e06f38c774a4",
+      25259
+    ],
+    [
+      "328dde26-aa8e-44de-ace7-943f7ba99d47",
+      113984
+    ],
+    [
+      "12ba3715-dd73-4e5c-8b4d-74d992cb9de3",
+      19305102
+    ],
+    [
+      "a36058b6-1ea8-48de-8393-6135d9d8d7dd",
+      121484
+    ],
+    [
+      "788d1e8f-509b-4267-a302-cc675236fc5a",
+      137189
+    ],
+    [
+      "626ed7be-3e81-492a-a6bc-1dd52100e458",
+      6801603
+    ],
+    [
+      "26300aa8-9bd6-4274-b39a-75fc4e594aed",
+      122272
+    ],
+    [
+      "1e083fd8-c451-4547-b278-5b655ab0715b",
+      7170541
+    ],
+    [
+      "ed25b3fe-28d6-4856-8a2d-821172cc0730",
+      272125
+    ],
+    [
+      "7b6944bd-90fe-4e20-97ab-0caeb313e4a0",
+      89130
+    ],
+    [
+      "6ccb642e-fb62-4b61-accc-0a87cba89d8a",
+      98332
+    ],
+    [
+      "5bcda92e-9c69-45a4-8651-31cac6dace61",
+      5305918
+    ],
+    [
+      "0e20c155-11f6-4f08-a61c-642f792691a8",
+      6896938
+    ]
+  ],
+  "timestamp": "2026-08-16T03:47:18.373900Z",
+  "tokens_used": 23920,
+  "units_analyzed": 13,
+  "units_total": 48
+}

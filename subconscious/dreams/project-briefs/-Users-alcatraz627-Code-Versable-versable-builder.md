@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-11T00:25:24.357739+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-08-16T03:50:11.974420+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A React/Next.js product builder (versable-builder) where the dominant failure mode is treating each page as isolated scope when the codebase is globally shared — components, layouts, and patterns recur across pages and must be audited before any single-page fix is applied.
+Versable Builder is a full-stack web application (Next.js/React frontend, backend services) with multi-agent coordination via IPC. Work is UI-heavy with frequent parallel sub-agent sessions.
 
 ## Things to do (or keep doing)
-- **Grep all consumers** before touching any drawer, sidebar, modal, or shared layout component — fix all N pages in one response, not the one the user named
-- **Cite full absolute paths** whenever referencing a file in any reply — basenames force follow-up questions and are treated as a mistake
-- **Verify on the running dev server** by observing an actual browser state; name the specific observable result — "I ran it and it looked fine" without a citation counts as no verification
-- **Always include decision context** when presenting deferred items: prior constraints + concrete options, not just the item label
+- **Audit all pages before touching any shared UI shell component** (sidebar, drawer, modal): implement once globally, never per-page variants
+- **Verify fixes on the running dev server** before claiming done — exercise the actual code path, not just the edit; "it looks right" is not verification
+- **Default-DENY for all access gates**: unrecognized commands/CLIs must be blocked, never passed through
+- **Show diff + plain-English effect before any permission prompt**; this is a protected repo — prepare the change, never commit or push
 
 ## Things to avoid
-- **Don't claim fixed/done/verified** unless the changed code path was actually executed and produced a specific, nameable output — false completion is the #1 trust destroyer here
-- **Don't commit or push** — this is a protected-repo project; prepare the diff and hand the commit to the user every time
-- **Don't verify only one state** of a multi-state surface (dark mode only, one modal variant only, one page only) — enumerate all states before starting, track coverage explicitly
-- **Don't strip decision context from deferred items** — the deferred-review workflow the user uses requires full context to act without a follow-up
+- **Don't emit AI-smell prose** (em-dashes, excessive bold, label:fragment rows) — the stop-hook will fire and re-emission with the same tells wastes cycles; emit mechanically different output after any prose correction
+- **Don't treat send-success as delivery** in IPC flows — wait for an actual round-trip reply from the peer before claiming a message was received
+- **Don't re-raise deferred topics** the user has skipped three or more times without explicit re-invitation
+- **Don't include internal banter or stakeholder commentary** in any document that may be shared externally — strip it before writing the file
 
 ## Open questions / known gaps
-- Multi-session / parallel-agent coordination repeatedly produces clobbered edits and stale task state; no ownership protocol is consistently enforced between sessions
-- UI verification degrades from "exercise in browser" to "shape-check the code" as complexity grows — the boundary between the two is unclear in practice
+- State-sync degrades under parallelism (task lists drift, ownership conflicts, stale branch state) — no reliable resolution pattern established yet; manual reconciliation required after burst sessions
+- Proxy evidence (test-pass, class-name match, advisory doc) is repeatedly mistaken for direct verification — the gap between "check ran" and "outcome confirmed" keeps surfacing across domains

@@ -1,0 +1,231 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17574,
+    "correction_density": 0.02564102564102564,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1605890795764845,
+    "unit_count": 39
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit 8658c6bc-16a0-0: thirty-second+ consecutive cycle with zero-tool session, topic_keywords ['enforce','style','ledger','file','content'], Unknown user_reaction; per-cycle volume (1) at low end of recent range; no corrective signal; fully deprioritized per history guidance",
+      "guard_clause_precheck_skipped:NEW — unit 8826f135-24: 6 of 13 Agent dispatches failed on the first wave because the subagent-output guard required the persistence clause inline in the prompt text, not as an external file reference; agent had generated the prompts via Python script and committed them before dispatch but did not apply a per-prompt completeness check against the guard requirement before firing; self-corrected on re-dispatch wave (all 7 second-wave succeeded); WAL checkpoint explicitly records 'guard lesson: persistence clause must be IN the dispatch prompt text, indirection hides it'; prior agent-failure events in f3996e99-17 were attributed to literal-request-over-intent (vague feedback loop), not guard-clause omission — this is a structurally distinct failure: the requirement was known and documented in the prompts directory but not verified as satisfied before the wave fired",
+      "path_assumption_without_verification:mild — unit 83564434-12: first Bash call targeted setup.tsx at an assumed path (success:false), self-corrected via fd; matches structural-claim-without-reading-code family at low severity; recovery was single-round-trip; not flagged as a named recurring bias in prior history but consistent with the infra-before-grep family"
+    ],
+    "calibration_score": 0.38,
+    "overconfident_count": 2,
+    "recommendations": [
+      "guard_clause_precheck_skipped (NEW — act on): Before firing any parallel Agent dispatch wave, add a deliberate per-prompt completeness scan against active guard requirements before the wave fires. Specifically: after generating dispatch prompts, and before calling Agent, verify inline that each prompt contains the persistence clause the subagent-output guard checks for — not as a read-the-docs step but as a mechanical string-presence check on the prompt text itself. The re-dispatch cost (6 retries) exceeded what a two-second pre-fire scan would have cost.",
+      "zero_tool_correction_on_teammate_digest (act on): Unit 8826f135-20 produced a zero-tool 307-char response to a teammate digest and received a Corrected reaction. Before responding to IPC/teammate digest messages without tools, verify whether the message expects an action (tool call, file read, acknowledgment with evidence) versus a conversational reply — a zero-tool response to a substantive digest is the same overconfidence shape as other documented no-action-taken patterns."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "8826f135-652a-4cab-844d-57bf63c13c77",
+      5235396
+    ],
+    [
+      "8658c6bc-16a0-458d-af8b-3fb66d091479",
+      131236
+    ],
+    [
+      "859b4579-f94a-4118-b20c-6ebe776a9bf7",
+      112250
+    ],
+    [
+      "83564434-7cf9-4856-936c-eac0878ac8a8",
+      8114730
+    ],
+    [
+      "821961e1-ce26-43f1-acb1-900aa6bb2a64",
+      142011
+    ],
+    [
+      "80c3ceea-a5ee-4584-93e1-d39843ceb424",
+      5634478
+    ],
+    [
+      "7ed343f7-b9ef-4bc1-8b0d-bec24d1a8fb2",
+      148600
+    ],
+    [
+      "7d6825b8-ea83-4477-a5e2-3df1f2959011",
+      102702
+    ],
+    [
+      "768f4f50-0c9d-4f95-af26-d0faada371eb",
+      92228
+    ],
+    [
+      "767ee96d-41d5-4ae5-9513-5d54636effd0",
+      156239
+    ],
+    [
+      "72c3add7-528a-490e-af65-1e7197375f25",
+      126001
+    ],
+    [
+      "70699448-9edc-45e7-a36a-3cf9067eb114",
+      122254
+    ],
+    [
+      "6acc8d11-03c0-426a-874a-27285968bc1e",
+      152465
+    ],
+    [
+      "684633ea-37f8-4144-a7b8-e22ec46b72fe",
+      121138
+    ],
+    [
+      "670a0380-16b0-4b2f-8cb4-fb1e8db64d9c",
+      111048
+    ],
+    [
+      "66b81e9d-b41a-44aa-81d4-90466b768e84",
+      144723
+    ],
+    [
+      "60106bfc-4596-4f96-8eda-7198d1f4a2dd",
+      135689
+    ],
+    [
+      "5ad08822-139e-4fdd-8648-9c66f55b8ffe",
+      123756
+    ],
+    [
+      "5786fb9c-36b9-4248-8ae2-78b9a513f04d",
+      125977
+    ],
+    [
+      "5640e0a4-772d-4993-9197-8c8af1a7e4fe",
+      119506
+    ],
+    [
+      "55cf17ba-79d0-4e09-9130-fb00cb0ad1eb",
+      109141
+    ],
+    [
+      "46eb8992-a194-4ad6-bb82-f373f5f2c990",
+      116016
+    ],
+    [
+      "43e8a05d-5cdf-4d88-a6b8-b2a394352926",
+      141224
+    ],
+    [
+      "4309dc5c-c760-4b7e-8a06-9dc80b81a956",
+      139694
+    ],
+    [
+      "3ee7f50b-5379-4071-be4a-080ae811e6a4",
+      137668
+    ],
+    [
+      "32aed77d-efcd-4724-9b5a-cb4fb68c9d58",
+      143687
+    ],
+    [
+      "32584b22-bdc3-4b7b-98b8-d0be598be17f",
+      127750
+    ],
+    [
+      "319a34e0-75e2-4edc-b852-58b3e2a6728e",
+      164003
+    ],
+    [
+      "2fa323c6-5844-4e2a-8b43-648b391031cd",
+      119874
+    ],
+    [
+      "2f770a2a-d66e-443a-8d63-d0f1fb74ce83",
+      140207
+    ],
+    [
+      "2eebca80-29b7-4485-a702-5337fc5c3fdf",
+      128576
+    ],
+    [
+      "2856091c-7f1d-409d-afea-c95b1cbd6fbe",
+      145878
+    ],
+    [
+      "1db9ea21-5a23-4fe5-8ab5-104983d08f36",
+      114573
+    ],
+    [
+      "1a9c2739-1eaf-45e4-bd90-130b9e26ac3c",
+      137050
+    ],
+    [
+      "1697d9eb-0578-43b2-89a3-820186694e51",
+      142451
+    ],
+    [
+      "14464c69-e586-466a-8474-6a26dea86e3e",
+      119401
+    ],
+    [
+      "1121b9c6-7599-4174-b4a7-46f962dd007c",
+      129075
+    ],
+    [
+      "0d1dd4c3-f076-4881-b402-cb6e534aa925",
+      133124
+    ],
+    [
+      "0afbd249-7829-41ac-aefb-01869a2642ad",
+      99263
+    ],
+    [
+      "042286d7-6cc6-4868-a8e4-d8e88a353771",
+      154175
+    ],
+    [
+      "f79b4524-1209-4211-a4ab-93590ceecdd9",
+      121678
+    ],
+    [
+      "eece2824-9bda-4e82-acbd-ad2da087465e",
+      118119
+    ],
+    [
+      "9fed68e3-1fd9-464d-8f9c-b5dfde1f3358",
+      125711
+    ],
+    [
+      "475c11df-25e2-429c-9645-81bbdeadddc1",
+      125446
+    ],
+    [
+      "dfcb9eea-833d-4212-8d84-64cbb4b0f360",
+      116817
+    ],
+    [
+      "cea0fad2-cac0-4f5a-8b73-d49578e20d49",
+      108167
+    ],
+    [
+      "ca00b2a4-704e-4c6a-8722-2a6ec160d789",
+      3200205
+    ],
+    [
+      "95a43979-4594-4d45-b634-abf04b7da7b1",
+      3993955
+    ],
+    [
+      "672e4230-68f5-4a64-924c-c8033ce178d5",
+      110188
+    ],
+    [
+      "5bad063c-cd0b-4640-975f-5426e350c955",
+      111676
+    ]
+  ],
+  "timestamp": "2026-08-15T03:45:15.788538Z",
+  "tokens_used": 11213,
+  "units_analyzed": 11,
+  "units_total": 39
+}

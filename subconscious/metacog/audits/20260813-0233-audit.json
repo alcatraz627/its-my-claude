@@ -1,0 +1,187 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17135,
+    "correction_density": 0.018867924528301886,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17729463552826485,
+    "unit_count": 53
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units a6618678-0 and 9d3cc461-0: two additional zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; twenty-seventh+ consecutive cycle with identical pattern; per-cycle volume (2) within recent range (2-4); no corrective signal; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit 058668ee-16: Write to /tmp/rca-domains-producer.md failed (success:false x2) before a third Write attempt succeeded; recovery shape (fail repeatedly, retry same path) unchanged from 16+ cycle baseline; this occurrence is inside the atone-filing unit for a separate structural-claim mistake, confirming the pattern persists even in sessions whose explicit purpose is behavioral correction; zero improvement signal",
+      "subagent_amplification_of_narrow_finding:RECURRING:NEW_SHAPE — documented in unit 058668ee-16 atone filing: the underlying structural-claim mistake involved two sub-agents each returning a narrowly-scoped true finding (the agent's own newly-authored 'domains' symbol had no caller), which the main agent amplified into a false broad claim (the system has no producer of domain data anywhere); each sub-agent inherited the narrow search term from the dispatch prompt, so the two reports were not independent corroboration; structurally related to infra-before-grep (grep a narrow term, find nothing, conclude absence) but applied to sub-agent output rather than the agent's own direct grep",
+      "ignored_own_transcript:NEW — documented in unit 058668ee-16 atone filing: the main agent had quoted the actual producer (scraper.utils.ts:192, writing scraper_config.request carrying sites) verbatim in its own first deep-dive summary earlier in the same session, then three messages later asserted that producer was absent; the standing precheck for structural-claim-without-reading-code did not include re-reading own prior session output before any absence assertion; the atone event adds this to its precheck but it is not yet in the standing rule"
+    ],
+    "calibration_score": 0.45,
+    "overconfident_count": 0,
+    "recommendations": [
+      "write_before_read_trap: advisory-only status has produced zero improvement across 16+ cycles; escalate to hook-level enforcement — a PreToolUse gate blocking Write to any path not previously Read in the current session would mechanically prevent the pattern; the advisory rule is clearly insufficient",
+      "subagent_amplification: when sub-agents return convergent negative findings, require verification that each sub-agent's search term maps to the vocabulary the codebase actually uses for the concept before accepting the combined result as independent corroboration; two sub-agents searching the same narrow term from the same brief are not independent",
+      "ignored_own_transcript: add an explicit precheck step to the structural-claim-without-reading-code rule: before any 'no producer / no caller / does not exist' assertion, scan own prior output in the session for the entity being claimed absent; the new atone event includes this in its precheck field but the standing rule text does not yet reflect it",
+      "compound_bash_failure_no_probe: no instances this cycle; no new action warranted",
+      "confirmation_bias_style_log: no new action warranted; fully deprioritized"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 4
+  },
+  "sessions": [
+    [
+      "d63726f5-d3cf-4730-9321-de4b185ae699",
+      150399
+    ],
+    [
+      "d049ade6-c2e1-40f4-a9f2-64596b2d05bc",
+      127172
+    ],
+    [
+      "bc8f0f24-5c1b-4b29-95d1-513939ff80c9",
+      104569
+    ],
+    [
+      "a6618678-ba5a-4826-9149-898542fc7aae",
+      132046
+    ],
+    [
+      "9d3cc461-e9c4-4700-bcd2-12e7f84e7064",
+      128239
+    ],
+    [
+      "9a2c1919-c426-452c-9403-acbcb1cfab17",
+      136078
+    ],
+    [
+      "8d42b35a-7288-4e1d-bfe5-7ad499ed22c0",
+      96127
+    ],
+    [
+      "82dfc7e8-0576-490c-ba60-afd19d868b33",
+      106504
+    ],
+    [
+      "7606bced-d2e6-49c9-8e27-efe3c5bd2072",
+      101923
+    ],
+    [
+      "72991fea-dd19-459d-9488-7b64ef0897c9",
+      190307
+    ],
+    [
+      "6d747834-a168-4167-a439-638a0ff38971",
+      119121
+    ],
+    [
+      "56f1f210-9d36-4ba1-b718-3af594525742",
+      137688
+    ],
+    [
+      "35e33b30-39c1-4ae3-b475-6b63afc2f0d5",
+      133756
+    ],
+    [
+      "2fe4c97b-ef73-46b4-bfb6-ca1ebaac0ec4",
+      114618
+    ],
+    [
+      "058668ee-60d4-4799-b1e6-4a552b6efc61",
+      5246398
+    ],
+    [
+      "d85e0e3a-1731-44de-ae3f-50739deeb9d4",
+      125442
+    ],
+    [
+      "b4d4b4c9-da07-4fbb-a5bf-41ab39481dba",
+      9497646
+    ],
+    [
+      "b4a943ef-5c57-48d6-abb4-9c724dce0778",
+      147451
+    ],
+    [
+      "b1284ef3-5da0-4584-a1fc-11b61bb693c2",
+      23337
+    ],
+    [
+      "656cdbca-b26b-4230-835f-4b0e9c142539",
+      4829049
+    ],
+    [
+      "62372621-9fe3-46d5-a6ff-0f1089787aa5",
+      110126
+    ],
+    [
+      "3a1a35f9-ce33-4deb-acfa-0077da7b31d8",
+      147875
+    ],
+    [
+      "2a32fd48-0488-41f6-8a92-fac30fa323bf",
+      125482
+    ],
+    [
+      "28d27da4-b088-429a-99ac-0d531abd6d24",
+      150656
+    ],
+    [
+      "67cc805d-c9d7-497e-84b5-130bbf906f67",
+      21942230
+    ],
+    [
+      "bc39c8a7-0ca4-4a36-9af8-dbd264ca679c",
+      365576
+    ],
+    [
+      "cc3bb653-5fcb-48d9-861d-2f27ff1b8942",
+      3072370
+    ],
+    [
+      "ba32e8cd-6ab8-4d53-ac16-f44558f8b9f1",
+      3668281
+    ],
+    [
+      "962b552f-e683-4c49-8bc1-bc22b226395f",
+      19805
+    ],
+    [
+      "8137f746-58b0-45e8-8a9f-3df35e768765",
+      127407
+    ],
+    [
+      "7a9611ea-f20d-4268-8ddf-b42271866414",
+      118118
+    ],
+    [
+      "501072a2-7243-4e4e-a8ec-d23abf3a8f32",
+      133001
+    ],
+    [
+      "4a3db13a-c3b8-4d7f-b89e-1768009627b7",
+      141768
+    ],
+    [
+      "399333ea-9465-4b20-b86e-70bc8478322b",
+      141179
+    ],
+    [
+      "1b9e2293-228d-47ec-92f7-b58fc2f8b215",
+      143546
+    ],
+    [
+      "1140baed-caeb-47cd-a7e6-13017e15481e",
+      113096
+    ],
+    [
+      "109b278f-cc81-405f-8586-6a0dedaa66ef",
+      110455
+    ],
+    [
+      "08e5d89f-0f70-46e4-acf0-61bddf5f2a57",
+      140309
+    ]
+  ],
+  "timestamp": "2026-08-13T02:33:08.853926Z",
+  "tokens_used": 9435,
+  "units_analyzed": 9,
+  "units_total": 53
+}

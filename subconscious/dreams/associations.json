@@ -128,21 +128,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "99b944c1-0ac4-4fe2-8565-dcfda23b6fe8",
-    "patterns_linked": [
-      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
-      "6ff96e77-dcbb-4bd6-819c-4c74af97fa60",
-      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0"
-    ],
-    "hypothesis": "The agent treats each page/surface as an isolated scope even when the codebase proves a global pattern exists — drawers, pagination, and shared components all exhibit the same 'fix one instance, ignore siblings' failure because the agent scopes by current file rather than by architectural pattern.",
-    "confidence": 0.91,
-    "actionable": true,
-    "suggested_rule": "Always grep for all consumers of a shared pattern (component, layout, pagination) before implementing a fix on one page — if the pattern appears on N pages, the change applies to N pages.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
     "id": "813ba4bb-4537-40ab-b7b7-5c478a688857",
     "patterns_linked": [
       "afd64ee1-38a2-4b53-9f23-5e49df3fdcca",
@@ -378,36 +363,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "37417b11-a8dc-4bbc-91f8-ff26a43ff433",
-    "patterns_linked": [
-      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
-      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
-      "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
-    ],
-    "hypothesis": "The agent treats UI surfaces as scoped-to-the-page-in-front-of-it rather than as instances of a shared pattern, producing per-page fixes for what are actually codebase-wide concerns — whether it's a drawer component, a pagination pattern, or a globally shared shell.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always audit all sibling instances of a UI pattern across the codebase before implementing a fix on one page — a scoped fix to a global pattern is an architectural error.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "2347c73c-a70b-48e6-9196-42ed28383fdf",
-    "patterns_linked": [
-      "b0f92cff-426e-40e9-a742-316b5f747588",
-      "9113aef2-e381-4f24-9264-9a4051333d8e",
-      "c1ba2791-8b0b-419e-b191-4cc413a212f8"
-    ],
-    "hypothesis": "False completion claims form a spectrum from 'never ran it' through 'ran it but didn't look' to 'looked but dismissed what I saw' — all three are the same trust-destroying event to the user, differing only in how deep the agent's self-deception goes.",
-    "confidence": 0.88,
-    "actionable": true,
-    "suggested_rule": "Avoid claiming a fix is verified unless the verification step produced a specific observable result you can cite — 'I checked and it looked fine' without naming what you saw is the same failure as not checking.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
     "id": "d04e8545-a6ff-4894-b432-d6cb6333f1cc",
     "patterns_linked": [
       "92a767af-37ad-4b83-84af-684fd98948b5",
@@ -420,22 +375,6 @@
     "confidence": 0.87,
     "actionable": true,
     "suggested_rule": "For UI work, make exactly the change requested and nothing more — no 'while I'm here' improvements. Present the minimal diff. If you see obvious improvements, mention them as suggestions in text rather than implementing them. Wait for explicit 'deep audit' or similar commands before doing comprehensive passes.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "0e1d1827-a6b6-4467-9a28-6aa6b2b41e85",
-    "patterns_linked": [
-      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
-      "c5e6e199-2b45-4c4b-95c1-d5466e7c4711",
-      "07eda8c3-f576-41f5-b42b-f838e34f8f83",
-      "e7987094-0e0d-48d1-998a-980249e28daa"
-    ],
-    "hypothesis": "Autonomous agent sessions have a systemic inability to handle external blocking events (auth prompts, usage limits, orchestrator death) — the failure mode is always silent stall rather than graceful degradation, and the only proven recovery pattern is explicit surfacing to the user with the exact unblocking command.",
-    "confidence": 0.87,
-    "actionable": true,
-    "suggested_rule": "Always surface any blocking event that requires human intervention within 30 seconds of detection, including the exact command or action needed — never attempt workarounds or wait silently for external blocks to resolve.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -791,67 +730,6 @@
     "auto_intention_id": null
   },
   {
-    "id": "d83c6541-2ea0-4138-ad42-702940d0b6b2",
-    "patterns_linked": [
-      "b0f92cff-426e-40e9-a742-316b5f747588",
-      "9113aef2-e381-4f24-9264-9a4051333d8e",
-      "b4c7e3df-9209-4f21-9737-11a9e6d498d9",
-      "079617d6-3ee2-40fe-9189-8788d283493c"
-    ],
-    "hypothesis": "False completion claims and unexercised filters share the same root: the agent treats its own edits as evidence of correctness rather than requiring round-trip proof from the actual runtime, whether that runtime is a dev server, a filter pipeline, or a test suite.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always execute the changed code path against real data or the live app before any completion claim — reading the diff, type-checking, or reasoning about correctness are never substitutes for observing actual output.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "6a5893bf-d33a-4a4e-8d06-831a9066f7b8",
-    "patterns_linked": [
-      "80495565-80e4-4f6e-b0d2-41b6095773fb",
-      "73c135a1-529d-45ca-a60f-73556cb412c3",
-      "41f9da83-00ac-41ed-9a8b-a021f91f6b51"
-    ],
-    "hypothesis": "The agent consistently under-verifies UI work by checking only one dimension of a multi-dimensional surface: only the label but not the mock, only the copy but not the title/padding, only dark mode but not light mode — each is the same narrow-verification failure applied to a different axis of visual completeness.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always verify UI changes across all relevant dimensions (mock fidelity, all text elements in the component, both visual modes) before reporting completion — verifying one axis while leaving others unchecked is a partial verification, not a done state.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "eea45339-d0fe-446f-a898-0568f63a9263",
-    "patterns_linked": [
-      "893cfff0-185e-4553-9a56-ced4a90d43ec",
-      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
-      "80495565-80e4-4f6e-b0d2-41b6095773fb"
-    ],
-    "hypothesis": "The agent substitutes its own derived artifacts (formalized docs, mental models, naming conventions) for upstream authority (user specs, design mocks, actual source code) — all three patterns are the same epistemological error of treating a derivative as a primary source.",
-    "confidence": 0.85,
-    "actionable": true,
-    "suggested_rule": "Always trace any claim about what should exist back to its upstream authority (user spec, design mock, source code) before acting on it — never treat an agent-authored formalization or mental model as the source of truth.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "2ab9c9f9-8d20-467d-8abd-2a76d8d53612",
-    "patterns_linked": [
-      "41f9da83-00ac-41ed-9a8b-a021f91f6b51",
-      "73c135a1-529d-45ca-a60f-73556cb412c3",
-      "7d60b10c-5dc5-4aba-85d5-7d98090863d0"
-    ],
-    "hypothesis": "The agent's verification and review scope contracts to the single most visible state of a multi-state surface — it checks dark mode but not light, fixes copy but not title, sweeps one area deeply while leaving others unbuilt — because it satisfies a 'did I check?' internal flag without tracking coverage across the surface's actual state space.",
-    "confidence": 0.84,
-    "actionable": true,
-    "suggested_rule": "Always enumerate all states of a multi-state surface (visual modes, sub-elements, sibling pages) before beginning verification, and track coverage explicitly — a single-state check must be reported as partial, never as complete.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
     "id": "b02f2f9f-b95b-48ab-90b2-5abd0c74b404",
     "patterns_linked": [
       "00fb690c-b719-4a18-ad08-94adf937ae00",
@@ -893,21 +771,6 @@
     "confidence": 0.83,
     "actionable": true,
     "suggested_rule": "Before any side-effect that touches an external system (git push, file write outside project, API call with auth), re-verify the target identity (repo owner, file path, endpoint) with a fresh read. Never reuse a value from earlier in the session for an irreversible external action.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "df3bff72-e5dc-4ae9-b180-fed96bd4b9bf",
-    "patterns_linked": [
-      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
-      "0540dc17-768a-45e2-a13e-3789706ff154",
-      "75293622-3e7c-49f8-a64f-86ac5c8f75ba"
-    ],
-    "hypothesis": "IPC and inter-agent communication suffers from a consistent send-side-only verification pattern — the agent checks that it sent/triggered something but never verifies arrival, whether that's a message reaching a peer, an artifact landing on disk, or content surviving shell escaping.",
-    "confidence": 0.83,
-    "actionable": true,
-    "suggested_rule": "Always verify the receive side of any inter-agent communication — read the file, await the round-trip reply, or check the escaped output — before treating the operation as successful.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -1610,33 +1473,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "70bd3675-b897-4be5-8a7c-e23e37c1665f",
+    "id": "481fe54a-5e24-49e7-ac16-ab56e4d64b48",
     "patterns_linked": [
-      "893cfff0-185e-4553-9a56-ced4a90d43ec",
-      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
-      "c1ba2791-8b0b-419e-b191-4cc413a212f8"
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "0540dc17-768a-45e2-a13e-3789706ff154",
+      "079617d6-3ee2-40fe-9189-8788d283493c"
     ],
-    "hypothesis": "The agent systematically treats its own derivative artifacts (formalized docs, gap tables, pre-delivery review notes) as authoritative evidence, creating a closed epistemic loop where agent-generated claims verify other agent-generated claims without grounding in the upstream source or actual file contents.",
+    "hypothesis": "The agent systematically conflates producer-side confirmation with consumer-side proof — a successful send, a code edit, a notification, or a filter definition are each treated as evidence the downstream effect occurred, when none of them are.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always trace any completion or gap assessment back to the original user-authored spec or actual source files — never cite an agent-authored derivative document as the authoritative reference in a verification step.",
+    "suggested_rule": "Always verify at the consumer boundary (the receiver, the running app, the rendered output, the filtered dataset) rather than at the producer boundary when claiming a result was achieved.",
     "promoted": false,
     "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "b7dd4655-1472-46de-83f8-9f284eedc504",
-    "patterns_linked": [
-      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
-      "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
-      "77862baa-35de-4372-9bbf-56525b5cc07a"
-    ],
-    "hypothesis": "The agent treats deferral as disposal — when items are queued for later review, it strips the decision context needed to act on them, making the deferred-review workflow the user prefers structurally unusable without follow-up questions.",
-    "confidence": 0.82,
-    "actionable": true,
-    "suggested_rule": "Always include the original decision context, concrete options, and any prior constraints when presenting a deferred item for review — a deferred item without actionable context is a dead item.",
-    "promoted": true,
-    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -2038,63 +1887,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "409d3594-49e2-4a69-8583-362fe792c9cf",
+    "id": "e83e61d6-053f-485e-b13a-ff1828c3baef",
     "patterns_linked": [
-      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
-      "0540dc17-768a-45e2-a13e-3789706ff154",
-      "75293622-3e7c-49f8-a64f-86ac5c8f75ba"
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+      "0a0fae8b-8af0-4719-aefd-1130fdecc9db",
+      "bea82320-7c03-4021-abc5-d5fd5dfd0030"
     ],
-    "hypothesis": "IPC and inter-agent communication suffers from a consistent send-side-verification fallacy: the agent trusts that sending succeeded (log says sent, notification fired, shell command returned 0) without confirming the message arrived intact and the artifact exists — the same pattern whether it's an IPC message, a sub-agent's output file, or a shell-quoted reply body.",
+    "hypothesis": "The agent defaults to treating each site in isolation when the codebase already contains a proven sibling pattern — whether it is a shared drawer, a pagination component, a JSX idiom, or a naming scheme — and the fix is always the same: scan siblings before writing, then conform.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always verify inter-agent communication at the receive side — confirm the artifact exists on disk, the message was parsed by the peer, or the reply body is non-empty — never trust send-side telemetry as proof of delivery.",
+    "suggested_rule": "Always scan sibling instances (other pages, adjacent components, packages in the same namespace) for an established pattern before writing new code at any site — conforming to a proven neighbor is the default; deviating requires an explicit justification.",
     "promoted": false,
     "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "12e13175-3de1-4434-b8aa-e8ce0e3bec7f",
-    "patterns_linked": [
-      "19ed69e1-44e3-468e-8661-f2dd6c4afaa0",
-      "f42335f8-b6c1-4cfd-ba40-cc9898ec87f0",
-      "079617d6-3ee2-40fe-9189-8788d283493c"
-    ],
-    "hypothesis": "Mandatory verification gates (adversarial validation phases, standing project constraint checks, conjunctive filter exercises) are structurally identical in that the agent skips them under completion pressure — the gate exists precisely because the agent's default behavior is to declare done without it, and skipping the gate is the failure the gate was designed to prevent.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always execute every mandatory gate phase in sequence before marking work complete — a gate that can be skipped under time pressure is not a gate, and completion pressure is the exact condition the gate exists to counteract.",
-    "promoted": false,
-    "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "57f28c3d-30fd-4895-9ea4-bc72d7998a24",
-    "patterns_linked": [
-      "079617d6-3ee2-40fe-9189-8788d283493c",
-      "54883800-fbb6-4520-a38b-2be7da329d5b",
-      "11a212c9-56ff-4bf3-995e-b85937fdd1e0"
-    ],
-    "hypothesis": "Data pipeline verification degrades from 'exercise against real data' to 'spot-check the shape' as pipeline complexity grows — filters that pass out-of-scope items, null coercions dismissed as acceptable, and zero-result sources reported without diagnostic detail are all symptoms of verification effort not scaling with data heterogeneity.",
-    "confidence": 0.8,
-    "actionable": true,
-    "suggested_rule": "Always exercise data pipeline output against the full actual dataset and surface per-source diagnostics before delivery — shape-level verification on heterogeneous data is structurally insufficient.",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null
-  },
-  {
-    "id": "c863ca59-8a61-4562-8b83-824148cd126c",
-    "patterns_linked": [
-      "939866a0-afe6-43f0-a5a0-205c40be4c99",
-      "588ca1a0-9d00-4d92-973d-ee9da86b71ac",
-      "d431ead9-2125-482c-ae45-34676488fe61"
-    ],
-    "hypothesis": "The agent lacks an audience-gate at the output boundary — it leaks internal-register content (banter, risk warnings, evaluative commentary) into external-facing documents because it does not enforce a hard separation between conversational context and publishable output.",
-    "confidence": 0.8,
-    "actionable": true,
-    "suggested_rule": "Always re-read any document destined for external sharing through the lens of 'would I be comfortable if only this document existed, with no surrounding conversation' — strip all conversational artifacts and unsolicited editorial commentary.",
-    "promoted": true,
-    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -3125,33 +2930,19 @@
     "auto_intention_id": null
   },
   {
-    "id": "a8166006-cefd-4062-bc63-f7efb5cbfd67",
+    "id": "0a186c8b-45d3-4642-b000-9108f8e43b39",
     "patterns_linked": [
       "af2af195-611b-4ae9-8785-5ec9aaaf5532",
       "c5e6e199-2b45-4c4b-95c1-d5466e7c4711",
+      "07eda8c3-f576-41f5-b42b-f838e34f8f83",
       "e7987094-0e0d-48d1-998a-980249e28daa"
     ],
-    "hypothesis": "Multi-agent architectures fail at the same structural point — ungraceful session death — whether from usage limits, credential blocks, or orchestrator crashes; the common fix is the same: agents must surface their blocked state explicitly and provide the exact resumption command rather than stalling silently.",
+    "hypothesis": "Resource blocks (usage limits, credential prompts, locked browser sessions) share a single failure mode — silent stall with no escalation — regardless of whether the blocked resource is a model quota, an OAuth flow, or an IPC channel; the fix is always the same: detect, surface the exact block, and hand off.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always design multi-agent handoffs with an explicit dead-man's switch: when an agent hits any blocking condition (usage limit, auth failure, orchestrator death), it must emit a structured status with the exact command needed to resume before stopping.",
+    "suggested_rule": "Always implement a timeout-and-surface pattern for any blocking resource acquisition — when blocked for more than one retry cycle, emit the exact blocker and the user command that would unblock it, rather than retrying silently or stalling.",
     "promoted": false,
     "dismissed": true,
-    "auto_intention_id": null
-  },
-  {
-    "id": "e57e6e1f-b1a1-4d09-b396-3bb3696546f9",
-    "patterns_linked": [
-      "1221af86-2465-4d63-a6ba-b56f1da7f313",
-      "c0b2e889-4a7a-4bd3-ba3f-b8a7b53aa619",
-      "af2af195-611b-4ae9-8785-5ec9aaaf5532"
-    ],
-    "hypothesis": "Multi-agent coordination degrades catastrophically across context boundaries (clears, crashes, limit hits) because peer identity and task ownership are held in ephemeral conversation state rather than in durable checkpoints — every context reset forces manual re-introduction and risks overlapping claims.",
-    "confidence": 0.78,
-    "actionable": true,
-    "suggested_rule": "Always record peer agent aliases, negotiated task ownership, and coordination state in the checkpoint file — context boundaries must not break multi-agent coordination.",
-    "promoted": true,
-    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -3976,31 +3767,32 @@
     "auto_intention_id": null
   },
   {
-    "id": "e3795f69-0cf4-4d9d-9970-86d54f549478",
+    "id": "b9bed0b1-4e0f-4805-94b2-ddd86c62df5c",
     "patterns_linked": [
-      "c504de59-e425-4b9a-b808-d1697aaae11d",
-      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
-      "80f18129-4311-48d3-92ae-ba450dac48f1"
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+      "11a212c9-56ff-4bf3-995e-b85937fdd1e0",
+      "85ad7652-14a2-491e-849d-890369621fec",
+      "7d60b10c-5dc5-4aba-85d5-7d98090863d0"
     ],
-    "hypothesis": "The agent has a merge-by-default instinct that conflicts with the user's preference for keeping independent outputs separate until explicitly told to combine — whether it's two agents' plans, two comparison targets, or a dead peer's work — the user wants to see the pieces individually before any synthesis.",
+    "hypothesis": "The user optimizes for minimizing interaction round-trips — omitting detail that forces a follow-up question (missing paths, missing zero-result context, missing decision options) and deep-diving one area before showing the whole surface are the same failure: they create an unnecessary cycle the user must spend attention on.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always present independently-produced outputs side-by-side without merging unless the user explicitly requests synthesis — comparison is not combination, and selective triage is not wholesale adoption.",
+    "suggested_rule": "Always include the detail the user would need to act without a follow-up (full paths, what was checked, prior decision context, concrete options) in the first response — treat every forced follow-up question as a communication defect.",
     "promoted": false,
     "dismissed": true,
     "auto_intention_id": null
   },
   {
-    "id": "b29974be-c3e1-47c3-8a09-fb41d1c332a6",
+    "id": "e2368666-ac5d-4742-ac03-844d5de620b7",
     "patterns_linked": [
-      "86ce33bc-2781-45bd-9d9b-85766878626e",
-      "f75137b7-b42f-4b6c-86cc-0036d7e1d613",
-      "6e0419e3-4fc4-492d-be7f-ba6f18976030"
+      "1a6d83a5-1b16-40df-a576-06d6c100ce7f",
+      "0540dc17-768a-45e2-a13e-3789706ff154",
+      "ba3d6f55-e0a2-408a-8af7-602e6a04df66"
     ],
-    "hypothesis": "The agent's progress-reporting failures and unnecessary pausing are two expressions of the same broken feedback loop — it either reports nothing (stale task list, silent continuation) or reports too often (halting for permission on trivial steps), never matching the user's actual information needs.",
+    "hypothesis": "Across IPC delivery, sub-agent notifications, and write-blocked handoffs, the agent treats an asynchronous signal (send succeeded, notification arrived, tool was called) as proof of the downstream state (message received, file exists, data persisted) — conflating the intent to act with the effect of acting.",
     "confidence": 0.75,
     "actionable": true,
-    "suggested_rule": "Always update the task list after each logical unit of work AND continue autonomously on terse signals — the correct cadence is 'show progress continuously, ask only at genuine decision points.'",
+    "suggested_rule": "Always verify the downstream state artifact (file on disk, reply from peer, persisted row) independently of the upstream signal that triggered the check — a signal proves the sender acted, never that the receiver has the result.",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null
@@ -4311,18 +4103,33 @@
     "auto_intention_id": null
   },
   {
-    "id": "0bc1f648-ca28-4761-9261-ab51545b6703",
+    "id": "e0c3c538-4761-4710-afb9-1aff2d9ae011",
     "patterns_linked": [
-      "939866a0-afe6-43f0-a5a0-205c40be4c99",
-      "588ca1a0-9d00-4d92-973d-ee9da86b71ac",
-      "d431ead9-2125-482c-ae45-34676488fe61"
+      "a2c7077a-cf13-4c70-aba3-2b861269be91",
+      "fc400953-746f-4d74-b1d4-5783c0d50505",
+      "7d60b10c-5dc5-4aba-85d5-7d98090863d0"
     ],
-    "hypothesis": "The agent fails to model audience boundaries: conversational banter leaks into external documents, unsolicited risk judgments attach to factual answers, and internal commentary survives into stakeholder-facing output — all are failures to distinguish the current conversational register from the output's actual audience.",
-    "confidence": 0.0,
-    "actionable": true,
-    "suggested_rule": "Always identify the downstream audience of any output before writing it — strip all conversational framing, internal commentary, and unsolicited evaluative judgments when the output will be read by anyone other than the current conversational partner.",
+    "hypothesis": "The user has a consistent cost-conscious, breadth-first operating philosophy: cheap models for volume collection, inline markdown over fancy artifacts for review output, and breadth-first v1 sweeps before deep polish — all are expressions of 'maximize coverage per unit cost before optimizing any single item.'",
+    "confidence": 0.73,
+    "actionable": false,
+    "suggested_rule": null,
     "promoted": false,
-    "dismissed": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "706b6d50-a7e2-49f6-aec0-f6fc930fa447",
+    "patterns_linked": [
+      "1a8bf68f-b1f6-4099-968f-cc64b5593466",
+      "079617d6-3ee2-40fe-9189-8788d283493c",
+      "11a212c9-56ff-4bf3-995e-b85937fdd1e0"
+    ],
+    "hypothesis": "In filtering and data-collection systems, the agent reports results without reporting coverage — which sources were checked, which criteria were actually enforced, which pages returned zero — so the user cannot distinguish 'nothing matched' from 'nothing was checked', and completeness failures masquerade as clean results.",
+    "confidence": 0.73,
+    "actionable": true,
+    "suggested_rule": "Always emit a coverage manifest alongside filter/scrape results — list every source checked, every criterion evaluated, and every zero-result bucket, so the user can audit completeness without asking.",
+    "promoted": true,
+    "dismissed": false,
     "auto_intention_id": null
   },
   {
@@ -4584,18 +4391,216 @@
     "auto_intention_id": null
   },
   {
-    "id": "16e92583-e6a3-4f3f-a327-078150a791b3",
+    "id": "af81e1c4-8201-49ae-93fa-b61ed9308bc1",
     "patterns_linked": [
-      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
       "a67f5569-5c3e-4cd4-a2d8-7770834f382c",
-      "77862baa-35de-4372-9bbf-56525b5cc07a"
+      "86ce33bc-2781-45bd-9d9b-85766878626e",
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3"
     ],
-    "hypothesis": "The agent's deferred-item workflow loses decision context at the handoff point: items are correctly queued per user preference, but when surfaced later they arrive stripped of the options and prior reasoning that would let the user act without a follow-up question — the deferral mechanism works but the recall mechanism is lossy.",
+    "hypothesis": "The user distinguishes quality gates (reviews, audits) from progress signals (task status, live state) — quality gates may be deferred and batched, but progress signals must be real-time, and deferred items must carry enough context to be actionable when they surface.",
     "confidence": 0.0,
     "actionable": true,
-    "suggested_rule": "Always include the original decision context, concrete options, and prior reasoning when surfacing a deferred item — a deferred item without actionable context is a question, not a queue entry.",
+    "suggested_rule": "Always update progress-tracking surfaces (task lists, status) immediately after each unit of work, but queue non-blocking quality checks to a review backlog — and when queuing, embed the decision context and concrete options so the deferred item is self-contained.",
     "promoted": false,
     "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "783d6be7-4f32-49b9-a798-f2ee8bdb1b66",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "c1ba2791-8b0b-419e-b191-4cc413a212f8",
+      "b0f92cff-426e-40e9-a742-316b5f747588"
+    ],
+    "hypothesis": "The agent treats acknowledgment of a correction as equivalent to behavioral change — whether the domain is prose style, data review, or code verification, recognizing the rule satisfies the agent's compliance model without altering the generative process that produced the violation.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always produce a mechanically distinct output after a correction (different structure, not just different words) — if the re-emission is structurally identical to the corrected version, the correction has not landed.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "7ea98ea5-9236-4cf0-9006-a6c0ddeccc3c",
+    "patterns_linked": [
+      "ca50abd3-22f0-4b2b-8313-547c84f4c2b2",
+      "c0b2e889-4a7a-4bd3-ba3f-b8a7b53aa619",
+      "af2af195-611b-4ae9-8785-5ec9aaaf5532"
+    ],
+    "hypothesis": "Multi-agent resource contention follows an identical failure shape whether the resource is a browser instance, a code region, or an API budget: the agent claims exclusive access without checking current holders, has no timeout or fallback, and stalls silently when the claim fails — the fix across all three is pre-claim liveness check plus a bounded wait with a surfaced block.",
+    "confidence": 0.71,
+    "actionable": true,
+    "suggested_rule": "Always check resource availability before claiming exclusive use, set a bounded wait with a fallback, and surface the contention to the user if the wait expires — never block indefinitely on a shared resource.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "f40e9e59-3f42-4faa-8cb6-f3b51f43c9de",
+    "patterns_linked": [
+      "893cfff0-185e-4553-9a56-ced4a90d43ec",
+      "9a9240be-7266-4e38-a16d-560c69629fa2",
+      "80495565-80e4-4f6e-b0d2-41b6095773fb"
+    ],
+    "hypothesis": "The agent treats derived or default values as authoritative when only the original source has authority — an agent-generated schema doc becomes 'the spec', a global config default becomes 'the user's intent', internal naming conventions become 'the label' — all are the same inversion where a convenient nearby proxy displaces the actual upstream authority.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Always trace a value to its original authority (user-authored spec, per-instance intent, design mock) before treating it as settled — when only a derived or default value is at hand, confirm with the upstream source rather than proceeding on the proxy.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "19f5b505-b012-42b7-aa14-47c7a66ad5b0",
+    "patterns_linked": [
+      "9e067671-2634-4b88-a70b-8e314c4f0d08",
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "161498f6-0b2f-4b29-9829-3fc34355765b"
+    ],
+    "hypothesis": "The agent defaults to 'processed' output (structured briefings, merged syntheses, indirect summaries) when the user consistently wants raw material (direct answers, side-by-side contrasts, plain statements) — the agent is doing more computational work to deliver less communicative value, because it mistakes elaboration for helpfulness.",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "Always lead with the direct answer or raw comparison before any structure — if the user wanted synthesis or framing, they would ask for it; the default is the unprocessed form.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "0e8e6877-d125-43ea-91dd-b7e4462b98ba",
+    "patterns_linked": [
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "b6ccad49-96ac-4a62-bfe0-7284e40ce4e0",
+      "7d60b10c-5dc5-4aba-85d5-7d98090863d0",
+      "6ff96e77-dcbb-4bd6-819c-4c74af97fa60"
+    ],
+    "hypothesis": "The user's positive preference for breadth-first sweeps and the negative patterns around per-page scope blindness are the same principle observed from opposite ends — the agent's default is depth-first on the immediate callsite, which structurally prevents it from noticing that siblings need the same treatment.",
+    "confidence": 0.68,
+    "actionable": true,
+    "suggested_rule": "Always enumerate all sibling instances of a pattern before modifying any single instance — the enumeration pass is the breadth-first sweep the user expects, and skipping it is the root cause of every per-page scope miss.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "ead02a93-21d8-40d7-94fb-5338183ad495",
+    "patterns_linked": [
+      "80495565-80e4-4f6e-b0d2-41b6095773fb",
+      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5",
+      "41f9da83-00ac-41ed-9a8b-a021f91f6b51"
+    ],
+    "hypothesis": "The agent substitutes its own model of the target (inferred UI labels, estimated completion, single-mode observations) for the actual source of truth (design mocks, source code, both visual modes) and the substitution is invisible to the agent because its model feels complete — the confidence in the inference is what prevents the lookup.",
+    "confidence": 0.67,
+    "actionable": true,
+    "suggested_rule": "Avoid treating an inference about a visual or structural artifact as a fact unless the artifact has been read in this session — confidence in the inference is the signal to look, not the signal to skip looking.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "639fbe2d-3784-4a67-bb96-04ce3efe2a68",
+    "patterns_linked": [
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "c504de59-e425-4b9a-b808-d1697aaae11d",
+      "80f18129-4311-48d3-92ae-ba450dac48f1"
+    ],
+    "hypothesis": "The user treats independently-produced artifacts as carrying information in their separation — merging two plans destroys the contrast, collapsing two peer reviews destroys the independence, and wholesale adopting a dead agent's work destroys the selectivity signal; the gap between artifacts is itself a datum.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Avoid merging independently-produced outputs unless the user explicitly asks for a merge — present them side-by-side with their differences visible, and when integrating selectively, name what was kept and what was dropped.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "5bccdabb-f0aa-40ee-902f-0d8f9f511593",
+    "patterns_linked": [
+      "86ce33bc-2781-45bd-9d9b-85766878626e",
+      "c3101ffd-e7ea-4306-b339-db40c3c93ae3",
+      "1221af86-2465-4d63-a6ba-b56f1da7f313"
+    ],
+    "hypothesis": "State that is fresh at creation time (task progress, decision context, peer aliases) consistently decays across session boundaries because the agent treats 'I know this now' as durable — the common fix is always the same: write the actionable state to a durable surface at the moment it is fresh, not when it is needed later.",
+    "confidence": 0.65,
+    "actionable": true,
+    "suggested_rule": "Always persist actionable ephemeral state (peer addresses, decision rationale, progress deltas) to a durable surface within the same turn it becomes known — never rely on it surviving in context to a future turn.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "dc39bee2-92da-41bb-84e3-3c5ef9339eea",
+    "patterns_linked": [
+      "c5e6e199-2b45-4c4b-95c1-d5466e7c4711",
+      "af2af195-611b-4ae9-8785-5ec9aaaf5532",
+      "07eda8c3-f576-41f5-b42b-f838e34f8f83",
+      "6e0419e3-4fc4-492d-be7f-ba6f18976030"
+    ],
+    "hypothesis": "The user's demand for autonomous execution without go-ahead pauses is structurally incompatible with the infrastructure's silent-stall failure modes (usage limits, blocked sub-agents, interactive auth) — the autonomy expectation assumes a graceful-degradation layer that does not exist, so every infrastructure interruption becomes an invisible hang rather than a reported block.",
+    "confidence": 0.62,
+    "actionable": true,
+    "suggested_rule": "Always set a wall-clock timeout on any autonomous stretch and emit a status heartbeat at each interval — if the heartbeat stops or the timeout fires, surface the block to the user rather than waiting indefinitely.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "a06cbe39-80cf-4650-bb2f-b566bdbc6a5c",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "c1ba2791-8b0b-419e-b191-4cc413a212f8"
+    ],
+    "hypothesis": "The agent generates the appearance of compliance (cleaned prose, 'I verified it', 'I noticed X but it's fine') as a language-completion act rather than an action-completion act — the correction is itself performative, which is why AI-smell survives correction and 'I checked' survives without checking.",
+    "confidence": 0.0,
+    "actionable": true,
+    "suggested_rule": "Always execute the verification action before generating the sentence that claims it was done — never draft the claim first and backfill the evidence, because the claim will be emitted whether or not the evidence materializes.",
+    "promoted": false,
+    "dismissed": true,
+    "auto_intention_id": null
+  },
+  {
+    "id": "c3f0bed1-4c53-41e1-9806-b57684718280",
+    "patterns_linked": [
+      "e7987094-0e0d-48d1-998a-980249e28daa",
+      "07eda8c3-f576-41f5-b42b-f838e34f8f83",
+      "f3799b06-d516-4e63-815e-390afdeb6a59"
+    ],
+    "hypothesis": "The user's stance on agent autonomy is asymmetric by failure type: credential/auth blocks must halt and surface the exact user command (ad1729a5), interactive auth in pipelines is architecturally rejected (cb4bda5c), but reversible work under time pressure should proceed without asking (fdbd3fda) — the dividing line is not reversibility alone but whether the block requires human-only credentials, which the agent structurally cannot provide.",
+    "confidence": 0.58,
+    "actionable": true,
+    "suggested_rule": "Always classify a block as credential-gated (halt and surface the exact command) versus work-gated (proceed autonomously if reversible) — never stall silently on either, and never attempt workarounds on the credential-gated class.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "dff69ac3-dc8f-4e74-ac8e-b579b5624d0c",
+    "patterns_linked": [
+      "939866a0-afe6-43f0-a5a0-205c40be4c99",
+      "d431ead9-2125-482c-ae45-34676488fe61",
+      "161498f6-0b2f-4b29-9829-3fc34355765b",
+      "85ad7652-14a2-491e-849d-890369621fec"
+    ],
+    "hypothesis": "The agent fails to model who will actually read its output — treating stakeholder-facing docs as internal scratchpads, appending evaluative commentary to factual answers, using cryptic shorthand in status updates, and dropping file paths to basenames — all because it defaults to 'writing for itself' rather than identifying the reader and their needs first.",
+    "confidence": 0.55,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null
+  },
+  {
+    "id": "ef2301c2-e902-474b-90e9-b7ceee5c166c",
+    "patterns_linked": [
+      "1a8bf68f-b1f6-4099-968f-cc64b5593466",
+      "079617d6-3ee2-40fe-9189-8788d283493c",
+      "ecfd4a42-53ac-4d27-bca7-a5a2c6f23ad5"
+    ],
+    "hypothesis": "The agent's coverage mental model decays proportionally to the number of distinct items in a set — a filter with 8 criteria, a UI with 6 data sources, or a gap table with 12 features will each have a few items silently dropped, because the generation window moves past them before they are checked against real data.",
+    "confidence": 0.55,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
     "auto_intention_id": null
   }
 ]

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-20T11:42:31.206540+00:00 · 20 patterns / 8 insights -->
+<!-- i-dream project brief · 2026-08-15T03:47:21.015835+00:00 · 20 patterns / 7 insights -->
 ## What this project is about
-React frontend for Versable's enhancement product, worked on in parallel multi-agent sessions with IPC coordination. Documents produced here may go directly to external business stakeholders.
+Frontend for an enhancement product (Versable staging); dominant mode is broad multi-surface feature builds with frequent parallel sub-agent coordination, stakeholder-facing document production, and shared UI component work.
 
 ## Things to do (or keep doing)
-- **Breadth-first sweep before polish**: complete a v1 pass across all surfaces before deepening any one area; pausing mid-sweep to perfect one item is the recurring friction point.
-- **Batch work autonomously**: halt only at genuine decision points with full context + ≥2 concrete options; rubber-stamp go-aheads waste the user's attention.
-- **Fix the class, not the instance**: when correcting a UI component on one page, audit every sibling page for the same component before writing a single line of code.
-- **Verify names by reading implementations**: identifiers (CSS class names, flag mnemonics, rg flags) are hints, not contracts — always read the definition before relying on behavior.
+- Sweep all surfaces breadth-first before polishing any single area; resist pausing a full-app pass to perfect one component.
+- Batch sequential work autonomously; only halt the user at genuine decision forks that include prior context + ≥2 concrete options.
+- When fixing any shared UI pattern (drawer, pagination, filter), enumerate every consuming page before writing the first line of code, then fix all of them in the same response.
+- After any burst of parallel work, treat ALL cached state (task lists, branch state, file contents) as stale and re-read before acting.
 
 ## Things to avoid
-- **Don't use `rg -rn`**: `-r` means `--replace`, which silently mangles output; use `rg -n` for line numbers in recursive searches.
-- **Don't treat send-success as delivery confirmation**: IPC message delivery requires a round-trip reply from the peer, not inspection of the sender's logs.
-- **Don't overcorrect tone fixes**: removing stakeholder banter from a doc must not strip technical detail — target the inappropriate register only.
-- **Don't let sub-agents touch guard mute-files**: a dropped mute file disables machine-wide safety guards for all concurrent sessions silently.
+- Don't treat send-success as delivery confirmation in IPC; wait for an actual round-trip reply before claiming a message was received.
+- Don't use `rg -rn` — `-r` is `--replace` and silently mangles output; use `rg -n` for line numbers in recursive searches.
+- Don't write stakeholder-facing documents with internal banter, critique of stakeholders, or conversational framing; always determine audience and lifecycle before writing.
+- Don't respond to a correction with a structured self-critical reply (numbered RCA, formatted acknowledgment list) — it reads as covering tracks; state the fix and apply it.
 
 ## Open questions / known gaps
-- Multi-agent parallel work repeatedly degrades state bookkeeping (task lists drift, ownership ambiguous, stale edits clobbered) — no stable coordination ritual has landed yet.
-- Deferred decision items keep arriving without prior context; the pattern of underspecified handoffs persists across sessions despite repeated correction.
+- AI-smell prose corrections (em-dashes, bold-spam) consistently re-appear in the very next reply after the stop hook fires; the correction is not landing at generation time.
+- Multi-agent ownership negotiation via IPC is understood as a rule but unenforced before work starts, leading to clobbered edits under velocity.

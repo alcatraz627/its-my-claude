@@ -1,0 +1,229 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17675,
+    "correction_density": 0.024390243902439025,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.10796057356554373,
+    "unit_count": 41
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit bbd38dd7-0: thirty-second+ consecutive zero-tool session with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; per-cycle volume (1) at low end of recent range; no corrective signal; fully deprioritized per history guidance",
+      "tool_retry_mild:RECURRING:STABLE — unit b4d4b4c9-12: four first-attempt tool failures across 55+ tool calls (one Bash glob expansion failure, one Edit old_string mismatch, one navigate_page, one screenshot); self-corrected in each case within one retry; structurally identical to git_command_overconfidence pattern from prior cycles but at lower severity; no user intervention required; not a new concern"
+    ],
+    "calibration_score": 0.64,
+    "overconfident_count": 0,
+    "recommendations": [
+      "No new actionable patterns detected this cycle. The b4d4b4c9-23 correction unit (user: 'nuke docs') shows well-calibrated defensive verification — agent confirmed state before concluding false alarm rather than acting on panic signal; this matches the affirmed intelligent-disobedience cluster and is a positive signal worth noting. Deprioritize tool_retry_mild recommendation as it has shown no worsening trend and self-corrects reliably. Deprioritize style log recommendation per history guidance."
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "bbd38dd7-806f-4373-ba32-68040cfab6be",
+      121878
+    ],
+    [
+      "ba942959-2d95-45d3-bc77-85cba224583c",
+      137034
+    ],
+    [
+      "ba8b9629-b767-4ac9-b0ab-b5b40b517cf6",
+      136102
+    ],
+    [
+      "b4d4b4c9-da07-4fbb-a5bf-41ab39481dba",
+      9960786
+    ],
+    [
+      "a75292f7-ba99-4599-9012-a8e00737f3e6",
+      100779
+    ],
+    [
+      "a47486a0-af92-426f-96d5-bbbd9a3cffdb",
+      138084
+    ],
+    [
+      "a412fbb4-8a02-451a-8abd-0cb58a0e3c3d",
+      3849579
+    ],
+    [
+      "9ee2a3f9-0ac1-4e90-bdcf-e68b48906b18",
+      141068
+    ],
+    [
+      "9e1989ec-4635-47de-8088-c3614850d1dd",
+      132524
+    ],
+    [
+      "9bf0b22f-f1cc-4d7e-8e4a-7ef24d002f6e",
+      111068
+    ],
+    [
+      "9953dd81-0172-4b31-8867-0eea361600d1",
+      102688
+    ],
+    [
+      "982b3c97-b544-41b7-818c-03baee95048a",
+      120816
+    ],
+    [
+      "96f185b3-f000-4aab-8021-3299e62200fa",
+      147175
+    ],
+    [
+      "90b03ffe-543b-45c4-a92e-35917e540254",
+      124791
+    ],
+    [
+      "8ccdf7ad-97b2-46b0-9467-7860c5d043d7",
+      122703
+    ],
+    [
+      "865b373d-f7d9-45cd-8f9c-f6fae2d86b7f",
+      124813
+    ],
+    [
+      "7be90a2f-0ff1-4a4c-808c-ef1afe9bc7c0",
+      111843
+    ],
+    [
+      "79ccc461-220f-4f58-b4c9-6e998495107c",
+      138536
+    ],
+    [
+      "78204954-05c9-4ada-b3da-156fdff4a1b7",
+      129862
+    ],
+    [
+      "7534fe43-e9dd-4e71-8c09-f3e3cf095c80",
+      141514
+    ],
+    [
+      "74621984-599e-4927-a0b4-3768ffdb0c60",
+      126728
+    ],
+    [
+      "743eb106-9794-4276-a103-f02fe7f739f9",
+      108512
+    ],
+    [
+      "7344204b-a1be-43ca-b36d-9ebd76c0a298",
+      126665
+    ],
+    [
+      "6ee48b6c-92a2-4529-9c9f-ea02935bf066",
+      120941
+    ],
+    [
+      "6dab4819-688e-437f-a26c-393f1e163014",
+      143104
+    ],
+    [
+      "6418b457-4b18-49f3-8fac-75b347634422",
+      111141
+    ],
+    [
+      "61e5e5f5-d37d-495e-9454-8c9e7649e647",
+      109971
+    ],
+    [
+      "5ffac2d8-9fe1-4afe-b292-e9eb729c479d",
+      123188
+    ],
+    [
+      "5f9fbf2c-0560-4437-8ba9-b485a2028f07",
+      141968
+    ],
+    [
+      "597fe04a-b1bb-40c3-b5c6-d2dc9a106994",
+      87385
+    ],
+    [
+      "5337b553-d6f5-4c8b-9649-8787a53175b6",
+      148913
+    ],
+    [
+      "504864d6-ccb8-4d6d-92f5-0498403e0d3c",
+      93582
+    ],
+    [
+      "4af9e5dd-954c-483e-b5f8-1ea122165b7f",
+      104442
+    ],
+    [
+      "471f0741-ebb7-467e-ab72-43a6dc98f57e",
+      7499024
+    ],
+    [
+      "47182659-0b9b-4376-9db3-b9687fb962cd",
+      118968
+    ],
+    [
+      "46a0fedb-35cd-4676-b77d-584253a50cc8",
+      151220
+    ],
+    [
+      "45e5b250-1233-4c61-ae34-373da0927398",
+      109231
+    ],
+    [
+      "409d14a6-abe3-4ef7-9fbb-24ab1fba741c",
+      120539
+    ],
+    [
+      "3ee16c39-af66-496a-a764-0e242347a172",
+      118978
+    ],
+    [
+      "3abc040c-8e47-418d-8878-9e09a62ad8b3",
+      128388
+    ],
+    [
+      "311d2cbb-77eb-4a4d-a1be-28032751c780",
+      128144
+    ],
+    [
+      "308e35b8-8fee-4557-b121-7d4d564a5fa2",
+      95815
+    ],
+    [
+      "301c5463-06a7-40bc-b9bd-976a9f0a21d8",
+      139069
+    ],
+    [
+      "2d876f35-73d6-4f81-a6c8-34de27612fb8",
+      131530
+    ],
+    [
+      "2c977c39-ed6a-497a-a35a-d98cbbbb3abd",
+      23167
+    ],
+    [
+      "2c0251c3-79a3-45c2-9bf3-2df1d39629d8",
+      121144
+    ],
+    [
+      "2bfcf0e3-2ca5-4bcd-9fd8-8fd997afcd2e",
+      119701
+    ],
+    [
+      "274f0558-6671-4d75-92c2-778927527d6e",
+      123564
+    ],
+    [
+      "26c2442e-b315-4038-887a-73d20e7b21e7",
+      104446
+    ],
+    [
+      "26650dd4-e4f0-4a6f-b648-fa0d32d77ee0",
+      141211
+    ]
+  ],
+  "timestamp": "2026-08-15T07:55:45.644768Z",
+  "tokens_used": 9425,
+  "units_analyzed": 7,
+  "units_total": 41
+}

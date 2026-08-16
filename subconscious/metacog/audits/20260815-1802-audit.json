@@ -1,0 +1,41 @@
+{
+  "effort_level": "Light",
+  "effort_signals": {
+    "budget_tokens": 25000,
+    "correction_density": 0.0,
+    "fresh_dream_insights": false,
+    "novelty_score": 0.10237187113655782,
+    "unit_count": 4
+  },
+  "response": {
+    "biases_detected": [
+      "authority_bias",
+      "documentation_trust_without_verification",
+      "optimism_bias_on_script_compatibility"
+    ],
+    "calibration_score": 0.1,
+    "overconfident_count": 1,
+    "recommendations": [
+      "Verify script flag signatures before constructing multi-flag CLI calls; the --body flag failure on unit 26 indicates assumed interface without checking --help first",
+      "Cross-check internal documentation claims (help text, README) against actual system state before citing them as evidence; the snapshot safety net was described as active when it had been dead for 81 days",
+      "When operating on append-only stores with no edit path, establish recovery options before writing; the junk event problem could have been prevented by probing the correction flow before the atone.sh add invocation",
+      "Reduce reliance on stale internal docs as ground truth; prefer live inspection (ls, git check-ignore, rg) over trusting prose descriptions of system state"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "30c71725-743d-4b7f-b261-7ab7fd1350c6",
+      134617
+    ],
+    [
+      "0e20c155-11f6-4f08-a61c-642f792691a8",
+      5398913
+    ]
+  ],
+  "timestamp": "2026-08-15T18:02:45.741930Z",
+  "tokens_used": 2891,
+  "units_analyzed": 4,
+  "units_total": 4
+}

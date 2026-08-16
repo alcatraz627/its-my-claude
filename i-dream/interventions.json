@@ -132,7 +132,7 @@
     },
     "body": "Before renaming: run `rg -F '<old-name>'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.",
     "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.07142857142857144
+    "strength": 0.6000000000000001
   },
   {
     "id": "d76985ac119aa0bb",
@@ -146,7 +146,7 @@
     },
     "body": "This is a cached artifact, not live state. Re-derive the claim from a live source (ps, process tree, env, sourcing the file) before asserting which session/tty/writer is real.",
     "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.07142857142857144
+    "strength": 0.0
   },
   {
     "id": "b26957e5af923ced",
@@ -217,5 +217,62 @@
     "promoted": "2026-08-08T10:24:33.095985Z",
     "promoted_by": "evidence-auto",
     "strength": 1.0
+  },
+  {
+    "id": "70851a16751aebf7",
+    "slug": "dense-briefing-instead-of-a-direct-answer",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "^\\s*(what|which|where|when|who|why|how|is|are|does|do|did|can|should|was|were)\\b[^?]{0,120}\\?\\s*$"
+    },
+    "body": "Lead with the answer. Your first sentence must BE the answer, not a route line, confidence grade, restatement, or context-setting. Reasoning goes after, or gets cut.",
+    "created": "2026-08-12T05:41:28.970747Z",
+    "promoted": "2026-08-15T01:35:52.302070Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "19cd4b6c2e53b23a",
+    "slug": "added-scope-without-checking-siblings",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "<(select|input|textarea|button)[\\s/>]"
+    },
+    "body": "Before adding a raw JSX form control: grep this file for existing Select/Input/Button/Dropdown imports. If one fills that role, use it — a green typecheck says nothing about convention.",
+    "created": "2026-08-14T00:31:15.433973Z",
+    "strength": 0.2714285714285714
+  },
+  {
+    "id": "0eee058e090c5109",
+    "slug": "escaped-selector-grep-false-negative",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Grep",
+      "input_pattern": "\\\\\\\\|\\|.*\\||\\.\\*.*\\.\\*"
+    },
+    "body": "This grep is filtered or compound. Do not write an absence claim (none / no X / nothing uses X) from it — re-run the bare symbol over the narrowest tree that would contain it first.",
+    "created": "2026-08-14T00:31:15.433973Z",
+    "strength": 0.2714285714285714
+  },
+  {
+    "id": "3bdb8957ec425538",
+    "slug": "repeatedly-emphasizing-ops-setup-that-user-already-addressed",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "(blocked|blocker|waiting on you|needs? your|action required|still needs)"
+    },
+    "body": "Check whether the user already declined, deferred, or ignored this blocked-on-user item this session. If so, leave it in the task list and drop it from this message.",
+    "created": "2026-08-16T03:45:46.205718Z",
+    "strength": 0.3
   }
 ]

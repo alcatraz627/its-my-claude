@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-07-23T00:58:42.670402+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-08-15T03:46:22.599533+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A staged enhancement product (likely a SaaS web app) where UI consistency, data integrity, and multi-agent coordination are the dominant concerns. Work style is parallel/multi-session with a protected repo requiring explicit user commit approval.
+A multi-tenant SaaS enhancement product (Versable staging) built with a Next.js frontend and Node/Python backend. Working style is multi-agent, high-velocity, protected-repo — no commits or pushes without explicit user approval.
 
 ## Things to do (or keep doing)
-- **Audit sibling pages before writing any shared UI component** (sidebar, drawer, modal) — the pattern is always globally-shared; per-page variants are always wrong here
-- **Treat every user-cited example as a class sample**: grep the full codebase for all instances before scoping any fix; the user named one, the fix covers all
-- **Verify from the consumer's perspective** — check message delivery not send-success, confirm pagination/behavior in the user's actual mode, run the code path not just the suite
-- **Batch sequential progress autonomously**; halt only at genuine decision gates with self-contained context + concrete options already enumerated
+- **Audit globally before implementing locally**: any UI shell component (drawer, sidebar, modal, pagination) must enumerate ALL consuming pages before writing the first line — per-page variants are always wrong here
+- **Verify at the receiver, not the sender**: after IPC sends, after sub-agent writes, after edits — check the artifact or delivery at the destination, not the send-side telemetry
+- **Default-DENY on access gates**: unrecognized commands/callers must deny, never fall through to allow
+- **Attach decision context to deferred items**: when surfacing backlogged decisions, include what was decided, what options remain, and what changed — never surface a bare item name
 
 ## Things to avoid
-- **Don't commit or push** — this is a protected repo; prepare the diff, show it, hand off to the user
-- **Don't zero-default missing data** (`bb.get('x', 0)` etc.) — absent input must emit UNCERTAIN/empty, never a fabricated plausible number
-- **Don't default-ALLOW on unknown inputs in any gate** — unrecognized commands/CLIs must DENY; default-allow renders the entire gate bypassable
-- **Never include internal critique or banter in any document** — docs may go directly to external stakeholders; strip all conversational framing before writing
+- **Don't make structural claims without reading source**: never assert "this doesn't exist" or "X lives at Y" without a file:line citation — grep first
+- **Don't let prose-smell tells survive rewrites**: em-dashes, Label:fragment rows, and bold-span excess in user-facing or external docs must be purged on first emission — the hook will fire repeatedly otherwise
+- **Don't treat `rg -rn` as recursive+line-numbers**: `-r` is `--replace`; use `rg -n` for line numbers in recursive searches
+- **Never include internal commentary in externally-shared documents**: strip all banter, critique, and framing about stakeholders before writing docs that go to external parties
 
 ## Open questions / known gaps
-- Multi-agent IPC ownership negotiation is a recurring friction point — pre-negotiate task boundaries via IPC before parallel work begins or ownership collisions will recur
-- State bookkeeping (task lists, branch state, file contents) degrades under parallel velocity — sync frequency must increase as parallelism increases, not decrease
+- Multi-agent parallel bursts consistently leave task lists, branch state, and ownership ambiguous — state-sync discipline degrades under exactly the conditions it's most needed
+- Prose-smell correction is not sticking across rewrites; the agent regenerates the same tells after the hook fires, suggesting the correction is acknowledged but not internalized

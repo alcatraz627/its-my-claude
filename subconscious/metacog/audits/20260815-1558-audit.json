@@ -1,0 +1,240 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17377,
+    "correction_density": 0.022988505747126436,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.245001104997352,
+    "unit_count": 87
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — three more zero-tool sessions (ebce50ec-0, e075b1c5-0, 8debe1fe-0) with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; 33rd+ consecutive cycle; per-cycle volume (3) within recent range (1-9); no corrective signal; fully deprioritized per history guidance",
+      "screenshot_path_assumption_no_probe:RECURRING:STABLE — unit 0a81cc14-9: agent issued browser_take_screenshot then attempted Read at hardcoded path .playwright-mcp/report-dark.png (failed), then issued 'find / -name report-dark.png' (root filesystem scan violating shell rule 'never Glob/Grep from ~/'), then retried screenshot with filename ss-dark.png which also failed to locate; agent ultimately abandoned pixel verification and declared 'screenshots would NOT be read back' in WAL checkpoint; second documented occurrence with identical structural shape to 0a81cc14-46 from the 2026-08-13 cycle; root-scan co-occurrence confirmed again; no improvement signal",
+      "write_before_read_trap:RECURRING:STABLE — unit 0a81cc14-4: Edit to 20260807-portfolio-email-drafts.md failed (success:false x1) before second Edit succeeded on same path; recovery shape unchanged from 15+ cycle baseline; zero improvement signal",
+      "guard_clause_precheck_skipped:RECURRING:STABLE — unit 8826f135-24: 7 of 9 first-wave Agent dispatches failed because the subagent-output guard required the inline persistence clause in the prompt text; prompts were written to files and committed before dispatch without per-prompt verification of guard compliance; all 7 second-wave dispatches succeeded after inline clause added; WAL checkpoint records 'guard lesson: persistence clause must be IN the dispatch prompt text'; previously flagged as NEW in 2026-08-15 prior cycle; now confirmed RECURRING with no structural improvement in dispatch pre-verification step",
+      "dense-briefing-instead-of-a-direct-answer:RECURRING:STABLE — unit 8826f135-20: zero-tool digest relay unit received Corrected user reaction; sixth+ occurrence this week per history; no improvement signal"
+    ],
+    "calibration_score": 0.44,
+    "cross_references": [
+      "unit 0a81cc14-9 VIOLATES dream insight 2 (false completion claims / unexercised filters): agent ran the full pipeline and rendered the report but could not read back the screenshot pixels; WAL checkpoint honestly declared 'pixels NOT read back' rather than claiming visual verification — this is well-calibrated honesty about an unexercised path, but the verification gap itself is a confirmed dream-insight violation pattern; the declared gap is better than a false pass but still represents incomplete exercise",
+      "unit 0a81cc14-21 CONFIRMS dream insight 2: browser_navigate + browser_evaluate used to read actual rendered DOM content (card counts, marker counts, pay strings) before claiming verification; content verified structurally from the live page rather than from static file inspection alone; genuine round-trip proof obtained",
+      "unit 0a81cc14-18 CONFIRMS dream insight 2: mutation testing applied to self-authored guards after adversarial review revealed two vacuous checks; agent watched guards fail on induced mutations then confirmed green on restore; this is the exercise-based-verification pattern executed correctly",
+      "unit 8826f135-24 CONFIRMS dream insight 1 (scoped fix to a global pattern is an architectural error): the 9-facet audit fan-out deliberately audited all consumer instances (facet-D scopes walmart-mvp and speedway, facet-B1/B2 covers all component docs) rather than a single-component fix; the breadth-first audit structure is consistent with the insight's prescription, though the guard_clause_precheck failure on the first wave is a dispatch mechanics failure unrelated to the insight's domain"
+    ],
+    "overconfident_count": 3,
+    "recommendations": [
+      "screenshot_path_assumption_no_probe: do not recommend new remediation — pattern is RECURRING:STABLE and already in backlog/rejections with hook-feedback filed; note that the root-scan co-occurrence (find /) is a second distinct shell-rule violation that has appeared in both documented occurrences and may warrant a separate hook proposal if not already tracked",
+      "guard_clause_precheck_skipped: graduated from NEW to RECURRING; the WAL checkpoint documents the lesson but the gap persists across sessions — the lesson is known but not structurally enforced; a per-prompt pre-dispatch completeness check (grep the assembled prompt for the persistence clause string before the Agent call fires) would close the gap without a hook; worth a proposal entry",
+      "write_before_read_trap and dense_briefing and confirmation_bias_style_log: no new recommendations — all RECURRING:STABLE with no improvement signal and already captured in backlog; deprioritized per standing history guidance"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 15
+  },
+  "sessions": [
+    [
+      "542ad7b4-986d-46c5-9013-fe9f8480a831",
+      123590
+    ],
+    [
+      "0a81cc14-2539-4216-9f93-fc378bb65ec8",
+      5187934
+    ],
+    [
+      "fedd8549-0a3a-4063-b65e-c227cc6c7713",
+      108547
+    ],
+    [
+      "ebce50ec-bdba-4b70-91ff-9d4c0d97fa2d",
+      129720
+    ],
+    [
+      "e075b1c5-bc97-44b3-928a-fb4d3568d8b5",
+      108107
+    ],
+    [
+      "d4790a77-0fc1-4104-a814-be44b68dc311",
+      105137
+    ],
+    [
+      "c33b2754-4c5c-482e-a367-35b4778bbe30",
+      104461
+    ],
+    [
+      "b19c7f4e-15c2-4207-94f3-e68b764d2e96",
+      112356
+    ],
+    [
+      "a34120d0-ea99-42a1-a23d-1f2addc6c1b1",
+      119494
+    ],
+    [
+      "9922ef71-d9d0-44bd-b9ca-b10489f5e028",
+      100478
+    ],
+    [
+      "94735b0e-0390-4f79-90ea-ea3e287e65bf",
+      118511
+    ],
+    [
+      "8debe1fe-4283-4639-a66e-ff2ba184e30a",
+      138024
+    ],
+    [
+      "8826f135-652a-4cab-844d-57bf63c13c77",
+      5812517
+    ],
+    [
+      "490e07cb-6d3e-4209-9a28-d70ae209fe4f",
+      109239
+    ],
+    [
+      "3e6b22e2-1e59-45fc-bdc6-f39faa1d9afc",
+      107217
+    ],
+    [
+      "3d0a5ca2-a8b8-4059-a27a-140c0f15e84f",
+      110241
+    ],
+    [
+      "381ff475-14c6-4dd1-8c62-a98fd41cf89a",
+      133217
+    ],
+    [
+      "2f46057d-84c3-4316-9515-95b079ca547f",
+      96760
+    ],
+    [
+      "1e0f794e-35b1-42b7-8856-8ba5a95b44f6",
+      86163
+    ],
+    [
+      "12ba3715-dd73-4e5c-8b4d-74d992cb9de3",
+      11626347
+    ],
+    [
+      "0cb2859f-cfff-430e-9bd4-ed6f78d6c8b7",
+      127007
+    ],
+    [
+      "0c5d49e7-23fc-4800-a429-79c842c02555",
+      107533
+    ],
+    [
+      "0b8d7af5-bb9b-40b7-807c-063019b2ab39",
+      114984
+    ],
+    [
+      "07854feb-1a1b-45c5-a9dc-8c6e4a62916f",
+      116752
+    ],
+    [
+      "25f2f369-dabe-440e-81d6-433e1888df01",
+      127665
+    ],
+    [
+      "1fe2d0f8-5ab5-4f07-a94e-a6a04d4bf9d4",
+      138488
+    ],
+    [
+      "1e083fd8-c451-4547-b278-5b655ab0715b",
+      6702609
+    ],
+    [
+      "1b2b77ce-61eb-4d45-b2c8-f55f3525318b",
+      96955
+    ],
+    [
+      "1523e931-ebda-4bcf-ad45-d2ef1eba75d1",
+      4146505
+    ],
+    [
+      "14b86d5b-afa6-4c1c-8d76-c05f84894d04",
+      144691
+    ],
+    [
+      "12278b47-6b6f-47f2-a4ad-b49a6b655d86",
+      143581
+    ],
+    [
+      "0f58a1a1-a793-46f2-b3c0-0fdd9bcbfaad",
+      149882
+    ],
+    [
+      "080051be-7aee-4d21-910e-7fb3428dad94",
+      125275
+    ],
+    [
+      "bc39c8a7-0ca4-4a36-9af8-dbd264ca679c",
+      889660
+    ],
+    [
+      "88fe3229-afc3-49e6-876d-23ab1c45d5f1",
+      911121
+    ],
+    [
+      "f69b7f3e-5575-4517-b61d-fd0db2bd8457",
+      129221
+    ],
+    [
+      "f5c44d78-89f6-4cb0-a80e-005e2c9c2520",
+      5696117
+    ],
+    [
+      "ee1a9038-3f12-4faf-ab79-cb910e8a45fc",
+      295999
+    ],
+    [
+      "e2eee0a9-67dd-461b-8f80-5bf173178c4c",
+      87983
+    ],
+    [
+      "d5370365-b06a-461a-ae3d-f7c1c9477ea6",
+      5125043
+    ],
+    [
+      "ce641c75-c089-4f74-8694-1bbe24d2167f",
+      91251
+    ],
+    [
+      "cc3bb653-5fcb-48d9-861d-2f27ff1b8942",
+      3076218
+    ],
+    [
+      "cab7f4ce-02b0-4212-a41c-efd26519f105",
+      88023
+    ],
+    [
+      "ba6b24c7-2d33-4d0e-85b8-6fd754946ef1",
+      104165
+    ],
+    [
+      "ba32e8cd-6ab8-4d53-ac16-f44558f8b9f1",
+      3669200
+    ],
+    [
+      "b1589cc6-75fc-484e-916d-b35289f5c5c6",
+      101597
+    ],
+    [
+      "699b5db8-284f-416a-b2b4-f5713ebedb5c",
+      86714
+    ],
+    [
+      "6189405b-8236-4314-aeeb-1f168d1c945a",
+      127554
+    ],
+    [
+      "5e2616c7-f199-4fab-97aa-c96f721595fd",
+      89804
+    ],
+    [
+      "561fb01e-dfe3-49b9-b099-34c4eeadde15",
+      127386
+    ]
+  ],
+  "timestamp": "2026-08-15T15:58:49.395069Z",
+  "tokens_used": 24120,
+  "units_analyzed": 18,
+  "units_total": 87
+}

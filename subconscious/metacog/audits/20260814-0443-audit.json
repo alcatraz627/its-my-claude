@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17793,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.13043008528849553,
+    "unit_count": 27
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 6 additional zero-tool sessions (units 9bbc9c33-0, 6186f52b-0, 38cc5f0e-0, 27ff06cd-0, 1d49102d-0, 1b5664fa-0) with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; thirtieth+ consecutive cycle; per-cycle volume (6) at high end of recent range (1-8); no corrective signal; fully deprioritized per history guidance",
+      "literal-request-over-intent:RECURRING:STABLE — unit f3996e99-17: 4 of 8 Agent dispatches failed, user issued Corrected reaction on PR description work; session self-corrected via atone in unit f3996e99-26 which documents three rewrites against vague feedback with no reference PR ever read; identical shape to mist-20260811-142119-a5 from two days prior; sixth occurrence this week per history; no improvement signal — precheck was documented in the atone event but the pattern recurred within same session before correction",
+      "dense-briefing-instead-of-a-direct-answer:RECURRING:STABLE — unit f3996e99-11 is an in-session atone for this pattern, filed at 761 chars for a correction turn carrying 3-4 facts; the atone message volume is itself marginal for a status-only unit, suggesting pattern persists at message-level even during explicit corrective turns; sixth occurrence this week per history; precheck recorded ('count facts, count sentences, delete if sentences exceed facts by more than ~3') but not yet showing reduction in occurrence rate",
+      "write_before_read_trap:RECURRING:STABLE — unit f3996e99-17: Write to frontend/.claude/output/20260813-pr-description/pr-body.md failed (success:false x1) before second Write succeeded on same path; recovery shape (retry same path) unchanged from 15+ cycle baseline; zero improvement signal"
+    ],
+    "calibration_score": 0.41,
+    "overconfident_count": 1,
+    "recommendations": [
+      "literal-request-over-intent: the documented precheck ('has the user stated the criterion, or have I read an accepted example of this artifact from this repo?') was not applied before the third rewrite in f3996e99-17 despite the atone firing; the gap is between precheck-as-rule and precheck-as-gate at decision time; no new recommendation beyond standing rule — deprioritize unless occurrence rate drops below 2/week",
+      "dense-briefing-instead-of-a-direct-answer: volume-based precheck introduced in f3996e99-11 atone is the correct mechanism; insufficient data to assess whether it is being applied prospectively vs only retrospectively; monitor next 2-3 cycles before escalating",
+      "confirmation_bias_style_log: fully deprioritized per standing guidance; no action",
+      "write_before_read_trap: fully deprioritized per standing guidance; no action"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "e7245596-6c3a-4dda-8a05-020f7a696cd5",
+      116922
+    ],
+    [
+      "e69aeca3-0009-4d1b-aa5e-4e8939ea286e",
+      129091
+    ],
+    [
+      "d7814c20-bf14-401c-aa34-5cadca2e4b85",
+      118025
+    ],
+    [
+      "d39903e0-7b07-46e4-a303-bc46f027d24b",
+      122069
+    ],
+    [
+      "cec5ee61-293f-490b-85b8-547f541c4848",
+      127905
+    ],
+    [
+      "ccee36c6-4535-4fb8-8653-3102c7470d17",
+      123281
+    ],
+    [
+      "c8f9b327-e9e3-4f46-916d-0ca90c0a2f43",
+      121400
+    ],
+    [
+      "bb28ead9-fc29-433b-9056-e62c8e77bf31",
+      124854
+    ],
+    [
+      "b7f88cc8-7c80-4c21-92d7-b451a022ee7c",
+      120501
+    ],
+    [
+      "b6c18514-bdb4-4473-880b-4faf0fcf8e82",
+      110473
+    ],
+    [
+      "b6a3a937-f5a5-400b-ac8f-32fe2937cfe3",
+      122227
+    ],
+    [
+      "9bbc9c33-f1af-45e4-98e0-cb2559c98c7a",
+      123277
+    ],
+    [
+      "999cdd2c-38d3-4976-9a46-8b56c5b82683",
+      126211
+    ],
+    [
+      "878c79ef-780d-4be9-ac03-a848f875c712",
+      126463
+    ],
+    [
+      "7c7943b1-f3ec-46f1-a125-34fdb0a8e3a5",
+      116992
+    ],
+    [
+      "6f92e4ec-9794-4d89-b130-ebf69cb2334a",
+      118137
+    ],
+    [
+      "65c4f84d-3d69-4f40-ad27-c70f35a41835",
+      129957
+    ],
+    [
+      "6186f52b-3de1-4ed5-9122-0c8f4851966b",
+      122203
+    ],
+    [
+      "5ef1291a-03c5-4444-b030-afc9ed87a6e7",
+      114581
+    ],
+    [
+      "58f6b364-2631-4721-a8c7-130e79f95f63",
+      98304
+    ],
+    [
+      "4d7d8b0f-29b6-49c4-b9f2-3aca8bd1b92c",
+      114898
+    ],
+    [
+      "3d5a9b30-e4a2-49f7-b717-c24423019c49",
+      121710
+    ],
+    [
+      "38cc5f0e-16c1-4949-90c3-3802b2cfea61",
+      119451
+    ],
+    [
+      "28c49a73-abdf-47ba-90d7-74d74176795f",
+      116646
+    ],
+    [
+      "27ff06cd-5acb-4be3-9561-ccb80b23b90e",
+      137713
+    ],
+    [
+      "211ea1c2-649c-4aae-a71d-6073545dcff5",
+      125950
+    ],
+    [
+      "1eff433d-b068-4d78-a9b0-22508906d7af",
+      127367
+    ],
+    [
+      "1d49102d-aa20-4bb3-bfdb-bdd86c546159",
+      131628
+    ],
+    [
+      "1b5664fa-a1a3-4490-b173-623fad789eec",
+      124701
+    ],
+    [
+      "10690ea3-a323-4780-9139-3b78c796c00e",
+      124218
+    ],
+    [
+      "0fc1d041-2abf-4e59-86f3-79ffa8e307bd",
+      119899
+    ],
+    [
+      "015b0e31-d0d8-4267-841b-a05ea22a6ca5",
+      112633
+    ],
+    [
+      "fa1d2b84-101d-4084-9dc0-7e1f256ce31f",
+      99632
+    ],
+    [
+      "f3996e99-e94c-46be-86be-baa20a06641d",
+      7411551
+    ],
+    [
+      "d6d6caf0-0357-4fbe-ba40-cf252b9b63aa",
+      113534
+    ],
+    [
+      "cf4feadb-dc21-4ef8-ad06-d406e516d7c7",
+      101833
+    ],
+    [
+      "caa3c825-425b-4124-aa8f-34500928e2e9",
+      123192
+    ],
+    [
+      "ca00b2a4-704e-4c6a-8722-2a6ec160d789",
+      29971
+    ],
+    [
+      "c80c4476-0779-4f33-8e17-60057e32f228",
+      103490
+    ],
+    [
+      "b69792b1-e063-4c44-b4d9-d126437efbb7",
+      95194
+    ],
+    [
+      "a5555fac-e3cf-43ef-91b3-35722c13f426",
+      122014
+    ],
+    [
+      "9edc35ae-a92e-463b-9a2a-6c96b9d14d5e",
+      146052
+    ],
+    [
+      "92aa5513-c78f-4fad-a715-1b0b277f8e31",
+      109882
+    ],
+    [
+      "8dc71dc0-3a25-47c5-9310-7d4db945be59",
+      109371
+    ],
+    [
+      "784fae4c-f28b-4fbf-bf0b-f4c4711dcf20",
+      161513
+    ],
+    [
+      "65f8f277-8b93-4286-93ca-f0b7fbd95b57",
+      90460
+    ],
+    [
+      "34d57360-7e3b-4ba7-8d39-e339a6949ca4",
+      106286
+    ],
+    [
+      "20544b93-c772-4e3e-8567-2c04f24d65be",
+      105381
+    ],
+    [
+      "058668ee-60d4-4799-b1e6-4a552b6efc61",
+      5254520
+    ],
+    [
+      "ff90bef2-85da-454d-8e2d-f3db612fad1d",
+      139624
+    ]
+  ],
+  "timestamp": "2026-08-14T04:43:59.058618Z",
+  "tokens_used": 10056,
+  "units_analyzed": 13,
+  "units_total": 27
+}
