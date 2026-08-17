@@ -8,7 +8,8 @@ import * as os from "node:os";
 import {
   KROOT, SERVER_INFO, LANES, PINS, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
   loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
-  loadItems, saveItems, loadLandings, loadPins, isArchived, type Item, type Pin,
+  loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
+  type Item, type Pin,
 } from "./lib.ts";
 
 const portArg = process.argv.indexOf("--port");
@@ -123,7 +124,26 @@ function renderMd(input: string): string {
 // claude-ipc registry. A stale "live" is worse than no badge, so nothing caches.
 const IPC_DB = path.join(os.homedir(), ".claude-ipc", "data", "ipc.sqlite");
 let ipcMissing = false;
-function livePeers(root: string): string[] {
+
+// The same file and the same 300s staleness window the statusline reads
+// (statusline.sh:374-384), so the board and the status line never disagree
+// about how many sub-agents a session has.
+const SUBAGENT_STALE_S = 300;
+function subagentsOf(sessionId: string | undefined): number {
+  if (!sessionId) return 0;
+  try {
+    const f = `/tmp/claude-agents-${sessionId.slice(0, 8)}`;
+    if (!fs.existsSync(f)) return 0;
+    const now = Date.now() / 1000;
+    return fs.readFileSync(f, "utf8").split("\n").filter((l) => {
+      const ts = Number(l.split("|")[2]);
+      return l.trim() && Number.isFinite(ts) && now - ts <= SUBAGENT_STALE_S;
+    }).length;
+  } catch { return 0; }
+}
+
+export interface LivePeer { alias: string; subagents: number }
+function livePeers(root: string): LivePeer[] {
   if (ipcMissing) return [];
   let db: any = null;
   try {
@@ -137,17 +157,20 @@ function livePeers(root: string): string[] {
     // a dead broker left behind. Heartbeats run every few minutes, so 15 is safe.
     const cutoff = Date.now() / 1000 - 900;
     const rows = db.query(
-      "select alias, cwd from registry_snapshot where status in ('live','idle') and last_seen > ?1",
-    ).all(cutoff) as { alias: string; cwd: string }[];
+      "select alias, cwd, session_id from registry_snapshot where status in ('live','idle') and last_seen > ?1",
+    ).all(cutoff) as { alias: string; cwd: string; session_id: string }[];
     const real = fs.realpathSync(root);
     const named = rows
       .filter((r) => r.cwd === real || r.cwd?.startsWith(real + path.sep))
-      .map((r) => r.alias)
       // drop only auto-generated aliases: a bare uuid, or <project>-<8 hex>
       // where the project half matches this board. "sprint-deadbeef" survives.
-      .filter((a) => !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(a))
-      .filter((a) => !new RegExp(`^${path.basename(real).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}-[0-9a-f]{8}$`, "i").test(a));
-    return [...new Set(named)].sort();
+      .filter((r) => !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(r.alias))
+      .filter((r) => !new RegExp(`^${path.basename(real).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}-[0-9a-f]{8}$`, "i").test(r.alias));
+    const seen = new Set<string>();
+    return named
+      .filter((r) => (seen.has(r.alias) ? false : (seen.add(r.alias), true)))
+      .map((r) => ({ alias: r.alias, subagents: subagentsOf(r.session_id) }))
+      .sort((a, b) => (a.alias < b.alias ? -1 : 1));
   } catch { return []; }
   finally { try { db?.close(); } catch { /* nothing to do */ } }
 }
@@ -329,10 +352,14 @@ const server = Bun.serve({
           catch { /* an unreadable board must not blank the owner's own writing */ }
         }
         const rows = items
-          .filter((i) => !want || i.slug === want || !i.slug)
+          .filter((i) => !want || visibleOn(i, want))
           .map((i) => ({
             ...i,
             boardName: i.slug ? names[i.slug] ?? null : null,
+            // the owner's display tags, named, so the agent reading an ask sees
+            // where it was scoped and not just an opaque slug list
+            shownOn: (displayScope(i) ?? []).map((s) => ({ slug: s, name: names[s] ?? s })),
+            everywhere: displayScope(i) === null,
             landing: landings[i.id] ?? null,
             landedCard: landings[i.id]?.cardId ? cardTitles.get(landings[i.id]!.cardId!) ?? null : null,
             archived: isArchived({ landings }, i.id),
@@ -426,9 +453,17 @@ const server = Bun.serve({
     // deliberate state (unassigned, routable later), not a missing argument.
     if (req.method === "POST" && p === "/api/item") {
       const body = (await req.json().catch(() => null)) as
-        { id?: string; body?: string; slug?: string; star?: boolean; trigger?: boolean } | null;
+        { id?: string; body?: string; slug?: string; boards?: string[] | null;
+          star?: boolean; trigger?: boolean } | null;
       if (!body) return json({ error: "need a JSON body" }, 400);
       if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
+      // A display tag naming a board that does not exist would hide the ask
+      // from every rail, which is the opposite of what tagging is for.
+      if (Array.isArray(body.boards)) {
+        const reg = registry().boards;
+        const bad = body.boards.filter((s) => !reg[s]);
+        if (bad.length) return json({ error: `unknown board(s): ${bad.join(", ")}` }, 404);
+      }
       if (typeof body.body === "string" && body.body.length > 10_000) return json({ error: "item over 10k chars" }, 413);
       const isNew = !body.id;
       if (isNew && (typeof body.body !== "string" || !body.body.trim())) {
@@ -461,6 +496,13 @@ const server = Bun.serve({
           return;
         }
         if (typeof body.body === "string") { it.body = body.body.trim(); it.updatedAt = now; }
+        // null clears the tags back to "shows everywhere"; an empty array means
+        // the same, so both spellings land on the same state rather than one of
+        // them producing an ask visible on no rail at all.
+        if (body.boards !== undefined) {
+          if (body.boards === null || body.boards.length === 0) delete it.boards;
+          else it.boards = [...new Set(body.boards)];
+        }
         if (body.star !== undefined) { if (body.star) it.starred = true; else delete it.starred; }
         if (body.trigger !== undefined) { if (body.trigger) it.triggered = now; else delete it.triggered; }
         saveItems(file, `item:${body.id}`);

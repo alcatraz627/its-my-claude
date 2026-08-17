@@ -108,14 +108,60 @@ case "$line" in
   *) bad "the clause disappears once everything is sorted" "line was empty, so the absence proves nothing: ${line:-<empty>}" ;;
 esac
 
+# --- display-scope tags (owner ruling 2026-08-17) --------------------------
+# Visibility is a display rule layered on the data, so an ask can be shown on
+# boards other than the one it was written on, and hidden from the rest.
+
+PROJ2="$ROOT/proj2"; mkdir -p "$PROJ2"; printf '# TODO\n\n- [ ] another\n' > "$PROJ2/TODO.md"
+REALPROJ2=$(cd "$PROJ2" && pwd -P)
+bun run "$HERE/cli.ts" init --project "$PROJ2" >/dev/null 2>&1
+SLUG2=$(python3 -c "
+import json,os
+r=json.load(open(os.path.join('$ROOT','registry.json')))['boards']
+print(next(s for s in r if s != '$SLUG'))")
+
+seed s1 "unscoped, shows on every rail"
+pre1=$(bun run "$HERE/cli.ts" items --project "$PROJ"  --json 2>/dev/null | python3 -c 'import sys,json;print("yes" if any(i["id"]=="s1" for i in json.load(sys.stdin)["items"]) else "no")')
+pre2=$(bun run "$HERE/cli.ts" items --project "$PROJ2" --json 2>/dev/null | python3 -c 'import sys,json;print("yes" if any(i["id"]=="s1" for i in json.load(sys.stdin)["items"]) else "no")')
+check "an untagged ask shows on board one" "$pre1" "yes"
+check "an untagged ask shows on board two as well" "$pre2" "yes"
+
+# Now scope it to board TWO only; board one must stop seeing it.
+SCOPE_TO="$SLUG2" python3 - "$ROOT" <<'PY'
+import json, os, sys
+p = os.path.join(sys.argv[1], "items.json")
+d = json.load(open(p))
+for i in d["items"]:
+    if i["id"] == "s1": i["boards"] = [os.environ["SCOPE_TO"]]
+json.dump(d, open(p, "w"), indent=2)
+PY
+seen1=$(bun run "$HERE/cli.ts" items --project "$PROJ"  --json 2>/dev/null | python3 -c 'import sys,json;print("yes" if any(i["id"]=="s1" for i in json.load(sys.stdin)["items"]) else "no")')
+seen2=$(bun run "$HERE/cli.ts" items --project "$PROJ2" --json 2>/dev/null | python3 -c 'import sys,json;print("yes" if any(i["id"]=="s1" for i in json.load(sys.stdin)["items"]) else "no")')
+check "a scoped ask is hidden from the board it is not tagged to" "$seen1" "no"
+check "a scoped ask is visible on the board it IS tagged to" "$seen2" "yes"
+
+# The session line mirrors the same rule in jq; both sides must agree.
+l1=$(printf '{"cwd":"%s"}' "$REALPROJ"  | KANBAN_ROOT="$ROOT" bash "$HERE/session-start-line.sh" 2>/dev/null)
+l2=$(printf '{"cwd":"%s"}' "$REALPROJ2" | KANBAN_ROOT="$ROOT" bash "$HERE/session-start-line.sh" 2>/dev/null)
+case "$l2" in *"unsorted asks"*) ok "the session line on the tagged board counts the scoped ask" ;;
+  *) bad "the session line on the tagged board counts the scoped ask" "$l2" ;; esac
+# By now every ask of board one's own is sorted and s1 was scoped to board two,
+# so board one must show NO asks clause while board two does. Both halves are
+# asserted: a blank line would satisfy "no clause" while proving nothing.
+case "$l1" in
+  *"unsorted asks"*) bad "the scoped ask is gone from the board it is not tagged to" "board one still counts it: $l1" ;;
+  *"[kanban] board"*) ok "the scoped ask is gone from the board it is not tagged to, line still renders" ;;
+  *) bad "the scoped ask is gone from the board it is not tagged to" "line was empty, so the absence proves nothing: ${l1:-<empty>}" ;;
+esac
+
 # --- regressions from the 2026-08-17 adversarial review -------------------
 # Each of these shipped broken and was caught by prosecution, not by this suite.
 
 out=$(bun run "$HERE/cli.ts" classify i1 --undo 2>&1)
 case "$out" in *"unclassified i1"*) ok "classify --undo retracts a landing (finding 7)" ;;
   *) bad "classify --undo retracts a landing" "$out" ;; esac
-n=$(bun run "$HERE/cli.ts" items --global --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["pending"])')
-check "an undone item is pending again" "$n" "1"
+back=$(bun run "$HERE/cli.ts" items --global --json 2>/dev/null | python3 -c 'import sys,json;print("yes" if any(i["id"]=="i1" and not i.get("landing") for i in json.load(sys.stdin)["items"]) else "no")')
+check "an undone item is pending again" "$back" "yes"
 
 # Deleting an ask must not leave its landing behind: ids are short and
 # recyclable, so a stale landing makes a fresh ask arrive pre-sorted.

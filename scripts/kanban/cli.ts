@@ -11,6 +11,7 @@ import {
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
+  displayScope,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -259,8 +260,15 @@ switch (verb) {
     for (const i of shown) {
       const l = landings.landings[i.id];
       const mark = l ? (isArchived(landings, i.id) ? "archived" : l.shape) : i.starred ? "STARRED" : i.triggered ? "now" : "pending";
+      // Origin and visibility are different facts and the owner sets them
+      // separately, so an ask written on one board but shown on others has to
+      // say both rather than collapsing to one slug.
+      const scope = displayScope(i);
       const where = i.slug ?? "unassigned";
-      console.log(`  ${i.id}  [${mark}] ${where}  ${i.body.split("\n")[0].slice(0, 72)}`);
+      const shownOn = !scope ? "shown everywhere"
+        : i.boards?.length ? `shown on ${scope.join(", ")}`
+        : "";
+      console.log(`  ${i.id}  [${mark}] ${where}${shownOn ? ` · ${shownOn}` : ""}  ${i.body.split("\n")[0].slice(0, 72)}`);
     }
     console.log(`classify with: kanban.sh classify <item-id> <${SHAPES.join("|")}> [--card <card-id>] [--note "what you did"]`);
     break;

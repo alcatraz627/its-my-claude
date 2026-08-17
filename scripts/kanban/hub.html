@@ -179,7 +179,9 @@ function boardEl(b, quiet) {
         ${b.counts.blocked ? `<span class="pill blk">${b.counts.blocked} blocked</span>` : ""}
         ${b.unread ? `<span class="pill unread">${b.unread} unread</span>` : ""}
         ${b.verify?.needsHuman ? `<span class="pill needs">${b.verify.needsHuman} needs you</span>` : ""}
-        ${b.live?.length ? `<span class="pill livep" title="${b.live.join(", ")}"><i></i>${b.live.length === 1 ? b.live[0] : `${b.live.length} live`}</span>` : ""}
+        ${b.live?.length ? `<span class="pill livep" title="${b.live.map((p) => p.alias + (p.subagents ? ` (+${p.subagents} sub-agents)` : "")).join(", ")}"><i></i>${
+          b.live.length === 1 ? b.live[0].alias : `${b.live.length} live`
+        }${b.live.reduce((n, p) => n + p.subagents, 0) ? ` +${b.live.reduce((n, p) => n + p.subagents, 0)}` : ""}</span>` : ""}
         ${b.reviewMe ? `<span class="pill">${b.reviewMe} for your review</span>` : ""}
       </span></div>
       <div class="root"></div>

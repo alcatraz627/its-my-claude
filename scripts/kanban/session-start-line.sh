@@ -78,12 +78,17 @@ if [ -f "$ITEMS" ]; then
   # one produce the same silence, and silence reads as nothing to report. So the
   # jq exit status is checked and reported instead of swallowed.
   icounts=$(jq -r --slurpfile L <(cat "$LANDINGS" 2>/dev/null || echo '{"landings":{}}') --arg slug "$slug" '
+    # mirrors displayScope() in lib.ts: explicit tags win, else the origin
+    # board scopes it, else it shows everywhere (null)
+    def scope: if ((.boards // []) | length) > 0 then .boards elif .slug then [.slug] else null end;
+    def here: (scope == null) or (scope | index($slug) != null);
     ($L[0].landings // {}) as $done
     | [ .items[]? | select($done[.id] == null) ] as $pending
-    | [ ([ $pending[] | select(.slug == $slug) ] | length),
-        ([ $pending[] | select(.slug == null) ] | length),
-        ([ $pending[] | select(.slug == $slug or .slug == null) | select(.starred == true) ] | length),
-        ([ $pending[] | select(.slug == $slug or .slug == null) | select(.triggered != null) ] | length) ]
+    | [ $pending[] | select(here) ] as $vis
+    | [ ([ $vis[] | select(scope != null) ] | length),
+        ([ $vis[] | select(scope == null) ] | length),
+        ([ $vis[] | select(.starred == true) ] | length),
+        ([ $vis[] | select(.triggered != null) ] | length) ]
     | @tsv' "$ITEMS" 2>/dev/null)
   if [ $? -ne 0 ] || [ -z "$icounts" ]; then
     broken="yes"

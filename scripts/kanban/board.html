@@ -97,9 +97,39 @@
   .notice button{background:none;border-color:transparent;color:var(--text-3);padding:3px 8px}
   .notice button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
+  /* ---------- sidebar ---------- */
+  /* context, never a destination: it rides along with whatever the canvas shows
+     and never owns the page (the shell rule in v2-plan-r2) */
+  .shell{flex:1;min-height:0;display:flex;align-items:stretch;min-width:0}
+  aside.side{flex:none;width:186px;border-right:1px solid var(--border);background:var(--well);
+             display:flex;flex-direction:column;gap:14px;padding:14px 12px;overflow-y:auto}
+  aside.side.collapsed{width:38px;padding:14px 6px;gap:10px;align-items:center}
+  aside.side.collapsed .sgroup{display:none}
+  .sidetoggle{width:100%;justify-content:center;height:24px;padding:0;font-size:12.5px;
+              background:none;border-color:transparent;color:var(--text-3)}
+  .sidetoggle:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .sgroup{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .slabel{font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+  .sempty{font-size:11.5px;color:var(--text-3);line-height:1.5}
+  .srow{display:flex;align-items:center;gap:6px;background:none;border:1px solid transparent;
+        border-radius:6px;padding:5px 7px;color:var(--text-2);font-size:12px;text-align:left;
+        width:100%;cursor:pointer;min-width:0}
+  .srow:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .srow .stxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .srow .sdrop{flex:none;color:var(--text-3);font-size:11px;opacity:0}
+  .srow:hover .sdrop{opacity:1}
+  .speer{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);padding:2px 7px;min-width:0}
+  .speer i{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex:none}
+  .speer .pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+             font-family:var(--mono);font-size:11.5px;color:var(--text)}
+  .speer .sub{flex:none;font-size:11px;color:var(--text-3)}
+
   /* ---------- board ---------- */
   main{flex:1;min-height:0;display:flex;gap:14px;padding:15px 24px 22px;overflow-x:auto;align-items:stretch}
-  .col{flex:1 1 284px;min-width:232px;max-width:400px;max-height:100%;display:flex;flex-direction:column;min-height:0;
+  /* 220, not 232: the collapsed sidebar's 38px rail has to come from somewhere,
+     and a few pixels off each lane is invisible where a clipped Done column and
+     a horizontal scrollbar are not */
+  .col{flex:1 1 284px;min-width:220px;max-width:400px;max-height:100%;display:flex;flex-direction:column;min-height:0;
        background:var(--well);border:1px solid var(--border);border-radius:10px;padding:10px 10px 4px}
   .col.archive{flex:.68 1 204px;min-width:196px;max-width:280px}
   .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 10px;flex:none}
@@ -169,6 +199,12 @@
                border:1px solid var(--border);color:var(--text-2);font:500 11.5px/1 var(--mono)}
   .railbroken{border:1px solid var(--red-br);background:var(--red-bg);color:var(--red);
               border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.5}
+  .railfilt{display:flex;gap:4px;flex:none;padding:0 1px 8px}
+  .railfilt button{flex:1;justify-content:center;height:22px;padding:0 3px;font-size:11px;
+                   white-space:nowrap;background:none;border-color:var(--border);color:var(--text-3)}
+  .railfilt button.on{background:var(--card);border-color:var(--blue-br);color:var(--blue);font-weight:600}
+  .item .scope{font-size:11.5px;color:var(--text-3)}
+  .item .scope.here{color:var(--blue)}
   .railfoot{flex:none;padding:6px 2px 2px}
   .railfoot button{width:100%;justify-content:center;background:none;border-color:transparent;color:var(--text-3);font-size:11.5px}
   .railfoot button:hover{background:var(--well);border-color:var(--border);color:var(--text-2)}
@@ -417,7 +453,10 @@
   <div class="summary" id="summary"></div>
   <div class="notice warn" id="stalebar"></div>
 </header>
-<main id="lanes" aria-label="board columns"></main>
+<div class="shell">
+  <aside class="side" id="side" aria-label="context sidebar"></aside>
+  <main id="lanes" aria-label="board columns"></main>
+</div>
 <div id="state"></div>
 
 <div id="scrim" onclick="closeDrawer()"></div>
@@ -593,10 +632,10 @@ function showState(kind, msg) {
     (msg ? `<div class="statemsg"></div>` : "") + (hint ? `<div>${hint}</div>` : "");
   if (msg) s.querySelector(".statemsg").textContent = msg; // never innerHTML an error string
   s.className = "on" + (kind === "err" ? " err" : "");
-  $("lanes").style.display = "none";
+  document.querySelector(".shell").style.display = "none";
   if (kind === "err") { $("summary").innerHTML = ""; $("stalebar").className = "notice warn"; }
 }
-function hideState() { $("state").className = ""; $("lanes").style.display = ""; }
+function hideState() { $("state").className = ""; document.querySelector(".shell").style.display = ""; }
 
 let lastError = false;
 async function load() {
@@ -845,7 +884,7 @@ window.addEventListener("resize", () => {
 // Items are the human's own writing, unclassified until an agent sorts them.
 // Fetched apart from the board because an unassigned item belongs to no board
 // yet, and because items outlive any one board.
-let items = [], pins = [], showArchived = false, itemDraft = "";
+let items = [], pins = [], showArchived = false, itemDraft = "", railScope = "all";
 
 // load() skips the re-render when the board payload is byte-identical, so an
 // item change with no card change would never reach the screen. Invalidating
@@ -877,6 +916,7 @@ async function postItem(body) {
 function itemEl(it) {
   const el = document.createElement("article");
   el.className = "item" + (it.landing ? " landed" : "") + (it.starred ? " starred" : "");
+  el.dataset.id = it.id;   // the sidebar's pin list jumps to this row
   const body = document.createElement("div");
   body.className = "ibody"; body.textContent = it.body;
   el.appendChild(body);
@@ -904,6 +944,14 @@ function itemEl(it) {
   when.textContent = `${ago(Date.parse(it.createdAt))} ago`;
   meta.append(when);
   if (!it.slug) { const u = document.createElement("span"); u.textContent = "unassigned"; meta.append(u); }
+  // where it SHOWS, which the owner sets apart from where they wrote it
+  const sc = document.createElement("span");
+  sc.className = "scope" + (it.everywhere ? "" : " here");
+  sc.textContent = it.everywhere ? "on every board"
+    : it.boards?.length ? (it.boards.length === 1 ? "only here" : `on ${it.boards.length} boards`)
+    : "";
+  if (sc.textContent) { sc.title = it.everywhere ? "shows on every board's rail until you scope it"
+    : `shows on: ${(it.shownOn ?? []).map((b) => b.name).join(", ")}`; meta.append(sc); }
   if (it.triggered && !it.landing) { const t = document.createElement("span"); t.textContent = "queued for now"; meta.append(t); }
 
   const acts = document.createElement("div");
@@ -923,6 +971,14 @@ function itemEl(it) {
     acts.append(b); return b;
   };
   if (!it.landing) {
+    // scoping is a display choice, so it toggles between "every rail" and this
+    // one; it never changes where the ask was written or who may sort it
+    const scoped = !it.everywhere && it.boards?.length === 1 && it.boards[0] === slug;
+    btn("here", scoped ? "shown only on this board; click to show everywhere" : "show this only on this board's rail",
+      scoped ? "pin on" : "", async () => {
+        await postItem({ id: it.id, boards: scoped ? null : [slug] });
+        await refreshRail();
+      });
     btn("star", it.starred ? "starred, so the agent is asked to notice it" : "star it so the agent notices",
       it.starred ? "on" : "", async () => { await postItem({ id: it.id, star: !it.starred }); await refreshRail(); });
     btn("now", it.triggered ? "already queued for immediate pickup" : "ask for pickup now, not at the next sweep",
@@ -952,9 +1008,14 @@ function railEl() {
   const pending = items.filter((i) => !i.landing);
   const landed = items.filter((i) => i.landing && !i.archived);
   const archived = items.filter((i) => i.archived);
+  // visible/total under a filter, the convention the lane headers already use,
+  // so a filtered count never reads as work disappearing
   const head = document.createElement("div");
   head.className = "chead";
-  head.innerHTML = `<h2>Your asks</h2><span class="count">${pending.length}</span>`;
+  const visPending = pending.filter((i) => railScope === "all" ? true
+    : railScope === "loose" ? i.everywhere : !i.everywhere).length;
+  head.innerHTML = `<h2>Your asks</h2><span class="count">${
+    railScope === "all" ? pending.length : `${visPending}/${pending.length}`}</span>`;
   wrap.appendChild(head);
 
   // The composer sits at the top so "I can keep throwing things" is one
@@ -995,9 +1056,29 @@ function railEl() {
   box.append(ta, bar);
   wrap.appendChild(box);
 
+  // Three-way scope filter. "Only here" and "everywhere" are the two populations
+  // the owner asked to separate; "all" is the default and stays first.
+  const FILT = [["all", "All", "every ask visible on this board"],
+                ["here", "Here", "asks scoped to this board only"],
+                ["loose", "Any board", "asks that show on every board's rail"]];
+  const fbar = document.createElement("div");
+  fbar.className = "railfilt";
+  for (const [key, label, tip] of FILT) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = label; b.title = tip;
+    b.className = railScope === key ? "on" : "";
+    b.onclick = () => { railScope = key; localStorage.setItem(`kanban-railscope-${slug}`, key); render(); };
+    fbar.appendChild(b);
+  }
+  wrap.appendChild(fbar);
+
+  const inScope = (i) => railScope === "all" ? true
+    : railScope === "loose" ? i.everywhere
+    : !i.everywhere;
+
   const list = document.createElement("div");
   list.className = "cards";
-  const shown = [...pending, ...landed, ...(showArchived ? archived : [])];
+  const shown = [...pending, ...landed, ...(showArchived ? archived : [])].filter(inScope);
   if (itemsBroken) {
     const e = document.createElement("div");
     e.className = "railbroken";
@@ -1025,11 +1106,113 @@ function railEl() {
   return wrap;
 }
 
+// The sidebar is context for whatever the canvas shows. Pins are the owner's
+// own jump list and no agent ever reads them; live presence is who else is in
+// this project right now. Both are glanceable, neither owns the page.
+// Collapsed until asked for. A sidebar is context and must never own the page,
+// and at 1440 the six lanes already fit exactly: spending 186px on it by
+// default pushes Done off the edge, which is the width regression the
+// adversarial review caught on the rail.
+let sideCollapsed = (localStorage.getItem("kanban-side") ?? "1") === "1";
+
+function renderSide() {
+  const el = $("side");
+  el.className = "side" + (sideCollapsed ? " collapsed" : "");
+  el.replaceChildren();
+
+  const toggle = document.createElement("button");
+  toggle.type = "button"; toggle.className = "sidetoggle";
+  toggle.textContent = sideCollapsed ? "›" : "‹";
+  toggle.title = sideCollapsed ? "expand the sidebar" : "collapse the sidebar";
+  toggle.onclick = () => {
+    sideCollapsed = !sideCollapsed;
+    localStorage.setItem("kanban-side", sideCollapsed ? "1" : "0");
+    renderSide();
+  };
+  el.appendChild(toggle);
+  if (sideCollapsed) return;
+
+  const group = (label, build) => {
+    const g = document.createElement("div");
+    g.className = "sgroup";
+    const l = document.createElement("div");
+    l.className = "slabel"; l.textContent = label;
+    g.appendChild(l);
+    build(g);
+    el.appendChild(g);
+  };
+
+  group("Pinned", (g) => {
+    if (!pins.length) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "Nothing pinned. Use pin on an ask to keep a pointer here.";
+      g.appendChild(e);
+      return;
+    }
+    for (const p of pins) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "srow";
+      const t = document.createElement("span");
+      t.className = "stxt";
+      t.textContent = p.label || p.ref;
+      const d = document.createElement("span");
+      d.className = "sdrop"; d.textContent = "unpin";
+      b.append(t, d);
+      b.title = p.kind === "item" ? "jump to this ask" : "jump to this card";
+      b.onclick = async (e) => {
+        // the unpin affordance is inside the row, so a click on it must not
+        // also navigate
+        if (e.target === d) {
+          await fetch("/api/pin", { method: "POST", headers: { "content-type": "application/json" },
+            body: JSON.stringify({ kind: p.kind, ref: p.ref }) });
+          await refreshRail();
+          return;
+        }
+        if (p.kind === "card" && data?.board.cards.some((c) => c.id === p.ref)) { openDrawer(p.ref); return; }
+        if (p.kind === "item") {
+          const row = document.querySelector(`#rail .item[data-id="${p.ref}"]`);
+          if (row) { row.scrollIntoView({ block: "center" }); row.classList.add("sel"); setTimeout(() => row.classList.remove("sel"), 1200); return; }
+          toast(p.slug && p.slug !== slug ? "That ask lives on another board" : "That ask is not on this rail right now");
+        }
+      };
+      g.appendChild(b);
+    }
+  });
+
+  group("Here now", (g) => {
+    const who = data?.live ?? [];
+    if (!who.length) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No other session is in this project.";
+      g.appendChild(e);
+      return;
+    }
+    for (const p of who) {
+      const r = document.createElement("div");
+      r.className = "speer";
+      const dot = document.createElement("i");
+      const n = document.createElement("span");
+      n.className = "pn"; n.textContent = p.alias;
+      r.append(dot, n);
+      if (p.subagents) {
+        const s = document.createElement("span");
+        s.className = "sub"; s.textContent = `+${p.subagents}`;
+        s.title = `${p.subagents} sub-agent${p.subagents > 1 ? "s" : ""} running`;
+        r.append(s);
+      }
+      g.appendChild(r);
+    }
+  });
+}
+
 // A rail action must not wait for the 5s board poll to show its effect.
 async function refreshRail() {
   await loadItems();
   const old = $("rail");
   if (old) old.replaceWith(railEl());
+  renderSide();   // pins live in both places; they must not disagree
 }
 
 function render() {
@@ -1044,6 +1227,7 @@ function render() {
   renderSummary();
   renderStale();
   renderLive();
+  renderSide();
 
   flat = [];
   const colEl = (lane) => {
@@ -1343,7 +1527,9 @@ function renderLive() {
   const label = document.createElement("span");
   label.textContent = who.length === 1 ? "session live:" : `${who.length} sessions live:`;
   const names = document.createElement("b");
-  names.textContent = who.join(", ");
+  // a session's sub-agents ride along with its name, from the same file and the
+  // same staleness window the statusline reads
+  names.textContent = who.map((p) => p.alias + (p.subagents ? ` +${p.subagents}` : "")).join(", ");
   el.append(dot, label, names);
   el.title = "agent sessions working in this project right now";
   el.className = "livepeers on";
@@ -1556,6 +1742,7 @@ $("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display
 showState("loading");
 sweepDrafts();
 itemDraft = localStorage.getItem(`kanban-itemdraft-${slug}`) ?? "";
+railScope = localStorage.getItem(`kanban-railscope-${slug}`) ?? "all";
 // items first, so the very first paint already carries the rail
 loadItems().then(load);
 setInterval(async () => { await loadItems(); await load(); }, 5000);

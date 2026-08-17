@@ -319,10 +319,24 @@ export interface Item {
   id: string;
   body: string;
   slug?: string;        // board it was written against; absent means unassigned
+  boards?: string[];    // where it SHOWS, overriding slug; absent means everywhere
   starred?: boolean;    // owner asking the agent to notice this one
   triggered?: string;   // ISO ts: owner wants pickup now, not at the next sweep
   createdAt: string;
   updatedAt: string;
+}
+
+// Where an ask is SHOWN, which the owner sets independently of where they wrote
+// it (ruling 2026-08-17: "more of a display rule than a data rule"). Explicit
+// tags win; otherwise the origin board scopes it; otherwise it shows everywhere.
+// null means everywhere.
+export function displayScope(i: Item): string[] | null {
+  if (i.boards?.length) return i.boards;
+  return i.slug ? [i.slug] : null;
+}
+export function visibleOn(i: Item, slug: string): boolean {
+  const scope = displayScope(i);
+  return !scope || scope.includes(slug);
 }
 // An unsorted item has no landing at all. That absence is what the nudge counts.
 export interface Landing {
@@ -375,7 +389,7 @@ export function isArchived(l: LandingsFile, id: string, now = Date.now()): boole
 export function pendingItems(items: Item[], l: LandingsFile, slug?: string): Item[] {
   return items
     .filter((i) => !isClassified(l, i.id))
-    .filter((i) => !slug || i.slug === slug || !i.slug)
+    .filter((i) => !slug || visibleOn(i, slug))
     .sort((a, b) =>
       Number(!!b.starred) - Number(!!a.starred) ||
       Number(!!b.triggered) - Number(!!a.triggered) ||
