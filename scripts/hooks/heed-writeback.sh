@@ -80,8 +80,13 @@ arm() {
   [ -f "$m" ] && return 0                       # already armed this session
   # Some checks need a "before" reading, because they ask whether something was
   # APPENDED rather than whether it exists. Take it now, while now is still now.
+  # HEED_BASELINE lets a caller that ALREADY computed the before-reading pass it
+  # in, rather than this file re-deriving it and becoming a second definition
+  # that can drift from the caller's.
   local baseline=0
-  if [ "$check" = persona-adopted ]; then
+  if [ -n "${HEED_BASELINE:-}" ]; then
+    baseline="$HEED_BASELINE"
+  elif [ "$check" = persona-adopted ]; then
     baseline=$(wc -l < "$HOME/.claude/personas/usage/events.jsonl" 2>/dev/null | tr -d ' ')
     baseline=${baseline:-0}
   fi
@@ -129,10 +134,33 @@ check_persona_adopted() {
      | rg -qF "\"persona\":\"${persona}\"" 2>/dev/null; then echo yes; else echo no; fi
 }
 
+# check_kanban_asks_sorted <slug> <baseline-pending-count>
+# Heeded means the count went DOWN, not that it is zero: an agent that sorts two
+# of five asks acted on the nudge. A store that will not parse is unknown, never
+# no, or a broken file would score a miss every Stop.
+check_kanban_asks_sorted() {
+  local slug="${1:-}" base="${2:-0}"
+  # honours KANBAN_ROOT like every other reader, so a suite can exercise this
+  # against a throwaway store instead of the owner's real one
+  local kroot="${KANBAN_ROOT:-$HOME/.claude/kanban}"
+  local items="$kroot/items.json" landings="$kroot/landings.json"
+  [ -f "$items" ] || { echo unknown; return; }
+  local now
+  now=$(jq -r --slurpfile L <(cat "$landings" 2>/dev/null || echo '{"landings":{}}') --arg slug "$slug" '
+    def scope: if ((.boards // []) | length) > 0 then .boards elif .slug then [.slug] else null end;
+    ($L[0].landings // {}) as $done
+    | [ .items[]? | select($done[.id] == null)
+        | select((scope == null) or (scope | index($slug) != null)) ] | length' "$items" 2>/dev/null)
+  case "$now" in ''|*[!0-9]*) echo unknown; return ;; esac
+  [ "$now" -lt "$base" ] 2>/dev/null && { echo yes; return; }
+  echo no
+}
+
 run_check() {
   case "${1:-}" in
     task-store-nonempty) check_task_store_nonempty "${2:-}" ;;
     persona-adopted)     check_persona_adopted "${2:-}" "${3:-0}" ;;
+    kanban-asks-sorted)  check_kanban_asks_sorted "${2:-}" "${3:-0}" ;;
     *)                   echo unknown ;;
   esac
 }

@@ -154,5 +154,34 @@ stop "$T"
   && ok "writes nothing while ~/.claude/.no-heed-writeback exists" \
   || bad "mute file did not stop the writeback"
 
+echo "== kanban-asks-sorted: the third check kind (task #62) =="
+# Heeded means the count went DOWN, not that it hit zero: sorting some of the
+# owner's asks is acting on the nudge.
+kchk() {
+  KANBAN_ROOT="$1" bash -c '
+source /dev/stdin <<EOF
+$(sed -n "/^check_kanban_asks_sorted()/,/^}/p" '"$HOME"'/.claude/scripts/hooks/heed-writeback.sh)
+EOF
+check_kanban_asks_sorted "$1" "$2"' _ "$2" "$3"
+}
+K=$(mktemp -d "${TMPDIR:-/tmp}/heedkan-XXXXXX")
+printf '{"items":[{"id":"a","body":"x","slug":"b1","createdAt":"2026-01-01T00:00:00Z","updatedAt":"2026-01-01T00:00:00Z"},{"id":"b","body":"y","slug":"b1","createdAt":"2026-01-01T00:00:00Z","updatedAt":"2026-01-01T00:00:00Z"}]}' > "$K/items.json"
+echo '{"landings":{}}' > "$K/landings.json"
+[ "$(kchk "$K" b1 2)" = no ]  && ok "an unchanged count is not a heed" \
+                              || bad "an unchanged ask count scored a heed"
+[ "$(kchk "$K" b1 4)" = yes ] && ok "a count that dropped reads as heeded" \
+                              || bad "sorting asks did not register as a heed"
+# An unassigned ask is visible on every board, so it counts toward each.
+printf '{"items":[{"id":"c","body":"loose","createdAt":"2026-01-01T00:00:00Z","updatedAt":"2026-01-01T00:00:00Z"}]}' > "$K/items.json"
+[ "$(kchk "$K" other-board 2)" = yes ] && ok "an untagged ask counts on a board it was not written on" \
+                                       || bad "an untagged ask was invisible to another board's check"
+# The load-bearing one: a broken store must never score a false heed.
+printf '{"items": [ {"id":"a","body":"trun' > "$K/items.json"
+[ "$(kchk "$K" b1 4)" = unknown ] && ok "a corrupt store is unknown, never a false heed" \
+                                  || bad "a corrupt store scored $(kchk "$K" b1 4) instead of unknown"
+[ "$(kchk "$K/gone" b1 4)" = unknown ] && ok "a missing store is unknown" \
+                                       || bad "a missing store did not read as unknown"
+rm -rf "$K"
+
 echo "---"; echo "pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]
