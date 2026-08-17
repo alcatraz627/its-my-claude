@@ -12,7 +12,9 @@ import * as os from "node:os";
 import * as crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
 
-export const KROOT = path.join(os.homedir(), ".claude", "kanban");
+// KANBAN_ROOT exists so a suite can exercise the global item store without
+// touching the owner's real one. Unset everywhere else, which is the default.
+export const KROOT = process.env.KANBAN_ROOT || path.join(os.homedir(), ".claude", "kanban");
 export const REGISTRY = path.join(KROOT, "registry.json");
 export const SERVER_INFO = path.join(KROOT, "server.json");
 
@@ -300,6 +302,85 @@ export function parseNoteTags(text: string | undefined): NoteTags {
 // skill specs still gets the contract — see rules/skill-spec-update-not-honored.
 export const TAG_LEGEND =
   "tags: @me self-note (not agent-nagged) · !now act on pickup · /skill run it against the card · >lane apply the move via `kanban.sh move` · #review-me human's own queue (don't act) · other #word free";
+
+// Owner items: the human's write channel, stored apart from the agent's verdict
+// on it. The server owns what the human wrote, the CLI owns what the agent
+// decided, so classification still works with the server down (the same split
+// that already lets note pickup work). Design: v2-plan-r2.md.
+
+export const ITEMS = path.join(KROOT, "items.json");
+export const LANDINGS = path.join(KROOT, "landings.json");
+export const PINS = path.join(KROOT, "pins.json");
+
+export const SHAPES = ["task", "subtask", "clarification", "remark"] as const;
+export type ItemShape = (typeof SHAPES)[number];
+
+export interface Item {
+  id: string;
+  body: string;
+  slug?: string;        // board it was written against; absent means unassigned
+  starred?: boolean;    // owner asking the agent to notice this one
+  triggered?: string;   // ISO ts: owner wants pickup now, not at the next sweep
+  createdAt: string;
+  updatedAt: string;
+}
+// An unsorted item has no landing at all. That absence is what the nudge counts.
+export interface Landing {
+  shape: ItemShape;
+  cardId?: string;      // the card it became, or attached to
+  note?: string;        // the agent's one-line account of what it did
+  at: string;
+  by?: string;          // session that classified it
+}
+export interface ItemsFile { items: Item[] }
+export interface LandingsFile { landings: Record<string, Landing> }
+// Owner-only and read-side. No agent ever reads this file, which is the whole
+// difference between a pin and a star.
+export interface Pin { id: string; kind: "card" | "item"; ref: string; slug?: string; label?: string; at: string }
+export interface PinsFile { pins: Pin[] }
+
+export const loadItems = (): ItemsFile => readJson<ItemsFile>(ITEMS, { items: [] });
+export const loadLandings = (): LandingsFile => readJson<LandingsFile>(LANDINGS, { landings: {} });
+export const loadPins = (): PinsFile => readJson<PinsFile>(PINS, { pins: [] });
+
+// Human-authored, so it rotates backups exactly like notes.json: this data is
+// gitignored and these copies are the entire recovery surface.
+export function saveItems(file: ItemsFile, by: string): void {
+  if (fs.existsSync(ITEMS)) {
+    fs.copyFileSync(ITEMS, `${ITEMS}.prev-${Date.now()}.bak`);
+    const baks = fs.readdirSync(KROOT).filter((f) => f.startsWith("items.json.prev-")).sort();
+    for (const old of baks.slice(0, Math.max(0, baks.length - 20))) fs.unlinkSync(path.join(KROOT, old));
+  }
+  atomicWrite(ITEMS, file, by, `items=${file.items.length}`);
+}
+
+// Two CLI classifiers race the same way two board writers do.
+export function withItemsLock<T>(fn: () => T): T {
+  return withBoardLock(KROOT, fn);
+}
+
+export const isClassified = (l: LandingsFile, id: string): boolean => !!l.landings[id];
+
+// Computed, not stored, so changing the window needs no migration and can never
+// leave a half-archived set behind.
+export const ARCHIVE_AFTER_MS = 7 * 864e5;
+export function isArchived(l: LandingsFile, id: string, now = Date.now()): boolean {
+  const at = l.landings[id]?.at;
+  return !!at && now - Date.parse(at) > ARCHIVE_AFTER_MS;
+}
+
+// What an agent should look at, in the order it should look. Starred first
+// because a star IS an instruction; then owner-triggered; then oldest-first so
+// nothing starves at the bottom.
+export function pendingItems(items: Item[], l: LandingsFile, slug?: string): Item[] {
+  return items
+    .filter((i) => !isClassified(l, i.id))
+    .filter((i) => !slug || i.slug === slug || !i.slug)
+    .sort((a, b) =>
+      Number(!!b.starred) - Number(!!a.starred) ||
+      Number(!!b.triggered) - Number(!!a.triggered) ||
+      Date.parse(a.createdAt) - Date.parse(b.createdAt));
+}
 
 export type HarvestedCard = Omit<Card, "createdAt" | "updatedAt">;
 

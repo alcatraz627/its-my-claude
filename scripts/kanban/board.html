@@ -117,6 +117,62 @@
      fourth claimant on a closed palette, and the light tint measured 1.000 */
   .col.attn{flex:1.25 1 340px;max-width:460px;border-color:var(--border-2);border-width:1.5px}
 
+  /* the owner's own lane. blue is already "you and your controls", so the rail
+     wears it and the status lanes stay neutral. it is not a status column and
+     must not read as one */
+  /* Width is load-bearing on this board (attention is carried by column width),
+     so the rail borrows rather than adds: it shrinks first and floors lower
+     than a status lane. At 1440, the common width here, the six lanes used to
+     fit exactly and 250px of rail pushed Done off the edge. */
+  .col.rail{flex:.62 1 232px;min-width:198px;max-width:300px;border-color:var(--blue-br);
+            background:linear-gradient(var(--blue-bg),var(--blue-bg)) var(--well)}
+  .col.rail .chead h2{color:var(--blue)}
+  .col.rail .chead .count{border-color:var(--blue-br);color:var(--blue)}
+  .railbox{flex:none;display:flex;flex-direction:column;gap:7px;padding:0 1px 10px}
+  .railbox textarea{height:74px;min-height:74px;font-size:12.5px;line-height:1.5;background:var(--card);
+                    border-color:var(--border);overflow:auto;resize:vertical}
+  .railbox textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent)}
+  .railbar{display:flex;align-items:center;gap:7px}
+  .railbar .rhint{flex:1;font-size:11.5px;color:var(--text-3)}
+  .railadd{background:var(--blue);border-color:transparent;color:var(--on-accent);font-weight:600;height:26px;padding:0 11px}
+  .railadd:hover{background:var(--blue);border-color:transparent;color:var(--on-accent);filter:brightness(1.08)}
+  .item{position:relative;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 11px;
+        display:flex;flex-direction:column;gap:7px;box-shadow:var(--shadow)}
+  .item:hover{border-color:var(--border-2)}
+  .item .ibody{font-size:12.5px;line-height:1.5;color:var(--text);white-space:pre-wrap;overflow-wrap:anywhere}
+  /* a sorted item is settled, so it takes the same recession the done column's
+     cards take: quieter ground, dimmer text, no strikethrough shouting */
+  .item.landed{background:none;box-shadow:none;border-color:var(--border);padding:7px 10px;gap:5px}
+  .item.landed .ibody{color:var(--text-3);font-size:12px;
+                      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .item .imeta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;color:var(--text-3)}
+  /* The rail floors at 198px, which cannot hold the timestamp and four controls
+     on one line. Wrapping made the row height depend on the body text, so the
+     controls take their own line always: predictable beats occasionally tighter. */
+  .item .iacts{display:flex;align-items:center;gap:3px;width:100%;justify-content:flex-end;
+               margin-top:1px;padding-top:5px;border-top:1px solid var(--border)}
+  /* three toggles read as one vocabulary; the destructive one is set apart by a
+     gap and a divider, the way the drawer holds its close button away from nav */
+  .item .iacts button{height:21px;padding:0 6px;font-size:11.5px;background:none;border-color:transparent;color:var(--text-3)}
+  .item .iacts button:hover{background:var(--well);border-color:var(--border);color:var(--text)}
+  .item .iacts button.on{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
+  .item .iacts button.pin.on{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
+  .item .iacts .del{margin-left:5px;padding-left:9px;border-left:1px solid var(--border);border-radius:0 6px 6px 0}
+  .item .iacts .del:hover{color:var(--red);background:var(--red-bg);border-left-color:var(--red-br)}
+  /* a star is an instruction to the agent, so it earns the same amber the rest
+     of the board reserves for "this is waiting on somebody" */
+  .item.starred:not(.landed){border-color:var(--amber-br)}
+  .item .land{font-size:11.5px;color:var(--text-2);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .item .land a{color:var(--blue);text-decoration:none}
+  .item .land a:hover{text-decoration:underline}
+  .item .shape{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:20px;
+               border:1px solid var(--border);color:var(--text-2);font:500 11.5px/1 var(--mono)}
+  .railbroken{border:1px solid var(--red-br);background:var(--red-bg);color:var(--red);
+              border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.5}
+  .railfoot{flex:none;padding:6px 2px 2px}
+  .railfoot button{width:100%;justify-content:center;background:none;border-color:transparent;color:var(--text-3);font-size:11.5px}
+  .railfoot button:hover{background:var(--well);border-color:var(--border);color:var(--text-2)}
+
   /* ---------- card ---------- */
   .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 13px 10px;
         cursor:pointer;outline:none;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;
@@ -413,6 +469,7 @@
       <span class="h" id="dPickup">the agent reads this on its next pickup</span>
       <span class="st" id="dSaved"></span>
       <button type="button" class="addnote" id="dAdd" title="start another note on this card">+ note</button>
+      <button type="button" class="addnote" id="dDel" title="delete this note">delete</button>
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
     <div class="conflict" id="dConflict"></div>
@@ -441,6 +498,7 @@
     <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card</td></tr>
     <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open card</td></tr>
     <tr><td><kbd>n</kbd></td><td>write a note on the open card</td></tr>
+    <tr><td><kbd>a</kbd></td><td>write an ask, sorted by the agent</td></tr>
     <tr><td><kbd>⌘</kbd> <kbd>↵</kbd></td><td>save the note, stay on the card</td></tr>
     <tr><td><kbd>c</kbd></td><td>copy status digest</td></tr>
     <tr><td><kbd>t</kbd></td><td>toggle theme</td></tr>
@@ -784,6 +842,196 @@ window.addEventListener("resize", () => {
   trimTimer = setTimeout(() => { tailTrim($("root")); document.querySelectorAll(".foot .src").forEach(tailTrim); }, 150);
 });
 
+// Items are the human's own writing, unclassified until an agent sorts them.
+// Fetched apart from the board because an unassigned item belongs to no board
+// yet, and because items outlive any one board.
+let items = [], pins = [], showArchived = false, itemDraft = "";
+
+// load() skips the re-render when the board payload is byte-identical, so an
+// item change with no card change would never reach the screen. Invalidating
+// lastPayload here is what makes an agent's classification appear live.
+let itemsSig = "", itemsBroken = null;
+async function loadItems() {
+  try {
+    const r = await (await fetch(`/api/items?slug=${encodeURIComponent(slug)}`)).json();
+    items = r.items ?? []; pins = r.pins ?? [];
+    // a store that will not parse must say so: an empty rail otherwise asserts
+    // the owner has written nothing, while their asks sit unread on disk
+    itemsBroken = r.broken ?? null;
+    const sig = JSON.stringify([items, pins, itemsBroken]);
+    if (sig !== itemsSig) { itemsSig = sig; lastPayload = ""; }
+  } catch (e) {
+    itemsBroken = `the board server did not answer (${e.message})`;
+  }
+}
+const isPinned = (kind, ref) => pins.some((p) => p.kind === kind && p.ref === ref);
+
+async function postItem(body) {
+  const res = await fetch("/api/item", { method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify(body) });
+  const out = await res.json();
+  if (!res.ok) throw new Error(out.error || res.status);
+  return out;
+}
+
+function itemEl(it) {
+  const el = document.createElement("article");
+  el.className = "item" + (it.landing ? " landed" : "") + (it.starred ? " starred" : "");
+  const body = document.createElement("div");
+  body.className = "ibody"; body.textContent = it.body;
+  el.appendChild(body);
+
+  if (it.landing) {
+    const land = document.createElement("div");
+    land.className = "land";
+    const shape = document.createElement("span");
+    shape.className = "shape"; shape.textContent = it.landing.shape;
+    land.append(shape);
+    if (it.landedCard) {
+      const a = document.createElement("a");
+      a.href = "#"; a.textContent = it.landedCard;
+      a.title = "open the card this landed on";
+      a.onclick = (e) => { e.preventDefault(); openDrawer(it.landing.cardId); };
+      land.append(a);
+    }
+    if (it.landing.note) { const n = document.createElement("span"); n.textContent = it.landing.note; land.append(n); }
+    el.appendChild(land);
+  }
+
+  const meta = document.createElement("div");
+  meta.className = "imeta";
+  const when = document.createElement("span");
+  when.textContent = `${ago(Date.parse(it.createdAt))} ago`;
+  meta.append(when);
+  if (!it.slug) { const u = document.createElement("span"); u.textContent = "unassigned"; meta.append(u); }
+  if (it.triggered && !it.landing) { const t = document.createElement("span"); t.textContent = "queued for now"; meta.append(t); }
+
+  const acts = document.createElement("div");
+  acts.className = "iacts";
+  // Every action reports. A stale row (deleted in another tab, or by an agent)
+  // makes the server refuse with a written reason, and dropping that on the
+  // floor leaves a dead row on screen with no way to tell what happened.
+  const btn = (label, title, cls, fn) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = label; b.title = title; b.className = cls;
+    b.onclick = async () => {
+      b.disabled = true;
+      try { await fn(); }
+      catch (e) { toast(e.message || "That did not work", 4000, "err"); await refreshRail(); }
+      finally { b.disabled = false; }
+    };
+    acts.append(b); return b;
+  };
+  if (!it.landing) {
+    btn("star", it.starred ? "starred, so the agent is asked to notice it" : "star it so the agent notices",
+      it.starred ? "on" : "", async () => { await postItem({ id: it.id, star: !it.starred }); await refreshRail(); });
+    btn("now", it.triggered ? "already queued for immediate pickup" : "ask for pickup now, not at the next sweep",
+      it.triggered ? "on" : "", async () => { await postItem({ id: it.id, trigger: !it.triggered }); await refreshRail(); });
+  }
+  btn("pin", isPinned("item", it.id) ? "pinned, and listed under Pinned on the hub" : "pin it to your own jump list",
+    "pin" + (isPinned("item", it.id) ? " on" : ""), async () => {
+      const res = await fetch("/api/pin", { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ kind: "item", ref: it.id, slug: it.slug, label: it.body.slice(0, 60) }) });
+      if (!res.ok) throw new Error((await res.json()).error || `pin failed (${res.status})`);
+      await refreshRail();
+    });
+  btn("✕", "delete this", "del", async () => {
+    await postItem({ id: it.id, body: "" });
+    toast("Ask deleted");
+    await refreshRail();
+  });
+  meta.append(acts);
+  el.appendChild(meta);
+  return el;
+}
+
+function railEl() {
+  const wrap = document.createElement("section");
+  wrap.className = "col rail";
+  wrap.id = "rail";
+  const pending = items.filter((i) => !i.landing);
+  const landed = items.filter((i) => i.landing && !i.archived);
+  const archived = items.filter((i) => i.archived);
+  const head = document.createElement("div");
+  head.className = "chead";
+  head.innerHTML = `<h2>Your asks</h2><span class="count">${pending.length}</span>`;
+  wrap.appendChild(head);
+
+  // The composer sits at the top so "I can keep throwing things" is one
+  // keystroke from opening the board. No destination picker: the agent sorts.
+  const box = document.createElement("div");
+  box.className = "railbox";
+  const ta = document.createElement("textarea");
+  ta.placeholder = "Write anything. The agent sorts it.";
+  ta.value = itemDraft;
+  ta.setAttribute("aria-label", "write an ask");
+  const bar = document.createElement("div");
+  bar.className = "railbar";
+  const hint = document.createElement("span");
+  hint.className = "rhint"; hint.textContent = "⌘↵ to add";
+  const add = document.createElement("button");
+  add.type = "button"; add.className = "railadd"; add.textContent = "Add";
+  const submit = async () => {
+    const v = ta.value.trim();
+    if (!v) return;
+    try {
+      await postItem({ body: v, slug });
+      ta.value = ""; itemDraft = "";
+      localStorage.removeItem(`kanban-itemdraft-${slug}`);
+      toast("Added to your asks");
+      await refreshRail();
+    } catch (e) { toast(`Could not add: ${e.message}`, 4000, "err"); }
+  };
+  add.onclick = submit;
+  ta.addEventListener("input", () => {
+    itemDraft = ta.value;
+    localStorage.setItem(`kanban-itemdraft-${slug}`, ta.value);
+  });
+  ta.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); submit(); }
+    if (e.key === "Escape") { e.stopPropagation(); ta.blur(); }
+  });
+  bar.append(hint, add);
+  box.append(ta, bar);
+  wrap.appendChild(box);
+
+  const list = document.createElement("div");
+  list.className = "cards";
+  const shown = [...pending, ...landed, ...(showArchived ? archived : [])];
+  if (itemsBroken) {
+    const e = document.createElement("div");
+    e.className = "railbroken";
+    e.textContent = `Your asks could not be read, so this list is not trustworthy: ${itemsBroken}. Fix or trash ~/.claude/kanban/items.json — nothing else on this board is affected.`;
+    list.appendChild(e);
+  } else if (!shown.length) {
+    const e = document.createElement("div");
+    e.className = "empty-col";
+    e.textContent = "Nothing yet. Anything you write here reaches the agent.";
+    list.appendChild(e);
+  } else shown.forEach((i) => list.appendChild(itemEl(i)));
+  wrap.appendChild(list);
+
+  if (archived.length) {
+    const foot = document.createElement("div");
+    foot.className = "railfoot";
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = showArchived ? `hide ${archived.length} archived` : `show ${archived.length} archived`;
+    b.title = "sorted more than 7 days ago";
+    b.onclick = () => { showArchived = !showArchived; render(); };
+    foot.appendChild(b);
+    wrap.appendChild(foot);
+  }
+  return wrap;
+}
+
+// A rail action must not wait for the 5s board poll to show its effect.
+async function refreshRail() {
+  await loadItems();
+  const old = $("rail");
+  if (old) old.replaceWith(railEl());
+}
+
 function render() {
   hideState();
   $("name").textContent = data.name;
@@ -820,14 +1068,32 @@ function render() {
     wrap.appendChild(list);
     return wrap;
   };
-  if (filterText && !cards.length) {
-    const none = document.createElement("div");
-    none.className = "fnone";
-    none.textContent = `No card matches “${filterText}”. Press Esc in the filter to clear it.`;
-    $("lanes").replaceChildren(none);
-    return;
-  }
-  $("lanes").replaceChildren(...LANE_ORDER.map(colEl).filter(Boolean));
+  // Rebuilding the rail destroys its textarea, taking focus and caret with it,
+  // and an agent classifying any OTHER ask changes the signature that triggers
+  // the rebuild. So while the composer has focus the rail node is left alone and
+  // only the lanes around it are rebuilt. The draft mirror is not enough on its
+  // own: it restores the text, never the cursor.
+  const prevRail = $("rail");
+  const railHeld = prevRail && prevRail.contains(document.activeElement);
+  const rail = railHeld ? prevRail : railEl();
+
+  // The rail is the owner's own lane, so a card filter never hides it: their
+  // composer has to stay reachable whatever the board is showing.
+  const rest = (filterText && !cards.length)
+    ? [(() => {
+        const none = document.createElement("div");
+        none.className = "fnone";
+        none.textContent = `No card matches “${filterText}”. Press Esc in the filter to clear it.`;
+        return none;
+      })()]
+    : LANE_ORDER.map(colEl).filter(Boolean);
+
+  // In-place, so a held rail is never detached: reparenting a focused node
+  // blurs it even when the parent is the same.
+  const lanes = $("lanes");
+  for (const child of [...lanes.children]) if (child !== rail) child.remove();
+  if (!rail.isConnected) lanes.appendChild(rail);
+  for (const el of rest) lanes.appendChild(el);
   markSel();
   tailTrim($("root"));
   document.querySelectorAll(".foot .src").forEach(tailTrim);
@@ -947,6 +1213,7 @@ function loadNoteIntoComposer(id) {
   dirty = hasDraft;
   const at = list.findIndex((n) => n.id === openNoteId);
   $("dNoteLabel").textContent = at < 0 ? "New note" : list.length > 1 ? `Note ${at + 1} of ${list.length}` : "Your note";
+  $("dDel").style.display = at < 0 ? "none" : "";   // nothing saved yet is nothing to delete
   $("dSaved").textContent = hasDraft ? "unsaved" : (cur?.updatedAt ? `saved ${ago(Date.parse(cur.updatedAt))} ago` : "");
   $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
   renderPickup(id);
@@ -1178,6 +1445,26 @@ $("dDiscard").onclick = () => {
   const c = openId, n = openNoteId; openId = null; dirty = false;
   openDrawer(c, n);
 };
+// Deleting has always worked by saving an empty note, but nothing said so, and
+// a capability nobody can see is one the reader believes is missing.
+$("dDel").onclick = async () => {
+  if (!openId || !openNoteId) return;
+  const list = notesOf(data.notes[openId]);
+  const cur = list.find((n) => n.id === openNoteId);
+  if (!cur) { toast("Nothing to delete yet"); return; }
+  try {
+    const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId: openId, noteId: openNoteId, note: "" }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    localStorage.removeItem(DRAFT_KEY(openId, openNoteId));
+    dirty = false; lastPayload = "";
+    const c = openId; openNoteId = null;
+    await load();
+    if (data.board.cards.some((x) => x.id === c)) openDrawer(c);
+    toast("Note deleted");
+  } catch (e) { toast(`Delete failed: ${e.message}`, 4000, "err"); }
+};
+
 // a blank composer with no id: the next save creates a note rather than editing one
 $("dAdd").onclick = () => {
   if (!openId) return;
@@ -1244,8 +1531,11 @@ $("dSave").onclick = async () => {
 
 document.addEventListener("keydown", (e) => {
   if (e.target === $("dNote")) { if (e.key === "Escape") e.target.blur(); return; }
-  if (e.target === $("filter")) return;
+  // any text field, not just the two named ones: the rail composer is a third,
+  // and a single-letter shortcut firing mid-sentence is the bug this prevents
+  if (e.target.matches?.("input,textarea,[contenteditable]")) return;
   if (e.key === "/") { e.preventDefault(); $("filter").focus(); $("filter").select(); return; }
+  if (e.key === "a") { const t = document.querySelector("#rail textarea"); if (t) { e.preventDefault(); t.focus(); } return; }
   // the modal is the topmost layer, so it consumes Escape before help or drawer
   if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
   if ($("help").style.display === "flex" && e.key !== "?") { $("help").style.display = "none"; return; }
@@ -1265,8 +1555,10 @@ $("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display
 
 showState("loading");
 sweepDrafts();
-load();
-setInterval(load, 5000);
+itemDraft = localStorage.getItem(`kanban-itemdraft-${slug}`) ?? "";
+// items first, so the very first paint already carries the rail
+loadItems().then(load);
+setInterval(async () => { await loadItems(); await load(); }, 5000);
 </script>
 </body>
 </html>

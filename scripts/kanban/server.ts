@@ -6,8 +6,9 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
 import {
-  KROOT, SERVER_INFO, LANES, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
+  KROOT, SERVER_INFO, LANES, PINS, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
   loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
+  loadItems, saveItems, loadLandings, loadPins, isArchived, type Item, type Pin,
 } from "./lib.ts";
 
 const portArg = process.argv.indexOf("--port");
@@ -33,6 +34,15 @@ function enqueueNote(fn: () => unknown): Promise<unknown> {
 function boardDirOf(slug: string): string | null {
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
   return registry().boards[slug] ? path.join(KROOT, "boards", slug) : null;
+}
+
+// items.json and pins.json share notes.json's discipline: one writer, and every
+// POST serializes through a chain so load-mutate-save never interleaves.
+let itemChain: Promise<unknown> = Promise.resolve();
+function enqueueItem(fn: () => unknown): Promise<unknown> {
+  const run = itemChain.then(() => fn());
+  itemChain = run.catch(() => undefined);
+  return run;
 }
 
 // Hand-rolled markdown→html for the doc viewer — zero dependencies, not full CommonMark.
@@ -295,6 +305,41 @@ const server = Bun.serve({
         return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir),
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root) });
       }
+      // The owner's own lane. `slug` scopes to one board and always keeps the
+      // unassigned ones, because an unassigned item is routable to any board.
+      if (p === "/api/items") {
+        const want = url.searchParams.get("slug") || null;
+        // The owner's own files get the degradation the boards already get
+        // (see the two catches below): a broken store must name itself broken,
+        // never read as an empty queue. Silence here is indistinguishable from
+        // "nothing to do", and this is the feature's only pickup signal.
+        let items, landings, pinRows;
+        try {
+          ({ items } = loadItems());
+          ({ landings } = loadLandings());
+          pinRows = loadPins().pins;
+        } catch (e: any) {
+          return json({ items: [], pins: [], broken: `${e.message}`.slice(0, 300) }, 200);
+        }
+        const names = Object.fromEntries(Object.entries(registry().boards).map(([s, b]) => [s, b.name]));
+        const cardTitles = new Map<string, string>();
+        for (const [s] of Object.entries(registry().boards)) {
+          if (want && s !== want) continue;
+          try { for (const c of loadBoard(path.join(KROOT, "boards", s)).cards) cardTitles.set(c.id, c.title); }
+          catch { /* an unreadable board must not blank the owner's own writing */ }
+        }
+        const rows = items
+          .filter((i) => !want || i.slug === want || !i.slug)
+          .map((i) => ({
+            ...i,
+            boardName: i.slug ? names[i.slug] ?? null : null,
+            landing: landings[i.id] ?? null,
+            landedCard: landings[i.id]?.cardId ? cardTitles.get(landings[i.id]!.cardId!) ?? null : null,
+            archived: isArchived({ landings }, i.id),
+          }))
+          .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+        return json({ items: rows, pins: pinRows });
+      }
       if (p === "/doc") {
         return docResponse(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0),
           url.searchParams.get("embed") === "1");
@@ -375,6 +420,92 @@ const server = Bun.serve({
       });
       if ("error" in result) return json(result, 500);
       return json(result);
+    }
+
+    // The owner writes from anywhere and never classifies. A missing slug is a
+    // deliberate state (unassigned, routable later), not a missing argument.
+    if (req.method === "POST" && p === "/api/item") {
+      const body = (await req.json().catch(() => null)) as
+        { id?: string; body?: string; slug?: string; star?: boolean; trigger?: boolean } | null;
+      if (!body) return json({ error: "need a JSON body" }, 400);
+      if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
+      if (typeof body.body === "string" && body.body.length > 10_000) return json({ error: "item over 10k chars" }, 413);
+      const isNew = !body.id;
+      if (isNew && (typeof body.body !== "string" || !body.body.trim())) {
+        return json({ error: "an empty item is not saved; write something first" }, 400);
+      }
+      let out: { ok: true; id: string; deleted?: boolean } | { error: string } = { error: "unwritten" };
+      await enqueueItem(() => {
+        const file = loadItems();
+        const now = new Date().toISOString();
+        if (isNew) {
+          const fresh: Item = { id: noteId(), body: body.body!.trim(), createdAt: now, updatedAt: now,
+            ...(body.slug ? { slug: body.slug } : {}), ...(body.star ? { starred: true } : {}) };
+          file.items.push(fresh);
+          saveItems(file, `item:new`);
+          out = { ok: true, id: fresh.id };
+          return;
+        }
+        const it = file.items.find((x) => x.id === body.id);
+        if (!it) { out = { error: "that item is gone; reload to see the current ones" }; return; }
+        // An empty body deletes, matching the note composer's existing grammar.
+        if (typeof body.body === "string" && !body.body.trim()) {
+          file.items = file.items.filter((x) => x.id !== body.id);
+          saveItems(file, `item:del`);
+          // Take the pin with it, the way mergeSync GCs an override with its
+          // card. The landing is CLI-owned, so the CLI sweeps that one instead.
+          const pf = loadPins();
+          const kept = pf.pins.filter((x) => !(x.kind === "item" && x.ref === body.id));
+          if (kept.length !== pf.pins.length) atomicWrite(PINS, { pins: kept }, "pin-gc", `pins=${kept.length}`);
+          out = { ok: true, id: body.id!, deleted: true };
+          return;
+        }
+        if (typeof body.body === "string") { it.body = body.body.trim(); it.updatedAt = now; }
+        if (body.star !== undefined) { if (body.star) it.starred = true; else delete it.starred; }
+        if (body.trigger !== undefined) { if (body.trigger) it.triggered = now; else delete it.triggered; }
+        saveItems(file, `item:${body.id}`);
+        out = { ok: true, id: body.id! };
+      });
+      if ("error" in out) return json(out, out.error.includes("gone") ? 409 : 500);
+      return json(out);
+    }
+
+    // A pin is owner-only and read-side; no agent reads this file. Posting an
+    // existing ref removes it, so the star and pin controls both toggle.
+    if (req.method === "POST" && p === "/api/pin") {
+      const body = (await req.json().catch(() => null)) as
+        { kind?: "card" | "item"; ref?: string; slug?: string; label?: string } | null;
+      if (!body?.ref || (body.kind !== "card" && body.kind !== "item")) {
+        return json({ error: "need {kind: card|item, ref}" }, 400);
+      }
+      // Same refusals its siblings make: /api/item checks the board, /api/note
+      // caps the size, and cli.ts refuses a card on no board because the link
+      // would be dead on arrival. A pin pointing at nothing is that same defect.
+      if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
+      if ((body.label?.length ?? 0) > 200) return json({ error: "pin label over 200 chars" }, 413);
+      if (body.kind === "item" && !loadItems().items.some((i) => i.id === body.ref)) {
+        return json({ error: `no ask ${body.ref}` }, 404);
+      }
+      if (body.kind === "card") {
+        const onBoard = Object.keys(registry().boards).some((s) => {
+          try { return loadBoard(path.join(KROOT, "boards", s)).cards.some((c) => c.id === body.ref); } catch { return false; }
+        });
+        if (!onBoard) return json({ error: `card ${body.ref} is not on any board` }, 404);
+      }
+      let out: { ok: true; pinned: boolean } = { ok: true, pinned: false };
+      await enqueueItem(() => {
+        const file = loadPins();
+        const at = file.pins.findIndex((x) => x.kind === body.kind && x.ref === body.ref);
+        if (at >= 0) { file.pins.splice(at, 1); out = { ok: true, pinned: false }; }
+        else {
+          const pin: Pin = { id: noteId(), kind: body.kind!, ref: body.ref!, at: new Date().toISOString(),
+            ...(body.slug ? { slug: body.slug } : {}), ...(body.label ? { label: body.label } : {}) };
+          file.pins.push(pin);
+          out = { ok: true, pinned: true };
+        }
+        atomicWrite(PINS, file, "pin", `pins=${file.pins.length}`);
+      });
+      return json(out);
     }
 
     return json({ error: `method ${req.method} not supported on ${p}` }, 405);

@@ -6,9 +6,11 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { execFileSync } from "node:child_process";
 import {
-  CliError, KROOT, REGISTRY, SERVER_INFO, LANES, type Lane, cardId, readJson, atomicWrite,
+  CliError, KROOT, REGISTRY, SERVER_INFO, LANES, LANDINGS, SHAPES, type Lane, type ItemShape,
+  cardId, readJson, atomicWrite,
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
+  loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -23,7 +25,7 @@ function flag(name: string): string | undefined {
 const hasFlag = (name: string) => rest.includes(`--${name}`);
 // Boolean flags never consume the next token, so flag order can't silently
 // swallow a positional (the sim + skeptic both flagged the old behavior).
-const BOOL_FLAGS = new Set(["json", "force", "undo", "keep-data", "cards", "unread", "ack", "needs-human", "clear"]);
+const BOOL_FLAGS = new Set(["json", "force", "undo", "keep-data", "cards", "unread", "ack", "needs-human", "clear", "all", "global"]);
 const positional = rest.filter((a, i) => {
   if (a.startsWith("--")) return false;
   const prev = rest[i - 1];
@@ -39,6 +41,16 @@ function projectDir(): string {
 // UX-sim's headline finding). The single catch at the bottom prints and exits.
 function die(msg: string, fix: string): never {
   throw new CliError(msg, fix);
+}
+
+// readJson throws a bare Error on a corrupt file, which reaches the user as a
+// stack trace instead of the kanban:/fix: contract every other refusal honours.
+function itemStore() {
+  try { return { items: loadItems().items, landings: loadLandings() }; }
+  catch (e: any) {
+    die(`the owner's asks could not be read: ${e.message}`,
+        `inspect or trash the broken file, then re-run; the boards are unaffected`);
+  }
 }
 
 function boardFor(dir: string) {
@@ -206,6 +218,97 @@ switch (verb) {
       ackNow();
       console.log(`acked ${unread.length} unread`);
     }
+    break;
+  }
+  // The owner's pending writing. Reads items.json without the server, so a
+  // sweep works when the board is down — the same reason ack is a CLI verb.
+  case "items": {
+    const { items, landings } = itemStore();
+    // Sweep landings whose ask is gone. The CLI owns this file, so the delete
+    // path in the server cannot do it; ids are short and recyclable, and a
+    // stale landing would make a fresh ask arrive pre-sorted and invisible.
+    {
+      const live = new Set(items.map((i) => i.id));
+      const orphans = Object.keys(landings.landings).filter((id) => !live.has(id));
+      if (orphans.length) {
+        withItemsLock(() => {
+          const file = loadLandings();
+          for (const id of orphans) delete file.landings[id];
+          atomicWrite(LANDINGS, file, "landing-gc", `dropped=${orphans.length}`);
+        });
+        for (const id of orphans) delete landings.landings[id];
+      }
+    }
+    const scope = hasFlag("global") ? undefined : (() => {
+      try { return boardFor(projectDir()).slug; } catch { return undefined; }
+    })();
+    const pending = pendingItems(items, landings, scope);
+    const shown = hasFlag("all")
+      ? items.filter((i) => !scope || i.slug === scope || !i.slug)
+      : pending;
+    if (hasFlag("json")) {
+      console.log(JSON.stringify({ scope: scope ?? "all boards", pending: pending.length,
+        items: shown.map((i) => ({ ...i, landing: landings.landings[i.id] ?? null })) }));
+      break;
+    }
+    if (!shown.length) {
+      console.log(scope ? `no owner items pending on ${scope}` : "no owner items pending");
+      break;
+    }
+    console.log(`${pending.length} pending${scope ? ` on ${scope}` : ""}${hasFlag("all") ? ` · ${shown.length} shown` : ""}`);
+    for (const i of shown) {
+      const l = landings.landings[i.id];
+      const mark = l ? (isArchived(landings, i.id) ? "archived" : l.shape) : i.starred ? "STARRED" : i.triggered ? "now" : "pending";
+      const where = i.slug ?? "unassigned";
+      console.log(`  ${i.id}  [${mark}] ${where}  ${i.body.split("\n")[0].slice(0, 72)}`);
+    }
+    console.log(`classify with: kanban.sh classify <item-id> <${SHAPES.join("|")}> [--card <card-id>] [--note "what you did"]`);
+    break;
+  }
+  // Records what the agent DID with an item. Minting the card is `add`; this
+  // verb only writes the verdict, so each does one thing and composes.
+  case "classify": {
+    const [id, shapeRaw] = positional;
+    const shape = shapeRaw as ItemShape;
+    // Sorting hides an ask from every rail and every session line, so it needs
+    // the reversal drop/verify/unregister all have.
+    if (id && hasFlag("undo")) {
+      withItemsLock(() => {
+        const file = loadLandings();
+        if (!file.landings[id]) die(`item ${id} is not classified`, `kanban.sh items --all  # shows what is sorted`);
+        delete file.landings[id];
+        atomicWrite(LANDINGS, file, "classify-undo", `landings=${Object.keys(file.landings).length}`);
+        console.log(`unclassified ${id}; it is pending again`);
+      });
+      break;
+    }
+    if (!id || !SHAPES.includes(shape)) {
+      die("usage", `kanban.sh classify <item-id> <${SHAPES.join("|")}> [--card <card-id>] [--note "what you did"] · retract: kanban.sh classify <item-id> --undo`);
+    }
+    const card = flag("card");
+    const note = flag("note");
+    withItemsLock(() => {
+      const { items } = loadItems();
+      const it = items.find((x) => x.id === id);
+      if (!it) die(`no item ${id}`, `kanban.sh items --all  # lists the ids`);
+      if (card && !/^[a-f0-9]{12}$/.test(card)) die(`--card must be a 12-hex card id, got ${card}`, `kanban.sh show <card-id>`);
+      // A card id that is not on any board is a typo, and recording it would
+      // make the landing link dead on arrival.
+      if (card) {
+        const found = Object.keys(registry().boards).some((s) => {
+          try { return loadBoard(path.join(KROOT, "boards", s)).cards.some((c) => c.id === card); } catch { return false; }
+        });
+        if (!found) die(`card ${card} is not on any board`, `kanban.sh add "<title>" then classify with the printed id`);
+      }
+      const file = loadLandings();
+      const prior = file.landings[id];
+      file.landings[id] = { shape, at: new Date().toISOString(),
+        ...(card ? { cardId: card } : {}), ...(note ? { note } : {}), ...(sessionId() ? { by: sessionId() } : {}) };
+      atomicWrite(LANDINGS, file, "classify", `landings=${Object.keys(file.landings).length}`);
+      const msg = `${prior ? "re-classified" : "classified"} ${id} as ${shape}${card ? ` → card ${card}` : ""}`;
+      if (hasFlag("json")) console.log(JSON.stringify({ id, shape, card: card ?? null, reclassified: !!prior }));
+      else console.log(msg);
+    });
     break;
   }
   case "status": {
@@ -393,6 +496,13 @@ switch (verb) {
                            won't resurrect); noted cards need --force
   unregister [slug] [--keep-data] remove a board everywhere (registry, status,
                            hub, HTTP); default trashes the board data too
+  items [--all] [--global] the owner's own asks, unsorted first. They write these
+                           from the board or the hub and never classify them;
+                           sorting is your job. --all also shows sorted ones.
+  classify <item-id> <shape> record what you did with an ask: task (minted a
+                           card) · subtask · clarification · remark;
+                           [--card <id>] links where it landed, [--note "…"]
+                           says what you did, [--undo] retracts it
   status [--cards] [--project dir] all boards; --project (or --cards) filters to one
   open                     open this project's board
   check                    self-verify (schema + server HTTP)

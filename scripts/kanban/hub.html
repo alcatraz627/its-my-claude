@@ -88,6 +88,32 @@
   .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
   .filters button{font-family:var(--mono);font-size:11.5px}
   .filters button.on{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  /* the owner's composer. blue is "you and your controls" here as on the board,
+     and it needs no destination: an unassigned ask is routed later */
+  .compose{background:var(--card);border:1px solid var(--blue-br);border-radius:10px;padding:12px 14px;
+           display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow)}
+  .compose textarea{width:100%;background:var(--well);color:var(--text);border:1px solid var(--border);
+                    border-radius:8px;height:74px;padding:10px 12px;font:13px/1.55 var(--sans);resize:vertical}
+  .compose textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent)}
+  .compose .crow{display:flex;align-items:center;gap:8px}
+  .compose .chint{flex:1;font-size:11.5px;color:var(--text-3)}
+  .compose select{font:inherit;font-size:12.5px;background:var(--well);color:var(--text-2);
+                  border:1px solid var(--border);border-radius:6px;padding:4px 7px}
+  .compose .go{background:var(--blue);border-color:transparent;color:var(--canvas);font-weight:600;padding:6px 12px}
+  [data-theme="light"] .compose .go{color:#fff}
+  .compose .go:hover{background:var(--blue);border-color:transparent;filter:brightness(1.08)}
+  .ask{display:flex;flex-direction:column;gap:7px;background:var(--card);border:1px solid var(--border);
+       border-radius:10px;padding:11px 14px;box-shadow:var(--shadow)}
+  /* a star is an open instruction, so it stops shouting once the item is sorted */
+  .ask.starred:not(.landed){border-color:var(--amber-br)}
+  .ask.landed{background:none;box-shadow:none;padding:9px 12px}
+  .ask .ab{font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+  .ask.landed .ab{color:var(--text-3);font-size:12.5px}
+  .ask .af{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--text-3)}
+  .ask .af .shape{border:1px solid var(--border);border-radius:20px;padding:1px 8px;font-family:var(--mono)}
+  .ask .af a{color:var(--blue);text-decoration:none}
+  .ask .af a:hover{text-decoration:underline}
+  .ask .af .wait{color:var(--amber)}
 </style>
 </head>
 <body>
@@ -95,7 +121,7 @@
   <h1 id="htitle">All boards</h1>
   <div class="views">
     <button id="vBoards" class="on" type="button">Boards</button>
-    <button id="vNotes" type="button">Notes</button>
+    <button id="vNotes" type="button">Asks</button>
   </div>
   <button id="theme" title="toggle theme">◐</button>
 </header>
@@ -189,12 +215,82 @@ function noteRow(r) {
 const text = (t) => { const s = document.createElement("span"); s.textContent = t; return s; };
 const sep = () => { const s = document.createElement("span"); s.className = "dotsep"; return s; };
 
-async function loadNotes() {
+// "What have I asked for, everywhere" is one question, so one view answers it:
+// the owner's own items alongside their card notes. Notes keep every behaviour
+// they had; items are the new half.
+let composeDraft = "";
+
+function composeEl(boards) {
+  const box = document.createElement("div");
+  box.className = "compose";
+  const ta = document.createElement("textarea");
+  ta.placeholder = "Write anything. The agent sorts it into a task, a sub-task, a clarification, or a remark.";
+  ta.setAttribute("aria-label", "write an ask");
+  ta.value = composeDraft;
+  const row = document.createElement("div");
+  row.className = "crow";
+  const sel = document.createElement("select");
+  sel.setAttribute("aria-label", "board, optional");
+  sel.innerHTML = `<option value="">no board yet</option>` +
+    boards.map((b) => `<option value="${b.slug}"></option>`).join("");
+  [...sel.options].slice(1).forEach((o, i) => { o.textContent = boards[i].name; });
+  const hint = document.createElement("span");
+  hint.className = "chint"; hint.textContent = "⌘↵ to add";
+  const go = document.createElement("button");
+  go.type = "button"; go.className = "go"; go.textContent = "Add";
+  const submit = async () => {
+    const v = ta.value.trim();
+    if (!v) return;
+    const res = await fetch("/api/item", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ body: v, ...(sel.value ? { slug: sel.value } : {}) }) });
+    if (!res.ok) { hint.textContent = `could not add: ${(await res.json()).error}`; return; }
+    ta.value = ""; composeDraft = ""; localStorage.removeItem("kanban-hubdraft");
+    loadAsks();
+  };
+  go.onclick = submit;
+  ta.addEventListener("input", () => { composeDraft = ta.value; localStorage.setItem("kanban-hubdraft", ta.value); });
+  ta.addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); submit(); } });
+  row.append(sel, hint, go);
+  box.append(ta, row);
+  return box;
+}
+
+function askRow(it) {
+  const el = document.createElement("div");
+  el.className = "ask" + (it.landing ? " landed" : "") + (it.starred ? " starred" : "");
+  const b = document.createElement("div");
+  b.className = "ab"; b.textContent = it.body;
+  const f = document.createElement("div");
+  f.className = "af";
+  if (it.landing) {
+    const s = document.createElement("span");
+    s.className = "shape"; s.textContent = it.landing.shape;
+    f.append(s);
+    if (it.landedCard && it.slug) {
+      const a = document.createElement("a");
+      a.href = `/b/${it.slug}?card=${it.landing.cardId}`;
+      a.textContent = it.landedCard;
+      f.append(a);
+    } else if (it.landedCard) { f.append(text(it.landedCard)); }
+  }
+  f.append(text(it.boardName ?? "no board yet"), sep(), text(`${ago(Date.parse(it.createdAt))} ago`));
+  if (it.starred && !it.landing) { f.append(sep()); const s = text("starred"); s.className = "wait"; f.append(s); }
+  if (!it.landing) { f.append(sep()); const w = text("not sorted yet"); w.className = "wait"; f.append(w); }
+  el.append(b, f);
+  return el;
+}
+
+async function loadAsks() {
   const list = document.getElementById("list");
   list.replaceChildren(...Array.from({ length: 3 }, () => {
     const d = document.createElement("div"); d.className = "bone"; return d;   // genuinely unknown until fetched
   }));
-  const { notes } = await (await fetch("/api/notes")).json();
+  const [{ notes }, itemRes, boardRes] = await Promise.all([
+    (await fetch("/api/notes")).json(),
+    (await fetch("/api/items")).json(),
+    (await fetch("/api/boards")).json(),
+  ]);
+  const items = (itemRes.items ?? []).filter((i) => !i.archived);
   const shown = tagFilter ? notes.filter((r) => r.tags[tagFilter]?.length || r.tags[tagFilter] === true) : notes;
   const bar = document.createElement("div");
   bar.className = "filters";
@@ -202,34 +298,55 @@ async function loadNotes() {
     const b = document.createElement("button");
     b.type = "button"; b.textContent = label;
     b.className = tagFilter === key ? "on" : "";
-    b.onclick = () => { tagFilter = tagFilter === key ? null : key; loadNotes(); };
+    // filters scope the note half only, so the items stay visible under one
+    b.title = `filter notes by ${label}`;
+    b.onclick = () => { tagFilter = tagFilter === key ? null : key; loadAsks(); };
     bar.appendChild(b);
   });
-  if (!shown.length) {
-    const e = document.createElement("div");
-    e.className = "empty";
-    e.textContent = tagFilter ? `No note carries ${FILTERS.find((f) => f[1] === tagFilter)[0]}.` : "No notes yet. Write one on a card.";
-    list.replaceChildren(bar, e);
-    return;
-  }
-  const byBoard = new Map();
-  for (const r of shown) { if (!byBoard.has(r.board)) byBoard.set(r.board, []); byBoard.get(r.board).push(r); }
-  list.replaceChildren(bar, ...[...byBoard].map(([board, rows]) => {
+
+  const groups = [];
+  const pending = items.filter((i) => !i.landing);
+  const sorted = items.filter((i) => i.landing);
+  const group = (label, rows, build) => {
+    if (!rows.length) return;
     const g = document.createElement("div");
     g.className = "group";
     const l = document.createElement("div");
-    l.className = "glabel"; l.textContent = `${board} · ${rows.length}`;
+    l.className = "glabel"; l.textContent = `${label} · ${rows.length}`;
     g.appendChild(l);
-    rows.forEach((r) => g.appendChild(noteRow(r)));
-    return g;
-  }));
+    rows.forEach((r) => g.appendChild(build(r)));
+    groups.push(g);
+  };
+  group("Waiting to be sorted", pending, askRow);
+  group("Sorted", sorted, askRow);
+
+  const byBoard = new Map();
+  for (const r of shown) { if (!byBoard.has(r.board)) byBoard.set(r.board, []); byBoard.get(r.board).push(r); }
+  for (const [board, rows] of byBoard) group(`${board} · notes`, rows, noteRow);
+
+  // The filter scopes notes only, so its empty state has to key on the NOTE
+  // half. Keying on the whole view means any ask on file silences it and the
+  // filter reads as a broken button.
+  const tail = [];
+  if (tagFilter && !shown.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = `No note carries ${FILTERS.find((f) => f[1] === tagFilter)[0]}.`;
+    tail.push(e);
+  } else if (!groups.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = "Nothing yet. Write anything above and the agent will sort it.";
+    tail.push(e);
+  }
+  list.replaceChildren(composeEl(boardRes.boards ?? []), bar, ...groups, ...tail);
 }
 
 function setView(v) {
   view = v;
   document.getElementById("vBoards").className = v === "boards" ? "on" : "";
   document.getElementById("vNotes").className = v === "notes" ? "on" : "";
-  document.getElementById("htitle").textContent = v === "boards" ? "All boards" : "All notes";
+  document.getElementById("htitle").textContent = v === "boards" ? "All boards" : "Your asks";
   load();
 }
 document.getElementById("vBoards").onclick = () => setView("boards");
@@ -237,7 +354,7 @@ document.getElementById("vNotes").onclick = () => setView("notes");
 
 async function load() {
   const list = document.getElementById("list");
-  if (view === "notes") { try { await loadNotes(); } catch (e) { list.innerHTML = `<div class="empty">Notes failed to load: ${e.message}</div>`; } return; }
+  if (view === "notes") { try { await loadAsks(); } catch (e) { list.innerHTML = `<div class="empty">Asks failed to load: ${e.message}</div>`; } return; }
   try {
     const { boards } = await (await fetch("/api/boards")).json();
     document.getElementById("huberr")?.remove(); // recovered: clear the failure note
@@ -270,8 +387,15 @@ async function load() {
     }
   }
 }
+composeDraft = localStorage.getItem("kanban-hubdraft") ?? "";
 load();
-setInterval(load, 10000);
+// the Asks view rebuilds its composer on every render, so a poll landing
+// mid-sentence would take the field out from under the typing
+setInterval(() => {
+  const ta = document.querySelector(".compose textarea");
+  if (ta && (document.activeElement === ta || ta.value.trim())) return;
+  load();
+}, 10000);
 </script>
 </body>
 </html>

@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+# Suite for the owner-item lane (items, landings, pins). Runs against a throwaway
+# KANBAN_ROOT so the owner's real store is never touched.
+#
+# Covers the two things the design turns on: an item is not board material until
+# an agent classifies it, and classification works with no server running.
+
+set -uo pipefail
+HERE=$(cd "$(dirname "$0")" && pwd)
+ROOT=$(mktemp -d "${TMPDIR:-/tmp}/kanban-items-XXXXXX")
+export KANBAN_ROOT="$ROOT"
+trap 'rm -rf "$ROOT"' EXIT
+
+pass=0; fail=0
+ok()  { printf '  PASS  %s\n' "$1"; pass=$((pass+1)); }
+bad() { printf '  FAIL  %s\n     %s\n' "$1" "${2:-}"; fail=$((fail+1)); }
+check() { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1" "expected [$3] got [$2]"; fi; }
+
+echo "item lane suite on $ROOT"
+
+# A project to own a board, so slug-scoping has something real to scope to.
+PROJ="$ROOT/proj"; mkdir -p "$PROJ"
+# The registry stores the realpath, and on macOS $TMPDIR is a symlink, so a cwd
+# built from the un-resolved path matches nothing and the line reads empty.
+REALPROJ=$(cd "$PROJ" && pwd -P)
+printf '# TODO\n\n- [ ] a harvested card\n' > "$PROJ/TODO.md"
+bun run "$HERE/cli.ts" init --project "$PROJ" >/dev/null 2>&1
+SLUG=$(bun run "$HERE/cli.ts" status --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin).get("slug",""))' 2>/dev/null)
+[ -n "$SLUG" ] || SLUG=$(python3 -c "
+import json,os
+print(list(json.load(open(os.path.join('$ROOT','registry.json')))['boards'])[0])" 2>/dev/null)
+
+seed() {  # seed <id> <body> [slug] [starred]
+  python3 - "$ROOT" "$1" "$2" "${3:-}" "${4:-}" <<'PY'
+import json, os, sys, datetime
+root, iid, body, slug, star = sys.argv[1:6]
+p = os.path.join(root, "items.json")
+d = json.load(open(p)) if os.path.exists(p) else {"items": []}
+now = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
+it = {"id": iid, "body": body, "createdAt": now, "updatedAt": now}
+if slug: it["slug"] = slug
+if star: it["starred"] = True
+d["items"].append(it)
+json.dump(d, open(p, "w"), indent=2)
+PY
+}
+
+seed i1 "unassigned ask"
+seed i2 "board ask" "$SLUG"
+seed i3 "starred ask" "$SLUG" 1
+
+n=$(bun run "$HERE/cli.ts" items --global --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["pending"])')
+check "all three seeded items are pending" "$n" "3"
+
+first=$(bun run "$HERE/cli.ts" items --global --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["items"][0]["id"])')
+check "a starred item sorts to the front" "$first" "i3"
+
+# The load-bearing one: classification is a file write, no server involved.
+out=$(bun run "$HERE/cli.ts" classify i1 remark --note "left as a remark" 2>&1)
+case "$out" in *"classified i1 as remark"*) ok "classify records a landing with no server running" ;;
+  *) bad "classify records a landing with no server running" "$out" ;; esac
+
+n=$(bun run "$HERE/cli.ts" items --global --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["pending"])')
+check "a classified item leaves the pending set" "$n" "2"
+
+out=$(bun run "$HERE/cli.ts" classify i2 nonsense 2>&1)
+case "$out" in *"usage"*) ok "an unknown shape is refused" ;; *) bad "an unknown shape is refused" "$out" ;; esac
+
+out=$(bun run "$HERE/cli.ts" classify i2 task --card zzz 2>&1)
+case "$out" in *"12-hex"*) ok "a malformed card id is refused" ;; *) bad "a malformed card id is refused" "$out" ;; esac
+
+out=$(bun run "$HERE/cli.ts" classify i2 task --card aaaaaaaaaaaa 2>&1)
+case "$out" in *"not on any board"*) ok "a card id on no board is refused, so no dead landing link" ;;
+  *) bad "a card id on no board is refused" "$out" ;; esac
+
+out=$(bun run "$HERE/cli.ts" classify nosuch remark 2>&1)
+case "$out" in *"no item nosuch"*) ok "classifying a missing item is refused" ;; *) bad "classifying a missing item is refused" "$out" ;; esac
+
+# Archive is computed from the landing timestamp, so backdating one is the whole test.
+python3 - "$ROOT" <<'PY'
+import json, os, sys, datetime
+p = os.path.join(sys.argv[1], "landings.json")
+d = json.load(open(p))
+old = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=8)
+d["landings"]["i1"]["at"] = old.isoformat().replace("+00:00", "Z")
+json.dump(d, open(p, "w"), indent=2)
+PY
+arch=$(bun run "$HERE/cli.ts" items --global --all 2>/dev/null | grep -c '\[archived\]')
+check "a landing older than 7 days reads as archived" "$arch" "1"
+
+# Board scoping keeps the unassigned ones: they are routable to any board.
+scoped=$(bun run "$HERE/cli.ts" items --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["pending"])')
+check "board scope keeps its own items plus the unassigned" "$scoped" "2"
+
+# The session-start line is the sweep path; it must name unsorted asks.
+line=$(printf '{"cwd":"%s"}' "$REALPROJ" | KANBAN_ROOT="$ROOT" bash "$HERE/session-start-line.sh" 2>/dev/null)
+case "$line" in *"unsorted asks"*) ok "the session-start line names unsorted asks" ;;
+  *) bad "the session-start line names unsorted asks" "${line:-<empty>}" ;; esac
+
+bun run "$HERE/cli.ts" classify i2 remark >/dev/null 2>&1
+bun run "$HERE/cli.ts" classify i3 remark >/dev/null 2>&1
+line=$(printf '{"cwd":"%s"}' "$REALPROJ" | KANBAN_ROOT="$ROOT" bash "$HERE/session-start-line.sh" 2>/dev/null)
+# Two assertions, not one: an empty line would satisfy "no clause" while proving
+# nothing, so the board line must still render for the absence to mean anything.
+case "$line" in
+  *"unsorted asks"*) bad "the clause disappears once everything is sorted" "$line" ;;
+  *"[kanban] board"*) ok "the clause disappears once everything is sorted, line still renders" ;;
+  *) bad "the clause disappears once everything is sorted" "line was empty, so the absence proves nothing: ${line:-<empty>}" ;;
+esac
+
+# --- regressions from the 2026-08-17 adversarial review -------------------
+# Each of these shipped broken and was caught by prosecution, not by this suite.
+
+out=$(bun run "$HERE/cli.ts" classify i1 --undo 2>&1)
+case "$out" in *"unclassified i1"*) ok "classify --undo retracts a landing (finding 7)" ;;
+  *) bad "classify --undo retracts a landing" "$out" ;; esac
+n=$(bun run "$HERE/cli.ts" items --global --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["pending"])')
+check "an undone item is pending again" "$n" "1"
+
+# Deleting an ask must not leave its landing behind: ids are short and
+# recyclable, so a stale landing makes a fresh ask arrive pre-sorted.
+bun run "$HERE/cli.ts" classify i1 remark >/dev/null 2>&1
+python3 - "$ROOT" <<'PY'
+import json, os, sys
+p = os.path.join(sys.argv[1], "items.json")
+d = json.load(open(p))
+d["items"] = [i for i in d["items"] if i["id"] != "i1"]
+json.dump(d, open(p, "w"), indent=2)
+PY
+bun run "$HERE/cli.ts" items --global >/dev/null 2>&1   # the GC runs here
+orph=$(python3 -c "
+import json,os,sys
+print('yes' if 'i1' in json.load(open(os.path.join('$ROOT','landings.json')))['landings'] else 'no')")
+check "a deleted ask's landing is swept (finding 12)" "$orph" "no"
+
+# A corrupt store must never read as an empty queue: all three readers report.
+cp "$ROOT/items.json" "$ROOT/items.ok"
+printf '{"items": [ {"id":"x1","body":"half a wri' > "$ROOT/items.json"
+
+out=$(bun run "$HERE/cli.ts" items --global 2>&1)
+case "$out" in *"could not be read"*) ok "the CLI names a corrupt store, not a stack trace (finding 1)" ;;
+  *) bad "the CLI names a corrupt store" "$(printf '%s' "$out" | head -2)" ;; esac
+
+line=$(printf '{"cwd":"%s"}' "$REALPROJ" | KANBAN_ROOT="$ROOT" bash "$HERE/session-start-line.sh" 2>/dev/null)
+case "$line" in
+  *"could not be read"*) ok "the session line warns on a corrupt store instead of going quiet (finding 1)" ;;
+  *"unsorted asks"*) bad "the session line warns on a corrupt store" "it reported counts off a broken file: $line" ;;
+  *) bad "the session line warns on a corrupt store" "it fell silent, which reads as nothing to do: ${line:-<empty>}" ;;
+esac
+cp "$ROOT/items.ok" "$ROOT/items.json"
+
+printf '  ---- %d passed, %d failed\n' "$pass" "$fail"
+[ "$fail" -eq 0 ]
