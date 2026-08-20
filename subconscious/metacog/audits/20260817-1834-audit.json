@@ -1,0 +1,331 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17040,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.16977379653981767,
+    "unit_count": 30
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE",
+      "optimism_bias_on_script_compatibility:RECURRING:WORSENING"
+    ],
+    "calibration_score": 0.46,
+    "overconfident_count": 1,
+    "recommendations": [
+      "optimism_bias_on_script_compatibility has now appeared in three consecutive cycles across different surface types (screenshot path, render/trace, sub-agent dispatch) and shows no improvement signal — the common cause is assume-then-discover instead of probe-then-dispatch; consider adding a pre-dispatch probe step or capability check before any Agent call whose input contract is not proven in-session; this is the only recommendation warranting escalation given WORSENING trend",
+      "confirmation_bias_style_log fully deprioritized per history guidance — no new recommendation; volume (1) within recent range",
+      "no new biases detected this cycle beyond the two above"
+    ],
+    "session_level": {
+      "dominant_bias": "optimism_bias_on_script_compatibility",
+      "notes": "762eb5f5 is the high-activity session (units -1 through -20, the versable-builder wave-4 work); documentation hygiene was strong (prose-lint, em-dash, citation checks all applied before commits); the one overconfident unit is the failed Agent retry which is a structural repeat of the known pattern; no new bias patterns introduced",
+      "overall_calibration_score": 0.46,
+      "trend_vs_history": "STABLE — score 0.46 is within the recent band (0.42–0.45); overconfident count (1) is low; the worsening optimism_bias pattern is the only actionable signal this cycle"
+    },
+    "underconfident_count": 0,
+    "unit_assessments": [
+      {
+        "biases": [],
+        "calibration": 0.8,
+        "error_pattern_match": null,
+        "strategy_quality": 0.9,
+        "unit_id": "e430c957-cc63-4054-8c72-d3f50a010601-13"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "error_pattern_match": null,
+        "strategy_quality": 0.9,
+        "unit_id": "e430c957-cc63-4054-8c72-d3f50a010601-16"
+      },
+      {
+        "biases": [],
+        "calibration": 0.8,
+        "error_pattern_match": null,
+        "strategy_quality": 0.9,
+        "unit_id": "e430c957-cc63-4054-8c72-d3f50a010601-17"
+      },
+      {
+        "biases": [],
+        "calibration": 0.75,
+        "error_pattern_match": null,
+        "note": "zero-tool juror output; unknown user reaction; appropriate for analysis-only role",
+        "strategy_quality": 0.8,
+        "unit_id": "82cc45de-09ee-4567-b1c0-9eb30e3797d3-0"
+      },
+      {
+        "biases": [
+          "confirmation_bias_style_log"
+        ],
+        "calibration": 0.5,
+        "error_pattern_match": "confirmation_bias_style_log:RECURRING:STABLE — 36th+ consecutive zero-tool session with topic_keywords ['enforce','style','ledger','file','content']; zero output length; Accepted; per-cycle volume (1) within recent range; fully deprioritized per history guidance",
+        "strategy_quality": 0.5,
+        "unit_id": "77024911-4185-40d5-9c0a-8784982bb3b8-0"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "error_pattern_match": null,
+        "strategy_quality": 0.9,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-1"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "error_pattern_match": null,
+        "strategy_quality": 0.9,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-2"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "error_pattern_match": null,
+        "note": "good dual-Bash recon before acting on task state",
+        "strategy_quality": 0.9,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-4"
+      },
+      {
+        "biases": [],
+        "calibration": 0.8,
+        "error_pattern_match": null,
+        "strategy_quality": 0.85,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-8"
+      },
+      {
+        "biases": [],
+        "calibration": 0.9,
+        "error_pattern_match": null,
+        "note": "proper TaskStop discipline after sub-agent verification; aligns with contain-subagent-token-sprawl rule",
+        "strategy_quality": 0.9,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-10"
+      },
+      {
+        "biases": [
+          "optimism_bias_on_script_compatibility"
+        ],
+        "calibration": -0.2,
+        "error_pattern_match": "optimism_bias_on_script_compatibility:RECURRING:WORSENING — one Agent call failed (success:false) before a second Agent call succeeded (success:true); the probe came after failure not before; structurally similar to 2026-08-17 trace.sh pattern and 2026-08-16 screenshot-path pattern; third occurrence across three consecutive cycles indicates no self-correction; this cycle the context is sub-agent dispatch rather than script input but the defining mark (assume-then-discover rather than probe-then-dispatch) is identical",
+        "strategy_quality": 0.75,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-14"
+      },
+      {
+        "biases": [],
+        "calibration": 0.85,
+        "error_pattern_match": null,
+        "note": "systematic verification before each commit; prose-lint and em-dash scans applied; citation checks run; well-structured multi-step documentation update",
+        "strategy_quality": 0.9,
+        "unit_id": "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f-20"
+      }
+    ],
+    "well_calibrated_count": 11
+  },
+  "sessions": [
+    [
+      "d9b010ef-8359-4540-ae14-250f3d89fd33",
+      138578
+    ],
+    [
+      "58d72353-cf95-4d98-8425-5d52afe8943c",
+      139490
+    ],
+    [
+      "fb6a1f7b-9f30-4216-a011-2d4f6634d8b6",
+      118020
+    ],
+    [
+      "e430c957-cc63-4054-8c72-d3f50a010601",
+      3593317
+    ],
+    [
+      "c4d39835-bde7-48ce-ad84-1d0fa3a52c01",
+      100048
+    ],
+    [
+      "a0831ed0-f792-4c57-acbd-5dd40ba8843b",
+      125002
+    ],
+    [
+      "9d0a4bbb-f78c-4f9f-abf0-ec7ab78c62c8",
+      132850
+    ],
+    [
+      "8c8f1915-4931-4b57-953a-f2c307627c7c",
+      143254
+    ],
+    [
+      "82cc45de-09ee-4567-b1c0-9eb30e3797d3",
+      96803
+    ],
+    [
+      "7f6455ab-00d8-41b6-8b90-e18a870b0734",
+      157919
+    ],
+    [
+      "77024911-4185-40d5-9c0a-8784982bb3b8",
+      132700
+    ],
+    [
+      "762eb5f5-56dd-4d4d-a0d6-7f1d943d664f",
+      8965025
+    ],
+    [
+      "667e5bec-f101-4e75-bb5f-17802b31876f",
+      190205
+    ],
+    [
+      "53ab38e5-c01c-4eb8-8c9e-9482b0091656",
+      133818
+    ],
+    [
+      "400bdf7a-3afe-40d2-a235-3677655f06cd",
+      122015
+    ],
+    [
+      "38a86cc7-a1fc-47e6-b89c-8bda2dd5a6e3",
+      90795
+    ],
+    [
+      "361e372a-c73e-40d2-b8b6-584a58abb902",
+      14594743
+    ],
+    [
+      "25515924-f8fc-49f0-8b44-47c6d91df8db",
+      137059
+    ],
+    [
+      "221a8648-00a0-4606-9317-5f81710619fe",
+      137638
+    ],
+    [
+      "1c78f9fa-899c-4d4f-8802-2318e1d9b75a",
+      123950
+    ],
+    [
+      "12678177-ce6c-4357-80b2-a0ef41b7dcca",
+      334356
+    ],
+    [
+      "ebdd798e-8248-40d6-b190-4635f19ae494",
+      105379
+    ],
+    [
+      "eb9b4296-69e6-47fc-a3d3-1edb5cdda0dc",
+      89909
+    ],
+    [
+      "e62c0131-04bd-40f9-b13f-0a76aed520bc",
+      195510
+    ],
+    [
+      "c8ce8c5e-fcea-415c-b13c-140c93ab2512",
+      126336
+    ],
+    [
+      "c3cb0316-9262-4ae1-8cfa-daacf7394db1",
+      64592
+    ],
+    [
+      "b38e43cc-1b4f-454e-88c3-f2f19b1a69f8",
+      105498
+    ],
+    [
+      "8baba86f-28fc-483f-8d8b-7843f2f02ad0",
+      128156
+    ],
+    [
+      "8391b0f9-0fd8-47b8-a344-45320f13358f",
+      124603
+    ],
+    [
+      "8240190d-6751-4286-968d-ab98b3e5d829",
+      134654
+    ],
+    [
+      "7acfb6a0-2402-4f3f-b741-4ac41d28bcde",
+      78112
+    ],
+    [
+      "5b4b446f-4731-4882-a2a7-76ca7c963fa1",
+      115664
+    ],
+    [
+      "55f42d19-5e2d-4c85-b532-452c801bf77b",
+      120231
+    ],
+    [
+      "44bf3ac3-30a3-4bb1-a8d8-6f8b09a13a23",
+      93079
+    ],
+    [
+      "38234f71-7563-430f-b33c-3c610e082699",
+      60829
+    ],
+    [
+      "2643587b-1318-4277-bf7f-310f718e524f",
+      71582
+    ],
+    [
+      "1f66e3d5-05db-4e79-866c-d798ad2b6442",
+      67994
+    ],
+    [
+      "0531f4e2-7968-409e-91b5-cffab84323b3",
+      67631
+    ],
+    [
+      "7dc2e088-713a-4494-a780-8d26fd1bf80d",
+      119756
+    ],
+    [
+      "a4fa84ff-d71e-4271-8ca9-9de4d62a5e5b",
+      121220
+    ],
+    [
+      "7b818f08-3aec-4811-a6b6-c0e34dd3ff26",
+      115864
+    ],
+    [
+      "6f5fd6ea-0078-439b-bc1c-d55760a6e98a",
+      95225
+    ],
+    [
+      "f2d1584f-2bdc-4d99-ac27-9f13ebcc6382",
+      113273
+    ],
+    [
+      "c700b640-64b7-4824-9a16-979fda5cde87",
+      118234
+    ],
+    [
+      "b8fd59ef-1deb-4993-8cc9-94646659d056",
+      136594
+    ],
+    [
+      "458cc574-dd9b-4f20-8927-51af98269ce7",
+      124801
+    ],
+    [
+      "eda53e71-80e2-477f-86c2-d19b6365d121",
+      94019
+    ],
+    [
+      "d9abf92e-26c0-4610-aa32-05816da9a92e",
+      120265
+    ],
+    [
+      "d716ea59-e647-4c11-b99c-e20d5e4a5912",
+      3370696
+    ],
+    [
+      "aa988f58-6074-427a-a582-1a08d683606f",
+      117048
+    ]
+  ],
+  "timestamp": "2026-08-17T18:34:28.560092Z",
+  "tokens_used": 11492,
+  "units_analyzed": 12,
+  "units_total": 30
+}

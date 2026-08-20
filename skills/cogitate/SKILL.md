@@ -8,7 +8,7 @@ description: >
   route to /deep-research instead.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch, Agent, Skill
 argument-hint: "[quickly] <query or direction>"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

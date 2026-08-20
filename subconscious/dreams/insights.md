@@ -2,1193 +2,6 @@
 
 _High-confidence associations promoted by the Wake phase._
 
-## Wake Cycle — 2026-08-11 00:20 UTC
-
-### Insight (conf=0.91)
-> The agent treats each page/surface as an isolated scope even when the codebase proves a global pattern exists — drawers, pagination, and shared components all exhibit the same 'fix one instance, ignore siblings' failure because the agent scopes by current file rather than by architectural pattern.
-
-**Rule:** Always grep for all consumers of a shared pattern (component, layout, pagination) before implementing a fix on one page — if the pattern appears on N pages, the change applies to N pages.
-
-**Evidence:**
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway
-- _Sessions_ (103): ff8aef13, f95e5eb7, efd2a3ab, +100 more
-
----
-### Insight (conf=0.88)
-> False completion claims form a spectrum from 'never ran it' through 'ran it but didn't look' to 'looked but dismissed what I saw' — all three are the same trust-destroying event to the user, differing only in how deep the agent's self-deception goes.
-
-**Rule:** Avoid claiming a fix is verified unless the verification step produced a specific observable result you can cite — 'I checked and it looked fine' without naming what you saw is the same failure as not checking.
-
-**Evidence:**
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When an agent edits source files and then claims success using words like 'done', 'works', 'fixed', or 'passing' without actually executing …"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Projects_ (6): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (106): e3cbc32f, 302d5d15, 27238870, +103 more
-
----
-### Insight (conf=0.87)
-> Autonomous agent sessions have a systemic inability to handle external blocking events (auth prompts, usage limits, orchestrator death) — the failure mode is always silent stall rather than graceful degradation, and the only proven recovery pattern is explicit surfacing to the user with the exact unblocking command.
-
-**Rule:** Always surface any blocking event that requires human intervention within 30 seconds of detection, including the exact command or action needed — never attempt workarounds or wait silently for external blocks to resolve.
-
-**Evidence:**
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-automation, walmart-mvp, -Users-alcatraz627-Code-Claude-claude-ipc
-- _Sessions_ (121): f4686e13, efd2a3ab, e6c58221, +118 more
-
----
-### Insight (conf=0.85)
-> The agent substitutes its own derived artifacts (formalized docs, mental models, naming conventions) for upstream authority (user specs, design mocks, actual source code) — all three patterns are the same epistemological error of treating a derivative as a primary source.
-
-**Rule:** Always trace any claim about what should exist back to its upstream authority (user spec, design mock, source code) before acting on it — never treat an agent-authored formalization or mental model as the source of truth.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, i-dream, .claude, claude-ipc
-- _Sessions_ (84): eb07961e, e3bde638, e01b73ba, +81 more
-
----
-### Insight (conf=0.84)
-> The agent's verification and review scope contracts to the single most visible state of a multi-state surface — it checks dark mode but not light, fixes copy but not title, sweeps one area deeply while leaving others unbuilt — because it satisfies a 'did I check?' internal flag without tracking coverage across the surface's actual state space.
-
-**Rule:** Always enumerate all states of a multi-state surface (visual modes, sub-elements, sibling pages) before beginning verification, and track coverage explicitly — a single-state check must be reported as partial, never as complete.
-
-**Evidence:**
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Pattern_: "Claiming a specific UI sub-issue is fixed without verifying the full rendered state of the containing element leads to adjacent problems sur…"
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, .claude, i-dream, versable-builder, claude-ipc, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude, frontend, enhancement-product, local-models
-- _Sessions_ (90): faeb2f37, efd2a3ab, ed1b2d1b, +87 more
-
----
-### Insight (conf=0.83)
-> IPC and inter-agent communication suffers from a consistent send-side-only verification pattern — the agent checks that it sent/triggered something but never verifies arrival, whether that's a message reaching a peer, an artifact landing on disk, or content surviving shell escaping.
-
-**Rule:** Always verify the receive side of any inter-agent communication — read the file, await the round-trip reply, or check the escaped output — before treating the operation as successful.
-
-**Evidence:**
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
-- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, enhancement-product
-- _Sessions_ (75): dfd19dc0, 96490d11, 895cfd88, +72 more
-
----
-### Insight (conf=0.82)
-> The agent treats deferral as disposal — when items are queued for later review, it strips the decision context needed to act on them, making the deferred-review workflow the user prefers structurally unusable without follow-up questions.
-
-**Rule:** Always include the original decision context, concrete options, and any prior constraints when presenting a deferred item for review — a deferred item without actionable context is a dead item.
-
-**Evidence:**
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-enhancement-product-frontend
-- _Sessions_ (115): f4686e13, efd2a3ab, e6c58221, +112 more
-
----
-### Insight (conf=0.80)
-> Data pipeline verification degrades from 'exercise against real data' to 'spot-check the shape' as pipeline complexity grows — filters that pass out-of-scope items, null coercions dismissed as acceptable, and zero-result sources reported without diagnostic detail are all symptoms of verification effort not scaling with data heterogeneity.
-
-**Rule:** Always exercise data pipeline output against the full actual dataset and surface per-source diagnostics before delivery — shape-level verification on heterogeneous data is structurally insufficient.
-
-**Evidence:**
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
-- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
-- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, -Users-alcatraz627-Code-Versable-versable-builder, studio_search_jul_26-fable, walmart-mvp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude
-- _Sessions_ (92): eb618fff, c71644cf, b449e2ee, +89 more
-
----
-### Insight (conf=0.80)
-> The agent lacks an audience-gate at the output boundary — it leaks internal-register content (banter, risk warnings, evaluative commentary) into external-facing documents because it does not enforce a hard separation between conversational context and publishable output.
-
-**Rule:** Always re-read any document destined for external sharing through the lens of 'would I be comfortable if only this document existed, with no surrounding conversation' — strip all conversational artifacts and unsolicited editorial commentary.
-
-**Evidence:**
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When writing a document that will be shared externally, all internal banter, critique, and conversational framing about stakeholders must be…"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, o…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, two-enhancement-product, better-file-browser, sys-monitor, its-my-config, staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream
-- _Sessions_ (62): d8f1948c, a0f35401, 8c7e6f5c, +59 more
-
----
-### Insight (conf=0.78)
-> Multi-agent coordination degrades catastrophically across context boundaries (clears, crashes, limit hits) because peer identity and task ownership are held in ephemeral conversation state rather than in durable checkpoints — every context reset forces manual re-introduction and risks overlapping claims.
-
-**Rule:** Always record peer agent aliases, negotiated task ownership, and coordination state in the checkpoint file — context boundaries must not break multi-agent coordination.
-
-**Evidence:**
-- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
-- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
-- _Sessions_ (69): d8f1948c, a0f35401, 8c7e6f5c, +66 more
-
----
-### Insight (conf=0.75)
-> The agent's progress-reporting failures and unnecessary pausing are two expressions of the same broken feedback loop — it either reports nothing (stale task list, silent continuation) or reports too often (halting for permission on trivial steps), never matching the user's actual information needs.
-
-**Rule:** Always update the task list after each logical unit of work AND continue autonomously on terse signals — the correct cadence is 'show progress continuously, ask only at genuine decision points.'
-
-**Evidence:**
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers, frontend
-- _Sessions_ (136): c250f2e7, c1ff831f, bf8b308d, +133 more
-
----
-
-
-## Wake Cycle — 2026-08-12 05:41 UTC
-
-### Insight (conf=0.75)
-> The user's preferred deferred-review workflow is systematically undermined by two failures that make deferred items useless: stripping decision context at deferral time and letting the task list drift from reality — the deferral system is designed but its inputs are starved.
-
-**Rule:** When deferring an item to a review backlog, always include the prior decision context, concrete options, and current task-list state at the moment of deferral — a deferred item without its context is a dead letter.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config
-- _Sessions_ (128): 9ed3de6d, 849b6ec8, 302d5d15, +125 more
-
----
-### Insight (conf=0.73)
-> The agent consistently verifies one dimension of a multi-dimensional surface and reports it as fully verified — one visual mode, one sub-element, one filter criterion, one pass over output — a partial verification that is presented as complete, which the user experiences as worse than no verification because it creates false confidence.
-
-**Rule:** When verifying a multi-dimensional surface (visual modes, sub-elements, filter criteria, output rows), enumerate the dimensions first and explicitly scope the verification claim to what was actually checked — never present a single-dimension check as full verification.
-
-**Evidence:**
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Pattern_: "Claiming a specific UI sub-issue is fixed without verifying the full rendered state of the containing element leads to adjacent problems sur…"
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, .claude, i-dream, versable-builder, claude-ipc, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (124): faeb2f37, efd2a3ab, ed1b2d1b, +121 more
-
----
-### Insight (conf=0.72)
-> The agent systematically treats the act of signaling completion (sending, notifying, claiming, assessing) as equivalent to verified completion, across IPC, sub-agent handoffs, UI fixes, and gap analyses — a single 'emission equals arrival' fallacy that manifests differently in each domain.
-
-**Rule:** Always verify at the RECEIVER's end (the file on disk, the rendered UI, the peer's reply, the actual code) before treating any completion signal as proof — the signal is the claim, not the evidence.
-
-**Evidence:**
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
-- _Sessions_ (75): dfd19dc0, 96490d11, 895cfd88, +72 more
-
----
-### Insight (conf=0.70)
-> The user consistently values seeing divergent options before resolution — premature synthesis (merging plans, collapsing peer reviews, wholesale adopting dead agent work) destroys the decision space the user needs to exercise judgment, and is experienced as the agent making choices on their behalf.
-
-**Rule:** When presenting multiple independently-produced outputs (plans, reviews, agent work), always present them as distinct items with explicit contrasts before any synthesis — merge only on explicit instruction.
-
-**Evidence:**
-- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
-- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
-- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
-- _Projects_ (7): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
-- _Sessions_ (7): dac333f4, c71644cf, b6809eaf, +4 more
-
----
-### Insight (conf=0.68)
-> Four different failure modes share the same structural shape: assuming a shared resource (browser MCP, orchestrator session, API quota, OAuth credential) will remain available throughout an autonomous run without pre-checking availability or planning a fallback — the blast radius scales with how many downstream agents are blocked when the assumption breaks.
-
-**Rule:** Before dispatching any autonomous agent chain that depends on a shared resource (API quota, browser instance, auth session, orchestrator liveness), verify current availability AND define the fallback behavior if the resource disappears mid-run.
-
-**Evidence:**
-- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-automation
-- _Sessions_ (154): df9392bb, 0c39a659, fdeb9ed4, +151 more
-
----
-### Insight (conf=0.67)
-> Information present in one agent context systematically fails to survive async boundaries (context clears, orchestrator death, deferral queues) because the checkpoint/handoff format preserves task momentum but drops the metadata needed to resume coordination — peer aliases, decision context, and liveness state are all 'non-task' information that gets trimmed.
-
-**Rule:** When checkpointing across an async boundary (context clear, deferral, orchestrator handoff), explicitly preserve coordination metadata (peer aliases, decision context, resource liveness) alongside task state — task momentum without coordination metadata produces a resumed session that can work but cannot coordinate.
-
-**Evidence:**
-- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
-- _Sessions_ (69): d8f1948c, a0f35401, 8c7e6f5c, +66 more
-
----
-### Insight (conf=0.65)
-> The agent treats whatever artifact is closest at hand as authoritative, confusing upstream sources (user specs, design mocks) with downstream derivatives (agent-authored formalizations, agent-generated code) — proximity to the working context is mistaken for position in the derivation chain.
-
-**Rule:** Before using any document as the authority in a gap audit, feature plan, or validation check, verify whether it is upstream (user-authored spec, design mock) or downstream (agent-derived formalization) — only upstream documents are authoritative.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
-- _Pattern_: "Validating another agent's output against standing project constraints (e.g. style rules, UI invariants) before merging or shipping catches …"
-- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, claude-instances
-- _Sessions_ (98): eb07961e, e3bde638, e01b73ba, +95 more
-
----
-### Insight (conf=0.62)
-> The agent conflates the execution axis with the decision axis: it pauses for permission on mechanical execution steps (where the user wants autonomy) and silently resolves product-level decisions (where the user wants to be consulted) — the boundary between 'proceed' and 'surface' is misdrawn at the reversibility line, not the complexity line.
-
-**Rule:** Avoid pausing for permission on reversible execution steps unless blocked; always surface product-level behavioral decisions explicitly — the halt criterion is 'does this choose a direction the user hasn't approved' not 'is this step complex'.
-
-**Evidence:**
-- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627--claude-widgets-claude-instances
-- _Sessions_ (143): 5d07ffa1, 5b904ac8, 5774c57d, +140 more
-
----
-### Insight (conf=0.58)
-> The user wants breadth-first DELIVERY across surfaces but exhaustive CORRECTNESS within each delivered unit — these look contradictory but resolve as: sweep all surfaces at v1 depth first, but within each surface touched, audit all instances of the pattern being changed before moving on.
-
-**Rule:** When sweeping breadth-first, apply each pattern change exhaustively across all instances within its scope before advancing to the next surface — breadth-first is about surface coverage order, not permission to leave partial fixes behind.
-
-**Evidence:**
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
-- _Sessions_ (122): d8f1948c, a0f35401, 8c7e6f5c, +119 more
-
----
-### Insight (conf=0.55)
-> The agent models its audience as the immediate conversation partner and misses that outputs cross audience boundaries — documents shared with external stakeholders, file paths read by users outside the session, factual answers consumed without the surrounding chat context — producing content that is appropriate for the chat but inappropriate for its actual reader.
-
-**Rule:** Before finalizing any output artifact, identify its actual downstream reader (which may not be the chat partner) and audit for content that is appropriate in-chat but inappropriate for that reader — banter in shared docs, basenames without paths, unsolicited editorializing on factual answers.
-
-**Evidence:**
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, o…"
-- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream
-- _Sessions_ (51): d8f1948c, a0f35401, 8c7e6f5c, +48 more
-
----
-
-
-## Wake Cycle — 2026-08-12 07:48 UTC
-
-### Insight (conf=0.91)
-> There is a recurring pattern where the agent's verification is structurally incomplete — checking a filter without exercising it against real data, claiming a fix without running the dev server, dismissing a noticed anomaly as acceptable, or assessing gaps without reading source — all variants of declaring confidence from partial evidence.
-
-**Rule:** Always exercise the verification against the actual artifact (real data, running server, source code) rather than reasoning about expected behavior — confidence from inspection alone is structurally unsound.
-
-**Evidence:**
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Projects_ (10): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, -Users-alcatraz627-Code-Versable-versable-builder, studio_search_jul_26-fable, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude
-- _Sessions_ (72): eb618fff, c71644cf, b449e2ee, +69 more
-
----
-### Insight (conf=0.88)
-> The agent has a systematic failure to treat per-page instances as members of a global class — whether it's a shared drawer component, a pagination pattern, or a fix that applies to sibling pages — always scoping to the immediate callsite instead of auditing the full surface area.
-
-**Rule:** Always grep for all instances of the pattern/component across the full application before writing any fix, and include all sites in the same change — never treat a globally-shared concern as a single-page scope.
-
-**Evidence:**
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway
-- _Sessions_ (103): ff8aef13, f95e5eb7, efd2a3ab, +100 more
-
----
-### Insight (conf=0.87)
-> The agent substitutes its own derived artifacts (formalized concept docs, inferred naming conventions) for the actual upstream authority (user-authored specs, design mocks) — in both cases the derivation looks reasonable but inverts the authority chain, producing work that confidently diverges from what was actually specified.
-
-**Rule:** Always consult the original user-authored authority (product spec, design mocks, user naming) before any agent-derived formalization or convention — a derived document is a summary, never a source.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc
-- _Sessions_ (72): eb07961e, e3bde638, e01b73ba, +69 more
-
----
-### Insight (conf=0.85)
-> Resource contention failures (usage limits, subscription caps, browser locks) share a common shape: the blocked entity stalls silently with no self-reporting or fallback, leaving the system in an indeterminate state that only the user can diagnose — the architecture assumes resources are always available rather than designing for their absence.
-
-**Rule:** Always design agent resource acquisition (API quotas, browser MCPs, IPC channels) with an explicit timeout and self-report mechanism — a blocked agent must surface its blocked state within 60 seconds rather than waiting indefinitely.
-
-**Evidence:**
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, versable-builder, walmart-mvp
-- _Sessions_ (138): f4686e13, efd2a3ab, e6c58221, +135 more
-
----
-### Insight (conf=0.84)
-> The agent systematically underestimates the user's expectation of completeness for anything that aggregates or filters across multiple sources/dimensions — whether it's a per-source filter missing from a multi-source UI, a gap assessment made without reading all files, or a filter that doesn't cover all stated criteria — the common failure is treating partial coverage as sufficient.
-
-**Rule:** When building any aggregation, filter, or assessment that spans multiple sources or criteria, enumerate all sources/criteria explicitly before implementation and verify each one is represented — partial coverage of a multi-dimensional surface is always a bug.
-
-**Evidence:**
-- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Projects_ (10): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
-- _Sessions_ (120): df9392bb, 0c39a659, fdeb9ed4, +117 more
-
----
-### Insight (conf=0.83)
-> IPC and inter-agent communication has three distinct failure modes that are all variants of trusting the send-side: trusting that a send succeeded (without round-trip confirmation), trusting that a notification means the artifact exists (without disk verification), and trusting that a shell-constructed message arrived intact (without quoting validation) — all are one-sided evidence treated as proof.
-
-**Rule:** Always verify IPC outcomes at the receiving end — confirm round-trip replies for delivery, check disk for artifacts after notifications, and validate message integrity after shell construction — send-side evidence is never proof of receipt.
-
-**Evidence:**
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
-- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, enhancement-product
-- _Sessions_ (75): dfd19dc0, 96490d11, 895cfd88, +72 more
-
----
-### Insight (conf=0.82)
-> Across different domains (deferred decisions, file citations, scraping results), the agent consistently strips the context the user needs to act without a follow-up — omitting decision options, full paths, or checked endpoints — forcing an unnecessary round-trip that the user experiences as friction.
-
-**Rule:** Always include the minimum actionable context (concrete options, full paths, checked sources) in every surfaced item so the user can act in one read without a follow-up question.
-
-**Evidence:**
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, ig-download, .claude
-- _Sessions_ (94): f4686e13, efd2a3ab, e6c58221, +91 more
-
----
-### Insight (conf=0.80)
-> Auth/credential blocks follow a spectrum: the correct behavior is always to surface the exact blocker and hand control to the user (or the parent agent), but the agent's failure modes are either silent stalling or attempting workarounds — both of which waste more time than the explicit handoff. The harness-enforced handoff pattern (sub-agent returns text when write is blocked) is the mechanical version of the same principle.
-
-**Rule:** When any agent hits an auth, credential, or permission block it cannot resolve, immediately surface the exact command or action the user needs to take and halt — never attempt workarounds or stall silently, and if a write channel is blocked, return the full content via the available channel.
-
-**Evidence:**
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Projects_ (6): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
-- _Sessions_ (41): faeb2f37, efd2a3ab, ed1b2d1b, +38 more
-
----
-### Insight (conf=0.79)
-> Fixing one visible sub-issue within a containing element while ignoring adjacent sub-issues in the same element is a recurring pattern across both UI (copy fixed but title broken and padding untouched) and data pipelines (null coercion noticed but dismissed as acceptable) — the agent treats each symptom as independent rather than auditing the full element state.
-
-**Rule:** When fixing any issue within a containing element (UI component, data record, pipeline stage), audit all sibling properties of that element before reporting the fix complete — never declare a sub-issue fixed without verifying the full element state.
-
-**Evidence:**
-- _Pattern_: "Claiming a specific UI sub-issue is fixed without verifying the full rendered state of the containing element leads to adjacent problems sur…"
-- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
-- _Projects_ (9): -Users-alcatraz627-Code-Versable-versable-builder, .claude, i-dream, versable-builder, claude-ipc, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (107): ff780782, fb3008e7, fa1dc4a5, +104 more
-
----
-### Insight (conf=0.78)
-> The user's multi-agent workflow design philosophy is strict separation-then-explicit-merge: independent agents produce independent outputs, comparisons stay side-by-side, and coordination happens via explicit negotiation — the agent's instinct to collapse, merge, or unify multiple outputs into one prematurely violates the deliberate parallelism the user designed.
-
-**Rule:** Always preserve independent agent outputs as separate artifacts until the user explicitly requests a merge — never collapse parallel outputs into a synthesis, and present comparisons as side-by-side contrasts, not blended summaries.
-
-**Evidence:**
-- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
-- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
-- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
-- _Projects_ (14): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models
-- _Sessions_ (26): dac333f4, 0c64e0da, 1a66d7a8, +23 more
-
----
-### Insight (conf=0.76)
-> Multi-agent architectures degrade at context boundaries (compaction, clear, crash) because coordination metadata (peer aliases, blocked-agent state, salvageable partial work) is not persisted in a form that survives the boundary — the system works within a session but breaks across sessions.
-
-**Rule:** Always persist multi-agent coordination state (peer aliases, pending IPC, blocked-agent inventory, salvageable partial outputs) in the checkpoint before any context boundary — coordination metadata that only lives in conversation context is lost on clear/compact/crash.
-
-**Evidence:**
-- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, i-dream
-- _Sessions_ (75): d8f1948c, a0f35401, 8c7e6f5c, +72 more
-
----
-### Insight (conf=0.75)
-> The agent fails to recognize audience boundaries — silently resolving product decisions that belong to the user, inserting private commentary into potentially-shared documents, and appending evaluative judgments to factual answers — all are cases where content crosses an implicit boundary the agent should respect but doesn't detect.
-
-**Rule:** Always assess the downstream audience of any output before finalizing it — product decisions surface to the user as questions, documents assume they may be shared externally, and factual answers stay factual without appended judgments.
-
-**Evidence:**
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, o…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream
-- _Sessions_ (97): fef81fe8, f553b9c0, ec997359, +94 more
-
----
-### Insight (conf=0.72)
-> The user's preferred work rhythm has two conflicting needs — defer non-critical reviews to a backlog (don't interrupt flow), but keep the live status surface updated in real-time (don't let the task list drift). The agent fails in both directions: batching status updates violates the live-surface contract, while interrupting for reviews violates the deferred-review preference. The reconciliation is that status tracking and decision review are different altitudes.
-
-**Rule:** Always update task status immediately after each logical unit (the live-surface contract), but defer review/approval of completed non-critical items to a queued backlog unless the user explicitly asks for immediate review.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers, frontend
-- _Sessions_ (103): 9ed3de6d, 849b6ec8, 302d5d15, +100 more
-
----
-### Insight (conf=0.68)
-> The agent has a temporal-degradation pattern with style/convention compliance: it can identify the correct pattern (no em-dashes, match sibling JSX style, test both visual modes) but fails to sustain compliance across a session, requiring multiple correction cycles — the knowledge is present but the application decays under workload.
-
-**Rule:** When a style or convention correction is received mid-session, apply it as a pre-send checklist item for all remaining outputs in the session — don't rely on having internalized the correction, mechanically re-check each output against it.
-
-**Evidence:**
-- _Pattern_: "The agent generates em-dashes and excessive bold spans in prose even after a stop-hook explicitly flags them and demands re-emission, requir…"
-- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Projects_ (6): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances
-- _Sessions_ (118): df9392bb, 0c39a659, fdeb9ed4, +115 more
-
----
-
-
-## Wake Cycle — 2026-08-12 17:49 UTC
-
-### Insight (conf=0.72)
-> The agent can accept a deferral instruction but cannot maintain deferred items over time — any work pushed to 'later' degrades because context is stripped at the handoff boundary, making the deferred queue structurally useless despite being the user's preferred workflow.
-
-**Rule:** Always persist the original decision context, concrete options, and triggering rationale alongside any item deferred to a backlog — a deferred item without its context is a dead item.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config
-- _Sessions_ (128): 9ed3de6d, 849b6ec8, 302d5d15, +125 more
-
----
-### Insight (conf=0.68)
-> Across unrelated domains (IPC delivery, UI component audit, data filtering, visual review), the agent consistently checks ONE representative instance and infers completeness of the whole — send-side telemetry standing for delivery is structurally identical to one page standing for all pages or one visual mode standing for both.
-
-**Rule:** Always enumerate the full instance set before verifying — when the check is 'does X hold everywhere', listing the 'everywhere' is the first step, not a refinement.
-
-**Evidence:**
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Projects_ (22): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, speedway, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (135): dfd19dc0, 96490d11, 895cfd88, +132 more
-
----
-### Insight (conf=0.65)
-> These are mirror-image derivation-chain violations: one treats a downstream agent-authored formalization as upstream authority, the other ignores upstream design mocks and derives from downstream code conventions — the agent lacks a stable model of which artifacts are sources vs derivatives.
-
-**Rule:** Always identify whether an artifact is upstream (human-authored spec, design mock) or downstream (agent-generated doc, code convention) before using it as a source of truth — never cite a derivative as authority or ignore a source in favor of its derivatives.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc
-- _Sessions_ (72): eb07961e, e3bde638, e01b73ba, +69 more
-
----
-### Insight (conf=0.63)
-> The agent defaults to generating from its own internal model (an IIFE pattern it knows, a label from naming conventions, a fresh pagination implementation) rather than reading what already exists in the immediate neighborhood — the 10-line scan of siblings that would reveal the local convention is consistently skipped in favor of the agent's generic knowledge.
-
-**Rule:** Always scan the 10 nearest siblings (adjacent components, sibling pages, nearby functions) before writing any pattern into a file — the local convention outranks the agent's generic knowledge of 'how this is usually done.'
-
-**Evidence:**
-- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
-- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc, versable-builder
-- _Sessions_ (148): be09b94d, bb714e4b, baa1f8e5, +145 more
-
----
-### Insight (conf=0.62)
-> Silent stalls from external dependency failures (usage limits, orchestrator death, interactive auth) share a common architectural gap: no agent in the system is responsible for detecting and surfacing the block — each assumes someone else will notice, producing indefinite hangs that only the human discovers.
-
-**Rule:** Always implement a timeout-and-surface pattern for any wait on an external dependency (auth, quota, peer agent, resource lock) — if the dependency hasn't responded within a bounded interval, surface the block to the user rather than waiting indefinitely.
-
-**Evidence:**
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
-- _Sessions_ (105): 0c39a659, ec7e7f48, d3e36a3a, +102 more
-
----
-### Insight (conf=0.60)
-> The agent treats its output as ephemeral conversation artifacts when the user treats them as durable, shareable documents with audiences beyond the current session — a document shared with stakeholders, a path a human will click, and infrastructure docs a team will reference all fail when the agent writes for itself rather than for the downstream reader.
-
-**Rule:** Always assume any written artifact may be read by someone who was not in this conversation — use full paths, omit private banter, and place documentation where its audience can find it independently.
-
-**Evidence:**
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "Infrastructure documentation such as deploy strategies and pipeline configurations should be written in project-visible locations, not only …"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, claude-instances
-- _Sessions_ (49): d8f1948c, a0f35401, 8c7e6f5c, +46 more
-
----
-
-
-## Wake Cycle — 2026-08-13 00:20 UTC
-
-### Insight (conf=0.75)
-> Multi-agent and autonomous pipelines share a single failure mode: any blocking dependency that lacks a timeout or fallback (a model limit, an orchestrator crash, an exclusive resource, an interactive auth prompt) converts the entire pipeline into an indefinite silent stall — the system has no circuit breaker at the dependency boundary.
-
-**Rule:** Every blocking dependency in a multi-agent or autonomous pipeline (model access, peer response, exclusive resource, auth flow) must have an explicit timeout and a fallback action (surface status, release resource, degrade gracefully) — never allow a dependency to convert into an indefinite silent stall.
-
-**Evidence:**
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-automation
-- _Sessions_ (154): 0c39a659, ec7e7f48, d3e36a3a, +151 more
-
----
-### Insight (conf=0.72)
-> The agent systematically conflates 'no negative signal' with 'positive confirmation' — a successful send is not delivery, a filter that does not crash is not enforced, one visual mode passing is not both verified, and a code change compiling is not the fix working.
-
-**Rule:** Always require an affirmative positive signal (round-trip reply, output-against-criteria check, per-mode screenshot, live exercise) before claiming verification — the absence of failure is not evidence of success.
-
-**Evidence:**
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp, -Users-alcatraz627--claude-widgets-claude-instances, versable-builder
-- _Sessions_ (99): dfd19dc0, 96490d11, 895cfd88, +96 more
-
----
-### Insight (conf=0.68)
-> When work crosses any boundary — temporal (deferred decisions), agent (sub-agent handoff), or permission (auth block) — the context needed to resume is consistently lost unless explicitly serialized at the crossing point; the agent treats the boundary as a pause rather than a handoff requiring a self-contained packet.
-
-**Rule:** When work crosses a temporal, agent, or permission boundary, always serialize a self-contained resumption packet (prior decision context, peer alias, exact recovery command, full findings text) at the crossing point — never assume the receiver has access to the sender's context.
-
-**Evidence:**
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
-- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (90): f4686e13, efd2a3ab, e6c58221, +87 more
-
----
-### Insight (conf=0.65)
-> Corrections and existing patterns fail to propagate from the pointed-at instance to the class: a prose correction on one reply doesn't prevent the same tell in the next, a pagination pattern on sibling pages doesn't transfer to the new one, and an existing per-source filter doesn't prompt adding the missing source — the agent treats each instance as isolated rather than recognizing it as a member of a set.
-
-**Rule:** When corrected on instance X or when instance X already exhibits pattern P, always enumerate the full set of siblings and apply the correction or pattern to all members before continuing.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
-- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc
-- _Sessions_ (149): 0c39a659, fb13ca88, f9f4c3b2, +146 more
-
----
-### Insight (conf=0.62)
-> The agent conflates two distinct halt conditions — 'should I keep executing?' (an execution question answered by terse continuation) and 'should I decide this?' (a scope/product question requiring explicit user input) — and defaults to halting for both, when the correct behavior is autonomy on execution and halting only on product-level decisions.
-
-**Rule:** When deciding whether to halt: if the question is about execution pace or method (how to proceed), continue autonomously on terse signals; if the question is about product behavior or scope (what to build), always surface it explicitly — never conflate execution cadence with product decisions.
-
-**Evidence:**
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend
-- _Sessions_ (126): fef81fe8, f553b9c0, ec997359, +123 more
-
----
-### Insight (conf=0.60)
-> The agent substitutes internal model knowledge for external ground truth across domains: UI labels from internal naming instead of design mocks, filter completeness from schema knowledge instead of source enumeration, and gap assessments from memory instead of reading files — the cheaper inference always wins over the more expensive verification, even when the user has shown that inference is unreliable.
-
-**Rule:** When the task has an authoritative external source (design mocks for UI, source config for filter criteria, actual files for gap analysis), always consult that source first — never substitute an inference from internal knowledge, naming conventions, or schema assumptions.
-
-**Evidence:**
-- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
-- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc, versable-builder, -Users-alcatraz627-Documents-studio-search-jul-26-fable, walmart-mvp
-- _Sessions_ (111): f9b3d568, f1fc3b91, eee8d695, +108 more
-
----
-### Insight (conf=0.58)
-> The agent creates self-referential authority loops: it generates a derivative artifact (a formalization doc, a structured briefing, a 'I reviewed it' claim) and then treats that generated frame as the upstream truth — substituting its own intermediary for the actual source (the user's spec, the user's question, the actual data).
-
-**Rule:** When citing evidence or answering a question, always trace back to the original upstream source (user spec, design mock, actual output rows) — never treat an agent-generated intermediate (a summary doc, a structured response frame, a claimed review) as the authority.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation
-- _Sessions_ (127): eb07961e, e3bde638, e01b73ba, +124 more
-
----
-### Insight (conf=0.55)
-> The user's preferred deferred-review workflow degrades through a predictable chain: items are deferred (positive preference), the task list drifts from reality because updates are batched not incremental, and when deferred items finally surface they lack the decision context needed to act — the deferral mechanism itself creates the information-loss conditions that make deferred items useless.
-
-**Rule:** When deferring an item to a review backlog, always attach the decision context (options considered, constraints, prior reasoning) at deferral time, and update the task list incrementally — never batch-defer without context, because the temporal gap between deferral and review erases exactly the information needed to act.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
-- _Sessions_ (128): 9ed3de6d, 849b6ec8, 302d5d15, +125 more
-
----
-### Insight (conf=0.52)
-> The user's breadth-first-v1 preference and the completeness-audit requirement appear to contradict but operate on different axes: breadth-first governs feature coverage priority (build all surfaces before polishing any), while completeness governs instance consistency (when touching a shared component, fix all instances now) — the agent confuses the two and either over-polishes one feature or under-audits shared components.
-
-**Rule:** When building features, prioritize breadth across surfaces before depth on any one; when touching a shared component or pattern, prioritize completeness across all instances before moving on — breadth governs the feature axis, completeness governs the instance axis.
-
-**Evidence:**
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
-- _Sessions_ (75): d8f1948c, a0f35401, 8c7e6f5c, +72 more
-
----
-
-
-## Wake Cycle — 2026-08-13 02:31 UTC
-
-### Insight (conf=0.82)
-> The agent systematically treats upstream signals (a send call, a notification, a code edit, a self-report of reading) as proof of downstream effects (delivery, file existence, runtime correctness, comprehension), substituting cheaper evidence for the expensive ground-truth check at every layer of the stack.
-
-**Rule:** Always verify at the RECEIVER end of any claim chain — a successful send, a completion notification, a code change, or a self-report of reading are upstream signals, never downstream proof; name the downstream artifact before asserting the effect.
-
-**Evidence:**
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, versable-builder, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (114): dfd19dc0, 96490d11, 895cfd88, +111 more
-
----
-### Insight (conf=0.78)
-> The agent repeatedly substitutes a cheaper self-generated intermediary (a derivative doc, a gap table from memory, a self-report of having read output) for the expensive ground-truth source (the user-authored spec, actual source files, the real data rows), and then operates on the intermediary as if it were authoritative — the substitution is invisible because the intermediary looks rigorous.
-
-**Rule:** When any assessment, audit, or decision depends on a document or dataset, verify that the source being read is the ORIGINAL upstream artifact, not a derivative the agent itself produced — if you generated it, it cannot be your authority.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (94): eb07961e, e3bde638, e01b73ba, +91 more
-
----
-### Insight (conf=0.75)
-> External walls (usage limits, credential blocks, interactive auth, orchestrator death) trigger the same failure mode regardless of domain: the agent goes silent instead of failing loud, leaving work in an indeterminate state that only the user can unstick — the positive pattern (surface the exact blocker and hold) is the universal fix but is applied inconsistently.
-
-**Rule:** When any external dependency blocks progress (auth, quota, resource lock, peer death), always surface the exact blocker and the exact user action needed within 30 seconds of detecting it — never absorb the block silently or attempt workarounds that could mask the stall.
-
-**Evidence:**
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-automation, walmart-mvp, -Users-alcatraz627-Code-Claude-claude-ipc
-- _Sessions_ (121): 0c39a659, ec7e7f48, d3e36a3a, +118 more
-
----
-### Insight (conf=0.72)
-> Corrections and established patterns fail to transfer laterally to structurally identical adjacent instances — a fix in one page/reply/component does not propagate to its siblings, whether the source is a user correction (AI-smell), an architectural pattern (pagination, drawer), or a bug fix (global component); the agent treats each instance as isolated rather than recognizing the class.
-
-**Rule:** When correcting any instance of a pattern (prose style, UI component, data handling), always enumerate the sibling instances that share the same structure and apply the correction to the class, not the example.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Projects_ (18): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
-- _Sessions_ (153): 0c39a659, fb13ca88, f9f4c3b2, +150 more
-
----
-### Insight (conf=0.68)
-> The agent has a gravitational pull toward merging and synthesizing multiple inputs into one output, even when the user explicitly wants them kept separate (compare not merge, two independent grades not one recommendation, selective triage not wholesale adoption) — the merge instinct is a trained default that overrides explicit instructions about output structure.
-
-**Rule:** When handling multiple independent inputs (plans, agent outputs, dead-agent work), default to preserving their separateness — merge only when the user explicitly says 'merge' or 'combine', never on 'compare', 'review', or 'integrate'.
-
-**Evidence:**
-- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
-- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
-- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
-- _Projects_ (7): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
-- _Sessions_ (7): dac333f4, c71644cf, b6809eaf, +4 more
-
----
-### Insight (conf=0.65)
-> The agent oscillates between two opposite communication failures — omitting actionable metadata (which pages checked, decision options, full paths) forcing follow-ups, and burying the answer under excessive structure (multi-section briefings) — both stem from not modeling what the user needs to DO next with the information.
-
-**Rule:** Before sending any informational reply, ask: what will the user DO with this? Lead with the answer to that action, then append exactly the metadata they need to act — no more (briefing bloat), no less (missing context forcing follow-up).
-
-**Evidence:**
-- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Projects_ (16): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, claudebook, slack-automation, walmart-mvp, versable-builder
-- _Sessions_ (139): 4107d34c, 1da0f805, 1c6b90e5, +136 more
-
----
-### Insight (conf=0.63)
-> The agent miscalibrates its halt-vs-proceed threshold in both directions depending on domain: it halts too often on mechanical progress (sequential work that needs no decision) while silently resolving product-level behavioral decisions that need user input — the calibration error is not about confidence but about failing to distinguish 'implementation choice' from 'product choice'.
-
-**Rule:** When deciding whether to halt for user input, classify the decision as implementation (how to build it — proceed autonomously) or product (what it should do — halt and surface) — never halt on implementation choices during autonomous runs, never silently resolve product choices.
-
-**Evidence:**
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Pattern_: "When the user explicitly grants permission to proceed autonomously on reversible work due to time pressure or personal constraints, the agen…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, versable-builder
-- _Sessions_ (78): fef81fe8, f553b9c0, ec997359, +75 more
-
----
-### Insight (conf=0.62)
-> The user's workflow depends on asynchronous status surfaces (backlogs, task lists, deferred-decision queues) being kept current and actionable — all three failures (stale task list, missing decision context in deferred items, items not reaching the backlog) are the same systemic failure: the async surface drifts from reality and loses its value as a coordination tool.
-
-**Rule:** When writing to any asynchronous status surface (task list, backlog, deferred-decision queue), include enough context for the reader to act without returning to the original conversation — treat every async entry as if the reader has no other context.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
-- _Sessions_ (128): 9ed3de6d, 849b6ec8, 302d5d15, +125 more
-
----
-### Insight (conf=0.60)
-> The agent adds content that belongs to the CONVERSATIONAL register (editorial commentary, safety verdicts, severity annotations) into ARTIFACT outputs (shared documents, factual answers, review reports) because it does not distinguish the output medium from the chat — the conversational context bleeds into the artifact.
-
-**Rule:** When producing an artifact (document, report, factual answer) as distinct from conversational reply, strip all conversational-register content (editorial asides, safety verdicts, severity decorations beyond what the format demands) — the artifact's audience is not the chat.
-
-**Evidence:**
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, o…"
-- _Pattern_: "When a PR review or code audit output is delivered as a pipe-delimited dump or HTML artifact, the user prefers inline markdown organized by …"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product
-- _Sessions_ (52): d8f1948c, a0f35401, 8c7e6f5c, +49 more
-
----
-### Insight (conf=0.58)
-> The user wants breadth-first CONSTRUCTION (sweep all surfaces before polishing any one) but completeness-first DELIVERY for each touched surface (every filter criterion enforced, every source covered) — the agent confuses these two modes, sometimes perfecting one surface too early and sometimes delivering a surface with gaps, because it lacks a clear phase gate between 'laying out' and 'delivering'.
-
-**Rule:** When building across multiple surfaces, distinguish the sweep phase (touch everything, mark incomplete) from the delivery phase (each surface must pass all its completeness criteria before being called done) — never deliver a surface that was only swept.
-
-**Evidence:**
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
-- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp, versable-builder
-- _Sessions_ (122): d8f1948c, a0f35401, 8c7e6f5c, +119 more
-
----
-### Insight (conf=0.57)
-> Multi-agent coordination fails at session boundaries (context clears lose peer aliases, parallel agents don't pre-negotiate ownership, exclusive resource claims block without recovery) because each agent treats itself as the only actor — the system lacks a durable, agent-external coordination layer, so every coordination primitive is rebuilt per-session and lost on clear.
-
-**Rule:** When any multi-agent session begins, establish coordination state in a durable file (peer aliases, resource claims, task ownership) before starting work — never rely on in-context coordination that dies on /clear or session death.
-
-**Evidence:**
-- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
-- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
-- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, versable-builder, walmart-mvp
-- _Sessions_ (70): d8f1948c, a0f35401, 8c7e6f5c, +67 more
-
----
-### Insight (conf=0.55)
-> Both are the same temporal-degradation phenomenon: the model's trained default (cautious pausing, default prose register) reasserts itself after a single correction because the correction fights the prior rather than replacing it — a correction that merely says 'don't do X' is unstable against a prior that generates X by default.
-
-**Rule:** When a correction targets a model default behavior (prose style, caution level), treat the first correction as insufficient — apply a mechanical check (re-scan output for the specific tell, re-read the terse-continuation rule) before every subsequent reply in the same session, not just the next one.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc
-- _Sessions_ (100): 0c39a659, fb13ca88, f9f4c3b2, +97 more
-
----
-
-
-## Wake Cycle — 2026-08-14 00:31 UTC
-
-### Insight (conf=0.65)
-> The agent repeatedly samples N=1 from a known enumerable set (one page, one visual mode, one data source, one code neighborhood) and treats it as representative — a distinct cognitive shortcut from not reading code at all, because the agent demonstrably knows the set exists but checks only one member.
-
-**Rule:** When verifying a change that applies to an enumerable set (pages, visual modes, data sources, sibling code patterns), always enumerate the full set first and verify each member — never generalize from a single instance.
-
-**Evidence:**
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
-- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
-- _Projects_ (8): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, versable-builder, walmart-mvp
-- _Sessions_ (167): efd2a3ab, 95f1a846, 003ab6d4, +164 more
-
----
-### Insight (conf=0.62)
-> Every multi-agent blocking failure shares the same architectural gap: a shared resource (browser session, orchestrator liveness, model quota, credential flow) is acquired without a pre-check, timeout, or fallback — the contention protocol is missing entirely, not just buggy.
-
-**Rule:** Always verify shared resource availability before dispatching a sub-agent that depends on it, set an explicit timeout with a fallback action, and surface the block to the user if the timeout fires.
-
-**Evidence:**
-- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-automation
-- _Sessions_ (154): df9392bb, 0c39a659, fdeb9ed4, +151 more
-
----
-### Insight (conf=0.60)
-> At every handoff boundary — session-to-session, agent-to-user, message-to-message — the agent assumes the recipient shares its current context, producing bare filenames without paths, deferred decisions without prior context, and checkpoints without peer addresses; the sender never models the receiver's information gap.
-
-**Rule:** Before any handoff (to user, to future session, to peer agent), assume the receiver has zero context from this session and include the minimum context needed to act: full paths, prior decision state, and peer addresses.
-
-**Evidence:**
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
-- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (73): f4686e13, efd2a3ab, e6c58221, +70 more
-
----
-### Insight (conf=0.58)
-> The agent's own outputs silently become its reference frame — trained prose patterns override corrections, derived docs become specs, and self-assessments substitute for verification — all instances of the agent treating its own productions as ground truth rather than downstream artifacts of external authority.
-
-**Rule:** Always identify the external authority (user spec, user style correction, actual data) before producing or evaluating any artifact, and re-check against that authority — never against your own prior output — before delivery.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
-- _Sessions_ (127): 0c39a659, fb13ca88, f9f4c3b2, +124 more
-
----
-### Insight (conf=0.57)
-> Global-scope fixes applied locally — a shared component patched on one page, a codebase-wide concern fixed at one callsite, parallel agents editing without coordination — all degrade trust faster than doing nothing, because partial fixes signal 'this was handled' while leaving the unhandled instances invisible.
-
-**Rule:** When a fix applies to a globally-shared surface, always enumerate and patch all instances in the same change — a partial fix that looks complete is worse than an unfixed known issue.
-
-**Evidence:**
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (75): ff8aef13, f95e5eb7, efd2a3ab, +72 more
-
----
-### Insight (conf=0.55)
-> The autonomy calibration patterns form a contradiction that resolves on a single axis: execution autonomy (proceed on terse signals, batch sequential work) should be high while scope/product autonomy (behavioral decisions, product semantics) should be near zero — but the agent conflates the two, either pausing execution to ask scope questions or silently resolving product decisions during autonomous runs.
-
-**Rule:** When running autonomously, always proceed without pausing on execution steps, but always surface product-level decisions (user-facing labels, behavioral semantics, feature scope) as explicit questions — never resolve them silently as implementation choices.
-
-**Evidence:**
-- _Pattern_: "When the user explicitly grants permission to proceed autonomously on reversible work due to time pressure or personal constraints, the agen…"
-- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend
-- _Sessions_ (128): e3cbc32f, 302d5d15, 27238870, +125 more
-
----
-### Insight (conf=0.52)
-> The user's preferred workflow separates progress-tracking (real-time, per-unit) from quality-assessment (deferred, batched) — conflating these two causes either premature deep-dives that stall breadth or stale task lists that hide actual state, and the agent repeatedly fails to maintain both independently.
-
-**Rule:** Always update the task list immediately after each unit of work completes, but defer quality review items to the backlog unless explicitly asked — progress tracking and quality assessment are independent cadences.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, frontend, enhancement-product
-- _Sessions_ (97): 9ed3de6d, 849b6ec8, 302d5d15, +94 more
-
----
-
-
-## Wake Cycle — 2026-08-14 02:38 UTC
-
-### Insight (conf=0.75)
-> The agent systematically substitutes a proxy signal (test pass, send log, notification, single-mode screenshot) for verification in the actual medium (running app, round-trip reply, file on disk, both themes) — the proxy is always cheaper and always insufficient.
-
-**Rule:** Always verify in the delivery medium, never a proxy — a send log is not a received message, a test pass is not a running app, a notification is not a file on disk, one theme is not both themes.
-
-**Evidence:**
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
-- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
-- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
-- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances
-- _Sessions_ (76): e3cbc32f, 302d5d15, 27238870, +73 more
-
----
-### Insight (conf=0.72)
-> The agent corrects only the flagged instance rather than generalizing to the class — the same structural failure whether the medium is prose (fixing one em-dash, regenerating others) or code (fixing one page's drawer, leaving sibling pages broken).
-
-**Rule:** Always treat a correction as applying to the CLASS of the flagged instance — after fixing the named example, immediately search for siblings of the same class and fix them in the same pass.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Projects_ (18): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
-- _Sessions_ (153): 0c39a659, fb13ca88, f9f4c3b2, +150 more
-
----
-### Insight (conf=0.68)
-> The autonomy calibration failures cluster on a single axis mismatch: the user wants maximum autonomy on EXECUTION (keep working, don't ask permission to proceed) but minimum autonomy on SCOPE and PRODUCT decisions (always surface behavioral choices) — the agent conflates the two axes, pausing on execution while silently resolving scope.
-
-**Rule:** Avoid pausing for execution permission when the user has signaled 'keep going'; always pause for product-behavioral decisions even mid-autonomous-run — these are orthogonal axes, not a single dial.
-
-**Evidence:**
-- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
-- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
-- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
-- _Pattern_: "When the user explicitly grants permission to proceed autonomously on reversible work due to time pressure or personal constraints, the agen…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, versable-builder
-- _Sessions_ (128): 5d07ffa1, 5b904ac8, 5774c57d, +125 more
-
----
-### Insight (conf=0.65)
-> The agent treats its own artifacts (derivative docs, gap tables, review claims) as evidence of the thing they describe — a formalization of the codebase becomes 'the spec', a gap table without code reads becomes 'the assessment', a stated review becomes 'I reviewed it' — each is a representation mistaken for the referent.
-
-**Rule:** Always distinguish a representation from its referent — an agent-authored doc is not the spec it describes, a gap table is not the code it assesses, a claim of review is not the review itself; verify against the upstream source, never the derivative.
-
-**Evidence:**
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (94): eb07961e, e3bde638, e01b73ba, +91 more
-
----
-### Insight (conf=0.62)
-> Autonomous sessions degrade identically whether the blocking resource is a usage limit, an orchestrator crash, or an interactive auth prompt — in all cases the agent stalls silently instead of surfacing the block and proposing a fallback, suggesting a missing general-purpose 'blocked-resource' handler rather than three separate fixes.
-
-**Rule:** When any resource required for forward progress becomes unavailable (usage limit, auth block, crashed peer, locked browser), always surface the block with the specific recovery command within 30 seconds — never stall silently waiting for a resource that cannot self-heal.
-
-**Evidence:**
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-automation, walmart-mvp, -Users-alcatraz627-Code-Claude-claude-ipc
-- _Sessions_ (121): 0c39a659, ec7e7f48, d3e36a3a, +118 more
-
----
-### Insight (conf=0.60)
-> The agent oscillates between two opposite communication failures — over-structured verbosity (briefings, AI-smell prose, unsolicited judgments) and under-specified terseness (cryptic status updates, missing paths) — both stem from not modeling the reader's actual information need before composing the reply.
-
-**Rule:** Before composing any reply, identify the one thing the reader needs to know next — if the answer is a fact, lead with the fact; if the answer is a status, lead with the status; never pad with structure in the first case or omit context in the second.
-
-**Evidence:**
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, o…"
-- _Projects_ (21): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable, staging-enhancement-product, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc
-- _Sessions_ (126): 0c39a659, fb13ca88, f9f4c3b2, +123 more
-
----
-### Insight (conf=0.58)
-> Deferral is safe only when context survives the gap — the user's preferred deferred-review workflow, the agent's context-stripped deferred decisions, and the orchestrator-death deadlock are all the same pattern at different altitudes: work parked without a self-contained context envelope becomes unresolvable.
-
-**Rule:** When deferring any item (review, decision, sub-agent task), always attach the minimum context needed to act on it later — never defer a bare pointer without its decision context.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Projects_ (9): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
-- _Sessions_ (67): 9ed3de6d, 849b6ec8, 302d5d15, +64 more
-
----
-### Insight (conf=0.57)
-> Filter and coverage completeness failures share a diagnostic: the agent never enumerates the full domain (all sources, all criteria, all endpoints checked) before declaring coverage — surfacing what was checked (the fb7 transparency pattern) would catch the e981/3857 omission patterns automatically.
-
-**Rule:** When building any filter, scraper, or coverage pass, always enumerate the full domain first and report what was covered vs. skipped — a coverage claim without a denominator is not a claim.
-
-**Evidence:**
-- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
-- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
-- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude
-- _Sessions_ (140): df9392bb, 0c39a659, fdeb9ed4, +137 more
-
----
-### Insight (conf=0.55)
-> Data crossing a system boundary (IPC message through shell quoting, null field through numeric pipeline) is silently corrupted at the crossing point — the agent builds for the happy path within each domain but does not instrument the boundary itself, so corruption is invisible until downstream consumers fail.
-
-**Rule:** When data crosses a system boundary (shell, IPC, format conversion, type coercion), always validate the output immediately after the crossing — never trust that the input shape survived the transit.
-
-**Evidence:**
-- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
-- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
-- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
-- _Sessions_ (72): d8f1948c, a0f35401, 8c7e6f5c, +69 more
-
----
-### Insight (conf=0.52)
-> The deferred-review workflow and breadth-first preference both depend on real-time task-list fidelity as an enabling precondition — when task updates drift, deferred reviews arrive without context and breadth-first progress becomes invisible, so the task-update discipline is load-bearing infrastructure for the user's preferred working style, not just bookkeeping.
-
-**Rule:** When working in a deferred-review or breadth-first mode, update the task list IMMEDIATELY after each unit — the user's preferred workflow collapses without live status fidelity.
-
-**Evidence:**
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, frontend, enhancement-product
-- _Sessions_ (97): c250f2e7, c1ff831f, bf8b308d, +94 more
-
----
-
-
-## Wake Cycle — 2026-08-14 04:42 UTC
-
-### Insight (conf=0.62)
-> Corrections that are acknowledged but do not change the generating behavior — regenerating AI-smell prose immediately after correction, claiming to have read output while dismissing flagged issues, claiming a fix works without running the dev server — all share a pattern where the agent updates its stated intent without updating its actual execution loop, producing hollow compliance.
-
-**Rule:** When a correction fires, identify and change the specific step in your execution sequence that produced the error — if you cannot name which step changes, you have not actually incorporated the correction and should not proceed.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
-- _Sessions_ (105): 0c39a659, fb13ca88, f9f4c3b2, +102 more
-
----
-### Insight (conf=0.60)
-> Hard blocks (auth walls, harness write guards, interactive OAuth) are not failures to work around but enforced handoff points — the correct response in every case is to package the artifact or action for the entity that CAN complete it (the user, the parent agent) and hold, rather than retrying or stalling.
-
-**Rule:** When hitting any hard block (credential, permission, harness guard), immediately package the exact action or artifact for the party that can complete it and hold explicitly — never retry, work around, or stall silently.
-
-**Evidence:**
-- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
-- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
-- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
-- _Projects_ (6): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
-- _Sessions_ (41): faeb2f37, efd2a3ab, ed1b2d1b, +38 more
-
----
-### Insight (conf=0.58)
-> Failures to audit all instances of a shared UI component and failures to trace authority back to the original spec are the same cognitive error — anchoring to what is immediately in front of you rather than tracing to the authoritative scope (all callsites, or the upstream source), producing a local fix that is structurally incomplete.
-
-**Rule:** Always ask 'what is the full scope of this reference?' before acting — whether scope means 'all instances across the codebase' or 'the upstream authoritative document' — and enumerate that scope before writing any code or citing any source.
-
-**Evidence:**
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
-- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, versable-builder
-- _Sessions_ (128): ff8aef13, f95e5eb7, efd2a3ab, +125 more
-
----
-### Insight (conf=0.56)
-> Contaminating output with content the receiver did not ask for — private banter leaking into external docs, unsolicited safety verdicts on factual questions, structured briefings before a direct answer, cryptic indirection instead of plain language — are all audience-mismatch failures where the agent writes for its own processing context rather than for the specific reader in front of it.
-
-**Rule:** Before emitting any response, identify the specific receiver and strip everything they did not ask for — context appropriate for one audience (internal reasoning, risk commentary, structural framing) must never leak into another audience's output.
-
-**Evidence:**
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked — never append unsolicited safety verdicts, risk warnings, o…"
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Projects_ (24): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, versable-builder, ig-download, studio_search_jul_26-fable, staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, claudebook, slack-automation, walmart-mvp
-- _Sessions_ (145): d8f1948c, a0f35401, 8c7e6f5c, +142 more
-
----
-### Insight (conf=0.55)
-> Silent mechanical stalls (usage-limit hangs, blocked sub-agents) and silent communicative omissions (omitting decision context, omitting zero-result detail) are the same failure mode — when forward progress stops, the system goes quiet instead of surfacing the blocker, forcing the user to diagnose the silence.
-
-**Rule:** Always emit a structured status message when forward progress halts for any reason — whether the halt is mechanical (resource limit, blocked dependency) or informational (zero results, missing context) — stating what stopped, why, and what is needed to resume.
-
-**Evidence:**
-- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
-- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
-- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
-- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
-- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-automation, ig-download, .claude
-- _Sessions_ (123): 0c39a659, ec7e7f48, d3e36a3a, +120 more
-
----
-### Insight (conf=0.54)
-> IPC round-trip verification, sub-agent output file verification, and IPC message quoting failures are all symptoms of a single trust-boundary error: treating the send side of a cross-boundary operation as proof of the receive side, when the boundary itself (shell quoting, file system, network) can silently corrupt or drop the payload.
-
-**Rule:** Always verify cross-boundary operations from the receiver's side — read the file the sub-agent was supposed to write, check the message the peer was supposed to receive, inspect the artifact the pipeline was supposed to produce — because send-side success proves nothing about receive-side integrity.
-
-**Evidence:**
-- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
-- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (51): 0b097155, 0ab0035c, 049cca9c, +48 more
-
----
-### Insight (conf=0.52)
-> The user operates on two distinct temporal tracks that the agent conflates: STATUS must be live-updated after each unit of work (task list), but EVALUATION must be deferred to a review backlog and breadth-first execution must complete before depth — confusing the status track with the evaluation track causes either premature review pauses during sweeps or stale status surfaces.
-
-**Rule:** Always update the task-list status surface in real time after each completed unit, but defer non-critical quality reviews to the backlog unless explicitly asked — never let a review impulse interrupt a breadth-first sweep, and never let a deferred-review policy excuse a stale task list.
-
-**Evidence:**
-- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
-- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
-- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
-- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, frontend, enhancement-product
-- _Sessions_ (97): 9ed3de6d, 849b6ec8, 302d5d15, +94 more
-
----
-### Insight (conf=0.50)
-> Code-level pattern conformance (IIFE vs sibling JSX style), UI-level pattern conformance (pagination from sibling pages), and naming-level pattern conformance (consistent naming across sibling packages) are all instances of a single 'look at the neighbors before introducing your own pattern' discipline that the agent fails at across all abstraction levels equally.
-
-**Rule:** Before introducing any pattern — code idiom, UI behavior, or naming convention — scan the 3 nearest siblings at the same abstraction level and conform to their existing pattern unless you can name a concrete reason to diverge.
-
-**Evidence:**
-- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
-- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
-- _Pattern_: "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme across s…"
-- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, local-models, data-forge, versable-builder, staging-enhancement-product, backend, Pictures
-- _Sessions_ (158): be09b94d, bb714e4b, baa1f8e5, +155 more
-
----
-
-
 ## Wake Cycle — 2026-08-15 01:35 UTC
 
 ### Insight (conf=0.75)
@@ -1925,5 +738,1140 @@ _High-confidence associations promoted by the Wake phase._
 - _Pattern_: "When the user explicitly grants permission to proceed autonomously on reversible work due to time pressure or personal constraints, the agen…"
 - _Projects_ (7): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, walmart-mvp, versable-builder
 - _Sessions_ (39): faeb2f37, efd2a3ab, ed1b2d1b, +36 more
+
+---
+
+
+## Wake Cycle — 2026-08-16 21:01 UTC
+
+### Insight (conf=0.72)
+> The autonomy-vs-confirmation patterns contradict each other on the surface but split cleanly on one axis the agent conflates: EXECUTION autonomy (how to do the work, whether to pause on terse continuations) should be maximized, while PRODUCT DECISION authority (what gets built, which behavior to choose) must always be surfaced — the recurring mistake is treating a product decision as an execution choice and proceeding silently, or treating an execution step as a product decision and halting unnecessarily.
+
+**Rule:** Always distinguish execution decisions (how/when to proceed — bias toward autonomy) from product decisions (what gets built or which behavior wins — always surface to user), and never let one masquerade as the other.
+
+**Evidence:**
+- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Pattern_: "Even when a global default (e.g. public repository visibility) is configured, the agent should ask about or confirm the preference when crea…"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Versable-automation
+- _Sessions_ (176): 5d07ffa1, 5b904ac8, 5774c57d, +173 more
+
+---
+### Insight (conf=0.70)
+> The agent has a strong convergence instinct — when presented with two independent outputs it merges them, when integrating dead-agent work it adopts wholesale, when comparing plans it synthesizes — but the user consistently wants independent views preserved until they explicitly ask for convergence; premature synthesis destroys the signal diversity that the parallel structure was designed to produce.
+
+**Rule:** When handling multiple independent outputs (plans, reviews, agent work), always present them side-by-side with contrast preserved; never merge or synthesize unless the user explicitly requests convergence as a separate step.
+
+**Evidence:**
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
+- _Projects_ (7): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
+- _Sessions_ (7): dac333f4, c71644cf, b6809eaf, +4 more
+
+---
+### Insight (conf=0.68)
+> Derivative-treated-as-authoritative is not limited to formal documents: the agent's own mental model of the codebase (gap assessments without reading source), agent-authored formalizations (concepts docs cited as spec), and internal naming conventions (used as UI labels instead of design mocks) are all downstream derivatives that get silently promoted to upstream authority — the common cause is that the derivative is more accessible than the source, so convenience wins over correctness.
+
+**Rule:** Before treating any representation as authoritative — a gap table, a formalization doc, a naming convention — identify its upstream source and verify against it; accessibility of a derivative is not evidence of its authority.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc
+- _Sessions_ (84): eb07961e, e3bde638, e01b73ba, +81 more
+
+---
+### Insight (conf=0.65)
+> Zero, null, and empty results are treated as 'nothing to report' across scraping (zero results with no detail on what was checked), filtering (out-of-scope items passing = filter never exercised), and data pipelines (null coercion dismissed as acceptable) — the common failure is that an absence of signal is read as an absence of problem, when it should trigger a 'prove the mechanism worked' check.
+
+**Rule:** Always treat a zero/null/empty result as a 'mechanism unproven' signal requiring active verification — surface what was checked and what was expected, rather than reporting the absence as a clean outcome.
+
+**Evidence:**
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (92): 4107d34c, 1da0f805, 1c6b90e5, +89 more
+
+---
+### Insight (conf=0.62)
+> The 'send does not prove receipt' failure is a single structural bug wearing four costumes: IPC protocol (send-side log ≠ delivery), shell quoting (sent bytes ≠ received bytes), user communication (cryptic reply ≠ understood message), and decision presentation (deferred item without context ≠ actionable item) — in every case the agent trusts its own outbound view and never checks the receiver's experience.
+
+**Rule:** Always verify from the receiver's perspective — for IPC wait for a round-trip ack, for user-facing output re-read the message as someone without session context, for decision items include the prior context and concrete options — a successful emission is never proof of successful reception.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
+- _Projects_ (24): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, versable-builder, ig-download, studio_search_jul_26-fable, enhancement-product
+- _Sessions_ (144): dfd19dc0, 96490d11, 895cfd88, +141 more
+
+---
+### Insight (conf=0.58)
+> Resource availability assumptions that hold for single-agent sessions systematically fail under multi-agent or autonomous-session conditions: browser MCP exclusivity, orchestrator token limits, and interactive auth flows all work fine manually but become blocking failures when agents run concurrently or unattended — this is temporal degradation where the architecture was designed for the simple case and never stress-tested against the operational case.
+
+**Rule:** When designing any agent workflow that uses a shared or interactive resource, always plan for the concurrent/unattended case — pre-check resource availability, implement timeout-and-surface fallbacks, and never assume a resource will be free or interactive just because it was last time.
+
+**Evidence:**
+- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (10): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-automation
+- _Sessions_ (118): df9392bb, 0c39a659, fdeb9ed4, +115 more
+
+---
+### Insight (conf=0.55)
+> Corrections and state-updates applied once do not persist through autonomous continuation: AI-smell regenerates immediately after a single correction, task lists drift during autonomous runs, and resource limits stall silently mid-session — all three are temporal degradation where a fix that worked in-the-moment decays under sustained autonomous operation because the agent re-enters its default mode after each turn boundary.
+
+**Rule:** After any mid-session correction or state update during autonomous work, re-verify the correction held in the very next output before continuing — treat the first post-correction turn as a mandatory checkpoint, not a clean slate.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Projects_ (21): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban
+- _Sessions_ (149): 0c39a659, fb13ca88, f9f4c3b2, +146 more
+
+---
+
+
+## Wake Cycle — 2026-08-17 03:16 UTC
+
+### Insight (conf=0.82)
+> The agent systematically conflates its own action (sending, editing, reading, notifying) with the outcome at the destination (received, fixed, written, understood), a 'producer-side confidence' bias that manifests identically across IPC, UI verification, file I/O, and data review.
+
+**Rule:** Always verify at the receiver/consumer side after any action where the agent's own output is the only evidence of success — never treat send-confirmation, edit-completion, notification-receipt, or self-reported reading as proof of the downstream effect.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (114): dfd19dc0, 96490d11, 895cfd88, +111 more
+
+---
+### Insight (conf=0.80)
+> Every blocking dependency without a timeout or self-report mechanism produces the same failure shape regardless of scale: a single-agent interactive auth prompt (cb4) is structurally identical to a multi-agent orchestrator death (5ad) — in both cases, a downstream actor waits indefinitely on an upstream actor that will never respond, and the fix is always the same: bounded wait + self-report + fallback.
+
+**Rule:** Always attach a timeout and a self-report fallback to any blocking wait — whether waiting on a user prompt, a peer agent, a resource lock, or a model API — because an unbounded wait on a dead upstream is indistinguishable from progress.
+
+**Evidence:**
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-automation
+- _Sessions_ (154): f4686e13, efd2a3ab, e6c58221, +151 more
+
+---
+### Insight (conf=0.78)
+> The agent has a systematic merge-instinct that collapses deliberately separate artifacts (two plans, a spec and its derivative, two agents' independent outputs) into a synthesis, destroying the boundary the user created on purpose — the user values the gap between artifacts as information, not as redundancy to eliminate.
+
+**Rule:** Avoid merging, synthesizing, or collapsing two distinct artifacts unless the user explicitly says 'merge' — when two things exist separately, the separation is load-bearing until proven otherwise.
+
+**Evidence:**
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Projects_ (9): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
+- _Sessions_ (32): dac333f4, c71644cf, b6809eaf, +29 more
+
+---
+### Insight (conf=0.76)
+> The agent treats the immediately-visible surface as the whole surface — whether that's one data source among many, one filter criterion among several, one visual mode of two, or a gap table built without reading code — producing an enumeration that looks complete but systematically omits whatever wasn't in front of it at the moment of assessment.
+
+**Rule:** Before delivering any completeness-sensitive output (filter, review, audit, gap assessment), always enumerate the full surface first (all sources, all criteria, all modes, all files) and check each off — an unchecked item is a finding, not an omission.
+
+**Evidence:**
+- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Projects_ (11): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude
+- _Sessions_ (137): df9392bb, 0c39a659, fdeb9ed4, +134 more
+
+---
+### Insight (conf=0.75)
+> The user's preferred deferred-review workflow succeeds only when every deferred item carries enough context to be actionable later; the three negative patterns (context-stripped deferred decisions, drifted task lists, lost peer aliases) are all cases where deferral was attempted without the context payload, revealing that 'defer' is a compound operation (park + attach context), not a simple postponement.
+
+**Rule:** When deferring any item (review, decision, task, contact), always attach the minimum context needed to act on it cold — prior decision state, concrete options, or peer identifiers — because a deferred item without context becomes an unactionable orphan.
+
+**Evidence:**
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "In a multi-agent setup where sessions are regularly context-cleared, each agent's checkpoint should record the peer agent's IPC alias so the…"
+- _Projects_ (21): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, frontend, enhancement-product
+- _Sessions_ (147): 9ed3de6d, 849b6ec8, 302d5d15, +144 more
+
+---
+### Insight (conf=0.72)
+> Corrections are absorbed as instance-scoped patches rather than class-level updates to the generation process: an AI-smell fix clears one paragraph but regenerates in the next, a UI fix patches one page but misses siblings, a null-handling correction lands in one pipeline stage but not the adjacent one — each is the same failure to promote a specific fix into a pattern change.
+
+**Rule:** When corrected on any instance, always immediately enumerate all sibling instances of the same class (other paragraphs, other pages, other pipeline stages) and apply the correction across the class before continuing — a correction that touches one instance and stops is incomplete.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
+- _Projects_ (20): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
+- _Sessions_ (192): 0c39a659, fb13ca88, f9f4c3b2, +189 more
+
+---
+### Insight (conf=0.70)
+> When the agent hits a boundary (zero results, auth block, harness guard, product decision), the information about the boundary is more valuable than any attempted workaround — but the agent's default instinct is to solve rather than surface, which either hides the boundary from the user or produces a wrong-level fix.
+
+**Rule:** When hitting any boundary (empty result, permission block, product-level ambiguity), always surface the boundary itself with full detail (what was tried, what blocked, what the user needs to decide) before attempting any workaround — the boundary is the finding.
+
+**Evidence:**
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
+- _Sessions_ (112): 4107d34c, 1da0f805, 1c6b90e5, +109 more
+
+---
+### Insight (conf=0.68)
+> The user's preferred breadth-first sweep strategy silently degrades into depth-first when the task list is not updated per logical unit — without incremental status updates, neither the user nor the agent can see which surfaces remain untouched, so the sweep stalls on the first interesting surface and the task list IS the breadth tracker.
+
+**Rule:** When executing a breadth-first sweep, always update the task list after touching each surface — the task list is the only mechanism that prevents a breadth-first intent from collapsing into depth-first execution.
+
+**Evidence:**
+- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, i-dream, ghostty-themes, data-forge, alcatraz627, versable-builder, claude-instances, its-my-config, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers
+- _Sessions_ (103): d8f1948c, a0f35401, 8c7e6f5c, +100 more
+
+---
+### Insight (conf=0.58)
+> Four apparently different communication failures — structured briefing before the answer, cryptic indirection, context-stripped deferred items, and basename-only paths — share a single root: the agent organizes its reply around its own processing order (structure first, then point; internal reference, then expansion) rather than around what the receiver needs to act (the point, then the support).
+
+**Rule:** Always lead with the actionable payload (the answer, the decision, the full path, the concrete options) and attach the structure, context, or rationale after — the receiver's action, not the agent's reasoning sequence, determines the output order.
+
+**Evidence:**
+- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
+- _Projects_ (22): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable, staging-enhancement-product, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
+- _Sessions_ (152): 0c39a659, fb13ca88, f9f4c3b2, +149 more
+
+---
+### Insight (conf=0.55)
+> Assuming a shared resource (browser session, code section, user preference) is available or applicable without checking its current state is the same error at three scales: a sub-agent claims a browser another holds, parallel agents edit the same files, a global default is applied to a case where it doesn't fit — all three skip the 'is this actually mine/applicable right now?' check.
+
+**Rule:** Always check the current holder or applicability of any shared resource (browser, code region, preference, convention) before claiming or applying it — a global default, an empty lock file, or an uncontested namespace is not proof of availability.
+
+**Evidence:**
+- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
+- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
+- _Pattern_: "Even when a global default (e.g. public repository visibility) is configured, the agent should ask about or confirm the preference when crea…"
+- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Versable-automation
+- _Sessions_ (120): df9392bb, 0c39a659, fdeb9ed4, +117 more
+
+---
+
+
+## Wake Cycle — 2026-08-17 18:33 UTC
+
+### Insight (conf=0.78)
+> Autonomous multi-agent pipelines are built assuming uninterrupted execution and have no circuit-breaker for external blocking events (usage limits, auth prompts, orchestrator death) — the failure mode is always silent stall rather than graceful degradation, regardless of whether the blocker is a credential, a quota, or a crashed parent.
+
+**Rule:** Always design autonomous pipelines with an explicit timeout and fallback for every external dependency (auth, quota, parent heartbeat) — silent stall on an external block must be architecturally impossible.
+
+**Evidence:**
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
+- _Sessions_ (105): f4686e13, efd2a3ab, e6c58221, +102 more
+
+---
+### Insight (conf=0.75)
+> Across UI components, data filters, and page patterns, the agent consistently handles N-1 of N items in a finite enumerable set and the user catches the missing one — the failure is not carelessness but a satisficing heuristic ('most is enough') applied to domains where exhaustive coverage over a small known set is the actual contract.
+
+**Rule:** When the task involves a finite, enumerable set (pages, sources, filter criteria, sibling patterns), always list the full set explicitly before implementing and check each member off — 'most' is never 'done' when the set is knowable.
+
+**Evidence:**
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp, versable-builder
+- _Sessions_ (193): ff8aef13, f95e5eb7, efd2a3ab, +190 more
+
+---
+### Insight (conf=0.73)
+> Verification consistently covers one axis of a multi-axis state space (one visual mode, one filter criterion, one environment) and generalizes the result across all axes — the agent treats a single-point sample as proof across the full domain, which is structurally identical whether the axes are light/dark mode, filter conjuncts, or dev-server-vs-static-check.
+
+**Rule:** Before reporting verification complete, always enumerate the axes that vary (visual modes, filter dimensions, environments, input distributions) and either exercise each or scope the claim to what was actually observed.
+
+**Evidence:**
+- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp, versable-builder
+- _Sessions_ (73): faeb2f37, efd2a3ab, ed1b2d1b, +70 more
+
+---
+### Insight (conf=0.72)
+> The agent performs symbolic compliance — generating output that looks corrected/verified without the underlying behavior actually changing — and this 'performative fix' pattern is structurally identical whether the surface is prose style, data review, or bug verification.
+
+**Rule:** Always require a mechanically distinct second action (a re-run, a diff, a re-read) after any self-correction claim before marking it resolved — a rewritten reply is not evidence of behavioral change.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
+- _Sessions_ (105): 0c39a659, fb13ca88, f9f4c3b2, +102 more
+
+---
+### Insight (conf=0.70)
+> The agent builds a self-referential trust loop: it generates a derivative artifact (a schema doc, a gap table, a 'I reviewed this' claim), then treats that artifact as authoritative evidence — trusting its own outputs over primary sources (user spec, actual code, actual rows) and closing the loop without external grounding.
+
+**Rule:** Never cite an agent-generated artifact as evidence for a claim about the system it describes — always trace back to the primary source (user spec, source code, real output) before any assertion that depends on the derivative.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (94): eb07961e, e3bde638, e01b73ba, +91 more
+
+---
+### Insight (conf=0.68)
+> The user explicitly wants deferral (queued review, not immediate), but the agent's deferral implementation loses both the decision context and the status tracking — so 'defer' degrades into 'abandon' because the state needed to resume is never preserved at the point of deferral.
+
+**Rule:** Always attach the prior decision context (options considered, current leaning, blocking question) and a task-tool entry at the moment of deferral — a deferred item without its resumption state is a dropped item.
+
+**Evidence:**
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config
+- _Sessions_ (128): f4686e13, efd2a3ab, e6c58221, +125 more
+
+---
+### Insight (conf=0.67)
+> The agent treats each code site as a blank canvas even when neighboring code within 10-20 lines demonstrates the established pattern (JSX style, pagination, UI labels from mocks) — this is not ignorance of conventions but failure to read the local neighborhood before writing, a form of tunnel vision on the insertion point.
+
+**Rule:** Always read 20 lines of surrounding context and scan sibling files in the same directory before writing new code at any insertion point — conform to the local pattern unless explicitly asked to deviate.
+
+**Evidence:**
+- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc, versable-builder
+- _Sessions_ (148): be09b94d, bb714e4b, baa1f8e5, +145 more
+
+---
+### Insight (conf=0.65)
+> The agent's pause/continue calibration is inverted: it pauses for permission on low-stakes sequential progress (where the user wants autonomy) while silently resolving high-stakes product-level decisions (where the user wants to be consulted) — the autonomy budget is spent on the wrong axis.
+
+**Rule:** Always classify a decision as 'execution' (how to do what was asked — proceed autonomously) or 'product' (what to build or what behavior to exhibit — surface to user) before acting; never pause on execution decisions or silently resolve product decisions.
+
+**Evidence:**
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
+- _Sessions_ (126): dfd19dc0, 96490d11, 895cfd88, +123 more
+
+---
+### Insight (conf=0.62)
+> The user has a strong 'preserve information provenance' principle: independent outputs must stay independent until explicitly merged, comparisons must contrast rather than synthesize, and derivative documents must not be elevated to authoritative — the common thread is that collapsing distinct sources destroys the user's ability to judge each on its own terms.
+
+**Rule:** Avoid collapsing independently-produced artifacts (plans, reviews, data sources) into a single output unless the user explicitly requests synthesis — preserve provenance and independence as the default.
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Projects_ (9): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder
+- _Sessions_ (32): dac333f4, 0c64e0da, 1a66d7a8, +29 more
+
+---
+### Insight (conf=0.60)
+> When blocked or producing a null/empty result, the agent's instinct is to either power through silently or report tersely — but the correct pattern is always to surface the maximum useful context (exact command needed, what was checked, what was found) at the point of handoff, because the user's next action depends on details the agent already holds.
+
+**Rule:** When reporting a block, an empty result, or handing off to the user, always include the specific details already known (commands tried, endpoints checked, partial findings) — a terse handoff forces a follow-up that wastes the user's time.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, versable-builder, studio_search_jul_26-fable, staging-enhancement-product
+- _Sessions_ (113): faeb2f37, efd2a3ab, ed1b2d1b, +110 more
+
+---
+
+
+## Wake Cycle — 2026-08-18 06:07 UTC
+
+### Insight (conf=0.82)
+> The agent treats each surface (page, list view, filter panel) as an isolated unit even when the codebase already contains a proven pattern on sibling surfaces — a 'local-fix-on-a-global-pattern' failure that recurs identically across drawer components, pagination, data source filters, and shared UI components.
+
+**Rule:** When implementing or fixing a UI pattern on one page, always grep for the same component/pattern across all sibling pages first — if the pattern exists elsewhere, apply it uniformly in the same change or explicitly scope the partial fix.
+
+**Evidence:**
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
+- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
+- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Documents-studio-search-jul-26-fable, versable-builder, walmart-mvp
+- _Sessions_ (154): ff8aef13, f95e5eb7, efd2a3ab, +151 more
+
+---
+### Insight (conf=0.75)
+> Token limits, subscription caps, and interactive auth prompts are three faces of the same architectural gap: resource exhaustion during autonomous execution causes silent stalls with no graceful degradation path, leaving dependent work in an indeterminate state that only the user can unblock.
+
+**Rule:** Always register a timeout or health-check for any autonomous session that depends on an exhaustible resource (tokens, auth, subscriptions) — when the resource is consumed, surface state + remaining work explicitly rather than stalling.
+
+**Evidence:**
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
+- _Sessions_ (105): f4686e13, efd2a3ab, e6c58221, +102 more
+
+---
+### Insight (conf=0.73)
+> Noticing a data anomaly and dismissing it is functionally identical to not noticing it — all three patterns show the agent detecting a suspicious value (an out-of-scope item passing a filter, a null coercing to a default, a finding in reviewed output) and then rationalizing past it rather than treating it as a blocker, especially after it was already corrected once.
+
+**Rule:** When you notice a suspicious value during review that matches a previously-corrected pattern, treat it as a confirmed blocker — never rationalize a noticed anomaly as acceptable when the same class of anomaly was already flagged.
+
+**Evidence:**
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (5): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, -Users-alcatraz627-Code-Versable-versable-builder, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (53): eb618fff, c71644cf, b449e2ee, +50 more
+
+---
+### Insight (conf=0.72)
+> The agent systematically verifies at the producer boundary (send log, build output, notification, self-report) instead of the consumer boundary (round-trip receipt, running app, file on disk, acted-on finding), a single 'wrong-side verification' bias that manifests identically across IPC, UI, sub-agent orchestration, and data review domains.
+
+**Rule:** Always verify at the consumer boundary — delivery not send, runtime not build, file-exists not notification, acted-on not read — before reporting a result as confirmed.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (114): dfd19dc0, 96490d11, 895cfd88, +111 more
+
+---
+### Insight (conf=0.70)
+> The agent prefers its own synthesis (a formalized doc, an inferred naming convention, a mental model of completion) over the ground-truth primary source (user spec, design mocks, actual source code), and this preference strengthens under time pressure — a systematic 'derivative-over-primary' bias.
+
+**Rule:** Before using any agent-generated summary, formalization, or gap assessment as input to a decision, name the primary source it derives from and verify against that source — never treat a derivative as upstream of its own origin.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc
+- _Sessions_ (84): eb07961e, e3bde638, e01b73ba, +81 more
+
+---
+### Insight (conf=0.70)
+> When blocked or producing null results, the correct pattern is always 'surface what you have with full diagnostic context and hand off cleanly' — the agent's instinct to either stall silently or report a bare count without detail is the same failure whether the block is an auth wall, a harness guard, or a zero-result scrape.
+
+**Rule:** When any operation produces a null result or hits an external block, always surface the diagnostic detail (which endpoints were tried, what the block was, what partial state exists) in the same response — a bare failure report with no detail is never acceptable.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, ig-download, .claude
+- _Sessions_ (62): faeb2f37, efd2a3ab, ed1b2d1b, +59 more
+
+---
+### Insight (conf=0.68)
+> All three are the same defect — providing structure (a briefing skeleton, a deferred-item label, an indirect phrasing) as a substitute for content (the decision context, the direct answer, the plain point) — revealing an agent tendency to confuse 'information was presented' with 'meaning was communicated.'
+
+**Rule:** Always lead with the actionable content (the answer, the decision options with context, the plain status) before any structural framing — if the structure can be removed and the message still works, the structure was the message.
+
+**Evidence:**
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Projects_ (22): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable, staging-enhancement-product, .claude
+- _Sessions_ (148): f4686e13, efd2a3ab, e6c58221, +145 more
+
+---
+### Insight (conf=0.65)
+> The user has a deliberate multi-agent epistemology: independent production, side-by-side comparison, and cross-validation against constraints are three distinct operations that must never be collapsed — merging independent outputs destroys the independence that makes the workflow valuable.
+
+**Rule:** When the user sets up independent agent outputs for comparison, never merge or synthesize them unless explicitly asked — present them side-by-side and validate each against project constraints independently.
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "Validating another agent's output against standing project constraints (e.g. style rules, UI invariants) before merging or shipping catches …"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, claude-instances
+- _Sessions_ (33): dac333f4, 0c64e0da, 1a66d7a8, +30 more
+
+---
+### Insight (conf=0.62)
+> The user's preferred deferred-review workflow degrades over time because the same agent that defers work also loses the context needed to present it actionably later — deferral without context-capture creates items that are expensive to re-enter, and task-list drift compounds this by making the backlog itself unreliable.
+
+**Rule:** When deferring an item to a review backlog, capture the decision context and concrete options at deferral time — not at presentation time — so the deferred item is self-contained and actionable without re-investigation.
+
+**Evidence:**
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config
+- _Sessions_ (128): 9ed3de6d, 849b6ec8, 302d5d15, +125 more
+
+---
+
+
+## Wake Cycle — 2026-08-18 08:18 UTC
+
+### Insight (conf=0.78)
+> Every IPC/multi-agent coordination failure shares a single root: treating send-side success as delivery confirmation — whether it's a message (send ≠ received), a shell-quoted body (sent ≠ intact), an orchestrator shutdown (stopped ≠ sub-agents notified), or an obligation (dispatched ≠ fulfilled); the system lacks end-to-end acknowledgment at every layer.
+
+**Rule:** Always verify IPC and multi-agent operations from the receiver's side — a send confirmation, exit code, or dispatch log is never proof of delivery; read the recipient's state or wait for an explicit ack.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "In multi-agent IPC sessions, unanswered peer queries must be replied to before the session ends; stop hooks will fire repeatedly for each un…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, better-file-browser, sys-monitor, its-my-config
+- _Sessions_ (102): dfd19dc0, 96490d11, 895cfd88, +99 more
+
+---
+### Insight (conf=0.75)
+> Every 'blocked by external resource' failure has the same correct response — preserve the work product and hand off explicitly — but the agent treats blocks as problems to solve autonomously (retrying, stalling, working around), which converts a recoverable handoff into a silent data loss; the pattern is 'a block is a handoff point, not a problem to solve'.
+
+**Rule:** When blocked by any external resource (auth, quota, exclusive lock, credential), always immediately surface the block with the exact recovery command for the user and persist all completed work — never stall, retry silently, or attempt workarounds.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
+- _Sessions_ (77): faeb2f37, efd2a3ab, ed1b2d1b, +74 more
+
+---
+### Insight (conf=0.72)
+> The agent's attention narrows to the proximate trigger in both code (fixing only the page it's looking at) and communication (answering only the surface of the question, omitting context/paths), suggesting a single underlying 'scope narrowing under task pressure' failure that manifests identically across domains.
+
+**Rule:** Always ask 'what is the complete scope this trigger belongs to?' before acting — in code, enumerate sibling pages/instances; in communication, enumerate what the user needs to act without a follow-up.
+
+**Evidence:**
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
+- _Sessions_ (139): ff8aef13, f95e5eb7, efd2a3ab, +136 more
+
+---
+### Insight (conf=0.70)
+> The user holds a 'complete enumeration' mental model: any system presented as covering a domain (filters, pagination, data sources) must cover it exhaustively — partial coverage that looks complete is judged more harshly than an honestly incomplete system, because it creates false confidence in the user's downstream decisions.
+
+**Rule:** When building any filter, category system, or pattern application, always enumerate the full domain first and explicitly annotate any gaps — never ship partial coverage without naming what is missing.
+
+**Evidence:**
+- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Projects_ (9): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc
+- _Sessions_ (153): df9392bb, 0c39a659, fdeb9ed4, +150 more
+
+---
+### Insight (conf=0.68)
+> The user treats independent perspectives as irreversibly valuable — merging two plans, collapsing two agents' outputs, or wholesale-adopting a dead peer's work all destroy the information that comes from seeing things separately; this is an epistemological preference where comparison always precedes synthesis.
+
+**Rule:** Always present independent outputs side-by-side with their differences highlighted before any merge or synthesis operation — never collapse multiple perspectives into one unless the user explicitly requests a merge as a separate step.
+
+**Evidence:**
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
+- _Projects_ (7): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
+- _Sessions_ (7): dac333f4, c71644cf, b6809eaf, +4 more
+
+---
+### Insight (conf=0.65)
+> These form a 'confidence laundering' chain: the agent generates a derivative artifact, later treats its own output as authoritative evidence, then uses that self-referential confidence to dismiss contradicting signals from the actual source — a temporal degradation where the agent's trust in its own prior output compounds across turns.
+
+**Rule:** Always trace any cited 'source' back to its origin author before using it as evidence — if you wrote it, it is a claim, not a source, and the upstream human-authored artifact must be re-read.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude
+- _Sessions_ (94): eb07961e, e3bde638, e01b73ba, +91 more
+
+---
+### Insight (conf=0.62)
+> Four patterns that look like separate communication failures are actually one autonomy-calibration rule: the user's communication register IS the instruction — terse input means 'execute now, don't discuss', a direct question means 'answer the question, nothing else', and pausing for clarification on either is experienced as the agent overriding the user's chosen interaction mode.
+
+**Rule:** Always match your response mode to the user's input register — terse continuation means execute silently, a direct question means a direct answer first, and structured briefings are warranted only when the user's input signals they want analysis.
+
+**Evidence:**
+- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Projects_ (28): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable
+- _Sessions_ (174): 5d07ffa1, 5b904ac8, 5774c57d, +171 more
+
+---
+### Insight (conf=0.58)
+> The user draws a sharp line between STATUS (must be live, incremental, never batched) and JUDGMENT (must be deferred, queued, never autonomous) — what looks like contradictory preferences about update frequency is actually a principal-agent trust boundary: the agent owns mechanical tracking, the principal owns quality calls.
+
+**Rule:** Always update status surfaces (task list, progress) immediately after each unit of work, but always queue quality/review judgments to a backlog unless the user explicitly asks for an immediate review.
+
+**Evidence:**
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Projects_ (21): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product-frontend
+- _Sessions_ (151): 9ed3de6d, 849b6ec8, 302d5d15, +148 more
+
+---
+### Insight (conf=0.52)
+> The user's 'breadth-first v1' preference and the 'consult mocks before building' mandate are the same principle viewed from opposite ends: both prevent the agent from shipping a locally-polished surface that is globally wrong — breadth catches structural misalignment early (before deep investment), and mocks catch label/flow misalignment early (before implementation investment).
+
+**Rule:** Before deep-investing in any single surface, always verify alignment with the global plan (breadth-first sweep) and with upstream design artifacts (mocks/specs) — local polish on a misaligned surface is negative value.
+
+**Evidence:**
+- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, i-dream, claude-ipc, versable-builder, -Users-alcatraz627--claude-widgets-claude-instances
+- _Sessions_ (84): d8f1948c, a0f35401, 8c7e6f5c, +81 more
+
+---
+
+
+## Wake Cycle — 2026-08-18 17:38 UTC
+
+### Insight (conf=0.88)
+> The agent systematically trusts proxy signals (send-side logs, notifications, mental models, compile passes) as proof of state at the destination, across four unrelated domains (IPC, sub-agent I/O, UI verification, architecture assessment) — the common root is substituting 'I initiated the check' for 'I observed the result'.
+
+**Rule:** Always distinguish between 'I triggered X' and 'I observed X completed at the destination' — when claiming a state (delivered, fixed, built, assessed), name the destination-side artifact you read, not the action you took.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "When a sub-agent signals completion via notification, verify the output artifact exists on disk before using its findings — the notification…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
+- _Sessions_ (75): dfd19dc0, 96490d11, 895cfd88, +72 more
+
+---
+### Insight (conf=0.85)
+> Pipelines labeled 'autonomous' degrade to silent stalls rather than graceful handoffs whenever they encounter a synchronous human dependency (credential prompt, usage limit, orchestrator death) — the 'autonomous' label masks undeclared blocking dependencies that have no timeout or fallback path.
+
+**Rule:** When designing any autonomous pipeline, enumerate every point where it could block on a human or external resource, and wire each one with a timeout, a fallback, and an explicit notification — an 'autonomous' pipeline without declared blocking points is a silent-stall pipeline.
+
+**Evidence:**
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
+- _Sessions_ (105): 0c39a659, ec7e7f48, d3e36a3a, +102 more
+
+---
+### Insight (conf=0.82)
+> The agent treats co-occurring instances of the same pattern as independent problems — whether in its own prose generation (AI-smell resurfaces after correction), UI components (drawer on one page, not all), or feature coverage (pagination on one list, not siblings) — revealing a systematic failure to propagate a correction to its full class.
+
+**Rule:** When correcting any instance of a pattern (code, prose, or UI), always grep for sibling instances of the same class before declaring the correction complete — a fix applied to one occurrence with known siblings is not a fix.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When a user reports that a UI component must be globally shared, the agent must search and fix ALL instances across the entire codebase in t…"
+- _Projects_ (18): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
+- _Sessions_ (153): 0c39a659, fb13ca88, f9f4c3b2, +150 more
+
+---
+### Insight (conf=0.80)
+> The agent systematically produces outputs that are not self-contained — deferred decisions without prior context, zero-result reports without what was checked, status updates without the point, paths without the directory — forcing a follow-up round-trip that the user experiences as wasted attention; the common shape is an output that answers a different question than the one the user will ask next.
+
+**Rule:** Before sending any status, result, or deferred item, ask: 'can the user act on this without asking a follow-up?' — if not, include the missing context (what was checked, prior decision state, full path, plain conclusion) in the same message.
+
+**Evidence:**
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Pattern_: "When citing a document or file in any response, always include the full path — a basename alone forces the user to hunt for the file and is …"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, ig-download, .claude, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, versable-builder, studio_search_jul_26-fable, staging-enhancement-product
+- _Sessions_ (145): f4686e13, efd2a3ab, e6c58221, +142 more
+
+---
+### Insight (conf=0.75)
+> The agent fails to treat established sibling patterns (JSX idioms, pagination, naming conventions) as implicit constraints — it evaluates each new instance against general best practices rather than against the nearest sibling in the same namespace, producing divergence in contexts where conformity is the correct default.
+
+**Rule:** Before writing any code, name, or pattern that has siblings in the same namespace (same page directory, same component library, same org), read the nearest sibling first and conform to its pattern unless you can name a specific reason to diverge.
+
+**Evidence:**
+- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When proposing names for packages, repos, or identifiers within the same organization, always default to a consistent naming scheme across s…"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, local-models, data-forge, versable-builder, staging-enhancement-product, backend, Pictures
+- _Sessions_ (158): be09b94d, bb714e4b, baa1f8e5, +155 more
+
+---
+### Insight (conf=0.72)
+> Multi-agent outputs require three distinct handling modes — keep-separate (peer review, comparison), validate-against-constraints (cross-check), and selective-triage (dead agent recovery) — but the agent defaults to a single mode (merge-and-use), collapsing distinctions the user explicitly wants preserved; the underlying failure is treating agent output as a final answer rather than a draft with provenance.
+
+**Rule:** When receiving output from another agent, explicitly classify the handling mode before acting: keep-separate (for comparison/peer-review), validate (for integration), or triage (for partial recovery) — never merge by default.
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "Validating another agent's output against standing project constraints (e.g. style rules, UI invariants) before merging or shipping catches …"
+- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, claude-instances
+- _Sessions_ (33): dac333f4, 0c64e0da, 1a66d7a8, +30 more
+
+---
+### Insight (conf=0.70)
+> The user's breadth-first preference and the task-list-drift failure are the same concern at two altitudes: the user wants global progress visibility (breadth-first v1 across all surfaces), and the Task tool is the mechanism that provides it — so task-list drift doesn't just lose tracking, it actively violates the user's preferred work style by making it impossible to see where the whole project stands.
+
+**Rule:** When doing breadth-first work across multiple surfaces, update the Task tool after completing each surface — not after each edit, but at each surface boundary — so the live status view mirrors the breadth-first sweep the user is tracking.
+
+**Evidence:**
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, enhancement-product
+- _Sessions_ (103): c250f2e7, c1ff831f, bf8b308d, +100 more
+
+---
+### Insight (conf=0.62)
+> Capability boundaries (auth blocks, harness guards, usage limits) are architecturally identical — all are points where the agent's autonomy ends and a handoff must occur — but the agent handles them inconsistently: auth blocks and harness guards have evolved clean handoff protocols (surface the command, return text to parent), while usage limits still produce silent stalls, suggesting the handoff pattern is learned per-surface rather than generalized.
+
+**Rule:** When hitting any capability boundary (auth, permission, quota, harness guard), apply the same handoff protocol: surface what blocked, what the user or parent needs to do, and what state the pending work is in — never stall silently regardless of the boundary type.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude
+- _Sessions_ (61): faeb2f37, efd2a3ab, ed1b2d1b, +58 more
+
+---
+### Insight (conf=0.58)
+> Two valid rules — 'proceed on terse continuation without pausing' and 'surface product-level decisions explicitly' — are in tension because the boundary between an execution decision (proceed) and a product decision (halt and ask) is ambiguous at the point of action; the agent resolves the ambiguity by defaulting to whichever rule it encountered most recently rather than classifying the decision type.
+
+**Rule:** When a terse continuation arrives and the next action involves a product-level behavioral choice (user-facing label, feature scope, data model semantics), pause once to name the product decision in one sentence — then proceed on the user's next terse signal; the first pause classifies the decision, the second signal authorizes it.
+
+**Evidence:**
+- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
+- _Sessions_ (126): 5d07ffa1, 5b904ac8, 5774c57d, +123 more
+
+---
+### Insight (conf=0.55)
+> A meta-artifact (a systematization doc, a claim of having reviewed) substitutes for engagement with the primary source in structurally the same way — both create a summary-layer that is then treated as equivalent to the thing it summarizes, allowing errors in the original to propagate unchallenged because 'the summary was consulted'.
+
+**Rule:** Avoid citing your own derived artifacts (summaries, systematizations, review claims) as evidence of source-level truth — when a decision depends on the primary source, read the primary source, even if a derivative exists.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (78): eb07961e, e3bde638, e01b73ba, +75 more
+
+---
+
+
+## Wake Cycle — 2026-08-19 01:03 UTC
+
+### Insight (conf=0.75)
+> The agent treats each surface as scoped-to-the-request rather than part of a system — a drawer on one page ignores sibling pages, a list page ignores sibling pagination, a filter set omits one source, and a multi-criteria filter skips criteria; the structural error is identical across UI components, data pipelines, and filtering logic: audit scope defaults to 'what was named' rather than 'what is structurally similar'.
+
+**Rule:** When implementing or modifying any instance of a repeated pattern (UI component, filter criterion, list page, data source), always enumerate ALL siblings of the same class in the codebase and verify consistency across the full set before delivering — the request names one instance, but the obligation covers the class.
+
+**Evidence:**
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Pattern_: "When a filtering UI is built over data aggregated from multiple heterogeneous sources, omitting a per-source filter for any actively-scraped…"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Documents-studio-search-jul-26-fable, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
+- _Sessions_ (193): ff8aef13, f95e5eb7, efd2a3ab, +190 more
+
+---
+### Insight (conf=0.72)
+> Communication failures and verification failures share the same mechanism: providing the FORM of completeness (a deferred-decision list, a zero-result count, a gap table, a 'reviewed' claim) while omitting the SUBSTANCE that makes the output actionable — the context, the checked endpoints, the source code, the acted-on findings.
+
+**Rule:** Always attach the evidence chain (what was checked, what was found, what was acted on) to any deliverable that claims completeness — whether it's a status update, a review, a gap assessment, or a data pipeline result.
+
+**Evidence:**
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, ig-download, .claude, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable, walmart-mvp
+- _Sessions_ (159): f4686e13, efd2a3ab, e6c58221, +156 more
+
+---
+### Insight (conf=0.68)
+> Collapsing two independent artifacts into one destroys the information their independence carried — it inverts authority chains (derivative-as-spec), eliminates adversarial value (merged peer reviews), prevents informed choice (merged plans), or imports unvetted work (wholesale adoption); the agent's instinct to 'synthesize' is often a lossy compression the user didn't authorize.
+
+**Rule:** Always preserve the independence of separately-produced artifacts unless the user explicitly requests a merge — side-by-side comparison is the default; synthesis is a distinct, authorized operation.
+
+**Evidence:**
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
+- _Projects_ (9): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
+- _Sessions_ (32): dac333f4, c71644cf, b6809eaf, +29 more
+
+---
+### Insight (conf=0.65)
+> The 'proceed autonomously on terse signals' patterns directly contradict the 'surface blocks and hold' patterns, but the reconciling variable is whether the agent CAN resolve the issue autonomously — misclassifying a resolvable situation as a block (pausing on terse continuation) wastes the user's attention, while misclassifying an unresolvable block as routine (silent model-limit stall) wastes their time; both directions fail identically by misjudging agent autonomy scope.
+
+**Rule:** Before pausing or proceeding, ask 'can I resolve this without the user?' — if yes, proceed silently; if no, surface the exact blocker and the exact command they need to run, then hold; never stall silently on an unresolvable block or pause for permission on resolvable progress.
+
+**Evidence:**
+- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban
+- _Sessions_ (132): 5d07ffa1, 5b904ac8, 5774c57d, +129 more
+
+---
+### Insight (conf=0.63)
+> The agent systematically under-surfaces decisions that cross the boundary between its own execution context and the user's social/professional context — posting as the user without attribution, creating a repo without confirming visibility, and silently resolving product-level behavioral questions are all cases where the agent treats a socially-visible or product-defining action as an implementation detail.
+
+**Rule:** When an action will be visible to people other than the user (teammates, customers, the public) or defines product behavior, always confirm the user's intent for THAT specific instance — even when a global default exists — because the social and product stakes are higher than the implementation stakes.
+
+**Evidence:**
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Pattern_: "Even when a global default (e.g. public repository visibility) is configured, the agent should ask about or confirm the preference when crea…"
+- _Pattern_: "Product-level behavioral decisions embedded in implementation (e.g., whether a user can add files to an existing job) must be surfaced as ex…"
+- _Projects_ (8): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers
+- _Sessions_ (108): a178d6c3, c8bc2450, baf2ac20, +105 more
+
+---
+### Insight (conf=0.62)
+> Across IPC, model limits, orchestration, and deferred decisions, state that was valid silently becomes invalid without any announcement — a stopped agent's ping, a dead orchestrator's promises, a hit usage limit, and a stripped decision context are all zombie state that the system continues to treat as live, and recovery requires detecting absence rather than presence.
+
+**Rule:** When depending on state from another agent, session, or prior turn, verify liveness before acting on it — a positive signal from the past (a sent message, an active orchestrator, a deferred item) is not evidence of current validity; absence of a freshness proof is itself the signal.
+
+**Evidence:**
+- _Pattern_: "Idle notifications arriving from sub-agents that have already been TaskStopped are stale and should be immediately dismissed without action …"
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Projects_ (14): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, .claude, versable-builder, studio_search_jul_26-fable, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban
+- _Sessions_ (111): b6cdefcf, 8db1413b, 857f9dd3, +108 more
+
+---
+### Insight (conf=0.60)
+> Multi-agent failures cluster at inter-agent boundaries where neither side owns the full picture — resource contention (browser MCP), task overlap (parallel edits), message corruption (shell quoting), and delivery verification (send ≠ receive) are all boundary failures that work perfectly in single-agent testing and fail only under real coordination, suggesting that multi-agent setups need boundary-specific integration tests, not just per-agent correctness.
+
+**Rule:** When designing a multi-agent workflow, explicitly test each inter-agent boundary (resource handoff, message delivery, task ownership) as a separate integration concern — never assume that individually-correct agents compose correctly.
+
+**Evidence:**
+- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
+- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
+- _Pattern_: "When sending IPC replies from a shell command, backticks and special characters in the message body get consumed by the shell and produce ze…"
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Projects_ (17): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, claude-instances, invasion-of-the-fiber-snatchers
+- _Sessions_ (94): df9392bb, 0c39a659, fdeb9ed4, +91 more
+
+---
+### Insight (conf=0.58)
+> These patterns resist single corrections because they are not knowledge gaps but default-mode behaviors that reassert themselves under cognitive load — AI-smell regenerates despite knowing the rule, task-list drift recurs during autonomous work, and IIFE insertion recurs despite the pattern being documented; one-time correction teaches the rule but does not override the default.
+
+**Rule:** When a pattern has been corrected once in a session and recurs, treat it as a default-mode reassertion rather than a knowledge gap — add a per-turn mechanical check (re-scan output for tells, diff task list against work done) rather than relying on the correction to persist.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "Using an IIFE or scope-wrapper in JSX is a recurring smell; before inserting one, scan the 10 lines around the insertion point and conform t…"
+- _Projects_ (18): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, claude-instances, its-my-config
+- _Sessions_ (161): 0c39a659, fb13ca88, f9f4c3b2, +158 more
+
+---
+### Insight (conf=0.55)
+> The user's preferred workflow (breadth-first sweep + deferred review) creates a tension with the requirement for live task-list accuracy — moving fast across many surfaces while deferring quality review means the task list must track 'touched but not reviewed' as a distinct state, not just 'done' or 'not started'; the task-list drift pattern recurs precisely because breadth-first work outpaces the status model's vocabulary.
+
+**Rule:** When executing a breadth-first sweep, update the task list after each surface with an explicit 'v1 complete, queued for review' status rather than marking done or leaving untouched — the deferred-review workflow needs a third state between 'in progress' and 'complete'.
+
+**Evidence:**
+- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Projects_ (22): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, i-dream, ghostty-themes, data-forge, alcatraz627, versable-builder, claude-instances, its-my-config, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers
+- _Sessions_ (120): d8f1948c, a0f35401, 8c7e6f5c, +117 more
+
+---
+
+
+## Wake Cycle — 2026-08-19 19:48 UTC
+
+### Insight (conf=0.75)
+> The agent repeatedly inverts authority chains by treating its own derivatives (formalizations, naming conventions, unsigned posts) as primary sources — the failure is not knowing the difference between 'I wrote this' and 'this is authoritative', which is the same confusion whether applied to documents, UI labels, or platform identity.
+
+**Rule:** Before treating any document or convention as authoritative, verify its provenance — if the agent created it (or it derives from agent output), it is downstream and cannot be cited as the spec; always trace authority to a human-authored upstream artifact.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, -Users-alcatraz627--claude, i-dream, .claude, claude-ipc, -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation
+- _Sessions_ (80): eb07961e, e3bde638, e01b73ba, +77 more
+
+---
+### Insight (conf=0.73)
+> The agent systematically confuses 'I initiated X' with 'X completed successfully' — whether sending an IPC message, applying a fix, or assessing completeness — because it verifies from the sender's perspective (send succeeded, code looks right, plan looks complete) rather than the receiver's (message arrived, fix works at runtime, code actually exists).
+
+**Rule:** Always verify from the consumer's perspective, not the producer's — a send is not a delivery, a code change is not a runtime fix, and a plan entry is not built code; the proof must come from the other end of the pipeline.
+
+**Evidence:**
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream
+- _Sessions_ (45): dfd19dc0, 96490d11, 895cfd88, +42 more
+
+---
+### Insight (conf=0.72)
+> Fixing one instance of a systemic behavior (whether prose style or UI architecture) never fixes the underlying generator — the agent treats corrections as local patches rather than signals about a class, so the same defect re-emerges in the next instance the correction didn't name.
+
+**Rule:** When corrected on any instance of a pattern (prose tell, UI component, code smell), always immediately grep for sibling instances of the same class before continuing — a correction names one example, not the boundary of the problem.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Projects_ (18): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
+- _Sessions_ (140): 0c39a659, fb13ca88, f9f4c3b2, +137 more
+
+---
+### Insight (conf=0.71)
+> Four apparently different communication failures (briefing before answering, cryptic status updates, hiding zero-result details, omitting decision context) are all the same underlying defect: the agent buries the actionable payload behind structure or omission, forcing the user to ask a follow-up for information that should have led the message.
+
+**Rule:** Always lead with the actionable payload (the answer, the zero-result detail, the decision options with their context) in the first sentence — structure, explanation, and framing follow the point, never precede it.
+
+**Evidence:**
+- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
+- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Projects_ (23): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable, staging-enhancement-product, .claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
+- _Sessions_ (183): 0c39a659, fb13ca88, f9f4c3b2, +180 more
+
+---
+### Insight (conf=0.70)
+> The agent has a strong implicit merge-bias: when presented with multiple independent outputs (plans, reviews, dead agent's work), it gravitates toward synthesis/integration rather than maintaining separation — this destroys the informational value of independence, which is the entire point of having multiple sources.
+
+**Rule:** When handling multiple independently-produced outputs, always default to preserving their separation (side-by-side, selective triage, independent grading) — merge only on explicit user instruction, because premature synthesis destroys the independence that makes the outputs valuable.
+
+**Evidence:**
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When incorporating a dead or unavailable peer agent's work, selectively triage it for only the parts worth integrating rather than wholesale…"
+- _Projects_ (7): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
+- _Sessions_ (7): dac333f4, c71644cf, b6809eaf, +4 more
+
+---
+### Insight (conf=0.68)
+> User demands for autonomous flow (no stopping for go-aheads) directly degrades task-tracking discipline because the feedback loop that enforces incremental updates (user attention each turn) is removed — autonomy and observability are in tension, and the agent sacrifices the latter when granted the former.
+
+**Rule:** When operating autonomously (terse continuation or explicit grant), treat task-list updates as a mechanical obligation tied to each file-write or logical unit — decouple tracking from user interaction so autonomy doesn't erode observability.
+
+**Evidence:**
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Pattern_: "In multi-agent sessions, the user should not have to repeatedly give plain go-aheads for short-distance progress; batch sequential work into…"
+- _Pattern_: "When the user types a terse continuation signal ('proceed', 'keep going') and context pressure is below 70%, the agent must continue work im…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Claude-i-dream
+- _Sessions_ (136): c250f2e7, c1ff831f, bf8b308d, +133 more
+
+---
+### Insight (conf=0.65)
+> Boundaries between systems (usage limits, resource locks, null fields) all fail in the same structural way: silently, producing either a stall or a plausible-but-wrong default — the agent lacks a general 'boundary reached' detection reflex and instead trusts that absence-of-error means success.
+
+**Rule:** When any operation returns zero results, hangs longer than expected, or produces a suspiciously round/default value, treat it as a boundary signal requiring explicit surfacing — never interpret silence at a system boundary as success.
+
+**Evidence:**
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
+- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
+- _Projects_ (14): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
+- _Sessions_ (190): 0c39a659, ec7e7f48, d3e36a3a, +187 more
+
+---
+### Insight (conf=0.62)
+> The agent's correct behavior at uncrossable boundaries (auth blocks, harness guards) follows the same structural pattern regardless of domain: stop, surface the exact handoff to whoever CAN cross it, and wait — but this pattern only activates reliably when the boundary is hard-enforced (a block); soft boundaries (interactive prompts, usage limits) produce stalls instead of handoffs.
+
+**Rule:** When any external dependency requires human action (auth, approval, credential, interactive prompt), treat it identically to a hard block: surface the exact command/action needed, state what is waiting on it, and hold — never attempt workarounds or wait silently for soft boundaries to resolve.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
+- _Sessions_ (41): faeb2f37, efd2a3ab, ed1b2d1b, +38 more
+
+---
+### Insight (conf=0.58)
+> The user's 'defer reviews to backlog' preference and their 'audit everything before acting' requirement appear contradictory but resolve at different abstraction levels: implementation must be complete across all instances (breadth), but judgment/review of non-critical completed work can be batched — the agent conflates 'defer review' with 'defer completeness' and uses the preference as license for partial implementation.
+
+**Rule:** When deferring work per the user's backlog preference, always distinguish implementation completeness (never deferred — all instances get the fix) from review/polish (safely deferred) — the deferral applies to the judgment pass, not the coverage pass.
+
+**Evidence:**
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, claude-ipc, i-dream, claude-instances, speedway
+- _Sessions_ (104): 9ed3de6d, 849b6ec8, 302d5d15, +101 more
+
+---
+
+
+## Wake Cycle — 2026-08-19 22:30 UTC
+
+### Insight (conf=0.75)
+> Any status or decision surface that is updated at coarser granularity than it is consumed becomes actively misleading rather than merely stale — task lists that batch-update, deferred decisions that lose context, and progress views that drift all share the property that a stale surface is read as current and acted on as truth.
+
+**Rule:** Always update a status surface at the same granularity it will be read — if a consumer checks it per-turn, update it per-turn; if a deferred item will be revisited cold, it must carry its full decision context at write time, not assume the reader remembers.
+
+**Evidence:**
+- _Pattern_: "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at se…"
+- _Pattern_: "When presenting deferred decision items to the user, the agent omits the prior decision context and concrete options, forcing the user to as…"
+- _Pattern_: "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without …"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-versable-builder, i-dream, ghostty-themes, data-forge, .claude, alcatraz627, local-models, versable-builder, claude-instances, its-my-config, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627--claude, -Users-alcatraz627, -Users-alcatraz627-Code-Claude-claude-ipc, staging-enhancement-product, two-enhancement-product, invasion-of-the-fiber-snatchers, frontend
+- _Sessions_ (133): c250f2e7, c1ff831f, bf8b308d, +130 more
+
+---
+### Insight (conf=0.73)
+> The agent produces confident assessments (gap tables, review reports, pipeline results) from incomplete observation and presents them without qualifying what was not observed — gap tables without reading code, reviews in one visual mode, zero-result pipelines without naming what was checked — and the user consistently demands the observation boundary be made explicit.
+
+**Rule:** Always annotate any assessment or report with the exact observation boundary — which files were read, which modes were tested, which endpoints were checked — so the consumer can distinguish 'verified absent' from 'not looked at'.
+
+**Evidence:**
+- _Pattern_: "Completion and gap assessments made without reading actual source files consistently overestimate how much is built; the agent should read c…"
+- _Pattern_: "UI review reports generated by testing in only one visual mode (e.g., dark mode only) produce findings the user considers not useful; review…"
+- _Pattern_: "When a scraping or data pipeline produces zero results for a specific source, the agent should proactively surface which pages or endpoints …"
+- _Projects_ (12): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-scripts-kanban, ig-download, .claude
+- _Sessions_ (74): 9ed3de6d, 849b6ec8, 302d5d15, +71 more
+
+---
+### Insight (conf=0.72)
+> The agent consistently verifies its own intention to comply rather than the actual output after it passes through the execution medium — prose generation re-inserts tells despite the correction being 'received', IPC checks the send log not the receiver, bug fixes verify the diff not the running app, and review claims verify the act of reading not what was found.
+
+**Rule:** Always verify at the receiver boundary (rendered output, peer acknowledgment, running app, downstream consumer) rather than the sender boundary (your edit, your send call, your intent to comply) — if the check doesn't cross the execution medium, it checked nothing.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "When verifying IPC message delivery, wait for an actual round-trip reply from the peer rather than inspecting the sending agent's own logs o…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "When the agent claims to have read through produced output before delivery, that claim must be backed by actually reading the rows and actin…"
+- _Projects_ (21): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627, staging-enhancement-product, .claude, two-enhancement-product, claude-instances, local-models, invasion-of-the-fiber-snatchers, frontend, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
+- _Sessions_ (131): 0c39a659, fb13ca88, f9f4c3b2, +128 more
+
+---
+### Insight (conf=0.70)
+> A single correction within a session does not durably override the agent's prior — the generation prior for prose style, the test-case selection prior for filters, and the dismissal prior for null values all reassert themselves within turns, producing the same failure the correction targeted, which means corrections need mechanical enforcement (hooks, assertions) not just acknowledged rules.
+
+**Rule:** When a correction is given for a pattern that has a generative prior (prose style, fixture selection, severity classification), always add a mechanical check (a grep, a hook, a post-generation scan) in the same turn rather than relying on the correction alone to hold — the prior is stronger than one correction.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "When implementing a multi-criteria filter (e.g. job type exclusions), the agent must verify that ALL stated criteria are enforced conjunctiv…"
+- _Pattern_: "Null or missing fields in a data pipeline must be explicitly handled before numeric operations or display logic — when the agent notices a n…"
+- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui, studio_search_jul_26-fable
+- _Sessions_ (102): 0c39a659, fb13ca88, f9f4c3b2, +99 more
+
+---
+### Insight (conf=0.68)
+> The agent's immediate working context silently promotes itself to 'source of truth', displacing the actual upstream authority — an agent-written formalization becomes the spec, the current page becomes the component scope, and internal naming becomes the label source, all because the local model is closer at hand than the real authority.
+
+**Rule:** Always name the upstream authority explicitly before acting on any synthesized or local model of the system — if the authority you are citing is something you wrote or the file you have open, you are probably looking at a derivative, not the source.
+
+**Evidence:**
+- _Pattern_: "When an agent creates a formal or technical document to capture and systematize an existing system (e.g., a concepts/schema doc derived from…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "Implementing UI module labels, page names, and creation flows without first consulting the design mocks causes explicit user frustration and…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627--claude-style-sweep-20260727-simple-lang, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-final, -Users-alcatraz627--claude-assets-decision-pages-lang-sweep-boundaries, .claude
+- _Sessions_ (114): eb07961e, e3bde638, e01b73ba, +111 more
+
+---
+### Insight (conf=0.65)
+> The user's decision-making model requires seeing all options at equal shallow depth before converging — the agent's default to synthesize, merge, or deep-dive one option destroys the option space the user needs to make a selection, which is why 'compare not merge', 'breadth-first v1', and 'independent peer review' are all the same demand stated on different surfaces.
+
+**Rule:** Always present parallel outputs, plans, or options at equal depth side-by-side before any convergence step — never merge, synthesize, or polish one option ahead of the others unless the user has explicitly selected a winner.
+
+**Evidence:**
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast — not a merged synthesis; merging…"
+- _Pattern_: "The user prefers a breadth-first v1 pass across all surfaces before deep-diving into polish, validation, or improvements on individual items…"
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Projects_ (14): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26
+- _Sessions_ (26): dac333f4, c71644cf, b6809eaf, +23 more
+
+---
+### Insight (conf=0.62)
+> The agent treats shared resources (browser sessions, codebase regions, UI components, established patterns) as if it has exclusive access, failing to enumerate other consumers before claiming or modifying them — the structural error is identical whether the shared resource is a browser MCP, a set of files, a UI drawer, or a pagination pattern.
+
+**Rule:** Before claiming, modifying, or scoping work on any resource, always enumerate its other consumers first — if you cannot list who else uses it (other agents, other pages, other callers), you do not know the blast radius of your change.
+
+**Evidence:**
+- _Pattern_: "Dispatching a sub-agent with 'exclusive use' of a browser MCP resource without first verifying no other session or agent currently holds it …"
+- _Pattern_: "When multiple agents work in parallel on the same codebase, they must pre-negotiate task ownership via IPC before starting work; overlapping…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Pattern_: "When a list page is missing pagination and sibling list pages in the same codebase already display the paginated pattern, the agent must app…"
+- _Projects_ (18): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, walmart-mvp, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway
+- _Sessions_ (160): df9392bb, 0c39a659, fdeb9ed4, +157 more
+
+---
+### Insight (conf=0.58)
+> When an external block is non-bypassable (auth wall, harness guard, credential scope), the only correct response is an explicit handoff to whoever can unblock — but the agent's default is to attempt workarounds or stall, and the positive pattern (surface the command and hold) is structurally identical to the harness-block recovery (return findings as text for parent to persist), suggesting both should be recognized as instances of a single 'graceful handoff' protocol.
+
+**Rule:** When blocked by an external constraint you cannot resolve (auth, permissions, harness guard, resource lock), always surface the exact unblocking action for the entity that can perform it and explicitly halt — never attempt workarounds, stall silently, or treat the block as a failure.
+
+**Evidence:**
+- _Pattern_: "When a sub-agent hits a credential or auth block that is outside its own scope to fix, the correct behavior is to surface the exact command …"
+- _Pattern_: "When a sub-agent's write is hard-blocked by a harness guard, the correct recovery is to return the full findings as text in the response so …"
+- _Pattern_: "Interactive authentication flows embedded in deployment scripts (browser-redirect OAuth, gcloud auth login) block autonomous agent sessions …"
+- _Projects_ (6): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, walmart-mvp
+- _Sessions_ (41): faeb2f37, efd2a3ab, ed1b2d1b, +38 more
+
+---
+### Insight (conf=0.52)
+> The user's preferred deferred-review workflow creates orphan-work risk when combined with the system's silent-stall failure mode — work queued for later review may never be reviewed if the session dies from a usage limit or orchestrator crash, because neither failure produces a durable 'unreviewed items' artifact.
+
+**Rule:** Always persist the deferred-review queue to a durable file (not just the task list) before any operation that could silently terminate the session, so the backlog survives a crash and is discoverable on resume.
+
+**Evidence:**
+- _Pattern_: "The user prefers a deferred review workflow: completed non-critical items should be queued to a 'to be reviewed' backlog rather than trigger…"
+- _Pattern_: "Hitting a model subscription or usage limit mid-autonomous-session causes the session to stall silently rather than producing a graceful not…"
+- _Pattern_: "When a main orchestrator session hits its usage limit while sub-agents are waiting on IPC responses, sub-agents are left blocked indefinitel…"
+- _Projects_ (13): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Claude-invasion-of-the-fiber-snatchers, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder--playwright-mcp, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627--claude-scripts-style, -Users-alcatraz627
+- _Sessions_ (106): 9ed3de6d, 849b6ec8, 302d5d15, +103 more
 
 ---

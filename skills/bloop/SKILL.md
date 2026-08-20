@@ -2,7 +2,7 @@
 name: bloop
 description: Drives a non-trivial build task through six stages — plan, build, review, validate, fix, docs — with an adversarial sub-agent validation gate that independently tries to break the work and grounds every finding in file:line. Produces the change itself plus a persisted validation report and updated docs. Use for multi-file or agentic work where a failed one-shot costs more than the structure; for a trivial one-off, just do it.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task
-user-invokable: true
+user-invocable: true
 argument-hint: "[task] [--from <stage>]"
 ---
 

@@ -26,25 +26,16 @@ set -euo pipefail
 PERSONA_DIR="${HOME}/.claude/personas"
 USAGE_DIR="${PERSONA_DIR}/usage"
 EVENTS="${USAGE_DIR}/events.jsonl"
-LOCK_DIR="${EVENTS}.lock"
 VALID_PERSONAS_GLOB="${PERSONA_DIR}/*.md"
 
 command -v jq >/dev/null 2>&1 || { echo "persona-log: jq required" >&2; exit 2; }
 mkdir -p "$USAGE_DIR"
 
-_now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
-
-_acquired=0
-_lock() {  # mkdir-based lock; ~2s budget, then proceed (a dropped log beats a hang)
-  local i=0
-  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
-    i=$((i+1)); [ "$i" -ge 20 ] && return 0   # gave up — do NOT mark acquired
-    sleep 0.1
-  done
-  _acquired=1
-}
-# Only release a lock we actually took — never rmdir a lock another live writer holds.
-_unlock() { [ "$_acquired" = 1 ] && rmdir "$LOCK_DIR" 2>/dev/null; _acquired=0; }
+# Append through the ledger family's sanctioned writer (ledger-common.sh), whose
+# mkdir lock is the one this script originally proved; id shape (puse-<stamp>-<rand>)
+# is unchanged so history stays citable.
+source "$(dirname "${BASH_SOURCE[0]}")/ledger/ledger-common.sh"
+_now() { ledger_ts; }
 
 # Emit a numeric value for jq --argjson, else `null`. A fat-fingered --corrections
 # must not crash the whole event under set -e (jq --argjson rejects non-JSON).
@@ -86,7 +77,7 @@ cmd_record() {
       task:$task, outcome:$outcome, loop:$loop, iterations:$iterations,
       corrections:$corrections, cost_tokens:$cost, note:$note}
      | with_entries(select(.value != "" and .value != null))')
-  _lock; printf '%s\n' "$line" >> "$EVENTS"; _unlock
+  ledger_append "$EVENTS" "${EVENTS}.lock" "$line"
   echo "$id"
 }
 

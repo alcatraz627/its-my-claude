@@ -2,7 +2,7 @@
 name: describe
 description: Analyzes a named Claude skill, MCP server, plugin, or custom feature in depth — reads its prompt, code, and runtime notes, then generates a terminal-style HTML report with architecture diagrams, workflow breakdowns, examples, and operational insights.
 allowed-tools: Read, Glob, Grep, Bash, Write, Agent
-user-invokable: true
+user-invocable: true
 argument-hint: "<name>"
 context: fork
 ---
@@ -32,12 +32,11 @@ and operational notes — with inline ASCII diagrams.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md` when one exists) before proceeding. Apply all rules — forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the **file lock
 protocol** — for the entire duration of this skill run.
 
-Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
-If it does not exist yet, continue without it.
+Also read the `## describe:` entries in `~/.claude/skills/runtime-notes*.md` for past run history.
 
 > Lock hygiene: run `bash ~/.claude/skills/shared/lock-file.sh cleanup` once at skill start
 > to clear any stale locks from crashed sessions. Then acquire a lock via `lock-file.sh
@@ -111,12 +110,12 @@ If found, this is a **custom feature**. Collect the relevant CLAUDE.md sections.
 If **no match** is found:
 
 - Print: `No skill, MCP server, plugin, or feature found matching "<name>".`
-- Use `AskUserQuestion` to ask the user to clarify or provide the correct name.
+- Ask in plain text for the correct name (a numbered list of the closest matches; no dialog tool, the owner's fullscreen TUI cannot show one).
 - Suggest close matches using fuzzy search across skill names and MCP server names.
 
 If **multiple categories** match (e.g., `chrome-devtools` matches both a plugin and a skill directory):
 
-- Use `AskUserQuestion` to let the user pick which one to analyze, or offer to analyze all.
+- Offer the matches as a numbered list in plain text: `1 the plugin · 2 the skill · 3 both`.
 
 ---
 
@@ -204,7 +203,7 @@ Compile from runtime-notes.md and any gotchas:
 ### 2.7 — Interactive Clarification
 
 At any point during analysis, if the agent determines that additional context from the user
-would significantly improve the report quality, use `AskUserQuestion` to ask. Examples:
+would significantly improve the report quality, ask in plain text with numbered options. Examples:
 
 - "This MCP server has 25+ tools. Want me to focus on a specific tool group, or cover all?"
 - "This skill chains with 3 other skills. Want me to include brief descriptions of those too?"
@@ -370,10 +369,23 @@ open .claude/output/*describe-<name>*/index.html
 - **Read-only analysis** — never modify the target skill/MCP/plugin files being analyzed
 - **Never execute** the target skill or its scripts — only read and document them
 - **Output only** to `.claude/output/` via `/create-report` — never write to the target's directory
-- **Interactive clarification** — use `AskUserQuestion` when the name is ambiguous (multiple
-  matches) or when additional context from the user could improve the analysis depth. Maximum
-  2 clarifying questions per run to avoid being chatty.
+- **Interactive clarification** — plain numbered questions in the conversation when the name is
+  ambiguous or more context would improve the depth; never a dialog tool. Maximum 2 per run.
 - **Chains with `/diagram`** — generates architecture and flow diagrams inline in the markdown
 - **Chains with `/create-report --style=terminal`** — final output is a terminal-themed HTML report
 - **Runtime notes** — always check for existing entries about the target to include operational
   history in the report
+
+## Validation
+
+Efficacy dimension: the report is right and gets read. Checks: (1) every claim about the
+target's workflow, tools, and configuration in the report cites the target file and line it
+came from (grep the report for bare claims); (2) the report's phase list matches the
+target's actual `##` headings, one to one; (3) the owner opened the report (skill-log
+`outcome: accepted`) more often than not over the last five runs.
+
+## Runtime notes and ledger
+
+Prepend a `## describe:` entry via `bash ~/.claude/skills/shared/prepend-runtime-note.sh describe <entry.md>`
+when a run taught something. Then
+`bash ~/.claude/scripts/skill-log.sh record describe --task "<target>" --outcome unknown --corrections 0 --note "kind=<skill|mcp|plugin|feature> report=<path>"`.

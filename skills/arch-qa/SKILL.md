@@ -2,7 +2,7 @@
 name: arch-qa
 description: Answers technical architecture questions by tracing code paths through the codebase — analyzing feature implementations, data flows, auth middleware, and service integrations — and outputting a structured architecture analysis.
 allowed-tools: Read, Glob, Grep, Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "<question>"
 context: fork
 ---

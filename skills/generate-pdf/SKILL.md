@@ -2,7 +2,7 @@
 name: generate-pdf
 description: Converts a markdown file to a styled PDF with 4 style variants (default, professional, academic, compact), optional cover page, TOC generation, and landscape mode. Output lands in the same directory as the input file.
 allowed-tools: Bash, Read
-user-invokable: true
+user-invocable: true
 argument-hint: "<file.md> [--style <name>] [--open] [--toc] [--cover] [--landscape]"
 ---
 

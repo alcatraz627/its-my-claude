@@ -1,0 +1,126 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17396,
+    "correction_density": 0.03125,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22487992791347017,
+    "unit_count": 32
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units 8dce41c2-0 and 57c50804-0 are the 39th+ consecutive zero-tool style-enforcement sessions with topic_keywords ['enforce','style','ledger','file','content']; two instances this cycle, within recent range (1-9); fully deprioritized per history guidance",
+      "optimism_bias_on_script_compatibility:RECURRING:IMPROVING_PARTIALLY — split signal this cycle: b4373e33-10 and -15 show probe-before-claim on contract verification (runner HTTP checks run before ruling; test suite re-run directly rather than trusting sub-agent report), which is the first sustained probe-first pattern in this context across recent cycles; BUT b4373e33-18 shows four consecutive Bash commands targeting /Users/alcatraz627/Code/Versable/app-forge-v6 failing (success:false) without probing path accessibility first, and 71f07d7d-30 shows two compound commit+push commands failing before the agent narrowed to commit-only — the improvement is context-bound (runner verification) and has not generalized to the access-barrier shape"
+    ],
+    "calibration_score": 0.65,
+    "cross_references": [
+      "b4373e33-10: CONFIRMS dream insight 2 (proxy verification fallacy) — agent reproduced all six vb-fable contract lapses over real HTTP before issuing rulings, then found a 7th lapse the peer could not reach; evidence-from-the-source rather than trusting the peer's report is exactly the correct behavior the insight prescribes",
+      "b4373e33-15: CONFIRMS dream insight 2 (proxy verification fallacy) — agent re-ran the test suite 'the way the repo actually runs it, not with pytest' before reporting results; also independently surfaced a write-ordering race condition not present in the sub-agent's fix report, demonstrating that direct exercise found what the report missed",
+      "b4373e33-9: CONFIRMS dream insight 3 (auth blocks and capability boundaries) — push authorization correctly identified as expired and held; CONFIRMS dream insight 1 (multi-agent single-points-of-failure) — Monitor tools used for IPC watching rather than sleep-based polling, eliminating the hang-on-no-listener risk",
+      "b4373e33-18: VIOLATES dream insight 2 (proxy verification fallacy) — four consecutive Bash commands to /Users/alcatraz627/Code/Versable/app-forge-v6 failed (success:false) without the agent probing whether the directory was accessible before retrying; the agent inferred path existence from prior session context rather than verifying directly"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "optimism_bias_on_script_compatibility improvement is REAL but NOT GENERALIZED: the runner-verification probe-first behavior in b4373e33-10 and -15 represents a genuine trajectory change from prior cycles, but the app-forge-v6 access failures in b4373e33-18 (four attempts, no pivot to probing the path) and the push-gate recoveries in 71f07d7d-30 confirm the bias still fires on inaccessible-path and permission-gate shapes; generalization to all access-barrier contexts is the remaining gap",
+      "71f07d7d-30 push gate pattern: the agent included push in a compound commit+push command and recovered on failure rather than probing authorization state before including push; the sentinel file (guard-git-push.sh flow) is checkable in advance with a single read; recommend probing authorization state before composing the command rather than recovering post-failure",
+      "sleep_polling_ipc_wait from 2026-08-18 is ABSENT this cycle: Monitor tools used correctly in b4373e33-9 for IPC state watching; improvement confirmed, do not re-flag unless sleep-based IPC polling reappears",
+      "b4373e33-16 atone-and-propose sequence for the HTML toggle and medium-mismatch mistakes is an affirm-worthy behavior: the agent filed both an atone event AND a propose.sh hook proposal in the same turn rather than relying on the atone correction alone, which directly satisfies the 'mechanical check in the same turn' rule in CLAUDE.md; flag as a pattern to reinforce"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1",
+      2201320
+    ],
+    [
+      "3addea32-cc20-4ae7-b401-a45c616e6ab1",
+      111807
+    ],
+    [
+      "44b45408-26f1-4d5f-af0d-66dfb8547993",
+      128361
+    ],
+    [
+      "18ab4df9-e7b1-4e0f-b916-bbf8ef26c13c",
+      135193
+    ],
+    [
+      "bf7b9f0e-c11d-4238-ba2d-96d1a55e3acd",
+      112881
+    ],
+    [
+      "8dce41c2-d0ec-4220-8281-63c949324fce",
+      135607
+    ],
+    [
+      "71f07d7d-95ec-4a2b-82a7-f6cec82775b5",
+      4395389
+    ],
+    [
+      "4c581ebe-8dd1-4e01-bf16-e8d8239a830a",
+      144045
+    ],
+    [
+      "7b0a2429-becc-4107-b711-c7084bb41697",
+      128204
+    ],
+    [
+      "57c50804-5df1-4803-bfbf-864370452a7a",
+      134554
+    ],
+    [
+      "2bd58c97-009a-4ff9-8c42-f8ec37d6ae96",
+      144850
+    ],
+    [
+      "b4373e33-d46a-4927-9a51-7ad99bfd89af",
+      5702315
+    ],
+    [
+      "7cb30aa4-99d4-4d96-8579-1833581cf7fe",
+      125061
+    ],
+    [
+      "6eeeb474-5cc9-489a-8a18-a51245c1dc6a",
+      147482
+    ],
+    [
+      "22bc9d2a-18f4-4cb0-835d-91a09e629d6b",
+      116285
+    ],
+    [
+      "6e425d98-bafd-4516-84ce-04a0dc7a5102",
+      853015
+    ],
+    [
+      "5960a4ac-3a77-43ba-97b8-3b81868bafb3",
+      115449
+    ],
+    [
+      "2f6be777-2ff3-47f1-bf5d-6683b00d157d",
+      1868359
+    ],
+    [
+      "f42421c9-9066-4d3a-8aaf-6efeafbcfffb",
+      3442969
+    ],
+    [
+      "b8008a10-bd3a-4f98-b53b-fb5b040f9133",
+      6475116
+    ],
+    [
+      "980f8941-9037-4b6e-ac2d-a01d013a45d0",
+      2753022
+    ],
+    [
+      "5105a318-4f9c-4ebb-aa3e-7c9c6c59bc57",
+      187294
+    ]
+  ],
+  "timestamp": "2026-08-19T22:32:12.043187Z",
+  "tokens_used": 23821,
+  "units_analyzed": 12,
+  "units_total": 32
+}

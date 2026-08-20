@@ -14,6 +14,11 @@
 # Run: bash ~/.claude/scripts/hooks/guard-rg-replace-bundle.test.sh  (exit 0 = pass)
 
 set -uo pipefail
+
+# Redirect the warn-log ledger so this suite never writes into the live audit
+# file. Without it, test fires are indistinguishable from live ones, which is
+# how 102 test events were read as live adherence data (audit 2026-08-18).
+export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/warnlog-test-XXXXXX")"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 HOOK="$HERE/guard-rg-replace-bundle.sh"
 

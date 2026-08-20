@@ -3,7 +3,7 @@ name: catchup
 description: Resumes a session from a /core-dump checkpoint. Reads ~/.claude/checkpoints/ index when CWD is ambiguous (presents a picker), or a specific _checkpoint.claude.md when one is given. Restores session context with minimum token usage by loading only targeted file sections relevant to pending tasks, and presents a compact briefing to immediately resume work. Companion skill to /core-dump.
 allowed-tools: Read, Glob, Grep, Bash
 argument-hint: "[filename | --session-id ID | --pick N]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief
@@ -26,6 +26,7 @@ what is still running.
 | **ipc identity + mail** | your alias, the dead predecessor's mail, peers owed a reply | 3.1b |
 | **Live subsystem state** | servers / watchers / jobs still running from before | 3.4 |
 | **Git reality** | what moved under you since the dump | 1.4 |
+| **Task table** | the store's own view, in the ratified shape, shown to the owner | 3.6 |
 
 Session-scoped counters (tool count, ctx %) need no action here — a `source==clear`
 SessionStart injector resets them on the first tool call (`scripts/session-mgmt/post-clear-counter-reset.sh`).
@@ -289,8 +290,9 @@ Read the checkpoint file. Extract the sections produced by `/core-dump`:
 
 1. **Resume Contract** — the act-on-this-first block: standing constraints,
    standing caveats, next action, blocked-on, expired authorizations, decaying
-   prerequisites, verification state, key anchor (the first two are absent on
-   pre-2026-07-16 checkpoints; their absence there is normal)
+   prerequisites, verification state, **live commitments**, **task store**, key
+   anchor (the first two are absent on pre-2026-07-16 checkpoints, and the two
+   bold ones on pre-2026-08-18 checkpoints; their absence there is normal)
 2. **Initial Goal** — what the session was originally trying to accomplish
 3. **Agent Actions** — sequential log of what was done (with file references)
 4. **Current Expectation** — what the user expected to happen next at dump time
@@ -315,6 +317,36 @@ Do not fail silently, and do not refuse the resume; partial context beats none.
 **Expired authorizations are binding:** anything the Resume Contract lists there
 needs fresh user confirmation before you act on it — a checkpoint is never a
 carrier of push/deploy/destructive-op approval across a clear or compact.
+
+**Live commitments are re-armed, never merely displayed.** The goal, an armed
+`/wake`, a live `/deadline`: these are what a `/clear` drops silently, and showing
+them as narrative is what made the owner re-set the goal on every resume. Owner
+ruling 2026-08-18: catchup "will either auto-re-arm it or ask the user to re-arm
+it". So for each entry, do one of exactly two things, and never a third:
+
+| entry | action |
+|---|---|
+| `goal: … · STILL VALID` | **Auto-re-arm, mechanically.** Run `bash ~/.claude/scripts/goal/goal.sh set "<text>" --by catchup` so the goal lives in the gcc store for THIS session id (the `37-goal-standing` hinter then re-injects it every 8 prompts while the harness `/goal` is not armed). State it back in one line and work under it. Then run `bash ~/.claude/scripts/goal/goal.sh box` and surface its output verbatim: one 🎯 structured box (heavy rail while the harness `/goal` is not armed, because only the owner can arm the Stop hook and it died with the old session), followed by the bare `/goal <text>` paste line between two double rules. That paste line is the owner-loved surface: keep it on ONE line with no rail character, so selecting it copies clean text. No question needed; the previous session already judged it. If the owner says not to, `goal.sh clear`. |
+| `goal: none` (nothing was ever set) | **Propose one.** Read the task list (`bash ~/.claude/scripts/task-table/task-table.sh --compact`) and the Next action, draft a one-line goal, and print it as a paste line `/goal <proposed>` under the briefing. **Every clause must be one YOU can finish alone**, because an armed goal is a Stop condition and a clause whose actor is the owner blocks every stop until they disarm it by hand (vb-fable, six stop rounds, 2026-08-19). Put the agent half in the goal and the owner half in the briefing blocked-on row: draft X and put it to the owner, never take the owner review of X. Do NOT write it to the gcc store unasked; a proposal is the owner's to accept. |
+| `goal: … · SUPERSEDED by …` | **Ask.** One line: the old goal, what superseded it, and whether the new one stands. |
+| `wake: … · ARMED` | **Ask before re-arming.** A wake fires an action on a clock. Re-arming one the owner has moved on from is a side effect they did not order. |
+| `deadline: … · LIVE` | **Ask.** Its burn projection and veto ledger belong to the run that set it; a resumed session inherits the commitment, not the accounting. |
+| any `FIRED` / `MET` / `MISSED` / `none` | Say nothing. Spent commitments are not news. |
+
+Never silently inherit, and never silently drop. Both failures look identical from
+the outside, which is why the two-outcome rule is written as a table rather than a
+preference.
+
+Re-arming is not re-authorizing. A revived wake or deadline carries no push,
+deploy, or destructive-op approval with it; those stay dead under Expired
+authorizations regardless of what got re-armed.
+
+**Task store:** when the contract names one, use it directly rather than
+re-deriving it. `/tasks` otherwise resolves the store by content-matching task
+subjects against the transcript, which is sound but is work the checkpoint already
+did. Carry the id into the briefing so `/tasks` and the Todos mirror agree on
+which store they mean. If the named store no longer exists on disk, say so and
+fall back to content-match rather than rendering an empty list as if it were true.
 
 **Standing constraints are binding scope fences:** surface them FIRST in the
 briefing, restate them verbatim (never paraphrased), and re-read the relevant
@@ -409,11 +441,21 @@ The JSON keys, every one optional and omitted when empty:
   // (needs the owner) | "parked" (filed, not scheduled). Notes stay short.
   "todos": [{"p": "now|ready|gate|parked", "text": "<the item>", "note": "<short>"}],
 
-  // FENCES: constraints + caveats. head = 2-3 word bold label the agent
-  // composes; body = the VERBATIM text (quotes carried as-is, never
+  // FENCES: constraints + caveats + LIVE COMMITMENTS. head = 2-3 word bold label
+  // the agent composes; body = the VERBATIM text (quotes carried as-is, never
   // paraphrased INSTEAD of; the head sits beside, not in place of).
   // Long caveat sets may roll into one fence whose body headlines each,
   // with the full text remaining in the checkpoint (owner ruling 2026-08-14).
+  //
+  // A live commitment rides here rather than in its own key, because a goal that
+  // still holds binds the next step exactly the way a constraint does, and the
+  // renderer's key list is fixed. Lead the fence list with them when present:
+  //   {"head": "Goal in force",  "body": "<the goal, verbatim> · gcc re-armed · harness not armed, paste: /goal <text>"}
+  //   {"head": "Wake armed",     "body": "<schedule> · re-arm? not yet asked"}
+  //   {"head": "Deadline live",  "body": "<commitment> due <when> · re-arm? not yet asked"}
+  // A goal marked STILL VALID is stated as in force, because it was auto-re-armed.
+  // A wake or deadline is stated as PENDING YOUR CALL, because those are asked
+  // rather than assumed. Spent commitments are omitted entirely.
   "fences": [{"head": "<2-3 words>", "body": "<verbatim>"}],
 
   // QUIET: merged to one line by the renderer
@@ -559,10 +601,73 @@ bash ~/.claude/scripts/propose.sh add \
 
 Set only the `link:*` tags you actually have. Do not set a value/priority (computed at triage from corroboration). This must not delay the hand-off — it is a quick reflective check, not a research task. Skip silently if nothing reusable surfaced.
 
+## Phase 3.6 — Render `/tasks`, below the briefing
+
+Run the task table and show it. Every resume, not only when something looks
+wrong.
+
+```bash
+bash ~/.claude/scripts/task-table/task-table.sh
+```
+
+Owner ask, 2026-08-18: *"Good to have: During core-dump or catchup (or after),
+have the agent run /tasks and also suggest a new / update existing goal"*, and
+again on 2026-08-19, *"Show me the /tasks"*. Before this phase existed the table
+was run as a private collector whose rows were folded into the briefing's TODO
+tier, which is not the same thing: the owner asked to see the store, and the
+briefing shows the agent's reading of it.
+
+**It goes BELOW the briefing, never inside it.** Both surfaces are capped at
+roughly 44 lines, so a table nested in a briefing has to lose most of itself to
+fit, and what it loses is the row detail that made the shape worth ratifying.
+Two surfaces, each whole, beats one surface with both halves crushed.
+
+Resolve the store from the Resume Contract's **Task store** field, not by
+content-match. A resumed session's own transcript matches nothing, so the
+resolver correctly refuses and lists candidates; the contract already holds the
+answer:
+
+```bash
+bash ~/.claude/scripts/task-table/task-table.sh --session <sid8-from-the-contract>
+```
+
+Use `--session`, not `--pin`. `--pin` writes the live-session mapping and exits
+without rendering anything, so an agent following this phase with `--pin` shows
+the owner no table at all. Pin separately if you want the bare command to work
+for the rest of the session.
+
+Render it as the tool prints it. Constraint, owner 2026-08-19 via gcp-fable:
+every `/tasks` run in every session renders the ratified batched-sequence shape
+(GOAL › BATCH bands, lane·tier, state glyphs, GATES first, legend of lanes).
+Do not hand-render, do not re-summarise, do not re-sort it into prose.
+
+Two cases where this phase says something short instead of a table:
+
+- **No store resolves and the contract named none.** One line saying so. Do not
+  guess a store; a confident wrong table is the defect the resolver's refusal
+  exists to prevent.
+- **The named store is gone from disk.** `--session` refuses: it exits 3, says
+  the sid names no store, and prints the candidates. Read the refusal and pick,
+  or say in one line that the contract's store is gone. Do not fall back to the
+  bare command hoping for the best, which renders the pin under a header naming
+  a store you did not ask for.
+
+Read the header back either way. The `session-<sid8>` it prints must be the sid
+the Resume Contract named, because a table that is right about itself and wrong
+about your question is the hardest kind to catch (`rules/testing.md`
+`[trust-the-tool-not-blind-to-it]`).
+
 ## Phase 4: hand off
 
 **The Phase 3.1 render is the hand-off.** Do not print a separate "context
-restored" box under it. The briefing's own seal already closes the document, and
+restored" box under it. Exactly two things follow it, in this order: the Phase
+3.6 `/tasks` table, then the re-arm surface. Nothing else. The re-arm surface
+earns its place because it is for the owner to paste, not to read: the
+`goal.sh box` output
+(🎯 box plus the bare `/goal <text>` line between double rules), and, only when the
+checkpoint's Re-arm block carried them, `/wake …` and `/deadline …` as bare lines.
+The same one-line paste surface is welcome, unprompted, at the end of a long planning
+session or a catchup onto a long-running plan (owner, 2026-08-18: "I LOVE it"). The briefing's own seal already closes the document, and
 a plain ASCII block underneath undoes the visual and is the last thing the user
 reads.
 

@@ -180,3 +180,14 @@ completion-block templates were rewritten to the 🏁 shape the same day. Remain
 (rg-replace guard, review-gate, declared-ready Stop feedback) adopts
 `hook_box_kind` opportunistically, when each file is next edited for cause;
 no sweep commit.
+
+## The paste line (owner-ratified 2026-08-18)
+
+Some callouts end in something the owner will paste back into the TUI: `/goal <text>`
+after a re-arm or a long planning session, a `/wake …`, a `/deadline …`. That line is
+NOT part of the box. It sits under the box, on one line, with no rail character, so a
+terminal selection of that single line copies clean text. Optional decoration is a
+double rule above and below (`═══`), never a `│` or `┃` prefix. The 🎯 `goal` kind
+(`scripts/goal/goal.sh box`) is the reference implementation: light rail when the
+harness `/goal` is armed, heavy rail as the warning when only the gcc goal holds.
+

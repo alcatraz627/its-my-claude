@@ -3,7 +3,7 @@ name: plugs
 description: Show what context-injecting and learning-capturing "plugs" are wired into the session (start / per-turn / compact / end) — what's registered, what's muted, and the current live state each plug acts on. Use when the user asks "what's plugged in", "what context is being injected", "what's muted", or wants to understand/audit the session lifecycle hooks. Renders live status; the full catalog is features/session-plugs.md.
 allowed-tools: Bash, Read
 argument-hint: "[--mutes]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

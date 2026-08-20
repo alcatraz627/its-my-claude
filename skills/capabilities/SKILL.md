@@ -2,7 +2,7 @@
 name: capabilities
 description: Generates a report of everything this Claude instance can do — skills, hooks, MCP servers, memory, runtime architecture, widgets, and all std::claude infrastructure.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch
-user-invokable: true
+user-invocable: true
 argument-hint: "[small | medium | large] [specific question]"
 context: fork
 ---
@@ -69,7 +69,7 @@ new locations not listed here, add them to this list in the report cache metadat
 
 | Source | What to extract |
 | ------ | --------------- |
-| `~/.claude/skills/*/SKILL.md` | All skill definitions — name, description, user-invokable, tools |
+| `~/.claude/skills/*/SKILL.md` | All skill definitions — name, description, user-invocable, tools |
 | `~/.claude/skills/GUIDELINES.md` | Shared skill rules |
 | `~/.claude/skills/shared/` | Shared library: Python exports, Bash scripts, gum-tui |
 | `~/.claude/skills/shared/README.md` | Full API reference for std::claude::shared |
@@ -208,7 +208,7 @@ One-screen summary. Format:
   Claude Capabilities — <date>
 ─────────────────────────────────────────────────────
 
-  Skills:       42 (38 user-invokable)
+  Skills:       42 (38 user-invocable)
   MCP Servers:  8 active / 14 in catalog
   Hooks:        56 registered
   Scripts:      30 utility scripts
@@ -373,5 +373,5 @@ This ensures the skill doesn't go stale as the config grows.
 - Cache is per-day, not per-session — multiple runs on the same day reuse the cache if counts match
 - For `large` reports, the scan may take 30-60 seconds due to reading many files — this is expected
 - The skill should feel like running `neofetch` but for your Claude config — a quick snapshot of everything available
-- When listing skills, always indicate which are user-invokable vs background-only
+- When listing skills, always indicate which are user-invocable vs background-only
 - The "Unique Capabilities" section should explicitly contrast with factory Claude — what can THIS instance do that a fresh `claude` install cannot?

@@ -65,7 +65,10 @@ TASK_DIR="$HOME/.claude/tasks/$SID"
 # why this hook once reported 3 tasks against a real store of 48.
 _r="$HOME/.claude/scripts/task-table/resolve-store.sh"
 if [ -x "$_r" ]; then
-  _d=$("$_r" 2>/dev/null) && [ -n "$_d" ] && [ -d "$_d" ] && TASK_DIR="$_d"
+  # Hand the resolver the sid from the event payload; in a hook process the
+  # ambient CLAUDE_CODE_SESSION_ID it would otherwise read is unset (review 2026-08-18, I7).
+  _d=$("$_r" --as-session "$SID" 2>/dev/null) || _d=$("$_r" 2>/dev/null)
+  [ -n "$_d" ] && [ -d "$_d" ] && TASK_DIR="$_d"
 fi
 STATE="$HOME/.claude/tasks/.sync-${SID}.json"
 CLEAN=$(printf '%s' "$SID" | tr -c 'A-Za-z0-9_-' '_')
@@ -162,11 +165,30 @@ if [ "$STALE" != 1 ]; then
 fi
 
 # Stale. Build a short reconcile instruction with a live snapshot.
-SUMMARY=$(printf '%s' "$TASKS_JSON" | jq -r '
-  ([.[] | select(.status=="in_progress")]) as $ip
-  | "\($ip|length) in-progress, \([.[]|select(.status=="pending")]|length) pending, \([.[]|select(.status=="completed")]|length) done"
-    + (if ($ip|length) > 0 then " | active: " + ([$ip[].subject] | .[0:3] | join("; ")) else "" end)
-' 2>/dev/null || echo "")
+#
+# COUNT FROM THE STORE, NOT THE REPLAY. TASKS_JSON comes from replay_tasks.py,
+# which reconstructs the list from THIS session's transcript and therefore only
+# sees tasks TOUCHED since the clear. That is the right signal for drift, which
+# is a question about activity, and the wrong one for a summary labelled
+# "Current:", which reads as the whole queue.
+#
+# Measured 2026-08-16: the nudge reported "3 pending, 11 done" against a real
+# store of 6 open and 44 done. Both numbers were correct about different things,
+# and nothing in the message said so. An agent that trusts it goes looking for 33
+# tasks it supposedly failed to record. Note the resolver at the top of this file
+# was already returning the right store; its answer just never reached this line,
+# because TASK_DIR only feeds the elif branch that a live transcript skips.
+SUMMARY=$(bash "$SCRIPT_DIR/summarize-store.sh" "$TASK_DIR" 2>/dev/null || echo "")
+# No store (a genuinely task-free session, or an unresolvable one): fall back to
+# the replay and SAY it is session-scoped, so the number is never mistaken for
+# the full queue.
+if [ -z "$SUMMARY" ]; then
+  SUMMARY=$(printf '%s' "$TASKS_JSON" | jq -r '
+    ([.[] | select(.status=="in_progress")]) as $ip
+    | "\($ip|length) in-progress, \([.[]|select(.status=="pending")]|length) pending, \([.[]|select(.status=="completed")]|length) done (touched this session only)"
+      + (if ($ip|length) > 0 then " | active: " + ([$ip[].subject] | .[0:3] | join("; ")) else "" end)
+  ' 2>/dev/null || echo "")
+fi
 
 REASON="Your task list hasn't changed in ${TURNS_SINCE} turns but ~${EDITS_SINCE} edits happened — it's drifted from what you're actually doing. Before stopping, reconcile it with TaskUpdate/TaskCreate: mark finished work completed, add anything new you took on, and set the right task in_progress. Current: ${SUMMARY}. (This check only fires above a few tasks; update the list and it won't fire again.)"
 

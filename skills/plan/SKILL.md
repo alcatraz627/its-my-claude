@@ -3,7 +3,7 @@ name: plan
 description: Routes a planning request to the instrument that fits it, by naming which of six needs the request actually has, and refuses to plan a change to something that already exists until current behaviour is written down. Planning requests usually carry two or three needs at once, and naming them is most of the routing decision. Use when a plan is wanted and the right instrument is not obvious: "how should we approach X", "what's the plan for Y", "where do I even start", "should we do A or B". Not a planner itself: it classifies, enforces one precondition, and hands off.
 allowed-tools: Read, Grep, Glob, Bash
 argument-hint: "<what you want planned, in your own words> [target]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

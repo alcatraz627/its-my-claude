@@ -1,8 +1,8 @@
 ---
 name: tasks
-description: Show the current task list as a table, sized so it never has to be scrolled to. Width is free, height stays within 44 lines, and the rows the owner can act on come first. Use when asked to show the task list, the todo list, the queue, what is left, what is pending, or the status of open work.
-argument-hint: "[--json | --compact | --session <sid8>]"
-user-invokable: true
+description: Show the current task list as ONE grouped, tagged, sequenced table, sized so it never has to be scrolled to. Groups by the project's ruled key (batch, domain, class, or the actor split), width free, height within 44 lines. Also the write path when the harness has no Task tool (task.sh). Use when asked to show the task list, the todo list, the queue, what is left, what is pending, the status of open work, or to regroup / rearrange it.
+argument-hint: "[--group batch|domain|class|actor] [--set-group <key>] [--json | --compact | --session <sid8>]"
+user-invocable: true
 allowed-tools: Bash, Read
 ---
 
@@ -27,19 +27,101 @@ catchup briefing follows. Detail is welcome inside that budget. Past it the tabl
 truncates loudly and names what it dropped, because a silently trimmed list reads
 as a complete one.
 
+## The shape (owner-ratified 2026-08-19, every /tasks run, every session)
+
+```
+TASKS · <store> · <alias> (<model>) · N open, M done · open rows written Xm ago
+  grouped: goal › batch (project view file) · needs you: #… · running: #…
+────────────────────────────────────────────────────────────────────────
+GATES (you)   (n)                       ← first, always
+  🔴 #id  task                                     owner        tags
+         ↳ blocked: <the blocked_on text> · note: …
+────────────────────────────────────────────────────────────────────────
+GOAL <name>   (n open, k sequenced)
+  BATCH <name>
+    ○ #id  task                                    lane·tier    class · domain
+    ⛓ #id  task  (after #x)                        lane·tier    …
+         ↳ refs: #x (gloss) · prop-… (title)
+────────────────────────────────────────────────────────────────────────
+LATER · deferred / after V1   (n)
+────────────────────────────────────────────────────────────────────────
+legend: ✅ done · ▶ running · ○ ready · ⛓ after #x · 🔴 needs you · ⏳ needs you (inferred)   lanes: …
+done (M): #…      height h/44 · regroup … · --detail · edit: task.sh
+```
+
+No vertical box borders (a glyph's terminal width can then never break the frame); rows
+inside a batch follow the `blockedBy` chain; every stored field prints (blocked_on text,
+lane, tier, goal, note, priority, refs gloss); an unset tier is a loud `?`; `--detail`
+prints descriptions and the full glossary. Rulings and provenance:
+`assets/reports/20260819-tasks-audit/plan.md`.
+
+## Grouping comes first, and a project ruling outranks the baseline
+
+The owner, 2026-08-18: `/tasks` "should show a structured, grouped, tagged,
+batched sequence; I get to tell the agent to re-arrange it or it does it anyway;
+this is FOR MY visibility", and typing two lines to get that by hand was "a HUGE
+FRICTION". So the bare command is already grouped, and the grouping key resolves
+in this order, highest first:
+
+1. `--group <key>` on the call, a one-off rearrangement ("group these by class").
+2. **The project's view file**, `<project>/.claude/tasks-view.json` (inside the
+   gcc itself: `~/.claude/tasks-view.json`), which holds `group`, an `order` of
+   group keys, and `labels`. **A project-level grouping ruling lives HERE, in a
+   file the tool reads, and it outranks everything below.** If the owner has ruled
+   how a project's list is grouped (slack-automation: by goal lane A..E, ruled
+   four times), that ruling belongs in this file, and `task-table.sh --set-group
+   <key>` writes it so it is said once. A ruling that lives only in a memory note
+   is the shape that produced a 4th-occurrence S3 on 2026-08-18
+   (`mist-20260818-130748-e4`).
+3. Auto: `goal` if any open row carries `metadata.goal` (with `batch` as the sub-band),
+   else `batch`, else `domain`, else the actor split.
+
+Whatever the grouping, the actor split is never lost: it rides as the row glyph
+(🔴 gated on you · ⏳ gated by inference · ▶ running · ○ ready · ⛓ waits · ✅
+verified) and as one `needs you: … · agent-ready: …` line under the header. The
+`tags` column carries class / domain / batch (whichever is not the group key) and
+`seq` carries `⛓ #N` (waits on) or `→ #M` (blocks).
+
+**Rearranging is yours to do, and welcome.** When the owner says "group by X" or
+"put the deck stuff first", run it with `--group` and, if it is a standing
+preference, `--set-group` (plus `order` / `labels` edited in the file). When you
+can see a better grouping than the current one, use it and say so in one line;
+the owner asked for that. The one thing that stays forbidden is re-typing the
+facts from memory.
+
 ## Run it
 
 ```bash
-bash ~/.claude/scripts/task-table/task-table.sh
+bash ~/.claude/scripts/task-table/task-table.sh                # grouped by the resolved key
+bash ~/.claude/scripts/task-table/task-table.sh --group class  # one-off regroup
+bash ~/.claude/scripts/task-table/task-table.sh --set-group domain   # sticks for this project
 ```
 
 | Flag | Use |
 |---|---|
-| (none) | the framed baseline table |
-| `--json` | full data, including every resolved reference |
+| (none) | the grouped table (view file → auto) |
+| `--group <batch\|domain\|class\|actor\|auto>` | one-off grouping |
+| `--set-group <key>` | persist the grouping for this project (writes the view file) |
+| `--json` | full data: `groups`, `group`, `group_source`, every task with metadata and refs |
 | `--refs` | just the reference glossary |
 | `--compact` | a three-line digest, for injection or a status line |
-| `--session <sid8>` | a specific session's store |
+| `--session <sid8>` | a specific session's store · `--pin <sid8>` remembers it for this live session |
+
+## Writing tasks when the harness has no Task tool
+
+Fable builds (observed 2026-08-18 by three sessions) expose no TaskCreate /
+TaskUpdate / TaskList. Use `scripts/task-table/task.sh`, which writes the same
+store files the Task tool writes, so this table reads both:
+
+```bash
+task.sh add "<subject>" --class fix --domain hooks --batch A --goal "<goal>" --lane <lane> --tier <fable|opus|sonnet|haiku|lm> [--priority P1] [--owner <alias>] [--note "…"] [--blocked-on "USER: …"] [--verified true|false|prod] [--blocked-by 3,4]
+task.sh update <id> --status in_progress|completed --append-desc "…" --blocked-on … --clear-blocked-on
+task.sh done <id>…   ·   task.sh start <id>   ·   task.sh meta <id> batch=B owner=me   ·   task.sh list
+```
+
+Set `class`, `domain`, `batch`, and `blocked_on` at creation, whichever tool you
+use: this table groups and gates from metadata, and an unset field is rendered as
+inferred (⏳) rather than declared (🔴), which is a weaker claim.
 
 ## The script owns the facts. You own the presented table.
 
@@ -66,7 +148,8 @@ columns; it never extends to the facts.
 
 ### Column vocabulary
 
-Core columns are always present: id, task, source, ref count.
+Core columns are always present: id (full width, `#121` is never shown as `12`),
+task, tags, seq.
 
 Optional columns each have a bar to clear, and the bar exists because a column
 that is present in every table stops carrying information:
@@ -98,17 +181,13 @@ Chat, essentially always. A `.md` file is the exception, not an equal option, an
 it is right only when the content genuinely cannot meet the height cap, such as a
 full ledger with descriptions and provenance.
 
-## What the grouping means
+## What the actor split means
 
-**NOW** is in-progress work. **NEEDS YOU** is the only section the owner can act
-on, so it sits above the rest: it holds anything gated on a phrase, an owner
-review, a decision, or their presence. **AGENT-READY** is work that needs nothing
-from them. **DONE** collapses to a row of ids, because a finished task's detail
-belongs in the ledger rather than in a status view.
-
-The `backlog` and `session` marker is derived from whether the description carries
-a `prop-` id, which is a real property of the data rather than a guess about
-intent.
+**NOW** is in-progress work. **NEEDS YOU** is anything gated on the owner (a
+phrase, a review, a decision, their presence). **AGENT-READY** needs nothing from
+them. **WAITING ON ANOTHER TASK** is sequenced behind an open row (`blockedBy`).
+**DONE** collapses to a row of ids. Under a batch or domain grouping these become
+the glyph and the summary line rather than the sections.
 
 ## When they want more than the table
 
@@ -192,4 +271,10 @@ table until it becomes one.
   items need thoughtful planning first and which are small backlog items wrapping
   up a goal. The task store has no field for that, and inferring it from
   description text would be wrong in a way nobody could see. It wants a metadata
-  key set at creation time. The plumbing is built and proven (task-table.sh reads metadata.class / metadata.domain / metadata.board_card), but only tasks created WITH that metadata populate the columns. Set it at TaskCreate time going forward.
+  key set at creation time. The plumbing is built and proven (task-table.sh reads
+  metadata.class / domain / batch / blocked_on / verified / board_card), but only
+  tasks created WITH that metadata populate the columns. Set it at TaskCreate time,
+  or with `task.sh`, going forward.
+- **An empty store says so loudly** (`!! EMPTY STORE`), because a resumed
+  session's tasks live in the store that CREATED them, and the empty own-store is
+  the usual wrong answer (vb-fable, 2026-08-18).

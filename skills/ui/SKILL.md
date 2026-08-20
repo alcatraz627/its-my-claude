@@ -3,7 +3,7 @@ name: ui
 description: Routes a UI request to the one instrument that fits it, and refuses to start until an existing surface has a written capability list. The account holds a whole cluster of UI skills whose cross-references are patchy and one-directional, so the cost of getting UI help is remembering which name to type. This is the front door. Use it when the ask is about a screen and the right tool is not obvious: "make this page better", "what should this look like", "is this done", "this is confusing", "build a new settings page". Not a doer: it classifies, enforces two preconditions, and hands off.
 allowed-tools: Read, Grep, Glob, Bash
 argument-hint: "<what you want done, in your own words> [surface or url]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

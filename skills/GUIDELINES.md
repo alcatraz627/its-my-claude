@@ -57,10 +57,17 @@ Never read from, write to, modify, or delete files in these locations:
   │ did       [1-2 sentence summary]
   │ modified  [N files]             created  [N files]
   │ errors    [issues, or none]     stats    [duration · tools · lines]
+  │ covered   [what this run checked/did]   skipped  [what it did not, and why]
   │ ▸ [absolute path, one line per file that matters]
   │ → [what the reader should do next, or: nothing needs you]
   └─ ✅ [how the result was verified] ─────────────────────────────────
   ```
+
+  The `covered … skipped …` row is the activation self-report (owner ruling
+  2026-08-20): the owner cannot QA a skill they never consciously invoked, so
+  every routed run names what it covered and what it skipped in the box itself.
+  A run that skipped nothing writes `skipped none`; a silent skip is the defect
+  this row exists to prevent.
 - All file paths in output must be **absolute** — clickable in terminals and IDEs
 
 ### Task Completion Summary
@@ -379,15 +386,22 @@ If it does not exist yet, continue without it.
 
 ## 8. Skill Frontmatter Reference
 
-When creating or improving skills, use these frontmatter fields:
+The fields Claude Code reads (the full list, from the skills docs at
+https://code.claude.com/docs/en/skills, confirmed 2026-08-19): `name`, `description`,
+`when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`,
+`user-invocable`, `allowed-tools`, `disallowed-tools`, `model`, `effort`, `context`,
+`agent`, `background`, `hooks`, `paths`, `shell`, `metadata`, `license`,
+`compatibility`. Anything else is silently ignored, so a misspelled field is a no-op
+(this house carried `user-invokable` for months). `scripts/skill-lint.sh` checks the
+names.
 
 | Field                      | Required                  | Notes                                                                  |
 | -------------------------- | ------------------------- | ---------------------------------------------------------------------- |
 | `name`                     | No (defaults to dir name) | Lowercase, hyphens only. Becomes the `/command`                        |
-| `description`              | Recommended               | How Claude decides when to auto-invoke. Start with a verb.             |
-| `argument-hint`            | No                        | `<required>` vs `[optional]` syntax                                    |
-| `user-invokable`           | No                        | `false` = background knowledge only; not in `/` menu                   |
-| `allowed-tools`            | No                        | Tools auto-approved when this skill is active                          |
+| `description`              | Recommended               | How Claude decides when to auto-invoke. Verb + input + output + "Use when ...". **Capped at 300 characters** (the roster has a budget; see below) |
+| `argument-hint`            | No                        | `<required>` vs `[optional]` syntax; under 120 characters              |
+| `user-invocable`           | No                        | `false` = background knowledge only; not in `/` menu                   |
+| `allowed-tools`            | No                        | Tools auto-approved when this skill is active (`Agent`, not the old `Task`) |
 | `disable-model-invocation` | No                        | `true` = Claude cannot auto-trigger; use for deploy/commit/push skills |
 | `context`                  | No                        | `fork` = runs in isolated subagent context; keeps main context clean   |
 | `model`                    | No                        | Override model for this skill                                          |
@@ -395,6 +409,15 @@ When creating or improving skills, use these frontmatter fields:
 **When to use `disable-model-invocation: true`:** Any skill with side effects — deploys, commits, git push, sending messages. Prevents accidental auto-invocation.
 
 **When to use `context: fork`:** Heavy exploration skills (`/pr-review`, `/arch-qa`, `/project-index`) that scan many files. Keeps main conversation context clean.
+
+**The description budget.** Claude Code loads every skill's name and description into
+context within a budget of 1% of the context window. When the listing overflows it
+keeps every name and drops the descriptions of the least-invoked skills first, so a
+rarely used skill with a long description is invisible to model routing. That is why
+the description is capped here and why `settings.json` sets
+`skillListingBudgetFraction`. The cap is a forcing function on the critical part; the
+skill body is unbounded (owner ruling 2026-08-19): a skill may be long when the model
+has to evaluate a lot before acting, and short when it does not.
 
 ---
 
@@ -430,10 +453,18 @@ When a skill generates a file intended as **internal agent context** (session ch
 
 ## Skill Authoring Conventions
 
-When **creating a new skill**, follow these conventions documented in `skills/README.md`:
+When **creating a new skill**, follow these conventions (the `/create-skill` wizard
+applies them; `scripts/skill-lint.sh` checks them on every SKILL.md write):
 
-1. **Check existing skills first** — read every skill's name and description; enhance or compose rather than duplicate where possible
-2. **Use the four-phase skeleton** — Information Gathering → Planning → Execution → Testing/Verification (in whatever order, however many iterations)
-3. **Run Prettier** on every file written or modified during the run: `npx prettier --write <filepath>`
-4. **Always include `## Brief`** immediately after frontmatter
-5. **Use `user-invokable: true`** (not `user-invocable`)
+1. **Check existing skills first** — `bash ~/.claude/scripts/skills-index.sh` then read `skills/00-index.md`; enhance or compose rather than duplicate.
+2. **Use the four-phase skeleton** — Information Gathering → Planning → Execution → Testing/Verification (in whatever order, however many iterations). Length is unbounded; altitude is not: procedure and heuristics, not essays.
+3. **Always include `## Brief`** immediately after frontmatter, under eight lines.
+4. **Frontmatter uses the real field names** (§8) with `user-invocable`, a capped description, and `Agent` not `Task` in `allowed-tools`.
+5. **Absolute paths only.** Global skills write to `~/.claude/skills/<name>/`; a relative `.claude/skills/...` resolves one level too deep when CWD is the gcc and `block-nested-claude.sh` refuses it.
+6. **Carry a `## Validation` rubric** — what to check and how, suited to what this skill's efficacy actually is (context retention, prose and structure, useful ratio, ...). A rubric, not worked examples: the agent over-indexes on examples (owner, 2026-08-19).
+7. **End with the two ledger steps** — a runtime note (§7) and `bash ~/.claude/scripts/skill-log.sh record <name> ...`, so the skill has an efficacy trail.
+8. **Regenerate the index** after writing: `bash ~/.claude/scripts/skills-index.sh`.
+9. **Run Prettier** on every file written or modified during the run: `npx prettier --write <filepath>`.
+
+A USAGE.md is optional; nothing routes on it. Do not write one unless the skill has a
+real quick-reference need.

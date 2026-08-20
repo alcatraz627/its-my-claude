@@ -2,7 +2,7 @@
 name: ui-gripe
 description: Diagnoses WHY a UI feels stupid, confusing, or frustrating — runs the local see --ui structural inventory as $0 ground truth, then a native-vision judgment pass to name what is fighting the user, ranked by damage, each finding tied to visible evidence and a concrete fix. Use when the user vents about a UI ("this is so confusing", "why is this dashboard stupid"), when a review agent needs a confusion audit rather than an aesthetic score, or before redesigning a screen that "feels wrong". For scored aesthetic critique against the terminal-dashboard fingerprints, use /designer-reviewer instead.
 allowed-tools: Read, Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "[screenshot-path] [the gripe, in the user's words]"
 context: fork
 ---
@@ -148,3 +148,10 @@ keeps firing, a see read that needed a crop, a gripe class this skill handles ba
 - `/designer-reviewer` — scored aesthetic critique against the user's fingerprints
 - `/web-design` — generation + systematization, with the same see --ui pre-pass
 - `~/Code/local-models/docs/CAPABILITIES.md` — the see/q/lm command menu
+
+## Findings the owner confirms become callout rows
+
+A finding that stays prose regresses unseen. When the owner confirms a finding (or
+made it themselves), record it:
+`bash ~/.claude/scripts/callouts/callouts.sh add "<their words>" --surface <s> --check "<re-verify how>"`.
+The next done-claim on that surface must pass `callouts.sh gate <s>` (see /callouts).

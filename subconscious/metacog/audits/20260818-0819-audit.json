@@ -1,0 +1,187 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17550,
+    "correction_density": 0.04411764705882353,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1076260135473124,
+    "unit_count": 68
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit f04ae843-1 is the 37th+ consecutive zero-tool session with topic_keywords ['clear','clear'] and Accepted user_reaction; one instance this cycle, within recent range; fully deprioritized per history guidance",
+      "sleep_polling_ipc_wait:NEW — unit f04ae843-3: a `sleep 60; claude-ipc inbox ...` sequence was used to wait for peer replies rather than relying on a Monitor or a notification-driven resume; not a tight polling loop but still uses a fixed-duration sleep to gate on externally-mutated IPC state, which the session-state rules and atone `cache-externally-mutated-state` pattern warn against; first explicit occurrence in the tracked history under this label"
+    ],
+    "calibration_score": 0.48,
+    "overconfident_count": 0,
+    "recommendations": [
+      "sleep_polling_ipc_wait (NEW): when waiting for a peer reply on a corr id, schedule a Monitor or ScheduleWakeup on the inbox rather than a fixed sleep; the current shape works but silently races — if the peer replies before the sleep expires the turn stalls for no reason, and if it replies after the turn ends the reply sits unread until the next explicit check; one occurrence, flag and watch",
+      "write_before_read_trap and optimism_bias_on_script_compatibility: both absent this cycle — no new instances; do not carry forward as active recommendations unless they re-emerge",
+      "confirmation_bias_style_log: continue to deprioritize per prior-cycle guidance; no change in trajectory"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "f9194be2-1003-41fd-b85b-e93e8ef5ff88",
+      164828
+    ],
+    [
+      "f04ae843-7d9c-4142-bc23-0153ce410484",
+      2919938
+    ],
+    [
+      "d9067e70-43be-462c-aa00-506b0f0c2830",
+      109340
+    ],
+    [
+      "d716ea59-e647-4c11-b99c-e20d5e4a5912",
+      5346534
+    ],
+    [
+      "a82d61e9-f052-4356-940d-3a5d2ec7019e",
+      124102
+    ],
+    [
+      "9bfb1492-eaa8-417d-91aa-d2f8c3e2fef0",
+      88972
+    ],
+    [
+      "99ddca34-3b59-454e-8499-ed253e181f5a",
+      120011
+    ],
+    [
+      "919a237f-7290-4409-8bda-02a4c5c54d16",
+      5549157
+    ],
+    [
+      "8e71ce26-a295-4db3-b920-d378e2dbb13e",
+      91575
+    ],
+    [
+      "88b8ed8e-f071-4c44-8044-65773a9c8bff",
+      123633
+    ],
+    [
+      "8827c5b4-9c04-41bd-ac24-40d5c7356470",
+      124167
+    ],
+    [
+      "77e8cd8e-1aec-4a36-9ef4-22aaa56c1576",
+      126619
+    ],
+    [
+      "5e9283d4-9dee-4c50-a8b3-494e92d25406",
+      117377
+    ],
+    [
+      "530f7247-f190-48ce-89e1-3bf2bfb7ea83",
+      121605
+    ],
+    [
+      "4b80faa0-0cf4-4732-8b32-7a2fde2b1257",
+      122260
+    ],
+    [
+      "4b680542-0e78-4629-864b-bc2eff0569a0",
+      131838
+    ],
+    [
+      "2af9300d-80fc-493b-8eaa-ab9cf33c0f63",
+      113763
+    ],
+    [
+      "0d248cef-ec82-434f-abf8-90a614b315dd",
+      5506458
+    ],
+    [
+      "f2f27ee4-f04d-4605-b036-e2dcf456a7a8",
+      150154
+    ],
+    [
+      "f1fc4318-aff0-4bd6-97a3-4ff0a23d5ced",
+      127803
+    ],
+    [
+      "f1ec4343-60d8-49db-abca-44d0c6524bc0",
+      12823538
+    ],
+    [
+      "ee387d4e-e116-487a-baed-116207fc8d4b",
+      8714435
+    ],
+    [
+      "dcb7d1b1-17a7-4ab3-ae26-f08c7f0e540f",
+      11223260
+    ],
+    [
+      "c4c977ef-7003-4bf8-9ec0-7a206a4fae8e",
+      135626
+    ],
+    [
+      "a4f448b2-7e1b-4d30-895c-796054661858",
+      121448
+    ],
+    [
+      "38af2699-667b-466d-94e5-dc0e22df3903",
+      169340
+    ],
+    [
+      "220b8f9b-2155-4d42-a455-68d2e0d3e455",
+      117854
+    ],
+    [
+      "00a32d21-1113-4d20-ba88-8f0c5d11f3d9",
+      11811512
+    ],
+    [
+      "f9977c86-a89e-4a91-87ea-202b22109833",
+      142816
+    ],
+    [
+      "e438e10a-1930-4488-a8c1-124a991ca6ca",
+      130402
+    ],
+    [
+      "d413d399-3892-43f9-a2f9-7eff2016e913",
+      125338
+    ],
+    [
+      "c4a08eb2-7cbe-4863-ae96-c684529956a0",
+      104892
+    ],
+    [
+      "ba81e455-47d1-43e4-ad82-a3bfe8327e44",
+      117604
+    ],
+    [
+      "9c285725-d3a3-4246-90b6-8ea1210e8b04",
+      119207
+    ],
+    [
+      "78060eb5-041d-42ca-a4a6-0fbeaada71b8",
+      4330680
+    ],
+    [
+      "57ed9ac4-c78e-4abb-96b5-53cfd6199e44",
+      129869
+    ],
+    [
+      "56f8ee8f-b522-4d26-bb15-b02bef16004d",
+      132753
+    ],
+    [
+      "54f371cb-8cf5-4fff-a73a-e615f3c22432",
+      7926872
+    ],
+    [
+      "470ee263-4974-4884-b5d1-3f5d2ae5a2ac",
+      15063846
+    ]
+  ],
+  "timestamp": "2026-08-18T08:19:28.573315Z",
+  "tokens_used": 11427,
+  "units_analyzed": 3,
+  "units_total": 68
+}

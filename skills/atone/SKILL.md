@@ -2,7 +2,7 @@
 name: atone
 description: Records a mistake — gathers context, classifies severity (S1/S2/S3), and writes a structured entry to ~/.claude/atone/events.jsonl. For S3 events, also drafts an RCA file with a runnable procedure. Invoke after a user correction or when the atone-nudge hint fires.
 allowed-tools: Read, Edit, Write, Bash, Grep
-user-invokable: true
+user-invocable: true
 argument-hint: "[brief description of the mistake]"
 ---
 
@@ -237,7 +237,7 @@ Code/process diff. Be specific.
 - ...
 - ...
 
-## Procedure (REQUIRED — runnable at draft time)
+## Procedure (REQUIRED, runnable at draft time)
 The single at-action-time check that would have prevented this:
 
 > Before [trigger action]: run/check [specific verification].

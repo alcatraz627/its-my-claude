@@ -115,15 +115,26 @@ if [ "$gated" = 0 ]; then
   [ -n "$top" ] && [ -f "$top/.claude/require-user-commit" ] && { gated=1; why="protected repo (marker $top/.claude/require-user-commit)"; }
 fi
 
-# (2) targets main/master — explicit ref token, --all/--mirror, or current checkout
+# (2) targets main/master. The gate reads the REFSPEC, not the checkout: HEAD is
+# only consulted when the push names no ref at all (a bare `git push`), because a
+# bare push goes to the current branch's upstream. Judging by HEAD alone blocked
+# `push origin --delete canary` from main and killed compound calls whose push
+# targeted a feature branch (automation-d8ff1149, 2026-08-20 — eight spent canary
+# branches stranded on the remote).
 if [ "$gated" = 0 ]; then
+  # Non-flag tokens after `push`: first is the remote, the rest are refspecs.
+  push_args=$(printf '%s' "$push_seg" | sed -E 's/.*[[:space:]]push([[:space:]]|$)/\1/' | tr ' ' '\n' | grep -vE '^-|^$' || true)
+  n_args=$(printf '%s' "$push_args" | grep -c . || true)
   if printf '%s' "$push_seg" | grep -qE '(^|[[:space:]:=/])(main|master)([[:space:]]|$)'; then
     gated=1; why="push targets main/master (explicit ref)"
   elif printf '%s' "$push_seg" | grep -qE '[[:space:]]--(all|mirror)([[:space:]]|$)'; then
     gated=1; why="push --all/--mirror can update main/master"
+  elif [ "${n_args:-0}" -ge 2 ]; then
+    : # explicit ref named and it is not main/master → a feature push or a branch
+      # delete (--delete/-d/:ref all leave the ref as a non-flag token); HEAD is irrelevant
   else
     br=$(git -C "$target" rev-parse --abbrev-ref HEAD 2>/dev/null)
-    case "$br" in main|master) gated=1; why="current branch is $br";; esac
+    case "$br" in main|master) gated=1; why="bare push while checked out on $br (no refspec; the push goes to $br's upstream)";; esac
   fi
 fi
 

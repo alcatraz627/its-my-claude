@@ -2,7 +2,7 @@
 name: vis-compare
 description: Judges whether a recreated image faithfully imitates a reference — runs the local `see diff A B` deterministic evidence pack (text/color/hash/shape, zero-cost, fabrication-proof) as ground truth, then a native-vision judgment pass that classifies each divergence against a user-editable taste policy (looks-worse / neutral / improvement / not-worth-chasing) rather than a raw distance score. Use when B is a rebuild/re-render of A and you want "what changed AND whether it matters" — recreate-with-a-freer-hand review, UI-recreation fidelity, icon/logo/theme/chart comparison, or a visual-regression judgment. For a single screenshot's confusion audit use /ui-gripe; for scored aesthetics use /designer-reviewer.
 allowed-tools: Read, Bash, Write, Edit
-user-invokable: true
+user-invocable: true
 argument-hint: "<reference-A> <candidate-B> [focus, in your words]"
 context: fork
 ---

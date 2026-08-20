@@ -2,7 +2,7 @@
 name: archive-notes
 description: Archives old runtime-notes entries beyond a threshold to a dated archive file, keeping the active notes file lean. Accepts a project path argument.
 allowed-tools: Read, Edit, Write, Bash, Glob
-user-invokable: true
+user-invocable: true
 argument-hint: "<project-path> [--keep N]"
 metadata:
   filePattern: ["**/runtime-notes*.md"]

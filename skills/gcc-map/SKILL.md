@@ -2,7 +2,7 @@
 name: gcc-map
 description: Maps how instruction content actually loads into an agent and the CLAUDE.md doc graph, measuring ground truth first and diffing it against what the indices claim, then runs a deterministic health battery (orphans, broken links, staleness, always-loaded budget, tier/paths drift) plus an unconstrained blindspot pass, and writes a durable map under assets/reports/.
 argument-hint: "[--deep]"
-user-invokable: true
+user-invocable: true
 disable-model-invocation: true
 context: fork
 allowed-tools: Read, Grep, Glob, Bash, Write, Task

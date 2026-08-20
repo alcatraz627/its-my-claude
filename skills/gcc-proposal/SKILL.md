@@ -2,7 +2,7 @@
 name: gcc-proposal
 description: Files a ~/.claude improvement proposal into the backlog via propose.sh — derives the title, category, effort, and cross-links from a rough description or from the current conversation, so you never have to remember the script or its flags.
 allowed-tools: Bash, Read
-user-invokable: true
+user-invocable: true
 argument-hint: "[rough description of the improvement]"
 ---
 

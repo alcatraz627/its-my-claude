@@ -2,7 +2,7 @@
 name: readme
 description: Scans a git repo's structure, docs, package metadata, and prior skill reports — generates a polished README.md with GitHub-style badges, a pixel-art cover image, a quick-start guide, and a linked documentation index. Writes intermediate repo data to the global scratchpad for inter-skill handoff.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
-user-invokable: true
+user-invocable: true
 argument-hint: "[output-path]"
 ---
 

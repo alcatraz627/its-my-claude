@@ -98,6 +98,37 @@ the wrong quantity. A 40%-FP warn-nudge that catches a costly slip beats a
 2%-FP block that mutes the whole hook the first time it false-fires on a push.
 Weigh FP by cost-of-false-fire; design the consequence to the cost tolerance.
 
+## A gate's number is only as true as the field it reads
+
+Worked incident, 2026-08-20 (automation's session; the goal Stop hook, owned by
+gcc-work, defect report in their mailbox; docs half relayed to docs-skill). The
+hook blocked FOURTEEN consecutive stops on an armed "finish all" goal. Three
+lessons for any hook that measures progress or demands output:
+
+1. **A progress count reads a field, not the truth.** The hook counted tasks
+   whose `blocked_on` FIELD was empty, while about two dozen stated their
+   blocker in PROSE. 48 of 53 remaining tasks needed the owner, credentials, a
+   usage-limit reset, or repos the agent cannot write to, and the count saw
+   none of it. The only way to make the number fall was to build work the owner
+   had explicitly reserved. A gate whose measure diverges from the record's
+   real semantics creates pressure to violate the rulings it exists to serve.
+2. **A gate that can state the reason it should stand down, and blocks anyway,
+   has stopped measuring.** The hook's own message conceded, verbatim: "48 of
+   the 53 remaining tasks cannot be finished by the assistant". It said that
+   and blocked. If the message text can articulate the stand-down condition,
+   the condition belongs in the code as an exit path.
+3. **A hook that forces re-emission raises the load on every style gate
+   downstream.** Each fire demanded a fresh summary; each summary grew; the
+   prose-smell gate then fired on the drifted register (em-dashes, bold spam,
+   emoji headers). Two gates in a feedback loop: one demanding output every
+   turn, one punishing what repeated output drifts into. When a hook demands
+   text, budget for what the demanded text does to the other gates.
+
+The /wake CLEAN-HALT reconciliation (skills/wake/SKILL.md, same day, task #25)
+carries the countermeasure for lesson 1: it classifies open task rows by
+reading both the field and the prose, and treats a row whose stated blocker has
+since cleared as agent-ready whatever its field says.
+
 ## Mute scope — file mutes are MACHINE-WIDE, not per-session
 
 Every mute file in the hook set (`~/.claude/.no-<gate>`, `.model-tier-off`,

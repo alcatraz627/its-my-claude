@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-16T03:48:50.405326+00:00 · 20 patterns / 6 insights -->
+<!-- i-dream project brief · 2026-08-19T22:33:53.882060+00:00 · 20 patterns / 7 insights -->
 ## What this project is about
-A multi-source job-search aggregation tool with scraping pipelines, filtering UI, and a two-agent mutual peer-review workflow where agents independently produce plans and grade each other's blueprints.
+A multi-source job/talent search aggregation platform with filtering UI and data pipelines. Working style is adversarial peer-review: two agents produce independent plans, then grade each other — convergence comes after, not before.
 
 ## Things to do (or keep doing)
-- **Emit a coverage manifest** alongside every filter/scrape result — list every source checked, every criterion evaluated, every zero-result bucket; the user notices omitted sources immediately
-- **Produce a side-by-side contrast** when asked to compare two plans or outputs — merging is a separate operation requiring explicit instruction
-- **Classify any block as credential-gated (halt, surface exact command) vs work-gated (proceed autonomously if reversible)** — never stall silently on either
-- **Exercise the changed path before claiming done** — the declared-ready hook has fired multiple times per session; run it, read the result line, then report
+- Always present parallel plans or options at equal depth side-by-side before any merge or synthesis step; the user needs the full option space first
+- Always annotate assessments (gap tables, filter reports, pipeline results) with the exact observation boundary — which files read, which modes tested, which endpoints hit
+- Always enumerate other consumers before claiming or modifying any shared resource (browser session, UI component, codebase region, established pattern)
+- When blocked by an external constraint (auth wall, harness guard, credential scope), surface the exact unblocking action for the owner — never attempt workarounds
 
 ## Things to avoid
-- **Don't regenerate AI-smell prose after a hook correction** — em-dashes, excessive bold, label:fragment rows; if the re-emission is structurally identical to what the hook flagged, the correction didn't land
-- **Don't raise a deferred or skipped topic again without explicit user invitation** — three or more skip signals is a hard scope boundary
-- **Don't accept a sub-agent's scope reduction as settled without independently probing feasibility** — present the narrowed scope to the user only after verifying it holds
-- **Don't name a sub-agent output file `report.md`** — the harness blocks that write; use a slug or timestamped name
+- Don't re-raise topics the user has deferred or skipped more than twice without explicit invitation; three skips is a final no
+- Don't sub-agent output to a file named `report.md` — the harness blocks this write; always use a non-reserved name
+- Don't substitute a curated subset in your reply when the user asked for the full result set
+- Don't claim done without exercising the changed path; the declared-ready hook fires repeatedly here — treat every firing as a real block
 
 ## Open questions / known gaps
-- Autonomous execution stretches stall silently on usage limits or auth blocks — no wall-clock heartbeat discipline established yet
-- Prose-style regressions persist across multi-turn sessions even after hook enforcement; a structural re-emission check (not just rewording) is not yet habitual
+- Prose-smell correction is not durable: em-dashes and bold spans re-emerge in the very next reply after hook correction; needs a mechanical post-generation check, not just intent
+- Deferred-review queue accumulates across turns and is lost on session end; no durable persistence exists for it yet

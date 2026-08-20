@@ -1,8 +1,8 @@
 ---
 name: wake
-description: Arm an opt-in wake monitor that revives THIS session if an outage leaves it alive-but-idle. A turn killed by a transient API error stops dead and waits for a human to type "keep going" — this pokes it instead. Strictly opt-in, session-only, self-deleting. Use when starting long unattended work you don't want to find stalled.
+description: Arm an opt-in wake monitor that revives THIS session if an outage leaves it alive-but-idle. A turn killed by a transient API error stops dead until a human types "keep going"; this pokes it instead. Session-only; disarms only when nothing agent-ready remains. Use before long unattended work.
 argument-hint: "[interval] (default 15m)"
-user-invokable: true
+user-invocable: true
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,9 @@ disable-model-invocation: true
 
 Arms a repeating wake on **this** session. Every N minutes, while the session sits
 idle, the wake asks one question: were you cut off, or are you done? If it was cut
-off, it re-orients and carries on. If it's done, it says so once and deletes itself.
+off, it re-orients and carries on. If the halt was deliberate, it reconciles the
+task list, works anything agent-ready, and disarms only once every open front is
+genuinely done or waiting on the owner.
 
 The point is narrow. A turn killed mid-flight by a transient API error does not
 crash — it stops, and the session sits there alive and idle until a human notices
@@ -124,9 +126,27 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
   CLEAN-HALT — the turn before this wake ended through the Stop hook: the
     session finished, or DELIBERATELY halted (parked on a decision, ended its
     loop, hit a gate). A halt is a decision, not an outage — do not re-animate
-    it, do not invent work, do not re-explain. Report in ONE line that the
-    halt-check held, then CronDelete this job. The user is away; a wake that
-    re-animates a finished or deliberately-parked session is worse than none.
+    it and do not re-explain. But do not stand down on the halt alone either:
+    a clean halt can be a deliberate park that is WAITING for this wake, and
+    two parks lost their wake exactly that way (task #25, 2026-08-19/20).
+    Reconcile the task list first:
+
+      Run: bash ~/.claude/scripts/task-table/task-table.sh
+      Read every open row and classify it: blocked on the owner, blocked on
+      an external actor, or agent-ready. A row whose stated blocker has since
+      cleared (a scheduled time now past, a reply that has arrived) is
+      agent-ready, whatever its field says.
+
+    Any row agent-ready: the park is not over. Do that work now, per the task
+    list, and leave this job armed; the next fire reconciles again. Invent
+    nothing beyond the rows.
+
+    Nothing agent-ready (every open row is owner-blocked or external, or no
+    rows are open): conclude in ONE line that all fronts are either genuinely
+    done or waiting on the owner, then CronDelete this job. Disarming is that
+    explicit conclusion, never a reflex from the halt alone. The user is
+    away; a wake that re-animates a session with nothing to do is worse than
+    none.
 
   anything else — that output is the prompt of a turn that DIED mid-flight
     (only an abort leaves turn-state behind; turn-start preserves it as
@@ -184,6 +204,11 @@ routine), that form needs a companion and this reasoning does not transfer.
 
 - **Built and live-fired**: the halt-check (step 2), the idle-fire, the
   self-delete. Job `584b5f20` did all of it unattended.
+- **Built but never fired**: the CLEAN-HALT task-list reconciliation, which
+  replaced the unconditional self-delete (owner ruling 2026-08-20, task #25:
+  two deliberate parks had lost their wake to the old stand-down). Disarm now
+  requires the explicit no-agent-ready-work conclusion; no live wake has
+  branched on it yet.
 - **Built but never fired**: the budget backoff, step 1. `limits-check.sh` has 30
   tests and all six of its guards are individually mutation-pinned (revert any one
   and the suite goes red), but that is bench evidence. No real wake has hit a

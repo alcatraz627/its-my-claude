@@ -3,7 +3,7 @@ name: retro-dump
 description: Manually trigger a retroactive /core-dump on a past session that ended without one. Headless — spawns `claude -p --resume <uuid>` to read the transcript and synthesize a /core-dump mini. Use when a session crashed mid-work, ran out of context without /core-dump'ing, or you want to backfill a checkpoint after the fact. Cost-aware (one LLM call per session) — guarded by MIN_TURNS / MAX_AGE_DAYS.
 allowed-tools: Read, Bash, Glob
 argument-hint: "[--uuid UUID | --last | --queue] [--min-turns N] [--max-age-days N]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

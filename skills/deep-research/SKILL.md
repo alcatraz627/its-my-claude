@@ -3,7 +3,7 @@ name: deep-research
 description: Answers a question that needs evidence from outside this machine, by splitting it into claims, researching each in parallel, verifying the load-bearing ones against independent sources with a seat that did not gather them, and writing a cited report with its uncertainties intact. Use when being wrong would be expensive and one search will not settle it: a technology choice, a security or licensing question, a market or vendor comparison, a "what is actually true about X" where sources disagree. For a single lookup use WebSearch. For a durable topic note use /cogitate, which routes its deep mode here.
 allowed-tools: Read, Write, Glob, Grep, Bash, WebSearch, WebFetch, Agent
 argument-hint: "<the question> [--scope quick|standard|exhaustive]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

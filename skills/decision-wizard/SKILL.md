@@ -2,7 +2,7 @@
 name: decision-wizard
 description: Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments — a design review, a migration go/no-go, config triage, per-item feedback, "which of these should I…" — STOP and use this instead of serializing questions into chat. It routes to one of two surfaces: a tiny inline numbered menu the user answers in one line (for ≤3 simple picks), or a pre-answered HTML decision page served on :5197 where every item carries YOUR drafted answer + recommendation and the user flips only what is wrong, then pastes back one compact string. Supports optional per-question and end-of-form notes. Use when the user says "decision page", "decision wizard", "ask me a batch", "feedback form", "minimize the work I have to do", "answer complex forms", or any time a task would otherwise spray N questions at the user.
 allowed-tools: Bash, Read, Write, Edit
-user-invokable: true
+user-invocable: true
 argument-hint: "[what you need decided]"
 ---
 

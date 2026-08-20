@@ -45,7 +45,7 @@ then read).
 
 The **Invoke** column: \`yes\` = user \`/name\` and model auto-invoke both allowed ·
 \`user-only\` = \`disable-model-invocation: true\`, the user must type it ·
-\`bg\` = \`user-invokable: false\`, background knowledge, not in the \`/\` menu.
+\`bg\` = \`user-invocable: false\`, background knowledge, not in the \`/\` menu.
 
 Regenerated $stamp.
 
@@ -89,7 +89,7 @@ for name in sorted(os.listdir(root)):
     fm = frontmatter(open(path, encoding="utf-8", errors="replace").read())
     desc = fm.get("description", "")
     invoke = "yes"
-    if fm.get("user-invokable", "").lower() == "false":
+    if fm.get("user-invocable", "").lower() == "false":
         invoke = "bg"
     elif fm.get("disable-model-invocation", "").lower() == "true":
         invoke = "user-only"

@@ -25,6 +25,41 @@ PORT = int(os.environ.get("DP_PORT", "5197"))
 PEND = os.path.join(REG, ".pending.txt")
 
 
+def _notify_origin(slug, page):
+    """Best-effort push on submit: ipc the session that created the page.
+
+    The load-bearing wake is the watcher the agent arms at handoff (an idle
+    session has no turn for this mail to land in), but the push means even an
+    unwatched submit surfaces on the session's next turn, and a dead session's
+    successor inherits it from the orphan mailbox."""
+    try:
+        import json as _json, subprocess
+        with open(os.path.join(page, "config.json")) as f:
+            origin = (_json.load(f).get("origin") or {}).get("session", "")
+        if origin:
+            subprocess.Popen(
+                ["claude-ipc", "send", "--from", "dp-server", "--to", origin,
+                 f"decision page {slug} answered — read it: bash ~/.claude/scripts/decision-page/decision-page.sh answer {slug}"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
+
+def _register_ipc_identity():
+    """One-time broker registration so submit pushes have a valid sender.
+
+    Runs in the server's own process context, giving the pushes an identity
+    distinct from any agent session (a send from an alias bound to the target's
+    own session is refused as self_send). Best-effort: the answer file is the
+    load-bearing signal; this push is the backup channel."""
+    try:
+        import subprocess
+        subprocess.Popen(["claude-ipc", "register", "dp-server", "--service"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
+
 def _clear_pending(slug):
     """Drop one slug from the pending ledger (best-effort, atomic rewrite)."""
     try:
@@ -72,6 +107,7 @@ class DPHandler(SimpleHTTPRequestHandler):
         with open(tmp, "w") as f:
             json.dump(rec, f, indent=1)
         os.replace(tmp, os.path.join(page, ".answer.json"))
+        _notify_origin(slug, page)
         _clear_pending(slug)
         return self._json(200, {"ok": True, "slug": slug})
 
@@ -80,5 +116,6 @@ class DPHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    _register_ipc_identity()
     os.makedirs(REG, exist_ok=True)
     ThreadingHTTPServer(("127.0.0.1", PORT), DPHandler).serve_forever()

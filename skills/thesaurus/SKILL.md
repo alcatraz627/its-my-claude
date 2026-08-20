@@ -7,7 +7,7 @@ description: >
   Also runs the weekly review (prune/promote) and digest rebuild. The glossary
   holds the meanings of the USER's words; the thesaurus holds the user's
   verdicts on CLAUDE's words.
-user-invokable: true
+user-invocable: true
 argument-hint: "<one-line verdict> | review | digest | list"
 ---
 

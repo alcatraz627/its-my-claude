@@ -84,6 +84,10 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0042 | language gates extended: code-file string copy + PR bodies; coverage map | ✅ | 2026-07-28 | 2026-07-28 | [0042-universal-language-gates.md](0042-universal-language-gates.md) |
 | 0044 | chat prose-smell gate enforced (PROSE_SMELL_ENFORCE=1 in settings env) + .json string copy gated | ✅ | 2026-08-08 | 2026-08-08 | [0044-chat-enforce-and-json-copy-gate.md](0044-chat-enforce-and-json-copy-gate.md) |
 | 0045 | Callout dialect v2, checkpoint-pair integration, triage-0814 gates (retrofit) | ✅ | 2026-08-14 | 2026-08-14 | [0045-callout-v2-triage-0814-gates.md](0045-callout-v2-triage-0814-gates.md) |
+| 0046 | Codex adapter, `adapters/` as a new top level | ✅ | 2026-08-14 | 2026-08-14 | [0046-codex-adapter.md](0046-codex-adapter.md) |
+| 0047 | `user-invocable` spelling, skill-lint gate, skills stream joins the ledger family | ✅ | 2026-08-19 | 2026-08-19 | [0047-skill-field-rename-and-skill-ledger.md](0047-skill-field-rename-and-skill-ledger.md) |
+| 0048 | skills-parked/ top level, callout ledger, coverage instruments | ✅ | 2026-08-20 | 2026-08-20 | [0048-coverage-build-parked-skills.md](0048-coverage-build-parked-skills.md) |
+| 0049 | residue review + speculative-atone loop + decision-page wake | ✅ | 2026-08-20 | 2026-08-20 | [0049-residue-review-speculative-atone.md](0049-residue-review-speculative-atone.md) |
 
 ---
 

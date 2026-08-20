@@ -2,7 +2,7 @@
 name: pyramid-sweep
 description: Runs a pyramid-of-intelligence corpus sweep — mine a large transcript corpus for candidate items with cheap mechanical passes, then refine through progressively smarter (and costlier) model tiers, each phase gate-verified, ending in a human decision surface. Proven on the 2026-07 vocabulary sweep (236 transcripts → 7 baked glossary rows). Use when a question needs breadth over a big corpus first and judgment only on survivors — vocabulary mining, preference harvesting, pattern extraction. For a single-file or known-location question, just search.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, Agent, Workflow
-user-invokable: true
+user-invocable: true
 argument-hint: "[what to mine, e.g. 'steering vocabulary from the last 60 days']"
 ---
 

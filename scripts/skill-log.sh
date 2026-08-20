@@ -27,38 +27,17 @@
 set -euo pipefail
 
 EVENTS="${SKILL_LOG_EVENTS:-${HOME}/.claude/skills/usage/events.jsonl}"
-LOCK_DIR="${EVENTS}.lock"
 
 command -v jq >/dev/null 2>&1 || { echo "skill-log: jq required" >&2; exit 2; }
 mkdir -p "$(dirname "$EVENTS")"
 
-_now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
-
-# mkdir-based lock (macOS has no flock). ~2s budget, then proceed — a dropped log
-# beats a hang. Two self-heal properties the naive version lacked: a crashed holder
-# is reclaimed once its dir is >30s stale, and _unlock runs on ANY exit via trap, so
-# a signal between lock and write never leaves the lock wedged forever.
-# Bound: the give-up path writes without the lock, so under heavy concurrency a line
-# larger than PIPE_BUF (~4KB) can interleave. Skill events are small and serial, so
-# this is unexposed today; keep --metrics blobs small. flock would fix it but macOS
-# lacks it.
-_acquired=0
-_lock() {
-  local i=0
-  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
-    # Reclaim a stale lock left by a crashed writer (dir mtime older than 30s).
-    if [ -d "$LOCK_DIR" ]; then
-      local age; age=$(( $(date +%s) - $(stat -f %m "$LOCK_DIR" 2>/dev/null || echo 0) ))
-      [ "$age" -gt 30 ] && rmdir "$LOCK_DIR" 2>/dev/null && continue
-    fi
-    i=$((i+1)); [ "$i" -ge 20 ] && return 0   # gave up — do NOT mark acquired
-    sleep 0.1
-  done
-  _acquired=1
-}
-_unlock() { [ "$_acquired" = 1 ] && rmdir "$LOCK_DIR" 2>/dev/null; _acquired=0; }
-# Release on any exit (SIGTERM/SIGINT/normal) — a wedged lock penalises every future call.
-trap _unlock EXIT INT TERM
+# The append goes through the gcc ledger family's one sanctioned writer (mkdir
+# lock, best-effort after ~2s, seal-safe), so this stream is a member of the family
+# ledger.sh reads, not a look-alike. The id keeps its original shape
+# (skl-<stamp>-<rand>, the persona-log style ledger-format.md lists as legal) so
+# history and citations stay valid.
+source "$(dirname "${BASH_SOURCE[0]}")/ledger/ledger-common.sh"
+_now() { ledger_ts; }
 
 # Emit a numeric value for jq --argjson, else `null` — a fat-fingered --corrections
 # must not crash the event under set -e (jq --argjson rejects non-JSON).
@@ -124,7 +103,7 @@ cmd_record() {
       loop:$loop, iterations:$iterations, corrections:$corrections, gate:$gate,
       cost_tokens:$cost, metrics:$metrics, note:$note}
      | with_entries(select(.value != "" and .value != null))')
-  _lock; printf '%s\n' "$line" >> "$EVENTS"; _unlock
+  ledger_append "$EVENTS" "${EVENTS}.lock" "$line"
   echo "$id"
 }
 

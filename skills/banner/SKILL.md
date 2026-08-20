@@ -3,7 +3,7 @@ name: banner
 description: Generates a customized terminal banner by prompting for title, sections, and theme — renders using std::claude::shared banner.py with guaranteed alignment.
 allowed-tools: Read, Bash, Glob
 argument-hint: "[description of what to display]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

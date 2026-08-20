@@ -67,10 +67,15 @@ soft_note() {  # $1 = message text
 # ── Gate 0: only turns that actually changed source/test files this session ──
 # A "done" with no edits is almost always conversational ("done reading"). Reuse the
 # session edit-list maintained by track-edits-session.sh.
+#
+# A no-source-edit turn is no longer a plain exit. It falls through to Stage P below,
+# which handles the one completion claim that arrives WITHOUT an edit: a verdict about
+# repo state. Everything between here and Stage P is inspection only, and Stage P
+# exits before Det1a, so a no-edit turn can never reach the blocking pipeline.
 EDITED="/tmp/claude-edited-files-${sid8}"
-[ -s "$EDITED" ] || exit 0
-if ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh|css|scss|sass|less|vue|svelte)$' "$EDITED" 2>/dev/null; then
-  exit 0
+src_edited=0
+if [ -s "$EDITED" ] && rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh|css|scss|sass|less|vue|svelte)$' "$EDITED" 2>/dev/null; then
+  src_edited=1
 fi
 
 # A style-only turn (css/scss/vue/svelte and nothing else) used to exit above, which
@@ -79,7 +84,8 @@ fi
 # than a block: this file class has no fire-rate history yet, and a colour-variable
 # tweak does not deserve the same consequence as an unexercised code path.
 style_only=0
-if ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$' "$EDITED" 2>/dev/null; then
+if [ "$src_edited" = 1 ] \
+   && ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$' "$EDITED" 2>/dev/null; then
   style_only=1
 fi
 
@@ -106,6 +112,69 @@ last_asst=$(printf '%s\n' "$turn_json" | jq -rc 'select(.type=="assistant")' 2>/
 [ -n "$last_asst" ] || exit 0
 claim_text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
 [ -n "$claim_text" ] || exit 0
+
+# ── Stage P: a verdict about REPO STATE, asserted without re-reading it ───────
+# The sibling failure to this hook's own. `declared-ready` asks whether you ran the
+# code you changed. This asks whether you looked before describing state you did not
+# change. Both are completion claims; only the first needs an edit to exist.
+#
+# Grounded in atone `status-verdict-from-stale-mental-model-no-re-check` (6 events,
+# S3), whose first instance shipped a "READY TO COMMIT + PUSH" box with a stage-list
+# for three commits the owner had already pushed hours earlier. Its recorded precheck
+# is the rule enforced here, verbatim: a verdict block naming repo state must be
+# immediately preceded by a fresh verification call, and a check from earlier in the
+# session does not count.
+#
+# Scoped to REPO state on purpose. The register's other five instances are context
+# pressure (already gated by ctx-claim-stop.sh), a doc's line count, and live process
+# identity. Those need different evidence and get their own gates or none; a single
+# regex spanning all of them would be the vocabulary sprawl this detector was
+# measured out of. Corpus rate for this claim shape: 1.21% of assistant messages
+# (132 of 10,934), and the git-read exemption removes the turns that did look.
+#
+# SOFT ONLY, per ruling D2a: a new gate ships warn-tier and is promoted on evidence.
+if [ "$src_edited" = 0 ]; then
+  REPO_CLAIM_RE='\b((is|are|remains?|stays?)[[:space:]]+(still[[:space:]]+)?(un)?committed|(nothing|everything|all|both)[[:space:]]+(is|are|was|were)[[:space:]]+(committed|pushed|staged)|working[[:space:]]+tree[[:space:]]+is[[:space:]]+clean|(already|now)[[:space:]]+(committed|pushed)|ready[[:space:]]+to[[:space:]]+(commit|push)|(has|have)[[:space:]]+been[[:space:]]+(committed|pushed))\b'
+  # "commit" is three different words in English and only one of them is git's.
+  # Measured false fires before this guard existed: "she is committed to the
+  # redesign" (a promise), "the transaction is committed once the WAL flush
+  # returns" and "the database transaction has been committed" (a DB commit),
+  # "ready to commit to that design" (a promise again), and "everything is pushed
+  # to the edge cache" (a deploy target that is not a remote). The disqualifier is
+  # applied PER SENTENCE, so one such phrase elsewhere in a long message cannot
+  # suppress a genuine verdict in another sentence, and vice versa.
+  REPO_DISQUAL_RE='\b(commit(ted)?[[:space:]]+to[[:space:]]|transaction|database|[[:space:]]db[[:space:]]|pushed[[:space:]]+to[[:space:]]+(the[[:space:]]+)?(edge|cache|cdn|queue|client|browser|prod|production|staging))\b'
+  # Quoted output is not a claim. A message showing `echo "everything is committed"`
+  # in a fenced block, or citing a log line, is describing rather than asserting.
+  # Same stripper prose-smell-stop.sh:59-61 uses, for the same reason.
+  repo_prose=$(printf '%s\n' "$claim_text" \
+    | awk 'BEGIN{f=0} /^[[:space:]]*```/{f=!f; next} !f{print}' \
+    | sed -e 's/`[^`]*`//g' -e '/^[[:space:]]*>/d')
+  repo_claim=0
+  while IFS= read -r s; do
+    printf '%s' "$s" | rg -qiP "$REPO_CLAIM_RE" 2>/dev/null || continue
+    printf '%s' "$s" | rg -qiP "$REPO_DISQUAL_RE" 2>/dev/null && continue
+    repo_claim=1; break
+  done <<EOF
+$(printf '%s' "$repo_prose" | rg -oP '[^.!?\n]+[.!?]?' 2>/dev/null)
+EOF
+  if [ "$repo_claim" = 1 ]; then
+    # Evidence: any state-READING git/gh command this turn. A write (commit, push,
+    # add) is not evidence — it changes state without reporting what is there, which
+    # is how the original event happened: the work was done, the tree was never read.
+    turn_bash=$(printf '%s\n' "$turn_json" \
+      | jq -r 'select(.type=="assistant") | .message.content[]?
+          | select(.type=="tool_use" and .name=="Bash") | .input.command // empty' 2>/dev/null)
+    if ! printf '%s\n' "$turn_bash" | rg -qP '\bgit[[:space:]]+(status|log|diff|show|rev-parse|ls-files|branch)\b|\bgh[[:space:]]+(pr|repo)[[:space:]]+(view|list|status)\b' 2>/dev/null; then
+      REPOMARK="/tmp/claude-declared-ready-repostate-${sid8}"
+      if [ ! -f "$REPOMARK" ]; then
+        : > "$REPOMARK" 2>/dev/null || true
+        soft_note "✓ repo-state verdict (soft — nothing read the tree this turn): your message states what is committed, pushed, or clean, and no git status/log/diff ran this turn. State drifts under the user, hooks, sub-agents, and concurrent sessions, so a check from earlier in the session is not evidence for a verdict written now. The first time this happened the message listed three commits to stage that the owner had already pushed (atone status-verdict-from-stale-mental-model, S3, 6x). Cheap fix: git status + git log --oneline -3 immediately before the sentence. Mute: touch ~/.claude/.no-declared-ready-gate"
+      fi
+    fi
+  fi
+  exit 0
+fi
 
 # Defined here (not at the eligibility gate) because Det1a's weak-credit branch
 # also consults SUCCESS_RE to stay out of the block pipeline's way.

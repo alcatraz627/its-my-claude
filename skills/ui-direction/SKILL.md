@@ -3,7 +3,7 @@ name: ui-direction
 description: Finds and rules on a visual direction before anyone plans or builds. Grounds the work in a cited research sheet that reads the owner's rejection record FIRST, runs the direction through frontend-design's own critique loop, and lands a SHA-stamped memo the owner rules on once. Can and must return "no direction" per problem when the canon already answers it. Use when a surface needs a direction rather than a plan: "what should this look like", "explore directions", a greenfield page, or a renovation whose taste question is unsettled. Not for planning a known change (that is /build-ui) and not for critique of one screenshot (that is /ui-gripe).
 allowed-tools: Read, Write, Grep, Glob, Bash, WebSearch, WebFetch, Agent
 argument-hint: "<surface> [--panel] [problem list or brief path]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

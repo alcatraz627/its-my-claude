@@ -2,7 +2,7 @@
 name: gotchas-update
 description: Appends a new dated entry to gotchas.md after a bug fix, architectural discovery, or lesson learned — keeping the project's developer pitfall log current.
 allowed-tools: Read, Edit, Write, Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "[description]"
 ---
 

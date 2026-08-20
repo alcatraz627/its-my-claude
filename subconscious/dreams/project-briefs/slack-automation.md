@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-15T01:39:30.791406+00:00 · 18 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-18T17:50:20.047251+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-Slack data-scraping and aggregation pipeline with multi-stage fan-out sub-agents, per-source filtering UI, and iterative deployment cycles. Work style is orchestration-heavy with frequent plan→implement→review sequencing.
+Slack automation and fan-out scraping pipelines with multi-platform data aggregation. Work style is iterative with strong session-continuity needs and external-platform integrations requiring explicit agent attribution.
 
 ## Things to do (or keep doing)
-- Route raw collection/scraping to sonnet-high or gemini; reserve higher-tier models for analysis and synthesis stages
-- Run a skeptical-review or adversarial gate sub-agent on any scraping/aggregation plan before implementing — it reliably surfaces real bugs
-- Check `git diff -w` before interpreting diff size; auto-formatting hooks rewrite on write and inflate apparent change size
-- When corrected on any behavior (prose style, code pattern, UI gap), treat the correction as class-scoped — find and fix all other instances of the same pattern immediately
+- Route raw scraping/collection steps to sonnet-high or gemini; reserve higher-tier models for analysis only
+- Always read a sub-agent's output file before treating its work as done — the completion notice is a pointer, not the artifact
+- When correcting any pattern instance (prose, code, UI), grep for sibling instances of the same class before declaring done
+- Verify task list session scope before displaying — showing the wrong session's list is treated as a hard error
 
 ## Things to avoid
-- Don't regenerate AI-smell prose (em-dashes, excessive bold) immediately after a stop-hook block; the hook fires again and again until the root pattern is eliminated
-- Don't claim a feature is done without exercising the code path; the declared-ready hook fires multiple times per session on this project
-- Don't answer a scoping or operational question with a multi-section structured briefing — give the direct answer first, context second
-- Don't treat checkpoint directives or documentation as authoritative across sessions; verify current code state before acting on any "completed" claim from a prior session note
+- Don't resurface work the user has explicitly parked on a concrete trigger condition (e.g., "only if customer demand"); the deferral stands until explicitly lifted
+- Don't name tasks as "unblocked" or "mine" in closing text without executing them in that same turn — naming and deferring is not execution
+- Don't assess context pressure by tool count or turn count; only ctx-pressure hook notifications (70/80/90%) are valid instruments
+- Don't apply hard line caps to checkpoint summaries; load-bearing constraints must be preserved verbatim regardless of length
 
 ## Open questions / known gaps
-- Kanban board is never proactively updated during multi-stage work; treat board sync as a required step at each stage boundary, not an optional cleanup
-- Ambiguous task references ("do #2") repeatedly cause direction corrections — confirm which item is meant before proceeding
+- AI-smell prose (em-dashes, bold spans) resurfaces repeatedly after correction within the same session — correction loop is not landing; treat prose regeneration after a block as requiring a full rewrite pass, not incremental edits
+- Per-source filter coverage in multi-platform data UIs is consistently incomplete at first pass; explicitly audit all actively-scraped sources against the filter UI before calling the feature done

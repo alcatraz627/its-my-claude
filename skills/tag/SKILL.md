@@ -2,7 +2,7 @@
 name: tag
 description: Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct home per PLACEMENT.md, updates every index and cross-reference, and promotes it into CLAUDE.md's always-loaded core only when the tier heuristics justify it.
 argument-hint: '[target | "concept"]'
-user-invokable: true
+user-invocable: true
 disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---

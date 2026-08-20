@@ -43,6 +43,7 @@ main { max-width: 1060px; margin: 0 auto; padding: 20px 22px 140px; }
   padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
   border-radius: 10px; }
 .intro kbd { color: var(--text); }
+a.evidence { color: var(--accent, #7cb7ff); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
 /* provenance line — which session/project/topic created this page */
 .origin { font-size: 12.5px; color: var(--dim); margin: 0 0 12px; padding: 2px 2px;
   display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
@@ -195,6 +196,12 @@ let CFG = null, FOCUS = -1;
 
 const esc = s => String(s ?? "").replace(/[&<>"]/g,
   c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* Evidence links: a bare http(s) URL in intro, group context, decision context,
+   or an item's read becomes a clickable link that opens in a new tab, so a page
+   can point at rendered evidence beside it (R1-landing.html) without HTML in
+   the config. */
+const linkify = s => esc(s).replace(/(https?:\/\/[^\s<)]+)/g,
+  u => `<a class="evidence" href="${u}" target="_blank" rel="noreferrer">${u.replace(/^https?:\/\/[^/]+\//, "")}</a>`);
 
 /* a note field, collapsed by default. Present on every card + the end-of-form
    card, so the human can annotate anything without the agent pre-seeding it. */
@@ -219,17 +226,17 @@ function render() {
       .map(esc).join(`<span class="sep"> · </span>`);
     h += `<p class="origin">${o.topic ? `<span class="badge">${esc(o.topic)}</span>` : ""}${tail}</p>`;
   }
-  if (CFG.intro) h += `<p class="intro">${esc(CFG.intro)} When you're done, hit
+  if (CFG.intro) h += `<p class="intro">${linkify(CFG.intro)} When you're done, hit
     <b>Submit to Claude</b> (or <b>Copy answers</b> to paste it yourself). Press
     <kbd>?</kbd> for keyboard.</p>`;
   if ((CFG.decisions || []).length) {
     const dm = (CFG.groups || {})["Decisions"] || {};
     h += `<div class="group${dm.color ? " tinted" : ""}" data-g="__decisions"${dm.color ? ` style="--gcol:${esc(dm.color)}"` : ""}><h2>Decisions <span class="n">· ${CFG.decisions.length}</span></h2>`;
-    if (dm.context) h += `<p class="gctx">${esc(dm.context)}</p>`;
+    if (dm.context) h += `<p class="gctx">${linkify(dm.context)}</p>`;
     CFG.decisions.forEach(d => {
       h += `<section class="card decision" data-d="${esc(d.id)}" tabindex="-1">
         <h3><span class="idtag">${esc(d.id)}</span> ${esc(d.question)}</h3>`;
-      if (d.context) h += `<p class="read">${esc(d.context)}</p>`;
+      if (d.context) h += `<p class="read">${linkify(d.context)}</p>`;
       d.options.forEach((o, i) => {
         h += `<label class="opt"><input type="radio" name="${esc(d.id)}"
           value="${esc(o.code)}" ${o.rec ? "checked" : ""}><b>${esc(o.code)}</b> ·
@@ -252,12 +259,12 @@ function render() {
       const n = CFG.sections.filter(x => (x.group || "Items") === group).length;
       const gm = (CFG.groups || {})[group] || {};
       h += `<div class="group${gm.color ? " tinted" : ""}" data-g="${esc(group)}"${gm.color ? ` style="--gcol:${esc(gm.color)}"` : ""}><h2>${esc(group)} <span class="n">· ${n}</span></h2>`;
-      if (gm.context) h += `<p class="gctx">${esc(gm.context)}</p>`;
+      if (gm.context) h += `<p class="gctx">${linkify(gm.context)}</p>`;
       open = true;
     }
     h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
       <h3>${esc(s.title)} <span class="idtag">${esc(s.id)}</span>${s.prio ? ` <span class="prio">${esc(s.prio)}</span>` : ""}</h3>`;
-    if (s.read) h += `<p class="read">${esc(s.read)}</p>`;
+    if (s.read) h += `<p class="read">${linkify(s.read)}</p>`;
     if ((s.images || []).length) h += `<div class="shots">` +
       s.images.map(im => `<img src="${esc(im)}" alt="${esc(s.title)}" loading="lazy">`).join("") + `</div>`;
     if (s.slots) {

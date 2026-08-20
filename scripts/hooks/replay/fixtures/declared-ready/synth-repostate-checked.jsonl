@@ -1,0 +1,4 @@
+{"type":"user","message":{"content":"where do things stand?"}}
+{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Bash","input":{"command":"git status --short && git log --oneline -3"}}]}}
+{"type":"user","message":{"content":[{"type":"tool_result","content":" M a.txt\nabc1234 last commit"}]}}
+{"type":"assistant","message":{"content":[{"type":"text","text":"Everything is committed except a.txt, and the working tree is otherwise clean."}]}}

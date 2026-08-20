@@ -66,16 +66,43 @@ grep -q 'session' /tmp/rs-test-err 2>/dev/null \
   || bad "the reason does not identify the session"
 
 echo "== --explain describes a FRESH content-match, not only a cached one =="
-live="${CLAUDE_CODE_SESSION_ID:-}"
-if [ -z "$live" ]; then
-  echo "  skip  no live session id in this environment"
-else
-  r=$(resolve "$live"); rc=${r%%|*}; err=${r##*|}
-  [ "$rc" = 0 ] && ok "the live session resolves cold" || bad "live session failed to resolve cold (exit $rc)"
-  printf '%s' "$err" | grep -q 'content-match' \
-    && ok "--explain reports the fresh match ($err)" \
-    || bad "--explain silent on a fresh match; python stderr is being swallowed"
-fi
+# Seeded fixture, not the ambient session: the live transcript only carries the
+# unescaped "subject":"..." key on harness builds with a Task tool (40 of 184
+# transcripts here), so depending on it made the suite pass or fail by BUILD
+# (gcc-work #1, 2026-08-20). Pattern copied from state-matrix.test.sh "the
+# TRANSCRIPT path": a TaskCreate-shaped transcript line, a matching store, a
+# decoy store, driven end to end under a sandbox HOME.
+SB2=$(mktemp -d)
+FSID=99999999-8888-7777-6666-555555555555
+FPROJ="$SB2/proj"; mkdir -p "$FPROJ"
+FTDIR="$SB2/.claude/projects/$(printf '%s' "$FPROJ" | sed 's#/#-#g')"; mkdir -p "$FTDIR"
+fd_store="$SB2/.claude/tasks/session-fx000001"; mkdir -p "$fd_store"
+i=1
+for subj in "wire the census exporter to the new schema" \
+            "backfill the delivery ledger for July" \
+            "retire the legacy webhook shim"; do
+  st="pending"; [ "$i" = 3 ] && st="done"   # done is canonical-equivalent (harness builds write it)
+  printf '{"id":"%s","subject":"%s","description":"","status":"%s","blocks":[],"blockedBy":[],"metadata":{}}' \
+    "$i" "$subj" "$st" > "$fd_store/$i.json"; i=$((i+1))
+done
+fd_decoy="$SB2/.claude/tasks/session-fx000002"; mkdir -p "$fd_decoy"
+printf '{"id":"1","subject":"something completely unrelated about fonts","description":"","status":"pending","blocks":[],"blockedBy":[],"metadata":{}}' > "$fd_decoy/1.json"
+{
+  printf '{"type":"user","timestamp":"2026-08-20T00:00:00Z","message":{"role":"user","content":"work the list"}}\n'
+  for subj in "wire the census exporter to the new schema" \
+              "backfill the delivery ledger for July" \
+              "retire the legacy webhook shim"; do
+    printf '{"type":"assistant","timestamp":"2026-08-20T00:00:01Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"TaskCreate","input":{"subject":"%s","status":"pending"}}]}}\n' "$subj"
+  done
+} > "$FTDIR/$FSID.jsonl"
+out=$(HOME="$SB2" bash "$R" --as-session "$FSID" --explain 2>/tmp/rs-fresh-err); rc=$?
+[ "$rc" = 0 ] && [ "$(basename "${out:-}")" = "session-fx000001" ] \
+  && ok "seeded session resolves cold to the matching store" \
+  || bad "seeded cold resolve failed (rc=$rc out=${out:-none})"
+grep -q 'content-match' /tmp/rs-fresh-err 2>/dev/null \
+  && ok "--explain reports the fresh match" \
+  || bad "--explain silent on a fresh match; python stderr is being swallowed"
+rm -rf "$SB2"
 
 echo "== a bare run stays quiet on stderr =="
 if [ -n "${CLAUDE_CODE_SESSION_ID:-}" ]; then

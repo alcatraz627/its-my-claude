@@ -3,7 +3,7 @@ name: revive
 description: Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume <uuid>` command for the user to run. Use when the user wants to fully rehydrate a past session — not just a summary. Companion to /catchup (which restores task context from a checkpoint summary). /revive is heavier (full conversation rehydration) and runs from a different terminal since a Claude process cannot replace itself.
 allowed-tools: Read, Glob, Grep, Bash
 argument-hint: "[--project PATH] [--all] [--within DAYS]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

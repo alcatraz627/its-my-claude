@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kanban · drafts</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
+<style>
+  /* kanban — drafts. Same skin as hub and board; the canvas is an editor rather
+     than a list, so the writing column gets the room and everything else gets
+     out of its way. */
+  :root{
+    --canvas:#131417; --well:#191b1f; --card:#212329; --card-hover:#282b32;
+    --border:#2f333b; --border-2:#414651; --ring:#5b9dff;
+    --text:#e9ebee; --text-2:#a4a9b1; --text-3:#8c939d;
+    --blue:#5b9dff; --blue-bg:rgb(91 157 255/.12); --blue-br:rgb(91 157 255/.32);
+    --amber:#e8b84b; --amber-bg:rgb(232 184 75/.12); --amber-br:rgb(232 184 75/.34);
+    --red:#ed7666; --red-bg:rgb(237 118 102/.12); --red-br:rgb(237 118 102/.32);
+    --green:#4bbd63;
+    --shadow:0 1px 2px rgb(0 0 0/.4);
+    --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
+  }
+  [data-theme="light"]{
+    --canvas:#e9ebef; --well:#f4f5f8; --card:#ffffff; --card-hover:#f7f8fa;
+    --border:#d7dae1; --border-2:#b6bcc6; --ring:#0961bb;
+    --text:#191c20; --text-2:#565d66; --text-3:#5f666f;
+    --blue:#0961bb; --blue-bg:rgb(9 97 187/.12); --blue-br:rgb(9 97 187/.26);
+    --amber:#8a5d05; --amber-bg:rgb(190 141 20/.12); --amber-br:rgb(150 108 12/.34);
+    --red:#a1271e; --red-bg:rgb(161 39 30/.12); --red-br:rgb(161 39 30/.28);
+    --green:#17752f;
+    --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
+  }
+  *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
+  html,body{height:100%}
+  body{margin:0;background:var(--canvas);color:var(--text);font:13px/1.5 var(--sans);
+       -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+       display:flex;flex-direction:column}
+  header{display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--border);flex:none}
+  h1{margin:0;font:600 15.5px/1.3 var(--sans);letter-spacing:-.011em;flex:1}
+  button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
+         padding:5px 9px;font-size:12.5px;font-weight:500;transition:background .12s,border-color .12s,color .12s}
+  button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  button:disabled{opacity:.45;cursor:default}
+  button:disabled:hover{background:var(--card);border-color:var(--border);color:var(--text-2)}
+  a{color:var(--blue)}
+  .views{display:flex;gap:4px}
+  .views a,.views button{display:inline-flex;align-items:center;text-decoration:none;border-radius:6px;
+         border:1px solid var(--border);background:var(--card);color:var(--text-2);padding:5px 9px;font-size:12.5px;font-weight:500}
+  .views .on{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+
+  main{flex:1;min-height:0;display:flex}
+  /* the list is context, so it stays narrow and lets the writing column breathe */
+  aside{width:286px;flex:none;border-right:1px solid var(--border);display:flex;flex-direction:column;min-height:0}
+  .atop{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center}
+  .atop .new{background:var(--blue);border-color:transparent;color:var(--canvas);font-weight:600}
+  [data-theme="light"] .atop .new{color:#fff}
+  .atop .new:hover{background:var(--blue);border-color:transparent;filter:brightness(1.08)}
+  .alist{overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:14px;flex:1}
+  .glabel{font:600 11.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);padding:0 4px 6px}
+  .drow{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:8px;
+        padding:8px 10px;color:var(--text);font-size:12.5px;line-height:1.45}
+  .drow:hover{background:var(--well);border-color:var(--border)}
+  .drow.on{background:var(--card);border-color:var(--blue-br)}
+  .drow .dh{font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .drow.pulled .dh{color:var(--text-3);text-decoration:line-through}
+  .drow .dm{margin-top:3px;font-size:11.5px;color:var(--text-3);display:flex;gap:7px;flex-wrap:wrap}
+  .drow .dm .now{color:var(--amber)}
+  .drow .dm .tpl{color:var(--blue)}
+  .aempty{color:var(--text-3);font-size:12.5px;padding:8px 4px}
+
+  section.edit{flex:1;min-width:0;display:flex;flex-direction:column}
+  .etop{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:none}
+  .etop input.title{flex:1;min-width:150px;background:transparent;border:1px solid transparent;border-radius:6px;
+                    color:var(--text);font:600 14px/1.4 var(--sans);padding:5px 8px}
+  .etop input.title:hover{border-color:var(--border)}
+  .etop input.title:focus{outline:none;background:var(--well);border-color:var(--blue)}
+  .etop select{font:inherit;font-size:12px;background:var(--card);color:var(--text-2);
+               border:1px solid var(--border);border-radius:6px;padding:5px 7px;max-width:190px}
+  .etop .save{background:var(--blue);border-color:transparent;color:var(--canvas);font-weight:600}
+  [data-theme="light"] .etop .save{color:#fff}
+  .etop .save:disabled{background:var(--card);color:var(--text-3)}
+  .etop .del:hover{color:var(--red);border-color:var(--red-br);background:var(--red-bg)}
+  .etop .on{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  .ebody{flex:1;min-height:0;display:flex}
+  .ebody.split .pane{width:50%}
+  .pane{width:100%;min-width:0;display:flex}
+  textarea{flex:1;width:100%;background:var(--canvas);color:var(--text);border:none;resize:none;
+           padding:18px 22px;font:13.5px/1.65 var(--mono);tab-size:2}
+  textarea:focus{outline:none}
+  .prev{flex:1;overflow-y:auto;padding:18px 22px;border-left:1px solid var(--border);font-size:13.5px;line-height:1.65}
+  .prev h1,.prev h2,.prev h3{letter-spacing:-.011em;margin:1.2em 0 .5em;line-height:1.3}
+  .prev h1{font-size:20px} .prev h2{font-size:16.5px} .prev h3{font-size:14px}
+  .prev h1:first-child,.prev h2:first-child,.prev h3:first-child{margin-top:0}
+  .prev p,.prev ul,.prev ol{margin:.7em 0}
+  .prev code{font:12.5px var(--mono);background:var(--well);border:1px solid var(--border);border-radius:4px;padding:1px 4px}
+  .prev pre{background:var(--well);border:1px solid var(--border);border-radius:8px;padding:11px 13px;overflow-x:auto}
+  .prev pre code{background:none;border:none;padding:0}
+  .prev table{border-collapse:collapse;width:100%;font-size:12.5px;display:block;overflow-x:auto}
+  .prev th,.prev td{border:1px solid var(--border);padding:5px 9px;text-align:left}
+  .prev th{background:var(--well)}
+  .estat{padding:7px 18px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text-3);
+         display:flex;gap:10px;align-items:center;flex:none;flex-wrap:wrap}
+  .estat .dirty{color:var(--amber)}
+  .estat .err{color:var(--red)}
+  .estat .ok{color:var(--green)}
+  .estat .spacer{flex:1}
+  .nothing{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-3);padding:40px;text-align:center}
+  #banner{margin:0;padding:9px 18px;border-bottom:1px solid var(--red-br);background:var(--red-bg);color:var(--red);font-size:12.5px;display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Drafts</h1>
+  <nav class="views">
+    <a href="/">Boards</a>
+    <a href="/drafts" class="on">Drafts</a>
+  </nav>
+  <button id="theme" title="toggle theme">◐</button>
+</header>
+<p id="banner"></p>
+<main>
+  <aside>
+    <div class="atop">
+      <button class="new" id="newDraft" type="button">New draft</button>
+      <select id="tplNew" aria-label="start from a template"><option value="">from a template…</option></select>
+    </div>
+    <div class="alist" id="list"><div class="aempty">Loading…</div></div>
+  </aside>
+  <section class="edit" id="edit"></section>
+</main>
+<script>
+const applyTheme = (t) => { document.documentElement.dataset.theme = t; document.body.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
+applyTheme(localStorage.getItem("kanban-theme") || "dark");
+document.getElementById("theme").onclick = () =>
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+// the board and hub both bind t; the editor must not swallow it while typing
+addEventListener("keydown", (e) => {
+  if (e.key !== "t" || e.metaKey || e.ctrlKey || e.altKey) return;
+  const el = document.activeElement;
+  if (el && (el.tagName === "TEXTAREA" || el.tagName === "INPUT" || el.isContentEditable)) return;
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+});
+
+const ago = (ms) => {
+  const s = Math.max(0, (Date.now() - ms) / 1000);
+  if (s < 90) return `${Math.round(s)}s`;
+  if (s < 5400) return `${Math.round(s / 60)}m`;
+  if (s < 172800) return `${Math.round(s / 3600)}h`;
+  return `${Math.round(s / 86400)}d`;
+};
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
+};
+const banner = (msg) => {
+  const b = document.getElementById("banner");
+  b.textContent = msg ?? "";
+  b.style.display = msg ? "block" : "none";
+};
+
+let drafts = [], boards = [], currentId = null, broken = null;
+// The unsaved buffer is separate from the saved record, so a poll or a list
+// click can never overwrite what the owner has typed but not yet saved.
+let buf = null;          // {title, body} while editing
+let saved = null;        // the record as the server last confirmed it
+let previewOn = localStorage.getItem("kanban-draft-preview") === "1";
+let status = null;       // {kind: "ok"|"err", msg}
+
+const KEY = (id) => `kanban-draftbuf-${id ?? "new"}`;
+// An unsaved new draft has no record yet, so "dirty" means it has any content at
+// all. The server refuses to store an empty draft, and it is right to: clicking
+// New should not put junk on disk before the owner has written anything.
+const dirty = () => !!buf && (saved
+  ? buf.title !== (saved.title ?? "") || buf.body !== saved.body
+  : !!(buf.title.trim() || buf.body.trim()));
+
+const post = async (patch) => {
+  const res = await fetch("/api/draft", { method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify(patch) });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error ?? `HTTP ${res.status}`);
+  return out;
+};
+
+async function load({ keepBuffer = true } = {}) {
+  let res;
+  try { res = await (await fetch("/api/drafts")).json(); }
+  catch (e) { banner(`could not reach the server: ${e.message}`); return; }
+  // a store that will not parse must say so; an empty list would read as "no
+  // drafts" and the owner would assume their writing was never saved
+  broken = res.broken ?? null;
+  banner(broken ? `Your drafts file will not parse, so none can be shown. Nothing else is affected. Fix or trash ~/.claude/kanban/drafts.json. ${broken}` : null);
+  drafts = res.drafts ?? [];
+  if (!boards.length) {
+    try { boards = (await (await fetch("/api/boards")).json()).boards ?? []; } catch { boards = []; }
+  }
+  if (currentId && !drafts.some((d) => d.id === currentId)) { currentId = null; buf = null; saved = null; }
+  if (!keepBuffer || !buf) selectFromUrl();
+  render();
+}
+
+function selectFromUrl() {
+  const want = new URLSearchParams(location.search).get("d");
+  if (want && drafts.some((d) => d.id === want)) open(want, { push: false });
+  else if (!currentId && drafts.length) open(drafts[0].id, { push: false });
+  else if (!drafts.length) { currentId = null; buf = null; saved = null; }
+}
+
+function open(id, { push = true } = {}) {
+  if (dirty() && !confirm("This draft has unsaved changes. Discard them?")) return;
+  const d = drafts.find((x) => x.id === id);
+  if (!d) return;
+  currentId = id;
+  saved = { title: d.title, body: d.body };
+  // a crash-recovered buffer wins over the saved text, since it is the newer
+  // thing the owner typed and losing it is the only unrecoverable outcome here
+  const stash = localStorage.getItem(KEY(id));
+  buf = stash ? JSON.parse(stash) : { title: d.title ?? "", body: d.body };
+  status = null;
+  if (push) history.replaceState(null, "", `/drafts?d=${id}`);
+  render();
+}
+
+// Nothing is written until the first save, so a new draft lives only in the
+// buffer. Seeding it from a template is the same act with the text pre-filled.
+function newDraft(seed) {
+  if (dirty() && !confirm("This draft has unsaved changes. Discard them?")) return;
+  localStorage.removeItem(KEY(null));   // a fresh start is not a crash recovery
+  currentId = null;
+  saved = null;
+  buf = { title: seed?.title ?? "", body: seed?.body ?? "" };
+  status = null;
+  history.replaceState(null, "", "/drafts");
+  render();
+  const ta = document.querySelector(".ebody textarea");
+  if (ta) { ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; }
+}
+
+async function save() {
+  if (!buf) return;
+  const creating = !currentId;
+  if (creating && !buf.title.trim() && !buf.body.trim()) {
+    status = { kind: "err", msg: "write something first" };
+    paintStatus();
+    return;
+  }
+  try {
+    const out = await post({ ...(currentId ? { id: currentId } : {}), title: buf.title, body: buf.body });
+    localStorage.removeItem(KEY(currentId));
+    if (out.deleted) { currentId = null; buf = null; saved = null; history.replaceState(null, "", "/drafts"); }
+    else {
+      currentId = out.id;
+      saved = { title: buf.title || undefined, body: buf.body };
+      history.replaceState(null, "", `/drafts?d=${out.id}`);
+    }
+    status = { kind: "ok", msg: out.deleted ? "deleted" : creating ? "created" : "saved" };
+    await load({ keepBuffer: true });
+  } catch (e) { status = { kind: "err", msg: e.message }; render(); }
+}
+
+async function patch(fields, note) {
+  if (!currentId) return;
+  try {
+    await post({ id: currentId, ...fields });
+    status = { kind: "ok", msg: note };
+    await load({ keepBuffer: true });
+  } catch (e) { status = { kind: "err", msg: e.message }; render(); }
+}
+
+function listEl() {
+  const wrap = el("div", null);
+  const groups = [
+    ["Waiting to be pulled", drafts.filter((d) => !d.isTemplate && !d.pull)],
+    ["Templates", drafts.filter((d) => d.isTemplate)],
+    ["Pulled", drafts.filter((d) => !d.isTemplate && d.pull)],
+  ];
+  let any = false;
+  for (const [label, rows] of groups) {
+    if (!rows.length) continue;
+    any = true;
+    const g = el("div", "group");
+    g.append(el("div", "glabel", `${label} · ${rows.length}`));
+    for (const d of rows) {
+      const b = el("button", "drow" + (d.id === currentId ? " on" : "") + (d.pull ? " pulled" : ""));
+      b.type = "button";
+      const head = d.title || d.body.split("\n").find((l) => l.trim()) || "(empty)";
+      b.append(el("div", "dh", head));
+      const m = el("div", "dm");
+      m.append(el("span", null, `${d.body.split("\n").length}L`));
+      m.append(el("span", null, `${ago(Date.parse(d.updatedAt))} ago`));
+      if (d.boardName) m.append(el("span", null, d.boardName));
+      if (d.isTemplate) m.append(el("span", "tpl", "template"));
+      if (d.triggered && !d.pull) m.append(el("span", "now", "offered"));
+      b.append(m);
+      b.onclick = () => open(d.id);
+      g.append(b);
+    }
+    wrap.append(g);
+  }
+  // An unreadable store is not an empty one. Saying "nothing written yet" over a
+  // file that failed to parse tells the owner their writing is gone.
+  if (!any) wrap.append(el("div", "aempty", broken
+    ? "Your drafts cannot be read, so none are listed. They are not gone; see the message above."
+    : "Nothing written yet. A draft is for the thought that is too big for the ask box."));
+  return wrap;
+}
+
+function editorEl() {
+  if (!buf) {
+    const n = el("div", "nothing");
+    n.append(el("div", null, broken ? "Fix the drafts file before writing more, or a new draft could be the only one left."
+      : drafts.length ? "Pick a draft on the left, or start a new one."
+      : "Start a draft to write something out properly."));
+    return [n];
+  }
+  // Undefined while the draft is still unsaved. Everything that acts on a stored
+  // record (template, offer, board, delete) waits until there is one to act on.
+  const d = drafts.find((x) => x.id === currentId);
+  const top = el("div", "etop");
+  const title = el("input", "title");
+  title.type = "text"; title.value = buf.title; title.placeholder = "Untitled";
+  title.setAttribute("aria-label", "draft title, optional");
+  title.oninput = () => { buf.title = title.value; stash(); paintStatus(); };
+  top.append(title);
+
+  const tpl = el("select");
+  tpl.setAttribute("aria-label", "insert a template at the cursor");
+  tpl.append(new Option("insert template…", ""));
+  for (const t of drafts.filter((x) => x.isTemplate)) {
+    tpl.append(new Option((t.title || t.body.split("\n").find((l) => l.trim()) || t.id).slice(0, 40), t.id));
+  }
+  tpl.disabled = tpl.options.length < 2;
+  tpl.onchange = () => { const t = drafts.find((x) => x.id === tpl.value); if (t) insertAtCursor(t.body); tpl.value = ""; };
+  top.append(tpl);
+
+  if (d) {
+    const board = el("select");
+    board.setAttribute("aria-label", "board, optional");
+    board.append(new Option("no board", ""));
+    for (const b of boards) board.append(new Option(b.name, b.slug));
+    board.value = d.slug ?? "";
+    board.onchange = () => patch({ slug: board.value || null }, board.value ? "attached" : "detached");
+    top.append(board);
+  }
+
+  const prevBtn = el("button", "prev-toggle" + (previewOn ? " on" : ""), "Preview");
+  prevBtn.type = "button";
+  prevBtn.onclick = () => { previewOn = !previewOn; localStorage.setItem("kanban-draft-preview", previewOn ? "1" : "0"); render(); };
+  top.append(prevBtn);
+
+  if (d) {
+  const tplBtn = el("button", d.isTemplate ? "on" : null, d.isTemplate ? "Template" : "Make template");
+  tplBtn.type = "button";
+  tplBtn.title = d.isTemplate
+    ? "A template is reused rather than consumed, so it never waits to be pulled. Click to make it an ordinary draft."
+    : "Mark this as a template so you can reuse its text. Select some text first to make a template of just that part.";
+  tplBtn.onclick = () => {
+    const ta = document.querySelector(".ebody textarea");
+    const sel = ta && ta.value.slice(ta.selectionStart, ta.selectionEnd).trim();
+    // A selection makes a template of the fragment (D5's "snippets"), which is
+    // the same act at a smaller scale, so it is the same control.
+    if (!d.isTemplate && sel) {
+      post({ body: sel, template: true })
+        .then(() => { status = { kind: "ok", msg: "selection saved as a template" }; return load({ keepBuffer: true }); })
+        .catch((e) => { status = { kind: "err", msg: e.message }; render(); });
+      return;
+    }
+    patch({ template: !d.isTemplate }, d.isTemplate ? "now an ordinary draft" : "now a template");
+  };
+  top.append(tplBtn);
+
+  if (!d.isTemplate) {
+    const offer = el("button", d.triggered ? "on" : null, d.triggered ? "Offered" : "Offer to a session");
+    offer.type = "button";
+    offer.title = d.triggered ? "A session has been asked to pick this up now. Click to withdraw."
+      : "Ask a working session to pick this up now, rather than at its next sweep.";
+    offer.onclick = () => patch({ trigger: !d.triggered }, d.triggered ? "withdrawn" : "offered");
+    top.append(offer);
+  }
+  }
+
+  if (d) {
+  const del = el("button", "del", "Delete");
+  del.type = "button";
+  del.onclick = async () => {
+    if (!confirm("Delete this draft? This cannot be undone.")) return;
+    try {
+      await post({ id: currentId, body: "", title: "" });
+      localStorage.removeItem(KEY(currentId));
+      currentId = null; buf = null; saved = null;
+      history.replaceState(null, "", "/drafts");
+      status = { kind: "ok", msg: "deleted" };
+      await load({ keepBuffer: false });
+    } catch (e) { status = { kind: "err", msg: e.message }; render(); }
+  };
+  top.append(del);
+  }
+
+  const saveBtn = el("button", "save", "Save");
+  saveBtn.type = "button"; saveBtn.id = "saveBtn";
+  saveBtn.onclick = save;
+  top.append(saveBtn);
+
+  const body = el("div", "ebody" + (previewOn ? " split" : ""));
+  const pane = el("div", "pane");
+  const ta = el("textarea");
+  ta.value = buf.body;
+  ta.spellcheck = true;
+  ta.setAttribute("aria-label", "draft body, markdown");
+  ta.placeholder = "# Write it out properly\n\nMarkdown. An agent pulls from this when you offer it.";
+  ta.oninput = () => { buf.body = ta.value; stash(); paintStatus(); schedulePreview(); };
+  pane.append(ta);
+  body.append(pane);
+  if (previewOn) {
+    const p = el("div", "prev");
+    p.id = "preview";
+    p.innerHTML = "";
+    body.append(p);
+  }
+
+  const stat = el("div", "estat");
+  stat.id = "estat";
+  return [top, body, stat];
+}
+
+function stash() {
+  if (!buf) return;
+  if (dirty()) localStorage.setItem(KEY(currentId), JSON.stringify(buf));
+  else localStorage.removeItem(KEY(currentId));
+}
+
+function insertAtCursor(text) {
+  const ta = document.querySelector(".ebody textarea");
+  if (!ta || !buf) return;
+  const a = ta.selectionStart, b = ta.selectionEnd;
+  const joined = ta.value.slice(0, a) + text + ta.value.slice(b);
+  buf.body = joined;
+  ta.value = joined;
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = a + text.length;
+  stash();
+  paintStatus();
+  schedulePreview();
+}
+
+// Painted on its own so typing does not rebuild the editor and drop the caret.
+function paintStatus() {
+  const stat = document.getElementById("estat");
+  if (!stat) return;
+  const d = drafts.find((x) => x.id === currentId);
+  stat.replaceChildren();
+  const words = (buf?.body.match(/\S+/g) ?? []).length;
+  stat.append(el("span", null, `${words} word${words === 1 ? "" : "s"}`));
+  if (d?.pull) {
+    const p = el("span", null, "pulled");
+    stat.append(p);
+    if (d.pull.cardId && d.pull.slug) {
+      const a = document.createElement("a");
+      a.href = `/b/${d.pull.slug}?card=${d.pull.cardId}`;
+      a.textContent = d.pull.note || "the card it became";
+      stat.append(a);
+    } else if (d.pull.note) stat.append(el("span", null, d.pull.note));
+  }
+  stat.append(el("span", "spacer"));
+  if (status) stat.append(el("span", status.kind === "err" ? "err" : "ok", status.msg));
+  if (dirty()) stat.append(el("span", "dirty", "unsaved · ⌘S"));
+  const btn = document.getElementById("saveBtn");
+  if (btn) btn.disabled = !dirty();
+}
+
+let previewTimer = null;
+function schedulePreview() {
+  if (!previewOn) return;
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(renderPreview, 250);
+}
+async function renderPreview() {
+  const p = document.getElementById("preview");
+  if (!p || !buf) return;
+  try {
+    const res = await fetch("/api/mdpreview", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ body: buf.body }) });
+    const out = await res.json();
+    // renderMd escapes the source before it marks anything up, so what comes
+    // back cannot carry tags the writer did not get through markdown itself.
+    p.innerHTML = res.ok ? out.html : "";
+    if (!res.ok) p.append(el("div", null, `preview unavailable: ${out.error ?? res.status}`));
+  } catch (e) { p.textContent = `preview unavailable: ${e.message}`; }
+}
+
+function render() {
+  document.getElementById("list").replaceChildren(listEl());
+  const t = document.getElementById("tplNew");
+  const keep = t.value;
+  t.replaceChildren(new Option("from a template…", ""));
+  for (const x of drafts.filter((d) => d.isTemplate)) {
+    t.append(new Option((x.title || x.body.split("\n").find((l) => l.trim()) || x.id).slice(0, 34), x.id));
+  }
+  t.value = keep;
+  t.disabled = t.options.length < 2;
+  document.getElementById("edit").replaceChildren(...editorEl());
+  paintStatus();
+  if (previewOn) renderPreview();
+}
+
+document.getElementById("newDraft").onclick = () => newDraft();
+document.getElementById("tplNew").onchange = (e) => {
+  const t = drafts.find((x) => x.id === e.target.value);
+  e.target.value = "";
+  if (t) newDraft({ body: t.body, title: t.title ? `${t.title} copy` : "" });
+};
+addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); }
+});
+// Losing typed text is the one unrecoverable outcome on this page, so the buffer
+// is stashed on the way out as well as on every keystroke.
+addEventListener("beforeunload", (e) => { stash(); if (dirty()) { e.preventDefault(); e.returnValue = ""; } });
+load({ keepBuffer: false });
+// A poll must never touch the editor: the list is worth refreshing, the words
+// the owner is typing are not the server's to replace.
+setInterval(() => { if (!dirty()) load({ keepBuffer: true }); }, 15000);
+</script>
+</body>
+</html>

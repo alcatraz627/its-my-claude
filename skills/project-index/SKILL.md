@@ -2,7 +2,7 @@
 name: project-index
 description: Scans the project structure, key files, dependencies, and architectural patterns — generates a comprehensive index markdown and optional HTML report. Runs in an isolated forked context to avoid polluting main conversation with hundreds of file reads.
 allowed-tools: Read, Write, Glob, Grep, Bash, Skill
-user-invokable: true
+user-invocable: true
 argument-hint: "[latest | output_path]"
 context: fork
 ---

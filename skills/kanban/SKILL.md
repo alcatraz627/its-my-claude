@@ -2,7 +2,7 @@
 name: kanban
 description: Drives the agent-populated kanban board — inits a board for the current project, re-syncs cards from docs/checkpoints/session-notes, pulls the human's unread card notes, and opens the board UI. Use when the user says "kanban", "board", "sync the board", "any notes for me", or at session start in a project with a board.
 argument-hint: "[init | sync | notes | open | status]"
-user-invokable: true
+user-invocable: true
 ---
 
 # Kanban

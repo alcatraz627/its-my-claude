@@ -2,7 +2,7 @@
 name: gated-plan
 description: The planning process for owner-gated work, meaning anything that cannot correctly proceed until a human decides. Investigates until it can falsify its own proposal, plans with alternatives and an explicit recommendation, batches every open question into ONE decision-grade bundle the human answers in a single pass, records each ruling in the artifact it binds rather than in chat, then implements and reports. Use when work is blocked on a judgment only the owner can make, when questions are accumulating faster than answers, when a plan says "awaiting ruling", or when a previous deferral is about to be silently resolved by momentum. Not for work you are authorized to just do.
 argument-hint: "[the gated work]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

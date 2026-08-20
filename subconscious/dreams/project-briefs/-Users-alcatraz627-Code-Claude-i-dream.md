@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-15T16:00:59.134008+00:00 · 20 patterns / 5 insights -->
+<!-- i-dream project brief · 2026-08-18T17:47:57.931412+00:00 · 20 patterns / 5 insights -->
 ## What this project is about
-Active dream-tracking dashboard (i-dream) with widgets, pm2 services, Anthropic API integration, and light/dark mode. Work style is structured peer-review with two-agent mutual grading; design mocks exist and are authoritative.
+A dream-tracking dashboard (i-dream) with widgets, pm2 services, and Anthropic API integration. Dominant work style: multi-agent peer-review workflows, UI-heavy feature development, and frequent context-retention discipline.
 
 ## Things to do (or keep doing)
-- **Audit sibling pages/components before writing any shared UI** — drawers, sidebars, pagination, and naming schemes already exist elsewhere; find the pattern first, then implement consistently across all instances in one response
-- **Verify at the consumer boundary** — a rendered page in the running dev server, not a code edit or a "sent" signal, is the proof that a UI fix worked
-- **Consult design mocks before implementing any label, flow, or module name** — derived naming from code conventions causes full reworks
-- **Present independently-produced artifacts side-by-side** — never merge two peer plans or reviews; separation carries signal the user needs
+- **Audit all sibling pages/components before touching any UI shell** (drawer, sidebar, modal) — implementing per-page instead of globally is the single most common rework trigger here.
+- **Consult design mocks before writing any label, page name, or creation flow** — internal naming conventions and code patterns are not substitutes; mocks are the contract.
+- **Classify multi-agent output handling mode explicitly** before acting: keep-separate (peer-review/comparison), validate (cross-check against constraints), or triage (dead-agent recovery).
+- **Preserve load-bearing constraints verbatim in every checkpoint** — applying line caps to summaries silently drops invariants; constraints survive truncation, everything else doesn't.
 
 ## Things to avoid
-- **Don't claim UI work done without visually inspecting the running app** — repeated false assurance cycles are the dominant trust-damage pattern here
-- **Don't pause on terse continuations** ("proceed", "keep going", "yes") when context is under 70% and work is clearly pending — continue immediately
-- **Don't skip mandatory skill gate phases** (adversarial validation, etc.) and mark tasks complete — silently skipping confirmed gates is a tracked mistake
-- **Don't regress to default-LLM prose register** (em-dashes, Label:fragment rows, bold-spam) across turns — the prose-smell hook fires repeatedly here; watch for it actively
+- **Don't claim a UI fix is done without visually exercising the rendered page on the running dev server** — compile passes and send-side logs are not destination-state proof.
+- **Don't treat a prose-smell correction as resolved after one rewrite** — AI-smell (em-dashes, bold-spam, Label:fragment rows) resurfaces in multi-turn sessions; re-scan before every human-facing reply.
+- **Don't proceed on a terse continuation when the next action involves a product-level behavioral choice** (user-visible label, feature scope, data model semantics) — pause one line, then execute.
+- **Don't make structural claims about where functionality lives without reading the relevant source file first** — verified at file:line, not inferred from naming.
 
 ## Open questions / known gaps
-- Prose-smell violations recur even after hook correction — the agent is not retaining the voice constraint turn-over-turn; no durable fix yet
-- Deferred decision items frequently lack the prior constraint + concrete options, forcing follow-up questions; format discipline here is unresolved
+- Tension between "proceed on terse continuation" and "surface product-level decisions explicitly" is unresolved — the boundary between an execution decision and a product choice needs per-case judgment, not a blanket rule.
+- Prose-smell hook fires repeatedly on the same violations session after session; a durable fix (stricter self-scan before send, not just hook-triggered rewrite) has not landed.

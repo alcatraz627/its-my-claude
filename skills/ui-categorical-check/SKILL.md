@@ -2,7 +2,7 @@
 name: ui-categorical-check
 description: Checks a UI change for CATEGORICAL bug-classes — the non-primitive defects that pass every DOM/behavioral assertion and only a human notices (a transparent floating layer, sibling controls at mismatched type scale, a height chain with no definite ancestor so the page overflows instead of scrolling inside, an action with no toast, a ghost-fade where a skeleton belongs). Runs a checklist MINED FROM THE USER'S OWN FEEDBACK HISTORY, not invented heuristics. Use before declaring a UI change done, or when a review keeps missing what the user then catches on sight. Sibling of /ui-gripe (per-screenshot confusion forensics), /designer-reviewer (scored aesthetics), /skeptical-review (grounded code review).
 allowed-tools: Read, Bash, Grep, Glob, Agent
-user-invokable: true
+user-invocable: true
 argument-hint: "[url-or-route] [what changed]"
 ---
 
@@ -118,3 +118,10 @@ fix. Then update the catalog with any NEW class this round surfaced.
   the question is "will the user immediately spot something I can't".
 - Findings are flagged, never auto-fixed silently; a color/contrast conflict with an
   explicit user request is surfaced in one sentence, then their call.
+
+## Findings the owner confirms become callout rows
+
+A finding that stays prose regresses unseen. When the owner confirms a finding (or
+made it themselves), record it:
+`bash ~/.claude/scripts/callouts/callouts.sh add "<their words>" --surface <s> --check "<re-verify how>"`.
+The next done-claim on that surface must pass `callouts.sh gate <s>` (see /callouts).

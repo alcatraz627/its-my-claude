@@ -11,7 +11,7 @@ import {
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
-  displayScope,
+  displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -26,7 +26,7 @@ function flag(name: string): string | undefined {
 const hasFlag = (name: string) => rest.includes(`--${name}`);
 // Boolean flags never consume the next token, so flag order can't silently
 // swallow a positional (the sim + skeptic both flagged the old behavior).
-const BOOL_FLAGS = new Set(["json", "force", "undo", "keep-data", "cards", "unread", "ack", "needs-human", "clear", "all", "global"]);
+const BOOL_FLAGS = new Set(["json", "force", "undo", "keep-data", "cards", "unread", "ack", "needs-human", "clear", "all", "global", "templates"]);
 const positional = rest.filter((a, i) => {
   if (a.startsWith("--")) return false;
   const prev = rest[i - 1];
@@ -50,6 +50,14 @@ function itemStore() {
   try { return { items: loadItems().items, landings: loadLandings() }; }
   catch (e: any) {
     die(`the owner's asks could not be read: ${e.message}`,
+        `inspect or trash the broken file, then re-run; the boards are unaffected`);
+  }
+}
+
+function draftStore() {
+  try { return { drafts: loadDrafts().drafts, pulls: loadPulls() }; }
+  catch (e: any) {
+    die(`the owner's drafts could not be read: ${e.message}`,
         `inspect or trash the broken file, then re-run; the boards are unaffected`);
   }
 }
@@ -319,6 +327,108 @@ switch (verb) {
     });
     break;
   }
+  // A draft is a document, so this verb has to be able to hand over the whole
+  // text: `drafts <id>` prints one in full, which is what a pull reads from.
+  case "drafts": {
+    const { drafts, pulls } = draftStore();
+    // Same orphan sweep as `items`, for the same reason: ids are short and
+    // recyclable, so a stale pull would make a fresh draft arrive pre-consumed.
+    {
+      const live = new Set(drafts.map((d) => d.id));
+      const orphans = Object.keys(pulls.pulls).filter((id) => !live.has(id));
+      if (orphans.length) {
+        withItemsLock(() => {
+          const file = loadPulls();
+          for (const id of orphans) delete file.pulls[id];
+          atomicWrite(PULLS, file, "pull-gc", `dropped=${orphans.length}`);
+        });
+        for (const id of orphans) delete pulls.pulls[id];
+      }
+    }
+    const [wanted] = positional;
+    if (wanted) {
+      const d = drafts.find((x) => x.id === wanted);
+      if (!d) die(`no draft ${wanted}`, `kanban.sh drafts --all  # lists the ids`);
+      const p = pulls.pulls[d.id];
+      if (hasFlag("json")) { console.log(JSON.stringify({ ...d, pull: p ?? null })); break; }
+      console.log(`${d.id}  ${d.isTemplate ? "[template]" : p ? "[pulled]" : "[pending]"}${d.slug ? `  ${d.slug}` : ""}`);
+      if (d.title) console.log(d.title);
+      console.log("");
+      console.log(d.body);
+      if (!p && !d.isTemplate) console.log(`\nrecord what you make of it: kanban.sh pull ${d.id} [--card <card-id>] [--note "what you did"]`);
+      break;
+    }
+    const scope = hasFlag("global") ? undefined : (() => {
+      try { return boardFor(projectDir()).slug; } catch { return undefined; }
+    })();
+    const pending = pendingDrafts(drafts, pulls, scope);
+    const shown = hasFlag("templates") ? drafts.filter((d) => d.isTemplate)
+      : hasFlag("all") ? drafts.filter((d) => !scope || !d.slug || d.slug === scope)
+      : pending;
+    if (hasFlag("json")) {
+      console.log(JSON.stringify({ scope: scope ?? "all boards", pending: pending.length,
+        drafts: shown.map((d) => ({ ...d, pull: pulls.pulls[d.id] ?? null })) }));
+      break;
+    }
+    if (!shown.length) {
+      console.log(hasFlag("templates") ? "no templates" : scope ? `no drafts pending on ${scope}` : "no drafts pending");
+      break;
+    }
+    console.log(`${pending.length} pending${scope ? ` on ${scope}` : ""}${shown.length !== pending.length ? ` · ${shown.length} shown` : ""}`);
+    for (const d of shown) {
+      const p = pulls.pulls[d.id];
+      const mark = d.isTemplate ? "template" : p ? "pulled" : d.triggered ? "now" : "pending";
+      const head = d.title ?? d.body.split("\n").find((l) => l.trim()) ?? "(empty)";
+      const lines = d.body.split("\n").length;
+      console.log(`  ${d.id}  [${mark}] ${d.slug ?? "unassigned"} · ${lines}L  ${head.slice(0, 60)}`);
+    }
+    console.log(`read one in full: kanban.sh drafts <draft-id>`);
+    break;
+  }
+  // The pull is the moment a draft's content becomes project material, and it
+  // goes through the agent so cards still come from docs the agent processed.
+  case "pull": {
+    const [id] = positional;
+    if (id && hasFlag("undo")) {
+      withItemsLock(() => {
+        const file = loadPulls();
+        if (!file.pulls[id]) die(`draft ${id} is not pulled`, `kanban.sh drafts --all  # shows what is consumed`);
+        delete file.pulls[id];
+        atomicWrite(PULLS, file, "pull-undo", `pulls=${Object.keys(file.pulls).length}`);
+        console.log(`un-pulled ${id}; it is pending again`);
+      });
+      break;
+    }
+    if (!id) die("usage", `kanban.sh pull <draft-id> [--card <card-id>] [--note "what you made of it"] · retract: kanban.sh pull <draft-id> --undo`);
+    const card = flag("card");
+    const note = flag("note");
+    withItemsLock(() => {
+      const { drafts } = loadDrafts();
+      const d = drafts.find((x) => x.id === id);
+      if (!d) die(`no draft ${id}`, `kanban.sh drafts --all  # lists the ids`);
+      // Using a template does not consume it, so recording a pull against one
+      // would retire something the owner means to reuse.
+      if (d.isTemplate) die(`draft ${id} is a template, so it is reused rather than consumed`,
+                            `copy its text into a new draft, or have the owner un-mark it in the browser`);
+      if (card && !/^[a-f0-9]{12}$/.test(card)) die(`--card must be a 12-hex card id, got ${card}`, `kanban.sh show <card-id>`);
+      let cardSlug: string | undefined;
+      if (card) {
+        cardSlug = Object.keys(registry().boards).find((s) => {
+          try { return loadBoard(path.join(KROOT, "boards", s)).cards.some((c) => c.id === card); } catch { return false; }
+        });
+        if (!cardSlug) die(`card ${card} is not on any board`, `kanban.sh add "<title>" then pull with the printed id`);
+      }
+      const file = loadPulls();
+      const prior = file.pulls[id];
+      file.pulls[id] = { at: new Date().toISOString(),
+        ...(card ? { cardId: card } : {}), ...(cardSlug ? { slug: cardSlug } : {}),
+        ...(note ? { note } : {}), ...(sessionId() ? { by: sessionId() } : {}) };
+      atomicWrite(PULLS, file, "pull", `pulls=${Object.keys(file.pulls).length}`);
+      if (hasFlag("json")) console.log(JSON.stringify({ id, card: card ?? null, slug: cardSlug ?? null, repulled: !!prior }));
+      else console.log(`${prior ? "re-pulled" : "pulled"} ${id}${card ? ` → card ${card}` : ""}`);
+    });
+    break;
+  }
   case "status": {
     const reg = registry();
     const port = serverPort();
@@ -511,6 +621,14 @@ switch (verb) {
                            card) · subtask · clarification · remark;
                            [--card <id>] links where it landed, [--note "…"]
                            says what you did, [--undo] retracts it
+  drafts [<draft-id>]      the owner's documents, the rung above an ask. Bare:
+                           the pending ones. With an id: that draft in full,
+                           which is what you read before pulling. [--all] adds
+                           consumed ones, [--templates] lists reusables instead
+  pull <draft-id>          consume a draft, recording what you made of it:
+                           [--card <id>] links the card, [--note "…"] says what
+                           you did, [--undo] retracts it. Templates are reused
+                           rather than consumed, so they refuse a pull
   status [--cards] [--project dir] all boards; --project (or --cards) filters to one
   open                     open this project's board
   check                    self-verify (schema + server HTTP)

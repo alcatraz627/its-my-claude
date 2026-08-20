@@ -2,7 +2,7 @@
 name: affirm
 description: Records an affirmed-good behavior — non-obvious approach the user explicitly approved. Sibling of /atone. Higher write bar than atone (only fires for genuinely surprising/load-bearing good calls). Writes to ~/.claude/affirm/events.jsonl.
 allowed-tools: Read, Edit, Write, Bash, Grep
-user-invokable: true
+user-invocable: true
 argument-hint: "[brief description of the good behavior]"
 ---
 

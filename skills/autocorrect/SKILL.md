@@ -1,7 +1,7 @@
 ---
 name: autocorrect
 description: Manage the autocorrect typo-correction dictionaries — view/edit mappings, review correction logs, teach new corrections, and check stats. Use to inspect or tune the autocorrect hinter that runs on every prompt.
-user-invokable: true
+user-invocable: true
 ---
 
 # /autocorrect — Manage Typo Correction Dictionaries

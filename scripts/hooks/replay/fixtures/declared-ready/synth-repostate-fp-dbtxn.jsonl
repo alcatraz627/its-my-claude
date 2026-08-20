@@ -1,0 +1,4 @@
+{"type":"user","message":{"content":"explain the write path"}}
+{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"/x/db.md"}}]}}
+{"type":"user","message":{"content":[{"type":"tool_result","content":"docs"}]}}
+{"type":"assistant","message":{"content":[{"type":"text","text":"The transaction is committed once the WAL flush returns. The database transaction has been committed and the lock released."}]}}

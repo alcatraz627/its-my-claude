@@ -9,7 +9,8 @@ import {
   KROOT, SERVER_INFO, LANES, PINS, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
   loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
-  type Item, type Pin,
+  loadDrafts, saveDrafts, loadPulls,
+  type Item, type Pin, type Draft,
 } from "./lib.ts";
 
 const portArg = process.argv.indexOf("--port");
@@ -257,6 +258,9 @@ const server = Bun.serve({
 
     if (req.method === "GET" || req.method === "HEAD") {
       if (p === "/") return html("hub.html");
+      // A destination, not a mode: its own data model and its own canvas, so it
+      // earns a URL you could send someone (v2-plan.md:151).
+      if (p === "/drafts") return html("drafts.html");
       if (p.startsWith("/b/")) return boardDirOf(p.slice(3)) ? html("board.html") : json({ error: `unknown board ${p.slice(3)} — kanban.sh status lists boards` }, 404);
       // every note on every board, so the hub can answer "what did I ask for"
       if (p === "/api/notes") {
@@ -366,6 +370,26 @@ const server = Bun.serve({
           }))
           .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
         return json({ items: rows, pins: pinRows });
+      }
+      // Drafts, the rung above an ask (D5). Same degradation contract as
+      // /api/items: a broken store says so rather than reading as an empty desk.
+      if (p === "/api/drafts") {
+        let drafts, pulls;
+        try {
+          ({ drafts } = loadDrafts());
+          ({ pulls } = loadPulls());
+        } catch (e: any) {
+          return json({ drafts: [], broken: `${e.message}`.slice(0, 300) }, 200);
+        }
+        const names = Object.fromEntries(Object.entries(registry().boards).map(([s, b]) => [s, b.name]));
+        const rows = drafts
+          .map((d) => ({
+            ...d,
+            boardName: d.slug ? names[d.slug] ?? null : null,
+            pull: pulls[d.id] ?? null,
+          }))
+          .sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
+        return json({ drafts: rows });
       }
       if (p === "/doc") {
         return docResponse(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0),
@@ -510,6 +534,80 @@ const server = Bun.serve({
       });
       if ("error" in out) return json(out, out.error.includes("gone") ? 409 : 500);
       return json(out);
+    }
+
+    // A draft is a document the owner authors, so it takes a title and a much
+    // larger body than an ask. Marking one as a template makes it reusable
+    // instead of consumable (D5); nothing else about it changes.
+    if (req.method === "POST" && p === "/api/draft") {
+      const body = (await req.json().catch(() => null)) as
+        { id?: string; title?: string; body?: string; slug?: string | null;
+          template?: boolean; trigger?: boolean } | null;
+      if (!body) return json({ error: "need a JSON body" }, 400);
+      if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
+      if ((body.title?.length ?? 0) > 200) return json({ error: "draft title over 200 chars" }, 413);
+      // Two orders of magnitude above the ask cap, because the point of the rung
+      // is that the thought was too big for the ask box.
+      if (typeof body.body === "string" && body.body.length > 200_000) {
+        return json({ error: "draft over 200k chars" }, 413);
+      }
+      const isNew = !body.id;
+      if (isNew && (typeof body.body !== "string" || !body.body.trim()) && !body.title?.trim()) {
+        return json({ error: "an empty draft is not saved; write something first" }, 400);
+      }
+      let out: { ok: true; id: string; deleted?: boolean } | { error: string } = { error: "unwritten" };
+      // Catch, so a corrupt store names itself here too. Uncaught, loadDrafts
+      // throwing reaches the browser as a bare 500 with no reason in it.
+      await enqueueItem(() => {
+       try {
+        const file = loadDrafts();
+        const now = new Date().toISOString();
+        if (isNew) {
+          const fresh: Draft = { id: noteId(), body: (body.body ?? "").trim(), createdAt: now, updatedAt: now,
+            ...(body.title?.trim() ? { title: body.title.trim() } : {}),
+            ...(body.slug ? { slug: body.slug } : {}),
+            ...(body.template ? { isTemplate: true } : {}) };
+          file.drafts.push(fresh);
+          saveDrafts(file, "draft:new");
+          out = { ok: true, id: fresh.id };
+          return;
+        }
+        const d = file.drafts.find((x) => x.id === body.id);
+        if (!d) { out = { error: "that draft is gone; reload to see the current ones" }; return; }
+        // A blank body deletes only when the draft has no title either, so
+        // clearing the editor to restructure a titled draft does not bin it.
+        if (typeof body.body === "string" && !body.body.trim() && !(body.title ?? d.title ?? "").trim()) {
+          file.drafts = file.drafts.filter((x) => x.id !== body.id);
+          saveDrafts(file, "draft:del");
+          out = { ok: true, id: body.id!, deleted: true };
+          return;
+        }
+        if (typeof body.body === "string") { d.body = body.body; d.updatedAt = now; }
+        if (body.title !== undefined) {
+          if (body.title.trim()) d.title = body.title.trim(); else delete d.title;
+          d.updatedAt = now;
+        }
+        if (body.slug !== undefined) {
+          if (body.slug) d.slug = body.slug; else delete d.slug;
+          d.updatedAt = now;
+        }
+        if (body.template !== undefined) { if (body.template) d.isTemplate = true; else delete d.isTemplate; }
+        if (body.trigger !== undefined) { if (body.trigger) d.triggered = now; else delete d.triggered; }
+        saveDrafts(file, `draft:${body.id}`);
+        out = { ok: true, id: body.id! };
+       } catch (e: any) { out = { error: `${e.message}`.slice(0, 300) }; }
+      });
+      if ("error" in out) return json(out, out.error.includes("gone") ? 409 : 500);
+      return json(out);
+    }
+
+    // The editor's preview pane. renderMd already backs the doc viewer, so the
+    // alternative was a second markdown implementation in the browser.
+    if (req.method === "POST" && p === "/api/mdpreview") {
+      const body = (await req.json().catch(() => null)) as { body?: string } | null;
+      if (typeof body?.body !== "string") return json({ error: "need {body}" }, 400);
+      if (body.body.length > 200_000) return json({ error: "over 200k chars" }, 413);
+      return json({ html: renderMd(body.body) });
     }
 
     // A pin is owner-only and read-side; no agent reads this file. Posting an

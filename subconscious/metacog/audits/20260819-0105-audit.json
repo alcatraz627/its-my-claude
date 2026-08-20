@@ -1,0 +1,63 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17323,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15687475490101846,
+    "unit_count": 32
+  },
+  "response": {
+    "biases_detected": [
+      "optimism_bias_on_script_compatibility:RECURRING:IMPROVING — unit a178d6c3-8 built a sort-simulation harness BEFORE fixing the version-sort bug (printf sequences through sort -r vs sort -n to prove gcloud string-sort shape), explicitly named the empirical limit (cannot create throwaway production secret versions to confirm gcloud ordering empirically), and mutation-tested the fix against HEAD by running the script at the old commit; prior three cycles showed probe-AFTER-failure recovery; this is the first probe-BEFORE-fix instance in recent history, suggesting trajectory reversal from WORSENING — do not flag as worsening this cycle"
+    ],
+    "calibration_score": 0.7,
+    "overconfident_count": 0,
+    "recommendations": [
+      "Deprioritize further escalation of optimism_bias_on_script_compatibility this cycle — the proof-before-fix shape appeared for the first time; monitor next cycle to confirm trajectory reversal before clearing the bias",
+      "sleep polling in unit a178d6c3-8 Monitor call (sleep 20 inside a for-loop watching CI) is the sanctioned external-CI-polling shape, not the IPC-wait anti-pattern flagged 2026-08-18 as sleep_polling_ipc_wait; these are distinct and the CI-polling shape requires no correction",
+      "Unit a178d6c3-1 catchup used render/trace.sh on first attempt without a schema mismatch, in contrast to the 2026-08-18 occurrence (unit 4f018d9d-15) where trace.sh rejected the payload and the agent needed five rg passes to reverse-engineer the schema; note as a positive data point in the same surface area as optimism_bias_on_script_compatibility",
+      "Unit a178d6c3-9 is a null unit (9-char input, 0 tools, 0 output) and was excluded from calibration counts; no signal"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "a178d6c3-9beb-4c06-8048-fb2df03e8ce8",
+      2493581
+    ],
+    [
+      "c8bc2450-3250-4aef-ad94-6d2528f1f856",
+      14010854
+    ],
+    [
+      "baf2ac20-27d4-41d5-8c38-7513a028e001",
+      7797570
+    ],
+    [
+      "4f815522-b70f-42a9-9c15-7c67e43f344e",
+      134137
+    ],
+    [
+      "467ce1d1-e9c5-4055-9754-45878ff4c2cd",
+      4953365
+    ],
+    [
+      "d8ff1149-646c-4c78-bfdc-8d74ff9c3631",
+      6613485
+    ],
+    [
+      "729c5137-34ee-49ad-bb57-93db6ed5c0ca",
+      5215093
+    ],
+    [
+      "0aef4816-f08e-4047-9ec0-f44e4600f67d",
+      131080
+    ]
+  ],
+  "timestamp": "2026-08-19T01:05:28.994851Z",
+  "tokens_used": 6229,
+  "units_analyzed": 3,
+  "units_total": 32
+}

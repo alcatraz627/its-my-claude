@@ -1,10 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 365,
+  "skillListingBudgetFraction": 0.02,
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "92",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": "5000",
     "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alcatraz627/.cargo/bin:/Users/alcatraz627/.pyenv/shims:/Users/alcatraz627/.pyenv/bin:/Users/alcatraz627/.bun/bin:/Users/alcatraz627/.codeium/windsurf/bin:/Users/alcatraz627/Code/my-gcp-tools:/Users/alcatraz627/.local/bin",
     "PROSE_SMELL_ENFORCE": "1",
     "STATUSLINE_PROFILE": "custom"
@@ -100,7 +102,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus[1m]",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -240,6 +242,15 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-comment-verbosity.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/skill-lint-nudge.sh"
           }
         ]
       },
@@ -417,6 +428,15 @@
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "Bash|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-secret-file-read.sh"
+          }
+        ]
+      },
       {
         "matcher": "Bash|Agent|Task",
         "hooks": [
@@ -831,6 +851,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/parked-skills-nudge.sh"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hook-orchestrator/run.sh SessionStart",
             "async": true
           }
@@ -872,6 +896,10 @@
     "Stop": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/speculative-atone-stop.sh"
+          },
           {
             "type": "command",
             "command": "~/.claude/scripts/hook-orchestrator/run.sh Stop",
@@ -1065,6 +1093,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/speculative-atone-hint.sh"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/scripts/session-mgmt/turn-counter.sh",
             "async": true
           }
@@ -1214,7 +1246,7 @@
     "railway@claude-plugins-official": false,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "sentry@claude-plugins-official": false,
-    "skill-creator@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": false,
     "slack@claude-plugins-official": false,
     "stripe@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": true,
@@ -1244,7 +1276,7 @@
   },
   "outputStyle": "Explanatory",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
@@ -1258,5 +1290,39 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "useAutoModeDuringPlan": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(gcloud *iam-policy-binding*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier",
+      "Bash(gcloud *storage cp*:*) and Bash(gcloud *storage mv*:*) — scoped to Versable GCP projects, matches this repo's declared ASK tier",
+      "Bash(gcloud *run deploy*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: Versable (versable.ai Google Workspace)",
+      "**Cloud provider(s)**: Google Cloud Platform — projects `walmart-496912` (gcloud CLI default), `speedway-versable`, `versable-pim`",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — unqueryable here (no remote configured on this repo)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: GCP Secret Manager (`gcloud secrets`) — reading secret values (`secrets versions access`) and creating service-account keys are hard-blocked per this repo's CLAUDE.md safety model",
+      "**Default / protected branches**: not queryable here (no git remote configured on this repo)",
+      "**CI/CD deploy targets**: Cloud Run service `speedway` and `speedway-dev` in `us-central1` under project `speedway-versable`, driven by `/Users/alcatraz627/Code/Versable/speedway/deploy/deploy.sh`",
+      "**Network posture**: None configured",
+      "**Source control**: This repo (`/Users/alcatraz627/Code/Versable/gcp`) has no configured remote — treat as local-only until a remote is added",
+      "**Trusted internal domains**: versable.ai (Google Workspace org)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim`; Cloud Run services `speedway`, `speedway-dev`",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: on-disk GCP credentials, ADC files, and any output of `gcloud secrets versions access` are sensitive — never print secret values or key material into the transcript; audience is the operator at a real terminal only",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any GCP resource, namespace, or Cloud Run service whose name carries `prod` or `production` as a whole word or name segment; also treat `speedway` and `speedway-dev` production traffic paths as sensitive per this repo's deploy tiering (mutations require explicit ask)",
+      "**Protected deployment namespaces / environments**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim` — mutating operations (`run deploy`, `instances create/stop`, `services enable`, `secrets create`, `*-iam-policy-binding`, `config set`, `bq query`, `storage cp/mv`, `tf apply`) require an explicit ask each time per this repo's declared safety model; delete/destroy, `set-iam-policy`, `secrets versions access`, `sa keys create`, and `auth revoke` are hard-blocked with no override",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment; `set-iam-policy` specifically flagged as dangerous (wholesale policy replacement, can silently drop bindings)",
+      "### User-specific",
+      "**Primary use of Claude Code**: GCP operations/inspection for Versable — running gcloud commands, reading cloud state, and recording findings (no application code in this repo)",
+      "**Trusted repo**: The git repository the agent started in (`/Users/alcatraz627/Code/Versable/gcp`) — no remote is currently configured, so treat as local-only until one is added",
+      "**Org-specific CLIs**: `gcloud` (project-scoped to `walmart-496912`, `speedway-versable`, `versable-pim`; always requires explicit `--project`); `bin/gcp-preflight.sh` for auth preflight",
+      "Routine under `/Users/alcatraz627/Code/Versable/` prefix: gcloud read-only operations (list, describe, get-iam-policy, logging read, versions list, ls, du, builds log) run freely per this repo's declared allow tier"
+    ]
+  },
   "voiceEnabled": false
 }

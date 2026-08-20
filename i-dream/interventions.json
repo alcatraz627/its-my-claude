@@ -135,20 +135,6 @@
     "strength": 0.6000000000000001
   },
   {
-    "id": "d76985ac119aa0bb",
-    "slug": "status-verdict-from-stale-mental-model-no-re-check",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Read",
-      "input_pattern": "(\\.current-session-id|/tmp/.*(session|registry|state|lock))"
-    },
-    "body": "This is a cached artifact, not live state. Re-derive the claim from a live source (ps, process tree, env, sourcing the file) before asserting which session/tty/writer is real.",
-    "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.0
-  },
-  {
     "id": "b26957e5af923ced",
     "slug": "sub-agent-material-output-left-in-conversation-only",
     "source": "atone-precheck",
@@ -173,7 +159,7 @@
     },
     "body": "Before drafting design questions: name the 3-5 composite user stories this surface serves and tie each question to one. Don't emit a list of independent taste option-picks.",
     "created": "2026-07-27T19:59:36.977558Z",
-    "strength": 0.7000000000000001
+    "strength": 0.8
   },
   {
     "id": "ab332bca10f938fc",
@@ -245,7 +231,7 @@
     },
     "body": "Before adding a raw JSX form control: grep this file for existing Select/Input/Button/Dropdown imports. If one fills that role, use it — a green typecheck says nothing about convention.",
     "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.2714285714285714
+    "strength": 0.22857142857142856
   },
   {
     "id": "0eee058e090c5109",
@@ -259,7 +245,7 @@
     },
     "body": "This grep is filtered or compound. Do not write an absence claim (none / no X / nothing uses X) from it — re-run the bare symbol over the narrowest tree that would contain it first.",
     "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.2714285714285714
+    "strength": 0.22857142857142856
   },
   {
     "id": "3bdb8957ec425538",
@@ -273,6 +259,102 @@
     },
     "body": "Check whether the user already declined, deferred, or ignored this blocked-on-user item this session. If so, leave it in the task list and drop it from this message.",
     "created": "2026-08-16T03:45:46.205718Z",
+    "strength": 0.2571428571428572
+  },
+  {
+    "id": "6c97902d153cf79e",
+    "slug": "status-verdict-from-stale-mental-model-no-re-check",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "_checkpoint\\.claude\\.md|checkpoints/"
+    },
+    "body": "Before marking any task done here, trace its deliverable (commit/file/artifact) in the Resume Contract. If it sits under standing caveats or reads unverified, the status is 'open, awaiting verdict'.",
+    "created": "2026-08-16T21:01:57.842342Z",
+    "strength": 0.2571428571428572
+  },
+  {
+    "id": "07fe981e338aa9c2",
+    "slug": "unmeasured-context-capacity-claim",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "^\\s*/core-dump\\b"
+    },
+    "body": "Owner asked for this dump, so run it. Otherwise never self-trigger /core-dump: dump only on a ctx-pressure 70/80/90 notice or a real hand-off (/clear, session end), not on a tool-count reminder or a feeling of fullness.",
+    "created": "2026-08-17T03:16:23.985784Z",
+    "promoted": "2026-08-18T17:42:27.112876Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "0af5975537d2493a",
+    "slug": "truncating-write-before-read-on-a-living-file",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "candidate",
+    "trigger": {
+      "tool": "Write"
+    },
+    "body": "Before this Write: does the path already exist? If it does and you did not create it this turn, stop and read it first. Never truncate a file another agent may own.",
+    "created": "2026-08-18T06:07:25.410846Z",
+    "strength": 1.0
+  },
+  {
+    "id": "8c24512f7c376155",
+    "slug": "named-the-next-work-then-stopped",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "^\\s*(keep going|continue|carry on|go on|next|proceed)\\b"
+    },
+    "body": "A terse 'continue' means the last turn stopped short. Don't end a turn on a sentence naming work you could start — do it. Stop only when a human must decide something first.",
+    "created": "2026-08-19T01:04:07.339490Z",
+    "strength": 0.3
+  },
+  {
+    "id": "df8bafaededd469b",
+    "slug": "repeat-request-dropped-across-sessions",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "project": "slack-automation",
+      "prompt_pattern": "\\b(task list|tasks|todo list|queue|what'?s (left|pending)|open work)\\b"
+    },
+    "body": "Check this project's memory for the owner's grouping ruling before printing tasks. Group by domain lane (A..E), not the NOW / NEEDS YOU / AGENT-READY actor split the tool defaults to.",
+    "created": "2026-08-19T01:04:07.339490Z",
+    "strength": 0.3
+  },
+  {
+    "id": "469cc32b63e5d2fc",
+    "slug": "html-outputs-missing-dark-light-mode-toggle",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "\\.html?$"
+    },
+    "body": "HTML output rule: dark is the default :root palette and a dark/light toggle control is MANDATORY. Add both before writing, or state the conflict and wait — a skill's silence is not an exemption.",
+    "created": "2026-08-19T19:49:09.230148Z",
+    "strength": 0.3
+  },
+  {
+    "id": "65cfe4c27a2ad5d1",
+    "slug": "halted-for-a-goahead-already-granted",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(keep going|carry on|continue|go ahead|proceed|just do it|finish it|do it all|next)\\b"
+    },
+    "body": "Don't end this turn with a question. If both options are yours to run and cheap to reverse, pick one, say which and why, and execute.",
+    "created": "2026-08-19T22:30:14.502499Z",
     "strength": 0.3
   }
 ]

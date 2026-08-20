@@ -3,7 +3,7 @@ name: build-change
 description: Plans a non-UI change and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the change, states problems as falsifiable triples, inherits its approach by sweeping how this codebase already solves the shape, writes a parity ledger for behaviour that must survive, turns findings into directives that each carry a runnable check, then specifies a contract skeleton and the smallest slice that runs. Can and must output "no build" when nothing warrants work. Use before writing code for a backend change, a refactor, a data migration, a CLI, a script, or a pipeline that already exists. Not for a one-line fix, and not for pages, which are /build-ui.
 allowed-tools: Read, Grep, Glob, Bash
 argument-hint: "<the change, or the surface to change> [scope limit]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

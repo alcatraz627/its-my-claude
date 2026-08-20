@@ -2,7 +2,7 @@
 name: adversarial-review
 description: Prosecutes work already declared done — re-runs the verification paths the author skipped, cross-examines every done/works/tested claim against executed evidence, and attacks even user-signed-off surfaces, with each finding passing a relevance gate mined from the user's recorded values so harshness stays aimed. Produces an evidence-tagged indictment (or an honest "held under attack" verdict) for the human to triage. Use when the user says "adversarial review", "tear this apart", "prove it's actually broken", after work has already passed /skeptical-review or sign-off, or before staking something real on a "done" claim.
 argument-hint: "[scope: files | branch | feature description]"
-user-invokable: true
+user-invocable: true
 disable-model-invocation: true
 ---
 

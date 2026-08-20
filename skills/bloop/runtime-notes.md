@@ -1,3 +1,103 @@
+## bloop: #73 tell 8 + repeated-ask hinter (gcc-work-78) — 2026-08-18 15:40
+
+**Purpose:** A length-ratio tell for prose-smell, and a shape-7 hinter for a
+repeated or escalating ask.
+
+**Insights:**
+
+1. Both halves shipped a DIFFERENT signal than the task named, and the corpus is
+   what decided. Length ratio flags 1.93% and is mostly wrong; adding "does the
+   reply open with a title instead of a sentence" drops it to 0.35% at 3-of-4
+   precision. Lexical overlap flags 8.4% and misses the recorded S3 case; keying on
+   the user SAYING they already asked gives 0.41% at 3-of-3.
+2. When a threshold sweep makes things worse, the two failure shapes probably have
+   opposite sizes. Short escalating asks and long topic follow-ups cannot be
+   separated by one overlap number, and the length-aware compromise scored worse
+   than either endpoint (9.19%). That is the signal to change signal, not to keep
+   tuning.
+3. In this account's transcripts most `type:"user"` turns are machine-generated:
+   skill invocations, hook feedback, task notifications, peer mail, compaction
+   notices, bash echoes. Any hinter or Stop hook reasoning about "what the user
+   said" needs that exclusion list, and omitting it cost a 27% fire rate.
+4. `jq -r` prints a multi-line string as multiple LINES. `jq -r … | tail -n 1` on a
+   message therefore keeps only its last line. Select the OBJECT first, decode
+   second. And `any(.[]?; …)` inside a select iterates the ROOT object's values, so
+   it tries to index the string "user" and dies.
+5. Check the sibling before building: 35-correction-loop.sh measures correction
+   density and says in its own header that it is not same-issue semantics, which is
+   what made the new hinter clearly non-duplicative rather than arguably so.
+
+---
+## bloop: #71 Stage P repo-state verdict (gcc-work-78) — 2026-08-18 07:05
+
+**Purpose:** Widen declared-ready past Gate 0 to completion claims that arrive on
+turns with no source edits.
+
+**Insights:**
+
+1. Measure the target population before designing the detector. The task's literal
+   wording ("the migration ran", "the deploy succeeded") occurs 13 times in 10,934
+   real messages, and most of those are the rule quoting itself. The register held
+   the same failure under a different slug with 6 events. Probing the corpus turned
+   a dead detector into a grounded one in about four tool calls.
+2. When a validator seat stalls, run its attack list yourself rather than shipping
+   unvalidated. The seat went idle twice without delivering; running attack C by
+   hand found 5 false positives the regex hid on inspection, all of them ordinary
+   English where "commit" means a promise or a database write.
+3. Sentence-scope a disqualifier instead of narrowing the match. A whole-message
+   denylist would let one incidental phrase suppress a genuine verdict elsewhere in
+   a long message; per-sentence keeps both independent, and the mixed case is worth
+   a fixture.
+4. The replay harness stores only 600 chars of final_text. Any precision claim read
+   off that field is bounded by the truncation, and saying so beats implying a full
+   read.
+5. Reuse a sibling hook's stripper rather than writing a second one. prose-smell had
+   already solved fenced/inline/blockquote removal for the same reason.
+
+---
+## bloop: SchemaForm R0, fixtures + lintSchema (catch-sform-7a) · 2026-08-18
+
+**Purpose:** a pure-logic walker with a closed vocabulary; one sonnet gate at high effort, one fix round.
+
+**Insights:**
+1. The gate paid for itself on a pure function with 54 green tests and four builder-side mutations: it found a JS-identity cycle the `$ref` guard could not see, duplicate leaves the doc comment promised away, and a depth rule that agreed with itself in two of three placements.
+2. When the seat's return message is a summary, ask for the full deliverable inline before fixing; the notification arrives 1-2 turns later and the transcript jsonl is not the report.
+3. Fixture-versus-sketch deviations the builder thought harmless are findings under a strict "anything else is a finding" sentence; widen the carve-out in the spec in the same commit rather than argue each one.
+4. Refusal reasons that suggest a workaround get checked by the gate as claims; keep the suggestion only when the substitute covers the keyword's real use.
+
+---
+## bloop: #69b nudge-tier heed revival (gcc-work-78) — 2026-08-18 06:15
+
+**Purpose:** Build heed recording for the advisory nudge tier. The mechanism
+already existed and had never executed once: committed at mode 644, registered as
+a bare path, returning 126 at every Stop for two days.
+
+**Insights:**
+
+1. Before building what a task names, check whether it exists and is merely dead.
+   The task said "build heed recording for the nudge tier"; the correct work was
+   a chmod plus hardening. The audit in front of me had already written the clue
+   ("the fix is to use what is there") about a different mechanism in the same file.
+2. A registered hook is not a running hook, and nothing in the visible signal
+   distinguishes them. Registration present, callers arming, markers on disk, all
+   true while the file could not exec. Only `ls -la` disagreed. Worth adding to any
+   "is this subsystem live" check: read the mode, not just the wiring.
+3. Fixing an exec bit can be actively harmful without a reap-and-ownership pass
+   first. 131 stale markers would have scored fabricated `heeded:false` lines the
+   instant the resolver worked, corrupting the metric the task existed to fix.
+4. A mutation that stays green means the TEST is the bug. Two rows this session:
+   my own "writes no ledger line" was vacuous until run past the grace window, and
+   the validator's `/bin/bash` finding showed my interpreter fixture was skipped by
+   an unrelated branch.
+5. Test sids must match the marker naming width. `arm()` uses `${sid:0:8}`, so a
+   9-char fixture sid makes the assertion look for a file that never existed, and
+   4 rows failed for a reason unrelated to the code.
+6. Declining to build the widening half was the right call and needed to be written
+   into the source file, not just said. Every cheap check for the five loudest
+   uninstrumented hooks produces a number that looks like heed and is not, which is
+   the exact failure the task exists to correct.
+
+---
 ## bloop: doc 53 G6 docs browser second pass (catch-title-8a) · 2026-08-16
 
 **Purpose:** 13 owner items in one loop: kit Breadcrumbs, kit Markdown (react-markdown + rehype-sanitize), CodeBlock shellMode, docs layout and subtitles; five commits, one sonnet gate.

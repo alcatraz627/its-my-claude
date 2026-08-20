@@ -1,9 +1,9 @@
 ---
 name: create-agent
-description: Reads all existing skills as context then scaffolds a new autonomous agent SKILL.md — with context: fork, no interactive prompts, and structured output — from user instructions, or rewrites an existing skill in agent format. Suggests a template when a similar skill exists.
+description: Scaffolds an autonomous agent SKILL.md (context: fork, no prompts, structured output) from instructions, or converts an existing skill to agent form, after reading the skill index for a template. Use when a workflow should run unattended and return a parsable report.
 allowed-tools: Read, Write, Edit, Bash, Glob, Skill
-user-invokable: true
-argument-hint: "<instructions | existing-skill-name>"
+user-invocable: true
+argument-hint: "<instructions | existing-skill-name> [--global | --project]"
 ---
 
 ## Brief
@@ -18,8 +18,7 @@ Unlike `/create-skill` which builds interactive Q&A wizards with approval gates,
 
 **What it produces:**
 
-- `.claude/skills/<name>/SKILL.md` — agent definition with `context: fork`, autonomous multi-phase workflow, structured terminal report output
-- `.claude/skills/<name>/USAGE.md` — quick-reference card
+- `<DEST>/SKILL.md` — agent definition with `context: fork`, autonomous multi-phase workflow, structured terminal report output
 
 **Two modes:**
 
@@ -46,13 +45,21 @@ Unlike `/create-skill` which builds interactive Q&A wizards with approval gates,
 
 ---
 
+## Destination
+
+Global when CWD is `~/.claude` or `--global` is passed: `~/.claude/skills/<name>/`.
+Project when CWD is a repo with a `.claude/` directory and `--project` is passed or CWD
+is not the gcc: `<cwd>/.claude/skills/<name>/`. Resolve `DEST` once, absolute, and use
+it in every step below. Never a bare `.claude/skills/<name>` relative to CWD: from the
+gcc that nests one level too deep and `block-nested-claude.sh` refuses it.
+
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md` when one exists) before proceeding. Apply all rules — forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
 protocol — for the entire duration of this skill run.
 
-Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
+Also read the `## create-agent:` entries in `~/.claude/skills/runtime-notes*.md` for past run history.
 If it does not exist yet, continue without it.
 
 > Lock reminder: acquire a lock via `lock-file.sh acquire` before every Edit/Write, and
@@ -66,7 +73,7 @@ If it does not exist yet, continue without it.
 ### 1.1 — Discover all existing skills
 
 ```
-Glob(".claude/skills/*/SKILL.md")
+bash ~/.claude/scripts/skills-index.sh   # then read ~/.claude/skills/00-index.md; add <cwd>/.claude/skills/*/SKILL.md when in a project
 ```
 
 For each skill found, read the frontmatter (`name`, `description`, `allowed-tools`, `context`) and the `## Brief` section (first paragraph only). Build a catalogue:
@@ -93,7 +100,7 @@ Parse the `<instructions>` argument:
 
 ### 2.1 (convert mode) — Analyze the existing skill
 
-Read `.claude/skills/<TARGET>/SKILL.md` in full.
+Read `<DEST-of-TARGET>/SKILL.md` in full (global or project, wherever the index found it).
 
 Scan for agent-incompatible patterns:
 
@@ -210,7 +217,7 @@ The shape is **verb + object + trigger**: what it does, to what, and the situati
     allowed-tools:  <list>
     argument-hint:  <hint>
     context:        fork      ← key agent property
-    user-invokable: true
+    user-invocable: true
 
   ## Brief
     <1–2 sentence brief>
@@ -254,15 +261,15 @@ Wait for input. Revise and re-print if needed.
 ### 4.1 — Create directory (new mode only)
 
 ```bash
-mkdir -p .claude/skills/<name>
+mkdir -p "$DEST"
 ```
 
-Print: `  Created .claude/skills/<name>/`
+Print: `  Created $DEST/`
 
 ### 4.2 — Check for existing SKILL.md (new mode only)
 
 ```bash
-ls .claude/skills/<name>/SKILL.md 2>/dev/null
+ls "$DEST/SKILL.md" 2>/dev/null
 ```
 
 If exists: print warning and ask `"Overwrite? (yes / no)"`. If "no" → stop.
@@ -273,11 +280,13 @@ Convert mode always overwrites the existing SKILL.md.
 
 Write a complete agent SKILL.md. The body follows the Claude-consumption shape from `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` — it's system-prompt material a model reads, so it's a tight operating procedure, not an essay. **Required elements:**
 
-- Frontmatter: `name`, action-oriented `description` (§3.2.1), `allowed-tools`, `user-invokable: true`, `argument-hint`, **`context: fork`**
+- Frontmatter: `name`, action-oriented `description` (§3.2.1, under 300 characters; the roster drops long ones), `allowed-tools` (`Agent`, never `Task`), `user-invocable: true`, `argument-hint` (under 120 characters), **`context: fork`**
 - `## Brief` immediately after frontmatter `---`
 - `## Step 0` preamble (copy verbatim from GUIDELINES.md template)
 - `## Usage` section with argument table
 - The body shape from §3.2: one-line identity → when-to-invoke trigger → numbered workflow (count fit to the task) → checklist/heuristics → the output contract below — with no `AskUserQuestion`, no "Wait for input", no `gum` interactives anywhere
+- `## Validation` rubric: the efficacy dimension this agent is judged on and two or three checks an agent can run (a rubric, not worked examples)
+- a closing ledger step: `bash ~/.claude/scripts/skill-log.sh record <name> --task "…" --outcome unknown --corrections 0 --note "…"`
 - `## Notes` section with any constraints or caveats
 
 Keep emphasis plain. Reserve ALL-CAPS / "MUST" for the rare load-bearing guardrail — on current models they over-trigger when overused.
@@ -310,27 +319,20 @@ Acquire lock before writing:
 ```bash
 # ABSOLUTE path required: a relative key is PWD-scoped, so sessions in different
 # cwds writing the same skill file would not mutually exclude.
-bash ~/.claude/skills/shared/lock-file.sh acquire "$(pwd)/.claude/skills/<name>/SKILL.md" "create-agent"
+bash ~/.claude/skills/shared/lock-file.sh acquire "$DEST/SKILL.md" "create-agent"
 ```
 
-Write, then release lock. Print: `  Writing .claude/skills/<name>/SKILL.md ...`
+Write, then release lock. Print: `  Writing $DEST/SKILL.md ...`
 
-### 4.4 — Write USAGE.md
+No USAGE.md: nothing routes on one (owner ruling cs-02, 2026-08-19).
 
-Write a quick-reference card. Standard structure:
-
-- **What it does** (1-2 sentences)
-- **Usage** syntax + argument table
-- **Examples** (2-3 worked examples)
-- **Caveats**: mention `context: fork`, that it never prompts mid-run, and any destructive action warnings
-- **Dependencies** table
-
-Acquire lock, write, release. Print: `  Writing .claude/skills/<name>/USAGE.md ...`
-
-### 4.5 — Format both files
+### 4.4 — Lint, format, index, record
 
 ```bash
-npx prettier --write .claude/skills/<name>/SKILL.md .claude/skills/<name>/USAGE.md
+python3 ~/.claude/scripts/skill-lint.py "$DEST/SKILL.md"     # fix errors; name leftover warnings in the summary
+npx prettier --write "$DEST/SKILL.md"
+bash ~/.claude/scripts/skills-index.sh                        # gcc skills; the nudge hook also does this on write
+bash ~/.claude/scripts/skill-log.sh record create-agent --task "<name>" --outcome unknown --corrections 0 --note "mode=<new|convert> dest=<global|project> lint=<clean|n warn>"
 ```
 
 ---
@@ -339,7 +341,7 @@ npx prettier --write .claude/skills/<name>/SKILL.md .claude/skills/<name>/USAGE.
 
 ### 5.1 — Mechanical checks
 
-Read back `.claude/skills/<name>/SKILL.md` and confirm:
+Read back `$DEST/SKILL.md` and confirm:
 
 | Check                                 | Expected |
 | ------------------------------------- | -------- |
@@ -351,6 +353,8 @@ Read back `.claude/skills/<name>/SKILL.md` and confirm:
 | tiered output contract                | present  |
 | `AskUserQuestion` in body             | absent   |
 | `"Wait for input"` in body            | absent   |
+| `## Validation` rubric + skill-log step | present  |
+| `skill-lint.py` errors                | none     |
 
 Print result for each check. If any check fails, describe what to fix manually.
 
@@ -366,8 +370,7 @@ Print final summary:
 ─────────────────────────────────────────────────────
 
   Files written:
-    .claude/skills/<name>/SKILL.md   (<N> lines)
-    .claude/skills/<name>/USAGE.md   (<N> lines)
+    <DEST>/SKILL.md   (<N> lines)
 
   Agent properties:
     context: fork ✓   — runs in isolated context
@@ -380,11 +383,19 @@ Print final summary:
 
 ---
 
+## Validation
+
+Efficacy dimension: does the generated agent run unattended and return a report the
+parent can parse. Checks: (1) the generated SKILL.md carries no `AskUserQuestion`,
+"Wait for input", or gum interactive (grep); (2) one dry invocation of the agent on a
+small input returns the tiered block with ERRORS / WARNINGS / SUMMARY (or its tiered
+equivalent) and nothing else on stdout; (3) `skill-lint.py` is clean at delivery.
+
 ## Notes
 
 - **Key difference from `/create-skill`**: Agents have no interactive prompts. If the task needs mid-run user decisions — approval gates, Q&A loops, menu navigation — use `/create-skill` instead.
 - **`context: fork` scope**: Fork isolates the conversation context window, not the filesystem. Agents still read and write real files and run shell commands — they just don't flood the main conversation with hundreds of tool-call results.
-- **Convert mode overwrites**: The existing SKILL.md is replaced. Ensure git is clean before converting so you can revert with `git checkout .claude/skills/<name>/SKILL.md` if needed.
+- **Convert mode overwrites**: The existing SKILL.md is replaced. Ensure git is clean before converting so you can revert with `git checkout -- "$DEST/SKILL.md"` if needed.
 - **Template suggestion is heuristic**: Keyword overlap — always review the suggested skill's brief before accepting.
 - **The generated body is Claude-facing**: The agent's SKILL.md body becomes a model's operating procedure, so it follows `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` (the consumption standard), not human-doc style. The routing `description` is a first-class design surface, not boilerplate — it drives Claude Code's delegation, so it reads as a job + trigger, not an identity.
 - After the skill run, update `runtime-notes.md` via the standard `prepend-runtime-note.sh` pattern from GUIDELINES.md §7.

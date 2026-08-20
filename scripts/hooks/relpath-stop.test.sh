@@ -6,6 +6,11 @@
 # next reader trusts the comment instead of the code.
 
 set -uo pipefail
+
+# Redirect the warn-log ledger so this suite never writes into the live audit
+# file. Without it, test fires are indistinguishable from live ones, which is
+# how 102 test events were read as live adherence data (audit 2026-08-18).
+export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/warnlog-test-XXXXXX")"
 cd "$(dirname "$0")" || exit 1
 
 pass=0; fail=0

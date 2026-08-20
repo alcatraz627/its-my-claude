@@ -1,0 +1,166 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16299,
+    "correction_density": 0.014492753623188406,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.11272471919258069,
+    "unit_count": 69
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit de963a5d-0 is the 38th+ consecutive zero-tool style-enforcement session with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; one instance this cycle, within recent range; fully deprioritized per history guidance",
+      "optimism_bias_on_script_compatibility:RECURRING:WORSENING — unit 4f018d9d-15: agent authored a core-dump JSON blob using the SKILL.md vocabulary (court-register keys: DECREE/DOCKET/OBJECTION/CHRONICLE/AMENDMENTS/COUNSEL) without reading scripts/render/trace.sh's actual key-parsing logic; trace.sh rejected the payload outright with 'refusing a sectionless dump render'; agent then executed five sequential rg passes to reverse-engineer the real schema (goal/todos/interrupts/stack_trace/files/coprocessor/emitted/next_action/resume_hint), rewrote the JSON, and succeeded; agent filed a proposal documenting the gap; this is the same probe-after-failure recovery shape observed in 2026-08-15 (screenshot-path), 2026-08-16 (trace-render), and 2026-08-17 (citation-ratchet); now appearing in a fourth distinct context (core-dump schema vs renderer schema mismatch); trajectory is worsening — four consecutive cycles, no convergence, and the agent self-documents the gap via proposal rather than changing approach pre-failure"
+    ],
+    "calibration_score": 0.49,
+    "overconfident_count": 1,
+    "recommendations": [
+      "optimism_bias_on_script_compatibility is now four consecutive cycles with no improvement; the intervention target is structural-claim-without-reading-code applied to script input schemas: before authoring any JSON or structured payload for a script (render, trace, validator, CI tool), read the script's key-parsing block first and confirm the key set — do not infer keys from SKILL.md, README, or the script's name; the pattern recurs because the SKILL.md vocabulary is plausible and the failure is only visible at runtime; pre-read is the only gate that catches it before the payload is written",
+      "the core-dump SKILL.md vocabulary gap (court-register terms vs actual render keys) is now filed as a proposal but has not been fixed; until the SKILL.md is corrected, the agent should treat SKILL.md's Phase 4 JSON examples as untrustworthy and always validate keys against trace.sh before authoring; a one-line rg on the renderer's key-parsing block takes under a second and would have prevented all four recovery loops"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "b6cdefcf-aa20-4b2d-86ee-6f1ddf2900b9",
+      4506122
+    ],
+    [
+      "b49cae47-8885-4183-8e35-32e6e3784ed0",
+      107387
+    ],
+    [
+      "a178d6c3-9beb-4c06-8048-fb2df03e8ce8",
+      1591801
+    ],
+    [
+      "4f018d9d-8dd1-4fe2-bc65-6a3ad7822918",
+      2451892
+    ],
+    [
+      "e2d80f12-f1c2-42c5-a971-f2620f20be9c",
+      132322
+    ],
+    [
+      "de963a5d-750e-40d9-8626-4cae7a18aa29",
+      88308
+    ],
+    [
+      "cc1644d2-7864-45f5-8008-5440a6bb869c",
+      124479
+    ],
+    [
+      "c8bc2450-3250-4aef-ad94-6d2528f1f856",
+      13506009
+    ],
+    [
+      "a97faa72-73d9-499b-ad36-196d786708e2",
+      21854101
+    ],
+    [
+      "a7061ba2-d068-43c3-a1ca-7665058391a9",
+      133151
+    ],
+    [
+      "998aecac-3898-4e60-a26f-4190038854b3",
+      135145
+    ],
+    [
+      "862dcdd1-1889-47e7-8390-f13ae773043a",
+      96487
+    ],
+    [
+      "0df683b3-7cdc-463f-8730-28588f65f246",
+      143044
+    ],
+    [
+      "040f2872-7d09-4ac1-aaa6-9bd3de407bb2",
+      130528
+    ],
+    [
+      "027ac829-0868-44a5-875d-0d19f987d6ea",
+      122264
+    ],
+    [
+      "821a23f0-691b-4927-8487-3cd763cd0535",
+      103371
+    ],
+    [
+      "f04ae843-7d9c-4142-bc23-0153ce410484",
+      3386056
+    ],
+    [
+      "baf2ac20-27d4-41d5-8c38-7513a028e001",
+      7338619
+    ],
+    [
+      "768ad234-15d3-49ef-aebe-eed9c2f6fbc2",
+      125940
+    ],
+    [
+      "766c5432-a4ac-4f84-8729-a9f30e7af3cf",
+      100093
+    ],
+    [
+      "60ca7b9c-9320-437c-bbd6-7fe4eaf77ee0",
+      21436
+    ],
+    [
+      "467ce1d1-e9c5-4055-9754-45878ff4c2cd",
+      4681624
+    ],
+    [
+      "3ce591ca-b4d5-408e-ab37-e3439f721aa4",
+      107176
+    ],
+    [
+      "25d9ab51-083f-40a5-9690-d3dccbff2066",
+      124415
+    ],
+    [
+      "2170e6f3-536f-4ffd-9d88-de0681164d99",
+      99520
+    ],
+    [
+      "20648b68-c6e1-47d9-bf5e-4ff30812d92b",
+      115998
+    ],
+    [
+      "0d248cef-ec82-434f-abf8-90a614b315dd",
+      5513706
+    ],
+    [
+      "d8ff1149-646c-4c78-bfdc-8d74ff9c3631",
+      5129705
+    ],
+    [
+      "00a32d21-1113-4d20-ba88-8f0c5d11f3d9",
+      12511463
+    ],
+    [
+      "88fe3229-afc3-49e6-876d-23ab1c45d5f1",
+      912890
+    ],
+    [
+      "7a4c1529-4894-4883-9a49-1870b45555f3",
+      96878
+    ],
+    [
+      "78060eb5-041d-42ca-a4a6-0fbeaada71b8",
+      8530080
+    ],
+    [
+      "729c5137-34ee-49ad-bb57-93db6ed5c0ca",
+      4459719
+    ],
+    [
+      "0d685b64-cf6e-46d1-b873-02d82b9dad3d",
+      121933
+    ]
+  ],
+  "timestamp": "2026-08-18T17:43:37.901049Z",
+  "tokens_used": 7073,
+  "units_analyzed": 8,
+  "units_total": 69
+}

@@ -2,7 +2,7 @@
 name: create-report
 description: Takes a markdown file and generates a polished, self-contained HTML report with a clean UI. Supports 13 visual styles (default, notion, dashboard, magazine, terminal, data-table, feed, corporate, academic, neon, minimal, kanban, slide). The LLM parses markdown into structured JSON, then a Node.js script renders HTML in the chosen style. Use when you want to convert any markdown document into a browsable HTML file.
 allowed-tools: Read, Write, Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "<input_markdown_path> [--style <name>] [--all-styles]"
 ---
 

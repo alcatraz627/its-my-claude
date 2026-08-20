@@ -105,6 +105,59 @@ if [ "${star_n:-0}" -ge 1 ] 2>/dev/null; then
   tells="${tells}\n- ★ decoration ×${star_n} (warn-tier: fine under the Explanatory output style, decoration otherwise)"
 fi
 
+# 8 · a short question answered with a structural opener instead of a sentence.
+#
+# The `dense-briefing-instead-of-a-direct-answer` shape: 10 events, S3, and every
+# one of their prechecks names the SAME discriminator, which is not length. "Is my
+# first sentence the answer, or is it setup?" A long answer to a short question is
+# often correct (a todo list, a report). Opening with a title when someone asked a
+# question never is.
+#
+# Measured over 1138 real prompt/reply pairs: raw length ratio alone flags 1.93%
+# and is mostly wrong (harness injections, image-paste boilerplate, legitimately
+# long lists, and replies that DO lead with the answer). Adding the opener test
+# drops it to 0.35% and 3 of 4 hits are real: `**Task: Root-folder census**`,
+# `**Formulating Central Config Design**`, `**Identifying Model-Specific
+# Capabilities**` — two of which are thinking-block titles that leaked into prose.
+#
+# The fourth was `**Six done, one in flight, two untouched.**`, which IS the answer
+# wearing bold. A header is a noun phrase; that is a sentence. Trailing sentence
+# punctuation inside the bold separates them and costs one character class.
+#
+# Warn-tier per ruling D2a. Length is the gate here, never the signal.
+# Two stages on purpose. `jq -r` prints a multi-line string as multiple LINES, so
+# a single `jq -r … | tail -n 1` keeps only the prompt's last line: a pasted
+# <system-reminder> block arrived as "</system-reminder>" and slipped past the
+# exclusion, and any multi-line prompt measured as just its final line, making a
+# long prompt read as short. Select the last matching OBJECT first, decode after.
+# Slurped on purpose, for two reasons that each cost a real bug on the way here.
+# `jq -r` prints a multi-line string as multiple LINES, so a `jq -r … | tail -n 1`
+# keeps only the prompt's final line: a pasted <system-reminder> block arrived as
+# "</system-reminder>" and slipped the exclusion below, and every multi-line prompt
+# measured as its last line only, which makes a long prompt read as short. And the
+# obvious `any(.[]?; .type=="text")` guard iterates the ROOT object's values, so it
+# tries to index the string "user" and dies. Decode every candidate, drop the
+# empties, take the last.
+last_user=$(printf '%s\n' "$tail_json" | jq -c 'select(.type=="user")' 2>/dev/null | jq -rs '
+  map(if (.message.content|type)=="string" then .message.content
+      elif (.message.content|type)=="array"
+      then ([.message.content[]? | select(.type=="text") | .text] | join(""))
+      else "" end)
+  | map(select(length > 0)) | last // ""' 2>/dev/null)
+# A harness injection is not something the user typed, and neither is the
+# coordinate boilerplate that rides along with a pasted image. Both read as a
+# short prompt and produced 7 of the 22 raw-ratio hits.
+if [ -n "$last_user" ] \
+   && ! printf '%s' "$last_user" | rg -q '^[[:space:]]*(<system-reminder>|\[Image:|<command-name>|<local-command|Caveat:)' 2>/dev/null \
+   && [ "${#last_user}" -le 200 ] \
+   && [ "$(printf '%s' "$prose" | wc -c | tr -d ' ')" -ge 1200 ]; then
+  opener=$(printf '%s\n' "$prose" | rg -m1 '\S' 2>/dev/null | head -1)
+  if printf '%s' "$opener" | rg -qP '^\s*(#{1,6}\s|\*\*[^*]{2,60}\*\*\s*:?\s*$)' 2>/dev/null \
+     && ! printf '%s' "$opener" | rg -qP '[.!?]\s*\*{0,2}\s*$' 2>/dev/null; then
+    tells="${tells}\n- opened a ${#prose}-char reply to a ${#last_user}-char question with a title, not the answer (\"${opener:0:48}…\") — lead with the sentence that answers, then explain"
+  fi
+fi
+
 # 7 · option-menu closer (warn-tier — genuine forks are legitimate).
 closer=$(printf '%s\n' "$prose" | rg '\S' 2>/dev/null | tail -3)
 if printf '%s' "$closer" | rg -qi '(would you like me to|do you want me to|shall i|want me to) .+ or .+\?' 2>/dev/null; then

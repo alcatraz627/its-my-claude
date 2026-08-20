@@ -1,484 +1,182 @@
 ---
 name: create-skill
-description: Guides the user through creating a new Claude Code skill. Asks structured questions one at a time, formalizes each answer into canonical skill language, shows a draft plan for approval, then writes the SKILL.md and a companion USAGE.md.
-allowed-tools: Read, Write, Edit, Bash, Glob
-user-invokable: true
-argument-hint: "[skill-name]"
+description: Turns a skill idea (a spec, intent, or checklist answers) into a finished SKILL.md with a tailored validation rubric and ledger steps, reviewed by a fresh seat for intent-vs-verbatim before it is written. Use when someone wants a new skill, slash command, or reusable workflow.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
+user-invocable: true
+argument-hint: "[skill-name] [--global | --project] [--dry-run <dir>]"
 ---
 
 ## Brief
 
-Guides you step-by-step through creating a new Claude Code skill: asks structured questions, formalizes your answers into canonical skill language, shows a draft plan for approval, then writes the SKILL.md and a companion USAGE.md into the right directory.
+`/create-skill` writes a skill the way this house writes them: the owner's words are
+intent to be modelled, not text to be pasted; the structure is fixed (frontmatter with
+the real field names, a Brief, Step 0, phases, a Validation rubric suited to what the
+skill is for, the two ledger steps); the destination is absolute; and a seat that did
+not draft it reads the draft for the one failure that keeps recurring, the owner's
+input dumped in verbatim. It closes its own loop: lint, index, ledger.
 
-# Create Skill
+## Step 0
 
-An interactive wizard that turns your description of a skill idea into a well-structured, production-ready SKILL.md. You provide intent; the wizard formalizes it and handles the boilerplate.
-
-**What it produces:**
-
-- `.claude/skills/<name>/SKILL.md` — full skill definition following the four-phase skeleton
-- `.claude/skills/<name>/USAGE.md` — quick-reference card with usage, examples, caveats, and dependencies
+Read `~/.claude/skills/GUIDELINES.md` (§8 and the Authoring Conventions are the
+contract this skill implements). Read the `## create-skill:` entries in
+`~/.claude/skills/runtime-notes.md` and the archives:
+`rg -n "^## create-skill" ~/.claude/skills/runtime-notes*.md`. Regenerate and read the
+menu so the new skill is not a duplicate: `bash ~/.claude/scripts/skills-index.sh`
+then `~/.claude/skills/00-index.md`.
 
 ## Usage
 
 ```
-/create-skill [skill-name]
+/create-skill <name>                     spec-first: take what the owner gave, ask only for gaps
+/create-skill <name> --project           write to <cwd>/.claude/skills/<name>/ (a repo-local skill)
+/create-skill <name> --global            write to ~/.claude/skills/<name>/ (the default from the gcc)
+/create-skill <name> --dry-run <dir>     write to <dir>/<name>/ and stop before index + ledger
 ```
 
-**Arguments:**
+Destination rule (cs-01): global when CWD is `~/.claude` or `--global` is passed;
+project when CWD is a repo with a `.claude/` directory and `--project` is passed or
+CWD is not the gcc. Always absolute paths. Never `.claude/skills/<name>` relative to
+CWD: from the gcc that nests one level too deep and `block-nested-claude.sh` refuses
+it.
 
-- `skill-name` (optional): The kebab-case name for the new skill. If not provided, the wizard will ask.
+## Phase 1: what the skill is (spec-first)
 
----
+The owner usually hands over the answers already, in a prompt, a spec file, or a
+conversation. Read those first. The checklist below is what a skill must answer, not
+a script of questions; ask only for a row that is genuinely missing, in one message,
+numbered.
 
-## Step 0: Load Shared Guidelines and Runtime Context
+| # | the skill must answer | formalise into |
+|---|---|---|
+| 1 | name | `name:` (lowercase, hyphens), unique in the index |
+| 2 | what it does and for whom, and WHEN to reach for it | `description:` verb + input + output + "Use when ..."; under 300 characters |
+| 3 | how it is invoked | `argument-hint:` with `<required>` / `[optional]`; under 120 characters |
+| 4 | what it must not do | a `## Boundaries` list, or "GUIDELINES defaults" |
+| 5 | which tools | `allowed-tools:` (`Agent`, never `Task`) |
+| 6 | what efficacy means for THIS skill | the `## Validation` rubric (below) |
+| 7 | what it chains with, what it writes, where | the phases and the output contract |
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
-retry logic, tool preferences, verbosity, timeouts, and post-run insights — for the entire
-duration of this skill run.
+**Intent, not transcript.** The owner's words name a goal; a named instance stands for
+its class; an example is one sample. Formalise: generalise the instance to the class
+it belongs to, size the skill to what a good run needs (long when the model must
+evaluate a lot before acting, short when it must not), and write the procedure in the
+house voice. Do not paste the owner's prompt into the skill. If a sentence in the
+draft is a near-verbatim run of the owner's input longer than a clause, rewrite it or
+cut it. (Owner, 2026-08-19: "so many cases where the model just dumps my input to the
+skill verbose instead of treating it as intent and what I have in mind".)
 
-Also read `.claude/skills/runtime-notes.md`. Scan all entries for:
+## Phase 2: the plan, shown once
 
-- Naming patterns used by existing skills (helps Q1 validation)
-- Common tool choices and phase structures (informs Q5 tool inference)
-- Past failures or bugs to avoid repeating in the new skill's instructions
-
-If `runtime-notes.md` does not exist yet, continue without it.
-
----
-
-## How the Q&A Loop Works
-
-For every question, the wizard follows this pattern:
-
-1. **Ask** — print the question with a brief explanation of why it matters
-2. **Wait** — do not proceed until the user responds
-3. **Formalize** — rewrite the user's raw answer into polished, canonical skill language
-4. **Confirm** — print the formalized version and ask: `"Does this capture it? Any changes?"` — wait for a response
-5. **Iterate** — if the user requests changes, revise and re-confirm; repeat until the user accepts
-
-Only move to the next question after the current answer is confirmed. Never skip a question.
-
----
-
-## Phase 1 — Information Gathering
-
-### Q1: Skill Name
-
-**Only ask if not provided as an argument.**
-
-Print:
+Print the plan in one block and ask for a yes or changes, once:
 
 ```
-What should the skill be called?
-This becomes the /command-name users type. Use lowercase-with-hyphens (e.g., "code-review", "deps-audit").
-→
+/<name>  →  <destination path>
+  description   <the 300-char routing sentence>
+  argument-hint <…>
+  allowed-tools <…>
+  brief         <two lines>
+  phases        <one line each; what is gathered, decided, done, checked>
+  validation    <the efficacy dimension and the two or three checks>
+  boundaries    <…>
 ```
 
-Wait for input. Validate: must be lowercase, hyphens only, no spaces or special chars.
-
-**Formalize:** `name: <normalized-name>`
-
-**Confirm:** `"I'll use the name \`<name>\` — invoked as \`/<name>\`. Good?"`
-
----
-
-### Q2: Goal
-
-Print:
-
-```
-What does this skill do? What problem does it solve?
-Describe it in 1–3 sentences — don't worry about precision yet, just the core idea.
-→
-```
-
-Wait for input.
-
-**Formalize:** Rewrite as a tight 1–2 sentence description:
-
-- Start with a verb ("Scans…", "Generates…", "Guides…", "Analyzes…")
-- Name the input, the action, and the output
-- Avoid vague words like "helps" or "assists" — be concrete
-
-Example transformation:
-
-- Raw: "it should check all the components and see if they have tests"
-- Formalized: "Scans all React components in `src/` and reports which ones lack a corresponding test file, outputting a checklist sorted by directory."
-
-**Confirm:** Print the formalized version and ask for changes.
-
----
-
-### Q3: Usage & Arguments
-
-Print:
-
-```
-How is this skill invoked? What arguments does it take?
-Examples:
-  /skill-name                          (no args)
-  /skill-name <required>               (one required arg)
-  /skill-name <required> [optional]    (required + optional)
-  /skill-name [flag | path]            (mutually exclusive)
-→
-```
-
-Wait for input. The user might say "no arguments", "just a file path", "a question like arch-qa", etc.
-
-**Formalize:** Produce:
-
-1. The invocation syntax line
-2. A bullet list of arguments with types and descriptions
-3. A `argument-hint` value for the frontmatter
-
-Example:
-
-```
-/deps-audit [--fix]
-
-Arguments:
-- `--fix` (optional): Automatically apply safe dependency updates
-argument-hint: "[--fix]"
-```
-
-**Confirm:** Show the formalized usage block and ask for changes.
-
----
-
-### Q4: Constraints
-
-Print:
-
-```
-What should this skill NOT do? Any hard limits or guardrails?
-Think about: destructive actions, files it shouldn't touch, decisions it shouldn't make autonomously, scope limits.
-(Press enter to skip if nothing comes to mind.)
-→
-```
-
-Wait for input. Accept a skip/empty answer.
-
-**Formalize:** If the user provided constraints, write them as a bullet list of clear prohibitions:
-
-- "Never modify files outside `.claude/`"
-- "Never commit or push — analysis only"
-- "Never run `rm` without user confirmation"
-
-If skipped, note: "No additional constraints beyond GUIDELINES.md defaults."
-
-**Confirm:** Show the constraints list (or the skip note) and ask for changes.
-
----
-
-### Q5: Tools
-
-Print:
-
-```
-Which Claude tools will this skill need?
-
-Available tools:
-  Read        — read files from disk
-  Write       — create new files
-  Edit        — patch existing files
-  Bash        — run shell commands
-  Glob        — find files by pattern
-  Grep        — search file contents
-  Task        — spawn subagents for complex research
-  WebFetch    — fetch web content
-
-List the ones that apply, or say "not sure" and I'll infer from the goal.
-→
-```
-
-Wait for input.
-
-**Formalize:** Produce a clean `allowed-tools` frontmatter line. If the user said "not sure", infer based on the goal:
-
-- Reads files → `Read, Glob, Grep`
-- Writes/creates output → add `Write`
-- Patches existing files → add `Edit`
-- Runs commands → add `Bash`
-- Does deep research → add `Task`
-
-**Confirm:** Show `allowed-tools: <list>` and ask for changes.
-
----
-
-### Q6: Example Use Cases
-
-Print:
-
-```
-Give 2–3 concrete examples of running this skill — what the user types and what they get back.
-These become the examples in the SKILL.md and USAGE.md.
-→
-```
-
-Wait for input. The user might be rough: "like you run it and it scans and shows a list".
-
-**Formalize:** Turn each example into:
-
-```
-/skill-name argument
-→ [One-line description of what the output looks like]
-```
-
-Example:
-
-```
-/deps-audit
-→ Prints a table of 14 outdated packages grouped by risk level (breaking / minor / patch)
-
-/deps-audit --fix
-→ Automatically updates 8 safe (patch-level) packages and lists 6 that need manual review
-```
-
-**Confirm:** Show the formatted examples and ask for changes.
-
----
-
-### Q7: Anything Else
-
-Print:
-
-```
-Anything else worth capturing?
-Think about:
-  - Does it chain with another skill? (e.g., calls /create-report at the end)
-  - Special output format? (markdown file, HTML, terminal-only)
-  - Edge cases or error conditions to handle?
-  - Post-run actions? (open a file, print a summary, update a log)
-(Press enter to skip.)
-→
-```
-
-Wait for input. Accept a skip.
-
-**Formalize:** If provided, add a "Notes" section summarizing these points in bullet form.
-
-**Confirm:** Show the notes (or skip confirmation) and ask for changes.
-
----
-
-## Phase 2 — Planning
-
-After all 7 questions are confirmed, generate a **plan outline** — not the full file, just the structure. Print it clearly so the user can review before anything is written.
-
-**Format:**
-
-```
-─────────────────────────────────────────────────────
-  Draft plan for /<name>
-─────────────────────────────────────────────────────
-
-  Frontmatter
-    name:          <name>
-    description:   <formalized goal — truncated to 80 chars>
-    allowed-tools: <tool list>
-    argument-hint: <usage hint>
-
-  ## Brief
-    <1-2 sentence brief>
-
-  ## Workflow
-
-    Phase 1 — Information Gathering
-      [Describe what data the skill collects and how]
-
-    Phase 2 — Planning
-      [How the skill decides what to do with what it found]
-
-    Phase 3 — Execution
-      [What it writes, edits, or runs]
-
-    Phase 4 — Verification
-      [How it confirms the output is correct]
-
-  ## Notes
-    [Constraints, integrations, edge cases — if any]
-
-─────────────────────────────────────────────────────
-  USAGE.md will also be written with:
-    - Usage syntax + argument table
-    - 2-3 worked examples
-    - Caveats and known limitations
-    - Dependencies (other skills, tools, files it reads)
-─────────────────────────────────────────────────────
-```
-
-Then ask:
-
-```
-Does this plan look right? Describe any changes, or say "looks good" to write the files.
-→
-```
-
-Wait for input. If changes requested: revise the relevant section(s) of the plan and re-print the full updated plan. Repeat until the user accepts.
-
----
-
-## Phase 3 — Execution
-
-Once the plan is approved:
-
-### 3.1 — Create the directory
-
-```bash
-mkdir -p .claude/skills/<name>
-```
-
-Print: `  Created .claude/skills/<name>/`
-
-### 3.2 — Check for existing SKILL.md
-
-```bash
-ls .claude/skills/<name>/SKILL.md 2>/dev/null
-```
-
-If it exists: print a warning and ask:
-
-```
-.claude/skills/<name>/SKILL.md already exists. Overwrite? (yes / no)
-→
-```
-
-If "no" → stop and report. If "yes" → proceed.
-
-### 3.3 — Write SKILL.md
-
-Write the full SKILL.md expanding the approved plan into a complete, working skill definition.
-
-**Required elements:**
-
-- Frontmatter with all fields (`name`, `description`, `allowed-tools`, `user-invokable: true`, `argument-hint`)
-  - `description`: must start with a verb ("Scans…", "Generates…", "Guides…"), name the input + action + output, max 2 sentences, no vague words like "helps" or "assists"
-  - `argument-hint`: must use `<name>` for required args and `[name]` for optional; e.g. `"<target> [--fix]"` or `"[skill-name | all]"`; use `""` if the skill takes no arguments
-- `## Brief` immediately after frontmatter `---`
-- `## Step 0: Load Shared Guidelines and Runtime Context` preamble block (copy verbatim from template below)
-- `## Usage` section with syntax and argument table
-- Four phases following the approved plan
-- `## Notes` section (if constraints or integrations exist)
-
-**Step 0 preamble template (copy verbatim):**
+The owner's "looks good", "go", or silence after a terse continuation means write.
+Changes mean revise the block and show it once more, not a question per row.
+
+## Phase 3: draft, then the intent review seat
+
+Draft the full SKILL.md in the shape below, to a scratch path
+(`~/.claude/scratchpad/create-skill/<name>.SKILL.md`), not the destination yet.
+
+Then dispatch one read-only seat. Build the prompt with
+`bash ~/.claude/scripts/seat/seat.sh prompt --role intent-review --out ~/.claude/scratchpad/create-skill/<name>.review.md --subject <draft path> --context "<the owner's original words, verbatim>"`,
+dispatch it (sonnet), and `seat.sh check` the verdict file before reading it. The
+role file carries this question set:
+
+1. Intent vs verbatim: which sentences of the draft are the owner's input pasted in?
+   Which named instance was kept as an instance when it stood for a class?
+2. Does the description route: does a reader know what the skill does, on what, and
+   when to reach for it, in under 300 characters?
+3. Altitude: is it procedure and heuristics, or an essay? Which emphasis words carry
+   no gate?
+4. Does the `## Validation` rubric measure what this skill is actually for, and could
+   an agent run its checks?
+5. Anything the house conventions require that is missing (Step 0, Brief, ledger
+   steps, absolute paths)?
+
+Fix what the seat found, or say in one line why not, then continue. This gate is not
+optional and is not self-review: the author is the worst judge of whether the author
+pasted.
+
+## Phase 4: write, lint, index, record
+
+1. Write `<destination>/SKILL.md`. If it already exists, stop and ask (overwrite,
+   rename, or abandon); never silently replace a skill.
+2. `python3 ~/.claude/scripts/skill-lint.py <destination>/SKILL.md`; fix until no
+   errors. Warnings are fixed or named in the delivery message.
+3. `npx prettier --write <destination>/SKILL.md` (if prettier is available).
+4. `bash ~/.claude/scripts/skills-index.sh` (gcc skills only; the nudge hook also does
+   this on write).
+5. `bash ~/.claude/scripts/skill-log.sh record create-skill --task "<name>" --outcome unknown --corrections 0 --note "dest=<global|project> review=<n findings, n fixed> lint=<clean|n warn>"`.
+6. Runtime note, per GUIDELINES §7, when the run taught something.
+7. Deliver: the absolute path, the description as written, what the seat caught, and
+   "invoke with /<name>". No USAGE.md (nothing routes on one; write one only if the
+   skill has a real quick-reference need).
+
+`--dry-run <dir>` stops after step 3 and prints the path.
+
+## The shape of a generated SKILL.md
 
 ```markdown
-## Step 0: Load Shared Guidelines and Runtime Context
+---
+name: <name>
+description: <verb + input + output. Use when ...>        # ≤300 chars
+allowed-tools: <…>                                         # Agent, never Task
+user-invocable: true
+argument-hint: "<…>"                                       # ≤120 chars
+---
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
-retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+## Brief
+<what it is and why it exists, ≤8 lines, human voice>
 
-Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
-If it does not exist yet, continue without it.
-
-> Lock reminder: acquire a lock via `lock-file.sh acquire` before every Edit/Write, and
-> release it immediately after. Never write to `runtime-notes.md` or any SKILL.md without
-> holding its lock.
-```
-
-Print: `  Writing .claude/skills/<name>/SKILL.md ...`
-
-### 3.4 — Write USAGE.md
-
-Write a concise quick-reference card at `.claude/skills/<name>/USAGE.md`.
-
-**Structure:**
-
-```markdown
-# /<name> — Usage Guide
-
-## What it does
-
-[1-2 sentence summary]
+## Step 0
+Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md`
+when one exists) and the `## <name>:` entries in `~/.claude/skills/runtime-notes.md`.
 
 ## Usage
+<invocation lines + argument table>
 
-\`\`\`
-/<name> [arguments]
-\`\`\`
+## <Phase 1 … N>
+<gather → decide → do → check, named for what they do; as long as the work needs>
 
-| Argument | Type | Description |
-| -------- | ---- | ----------- |
-| ...      | ...  | ...         |
+## Boundaries
+<what it never does; only when there are real ones>
 
-## Examples
+## Validation
+<the efficacy dimension this skill is judged on (e.g. "context retention across
+/clear", "prose and structure of the output", "useful-to-noise ratio of findings")
+and two or three checks an agent can run: what to look at, how, what a pass is.
+A rubric, not worked examples.>
 
-### Example 1: [title]
-
-\`\`\`
-/<name> argument
-\`\`\`
-[What happens and what the output looks like]
-
-### Example 2: [title]
-
-...
-
-## Caveats
-
-- [Known limitation or gotcha]
-- [What the skill does NOT do]
-- [Any prerequisite state required]
-
-## Dependencies
-
-| Dependency    | Type         | Notes                      |
-| ------------- | ------------ | -------------------------- |
-| GUIDELINES.md | Shared rules | Read at start of every run |
-| [other skill] | Skill        | Called at step N           |
-| [file/dir]    | File         | Must exist before running  |
-
-## Tips
-
-- [Usage tip]
-- [How to combine with other skills]
+## Runtime notes and ledger
+Prepend a `## <name>:` entry via `bash ~/.claude/skills/shared/prepend-runtime-note.sh <name> <entry.md>`
+when the run taught something. Then
+`bash ~/.claude/scripts/skill-log.sh record <name> --task "…" --outcome unknown --corrections 0 --note "…"`.
 ```
 
-Print: `  Writing .claude/skills/<name>/USAGE.md ...`
+Caps are forcing functions on the budgeted parts (description, argument-hint, Brief,
+emphasis words). The body is unbounded.
 
-### 3.5 — Format both files
+## Validation
 
-```bash
-npx prettier --write .claude/skills/<name>/SKILL.md .claude/skills/<name>/USAGE.md
-```
+Efficacy dimension: does the written skill do what the owner meant, and is it found
+and used. Checks: (1) the review seat's intent-vs-verbatim finding count on the
+first draft, trending down across runs; (2) `skill-lint.py` clean at delivery;
+(3) the skill's own first `skill-log` record lands within its first real run, and its
+runtime note says the outline held.
 
-Print the prettier output.
+## Runtime notes and ledger
 
----
-
-## Phase 4 — Verification
-
-Read back both written files and confirm they exist and are non-empty:
-
-```bash
-ls -la .claude/skills/<name>/
-```
-
-Print a final summary:
-
-```
-─────────────────────────────────────────────────────
-  ✓ Skill created: /<name>
-─────────────────────────────────────────────────────
-
-  Files written:
-    .claude/skills/<name>/SKILL.md     (<N> lines)
-    .claude/skills/<name>/USAGE.md     (<N> lines)
-
-  To use: type /<name> in any Claude Code session.
-  To review: /user-config edit → select the new skill.
-
-─────────────────────────────────────────────────────
-```
-
----
-
-## Notes
-
-- The wizard never writes files until Phase 3 — all Q&A and planning happen first.
-- If the user gives vague or partial answers, the formalization step is where the wizard adds structure and precision. Trust the process.
-- The wizard should not invent constraints the user didn't imply — only formalize what was actually described.
-- Skill names must be unique. Before writing, check for an existing directory with the same name.
-- After writing, remind the user that `/user-config` can be used to review, explain, edit, or simplify the new skill.
+Prepend a `## create-skill:` entry with `prepend-runtime-note.sh` when the run taught
+something (what the seat caught, a checklist row that was hard to fill). The
+`skill-log.sh record create-skill` line in Phase 4 is mandatory.

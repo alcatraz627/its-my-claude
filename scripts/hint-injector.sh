@@ -24,6 +24,15 @@ INPUT=$(cat 2>/dev/null || echo "{}")
 PROMPT=$(echo "$INPUT" | jq -r '.prompt // ""' 2>/dev/null || echo "")
 [[ -z "$PROMPT" ]] && exit 0
 
+# The payload carries session_id (same field ctx-signal-nudge.sh:22 and
+# persona-suggest.sh:23 read); only .prompt was being passed on. A hinter that
+# keeps per-session state had no way to know whose turn it was, so 35-correction-
+# loop.sh keys on the DATE when the env var is unset, pooling every session
+# running that day into one window. Exported, not piped, so no hinter's stdin
+# contract changes and one that ignores it is unaffected.
+CLAUDE_HINT_SID=$(echo "$INPUT" | jq -r '.session_id // ""' 2>/dev/null || echo "")
+export CLAUDE_HINT_SID
+
 # Hard per-hinter time cap so one slow hinter can't stall the user's prompt.
 # macOS ships no `timeout`; fall back to a perl alarm (a pending alarm survives
 # exec, so it still kills the bash that replaces perl).

@@ -3,7 +3,7 @@ name: validate
 description: Routes a finished or nearly-finished change to the checks it actually needs, by first naming every validation question the change raises and then saying which instrument covers each one and which are being skipped and why. The failure this prevents is not picking the wrong checker, it is never asking the third question at all. Use when a change is about to be called done, when a review keeps missing what the user then catches on sight, or when you have fifteen audit skills and no idea which apply here. Not a checker itself: it classifies, enforces one precondition, and hands off.
 allowed-tools: Read, Grep, Glob, Bash, Agent
 argument-hint: "<what changed> [path or diff scope]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief
@@ -74,6 +74,11 @@ If the change came from `/build-ui` or `/build-change`, a parity ledger already
 exists. Run every row's check and report the results row by row. That ledger is
 a contract, and an unrun check is an unmet one.
 
+Whatever ledger exists, the callout store is part of Vf now: run
+`bash ~/.claude/scripts/callouts/callouts.sh gate <surface>` for every surface the
+change touched. Open call-outs are the owner's own parity rows, and an unmet one
+outranks anything a generated ledger says.
+
 If no ledger exists, build a small one now before any other check runs, from
 what is actually there rather than from memory: the tests that currently pass,
 the callers of anything the change touched, and any behaviour a `NOTE(by human)`
@@ -113,7 +118,9 @@ account fails most often, and they are the two where the agent that did the work
 is the worst available judge, because both ask whether the work drifted from
 something the author already believes it matches.
 
-So dispatch one seat that did not do the work. Give it the user's verbatim ask,
+So dispatch one seat that did not do the work. Build the dispatch with
+`bash ~/.claude/scripts/seat/seat.sh prompt --role second-seat --out <abs path> --subject <report>`
+and verify the verdict landed with `seat.sh check --out <abs path>`. Give it the user's verbatim ask,
 the change scope, and the parity ledger with its per-row results, and ask it to
 answer two questions independently rather than to review your answers:
 

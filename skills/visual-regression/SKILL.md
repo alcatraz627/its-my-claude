@@ -2,7 +2,7 @@
 name: visual-regression
 description: Captures baseline screenshots via Playwright MCP and compares against later snapshots to detect visual regressions — pixel-diff reports with highlighted change regions.
 allowed-tools: Read, Write, Bash, Glob, Grep
-user-invokable: true
+user-invocable: true
 argument-hint: "<baseline | compare | report> <url | path>"
 ---
 

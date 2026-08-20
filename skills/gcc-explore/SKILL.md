@@ -2,7 +2,7 @@
 name: gcc-explore
 description: Sit down with the gcc and look around. Renders the config as three panels (SHAPE, what it is; MOVEMENT, which way it is drifting; CYCLE, the loops keeping it alive) from artifacts that already exist, then holds a dig-deeper conversation where both sides reach out. Use when the user wants to feel the shape of their config rather than find a defect in it: "show me the gcc", "what is this thing", "how is it moving", "walk me through it". For "what is broken" use /gcc-map instead.
 argument-hint: "[shape <dir> | vital <name> | cycle <loop>]"
-user-invokable: true
+user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

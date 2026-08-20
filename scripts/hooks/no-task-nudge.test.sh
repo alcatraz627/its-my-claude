@@ -18,6 +18,11 @@
 #   bash ~/.claude/scripts/hooks/no-task-nudge.test.sh
 
 set -uo pipefail
+
+# Redirect the warn-log ledger so this suite never writes into the live audit
+# file. Without it, test fires are indistinguishable from live ones, which is
+# how 102 test events were read as live adherence data (audit 2026-08-18).
+export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/warnlog-test-XXXXXX")"
 HOOK="${HOOK_UNDER_TEST:-$(dirname "$0")/no-task-nudge.sh}"
 SID="aaaabbbb-1111-2222-3333-444455556666"
 SID8="${SID:0:8}"

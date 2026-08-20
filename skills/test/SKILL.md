@@ -3,7 +3,7 @@ name: test
 description: Run tests for the current folder using a cached per-folder framework detection. First run probes the folder for pyproject.toml/package.json/Cargo.toml/go.mod etc and caches the resulting test command; subsequent runs reuse the cache (sub-200ms). Stale-cache failure is an acceptable rare cost — re-detect on test-not-found errors. Use when the user asks to run tests, validate changes, or check a specific test file/function. Nudges toward thoroughness — adjacent tests, coverage checks, and result analysis.
 allowed-tools: Read, Glob, Grep, Bash
 argument-hint: "[path | -k keyword | --refresh | --thorough | --only]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

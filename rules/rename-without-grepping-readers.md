@@ -1,18 +1,21 @@
 ---
-brief: A rename is not done until you have grepped the OLD name's readers across the full tree — including the string-keyed ones (tags, marker paths, config keys) no compiler can see. Documenting a rename in a review is not reviewing it.
+brief: A rename or a corrected claim is not done until every reader of the old version is found. That includes the string-keyed readers no compiler can see, and the surfaces outside the tree that no grep can reach (PR body, PR and issue comments, pushed commit messages, Slack). Documenting a rename in a review is not reviewing it.
 triggers:
   - topic:rename
   - phrase:"renamed"
   - phrase:"rename the"
   - phrase:"breaking rename"
   - phrase:"stale caller"
+  - phrase:"fixed everywhere"
+  - phrase:"none left"
 related:
   - rules/grep-scope-before-claiming-absence.md
   - rules/structural-claim-without-reading-code.md
+  - rules/read-the-comments-on-a-pr-you-raised.md
   - rules/testing.md
 tier: 1
 category: rules
-updated: 2026-07-16
+updated: 2026-08-19
 stale_after_days: 180
 ---
 
@@ -52,13 +55,43 @@ Grep for every kind of name a reader can key on:
 So the search must cover **non-code files too** — configs, migrations, docs, data
 ledgers, shell scripts — not just the language's source glob.
 
+## The surfaces are not all in the tree
+
+Everything above assumes the readers live in files you can grep. Some do not, and
+those are the ones that survive a clean sweep.
+
+The same discipline governs a **corrected claim**, not only a renamed symbol. When
+you find that something you wrote is wrong, its other copies are readers of the old
+version in exactly the way a stale caller is.
+
+Surfaces `git grep` cannot reach:
+
+- the **PR title and description**, which is the first thing a reviewer opens
+- **PR and issue comments**, including ones you wrote earlier in the same thread
+- **commit messages already pushed**, which cannot be edited without a rewrite, so
+  the correction goes in the next commit's message instead
+- Slack messages, docs published to a site, anything living in another repo
+- anything posted under a human's account, where a stale claim reads as theirs
+
+So the check has two halves. Grep the tree, then **enumerate the surfaces** by
+asking where else this claim was stated, and go look at each one. A tree that
+greps clean is evidence about the tree and nothing else.
+
+**Provenance, 2026-08-19.** On walmart-mvp PR #59 the review bot found that a
+guidebook's central mechanism was wrong. It was corrected in three cited places, a
+fourth found by grepping the claim rather than the citations, and the tree then
+grepped clean three times. The same wrong mechanism was still sitting in the PR
+description, word for word, and in two GitHub comments. Nobody had looked, because
+the sweep had been scoped to the artifact being edited.
+
 ## The check
 
 1. Grep the **OLD** name across the full project tree (per
    [[grep-scope-before-claiming-absence]] — the whole tree, not the renamed file's
    directory), with ignored + hidden files included.
 2. For each hit: update it, or state why it is genuinely unrelated.
-3. Only then is the rename done. If you cannot enumerate the readers, you do not
+3. Enumerate the off-tree surfaces above and check each one by hand.
+4. Only then is the rename done. If you cannot enumerate the readers, you do not
    know the rename is safe.
 
 ## Reviewing a rename

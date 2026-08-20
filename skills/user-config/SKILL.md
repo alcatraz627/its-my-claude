@@ -1,7 +1,7 @@
 ---
 name: user-config
 description: Lists and manages all Claude configuration in this project — guidelines, skill definitions, personal settings, and shared utilities. Use /user-config to view config or /user-config edit to interactively explain, edit, or simplify any item.
-user-invokable: true
+user-invocable: true
 argument-hint: "[edit]"
 ---
 

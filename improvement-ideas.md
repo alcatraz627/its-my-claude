@@ -1014,3 +1014,10 @@ green cron.** Propagate the code, or the scheduler reports success forever.
 
 - Exercise agent-facing tools in their DEPLOYMENT shape before calling them done: a `[ -t 0 ]` guard is dead under the Bash tool (stdin never a tty), `BASH_SOURCE` resolves to the symlink not the script (vocab lookups break only via PATH), and a pm2 entry passes `describe` while stopped. All three shipped past authoring-shape tests today and were caught only by probing the installed form.
 - Absence of telemetry is not absence of effect: 34 of 38 hooks cannot record heed, so "never converts" conclusions drawn from silent ledgers are untrustworthy; instrument re-observation before tuning or retiring an advisory.
+
+## 2026-08-18 (gcc-fable, Versable/gcp)
+- Two agents converging after one concedes under challenge is not "independent convergence"; say which it was, the evidentiary weight differs and a reviewer will catch the difference.
+- A checkpoint's one-line gloss of a review finding can be wrong; read the finding body before dispositioning.
+- The secret-file guard fires on secret-shaped dotfile names anywhere in Bash command text, including ipc message bodies; reword the filename. `rg -q '\$\{VAR\}' FILE` learns which env var a registry config expects without printing it.
+- A blocked compound command is a partial failure: re-run the whole command, not the half you remember (peer's README that "existed" but did not).
+- A deck reviewer prompt that maps every slide claim to a source line and marks SUPPORTED/OVERSTATED/CONTRADICTED/UNSOURCED is cheap and finds real defects (19 in a 14-slide deck the author thought clean).

@@ -2,7 +2,7 @@
 name: ste-writing
 description: Rewrite prose into Simplified Technical English adapted to this account. Covers docs, READMEs, PR descriptions and their inventories, error messages, release notes, runbooks, and hook user-text. Never code, never chat replies. Strict mode for procedures, errors, and hook text. Flavored mode for READMEs, PR descriptions, and general docs. Use when asked to make writing plain, to de-slop a doc, or to write error text that reads human. Chat replies are out of scope and rules/audience-aware-writing.md routes them.
 argument-hint: "[strict|flavored] [file or pasted text]"
-user-invokable: true
+user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ---
 

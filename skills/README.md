@@ -1,6 +1,6 @@
 # `~/.claude/skills/` — Global skill definitions
 
-> Skills are user-invokable `/command` entrypoints. Each lives in its own subdir with a `SKILL.md`.
+> Skills are user-invocable `/command` entrypoints. Each lives in its own subdir with a `SKILL.md`.
 
 ## When to add a skill here
 

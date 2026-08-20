@@ -368,7 +368,8 @@ export function saveItems(file: ItemsFile, by: string): void {
   atomicWrite(ITEMS, file, by, `items=${file.items.length}`);
 }
 
-// Two CLI classifiers race the same way two board writers do.
+// Two CLI classifiers race the same way two board writers do. One lock covers
+// all of KROOT, so items, pins, drafts and pulls serialize against each other.
 export function withItemsLock<T>(fn: () => T): T {
   return withBoardLock(KROOT, fn);
 }
@@ -392,6 +393,67 @@ export function pendingItems(items: Item[], l: LandingsFile, slug?: string): Ite
     .filter((i) => !slug || visibleOn(i, slug))
     .sort((a, b) =>
       Number(!!b.starred) - Number(!!a.starred) ||
+      Number(!!b.triggered) - Number(!!a.triggered) ||
+      Date.parse(a.createdAt) - Date.parse(b.createdAt));
+}
+
+// Drafts: the rung above an ask. An ask is a sentence the owner throws over the
+// wall; a draft is a document they sit down and write. Ruling D5. Design and the
+// full definition: assets/reports/20260816-kanban-corpus/v2-plan.md:119.
+//
+// Same writer split as items, for the same reason: the owner owns the text
+// (drafts.json, server) and the agent owns what it did with the text
+// (pulls.json, CLI), so a pull still records with the server down.
+export const DRAFTS = path.join(KROOT, "drafts.json");
+export const PULLS = path.join(KROOT, "pulls.json");
+
+export interface Draft {
+  id: string;
+  title?: string;       // optional: an untitled draft is a legitimate state
+  body: string;         // markdown
+  isTemplate?: boolean; // reusable rather than one-off (D5)
+  slug?: string;        // board affinity, optional: a draft starts uncoupled
+  triggered?: string;   // ISO ts: offered to a session, the item field's twin
+  createdAt: string;
+  updatedAt: string;
+}
+
+// A draft is consumed on pull and keeps a link to where it went (D5). Shaped
+// like Landing on purpose, plus the slug Landing lacks so the link can be built
+// without falling back to the source record's own board.
+export interface Pull {
+  cardId?: string;
+  slug?: string;
+  note?: string;        // the agent's one-line account of what it made
+  at: string;
+  by?: string;
+}
+export interface DraftsFile { drafts: Draft[] }
+export interface PullsFile { pulls: Record<string, Pull> }
+
+export const loadDrafts = (): DraftsFile => readJson<DraftsFile>(DRAFTS, { drafts: [] });
+export const loadPulls = (): PullsFile => readJson<PullsFile>(PULLS, { pulls: {} });
+
+// Human-authored and gitignored, so these backups are the only recovery surface.
+// Identical to saveItems; if a third one appears, that is the time to factor it.
+export function saveDrafts(file: DraftsFile, by: string): void {
+  if (fs.existsSync(DRAFTS)) {
+    fs.copyFileSync(DRAFTS, `${DRAFTS}.prev-${Date.now()}.bak`);
+    const baks = fs.readdirSync(KROOT).filter((f) => f.startsWith("drafts.json.prev-")).sort();
+    for (const old of baks.slice(0, Math.max(0, baks.length - 20))) fs.unlinkSync(path.join(KROOT, old));
+  }
+  atomicWrite(DRAFTS, file, by, `drafts=${file.drafts.length}`);
+}
+
+export const isPulled = (p: PullsFile, id: string): boolean => !!p.pulls[id];
+
+// A template is never "waiting to be pulled": using it does not consume it, so
+// it would otherwise sit in the queue forever asking to be dealt with.
+export function pendingDrafts(drafts: Draft[], p: PullsFile, slug?: string): Draft[] {
+  return drafts
+    .filter((d) => !d.isTemplate && !isPulled(p, d.id))
+    .filter((d) => !slug || !d.slug || d.slug === slug)
+    .sort((a, b) =>
       Number(!!b.triggered) - Number(!!a.triggered) ||
       Date.parse(a.createdAt) - Date.parse(b.createdAt));
 }

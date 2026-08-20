@@ -390,6 +390,43 @@ fi
 
 ---
 
+## Step 5.8: Skills roster health (in-04)
+
+Three checks on the skill roster itself: a stale index misroutes discovery, an
+over-budget description gets dropped by the roster first, and a skill with no
+recorded run has no efficacy evidence behind it.
+
+```bash
+source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
+gum_divider "Skills roster"
+SK=~/.claude/skills
+newer=$(find "$SK" -name SKILL.md -newer "$SK/00-index.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$newer" = "0" ]; then gum_success "index current (no SKILL.md newer than 00-index.md)"
+else gum_warn "index STALE: $newer SKILL.md newer than 00-index.md — run: bash ~/.claude/scripts/skills-index.sh"; fi
+overs=$(python3 ~/.claude/scripts/skill-lint.py "$SK"/*/SKILL.md 2>/dev/null | rg -c "description-long"); overs=${overs:-0}
+if [ "$overs" = "0" ]; then gum_success "description budget: no skill over the 300-char cap"
+else gum_warn "description budget: $overs skill(s) over the 300-char cap (roster drops long ones first) — python3 ~/.claude/scripts/skill-lint.py to list"; fi
+python3 - <<'PY'
+import json, glob, os
+names = {os.path.basename(os.path.dirname(f)) for f in glob.glob(os.path.expanduser('~/.claude/skills/*/SKILL.md'))}
+ev = os.path.expanduser('~/.claude/skills/usage/events.jsonl')
+used = set()
+if os.path.exists(ev):
+    for ln in open(ev):
+        try: used.add(json.loads(ln).get('skill', ''))
+        except Exception: pass
+un = sorted(names - used)
+head = ', '.join(un[:8]) + (' …' if len(un) > 8 else '')
+print(f"  unrecorded: {len(un)} of {len(names)} skills have no skill-log run" + (f" ({head})" if un else ''))
+PY
+```
+
+The unrecorded count is information, not an alarm: rarely-used skills are
+legitimate. It feeds the same judgment the 2026-08-20 catalog eval used
+(usage pyramid, zero-evidence skills), on demand instead of once.
+
+---
+
 ## Step 6: Summary
 
 Collate all findings into a completion block. The severity summary should reflect

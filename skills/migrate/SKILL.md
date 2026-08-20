@@ -3,7 +3,7 @@ name: migrate
 description: Create a migration entry for a structural change to ~/.claude/. Required before/alongside any change that moves a canonical path, renames a script other things reference, changes a data schema, alters hook architecture, or creates/removes a top-level dir. See conventions/gcc-hygiene.md for the structural-change definition. Use this when about to commit structural change to gcc, or to backfill a missing migration entry after the fact.
 allowed-tools: Read, Write, Edit, Bash, Glob
 argument-hint: "[--backfill] [--title TITLE]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

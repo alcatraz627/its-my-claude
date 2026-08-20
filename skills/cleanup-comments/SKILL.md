@@ -7,7 +7,7 @@ description: >
   AI-tell prose (em dashes, emojis, essays, restate-the-code comments) into
   short human comments; flags TODOs and possibly-stale claims. Previews every
   change for confirmation before applying. Never commits.
-user-invokable: true
+user-invocable: true
 argument-hint: "[path|glob] [--changed [base]] [--all] [--apply]"
 ---
 

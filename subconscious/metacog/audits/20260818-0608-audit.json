@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16700,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.13865064009949613,
+    "unit_count": 27
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — unit cd7f1887-0 is the 36th+ consecutive zero-tool style-enforcement session with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; one instance this cycle, within recent range; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit e430c957-25: Edit to TRACKING.md failed (success:false) before a second Edit succeeded, structurally identical to 15+ prior cycle occurrences; unit e430c957-28: a new Python-expression sub-shape appeared — open(f,'w').write(entry+open(f).read()) evaluated the write-open before the read, truncating .claude/skills/runtime-notes.md; agent self-caught, filed atone mist-20260817-210914-f5, and filed a proposal to extend prepend-runtime-note.sh; this sub-shape (in-expression ordering rather than Edit-tool sequencing) has not appeared in prior cycles and represents an escalation of the pattern into a new surface",
+      "optimism_bias_on_script_compatibility:RECURRING:WORSENING — unit e430c957-28: node scripts/ci-citations.mjs called after a multi-file Python edit (success:false), triggering three subsequent Bash recovery passes to remove foreign session headers that the write had pulled in; identical probe-after-failure shape as 2026-08-15 and 2026-08-16; now observed across three distinct contexts (screenshot-path, trace-render, citation-ratchet) in three consecutive cycles with no convergence, confirming worsening trajectory"
+    ],
+    "calibration_score": 0.41,
+    "overconfident_count": 1,
+    "recommendations": [
+      "write_before_read_trap Python-expression variant is NEW this cycle and not covered by existing mitigation (which targets Edit-tool sequencing); the pattern is now surfacing in hand-rolled Python one-liners that read the same file in the write expression; a targeted precheck — 'does any open(f,\"w\") appear in the same expression as open(f).read()?' — would catch this specific shape before the write fires; existing proposal to extend prepend-runtime-note.sh should be prioritized to eliminate the hand-roll opportunity",
+      "optimism_bias_on_script_compatibility shows no self-correction across three cycles; the consistent shape is calling a script with assumed input shape, failing, then probing to learn the actual contract; recommend pre-call contract verification (read script docs or EXAMPLES.md before first invocation) rather than post-failure diagnosis; this is the only non-deprioritized recurring bias showing active worsening",
+      "confirmation_bias_style_log remains fully deprioritized; no corrective action recommended this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "f2df7e62-ee18-4c14-937d-c0b4369ffebe",
+      120646
+    ],
+    [
+      "e430c957-cc63-4054-8c72-d3f50a010601",
+      6769164
+    ],
+    [
+      "cd7f1887-803c-4428-baa2-94100781d814",
+      125865
+    ],
+    [
+      "a97faa72-73d9-499b-ad36-196d786708e2",
+      21501069
+    ],
+    [
+      "8e2c0eb3-0fdb-41fb-aba0-97449890bcea",
+      90290
+    ],
+    [
+      "8c506903-0c21-4c36-b2cf-b58abeb9d99a",
+      120715
+    ],
+    [
+      "893f77a5-08e0-4a9b-88b1-8fa4459bd671",
+      98890
+    ],
+    [
+      "8265db24-370e-4788-8a04-af410964cc4d",
+      119510
+    ],
+    [
+      "7d6429b4-1568-44fe-8617-bdaca13c2550",
+      108684
+    ],
+    [
+      "6d2660b8-e3bd-4529-9ad4-c5a4f3735536",
+      102377
+    ],
+    [
+      "69f387ba-6b4c-4550-bdc1-b0c8168cb0e7",
+      8381124
+    ],
+    [
+      "52d94835-59ec-4738-bc77-3b8b66524e1e",
+      117559
+    ],
+    [
+      "396e87ae-0495-4b6e-9272-12a32de34ab5",
+      106139
+    ],
+    [
+      "343b91b1-86d0-4e72-9688-66ce5f132c79",
+      108565
+    ],
+    [
+      "05848639-55ea-4cc0-ac75-add3eab9756d",
+      118777
+    ],
+    [
+      "ed3f3405-e3b2-49f0-8858-45abe2b8020d",
+      115832
+    ],
+    [
+      "d19e237e-9622-4428-8600-2d0eae4beee8",
+      102517
+    ],
+    [
+      "a735b642-b3e9-4fce-bc40-18f55352e575",
+      107749
+    ],
+    [
+      "958bb0ca-9a36-4d2a-a114-e96334fcdba1",
+      95740
+    ],
+    [
+      "717eed94-e916-4b31-b734-1aaf5c20fd99",
+      123666
+    ],
+    [
+      "6e7e9bab-9948-4de8-9a3b-0e0f3004bffc",
+      117453
+    ],
+    [
+      "68c57aa7-4c1d-4dba-883a-348dfd6099fd",
+      91085
+    ],
+    [
+      "64175d31-79c1-48e4-baff-00643f4d7724",
+      116894
+    ],
+    [
+      "5f19e9ba-c70d-42b9-8c9d-f329559e2c9b",
+      126098
+    ],
+    [
+      "5582da20-3f04-4a29-9363-fe72bfc9a4f3",
+      102535
+    ],
+    [
+      "1e77e818-fbb5-4f98-b437-8712b93e4841",
+      120130
+    ],
+    [
+      "12974435-9b40-48a0-8cbb-e6e8346f5750",
+      126866
+    ],
+    [
+      "d5c6448c-7584-4b00-ae3f-1d2104cb3053",
+      121280
+    ],
+    [
+      "c42f98be-74d1-49f3-872f-3f1773e0448c",
+      125569
+    ],
+    [
+      "4231a210-a243-4c8d-81f3-fcf420575058",
+      109124
+    ],
+    [
+      "ec37de6d-d12e-42c9-b025-c1c7ea884bcc",
+      119469
+    ],
+    [
+      "e6c37579-c134-40c8-8342-3e35abc22ab4",
+      129660
+    ],
+    [
+      "d5b9fed4-ce65-42e2-8cce-bebfae5b3110",
+      103235
+    ],
+    [
+      "cf33203d-f021-4860-adc3-c6521616361f",
+      129072
+    ],
+    [
+      "c34448ea-ae9a-4f85-bec1-32a5ac3c5afa",
+      105740
+    ],
+    [
+      "c13f548c-7308-4a55-a73c-2e1ef4ce16f2",
+      129678
+    ],
+    [
+      "be7da212-c818-420f-b8df-7df2066274b8",
+      123978
+    ],
+    [
+      "a440c69f-6af7-43f7-a2b9-c596dce4d908",
+      114791
+    ],
+    [
+      "8bdf7f60-b704-419f-9f32-3554f3b03114",
+      155726
+    ],
+    [
+      "6866d937-e758-4bf4-bf58-2feab9f3cca0",
+      122672
+    ],
+    [
+      "613cc430-f3ea-4189-8a4f-1e40ff12fe5b",
+      124926
+    ],
+    [
+      "572f90d9-c141-4602-b069-522c58b0687b",
+      119509
+    ],
+    [
+      "53e09fa5-6e63-48f4-8dd6-ef2ebc55bc13",
+      145338
+    ],
+    [
+      "0d0b439f-cda7-401f-a4ad-cc91f44852d0",
+      132835
+    ],
+    [
+      "5a30c2d0-3b99-49f3-bfae-289737669e51",
+      109601
+    ],
+    [
+      "85a16235-d5c6-45b2-ae6c-a1904c42f452",
+      128031
+    ],
+    [
+      "679158ff-1cdc-44a2-9ec1-e10fb8d6d046",
+      144098
+    ],
+    [
+      "535aec3a-8fec-48af-b362-453f19cb7560",
+      119912
+    ],
+    [
+      "17b60b70-1ef5-49c6-bf19-6e225b648797",
+      124822
+    ],
+    [
+      "f9f01ae7-cfea-4cad-bbf3-2e52065e09b8",
+      122461
+    ]
+  ],
+  "timestamp": "2026-08-18T06:08:36.711248Z",
+  "tokens_used": 9271,
+  "units_analyzed": 7,
+  "units_total": 27
+}

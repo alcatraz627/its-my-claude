@@ -137,4 +137,49 @@ for h in "Resume Contract" "Session Insights"; do
   rg -q "^## ${h}[[:space:]]*$" "$f" || optional_absent="${optional_absent} '## ${h}'"
 done
 [ -n "$optional_absent" ] && echo "note: optional heading(s) absent:${optional_absent} (normal on precompact/older dumps)"
+# Field-level check on the Resume Contract, WARN TIER (ruling D2a: a new gate
+# ships warn-tier and is promoted on evidence). Headings can all be present while
+# a contract FIELD the template specifies is simply absent, which is how the
+# 2026-08-19 dump shipped without "Task list, glanced" — the prose specified the
+# field, the emitted template did not carry it, and this validator returned OK.
+# Missing fields are reported, never fatal: older dumps predate later fields.
+if rg -q "^## Resume Contract[[:space:]]*$" "$f"; then
+  # The field list is DERIVED from the core-dump template, not kept as a second
+  # hand-maintained copy. Two lists that must agree are a drift guard that only
+  # ever agrees with itself; this one reads the other side.
+  _tmpl="$HOME/.claude/skills/core-dump/SKILL.md"
+  _fields=$(rg --no-filename -o -- '^- \*\*[^*]+:\*\* <' "$_tmpl" 2>/dev/null \
+            | sed 's/^- \*\*//; s/:\*\* <$//' | sort -u)
+  [ -n "$_fields" ] || _fields=$(printf '%s\n' "Standing constraints" "Standing caveats" \
+    "Next action" "Next action's requirements" "Blocked on" "Expired authorizations" \
+    "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" \
+    "Task store" "Key anchor")
+
+  # Scoped to the Resume Contract SECTION, and a present-but-empty field counts as
+  # absent: "- **Task store:**" with nothing after it satisfied the old presence
+  # test while telling a resumed agent exactly nothing.
+  _contract=$(python3 - "$f" <<'PYX'
+import sys, re
+t = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+m = re.search(r"^## Resume Contract[ \t]*$(.*?)(?=^## |\Z)", t, re.M | re.S)
+print(m.group(1) if m else "")
+PYX
+)
+  absent_fields=""; empty_fields=""
+  while IFS= read -r lbl; do
+    [ -n "$lbl" ] || continue
+    _line=$(printf '%s\n' "$_contract" | rg -F "**${lbl}:**" | head -1)
+    if [ -z "$_line" ]; then
+      absent_fields="${absent_fields} '${lbl}'"
+    else
+      _val=${_line#*"**${lbl}:**"}
+      case "$(printf '%s' "$_val" | tr -d '[:space:]')" in
+        ""|"-"|"—") empty_fields="${empty_fields} '${lbl}'" ;;
+      esac
+    fi
+  done <<< "$_fields"
+  [ -n "$absent_fields" ] && echo "warn: Resume Contract field(s) absent:${absent_fields} (template: core-dump SKILL.md 2.6)"
+  [ -n "$empty_fields" ] && echo "warn: Resume Contract field(s) present but EMPTY:${empty_fields} (write the value or 'none')"
+fi
+
 echo "OK: parse contract satisfied: $f"

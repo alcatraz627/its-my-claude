@@ -1,0 +1,179 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17147,
+    "correction_density": 0.045454545454545456,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.26674992803175707,
+    "unit_count": 22
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units 8617dd17-0 and 5fb009fc-0 are the 34th+ consecutive cycle of zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Unknown user_reaction; two instances this cycle, within recent range (1-9); both share input hash 3b495f396e54aa33, indicating duplicate-session dispatch of identical input; no corrective signal; fully deprioritized per history guidance"
+    ],
+    "calibration_score": 0.45,
+    "cross_references": [
+      "b6cdefcf-6: CONFIRMS dream insight 3 (emission-equals-arrival fallacy avoided) — agent traced 'Hawky' through proposal, identity-gate, merged-evidence, and scored-listings stages by reading actual file contents at each stage rather than inferring presence from upstream success signals; receiver-end verification applied correctly across all four pipeline stages",
+      "99d33150-7: PARTIAL CHECK against dream insight 2 (partial verification presented as complete) — agent enumerated routes from the live index page and verified HTTP 200 for all discovered routes plus security probes; scope was bounded to index-discoverable routes and the agent did not claim complete route coverage beyond what was enumerated; the tsc --noEmit call is collect-not-run adjacent but is used as a type-check gate in a review context with real exercise following via curl, avoiding the collect-not-run trap",
+      "99d33150-7: one Bash call returned success:false (mkdocs venv fd search); agent self-corrected in the following call without user intervention — structurally identical to tool_retry_mild pattern from 2026-08-15 cycles; classified mild, no escalation warranted"
+    ],
+    "overconfident_count": 0,
+    "recommendations": [
+      "No NEW biases detected this cycle; all flagged patterns are RECURRING:STABLE with no deterioration signal relative to prior cycles",
+      "confirmation_bias_style_log continues at established baseline; duplicate-input dispatch (shared hash 3b495f396e54aa33 across two sessions) is a new structural observation but does not change the bias classification or require a new recommendation — deprioritized per history guidance",
+      "Tool-using sessions (b6cdefcf-6, 99d33150-7) demonstrate well-calibrated investigative strategies: b6cdefcf-6 traced a named entity through four distinct pipeline stages by reading actual file contents; 99d33150-7 combined tsc type-check with live HTTP route enumeration and security probes rather than asserting coverage from a single check — these represent the correct receiver-end verification pattern"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "b6cdefcf-aa20-4b2d-86ee-6f1ddf2900b9",
+      4243271
+    ],
+    [
+      "a3b1ca32-c8ab-44d4-bc13-dff8574a3bd8",
+      136534
+    ],
+    [
+      "8617dd17-ace1-4dcf-a7f1-2653d9120095",
+      130732
+    ],
+    [
+      "5fb009fc-e1be-4bfa-a146-6cd935fb4569",
+      125320
+    ],
+    [
+      "e9ae449e-04f2-4998-908f-333d761605ca",
+      145921
+    ],
+    [
+      "e2524da8-7f72-4017-991e-eb109da82c6b",
+      131778
+    ],
+    [
+      "d98972ae-d613-490b-8557-565c9d7c155c",
+      142183
+    ],
+    [
+      "d7d9f08f-7d23-42ef-8d0f-b21aef0c9c42",
+      111671
+    ],
+    [
+      "d35fa224-3b97-4fa9-9e0d-8247a998fda1",
+      124863
+    ],
+    [
+      "a6066743-3017-477d-9781-1965a63c3100",
+      132898
+    ],
+    [
+      "99d33150-7edf-43d0-be35-8014895aa550",
+      14503379
+    ],
+    [
+      "96871f47-a1a4-4183-ae30-8995a18e6e36",
+      18456608
+    ],
+    [
+      "93c86013-3b1d-4b8f-989e-aa19e9ca0cb0",
+      152089
+    ],
+    [
+      "8eb596ca-6b3f-4eac-8f81-b7e60ed5bbd1",
+      127296
+    ],
+    [
+      "8923fe44-f242-499d-a536-fd79808b8096",
+      129970
+    ],
+    [
+      "7a2e53e9-4347-4c04-9b8c-08edfde2b8c6",
+      23299275
+    ],
+    [
+      "71398c67-2b8e-4006-8d80-f8223ab00ec7",
+      135345
+    ],
+    [
+      "57495a67-124d-42df-b335-2cc6cc8eb6b5",
+      135781
+    ],
+    [
+      "5160a4ec-7d17-4a53-ab3b-676b3f959fae",
+      124025
+    ],
+    [
+      "4cd28f2f-c4e3-48f1-9634-4bb4ab15e4bf",
+      102788
+    ],
+    [
+      "4ae9a986-a86a-445e-9bdb-c4fd820cae44",
+      138073
+    ],
+    [
+      "47c52449-e0a7-41ef-b255-7559cb40e1d9",
+      88755
+    ],
+    [
+      "b6177492-ca5e-47f2-a177-a504b6a55bf2",
+      120208
+    ],
+    [
+      "aaa5253f-71e4-4e53-8fba-80eef59c4f66",
+      130395
+    ],
+    [
+      "a1662ad1-81bc-4cb3-8ff8-903c17f92179",
+      138155
+    ],
+    [
+      "9398dd46-a95f-43ab-a998-f6cc0a38e0b5",
+      6100415
+    ],
+    [
+      "864e4266-be9d-40c5-aaa5-504794ecb4a4",
+      124776
+    ],
+    [
+      "7b0b3275-4736-4a99-950a-600669860984",
+      141483
+    ],
+    [
+      "626ed7be-3e81-492a-a6bc-1dd52100e458",
+      8547598
+    ],
+    [
+      "4d2c4415-aefc-4b99-a613-8aa70cc67db9",
+      144343
+    ],
+    [
+      "33cd613c-6be2-4f1d-9973-0ca9afe5bbcd",
+      142635
+    ],
+    [
+      "1c4116eb-1772-45f7-899c-cf503531ccf6",
+      21321
+    ],
+    [
+      "1bd0e254-7472-4e0f-80fc-2c68a196ee42",
+      120537
+    ],
+    [
+      "1697a5bb-7d3c-4406-b126-475b47f48096",
+      119496
+    ],
+    [
+      "05f8c941-e501-47a6-be6a-965b1825f5e9",
+      129147
+    ],
+    [
+      "5bcda92e-9c69-45a4-8651-31cac6dace61",
+      8522639
+    ]
+  ],
+  "timestamp": "2026-08-16T21:03:04.246963Z",
+  "tokens_used": 6192,
+  "units_analyzed": 4,
+  "units_total": 22
+}

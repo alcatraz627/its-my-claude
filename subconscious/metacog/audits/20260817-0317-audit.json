@@ -1,0 +1,75 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17626,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1748828179095934,
+    "unit_count": 11
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — units cbfe32ca-0 and 832cb81b-0 are two more zero-tool sessions with topic_keywords ['enforce','style','ledger','file','content'] and Accepted user_reaction; this is the 35th+ consecutive cycle; per-cycle volume (2) within recent range; fully deprioritized per history guidance",
+      "write_before_read_trap:RECURRING:STABLE — unit 5bcda92e-30: Edit to _20260817-gcc-work.claude.md failed (success:false) before a second Edit succeeded on the same path; structurally identical to 15+ prior cycle occurrences; no improvement signal",
+      "optimism_bias_on_script_compatibility:RECURRING:WORSENING — unit 5bcda92e-30: trace.sh called once with an initial JSON schema (success:false), agent then read EXAMPLES.md and sed-probed lines 15-45 to understand the expected shape, rewrote the JSON, called trace.sh again (success:true); same optimism-about-script-input-contract shape seen 2026-08-15 but now manifesting in a render/trace context rather than a screenshot-path context; the probe came after failure rather than before, which is the defining mark of this bias; second occurrence across two cycles suggests it is not self-correcting"
+    ],
+    "calibration_score": 0.42,
+    "overconfident_count": 2,
+    "recommendations": [
+      "For optimism_bias_on_script_compatibility: read or grep a script's EXAMPLES.md or --help output BEFORE the first call when the schema is not already known from this session's context; the 5bcda92e-30 recovery sequence (fail → read examples → retry) is the correct order inverted",
+      "write_before_read_trap and confirmation_bias_style_log are STABLE with no improvement signal; both are already in active monitoring; no new recommendation issued per deprioritization policy"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "99781e5d-3fc4-4760-a6a4-04f1c5987fdc",
+      90201
+    ],
+    [
+      "12845803-4dad-485f-9543-134b898d3874",
+      12442830
+    ],
+    [
+      "f1ec4343-60d8-49db-abca-44d0c6524bc0",
+      4628513
+    ],
+    [
+      "cbfe32ca-6a7f-4346-8309-21bf074efdd5",
+      162514
+    ],
+    [
+      "bb319253-9b85-4497-a4f2-470ed5d7ab92",
+      133465
+    ],
+    [
+      "a7babb4b-5fd8-4fd2-a432-fa55a76585eb",
+      123304
+    ],
+    [
+      "9398dd46-a95f-43ab-a998-f6cc0a38e0b5",
+      7976747
+    ],
+    [
+      "832cb81b-f1c1-49eb-a0b0-2af945a08518",
+      143007
+    ],
+    [
+      "662f3216-9c63-4d43-bf57-45b91b1fceff",
+      125725
+    ],
+    [
+      "5bcda92e-9c69-45a4-8651-31cac6dace61",
+      9094649
+    ],
+    [
+      "470ee263-4974-4884-b5d1-3f5d2ae5a2ac",
+      8938057
+    ]
+  ],
+  "timestamp": "2026-08-17T03:17:37.410036Z",
+  "tokens_used": 10951,
+  "units_analyzed": 11,
+  "units_total": 11
+}

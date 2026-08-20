@@ -2,7 +2,7 @@
 name: diagram
 description: Renders terminal diagrams — flowcharts, sequence diagrams, trees, tables, state machines, and architecture layouts — using gum-tui.sh for box-accurate rendering. Use when explaining spatial or hierarchical structures visually.
 allowed-tools: Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "<description of what to diagram>"
 ---
 

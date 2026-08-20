@@ -3,7 +3,7 @@ name: build-ui
 description: Plans a page-level UI build or renovation and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the work (surface conversion, trait sweep, or primitive promotion), picks the goal from the decision the user leaves with, derives environment context by measurement rather than memory, states problems as falsifiable triples, assigns a value-add profile that generates loading law, inherits layout by sweeping siblings, then specifies a structural skeleton and a living embryo. Can and must output "no build" when nothing warrants work. Use when asked to build, renovate, restyle, or bring a page up to the design language; when a page "feels dated" or "off"; or before writing UI code for a surface that already exists. Not for single-component fixes or one-line copy changes.
 allowed-tools: Read, Grep, Glob, Bash
 argument-hint: "<page or surface> [trait-only scope]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

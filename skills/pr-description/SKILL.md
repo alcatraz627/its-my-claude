@@ -9,7 +9,7 @@ description: >
   decision a reviewer must ratify, and an honest verification boundary.
   Output is a file the human pastes; never runs gh pr create or gh pr edit.
   Use for "write the PR description", "PR body", "describe this PR".
-user-invokable: true
+user-invocable: true
 argument-hint: "[PR number | base..head | branch]"
 allowed-tools: Read, Glob, Grep, Bash, Write
 ---

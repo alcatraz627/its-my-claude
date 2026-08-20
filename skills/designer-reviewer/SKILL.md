@@ -3,7 +3,7 @@ name: designer-reviewer
 description: Reviews UI screenshots against the user's terminal-dashboard aesthetic fingerprints. Gives scored critiques with actionable CSS fixes. Use when reviewing pm2-manage, visualize-claude, or any developer tool UI for visual consistency against the established dark/dense/semantic design system.
 disable-model-invocation: true
 allowed-tools: Read, Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "[screenshot-path]"
 context: fork
 ---

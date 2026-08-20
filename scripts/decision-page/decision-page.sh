@@ -292,7 +292,10 @@ cmd_pending() {
     add)   local slug="${1:?usage: decision-page.sh pending add <slug>}"
            grep -qxF "$slug" "$PEND" || printf '%s\n' "$slug" >> "$PEND"
            printf 'pending: %s%s%s — clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug"
-           printf '  arm the wake path in THIS turn: Monitor/poll "decision-page.sh answer %s" — an ended turn never wakes (this chip is visibility, not a wake). Deliberately deferring? Tell the human pickup is next-session.\n' "$slug" ;;
+           printf '  ARM THE WAKE IN THIS TURN — run this exact Bash call with run_in_background: true\n'
+           printf '    until [ -f "%s/%s/.answer.json" ]; do sleep 5; done; echo "decision page %s answered"\n' "$REG" "$slug" "$slug"
+           printf '  (it exits on submit and re-invokes you; the server also ipcs the origin session as backup.\n'
+           printf '   an unarmed handoff means next-session pickup — say so to the human if you deliberately defer.)\n' ;;
     clear) local slug="${1:?usage: decision-page.sh pending clear <slug>}"
            local tmp="$PEND.$$.tmp"
            grep -vxF "$slug" "$PEND" > "$tmp" 2>/dev/null; mv -f "$tmp" "$PEND"

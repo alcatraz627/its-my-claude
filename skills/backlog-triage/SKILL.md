@@ -3,7 +3,7 @@ name: backlog-triage
 description: Review the triaged gcc improvement backlog and act on it. Reads the ranked triage file produced by backlog-consolidate.py (PROMOTE / WATCH / DROP-REVIEW), presents the PROMOTE candidates and the stale DROP-REVIEW items, and drives a human PROMOTE/DROP decision per item — implementing or handing off the promoted ones and rejecting the dropped ones via propose.sh. The one place where backlog items change state.
 allowed-tools: Read, Bash, Glob, mcp__inputs__pick_many, mcp__inputs__confirm
 argument-hint: "[--refresh]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

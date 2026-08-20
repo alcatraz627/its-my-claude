@@ -16,3 +16,4 @@ dream	🌙	dream	-	tag	ambient lesson; line-tag only
 insight	💡	insight	-	tag	educational aside; multi-line hanging indent allowed
 ctx	🌡️	ctx	-	tag	context pressure notice; line-tag only
 kanban	📋	kanban	-	tag	unread board notes; line-tag only
+goal	🎯	goal	light	box	a session goal armed / re-armed / awaiting the owner; the paste line follows the box, bare

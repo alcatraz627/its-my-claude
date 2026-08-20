@@ -385,6 +385,10 @@ if [ "$N" -gt 0 ]; then
   # Column width is measured from the longest path, never faked with a fixed
   # dot-leader run that lines nothing up.
   PW=$(jqa '[.files[].path | length] | max')
+  # jq yields nothing when .files holds bare strings instead of {path,change}
+  # objects; "[ '' -gt N ]" then throws "integer expression expected" mid-render
+  # (automation, 2026-08-18, seen inside AMENDMENTS). Non-numeric means: no cap.
+  case "$PW" in ''|*[!0-9]*) PW=$((W - 22));; esac
   [ "$PW" -gt $((W - 22)) ] && PW=$((W - 22))
   jqa '.files[] | "\(.path)\(.change)"' | while IFS= read -r row; do
     p="${row%%$'\001'*}"; c="${row##*$'\001'}"

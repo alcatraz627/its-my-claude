@@ -2,7 +2,7 @@
 name: create-report:table
 description: Parses tabular data (CSV/JSON file or inline), maps natural-language instructions to generate-table.ts CLI flags, extends the script if a requested feature is missing, and outputs a self-contained interactive HTML table page with sorting, search, filtering, pagination, theming, type-aware columns, row highlighting, and export.
 allowed-tools: Read, Write, Edit, Bash
-user-invokable: true
+user-invocable: true
 argument-hint: "<data_source> [instructions]"
 context: fork
 ---

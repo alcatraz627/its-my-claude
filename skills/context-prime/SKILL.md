@@ -2,7 +2,7 @@
 name: context-prime
 description: Loads project index, gotchas, recent git log, and open issues into context at the start of a session — bootstrapping Claude's awareness without any manual prompting.
 allowed-tools: Read, Bash, Glob
-user-invokable: true
+user-invocable: true
 argument-hint: ""
 disable-model-invocation: true
 ---

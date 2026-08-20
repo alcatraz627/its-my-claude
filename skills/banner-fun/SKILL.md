@@ -1,7 +1,7 @@
 ---
 name: banner-fun
 description: Render a daily fun terminal banner with weather, quote, moon phase, and code riddle. Use for the daily fun banner — not dev metrics, which live in the statusline.
-user-invokable: true
+user-invocable: true
 ---
 
 # banner-fun — Daily Fun Terminal Banner

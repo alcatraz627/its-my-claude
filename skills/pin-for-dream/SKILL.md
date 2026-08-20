@@ -2,7 +2,7 @@
 name: pin-for-dream
 description: Pin a structured insight from the current Claude Code session for i-dream's next dream cycle to examine. Auto-gathers session context (cwd, recent files touched, transcript path). Writes one PinEvent JSON to ~/.claude/pinned/events.jsonl via `i-dream pin add --from-json -`. Use when the user (or you) notices something worth dreaming about — a non-obvious pattern, a bug whose root cause spans files, a tradeoff that should propagate to future decisions. Auto-decays after 2 dream cycles (~2 weeks).
 allowed-tools: Bash, Read
-user-invokable: true
+user-invocable: true
 argument-hint: "[brief description of the insight]"
 ---
 

@@ -27,6 +27,7 @@ _streams() {
     pinned    "$HOME/.claude/pinned/events.jsonl"         '(.framing//"pin")'                      '(.text//"")' \
     proposals "$HOME/.claude/proposals.jsonl"             '(.category//"")+"/"+(.status//"")'      '(.title//"")' \
     personas  "$HOME/.claude/personas/usage/events.jsonl" '(.persona//"")+"/"+(.mode//"")'         '(.task//"")' \
+    skills    "$HOME/.claude/skills/usage/events.jsonl"   '(.skill//"")+"/"+(.outcome//"?")'        '(.task//"")' \
     warns     "$HOME/.claude/hooks/warn-events.jsonl"     '(.hook_id//"")+"/"+(.action//"?")+"/"+(.heeded//"")' '(.hook_id//"")' \
     alerts    "$HOME/.claude/ledger/alerts.jsonl"         '(.detector//"")+" ["+(.tier//"")+"]"'   '(.instruction//"")' \
     bookmarks "$HOME/.claude/ledger/bookmarks.jsonl"      '(.label//"")'                            '(.note//"")'

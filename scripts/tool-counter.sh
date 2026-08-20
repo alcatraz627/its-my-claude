@@ -96,11 +96,26 @@ if (( new_total > 0 && new_total % 30 == 0 )); then
     m=$(stat -f %m "$cf" 2>/dev/null || echo 0)
     (( now - m < 300 )) && recent_ckpt=1
   done
-  if (( ! recent_ckpt )); then
+  # Owner ruling 2026-08-18, verbatim: "no context nudging before 50% context, no
+  # matter how many tool calls". A tool count measures no context, but the old
+  # wording ("context may auto-compact soon") read as if it did, and three agents
+  # in three days ran a mini core-dump at ~30% on its say-so (atone slug
+  # unmeasured-context-capacity-claim, mist-20260818-130537-c0 S3 and two
+  # siblings). So the nudge is gated on the MEASURED context percentage, read the
+  # way ctx-pressure-nudge.sh reads it: the payload's context_window field, else
+  # the file the statusline persists for this claude pid. Unknown means silent.
+  used=""
+  rem=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty' 2>/dev/null) || true
+  if [[ -z "$rem" || "$rem" == "null" ]]; then
+    ctx_file="${CTX_FILE_OVERRIDE:-/tmp/claude-ctx-${PPID}}"
+    [[ -f "$ctx_file" ]] && rem=$(tr -dc '0-9.' < "$ctx_file" 2>/dev/null)
+  fi
+  [[ "$rem" =~ ^[0-9]+(\.[0-9]+)?$ ]] && used=$(awk -v r="$rem" 'BEGIN { printf "%d", 100 - r }' 2>/dev/null)
+  if (( ! recent_ckpt )) && [[ -n "$used" ]] && (( used >= 50 )); then
     if (( new_total == 30 )); then
-      msg="Tool count 30 — consider a WAL checkpoint to preserve session state."
+      msg="Tool count 30, context ~${used}% full — consider a WAL checkpoint to preserve session state."
     else
-      msg="Tool count ${new_total} (long session) — consider /core-dump mini; context may auto-compact soon."
+      msg="Tool count ${new_total}, context ~${used}% full (measured) — consider /core-dump mini at the next task boundary."
     fi
     jq -nc --arg m "[auto-checkpoint] $msg" '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
   fi

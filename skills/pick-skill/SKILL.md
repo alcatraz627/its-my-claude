@@ -3,7 +3,7 @@ name: pick-skill
 description: The front door when the right instrument is not obvious. Two jobs. Retrieval, for "I half-remember a skill exists", answered with a ranked shortlist you pick from by number, never a single guess. Routing, for work of a known shape, answered from the chain map (plan, build, validate, experience) and the domain fronts (/ui, /plan, /validate, /magi). Every run ends with a summary block whose "next time" row teaches the direct one-hop query. Use when the user says "pick a skill", "is there a skill for", "what do we have for", or describes work without naming an instrument.
 allowed-tools: Read, Bash, Glob, Grep, Skill
 argument-hint: "[what you want done, or the half-remembered thing]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

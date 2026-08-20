@@ -22,7 +22,7 @@
       "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
       "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
       "turn_in_file": 0,
-      "note": "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified' — the interaction tsc cannot see is never exercised"
+      "note": "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified' \u2014 the interaction tsc cannot see is never exercised"
     },
     {
       "name": "tp-b40f9d66-t1",
@@ -34,7 +34,7 @@
       "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
       "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
       "turn_in_file": 1,
-      "note": "'Done. Type-checks clean.' on a drag/modifier hook — the cursor/keyboard interaction a type-check cannot see"
+      "note": "'Done. Type-checks clean.' on a drag/modifier hook \u2014 the cursor/keyboard interaction a type-check cannot see"
     },
     {
       "name": "tp-b40f9d66-t3",
@@ -58,7 +58,7 @@
       "cwd": "/Users/alcatraz627/Code/Versable/two-enhancement-product",
       "source_transcript": "b40f9d66-8c30-4a8d-82b9-4a2159ed7485.jsonl",
       "turn_in_file": 4,
-      "note": "comment-only .tsx edit — nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"
+      "note": "comment-only .tsx edit \u2014 nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"
     },
     {
       "name": "tp-1c86d512-t108",
@@ -70,7 +70,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 108,
-      "note": "swift menubar rebuild 'complete and compiling at every step' — compile-checked to /tmp, never deployed/run"
+      "note": "swift menubar rebuild 'complete and compiling at every step' \u2014 compile-checked to /tmp, never deployed/run"
     },
     {
       "name": "fp-1c86d512-t2",
@@ -94,7 +94,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 128,
-      "note": "verifiable half verified live; the remaining half is a user-only observation ('awaiting you') — a hedge, not an over-claim"
+      "note": "verifiable half verified live; the remaining half is a user-only observation ('awaiting you') \u2014 a hedge, not an over-claim"
     },
     {
       "name": "fp-5da7133c-t59",
@@ -130,7 +130,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 3,
-      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent \u2014 a redesign must not start blocking this"
     },
     {
       "name": "control-1c86d512-t12",
@@ -142,7 +142,7 @@
       "cwd": "/Users/alcatraz627/Code/Claude/i-dream",
       "source_transcript": "1c86d512-4824-4585-a2a3-aa107db3f4fe.jsonl",
       "turn_in_file": 12,
-      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this"
+      "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent \u2014 a redesign must not start blocking this"
     },
     {
       "name": "real-a280d4810495-t0",
@@ -286,7 +286,7 @@
       "cwd": "/Users/alcatraz627/.claude",
       "source_transcript": "69aeb3ea-3288-47e0-87e7-d1c639a4c438.jsonl",
       "turn_in_file": 56,
-      "note": "FOUNDING event — `warn-log.sh` writes to a file that 'doesn't even exist yet, never fired', off an `fd -H` probe (hidden, NOT --no-ignore) that skipped the git-ignored warn-events.jsonl. High-stakes ~/.claude -> BLOCK. The exact recurrence this gate targets."
+      "note": "FOUNDING event \u2014 `warn-log.sh` writes to a file that 'doesn't even exist yet, never fired', off an `fd -H` probe (hidden, NOT --no-ignore) that skipped the git-ignored warn-events.jsonl. High-stakes ~/.claude -> BLOCK. The exact recurrence this gate targets."
     },
     {
       "name": "synth-fd-H-no-clear",
@@ -392,7 +392,7 @@
       "desired": "silent",
       "klass": "FP",
       "cwd": "/Users/alcatraz627/.claude",
-      "note": "path in backticks followed by a space — must NOT fire",
+      "note": "path in backticks followed by a space \u2014 must NOT fire",
       "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
       "turn_in_file": 0
     },
@@ -404,7 +404,7 @@
       "desired": "silent",
       "klass": "FP",
       "cwd": "/Users/alcatraz627/.claude",
-      "note": "inline code, no trailing period — must NOT fire",
+      "note": "inline code, no trailing period \u2014 must NOT fire",
       "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
       "turn_in_file": 0
     },
@@ -416,7 +416,7 @@
       "desired": "block",
       "klass": "TP",
       "cwd": "/Users/alcatraz627/.claude",
-      "note": "bare path.ext:line:col then a period — the false-negative the fix closes",
+      "note": "bare path.ext:line:col then a period \u2014 the false-negative the fix closes",
       "source_transcript": "SYNTHETIC (Wave-1 filename-dot fix)",
       "turn_in_file": 0
     },
@@ -635,6 +635,126 @@
       "source_transcript": "SYNTHETIC (R3 pins, re-review 2026-08-13)",
       "turn_in_file": 0,
       "note": "R3 pin: praise-without-evidence opener detector alone."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "synth-repostate-unchecked",
+      "fixture": "fixtures/declared-ready/synth-repostate-unchecked.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "note": "Stage P: repo-state verdict (committed/pushed/clean) with NO source edits and no git read this turn -- atone status-verdict-from-stale-mental-model, S3 6x. Soft only per D2a."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "synth-repostate-checked",
+      "fixture": "fixtures/declared-ready/synth-repostate-checked.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "note": "Stage P exemption: the same verdict AFTER git status + git log ran this turn -- the agent looked, so no note."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "synth-repostate-nocla",
+      "fixture": "fixtures/declared-ready/synth-repostate-nocla.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "note": "Stage P negative: a no-edit turn saying 'done reading' with no repo-state verdict -- must stay silent."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "synth-repostate-writeonly",
+      "fixture": "fixtures/declared-ready/synth-repostate-writeonly.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "note": "Stage P boundary: git add + git commit are WRITES, not reads. They change state without reporting it, which is exactly how the source event happened."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "name": "synth-repostate-fp-dative",
+      "fixture": "fixtures/declared-ready/synth-repostate-fp-dative.jsonl",
+      "note": "Stage P disqualifier: 'committed TO' is a promise, not a git commit. Fired before the sentence-scoped disqualifier existed."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "name": "synth-repostate-fp-dbtxn",
+      "fixture": "fixtures/declared-ready/synth-repostate-fp-dbtxn.jsonl",
+      "note": "Stage P disqualifier: a DATABASE transaction commits too. Both phrasings fired before the guard."
+    },
+    {
+      "hook": "declared-ready-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "name": "synth-repostate-fp-fenced",
+      "fixture": "fixtures/declared-ready/synth-repostate-fp-fenced.jsonl",
+      "note": "Stage P: quoted output is not a claim. The phrase appears ONLY inside a fenced block; same stripper prose-smell-stop.sh:59-61 uses."
+    },
+    {
+      "hook": "prose-smell-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "prose-smell-tp-title-opener",
+      "fixture": "fixtures/prose-smell/prose-smell-tp-title-opener.jsonl",
+      "expected": "soft",
+      "desired": "soft",
+      "klass": "TP",
+      "note": "Tell 8: a 10-char question answered with a bold TITLE instead of the answer. dense-briefing S3 x10; measured 0.35% of real pairs."
+    },
+    {
+      "hook": "prose-smell-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "prose-smell-fp-bold-sentence",
+      "fixture": "fixtures/prose-smell/prose-smell-fp-bold-sentence.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "note": "Tell 8 guard: '**Six done, one in flight, two untouched.**' IS the answer wearing bold. A header is a noun phrase; trailing sentence punctuation separates them."
+    },
+    {
+      "hook": "prose-smell-stop.sh",
+      "cwd": "/Users/alcatraz627/.claude",
+      "source_transcript": "SYNTHETIC",
+      "turn_in_file": 0,
+      "name": "prose-smell-fp-multiline-reminder",
+      "fixture": "fixtures/prose-smell/prose-smell-fp-multiline-reminder.jsonl",
+      "expected": "silent",
+      "desired": "silent",
+      "klass": "FP",
+      "note": "Tell 8 regression pin: a MULTI-LINE <system-reminder> is not a user prompt. jq -r + tail -n 1 kept only its last line and it slipped the exclusion."
     }
   ]
 }

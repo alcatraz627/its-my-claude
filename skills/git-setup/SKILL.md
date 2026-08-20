@@ -2,7 +2,7 @@
 name: git-setup
 description: Initializes, audits, and maintains git repositories — sets up .gitignore, branch protection, conventional commits, PR templates, and runs health checks on existing repos.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch
-user-invokable: true
+user-invocable: true
 argument-hint: "<init | health | clean> [options]"
 ---
 
