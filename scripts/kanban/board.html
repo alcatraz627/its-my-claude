@@ -540,7 +540,7 @@
      paper rather than as an input. It grows with what you type. */
   .composer textarea{font:400 13.5px/1.68 var(--sans);letter-spacing:-.002em;padding:11px 13px;
                      background:var(--card);border:1px solid var(--border);border-radius:9px;
-                     color:var(--text);min-height:76px;resize:none;overflow-y:auto;
+                     color:var(--text);min-height:76px;resize:vertical;overflow-y:auto;
                      transition:height .14s cubic-bezier(.32,.72,0,1),border-color .12s,box-shadow .12s;
                      background-image:linear-gradient(var(--border) 1px,transparent 1px);
                      background-size:100% 1.68em;background-position:0 1.42em;background-attachment:local}
@@ -581,7 +581,7 @@
   /* empty and idle, the dock is one quiet line so the evidence above keeps the
      height; text, focus, or a conflict expands it (a draft counts as text) */
   .composer.min .hint,.composer.min .parsed,.composer.min .cbar,.composer.min .restored{display:none}
-  .composer.min textarea{height:38px;resize:none;overflow:hidden}
+  .composer.min textarea{min-height:38px;overflow:hidden}
   .chead{display:flex;align-items:center;gap:8px}
   .chead .ci2{flex:none;display:grid;place-items:center;color:var(--text-3)}
   .chead .tt2{display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -883,7 +883,7 @@
            overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #pop .psub{font:400 11.5px/1.4 var(--sans);color:var(--text-3);margin-top:-4px;
              overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  #pop textarea{flex:1;min-height:0;resize:none;font:400 13px/1.6 var(--sans);padding:11px 12px;
+  #pop textarea{flex:1;min-height:80px;resize:vertical;font:400 13.5px/1.66 var(--sans);padding:11px 13px;
                 background:var(--card);border:1px solid var(--border);border-radius:9px;color:var(--text)}
   #pop textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);outline:none}
   #pop .pbar{display:flex;align-items:center;gap:7px}
@@ -1683,7 +1683,8 @@ function sketchPath(x1, y1, x2, y2, seed) {
   const dx = x2 - x1, dy = y2 - y1;
   const dist = Math.hypot(dx, dy);
   // bow away from the straight line, more on a long run, capped so it stays tidy
-  const bow = Math.min(dist * 0.22, 76);
+  // proportional, and capped at both ends: a short run that bows 76px is a loop
+  const bow = Math.max(10, Math.min(dist * 0.22, 76));
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
   // perpendicular, biased upward so the curve arcs over the board rather than
   // through the cards between the two ends
@@ -1701,18 +1702,36 @@ function drawArrow(a, b) {
   const svg = $("xarrow");
   if (!a || !b) return clearArrow();
   const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
-  // leave from the facing edge of each, not from the centre, so the line never
-  // starts underneath the thing it is pointing at
+
+  // The panel sits over the right of the board, so a card underneath it has a
+  // rect the arrow would happily point into. Clip the card end to the panel's
+  // left edge and aim at the sliver that is actually visible; if none of it is,
+  // there is nothing to point at and the highlight alone has to carry it.
+  const panel = $("drawer");
+  const pr = panel.classList.contains("open") ? panel.getBoundingClientRect() : null;
+  const occluded = (r) => pr && r.right > pr.left && r.left < pr.right;
+  const visibleRight = (r) => (occluded(r) ? Math.min(r.right, pr.left - 2) : r.right);
+  if (pr && occluded(ra) && ra.left > pr.left - 24) return clearArrow();
+
   const aRight = ra.left < rb.left;
-  const x1 = aRight ? ra.right + 3 : ra.left - 3, y1 = ra.top + Math.min(ra.height / 2, 26);
-  const x2 = aRight ? rb.left - 3 : rb.right + 3, y2 = rb.top + Math.min(rb.height / 2, 26);
+  const ax = aRight ? visibleRight(ra) + 3 : ra.left - 3;
+  const bx = aRight ? rb.left - 3 : visibleRight(rb) + 3;
+  const y1 = ra.top + Math.min(ra.height / 2, 26);
+  const y2 = rb.top + Math.min(rb.height / 2, 26);
+
+  // Two ends that nearly touch produce a hairpin, which reads as a smudge. Under
+  // ~54px the arrow says nothing the two highlights do not already say, so it is
+  // dropped rather than drawn badly.
+  const dist = Math.hypot(bx - ax, y2 - y1);
+  if (dist < 54) return clearArrow();
+
   const seed = Math.round(ra.top + rb.top);
-  const d = sketchPath(x1, y1, x2, y2, seed);
+  const d = sketchPath(ax, y1, bx, y2, seed);
   // two strokes at slightly different widths reads as ink, one reads as a border
   svg.innerHTML =
     `<path class="ink1" d="${d}" stroke-width="1.6" stroke-dasharray="7 6"/>` +
-    `<path class="ink2" d="${sketchPath(x1, y1, x2, y2, seed + 31)}" stroke-width="1.1" stroke-dasharray="5 8"/>` +
-    `<path class="ink1" d="${arrowHead(x2, y2, x1, y1, seed)}" stroke-width="1.6"/>`;
+    `<path class="ink2" d="${sketchPath(ax, y1, bx, y2, seed + 31)}" stroke-width="1.1" stroke-dasharray="5 8"/>` +
+    `<path class="ink1" d="${arrowHead(bx, y2, ax, y1, seed)}" stroke-width="1.6"/>`;
   svg.classList.add("on");
 }
 function clearArrow() { const s = $("xarrow"); s.classList.remove("on"); }
@@ -2856,7 +2875,7 @@ function loadNoteIntoComposer(id) {
   setSaveState(hasDraft ? "unsaved" : (cur?.updatedAt ? "saved" : "idle"),
     hasDraft ? "Unsaved. ⌘↵ saves it; it is kept here either way."
       : cur?.updatedAt ? `Saved ${ago(Date.parse(cur.updatedAt))} ago` : "");
-  autoGrow($("dNote"));
+  resetGrow($("dNote"));
   renderPickup(id);
   renderParse();
   syncComposer();
@@ -2940,15 +2959,20 @@ function setSaveState(kind, tip) {
 }
 // Grows with what you type, up to the room the drawer can spare above it. The
 // cap is measured rather than guessed, so a tall panel gives you a tall page.
+// Grows to fit, and never shrinks. That one asymmetry is what lets the box be
+// hand-resizable at the same time: a height you dragged taller is simply never
+// taken back, so there is no manual-versus-automatic state to get wrong.
 function autoGrow(ta) {
   if (!ta) return;
   // Measured against the PANEL, not the body above it. The body shrinks as this
   // box grows, so a cap taken from it chases itself and never binds.
-  const panel = $("drawer").getBoundingClientRect().height;
-  const room = Math.max(120, Math.round(panel * 0.42));
-  ta.style.height = "auto";
-  ta.style.height = `${Math.min(Math.max(ta.scrollHeight + 2, 76), room)}px`;
+  const room = Math.max(120, Math.round($("drawer").getBoundingClientRect().height * 0.42));
+  const now = ta.getBoundingClientRect().height;
+  const want = Math.min(Math.max(ta.scrollHeight + 2, 76), room);
+  if (want > now) ta.style.height = `${want}px`;
 }
+// A fresh note is a fresh sitting, so the box returns to its resting height.
+function resetGrow(ta) { if (ta) { ta.style.height = ""; autoGrow(ta); } }
 // A short, once-only cue per action. The class is cleared on the way in so a
 // repeated action re-fires rather than sitting inert.
 function fx(el, name) {
@@ -4259,6 +4283,7 @@ $("dSave").onclick = async () => {
 // open, the panel. The panel's keys are the shifted twins of the board's, so
 // J/K walks notes exactly the way j/k walks cards and nothing needs a mode.
 let noteAt = -1;   // cursor into the open card's note rows, -1 = none
+let lastComposerNote;
 
 function noteRows() { return [...$("dOther").querySelectorAll(".nrow")]; }
 function markNote() {
