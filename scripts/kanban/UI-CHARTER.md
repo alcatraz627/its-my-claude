@@ -188,6 +188,12 @@ first questions.
 | A second progress or chip idiom | Reuse `progRing`, `.chip`, `wireReorder`, the palette shell. |
 | An unsaved-text surface sharing a slot with saved ones | The draft canvas is its own durable row. |
 | Colour used to mean two things | One dot, one meaning. |
+| A guard made of necessary-but-insufficient conditions | Length and membership both passed while the set was wrong, and a note was deleted. A guard over a permutation asserts a bijection. |
+| A delegated list testing the container before the thing inside it | A note chip lives inside a card, so while the card's rule ran first the chip could never win its own pair. Specific before container. |
+| A timed effect wearing a live state's class | The tab-open flash borrowed the peer class, so clearing the pair could not clear the flash. A temporary effect gets its own name. |
+| A measurement taken from something the measured thing changes | The composer's height cap was a share of the box above it, which shrinks as the composer grows, so the cap chased itself. Measure against something the change cannot move. |
+| A second list of what the first list already says | The keyboard map is built by reading the shortcut table, so a binding cannot be on the keyboard and missing from the docs. |
+| `e.target.matches` unguarded in a document-level handler | A keydown targeting the document has no `matches`, and the throw took the whole handler with it. Optional-call it. |
 
 ---
 
@@ -219,7 +225,54 @@ the owner instead of relitigating it.
 
 ---
 
-## 15. Changelog
+## 15. Review, 2026-08-22
+
+Written after the round that built the peek column, the palettes, search, the
+nudge, the notepad composer, the drawn keyboard, the playground and the hub.
+This is the back-propagation the owner asked for: what the charter got right,
+what it was missing, and what it now says because of it.
+
+**What held.** Three rules did real work rather than sitting there. "Everything
+shown is a handle" produced the pressable stat chips, the tag chips that open a
+peek and the search results that become a selection; each time the question was
+already answered before it was asked. "Colour is spent once per object" survived
+six new surfaces without the palette gaining a hue, because the tag dot pattern
+generalised to the peek column, the pair highlight and the composer status.
+"One writer per file" decided where tags and goals live in about a minute, and
+that decision has not been revisited since.
+
+**What was missing, and is now in.** Six of the seven new anti-patterns above
+came from this round, and five of them are the same shape: a rule that was
+correct about the common case and silent about the edge. The charter said
+controls stop propagation; it did not say that a *delegated* list has to test
+the inner thing first, and the note chip bug followed. It said motion is short
+and explains a relationship; it did not say a timed effect must not borrow a
+live state's class name. It said measure, not guess; it did not say the
+measurement must be taken from something your change cannot move.
+
+**The pattern under the pattern.** Every one of those is a guard or a rule that
+was *necessary and not sufficient*, and none of them failed loudly. The reorder
+bug returned `ok:true` while deleting a note. The pair bug lit the wrong element
+and looked deliberate. The height cap silently never bound. That is the class of
+defect the capped QA round is actually for, so §14's budget is unchanged but its
+framing is now explicit: the checks are chosen to make a silent wrong answer
+loud, not to enumerate the surface.
+
+**What the QA round cost, measured.** Ten changed elements, six adjacent, five
+overlay checks, four keyboard paths, two themes, once per surface. It caught the
+double-owned subtitle, the blank title icon, the always-true row wearing the
+dimmed style and the toolbar overflow. It did not catch the reorder blocker; the
+adversarial seat did. Both are worth their cost and neither replaces the other:
+the round catches drift, the seat catches wrongness.
+
+**One thing to watch.** The board now has seven declared pairs, four palettes
+sharing one shell, and three surfaces that render from a single vocabulary. That
+consolidation is the reason this round moved quickly, and it is also the reason
+a mistake in a shared primitive now shows up in seven places at once. The next
+round should treat any edit to `.chip`, the palette shell, `PAIRS` or the
+overlay contract as touching every surface that uses them, and QA accordingly.
+
+## 16. Changelog
 
 - **2026-08-21.** Founding set, distilled from the column-width, title-brief,
   panel, notes, selection, status-band, tag and modal-sweep rounds.
