@@ -272,13 +272,44 @@ a mistake in a shared primitive now shows up in seven places at once. The next
 round should treat any edit to `.chip`, the palette shell, `PAIRS` or the
 overlay contract as touching every surface that uses them, and QA accordingly.
 
-## 16. Changelog
+## 16. Review, 2026-08-22, cross-page
+
+The first review covered the board. This one covers everything else, and its
+finding is different in kind: the board was internally consistent and the
+*system* was not.
+
+**What the audit found.** Four surfaces each declared their own tokens, buttons,
+tooltip and header. They agreed because someone had kept them agreeing by hand,
+and the doc viewer had already stopped: a fourth palette in raw hex that no
+token could reach, so a theme change could never touch it. Navigation was a
+partial graph, and the sharpest instance was that the drafts page offered two
+links and no route to Asks at all. Board stars existed only inside the board's
+own picker, so the one page listing every board could neither show nor set one.
+
+**What that changes in the charter.** §4's "every colour is a token" needed a
+companion: *the tokens live in one file that every surface links*. A rule that
+each page must use tokens is satisfiable by four private copies, which is
+exactly what happened. Same for §5, §7 and §13: a shared primitive is the only
+enforceable form of a shared standard.
+
+**The measurable part.** The review swept for native `title=` tooltips, which
+§13 bans, and found them still on three surfaces after all the earlier rounds:
+sixteen on the board, two on drafts. They survived because each round checked
+the thing it had just built. A sweep that asks one question of every surface
+finds what a per-surface review cannot, and it is cheap: one selector.
+
+**Standing count.** Zero native tooltips and 608 owned ones across the board,
+the panel, all four help tabs and the peek column, in both themes.
+
+## 17. Changelog
 
 - **2026-08-21.** Founding set, distilled from the column-width, title-brief,
   panel, notes, selection, status-band, tag and modal-sweep rounds.
 - **2026-08-22.** Added the §7 peer-highlight rule (blue primary, green peer,
   dotted spaced outline, soft glow), the middle-click convention, and the
   "should be fun" clause in §1.
+- **2026-08-22, third round.** shared.css and shared.js, the three-view nav on
+  every page, hub stars and glyphs, the doc viewer on the standard. §16 reviews it.
 - **2026-08-22, second round.** Three rulings earned while building under it.
   A binding shows on its control, not only in help (§10). A palette is one
   component with sections, reused rather than re-hand-rolled per use (§13). A

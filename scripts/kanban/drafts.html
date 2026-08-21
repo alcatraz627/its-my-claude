@@ -316,7 +316,7 @@ function editorEl() {
   if (d) {
   const tplBtn = el("button", d.isTemplate ? "on" : null, d.isTemplate ? "Template" : "Make template");
   tplBtn.type = "button";
-  tplBtn.title = d.isTemplate
+  tplBtn.dataset.tip = d.isTemplate
     ? "A template is reused rather than consumed, so it never waits to be pulled. Click to make it an ordinary draft."
     : "Mark this as a template so you can reuse its text. Select some text first to make a template of just that part.";
   tplBtn.onclick = () => {
@@ -337,7 +337,7 @@ function editorEl() {
   if (!d.isTemplate) {
     const offer = el("button", d.triggered ? "on" : null, d.triggered ? "Offered" : "Offer to a session");
     offer.type = "button";
-    offer.title = d.triggered ? "A session has been asked to pick this up now. Click to withdraw."
+    offer.dataset.tip = d.triggered ? "A session has been asked to pick this up now. Click to withdraw."
       : "Ask a working session to pick this up now, rather than at its next sweep.";
     offer.onclick = () => patch({ trigger: !d.triggered }, d.triggered ? "withdrawn" : "offered");
     top.append(offer);

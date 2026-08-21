@@ -1135,8 +1135,8 @@
     <span class="lane" id="dLane"></span>
     <span class="sp"></span>
     <div class="navgrp">
-      <button class="icon" id="dPrev" title="previous card (k)" aria-label="previous card">↑</button>
-      <button class="icon" id="dNext" title="next card (j)" aria-label="next card">↓</button>
+      <button class="icon" id="dPrev" data-tip="Previous card (k)" aria-label="previous card">↑</button>
+      <button class="icon" id="dNext" data-tip="Next card (j)" aria-label="next card">↓</button>
     </div>
     <button class="icon" id="dCollapse" data-tip="Collapse the panel to its tab rail (Esc)" aria-label="collapse panel">»</button>
     <button class="icon" id="dClose" data-tip="Close this tab (⌘W)" aria-label="close tab">✕</button>
@@ -2191,11 +2191,11 @@ function cardEl(c) {
   const shown = line ? tokensIn(line) : null;
   const needs = c.verify?.needsHuman;
   const statParts = [
-    subs.length ? `<span class="pill prog" title="sub-items">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "",
+    subs.length ? `<span class="pill prog" data-tip="Checkboxes nested under this card in its source document">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "",
     c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" title="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? " — " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
     needs && !isArchive ? `<span class="pill needs" title="graded ${c.verify.grade}, but wants your own testing">${c.verify.grade} · needs you</span>` : "",
     tagPills(nt, shown, 2),
-    c.staleReason ? '<span class="pill why" title="why this went stale"></span>' : "",
+    c.staleReason ? '<span class="pill why" data-tip="Why this card went stale"></span>' : "",
   ].filter(Boolean);
   const statHTML = statParts.length ? `<span class="stat">${statParts.join("")}</span>` : "";
   el.innerHTML =
@@ -2206,14 +2206,14 @@ function cardEl(c) {
     (line ? `<div class="note">${markTokens(line)}</div>` : "") +
     `<div class="chips"></div>` +
     `<div class="pills"><span class="ident">
-      ${c.tag ? '<span class="pill mono xtag" title="source tag"></span>' : ""}
+      ${c.tag ? '<span class="pill mono xtag" data-tip="The tag its source line carried, kept verbatim"></span>' : ""}
       ${c.heading && !echoesLane(c.heading, c.lane) ? `<span class="pill label l${hue}"><i class="sw"></i><span class="nm"></span></span>` : ""}
       </span>${statHTML}
     </div>` +
-    (needs && isArchive ? `<div class="pills keep"><span class="pill needs" title="graded, but wants your own testing">Needs you</span></div>` : "") +
+    (needs && isArchive ? `<div class="pills keep"><span class="pill needs" data-tip="The agent graded this and still wants you to test it">Needs you</span></div>` : "") +
     `<div class="foot"><span class="src"></span>` +
     (note && !line && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
-      ? `<span class="waiting" title="written after the agent last read this board's notes">awaiting pickup</span>` : "") +
+      ? `<span class="waiting" data-tip="Written after the agent last read this board's notes, so it has not been picked up yet">awaiting pickup</span>` : "") +
     `<span class="age"></span></div>`;
   const titleEl = el.querySelector(".title");
   titleEl.textContent = briefOf(c);
@@ -2225,7 +2225,7 @@ function cardEl(c) {
   if (c.heading && !echoesLane(c.heading, c.lane)) {
     const p = el.querySelector(".pill.label");
     p.querySelector(".nm").textContent = c.heading;
-    p.title = "label · " + c.heading;
+    p.dataset.tip = "Section: " + c.heading;
   }
   if (c.staleReason) el.querySelector(".pill.why").textContent = c.staleReason;
   // One chip per note, numbered. #n is the card's own numbering and it is what
@@ -2277,7 +2277,7 @@ function cardEl(c) {
   const srcEl = el.querySelector(".src");
   srcEl.textContent = tailPath(sp); srcEl.dataset.tip = sp;
   el.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
-  if (isArchive) el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
+  if (isArchive) el.dataset.tip = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
   el.onclick = () => openDrawer(c.id);
   el.onkeydown = (e) => { if (e.key === "Enter") openDrawer(c.id); };
   flat.push(c.id);
@@ -2428,7 +2428,7 @@ function renderStale() {
 // from the full string first, so it is correct in both resize directions.
 function tailTrim(el) {
   const full = el.title || el.textContent;
-  el.title = full; el.textContent = full;
+  el.dataset.tip = full; el.removeAttribute("title"); el.textContent = full;
   let guard = 300;
   while (el.scrollWidth > el.clientWidth && el.textContent.length > 12 && guard--) {
     el.textContent = "…" + el.textContent.replace(/^…/, "").slice(3);
@@ -2519,7 +2519,7 @@ function itemEl(it) {
   sc.textContent = it.everywhere ? "on every board"
     : it.boards?.length ? (it.boards.length === 1 ? "only here" : `on ${it.boards.length} boards`)
     : "";
-  if (sc.textContent) { sc.title = it.everywhere ? "shows on every board's rail until you scope it"
+  if (sc.textContent) { sc.dataset.tip = it.everywhere ? "shows on every board's rail until you scope it"
     : `shows on: ${(it.shownOn ?? []).map((b) => b.name).join(", ")}`; meta.append(sc); }
   if (it.triggered && !it.landing) { const t = document.createElement("span"); t.textContent = "queued for now"; meta.append(t); }
 
@@ -2697,7 +2697,7 @@ function renderSide() {
   const toggle = document.createElement("button");
   toggle.type = "button"; toggle.className = "sidetoggle";
   toggle.textContent = sideCollapsed ? "›" : "‹";
-  toggle.title = sideCollapsed ? "expand the sidebar" : "collapse the sidebar";
+  toggle.dataset.tip = sideCollapsed ? "Expand the sidebar" : "Collapse the sidebar";
   toggle.onclick = () => {
     sideCollapsed = !sideCollapsed;
     localStorage.setItem("kanban-side", sideCollapsed ? "1" : "0");
@@ -2792,7 +2792,7 @@ function renderSide() {
       const d = document.createElement("span");
       d.className = "sdrop"; d.textContent = "unpin";
       b.append(t, d);
-      b.title = p.kind === "item" ? "jump to this ask" : "jump to this card";
+      b.dataset.tip = p.kind === "item" ? "Jump to this ask" : "Jump to this card";
       b.onclick = async (e) => {
         // the unpin affordance is inside the row, so a click on it must not
         // also navigate
@@ -2832,7 +2832,7 @@ function renderSide() {
       if (p.subagents) {
         const s = document.createElement("span");
         s.className = "sub"; s.textContent = `+${p.subagents}`;
-        s.title = `${p.subagents} sub-agent${p.subagents > 1 ? "s" : ""} running`;
+        s.dataset.tip = `${p.subagents} sub-agent${p.subagents > 1 ? "s" : ""} running`;
         r.append(s);
       }
       g.appendChild(r);
@@ -2852,7 +2852,7 @@ function render() {
   hideState();
   $("name").querySelector(".bnm").textContent = data.name;
   document.title = `${data.name} · kanban`;
-  $("root").title = data.root; $("root").textContent = data.root;
+  $("root").dataset.tip = data.root; $("root").textContent = data.root;
   const all = data.board.cards;
   if (!all.length) { showState("empty"); return; }
   const cards = all.filter(matchFilter);
@@ -3015,7 +3015,7 @@ const INSERT_TOKENS = [
 ];
 for (const [tok, tip] of INSERT_TOKENS) {
   const b = document.createElement("button");
-  b.className = "tagbtn"; b.textContent = tok; b.title = tip; b.type = "button";
+  b.className = "tagbtn"; b.textContent = tok; b.dataset.tip = tip; b.type = "button";
   b.onclick = () => {
     const ta = $("dNote");
     const at = ta.selectionStart ?? ta.value.length;
@@ -3394,7 +3394,7 @@ function renderTabs() {
     // the label swaps with the panel: a name when there is room, initials at 46px
     txt.textContent = collapsed() ? initialsOf(c) : briefOf(c);
     const x = document.createElement("span");
-    x.className = "tx"; x.textContent = "✕"; x.title = "close tab";
+    x.className = "tx"; x.textContent = "✕"; x.dataset.tip = "Close this tab";
     x.onclick = (e) => { e.stopPropagation(); closeTab(id); };
     b.append(glyph, txt, x);
     b.draggable = true;
@@ -3466,14 +3466,14 @@ function openDrawer(id, wantNoteId, opts = {}) {
   const subs = c.subs ?? [];
   const done = subs.filter((s) => s.done).length;
   $("dPills").innerHTML =
-    (c.heading ? `<span class="pill label l${hue}" title="label"><i class="sw"></i><span class="nm">${esc(c.heading)}</span></span>` : "") +
-    (c.tag ? `<span class="pill mono" title="source tag">${esc(c.tag)}</span>` : "") +
+    (c.heading ? `<span class="pill label l${hue}" data-tip="The section this card sits under in its document"><i class="sw"></i><span class="nm">${esc(c.heading)}</span></span>` : "") +
+    (c.tag ? `<span class="pill mono" data-tip="The tag its source line carried, kept verbatim">${esc(c.tag)}</span>` : "") +
     (subs.length ? `<span class="pill prog">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "") +
-    (c.staleReason ? `<span class="pill" title="why this went stale">${esc(c.staleReason)}</span>` : "");
+    (c.staleReason ? `<span class="pill" data-tip="Why this card went stale">${esc(c.staleReason)}</span>` : "");
   renderGoal(c.id);
   renderCardTags(c.id);
   $("dSub").textContent = `Updated ${ago(Date.parse(c.updatedAt))} ago · created ${ago(Date.parse(c.createdAt))} ago`;
-  $("dSub").title = `${new Date(c.updatedAt).toLocaleString()} · created ${new Date(c.createdAt).toLocaleString()}`;
+  $("dSub").dataset.tip = `${new Date(c.updatedAt).toLocaleString()} · created ${new Date(c.createdAt).toLocaleString()}`;
 
   $("dClaimWrap").style.display = c.verify ? "" : "none";
   if (c.verify) {
@@ -3500,7 +3500,7 @@ function openDrawer(id, wantNoteId, opts = {}) {
   // a linked doc has no line, so its preview is the top of the file. Say that,
   // or it reads as the harvested excerpt showing the wrong card's content.
   // the doc gets told where the reader came from, so it can offer a way back
-  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
+  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}" target="_blank" rel="noopener" data-tip="Open ${esc(p)} — the document this card was read from">` +
     `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
     `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">↗</span></a>` +
     `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;
@@ -4441,7 +4441,7 @@ function renderLive() {
   // same staleness window the statusline reads
   names.textContent = who.map((p) => p.alias + (p.subagents ? ` +${p.subagents}` : "")).join(", ");
   el.append(dot, label, names);
-  el.title = "agent sessions working in this project right now";
+  el.dataset.tip = "Agent sessions working in this project right now";
   el.className = "livepeers on";
 }
 
@@ -4539,7 +4539,7 @@ async function fillSegs() {
 function openDocModal(p, line) {
   const q = `/doc?path=${encodeURIComponent(p)}${line ? `&line=${line}` : ""}`;
   const framed = `${q}&embed=1`;   // the modal supplies the chrome
-  $("dmPath").title = p; $("dmPath").textContent = p;
+  $("dmPath").dataset.tip = p; $("dmPath").textContent = p;
   $("dmOpen").href = q;          // a real tab keeps its own theme control
   $("dmFrame").src = framed;
   $("docmodal").classList.add("on");
