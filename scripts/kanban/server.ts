@@ -778,6 +778,68 @@ const server = Bun.serve({
       return json(out);
     }
 
+    // The nudge. One press that asks whoever is working here to bring the board
+    // up to date and then carry on, and that tells them what to do in each of
+    // the states they might be in. The wording matters more than the plumbing:
+    // an agent reading this should know what is being asked without guessing.
+    if (req.method === "POST" && p === "/api/nudge") {
+      const body = (await req.json().catch(() => null)) as { slug?: string } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      const reg = body?.slug ? registry().boards[body.slug] : null;
+      if (!dir || !reg) return json({ error: `unknown board ${body?.slug ?? ""}` }, 404);
+      const board = loadBoard(dir);
+      const notes = loadNotes(dir);
+      const sel = loadSelection(dir);
+      const lanes = (k: string) => board.cards.filter((c) => c.lane === k).length;
+      const ack = loadAck(dir);
+      const unread = Object.entries(notes)
+        .filter(([id, e]) => notesOf(e).some((n) => !noteSeen(ack, id, n) && !parseNoteTags(n.body).me)).length;
+      const msg = [
+        `[kanban] the owner pressed Nudge on board "${reg.name}".`,
+        ``,
+        `They are asking for two things, in this order:`,
+        `1. Bring the board up to date. Run kanban.sh sync, then move/verify/brief anything`,
+        `   whose real state has drifted from what the board says.`,
+        `2. Carry on with what you were doing. The nudge is not a new task.`,
+        ``,
+        `Then, depending on where you actually are:`,
+        `- Still working: say in one line what you are on, and continue. Nothing else is needed.`,
+        `- Blocked: tell them WHAT is blocking you in plain direct terms, no jargon and no`,
+        `  hedging, and give them your recommendation for unblocking it. If there are options,`,
+        `  say which one you would pick and why. Put it on the blocked card as a note so it`,
+        `  survives, and mark that card blocked if it is not already.`,
+        `- Idle with a reason (waiting on them, on a review, on a deploy): name the reason and`,
+        `  what would clear it.`,
+        `- Idle with no reason: pick the work back up. Read the plan, the active lane and any`,
+        `  unread notes, choose the next thing, say what you chose in one line, and start.`,
+        `- Nothing left: say so, and suggest what you think should be next, ranked, with the`,
+        `  reason for the top pick.`,
+        ``,
+        `Board state right now: ${lanes("active")} active, ${lanes("blocked")} blocked, `
+          + `${lanes("inbox") + lanes("backlog")} waiting, ${unread} card(s) with unread notes`
+          + `${sel.cards.length || sel.notes.length ? `, and ${sel.cards.length} card(s) + ${sel.notes.length} note(s) currently selected by the owner` : ""}.`,
+        `Read the detail with: kanban.sh notes --unread --ack · kanban.sh selected · kanban.sh status --cards`,
+      ].join("\n");
+      const ipcBin = [path.join(os.homedir(), ".local", "bin", "claude-ipc"), "/usr/local/bin/claude-ipc"]
+        .find((f) => fs.existsSync(f)) ?? "claude-ipc";
+      ipcRegister(ipcBin);
+      const peers = livePeers(reg.root).filter((x) => x.alias !== IPC_ALIAS);
+      const sent: string[] = [];
+      let reason = "";
+      for (const peer of peers) {
+        try {
+          execFileSync(ipcBin, ["send", "--to", peer.alias, "--from", IPC_ALIAS, "--kind", "inform",
+            "--no-reply-expected", msg], { stdio: ["ignore", "ignore", "pipe"], timeout: 8000 });
+          sent.push(peer.alias);
+        } catch (e: any) {
+          const err = String(e?.stderr ?? "");
+          reason = e?.code === "ENOENT" ? "claude-ipc is not installed where the board server can reach it"
+            : err.split("\n")[0].slice(0, 140) || "the ipc broker refused the message";
+        }
+      }
+      return json({ ok: true, sent, peers: peers.map((x) => x.alias), reason: sent.length ? "" : reason });
+    }
+
     // "Send to agent": the selection, rendered, pushed at whoever is live in
     // this project right now. It stays on disk either way — a nudge nobody was
     // around to receive must still be there at the next pickup, which is the

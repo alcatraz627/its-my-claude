@@ -535,14 +535,70 @@
   /* the note is this product's only input, so it is docked — never scrolled to.
      it takes a comfortable share of the height and no more; drag to grow */
   .composer{flex:none;border-top:1px solid var(--border);background:var(--well);padding:12px 16px 14px;display:flex;flex-direction:column;gap:9px}
+  /* A place to write, not a form field. Slightly larger type, a longer measure,
+     leading that lets a paragraph breathe, and a ruled ground so it reads as
+     paper rather than as an input. It grows with what you type. */
+  .composer textarea{font:400 13.5px/1.68 var(--sans);letter-spacing:-.002em;padding:11px 13px;
+                     background:var(--card);border:1px solid var(--border);border-radius:9px;
+                     color:var(--text);min-height:76px;resize:none;overflow-y:auto;
+                     transition:height .14s cubic-bezier(.32,.72,0,1),border-color .12s,box-shadow .12s;
+                     background-image:linear-gradient(var(--border) 1px,transparent 1px);
+                     background-size:100% 1.68em;background-position:0 1.42em;background-attachment:local}
+  [data-theme="light"] .composer textarea{background-image:linear-gradient(color-mix(in srgb,var(--border) 55%,transparent) 1px,transparent 1px)}
+  .composer textarea:focus{border-color:var(--blue);outline:none;
+                           box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 15%,transparent)}
+  .composer textarea::placeholder{color:var(--text-3);font-style:italic}
+  @media (prefers-reduced-motion: reduce){ .composer textarea{transition:none} }
+
+  /* ---------- action feedback ---------- */
+  /* Saving, reopening and restoring each look different, because they are.
+     Short, once, and never in the way. */
+  @keyframes flash-save{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--green) 55%,transparent)}
+                        60%{box-shadow:0 0 0 5px color-mix(in srgb,var(--green) 22%,transparent)}
+                        100%{box-shadow:0 0 0 0 transparent}}
+  @keyframes flash-open{0%{background:color-mix(in srgb,var(--blue) 14%,transparent)}100%{background:var(--card)}}
+  @keyframes flash-back{0%{transform:translateY(-4px);opacity:.4}100%{transform:none;opacity:1}}
+  .fx-save{animation:flash-save .62s ease-out}
+  .fx-open{animation:flash-open .5s ease-out}
+  .fx-back{animation:flash-back .3s cubic-bezier(.32,.72,0,1)}
+  @media (prefers-reduced-motion: reduce){ .fx-save,.fx-open,.fx-back{animation:none} }
+
+  /* ---------- provenance, compacted ---------- */
+  /* It used to take a whole group, a heading and a paragraph to say where a
+     card came from. It is one row now, directly above where you write, which
+     is the only place that answer is ever needed. */
+  .srcline{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;
+           background:var(--card);border:1px solid var(--border);min-width:0}
+  .srcline .si{flex:none;color:var(--text-3);display:grid;place-items:center}
+  .srcline .sp2{flex:1;min-width:0;font:11.5px/1.35 var(--mono);color:var(--text-2);
+                overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl;text-align:left}
+  .srcline a.sp2{color:var(--blue);text-decoration:none}
+  .srcline a.sp2:hover{text-decoration:underline}
+  .srcline .sx{flex:none;font:11px/1 var(--sans);color:var(--text-3);white-space:nowrap}
+  .srcline .smore{flex:none;height:20px;padding:0 7px;font-size:11px;background:none;
+                  border-color:transparent;color:var(--text-3)}
+  .srcline .smore:hover{background:var(--well);border-color:var(--border);color:var(--text)}
   /* empty and idle, the dock is one quiet line so the evidence above keeps the
      height; text, focus, or a conflict expands it (a draft counts as text) */
   .composer.min .hint,.composer.min .parsed,.composer.min .cbar,.composer.min .restored{display:none}
   .composer.min textarea{height:38px;resize:none;overflow:hidden}
-  .chead{display:flex;align-items:baseline;gap:8px}
-  .chead .t{font:600 11.5px/1 var(--sans);color:var(--text)}
-  .chead .h{font-size:11.5px;color:var(--text-3);flex:1}
-  .chead .st{font-size:11.5px;color:var(--text-3)}
+  .chead{display:flex;align-items:center;gap:8px}
+  .chead .ci2{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .chead .tt2{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .chead .t{font:600 12px/1.1 var(--sans);color:var(--text)}
+  .chead .h{font:400 10.5px/1.2 var(--sans);color:var(--text-3);white-space:nowrap;
+            overflow:hidden;text-overflow:ellipsis}
+  .chead .gsp2{flex:1}
+  /* status and actions are icons with tooltips, in the palette's own colours,
+     so the header stops being a sentence with buttons wedged into it */
+  .chead .st{flex:none;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+             color:var(--text-3);font-size:0}
+  .chead .st.unsaved{color:var(--amber);background:var(--amber-bg)}
+  .chead .st.saved{color:var(--green);background:var(--green-bg)}
+  .chead .iact{flex:none;width:24px;height:24px;padding:0;justify-content:center;
+               background:none;border-color:transparent;color:var(--text-3)}
+  .chead .iact:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .chead .iact.danger:hover{background:var(--red-bg);border-color:var(--red-br);color:var(--red)}
   /* the composer describing itself is not an alarm, so it carries weight, not
      amber; amber now means one thing only, that the board waits on you */
   .chead .st.unsaved{color:var(--text);font-weight:600}
@@ -942,6 +998,7 @@
       <span id="cardSelWrap"></span>
       <span id="noteSelWrap"></span>
       <span id="sendWrap"></span>
+      <button id="nudgeBtn" data-tip="Ask whoever is working here to bring the board up to date and carry on. If they are blocked they will explain it plainly and recommend a way out; if they are idle they will pick the work back up.">Nudge</button>
       <button id="digestBtn" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
       <button class="icon ghost" id="theme" data-tip="Toggle light and dark (t)" aria-label="toggle theme">◐</button>
       <button class="icon ghost" id="helpBtn" data-tip="Keyboard shortcuts (?)" aria-label="shortcuts">?</button>
@@ -988,26 +1045,25 @@
       <div class="ghead">Sub-items<span class="gsp"></span><span class="gval" id="dSubsCount"></span></div>
       <ul class="subs" id="dSubs"></ul>
     </div>
-    <div class="grp">
-      <div class="ghead">Where this came from</div>
+    <div class="grp" id="dSrcFull" hidden>
+      <div class="ghead">Every source and linked doc</div>
       <div id="dSrc"></div>
-      <div class="mirror" id="dMirror"></div>
-    </div>
-    <div class="grp">
-      <div class="ghead">For the CLI</div>
       <div class="cbar">
-        <button class="idbtn" id="dId" title="copy the card id"></button>
+        <button class="idbtn" id="dId" data-tip="copy the card id"></button>
         <span class="mirror" id="dVia"></span>
       </div>
     </div>
   </div>
+  <div class="srcline" id="dSrcLine"></div>
   <div class="composer">
     <div class="chead">
-      <span class="t" id="dNoteLabel">Your note</span>
-      <span class="h" id="dPickup">the agent reads this on its next pickup</span>
+      <span class="ci2" id="dNoteIcon"></span>
+      <span class="tt2"><span class="t" id="dNoteLabel">Draft</span>
+      <span class="h" id="dPickup">the agent reads this on its next pickup</span></span>
+      <span class="gsp2"></span>
       <span class="st" id="dSaved"></span>
-      <button type="button" class="addnote" id="dAdd" title="start another note on this card">+ note</button>
-      <button type="button" class="addnote" id="dDel" title="delete this note">delete</button>
+      <button type="button" class="icon iact" id="dAdd" aria-label="start another note"></button>
+      <button type="button" class="icon iact danger" id="dDel" aria-label="delete this note"></button>
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
     <div class="conflict" id="dConflict"></div>
@@ -2782,10 +2838,18 @@ function loadNoteIntoComposer(id) {
   $("dRestored").className = "restored" + (hasDraft ? " on" : "");
   dirty = hasDraft;
   const at = list.findIndex((n) => n.id === openNoteId);
-  $("dNoteLabel").textContent = at < 0 ? "Draft" : `Editing note #${at + 1}`;
+  const editing = at >= 0;
+  $("dNoteLabel").textContent = editing ? `Note #${at + 1}` : "New note";
+  $("dNoteIcon").innerHTML = editing ? PEN_ICON : NOTE_ICON;
+  $("dAdd").innerHTML = PLUS_ICON;
+  $("dAdd").dataset.tip = "Start another note on this card";
+  $("dDel").innerHTML = TRASH_ICON;
+  $("dDel").dataset.tip = "Delete this note";
   $("dDel").style.display = at < 0 ? "none" : "";   // nothing saved yet is nothing to delete
-  $("dSaved").textContent = hasDraft ? "unsaved" : (cur?.updatedAt ? `saved ${ago(Date.parse(cur.updatedAt))} ago` : "");
-  $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
+  setSaveState(hasDraft ? "unsaved" : (cur?.updatedAt ? "saved" : "idle"),
+    hasDraft ? "Unsaved. ⌘↵ saves it; it is kept here either way."
+      : cur?.updatedAt ? `Saved ${ago(Date.parse(cur.updatedAt))} ago` : "");
+  autoGrow($("dNote"));
   renderPickup(id);
   renderParse();
   syncComposer();
@@ -2859,6 +2923,90 @@ function renderCardTags(cardId) {
   row.appendChild(add);
 }
 
+// The composer's status is a coloured glyph now, not a sentence: amber dot for
+// unsaved, green tick for saved, nothing at rest. The tooltip carries the words.
+function setSaveState(kind, tip) {
+  const el = $("dSaved");
+  el.className = "st" + (kind === "unsaved" ? " unsaved" : kind === "saved" ? " saved" : "");
+  el.innerHTML = kind === "unsaved" ? DOT_ICON : kind === "saved" ? TICK_ICON : "";
+  if (tip) el.dataset.tip = tip; else delete el.dataset.tip;
+}
+// Grows with what you type, up to the room the drawer can spare above it. The
+// cap is measured rather than guessed, so a tall panel gives you a tall page.
+function autoGrow(ta) {
+  if (!ta) return;
+  // Measured against the PANEL, not the body above it. The body shrinks as this
+  // box grows, so a cap taken from it chases itself and never binds.
+  const panel = $("drawer").getBoundingClientRect().height;
+  const room = Math.max(120, Math.round(panel * 0.42));
+  ta.style.height = "auto";
+  ta.style.height = `${Math.min(Math.max(ta.scrollHeight + 2, 76), room)}px`;
+}
+// A short, once-only cue per action. The class is cleared on the way in so a
+// repeated action re-fires rather than sitting inert.
+function fx(el, name) {
+  if (!el) return;
+  el.classList.remove("fx-save", "fx-open", "fx-back");
+  void el.offsetWidth;
+  el.classList.add(name);
+  setTimeout(() => el.classList.remove(name), 700);
+}
+
+const SRC_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4 2.2h5l3 3v8.6H4V2.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 2.2v3.3h3" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+const PEN_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+const PLUS_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3.4v9.2M3.4 8h9.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+const TRASH_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.2 4.6h9.6M6.4 4.6V3.2h3.2v1.4M4.6 4.6l.6 8.2h5.6l.6-8.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const DOT_ICON = `<svg width="9" height="9" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>`;
+const TICK_ICON = `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.4 5.6 10 11 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+// One row saying where this card came from and how fresh the mirror is. It sits
+// directly above the place you write, because that is the only moment the
+// answer matters, and the full list is one press away rather than always open.
+function renderSrcLine(c) {
+  const el = $("dSrcLine");
+  const extra = c.docs?.length ?? 0;
+  const syncedAt = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
+  const stale = syncedAt && Date.now() - syncedAt > 36e5 * 6;
+  el.replaceChildren();
+  const ic = document.createElement("span");
+  ic.className = "si"; ic.innerHTML = SRC_ICON;
+  el.append(ic);
+  if (c.source.kind === "manual") {
+    const t = document.createElement("span");
+    t.className = "sp2"; t.style.direction = "ltr";
+    t.textContent = "Added by hand, not from a document";
+    el.append(t);
+  } else {
+    const a = document.createElement("a");
+    a.className = "sp2";
+    a.href = `/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}`;
+    a.target = "_blank"; a.rel = "noopener";
+    a.textContent = `${c.source.path}${c.source.line ? ":" + c.source.line : ""}`;
+    a.dataset.tip = "Open the document this card was read from";
+    el.append(a);
+  }
+  const age = document.createElement("span");
+  age.className = "sx";
+  age.textContent = syncedAt ? `read ${ago(syncedAt)} ago` : "never read";
+  age.style.color = stale ? "var(--amber)" : "";
+  age.dataset.tip = stale
+    ? "This card is older than your docs may be. Re-read them with kanban.sh sync."
+    : "When the board last read your documents. The card mirrors them; it is not live state.";
+  el.append(age);
+  if (extra) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "smore";
+    b.textContent = `+${extra} doc${extra > 1 ? "s" : ""}`;
+    b.dataset.tip = "Show every source and linked document for this card";
+    b.onclick = () => {
+      const full = $("dSrcFull");
+      full.hidden = !full.hidden;
+      if (!full.hidden) full.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    };
+    el.append(b);
+  }
+}
+
 function renderOtherNotes(id) {
   const list = notesOf(data.notes[id]);
   const draftText = readDraft(id, null) ?? "";
@@ -2915,7 +3063,7 @@ function renderOtherNotes(id) {
     pickable: true,
     picked: isPickedNote(id, n.id),
     key: nKey(id, n.id),
-    onclick: () => { flushDraft(); openNoteId = n.id; loadNoteIntoComposer(id); renderOtherNotes(id); $("dNote").focus(); },
+    onclick: () => { flushDraft(); openNoteId = n.id; loadNoteIntoComposer(id); renderOtherNotes(id); fx($("dNote"), "fx-open"); $("dNote").focus(); },
   }));
   rows.push(row({
     label: "draft",
@@ -2924,7 +3072,7 @@ function renderOtherNotes(id) {
     placeholder: "Start typing below and it stays here until you save it",
     active: openNoteId === null,
     draft: true,
-    onclick: () => { flushDraft(); openNoteId = null; loadNoteIntoComposer(id); renderOtherNotes(id); $("dNote").focus(); },
+    onclick: () => { flushDraft(); openNoteId = null; loadNoteIntoComposer(id); renderOtherNotes(id); fx($("dNote"), "fx-back"); $("dNote").focus(); },
   }));
   $("dOther").replaceChildren(...rows);
   wireReorder($("dOther"), ".nrow", (order) => saveNoteOrder(id, order), (el) => el.dataset.noteId);
@@ -3146,9 +3294,9 @@ function openDrawer(id, wantNoteId, opts = {}) {
     `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
     `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">↗</span></a>` +
     `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;
-  $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually — no source document.</div>` : srcRow(c.source.path, c.source.line, false)) +
+  $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually, so there is no source document.</div>` : srcRow(c.source.path, c.source.line, false)) +
     (c.docs?.length ? c.docs.map((d) => srcRow(d, null, true)).join("") : "");
-  $("dMirror").textContent = `Mirrored from your docs, synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"} — not live code state.`;
+  renderSrcLine(c);
 
   $("dId").innerHTML = `<span></span><span style="opacity:.6">⧉</span>`;
   $("dId").querySelector("span").textContent = c.id;
@@ -3682,6 +3830,27 @@ $("bpq").addEventListener("keydown", (e) => {
   else if (e.key === "Escape") { closeBoardPick(); e.stopPropagation(); }
 });
 
+const NUDGE_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.8a4.2 4.2 0 0 0-4.2 4.2c0 2.6-1.1 3.4-1.1 3.4h10.6s-1.1-.8-1.1-3.4A4.2 4.2 0 0 0 8 1.8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6.6 12a1.5 1.5 0 0 0 2.8 0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+$("nudgeBtn").innerHTML = `${NUDGE_ICON}<span>Nudge</span>`;
+$("nudgeBtn").onclick = async () => {
+  const b = $("nudgeBtn");
+  b.disabled = true;
+  try {
+    const res = await fetch("/api/nudge", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug }) });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || res.status);
+    // the same three honest outcomes the send button reports
+    toast(out.sent.length
+      ? `Nudged ${out.sent.join(", ")} — they will sync the board and carry on`
+      : out.reason
+        ? `Could not reach anyone — ${out.reason}`
+        : `Nobody is working here right now. Nothing was sent.`,
+      out.sent.length ? 4200 : 5200, out.reason ? "err" : "");
+  } catch (e) { toast(`Nudge failed: ${e.message}`, 4000, "err"); }
+  finally { b.disabled = false; }
+};
+
 $("popClose").onclick = closePop;
 $("popPick").onclick = () => { if (popCard && popNote) { toggleSel("note", nKey(popCard, popNote)); syncPopPick(); } };
 $("popNote").addEventListener("input", () => {
@@ -3795,6 +3964,8 @@ function renderPickup(id) {
   const el = $("dPickup");
   const n = data.notes[id];
   const ack = data.ackTs || 0;
+  // a draft is not "waiting on an agent", it is waiting on you
+  if (openNoteId === null) { el.textContent = "a draft, kept here until you save it"; el.className = "h"; return; }
   if (!n?.note) { el.textContent = "the agent reads this on its next pickup"; el.className = "h"; return; }
   const written = Date.parse(n.updatedAt);
   if (ack >= written) { el.textContent = `picked up by an agent ${ago(ack)} ago`; el.className = "h seen"; return; }
@@ -3903,7 +4074,8 @@ function closeDrawer() {
 
 $("dNote").addEventListener("input", () => {
   dirty = true;
-  $("dSaved").textContent = "unsaved"; $("dSaved").className = "st unsaved";
+  setSaveState("unsaved", "Unsaved. ⌘↵ saves it; it is kept here either way.");
+  autoGrow($("dNote"));
   renderParse();
   syncComposer();
   clearTimeout(draftTimer);
@@ -3930,13 +4102,16 @@ $("dSave").onclick = async () => {
       openNoteId = null;
       loadNoteIntoComposer(c); renderOtherNotes(c);
       $("dNote").value = text; dirty = true;
-      $("dSaved").textContent = "unsaved"; $("dSaved").className = "st unsaved";
+      setSaveState("unsaved", "Kept, and will save as a new note.");
       toast(`${error} Your text is kept and will save as a new note.`, 6000, "err");
       return;
     }
     if (!res.ok) throw new Error((await res.json()).error || res.status);
     const out = await res.json();
-    dirty = false; $("dSaved").textContent = "saved just now"; $("dSaved").className = "st";
+    dirty = false;
+    setSaveState("saved", "Saved just now");
+    fx($("dNote"), "fx-save");
+    fx($("dTags2"), "fx-back");
     $("dRestored").className = "restored";
     baseNote = $("dNote").value; conflictNote = null; renderConflict();
     clearTimeout(draftTimer);
