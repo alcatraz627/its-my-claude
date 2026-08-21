@@ -844,6 +844,11 @@
            box-shadow:0 0 14px -3px color-mix(in srgb,var(--green) 40%,transparent),var(--shadow);
            transition:background .16s,border-color .16s,box-shadow .16s}
   .dtab.xh-peer{background:linear-gradient(var(--green-bg),var(--green-bg)) var(--canvas)!important}
+  /* the same look, but its own name: a timed flash must never be mistaken for a
+     live pair, or clearing the pair leaves it behind */
+  .xh-flash{border-color:var(--green-br)!important;
+            background:linear-gradient(var(--green-bg),var(--green-bg)) var(--card)!important;
+            transition:background .16s,border-color .16s}
 
   /* the arrow layer. Never interactive, never over a tooltip. */
   /* width/height are load-bearing: a bare <svg> falls back to its intrinsic
@@ -1794,6 +1799,55 @@ function peekEl() {
 const cardNode = (id) => document.querySelector(`.card[data-id="${id}"]`);
 const tabNode = (id) => document.querySelector(`.dtab[data-tab-id="${id}"]`);
 
+// Every relationship on this board with two visible ends. A pair is declared
+// once here and the same charm applies to all of them: the end under the
+// pointer takes blue and the dotted outline, its counterpart takes green, and
+// an arrow is drawn between them when there is room to draw one.
+//
+// Enumerated rather than guessed at, by walking the board for anything that
+// exists in two places at once:
+//   card  <-> its panel tab           (you are reading it over there)
+//   card  <-> its row in the peek     (this is one of the group)
+//   card  <-> its card in another lane? no: a card is in exactly one lane
+//   tag chip <-> its sidebar row      (this is the tag you are pressing)
+//   note chip <-> its row in the panel (this chip is that note)
+//   ask   <-> the card it landed on   (this is what became of what you asked)
+// ORDER IS THE CONTRACT: most specific first. A note chip lives inside a card,
+// so if the card's rule is tested first the chip can never win its own pair.
+const PAIRS = [
+  { sel: ".chip.note", peers: (el) => [noteRowFor(el.dataset.key)] },
+  { sel: ".chip.tag", peers: (el) => [sideTagFor(el)] },
+  { sel: ".notestack .nrow", peers: (el) => [noteChipFor(el.dataset.noteId)] },
+  { sel: ".srow.tagrow", peers: (el) => cardsWithTag(el) },
+  { sel: ".dtab", peers: (el) => [cardNode(el.dataset.tabId)] },
+  { sel: "#peek .card", peers: (el) => [boardCardFor(el)] },
+  { sel: ".item", peers: (el) => [landedCardFor(el)] },
+  { sel: ".card", peers: (el) => [tabNode(el.dataset.id), peekRowFor(el.dataset.id)] },
+];
+// a card in the peek and the same card on the board are two ends of one thing
+const peekRowFor = (id) => document.querySelector(`#peek .card[data-id="${id}"]`);
+const boardCardFor = (el) => el.closest("#peek")
+  ? document.querySelector(`main .col:not(.peek) .card[data-id="${el.dataset.id}"]`) : null;
+const noteChipFor = (nid) => nid
+  ? document.querySelector(`.card .chip.note[data-key$=":${nid}"]`) : null;
+const noteRowFor = (key) => {
+  const [, nid] = String(key).split(":");
+  return document.querySelector(`.notestack .nrow[data-note-id="${nid}"]`);
+};
+function sideTagFor(chip) {
+  const name = chip.querySelector(".tn")?.textContent;
+  return [...document.querySelectorAll(".srow.tagrow")].find((r) => r.querySelector(".stxt")?.textContent === name) ?? null;
+}
+function cardsWithTag(row) {
+  const name = row.querySelector(".stxt")?.textContent;
+  return [...document.querySelectorAll(".card .chip.tag")]
+    .filter((c) => c.querySelector(".tn")?.textContent === name).slice(0, 1);
+}
+const landedCardFor = (item) => {
+  const id = (items ?? []).find((i) => i.id === item.dataset.id)?.landing?.cardId;
+  return id ? cardNode(id) : null;
+};
+
 // Excalidraw's look is a confident line drawn slightly wrong, twice. The wobble
 // is derived from the endpoints rather than random, so the same pair always
 // draws the same arrow and a re-render does not make it twitch.
@@ -1856,17 +1910,19 @@ function drawArrow(a, b) {
 function clearArrow() { const s = $("xarrow"); s.classList.remove("on"); }
 
 let xhPair = null;
-function crossHighlight(id, from) {
-  if (!id) return;
-  const card = cardNode(id), tab = tabNode(id);
-  if (!card || !tab) return;                       // nothing to connect to
+function linkPair(primary, peer) {
+  if (!primary || !peer || xhPair?.[0] === primary) return;
   clearCrossHighlight();
-  const primary = from === "tab" ? tab : card;
-  const peer = from === "tab" ? card : tab;
   primary.classList.add("xh-primary");
   peer.classList.add("xh-peer");
   xhPair = [primary, peer];
   drawArrow(primary, peer);
+}
+// kept for the tab-open flash and anything else that knows only an id
+function crossHighlight(id, from) {
+  const card = cardNode(id), tab = tabNode(id);
+  if (!card || !tab) return;
+  linkPair(from === "tab" ? tab : card, from === "tab" ? card : tab);
 }
 function clearCrossHighlight() {
   (xhPair ?? []).forEach((el) => el.classList.remove("xh-primary", "xh-peer"));
@@ -1876,13 +1932,16 @@ function clearCrossHighlight() {
 // Delegated so a re-render cannot leave a stale listener, and so a card drawn
 // after the panel opened still participates.
 document.addEventListener("pointerover", (e) => {
-  const card = e.target.closest?.(".card");
-  if (card) return crossHighlight(card.dataset.id, "card");
-  const tab = e.target.closest?.(".dtab");
-  if (tab) return crossHighlight(tab.dataset.tabId, "tab");
+  for (const p of PAIRS) {
+    const el = e.target.closest?.(p.sel);
+    if (!el) continue;
+    const peers = p.peers(el).filter(Boolean).filter((x) => x !== el);
+    if (!peers.length) continue;
+    return linkPair(el, peers[0]);
+  }
 });
 document.addEventListener("pointerout", (e) => {
-  const el = e.target.closest?.(".card,.dtab");
+  const el = e.target.closest?.(PAIRS.map((p) => p.sel).join(","));
   if (el && !el.contains(e.relatedTarget)) clearCrossHighlight();
 });
 // the line is drawn in viewport space, so anything that moves the ends drops it
@@ -3472,8 +3531,8 @@ function openDrawer(id, wantNoteId, opts = {}) {
   // you where you are on the board without hunting for it
   const peer = cardNode(id);
   if (peer) {
-    peer.classList.add("xh-peer");
-    setTimeout(() => peer.classList.remove("xh-peer"), 900);
+    peer.classList.add("xh-flash");
+    setTimeout(() => peer.classList.remove("xh-flash"), 900);
   }
   fillSegs();
 }
