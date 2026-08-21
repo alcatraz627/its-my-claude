@@ -70,7 +70,26 @@
   .brow .actions{margin-left:14px}
   .btitle{font:600 15.5px/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap}
   .bpath{color:var(--text-3);font:11.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-  .actions{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  /* Charter §6: group, then hold. Four groups, each a holder, so the row parses
+     as find / pick / act / view instead of eight peers in a line. The gap
+     BETWEEN groups is larger than the gap inside one, which is what makes the
+     grouping readable without drawing seven dividers. */
+  .actions{display:flex;gap:12px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  .tgrp{display:flex;align-items:center;gap:5px}
+  .tgrp.find{gap:0;border:1px solid var(--border);border-radius:8px;background:var(--card);
+             padding-left:2px;transition:border-color .12s,box-shadow .12s}
+  .tgrp.find:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 14%,transparent)}
+  .tgrp.find #searchBtn{border:none;background:none;height:26px;width:28px;padding:0;justify-content:center}
+  .tgrp.find #searchBtn:hover{color:var(--blue);background:none}
+  #filter{width:150px;height:28px;padding:0 10px 0 4px;border:none;background:none;
+          color:var(--text);font:12.5px/1 var(--sans)}
+  #filter:focus{outline:none}
+  /* the act group is the one that reaches an agent, so it holds a ground */
+  .tgrp.act{background:var(--well);border:1px solid var(--border);border-radius:8px;padding:3px}
+  .tgrp.act button{height:26px}
+  .tgrp.view{gap:2px}
+  /* an empty group must not leave a hole in the row */
+  .tgrp:empty,.tgrp.pick:not(:has(button)):not(:has(.selbar)){display:none}
   button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
          padding:5px 10px;font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:background .12s,border-color .12s,color .12s}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
@@ -449,10 +468,9 @@
      carried by width and weight, so a peer-liveness dot is information */
   .livepeers i{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex:none}
   .livepeers b{font-weight:550;font-family:var(--mono);font-size:11.5px;color:var(--text)}
-  #filter{width:150px;height:28px;padding:0 10px;border-radius:6px;border:1px solid var(--border);
-          background:var(--card);color:var(--text);font:12.5px/1 var(--sans)}
+
   #filter::placeholder{color:var(--text-3)}
-  #filter:focus{outline:2px solid var(--ring);outline-offset:1px;border-color:transparent}
+
   .fnone{color:var(--text-2);font-size:13px;padding:14px 2px}
   /* the pickup receipt is neither verification nor an alarm, so it stays grey */
   .chead .h.seen{color:var(--text-2)}
@@ -929,7 +947,18 @@
   /* The header is a quieter ground than the panes, so the tabs read as sitting
      on it rather than floating. The active tab is marked by a rule under it,
      not by a box around it: three-sided borders never quite meet the seam. */
-  .htabs{display:flex;gap:3px;padding:11px 16px 0;background:var(--well);
+  /* The modal names itself, then offers its four doors. The title bar is the
+     quietest ground in the stack, the tab strip sits on the same ground, and
+     the active tab is the only thing wearing the canvas — so the eye reads
+     title, then tabs, then the page. */
+  .htitle{display:flex;align-items:center;gap:11px;padding:14px 16px 12px;background:var(--well);flex:none}
+  .htitle .hmark{flex:none;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;
+                 background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br)}
+  .htitle .htx{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .htitle .htx b{font:600 14px/1.2 var(--sans);color:var(--text);letter-spacing:-.01em}
+  .htitle .htx i{font:400 11.5px/1.2 var(--sans);font-style:normal;color:var(--text-3)}
+  .htitle .hsp{flex:1}
+  .htabs{display:flex;gap:3px;padding:0 16px;background:var(--well);
          border-bottom:1px solid var(--border);flex:none;align-items:stretch}
   .htab{display:flex;align-items:center;gap:9px;background:none;border:none;
         border-bottom:2px solid transparent;border-radius:8px 8px 0 0;
@@ -946,7 +975,8 @@
   .htab.on .ht i{color:var(--text-3);opacity:1}
   .hpane{display:none;padding:18px 22px 22px;overflow:auto;min-height:0}
   .hpane.on{display:block}
-  .hclose{margin-left:auto;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
+  .hclose{flex:none;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
+  .hclose:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
   /* the map. One picture of how a doc becomes a card and how anything you
      write reaches an agent — the two flows this whole board exists to run. */
@@ -961,6 +991,45 @@
   .hmap path,.hmap line{stroke:var(--border-2);fill:none}
   .term .shot svg{display:block}
   .hmap .lbl{fill:var(--text-3);font:10px var(--sans)}
+
+  /* ---------- the drawn keyboard ---------- */
+  /* Every bound key lit on a real layout, so you can see what is taken and what
+     is free at a glance. Hovering a key lights its row below; hovering a row
+     lights its key. Same charm as the board's own cards and tabs. */
+  .kbd-wrap{border:1px solid var(--border);border-radius:11px;background:var(--well);
+            padding:13px 14px;margin-bottom:20px;overflow-x:auto}
+  .kbd-row{display:flex;gap:5px;margin-bottom:5px;justify-content:center;min-width:max-content}
+  .kbd-row:last-child{margin-bottom:0}
+  .kcap{width:33px;height:33px;flex:none;border-radius:7px;border:1px solid var(--border);
+        background:var(--card);color:var(--text-3);display:grid;place-items:center;
+        font:500 12px/1 var(--sans);cursor:default;position:relative;
+        transition:background .12s,border-color .12s,color .12s,transform .12s}
+  .kcap.wide{width:auto;padding:0 11px;font-size:11px}
+  /* bound keys are the point, so they carry the ink and the unbound ones recede */
+  .kcap.bound{color:var(--text);border-color:var(--border-2);cursor:pointer}
+  .kcap.bound::after{content:"";position:absolute;bottom:3px;width:11px;height:2px;border-radius:2px;
+                     background:var(--blue);opacity:.5}
+  .kcap.bound:hover,.kcap.lit{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
+  .kcap.peer{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}
+  .krow-lit td{background:var(--blue-bg)}
+  .krow-lit td:first-child{border-radius:6px 0 0 6px}
+  .krow-lit td:last-child{border-radius:0 6px 6px 0}
+  #hKeys tr[data-key]{cursor:pointer}
+  @media (prefers-reduced-motion: reduce){ .kcap{transition:none} }
+
+  /* Shared across every pane so three tabs stop each inventing their own scale:
+     a group heading, a body measure, a table, a code token. */
+  .hpane{max-width:none}
+  .hpane .ghead{padding-top:0;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .hpane .ghead::after{content:"";flex:1;height:1px;background:var(--border)}
+  #hKeys table{width:100%}
+  #hKeys td{padding:5px 14px 5px 0;font-size:12.5px;line-height:1.5}
+  #hKeys td:first-child{width:132px}
+  #hKeys .grouphead{padding-top:20px;padding-bottom:4px}
+  #hKeys tr:hover td{color:var(--text)}
+  #hTags td:first-child{width:132px}
+  #hTags code,#hKeys code{font:11.5px var(--mono);background:var(--well);border:1px solid var(--border);
+                          border-radius:4px;padding:1px 5px;color:var(--text-2)}
 
   /* one entry per thing the board has a word for */
   .term{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--border)}
@@ -994,14 +1063,23 @@
     <span class="bpath" id="root"></span>
     <span class="livepeers" id="live"></span>
     <div class="actions">
-      <input id="filter" type="search" placeholder="Filter cards — title, label or path  /" aria-label="filter cards" autocomplete="off">
-      <span id="cardSelWrap"></span>
-      <span id="noteSelWrap"></span>
-      <span id="sendWrap"></span>
-      <button id="nudgeBtn" data-tip="Ask whoever is working here to bring the board up to date and carry on. If they are blocked they will explain it plainly and recommend a way out; if they are idle they will pick the work back up.">Nudge</button>
-      <button id="digestBtn" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
-      <button class="icon ghost" id="theme" data-tip="Toggle light and dark (t)" aria-label="toggle theme">◐</button>
-      <button class="icon ghost" id="helpBtn" data-tip="Keyboard shortcuts (?)" aria-label="shortcuts">?</button>
+      <span class="tgrp find">
+        <button class="icon ghost" id="searchBtn" data-tip="Search cards, your notes, tags and asks (/)" aria-label="search"></button>
+        <input id="filter" type="search" placeholder="Filter this board" aria-label="filter cards" autocomplete="off">
+      </span>
+      <span class="tgrp pick" id="pickGrp">
+        <span id="cardSelWrap"></span>
+        <span id="noteSelWrap"></span>
+      </span>
+      <span class="tgrp act">
+        <span id="sendWrap"></span>
+        <button id="nudgeBtn" data-tip="Ask whoever is working here to bring the board up to date and carry on. If they are blocked they will explain it plainly and recommend a way out; if they are idle they will pick the work back up.">Nudge</button>
+        <button id="digestBtn" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
+      </span>
+      <span class="tgrp view">
+        <button class="icon ghost" id="theme" data-tip="Toggle light and dark (t)" aria-label="toggle theme">◐</button>
+        <button class="icon ghost" id="helpBtn" data-tip="Shortcuts, terminology and how it works (?)" aria-label="help">?</button>
+      </span>
     </div>
   </div>
   <div class="summary" id="summary"></div>
@@ -1127,14 +1205,17 @@
   <iframe id="dmFrame" title="document preview" src="about:blank"></iframe>
 </div></div>
 <div id="help" role="dialog" aria-modal="true" aria-label="help"><div class="box">
+  <div class="htitle"><span class="hmark"></span><span class="htx"><b>The board, explained</b>
+    <i>keys, words, mechanism, and how to reach the agent</i></span><span class="hsp"></span>
+    <button class="hclose" type="button" id="hClose" aria-label="close">✕</button></div>
   <div class="htabs" role="tablist">
     <button class="htab on" data-pane="hKeys" role="tab"><span class="hi"></span><span class="ht"><b>Keyboard</b><i>Shortcuts</i></span></button>
     <button class="htab" data-pane="hTerms" role="tab"><span class="hi"></span><span class="ht"><b>Taxonomy</b><i>What is it called</i></span></button>
     <button class="htab" data-pane="hVibe" role="tab"><span class="hi"></span><span class="ht"><b>Vibe Code</b><i>How does it work</i></span></button>
     <button class="htab" data-pane="hTags" role="tab"><span class="hi"></span><span class="ht"><b>Hey Claude</b><i>Relay to the agent</i></span></button>
-    <button class="hclose" type="button" id="hClose" aria-label="close">✕</button>
   </div>
   <div class="hpane on" id="hKeys">
+  <div class="kbd-wrap" id="kbdMap"></div>
   <table>
     <tr><td colspan="2" class="grouphead">Move</td></tr>
     <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the lane</td></tr>
@@ -3407,6 +3488,7 @@ function setDrawerWidth(px, persist = true) {
 function openHelp() {
   if ($("help").style.display === "flex") return closeHelp();
   $("help").style.display = "flex";
+  buildKeyboard();
   overlayOpen($("help"), document.querySelector(".htab"));
 }
 function closeHelp() {
@@ -3655,6 +3737,90 @@ function renderVibe() {
       <tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>
     </div>`).join("");
   pane.dataset.built = "1";
+}
+
+// ---------- the drawn keyboard ----------
+// The rows below the map are the source of truth: each is tagged with the keys
+// it documents, and the map is built by reading them. One list, so a binding
+// cannot appear on the keyboard and be missing from the table.
+const KBD_ROWS = [
+  ["`","1","2","3","4","5","6","7","8","9","0","-","="],
+  ["q","w","e","r","t","y","u","i","o","p","[","]","\\"],
+  ["a","s","d","f","g","h","j","k","l",";","'"],
+  ["z","x","c","v","b","n","m",",",".","/"],
+];
+function buildKeyboard() {
+  const wrap = $("kbdMap");
+  if (!wrap || wrap.dataset.built) return;
+  // read every documented binding off the table itself
+  const bound = new Map();
+  $("hKeys").querySelectorAll("tr").forEach((tr) => {
+    const cell = tr.querySelector("td");
+    if (!cell || cell.colSpan > 1) return;
+    const keys = [...cell.querySelectorAll("kbd")].map((k) => k.textContent.trim());
+    const what = tr.querySelector("td:last-child")?.textContent.trim() ?? "";
+    if (!keys.length || !what) return;
+    tr.dataset.key = keys.join(",");
+    for (const k of keys) {
+      const low = k.toLowerCase();
+      if (!bound.has(low)) bound.set(low, { what, tr, shift: k !== low && k.length === 1 });
+    }
+  });
+  const frag = document.createDocumentFragment();
+  for (const row of KBD_ROWS) {
+    const r = document.createElement("div");
+    r.className = "kbd-row";
+    for (const k of row) {
+      const cap = document.createElement("span");
+      const hit = bound.get(k);
+      cap.className = "kcap" + (hit ? " bound" : "");
+      cap.textContent = k;
+      cap.dataset.k = k;
+      if (hit) {
+        cap.dataset.tip = hit.shift ? `⇧${k.toUpperCase()} · ${hit.what}` : hit.what;
+        cap.onmouseenter = () => litKey(k, true);
+        cap.onmouseleave = () => litKey(k, false);
+        cap.onclick = () => { hit.tr.scrollIntoView({ block: "center", behavior: "smooth" }); fx(hit.tr, "fx-open"); };
+      }
+      r.appendChild(cap);
+    }
+    frag.appendChild(r);
+  }
+  // the modifiers and the odd ones out, on their own line
+  const r = document.createElement("div");
+  r.className = "kbd-row";
+  for (const [label, key] of [["esc","escape"],["⌘","meta"],["⇧","shift"],["↵","enter"],["↑","arrowup"],["↓","arrowdown"],["←","arrowleft"],["→","arrowright"]]) {
+    const cap = document.createElement("span");
+    const hit = bound.get(label.toLowerCase()) || bound.get(key);
+    cap.className = "kcap wide" + (hit ? " bound" : "");
+    cap.textContent = label;
+    cap.dataset.k = label;
+    if (hit) {
+      cap.dataset.tip = hit.what;
+      cap.onmouseenter = () => litKey(label, true);
+      cap.onmouseleave = () => litKey(label, false);
+      cap.onclick = () => { hit.tr.scrollIntoView({ block: "center", behavior: "smooth" }); fx(hit.tr, "fx-open"); };
+    }
+    r.appendChild(cap);
+  }
+  frag.appendChild(r);
+  wrap.replaceChildren(frag);
+
+  // the other direction: hovering a row lights its keys
+  $("hKeys").querySelectorAll("tr[data-key]").forEach((tr) => {
+    tr.onmouseenter = () => tr.dataset.key.split(",").forEach((k) => capFor(k)?.classList.add("peer"));
+    tr.onmouseleave = () => document.querySelectorAll(".kcap.peer").forEach((c) => c.classList.remove("peer"));
+  });
+  wrap.dataset.built = "1";
+}
+const capFor = (k) => $("kbdMap").querySelector(`.kcap[data-k="${k.toLowerCase()}"]`)
+  || $("kbdMap").querySelector(`.kcap[data-k="${k}"]`);
+function litKey(k, on) {
+  const rows = $("hKeys").querySelectorAll(`tr[data-key]`);
+  rows.forEach((tr) => {
+    const has = tr.dataset.key.split(",").some((x) => x.toLowerCase() === k.toLowerCase());
+    tr.classList.toggle("krow-lit", on && has);
+  });
 }
 
 document.querySelectorAll(".htab").forEach((tab) => {
@@ -3986,6 +4152,12 @@ $("bpq").addEventListener("keydown", (e) => {
 });
 
 const NUDGE_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.8a4.2 4.2 0 0 0-4.2 4.2c0 2.6-1.1 3.4-1.1 3.4h10.6s-1.1-.8-1.1-3.4A4.2 4.2 0 0 0 8 1.8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6.6 12a1.5 1.5 0 0 0 2.8 0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+document.querySelector(".htitle .hmark").innerHTML =
+  `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.75 1.75 0 1 1 2.4 1.63c-.45.18-.7.6-.7 1.08v.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11.4" r=".85" fill="currentColor"/></svg>`;
+$("searchBtn").innerHTML = SEARCH_ICON;
+$("searchBtn").onclick = () => openSearch($("filter").value.trim());
+const COPY_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="5.4" y="2.2" width="8.4" height="9.6" rx="1.6" stroke="currentColor" stroke-width="1.2"/><path d="M10.6 13.8H3.8a1.6 1.6 0 0 1-1.6-1.6V5.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+$("digestBtn").innerHTML = `${COPY_ICON}<span>Copy status</span>`;
 $("nudgeBtn").innerHTML = `${NUDGE_ICON}<span>Nudge</span>`;
 $("nudgeBtn").onclick = async () => {
   const b = $("nudgeBtn");
