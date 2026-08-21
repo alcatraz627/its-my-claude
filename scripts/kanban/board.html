@@ -651,17 +651,17 @@
   /* One component. Boards use it, search uses it, tags use it. Sectioned, so a
      result set can say what KIND of thing each group is instead of running the
      three together. Charter §6: group, then hold. */
-  #bpick,#tpick{position:fixed;inset:0;background:var(--scrim);display:none;align-items:flex-start;
+  #bpick,#tpick,#spick{position:fixed;inset:0;background:var(--scrim);display:none;align-items:flex-start;
          justify-content:center;z-index:40;padding-top:12vh}
-  #bpick.on,#tpick.on{display:flex}
-  #bpick .bpbox,#tpick .bpbox{width:min(620px,93vw);background:var(--canvas);border:1px solid var(--border-2);
+  #bpick.on,#tpick.on,#spick.on{display:flex}
+  #bpick .bpbox,#tpick .bpbox,#spick .bpbox{width:min(620px,93vw);background:var(--canvas);border:1px solid var(--border-2);
                 border-radius:14px;box-shadow:0 28px 70px rgb(0 0 0/.42);overflow:hidden;
                 display:flex;flex-direction:column;max-height:76vh}
   .bpq{display:flex;align-items:center;gap:11px;padding:0 16px;border-bottom:1px solid var(--border);flex:none}
   .bpq .qi{flex:none;color:var(--text-3);display:grid;place-items:center}
-  #bpick input,#tpick input{flex:1;min-width:0;border:none;background:none;color:var(--text);
+  #bpick input,#tpick input,#spick input{flex:1;min-width:0;border:none;background:none;color:var(--text);
                font:400 15px/1 var(--sans);padding:16px 0;outline:none}
-  #bpick input::placeholder,#tpick input::placeholder{color:var(--text-3)}
+  #bpick input::placeholder,#tpick input::placeholder,#spick input::placeholder{color:var(--text-3)}
   .bpq .qk{flex:none;font:11px var(--mono);color:var(--text-3);background:var(--well);
            border:1px solid var(--border);border-radius:5px;padding:2px 6px}
   .bplist{flex:1;min-height:0;overflow-y:auto;padding:7px 7px 9px}
@@ -1078,6 +1078,13 @@
   </aside>
 </div>
 <div id="state"></div>
+<div id="spick" role="dialog" aria-modal="true" aria-label="search"><div class="bpbox">
+  <div class="bpq"><span class="qi" id="spIcon"></span>
+  <input id="spq" type="search" placeholder="A card, a word from a note, a milestone, a question like blocked" aria-label="search" autocomplete="off">
+  <span class="qk">/</span></div>
+  <div class="bplist" id="splist" role="listbox"></div>
+  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> go</span><span><kbd>⌘</kbd><kbd>↵</kbd> select all shown</span><span><kbd>esc</kbd> close</span></div>
+</div></div>
 <div id="tpick" role="dialog" aria-modal="true" aria-label="add a tag"><div class="bpbox">
   <div class="bpq"><span class="qi" id="tpIcon"></span>
   <input id="tpq" type="search" placeholder="milestone:M2 · tier:sonnet · effort:high · or any name" aria-label="find or create a tag" autocomplete="off">
@@ -3717,6 +3724,130 @@ $("tpq").addEventListener("keydown", (e) => {
 });
 $("tpick").onclick = (e) => { if (e.target === $("tpick")) closeTagPick(); };
 
+// ---------- search ----------
+// Built to SEARCH-DESIGN.md. The finding that shapes it: of the seven questions
+// someone brings to this board, only two are text. The rest are states and
+// groups, so Questions come first and a bare word offers them without syntax.
+const QUESTIONS = [
+  { q: "blocked", label: "Blocked", hint: "cards the agent stopped on", filter: "is:blocked" },
+  { q: "needs you review mine", label: "Needs you", hint: "graded, but wants your own testing", filter: "needs-you" },
+  { q: "unread notes", label: "Waiting on your review", hint: "notes you tagged for your queue", filter: "review-me" },
+  { q: "open motion active", label: "In motion", hint: "not yet done or stale", filter: "is:open" },
+  { q: "settled done", label: "Settled", hint: "done and stale", filter: "is:settled" },
+  { q: "new since visit changed", label: "New since your last visit", hint: "cards created since you were here", filter: "since:new" },
+];
+let spAt = 0, spRows = [];
+
+function openSearch(seed = "") {
+  $("spick").classList.add("on");
+  overlayOpen($("spick"), $("spq"));
+  $("spIcon").innerHTML = SEARCH_ICON;
+  $("spq").value = seed; spAt = 0;
+  renderSearch();
+}
+function closeSearch() { $("spick").classList.remove("on"); overlayClose(); }
+
+function searchSections() {
+  const q = $("spq").value.trim().toLowerCase();
+  const out = [];
+  const hit = (t) => !q || String(t ?? "").toLowerCase().includes(q);
+  // 1. questions, because five of the seven intents live here
+  const qs = QUESTIONS.filter((x) => !q || x.q.split(" ").some((w) => w.startsWith(q)) || hit(x.label));
+  if (qs.length) out.push({ label: "Questions", kind: "q", rows: qs.slice(0, 6) });
+  if (!q) return out;
+  // 2. cards on this board
+  const cards = data.board.cards.filter((c) => hit(c.title) || hit(c.titleBrief) || hit(c.heading));
+  if (cards.length) out.push({ label: "Cards", kind: "card", rows: cards.slice(0, 8) });
+  // 3. your own writing, a different corpus from the cards
+  const noteRows = [];
+  for (const [cid, e] of Object.entries(data.notes ?? {})) {
+    notesOf(e).forEach((n, i) => { if (hit(n.body)) noteRows.push({ cid, n, i }); });
+  }
+  if (noteRows.length) out.push({ label: "Your notes", kind: "note", rows: noteRows.slice(0, 6) });
+  // 4. tags, whose verb is "show me the group"
+  const tg = plan().tags.filter((t) => hit(t.name) || hit(t.kind));
+  if (tg.length) out.push({ label: "Tags", kind: "tag", rows: tg.slice(0, 6) });
+  // 5. the owner's unsorted asks
+  const asks = (items ?? []).filter((i) => !i.landing && hit(i.body));
+  if (asks.length) out.push({ label: "Your asks", kind: "ask", rows: asks.slice(0, 4) });
+  return out;
+}
+
+function renderSearch() {
+  const secs = searchSections();
+  spRows = secs.flatMap((sec) => sec.rows.map((r) => ({ kind: sec.kind, r })));
+  spAt = Math.min(spAt, Math.max(0, spRows.length - 1));
+  const q = $("spq").value.trim();
+  if (!spRows.length) {
+    // never say "no results" without saying what was looked in
+    $("splist").innerHTML = `<div class="bpnone">Nothing matches “${esc(q)}”. Searched this board's cards, your notes, your tags and your unsorted asks.</div>`;
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  let i = 0;
+  for (const sec of secs) {
+    const h = document.createElement("div");
+    h.className = "bpsec";
+    h.innerHTML = `<span>${sec.label}</span><span class="line"></span>`;
+    frag.appendChild(h);
+    for (const r of sec.rows) {
+      const at = i++;
+      const el = document.createElement("button");
+      el.type = "button"; el.role = "option";
+      el.className = "bprow" + (at === spAt ? " on" : "");
+      let icon = "", name = "", sub = "", meta = "";
+      if (sec.kind === "q") { icon = SB_ICON.motion; name = r.label; sub = r.hint; meta = "show these"; }
+      else if (sec.kind === "card") { icon = BOARD_ICON; name = briefOf(r); sub = r.source.kind === "manual" ? "added by hand" : r.source.path; meta = LANE_NAME[r.lane]; }
+      else if (sec.kind === "note") { icon = NOTE_ICON; name = `note #${r.i + 1}`; sub = r.n.body.replace(/\s+/g, " "); meta = briefOf(data.board.cards.find((c) => c.id === r.cid) ?? { title: r.cid }); }
+      else if (sec.kind === "tag") { icon = `<i class="tdot" style="display:block;width:8px;height:8px;border-radius:50%;background:var(--dot)"></i>`; name = r.kind === "plain" ? r.name : `${r.kind}: ${r.name}`; sub = "open its peek column"; meta = `${(plan().on && Object.values(plan().on).filter((ids) => ids.includes(r.id)).length) || 0} cards`; }
+      else { icon = PEN_ICON; name = "ask"; sub = r.body.replace(/\s+/g, " "); meta = r.starred ? "starred" : ""; }
+      el.innerHTML = `<span class="bi ${sec.kind === "tag" ? `k-${r.kind}` : ""}">${icon}</span><span class="bn"></span>` +
+        `<span class="bp" style="direction:ltr"></span><span class="bc">${esc(meta)}</span>`;
+      el.querySelector(".bn").textContent = name;
+      el.querySelector(".bp").textContent = sub;
+      el.onmouseenter = () => { spAt = at; markSp(); };
+      el.onclick = () => goSearch({ kind: sec.kind, r });
+      frag.appendChild(el);
+    }
+  }
+  $("splist").replaceChildren(frag);
+}
+const markSp = () => $("splist").querySelectorAll(".bprow").forEach((el, i) => el.classList.toggle("on", i === spAt));
+
+// Two verbs, as the guide says: a card is a place to GO, a question or a tag is
+// a set to SHOW. Closing always leaves the board where it was.
+function goSearch(hit) {
+  if (!hit) return;
+  const { kind, r } = hit;
+  closeSearch();
+  if (kind === "q") { setFilter(filterText === r.filter ? "" : r.filter); return; }
+  if (kind === "tag") { peekTag(r); return; }
+  if (kind === "card") { if (!findCard(r.id)) openDrawer(r.id); else setTimeout(() => openDrawer(r.id), 260); return; }
+  if (kind === "note") { openDrawer(r.cid, r.n.id); return; }
+  if (kind === "ask") { document.querySelector(`#rail .item[data-id="${r.id}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+}
+// The eighth capability: turn what you searched for into what you send.
+async function selectAllShown() {
+  const cards = spRows.filter((x) => x.kind === "card").map((x) => x.r.id);
+  const notes = spRows.filter((x) => x.kind === "note").map((x) => nKey(x.r.cid, x.r.n.id));
+  if (!cards.length && !notes.length) { toast("Nothing here to select"); return; }
+  closeSearch();
+  for (const id of cards) await toggleSel("card", id, true);
+  for (const k of notes) await toggleSel("note", k, true);
+  selMode = selMode || !!cards.length; noteSelMode = noteSelMode || !!notes.length;
+  applyModes();
+  toast(`Selected ${cards.length} card(s) and ${notes.length} note(s) — press s to send them`);
+}
+$("spq").addEventListener("input", () => { spAt = 0; renderSearch(); });
+$("spq").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowDown") { spAt = Math.min(spAt + 1, spRows.length - 1); markSp(); e.preventDefault(); }
+  else if (e.key === "ArrowUp") { spAt = Math.max(spAt - 1, 0); markSp(); e.preventDefault(); }
+  else if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); selectAllShown(); }
+  else if (e.key === "Enter") { goSearch(spRows[spAt]); e.preventDefault(); }
+  else if (e.key === "Escape") { closeSearch(); e.stopPropagation(); }
+});
+$("spick").onclick = (e) => { if (e.target === $("spick")) closeSearch(); };
+
 // ---------- board switcher ----------
 // Sectioned: where you were, what you keep, then everything. Recency is a
 // per-browser convenience so it lives in localStorage; a star is a real
@@ -4158,6 +4289,7 @@ document.addEventListener("keydown", (e) => {
   // so this list and the ladder in the charter cannot drift apart.
   if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
   if ($("help").style.display === "flex" && e.key !== "?") { closeHelp(); return; }
+  if ($("spick").classList.contains("on")) { if (e.key === "Escape") closeSearch(); return; }
   if ($("bpick").classList.contains("on")) { if (e.key === "Escape") closeBoardPick(); return; }
   if ($("tpick").classList.contains("on")) { if (e.key === "Escape") closeTagPick(); return; }
   if ($("pop").classList.contains("on")) {
@@ -4221,7 +4353,7 @@ document.addEventListener("keydown", (e) => {
     case "C": clearSel("all"); toast("Selection cleared"); break;
 
     // ---- everything else ----
-    case "/": $("filter").focus(); $("filter").select(); e.preventDefault(); break;
+    case "/": openSearch(); e.preventDefault(); break;
     case "a": { const t = document.querySelector("#rail textarea"); if (t) { t.focus(); e.preventDefault(); } break; }
     case "#": { const c = openId ?? flat[sel]; if (c) { if (!openId) openDrawer(c); openTagPick(c); } e.preventDefault(); break; }
     case "g": if (panel) { editGoal(openId, plan().goals[openId] ?? ""); e.preventDefault(); }
