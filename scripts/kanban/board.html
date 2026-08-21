@@ -659,6 +659,50 @@
                   background:none;border-color:transparent;color:var(--text-3)}
   .stagbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
+  /* ---------- cross-highlight ---------- */
+  /* Hovering a thing that exists in two places lights both. The one under the
+     pointer keeps the blue it already had and gains a dotted, spaced outline
+     with a soft glow, held far enough out not to crowd the border. Its
+     counterpart takes green, with no outline, so at a glance you can tell
+     which end you are touching. Charter §7. */
+  @keyframes xh-in{from{outline-color:transparent;box-shadow:var(--shadow)}}
+  .xh-primary{outline:1.5px dotted var(--blue);outline-offset:5px;
+              box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 9%,transparent),
+                         0 0 18px -2px color-mix(in srgb,var(--blue) 42%,transparent),var(--shadow);
+              animation:xh-in .22s cubic-bezier(.32,.72,0,1)}
+  .card.xh-primary{background:var(--card-hover);border-color:var(--blue-br)}
+  .dtab.xh-primary{outline-offset:3px}
+  /* the peer says "over here" without shouting: no outline, its own ground */
+  .xh-peer{border-color:var(--green-br)!important;
+           background:linear-gradient(var(--green-bg),var(--green-bg)) var(--card)!important;
+           box-shadow:0 0 14px -3px color-mix(in srgb,var(--green) 40%,transparent),var(--shadow);
+           transition:background .16s,border-color .16s,box-shadow .16s}
+  .dtab.xh-peer{background:linear-gradient(var(--green-bg),var(--green-bg)) var(--canvas)!important}
+
+  /* the arrow layer. Never interactive, never over a tooltip. */
+  /* width/height are load-bearing: a bare <svg> falls back to its intrinsic
+     300x150 and silently clips every coordinate outside it, which is most of
+     the viewport */
+  #xarrow{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:25;overflow:visible}
+  #xarrow path{fill:none;stroke:var(--green);stroke-linecap:round;stroke-linejoin:round;
+               opacity:0;transition:opacity .18s}
+  #xarrow.on path{opacity:.55}
+  #xarrow path.ink2{opacity:0}
+  #xarrow.on path.ink2{opacity:.28}
+  @media (prefers-reduced-motion: reduce){ .xh-primary{animation:none} #xarrow path{transition:none} }
+
+  /* "I brought you here": a found card pulses twice on a soft ease */
+  @keyframes findpulse{
+    0%{outline-color:transparent;box-shadow:var(--shadow)}
+    18%{outline-color:var(--blue);box-shadow:0 0 0 6px color-mix(in srgb,var(--blue) 16%,transparent),var(--shadow)}
+    46%{outline-color:color-mix(in srgb,var(--blue) 35%,transparent);box-shadow:var(--shadow)}
+    68%{outline-color:var(--blue);box-shadow:0 0 0 6px color-mix(in srgb,var(--blue) 16%,transparent),var(--shadow)}
+    100%{outline-color:transparent;box-shadow:var(--shadow)}
+  }
+  .found{outline:1.5px dotted var(--blue);outline-offset:5px;
+         animation:findpulse 1.5s cubic-bezier(.32,.72,0,1)}
+  @media (prefers-reduced-motion: reduce){ .found{animation:none;outline-color:var(--blue)} }
+
   /* ---------- select mode ---------- */
   .card .cbox{position:absolute;top:9px;right:9px;width:18px;height:18px;border:1.5px solid var(--border-2);
               border-radius:5px;background:var(--card);display:none;place-items:center;
@@ -889,6 +933,7 @@
     <button type="button" class="accent" id="popSave">Save <span class="k">⌘↵</span></button>
   </div>
 </div>
+<svg id="xarrow" aria-hidden="true"></svg>
 <div id="tip" role="tooltip" aria-hidden="true"></div>
 
 <div id="toast" role="status"></div>
@@ -1271,6 +1316,102 @@ function syncPopPick() {
   $("popPick").dataset.tip = on ? "Selected — click to deselect" : "Add this note to the selection you send an agent";
 }
 
+// ---------- cross-highlight ----------
+// A card and its panel tab are the same thing in two places. Hovering either
+// lights both and draws a line you can trace between them, so the connection is
+// visible rather than remembered. Charter §7.
+const cardNode = (id) => document.querySelector(`.card[data-id="${id}"]`);
+const tabNode = (id) => document.querySelector(`.dtab[data-tab-id="${id}"]`);
+
+// Excalidraw's look is a confident line drawn slightly wrong, twice. The wobble
+// is derived from the endpoints rather than random, so the same pair always
+// draws the same arrow and a re-render does not make it twitch.
+function sketchPath(x1, y1, x2, y2, seed) {
+  const jitter = (n, amp) => ((Math.sin((seed + n) * 12.9898) * 43758.5453) % 1) * amp;
+  const dx = x2 - x1, dy = y2 - y1;
+  const dist = Math.hypot(dx, dy);
+  // bow away from the straight line, more on a long run, capped so it stays tidy
+  const bow = Math.min(dist * 0.22, 76);
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  // perpendicular, biased upward so the curve arcs over the board rather than
+  // through the cards between the two ends
+  const nx = -dy / (dist || 1), ny = dx / (dist || 1);
+  const cx = mx + nx * bow + jitter(1, 7), cy = my + ny * bow - Math.abs(bow) * 0.15 + jitter(2, 7);
+  return `M ${x1 + jitter(3, 2)} ${y1 + jitter(4, 2)} Q ${cx} ${cy} ${x2 + jitter(5, 2)} ${y2 + jitter(6, 2)}`;
+}
+function arrowHead(x, y, fromX, fromY, seed) {
+  const a = Math.atan2(y - fromY, x - fromX);
+  const len = 9, spread = 0.42;
+  const p = (off) => `M ${x} ${y} L ${x - len * Math.cos(a + off)} ${y - len * Math.sin(a + off)}`;
+  return `${p(spread)} ${p(-spread)}`;
+}
+function drawArrow(a, b) {
+  const svg = $("xarrow");
+  if (!a || !b) return clearArrow();
+  const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+  // leave from the facing edge of each, not from the centre, so the line never
+  // starts underneath the thing it is pointing at
+  const aRight = ra.left < rb.left;
+  const x1 = aRight ? ra.right + 3 : ra.left - 3, y1 = ra.top + Math.min(ra.height / 2, 26);
+  const x2 = aRight ? rb.left - 3 : rb.right + 3, y2 = rb.top + Math.min(rb.height / 2, 26);
+  const seed = Math.round(ra.top + rb.top);
+  const d = sketchPath(x1, y1, x2, y2, seed);
+  // two strokes at slightly different widths reads as ink, one reads as a border
+  svg.innerHTML =
+    `<path class="ink1" d="${d}" stroke-width="1.6" stroke-dasharray="7 6"/>` +
+    `<path class="ink2" d="${sketchPath(x1, y1, x2, y2, seed + 31)}" stroke-width="1.1" stroke-dasharray="5 8"/>` +
+    `<path class="ink1" d="${arrowHead(x2, y2, x1, y1, seed)}" stroke-width="1.6"/>`;
+  svg.classList.add("on");
+}
+function clearArrow() { const s = $("xarrow"); s.classList.remove("on"); }
+
+let xhPair = null;
+function crossHighlight(id, from) {
+  if (!id) return;
+  const card = cardNode(id), tab = tabNode(id);
+  if (!card || !tab) return;                       // nothing to connect to
+  clearCrossHighlight();
+  const primary = from === "tab" ? tab : card;
+  const peer = from === "tab" ? card : tab;
+  primary.classList.add("xh-primary");
+  peer.classList.add("xh-peer");
+  xhPair = [primary, peer];
+  drawArrow(primary, peer);
+}
+function clearCrossHighlight() {
+  (xhPair ?? []).forEach((el) => el.classList.remove("xh-primary", "xh-peer"));
+  xhPair = null;
+  clearArrow();
+}
+// Delegated so a re-render cannot leave a stale listener, and so a card drawn
+// after the panel opened still participates.
+document.addEventListener("pointerover", (e) => {
+  const card = e.target.closest?.(".card");
+  if (card) return crossHighlight(card.dataset.id, "card");
+  const tab = e.target.closest?.(".dtab");
+  if (tab) return crossHighlight(tab.dataset.tabId, "tab");
+});
+document.addEventListener("pointerout", (e) => {
+  const el = e.target.closest?.(".card,.dtab");
+  if (el && !el.contains(e.relatedTarget)) clearCrossHighlight();
+});
+// the line is drawn in viewport space, so anything that moves the ends drops it
+addEventListener("scroll", clearCrossHighlight, true);
+addEventListener("resize", clearCrossHighlight);
+
+// Bring a card into view and say so. Used when a peek row or a tab points at
+// something that is off screen: scrolling there silently leaves you hunting.
+function findCard(id) {
+  const el = cardNode(id);
+  if (!el) return false;
+  el.scrollIntoView({ block: "center", behavior: "smooth" });
+  el.classList.remove("found");
+  void el.offsetWidth;                              // restart the animation
+  el.classList.add("found");
+  setTimeout(() => el.classList.remove("found"), 1700);
+  return true;
+}
+
 // ---------- tooltips ----------
 // Delegated, so a re-render never orphans a listener, and driven by data-tip
 // rather than title= so nothing double-fires. data-tiph is an optional heading.
@@ -1569,6 +1710,15 @@ function cardEl(c) {
       else openPop(c.id, n.id, ch);
     };
     chipRow.appendChild(ch);
+  });
+  // middle-click is the quiet version of a click: it opens the card in the
+  // background rather than pulling you into it, and does nothing at all if the
+  // card is already a tab. Charter §7.
+  el.addEventListener("pointerdown", (e) => { if (e.button === 1) e.preventDefault(); });
+  el.addEventListener("auxclick", (e) => {
+    if (e.button !== 1) return;
+    e.preventDefault(); e.stopPropagation();
+    openInBackground(c.id);
   });
   const box = el.querySelector(".cbox");
   box.onclick = (e) => { e.stopPropagation(); toggleSel("card", c.id); };
@@ -2621,6 +2771,22 @@ function closeTab(id) {
   else { openId = null; dirty = false; $("drawer").classList.remove("open"); renderTabs(); }
 }
 
+// Open a card as a tab without taking the focus off what you are reading. A
+// card already open is left exactly as it is, including which tab is active.
+function openInBackground(id) {
+  if (!data?.board.cards.some((c) => c.id === id)) return;
+  if (tabs.includes(id)) {
+    // no-op, but say so: silence here reads as a broken gesture
+    toast("Already open in a tab");
+    return;
+  }
+  tabs.push(id);
+  if (!openId) { openDrawer(id); return; }   // nothing was open, so it becomes the tab
+  $("drawer").classList.add("open");
+  renderTabs();
+  toast("Opened in the background");
+}
+
 function openDrawer(id, wantNoteId, opts = {}) {
   const c = data.board.cards.find((x) => x.id === id);
   if (!c) return;
@@ -2703,6 +2869,13 @@ function openDrawer(id, wantNoteId, opts = {}) {
   renderOtherNotes(id);
   $("drawer").classList.add("open");
   renderTabs();
+  // the card this tab came from gets a moment of green, so switching tabs tells
+  // you where you are on the board without hunting for it
+  const peer = cardNode(id);
+  if (peer) {
+    peer.classList.add("xh-peer");
+    setTimeout(() => peer.classList.remove("xh-peer"), 900);
+  }
   fillSegs();
 }
 function stepCard(d) {
