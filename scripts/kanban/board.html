@@ -3188,7 +3188,7 @@ function renderSrcLine(c) {
   } else {
     const a = document.createElement("a");
     a.className = "sp2";
-    a.href = `/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}`;
+    a.href = `/doc?path=${encodeURIComponent(data.root + "/" + c.source.path)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}`;
     a.target = "_blank"; a.rel = "noopener";
     a.textContent = `${c.source.path}${c.source.line ? ":" + c.source.line : ""}`;
     a.dataset.tip = "Open the document this card was read from";
@@ -3499,7 +3499,8 @@ function openDrawer(id, wantNoteId, opts = {}) {
 
   // a linked doc has no line, so its preview is the top of the file. Say that,
   // or it reads as the harvested excerpt showing the wrong card's content.
-  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
+  // the doc gets told where the reader came from, so it can offer a way back
+  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}" target="_blank" rel="noopener" title="open ${esc(p)}">` +
     `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
     `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">↗</span></a>` +
     `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;

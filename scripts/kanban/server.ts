@@ -24,6 +24,10 @@ if (!Number.isInteger(PORT)) {
 
 const HERE = import.meta.dir;
 const html = (name: string) => new Response(fs.readFileSync(path.join(HERE, name)), { headers: { "content-type": "text/html; charset=utf-8" } });
+// The shared look and behaviour, served once rather than pasted into each page.
+// No cache header on purpose: this is a localhost tool someone is editing.
+const asset = (name: string, type: string) =>
+  new Response(fs.readFileSync(path.join(HERE, name)), { headers: { "content-type": `${type}; charset=utf-8`, "cache-control": "no-store" } });
 const json = (obj: unknown, status = 200) => Response.json(obj, { status });
 
 // The only writer of notes.json is this chain — POSTs serialize through it so
@@ -219,13 +223,14 @@ function docSegment(reqPath: string, line: number): Response {
 
 // embed=1 is the in-drawer modal, which already has the board's chrome around
 // it: a second theme toggle inside the document reads as a document action.
-function docResponse(reqPath: string, line = 0, embed = false): Response {
+function docResponse(reqPath: string, line = 0, embed = false,
+                     back: { slug: string; card: string } = { slug: "", card: "" }): Response {
   const r = resolveDocPath(reqPath);
   if ("error" in r) {
     if (r.status !== 404) return json({ error: r.error }, r.status);
     // a human lands here from a stale card link; JSON is the wrong shape
     return new Response(
-      `<!doctype html><meta charset="utf-8"><title>doc not found</title>
+      `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>doc not found</title>
 <style>body{background:#14161a;color:#d8dde4;font:15px/1.6 -apple-system,sans-serif;max-width:640px;margin:18vh auto;padding:0 1rem}
 code{background:#1b1e24;border:1px solid #2a2f37;border-radius:4px;padding:1px 5px}p{color:#8a93a0}</style>
 <h2>This document is gone</h2>
@@ -238,26 +243,36 @@ or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</co
   const real = r.real;
   const body = renderMd(fs.readFileSync(real, "utf8"));
   return new Response(
-    `<!doctype html><meta charset="utf-8"><title>${path.basename(real)}</title>
-<style>:root{--bg:#14161a;--text:#d8dde4;--dim:#8a93a0;--border:#2a2f37;--surface:#1b1e24;--accent:#6ea8fe}
-[data-theme="light"]{--bg:#faf9f7;--text:#20242a;--dim:#6b7280;--border:#e2e0dc;--surface:#fff;--accent:#2563eb}
-body{background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,sans-serif;max-width:860px;margin:2rem auto;padding:0 1rem}
-code,pre{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 4px}
-pre{padding:10px;overflow-x:auto}h1,h2,h3{line-height:1.3}a{color:var(--accent)}hr{border:0;border-top:1px solid var(--border)}
+    `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>${path.basename(real)}</title>
+<link rel="stylesheet" href="/shared.css">
+<style>
+/* the document reads on the same tokens as everything else; it used to carry a
+   fourth private palette that agreed with the others by hand */
+body{background:var(--canvas);color:var(--text);font:15px/1.68 var(--sans);margin:0}
+.docwrap{max-width:860px;margin:26px auto;padding:0 20px}
+code,pre{background:var(--well);border:1px solid var(--border);border-radius:4px;padding:1px 4px}
+pre{padding:10px;overflow-x:auto}h1,h2,h3{line-height:1.3}a{color:var(--blue)}hr{border:0;border-top:1px solid var(--border)}
 table{border-collapse:collapse;margin:10px 0;display:block;overflow-x:auto;max-width:100%}
-th,td{border:1px solid var(--border);padding:5px 10px;text-align:left;vertical-align:top}th{background:var(--surface)}
-.hit{background:var(--surface);outline:2px solid var(--accent);outline-offset:6px;border-radius:3px}
-#theme{position:fixed;top:12px;right:12px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font:inherit}
+th,td{border:1px solid var(--border);padding:5px 10px;text-align:left;vertical-align:top}th{background:var(--well)}
+.hit{background:var(--well);outline:2px dotted var(--blue);outline-offset:6px;border-radius:3px}
+.docmeta{display:flex;align-items:center;gap:9px;font:11.5px/1.5 var(--mono);color:var(--text-3);
+         padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--well);margin-bottom:20px}
+.docmeta .dsp{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.docmeta .ro{flex:none}
 *{scrollbar-width:thin;scrollbar-color:var(--border) transparent}</style>
-${embed ? "" : `<button id="theme" title="toggle theme">◐</button>`}
-${embed ? "" : `<p style="color:var(--dim)">${real} · read-only</p>`}${body}
-<script>const applyTheme=t=>{document.documentElement.dataset.theme=t;localStorage.setItem("kanban-theme",t)};
-applyTheme(localStorage.getItem("kanban-theme")||"dark");
+${embed ? "" : `<header id="phead"></header>`}
+${embed ? body : `<div class="docwrap"><div class="docmeta">
+  ${back.slug ? `<a href="/b/${back.slug}${back.card ? `?card=${back.card}` : ""}" data-tip="Back to the card that linked this">&larr; back to the board</a>` : ""}
+  <span class="dsp">${real}</span><span class="ro">read-only mirror</span></div>${body}</div>`}
+${embed ? "" : `<script src="/shared.js"></script>`}
+<script>${embed ? `const applyTheme=t=>{document.documentElement.dataset.theme=t;localStorage.setItem("kanban-theme",t)};
+applyTheme(localStorage.getItem("kanban-theme")||"dark");` : `pageHead({ mount: "#phead", active: "boards",
+  title: ${JSON.stringify(path.basename(real))}, sub: "a document the board reads, shown read-only" });`}
 const want=${line || 0};
 if(want){const els=[...document.querySelectorAll("[id^=L]")].filter(e=>/^L\\d+$/.test(e.id));
  const hit=els.filter(e=>+e.id.slice(1)<=want).pop()||els[0];
  if(hit){hit.classList.add("hit");hit.scrollIntoView({block:"center"});}}
-document.getElementById("theme").onclick=()=>applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark");</script>`,
+</script>`,
     { headers: { "content-type": "text/html; charset=utf-8" } },
   );
 }
@@ -270,6 +285,18 @@ const server = Bun.serve({
     const p = url.pathname;
 
     if (req.method === "GET" || req.method === "HEAD") {
+      // a favicon 404 on every page is noise in every console, and the mark is
+      // the same one the page chrome wears
+      if (p === "/favicon.ico" || p === "/favicon.svg") {
+        return new Response(
+          `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">` +
+          `<rect width="16" height="16" rx="3.5" fill="#5b9dff"/>` +
+          `<rect x="3.4" y="3.6" width="3.4" height="8.8" rx="1.1" stroke="#111318" stroke-width="1.3"/>` +
+          `<rect x="8.6" y="3.6" width="3.4" height="5.4" rx="1.1" stroke="#111318" stroke-width="1.3"/></svg>`,
+          { headers: { "content-type": "image/svg+xml", "cache-control": "max-age=86400" } });
+      }
+      if (p === "/shared.css") return asset("shared.css", "text/css");
+      if (p === "/shared.js") return asset("shared.js", "text/javascript");
       if (p === "/") return html("hub.html");
       // A destination, not a mode: its own data model and its own canvas, so it
       // earns a URL you could send someone (v2-plan.md:151).
@@ -407,7 +434,8 @@ const server = Bun.serve({
       }
       if (p === "/doc") {
         return docResponse(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0),
-          url.searchParams.get("embed") === "1");
+          url.searchParams.get("embed") === "1",
+          { slug: url.searchParams.get("from") ?? "", card: url.searchParams.get("card") ?? "" });
       }
       if (p === "/api/docseg") return docSegment(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0));
       return json({ error: `no route ${p}` }, 404);
