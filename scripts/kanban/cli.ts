@@ -6,11 +6,12 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { execFileSync } from "node:child_process";
 import {
-  CliError, KROOT, REGISTRY, SERVER_INFO, LANES, LANDINGS, SHAPES, type Lane, type ItemShape,
+  CliError, KROOT, REGISTRY, SERVER_INFO, LANES, LANDINGS, SHAPES, BRIEF_MAX, type Lane, type ItemShape,
   cardId, readJson, atomicWrite,
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
+  loadSelection, renderSelection,
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
@@ -42,6 +43,21 @@ function projectDir(): string {
 // UX-sim's headline finding). The single catch at the bottom prints and exits.
 function die(msg: string, fix: string): never {
   throw new CliError(msg, fix);
+}
+
+// The board face shows this instead of a long title, so it has to read like a
+// name: refuse an over-long one rather than truncate it, because a hard cut
+// mid-clause is exactly the unreadable card face the brief exists to prevent.
+function checkBrief(raw: string | undefined, title: string): string | undefined {
+  if (raw === undefined) return undefined;
+  const t = raw.trim();
+  if (!t) die("--brief is empty", `drop the flag, or give a summary phrase: --brief "wire the CSV export"`);
+  if (t.length > BRIEF_MAX) {
+    die(`--brief is ${t.length} chars, cap is ${BRIEF_MAX}`,
+        `summarise, don't truncate — a phrase the human can recognise the card by: --brief "${t.slice(0, 48).trim()}…"`);
+  }
+  if (title && t.length > title.length) die("--brief is longer than the title", `drop --brief; the title already is one`);
+  return t;
 }
 
 // readJson throws a bare Error on a corrupt file, which reaches the user as a
@@ -84,7 +100,7 @@ function doSync(dir: string, by: string) {
   const { slug, root, boardDir } = dir === "init" ? registerBoard(process.cwd()) : boardFor(dir);
   refreshFacts(slug);
   const h = harvest(root);
-  const { delta, overridesHeld, notesPreserved } = mergeSync(boardDir, h.cards, by);
+  const { delta, overridesHeld, notesPreserved } = mergeSync(boardDir, h.cards, by, hasFlag("force"));
   console.log(
     `synced ${slug}: ${delta.new} new, ${delta.moved} moved, ${delta.kept} unchanged, ` +
     `${delta.gone} gone, ${delta.stale} kept-as-stale` +
@@ -110,6 +126,7 @@ switch (verb) {
   case "add": {
     const title = positional[0];
     if (!title) die("add needs a title", `kanban.sh add "wire the export" [--lane backlog]`);
+    const titleBrief = checkBrief(flag("brief"), title);
     const lane = (flag("lane") ?? "inbox") as Lane;
     if (!LANES.includes(lane)) die(`unknown lane ${lane}`, `one of: ${LANES.join(" ")}`);
     const { slug, boardDir } = boardFor(projectDir());
@@ -118,7 +135,7 @@ switch (verb) {
       const id = cardId("manual", title);
       if (board.cards.some((c) => c.id === id)) die(`card ${id} already exists`, `kanban.sh move ${id} <lane>`);
       const now = new Date().toISOString();
-      board.cards.push({ id, title, lane, source: { path: "manual", kind: "manual" }, docs: [], createdAt: now, updatedAt: now });
+      board.cards.push({ id, title, ...(titleBrief ? { titleBrief } : {}), lane, source: { path: "manual", kind: "manual" }, docs: [], createdAt: now, updatedAt: now });
       atomicWrite(path.join(boardDir, "board.json"), board, "add", `cards=${board.cards.length}`);
       if (hasFlag("json")) console.log(JSON.stringify({ id, lane, slug }));
       else console.log(`added ${id} to ${lane} on ${slug}`);
@@ -164,6 +181,37 @@ switch (verb) {
       card.updatedAt = new Date().toISOString();
       atomicWrite(path.join(boardDir, "board.json"), board, "verify", `card=${id} ${grade}`);
       console.log(`verified ${id}: ${grade}${hasFlag("needs-human") ? " + needs-human" : ""} (survives sync)`);
+    });
+    break;
+  }
+  // The read side of the board's two selection states. The human ticks cards or
+  // notes in the UI to say "this is what I mean"; without this verb that signal
+  // reaches nobody, which is exactly the dead end pins.json already is.
+  case "selected": {
+    const { slug, boardDir } = boardFor(projectDir());
+    const { name } = registry().boards[slug] ?? { name: slug };
+    const sel = loadSelection(boardDir);
+    if (hasFlag("json")) { console.log(JSON.stringify(sel)); break; }
+    if (!sel.cards.length && !sel.notes.length) {
+      console.log(`nothing selected on ${slug} — the owner has not ticked anything`);
+      break;
+    }
+    console.log(renderSelection(boardDir, name, sel));
+    break;
+  }
+  case "brief": {
+    const [id, text] = positional;
+    if (!id || (!text && !hasFlag("clear"))) die("usage", `kanban.sh brief <card-id> "one-line summary" | --clear`);
+    const titleBrief = hasFlag("clear") ? undefined : checkBrief(text, "");
+    const { slug, boardDir } = boardFor(projectDir());
+    withBoardLock(boardDir, () => {
+      const board = loadBoard(boardDir);
+      const card = board.cards.find((c) => c.id === id);
+      if (!card) die(`no card ${id} on ${slug}`, `kanban.sh status --project ${projectDir()} lists ids`);
+      if (titleBrief) card.titleBrief = titleBrief; else delete card.titleBrief;
+      card.updatedAt = new Date().toISOString();
+      atomicWrite(path.join(boardDir, "board.json"), board, "brief", `card=${id}`);
+      console.log(titleBrief ? `brief set on ${id}: ${titleBrief}` : `brief cleared on ${id}`);
     });
     break;
   }
@@ -597,8 +645,15 @@ switch (verb) {
   default:
     console.log(`kanban.sh <verb>
   init [--project dir]     register + first sync + URL
-  sync [--project dir]     re-harvest; prints the delta digest
-  add "<title>" [--lane l] manual card (model-driven lifecycle, D4a)
+  sync [--project dir]     re-harvest; prints the delta digest. Refuses to empty
+                           a populated board when the harvest finds nothing —
+                           [--force] if that is genuinely right
+  add "<title>" [--lane l] manual card (model-driven lifecycle, D4a); pass
+                           [--brief "…"] whenever the title runs long
+  brief <id> "<text>"      the ${BRIEF_MAX}-char summary phrase the board face shows in
+                           place of a long title — a name the human can scan and
+                           recognise, not a description. The full title stays as
+                           the card's description in the drawer. [--clear] drops it
   move <id> <lane>         override lane (survives sync)
   verify <id> <grade>      grade the card's claimed state: executed (ran it) ·
                            cited (file:line evidence) · reasoned (argument only);
@@ -629,6 +684,10 @@ switch (verb) {
                            [--card <id>] links the card, [--note "…"] says what
                            you did, [--undo] retracts it. Templates are reused
                            rather than consumed, so they refuse a pull
+  selected [--json]        what the owner has ticked on this board — cards and
+                           notes they are pointing at right now, in full. They
+                           may also have pushed it at you directly with the
+                           board's "Send to agent" button
   status [--cards] [--project dir] all boards; --project (or --cards) filters to one
   open                     open this project's board
   check                    self-verify (schema + server HTTP)

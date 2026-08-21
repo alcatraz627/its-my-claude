@@ -8,7 +8,7 @@ import * as os from "node:os";
 import { execFileSync } from "node:child_process";
 import { canonicalRoot, cardId, type HarvestedCard, type Lane } from "./lib.ts";
 
-const MAX_FILES = 60;
+const MAX_FILES = 120; // a repo with a big docs/plan tree blew straight through 60
 const MAX_CARDS = 400;
 
 interface HarvestResult { cards: HarvestedCard[]; scanned: string[]; skipped: string[] }
@@ -176,7 +176,14 @@ export function harvest(root: string): HarvestResult {
     }
   };
 
-  for (const doc of globDocs(root)) consider(doc, () => parseCheckboxFile(doc, root, "checkbox"));
+  // ORDER IS LOAD-BEARING. The MAX_FILES budget is first-come, and the doc glob
+  // is alphabetical, so scanning docs first spends the whole budget on whatever
+  // sorts early — which on a big repo is prose plan docs carrying no checkboxes
+  // at all. versable-builder hit exactly that on 2026-08-21: 60 docs scanned,
+  // zero cards, and the live workspace mirror plus every checkpoint skipped past
+  // the cap, which emptied a 71-card board in one sync. The live sources are
+  // few, dense, and freshest, so they are scanned first and the docs spend
+  // what's left.
 
   // Only live workspace mirrors. Historical per-session snapshots are frozen
   // state and were the top source of same-task-in-N-files duplicates.
@@ -190,6 +197,10 @@ export function harvest(root: string): HarvestResult {
 
   const ckDir = path.join(os.homedir(), ".claude", "checkpoints");
   if (fs.existsSync(ckDir)) {
+    // Many session pointers resolve to the same file (every session in a repo
+    // writes _precompact-checkpoint.claude.md), and each duplicate used to cost
+    // a slot of the budget and re-harvest the same cards.
+    const seenCk = new Set<string>();
     for (const f of fs.readdirSync(ckDir)) {
       if (!f.endsWith(".json")) continue;
       try {
@@ -200,12 +211,17 @@ export function harvest(root: string): HarvestResult {
         let ptrRoot = String(ptr.project_root ?? "");
         try { ptrRoot = canonicalRoot(ptrRoot); } catch { continue; }
         if (ptrRoot !== root) continue;
-        const ageDays = (Date.now() - fs.statSync(ptr.checkpoint_path).mtimeMs) / 86_400_000;
-        if (ageDays > 14) { skipped.push(`${ptr.checkpoint_path} (${Math.round(ageDays)}d old, age-decayed)`); continue; }
-        consider(ptr.checkpoint_path, () => parseCheckpointFile(ptr.checkpoint_path, root));
+        const real = fs.realpathSync(ptr.checkpoint_path);
+        if (seenCk.has(real)) continue;
+        seenCk.add(real);
+        const ageDays = (Date.now() - fs.statSync(real).mtimeMs) / 86_400_000;
+        if (ageDays > 14) { skipped.push(`${real} (${Math.round(ageDays)}d old, age-decayed)`); continue; }
+        consider(real, () => parseCheckpointFile(real, root));
       } catch { skipped.push(path.join(ckDir, f)); }
     }
   }
+
+  for (const doc of globDocs(root)) consider(doc, () => parseCheckboxFile(doc, root, "checkbox"));
 
   // Dedupe by TITLE across sources: the same task lives in plan docs,
   // checkpoints, and the workspace mirror at once, and per-source ids can't

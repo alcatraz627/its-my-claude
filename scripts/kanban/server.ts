@@ -5,11 +5,12 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
+import { execFileSync } from "node:child_process";
 import {
   KROOT, SERVER_INFO, LANES, PINS, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
   loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
-  loadDrafts, saveDrafts, loadPulls,
+  loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 
@@ -143,6 +144,15 @@ function subagentsOf(sessionId: string | undefined): number {
   } catch { return 0; }
 }
 
+// The board's own ipc identity. Registered lazily right before a send rather
+// than at boot, because the broker prunes idle aliases and a name registered
+// hours ago may be gone by the time the human clicks the button.
+const IPC_ALIAS = "kanban-board";
+function ipcRegister(bin: string): void {
+  try { execFileSync(bin, ["register", IPC_ALIAS], { stdio: ["ignore", "ignore", "ignore"], timeout: 5000 }); }
+  catch { /* a down broker is reported by the send itself, not here */ }
+}
+
 export interface LivePeer { alias: string; subagents: number }
 function livePeers(root: string): LivePeer[] {
   if (ipcMissing) return [];
@@ -165,6 +175,8 @@ function livePeers(root: string): LivePeer[] {
       .filter((r) => r.cwd === real || r.cwd?.startsWith(real + path.sep))
       // drop only auto-generated aliases: a bare uuid, or <project>-<8 hex>
       // where the project half matches this board. "sprint-deadbeef" survives.
+      // the board's own ipc identity is not an agent working here
+      .filter((r) => r.alias !== IPC_ALIAS)
       .filter((r) => !/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(r.alias))
       .filter((r) => !new RegExp(`^${path.basename(real).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}-[0-9a-f]{8}$`, "i").test(r.alias));
     const seen = new Set<string>();
@@ -330,7 +342,8 @@ const server = Bun.serve({
         // ackTs closes the note loop in the UI: it is when an agent last ran
         // `notes --ack`, so a note newer than it has not been picked up yet.
         return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir),
-          notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root) });
+          notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
+          selection: loadSelection(dir) });
       }
       // The owner's own lane. `slug` scopes to one board and always keeps the
       // unassigned ones, because an unassigned item is routable to any board.
@@ -612,6 +625,108 @@ const server = Bun.serve({
 
     // A pin is owner-only and read-side; no agent reads this file. Posting an
     // existing ref removes it, so the star and pin controls both toggle.
+    // Note order is the human's, not the store's. They drag a note up because it
+    // matters more, and that ranking is information an agent should see, so it
+    // is persisted rather than held in the page.
+    if (req.method === "POST" && p === "/api/note-order") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; cardId?: string; order?: string[] } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.cardId || !Array.isArray(body.order)) {
+        return json({ error: "need {slug, cardId, order: [noteId…]}" }, 400);
+      }
+      let out: { ok: true; order: string[] } | { error: string } = { error: "unwritten" };
+      await enqueueNote(() => {
+        const all = loadNotes(dir);
+        const list = notesOf(all[body.cardId!]);
+        // Reject a stale order outright rather than reconciling it: a page that
+        // has the wrong set of ids also has the wrong picture of the card, and
+        // silently dropping the difference would delete a note it never saw.
+        const have = new Set(list.map((n) => n.id));
+        if (body.order!.length !== list.length || !body.order!.every((id) => have.has(id))) {
+          out = { error: "that ordering is out of date; reload the board" };
+          return;
+        }
+        const byId = new Map(list.map((n) => [n.id, n]));
+        const reordered = body.order!.map((id) => byId.get(id)!);
+        const entry = deriveEntry(reordered, all[body.cardId!]?.activeId);
+        if (entry) all[body.cardId!] = entry; else delete all[body.cardId!];
+        saveNotes(dir, all, `note-order:${body.cardId}`);
+        out = { ok: true, order: body.order! };
+      });
+      return json(out, "error" in out ? 409 : 200);
+    }
+
+    // The two selections are independent by design: a human ticking cards is
+    // answering a different question from a human ticking notes, and collapsing
+    // them into one list would make "send these three notes" impossible.
+    if (req.method === "POST" && p === "/api/select") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; kind?: "card" | "note"; ref?: string; on?: boolean; clear?: "cards" | "notes" | "all" } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir) return json({ error: `unknown board ${body?.slug ?? ""}` }, 404);
+      let out: Selection = emptySelection();
+      await enqueueItem(() => {
+        const sel = loadSelection(dir);
+        if (body!.clear) {
+          if (body!.clear === "cards" || body!.clear === "all") sel.cards = [];
+          if (body!.clear === "notes" || body!.clear === "all") sel.notes = [];
+        } else {
+          const list = body!.kind === "note" ? sel.notes : sel.cards;
+          const ref = String(body!.ref ?? "");
+          const at = list.indexOf(ref);
+          if (body!.on === false || (body!.on === undefined && at >= 0)) { if (at >= 0) list.splice(at, 1); }
+          else if (at < 0 && ref) list.push(ref);
+        }
+        sel.updatedAt = new Date().toISOString();
+        saveSelection(dir, sel, "select");
+        out = sel;
+      });
+      return json(out);
+    }
+
+    // "Send to agent": the selection, rendered, pushed at whoever is live in
+    // this project right now. It stays on disk either way — a nudge nobody was
+    // around to receive must still be there at the next pickup, which is the
+    // whole failure mode the pins channel has.
+    if (req.method === "POST" && p === "/api/send") {
+      const body = (await req.json().catch(() => null)) as { slug?: string } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      const reg = body?.slug ? registry().boards[body.slug] : null;
+      if (!dir || !reg) return json({ error: `unknown board ${body?.slug ?? ""}` }, 404);
+      const sel = loadSelection(dir);
+      if (!sel.cards.length && !sel.notes.length) return json({ error: "nothing selected" }, 400);
+      const digest = renderSelection(dir, reg.name, sel);
+      const peers = livePeers(reg.root);
+      // pm2 inherits whatever PATH the shell that started it had, so the binary
+      // is resolved explicitly. A missing binary and a down broker used to look
+      // identical from the UI — both "sent nothing" — and only one of them is
+      // something the human can fix.
+      const ipcBin = [path.join(os.homedir(), ".local", "bin", "claude-ipc"), "/usr/local/bin/claude-ipc"]
+        .find((f) => fs.existsSync(f)) ?? "claude-ipc";
+      const sent: string[] = [];
+      let reason = "";
+      // The board is its own actor, not a session. Without --from, the broker
+      // resolves the sender from the server's cwd, decides that is whichever
+      // agent is working in this repo, and refuses the send as a self-send —
+      // exactly the peer you most wanted to reach.
+      ipcRegister(ipcBin);
+      for (const peer of peers.filter((x) => x.alias !== IPC_ALIAS)) {
+        try {
+          execFileSync(ipcBin, ["send", "--to", peer.alias, "--from", IPC_ALIAS, "--kind", "inform",
+            "--no-reply-expected", digest], { stdio: ["ignore", "ignore", "pipe"], timeout: 8000 });
+          sent.push(peer.alias);
+        } catch (e: any) {
+          const err = String(e?.stderr ?? "");
+          reason = e?.code === "ENOENT" ? "claude-ipc is not installed where the board server can reach it"
+            : err.includes("not_registered") ? "the board could not register with the ipc broker"
+            : err.split("\n")[0].slice(0, 140) || "the ipc broker refused the message";
+        }
+      }
+      return json({ ok: true, sent, peers: peers.map((p) => p.alias), reason: sent.length ? "" : reason,
+        cards: sel.cards.length, notes: sel.notes.length });
+    }
+
     if (req.method === "POST" && p === "/api/pin") {
       const body = (await req.json().catch(() => null)) as
         { kind?: "card" | "item"; ref?: string; slug?: string; label?: string } | null;

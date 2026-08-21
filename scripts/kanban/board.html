@@ -56,16 +56,59 @@
   .brow{display:flex;align-items:center;gap:10px;min-width:0}
   .btitle{font:600 15.5px/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap}
   .bpath{color:var(--text-3);font:11.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-  .actions{display:flex;gap:6px;flex:none}
+  .actions{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
   button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
          padding:5px 10px;font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:background .12s,border-color .12s,color .12s}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   button:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
   button.icon{padding:5px 8px}
-  .summary{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13px;color:var(--text-2);min-height:24px}
+  /* Variants, so a button's colour states what it does rather than which
+     screen it happens to sit on. accent = the affirmative act · ghost = a
+     control that must not compete · danger = destroys something. */
+  button.accent{background:var(--blue);border-color:transparent;color:var(--on-accent);font-weight:600}
+  button.accent:hover{background:var(--blue);border-color:transparent;color:var(--on-accent);filter:brightness(1.08)}
+  button.ghost{background:none;border-color:transparent;color:var(--text-3)}
+  button.ghost:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  button.danger{color:var(--red);border-color:var(--border)}
+  button.danger:hover{background:color-mix(in srgb,var(--red) 12%,transparent);border-color:var(--red);color:var(--red)}
+  button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  button svg{flex:none}
+  button[disabled]{opacity:.45;cursor:not-allowed}
+  /* ---------- status band ---------- */
+  /* Was one flat sentence. It is the board's masthead, so it now reads in three
+     registers: what wants YOU (loud, actionable), what the board is doing
+     (quiet counts you can filter by), and how fresh this all is (dimmest, and
+     only loud when the mirror has gone stale). Everything countable is a
+     button, because every count here answers "show me which ones". */
+  .summary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px;color:var(--text-2);min-height:26px}
   .summary b{color:var(--text);font-weight:600}
-  .summary .dotsep{width:3px;height:3px;border-radius:50%;background:var(--border-2)}
+  .summary .dotsep{width:3px;height:3px;border-radius:50%;background:var(--border-2);flex:none}
   .summary .blocked{color:var(--amber);font-weight:500}
+  /* a stat is a filter that happens to show a number */
+  .stat-chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:7px;
+             border:1px solid transparent;background:none;color:var(--text-2);font:13px/1 var(--sans);cursor:pointer}
+  .stat-chip:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .stat-chip.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  .stat-chip .sg{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .stat-chip:hover .sg,.stat-chip.on .sg{color:currentColor}
+  .stat-chip.warn{color:var(--amber)}
+  .stat-chip.warn .sg{color:var(--amber)}
+  .stat-chip.warn:hover{background:var(--amber-bg);border-color:var(--amber-br)}
+  .stat-chip.warn.on{background:var(--amber-bg);border-color:var(--amber-br);color:var(--amber)}
+  .stat-chip.mute{color:var(--text-3);cursor:default}
+  .stat-chip.mute:hover{background:none;border-color:transparent;color:var(--text-3)}
+  .stat-chip.stale{color:var(--amber)}
+  /* the delta is a second row: it is news, not state, and it comes and goes */
+  .sband{display:flex;align-items:center;gap:7px;flex-wrap:wrap;width:100%}
+  .sdelta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;width:100%;padding-top:2px}
+  .sdelta .dlabel{font-size:12px;color:var(--text-3);display:inline-flex;align-items:center;gap:6px}
+  .sdelta .dlabel .sg{color:var(--text-3)}
+  .dchip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:20px;
+         border:1px solid var(--border);background:var(--card);color:var(--text-2);font:500 12px/1 var(--sans);cursor:pointer}
+  .dchip:hover{border-color:var(--border-2);color:var(--text)}
+  .dchip.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  .dchip.amber{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
+  .dchip b{font-weight:700}
   /* amber because it is on you; a button because it filters, not just informs */
   /* the tint rides on the card colour, not the canvas: over the darker light
      canvas the bare tint measures 4.36:1, over card it measures 5.11:1 */
@@ -126,12 +169,20 @@
 
   /* ---------- board ---------- */
   main{flex:1;min-height:0;display:flex;gap:14px;padding:15px 24px 22px;overflow-x:auto;align-items:stretch}
-  /* 220, not 232: the collapsed sidebar's 38px rail has to come from somewhere,
-     and a few pixels off each lane is invisible where a clipped Done column and
-     a horizontal scrollbar are not */
-  .col{flex:1 1 284px;min-width:220px;max-width:400px;max-height:100%;display:flex;flex-direction:column;min-height:0;
+  /* ⌘ held: the board is a grab surface. The cursor is the only affordance
+     there is for a modifier gesture, so it changes on the modifier, not on the
+     drag. */
+  main.pangrab{cursor:grab}
+  main.panning{cursor:grabbing;user-select:none}
+  main.panning *{pointer-events:none}
+  /* 400px floor on every lane, owner's call: a title has to be readable on the
+     card face before anything else about the board matters. Six lanes no longer
+     fit a 1440 viewport, so the board scrolls sideways by design (main is
+     overflow-x:auto) and the relative widths below only order what happens
+     ABOVE the floor */
+  .col{flex:1 1 400px;min-width:400px;max-width:560px;max-height:100%;display:flex;flex-direction:column;min-height:0;
        background:var(--well);border:1px solid var(--border);border-radius:10px;padding:10px 10px 4px}
-  .col.archive{flex:.68 1 204px;min-width:196px;max-width:280px}
+  .col.archive{flex:.68 1 400px;min-width:400px;max-width:440px}
   .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 10px;flex:none}
   .chead h2{font:600 13px/1.4 var(--sans);letter-spacing:-.006em;color:var(--text)}
   .chead .count{margin-left:auto;font-size:12.5px;font-weight:550;color:var(--text-3);background:var(--card);
@@ -145,16 +196,15 @@
   /* the two columns that need you sit on a lighter well — weight, not hue */
   /* attention is width and border weight, never a tint: a hue here would be a
      fourth claimant on a closed palette, and the light tint measured 1.000 */
-  .col.attn{flex:1.25 1 340px;max-width:460px;border-color:var(--border-2);border-width:1.5px}
+  .col.attn{flex:1.25 1 460px;max-width:640px;border-color:var(--border-2);border-width:1.5px}
 
   /* the owner's own lane. blue is already "you and your controls", so the rail
      wears it and the status lanes stay neutral. it is not a status column and
      must not read as one */
   /* Width is load-bearing on this board (attention is carried by column width),
-     so the rail borrows rather than adds: it shrinks first and floors lower
-     than a status lane. At 1440, the common width here, the six lanes used to
-     fit exactly and 250px of rail pushed Done off the edge. */
-  .col.rail{flex:.62 1 232px;min-width:198px;max-width:300px;border-color:var(--blue-br);
+     so the rail borrows rather than adds: it shrinks first, down to the same
+     400px floor every lane now holds. */
+  .col.rail{flex:.62 1 400px;min-width:400px;max-width:460px;border-color:var(--blue-br);
             background:linear-gradient(var(--blue-bg),var(--blue-bg)) var(--well)}
   .col.rail .chead h2{color:var(--blue)}
   .col.rail .chead .count{border-color:var(--blue-br);color:var(--blue)}
@@ -183,11 +233,19 @@
                margin-top:1px;padding-top:5px;border-top:1px solid var(--border)}
   /* three toggles read as one vocabulary; the destructive one is set apart by a
      gap and a divider, the way the drawer holds its close button away from nav */
-  .item .iacts button{height:21px;padding:0 6px;font-size:11.5px;background:none;border-color:transparent;color:var(--text-3)}
+  /* Five labelled buttons on every ask read as five demands. They are icons
+     now, and they fade in on hover or focus — except the ones already ON,
+     which are state and must stay visible when nobody is pointing at the row. */
+  .item .iacts button{height:22px;width:22px;padding:0;justify-content:center;font-size:11.5px;
+                      background:none;border-color:transparent;color:var(--text-3);
+                      opacity:0;transition:opacity .12s,background .12s,border-color .12s,color .12s}
+  .item:hover .iacts button,.item:focus-within .iacts button,
+  .item .iacts button.on,.item .iacts button:focus-visible{opacity:1}
+  @media (hover: none){ .item .iacts button{opacity:1} }
   .item .iacts button:hover{background:var(--well);border-color:var(--border);color:var(--text)}
   .item .iacts button.on{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
   .item .iacts button.pin.on{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
-  .item .iacts .del{margin-left:5px;padding-left:9px;border-left:1px solid var(--border);border-radius:0 6px 6px 0}
+  .item .iacts .del{margin-left:4px}
   .item .iacts .del:hover{color:var(--red);background:var(--red-bg);border-left-color:var(--red-br)}
   /* a star is an instruction to the agent, so it earns the same amber the rest
      of the board reserves for "this is waiting on somebody" */
@@ -284,11 +342,58 @@
   #state.err .big{color:var(--red)}
 
   /* ---------- drawer ---------- */
-  #scrim{position:fixed;inset:0;background:rgb(0 0 0/.34);display:none;backdrop-filter:blur(1px)}
-  #scrim.open{display:block}
-  #drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,96vw);background:var(--canvas);border-left:1px solid var(--border);
-          display:none;flex-direction:column;box-shadow:-24px 0 60px rgb(0 0 0/.28);z-index:2}
-  #drawer.open{display:flex}
+  /* In the flex flow, not over it. A backdrop made the board unusable while a
+     card was open, which is wrong for a panel you keep open while working: the
+     board shrinks instead, and it already scrolls sideways. Collapsed, the
+     panel keeps its tab stubs so the open set stays visible at 46px. */
+  #drawer{flex:none;width:0;overflow:hidden;background:var(--canvas);border-left:1px solid transparent;
+          display:flex;flex-direction:column;min-height:0;
+          transition:width .22s cubic-bezier(.32,.72,0,1),border-color .22s}
+  #drawer.open{width:min(520px,42vw);border-left-color:var(--border);
+               box-shadow:-18px 0 40px -24px rgb(0 0 0/.55)}
+  /* a user-set width wins over the default, and survives a reload */
+  #drawer.open.sized{width:var(--dw)}
+  #drawer.open.collapsed{width:46px}
+  /* Everything but the stub rail is hidden at 46px — including the tint, whose
+     2px would otherwise read as a stray line above the stubs. */
+  #drawer.collapsed .dhead,#drawer.collapsed .dbody,#drawer.collapsed .composer,#drawer.collapsed .dtint{display:none}
+  @media (prefers-reduced-motion: reduce){ #drawer{transition:none} }
+
+  /* ---------- drawer tabs ---------- */
+  /* 6px of grab area, 1px of it visible: a wider hit target than the border it
+     sits on, without drawing a second border */
+  .dgrip{position:absolute;left:-3px;top:0;bottom:0;width:7px;cursor:col-resize;z-index:3}
+  .dgrip:hover::after,.dgrip.on::after{content:"";position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--blue)}
+  #drawer{position:relative}
+  #drawer.collapsed .dgrip{display:none}
+  .dtabs{flex:none;display:flex;align-items:stretch;gap:2px;padding:6px 6px 0;overflow-x:auto;
+         border-bottom:1px solid var(--border);background:var(--well)}
+  .dtabs::-webkit-scrollbar{height:0}
+  .dtab{display:flex;align-items:center;gap:6px;max-width:190px;min-width:0;flex:none;
+        background:none;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;
+        padding:6px 8px;color:var(--text-3);font:500 12px/1.3 var(--sans);cursor:pointer}
+  .dtab:hover{background:var(--card);color:var(--text-2)}
+  .dtab.on{background:var(--canvas);border-color:var(--border);color:var(--text);
+           box-shadow:0 1px 0 0 var(--canvas)}
+  .dtab .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dtab .tx{flex:none;width:15px;height:15px;border-radius:4px;display:grid;place-items:center;
+            font-size:11px;color:var(--text-3);opacity:0;transition:opacity .1s,background .1s}
+  .dtab:hover .tx,.dtab.on .tx{opacity:1}
+  .dtab .tx:hover{background:var(--well);color:var(--text)}
+  /* Collapsed: a vertical stack of stubs. Text stays horizontal — a rotated
+     label is the "vertical distortion" this is meant to avoid — so identity is
+     carried by the lane glyph plus two letters, with the tooltip holding the
+     rest. */
+  #drawer.collapsed .dtabs{flex-direction:column;gap:4px;padding:8px 5px;overflow-x:hidden;overflow-y:auto;
+                           border-bottom:none;background:none;flex:1;min-height:0}
+  #drawer.collapsed .dtab{max-width:none;width:36px;height:36px;padding:0;border-radius:8px;
+                          justify-content:center;border:1px solid var(--border);background:var(--card)}
+  #drawer.collapsed .dtab.on{border-color:var(--ring);background:var(--well)}
+  #drawer.collapsed .dtab .tt{flex:none;font:600 10.5px/1 var(--mono);letter-spacing:-.02em;text-overflow:clip}
+  #drawer.collapsed .dtab .tx{display:none}
+  #drawer.collapsed .dtab .tg{display:none}
+  .dtab .tg{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .dtab.on .tg{color:var(--text-2)}
   /* the card's label colour follows you into the drawer */
   .dtint{height:2px;flex:none;background:var(--border-2)}
   .dhead{display:flex;align-items:center;gap:8px;padding:10px 12px 10px 18px;border-bottom:1px solid var(--border);flex:none}
@@ -297,6 +402,12 @@
   .navgrp{display:flex;gap:4px}
   .dbody{overflow-y:auto;padding:18px 18px 24px;display:flex;flex-direction:column;gap:22px;flex:1 1 auto;min-height:0}
   .dtitle{margin:0;font:600 19px/1.32 var(--sans);letter-spacing:-.019em}
+  /* the card's own words, verbatim, under a heading that is only a summary of
+     them. Reading prose, so: body weight, longer measure, generous leading, and
+     a rule down the side saying "this is quoted from the source, not written
+     for the drawer" */
+  .ddesc{margin-top:11px;font:400 13.5px/1.62 var(--sans);letter-spacing:-.002em;color:var(--text-2);
+         white-space:pre-wrap;overflow-wrap:anywhere;border-left:2px solid var(--border-2);padding-left:12px}
   .dpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .dsub{margin-top:9px;font-size:12.5px;color:var(--text-3)}
   .grp{display:flex;flex-direction:column;gap:10px}
@@ -324,7 +435,7 @@
      carried by width and weight, so a peer-liveness dot is information */
   .livepeers i{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex:none}
   .livepeers b{font-weight:550;font-family:var(--mono);font-size:11.5px;color:var(--text)}
-  #filter{width:190px;height:28px;padding:0 10px;border-radius:6px;border:1px solid var(--border);
+  #filter{width:150px;height:28px;padding:0 10px;border-radius:6px;border:1px solid var(--border);
           background:var(--card);color:var(--text);font:12.5px/1 var(--sans)}
   #filter::placeholder{color:var(--text-3)}
   #filter:focus{outline:2px solid var(--ring);outline-offset:1px;border-color:transparent}
@@ -355,11 +466,46 @@
   /* other notes read at zero clicks, in the scrolling body so the composer
      keeps its whole height. Clicking one swaps it into the editor. */
   .notestack{display:flex;flex-direction:column;gap:6px}
+  /* drag to rank, middle-click to dismiss — both on rows and tabs, so the two
+     lists behave the same way */
+  .notestack .nrow{cursor:grab}
+  .notestack .nrow:active{cursor:grabbing}
+  .notestack .nrow.dragging{opacity:.4}
+  .notestack .nrow.dropbefore{box-shadow:0 -2px 0 0 var(--blue)}
+  .notestack .nrow.dropafter{box-shadow:0 2px 0 0 var(--blue)}
+  .dtab.dragging{opacity:.4}
+  .dtab.dropbefore{box-shadow:inset 2px 0 0 0 var(--blue)}
+  .dtab.dropafter{box-shadow:inset -2px 0 0 0 var(--blue)}
   .notestack button{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--border);
        border-radius:8px;padding:8px 11px;color:var(--text-2);font:12.5px/1.5 var(--sans);cursor:pointer}
   .notestack button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
-  .notestack .nbody{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .notestack .nbody{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+                    overflow-wrap:anywhere}
   .notestack .nmeta{display:block;margin-top:4px;font-size:11.5px;color:var(--text-3)}
+  /* A row states which note it is before it states what it says: the number is
+     the handle you use to talk about it. */
+  .notestack .nrow{display:flex;flex-direction:column;gap:5px;text-align:left;align-items:stretch}
+  /* the name on the left, its state on the right, nothing floating in the
+     middle: a row you scan down a column of */
+  .notestack .nhead{display:flex;align-items:center;justify-content:space-between;gap:7px;width:100%}
+  .notestack .nleft{display:flex;align-items:center;gap:7px;min-width:0}
+  .notestack .nnum{font:600 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);
+                   white-space:nowrap}
+  .notestack .nrow.active .nnum{color:var(--blue)}
+  .notestack .nhead .nmeta{margin:0;flex:none;white-space:nowrap}
+  .notestack .nrow.active{border-color:var(--blue-br);background:var(--blue-bg)}
+  /* the draft is a canvas, not a record: dashed says "this is not saved yet"
+     without needing a word for it */
+  .notestack .nrow.draft{border-style:dashed}
+  .notestack .nbody.empty{color:var(--text-3);font-style:italic}
+  .notestack .npick{flex:none;width:15px;height:15px;border:1.5px solid var(--border-2);border-radius:4px;
+                    display:grid;place-items:center;color:transparent;background:var(--canvas);cursor:pointer}
+  .notestack .npick:hover{border-color:var(--blue)}
+  .notestack .npick.on{background:var(--blue);border-color:var(--blue);color:var(--on-accent)}
+  .notestack .nrow.picked{border-color:var(--blue-br)}
+  /* the keyboard's position in the list, distinct from "being edited" (active)
+     and from "selected" (picked) — three different facts about one row */
+  .notestack .nrow.cursor{outline:2px solid var(--ring);outline-offset:1px}
   .addnote{flex:none;height:22px;padding:0 9px;border-radius:20px;font-size:11.5px;
        background:none;border:1px solid var(--border);color:var(--text-2)}
   .addnote:hover{background:var(--card);border-color:var(--border-2);color:var(--text)}
@@ -421,6 +567,117 @@
 
   /* a toast floats over content, so it keeps the opaque card ground; only the
      border and text carry the broken hue (a tinted alpha would make it C1) */
+  /* ---------- board switcher ---------- */
+  /* The board's own name is the door to the others. Cheaper than a back-trip
+     to the hub and it does not make you scroll a fixed list to find one. */
+  .btitle{background:none;border:none;padding:2px 6px 2px 2px;border-radius:7px;gap:4px}
+  .btitle:hover{background:var(--card);color:var(--text)}
+  .btitle .bchev{font-size:11px;color:var(--text-3);line-height:1}
+  #bpick{position:fixed;inset:0;background:rgb(0 0 0/.32);display:none;align-items:flex-start;
+         justify-content:center;z-index:8;padding-top:14vh}
+  #bpick.on{display:flex}
+  #bpick .bpbox{width:min(560px,92vw);background:var(--canvas);border:1px solid var(--border-2);
+                border-radius:13px;box-shadow:0 26px 64px rgb(0 0 0/.4);overflow:hidden}
+  #bpick input{width:100%;border:none;border-bottom:1px solid var(--border);background:none;color:var(--text);
+               font:400 14.5px/1 var(--sans);padding:15px 17px;outline:none}
+  .bplist{max-height:46vh;overflow-y:auto;padding:6px}
+  .bprow{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border-radius:8px;
+         background:none;border:1px solid transparent;cursor:pointer;text-align:left}
+  .bprow:hover,.bprow.on{background:var(--well);border-color:var(--border)}
+  .bprow.cur{border-color:var(--blue-br)}
+  .bprow .bn{font:600 13px/1.3 var(--sans);color:var(--text);flex:none}
+  .bprow .bp{flex:1;min-width:0;font:11.5px/1.3 var(--mono);color:var(--text-3);
+             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl;text-align:left}
+  .bprow .bc{flex:none;font:500 11.5px/1 var(--sans);color:var(--text-3)}
+  .bprow .bu{flex:none;font:600 11px/1 var(--sans);color:var(--blue);background:var(--blue-bg);
+             border:1px solid var(--blue-br);border-radius:20px;padding:2px 7px}
+  .bphint{display:flex;gap:14px;padding:9px 15px;border-top:1px solid var(--border);
+          font-size:11.5px;color:var(--text-3)}
+  .bphint kbd{font:11px var(--mono);background:var(--well);border:1px solid var(--border);
+              border-radius:4px;padding:1px 5px;margin-right:3px}
+  .bpnone{padding:16px 17px;font-size:12.5px;color:var(--text-3)}
+
+  /* ---------- chips (notes on the card face) ---------- */
+  /* A note is a thing with an identity, so it gets a chip with a name, not a
+     count. #n is stable per card, which is what makes "note #2" sayable out
+     loud to an agent. */
+  .chips{display:flex;flex-wrap:wrap;gap:5px}
+  .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;
+        border:1px solid var(--border);border-radius:20px;background:var(--well);color:var(--text-2);
+        font:500 11.5px/1 var(--sans);cursor:pointer;transition:background .11s,border-color .11s,color .11s}
+  .chip:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  .chip .ci{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .chip:hover .ci{color:var(--text-2)}
+  .chip.unread{border-color:var(--blue-br);color:var(--blue)}
+  .chip.unread .ci{color:var(--blue)}
+  .chip.picked{background:var(--blue);border-color:transparent;color:var(--on-accent)}
+  .chip.picked .ci,.chip.picked:hover .ci{color:var(--on-accent)}
+  .chip.picked:hover{background:var(--blue);filter:brightness(1.08);color:var(--on-accent)}
+  /* the checkbox only exists in note-select mode, and it replaces the icon
+     rather than crowding beside it */
+  .chip .cbx{flex:none;width:12px;height:12px;border:1.5px solid var(--border-2);border-radius:3px;
+             display:grid;place-items:center;font-size:9px;color:transparent}
+  .chip.picked .cbx{background:var(--on-accent);border-color:var(--on-accent);color:var(--blue)}
+
+  /* ---------- select mode ---------- */
+  .card .cbox{position:absolute;top:9px;right:9px;width:18px;height:18px;border:1.5px solid var(--border-2);
+              border-radius:5px;background:var(--card);display:none;place-items:center;
+              color:transparent;font-size:12px;cursor:pointer;z-index:1;
+              transition:background .11s,border-color .11s,color .11s}
+  body.selmode .card .cbox{display:grid}
+  body.selmode .card.changed .title,body.selmode .card .title{padding-right:24px}
+  body.selmode .card .newdot{right:32px}
+  .card .cbox:hover{border-color:var(--blue);background:var(--blue-bg)}
+  .card.picked{border-color:var(--blue-br);box-shadow:0 0 0 1px var(--blue-br),var(--shadow)}
+  .card.picked .cbox{background:var(--blue);border-color:var(--blue);color:var(--on-accent)}
+  /* the toolbar the toggle turns into: same slot, same height, so nothing in
+     the header jumps when it opens */
+  .selbar{display:flex;align-items:center;gap:7px;height:28px;padding:0 4px 0 10px;
+          border:1px solid var(--blue-br);border-radius:7px;background:var(--blue-bg)}
+  .selbar .sc{font:600 12px/1 var(--sans);color:var(--blue);white-space:nowrap}
+  .selbar .sdiv{width:1px;height:15px;background:var(--blue-br)}
+
+  /* ---------- note popover ---------- */
+  /* Opened from a chip and sized off the card it belongs to, so the writing
+     surface is bigger than the thing that spawned it — the point is to be able
+     to actually write here instead of in a 2-line preview. */
+  #pop{position:fixed;z-index:7;display:none;flex-direction:column;gap:10px;
+       background:var(--canvas);border:1px solid var(--border-2);border-radius:12px;padding:14px;
+       box-shadow:0 20px 54px rgb(0 0 0/.38);opacity:0;transform:translateY(4px) scale(.99);
+       transition:opacity .13s,transform .13s;transform-origin:top left}
+  #pop.on{display:flex;opacity:1;transform:none}
+  #pop .ph{display:flex;align-items:center;gap:8px}
+  #pop .pt{flex:1;min-width:0;font:600 13.5px/1.35 var(--sans);color:var(--text);
+           overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #pop .psub{font:400 11.5px/1.4 var(--sans);color:var(--text-3);margin-top:-4px;
+             overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #pop textarea{flex:1;min-height:0;resize:none;font:400 13px/1.6 var(--sans);padding:11px 12px;
+                background:var(--card);border:1px solid var(--border);border-radius:9px;color:var(--text)}
+  #pop textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);outline:none}
+  #pop .pbar{display:flex;align-items:center;gap:7px}
+  #pop .pbar .psp{flex:1}
+  #pop .pst{font:500 11.5px/1 var(--sans);color:var(--text-3)}
+  #pop .pst.unsaved{color:var(--amber)}
+
+  /* A tooltip we own. The native title= attribute was the first try and the
+     owner never saw it fire; it is also incapable of the two things this board
+     needs — a readable measure for a paragraph-long card title, and a scroll
+     cap so a 5000-char note does not become a full-screen sheet. */
+  #tip{position:fixed;z-index:6;max-width:min(460px,72vw);max-height:40vh;overflow-y:auto;
+       background:var(--card);color:var(--text);border:1px solid var(--border-2);border-radius:9px;
+       padding:9px 12px;font:400 12.5px/1.55 var(--sans);box-shadow:0 12px 34px rgb(0 0 0/.34);
+       pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .11s,transform .11s;
+       white-space:pre-wrap;overflow-wrap:anywhere;display:none}
+  #tip.on{opacity:1;transform:none}
+  /* the arrow is a rotated square clipped by the panel edge, so it inherits the
+     border and the shadow instead of needing its own */
+  #tip::after{content:"";position:absolute;width:9px;height:9px;background:var(--card);
+              border-left:1px solid var(--border-2);border-top:1px solid var(--border-2);
+              transform:rotate(45deg);left:var(--ax,18px)}
+  #tip.below::after{top:-5px}
+  #tip.above::after{bottom:-5px;transform:rotate(225deg)}
+  #tip .tiph{display:block;font:600 11.5px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
+             color:var(--text-3);margin-bottom:6px}
   #toast.err{border-color:var(--red);color:var(--red)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
          border-radius:8px;padding:9px 16px;font-size:13px;display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:3}
@@ -439,15 +696,18 @@
 <body>
 <header class="top">
   <div class="brow">
-    <span class="crumb"><a href="/" title="all boards">All boards</a><span>/</span></span>
-    <h1 class="btitle" id="name">kanban</h1>
+    <span class="crumb"><a href="/" data-tip="The hub: every board, your pins and your drafts">All boards</a><span>/</span></span>
+    <button class="btitle" id="name" aria-haspopup="listbox" data-tip="Switch board (b)">kanban<span class="bchev">⌄</span></button>
     <span class="bpath" id="root"></span>
     <span class="livepeers" id="live"></span>
     <div class="actions">
-      <input id="filter" type="search" placeholder="Filter cards  /" aria-label="filter cards" autocomplete="off">
-      <button id="digestBtn" title="copy status digest (c)">Copy status</button>
-      <button class="icon" id="theme" title="toggle theme (t)" aria-label="toggle theme">◐</button>
-      <button class="icon" id="helpBtn" title="shortcuts (?)" aria-label="shortcuts">?</button>
+      <input id="filter" type="search" placeholder="Filter cards — title, label or path  /" aria-label="filter cards" autocomplete="off">
+      <span id="cardSelWrap"></span>
+      <span id="noteSelWrap"></span>
+      <span id="sendWrap"></span>
+      <button id="digestBtn" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
+      <button class="icon ghost" id="theme" data-tip="Toggle light and dark (t)" aria-label="toggle theme">◐</button>
+      <button class="icon ghost" id="helpBtn" data-tip="Keyboard shortcuts (?)" aria-label="shortcuts">?</button>
     </div>
   </div>
   <div class="summary" id="summary"></div>
@@ -456,12 +716,10 @@
 <div class="shell">
   <aside class="side" id="side" aria-label="context sidebar"></aside>
   <main id="lanes" aria-label="board columns"></main>
-</div>
-<div id="state"></div>
-
-<div id="scrim" onclick="closeDrawer()"></div>
-<aside id="drawer" aria-label="card detail">
+  <aside id="drawer" aria-label="open cards">
+  <div class="dgrip" id="dGrip" role="separator" aria-orientation="vertical" aria-label="resize panel" tabindex="0"></div>
   <div class="dtint" id="dTint"></div>
+  <div class="dtabs" id="dTabs" role="tablist" aria-label="open cards"></div>
   <div class="dhead">
     <span class="lane" id="dLane"></span>
     <span class="sp"></span>
@@ -469,16 +727,18 @@
       <button class="icon" id="dPrev" title="previous card (k)" aria-label="previous card">↑</button>
       <button class="icon" id="dNext" title="next card (j)" aria-label="next card">↓</button>
     </div>
-    <button class="icon" onclick="closeDrawer()" title="close (Esc)" aria-label="close">✕</button>
+    <button class="icon" id="dCollapse" data-tip="Collapse the panel to its tab rail (Esc)" aria-label="collapse panel">»</button>
+    <button class="icon" id="dClose" data-tip="Close this tab (⌘W)" aria-label="close tab">✕</button>
   </div>
   <div class="dbody">
     <div>
       <h3 class="dtitle" id="dTitle"></h3>
+      <div class="ddesc" id="dDesc"></div>
       <div class="dpills" id="dPills"></div>
       <div class="dsub" id="dSub"></div>
     </div>
     <div class="grp" id="dOtherWrap">
-      <div class="ghead">Your other notes<span class="gsp"></span><span class="gval" id="dOtherCount"></span></div>
+      <div class="ghead">Your notes<span class="gsp"></span><span class="gval" id="dOtherCount"></span></div>
       <div class="notestack" id="dOther"></div>
     </div>
     <div class="grp" id="dClaimWrap">
@@ -512,7 +772,7 @@
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
     <div class="conflict" id="dConflict"></div>
-    <textarea id="dNote" placeholder="Write for the agent…"></textarea>
+    <textarea id="dNote" placeholder="Leave a note. The agent reads it on its next pickup, so write it the way you would say it."></textarea>
     <div class="hint" id="dLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
     <div class="parsed" id="dTags"></div>
     <div class="cbar">
@@ -520,7 +780,30 @@
       <button class="primary" id="dSave">Save note <span class="k">⌘↵</span></button>
     </div>
   </div>
-</aside>
+  </aside>
+</div>
+<div id="state"></div>
+<div id="bpick" role="dialog" aria-modal="true" aria-label="switch board"><div class="bpbox">
+  <input id="bpq" type="search" placeholder="Type a board name or path" aria-label="find a board" autocomplete="off">
+  <div class="bplist" id="bplist" role="listbox"></div>
+  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span></div>
+</div></div>
+<div id="pop" role="dialog" aria-label="note editor">
+  <div class="ph">
+    <span class="pt" id="popTitle"></span>
+    <button type="button" class="icon ghost" id="popPick" data-tip="Add this note to the selection you send an agent" aria-label="select note">○</button>
+    <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close">✕</button>
+  </div>
+  <div class="psub" id="popSub"></div>
+  <textarea id="popNote" placeholder="Write the note here. ⌘↵ saves it."></textarea>
+  <div class="pbar">
+    <span class="pst" id="popSt"></span>
+    <span class="psp"></span>
+    <button type="button" class="danger" id="popDel">Delete</button>
+    <button type="button" class="accent" id="popSave">Save <span class="k">⌘↵</span></button>
+  </div>
+</div>
+<div id="tip" role="tooltip" aria-hidden="true"></div>
 
 <div id="toast" role="status"></div>
 <div id="docmodal" role="dialog" aria-modal="true" aria-label="document preview"><div class="dbox">
@@ -534,15 +817,34 @@
 <div id="help"><div class="box">
   <h3>Keyboard</h3>
   <table>
-    <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card</td></tr>
-    <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open card</td></tr>
-    <tr><td><kbd>n</kbd></td><td>write a note on the open card</td></tr>
+    <tr><td colspan="2" class="grouphead">Move</td></tr>
+    <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the lane</td></tr>
+    <tr><td><kbd>h</kbd> <kbd>l</kbd></td><td>previous / next lane, same row</td></tr>
+    <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open the card in a tab</td></tr>
+    <tr><td><kbd>O</kbd></td><td>open it in a background tab</td></tr>
+    <tr><td><kbd>/</kbd></td><td>filter cards</td></tr>
+    <tr><td><kbd>b</kbd></td><td>switch board · <kbd>B</kbd> the hub</td></tr>
+    <tr><td colspan="2" class="grouphead">Tabs</td></tr>
+    <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>previous / next tab</td></tr>
+    <tr><td><kbd>1</kbd>…<kbd>9</kbd></td><td>jump to that tab</td></tr>
+    <tr><td><kbd>w</kbd></td><td>close this tab</td></tr>
+    <tr><td><kbd>\</kbd></td><td>collapse / expand the panel</td></tr>
+    <tr><td colspan="2" class="grouphead">Notes</td></tr>
+    <tr><td><kbd>J</kbd> <kbd>K</kbd></td><td>walk the note list</td></tr>
+    <tr><td><kbd>enter</kbd> <kbd>e</kbd></td><td>edit the note under the cursor</td></tr>
+    <tr><td><kbd>n</kbd></td><td>start a new note on the draft canvas</td></tr>
+    <tr><td><kbd>d</kbd></td><td>dismiss it · <kbd>u</kbd> undo that</td></tr>
+    <tr><td><kbd>⌘</kbd> <kbd>↵</kbd></td><td>save, and stay where you are</td></tr>
+    <tr><td colspan="2" class="grouphead">Selection</td></tr>
+    <tr><td><kbd>x</kbd></td><td>select the card, or the note under the cursor</td></tr>
+    <tr><td><kbd>X</kbd> <kbd>N</kbd></td><td>card / note select mode</td></tr>
+    <tr><td><kbd>s</kbd></td><td>send the selection to an agent</td></tr>
+    <tr><td><kbd>C</kbd></td><td>clear the whole selection</td></tr>
+    <tr><td colspan="2" class="grouphead">Everything else</td></tr>
     <tr><td><kbd>a</kbd></td><td>write an ask, sorted by the agent</td></tr>
-    <tr><td><kbd>⌘</kbd> <kbd>↵</kbd></td><td>save the note, stay on the card</td></tr>
-    <tr><td><kbd>c</kbd></td><td>copy status digest</td></tr>
-    <tr><td><kbd>t</kbd></td><td>toggle theme</td></tr>
-    <tr><td><kbd>?</kbd></td><td>this help</td></tr>
-    <tr><td><kbd>esc</kbd></td><td>close</td></tr>
+    <tr><td><kbd>c</kbd></td><td>copy status digest · <kbd>t</kbd> theme</td></tr>
+    <tr><td><kbd>⌘</kbd> drag</td><td>pan the board</td></tr>
+    <tr><td><kbd>esc</kbd></td><td>step back out, one layer at a time</td></tr>
     <tr><td colspan="2" class="grouphead">Note tags</td></tr>
     <tr><td><kbd>@me</kbd></td><td>note to self — the agent isn't nagged</td></tr>
     <tr><td><kbd>!now</kbd></td><td>agent acts on next pickup</td></tr>
@@ -581,6 +883,27 @@ function tailPath(s, max = 26) {
   if (b > -1 && b <= 12) cut = cut.slice(b); // start at a segment boundary when one is near
   return "…" + cut;
 }
+// What a card calls itself on the board face. The agent supplies `titleBrief`
+// (capped at 100 chars by the CLI); a harvested card has only the doc line it
+// came from, which is routinely a paragraph, so we cut one here rather than
+// show a wall. The full text is never lost — it hovers on the face and reads
+// as the drawer's description.
+const BRIEF_MAX = 100;
+function briefOf(c) {
+  if (c.titleBrief) return c.titleBrief;
+  const t = (c.title || "").trim();
+  if (t.length <= BRIEF_MAX) return t;
+  const head = t.slice(0, BRIEF_MAX + 1);
+  // prefer a real clause end, then a word end, before falling back to a hard cut
+  const stop = Math.max(head.lastIndexOf(". "), head.lastIndexOf(" — "), head.lastIndexOf(" – "), head.lastIndexOf(": "), head.lastIndexOf(" · "));
+  if (stop > 40) return t.slice(0, stop).trim() + "…";
+  const sp = head.lastIndexOf(" ");
+  return (sp > 40 ? t.slice(0, sp) : t.slice(0, BRIEF_MAX)).trim() + "…";
+}
+// the description under the drawer title: the untrimmed original, shown only
+// when it says more than the heading already does
+const descOf = (c) => { const t = (c.title || "").trim(); return t && t !== briefOf(c) ? t : ""; };
+
 let data = null, flat = [], sel = -1, openId = null, openNoteId = null, dirty = false, lastPayload = "";
 
 const $ = (id) => document.getElementById(id);
@@ -594,6 +917,271 @@ $("theme").onclick = toggleTheme;
 function toast(msg, ms = 1900, kind = "") { const t = $("toast"); t.textContent = msg;
   t.className = kind === "err" ? "err" : ""; t.setAttribute("role", kind === "err" ? "alert" : "status");
   t.style.display = "block"; setTimeout(() => (t.style.display = "none"), ms); }
+
+// ---------- selection ----------
+// Two independent sets, mirroring the server's selection.json. Cards and notes
+// answer different questions ("work on these" vs "read these"), so they are
+// never merged — the same card can be unticked while one of its notes is not.
+let selMode = false, noteSelMode = false;
+const picked = () => data?.selection ?? { cards: [], notes: [] };
+const nKey = (cardId, noteId) => `${cardId}:${noteId}`;
+const isPickedCard = (id) => picked().cards.includes(id);
+const isPickedNote = (cardId, noteId) => picked().notes.includes(nKey(cardId, noteId));
+
+const NOTE_ICON = `<svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 2.5h8a.5.5 0 0 1 .5.5v6L8 12H3a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5Z" stroke="currentColor" stroke-width="1.2"/><path d="M11.5 9H8.5v3" stroke="currentColor" stroke-width="1.2"/></svg>`;
+const PICK_ICON = `<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.5 5.5 10.5 11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const SEND_ICON = `<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 1.5 6.5 7.5M12.5 1.5 8.5 12.5 6.5 7.5 1.5 5.5 12.5 1.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+
+// Optimistic, then reconciled: a tick has to feel instant, but the server owns
+// the file, so the response replaces the guess rather than sitting on top of it.
+async function toggleSel(kind, ref, on) {
+  const list = kind === "note" ? picked().notes : picked().cards;
+  const at = list.indexOf(ref);
+  if (on === undefined) on = at < 0;
+  if (on && at < 0) list.push(ref); else if (!on && at >= 0) list.splice(at, 1);
+  renderPicked();
+  try {
+    const res = await fetch("/api/select", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, kind, ref, on }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    if (data) data.selection = await res.json();
+    lastPayload = "";
+    renderPicked();
+  } catch (e) { toast(`Selection failed: ${e.message}`, 3500, "err"); lastPayload = ""; load(); }
+}
+async function clearSel(which) {
+  try {
+    const res = await fetch("/api/select", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, clear: which }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    if (data) data.selection = await res.json();
+    lastPayload = ""; renderPicked();
+  } catch (e) { toast(`Clear failed: ${e.message}`, 3500, "err"); }
+}
+async function sendToAgent() {
+  try {
+    const res = await fetch("/api/send", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug }) });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || res.status);
+    // an honest report: nobody live is a real outcome, not a failure, because
+    // the selection is on disk and the next session's start line will say so
+    // three outcomes, three sentences: delivered · nobody home · actually broken
+    toast(out.sent.length
+      ? `Sent ${out.cards} card(s), ${out.notes} note(s) to ${out.sent.join(", ")}`
+      : out.reason
+        ? `Could not deliver — ${out.reason}. The selection is saved; the next agent will still be told.`
+        : `Nobody is live here — the selection is saved and the next agent will be told`,
+      out.reason ? 6000 : 4200, out.reason ? "err" : "");
+  } catch (e) { toast(`Send failed: ${e.message}`, 4000, "err"); }
+}
+
+// Repaint only what a tick changes. A full render would rebuild the rail and
+// steal the caret, and this fires on every checkbox click.
+function renderPicked() {
+  const p = picked();
+  document.querySelectorAll(".card").forEach((el) => {
+    const on = p.cards.includes(el.dataset.id);
+    el.classList.toggle("picked", on);
+    const box = el.querySelector(".cbox");
+    if (box) { box.innerHTML = on ? PICK_ICON : ""; box.setAttribute("aria-checked", String(on)); }
+  });
+  document.querySelectorAll(".chip.note").forEach((ch) => {
+    const on = p.notes.includes(ch.dataset.key);
+    ch.classList.toggle("picked", on);
+    const bx = ch.querySelector(".cbx");
+    if (bx) bx.textContent = on ? "✓" : "";
+  });
+  renderSelBars();
+}
+
+function selBar(kind) {
+  const p = picked();
+  const n = kind === "note" ? p.notes.length : p.cards.length;
+  const mode = kind === "note" ? noteSelMode : selMode;
+  const label = kind === "note" ? "notes" : "cards";
+  if (!mode) {
+    const b = document.createElement("button");
+    b.className = "sel-toggle" + (n ? " on" : "");
+    b.dataset.tip = `Pick ${label} to push at an agent. Ticking never changes the board — it says "this is what I mean".`;
+    b.innerHTML = `${kind === "note" ? NOTE_ICON : PICK_ICON}<span>Select ${label}${n ? ` · ${n}` : ""}</span>`;
+    b.onclick = () => { if (kind === "note") noteSelMode = true; else selMode = true; applyModes(); };
+    return b;
+  }
+  const bar = document.createElement("span");
+  bar.className = "selbar";
+  const count = document.createElement("span");
+  count.className = "sc"; count.textContent = `${n} ${label.slice(0, -1)}${n === 1 ? "" : "s"}`;
+  const clear = document.createElement("button");
+  clear.className = "ghost"; clear.textContent = "Clear"; clear.disabled = !n;
+  clear.dataset.tip = `Deselect every ${label.slice(0, -1)}`;
+  clear.onclick = () => clearSel(kind === "note" ? "notes" : "cards");
+  const exit = document.createElement("button");
+  exit.className = "ghost icon"; exit.textContent = "✕"; exit.setAttribute("aria-label", `exit ${label} selection`);
+  exit.dataset.tip = "Leave select mode. The selection itself is kept.";
+  exit.onclick = () => { if (kind === "note") noteSelMode = false; else selMode = false; applyModes(); };
+  const div = document.createElement("span"); div.className = "sdiv";
+  bar.append(count, div, clear, exit);
+  return bar;
+}
+// The send button belongs to the selection, not to either mode: you can tick
+// cards, leave select mode, tick notes, and still send both together.
+function sendBtn() {
+  const p = picked(), n = p.cards.length + p.notes.length;
+  if (!n) return document.createTextNode("");
+  const b = document.createElement("button");
+  b.className = "accent";
+  b.innerHTML = `${SEND_ICON}<span>Send ${n} to agent</span>`;
+  b.dataset.tip = "Push everything selected — cards and notes — at whichever agent is live in this project, in full. If nobody is live it is saved and the next one is told.";
+  b.onclick = sendToAgent;
+  return b;
+}
+function renderSelBars() {
+  $("cardSelWrap").replaceChildren(selBar("card"));
+  $("noteSelWrap").replaceChildren(selBar("note"));
+  $("sendWrap").replaceChildren(sendBtn());
+}
+function applyModes() {
+  document.body.classList.toggle("selmode", selMode);
+  document.body.classList.toggle("notesel", noteSelMode);
+  renderChipsMode();
+  renderSelBars();
+  renderPicked();
+}
+// chips swap their icon for a checkbox in note-select mode; nothing else moves
+function renderChipsMode() {
+  document.querySelectorAll(".chip.note").forEach((ch) => {
+    const ic = ch.querySelector(".ci");
+    if (ic) ic.innerHTML = noteSelMode ? `<span class="cbx"></span>` : NOTE_ICON;
+  });
+}
+
+// ---------- note popover ----------
+// Editing a note should not cost you the board. The popover is anchored to the
+// chip that opened it and sized off that card, so the writing surface is
+// meaningfully bigger than the preview that spawned it.
+let popCard = null, popNote = null, popDirty = false;
+function openPop(cardId, noteId, anchorEl) {
+  const c = data.board.cards.find((x) => x.id === cardId);
+  if (!c) return;
+  const list = notesOf(data.notes[cardId]);
+  const at = list.findIndex((n) => n.id === noteId);
+  popCard = cardId; popNote = noteId; popDirty = false;
+  const pop = $("pop");
+  $("popTitle").textContent = at >= 0 ? `Note #${at + 1}` : "New note";
+  $("popSub").textContent = briefOf(c);
+  $("popNote").value = at >= 0 ? list[at].body : "";
+  $("popSt").textContent = at >= 0 ? `saved ${ago(Date.parse(list[at].updatedAt))} ago` : "unsaved";
+  $("popSt").className = "pst" + (at >= 0 ? "" : " unsaved");
+  $("popDel").style.display = at >= 0 ? "" : "none";
+  syncPopPick();
+  // 1.5x the card it belongs to, clamped so it always fits the window
+  const cardEl_ = anchorEl.closest(".card") ?? anchorEl;
+  const r = cardEl_.getBoundingClientRect();
+  pop.style.width = `${Math.min(Math.round(r.width * 1.5), innerWidth - 32)}px`;
+  pop.style.height = `${Math.min(Math.round(r.height * 1.5), innerHeight - 32)}px`;
+  pop.classList.add("on");
+  const pr = pop.getBoundingClientRect();
+  pop.style.left = `${Math.min(Math.max(12, r.left), Math.max(12, innerWidth - pr.width - 12))}px`;
+  pop.style.top = `${Math.min(Math.max(12, r.top), Math.max(12, innerHeight - pr.height - 12))}px`;
+  $("popNote").focus();
+}
+function closePop() {
+  if (popDirty) toast("Note not saved — reopen the chip to finish it", 3000);
+  popCard = null; popNote = null; popDirty = false;
+  $("pop").classList.remove("on");
+}
+function syncPopPick() {
+  const on = popCard && popNote && isPickedNote(popCard, popNote);
+  $("popPick").classList.toggle("on", !!on);
+  $("popPick").innerHTML = on ? PICK_ICON : "○";
+  $("popPick").dataset.tip = on ? "Selected — click to deselect" : "Add this note to the selection you send an agent";
+}
+
+// ---------- tooltips ----------
+// Delegated, so a re-render never orphans a listener, and driven by data-tip
+// rather than title= so nothing double-fires. data-tiph is an optional heading.
+const TIP_DELAY = 260;
+let tipTimer = null, tipFor = null;
+function placeTip(el) {
+  const t = $("tip"), r = el.getBoundingClientRect();
+  t.style.display = "block";
+  const b = t.getBoundingClientRect();
+  // below by default, above when the bottom would clip; clamped to the viewport
+  let top = r.bottom + 9, below = true;
+  if (top + b.height > innerHeight - 8) { top = Math.max(8, r.top - b.height - 9); below = false; }
+  const left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - b.width - 8));
+  t.style.top = `${top}px`;
+  t.style.left = `${left}px`;
+  t.classList.toggle("below", below); t.classList.toggle("above", !below);
+  // the arrow tracks the anchor's centre, clamped inside the panel's corners
+  const ax = Math.min(Math.max(10, r.left + r.width / 2 - left - 4.5), Math.max(10, b.width - 19));
+  t.style.setProperty("--ax", `${ax}px`);
+  t.classList.add("on"); t.setAttribute("aria-hidden", "false");
+}
+function showTip(el) {
+  const body = el.dataset.tip; if (!body) return;
+  const t = $("tip");
+  t.replaceChildren();
+  if (el.dataset.tiph) { const h = document.createElement("b"); h.className = "tiph"; h.textContent = el.dataset.tiph; t.append(h); }
+  t.append(document.createTextNode(body));
+  tipFor = el; placeTip(el);
+}
+function hideTip() {
+  clearTimeout(tipTimer); tipFor = null;
+  const t = $("tip"); t.classList.remove("on"); t.setAttribute("aria-hidden", "true");
+  setTimeout(() => { if (!tipFor) t.style.display = "none"; }, 120);
+}
+document.addEventListener("pointerover", (e) => {
+  const el = e.target.closest?.("[data-tip]");
+  if (!el || el === tipFor) return;
+  clearTimeout(tipTimer);
+  tipTimer = setTimeout(() => showTip(el), TIP_DELAY);
+});
+document.addEventListener("pointerout", (e) => {
+  const el = e.target.closest?.("[data-tip]");
+  if (el && !el.contains(e.relatedTarget)) hideTip();
+});
+addEventListener("scroll", hideTip, true);
+addEventListener("keydown", (e) => { if (e.key === "Escape") hideTip(); });
+
+// ---------- ⌘-drag panning ----------
+// The board scrolls sideways now that lanes floor at 400px, and a trackpad
+// horizontal scroll is a poor way to cross six lanes. Held ⌘ (or ctrl) turns
+// the whole board into a grab surface; the modifier is what keeps this from
+// eating card clicks, and capture-phase click suppression handles the case
+// where a drag ends on top of a card.
+let panFrom = null, panned = false;
+const boardMain = () => document.querySelector("main");
+const panCursor = (on) => boardMain()?.classList.toggle("pangrab", on && !panFrom);
+addEventListener("keydown", (e) => { if (e.key === "Meta" || e.key === "Control") panCursor(true); });
+addEventListener("keyup", (e) => { if (e.key === "Meta" || e.key === "Control") panCursor(false); });
+addEventListener("blur", () => panCursor(false));
+addEventListener("pointerdown", (e) => {
+  if (!(e.metaKey || e.ctrlKey) || e.button !== 0) return;
+  const m = boardMain(); if (!m || !m.contains(e.target)) return;
+  panFrom = { x: e.clientX, y: e.clientY, left: m.scrollLeft, top: m.scrollTop };
+  panned = false;
+  m.classList.add("panning");
+  try { m.setPointerCapture?.(e.pointerId); } catch {} // synthetic pointers have no active id
+  e.preventDefault();
+});
+addEventListener("pointermove", (e) => {
+  if (!panFrom) return;
+  const m = boardMain(); if (!m) return;
+  const dx = e.clientX - panFrom.x, dy = e.clientY - panFrom.y;
+  if (Math.abs(dx) > 3 || Math.abs(dy) > 3) panned = true;
+  m.scrollLeft = panFrom.left - dx;
+  m.scrollTop = panFrom.top - dy;
+});
+addEventListener("pointerup", (e) => {
+  if (!panFrom) return;
+  const m = boardMain(); m?.classList.remove("panning");
+  try { m?.releasePointerCapture?.(e.pointerId); } catch {}
+  panFrom = null;
+  // a drag that moved swallows the click it would otherwise deliver to a card
+  if (panned) { const eat = (ev) => { ev.stopPropagation(); ev.preventDefault(); }; addEventListener("click", eat, { capture: true, once: true }); }
+});
 
 const VISIT_KEY = `kanban-visit-${slug}`;
 let anchor = +localStorage.getItem(VISIT_KEY) || 0;
@@ -749,22 +1337,27 @@ function cardEl(c) {
   const statHTML = statParts.length ? `<span class="stat">${statParts.join("")}</span>` : "";
   el.innerHTML =
     (hue !== null ? '<span class="stripe"></span>' : "") +
-    (since(c.updatedAt) && !isArchive ? '<span class="newdot" title="changed since your last visit"></span>' : "") +
+    (since(c.updatedAt) && !isArchive ? '<span class="newdot" data-tip="changed since your last visit"></span>' : "") +
+    `<span class="cbox" role="checkbox" aria-checked="false" aria-label="select this card"></span>` +
     `<div class="title"></div>` +
     (line ? `<div class="note">${markTokens(line)}</div>` : "") +
+    `<div class="chips"></div>` +
     `<div class="pills"><span class="ident">
-      ${note && !line ? `<span class="pill mono" title="${nt.me ? "note to self" : "has a note"}">${nt.me ? "@me note" : "note"}</span>` : ""}
       ${c.tag ? '<span class="pill mono xtag" title="source tag"></span>' : ""}
       ${c.heading && !echoesLane(c.heading, c.lane) ? `<span class="pill label l${hue}"><i class="sw"></i><span class="nm"></span></span>` : ""}
       </span>${statHTML}
     </div>` +
     (needs && isArchive ? `<div class="pills keep"><span class="pill needs" title="graded, but wants your own testing">Needs you</span></div>` : "") +
     `<div class="foot"><span class="src"></span>` +
-    (hiddenNotes ? `<span class="pill quiet notecount" title="this card holds ${allNotes.length} notes">+${hiddenNotes} note${hiddenNotes > 1 ? "s" : ""}</span>` : "") +
     (note && !line && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
       ? `<span class="waiting" title="written after the agent last read this board's notes">awaiting pickup</span>` : "") +
     `<span class="age"></span></div>`;
-  el.querySelector(".title").textContent = c.title;
+  const titleEl = el.querySelector(".title");
+  titleEl.textContent = briefOf(c);
+  // our tooltip, not title=: the face clamps at two lines and the real title
+  // can be thousands of characters, which is not a shape native tooltips read
+  titleEl.dataset.tip = c.title;
+  titleEl.dataset.tiph = "full title";
   if (c.tag) el.querySelector(".xtag").textContent = c.tag; // "(#7)" / "OWNER REMINDER" prefix from the doc
   if (c.heading && !echoesLane(c.heading, c.lane)) {
     const p = el.querySelector(".pill.label");
@@ -772,8 +1365,41 @@ function cardEl(c) {
     p.title = "label · " + c.heading;
   }
   if (c.staleReason) el.querySelector(".pill.why").textContent = c.staleReason;
+  // One chip per note, numbered. #n is the card's own numbering and it is what
+  // makes a note referable — "note #2" means something to a human reading the
+  // board and to an agent reading `kanban.sh selected`.
+  const chipRow = el.querySelector(".chips");
+  if (!allNotes.length) chipRow.remove();
+  else allNotes.forEach((n, i) => {
+    const tags = parseTags(n.body);
+    const ch = document.createElement("button");
+    ch.type = "button";
+    ch.className = "chip note" + (tags.me ? "" : (Date.parse(n.updatedAt) > (data.ackTs || 0) ? " unread" : ""))
+      + (isPickedNote(c.id, n.id) ? " picked" : "");
+    ch.dataset.key = nKey(c.id, n.id);
+    ch.dataset.tip = n.body;
+    ch.dataset.tiph = `note #${i + 1}${tags.me ? " · @me" : ""}`;
+    const ic = document.createElement("span");
+    ic.className = "ci";
+    ic.innerHTML = noteSelMode ? `<span class="cbx">${isPickedNote(c.id, n.id) ? "✓" : ""}</span>` : NOTE_ICON;
+    const lbl = document.createElement("span");
+    lbl.textContent = `note #${i + 1}`;
+    ch.append(ic, lbl);
+    // the chip is its own control: a click here is never a click on the card
+    ch.onclick = (e) => {
+      e.stopPropagation();
+      if (noteSelMode) toggleSel("note", nKey(c.id, n.id));
+      else openPop(c.id, n.id, ch);
+    };
+    chipRow.appendChild(ch);
+  });
+  const box = el.querySelector(".cbox");
+  box.onclick = (e) => { e.stopPropagation(); toggleSel("card", c.id); };
+  box.onkeydown = (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); e.stopPropagation(); toggleSel("card", c.id); } };
+  if (isPickedCard(c.id)) { el.classList.add("picked"); box.innerHTML = PICK_ICON; box.setAttribute("aria-checked", "true"); }
+
   const srcEl = el.querySelector(".src");
-  srcEl.textContent = tailPath(sp); srcEl.title = sp;
+  srcEl.textContent = tailPath(sp); srcEl.dataset.tip = sp;
   el.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
   if (isArchive) el.title = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
   el.onclick = () => openDrawer(c.id);
@@ -810,47 +1436,104 @@ async function copyDigest() {
 }
 $("digestBtn").onclick = copyDigest;
 
+// Three registers, top to bottom and left to right: what wants you, what the
+// board is doing, how fresh the mirror is. The delta is a second line because
+// it is news rather than state — it appears when you have been away and leaves
+// when you clear it.
+const SB_ICON = {
+  needs: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1.8 12.6 11.6H1.4L7 1.8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 5.6v2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.8" r=".75" fill="currentColor"/></svg>`,
+  motion: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.1V7l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  blocked: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.2"/><path d="M3.6 3.6 10.4 10.4" stroke="currentColor" stroke-width="1.2"/></svg>`,
+  settled: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.2"/><path d="M4.4 7.2 6.3 9.1 9.7 5.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  sync: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M11.8 6A4.9 4.9 0 0 0 3.1 4.2M2.2 8a4.9 4.9 0 0 0 8.7 1.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M11.9 2.6V6H8.6M2.1 11.4V8h3.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  delta: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 11.5h10M7 2.5 11.5 11.5h-9L7 2.5Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
+  review: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1.5 7S3.6 3.2 7 3.2 12.5 7 12.5 7 10.4 10.8 7 10.8 1.5 7 1.5 7Z" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="1.6" stroke="currentColor" stroke-width="1.2"/></svg>`,
+};
+
+function statChip({ icon, n, label, filter, cls = "", tip }) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "stat-chip " + cls + (filter && filterText === filter ? " on" : "");
+  b.innerHTML = `<span class="sg">${SB_ICON[icon] ?? ""}</span><span><b>${n}</b> ${label}</span>`;
+  if (tip) b.dataset.tip = tip;
+  if (filter) b.onclick = () => setFilter(filterText === filter ? "" : filter);
+  else b.tabIndex = -1;
+  return b;
+}
+
 function renderSummary() {
   const cards = data.board.cards;
   const by = (k) => cards.filter((c) => c.lane === k);
   const open = cards.length - by("done").length - by("stale").length;
   const nblk = by("blocked").length;
   const needs = cards.filter((c) => c.verify?.needsHuman).length;
-  const sep = '<span class="dotsep"></span>';
-  // the hub said "N needs you"; the count leads this sentence and clicking it
-  // scopes the board to those cards, closing that handoff
-  const needsOn = filterText === "needs-you";
-  $("summary").innerHTML =
-    (needs ? `<button type="button" class="needsyou${needsOn ? " on" : ""}" id="needsBtn" title="${needsOn ? "show all cards again" : "show only the cards waiting on you"}"><b>${needs}</b> need${needs > 1 ? "" : "s"} you</button>${sep}` : "") +
-    `<span><b>${open}</b> in motion${nblk ? `, <span class="blocked"><b>${nblk}</b> of them blocked</span>` : ""}</span>${sep}` +
-    `<span><b>${cards.length - open}</b> settled</span>${sep}` +
-    `<span>synced ${data.board.syncedAt ? ago(Date.parse(data.board.syncedAt)) + " ago" : "never"}</span>` +
-    deltaClause();
-  const d = $("deltaDismiss");
-  if (d) d.onclick = () => { anchor = 0; render(); };
-  const nb = $("needsBtn");
-  if (nb) nb.onclick = () => setFilter(filterText === "needs-you" ? "" : "needs-you");
+  const syncedAt = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
+  const staleSync = syncedAt && Date.now() - syncedAt > 36e5 * 6;
+
+  const band = document.createElement("div");
+  band.className = "sband";
+  // 1. what wants you. Loud, first, and gone entirely when the answer is none.
+  if (needs) band.append(statChip({ icon: "needs", n: needs, label: `need${needs > 1 ? "" : "s"} you`,
+    filter: "needs-you", cls: "warn",
+    tip: "The agent graded these but asked you to test them yourself. Press to show only those." }));
+  // 2. what the board is doing. Quiet, and every number is a filter.
+  band.append(statChip({ icon: "motion", n: open, label: "in motion", filter: "is:open",
+    tip: "Cards not yet done or stale" }));
+  if (nblk) band.append(statChip({ icon: "blocked", n: nblk, label: "blocked", filter: "is:blocked", cls: "warn",
+    tip: "Cards the agent stopped on. Open one to see what it is waiting for." }));
+  band.append(statChip({ icon: "settled", n: cards.length - open, label: "settled", filter: "is:settled",
+    tip: "Done and stale cards" }));
+  // 3. how fresh this is. Dimmest, unless it has gone stale, which is a warning.
+  band.append(statChip({ icon: "sync", n: "", label: syncedAt ? `synced ${ago(syncedAt)} ago` : "never synced",
+    cls: "mute" + (staleSync || !syncedAt ? " stale" : ""),
+    tip: staleSync || !syncedAt
+      ? "This mirror is old, so the board may not match your docs. Re-harvest with: kanban.sh sync"
+      : "When the board last re-read your docs" }));
+
+  $("summary").replaceChildren(band, ...deltaRow());
 }
 
-// returns the "since your last visit" clause appended to the summary sentence
-function deltaClause() {
-  if (anchor <= 0 || !data) return "";
+// What changed while you were away, as pressable chips. Each one filters to
+// exactly the cards it counted, which is the whole reason to show a number.
+function deltaRow() {
+  if (anchor <= 0 || !data) return [];
   const cards = data.board.cards;
   const chg = cards.filter((c) => since(c.updatedAt));
   const doneSince = chg.filter((c) => c.lane === "done").length;
   const blockedSince = chg.filter((c) => c.lane === "blocked").length;
-  const newSince = chg.filter((c) => since(c.createdAt)).length;
+  const newSince = cards.filter((c) => since(c.createdAt)).length;
+  const moved = chg.length - doneSince - blockedSince - chg.filter((c) => since(c.createdAt)).length;
   const reviewMe = cards.filter((c) => parseTags(data.notes[c.id]?.note).review).length;
-  if (!chg.length && !reviewMe) return "";
-  const bits = [];
-  if (doneSince) bits.push(`<b>${doneSince}</b> done`);
-  if (blockedSince) bits.push(`<span class="blocked"><b>${blockedSince}</b> newly blocked</span>`);
-  if (newSince) bits.push(`<b>${newSince}</b> new`);
-  const other = chg.length - doneSince - blockedSince - newSince;
-  if (other > 0) bits.push(`<b>${other}</b> moved`);
-  if (reviewMe) bits.push(`<b>${reviewMe}</b> waiting on your review`);
-  return `<span class="dotsep"></span><span class="delta">since your last visit ${ago(anchor)} ago — ${bits.join(", ")}` +
-    ` <button class="linkish" id="deltaDismiss" title="clear the markers">clear</button></span>`;
+  if (!chg.length && !reviewMe) return [];
+
+  const row = document.createElement("div");
+  row.className = "sdelta";
+  const label = document.createElement("span");
+  label.className = "dlabel";
+  label.innerHTML = `<span class="sg">${SB_ICON.delta}</span><span>since your last visit ${ago(anchor)} ago</span>`;
+  row.append(label);
+  const chip = (n, text, filter, cls = "") => {
+    if (!n) return;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "dchip " + cls + (filterText === filter ? " on" : "");
+    b.innerHTML = `<b>${n}</b> ${text}`;
+    b.dataset.tip = `Show only these ${n === 1 ? "card" : "cards"}`;
+    b.onclick = () => setFilter(filterText === filter ? "" : filter);
+    row.append(b);
+  };
+  chip(doneSince, "done", "since:done");
+  chip(blockedSince, "newly blocked", "since:blocked", "amber");
+  chip(newSince, "new", "since:new");
+  chip(moved > 0 ? moved : 0, "moved", "since:moved");
+  chip(reviewMe, "waiting on your review", "review-me");
+  const clear = document.createElement("button");
+  clear.type = "button"; clear.className = "dchip";
+  clear.textContent = "mark all seen";
+  clear.dataset.tip = "Drop the since-markers. The board stops calling these out until your next visit.";
+  clear.onclick = () => { anchor = 0; localStorage.setItem(VISIT_KEY, String(Date.now())); render(); };
+  row.append(clear);
+  return [row];
 }
 
 function renderStale() {
@@ -913,6 +1596,16 @@ async function postItem(body) {
   return out;
 }
 
+// One glyph per rail action. Drawn rather than typed so they sit on the same
+// optical weight as the rest of the board's iconography.
+const RAIL_ICON = {
+  here: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 12.5S2.5 8.8 2.5 5.9a4.5 4.5 0 0 1 9 0C11.5 8.8 7 12.5 7 12.5Z" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="5.8" r="1.5" fill="currentColor"/></svg>`,
+  star: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="m7 1.8 1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 10l-3.2 1.7.6-3.6L1.8 5.6l3.6-.5L7 1.8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
+  now: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7.8 1.5 3 7.8h3.3l-.8 4.7L10.5 6H7.2l.6-4.5Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
+  pin: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M8.6 1.6 12.4 5.4 10.6 6l-.4 3.1-5.3-5.3L8 3.4l.6-1.8ZM4.9 3.8 1.9 12l8.2-3" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
+  "✕": `<svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="m3.6 3.6 6.8 6.8M10.4 3.6l-6.8 6.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`,
+};
+
 function itemEl(it) {
   const el = document.createElement("article");
   el.className = "item" + (it.landing ? " landed" : "") + (it.starred ? " starred" : "");
@@ -930,7 +1623,7 @@ function itemEl(it) {
     if (it.landedCard) {
       const a = document.createElement("a");
       a.href = "#"; a.textContent = it.landedCard;
-      a.title = "open the card this landed on";
+      a.dataset.tip = "Open the card this ask turned into";
       a.onclick = (e) => { e.preventDefault(); openDrawer(it.landing.cardId); };
       land.append(a);
     }
@@ -961,7 +1654,12 @@ function itemEl(it) {
   // floor leaves a dead row on screen with no way to tell what happened.
   const btn = (label, title, cls, fn) => {
     const b = document.createElement("button");
-    b.type = "button"; b.textContent = label; b.title = title; b.className = cls;
+    b.type = "button";
+    // the glyph carries the action, the tooltip carries the sentence
+    const ico = RAIL_ICON[label];
+    if (ico) { b.innerHTML = ico; b.setAttribute("aria-label", title); }
+    else b.textContent = label;
+    b.dataset.tip = title; b.className = cls;
     b.onclick = async () => {
       b.disabled = true;
       try { await fn(); }
@@ -1023,7 +1721,7 @@ function railEl() {
   const box = document.createElement("div");
   box.className = "railbox";
   const ta = document.createElement("textarea");
-  ta.placeholder = "Write anything. The agent sorts it.";
+  ta.placeholder = "Type anything for the agent. It gets sorted into a card for you — no need to say where it goes.";
   ta.value = itemDraft;
   ta.setAttribute("aria-label", "write an ask");
   const bar = document.createElement("div");
@@ -1065,7 +1763,7 @@ function railEl() {
   fbar.className = "railfilt";
   for (const [key, label, tip] of FILT) {
     const b = document.createElement("button");
-    b.type = "button"; b.textContent = label; b.title = tip;
+    b.type = "button"; b.textContent = label; b.dataset.tip = tip;
     b.className = railScope === key ? "on" : "";
     b.onclick = () => { railScope = key; localStorage.setItem(`kanban-railscope-${slug}`, key); render(); };
     fbar.appendChild(b);
@@ -1087,7 +1785,7 @@ function railEl() {
   } else if (!shown.length) {
     const e = document.createElement("div");
     e.className = "empty-col";
-    e.textContent = "Nothing yet. Anything you write here reaches the agent.";
+    e.textContent = "Nothing here yet. Anything you type above reaches the agent on its next pickup.";
     list.appendChild(e);
   } else shown.forEach((i) => list.appendChild(itemEl(i)));
   wrap.appendChild(list);
@@ -1098,7 +1796,7 @@ function railEl() {
     const b = document.createElement("button");
     b.type = "button";
     b.textContent = showArchived ? `hide ${archived.length} archived` : `show ${archived.length} archived`;
-    b.title = "sorted more than 7 days ago";
+    b.dataset.tip = "Asks the agent sorted more than 7 days ago";
     b.onclick = () => { showArchived = !showArchived; render(); };
     foot.appendChild(b);
     wrap.appendChild(foot);
@@ -1228,6 +1926,7 @@ function render() {
   renderStale();
   renderLive();
   renderSide();
+  renderSelBars();
 
   flat = [];
   const colEl = (lane) => {
@@ -1247,7 +1946,7 @@ function render() {
     wrap.appendChild(head);
     const list = document.createElement("div");
     list.className = "cards";
-    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">Nothing here</div>`;
+    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this lane</div>`;
     cardsIn.forEach((c) => list.appendChild(cardEl(c)));
     wrap.appendChild(list);
     return wrap;
@@ -1396,7 +2095,7 @@ function loadNoteIntoComposer(id) {
   $("dRestored").className = "restored" + (hasDraft ? " on" : "");
   dirty = hasDraft;
   const at = list.findIndex((n) => n.id === openNoteId);
-  $("dNoteLabel").textContent = at < 0 ? "New note" : list.length > 1 ? `Note ${at + 1} of ${list.length}` : "Your note";
+  $("dNoteLabel").textContent = at < 0 ? "Draft" : `Editing note #${at + 1}`;
   $("dDel").style.display = at < 0 ? "none" : "";   // nothing saved yet is nothing to delete
   $("dSaved").textContent = hasDraft ? "unsaved" : (cur?.updatedAt ? `saved ${ago(Date.parse(cur.updatedAt))} ago` : "");
   $("dSaved").className = "st" + (hasDraft ? " unsaved" : "");
@@ -1415,36 +2114,244 @@ function syncComposer() {
 $("dNote").addEventListener("focus", syncComposer);
 $("dNote").addEventListener("blur", () => setTimeout(syncComposer, 150));
 
+// The saved notes, all of them, plus one draft row that never leaves.
+//
+// The old list hid whichever note the composer held, so the list reshuffled
+// every time you clicked a row and the thing you were editing vanished from
+// the place you clicked it. Now the list is the notes, the composer is a
+// separate surface, and the draft is the last row of the list — a durable
+// canvas that stays until it is saved rather than a state the list falls into.
 function renderOtherNotes(id) {
-  const others = notesOf(data.notes[id]).filter((n) => n.id !== openNoteId);
-  $("dOtherWrap").style.display = others.length ? "" : "none";
-  if (!others.length) { $("dOther").replaceChildren(); return; }
-  $("dOtherCount").textContent = String(others.length);
-  $("dOther").replaceChildren(...others.map((n) => {
+  const list = notesOf(data.notes[id]);
+  const draftText = readDraft(id, null) ?? "";
+  $("dOtherWrap").style.display = "";
+  $("dOtherCount").textContent = list.length ? `${list.length} saved` : "none saved yet";
+
+  const row = (opts) => {
     const b = document.createElement("button");
     b.type = "button";
-    b.title = "edit this note";
-    const body = document.createElement("span");
-    body.className = "nbody"; body.textContent = n.body;
+    b.className = "nrow" + (opts.active ? " active" : "") + (opts.draft ? " draft" : "") + (opts.picked ? " picked" : "");
+    const head = document.createElement("span");
+    head.className = "nhead";
+    const left = document.createElement("span");
+    left.className = "nleft";
+    if (opts.pickable) {
+      const bx = document.createElement("span");
+      bx.className = "npick" + (opts.picked ? " on" : "");
+      bx.innerHTML = opts.picked ? PICK_ICON : "";
+      bx.setAttribute("role", "checkbox");
+      bx.setAttribute("aria-checked", String(!!opts.picked));
+      bx.dataset.tip = opts.picked ? "Selected — click to drop it from the set you send an agent"
+                                   : "Select this note to send it to an agent";
+      bx.onclick = (e) => { e.stopPropagation(); toggleSel("note", opts.key); renderOtherNotes(id); };
+      left.append(bx);
+    }
+    const nm = document.createElement("span");
+    nm.className = "nnum"; nm.textContent = opts.label;
+    left.append(nm);
     const meta = document.createElement("span");
-    meta.className = "nmeta";
-    meta.textContent = `saved ${ago(Date.parse(n.updatedAt))} ago`;
-    b.append(body, meta);
-    b.onclick = () => { flushDraft(); openNoteId = n.id; loadNoteIntoComposer(id); renderOtherNotes(id); $("dNote").focus(); };
+    meta.className = "nmeta"; meta.textContent = opts.meta;
+    head.append(left, meta);
+    const body = document.createElement("span");
+    body.className = "nbody"; body.textContent = opts.body || opts.placeholder;
+    if (!opts.body) body.classList.add("empty");
+    b.append(head, body);
+    b.onclick = opts.onclick;
+    // the clamp shows four lines; the tooltip owes you the rest
+    if (opts.body) { b.dataset.tip = opts.body; b.dataset.tiph = opts.label; }
+    if (opts.noteId) {
+      b.draggable = true;
+      b.dataset.noteId = opts.noteId;
+      b.addEventListener("pointerdown", (e) => { if (e.button === 1) e.preventDefault(); });
+      b.addEventListener("auxclick", (e) => { if (e.button === 1) { e.preventDefault(); dismissNote(id, opts.noteId); } });
+    }
     return b;
+  };
+
+  const rows = list.map((n, i) => row({
+    noteId: n.id,
+    label: `note #${i + 1}`,
+    meta: `saved ${ago(Date.parse(n.updatedAt))} ago`,
+    body: n.body,
+    active: n.id === openNoteId,
+    pickable: true,
+    picked: isPickedNote(id, n.id),
+    key: nKey(id, n.id),
+    onclick: () => { flushDraft(); openNoteId = n.id; loadNoteIntoComposer(id); renderOtherNotes(id); $("dNote").focus(); },
   }));
+  rows.push(row({
+    label: "draft",
+    meta: draftText.trim() ? "unsaved" : "empty",
+    body: openNoteId === null ? $("dNote").value : draftText,
+    placeholder: "Start typing below and it stays here until you save it",
+    active: openNoteId === null,
+    draft: true,
+    onclick: () => { flushDraft(); openNoteId = null; loadNoteIntoComposer(id); renderOtherNotes(id); $("dNote").focus(); },
+  }));
+  $("dOther").replaceChildren(...rows);
+  wireReorder($("dOther"), ".nrow", (order) => saveNoteOrder(id, order), (el) => el.dataset.noteId);
 }
 
-function openDrawer(id, wantNoteId) {
+// Deleting by middle-click needs a way back, because the gesture is easy to
+// fire by accident and a note is the one thing here the human wrote by hand.
+let undoNote = null;
+async function dismissNote(cardId, noteId) {
+  const list = notesOf(data.notes[cardId]);
+  const n = list.find((x) => x.id === noteId);
+  if (!n) return;
+  try {
+    const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId, noteId, note: "" }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    undoNote = { cardId, body: n.body };
+    if (openNoteId === noteId) openNoteId = null;
+    lastPayload = ""; await load();
+    if (openId === cardId) { loadNoteIntoComposer(cardId); renderOtherNotes(cardId); }
+    toast("Note dismissed — press u to undo", 5000);
+  } catch (e) { toast(`Dismiss failed: ${e.message}`, 4000, "err"); }
+}
+async function undoDismiss() {
+  if (!undoNote) { toast("Nothing to undo"); return; }
+  const { cardId, body } = undoNote;
+  try {
+    const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId, noteId: "new", note: body }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    undoNote = null;
+    lastPayload = ""; await load();
+    if (openId === cardId) renderOtherNotes(cardId);
+    toast("Note restored");
+  } catch (e) { toast(`Undo failed: ${e.message}`, 4000, "err"); }
+}
+async function saveNoteOrder(cardId, order) {
+  try {
+    const res = await fetch("/api/note-order", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId, order }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    lastPayload = ""; await load();
+    if (openId === cardId) renderOtherNotes(cardId);
+  } catch (e) { toast(`Reorder failed: ${e.message}`, 4000, "err"); lastPayload = ""; load(); }
+}
+
+// One reorder implementation for both lists. HTML5 drag-and-drop rather than
+// pointer maths: it gives keyboard-independent semantics, a drag image, and an
+// escape-to-cancel for free.
+function wireReorder(container, sel, commit, idOf) {
+  let dragEl = null;
+  const clear = () => container.querySelectorAll(sel).forEach((n) => n.classList.remove("dropbefore", "dropafter", "dragging"));
+  container.querySelectorAll(sel).forEach((el) => {
+    el.addEventListener("dragstart", (e) => {
+      dragEl = el; el.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", idOf(el) ?? "");
+    });
+    el.addEventListener("dragend", () => { dragEl = null; clear(); });
+    el.addEventListener("dragover", (e) => {
+      if (!dragEl || el === dragEl) return;
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      // horizontal strips split left/right, vertical ones top/bottom
+      const after = container.classList.contains("dtabs") && !collapsed()
+        ? e.clientX > r.left + r.width / 2
+        : e.clientY > r.top + r.height / 2;
+      el.classList.remove("dropbefore", "dropafter");
+      el.classList.add(after ? "dropafter" : "dropbefore");
+    });
+    el.addEventListener("dragleave", () => el.classList.remove("dropbefore", "dropafter"));
+    el.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (!dragEl || el === dragEl) return;
+      const after = el.classList.contains("dropafter");
+      clear();
+      const nodes = [...container.querySelectorAll(sel)];
+      const ids = nodes.map(idOf).filter(Boolean);
+      const from = ids.indexOf(idOf(dragEl));
+      let to = ids.indexOf(idOf(el));
+      if (from < 0 || to < 0) return;
+      ids.splice(from, 1);
+      if (from < to) to -= 1;
+      ids.splice(after ? to + 1 : to, 0, idOf(dragEl));
+      commit(ids);
+    });
+  });
+}
+
+// Open cards are tabs, and the panel outlives any one of them. `tabs` is the
+// order they were opened in; `openId` is whichever is showing.
+let tabs = [];
+const initialsOf = (c) => (briefOf(c).replace(/[^\p{L}\p{N} ]/gu, " ").trim().split(/\s+/).slice(0, 2)
+  .map((w) => w[0]).join("") || "?").toUpperCase().slice(0, 2);
+
+function renderTabs() {
+  const strip = $("dTabs");
+  tabs = tabs.filter((id) => data?.board.cards.some((c) => c.id === id));
+  strip.replaceChildren(...tabs.map((id) => {
+    const c = data.board.cards.find((x) => x.id === id);
+    const b = document.createElement("button");
+    b.type = "button"; b.role = "tab";
+    b.className = "dtab" + (id === openId ? " on" : "");
+    b.setAttribute("aria-selected", String(id === openId));
+    b.dataset.tip = c.title; b.dataset.tiph = LANE_NAME[c.lane];
+    const glyph = document.createElement("span");
+    glyph.className = "tg"; glyph.innerHTML = laneIcon(c.lane, 12);
+    const txt = document.createElement("span");
+    txt.className = "tt";
+    // the label swaps with the panel: a name when there is room, initials at 46px
+    txt.textContent = collapsed() ? initialsOf(c) : briefOf(c);
+    const x = document.createElement("span");
+    x.className = "tx"; x.textContent = "✕"; x.title = "close tab";
+    x.onclick = (e) => { e.stopPropagation(); closeTab(id); };
+    b.append(glyph, txt, x);
+    b.draggable = true;
+    b.dataset.tabId = id;
+    b.addEventListener("pointerdown", (e) => { if (e.button === 1) e.preventDefault(); });
+    b.addEventListener("auxclick", (e) => { if (e.button === 1) { e.preventDefault(); closeTab(id); } });
+    b.onclick = () => {
+      // a stub click is "show me this one", which means un-collapsing too
+      if (collapsed()) setCollapsed(false);
+      if (id !== openId) openDrawer(id); else renderTabs();
+    };
+    return b;
+  }));
+  wireReorder(strip, ".dtab", (order) => { tabs = order; renderTabs(); }, (el) => el.dataset.tabId);
+  // keep the tab you are on reachable when the strip has overflowed
+  strip.querySelector(".dtab.on")?.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
+const collapsed = () => $("drawer").classList.contains("collapsed");
+function setCollapsed(on) {
+  $("drawer").classList.toggle("collapsed", on);
+  localStorage.setItem(`kanban-side-${slug}`, on ? "1" : "0");
+  renderTabs();   // labels differ between the two widths
+}
+function closeTab(id) {
+  const at = tabs.indexOf(id);
+  if (at < 0) return;
+  if (id === openId) flushDraft();
+  tabs.splice(at, 1);
+  if (id !== openId) { renderTabs(); return; }
+  const next = tabs[at] ?? tabs[at - 1];
+  if (next) openDrawer(next);
+  else { openId = null; dirty = false; $("drawer").classList.remove("open"); renderTabs(); }
+}
+
+function openDrawer(id, wantNoteId, opts = {}) {
   const c = data.board.cards.find((x) => x.id === id);
   if (!c) return;
   if (openId !== id) flushDraft();
+  // j/k stepping walks the board; it replaces the tab it is standing on rather
+  // than leaving a trail of them behind
+  const at = tabs.indexOf(openId);
+  if (opts.replace && at >= 0) tabs[at] = id;
+  else if (!tabs.includes(id)) tabs.push(id);
   openId = id; dirty = false;
   const i = flat.indexOf(id); if (i >= 0) { sel = i; markSel(); }
   const hue = c.heading ? labelHue(c.heading) : null;
   $("dTint").style.background = hue === null ? "var(--border-2)" : `var(--l${hue})`;
   $("dLane").innerHTML = `${laneIcon(c.lane, 13)}<span>${LANE_NAME[c.lane]}</span>`;
-  $("dTitle").textContent = c.title;
+  $("dTitle").textContent = briefOf(c);
+  const desc = descOf(c);
+  $("dDesc").textContent = desc;
+  $("dDesc").style.display = desc ? "" : "none";
   const subs = c.subs ?? [];
   const done = subs.filter((s) => s.done).length;
   $("dPills").innerHTML =
@@ -1505,14 +2412,160 @@ function openDrawer(id, wantNoteId) {
     : list.length ? list.reduce((a, b) => ((Date.parse(a.updatedAt) || 0) >= (Date.parse(b.updatedAt) || 0) ? a : b)).id : null;
   loadNoteIntoComposer(id);
   renderOtherNotes(id);
-  $("drawer").classList.add("open"); $("scrim").classList.add("open");
+  $("drawer").classList.add("open");
+  renderTabs();
   fillSegs();
 }
 function stepCard(d) {
   if (!flat.length) return;
   sel = Math.min(Math.max((sel < 0 ? 0 : sel) + d, 0), flat.length - 1);
-  openDrawer(flat[sel]);
+  openDrawer(flat[sel], null, { replace: true });
 }
+// Panel width is the human's call within limits that keep both halves usable:
+// under 150px the panel cannot show a note, over 40% the board stops being the
+// thing you are looking at.
+const DW_MIN = 150, DW_MAX = () => Math.round(innerWidth * 0.4);
+function setDrawerWidth(px, persist = true) {
+  const w = Math.min(Math.max(Math.round(px), DW_MIN), DW_MAX());
+  const d = $("drawer");
+  d.classList.add("sized");
+  d.style.setProperty("--dw", `${w}px`);
+  if (persist) localStorage.setItem(`kanban-dw-${slug}`, String(w));
+  return w;
+}
+(() => {
+  const saved = +localStorage.getItem(`kanban-dw-${slug}`);
+  if (saved) setDrawerWidth(saved, false);
+  let resizing = false;
+  const grip = $("dGrip");
+  grip.addEventListener("pointerdown", (e) => {
+    resizing = true; grip.classList.add("on");
+    // the transition is for open/close, not for a drag that must track the pointer
+    $("drawer").style.transition = "none";
+    try { grip.setPointerCapture(e.pointerId); } catch {}
+    e.preventDefault(); e.stopPropagation();
+  });
+  addEventListener("pointermove", (e) => { if (resizing) setDrawerWidth(innerWidth - e.clientX); });
+  addEventListener("pointerup", () => {
+    if (!resizing) return;
+    resizing = false; grip.classList.remove("on"); $("drawer").style.transition = "";
+  });
+  // keyboard resize, because a drag handle nobody can tab to is not a control
+  grip.addEventListener("keydown", (e) => {
+    const cur = $("drawer").getBoundingClientRect().width;
+    if (e.key === "ArrowLeft") { setDrawerWidth(cur + 24); e.preventDefault(); }
+    if (e.key === "ArrowRight") { setDrawerWidth(cur - 24); e.preventDefault(); }
+  });
+  addEventListener("resize", () => {
+    const cur = $("drawer").getBoundingClientRect().width;
+    if ($("drawer").classList.contains("sized") && cur > DW_MAX()) setDrawerWidth(DW_MAX());
+  });
+})();
+
+// ---------- board switcher ----------
+// Fetched when it opens, never cached: the set of boards changes underneath a
+// long-lived tab and a switcher that offers a board someone unregistered is
+// worse than one that takes 40ms.
+let bpBoards = [], bpAt = 0;
+async function openBoardPick() {
+  $("bpick").classList.add("on");
+  $("bpq").value = ""; bpAt = 0;
+  $("bplist").innerHTML = `<div class="bpnone">Loading boards…</div>`;
+  $("bpq").focus();
+  try {
+    const res = await fetch("/api/boards");
+    bpBoards = (await res.json()).boards ?? [];
+  } catch { bpBoards = []; }
+  renderBoardPick();
+}
+function closeBoardPick() { $("bpick").classList.remove("on"); }
+function bpMatches() {
+  const q = $("bpq").value.trim().toLowerCase();
+  const all = bpBoards.filter((b) => !q || b.name.toLowerCase().includes(q) || b.root.toLowerCase().includes(q));
+  // the board you are on sorts last: you are already here
+  return all.sort((a, b) => (a.slug === slug ? 1 : b.slug === slug ? -1 : (b.unread ?? 0) - (a.unread ?? 0)));
+}
+function renderBoardPick() {
+  const rows = bpMatches();
+  bpAt = Math.min(bpAt, Math.max(0, rows.length - 1));
+  if (!rows.length) { $("bplist").innerHTML = `<div class="bpnone">No board matches that.</div>`; return; }
+  $("bplist").replaceChildren(...rows.map((b, i) => {
+    const el = document.createElement("button");
+    el.type = "button"; el.role = "option";
+    el.className = "bprow" + (i === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
+    const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
+      .reduce((n, [, v]) => n + v, 0);
+    el.innerHTML = `<span class="bn"></span><span class="bp"></span>` +
+      (b.unread ? `<span class="bu">${b.unread} unread</span>` : "") +
+      `<span class="bc">${open} open${b.slug === slug ? " · here" : ""}</span>`;
+    el.querySelector(".bn").textContent = b.name;
+    el.querySelector(".bp").textContent = b.root;
+    el.onmouseenter = () => { bpAt = i; markBp(); };
+    el.onclick = () => gotoBoard(b);
+    return el;
+  }));
+}
+const markBp = () => $("bplist").querySelectorAll(".bprow").forEach((el, i) => el.classList.toggle("on", i === bpAt));
+function gotoBoard(b) {
+  if (!b) return;
+  if (b.slug === slug) { closeBoardPick(); return; }
+  location.href = `/b/${b.slug}`;
+}
+$("name").onclick = openBoardPick;
+$("bpick").onclick = (e) => { if (e.target === $("bpick")) closeBoardPick(); };
+$("bpq").addEventListener("input", () => { bpAt = 0; renderBoardPick(); });
+$("bpq").addEventListener("keydown", (e) => {
+  const rows = bpMatches();
+  if (e.key === "ArrowDown") { bpAt = Math.min(bpAt + 1, rows.length - 1); markBp(); e.preventDefault(); }
+  else if (e.key === "ArrowUp") { bpAt = Math.max(bpAt - 1, 0); markBp(); e.preventDefault(); }
+  else if (e.key === "Enter") { gotoBoard(rows[bpAt]); e.preventDefault(); }
+  else if (e.key === "Escape") { closeBoardPick(); e.stopPropagation(); }
+});
+
+$("popClose").onclick = closePop;
+$("popPick").onclick = () => { if (popCard && popNote) { toggleSel("note", nKey(popCard, popNote)); syncPopPick(); } };
+$("popNote").addEventListener("input", () => {
+  popDirty = true;
+  $("popSt").textContent = "unsaved"; $("popSt").className = "pst unsaved";
+});
+$("popNote").addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); $("popSave").click(); }
+  if (e.key === "Escape") { e.stopPropagation(); closePop(); }
+});
+$("popSave").onclick = async () => {
+  if (!popCard) return;
+  try {
+    const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId: popCard, noteId: popNote ?? "new", note: $("popNote").value }) });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || res.status);
+    if (out.noteId) popNote = out.noteId;
+    popDirty = false;
+    $("popSt").textContent = "saved just now"; $("popSt").className = "pst";
+    lastPayload = ""; await load();
+    toast("Note saved");
+  } catch (e) { toast(`Save failed: ${e.message}`, 4000, "err"); }
+};
+$("popDel").onclick = async () => {
+  if (!popCard || !popNote) return;
+  try {
+    const res = await fetch("/api/note", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId: popCard, noteId: popNote, note: "" }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    popDirty = false; closePop();
+    lastPayload = ""; await load();
+    toast("Note deleted");
+  } catch (e) { toast(`Delete failed: ${e.message}`, 4000, "err"); }
+};
+// click-away closes, but never while the pointer is inside the popover itself
+addEventListener("pointerdown", (e) => {
+  if (!$("pop").classList.contains("on")) return;
+  if (e.target.closest("#pop") || e.target.closest(".chip.note")) return;
+  closePop();
+});
+
+$("dCollapse").onclick = () => setCollapsed(!collapsed());
+$("dClose").onclick = () => { if (openId) closeTab(openId); };
 $("dPrev").onclick = () => stepCard(-1);
 $("dNext").onclick = () => stepCard(1);
 
@@ -1543,6 +2596,16 @@ function matchFilter(c) {
   // "needs-you" is the header clause's scope, not a text search: the hub
   // promises "N needs you" and this is where that promise lands
   if (filterText === "needs-you") return !!c.verify?.needsHuman;
+  // the status band's counts are the same promise: a number you can press to
+  // see exactly the cards it counted
+  if (filterText === "is:blocked") return c.lane === "blocked";
+  if (filterText === "is:open") return c.lane !== "done" && c.lane !== "stale";
+  if (filterText === "is:settled") return c.lane === "done" || c.lane === "stale";
+  if (filterText === "since:done") return since(c.updatedAt) && c.lane === "done";
+  if (filterText === "since:blocked") return since(c.updatedAt) && c.lane === "blocked";
+  if (filterText === "since:new") return since(c.createdAt);
+  if (filterText === "since:moved") return since(c.updatedAt) && c.lane !== "done" && c.lane !== "blocked" && !since(c.createdAt);
+  if (filterText === "review-me") return parseTags(data.notes[c.id]?.note).review;
   const hay = [c.title, c.heading, c.tag, c.source?.path, data.notes[c.id]?.note,
     ...(c.subs ?? []).map((s) => s.title)].filter(Boolean).join(" ").toLowerCase();
   return filterText.split(/\s+/).every((t) => hay.includes(t));
@@ -1659,14 +2722,16 @@ $("dAdd").onclick = () => {
   loadNoteIntoComposer(openId); renderOtherNotes(openId);
   $("dNote").focus();
 };
+// Collapse, not destroy: the tabs are the open set and they survive. Closing an
+// individual card is closeTab; emptying the panel is what hides it.
 function closeDrawer() {
-  // no confirm dialog: closing flushes the pending draft write, so it can never lose it
+  // no confirm dialog: collapsing flushes the pending draft write, so it can never lose it
   flushDraft();
   // dirty means "typed", not "changed": reverting to the saved text leaves
   // nothing to keep, so promising a kept draft would be a lie.
   if (dirty && $("dNote").value !== baseNote) toast("Draft kept — it will be here when you come back");
-  dirty = false; openId = null;
-  $("drawer").classList.remove("open"); $("scrim").classList.remove("open");
+  dirty = false;
+  setCollapsed(true);
 }
 
 $("dNote").addEventListener("input", () => {
@@ -1715,31 +2780,144 @@ $("dSave").onclick = async () => {
   } catch (e) { toast(`Save failed: ${e.message}`, 4000, "err"); }
 };
 
+// ---------- keyboard ----------
+// Three layers, resolved in this order: a text field owns every key but Escape
+// and ⌘↵ · an open overlay owns the rest · otherwise the board and, when it is
+// open, the panel. The panel's keys are the shifted twins of the board's, so
+// J/K walks notes exactly the way j/k walks cards and nothing needs a mode.
+let noteAt = -1;   // cursor into the open card's note rows, -1 = none
+
+function noteRows() { return [...$("dOther").querySelectorAll(".nrow")]; }
+function markNote() {
+  const rows = noteRows();
+  rows.forEach((r, i) => r.classList.toggle("cursor", i === noteAt));
+  if (noteAt >= 0) rows[noteAt]?.scrollIntoView({ block: "nearest" });
+}
+function stepNote(d) {
+  const rows = noteRows();
+  if (!rows.length) return;
+  noteAt = noteAt < 0 ? (d > 0 ? 0 : rows.length - 1) : Math.min(Math.max(noteAt + d, 0), rows.length - 1);
+  markNote();
+}
+const noteIdAt = () => noteRows()[noteAt]?.dataset.noteId ?? null;
+
 document.addEventListener("keydown", (e) => {
-  if (e.target === $("dNote")) { if (e.key === "Escape") e.target.blur(); return; }
-  // any text field, not just the two named ones: the rail composer is a third,
-  // and a single-letter shortcut firing mid-sentence is the bug this prevents
-  if (e.target.matches?.("input,textarea,[contenteditable]")) return;
-  if (e.key === "/") { e.preventDefault(); $("filter").focus(); $("filter").select(); return; }
-  if (e.key === "a") { const t = document.querySelector("#rail textarea"); if (t) { e.preventDefault(); t.focus(); } return; }
-  // the modal is the topmost layer, so it consumes Escape before help or drawer
+  const mod = e.metaKey || e.ctrlKey;
+  // text fields keep their keys; only leaving and saving are ours
+  if (e.target.matches?.("input,textarea,[contenteditable]")) {
+    if (e.key === "Escape") {
+      e.target.blur();
+      if (e.target === $("filter") && filterText) { $("filter").value = ""; $("filter").dispatchEvent(new Event("input")); }
+    }
+    return;
+  }
+  // overlays, outermost first
   if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
+  if ($("bpick").classList.contains("on")) { if (e.key === "Escape") closeBoardPick(); return; }
+  if ($("pop").classList.contains("on")) {
+    if (e.key === "Escape") closePop();
+    if (e.key === "e") { e.preventDefault(); $("popNote").focus(); }
+    if (e.key === "p") { e.preventDefault(); $("popPick").click(); }
+    return;
+  }
   if ($("help").style.display === "flex" && e.key !== "?") { $("help").style.display = "none"; return; }
+
+  const panel = !!openId && $("drawer").classList.contains("open");
+  // jump straight to a tab by position, the way every tabbed thing does
+  if (panel && !mod && /^[1-9]$/.test(e.key) && tabs.length > 1) {
+    const at = +e.key - 1;
+    if (tabs[at]) { openDrawer(tabs[at]); e.preventDefault(); }
+    return;
+  }
+
   switch (e.key) {
-    case "j": sel = Math.min(sel + 1, flat.length - 1); markSel(); if (openId) openDrawer(flat[sel]); break;
-    case "k": sel = Math.max(sel - 1, 0); markSel(); if (openId) openDrawer(flat[sel]); break;
-    case "Enter": case "o": if (flat[sel]) openDrawer(flat[sel]); break;
-    case "n": if (openId) $("dNote").focus(); else if (flat[sel]) { openDrawer(flat[sel]); $("dNote").focus(); } e.preventDefault(); break;
+    // ---- move on the board ----
+    case "j": case "ArrowDown":
+      sel = Math.min(sel + 1, flat.length - 1); markSel();
+      if (panel) openDrawer(flat[sel], null, { replace: true }); e.preventDefault(); break;
+    case "k": case "ArrowUp":
+      sel = Math.max(sel - 1, 0); markSel();
+      if (panel) openDrawer(flat[sel], null, { replace: true }); e.preventDefault(); break;
+    case "h": case "ArrowLeft": stepLane(-1); e.preventDefault(); break;
+    case "l": case "ArrowRight": stepLane(1); e.preventDefault(); break;
+
+    // ---- open ----
+    case "Enter": case "o":
+      if (panel && noteAt >= 0) { noteRows()[noteAt]?.click(); $("dNote").focus(); }
+      else if (flat[sel]) openDrawer(flat[sel]);
+      e.preventDefault(); break;
+    case "O": if (flat[sel]) { const keep = openId; openDrawer(flat[sel]); if (keep) openDrawer(keep); } e.preventDefault(); break;
+
+    // ---- tabs ----
+    case "]": if (tabs.length) { openDrawer(tabs[(tabs.indexOf(openId) + 1) % tabs.length]); } e.preventDefault(); break;
+    case "[": if (tabs.length) { openDrawer(tabs[(tabs.indexOf(openId) - 1 + tabs.length) % tabs.length]); } e.preventDefault(); break;
+    case "w": if (openId) { closeTab(openId); e.preventDefault(); } break;
+    case "\\": if (panel || tabs.length) { setCollapsed(!collapsed()); e.preventDefault(); } break;
+
+    // ---- notes ----
+    case "J": if (panel) { stepNote(1); e.preventDefault(); } break;
+    case "K": if (panel) { stepNote(-1); e.preventDefault(); } break;
+    case "n":
+      if (panel) { openNoteId = null; loadNoteIntoComposer(openId); renderOtherNotes(openId); $("dNote").focus(); }
+      else if (flat[sel]) { openDrawer(flat[sel]); openNoteId = null; loadNoteIntoComposer(openId); renderOtherNotes(openId); $("dNote").focus(); }
+      e.preventDefault(); break;
+    case "e": if (panel) { $("dNote").focus(); e.preventDefault(); } break;
+    case "d": if (panel && noteIdAt()) { dismissNote(openId, noteIdAt()); e.preventDefault(); } break;
+    case "u": undoDismiss(); break;
+
+    // ---- selection ----
+    case "x":
+      if (panel && noteAt >= 0 && noteIdAt()) toggleSel("note", nKey(openId, noteIdAt()));
+      else if (flat[sel]) { selMode = true; applyModes(); toggleSel("card", flat[sel]); }
+      e.preventDefault(); break;
+    case "X": selMode = !selMode; applyModes(); break;
+    case "N": noteSelMode = !noteSelMode; applyModes(); break;
+    case "s": { const p = picked(); if (p.cards.length + p.notes.length) sendToAgent(); else toast("Nothing selected yet — press x on a card"); break; }
+    case "C": clearSel("all"); toast("Selection cleared"); break;
+
+    // ---- everything else ----
+    case "/": $("filter").focus(); $("filter").select(); e.preventDefault(); break;
+    case "a": { const t = document.querySelector("#rail textarea"); if (t) { t.focus(); e.preventDefault(); } break; }
+    case "b": openBoardPick(); e.preventDefault(); break;
+    case "B": location.href = "/"; break;
     case "c": copyDigest(); break;
     case "t": toggleTheme(); break;
     case "?": $("help").style.display = $("help").style.display === "flex" ? "none" : "flex"; break;
-    case "Escape": closeDrawer(); break;
+    // one Escape walks back out: note cursor, then the panel, then the filter
+    case "Escape":
+      if (panel && noteAt >= 0) { noteAt = -1; markNote(); }
+      else if (panel) closeDrawer();
+      else if (filterText) { $("filter").value = ""; $("filter").dispatchEvent(new Event("input")); }
+      break;
   }
 });
+
+// h/l crosses lanes at roughly the row you were on, which is what the eye
+// expects; falling to the last card of a shorter lane beats refusing to move.
+function stepLane(d) {
+  const cur = flat[sel];
+  const lanes = [...document.querySelectorAll("main .col:not(.rail)")];
+  if (!lanes.length) return;
+  const curLane = cur ? document.querySelector(`.card[data-id="${cur}"]`)?.closest(".col") : null;
+  let at = curLane ? lanes.indexOf(curLane) : 0;
+  const rowIn = curLane ? [...curLane.querySelectorAll(".card")].findIndex((c) => c.dataset.id === cur) : 0;
+  for (let step = 1; step <= lanes.length; step++) {
+    const next = lanes[at + d * step];
+    if (!next) break;
+    const cards = [...next.querySelectorAll(".card")];
+    if (!cards.length) continue;
+    const target = cards[Math.min(Math.max(rowIn, 0), cards.length - 1)];
+    sel = flat.indexOf(target.dataset.id);
+    markSel();
+    if (openId) openDrawer(flat[sel], null, { replace: true });
+    return;
+  }
+}
 $("helpBtn").onclick = () => ($("help").style.display = "flex");
 $("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display = "none"; };
 
 showState("loading");
+if (localStorage.getItem(`kanban-side-${slug}`) === "1") $("drawer").classList.add("collapsed");
 sweepDrafts();
 itemDraft = localStorage.getItem(`kanban-itemdraft-${slug}`) ?? "";
 railScope = localStorage.getItem(`kanban-railscope-${slug}`) ?? "all";

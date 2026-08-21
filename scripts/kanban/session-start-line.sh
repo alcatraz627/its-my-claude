@@ -108,11 +108,23 @@ elif [ "${mine:-0}" -gt 0 ] 2>/dev/null || [ "${loose:-0}" -gt 0 ] 2>/dev/null; 
   asks=" · the owner has unsorted asks ($bits). Read and sort them: bash ~/.claude/scripts/kanban/kanban.sh items"
 fi
 
+# The owner's selection: cards/notes they have ticked in the UI as "this is what
+# I mean". Read straight from the file so this line needs no bun and no server.
+picked=""
+SELF="$bdir/selection.json"
+if [ -f "$SELF" ]; then
+  scounts=$(jq -r '[ (.cards // [] | length), (.notes // [] | length) ] | @tsv' "$SELF" 2>/dev/null || printf '0\t0')
+  scards=${scounts%%$'\t'*}; snotes=${scounts#*$'\t'}
+  if [ "${scards:-0}" -gt 0 ] 2>/dev/null || [ "${snotes:-0}" -gt 0 ] 2>/dev/null; then
+    picked=" · the owner has SELECTED ${scards:-0} card(s) and ${snotes:-0} note(s) — that is their working set: bash ~/.claude/scripts/kanban/kanban.sh selected"
+  fi
+fi
+
 if [ "${unread:-0}" -gt 0 ] 2>/dev/null; then
   extra=""; [ "${actionable:-0}" -gt 0 ] 2>/dev/null && extra=" ($actionable marked !now)"
-  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked · board: http://localhost:5106/b/$slug"
 else
-  line="[kanban] board \"$name\" — no unread notes$asks · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — no unread notes$asks$picked · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
 fi
 
 jq -nc --arg c "$line" '{additionalContext: $c}'

@@ -27,6 +27,8 @@ export class CliError extends Error {
   constructor(msg: string, public fix: string) { super(msg); }
 }
 
+export const BRIEF_MAX = 100; // chars; a card-face title longer than this stops being scannable
+
 export interface CardSource {
   path: string;          // repo-relative source file, or "manual"
   line?: number;
@@ -35,6 +37,10 @@ export interface CardSource {
 export interface Card {
   id: string;
   title: string;
+  // What the card calls itself on the board face: a summary phrase the agent
+  // writes, capped at 100 chars (BRIEF_MAX). The full `title` stays put and
+  // becomes the drawer's description, so nothing is lost by summarising.
+  titleBrief?: string;
   tag?: string;          // "(#7)" / "OWNER REMINDER" style prefix, surfaced as a badge
   subs?: { title: string; done: boolean }[]; // nested checkboxes under the card's line
   lane: Lane;
@@ -310,6 +316,61 @@ export const TAG_LEGEND =
 
 export const ITEMS = path.join(KROOT, "items.json");
 export const LANDINGS = path.join(KROOT, "landings.json");
+// The human's selection: which cards and which notes they have ticked as
+// "this is what I mean". Board-scoped, server-owned like notes.json, and read
+// by the CLI so an agent picking up work sees the same set the human is
+// looking at. Empty is the resting state — a selection is an act, not a mode.
+export interface Selection { cards: string[]; notes: string[]; updatedAt: string | null }
+export const emptySelection = (): Selection => ({ cards: [], notes: [], updatedAt: null });
+// a note's key is card:note, so one string identifies it across both stores
+export const noteKey = (cardId: string, nId: string) => `${cardId}:${nId}`;
+export const loadSelection = (boardDir: string): Selection =>
+  readJson<Selection>(path.join(boardDir, "selection.json"), emptySelection());
+export function saveSelection(boardDir: string, sel: Selection, by: string): void {
+  atomicWrite(path.join(boardDir, "selection.json"), sel, by,
+    `cards=${sel.cards.length} notes=${sel.notes.length}`);
+}
+
+// What the agent actually receives. Written for a reader with no board open:
+// every selected card in full, every selected note verbatim, and the one line
+// that says what to do with it. Kept plain text — it arrives as an ipc message.
+export function renderSelection(dir: string, name: string, sel: Selection): string {
+  const board = loadBoard(dir);
+  const notes = loadNotes(dir);
+  const byId = new Map(board.cards.map((c) => [c.id, c]));
+  const out: string[] = [
+    `[kanban] the owner selected ${sel.cards.length} card(s) and ${sel.notes.length} note(s) on board "${name}" and sent them to you.`,
+    `They are pointing at this deliberately — treat it as the working set for right now.`,
+    ``,
+  ];
+  for (const id of sel.cards) {
+    const c = byId.get(id);
+    if (!c) { out.push(`- card ${id} (no longer on the board)`); continue; }
+    const src = c.source.kind === "manual" ? "manual" : `${c.source.path}${c.source.line ? ":" + c.source.line : ""}`;
+    out.push(`### card ${c.id} · ${c.lane} · ${src}`);
+    out.push(c.title);
+    if (c.subs?.length) out.push(...c.subs.map((x) => `  - [${x.done ? "x" : " "}] ${x.title}`));
+    if (c.docs?.length) out.push(`  docs: ${c.docs.join(", ")}`);
+    const mine = notesOf(notes[c.id]);
+    if (mine.length) out.push(...mine.map((n, i) => `  note #${i + 1}: ${n.body}`));
+    out.push(``);
+  }
+  if (sel.notes.length) {
+    out.push(`### selected notes`);
+    for (const key of sel.notes) {
+      const [cardId, nId] = key.split(":");
+      const list = notesOf(notes[cardId]);
+      const at = list.findIndex((n) => n.id === nId);
+      const c = byId.get(cardId);
+      if (at < 0) { out.push(`- note ${key} (deleted)`); continue; }
+      out.push(`- on card ${cardId}${c ? ` (${c.lane})` : ""}, note #${at + 1}: ${list[at].body}`);
+    }
+    out.push(``);
+  }
+  out.push(`Pull the full context with: kanban.sh notes --unread --ack`);
+  return out.join("\n");
+}
+
 export const PINS = path.join(KROOT, "pins.json");
 
 export const SHAPES = ["task", "subtask", "clarification", "remark"] as const;
@@ -463,7 +524,7 @@ export type HarvestedCard = Omit<Card, "createdAt" | "updatedAt">;
 // Merge a fresh harvest into the existing board. Machine lane only: harvest
 // decides lanes, overrides (agent `move`) win, manual cards persist, and a
 // vanished card with a human note is kept as stale instead of deleted.
-export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: string) {
+export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: string, force = false) {
   return withBoardLock(boardDir, () => {
     const prev = loadBoard(boardDir);
     const notes = loadNotes(boardDir);
@@ -487,6 +548,7 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
         // union in (harvest only knows doc-inline links), verify carries over.
         docs: old ? [...new Set([...h.docs, ...old.docs])] : h.docs,
         verify: old?.verify,
+        titleBrief: old?.titleBrief, // harvest can't write one; the agent's survives
         createdAt: old?.createdAt ?? now,
         updatedAt: old && old.lane === lane ? old.updatedAt : now,
       };
@@ -509,8 +571,28 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
       }
     }
 
+    // A harvest that finds NOTHING where a populated board stood is a broken
+    // scanner, not an emptied project — a cap, a moved docs dir, a bad root.
+    // Sync would otherwise delete every card and GC the overrides with them,
+    // and board.json is the one store with no undo. So: refuse, and say what
+    // would have gone. Narrow on purpose (zero yield only): a partial drop is a
+    // legitimate outcome, and the rotated backup below covers it.
+    if (!force && !cards.length && prev.cards.length) {
+      throw new CliError(
+        `harvest found no cards, but the board holds ${prev.cards.length} — refusing to empty it`,
+        `check the sources first (are the doc paths still there? did a rename move docs/?); ` +
+        `if the board really should be empty, kanban.sh sync --force`);
+    }
+    const file = path.join(boardDir, "board.json");
+    // board.json used to be the only store without a rotated backup, which is
+    // how one bad sync became unrecoverable. Cheap: these files are small.
+    if (fs.existsSync(file)) {
+      fs.copyFileSync(file, `${file}.prev-${Date.now()}.bak`);
+      const baks = fs.readdirSync(boardDir).filter((f) => f.startsWith("board.json.prev-")).sort();
+      for (const old of baks.slice(0, Math.max(0, baks.length - 20))) fs.unlinkSync(path.join(boardDir, old));
+    }
     const board: Board = { cards, overrides: prev.overrides, tombstones, syncedAt: now };
-    atomicWrite(path.join(boardDir, "board.json"), board, by, `cards=${cards.length}`);
+    atomicWrite(file, board, by, `cards=${cards.length}`);
     return { board, delta, overridesHeld, notesPreserved: Object.keys(notes).filter((id) => notesOf(notes[id]).length).length };
   });
 }
