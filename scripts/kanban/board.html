@@ -992,6 +992,40 @@
   .term .shot svg{display:block}
   .hmap .lbl{fill:var(--text-3);font:10px var(--sans)}
 
+  /* ---------- the Hey Claude playground ---------- */
+  /* Left half explains, right half lets you try it. Everything below the box is
+     derived from what is in it, deterministically, so the page is a mirror
+     rather than a claim. */
+  .hplay{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media (max-width:820px){ .hplay{grid-template-columns:1fr} }
+  .hplay .pane-l p{font:400 12.5px/1.65 var(--sans);color:var(--text-2);margin-bottom:10px}
+  .hmock{border:1px solid var(--border-2);border-radius:11px;background:var(--well);overflow:hidden}
+  .hmock .mhead{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:1px solid var(--border);
+                background:var(--canvas)}
+  .hmock .mhead .mi{flex:none;color:var(--text-3);display:grid;place-items:center}
+  .hmock .mhead b{font:600 12px/1.1 var(--sans);color:var(--text)}
+  .hmock .mhead i{font:400 10.5px/1.1 var(--sans);font-style:normal;color:var(--text-3)}
+  .hmock textarea{width:100%;border:none;background:var(--card);color:var(--text);outline:none;
+                  font:400 13px/1.62 var(--sans);padding:11px 13px;min-height:104px;resize:vertical;display:block}
+  .hchips{display:flex;flex-wrap:wrap;gap:5px;padding:9px 11px;border-top:1px solid var(--border);
+          background:var(--well);justify-content:flex-end}
+  .hchips .lb{flex:1;font:400 11px/1.5 var(--sans);color:var(--text-3);text-align:left}
+  .hout{margin-top:13px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .hout .oh{display:flex;align-items:center;gap:7px;padding:8px 11px;background:var(--well);
+            border-bottom:1px solid var(--border);font:600 10.5px/1 var(--sans);
+            letter-spacing:.07em;text-transform:uppercase;color:var(--text-3)}
+  .hout .ob{padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:var(--card)}
+  .hline{display:flex;gap:9px;align-items:flex-start;font:400 12px/1.5 var(--sans)}
+  .hline .hk{flex:none;width:96px;font:600 10.5px/1.5 var(--sans);letter-spacing:.04em;
+             text-transform:uppercase;color:var(--text-3)}
+  .hline .hv{flex:1;min-width:0;color:var(--text-2);overflow-wrap:anywhere}
+  .hline .hv em{font-style:normal;color:var(--text)}
+  .hline.on .hk{color:var(--blue)}
+  .hline.off .hv{color:var(--text-3)}
+  .hthread{font:11.5px/1.6 var(--mono);color:var(--text-3);background:var(--well);
+           border-radius:7px;padding:9px 11px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .hthread b{color:var(--text-2);font-weight:600}
+
   /* ---------- the drawn keyboard ---------- */
   /* Every bound key lit on a real layout, so you can see what is taken and what
      is free at a glance. Hovering a key lights its row below; hovering a row
@@ -1253,6 +1287,10 @@
   <div class="hpane" id="hTerms"></div>
   <div class="hpane" id="hVibe"></div>
   <div class="hpane" id="hTags">
+  <div class="hplay">
+    <div class="pane-l" id="hPlayLeft"></div>
+    <div class="pane-r" id="hPlayRight"></div>
+  </div>
   <table>
     <tr><td colspan="2" class="grouphead">Note tags</td></tr>
     <tr><td><kbd>@me</kbd></td><td>note to self — the agent isn't nagged</td></tr>
@@ -3739,6 +3777,108 @@ function renderVibe() {
   pane.dataset.built = "1";
 }
 
+// ---------- the Hey Claude playground ----------
+// A replica of the note box with a worked example behind it. Everything under
+// the box is DERIVED from what is in the box, by the same parseTags the real
+// board uses, so this teaches the actual behaviour rather than a description of
+// it. The example card is fixed and fictional, which is what lets the "what
+// else the agent sees" panel be concrete without depending on your board.
+const HP_CARD = {
+  id: "c41b90d3e7a2", lane: "blocked", title: "Nightly CSV export writes ragged rows",
+  goal: "Finance can open the nightly file in Excel without fixing it by hand",
+  tags: [["milestone", "M2"], ["tier", "sonnet"], ["risk", "data-loss"]],
+  src: "docs/plan/07-export.md:41", other: "note #1: the ragged rows only appear when a value contains a comma",
+};
+const HP_EXAMPLES = [
+  ["Plain", "The header row is wrong too, not just the body. Same fix probably covers both."],
+  ["Act now", "!now this is blocking the finance close, please pick it up before anything else"],
+  ["Route a skill", "/skeptical-review the quoting fix before it ships, I do not trust it yet"],
+  ["Move a lane", ">backlog parking this until finance confirms the format they want"],
+  ["Note to self", "@me remember to ask finance whether they want CRLF or LF"],
+  ["For your queue", "#review-me I want to read the diff on this one myself"],
+];
+
+function renderPlayground() {
+  const L = $("hPlayLeft"), R = $("hPlayRight");
+  if (!L || L.dataset.built) return;
+  L.innerHTML = `
+    <div class="ghead">How anything you write gets there</div>
+    <p>Notes are <em>pull-based</em>. Nothing interrupts an agent that is working. When
+    the next one starts, its first line says how many notes are unread here, and it
+    reads them with <code>kanban.sh notes --unread --ack</code>.</p>
+    <p>A note is plain text, so you never have to learn a syntax. But six tokens do
+    change what happens, and the box on the right shows you exactly what each one
+    does before you commit to it.</p>
+    <p>The agent never sees a note alone. It arrives attached to its card, and the card
+    brings its goal, its lane, its tags and its other notes with it. That surrounding
+    context is the difference between "fix the header" and a request an agent can act
+    on without asking you what you meant.</p>
+    <div class="ghead" style="margin-top:18px">The example card</div>
+    <div class="hthread"><b>${esc(HP_CARD.title)}</b>
+lane: ${HP_CARD.lane} · ${HP_CARD.src}
+goal: ${esc(HP_CARD.goal)}
+tags: ${HP_CARD.tags.map(([k, v]) => k + ":" + v).join("  ")}</div>`;
+  R.innerHTML = `
+    <div class="hmock">
+      <div class="mhead"><span class="mi">${NOTE_ICON}</span>
+        <span style="display:flex;flex-direction:column;gap:2px"><b>Your note</b>
+        <i>on “${esc(HP_CARD.title)}”</i></span></div>
+      <textarea id="hpBox" spellcheck="false" aria-label="try a note"></textarea>
+      <div class="hchips"><span class="lb">Load an example, then edit it</span></div>
+    </div>
+    <div class="hout">
+      <div class="oh">What this tells the agent</div>
+      <div class="ob" id="hpOut"></div>
+    </div>`;
+  const chips = R.querySelector(".hchips");
+  for (const [label, body] of HP_EXAMPLES) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip";
+    b.textContent = label;
+    b.onclick = () => { $("hpBox").value = body; hpRender(); $("hpBox").focus(); };
+    chips.appendChild(b);
+  }
+  $("hpBox").addEventListener("input", hpRender);
+  $("hpBox").value = HP_EXAMPLES[1][1];
+  hpRender();
+  L.dataset.built = "1";
+}
+
+// Deterministic, and deliberately dumb: it reads the tokens with the board's own
+// parser and states the consequence of each. No inference, nothing guessed.
+function hpRender() {
+  const text = $("hpBox").value;
+  const t = parseTags(text);
+  const first = text.split("\n")[0].trim();
+  const row = (k, v, on) => `<div class="hline ${on ? "on" : "off"}"><span class="hk">${k}</span><span class="hv">${v}</span></div>`;
+  const out = [];
+  out.push(row("Reaches", t.me
+    ? "<em>nobody.</em> @me keeps it out of the unread count, so no agent is nagged about it"
+    : "<em>the next agent to start work here</em>, in its unread list", !t.me));
+  out.push(row("Urgency", t.act
+    ? "<em>on pickup.</em> !now asks it to act before the next sweep"
+    : "the next time it pulls notes; nothing is interrupted", t.act));
+  out.push(row("Skill", t.skills.length
+    ? `it is asked to run <em>${t.skills.map(esc).join(", ")}</em> on this card`
+    : "none requested", t.skills.length > 0));
+  out.push(row("Lane", t.moves.length
+    ? `it is asked to move the card to <em>${t.moves.map(esc).join(", ")}</em> via the CLI`
+    : "unchanged", t.moves.length > 0));
+  out.push(row("Your queue", t.review
+    ? "<em>flagged for you.</em> the board counts it under waiting on your review"
+    : "not flagged", t.review));
+  out.push(row("On the face", first
+    ? (t.act || t.moves.length || t.skills.length || t.review || HP_CARD.lane === "blocked"
+        ? `the first line shows on the card: <em>${esc(first.slice(0, 64))}${first.length > 64 ? "…" : ""}</em>`
+        : "a note chip only; the text stays in the panel")
+    : "nothing yet", !!first));
+  out.push(`<div class="hline on"><span class="hk">It also sees</span><span class="hv"><div class="hthread">` +
+    `<b>card</b> ${esc(HP_CARD.title)}\n<b>lane</b> ${HP_CARD.lane}   <b>from</b> ${HP_CARD.src}\n` +
+    `<b>goal</b> ${esc(HP_CARD.goal)}\n<b>tags</b> ${HP_CARD.tags.map(([k, v]) => k + ":" + v).join("  ")}\n` +
+    `<b>and</b> ${esc(HP_CARD.other)}</div></span></div>`);
+  $("hpOut").innerHTML = out.join("");
+}
+
 // ---------- the drawn keyboard ----------
 // The rows below the map are the source of truth: each is tagged with the keys
 // it documents, and the map is built by reading them. One list, so a binding
@@ -3829,6 +3969,7 @@ document.querySelectorAll(".htab").forEach((tab) => {
     document.querySelectorAll(".hpane").forEach((p) => p.classList.toggle("on", p.id === tab.dataset.pane));
     if (tab.dataset.pane === "hTerms") renderTerms();
     if (tab.dataset.pane === "hVibe") renderVibe();
+    if (tab.dataset.pane === "hTags") renderPlayground();
   };
 });
 $("hClose").onclick = closeHelp;
