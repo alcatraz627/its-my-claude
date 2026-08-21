@@ -65,15 +65,19 @@ function die(msg: string, fix: string): never {
 // The board face shows this instead of a long title, so it has to read like a
 // name: refuse an over-long one rather than truncate it, because a hard cut
 // mid-clause is exactly the unreadable card face the brief exists to prevent.
+// Characters as a reader counts them, not UTF-16 code units: an emoji is two
+// units and one character, so .length halved the real cap on emoji-bearing text.
+const charLen = (s: string) => [...s].length;
 function checkBrief(raw: string | undefined, title: string): string | undefined {
   if (raw === undefined) return undefined;
   const t = raw.trim();
   if (!t) die("--brief is empty", `drop the flag, or give a summary phrase: --brief "wire the CSV export"`);
-  if (t.length > BRIEF_MAX) {
-    die(`--brief is ${t.length} chars, cap is ${BRIEF_MAX}`,
-        `summarise, don't truncate — a phrase the human can recognise the card by: --brief "${t.slice(0, 48).trim()}…"`);
+  const n = charLen(t);
+  if (n > BRIEF_MAX) {
+    die(`--brief is ${n} chars, cap is ${BRIEF_MAX}`,
+        `summarise, don't truncate — a phrase the human can recognise the card by: --brief "${[...t].slice(0, 48).join("").trim()}…"`);
   }
-  if (title && t.length > title.length) die("--brief is longer than the title", `drop --brief; the title already is one`);
+  if (title && n > charLen(title)) die("--brief is longer than the title", `drop --brief; the title already is one`);
   return t;
 }
 
@@ -266,12 +270,14 @@ switch (verb) {
   case "brief": {
     const [id, text] = positional;
     if (!id || (!text && !hasFlag("clear"))) die("usage", `kanban.sh brief <card-id> "one-line summary" | --clear`);
-    const titleBrief = hasFlag("clear") ? undefined : checkBrief(text, "");
     const { slug, boardDir } = boardFor(projectDir());
     withBoardLock(boardDir, () => {
       const board = loadBoard(boardDir);
       const card = board.cards.find((c) => c.id === id);
       if (!card) die(`no card ${id} on ${slug}`, `kanban.sh status --project ${projectDir()} lists ids`);
+      // the card's REAL title, not "": passing an empty one silently skipped the
+      // longer-than-the-title check on the only path a harvested card can use
+      const titleBrief = hasFlag("clear") ? undefined : checkBrief(text, card.title);
       if (titleBrief) card.titleBrief = titleBrief; else delete card.titleBrief;
       card.updatedAt = new Date().toISOString();
       atomicWrite(path.join(boardDir, "board.json"), board, "brief", `card=${id}`);

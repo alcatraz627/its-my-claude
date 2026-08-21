@@ -15,6 +15,7 @@ related:
   - conventions/cli-help-design.md
   - conventions/html-output.md
   - conventions/dashboard-tools.md
+  - conventions/ui-charter.md
 tier: 2
 category: conventions
 updated: 2026-06-21

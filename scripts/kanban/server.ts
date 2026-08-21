@@ -731,7 +731,12 @@ const server = Bun.serve({
         // has the wrong set of ids also has the wrong picture of the card, and
         // silently dropping the difference would delete a note it never saw.
         const have = new Set(list.map((n) => n.id));
-        if (body.order!.length !== list.length || !body.order!.every((id) => have.has(id))) {
+        const asked = new Set(body.order!);
+        // Length and membership are not enough: ["a","a","b"] passes both against
+        // {a,b,c} and then writes note a twice while deleting note c. The ids must
+        // be a bijection onto the set, so uniqueness is checked too.
+        if (body.order!.length !== list.length || asked.size !== list.length
+            || !body.order!.every((id) => have.has(id))) {
           out = { error: "that ordering is out of date; reload the board" };
           return;
         }

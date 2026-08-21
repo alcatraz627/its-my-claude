@@ -96,6 +96,7 @@
 | `conventions/tui-design.md` | Functional TUI patterns + fzf-as-runtime launcher blueprint + approach selection | `topic:tui`, `topic:fzf` |
 | `conventions/visual-design.md` | Visual-design reference: OKLCH color harmony, layout/hierarchy, de-chaos rule | `topic:color`, `topic:visual-design` |
 | `conventions/dashboard-tools.md` | Build template for single-user dashboard tools: watcher + JSON-state, mutex, atomic writes | `topic:dashboard-tool` |
+| `conventions/ui-charter.md` | Give a repeatedly-reviewed UI its own dated charter of owner rulings, plus a count-capped QA round per change | `topic:ui-charter`, `phrase:"every UI round"` |
 | `conventions/run-and-observe-affordance.md` | Every project exposes a one-command run-and-observe affordance so verifying is cheap | `topic:run-and-observe`, `topic:verify-affordance` |
 | `conventions/large-external-list-scan.md` | Procedure for scanning a vast external list (GH / Linear / Slack): pagination + budget | `topic:large-list-scan`, `topic:pagination` |
 | `conventions/hook-authoring-and-review.md` | Checklist for authoring + reviewing gcc hooks | `topic:hook-authoring`, `topic:hooks` |

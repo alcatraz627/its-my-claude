@@ -1425,12 +1425,28 @@ function openPop(cardId, noteId, anchorEl) {
   pop.style.top = `${Math.min(Math.max(12, r.top), Math.max(12, innerHeight - pr.height - 12))}px`;
   $("popNote").focus();
 }
-function closePop() {
-  if (popDirty) toast("Note not saved — reopen the chip to finish it", 3000);
-  popCard = null; popNote = null; popDirty = false;
+// Charter §9: click-away closes anything that is NOT holding unsaved text. It
+// used to close regardless and apologise afterwards, which is how typing gets
+// lost. Now a dirty popover refuses the casual dismissals and keeps its text
+// where the composer can find it again.
+// `arm` is passed only by the Escape path. A click-away refusal must NOT arm the
+// discard, or the warning itself becomes the first half of losing the text.
+function closePop({ force = false, arm = false } = {}) {
+  if (popDirty && !force) {
+    $("popNote").focus();
+    toast(arm ? "Unsaved text. Press Escape again to discard it, or ⌘↵ to save."
+              : "This note has unsaved text. Save it, or press Escape to leave.", 3600);
+    if (arm) popEscArmed = true;
+    return false;
+  }
+  popCard = null; popNote = null; popDirty = false; popEscArmed = false;
   $("pop").classList.remove("on");
   overlayClose();
+  return true;
 }
+// Escape twice discards deliberately; once is a warning, so nothing is lost to
+// a reflex. The arm resets the moment more is typed.
+let popEscArmed = false;
 function syncPopPick() {
   const on = popCard && popNote && isPickedNote(popCard, popNote);
   $("popPick").classList.toggle("on", !!on);
@@ -3669,12 +3685,12 @@ $("bpq").addEventListener("keydown", (e) => {
 $("popClose").onclick = closePop;
 $("popPick").onclick = () => { if (popCard && popNote) { toggleSel("note", nKey(popCard, popNote)); syncPopPick(); } };
 $("popNote").addEventListener("input", () => {
-  popDirty = true;
+  popDirty = true; popEscArmed = false;
   $("popSt").textContent = "unsaved"; $("popSt").className = "pst unsaved";
 });
 $("popNote").addEventListener("keydown", (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); $("popSave").click(); }
-  if (e.key === "Escape") { e.stopPropagation(); closePop(); }
+  if (e.key === "Escape") { e.stopPropagation(); closePop({ force: popEscArmed, arm: true }); }
 });
 $("popSave").onclick = async () => {
   if (!popCard) return;
@@ -3684,7 +3700,7 @@ $("popSave").onclick = async () => {
     const out = await res.json();
     if (!res.ok) throw new Error(out.error || res.status);
     if (out.noteId) popNote = out.noteId;
-    popDirty = false;
+    popDirty = false; popEscArmed = false;
     $("popSt").textContent = "saved just now"; $("popSt").className = "pst";
     lastPayload = ""; await load();
     toast("Note saved");
@@ -3963,16 +3979,18 @@ document.addEventListener("keydown", (e) => {
     return;
   }
   // overlays, outermost first
+  // In z order, top first (doc preview 60 · help 50 · palettes 40 · popover 30),
+  // so this list and the ladder in the charter cannot drift apart.
   if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
+  if ($("help").style.display === "flex" && e.key !== "?") { closeHelp(); return; }
   if ($("bpick").classList.contains("on")) { if (e.key === "Escape") closeBoardPick(); return; }
   if ($("tpick").classList.contains("on")) { if (e.key === "Escape") closeTagPick(); return; }
   if ($("pop").classList.contains("on")) {
-    if (e.key === "Escape") closePop();
+    if (e.key === "Escape") closePop({ force: popEscArmed, arm: true });
     if (e.key === "e") { e.preventDefault(); $("popNote").focus(); }
     if (e.key === "p") { e.preventDefault(); $("popPick").click(); }
     return;
   }
-  if ($("help").style.display === "flex" && e.key !== "?") { closeHelp(); return; }
 
   const panel = !!openId && $("drawer").classList.contains("open");
   // jump straight to a tab by position, the way every tabbed thing does

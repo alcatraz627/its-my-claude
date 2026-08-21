@@ -11,6 +11,10 @@ inherits them instead of being told again. Two jobs:
 It grows. A new ruling gets added the same day it is made, with its date, so the
 charter is the record and nobody has to re-derive it from a transcript.
 
+The pattern this file is an instance of lives at
+`~/.claude/conventions/ui-charter.md`, which says when a project earns a charter
+and carries the QA budget below in reusable form.
+
 ---
 
 ## 1. The disposition

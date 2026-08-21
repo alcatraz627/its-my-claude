@@ -11,6 +11,7 @@ triggers:
 related:
   - conventions/html-output.md
   - mistake-patterns/2026-04-28-sherpa-data-loss-rca.md
+  - conventions/ui-charter.md
 tier: 2
 category: conventions
 updated: 2026-04-28
