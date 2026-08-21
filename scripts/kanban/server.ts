@@ -818,14 +818,18 @@ const server = Bun.serve({
     if (req.method === "POST" && p === "/api/pin") {
       const body = (await req.json().catch(() => null)) as
         { kind?: "card" | "item"; ref?: string; slug?: string; label?: string } | null;
-      if (!body?.ref || (body.kind !== "card" && body.kind !== "item")) {
-        return json({ error: "need {kind: card|item, ref}" }, 400);
+      const PIN_KINDS = ["card", "item", "board"];
+      if (!body?.ref || !PIN_KINDS.includes(body.kind as string)) {
+        return json({ error: `need {kind: ${PIN_KINDS.join("|")}, ref}` }, 400);
       }
       // Same refusals its siblings make: /api/item checks the board, /api/note
       // caps the size, and cli.ts refuses a card on no board because the link
       // would be dead on arrival. A pin pointing at nothing is that same defect.
       if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
       if ((body.label?.length ?? 0) > 200) return json({ error: "pin label over 200 chars" }, 413);
+      if (body.kind === "board" && !registry().boards[body.ref]) {
+        return json({ error: `no board ${body.ref}` }, 404);
+      }
       if (body.kind === "item" && !loadItems().items.some((i) => i.id === body.ref)) {
         return json({ error: `no ask ${body.ref}` }, 404);
       }

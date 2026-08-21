@@ -478,7 +478,9 @@ export interface ItemsFile { items: Item[] }
 export interface LandingsFile { landings: Record<string, Landing> }
 // Owner-only and read-side. No agent ever reads this file, which is the whole
 // difference between a pin and a star.
-export interface Pin { id: string; kind: "card" | "item"; ref: string; slug?: string; label?: string; at: string }
+// "board" joins card and item so starring a board reuses the jump list rather
+// than adding a fourth store for one boolean.
+export interface Pin { id: string; kind: "card" | "item" | "board"; ref: string; slug?: string; label?: string; at: string }
 export interface PinsFile { pins: Pin[] }
 
 export const loadItems = (): ItemsFile => readJson<ItemsFile>(ITEMS, { items: [] });

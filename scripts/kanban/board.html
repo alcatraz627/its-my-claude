@@ -58,7 +58,16 @@
   .crumb{display:flex;align-items:center;gap:7px;flex:none;font-size:12.5px;color:var(--text-3)}
   .crumb a{color:var(--text-3);text-decoration:none;border-radius:5px;padding:2px 5px;margin-left:-5px}
   .crumb a:hover{color:var(--text);background:var(--well)}
-  .brow{display:flex;align-items:center;gap:10px;min-width:0}
+  /* Three ranks in one row, and they should read as three: the way back is
+     quietest, the board's name is the title, its path is a mono aside. The gap
+     before the actions is larger than the gaps inside the identity group, so
+     the row parses as "who am I" then "what can I do". Charter §3, §6. */
+  .brow{display:flex;align-items:center;gap:9px;min-width:0}
+  .brow .crumb{font-size:12px}
+  .brow .crumb a{color:var(--text-3);text-decoration:none;border-radius:5px;padding:2px 5px}
+  .brow .crumb a:hover{color:var(--text);background:var(--card)}
+  .brow .crumb span{color:var(--border-2);margin:0 1px}
+  .brow .actions{margin-left:14px}
   .btitle{font:600 15.5px/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap}
   .bpath{color:var(--text-3);font:11.5px/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
   .actions{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
@@ -578,29 +587,62 @@
   .btitle{background:none;border:none;padding:2px 6px 2px 2px;border-radius:7px;gap:4px}
   .btitle:hover{background:var(--card);color:var(--text)}
   .btitle .bchev{font-size:11px;color:var(--text-3);line-height:1}
+  /* the binding rides on the control, so nobody has to open help to find it */
+  .btitle .bkey{font:11px/1 var(--mono);color:var(--text-3);background:var(--well);
+                border:1px solid var(--border);border-radius:4px;padding:2px 5px;margin-left:3px}
+  .btitle:hover .bkey{color:var(--text-2);border-color:var(--border-2)}
+  /* ---------- the palette ---------- */
+  /* One component. Boards use it, search uses it, tags use it. Sectioned, so a
+     result set can say what KIND of thing each group is instead of running the
+     three together. Charter §6: group, then hold. */
   #bpick,#tpick{position:fixed;inset:0;background:var(--scrim);display:none;align-items:flex-start;
-         justify-content:center;z-index:40;padding-top:14vh}
+         justify-content:center;z-index:40;padding-top:12vh}
   #bpick.on,#tpick.on{display:flex}
-  #bpick .bpbox,#tpick .bpbox{width:min(560px,92vw);background:var(--canvas);border:1px solid var(--border-2);
-                border-radius:13px;box-shadow:0 26px 64px rgb(0 0 0/.4);overflow:hidden}
-  #bpick input,#tpick input{width:100%;border:none;border-bottom:1px solid var(--border);background:none;color:var(--text);
-               font:400 14.5px/1 var(--sans);padding:15px 17px;outline:none}
-  .bplist{max-height:46vh;overflow-y:auto;padding:6px}
-  .bprow{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border-radius:8px;
-         background:none;border:1px solid transparent;cursor:pointer;text-align:left}
-  .bprow:hover,.bprow.on{background:var(--well);border-color:var(--border)}
-  .bprow.cur{border-color:var(--blue-br)}
-  .bprow .bn{font:600 13px/1.3 var(--sans);color:var(--text);flex:none}
-  .bprow .bp{flex:1;min-width:0;font:11.5px/1.3 var(--mono);color:var(--text-3);
+  #bpick .bpbox,#tpick .bpbox{width:min(620px,93vw);background:var(--canvas);border:1px solid var(--border-2);
+                border-radius:14px;box-shadow:0 28px 70px rgb(0 0 0/.42);overflow:hidden;
+                display:flex;flex-direction:column;max-height:76vh}
+  .bpq{display:flex;align-items:center;gap:11px;padding:0 16px;border-bottom:1px solid var(--border);flex:none}
+  .bpq .qi{flex:none;color:var(--text-3);display:grid;place-items:center}
+  #bpick input,#tpick input{flex:1;min-width:0;border:none;background:none;color:var(--text);
+               font:400 15px/1 var(--sans);padding:16px 0;outline:none}
+  #bpick input::placeholder,#tpick input::placeholder{color:var(--text-3)}
+  .bpq .qk{flex:none;font:11px var(--mono);color:var(--text-3);background:var(--well);
+           border:1px solid var(--border);border-radius:5px;padding:2px 6px}
+  .bplist{flex:1;min-height:0;overflow-y:auto;padding:7px 7px 9px}
+  /* a section header, not a row: dim, tracked, and it never takes the cursor */
+  .bpsec{display:flex;align-items:center;gap:8px;padding:11px 10px 5px;
+         font:600 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+  .bpsec:first-child{padding-top:4px}
+  .bpsec .line{flex:1;height:1px;background:var(--border)}
+  .bprow{display:flex;align-items:center;gap:11px;width:100%;padding:9px 10px;border-radius:9px;
+         background:none;border:1px solid transparent;cursor:pointer;text-align:left;
+         transition:background .1s,border-color .1s}
+  .bprow:hover{background:var(--well)}
+  .bprow.on{background:var(--well);border-color:var(--border-2);
+            box-shadow:inset 2px 0 0 0 var(--blue)}
+  .bprow:active{background:var(--card-hover)}
+  .bprow.cur .bn{color:var(--blue)}
+  .bprow .bi{flex:none;width:19px;display:grid;place-items:center;color:var(--text-3)}
+  .bprow.on .bi{color:var(--blue)}
+  .bprow .bn{font:600 13px/1.35 var(--sans);color:var(--text);flex:none;max-width:44%;
+             overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bprow .bp{flex:1;min-width:0;font:11.5px/1.35 var(--mono);color:var(--text-3);
              overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:rtl;text-align:left}
   .bprow .bc{flex:none;font:500 11.5px/1 var(--sans);color:var(--text-3)}
   .bprow .bu{flex:none;font:600 11px/1 var(--sans);color:var(--blue);background:var(--blue-bg);
              border:1px solid var(--blue-br);border-radius:20px;padding:2px 7px}
-  .bphint{display:flex;gap:14px;padding:9px 15px;border-top:1px solid var(--border);
-          font-size:11.5px;color:var(--text-3)}
-  .bphint kbd{font:11px var(--mono);background:var(--well);border:1px solid var(--border);
+  /* the star is a control inside a row, so it must not fire the row */
+  .bprow .bstar{flex:none;width:24px;height:24px;border-radius:6px;display:grid;place-items:center;
+                border:1px solid transparent;background:none;color:var(--text-3);opacity:0;
+                transition:opacity .1s,background .1s,color .1s}
+  .bprow:hover .bstar,.bprow.on .bstar,.bprow .bstar.starred{opacity:1}
+  .bprow .bstar:hover{background:var(--card);border-color:var(--border);color:var(--amber)}
+  .bprow .bstar.starred{color:var(--amber)}
+  .bphint{display:flex;gap:15px;padding:10px 16px;border-top:1px solid var(--border);
+          font-size:11.5px;color:var(--text-3);flex:none;background:var(--well)}
+  .bphint kbd{font:11px var(--mono);background:var(--card);border:1px solid var(--border);
               border-radius:4px;padding:1px 5px;margin-right:3px}
-  .bpnone{padding:16px 17px;font-size:12.5px;color:var(--text-3)}
+  .bpnone{padding:18px 17px;font-size:12.5px;color:var(--text-3)}
 
   /* ---------- chips (notes on the card face) ---------- */
   /* A note is a thing with an identity, so it gets a chip with a name, not a
@@ -658,6 +700,56 @@
   .stagbar button{flex:1;height:22px;padding:0;justify-content:center;font-size:11px;
                   background:none;border-color:transparent;color:var(--text-3)}
   .stagbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+
+  /* ---------- column sizing ---------- */
+  /* Each lane can be dragged wider and remembers it. The grip is on the lane's
+     trailing edge, the menu holds the numbers, and reset puts it back on the
+     400px floor the whole board is built around. */
+  .col{position:relative}
+  .colgrip{position:absolute;right:-8px;top:0;bottom:0;width:14px;cursor:col-resize;z-index:2}
+  .colgrip::after{content:"";position:absolute;left:6px;top:14px;bottom:14px;width:2px;border-radius:2px;
+                  background:transparent;transition:background .12s}
+  .colgrip:hover::after,.colgrip.on::after{background:var(--blue)}
+  .col.sized{flex:none}
+  .chead .cmenu{flex:none;width:22px;height:22px;padding:0;justify-content:center;
+                background:none;border-color:transparent;color:var(--text-3);opacity:0;transition:opacity .12s}
+  .col:hover .chead .cmenu,.chead .cmenu:focus-visible,.chead .cmenu.on{opacity:1}
+  .chead .cmenu:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  /* the properties card. Built to take more rows than it has today. */
+  .colcard{position:absolute;z-index:35;min-width:236px;background:var(--canvas);
+           border:1px solid var(--border-2);border-radius:11px;padding:12px 13px;
+           box-shadow:0 18px 44px rgb(0 0 0/.34);display:none;flex-direction:column;gap:9px}
+  .colcard.on{display:flex}
+  .colcard h4{font:600 12.5px/1.2 var(--sans);color:var(--text);display:flex;align-items:center;gap:7px}
+  .colcard .crow{display:flex;align-items:center;gap:9px;font:12px/1.4 var(--sans);color:var(--text-2)}
+  .colcard .crow .ck{flex:1;color:var(--text-3)}
+  .colcard .crow .cv{font:500 12px/1 var(--mono);color:var(--text)}
+  .colcard input[type=range]{width:100%;accent-color:var(--blue)}
+  .colcard .cbtns{display:flex;gap:6px;padding-top:2px}
+  .colcard .cbtns button{flex:1;height:26px;justify-content:center;font-size:12px}
+
+  /* ---------- the peek column ---------- */
+  /* Pressing a tag opens a temporary lane beside the board holding everything
+     that shares it. It has to look borrowed rather than owned: a dashed border,
+     a tinted ground, and a dismissal you have to mean. Charter §9. */
+  .col.peek{flex:1 1 400px;min-width:400px;max-width:520px;
+            border-style:dashed;border-color:var(--dot,var(--violet));
+            background:linear-gradient(color-mix(in srgb,var(--dot,var(--violet)) 7%,transparent),
+                                       color-mix(in srgb,var(--dot,var(--violet)) 7%,transparent)) var(--well);
+            animation:peekin .26s cubic-bezier(.32,.72,0,1)}
+  @keyframes peekin{from{opacity:0;transform:translateX(-14px);max-width:0}}
+  @media (prefers-reduced-motion: reduce){ .col.peek{animation:none} }
+  .col.peek .chead h2{color:var(--dot,var(--violet));display:flex;align-items:center;gap:7px}
+  .col.peek .chead .count{border-color:color-mix(in srgb,var(--dot,var(--violet)) 40%,transparent);
+                          color:var(--dot,var(--violet))}
+  .peekbar{display:flex;align-items:center;gap:7px;padding:0 4px 9px;flex:none}
+  .peekbar .pw{flex:1;font-size:11.5px;line-height:1.4;color:var(--text-3)}
+  .peekclose{height:24px;padding:0 9px;font-size:11.5px;background:var(--card);
+             border-color:var(--border);color:var(--text-2)}
+  .peekclose:hover{border-color:var(--dot,var(--violet));color:var(--text)}
+  .col.peek .card{cursor:pointer}
+  /* a peek card is a pointer at the real one, so it says so on hover */
+  .col.peek .card:hover{border-color:var(--dot,var(--violet))}
 
   /* ---------- cross-highlight ---------- */
   /* Hovering a thing that exists in two places lights both. The one under the
@@ -778,11 +870,24 @@
   /* Two audiences in one modal: someone who wants a key, and someone who wants
      to know what a thing IS. Tabs keep the first fast and give the second room. */
   #help .box{width:min(880px,94vw);padding:0;display:flex;flex-direction:column}
-  .htabs{display:flex;gap:2px;padding:12px 16px 0;border-bottom:1px solid var(--border);flex:none}
-  .htab{background:none;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;
-        padding:8px 13px;color:var(--text-3);font:600 12.5px/1 var(--sans);cursor:pointer}
-  .htab:hover{color:var(--text-2);background:var(--well)}
-  .htab.on{background:var(--canvas);border-color:var(--border);color:var(--text);box-shadow:0 1px 0 0 var(--canvas)}
+  /* The header is a quieter ground than the panes, so the tabs read as sitting
+     on it rather than floating. The active tab is marked by a rule under it,
+     not by a box around it: three-sided borders never quite meet the seam. */
+  .htabs{display:flex;gap:3px;padding:11px 16px 0;background:var(--well);
+         border-bottom:1px solid var(--border);flex:none;align-items:stretch}
+  .htab{display:flex;align-items:center;gap:9px;background:none;border:none;
+        border-bottom:2px solid transparent;border-radius:8px 8px 0 0;
+        padding:9px 13px 8px;color:var(--text-3);cursor:pointer;text-align:left;
+        transition:background .12s,color .12s,border-color .12s}
+  .htab .hi{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .htab .ht{display:flex;flex-direction:column;gap:2px;line-height:1}
+  .htab .ht b{font:600 12.5px/1.1 var(--sans);color:inherit}
+  .htab .ht i{font:400 10.5px/1.1 var(--sans);font-style:normal;color:var(--text-3);opacity:.85}
+  .htab:hover{color:var(--text-2);background:var(--canvas)}
+  .htab:hover .hi{color:var(--text-2)}
+  .htab.on{background:var(--canvas);color:var(--text);border-bottom-color:var(--blue)}
+  .htab.on .hi{color:var(--blue)}
+  .htab.on .ht i{color:var(--text-3);opacity:1}
   .hpane{display:none;padding:18px 22px 22px;overflow:auto;min-height:0}
   .hpane.on{display:block}
   .hclose{margin-left:auto;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
@@ -814,13 +919,22 @@
   .term .use .do b{color:var(--green)}
   .term .use .dont b{color:var(--red)}
   .term .use i{font-style:normal;color:var(--text-3)}
+  .vtbl{margin-bottom:22px}
+  .vtbl .ghead{margin-bottom:8px}
+  .vtbl table{width:100%;border-collapse:collapse}
+  .vtbl th{text-align:left;font:600 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
+           color:var(--text-3);padding:0 12px 7px 0;border-bottom:1px solid var(--border)}
+  .vtbl td{font:400 12.5px/1.5 var(--sans);color:var(--text-2);padding:7px 12px 7px 0;
+           border-bottom:1px solid var(--border);vertical-align:top}
+  .vtbl td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
+  .vtbl tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="brow">
     <span class="crumb"><a href="/" data-tip="The hub: every board, your pins and your drafts">All boards</a><span>/</span></span>
-    <button class="btitle" id="name" aria-haspopup="listbox" data-tip="Switch board (b)">kanban<span class="bchev">⌄</span></button>
+    <button class="btitle" id="name" aria-haspopup="listbox" data-tip="Switch board, star one, or jump to a recent one"><span class="bnm">kanban</span><span class="bkey">b</span><span class="bchev">⌄</span></button>
     <span class="bpath" id="root"></span>
     <span class="livepeers" id="live"></span>
     <div class="actions">
@@ -909,14 +1023,18 @@
 </div>
 <div id="state"></div>
 <div id="tpick" role="dialog" aria-modal="true" aria-label="add a tag"><div class="bpbox">
+  <div class="bpq"><span class="qi" id="tpIcon"></span>
   <input id="tpq" type="search" placeholder="milestone:M2 · tier:sonnet · effort:high · or any name" aria-label="find or create a tag" autocomplete="off">
+  <span class="qk">#</span></div>
   <div class="bplist" id="tplist" role="listbox"></div>
   <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> apply</span><span>type <kbd>kind:name</kbd> to make a new one</span><span><kbd>esc</kbd> close</span></div>
 </div></div>
 <div id="bpick" role="dialog" aria-modal="true" aria-label="switch board"><div class="bpbox">
-  <input id="bpq" type="search" placeholder="Type a board name or path" aria-label="find a board" autocomplete="off">
+  <div class="bpq"><span class="qi" id="bpIcon"></span>
+  <input id="bpq" type="search" placeholder="Jump to a board by name or path" aria-label="find a board" autocomplete="off">
+  <span class="qk">b</span></div>
   <div class="bplist" id="bplist" role="listbox"></div>
-  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>esc</kbd> close</span></div>
+  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>s</kbd> star</span><span><kbd>esc</kbd> close</span></div>
 </div></div>
 <div id="pop" role="dialog" aria-label="note editor">
   <div class="ph">
@@ -947,9 +1065,10 @@
 </div></div>
 <div id="help" role="dialog" aria-modal="true" aria-label="help"><div class="box">
   <div class="htabs" role="tablist">
-    <button class="htab on" data-pane="hKeys" role="tab">Keyboard</button>
-    <button class="htab" data-pane="hTerms" role="tab">What everything means</button>
-    <button class="htab" data-pane="hTags" role="tab">Note tags &amp; grades</button>
+    <button class="htab on" data-pane="hKeys" role="tab"><span class="hi"></span><span class="ht"><b>Keyboard</b><i>Shortcuts</i></span></button>
+    <button class="htab" data-pane="hTerms" role="tab"><span class="hi"></span><span class="ht"><b>Taxonomy</b><i>What is it called</i></span></button>
+    <button class="htab" data-pane="hVibe" role="tab"><span class="hi"></span><span class="ht"><b>Vibe Code</b><i>How does it work</i></span></button>
+    <button class="htab" data-pane="hTags" role="tab"><span class="hi"></span><span class="ht"><b>Hey Claude</b><i>Relay to the agent</i></span></button>
     <button class="hclose" type="button" id="hClose" aria-label="close">✕</button>
   </div>
   <div class="hpane on" id="hKeys">
@@ -988,6 +1107,7 @@
   </table>
   </div>
   <div class="hpane" id="hTerms"></div>
+  <div class="hpane" id="hVibe"></div>
   <div class="hpane" id="hTags">
   <table>
     <tr><td colspan="2" class="grouphead">Note tags</td></tr>
@@ -1091,7 +1211,9 @@ function tagChip(t, { onCard = null } = {}) {
   b.dataset.tip = `${presetOf(t.kind).label} · ${t.name}${t.note ? ` — ${t.note}` : ""}\nPress to show every card that shares it.`;
   b.onclick = (e) => {
     e.stopPropagation();
-    setFilter(filterText === tagFilter(t) ? "" : tagFilter(t));
+    // a tag press is "show me the others", which is a peek beside the board
+    // rather than a filter that hides the board you were reading
+    peekTag(peekOn?.id === t.id ? null : t);
   };
   if (onCard) {
     b.addEventListener("auxclick", (e) => {
@@ -1314,6 +1436,157 @@ function syncPopPick() {
   $("popPick").classList.toggle("on", !!on);
   $("popPick").innerHTML = on ? PICK_ICON : "○";
   $("popPick").dataset.tip = on ? "Selected — click to deselect" : "Add this note to the selection you send an agent";
+}
+
+// ---------- lane sizing ----------
+// A width the human chose beats the default, and it is remembered per lane per
+// board. The floor is the same 400px the whole board is built on; the ceiling
+// keeps one lane from eating the row.
+const COL_DEFAULT = 400, COL_MIN = 260, COL_MAX = 900;
+const colKey = (lane) => `kanban-colw-${slug}-${lane}`;
+const colWidth = (lane) => +localStorage.getItem(colKey(lane)) || 0;
+function applyColWidth(el, lane) {
+  const w = colWidth(lane);
+  el.classList.toggle("sized", !!w);
+  el.style.width = w ? `${w}px` : "";
+  el.style.maxWidth = w ? `${w}px` : "";
+  el.style.minWidth = w ? `${w}px` : "";
+}
+function setColWidth(lane, px) {
+  const w = Math.min(Math.max(Math.round(px), COL_MIN), COL_MAX);
+  localStorage.setItem(colKey(lane), String(w));
+  const el = document.getElementById(`lane-${lane}`);
+  if (el) applyColWidth(el, lane);
+  return w;
+}
+function resetColWidth(lane) {
+  localStorage.removeItem(colKey(lane));
+  const el = document.getElementById(`lane-${lane}`);
+  if (el) applyColWidth(el, lane);
+}
+function wireColGrip(grip, wrap, lane) {
+  let from = null;
+  grip.addEventListener("pointerdown", (e) => {
+    from = { x: e.clientX, w: wrap.getBoundingClientRect().width };
+    grip.classList.add("on");
+    try { grip.setPointerCapture(e.pointerId); } catch {}
+    e.preventDefault(); e.stopPropagation();
+  });
+  grip.addEventListener("pointermove", (e) => { if (from) setColWidth(lane, from.w + (e.clientX - from.x)); });
+  const end = (e) => {
+    if (!from) return;
+    from = null; grip.classList.remove("on");
+    try { grip.releasePointerCapture(e.pointerId); } catch {}
+  };
+  grip.addEventListener("pointerup", end);
+  grip.addEventListener("pointercancel", end);
+  // a grip nobody can tab to is not a control
+  grip.tabIndex = 0;
+  grip.addEventListener("keydown", (e) => {
+    const cur = wrap.getBoundingClientRect().width;
+    if (e.key === "ArrowRight") { setColWidth(lane, cur + 24); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { setColWidth(lane, cur - 24); e.preventDefault(); }
+  });
+}
+
+// The lane's properties, in a card that is built to grow. Today it carries the
+// name, the width and the card count; the shape takes more rows unchanged.
+function openColCard(lane, wrap, btn) {
+  closeColCard();
+  const card = document.createElement("div");
+  card.className = "colcard on";
+  card.id = "colcard";
+  const w = Math.round(wrap.getBoundingClientRect().width);
+  const cards = data.board.cards.filter((c) => c.lane === lane).length;
+  card.innerHTML =
+    `<h4>${laneIcon(lane, 13)}<span>${LANE_NAME[lane]}</span></h4>` +
+    `<div class="crow"><span class="ck">Cards in this lane</span><span class="cv">${cards}</span></div>` +
+    `<div class="crow"><span class="ck">Width</span><span class="cv" id="ccw">${w}px</span></div>` +
+    `<input type="range" id="ccr" min="${COL_MIN}" max="${COL_MAX}" step="10" value="${w}" aria-label="lane width">` +
+    `<div class="crow"><span class="ck">Card title</span><span class="cv">${BRIEF_MAX} chars</span></div>` +
+    `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset to ${COL_DEFAULT}px</button>` +
+    `<button type="button" id="ccdone">Done</button></div>`;
+  document.body.appendChild(card);
+  const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
+  card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
+  card.style.left = `${Math.min(Math.max(10, r.right - cr.width), innerWidth - cr.width - 10)}px`;
+  btn.classList.add("on");
+  const rng = card.querySelector("#ccr");
+  rng.oninput = () => { card.querySelector("#ccw").textContent = `${setColWidth(lane, +rng.value)}px`; };
+  card.querySelector("#ccreset").onclick = () => {
+    resetColWidth(lane);
+    rng.value = String(Math.round(document.getElementById(`lane-${lane}`).getBoundingClientRect().width));
+    card.querySelector("#ccw").textContent = `${rng.value}px`;
+    toast("Lane width reset");
+  };
+  card.querySelector("#ccdone").onclick = closeColCard;
+  setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
+}
+function closeColCardAway(e) { if (!e.target.closest("#colcard")) closeColCard(); else setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0); }
+function closeColCard() {
+  document.getElementById("colcard")?.remove();
+  document.querySelectorAll(".cmenu.on").forEach((b) => b.classList.remove("on"));
+}
+
+// ---------- the peek column ----------
+// A cluster made visible. Pressing a tag slides a temporary lane in beside the
+// board carrying every card that shares it, so you can see the group without
+// losing the lane you were reading. It is explicitly dismissed, never dropped
+// by the next click, because it is a place you work from.
+let peekOn = null;
+function peekTag(t) {
+  peekOn = t;
+  render();
+  if (t) {
+    // land on it rather than leaving it off the right edge
+    requestAnimationFrame(() => document.querySelector(".col.peek")?.scrollIntoView({ inline: "nearest", behavior: "smooth", block: "nearest" }));
+  }
+}
+function peekEl() {
+  if (!peekOn) return null;
+  const t = plan().tags.find((x) => x.id === peekOn.id);
+  if (!t) { peekOn = null; return null; }
+  const wrap = document.createElement("section");
+  wrap.className = `col peek k-${t.kind}`;
+  wrap.id = "peek";
+  const mine = data.board.cards.filter((c) => tagsOnCard(c.id).some((x) => x.id === t.id));
+  const head = document.createElement("div");
+  head.className = "chead";
+  head.innerHTML = `<h2><i class="tdot" style="width:8px;height:8px;border-radius:50%;background:var(--dot);display:inline-block"></i>` +
+    `<span></span></h2><span class="count">${mine.length}</span>`;
+  head.querySelector("span:not(.count)").textContent = t.kind === "plain" ? t.name : `${t.kind}: ${t.name}`;
+  wrap.appendChild(head);
+
+  const bar = document.createElement("div");
+  bar.className = "peekbar";
+  const w = document.createElement("span");
+  w.className = "pw";
+  w.textContent = mine.length
+    ? `Every card carrying this tag, wherever it sits. Click one to find it on the board.`
+    : `Nothing carries this tag yet.`;
+  const x = document.createElement("button");
+  x.type = "button"; x.className = "peekclose";
+  x.textContent = "Dismiss";
+  x.dataset.tip = "Close this peek. It stays until you say so.";
+  x.onclick = () => peekTag(null);
+  bar.append(w, x);
+  wrap.appendChild(bar);
+
+  const list = document.createElement("div");
+  list.className = "cards";
+  if (!mine.length) list.innerHTML = `<div class="empty-col">No cards yet</div>`;
+  mine.forEach((c) => {
+    const el = cardEl(c);
+    // in the peek, a card is a pointer: clicking finds the real one rather than
+    // opening a second copy of the same detail
+    el.onclick = (e) => {
+      if (e.target.closest(".chip,.cbox")) return;
+      if (!findCard(c.id)) toast("That card is filtered out of the board right now");
+    };
+    list.appendChild(el);
+  });
+  wrap.appendChild(list);
+  return wrap;
 }
 
 // ---------- cross-highlight ----------
@@ -2301,7 +2574,7 @@ async function refreshRail() {
 
 function render() {
   hideState();
-  $("name").textContent = data.name;
+  $("name").querySelector(".bnm").textContent = data.name;
   document.title = `${data.name} · kanban`;
   $("root").title = data.root; $("root").textContent = data.root;
   const all = data.board.cards;
@@ -2328,8 +2601,17 @@ function render() {
     head.className = "chead";
     const total = all.filter((c) => c.lane === lane).length;
     head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2>` +
-      `<span class="count">${filterText ? `${cardsIn.length}/${total}` : total}</span>`;
+      `<span class="count">${filterText ? `${cardsIn.length}/${total}` : total}</span>` +
+      `<button type="button" class="cmenu" aria-label="lane options">⋯</button>`;
+    head.querySelector(".cmenu").onclick = (e) => { e.stopPropagation(); openColCard(lane, wrap, e.currentTarget); };
     wrap.appendChild(head);
+    applyColWidth(wrap, lane);
+    const grip = document.createElement("div");
+    grip.className = "colgrip";
+    grip.setAttribute("role", "separator");
+    grip.dataset.tip = "Drag to resize this lane";
+    wireColGrip(grip, wrap, lane);
+    wrap.appendChild(grip);
     const list = document.createElement("div");
     list.className = "cards";
     if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this lane</div>`;
@@ -2356,6 +2638,9 @@ function render() {
         return none;
       })()]
     : LANE_ORDER.map(colEl).filter(Boolean);
+  // the peek sits at the end of the lanes, which is where it slid in from
+  const peek = peekEl();
+  if (peek) rest.push(peek);
 
   // In-place, so a held rail is never detached: reparenting a focused node
   // blurs it even when the parent is the same.
@@ -2997,6 +3282,10 @@ const TERMS = [
     p: "One vocabulary that cuts across every card. A tag has a kind, and the kind carries the colour of its dot: milestone, model tier, effort, area, risk, or plain. Milestones are tags rather than checklists, which is what makes a milestone answerable by a filter instead of a rollup. Tags are made by using them, so there is no vocabulary to define first, and the sidebar is where you rename or retire one. Pressing any chip anywhere shows every card that shares it.",
     do: "Use a milestone to group work, and tier or effort to tell an agent what a card is worth.",
     dont: "Do not confuse a tag with the coloured label pill. That is section context from your doc, set automatically." },
+  { id: "peek", vig: "lane", title: "Peek column", rel: ["tag", "milestone", "cluster"],
+    p: "Pressing a tag anywhere slides a temporary lane in beside the board holding every card that carries it, wherever those cards actually sit. It is how a cluster becomes visible: a milestone is a tag several cards share, so pressing it answers what is left without filtering the board you were reading. It looks borrowed on purpose, with a dashed border and a tinted ground, and it stays until you dismiss it because it is a place you work from. Clicking a card inside it finds the real one on the board and pulses it.",
+    do: "Press a milestone to see the whole group at once, then click through to the card you want.",
+    dont: "Do not treat it as a filter. The board underneath is untouched, which is the point." },
   { id: "goal", vig: "goal", title: "Goal", rel: ["card", "selection"],
     p: "One line per card saying what has to be true for it to be done. Titles say what the work is; a goal says what it is for, which is the thing an agent most often has to guess. It sits above the card's claims in the panel, edits in place, and travels with the card whenever you send a selection, so it arrives as context rather than as something to be inferred. Keep it to a sentence: anything longer is a note.",
     do: "Write the outcome, not the steps. “Finance can open the file” beats “fix the CSV writer”.",
@@ -3081,11 +3370,104 @@ function renderTerms() {
   pane.dataset.built = "1";
 }
 
+// one glyph per tab, in the board's own drawn style rather than emoji
+const HTAB_ICON = {
+  hKeys: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.4" y="3.6" width="13.2" height="8.8" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4.2 6.4h.01M6.6 6.4h.01M9 6.4h.01M11.4 6.4h.01M5 9.4h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  hTerms: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2.4 3.2A1.4 1.4 0 0 1 3.8 1.8H8v12.4H3.8a1.4 1.4 0 0 1-1.4-1.4V3.2ZM8 1.8h4.2a1.4 1.4 0 0 1 1.4 1.4v9.6a1.4 1.4 0 0 1-1.4 1.4H8" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+  hVibe: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M5.6 5 2.6 8l3 3M10.4 5l3 3-3 3M9.2 3.2 6.8 12.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  hTags: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M13.6 8.2c0 2.7-2.5 4.9-5.6 4.9-.7 0-1.4-.1-2-.3l-3.6 1.1 1.2-2.8a4.6 4.6 0 0 1-1.2-3c0-2.7 2.5-4.8 5.6-4.8s5.6 2.2 5.6 4.9Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+};
+document.querySelectorAll(".htab").forEach((t) => { t.querySelector(".hi").innerHTML = HTAB_ICON[t.dataset.pane] ?? ""; });
+
+// ---------- the Vibe Code tab ----------
+// How the thing actually works, for someone who wants to drive it rather than
+// just use it: which process owns which file, what a sync does and does not
+// touch, and what an agent can change from the command line.
+const VIBE_MAP = `<svg class="hmap" viewBox="0 0 840 250" role="img" aria-label="which process owns which file">
+  <text class="s" x="14" y="18">THE CLI · kanban.sh</text>
+  <rect class="n" x="14" y="26" width="176" height="86" rx="7"/>
+  <text class="t" x="28" y="48">sync · move · verify</text>
+  <text x="28" y="66">brief · link · drop</text>
+  <text class="s" x="28" y="88">writes board.json only</text>
+  <text class="s" x="28" y="103">asks the server for the rest</text>
+
+  <text class="s" x="14" y="140">THE SERVER · :5106</text>
+  <rect class="n" x="14" y="148" width="176" height="86" rx="7"/>
+  <text class="t" x="28" y="170">the board UI</text>
+  <text x="28" y="188">notes · selection · plan</text>
+  <text class="s" x="28" y="210">the only writer of those</text>
+
+  <path d="M196 70h60m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M196 190h60m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M104 118v22m0 0-6-7m6 7 6-7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="lbl" x="112" y="134">HTTP, for the human lane</text>
+
+  <text class="s" x="264" y="18">ONE FILE, ONE WRITER</text>
+  <rect class="y" x="264" y="26" width="196" height="208" rx="7"/>
+  <text class="t" x="278" y="48">board.json</text><text class="s" x="278" y="64">cards · lanes · overrides</text>
+  <text class="t" x="278" y="90">notes.json</text><text class="s" x="278" y="106">what you wrote</text>
+  <text class="t" x="278" y="132">plan.json</text><text class="s" x="278" y="148">tags · goals</text>
+  <text class="t" x="278" y="174">selection.json</text><text class="s" x="278" y="190">what you pointed at</text>
+  <text class="s" x="278" y="220">all but the first survive a sync</text>
+
+  <path d="M466 130h50m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="s" x="526" y="18">A SYNC</text>
+  <rect class="n" x="526" y="26" width="300" height="100" rx="7"/>
+  <text x="540" y="48">1. read plan docs, checkpoints, the live workspace</text>
+  <text x="540" y="68">2. rebuild every card from what it found</text>
+  <text x="540" y="88">3. carry the human's work back onto them</text>
+  <text class="s" x="540" y="110">refuses to empty a board when it finds nothing</text>
+
+  <text class="s" x="526" y="152">WHAT AN AGENT CHANGES</text>
+  <rect class="n" x="526" y="160" width="300" height="74" rx="7"/>
+  <text x="540" y="182">lane · verification grade · title brief</text>
+  <text x="540" y="202">linked docs · tags · goals</text>
+  <text class="s" x="540" y="222">never your notes, never your selection</text>
+</svg>`;
+
+const VIBE_TABLES = [
+  { h: "Who writes what", cols: ["File", "Owner", "Survives a sync"], rows: [
+    ["board.json", "the CLI", "rebuilt, with your work carried over"],
+    ["notes.json", "the server", "yes"],
+    ["plan.json", "the server", "yes"],
+    ["selection.json", "the server", "yes"],
+    ["ack.json", "the CLI", "yes"],
+  ]},
+  { h: "What an agent runs", cols: ["Command", "What it does"], rows: [
+    ["kanban.sh sync", "re-read the docs and rebuild the cards"],
+    ["kanban.sh notes --unread --ack", "read what you wrote, and mark it seen"],
+    ["kanban.sh selected", "read what you ticked, in full"],
+    ["kanban.sh items", "read your unsorted asks"],
+    ["kanban.sh move / verify / brief", "change a lane, grade a claim, name a card"],
+    ["kanban.sh tag / goal", "group a card, or say what it is for"],
+  ]},
+  { h: "How your writing reaches one", cols: ["You do this", "It arrives as"], rows: [
+    ["Write a note on a card", "an unread note, pulled on the agent's next pickup"],
+    ["Type in Your asks", "an unsorted ask for the agent to file into a card"],
+    ["Tick cards or notes", "a selection, read with kanban.sh selected"],
+    ["Press Send to agent", "an ipc message to whoever is live in this project"],
+    ["Star a board", "a pin, listed on the hub"],
+  ]},
+];
+
+function renderVibe() {
+  const pane = $("hVibe");
+  if (pane.dataset.built) return;
+  pane.innerHTML = VIBE_MAP + VIBE_TABLES.map((t) => `
+    <div class="vtbl">
+      <div class="ghead">${esc(t.h)}</div>
+      <table><thead><tr>${t.cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+      <tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>
+    </div>`).join("");
+  pane.dataset.built = "1";
+}
+
 document.querySelectorAll(".htab").forEach((tab) => {
   tab.onclick = () => {
     document.querySelectorAll(".htab").forEach((t) => t.classList.toggle("on", t === tab));
     document.querySelectorAll(".hpane").forEach((p) => p.classList.toggle("on", p.id === tab.dataset.pane));
     if (tab.dataset.pane === "hTerms") renderTerms();
+    if (tab.dataset.pane === "hVibe") renderVibe();
   };
 });
 $("hClose").onclick = closeHelp;
@@ -3098,6 +3480,7 @@ function openTagPick(cardId) {
   tpCard = cardId; tpAt = 0;
   $("tpick").classList.add("on");
   overlayOpen($("tpick"), $("tpq"));
+  $("tpIcon").innerHTML = SEARCH_ICON;
   $("tpq").value = "";
   renderTagPick();
   $("tpq").focus();
@@ -3171,16 +3554,30 @@ $("tpq").addEventListener("keydown", (e) => {
 $("tpick").onclick = (e) => { if (e.target === $("tpick")) closeTagPick(); };
 
 // ---------- board switcher ----------
-// Fetched when it opens, never cached: the set of boards changes underneath a
-// long-lived tab and a switcher that offers a board someone unregistered is
-// worse than one that takes 40ms.
-let bpBoards = [], bpAt = 0;
+// Sectioned: where you were, what you keep, then everything. Recency is a
+// per-browser convenience so it lives in localStorage; a star is a real
+// bookmark so it lives in pins.json, which until now nothing read.
+const RECENT_KEY = "kanban-recent-boards";
+const recentBoards = () => { try { return JSON.parse(localStorage.getItem(RECENT_KEY)) ?? []; } catch { return []; } };
+(function noteVisit() {
+  const list = recentBoards().filter((x) => x !== slug);
+  list.unshift(slug);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 12)));
+})();
+
+const STAR_ICON = (on) => `<svg width="13" height="13" viewBox="0 0 14 14" fill="${on ? "currentColor" : "none"}"><path d="m7 1.8 1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 10l-3.2 1.7.6-3.6L1.8 5.6l3.6-.5L7 1.8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
+const SEARCH_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.4"/><path d="m10.6 10.6 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+const BOARD_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`;
+
+let bpBoards = [], bpAt = 0, bpRows = [];
+const isStarredBoard = (s2) => pins.some((p) => p.kind === "board" && p.ref === s2);
+
 async function openBoardPick() {
   $("bpick").classList.add("on");
   overlayOpen($("bpick"), $("bpq"));
+  $("bpIcon").innerHTML = SEARCH_ICON;
   $("bpq").value = ""; bpAt = 0;
   $("bplist").innerHTML = `<div class="bpnone">Loading boards…</div>`;
-  $("bpq").focus();
   try {
     const res = await fetch("/api/boards");
     bpBoards = (await res.json()).boards ?? [];
@@ -3188,33 +3585,70 @@ async function openBoardPick() {
   renderBoardPick();
 }
 function closeBoardPick() { $("bpick").classList.remove("on"); overlayClose(); }
-function bpMatches() {
+
+// Sections are built, then flattened into one cursor list, so ↑/↓ crosses a
+// heading without ever landing on it.
+function bpSections() {
   const q = $("bpq").value.trim().toLowerCase();
-  const all = bpBoards.filter((b) => !q || b.name.toLowerCase().includes(q) || b.root.toLowerCase().includes(q));
-  // the board you are on sorts last: you are already here
-  return all.sort((a, b) => (a.slug === slug ? 1 : b.slug === slug ? -1 : (b.unread ?? 0) - (a.unread ?? 0)));
+  const hit = (b) => !q || b.name.toLowerCase().includes(q) || b.root.toLowerCase().includes(q);
+  const all = bpBoards.filter(hit);
+  const seen = new Set();
+  const take = (list) => list.filter((b) => !seen.has(b.slug) && (seen.add(b.slug), true));
+  const byId = Object.fromEntries(all.map((b) => [b.slug, b]));
+  const out = [];
+  if (!q) {
+    const rec = recentBoards().filter((x) => x !== slug).map((x) => byId[x]).filter(Boolean).slice(0, 3);
+    if (rec.length) out.push({ label: "Recent", rows: take(rec) });
+  }
+  const starred = take(all.filter((b) => isStarredBoard(b.slug)));
+  if (starred.length) out.push({ label: "Starred", rows: starred });
+  const rest = take(all).sort((x, y) => (x.slug === slug ? 1 : y.slug === slug ? -1 : (y.unread ?? 0) - (x.unread ?? 0)));
+  if (rest.length) out.push({ label: q ? "Matches" : "All boards", rows: rest });
+  return out;
 }
 function renderBoardPick() {
-  const rows = bpMatches();
-  bpAt = Math.min(bpAt, Math.max(0, rows.length - 1));
-  if (!rows.length) { $("bplist").innerHTML = `<div class="bpnone">No board matches that.</div>`; return; }
-  $("bplist").replaceChildren(...rows.map((b, i) => {
-    const el = document.createElement("button");
-    el.type = "button"; el.role = "option";
-    el.className = "bprow" + (i === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
-    const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
-      .reduce((n, [, v]) => n + v, 0);
-    el.innerHTML = `<span class="bn"></span><span class="bp"></span>` +
-      (b.unread ? `<span class="bu">${b.unread} unread</span>` : "") +
-      `<span class="bc">${open} open${b.slug === slug ? " · here" : ""}</span>`;
-    el.querySelector(".bn").textContent = b.name;
-    el.querySelector(".bp").textContent = b.root;
-    el.onmouseenter = () => { bpAt = i; markBp(); };
-    el.onclick = () => gotoBoard(b);
-    return el;
-  }));
+  const secs = bpSections();
+  bpRows = secs.flatMap((s2) => s2.rows);
+  bpAt = Math.min(bpAt, Math.max(0, bpRows.length - 1));
+  if (!bpRows.length) { $("bplist").innerHTML = `<div class="bpnone">No board matches that.</div>`; return; }
+  const frag = document.createDocumentFragment();
+  let i = 0;
+  for (const sec of secs) {
+    const h = document.createElement("div");
+    h.className = "bpsec";
+    h.innerHTML = `<span>${sec.label}</span><span class="line"></span>`;
+    frag.appendChild(h);
+    for (const b of sec.rows) {
+      const at = i++;
+      const el = document.createElement("button");
+      el.type = "button"; el.role = "option";
+      el.className = "bprow" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
+      const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
+        .reduce((n, [, v]) => n + v, 0);
+      el.innerHTML = `<span class="bi">${BOARD_ICON}</span><span class="bn"></span><span class="bp"></span>` +
+        (b.unread ? `<span class="bu">${b.unread} unread</span>` : "") +
+        `<span class="bc">${open} open${b.slug === slug ? " · here" : ""}</span>` +
+        `<span class="bstar${isStarredBoard(b.slug) ? " starred" : ""}" role="button">${STAR_ICON(isStarredBoard(b.slug))}</span>`;
+      el.querySelector(".bn").textContent = b.name;
+      el.querySelector(".bp").textContent = b.root;
+      el.onmouseenter = () => { bpAt = at; markBp(); };
+      el.onclick = () => gotoBoard(b);
+      el.querySelector(".bstar").onclick = (e) => { e.stopPropagation(); toggleStar(b); };
+      frag.appendChild(el);
+    }
+  }
+  $("bplist").replaceChildren(frag);
 }
 const markBp = () => $("bplist").querySelectorAll(".bprow").forEach((el, i) => el.classList.toggle("on", i === bpAt));
+async function toggleStar(b) {
+  try {
+    const res = await fetch("/api/pin", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ kind: "board", ref: b.slug, slug: b.slug, label: b.name }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    await refreshRail();          // pins live on the rail payload
+    renderBoardPick();
+  } catch (e) { toast(`Star failed: ${e.message}`, 3500, "err"); }
+}
 function gotoBoard(b) {
   if (!b) return;
   if (b.slug === slug) { closeBoardPick(); return; }
@@ -3224,10 +3658,11 @@ $("name").onclick = openBoardPick;
 $("bpick").onclick = (e) => { if (e.target === $("bpick")) closeBoardPick(); };
 $("bpq").addEventListener("input", () => { bpAt = 0; renderBoardPick(); });
 $("bpq").addEventListener("keydown", (e) => {
-  const rows = bpMatches();
-  if (e.key === "ArrowDown") { bpAt = Math.min(bpAt + 1, rows.length - 1); markBp(); e.preventDefault(); }
+  if (e.key === "ArrowDown") { bpAt = Math.min(bpAt + 1, bpRows.length - 1); markBp(); e.preventDefault(); }
   else if (e.key === "ArrowUp") { bpAt = Math.max(bpAt - 1, 0); markBp(); e.preventDefault(); }
-  else if (e.key === "Enter") { gotoBoard(rows[bpAt]); e.preventDefault(); }
+  else if (e.key === "Enter") { gotoBoard(bpRows[bpAt]); e.preventDefault(); }
+  // star without leaving the keyboard, which is the point of having the palette
+  else if (e.key === "s" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (bpRows[bpAt]) toggleStar(bpRows[bpAt]); }
   else if (e.key === "Escape") { closeBoardPick(); e.stopPropagation(); }
 });
 
