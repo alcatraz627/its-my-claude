@@ -1,6 +1,6 @@
 ---
 name: catchup
-description: Resumes a session from a /core-dump checkpoint. Reads ~/.claude/checkpoints/ index when CWD is ambiguous (presents a picker), or a specific _checkpoint.claude.md when one is given. Restores session context with minimum token usage by loading only targeted file sections relevant to pending tasks, and presents a compact briefing to immediately resume work. Companion skill to /core-dump.
+description: Resumes a session from a /core-dump checkpoint. Resolves via the ~/.claude/checkpoints/ index (picker when ambiguous) or a named _checkpoint.claude.md, loads only targeted file sections for pending tasks, and presents a compact briefing to resume work. Companion to /core-dump.
 allowed-tools: Read, Glob, Grep, Bash
 argument-hint: "[filename | --session-id ID | --pick N]"
 user-invocable: true
@@ -331,6 +331,7 @@ it". So for each entry, do one of exactly two things, and never a third:
 | `goal: … · SUPERSEDED by …` | **Ask.** One line: the old goal, what superseded it, and whether the new one stands. |
 | `wake: … · ARMED` | **Ask before re-arming.** A wake fires an action on a clock. Re-arming one the owner has moved on from is a side effect they did not order. |
 | `deadline: … · LIVE` | **Ask.** Its burn projection and veto ledger belong to the run that set it; a resumed session inherits the commitment, not the accounting. |
+| `crons: <duty (job, schedule)> …` | **CronList first; re-arm only what is absent.** CronCreate jobs are PROCESS-scoped: they survive /clear and /compact, and die only with the process. A checkpoint claiming a cron "died with the /clear" is wrong by construction. Run `CronList` and `bash ~/.claude/scripts/cron/cron-duty.sh list`; re-arm only duties missing from both, `record` what you arm, and delete any duplicate you find (the c2271ddc double check-in, 2026-08-21). |
 | any `FIRED` / `MET` / `MISSED` / `none` | Say nothing. Spent commitments are not news. |
 
 Never silently inherit, and never silently drop. Both failures look identical from
@@ -456,6 +457,11 @@ The JSON keys, every one optional and omitted when empty:
   // A goal marked STILL VALID is stated as in force, because it was auto-re-armed.
   // A wake or deadline is stated as PENDING YOUR CALL, because those are asked
   // rather than assumed. Spent commitments are omitted entirely.
+  //
+  // Same-work-stream atone prechecks also ride here (Phase 3.3 promotion rule):
+  //   {"head": "🙏 precheck", "body": "<slug> (this work stream, <date>): <precheck, verbatim imperative>"}
+  // Cap 2, newest first. Never rendered as Learnings; a recurrence-1 slug's only
+  // carrier at resume time is the checkpoint, and its precheck binds like a fence.
   "fences": [{"head": "<2-3 words>", "body": "<verbatim>"}],
 
   // QUIET: merged to one line by the renderer
@@ -562,7 +568,25 @@ Scan `.claude/skills/runtime-notes.md` for entries relevant to the task domain (
 
 Fold the checkpoint's own **Session Insights** section (parsed in 1.3) into the same "Learnings" block: its gotchas and decisions were written by the session you're resuming and routinely carry the highest-value continuation context (model-routing choices, dead ends already explored, non-obvious traps).
 
-Third source, the atone register: read `~/.claude/atone/derived/_tldr.txt` (skip silently if absent). Pick AT MOST 2 patterns whose precheck plausibly binds the checkpoint's next action or pending items, and fold each into Learnings as `🙏 watch · <slug> ×N: <the tie to this resume's work>`. The SessionStart lane already shows the whole register, so the briefing's only job is the tie to the work being resumed; an unrelated top pattern is noise here, not diligence. Same-session atone events named in the checkpoint's Session Insights (core-dump 2.5 records them) outrank the register: a fresh wound beats a chronic one.
+Third source, the atone register: read `~/.claude/atone/derived/_tldr.txt` (skip silently if absent). Pick AT MOST 2 patterns whose precheck plausibly binds the checkpoint's next action or pending items, and fold each into Learnings as `🙏 watch · <slug> ×N: <the tie to this resume's work>`. The SessionStart lane already shows the whole register, so the briefing's only job is the tie to the work being resumed; an unrelated top pattern is noise here, not diligence.
+
+**Same-work-stream atones are FENCES, never Learnings.** An atone event named in
+the checkpoint's Session Insights (core-dump 2.5 records them) was filed by the
+work stream you are resuming, and a slug at recurrence 1 is invisible in the
+register BY CONSTRUCTION, which makes the checkpoint its only carrier at the
+moment its precheck is cheapest to apply. A precheck is an imperative; a learning
+is a fact; rendering the first as the second is how a session re-reads its own
+wound as orientation and repeats it hours later (gcp-fable msg-7d2ea2ed,
+mist-20260820-191749-17: the slug's first instance was parsed from the checkpoint
+into Learnings, surfaced, and repeated the same day). So: for each atone event the
+checkpoint names (cap 2, newest first), fetch its precheck text
+(`bash ~/.claude/scripts/atone.sh show <id>`, or the checkpoint's own wording when
+the ledger is unavailable) and render it as a Phase 3.1 `fences` row, head
+`🙏 precheck`, body `<slug> (this work stream, <date>): <precheck, verbatim
+imperative>`. These rows land in NOW with the constraints; they never appear as
+`🙏 watch` Learnings, and they do not count against the register's 2-pick cap.
+Register-wide picks stay in Learnings as before: a fresh wound beats a chronic
+one, and the fence tier is the difference.
 
 ### 3.4 Surface live subsystem state
 

@@ -10,6 +10,7 @@ related:
   - conventions/cli-help-design.md
   - conventions/tui-design.md
   - rules/sub-agent-outputs.md
+  - conventions/shipped-checks-serve-the-author.md
 tier: 2
 category: conventions
 updated: 2026-07-04

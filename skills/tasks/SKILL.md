@@ -1,6 +1,6 @@
 ---
 name: tasks
-description: Show the current task list as ONE grouped, tagged, sequenced table, sized so it never has to be scrolled to. Groups by the project's ruled key (batch, domain, class, or the actor split), width free, height within 44 lines. Also the write path when the harness has no Task tool (task.sh). Use when asked to show the task list, the todo list, the queue, what is left, what is pending, the status of open work, or to regroup / rearrange it.
+description: Show the current task list as ONE grouped, tagged, sequenced table (project's ruled key; width free, height within 44 lines). Also the write path when the harness has no Task tool (task.sh). Use for the task list, todo list, queue, what is left or pending, or to regroup it.
 argument-hint: "[--group batch|domain|class|actor] [--set-group <key>] [--json | --compact | --session <sid8>]"
 user-invocable: true
 allowed-tools: Bash, Read
@@ -168,7 +168,9 @@ The point is that columns answer the question the reader has today.
 
 Owner ruling, 2026-08-15: a bare task number, proposal id, disposition code, or
 file path tells an out-of-context reader nothing about the premise of the row.
-Every such reference gets a one-line gloss or an absolute path.
+Every such reference gets a one-line gloss or an absolute path. The stronger
+form: a row whose SUBJECT was compressed away is deleted, never shipped. A
+subjectless id row is noise wearing a row's shape (mist-20260820-092606-29).
 
 `--refs` resolves them in bulk: proposal ids against the ledger, task numbers
 against the store, files by existence check, atone ids to their lookup command.
@@ -193,7 +195,10 @@ the glyph and the summary line rather than the sections.
 
 The table is a status surface, not a record. For descriptions and provenance,
 generate a ledger instead and hand over the path, because that content cannot fit
-the height cap and should not try:
+the height cap and should not try. One overflow is different: when the rows that
+overflow are OWNER-GATED decisions, the route is /decision-wizard, not a ledger
+file. A decision queue is answered, not read
+(rules/owner-decisions-go-through-a-wizard.md):
 
 ```bash
 # see assets/reports/<date>-task-ledger/ledger.md for the shape

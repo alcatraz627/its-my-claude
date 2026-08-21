@@ -18695,3 +18695,746 @@
 {"id": "65cfe4c27a2ad5d1", "sid": "7828eb80-e17d-47a2-8b04-a0b809f9bba3", "state": "shadow", "surface": "prompt", "ts": 1787223794}
 {"id": "2c5dedd9d8a2b605", "sid": "7828eb80-e17d-47a2-8b04-a0b809f9bba3", "state": "live", "surface": "prompt", "ts": 1787223794}
 {"id": "d70ac4ce6f871434", "sid": "7828eb80-e17d-47a2-8b04-a0b809f9bba3", "state": "live", "surface": "prompt", "ts": 1787223794}
+{"id": "0af5975537d2493a", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787223915}
+{"id": "91c2e2e7f756ba2b", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787223915}
+{"id": "3c40a861cd0842a7", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787223915}
+{"id": "8923583f5c7a27d2", "sid": "1037b7fa-ea17-4564-b1bf-9195b00807b4", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787223930}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787223934}
+{"id": "0af5975537d2493a", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787223943}
+{"id": "91c2e2e7f756ba2b", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787223943}
+{"id": "3c40a861cd0842a7", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787223943}
+{"id": "0af5975537d2493a", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224077}
+{"id": "91c2e2e7f756ba2b", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224077}
+{"id": "3c40a861cd0842a7", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224077}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224110}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224110}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224110}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224110}
+{"id": "b26957e5af923ced", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787224126}
+{"id": "2c5dedd9d8a2b605", "sid": "810270b1-b71b-424d-8d46-979f8a3cc663", "state": "live", "surface": "prompt", "ts": 1787224133}
+{"id": "d70ac4ce6f871434", "sid": "810270b1-b71b-424d-8d46-979f8a3cc663", "state": "live", "surface": "prompt", "ts": 1787224133}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224151}
+{"id": "0af5975537d2493a", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224237}
+{"id": "91c2e2e7f756ba2b", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224237}
+{"id": "3c40a861cd0842a7", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224237}
+{"id": "8f2469b9c91895c0", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224237}
+{"id": "0af5975537d2493a", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224277}
+{"id": "91c2e2e7f756ba2b", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224277}
+{"id": "3c40a861cd0842a7", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224277}
+{"id": "8f2469b9c91895c0", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224277}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787224279}
+{"id": "b26957e5af923ced", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787224323}
+{"id": "2c5dedd9d8a2b605", "sid": "f78307d1-0c4e-495b-8982-d4eb0d88a1a3", "state": "live", "surface": "prompt", "ts": 1787224329}
+{"id": "d70ac4ce6f871434", "sid": "f78307d1-0c4e-495b-8982-d4eb0d88a1a3", "state": "live", "surface": "prompt", "ts": 1787224329}
+{"id": "0af5975537d2493a", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224541}
+{"id": "91c2e2e7f756ba2b", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224541}
+{"id": "3c40a861cd0842a7", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224541}
+{"id": "8f2469b9c91895c0", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224541}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224600}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224600}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224600}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224616}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224616}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224616}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224616}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224617}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224619}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224627}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224632}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224632}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224632}
+{"id": "65cfe4c27a2ad5d1", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "shadow", "surface": "prompt", "ts": 1787224723}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224824}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224824}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224824}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224824}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787224838}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224838}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224838}
+{"id": "8f2469b9c91895c0", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787224838}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224847}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224848}
+{"id": "fbbe2e1ac4733ec2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224850}
+{"id": "fbbe2e1ac4733ec2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224855}
+{"id": "ab332bca10f938fc", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224862}
+{"id": "6ac96d0a5866cf77", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224862}
+{"id": "fbbe2e1ac4733ec2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224862}
+{"id": "fbbe2e1ac4733ec2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224896}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224896}
+{"id": "fbbe2e1ac4733ec2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224900}
+{"id": "8923583f5c7a27d2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224900}
+{"id": "ab332bca10f938fc", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224904}
+{"id": "6ac96d0a5866cf77", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787224904}
+{"id": "fbbe2e1ac4733ec2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787224904}
+{"id": "8923583f5c7a27d2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224916}
+{"id": "8923583f5c7a27d2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787224927}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225028}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225028}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225028}
+{"id": "8f2469b9c91895c0", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225028}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225071}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225236}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225321}
+{"id": "0af5975537d2493a", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225324}
+{"id": "91c2e2e7f756ba2b", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225324}
+{"id": "3c40a861cd0842a7", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225324}
+{"id": "8f2469b9c91895c0", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225324}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225353}
+{"id": "0af5975537d2493a", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225371}
+{"id": "91c2e2e7f756ba2b", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225371}
+{"id": "3c40a861cd0842a7", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225371}
+{"id": "8f2469b9c91895c0", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225371}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225426}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225426}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225426}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225426}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225682}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787225682}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225682}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787225682}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225745}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225848}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787225934}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787226062}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787226063}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226185}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226185}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787226185}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226192}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226192}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787226192}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226197}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226197}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787226197}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226198}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226198}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787226198}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226204}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787226204}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787226204}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787226230}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787226396}
+{"id": "8923583f5c7a27d2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787226426}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787226619}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787226619}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787226619}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787226619}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787226711}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787226995}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787227862}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787228004}
+{"id": "44a5d9b7187585b2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787228944}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787228944}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787228944}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787228944}
+{"id": "44a5d9b7187585b2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787228966}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787228966}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787228966}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787228966}
+{"id": "ab332bca10f938fc", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787228979}
+{"id": "6ac96d0a5866cf77", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1787228979}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787228979}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787228990}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787229035}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229075}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229075}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229075}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229075}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229143}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229143}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229143}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229143}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229173}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229173}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229173}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229173}
+{"id": "44a5d9b7187585b2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229199}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229199}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229199}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229199}
+{"id": "44a5d9b7187585b2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229201}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229201}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229201}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229201}
+{"id": "44a5d9b7187585b2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229204}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229204}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229204}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229204}
+{"id": "fbbe2e1ac4733ec2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787229218}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787229392}
+{"id": "8923583f5c7a27d2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787229396}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787229662}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229838}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229838}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229838}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229838}
+{"id": "b26957e5af923ced", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787229852}
+{"id": "2c5dedd9d8a2b605", "sid": "282ce1f8-9d25-4d51-bde3-d6e78d14aa32", "state": "live", "surface": "prompt", "ts": 1787229859}
+{"id": "d70ac4ce6f871434", "sid": "282ce1f8-9d25-4d51-bde3-d6e78d14aa32", "state": "live", "surface": "prompt", "ts": 1787229859}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787229886}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229886}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229886}
+{"id": "8f2469b9c91895c0", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787229886}
+{"id": "65cfe4c27a2ad5d1", "sid": "d6af000e-2d5b-40ef-83c4-7797cd4f7a55", "state": "shadow", "surface": "prompt", "ts": 1787229888}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787229910}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787230410}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787230645}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787230975}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787231166}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787231463}
+{"id": "65cfe4c27a2ad5d1", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "shadow", "surface": "prompt", "ts": 1787232077}
+{"id": "2c5dedd9d8a2b605", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "prompt", "ts": 1787232077}
+{"id": "65cfe4c27a2ad5d1", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "shadow", "surface": "prompt", "ts": 1787232528}
+{"id": "8923583f5c7a27d2", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787232673}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787232790}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232790}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232790}
+{"id": "8f2469b9c91895c0", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232790}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787232877}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787232888}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232888}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232888}
+{"id": "8f2469b9c91895c0", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232888}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787232920}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232920}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232920}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232920}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787232967}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232967}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232967}
+{"id": "8f2469b9c91895c0", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787232967}
+{"id": "0af5975537d2493a", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787233035}
+{"id": "91c2e2e7f756ba2b", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787233035}
+{"id": "3c40a861cd0842a7", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787233035}
+{"id": "8f2469b9c91895c0", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787233035}
+{"id": "b26957e5af923ced", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787233054}
+{"id": "2c5dedd9d8a2b605", "sid": "69f87dbd-f4a6-43df-80cd-3cd3eedf4a97", "state": "live", "surface": "prompt", "ts": 1787233062}
+{"id": "d70ac4ce6f871434", "sid": "69f87dbd-f4a6-43df-80cd-3cd3eedf4a97", "state": "live", "surface": "prompt", "ts": 1787233062}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787233262}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787233282}
+{"id": "8923583f5c7a27d2", "sid": "b4373e33-d46a-4927-9a51-7ad99bfd89af", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787233296}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787233390}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787233445}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787233445}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787233445}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787233445}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787233529}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787235063}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787235256}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787235547}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787235851}
+{"id": "65cfe4c27a2ad5d1", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "shadow", "surface": "prompt", "ts": 1787235963}
+{"id": "2c5dedd9d8a2b605", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "prompt", "ts": 1787235963}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787236013}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236013}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236013}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236013}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787236037}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236037}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236037}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236037}
+{"id": "2c5dedd9d8a2b605", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "prompt", "ts": 1787236212}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787236288}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787236297}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236297}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236297}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236297}
+{"id": "0af5975537d2493a", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787236347}
+{"id": "91c2e2e7f756ba2b", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236347}
+{"id": "3c40a861cd0842a7", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236347}
+{"id": "8f2469b9c91895c0", "sid": "0eeffc6e-39a0-48f0-82f1-7b1d6232d621", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787236347}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787236374}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787236491}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787237026}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787237243}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787237565}
+{"id": "0af5975537d2493a", "sid": "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787237588}
+{"id": "91c2e2e7f756ba2b", "sid": "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787237588}
+{"id": "3c40a861cd0842a7", "sid": "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787237588}
+{"id": "8f2469b9c91895c0", "sid": "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787237588}
+{"id": "b26957e5af923ced", "sid": "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787237602}
+{"id": "65cfe4c27a2ad5d1", "sid": "272e9069-0cb5-45be-bd36-b79281657259", "state": "shadow", "surface": "prompt", "ts": 1787237607}
+{"id": "2c5dedd9d8a2b605", "sid": "272e9069-0cb5-45be-bd36-b79281657259", "state": "live", "surface": "prompt", "ts": 1787237607}
+{"id": "d70ac4ce6f871434", "sid": "272e9069-0cb5-45be-bd36-b79281657259", "state": "live", "surface": "prompt", "ts": 1787237607}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787237996}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787238236}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787238819}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787239188}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787239242}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787240463}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787242262}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787242649}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787242660}
+{"id": "65cfe4c27a2ad5d1", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "shadow", "surface": "prompt", "ts": 1787242989}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787243082}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787243082}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787243082}
+{"id": "8f2469b9c91895c0", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787243082}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787244305}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244349}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244349}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244349}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244349}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244369}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244369}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244369}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244369}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244428}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244428}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244428}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244428}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244430}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244430}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244430}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244430}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244449}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244449}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244449}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244449}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244457}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244457}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244457}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244457}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244462}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244462}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244462}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244462}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244489}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244489}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244489}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244489}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244526}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244526}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244526}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244526}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244560}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244560}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244560}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244560}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244584}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244584}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244584}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244584}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787244587}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244623}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244623}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244623}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244623}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244660}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244660}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244660}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244660}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244942}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244942}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244942}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244946}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244946}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244946}
+{"id": "2c5dedd9d8a2b605", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "prompt", "ts": 1787244988}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787244994}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244994}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787244994}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787245004}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245004}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245004}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787245033}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245033}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245033}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787245035}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245035}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245035}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787245035}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787245392}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245392}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245392}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787245392}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787245770}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787245862}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787247663}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248141}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248141}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248141}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248141}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248158}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248158}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248158}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248158}
+{"id": "fbbe2e1ac4733ec2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787248168}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248190}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248190}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248190}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248190}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248222}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787248222}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248222}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787248222}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787248269}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787248896}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787249430}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787249462}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787251263}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787252999}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787252999}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787252999}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787252999}
+{"id": "fbbe2e1ac4733ec2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787253007}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787253029}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787253029}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253029}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253029}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787253063}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787253167}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787253453}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253453}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253453}
+{"id": "8f2469b9c91895c0", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253453}
+{"id": "b26957e5af923ced", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787253467}
+{"id": "65cfe4c27a2ad5d1", "sid": "f35fb866-de9c-4d0d-a775-14769db1fe49", "state": "shadow", "surface": "prompt", "ts": 1787253473}
+{"id": "2c5dedd9d8a2b605", "sid": "f35fb866-de9c-4d0d-a775-14769db1fe49", "state": "live", "surface": "prompt", "ts": 1787253473}
+{"id": "d70ac4ce6f871434", "sid": "f35fb866-de9c-4d0d-a775-14769db1fe49", "state": "live", "surface": "prompt", "ts": 1787253473}
+{"id": "0af5975537d2493a", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787253525}
+{"id": "91c2e2e7f756ba2b", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253525}
+{"id": "3c40a861cd0842a7", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253525}
+{"id": "8f2469b9c91895c0", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253525}
+{"id": "b26957e5af923ced", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787253546}
+{"id": "65cfe4c27a2ad5d1", "sid": "2bb86cfa-06b1-4cab-aa93-1cc5301a540d", "state": "shadow", "surface": "prompt", "ts": 1787253554}
+{"id": "2c5dedd9d8a2b605", "sid": "2bb86cfa-06b1-4cab-aa93-1cc5301a540d", "state": "live", "surface": "prompt", "ts": 1787253554}
+{"id": "d70ac4ce6f871434", "sid": "2bb86cfa-06b1-4cab-aa93-1cc5301a540d", "state": "live", "surface": "prompt", "ts": 1787253554}
+{"id": "b26957e5af923ced", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787253582}
+{"id": "65cfe4c27a2ad5d1", "sid": "ffb01f0d-6df2-48de-97ce-1a5437087849", "state": "shadow", "surface": "prompt", "ts": 1787253588}
+{"id": "2c5dedd9d8a2b605", "sid": "ffb01f0d-6df2-48de-97ce-1a5437087849", "state": "live", "surface": "prompt", "ts": 1787253588}
+{"id": "d70ac4ce6f871434", "sid": "ffb01f0d-6df2-48de-97ce-1a5437087849", "state": "live", "surface": "prompt", "ts": 1787253588}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787253592}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787253592}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253592}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787253592}
+{"id": "fbbe2e1ac4733ec2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787253599}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787253616}
+{"id": "21c3c4770c14faf1", "sid": "6574a122-8999-449a-836f-3386f710f4f8", "state": "shadow", "surface": "prompt", "ts": 1787253641}
+{"id": "65cfe4c27a2ad5d1", "sid": "6574a122-8999-449a-836f-3386f710f4f8", "state": "shadow", "surface": "prompt", "ts": 1787253641}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787254140}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787254140}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787254140}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787254982}
+{"id": "fbbe2e1ac4733ec2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787255061}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255075}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255075}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255075}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255104}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255104}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255104}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255104}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255128}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255128}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255128}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255128}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255179}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255179}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255179}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787255280}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255356}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255356}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255356}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255356}
+{"id": "0af5975537d2493a", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787255393}
+{"id": "91c2e2e7f756ba2b", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255393}
+{"id": "3c40a861cd0842a7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255393}
+{"id": "8f2469b9c91895c0", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787255393}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787256663}
+{"id": "65cfe4c27a2ad5d1", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "shadow", "surface": "prompt", "ts": 1787257220}
+{"id": "70851a16751aebf7", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "prompt", "ts": 1787257414}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257445}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257445}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257445}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257445}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257574}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257574}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257574}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787257621}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257824}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257824}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257824}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257824}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257865}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787257865}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257865}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787257865}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787258093}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787258463}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787258801}
+{"id": "44a5d9b7187585b2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787259143}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787259143}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787259143}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787259143}
+{"id": "65cfe4c27a2ad5d1", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "shadow", "surface": "prompt", "ts": 1787259235}
+{"id": "8923583f5c7a27d2", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787259364}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787259374}
+{"id": "65cfe4c27a2ad5d1", "sid": "eff2a34f-9ad9-4173-a3cf-2a2e38fbb1e1", "state": "shadow", "surface": "prompt", "ts": 1787259390}
+{"id": "2c5dedd9d8a2b605", "sid": "eff2a34f-9ad9-4173-a3cf-2a2e38fbb1e1", "state": "live", "surface": "prompt", "ts": 1787259390}
+{"id": "d70ac4ce6f871434", "sid": "eff2a34f-9ad9-4173-a3cf-2a2e38fbb1e1", "state": "live", "surface": "prompt", "ts": 1787259390}
+{"id": "65cfe4c27a2ad5d1", "sid": "094d63fd-56fb-46cf-9e38-536535f4e0c4", "state": "shadow", "surface": "prompt", "ts": 1787259411}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787259450}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787259450}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787259450}
+{"id": "b26957e5af923ced", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787259554}
+{"id": "65cfe4c27a2ad5d1", "sid": "9b4da3b0-c5c7-42e9-ad21-b9a7317a4766", "state": "shadow", "surface": "prompt", "ts": 1787259561}
+{"id": "2c5dedd9d8a2b605", "sid": "9b4da3b0-c5c7-42e9-ad21-b9a7317a4766", "state": "live", "surface": "prompt", "ts": 1787259561}
+{"id": "d70ac4ce6f871434", "sid": "9b4da3b0-c5c7-42e9-ad21-b9a7317a4766", "state": "live", "surface": "prompt", "ts": 1787259561}
+{"id": "65cfe4c27a2ad5d1", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "shadow", "surface": "prompt", "ts": 1787259769}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787259958}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787259958}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787259958}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787260208}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787260208}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787260208}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787260262}
+{"id": "65cfe4c27a2ad5d1", "sid": "a5fe5cb6-7130-4e1d-a296-6eaf866b914e", "state": "shadow", "surface": "prompt", "ts": 1787260509}
+{"id": "65cfe4c27a2ad5d1", "sid": "2b812e13-200f-43f6-8f55-70e93d216913", "state": "shadow", "surface": "prompt", "ts": 1787260592}
+{"id": "2c5dedd9d8a2b605", "sid": "2b812e13-200f-43f6-8f55-70e93d216913", "state": "live", "surface": "prompt", "ts": 1787260592}
+{"id": "2c5dedd9d8a2b605", "sid": "d07295bf-2c69-4061-953a-bc8c947c1ce3", "state": "live", "surface": "prompt", "ts": 1787260669}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787262063}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787263758}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787263758}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787263758}
+{"id": "8f2469b9c91895c0", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787263758}
+{"id": "0af5975537d2493a", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787263800}
+{"id": "91c2e2e7f756ba2b", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787263800}
+{"id": "3c40a861cd0842a7", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787263800}
+{"id": "8f2469b9c91895c0", "sid": "a2fad101-d3df-4e63-8e31-c55422218114", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787263800}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787263863}
+{"id": "8923583f5c7a27d2", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787264532}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787265662}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787267463}
+{"id": "8c24512f7c376155", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787268025}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787268025}
+{"id": "8c24512f7c376155", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "shadow", "surface": "prompt", "ts": 1787268060}
+{"id": "65cfe4c27a2ad5d1", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "shadow", "surface": "prompt", "ts": 1787268060}
+{"id": "65cfe4c27a2ad5d1", "sid": "2f6be777-2ff3-47f1-bf5d-6683b00d157d", "state": "shadow", "surface": "prompt", "ts": 1787268142}
+{"id": "8923583f5c7a27d2", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787268383}
+{"id": "8923583f5c7a27d2", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787268638}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787269263}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787271063}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787272863}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787274662}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787276462}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787278262}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787280062}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787281863}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787283663}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787285077}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285077}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285077}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285077}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787285086}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285086}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285086}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285086}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787285099}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285099}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285099}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285099}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787285109}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285109}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285109}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285109}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787285118}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285118}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285118}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787285118}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787285463}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787287263}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787287957}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787287957}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787287957}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787287957}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787289063}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787290863}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787292663}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787294462}
+{"id": "65cfe4c27a2ad5d1", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "shadow", "surface": "prompt", "ts": 1787296262}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787297086}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787297086}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787297086}
+{"id": "8f2469b9c91895c0", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787297086}
+{"id": "0af5975537d2493a", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787297112}
+{"id": "91c2e2e7f756ba2b", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787297112}
+{"id": "3c40a861cd0842a7", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787297112}
+{"id": "8f2469b9c91895c0", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787297112}
+{"id": "07fe981e338aa9c2", "sid": "4449a61d-1457-46a7-b398-47a0f1dce432", "state": "live", "surface": "prompt", "ts": 1787297515}
+{"id": "65cfe4c27a2ad5d1", "sid": "fc30c063-f084-4ed6-bc04-620daa650e16", "state": "shadow", "surface": "prompt", "ts": 1787297532}
+{"id": "65cfe4c27a2ad5d1", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "shadow", "surface": "prompt", "ts": 1787298062}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787299062}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299062}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299062}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299062}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787299074}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299074}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299074}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299074}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787299110}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299110}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299110}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299110}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787299123}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299123}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299123}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787299123}
+{"id": "65cfe4c27a2ad5d1", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "shadow", "surface": "prompt", "ts": 1787299863}
+{"id": "65cfe4c27a2ad5d1", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "shadow", "surface": "prompt", "ts": 1787301663}
+{"id": "65cfe4c27a2ad5d1", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "shadow", "surface": "prompt", "ts": 1787303462}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787304668}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304668}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304668}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304668}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787304680}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304680}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304680}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304680}
+{"id": "0af5975537d2493a", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787304684}
+{"id": "91c2e2e7f756ba2b", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304684}
+{"id": "3c40a861cd0842a7", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304684}
+{"id": "8f2469b9c91895c0", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304684}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787304810}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304810}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787304810}
+{"id": "65cfe4c27a2ad5d1", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "shadow", "surface": "prompt", "ts": 1787304853}
+{"id": "65cfe4c27a2ad5d1", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "shadow", "surface": "prompt", "ts": 1787304978}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787305261}
+{"id": "65cfe4c27a2ad5d1", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "shadow", "surface": "prompt", "ts": 1787305262}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787305355}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787305375}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787305375}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787305375}
+{"id": "65cfe4c27a2ad5d1", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "shadow", "surface": "prompt", "ts": 1787305499}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787305701}
+{"id": "8c24512f7c376155", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "shadow", "surface": "prompt", "ts": 1787306135}
+{"id": "65cfe4c27a2ad5d1", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "shadow", "surface": "prompt", "ts": 1787306135}
+{"id": "e454d031fa4afcf4", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "prompt", "ts": 1787306167}
+{"id": "2c5dedd9d8a2b605", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "live", "surface": "prompt", "ts": 1787306226}
+{"id": "65cfe4c27a2ad5d1", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "shadow", "surface": "prompt", "ts": 1787306263}
+{"id": "07fe981e338aa9c2", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "prompt", "ts": 1787306363}
+{"id": "8923583f5c7a27d2", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787306454}
+{"id": "8923583f5c7a27d2", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787306467}
+{"id": "0af5975537d2493a", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787306511}
+{"id": "91c2e2e7f756ba2b", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787306511}
+{"id": "3c40a861cd0842a7", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787306511}
+{"id": "8f2469b9c91895c0", "sid": "980f8941-9037-4b6e-ac2d-a01d013a45d0", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787306511}
+{"id": "b26957e5af923ced", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1787306526}
+{"id": "65cfe4c27a2ad5d1", "sid": "38400d41-6de4-4eb4-8990-9ef721680191", "state": "shadow", "surface": "prompt", "ts": 1787306533}
+{"id": "2c5dedd9d8a2b605", "sid": "38400d41-6de4-4eb4-8990-9ef721680191", "state": "live", "surface": "prompt", "ts": 1787306533}
+{"id": "d70ac4ce6f871434", "sid": "38400d41-6de4-4eb4-8990-9ef721680191", "state": "live", "surface": "prompt", "ts": 1787306533}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787306700}
+{"id": "8923583f5c7a27d2", "sid": "e82d0205-8506-4752-ad0a-16ba480b6d5b", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787306821}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787306860}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787306982}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787307066}
+{"id": "65cfe4c27a2ad5d1", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "shadow", "surface": "prompt", "ts": 1787307325}
+{"id": "65cfe4c27a2ad5d1", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "shadow", "surface": "prompt", "ts": 1787307412}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787307456}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787307458}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787307460}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787307470}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787307490}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787307491}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307491}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307491}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307491}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787307499}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307499}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307499}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307499}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787307506}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307506}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307506}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307506}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787307521}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307521}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307521}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307521}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787307538}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787307644}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307644}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787307644}
+{"id": "65cfe4c27a2ad5d1", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "shadow", "surface": "prompt", "ts": 1787307725}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787307964}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787307996}
+{"id": "44a5d9b7187585b2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787308364}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787308364}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787308364}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787308364}
+{"id": "70851a16751aebf7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "prompt", "ts": 1787308758}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787309331}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787309331}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787309331}
+{"id": "65cfe4c27a2ad5d1", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "shadow", "surface": "prompt", "ts": 1787309769}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787309975}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787309985}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787310010}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787310305}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310305}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310305}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310305}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787310314}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310314}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310314}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310314}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787310323}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310323}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310323}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787310323}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787312655}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787312674}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787312746}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312746}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312746}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787312867}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312867}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312867}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312867}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787312877}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312877}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312877}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312877}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787312887}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312887}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312887}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787312887}
+{"id": "0af5975537d2493a", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313086}
+{"id": "91c2e2e7f756ba2b", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313086}
+{"id": "3c40a861cd0842a7", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313086}
+{"id": "8f2469b9c91895c0", "sid": "26739d4b-465b-4855-881f-c17c67022ae5", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313086}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787313182}
+{"id": "8923583f5c7a27d2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787313194}
+{"id": "65cfe4c27a2ad5d1", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "shadow", "surface": "prompt", "ts": 1787313284}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787313331}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787313333}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787313335}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787313340}
+{"id": "fbbe2e1ac4733ec2", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1787313365}
+{"id": "8923583f5c7a27d2", "sid": "7e781759-c254-4c8d-9b06-6f8c2402db0d", "state": "live", "surface": "tool", "tool": "Bash", "ts": 1787313379}
+{"id": "65cfe4c27a2ad5d1", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "shadow", "surface": "prompt", "ts": 1787313389}
+{"id": "07fe981e338aa9c2", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "prompt", "ts": 1787313389}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313449}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313449}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313449}
+{"id": "8f2469b9c91895c0", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313449}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313461}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313461}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313461}
+{"id": "8f2469b9c91895c0", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313461}
+{"id": "0af5975537d2493a", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313571}
+{"id": "91c2e2e7f756ba2b", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313571}
+{"id": "3c40a861cd0842a7", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313571}
+{"id": "8f2469b9c91895c0", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313571}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313588}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313588}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313588}
+{"id": "8f2469b9c91895c0", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313588}
+{"id": "0af5975537d2493a", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313643}
+{"id": "91c2e2e7f756ba2b", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313643}
+{"id": "3c40a861cd0842a7", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313643}
+{"id": "8f2469b9c91895c0", "sid": "ac7f34c0-3727-4c68-a0eb-02915c6eb298", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313643}
+{"id": "0af5975537d2493a", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "candidate", "surface": "tool", "tool": "Write", "ts": 1787313662}
+{"id": "91c2e2e7f756ba2b", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313662}
+{"id": "3c40a861cd0842a7", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313662}
+{"id": "8f2469b9c91895c0", "sid": "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78", "state": "live", "surface": "tool", "tool": "Write", "ts": 1787313662}

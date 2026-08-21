@@ -2,7 +2,7 @@
 name: apple
 description: Router for Apple platform development skills — iOS, macOS, watchOS, visionOS, SwiftUI, Swift, App Store, design (Liquid Glass), generators, testing, and more. Dispatches to 23 specialized sub-skill categories.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
-user-invokable: true
+user-invocable: true
 argument-hint: "<category> [sub-skill] [options] | list | search <query>"
 ---
 

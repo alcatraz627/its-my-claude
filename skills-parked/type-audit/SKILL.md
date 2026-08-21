@@ -3,7 +3,7 @@ name: type-audit
 description: Scans the TypeScript codebase for unsafe type patterns (explicit `any`, implicit `any`, non-null assertions, unsafe casts), reports them with file:line references, and offers targeted fixes. Project-specific: requires a Next.js TypeScript project (tsconfig.json plus next in package.json).
 disable-model-invocation: true
 allowed-tools: Read, Bash, Glob, Grep, Edit
-user-invokable: true
+user-invocable: true
 argument-hint: "[--fix] [path]"
 ---
 

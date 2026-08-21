@@ -59,8 +59,13 @@ no local copy — use the global one, don't scaffold one.)
 
 ## Phase 1 — Parse and check
 
-1. **`off` / `stop` / `disarm`** → run `CronList`, `CronDelete` any wake job, confirm
+1. **`off` / `stop` / `disarm`** → run `CronList`, `CronDelete` any wake job, run
+   `bash ~/.claude/scripts/cron/cron-duty.sh clear wake-halt-check`, confirm
    in one line, stop.
+1b. **`CronList` before arming.** A wake job may already be live: CronCreate jobs
+   are PROCESS-scoped, so they survive `/clear` and `/compact` (they die only
+   with the process). A wake armed before a `/clear` is still firing; arming
+   another makes a duplicate. If one exists, say so and keep it.
 2. Parse a leading `Nm` / `Nh`; default **15m** when absent.
 3. **Confirm the session actually wants this.** If the user's work is plainly
    finished, say so and don't arm — an armed wake on a finished session is pure
@@ -68,7 +73,10 @@ no local copy — use the global one, don't scaffold one.)
 
 ## Phase 2 — Arm
 
-Convert the interval, then `CronCreate` with `recurring: true`.
+Convert the interval, then `CronCreate` with `recurring: true`. After it returns
+a job id, record the duty so resumes and siblings can see it is armed:
+`bash ~/.claude/scripts/cron/cron-duty.sh record wake-halt-check --job <id>
+--schedule "<expr>"` (rules/scheduling-discipline.md §CronCreate).
 
 **Offset the fire marks off `:00` and `:30`.** Every scheduler on the planet fires
 on the hour; `CronCreate`'s own guidance is to avoid those marks when the time is
@@ -166,8 +174,9 @@ delete the job you just armed. The first real fire is the first run.
 
 ## Phase 3 — Confirm
 
-One short confirmation: interval, fire marks, the job id, that it is session-only
-and dies when Claude exits, that recurring jobs auto-expire after 7 days, and that
+One short confirmation: interval, fire marks, the job id, that it is
+process-scoped (survives `/clear`, dies when the Claude process exits), that
+recurring jobs auto-expire after 7 days, and that
 `/wake off` (or `CronDelete <id>`) disarms it sooner.
 
 ## Notes

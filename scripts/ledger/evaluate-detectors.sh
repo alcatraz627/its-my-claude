@@ -24,6 +24,7 @@
 # Test/isolation: LEDGER_DIR relocates all state (tests point it at a temp dir);
 # LEDGER_NOW fixes "now" for deterministic window math.
 set -uo pipefail
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"  # launchd bare-PATH fix (same class as residue-review.sh:22), probe-proven 2026-08-21
 
 LEDGER_DIR="${LEDGER_DIR:-$HOME/.claude/ledger}"
 GOALS="$LEDGER_DIR/goals.toml"

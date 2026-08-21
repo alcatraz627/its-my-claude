@@ -3,7 +3,7 @@ name: forgotten-todos
 description: Browse the cross-session backlog of unfinished todos surfaced from /core-dump checkpoints. Reads ~/.claude/subconscious/dreams/pending-todos.jsonl (regenerated from all ingested checkpoint Pending Items), deduped by content, sorted by recurrence count then recency. Use when the user asks "what was I about to do", "anything I forgot", or wants to clean up the long-tail todo backlog from past sessions.
 allowed-tools: Read, Bash
 argument-hint: "[--all] [--project PATH] [--seen-min N]"
-user-invokable: true
+user-invocable: true
 ---
 
 ## Brief

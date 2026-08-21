@@ -88,6 +88,11 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0047 | `user-invocable` spelling, skill-lint gate, skills stream joins the ledger family | ✅ | 2026-08-19 | 2026-08-19 | [0047-skill-field-rename-and-skill-ledger.md](0047-skill-field-rename-and-skill-ledger.md) |
 | 0048 | skills-parked/ top level, callout ledger, coverage instruments | ✅ | 2026-08-20 | 2026-08-20 | [0048-coverage-build-parked-skills.md](0048-coverage-build-parked-skills.md) |
 | 0049 | residue review + speculative-atone loop + decision-page wake | ✅ | 2026-08-20 | 2026-08-20 | [0049-residue-review-speculative-atone.md](0049-residue-review-speculative-atone.md) |
+| 0050 | register-friction instrument (lede renderer, counter gate, weekly audit) | ✅ | 2026-08-20 | 2026-08-20 | [0050-register-friction-instrument.md](0050-register-friction-instrument.md) |
+| 0051 | the warden (monitor session + beat scheduler + institution dir) | ✅ | 2026-08-21 | 2026-08-21 | [0051-warden.md](0051-warden.md) |
+| 0052 | cron duty ledger + CronCreate process-scope convention | ✅ | 2026-08-21 | 2026-08-21 | [0052-cron-duty-ledger.md](0052-cron-duty-ledger.md) |
+| 0053 | usage gate for autonomous institutions (warden + residue-review) | ✅ | 2026-08-21 | 2026-08-21 | [0053-usage-gate.md](0053-usage-gate.md) |
+| 0054 | warden succession hardening + weekly review row | ✅ | 2026-08-21 | 2026-08-21 | [0054-warden-succession.md](0054-warden-succession.md) |
 
 ---
 

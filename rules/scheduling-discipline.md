@@ -45,6 +45,30 @@ Three scheduling surfaces are reachable from this account. Pick by the kind of w
 
 If you find yourself reaching for crontab or hand-writing a plist when the job is "fire shell command X at time Y", you're in `gcc-schedule` territory.
 
+## Harness `CronCreate` jobs are PROCESS-scoped, and duties need names
+
+Two facts about the harness scheduler that checkpoints keep getting wrong
+(provenance: duplicate warden check-ins at :23, 2026-08-21, after a resume
+re-armed a cron whose process had survived the `/clear`):
+
+1. **Lifetime.** A `CronCreate` job lives in the harness process's memory. It
+   survives `/clear` and `/compact`; it dies with the PROCESS (5h cap, crash,
+   closed terminal), and auto-expires after 7 days. A checkpoint can only say
+   what was armed at dump time; only an in-session `CronList` can say what is
+   armed now. Never re-arm from a checkpoint claim alone: `CronList` first,
+   then re-arm only what is absent.
+2. **Identity.** Job ids are per-arming, not per-duty. A recurring duty (a
+   check-in, a watch, a poll) needs a stable slug so a resume or a sibling can
+   ask "is this already armed?" instead of arming a duplicate.
+
+Both are served by the duty ledger `~/.claude/scripts/cron/cron-duty.sh`:
+`record <slug> --job <id> --schedule "<expr>"` after every recurring
+`CronCreate`, `clear <slug>` alongside `CronDelete`, and `check <slug>` /
+`list` for the liveness verdict (recorded harness pid plus start time; DEAD
+means definitely unarmed, safe to re-arm). In-session, `CronList` stays the
+ground truth; the ledger is what other sessions and post-`/clear` resumes can
+read.
+
 ## Always include `--description`
 
 Every schedule that fires more than a few hours out — daily, weekly, one-shot N days from now — must carry a description. The description lands in the Calendar event notes and the registry's `meta.json`. Future-you (and any agent picking up the schedule via `show` or `inventory`) needs the context. Sample shapes:

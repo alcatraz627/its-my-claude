@@ -3,7 +3,7 @@ name: sync-api-types
 description: Reads FastAPI Pydantic models from ../backend/ and diffs their fields against the TypeScript types used in src/ to consume those endpoints — reports mismatches and prints corrected type definitions. Project-specific: requires FastAPI backend + TypeScript frontend monorepo.
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Edit, Write
-user-invokable: true
+user-invocable: true
 argument-hint: "[endpoint-path]"
 context: fork
 ---

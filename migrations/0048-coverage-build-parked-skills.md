@@ -39,3 +39,27 @@ skills stay reachable through awareness plus a proactive twice-trigger.
 A reference to `skills/<name>/` for any of the 11 moved names now points at
 `skills-parked/<name>/`. `skills/00-index.md` regenerates clean; the one
 load-bearing reader found (core-dump's See Also) was updated in this change.
+
+## Amendment 2026-08-20 — skills-parked/ is tracked
+
+This migration created a new top level and did not say whether git should track
+it. `.gitignore` runs an allowlist (`/*`, then un-ignore the config/code layer),
+so silence meant ignored, and git could see the source of the move but not its
+destination. The next `git add -A` would therefore have recorded the move as 428
+bare deletions: the skills stay on this disk and leave the repo and every clone.
+
+The bi-weekly repo-sync caught it before pushing, held the deletions back, and
+put it to the owner, who ruled **track it** — consistent with "Kept, not loaded"
+above, which is about roster cost rather than about what the repo keeps.
+`!/skills-parked/` is now in `.gitignore` (431 files, 5.4M).
+
+Two things worth carrying forward:
+
+- A new top-level dir under an allowlist is invisible by default. Creating one
+  is a tracking decision even when it doesn't feel like one, so state the answer
+  in the migration that creates it.
+- `COMMIT.md` step 1 scans with `rg` from the repo root, and `rg` honours
+  `.gitignore`. A previously-ignored dir that becomes tracked is therefore
+  brand-new bytes the standard scan never read. Scan such a dir explicitly with
+  `--no-ignore` before the commit that starts tracking it. Done here: 431 files
+  read, clean.

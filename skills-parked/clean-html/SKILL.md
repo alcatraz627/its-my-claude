@@ -2,7 +2,7 @@
 name: clean-html
 description: Converts HTML files to clean, readable markdown by extracting and downloading embedded media, stripping tags while preserving document hierarchy, and removing UI clutter.
 allowed-tools: Read, Bash, Write, WebFetch
-user-invokable: true
+user-invocable: true
 argument-hint: "<source> [--output <name>]"
 ---
 

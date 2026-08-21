@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-08-20
+updated: 2026-08-21
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-08-20 15:39.
+Regenerated 2026-08-21 15:53.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -43,11 +43,11 @@ Regenerated 2026-08-20 15:39.
 | `build-ui` | yes | Plans a page-level UI build or renovation and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the … |
 | `callouts` | yes | Persists the owner's review findings as re-runnable acceptance rows per surface, and gates any later "done" claim on re-running the open rows. Use when the owner calls … |
 | `capabilities` | yes | Generates a report of everything this Claude instance can do — skills, hooks, MCP servers, memory, runtime architecture, widgets, and all std::claude infrastructure. |
-| `catchup` | yes | Resumes a session from a /core-dump checkpoint. Reads ~/.claude/checkpoints/ index when CWD is ambiguous (presents a picker), or a specific _checkpoint.claude.md when … |
+| `catchup` | yes | Resumes a session from a /core-dump checkpoint. Resolves via the ~/.claude/checkpoints/ index (picker when ambiguous) or a named _checkpoint.claude.md, loads only … |
 | `cleanup-comments` | yes | Prune, simplify, and remove low-value comments in changed code (or a path you pass) per the repo comment-style rubric. Strips [claude@] tags, plan refs … |
 | `cogitate` | yes | Use when the user wants to research a topic and keep a durable, growing note on it — answers a query and files a dated structured response under … |
 | `context-prime` | user-only | Loads project index, gotchas, recent git log, and open issues into context at the start of a session — bootstrapping Claude's awareness without any manual prompting. |
-| `core-dump` | yes | Writes _checkpoint.claude.md (or a named file) to the project root — condensing the active session into original goal, sequential agent actions, current expectation, and … |
+| `core-dump` | yes | Writes _checkpoint.claude.md (or a named file) condensing the session into goal, actions, expectation, and pending items; "mini" mode for quick notes. Indexes a … |
 | `create-agent` | yes | Scaffolds an autonomous agent SKILL.md (context: fork, no prompts, structured output) from instructions, or converts an existing skill to agent form, after reading the … |
 | `create-report` | yes | Takes a markdown file and generates a polished, self-contained HTML report with a clean UI. Supports 13 visual styles (default, notion, dashboard, magazine, terminal, … |
 | `create-skill` | yes | Turns a skill idea (a spec, intent, or checklist answers) into a finished SKILL.md with a tailored validation rubric and ledger steps, reviewed by a fresh seat for … |
@@ -91,6 +91,7 @@ Regenerated 2026-08-20 15:39.
 | `readme` | yes | Scans a git repo's structure, docs, package metadata, and prior skill reports — generates a polished README.md with GitHub-style badges, a pixel-art cover image, a … |
 | `retro-dump` | yes | Manually trigger a retroactive /core-dump on a past session that ended without one. Headless — spawns `claude -p --resume <uuid>` to read the transcript and synthesize a … |
 | `revive` | yes | Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume … |
+| `roster-budget` | yes | Measures the skill roster against its listing budget and names the skills whose descriptions are being dropped, ranked by what each long description costs. Use when a … |
 | `scan-sessions` | yes | Deep-scan past Claude Code sessions for patterns, frustration signals, and improvement opportunities |
 | `session-stats` | yes | Full session analytics report — cost, tokens, tools, rate limits, context usage, and activity timeline |
 | `shell-mem` | yes | Look up recent shell commands, background process history, or mark background processes as done. Use when asked about recent commands, what's running, shell history, or … |
@@ -101,7 +102,7 @@ Regenerated 2026-08-20 15:39.
 | `summarize-changes` | yes | Generates a categorized changelog of recent work, scoped by three orthogonal axes (time / topic / source) and rendered in a user-selected format. Treats git as ONE … |
 | `svg` | yes | Authors, edits, optimizes, and render-checks SVG graphics — icons, logos, diagrams, illustrations, patterns. Claude writes the SVG markup directly (no image-gen … |
 | `tag` | user-only | Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct … |
-| `tasks` | yes | Show the current task list as ONE grouped, tagged, sequenced table, sized so it never has to be scrolled to. Groups by the project's ruled key (batch, domain, class, or … |
+| `tasks` | yes | Show the current task list as ONE grouped, tagged, sequenced table (project's ruled key; width free, height within 44 lines). Also the write path when the harness has no … |
 | `test` | yes | Run tests for the current folder using a cached per-folder framework detection. First run probes the folder for pyproject.toml/package.json/Cargo.toml/go.mod etc and … |
 | `thesaurus` | yes | Ten-second capture of a style verdict into the style thesaurus — the ledger of how the user wants Claude to write (word choice, comments, prose, report structure). … |
 | `ui` | yes | Routes a UI request to the one instrument that fits it, and refuses to start until an existing surface has a written capability list. The account holds a whole cluster … |

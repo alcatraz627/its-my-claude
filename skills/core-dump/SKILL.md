@@ -1,6 +1,6 @@
 ---
 name: core-dump
-description: Writes _checkpoint.claude.md (or a named file) to the project root — condensing the active session into original goal, sequential agent actions, current expectation, and pending items. Supports "mini" mode for quick abbreviated notes. Records a session-keyed pointer + chronological index entry under ~/.claude/checkpoints/ so multiple long-running agents do not clobber each other. Serves as a hand-off artifact for /catchup after /clear.
+description: Writes _checkpoint.claude.md (or a named file) condensing the session into goal, actions, expectation, and pending items; "mini" mode for quick notes. Indexes a session-keyed pointer under ~/.claude/checkpoints/. Hand-off artifact for /catchup after /clear.
 allowed-tools: Read, Write, Glob, Bash, Edit, mcp__inputs__form, mcp__inputs__confirm
 argument-hint: "[mini] [filename] [--name NAME] [--no-prompt] [instructions]"
 user-invocable: true
@@ -357,6 +357,14 @@ everything below them:
 
   - `wake: <schedule> · ARMED` / `FIRED` / `none`. Read the live state rather than
     recalling it: `~/.claude/.turn-state/<SESSION_ID>.json`.
+  - `crons: <duty-slug (job id, schedule)> …` / `none`. Read the live state with
+    `CronList`, never from memory, and cross-check the duty ledger
+    (`bash ~/.claude/scripts/cron/cron-duty.sh list`). State the lifetime fact
+    IN the checkpoint so the resume cannot get it wrong: CronCreate jobs are
+    PROCESS-scoped. They survive `/clear` and `/compact`; they die with the
+    process. The resume must `CronList` first and re-arm only what is absent
+    (rules/scheduling-discipline.md §CronCreate; the c2271ddc duplicate,
+    2026-08-21, is what skipping that check produces).
   - `deadline: <commitment> due <when> · LIVE` / `MET` / `MISSED` / `none`. State
     lives with the skill (`skills/deadline/runtime-notes.md`, plus that run's veto
     ledger and burn projection).
@@ -482,7 +490,7 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 - **Expired authorizations:** <list | none>
 - **Decaying prerequisites:** <each with its fix command — creds/tunnels/daemons/seeded data | none>
 - **Verification state:** <last run + result + command | UNCONFIRMED — nothing run>
-- **Live commitments:** goal: <verbatim · STILL VALID|SUPERSEDED by …|none · clauses: <name>=served|UNSERVED … (2+ clause goals only) · harness ARMED|not armed · gcc set|none> · wake: <schedule · ARMED|FIRED|none> · deadline: <commitment due when · LIVE|MET|MISSED|none>
+- **Live commitments:** goal: <verbatim · STILL VALID|SUPERSEDED by …|none · clauses: <name>=served|UNSERVED … (2+ clause goals only) · harness ARMED|not armed · gcc set|none> · wake: <schedule · ARMED|FIRED|none> · deadline: <commitment due when · LIVE|MET|MISSED|none> · crons: <duty-slug (job, schedule) via CronList|none>
 - **Task list, glanced:** <N open, M done · needs you: #ids · grouped by <key> | —>
 - **Task store:** <session-<sid8> | —>
 - **Key anchor:** <file:line | —>

@@ -100,6 +100,14 @@ did not deliver.
 *Lived case:* three escalating asks for a UI pass answered with reviews and
 micro-fixes (`mist-20260811-142119-a5`, S3).
 
+*The tell that hides:* the second ask does not have to repeat the first. A NEW
+question on the SAME topic, immediately after your answer, is the same signal
+wearing a different phrasing; read it as evidence the first answer was
+incomplete before reading it as a fresh question. Lived case: owner asked where
+doc 71 required a second review pass, got a grounded answer, then had to ask
+"aren't we using gemini for the reader?" because the answer never said the work
+could not currently run (`mist-20260820-191945-b3`).
+
 ## The escape hatch
 
 If the user says "exactly this", or repeats the string after you pushed back,

@@ -16,6 +16,31 @@
 
 ---
 
+## core-dump: week-close full dump [ac7f34c0] · 2026-08-21 17:50
+**Purpose:** Close the week: full dump after warden hardening, queue clearance, usage nudge, and filing.
+
+**Insights:**
+1. The new crons field earned its place immediately: this dump records both duties with the process-scope warning, and the decaying-prerequisites row carries their re-arm commands.
+2. Caveat diff vs the morning mini passed with zero vanished, which is the first live exercise of the same-stem diff since it was wired.
+
+---
+
+## catchup: docs-skill resume, queue worked, two silent-failure root causes [ac7f34c0] · 2026-08-21 13:30
+**Purpose:** Resume from the mini dump, re-arm the 3h warden check-in, work agent queue 53 54 55 51 52.
+
+**Insights:**
+1. ledger-evaluate dead 42d: yq guard exits 0 under launchd bare PATH (evaluate-detectors.sh:40). PATH-prepend fix probe-proven under env -i; kept the never-blocks contract, freshness registry stays the loud watcher.
+2. i-dream daemon was never wedged: dreams gate on 4h mtime-idle of subconscious/.last-activity, and the Aug-20 fleet (warden 45m beats, 23:00 residue, 02:51 dreampass) removed the idle window. Hooks touch the file for headless sessions too (post-tool-use.sh:9). Do not bounce; the fix is an owner design pick.
+3. Same defect class twice in one day: machine activity mimics human activity (dream gate + warden invoked-ratio 71% vs WATCH item 2). Any activity signal needs a human-vs-automation split.
+4. dp answer wake: an ipc inform cannot wake an idle session; only bg-exit, Monitor, cron, or task notifications re-invoke. The armed watcher is load-bearing; the chip prints it (decision-page.sh:296).
+5. catchup now renders same-work-stream atone prechecks as FENCES (imperative), not Learnings (fact); recurrence-1 slugs have no other carrier at resume time.
+
+---
+
+Mini dump run: the prose-smell Write gate blocks the SKILL.md template itself (its "# Mini Core Dump — <ts>" header carries an em-dash, and constraint prose written naturally trips the zero budget). Wrote dash-free on retry. The template header should drop its em-dash so every future mini does not hit the same wall.
+
+---
+
 Audited intake + probe for maturation (tasks #37/#38). The routing brief claimed both lacked a Validation rubric and ledger step; gather refuted it, both were born complete (coverage build wrote them). Lesson for routing briefs: read, do not recall. The real gap was activation, not structure: 36-repeated-ask cited shape-7 but named no instrument (now names /intake, test 8/8); probe has no mechanical activation carrier (proposal filed, correction-loop rejected as semantic misfit). Both got explicit maturity bars: flag flips on evidence (intake ≥1 catch/≥5 runs; probe ≥3 confirmed mechanisms), never on a maturation pass.
 
 ---

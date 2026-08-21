@@ -64,7 +64,10 @@ def lint(src):
         L = s["lines"]; prose = [x for x in body_text(L) if x.strip()]
         text = re.sub(r"`[^`]*`", " ", " ".join(prose)); notes = " ".join(s["notes"])   # a word in backticks is a specimen, not a use
         def f(kind, msg): findings.append({"slide": n, "title": s["title"], "kind": kind, "msg": msg})
-        if "—" in "\n".join(L) or "—" in notes: f("em-dash", "em-dash present; use a comma, a period, or 'and'")
+        # same specimen rule as `text` above: an em-dash quoted in backticks is a
+        # mention, not a use, so strip code spans before the check fires
+        dash_scope = re.sub(r"`[^`]*`", " ", "\n".join(L) + "\n" + notes)
+        if "—" in dash_scope: f("em-dash", "em-dash present; use a comma, a period, or 'and'")
         bullets = [x for x in L if re.match(r"^\s*([-*]|\d+\.) ", x)]
         if len(bullets) > 6: f("bullets", f"{len(bullets)} bullets; six is the ceiling, split the slide")
         for b in bullets:

@@ -102,6 +102,27 @@ no category home. State what the thing is; drop the "not X" preamble.
 >
 > After: "The bug is a race in the loader."
 
+### bare-ids — the store's coordinates shown to the reader
+
+Confirmed at volume by the 2026-08-20 register-friction sweep (32 of 153
+verified friction windows): a run of #NN ids without subjects makes the reader
+do a lookup per row. Every id carries three or more words of subject on the
+same line, or it does not ship. Counted by counter-gate-stop.sh (cluster-aware:
+an id inside a run of ids is bare regardless of trailing words).
+
+### buried-question — the ask decided last, written last
+
+Sweep-measured: a question in the tail of a long reply is answered 1 time in
+19; an open question 10/26; a menu 12/23. If a reply needs an answer, the ask
+lives in the first screen, in the lede block, or it is functionally rhetorical.
+
+### option-menu — the fork that is really a stop
+
+Sweep-confirmed (22 windows): closing menus the owner rejects by reframing.
+A menu is legitimate only when the fork is real and each option carries the
+agent's drafted answer; "what should I do next?" menus are the writer stopping,
+not a decision surface.
+
 ## Detection at a glance
 
 | category | mechanical (prose-lint catches it) | judgment-only (review-time) |
@@ -110,6 +131,9 @@ no category home. State what the thing is; drop the "not X" preamble.
 | verdict-first | verdict token opening the first sentence | verdict contradicted by its own details |
 | overclaim | the "should now work" phrase family | claim-versus-evidence matching |
 | contrastive-scaffold | "not X, but Y" and "— it's" (the bare "not X —" form fires on plain negation; rejected) | none observed |
+| bare-ids | counter-gate-stop.sh cluster count | whether a gloss is honest |
+| buried-question | counter-gate-stop.sh first-question position | whether the ask needed asking |
+| option-menu | none yet (candidate: closing-region numbered list + trailing ?) | fork-is-real judgment |
 
 ## Calibrate the metric before you let it steer
 

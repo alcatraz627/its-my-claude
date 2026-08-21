@@ -92,6 +92,7 @@
 | `conventions/gcc-hygiene.md` | Clean ~/.claude: keep/derive/archive heuristics + structural-change (migration) definition | `topic:gcc-hygiene`, `tool:migrate` |
 | `conventions/preference-graduation.md` | Graduate recurring preference/vocab signals from insight streams into GLOSSARY / memory / rules | `topic:preferences`, `skill:preference-graduation` |
 | `conventions/agent-first-tools.md` | Design doctrine for tools Claude drives: digest deltas, ref contracts, fix-proposing errors | `topic:agent-first-tools`, `topic:cli-for-agents` |
+| `conventions/shipped-checks-serve-the-author.md` | A check shipped to someone else's repo: precise may block, imprecise must stay advisory; the stale-claim class only a reader catches | `topic:shipped-tooling`, `topic:qa-checks`, `phrase:"should this block"` |
 | `conventions/tui-design.md` | Functional TUI patterns + fzf-as-runtime launcher blueprint + approach selection | `topic:tui`, `topic:fzf` |
 | `conventions/visual-design.md` | Visual-design reference: OKLCH color harmony, layout/hierarchy, de-chaos rule | `topic:color`, `topic:visual-design` |
 | `conventions/dashboard-tools.md` | Build template for single-user dashboard tools: watcher + JSON-state, mutex, atomic writes | `topic:dashboard-tool` |

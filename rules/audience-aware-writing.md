@@ -62,11 +62,34 @@ Scan a draft for a human and cut these tells before sending:
   update, then drop it.
 - **Headlining a self-introduced fix.** A problem this same session created and then
   fixed is a side-effect found during development, not a trophy. Fold it in low.
+  The stronger form: a self-correction that consumes the reply while the actual
+  question goes unanswered. Correcting yourself is more comfortable than answering
+  and looks like diligence; finishing the correction is not finishing the answer.
+  Re-read the question after the correction and answer it
+  (mist-20260820-191945-b3).
 - **Dry tech instead of value.** Say what a tool does for the reader and why they
   would want it, not its module list ("composable measure/drive/logs primitives").
 - **Flattery or unrequested agenda.** No "you're absolutely right" without evidence,
   no option-menus the user did not ask for. Answer and stop. See
   [[pushback-and-self-criticism]].
+
+## Situate a status answer, not just ground it
+
+Grounding a claim (cite the file and line, read do not recall) is covered
+everywhere; situating one is not, and an answer can be entirely grounded and
+still useless because it describes a plan in a vacuum. Two duties for any answer
+about queued or planned work, both from mist-20260820-191945-b3, where a correct,
+quoted, checked answer still failed and the owner had to come back with the
+question the answer should have made unnecessary:
+
+- **Name the constraint in force.** One line: what governs this work today, and
+  is it buildable under that. A wave of planned work whose runner was ruled off
+  an hour ago is not "specified in doc 71", it is "specified in doc 71 and
+  currently cannot run, because the seats it runs on are off for the week".
+- **A ruling made this session is the frame, not background.** Recent decisions
+  feel like shared context because you were there for them; the reader has no
+  such feeling. If a ruling made this session changes the answer, that change IS
+  the answer. Lead with it, never bury it as preamble.
 
 ## You cannot see your own AI-smell; route the final voice pass to a fresh reviewer
 

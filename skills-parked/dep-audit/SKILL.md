@@ -2,7 +2,7 @@
 name: dep-audit
 description: Runs npm audit and npm outdated, cross-references key dependencies against known breaking versions, and produces a prioritized upgrade list — separating critical security patches from optional major upgrades. With --fix, applies npm audit fix for patch-level security patches only.
 allowed-tools: Read, Bash, Glob, Skill
-user-invokable: true
+user-invocable: true
 argument-hint: "[--fix]"
 context: fork
 ---

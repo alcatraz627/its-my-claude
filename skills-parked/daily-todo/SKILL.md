@@ -2,7 +2,7 @@
 name: daily-todo
 description: Scans all project runtime-notes for recent entries, checks todo files for unchecked items, reads MEMORY.md indexes for activity hints — generates a daily todo file at ~/.claude/todo-YYYY-MM-DD.md.
 allowed-tools: Read, Edit, Write, Bash, Glob, Grep, Agent
-user-invokable: true
+user-invocable: true
 argument-hint: "[YYYY-MM-DD]"
 metadata:
   filePattern: ["**/todo-*.md"]

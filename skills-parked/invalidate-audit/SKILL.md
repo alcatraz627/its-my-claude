@@ -3,7 +3,7 @@ name: invalidate-audit
 description: Scans all useM and useMutation calls in src/ and reports any missing QueryKeys invalidation in their onSuccess callback — catching stale-data risks with file:line references. Project-specific: requires TanStack Query with useM/useMutation pattern.
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep
-user-invokable: true
+user-invocable: true
 argument-hint: "[path]"
 context: fork
 ---

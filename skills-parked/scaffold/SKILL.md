@@ -2,7 +2,7 @@
 name: scaffold
 description: Scaffolds new projects with opinionated defaults — wizard-based stack selection, file generation, and a post-scaffold pipeline that calls /git-setup, /readme, and other skills to deliver a ready-to-code project.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill
-user-invokable: true
+user-invocable: true
 argument-hint: "[<stack>] [--name <project>] [--dir <path>] [--minimal] [--no-git] [--no-readme]"
 ---
 

@@ -71,4 +71,7 @@ the wizard, and the doc is linked for the curious, not assigned.
 ## Diagnostic signal
 
 You are typing "1." under a sentence that says what you need from the owner,
-or "please review" next to a path you wrote. Stop; wizard it.
+or "please review" next to a path you wrote. Stop; wizard it. Third signal, in
+the tasks vocabulary: a /tasks render whose owner-gated count exceeds the height
+cap is definitionally this case. Wizard the gates, never compress them
+(mist-20260820-092606-29, 42 gates shipped as word salad).

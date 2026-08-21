@@ -1,0 +1,12 @@
+# name	tags	activation criteria (when to copy in / suggest)
+apple	macos,ios,swift,swiftui,xcode	project has *.xcodeproj, Package.swift, or Info.plist; or the ask names iOS/macOS/SwiftUI
+type-audit	nextjs,typescript,versable	Next.js App Router project with the versable shape; owner asks for a type audit
+route-audit	nextjs,versable	same as type-audit; route/handler sweep
+invalidate-audit	nextjs,cache,versable	same shape; cache-invalidation sweep
+sync-api-types	versable,api,codegen	the versable API repo pair; types drifted between BE and FE
+add-mcp	mcp,setup	a project needs an MCP server from the catalog wired into .mcp.json
+clean-html	html,scrape,markdown	owner hands an HTML page to turn into readable markdown with media
+scaffold	new-project,bootstrap	a brand-new repo is being started from nothing
+dep-audit	npm,security,dependencies	owner asks about outdated or vulnerable deps in a node project
+daily-todo	todo,daily	owner asks for a daily todo file again (fell out of use 2026-Q2)
+forgotten-todos	todo,backlog,checkpoints	owner asks "what did I forget" / cross-session backlog browse

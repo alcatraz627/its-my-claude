@@ -60,4 +60,36 @@ rg -q 'one opus seat' "$HOME/.claude/skills/deck/SKILL.md" && ok "SKILL.md's pha
 rg -q 'in-band or it does not exist' "$HOME/.claude/skills/deck/SKILL.md" && ok "the in-band read-back rule is stated" || ko "no in-band read-back rule"
 rg -q 'DECK_MTIME' "$RP" && ok "the prompt pins the deck mtime so a stale read is detectable" || ko "no mtime pin"
 
+T2=$(mktemp -d)   # the original suite trashes $T before this point
+echo "== lint: em-dash in backticks is a specimen, not a use (handback item 2) =="
+printf '# T\n## L\nNever an em-dash; the rule bans `—` as a mark on slides.\n' > "$T2/dash.md"
+python3 "$D/lint.py" "$T2/dash.md" > "$T2/dash.out" 2>&1
+rg -q '\[em-dash\]' "$T2/dash.out" && ko "em-dash specimen in backticks still fires" || ok "em-dash quoted in backticks stays silent"
+printf '# T\n## L\nA bare em-dash — like this — must still fire.\n' > "$T2/dash2.md"
+python3 "$D/lint.py" "$T2/dash2.md" > "$T2/dash2.out" 2>&1
+rg -q '\[em-dash\]' "$T2/dash2.out" && ok "a real em-dash still fires" || ko "em-dash rule went blind"
+
+echo "== check.sh --first picker: 1440 report wins over 1920 (handback item 4) =="
+R1440='[{"slide":1,"over":false},{"slide":3,"over":true}]'
+R1920='[{"slide":1,"over":false},{"slide":3,"over":false}]'
+[ "$(bash "$D/check.sh" --__first "$R1440" "$R1920")" = "3" ] && ok "overflow at 1440 only picks slide 3" || ko "picker sampled the wrong report"
+RBOTH1440='[{"slide":3,"over":true}]'; RBOTH1920='[{"slide":5,"over":true}]'
+[ "$(bash "$D/check.sh" --__first "$RBOTH1440" "$RBOTH1920")" = "3" ] && ok "both sizes over: 1440s slide wins (screenshots land at 1440)" || ko "picker prefers the wrong size when both overflow"
+[ "$(bash "$D/check.sh" --__first "$R1920" "$R1920")" = "1" ] && ok "no overflow anywhere falls back to slide 1" || ko "picker fallback broken"
+[ "$(bash "$D/check.sh" --__first "" 'junk')" = "1" ] && ok "unparseable reports fall back to slide 1" || ko "picker dies on junk"
+
+echo "== check.sh gate: a page that measured nothing FAILS (handback item 1) =="
+CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+if [ -x "$CHROME_BIN" ]; then
+  printf '<html><body><section class="slide x">a</section><section class="slide x">b</section></body></html>' > "$T2/nomeasure.html"
+  bash "$D/check.sh" "$T2/nomeasure.html" --first > "$T2/gate.out" 2>&1; grc=$?
+  [ $grc -ne 0 ] && rg -q "GATE FAILURE" "$T2/gate.out" && ok "unmeasured deck exits nonzero with a loud GATE FAILURE" || ko "vacuous 0-over-of-0 still passes (rc=$grc)"
+  python3 "$D/render.py" "$D/fixtures/DECK.md" -o "$T2/deck.html" >/dev/null 2>&1
+  bash "$D/check.sh" "$T2/deck.html" --first > "$T2/gate2.out" 2>&1
+  rg -q "GATE FAILURE" "$T2/gate2.out" && ko "gate fires on the real fixture deck" || ok "real fixture deck measures clean, gate silent"
+else
+  echo "  skip  no Chrome; gate test UNCONFIRMED here (runs on any machine with Chrome)"
+fi
+
+trash "$T2" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

@@ -10,6 +10,7 @@ related:
   - features/declared-ready-stop-hook.md
   - features/hooks-tui-limits.md
   - rules/surface-hook-nudges-to-user.md
+  - conventions/shipped-checks-serve-the-author.md
 tier: 2
 category: features
 updated: 2026-07-05
