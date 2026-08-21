@@ -20,7 +20,7 @@
    retry. **Always release in step 6**, even if you abort partway.
 
 1. **Secret-scan the committable surface FIRST** (before `git add`). `rg` respects
-   `.gitignore`, so this scans exactly what would be pushed:
+   `.gitignore`, so this scans what is already tracked or trackable:
    ```bash
    cd ~/.claude && rg -n -o \
      'ghp_[A-Za-z0-9]{20,}|gho_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|xoxb-[A-Za-z0-9-]{10,}|figd_[A-Za-z0-9]+|AKIA[A-Z0-9]{16}|-----BEGIN [A-Z ]*PRIVATE KEY' \
@@ -28,6 +28,22 @@
    ```
    ANY output → **STOP**, do not commit. Remove the secret or `.gitignore` it first.
    Never commit `.env`, credentials, tokens (`rules/never-modify-anthropic-credentials.md`).
+
+   **If this commit starts tracking a directory that was ignored, scan that
+   directory separately with `--no-ignore` before committing it.** The scan above
+   inherits `.gitignore`, so a previously-ignored path is invisible to it, and the
+   bytes entering the repo are exactly the ones nothing has read. The reassurance
+   in the line above holds only while the ignore set and the tracked set agree,
+   and starting to track something is the moment they disagree.
+
+   ```bash
+   rg --no-ignore -n -o '<same pattern>' <the-newly-tracked-dir>
+   ```
+
+   Cheap tell that you are in this case: `git status` shows deletions whose
+   matching additions never appear. Lived case 2026-08-20, mig 0048: 431 files
+   moved into a new top-level `skills-parked/`, which the allowlist ignored by
+   default, so a root-scoped `rg --files .` returned zero hits under it.
 
 2. **Verification triad — this repo is MULTI-SESSION; it moves under you.** Other
    Claude sessions commit here concurrently. Before pushing:
