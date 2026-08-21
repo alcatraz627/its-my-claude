@@ -11,7 +11,7 @@ import {
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
-  loadSelection, renderSelection,
+  loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
@@ -33,6 +33,23 @@ const positional = rest.filter((a, i) => {
   const prev = rest[i - 1];
   return !(prev?.startsWith("--") && !BOOL_FLAGS.has(prev.slice(2)));
 });
+
+// The human-lane stores (notes, selection, plan) belong to the server, so the
+// CLI asks rather than writes. A refusal comes back as the server's own
+// sentence, which is more specific than anything this side could invent.
+async function post(route: string, body: unknown): Promise<any> {
+  const info = readJson<{ port?: number }>(SERVER_INFO, {});
+  if (!info.port) die("the board server is not running", `pm2 start kanban, or: kanban.sh check`);
+  let res: Response;
+  try {
+    res = await fetch(`http://127.0.0.1:${info.port}${route}`, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body),
+    });
+  } catch (e: any) { return die(`could not reach the board server on :${info.port}`, `kanban.sh check`); }
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) die(out.error ?? `server said ${res.status}`, `fix the above and re-run`);
+  return out;
+}
 
 function projectDir(): string {
   return path.resolve(flag("project") ?? process.cwd());
@@ -197,6 +214,53 @@ switch (verb) {
       break;
     }
     console.log(renderSelection(boardDir, name, sel));
+    break;
+  }
+  // Tags are the board's one cross-cutting axis: a milestone, a model lane, an
+  // effort, an area. Writes go through the server because plan.json is the
+  // human lane's file, the same way `drop --force` routes note deletion.
+  case "tag": {
+    const [id, spec] = positional;
+    const { slug, boardDir } = boardFor(projectDir());
+    if (!id) {
+      // bare `tag` lists the vocabulary and what it is worth
+      const plan = loadPlan(boardDir);
+      if (hasFlag("json")) { console.log(JSON.stringify(plan.tags)); break; }
+      if (!plan.tags.length) {
+        console.log(`no tags on ${slug} yet.\n  kinds: ${TAG_PRESETS.map((t) => t.kind).join(" ")}` +
+          `\n  add one: kanban.sh tag <card-id> milestone:M2`);
+        break;
+      }
+      const counts = new Map<string, number>();
+      for (const ids of Object.values(plan.on)) for (const t of ids) counts.set(t, (counts.get(t) ?? 0) + 1);
+      for (const t of plan.tags) console.log(`  ${t.kind}:${t.name}  ${counts.get(t.id) ?? 0} card(s)`);
+      break;
+    }
+    if (!spec) die("usage", `kanban.sh tag <card-id> <kind>:<name>   (drop it with a leading -)`);
+    const strip = spec.startsWith("-") ? spec.slice(1) : spec;
+    const [kindRaw, ...rest] = strip.split(":");
+    const name = rest.join(":");
+    const kind = (name ? kindRaw : "plain") as TagKind;
+    const value = name || kindRaw;
+    if (!TAG_PRESETS.some((t) => t.kind === kind)) {
+      die(`unknown tag kind ${kind}`, `one of: ${TAG_PRESETS.map((t) => t.kind).join(" ")}, or a bare name for a plain tag`);
+    }
+    const res = await post("/api/tag", { slug, op: spec.startsWith("-") ? "unapply" : "apply", cardId: id, kind, name: value });
+    console.log(`${spec.startsWith("-") ? "removed" : "tagged"} ${id}: ${kind}:${value}`);
+    break;
+  }
+  case "goal": {
+    const [id, ...restWords] = positional;
+    const { slug, boardDir } = boardFor(projectDir());
+    if (!id) die("usage", `kanban.sh goal <card-id> "why this card exists"   (empty clears it)`);
+    if (!restWords.length && !hasFlag("clear")) {
+      const g = loadPlan(boardDir).goals[id];
+      console.log(g ? g : `no goal on ${id}`);
+      break;
+    }
+    const goal = hasFlag("clear") ? "" : restWords.join(" ");
+    await post("/api/goal", { slug, cardId: id, goal });
+    console.log(goal ? `goal set on ${id}: ${goal}` : `goal cleared on ${id}`);
     break;
   }
   case "brief": {
@@ -684,6 +748,14 @@ switch (verb) {
                            [--card <id>] links the card, [--note "…"] says what
                            you did, [--undo] retracts it. Templates are reused
                            rather than consumed, so they refuse a pull
+  tag [<id> <kind>:<name>]  bare: the board's tag vocabulary and its card counts.
+                           With a card: apply a tag, or drop it with a leading
+                           "-" (kanban.sh tag ab12 -milestone:M2). Kinds:
+                           ${TAG_PRESETS.map((t) => t.kind).join(" ")}. A milestone is
+                           a tag several cards share, so "what is left for M2"
+                           is a filter, not a rollup
+  goal <id> "<why>"        one line saying why the card exists; bare reads it,
+                           [--clear] drops it
   selected [--json]        what the owner has ticked on this board — cards and
                            notes they are pointing at right now, in full. They
                            may also have pushed it at you directly with the

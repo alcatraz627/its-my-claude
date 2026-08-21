@@ -23,6 +23,9 @@
     --on-accent:#111318;
     --shadow:0 1px 2px rgb(0 0 0/.4);
     --l0:#33bda5; --l1:#14bbc2; --l2:#33b5da; --l3:#a497ea; --l4:#c18dd8; --l5:#d686bc;
+    --violet:#9c8cf0; --grey:#8c939d;
+    /* one scrim, so three overlays do not each pick a different dark */
+    --scrim:rgb(0 0 0/.38);
     --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
     --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
   }
@@ -37,6 +40,8 @@
     --on-accent:#ffffff;
     --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
     --l0:#007863; --l1:#006d77; --l2:#006e8f; --l3:#59459f; --l4:#753a8d; --l5:#883170;
+    --violet:#5b46b8; --grey:#5f666f;
+    --scrim:rgb(16 24 40/.34);
   }
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
   ::-webkit-scrollbar{width:10px;height:10px}
@@ -357,7 +362,7 @@
   /* Everything but the stub rail is hidden at 46px — including the tint, whose
      2px would otherwise read as a stray line above the stubs. */
   #drawer.collapsed .dhead,#drawer.collapsed .dbody,#drawer.collapsed .composer,#drawer.collapsed .dtint{display:none}
-  @media (prefers-reduced-motion: reduce){ #drawer{transition:none} }
+  @media (prefers-reduced-motion: reduce){ #drawer,#pop,#tip{transition:none} }
 
   /* ---------- drawer tabs ---------- */
   /* 6px of grab area, 1px of it visible: a wider hit target than the border it
@@ -451,7 +456,7 @@
   .seg .seghint{display:block;margin-top:4px;font-size:11.5px;color:var(--text-3)}
   .seg.gone{cursor:default;color:var(--text-3);font-size:11.5px}
   .seg.gone:hover{background:var(--well);border-color:var(--border);color:var(--text-3)}
-  #docmodal{position:fixed;inset:0;background:rgb(0 0 0/.5);display:none;align-items:center;justify-content:center;z-index:4}
+  #docmodal{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:60}
   #docmodal.on{display:flex}
   #docmodal .dbox{background:var(--canvas);border:1px solid var(--border);border-radius:12px;
        width:min(880px,92vw);height:min(720px,86vh);display:flex;flex-direction:column;overflow:hidden}
@@ -573,12 +578,12 @@
   .btitle{background:none;border:none;padding:2px 6px 2px 2px;border-radius:7px;gap:4px}
   .btitle:hover{background:var(--card);color:var(--text)}
   .btitle .bchev{font-size:11px;color:var(--text-3);line-height:1}
-  #bpick{position:fixed;inset:0;background:rgb(0 0 0/.32);display:none;align-items:flex-start;
-         justify-content:center;z-index:8;padding-top:14vh}
-  #bpick.on{display:flex}
-  #bpick .bpbox{width:min(560px,92vw);background:var(--canvas);border:1px solid var(--border-2);
+  #bpick,#tpick{position:fixed;inset:0;background:var(--scrim);display:none;align-items:flex-start;
+         justify-content:center;z-index:40;padding-top:14vh}
+  #bpick.on,#tpick.on{display:flex}
+  #bpick .bpbox,#tpick .bpbox{width:min(560px,92vw);background:var(--canvas);border:1px solid var(--border-2);
                 border-radius:13px;box-shadow:0 26px 64px rgb(0 0 0/.4);overflow:hidden}
-  #bpick input{width:100%;border:none;border-bottom:1px solid var(--border);background:none;color:var(--text);
+  #bpick input,#tpick input{width:100%;border:none;border-bottom:1px solid var(--border);background:none;color:var(--text);
                font:400 14.5px/1 var(--sans);padding:15px 17px;outline:none}
   .bplist{max-height:46vh;overflow-y:auto;padding:6px}
   .bprow{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border-radius:8px;
@@ -619,6 +624,41 @@
              display:grid;place-items:center;font-size:9px;color:transparent}
   .chip.picked .cbx{background:var(--on-accent);border-color:var(--on-accent);color:var(--blue)}
 
+  /* A tag chip is the same object everywhere it appears — card face, drawer,
+     sidebar, picker — so learning it once is enough. The dot carries the kind
+     and is the only place colour is spent; the text stays readable text. */
+  .chip.tag{padding-left:7px}
+  .chip.tag .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
+  .chip.tag .tk{color:var(--text-3);font-weight:400}
+  .chip.tag:hover .tk{color:var(--text-2)}
+  .chip.tag.on{border-color:var(--dot,var(--grey));color:var(--text)}
+  .k-milestone{--dot:var(--violet)} .k-tier{--dot:var(--blue)} .k-effort{--dot:var(--amber)}
+  .k-area{--dot:var(--green)} .k-risk{--dot:var(--red)} .k-plain{--dot:var(--grey)}
+
+  /* ---------- goal ---------- */
+  /* The card's "why", one line, sitting above everything the card claims. It
+     reads as a statement rather than a field, so it has no box until you touch it. */
+  .dgoal{display:flex;align-items:flex-start;gap:8px;margin-top:12px;padding:8px 10px;border-radius:8px;
+         border:1px dashed var(--border);cursor:text;color:var(--text-2);font:400 13px/1.55 var(--sans)}
+  .dgoal:hover{border-color:var(--border-2);background:var(--well)}
+  .dgoal .gi{flex:none;margin-top:2px;color:var(--violet)}
+  .dgoal .gt{flex:1;min-width:0;overflow-wrap:anywhere}
+  .dgoal .gt.empty{color:var(--text-3);font-style:italic}
+  .dgoal textarea{flex:1;min-height:52px;resize:vertical;font:400 13px/1.55 var(--sans);
+                  background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 9px;color:var(--text)}
+
+  /* ---------- sidebar tags ---------- */
+  .srow.tagrow{gap:7px}
+  .srow .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
+  .srow .tct{flex:none;font:500 11px/1 var(--mono);color:var(--text-3)}
+  .srow.on{background:var(--card);border-color:var(--border-2);color:var(--text)}
+  .skind{font:600 10px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);
+         padding:5px 7px 1px}
+  .stagbar{display:flex;gap:4px;padding:3px 5px 0}
+  .stagbar button{flex:1;height:22px;padding:0;justify-content:center;font-size:11px;
+                  background:none;border-color:transparent;color:var(--text-3)}
+  .stagbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+
   /* ---------- select mode ---------- */
   .card .cbox{position:absolute;top:9px;right:9px;width:18px;height:18px;border:1.5px solid var(--border-2);
               border-radius:5px;background:var(--card);display:none;place-items:center;
@@ -641,7 +681,7 @@
   /* Opened from a chip and sized off the card it belongs to, so the writing
      surface is bigger than the thing that spawned it — the point is to be able
      to actually write here instead of in a 2-line preview. */
-  #pop{position:fixed;z-index:7;display:none;flex-direction:column;gap:10px;
+  #pop{position:fixed;z-index:30;display:none;flex-direction:column;gap:10px;
        background:var(--canvas);border:1px solid var(--border-2);border-radius:12px;padding:14px;
        box-shadow:0 20px 54px rgb(0 0 0/.38);opacity:0;transform:translateY(4px) scale(.99);
        transition:opacity .13s,transform .13s;transform-origin:top left}
@@ -663,7 +703,7 @@
      owner never saw it fire; it is also incapable of the two things this board
      needs — a readable measure for a paragraph-long card title, and a scroll
      cap so a 5000-char note does not become a full-screen sheet. */
-  #tip{position:fixed;z-index:6;max-width:min(460px,72vw);max-height:40vh;overflow-y:auto;
+  #tip{position:fixed;z-index:90;max-width:min(460px,72vw);max-height:40vh;overflow-y:auto;
        background:var(--card);color:var(--text);border:1px solid var(--border-2);border-radius:9px;
        padding:9px 12px;font:400 12.5px/1.55 var(--sans);box-shadow:0 12px 34px rgb(0 0 0/.34);
        pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .11s,transform .11s;
@@ -681,7 +721,7 @@
   #toast.err{border-color:var(--red);color:var(--red)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
          border-radius:8px;padding:9px 16px;font-size:13px;display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:3}
-  #help{position:fixed;inset:0;background:rgb(0 0 0/.4);display:none;align-items:center;justify-content:center;z-index:4}
+  #help{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:50}
   #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:20px 24px;min-width:340px;
              box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
   #help h3{font:600 13px/1 var(--sans);margin-bottom:14px}
@@ -691,6 +731,45 @@
   #help kbd{font:500 11.5px/1 var(--mono);background:var(--card);border:1px solid var(--border);border-bottom-width:2px;
             border-radius:5px;padding:3px 6px;color:var(--text)}
   #help .grouphead{padding-top:14px;font:600 11.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+  /* Two audiences in one modal: someone who wants a key, and someone who wants
+     to know what a thing IS. Tabs keep the first fast and give the second room. */
+  #help .box{width:min(880px,94vw);padding:0;display:flex;flex-direction:column}
+  .htabs{display:flex;gap:2px;padding:12px 16px 0;border-bottom:1px solid var(--border);flex:none}
+  .htab{background:none;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;
+        padding:8px 13px;color:var(--text-3);font:600 12.5px/1 var(--sans);cursor:pointer}
+  .htab:hover{color:var(--text-2);background:var(--well)}
+  .htab.on{background:var(--canvas);border-color:var(--border);color:var(--text);box-shadow:0 1px 0 0 var(--canvas)}
+  .hpane{display:none;padding:18px 22px 22px;overflow:auto;min-height:0}
+  .hpane.on{display:block}
+  .hclose{margin-left:auto;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
+
+  /* the map. One picture of how a doc becomes a card and how anything you
+     write reaches an agent — the two flows this whole board exists to run. */
+  .hmap{width:100%;height:auto;margin-bottom:20px;border:1px solid var(--border);border-radius:10px;background:var(--well)}
+  .hmap text{font:11px var(--sans);fill:var(--text-2)}
+  .hmap text.t{font:600 11.5px var(--sans);fill:var(--text)}
+  .hmap text.s{font:10px var(--mono);fill:var(--text-3)}
+  /* the vignettes reuse these classes, so the fills are scoped to both or the
+     schematics render as solid black rectangles */
+  .hmap rect.n,.term .shot rect.n{fill:var(--card);stroke:var(--border-2)}
+  .hmap rect.y,.term .shot rect.y{fill:var(--blue-bg);stroke:var(--blue-br)}
+  .hmap path,.hmap line{stroke:var(--border-2);fill:none}
+  .term .shot svg{display:block}
+  .hmap .lbl{fill:var(--text-3);font:10px var(--sans)}
+
+  /* one entry per thing the board has a word for */
+  .term{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--border)}
+  .term:first-of-type{border-top:none}
+  .term .shot{border:1px solid var(--border);border-radius:8px;background:var(--well);padding:8px;align-self:start}
+  .term h4{font:600 13.5px/1.3 var(--sans);color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:7px}
+  .term p{font:400 12.5px/1.6 var(--sans);color:var(--text-2);margin-bottom:8px}
+  .term .rel{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+  .term .use{display:flex;flex-direction:column;gap:3px;font:400 12px/1.5 var(--sans)}
+  .term .use span{display:flex;gap:7px}
+  .term .use b{flex:none;font:600 11px/1.5 var(--sans);letter-spacing:.04em;text-transform:uppercase;width:44px}
+  .term .use .do b{color:var(--green)}
+  .term .use .dont b{color:var(--red)}
+  .term .use i{font-style:normal;color:var(--text-3)}
 </style>
 </head>
 <body>
@@ -734,7 +813,9 @@
     <div>
       <h3 class="dtitle" id="dTitle"></h3>
       <div class="ddesc" id="dDesc"></div>
+      <div class="dgoal" id="dGoal"></div>
       <div class="dpills" id="dPills"></div>
+      <div class="chips dtags" id="dTags2"></div>
       <div class="dsub" id="dSub"></div>
     </div>
     <div class="grp" id="dOtherWrap">
@@ -783,6 +864,11 @@
   </aside>
 </div>
 <div id="state"></div>
+<div id="tpick" role="dialog" aria-modal="true" aria-label="add a tag"><div class="bpbox">
+  <input id="tpq" type="search" placeholder="milestone:M2 · tier:sonnet · effort:high · or any name" aria-label="find or create a tag" autocomplete="off">
+  <div class="bplist" id="tplist" role="listbox"></div>
+  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> apply</span><span>type <kbd>kind:name</kbd> to make a new one</span><span><kbd>esc</kbd> close</span></div>
+</div></div>
 <div id="bpick" role="dialog" aria-modal="true" aria-label="switch board"><div class="bpbox">
   <input id="bpq" type="search" placeholder="Type a board name or path" aria-label="find a board" autocomplete="off">
   <div class="bplist" id="bplist" role="listbox"></div>
@@ -814,8 +900,14 @@
   </div>
   <iframe id="dmFrame" title="document preview" src="about:blank"></iframe>
 </div></div>
-<div id="help"><div class="box">
-  <h3>Keyboard</h3>
+<div id="help" role="dialog" aria-modal="true" aria-label="help"><div class="box">
+  <div class="htabs" role="tablist">
+    <button class="htab on" data-pane="hKeys" role="tab">Keyboard</button>
+    <button class="htab" data-pane="hTerms" role="tab">What everything means</button>
+    <button class="htab" data-pane="hTags" role="tab">Note tags &amp; grades</button>
+    <button class="hclose" type="button" id="hClose" aria-label="close">✕</button>
+  </div>
+  <div class="hpane on" id="hKeys">
   <table>
     <tr><td colspan="2" class="grouphead">Move</td></tr>
     <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the lane</td></tr>
@@ -840,11 +932,19 @@
     <tr><td><kbd>X</kbd> <kbd>N</kbd></td><td>card / note select mode</td></tr>
     <tr><td><kbd>s</kbd></td><td>send the selection to an agent</td></tr>
     <tr><td><kbd>C</kbd></td><td>clear the whole selection</td></tr>
+    <tr><td colspan="2" class="grouphead">Goal and tags</td></tr>
+    <tr><td><kbd>g</kbd></td><td>set the card's goal, in one line</td></tr>
+    <tr><td><kbd>#</kbd></td><td>tag it — milestone, model tier, effort, anything</td></tr>
     <tr><td colspan="2" class="grouphead">Everything else</td></tr>
     <tr><td><kbd>a</kbd></td><td>write an ask, sorted by the agent</td></tr>
     <tr><td><kbd>c</kbd></td><td>copy status digest · <kbd>t</kbd> theme</td></tr>
     <tr><td><kbd>⌘</kbd> drag</td><td>pan the board</td></tr>
     <tr><td><kbd>esc</kbd></td><td>step back out, one layer at a time</td></tr>
+  </table>
+  </div>
+  <div class="hpane" id="hTerms"></div>
+  <div class="hpane" id="hTags">
+  <table>
     <tr><td colspan="2" class="grouphead">Note tags</td></tr>
     <tr><td><kbd>@me</kbd></td><td>note to self — the agent isn't nagged</td></tr>
     <tr><td><kbd>!now</kbd></td><td>agent acts on next pickup</td></tr>
@@ -858,6 +958,7 @@
     <tr><td>reasoned</td><td>argued, not observed</td></tr>
     <tr><td>needs you</td><td>graded, but wants your own testing</td></tr>
   </table>
+  </div>
 </div></div>
 
 <script>
@@ -917,6 +1018,76 @@ $("theme").onclick = toggleTheme;
 function toast(msg, ms = 1900, kind = "") { const t = $("toast"); t.textContent = msg;
   t.className = kind === "err" ? "err" : ""; t.setAttribute("role", kind === "err" ? "alert" : "status");
   t.style.display = "block"; setTimeout(() => (t.style.display = "none"), ms); }
+
+// ---------- tags ----------
+// One vocabulary, one chip, one filter. A milestone is a tag several cards
+// share, which is why "what is left for M2" is `tag:milestone:M2` and not a
+// per-card checklist that nobody could total up.
+const plan = () => data?.plan ?? { tags: [], on: {}, goals: {} };
+const presets = () => data?.presets ?? [];
+const presetOf = (kind) => presets().find((p) => p.kind === kind) ?? { kind: "plain", label: "Tag", hue: "grey", values: [] };
+const tagById = (id) => plan().tags.find((t) => t.id === id);
+const tagsOnCard = (cardId) => (plan().on[cardId] ?? []).map(tagById).filter(Boolean);
+const tagFilter = (t) => `tag:${t.kind}:${t.name}`;
+const tagCounts = () => {
+  const m = new Map();
+  for (const ids of Object.values(plan().on)) for (const id of ids) m.set(id, (m.get(id) ?? 0) + 1);
+  return m;
+};
+
+function tagChip(t, { onCard = null } = {}) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = `chip tag k-${t.kind}` + (filterText === tagFilter(t) ? " on" : "");
+  b.innerHTML = `<i class="tdot"></i><span class="tk"></span><span class="tn"></span>`;
+  // the kind reads as a prefix rather than a second chip: one object, not two
+  b.querySelector(".tk").textContent = t.kind === "plain" ? "#" : `${t.kind}:`;
+  b.querySelector(".tn").textContent = t.name;
+  b.dataset.tip = `${presetOf(t.kind).label} · ${t.name}${t.note ? ` — ${t.note}` : ""}\nPress to show every card that shares it.`;
+  b.onclick = (e) => {
+    e.stopPropagation();
+    setFilter(filterText === tagFilter(t) ? "" : tagFilter(t));
+  };
+  if (onCard) {
+    b.addEventListener("auxclick", (e) => {
+      // middle-click drops the tag from this card, the same gesture the tabs
+      // and the note rows already use for "take this off my screen"
+      if (e.button !== 1) return;
+      e.preventDefault(); e.stopPropagation();
+      applyTag(onCard, t, false);
+    });
+  }
+  return b;
+}
+
+async function applyTag(cardId, t, on = true) {
+  try {
+    const res = await fetch("/api/tag", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, op: on ? "apply" : "unapply", cardId, kind: t.kind, name: t.name, tagId: t.id }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    lastPayload = ""; await load();
+    if (openId === cardId) openDrawer(cardId);
+  } catch (e) { toast(`Tag failed: ${e.message}`, 4000, "err"); }
+}
+async function tagOp(body) {
+  try {
+    const res = await fetch("/api/tag", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, ...body }) });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || res.status);
+    lastPayload = ""; await load();
+    return out;
+  } catch (e) { toast(`Tag failed: ${e.message}`, 4000, "err"); return null; }
+}
+async function setGoal(cardId, goal) {
+  try {
+    const res = await fetch("/api/goal", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, cardId, goal }) });
+    if (!res.ok) throw new Error((await res.json()).error || res.status);
+    lastPayload = ""; await load();
+    if (openId === cardId) openDrawer(cardId);
+  } catch (e) { toast(`Goal failed: ${e.message}`, 4000, "err"); }
+}
 
 // ---------- selection ----------
 // Two independent sets, mirroring the server's selection.json. Cards and notes
@@ -1081,6 +1252,7 @@ function openPop(cardId, noteId, anchorEl) {
   pop.style.width = `${Math.min(Math.round(r.width * 1.5), innerWidth - 32)}px`;
   pop.style.height = `${Math.min(Math.round(r.height * 1.5), innerHeight - 32)}px`;
   pop.classList.add("on");
+  overlayOpen(pop, $("popNote"));
   const pr = pop.getBoundingClientRect();
   pop.style.left = `${Math.min(Math.max(12, r.left), Math.max(12, innerWidth - pr.width - 12))}px`;
   pop.style.top = `${Math.min(Math.max(12, r.top), Math.max(12, innerHeight - pr.height - 12))}px`;
@@ -1090,6 +1262,7 @@ function closePop() {
   if (popDirty) toast("Note not saved — reopen the chip to finish it", 3000);
   popCard = null; popNote = null; popDirty = false;
   $("pop").classList.remove("on");
+  overlayClose();
 }
 function syncPopPick() {
   const on = popCard && popNote && isPickedNote(popCard, popNote);
@@ -1369,7 +1542,11 @@ function cardEl(c) {
   // makes a note referable — "note #2" means something to a human reading the
   // board and to an agent reading `kanban.sh selected`.
   const chipRow = el.querySelector(".chips");
-  if (!allNotes.length) chipRow.remove();
+  const cardTags = tagsOnCard(c.id);
+  // tags first: they say what the card IS, and the notes say what is being
+  // asked about it
+  cardTags.forEach((t) => chipRow.appendChild(tagChip(t, { onCard: c.id })));
+  if (!allNotes.length && !cardTags.length) chipRow.remove();
   else allNotes.forEach((n, i) => {
     const tags = parseTags(n.body);
     const ch = document.createElement("button");
@@ -1840,6 +2017,65 @@ function renderSide() {
     el.appendChild(g);
   };
 
+  // The board's vocabulary, grouped by kind so the presets read as the
+  // categories they are. Each row filters; the two buttons under it are the
+  // only place a tag is renamed or destroyed, which keeps those away from the
+  // chips you press all day.
+  group("Tags", (g) => {
+    const tags = plan().tags;
+    if (!tags.length) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No tags yet. Open a card and press # to make one — a milestone, a model tier, an effort.";
+      g.appendChild(e);
+      return;
+    }
+    const counts = tagCounts();
+    for (const pr of presets()) {
+      const mine = tags.filter((t) => t.kind === pr.kind)
+        .sort((a, b) => (counts.get(b.id) ?? 0) - (counts.get(a.id) ?? 0));
+      if (!mine.length) continue;
+      const h = document.createElement("div");
+      h.className = "skind"; h.textContent = pr.label;
+      h.dataset.tip = pr.hint;
+      g.appendChild(h);
+      for (const t of mine) {
+        const wrap = document.createElement("div");
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = `srow tagrow k-${t.kind}` + (filterText === tagFilter(t) ? " on" : "");
+        b.innerHTML = `<i class="tdot"></i><span class="stxt"></span><span class="tct">${counts.get(t.id) ?? 0}</span>`;
+        b.querySelector(".stxt").textContent = t.name;
+        b.dataset.tip = `${counts.get(t.id) ?? 0} card(s). Press to show only those.`;
+        b.onclick = () => setFilter(filterText === tagFilter(t) ? "" : tagFilter(t));
+        wrap.appendChild(b);
+        const bar = document.createElement("div");
+        bar.className = "stagbar";
+        const ren = document.createElement("button");
+        ren.type = "button"; ren.textContent = "rename"; ren.dataset.tip = "Rename it everywhere it is used";
+        ren.onclick = async () => {
+          const name = prompt(`Rename ${t.kind}:${t.name} to:`, t.name);
+          if (name && name.trim() && name.trim() !== t.name) {
+            await tagOp({ op: "rename", tagId: t.id, name: name.trim() });
+            render();
+          }
+        };
+        const del = document.createElement("button");
+        del.type = "button"; del.textContent = "delete"; del.className = "danger";
+        del.dataset.tip = `Remove it from all ${counts.get(t.id) ?? 0} card(s) and from the vocabulary`;
+        del.onclick = async () => {
+          const n = counts.get(t.id) ?? 0;
+          if (n && !confirm(`Delete ${t.kind}:${t.name}? It comes off ${n} card${n > 1 ? "s" : ""}.`)) return;
+          await tagOp({ op: "delete", tagId: t.id });
+          if (filterText === tagFilter(t)) setFilter(""); else render();
+        };
+        bar.append(ren, del);
+        wrap.appendChild(bar);
+        g.appendChild(wrap);
+      }
+    }
+  });
+
   group("Pinned", (g) => {
     if (!pins.length) {
       const e = document.createElement("div");
@@ -2121,6 +2357,57 @@ $("dNote").addEventListener("blur", () => setTimeout(syncComposer, 150));
 // the place you clicked it. Now the list is the notes, the composer is a
 // separate surface, and the draft is the last row of the list — a durable
 // canvas that stays until it is saved rather than a state the list falls into.
+const GOAL_ICON = `<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.4" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="2.4" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r=".9" fill="currentColor"/></svg>`;
+
+// The goal is a sentence you either have or you don't, so it edits in place
+// rather than through a form: click it, type, blur to save.
+function renderGoal(cardId) {
+  const el = $("dGoal");
+  const g = plan().goals[cardId] ?? "";
+  el.replaceChildren();
+  const ic = document.createElement("span");
+  ic.className = "gi"; ic.innerHTML = GOAL_ICON;
+  const txt = document.createElement("span");
+  txt.className = "gt" + (g ? "" : " empty");
+  txt.textContent = g || "Say why this card exists, in one line";
+  el.append(ic, txt);
+  el.dataset.tip = "The card's goal. The agent reads it with the card, and it travels with a sent selection.";
+  el.onclick = () => editGoal(cardId, g);
+}
+function editGoal(cardId, current) {
+  const el = $("dGoal");
+  el.replaceChildren();
+  const ic = document.createElement("span");
+  ic.className = "gi"; ic.innerHTML = GOAL_ICON;
+  const ta = document.createElement("textarea");
+  ta.value = current; ta.setAttribute("aria-label", "card goal");
+  ta.placeholder = "One line: what has to be true for this card to be done";
+  el.append(ic, ta);
+  delete el.dataset.tip;
+  el.onclick = null;
+  ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  const commit = async () => {
+    const v = ta.value.trim();
+    if (v !== current) await setGoal(cardId, v); else renderGoal(cardId);
+  };
+  ta.addEventListener("blur", commit);
+  ta.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { e.stopPropagation(); ta.value = current; ta.blur(); }
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ta.blur(); }
+  });
+}
+
+function renderCardTags(cardId) {
+  const row = $("dTags2");
+  row.replaceChildren(...tagsOnCard(cardId).map((t) => tagChip(t, { onCard: cardId })));
+  const add = document.createElement("button");
+  add.type = "button"; add.className = "chip";
+  add.innerHTML = `<span class="ci">＋</span><span>tag</span>`;
+  add.dataset.tip = "Add a tag (#). Milestones, model tier, effort — anything worth grouping cards by.";
+  add.onclick = (e) => { e.stopPropagation(); openTagPick(cardId, add); };
+  row.appendChild(add);
+}
+
 function renderOtherNotes(id) {
   const list = notesOf(data.notes[id]);
   const draftText = readDraft(id, null) ?? "";
@@ -2359,6 +2646,8 @@ function openDrawer(id, wantNoteId, opts = {}) {
     (c.tag ? `<span class="pill mono" title="source tag">${esc(c.tag)}</span>` : "") +
     (subs.length ? `<span class="pill prog">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "") +
     (c.staleReason ? `<span class="pill" title="why this went stale">${esc(c.staleReason)}</span>` : "");
+  renderGoal(c.id);
+  renderCardTags(c.id);
   $("dSub").textContent = `Updated ${ago(Date.parse(c.updatedAt))} ago · created ${ago(Date.parse(c.createdAt))} ago`;
   $("dSub").title = `${new Date(c.updatedAt).toLocaleString()} · created ${new Date(c.createdAt).toLocaleString()}`;
 
@@ -2462,6 +2751,252 @@ function setDrawerWidth(px, persist = true) {
   });
 })();
 
+function openHelp() {
+  if ($("help").style.display === "flex") return closeHelp();
+  $("help").style.display = "flex";
+  overlayOpen($("help"), document.querySelector(".htab"));
+}
+function closeHelp() {
+  if ($("help").style.display !== "flex") return;
+  $("help").style.display = "none";
+  overlayClose();
+}
+
+// ---------- overlay contract ----------
+// Every modal on this board now opens and closes the same way: the scroll
+// behind it locks, focus moves into it, and focus returns to whatever opened it.
+// The last part is the one that was missing everywhere — closing a palette used
+// to drop the keyboard back at the top of the document, which ends a
+// keyboard-only session on the spot.
+const openStack = [];
+function overlayOpen(el, focusEl) {
+  openStack.push(document.activeElement);
+  document.body.style.overflow = "hidden";
+  (focusEl ?? el.querySelector("input,textarea,button"))?.focus();
+}
+function overlayClose() {
+  const back = openStack.pop();
+  // only the last one out unlocks: two stacked overlays would otherwise leave
+  // the page scrollable under the one still open
+  if (!openStack.length) document.body.style.overflow = "";
+  if (back && document.contains(back)) back.focus();
+}
+
+// ---------- the terminology tab ----------
+// Every word this board uses, what it is for, and the mistake each one invites.
+// The vignette is a schematic rather than a screenshot: it stays right when the
+// UI moves, it follows the theme, and it costs no binary.
+const VIG = {
+  card: `<svg viewBox="0 0 108 62" width="108" height="62"><rect class="n" x="2" y="2" width="104" height="58" rx="6"/><rect x="10" y="12" width="66" height="5" rx="2.5" fill="var(--text-3)"/><rect x="10" y="22" width="48" height="5" rx="2.5" fill="var(--border-2)"/><rect x="10" y="38" width="26" height="10" rx="5" fill="var(--well)" stroke="var(--border)"/><rect x="40" y="38" width="26" height="10" rx="5" fill="var(--well)" stroke="var(--border)"/></svg>`,
+  lane: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="2" y="2" width="50" height="58" rx="6" fill="var(--well)" stroke="var(--border)"/><rect x="56" y="2" width="50" height="58" rx="6" fill="var(--well)" stroke="var(--border-2)" stroke-width="1.5"/><rect class="n" x="8" y="14" width="38" height="14" rx="4"/><rect class="n" x="8" y="32" width="38" height="14" rx="4"/><rect class="n" x="62" y="14" width="38" height="14" rx="4"/></svg>`,
+  note: `<svg viewBox="0 0 108 62" width="108" height="62"><rect class="n" x="2" y="2" width="104" height="58" rx="6"/><rect x="10" y="10" width="40" height="12" rx="6" fill="var(--blue-bg)" stroke="var(--blue-br)"/><circle cx="18" cy="16" r="2.4" fill="var(--blue)"/><rect x="10" y="30" width="86" height="4" rx="2" fill="var(--border-2)"/><rect x="10" y="39" width="70" height="4" rx="2" fill="var(--border-2)"/><rect x="10" y="48" width="52" height="4" rx="2" fill="var(--border-2)"/></svg>`,
+  tag: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="6" y="10" width="44" height="13" rx="6.5" fill="var(--well)" stroke="var(--border)"/><circle cx="14" cy="16.5" r="3" fill="var(--violet)"/><rect x="6" y="28" width="52" height="13" rx="6.5" fill="var(--well)" stroke="var(--border)"/><circle cx="14" cy="34.5" r="3" fill="var(--blue)"/><rect x="6" y="46" width="38" height="13" rx="6.5" fill="var(--well)" stroke="var(--border)"/><circle cx="14" cy="52.5" r="3" fill="var(--amber)"/></svg>`,
+  goal: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="4" y="14" width="100" height="34" rx="7" fill="none" stroke="var(--border)" stroke-dasharray="4 3"/><circle cx="22" cy="31" r="8" fill="none" stroke="var(--violet)" stroke-width="1.4"/><circle cx="22" cy="31" r="3.4" fill="none" stroke="var(--violet)" stroke-width="1.4"/><rect x="38" y="27" width="54" height="4" rx="2" fill="var(--text-3)"/><rect x="38" y="35" width="36" height="4" rx="2" fill="var(--border-2)"/></svg>`,
+  ask: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="2" y="2" width="104" height="58" rx="6" fill="var(--blue-bg)" stroke="var(--blue-br)"/><rect x="10" y="10" width="88" height="20" rx="5" fill="var(--card)" stroke="var(--border)"/><rect x="16" y="17" width="52" height="4" rx="2" fill="var(--border-2)"/><rect x="70" y="36" width="28" height="12" rx="5" fill="var(--blue)"/></svg>`,
+  sel: `<svg viewBox="0 0 108 62" width="108" height="62"><rect class="y" x="2" y="2" width="104" height="26" rx="6"/><path d="M12 15.5 16 19.5 24 10.5" stroke="var(--blue)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="32" y="12" width="46" height="5" rx="2.5" fill="var(--blue)" opacity=".55"/><rect class="n" x="2" y="34" width="104" height="26" rx="6"/><rect x="12" y="44" width="10" height="10" rx="3" fill="none" stroke="var(--border-2)" stroke-width="1.5"/><rect x="32" y="46" width="46" height="5" rx="2.5" fill="var(--border-2)"/></svg>`,
+  verify: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="6" y="8" width="54" height="14" rx="7" fill="var(--green-bg)" stroke="var(--green-br)"/><path d="M14 15 17.5 18.5 24 11" stroke="var(--green)" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="6" y="27" width="46" height="14" rx="7" fill="var(--well)" stroke="var(--border)"/><rect x="6" y="46" width="66" height="14" rx="7" fill="var(--amber-bg)" stroke="var(--amber-br)"/></svg>`,
+  sync: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="4" y="12" width="34" height="38" rx="4" fill="var(--card)" stroke="var(--border)"/><rect x="10" y="20" width="22" height="3" rx="1.5" fill="var(--border-2)"/><rect x="10" y="27" width="18" height="3" rx="1.5" fill="var(--border-2)"/><path d="M44 26h18m0 0-5-5m5 5-5 5" stroke="var(--text-3)" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect class="n" x="70" y="12" width="34" height="16" rx="4"/><rect class="n" x="70" y="34" width="34" height="16" rx="4"/></svg>`,
+  panel: `<svg viewBox="0 0 108 62" width="108" height="62"><rect x="2" y="2" width="58" height="58" rx="5" fill="var(--well)" stroke="var(--border)"/><rect x="64" y="2" width="42" height="58" rx="5" fill="var(--card)" stroke="var(--border-2)"/><rect x="68" y="6" width="16" height="9" rx="3" fill="var(--canvas)" stroke="var(--border-2)"/><rect x="86" y="6" width="16" height="9" rx="3" fill="var(--well)"/><rect x="68" y="22" width="34" height="4" rx="2" fill="var(--text-3)"/><rect x="68" y="31" width="26" height="4" rx="2" fill="var(--border-2)"/></svg>`,
+};
+
+const TERMS = [
+  { id: "board", vig: "sync", title: "Board", rel: ["sync", "card", "lane"],
+    p: "One board mirrors one project. It is built by reading that project's plan documents, checkpoints and live workspace notes, so it is a view of what those files say rather than a place you type work into. That direction matters: editing the board never edits your docs. Boards are per-project and independent, and the name in the header switches between them. What the board adds on top of the mirror is everything the mirror cannot hold — your notes, your tags, your goals, what you have selected — all of which survive the next re-read.",
+    do: "Treat it as a reading surface for a project, and one place to leave things for an agent.",
+    dont: "Do not expect edits here to change your markdown. The docs are upstream." },
+  { id: "card", vig: "card", title: "Card", rel: ["title brief", "goal", "tag", "note"],
+    p: "A card is one task, harvested from a checkbox or a checkpoint line, or added by hand. Its identity is a hash of its source and title, so the same item keeps the same id across re-reads and anything you attach to it survives. The face shows a short brief; the full text, which is often a paragraph, lives in the panel as the card's description and on hover. Everything else on the face is a handle: tag chips, note chips, the source path, the lane.",
+    do: "Open one to see everything about it, and use its id when talking to an agent about it.",
+    dont: "Do not treat a long title as the card's description. Give it a brief and let the title be the record." },
+  { id: "lane", vig: "lane", title: "Lane", rel: ["sync", "move"],
+    p: "The six lanes are inbox, backlog, active, blocked, done and stale. Lanes are decided by the harvest from how an item appears in your docs, unless an agent has explicitly moved a card, in which case that decision wins and survives every re-read. Blocked and active are drawn wider and with a heavier border because they are the two that want attention. Stale means the source line vanished from your docs while the card still had notes on it, so it is kept rather than deleted.",
+    do: "Read lane as the agent's claim about state, and check it against the card's verification grade.",
+    dont: "Do not drag cards between lanes here. The agent moves them, and it records why." },
+  { id: "note", vig: "note", title: "Note", rel: ["draft", "chip", "pickup"],
+    p: "A note is the main way you talk to an agent about a specific card. A card can hold many, each numbered so you can name one out loud, and each shown as a chip on the face. Notes are pull-based: nothing interrupts a working agent, and the next one to start is told how many are unread. Tokens inside the text change what happens, so a note can also route work. Notes are yours, never rewritten by a re-read, and they are what keeps a card from being deleted when its source line disappears.",
+    do: "Write it the way you would say it. Middle-click a chip to dismiss one, and press u if that was a mistake.",
+    dont: "Do not assume it was seen. Unread until an agent acknowledges it." },
+  { id: "draft", vig: "note", title: "Draft canvas", rel: ["note"],
+    p: "The last row of a card's note list is always a draft, and it is never anything else. It holds whatever you have half-written, survives closing the panel, reloading the page and crashing the tab, and only becomes a note when you save it. This exists because the earlier design put your unsaved text and your saved notes in the same slot, so opening a note replaced what you were typing. The two are now separate surfaces: the list is what you have said, the canvas is what you are still saying.",
+    do: "Leave a thought half-finished. It will be there.",
+    dont: "Do not expect an agent to see it. A draft is not a note until you save it." },
+  { id: "tag", vig: "tag", title: "Tag", rel: ["milestone", "model tier", "effort", "filter"],
+    p: "One vocabulary that cuts across every card. A tag has a kind, and the kind carries the colour of its dot: milestone, model tier, effort, area, risk, or plain. Milestones are tags rather than checklists, which is what makes a milestone answerable by a filter instead of a rollup. Tags are made by using them, so there is no vocabulary to define first, and the sidebar is where you rename or retire one. Pressing any chip anywhere shows every card that shares it.",
+    do: "Use a milestone to group work, and tier or effort to tell an agent what a card is worth.",
+    dont: "Do not confuse a tag with the coloured label pill. That is section context from your doc, set automatically." },
+  { id: "goal", vig: "goal", title: "Goal", rel: ["card", "selection"],
+    p: "One line per card saying what has to be true for it to be done. Titles say what the work is; a goal says what it is for, which is the thing an agent most often has to guess. It sits above the card's claims in the panel, edits in place, and travels with the card whenever you send a selection, so it arrives as context rather than as something to be inferred. Keep it to a sentence: anything longer is a note.",
+    do: "Write the outcome, not the steps. “Finance can open the file” beats “fix the CSV writer”.",
+    dont: "Do not restate the title. If it says the same thing, the card does not need one." },
+  { id: "ask", vig: "ask", title: "Your asks", rel: ["draft doc", "classify"],
+    p: "The blue lane on the left is yours, and it is the one place you write without deciding where anything goes. Anything typed there becomes an ask, and sorting it into a card is the agent's job, not yours. An ask can be scoped to this board or left to show on every board's rail, starred so an agent notices it, or queued for pickup now rather than at the next sweep. Once an agent sorts one, it records what it made of it and links the card.",
+    do: "Throw things in mid-thought. That is what it is for.",
+    dont: "Do not use it for something about a specific card. That is a note." },
+  { id: "sel", vig: "sel", title: "Selection", rel: ["send to agent", "card", "note"],
+    p: "Two independent sets, one of cards and one of notes, both empty by default. Ticking says “this is what I mean right now” and changes nothing about the board. The selection is stored with the board, so an agent reads it even if nobody was around when you made it, and the next session's first line says how many things are waiting. Sending pushes the whole set, in full, at whatever agent is live in the project. Cards and notes stay separate because “work on these” and “read these” are different requests.",
+    do: "Tick a few things and send them when you want an agent looking where you are looking.",
+    dont: "Do not treat it as a queue. It is a pointer, and it stays until you clear it." },
+  { id: "verify", vig: "verify", title: "Verification grade", rel: ["needs you", "claim"],
+    p: "How much an agent's claim about a card is worth. Executed means it ran the thing and read the result. Cited means it quoted file and line but did not re-run. Reasoned means it argued, without observing. An agent can also mark a card as needing you, which means it graded its own work and still wants you to test it. The grade is deliberately a separate axis from the lane: a card can sit in done on nothing better than an argument, and this is where you see that.",
+    do: "Read the grade before you believe the lane.",
+    dont: "Do not read executed as correct. It means observed, not right." },
+  { id: "sync", vig: "sync", title: "Sync and the mirror", rel: ["board", "lane", "stale"],
+    p: "Sync re-reads the project's docs, checkpoints and live workspace notes and rebuilds the cards from them. Everything an agent or you attached survives it: lane overrides, verification grades, briefs, notes, tags, goals and selections. Card ids are content hashes, so an unchanged item comes back as the same card. The footer of every card says when the mirror was last refreshed, because a stale mirror reads exactly like a fresh one, and the status band turns amber once it is old enough to mislead you.",
+    do: "Re-sync when you have edited plan docs and want the board to catch up.",
+    dont: "Do not trust an old mirror. Check the sync age before drawing conclusions from the counts." },
+  { id: "panel", vig: "panel", title: "Panel and tabs", rel: ["card", "note", "goal"],
+    p: "The right-hand panel is where a card's detail lives, and it holds several at once as tabs. It sits beside the board rather than over it, so the board stays usable while it is open, and it collapses to a rail of stubs that keeps your open set visible at forty-six pixels. Tabs reorder by dragging and close on a middle click. Stepping through cards with the keyboard replaces the tab you are standing on rather than piling up new ones; open one deliberately to keep it.",
+    do: "Keep two or three cards open while you work through something.",
+    dont: "Do not expect it to remember tabs across a reload. The set is per-visit." },
+];
+
+const CONCEPT_MAP = `<svg class="hmap" viewBox="0 0 840 210" role="img" aria-label="how a document becomes a card and how what you write reaches an agent">
+  <text class="s" x="14" y="20">YOUR PROJECT</text>
+  <rect class="n" x="14" y="30" width="118" height="46" rx="7"/>
+  <text class="t" x="27" y="50">plan docs</text><text x="27" y="66">checkpoints</text>
+  <path d="M136 53h44m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="lbl" x="141" y="44">sync</text>
+
+  <text class="s" x="190" y="20">THE MIRROR</text>
+  <rect class="n" x="190" y="30" width="112" height="46" rx="7"/>
+  <text class="t" x="203" y="50">cards</text><text x="203" y="66">in six lanes</text>
+
+  <path d="M306 53h44m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="s" x="360" y="20">WHAT YOU ADD</text>
+  <rect class="y" x="360" y="30" width="150" height="150" rx="7"/>
+  <text class="t" x="374" y="50">notes</text><text x="374" y="66">tags · milestones</text>
+  <text x="374" y="82">goals</text><text x="374" y="98">verification grades</text>
+  <text class="s" x="374" y="120">survives every sync</text>
+  <rect class="n" x="374" y="132" width="122" height="34" rx="6"/>
+  <text class="t" x="386" y="153">selection</text>
+
+  <path d="M514 105h48m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="lbl" x="516" y="96">send · pull</text>
+  <text class="s" x="572" y="20">THE AGENT</text>
+  <rect class="n" x="572" y="30" width="150" height="150" rx="7"/>
+  <text class="t" x="586" y="50">reads</text>
+  <text x="586" y="68">kanban.sh notes</text><text x="586" y="84">kanban.sh selected</text>
+  <text x="586" y="100">the session start line</text>
+  <text class="t" x="586" y="126">writes back</text>
+  <text x="586" y="144">move · verify · brief</text><text x="586" y="160">tag · goal</text>
+
+  <path d="M726 105h44m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect class="n" x="14" y="118" width="118" height="62" rx="7"/>
+  <text class="s" x="14" y="108">UNSORTED</text>
+  <text class="t" x="27" y="140">your asks</text><text x="27" y="157">drafts</text>
+  <path d="M136 149h206m0 0-7-6m7 6-7 6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text class="lbl" x="200" y="141">the agent sorts these into cards</text>
+  <text class="s" x="770" y="102">work</text><text class="s" x="762" y="116">happens</text>
+</svg>`;
+
+function renderTerms() {
+  const pane = $("hTerms");
+  if (pane.dataset.built) return;
+  pane.innerHTML = CONCEPT_MAP + TERMS.map((t) => `
+    <div class="term">
+      <div class="shot">${VIG[t.vig] ?? ""}</div>
+      <div>
+        <h4>${esc(t.title)}</h4>
+        <p>${esc(t.p)}</p>
+        <div class="rel">${t.rel.map((r) => `<span class="chip tag k-plain" style="pointer-events:none"><i class="tdot"></i><span>${esc(r)}</span></span>`).join("")}</div>
+        <div class="use">
+          <span class="do"><b>Do</b><i>${esc(t.do)}</i></span>
+          <span class="dont"><b>Not</b><i>${esc(t.dont)}</i></span>
+        </div>
+      </div>
+    </div>`).join("");
+  pane.dataset.built = "1";
+}
+
+document.querySelectorAll(".htab").forEach((tab) => {
+  tab.onclick = () => {
+    document.querySelectorAll(".htab").forEach((t) => t.classList.toggle("on", t === tab));
+    document.querySelectorAll(".hpane").forEach((p) => p.classList.toggle("on", p.id === tab.dataset.pane));
+    if (tab.dataset.pane === "hTerms") renderTerms();
+  };
+});
+$("hClose").onclick = closeHelp;
+
+// ---------- tag picker ----------
+// Existing vocabulary first, then the presets' suggested values, then whatever
+// you typed. Create-on-use: you never have to define a tag before using it.
+let tpCard = null, tpAt = 0;
+function openTagPick(cardId) {
+  tpCard = cardId; tpAt = 0;
+  $("tpick").classList.add("on");
+  overlayOpen($("tpick"), $("tpq"));
+  $("tpq").value = "";
+  renderTagPick();
+  $("tpq").focus();
+}
+function closeTagPick() { $("tpick").classList.remove("on"); tpCard = null; overlayClose(); }
+function parseTagInput(q) {
+  const at = q.indexOf(":");
+  if (at < 0) return { kind: "plain", name: q.trim() };
+  const kind = q.slice(0, at).trim().toLowerCase();
+  const name = q.slice(at + 1).trim();
+  return presets().some((p) => p.kind === kind) ? { kind, name } : { kind: "plain", name: q.trim() };
+}
+function tpOptions() {
+  const q = $("tpq").value.trim();
+  const onCard = new Set(plan().on[tpCard] ?? []);
+  const hit = (t) => !q || `${t.kind}:${t.name}`.toLowerCase().includes(q.toLowerCase());
+  const out = plan().tags.filter(hit).map((t) => ({ ...t, exists: true, applied: onCard.has(t.id) }));
+  // preset values that are not yet in the vocabulary read as suggestions
+  for (const p of presets()) {
+    for (const v of p.values ?? []) {
+      if (out.some((t) => t.kind === p.kind && t.name.toLowerCase() === v.toLowerCase())) continue;
+      const cand = { kind: p.kind, name: v, exists: false };
+      if (hit(cand)) out.push(cand);
+    }
+  }
+  const typed = parseTagInput(q);
+  // "effort" on its own is someone reaching for the kind, not naming a tag; a
+  // create-row there would mint a plain tag called "effort" and split the
+  // vocabulary in two
+  const isBareKind = presets().some((pr) => pr.kind === q.trim().toLowerCase());
+  if (typed.name && !isBareKind && !out.some((t) => t.kind === typed.kind && t.name.toLowerCase() === typed.name.toLowerCase())) {
+    out.unshift({ ...typed, exists: false, isNew: true });
+  }
+  return out.slice(0, 40);
+}
+function renderTagPick() {
+  const rows = tpOptions();
+  tpAt = Math.min(tpAt, Math.max(0, rows.length - 1));
+  if (!rows.length) { $("tplist").innerHTML = `<div class="bpnone">Type a name to make a tag.</div>`; return; }
+  $("tplist").replaceChildren(...rows.map((t, i) => {
+    const el = document.createElement("button");
+    el.type = "button"; el.role = "option";
+    el.className = "bprow" + (i === tpAt ? " on" : "");
+    const pr = presetOf(t.kind);
+    el.innerHTML = `<span class="chip tag k-${t.kind}" style="pointer-events:none"><i class="tdot"></i>` +
+      `<span class="tk">${t.kind === "plain" ? "#" : t.kind + ":"}</span><span class="tn"></span></span>` +
+      `<span class="bp">${esc(pr.hint)}</span>` +
+      `<span class="bc">${t.applied ? "on this card" : t.isNew ? "new" : t.exists ? "in use" : "suggested"}</span>`;
+    el.querySelector(".tn").textContent = t.name;
+    el.onmouseenter = () => { tpAt = i; $("tplist").querySelectorAll(".bprow").forEach((n, j) => n.classList.toggle("on", j === i)); };
+    el.onclick = () => pickTag(t);
+    return el;
+  }));
+}
+async function pickTag(t) {
+  if (!t || !tpCard) return;
+  const card = tpCard;
+  closeTagPick();
+  // clicking one already on the card takes it off, so the picker is also the
+  // place you remove things
+  await applyTag(card, t, !t.applied);
+}
+$("tpq").addEventListener("input", () => { tpAt = 0; renderTagPick(); });
+$("tpq").addEventListener("keydown", (e) => {
+  const rows = tpOptions();
+  if (e.key === "ArrowDown") { tpAt = Math.min(tpAt + 1, rows.length - 1); renderTagPick(); e.preventDefault(); }
+  else if (e.key === "ArrowUp") { tpAt = Math.max(tpAt - 1, 0); renderTagPick(); e.preventDefault(); }
+  else if (e.key === "Enter") { pickTag(rows[tpAt]); e.preventDefault(); }
+  else if (e.key === "Escape") { closeTagPick(); e.stopPropagation(); }
+});
+$("tpick").onclick = (e) => { if (e.target === $("tpick")) closeTagPick(); };
+
 // ---------- board switcher ----------
 // Fetched when it opens, never cached: the set of boards changes underneath a
 // long-lived tab and a switcher that offers a board someone unregistered is
@@ -2469,6 +3004,7 @@ function setDrawerWidth(px, persist = true) {
 let bpBoards = [], bpAt = 0;
 async function openBoardPick() {
   $("bpick").classList.add("on");
+  overlayOpen($("bpick"), $("bpq"));
   $("bpq").value = ""; bpAt = 0;
   $("bplist").innerHTML = `<div class="bpnone">Loading boards…</div>`;
   $("bpq").focus();
@@ -2478,7 +3014,7 @@ async function openBoardPick() {
   } catch { bpBoards = []; }
   renderBoardPick();
 }
-function closeBoardPick() { $("bpick").classList.remove("on"); }
+function closeBoardPick() { $("bpick").classList.remove("on"); overlayClose(); }
 function bpMatches() {
   const q = $("bpq").value.trim().toLowerCase();
   const all = bpBoards.filter((b) => !q || b.name.toLowerCase().includes(q) || b.root.toLowerCase().includes(q));
@@ -2606,6 +3142,12 @@ function matchFilter(c) {
   if (filterText === "since:new") return since(c.createdAt);
   if (filterText === "since:moved") return since(c.updatedAt) && c.lane !== "done" && c.lane !== "blocked" && !since(c.createdAt);
   if (filterText === "review-me") return parseTags(data.notes[c.id]?.note).review;
+  // tag:<kind>:<name> — the payoff of a shared vocabulary is that one press
+  // shows every card carrying it, milestones included
+  if (filterText.startsWith("tag:")) {
+    const want = filterText.slice(4).toLowerCase();
+    return tagsOnCard(c.id).some((t) => `${t.kind}:${t.name}`.toLowerCase() === want || t.name.toLowerCase() === want);
+  }
   const hay = [c.title, c.heading, c.tag, c.source?.path, data.notes[c.id]?.note,
     ...(c.subs ?? []).map((s) => s.title)].filter(Boolean).join(" ").toLowerCase();
   return filterText.split(/\s+/).every((t) => hay.includes(t));
@@ -2679,9 +3221,10 @@ function openDocModal(p, line) {
   $("dmFrame").src = framed;
   $("docmodal").classList.add("on");
   tailTrim($("dmPath")); // keep the filename, drop the leading directories
-  $("dmClose").focus();
+  overlayOpen($("docmodal"), $("dmClose"));
 }
 function closeDocModal() {
+  overlayClose();
   $("docmodal").classList.remove("on");
   $("dmFrame").src = "about:blank";
 }
@@ -2814,13 +3357,14 @@ document.addEventListener("keydown", (e) => {
   // overlays, outermost first
   if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
   if ($("bpick").classList.contains("on")) { if (e.key === "Escape") closeBoardPick(); return; }
+  if ($("tpick").classList.contains("on")) { if (e.key === "Escape") closeTagPick(); return; }
   if ($("pop").classList.contains("on")) {
     if (e.key === "Escape") closePop();
     if (e.key === "e") { e.preventDefault(); $("popNote").focus(); }
     if (e.key === "p") { e.preventDefault(); $("popPick").click(); }
     return;
   }
-  if ($("help").style.display === "flex" && e.key !== "?") { $("help").style.display = "none"; return; }
+  if ($("help").style.display === "flex" && e.key !== "?") { closeHelp(); return; }
 
   const panel = !!openId && $("drawer").classList.contains("open");
   // jump straight to a tab by position, the way every tabbed thing does
@@ -2878,11 +3422,14 @@ document.addEventListener("keydown", (e) => {
     // ---- everything else ----
     case "/": $("filter").focus(); $("filter").select(); e.preventDefault(); break;
     case "a": { const t = document.querySelector("#rail textarea"); if (t) { t.focus(); e.preventDefault(); } break; }
+    case "#": { const c = openId ?? flat[sel]; if (c) { if (!openId) openDrawer(c); openTagPick(c); } e.preventDefault(); break; }
+    case "g": if (panel) { editGoal(openId, plan().goals[openId] ?? ""); e.preventDefault(); }
+              else if (flat[sel]) { openDrawer(flat[sel]); editGoal(flat[sel], plan().goals[flat[sel]] ?? ""); e.preventDefault(); } break;
     case "b": openBoardPick(); e.preventDefault(); break;
     case "B": location.href = "/"; break;
     case "c": copyDigest(); break;
     case "t": toggleTheme(); break;
-    case "?": $("help").style.display = $("help").style.display === "flex" ? "none" : "flex"; break;
+    case "?": openHelp(); break;
     // one Escape walks back out: note cursor, then the panel, then the filter
     case "Escape":
       if (panel && noteAt >= 0) { noteAt = -1; markNote(); }
@@ -2913,8 +3460,8 @@ function stepLane(d) {
     return;
   }
 }
-$("helpBtn").onclick = () => ($("help").style.display = "flex");
-$("help").onclick = (e) => { if (e.target === $("help")) $("help").style.display = "none"; };
+$("helpBtn").onclick = openHelp;
+$("help").onclick = (e) => { if (e.target === $("help")) closeHelp(); };
 
 showState("loading");
 if (localStorage.getItem(`kanban-side-${slug}`) === "1") $("drawer").classList.add("collapsed");

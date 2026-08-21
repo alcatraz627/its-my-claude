@@ -11,6 +11,7 @@ import {
   loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
+  loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 
@@ -343,7 +344,7 @@ const server = Bun.serve({
         // `notes --ack`, so a note newer than it has not been picked up yet.
         return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir),
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
-          selection: loadSelection(dir) });
+          selection: loadSelection(dir), plan: loadPlan(dir), presets: TAG_PRESETS });
       }
       // The owner's own lane. `slug` scopes to one board and always keeps the
       // unassigned ones, because an unassigned item is routable to any board.
@@ -625,6 +626,93 @@ const server = Bun.serve({
 
     // A pin is owner-only and read-side; no agent reads this file. Posting an
     // existing ref removes it, so the star and pin controls both toggle.
+    // Tags and goals. One route for the whole vocabulary because the operations
+    // are the same shape: name a tag, then say what it applies to.
+    if (req.method === "POST" && p === "/api/tag") {
+      const body = (await req.json().catch(() => null)) as {
+        slug?: string; op?: "apply" | "unapply" | "create" | "rename" | "delete";
+        cardId?: string; kind?: TagKind; name?: string; tagId?: string; note?: string;
+      } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir) return json({ error: `unknown board ${body?.slug ?? ""}` }, 404);
+      if ((body!.name?.length ?? 0) > 40) return json({ error: "a tag name over 40 chars is a sentence, not a tag" }, 413);
+      if (body!.kind && !TAG_PRESETS.some((t) => t.kind === body!.kind)) {
+        return json({ error: `unknown tag kind ${body!.kind}` }, 400);
+      }
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir);
+        const op = body!.op ?? "apply";
+        // create-on-use: a vocabulary you must define before using is one nobody
+        // uses. The first application of a name is what mints it.
+        const mint = () => {
+          const kind = (body!.kind ?? "plain") as TagKind;
+          const name = String(body!.name ?? "").trim();
+          if (!name) return null;
+          const found = findTag(plan, kind, name);
+          if (found) return found;
+          const t = { id: noteId(), name, kind, createdAt: new Date().toISOString() };
+          plan.tags.push(t);
+          return t;
+        };
+        if (op === "create") { const t = mint(); out = t ? { ok: true, tag: t } : { error: "a tag needs a name" }; }
+        else if (op === "apply" || op === "unapply") {
+          const card = String(body!.cardId ?? "");
+          if (!card) { out = { error: "apply needs a cardId" }; return; }
+          const t = body!.tagId ? plan.tags.find((x) => x.id === body!.tagId) : mint();
+          if (!t) { out = { error: "no such tag" }; return; }
+          const list = plan.on[card] ?? (plan.on[card] = []);
+          const at = list.indexOf(t.id);
+          if (op === "apply" && at < 0) list.push(t.id);
+          if (op === "unapply" && at >= 0) list.splice(at, 1);
+          if (!list.length) delete plan.on[card];
+          out = { ok: true, tag: t };
+        } else if (op === "rename") {
+          const t = plan.tags.find((x) => x.id === body!.tagId);
+          if (!t) { out = { error: "no such tag" }; return; }
+          const name = String(body!.name ?? "").trim();
+          if (!name) { out = { error: "a tag needs a name" }; return; }
+          // a rename that collides would fork the filter in two
+          if (findTag(plan, body!.kind ?? t.kind, name) && tagKey(t.kind, t.name) !== tagKey(body!.kind ?? t.kind, name)) {
+            out = { error: `${name} already exists in ${body!.kind ?? t.kind}` }; return;
+          }
+          t.name = name;
+          if (body!.kind) t.kind = body!.kind;
+          if (body!.note !== undefined) t.note = body!.note || undefined;
+          out = { ok: true, tag: t };
+        } else if (op === "delete") {
+          const at = plan.tags.findIndex((x) => x.id === body!.tagId);
+          if (at < 0) { out = { error: "no such tag" }; return; }
+          plan.tags.splice(at, 1);
+          for (const [card, list] of Object.entries(plan.on)) {
+            const i = list.indexOf(body!.tagId!);
+            if (i >= 0) list.splice(i, 1);
+            if (!list.length) delete plan.on[card];
+          }
+          out = { ok: true };
+        } else { out = { error: `unknown op ${op}` }; return; }
+        if (!out.error) savePlan(dir, plan, `tag:${op}`);
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
+    // The card's own "why". One line, and empty deletes it.
+    if (req.method === "POST" && p === "/api/goal") {
+      const body = (await req.json().catch(() => null)) as { slug?: string; cardId?: string; goal?: string } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.cardId) return json({ error: "need {slug, cardId, goal}" }, 400);
+      if ((body.goal?.length ?? 0) > 400) return json({ error: "a goal over 400 chars belongs in a note" }, 413);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir);
+        const g = String(body.goal ?? "").trim();
+        if (g) plan.goals[body.cardId!] = g; else delete plan.goals[body.cardId!];
+        savePlan(dir, plan, `goal:${body.cardId}`);
+        out = { ok: true, goal: g };
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
     // Note order is the human's, not the store's. They drag a note up because it
     // matters more, and that ranking is information an agent should see, so it
     // is persisted rather than held in the page.

@@ -337,6 +337,7 @@ export function saveSelection(boardDir: string, sel: Selection, by: string): voi
 export function renderSelection(dir: string, name: string, sel: Selection): string {
   const board = loadBoard(dir);
   const notes = loadNotes(dir);
+  const plan = loadPlan(dir);
   const byId = new Map(board.cards.map((c) => [c.id, c]));
   const out: string[] = [
     `[kanban] the owner selected ${sel.cards.length} card(s) and ${sel.notes.length} note(s) on board "${name}" and sent them to you.`,
@@ -349,6 +350,9 @@ export function renderSelection(dir: string, name: string, sel: Selection): stri
     const src = c.source.kind === "manual" ? "manual" : `${c.source.path}${c.source.line ? ":" + c.source.line : ""}`;
     out.push(`### card ${c.id} · ${c.lane} · ${src}`);
     out.push(c.title);
+    if (plan.goals[c.id]) out.push(`  goal: ${plan.goals[c.id]}`);
+    const tg = tagsOn(plan, c.id);
+    if (tg.length) out.push(`  tags: ${tg.map((t) => `${t.kind}:${t.name}`).join(" ")}`);
     if (c.subs?.length) out.push(...c.subs.map((x) => `  - [${x.done ? "x" : " "}] ${x.title}`));
     if (c.docs?.length) out.push(`  docs: ${c.docs.join(", ")}`);
     const mine = notesOf(notes[c.id]);
@@ -370,6 +374,69 @@ export function renderSelection(dir: string, name: string, sel: Selection): stri
   out.push(`Pull the full context with: kanban.sh notes --unread --ack`);
   return out.join("\n");
 }
+
+// ---------- tags + goals (the plan store) ----------
+//
+// One cross-cutting primitive. A milestone is not a checklist under a card, it
+// is a tag several cards share, so "what is left for M2" is a filter rather
+// than a rollup — and the same machinery then carries the model lane, the
+// effort, and anything else the human finds worth calling out.
+//
+// This is a SEPARATE store from board.json on purpose. board.json belongs to
+// the CLI, the UI has to be able to set a tag, and one writer per file is the
+// rule the notes and selection stores already keep. Living outside board.json
+// also means a plan survives sync without mergeSync carrying it.
+export type TagKind = "milestone" | "tier" | "effort" | "area" | "risk" | "plain";
+
+// A preset is a kind with a known vocabulary and a colour. `values` seeds the
+// picker; a preset never refuses an unlisted value, because a vocabulary that
+// argues with the human is worse than one that suggests.
+export interface TagPreset { kind: TagKind; label: string; hint: string; hue: string; values: string[] }
+export const TAG_PRESETS: TagPreset[] = [
+  { kind: "milestone", label: "Milestone", hue: "violet",
+    hint: "A checkpoint several cards share. Filter by it to see what is left.",
+    values: ["M1", "M2", "M3", "beta", "ship"] },
+  // the lanes and the effort ladder are not invented here: they are the ones
+  // rules/model-tier-routing.md already routes work across
+  { kind: "tier", label: "Model tier", hue: "blue",
+    hint: "The lane this card's work should run on. A suggestion to the agent, never a switch.",
+    values: ["lm", "gemini", "haiku", "sonnet", "opus", "fable"] },
+  { kind: "effort", label: "Effort", hue: "amber",
+    hint: "How much reasoning the card is worth, on the same ladder the agent already uses.",
+    values: ["low", "medium", "high", "xhigh"] },
+  { kind: "area", label: "Area", hue: "green",
+    hint: "Which part of the project it touches.", values: [] },
+  { kind: "risk", label: "Risk", hue: "red",
+    hint: "What could go wrong if this is done carelessly.",
+    values: ["breaking", "data-loss", "security", "perf"] },
+  { kind: "plain", label: "Tag", hue: "grey",
+    hint: "Anything else worth grouping cards by.", values: [] },
+];
+export const presetFor = (kind: TagKind): TagPreset =>
+  TAG_PRESETS.find((p) => p.kind === kind) ?? TAG_PRESETS[TAG_PRESETS.length - 1];
+
+export interface Tag { id: string; name: string; kind: TagKind; note?: string; createdAt: string }
+export interface Plan {
+  tags: Tag[];                        // the board's vocabulary
+  on: Record<string, string[]>;       // cardId → tag ids
+  goals: Record<string, string>;      // cardId → why this card exists, in one line
+  updatedAt: string | null;
+}
+export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, updatedAt: null });
+export const loadPlan = (boardDir: string): Plan =>
+  readJson<Plan>(path.join(boardDir, "plan.json"), emptyPlan());
+export function savePlan(boardDir: string, plan: Plan, by: string): void {
+  plan.updatedAt = new Date().toISOString();
+  atomicWrite(path.join(boardDir, "plan.json"), plan, by,
+    `tags=${plan.tags.length} tagged=${Object.keys(plan.on).length} goals=${Object.keys(plan.goals).length}`);
+}
+// Names are matched loosely so "M2", "m2" and " M2 " are one tag; a vocabulary
+// that quietly forks on case is a vocabulary nobody can filter by.
+export const tagKey = (kind: string, name: string) => `${kind}:${name.trim().toLowerCase()}`;
+export const findTag = (plan: Plan, kind: string, name: string): Tag | undefined =>
+  plan.tags.find((t) => tagKey(t.kind, t.name) === tagKey(kind, name));
+export const tagsOn = (plan: Plan, cardId: string): Tag[] =>
+  (plan.on[cardId] ?? []).map((id) => plan.tags.find((t) => t.id === id)).filter((t): t is Tag => !!t);
 
 export const PINS = path.join(KROOT, "pins.json");
 
