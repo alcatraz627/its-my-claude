@@ -222,3 +222,10 @@ the owner instead of relitigating it.
 - **2026-08-22.** Added the §7 peer-highlight rule (blue primary, green peer,
   dotted spaced outline, soft glow), the middle-click convention, and the
   "should be fun" clause in §1.
+- **2026-08-22, second round.** Three rulings earned while building under it.
+  A binding shows on its control, not only in help (§10). A palette is one
+  component with sections, reused rather than re-hand-rolled per use (§13). A
+  temporary surface carries a dashed border and a tinted ground, and is
+  dismissed rather than dropped by the next click (§9), which is the peek
+  column. Search has its own contract in SEARCH-DESIGN.md and that document is
+  its acceptance list.
