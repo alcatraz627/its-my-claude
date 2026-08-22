@@ -301,13 +301,56 @@ finds what a per-surface review cannot, and it is cheap: one selector.
 **Standing count.** Zero native tooltips and 608 owned ones across the board,
 the panel, all four help tabs and the peek column, in both themes.
 
-## 17. Changelog
+## 17. The thorough review (next round's instrument)
+
+§14's round is capped on purpose and catches drift. It does not catch what the
+owner is asking for next: *"extend the review to more specific items and things
+... a much more thorough review."* That is a different instrument, and mixing
+the two is how the capped round quietly turns into an uncapped one.
+
+**When to run it.** Once a surface is built and its capped rounds keep coming
+back clean. Not per change. Expect it to be its own session.
+
+**How it differs.** The capped round asks a few questions of what just changed.
+The thorough review asks every question of one surface at a time, and its unit
+is the individual element rather than the screen.
+
+**The pass list, per surface.** Each pass is a sweep across every instance, not
+a sample:
+
+1. **Every control**, one at a time: its five states, its target size, its
+   label, its glyph, its tooltip, its keyboard route, and what happens on a
+   double press.
+2. **Every piece of copy**, read aloud: does it say what happens next, is it in
+   the human voice, does it match the vocabulary the rest of the board uses.
+3. **Every empty, loading, error and one-item state.** These are where a board
+   that looks finished stops being finished, and none of them appear in a
+   screenshot of a populated board.
+4. **Every number on screen**, traced to what it counts and whether pressing it
+   shows exactly that set.
+5. **Every boundary**: the longest title, the emoji, the 200-card lane, the
+   card with no notes, the note with no text, the tag on nothing.
+6. **Every route between two surfaces**, walked in both directions.
+7. **Both themes at three widths**, with the panel open and closed.
+
+**What it produces.** A numbered finding list with a disposition on each, and
+new charter rules for whatever it found that the charter did not already say.
+A thorough review that adds no rules either found nothing, which is worth
+stating plainly, or was not thorough.
+
+**What it must not become.** An excuse to rebuild. A finding is a defect or a
+named deferral, never a redesign, unless the owner rules otherwise.
+
+## 18. Changelog
 
 - **2026-08-21.** Founding set, distilled from the column-width, title-brief,
   panel, notes, selection, status-band, tag and modal-sweep rounds.
 - **2026-08-22.** Added the §7 peer-highlight rule (blue primary, green peer,
   dotted spaced outline, soft glow), the middle-click convention, and the
   "should be fun" clause in §1.
+- **2026-08-22, fourth round.** §17 added: the thorough per-element review, as
+  the instrument for the next session's deeper pass. §14's capped round is
+  explicitly NOT that, and the two are now named separately.
 - **2026-08-22, third round.** shared.css and shared.js, the three-view nav on
   every page, hub stars and glyphs, the doc viewer on the standard. §16 reviews it.
 - **2026-08-22, second round.** Three rulings earned while building under it.
