@@ -43,6 +43,26 @@ for s, b in reg.items():
     if os.path.realpath(b["root"]) == want: print(s); break
 PY
 }
+# Bump a draft the way the owner does from the board: `body` rewrites the text
+# (which moves updatedAt), `trigger` is the "Offer to a session" button.
+touch_draft() {  # touch_draft <id> <body|trigger> [text]
+  python3 - "$ROOT" "$1" "$2" "${3:-}" <<'PY2'
+import json, os, sys, datetime, time
+root, did, what, text = sys.argv[1:5]
+p = os.path.join(root, "drafts.json")
+d = json.load(open(p))
+time.sleep(0.01)  # ISO ms resolution: a same-instant edit is not a later one
+now = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
+for rec in d["drafts"]:
+    if rec["id"] == did:
+        if what == "body": rec["body"] = text; rec["updatedAt"] = now
+        else: rec["triggered"] = now
+        break
+else: raise SystemExit(f"no draft {did}")
+json.dump(d, open(p, "w"), indent=2)
+PY2
+}
+
 SLUG=$(slug_of "$PROJ")
 SLUG2=$(slug_of "$OTHER")
 CARD=$(python3 - "$ROOT" "$SLUG" <<'PY'
@@ -162,7 +182,40 @@ seed d2 "a different draft that recycled the id"
 out=$(K drafts --global)
 has "the id's new owner arrives pending, not pre-consumed" "$out" "d2  [pending]"
 
-# ---- 8. a broken store must name itself broken --------------------------
+# ---- 8. a revision outlives its pull ------------------------------------
+# A pull consumes the text that was there when it was taken. If the owner edits
+# the draft afterwards, or offers it again, what is waiting is no longer what the
+# agent read — so the pull is spent and the draft comes back. Keyed on the id
+# alone this never happened: a draft consumed once was invisible to every session
+# forever, while the board went on rendering it as offered.
+seed d9 "first version"
+K pull d9 --note "read the first version" >/dev/null
+out=$(K drafts --global)
+hasnt "a freshly pulled draft is not pending" "$out" "d9  [pending]"
+
+touch_draft d9 body "second version, written after the pull"
+out=$(K drafts --global)
+has "an edit after the pull brings the draft back" "$out" "d9  [pending]"
+out=$(K drafts d9)
+has "the returned draft carries the new text"  "$out" "second version"
+has "the returned draft offers the pull again" "$out" "kanban.sh pull d9"
+
+K pull d9 --note "read the second version" >/dev/null
+out=$(K drafts --global)
+hasnt "pulling the revision consumes it again" "$out" "d9  [pending]"
+
+touch_draft d9 trigger
+out=$(K drafts --global)
+has "offering a consumed draft brings it back"     "$out" "d9"
+has "an offered draft is marked for pickup now"    "$out" "d9  [now]"
+
+# The marker and the sweep must answer the same question. They read the same
+# store from two call sites, so they can disagree, and a draft that is listed as
+# waiting while being marked consumed is unactionable in both directions.
+out=$(K drafts --all --global)
+hasnt "the marker agrees with the sweep" "$out" "d9  [pulled]"
+
+# ---- 9. a broken store must name itself broken --------------------------
 cp "$ROOT/drafts.json" "$ROOT/drafts.ok.json"
 printf '{ this is not json' > "$ROOT/drafts.json"
 out=$(K drafts --global); rc=$?
@@ -171,8 +224,120 @@ if [ "$rc" -ne 0 ]; then ok "a broken store exits non-zero"; else bad "a broken 
 hasnt "a broken store never reads as an empty desk" "$out" "no drafts pending"
 cp "$ROOT/drafts.ok.json" "$ROOT/drafts.json"
 
-# ---- 9. no server was ever running -------------------------------------
+# ---- 10. no server was ever running ------------------------------------
 if [ ! -f "$ROOT/server.json" ]; then ok "the whole lane ran with no server"; else bad "the whole lane ran with no server" "server.json exists"; fi
+
+# ---- 11. the session line and the CLI answer the same question ----------
+# "Pending" is defined twice: once in lib.ts, once mirrored in jq inside
+# session-start-line.sh, because that line must run with no bun and no server.
+# Two definitions drift, and the drift is invisible when each side is only ever
+# tested on its own. So both are asked about ONE fixture here, in the three
+# states that separate them.
+REALPROJ=$(cd "$PROJ" && pwd -P)
+sline() { printf '{"cwd":"%s"}' "$REALPROJ" | KANBAN_ROOT="$ROOT" bash "$HERE/session-start-line.sh" 2>/dev/null; }
+# Count, never presence: the fixture holds other legitimately-waiting drafts, so
+# "does the phrase appear" cannot isolate one draft. An earlier version of this
+# test asserted presence and failed on its own noise.
+sline_n() { sline | sed -n 's/.*the owner has drafts (\([0-9]*\) waiting.*/\1/p' | head -1; }
+sline_n0() { local n; n=$(sline_n); printf '%s' "${n:-0}"; }
+cli_pending() { K drafts --global | grep -cF "$1  [" || true; }
+
+base=$(sline_n0)
+seed d11 "a document the owner sat down and wrote" "Routing plan"
+touch_draft d11 trigger
+check "the session line counts the new draft"  "$(sline_n0)" "$((base+1))"
+has   "the session line says it was offered"   "$(sline)" "OFFERED TO A SESSION"
+check "the CLI agrees it is pending"           "$(cli_pending d11)" "1"
+
+K pull d11 --note "read it" >/dev/null
+check "a consumed draft leaves the session line" "$(sline_n0)" "$base"
+check "the CLI agrees it is consumed"            "$(cli_pending d11)" "0"
+
+touch_draft d11 body "the owner revised it after the pull"
+check "a revision returns to the session line"   "$(sline_n0)" "$((base+1))"
+check "the CLI agrees the revision is pending"   "$(cli_pending d11)" "1"
+
+# An unreadable store must say so on both sides rather than read as an empty desk.
+cp "$ROOT/drafts.json" "$ROOT/drafts.ok2.json"
+printf '{ broken' > "$ROOT/drafts.json"
+line=$(sline)
+has "the session line warns on an unreadable drafts store" "$line" "could not be read"
+cp "$ROOT/drafts.ok2.json" "$ROOT/drafts.json"
+
+# ---- 12. a revision comes back as a change, not as 44 lines again -------
+# The pull snapshots the body, so when the owner edits afterwards the agent is
+# handed what MOVED. Without it a returning draft is indistinguishable from a
+# new one and the reader has to diff it by eye.
+seed d12 $'line one\nline two\nline three' "Routing"
+K pull d12 --note "read v1" >/dev/null
+touch_draft d12 body $'line one\nline two CHANGED\nline three\nline four'
+out=$(K drafts d12)
+has   "a revised draft says it was revised"        "$out" "REVISED since you pulled it"
+has   "the diff shows what was removed"            "$out" "- line two"
+has   "the diff shows what replaced it"            "$out" "+ line two CHANGED"
+has   "the diff shows what was added"              "$out" "+ line four"
+hasnt "an unchanged line is not reported as moved" "$out" "- line one"
+has   "the full text still follows the diff"       "$out" "the draft in full"
+
+# Offered again with no edit is a different event and must not read as a change.
+K pull d12 --note "read v2" >/dev/null
+touch_draft d12 trigger
+out=$(K drafts d12)
+has "an unchanged re-offer says so instead of showing a diff" "$out" "text is unchanged"
+
+# A pull taken before snapshots existed must say it cannot diff, not show a wrong one.
+seed d13 "old body"
+K pull d13 --note "legacy" >/dev/null
+python3 - "$ROOT" <<'PY2'
+import json, os, sys
+p = os.path.join(sys.argv[1], "pulls.json")
+d = json.load(open(p))
+d["pulls"]["d13"].pop("text", None)     # a pull record from before this feature
+json.dump(d, open(p, "w"), indent=2)
+PY2
+touch_draft d13 body "new body"
+out=$(K drafts d13)
+has "a pull with no snapshot says why it cannot diff" "$out" "No diff"
+
+# ---- 13. a draft can name who it is for ---------------------------------
+# D2: an unaddressed draft behaves exactly as before, which matters because every
+# draft written until today is unaddressed.
+# D7: an agent-addressed draft is invisible to every other agent. This is the one
+# whose failure is silent and whose cost is the owner's private text reaching the
+# wrong reader, so it is asserted from BOTH sides rather than once.
+seed d20 "for anyone"
+out=$(KANBAN_ALIAS=someone K drafts --global)
+has "an unaddressed draft still reaches anyone" "$out" "d20"
+
+seed d21 "for one agent only"
+K to d21 agent:gcp-fable >/dev/null
+out=$(KANBAN_ALIAS=gcp-fable K drafts --global)
+has   "the addressed agent sees it"        "$out" "d21"
+has   "the row says who it is for"         "$out" "agent:gcp-fable"
+out=$(KANBAN_ALIAS=someone-else K drafts --global)
+hasnt "another agent does not see it"      "$out" "d21"
+has   "and still sees the unaddressed one" "$out" "d20"
+out=$(K drafts --global)
+hasnt "an agent that cannot name itself does not see it either" "$out" "d21"
+
+# A board recipient is the other half of the same field.
+out=$(K to d21 "board:$SLUG")
+has "retargeting to a board confirms" "$out" "board:"
+out=$(KANBAN_ALIAS=gcp-fable K drafts --project "$OTHER")
+hasnt "the previously addressed agent no longer sees it elsewhere" "$out" "d21"
+out=$(K drafts --project "$PROJ")
+has "the addressed board sees it with no alias at all" "$out" "d21"
+
+out=$(K to d21 --clear)
+has "clearing returns it to anyone" "$out" "for anyone"
+out=$(KANBAN_ALIAS=someone-else K drafts --global)
+has "and anyone means anyone" "$out" "d21"
+
+# Refusals, so a draft is never addressed to a place that does not exist.
+out=$(K to d21 "board:nosuch" 2>&1)
+has "an unknown board is refused"   "$out" "no board nosuch"
+out=$(K to d21 "gcp-fable" 2>&1)
+has "an unprefixed recipient is refused" "$out" "not a recipient"
 
 printf '\n%s passed, %s failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

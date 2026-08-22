@@ -79,7 +79,8 @@
   .tgrp.find{gap:0;border:1px solid var(--border);border-radius:8px;background:var(--card);
              padding-left:2px;transition:border-color .12s,box-shadow .12s}
   .tgrp.find:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 14%,transparent)}
-  .tgrp.find #searchBtn{border:none;background:none;height:26px;width:28px;padding:0;justify-content:center}
+  .tgrp.find #searchBtn{border:none;background:none;height:26px;padding:0 7px 0 4px;gap:5px;justify-content:center}
+  .tgrp.find #searchBtn .sl{font:500 12px/1 var(--sans)}
   .tgrp.find #searchBtn:hover{color:var(--blue);background:none}
   #filter{width:150px;height:28px;padding:0 10px 0 4px;border:none;background:none;
           color:var(--text);font:12.5px/1 var(--sans)}
@@ -356,7 +357,12 @@
   .col.archive .card{flex-direction:row;align-items:center;gap:9px;padding:7px 11px}
   .col.archive .card .title{flex:1;min-width:0;font-size:12.5px;font-weight:450;color:var(--text-2);
                             display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .col.archive .card .note,.col.archive .card .pills{display:none}
+  /* Tags postdate this row and were never added to it, so they rendered at full
+     size beside a title that is flex:1 min-width:0 — the chips took the width and
+     the title computed to 0px, leaving settled cards with no title at all. The
+     row is title-first, as the rest of this block already says; a settled card's
+     tags are not a skim fact and the drawer still carries them. */
+  .col.archive .card .note,.col.archive .card .pills,.col.archive .card .chips{display:none}
   .col.archive .card .pills.keep{display:flex;flex:none}
   .col.archive .card .foot{flex:none}
   .col.archive .card .foot .src{display:none}
@@ -675,6 +681,19 @@
   #bpick .bpbox,#tpick .bpbox,#spick .bpbox{width:min(620px,93vw);background:var(--canvas);border:1px solid var(--border-2);
                 border-radius:14px;box-shadow:0 28px 70px rgb(0 0 0/.42);overflow:hidden;
                 display:flex;flex-direction:column;max-height:76vh}
+  /* Charter §4 as amended 2026-08-22. The SECTION heading says which kind; this
+     tint only makes the scan faster, and it lives on the glyph alone so "colour
+     is spent once per object" still holds. It applies here and in search, the
+     only lists that mix kinds, and never on a board surface. */
+  .bprow.k-boards .bi{color:var(--blue)}
+  .bprow.k-asks   .bi{color:var(--amber)}
+  .bprow.k-drafts .bi{color:var(--violet)}
+  /* What search can do, shown rather than described. */
+  .sphint{padding:14px 16px 8px;font:12.5px/1.55 var(--sans);color:var(--text-3)}
+  .spchips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
+  .spchip{font:500 12px/1 var(--sans);padding:6px 10px;border-radius:99px;
+          border:1px solid var(--border);background:var(--card);color:var(--text-2)}
+  .spchip:hover{border-color:var(--blue-br);background:var(--blue-bg);color:var(--blue)}
   .bpq{display:flex;align-items:center;gap:11px;padding:0 16px;border-bottom:1px solid var(--border);flex:none}
   .bpq .qi{flex:none;color:var(--text-3);display:grid;place-items:center}
   #bpick input,#tpick input,#spick input{flex:1;min-width:0;border:none;background:none;color:var(--text);
@@ -794,12 +813,16 @@
            border:1px solid var(--border-2);border-radius:11px;padding:12px 13px;
            box-shadow:0 18px 44px rgb(0 0 0/.34);display:none;flex-direction:column;gap:9px}
   .colcard.on{display:flex}
-  .colcard h4{font:600 12.5px/1.2 var(--sans);color:var(--text);display:flex;align-items:center;gap:7px}
+  /* margin:0 is load-bearing. The font shorthand does not reset the UA's default
+     h4 margin, so 1.33em of it (about 16.6px) sat above the heading and made the
+     card 29.6px deep at the top against 13px at the bottom, which is what the
+     owner saw. Nobody had set it; it was simply never taken off. */
+  .colcard h4{margin:0;font:600 12.5px/1.2 var(--sans);color:var(--text);display:flex;align-items:center;gap:7px}
   .colcard .crow{display:flex;align-items:center;gap:9px;font:12px/1.4 var(--sans);color:var(--text-2)}
   .colcard .crow .ck{flex:1;color:var(--text-3)}
   .colcard .crow .cv{font:500 12px/1 var(--mono);color:var(--text)}
   .colcard input[type=range]{width:100%;accent-color:var(--blue)}
-  .colcard .cbtns{display:flex;gap:6px;padding-top:2px}
+  .colcard .cbtns{display:flex;gap:6px;padding-top:5px}
   .colcard .cbtns button{flex:1;height:26px;justify-content:center;font-size:12px}
 
   /* ---------- the peek column ---------- */
@@ -940,9 +963,29 @@
   #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:20px 24px;min-width:340px;
              box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
   #help h3{font:600 13px/1 var(--sans);margin-bottom:14px}
-  #help table{border-collapse:collapse}
-  #help td{padding:3px 14px 3px 0;color:var(--text-2);font-size:12.5px}
-  #help td:first-child{white-space:nowrap}
+  /* One table treatment for the whole modal. Before this, the Vibe Code tables
+     carried a full hierarchy (column heads, a promoted identifier column, row
+     rules) while Keyboard and Hey Claude were bare rows at 3px padding, so the
+     same kind of content read as two different systems depending on which tab
+     you opened. The treatment lives here once; .vtbl now only spaces its
+     wrapper. */
+  #help table{width:100%;border-collapse:collapse}
+  #help th{text-align:left;font:600 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
+           color:var(--text-3);padding:0 12px 7px 0;border-bottom:1px solid var(--border)}
+  /* The tighter of the two paddings that existed wins, not the looser: the owner's
+     space rule is to use what is there before asking for more, and the keyboard
+     table is 31 rows deep where 2px a row is a screenful. */
+  #help td{font:400 12.5px/1.5 var(--sans);color:var(--text-2);padding:5px 14px 5px 0;
+           border-bottom:1px solid var(--border)}
+  /* The identifier column is the one you scan down, so it carries the weight. */
+  #help td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
+  #help tr:last-child td{border-bottom:none}
+  /* A section head is a head, not a row: it spans, it takes no rule, and it does
+     not inherit the identifier column's weight. Declared after td:first-child
+     because they carry equal specificity and order is what decides. */
+  #help td.grouphead{font:600 11.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+                     color:var(--text-3);padding:20px 0 6px;border-bottom:none;white-space:normal}
+  #help tr:first-child td.grouphead{padding-top:2px}
   #help kbd{font:500 11.5px/1 var(--mono);background:var(--card);border:1px solid var(--border);border-bottom-width:2px;
             border-radius:5px;padding:3px 6px;color:var(--text)}
   #help .grouphead{padding-top:14px;font:600 11.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
@@ -979,7 +1022,54 @@
   .htab.on .hi{color:var(--blue)}
   .htab.on .ht i{color:var(--text-3);opacity:1}
   .hpane{display:none;padding:18px 22px 22px;overflow:auto;min-height:0}
+  /* Three tabs open with a reference the rows beneath keep pointing at: a drawn
+     keyboard, a map of the pipeline. Reading row 40 while the thing it names has
+     scrolled off is the hiccup, so the reference holds and the rows move under
+     it. Hey Claude opens with a playground instead, which is a thing you use
+     rather than one you consult, and pinning it would eat the pane — so #hTags
+     is deliberately absent from this list.
+     The modal's own title and tab strip are NOT involved and must never be: they
+     are flex:none siblings of this scroller, which is why they cannot drift.
+     Baseline and the re-run: HELP-MODAL-SCROLL-PARITY.md
+     The offset is negative by the pane's top padding, which pins the reference
+     flush against the scrollport edge. A positive offset leaves that padding as
+     a gap the pinned element cannot fill, and rows scroll through it and read as
+     a clipped row floating above the reference. Measured: top:18px produced a
+     36px band with two rows visible in it. Flush costs an 18px catch-up the
+     first time you scroll, which is uniform across all three and invisible
+     unless measured; the bleed was neither. */
+  #hKeys > .kbd-wrap,
+  #hTerms > svg:first-child,
+  #hVibe > svg:first-child{position:sticky;top:-18px;z-index:1}
+  #hTerms > svg:first-child,
+  #hVibe > svg:first-child{display:block;background:var(--canvas);
+                           padding-bottom:12px;border-bottom:1px solid var(--border)}
   .hpane.on{display:block}
+  /* The charter renders as a document inside the modal. Tables are deliberately
+     absent from this block: #help's one table treatment already owns them, and a
+     second set here is exactly the drift the treatment was written to end. */
+  .cdoc{max-width:74ch;font:400 13px/1.7 var(--sans);color:var(--text-2)}
+  .cdoc h1{font:600 17px/1.3 var(--sans);color:var(--text);margin:0 0 4px}
+  .cdoc h2{font:600 13.5px/1.3 var(--sans);color:var(--text);margin:26px 0 8px;
+           padding-top:14px;border-top:1px solid var(--border)}
+  .cdoc h2:first-of-type{border-top:none;padding-top:0;margin-top:18px}
+  .cdoc h3{font:600 12.5px/1.3 var(--sans);color:var(--text);margin:18px 0 6px}
+  .cdoc p{margin:0 0 10px}
+  .cdoc ul,.cdoc ol{margin:0 0 10px;padding-left:20px}
+  .cdoc li{margin:0 0 5px}
+  .cdoc li::marker{color:var(--text-3)}
+  .cdoc strong{color:var(--text);font-weight:600}
+  .cdoc em{font-style:italic}
+  .cdoc code{font:11.5px var(--mono);background:var(--well);border:1px solid var(--border);
+             border-radius:4px;padding:1px 4px;color:var(--text)}
+  .cdoc blockquote{margin:0 0 10px;padding:2px 0 2px 12px;border-left:2px solid var(--blue-br);color:var(--text-3)}
+  .cdoc hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+  .cdoc a{color:var(--blue)}
+  .cdoc .tbox{display:inline-grid;place-items:center;width:13px;height:13px;margin-right:7px;
+              border:1px solid var(--border-2);border-radius:3.5px;vertical-align:-2px;
+              font:700 9px/1 var(--sans);color:transparent}
+  .cdoc .tbox.on{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}
+  .cnote{color:var(--text-3);font:400 12.5px/1.6 var(--sans);padding:8px 0}
   .hclose{flex:none;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
   .hclose:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
@@ -1002,6 +1092,13 @@
      derived from what is in it, deterministically, so the page is a mirror
      rather than a claim. */
   .hplay{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  /* The reference table rides INSIDE the left column, under the example card,
+     rather than full-width beneath both. It has to be in that column's flow and
+     not a second grid row: a row-2 item starts below the TALLEST row-1 cell, so
+     as a grid child it cleared the right column and added 87px of scroll instead
+     of filling the 330px already sitting empty under the example card. */
+  .hcol{min-width:0}
+  .hcol > table{margin-top:18px}
   @media (max-width:820px){ .hplay{grid-template-columns:1fr} }
   .hplay .pane-l p{font:400 12.5px/1.65 var(--sans);color:var(--text-2);margin-bottom:10px}
   .hmock{border:1px solid var(--border-2);border-radius:11px;background:var(--well);overflow:hidden}
@@ -1061,10 +1158,27 @@
   .hpane{max-width:none}
   .hpane .ghead{padding-top:0;margin-bottom:9px;display:flex;align-items:center;gap:7px}
   .hpane .ghead::after{content:"";flex:1;height:1px;background:var(--border)}
-  #hKeys table{width:100%}
-  #hKeys td{padding:5px 14px 5px 0;font-size:12.5px;line-height:1.5}
-  #hKeys td:first-child{width:132px}
-  #hKeys .grouphead{padding-top:20px;padding-bottom:4px}
+  /* 31 rows in one column meant scrolling past the very keyboard they are read
+     against. Two columns fit the map in the pane instead of asking for more
+     height, which is the space rule. Multicol rather than a two-track grid: a
+     column flows top-to-bottom so a group stays together, where a grid would
+     deal each group's rows left-right across both tracks. */
+  #hKeys table{display:block;column-count:2;column-gap:34px}
+  /* Each group is its own tbody so a column break cannot land inside one. Without
+     this the second column opened with two rows whose heading was still at the
+     foot of the first, which reads as a list that starts in the middle. */
+  #hKeys tbody{display:block;break-inside:avoid}
+  #hKeys tr{display:grid;grid-template-columns:112px 1fr;gap:10px;align-items:baseline;
+            break-inside:avoid;border-bottom:1px solid var(--border)}
+  #hKeys td{display:block;border-bottom:none;padding:5px 0}
+  /* A group head spans its column and never ends one, or the heading and the
+     rows it names land in different columns. */
+  #hKeys tr:has(td.grouphead){display:block;border-bottom:none;break-after:avoid}
+  #hKeys tr:has(td.grouphead) td.grouphead{padding:16px 0 5px}
+  /* Only the very first group sits flush; every later one keeps the gap that
+     separates it from the group above. Scoped to the first tbody, because after
+     the group-wrapping rewrite EVERY head is the first row of its own tbody. */
+  #hKeys tbody:first-of-type tr:first-child td.grouphead{padding-top:0}
   #hKeys tr:hover td{color:var(--text)}
   #hTags td:first-child{width:132px}
   #hTags code,#hKeys code{font:11.5px var(--mono);background:var(--well);border:1px solid var(--border);
@@ -1074,7 +1188,7 @@
   .term{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--border)}
   .term:first-of-type{border-top:none}
   .term .shot{border:1px solid var(--border);border-radius:8px;background:var(--well);padding:8px;align-self:start}
-  .term h4{font:600 13.5px/1.3 var(--sans);color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:7px}
+  .term h4{font:600 13.5px/1.3 var(--sans);color:var(--text);margin:0 0 6px;display:flex;align-items:center;gap:7px}
   .term p{font:400 12.5px/1.6 var(--sans);color:var(--text-2);margin-bottom:8px}
   .term .rel{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
   .term .use{display:flex;flex-direction:column;gap:3px;font:400 12px/1.5 var(--sans)}
@@ -1085,13 +1199,6 @@
   .term .use i{font-style:normal;color:var(--text-3)}
   .vtbl{margin-bottom:22px}
   .vtbl .ghead{margin-bottom:8px}
-  .vtbl table{width:100%;border-collapse:collapse}
-  .vtbl th{text-align:left;font:600 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
-           color:var(--text-3);padding:0 12px 7px 0;border-bottom:1px solid var(--border)}
-  .vtbl td{font:400 12.5px/1.5 var(--sans);color:var(--text-2);padding:7px 12px 7px 0;
-           border-bottom:1px solid var(--border);vertical-align:top}
-  .vtbl td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
-  .vtbl tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
@@ -1103,8 +1210,8 @@
     <span class="livepeers" id="live"></span>
     <div class="actions">
       <span class="tgrp find">
-        <button class="icon ghost" id="searchBtn" data-tip="Search cards, your notes, tags and asks (/)" aria-label="search"></button>
-        <input id="filter" type="search" placeholder="Filter this board" aria-label="filter cards" autocomplete="off">
+        <button class="ghost" id="searchBtn" data-tip="Search cards, your notes, tags and asks (/)" aria-label="search"><span class="sl">Search</span></button>
+        <input id="filter" type="search" placeholder="Filter this board" aria-label="filter this board" autocomplete="off">
       </span>
       <span class="tgrp pick" id="pickGrp">
         <span id="cardSelWrap"></span>
@@ -1209,12 +1316,12 @@
   <div class="bplist" id="tplist" role="listbox"></div>
   <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> apply</span><span>type <kbd>kind:name</kbd> to make a new one</span><span><kbd>esc</kbd> close</span></div>
 </div></div>
-<div id="bpick" role="dialog" aria-modal="true" aria-label="switch board"><div class="bpbox">
+<div id="bpick" role="dialog" aria-modal="true" aria-label="go to a board, an ask or a draft"><div class="bpbox">
   <div class="bpq"><span class="qi" id="bpIcon"></span>
-  <input id="bpq" type="search" placeholder="Jump to a board by name or path" aria-label="find a board" autocomplete="off">
+  <input id="bpq" type="search" placeholder="Go to a board, an ask or a draft" aria-label="go to a board, an ask or a draft" autocomplete="off">
   <span class="qk">b</span></div>
   <div class="bplist" id="bplist" role="listbox"></div>
-  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>s</kbd> star</span><span><kbd>esc</kbd> close</span></div>
+  <div class="bphint"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> open</span><span><kbd>s</kbd> star a board</span><span><kbd>esc</kbd> close</span></div>
 </div></div>
 <div id="pop" role="dialog" aria-label="note editor">
   <div class="ph">
@@ -1252,50 +1359,63 @@
     <button class="htab" data-pane="hTerms" role="tab"><span class="hi"></span><span class="ht"><b>Taxonomy</b><i>What is it called</i></span></button>
     <button class="htab" data-pane="hVibe" role="tab"><span class="hi"></span><span class="ht"><b>Vibe Code</b><i>How does it work</i></span></button>
     <button class="htab" data-pane="hTags" role="tab"><span class="hi"></span><span class="ht"><b>Hey Claude</b><i>Relay to the agent</i></span></button>
+    <button class="htab" data-pane="hCharter" role="tab"><span class="hi"></span><span class="ht"><b>Charter</b><i>What we agreed</i></span></button>
   </div>
   <div class="hpane on" id="hKeys">
   <div class="kbd-wrap" id="kbdMap"></div>
   <table>
-    <tr><td colspan="2" class="grouphead">Move</td></tr>
-    <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the lane</td></tr>
-    <tr><td><kbd>h</kbd> <kbd>l</kbd></td><td>previous / next lane, same row</td></tr>
-    <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open the card in a tab</td></tr>
-    <tr><td><kbd>O</kbd></td><td>open it in a background tab</td></tr>
-    <tr><td><kbd>/</kbd></td><td>filter cards</td></tr>
-    <tr><td><kbd>b</kbd></td><td>switch board · <kbd>B</kbd> the hub</td></tr>
-    <tr><td colspan="2" class="grouphead">Tabs</td></tr>
-    <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>previous / next tab</td></tr>
-    <tr><td><kbd>1</kbd>…<kbd>9</kbd></td><td>jump to that tab</td></tr>
-    <tr><td><kbd>w</kbd></td><td>close this tab</td></tr>
-    <tr><td><kbd>\</kbd></td><td>collapse / expand the panel</td></tr>
-    <tr><td colspan="2" class="grouphead">Notes</td></tr>
-    <tr><td><kbd>J</kbd> <kbd>K</kbd></td><td>walk the note list</td></tr>
-    <tr><td><kbd>enter</kbd> <kbd>e</kbd></td><td>edit the note under the cursor</td></tr>
-    <tr><td><kbd>n</kbd></td><td>start a new note on the draft canvas</td></tr>
-    <tr><td><kbd>d</kbd></td><td>dismiss it · <kbd>u</kbd> undo that</td></tr>
-    <tr><td><kbd>⌘</kbd> <kbd>↵</kbd></td><td>save, and stay where you are</td></tr>
-    <tr><td colspan="2" class="grouphead">Selection</td></tr>
-    <tr><td><kbd>x</kbd></td><td>select the card, or the note under the cursor</td></tr>
-    <tr><td><kbd>X</kbd> <kbd>N</kbd></td><td>card / note select mode</td></tr>
-    <tr><td><kbd>s</kbd></td><td>send the selection to an agent</td></tr>
-    <tr><td><kbd>C</kbd></td><td>clear the whole selection</td></tr>
-    <tr><td colspan="2" class="grouphead">Goal and tags</td></tr>
-    <tr><td><kbd>g</kbd></td><td>set the card's goal, in one line</td></tr>
-    <tr><td><kbd>#</kbd></td><td>tag it — milestone, model tier, effort, anything</td></tr>
-    <tr><td colspan="2" class="grouphead">Everything else</td></tr>
-    <tr><td><kbd>a</kbd></td><td>write an ask, sorted by the agent</td></tr>
-    <tr><td><kbd>c</kbd></td><td>copy status digest · <kbd>t</kbd> theme</td></tr>
-    <tr><td><kbd>⌘</kbd> drag</td><td>pan the board</td></tr>
-    <tr><td><kbd>esc</kbd></td><td>step back out, one layer at a time</td></tr>
-  </table>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Move</td></tr>
+      <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the lane</td></tr>
+      <tr><td><kbd>h</kbd> <kbd>l</kbd></td><td>previous / next lane, same row</td></tr>
+      <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open the card in a tab</td></tr>
+      <tr><td><kbd>O</kbd></td><td>open it in a background tab</td></tr>
+      <tr><td><kbd>/</kbd></td><td>search cards, notes, tags and asks</td></tr>
+      <tr><td><kbd>b</kbd></td><td>switch board · <kbd>B</kbd> the hub</td></tr>
+    </tbody>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Tabs</td></tr>
+      <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>previous / next tab</td></tr>
+      <tr><td><kbd>1</kbd>…<kbd>9</kbd></td><td>jump to that tab</td></tr>
+      <tr><td><kbd>w</kbd></td><td>close this tab</td></tr>
+      <tr><td><kbd>\</kbd></td><td>collapse / expand the panel</td></tr>
+      <tr><td><kbd>|</kbd></td><td>collapse / expand the sidebar</td></tr>
+    </tbody>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Notes</td></tr>
+      <tr><td><kbd>J</kbd> <kbd>K</kbd></td><td>walk the note list</td></tr>
+      <tr><td><kbd>enter</kbd> <kbd>e</kbd></td><td>edit the note under the cursor</td></tr>
+      <tr><td><kbd>n</kbd></td><td>start a new note on the draft canvas</td></tr>
+      <tr><td><kbd>d</kbd></td><td>dismiss it · <kbd>u</kbd> undo that</td></tr>
+      <tr><td><kbd>⌘</kbd> <kbd>↵</kbd></td><td>save, and stay where you are</td></tr>
+    </tbody>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Selection</td></tr>
+      <tr><td><kbd>x</kbd></td><td>select the card, or the note under the cursor</td></tr>
+      <tr><td><kbd>X</kbd> <kbd>N</kbd></td><td>card / note select mode</td></tr>
+      <tr><td><kbd>s</kbd></td><td>send the selection to an agent</td></tr>
+      <tr><td><kbd>C</kbd></td><td>clear the whole selection</td></tr>
+    </tbody>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Goal and tags</td></tr>
+      <tr><td><kbd>g</kbd></td><td>set the card's goal, in one line</td></tr>
+      <tr><td><kbd>#</kbd></td><td>tag it — milestone, model tier, effort, anything</td></tr>
+    </tbody>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Everything else</td></tr>
+      <tr><td><kbd>a</kbd></td><td>write an ask, sorted by the agent</td></tr>
+      <tr><td><kbd>c</kbd></td><td>copy status digest · <kbd>t</kbd> theme</td></tr>
+      <tr><td><kbd>⌘</kbd> drag</td><td>pan the board</td></tr>
+      <tr><td><kbd>esc</kbd></td><td>step back out, one layer at a time</td></tr>
+    </tbody>
+</table>
   </div>
   <div class="hpane" id="hTerms"></div>
   <div class="hpane" id="hVibe"></div>
   <div class="hpane" id="hTags">
   <div class="hplay">
+    <div class="hcol">
     <div class="pane-l" id="hPlayLeft"></div>
-    <div class="pane-r" id="hPlayRight"></div>
-  </div>
   <table>
     <tr><td colspan="2" class="grouphead">Note tags</td></tr>
     <tr><td><kbd>@me</kbd></td><td>note to self — the agent isn't nagged</td></tr>
@@ -1310,7 +1430,11 @@
     <tr><td>reasoned</td><td>argued, not observed</td></tr>
     <tr><td>needs you</td><td>graded, but wants your own testing</td></tr>
   </table>
+    </div>
+    <div class="pane-r" id="hPlayRight"></div>
   </div>
+  </div>
+  <div class="hpane" id="hCharter"></div>
 </div></div>
 
 <script>
@@ -2151,7 +2275,7 @@ function tokensIn(line) {
 function tagPills(nt, shown, max) {
   const out = [];
   const has = (tok) => shown && shown.has(tok);
-  const add = (cls, txt, title) => out.push(`<span class="pill tag ${cls}" title="${title}">${txt}</span>`);
+  const add = (cls, txt, title) => out.push(`<span class="pill tag ${cls}" data-tip="${title}">${txt}</span>`);
   if (nt.act && !has("!now")) add("", "!now", "act on next agent pickup");
   nt.skills.slice(0, 2).forEach((s) => { if (!has(s)) add("", s, "capability requested on this card"); });
   nt.moves.slice(0, 1).forEach((l) => { if (!has(">" + l)) add("", "&gt;" + l, "move requested — the agent applies it via CLI"); });
@@ -2160,7 +2284,7 @@ function tagPills(nt, shown, max) {
   nt.free.slice(0, 2).forEach((f) => { if (!has(f)) add("quiet", f, "tag"); });
   if (max && out.length > max) {
     const hidden = out.length - max; // the card shows what fits and says how much it hid
-    return out.slice(0, max).join("") + `<span class="pill quiet" title="${hidden} more tag${hidden > 1 ? "s" : ""} in the note">+${hidden}</span>`;
+    return out.slice(0, max).join("") + `<span class="pill quiet" data-tip="${hidden} more tag${hidden > 1 ? "s" : ""} in the note">+${hidden}</span>`;
   }
   return out.join("");
 }
@@ -2192,8 +2316,8 @@ function cardEl(c) {
   const needs = c.verify?.needsHuman;
   const statParts = [
     subs.length ? `<span class="pill prog" data-tip="Checkboxes nested under this card in its source document">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "",
-    c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" title="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? " — " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
-    needs && !isArchive ? `<span class="pill needs" title="graded ${c.verify.grade}, but wants your own testing">${c.verify.grade} · needs you</span>` : "",
+    c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" data-tip="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? " — " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
+    needs && !isArchive ? `<span class="pill needs" data-tip="graded ${c.verify.grade}, but wants your own testing">${c.verify.grade} · needs you</span>` : "",
     tagPills(nt, shown, 2),
     c.staleReason ? '<span class="pill why" data-tip="Why this card went stale"></span>' : "",
   ].filter(Boolean);
@@ -2260,9 +2384,9 @@ function cardEl(c) {
     };
     chipRow.appendChild(ch);
   });
-  // middle-click is the quiet version of a click: it opens the card in the
-  // background rather than pulling you into it, and does nothing at all if the
-  // card is already a tab. Charter §7.
+  // middle-click is the quiet version of a click: it toggles the card's tab
+  // rather than pulling you into it, and never changes whether the panel is
+  // open. Charter §7.
   el.addEventListener("pointerdown", (e) => { if (e.button === 1) e.preventDefault(); });
   el.addEventListener("auxclick", (e) => {
     if (e.button !== 1) return;
@@ -2689,6 +2813,17 @@ function railEl() {
 // adversarial review caught on the rail.
 let sideCollapsed = (localStorage.getItem("kanban-side") ?? "1") === "1";
 
+// The sidebar's collapse, reachable from the key and the button alike. It used
+// to live only inside the button's onclick, which is what "open / close is still
+// via click" was pointing at (owner, 2026-08-22). Charter §10 wants every surface
+// reachable without a mouse, and shifted twins for related motions: the panel
+// collapses on \\, so the sidebar collapses on its shifted twin, |.
+function toggleSide() {
+  sideCollapsed = !sideCollapsed;
+  localStorage.setItem("kanban-side", sideCollapsed ? "1" : "0");
+  renderSide();
+}
+
 function renderSide() {
   const el = $("side");
   el.className = "side" + (sideCollapsed ? " collapsed" : "");
@@ -2698,11 +2833,7 @@ function renderSide() {
   toggle.type = "button"; toggle.className = "sidetoggle";
   toggle.textContent = sideCollapsed ? "›" : "‹";
   toggle.dataset.tip = sideCollapsed ? "Expand the sidebar" : "Collapse the sidebar";
-  toggle.onclick = () => {
-    sideCollapsed = !sideCollapsed;
-    localStorage.setItem("kanban-side", sideCollapsed ? "1" : "0");
-    renderSide();
-  };
+  toggle.onclick = toggleSide;
   el.appendChild(toggle);
   if (sideCollapsed) return;
 
@@ -3433,16 +3564,20 @@ function closeTab(id) {
 // card already open is left exactly as it is, including which tab is active.
 function openInBackground(id) {
   if (!data?.board.cards.some((c) => c.id === id)) return;
-  if (tabs.includes(id)) {
-    // no-op, but say so: silence here reads as a broken gesture
-    toast("Already open in a tab");
-    return;
-  }
+  // The gesture TOGGLES. It used to only ever add, and answered a second press
+  // with "Already open in a tab", which reads as a broken gesture rather than as
+  // the other half of a toggle. (Owner, 2026-08-22: "middle click on a card in
+  // main board should toggle add / remove in the board".)
+  if (tabs.includes(id)) { closeTab(id); toast("Closed that tab"); return; }
+  // Whether the panel is open belongs to the reader, not to this gesture. It
+  // used to force a closed panel open, which is the "without stealing focus or
+  // changing sidebar open state" half of the same ask. Measured before the fix:
+  // open went false to true on a single middle-click.
+  const wasOpen = $("drawer").classList.contains("open");
   tabs.push(id);
-  if (!openId) { openDrawer(id); return; }   // nothing was open, so it becomes the tab
-  $("drawer").classList.add("open");
+  if (!openId && wasOpen) { openDrawer(id); return; }  // nothing active yet, and the panel is already showing
   renderTabs();
-  toast("Opened in the background");
+  toast(wasOpen ? "Opened in the background" : "Added a tab, waiting in the panel");
 }
 
 function openDrawer(id, wantNoteId, opts = {}) {
@@ -3745,12 +3880,38 @@ function renderTerms() {
   pane.dataset.built = "1";
 }
 
+// ---------- the Charter tab ----------
+// The charter is a file, and this renders it rather than restating it. A copy of
+// its rulings kept here by hand would be the charter's own anti-pattern, "a
+// second list of what the first list already says", and it would be wrong the
+// first time a ruling landed. So the tab is a view of UI-CHARTER.md, served by
+// the same markdown renderer that backs the doc viewer.
+let charterBuilt = false;
+async function renderCharter() {
+  const pane = $("hCharter");
+  if (!pane || charterBuilt) return;
+  pane.innerHTML = `<div class="cnote">Reading UI-CHARTER.md\u2026</div>`;
+  try {
+    const res = await fetch("/api/charter");
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error ?? `HTTP ${res.status}`);
+    pane.innerHTML = `<div class="cdoc">${out.html}</div>`;
+    charterBuilt = true;
+  } catch (e) {
+    // An empty pane would read as "the charter says nothing", which is the worse
+    // of the two wrong answers.
+    pane.innerHTML = `<div class="cnote">The charter could not be read: ${esc(e.message)}.
+      It lives beside the server as UI-CHARTER.md.</div>`;
+  }
+}
+
 // one glyph per tab, in the board's own drawn style rather than emoji
 const HTAB_ICON = {
   hKeys: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.4" y="3.6" width="13.2" height="8.8" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4.2 6.4h.01M6.6 6.4h.01M9 6.4h.01M11.4 6.4h.01M5 9.4h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
   hTerms: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2.4 3.2A1.4 1.4 0 0 1 3.8 1.8H8v12.4H3.8a1.4 1.4 0 0 1-1.4-1.4V3.2ZM8 1.8h4.2a1.4 1.4 0 0 1 1.4 1.4v9.6a1.4 1.4 0 0 1-1.4 1.4H8" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
   hVibe: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M5.6 5 2.6 8l3 3M10.4 5l3 3-3 3M9.2 3.2 6.8 12.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   hTags: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M13.6 8.2c0 2.7-2.5 4.9-5.6 4.9-.7 0-1.4-.1-2-.3l-3.6 1.1 1.2-2.8a4.6 4.6 0 0 1-1.2-3c0-2.7 2.5-4.8 5.6-4.8s5.6 2.2 5.6 4.9Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+  hCharter: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3.9 1.9v12.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M3.9 2.7h8.4l-1.9 2.7 1.9 2.7H3.9" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
 };
 document.querySelectorAll(".htab").forEach((t) => { t.querySelector(".hi").innerHTML = HTAB_ICON[t.dataset.pane] ?? ""; });
 
@@ -4030,6 +4191,7 @@ document.querySelectorAll(".htab").forEach((tab) => {
     if (tab.dataset.pane === "hTerms") renderTerms();
     if (tab.dataset.pane === "hVibe") renderVibe();
     if (tab.dataset.pane === "hTags") renderPlayground();
+    if (tab.dataset.pane === "hCharter") renderCharter();
   };
 });
 $("hClose").onclick = closeHelp;
@@ -4169,6 +4331,31 @@ function renderSearch() {
   spRows = secs.flatMap((sec) => sec.rows.map((r) => ({ kind: sec.kind, r })));
   spAt = Math.min(spAt, Math.max(0, spRows.length - 1));
   const q = $("spq").value.trim();
+  // With nothing typed, the bar used to be a blank box: the owner reported the
+  // search as "not built" while it was shipped, because nothing on it says what
+  // it can do. SEARCH-DESIGN.md already lists the intents; this surfaces them
+  // instead of adding more. Chips are pressable, so each one is a worked example
+  // rather than a label about one.
+  if (!q) {
+    const seeds = [
+      ["blocked", "what is stopping me"],
+      ["unread", "what the agent has not read"],
+      ["needs you", "graded, but wants your testing"],
+      ["milestone", "everything under one milestone"],
+      ["@me", "notes you left yourself"],
+    ];
+    const tags = (data?.plan?.tags ?? []).slice(0, 3).map((t) => [t.name, `${t.kind}: ${t.name}`]);
+    $("splist").innerHTML =
+      `<div class="sphint">Searches this board's cards, your notes, your tags and your unsorted asks, all at once. Try:</div>` +
+      `<div class="spchips">` +
+      [...seeds, ...tags].map(([q2, why]) =>
+        `<button type="button" class="spchip" data-q="${esc(q2)}" data-tip="${esc(why)}">${esc(q2)}</button>`).join("") +
+      `</div>`;
+    $("splist").querySelectorAll(".spchip").forEach((c) => {
+      c.onclick = () => { $("spq").value = c.dataset.q; spAt = 0; renderSearch(); $("spq").focus(); };
+    });
+    return;
+  }
   if (!spRows.length) {
     // never say "no results" without saying what was looked in
     $("splist").innerHTML = `<div class="bpnone">Nothing matches “${esc(q)}”. Searched this board's cards, your notes, your tags and your unsorted asks.</div>`;
@@ -4253,11 +4440,23 @@ const recentBoards = () => { try { return JSON.parse(localStorage.getItem(RECENT
 
 const STAR_ICON = (on) => `<svg width="13" height="13" viewBox="0 0 14 14" fill="${on ? "currentColor" : "none"}"><path d="m7 1.8 1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 10l-3.2 1.7.6-3.6L1.8 5.6l3.6-.5L7 1.8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 const SEARCH_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.4"/><path d="m10.6 10.6 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+// One glyph per kind for the switcher. These are the SAME paths as NAV_ICON in
+// shared.js, and this is a copy, because board.html links neither shared.css nor
+// shared.js: it is the last fully-private page and its conversion is task #4 in
+// the previous round's pending list. Named here rather than left to be noticed,
+// so the copy is a known debt and not a discovery. BOARD_ICON below is already
+// the same duplication for the boards glyph.
+const NAVG = {
+  boards: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`,
+  asks: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.4 2.6h9.2v8.2L9.4 13.4H3.4V2.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M12.6 10.8H9.4v2.6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+  drafts: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+};
 const BOARD_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`;
 
 let bpBoards = [], bpAt = 0, bpRows = [];
 const isStarredBoard = (s2) => pins.some((p) => p.kind === "board" && p.ref === s2);
 
+let bpItems = [], bpDrafts = [];
 async function openBoardPick() {
   $("bpick").classList.add("on");
   overlayOpen($("bpick"), $("bpq"));
@@ -4268,6 +4467,18 @@ async function openBoardPick() {
     const res = await fetch("/api/boards");
     bpBoards = (await res.json()).boards ?? [];
   } catch { bpBoards = []; }
+  // The switcher covers a KIND and an INSTANCE. It knew only boards, so asks and
+  // drafts had an index and no way to reach one of them (NAV-UNIFICATION.md).
+  // Loaded after the boards render so a slow lane never delays the common case.
+  renderBoardPick();
+  try {
+    const [it, dr] = await Promise.all([
+      fetch("/api/items").then((r) => r.json()).catch(() => ({})),
+      fetch("/api/drafts").then((r) => r.json()).catch(() => ({})),
+    ]);
+    bpItems = (it.items ?? []).filter((x) => !x.landing && !x.archived);
+    bpDrafts = (dr.drafts ?? []).filter((d) => !d.isTemplate);
+  } catch { bpItems = []; bpDrafts = []; }
   renderBoardPick();
 }
 function closeBoardPick() { $("bpick").classList.remove("on"); overlayClose(); }
@@ -4284,12 +4495,31 @@ function bpSections() {
   const out = [];
   if (!q) {
     const rec = recentBoards().filter((x) => x !== slug).map((x) => byId[x]).filter(Boolean).slice(0, 3);
-    if (rec.length) out.push({ label: "Recent", rows: take(rec) });
+    if (rec.length) out.push({ label: "Recent", kind: "boards", rows: take(rec) });
   }
   const starred = take(all.filter((b) => isStarredBoard(b.slug)));
-  if (starred.length) out.push({ label: "Starred", rows: starred });
+  if (starred.length) out.push({ label: "Starred", kind: "boards", rows: starred });
   const rest = take(all).sort((x, y) => (x.slug === slug ? 1 : y.slug === slug ? -1 : (y.unread ?? 0) - (x.unread ?? 0)));
-  if (rest.length) out.push({ label: q ? "Matches" : "All boards", rows: rest });
+  if (rest.length) out.push({ label: q ? "Boards" : "All boards", kind: "boards", rows: rest });
+
+  // Charter §4, as amended 2026-08-22: in a kind-mixing list the SECTION says
+  // which kind, and the glyph's tint only reinforces it. So each kind gets its
+  // own heading and never relies on hue to be understood.
+  const oneLine = (t) => (t || "").split("\n").find((l) => l.trim()) ?? "";
+  const asks = bpItems
+    .filter((i) => !q || (i.body || "").toLowerCase().includes(q))
+    .slice(0, q ? 8 : 4)
+    .map((i) => ({ kind: "asks", id: i.id, name: oneLine(i.body).slice(0, 72),
+                   sub: i.boardName ? `on ${i.boardName}` : "unassigned" }));
+  if (asks.length) out.push({ label: "Your asks", kind: "asks", rows: asks });
+
+  const drafts = bpDrafts
+    .filter((d) => !q || `${d.title ?? ""} ${d.body}`.toLowerCase().includes(q))
+    .slice(0, q ? 8 : 4)
+    .map((d) => ({ kind: "drafts", id: d.id,
+                   name: d.title || oneLine(d.body).slice(0, 72) || "(untitled)",
+                   sub: `${(d.body || "").split("\n").length}L` }));
+  if (drafts.length) out.push({ label: "Drafts", kind: "drafts", rows: drafts });
   return out;
 }
 function renderBoardPick() {
@@ -4308,7 +4538,20 @@ function renderBoardPick() {
       const at = i++;
       const el = document.createElement("button");
       el.type = "button"; el.role = "option";
-      el.className = "bprow" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
+      // An ask or a draft is a different shape from a board: it has no counts,
+      // no star and no path, so it renders its own row and shares only the
+      // cursor and the kind tint.
+      if (sec.kind !== "boards") {
+        el.className = `bprow k-${sec.kind}` + (at === bpAt ? " on" : "");
+        el.innerHTML = `<span class="bi">${NAVG[sec.kind]}</span><span class="bn"></span><span class="bp"></span>`;
+        el.querySelector(".bn").textContent = b.name;
+        el.querySelector(".bp").textContent = b.sub;
+        el.onmouseenter = () => { bpAt = at; markBp(); };
+        el.onclick = () => gotoKind(b);
+        frag.appendChild(el);
+        continue;
+      }
+      el.className = "bprow k-boards" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
       const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
         .reduce((n, [, v]) => n + v, 0);
       el.innerHTML = `<span class="bi">${BOARD_ICON}</span><span class="bn"></span><span class="bp"></span>` +
@@ -4335,6 +4578,12 @@ async function toggleStar(b) {
     renderBoardPick();
   } catch (e) { toast(`Star failed: ${e.message}`, 3500, "err"); }
 }
+// An ask lives on the hub's asks view; a draft has a page of its own. Both are
+// real destinations, which is the whole point of giving them instance routes.
+function gotoKind(r) {
+  if (r.kind === "drafts") { location.href = `/drafts?d=${encodeURIComponent(r.id)}`; return; }
+  location.href = `/?v=asks#${encodeURIComponent(r.id)}`;
+}
 function gotoBoard(b) {
   if (!b) return;
   if (b.slug === slug) { closeBoardPick(); return; }
@@ -4355,7 +4604,7 @@ $("bpq").addEventListener("keydown", (e) => {
 const NUDGE_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.8a4.2 4.2 0 0 0-4.2 4.2c0 2.6-1.1 3.4-1.1 3.4h10.6s-1.1-.8-1.1-3.4A4.2 4.2 0 0 0 8 1.8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6.6 12a1.5 1.5 0 0 0 2.8 0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 document.querySelector(".htitle .hmark").innerHTML =
   `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.75 1.75 0 1 1 2.4 1.63c-.45.18-.7.6-.7 1.08v.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11.4" r=".85" fill="currentColor"/></svg>`;
-$("searchBtn").innerHTML = SEARCH_ICON;
+$("searchBtn").innerHTML = SEARCH_ICON + `<span class="sl">Search</span>`;
 $("searchBtn").onclick = () => openSearch($("filter").value.trim());
 const COPY_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="5.4" y="2.2" width="8.4" height="9.6" rx="1.6" stroke="currentColor" stroke-width="1.2"/><path d="M10.6 13.8H3.8a1.6 1.6 0 0 1-1.6-1.6V5.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 $("digestBtn").innerHTML = `${COPY_ICON}<span>Copy status</span>`;
@@ -4686,7 +4935,15 @@ document.addEventListener("keydown", (e) => {
   // In z order, top first (doc preview 60 · help 50 · palettes 40 · popover 30),
   // so this list and the ladder in the charter cannot drift apart.
   if (docModalOpen()) { if (e.key === "Escape") closeDocModal(); return; }
-  if ($("help").style.display === "flex" && e.key !== "?") { closeHelp(); return; }
+  // An open overlay owns every key (§10), so while help is up nothing reaches the
+  // board. Escape leaves, and "?" toggles the way it arrived. Every other key is
+  // swallowed rather than treated as "close and carry on", which is why a stray
+  // keystroke used to dismiss the modal mid-read. Tab still traverses, because
+  // this returns without preventing the default.
+  if ($("help").style.display === "flex") {
+    if (e.key === "Escape" || e.key === "?") closeHelp();
+    return;
+  }
   if ($("spick").classList.contains("on")) { if (e.key === "Escape") closeSearch(); return; }
   if ($("bpick").classList.contains("on")) { if (e.key === "Escape") closeBoardPick(); return; }
   if ($("tpick").classList.contains("on")) { if (e.key === "Escape") closeTagPick(); return; }
@@ -4727,6 +4984,7 @@ document.addEventListener("keydown", (e) => {
     case "]": if (tabs.length) { openDrawer(tabs[(tabs.indexOf(openId) + 1) % tabs.length]); } e.preventDefault(); break;
     case "[": if (tabs.length) { openDrawer(tabs[(tabs.indexOf(openId) - 1 + tabs.length) % tabs.length]); } e.preventDefault(); break;
     case "w": if (openId) { closeTab(openId); e.preventDefault(); } break;
+    case "|": toggleSide(); e.preventDefault(); break;
     case "\\": if (panel || tabs.length) { setCollapsed(!collapsed()); e.preventDefault(); } break;
 
     // ---- notes ----

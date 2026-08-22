@@ -120,11 +120,70 @@ if [ -f "$SELF" ]; then
   fi
 fi
 
+# The owner's drafts. A draft is the rung above an ask: a document they sat down
+# and wrote, so it is worth reading before planning, and "Offer to a session" is
+# them asking for pickup now. Nothing surfaced this before, so offering a draft
+# lit the button up and reached no one.
+#
+# The pending rule mirrors isPulled() + pendingDrafts() in lib.ts and must stay in
+# step with them. test-drafts.sh section 11 pins the two against one fixture, so
+# the drift is caught rather than merely warned about.
+DRAFTSF="$KROOT/drafts.json"
+PULLSF="$KROOT/pulls.json"
+dpend=0; doffer=0; dagent=0; dbroken=""
+if [ -f "$DRAFTSF" ]; then
+  # Timestamps compare as strings on purpose: these are all Date.toISOString(),
+  # so they are same-format UTC and sort correctly, while jq's fromdateiso8601
+  # rejects the fractional seconds every one of them carries.
+  dcounts=$(jq -r --slurpfile P <(cat "$PULLSF" 2>/dev/null || echo '{"pulls":{}}') --arg slug "$slug" '
+    ($P[0].pulls // {}) as $pulls
+    | [ .drafts[]?
+        | select((.isTemplate // false) | not)
+        | . as $d
+        | ($pulls[$d.id].at // null) as $taken
+        | ([($d.updatedAt // ""), ($d.triggered // "")] | max) as $touched
+        # no pull, or one the owner has outdated by editing or re-offering
+        | select($taken == null or $touched > $taken)
+      ] as $live
+    # mirrors visibleTo() in lib.ts. This hook cannot resolve an agent alias: it
+    # runs at SessionStart, BEFORE the session registers with the ipc broker, so
+    # the answer would be "no" for every agent-addressed draft including the ones
+    # meant for this reader. So it counts what it can see and reports the rest as
+    # a separate number, which sends the reader to the CLI, where the alias does
+    # resolve. A wrong count is worse here than an honest partial one.
+    | [ $live[] | select((.to // []) | length == 0)
+                 | select((.slug // null) == null or .slug == $slug) ] as $mine
+    | [ $live[] | select([ (.to // [])[] | select(startswith("board:")) ]
+                         | index("board:" + $slug) != null) ] as $forboard
+    | ($mine + $forboard | unique_by(.id)) as $pending
+    | [ $live[] | select([ (.to // [])[] | select(startswith("agent:")) ] | length > 0) ] as $foragent
+    | [ ($pending | length),
+        ([ $pending[] | select(.triggered != null) ] | length),
+        ($foragent | length) ]
+    | @tsv' "$DRAFTSF" 2>/dev/null)
+  # Same rule as the asks above: an unreadable store must not read as an empty one.
+  if [ $? -ne 0 ] || [ -z "$dcounts" ]; then
+    dbroken="yes"
+  else
+    dpend=$(printf '%s' "$dcounts" | cut -f1); doffer=$(printf '%s' "$dcounts" | cut -f2)
+    dagent=$(printf '%s' "$dcounts" | cut -f3)
+  fi
+fi
+drafted=""
+if [ -n "$dbroken" ]; then
+  drafted=" · WARNING: the owner's drafts could not be read ($DRAFTSF will not parse), so this line cannot tell you whether any are waiting."
+elif [ "${dpend:-0}" -gt 0 ] 2>/dev/null || [ "${dagent:-0}" -gt 0 ] 2>/dev/null; then
+  dbits="$dpend waiting"
+  [ "${doffer:-0}" -gt 0 ] 2>/dev/null && dbits="$dbits, $doffer OFFERED TO A SESSION"
+  [ "${dagent:-0}" -gt 0 ] 2>/dev/null && dbits="$dbits, $dagent addressed to a named agent (this line cannot tell whether that is you — the CLI can)"
+  drafted=" · the owner has drafts ($dbits) — documents they wrote for you, above an ask. Read before planning: bash ~/.claude/scripts/kanban/kanban.sh drafts"
+fi
+
 if [ "${unread:-0}" -gt 0 ] 2>/dev/null; then
   extra=""; [ "${actionable:-0}" -gt 0 ] 2>/dev/null && extra=" ($actionable marked !now)"
-  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked$drafted · board: http://localhost:5106/b/$slug"
 else
-  line="[kanban] board \"$name\" — no unread notes$asks$picked · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — no unread notes$asks$picked$drafted · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
 fi
 
 jq -nc --arg c "$line" '{additionalContext: $c}'

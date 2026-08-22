@@ -109,6 +109,31 @@ export function deriveEntry(list: Note[], activeId?: string): NoteEntry | null {
 // home rather than scattering process.env through the modules.
 export const sessionId = (): string | undefined => process.env.CLAUDE_CODE_SESSION_ID || undefined;
 
+// This agent's own ipc alias, which is how a draft addressed to an agent finds
+// its reader. Explicit env first so a test or a script can say who it is without
+// a broker; then the registry, keyed by session id.
+//
+// Returning undefined is a real answer and not a failure: an agent that cannot
+// name itself simply never matches an agent-addressed draft, per visibleTo's
+// fail-closed rule. Nothing here throws, because the drafts lane's whole contract
+// is that it works with no server and no broker.
+export function selfAlias(): string | undefined {
+  if (process.env.KANBAN_ALIAS) return process.env.KANBAN_ALIAS;
+  const sid = sessionId();
+  if (!sid) return undefined;
+  try {
+    const db = path.join(os.homedir(), ".claude-ipc", "data", "ipc.sqlite");
+    if (!fs.existsSync(db)) return undefined;
+    const { Database } = require("bun:sqlite");
+    const h = new Database(db, { readonly: true });
+    try {
+      const row = h.query("select alias from registry_snapshot where session_id = ?1 order by last_seen desc limit 1")
+        .get(sid) as { alias?: string } | null;
+      return row?.alias || undefined;
+    } finally { try { h.close(); } catch { /* nothing to do */ } }
+  } catch { return undefined; }
+}
+
 export interface BoardMeta {
   root: string; name: string; createdAt: string;
   // who opened it and what the project is, so the board reads as a project's
@@ -544,6 +569,12 @@ export interface Draft {
   isTemplate?: boolean; // reusable rather than one-off (D5)
   slug?: string;        // board affinity, optional: a draft starts uncoupled
   triggered?: string;   // ISO ts: offered to a session, the item field's twin
+  // Who this is FOR: "board:<slug>" or "agent:<alias>". Absent means anyone, the
+  // same default Item.boards carries, and the same default every draft written
+  // before this field existed still has. `slug` is not replaced: that is the
+  // draft's home, this is a statement about who should act on it, and a draft can
+  // live on one board while being addressed to an agent working elsewhere.
+  to?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -557,9 +588,61 @@ export interface Pull {
   note?: string;        // the agent's one-line account of what it made
   at: string;
   by?: string;
+  // The body as it stood when it was consumed. Kept so that a draft the owner
+  // revises afterwards can be handed back as a DIFF rather than as 44 lines the
+  // agent has to re-read to find the three that changed. Without this the pull
+  // records that a read happened and nothing about what was read.
+  text?: string;
 }
 export interface DraftsFile { drafts: Draft[] }
 export interface PullsFile { pulls: Record<string, Pull> }
+
+// A line diff, smallest thing that answers "what changed since I read this".
+// LCS over lines: the table is (a x b) cells, and a draft is prose rather than a
+// log, so the sizes here are hundreds of lines, not millions. Guarded anyway,
+// because an unbounded table on a pasted file is a hang rather than a slow reply.
+export function lineDiff(before: string, after: string, cap = 4000):
+  { kind: " " | "-" | "+"; text: string }[] | null {
+  const A = before.split("\n"), B = after.split("\n");
+  if (A.length > cap || B.length > cap) return null;
+  const L: number[][] = Array.from({ length: A.length + 1 }, () => new Array(B.length + 1).fill(0));
+  for (let i = A.length - 1; i >= 0; i--) {
+    for (let j = B.length - 1; j >= 0; j--) {
+      L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    }
+  }
+  const out: { kind: " " | "-" | "+"; text: string }[] = [];
+  let i = 0, j = 0;
+  while (i < A.length && j < B.length) {
+    if (A[i] === B[j]) { out.push({ kind: " ", text: A[i] }); i++; j++; }
+    else if (L[i + 1][j] >= L[i][j + 1]) { out.push({ kind: "-", text: A[i] }); i++; }
+    else { out.push({ kind: "+", text: B[j] }); j++; }
+  }
+  while (i < A.length) out.push({ kind: "-", text: A[i++] });
+  while (j < B.length) out.push({ kind: "+", text: B[j++] });
+  return out;
+}
+
+// The changed lines with a little context, which is what an agent reads. A whole
+// draft echoed back with three markers in it is the thing this exists to avoid.
+export function diffHunks(before: string, after: string, ctx = 2): string[] | null {
+  const d = lineDiff(before, after);
+  if (!d) return null;
+  const keep = new Set<number>();
+  d.forEach((x, n) => {
+    if (x.kind === " ") return;
+    for (let k = Math.max(0, n - ctx); k <= Math.min(d.length - 1, n + ctx); k++) keep.add(k);
+  });
+  if (!keep.size) return [];
+  const lines: string[] = [];
+  let last = -99;
+  [...keep].sort((a, b) => a - b).forEach((n) => {
+    if (n > last + 1) lines.push("…");
+    lines.push(d[n].kind + " " + d[n].text);
+    last = n;
+  });
+  return lines;
+}
 
 export const loadDrafts = (): DraftsFile => readJson<DraftsFile>(DRAFTS, { drafts: [] });
 export const loadPulls = (): PullsFile => readJson<PullsFile>(PULLS, { pulls: {} });
@@ -575,14 +658,57 @@ export function saveDrafts(file: DraftsFile, by: string): void {
   atomicWrite(DRAFTS, file, by, `drafts=${file.drafts.length}`);
 }
 
-export const isPulled = (p: PullsFile, id: string): boolean => !!p.pulls[id];
+// A pull consumes the text that was there when it was taken. The owner can edit
+// a draft afterwards, or offer it again, and either act means what is waiting is
+// no longer what the agent read. So a pull older than the owner's last touch is
+// spent rather than binding.
+//
+// Keyed on the id alone, a draft consumed once stayed consumed forever: every
+// later revision was invisible to every session while the board went on showing
+// the draft as offered. That combination is the worst one, because the board's
+// confirmation is what stops the owner re-sending.
+export function isPulled(p: PullsFile, d: Draft): boolean {
+  const pull = p.pulls[d.id];
+  if (!pull) return false;
+  const taken = Date.parse(pull.at);
+  // An unreadable pull timestamp cannot prove the draft was read, and silence
+  // reads as nothing to report. An unprovable pull shows the draft, never hides it.
+  if (!Number.isFinite(taken)) return false;
+  const touched = Math.max(Date.parse(d.updatedAt) || 0,
+                           d.triggered ? Date.parse(d.triggered) || 0 : 0);
+  return touched <= taken;
+}
 
 // A template is never "waiting to be pulled": using it does not consume it, so
 // it would otherwise sit in the queue forever asking to be dealt with.
-export function pendingDrafts(drafts: Draft[], p: PullsFile, slug?: string): Draft[] {
+// Who a draft is for, split by kind. null means anyone, which is the default and
+// what every pre-existing draft carries.
+export function recipientsOf(d: Draft): { boards: string[]; agents: string[] } | null {
+  if (!d.to?.length) return null;
+  return {
+    boards: d.to.filter((x) => x.startsWith("board:")).map((x) => x.slice(6)),
+    agents: d.to.filter((x) => x.startsWith("agent:")).map((x) => x.slice(6)),
+  };
+}
+
+// The one rule every surface asks: the CLI sweep, the session-start line and any
+// future push. Three surfaces asking three copies of this question is the drift
+// session-start-line.sh already warns about in its own header.
+//
+// Fail-closed on purpose. A reader who cannot say who they are does NOT see a
+// draft addressed to an agent: the owner's private text going to the wrong reader
+// is the one failure here that cannot be taken back.
+export function visibleTo(d: Draft, who: { slug?: string; alias?: string }): boolean {
+  const r = recipientsOf(d);
+  if (!r) return !who.slug || !d.slug || d.slug === who.slug;   // unaddressed: as before
+  if (who.alias && r.agents.includes(who.alias)) return true;
+  return !!who.slug && r.boards.includes(who.slug);
+}
+
+export function pendingDrafts(drafts: Draft[], p: PullsFile, slug?: string, alias?: string): Draft[] {
   return drafts
-    .filter((d) => !d.isTemplate && !isPulled(p, d.id))
-    .filter((d) => !slug || !d.slug || d.slug === slug)
+    .filter((d) => !d.isTemplate && !isPulled(p, d))
+    .filter((d) => visibleTo(d, { slug, alias }))
     .sort((a, b) =>
       Number(!!b.triggered) - Number(!!a.triggered) ||
       Date.parse(a.createdAt) - Date.parse(b.createdAt));

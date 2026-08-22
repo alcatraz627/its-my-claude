@@ -1,0 +1,7 @@
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"textural feedback at the point of contact","outcome":"direction","closed_by":""}
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"control consistency: height, borders, solid/outlined/text","outcome":"no-direction","closed_by":"shared.css:48-65 already defines the vocabulary; drafts.html:20-24 shadows it"}
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"dropdowns approachable","outcome":"direction","closed_by":""}
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"intuitive editor/preview, hover-highlight","outcome":"direction","closed_by":"caret-line raw reveal; owner ruling required, it removes the Preview toggle"}
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"durable undo/redo","outcome":"no-direction","closed_by":"mechanism defect at drafts.html:455, replaceChildren destroys the undo stack; task #12"}
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"auto-save","outcome":"no-direction","closed_by":"mechanism; the save tell resolves under the textural direction"}
+{"ts":"2026-08-22T06:38:30Z","surface":"kanban drafts editing surface","problem":"spelling highlight","outcome":"no-direction","closed_by":"already shipped: ta.spellcheck=true at drafts.html:370"}

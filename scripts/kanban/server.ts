@@ -11,6 +11,7 @@ import {
   loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
+  recipientsOf, isPulled,
   loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
@@ -59,10 +60,24 @@ function renderMd(input: string): string {
   // heading, list and table in a CRLF file falls through to a paragraph.
   const src = input.replace(/\r\n?/g, "\n");
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const inline = (s: string) =>
-    s.replace(/`([^`]+)`/g, "<code>$1</code>")
+  // GFM, kept incremental on the owner's own fence ("I don't want to overcomplicate
+  // just incrementally improv"): strikethrough, emphasis, bare-URL autolinks.
+  //
+  // Code spans are lifted OUT first and put back LAST. Replacing them in place is
+  // not enough, and that is the whole reason for the detour: every later pass
+  // still walks the produced string, so `~~x~~` inside backticks came back struck
+  // through. Markup inside code must stay literal, or code cannot quote markup.
+  const inline = (s: string) => {
+    const spans: string[] = [];
+    let out = s.replace(/`([^`]+)`/g, (_m, code) => `\u0000${spans.push(code) - 1}\u0000`);
+    out = out
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, `<a href="$2" rel="noopener">$1</a>`);
+      .replace(/~~([^~]+)~~/g, "<del>$1</del>")
+      .replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s).,;:!?]|$)/g, "$1<em>$2</em>")
+      .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, `<a href="$2" rel="noopener">$1</a>`)
+      .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, `$1<a href="$2" rel="noopener">$2</a>`);
+    return out.replace(/\u0000(\d+)\u0000/g, (_m, n) => `<code>${spans[Number(n)]}</code>`);
+  };
   const out: string[] = [];
   // Blocks carry the source line they started on, so /doc?line=N can scroll to
   // the place a card was harvested from. The fence split eats one line per ```.
@@ -110,15 +125,27 @@ function renderMd(input: string): string {
       flushTable();
       const ol = l.match(/^\s*\d+\.\s+(.*)$/);
       const ul = l.match(/^\s*[-*]\s+(.*)$/);
+      // A checkbox is what the harvester reads to mint a card, so a doc full of
+      // them rendering as literal "[ ]" was the one gap worth closing here.
+      const box = ul && ul[1].match(/^\[([ xX])\]\s+(.*)$/);
       if (ol || ul) {
         flushPara();
         const tag: "ul" | "ol" = ol ? "ol" : "ul";
         if (!list || list.tag !== tag) { flushList(); list = { tag, items: [] }; }
-        list.items.push((ol ?? ul)![1]);
+        list.items.push(box
+          ? `<span class="tbox${box[1] === " " ? "" : " on"}">${box[1] === " " ? "" : "\u2713"}</span>${inline(box[2])}`
+          : (ol ?? ul)![1]);
         continue;
       }
       if (/^---+$/.test(l.trim())) { flushAll(); out.push("<hr>"); continue; }
       if (!l.trim()) { flushAll(); continue; }
+      // A hard-wrapped list item continues on the following line; markdown calls
+      // this a lazy continuation. Without it any wrapped bullet ENDED its list and
+      // the rest of the sentence became a paragraph outside it, so a hard-wrapped
+      // ordered list rendered as a run of one-item lists each numbered "1." with
+      // its second half adrift. Every doc in this repo is wrapped at ~80 columns,
+      // so this was the common case rather than an edge one.
+      if (list && list.items.length) { list.items[list.items.length - 1] += " " + l.trim(); continue; }
       flushList();
       para.push(l.trim());
     }
@@ -158,6 +185,24 @@ function ipcRegister(bin: string): void {
   catch { /* a down broker is reported by the send itself, not here */ }
 }
 
+// Is this named alias live right now? Same table and same window as livePeers,
+// asked by name instead of by directory, because a draft addressed to an agent
+// names one and a board does not.
+export function aliasIsLive(alias: string): boolean {
+  if (ipcMissing) return false;
+  let db: any = null;
+  try {
+    if (!fs.existsSync(IPC_DB)) { ipcMissing = true; return false; }
+    const { Database } = require("bun:sqlite");
+    db = new Database(IPC_DB, { readonly: true });
+    const row = db.query(
+      "select 1 from registry_snapshot where alias = ?1 and status in ('live','idle') and last_seen > ?2 limit 1",
+    ).get(alias, Date.now() / 1000 - 1800);
+    return !!row;
+  } catch { return false; }
+  finally { try { db?.close(); } catch { /* nothing to do */ } }
+}
+
 export interface LivePeer { alias: string; subagents: number }
 function livePeers(root: string): LivePeer[] {
   if (ipcMissing) return [];
@@ -169,9 +214,19 @@ function livePeers(root: string): LivePeer[] {
     // opened per call on purpose: a kept handle pins a WAL snapshot, so
     // last_seen freezes while the clock moves and every peer ages out to dead.
     db = new Database(IPC_DB, { readonly: true });
-    // the broker's own status is authoritative; this window only discards rows
-    // a dead broker left behind. Heartbeats run every few minutes, so 15 is safe.
-    const cutoff = Date.now() / 1000 - 900;
+    // last_seen is the liveness test. The status column is NOT: measured
+    // 2026-08-22, it reads "live" for sessions last seen 19 and 21 hours ago, so
+    // 172 of 266 rows claim to be live. An earlier comment here called status
+    // authoritative and treated this window as a mere dead-broker backstop; the
+    // table disagrees, and trusting it surfaced seven peers on one board of which
+    // one was real.
+    //
+    // 15 minutes was too tight for the case the nudge exists for. A session
+    // waiting on the owner heartbeats rarely: gcp-fable and this board's own
+    // gcc-kanban were both genuinely alive at 1086s and 1258s, past the old
+    // cutoff, so a nudge could not reach the only sessions worth nudging. 30
+    // minutes covers an idle-but-live session and still drops the 11-hour ones.
+    const cutoff = Date.now() / 1000 - 1800;
     const rows = db.query(
       "select alias, cwd, session_id from registry_snapshot where status in ('live','idle') and last_seen > ?1",
     ).all(cutoff) as { alias: string; cwd: string; session_id: string }[];
@@ -369,9 +424,21 @@ const server = Bun.serve({
         const reg = registry().boards[slug];
         // ackTs closes the note loop in the UI: it is when an agent last ran
         // `notes --ack`, so a note newer than it has not been picked up yet.
-        return json({ slug, name: reg.name, root: reg.root, board: loadBoard(dir),
+        const bd = loadBoard(dir);
+        // A dropped card leaves its tag row behind in plan.json, so a tag count
+        // taken from the raw store promises cards the filter cannot produce. The
+        // membership map is served against the LIVE board, which keeps every
+        // reader agreeing about what a tag is worth. The orphan rows stay on
+        // disk and are simply never served; clearing them belongs on the drop
+        // path, which cannot reach plan.json without going through here.
+        const rawPlan = loadPlan(dir);
+        const alive = new Set(bd.cards.map((c) => c.id));
+        const plan = { ...rawPlan,
+          on: Object.fromEntries(Object.entries(rawPlan.on).filter(([cid]) => alive.has(cid))),
+          goals: Object.fromEntries(Object.entries(rawPlan.goals ?? {}).filter(([cid]) => alive.has(cid))) };
+        return json({ slug, name: reg.name, root: reg.root, board: bd,
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
-          selection: loadSelection(dir), plan: loadPlan(dir), presets: TAG_PRESETS });
+          selection: loadSelection(dir), plan, presets: TAG_PRESETS });
       }
       // The owner's own lane. `slug` scopes to one board and always keeps the
       // unassigned ones, because an unassigned item is routable to any board.
@@ -428,6 +495,11 @@ const server = Bun.serve({
             ...d,
             boardName: d.slug ? names[d.slug] ?? null : null,
             pull: pulls[d.id] ?? null,
+            // A pull RECORD and a consumed DRAFT are different questions: once
+            // the owner revises a pulled draft it is waiting again. The page
+            // grouped on the record and so filed revised drafts under Pulled
+            // while the CLI listed them as waiting. One rule, asked here.
+            consumed: isPulled({ pulls }, d),
           }))
           .sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
         return json({ drafts: rows });
@@ -438,6 +510,17 @@ const server = Bun.serve({
           { slug: url.searchParams.get("from") ?? "", card: url.searchParams.get("card") ?? "" });
       }
       if (p === "/api/docseg") return docSegment(url.searchParams.get("path") ?? "", Number(url.searchParams.get("line") ?? 0));
+      // The charter, rendered from the file rather than copied into the help
+      // modal. A hand-kept copy would be the charter's own anti-pattern, "a
+      // second list of what the first list already says", and it would go stale
+      // the first time a ruling landed.
+      if (p === "/api/charter") {
+        const f = path.join(HERE, "UI-CHARTER.md");
+        if (!fs.existsSync(f)) return json({ error: "UI-CHARTER.md is not beside the server" }, 404);
+        const src = fs.readFileSync(f, "utf8");
+        return json({ html: renderMd(src), bytes: src.length,
+                      mtime: fs.statSync(f).mtime.toISOString() });
+      }
       return json({ error: `no route ${p}` }, 404);
     }
 
@@ -584,7 +667,7 @@ const server = Bun.serve({
     if (req.method === "POST" && p === "/api/draft") {
       const body = (await req.json().catch(() => null)) as
         { id?: string; title?: string; body?: string; slug?: string | null;
-          template?: boolean; trigger?: boolean } | null;
+          template?: boolean; trigger?: boolean; to?: string[] | null } | null;
       if (!body) return json({ error: "need a JSON body" }, 400);
       if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
       if ((body.title?.length ?? 0) > 200) return json({ error: "draft title over 200 chars" }, 413);
@@ -633,13 +716,27 @@ const server = Bun.serve({
           if (body.slug) d.slug = body.slug; else delete d.slug;
           d.updatedAt = now;
         }
+        // Who it is for. Same refusal the CLI verb makes: a recipient pointing at
+        // nothing is a draft addressed to a place that does not exist, which
+        // reads as delivered.
+        if (body.to !== undefined) {
+          if (!body.to || !body.to.length) delete d.to;
+          else {
+            const bad = body.to.find((t) => !/^(agent|board):.+$/.test(t)
+              || (t.startsWith("board:") && !registry().boards[t.slice(6)]));
+            if (bad) { out = { error: `"${bad}" is not a recipient — use agent:<alias> or board:<slug>` }; return; }
+            d.to = [...new Set(body.to)];
+          }
+          d.updatedAt = now;
+        }
         if (body.template !== undefined) { if (body.template) d.isTemplate = true; else delete d.isTemplate; }
         if (body.trigger !== undefined) { if (body.trigger) d.triggered = now; else delete d.triggered; }
         saveDrafts(file, `draft:${body.id}`);
         out = { ok: true, id: body.id! };
        } catch (e: any) { out = { error: `${e.message}`.slice(0, 300) }; }
       });
-      if ("error" in out) return json(out, out.error.includes("gone") ? 409 : 500);
+      if ("error" in out) return json(out, out.error.includes("gone") ? 409
+        : out.error.includes("not a recipient") ? 400 : 500);
       return json(out);
     }
 
@@ -868,6 +965,64 @@ const server = Bun.serve({
       return json({ ok: true, sent, peers: peers.map((x) => x.alias), reason: sent.length ? "" : reason });
     }
 
+    // Hand a draft to the agent it is addressed to. The nudge's shape with a
+    // different resolver: recipients come from the draft, not from the board's
+    // directory, which is the whole point of Draft.to.
+    //
+    // A push NEVER replaces the wait. The draft stays pending either way, so a
+    // recipient who was asleep still finds it at their next sweep. Pushing is an
+    // accelerator on a channel that already works, not the channel.
+    if (req.method === "POST" && p === "/api/draft-send") {
+      const body = (await req.json().catch(() => null)) as { id?: string } | null;
+      const { drafts } = loadDrafts();
+      const d = body?.id ? drafts.find((x) => x.id === body.id) : null;
+      if (!d) return json({ error: `no draft ${body?.id ?? ""}` }, 404);
+      const r = recipientsOf(d);
+      if (!r || !r.agents.length) {
+        // Refused rather than broadcast. A draft addressed to nobody in
+        // particular is not a thing to shout; it is already waiting for whoever
+        // sweeps, which is what "addressed to anyone" means.
+        return json({ error: "this draft names no agent — address it first: kanban.sh to "
+          + d.id + " agent:<alias>" }, 400);
+      }
+      const ipcBin = [path.join(os.homedir(), ".local", "bin", "claude-ipc"), "/usr/local/bin/claude-ipc"]
+        .find((f) => fs.existsSync(f)) ?? "claude-ipc";
+      ipcRegister(ipcBin);
+      const head = d.title ?? d.body.split("\n").find((l) => l.trim()) ?? d.id;
+      const msg = [
+        `[kanban] the owner handed you a draft: "${head}".`,
+        ``,
+        `A draft is a document they sat down and wrote, a rung above an ask, and this`,
+        `one is addressed to you by name rather than left for whoever passes.`,
+        ``,
+        `Read it in full, then record what you made of it:`,
+        `  kanban.sh drafts ${d.id}`,
+        `  kanban.sh pull ${d.id} [--card <card-id>] [--note "what you did"]`,
+        ``,
+        `If they revise it after you pull, it comes back to you with a diff of what`,
+        `changed rather than the whole document again.`,
+      ].join("\n");
+      const sent: string[] = [];
+      const asleep: string[] = [];
+      let reason = "";
+      for (const alias of r.agents) {
+        if (!aliasIsLive(alias)) { asleep.push(alias); continue; }
+        try {
+          execFileSync(ipcBin, ["send", "--to", alias, "--from", IPC_ALIAS, "--kind", "inform",
+            "--no-reply-expected", msg], { stdio: ["ignore", "ignore", "pipe"], timeout: 8000 });
+          sent.push(alias);
+        } catch (e: any) {
+          const err = String(e?.stderr ?? "");
+          reason = e?.code === "ENOENT" ? "claude-ipc is not installed where the board server can reach it"
+            : err.split("\n")[0].slice(0, 140) || "the ipc broker refused the message";
+        }
+      }
+      // Silence is the failure this reports on. "Offered" with nobody reached is
+      // the exact shape that hid the owner's feedback for a day.
+      return json({ ok: true, sent, asleep, addressed: r.agents,
+        reason: sent.length ? "" : (reason || (asleep.length ? "nobody live — it is waiting in their inbox" : "")) });
+    }
+
     // "Send to agent": the selection, rendered, pushed at whoever is live in
     // this project right now. It stays on disk either way — a nudge nobody was
     // around to receive must still be there at the next pickup, which is the
@@ -912,8 +1067,11 @@ const server = Bun.serve({
 
     if (req.method === "POST" && p === "/api/pin") {
       const body = (await req.json().catch(() => null)) as
-        { kind?: "card" | "item"; ref?: string; slug?: string; label?: string } | null;
-      const PIN_KINDS = ["card", "item", "board"];
+        { kind?: "card" | "item" | "board" | "archived"; ref?: string; slug?: string; label?: string } | null;
+      // "archived" is a board the owner has said is not theirs right now. It rides
+      // the pin store rather than a new file because a pin is already a toggle
+      // and already owner-only, which is exactly what this is.
+      const PIN_KINDS = ["card", "item", "board", "archived"];
       if (!body?.ref || !PIN_KINDS.includes(body.kind as string)) {
         return json({ error: `need {kind: ${PIN_KINDS.join("|")}, ref}` }, 400);
       }
@@ -922,7 +1080,7 @@ const server = Bun.serve({
       // would be dead on arrival. A pin pointing at nothing is that same defect.
       if (body.slug && !registry().boards[body.slug]) return json({ error: `unknown board ${body.slug}` }, 404);
       if ((body.label?.length ?? 0) > 200) return json({ error: "pin label over 200 chars" }, 413);
-      if (body.kind === "board" && !registry().boards[body.ref]) {
+      if ((body.kind === "board" || body.kind === "archived") && !registry().boards[body.ref]) {
         return json({ error: `no board ${body.ref}` }, 404);
       }
       if (body.kind === "item" && !loadItems().items.some((i) => i.id === body.ref)) {

@@ -12,7 +12,8 @@ import {
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
   loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
-  displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled,
+  displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled, diffHunks,
+  DRAFTS, saveDrafts, recipientsOf, selfAlias,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -235,8 +236,16 @@ switch (verb) {
           `\n  add one: kanban.sh tag <card-id> milestone:M2`);
         break;
       }
+      // A dropped card leaves its tags behind in plan.json, so a raw count here
+      // promises cards the filter cannot produce. Counted against the live board
+      // instead. This makes the NUMBER honest; the orphaned rows are still in the
+      // store and their removal belongs on the drop path, which is server-side.
+      const live = new Set(loadBoard(boardDir).cards.map((c) => c.id));
       const counts = new Map<string, number>();
-      for (const ids of Object.values(plan.on)) for (const t of ids) counts.set(t, (counts.get(t) ?? 0) + 1);
+      for (const [cid, ids] of Object.entries(plan.on)) {
+        if (!live.has(cid)) continue;
+        for (const t of ids) counts.set(t, (counts.get(t) ?? 0) + 1);
+      }
       for (const t of plan.tags) console.log(`  ${t.kind}:${t.name}  ${counts.get(t.id) ?? 0} card(s)`);
       break;
     }
@@ -468,18 +477,42 @@ switch (verb) {
       const d = drafts.find((x) => x.id === wanted);
       if (!d) die(`no draft ${wanted}`, `kanban.sh drafts --all  # lists the ids`);
       const p = pulls.pulls[d.id];
-      if (hasFlag("json")) { console.log(JSON.stringify({ ...d, pull: p ?? null })); break; }
-      console.log(`${d.id}  ${d.isTemplate ? "[template]" : p ? "[pulled]" : "[pending]"}${d.slug ? `  ${d.slug}` : ""}`);
+      // The record and the verdict are different questions: a pull row can exist
+      // and still be spent, because the owner has revised the draft since.
+      const consumed = isPulled(pulls, d);
+      if (hasFlag("json")) { console.log(JSON.stringify({ ...d, pull: p ?? null, consumed })); break; }
+      console.log(`${d.id}  ${d.isTemplate ? "[template]" : consumed ? "[pulled]" : "[pending]"}${d.slug ? `  ${d.slug}` : ""}`);
       if (d.title) console.log(d.title);
+      // A draft you already consumed and the owner has since revised is not new
+      // text, it is a CHANGE, and reading 44 lines to find the 3 that moved is the
+      // work this exists to remove. The diff leads because it is the news; the
+      // body still follows, because a change out of context is not actionable.
+      if (p && !consumed) {
+        const hunks = p.text === undefined ? null : diffHunks(p.text, d.body);
+        console.log("");
+        console.log(`REVISED since you pulled it at ${p.at}${p.note ? ` ("${p.note}")` : ""}.`);
+        if (hunks === null) {
+          console.log(p.text === undefined
+            ? "  No diff: this was pulled before revisions were recorded, or the draft was too large to snapshot."
+            : "  No diff: the draft is too large to compare. Read it in full below.");
+        } else if (!hunks.length) {
+          console.log("  The text is unchanged; it came back because it was offered again.");
+        } else {
+          console.log("");
+          for (const l of hunks) console.log("  " + l);
+        }
+        console.log("");
+        console.log("--- the draft in full ---");
+      }
       console.log("");
       console.log(d.body);
-      if (!p && !d.isTemplate) console.log(`\nrecord what you make of it: kanban.sh pull ${d.id} [--card <card-id>] [--note "what you did"]`);
+      if (!consumed && !d.isTemplate) console.log(`\nrecord what you make of it: kanban.sh pull ${d.id} [--card <card-id>] [--note "what you did"]`);
       break;
     }
     const scope = hasFlag("global") ? undefined : (() => {
       try { return boardFor(projectDir()).slug; } catch { return undefined; }
     })();
-    const pending = pendingDrafts(drafts, pulls, scope);
+    const pending = pendingDrafts(drafts, pulls, scope, selfAlias());
     const shown = hasFlag("templates") ? drafts.filter((d) => d.isTemplate)
       : hasFlag("all") ? drafts.filter((d) => !scope || !d.slug || d.slug === scope)
       : pending;
@@ -494,17 +527,47 @@ switch (verb) {
     }
     console.log(`${pending.length} pending${scope ? ` on ${scope}` : ""}${shown.length !== pending.length ? ` · ${shown.length} shown` : ""}`);
     for (const d of shown) {
-      const p = pulls.pulls[d.id];
-      const mark = d.isTemplate ? "template" : p ? "pulled" : d.triggered ? "now" : "pending";
+      const mark = d.isTemplate ? "template" : isPulled(pulls, d) ? "pulled" : d.triggered ? "now" : "pending";
       const head = d.title ?? d.body.split("\n").find((l) => l.trim()) ?? "(empty)";
       const lines = d.body.split("\n").length;
-      console.log(`  ${d.id}  [${mark}] ${d.slug ?? "unassigned"} · ${lines}L  ${head.slice(0, 60)}`);
+      const to = d.to?.length ? ` → ${d.to.join(" ")}` : "";
+      console.log(`  ${d.id}  [${mark}] ${d.slug ?? "unassigned"}${to} · ${lines}L  ${head.slice(0, 60)}`);
     }
     console.log(`read one in full: kanban.sh drafts <draft-id>`);
     break;
   }
   // The pull is the moment a draft's content becomes project material, and it
   // goes through the agent so cards still come from docs the agent processed.
+  // Who a draft is for. The owner normally sets this from the drafts page; the
+  // verb exists so an agent can hand one on, and so the rule is testable without
+  // a browser.
+  case "to": {
+    const [id, ...targets] = positional;
+    if (!id) die("need a draft id", `kanban.sh to <draft-id> agent:<alias>|board:<slug> [...]  ·  --clear`);
+    const { drafts } = loadDrafts();
+    const d = drafts.find((x) => x.id === id);
+    if (!d) die(`no draft ${id}`, `kanban.sh drafts --all  # lists the ids`);
+    if (hasFlag("clear")) {
+      delete d.to;
+    } else {
+      if (!targets.length) die("need at least one recipient", `kanban.sh to ${id} agent:<alias>   ·   --clear to address it to anyone`);
+      for (const t of targets) {
+        if (!/^(agent|board):.+$/.test(t)) {
+          die(`"${t}" is not a recipient`, `use agent:<alias> or board:<slug> — kanban.sh status lists the board slugs`);
+        }
+        // Same refusal /api/pin makes: a recipient pointing at nothing is a draft
+        // addressed to a place that does not exist, which reads as delivered.
+        if (t.startsWith("board:") && !registry().boards[t.slice(6)]) {
+          die(`no board ${t.slice(6)}`, `kanban.sh status   # lists the slugs`);
+        }
+      }
+      d.to = [...new Set(targets)];
+    }
+    saveDrafts({ drafts }, "to");
+    const r = recipientsOf(d);
+    console.log(r ? `${id} is for ${d.to!.join(", ")}` : `${id} is for anyone`);
+    break;
+  }
   case "pull": {
     const [id] = positional;
     if (id && hasFlag("undo")) {
@@ -538,9 +601,16 @@ switch (verb) {
       }
       const file = loadPulls();
       const prior = file.pulls[id];
+      // The body is snapshotted so a later revision can be handed back as a diff.
+      // Capped: a pull record is a receipt, and a pasted novel should not double
+      // the store. Over the cap the diff is simply unavailable, which the reader
+      // is told, rather than half a diff that looks whole.
+      const PULL_SNAP = 120_000;
+      const snap = d.body.length <= PULL_SNAP ? d.body : undefined;
       file.pulls[id] = { at: new Date().toISOString(),
         ...(card ? { cardId: card } : {}), ...(cardSlug ? { slug: cardSlug } : {}),
-        ...(note ? { note } : {}), ...(sessionId() ? { by: sessionId() } : {}) };
+        ...(note ? { note } : {}), ...(sessionId() ? { by: sessionId() } : {}),
+        ...(snap !== undefined ? { text: snap } : {}) };
       atomicWrite(PULLS, file, "pull", `pulls=${Object.keys(file.pulls).length}`);
       if (hasFlag("json")) console.log(JSON.stringify({ id, card: card ?? null, slug: cardSlug ?? null, repulled: !!prior }));
       else console.log(`${prior ? "re-pulled" : "pulled"} ${id}${card ? ` → card ${card}` : ""}`);
@@ -746,6 +816,11 @@ switch (verb) {
                            card) · subtask · clarification · remark;
                            [--card <id>] links where it landed, [--note "…"]
                            says what you did, [--undo] retracts it
+  to <id> <target>...      who a draft is for: agent:<alias> or board:<slug>, several
+                           allowed. Absent means anyone, which is every draft's
+                           default. An agent-addressed draft is invisible to every
+                           other agent, so this is how the owner writes to one of
+                           you rather than to whoever is standing here. [--clear]
   drafts [<draft-id>]      the owner's documents, the rung above an ask. Bare:
                            the pending ones. With an id: that draft in full,
                            which is what you read before pulling. [--all] adds

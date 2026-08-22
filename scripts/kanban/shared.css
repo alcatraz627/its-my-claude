@@ -121,3 +121,10 @@
            transition:background .16s,border-color .16s}
 
   @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+
+/* A rendered task box. The harvester reads these checkboxes to mint cards, so a
+   doc full of them used to render as literal "[ ]" in every preview. */
+.tbox{display:inline-grid;place-items:center;width:13px;height:13px;margin-right:7px;
+      border:1px solid var(--border-2);border-radius:3.5px;vertical-align:-2px;
+      font:700 9px/1 var(--sans);color:transparent;flex:none}
+.tbox.on{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}

@@ -17,11 +17,12 @@
        display:flex;flex-direction:column}
   header{display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--border);flex:none}
   h1{margin:0;font:600 15.5px/1.3 var(--sans);letter-spacing:-.011em;flex:1}
-  button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
-         padding:5px 9px;font-size:12.5px;font-weight:500;transition:background .12s,border-color .12s,color .12s}
-  button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
-  button:disabled{opacity:.45;cursor:default}
-  button:disabled:hover{background:var(--card);border-color:var(--border);color:var(--text-2)}
+  /* This page links shared.css and then re-declared button on top of it, which
+     shadowed the one place the solid/outlined/text vocabulary lives. Two of six
+     variants were in use, the page hand-rolled its own solid and danger, and a
+     disabled button computed cursor:default where the standard says not-allowed.
+     Only the padding is kept, because this toolbar is denser than the board's. */
+  button{padding:5px 9px;font-size:12.5px;font-weight:500}
   a{color:var(--blue)}
   .views{display:flex;gap:4px}
   .views a,.views button{display:inline-flex;align-items:center;text-decoration:none;border-radius:6px;
@@ -57,18 +58,71 @@
   .etop input.title:focus{outline:none;background:var(--well);border-color:var(--blue)}
   .etop select{font:inherit;font-size:12px;background:var(--card);color:var(--text-2);
                border:1px solid var(--border);border-radius:6px;padding:5px 7px;max-width:190px}
-  .etop .save{background:var(--blue);border-color:transparent;color:var(--canvas);font-weight:600}
-  [data-theme="light"] .etop .save{color:#fff}
-  .etop .save:disabled{background:var(--card);color:var(--text-3)}
-  .etop .del:hover{color:var(--red);border-color:var(--red-br);background:var(--red-bg)}
+  /* Handing a draft over is the consequential act on this page, so it wears the
+     solid treatment; everything else beside it stays outlined. */
+  .etop .sendnow{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue);font-weight:600}
+  .etop .sendnow:hover{background:var(--blue);border-color:transparent;color:var(--canvas)}
+  [data-theme="light"] .etop .sendnow:hover{color:#fff}
+  .etop .forsel{max-width:210px}
+  /* the three-way mode control: one holder, so the three read as one choice */
+  .modes{display:inline-flex;gap:2px;background:var(--canvas);border:1px solid var(--border);
+         border-radius:7px;padding:2px}
+  .modes .modebtn{border:none;background:none;padding:3px 9px;font-size:12px;border-radius:5px;color:var(--text-3)}
+  .modes .modebtn:hover{background:var(--well);color:var(--text-2)}
+  .modes .modebtn.on{background:var(--card);color:var(--text);box-shadow:var(--shadow)}
+  /* Live: rendered lines, with the caret's line showing its raw markdown. The
+     raw line keeps the mono face so the swap reads as the same text in two
+     dresses rather than as two different things. */
+  .ebody.live{display:block;overflow:auto}
+  .ebody.live .livepane{min-height:100%}
+  .livepane{display:block;width:100%;padding:18px 22px}
+  .lrend{font:13.5px/1.75 var(--sans);color:var(--text-2);padding:1px 6px;margin:0 -6px;
+         border-radius:5px;cursor:text;min-height:1.75em}
+  .lrend:hover{background:var(--well)}
+  .lrend .lh1,.lrend .lh2,.lrend .lh3{color:var(--text);font-weight:600}
+  .lrend .lh1{font-size:19px} .lrend .lh2{font-size:16px} .lrend .lh3{font-size:14.5px}
+  .lrend .lbul{color:var(--text-3)}
+  .lrend .lq{color:var(--text-3);border-left:2px solid var(--blue-br);padding-left:8px;display:inline-block}
+  .lrend code,.lraw code{font:11.5px var(--mono);background:var(--well);border:1px solid var(--border);
+                         border-radius:4px;padding:1px 4px}
+  .lraw{display:block;width:100%;resize:none;overflow:hidden;background:var(--well);
+        border:1px solid var(--blue-br);border-radius:5px;color:var(--text);
+        font:13px/1.75 var(--mono);padding:0 6px;margin:0 -7px}
+  .lraw:focus{outline:none;border-color:var(--blue)}
+  .drow .dm .dto{color:var(--blue)}
+  .drow .dm .dpull{color:var(--text-3)}
+  /* §5: the glyph accompanies the label, it never replaces it. One rule so the
+     whole row lines up instead of each button deciding for itself. */
+  .etop button{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .etop button svg{flex:none}
+  /* .save is shared.css's .accent and .del is its .danger; both are applied in
+     the markup now rather than re-described here. */
+  .etop .save:disabled{background:var(--card);color:var(--text-3);border-color:var(--border)}
   .etop .on{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   .ebody{flex:1;min-height:0;display:flex}
   .ebody.split .pane{width:50%}
   .pane{width:100%;min-width:0;display:flex}
-  textarea{flex:1;width:100%;background:var(--canvas);color:var(--text);border:none;resize:none;
-           padding:18px 22px;font:13.5px/1.65 var(--mono);tab-size:2}
-  textarea:focus{outline:none}
-  .prev{flex:1;overflow-y:auto;padding:18px 22px;border-left:1px solid var(--border);font-size:13.5px;line-height:1.65}
+  /* The direction memo's finding, built. The writing surface used to sit on the
+     page's own ground with no border, measured identical to body in both themes,
+     while every control above it was raised onto --card. The thing you touch was
+     the least defined object on screen, which is why it read as a hole rather
+     than as paper. It is now the raised object and the page is its frame. */
+  .ebody{padding:14px 16px;gap:14px}
+  textarea{flex:1;width:100%;background:var(--card);color:var(--text);resize:none;
+           border:1px solid var(--border);border-radius:9px;
+           padding:16px 18px;font:13.5px/1.65 var(--mono);tab-size:2;
+           transition:border-color .14s,box-shadow .14s}
+  /* Textural, not thematic: the surface answers where the hand is. The border
+     lifts and a soft ring appears on the object being written in, and nothing
+     else on the page moves. */
+  textarea:focus{outline:none;border-color:var(--blue-br);
+                 box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 11%,transparent)}
+  /* Raw and rendered are two dresses on one text, so they are told apart by
+     depth rather than by decoration: raw is the raised card you type on, rendered
+     is recessed into the well behind it. */
+  .ebody.split .prev{background:var(--well);border:1px solid var(--border);border-radius:9px}
+  .livepane{background:var(--card);border:1px solid var(--border);border-radius:9px}
+  .prev{flex:1;overflow-y:auto;padding:18px 22px;font-size:13.5px;line-height:1.65}
   .prev h1,.prev h2,.prev h3{letter-spacing:-.011em;margin:1.2em 0 .5em;line-height:1.3}
   .prev h1{font-size:20px} .prev h2{font-size:16.5px} .prev h3{font-size:14px}
   .prev h1:first-child,.prev h2:first-child,.prev h3:first-child{margin-top:0}
@@ -128,7 +182,18 @@ let drafts = [], boards = [], currentId = null, broken = null;
 // click can never overwrite what the owner has typed but not yet saved.
 let buf = null;          // {title, body} while editing
 let saved = null;        // the record as the server last confirmed it
-let previewOn = localStorage.getItem("kanban-draft-preview") === "1";
+let mode = localStorage.getItem("kanban-draft-mode")
+  || (localStorage.getItem("kanban-draft-preview") === "1" ? "preview" : "edit");
+let liveAt = 0;                       // which source line is showing its raw text
+const previewOn = () => mode === "preview";
+const G = {
+  preview:  `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M.9 7S3.1 3.1 7 3.1 13.1 7 13.1 7 10.9 10.9 7 10.9.9 7 .9 7Z" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.7" stroke="currentColor" stroke-width="1.15"/></svg>`,
+  template: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="2.2" y="1.6" width="7.4" height="9.4" rx="1.2" stroke="currentColor" stroke-width="1.15"/><path d="M4.6 12.9h5.6a1.2 1.2 0 0 0 1.2-1.2V4.4" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/></svg>`,
+  offer:    `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M12.4 1.6 6.6 7.4M12.4 1.6 8.5 12.4 6.6 7.4 1.6 5.5 12.4 1.6Z" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"/></svg>`,
+  del:      `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.4 3.7h9.2M5.4 3.7V2.5h3.2v1.2M3.6 3.7l.6 8a.9.9 0 0 0 .9.8h3.8a.9.9 0 0 0 .9-.8l.6-8" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  save:     `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.4 7.3 5.6 10.5 11.6 3.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
+let agents = [];
 let status = null;       // {kind: "ok"|"err", msg}
 
 const KEY = (id) => `kanban-draftbuf-${id ?? "new"}`;
@@ -159,9 +224,16 @@ async function load({ keepBuffer = true } = {}) {
   if (!boards.length) {
     try { boards = (await (await fetch("/api/boards")).json()).boards ?? []; } catch { boards = []; }
   }
+  // Who is around to be addressed. Rebuilt every load rather than cached: an
+  // alias goes stale on its own clock and a stale "live" is worse than no list,
+  // because the owner would address a draft to somebody who cannot be reached.
+  agents = [...new Set(boards.flatMap((b) => (b.live ?? []).map((p) => p.alias)))].sort();
   if (currentId && !drafts.some((d) => d.id === currentId)) { currentId = null; buf = null; saved = null; }
   if (!keepBuffer || !buf) selectFromUrl();
-  render();
+  // "A poll must never touch the editor" — the list is worth refreshing, the words
+  // being typed are not the server's to replace. Rebuilding the editor was touching
+  // it, however faithfully the text was copied back.
+  render({ editor: !(keepBuffer && buf) });
 }
 
 function selectFromUrl() {
@@ -181,6 +253,9 @@ function open(id, { push = true } = {}) {
   // thing the owner typed and losing it is the only unrecoverable outcome here
   const stash = localStorage.getItem(KEY(id));
   buf = stash ? JSON.parse(stash) : { title: d.title ?? "", body: d.body };
+  // Per-draft history, so undo never walks you into another draft's text.
+  histLoad(id);
+  if (!hist.past.length) { hist.past.push({ title: buf.title, body: buf.body }); histSave(); }
   status = null;
   if (push) history.replaceState(null, "", `/drafts?d=${id}`);
   render();
@@ -194,6 +269,7 @@ function newDraft(seed) {
   currentId = null;
   saved = null;
   buf = { title: seed?.title ?? "", body: seed?.body ?? "" };
+  hist = { past: [{ title: buf.title, body: buf.body }], future: [] };
   status = null;
   history.replaceState(null, "", "/drafts");
   render();
@@ -201,7 +277,28 @@ function newDraft(seed) {
   if (ta) { ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; }
 }
 
-async function save() {
+// Auto-save. The owner asked for it outright ("the editing surface needs to be
+// auto-save=true"), which changes this page's old contract that nothing is
+// written until you press Save.
+//
+// Two guards, because auto-saving is easy to make worse than manual saving:
+//
+//  - A draft that does not exist yet is NOT created on a keystroke. Every stray
+//    character in a fresh editor would otherwise mint a draft, and the list is
+//    the owner's, not a scratchpad. A new draft is born when they press Save,
+//    and auto-save takes over from there.
+//  - The debounce is generous. A save is a round trip and a write; firing one
+//    per pause in typing is noise, and the crash stash already protects the text
+//    on every keystroke, so nothing is at risk while this waits.
+let autoTimer = null;
+const AUTOSAVE_MS = 1500;
+function scheduleAutoSave() {
+  clearTimeout(autoTimer);
+  if (!currentId) return;            // never create; only keep an existing one current
+  autoTimer = setTimeout(() => { if (dirty()) save({ auto: true }); }, AUTOSAVE_MS);
+}
+
+async function save(opts = {}) {
   if (!buf) return;
   const creating = !currentId;
   if (creating && !buf.title.trim() && !buf.body.trim()) {
@@ -218,7 +315,10 @@ async function save() {
       saved = { title: buf.title || undefined, body: buf.body };
       history.replaceState(null, "", `/drafts?d=${out.id}`);
     }
-    status = { kind: "ok", msg: out.deleted ? "deleted" : creating ? "created" : "saved" };
+    // An auto-save says so, quietly. Reporting it as "saved" the same way a
+    // deliberate save does would make the owner unsure which one happened.
+    status = { kind: "ok", msg: out.deleted ? "deleted" : creating ? "created"
+      : opts.auto ? "saved automatically" : "saved" };
     await load({ keepBuffer: true });
   } catch (e) { status = { kind: "err", msg: e.message }; render(); }
 }
@@ -235,9 +335,9 @@ async function patch(fields, note) {
 function listEl() {
   const wrap = el("div", null);
   const groups = [
-    ["Waiting to be pulled", drafts.filter((d) => !d.isTemplate && !d.pull)],
+    ["Waiting to be pulled", drafts.filter((d) => !d.isTemplate && !d.consumed)],
     ["Templates", drafts.filter((d) => d.isTemplate)],
-    ["Pulled", drafts.filter((d) => !d.isTemplate && d.pull)],
+    ["Pulled", drafts.filter((d) => !d.isTemplate && d.consumed)],
   ];
   let any = false;
   for (const [label, rows] of groups) {
@@ -246,13 +346,26 @@ function listEl() {
     const g = el("div", "group");
     g.append(el("div", "glabel", `${label} · ${rows.length}`));
     for (const d of rows) {
-      const b = el("button", "drow" + (d.id === currentId ? " on" : "") + (d.pull ? " pulled" : ""));
+      const b = el("button", "drow" + (d.id === currentId ? " on" : "") + (d.consumed ? " pulled" : ""));
       b.type = "button";
       const head = d.title || d.body.split("\n").find((l) => l.trim()) || "(empty)";
       b.append(el("div", "dh", head));
       const m = el("div", "dm");
       m.append(el("span", null, `${d.body.split("\n").length}L`));
       m.append(el("span", null, `${ago(Date.parse(d.updatedAt))} ago`));
+      // Who it is for and what became of it, both on the row: the owner could
+      // address and hand over a draft but had nowhere to SEE either.
+      if (d.to?.length) {
+        const to = el("span", "dto", d.to.map((t) => t.replace(/^agent:/, "\u2192 ")
+                                                      .replace(/^board:/, "\u2192 ")).join(" "));
+        m.append(to);
+      }
+      if (d.consumed && d.pull) {
+        m.append(el("span", "dpull", `read ${ago(Date.parse(d.pull.at))} ago`));
+      } else if (d.pull) {
+        // a pull exists but it is spent, which is the state the diff explains
+        m.append(el("span", "now", "revised since"));
+      }
       if (d.boardName) m.append(el("span", null, d.boardName));
       if (d.isTemplate) m.append(el("span", "tpl", "template"));
       if (d.triggered && !d.pull) m.append(el("span", "now", "offered"));
@@ -285,7 +398,7 @@ function editorEl() {
   const title = el("input", "title");
   title.type = "text"; title.value = buf.title; title.placeholder = "Untitled";
   title.setAttribute("aria-label", "draft title, optional");
-  title.oninput = () => { buf.title = title.value; stash(); paintStatus(); };
+  title.oninput = () => { buf.title = title.value; stash(); paintStatus(); scheduleAutoSave(); histRecord(); };
   top.append(title);
 
   const tpl = el("select");
@@ -308,13 +421,84 @@ function editorEl() {
     top.append(board);
   }
 
-  const prevBtn = el("button", "prev-toggle" + (previewOn ? " on" : ""), "Preview");
-  prevBtn.type = "button";
-  prevBtn.onclick = () => { previewOn = !previewOn; localStorage.setItem("kanban-draft-preview", previewOn ? "1" : "0"); render(); };
-  top.append(prevBtn);
+  // Who this draft is FOR, which is a different question from which board it
+  // lives on. Absent means anyone, which is what every draft was until today.
+  const forSel = el("select", "forsel");
+  forSel.dataset.tip = "Who this draft is for. Anyone means whoever sweeps; naming an agent hides it from the others.";
+  forSel.append(new Option("For: anyone", ""));
+  for (const a of agents) forSel.append(new Option(`For: ${a}`, `agent:${a}`));
+  for (const b of boards) forSel.append(new Option(`For: ${b.name} (board)`, `board:${b.slug}`));
+  const cur = (buf.to ?? saved?.to ?? d?.to ?? [])[0] ?? "";
+  // An alias that has since gone quiet must still show as the current answer, or
+  // the control would silently claim the draft is for anyone.
+  if (cur && ![...forSel.options].some((o) => o.value === cur)) {
+    forSel.append(new Option(`For: ${cur.replace(/^agent:/, "")} (not live)`, cur));
+  }
+  forSel.value = cur;
+  forSel.disabled = !currentId;
+  forSel.onchange = async () => {
+    try {
+      const res = await fetch("/api/draft", { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id: currentId, to: forSel.value ? [forSel.value] : [] }) });
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error ?? res.status);
+      status = { kind: "ok", msg: forSel.value ? `for ${forSel.value}` : "for anyone" };
+      await load({ keepBuffer: true });
+      // load() deliberately leaves the editor alone while the owner is mid-edit,
+      // which is what stops the poll eating keystrokes. A recipient change is not
+      // the poll: it is a deliberate act whose whole result is a control that has
+      // to appear or disappear, so it asks for the rebuild explicitly. render()
+      // hands focus and caret back, so asking is safe.
+      render();
+    } catch (e) { status = { kind: "err", msg: e.message }; render(); }
+  };
+  top.append(forSel);
+
+  // Handing it over is a different act from leaving it out, so it is a different
+  // control. It appears only when there is somebody named to hand it to.
+  if (cur.startsWith("agent:")) {
+    const send = el("button", "sendnow accent");
+    send.innerHTML = G.offer + `<span>Send to ${cur.slice(6)}</span>`;
+    send.type = "button";
+    send.dataset.tip = "Push it at them now. It stays waiting either way.";
+    send.onclick = async () => {
+      send.disabled = true;
+      try {
+        const res = await fetch("/api/draft-send", { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id: currentId }) });
+        const out = await res.json();
+        if (!res.ok) throw new Error(out.error ?? res.status);
+        // Reaching nobody is reported, not swallowed. "Sent" over silence is the
+        // shape that hid the owner's own feedback for a day.
+        status = out.sent?.length
+          ? { kind: "ok", msg: `handed to ${out.sent.join(", ")}` }
+          : { kind: "err", msg: out.reason || "nobody received it" };
+      } catch (e) { status = { kind: "err", msg: e.message }; }
+      send.disabled = false;
+      paintStatus();
+    };
+    top.append(send);
+  }
+
+  // Three surfaces, not two. The owner's reason for keeping all three is that a
+  // third one helps when something renders wrong, so Edit must always be able to
+  // show the raw text on its own.
+  const modes = el("div", "modes");
+  for (const [k, label, tip] of [
+    ["edit", "Edit", "The raw markdown, nothing rendered"],
+    ["live", "Live", "Rendered as you write; only the line you are on shows its raw markdown"],
+    ["preview", "Preview", "Raw and rendered side by side"],
+  ]) {
+    const mb = el("button", "modebtn" + (mode === k ? " on" : ""), label);
+    mb.type = "button"; mb.dataset.tip = tip;
+    mb.onclick = () => { mode = k; localStorage.setItem("kanban-draft-mode", k); render(); };
+    modes.append(mb);
+  }
+  top.append(modes);
 
   if (d) {
-  const tplBtn = el("button", d.isTemplate ? "on" : null, d.isTemplate ? "Template" : "Make template");
+  const tplBtn = el("button", d.isTemplate ? "on" : null);
+  tplBtn.innerHTML = G.template + `<span>${d.isTemplate ? "Template" : "Make template"}</span>`;
   tplBtn.type = "button";
   tplBtn.dataset.tip = d.isTemplate
     ? "A template is reused rather than consumed, so it never waits to be pulled. Click to make it an ordinary draft."
@@ -335,7 +519,8 @@ function editorEl() {
   top.append(tplBtn);
 
   if (!d.isTemplate) {
-    const offer = el("button", d.triggered ? "on" : null, d.triggered ? "Offered" : "Offer to a session");
+    const offer = el("button", d.triggered ? "on" : null);
+    offer.innerHTML = G.offer + `<span>${d.triggered ? "Offered" : "Offer to a session"}</span>`;
     offer.type = "button";
     offer.dataset.tip = d.triggered ? "A session has been asked to pick this up now. Click to withdraw."
       : "Ask a working session to pick this up now, rather than at its next sweep.";
@@ -345,7 +530,9 @@ function editorEl() {
   }
 
   if (d) {
-  const del = el("button", "del", "Delete");
+  const del = el("button", "del danger");
+  del.innerHTML = G.del + `<span>Delete</span>`;
+  del.dataset.tip = "Delete this draft. It cannot be undone.";
   del.type = "button";
   del.onclick = async () => {
     if (!confirm("Delete this draft? This cannot be undone.")) return;
@@ -361,22 +548,30 @@ function editorEl() {
   top.append(del);
   }
 
-  const saveBtn = el("button", "save", "Save");
+  const saveBtn = el("button", "save accent");
+  saveBtn.innerHTML = G.save + `<span>Save</span>`;
+  saveBtn.dataset.tip = "Write it to disk (\u2318S). Nothing is saved until you do.";
   saveBtn.type = "button"; saveBtn.id = "saveBtn";
   saveBtn.onclick = save;
   top.append(saveBtn);
 
-  const body = el("div", "ebody" + (previewOn ? " split" : ""));
+  const body = el("div", "ebody" + (previewOn() ? " split" : "") + (mode === "live" ? " live" : ""));
+  if (mode === "live") {
+    body.append(liveEl());
+    const st = el("div", "estat");
+    st.id = "estat";
+    return [top, body, st];
+  }
   const pane = el("div", "pane");
   const ta = el("textarea");
   ta.value = buf.body;
   ta.spellcheck = true;
   ta.setAttribute("aria-label", "draft body, markdown");
   ta.placeholder = "# Write it out properly\n\nMarkdown. An agent pulls from this when you offer it.";
-  ta.oninput = () => { buf.body = ta.value; stash(); paintStatus(); schedulePreview(); };
+  ta.oninput = () => { buf.body = ta.value; stash(); paintStatus(); schedulePreview(); scheduleAutoSave(); histRecord(); };
   pane.append(ta);
   body.append(pane);
-  if (previewOn) {
+  if (previewOn()) {
     const p = el("div", "prev");
     p.id = "preview";
     p.innerHTML = "";
@@ -386,6 +581,139 @@ function editorEl() {
   const stat = el("div", "estat");
   stat.id = "estat";
   return [top, body, stat];
+}
+
+// Live: the document reads as rendered, and only the line the caret is on shows
+// its raw markdown. One continuous surface rather than a mode you toggle in and
+// out of. Owner ruling 2026-08-22 (Q2=B): this JOINS Edit and Preview, it does
+// not replace either, because a third surface is what you compare against when
+// something renders wrong.
+function liveEl() {
+  const wrap = el("div", "livepane");
+  const lines = buf.body.split("\n");
+  liveAt = Math.max(0, Math.min(liveAt, lines.length - 1));
+  lines.forEach((raw, i) => {
+    if (i === liveAt) {
+      const inp = el("textarea", "lraw");
+      inp.value = raw;
+      inp.rows = 1;
+      inp.spellcheck = true;
+      inp.setAttribute("aria-label", `line ${i + 1}, raw markdown`);
+      inp.oninput = () => {
+        const next = buf.body.split("\n");
+        next[i] = inp.value.replace(/\n/g, " ");
+        buf.body = next.join("\n");
+        stash(); paintStatus(); scheduleAutoSave(); histRecord();
+      };
+      inp.onkeydown = (e) => {
+        // Enter splits the line, the arrows walk it, and everything else is the
+        // browser's. A line editor that swallowed Enter would not be an editor.
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const at = inp.selectionStart;
+          const next = buf.body.split("\n");
+          next.splice(i, 1, inp.value.slice(0, at), inp.value.slice(at));
+          buf.body = next.join("\n"); liveAt = i + 1; stash(); render();
+        } else if (e.key === "ArrowUp" && inp.selectionStart === 0 && i > 0) {
+          e.preventDefault(); liveAt = i - 1; render();
+        } else if (e.key === "ArrowDown" && inp.selectionEnd === inp.value.length && i < lines.length - 1) {
+          e.preventDefault(); liveAt = i + 1; render();
+        } else if (e.key === "Backspace" && inp.selectionStart === 0 && inp.selectionEnd === 0 && i > 0) {
+          e.preventDefault();
+          const next = buf.body.split("\n");
+          const join = next[i - 1].length;
+          next.splice(i - 1, 2, next[i - 1] + inp.value);
+          buf.body = next.join("\n"); liveAt = i - 1; stash(); render();
+          const back = document.querySelector(".lraw");
+          if (back) back.setSelectionRange(join, join);
+        }
+      };
+      wrap.append(inp);
+      return;
+    }
+    const ln = el("div", "lrend");
+    ln.dataset.i = String(i);
+    ln.innerHTML = liveRender(raw);
+    ln.onclick = () => { liveAt = i; render(); };
+    wrap.append(ln);
+  });
+  return wrap;
+}
+
+// A deliberately small renderer: this is a per-LINE view, so block constructs
+// that span lines are not its job. The full document still renders through the
+// server in Preview, which is one reason that mode is kept.
+function liveRender(raw) {
+  const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  if (!raw.trim()) return "<br>";
+  const h = raw.match(/^(#{1,6})\s+(.*)$/);
+  const inline = (t) => esc(t)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  if (h) return `<span class="lh${h[1].length}">${inline(h[2])}</span>`;
+  const li = raw.match(/^(\s*)[-*]\s+(.*)$/);
+  if (li) return `<span class="lbul">&bull;</span> ${inline(li[2])}`;
+  const q = raw.match(/^>\s?(.*)$/);
+  if (q) return `<span class="lq">${inline(q[1])}</span>`;
+  return inline(raw);
+}
+
+// Undo that survives what the browser's cannot. render() rebuilds the editor,
+// which destroys the live element and with it the native undo stack, so ⌘Z used
+// to lose everything the moment anything re-rendered. This history lives on the
+// buffer instead, and is written beside the crash stash so it also survives a
+// reload, which is the "persistent" half of the ask.
+//
+// Typing is coalesced: a snapshot lands once you pause, not once per keystroke,
+// or a single sentence would take thirty presses to undo.
+const HKEY = (id) => `kanban-draft-hist-${id ?? "new"}`;
+const HIST_CAP = 60;
+let hist = { past: [], future: [] };
+let histTimer = null;
+
+function histLoad(id) {
+  try { hist = JSON.parse(localStorage.getItem(HKEY(id))) ?? { past: [], future: [] }; }
+  catch { hist = { past: [], future: [] }; }
+  if (!Array.isArray(hist.past) || !Array.isArray(hist.future)) hist = { past: [], future: [] };
+}
+function histSave() {
+  try { localStorage.setItem(HKEY(currentId), JSON.stringify(hist)); } catch { /* quota: history is a nicety */ }
+}
+function histSnap() {
+  if (!buf) return;
+  const top = hist.past[hist.past.length - 1];
+  const now = { title: buf.title, body: buf.body };
+  if (top && top.title === now.title && top.body === now.body) return;
+  hist.past.push(now);
+  if (hist.past.length > HIST_CAP) hist.past.shift();
+  hist.future = [];              // a new edit forks the timeline
+  histSave();
+}
+function histRecord() { clearTimeout(histTimer); histTimer = setTimeout(histSnap, 600); }
+
+function histApply(entry) {
+  buf.title = entry.title; buf.body = entry.body;
+  stash(); render();
+}
+function undo() {
+  if (!buf) return;
+  clearTimeout(histTimer);
+  histSnap();                                     // capture what is on screen first
+  if (hist.past.length < 2) { status = { kind: "err", msg: "nothing to undo" }; paintStatus(); return; }
+  hist.future.push(hist.past.pop());
+  histApply(hist.past[hist.past.length - 1]);
+  histSave();
+  status = { kind: "ok", msg: `undo · ${hist.past.length - 1} left` };
+  paintStatus();
+}
+function redo() {
+  if (!buf || !hist.future.length) { status = { kind: "err", msg: "nothing to redo" }; paintStatus(); return; }
+  const e = hist.future.pop();
+  hist.past.push(e);
+  histApply(e);
+  histSave();
+  status = { kind: "ok", msg: "redo" };
+  paintStatus();
 }
 
 function stash() {
@@ -417,7 +745,9 @@ function paintStatus() {
   const words = (buf?.body.match(/\S+/g) ?? []).length;
   stat.append(el("span", null, `${words} word${words === 1 ? "" : "s"}`));
   if (d?.pull) {
-    const p = el("span", null, "pulled");
+    const when = d.pull.at ? ` ${ago(Date.parse(d.pull.at))} ago` : "";
+    const by = d.pull.by ? ` by ${String(d.pull.by).slice(0, 8)}` : "";
+    const p = el("span", null, (d.consumed ? "pulled" : "pulled, then revised") + when + by);
     stat.append(p);
     if (d.pull.cardId && d.pull.slug) {
       const a = document.createElement("a");
@@ -435,7 +765,7 @@ function paintStatus() {
 
 let previewTimer = null;
 function schedulePreview() {
-  if (!previewOn) return;
+  if (!previewOn()) return;
   clearTimeout(previewTimer);
   previewTimer = setTimeout(renderPreview, 250);
 }
@@ -453,7 +783,18 @@ async function renderPreview() {
   } catch (e) { p.textContent = `preview unavailable: ${e.message}`; }
 }
 
-function render() {
+// The editor is rebuilt wholesale by replaceChildren, which destroys the live
+// <textarea> and with it the caret, the selection and the native undo stack. The
+// text survives because buf is written on every keystroke; the CARET does not, and
+// a textarea that is no longer focused receives no keystrokes at all. That is how
+// characters went missing: the poll landed mid-edit, focus moved to <body>, and
+// everything typed after it went nowhere.
+//
+// Two guards, because there are two ways in. Here: whatever had focus gets it back
+// with its selection intact, which covers save() and open(). In load(): the editor
+// is not rebuilt at all while the owner is mid-edit, which is what the poll's own
+// comment already promised and the code did not keep.
+function render({ editor = true } = {}) {
   document.getElementById("list").replaceChildren(listEl());
   const t = document.getElementById("tplNew");
   const keep = t.value;
@@ -463,9 +804,30 @@ function render() {
   }
   t.value = keep;
   t.disabled = t.options.length < 2;
-  document.getElementById("edit").replaceChildren(...editorEl());
+  if (editor) {
+    const live = document.querySelector(".ebody textarea");
+    const title = document.querySelector(".etop input.title");
+    const held = document.activeElement === live && live
+      ? { what: "body", start: live.selectionStart, end: live.selectionEnd }
+      : document.activeElement === title && title
+      ? { what: "title", start: title.selectionStart, end: title.selectionEnd }
+      : null;
+    document.getElementById("edit").replaceChildren(...editorEl());
+    // Live's caret IS the raw line, so it has to arrive focused; otherwise the
+    // mode looks editable and silently is not.
+    if (mode === "live") {
+      const raw = document.querySelector(".lraw");
+      if (raw) { raw.focus(); raw.style.height = "auto"; raw.style.height = raw.scrollHeight + "px"; }
+    }
+    if (held) {
+      const back = held.what === "body"
+        ? document.querySelector(".ebody textarea")
+        : document.querySelector(".etop input.title");
+      if (back) { back.focus(); back.setSelectionRange(held.start, held.end); }
+    }
+  }
   paintStatus();
-  if (previewOn) renderPreview();
+  if (previewOn()) renderPreview();
 }
 
 document.getElementById("newDraft").onclick = () => newDraft();
@@ -475,7 +837,14 @@ document.getElementById("tplNew").onchange = (e) => {
   if (t) newDraft({ body: t.body, title: t.title ? `${t.title} copy` : "" });
 };
 addEventListener("keydown", (e) => {
-  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); }
+  const mod = e.metaKey || e.ctrlKey;
+  if (!mod) return;
+  const k = e.key.toLowerCase();
+  if (k === "s") { e.preventDefault(); save(); return; }
+  // Ours, not the browser's: the native stack does not survive a re-render, so
+  // letting the default through would undo into a stack that no longer exists.
+  if (k === "z" && !e.shiftKey) { e.preventDefault(); undo(); return; }
+  if ((k === "z" && e.shiftKey) || k === "y") { e.preventDefault(); redo(); }
 });
 // Losing typed text is the one unrecoverable outcome on this page, so the buffer
 // is stashed on the way out as well as on every keystroke.

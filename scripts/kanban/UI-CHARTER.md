@@ -79,6 +79,31 @@ Three things follow from that, and most of the rules below are consequences:
 - **Both themes, always.** Every colour is a token. A rule written only inside a
   media query, or only for dark, is incomplete.
 
+**In a list that mixes kinds, the SECTION says which kind, and hue reinforces it.**
+Owner ruling 2026-08-22, refined from a rendered four-way comparison: group by
+kind, and add the tint on top. Grouping is the charter-conforming half and it
+carries the meaning; the hue only makes the scan faster.
+
+- Results in a kind-mixing list are **sectioned under a kind heading**. That is
+  the answer to "which kind is this", and it is the answer even in greyscale.
+- On top of that, the kind's **glyph** takes a hue: boards blue, asks amber,
+  drafts violet. Glyph only, never the text, ground or border, so "colour is
+  spent once per object" holds.
+- Both apply **only where kinds are mixed**: the unified switcher, global search,
+  any index listing more than one kind. Never on a board surface.
+
+**Why this ordering matters more than it looks.** Hue alone was on the table and
+was not chosen. It would have made blue, amber and violet each mean two things
+with nothing but context to separate them, so a misread hue would have been a
+wrong answer. With the section header carrying the meaning, a misread hue costs
+nothing: the reader has already been told, and the tint is an accelerator they
+can ignore. That is the difference between an amendment that adds a second axis
+and one that adds a second *hint*.
+
+The standing question for any later colour decision is therefore narrow: a kind
+hue may appear only inside a kind-mixing list, and only where a section heading
+already states the kind. A kind hue without its heading is the bug.
+
 ## 5. Icons
 
 - **Every action button carries a glyph**, and the tooltip carries the sentence.
@@ -341,8 +366,78 @@ stating plainly, or was not thorough.
 **What it must not become.** An excuse to rebuild. A finding is a defect or a
 named deferral, never a redesign, unless the owner rules otherwise.
 
-## 18. Changelog
+## 18. Space, and what a surface owes its own chrome
 
+Two rulings from 2026-08-22, both from the owner, both earned on the help modal.
+
+**Use the space you have before you ask for more.** Owner, verbatim: *"The
+guideline of maximising space utilization without asking for more if the existing
+is sufficient for what we need to show."* Height is the scarce axis (§6), so a
+long single column that scrolls past its own reference is a failure to use the
+width that was already paid for. Two worked cases, both measured: the keyboard's
+31 shortcut rows went to two columns and its scroll fell from 637px to 233px; the
+note-tags reference moved under the example card into a column that was already
+330px short, and Hey Claude's scroll fell from 552px to 288px.
+
+The corollary bites when you reach for a grid. A grid's second row begins below
+the TALLEST cell of the first, so a table placed there clears the taller column
+instead of filling the gap beside it. The first attempt at the note-tags move did
+exactly that and ADDED 87px. Filling a column's empty space means being inside
+that column's flow, not in a later row.
+
+**A pinned reference pins flush, or it leaks.** Where a pane's top section is a
+reference the rows keep pointing at, it sticks and the rows move under it. The
+offset must be negative by the scroller's own top padding: a positive offset
+leaves that padding as a gap the pinned element cannot fill, and rows scroll
+through it, which reads as a clipped row floating above the reference. Measured:
+`top:18px` against an 18px pane padding produced a 36px band with two rows
+visible in it, where `top:-18px` produced none.
+
+Not every pane earns one. The three that do open with something you consult while
+reading (a drawn keyboard, a pipeline map); the one that does not opens with a
+playground you use rather than consult, and pinning it would eat the pane.
+
+**The chrome above the scroller is not part of this.** The modal's title bar and
+tab strip are `flex:none` siblings of the single scrolling pane, so they are
+structurally incapable of moving. Owner, verbatim: *"the modal title and tab stay
+as is without any scroll hiccups (there are none right now, don't cause a mess
+here)."* Any change inside a pane re-runs the check in
+`HELP-MODAL-SCROLL-PARITY.md`, and every tab must still measure 0. That file also
+carries the shape of a parity check that passes for the wrong reason: an early
+run reported all-zero movement on a modal that was closed, because a toggle had
+shut it. A parity check needs a positive assertion that the thing it measures
+actually happened.
+
+---
+
+## 19. Changelog
+
+- **2026-08-22, seventh round.** The §16 standing count was WRONG and a peer
+  found it. It read "zero native tooltips and 608 owned ones across the board";
+  `board.html` carried four banned `title=` attributes, two of them on the
+  verify and needs-you pills, which is the decision path itself. §13 bans the
+  pattern precisely because "the `title` attribute never fired for the owner",
+  so the options text on a decision card was being delivered by the mechanism
+  this charter says does not reach them. Converted to `data-tip`; one `title`
+  remains and is legitimate (an iframe label). Reported by vb-fable, 2026-08-22.
+  **A standing count is a measurement with a date, not a property.** This one
+  was taken after a sweep, written as though it would stay true, and was carried
+  forward twice in checkpoints without being re-run. Any count in this file is
+  re-measured before it is repeated.
+- **2026-08-22, sixth round.** §4 AMENDED: in a kind-mixing list, a section
+  heading states the kind and the kind's glyph takes a hue on top (boards blue,
+  asks amber, drafts violet). Owner ruled against a rendered four-way comparison,
+  first picking hue alone and then refining to grouping-plus-hue, which keeps the
+  meaning in the heading and leaves the tint as an accelerator. §17
+  of the drafts editor direction settled the same way: caret-line reveal ships as
+  a THIRD mode beside Edit and Preview rather than replacing the toggle, the
+  owner's reason being that a third surface helps when something is wrong.
+- **2026-08-22, fifth round.** §18 added: the space rule and the pinned-reference
+  rule, both from the owner. The help modal gained one table treatment for every
+  tab (it had carried two), a Charter tab that renders UI-CHARTER.md rather than
+  restating it, and Escape-only dismissal. `renderMd` gained lazy continuation,
+  without which every hard-wrapped list in every doc rendered as a run of
+  one-item lists.
 - **2026-08-21.** Founding set, distilled from the column-width, title-brief,
   panel, notes, selection, status-band, tag and modal-sweep rounds.
 - **2026-08-22.** Added the §7 peer-highlight rule (blue primary, green peer,
