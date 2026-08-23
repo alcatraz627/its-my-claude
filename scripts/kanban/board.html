@@ -23,7 +23,7 @@
     --on-accent:#111318;
     --shadow:0 1px 2px rgb(0 0 0/.4);
     --l0:#33bda5; --l1:#14bbc2; --l2:#33b5da; --l3:#a497ea; --l4:#c18dd8; --l5:#d686bc;
-    --violet:#9c8cf0; --grey:#8c939d;
+    --violet:#9c8cf0; --grey:#8c939d; --teal:#4fc3b8; --pink:#e07aa8;
     /* one scrim, so three overlays do not each pick a different dark */
     --scrim:rgb(0 0 0/.38);
     --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -40,7 +40,7 @@
     --on-accent:#ffffff;
     --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
     --l0:#007863; --l1:#006d77; --l2:#006e8f; --l3:#59459f; --l4:#753a8d; --l5:#883170;
-    --violet:#5b46b8; --grey:#5f666f;
+    --violet:#5b46b8; --grey:#5f666f; --teal:#0f8a7e; --pink:#b8336f;
     --scrim:rgb(16 24 40/.34);
   }
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
@@ -338,6 +338,7 @@
   .pill.verify{color:var(--green);border-color:var(--green-br);background:var(--green-bg)}
   .pill.verify.soft{color:var(--text-2);border-color:var(--border);background:none}
   .pill.needs{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg);font-weight:600}
+  .pill.seq{color:var(--text-2);gap:4px} .pill.seq.soft{color:var(--text-3)}
   .pill.tag{color:var(--text-2);border-color:var(--border);background:var(--well);font-family:var(--mono);font-size:11.5px}
   .pill.tag.quiet{color:var(--text-3);border-color:var(--border);background:none}
   .pill.prog{gap:6px;padding-left:6px;color:var(--text-2)}
@@ -769,6 +770,7 @@
   .chip.tag.on{border-color:var(--dot,var(--grey));color:var(--text)}
   .k-milestone{--dot:var(--violet)} .k-tier{--dot:var(--blue)} .k-effort{--dot:var(--amber)}
   .k-area{--dot:var(--green)} .k-risk{--dot:var(--red)} .k-plain{--dot:var(--grey)}
+  .k-priority{--dot:var(--pink)} .k-class{--dot:var(--teal)}
 
   /* ---------- goal ---------- */
   /* The card's "why", one line, sitting above everything the card claims. It
@@ -2197,6 +2199,7 @@ function progRing(done, total) {
     (p > 0 ? `<circle cx="7" cy="7" r="${r}" stroke="${p === 1 ? "var(--green)" : "var(--text-2)"}" stroke-width="2" stroke-linecap="round"
        stroke-dasharray="${(C * p).toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 7 7)"/>` : "") + `</svg>`;
 }
+const SEQ_ICON = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h5M5.2 3.8 7.4 6l-2.2 2.2M9.5 3v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const CHECK = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 L4.8 8.5 L9.5 3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 function showState(kind, msg) {
@@ -2291,6 +2294,16 @@ function tagPills(nt, shown, max) {
 const VF = { executed: "executed", cited: "cited", reasoned: "reasoned" };
 const VF_TIP = { executed: "the agent ran it and read the result", cited: "evidence quoted, not re-run", reasoned: "argued, not observed" };
 
+// Execution order on the face: "after N", with the predecessors' titles on the
+// tip, greyed once every one of them is settled so a free card reads as free.
+function afterPill(c) {
+  const ids = data?.plan?.seq?.[c.id] ?? [];
+  if (!ids.length) return "";
+  const preds = ids.map((id) => data.board.cards.find((x) => x.id === id)).filter(Boolean);
+  const open = preds.filter((p) => !ARCHIVE.has(p.lane));
+  const tip = "after: " + preds.map((p) => briefOf(p)).join(" · ");
+  return `<span class="pill seq${open.length ? "" : " soft"}" data-tip="${esc(tip)}">${SEQ_ICON}after ${open.length || preds.length}</span>`;
+}
 function cardEl(c) {
   const el = document.createElement("article");
   const hue = c.heading ? labelHue(c.heading) : null;
@@ -2320,6 +2333,7 @@ function cardEl(c) {
     needs && !isArchive ? `<span class="pill needs" data-tip="graded ${c.verify.grade}, but wants your own testing">${c.verify.grade} · needs you</span>` : "",
     tagPills(nt, shown, 2),
     c.staleReason ? '<span class="pill why" data-tip="Why this card went stale"></span>' : "",
+    afterPill(c),
   ].filter(Boolean);
   const statHTML = statParts.length ? `<span class="stat">${statParts.join("")}</span>` : "";
   el.innerHTML =

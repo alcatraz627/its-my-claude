@@ -276,6 +276,21 @@ switch (verb) {
     console.log(goal ? `goal set on ${id}: ${goal}` : `goal cleared on ${id}`);
     break;
   }
+  case "after": {
+    // Execution order: this card comes after those. Bare reads it; --clear drops it.
+    const [id, ...ids] = positional;
+    const { slug, boardDir } = boardFor(projectDir());
+    if (!id) die("usage", `kanban.sh after <card-id> <id> [<id>…]   (bare reads it; --clear drops it)`);
+    if (!ids.length && !hasFlag("clear")) {
+      const a = loadPlan(boardDir).seq?.[id] ?? [];
+      console.log(a.length ? `after: ${a.join(" ")}` : `no order on ${id}`);
+      break;
+    }
+    const after = hasFlag("clear") ? [] : ids.flatMap((x) => x.split(","));
+    await post("/api/after", { slug, cardId: id, after });
+    console.log(after.length ? `${id} after ${after.join(" ")}` : `order cleared on ${id}`);
+    break;
+  }
   case "brief": {
     const [id, text] = positional;
     if (!id || (!text && !hasFlag("clear"))) die("usage", `kanban.sh brief <card-id> "one-line summary" | --clear`);
@@ -692,14 +707,16 @@ switch (verb) {
     const plan = loadPlan(boardDir);
     const goal = plan.goals[id] ?? null;
     const tags = tagsOn(plan, id).map((t) => ({ id: t.id, kind: t.kind, name: t.name }));
+    const after = plan.seq?.[id] ?? [];
     if (hasFlag("json")) {
-      console.log(JSON.stringify({ slug, root, card: { ...card, goal, tags }, note, override: board.overrides[id] ?? null }, null, 2));
+      console.log(JSON.stringify({ slug, root, card: { ...card, goal, tags, after }, note, override: board.overrides[id] ?? null }, null, 2));
       break;
     }
     console.log(`${card.id} · ${card.lane}${card.tag ? ` · ${card.tag}` : ""}${card.heading ? ` · ${card.heading}` : ""}`);
     console.log(card.title);
     if (goal) console.log(`goal: ${goal}`);
     if (tags.length) console.log(`tags: ${tags.map((t) => `${t.kind}:${t.name}`).join(" · ")}`);
+    if (after.length) console.log(`after: ${after.join(" ")}`);
     console.log(`source: ${card.source.kind === "manual" ? "manual" : `${card.source.path}${card.source.line ? ":" + card.source.line : ""}`}${card.via ? ` · via ${card.via}` : ""}`);
     if (card.verify) console.log(`verified: ${card.verify.grade}${card.verify.needsHuman ? " + needs-human" : ""}${card.verify.note ? ` — ${card.verify.note}` : ""} (${card.verify.at})`);
     for (const s of card.subs ?? []) console.log(`  [${s.done ? "x" : " "}] ${s.title}`);
@@ -809,6 +826,7 @@ switch (verb) {
                            [--force] if that is genuinely right
   add "<title>" [--lane l] manual card (model-driven lifecycle, D4a); pass
                            [--brief "…"] whenever the title runs long
+  after <id> <id…>         execution order: this card comes after those (bare reads; --clear)
   brief <id> "<text>"      the ${BRIEF_MAX}-char summary phrase the board face shows in
                            place of a long title — a name the human can scan and
                            recognise, not a description. The full title stays as

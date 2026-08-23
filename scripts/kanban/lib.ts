@@ -411,7 +411,7 @@ export function renderSelection(dir: string, name: string, sel: Selection): stri
 // the CLI, the UI has to be able to set a tag, and one writer per file is the
 // rule the notes and selection stores already keep. Living outside board.json
 // also means a plan survives sync without mergeSync carrying it.
-export type TagKind = "milestone" | "tier" | "effort" | "area" | "risk" | "plain";
+export type TagKind = "milestone" | "priority" | "class" | "tier" | "effort" | "area" | "risk" | "plain";
 
 // A preset is a kind with a known vocabulary and a colour. `values` seeds the
 // picker; a preset never refuses an unlisted value, because a vocabulary that
@@ -429,6 +429,16 @@ export const TAG_PRESETS: TagPreset[] = [
   { kind: "effort", label: "Effort", hue: "amber",
     hint: "How much reasoning the card is worth, on the same ladder the agent already uses.",
     values: ["low", "medium", "high", "xhigh"] },
+  // priority and class were missing, so boards put P1 under "tier" (the model
+  // ladder) and had no word for what KIND of work a card is. Both are the
+  // task store's vocabulary (task.sh --priority / --class), so the board and
+  // /tasks now say the same thing.
+  { kind: "priority", label: "Priority", hue: "pink",
+    hint: "How soon. P1 is this week, P3 is when it comes up.",
+    values: ["P1", "P2", "P3"] },
+  { kind: "class", label: "Class", hue: "teal",
+    hint: "What kind of work the card is: plan it, build it, review it, fix it, or design it.",
+    values: ["plan", "build", "review", "fix", "design"] },
   { kind: "area", label: "Area", hue: "green",
     hint: "Which part of the project it touches.", values: [] },
   { kind: "risk", label: "Risk", hue: "red",
@@ -445,9 +455,10 @@ export interface Plan {
   tags: Tag[];                        // the board's vocabulary
   on: Record<string, string[]>;       // cardId → tag ids
   goals: Record<string, string>;      // cardId → why this card exists, in one line
+  seq?: Record<string, string[]>;     // cardId → the cards it comes after (execution order)
   updatedAt: string | null;
 }
-export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, updatedAt: null });
+export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, seq: {}, updatedAt: null });
 export const loadPlan = (boardDir: string): Plan =>
   readJson<Plan>(path.join(boardDir, "plan.json"), emptyPlan());
 export function savePlan(boardDir: string, plan: Plan, by: string): void {

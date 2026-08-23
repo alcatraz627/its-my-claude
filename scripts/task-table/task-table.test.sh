@@ -25,6 +25,16 @@ render | rg -q "grouped: batch \(auto" && ok "batch present: auto → batch" || 
 out=$(render); [ "$(echo "$out" | rg -n "^BATCH A" | cut -d: -f1)" -lt "$(echo "$out" | rg -n "^GATES|^BATCH B" | tail -1 | cut -d: -f1)" ] && ok "batches in natural order (gates first)" || ko "batch order"
 render | rg -q "needs you: #2" && render | rg -q "blocked: USER: rule" && ok "gate shows in the summary line AND its blocked_on text on the row" || ko "summary/blocked line"
 
+echo "== explicit lane beats prose inference =="
+$T add "answer the card that needs you, with a choice" --lane gcc --tier opus >/dev/null
+render | rg -q "needs you:.*#4\b" && ko "a gcc-lane row whose prose says 'needs you' must not be a gate" || ok "a gcc-lane row whose prose says 'needs you' is not a gate (#48, 2026-08-23)"
+$T add "owner's own item" --lane owner >/dev/null
+render | rg -q "needs you:.*#5" && ok "an owner-lane row is a gate without any phrase" || ko "owner lane → gate"
+$T add "parked thing" --goal later >/dev/null
+for i in 1 2 3; do $T update $i --tier sonnet >/dev/null; done   # the earlier rows, so only #5 and #6 lack a tier
+render | rg -q "carry no tier" && ko "deferred rows must not count in the no-tier warning" || ok "deferred and owner rows are skipped by the no-tier warning"
+$T update 4 --lane "" >/dev/null; $T done 5 6 >/dev/null
+
 echo "== flag and project view file =="
 render --group class | rg -q "grouped: class( › batch)? \(flag\)" && ok "--group overrides auto" || ko "flag"
 bash "$TT" --set-group domain | rg -q "group=domain" && ok "--set-group writes the project view" || ko "set-group"

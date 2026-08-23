@@ -210,6 +210,14 @@ json.dump({"tags":[{"id":"t1","name":"M2","kind":"milestone","createdAt":"2026-0
 PY
   got=$(bun run "$HERE/cli.ts" show "$CARD" --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;c=json.load(sys.stdin)["card"];print(c.get("goal"),"|",",".join(t["kind"]+":"+t["name"] for t in c.get("tags",[])))')
   check "show --json carries goal and tags on the card object (#49)" "$got" "prove the contract | milestone:M2"
+  # execution order rides the same store; a predecessor that is not on the board is dropped when served, kept raw here
+  python3 - "$BDIR" "$CARD" <<'PY'
+import json,sys,os
+d,c=sys.argv[1],sys.argv[2]; p=json.load(open(os.path.join(d,"plan.json"))); p["seq"]={c:["aaaaaaaaaaaa"]}
+json.dump(p, open(os.path.join(d,"plan.json"),"w"))
+PY
+  got=$(bun run "$HERE/cli.ts" show "$CARD" --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;print(",".join(json.load(sys.stdin)["card"].get("after",[])))')
+  check "show --json carries the card's execution order (after)" "$got" "aaaaaaaaaaaa"
 else
   bad "show --json carries goal and tags" "no card in the fixture board to show"
 fi

@@ -20,7 +20,7 @@
     --on-accent:#111318;
     --shadow:0 1px 2px rgb(0 0 0/.4);
     --l0:#33bda5; --l1:#14bbc2; --l2:#33b5da; --l3:#a497ea; --l4:#c18dd8; --l5:#d686bc;
-    --violet:#9c8cf0; --grey:#8c939d;
+    --violet:#9c8cf0; --grey:#8c939d; --teal:#4fc3b8; --pink:#e07aa8;
     /* one scrim, so three overlays do not each pick a different dark */
     --scrim:rgb(0 0 0/.38);
     --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -37,7 +37,7 @@
     --on-accent:#ffffff;
     --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
     --l0:#007863; --l1:#006d77; --l2:#006e8f; --l3:#59459f; --l4:#753a8d; --l5:#883170;
-    --violet:#5b46b8; --grey:#5f666f;
+    --violet:#5b46b8; --grey:#5f666f; --teal:#0f8a7e; --pink:#b8336f;
     --scrim:rgb(16 24 40/.34);
   }
 
@@ -73,6 +73,7 @@
   .chip.tag .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
   .k-milestone{--dot:var(--violet)} .k-tier{--dot:var(--blue)} .k-effort{--dot:var(--amber)}
   .k-area{--dot:var(--green)} .k-risk{--dot:var(--red)} .k-plain{--dot:var(--grey)}
+  .k-priority{--dot:var(--pink)} .k-class{--dot:var(--teal)}
 
   /* ---------- the page chrome every surface wears ---------- */
   .pagehead{display:flex;align-items:center;gap:11px;padding:13px 24px;

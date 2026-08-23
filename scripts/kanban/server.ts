@@ -435,7 +435,9 @@ const server = Bun.serve({
         const alive = new Set(bd.cards.map((c) => c.id));
         const plan = { ...rawPlan,
           on: Object.fromEntries(Object.entries(rawPlan.on).filter(([cid]) => alive.has(cid))),
-          goals: Object.fromEntries(Object.entries(rawPlan.goals ?? {}).filter(([cid]) => alive.has(cid))) };
+          goals: Object.fromEntries(Object.entries(rawPlan.goals ?? {}).filter(([cid]) => alive.has(cid))),
+          seq: Object.fromEntries(Object.entries(rawPlan.seq ?? {}).filter(([cid]) => alive.has(cid))
+            .map(([cid, ids]) => [cid, ids.filter((x) => alive.has(x))])) };
         return json({ slug, name: reg.name, root: reg.root, board: bd,
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
           selection: loadSelection(dir), plan, presets: TAG_PRESETS });
@@ -843,6 +845,29 @@ const server = Bun.serve({
         if (g) plan.goals[body.cardId!] = g; else delete plan.goals[body.cardId!];
         savePlan(dir, plan, `goal:${body.cardId}`);
         out = { ok: true, goal: g };
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
+    // Execution order. "After" is a fact about the plan, not the card, so it
+    // lives beside goals and tags and survives sync the same way. Empty clears.
+    if (req.method === "POST" && p === "/api/after") {
+      const body = (await req.json().catch(() => null)) as { slug?: string; cardId?: string; after?: string[] } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.cardId) return json({ error: "need {slug, cardId, after: [ids]}" }, 400);
+      const bd = loadBoard(dir);
+      const alive = new Set(bd.cards.map((c) => c.id));
+      if (!alive.has(body.cardId)) return json({ error: `no card ${body.cardId}` }, 404);
+      const want = (body.after ?? []).filter((x) => x !== body.cardId);
+      const missing = want.filter((x) => !alive.has(x));
+      if (missing.length) return json({ error: `no card ${missing.join(", ")} on this board` }, 404);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir);
+        plan.seq = plan.seq ?? {};
+        if (want.length) plan.seq[body.cardId!] = want; else delete plan.seq[body.cardId!];
+        savePlan(dir, plan, `after:${body.cardId}`);
+        out = { ok: true, after: want };
       });
       return json(out, out.error ? 400 : 200);
     }

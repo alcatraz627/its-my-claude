@@ -297,6 +297,13 @@ GATE = re.compile(r"USER-GATED|Blocked on the owner|owner reviews|needs you|"
                   r"owner present|phrase-gated|dedicated session", re.I)
 def gated(r):
     if meta(r, "blocked_on"): return True
+    # An explicit lane beats prose inference. A row the agent has claimed
+    # (lane gcc) is not owner-gated because its description mentions "needs
+    # you": #48 on 2026-08-23 was ABOUT needs-human cards and rendered as a
+    # gate, which hid its whole batch. Inference is for rows nobody labelled.
+    lane = (meta(r, "lane") or "").lower()
+    if lane and lane != "owner": return False
+    if lane == "owner": return True
     return bool(GATE.search(desc(r)) or GATE.search(subj(r)))
 def gate_declared(r): return bool(meta(r, "blocked_on"))
 
@@ -537,7 +544,9 @@ w(f"TASKS  ·  {d.name}  ·  {alias} ({model})  ·  {_counts}  ·  {_when}")
 w(f"  grouped: {group}" + (f" › {sub}" if sub else "") + f" ({group_src})  ·  resolved by {resolved_by}" +
   (f"  ·  needs you: " + " ".join(f"#{x['id']}" for x in gates) if gates else "") +
   (f"  ·  running: " + " ".join(f"#{x['id']}" for x in now) if now else ""))
-notier = sum(1 for x in live if not (meta_of(x, "tier") or meta_of(x, "model")))
+# owner-lane and deferred rows are not this agent's to run, so a missing tier there is not a gap
+notier = sum(1 for x in live if not (meta_of(x, "tier") or meta_of(x, "model"))
+             and (meta_of(x, "lane") or "").lower() != "owner" and not deferred(x))
 if notier: w(f"  {notier} open row(s) carry no tier (rendered '?'); set with task.sh update <id> --tier <fable|opus|sonnet|haiku|lm>")
 if view.get("_broken"): w(f"  !! view file did not parse, ignored: {view['_broken']}")
 if resolved_by.startswith("guess"):

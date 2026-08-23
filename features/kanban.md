@@ -68,6 +68,26 @@ Agents pull with `kanban.sh notes --unread --ack`, which returns one row per
 note keyed `cardId#noteId`. A `!now` on any note fires. An `@me` note never
 nags an agent.
 
+### What a card can carry, and where it lives
+
+Beyond lane and notes, a card carries the same vocabulary `/tasks` uses, so a
+board and a task store can say the same thing about the same work. All of it
+is in `plan.json` (server-owned, survives sync), read back by `show --json`:
+
+- **tags**, by kind: `milestone` · `priority` (P1 P2 P3) · `class` (plan build
+  review fix design, what KIND of work it is) · `tier` (lm gemini haiku sonnet
+  opus fable, the model lane) · `effort` · `area` · `risk` · `plain`.
+  `kanban.sh tag <id> <kind>:<name>`; a leading `-` removes.
+- **goal**: the one line on why the card exists. `kanban.sh goal <id> "…"`.
+- **after**: execution order, the cards this one comes after; the face shows
+  `after N` with their titles on the tip. `kanban.sh after <id> <id…>`.
+
+Use `priority` for P1..P3 and `tier` for the model: a board once filed P1 under
+`tier` because `priority` did not exist, and the sidebar grouped it with opus.
+When you find the board cannot hold an attribute the work needs, add the kind
+or the field here rather than bending an existing one; every agent will hit
+the same wall.
+
 ### Invariants that cost something to learn
 
 - Wiping a card's notes requires an explicit `all: true`, which only `drop`
