@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-keys="own">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>kanban</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/shared.css">
 <style>
   /* ============================================================
      kanban — v10. Product-grade skin: system UI type, crisp
@@ -12,37 +13,7 @@
      Six equal kanban columns; labels and sub-items intact.
      Read + notes only — every mutation still goes through the CLI.
      ============================================================ */
-  :root{
-    --canvas:#131417; --well:#191b1f; --card:#212329; --card-hover:#282b32;
-    --border:#2f333b; --border-2:#414651; --ring:#5b9dff;
-    --text:#e9ebee; --text-2:#a4a9b1; --text-3:#8c939d;
-    --blue:#5b9dff; --blue-bg:rgb(91 157 255/.12); --blue-br:rgb(91 157 255/.32);
-    --amber:#e8b84b; --amber-bg:rgb(232 184 75/.12); --amber-br:rgb(232 184 75/.34);
-    --green:#4bbd63; --green-bg:rgb(75 189 99/.12); --green-br:rgb(75 189 99/.30);
-    --red:#ed7666; --red-bg:rgb(237 118 102/.12); --red-br:rgb(237 118 102/.32);
-    --on-accent:#111318;
-    --shadow:0 1px 2px rgb(0 0 0/.4);
-    --l0:#33bda5; --l1:#14bbc2; --l2:#33b5da; --l3:#a497ea; --l4:#c18dd8; --l5:#d686bc;
-    --violet:#9c8cf0; --grey:#8c939d; --teal:#4fc3b8; --pink:#e07aa8;
-    /* one scrim, so three overlays do not each pick a different dark */
-    --scrim:rgb(0 0 0/.38);
-    --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
-    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
-  }
-  [data-theme="light"]{
-    --canvas:#e9ebef; --well:#f4f5f8; --card:#ffffff; --card-hover:#f7f8fa;
-    --border:#d7dae1; --border-2:#b6bcc6; --ring:#0961bb;
-    --text:#191c20; --text-2:#565d66; --text-3:#5f666f;
-    --blue:#0961bb; --blue-bg:rgb(9 97 187/.12); --blue-br:rgb(9 97 187/.26);
-    --amber:#8a5d05; --amber-bg:rgb(190 141 20/.12); --amber-br:rgb(150 108 12/.34);
-    --green:#17752f; --green-bg:rgb(26 127 55/.12); --green-br:rgb(26 127 55/.26);
-    --red:#a1271e; --red-bg:rgb(161 39 30/.12); --red-br:rgb(161 39 30/.28);
-    --on-accent:#ffffff;
-    --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
-    --l0:#007863; --l1:#006d77; --l2:#006e8f; --l3:#59459f; --l4:#753a8d; --l5:#883170;
-    --violet:#5b46b8; --grey:#5f666f; --teal:#0f8a7e; --pink:#b8336f;
-    --scrim:rgb(16 24 40/.34);
-  }
+  /* Tokens, the tooltip and the button/chip primitives live in shared.css. */
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
   ::-webkit-scrollbar{width:10px;height:10px}
   ::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:6px;border:3px solid transparent;background-clip:content-box}
@@ -397,7 +368,6 @@
   /* Everything but the stub rail is hidden at 46px — including the tint, whose
      2px would otherwise read as a stray line above the stubs. */
   #drawer.collapsed .dhead,#drawer.collapsed .dbody,#drawer.collapsed .composer,#drawer.collapsed .dtint{display:none}
-  @media (prefers-reduced-motion: reduce){ #drawer,#pop,#tip{transition:none} }
 
   /* ---------- drawer tabs ---------- */
   /* 6px of grab area, 1px of it visible: a wider hit target than the border it
@@ -573,7 +543,6 @@
   .composer textarea:focus{border-color:var(--blue);outline:none;
                            box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 15%,transparent)}
   .composer textarea::placeholder{color:var(--text-3);font-style:italic}
-  @media (prefers-reduced-motion: reduce){ .composer textarea{transition:none} }
 
   /* ---------- action feedback ---------- */
   /* Saving, reopening and restoring each look different, because they are.
@@ -586,7 +555,6 @@
   .fx-save{animation:flash-save .62s ease-out}
   .fx-open{animation:flash-open .5s ease-out}
   .fx-back{animation:flash-back .3s cubic-bezier(.32,.72,0,1)}
-  @media (prefers-reduced-motion: reduce){ .fx-save,.fx-open,.fx-back{animation:none} }
 
   /* ---------- provenance, compacted ---------- */
   /* It used to take a whole group, a heading and a paragraph to say where a
@@ -837,7 +805,6 @@
                                        color-mix(in srgb,var(--dot,var(--violet)) 7%,transparent)) var(--well);
             animation:peekin .26s cubic-bezier(.32,.72,0,1)}
   @keyframes peekin{from{opacity:0;transform:translateX(-14px);max-width:0}}
-  @media (prefers-reduced-motion: reduce){ .col.peek{animation:none} }
   .col.peek .chead h2{color:var(--dot,var(--violet));display:flex;align-items:center;gap:7px}
   .col.peek .chead .count{border-color:color-mix(in srgb,var(--dot,var(--violet)) 40%,transparent);
                           color:var(--dot,var(--violet))}
@@ -885,7 +852,6 @@
   #xarrow.on path{opacity:.55}
   #xarrow path.ink2{opacity:0}
   #xarrow.on path.ink2{opacity:.28}
-  @media (prefers-reduced-motion: reduce){ .xh-primary{animation:none} #xarrow path{transition:none} }
 
   /* "I brought you here": a found card pulses twice on a soft ease */
   @keyframes findpulse{
@@ -897,7 +863,6 @@
   }
   .found{outline:1.5px dotted var(--blue);outline-offset:5px;
          animation:findpulse 1.5s cubic-bezier(.32,.72,0,1)}
-  @media (prefers-reduced-motion: reduce){ .found{animation:none;outline-color:var(--blue)} }
 
   /* ---------- select mode ---------- */
   .card .cbox{position:absolute;top:9px;right:9px;width:18px;height:18px;border:1.5px solid var(--border-2);
@@ -939,25 +904,6 @@
   #pop .pst{font:500 11.5px/1 var(--sans);color:var(--text-3)}
   #pop .pst.unsaved{color:var(--amber)}
 
-  /* A tooltip we own. The native title= attribute was the first try and the
-     owner never saw it fire; it is also incapable of the two things this board
-     needs — a readable measure for a paragraph-long card title, and a scroll
-     cap so a 5000-char note does not become a full-screen sheet. */
-  #tip{position:fixed;z-index:90;max-width:min(460px,72vw);max-height:40vh;overflow-y:auto;
-       background:var(--card);color:var(--text);border:1px solid var(--border-2);border-radius:9px;
-       padding:9px 12px;font:400 12.5px/1.55 var(--sans);box-shadow:0 12px 34px rgb(0 0 0/.34);
-       pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .11s,transform .11s;
-       white-space:pre-wrap;overflow-wrap:anywhere;display:none}
-  #tip.on{opacity:1;transform:none}
-  /* the arrow is a rotated square clipped by the panel edge, so it inherits the
-     border and the shadow instead of needing its own */
-  #tip::after{content:"";position:absolute;width:9px;height:9px;background:var(--card);
-              border-left:1px solid var(--border-2);border-top:1px solid var(--border-2);
-              transform:rotate(45deg);left:var(--ax,18px)}
-  #tip.below::after{top:-5px}
-  #tip.above::after{bottom:-5px;transform:rotate(225deg)}
-  #tip .tiph{display:block;font:600 11.5px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
-             color:var(--text-3);margin-bottom:6px}
   #toast.err{border-color:var(--red);color:var(--red)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
          border-radius:8px;padding:9px 16px;font-size:13px;display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:3}
@@ -1102,7 +1048,7 @@
   .hcol{min-width:0}
   .hcol > table{margin-top:18px}
   @media (max-width:820px){ .hplay{grid-template-columns:1fr} }
-  .hplay .pane-l p{font:400 12.5px/1.65 var(--sans);color:var(--text-2);margin-bottom:10px}
+  .hplay .pane-l p{font:400 12.5px/1.65 var(--sans);color:var(--text-2);margin:1em 0 10px}
   .hmock{border:1px solid var(--border-2);border-radius:11px;background:var(--well);overflow:hidden}
   .hmock .mhead{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:1px solid var(--border);
                 background:var(--canvas)}
@@ -1153,7 +1099,6 @@
   .krow-lit td:first-child{border-radius:6px 0 0 6px}
   .krow-lit td:last-child{border-radius:0 6px 6px 0}
   #hKeys tr[data-key]{cursor:pointer}
-  @media (prefers-reduced-motion: reduce){ .kcap{transition:none} }
 
   /* Shared across every pane so three tabs stop each inventing their own scale:
      a group heading, a body measure, a table, a code token. */
@@ -1191,7 +1136,7 @@
   .term:first-of-type{border-top:none}
   .term .shot{border:1px solid var(--border);border-radius:8px;background:var(--well);padding:8px;align-self:start}
   .term h4{font:600 13.5px/1.3 var(--sans);color:var(--text);margin:0 0 6px;display:flex;align-items:center;gap:7px}
-  .term p{font:400 12.5px/1.6 var(--sans);color:var(--text-2);margin-bottom:8px}
+  .term p{font:400 12.5px/1.6 var(--sans);color:var(--text-2);margin:1em 0 8px}
   .term .rel{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
   .term .use{display:flex;flex-direction:column;gap:3px;font:400 12px/1.5 var(--sans)}
   .term .use span{display:flex;gap:7px}
@@ -1341,7 +1286,6 @@
   </div>
 </div>
 <svg id="xarrow" aria-hidden="true"></svg>
-<div id="tip" role="tooltip" aria-hidden="true"></div>
 
 <div id="toast" role="status"></div>
 <div id="docmodal" role="dialog" aria-modal="true" aria-label="document preview"><div class="dbox">
@@ -1439,6 +1383,7 @@
   <div class="hpane" id="hCharter"></div>
 </div></div>
 
+<script src="/shared.js"></script>
 <script>
 const slug = location.pathname.split("/")[2];
 // ?card=&note= arrives from the hub's notes view: open that card on that note
@@ -1488,9 +1433,6 @@ let data = null, flat = [], sel = -1, openId = null, openNoteId = null, dirty = 
 const $ = (id) => document.getElementById(id);
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
 // and the toggle restyles by class alone — no re-render, nothing inlined
-const applyTheme = (t) => { document.documentElement.dataset.theme = t; document.body.dataset.theme = t; localStorage.setItem("kanban-theme", t); };
-applyTheme(localStorage.getItem("kanban-theme") || "dark");
-const toggleTheme = () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 $("theme").onclick = toggleTheme;
 
 function toast(msg, ms = 1900, kind = "") { const t = $("toast"); t.textContent = msg;
@@ -2087,52 +2029,6 @@ function findCard(id) {
   return true;
 }
 
-// ---------- tooltips ----------
-// Delegated, so a re-render never orphans a listener, and driven by data-tip
-// rather than title= so nothing double-fires. data-tiph is an optional heading.
-const TIP_DELAY = 260;
-let tipTimer = null, tipFor = null;
-function placeTip(el) {
-  const t = $("tip"), r = el.getBoundingClientRect();
-  t.style.display = "block";
-  const b = t.getBoundingClientRect();
-  // below by default, above when the bottom would clip; clamped to the viewport
-  let top = r.bottom + 9, below = true;
-  if (top + b.height > innerHeight - 8) { top = Math.max(8, r.top - b.height - 9); below = false; }
-  const left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - b.width - 8));
-  t.style.top = `${top}px`;
-  t.style.left = `${left}px`;
-  t.classList.toggle("below", below); t.classList.toggle("above", !below);
-  // the arrow tracks the anchor's centre, clamped inside the panel's corners
-  const ax = Math.min(Math.max(10, r.left + r.width / 2 - left - 4.5), Math.max(10, b.width - 19));
-  t.style.setProperty("--ax", `${ax}px`);
-  t.classList.add("on"); t.setAttribute("aria-hidden", "false");
-}
-function showTip(el) {
-  const body = el.dataset.tip; if (!body) return;
-  const t = $("tip");
-  t.replaceChildren();
-  if (el.dataset.tiph) { const h = document.createElement("b"); h.className = "tiph"; h.textContent = el.dataset.tiph; t.append(h); }
-  t.append(document.createTextNode(body));
-  tipFor = el; placeTip(el);
-}
-function hideTip() {
-  clearTimeout(tipTimer); tipFor = null;
-  const t = $("tip"); t.classList.remove("on"); t.setAttribute("aria-hidden", "true");
-  setTimeout(() => { if (!tipFor) t.style.display = "none"; }, 120);
-}
-document.addEventListener("pointerover", (e) => {
-  const el = e.target.closest?.("[data-tip]");
-  if (!el || el === tipFor) return;
-  clearTimeout(tipTimer);
-  tipTimer = setTimeout(() => showTip(el), TIP_DELAY);
-});
-document.addEventListener("pointerout", (e) => {
-  const el = e.target.closest?.("[data-tip]");
-  if (el && !el.contains(e.relatedTarget)) hideTip();
-});
-addEventListener("scroll", hideTip, true);
-addEventListener("keydown", (e) => { if (e.key === "Escape") hideTip(); });
 
 // ---------- ⌘-drag panning ----------
 // The board scrolls sideways now that lanes floor at 400px, and a trackpad
@@ -2175,7 +2071,6 @@ addEventListener("pointerup", (e) => {
 const VISIT_KEY = `kanban-visit-${slug}`;
 let anchor = +localStorage.getItem(VISIT_KEY) || 0;
 const since = (iso) => anchor > 0 && Date.parse(iso) > anchor;
-const ago = (ms) => { const d = Date.now() - ms, h = d / 36e5; return h < 1 ? `${Math.max(1, Math.round(d / 6e4))}m` : h < 48 ? `${Math.round(h)}h` : `${Math.round(h / 24)}d`; };
 
 // lane state icons — the state's identity is a shape, so a label that happens
 // to be named "In progress" can never be mistaken for one
@@ -2562,16 +2457,6 @@ function renderStale() {
   } else bar.className = "notice warn";
 }
 
-// keep the varying TAIL of a path visible; the head is boilerplate. restores
-// from the full string first, so it is correct in both resize directions.
-function tailTrim(el) {
-  const full = el.title || el.textContent;
-  el.dataset.tip = full; el.removeAttribute("title"); el.textContent = full;
-  let guard = 300;
-  while (el.scrollWidth > el.clientWidth && el.textContent.length > 12 && guard--) {
-    el.textContent = "…" + el.textContent.replace(/^…/, "").slice(3);
-  }
-}
 let trimTimer = null;
 window.addEventListener("resize", () => {
   clearTimeout(trimTimer);
@@ -4408,7 +4293,7 @@ function renderSearch() {
       el.className = "bprow" + (at === spAt ? " on" : "");
       let icon = "", name = "", sub = "", meta = "";
       if (sec.kind === "q") { icon = SB_ICON.motion; name = r.label; sub = r.hint; meta = "show these"; }
-      else if (sec.kind === "card") { icon = BOARD_ICON; name = briefOf(r); sub = r.source.kind === "manual" ? "added by hand" : r.source.path; meta = LANE_NAME[r.lane]; }
+      else if (sec.kind === "card") { icon = NAV_ICON.boards; name = briefOf(r); sub = r.source.kind === "manual" ? "added by hand" : r.source.path; meta = LANE_NAME[r.lane]; }
       else if (sec.kind === "note") { icon = NOTE_ICON; name = `note #${r.i + 1}`; sub = r.n.body.replace(/\s+/g, " "); meta = briefOf(data.board.cards.find((c) => c.id === r.cid) ?? { title: r.cid }); }
       else if (sec.kind === "tag") { icon = `<i class="tdot" style="display:block;width:8px;height:8px;border-radius:50%;background:var(--dot)"></i>`; name = r.kind === "plain" ? r.name : `${r.kind}: ${r.name}`; sub = "open its peek column"; meta = `${(plan().on && Object.values(plan().on).filter((ids) => ids.includes(r.id)).length) || 0} cards`; }
       else { icon = PEN_ICON; name = "ask"; sub = r.body.replace(/\s+/g, " "); meta = r.starred ? "starred" : ""; }
@@ -4473,18 +4358,6 @@ const recentBoards = () => { try { return JSON.parse(localStorage.getItem(RECENT
 
 const STAR_ICON = (on) => `<svg width="13" height="13" viewBox="0 0 14 14" fill="${on ? "currentColor" : "none"}"><path d="m7 1.8 1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 10l-3.2 1.7.6-3.6L1.8 5.6l3.6-.5L7 1.8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 const SEARCH_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.4"/><path d="m10.6 10.6 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
-// One glyph per kind for the switcher. These are the SAME paths as NAV_ICON in
-// shared.js, and this is a copy, because board.html links neither shared.css nor
-// shared.js: it is the last fully-private page and its conversion is task #4 in
-// the previous round's pending list. Named here rather than left to be noticed,
-// so the copy is a known debt and not a discovery. BOARD_ICON below is already
-// the same duplication for the boards glyph.
-const NAVG = {
-  boards: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`,
-  asks: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.4 2.6h9.2v8.2L9.4 13.4H3.4V2.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M12.6 10.8H9.4v2.6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
-  drafts: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
-};
-const BOARD_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`;
 
 let bpBoards = [], bpAt = 0, bpRows = [];
 const isStarredBoard = (s2) => pins.some((p) => p.kind === "board" && p.ref === s2);
@@ -4576,7 +4449,7 @@ function renderBoardPick() {
       // cursor and the kind tint.
       if (sec.kind !== "boards") {
         el.className = `bprow k-${sec.kind}` + (at === bpAt ? " on" : "");
-        el.innerHTML = `<span class="bi">${NAVG[sec.kind]}</span><span class="bn"></span><span class="bp"></span>`;
+        el.innerHTML = `<span class="bi">${NAV_ICON[sec.kind]}</span><span class="bn"></span><span class="bp"></span>`;
         el.querySelector(".bn").textContent = b.name;
         el.querySelector(".bp").textContent = b.sub;
         el.onmouseenter = () => { bpAt = at; markBp(); };
@@ -4587,7 +4460,7 @@ function renderBoardPick() {
       el.className = "bprow k-boards" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
       const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
         .reduce((n, [, v]) => n + v, 0);
-      el.innerHTML = `<span class="bi">${BOARD_ICON}</span><span class="bn"></span><span class="bp"></span>` +
+      el.innerHTML = `<span class="bi">${NAV_ICON.boards}</span><span class="bn"></span><span class="bp"></span>` +
         (b.unread ? `<span class="bu">${b.unread} unread</span>` : "") +
         `<span class="bc">${open} open${b.slug === slug ? " · here" : ""}</span>` +
         `<span class="bstar${isStarredBoard(b.slug) ? " starred" : ""}" role="button">${STAR_ICON(isStarredBoard(b.slug))}</span>`;

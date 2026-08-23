@@ -179,6 +179,14 @@ One contract, no exceptions:
   panel. Related motions share a letter.
 - **Every binding appears in the help modal**, grouped by where you are when you
   press it, and a binding with a visible control shows on that control.
+- **A shared key map yields to a page that owns one.** `shared.js` binds `t` and
+  the view digits on every surface. A page with its own richer map declares it
+  with `data-keys="own"` on `<html>`, and the shared handler returns before it
+  reads the key. Without that, both handlers fire: `t` toggles twice and lands
+  back where it started, and it fires inside the overlays the page's own map
+  deliberately swallows, which is the three-layer rule above being broken by a
+  handler that never heard of it. Check: remove the attribute and `t` must stop
+  working on the board.
 
 ## 11. Data and where things live
 
@@ -419,6 +427,22 @@ actually happened.
 ---
 
 ## 19. Changelog
+
+- **2026-08-24, design system pass 1 (#61).** `board.html` links `shared.css`
+  and `shared.js` and no longer carries its own copies: the token block
+  (diffed byte-for-byte against `shared.css` before anything was deleted), the
+  tooltip layer, the icon set, `applyTheme`, `toggleTheme`, `ago`, `tailTrim`,
+  and seven local `prefers-reduced-motion` rules the shared global rule already
+  covers with `!important`. 127 lines left the file; four suites stayed at
+  2/27/9/68 and the two themes diffed with no layout shift and no palette
+  change. Two things had to be built rather than deleted: the `data-keys="own"`
+  rule in §10, and an explicit top margin on `.term p` and `.hplay .pane-l p`,
+  because `shared.css` resets `*{margin:0}` and both had been living on the UA
+  default. **G13's check was wrong in both directions** — a bare filename grep
+  is satisfied by a comment that names the files, so it passed before the work
+  (2, matching the copy note) and failed after the work was correct (3). It is
+  pinned to the attribute form now. The lesson is the one this board already
+  learned twice on 2026-08-23: a guard that agrees with itself is not a guard.
 
 - **2026-08-23, the design system.** `DESIGN-SYSTEM.md` is now the book for
   what the parts are: the neutral and semantic ladders, lane and tag hues, a

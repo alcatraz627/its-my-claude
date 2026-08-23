@@ -132,7 +132,13 @@ function pageHead({ mount, active, title, sub, onView, counts = {} }) {
 }
 
 // One key map for all three, so the entrance behaves like the board.
+// A page that already owns a richer key map says so with data-keys="own" on
+// <html> and handles t and the view digits itself. The board does: its keys are
+// suppressed while a modal, a picker or the note popover is open, and this
+// handler has no such guard, so without the opt-out t would fire twice and would
+// fire inside overlays that deliberately swallow it.
 addEventListener("keydown", (e) => {
+  if (document.documentElement.dataset.keys === "own") return;
   // optional call: a keydown whose target is the document has no .matches, and
   // the throw used to take the whole handler with it
   if (e.target.matches?.("input,textarea,[contenteditable]")) return;

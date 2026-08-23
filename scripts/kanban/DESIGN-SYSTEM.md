@@ -350,12 +350,23 @@ all of them remove a second way of doing one thing.
 | G10 | z-index unnamed | nine numbers | the §5 ladder as tokens | `rg -o "z-index:[0-9]+"` = 0 (all `var(--z-…)`) |
 | G11 | ink-only tag hues | violet, pink, teal, grey lack tint and line | give each the three-shade ladder | a priority chip's `.on` renders tinted |
 | G12 | no split / menu button | none exists; two callers arrive with #38 and Offer | define `.split` once in `shared.css` | both callers use it; a11y menu semantics |
-| G13 | board links no shared sheet or script | known copy of icons, tokens, tooltip | link both; delete copies | `rg -c "shared\.(css\|js)" board.html` = 2 |
+| G13 | board links no shared sheet or script | known copy of icons, tokens, tooltip | link both; delete copies | `rg -c 'href="/shared\.css"\|src="/shared\.js"' board.html` = 2 |
 | G14 | light theme | verified only on surfaces touched this week | the §17 pass runs both themes per element | screenshots in `REVIEW-<date>.md` |
 | G15 | silently disabled controls | template selects at 45% with no hint | hidden or a tip that says what would enable it | a11y tree: no `disabled` without `aria-description` or absence |
 | G16 | empty-state voice | "No cards in this lane" vs "Nothing yet. Write anything above…" | one voice: what is missing, then what to do | grep the three empties |
 | G17 | typed arrow in a link | "open in tab ↗" | the drawn external glyph | charter test's §5 row widened to `<a>` |
 | G18 | `.kbd` keycap vs `.k` hint | two keycap styles | one `.k` | grep |
+| G19 | the shared key map has no overlay guards | `t` is bound in both `shared.js` and `board.html`; board returns early inside five overlays, shared does not, so linking makes `t` fire twice and fire inside overlays | `data-keys="own"` on `<html>`; the shared handler returns before reading the key (charter §10) | remove the attribute and `t` must stop toggling |
+
+**G1, G9, G13 and G19 landed 2026-08-24 (pass 1, task #61).** Three effects are
+deliberate, not drift: a relative time under 90 seconds now reads in seconds
+(`shared.js`'s `ago` has a tier board's copy lacked), the switcher glyphs are
+13px rather than 14px (`NAV_ICON` is the one set), and a truncated path grows
+back when its column widens, which board's own `tailTrim` could not do although
+the comment beside it said it did. Two things had to be built rather than
+deleted: G19 below, and an explicit top margin on `.term p` and
+`.hplay .pane-l p`, because `shared.css` resets `*{margin:0}` and both had been
+living on the UA default of `1em`. Measured before and after: 12.5px either way.
 
 Order for the next agent: G1 and G13 first (they remove the duplication that
 makes every other fix two edits), then G2–G5 and G10 as a token pass with the
