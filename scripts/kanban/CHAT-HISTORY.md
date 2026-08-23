@@ -129,6 +129,10 @@ phase 3-5   → opus, after unified-surfaces phase 1
 
 ## Owner decisions (next decision page)
 
+> On the page as of 2026-08-24: `http://localhost:5197/kanban-aug24-rulings/`
+> (D2, D3, D4 there are D-ch-1, D-ch-2, D-ch-3 here). Nothing in this plan
+> gets built until they are answered.
+
 - D-ch-1: the transcript view lives on the board and the old viewer retires
   (recommended) or both stay.
 - D-ch-2: `transcript.py` as a subprocess contract (recommended) or a TS port.
