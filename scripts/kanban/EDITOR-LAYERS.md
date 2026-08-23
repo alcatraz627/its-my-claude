@@ -101,8 +101,21 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > burst and waits now, and dropping the timer turns that row red. A row that
 > cannot fail is not a test.
 >
-> Remaining: steps 3 (preview toggle), 4 (popover legend, stash, restore banner,
-> conflict notice) and 5 (`renderMd` tables then images).
+> **Step 3 built.** A preview toggle, not the drafts page's three-mode bar,
+> because three modes on a five-line note is chrome without payload. The server
+> renders it, since renderMd lives there and a second client-side parser is the
+> drift this spec exists to stop. A failed render says so in the pane; an empty
+> pane would read as "this renders to nothing".
+>
+> **Composer: exercised.** aria-pressed flips, headings, lists, code and bold
+> render, the textarea hides, pressing again restores everything.
+>
+> **Popover: wired identically, UNCONFIRMED.** Same `attachPreview` call, same
+> id pattern, but no note chip was reachable in the viewport during the session
+> that built it, so the path was never actually pressed. Not a checkmark.
+>
+> Remaining: step 4 (popover legend, stash, restore banner, conflict notice) and
+> step 5 (`renderMd` tables then images).
 
 ## Build order, with checks
 

@@ -1291,6 +1291,8 @@
     <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close"></button>
   </div>
   <div class="psub" id="popSub"></div>
+  <button type="button" class="ghost npv" id="popNotePv" data-tip="See how this note will read once it is rendered">preview</button>
+  <div class="pvpane" id="popNotePane" hidden></div>
   <textarea id="popNote" placeholder="Write the note here. ⌘↵ saves it."></textarea>
   <div class="pbar">
     <span class="pst" id="popSt"></span>
@@ -1495,7 +1497,10 @@ function bufferComposer() {
 }
 function bufferPopover(cardId, noteId) {
   const el = $("popNote");
-  if (el) { el.dataset.buffered = ""; attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` }); }
+  if (el) { el.dataset.buffered = ""; attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` });
+    // the popover is the same message as the composer, so it gets the same
+    // affordance rather than a lesser one (the spec's "adds" row)
+    attachPreview(el, "popNotePv", "popNotePane"); }
 }
 
 function mountBoardNav() {
