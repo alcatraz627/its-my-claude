@@ -429,6 +429,10 @@
   /* The choice, where the context is. The recommended option is named in
      words, not marked by colour alone (§4): "the agent's pick" reads to
      someone who cannot see the tint. */
+  .pvpane{border:1px solid var(--border);border-radius:var(--r-card);background:var(--well);
+          padding:10px 12px;font:400 var(--fs-body)/1.6 var(--sans);color:var(--text-2);
+          max-height:40vh;overflow:auto}
+  .npv{float:right;margin:-2px 0 4px}
   .askbox{margin-top:10px}
   .askbox:empty{display:none}
   .askq{font:600 var(--fs-body)/1.45 var(--sans);color:var(--text);margin-bottom:8px}
@@ -1246,6 +1250,8 @@
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
     <div class="conflict" id="dConflict"></div>
+    <button type="button" class="ghost npv" id="dNotePv" data-tip="See how this note will read once it is rendered">preview</button>
+    <div class="pvpane" id="dNotePane" hidden></div>
     <textarea id="dNote" placeholder="Leave a note. The agent reads it on its next pickup, so write it the way you would say it."></textarea>
     <div class="hint" id="dLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
     <div class="parsed" id="dTags"></div>
@@ -1452,9 +1458,40 @@ const $ = (id) => document.getElementById(id);
 // behind it, not a textarea value, so "move it" would be a restructure of that
 // page's state rather than a move. Recorded in EDITOR-LAYERS.md rather than
 // pretended.
+// Preview is a TOGGLE on these surfaces, not the drafts page's three-mode bar:
+// three modes on a five-line note is chrome without payload. The server renders
+// it, because renderMd lives there and a second client-side markdown parser is
+// the drift this spec exists to stop.
+function attachPreview(ta, btnId, paneId) {
+  const btn = document.getElementById(btnId), pane = document.getElementById(paneId);
+  if (!btn || !pane || btn.dataset.wired === "1") return;
+  btn.dataset.wired = "1";
+  btn.setAttribute("aria-pressed", "false");
+  btn.onclick = async () => {
+    const on = btn.getAttribute("aria-pressed") !== "true";
+    btn.setAttribute("aria-pressed", String(on));
+    btn.classList.toggle("on", on);
+    pane.hidden = !on; ta.hidden = on;
+    if (!on) return;
+    pane.textContent = "rendering…";
+    try {
+      const res = await fetch("/api/mdpreview", { method: "POST",
+        headers: { "content-type": "application/json" }, body: JSON.stringify({ body: ta.value }) });
+      const out = await res.json();
+      if (out.error) throw new Error(out.error);
+      pane.innerHTML = `<div class="cdoc">${out.html}</div>`;
+    } catch (e) {
+      // an empty pane would read as "this renders to nothing", which is the
+      // worse of the two wrong answers
+      pane.textContent = `Could not render that: ${e.message}`;
+    }
+  };
+}
+
 function bufferComposer() {
   const el = $("dNote");
-  if (el && openId) { el.dataset.buffered = ""; attachBuffer(el, { id: `note-${openId}` }); }
+  if (el && openId) { el.dataset.buffered = ""; attachBuffer(el, { id: `note-${openId}` });
+    attachPreview(el, "dNotePv", "dNotePane"); }
 }
 function bufferPopover(cardId, noteId) {
   const el = $("popNote");
