@@ -433,6 +433,10 @@
           padding:10px 12px;font:400 var(--fs-body)/1.6 var(--sans);color:var(--text-2);
           max-height:40vh;overflow:auto}
   .npv{float:right;margin:-2px 0 4px}
+  .pvrestore{display:flex;align-items:center;gap:7px;margin-bottom:7px;padding:6px 9px;
+             border:1px solid var(--amber-br);background:var(--amber-bg);border-radius:var(--r-control);
+             font:400 var(--fs-small)/1.4 var(--sans);color:var(--text-2)}
+  .pvrestore span{flex:1}
   .askbox{margin-top:10px}
   .askbox:empty{display:none}
   .askq{font:600 var(--fs-body)/1.45 var(--sans);color:var(--text);margin-bottom:8px}
@@ -1291,6 +1295,7 @@
     <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close"></button>
   </div>
   <div class="psub" id="popSub"></div>
+  <div class="pvrestore" id="popRestore" hidden></div>
   <button type="button" class="ghost npv" id="popNotePv" data-tip="See how this note will read once it is rendered">preview</button>
   <div class="pvpane" id="popNotePane" hidden></div>
   <textarea id="popNote" placeholder="Write the note here. ⌘↵ saves it."></textarea>
@@ -1464,6 +1469,37 @@ const $ = (id) => document.getElementById(id);
 // three modes on a five-line note is chrome without payload. The server renders
 // it, because renderMd lives there and a second client-side markdown parser is
 // the drift this spec exists to stop.
+// Losing a half-written note to a mis-click is the complaint class this exists
+// for, and the popover had no protection at all: close it and the words were
+// gone. The composer's stash is already keyed by card AND note, so this is the
+// same store called with the popover's ids, exactly as the spec says.
+//
+// A restore is OFFERED, never applied: silently replacing what is on screen
+// with something older is its own way to lose work.
+function attachStash(ta, cardId, noteId, bannerId) {
+  const banner = document.getElementById(bannerId);
+  if (!banner) return;
+  let t = null;
+  ta.addEventListener("input", () => {
+    clearTimeout(t);
+    t = setTimeout(() => writeDraft(cardId, noteId, ta.value), 350);
+  });
+  const kept = readDraft(cardId, noteId);
+  banner.hidden = !(kept && kept.trim() && kept !== ta.value);
+  if (banner.hidden) return;
+  banner.replaceChildren();
+  const txt = document.createElement("span");
+  txt.textContent = "You had unsaved words here.";
+  const use = document.createElement("button");
+  use.type = "button"; use.className = "ghost"; use.textContent = "Restore them";
+  use.onclick = () => { ta.value = kept; ta.dispatchEvent(new Event("input", { bubbles: true }));
+                        banner.hidden = true; ta.focus(); };
+  const drop = document.createElement("button");
+  drop.type = "button"; drop.className = "ghost"; drop.textContent = "Discard";
+  drop.onclick = () => { localStorage.removeItem(DRAFT_KEY(cardId, noteId)); banner.hidden = true; };
+  banner.append(txt, use, drop);
+}
+
 function attachPreview(ta, btnId, paneId) {
   const btn = document.getElementById(btnId), pane = document.getElementById(paneId);
   if (!btn || !pane || btn.dataset.wired === "1") return;
@@ -1498,6 +1534,7 @@ function bufferComposer() {
 function bufferPopover(cardId, noteId) {
   const el = $("popNote");
   if (el) { el.dataset.buffered = ""; attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` });
+    attachStash(el, cardId, noteId, "popRestore");
     // the popover is the same message as the composer, so it gets the same
     // affordance rather than a lesser one (the spec's "adds" row)
     attachPreview(el, "popNotePv", "popNotePane"); }

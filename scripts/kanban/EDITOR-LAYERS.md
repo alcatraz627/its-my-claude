@@ -131,7 +131,17 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > image is missing" when the true answer is "there is nowhere to resolve this
 > from".
 >
-> Remaining: step 4 (popover legend, stash, restore banner, conflict notice).
+> **Step 4, the half that matters.** The popover had NO protection: close it and
+> the words were gone, which is the complaint class the spec calls #1. The
+> composer's stash is already keyed by card AND note, so this is the same store
+> called with the popover's ids, exactly as the spec said it would be.
+>
+> A restore is OFFERED, never applied. Silently replacing what is on screen with
+> something older is its own way to lose work. Exercised: type half a sentence,
+> Escape out the way a mis-click does, reopen, the banner appears, the textarea
+> is NOT silently overwritten, Restore puts it back, Discard forgets it.
+>
+> Remaining: the popover legend and the conflict notice.
 
 ## Build order, with checks
 
