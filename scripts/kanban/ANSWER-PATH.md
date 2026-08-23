@@ -94,7 +94,18 @@ by the server for notes; the answer is the owner's, so it goes the owner's way
 > every reader still sees one object and no caller touches `plan.answers`
 > directly. `seenAt` is written once and a later defer does not move it.
 >
-> Remaining: step 4, the drawer block, the face pill and the hub count.
+> **Step 4 built the same day.** The drawer block, the face pill and the count.
+> Two collisions the plan's keyboard line would have caused, resolved the way
+> the plan itself scopes them: the board already spends `1`-`9` on "jump to that
+> tab" and `l` on "next lane", so the ask's keys live on the block and fire only
+> when focus is inside it. Verified both ways: `2` inside the block picks option
+> two, `2` outside still means what it always meant.
+>
+> One wording fix caught by looking at it rather than by a test. The face read
+> `seen · later` as soon as the drawer opened, which claims the owner deferred
+> when all they did was look. "Later" is something they SAY; opening is not
+> saying it. Three labels now, for three states: `needs you · a choice`,
+> `needs you · seen`, `seen · later`, then `answered · <the pick>`.
 
 ## Sequence (build order, each with its check)
 

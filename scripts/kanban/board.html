@@ -426,6 +426,27 @@
   .ghead .gval{font:500 var(--fs-small)/1 var(--mono);letter-spacing:0;text-transform:none;color:var(--text-2)}
   /* verification is a CLAIM, not metadata: it gets a container you can be
      skeptical at — the grade, the agent's own words, and who said them */
+  /* The choice, where the context is. The recommended option is named in
+     words, not marked by colour alone (§4): "the agent's pick" reads to
+     someone who cannot see the tint. */
+  .askbox{margin-top:10px}
+  .askbox:empty{display:none}
+  .askq{font:600 var(--fs-body)/1.45 var(--sans);color:var(--text);margin-bottom:8px}
+  .askopts{display:flex;flex-direction:column;gap:2px;border:none;padding:0;margin:0 0 9px}
+  .askopt{display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-radius:var(--r-control);
+          cursor:pointer;transition:background var(--t-fast)}
+  .askopt:hover{background:var(--well)}
+  .askopt input{margin:2px 0 0;accent-color:var(--blue);flex:none}
+  .askopt .ao{font:400 var(--fs-body)/1.45 var(--sans);color:var(--text-2)}
+  .askopt .arec{font:600 var(--fs-caption)/1 var(--sans);letter-spacing:.04em;text-transform:uppercase;
+                color:var(--blue);background:var(--blue-bg);border:1px solid var(--blue-br);
+                border-radius:var(--r-pill);padding:2px 7px;margin-left:6px;white-space:nowrap}
+  .asktext{width:100%;margin-bottom:9px}
+  .askacts{display:flex;align-items:center;gap:7px}
+  .askacts .asp{flex:1}
+  .askstate{font:400 var(--fs-small)/1.4 var(--sans);color:var(--text-3)}
+  .askdone{font:400 var(--fs-body)/1.5 var(--sans);color:var(--text-2)}
+  .askdone b{color:var(--text);font-weight:600}
   .claim{border:1px solid var(--border);border-radius:var(--r-panel);background:var(--well);padding:12px 14px;display:flex;flex-direction:column;gap:9px}
   .claim .crow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .claim .cq{font-size:var(--fs-lead);line-height:1.5;color:var(--text)}
@@ -1159,6 +1180,7 @@
     <div class="grp" id="dClaimWrap">
       <div class="ghead">What the agent claims</div>
       <div class="claim" id="dClaim"></div>
+      <div class="askbox" id="dAsk"></div>
     </div>
     <div class="grp" id="dSubsWrap">
       <div class="ghead">Sub-items<span class="gsp"></span><span class="gval" id="dSubsCount"></span></div>
@@ -2193,7 +2215,19 @@ function cardEl(c) {
   const statParts = [
     subs.length ? `<span class="pill prog" data-tip="Checkboxes nested under this card in its source document">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "",
     c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" data-tip="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? " — " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
-    needs && !isArchive ? `<span class="pill needs" data-tip="graded ${c.verify.grade}, but wants your own testing">${c.verify.grade} · needs you</span>` : "",
+    needs && !isArchive ? (() => {
+      const a = askOn(c), st = askStateOf(a);
+      if (st === "answered") {
+        const pick = a.answer.pick === null || a.answer.pick === undefined
+          ? (a.answer.text ?? "answered") : a.options[a.answer.pick];
+        return `<span class="pill verify" data-tip="You answered this: ${esc(pick)}">answered · ${esc(String(pick).slice(0, 28))}</span>`;
+      }
+      // "later" is a thing the owner SAID; merely having opened it is not that.
+      // Collapsing the two would report a decision they never made.
+      if (a?.deferredAt) return `<span class="pill needs" data-tip="You kept this one for later">seen · later</span>`;
+      if (st === "seen") return `<span class="pill needs" data-tip="You have opened this one and not answered yet">needs you · seen</span>`;
+      return `<span class="pill needs" data-tip="${a ? "The agent put a choice on this card and you have not opened it" : `graded ${c.verify.grade}, but wants your own testing`}">${a ? "needs you · a choice" : `${c.verify.grade} · needs you`}</span>`;
+    })() : "",
     tagPills(nt, shown, 2),
     c.staleReason ? '<span class="pill why" data-tip="Why this card went stale"></span>' : "",
     afterPill(c),
@@ -2343,7 +2377,7 @@ function renderSummary() {
   const by = (k) => cards.filter((c) => c.lane === k);
   const open = cards.length - by("done").length - by("stale").length;
   const nblk = by("blocked").length;
-  const needs = cards.filter((c) => c.verify?.needsHuman).length;
+  const needs = cards.filter((c) => c.verify?.needsHuman && askStateOf(askOn(c)) !== "answered").length;
   const syncedAt = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
   const staleSync = syncedAt && Date.now() - syncedAt > 36e5 * 6;
 
@@ -3507,6 +3541,7 @@ function openDrawer(id, wantNoteId, opts = {}) {
       (v.note ? `<div class="cq">“${esc(v.note)}”</div>` : "") +
       `<div class="cwho">${VF_TIP[v.grade] || ""}${v.at ? " · " + ago(Date.parse(v.at)) + " ago" : ""}${c.via ? " · session <code>" + esc(c.via) + "</code>" : ""}</div>`;
   }
+  renderAsk(c);
 
   $("dSubsWrap").style.display = subs.length ? "" : "none";
   $("dSubsCount").textContent = subs.length ? `${done}/${subs.length} done` : "";
@@ -3605,6 +3640,131 @@ function setDrawerWidth(px, persist = true) {
     if ($("drawer").classList.contains("sized") && cur > DW_MAX()) setDrawerWidth(DW_MAX());
   });
 })();
+
+// ---------- the choice on a card (#48) ----------
+// The agent's half rides on the card, the owner's half in plan.answers; askOn()
+// is the client's askOf(). Nothing else reads plan.answers directly.
+const askOn = (c) => c?.verify?.ask ? { ...c.verify.ask, ...((plan().answers ?? {})[c.id] ?? {}) } : null;
+const askStateOf = (a) => !a ? null : a.answer ? "answered" : (a.seenAt || a.deferredAt) ? "seen" : "unseen";
+
+async function postAnswer(cardId, body) {
+  const res = await fetch("/api/answer", { method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ slug, cardId, ...body }) });
+  const out = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+  if (!res.ok || out.error) { toast(out.error ?? "could not save that", true); return null; }
+  // keep the client's copy honest rather than re-fetching the whole board
+  const p = plan(); p.answers = p.answers ?? {}; p.answers[cardId] = { ...(p.answers[cardId] ?? {}), ...out };
+  delete p.answers[cardId].ok; delete p.answers[cardId].state;
+  return out;
+}
+
+function renderAsk(c) {
+  const box = $("dAsk"); if (!box) return;
+  const a = askOn(c);
+  if (!a) { box.replaceChildren(); return; }
+  const state = askStateOf(a);
+  box.replaceChildren();
+
+  if (state === "answered") {
+    const done = document.createElement("div");
+    done.className = "askdone";
+    const chosen = a.answer.pick === null || a.answer.pick === undefined
+      ? "no option" : a.options[a.answer.pick];
+    done.innerHTML = `<b></b>`;
+    done.querySelector("b").textContent = chosen;
+    if (a.answer.text) done.append(document.createTextNode(` — ${a.answer.text}`));
+    const change = document.createElement("button");
+    change.type = "button"; change.className = "ghost"; change.textContent = "Change";
+    change.dataset.tip = "Answer it differently";
+    change.onclick = () => { const p = plan(); delete p.answers[c.id].answer; renderAsk(c); };
+    const acts = document.createElement("div"); acts.className = "askacts";
+    acts.append(change);
+    box.append(done, acts);
+    return;
+  }
+
+  if (a.question) { const q = document.createElement("div"); q.className = "askq";
+    q.textContent = a.question; box.append(q); }
+  const group = document.createElement("fieldset");
+  group.className = "askopts";
+  group.setAttribute("role", "radiogroup");
+  group.setAttribute("aria-label", a.question || "the agent's question");
+  a.options.forEach((opt, i) => {
+    const row = document.createElement("label");
+    row.className = "askopt";
+    const input = document.createElement("input");
+    input.type = "radio"; input.name = `ask-${c.id}`; input.value = String(i);
+    const txt = document.createElement("span"); txt.className = "ao"; txt.textContent = opt;
+    row.append(input, txt);
+    if (a.rec === i) {
+      const rec = document.createElement("span");
+      rec.className = "arec"; rec.textContent = "the agent's pick";
+      // named, not just tinted, so the recommendation survives a colour-blind read
+      input.setAttribute("aria-describedby", `arec-${c.id}`);
+      rec.id = `arec-${c.id}`;
+      row.append(rec);
+    }
+    group.append(row);
+  });
+  box.append(group);
+
+  const text = document.createElement("input");
+  text.type = "text"; text.className = "asktext"; text.id = "dAskText";
+  text.placeholder = "or say something else — that counts as the answer";
+  text.setAttribute("aria-label", "answer in your own words");
+  box.append(text);
+
+  const acts = document.createElement("div"); acts.className = "askacts";
+  const send = document.createElement("button");
+  send.type = "button"; send.className = "accent"; send.id = "dAskSend";
+  send.innerHTML = `Answer <span class="k">⌘↵</span>`;
+  send.dataset.tip = "Record your answer on this card (⌘↵)";
+  send.onclick = async () => {
+    const picked = group.querySelector("input:checked");
+    if (!picked && !text.value.trim()) return toast("Pick one, or say something in the box", true);
+    const out = await postAnswer(c.id, { pick: picked ? Number(picked.value) : null,
+                                         ...(text.value.trim() ? { text: text.value.trim() } : {}) });
+    if (out) { toast("Answered"); renderAsk(c); render(); }
+  };
+  const later = document.createElement("button");
+  later.type = "button"; later.className = "ghost"; later.textContent = "Later";
+  later.dataset.tip = "Keep it, say you have seen it and not decided (l)";
+  later.onclick = async () => {
+    const out = await postAnswer(c.id, { defer: true });
+    if (out) { toast("Kept for later"); renderAsk(c); render(); }
+  };
+  const st = document.createElement("span");
+  st.className = "askstate";
+  st.textContent = a.deferredAt ? "you kept this for later" : a.seenAt ? "seen, not answered" : "";
+  acts.append(send, later, Object.assign(document.createElement("span"), { className: "asp" }), st);
+  box.append(acts);
+
+  // Keys, scoped to focus inside this block on purpose. The board already
+  // spends 1-9 on "jump to that tab" and l on "next lane", so an ask that
+  // claimed them globally would take two working bindings away. Focused-only
+  // is also what the plan asked for, and it means the digits read as "pick
+  // option n" exactly where that is the obvious meaning.
+  box.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") return;                       // Esc still steps out (§10)
+    if (e.metaKey || e.ctrlKey) {
+      if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); send.click(); }
+      return;
+    }
+    if (e.target === text) return;                        // typing is typing
+    const n = Number(e.key);
+    if (Number.isInteger(n) && n >= 1 && n <= a.options.length) {
+      const input = group.querySelectorAll("input")[n - 1];
+      input.checked = true; input.focus();
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+    if (e.key === "l") { e.preventDefault(); e.stopPropagation(); later.click(); }
+  });
+
+  // opening the drawer on an unseen ask is the cheapest honest signal the board
+  // can give an agent: the owner cannot have decided without seeing it
+  if (state === "unseen") postAnswer(c.id, { seen: true }).then((o) => { if (o) render(); });
+}
 
 function openHelp() {
   if ($("help").style.display === "flex") return closeHelp();
