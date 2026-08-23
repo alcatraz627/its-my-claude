@@ -802,6 +802,21 @@
   .col:hover .chead .cmenu,.chead .cmenu:focus-visible,.chead .cmenu.on{opacity:1}
   .chead .cmenu:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   /* the properties card. Built to take more rows than it has today. */
+  /* Density is three values, not a slider: the middle one is what the board
+     already looked like, so nobody has to find their way back to it. */
+  .dens-compact .card{padding:7px 11px 6px}
+  .dens-compact .card .pills,.dens-compact .card .chips,.dens-compact .card .foot .src{display:none}
+  .dens-compact .card .t{font:500 var(--fs-body)/1.35 var(--sans)}
+  .dens-full .card .cfirst{display:block}
+  .card .cfirst{display:none;font:400 var(--fs-small)/1.5 var(--sans);color:var(--text-3);
+                margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* A folded lane keeps its head, its count and its amber. It narrows rather
+     than vanishing, because "where did Done go" is the failure hide-lane has
+     and collapse does not (§18). */
+  .col.folded{min-width:0;width:210px;flex:0 0 210px}
+  .col.folded .cards{display:none}
+  .col.folded .colgrip{display:none}
+  .col.folded .chead{border-bottom:none}
   .colcard{position:absolute;z-index:var(--z-lanepop);min-width:236px;background:var(--canvas);
            border:1px solid var(--border-2);border-radius:var(--r-panel);padding:12px 13px;
            box-shadow:0 18px 44px rgb(0 0 0/.34);display:none;flex-direction:column;gap:9px}
@@ -1705,6 +1720,48 @@ function syncPopPick() {
 // keeps one lane from eating the row.
 const COL_DEFAULT = 400, COL_MIN = 260, COL_MAX = 900;
 const colKey = (lane) => `kanban-colw-${slug}-${lane}`;
+
+// A column setting is a per-lane VIEW preference the owner holds across visits.
+// Anything that changes the data, or that applies to the whole board, belongs
+// elsewhere — that is the rule the plan set and the reason hide-lane and the
+// second length knob are not here. Width keeps its own key because it already
+// had one; the rest ride together so "reset this lane" is one delete.
+const SORTS = { updated: "Last touched", created: "Newest first", title: "Title",
+                tag: "Milestone first", source: "Written by hand first" };
+const DENSITIES = { compact: "Compact", normal: "Normal", full: "Full" };
+const colpKey = (lane) => `kanban-colp-${slug}-${lane}`;
+const colPref = (lane) => { try { return JSON.parse(localStorage.getItem(colpKey(lane))) ?? {}; } catch { return {}; } };
+function setColPref(lane, patch) {
+  const next = { ...colPref(lane), ...patch };
+  for (const k of Object.keys(next)) if (next[k] == null) delete next[k];
+  if (Object.keys(next).length) localStorage.setItem(colpKey(lane), JSON.stringify(next));
+  else localStorage.removeItem(colpKey(lane));
+  render();
+}
+const sortOf = (lane) => colPref(lane).sort ?? "updated";
+const densityOf = (lane) => colPref(lane).density ?? "normal";
+const collapsedOf = (lane) => !!colPref(lane).collapsed;
+
+// One function decides lane order for the board AND for the c digest, so the
+// digest reads the way the board looks rather than the way the store happens
+// to hold it.
+function sortLane(cards, lane) {
+  const ts = (v) => Date.parse(v || 0) || 0;
+  const cmp = {
+    updated: (a, b) => ts(b.updatedAt) - ts(a.updatedAt),
+    created: (a, b) => ts(b.createdAt) - ts(a.createdAt),
+    title: (a, b) => briefOf(a).localeCompare(briefOf(b), undefined, { sensitivity: "base" }),
+    // a milestone is the coarsest thing a card can carry, so it sorts first and
+    // everything untagged falls to the end rather than to the front
+    tag: (a, b) => {
+      const m = (c) => tagsOnCard(c.id).find((t) => t.kind === "milestone")?.name ?? "\uffff";
+      return m(a).localeCompare(m(b)) || ts(b.updatedAt) - ts(a.updatedAt);
+    },
+    source: (a, b) => (a.source?.kind === "manual" ? 0 : 1) - (b.source?.kind === "manual" ? 0 : 1)
+                      || ts(b.updatedAt) - ts(a.updatedAt),
+  };
+  return [...cards].sort(cmp[sortOf(lane)] ?? cmp.updated);
+}
 const colWidth = (lane) => +localStorage.getItem(colKey(lane)) || 0;
 function applyColWidth(el, lane) {
   const w = colWidth(lane);
@@ -1764,8 +1821,20 @@ function openColCard(lane, wrap, btn) {
     `<div class="crow"><span class="ck">Cards in this lane</span><span class="cv">${cards}</span></div>` +
     `<div class="crow"><span class="ck">Width</span><span class="cv" id="ccw">${w}px</span></div>` +
     `<input type="range" id="ccr" min="${COL_MIN}" max="${COL_MAX}" step="10" value="${w}" aria-label="lane width">` +
-    `<div class="crow"><span class="ck">Card title</span><span class="cv">${BRIEF_MAX} chars</span></div>` +
-    `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset to ${COL_DEFAULT}px</button>` +
+    `<div class="crow"><span class="ck">Sort <kbd>s</kbd></span></div>` +
+    `<div class="seg" id="ccsort" role="radiogroup" aria-label="sort this lane">` +
+      Object.entries(SORTS).map(([k, v]) =>
+        `<button type="button" role="radio" data-v="${k}" aria-checked="${sortOf(lane) === k}"` +
+        ` class="${sortOf(lane) === k ? "on" : ""}">${v}</button>`).join("") + `</div>` +
+    `<div class="crow"><span class="ck">Density <kbd>d</kbd></span></div>` +
+    `<div class="seg" id="ccdens" role="radiogroup" aria-label="card density in this lane">` +
+      Object.entries(DENSITIES).map(([k, v]) =>
+        `<button type="button" role="radio" data-v="${k}" aria-checked="${densityOf(lane) === k}"` +
+        ` class="${densityOf(lane) === k ? "on" : ""}">${v}</button>`).join("") + `</div>` +
+    `<div class="crow"><span class="ck">Fold this lane <kbd>c</kbd></span>` +
+      `<button type="button" class="ghost" id="cccol" aria-pressed="${collapsedOf(lane)}">` +
+      `${collapsedOf(lane) ? "Unfold" : "Fold"}</button></div>` +
+    `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset this lane</button>` +
     `<button type="button" id="ccdone">Done</button></div>`;
   document.body.appendChild(card);
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
@@ -1774,12 +1843,45 @@ function openColCard(lane, wrap, btn) {
   btn.classList.add("on");
   const rng = card.querySelector("#ccr");
   rng.oninput = () => { card.querySelector("#ccw").textContent = `${setColWidth(lane, +rng.value)}px`; };
+  // one segmented control per lever, and each one re-renders the board rather
+  // than trying to patch the lane in place
+  const wireSeg = (id, key) => card.querySelector(id).addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-v]"); if (!b) return;
+    setColPref(lane, { [key]: b.dataset.v === (key === "sort" ? "updated" : "normal") ? null : b.dataset.v });
+    card.querySelectorAll(`${id} button`).forEach((x) => {
+      const on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-checked", String(on));
+    });
+  });
+  wireSeg("#ccsort", "sort");
+  wireSeg("#ccdens", "density");
+  const colBtn = card.querySelector("#cccol");
+  colBtn.onclick = () => {
+    const now = !collapsedOf(lane);
+    setColPref(lane, { collapsed: now || null });
+    colBtn.textContent = now ? "Unfold" : "Fold";
+    colBtn.setAttribute("aria-pressed", String(now));
+  };
   card.querySelector("#ccreset").onclick = () => {
     resetColWidth(lane);
-    rng.value = String(Math.round(document.getElementById(`lane-${lane}`).getBoundingClientRect().width));
-    card.querySelector("#ccw").textContent = `${rng.value}px`;
-    toast("Lane width reset");
+    localStorage.removeItem(colpKey(lane));
+    render();
+    closeColCard();
+    toast(`${LANE_NAME[lane]} back to its defaults`);
   };
+  // s, d and c only while this popover is open, so the board keeps its own
+  card.addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const cycle = (id, map, key) => {
+      const ks = Object.keys(map), cur = key === "sort" ? sortOf(lane) : densityOf(lane);
+      const next = ks[(ks.indexOf(cur) + 1) % ks.length];
+      card.querySelector(`${id} button[data-v="${next}"]`).click();
+      e.preventDefault(); e.stopPropagation();
+    };
+    if (e.key === "s") cycle("#ccsort", SORTS, "sort");
+    else if (e.key === "d") cycle("#ccdens", DENSITIES, "density");
+    else if (e.key === "c") { colBtn.click(); e.preventDefault(); e.stopPropagation(); }
+  });
+  card.tabIndex = -1; card.focus();
   card.querySelector("#ccdone").onclick = closeColCard;
   setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
 }
@@ -2246,6 +2348,9 @@ function cardEl(c) {
       </span>${statHTML}
     </div>` +
     (needs && isArchive ? `<div class="pills keep"><span class="pill needs" data-tip="The agent graded this and still wants you to test it">Needs you</span></div>` : "") +
+    // full density adds the claim's first line, which is the one thing a
+    // reader wants that the face does not already carry
+    `<div class="cfirst"></div>` +
     `<div class="foot"><span class="src"></span>` +
     (note && !line && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
       ? `<span class="waiting" data-tip="Written after the agent last read this board's notes, so it has not been picked up yet">awaiting pickup</span>` : "") +
@@ -2309,6 +2414,11 @@ function cardEl(c) {
   box.onkeydown = (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); e.stopPropagation(); toggleSel("card", c.id); } };
   if (isPickedCard(c.id)) { el.classList.add("picked"); box.innerHTML = PICK_ICON; box.setAttribute("aria-checked", "true"); }
 
+  // the claim's first line, shown only where full density asks for it. The
+  // note is the context an agent wrote about its own grade, so it is the
+  // most useful sentence a card can carry without opening it.
+  const first = (c.verify?.note ?? "").split("\n")[0].trim();
+  if (first) el.querySelector(".cfirst").textContent = first;
   const srcEl = el.querySelector(".src");
   srcEl.textContent = tailPath(sp); srcEl.dataset.tip = sp;
   el.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
@@ -2898,13 +3008,18 @@ function render() {
 
   flat = [];
   const colEl = (lane) => {
-    const cardsIn = by(lane);
+    const cardsIn = sortLane(by(lane), lane);
     // an empty column still renders — "nothing is active" must be visible.
     // only an empty stale column pays no layout.
     if (!cardsIn.length && lane === "stale") return null;
     const collapsible = lane === "stale";
     const wrap = document.createElement(collapsible ? "details" : "section");
-    wrap.className = "col" + (lane === "blocked" || lane === "active" ? " attn" : "") + (ARCHIVE.has(lane) ? " archive" : "");
+    // a collapsed lane still shows its head and its count, never just a
+    // chevron: §18's space rule applied to a lane, not a disappearing act
+    const folded = collapsedOf(lane);
+    wrap.className = "col" + (lane === "blocked" || lane === "active" ? " attn" : "")
+      + (ARCHIVE.has(lane) ? " archive" : "") + (folded ? " folded" : "")
+      + ` dens-${densityOf(lane)}`;
     wrap.id = `lane-${lane}`;
     const head = document.createElement(collapsible ? "summary" : "div");
     head.className = "chead";
@@ -2924,7 +3039,9 @@ function render() {
     const list = document.createElement("div");
     list.className = "cards";
     if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this lane. Drag one here to move it.</div>`;
-    cardsIn.forEach((c) => list.appendChild(cardEl(c)));
+    // a folded lane builds no cards at all: the point is the space, and the
+    // filter still counts them because the count comes from cardsIn above
+    if (!folded) cardsIn.forEach((c) => list.appendChild(cardEl(c)));
     wrap.appendChild(list);
     return wrap;
   };

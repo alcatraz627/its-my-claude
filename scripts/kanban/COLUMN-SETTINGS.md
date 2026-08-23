@@ -51,6 +51,23 @@ rows where there are three, one of which did nothing.
 - Persistence: reload keeps all three; `Reset this lane` clears all three keys.
 - §14 round, both themes.
 
+> **Built 2026-08-24 (#38), the per-lane half.** Sort (five orders), Density
+> (three values), Fold and Reset, all in the lane popover, all per lane in
+> localStorage under one key so Reset is one delete. `sortLane()` is the single
+> function the plan asked for. Checks run: sorted by title the lane lists
+> alphabetically; compact hides tags and source and keeps title and age; full
+> shows the claim's first line; a folded lane keeps its head, its count and its
+> width floor and builds no cards; all three survive a reload; Reset clears the
+> three keys AND the width key together. Both themes.
+>
+> `s`, `d` and `c` are bound ON THE POPOVER, not on the board, because the
+> board already spends `c` on "copy status digest". A key that works only where
+> its control is visible is the §10 three-layer rule, not a compromise.
+>
+> **Remaining: the board-settings dropdown** and its divergence chips (the D2a
+> note). That is where G12's split button finally gets a real caller, which is
+> why it was not built speculatively in pass 3.
+
 ## Ruled, 2026-08-23 (decision page kanban-plans-round-2)
 
 D1a, D2a, and this note, verbatim: "All of this, plus also add to navbar a
