@@ -355,7 +355,7 @@ all of them remove a second way of doing one thing.
 | G1 | the token block is duplicated in `board.html` | two identical 30-line blocks, hand-synced twice this week | board links `shared.css`; delete its block | `rg -c -- "--canvas:" board.html` = 0 |
 | G2 | radius drift | 15 values on the board | the five-step ladder as tokens (`--r-inner/-control/-card/-panel/-round`) | `rg -o "border-radius:[0-9.]+px"` yields only ladder values |
 | G3 | type scale drift | 14 sizes | the seven steps as tokens (`--fs-micro` … `--fs-display`) | same grep on `font(-size)?:` |
-| G4 | four focus recipes | 2px ring + three glows | one ring; one glow on the writing surface | `rg -c "0 0 0 [0-9]px"` = 1 |
+| G4 | four focus recipes | 2px ring + three glows | one ring; one glow on the writing surface, `var(--focus-glow)` | `rg -c 'var\(--focus-glow\)' board.html` = 4, and no raw `color-mix` glow outside the three named effects |
 | G5 | seven transition durations | .1 … .22 | `--t-fast: .12s`, `--t-move: .22s` | `rg -o "\.[0-9]+s"` yields two |
 | G6 | `.primary` duplicates `.accent` | two solid variants, 28 vs 30 px | drop `.primary`, one height | `rg -c "\.primary" board.html` = 0 |
 | G7 | `.icon` vs `.ico` | two icon-button names | keep `.icon`, hub adopts it | `rg -c "\.ico\b"` = 0 |
@@ -370,8 +370,22 @@ all of them remove a second way of doing one thing.
 | G16 | empty-state voice | "No cards in this lane" vs "Nothing yet. Write anything above…" | one voice: what is missing, then what to do | grep the three empties |
 | G17 | typed arrow in a link | "open in tab ↗" | the drawn external glyph | charter test's §5 row widened to `<a>` |
 | G18 | `.kbd` keycap vs `.k` hint | two keycap styles | one `.k` | grep |
+| G21 | a focused card and a selected card look identical | `.card:focus-visible` and `.card.sel` share one `0 0 0 2px` shadow, so keyboard focus is indistinguishable from selection, and `x` selects whatever the ring is on | give focus the §3.3 outline and leave the shadow to selection | tab to a card without selecting it; the two states must differ |
 | G20 | the toast is below every overlay | `#toast` is z 3, `#help` is 50, so a toast fired while any overlay is open is invisible; measured live, and it predates this work | either lift the toast above the modal tier, or adopt a corrected §5 ladder wholesale | open the help modal, fire a toast, see it |
 | G19 | the shared key map has no overlay guards | `t` is bound in both `shared.js` and `board.html`; board returns early inside five overlays, shared does not, so linking makes `t` fire twice and fire inside overlays | `data-keys="own"` on `<html>`; the shared handler returns before reading the key (charter §10) | remove the attribute and `t` must stop toggling |
+
+**G2, G3 and G4 landed 2026-08-24 (pass 2b, task #62):** 84 radius values onto
+five steps plus the hairline, 171 type values onto seven steps, and the four
+focus glows onto one `--focus-glow`. Two consequences worth knowing. `body` was
+13px, half a pixel off the 13.5 step, so it collapsed onto it and roughly 220
+inheriting elements grew half a pixel; that is the drift this ladder exists to
+remove, and nothing reflowed. And `#help`, `#pop`, `#docmodal` and the three
+pickers lost 2 to 4px of corner, which is the only change visible without a
+ruler; the help modal re-ran its scroll-parity check on all five tabs and holds.
+**G4's own check was too broad** in the same way G13's was: `0 0 0 [0-9]px`
+counts every ring-shaped shadow, so it swept in the `fx-save` and `.found`
+keyframes this book says must stay. Rewritten to name the token. G21 came out
+of doing it.
 
 **G5 and G10 landed 2026-08-24 (pass 2a, task #62):** the ladders are tokens in
 `shared.css`, 59 transition durations collapsed to `--t-fast` / `--t-move` (the

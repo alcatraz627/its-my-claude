@@ -59,7 +59,7 @@
     --t-fast:.12s; --t-move:.22s; --ease-move:cubic-bezier(.32,.72,0,1);
 
     /* focus: one ring everywhere, one glow and only on a writing surface */
-    --focus-glow-a:12%;
+    --focus-glow:0 0 0 3px color-mix(in srgb,var(--ring) 12%,transparent);
 
     /* z. These are the measured stack, named, NOT §5's proposed six layers:
        that table puts help, the doc viewer, the toast and the tooltip all on

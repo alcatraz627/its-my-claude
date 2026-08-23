@@ -94,3 +94,19 @@ Taxonomy fell from 2984px of scroll to 2704px, because every term heading was
 carrying about 18px of browser-default `h4` margin that nobody had set. Recorded
 here because a scroll range changing is exactly the kind of side effect this
 check exists to notice, and in this case it was the intended one.
+
+## Re-run 2 — after design-system pass 2b (radius ladder), 2026-08-24
+
+`#help .box` went from a 12px corner to `var(--r-panel)` (10px). Nothing else in
+the modal changed. All five tabs, each pane scrolled to `scrollHeight`:
+
+| Tab | pane can scroll | scroll range | title moved | tabs moved |
+|---|---|---|---|---|
+| Keyboard | yes | 263px | 0px | 0px |
+| Taxonomy | yes | 2751px | 0px | 0px |
+| Vibe Code | yes | 405px | 0px | 0px |
+| Hey Claude | yes | 288px | 0px | 0px |
+| Charter | yes | 10322px | 0px | 0px |
+
+`document.body` still does not scroll. **Parity holds.** The Charter tab is the
+one added since the baseline table, and it is measured here for the first time.
