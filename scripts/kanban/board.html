@@ -28,7 +28,7 @@
   header.top{flex:none;padding:14px 24px 11px;display:flex;flex-direction:column;gap:11px;border-bottom:1px solid var(--border)}
   .crumb{display:flex;align-items:center;gap:7px;flex:none;font-size:var(--fs-body);color:var(--text-3)}
   .crumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);padding:2px 5px;margin-left:-5px}
-  .crumb a:hover{color:var(--text);background:var(--well)}
+  .crumb a:hover{color:var(--text);background:var(--card)}
   /* Three ranks in one row, and they should read as three: the way back is
      quietest, the board's name is the title, its path is a mono aside. The gap
      before the actions is larger than the gaps inside the identity group, so
@@ -257,7 +257,7 @@
   .item:hover .iacts button,.item:focus-within .iacts button,
   .item .iacts button.on,.item .iacts button:focus-visible{opacity:1}
   @media (hover: none){ .item .iacts button{opacity:1} }
-  .item .iacts button:hover{background:var(--well);border-color:var(--border);color:var(--text)}
+  .item .iacts button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   .item .iacts button.on{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
   .item .iacts button.pin.on{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
   .item .iacts .del{margin-left:4px}
@@ -280,7 +280,7 @@
   .item .scope.here{color:var(--blue)}
   .railfoot{flex:none;padding:6px 2px 2px}
   .railfoot button{width:100%;justify-content:center;background:none;border-color:transparent;color:var(--text-3);font-size:var(--fs-small)}
-  .railfoot button:hover{background:var(--well);border-color:var(--border);color:var(--text-2)}
+  .railfoot button:hover{background:var(--card);border-color:var(--border);color:var(--text-2)}
 
   /* ---------- card ---------- */
   .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--r-card);padding:11px 13px 10px;
@@ -399,7 +399,7 @@
   .dtab .tx{flex:none;width:15px;height:15px;border-radius:var(--r-inner);display:grid;place-items:center;
             font-size:var(--fs-small);color:var(--text-3);opacity:0;transition:opacity var(--t-fast),background var(--t-fast)}
   .dtab:hover .tx,.dtab.on .tx{opacity:1}
-  .dtab .tx:hover{background:var(--well);color:var(--text)}
+  .dtab .tx:hover{background:var(--card);color:var(--text)}
   /* Collapsed: a vertical stack of stubs. Text stays horizontal — a rotated
      label is the "vertical distortion" this is meant to avoid — so identity is
      carried by the lane glyph plus two letters, with the tooltip holding the
@@ -453,7 +453,7 @@
   .askopts{display:flex;flex-direction:column;gap:2px;border:none;padding:0;margin:0 0 9px}
   .askopt{display:flex;align-items:flex-start;gap:8px;padding:6px 8px;border-radius:var(--r-control);
           cursor:pointer;transition:background var(--t-fast)}
-  .askopt:hover{background:var(--well)}
+  .askopt:hover{background:var(--card)}
   .askopt input{margin:2px 0 0;accent-color:var(--blue);flex:none}
   .askopt .ao{font:400 var(--fs-body)/1.45 var(--sans);color:var(--text-2)}
   .askopt .arec{font:600 var(--fs-caption)/1 var(--sans);letter-spacing:.04em;text-transform:uppercase;
@@ -498,7 +498,7 @@
   .seg .segln{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:var(--fs-small)/1.55 var(--mono)}
   .seg .seghint{display:block;margin-top:4px;font-size:var(--fs-small);color:var(--text-3)}
   .seg.gone{cursor:default;color:var(--text-3);font-size:var(--fs-small)}
-  .seg.gone:hover{background:var(--well);border-color:var(--border);color:var(--text-3)}
+  .seg.gone:hover{background:var(--card);border-color:var(--border);color:var(--text-3)}
   #docmodal{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:var(--z-doc)}
   #docmodal.on{display:flex}
   #docmodal .dbox{background:var(--canvas);border:1px solid var(--border);border-radius:var(--r-panel);
@@ -607,7 +607,7 @@
   .srcline .sx{flex:none;font:var(--fs-small)/1 var(--sans);color:var(--text-3);white-space:nowrap}
   .srcline .smore{flex:none;height:20px;padding:0 7px;font-size:var(--fs-small);background:none;
                   border-color:transparent;color:var(--text-3)}
-  .srcline .smore:hover{background:var(--well);border-color:var(--border);color:var(--text)}
+  .srcline .smore:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   /* empty and idle, the dock is one quiet line so the evidence above keeps the
      height; text, focus, or a conflict expands it (a draft counts as text) */
   .composer.min .hint,.composer.min .parsed,.composer.min .cbar,.composer.min .restored{display:none}
@@ -714,7 +714,7 @@
   .bprow{display:flex;align-items:center;gap:11px;width:100%;padding:9px 10px;border-radius:var(--r-card);
          background:none;border:1px solid transparent;cursor:pointer;text-align:left;
          transition:background var(--t-fast),border-color var(--t-fast)}
-  .bprow:hover{background:var(--well)}
+  .bprow:hover{background:var(--card)}
   .bprow.on{background:var(--well);border-color:var(--border-2);
             box-shadow:inset 2px 0 0 0 var(--blue)}
   .bprow:active{background:var(--card-hover)}
@@ -784,7 +784,7 @@
      reads as a statement rather than a field, so it has no box until you touch it. */
   .dgoal{display:flex;align-items:flex-start;gap:8px;margin-top:12px;padding:8px 10px;border-radius:var(--r-card);
          border:1px dashed var(--border);cursor:text;color:var(--text-2);font:400 var(--fs-lead)/1.55 var(--sans)}
-  .dgoal:hover{border-color:var(--border-2);background:var(--well)}
+  .dgoal:hover{border-color:var(--border-2);background:var(--card)}
   .dgoal .gi{flex:none;margin-top:2px;color:var(--violet)}
   .dgoal .gt{flex:1;min-width:0;overflow-wrap:anywhere}
   .dgoal .gt.empty{color:var(--text-3);font-style:italic}
@@ -800,7 +800,7 @@
   .sview{flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;
          background:none;border-color:transparent;color:var(--text-2);text-align:left;min-width:0}
   .sview .svtop{display:flex;align-items:center;gap:7px;min-width:0}
-  .sview:hover{background:var(--well);border-color:var(--border);color:var(--text)}
+  .sview:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   .sview.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
   .sview .svn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .sview .svc{flex:none;font:600 var(--fs-small)/1 var(--mono);color:var(--text-3)}

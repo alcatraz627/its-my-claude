@@ -359,7 +359,7 @@ all of them remove a second way of doing one thing.
 | G5 | seven transition durations | .1 … .22 | `--t-fast: .12s`, `--t-move: .22s` | `rg -o "\.[0-9]+s"` yields two |
 | G6 | `.primary` duplicates `.accent` | two solid variants, 28 vs 30 px | drop `.primary`, one height | `rg -c "\.primary" board.html` = 0 |
 | G7 | `.icon` vs `.ico` | two icon-button names | keep `.icon`, hub adopts it | `rg -c "\.ico\b"` = 0 |
-| G8 | eight hover recipes | counted | three (quiet, raised, accent) as mixins | hover grep yields three bodies |
+| G8 | eight hover recipes | counted | RULED D1a 2026-08-24: quiet = --card. 10 bodies moved off --well; all 23 hover grounds are --card now | `rg -o ":hover{[^}]*background:var(--well)" board.html` = 0 |
 | G9 | reduced-motion | one global rule + eight local | global only, after G1 | local rules = 0 |
 | G10 | z-index unnamed | nine numbers | the §5 ladder as tokens | `rg -o "z-index:[0-9]+"` = 0 (all `var(--z-…)`) |
 | G11 | ink-only tag hues | violet, pink, teal, grey lack tint and line | give each the three-shade ladder | a priority chip's `.on` renders tinted |
