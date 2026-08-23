@@ -86,6 +86,17 @@
          align-items:center;gap:6px;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   button:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
+  /* PRESSED (charter §7's fifth state). It was the one appearance missing from
+     every control on every page: two :active rules existed in the whole tree
+     and one of them only changed a cursor, which by §7's own sentence made
+     every button, chip, tab and card unfinished. One rule rather than ten,
+     because it was the same state missing every time. A press is a half-pixel
+     down and a shade darker, at --t-fast, so it reads as contact rather than
+     as another colour to learn. */
+  button:active:not([disabled]),.chip:active,.card:active,.views a:active{
+    transform:translateY(.5px);filter:brightness(.97)}
+  @media (prefers-reduced-motion: reduce){
+    button:active:not([disabled]),.chip:active,.card:active,.views a:active{transform:none}}
   button svg{flex:none}
   button[disabled]{opacity:.45;cursor:not-allowed}
   button.icon{padding:5px 8px}

@@ -29,8 +29,23 @@ ten, which is the useful shape of the answer:
 button:active,.chip:active{transform:translateY(.5px);filter:brightness(.97)}
 ```
 
-Not applied here: it is a look change on every control at once, which belongs
-in a pass the owner sees (#16's §17 round), not in a caveats sweep.
+**Applied, after reconsidering.** The first instinct was to defer it as "a look
+change the owner should see", but that conflated two different things. The quiet
+hover (G22, #75) is a taste fork with two defensible answers, which is why it is
+on a decision page. A missing state that §7 MANDATES is compliance, not taste,
+and deferring compliance to a taste queue is how a charter stops binding. One
+rule in `shared.css`, with the motion half suppressed under
+`prefers-reduced-motion`.
+
+`button` now declares all five. `.chip`, `.card` and `.views a` declare their own
+hover and active and inherit focus-visible and disabled from the base, which is
+what §7 asks for once inheritance is counted.
+
+**What is NOT verified: the press itself.** `:active` cannot be forced from
+script, so what was checked is that the rule is present and well-formed in the
+served CSS and that the selectors are the right ones. Someone has to press a
+button to see it. Same honest limit as reduced-motion, recorded rather than
+rounded up to a tick.
 
 ## Still carried, with the reason
 
