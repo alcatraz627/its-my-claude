@@ -51,7 +51,22 @@ rows where there are three, one of which did nothing.
 - Persistence: reload keeps all three; `Reset this lane` clears all three keys.
 - §14 round, both themes.
 
-## Owner decisions (go to the combined page)
+## Ruled, 2026-08-23 (decision page kanban-plans-round-2)
+
+D1a, D2a, and this note, verbatim: "All of this, plus also add to navbar a
+dropdown for global board settings, one tab in it for column settings, where
+we set the default values for this, and chips below to call out all the ones
+that diverge and clicking to go and open that cols's dropdown".
+
+So the build gains a **board settings dropdown** in the top bar with a Column
+settings tab: the default Sort, Density, Collapse and Width for this board;
+below it one chip per lane whose settings diverge from the defaults, and
+pressing a chip opens that lane's popover. Defaults are per board and shared
+(`plan.json`, so the agent's `c` digest uses them); the lane overrides stay
+local. Check: set a default, one lane overridden, exactly one chip; press it,
+that lane's popover opens.
+
+## Owner decisions (answered above)
 
 - D-col-1: add Sort, Density, Collapse, Reset (recommended) or a subset.
 - D-col-2: soft limit later, after #39 (recommended) or never.

@@ -96,7 +96,25 @@ OR and NOT (the grammar stays AND-only until a view needs otherwise), views
 across boards (the hub is the wrong altitude for a per-board query), and
 sharing views between boards by copy (a later CLI flag if asked).
 
-## Owner decision (combined page)
+## Ruled, 2026-08-23 (decision page kanban-plans-round-2)
+
+D3a shared, with this note, verbatim: "Wanna share as much with the agent as
+possible, allow me to add notes for agent (optional) as well so when the agent
+reeads the board it can know what I am using it for, it may or may not bother
+using it, do also update agent's prompt so it is aware". So `View` gains
+`note?: string`, the owner's one line on what the view is for; `view` (list)
+prints it; the session-start line names the board's views and their notes
+under the drafts block; `features/kanban.md` and the `/kanban` skill say views
+exist and how to read them.
+
+D4b, the fuller grammar now: AND, OR and NOT over the same clauses. Syntax
+keeps the clause words as they are; `or` and `not` are lowercase words between
+them, AND is the space as today: `tag:milestone:M2 is:blocked or review-me`,
+`is:open not tag:area:docs`. Precedence: NOT binds a clause, AND binds tighter
+than OR, no parentheses. `matchClause` becomes `matchQuery`, parsed once, and
+the deferred list loses its first row.
+
+## Owner decisions (answered above)
 
 - D-view-1: views live in `plan.json` shared (recommended) or owner-local.
 - D-view-2: AND-only, four clauses max (recommended) or a fuller grammar now.

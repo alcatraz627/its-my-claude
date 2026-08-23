@@ -107,7 +107,34 @@ phase 4     → after ANSWER-PATH.md ships, same seat
 
 No fleet. Each phase is one branch commit with its check in the message.
 
-## Owner decisions (combined page)
+## Ruled, 2026-08-23 (decision page kanban-plans-round-2)
+
+D5a registry first. D6a phase order 1 → 2 → 3 → 4. D10a §14 round only.
+
+D7c, scan and mark unclaimed, with this note, verbatim: "Also tell agent to
+use this as a part of the standard /kanban + /decision-pages generation it
+does". So phase 1 both scans `assets/reports/**/*.html` (listed as
+`unclaimed`, with path and mtime) and takes explicit registrations; and the
+`/decision-wizard` and `/kanban` skills, plus `decision-page.sh new`, register
+what they make as a matter of course, so new pages are never unclaimed.
+
+D8b, plan states mirror the lanes: `inbox · backlog · active · blocked ·
+done · stale`, the same vocabulary a card has, so a plan on the board reads
+like everything else on it and the lane filters apply to it.
+
+D9a, with this note, verbatim: "a, but optionally open b to view all in one
+place, tell the agent to update and store the decided ones here too and allow
+me to add commments and hook into the standard agent nudge workflow from
+kanban". So: attention derived (hub count, board chip, rail) AND a Decisions
+view on the board that lists every decision in one place, card-bound or not,
+pending first, decided below with the answer; the agent records decisions it
+took to the owner there (`kanban.sh decide add`) and marks them decided when
+answered; the owner can comment on any decision (the note composer, reused,
+with the card-less case writing to the decision); and a pending decision
+counts for the nudge the way an unread note does, so `kanban.sh nudge` and
+the session-start line name it.
+
+## Owner decisions (answered above)
 
 - D-uni-1: registry-first, servers stay (recommended) or merge :5197 into
   :5106 now.
