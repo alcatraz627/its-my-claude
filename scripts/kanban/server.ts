@@ -385,6 +385,62 @@ const server = Bun.serve({
         rows.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
         return json({ notes: rows, broken });
       }
+      // Every surface the owner has, in one list (#56, phase 1). Colocation, not
+      // migration: boards stay where they are, decision pages stay on :5197, and
+      // this only answers "what is there". A hub tab reads it; nothing moves.
+      if (p === "/api/surfaces") {
+        const out: any = { boards: [], decisions: [], previews: [] };
+        try {
+          out.boards = Object.entries(registry().boards).map(([slug, b]: any) => ({
+            kind: "board", slug, name: b.name ?? slug, root: b.root,
+            href: `/b/${slug}`, at: b.syncedAt ?? null }));
+        } catch (e: any) { out.boardsError = String(e?.message ?? e); }
+
+        // decision pages live beside the other server; read them, never move them
+        // KROOT is ~/.claude/kanban, and these live beside it under ~/.claude
+      const CROOT = path.dirname(KROOT);
+      const dpRoot = path.join(CROOT, "assets", "decision-pages");
+      let pendingSlugs = new Set<string>();
+      try { pendingSlugs = new Set(fs.readFileSync(path.join(dpRoot, ".pending.txt"), "utf8")
+        .split("\n").map((x) => x.trim()).filter(Boolean)); } catch { /* none pending */ }
+        try {
+          for (const slug of fs.readdirSync(dpRoot)) {
+            const dir = path.join(dpRoot, slug);
+            let cfg: any = null;
+            try { cfg = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8")); } catch { continue; }
+            // pending is ONE file at the registry root with a slug per line, not a
+          // marker inside each page. Read from decision-page.sh rather than guessed.
+            let st: any = null;
+            try { st = fs.statSync(path.join(dir, "config.json")); } catch {}
+            out.decisions.push({
+              kind: "decision", slug,
+              name: cfg.title ?? slug,
+              href: `http://localhost:5197/${slug}/`,
+              origin: cfg.origin?.project ?? null,
+              items: (cfg.decisions?.length ?? 0) + (cfg.sections?.length ?? 0),
+              pending: pendingSlugs.has(slug),
+              at: st ? new Date(st.mtimeMs).toISOString() : null,
+            });
+          }
+        } catch (e: any) { if ((e?.code ?? "") !== "ENOENT") out.decisionsError = String(e?.message ?? e); }
+        // pending first: a page waiting on the owner outranks one they answered
+        out.decisions.sort((a: any, b: any) =>
+          Number(b.pending) - Number(a.pending) || String(b.at ?? "").localeCompare(String(a.at ?? "")));
+
+        // previews arrive with preview.sh (not built): an empty list is the
+        // honest answer, not a missing key the hub would have to guess about
+        const man = path.join(CROOT, "assets", "previews", "manifest.jsonl");
+        try {
+          out.previews = fs.readFileSync(man, "utf8").split("\n").filter(Boolean)
+            .map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+        } catch { /* no manifest yet */ }
+
+        return json({ ...out,
+          counts: { boards: out.boards.length, decisions: out.decisions.length,
+                    decisionsPending: out.decisions.filter((d: any) => d.pending).length,
+                    previews: out.previews.length } });
+      }
+
       if (p === "/api/boards") {
         const reg = registry();
         return json({

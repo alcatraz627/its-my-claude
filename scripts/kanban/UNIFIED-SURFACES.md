@@ -41,6 +41,19 @@ Two things follow from treating them as one set:
 
 ## Phases, each shippable alone
 
+> **Phase 1's data half built 2026-08-24 (#56).** `/api/surfaces` answers with
+> boards, decision pages and previews in one list, pending first. The check ran
+> as written: 46 decision pages, 3 pending, and this session's own page sorts to
+> the top. Previews return an empty list rather than a missing key, because
+> `preview.sh` does not exist yet and a hub tab should not have to guess.
+> Colocation, not migration: nothing moved. **Remaining: the two hub tabs and
+> the `b` switcher kinds**, which are the UI half.
+>
+> Two things were assumed and had to be read instead: `registry()` returns a
+> map keyed by slug, not a list, and `.pending.txt` is ONE file at the registry
+> root with a slug per line, not a marker inside each page. Both were silently
+> swallowed by catch blocks until the errors were surfaced into the response.
+
 **Phase 1, the registry and the hub (colocation).** `server.ts` gains
 `/api/surfaces`: boards from the registry, decision pages by reading
 `assets/decision-pages/*/config.json` + `.pending.txt`, previews from a new
