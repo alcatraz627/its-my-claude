@@ -624,9 +624,7 @@
   .hint code{font:var(--fs-small) var(--mono);color:var(--text-2)}
   /* text ON the accent, not the accent as text: white on the dark theme's
      lighter blue measured 2.72:1, so each theme takes the readable side */
-  .primary{background:var(--blue);border-color:transparent;color:var(--on-accent);font-weight:600;height:30px}
-  .primary:hover{background:var(--blue);border-color:transparent;color:var(--on-accent);filter:brightness(1.08)}
-  .primary .k{font:var(--fs-small)/1 var(--mono);opacity:.85}
+  .accent .k{font:var(--fs-small)/1 var(--mono);opacity:.85}
 
   /* a toast floats over content, so it keeps the opaque card ground; only the
      border and text carry the broken hue (a tinted alpha would make it C1) */
@@ -735,10 +733,15 @@
   .chip.tag .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
   .chip.tag .tk{color:var(--text-3);font-weight:400}
   .chip.tag:hover .tk{color:var(--text-2)}
-  .chip.tag.on{border-color:var(--dot,var(--grey));color:var(--text)}
-  .k-milestone{--dot:var(--violet)} .k-tier{--dot:var(--blue)} .k-effort{--dot:var(--amber)}
-  .k-area{--dot:var(--green)} .k-risk{--dot:var(--red)} .k-plain{--dot:var(--grey)}
-  .k-priority{--dot:var(--pink)} .k-class{--dot:var(--teal)}
+  .chip.tag.on{background:var(--dot-bg,var(--grey-bg));border-color:var(--dot-br,var(--grey-br));color:var(--text)}
+  .k-milestone{--dot:var(--violet);--dot-bg:var(--violet-bg);--dot-br:var(--violet-br)}
+  .k-tier{--dot:var(--blue);--dot-bg:var(--blue-bg);--dot-br:var(--blue-br)}
+  .k-effort{--dot:var(--amber);--dot-bg:var(--amber-bg);--dot-br:var(--amber-br)}
+  .k-area{--dot:var(--green);--dot-bg:var(--green-bg);--dot-br:var(--green-br)}
+  .k-risk{--dot:var(--red);--dot-bg:var(--red-bg);--dot-br:var(--red-br)}
+  .k-plain{--dot:var(--grey);--dot-bg:var(--grey-bg);--dot-br:var(--grey-br)}
+  .k-priority{--dot:var(--pink);--dot-bg:var(--pink-bg);--dot-br:var(--pink-br)}
+  .k-class{--dot:var(--teal);--dot-bg:var(--teal-bg);--dot-br:var(--teal-br)}
 
   /* ---------- goal ---------- */
   /* The card's "why", one line, sitting above everything the card claims. It
@@ -1243,7 +1246,7 @@
     <div class="parsed" id="dTags"></div>
     <div class="cbar">
       <div class="inserts" id="dInsert"></div>
-      <button class="primary" id="dSave">Save note <span class="k">⌘↵</span></button>
+      <button class="accent" id="dSave">Save note <span class="k">⌘↵</span></button>
     </div>
   </div>
   </aside>

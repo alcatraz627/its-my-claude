@@ -20,7 +20,10 @@
     --on-accent:#111318;
     --shadow:0 1px 2px rgb(0 0 0/.4);
     --l0:#33bda5; --l1:#14bbc2; --l2:#33b5da; --l3:#a497ea; --l4:#c18dd8; --l5:#d686bc;
-    --violet:#9c8cf0; --grey:#8c939d; --teal:#4fc3b8; --pink:#e07aa8;
+    --violet:#9c8cf0; --violet-bg:rgb(156 140 240/.12); --violet-br:rgb(156 140 240/.32);
+    --grey:#8c939d;   --grey-bg:rgb(140 147 157/.12);   --grey-br:rgb(140 147 157/.32);
+    --teal:#4fc3b8;   --teal-bg:rgb(79 195 184/.12);    --teal-br:rgb(79 195 184/.32);
+    --pink:#e07aa8;   --pink-bg:rgb(224 122 168/.12);   --pink-br:rgb(224 122 168/.32);
     /* one scrim, so three overlays do not each pick a different dark */
     --scrim:rgb(0 0 0/.38);
     --sans:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
@@ -37,7 +40,10 @@
     --on-accent:#ffffff;
     --shadow:0 1px 2px rgb(16 24 40/.06),0 1px 1px rgb(16 24 40/.04);
     --l0:#007863; --l1:#006d77; --l2:#006e8f; --l3:#59459f; --l4:#753a8d; --l5:#883170;
-    --violet:#5b46b8; --grey:#5f666f; --teal:#0f8a7e; --pink:#b8336f;
+    --violet:#5b46b8; --violet-bg:rgb(91 70 184/.12);   --violet-br:rgb(91 70 184/.26);
+    --grey:#5f666f;   --grey-bg:rgb(95 102 111/.12);    --grey-br:rgb(95 102 111/.26);
+    --teal:#0f8a7e;   --teal-bg:rgb(15 138 126/.12);    --teal-br:rgb(15 138 126/.26);
+    --pink:#b8336f;   --pink-bg:rgb(184 51 111/.12);    --pink-br:rgb(184 51 111/.26);
     --scrim:rgb(16 24 40/.34);
   }
 
@@ -90,9 +96,6 @@
   button.danger{color:var(--red);border-color:var(--border)}
   button.danger:hover{background:color-mix(in srgb,var(--red) 12%,transparent);border-color:var(--red);color:var(--red)}
   button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
-  button.ico{width:30px;height:30px;padding:0;display:grid;place-items:center;
-             background:none;border-color:transparent;color:var(--text-3)}
-  button.ico:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
   /* ---------- chips ---------- */
   .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;
@@ -101,9 +104,14 @@
   .chip:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   .chip .ci{flex:none;display:grid;place-items:center;color:var(--text-3)}
   .chip.tag .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
-  .k-milestone{--dot:var(--violet)} .k-tier{--dot:var(--blue)} .k-effort{--dot:var(--amber)}
-  .k-area{--dot:var(--green)} .k-risk{--dot:var(--red)} .k-plain{--dot:var(--grey)}
-  .k-priority{--dot:var(--pink)} .k-class{--dot:var(--teal)}
+  .k-milestone{--dot:var(--violet);--dot-bg:var(--violet-bg);--dot-br:var(--violet-br)}
+  .k-tier{--dot:var(--blue);--dot-bg:var(--blue-bg);--dot-br:var(--blue-br)}
+  .k-effort{--dot:var(--amber);--dot-bg:var(--amber-bg);--dot-br:var(--amber-br)}
+  .k-area{--dot:var(--green);--dot-bg:var(--green-bg);--dot-br:var(--green-br)}
+  .k-risk{--dot:var(--red);--dot-bg:var(--red-bg);--dot-br:var(--red-br)}
+  .k-plain{--dot:var(--grey);--dot-bg:var(--grey-bg);--dot-br:var(--grey-br)}
+  .k-priority{--dot:var(--pink);--dot-bg:var(--pink-bg);--dot-br:var(--pink-br)}
+  .k-class{--dot:var(--teal);--dot-bg:var(--teal-bg);--dot-br:var(--teal-br)}
 
   /* ---------- the page chrome every surface wears ---------- */
   .pagehead{display:flex;align-items:center;gap:11px;padding:13px 24px;

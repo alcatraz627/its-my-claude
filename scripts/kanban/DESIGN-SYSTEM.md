@@ -370,9 +370,36 @@ all of them remove a second way of doing one thing.
 | G16 | empty-state voice | "No cards in this lane" vs "Nothing yet. Write anything above…" | one voice: what is missing, then what to do | grep the three empties |
 | G17 | typed arrow in a link | "open in tab ↗" | the drawn external glyph | charter test's §5 row widened to `<a>` |
 | G18 | `.kbd` keycap vs `.k` hint | two keycap styles | one `.k` | grep |
+| G22 | quiet hover: the book and the code disagree | §8 defines quiet as "ghost → well ground", but 9 of the 15 real hovers come up to `--card` and only 6 to `--well`; `--well` is the smaller step, so adopting it makes every chrome button's hover fainter | owner picks one, then it is applied everywhere at once | count the two bodies; one of them must reach 0 |
 | G21 | a focused card and a selected card look identical | `.card:focus-visible` and `.card.sel` share one `0 0 0 2px` shadow, so keyboard focus is indistinguishable from selection, and `x` selects whatever the ring is on | give focus the §3.3 outline and leave the shadow to selection | tab to a card without selecting it; the two states must differ |
 | G20 | the toast is below every overlay | `#toast` is z 3, `#help` is 50, so a toast fired while any overlay is open is invisible; measured live, and it predates this work | either lift the toast above the modal tier, or adopt a corrected §5 ladder wholesale | open the help modal, fire a toast, see it |
 | G19 | the shared key map has no overlay guards | `t` is bound in both `shared.js` and `board.html`; board returns early inside five overlays, shared does not, so linking makes `t` fire twice and fire inside overlays | `data-keys="own"` on `<html>`; the shared handler returns before reading the key (charter §10) | remove the attribute and `t` must stop toggling |
+
+**G6, G7 and G11 landed 2026-08-24 (pass 3, task #63).** `.primary` was
+`.accent` plus an explicit 30px height, and it had one caller; its keycap rule
+moved to `.accent`, where the note popover's Save had been carrying an unstyled
+`.k` all along. `.ico` turned out to be `.ghost` + `.icon` + a fixed 30×30 box
+whose colours were already byte-identical to `.ghost`, so the hub now writes the
+composition the board already used, `class="icon ghost"`. The four ink-only hues
+have their tint and line in both themes, every kind carries all three shades, and
+a tag chip's `on` is tinted rather than outlined: measured, eight kinds, eight
+distinct backgrounds.
+
+**Two gaps in pass 3 were deliberately NOT closed.**
+
+`G12` (the split button) has no caller. Its own row says "none exists; two
+callers arrive with #38 and Offer", and neither exists yet: there is no `.split`
+rule and no `class="split"` in any file. Building it now would be an exported
+abstraction with zero call sites, which is the one thing
+`rules/speculative-abstractions-without-a-load-bearing-caller.md` exists to stop.
+It should be defined inside #38, where the first real caller lands, and the
+second caller then adopts it. Its check is also unusable as written: `\.split\b`
+matches every JavaScript `.split()` call and reports 12 hits in `board.html`
+today, none of them CSS.
+
+`G8` (three hovers) is the G22 disagreement above and needs a ruling before any
+of the 15 bodies move, because the two candidate recipes differ in how loud every
+chrome button feels and the owner has been explicit about wanting flair.
 
 **G2, G3 and G4 landed 2026-08-24 (pass 2b, task #62):** 84 radius values onto
 five steps plus the hairline, 171 type values onto seven steps, and the four

@@ -114,7 +114,7 @@ function pageHead({ mount, active, title, sub, onView, counts = {} }) {
            <span class="vi">${NAV_ICON[v]}</span><span class="vt">${v === "boards" ? "Boards" : v === "asks" ? "Your asks" : "Drafts"}</span>
            <span class="vn">${counts[v] ?? ""}</span></a>`).join("") +
     `</div>` +
-    `<button class="ico" id="phTheme" data-tip="Light and dark (t)" aria-label="toggle theme">${THEME_ICON}</button>`;
+    `<button class="icon ghost" id="phTheme" data-tip="Light and dark (t)" aria-label="toggle theme">${THEME_ICON}</button>`;
   document.getElementById("phTitle").textContent = title;
   document.getElementById("phSub").textContent = sub;
   document.getElementById("phTheme").onclick = toggleTheme;
