@@ -425,6 +425,7 @@ function editorEl() {
   // lives on. Absent means anyone, which is what every draft was until today.
   const forSel = el("select", "forsel");
   forSel.dataset.tip = "Who this draft is for. Anyone means whoever sweeps; naming an agent hides it from the others.";
+  forSel.setAttribute("aria-label", "who this draft is for");
   forSel.append(new Option("For: anyone", ""));
   for (const a of agents) forSel.append(new Option(`For: ${a}`, `agent:${a}`));
   for (const b of boards) forSel.append(new Option(`For: ${b.name} (board)`, `board:${b.slug}`));

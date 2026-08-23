@@ -155,7 +155,7 @@ function boardEl(b, quiet) {
     a.innerHTML = `<div class="row1"><span class="name"></span><span class="badges"><span class="pill blk">unreadable</span></span></div><div class="root"></div>` +
       `<div class="counts"><span class="stale">This board's data will not parse. Nothing else is affected. Fix or trash <code>~/.claude/kanban/boards/${b.slug}</code>.</span></div>`;
     a.querySelector(".name").textContent = b.name;
-    const re = a.querySelector(".root"); re.title = b.root; re.textContent = b.root;
+    const re = a.querySelector(".root"); re.dataset.tip = b.root; re.textContent = b.root;
     return a;
   }
   if (quiet) {
@@ -189,6 +189,9 @@ function boardEl(b, quiet) {
     star.className = "bstar" + (starred.has(b.slug) ? " on" : "");
     star.innerHTML = STAR(starred.has(b.slug));
     star.dataset.tip = starred.has(b.slug) ? "Starred. Click to unstar." : "Star this board so it sorts to the top";
+    // an icon-only control still needs a name a keyboard or reader can find
+    star.setAttribute("aria-label", starred.has(b.slug) ? "unstar this board" : "star this board");
+    star.setAttribute("aria-pressed", String(starred.has(b.slug)));
     star.onclick = async (e) => {
       e.preventDefault(); e.stopPropagation();   // a control inside a link is not the link
       try {
@@ -212,6 +215,8 @@ function boardEl(b, quiet) {
     box.innerHTML = BOX(off);
     box.dataset.tip = off ? "Archived. Click to bring it back to the list."
                           : "Archive this board — it folds away without being deleted";
+    box.setAttribute("aria-label", off ? "restore this board to the list" : "archive this board");
+    box.setAttribute("aria-pressed", String(off));
     box.onclick = async (e) => {
       e.preventDefault(); e.stopPropagation();
       try {
@@ -224,7 +229,7 @@ function boardEl(b, quiet) {
     (a.querySelector(".row1") ?? a).appendChild(box);
   }
   const rootEl = a.querySelector(".root");
-  rootEl.title = b.root; rootEl.textContent = b.root;
+  rootEl.dataset.tip = b.root; rootEl.textContent = b.root;
   return a;
 }
 
@@ -315,7 +320,7 @@ function routeEl(it, boards, onDone) {
   // the blank option means "back where you wrote it" and NOT "everywhere". There
   // is no spelling for everywhere-despite-an-origin, so none is offered: an
   // option that silently did something else would be worse than its absence.
-  sel.title = origin
+  sel.dataset.tip = origin
     ? `Untagged, this ask shows on ${origin.name}, the board you wrote it on. Tag it to move it.`
     : "Untagged, this ask shows on every board's rail. Tag it to scope it to one.";
   const opts = [["", origin ? `on ${origin.name} · as written` : "on every board"]];
@@ -397,7 +402,7 @@ async function loadAsks() {
     b.type = "button"; b.textContent = label;
     b.className = tagFilter === key ? "on" : "";
     // filters scope the note half only, so the items stay visible under one
-    b.title = `filter notes by ${label}`;
+    b.dataset.tip = `filter notes by ${label}`; b.setAttribute("aria-label", `filter notes by ${label}`);
     b.onclick = () => { tagFilter = tagFilter === key ? null : key; loadAsks(); };
     bar.appendChild(b);
   });

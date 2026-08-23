@@ -113,6 +113,10 @@ already states the kind. A kind hue without its heading is the bug.
 - **One glyph per meaning across the whole board.** The send arrow, the check,
   the note page and the target each appear once in the vocabulary.
 - **Icons never replace a label in a primary control.** They accompany it.
+- **An icon-only secondary control still has a name.** `aria-label` says what
+  it does, `aria-pressed` says its state when it is a toggle, and `data-tip`
+  carries the sentence. A tip alone is hover-only, and a control nobody can
+  name from the keyboard is not a control (2026-08-23, the hub's 18).
 
 ## 6. Spacing and grouping
 
@@ -324,7 +328,11 @@ the thing it had just built. A sweep that asks one question of every surface
 finds what a per-surface review cannot, and it is cheap: one selector.
 
 **Standing count.** Zero native tooltips and 608 owned ones across the board,
-the panel, all four help tabs and the peek column, in both themes.
+the panel, all four help tabs and the peek column, in both themes. Re-measured
+2026-08-23 across all three pages, both spellings (`title="` and `.title =`):
+zero, after four property-set ones were found on the hub. The one `title=` on
+the doc-modal iframe is its accessible name, not a tooltip, and is exempt.
+`test-charter.sh` now takes this measurement every run.
 
 ## 17. The thorough review (next round's instrument)
 
@@ -412,6 +420,15 @@ actually happened.
 
 ## 19. Changelog
 
+- **2026-08-23, eighth round.** The hub audited for the §5 and §16 contract at
+  last (#46): four native tooltips set as `.title =` properties, which the
+  attribute grep behind §16's count could not see, and every star and archive
+  button unnamed (no `aria-label`, 18 on the page; #55), as was the drafts
+  recipient combobox. All converted or named; `aria-pressed` added to the two
+  toggles. **An icon-only control carries a name, not only a tip** is now the
+  reading of §5 for secondary controls too. The §16 count is re-measured by
+  `test-charter.sh` rather than carried. Same day: `show --json` carries the
+  card's goal and tags (#49), and drop forgets them (#43).
 - **2026-08-22, seventh round.** The §16 standing count was WRONG and a peer
   found it. It read "zero native tooltips and 608 owned ones across the board";
   `board.html` carried four banned `title=` attributes, two of them on the
