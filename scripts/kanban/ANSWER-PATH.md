@@ -83,6 +83,19 @@ by the server for notes; the answer is the owner's, so it goes the owner's way
 - Keyboard: `1`-`6` pick when the answer block is focused, `⌘↵` answers, `l`
   defers. Esc steps out (§10).
 
+> **Built 2026-08-24 (#48), steps 1 to 3 and 5.** One correction to the design
+> above, and it matters. The type sketch puts `seenAt`, `deferredAt` and
+> `answer` inside `verify.ask` on the card, but `board.json` has exactly one
+> writer and it is the CLI (charter §11); the server has never written it. So
+> the halves are split along the line the plan's own prose draws: the AGENT's
+> half (`question`, `options`, `rec`, `askedAt`) is on the card, and the
+> OWNER's half lives in `plan.json` under `answers[cardId]`, which is where the
+> note path already puts the owner's words. `askOf(card, plan)` merges them, so
+> every reader still sees one object and no caller touches `plan.answers`
+> directly. `seenAt` is written once and a later defer does not move it.
+>
+> Remaining: step 4, the drawer block, the face pill and the hub count.
+
 ## Sequence (build order, each with its check)
 
 1. `lib.ts` type + `show --json` already serves it. Check: `test-items.sh` row

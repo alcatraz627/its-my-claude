@@ -203,6 +203,13 @@ One contract, no exceptions:
 
 ## 12. Reporting and honesty in the UI
 
+- **A decision the owner has not opened is shown as unseen, never as
+  undecided.** Those are different facts and only one of them is about the
+  owner. An ask carries three states, not two: nobody has looked, somebody
+  looked and put it off, somebody answered. Collapsing the first two makes the
+  board report a choice as pending when it was never actually put in front of
+  anyone (#48; vb-fable's constraint 2, which nobody else would have given).
+
 - **Distinguish delivered, nobody-home and broken.** Three outcomes, three
   sentences. Never collapse a failure into a silence.
 - **Loud truncation.** A list showing part of itself says how much it hid.

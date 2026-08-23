@@ -13,7 +13,7 @@ import {
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
   loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled, diffHunks,
-  DRAFTS, saveDrafts, recipientsOf, selfAlias,
+  DRAFTS, saveDrafts, recipientsOf, selfAlias, askState, askOf,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -181,6 +181,31 @@ switch (verb) {
     });
     break;
   }
+  case "answer": {
+    // The read side of the ask. The owner answers in the board; an agent comes
+    // back here to find out whether they did, and which of the three states it
+    // is in, without parsing prose out of a note.
+    const [id] = positional;
+    if (!id) die("answer needs a card id", 'kanban.sh answer <id> [--json] · the owner answers in the drawer, this reads it back');
+    const { slug, boardDir } = boardFor(projectDir());
+    const board = loadBoard(boardDir);
+    const card = board.cards.find((c) => c.id === id);
+    if (!card) die(`no card ${id} on ${slug}`, "kanban.sh status --cards lists ids");
+    const ask = askOf(card, loadPlan(boardDir));
+    const state = askState(ask ?? undefined);
+    if (hasFlag("json")) { console.log(JSON.stringify({ id, state, ask: ask ?? null }, null, 2)); break; }
+    if (!ask) { console.log(`${id}: no ask on this card`); break; }
+    console.log(`${id} · ${state}`);
+    if (ask.question) console.log(`  ${ask.question}`);
+    ask.options.forEach((o, i) => console.log(`  ${i + 1}. ${o}${ask.rec === i ? "   <- the agent's pick" : ""}`));
+    if (state === "answered") {
+      const a = ask.answer!;
+      console.log(`  answered: ${a.pick === null || a.pick === undefined ? "(no option)" : `${a.pick + 1}. ${ask.options[a.pick]}`}${a.text ? ` — ${a.text}` : ""}`);
+    } else if (ask.deferredAt) console.log("  the owner saw it and said later");
+    else if (ask.seenAt) console.log("  the owner has seen it, not answered yet");
+    else console.log("  the owner has not opened it yet");
+    break;
+  }
   case "verify": {
     // Grade what "done" means (M3): how was this card's claimed state checked.
     const [id, gradeRaw] = positional;
@@ -199,10 +224,29 @@ switch (verb) {
       }
       const grade = gradeRaw as (typeof GRADES)[number];
       if (!GRADES.includes(grade)) die(`grade must be one of ${GRADES.join("|")}`, `executed = ran the path · cited = file:line evidence · reasoned = argument only`);
-      card.verify = { grade, ...(hasFlag("needs-human") ? { needsHuman: true } : {}), ...(flag("note") ? { note: flag("note")! } : {}), at: new Date().toISOString() };
+      // An ask is what needs-human MEANS, so it never arrives without it: a
+      // choice nobody is told to make is a note, and this is not the note path.
+      const askRaw = flag("ask");
+      if (askRaw && !hasFlag("needs-human"))
+        die("--ask needs --needs-human", "an ask IS what needs-human means: kanban.sh verify <id> <grade> --needs-human --ask \"A|B|C\"");
+      let ask: NonNullable<NonNullable<typeof card.verify>["ask"]> | undefined;
+      if (askRaw) {
+        const options = askRaw.split("|").map((o) => o.trim()).filter(Boolean);
+        if (options.length < 2 || options.length > 6)
+          die(`--ask needs 2 to 6 options, got ${options.length}`, 'separate them with | : --ask "keep it|drop it|ask me again"');
+        const recRaw = flag("rec");
+        const rec = recRaw === undefined ? undefined : Number(recRaw);
+        if (rec !== undefined && (!Number.isInteger(rec) || rec < 1 || rec > options.length))
+          die(`--rec must be 1 to ${options.length}`, "it is the option number you would pick yourself");
+        ask = { ...(flag("question") ? { question: flag("question")! } : {}), options,
+                ...(rec !== undefined ? { rec: rec - 1 } : {}), askedAt: new Date().toISOString() };
+      }
+      // an existing ask survives a re-grade unless a new one replaces it
+      const keptAsk = ask ?? card.verify?.ask;
+      card.verify = { grade, ...(hasFlag("needs-human") ? { needsHuman: true } : {}), ...(flag("note") ? { note: flag("note")! } : {}), ...(keptAsk ? { ask: keptAsk } : {}), at: new Date().toISOString() };
       card.updatedAt = new Date().toISOString();
       atomicWrite(path.join(boardDir, "board.json"), board, "verify", `card=${id} ${grade}`);
-      console.log(`verified ${id}: ${grade}${hasFlag("needs-human") ? " + needs-human" : ""} (survives sync)`);
+      console.log(`verified ${id}: ${grade}${hasFlag("needs-human") ? " + needs-human" : ""}${ask ? ` + ask (${ask.options.length} options${ask.rec !== undefined ? `, you picked ${ask.rec + 1}` : ""})` : ""} (survives sync)`);
     });
     break;
   }

@@ -222,6 +222,45 @@ else
   bad "show --json carries goal and tags" "no card in the fixture board to show"
 fi
 
+# The answer path (#48). The agent's half of an ask goes on the card; the
+# owner's half goes in plan.json because board.json has one writer and it is
+# the CLI (§11). These pin the refusals and the three derived states, because a
+# state machine nobody can name is the thing vb-fable's constraint 2 is about.
+if [ -n "$CARD" ]; then
+  err=$(bun run "$HERE/cli.ts" verify "$CARD" executed --ask "a|b" --project "$PROJ" 2>&1 >/dev/null)
+  case "$err" in *"needs --needs-human"*) ok "an ask without --needs-human is refused (#48)" ;;
+    *) bad "an ask without --needs-human is refused (#48)" "$err" ;; esac
+
+  err=$(bun run "$HERE/cli.ts" verify "$CARD" executed --needs-human --ask "only-one" --project "$PROJ" 2>&1 >/dev/null)
+  case "$err" in *"2 to 6 options"*) ok "an ask with one option is refused (#48)" ;;
+    *) bad "an ask with one option is refused (#48)" "$err" ;; esac
+
+  bun run "$HERE/cli.ts" verify "$CARD" reasoned --needs-human --ask "keep it|drop it|ask again" --rec 2 \
+    --question "which one?" --project "$PROJ" >/dev/null 2>&1
+  got=$(bun run "$HERE/cli.ts" answer "$CARD" --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;d=json.load(sys.stdin);a=d["ask"];print(d["state"],len(a["options"]),a["rec"])')
+  check "a recorded ask reads back unseen, with the agent's pick 0-based" "$got" "unseen 3 1"
+
+  # the owner's half, written the way the server writes it
+  python3 - "$BDIR" "$CARD" <<'PY2'
+import json,sys,os
+d,c=sys.argv[1],sys.argv[2]
+p=json.load(open(os.path.join(d,"plan.json"))); p.setdefault("answers",{})[c]={"seenAt":"2026-01-01T00:00:00Z"}
+json.dump(p, open(os.path.join(d,"plan.json"),"w"))
+PY2
+  got=$(bun run "$HERE/cli.ts" answer "$CARD" --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin)["state"])')
+  check "seen and unseen are different states, not one 'undecided' (constraint 2)" "$got" "seen"
+
+  python3 - "$BDIR" "$CARD" <<'PY3'
+import json,sys,os
+d,c=sys.argv[1],sys.argv[2]
+p=json.load(open(os.path.join(d,"plan.json")))
+p["answers"][c]["answer"]={"pick":None,"text":"neither, do X","at":"2026-01-01T00:00:01Z"}
+json.dump(p, open(os.path.join(d,"plan.json"),"w"))
+PY3
+  got=$(bun run "$HERE/cli.ts" answer "$CARD" --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;d=json.load(sys.stdin);a=d["ask"]["answer"];print(d["state"],a["pick"],a["text"])')
+  check "a null pick with text is a real answer, not a note elsewhere (constraint 4)" "$got" "answered None neither, do X"
+fi
+
 # drop with no server: plan rows cannot be forgotten (the server owns plan.json),
 # so the CLI must say so rather than go quiet. The server path was exercised live
 # on 2026-08-23 (task #43's note); this pins the honest fallback.

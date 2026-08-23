@@ -50,11 +50,40 @@ export interface Card {
   staleReason?: string;
   // How trustworthy is this card's claimed state — agent-set via `verify` verb,
   // survives sync. Grades reuse the adversarial-review evidence vocabulary.
-  verify?: { grade: "executed" | "cited" | "reasoned"; needsHuman?: boolean; note?: string; at: string };
+  verify?: {
+    grade: "executed" | "cited" | "reasoned"; needsHuman?: boolean; note?: string; at: string;
+    // The choice itself, put on the card so the owner answers where the context
+    // is (#48). Only ever set alongside needsHuman: an ask IS what that means.
+    ask?: {
+      question?: string;          // one line; the note stays the context
+      options: string[];          // 2 to 6, in the agent's words
+      rec?: number;               // index of the agent's own pick
+      askedAt: string;
+      seenAt?: string;            // the owner opened the drawer on it
+      deferredAt?: string;        // the owner said "later"
+      // pick may be null with text set: "neither, do X" is a real answer,
+      // never a note filed somewhere else (vb-fable constraint 4)
+      answer?: { pick: number | null; text?: string; at: string };
+    };
+  };
   via?: string;          // session id (8 chars) whose workspace the card was harvested from
   createdAt: string;
   updatedAt: string;
 }
+// Three states the owner and the agent can both name. Unseen and deferred stay
+// distinguishable on purpose (vb-fable constraint 2): a decision nobody has
+// opened is not the same as one that was opened and put off.
+export type AskState = "unseen" | "seen" | "answered";
+// The whole ask as anyone should see it: what the agent asked, plus whatever
+// the owner has done about it. Callers never touch plan.answers directly.
+export function askOf(card: { id: string; verify?: { ask?: any } }, plan: { answers?: Record<string, any> }) {
+  const ask = card.verify?.ask;
+  if (!ask) return null;
+  return { ...ask, ...(plan.answers?.[card.id] ?? {}) };
+}
+export const askState = (ask?: { seenAt?: string; deferredAt?: string; answer?: unknown }): AskState | null =>
+  !ask ? null : ask.answer ? "answered" : (ask.seenAt || ask.deferredAt) ? "seen" : "unseen";
+
 export interface Board {
   cards: Card[];
   overrides: Record<string, { lane: Lane }>; // agent `move` verdicts, survive sync
@@ -456,9 +485,14 @@ export interface Plan {
   on: Record<string, string[]>;       // cardId → tag ids
   goals: Record<string, string>;      // cardId → why this card exists, in one line
   seq?: Record<string, string[]>;     // cardId → the cards it comes after (execution order)
+  // cardId → the owner's half of a verify ask (#48). Server-written, because
+  // board.json has one writer and it is the CLI (charter §11). The agent's
+  // half stays on the card; askOf() puts them back together for a reader.
+  answers?: Record<string, { seenAt?: string; deferredAt?: string;
+                             answer?: { pick: number | null; text?: string; at: string } }>;
   updatedAt: string | null;
 }
-export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, seq: {}, updatedAt: null });
+export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, seq: {}, answers: {}, updatedAt: null });
 export const loadPlan = (boardDir: string): Plan =>
   readJson<Plan>(path.join(boardDir, "plan.json"), emptyPlan());
 export function savePlan(boardDir: string, plan: Plan, by: string): void {

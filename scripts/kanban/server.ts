@@ -12,7 +12,7 @@ import {
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
-  loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, type Plan, type TagKind,
+  loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 
@@ -851,6 +851,45 @@ const server = Bun.serve({
 
     // Execution order. "After" is a fact about the plan, not the card, so it
     // lives beside goals and tags and survives sync the same way. Empty clears.
+    // The owner's half of a verify ask (#48). Written here rather than on the
+    // card because board.json has one writer and it is the CLI (charter §11);
+    // askOf() puts the two halves back together for anyone reading.
+    if (req.method === "POST" && p === "/api/answer") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; cardId?: string; pick?: number | null; text?: string;
+          seen?: boolean; defer?: boolean } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.cardId) return json({ error: "need {slug, cardId} plus one of {seen}, {defer}, {pick and/or text}" }, 400);
+      const bd = loadBoard(dir);
+      const card = bd.cards.find((c) => c.id === body.cardId);
+      if (!card) return json({ error: `no card ${body.cardId}` }, 404);
+      const ask = card.verify?.ask;
+      if (!ask) return json({ error: `card ${body.cardId} carries no ask` }, 409);
+      const answering = body.pick !== undefined || body.text !== undefined;
+      if (answering && body.pick !== null && body.pick !== undefined &&
+          (!Number.isInteger(body.pick) || body.pick < 0 || body.pick >= ask.options.length))
+        return json({ error: `pick must be 0 to ${ask.options.length - 1}, or null for "neither"` }, 400);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir);
+        plan.answers = plan.answers ?? {};
+        const cur = plan.answers[body.cardId!] ?? {};
+        const now = new Date().toISOString();
+        // seen is set once and never moved: it is the timestamp of the first
+        // look, not of the most recent one
+        if (body.seen && !cur.seenAt) cur.seenAt = now;
+        if (body.defer) { cur.deferredAt = now; cur.seenAt = cur.seenAt ?? now; }
+        if (answering) {
+          cur.answer = { pick: body.pick ?? null, ...(body.text ? { text: body.text } : {}), at: now };
+          cur.seenAt = cur.seenAt ?? now;
+        }
+        plan.answers[body.cardId!] = cur;
+        savePlan(dir, plan, `answer:${body.cardId}`);
+        out = { ok: true, state: askState(cur), ...cur };
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
     if (req.method === "POST" && p === "/api/after") {
       const body = (await req.json().catch(() => null)) as { slug?: string; cardId?: string; after?: string[] } | null;
       const dir = body?.slug ? boardDirOf(body.slug) : null;
