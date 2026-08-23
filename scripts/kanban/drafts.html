@@ -139,6 +139,9 @@
   .estat .err{color:var(--red)}
   .estat .ok{color:var(--green)}
   .estat .spacer{flex:1}
+  /* the agent's pull note yields before the save state does: it shrinks to an
+     ellipsis, the full text rides the tooltip, and "saved" stays on screen */
+  .estat .pnote{flex:0 1 auto;min-width:0;max-width:46ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .nothing{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-3);padding:40px;text-align:center}
   #banner{margin:0;padding:9px 18px;border-bottom:1px solid var(--red-br);background:var(--red-bg);color:var(--red);font-size:12.5px;display:none}
 </style>
@@ -753,9 +756,15 @@ function paintStatus() {
     if (d.pull.cardId && d.pull.slug) {
       const a = document.createElement("a");
       a.href = `/b/${d.pull.slug}?card=${d.pull.cardId}`;
+      a.className = "pnote";
       a.textContent = d.pull.note || "the card it became";
+      if (d.pull.note) a.dataset.tip = d.pull.note;
       stat.append(a);
-    } else if (d.pull.note) stat.append(el("span", null, d.pull.note));
+    } else if (d.pull.note) {
+      const n = el("span", "pnote", d.pull.note);
+      n.dataset.tip = d.pull.note;
+      stat.append(n);
+    }
   }
   stat.append(el("span", "spacer"));
   if (status) stat.append(el("span", status.kind === "err" ? "err" : "ok", status.msg));
