@@ -110,9 +110,13 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > **Composer: exercised.** aria-pressed flips, headings, lists, code and bold
 > render, the textarea hides, pressing again restores everything.
 >
-> **Popover: wired identically, UNCONFIRMED.** Same `attachPreview` call, same
-> id pattern, but no note chip was reachable in the viewport during the session
-> that built it, so the path was never actually pressed. Not a checkmark.
+> **Popover: exercised too.** It shipped UNCONFIRMED first, because no note chip
+> was reachable in the viewport and "same code therefore same behaviour" is the
+> reasoning that ships broken twins. Closed the same session by standing up a
+> throwaway board with a note on it and pressing the thing: aria flips, bold,
+> code and list items render, the textarea hides, pressing again restores it.
+> The board was unregistered afterwards; a test fixture living in the owner's
+> registry is indistinguishable from their real work.
 >
 > Remaining: step 4 (popover legend, stash, restore banner, conflict notice) and
 > step 5 (`renderMd` tables then images).
