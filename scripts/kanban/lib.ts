@@ -480,6 +480,15 @@ export const presetFor = (kind: TagKind): TagPreset =>
   TAG_PRESETS.find((p) => p.kind === kind) ?? TAG_PRESETS[TAG_PRESETS.length - 1];
 
 export interface Tag { id: string; name: string; kind: TagKind; note?: string; createdAt: string }
+export interface View {
+  id: string; name: string; clauses: string[];
+  by: "owner" | "agent"; createdAt: string; updatedAt: string;
+}
+// What a view MEANS lives in match.js, which has no imports and no DOM so the
+// board can <script> the same file bun imports here. Re-exported rather than
+// re-implemented: a second copy is how two surfaces start disagreeing.
+export { VIEW_LIMITS, CLAUSE_GRAMMAR, isKnownClause, matchClause, matchView } from "./match.js";
+
 export interface Plan {
   tags: Tag[];                        // the board's vocabulary
   on: Record<string, string[]>;       // cardId → tag ids
@@ -494,6 +503,7 @@ export interface Plan {
   // than local because the agent's `c` digest should read the way the board
   // reads; a lane that overrides one of these keeps its override local.
   cols?: { sort?: string; density?: string; collapsed?: boolean; width?: number };
+  views?: View[];                     // named queries both sides can say (#39)
   updatedAt: string | null;
 }
 export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, seq: {}, answers: {}, updatedAt: null });

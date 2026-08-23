@@ -76,6 +76,23 @@ Matching runs through the SAME function the board uses, moved to `lib.ts` as
 - A view name is a legal word in an ask: the harvester leaves it alone; the
   agent reading the ask runs `view <name>` to resolve it.
 
+> **Steps 1, 2 and 5 built 2026-08-24 (#39).** One correction the plan could not
+> have known: it says `matchClause` moves to `lib.ts` "so the CLI and the board
+> cannot disagree", but the board is a page and cannot import `lib.ts`, while
+> `shared.js` touches the DOM at load so the server cannot import IT. Neither
+> file could host the thing. So it lives in **`match.js`**: no imports, no DOM,
+> `<script>`-able by the board and `require`-able by bun, with `lib.ts`
+> re-exporting rather than re-implementing. That is the only shape that makes
+> "cannot disagree" true instead of aspirational.
+>
+> The board gained something on the way. Its old matcher compared `filterText`
+> to one clause at a time, so it could never AND two; it now splits and ANDs,
+> which is exactly what applying a view will set. `is:open is:blocked` returns 2
+> where each clause alone returns 133 and 2.
+>
+> Remaining: step 3 (`/api/view`, the owner's create/rename/delete path) and
+> step 4 (the sidebar VIEWS group, save-as-view, the search section).
+
 ## Sequence, with checks
 
 1. `lib.ts`: `View` type, `matchClause`, `views` on `Plan`. Check: the board's

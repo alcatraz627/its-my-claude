@@ -14,6 +14,7 @@ import {
   loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled, diffHunks,
   DRAFTS, saveDrafts, recipientsOf, selfAlias, askState, askOf,
+  matchView, isKnownClause, CLAUSE_GRAMMAR, VIEW_LIMITS, savePlan, noteId, type View,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -179,6 +180,78 @@ switch (verb) {
       atomicWrite(path.join(boardDir, "board.json"), board, "move", `card=${id}`);
       console.log(`moved ${id} → ${lane} (override recorded; survives sync)`);
     });
+    break;
+  }
+  case "view": {
+    // A name over a query, said the same way on both sides. The owner presses
+    // it in the sidebar; an agent runs it here; neither has to describe the
+    // filter in prose to the other.
+    const { slug, boardDir } = boardFor(projectDir());
+    const plan = loadPlan(boardDir);
+    plan.views = plan.views ?? [];
+    const sub = positional[0];
+    const RECENT_MS = 36 * 3600 * 1000;
+    const ctxFor = (notes: any) => ({
+      since: (iso?: string) => !!iso && Date.now() - Date.parse(iso) < RECENT_MS,
+      tagsOf: (id: string) => tagsOn(plan, id),
+      noteOf: (id: string) => notesOf(notes, id).map((n: any) => n.body).join(" "),
+      reviewOf: (id: string) => notesOf(notes, id).some((n: any) => parseNoteTags(n.body).review),
+    });
+    const byName = (n: string) => plan.views!.find((v) => v.name.toLowerCase() === n.toLowerCase());
+
+    if (!sub || sub === "list") {
+      const board = loadBoard(boardDir), notes = loadNotes(boardDir), ctx = ctxFor(notes);
+      if (!plan.views.length) { console.log(`no views on ${slug} yet`,);
+        console.log(`  make one: kanban.sh view add "this week" since:new since:moved`); break; }
+      for (const v of plan.views) {
+        const n = board.cards.filter((c) => matchView(c, v.clauses, ctx)).length;
+        console.log(`${v.name}  ·  ${v.clauses.join(" ")}  ·  ${n} card${n === 1 ? "" : "s"} now${v.by === "agent" ? "  (by agent)" : ""}`);
+      }
+      break;
+    }
+
+    if (sub === "add") {
+      const name = positional[1];
+      const clauses = positional.slice(2).map((c) => c.trim()).filter(Boolean);
+      if (!name) die("view add needs a name", 'kanban.sh view add "M2 blocked" tag:milestone:M2 is:blocked');
+      if (name.length < VIEW_LIMITS.nameMin || name.length > VIEW_LIMITS.nameMax)
+        die(`a view name is ${VIEW_LIMITS.nameMin} to ${VIEW_LIMITS.nameMax} characters`, `"${name}" is ${name.length}`);
+      if (!clauses.length) die("a view needs at least one clause", `the grammar: ${CLAUSE_GRAMMAR.join(" · ")}`);
+      if (clauses.length > VIEW_LIMITS.maxClauses)
+        die(`a view holds at most ${VIEW_LIMITS.maxClauses} clauses, got ${clauses.length}`, "more clauses than that is a search, not a view");
+      const bad = clauses.filter((c) => !isKnownClause(c));
+      if (bad.length) die(`unknown clause: ${bad.join(", ")}`, `the grammar: ${CLAUSE_GRAMMAR.join(" · ")}`);
+      const words = clauses.filter((c) => !/^(is|since|tag):/.test(c) && c !== "needs-you" && c !== "review-me");
+      if (words.length > VIEW_LIMITS.maxWords)
+        die(`at most ${VIEW_LIMITS.maxWords} free-text word, got ${words.length}`, "two words is a search; name the query instead");
+      const now = new Date().toISOString();
+      const existing = byName(name);
+      if (existing) { existing.clauses = clauses; existing.updatedAt = now; }
+      else plan.views.push({ id: noteId(), name, clauses, by: "agent", createdAt: now, updatedAt: now });
+      savePlan(boardDir, plan, `view:${existing ? "update" : "add"}`);
+      console.log(`${existing ? "updated" : "added"} view "${name}": ${clauses.join(" ")}`);
+      break;
+    }
+
+    if (sub === "rm") {
+      const name = positional[1];
+      if (!name) die("view rm needs a name", "kanban.sh view lists them");
+      const v = byName(name);
+      if (!v) die(`no view "${name}" on ${slug}`, "kanban.sh view lists them");
+      plan.views = plan.views.filter((x) => x.id !== v.id);
+      savePlan(boardDir, plan, "view:rm");
+      console.log(`removed view "${v.name}"`);
+      break;
+    }
+
+    // bare name: the cards it matches, right now
+    const v = byName(sub);
+    if (!v) die(`no view "${sub}" on ${slug}`, "kanban.sh view lists them · view add makes one");
+    const board = loadBoard(boardDir), notes = loadNotes(boardDir), ctx = ctxFor(notes);
+    const hits = board.cards.filter((c) => matchView(c, v.clauses, ctx));
+    if (hasFlag("json")) { console.log(JSON.stringify({ view: v, count: hits.length, cards: hits }, null, 2)); break; }
+    console.log(`${v.name} · ${v.clauses.join(" ")} · ${hits.length} card${hits.length === 1 ? "" : "s"}`);
+    for (const c of hits) console.log(`  ${c.id}  ${c.lane.padEnd(8)}  ${(c.title ?? "").slice(0, 68)}`);
     break;
   }
   case "answer": {

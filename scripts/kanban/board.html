@@ -1370,6 +1370,7 @@
   <div class="hpane" id="hCharter"></div>
 </div></div>
 
+<script src="/match.js"></script>
 <script src="/shared.js"></script>
 <script>
 const slug = location.pathname.split("/")[2];
@@ -4949,30 +4950,21 @@ function renderLive() {
 // Filtering is a view over the mirror, never a mutation of it: it narrows what
 // renders and the column counts say visible/total so nothing looks lost.
 let filterText = "";
+// What a clause means lives in match.js, which the CLI imports too, so a view
+// cannot mean one thing here and another there. The board's job is only to say
+// what "recently" is and where its notes and tags are.
+const clauseCtx = () => ({
+  since: (iso) => since(iso),
+  tagsOf: (id) => tagsOnCard(id),
+  noteOf: (id) => data.notes[id]?.note ?? "",
+  reviewOf: (id) => !!parseTags(data.notes[id]?.note).review,
+});
 function matchFilter(c) {
   if (!filterText) return true;
-  // "needs-you" is the header clause's scope, not a text search: the hub
-  // promises "N needs you" and this is where that promise lands
-  if (filterText === "needs-you") return !!c.verify?.needsHuman;
-  // the status band's counts are the same promise: a number you can press to
-  // see exactly the cards it counted
-  if (filterText === "is:blocked") return c.lane === "blocked";
-  if (filterText === "is:open") return c.lane !== "done" && c.lane !== "stale";
-  if (filterText === "is:settled") return c.lane === "done" || c.lane === "stale";
-  if (filterText === "since:done") return since(c.updatedAt) && c.lane === "done";
-  if (filterText === "since:blocked") return since(c.updatedAt) && c.lane === "blocked";
-  if (filterText === "since:new") return since(c.createdAt);
-  if (filterText === "since:moved") return since(c.updatedAt) && c.lane !== "done" && c.lane !== "blocked" && !since(c.createdAt);
-  if (filterText === "review-me") return parseTags(data.notes[c.id]?.note).review;
-  // tag:<kind>:<name> — the payoff of a shared vocabulary is that one press
-  // shows every card carrying it, milestones included
-  if (filterText.startsWith("tag:")) {
-    const want = filterText.slice(4).toLowerCase();
-    return tagsOnCard(c.id).some((t) => `${t.kind}:${t.name}`.toLowerCase() === want || t.name.toLowerCase() === want);
-  }
-  const hay = [c.title, c.heading, c.tag, c.source?.path, data.notes[c.id]?.note,
-    ...(c.subs ?? []).map((s) => s.title)].filter(Boolean).join(" ").toLowerCase();
-  return filterText.split(/\s+/).every((t) => hay.includes(t));
+  // One clause or several, ANDed, which is exactly what applying a view sets.
+  // A bare phrase still behaves as it always did, because an unrecognised word
+  // is a text search in match.js too.
+  return matchView(c, filterText.split(/\s+/).filter(Boolean), clauseCtx());
 }
 function setFilter(v) {
   const f = $("filter");

@@ -261,6 +261,37 @@ PY3
   check "a null pick with text is a real answer, not a note elsewhere (constraint 4)" "$got" "answered None neither, do X"
 fi
 
+# Views (#39). match.js is the ONE matcher: the board <script>s it and the CLI
+# imports it, so these rows pin what a clause means for both surfaces at once.
+# Every clause in the grammar, positive AND negative, because a matcher that
+# only ever says yes is not a matcher.
+grammar=$(bun -e '
+const m = require("'"$HERE"'/match.js");
+const ctx = { since: (i) => i === "recent", tagsOf: () => [{kind:"milestone",name:"M2"}],
+              noteOf: () => "a note about widgets", reviewOf: (id) => id === "rev" };
+const open   = { id:"a", lane:"active",  title:"open one",   createdAt:"old",    updatedAt:"recent" };
+const done   = { id:"b", lane:"done",    title:"done one",   createdAt:"old",    updatedAt:"recent" };
+const block  = { id:"c", lane:"blocked", title:"blocked",    createdAt:"old",    updatedAt:"recent" };
+const fresh  = { id:"d", lane:"active",  title:"new one",    createdAt:"recent", updatedAt:"recent" };
+const needs  = { id:"e", lane:"active",  title:"needs",      createdAt:"old", updatedAt:"old", verify:{needsHuman:true} };
+const rev    = { id:"rev", lane:"active", title:"review",    createdAt:"old", updatedAt:"old" };
+const t = (v) => v ? "1" : "0";
+process.stdout.write([
+  t(m.matchClause(open,"is:open",ctx)),      t(m.matchClause(done,"is:open",ctx)),
+  t(m.matchClause(done,"is:settled",ctx)),   t(m.matchClause(open,"is:settled",ctx)),
+  t(m.matchClause(block,"is:blocked",ctx)),  t(m.matchClause(open,"is:blocked",ctx)),
+  t(m.matchClause(needs,"needs-you",ctx)),   t(m.matchClause(open,"needs-you",ctx)),
+  t(m.matchClause(rev,"review-me",ctx)),     t(m.matchClause(open,"review-me",ctx)),
+  t(m.matchClause(fresh,"since:new",ctx)),   t(m.matchClause(needs,"since:new",ctx)),
+  t(m.matchClause(open,"since:moved",ctx)),  t(m.matchClause(fresh,"since:moved",ctx)),
+  t(m.matchClause(done,"since:done",ctx)),   t(m.matchClause(open,"since:done",ctx)),
+  t(m.matchClause(open,"tag:milestone:M2",ctx)), t(m.matchClause(open,"tag:milestone:M9",ctx)),
+  t(m.matchClause(open,"widgets",ctx)),      t(m.matchClause(open,"absent",ctx)),
+  t(m.matchView(block,["is:open","is:blocked"],ctx)), t(m.matchView(open,["is:open","is:blocked"],ctx)),
+].join(""));
+' 2>/dev/null)
+check "match.js answers all 11 clause pairs, and ANDs them (#39)" "$grammar" "1010101010101010101010"
+
 # drop with no server: plan rows cannot be forgotten (the server owns plan.json),
 # so the CLI must say so rather than go quiet. The server path was exercised live
 # on 2026-08-23 (task #43's note); this pins the honest fallback.

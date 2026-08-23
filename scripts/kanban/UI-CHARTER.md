@@ -200,6 +200,10 @@ One contract, no exceptions:
   a defect, not a feature. `pins.json` is the standing example.
 - **Refuse rather than truncate.** A cap that silently cuts produces garbage. A
   cap that refuses with the fixing sentence produces a better input.
+- **A view is a query, never a list of cards.** A named filter stores its
+  clauses and resolves them when it is read, so it is still right tomorrow
+  without anyone maintaining it. Storing the ids it matched today would make
+  the name a lie by the next sync (#39).
 
 ## 12. Reporting and honesty in the UI
 
