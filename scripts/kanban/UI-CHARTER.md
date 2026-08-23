@@ -429,6 +429,11 @@ actually happened.
   reading of §5 for secondary controls too. The §16 count is re-measured by
   `test-charter.sh` rather than carried. Same day: `show --json` carries the
   card's goal and tags (#49), and drop forgets them (#43).
+  Eleven typed chrome glyphs on the board drawn (#45, the count had been
+  carried as eight). The drafts status strip ellipsizes the pull note so the
+  save state stays on screen (#47). §14 round on the batch: nothing found;
+  four keyboard paths, two overlays, both themes on hub and board. Skipped:
+  the drafts strip was read in light only.
 - **2026-08-22, seventh round.** The §16 standing count was WRONG and a peer
   found it. It read "zero native tooltips and 608 owned ones across the board";
   `board.html` carried four banned `title=` attributes, two of them on the
