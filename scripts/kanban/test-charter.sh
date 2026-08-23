@@ -20,5 +20,12 @@ hits=$(cd "$HERE" && rg -n ' title="|\.title *= ' board.html hub.html drafts.htm
 if [ -z "$hits" ]; then ok "no native tooltips on board, hub or drafts (§16)"
 else no "no native tooltips on board, hub or drafts (§16)" "$hits"; fi
 
+# §5: drawn, not typed. A button whose only content is a unicode dingbat, in
+# markup or assigned as textContent, reads at a different weight from the SVG
+# set beside it. Eleven of them were found on the board on 2026-08-23 (#45).
+typed=$(cd "$HERE" && rg -n '<button[^>]*>[[:space:]]*[◐?↑↓»«✕✓○●⋯›‹×✎]+[[:space:]]*</button>|textContent = "[◐?↑↓»«✕✓○●⋯›‹×✎]"' board.html hub.html drafts.html || true)
+if [ -z "$typed" ]; then ok "no typed dingbats in buttons on board, hub or drafts (§5)"
+else no "no typed dingbats in buttons on board, hub or drafts (§5)" "$typed"; fi
+
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

@@ -1223,8 +1223,8 @@
         <button id="digestBtn" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
       </span>
       <span class="tgrp view">
-        <button class="icon ghost" id="theme" data-tip="Toggle light and dark (t)" aria-label="toggle theme">◐</button>
-        <button class="icon ghost" id="helpBtn" data-tip="Shortcuts, terminology and how it works (?)" aria-label="help">?</button>
+        <button class="icon ghost" id="theme" data-tip="Toggle light and dark (t)" aria-label="toggle theme"></button>
+        <button class="icon ghost" id="helpBtn" data-tip="Shortcuts, terminology and how it works (?)" aria-label="help"></button>
       </span>
     </div>
   </div>
@@ -1242,11 +1242,11 @@
     <span class="lane" id="dLane"></span>
     <span class="sp"></span>
     <div class="navgrp">
-      <button class="icon" id="dPrev" data-tip="Previous card (k)" aria-label="previous card">↑</button>
-      <button class="icon" id="dNext" data-tip="Next card (j)" aria-label="next card">↓</button>
+      <button class="icon" id="dPrev" data-tip="Previous card (k)" aria-label="previous card"></button>
+      <button class="icon" id="dNext" data-tip="Next card (j)" aria-label="next card"></button>
     </div>
-    <button class="icon" id="dCollapse" data-tip="Collapse the panel to its tab rail (Esc)" aria-label="collapse panel">»</button>
-    <button class="icon" id="dClose" data-tip="Close this tab (⌘W)" aria-label="close tab">✕</button>
+    <button class="icon" id="dCollapse" data-tip="Collapse the panel to its tab rail (Esc)" aria-label="collapse panel"></button>
+    <button class="icon" id="dClose" data-tip="Close this tab (⌘W)" aria-label="close tab"></button>
   </div>
   <div class="dbody">
     <div>
@@ -1326,8 +1326,8 @@
 <div id="pop" role="dialog" aria-label="note editor">
   <div class="ph">
     <span class="pt" id="popTitle"></span>
-    <button type="button" class="icon ghost" id="popPick" data-tip="Add this note to the selection you send an agent" aria-label="select note">○</button>
-    <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close">✕</button>
+    <button type="button" class="icon ghost" id="popPick" data-tip="Add this note to the selection you send an agent" aria-label="select note"></button>
+    <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close"></button>
   </div>
   <div class="psub" id="popSub"></div>
   <textarea id="popNote" placeholder="Write the note here. ⌘↵ saves it."></textarea>
@@ -1353,7 +1353,7 @@
 <div id="help" role="dialog" aria-modal="true" aria-label="help"><div class="box">
   <div class="htitle"><span class="hmark"></span><span class="htx"><b>The board, explained</b>
     <i>keys, words, mechanism, and how to reach the agent</i></span><span class="hsp"></span>
-    <button class="hclose" type="button" id="hClose" aria-label="close">✕</button></div>
+    <button class="hclose" type="button" id="hClose" aria-label="close"></button></div>
   <div class="htabs" role="tablist">
     <button class="htab on" data-pane="hKeys" role="tab"><span class="hi"></span><span class="ht"><b>Keyboard</b><i>Shortcuts</i></span></button>
     <button class="htab" data-pane="hTerms" role="tab"><span class="hi"></span><span class="ht"><b>Taxonomy</b><i>What is it called</i></span></button>
@@ -1666,7 +1666,7 @@ function selBar(kind) {
   clear.dataset.tip = `Deselect every ${label.slice(0, -1)}`;
   clear.onclick = () => clearSel(kind === "note" ? "notes" : "cards");
   const exit = document.createElement("button");
-  exit.className = "ghost icon"; exit.textContent = "✕"; exit.setAttribute("aria-label", `exit ${label} selection`);
+  exit.className = "ghost icon"; exit.innerHTML = X_ICON; exit.setAttribute("aria-label", `exit ${label} selection`);
   exit.dataset.tip = "Leave select mode. The selection itself is kept.";
   exit.onclick = () => { if (kind === "note") noteSelMode = false; else selMode = false; applyModes(); };
   const div = document.createElement("span"); div.className = "sdiv";
@@ -2831,7 +2831,8 @@ function renderSide() {
 
   const toggle = document.createElement("button");
   toggle.type = "button"; toggle.className = "sidetoggle";
-  toggle.textContent = sideCollapsed ? "›" : "‹";
+  toggle.innerHTML = sideCollapsed ? CHEV_R_ICON : CHEV_L_ICON;
+  toggle.setAttribute("aria-label", sideCollapsed ? "expand the sidebar" : "collapse the sidebar");
   toggle.dataset.tip = sideCollapsed ? "Expand the sidebar" : "Collapse the sidebar";
   toggle.onclick = toggleSide;
   el.appendChild(toggle);
@@ -3009,7 +3010,7 @@ function render() {
     const total = all.filter((c) => c.lane === lane).length;
     head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2>` +
       `<span class="count">${filterText ? `${cardsIn.length}/${total}` : total}</span>` +
-      `<button type="button" class="cmenu" aria-label="lane options">⋯</button>`;
+      `<button type="button" class="cmenu" aria-label="lane options">${DOTS_ICON}</button>`;
     head.querySelector(".cmenu").onclick = (e) => { e.stopPropagation(); openColCard(lane, wrap, e.currentTarget); };
     wrap.appendChild(head);
     applyColWidth(wrap, lane);
@@ -3295,6 +3296,24 @@ function fx(el, name) {
 const SRC_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4 2.2h5l3 3v8.6H4V2.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 2.2v3.3h3" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
 const PEN_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
 const PLUS_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 3.4v9.2M3.4 8h9.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+// Chrome glyphs the charter wants drawn rather than typed (§5): the same 16
+// grid and stroke as the icons above, so a close box and a pen read as one set.
+const G = (d, w = 1.4) => `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="${d}" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const X_ICON = G("M4 4l8 8M12 4l-8 8");
+const UP_ICON = G("M8 12.5V3.5M4 7.5l4-4 4 4");
+const DOWN_ICON = G("M8 3.5v9M4 8.5l4 4 4-4");
+const CHEV_L_ICON = G("M9.8 3.5 5.3 8l4.5 4.5");
+const CHEV_R_ICON = G("M6.2 3.5 10.7 8l-4.5 4.5");
+const CHEV_RR_ICON = G("M4 3.5 8.5 8 4 12.5M8.5 3.5 13 8l-4.5 4.5");
+const DOTS_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="3.5" cy="8" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="12.5" cy="8" r="1.4"/></svg>`;
+const RING_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.2" stroke="currentColor" stroke-width="1.3"/></svg>`;
+const HELP_ICON = G("M5.6 6.1a2.4 2.4 0 1 1 3.4 2.2c-.7.4-1 .8-1 1.5M8 12.6h.01", 1.3);
+const THEME_ICON_B = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 2.4a5.6 5.6 0 0 1 0 11.2Z" fill="currentColor"/></svg>`;
+// the static chrome glyphs, drawn once the icon set is defined
+for (const [id, ico] of [["theme", THEME_ICON_B], ["helpBtn", HELP_ICON], ["dPrev", UP_ICON], ["dNext", DOWN_ICON],
+  ["dCollapse", CHEV_RR_ICON], ["dClose", X_ICON], ["popPick", RING_ICON], ["popClose", X_ICON], ["hClose", X_ICON]]) {
+  const b = $(id); if (b) b.innerHTML = ico;
+}
 const TRASH_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.2 4.6h9.6M6.4 4.6V3.2h3.2v1.4M4.6 4.6l.6 8.2h5.6l.6-8.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const DOT_ICON = `<svg width="9" height="9" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>`;
 const TICK_ICON = `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.4 5.6 10 11 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -3525,7 +3544,7 @@ function renderTabs() {
     // the label swaps with the panel: a name when there is room, initials at 46px
     txt.textContent = collapsed() ? initialsOf(c) : briefOf(c);
     const x = document.createElement("span");
-    x.className = "tx"; x.textContent = "✕"; x.dataset.tip = "Close this tab";
+    x.className = "tx"; x.innerHTML = X_ICON; x.dataset.tip = "Close this tab";
     x.onclick = (e) => { e.stopPropagation(); closeTab(id); };
     b.append(glyph, txt, x);
     b.draggable = true;
