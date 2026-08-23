@@ -1303,6 +1303,7 @@
     <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close"></button>
   </div>
   <div class="psub" id="popSub"></div>
+  <div class="pvrestore" id="popConflict" hidden></div>
   <div class="pvrestore" id="popRestore" hidden></div>
   <div class="hint" id="popLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
   <button type="button" class="ghost npv" id="popNotePv" data-tip="See how this note will read once it is rendered">preview</button>
@@ -3448,7 +3449,31 @@ function sweepDrafts() {
 // last-write-wins, but never silently: if the agent rewrites the note while you
 // are typing, say so and offer their version
 let baseNote = "", conflictNote = null;
+// The popover edits the same note the composer does, so it races the same way:
+// an agent can rewrite the body while the owner is mid-sentence. Same data,
+// same race, same notice — the spec's "adds" row.
+function checkPopConflict(parsed) {
+  const el = $("popConflict"), ta = $("popNote");
+  if (!el || !ta || !popCard || !$("pop").classList.contains("on")) return;
+  const theirs = notesOf(data.notes[popCard]).find((n) => n.id === popNote)?.body ?? "";
+  const now = notesOf(parsed.notes[popCard]).find((n) => n.id === popNote)?.body ?? theirs;
+  if (now === theirs || now === ta.value) { el.hidden = true; return; }
+  // never overwrite what they are typing; say it changed and let them look
+  el.hidden = false;
+  el.replaceChildren();
+  const t = document.createElement("span");
+  t.textContent = "An agent rewrote this note while you were typing.";
+  const see = document.createElement("button");
+  see.type = "button"; see.className = "ghost"; see.textContent = "Take theirs";
+  see.onclick = () => { ta.value = now; ta.dispatchEvent(new Event("input", { bubbles: true })); el.hidden = true; };
+  const keep = document.createElement("button");
+  keep.type = "button"; keep.className = "ghost"; keep.textContent = "Keep mine";
+  keep.onclick = () => { el.hidden = true; };
+  el.append(t, see, keep);
+}
+
 function checkConflict(parsed) {
+  checkPopConflict(parsed);
   if (!openId) return;
   const theirs = parsed.notes[openId]?.note ?? "";
   if (theirs !== baseNote && theirs !== $("dNote").value) {

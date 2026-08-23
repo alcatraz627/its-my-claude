@@ -147,7 +147,16 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > popover is the same message and a vocabulary that differs by surface is a
 > vocabulary nobody trusts.
 >
-> Remaining: the conflict notice.
+> **The conflict notice too, so step 4 is done.** The popover edits the same
+> note the composer does and races the same way: an agent can rewrite the body
+> mid-sentence. Same data, same race, same notice, offering Take theirs or Keep
+> mine and never overwriting what is being typed.
+>
+> **UNCONFIRMED, honestly:** the race itself was not induced. Verified that the
+> page boots with it in the poll path, the slot exists, and it is a no-op rather
+> than a throw when no popover is open. Making a real agent rewrite a note
+> mid-edit needs a second writer, which is the same wall the concurrent-edit
+> caveat hit.
 
 ## Build order, with checks
 
