@@ -755,7 +755,7 @@ const server = Bun.serve({
     // are the same shape: name a tag, then say what it applies to.
     if (req.method === "POST" && p === "/api/tag") {
       const body = (await req.json().catch(() => null)) as {
-        slug?: string; op?: "apply" | "unapply" | "create" | "rename" | "delete";
+        slug?: string; op?: "apply" | "unapply" | "create" | "rename" | "delete" | "forget";
         cardId?: string; kind?: TagKind; name?: string; tagId?: string; note?: string;
       } | null;
       const dir = body?.slug ? boardDirOf(body.slug) : null;
@@ -815,6 +815,15 @@ const server = Bun.serve({
             if (!list.length) delete plan.on[card];
           }
           out = { ok: true };
+        } else if (op === "forget") {
+          // A dropped card takes its tag rows and its goal with it. The serving
+          // side already filters orphans; this is what stops them accumulating.
+          const card = String(body!.cardId ?? "");
+          if (!card) { out = { error: "forget needs a cardId" }; return; }
+          const had = (plan.on[card]?.length ?? 0) + (plan.goals[card] ? 1 : 0);
+          delete plan.on[card];
+          delete plan.goals[card];
+          out = { ok: true, removed: had };
         } else { out = { error: `unknown op ${op}` }; return; }
         if (!out.error) savePlan(dir, plan, `tag:${op}`);
       });

@@ -214,5 +214,16 @@ else
   bad "show --json carries goal and tags" "no card in the fixture board to show"
 fi
 
+# drop with no server: plan rows cannot be forgotten (the server owns plan.json),
+# so the CLI must say so rather than go quiet. The server path was exercised live
+# on 2026-08-23 (task #43's note); this pins the honest fallback.
+if [ -n "$CARD" ]; then
+  err=$(bun run "$HERE/cli.ts" drop "$CARD" --project "$PROJ" 2>&1 >/dev/null)
+  still=$(python3 -c "import json;p=json.load(open('$BDIR/plan.json'));print(bool(p['on'].get('$CARD')), bool(p['goals'].get('$CARD')))")
+  case "$err" in *"NOT removed"*) ok "drop without a server says the plan rows were not removed (#43)" ;;
+    *) bad "drop without a server says the plan rows were not removed (#43)" "$err" ;; esac
+  check "and the rows really are still there, so the message is true" "$still" "True True"
+fi
+
 printf '  ---- %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

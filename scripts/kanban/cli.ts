@@ -763,6 +763,18 @@ switch (verb) {
         ? `dropped ${id} (manual card, gone for good)`
         : `dropped ${id} (tombstoned — sync won't resurrect it; undo: kanban.sh drop ${id} --undo)`);
     });
+    // Tags and goal live in plan.json, which the server owns. Forget them there
+    // so the store does not keep rows for a card that no longer exists.
+    const plan = loadPlan(boardDir);
+    if (plan.on[id]?.length || plan.goals[id]) {
+      const port = serverPort();
+      const res = port ? await fetch(`http://localhost:${port}/api/tag`, {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ slug, op: "forget", cardId: id }),
+      }).catch(() => null) : null;
+      if (res?.ok) console.error(`tags and goal forgotten (via server)`);
+      else console.error(`tags and goal NOT removed from plan.json (server ${port ? "unreachable" : "not configured"}); they are never served, but re-run with the server up to clear them`);
+    }
     break;
   }
   case "unregister": {
