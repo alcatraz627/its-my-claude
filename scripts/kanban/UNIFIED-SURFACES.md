@@ -88,6 +88,69 @@ page that links `shared.js` can post a `seen` and a one-line reaction to
 `/api/surface`, so "did you look at it" stops being a chat question. Cheap
 once phase 1 exists; deliberately last because most previews are read once.
 
+## Phase 0, added 2026-08-23: the navbar, uniform and powerful; the help modal, everywhere
+
+Owner, verbatim: "Make the navbar 'uniform' for all pages, it can have section
+/ page specific elements but the core nav + logo icon click for home + other
+common info should still be shown, essentially I shouldn't lose access to
+common things in the navbar across; also improve the visual highlighting and
+controls in the navbar across + empower it even more for me to use it like a
+'power user' (define this properly and map to workflows / features / common
+minimal user actions or viewing for maximum customizable context)". And: "I
+really like everything about the help modal in the board, how else can we reuse
+the work done there to make it useful across other places as well".
+
+**The uniform navbar.** Today the hub and drafts share `pageHead` (shared.js)
+and the board has its own top bar (catalog §4), so the owner loses the page
+tabs on the board and the board's search on every other page. One `navbar`
+in `shared.js`, three zones, on every page:
+
+| zone | always | per page |
+|---|---|---|
+| left: identity | logo glyph (press = hub), crumb `All boards / <board>`, the `b` switcher | the board's path, the draft's title |
+| middle: find | the command bar (`/`): search on a board, filter on hub lists, find in a transcript | the placeholder says what it searches here |
+| right: common | page tabs (Boards · Asks · Drafts · Decisions · Previews), live peers, theme, help `?` | the board's select/nudge/copy group; drafts' Offer |
+
+Highlighting: the active tab carries the kind's hue under the label (§4
+grouping-plus-hue), the current board's name is `--text` 600, everything
+common is `--text-2`, and the page-specific group sits in its own bordered
+pill so the eye can tell "here" from "everywhere".
+
+**Power user, defined.** The owner's minimal recurring actions, measured from
+the session-start line, the asks rail and the decision pages: open a board,
+find a thing, see what needs them, write an ask, answer a decision, read a
+transcript, switch theme. The navbar serves those without the mouse:
+
+- `b` go-to (boards, asks, drafts, decisions, previews, sessions, views)
+- `/` the command bar, with verbs: `>lane card`, `#tag card`, `@agent ask`,
+  `view name` applies a view, `?` opens help; the search picker's chips are
+  the vocabulary
+- a **needs-you counter** in the right zone (cards needing you + pending
+  decisions + unread drafts pulls), pressable, the same number the hub shows
+- **pinned context**: the owner pins up to three things (a board, a view, a
+  decision) to the left zone from the switcher (`p`); they persist in the pin
+  store and render as small chips, so "my three boards" is one keystroke
+- `g` then a letter: `g b` boards, `g a` asks, `g d` drafts, `g s` sessions,
+  `g ?` help (chorded, shown in the help modal's Keyboard tab)
+- the theme, help and the live-peers pill never move
+
+**The help modal, everywhere.** What makes it good is the five-tab shape
+(Keyboard · Taxonomy · Vibe Code · Hey Claude · Charter), one table
+treatment, sticky heads where a tab warrants one, Esc-only dismissal, and the
+Charter tab rendering the source live. Reuse is one component in `shared.js`
+(`helpModal(tabs)`) with the board's CSS moved to `shared.css`, and per-page
+tab sets: hub (Keyboard · Taxonomy · Charter), drafts (Keyboard · Taxonomy ·
+Templates · Charter), decision pages (Keyboard · How to answer · Charter),
+transcript tab (Keyboard · Reading a session · Charter). Keyboard and
+Taxonomy are generated from the same tables the navbar and the pickers read,
+so the modal never drifts from the keys. `?` opens it on every page.
+Check: `HELP-MODAL-SCROLL-PARITY.md` re-run on every page that mounts it;
+the a11y tree shows one `dialog "help"` per page with the page's tab names.
+
+Sequence: the navbar lands before phase 1's hub tabs (they are its right
+zone); the help component lands with phase 2 (the decision page is its first
+new host).
+
 ## Served from where
 
 Recommendation: leave :5197 and :5106 as they are through phase 3. The Python
