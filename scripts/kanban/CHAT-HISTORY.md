@@ -127,7 +127,14 @@ phase 2 UI  → the §14 round; the §17 pass covers the tab when it runs
 phase 3-5   → opus, after unified-surfaces phase 1
 ```
 
-## Owner decisions (next decision page)
+## RULED 2026-08-24 (decision page kanban-aug24-rulings)
+
+- **D-ch-1 = a:** the transcript view lives on the board and the old viewer
+  retires. One place to read a session.
+- **D-ch-2 = a:** `transcript.py` stays a subprocess behind a fixed contract.
+- **D-ch-3 = a:** sessions are a drawer tab, so the board stays on screen.
+
+## Owner decisions (answered above)
 
 > On the page as of 2026-08-24: `http://localhost:5197/kanban-aug24-rulings/`
 > (D2, D3, D4 there are D-ch-1, D-ch-2, D-ch-3 here). Nothing in this plan

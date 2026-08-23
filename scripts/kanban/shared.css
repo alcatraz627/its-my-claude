@@ -135,7 +135,12 @@
   /* Identity SHRINKS. It held flex:none until a board whose path is 842px wide
      pushed the zone to 985 and squeezed the find zone to zero. What you are
      looking AT can ellipsise; the control you type INTO cannot vanish. */
-  .nzid{flex:0 1 auto;min-width:0}
+  /* Identity shrinks but DOES NOT VANISH. It held flex:none (a long path then
+     squeezed find to zero), then flex:0 1 auto with no floor (identity itself
+     went to zero: logo, crumb, board name and path all gone). §18b applies to
+     this zone as much as to the other one — the fix for one zone reaching zero
+     must not be another zone reaching zero. */
+  .nzid{flex:0 1 auto;min-width:210px}
   .nzfind{flex:1 1 260px;min-width:170px;justify-content:flex-start}
   .nfind{display:flex;align-items:center;gap:7px;min-width:0}
   .nowrap{white-space:nowrap;flex:none}
@@ -154,8 +159,17 @@
   .navbar .nsub{font:400 var(--fs-small)/1.2 var(--sans);color:var(--text-3)}
   .navbar .nsub:empty{display:none}
   .npeers:empty,.npage:empty{display:none}
-  .npage{display:flex;align-items:center;gap:5px;padding:3px;
+  /* The page's own group is the widest thing in the bar and it was wrapping to
+     a second row. It slides instead: a bar that changes HEIGHT as you use it
+     costs more than one you scroll, and the zones stay where the eye left them. */
+  .npage{display:flex;align-items:center;gap:5px;padding:3px;flex:0 1 auto;min-width:0;
+         overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
          border:1px solid var(--border);border-radius:var(--r-card);background:var(--canvas)}
+  .npage::-webkit-scrollbar{display:none}
+  .npage > *{flex:none}
+  /* common controls never scroll away: theme and help are the two things that
+     must be in the same place on every page */
+  .nzcommon > .icon{flex:none}
   .views{display:flex;gap:2px;background:var(--canvas);border:1px solid var(--border);
          border-radius:var(--r-card);padding:3px}
   .views button,.views a{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;

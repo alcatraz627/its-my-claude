@@ -45,7 +45,17 @@
      as find / pick / act / view instead of eight peers in a line. The gap
      BETWEEN groups is larger than the gap inside one, which is what makes the
      grouping readable without drawing seven dividers. */
-  .actions{display:flex;gap:12px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  .actions{display:flex;gap:12px;flex:0 1 auto;min-width:0;flex-wrap:nowrap;justify-content:flex-end;align-items:center}
+  /* the wrapper that carries the board's own controls into the navbar. Without
+     this it is a block, and its three groups stacked into a 92px column that
+     made the whole bar three rows tall. */
+  .bpage{display:flex;align-items:center;gap:7px;min-width:0}
+  /* the same trap as .bpage: a wrapper carried into the navbar with no flex
+     styling lays its children out as blocks, and identity took three lines
+     while the search box landed on top of the board name */
+  .bident{display:flex;align-items:center;gap:8px;min-width:0}
+  .bident .bpath{flex:0 1 auto;min-width:0}
+  .bpage > *{flex:none}
   .tgrp{display:flex;align-items:center;gap:5px}
   .tgrp.find{gap:0;border:1px solid var(--border);border-radius:var(--r-card);background:var(--card);
              padding-left:2px;transition:border-color var(--t-fast),box-shadow var(--t-fast)}
@@ -565,10 +575,8 @@
   .composer textarea{font:400 var(--fs-lead)/1.68 var(--sans);letter-spacing:-.002em;padding:11px 13px;
                      background:var(--card);border:1px solid var(--border);border-radius:var(--r-card);
                      color:var(--text);min-height:76px;resize:vertical;overflow-y:auto;
-                     transition:height var(--t-fast) cubic-bezier(.32,.72,0,1),border-color var(--t-fast),box-shadow var(--t-fast);
-                     background-image:linear-gradient(var(--border) 1px,transparent 1px);
-                     background-size:100% 1.68em;background-position:0 1.42em;background-attachment:local}
-  [data-theme="light"] .composer textarea{background-image:linear-gradient(color-mix(in srgb,var(--border) 55%,transparent) 1px,transparent 1px)}
+                     transition:border-color var(--t-fast),box-shadow var(--t-fast);
+                     max-height:52vh}
   .composer textarea:focus{border-color:var(--blue);outline:none;
                            box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 15%,transparent)}
   .composer textarea::placeholder{color:var(--text-3);font-style:italic}
@@ -3607,13 +3615,27 @@ function autoGrow(ta) {
   if (!ta) return;
   // Measured against the PANEL, not the body above it. The body shrinks as this
   // box grows, so a cap taken from it chases itself and never binds.
-  const room = Math.max(120, Math.round($("drawer").getBoundingClientRect().height * 0.42));
+  // Once the owner drags the corner, the box is THEIRS: growing over a hand
+  // set height is the thing that made the panel above start scrolling.
+  if (ta.dataset.userSized === "1") return;
+  // A third of the panel, not 42%: the note was winning the argument with
+  // everything above it, and the card is what you came to read.
+  const room = Math.max(110, Math.round($("drawer").getBoundingClientRect().height * 0.33));
   const now = ta.getBoundingClientRect().height;
   const want = Math.min(Math.max(ta.scrollHeight + 2, 76), room);
   if (want > now) ta.style.height = `${want}px`;
 }
 // A fresh note is a fresh sitting, so the box returns to its resting height.
-function resetGrow(ta) { if (ta) { ta.style.height = ""; autoGrow(ta); } }
+function resetGrow(ta) { if (ta) { delete ta.dataset.userSized; ta.style.height = ""; autoGrow(ta); } }
+// A drag on the corner is the owner saying how big this should be. Nothing
+// grows over that afterwards.
+new ResizeObserver((es) => {
+  for (const e of es) {
+    const ta = e.target;
+    if (ta.dataset.growing === "1") { ta.dataset.growing = ""; continue; }
+    if (document.activeElement === ta || ta.matches(":hover")) ta.dataset.userSized = "1";
+  }
+}).observe(document.getElementById("dNote"));
 // A short, once-only cue per action. The class is cleared on the way in so a
 // repeated action re-fires rather than sitting inert.
 function fx(el, name) {

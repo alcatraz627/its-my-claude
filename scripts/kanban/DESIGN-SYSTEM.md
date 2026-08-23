@@ -319,7 +319,7 @@ A number on this app is a count you can press to see the things counted.
 ## 8 · Interaction vocabulary
 
 - **Hover** = one step up the neutral ladder, `.12s`. Three recipes only:
-  quiet (ghost → well ground), raised (card → card-hover, border-2), accent
+  quiet (ghost → CARD ground), raised (card → card-hover, border-2), accent
   (solid → brightness 1.08). Measured today: eight (G8).
 - **Pressed / on** = the control's own tint ladder.
 - **Focus** = the one ring, always visible on keyboard, never on pointer.
@@ -370,7 +370,7 @@ all of them remove a second way of doing one thing.
 | G16 | empty-state voice | "No cards in this lane" vs "Nothing yet. Write anything above…" | one voice: what is missing, then what to do | grep the three empties |
 | G17 | typed arrow in a link | "open in tab ↗" | the drawn external glyph | charter test's §5 row widened to `<a>` |
 | G18 | `.kbd` keycap vs `.k` hint | two keycap styles | one `.k` | grep |
-| G22 | quiet hover: the book and the code disagree | §8 defines quiet as "ghost → well ground", but 9 of the 15 real hovers come up to `--card` and only 6 to `--well`; `--well` is the smaller step, so adopting it makes every chrome button's hover fainter | owner picks one, then it is applied everywhere at once | count the two bodies; one of them must reach 0 |
+| G22 | RULED 2026-08-24 (D1a): quiet = `--card`, the louder step. The book said `--well`; the code said `--card` 9 times of 15 and the owner kept the code. §8 updated. G8 unblocked. | §8 defines quiet as "ghost → well ground", but 9 of the 15 real hovers come up to `--card` and only 6 to `--well`; `--well` is the smaller step, so adopting it makes every chrome button's hover fainter | owner picks one, then it is applied everywhere at once | count the two bodies; one of them must reach 0 |
 | G21 | a focused card and a selected card look identical | `.card:focus-visible` and `.card.sel` share one `0 0 0 2px` shadow, so keyboard focus is indistinguishable from selection, and `x` selects whatever the ring is on | give focus the §3.3 outline and leave the shadow to selection | tab to a card without selecting it; the two states must differ |
 | G20 | the toast is below every overlay | `#toast` is z 3, `#help` is 50, so a toast fired while any overlay is open is invisible; measured live, and it predates this work | either lift the toast above the modal tier, or adopt a corrected §5 ladder wholesale | open the help modal, fire a toast, see it |
 | G19 | the shared key map has no overlay guards | `t` is bound in both `shared.js` and `board.html`; board returns early inside five overlays, shared does not, so linking makes `t` fire twice and fire inside overlays | `data-keys="own"` on `<html>`; the shared handler returns before reading the key (charter §10) | remove the attribute and `t` must stop toggling |
