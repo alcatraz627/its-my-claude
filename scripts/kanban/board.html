@@ -1296,6 +1296,7 @@
   </div>
   <div class="psub" id="popSub"></div>
   <div class="pvrestore" id="popRestore" hidden></div>
+  <div class="hint" id="popLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
   <button type="button" class="ghost npv" id="popNotePv" data-tip="See how this note will read once it is rendered">preview</button>
   <div class="pvpane" id="popNotePane" hidden></div>
   <textarea id="popNote" placeholder="Write the note here. ⌘↵ saves it."></textarea>
@@ -1535,6 +1536,14 @@ function bufferPopover(cardId, noteId) {
   const el = $("popNote");
   if (el) { el.dataset.buffered = ""; attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` });
     attachStash(el, cardId, noteId, "popRestore");
+    // The popover is the same message as the composer, so it speaks the same
+    // vocabulary. Shown only while the note is empty, exactly as the composer
+    // does it: syntax help earns its space before you write, not after.
+    const leg = $("popLegend");
+    if (leg) {
+      const sync = () => { leg.style.display = el.value.trim() ? "none" : ""; };
+      el.addEventListener("input", sync); sync();
+    }
     // the popover is the same message as the composer, so it gets the same
     // affordance rather than a lesser one (the spec's "adds" row)
     attachPreview(el, "popNotePv", "popNotePane"); }

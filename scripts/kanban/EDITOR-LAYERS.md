@@ -141,7 +141,13 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > Escape out the way a mis-click does, reopen, the banner appears, the textarea
 > is NOT silently overwritten, Restore puts it back, Discard forgets it.
 >
-> Remaining: the popover legend and the conflict notice.
+> **The legend too.** Same six tokens as the composer, shown only while the note
+> is empty, hidden the moment you write: syntax help earns its space before you
+> type, not after. Verified byte-identical to the composer's, because the
+> popover is the same message and a vocabulary that differs by surface is a
+> vocabulary nobody trusts.
+>
+> Remaining: the conflict notice.
 
 ## Build order, with checks
 
