@@ -78,11 +78,11 @@
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--canvas);color:var(--text);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+  body{background:var(--canvas);color:var(--text);font:var(--fs-lead)/1.5 var(--sans);-webkit-font-smoothing:antialiased}
 
   /* ---------- buttons (charter §5, §7) ---------- */
-  button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);
-         color:var(--text-2);padding:5px 10px;font-size:12.5px;font-weight:500;display:inline-flex;
+  button{font:inherit;cursor:pointer;border-radius:var(--r-control);border:1px solid var(--border);background:var(--card);
+         color:var(--text-2);padding:5px 10px;font-size:var(--fs-body);font-weight:500;display:inline-flex;
          align-items:center;gap:6px;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   button:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
@@ -99,8 +99,8 @@
 
   /* ---------- chips ---------- */
   .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;
-        border:1px solid var(--border);border-radius:20px;background:var(--well);color:var(--text-2);
-        font:500 11.5px/1 var(--sans);cursor:pointer;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
+        border:1px solid var(--border);border-radius:var(--r-pill);background:var(--well);color:var(--text-2);
+        font:500 var(--fs-small)/1 var(--sans);cursor:pointer;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   .chip:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   .chip .ci{flex:none;display:grid;place-items:center;color:var(--text-3)}
   .chip.tag .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
@@ -113,33 +113,58 @@
   .k-priority{--dot:var(--pink);--dot-bg:var(--pink-bg);--dot-br:var(--pink-br)}
   .k-class{--dot:var(--teal);--dot-bg:var(--teal-bg);--dot-br:var(--teal-br)}
 
-  /* ---------- the page chrome every surface wears ---------- */
-  .pagehead{display:flex;align-items:center;gap:11px;padding:13px 24px;
-            border-bottom:1px solid var(--border);background:var(--well)}
-  .pagehead .hmark{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;
-                   background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br)}
-  .pagehead .htx{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .pagehead h1{margin:0;font:600 14.5px/1.2 var(--sans);letter-spacing:-.011em;color:var(--text)}
-  .pagehead .hsub{font:400 11.5px/1.2 var(--sans);color:var(--text-3)}
-  .pagehead .hsp{flex:1}
+  /* ---------- the navbar every surface wears (UNIFIED-SURFACES phase 0) ----------
+     Three zones. Left says who and where, middle says what you are looking for
+     HERE, right says what is true everywhere plus this page's own group. The
+     page-specific group sits in its own bordered pill so the eye can tell "here"
+     from "everywhere" without reading a word of it. */
+  .navbar{display:flex;align-items:center;gap:12px;padding:11px 20px;
+          border-bottom:1px solid var(--border);background:var(--well)}
+  .nz{display:flex;align-items:center;gap:9px;min-width:0}
+  .nzid{flex:none}
+  .nzfind{flex:1;min-width:0;justify-content:flex-start}
+  .nzcommon{flex:none;margin-left:auto}
+  .nlogo{flex:none;width:28px;height:28px;padding:0;display:grid;place-items:center;
+         background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br);
+         border-radius:var(--r-card)}
+  .nlogo:hover{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);filter:brightness(1.06)}
+  .ncrumb{flex:none;display:flex;align-items:center;gap:6px;font:400 var(--fs-body)/1.3 var(--sans);color:var(--text-3)}
+  .ncrumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);padding:2px 5px;margin-left:-5px}
+  .ncrumb a:hover{color:var(--text);background:var(--card)}
+  .ntx{display:flex;flex-direction:column;gap:2px;min-width:0}
+  /* the thing you are looking AT is the loudest word in the bar; everything
+     common is one step quieter, which is the whole highlighting rule */
+  .navbar h1{margin:0;font:600 var(--fs-lead)/1.2 var(--sans);letter-spacing:-.011em;color:var(--text)}
+  .navbar .nsub{font:400 var(--fs-small)/1.2 var(--sans);color:var(--text-3)}
+  .navbar .nsub:empty{display:none}
+  .npeers:empty,.npage:empty{display:none}
+  .npage{display:flex;align-items:center;gap:5px;padding:3px;
+         border:1px solid var(--border);border-radius:var(--r-card);background:var(--canvas)}
   .views{display:flex;gap:2px;background:var(--canvas);border:1px solid var(--border);
-         border-radius:9px;padding:3px}
+         border-radius:var(--r-card);padding:3px}
   .views button,.views a{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;
-        border:1px solid transparent;background:none;border-radius:7px;color:var(--text-3);
-        font:600 12.5px/1 var(--sans);text-decoration:none;
+        border:1px solid transparent;background:none;border-radius:var(--r-control);color:var(--text-3);
+        font:600 var(--fs-body)/1 var(--sans);text-decoration:none;
         transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast)}
   .views button:hover,.views a:hover{background:var(--well);color:var(--text-2);border-color:transparent}
   .views .vi{flex:none;display:grid;place-items:center;color:currentColor}
-  .views .vn{flex:none;font:600 11px/1 var(--mono);color:var(--text-3);background:var(--well);
-             border-radius:20px;padding:2px 6px;min-width:20px;text-align:center}
+  .views .vn{flex:none;font:600 var(--fs-small)/1 var(--mono);color:var(--text-3);background:var(--well);
+             border-radius:var(--r-pill);padding:2px 6px;min-width:20px;text-align:center}
   .views .vn:empty{display:none}
-  .views .on{background:var(--card);border-color:var(--border);color:var(--text);box-shadow:var(--shadow)}
-  .views .on .vn{color:var(--blue);background:var(--blue-bg)}
+  .views .on{background:var(--card);border-color:var(--border);color:var(--text);box-shadow:var(--shadow);
+             position:relative}
+  /* a 2px hue rule under the active label: which page you are on is answered by
+     colour before the word is read */
+  .views .on::after{content:"";position:absolute;left:11px;right:11px;bottom:-4px;height:2px;
+                    border-radius:var(--r-hair);background:var(--nav-hue,var(--blue))}
+  .views .k-boards{--nav-hue:var(--blue)} .views .k-asks{--nav-hue:var(--amber)}
+  .views .k-drafts{--nav-hue:var(--violet)}
+  .views .on .vn{color:var(--nav-hue,var(--blue));background:var(--well)}
 
   /* ---------- the tooltip (charter §13: never the native one) ---------- */
   #tip{position:fixed;z-index:var(--z-tip);max-width:min(460px,72vw);max-height:40vh;overflow-y:auto;
-       background:var(--card);color:var(--text);border:1px solid var(--border-2);border-radius:9px;
-       padding:9px 12px;font:400 12.5px/1.55 var(--sans);box-shadow:0 12px 34px rgb(0 0 0/.34);
+       background:var(--card);color:var(--text);border:1px solid var(--border-2);border-radius:var(--r-card);
+       padding:9px 12px;font:400 var(--fs-body)/1.55 var(--sans);box-shadow:0 12px 34px rgb(0 0 0/.34);
        pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity var(--t-fast),transform var(--t-fast);
        white-space:pre-wrap;overflow-wrap:anywhere;display:none}
   #tip.on{opacity:1;transform:none}
@@ -148,7 +173,7 @@
               transform:rotate(45deg);left:var(--ax,18px)}
   #tip.below::after{top:-5px}
   #tip.above::after{bottom:-5px;transform:rotate(225deg)}
-  #tip .tiph{display:block;font:600 11.5px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
+  #tip .tiph{display:block;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
              color:var(--text-3);margin-bottom:6px}
 
   /* ---------- cross-highlight (charter §7) ---------- */
@@ -164,6 +189,6 @@
 /* A rendered task box. The harvester reads these checkboxes to mint cards, so a
    doc full of them used to render as literal "[ ]" in every preview. */
 .tbox{display:inline-grid;place-items:center;width:13px;height:13px;margin-right:7px;
-      border:1px solid var(--border-2);border-radius:3.5px;vertical-align:-2px;
-      font:700 9px/1 var(--sans);color:transparent;flex:none}
+      border:1px solid var(--border-2);border-radius:var(--r-inner);vertical-align:-2px;
+      font:700 var(--fs-micro)/1 var(--sans);color:transparent;flex:none}
 .tbox.on{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}

@@ -93,31 +93,62 @@ const NAV_ICON = {
   drafts: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
 };
 const MARK_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="2.4" width="4.6" height="11.2" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="7.6" y="2.4" width="4.6" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M14.4 5v6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+const HELP_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.75 1.75 0 1 1 1.9 1.85V9.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8.1" cy="11.6" r=".75" fill="currentColor"/></svg>`;
 const THEME_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 2.4a5.6 5.6 0 0 0 0 11.2V2.4Z" fill="currentColor"/></svg>`;
 
 // `active` is one of boards | asks | drafts. `onView` is optional: a page that
 // switches in place (the hub) handles its own two views; a page that does not
 // (drafts) navigates.
-function pageHead({ mount, active, title, sub, onView, counts = {} }) {
+//
+// Three zones (UNIFIED-SURFACES phase 0). Left is who and where, middle is what
+// you are looking for here, right is what is true on every page plus this page's
+// own group. A page supplies its identity, its find control and its actions; it
+// never re-implements the parts that must not move, which is what "I shouldn't
+// lose access to common things in the navbar across" asks for.
+//
+// `find` and `actions` are elements the page owns and this mounts; `help` is a
+// handler, and the help control is ABSENT rather than dead on a page that has no
+// modal yet (charter §7 states: a control that cannot act is hidden, never
+// silently greyed).
+function navbar({ mount, active, title, sub, crumb, identity, find, actions, counts = {},
+                  peers, help, onView }) {
   const el = typeof mount === "string" ? document.querySelector(mount) : mount;
   if (!el) return null;
-  el.className = "pagehead";
+  // add, never replace: a page may already carry a class its own CSS reads
+  // (the board styles .brow .crumb, and losing that class loses the crumb)
+  el.classList.add("navbar");
   el.innerHTML =
-    `<span class="hmark">${MARK_ICON}</span>` +
-    `<span class="htx"><h1 id="phTitle"></h1><span class="hsub" id="phSub"></span></span>` +
-    `<span class="hsp"></span>` +
-    `<div class="views" role="tablist">` +
-      ["boards", "asks", "drafts"].map((v, i) =>
-        `<a href="${v === "drafts" ? "/drafts" : v === "asks" ? "/?view=asks" : "/"}" data-v="${v}" data-k="${i + 1}" role="tab"
-            class="${v === active ? "on" : ""}"
-            data-tip="${v === "boards" ? "Every project an agent is working on" : v === "asks" ? "Things you wrote down for an agent to sort" : "Your documents, the rung above an ask"} · press ${i + 1}">
-           <span class="vi">${NAV_ICON[v]}</span><span class="vt">${v === "boards" ? "Boards" : v === "asks" ? "Your asks" : "Drafts"}</span>
-           <span class="vn">${counts[v] ?? ""}</span></a>`).join("") +
+    `<div class="nz nzid">` +
+      `<button class="nlogo" id="nbHome" aria-label="home"` +
+      ` data-tip="Every board, your asks and your drafts (g b)">${MARK_ICON}</button>` +
+      (crumb ? `<span class="ncrumb">${crumb}</span>` : "") +
+      (identity ? `<span class="nident" id="nbIdent"></span>`
+                : `<span class="ntx"><h1 id="nbTitle"></h1><span class="nsub" id="nbSub"></span></span>`) +
     `</div>` +
-    `<button class="icon ghost" id="phTheme" data-tip="Light and dark (t)" aria-label="toggle theme">${THEME_ICON}</button>`;
-  document.getElementById("phTitle").textContent = title;
-  document.getElementById("phSub").textContent = sub;
-  document.getElementById("phTheme").onclick = toggleTheme;
+    `<div class="nz nzfind" id="nbFind"></div>` +
+    `<div class="nz nzcommon">` +
+      `<div class="views" role="tablist">` +
+        ["boards", "asks", "drafts"].map((v, i) =>
+          `<a href="${v === "drafts" ? "/drafts" : v === "asks" ? "/?view=asks" : "/"}" data-v="${v}" data-k="${i + 1}" role="tab"
+              class="${v === active ? "on" : ""} k-${v}"
+              data-tip="${v === "boards" ? "Every project an agent is working on" : v === "asks" ? "Things you wrote down for an agent to sort" : "Your documents, the rung above an ask"} · press ${i + 1}">
+             <span class="vi">${NAV_ICON[v]}</span><span class="vt">${v === "boards" ? "Boards" : v === "asks" ? "Your asks" : "Drafts"}</span>
+             <span class="vn">${counts[v] ?? ""}</span></a>`).join("") +
+      `</div>` +
+      `<span class="npeers" id="nbPeers"></span>` +
+      `<span class="npage" id="nbActions"></span>` +
+      `<button class="icon ghost" id="nbTheme" data-tip="Light and dark (t)" aria-label="toggle theme">${THEME_ICON}</button>` +
+      (help ? `<button class="icon ghost" id="nbHelp" data-tip="Shortcuts, terminology and how it works (?)" aria-label="help">${HELP_ICON}</button>` : "") +
+    `</div>`;
+  if (identity) document.getElementById("nbIdent").append(identity);
+  else { document.getElementById("nbTitle").textContent = title ?? "";
+         document.getElementById("nbSub").textContent = sub ?? ""; }
+  document.getElementById("nbHome").onclick = () => { location.href = "/"; };
+  document.getElementById("nbTheme").onclick = toggleTheme;
+  if (help) document.getElementById("nbHelp").onclick = help;
+  if (find) document.getElementById("nbFind").append(find);
+  if (actions) document.getElementById("nbActions").append(actions);
+  if (peers) document.getElementById("nbPeers").append(peers);
   // a page that switches in place intercepts; everything else navigates
   if (onView) {
     el.querySelectorAll(".views a").forEach((a) => {
@@ -131,6 +162,13 @@ function pageHead({ mount, active, title, sub, onView, counts = {} }) {
   return el;
 }
 
+// g-then-a-letter, for pages that do not own their key map. The board does own
+// it, and `g` there already edits a card's goal, so the board reaches the same
+// places with `b` (its go-to picker) instead. One letter, two meanings, and the
+// page that got there first keeps it.
+let gArmed = null;
+const GO = { b: "/", a: "/?view=asks", d: "/drafts" };
+
 // One key map for all three, so the entrance behaves like the board.
 // A page that already owns a richer key map says so with data-keys="own" on
 // <html> and handles t and the view digits itself. The board does: its keys are
@@ -143,6 +181,9 @@ addEventListener("keydown", (e) => {
   // the throw used to take the whole handler with it
   if (e.target.matches?.("input,textarea,[contenteditable]")) return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (gArmed) { clearTimeout(gArmed); gArmed = null;
+    if (GO[e.key]) { location.href = GO[e.key]; return; } }
+  if (e.key === "g") { gArmed = setTimeout(() => { gArmed = null; }, 1400); return; }
   if (e.key === "t") return toggleTheme();
   const hit = document.querySelector(`.views a[data-k="${e.key}"]`);
   if (hit) hit.click();

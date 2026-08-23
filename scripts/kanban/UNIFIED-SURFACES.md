@@ -90,6 +90,22 @@ once phase 1 exists; deliberately last because most previews are read once.
 
 ## Phase 0, added 2026-08-23: the navbar, uniform and powerful; the help modal, everywhere
 
+> **Navbar shipped 2026-08-24 (#68).** `navbar()` in `shared.js` replaces
+> `pageHead`; all three pages mount it. The board keeps its dense controls but
+> hands them to the bar as zone contents rather than re-creating them, so every
+> id and handler survives. Logo-press-for-home, the page tabs and the help
+> control are common now; the board gained tabs it never had and the hub and
+> drafts gained the logo. The active tab carries its kind's hue as a 2px rule.
+> Two things diverge from the text below and are recorded rather than silently
+> resolved. **The `g` chord is not on the board**: `g` there already edits a
+> card's goal, and the board reaches the same places with `b`, which this plan
+> also lists; the chord works on every page that does not own its key map.
+> **The help control is absent, not disabled, on the hub and drafts** until the
+> shared modal lands with #69, because §7 says a control that cannot act is
+> hidden rather than greyed. The command bar verbs, the needs-you counter and
+> pinned context are NOT built: they overlap #70, the app-wide movement plan
+> the owner asked for on 2026-08-24, and building them twice is the risk.
+
 Owner, verbatim: "Make the navbar 'uniform' for all pages, it can have section
 / page specific elements but the core nav + logo icon click for home + other
 common info should still be shown, essentially I shouldn't lose access to

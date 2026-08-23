@@ -428,6 +428,21 @@ actually happened.
 
 ## 19. Changelog
 
+- **2026-08-24, one navbar (#68).** Every page wears `navbar()` from
+  `shared.js`: identity left, find in the middle, everything common plus the
+  page's own group on the right, that group in its own bordered pill so the eye
+  separates "here" from "everywhere". The board had no page tabs and the hub
+  and drafts had no logo-home; both are common now, which is what "I shouldn't
+  lose access to common things in the navbar across" asked for. The active tab
+  carries its kind's hue as a 2px rule under the label (§4). One rule learned
+  the hard way and worth keeping: **`navbar()` ADDS its class, never replaces
+  the mount's**, because the board styles `.brow .crumb` and replacing the
+  class silently drops the crumb. Adding `HELP_ICON` to `shared.js` also
+  collided with the board's own and killed the page with a SyntaxError until
+  the board's copy went; a new global in a shared file gets grepped against
+  every consumer first, which is pass 1's lesson arriving from the other
+  direction.
+
 - **2026-08-24, design system pass 1 (#61).** `board.html` links `shared.css`
   and `shared.js` and no longer carries its own copies: the token block
   (diffed byte-for-byte against `shared.css` before anything was deleted), the

@@ -465,7 +465,7 @@ const STAR = (on) => `<svg width="13" height="13" viewBox="0 0 14 14" fill="${on
 function setView(v) {
   view = v;
   const [t, sub] = VIEW_COPY[v] ?? VIEW_COPY.boards;
-  pageHead({ mount: "#phead", active: v === "notes" ? "asks" : "boards",
+  navbar({ mount: "#phead", active: v === "notes" ? "asks" : "boards",
     title: t, sub, counts: hubCounts,
     onView: (nv) => setView(nv === "asks" ? "notes" : "boards") });
   load();
