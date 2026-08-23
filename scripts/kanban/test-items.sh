@@ -195,5 +195,24 @@ case "$line" in
 esac
 cp "$ROOT/items.ok" "$ROOT/items.json"
 
+# show --json carries goal and tags on the card object. They live in plan.json,
+# and an agent reading the card alone used to get neither (vb-fable, #49).
+BDIR=$(python3 -c "
+import json,os; r=json.load(open(os.path.join('$ROOT','registry.json')))['boards']
+print(r['$SLUG']['dir'] if isinstance(r['$SLUG'],dict) and 'dir' in r['$SLUG'] else os.path.join('$ROOT','boards','$SLUG'))")
+CARD=$(python3 -c "import json;print(json.load(open('$BDIR/board.json'))['cards'][0]['id'])" 2>/dev/null)
+if [ -n "$CARD" ]; then
+  python3 - "$BDIR" "$CARD" <<'PY'
+import json,sys,os
+d,c=sys.argv[1],sys.argv[2]
+json.dump({"tags":[{"id":"t1","name":"M2","kind":"milestone","createdAt":"2026-08-23T00:00:00Z"}],
+           "on":{c:["t1"]},"goals":{c:"prove the contract"},"updatedAt":None}, open(os.path.join(d,"plan.json"),"w"))
+PY
+  got=$(bun run "$HERE/cli.ts" show "$CARD" --project "$PROJ" --json 2>/dev/null | python3 -c 'import sys,json;c=json.load(sys.stdin)["card"];print(c.get("goal"),"|",",".join(t["kind"]+":"+t["name"] for t in c.get("tags",[])))')
+  check "show --json carries goal and tags on the card object (#49)" "$got" "prove the contract | milestone:M2"
+else
+  bad "show --json carries goal and tags" "no card in the fixture board to show"
+fi
+
 printf '  ---- %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

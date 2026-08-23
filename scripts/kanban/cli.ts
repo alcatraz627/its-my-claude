@@ -687,12 +687,19 @@ switch (verb) {
     const card = board.cards.find((c) => c.id === id);
     if (!card) die(`no card ${id} on ${slug}`, `kanban.sh status --cards lists ids`);
     const note = loadNotes(boardDir)[id] ?? null;
+    // Goal and tags live in plan.json, not on the card row, so an agent reading
+    // the card object alone never saw them (vb-fable, 2026-08-22).
+    const plan = loadPlan(boardDir);
+    const goal = plan.goals[id] ?? null;
+    const tags = tagsOn(plan, id).map((t) => ({ id: t.id, kind: t.kind, name: t.name }));
     if (hasFlag("json")) {
-      console.log(JSON.stringify({ slug, root, card, note, override: board.overrides[id] ?? null }, null, 2));
+      console.log(JSON.stringify({ slug, root, card: { ...card, goal, tags }, note, override: board.overrides[id] ?? null }, null, 2));
       break;
     }
     console.log(`${card.id} · ${card.lane}${card.tag ? ` · ${card.tag}` : ""}${card.heading ? ` · ${card.heading}` : ""}`);
     console.log(card.title);
+    if (goal) console.log(`goal: ${goal}`);
+    if (tags.length) console.log(`tags: ${tags.map((t) => `${t.kind}:${t.name}`).join(" · ")}`);
     console.log(`source: ${card.source.kind === "manual" ? "manual" : `${card.source.path}${card.source.line ? ":" + card.source.line : ""}`}${card.via ? ` · via ${card.via}` : ""}`);
     if (card.verify) console.log(`verified: ${card.verify.grade}${card.verify.needsHuman ? " + needs-human" : ""}${card.verify.note ? ` — ${card.verify.note}` : ""} (${card.verify.at})`);
     for (const s of card.subs ?? []) console.log(`  [${s.done ? "x" : " "}] ${s.title}`);
