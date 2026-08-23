@@ -375,6 +375,24 @@ all of them remove a second way of doing one thing.
 | G20 | the toast is below every overlay | `#toast` is z 3, `#help` is 50, so a toast fired while any overlay is open is invisible; measured live, and it predates this work | either lift the toast above the modal tier, or adopt a corrected §5 ladder wholesale | open the help modal, fire a toast, see it |
 | G19 | the shared key map has no overlay guards | `t` is bound in both `shared.js` and `board.html`; board returns early inside five overlays, shared does not, so linking makes `t` fire twice and fire inside overlays | `data-keys="own"` on `<html>`; the shared handler returns before reading the key (charter §10) | remove the attribute and `t` must stop toggling |
 
+**G15, G16, G17 and G18 landed 2026-08-24 (pass 4, task #64).** The one control
+that goes quietly grey on this board, the selection bar's Clear, now says what
+would enable it instead. Two bare empty states got the second half of the voice
+the other four already had; the tag-peek one had been saying "No cards yet"
+directly under a bar already reading "Nothing carries this tag yet". The two
+typed corner arrows became one drawn `EXT_ICON`, and **`test-charter.sh` was
+widened in the same change** rather than left behind the rule: its §5 row read
+only a button whose ENTIRE content is a dingbat, so both arrows hid from it
+because they carried a label too. The new row bans the character outright in all
+three pages, and it was mutation-tested — putting `open in tab ↗` back turns it
+red while the old row stays green, which is what "the widening was necessary"
+looks like as evidence. Two keycap styles became one `kbd`.
+
+**G14 is not pass 4's to close.** Its own fix says "the §17 pass runs both
+themes per element" and its check is "screenshots in `REVIEW-<date>.md`", which
+is task #16's instrument. Closing it here would mean claiming a sweep that has
+not run.
+
 **G6, G7 and G11 landed 2026-08-24 (pass 3, task #63).** `.primary` was
 `.accent` plus an explicit 30px height, and it had one caller; its keycap rule
 moved to `.accent`, where the note popover's Save had been carrying an unstyled

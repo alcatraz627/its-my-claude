@@ -27,5 +27,14 @@ typed=$(cd "$HERE" && rg -n '<button[^>]*>[[:space:]]*[◐?↑↓»«✕✓○�
 if [ -z "$typed" ]; then ok "no typed dingbats in buttons on board, hub or drafts (§5)"
 else no "no typed dingbats in buttons on board, hub or drafts (§5)" "$typed"; fi
 
+# §5 widened to links (G17, 2026-08-24). "open in tab ↗" and a bare ↗ before
+# </a> were the two that hid from the check above, because it only reads a
+# button whose ENTIRE content is a dingbat and these carry a label too. The
+# leaving-the-page glyph is EXT_ICON now, so the character itself should not
+# appear in any of the three pages at all, which is a rule with nowhere to hide.
+arrow=$(cd "$HERE" && rg -n '↗|↖|↘|↙' board.html hub.html drafts.html || true)
+if [ -z "$arrow" ]; then ok "no typed corner arrows anywhere on board, hub or drafts (§5, G17)"
+else no "no typed corner arrows anywhere on board, hub or drafts (§5, G17)" "$arrow"; fi
+
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

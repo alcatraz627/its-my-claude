@@ -700,8 +700,7 @@
   .bprow .bstar.starred{color:var(--amber)}
   .bphint{display:flex;gap:15px;padding:10px 16px;border-top:1px solid var(--border);
           font-size:var(--fs-small);color:var(--text-3);flex:none;background:var(--well)}
-  .bphint kbd{font:var(--fs-small) var(--mono);background:var(--card);border:1px solid var(--border);
-              border-radius:var(--r-inner);padding:1px 5px;margin-right:3px}
+  .bphint kbd{margin-right:3px}
   .bpnone{padding:18px 17px;font-size:var(--fs-body);color:var(--text-3)}
 
   /* ---------- chips (notes on the card face) ---------- */
@@ -937,8 +936,10 @@
   #help td.grouphead{font:600 var(--fs-small)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
                      color:var(--text-3);padding:20px 0 6px;border-bottom:none;white-space:normal}
   #help tr:first-child td.grouphead{padding-top:2px}
-  #help kbd{font:500 var(--fs-small)/1 var(--mono);background:var(--card);border:1px solid var(--border);border-bottom-width:2px;
-            border-radius:var(--r-inner);padding:3px 6px;color:var(--text)}
+  /* one keycap for the whole board: the legend in a hint row and the one in the
+     help table were two styles for one idea (G18). */
+  kbd{font:500 var(--fs-small)/1 var(--mono);background:var(--card);border:1px solid var(--border);
+      border-bottom-width:2px;border-radius:var(--r-inner);padding:3px 6px;color:var(--text)}
   #help .grouphead{padding-top:14px;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
   /* Two audiences in one modal: someone who wants a key, and someone who wants
      to know what a thing IS. Tabs keep the first fast and give the second room. */
@@ -1294,7 +1295,7 @@
 <div id="docmodal" role="dialog" aria-modal="true" aria-label="document preview"><div class="dbox">
   <div class="dbar">
     <span class="dmp" id="dmPath"></span>
-    <a id="dmOpen" href="#" target="_blank" rel="noopener">open in tab ↗</a>
+    <a id="dmOpen" href="#" target="_blank" rel="noopener">open in tab</a>
     <button type="button" id="dmClose">close</button>
   </div>
   <iframe id="dmFrame" title="document preview" src="about:blank"></iframe>
@@ -1610,7 +1611,8 @@ function selBar(kind) {
   count.className = "sc"; count.textContent = `${n} ${label.slice(0, -1)}${n === 1 ? "" : "s"}`;
   const clear = document.createElement("button");
   clear.className = "ghost"; clear.textContent = "Clear"; clear.disabled = !n;
-  clear.dataset.tip = `Deselect every ${label.slice(0, -1)}`;
+  clear.dataset.tip = n ? `Deselect every ${label.slice(0, -1)}`
+    : `Nothing is selected yet — press x on a ${label.slice(0, -1)} first`;
   clear.onclick = () => clearSel(kind === "note" ? "notes" : "cards");
   const exit = document.createElement("button");
   exit.className = "ghost icon"; exit.innerHTML = X_ICON; exit.setAttribute("aria-label", `exit ${label} selection`);
@@ -1848,7 +1850,7 @@ function peekEl() {
 
   const list = document.createElement("div");
   list.className = "cards";
-  if (!mine.length) list.innerHTML = `<div class="empty-col">No cards yet</div>`;
+  if (!mine.length) list.innerHTML = `<div class="empty-col">Nothing carries this tag yet. Open a card and press # to add it.</div>`;
   mine.forEach((c) => {
     const el = cardEl(c);
     // in the peek, a card is a pointer: clicking finds the real one rather than
@@ -2924,7 +2926,7 @@ function render() {
     wrap.appendChild(grip);
     const list = document.createElement("div");
     list.className = "cards";
-    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this lane</div>`;
+    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this lane. Drag one here to move it.</div>`;
     cardsIn.forEach((c) => list.appendChild(cardEl(c)));
     wrap.appendChild(list);
     return wrap;
@@ -3037,6 +3039,9 @@ function renderConflict(at) {
     $("dNote").dispatchEvent(new Event("input"));
   };
 }
+// leaving-the-page arrow. Was a typed north-east arrow in two links; §5 bans a
+// typed glyph standing in for an icon, and G17 widens that from buttons to links.
+const EXT_ICON = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5.4 10.6 10.6 5.4M6.2 5.4h4.4v4.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const FILE_ICON = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="color:var(--text-3)"><rect x="2.5" y="1.5" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4.7 5h3.6M4.7 7.4h3.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 
 const INSERT_TOKENS = [
@@ -3558,7 +3563,7 @@ function openDrawer(id, wantNoteId, opts = {}) {
   // the doc gets told where the reader came from, so it can offer a way back
   const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}" target="_blank" rel="noopener" data-tip="Open ${esc(p)} — the document this card was read from">` +
     `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
-    `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">↗</span></a>` +
+    `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">${EXT_ICON}</span></a>` +
     `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;
   $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually, so there is no source document.</div>` : srcRow(c.source.path, c.source.line, false)) +
     (c.docs?.length ? c.docs.map((d) => srcRow(d, null, true)).join("") : "");
@@ -4699,6 +4704,7 @@ function openDocModal(p, line) {
   const framed = `${q}&embed=1`;   // the modal supplies the chrome
   $("dmPath").dataset.tip = p; $("dmPath").textContent = p;
   $("dmOpen").href = q;          // a real tab keeps its own theme control
+  if (!$("dmOpen").querySelector("svg")) $("dmOpen").insertAdjacentHTML("beforeend", EXT_ICON);
   $("dmFrame").src = framed;
   $("docmodal").classList.add("on");
   tailTrim($("dmPath")); // keep the filename, drop the leading directories
