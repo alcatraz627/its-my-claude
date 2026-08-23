@@ -437,6 +437,21 @@ actually happened.
 
 ---
 
+## 18b. No zone may reach zero
+
+A layout zone that can be squeezed out of existence is a control the owner
+loses without being told. On 2026-08-24 a board whose path is 842px wide pushed
+the navbar identity zone to 985px and took the find zone, search box included,
+to exactly zero width. Nothing errored; the control was simply not there, and
+only long-path boards showed it.
+
+So: **every zone that holds a control declares a floor** (`min-width`), and the
+zone that holds what you are looking AT is the one that shrinks. A label may
+ellipsise. A thing you type into may not vanish. Check: render the widest real
+input you have, not the tidy one, and assert every zone is above its floor.
+
+---
+
 ## 19. Changelog
 
 - **2026-08-24, one navbar (#68).** Every page wears `navbar()` from
