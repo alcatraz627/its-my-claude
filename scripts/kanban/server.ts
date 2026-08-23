@@ -851,6 +851,25 @@ const server = Bun.serve({
 
     // Execution order. "After" is a fact about the plan, not the card, so it
     // lives beside goals and tags and survives sync the same way. Empty clears.
+    // The board's default column view (#38). plan.json, because it is shared:
+    // an agent reading the digest should get the order the owner set.
+    if (req.method === "POST" && p === "/api/board-cols") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; cols?: Record<string, unknown> } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir) return json({ error: "need {slug, cols}" }, 400);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir);
+        const c = { ...(body!.cols ?? {}) };
+        for (const k of Object.keys(c)) if (c[k] == null) delete c[k];
+        if (Object.keys(c).length) plan.cols = c as any; else delete plan.cols;
+        savePlan(dir, plan, "board-cols");
+        out = { ok: true, cols: plan.cols ?? {} };
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
     // The owner's half of a verify ask (#48). Written here rather than on the
     // card because board.json has one writer and it is the CLI (charter §11);
     // askOf() puts the two halves back together for anyone reading.

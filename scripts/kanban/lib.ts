@@ -490,6 +490,10 @@ export interface Plan {
   // half stays on the card; askOf() puts them back together for a reader.
   answers?: Record<string, { seenAt?: string; deferredAt?: string;
                              answer?: { pick: number | null; text?: string; at: string } }>;
+  // the board's default column view (#38, owner's D2a note). Shared rather
+  // than local because the agent's `c` digest should read the way the board
+  // reads; a lane that overrides one of these keeps its override local.
+  cols?: { sort?: string; density?: string; collapsed?: boolean; width?: number };
   updatedAt: string | null;
 }
 export const emptyPlan = (): Plan => ({ tags: [], on: {}, goals: {}, seq: {}, answers: {}, updatedAt: null });

@@ -64,9 +64,23 @@ rows where there are three, one of which did nothing.
 > board already spends `c` on "copy status digest". A key that works only where
 > its control is visible is the §10 three-layer rule, not a compromise.
 >
-> **Remaining: the board-settings dropdown** and its divergence chips (the D2a
-> note). That is where G12's split button finally gets a real caller, which is
-> why it was not built speculatively in pass 3.
+> **The board-settings dropdown landed the same day.** Defaults for Sort and
+> Density live in `plan.json` so the agent's digest reads the way the board
+> reads; a lane override stays local and sits on top. Below them, one chip per
+> lane that says something different, and pressing a chip opens that lane. The
+> ruling's check ran exactly as written: set a default, override one lane,
+> exactly one chip, press it and Backlog opens.
+>
+> **G12 still has no caller.** The split button was written for this and then
+> removed unused within the hour, because the owner asked for a *dropdown* and
+> a dropdown is a menu button: one control, one action, no second half. A split
+> is label-plus-menu and nothing here is that. Forcing it in would have been the
+> exported-shape-with-no-caller that pass 3 declined to ship, only worse for
+> having a caller that did not fit. The Offer menu may be the real one.
+>
+> Divergence is defined against the board default, not against the presence of
+> a key: setting a lane to the same value the board already uses is not a
+> divergence and does not earn a chip.
 
 ## Ruled, 2026-08-23 (decision page kanban-plans-round-2)
 

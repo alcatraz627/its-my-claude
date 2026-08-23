@@ -14,7 +14,13 @@ trap 'rm -rf "$ROOT"' EXIT
 
 pass=0; fail=0
 ok()  { printf '  PASS  %s\n' "$1"; pass=$((pass+1)); }
-bad() { printf '  FAIL  %s\n     %s\n' "$1" "${2:-}"; fail=$((fail+1)); }
+# This suite has flaked 67/1 twice (2026-08-23, 2026-08-24) and gone green on
+# the next run both times, so the failing row was never captured and the caveat
+# could not be chased. Every failure now also appends to a log that survives the
+# re-run, which turns "it flaked again" into a row with a name.
+FLAKE_LOG="${FLAKE_LOG:-/tmp/kanban-test-drafts-failures.log}"
+bad() { printf '  FAIL  %s\n     %s\n' "$1" "${2:-}"; fail=$((fail+1));
+        printf '%s\t%s\t%s\n' "$(date -u +%FT%TZ)" "$1" "${2:-}" >> "$FLAKE_LOG"; }
 check() { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1" "expected [$3] got [$2]"; fi; }
 # -F, not -q alone: these patterns carry [brackets], which a basic regex reads as
 # a character class. The bracketed form made one assertion fail loudly and its

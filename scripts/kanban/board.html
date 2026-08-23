@@ -831,6 +831,8 @@
   .colcard .crow .cv{font:500 var(--fs-body)/1 var(--mono);color:var(--text)}
   .colcard input[type=range]{width:100%;accent-color:var(--blue)}
   .colcard .cbtns{display:flex;gap:6px;padding-top:5px}
+  .divchips{display:flex;flex-wrap:wrap;gap:5px}
+  .divchips .chip{height:24px}
   .colcard .cbtns button{flex:1;height:26px;justify-content:center;font-size:var(--fs-body)}
 
   /* ---------- the peek column ---------- */
@@ -1431,7 +1433,21 @@ function mountBoardNav() {
   const find = bar.querySelector(".tgrp.find");
   const page = document.createElement("span");
   page.className = "bpage";
-  page.append($("pickGrp"), bar.querySelector(".tgrp.act"));
+  // the board's own settings, in the page group because that is what they are:
+  // this board's, not every board's (UNIFIED-SURFACES phase 0's zone rule)
+  const cog = document.createElement("button");
+  cog.type = "button"; cog.className = "icon ghost"; cog.id = "bsBtn";
+  cog.setAttribute("aria-label", "board settings");
+  cog.setAttribute("aria-haspopup", "menu");
+  cog.setAttribute("aria-expanded", "false");
+  cog.dataset.tip = "Defaults every lane starts from, and which lanes differ";
+  cog.innerHTML = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none">` +
+    `<path d="M2.6 4.6h10.8M2.6 8h10.8M2.6 11.4h10.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>` +
+    `<circle cx="5.6" cy="4.6" r="1.6" fill="var(--canvas)" stroke="currentColor" stroke-width="1.3"/>` +
+    `<circle cx="10.4" cy="8" r="1.6" fill="var(--canvas)" stroke="currentColor" stroke-width="1.3"/>` +
+    `<circle cx="6.4" cy="11.4" r="1.6" fill="var(--canvas)" stroke="currentColor" stroke-width="1.3"/></svg>`;
+  cog.onclick = (e) => { e.stopPropagation(); openBoardSettings(cog); };
+  page.append($("pickGrp"), bar.querySelector(".tgrp.act"), cog);
   navbar({ mount: bar, active: "boards", identity: ident, find,
            actions: page, peers: $("live"), help: openHelp });
 }
@@ -1738,9 +1754,19 @@ function setColPref(lane, patch) {
   else localStorage.removeItem(colpKey(lane));
   render();
 }
-const sortOf = (lane) => colPref(lane).sort ?? "updated";
-const densityOf = (lane) => colPref(lane).density ?? "normal";
-const collapsedOf = (lane) => !!colPref(lane).collapsed;
+const boardCols = () => plan().cols ?? {};
+const sortOf = (lane) => colPref(lane).sort ?? boardCols().sort ?? "updated";
+const densityOf = (lane) => colPref(lane).density ?? boardCols().density ?? "normal";
+const collapsedOf = (lane) => colPref(lane).collapsed ?? !!boardCols().collapsed;
+// a lane diverges when it says something different from the board, not when it
+// merely has a key: setting a lane to the board's own value is not a divergence
+const laneDiverges = (lane) => {
+  const p = colPref(lane), b = boardCols();
+  return (p.sort !== undefined && p.sort !== (b.sort ?? "updated"))
+      || (p.density !== undefined && p.density !== (b.density ?? "normal"))
+      || (p.collapsed !== undefined && !!p.collapsed !== !!b.collapsed)
+      || (!!colWidth(lane) && colWidth(lane) !== (b.width ?? COL_DEFAULT));
+};
 
 // One function decides lane order for the board AND for the c digest, so the
 // digest reads the way the board looks rather than the way the store happens
@@ -1809,6 +1835,78 @@ function wireColGrip(grip, wrap, lane) {
 
 // The lane's properties, in a card that is built to grow. Today it carries the
 // name, the width and the card count; the shape takes more rows unchanged.
+// ---------- board settings (#38, the owner's D2a note) ----------
+// The board's defaults live in plan.json so an agent's digest reads the way the
+// board reads. Below them, one chip per lane that says something different, and
+// pressing a chip opens that lane so the divergence is one press from its cause
+// rather than a thing you have to go hunting for.
+async function saveBoardCols(patch) {
+  const cols = { ...boardCols(), ...patch };
+  for (const k of Object.keys(cols)) if (cols[k] == null) delete cols[k];
+  const res = await fetch("/api/board-cols", { method: "POST",
+    headers: { "content-type": "application/json" }, body: JSON.stringify({ slug, cols }) });
+  const out = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+  if (!res.ok || out.error) { toast(out.error ?? "could not save the board defaults", true); return false; }
+  plan().cols = out.cols;
+  render();
+  return true;
+}
+
+function openBoardSettings(btn) {
+  closeColCard();
+  const card = document.createElement("div");
+  card.className = "colcard on"; card.id = "colcard";
+  const b = boardCols();
+  const seg = (id, map, cur) =>
+    `<div class="seg" id="${id}" role="radiogroup" aria-label="${id === "bssort" ? "default sort" : "default density"}">` +
+    Object.entries(map).map(([k, v]) =>
+      `<button type="button" role="radio" data-v="${k}" aria-checked="${cur === k}" class="${cur === k ? "on" : ""}">${v}</button>`).join("") +
+    `</div>`;
+  const diverged = LANE_ORDER.filter((l) => document.getElementById(`lane-${l}`) && laneDiverges(l));
+  card.innerHTML =
+    `<h4><span>Board settings</span></h4>` +
+    `<div class="crow"><span class="ck">These are the defaults every lane starts from.</span></div>` +
+    `<div class="crow"><span class="ck">Sort</span></div>` + seg("bssort", SORTS, b.sort ?? "updated") +
+    `<div class="crow"><span class="ck">Density</span></div>` + seg("bsdens", DENSITIES, b.density ?? "normal") +
+    `<div class="crow"><span class="ck">Lanes that differ</span>` +
+      `<span class="cv">${diverged.length}</span></div>` +
+    `<div class="divchips" id="bsdiv">` +
+      (diverged.length
+        ? diverged.map((l) => `<button type="button" class="chip" data-lane="${l}">${LANE_NAME[l]}</button>`).join("")
+        : `<span class="ck">None. Every lane is using these.</span>`) +
+    `</div>` +
+    `<div class="cbtns"><button type="button" class="ghost" id="bsreset">Clear board defaults</button>` +
+    `<button type="button" id="ccdone">Done</button></div>`;
+  document.body.appendChild(card);
+  btn.setAttribute("aria-expanded", "true");
+  const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
+  card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
+  card.style.left = `${Math.min(Math.max(10, r.right - cr.width), innerWidth - cr.width - 10)}px`;
+  const wire = (id, key) => card.querySelector(id).addEventListener("click", async (e) => {
+    const t = e.target.closest("button[data-v]"); if (!t) return;
+    const dflt = key === "sort" ? "updated" : "normal";
+    if (!(await saveBoardCols({ [key]: t.dataset.v === dflt ? null : t.dataset.v }))) return;
+    card.querySelectorAll(`${id} button`).forEach((x) => {
+      const on = x === t; x.classList.toggle("on", on); x.setAttribute("aria-checked", String(on));
+    });
+  });
+  wire("#bssort", "sort"); wire("#bsdens", "density");
+  card.querySelector("#bsdiv").addEventListener("click", (e) => {
+    const chip = e.target.closest("button[data-lane]"); if (!chip) return;
+    const lane = chip.dataset.lane;
+    const head = document.getElementById(`lane-${lane}`)?.querySelector(".cmenu");
+    closeColCard();
+    if (head) { head.scrollIntoView({ block: "nearest", inline: "center" }); head.click(); }
+  });
+  card.querySelector("#bsreset").onclick = async () => {
+    if (await saveBoardCols({ sort: null, density: null, collapsed: null, width: null })) {
+      closeColCard(); toast("Board defaults cleared");
+    }
+  };
+  card.querySelector("#ccdone").onclick = closeColCard;
+  setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
+}
+
 function openColCard(lane, wrap, btn) {
   closeColCard();
   const card = document.createElement("div");
@@ -1888,6 +1986,7 @@ function openColCard(lane, wrap, btn) {
 function closeColCardAway(e) { if (!e.target.closest("#colcard")) closeColCard(); else setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0); }
 function closeColCard() {
   document.getElementById("colcard")?.remove();
+  document.getElementById("bsBtn")?.setAttribute("aria-expanded", "false");
   document.querySelectorAll(".cmenu.on").forEach((b) => b.classList.remove("on"));
 }
 
