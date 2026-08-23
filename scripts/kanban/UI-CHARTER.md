@@ -420,6 +420,15 @@ actually happened.
 
 ## 19. Changelog
 
+- **2026-08-23, the design system.** `DESIGN-SYSTEM.md` is now the book for
+  what the parts are: the neutral and semantic ladders, lane and tag hues, a
+  seven-step type scale, a five-step radius ladder, one focus ring, two
+  motion durations, a named z ladder, the button variants and composites
+  (group, segmented, toggle, split), chips versus pills, surfaces, bars. Its
+  §10 lists eighteen measured drifts with fix and check; §17 reads §§2–8 of
+  it as the rubric. Two tag kinds added, `priority` and `class`, and a card's
+  execution order (`after`). This charter stays the rules; the book is the
+  parts.
 - **2026-08-23, eighth round.** The hub audited for the §5 and §16 contract at
   last (#46): four native tooltips set as `.title =` properties, which the
   attribute grep behind §16's count could not see, and every star and archive
