@@ -105,6 +105,24 @@ once phase 1 exists; deliberately last because most previews are read once.
 > hidden rather than greyed. The command bar verbs, the needs-you counter and
 > pinned context are NOT built: they overlap #70, the app-wide movement plan
 > the owner asked for on 2026-08-24, and building them twice is the risk.
+>
+> **Help modal shipped 2026-08-24 (#69), partly.** `helpModal()` in `shared.js`
+> plus the shell, table and keycap CSS in `shared.css`. It works two ways,
+> because the board's panes are long hand-written tables and moving them into
+> JavaScript would be a rewrite rather than a reuse: a page that already has
+> the markup is ADOPTED (the component takes the tab strip and the lazy
+> per-pane build; the board keeps open/close because those are wired to its own
+> overlay stack), and a page with none gets one BUILT from a tab spec. The hub
+> and drafts now answer `?` with a Keyboard reference generated from
+> `SHARED_KEYS`, the same list `shared.js` binds from, so the reference cannot
+> drift from the behaviour. A single-tab modal renders no tab strip.
+>
+> **What remains of #69:** the Taxonomy and Charter tabs for the hub and
+> drafts, and the decision-page and transcript hosts. Charter needs the 17
+> `.cdoc` rules moved to `shared.css` (the server already returns rendered
+> HTML, so the fetch itself is page-agnostic); Taxonomy needs content that does
+> not exist for those pages yet. Shipping them empty would have been worse than
+> shipping one tab that is real.
 
 Owner, verbatim: "Make the navbar 'uniform' for all pages, it can have section
 / page specific elements but the core nav + logo icon click for home + other

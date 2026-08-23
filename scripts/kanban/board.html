@@ -909,9 +909,6 @@
   #toast.err{border-color:var(--red);color:var(--red)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
          border-radius:var(--r-card);padding:9px 16px;font-size:var(--fs-lead);display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:var(--z-toast)}
-  #help{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:var(--z-modal)}
-  #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:var(--r-panel);padding:20px 24px;min-width:340px;
-             box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
   #help h3{font:600 var(--fs-lead)/1 var(--sans);margin-bottom:14px}
   /* One table treatment for the whole modal. Before this, the Vibe Code tables
      carried a full hierarchy (column heads, a promoted identifier column, row
@@ -919,31 +916,8 @@
      same kind of content read as two different systems depending on which tab
      you opened. The treatment lives here once; .vtbl now only spaces its
      wrapper. */
-  #help table{width:100%;border-collapse:collapse}
-  #help th{text-align:left;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
-           color:var(--text-3);padding:0 12px 7px 0;border-bottom:1px solid var(--border)}
-  /* The tighter of the two paddings that existed wins, not the looser: the owner's
-     space rule is to use what is there before asking for more, and the keyboard
-     table is 31 rows deep where 2px a row is a screenful. */
-  #help td{font:400 var(--fs-body)/1.5 var(--sans);color:var(--text-2);padding:5px 14px 5px 0;
-           border-bottom:1px solid var(--border)}
-  /* The identifier column is the one you scan down, so it carries the weight. */
-  #help td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
-  #help tr:last-child td{border-bottom:none}
-  /* A section head is a head, not a row: it spans, it takes no rule, and it does
-     not inherit the identifier column's weight. Declared after td:first-child
-     because they carry equal specificity and order is what decides. */
-  #help td.grouphead{font:600 var(--fs-small)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
-                     color:var(--text-3);padding:20px 0 6px;border-bottom:none;white-space:normal}
-  #help tr:first-child td.grouphead{padding-top:2px}
-  /* one keycap for the whole board: the legend in a hint row and the one in the
-     help table were two styles for one idea (G18). */
-  kbd{font:500 var(--fs-small)/1 var(--mono);background:var(--card);border:1px solid var(--border);
-      border-bottom-width:2px;border-radius:var(--r-inner);padding:3px 6px;color:var(--text)}
-  #help .grouphead{padding-top:14px;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
   /* Two audiences in one modal: someone who wants a key, and someone who wants
      to know what a thing IS. Tabs keep the first fast and give the second room. */
-  #help .box{width:min(880px,94vw);padding:0;display:flex;flex-direction:column}
   /* The header is a quieter ground than the panes, so the tabs read as sitting
      on it rather than floating. The active tab is marked by a rule under it,
      not by a box around it: three-sided borders never quite meet the seam. */
@@ -951,29 +925,6 @@
      quietest ground in the stack, the tab strip sits on the same ground, and
      the active tab is the only thing wearing the canvas — so the eye reads
      title, then tabs, then the page. */
-  .htitle{display:flex;align-items:center;gap:11px;padding:14px 16px 12px;background:var(--well);flex:none}
-  .htitle .hmark{flex:none;width:26px;height:26px;border-radius:var(--r-control);display:grid;place-items:center;
-                 background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br)}
-  .htitle .htx{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .htitle .htx b{font:600 var(--fs-lead)/1.2 var(--sans);color:var(--text);letter-spacing:-.01em}
-  .htitle .htx i{font:400 var(--fs-small)/1.2 var(--sans);font-style:normal;color:var(--text-3)}
-  .htitle .hsp{flex:1}
-  .htabs{display:flex;gap:3px;padding:0 16px;background:var(--well);
-         border-bottom:1px solid var(--border);flex:none;align-items:stretch}
-  .htab{display:flex;align-items:center;gap:9px;background:none;border:none;
-        border-bottom:2px solid transparent;border-radius:var(--r-card) var(--r-card) 0 0;
-        padding:9px 13px 8px;color:var(--text-3);cursor:pointer;text-align:left;
-        transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast)}
-  .htab .hi{flex:none;display:grid;place-items:center;color:var(--text-3)}
-  .htab .ht{display:flex;flex-direction:column;gap:2px;line-height:1}
-  .htab .ht b{font:600 var(--fs-body)/1.1 var(--sans);color:inherit}
-  .htab .ht i{font:400 var(--fs-caption)/1.1 var(--sans);font-style:normal;color:var(--text-3);opacity:.85}
-  .htab:hover{color:var(--text-2);background:var(--canvas)}
-  .htab:hover .hi{color:var(--text-2)}
-  .htab.on{background:var(--canvas);color:var(--text);border-bottom-color:var(--blue)}
-  .htab.on .hi{color:var(--blue)}
-  .htab.on .ht i{color:var(--text-3);opacity:1}
-  .hpane{display:none;padding:18px 22px 22px;overflow:auto;min-height:0}
   /* Three tabs open with a reference the rows beneath keep pointing at: a drawn
      keyboard, a map of the pipeline. Reading row 40 while the thing it names has
      scrolled off is the hiccup, so the reference holds and the rows move under
@@ -996,7 +947,6 @@
   #hTerms > svg:first-child,
   #hVibe > svg:first-child{display:block;background:var(--canvas);
                            padding-bottom:12px;border-bottom:1px solid var(--border)}
-  .hpane.on{display:block}
   /* The charter renders as a document inside the modal. Tables are deliberately
      absent from this block: #help's one table treatment already owns them, and a
      second set here is exactly the drift the treatment was written to end. */
@@ -1022,8 +972,6 @@
               font:700 var(--fs-micro)/1 var(--sans);color:transparent}
   .cdoc .tbox.on{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}
   .cnote{color:var(--text-3);font:400 var(--fs-body)/1.6 var(--sans);padding:8px 0}
-  .hclose{flex:none;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
-  .hclose:hover{background:var(--card);border-color:var(--border);color:var(--text)}
 
   /* the map. One picture of how a doc becomes a card and how anything you
      write reaches an agent — the two flows this whole board exists to run. */
@@ -4124,16 +4072,16 @@ function litKey(k, on) {
   });
 }
 
-document.querySelectorAll(".htab").forEach((tab) => {
-  tab.onclick = () => {
-    document.querySelectorAll(".htab").forEach((t) => t.classList.toggle("on", t === tab));
-    document.querySelectorAll(".hpane").forEach((p) => p.classList.toggle("on", p.id === tab.dataset.pane));
-    if (tab.dataset.pane === "hTerms") renderTerms();
-    if (tab.dataset.pane === "hVibe") renderVibe();
-    if (tab.dataset.pane === "hTags") renderPlayground();
-    if (tab.dataset.pane === "hCharter") renderCharter();
-  };
-});
+// The board hand-wrote these panes, so the shared component ADOPTS the markup
+// rather than rebuilding it: it takes the tab strip, the board keeps open/close
+// because those are wired to its own overlay stack. One tab-strip implementation
+// across every page that mounts a help modal (UNIFIED-SURFACES phase 0, #69).
+registerHelp(helpModal({ id: "help", onShow: (pane) => {
+  if (pane === "hTerms") renderTerms();
+  if (pane === "hVibe") renderVibe();
+  if (pane === "hTags") renderPlayground();
+  if (pane === "hCharter") renderCharter();
+} }));
 $("hClose").onclick = closeHelp;
 
 // ---------- tag picker ----------

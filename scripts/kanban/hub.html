@@ -467,9 +467,18 @@ function setView(v) {
   const [t, sub] = VIEW_COPY[v] ?? VIEW_COPY.boards;
   navbar({ mount: "#phead", active: v === "notes" ? "asks" : "boards",
     title: t, sub, counts: hubCounts,
-    onView: (nv) => setView(nv === "asks" ? "notes" : "boards") });
+    onView: (nv) => setView(nv === "asks" ? "notes" : "boards"),
+    help: () => theHelp && theHelp.open() });
   load();
 }
+
+// The keyboard reference, on this page too. `?` opens it; the rows are
+// generated from SHARED_KEYS so they cannot drift from the bindings.
+registerHelp(helpModal({
+  id: "help", title: "The hub, explained", sub: "the keys this page answers to",
+  tabs: [{ id: "keys", label: "Keyboard", sub: "Shortcuts",
+           build: (pane) => fillKeys(pane, SHARED_KEYS.concat([{ group: "Here", rows: [["enter", "open the board under the cursor"]] }])) }],
+}));
 
 async function load() {
   const list = document.getElementById("list");

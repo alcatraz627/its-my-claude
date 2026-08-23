@@ -176,6 +176,70 @@
   #tip .tiph{display:block;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
              color:var(--text-3);margin-bottom:6px}
 
+  /* ---------- the help modal (UNIFIED-SURFACES phase 0) ----------
+     The board's modal is the one the owner liked, so this IS that shape,
+     lifted whole: a titled dialog, a tab strip on the quieter ground, one
+     scrolling pane at a time. The title and the tab strip are flex:none
+     SIBLINGS of the pane, which is the structural reason the chrome cannot
+     drift when a pane scrolls (HELP-MODAL-SCROLL-PARITY.md). Any page that
+     mounts helpModal() inherits that, including the ones that do not know
+     they were relying on it. */
+  #help{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:var(--z-modal)}
+  #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:var(--r-panel);padding:20px 24px;min-width:340px;
+             box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
+  #help .box{width:min(880px,94vw);padding:0;display:flex;flex-direction:column}
+  .htitle{display:flex;align-items:center;gap:11px;padding:14px 16px 12px;background:var(--well);flex:none}
+  .htitle .hmark{flex:none;width:26px;height:26px;border-radius:var(--r-control);display:grid;place-items:center;
+                 background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br)}
+  .htitle .htx{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .htitle .htx b{font:600 var(--fs-lead)/1.2 var(--sans);color:var(--text);letter-spacing:-.01em}
+  .htitle .htx i{font:400 var(--fs-small)/1.2 var(--sans);font-style:normal;color:var(--text-3)}
+  .htitle .hsp{flex:1}
+  .htabs{display:flex;gap:3px;padding:0 16px;background:var(--well);
+         border-bottom:1px solid var(--border);flex:none;align-items:stretch}
+  .htab{display:flex;align-items:center;gap:9px;background:none;border:none;
+        border-bottom:2px solid transparent;border-radius:var(--r-card) var(--r-card) 0 0;
+        padding:9px 13px 8px;color:var(--text-3);cursor:pointer;text-align:left;
+        transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast)}
+  .htab .hi{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .htab .ht{display:flex;flex-direction:column;gap:2px;line-height:1}
+  .htab .ht b{font:600 var(--fs-body)/1.1 var(--sans);color:inherit}
+  .htab .ht i{font:400 var(--fs-caption)/1.1 var(--sans);font-style:normal;color:var(--text-3);opacity:.85}
+  .htab:hover{color:var(--text-2);background:var(--canvas)}
+  .htab:hover .hi{color:var(--text-2)}
+  .htab.on{background:var(--canvas);color:var(--text);border-bottom-color:var(--blue)}
+  .htab.on .hi{color:var(--blue)}
+  .htab.on .ht i{color:var(--text-3);opacity:1}
+  .hpane{display:none;padding:18px 22px 22px;overflow:auto;min-height:0}
+
+  /* the modal's table and keycap, shared because helpModal() generates both
+     for a page that has no hand-written panes of its own */
+  #help table{width:100%;border-collapse:collapse}
+  #help th{text-align:left;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
+           color:var(--text-3);padding:0 12px 7px 0;border-bottom:1px solid var(--border)}
+  /* The tighter of the two paddings that existed wins, not the looser: the owner's
+     space rule is to use what is there before asking for more, and the keyboard
+     table is 31 rows deep where 2px a row is a screenful. */
+  #help td{font:400 var(--fs-body)/1.5 var(--sans);color:var(--text-2);padding:5px 14px 5px 0;
+           border-bottom:1px solid var(--border)}
+  /* The identifier column is the one you scan down, so it carries the weight. */
+  #help td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
+  #help tr:last-child td{border-bottom:none}
+  /* A section head is a head, not a row: it spans, it takes no rule, and it does
+     not inherit the identifier column's weight. Declared after td:first-child
+     because they carry equal specificity and order is what decides. */
+  #help td.grouphead{font:600 var(--fs-small)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+                     color:var(--text-3);padding:20px 0 6px;border-bottom:none;white-space:normal}
+  #help tr:first-child td.grouphead{padding-top:2px}
+  /* one keycap for the whole board: the legend in a hint row and the one in the
+     help table were two styles for one idea (G18). */
+  kbd{font:500 var(--fs-small)/1 var(--mono);background:var(--card);border:1px solid var(--border);
+      border-bottom-width:2px;border-radius:var(--r-inner);padding:3px 6px;color:var(--text)}
+  #help .grouphead{padding-top:14px;font:600 var(--fs-small)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+  .hpane.on{display:block}
+  .hclose{flex:none;align-self:center;background:none;border-color:transparent;color:var(--text-3)}
+  .hclose:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+
   /* ---------- cross-highlight (charter §7) ---------- */
   .xh-primary{outline:1.5px dotted var(--blue);outline-offset:5px;
               box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 9%,transparent),

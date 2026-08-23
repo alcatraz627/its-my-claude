@@ -165,7 +165,17 @@
 // switching in place. Before this it offered two links and no route to Asks at
 // all, which is the partial-graph defect the audit named.
 navbar({ mount: "#phead", active: "drafts", title: "Your drafts",
-  sub: "documents you write for an agent, the rung above an ask" });
+  sub: "documents you write for an agent, the rung above an ask",
+  help: () => theHelp && theHelp.open() });
+
+// The keyboard reference, on this page too. `?` opens it; the rows are
+// generated from SHARED_KEYS so they cannot drift from the bindings.
+registerHelp(helpModal({
+  id: "help", title: "Drafts, explained", sub: "the keys this page answers to",
+  tabs: [{ id: "keys", label: "Keyboard", sub: "Shortcuts",
+           build: (pane) => fillKeys(pane, SHARED_KEYS.concat([{ group: "Here", rows: [["\u2318\u21b5", "save the draft you are editing"]] }])) }],
+}));
+
 
 
 const el = (tag, cls, text) => {

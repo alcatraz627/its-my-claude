@@ -94,6 +94,7 @@ const NAV_ICON = {
 };
 const MARK_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="2.4" width="4.6" height="11.2" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="7.6" y="2.4" width="4.6" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M14.4 5v6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
 const HELP_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.75 1.75 0 1 1 1.9 1.85V9.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8.1" cy="11.6" r=".75" fill="currentColor"/></svg>`;
+const CLOSE_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="m4.6 4.6 6.8 6.8M11.4 4.6l-6.8 6.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
 const THEME_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 2.4a5.6 5.6 0 0 0 0 11.2V2.4Z" fill="currentColor"/></svg>`;
 
 // `active` is one of boards | asks | drafts. `onView` is optional: a page that
@@ -169,6 +170,104 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
 let gArmed = null;
 const GO = { b: "/", a: "/?view=asks", d: "/drafts" };
 
+// ---------- the help modal ----------
+// The board's modal is the one the owner asked to reuse, so this is that shape
+// rather than a new one: a titled dialog, a tab strip on the quieter ground,
+// one scrolling pane at a time, Esc the only way out.
+//
+// Two ways in, because the board's panes are long hand-written tables and
+// moving them into JavaScript would be a rewrite, not a reuse. A page that
+// already has the markup gets ADOPTED — this takes over the tab strip, the
+// close and the Escape, and leaves the panes alone. A page that has none gets
+// one BUILT from a tab spec. Either way the behaviour has one implementation.
+function helpModal({ id = "help", title = "Help", sub = "", tabs = [], onOpen, onShow } = {}) {
+  let el = document.getElementById(id);
+  const adopted = !!el;
+  if (!el) {
+    el = document.createElement("div");
+    el.id = id;
+    el.setAttribute("role", "dialog");
+    el.setAttribute("aria-modal", "true");
+    el.setAttribute("aria-label", "help");
+    el.innerHTML =
+      `<div class="box">` +
+        `<div class="htitle"><span class="hmark">${MARK_ICON}</span>` +
+          `<span class="htx"><b></b><i></i></span><span class="hsp"></span>` +
+          `<button class="hclose icon" type="button" aria-label="close" data-tip="Close (Esc)">${CLOSE_ICON}</button></div>` +
+        (tabs.length > 1 ? `<div class="htabs" role="tablist">` +
+          tabs.map((t, i) => `<button class="htab${i ? "" : " on"}" data-pane="${id}-${t.id}" role="tab"` +
+            ` aria-selected="${i ? "false" : "true"}"><span class="hi">${t.icon ?? ""}</span>` +
+            `<span class="ht"><b></b><i></i></span></button>`).join("") +
+        `</div>` : "") +
+        tabs.map((t, i) => `<div class="hpane${i ? "" : " on"}" id="${id}-${t.id}" role="tabpanel"></div>`).join("") +
+      `</div>`;
+    document.body.appendChild(el);
+    el.querySelector(".htitle .htx b").textContent = title;
+    el.querySelector(".htitle .htx i").textContent = sub;
+    // textContent, not innerHTML: a label is a label, never markup
+    [...el.querySelectorAll(".htab")].forEach((b, i) => {
+      b.querySelector(".ht b").textContent = tabs[i].label;
+      b.querySelector(".ht i").textContent = tabs[i].sub ?? "";
+    });
+  }
+  const panes = () => [...el.querySelectorAll(".hpane")];
+  const strip = () => [...el.querySelectorAll(".htab")];
+  const show = (tab) => {
+    strip().forEach((t) => { const on = t === tab;
+      t.classList.toggle("on", on); t.setAttribute("aria-selected", String(on)); });
+    panes().forEach((p) => p.classList.toggle("on", p.id === tab.dataset.pane));
+    // a host may fill a pane the first time it is shown rather than up front
+    if (onShow) onShow(tab.dataset.pane, document.getElementById(tab.dataset.pane));
+  };
+  const close = () => { if (el.style.display !== "flex") return; el.style.display = "none"; };
+  const open = () => {
+    if (el.style.display === "flex") return close();
+    el.style.display = "flex";
+    tabs.forEach((t) => { if (t.build) t.build(document.getElementById(`${id}-${t.id}`)); });
+    if (onOpen) onOpen(el);
+    strip()[0]?.focus();
+  };
+  strip().forEach((t) => { t.onclick = () => show(t); });
+  if (!adopted) {
+    el.querySelector(".hclose")?.addEventListener("click", close);
+    // Esc only, and only when this one is open (charter §9)
+    addEventListener("keydown", (e) => { if (e.key === "Escape" && el.style.display === "flex") close(); });
+  }
+  return { el, open, close, show, adopted };
+}
+
+// The keys THIS file binds, written once. helpModal() renders them, so the
+// reference and the behaviour cannot disagree: change a binding above and the
+// modal changes with it.
+const SHARED_KEYS = [
+  { group: "Go", rows: [["1", "Boards"], ["2", "Your asks"], ["3", "Drafts"],
+                        ["g b", "the hub"], ["g a", "your asks"], ["g d", "drafts"]] },
+  { group: "Everywhere", rows: [["t", "light and dark"], ["?", "this reference"],
+                                ["esc", "close it"]] },
+];
+const keysTable = (groups) => `<table><tbody>` + groups.map((g) =>
+  `<tr><td colspan="2" class="grouphead"></td></tr>` +
+  g.rows.map(() => `<tr><td></td><td></td></tr>`).join("")).join("") + `</tbody></table>`;
+// built as structure first and filled as text, so a label can never be markup
+function fillKeys(pane, groups) {
+  pane.innerHTML = keysTable(groups);
+  const rows = [...pane.querySelectorAll("tr")];
+  let i = 0;
+  for (const g of groups) {
+    rows[i++].querySelector("td").textContent = g.group;
+    for (const [key, what] of g.rows) {
+      const tds = rows[i++].querySelectorAll("td");
+      tds[0].replaceChildren(...key.split(" ").map((k) => {
+        const el = document.createElement("kbd"); el.textContent = k; return el; }));
+      tds[1].textContent = what;
+    }
+  }
+}
+
+// ? opens the page's help, on every page that mounted one
+let theHelp = null;
+const registerHelp = (h) => { theHelp = h; return h; };
+
 // One key map for all three, so the entrance behaves like the board.
 // A page that already owns a richer key map says so with data-keys="own" on
 // <html> and handles t and the view digits itself. The board does: its keys are
@@ -184,6 +283,7 @@ addEventListener("keydown", (e) => {
   if (gArmed) { clearTimeout(gArmed); gArmed = null;
     if (GO[e.key]) { location.href = GO[e.key]; return; } }
   if (e.key === "g") { gArmed = setTimeout(() => { gArmed = null; }, 1400); return; }
+  if (e.key === "?" && theHelp) { theHelp.open(); return; }
   if (e.key === "t") return toggleTheme();
   const hit = document.querySelector(`.views a[data-k="${e.key}"]`);
   if (hit) hit.click();
