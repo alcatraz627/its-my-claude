@@ -121,8 +121,13 @@
   .navbar{display:flex;align-items:center;gap:12px;padding:11px 20px;
           border-bottom:1px solid var(--border);background:var(--well)}
   .nz{display:flex;align-items:center;gap:9px;min-width:0}
-  .nzid{flex:none}
-  .nzfind{flex:1;min-width:0;justify-content:flex-start}
+  /* Identity SHRINKS. It held flex:none until a board whose path is 842px wide
+     pushed the zone to 985 and squeezed the find zone to zero. What you are
+     looking AT can ellipsise; the control you type INTO cannot vanish. */
+  .nzid{flex:0 1 auto;min-width:0}
+  .nzfind{flex:1 1 260px;min-width:170px;justify-content:flex-start}
+  .nfind{display:flex;align-items:center;gap:7px;min-width:0}
+  .nowrap{white-space:nowrap;flex:none}
   .nzcommon{flex:none;margin-left:auto}
   .nlogo{flex:none;width:28px;height:28px;padding:0;display:grid;place-items:center;
          background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br);

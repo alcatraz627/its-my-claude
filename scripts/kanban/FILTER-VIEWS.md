@@ -90,8 +90,27 @@ Matching runs through the SAME function the board uses, moved to `lib.ts` as
 > which is exactly what applying a view will set. `is:open is:blocked` returns 2
 > where each clause alone returns 133 and 2.
 >
-> Remaining: step 3 (`/api/view`, the owner's create/rename/delete path) and
-> step 4 (the sidebar VIEWS group, save-as-view, the search section).
+> **Steps 3 and 4 landed the same day, so #39 is done.** `/api/view` takes
+> add / rename / rm and refuses a duplicate name case-insensitively, which is
+> the tag rule. The sidebar has a VIEWS group above TAGS with a live count per
+> view and the agent-made ones marked in words; pressing one applies its
+> clauses, and a filter you are looking at grows a `save as view` button that
+> knows when this exact filter is already a view. Verified across the seam: a
+> view the SERVER created is listed by `kanban.sh view`, and one the CLI created
+> shows in the sidebar.
+>
+> Two layout defects that only looking caught, both mine. The delete button sat
+> in flow at `opacity:0`, stealing 30px from every name so "blocked here"
+> rendered as "b.."; it overlays the row now. And the `by agent` badge took as
+> much width as the name in a 186px sidebar, so the mark moved to its own line
+> under it.
+>
+> **One of them was a navbar bug from #68**, exposed only here. `.nzid` was
+> `flex:none`, so a board whose path is 842px wide pushed the identity zone to
+> 985 and squeezed the find zone to ZERO width, filter and all. The main board's
+> path is short, which is why every earlier check passed. Identity shrinks now
+> and find has a 170px floor: what you are looking AT may ellipsise, the control
+> you type INTO may not vanish.
 
 ## Sequence, with checks
 

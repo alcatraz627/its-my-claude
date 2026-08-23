@@ -780,6 +780,26 @@
   .srow .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
   .srow .tct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
   .srow.on{background:var(--card);border-color:var(--border-2);color:var(--text)}
+  .srow{display:flex;align-items:center;gap:3px;position:relative}
+  .sview{flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;
+         background:none;border-color:transparent;color:var(--text-2);text-align:left;min-width:0}
+  .sview .svtop{display:flex;align-items:center;gap:7px;min-width:0}
+  .sview:hover{background:var(--well);border-color:var(--border);color:var(--text)}
+  .sview.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  .sview .svn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sview .svc{flex:none;font:600 var(--fs-small)/1 var(--mono);color:var(--text-3)}
+  .sview.on .svc{color:var(--blue)}
+  /* who made it, said in a word rather than a colour (§4) */
+  .sby{font:400 var(--fs-caption)/1.2 var(--sans);color:var(--text-3);
+       overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* absolute, not merely transparent: a hidden control that still takes its
+     width is a control that shrinks the label it sits beside */
+  .srow .sdel{position:absolute;right:2px;top:50%;transform:translateY(-50%);
+              opacity:0;pointer-events:none;background:var(--well);
+              transition:opacity var(--t-fast)}
+  .srow:hover .sdel,.srow:focus-within .sdel{opacity:1;pointer-events:auto}
+  /* the name outranks the badge: who made it can ellipsise, what it is cannot */
+  .sview .svn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .skind{font:600 var(--fs-caption)/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);
          padding:5px 7px 1px}
   .stagbar{display:flex;gap:4px;padding:3px 5px 0}
@@ -1150,6 +1170,7 @@
         <button class="ghost" id="searchBtn" data-tip="Search cards, your notes, tags and asks (/)" aria-label="search"><span class="sl">Search</span></button>
         <input id="filter" type="search" placeholder="Filter this board" aria-label="filter this board" autocomplete="off">
       </span>
+      <button type="button" class="ghost nowrap" id="saveView" hidden data-tip="Name what you are looking at, so you and an agent can both say it">save as view</button>
       <span class="tgrp pick" id="pickGrp">
         <span id="cardSelWrap"></span>
         <span id="noteSelWrap"></span>
@@ -1431,7 +1452,9 @@ function mountBoardNav() {
   const ident = document.createElement("span");
   ident.className = "bident";
   ident.append(bar.querySelector(".crumb"), $("name"), $("root"));
-  const find = bar.querySelector(".tgrp.find");
+  const find = document.createElement("span");
+  find.className = "nfind";
+  find.append(bar.querySelector(".tgrp.find"), $("saveView"));
   const page = document.createElement("span");
   page.className = "bpage";
   // the board's own settings, in the page group because that is what they are:
@@ -2935,6 +2958,35 @@ function toggleSide() {
   renderSide();
 }
 
+// A filter you are looking at becomes a view by naming it. This is the whole
+// path from "I typed something useful" to "we both have a word for it", and it
+// is why the owner never has to learn the clause grammar.
+function renderSaveView() {
+  const b = $("saveView");
+  if (!b) return;
+  const active = !!filterText.trim();
+  b.hidden = !active;
+  if (!active) return;
+  const clauses = filterText.trim().split(/\s+/).filter(Boolean);
+  const already = (plan().views ?? []).some((v) => v.clauses.join(" ").toLowerCase() === clauses.join(" ").toLowerCase());
+  b.disabled = already;
+  b.textContent = already ? "saved as a view" : "save as view";
+  b.dataset.tip = already
+    ? "You already have a view for exactly this filter"
+    : "Name what you are looking at, so you and an agent can both say it";
+  b.onclick = async () => {
+    const name = prompt("Call this view what?", clauses.join(" ").slice(0, 40));
+    if (name === null) return;
+    const res = await fetch("/api/view", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, op: "add", name: name.trim(), clauses }) });
+    const out = await res.json().catch(() => ({ error: "failed" }));
+    if (out.error) return toast(out.error, true);
+    plan().views = [...(plan().views ?? []), out.view];
+    toast(`View "${out.view.name}" saved`);
+    render();
+  };
+}
+
 function renderSide() {
   const el = $("side");
   el.className = "side" + (sideCollapsed ? " collapsed" : "");
@@ -2958,6 +3010,59 @@ function renderSide() {
     build(g);
     el.appendChild(g);
   };
+
+  // Views sit above Tags because a view is a thing the owner (or an agent)
+  // NAMED, and a named thing outranks a vocabulary they merely accumulated.
+  // The count is live: a view is a query, so it answers for today.
+  group("Views", (g) => {
+    const views = plan().views ?? [];
+    if (!views.length) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No views yet. Filter the board, then press save as view to name what you are looking at.";
+      g.appendChild(e);
+      return;
+    }
+    const ctx = clauseCtx();
+    for (const v of views) {
+      const wrap = document.createElement("div");
+      wrap.className = "srow";
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "sview" + (filterText === v.clauses.join(" ").toLowerCase() ? " on" : "");
+      const n = (data?.board.cards ?? []).filter((c) => matchView(c, v.clauses, ctx)).length;
+      // The sidebar is 186px wide. A "by agent" badge on the name's line took
+      // as much room as the name and rendered "blocked here" as "b..", so the
+      // mark sits under it: the name is what you scan, the author is what you
+      // check afterwards.
+      b.innerHTML = `<span class="svtop"><span class="svn"></span><span class="svc"></span></span>`;
+      b.querySelector(".svn").textContent = v.name;
+      b.querySelector(".svc").textContent = String(n);
+      b.dataset.tip = `${v.clauses.join(" · ")}\n${n} card${n === 1 ? "" : "s"} right now${v.by === "agent" ? "\nmade by an agent" : ""}`;
+      b.onclick = () => setFilter(v.clauses.join(" ").toLowerCase());
+      if (v.by === "agent") {
+        const m = document.createElement("span");
+        m.className = "sby"; m.textContent = "made by an agent";
+        b.append(m);
+      }
+      const del = document.createElement("button");
+      del.type = "button"; del.className = "icon ghost sdel";
+      del.setAttribute("aria-label", `delete the view ${v.name}`);
+      del.dataset.tip = "Delete this view. The cards are untouched; a view is only a query.";
+      del.innerHTML = X_ICON;
+      del.onclick = async (e) => {
+        e.stopPropagation();
+        const res = await fetch("/api/view", { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ slug, op: "rm", id: v.id }) });
+        const out = await res.json().catch(() => ({ error: "failed" }));
+        if (out.error) return toast(out.error, true);
+        plan().views = (plan().views ?? []).filter((x) => x.id !== v.id);
+        toast(`View "${v.name}" deleted`); render();
+      };
+      wrap.append(b, del);
+      g.appendChild(wrap);
+    }
+  });
 
   // The board's vocabulary, grouped by kind so the presets read as the
   // categories they are. Each row filters; the two buttons under it are the
@@ -3104,6 +3209,7 @@ function render() {
   renderStale();
   renderLive();
   renderSide();
+  renderSaveView();
   renderSelBars();
 
   flat = [];

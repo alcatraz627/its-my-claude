@@ -12,7 +12,8 @@ import {
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
-  loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState, type Plan, type TagKind,
+  loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState,
+  VIEW_LIMITS, isKnownClause, matchView, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 
@@ -852,6 +853,61 @@ const server = Bun.serve({
 
     // Execution order. "After" is a fact about the plan, not the card, so it
     // lives beside goals and tags and survives sync the same way. Empty clears.
+    // Views, the owner's path (#39). Same store as the agent's CLI verbs, so
+    // "the for-me view" means one list no matter who says it.
+    if (req.method === "POST" && p === "/api/view") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; op?: string; id?: string; name?: string; clauses?: string[] } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.op) return json({ error: "need {slug, op: add|rename|rm, …}" }, 400);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir);
+        plan.views = plan.views ?? [];
+        const dup = (n: string, notId?: string) =>
+          plan.views!.some((v) => v.name.toLowerCase() === n.trim().toLowerCase() && v.id !== notId);
+        const now = new Date().toISOString();
+        if (body!.op === "add") {
+          const name = (body!.name ?? "").trim();
+          const clauses = (body!.clauses ?? []).map((c) => String(c).trim()).filter(Boolean);
+          if (name.length < VIEW_LIMITS.nameMin || name.length > VIEW_LIMITS.nameMax)
+            { out = { error: `a view name is ${VIEW_LIMITS.nameMin} to ${VIEW_LIMITS.nameMax} characters` }; return; }
+          if (!clauses.length) { out = { error: "a view needs at least one clause" }; return; }
+          if (clauses.length > VIEW_LIMITS.maxClauses)
+            { out = { error: `at most ${VIEW_LIMITS.maxClauses} clauses; more than that is a search` }; return; }
+          const bad = clauses.filter((c) => !isKnownClause(c));
+          if (bad.length) { out = { error: `unknown clause: ${bad.join(", ")}` }; return; }
+          // the tag rule: unique per board, case-insensitively
+          if (dup(name)) { out = { error: `a view called "${name}" already exists here` }; return; }
+          const v = { id: noteId(), name, clauses, by: "owner" as const, createdAt: now, updatedAt: now };
+          plan.views!.push(v);
+          savePlan(dir, plan, "view:add");
+          out = { ok: true, view: v };
+          return;
+        }
+        const v = plan.views!.find((x) => x.id === body!.id);
+        if (!v) { out = { error: `no view ${body!.id}` }; return; }
+        if (body!.op === "rm") {
+          plan.views = plan.views!.filter((x) => x.id !== v.id);
+          savePlan(dir, plan, "view:rm");
+          out = { ok: true, removed: v.name };
+          return;
+        }
+        if (body!.op === "rename") {
+          const name = (body!.name ?? "").trim();
+          if (name.length < VIEW_LIMITS.nameMin || name.length > VIEW_LIMITS.nameMax)
+            { out = { error: `a view name is ${VIEW_LIMITS.nameMin} to ${VIEW_LIMITS.nameMax} characters` }; return; }
+          if (dup(name, v.id)) { out = { error: `a view called "${name}" already exists here` }; return; }
+          v.name = name; v.updatedAt = now;
+          savePlan(dir, plan, "view:rename");
+          out = { ok: true, view: v };
+          return;
+        }
+        out = { error: `unknown op ${body!.op}` };
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
     // The board's default column view (#38). plan.json, because it is shared:
     // an agent reading the digest should get the order the owner set.
     if (req.method === "POST" && p === "/api/board-cols") {
