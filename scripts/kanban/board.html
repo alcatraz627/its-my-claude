@@ -48,7 +48,7 @@
   .actions{display:flex;gap:12px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
   .tgrp{display:flex;align-items:center;gap:5px}
   .tgrp.find{gap:0;border:1px solid var(--border);border-radius:8px;background:var(--card);
-             padding-left:2px;transition:border-color .12s,box-shadow .12s}
+             padding-left:2px;transition:border-color var(--t-fast),box-shadow var(--t-fast)}
   .tgrp.find:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 14%,transparent)}
   .tgrp.find #searchBtn{border:none;background:none;height:26px;padding:0 7px 0 4px;gap:5px;justify-content:center}
   .tgrp.find #searchBtn .sl{font:500 12px/1 var(--sans)}
@@ -63,7 +63,7 @@
   /* an empty group must not leave a hole in the row */
   .tgrp:empty,.tgrp.pick:not(:has(button)):not(:has(.selbar)){display:none}
   button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
-         padding:5px 10px;font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:background .12s,border-color .12s,color .12s}
+         padding:5px 10px;font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   button:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
   button.icon{padding:5px 8px}
@@ -243,7 +243,7 @@
      which are state and must stay visible when nobody is pointing at the row. */
   .item .iacts button{height:22px;width:22px;padding:0;justify-content:center;font-size:11.5px;
                       background:none;border-color:transparent;color:var(--text-3);
-                      opacity:0;transition:opacity .12s,background .12s,border-color .12s,color .12s}
+                      opacity:0;transition:opacity var(--t-fast),background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   .item:hover .iacts button,.item:focus-within .iacts button,
   .item .iacts button.on,.item .iacts button:focus-visible{opacity:1}
   @media (hover: none){ .item .iacts button{opacity:1} }
@@ -275,7 +275,7 @@
   /* ---------- card ---------- */
   .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 13px 10px;
         cursor:pointer;outline:none;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;
-        transition:background .12s,border-color .12s}
+        transition:background var(--t-fast),border-color var(--t-fast)}
   .card:hover{background:var(--card-hover);border-color:var(--border-2)}
   .card:focus-visible,.card.sel{border-color:var(--ring);box-shadow:0 0 0 2px color-mix(in srgb,var(--ring) 24%,transparent),var(--shadow)}
   [data-theme="light"] .card:focus-visible,[data-theme="light"] .card.sel{box-shadow:0 0 0 2px color-mix(in srgb,var(--ring) 18%,transparent),var(--shadow)}
@@ -359,7 +359,7 @@
      panel keeps its tab stubs so the open set stays visible at 46px. */
   #drawer{flex:none;width:0;overflow:hidden;background:var(--canvas);border-left:1px solid transparent;
           display:flex;flex-direction:column;min-height:0;
-          transition:width .22s cubic-bezier(.32,.72,0,1),border-color .22s}
+          transition:width var(--t-move) cubic-bezier(.32,.72,0,1),border-color var(--t-move)}
   #drawer.open{width:min(520px,42vw);border-left-color:var(--border);
                box-shadow:-18px 0 40px -24px rgb(0 0 0/.55)}
   /* a user-set width wins over the default, and survives a reload */
@@ -372,7 +372,7 @@
   /* ---------- drawer tabs ---------- */
   /* 6px of grab area, 1px of it visible: a wider hit target than the border it
      sits on, without drawing a second border */
-  .dgrip{position:absolute;left:-3px;top:0;bottom:0;width:7px;cursor:col-resize;z-index:3}
+  .dgrip{position:absolute;left:-3px;top:0;bottom:0;width:7px;cursor:col-resize;z-index:var(--z-grip-drawer)}
   .dgrip:hover::after,.dgrip.on::after{content:"";position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--blue)}
   #drawer{position:relative}
   #drawer.collapsed .dgrip{display:none}
@@ -387,7 +387,7 @@
            box-shadow:0 1px 0 0 var(--canvas)}
   .dtab .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .dtab .tx{flex:none;width:15px;height:15px;border-radius:4px;display:grid;place-items:center;
-            font-size:11px;color:var(--text-3);opacity:0;transition:opacity .1s,background .1s}
+            font-size:11px;color:var(--text-3);opacity:0;transition:opacity var(--t-fast),background var(--t-fast)}
   .dtab:hover .tx,.dtab.on .tx{opacity:1}
   .dtab .tx:hover{background:var(--well);color:var(--text)}
   /* Collapsed: a vertical stack of stubs. Text stays horizontal — a rotated
@@ -460,7 +460,7 @@
   .seg .seghint{display:block;margin-top:4px;font-size:11.5px;color:var(--text-3)}
   .seg.gone{cursor:default;color:var(--text-3);font-size:11.5px}
   .seg.gone:hover{background:var(--well);border-color:var(--border);color:var(--text-3)}
-  #docmodal{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:60}
+  #docmodal{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:var(--z-doc)}
   #docmodal.on{display:flex}
   #docmodal .dbox{background:var(--canvas);border:1px solid var(--border);border-radius:12px;
        width:min(880px,92vw);height:min(720px,86vh);display:flex;flex-direction:column;overflow:hidden}
@@ -536,7 +536,7 @@
   .composer textarea{font:400 13.5px/1.68 var(--sans);letter-spacing:-.002em;padding:11px 13px;
                      background:var(--card);border:1px solid var(--border);border-radius:9px;
                      color:var(--text);min-height:76px;resize:vertical;overflow-y:auto;
-                     transition:height .14s cubic-bezier(.32,.72,0,1),border-color .12s,box-shadow .12s;
+                     transition:height var(--t-fast) cubic-bezier(.32,.72,0,1),border-color var(--t-fast),box-shadow var(--t-fast);
                      background-image:linear-gradient(var(--border) 1px,transparent 1px);
                      background-size:100% 1.68em;background-position:0 1.42em;background-attachment:local}
   [data-theme="light"] .composer textarea{background-image:linear-gradient(color-mix(in srgb,var(--border) 55%,transparent) 1px,transparent 1px)}
@@ -645,7 +645,7 @@
      result set can say what KIND of thing each group is instead of running the
      three together. Charter §6: group, then hold. */
   #bpick,#tpick,#spick{position:fixed;inset:0;background:var(--scrim);display:none;align-items:flex-start;
-         justify-content:center;z-index:40;padding-top:12vh}
+         justify-content:center;z-index:var(--z-picker);padding-top:12vh}
   #bpick.on,#tpick.on,#spick.on{display:flex}
   #bpick .bpbox,#tpick .bpbox,#spick .bpbox{width:min(620px,93vw);background:var(--canvas);border:1px solid var(--border-2);
                 border-radius:14px;box-shadow:0 28px 70px rgb(0 0 0/.42);overflow:hidden;
@@ -678,7 +678,7 @@
   .bpsec .line{flex:1;height:1px;background:var(--border)}
   .bprow{display:flex;align-items:center;gap:11px;width:100%;padding:9px 10px;border-radius:9px;
          background:none;border:1px solid transparent;cursor:pointer;text-align:left;
-         transition:background .1s,border-color .1s}
+         transition:background var(--t-fast),border-color var(--t-fast)}
   .bprow:hover{background:var(--well)}
   .bprow.on{background:var(--well);border-color:var(--border-2);
             box-shadow:inset 2px 0 0 0 var(--blue)}
@@ -696,7 +696,7 @@
   /* the star is a control inside a row, so it must not fire the row */
   .bprow .bstar{flex:none;width:24px;height:24px;border-radius:6px;display:grid;place-items:center;
                 border:1px solid transparent;background:none;color:var(--text-3);opacity:0;
-                transition:opacity .1s,background .1s,color .1s}
+                transition:opacity var(--t-fast),background var(--t-fast),color var(--t-fast)}
   .bprow:hover .bstar,.bprow.on .bstar,.bprow .bstar.starred{opacity:1}
   .bprow .bstar:hover{background:var(--card);border-color:var(--border);color:var(--amber)}
   .bprow .bstar.starred{color:var(--amber)}
@@ -713,7 +713,7 @@
   .chips{display:flex;flex-wrap:wrap;gap:5px}
   .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;
         border:1px solid var(--border);border-radius:20px;background:var(--well);color:var(--text-2);
-        font:500 11.5px/1 var(--sans);cursor:pointer;transition:background .11s,border-color .11s,color .11s}
+        font:500 11.5px/1 var(--sans);cursor:pointer;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   .chip:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
   .chip .ci{flex:none;display:grid;place-items:center;color:var(--text-3)}
   .chip:hover .ci{color:var(--text-2)}
@@ -769,17 +769,17 @@
      trailing edge, the menu holds the numbers, and reset puts it back on the
      400px floor the whole board is built around. */
   .col{position:relative}
-  .colgrip{position:absolute;right:-8px;top:0;bottom:0;width:14px;cursor:col-resize;z-index:2}
+  .colgrip{position:absolute;right:-8px;top:0;bottom:0;width:14px;cursor:col-resize;z-index:var(--z-grip)}
   .colgrip::after{content:"";position:absolute;left:6px;top:14px;bottom:14px;width:2px;border-radius:2px;
-                  background:transparent;transition:background .12s}
+                  background:transparent;transition:background var(--t-fast)}
   .colgrip:hover::after,.colgrip.on::after{background:var(--blue)}
   .col.sized{flex:none}
   .chead .cmenu{flex:none;width:22px;height:22px;padding:0;justify-content:center;
-                background:none;border-color:transparent;color:var(--text-3);opacity:0;transition:opacity .12s}
+                background:none;border-color:transparent;color:var(--text-3);opacity:0;transition:opacity var(--t-fast)}
   .col:hover .chead .cmenu,.chead .cmenu:focus-visible,.chead .cmenu.on{opacity:1}
   .chead .cmenu:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   /* the properties card. Built to take more rows than it has today. */
-  .colcard{position:absolute;z-index:35;min-width:236px;background:var(--canvas);
+  .colcard{position:absolute;z-index:var(--z-lanepop);min-width:236px;background:var(--canvas);
            border:1px solid var(--border-2);border-radius:11px;padding:12px 13px;
            box-shadow:0 18px 44px rgb(0 0 0/.34);display:none;flex-direction:column;gap:9px}
   .colcard.on{display:flex}
@@ -834,21 +834,21 @@
   .xh-peer{border-color:var(--green-br)!important;
            background:linear-gradient(var(--green-bg),var(--green-bg)) var(--card)!important;
            box-shadow:0 0 14px -3px color-mix(in srgb,var(--green) 40%,transparent),var(--shadow);
-           transition:background .16s,border-color .16s,box-shadow .16s}
+           transition:background var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast)}
   .dtab.xh-peer{background:linear-gradient(var(--green-bg),var(--green-bg)) var(--canvas)!important}
   /* the same look, but its own name: a timed flash must never be mistaken for a
      live pair, or clearing the pair leaves it behind */
   .xh-flash{border-color:var(--green-br)!important;
             background:linear-gradient(var(--green-bg),var(--green-bg)) var(--card)!important;
-            transition:background .16s,border-color .16s}
+            transition:background var(--t-fast),border-color var(--t-fast)}
 
   /* the arrow layer. Never interactive, never over a tooltip. */
   /* width/height are load-bearing: a bare <svg> falls back to its intrinsic
      300x150 and silently clips every coordinate outside it, which is most of
      the viewport */
-  #xarrow{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:25;overflow:visible}
+  #xarrow{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:var(--z-arrow);overflow:visible}
   #xarrow path{fill:none;stroke:var(--green);stroke-linecap:round;stroke-linejoin:round;
-               opacity:0;transition:opacity .18s}
+               opacity:0;transition:opacity var(--t-fast)}
   #xarrow.on path{opacity:.55}
   #xarrow path.ink2{opacity:0}
   #xarrow.on path.ink2{opacity:.28}
@@ -867,8 +867,8 @@
   /* ---------- select mode ---------- */
   .card .cbox{position:absolute;top:9px;right:9px;width:18px;height:18px;border:1.5px solid var(--border-2);
               border-radius:5px;background:var(--card);display:none;place-items:center;
-              color:transparent;font-size:12px;cursor:pointer;z-index:1;
-              transition:background .11s,border-color .11s,color .11s}
+              color:transparent;font-size:12px;cursor:pointer;z-index:var(--z-base);
+              transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   body.selmode .card .cbox{display:grid}
   body.selmode .card.changed .title,body.selmode .card .title{padding-right:24px}
   body.selmode .card .newdot{right:32px}
@@ -886,10 +886,10 @@
   /* Opened from a chip and sized off the card it belongs to, so the writing
      surface is bigger than the thing that spawned it — the point is to be able
      to actually write here instead of in a 2-line preview. */
-  #pop{position:fixed;z-index:30;display:none;flex-direction:column;gap:10px;
+  #pop{position:fixed;z-index:var(--z-pop);display:none;flex-direction:column;gap:10px;
        background:var(--canvas);border:1px solid var(--border-2);border-radius:12px;padding:14px;
        box-shadow:0 20px 54px rgb(0 0 0/.38);opacity:0;transform:translateY(4px) scale(.99);
-       transition:opacity .13s,transform .13s;transform-origin:top left}
+       transition:opacity var(--t-fast),transform var(--t-fast);transform-origin:top left}
   #pop.on{display:flex;opacity:1;transform:none}
   #pop .ph{display:flex;align-items:center;gap:8px}
   #pop .pt{flex:1;min-width:0;font:600 13.5px/1.35 var(--sans);color:var(--text);
@@ -906,8 +906,8 @@
 
   #toast.err{border-color:var(--red);color:var(--red)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
-         border-radius:8px;padding:9px 16px;font-size:13px;display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:3}
-  #help{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:50}
+         border-radius:8px;padding:9px 16px;font-size:13px;display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:var(--z-toast)}
+  #help{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;z-index:var(--z-modal)}
   #help .box{background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:20px 24px;min-width:340px;
              box-shadow:0 24px 70px rgb(0 0 0/.4);max-height:84vh;overflow:auto}
   #help h3{font:600 13px/1 var(--sans);margin-bottom:14px}
@@ -959,7 +959,7 @@
   .htab{display:flex;align-items:center;gap:9px;background:none;border:none;
         border-bottom:2px solid transparent;border-radius:8px 8px 0 0;
         padding:9px 13px 8px;color:var(--text-3);cursor:pointer;text-align:left;
-        transition:background .12s,color .12s,border-color .12s}
+        transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast)}
   .htab .hi{flex:none;display:grid;place-items:center;color:var(--text-3)}
   .htab .ht{display:flex;flex-direction:column;gap:2px;line-height:1}
   .htab .ht b{font:600 12.5px/1.1 var(--sans);color:inherit}
@@ -988,7 +988,7 @@
      unless measured; the bleed was neither. */
   #hKeys > .kbd-wrap,
   #hTerms > svg:first-child,
-  #hVibe > svg:first-child{position:sticky;top:-18px;z-index:1}
+  #hVibe > svg:first-child{position:sticky;top:-18px;z-index:var(--z-base)}
   #hTerms > svg:first-child,
   #hVibe > svg:first-child{display:block;background:var(--canvas);
                            padding-bottom:12px;border-bottom:1px solid var(--border)}
@@ -1087,7 +1087,7 @@
   .kcap{width:33px;height:33px;flex:none;border-radius:7px;border:1px solid var(--border);
         background:var(--card);color:var(--text-3);display:grid;place-items:center;
         font:500 12px/1 var(--sans);cursor:default;position:relative;
-        transition:background .12s,border-color .12s,color .12s,transform .12s}
+        transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast),transform var(--t-fast)}
   .kcap.wide{width:auto;padding:0 11px;font-size:11px}
   /* bound keys are the point, so they carry the ink and the unbound ones recede */
   .kcap.bound{color:var(--text);border-color:var(--border-2);cursor:pointer}

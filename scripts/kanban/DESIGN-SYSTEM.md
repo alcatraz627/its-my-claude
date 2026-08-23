@@ -123,6 +123,12 @@ truncation (title then source, never the age) and this ladder does not move it.
 | 10 | panels: popovers, the lane popover, hub rows |
 | 20 / 99 | fully round: pills, dots, the count badge |
 
+A sixth step, `--r-hair: 2px`, was added when the ladder met the code: three
+decorations are under 3px wide (`.notice .bar`, `.colgrip::after`,
+`.kcap.bound::after`), and at that width a 4px radius reads as a lozenge, not a
+softened corner. Added as a step rather than distorting them, which is the
+owner's rule about the stores applied to this book.
+
 Measured today: 15 values on the board (2, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11,
 12, 14, 20, 99). Gap G2.
 
@@ -164,6 +170,14 @@ modal. The z ladder, named so nobody picks a number:
 | popover | 50 | lane options, the note popover |
 | picker | 60 | search, tag, go-to |
 | modal | 90 | help, doc viewer, toast, tooltip |
+
+**This table is a proposal, not a measurement, and it does not survive contact.**
+The stack actually in the code is `.dgrip` 3, `.colgrip` 2, `#toast` 3,
+`#xarrow` 25, `#pop` 30, `.colcard` 35, the pickers 40, `#help` 50, `#docmodal`
+60, `#tip` 90. Collapsing help, doc, toast and tooltip onto one number ties four
+overlays and would reverse help and doc by source order. So pass 2 named the
+measured stack (`--z-base` … `--z-tip` in `shared.css`) and moved nothing. The
+restack is G20.
 
 ## 6 · Icons and dots
 
@@ -356,7 +370,13 @@ all of them remove a second way of doing one thing.
 | G16 | empty-state voice | "No cards in this lane" vs "Nothing yet. Write anything above…" | one voice: what is missing, then what to do | grep the three empties |
 | G17 | typed arrow in a link | "open in tab ↗" | the drawn external glyph | charter test's §5 row widened to `<a>` |
 | G18 | `.kbd` keycap vs `.k` hint | two keycap styles | one `.k` | grep |
+| G20 | the toast is below every overlay | `#toast` is z 3, `#help` is 50, so a toast fired while any overlay is open is invisible; measured live, and it predates this work | either lift the toast above the modal tier, or adopt a corrected §5 ladder wholesale | open the help modal, fire a toast, see it |
 | G19 | the shared key map has no overlay guards | `t` is bound in both `shared.js` and `board.html`; board returns early inside five overlays, shared does not, so linking makes `t` fire twice and fire inside overlays | `data-keys="own"` on `<html>`; the shared handler returns before reading the key (charter §10) | remove the attribute and `t` must stop toggling |
+
+**G5 and G10 landed 2026-08-24 (pass 2a, task #62):** the ladders are tokens in
+`shared.css`, 59 transition durations collapsed to `--t-fast` / `--t-move` (the
+drawer's width is the only genuine move), and all 11 bare `z-index` numbers are
+named at their existing values, so nothing restacked. G20 came out of doing it.
 
 **G1, G9, G13 and G19 landed 2026-08-24 (pass 1, task #61).** Three effects are
 deliberate, not drift: a relative time under 90 seconds now reads in seconds
