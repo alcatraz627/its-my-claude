@@ -75,6 +75,17 @@ function renderMd(input: string): string {
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/~~([^~]+)~~/g, "<del>$1</del>")
       .replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s).,;:!?]|$)/g, "$1<em>$2</em>")
+      // Images BEFORE links, because ![alt](src) contains [alt](src) and the
+      // link rule would eat the inside and leave a stray "!".
+      //
+      // A relative path only means something relative to a document, and a note
+      // has no document, so it says so inline rather than emitting a broken
+      // <img>. An empty frame reads as "the image is missing"; this reads as
+      // "there is nowhere to resolve this from", which is the true one.
+      .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) =>
+        /^(https?:)?\/\//.test(src) || src.startsWith("/")
+          ? `<img src="${src}" alt="${alt}" loading="lazy" style="max-width:100%;height:auto;border-radius:8px">`
+          : `<span class="cnote">image <code>${src}</code> is relative, and this surface has no document to resolve it from</span>`)
       .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, `<a href="$2" rel="noopener">$1</a>`)
       .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, `$1<a href="$2" rel="noopener">$2</a>`);
     return out.replace(/\u0000(\d+)\u0000/g, (_m, n) => `<code>${spans[Number(n)]}</code>`);

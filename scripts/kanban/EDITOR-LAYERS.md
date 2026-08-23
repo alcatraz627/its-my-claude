@@ -118,8 +118,20 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > The board was unregistered afterwards; a test fixture living in the owner's
 > registry is indistinguishable from their real work.
 >
-> Remaining: step 4 (popover legend, stash, restore banner, conflict notice) and
-> step 5 (`renderMd` tables then images).
+> **Step 5, and the plan was half stale.** It says tables first, then images.
+> Tables ALREADY rendered — GFM pipes, thead and tbody, verified through
+> /api/mdpreview before touching anything. Only images were missing, and they
+> came out as literal text.
+>
+> Images render now, ahead of the link rule, because ![alt](src) contains
+> [alt](src) and the link rule would eat the inside and leave a stray "!".
+> Absolute and http sources become a lazy-loaded <img> capped at the container
+> width. A RELATIVE source says so inline instead: a path is only relative to a
+> document and a note has no document, so an empty frame would read as "the
+> image is missing" when the true answer is "there is nowhere to resolve this
+> from".
+>
+> Remaining: step 4 (popover legend, stash, restore banner, conflict notice).
 
 ## Build order, with checks
 
