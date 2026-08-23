@@ -1392,6 +1392,7 @@
 </div></div>
 
 <script src="/match.js"></script>
+<script src="/editor.js"></script>
 <script src="/shared.js"></script>
 <script>
 const slug = location.pathname.split("/")[2];
@@ -1446,6 +1447,20 @@ const $ = (id) => document.getElementById(id);
 // to the navbar as zone contents: identity on the left, find in the middle, the
 // board's own select/act group in the right zone's pill. Nothing is re-created,
 // so every id and every handler below still finds its element.
+// #13 layer 0 on the two message surfaces. The drafts page keeps its own
+// two-field history for now: its buffer is {title, body} with a server save
+// behind it, not a textarea value, so "move it" would be a restructure of that
+// page's state rather than a move. Recorded in EDITOR-LAYERS.md rather than
+// pretended.
+function bufferComposer() {
+  const el = $("dNote");
+  if (el && openId) { el.dataset.buffered = ""; attachBuffer(el, { id: `note-${openId}` }); }
+}
+function bufferPopover(cardId, noteId) {
+  const el = $("popNote");
+  if (el) { el.dataset.buffered = ""; attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` }); }
+}
+
 function mountBoardNav() {
   const bar = document.querySelector(".brow");
   if (!bar || !window.navbar) return;
@@ -1719,6 +1734,7 @@ function openPop(cardId, noteId, anchorEl) {
   pop.style.width = `${Math.min(Math.round(r.width * 1.5), innerWidth - 32)}px`;
   pop.style.height = `${Math.min(Math.round(r.height * 1.5), innerHeight - 32)}px`;
   pop.classList.add("on");
+  bufferPopover(openId, at >= 0 ? list[at].id : null);
   overlayOpen(pop, $("popNote"));
   const pr = pop.getBoundingClientRect();
   pop.style.left = `${Math.min(Math.max(12, r.left), Math.max(12, innerWidth - pr.width - 12))}px`;
@@ -3835,6 +3851,9 @@ function openDrawer(id, wantNoteId, opts = {}) {
   if (opts.replace && at >= 0) tabs[at] = id;
   else if (!tabs.includes(id)) tabs.push(id);
   openId = id; dirty = false;
+  // the composer's undo stack is per card, so switching away and back resumes
+  // THAT card's history rather than inheriting the last card's
+  setTimeout(bufferComposer, 0);
   const i = flat.indexOf(id); if (i >= 0) { sel = i; markSel(); }
   const hue = c.heading ? labelHue(c.heading) : null;
   $("dTint").style.background = hue === null ? "var(--border-2)" : `var(--l${hue})`;

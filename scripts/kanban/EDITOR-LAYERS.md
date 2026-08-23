@@ -77,6 +77,33 @@ change and land once, in `renderMd`, after the doc viewer is re-checked (seed
 §4 caveat): tables first (GFM pipes, no alignment), images as `<img>` with the
 path resolved the way `/doc` resolves links, behind the same size guard.
 
+> **Steps 1 and 2 built 2026-08-24 (#13).** Layer 0 lives in **`editor.js`**,
+> not `shared.js`, for the reason `match.js` exists: nothing in it touches the
+> DOM until a function is CALLED, so bun can require it and `test-editor.sh` can
+> exercise the history against a stub element. A core that can only be tested
+> through a browser is a core nobody tests. The board `<script>`s it.
+>
+> The composer and the note popover have the surviving undo stack they never
+> had, keyed per card (and per note for the popover), so switching cards and
+> coming back resumes THAT card's history. Proven by genuinely replacing the
+> node and undoing on the fresh one, which is where the native stack is empty.
+>
+> **The drafts page keeps its own two-field history.** The plan says Layer 0 is
+> "the #12 mechanism, moved, not rewritten", but drafts' buffer is
+> `{title, body}` behind a server save, not a textarea value. Making it use
+> `attachBuffer` is a restructure of that page's state model, not a move, and
+> its own suite is the thing that would pay for the mistake. Recorded rather
+> than pretended.
+>
+> **The coalescing test could not fail when it was written**, which is the more
+> useful half of this entry. It called `snap()` by hand after every edit, so the
+> timer was irrelevant: removing the timer left every row green. It types a
+> burst and waits now, and dropping the timer turns that row red. A row that
+> cannot fail is not a test.
+>
+> Remaining: steps 3 (preview toggle), 4 (popover legend, stash, restore banner,
+> conflict notice) and 5 (`renderMd` tables then images).
+
 ## Build order, with checks
 
 1. Extract Layer 0 to `shared.js`; drafts uses it. Check: drafts suite green
