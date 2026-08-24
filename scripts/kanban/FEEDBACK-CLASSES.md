@@ -190,8 +190,23 @@ path and the labels). At 1600 on `.claude`, with five verbs and a selection
 live, every labelled verb including the primary is fully visible and only the
 board-settings icon slides.
 
-**Still open:** the spacing that wastes vertical room, and whether it sticks on
-every view of Your asks.
+**Sticky on every view: confirmed, not rebuilt.** Measured on `/?view=asks`,
+which is the view the row named: `position:sticky`, `top:0`, and the bar holds
+at 0 after scrolling 400px. A previous round fixed it; this one checked.
+
+**Vertical room.** 172px of chrome stood above the first card on a 1000px
+screen, and 43px of that was the three gaps between the bar, the summary row
+and the first lane — more air than the summary row is tall, with the lanes'
+own top padding a second helping of it. Now 152px. The row keeps its own
+height; only the space around it was spent more carefully.
+
+**The bigger vertical question is the owner's, not this row's.** The summary
+band costs about 49px of the scarce axis to say four things, three of which the
+lane heads already count. Folding or dropping it is a surface decision and it
+needs their word, so it is asked rather than assumed.
+
+**C7 is otherwise swept**: one component, a documented overflow behaviour,
+sticky everywhere, verified at four widths on two boards in both themes.
 
 ---
 

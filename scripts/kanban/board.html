@@ -31,7 +31,11 @@
      floating slab rather than the top of the page. It now only stacks the bar
      above the summary row, and the inset it does keep belongs to that row. */
   header.top{flex:none;padding:0;display:flex;flex-direction:column;border-bottom:1px solid var(--border)}
-  header.top > .summary{margin:9px 16px}
+  /* Height is the scarce axis (§6) and 43px of it went on the three gaps
+     between the bar, this row and the first lane — more air than the row is
+     tall. §18: use the space you already have. The row keeps its own height;
+     only the space around it is spent more carefully. */
+  header.top > .summary{margin:5px 16px 6px}
   header.top > .notice{margin:0 16px 10px}
   .crumb{display:flex;align-items:center;gap:7px;flex:none;font-size:var(--fs-body);color:var(--text-3)}
   .crumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);padding:2px 5px;margin-left:-5px}
@@ -210,7 +214,9 @@
   .speer .sub{flex:none;font-size:var(--fs-small);color:var(--text-3)}
 
   /* ---------- board ---------- */
-  main{flex:1;min-height:0;display:flex;gap:14px;padding:15px 24px 22px;overflow-x:auto;align-items:stretch}
+  /* The lanes' own top padding already separates a head from the panel edge, so
+     15px above them was a second helping of the same air (§18). */
+  main{flex:1;min-height:0;display:flex;gap:14px;padding:9px 24px 22px;overflow-x:auto;align-items:stretch}
   /* ⌘ held: the board is a grab surface. The cursor is the only affordance
      there is for a modifier gesture, so it changes on the modifier, not on the
      drag. */
@@ -223,9 +229,9 @@
      overflow-x:auto) and the relative widths below only order what happens
      ABOVE the floor */
   .col{flex:1 1 400px;min-width:400px;max-width:560px;max-height:100%;display:flex;flex-direction:column;min-height:0;
-       background:var(--well);border:1px solid var(--border);border-radius:var(--r-panel);padding:10px 10px 4px}
+       background:var(--well);border:1px solid var(--border);border-radius:var(--r-panel);padding:6px 10px 4px}
   .col.archive{flex:.68 1 400px;min-width:400px;max-width:440px}
-  .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 10px;flex:none}
+  .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 7px;flex:none}
   .chead h2{font:600 var(--fs-lead)/1.4 var(--sans);letter-spacing:-.006em;color:var(--text)}
   .chead .count{margin-left:auto;font-size:var(--fs-body);font-weight:550;color:var(--text-3);background:var(--card);
                 border:1px solid var(--border);border-radius:var(--r-pill);padding:1px 8px;min-width:24px;text-align:center}
