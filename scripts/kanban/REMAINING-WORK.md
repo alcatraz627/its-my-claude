@@ -248,12 +248,16 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     filed as: (`50b6dafd4faa`). Drafts has
     three modes; note editors have a two-state toggle.
 24. **Global tag colours** (`#66`). Set a tag's colour once, holds across boards.
-25. **Inactive boards on the hub** (`#67`). localStorage only, agents never see
-    it.
-26. **Column settings soft limit**. The one unbuilt lever per
-    `COLUMN-SETTINGS.md`, gated on `#39` which is now done. **Rescoped**: the
-    previous plan framed this as an open scope question; the scope is fully
-    answered in a per-lever table and only this lever remains.
+25. **Inactive boards on the hub** (`#67`) **Was already built** (this row was
+    stale): the hub's crate toggle archives a board out of every live tier
+    into a greyed "gone" tier, server-backed via pins rather than the
+    localStorage the row proposed, with the semantics the ruling wanted (an
+    instruction about the list, agents keep working there).
+26. **Column settings soft limit** **Done 2026-08-25.** `plan.cols.limits`
+    (board-level, shared, so an agent reading plan.json sees the team fact),
+    a Soft limit row in the lane popover, and the head's count turns amber
+    above it with a tooltip saying it is a signal, never a block. Verified
+    live: set 1 on a lane of 4, amber with tooltip, persists, clears back.
 27. **Showcase boards** (`#65`). Exercise every feature, tag each card
     `showcase` plus its slug. After 15, when there is a full feature set.
 

@@ -290,6 +290,8 @@
   .chead .count{margin-left:auto;font-size:var(--fs-body);font-weight:550;color:var(--text-3);background:var(--card);
                 border:1px solid var(--border);border-radius:var(--r-pill);padding:1px 8px;min-width:24px;text-align:center}
   .col.attn .chead .count{color:var(--text);border-color:var(--border-2)}
+  /* over the soft limit (#38 lever 5): a WIP signal, never a block */
+  .chead .count.over{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
   details.col{align-self:flex-start}
   details.col > summary{list-style:none;cursor:pointer}
   details.col > summary::-webkit-details-marker{display:none}
@@ -2394,6 +2396,12 @@ function openColCard(lane, wrap, btn) {
     `<div class="crow"><span class="ck">Fold this column <kbd>c</kbd></span>` +
       `<button type="button" class="ghost" id="cccol" aria-pressed="${collapsedOf(lane)}">` +
       `${collapsedOf(lane) ? "Unfold" : "Fold"}</button></div>` +
+    // Lever 5, the one board-SHARED row here: a WIP signal, never a block.
+    // "Reset this column" clears the local levers and leaves this alone.
+    `<div class="crow"><span class="ck">Soft limit</span>` +
+      `<input type="number" id="cclim" min="1" max="99" inputmode="numeric" placeholder="none"` +
+      ` value="${boardCols().limits?.[lane] ?? ""}" aria-label="soft limit for this column"` +
+      ` data-tip="Above this count the head turns amber. Shared with the board and its agents; a signal, never a block."></div>` +
     `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset this column</button>` +
     `<button type="button" id="ccdone">Done</button></div>`;
   document.body.appendChild(card);
@@ -2414,6 +2422,13 @@ function openColCard(lane, wrap, btn) {
   });
   wireSeg("#ccsort", "sort");
   wireSeg("#ccdens", "density");
+  const lim = card.querySelector("#cclim");
+  lim.onchange = async () => {
+    const cur = { ...(boardCols().limits ?? {}) };
+    const n = Math.max(0, Math.round(+lim.value || 0));
+    if (n) cur[lane] = n; else delete cur[lane];
+    await saveBoardCols({ limits: Object.keys(cur).length ? cur : null });
+  };
   const colBtn = card.querySelector("#cccol");
   colBtn.onclick = () => {
     const now = !collapsedOf(lane);
@@ -3903,8 +3918,12 @@ function render() {
     const head = document.createElement(collapsible ? "summary" : "div");
     head.className = "chead";
     const total = all.filter((c) => c.lane === lane).length;
+    // lever 5: over the shared soft limit, the count turns amber and says so
+    const lim = boardCols().limits?.[lane];
+    const over = !!lim && total > lim;
     head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2>` +
-      `<span class="count">${filterText ? `${cardsIn.length}/${total}` : total}</span>` +
+      `<span class="count${over ? " over" : ""}"${over ? ` data-tip="${total} of a soft limit of ${lim}. A signal, never a block."` : ""}>` +
+      `${filterText ? `${cardsIn.length}/${total}` : total}</span>` +
       `<button type="button" class="cmenu" aria-label="column options">${DOTS_ICON}</button>`;
     head.querySelector(".cmenu").onclick = (e) => { e.stopPropagation(); openColCard(lane, wrap, e.currentTarget); };
     wrap.appendChild(head);

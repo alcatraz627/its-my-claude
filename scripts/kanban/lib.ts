@@ -536,7 +536,10 @@ export interface Plan {
   // the board's default column view (#38, owner's D2a note). Shared rather
   // than local because the agent's `c` digest should read the way the board
   // reads; a lane that overrides one of these keeps its override local.
-  cols?: { sort?: string; density?: string; collapsed?: boolean; width?: number };
+  // limits: per-lane soft WIP counts (#38 lever 5). Board-level and shared
+  // because a limit is a team fact; the head turns amber above it, never blocks.
+  cols?: { sort?: string; density?: string; collapsed?: boolean; width?: number;
+           limits?: Record<string, number> };
   views?: View[];                     // named queries both sides can say (#39)
   updatedAt: string | null;
 }
