@@ -350,8 +350,12 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     const mark = () => el.dataset.of = el.scrollWidth > el.clientWidth + 1 ? "x" : "none";
     mark();
     if (typeof ResizeObserver === "function") new ResizeObserver(mark).observe(el);
+    // content lands after mount (the status band, the page's verbs), and a
+    // content change need not change the box the ResizeObserver watches
+    if (typeof MutationObserver === "function") new MutationObserver(mark).observe(el, { childList: true, subtree: true });
     addEventListener("resize", mark);
   };
+  markOverflow(document.getElementById("nbStatus"));
   if (find) { document.getElementById("nbFind").append(find); markOverflow(find); }
   if (actions) {
     const np = document.getElementById("nbActions");
@@ -370,24 +374,17 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   // is an indicator and a glyph with a count still says which kind you are in.
   // A control that has scrolled off says nothing at all.
   //
-  // Hysteresis, because shedding changes the very width that decides to shed:
-  // it tightens the moment anything is cut and loosens only once the slack is
-  // wider than the labels cost, so it cannot flutter between the two states.
-  // Measure the UN-SHED state every time and decide from that, rather than
-  // asking how much slack is left: the zones flex, so they absorb every spare
-  // pixel and the leftover is always zero whether or not there is room. Reading
-  // it that way could only ever tighten, never loosen.
-  //
-  // Deterministic, so it settles: the same question is asked of the same state
-  // and gets the same answer, which is what stops it flickering between the two.
+  // Stable because it always decides from the UN-SHED layout: shedding changes
+  // the very width that decides, so the attribute is dropped, the un-shed cut
+  // is measured, and the same state always gets the same answer. Asking how
+  // much slack is left instead would never loosen, because the zones flex and
+  // absorb every spare pixel.
   const tighten = () => {
     const np = document.getElementById("nbActions");
     if (!np || !np.firstChild) return;
-    const was = el.dataset.tight;
     delete el.dataset.tight;
     const cutWithLabels = np.scrollWidth - np.clientWidth;   // forces the reflow
     if (cutWithLabels > 1) el.dataset.tight = "1";
-    else if (was) delete el.dataset.tight;
   };
   tighten();
   // Observe the GROUP, not just the bar: the bar's own box does not change when

@@ -50,7 +50,12 @@
   .brow .crumb a:hover{color:var(--text);background:var(--card)}
   .brow .crumb span{color:var(--border-2);margin:0 1px}
   .brow .actions{margin-left:14px}
-  .btitle{font:600 var(--fs-title)/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap}
+  /* The title shrinks and the NAME ellipsises. Both held their content width,
+     so a squeezed identity zone hard-clipped the name at .nident's overflow
+     edge with no ellipsis: "kanban-fixture" read "kanban-". */
+  .btitle{font:600 var(--fs-title)/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap;
+          min-width:0;display:inline-flex;align-items:baseline}
+  .btitle .bnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .bpath{color:var(--text-3);font:var(--fs-small)/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
   /* Charter §6: group, then hold. Four groups, each a holder, so the row parses
      as find / pick / act / view instead of eight peers in a line. The gap
@@ -2977,7 +2982,12 @@ function statChip({ icon, n, label, filter, cls = "", tip }) {
   const b = document.createElement("button");
   b.type = "button";
   b.className = "stat-chip " + cls + (filter && filterText === filter ? " on" : "");
-  b.innerHTML = `<span class="sg">${SB_ICON[icon] ?? ""}</span><span><b>${n}</b> ${label}</span>`;
+  // The number and the word are separate spans so the tight bar can shed the
+  // word and keep the number (shared.css targets .sl). One flat span made that
+  // shed rule select nothing, and the band clipped instead.
+  b.innerHTML = `<span class="sg">${SB_ICON[icon] ?? ""}</span>`
+    + (n !== "" ? `<span class="sn"><b>${n}</b></span>` : "")
+    + `<span class="sl">${label}</span>`;
   if (tip) b.dataset.tip = tip;
   // It still filters, which §13 requires of every count. When the count names
   // ONE column it also brings that column into the middle of the screen, which

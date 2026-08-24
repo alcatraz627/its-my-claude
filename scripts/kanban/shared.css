@@ -235,18 +235,34 @@
      went to zero: logo, crumb, board name and path all gone). §18b applies to
      this zone as much as to the other one — the fix for one zone reaching zero
      must not be another zone reaching zero. */
-  .nzid{flex:0 1 auto;min-width:180px}
+  /* And it is CAPPED, and its basis is modest. With the status band aboard,
+     this zone's natural width reached 55% of the bar, the verbs zone was
+     crushed to 117px for a 485px group, and the bar declared itself tight at
+     every width, 1920 included: an auto basis demands the FULL path before
+     the other zones are served. A small basis that grows into free space
+     serves the controls first and gives the path whatever is left. */
+  .nzid{flex:1 1 340px;min-width:180px;max-width:44%}
   /* The zone was allowed to shrink and could not, because the wrapper a page
      mounts its identity into carried no styles at all: a flex item defaults to
      min-width:auto, so it refuses to go below its content and the zone clips
      instead. Whatever a page puts here, the wrapper shrinks. */
-  .nident{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden}
+  /* Identity outranks the band inside this zone: the band sheds first (its
+     own comment below says so), so it carries the higher shrink factor and the
+     identity grows into whatever the zone wins. */
+  .nident{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;flex:1 1 auto}
   /* The board's status, in the bar rather than in a band of its own. It sits
      after the identity because it is about the thing the identity names, and it
      sheds before the identity does: a number you can re-read by looking at the
      columns outranks knowing which board you are on. */
-  .nstatus{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;
+  /* It slides rather than clips: at 1440 the band was cut 106px mid-word with
+     no scroll and no sign, which is the exact hidden-control shape .npage and
+     .nfind were given masks for. Same treatment, same fade. */
+  .nstatus{display:flex;align-items:center;gap:6px;min-width:96px;flex:0 3 auto;
+           overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
            margin-left:10px;padding-left:10px;border-left:1px solid var(--border-2)}
+  .nstatus::-webkit-scrollbar{display:none}
+  .nstatus[data-of="x"]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%);
+                        mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%)}
   /* One line, always. The band wraps by default and a wrapped band makes the
      bar taller, which is the height this change exists to give back. */
   .nstatus .sband{flex-wrap:nowrap;gap:6px;min-width:0}
@@ -257,7 +273,7 @@
      dropping that band was to keep the numbers and get the height back. Under
      pressure it drops its words and keeps its numbers, the same bargain the
      tabs strike. */
-  .navbar[data-tight] .nstatus .stat-chip span span,
+  .navbar[data-tight] .nstatus .stat-chip .sl,
   .navbar[data-tight] .nstatus .stat-chip.mute{display:none}
   .navbar[data-tight] .nstatus .stat-chip{padding:0 6px;gap:4px}
   .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
@@ -282,7 +298,10 @@
          background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br);
          border-radius:var(--r-card)}
   .nlogo:hover{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);filter:brightness(1.06)}
-  .ncrumb{flex:none;display:flex;align-items:center;gap:6px;font:400 var(--fs-body)/1.3 var(--sans);color:var(--text-3)}
+  /* It shrinks: flex:none pushed the squeeze out to .nident's overflow, which
+     hard-clips the board name with no ellipsis. Shrinking here lets
+     .ncrumb-now do the ellipsising it already declares. */
+  .ncrumb{flex:0 1 auto;display:flex;align-items:center;gap:6px;font:400 var(--fs-body)/1.3 var(--sans);color:var(--text-3)}
   .ncrumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);padding:2px 5px;margin-left:-5px}
   .ncrumb a:hover{color:var(--text);background:var(--card)}
   /* the instance you are looking AT is the loudest word in the bar; the kind
