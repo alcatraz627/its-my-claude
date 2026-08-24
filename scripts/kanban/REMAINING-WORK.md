@@ -210,8 +210,13 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     draft); a probe plan's rule-flip was verified at the API. Deliberately
     NOT built: decision-page auto-rule on submit (cross-system, rides the
     owner-gated 13) and plan tagging (ambiguous in the spec).
-15. **Phase 4: decisions without a card** (`#59`, P1). Derived attention,
-    Decisions view. After 14.
+15. **Phase 4: decisions without a card** (`#59`, P1). **Partly covered by
+    item 12, rest gated 2026-08-25**: the Decisions kind's tab already counts
+    pending pages on every page, which is the derived-attention half. The
+    unseen-versus-seen half needs the :5197 decision pages to report "the
+    owner opened me", which is the same cross-system integration item 13
+    waits on (the owner's call on how decision pages adopt kanban's assets).
+    Build the rest with 13.
 
 ### Ergonomics, all four unchained from `#70` on 2026-08-24
 
