@@ -179,7 +179,11 @@
      overflow:auto box clips anything reaching past its padding, so the handle
      sat 16px inside the edge, under the content. */
   aside.side{position:relative;flex:none;width:186px;border-right:1px solid var(--border);
-             background:var(--well);display:flex;flex-direction:column;overflow:visible}
+             background:var(--well);display:flex;flex-direction:column;overflow:visible;
+             transition:width .22s cubic-bezier(.32,.72,0,1)}
+  /* the drag must track the pointer, so the transition is for the toggle only */
+  aside.side.sizing{transition:none}
+  @media (prefers-reduced-motion: reduce){ aside.side{transition:none} }
   aside.side.sized{width:var(--sw)}
   aside.side.collapsed{width:38px}
   aside.side.collapsed.sized{width:38px}
@@ -510,7 +514,14 @@
   .pvpane{border:1px solid var(--border);border-radius:var(--r-card);background:var(--well);
           padding:10px 12px;font:400 var(--fs-body)/1.6 var(--sans);color:var(--text-2);
           max-height:40vh;overflow:auto}
-  .npv{float:right;margin:-2px 0 4px}
+  /* An action is an icon and a tooltip, together, in the row that already holds
+     this note's other verbs. It used to be a word floated on its own line above
+     the box, which read as a section rather than as one of the buttons it
+     belongs with. */
+  .grp .gsp2 ~ .iact{margin-left:2px}
+  .grp .iact{padding:4px 5px}
+  .dhead .dprov{margin-left:7px;font:400 var(--fs-caption)/1 var(--sans);color:var(--text-3);
+                border:1px solid var(--border);border-radius:var(--r-pill);padding:2px 6px}
   .pvrestore{display:flex;align-items:center;gap:7px;margin-bottom:7px;padding:6px 9px;
              border:1px solid var(--amber-br);background:var(--amber-bg);border-radius:var(--r-control);
              font:400 var(--fs-small)/1.4 var(--sans);color:var(--text-2)}
@@ -828,7 +839,7 @@
   /* A note is a thing with an identity, so it gets a chip with a name, not a
      count. #n is stable per card, which is what makes "note #2" sayable out
      loud to an agent. */
-  .chips{display:flex;flex-wrap:wrap;gap:5px}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
   .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;
         border:1px solid var(--border);border-radius:var(--r-pill);background:var(--well);color:var(--text-2);
         font:500 var(--fs-small)/1 var(--sans);cursor:pointer;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
@@ -1346,12 +1357,12 @@
       <span class="h" id="dPickup">the agent reads this on its next pickup</span></span>
       <span class="gsp2"></span>
       <span class="st" id="dSaved"></span>
+      <button type="button" class="icon iact" id="dNotePv" aria-label="preview this note" data-tip="See how this note will read once it is rendered"></button>
       <button type="button" class="icon iact" id="dAdd" aria-label="start another note"></button>
       <button type="button" class="icon iact danger" id="dDel" aria-label="delete this note"></button>
     </div>
     <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
     <div class="conflict" id="dConflict"></div>
-    <button type="button" class="ghost npv" id="dNotePv" data-tip="See how this note will read once it is rendered">preview</button>
     <div class="pvpane" id="dNotePane" hidden></div>
     <textarea id="dNote" placeholder="Leave a note. The agent reads it on its next pickup, so write it the way you would say it."></textarea>
     <div class="hint" id="dLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
@@ -1388,6 +1399,7 @@
 <div id="pop" role="dialog" aria-label="note editor">
   <div class="ph">
     <span class="pt" id="popTitle"></span>
+    <button type="button" class="icon ghost" id="popNotePv" aria-label="preview this note" data-tip="See how this note will read once it is rendered"></button>
     <button type="button" class="icon ghost" id="popPick" data-tip="Add this note to the selection you send an agent" aria-label="select note"></button>
     <button type="button" class="icon ghost" id="popClose" data-tip="Close (Esc)" aria-label="close"></button>
   </div>
@@ -1395,7 +1407,6 @@
   <div class="pvrestore" id="popConflict" hidden></div>
   <div class="pvrestore" id="popRestore" hidden></div>
   <div class="hint" id="popLegend"><code>@me</code> self · <code>!now</code> act now · <code>/skill</code> run it · <code>&gt;lane</code> move · <code>#defer</code> park · <code>#review-me</code> your queue</div>
-  <button type="button" class="ghost npv" id="popNotePv" data-tip="See how this note will read once it is rendered">preview</button>
   <div class="pvpane" id="popNotePane" hidden></div>
   <textarea id="popNote" placeholder="Write the note here. ⌘↵ saves it."></textarea>
   <div class="pbar">
@@ -1652,6 +1663,11 @@ function bufferPopover(cardId, noteId) {
     attachPreview(el, "popNotePv", "popNotePane"); }
 }
 
+// Declared up here because the bar mounts before the sidebar's own section runs
+// and asks whether the panel is shut. A `let` read before its line is an error,
+// not a false.
+let sideCollapsed = (localStorage.getItem("kanban-side") ?? "1") === "1";
+
 function mountBoardNav() {
   const bar = document.querySelector(".brow");
   if (!bar || !window.navbar) return;
@@ -1683,7 +1699,8 @@ function mountBoardNav() {
   // that when a filter makes it appear it lands beside the zone you just used.
   page.append($("saveView"), $("pickGrp"), bar.querySelector(".tgrp.act"), cog);
   navbar({ mount: bar, active: "boards", identity: ident, find,
-           actions: page, peers: $("live"), help: openHelp });
+           actions: page, peers: $("live"), help: openHelp,
+           aside: { isCollapsed: () => sideCollapsed, toggle: toggleSide } });
 }
 mountBoardNav();
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
@@ -3326,7 +3343,6 @@ function railEl() {
 // and at 1440 the six lanes already fit exactly: spending 186px on it by
 // default pushes Done off the edge, which is the width regression the
 // adversarial review caught on the rail.
-let sideCollapsed = (localStorage.getItem("kanban-side") ?? "1") === "1";
 
 // The sidebar's collapse, reachable from the key and the button alike. It used
 // to live only inside the button's onclick, which is what "open / close is still
@@ -3478,7 +3494,9 @@ function renderSide() {
   grip.dataset.tip = "Drag to resize · double-click to reset";
   grip.ondblclick = resetSideWidth;
   el.appendChild(grip);
-  wireGrip(grip, { width: () => el.getBoundingClientRect().width, set: setSideWidth });
+  wireGrip(grip, { width: () => el.getBoundingClientRect().width, set: setSideWidth,
+                   before: () => el.classList.add("sizing"),
+                   after: () => el.classList.remove("sizing") });
 
   // A section folds, remembers whether it is folded, and says how much it holds
   // while folded — the same bargain the lanes strike. Searching opens every
@@ -3999,6 +4017,8 @@ function loadNoteIntoComposer(id) {
   $("dNoteLabel").textContent = editing ? `Note #${at + 1}` : "New note";
   $("dNoteIcon").innerHTML = editing ? PEN_ICON : NOTE_ICON;
   $("dAdd").innerHTML = PLUS_ICON;
+  $("dNotePv").innerHTML = EYE_ICON;
+  const pp = $("popNotePv"); if (pp) pp.innerHTML = EYE_ICON;
   $("dAdd").dataset.tip = "Start another note on this card";
   $("dDel").innerHTML = TRASH_ICON;
   $("dDel").dataset.tip = "Delete this note";
@@ -4200,6 +4220,7 @@ for (const [id, ico] of [["dPrev", UP_ICON], ["dNext", DOWN_ICON],
   ["dCollapse", CHEV_RR_ICON], ["dClose", X_ICON], ["popPick", RING_ICON], ["popClose", X_ICON], ["hClose", X_ICON]]) {
   const b = $(id); if (b) b.innerHTML = ico;
 }
+const EYE_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1.6 8s2.4-4 6.4-4 6.4 4 6.4 4-2.4 4-6.4 4S1.6 8 1.6 8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.7" stroke="currentColor" stroke-width="1.2"/></svg>`;
 const PEEK_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="2.8" width="12.4" height="10.4" rx="1.6" stroke="currentColor" stroke-width="1.2"/><path d="M9.6 2.8v10.4" stroke="currentColor" stroke-width="1.2"/></svg>`;
 const TRASH_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.2 4.6h9.6M6.4 4.6V3.2h3.2v1.4M4.6 4.6l.6 8.2h5.6l.6-8.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const DOT_ICON = `<svg width="9" height="9" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>`;
@@ -4571,7 +4592,20 @@ function openDrawer(id, wantNoteId, opts = {}) {
     `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
     `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">${EXT_ICON}</span></a>` +
     `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;
-  $("dSrc").innerHTML = (c.source.kind === "manual" ? `<div class="mirror">Added manually, so there is no source document.</div>` : srcRow(c.source.path, c.source.line, false)) +
+  // "Added manually, so there is no source document" took a row above the notes
+  // to say something about the card, not about the notes. It rides the panel's
+  // own title now, quietly, where the rest of what the card IS already lives.
+  const lane = $("dLane");
+  if (lane) {
+    lane.querySelector(".dprov")?.remove();
+    if (c.source.kind === "manual") {
+      const m = document.createElement("span");
+      m.className = "dprov"; m.textContent = "added by hand";
+      m.dataset.tip = "This card was typed here, so it mirrors no document.";
+      lane.append(m);
+    }
+  }
+  $("dSrc").innerHTML = (c.source.kind === "manual" ? "" : srcRow(c.source.path, c.source.line, false)) +
     (c.docs?.length ? c.docs.map((d) => srcRow(d, null, true)).join("") : "");
   renderSrcLine(c);
 

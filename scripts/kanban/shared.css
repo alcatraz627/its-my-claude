@@ -319,6 +319,25 @@
   /* common controls never scroll away: theme and help are the two things that
      must be in the same place on every page */
   .nzcommon > .icon{flex:none}
+  /* The panel toggle sits where the panel's edge is, and stays put when the
+     panel moves: a control that slides out from under the pointer using it is
+     the thing this placement avoids. Only the chevron turns. */
+  .nasidetog{flex:none;margin-right:8px;padding:4px 5px}
+  .nasidetog svg{transition:transform .22s cubic-bezier(.32,.72,0,1)}
+  .nasidetog.shut svg{transform:rotate(180deg)}
+  @media (prefers-reduced-motion: reduce){ .nasidetog svg{transition:none} }
+
+  /* A bar where every control has a filled box has no emphasis left to spend.
+     Plain by default with a tooltip; a background means "this one matters",
+     which is the primary action and the states that are currently ON. */
+  .nzcommon .npage > button,
+  .nzcommon .npage .tgrp > button{background:none;border-color:transparent;color:var(--text-2)}
+  .nzcommon .npage > button:hover,
+  .nzcommon .npage .tgrp > button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .nzcommon .npage button.accent{background:var(--blue);border-color:transparent;color:var(--on-accent)}
+  .nzcommon .npage button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  .nzcommon .npage button.danger{color:var(--red)}
+
   /* the bar's floor: where you can GO never scrolls away, and never shrinks */
   .views{flex:none;display:flex;gap:2px;background:var(--canvas);border:1px solid var(--border);
          border-radius:var(--r-card);padding:3px}

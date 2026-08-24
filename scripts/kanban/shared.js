@@ -138,6 +138,8 @@ function wireGrip(grip, { width, set, edge = "right", step = 24, before, after }
 // The kinds' glyphs, keyed by id, built from the registry so the two cannot
 // disagree. Kept as a name because three call sites already say NAV_ICON.x.
 const NAV_ICON = Object.fromEntries(KINDS.map((k) => [k.id, k.icon]));
+// one chevron, turned by CSS, so open and shut are one control rather than two
+const CHEV_LR_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.8 3.5 5.3 8l4.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const MARK_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="2.4" width="4.6" height="11.2" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="7.6" y="2.4" width="4.6" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M14.4 5v6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
 const HELP_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.75 1.75 0 1 1 1.9 1.85V9.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8.1" cy="11.6" r=".75" fill="currentColor"/></svg>`;
 const CLOSE_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="m4.6 4.6 6.8 6.8M11.4 4.6l-6.8 6.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
@@ -281,7 +283,7 @@ function kindMatches(ix, kindId, q, cap) {
 }
 
 function navbar({ mount, active, title, sub, crumb, identity, find, actions, counts = {},
-                  peers, help, onView }) {
+                  peers, help, onView, aside }) {
   const el = typeof mount === "string" ? document.querySelector(mount) : mount;
   if (!el) return null;
   // add, never replace: a page may already carry a class its own CSS reads
@@ -297,6 +299,10 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     `</div>` +
     `<div class="nz nzfind" id="nbFind"></div>` +
     `<div class="nz nzcommon">` +
+      // The panel's own toggle, at the edge the panel meets. It stays exactly
+      // here whether the panel is open or shut, so the control does not move
+      // out from under the pointer that is using it; only the chevron turns.
+      (aside ? `<button class="icon ghost nasidetog" id="nbAside"></button>` : "") +
       // Every kind this app has, from kinds.js. Label, route, key, tip and hue
       // all come from the one declaration, so a fourth kind is one entry there
       // and nothing here. The hue rides an inline custom property rather than a
@@ -317,6 +323,20 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   if (identity) document.getElementById("nbIdent").append(identity);
   else { document.getElementById("nbTitle").textContent = title ?? "";
          document.getElementById("nbSub").textContent = sub ?? ""; }
+  if (aside) {
+    const b = document.getElementById("nbAside");
+    b.innerHTML = CHEV_LR_ICON;
+    const paint = () => {
+      const shut = aside.isCollapsed();
+      b.classList.toggle("shut", shut);
+      b.setAttribute("aria-label", shut ? "show the side panel" : "hide the side panel");
+      b.setAttribute("aria-expanded", String(!shut));
+      b.dataset.tip = (shut ? "Show the side panel" : "Hide the side panel") + " (|)";
+    };
+    b.onclick = () => { aside.toggle(); paint(); };
+    paint();
+    aside.repaint = paint;
+  }
   document.getElementById("nbHome").onclick = () => { location.href = "/"; };
   document.getElementById("nbTheme").onclick = toggleTheme;
   if (help) document.getElementById("nbHelp").onclick = help;
