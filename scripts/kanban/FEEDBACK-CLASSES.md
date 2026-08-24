@@ -99,6 +99,29 @@ inline, which beat the folded class, so folding a widened lane reclaimed nothing
 now keeps its unfold control lit, because the way back should not be the thing
 that hides until hover.
 
+**The left sidebar, designed rather than patched, 2026-08-24.** The owner listed
+seven things and they were one thing: it had accreted, never been designed. The
+grip could not be grabbed at all — an overflow:auto box clips what reaches past
+its padding, so the handle sat 16px inside the edge under the content, and the
+earlier round had verified `setSideWidth()` the function instead of dragging it.
+The panel is built like the drawer now: a shell that does not scroll, a head
+that stays put, a body that does, and the grip on the shell.
+
+Its two heading levels were 11.5px and 10.5px, both weight 600, both uppercase
+— one pixel apart, which is no hierarchy. A section is a sentence-case heading
+that folds, remembers whether it is folded, and keeps its count while folded;
+a kind stays small caps and steps back. Folding Tags reclaims 449px, which is
+what put Pinned and Here now 404px below the fold.
+
+A find box narrows both lists and drops sections that no longer have anything
+in them. It keeps focus and the caret across the re-render, which the first
+attempt did not: only the first character survived.
+
+`window.prompt` is gone from this page. Both callers — renaming a tag and naming
+a view — now use the popover the lanes already own, which can show what the tag
+is on and what the filter says, neither of which an OS dialog can do. The two
+row verbs became one handle, so pointing at a row costs it 20px, never its name.
+
 **Still open, and named rather than implied:** ephemeral tag
 columns, the note popover, the composer, the three pickers, the doc modal and
 the help modal have none of it. Neither does the drag half for surfaces that
