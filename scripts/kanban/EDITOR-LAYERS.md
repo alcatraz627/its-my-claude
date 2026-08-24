@@ -60,6 +60,23 @@ helper attached, so the core is proven outside drafts.
 "Adds" rows are the whole of #13's build. Everything else is already where
 it should be.
 
+## Who has layer 0, and the one surface that opts out (2026-08-25)
+
+The core said "every surface, no opt-out" and only `board.html` loaded the file
+at all. The hub and drafts never did, so five text surfaces went without it.
+
+Attached now: the board's asks composer (rebuilt on every ask write, which is
+the exact case the core exists for), the card goal editor (rebuilt by render)
+and the hub's ask composer (rebuilt on every load). The two note surfaces
+already had it.
+
+**The drafts editor keeps its own history, deliberately.** It snapshots title
+and body as one entry and persists to localStorage per draft, so it survives a
+reload; `attachBuffer` is per element, single field, and survives a rebuild
+rather than a reload. Those are different capabilities, and routing drafts
+through the core would lose the half it actually needs. The live raw line rides
+the same history for the same reason.
+
 ## Layer 2, the surface's own (never shared)
 
 Drafts: modes, templates, recipient, offer. Composer: the pickup hint, the

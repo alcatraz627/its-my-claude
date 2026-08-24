@@ -37,6 +37,22 @@ if (cd "$HERE" && rg -q '^async function afterWrite' board.html) \
 else no "writes leave through one path, and the rail's refresh uses it (C5)" \
         "afterWrite missing, or refreshRail no longer routes through it"; fi
 
+# C6: the editing core is layer 0, "every surface, no opt-out" (EDITOR-LAYERS.md),
+# and it was loaded by board.html alone. A page that builds a text surface loads
+# the core; drafts is the recorded exception, with its own document-level history.
+for pg in board.html hub.html; do
+  if (cd "$HERE" && rg -q 'src="/editor.js"' "$pg"); then ok "$pg loads the editing core (C6)"
+  else no "$pg loads the editing core (C6)" "no <script src=/editor.js> in $pg"; fi
+done
+# and the surfaces that get rebuilt actually attach it
+missing=""
+for surf in 'ask-\$\{slug\}' 'goal-\$\{cardId\}'; do
+  (cd "$HERE" && rg -q "attachBuffer\(ta, \{ id: \`$surf\`" board.html) || missing="$missing $surf"
+done
+(cd "$HERE" && rg -q 'attachBuffer\(ta, \{ id: "hub-ask"' hub.html) || missing="$missing hub-ask"
+if [ -z "$missing" ]; then ok "every rebuilt text surface attaches the core (C6)"
+else no "every rebuilt text surface attaches the core (C6)" "unattached:$missing"; fi
+
 # §5: drawn, not typed. A button whose only content is a unicode dingbat, in
 # markup or assigned as textContent, reads at a different weight from the SVG
 # set beside it. Eleven of them were found on the board on 2026-08-23 (#45).

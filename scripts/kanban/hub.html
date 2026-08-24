@@ -133,6 +133,7 @@
 <header id="phead"></header>
 <main id="list"><div class="empty">Loading…</div></main>
 <script src="/kinds.js"></script>
+<script src="/editor.js"></script>
 <script src="/shared.js"></script>
 <script>
 
@@ -269,6 +270,10 @@ function composeEl(boards) {
   ta.placeholder = "Write anything. The agent sorts it into a task, a sub-task, a clarification, or a remark.";
   ta.setAttribute("aria-label", "write an ask");
   ta.value = composeDraft;
+  // Layer 0, no opt-out (EDITOR-LAYERS.md). This page rebuilds the composer on
+  // every load, so the native undo stack died with it. The core was written for
+  // exactly this and only the board had been given it.
+  attachBuffer(ta, { id: "hub-ask" });
   const row = document.createElement("div");
   row.className = "crow";
   const sel = document.createElement("select");

@@ -206,6 +206,30 @@ popover, note editor, drafts editor, and the ask-answer text field.
 **Done when.** The editor core (`editor.js`) owns each capability and every
 editing surface opts in, per `EDITOR-LAYERS.md`.
 
+**Swept 2026-08-25, and the gap was the other way round from the catch.** The
+layer-1 opt-ins the table asks for had all been built: the note popover carries
+its preview toggle, legend, restore banner and conflict notice, and so does the
+composer. What had not happened was layer 0, the part with no opt-out. The core
+calls itself "the editing core every text surface gets" and `board.html` was
+the only page that loaded the file. The hub and drafts never did.
+
+Three surfaces were going without it, and each is rebuilt in normal use, which
+is the exact case the core was written for: the board's asks composer (replaced
+on every ask write), the card goal editor (rebuilt by render) and the hub's ask
+composer (rebuilt on every load). On all three the native stack died with the
+element, so an undo after a refresh did nothing. Attached now, and exercised:
+type, let the page rebuild the element, undo, and the edit walks back. With the
+attach removed it does not, which is how that was checked.
+
+The drafts editor keeps its own history on purpose and `EDITOR-LAYERS.md` now
+records why: it snapshots title and body together and persists per draft across
+a reload, where the core is per element, single field, and survives a rebuild
+instead. Routing drafts through the core would have cost it the half it needs.
+
+Guarded and mutation-tested: a page that builds a text surface must load the
+core, and the rebuilt surfaces must attach it. Each guard fails only on its own
+mutation.
+
 ---
 
 ## C7 · The navbar is assembled, not designed

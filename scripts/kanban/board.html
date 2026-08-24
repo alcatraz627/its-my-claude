@@ -3209,6 +3209,10 @@ function railEl() {
   ta.placeholder = "Type anything for the agent. It gets sorted into a card for you — no need to say where it goes.";
   ta.value = itemDraft;
   ta.setAttribute("aria-label", "write an ask");
+  // Layer 0, no opt-out (EDITOR-LAYERS.md). This node is replaced on every ask
+  // write, so the native stack died with it and a sentence you undid came back
+  // wrong. The history lives beside the surface, keyed per board.
+  attachBuffer(ta, { id: `ask-${slug}` });
   const bar = document.createElement("div");
   bar.className = "railbar";
   const hint = document.createElement("span");
@@ -4018,6 +4022,7 @@ function editGoal(cardId, current) {
   const ta = document.createElement("textarea");
   ta.value = current; ta.setAttribute("aria-label", "card goal");
   ta.placeholder = "One line: what has to be true for this card to be done";
+  attachBuffer(ta, { id: `goal-${cardId}` });
   el.append(ic, ta);
   delete el.dataset.tip;
   el.onclick = null;
