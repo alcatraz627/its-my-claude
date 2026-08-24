@@ -172,10 +172,26 @@ genuinely one control each remain. The live-sessions badge could grow without
 bound and shoved the primary action off the bar, so it is capped with the full
 list in its tooltip.
 
-**Still open:** the spacing that wastes vertical room, whether it sticks on
-every view of Your asks, and the four-width two-theme verification. The overflow
-behaviour is now consistent but is not written down anywhere, which the row
-asks for.
+**The overflow behaviour, written down**, because the row asks for it and a
+behaviour nobody recorded is one the next session re-invents. The bar measures
+what it would need with nothing shed, and if this board's verbs do not fit it
+marks itself tight. Tight sheds in a fixed order: the path first, since the
+crumb beside it already names the board, then the tab labels, since a glyph and
+a count still say which kind you are in while a control that scrolled off says
+nothing. What still does not fit slides behind a fade, and the last thing in
+the group is the first to slide, so the primary action is never what goes.
+Measured rather than tied to a width, because the bar's content varies per
+board: a longer name and two live peers is what pushed "Send to agent" off the
+edge on `gcp` while `.claude` looked fine.
+
+**Verified 2026-08-24** on `gcp` and `.claude`, at 900, 1280, 1600 and 1920, in
+both themes, including the loosen direction (900 then back to 1920 restores the
+path and the labels). At 1600 on `.claude`, with five verbs and a selection
+live, every labelled verb including the primary is fully visible and only the
+board-settings icon slides.
+
+**Still open:** the spacing that wastes vertical room, and whether it sticks on
+every view of Your asks.
 
 ---
 

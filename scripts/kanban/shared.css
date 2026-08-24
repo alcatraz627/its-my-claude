@@ -318,6 +318,16 @@
      colour before the word is read */
   .views .on::after{content:"";position:absolute;left:11px;right:11px;bottom:-4px;height:2px;
                     border-radius:var(--r-hair);background:var(--nav-hue,var(--blue))}
+  /* The shed order, driven by measurement rather than by a width guess: the bar
+     marks itself tight when the page group's verbs no longer fit (shared.js).
+     The path goes first, because the crumb two inches left already names the
+     board and an ellipsised "…rs…" says less than nothing. Then the tab labels,
+     because a glyph and a count still state which kind you are in, while a
+     primary action that has scrolled off the edge states nothing. */
+  .navbar[data-tight] .bpath{display:none}
+  .navbar[data-tight] .views .vt{display:none}
+  .navbar[data-tight] .views button,.navbar[data-tight] .views a{padding:0 9px}
+
   /* Under 1200 the bar sheds words before it sheds room. The tab keeps its icon
      and its count, and the name moves to the tooltip that was already there, so
      nothing becomes unreachable — it becomes shorter. Measured at the four

@@ -338,6 +338,48 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     np.append(actions);
     markOverflow(np);
   }
+
+  // The bar sheds in a fixed order when it runs out of room, instead of letting
+  // whatever happens to sit last in the DOM fall off the right edge. On a board
+  // with a longer name and two live peers, that was "Send to agent" — the point
+  // of the whole app — while an ellipsised path kept its pixels.
+  //
+  // The signal is the page group scrolling: if this board's verbs do not fit,
+  // the bar is over-subscribed. What goes first is the path, because the crumb
+  // beside it already names the board, and then the tab labels, because a tab
+  // is an indicator and a glyph with a count still says which kind you are in.
+  // A control that has scrolled off says nothing at all.
+  //
+  // Hysteresis, because shedding changes the very width that decides to shed:
+  // it tightens the moment anything is cut and loosens only once the slack is
+  // wider than the labels cost, so it cannot flutter between the two states.
+  // Measure the UN-SHED state every time and decide from that, rather than
+  // asking how much slack is left: the zones flex, so they absorb every spare
+  // pixel and the leftover is always zero whether or not there is room. Reading
+  // it that way could only ever tighten, never loosen.
+  //
+  // Deterministic, so it settles: the same question is asked of the same state
+  // and gets the same answer, which is what stops it flickering between the two.
+  const tighten = () => {
+    const np = document.getElementById("nbActions");
+    if (!np || !np.firstChild) return;
+    const was = el.dataset.tight;
+    delete el.dataset.tight;
+    const cutWithLabels = np.scrollWidth - np.clientWidth;   // forces the reflow
+    if (cutWithLabels > 1) el.dataset.tight = "1";
+    else if (was) delete el.dataset.tight;
+  };
+  tighten();
+  // Observe the GROUP, not just the bar: the bar's own box does not change when
+  // its contents grow, so watching only the bar meant this never re-ran once the
+  // board's verbs and peers actually landed.
+  if (typeof ResizeObserver === "function") {
+    const ro = new ResizeObserver(tighten);
+    ro.observe(el);
+    const np = document.getElementById("nbActions");
+    if (np) { ro.observe(np); new MutationObserver(tighten).observe(np, { childList: true, subtree: true }); }
+  }
+  addEventListener("resize", tighten);
   if (peers) document.getElementById("nbPeers").append(peers);
   // Counts land after first paint: the bar must not wait on a fetch per kind to
   // draw. A page may pass its own for a kind it already holds; anything it does
