@@ -193,10 +193,12 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ### Unified surfaces
 
-12. **Phase 1: the hub's two tabs** (`#56`, P1) `[spine]`. Registry is built and
-    verified live (48 decisions, 3 pending, 9 boards, previews empty). The UI
-    half remains. **Reshaped by item 1**: its board-switcher "kinds" and the nav
-    registry must be one thing.
+12. **Phase 1: the hub's two tabs** (`#56`, P1) `[spine]` **Done 2026-08-25.**
+    Decisions and Previews joined kinds.js as kinds, which is the reshape item
+    1 asked for: tabs on all three pages, counts (Decisions counts pending),
+    palette and switcher sections, and the find box all derive from the one
+    registry. The hub renders both views, pending first with origin and age;
+    rows link to :5197 where the pages already live. Verified live.
 13. **Phase 2: the charter as a decision page** (`#57`). After 12.
 14. **Phase 3: plans as a kind** (`#58`) `[spine]`. Lane-vocabulary states,
     plan add and rule verbs. After 13.

@@ -228,9 +228,16 @@ let kindIndexP = null;
 function kindIndex({ fresh = false } = {}) {
   if (fresh) kindIndexP = null;
   if (kindIndexP) return kindIndexP;
+  // kinds may share an endpoint (decisions and previews both read
+  // /api/surfaces): one fetch per URL, not per kind
+  const byApi = new Map();
+  const apiJson = (api) => {
+    if (!byApi.has(api)) byApi.set(api, fetch(api).then((r) => r.json()));
+    return byApi.get(api);
+  };
   kindIndexP = Promise.all(KINDS.map(async (k) => {
     if (!k.api || !k.listOf) return [k.id, null];
-    try { return [k.id, k.listOf(await (await fetch(k.api)).json())]; }
+    try { return [k.id, k.listOf(await apiJson(k.api))]; }
     catch { return [k.id, null]; }
   })).then(Object.fromEntries);
   return kindIndexP;
@@ -325,6 +332,16 @@ const KIND_ROW = {
     row: (d) => ({ id: d.id, name: d.title || firstLineName(d.body) || "(untitled)",
                    sub: `${(d.body || "").split("\n").length}L` }),
     href: (d) => `/drafts?d=${encodeURIComponent(d.id)}`,
+  },
+  decisions: {
+    text: (d) => `${d.name ?? ""} ${d.origin ?? ""}`,
+    row: (d) => ({ id: d.slug, name: d.name, sub: d.pending ? "needs you" : (d.origin ?? "answered") }),
+    href: (d) => d.href,
+  },
+  previews: {
+    text: (p2) => `${p2.title ?? p2.name ?? ""} ${p2.origin ?? ""}`,
+    row: (p2) => ({ id: p2.id ?? p2.href, name: p2.title ?? p2.name ?? "(untitled)", sub: p2.origin ?? "" }),
+    href: (p2) => p2.href,
   },
 };
 

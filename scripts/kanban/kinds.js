@@ -66,6 +66,36 @@ const KINDS = [
     inPage: false,                   // a real page; let the link navigate
     icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
   },
+  {
+    id: "decisions",
+    label: "Decisions",
+    indexLabel: "decisions",
+    href: "/?view=decisions",
+    key: "4",
+    hue: "--teal",
+    tip: "Pages an agent built for you to rule on",
+    searchRank: 4,
+    api: "/api/surfaces",
+    // the tab is an indicator: it counts what NEEDS you, the way asks does;
+    // the hub's own view still lists every page, answered ones included
+    listOf: (j) => (j.decisions ?? []).filter((d) => d.pending),
+    inPage: true,
+    icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5.2 8.3 7.1 10.2 10.8 5.9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  },
+  {
+    id: "previews",
+    label: "Previews",
+    indexLabel: "previews",
+    href: "/?view=previews",
+    key: "5",
+    hue: "--pink",
+    tip: "One-off pages agents rendered for you to look at",
+    searchRank: 5,
+    api: "/api/surfaces",
+    listOf: (j) => j.previews ?? [],
+    inPage: true,
+    icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1.8 8S4.2 3.6 8 3.6 14.2 8 14.2 8 11.8 12.4 8 12.4 1.8 8 1.8 8Z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg>`,
+  },
   // Sessions lands here when its page does (CHAT-HISTORY.md, D-ch-1..3). It is
   // a kind, not a special case: one entry, and the navbar, the hue, the key and
   // the palette all follow. Nothing else has to be edited to add it, which is

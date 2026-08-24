@@ -12,9 +12,6 @@
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
   body{margin:0;background:var(--canvas);color:var(--text);font:13px/1.5 var(--sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
   svg{display:block;flex:none}
-  /* The hub names itself and its three doors, the way the board's help modal
-     does. Same idiom in both places rather than two inventions. */
-         background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br)}
   button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text-2);
          padding:5px 9px;font-size:12.5px;font-weight:500;transition:background .12s,border-color .12s,color .12s}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
@@ -113,6 +110,15 @@
   .ask.linked{border-color:var(--ring);box-shadow:var(--focus-glow)}
   .ask.landed{background:none;box-shadow:none;padding:9px 12px}
   .ask .ab{font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+  /* a surface row (#56): one line, name loudest, origin quiet, age at the edge */
+  .surf{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
+        border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);color:var(--text);
+        text-decoration:none;min-width:0}
+  .surf:hover{background:var(--card-hover)}
+  .surf.pending{border-color:var(--amber-br)}
+  .surf .sn{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .surf .so{color:var(--text-3);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .surf .sage{margin-left:auto;color:var(--text-3);font-size:12px;flex:none}
   .ask.landed .ab{color:var(--text-3);font-size:12.5px}
   .ask .af{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--text-3)}
   .ask .af .shape{border:1px solid var(--border);border-radius:20px;padding:1px 8px;font-family:var(--mono)}
@@ -467,6 +473,54 @@ async function loadAsks() {
   }
 }
 
+// The unified-surfaces views (#56 phase 1, the UI half): every decision page
+// and registered preview, from /api/surfaces, pending first. Colocation, not
+// migration: rows link to where each page already lives.
+async function loadSurfaces(which) {
+  const list = document.getElementById("list");
+  const j = await (await fetch("/api/surfaces")).json();
+  const rows = which === "decisions" ? (j.decisions ?? []) : (j.previews ?? []);
+  const frag = [];
+  const group = (label, rs) => {
+    if (!rs.length) return;
+    const g = document.createElement("div");
+    g.className = "group";
+    const l = document.createElement("div");
+    l.className = "glabel"; l.textContent = `${label} · ${rs.length}`;
+    g.appendChild(l);
+    for (const r of rs) {
+      const a = document.createElement("a");
+      a.className = "surf" + (r.pending ? " pending" : "");
+      a.href = r.href;
+      const nm = document.createElement("span");
+      nm.className = "sn"; nm.textContent = r.name ?? r.title ?? "(untitled)";
+      const so = document.createElement("span");
+      so.className = "so";
+      so.textContent = [r.origin, r.items ? `${r.items} item${r.items === 1 ? "" : "s"}` : null]
+        .filter(Boolean).join(" · ");
+      const age = document.createElement("span");
+      age.className = "sage";
+      age.textContent = r.at ? `${ago(Date.parse(r.at))} ago` : "";
+      a.append(nm, so, age);
+      g.appendChild(a);
+    }
+    frag.push(g);
+  };
+  if (which === "decisions") {
+    group("Waiting on you", rows.filter((r) => r.pending));
+    group("Answered", rows.filter((r) => !r.pending));
+  } else group("Previews", rows);
+  if (!frag.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = which === "decisions"
+      ? "No decision pages yet. An agent makes one when a batch of choices needs you."
+      : "No previews registered yet. preview.sh register adds a page here.";
+    frag.push(e);
+  }
+  list.replaceChildren(...frag);
+}
+
 // each view names itself in the title AND says what it is for, because the hub
 // is where someone lands who does not yet know what any of this is
 // The header, the tabs, the keys and the theme are shared.js's now; this page
@@ -474,6 +528,8 @@ async function loadAsks() {
 const VIEW_COPY = {
   boards: ["Your boards", "every project an agent is working on for you"],
   notes: ["Your asks", "things you wrote down for an agent to sort into cards"],
+  decisions: ["Decisions", "pages an agent built for you to rule on"],
+  previews: ["Previews", "one-off pages agents rendered for you to look at"],
 };
 let starred = new Set();
 // An archived board is one the owner has said is not theirs right now. A crate
@@ -487,11 +543,11 @@ function setView(v) {
   // The hub IS a kind's index, so its crumb is the left half alone: "All
   // boards" or "All asks", no instance. Same identity slot the board and drafts
   // use, rather than the title block this page had to itself.
-  const kind = v === "notes" ? "asks" : "boards";
+  const kind = v === "notes" ? "asks" : v;
   navbar({ mount: "#phead", active: kind,
     identity: crumbFor(kind),
     find: pageFind,
-    onView: (nv) => setView(nv === "asks" ? "notes" : "boards"),
+    onView: (nv) => setView(nv === "asks" ? "notes" : nv),
     help: () => theHelp && theHelp.open() });
   load();
 }
@@ -546,6 +602,11 @@ registerHelp(helpModal({
 async function load() {
   const list = document.getElementById("list");
   if (view === "notes") { try { await loadAsks(); } catch (e) { list.innerHTML = `<div class="empty">Asks failed to load: ${e.message}</div>`; } return; }
+  if (view === "decisions" || view === "previews") {
+    try { await loadSurfaces(view); }
+    catch (e) { list.innerHTML = `<div class="empty">${VIEW_COPY[view][0]} failed to load: ${e.message}</div>`; }
+    return;
+  }
   try {
     const { boards } = await (await fetch("/api/boards")).json();
     // pins.json carries board stars now; the hub is where they are most useful
@@ -597,7 +658,11 @@ async function load() {
 composeDraft = localStorage.getItem("kanban-hubdraft") ?? "";
 // arriving from another page with ?view=asks must land on asks, not on boards:
 // the tab said Asks and the page has to agree with the tab
-setView(new URLSearchParams(location.search).get("view") === "asks" ? "notes" : view);
+setView((() => {
+  const pv = new URLSearchParams(location.search).get("view");
+  if (pv === "asks") return "notes";
+  return ["boards", "decisions", "previews"].includes(pv) ? pv : view;
+})());
 // the Asks view rebuilds its composer on every render, so a poll landing
 // mid-sentence would take the field out from under the typing
 setInterval(() => {

@@ -49,6 +49,16 @@ Two things follow from treating them as one set:
 > Colocation, not migration: nothing moved. **Remaining: the two hub tabs and
 > the `b` switcher kinds**, which are the UI half.
 >
+> **The UI half built 2026-08-25.** Decisions and Previews are KINDS in
+> kinds.js, not hub special cases, so the five tabs, the counts, the palette
+> sections, the `b` switcher and the find box all inherited them from the
+> registry with no per-consumer wiring. The Decisions tab counts what needs
+> you (4 today), its view lists every page pending-first (46 answered below),
+> rows carry origin, item count and age and link to :5197 where the pages
+> already live. Previews shows the honest empty state until preview.sh
+> exists. Check ran: the switcher's Decisions section finds a pending page
+> by name.
+>
 > Two things were assumed and had to be read instead: `registry()` returns a
 > map keyed by slug, not a list, and `.pending.txt` is ONE file at the registry
 > root with a slug per line, not a marker inside each page. Both were silently
