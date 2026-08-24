@@ -1597,14 +1597,23 @@ const $ = (id) => document.getElementById(id);
 //
 // A restore is OFFERED, never applied: silently replacing what is on screen
 // with something older is its own way to lose work.
+const stashBind = new WeakMap();   // ta -> live ids: the one input listener reads these at fire time
 function attachStash(ta, cardId, noteId, bannerId) {
   const banner = document.getElementById(bannerId);
   if (!banner) return;
-  let t = null;
-  ta.addEventListener("input", () => {
-    clearTimeout(t);
-    t = setTimeout(() => writeDraft(cardId, noteId, ta.value), 350);
-  });
+  // The popover reuses one textarea for every card. A listener per open closes
+  // over that open's ids and keeps firing after the next open, so typing in
+  // card B wrote B's words into A's draft slot. One listener; a re-call re-keys.
+  let bind = stashBind.get(ta);
+  if (bind) { clearTimeout(bind.t); bind.cardId = cardId; bind.noteId = noteId; }
+  else {
+    bind = { cardId, noteId, t: null };
+    stashBind.set(ta, bind);
+    ta.addEventListener("input", () => {
+      clearTimeout(bind.t);
+      bind.t = setTimeout(() => writeDraft(bind.cardId, bind.noteId, ta.value), 350);
+    });
+  }
   const kept = readDraft(cardId, noteId);
   banner.hidden = !(kept && kept.trim() && kept !== ta.value);
   if (banner.hidden) return;
@@ -1647,22 +1656,28 @@ function attachPreview(ta, btnId, paneId) {
   };
 }
 
+// #dNote and #popNote are static nodes reused for every card. These rely on
+// attachBuffer's re-key path: clearing its guard stacked one handler set per
+// card opened, and undo went dead from the second card on.
 function bufferComposer() {
   const el = $("dNote");
-  if (el && openId) { el.dataset.buffered = ""; attachBuffer(el, { id: `note-${openId}` });
+  if (el && openId) { attachBuffer(el, { id: `note-${openId}` });
     attachPreview(el, "dNotePv", "dNotePane"); }
 }
 function bufferPopover(cardId, noteId) {
   const el = $("popNote");
-  if (el) { el.dataset.buffered = ""; attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` });
+  if (el) { attachBuffer(el, { id: `pop-${cardId}-${noteId ?? "new"}` });
     attachStash(el, cardId, noteId, "popRestore");
     // The popover is the same message as the composer, so it speaks the same
     // vocabulary. Shown only while the note is empty, exactly as the composer
     // does it: syntax help earns its space before you write, not after.
     const leg = $("popLegend");
     if (leg) {
-      const sync = () => { leg.style.display = el.value.trim() ? "none" : ""; };
-      el.addEventListener("input", sync); sync();
+      if (!el.dataset.legendWired) {
+        el.dataset.legendWired = "1";
+        el.addEventListener("input", () => { leg.style.display = el.value.trim() ? "none" : ""; });
+      }
+      leg.style.display = el.value.trim() ? "none" : "";
     }
     // the popover is the same message as the composer, so it gets the same
     // affordance rather than a lesser one (the spec's "adds" row)
@@ -4401,17 +4416,23 @@ async function saveNoteOrder(cardId, order) {
 // One reorder implementation for both lists. HTML5 drag-and-drop rather than
 // pointer maths: it gives keyboard-independent semantics, a drag image, and an
 // escape-to-cancel for free.
+const reorderDrag = new WeakMap();  // container -> the element mid-drag, shared by every wiring pass
 function wireReorder(container, sel, commit, idOf) {
-  let dragEl = null;
   const clear = () => container.querySelectorAll(sel).forEach((n) => n.classList.remove("dropbefore", "dropafter", "dragging"));
   container.querySelectorAll(sel).forEach((el) => {
+    // Wiring a node twice stacks handler sets that each commit the drop, and
+    // the second splices an already-mutated DOM: the moves cancel (H1). Drag
+    // state lives on the container so nodes wired in different passes compose.
+    if (el.dataset.reorderWired === "1") return;
+    el.dataset.reorderWired = "1";
     el.addEventListener("dragstart", (e) => {
-      dragEl = el; el.classList.add("dragging");
+      reorderDrag.set(container, el); el.classList.add("dragging");
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/plain", idOf(el) ?? "");
     });
-    el.addEventListener("dragend", () => { dragEl = null; clear(); });
+    el.addEventListener("dragend", () => { reorderDrag.delete(container); clear(); });
     el.addEventListener("dragover", (e) => {
+      const dragEl = reorderDrag.get(container);
       if (!dragEl || el === dragEl) return;
       e.preventDefault();
       const r = el.getBoundingClientRect();
@@ -4428,6 +4449,7 @@ function wireReorder(container, sel, commit, idOf) {
     el.addEventListener("dragleave", () => el.classList.remove("dropbefore", "dropafter"));
     el.addEventListener("drop", (e) => {
       e.preventDefault();
+      const dragEl = reorderDrag.get(container);
       if (!dragEl || el === dragEl) return;
       const after = el.classList.contains("dropafter");
       clear();

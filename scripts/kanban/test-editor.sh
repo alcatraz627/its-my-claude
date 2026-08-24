@@ -55,13 +55,23 @@ const el4 = mk("t4"); el4.value = "hello world";
 el4.selectionStart = el4.selectionEnd = 5;
 insertAtCursor(el4, " there");
 
-// attaching twice is a no-op, so a double-render cannot double-bind the keys
-const twice = attachBuffer(el, { id: "t1" });
+// attaching twice must not double-bind: same element, same key -> ONE listener
+// set survives, because two sets undo against each other and cancel (H2)
+const listenersBefore = el._on.input.length;
+attachBuffer(el, { id: "t1" });
+const singleBind = String(el._on.input.length === listenersBefore);
 
-process.stdout.write([burst, d0, u1, u2, r1, survived, freshDepth, el4.value, twice === null].join("|"));
+// a static element shown for a NEW surface re-keys the one binding: the same
+// listeners now drive the new surface own stack, not the old card
+el.value = "B text";
+const rk = attachBuffer(el, { id: "t9" });
+typeIn(el, "B text more"); rk.snap();
+rk.undo(); const rkUndo = el.value;
+
+process.stdout.write([burst, d0, u1, u2, r1, survived, freshDepth, el4.value, singleBind, rkUndo].join("|"));
 ' 2>&1)
 
-IFS="|" read -r burst depth u1 u2 r1 survived freshDepth inserted twice <<< "$out"
+IFS="|" read -r burst depth u1 u2 r1 survived freshDepth inserted singleBind rkUndo <<< "$out"
 check "three keystrokes inside the window leave ONE snapshot"  "$burst"     "1"
 check "three explicit snapshots each land"                    "$depth"     "3"
 check "undo walks back one snapshot, not one keystroke"       "$u1"        "one two"
@@ -73,7 +83,8 @@ check "redo goes forward"                                     "$r1"        "one 
 check "a fresh element with the same key resumes the shared stack"   "$survived"  "one two"
 check "a different key is a different, empty history"         "$freshDepth" "1"
 check "insert lands at the caret, not at the end"             "$inserted"  "hello there world"
-check "attaching twice is refused, so keys bind once"         "$twice"     "true"
+check "re-attach with the same key adds no second listener"   "$singleBind" "true"
+check "re-attach with a new key drives the new surface stack" "$rkUndo"    "B text"
 
 printf '  ---- %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

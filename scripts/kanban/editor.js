@@ -33,13 +33,27 @@ function insertAtCursor(el, text) {
 // rather than the same comment in three files.
 const hasLiveCaret = (el) => !!el && document.activeElement === el;
 
+const bufBound = new WeakMap();     // el -> { rekey, api }: the one binding a reused element carries
+
 function attachBuffer(el, { id, onChange } = {}) {
-  if (!el || el.dataset.buffered === "1") return null;
+  if (!el) return null;
+  const wantKey = id || el.id || "buffer";
+  // A static element reused across surfaces (the note popover, the card
+  // composer) reaches here once per surface it shows. A second listener set
+  // would fight the first — each stack's undo dispatches a synthetic input
+  // that re-enters the other's record(), and the net movement is zero — so a
+  // repeat call re-keys the binding it already has instead of attaching again.
+  if (el.dataset.buffered === "1") {
+    const bound = bufBound.get(el);
+    if (!bound) return null;
+    bound.rekey(wantKey, onChange);
+    return bound.api;
+  }
   el.dataset.buffered = "1";
-  const key = id || el.id || "buffer";
-  const h = bufHist.get(key) ?? { past: [], future: [], timer: null };
-  bufHist.set(key, h);
+  let h = bufHist.get(wantKey) ?? { past: [], future: [], timer: null };
+  bufHist.set(wantKey, h);
   if (!h.past.length) h.past.push(el.value ?? "");
+  let change = onChange;
 
   const snap = () => {
     const now = el.value ?? "";
@@ -52,7 +66,7 @@ function attachBuffer(el, { id, onChange } = {}) {
   const put = (v) => {
     el.value = v;
     el.dispatchEvent(new Event("input", { bubbles: true }));
-    if (onChange) onChange(v);
+    if (change) change(v);
   };
   const undo = () => {
     clearTimeout(h.timer); snap();
@@ -75,8 +89,18 @@ function attachBuffer(el, { id, onChange } = {}) {
     if (k === "z" && !e.shiftKey) { if (undo()) { e.preventDefault(); e.stopPropagation(); } }
     else if ((k === "z" && e.shiftKey) || k === "y") { if (redo()) { e.preventDefault(); e.stopPropagation(); } }
   });
-  return { undo, redo, snap, depth: () => h.past.length, id: key,
-           insert: (t) => insertAtCursor(el, t) };
+  const api = { undo, redo, snap, depth: () => h.past.length, id: wantKey,
+                insert: (t) => insertAtCursor(el, t) };
+  const rekey = (nextKey, nextChange) => {
+    clearTimeout(h.timer);               // a pending snapshot belongs to the surface we are leaving
+    h = bufHist.get(nextKey) ?? { past: [], future: [], timer: null };
+    bufHist.set(nextKey, h);
+    if (!h.past.length) h.past.push(el.value ?? "");
+    change = nextChange;
+    api.id = nextKey;
+  };
+  bufBound.set(el, { rekey, api });
+  return api;
 }
 
 
