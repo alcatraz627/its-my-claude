@@ -25,7 +25,14 @@
   svg{display:block;flex:none}
 
   /* ---------- masthead ---------- */
-  header.top{flex:none;padding:14px 24px 11px;display:flex;flex-direction:column;gap:11px;border-bottom:1px solid var(--border)}
+  /* The navbar owns its own padding, rule and stickiness (shared.css). This
+     wrapper used to add 14/24/11 and a second border on top of that, which is
+     the spacing the owner asked to be rid of and the reason the bar read as a
+     floating slab rather than the top of the page. It now only stacks the bar
+     above the summary row, and the inset it does keep belongs to that row. */
+  header.top{flex:none;padding:0;display:flex;flex-direction:column;border-bottom:1px solid var(--border)}
+  header.top > .summary{margin:9px 16px}
+  header.top > .notice{margin:0 16px 10px}
   .crumb{display:flex;align-items:center;gap:7px;flex:none;font-size:var(--fs-body);color:var(--text-3)}
   .crumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);padding:2px 5px;margin-left:-5px}
   .crumb a:hover{color:var(--text);background:var(--card)}
@@ -1464,6 +1471,7 @@ const descOf = (c) => { const t = (c.title || "").trim(); return t && t !== brie
 let data = null, flat = [], sel = -1, openId = null, openNoteId = null, dirty = false, lastPayload = "";
 
 const $ = (id) => document.getElementById(id);
+
 
 // The board wears the same navbar as every other page (UNIFIED-SURFACES phase
 // 0). Its controls are denser than the hub's, so they are detached and handed

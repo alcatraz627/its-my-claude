@@ -29,7 +29,13 @@ const ago = (ms) => {
 // a path's varying end is its identity, so shortening drops the head
 function tailTrim(el) {
   const full = el.dataset.tip || el.title || el.textContent;
-  el.dataset.tip = full; el.removeAttribute("title"); el.textContent = full;
+  el.dataset.tip = full; el.removeAttribute("title");
+  // Spend the width on the part that names the thing. Every caller here is a
+  // path, and "/Users/<someone>/" is eighteen characters that are the same on
+  // every row, so a squeezed element spent all of them and then trimmed away
+  // the half that identifies it ("…627/.claude"). A shell prompt solved this
+  // decades ago. The tooltip still carries the real path, untouched.
+  el.textContent = full.replace(/^\/Users\/[^/]+(?=\/)/, "~");
   let guard = 300;
   while (el.scrollWidth > el.clientWidth && el.textContent.length > 12 && guard--) {
     el.textContent = "…" + el.textContent.replace(/^…/, "").slice(3);
@@ -148,7 +154,17 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   document.getElementById("nbTheme").onclick = toggleTheme;
   if (help) document.getElementById("nbHelp").onclick = help;
   if (find) document.getElementById("nbFind").append(find);
-  if (actions) document.getElementById("nbActions").append(actions);
+  if (actions) {
+    const np = document.getElementById("nbActions");
+    np.append(actions);
+    // The fade only means something when something is actually cut off. Mark
+    // the group so the mask can switch itself off, and re-measure on resize:
+    // whether it overflows is a function of the window, not of one render.
+    const mark = () => np.dataset.of = np.scrollWidth > np.clientWidth + 1 ? "x" : "none";
+    mark();
+    if (typeof ResizeObserver === "function") new ResizeObserver(mark).observe(np);
+    addEventListener("resize", mark);
+  }
   if (peers) document.getElementById("nbPeers").append(peers);
   // a page that switches in place intercepts; everything else navigates
   if (onView) {

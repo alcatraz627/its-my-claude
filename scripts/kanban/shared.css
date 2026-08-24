@@ -71,10 +71,14 @@
        that table puts help, the doc viewer, the toast and the tooltip all on
        90, which collides four overlays onto one number and would reverse
        help and doc by source order. The restack is G20 and the owner's call. */
-    --z-base:1; --z-grip:2; --z-grip-drawer:3; --z-arrow:25; --z-pop:30;
+    --z-base:1; --z-grip:2; --z-grip-drawer:3; --z-nav:20; --z-arrow:25; --z-pop:30;
     --z-lanepop:35; --z-picker:40; --z-modal:50; --z-doc:60; --z-tip:90;
-    /* the toast sits at 3, which is under every overlay — see G20 */
-    --z-toast:3;
+    /* The toast sat at 3, under every overlay, so a message about what just
+       happened was invisible during the thing it was about. The full four-way
+       restack is still G20 and still the owner's, but a notification nobody can
+       see is broken rather than styled, so it rides above the modals now and
+       stays under the tooltip. */
+    --z-toast:70;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -129,9 +133,20 @@
      HERE, right says what is true everywhere plus this page's own group. The
      page-specific group sits in its own bordered pill so the eye can tell "here"
      from "everywhere" without reading a word of it. */
-  .navbar{display:flex;align-items:center;gap:12px;padding:11px 20px;
+  /* One bar, one owner of its own chrome. It carries its padding, its rule and
+     its stickiness itself, so a page cannot wrap it in a second set of both.
+     It sticks on EVERY page: it did so on none, and the owner met that on Your
+     asks first. */
+  .navbar{position:sticky;top:0;z-index:var(--z-nav);
+          display:flex;align-items:center;gap:0;padding:7px 14px;
           border-bottom:1px solid var(--border);background:var(--well)}
-  .nz{display:flex;align-items:center;gap:9px;min-width:0}
+  .nz{display:flex;align-items:center;gap:8px;min-width:0}
+  /* Separation says what the eye should group. Zones used to sit in one flat
+     12px gap, which reads as widgets that happen to share a row. Now the gap
+     lives on the zone, and the boundary between "this board" and "everything"
+     is drawn, so the bar has two halves rather than five loose parts. */
+  .nz + .nz{margin-left:12px}
+  .nzcommon{padding-left:14px;border-left:1px solid var(--border-2)}
   /* Identity SHRINKS. It held flex:none until a board whose path is 842px wide
      pushed the zone to 985 and squeezed the find zone to zero. What you are
      looking AT can ellipsise; the control you type INTO cannot vanish. */
@@ -140,11 +155,16 @@
      went to zero: logo, crumb, board name and path all gone). §18b applies to
      this zone as much as to the other one — the fix for one zone reaching zero
      must not be another zone reaching zero. */
-  .nzid{flex:0 1 auto;min-width:210px}
-  .nzfind{flex:1 1 260px;min-width:170px;justify-content:flex-start}
+  .nzid{flex:0 1 auto;min-width:180px}
+  .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
   .nfind{display:flex;align-items:center;gap:7px;min-width:0}
   .nowrap{white-space:nowrap;flex:none}
-  .nzcommon{flex:none;margin-left:auto}
+  /* This zone held flex:none while carrying 77% of the bar's width, so at 1600
+     the bar overflowed by 62px with all three zones already on their floors:
+     nothing could give, because the widest thing was the one thing forbidden to
+     shrink. It shrinks now. Its floor is the tabs and the app icons (below),
+     and .npage is the elastic part, which is what its overflow-x was for. */
+  .nzcommon{flex:0 1 auto;min-width:0;margin-left:auto}
   .nlogo{flex:none;width:28px;height:28px;padding:0;display:grid;place-items:center;
          background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-br);
          border-radius:var(--r-card)}
@@ -162,15 +182,24 @@
   /* The page's own group is the widest thing in the bar and it was wrapping to
      a second row. It slides instead: a bar that changes HEIGHT as you use it
      costs more than one you scroll, and the zones stay where the eye left them. */
-  .npage{display:flex;align-items:center;gap:5px;padding:3px;flex:0 1 auto;min-width:0;
+  .npage{display:flex;align-items:center;gap:5px;padding:3px;flex:1 1 auto;min-width:0;
          overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
          border:1px solid var(--border);border-radius:var(--r-card);background:var(--canvas)}
   .npage::-webkit-scrollbar{display:none}
+  /* A group that scrolls with no sign of it is a hidden control: "Copy status"
+     simply stopped existing at 1600px. The mask fades the cut edge so the row
+     reads as continuing, and the group is focusable so a keyboard reaches what
+     the fade implies. Both edges, because it scrolls both ways. */
+  .npage{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 10px,#000 calc(100% - 14px),transparent 100%);
+         mask-image:linear-gradient(to right,transparent 0,#000 10px,#000 calc(100% - 14px),transparent 100%)}
+  .npage:not([data-of])::-webkit-scrollbar{display:none}
+  .npage[data-of="none"]{-webkit-mask-image:none;mask-image:none}
   .npage > *{flex:none}
   /* common controls never scroll away: theme and help are the two things that
      must be in the same place on every page */
   .nzcommon > .icon{flex:none}
-  .views{display:flex;gap:2px;background:var(--canvas);border:1px solid var(--border);
+  /* the bar's floor: where you can GO never scrolls away, and never shrinks */
+  .views{flex:none;display:flex;gap:2px;background:var(--canvas);border:1px solid var(--border);
          border-radius:var(--r-card);padding:3px}
   .views button,.views a{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;
         border:1px solid transparent;background:none;border-radius:var(--r-control);color:var(--text-3);
@@ -187,6 +216,22 @@
      colour before the word is read */
   .views .on::after{content:"";position:absolute;left:11px;right:11px;bottom:-4px;height:2px;
                     border-radius:var(--r-hair);background:var(--nav-hue,var(--blue))}
+  /* Under 1200 the bar sheds words before it sheds room. The tab keeps its icon
+     and its count, and the name moves to the tooltip that was already there, so
+     nothing becomes unreachable — it becomes shorter. Measured at the four
+     widths this app is used at: 900, 1280, 1600, 1920. */
+  @media (max-width:1200px){
+    .views .vt{display:none}
+    .views button,.views a{padding:0 9px}
+    .navbar .nsub{display:none}
+    .nzcommon{padding-left:10px}
+    .nz + .nz{margin-left:9px}
+  }
+  @media (max-width:900px){
+    .ncrumb{display:none}
+    .nzid{min-width:120px}
+    .nzfind{flex:1 1 140px;min-width:110px}
+  }
   .views .k-boards{--nav-hue:var(--blue)} .views .k-asks{--nav-hue:var(--amber)}
   .views .k-drafts{--nav-hue:var(--violet)}
   .views .on .vn{color:var(--nav-hue,var(--blue));background:var(--well)}
