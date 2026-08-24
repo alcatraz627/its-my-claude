@@ -696,9 +696,6 @@
      tint only makes the scan faster, and it lives on the glyph alone so "colour
      is spent once per object" still holds. It applies here and in search, the
      only lists that mix kinds, and never on a board surface. */
-  /* the picker row's glyph takes the kind's hue, handed in as --nav-hue by
-     kinds.js rather than named here, so a new kind needs no rule */
-  .bprow .bi{color:var(--nav-hue,var(--text-2))}
   /* What search can do, shown rather than described. */
   .sphint{padding:14px 16px 8px;font:var(--fs-body)/1.55 var(--sans);color:var(--text-3)}
   .spchips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
@@ -726,7 +723,11 @@
             box-shadow:inset 2px 0 0 0 var(--blue)}
   .bprow:active{background:var(--card-hover)}
   .bprow.cur .bn{color:var(--blue)}
-  .bprow .bi{flex:none;width:19px;display:grid;place-items:center;color:var(--text-3)}
+  /* The glyph takes its kind's hue, handed in as --nav-hue from kinds.js rather
+     than named in a rule per kind. Falls back to text-3 for a row whose kind
+     has no hue. Charter §4: the SECTION says which kind and the tint only
+     reinforces it, so this is an accelerator, never the only signal. */
+  .bprow .bi{flex:none;width:19px;display:grid;place-items:center;color:var(--nav-hue,var(--text-3))}
   .bprow.on .bi{color:var(--blue)}
   .bprow .bn{font:600 var(--fs-lead)/1.35 var(--sans);color:var(--text);flex:none;max-width:44%;
              overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -5085,20 +5086,33 @@ function bpSections() {
   // which kind, and the glyph's tint only reinforces it. So each kind gets its
   // own heading and never relies on hue to be understood.
   const oneLine = (t) => (t || "").split("\n").find((l) => l.trim()) ?? "";
-  const asks = bpItems
-    .filter((i) => !q || (i.body || "").toLowerCase().includes(q))
-    .slice(0, q ? 8 : 4)
-    .map((i) => ({ kind: "asks", id: i.id, name: oneLine(i.body).slice(0, 72),
-                   sub: i.boardName ? `on ${i.boardName}` : "unassigned" }));
-  if (asks.length) out.push({ label: "Your asks", kind: "asks", rows: asks });
-
-  const drafts = bpDrafts
-    .filter((d) => !q || `${d.title ?? ""} ${d.body}`.toLowerCase().includes(q))
-    .slice(0, q ? 8 : 4)
-    .map((d) => ({ kind: "drafts", id: d.id,
-                   name: d.title || oneLine(d.body).slice(0, 72) || "(untitled)",
-                   sub: `${(d.body || "").split("\n").length}L` }));
-  if (drafts.length) out.push({ label: "Drafts", kind: "drafts", rows: drafts });
+  // One adapter per non-board kind: what its instances are, how to match one
+  // against the query, and how a row reads. The section's LABEL comes from the
+  // registry, so a kind is named the same here as it is in the navbar. Adding
+  // a kind is an entry in kinds.js plus one adapter here, not a fourth
+  // copy-pasted block.
+  const ADAPTERS = {
+    asks: {
+      rows: () => bpItems,
+      match: (i) => (i.body || "").toLowerCase().includes(q),
+      row: (i) => ({ id: i.id, name: oneLine(i.body).slice(0, 72),
+                     sub: i.boardName ? `on ${i.boardName}` : "unassigned" }),
+    },
+    drafts: {
+      rows: () => bpDrafts,
+      match: (d) => `${d.title ?? ""} ${d.body}`.toLowerCase().includes(q),
+      row: (d) => ({ id: d.id, name: d.title || oneLine(d.body).slice(0, 72) || "(untitled)",
+                     sub: `${(d.body || "").split("\n").length}L` }),
+    },
+  };
+  for (const k of KINDS) {
+    const a = ADAPTERS[k.id];
+    if (!a) continue;                       // boards are built above; a kind with no adapter yet is simply absent
+    const rows = a.rows().filter((x) => !q || a.match(x))
+      .slice(0, q ? 8 : 4)
+      .map((x) => ({ kind: k.id, ...a.row(x) }));
+    if (rows.length) out.push({ label: k.label, kind: k.id, rows });
+  }
   return out;
 }
 function renderBoardPick() {
@@ -5121,7 +5135,8 @@ function renderBoardPick() {
       // no star and no path, so it renders its own row and shares only the
       // cursor and the kind tint.
       if (sec.kind !== "boards") {
-        el.className = `bprow k-${sec.kind}` + (at === bpAt ? " on" : "");
+        el.className = "bprow" + (at === bpAt ? " on" : "");
+        el.style.setProperty("--nav-hue", `var(${kindById(sec.kind)?.hue ?? "--text-2"})`);
         el.innerHTML = `<span class="bi">${NAV_ICON[sec.kind]}</span><span class="bn"></span><span class="bp"></span>`;
         el.querySelector(".bn").textContent = b.name;
         el.querySelector(".bp").textContent = b.sub;
@@ -5131,7 +5146,7 @@ function renderBoardPick() {
         continue;
       }
       el.className = "bprow" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
-      el.style.setProperty("--nav-hue", `var(${kindById("boards").hue})`);
+      el.style.setProperty("--nav-hue", `var(${kindById(sec.kind)?.hue ?? "--text-2"})`);
       const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
         .reduce((n, [, v]) => n + v, 0);
       el.innerHTML = `<span class="bi">${NAV_ICON.boards}</span><span class="bn"></span><span class="bp"></span>` +

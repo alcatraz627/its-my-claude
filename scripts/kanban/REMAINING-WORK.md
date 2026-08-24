@@ -92,15 +92,16 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
 `COMPLIANCE-LEDGER.md:56` records it PARTIAL, "Per-kind index pages NOT done".
 `NAV-UNIFICATION.md:109-142` names four slices, in this order:
 
-2. **Reach an instance of any kind** `[spine]`. `NAV-UNIFICATION.md:40-48` draws
-   the defect as one table with two empty cells: the toolbar reaches every
-   kind's index, the palette reaches an instance of one kind only. So you can
-   name a board and cannot name a draft. Unification is "completing one table",
-   not merging two controls. Plus the crumb generalised to `All <kind> /
-   <instance>`, left half always a link to that kind's index.
-   (`COMPLIANCE-LEDGER.md:56` calls this "per-kind index pages NOT done", which
-   reads as if the indexes are missing; they are not, and that ledger row is one
-   of the stale ones.)
+2. **Reach an instance of any kind** `[spine]`. **Mostly already built**, which
+   this plan did not know: the palette had asks and draft sections and a
+   `gotoKind` handler before today. Done 2026-08-24: its sections derive from
+   `KINDS` through one adapter per kind rather than a copy-pasted block each,
+   and the per-kind hue rides the registry. Verified by naming a draft, which
+   is the cell `NAV-UNIFICATION.md:40-48` drew as empty.
+   **Remaining:** the crumb generalised to `All <kind> / <instance>`, still
+   boards-only. (`COMPLIANCE-LEDGER.md:56` calls this "per-kind index pages NOT
+   done", which reads as if the indexes are missing; they are not, and that
+   ledger row is one of the stale ones.)
 3. **Palette widened to N kinds** `[spine]`, sectioned by kind, each carrying
    its glyph, hue tint on top per the 2026-08-22 ruling. Boards keeps its
    recent/starred/all sub-structure.
