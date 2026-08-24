@@ -135,6 +135,56 @@
   button.danger:hover{background:color-mix(in srgb,var(--red) 12%,transparent);border-color:var(--red);color:var(--red)}
   button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
 
+  /* ---------- the help modal's document and glossary panes ----------
+     Both are page-agnostic: the charter is one file every page can render,
+     and a term entry has the same shape whatever surface has the word. They
+     lived in board.html while the board was the only page with a help modal;
+     the hub and drafts now host the same tabs. */
+  /* The charter renders as a document inside the modal. Tables are deliberately
+     absent from this block: #help's one table treatment already owns them, and a
+     second set here is exactly the drift the treatment was written to end. */
+  .cdoc{max-width:74ch;font:400 var(--fs-lead)/1.7 var(--sans);color:var(--text-2)}
+  .cdoc h1{font:600 var(--fs-title)/1.3 var(--sans);color:var(--text);margin:0 0 4px}
+  .cdoc h2{font:600 var(--fs-lead)/1.3 var(--sans);color:var(--text);margin:26px 0 8px;
+           padding-top:14px;border-top:1px solid var(--border)}
+  .cdoc h2:first-of-type{border-top:none;padding-top:0;margin-top:18px}
+  .cdoc h3{font:600 var(--fs-body)/1.3 var(--sans);color:var(--text);margin:18px 0 6px}
+  .cdoc p{margin:0 0 10px}
+  .cdoc ul,.cdoc ol{margin:0 0 10px;padding-left:20px}
+  .cdoc li{margin:0 0 5px}
+  .cdoc li::marker{color:var(--text-3)}
+  .cdoc strong{color:var(--text);font-weight:600}
+  .cdoc em{font-style:italic}
+  .cdoc code{font:var(--fs-small) var(--mono);background:var(--well);border:1px solid var(--border);
+             border-radius:var(--r-inner);padding:1px 4px;color:var(--text)}
+  .cdoc blockquote{margin:0 0 10px;padding:2px 0 2px 12px;border-left:2px solid var(--blue-br);color:var(--text-3)}
+  .cdoc hr{border:none;border-top:1px solid var(--border);margin:20px 0}
+  .cdoc a{color:var(--blue)}
+  .cdoc .tbox{display:inline-grid;place-items:center;width:13px;height:13px;margin-right:7px;
+              border:1px solid var(--border-2);border-radius:var(--r-inner);vertical-align:-2px;
+              font:700 var(--fs-micro)/1 var(--sans);color:transparent}
+  .cdoc .tbox.on{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}
+  .cnote{color:var(--text-3);font:400 var(--fs-body)/1.6 var(--sans);padding:8px 0}
+
+  /* one entry per thing a surface has a word for */
+  .term{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--border)}
+  .term:first-of-type{border-top:none}
+  .term .shot{border:1px solid var(--border);border-radius:var(--r-card);background:var(--well);padding:8px;align-self:start}
+  .term h4{font:600 var(--fs-lead)/1.3 var(--sans);color:var(--text);margin:0 0 6px;display:flex;align-items:center;gap:7px}
+  .term p{font:400 var(--fs-body)/1.6 var(--sans);color:var(--text-2);margin:1em 0 8px}
+  .term .rel{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+  .term .use{display:flex;flex-direction:column;gap:3px;font:400 var(--fs-body)/1.5 var(--sans)}
+  .term .use span{display:flex;gap:7px}
+  .term .use b{flex:none;font:600 var(--fs-small)/1.5 var(--sans);letter-spacing:.04em;text-transform:uppercase;width:44px}
+  .term .use .do b{color:var(--green)}
+  .term .use .dont b{color:var(--red)}
+  .term .use i{font-style:normal;color:var(--text-3)}
+  .term .shot svg{display:block}
+  .term.novig{grid-template-columns:1fr}
+  .term .shot rect.n{fill:var(--card);stroke:var(--border-2)}
+  .term .shot rect.y{fill:var(--blue-bg);stroke:var(--blue-br)}
+  .term .shot path,.term .shot line{stroke:var(--border-2);fill:none}
+
   /* ---------- chips ---------- */
   .chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;
         border:1px solid var(--border);border-radius:var(--r-pill);background:var(--well);color:var(--text-2);

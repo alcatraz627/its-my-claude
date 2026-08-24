@@ -187,10 +187,43 @@ function currentDraftName() {
 
 // The keyboard reference, on this page too. `?` opens it; the rows are
 // generated from SHARED_KEYS so they cannot drift from the bindings.
+// Every entry names something this page renders, so a word here can be checked
+// against the screen.
+const DRAFT_TERMS = [
+  { title: "Draft", rel: ["ask", "pull", "save"],
+    p: "A draft is a document of yours, the rung above an ask: longer, kept, and edited over time rather than written once. It lives here rather than on a board because it is not about one project yet. Nothing is written to disk until you save, and the page says so plainly instead of pretending an autosave happened.",
+    do: "Use it for the thought that is too big to be one line.",
+    dont: "Do not assume it saved. Nothing is on disk until you press save." },
+  { title: "Pull", rel: ["draft", "agent", "consumed"],
+    p: "A pull is an agent taking a draft and doing something with it. That is what turns a document into project material, and it is the moment a draft stops waiting. The agent leaves a note saying what it did, so the record is the agent's own words rather than a status flag. Pulling consumes an ordinary draft, and a pull can be undone.",
+    do: "Read the pull note. It says what your document became.",
+    dont: "Do not rewrite a pulled draft expecting it to be re-read. Offer it again instead." },
+  { title: "Template", rel: ["draft", "pull"],
+    p: "A template is a draft that is reused rather than consumed, so pulling one never takes it out of the list. That single difference is the whole of it: everything else about a template behaves like a draft. It exists because some documents are a shape you want filled in again next week, not a message delivered once.",
+    do: "Make one of anything you would otherwise rewrite from memory.",
+    dont: "Do not make a one-off a template. A list of templates you never reuse is a list you stop reading." },
+  { title: "Offered", rel: ["pull", "agent", "now"],
+    p: "Offering a draft asks a session to pick it up now rather than whenever it next sweeps. It is the one place on this page that pushes instead of waiting, and it is reversible: an offer can be withdrawn while nobody has acted on it. A draft that is offered is still an ordinary draft in every other respect.",
+    do: "Offer the one that is blocking somebody, and let the rest wait.",
+    dont: "Do not offer everything. If all of it is urgent then none of it is marked." },
+  { title: "For", rel: ["draft", "agent"],
+    p: "Every draft is addressed. Anyone means whoever sweeps next, which is the usual case and the reason it is the default. Naming an agent narrows it to them, and that also hides it from the others, so an addressed draft is a choice about who does not see it as much as about who does.",
+    do: "Leave it as anyone unless a specific session is the only one who can act.",
+    dont: "Do not name a session that is not running. Nobody sweeps on its behalf." },
+  { title: "Edit, Live and Preview", rel: ["draft", "markdown"],
+    p: "Three ways to look at the same text. Edit is the raw markdown. Live renders each line as you leave it, which is a per-line view and deliberately does not handle constructs that span lines. Preview asks the server to render the whole document properly, which is why it is kept: it is the one that shows you what a reader will actually see.",
+    do: "Write in Edit or Live, and check the finished shape in Preview.",
+    dont: "Do not judge a table or a code block from Live. Spanning constructs are not its job." },
+];
+
 registerHelp(helpModal({
-  id: "help", title: "Drafts, explained", sub: "the keys this page answers to",
-  tabs: [{ id: "keys", label: "Keyboard", sub: "Shortcuts",
-           build: (pane) => fillKeys(pane, SHARED_KEYS.concat([{ group: "Here", rows: [["\u2318\u21b5", "save the draft you are editing"]] }])) }],
+  id: "help", title: "Drafts, explained", sub: "the words, the keys and what we agreed",
+  tabs: [
+    { id: "keys", label: "Keyboard", sub: "Shortcuts",
+      build: (pane) => fillKeys(pane, SHARED_KEYS.concat([{ group: "Here", rows: [["\u2318\u21b5", "save the draft you are editing"]] }])) },
+    termsTab(DRAFT_TERMS),
+    charterTab(),
+  ],
 }));
 
 

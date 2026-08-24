@@ -477,10 +477,47 @@ function setView(v) {
 
 // The keyboard reference, on this page too. `?` opens it; the rows are
 // generated from SHARED_KEYS so they cannot drift from the bindings.
+// The hub's own vocabulary. Every entry describes something this page actually
+// renders, so a word here can be checked against the screen.
+const HUB_TERMS = [
+  { title: "Board", rel: ["project", "sync", "hub"],
+    p: "One board mirrors one project, and this page is the index of them. A row carries what you would want before deciding to open it: how much is active, how much is in motion and how much of that is blocked, what is done, and when the mirror was last read. A mirror older than a day says so, because a confident number from a stale read is worse than no number.",
+    do: "Scan the rows for where the work is, and open the one that is moving.",
+    dont: "Do not read a count as live. It is as fresh as the sync beside it." },
+  { title: "Ask", rel: ["landing", "card", "board"],
+    p: "An ask is a line you wrote for an agent to sort. It starts belonging to nobody: it has no card, and it may have no board either. An agent reads it, decides what it is, and either turns it into a card or records why it did not. Until that happens it says \u201cnot sorted yet\u201d, which is a real state rather than a delay.",
+    do: "Write the thought as it occurs and let the sorting be somebody else's job.",
+    dont: "Do not phrase one as a task. Deciding whether it is a task is the point." },
+  { title: "Landing", rel: ["ask", "shape", "card"],
+    p: "The landing is the agent's decision about an ask, and it has two parts: a shape, one of task, subtask, remark or clarification, and a note saying why. A landed ask stops offering to be routed, because where it goes is no longer a question. An ask that landed as a clarification is not a failure; it means the ask was two words and turning it into a task would have been a guess.",
+    do: "Read the note when the shape surprises you. It says what the agent could not assume.",
+    dont: "Do not expect every ask to become a card. Most of the shapes are not tasks." },
+  { title: "Star", rel: ["board", "recent"],
+    p: "A star is a bookmark you set, and it sorts that board to the top of the list. It is stored with the boards rather than in this browser, so it is the same star wherever you open the hub. That is what separates it from recency, which is a convenience this browser remembers on its own and never shares.",
+    do: "Star the two or three projects you actually live in.",
+    dont: "Do not star everything. A list where every row is starred sorts by nothing." },
+  { title: "Archive", rel: ["board", "star"],
+    p: "Marking a board archived is you saying it is not yours right now. It greys out and stops competing for your attention, and nothing about the board itself changes: no data is deleted, agents keep working there, and the counts keep updating. It is an instruction about this list, not an opinion about the project.",
+    do: "Archive the projects you are not on this month, and unarchive one the day you return.",
+    dont: "Do not use it to mean finished. Done work is a lane on the board, not a state of the board." },
+  { title: "Live", rel: ["agent", "board", "nudge"],
+    p: "The live pill names who is working on that board at this moment, by their session alias, and counts their sub-agents. It is information and not a control, which is why it does not look pressable: knowing that somebody is in there changes what you do next, and clicking it would not.",
+    do: "Check it before leaving a note, so you know whether anyone is around to read it.",
+    dont: "Do not treat its absence as nobody caring. An agent that starts later still reads your notes." },
+  { title: "Unread", rel: ["note", "pull", "agent"],
+    p: "Unread counts the notes you have written that no agent has picked up yet. Notes are pull-based on purpose: nothing interrupts an agent mid-task, and the next one to start is told how many are waiting. So the number falling is an agent having read them, not a timer expiring.",
+    do: "Leave the note and carry on. It will be collected.",
+    dont: "Do not rewrite a note because it still says unread. It was not missed, it was not yet fetched." },
+];
+
 registerHelp(helpModal({
-  id: "help", title: "The hub, explained", sub: "the keys this page answers to",
-  tabs: [{ id: "keys", label: "Keyboard", sub: "Shortcuts",
-           build: (pane) => fillKeys(pane, SHARED_KEYS.concat([{ group: "Here", rows: [["enter", "open the board under the cursor"]] }])) }],
+  id: "help", title: "The hub, explained", sub: "the words, the keys and what we agreed",
+  tabs: [
+    { id: "keys", label: "Keyboard", sub: "Shortcuts",
+      build: (pane) => fillKeys(pane, SHARED_KEYS.concat([{ group: "Here", rows: [["enter", "open the board under the cursor"]] }])) },
+    termsTab(HUB_TERMS),
+    charterTab(),
+  ],
 }));
 
 async function load() {

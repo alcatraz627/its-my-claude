@@ -164,9 +164,16 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ### `#69` remaining scope, named in the spec and carded nowhere
 
-10. **Help modal Taxonomy and Charter tabs for hub and drafts**
-    (`UNIFIED-SURFACES.md:133`). Charter needs the 17 `.cdoc` rules moved to
-    `shared.css`; Taxonomy needs content that does not exist for those pages.
+10. **Help modal Taxonomy and Charter tabs for hub and drafts** **Done
+    2026-08-24.** The `.cdoc` and `.term` rules moved to `shared.css`, and both
+    tabs are now specs any page drops into its modal (`shared.js:charterTab`,
+    `termsTab`). Charter renders `UI-CHARTER.md` rather than restating it, so
+    all three pages show the same rulings from the one file. Taxonomy was the
+    half with no content: the hub has seven terms and drafts six, each written
+    against what those pages actually render, with a Do and a Not. They carry
+    no vignettes yet and so lay out in one column rather than framing an empty
+    box; the board keeps its illustrated version. `esc` moved to `shared.js`
+    for the same reason the CSS did.
 11. **Help hosts on the decision-page and transcript surfaces**, same source.
 
 ### Unified surfaces

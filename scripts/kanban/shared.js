@@ -115,6 +115,11 @@ const THEME_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none">
 // handler, and the help control is ABSENT rather than dead on a page that has no
 // modal yet (charter §7 states: a control that cannot act is hidden, never
 // silently greyed).
+// Text going into markup. Every page needs it, and a second copy in a page's
+// own script is a redeclaration error rather than a shadow.
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
 // The name a person would call a body of prose: its first real line, with a
 // markdown heading's marks taken off. Without the strip a crumb reads
 // "All drafts / ## gcc-work" and a picker row reads "# Claude Instances global
@@ -323,6 +328,61 @@ let gArmed = null;
 // g-then-first-letter, derived: a new kind gets its letter for free unless one
 // is taken, and the board owns `g` for a card's goal so it uses `b` instead.
 const GO = Object.fromEntries(KINDS.map((k) => [k.id[0], k.href]));
+
+// ---------- help tabs any surface can host ----------
+// Two of the board's tabs say nothing board-specific. The charter is one file
+// every page can render, and a term entry has the same shape whatever surface
+// owns the word, so both are tab specs rather than markup a page copies.
+const HTAB_ICON_TERMS = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2.4 3.2A1.4 1.4 0 0 1 3.8 1.8H8v12.4H3.8a1.4 1.4 0 0 1-1.4-1.4V3.2ZM8 1.8h4.2a1.4 1.4 0 0 1 1.4 1.4v9.6a1.4 1.4 0 0 1-1.4 1.4H8" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+const HTAB_ICON_CHARTER = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3.9 1.9v12.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M3.9 2.7h8.4l-1.9 2.7 1.9 2.7H3.9" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+
+// Renders UI-CHARTER.md rather than restating it. A copy of its rulings kept
+// per page would be the charter's own anti-pattern, "a second list of what the
+// first list already says", and wrong the first time a ruling landed.
+const charterTab = () => ({
+  id: "charter", label: "Charter", sub: "What we agreed", icon: HTAB_ICON_CHARTER,
+  build: async (pane) => {
+    if (!pane || pane.dataset.built) return;
+    pane.innerHTML = `<div class="cnote">Reading UI-CHARTER.md\u2026</div>`;
+    try {
+      const res = await fetch("/api/charter");
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error ?? `HTTP ${res.status}`);
+      pane.innerHTML = `<div class="cdoc">${out.html}</div>`;
+      pane.dataset.built = "1";
+    } catch (e) {
+      // An empty pane would read as "the charter says nothing", which is the
+      // worse of the two wrong answers.
+      pane.innerHTML = `<div class="cnote">The charter could not be read: ${esc(e.message)}.
+        It lives beside the server as UI-CHARTER.md.</div>`;
+    }
+  },
+});
+
+// One entry per thing this surface has a word for: what it is, what it sits
+// next to, and the two sentences that stop it being misused. A term with no
+// vignette drawn for it gets one column rather than an empty framed box.
+const termsTab = (terms, { intro = "" } = {}) => ({
+  id: "terms", label: "Taxonomy", sub: "What is it called", icon: HTAB_ICON_TERMS,
+  build: (pane) => {
+    if (!pane || pane.dataset.built) return;
+    pane.innerHTML = intro + terms.map((t) => `
+      <div class="term${t.vig ? "" : " novig"}">
+        ${t.vig ? `<div class="shot">${t.vig}</div>` : ""}
+        <div>
+          <h4>${esc(t.title)}</h4>
+          <p>${esc(t.p)}</p>
+          ${t.rel?.length ? `<div class="rel">${t.rel.map((r) =>
+            `<span class="chip tag k-plain" style="pointer-events:none"><i class="tdot"></i><span>${esc(r)}</span></span>`).join("")}</div>` : ""}
+          <div class="use">
+            <span class="do"><b>Do</b><i>${esc(t.do)}</i></span>
+            <span class="dont"><b>Not</b><i>${esc(t.dont)}</i></span>
+          </div>
+        </div>
+      </div>`).join("");
+    pane.dataset.built = "1";
+  },
+});
 
 // ---------- the help modal ----------
 // The board's modal is the one the owner asked to reuse, so this is that shape
