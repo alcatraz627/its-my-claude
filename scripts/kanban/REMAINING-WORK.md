@@ -239,9 +239,14 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 21. **A searchable dropdown, shared** (`b5e81d906f33`). The board has it in its
     three pickers; drafts has bare selects. Today's fix gave them the right
     size, not the right control. Promote the pickers out of `board.html` first.
-22. **One navbar on all three pages, really** (`8349c2dc800c`). The title block
-    is gone: all three wear the same crumb identity now. **Remaining:** drafts
-    and the hub still have no find box, which is item 5's cross-kind search.
+22. **One navbar on all three pages, really** (`8349c2dc800c`) **Done
+    2026-08-25.** The title block was already gone; the missing half was the
+    find box. `shared.js:kindFind()` now searches every kind from the same
+    index the tabs count, with sections, keyboard, an honest what-was-searched
+    empty state, and Enter navigating to the instance. The hub and drafts
+    mount ONE element for the page's life, so the hub's per-view remounts
+    move it rather than re-wire it. Verified live on both pages, including
+    Enter landing on a board from the hub.
 23. **Edit / Live / Preview on the note editors** **Partly done 2026-08-25**:
     the note editors carry a preview, now an icon with a tooltip in the note's
     own button row rather than a word floated above the box. Live (the

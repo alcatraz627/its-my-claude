@@ -236,6 +236,64 @@ function kindIndex({ fresh = false } = {}) {
   return kindIndexP;
 }
 
+// The find box for pages whose corpora are the kinds alone (the hub, drafts).
+// The board keeps its richer in-board search; this answers "take me to an
+// instance of anything" from the same index the tabs count. Create it ONCE per
+// page and pass the same element to every navbar() mount, so its listeners do
+// not stack across remounts.
+function kindFind() {
+  const wrap = document.createElement("div");
+  wrap.className = "kfind";
+  wrap.innerHTML = `<input type="search" placeholder="Search boards, asks, drafts" aria-label="search everything">` +
+                   `<div class="kflist" hidden role="listbox"></div>`;
+  const input = wrap.querySelector("input"), list = wrap.querySelector(".kflist");
+  let rows = [], at = 0, timer = null;
+  const close = () => { list.hidden = true; rows = []; };
+  const mark = () => rows.forEach((r, i) => r.classList.toggle("on", i === at));
+  const renderList = async () => {
+    const q = input.value.trim();
+    if (!q) { close(); return; }
+    const ix = await kindIndex();
+    rows = []; list.replaceChildren();
+    for (const k of searchKinds()) {
+      const ms = kindMatches(ix, k.id, q, 4);
+      if (!ms.length) continue;
+      const h = document.createElement("div");
+      h.className = "kfh"; h.textContent = k.label;
+      list.appendChild(h);
+      for (const m of ms) {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "kfrow"; b.setAttribute("role", "option");
+        b.innerHTML = `<span class="kfn"></span><span class="kfs"></span>`;
+        b.querySelector(".kfn").textContent = m.name;
+        b.querySelector(".kfs").textContent = m.sub ?? "";
+        b.onclick = () => { location.href = m.href; };
+        rows.push(b); list.appendChild(b);
+      }
+    }
+    if (!rows.length) {
+      // name what was looked in, and only what actually answered (§12)
+      const e = document.createElement("div");
+      e.className = "kfnone";
+      const searched = searchKinds().filter((k) => ix[k.id] != null).map((k) => `your ${k.indexLabel}`);
+      e.textContent = `Nothing matches “${q}”. Searched ${andList(searched)}.`;
+      list.appendChild(e);
+    }
+    at = 0; mark();
+    list.hidden = false;
+  };
+  input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(renderList, 120); });
+  input.addEventListener("focus", renderList);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") { at = Math.min(at + 1, rows.length - 1); mark(); e.preventDefault(); }
+    else if (e.key === "ArrowUp") { at = Math.max(at - 1, 0); mark(); e.preventDefault(); }
+    else if (e.key === "Enter") rows[at]?.click();
+    else if (e.key === "Escape") { if (input.value) { input.value = ""; close(); } else input.blur(); e.stopPropagation(); }
+  });
+  addEventListener("pointerdown", (e) => { if (!wrap.contains(e.target)) close(); });
+  return wrap;
+}
+
 // The tabs' counts. Charter §7 asks the toolbar to state which kind you are in
 // WITH its counts, which is what makes it an indicator rather than a navigator.
 // It counts the very list the palette offers, so the pill and the list can

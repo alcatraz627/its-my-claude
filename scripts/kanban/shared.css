@@ -285,6 +285,24 @@
          overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:1px 0}
   .nfind::-webkit-scrollbar{display:none}
   .nfind > *{flex:none}
+  /* the cross-kind find box the hub and drafts mount (the board has its own) */
+  .kfind{position:relative;display:flex;align-items:center;min-width:0;flex:1 1 auto;max-width:340px}
+  .kfind input{width:100%;height:var(--h-control);padding:0 10px;border:1px solid var(--border);
+               border-radius:var(--r-control);background:var(--card);color:var(--text);
+               font:inherit;font-size:var(--fs-body)}
+  .kfind input::placeholder{color:var(--text-3)}
+  .kfind input:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
+  .kflist{position:absolute;top:calc(100% + 6px);left:0;min-width:300px;max-width:420px;
+          max-height:60vh;overflow:auto;background:var(--card);border:1px solid var(--border-2);
+          border-radius:var(--r-panel);box-shadow:var(--shadow);z-index:var(--z-picker);padding:6px}
+  .kflist .kfh{font:600 var(--fs-caption)/1.4 var(--sans);letter-spacing:.04em;text-transform:uppercase;
+               color:var(--text-3);padding:6px 8px 3px}
+  .kflist .kfrow{display:flex;align-items:center;gap:8px;width:100%;padding:6px 8px;border:0;min-height:0;
+                 background:none;border-radius:var(--r-control);cursor:pointer;color:var(--text-2);text-align:left}
+  .kflist .kfrow .kfn{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .kflist .kfrow .kfs{margin-left:auto;color:var(--text-3);font-size:var(--fs-small);flex:none}
+  .kflist .kfrow.on,.kflist .kfrow:hover{background:var(--card-hover)}
+  .kflist .kfnone{padding:10px;color:var(--text-3);font-size:var(--fs-body)}
   .nfind[data-of="x"]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%);
                       mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%)}
   .nowrap{white-space:nowrap;flex:none}

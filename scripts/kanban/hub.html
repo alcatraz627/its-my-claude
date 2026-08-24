@@ -490,10 +490,13 @@ function setView(v) {
   const kind = v === "notes" ? "asks" : "boards";
   navbar({ mount: "#phead", active: kind,
     identity: crumbFor(kind),
+    find: pageFind,
     onView: (nv) => setView(nv === "asks" ? "notes" : "boards"),
     help: () => theHelp && theHelp.open() });
   load();
 }
+// one find element for the page's lifetime: remounts move it, never re-wire it
+const pageFind = kindFind();
 
 // The keyboard reference, on this page too. `?` opens it; the rows are
 // generated from SHARED_KEYS so they cannot drift from the bindings.

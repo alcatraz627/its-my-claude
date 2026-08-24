@@ -168,9 +168,12 @@
 // The same identity the board wears: `All drafts / <the one you are reading>`,
 // rather than a title block only this page had. The instance half is filled in
 // by mountNav() whenever the open draft changes.
+// one find element for the page's lifetime: remounts move it, never re-wire it
+const pageFind = kindFind();
 function mountNav() {
   navbar({ mount: "#phead", active: "drafts",
     identity: crumbFor("drafts", currentDraftName()),
+    find: pageFind,
     help: () => theHelp && theHelp.open() });
 }
 // The draft currently open, by the name a person would call it. Nothing open is
