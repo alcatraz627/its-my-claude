@@ -137,7 +137,9 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
 
 ### The owner's direct ask
 
-6. **`items` as a first-class CLI entity** **NEW**. Today `cli.ts` can read
+6. **`items` as a first-class CLI entity** **Done 2026-08-24**: `cli.ts:582`
+   carries `item add|edit|rm`, POSTing so `items.json` keeps one writer.
+   Originally filed as: Today `cli.ts` can read
    (`items`) and record a disposition (`classify`) and nothing else;
    `saveItems` is called only from `server.ts:701,710,729`, so **only the UI can
    write an ask**. Owner: durable per project, agent modifiable and readable,
@@ -149,18 +151,15 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
 The 08-23 checkpoint's own entry: "filter views per `FILTER-VIEWS.md`: shared,
 owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
-7. **OR and NOT grammar**. `match.js:50` reads "clauses are ANDed; OR and NOT
-   are deferred", quoting a deferral that `FILTER-VIEWS.md:146` **overruled the
-   same day** (D4b: "the fuller grammar now... `matchClause` becomes
-   `matchQuery`"). `matchQuery` does not exist. Precedence per the ruling: NOT
-   binds a clause, AND binds tighter than OR, no parentheses.
+7. **OR and NOT grammar** **Done 2026-08-24**: `matchQuery` exists
+   (`match.js:100`) with `parseQuery`/`matchParsed`, to the ruled precedence.
+   The claim that it did not exist is what this plan said before `#39` finished.
 8. **Owner notes on a view**. D3a, his words: "allow me to add notes for agent
    (optional) as well so when the agent reads the board it can know what I am
    using it for". `lib.ts:510` has no `note` field.
-9. **The `/kanban` skill is stale against its own CLI**. Seven verbs
-   undocumented: `classify` `drafts` `goal` `items` `tag` `verify` `--json`.
-   Zero mentions of views. Untouched since Aug 21. This is the peer complaint
-   gcp-c2398e8b sent on 2026-08-24, confirmed by grep.
+9. **The `/kanban` skill is stale against its own CLI** **Done 2026-08-24**,
+   and guarded: `test-charter.sh` asserts "every cli.ts verb appears in the
+   /kanban skill" and passes. The peer complaint gcp-c2398e8b is answered.
 
 ### `#69` remaining scope, named in the spec and carded nowhere
 
