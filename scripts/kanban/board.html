@@ -2070,8 +2070,7 @@ async function saveBoardCols(patch) {
     headers: { "content-type": "application/json" }, body: JSON.stringify({ slug, cols }) });
   const out = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
   if (!res.ok || out.error) { toast(out.error ?? "could not save the board defaults", true); return false; }
-  plan().cols = out.cols;
-  render();
+  await afterWrite();      // the store's answer, not the one we hoped for
   return true;
 }
 
@@ -2159,9 +2158,8 @@ function openNameView(btn, clauses) {
       body: JSON.stringify({ slug, op: "add", name, clauses }) });
     const out = await res.json().catch(() => ({ error: "failed" }));
     if (out.error) return toast(out.error, true);
-    plan().views = [...(plan().views ?? []), out.view];
     toast(`View "${out.view.name}" saved`);
-    render();
+    await afterWrite();
   };
   card.querySelector("#vwsave").onclick = save;
   card.querySelector("#vwcancel").onclick = closeColCard;
@@ -3521,8 +3519,8 @@ function renderSide() {
           body: JSON.stringify({ slug, op: "rm", id: v.id }) });
         const out = await res.json().catch(() => ({ error: "failed" }));
         if (out.error) return toast(out.error, true);
-        plan().views = (plan().views ?? []).filter((x) => x.id !== v.id);
-        toast(`View "${v.name}" deleted`); render();
+        toast(`View "${v.name}" deleted`);
+        await afterWrite();
       };
       wrap.append(b, del);
       g.appendChild(wrap);
@@ -3669,12 +3667,21 @@ function renderSide() {
 }
 
 // A rail action must not wait for the 5s board poll to show its effect.
-async function refreshRail() {
-  await loadItems();
+// The one path out of a write. It rebuilds the asks column, which render() does
+// not (it holds that node in place so a composer being typed in is never
+// detached), and then re-reads the board so everything else showing the same
+// data renders from the store rather than from what one call site happened to
+// know. It used to stop after the rail and the sidebar, so an ask landing as a
+// card left the lanes, the face counts and the summary on the previous state
+// until something unrelated re-rendered (FEEDBACK-CLASSES C5).
+async function afterWrite({ items = false } = {}) {
+  if (items) await loadItems();
   const old = $("rail");
-  if (old) old.replaceWith(railEl());
-  renderSide();   // pins live in both places; they must not disagree
+  if (items && old) old.replaceWith(railEl());
+  lastPayload = "";        // the payload cache must not swallow the read we just asked for
+  await load();            // renders the lanes, the sidebar, the peers and the summary together
 }
+const refreshRail = () => afterWrite({ items: true });
 
 function render() {
   hideState();

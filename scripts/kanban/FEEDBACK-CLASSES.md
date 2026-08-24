@@ -161,6 +161,33 @@ count), cards, drafts, selection, plan answers, views.
 **Done when.** Writes go through one path that re-renders from the store, and a
 test mutates each entity then asserts every surface showing it changed.
 
+**Swept 2026-08-25.** The caught instance was already fixed and `load()` carries
+the note: the guard tested focus rather than `dirty`, so the very load a save
+triggered returned early. The class was not. Four sites in `board.html` broke it
+and none of them was the caught one.
+
+Three wrote the server's answer into the in-memory store and rendered from that:
+board defaults, saving a view, deleting a view. A page that patches its own copy
+of what it just sent shows what it hoped for rather than what the store holds,
+and any surface reading the same data disagrees until something unrelated
+re-renders. All three re-read now.
+
+The fourth was `refreshRail`, which rebuilt the asks column and the sidebar by
+hand and stopped, so an ask landing as a card left the lanes, the face counts
+and the summary on the previous state. Writes leave through one `afterWrite`
+now, which rebuilds the column render() deliberately holds in place and then
+re-reads the board.
+
+Hub and drafts were already compliant: every write there re-reads, and the
+hub's starred and archived sets are rebuilt from the fetched pins rather than
+patched.
+
+Guarded and mutation-tested: `test-charter.sh` fails if a private copy comes
+back, and separately if the rail stops going through the one path. Each
+mutation fails only its own row. Exercised live as well: saving a view, then
+deleting it, with the sidebar and the store agreeing at each step, and an ask
+write on the board where that branch can actually fire.
+
 ---
 
 ## C6 · A capability is built on one surface and not offered on its siblings

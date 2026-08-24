@@ -20,6 +20,23 @@ hits=$(cd "$HERE" && rg -n ' title="|\.title *= ' board.html hub.html drafts.htm
 if [ -z "$hits" ]; then ok "no native tooltips on board, hub or drafts (§16)"
 else no "no native tooltips on board, hub or drafts (§16)" "$hits"; fi
 
+# C5: no view keeps a private copy. A write sends a patch and then RE-READS; it
+# never writes the server's answer into the in-memory store and renders from
+# that. Three sites did (board defaults, saving a view, deleting one), so the
+# page could show something the store did not have, and the surfaces that read
+# the same data disagreed until an unrelated render.
+priv=$(cd "$HERE" && rg -n 'plan\(\)\.[a-z]+ *=[^=]' board.html || true)
+if [ -z "$priv" ]; then ok "no view patches the in-memory store instead of re-reading (C5)"
+else no "no view patches the in-memory store instead of re-reading (C5)" "$priv"; fi
+
+# C5: the one path out of a write exists and the rail's refresh goes through it,
+# rather than rebuilding one surface by hand and stopping there.
+if (cd "$HERE" && rg -q '^async function afterWrite' board.html) \
+   && (cd "$HERE" && rg -q 'refreshRail = \(\) => afterWrite' board.html); then
+  ok "writes leave through one path, and the rail's refresh uses it (C5)"
+else no "writes leave through one path, and the rail's refresh uses it (C5)" \
+        "afterWrite missing, or refreshRail no longer routes through it"; fi
+
 # §5: drawn, not typed. A button whose only content is a unicode dingbat, in
 # markup or assigned as textContent, reads at a different weight from the SVG
 # set beside it. Eleven of them were found on the board on 2026-08-23 (#45).
