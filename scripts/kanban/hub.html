@@ -455,7 +455,6 @@ const VIEW_COPY = {
   boards: ["Your boards", "every project an agent is working on for you"],
   notes: ["Your asks", "things you wrote down for an agent to sort into cards"],
 };
-let hubCounts = {};   // filled once the data lands, so tabs carry what they count
 let starred = new Set();
 // An archived board is one the owner has said is not theirs right now. A crate
 // with its lid on, distinct from the star and never amber: this is not an opinion
@@ -470,7 +469,7 @@ function setView(v) {
   // use, rather than the title block this page had to itself.
   const kind = v === "notes" ? "asks" : "boards";
   navbar({ mount: "#phead", active: kind,
-    identity: crumbFor(kind), counts: hubCounts,
+    identity: crumbFor(kind),
     onView: (nv) => setView(nv === "asks" ? "notes" : "boards"),
     help: () => theHelp && theHelp.open() });
   load();
@@ -495,8 +494,6 @@ async function load() {
       starred = new Set(pins.filter((x) => x.kind === "board").map((x) => x.ref));
       archived = new Set(pins.filter((x) => x.kind === "archived").map((x) => x.ref));
     } catch { starred = new Set(); archived = new Set(); }
-    hubCounts = { boards: boards.length };
-    document.querySelectorAll('.views a[data-v="boards"] .vn').forEach((n) => { n.textContent = boards.length; });
     document.getElementById("huberr")?.remove(); // recovered: clear the failure note
     if (!boards.length) { list.innerHTML = `<div class="empty">No boards yet — run <code>kanban.sh init</code> in a project</div>`; return; }
     // a board that asks something of you is a card; the rest are rows

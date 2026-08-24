@@ -152,6 +152,27 @@ function crumbFor(kindId, instance) {
   return wrap;
 }
 
+// The tabs' counts. Charter §7 asks the toolbar to state which kind you are in
+// WITH its counts, which is what makes it an indicator rather than a navigator.
+// Each kind counts itself (kinds.js), so a new kind's tab arrives counted and
+// no page keeps a tally of its own.
+//
+// One request per kind, once per page: a second caller gets the first one's
+// promise. A kind that cannot be reached answers null, NOT zero — an unknown
+// count is not a count of none (§12), and an empty pill is hidden rather than
+// asserting an emptiness nothing verified.
+let kindCountsP = null;
+function kindCounts({ fresh = false } = {}) {
+  if (fresh) kindCountsP = null;
+  if (kindCountsP) return kindCountsP;
+  kindCountsP = Promise.all(KINDS.map(async (k) => {
+    if (!k.api || !k.countOf) return [k.id, null];
+    try { return [k.id, k.countOf(await (await fetch(k.api)).json())]; }
+    catch { return [k.id, null]; }
+  })).then(Object.fromEntries);
+  return kindCountsP;
+}
+
 function navbar({ mount, active, title, sub, crumb, identity, find, actions, counts = {},
                   peers, help, onView }) {
   const el = typeof mount === "string" ? document.querySelector(mount) : mount;
@@ -205,6 +226,20 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     addEventListener("resize", mark);
   }
   if (peers) document.getElementById("nbPeers").append(peers);
+  // Counts land after first paint: the bar must not wait on a fetch per kind to
+  // draw. A page may pass its own for a kind it already holds; anything it does
+  // not name is asked for. Re-asked when the tab comes back into view, because
+  // a count that was true when you left is the staleness §12 calls dishonest.
+  const showCounts = (c) => el.querySelectorAll(".views a").forEach((a) => {
+    const n = c[a.dataset.v];
+    a.querySelector(".vn").textContent = n == null ? "" : n;
+  });
+  const loadCounts = (fresh) =>
+    kindCounts({ fresh }).then((c) => showCounts({ ...c, ...counts }));
+  loadCounts(false);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") loadCounts(true);
+  });
   // a page that switches in place intercepts; everything else navigates
   if (onView) {
     el.querySelectorAll(".views a").forEach((a) => {

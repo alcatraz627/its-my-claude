@@ -111,8 +111,16 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
    glyph with the hue tint on top per the 2026-08-22 ruling, and Boards keeps
    its recent/starred/all sub-structure. Verified: four sections, three hues,
    and typing a draft's name finds it.
-4. **Toolbar demoted from navigator to indicator** `[spine]`. Charter §7: it
-   states which kind you are in, with counts. The palette becomes the picker.
+4. **Toolbar demoted from navigator to indicator** `[spine]`. **Done
+   2026-08-24.** It was a navigator with nothing to state: `.views .vn:empty`
+   hides a blank pill, only the hub ever wrote a count, and it wrote one, for
+   boards, by reaching into the navbar's DOM. Each kind now counts itself from
+   `kinds.js` (`api` + `countOf`) and `shared.js:kindCounts()` asks once per
+   page, so all three pages read 9 / 2 / 3 and a fourth kind arrives already
+   counted. A kind that cannot be reached answers `null`, never `0` (§12), and
+   the counts are re-asked when the tab comes back into view. The palette is
+   the picker, and its keyboard now agrees with its mouse: Enter on a draft row
+   went to `/b/undefined` because every row was sent to `gotoBoard`.
 5. **Search across all kinds** `[spine]`, plus the missing **Boards section**
    in the board palette: `SEARCH-DESIGN.md:84` designs 6 sections,
    `board.html:4893` implements 5. Acceptance test 5 ("typing a project name

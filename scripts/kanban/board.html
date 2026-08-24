@@ -5117,9 +5117,9 @@ function bpSections() {
 }
 function renderBoardPick() {
   const secs = bpSections();
-  bpRows = secs.flatMap((s2) => s2.rows);
+  bpRows = secs.flatMap((s2) => s2.rows.map((r) => ({ ...r, kind: s2.kind })));
   bpAt = Math.min(bpAt, Math.max(0, bpRows.length - 1));
-  if (!bpRows.length) { $("bplist").innerHTML = `<div class="bpnone">No board matches that.</div>`; return; }
+  if (!bpRows.length) { $("bplist").innerHTML = `<div class="bpnone">Nothing matches that.</div>`; return; }
   const frag = document.createDocumentFragment();
   let i = 0;
   for (const sec of secs) {
@@ -5141,7 +5141,7 @@ function renderBoardPick() {
         el.querySelector(".bn").textContent = b.name;
         el.querySelector(".bp").textContent = b.sub;
         el.onmouseenter = () => { bpAt = at; markBp(); };
-        el.onclick = () => gotoKind(b);
+        el.onclick = () => bpOpen({ ...b, kind: sec.kind });
         frag.appendChild(el);
         continue;
       }
@@ -5156,7 +5156,7 @@ function renderBoardPick() {
       el.querySelector(".bn").textContent = b.name;
       el.querySelector(".bp").textContent = b.root;
       el.onmouseenter = () => { bpAt = at; markBp(); };
-      el.onclick = () => gotoBoard(b);
+      el.onclick = () => bpOpen({ ...b, kind: sec.kind });
       el.querySelector(".bstar").onclick = (e) => { e.stopPropagation(); toggleStar(b); };
       frag.appendChild(el);
     }
@@ -5179,6 +5179,14 @@ function gotoKind(r) {
   if (r.kind === "drafts") { location.href = `/drafts?d=${encodeURIComponent(r.id)}`; return; }
   location.href = `/?v=asks#${encodeURIComponent(r.id)}`;
 }
+// Where a row goes is decided by its kind, in one place. The keyboard used to
+// send every row to gotoBoard, so pressing Enter on a draft went to
+// /b/undefined while clicking the same row worked — a control with two
+// implementations disagreeing about one action (§13).
+function bpOpen(r) {
+  if (!r) return;
+  if (r.kind === "boards") gotoBoard(r); else gotoKind(r);
+}
 function gotoBoard(b) {
   if (!b) return;
   if (b.slug === slug) { closeBoardPick(); return; }
@@ -5190,9 +5198,10 @@ $("bpq").addEventListener("input", () => { bpAt = 0; renderBoardPick(); });
 $("bpq").addEventListener("keydown", (e) => {
   if (e.key === "ArrowDown") { bpAt = Math.min(bpAt + 1, bpRows.length - 1); markBp(); e.preventDefault(); }
   else if (e.key === "ArrowUp") { bpAt = Math.max(bpAt - 1, 0); markBp(); e.preventDefault(); }
-  else if (e.key === "Enter") { gotoBoard(bpRows[bpAt]); e.preventDefault(); }
+  else if (e.key === "Enter") { bpOpen(bpRows[bpAt]); e.preventDefault(); }
   // star without leaving the keyboard, which is the point of having the palette
-  else if (e.key === "s" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (bpRows[bpAt]) toggleStar(bpRows[bpAt]); }
+  else if (e.key === "s" && (e.metaKey || e.ctrlKey)) { e.preventDefault();
+    const r = bpRows[bpAt]; if (r?.kind === "boards") toggleStar(r); }
   else if (e.key === "Escape") { closeBoardPick(); e.stopPropagation(); }
 });
 
