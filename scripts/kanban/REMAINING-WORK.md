@@ -98,13 +98,19 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
    `KINDS` through one adapter per kind rather than a copy-pasted block each,
    and the per-kind hue rides the registry. Verified by naming a draft, which
    is the cell `NAV-UNIFICATION.md:40-48` drew as empty.
-   **Remaining:** the crumb generalised to `All <kind> / <instance>`, still
-   boards-only. (`COMPLIANCE-LEDGER.md:56` calls this "per-kind index pages NOT
+   **Crumb done 2026-08-24**: `crumbFor()` in `shared.js`, built from the
+   registry, on all three pages. The hub is an index so it shows the left half
+   alone and follows the kind when you switch in place; drafts names the open
+   draft. The registry gained `indexLabel` because the tab wants the owner's
+   word ("Your asks") and the crumb wants a plural that reads after "All"
+   ("All asks"). **Item 2 is complete.** (`COMPLIANCE-LEDGER.md:56` calls this "per-kind index pages NOT
    done", which reads as if the indexes are missing; they are not, and that
    ledger row is one of the stale ones.)
-3. **Palette widened to N kinds** `[spine]`, sectioned by kind, each carrying
-   its glyph, hue tint on top per the 2026-08-22 ruling. Boards keeps its
-   recent/starred/all sub-structure.
+3. **Palette widened to N kinds** `[spine]`. **Done 2026-08-24** as part of
+   item 2: sections walk `KINDS` through one adapter per kind, each carries its
+   glyph with the hue tint on top per the 2026-08-22 ruling, and Boards keeps
+   its recent/starred/all sub-structure. Verified: four sections, three hues,
+   and typing a draft's name finds it.
 4. **Toolbar demoted from navigator to indicator** `[spine]`. Charter §7: it
    states which kind you are in, with counts. The palette becomes the picker.
 5. **Search across all kinds** `[spine]`, plus the missing **Boards section**
@@ -179,9 +185,9 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 21. **A searchable dropdown, shared** (`b5e81d906f33`). The board has it in its
     three pickers; drafts has bare selects. Today's fix gave them the right
     size, not the right control. Promote the pickers out of `board.html` first.
-22. **One navbar on all three pages, really** (`8349c2dc800c`). Drafts and hub
-    still have no find box and a title block where the board has identity.
-    Folds into items 2 to 4.
+22. **One navbar on all three pages, really** (`8349c2dc800c`). The title block
+    is gone: all three wear the same crumb identity now. **Remaining:** drafts
+    and the hub still have no find box, which is item 5's cross-kind search.
 23. **Edit / Live / Preview on the note editors** (`50b6dafd4faa`). Drafts has
     three modes; note editors have a two-state toggle.
 24. **Global tag colours** (`#66`). Set a tag's colour once, holds across boards.
