@@ -71,6 +71,9 @@
        that table puts help, the doc viewer, the toast and the tooltip all on
        90, which collides four overlays onto one number and would reverse
        help and doc by source order. The restack is G20 and the owner's call. */
+    /* One height for every control that sits on a row with another one. Buttons
+       and selects both read it, which is the only way they stay the same size. */
+    --h-control:31px;
     --z-base:1; --z-grip:2; --z-grip-drawer:3; --z-nav:20; --z-arrow:25; --z-pop:30;
     --z-lanepop:35; --z-picker:40; --z-modal:50; --z-doc:60; --z-tip:90;
     /* The toast sat at 3, under every overlay, so a message about what just
@@ -86,9 +89,29 @@
 
   /* ---------- buttons (charter §5, §7) ---------- */
   button{font:inherit;cursor:pointer;border-radius:var(--r-control);border:1px solid var(--border);background:var(--card);
-         color:var(--text-2);padding:5px 10px;font-size:var(--fs-body);font-weight:500;display:inline-flex;
+         color:var(--text-2);min-height:var(--h-control);padding:5px 10px;font-size:var(--fs-body);font-weight:500;display:inline-flex;
          align-items:center;gap:6px;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
   button:hover{background:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  /* A select is a control, and until now it was whatever the OS felt like. On
+     drafts that put a 19px unstyled native select with square corners directly
+     beside a 31px button with a 6px radius, which is the mismatch the owner
+     named. One geometry, drawn from the same tokens the button uses, so the two
+     cannot drift apart again. The chevron is ours because appearance:none takes
+     the platform's away.
+     This is geometry only. A select with many options still owes the owner
+     search and a subtitle line, which is the picker the board already has and
+     drafts has not been given (C6, C8). */
+  select{font:inherit;font-size:var(--fs-body);font-weight:500;cursor:pointer;
+         height:var(--h-control);padding:0 26px 0 10px;
+         border:1px solid var(--border);border-radius:var(--r-control);
+         background:var(--card) no-repeat right 8px center;
+         background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7' fill='none'%3E%3Cpath d='M1 1.4L5 5.4L9 1.4' stroke='%23888' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+         color:var(--text-2);-webkit-appearance:none;appearance:none;
+         transition:background-color var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
+  select:hover:not([disabled]){background-color:var(--card-hover);border-color:var(--border-2);color:var(--text)}
+  select:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
+  select[disabled]{opacity:.5;cursor:not-allowed}
+  select option{background:var(--card);color:var(--text)}
   button:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
   /* PRESSED (charter §7's fifth state). It was the one appearance missing from
      every control on every page: two :active rules existed in the whole tree

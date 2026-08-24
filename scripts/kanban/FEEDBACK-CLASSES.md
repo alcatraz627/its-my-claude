@@ -202,6 +202,29 @@ and fails on one that has none.
 
 ---
 
+## C11 · A helper built beside the one that already does it
+
+**Class.** Before adding a helper, grep the tree for what it would do. This app
+has a shared layer (`shared.js`, `editor.js`, `match.js`) that most sessions do
+not read first, so the same job gets a second implementation that then drifts
+from the first.
+
+**Caught.** Twice inside the 2026-08-24 session, both nearly shipped. A path
+shortener was written next to `tailTrim`, which already trims paths by
+measurement and did it better. A size-remembering observer was written next to
+the `userSized` observer, which already tracked exactly that and only lacked
+persistence. In both cases the right fix was three lines inside the existing
+primitive, and the wrong one was a parallel system that would silently disagree
+with it later.
+
+**Scope.** Anything added to `board.html`, `hub.html` or `drafts.html` that
+could plausibly live in `shared.js` or `editor.js`.
+
+**Done when.** Reflex, not a rule: the grep happens before the helper, and a
+new helper in a page file carries a line saying why it is not shared.
+
+---
+
 ## How a session uses this file
 
 1. Before touching a surface, read the classes whose **scope** names it.
