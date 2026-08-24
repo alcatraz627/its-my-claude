@@ -696,9 +696,9 @@
      tint only makes the scan faster, and it lives on the glyph alone so "colour
      is spent once per object" still holds. It applies here and in search, the
      only lists that mix kinds, and never on a board surface. */
-  .bprow.k-boards .bi{color:var(--blue)}
-  .bprow.k-asks   .bi{color:var(--amber)}
-  .bprow.k-drafts .bi{color:var(--violet)}
+  /* the picker row's glyph takes the kind's hue, handed in as --nav-hue by
+     kinds.js rather than named here, so a new kind needs no rule */
+  .bprow .bi{color:var(--nav-hue,var(--text-2))}
   /* What search can do, shown rather than described. */
   .sphint{padding:14px 16px 8px;font:var(--fs-body)/1.55 var(--sans);color:var(--text-3)}
   .spchips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
@@ -1426,6 +1426,7 @@
 
 <script src="/match.js"></script>
 <script src="/editor.js"></script>
+<script src="/kinds.js"></script>
 <script src="/shared.js"></script>
 <script>
 const slug = location.pathname.split("/")[2];
@@ -5129,7 +5130,8 @@ function renderBoardPick() {
         frag.appendChild(el);
         continue;
       }
-      el.className = "bprow k-boards" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
+      el.className = "bprow" + (at === bpAt ? " on" : "") + (b.slug === slug ? " cur" : "");
+      el.style.setProperty("--nav-hue", `var(${kindById("boards").hue})`);
       const open = Object.entries(b.counts ?? {}).filter(([k]) => k !== "done" && k !== "stale")
         .reduce((n, [, v]) => n + v, 0);
       el.innerHTML = `<span class="bi">${NAV_ICON.boards}</span><span class="bn"></span><span class="bp"></span>` +

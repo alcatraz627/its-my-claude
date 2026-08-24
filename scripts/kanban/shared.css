@@ -255,8 +255,9 @@
     .nzid{min-width:120px}
     .nzfind{flex:1 1 140px;min-width:110px}
   }
-  .views .k-boards{--nav-hue:var(--blue)} .views .k-asks{--nav-hue:var(--amber)}
-  .views .k-drafts{--nav-hue:var(--violet)}
+  /* A kind's hue arrives as an inline --nav-hue from kinds.js. It used to be a
+     CSS rule per kind, which is a list, and a list is the thing this stopped
+     being. */
   .views .on .vn{color:var(--nav-hue,var(--blue));background:var(--well)}
 
   /* ---------- the tooltip (charter §13: never the native one) ---------- */

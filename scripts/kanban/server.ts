@@ -365,6 +365,7 @@ const server = Bun.serve({
       if (p === "/shared.css") return asset("shared.css", "text/css");
       if (p === "/shared.js") return asset("shared.js", "text/javascript");
       if (p === "/match.js") return asset("match.js", "text/javascript");
+      if (p === "/kinds.js") return asset("kinds.js", "text/javascript");
       if (p === "/editor.js") return asset("editor.js", "text/javascript");
       if (p === "/") return html("hub.html");
       // A destination, not a mode: its own data model and its own canvas, so it

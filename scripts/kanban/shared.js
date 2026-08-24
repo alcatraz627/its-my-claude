@@ -93,11 +93,9 @@ function tailTrim(el) {
 // Three views, reachable from all of them, with the same keys everywhere. The
 // partial navigation graph was the audit's headline finding: you could not
 // reach Asks from Drafts at all.
-const NAV_ICON = {
-  boards: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`,
-  asks: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.4 2.6h9.2v8.2L9.4 13.4H3.4V2.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M12.6 10.8H9.4v2.6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
-  drafts: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
-};
+// The kinds' glyphs, keyed by id, built from the registry so the two cannot
+// disagree. Kept as a name because three call sites already say NAV_ICON.x.
+const NAV_ICON = Object.fromEntries(KINDS.map((k) => [k.id, k.icon]));
 const MARK_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="2.4" width="4.6" height="11.2" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="7.6" y="2.4" width="4.6" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M14.4 5v6.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
 const HELP_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.75 1.75 0 1 1 1.9 1.85V9.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8.1" cy="11.6" r=".75" fill="currentColor"/></svg>`;
 const CLOSE_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="m4.6 4.6 6.8 6.8M11.4 4.6l-6.8 6.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
@@ -134,13 +132,17 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     `</div>` +
     `<div class="nz nzfind" id="nbFind"></div>` +
     `<div class="nz nzcommon">` +
+      // Every kind this app has, from kinds.js. Label, route, key, tip and hue
+      // all come from the one declaration, so a fourth kind is one entry there
+      // and nothing here. The hue rides an inline custom property rather than a
+      // CSS rule per kind, for the same reason: a rule per kind is a list.
       `<div class="views" role="tablist">` +
-        ["boards", "asks", "drafts"].map((v, i) =>
-          `<a href="${v === "drafts" ? "/drafts" : v === "asks" ? "/?view=asks" : "/"}" data-v="${v}" data-k="${i + 1}" role="tab"
-              class="${v === active ? "on" : ""} k-${v}"
-              data-tip="${v === "boards" ? "Every project an agent is working on" : v === "asks" ? "Things you wrote down for an agent to sort" : "Your documents, the rung above an ask"} · press ${i + 1}">
-             <span class="vi">${NAV_ICON[v]}</span><span class="vt">${v === "boards" ? "Boards" : v === "asks" ? "Your asks" : "Drafts"}</span>
-             <span class="vn">${counts[v] ?? ""}</span></a>`).join("") +
+        KINDS.map((k) =>
+          `<a href="${k.href}" data-v="${k.id}" data-k="${k.key}" role="tab"
+              class="${k.id === active ? "on" : ""}" style="--nav-hue:var(${k.hue})"
+              data-tip="${k.tip} · press ${k.key}">
+             <span class="vi">${k.icon}</span><span class="vt">${k.label}</span>
+             <span class="vn">${counts[k.id] ?? ""}</span></a>`).join("") +
       `</div>` +
       `<span class="npeers" id="nbPeers"></span>` +
       `<span class="npage" id="nbActions"></span>` +
@@ -171,7 +173,9 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     el.querySelectorAll(".views a").forEach((a) => {
       a.onclick = (e) => {
         const v = a.dataset.v;
-        if (v === "drafts") return;              // a real page, let it navigate
+        // Whether a kind switches in place or navigates is the kind's own
+        // property, not a name check against one id.
+        if (!kindById(v)?.inPage) return;        // a real page, let it navigate
         e.preventDefault(); onView(v);
       };
     });
@@ -184,7 +188,9 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
 // places with `b` (its go-to picker) instead. One letter, two meanings, and the
 // page that got there first keeps it.
 let gArmed = null;
-const GO = { b: "/", a: "/?view=asks", d: "/drafts" };
+// g-then-first-letter, derived: a new kind gets its letter for free unless one
+// is taken, and the board owns `g` for a card's goal so it uses `b` instead.
+const GO = Object.fromEntries(KINDS.map((k) => [k.id[0], k.href]));
 
 // ---------- the help modal ----------
 // The board's modal is the one the owner asked to reuse, so this is that shape

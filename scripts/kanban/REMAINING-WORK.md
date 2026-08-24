@@ -11,7 +11,8 @@ every `*.md` in this directory. `COMPLIANCE-LEDGER.md`, `SURFACE-CATALOG.md` and
 `CAVEATS-LEDGER.md` were read but are **themselves stale** and are treated as
 suspects, not authorities (see Everything else).
 
-Branch `kanban/aug22-sweep`, 52 commits ahead of `main`, 33 never pushed.
+Branch `kanban/aug22-sweep`, 55 commits ahead of `main` and fast-forwarded
+into it locally, awaiting the push gate.
 
 The board's Active lane holds 156 more cards harvested from other projects'
 checkpoints, because sync scans `_*.claude.md` under the repo root and
@@ -47,14 +48,27 @@ item in this document.
 
 ---
 
-## Waiting on the owner (4)
+## Waiting on the owner (1)
 
 | Item | Why it is his |
 |---|---|
-| **Merge and push the branch** | 52 commits ahead of `main`, 33 unpushed. Every fix from today is local only. |
-| **Plan Phase 5 audits: keep or drop** (`cd83103f07a4`) | His note: "Is this even required? If it doesn't add value, can drop it". Agent read: drop it. Nothing depends on it and it arrived from a checkpoint sweep. |
-| **Sessions hub scope** (`2920a64567e5`) | His `/new-item` note asked for a hub inspired by claude-instances, synced with the kanban but able to stand alone, "shares identity without full coupling". Open: one store, or two that agree? |
-| **`pm2 startup`, and the stopped decision-pages service** | :5197 is down. `pm2 startup` needs his password. |
+| **Approve the push** | `main` is fast-forwarded locally to 55 commits of kanban work. The push gate needs a per-push sentinel only the owner can create. Merge and push both authorised 2026-08-24; the gate is mechanical, not a second ask. |
+
+**Closed 2026-08-24.** `pm2 startup`: done.
+**Sessions hub scope: never a real gate.**
+`CHAT-HISTORY.md` is a complete 146-line plan (four surfaces, five shippable
+phases each with its own check, what retires from claude-instances) and its
+three rulings were answered on 2026-08-24. This document invented an open
+question the plan already answers, and said so to an owner who had been told
+the planning was finished. It was.
+
+The one genuine divergence, and it is small: `CHAT-HISTORY.md:69` decides a
+hub-level **Sessions tab is not added**, because "sessions are per board, the
+wrong altitude for the hub". The owner's later `/new-item` note asks for "a
+sessions hub, inspired by claude-instances... but can also exist
+independently". D-ch-3 ruled on the per-board surface (a drawer tab, not a full
+page), which is a different question from whether the hub gets one. That delta
+is the only thing unsettled, and it is a paragraph, not a plan.
 
 **Resolved 2026-08-24, was gated:** the asks-versus-items naming
 (`NAV-UNIFICATION.md:153`, open since 2026-08-22 and blocking `#21`). Owner:
@@ -246,11 +260,23 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ## Counts
 
-Waiting on the owner 4 · to build 27 · to plan 6 · to review 3 · everything
-else 7. **Total 47**, against the previous version's 35-miscounted-as-31.
+Waiting on the owner 1 · to build 27 · to plan 6 · to review 3 · everything
+else 7. **Total 44**, against the previous version's 35-miscounted-as-31.
 
 Counted by script, not by eye, after the first version got this wrong.
 
 Nine items are new or were absent: the kind registry, the four `#21` slices, the
 `items` CLI, the three `#39` completions, the two `#69` tabs, drafts-routing
 slice 4, the stale-docs item, and draft `ox00epxm`.
+
+---
+
+## Not before all existing scope is finished
+
+Owner, 2026-08-24, verbatim: *"Things to do ONCE WE FINISH ALL EXISTING SCOPE
+NOT BEFORE"*. Neither is started, planned or scoped until everything above is
+done.
+
+- **More note commands**, in the shape of `/new-item`.
+- **Session hub integration.** Already planned in `CHAT-HISTORY.md`; what is
+  open is only the hub-tab delta named above.
