@@ -2966,10 +2966,11 @@ function cardEl(c) {
     const lbl = document.createElement("span");
     lbl.textContent = `note #${i + 1}`;
     ch.append(ic, lbl);
-    // the chip is its own control: a click here is never a click on the card
+    // the chip is its own control: a click here is never a click on the card.
+    // Shift-click selects the note (#71), the same half x covers by keyboard.
     ch.onclick = (e) => {
       e.stopPropagation();
-      if (noteSelMode) toggleSel("note", nKey(c.id, n.id));
+      if (e.shiftKey || noteSelMode) toggleSel("note", nKey(c.id, n.id));
       else openPop(c.id, n.id, ch);
     };
     chipRow.appendChild(ch);
@@ -2977,7 +2978,9 @@ function cardEl(c) {
   // middle-click is the quiet version of a click: it toggles the card's tab
   // rather than pulling you into it, and never changes whether the panel is
   // open. Charter §7.
-  el.addEventListener("pointerdown", (e) => { if (e.button === 1) e.preventDefault(); });
+  // shift starts a text selection on mousedown, which a shift-CLICK selector
+  // must not; middle-click keeps its old preventDefault for autoscroll
+  el.addEventListener("pointerdown", (e) => { if (e.button === 1 || e.shiftKey) e.preventDefault(); });
   el.addEventListener("auxclick", (e) => {
     if (e.button !== 1) return;
     e.preventDefault(); e.stopPropagation();
@@ -2997,7 +3000,13 @@ function cardEl(c) {
   srcEl.textContent = tailPath(sp); srcEl.dataset.tip = sp;
   el.querySelector(".age").textContent = ago(Date.parse(c.updatedAt));
   if (isArchive) el.dataset.tip = `${c.heading ?? ""} · ${sp}`.replace(/^ · /, "");
-  el.onclick = () => openDrawer(c.id);
+  // Shift-click is the mouse half of x (#71): it selects instead of opening,
+  // and it turns select mode on the way x does, so the checkboxes appear and
+  // the next clicks read as what they now are.
+  el.onclick = (e) => {
+    if (e.shiftKey) { if (!selMode) { selMode = true; applyModes(); } toggleSel("card", c.id); }
+    else openDrawer(c.id);
+  };
   el.onkeydown = (e) => { if (e.key === "Enter") openDrawer(c.id); };
   flat.push(c.id);
   return el;
@@ -4428,7 +4437,12 @@ function renderOtherNotes(id) {
     body.className = "nbody"; body.textContent = opts.body || opts.placeholder;
     if (!opts.body) body.classList.add("empty");
     b.append(head, body);
-    b.onclick = opts.onclick;
+    // shift-click selects the saved note (#71) instead of opening it; the
+    // draft row is not a note yet and keeps its plain click
+    b.onclick = (e) => {
+      if (e.shiftKey && opts.pickable) { toggleSel("note", opts.key); renderOtherNotes(id); }
+      else opts.onclick?.(e);
+    };
     // the clamp shows four lines; the tooltip owes you the rest
     if (opts.body) { b.dataset.tip = opts.body; b.dataset.tiph = opts.label; }
     if (opts.noteId) {

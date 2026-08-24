@@ -219,7 +219,11 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     naming one container to decide its axis. **Remaining:** the smooth
     animation, and more than one unique tag column at once — today `peekOn` is a
     single tag, so a second peek replaces the first.
-18. **Shift-click selects cards and notes** (`#71`, P1). Mouse half of `x`.
+18. **Shift-click selects cards and notes** (`#71`, P1) **Done 2026-08-25.**
+    Shift-click on a card selects it and turns select mode on, the way `x`
+    does; on a note chip or a saved note row in the panel it selects the
+    note; plain clicks keep opening. The shift-mousedown text-selection is
+    suppressed. Verified live on all three surfaces.
 19. **Floating boxes: draggable, titled, tied to their anchor** (`#72`). Every
     floating surface, arrow to its anchor.
 
