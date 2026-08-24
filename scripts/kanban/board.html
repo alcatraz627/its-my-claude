@@ -602,6 +602,12 @@
   /* drag to rank, middle-click to dismiss — both on rows and tabs, so the two
      lists behave the same way */
   .notestack .nrow{cursor:grab}
+  /* The saved notes are the half you scroll and the composer is the half you
+     type in, and how that space is split is a preference. The list takes a drag
+     on its bottom edge and keeps the height, per board, the way the composer
+     already does. */
+  .notestack{overflow-y:auto;resize:vertical;min-height:52px;max-height:60vh}
+  .notestack::-webkit-resizer{display:none}
   .notestack .nrow:active{cursor:grabbing}
   .notestack .nrow.dragging{opacity:.4}
   .notestack .nrow.dropbefore{box-shadow:0 -2px 0 0 var(--blue)}
@@ -4135,7 +4141,7 @@ function autoGrow(ta) {
 // you looked again, which reads as a box that cannot be resized at all. It is
 // stored per surface and per board now, because the drawer's composer and the
 // popover are different sizes of question.
-const sizeKey = (ta) => `kanban-h-${ta.id}-${slug}`;
+const sizeKey = (el) => `kanban-h-${el.id}-${slug}`;
 function savedSize(ta) { try { return localStorage.getItem(sizeKey(ta)); } catch { return null; } }
 
 // A fresh note is a fresh sitting, so the box returns to the height the owner
@@ -4343,6 +4349,11 @@ function renderOtherNotes(id) {
   }));
   $("dOther").replaceChildren(...rows);
   fxMark($("dOther"), ".nrow");
+  // the height the owner dragged this list to, restored and then watched
+  const stack = $("dOther");
+  const keep = savedSize(stack);
+  if (keep) stack.style.height = keep;
+  if (!stack.dataset.watched) { stack.dataset.watched = "1"; sizeWatch.observe(stack); }
   wireReorder($("dOther"), ".nrow", (order) => saveNoteOrder(id, order), (el) => el.dataset.noteId);
 }
 
