@@ -201,11 +201,20 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ### Ergonomics, all four unchained from `#70` on 2026-08-24
 
-16. **Left sidebar rebuild to parity with the right panel** (`#74`, P1). The one
-    the owner said got none of the changes he hinted at. "Don't leave half-done
-    work."
-17. **Ephemeral columns and input ergonomics** (`#73`, P1). Drag any column
-    across the sea, smooth animation, more than one unique tag column at once.
+16. **Left sidebar rebuild to parity with the right panel** (`#74`, P1).
+    **Done 2026-08-24**, in two passes and then a third after the owner listed
+    seven things it still got wrong. It is a panel now: a head that owns the
+    search, a grip that works (the first one could not be grabbed at all), a
+    width kept per board, foldable sections with two real heading levels, a find
+    box, one row handle instead of two verbs, and no `window.prompt` anywhere on
+    the page. Recorded against `FEEDBACK-CLASSES.md` C3, which is where the
+    detail lives.
+17. **Ephemeral columns and input ergonomics** (`#73`, P1). **Half done
+    2026-08-24**: every column drags by its head, the peek column included, and
+    the order is kept per board. It reuses `wireReorder`, which had to stop
+    naming one container to decide its axis. **Remaining:** the smooth
+    animation, and more than one unique tag column at once — today `peekOn` is a
+    single tag, so a second peek replaces the first.
 18. **Shift-click selects cards and notes** (`#71`, P1). Mouse half of `x`.
 19. **Floating boxes: draggable, titled, tied to their anchor** (`#72`). Every
     floating surface, arrow to its anchor.
