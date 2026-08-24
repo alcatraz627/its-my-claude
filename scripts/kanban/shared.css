@@ -241,6 +241,25 @@
      min-width:auto, so it refuses to go below its content and the zone clips
      instead. Whatever a page puts here, the wrapper shrinks. */
   .nident{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden}
+  /* The board's status, in the bar rather than in a band of its own. It sits
+     after the identity because it is about the thing the identity names, and it
+     sheds before the identity does: a number you can re-read by looking at the
+     columns outranks knowing which board you are on. */
+  .nstatus{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;
+           margin-left:10px;padding-left:10px;border-left:1px solid var(--border-2)}
+  /* One line, always. The band wraps by default and a wrapped band makes the
+     bar taller, which is the height this change exists to give back. */
+  .nstatus .sband{flex-wrap:nowrap;gap:6px;min-width:0}
+  .nstatus .stat-chip{flex:none;white-space:nowrap}
+  .nstatus:empty{display:none}
+  /* It does NOT shed first. Hiding it when the bar is tight meant hiding it
+     almost always, which is worse than the band it replaced: the point of
+     dropping that band was to keep the numbers and get the height back. Under
+     pressure it drops its words and keeps its numbers, the same bargain the
+     tabs strike. */
+  .navbar[data-tight] .nstatus .stat-chip span span,
+  .navbar[data-tight] .nstatus .stat-chip.mute{display:none}
+  .navbar[data-tight] .nstatus .stat-chip{padding:0 6px;gap:4px}
   .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
   /* Same treatment as .npage below, for the same reason and one zone over: this
      one shrank correctly and then painted its overflow ON TOP of the tabs, so

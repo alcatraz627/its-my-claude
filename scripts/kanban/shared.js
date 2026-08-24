@@ -292,7 +292,7 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
       `<button class="nlogo" id="nbHome" aria-label="home"` +
       ` data-tip="Every board, your asks and your drafts (g b)">${MARK_ICON}</button>` +
       (crumb ? `<span class="ncrumb">${crumb}</span>` : "") +
-      (identity ? `<span class="nident" id="nbIdent"></span>`
+      (identity ? `<span class="nident" id="nbIdent"></span><span class="nstatus" id="nbStatus"></span>`
                 : `<span class="ntx"><h1 id="nbTitle"></h1><span class="nsub" id="nbSub"></span></span>`) +
     `</div>` +
     `<div class="nz nzfind" id="nbFind"></div>` +

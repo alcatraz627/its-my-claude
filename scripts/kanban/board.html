@@ -666,6 +666,16 @@
   .fx-save{animation:flash-save .62s ease-out}
   .fx-open{animation:flash-open .5s ease-out}
   .fx-back{animation:flash-back .3s cubic-bezier(.32,.72,0,1)}
+  /* A note or a tag that appears without motion reads as a page that redrew,
+     not as the thing you just made. These land and leave, in the panel's list
+     and on the card face alike, so the same event looks the same in both. */
+  @keyframes fx-enter{0%{opacity:0;transform:translateY(-6px) scale(.97)}100%{opacity:1;transform:none}}
+  @keyframes fx-leave{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-4px) scale(.97)}}
+  .fx-in{animation:fx-enter .26s cubic-bezier(.32,.72,0,1)}
+  .fx-out{animation:fx-leave .2s ease-in forwards}
+  @media (prefers-reduced-motion: reduce){
+    .fx-in,.fx-out{animation:none}
+  }
 
   /* ---------- provenance, compacted ---------- */
   /* It used to take a whole group, a heading and a paragraph to say where a
@@ -1277,7 +1287,7 @@
       </span>
     </div>
   </div>
-  <div class="summary" id="summary"></div>
+
   <div class="notice warn" id="stalebar"></div>
 </header>
 <div class="shell">
@@ -1422,8 +1432,8 @@
   <table>
     <tbody>
       <tr><td colspan="2" class="grouphead">Move</td></tr>
-      <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the lane</td></tr>
-      <tr><td><kbd>h</kbd> <kbd>l</kbd></td><td>previous / next lane, same row</td></tr>
+      <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>next / previous card in the column</td></tr>
+      <tr><td><kbd>h</kbd> <kbd>l</kbd></td><td>previous / next column, same row</td></tr>
       <tr><td><kbd>enter</kbd> <kbd>o</kbd></td><td>open the card in a tab</td></tr>
       <tr><td><kbd>O</kbd></td><td>open it in a background tab</td></tr>
       <tr><td><kbd>/</kbd></td><td>search cards, notes, tags and asks</td></tr>
@@ -1660,7 +1670,7 @@ function mountBoardNav() {
   cog.setAttribute("aria-label", "board settings");
   cog.setAttribute("aria-haspopup", "menu");
   cog.setAttribute("aria-expanded", "false");
-  cog.dataset.tip = "Defaults every lane starts from, and which lanes differ";
+  cog.dataset.tip = "Defaults every column starts from, and which columns differ";
   cog.innerHTML = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none">` +
     `<path d="M2.6 4.6h10.8M2.6 8h10.8M2.6 11.4h10.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>` +
     `<circle cx="5.6" cy="4.6" r="1.6" fill="var(--canvas)" stroke="currentColor" stroke-width="1.3"/>` +
@@ -2087,7 +2097,7 @@ function openBoardSettings(btn) {
   const diverged = LANE_ORDER.filter((l) => document.getElementById(`lane-${l}`) && laneDiverges(l));
   card.innerHTML =
     `<h4><span>Board settings</span></h4>` +
-    `<div class="crow"><span class="ck">These are the defaults every lane starts from.</span></div>` +
+    `<div class="crow"><span class="ck">These are the defaults every column starts from.</span></div>` +
     `<div class="crow"><span class="ck">Sort</span></div>` + seg("bssort", SORTS, b.sort ?? "updated") +
     `<div class="crow"><span class="ck">Density</span></div>` + seg("bsdens", DENSITIES, b.density ?? "normal") +
     `<div class="crow"><span class="ck">Lanes that differ</span>` +
@@ -2095,7 +2105,7 @@ function openBoardSettings(btn) {
     `<div class="divchips" id="bsdiv">` +
       (diverged.length
         ? diverged.map((l) => `<button type="button" class="chip" data-lane="${l}">${LANE_NAME[l]}</button>`).join("")
-        : `<span class="ck">None. Every lane is using these.</span>`) +
+        : `<span class="ck">None. Every column is using these.</span>`) +
     `</div>` +
     `<div class="cbtns"><button type="button" class="ghost" id="bsreset">Clear board defaults</button>` +
     `<button type="button" id="ccdone">Done</button></div>`;
@@ -2263,23 +2273,23 @@ function openColCard(lane, wrap, btn) {
   const cards = data.board.cards.filter((c) => c.lane === lane).length;
   card.innerHTML =
     `<h4>${laneIcon(lane, 13)}<span>${LANE_NAME[lane]}</span></h4>` +
-    `<div class="crow"><span class="ck">Cards in this lane</span><span class="cv">${cards}</span></div>` +
+    `<div class="crow"><span class="ck">Cards in this column</span><span class="cv">${cards}</span></div>` +
     `<div class="crow"><span class="ck">Width</span><span class="cv" id="ccw">${w}px</span></div>` +
-    `<input type="range" id="ccr" min="${COL_MIN}" max="${COL_MAX}" step="10" value="${w}" aria-label="lane width">` +
+    `<input type="range" id="ccr" min="${COL_MIN}" max="${COL_MAX}" step="10" value="${w}" aria-label="column width">` +
     `<div class="crow"><span class="ck">Sort <kbd>s</kbd></span></div>` +
-    `<div class="seg" id="ccsort" role="radiogroup" aria-label="sort this lane">` +
+    `<div class="seg" id="ccsort" role="radiogroup" aria-label="sort this column">` +
       Object.entries(SORTS).map(([k, v]) =>
         `<button type="button" role="radio" data-v="${k}" aria-checked="${sortOf(lane) === k}"` +
         ` class="${sortOf(lane) === k ? "on" : ""}">${v}</button>`).join("") + `</div>` +
     `<div class="crow"><span class="ck">Density <kbd>d</kbd></span></div>` +
-    `<div class="seg" id="ccdens" role="radiogroup" aria-label="card density in this lane">` +
+    `<div class="seg" id="ccdens" role="radiogroup" aria-label="card density in this column">` +
       Object.entries(DENSITIES).map(([k, v]) =>
         `<button type="button" role="radio" data-v="${k}" aria-checked="${densityOf(lane) === k}"` +
         ` class="${densityOf(lane) === k ? "on" : ""}">${v}</button>`).join("") + `</div>` +
-    `<div class="crow"><span class="ck">Fold this lane <kbd>c</kbd></span>` +
+    `<div class="crow"><span class="ck">Fold this column <kbd>c</kbd></span>` +
       `<button type="button" class="ghost" id="cccol" aria-pressed="${collapsedOf(lane)}">` +
       `${collapsedOf(lane) ? "Unfold" : "Fold"}</button></div>` +
-    `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset this lane</button>` +
+    `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset this column</button>` +
     `<button type="button" id="ccdone">Done</button></div>`;
   document.body.appendChild(card);
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
@@ -2828,6 +2838,8 @@ function cardEl(c) {
   // tags first: they say what the card IS, and the notes say what is being
   // asked about it
   cardTags.forEach((t) => chipRow.appendChild(tagChip(t, { onCard: c.id })));
+  chipRow.dataset.fxKey = c.id;
+  fxMark(chipRow, ".chip.tag", (e) => e.textContent);
   if (!allNotes.length && !cardTags.length) chipRow.remove();
   else allNotes.forEach((n, i) => {
     const tags = parseTags(n.body);
@@ -2929,7 +2941,15 @@ function statChip({ icon, n, label, filter, cls = "", tip }) {
   b.className = "stat-chip " + cls + (filter && filterText === filter ? " on" : "");
   b.innerHTML = `<span class="sg">${SB_ICON[icon] ?? ""}</span><span><b>${n}</b> ${label}</span>`;
   if (tip) b.dataset.tip = tip;
-  if (filter) b.onclick = () => setFilter(filterText === filter ? "" : filter);
+  // It still filters, which §13 requires of every count. When the count names
+  // ONE column it also brings that column into the middle of the screen, which
+  // is what you would have done next by hand on a board six columns wide.
+  if (filter) b.onclick = () => {
+    setFilter(filterText === filter ? "" : filter);
+    const lane = { "is:blocked": "blocked", "is:settled": "done" }[filter];
+    if (lane) requestAnimationFrame(() =>
+      document.getElementById(`lane-${lane}`)?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }));
+  };
   else b.tabIndex = -1;
   return b;
 }
@@ -2963,7 +2983,13 @@ function renderSummary() {
       ? "This mirror is old, so the board may not match your docs. Re-harvest with: kanban.sh sync"
       : "When the board last re-read your docs" }));
 
-  $("summary").replaceChildren(band, ...deltaRow());
+  // Into the bar, not a row of its own. A second band cost ~49px of the scarce
+  // axis to say four things, three of which the columns already count, and the
+  // owner ruled it out on 2026-08-25. The deltas ride along with it.
+  const slot = document.getElementById("nbStatus");
+  if (slot) slot.replaceChildren(band, ...deltaRow());
+  const legacy = document.getElementById("summary");
+  if (legacy) legacy.remove();
 }
 
 // What changed while you were away, as pressable chips. Each one filters to
@@ -3684,6 +3710,12 @@ async function afterWrite({ items = false } = {}) {
   if (items && old) old.replaceWith(railEl());
   lastPayload = "";        // the payload cache must not swallow the read we just asked for
   await load();            // renders the lanes, the sidebar, the peers and the summary together
+  // The open panel's note list is a view of the same data and render() does not
+  // touch it. Three save paths remembered to rebuild it by hand and a fourth
+  // did not, so a note you saved from the popover did not appear in the list
+  // until the panel was closed and reopened. It belongs here, where nobody has
+  // to remember (FEEDBACK-CLASSES C5).
+  if (openId) renderOtherNotes(openId);
 }
 const refreshRail = () => afterWrite({ items: true });
 
@@ -3728,19 +3760,19 @@ function render() {
     const total = all.filter((c) => c.lane === lane).length;
     head.innerHTML = `${laneIcon(lane)}<h2>${LANE_NAME[lane]}</h2>` +
       `<span class="count">${filterText ? `${cardsIn.length}/${total}` : total}</span>` +
-      `<button type="button" class="cmenu" aria-label="lane options">${DOTS_ICON}</button>`;
+      `<button type="button" class="cmenu" aria-label="column options">${DOTS_ICON}</button>`;
     head.querySelector(".cmenu").onclick = (e) => { e.stopPropagation(); openColCard(lane, wrap, e.currentTarget); };
     wrap.appendChild(head);
     applyColWidth(wrap, lane);
     const grip = document.createElement("div");
     grip.className = "colgrip";
     grip.setAttribute("role", "separator");
-    grip.dataset.tip = "Drag to resize this lane";
+    grip.dataset.tip = "Drag to resize this column";
     wireColGrip(grip, wrap, lane);
     wrap.appendChild(grip);
     const list = document.createElement("div");
     list.className = "cards";
-    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this lane. Drag one here to move it.</div>`;
+    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this column. Drag one here to move it.</div>`;
     // a folded lane builds no cards at all: the point is the space, and the
     // filter still counts them because the count comes from cardsIn above
     if (!folded) cardsIn.forEach((c) => list.appendChild(cardEl(c)));
@@ -4041,6 +4073,7 @@ function editGoal(cardId, current) {
 function renderCardTags(cardId) {
   const row = $("dTags2");
   row.replaceChildren(...tagsOnCard(cardId).map((t) => tagChip(t, { onCard: cardId })));
+  fxMark(row, ".chip.tag", (e) => e.textContent);
   const add = document.createElement("button");
   add.type = "button"; add.className = "chip";
   add.innerHTML = `<span class="ci">＋</span><span>tag</span>`;
@@ -4118,6 +4151,26 @@ for (const id of ["dNote", "popNote"]) {
 }
 // A short, once-only cue per action. The class is cleared on the way in so a
 // repeated action re-fires rather than sitting inert.
+// What was on screen last time, so a repaint can tell an arrival from a redraw.
+// Keyed by the surface, because the same note appears in the panel's list and
+// on the card face and both should animate the same event.
+const fxSeen = new Map();
+function fxMark(container, sel, key = (e) => e.dataset.noteId || e.dataset.tagId || e.textContent) {
+  if (!container) return;
+  // Every card's chip row carries the same class, so the key has to be the
+  // card's, or one card's chips get compared against another's and every
+  // scroll looks like an arrival.
+  const id = container.dataset.fxKey || container.id || container.className;
+  const now = new Set([...container.querySelectorAll(sel)].map(key));
+  const before = fxSeen.get(id);
+  if (before) {
+    for (const el of container.querySelectorAll(sel)) {
+      if (!before.has(key(el))) { el.classList.add("fx-in"); setTimeout(() => el.classList.remove("fx-in"), 320); }
+    }
+  }
+  fxSeen.set(id, now);
+}
+
 function fx(el, name) {
   if (!el) return;
   el.classList.remove("fx-save", "fx-open", "fx-back");
@@ -4268,6 +4321,7 @@ function renderOtherNotes(id) {
     onclick: () => { flushDraft(); openNoteId = null; loadNoteIntoComposer(id); renderOtherNotes(id); fx($("dNote"), "fx-back"); $("dNote").focus(); },
   }));
   $("dOther").replaceChildren(...rows);
+  fxMark($("dOther"), ".nrow");
   wireReorder($("dOther"), ".nrow", (order) => saveNoteOrder(id, order), (el) => el.dataset.noteId);
 }
 
@@ -5424,7 +5478,7 @@ function goSearch(hit) {
 async function selectAllShown() {
   const cards = spRows.filter((x) => x.kind === "card").map((x) => x.r.id);
   const notes = spRows.filter((x) => x.kind === "note").map((x) => nKey(x.r.cid, x.r.n.id));
-  if (!cards.length && !notes.length) { toast("Nothing here to select — this lane is empty"); return; }
+  if (!cards.length && !notes.length) { toast("Nothing here to select — this column is empty"); return; }
   closeSearch();
   for (const id of cards) await toggleSel("card", id, true);
   for (const k of notes) await toggleSel("note", k, true);
@@ -5642,7 +5696,7 @@ $("popSave").onclick = async () => {
     if (out.noteId) popNote = out.noteId;
     popDirty = false; popEscArmed = false;
     $("popSt").textContent = "saved just now"; $("popSt").className = "pst";
-    lastPayload = ""; await load();
+    await afterWrite();
     toast("Note saved");
   } catch (e) { toast(`Save failed: ${e.message}`, 4000, "err"); }
 };
@@ -5682,7 +5736,14 @@ function renderLive() {
   const names = document.createElement("b");
   // a session's sub-agents ride along with its name, from the same file and the
   // same staleness window the statusline reads
-  const full = who.map((p) => p.alias + (p.subagents ? ` +${p.subagents}` : ""));
+  // A session that never named itself is identified by the first eight
+  // characters of a uuid, and "26739d4b" told the owner nothing while taking
+  // the room a real name needed. Named ones come first and an unnamed one says
+  // so in words (C1: nothing here speaks in the machine's nouns).
+  const named = (p) => !/^[0-9a-f]{8}$/i.test(p.alias);
+  const say = (p) => (named(p) ? p.alias : "unnamed") + (p.subagents ? ` +${p.subagents}` : "");
+  const sorted = [...who].sort((a, b) => Number(named(b)) - Number(named(a)));
+  const full = sorted.map(say);
   // Two names and a remainder, because the bar has a finite row and the whole
   // list is one hover away. The tooltip is where the detail belongs.
   names.textContent = full.length > 2 ? `${full.slice(0, 2).join(", ")} +${full.length - 2}` : full.join(", ");
