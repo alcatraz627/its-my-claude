@@ -1779,7 +1779,7 @@ function tagChip(t, { onCard = null } = {}) {
     e.stopPropagation();
     // a tag press is "show me the others", which is a peek beside the board
     // rather than a filter that hides the board you were reading
-    peekTag(peekOn?.id === t.id ? null : t);
+    peekTag(t);
   };
   // The same tag, wherever it appears, answers a right-click with the same
   // popover: the sidebar row and this chip are two views of one object.
@@ -2477,22 +2477,26 @@ function closeColCard() {
 // board carrying every card that shares it, so you can see the group without
 // losing the lane you were reading. It is explicitly dismissed, never dropped
 // by the next click, because it is a place you work from.
-let peekOn = null;
+// More than one can be open (#73): each tag is its own column, toggled by the
+// same press that opened it, and a second peek stands beside the first.
+let peeks = [];
+const isPeeked = (t) => peeks.some((p) => p.id === t?.id);
 function peekTag(t) {
-  peekOn = t;
+  if (!t) peeks = [];
+  else if (isPeeked(t)) peeks = peeks.filter((p) => p.id !== t.id);
+  else peeks.push({ id: t.id });
   render();
-  if (t) {
+  if (t && isPeeked(t)) {
     // land on it rather than leaving it off the right edge
-    requestAnimationFrame(() => document.querySelector(".col.peek")?.scrollIntoView({ inline: "nearest", behavior: "smooth", block: "nearest" }));
+    requestAnimationFrame(() => document.getElementById(`peek-${t.id}`)?.scrollIntoView({ inline: "nearest", behavior: "smooth", block: "nearest" }));
   }
 }
-function peekEl() {
-  if (!peekOn) return null;
-  const t = plan().tags.find((x) => x.id === peekOn.id);
-  if (!t) { peekOn = null; return null; }
+function peekEl(pk) {
+  const t = plan().tags.find((x) => x.id === pk.id);
+  if (!t) { peeks = peeks.filter((p) => p.id !== pk.id); return null; }
   const wrap = document.createElement("section");
   wrap.className = `col peek k-${t.kind}`;
-  wrap.id = "peek";
+  wrap.id = `peek-${t.id}`;   // per tag, so a dragged position is kept per tag
   const mine = data.board.cards.filter((c) => tagsOnCard(c.id).some((x) => x.id === t.id));
   const head = document.createElement("div");
   head.className = "chead";
@@ -2512,7 +2516,7 @@ function peekEl() {
   x.type = "button"; x.className = "peekclose";
   x.textContent = "Dismiss";
   x.dataset.tip = "Close this peek. It stays until you say so.";
-  x.onclick = () => peekTag(null);
+  x.onclick = () => peekTag(t);
   bar.append(w, x);
   wrap.appendChild(bar);
 
@@ -3762,7 +3766,7 @@ function renderSide() {
         b.addEventListener("auxclick", (e) => {
           if (e.button !== 1) return;
           e.preventDefault(); e.stopPropagation();
-          peekTag(peekOn?.id === t.id ? null : t);
+          peekTag(t);
         });
         wrap.appendChild(b);
         // One handle, opening the pair in the app's own popover. Renaming used
@@ -3962,9 +3966,8 @@ function render() {
         return none;
       })()]
     : LANE_ORDER.map(colEl).filter(Boolean);
-  // the peek sits at the end of the lanes, which is where it slid in from
-  const peek = peekEl();
-  if (peek) rest.push(peek);
+  // the peeks sit at the end of the lanes, which is where each slid in from
+  for (const pk of [...peeks]) { const p = peekEl(pk); if (p) rest.push(p); }
 
   // In-place, so a held rail is never detached: reparenting a focused node
   // blurs it even when the parent is the same.
@@ -3992,7 +3995,27 @@ function setColOrder(ids) {
   if (ids.length) localStorage.setItem(colOrderKey(), JSON.stringify(ids));
   else localStorage.removeItem(colOrderKey());
 }
-function applyColOrder(lanes) {
+// FLIP, drag-commit only: a dropped column glides to its place instead of
+// teleporting. Never on render(), whose nodes are fresh and would animate a
+// shuffle on every poll; never under prefers-reduced-motion.
+function flipStart(lanes) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+  const m = new Map();
+  for (const c of lanes.children) m.set(c, c.getBoundingClientRect().left);
+  return m;
+}
+function flipPlay(lanes, before) {
+  if (!before) return;
+  for (const c of lanes.children) {
+    const was = before.get(c);
+    if (was === undefined) continue;
+    const dx = was - c.getBoundingClientRect().left;
+    if (dx) c.animate([{ transform: `translateX(${dx}px)` }, { transform: "none" }],
+                      { duration: 220, easing: "cubic-bezier(.32,.72,0,1)" });
+  }
+}
+
+function applyColOrder(lanes, { animate = false } = {}) {
   const saved = colOrder();
   // Reorder the DOM, not a CSS order property. The reorder primitive indexes by
   // document order, so a visual order laid over the top disagrees with it and
@@ -4007,7 +4030,11 @@ function applyColOrder(lanes) {
       return (ai < 0 ? Infinity : ai) - (bi < 0 ? Infinity : bi);
     });
     const holdsFocus = want.some((c) => c.contains(document.activeElement) && c.id === "rail");
-    if (!holdsFocus) want.forEach((c) => lanes.appendChild(c));
+    if (!holdsFocus) {
+      const before = animate ? flipStart(lanes) : null;
+      want.forEach((c) => lanes.appendChild(c));
+      flipPlay(lanes, before);
+    }
   }
   for (const c of lanes.children) {
     // The HEAD is the handle, not the whole column: a draggable element cannot
@@ -4017,7 +4044,7 @@ function applyColOrder(lanes) {
     const h = c.querySelector(".chead");
     if (h) { h.draggable = true; h.dataset.tip = h.dataset.tip || "Drag to move this column"; }
   }
-  wireReorder(lanes, ".col", (order) => { setColOrder(order); applyColOrder(lanes); }, (el) => el.id);
+  wireReorder(lanes, ".col", (order) => { setColOrder(order); applyColOrder(lanes, { animate: true }); }, (el) => el.id);
 }
 
 function markSel() {

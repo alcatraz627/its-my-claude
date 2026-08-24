@@ -213,12 +213,14 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     box, one row handle instead of two verbs, and no `window.prompt` anywhere on
     the page. Recorded against `FEEDBACK-CLASSES.md` C3, which is where the
     detail lives.
-17. **Ephemeral columns and input ergonomics** (`#73`, P1). **Half done
-    2026-08-24**: every column drags by its head, the peek column included, and
-    the order is kept per board. It reuses `wireReorder`, which had to stop
-    naming one container to decide its axis. **Remaining:** the smooth
-    animation, and more than one unique tag column at once — today `peekOn` is a
-    single tag, so a second peek replaces the first.
+17. **Ephemeral columns and input ergonomics** (`#73`, P1) **Done
+    2026-08-25.** The 08-24 half: every column drags by its head, order kept
+    per board. The rest landed today: peeks are a list, so a second tag
+    stands beside the first, each dismisses alone, and a peek's dragged
+    position is kept per tag (`peek-<tagId>` ids). A dropped column glides
+    to its place (FLIP, drag-commit only, never on renders, off under
+    reduced motion). Verified live: two peeks, individual dismiss, correct
+    order with five glide animations on the drop.
 18. **Shift-click selects cards and notes** (`#71`, P1) **Done 2026-08-25.**
     Shift-click on a card selects it and turns select mode on, the way `x`
     does; on a note chip or a saved note row in the panel it selects the
