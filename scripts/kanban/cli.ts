@@ -123,7 +123,7 @@ function doSync(dir: string, by: string) {
   const { slug, root, boardDir } = dir === "init" ? registerBoard(process.cwd()) : boardFor(dir);
   refreshFacts(slug);
   const h = harvest(root);
-  const { delta, overridesHeld, notesPreserved } = mergeSync(boardDir, h.cards, by, hasFlag("force"));
+  const { delta, overridesHeld, notesPreserved, coverage } = mergeSync(boardDir, h.cards, by, hasFlag("force"));
   console.log(
     `synced ${slug}: ${delta.new} new, ${delta.moved} moved, ${delta.kept} unchanged, ` +
     `${delta.gone} gone, ${delta.stale} kept-as-stale` +
@@ -131,6 +131,17 @@ function doSync(dir: string, by: string) {
     ` · notes preserved: ${notesPreserved} · ` +
     `scanned ${h.scanned.length} files${h.skipped.length ? ` · SKIPPED ${h.skipped.length}: ${h.skipped.slice(0, 3).join(", ")}` : ""}`,
   );
+  // The quality half of the digest. A count line reports that sync ran; this
+  // reports whether the board it just wrote can be read. Second line on
+  // purpose: the owner scans for it, and burying it in the first would make
+  // both harder to read.
+  const cov = `board now: ${coverage.total} cards · ${coverage.autoBrief} auto-named` +
+    `${coverage.noBrief ? ` · ${coverage.noBrief} still unnamed` : ""}` +
+    ` · ${coverage.untagged} untagged`;
+  console.log(coverage.untagged || coverage.autoBrief
+    ? `${cov}\n  ${coverage.autoBrief ? `auto names are a starting point — improve one: kanban.sh brief <id> "<name>"` : ""}` +
+      `${coverage.untagged ? `${coverage.autoBrief ? "\n  " : ""}tag them so a lane can be read: kanban.sh tag <id> <tag>` : ""}`
+    : cov);
   return { slug, boardDir };
 }
 

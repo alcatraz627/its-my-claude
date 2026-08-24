@@ -28,6 +28,29 @@ export class CliError extends Error {
 }
 
 export const BRIEF_MAX = 100; // chars; a card-face title longer than this stops being scannable
+// A harvested card is named by whatever prose line it came from, and a bullet
+// in a checkpoint is a sentence, not a name. So sync cuts one. The cap is well
+// under BRIEF_MAX because this is a NAME the owner scans a lane by, not a
+// summary they read: a wall of 70-char titles is the failure this exists to
+// stop. An imperfect scannable name beats a paragraph, and `briefAuto` marks it
+// so a person knows it is theirs to improve.
+export const BRIEF_AUTO_MAX = 56;
+const BRIEF_AUTO_MIN = 24; // below this a clause cut says less than the cap would
+
+export function deriveBrief(title: string): string | undefined {
+  const t = (title || "").trim().replace(/\s+/g, " ");
+  if (t.length <= BRIEF_AUTO_MAX) return undefined; // already a name; nothing to cut
+  // Prefer a real clause end that lands in the window — those read as written
+  // rather than chopped. Semicolons and sentence stops first: they end a
+  // thought, where a comma usually continues one.
+  for (const sep of ["; ", ". ", " — ", " – ", "), ", ", then ", " · "]) {
+    const at = t.indexOf(sep);
+    if (at >= BRIEF_AUTO_MIN && at <= BRIEF_AUTO_MAX) return t.slice(0, at).trim() + "…";
+  }
+  const head = t.slice(0, BRIEF_AUTO_MAX + 1);
+  const sp = head.lastIndexOf(" ");
+  return (sp >= BRIEF_AUTO_MIN ? t.slice(0, sp) : t.slice(0, BRIEF_AUTO_MAX)).trim() + "…";
+}
 
 export interface CardSource {
   path: string;          // repo-relative source file, or "manual"
@@ -41,6 +64,10 @@ export interface Card {
   // writes, capped at 100 chars (BRIEF_MAX). The full `title` stays put and
   // becomes the drawer's description, so nothing is lost by summarising.
   titleBrief?: string;
+  // Set when `titleBrief` was cut by deriveBrief rather than written by a
+  // person. The face marks these, because an auto name is a starting point:
+  // sync cannot know which clause of a sentence was the point of it.
+  briefAuto?: boolean;
   tag?: string;          // "(#7)" / "OWNER REMINDER" style prefix, surfaced as a badge
   subs?: { title: string; done: boolean }[]; // nested checkboxes under the card's line
   lane: Lane;
@@ -775,6 +802,16 @@ export function pendingDrafts(drafts: Draft[], p: PullsFile, slug?: string, alia
 
 export type HarvestedCard = Omit<Card, "createdAt" | "updatedAt">;
 
+// Which brief a synced card keeps. A person's brief (CLI `brief` verb, or an
+// `add --brief`) is authored intent and survives untouched; anything else is
+// re-derived, so a card whose source line was reworded gets a fresh name.
+function briefFor(h: HarvestedCard, old: Card | undefined):
+    { titleBrief?: string; briefAuto?: boolean } {
+  if (old?.titleBrief && !old.briefAuto) return { titleBrief: old.titleBrief };
+  const auto = deriveBrief(h.title);
+  return auto ? { titleBrief: auto, briefAuto: true } : {};
+}
+
 // Merge a fresh harvest into the existing board. Machine lane only: harvest
 // decides lanes, overrides (agent `move`) win, manual cards persist, and a
 // vanished card with a human note is kept as stale instead of deleted.
@@ -802,7 +839,9 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
         // union in (harvest only knows doc-inline links), verify carries over.
         docs: old ? [...new Set([...h.docs, ...old.docs])] : h.docs,
         verify: old?.verify,
-        titleBrief: old?.titleBrief, // harvest can't write one; the agent's survives
+        // A brief a person wrote always wins and is never re-derived. An
+        // auto one is recomputed each sync so it tracks a retitled source.
+        ...briefFor(h, old),
         createdAt: old?.createdAt ?? now,
         updatedAt: old && old.lane === lane ? old.updatedAt : now,
       };
@@ -847,6 +886,16 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
     }
     const board: Board = { cards, overrides: prev.overrides, tombstones, syncedAt: now };
     atomicWrite(file, board, by, `cards=${cards.length}`);
-    return { board, delta, overridesHeld, notesPreserved: Object.keys(notes).filter((id) => notesOf(notes[id]).length).length };
+    // Counts alone ("23 new, 0 moved") report that sync RAN, never that the
+    // board is readable — which is how a board rots while every digest stays
+    // green. Coverage is the quality half, and it rides the same line.
+    const coverage = {
+      total: cards.length,
+      noBrief: cards.filter((c) => !c.titleBrief && c.title.length > BRIEF_AUTO_MAX).length,
+      autoBrief: cards.filter((c) => c.briefAuto).length,
+      untagged: cards.filter((c) => !c.tag).length,
+    };
+    return { board, delta, overridesHeld, coverage,
+      notesPreserved: Object.keys(notes).filter((id) => notesOf(notes[id]).length).length };
   });
 }
