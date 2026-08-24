@@ -4873,6 +4873,12 @@ $("tpick").onclick = (e) => { if (e.target === $("tpick")) closeTagPick(); };
 // Built to SEARCH-DESIGN.md. The finding that shapes it: of the seven questions
 // someone brings to this board, only two are text. The rest are states and
 // groups, so Questions come first and a bare word offers them without syntax.
+// Never say "no results" without saying what was looked in (SEARCH-DESIGN.md
+// §3). Built from the sections search actually has, so a kind added to the
+// registry is named here without anyone remembering to.
+const searchCorpora = () => ["this board's cards", "your notes", "your tags"]
+  .concat(searchKinds().map((k) => `your ${k.indexLabel}`));
+
 const QUESTIONS = [
   { q: "blocked", label: "Blocked", hint: "cards the agent stopped on", filter: "is:blocked" },
   { q: "needs you review mine", label: "Needs you", hint: "graded, but wants your own testing", filter: "needs-you" },
@@ -4883,11 +4889,17 @@ const QUESTIONS = [
 ];
 let spAt = 0, spRows = [];
 
-function openSearch(seed = "") {
+// What is on this board answers instantly; the other kinds come from the shared
+// index, so the first render never waits on a fetch and the kind sections drop
+// in when they land.
+let spIndex = null;
+async function openSearch(seed = "") {
   $("spick").classList.add("on");
   overlayOpen($("spick"), $("spq"));
   $("spIcon").innerHTML = SEARCH_ICON;
   $("spq").value = seed; spAt = 0;
+  renderSearch();
+  spIndex = await kindIndex({ fresh: true });
   renderSearch();
 }
 function closeSearch() { $("spick").classList.remove("on"); overlayClose(); }
@@ -4912,9 +4924,14 @@ function searchSections() {
   // 4. tags, whose verb is "show me the group"
   const tg = plan().tags.filter((t) => hit(t.name) || hit(t.kind));
   if (tg.length) out.push({ label: "Tags", kind: "tag", rows: tg.slice(0, 6) });
-  // 5. the owner's unsorted asks
-  const asks = (items ?? []).filter((i) => !i.landing && hit(i.body));
-  if (asks.length) out.push({ label: "Your asks", kind: "ask", rows: asks.slice(0, 4) });
+  // 5 onward: every other kind this app has, ranked by SEARCH-DESIGN.md §4.
+  // The Boards section is what makes `b` and search one door, which was the
+  // sixth section the design asked for and the acceptance test nobody could
+  // pass; a kind added to the registry arrives here with it.
+  for (const k of searchKinds()) {
+    const rows = kindMatches(spIndex, k.id, q, 4);
+    if (rows.length) out.push({ label: k.label, kind: k.id, rows });
+  }
   return out;
 }
 
@@ -4938,7 +4955,7 @@ function renderSearch() {
     ];
     const tags = (data?.plan?.tags ?? []).slice(0, 3).map((t) => [t.name, `${t.kind}: ${t.name}`]);
     $("splist").innerHTML =
-      `<div class="sphint">Searches this board's cards, your notes, your tags and your unsorted asks, all at once. Try:</div>` +
+      `<div class="sphint">Searches ${esc(andList(searchCorpora()))}, all at once. Try:</div>` +
       `<div class="spchips">` +
       [...seeds, ...tags].map(([q2, why]) =>
         `<button type="button" class="spchip" data-q="${esc(q2)}" data-tip="${esc(why)}">${esc(q2)}</button>`).join("") +
@@ -4950,7 +4967,7 @@ function renderSearch() {
   }
   if (!spRows.length) {
     // never say "no results" without saying what was looked in
-    $("splist").innerHTML = `<div class="bpnone">Nothing matches “${esc(q)}”. Searched this board's cards, your notes, your tags and your unsorted asks.</div>`;
+    $("splist").innerHTML = `<div class="bpnone">Nothing matches “${esc(q)}”. Searched ${esc(andList(searchCorpora()))}.</div>`;
     return;
   }
   const frag = document.createDocumentFragment();
@@ -4970,7 +4987,8 @@ function renderSearch() {
       else if (sec.kind === "card") { icon = NAV_ICON.boards; name = briefOf(r); sub = r.source.kind === "manual" ? "added by hand" : r.source.path; meta = LANE_NAME[r.lane]; }
       else if (sec.kind === "note") { icon = NOTE_ICON; name = `note #${r.i + 1}`; sub = r.n.body.replace(/\s+/g, " "); meta = briefOf(data.board.cards.find((c) => c.id === r.cid) ?? { title: r.cid }); }
       else if (sec.kind === "tag") { icon = `<i class="tdot" style="display:block;width:8px;height:8px;border-radius:50%;background:var(--dot)"></i>`; name = r.kind === "plain" ? r.name : `${r.kind}: ${r.name}`; sub = "open its peek column"; meta = `${(plan().on && Object.values(plan().on).filter((ids) => ids.includes(r.id)).length) || 0} cards`; }
-      else { icon = PEN_ICON; name = "ask"; sub = r.body.replace(/\s+/g, " "); meta = r.starred ? "starred" : ""; }
+      else { icon = NAV_ICON[sec.kind] ?? PEN_ICON; name = r.name; sub = r.sub; meta = "";
+             el.style.setProperty("--nav-hue", `var(${kindById(sec.kind)?.hue ?? "--text-2"})`); }
       el.innerHTML = `<span class="bi ${sec.kind === "tag" ? `k-${r.kind}` : ""}">${icon}</span><span class="bn"></span>` +
         `<span class="bp" style="direction:ltr"></span><span class="bc">${esc(meta)}</span>`;
       el.querySelector(".bn").textContent = name;
@@ -4994,7 +5012,14 @@ function goSearch(hit) {
   if (kind === "tag") { peekTag(r); return; }
   if (kind === "card") { if (!findCard(r.id)) openDrawer(r.id); else setTimeout(() => openDrawer(r.id), 260); return; }
   if (kind === "note") { openDrawer(r.cid, r.n.id); return; }
-  if (kind === "ask") { document.querySelector(`#rail .item[data-id="${r.id}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+  // A thing already on this page stays here: an ask sits on the rail, so search
+  // scrolls to it rather than leaving the board (§1). Anything with nothing here
+  // to point at is a real navigation, to the address its kind gave it.
+  if (KIND_ROW[kind]) {
+    const here = document.querySelector(`#rail .item[data-id="${r.id}"]`);
+    if (here) { here.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+    if (r.href) location.href = r.href;
+  }
 }
 // The eighth capability: turn what you searched for into what you send.
 async function selectAllShown() {
@@ -5036,29 +5061,19 @@ const SEARCH_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"
 let bpBoards = [], bpAt = 0, bpRows = [];
 const isStarredBoard = (s2) => pins.some((p) => p.kind === "board" && p.ref === s2);
 
-let bpItems = [], bpDrafts = [];
+// The switcher covers a KIND and an INSTANCE, and every kind's instances come
+// from the one index the tab counts and the search also read.
+let bpIndex = null;
 async function openBoardPick() {
   $("bpick").classList.add("on");
   overlayOpen($("bpick"), $("bpq"));
   $("bpIcon").innerHTML = SEARCH_ICON;
   $("bpq").value = ""; bpAt = 0;
-  $("bplist").innerHTML = `<div class="bpnone">Loading boards…</div>`;
-  try {
-    const res = await fetch("/api/boards");
-    bpBoards = (await res.json()).boards ?? [];
-  } catch { bpBoards = []; }
-  // The switcher covers a KIND and an INSTANCE. It knew only boards, so asks and
-  // drafts had an index and no way to reach one of them (NAV-UNIFICATION.md).
-  // Loaded after the boards render so a slow lane never delays the common case.
-  renderBoardPick();
-  try {
-    const [it, dr] = await Promise.all([
-      fetch("/api/items").then((r) => r.json()).catch(() => ({})),
-      fetch("/api/drafts").then((r) => r.json()).catch(() => ({})),
-    ]);
-    bpItems = (it.items ?? []).filter((x) => !x.landing && !x.archived);
-    bpDrafts = (dr.drafts ?? []).filter((d) => !d.isTemplate);
-  } catch { bpItems = []; bpDrafts = []; }
+  $("bplist").innerHTML = `<div class="bpnone">Loading…</div>`;
+  // Fresh each time it opens: a board starred or a draft written since the last
+  // open should be here, and this is the moment somebody is asking.
+  bpIndex = await kindIndex({ fresh: true });
+  bpBoards = bpIndex.boards ?? [];
   renderBoardPick();
 }
 function closeBoardPick() { $("bpick").classList.remove("on"); overlayClose(); }
@@ -5085,32 +5100,13 @@ function bpSections() {
   // Charter §4, as amended 2026-08-22: in a kind-mixing list the SECTION says
   // which kind, and the glyph's tint only reinforces it. So each kind gets its
   // own heading and never relies on hue to be understood.
-
-  // One adapter per non-board kind: what its instances are, how to match one
-  // against the query, and how a row reads. The section's LABEL comes from the
-  // registry, so a kind is named the same here as it is in the navbar. Adding
-  // a kind is an entry in kinds.js plus one adapter here, not a fourth
-  // copy-pasted block.
-  const ADAPTERS = {
-    asks: {
-      rows: () => bpItems,
-      match: (i) => (i.body || "").toLowerCase().includes(q),
-      row: (i) => ({ id: i.id, name: firstLineName(i.body),
-                     sub: i.boardName ? `on ${i.boardName}` : "unassigned" }),
-    },
-    drafts: {
-      rows: () => bpDrafts,
-      match: (d) => `${d.title ?? ""} ${d.body}`.toLowerCase().includes(q),
-      row: (d) => ({ id: d.id, name: d.title || firstLineName(d.body) || "(untitled)",
-                     sub: `${(d.body || "").split("\n").length}L` }),
-    },
-  };
+  //
+  // Boards are built above because they carry sub-structure nothing else has,
+  // recent and starred; every other kind is a plain matched list, and its label
+  // comes from the registry so a kind is named the same here as on its tab.
   for (const k of KINDS) {
-    const a = ADAPTERS[k.id];
-    if (!a) continue;                       // boards are built above; a kind with no adapter yet is simply absent
-    const rows = a.rows().filter((x) => !q || a.match(x))
-      .slice(0, q ? 8 : 4)
-      .map((x) => ({ kind: k.id, ...a.row(x) }));
+    if (k.id === "boards") continue;
+    const rows = kindMatches(bpIndex, k.id, q, q ? 8 : 4);
     if (rows.length) out.push({ label: k.label, kind: k.id, rows });
   }
   return out;
@@ -5173,19 +5169,14 @@ async function toggleStar(b) {
     renderBoardPick();
   } catch (e) { toast(`Star failed: ${e.message}`, 3500, "err"); }
 }
-// An ask lives on the hub's asks view; a draft has a page of its own. Both are
-// real destinations, which is the whole point of giving them instance routes.
-function gotoKind(r) {
-  if (r.kind === "drafts") { location.href = `/drafts?d=${encodeURIComponent(r.id)}`; return; }
-  location.href = `/?v=asks#${encodeURIComponent(r.id)}`;
-}
-// Where a row goes is decided by its kind, in one place. The keyboard used to
-// send every row to gotoBoard, so pressing Enter on a draft went to
-// /b/undefined while clicking the same row worked — a control with two
-// implementations disagreeing about one action (§13).
+// Where a row goes is decided by its kind, in one place, so the mouse and the
+// keyboard cannot disagree about one action (§13). A board is the one kind with
+// somewhere to be already open, so it gets its own check; every other row
+// carries the address the registry gave it.
 function bpOpen(r) {
   if (!r) return;
-  if (r.kind === "boards") gotoBoard(r); else gotoKind(r);
+  if (r.kind === "boards") gotoBoard(r);
+  else if (r.href) location.href = r.href;
 }
 function gotoBoard(b) {
   if (!b) return;

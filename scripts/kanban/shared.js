@@ -161,16 +161,76 @@ function crumbFor(kindId, instance) {
 // promise. A kind that cannot be reached answers null, NOT zero — an unknown
 // count is not a count of none (§12), and an empty pill is hidden rather than
 // asserting an emptiness nothing verified.
-let kindCountsP = null;
-function kindCounts({ fresh = false } = {}) {
-  if (fresh) kindCountsP = null;
-  if (kindCountsP) return kindCountsP;
-  kindCountsP = Promise.all(KINDS.map(async (k) => {
-    if (!k.api || !k.countOf) return [k.id, null];
-    try { return [k.id, k.countOf(await (await fetch(k.api)).json())]; }
+// Every instance of every kind, loaded once per page. The tab counts, the
+// palette and the board's search are three views of one question — what is
+// there, of each kind — and each used to ask it separately, so a kind wired
+// into one was missing from the others.
+//
+// One request per kind: a second caller gets the first one's promise. A kind
+// that cannot be reached answers null, NOT an empty array, because an unknown
+// list is not an empty one (§12) and callers must be able to tell them apart.
+let kindIndexP = null;
+function kindIndex({ fresh = false } = {}) {
+  if (fresh) kindIndexP = null;
+  if (kindIndexP) return kindIndexP;
+  kindIndexP = Promise.all(KINDS.map(async (k) => {
+    if (!k.api || !k.listOf) return [k.id, null];
+    try { return [k.id, k.listOf(await (await fetch(k.api)).json())]; }
     catch { return [k.id, null]; }
   })).then(Object.fromEntries);
-  return kindCountsP;
+  return kindIndexP;
+}
+
+// The tabs' counts. Charter §7 asks the toolbar to state which kind you are in
+// WITH its counts, which is what makes it an indicator rather than a navigator.
+// It counts the very list the palette offers, so the pill and the list can
+// never disagree.
+const kindCounts = (opts) => kindIndex(opts).then((ix) =>
+  Object.fromEntries(KINDS.map((k) => [k.id, ix[k.id]?.length ?? null])));
+
+// How an instance of a kind reads and where it goes, in one place, so the
+// palette and search show the same row for the same thing. `text` is what a
+// query matches against; `row` is what a person sees; `href` is the instance's
+// own address, which is the cell NAV-UNIFICATION.md drew as empty for every
+// kind but boards.
+const KIND_ROW = {
+  boards: {
+    text: (b) => `${b.name} ${b.root}`,
+    row: (b) => ({ id: b.slug, name: b.name, sub: b.root }),
+    href: (b) => `/b/${b.slug}`,
+  },
+  asks: {
+    text: (i) => i.body ?? "",
+    row: (i) => ({ id: i.id, name: firstLineName(i.body),
+                   sub: i.boardName ? `on ${i.boardName}` : "unassigned" }),
+    href: (i) => `/?v=asks#${encodeURIComponent(i.id)}`,
+  },
+  drafts: {
+    text: (d) => `${d.title ?? ""} ${d.body ?? ""}`,
+    row: (d) => ({ id: d.id, name: d.title || firstLineName(d.body) || "(untitled)",
+                   sub: `${(d.body || "").split("\n").length}L` }),
+    href: (d) => `/drafts?d=${encodeURIComponent(d.id)}`,
+  },
+};
+
+// Kinds in the order a search should offer them, which is not the order the tab
+// bar shows (kinds.js: searchRank).
+const searchKinds = () => KINDS.filter((k) => KIND_ROW[k.id])
+  .slice().sort((a, b) => (a.searchRank ?? 99) - (b.searchRank ?? 99));
+
+// "a, b and c" — for sentences that must name what was searched.
+const andList = (xs) => xs.length < 2 ? (xs[0] ?? "")
+  : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`;
+
+// The instances of one kind that match a query, already shaped for a row. A
+// kind with no adapter yet is simply absent rather than half-rendered.
+function kindMatches(ix, kindId, q, cap) {
+  const a = KIND_ROW[kindId], list = ix?.[kindId];
+  if (!a || !list) return [];
+  const t = (q || "").trim().toLowerCase();
+  return list.filter((x) => !t || a.text(x).toLowerCase().includes(t))
+             .slice(0, cap)
+             .map((x) => ({ kind: kindId, href: a.href(x), ...a.row(x) }));
 }
 
 function navbar({ mount, active, title, sub, crumb, identity, find, actions, counts = {},

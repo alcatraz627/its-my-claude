@@ -21,12 +21,17 @@ const KINDS = [
     key: "1",                        // the number that reaches it
     hue: "--blue",                   // the kind's accelerator tint, on top of grouping
     tip: "Every project an agent is working on",
-    // How many of this kind exist, for the tab's count. Endpoint and filter
-    // live WITH the kind, so a new kind's tab counts itself; §7 wants the
-    // toolbar to state where you are with its counts, and a count assembled
-    // per page is the second list §13 bans.
+    // Where this kind's instances come from, and how to read them out of the
+    // response. Everything that asks "what is there, of this kind" — the tab's
+    // count, the palette, the board's search — goes through this one pair, so
+    // the count and the list can never disagree about what counts.
     api: "/api/boards",
-    countOf: (j) => (j.boards ?? []).length,
+    listOf: (j) => j.boards ?? [],
+    // Where this kind sits in the board's search results. SEARCH-DESIGN.md §4
+    // ranks by how often the intent occurs, which is not the order the tab bar
+    // shows: from inside a board, "which board" is the least local question and
+    // comes last.
+    searchRank: 3,
     // Switched in place by a page that owns both views, rather than navigated.
     inPage: true,
     icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="2.6" width="5" height="10.8" rx="1.4" stroke="currentColor" stroke-width="1.2"/><rect x="9.2" y="2.6" width="5" height="6.6" rx="1.4" stroke="currentColor" stroke-width="1.2"/></svg>`,
@@ -39,9 +44,11 @@ const KINDS = [
     key: "2",
     hue: "--amber",
     tip: "Things you wrote down for an agent to sort",
+    searchRank: 1,
     api: "/api/items",
-    // The same filter the palette lists by, so the pill and the list agree.
-    countOf: (j) => (j.items ?? []).filter((i) => !i.landing && !i.archived).length,
+    // An ask that has landed on a board is a card now, and an archived one is
+    // put away: neither is something to go to.
+    listOf: (j) => (j.items ?? []).filter((i) => !i.landing && !i.archived),
     inPage: true,
     icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.4 2.6h9.2v8.2L9.4 13.4H3.4V2.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M12.6 10.8H9.4v2.6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
   },
@@ -53,8 +60,9 @@ const KINDS = [
     key: "3",
     hue: "--violet",
     tip: "Your documents, the rung above an ask",
+    searchRank: 2,
     api: "/api/drafts",
-    countOf: (j) => (j.drafts ?? []).filter((d) => !d.isTemplate).length,
+    listOf: (j) => (j.drafts ?? []).filter((d) => !d.isTemplate),
     inPage: false,                   // a real page; let the link navigate
     icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
   },
