@@ -27,6 +27,15 @@ check() { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1" "expected [$3] got [$2
 # sibling pass vacuously, which is the worse half.
 has()   { if printf '%s' "$2" | grep -qF -- "$3"; then ok "$1"; else bad "$1" "no [$3] in [$2]"; fi; }
 hasnt() { if printf '%s' "$2" | grep -qF -- "$3"; then bad "$1" "unwanted [$3] in [$2]"; else ok "$1"; fi; }
+# A draft id is two characters, and a listing prints a randomly-slugged board on
+# its header line, so a bare `grep -F d3` matched "proj-e34cd3" and this suite
+# failed at random. The loud half was the 67/1 above; the quiet half is worse,
+# because the same collision lets a `has` pass while its row is absent. These
+# match the ID COLUMN — start of line, then the id, then whitespace — so the
+# assertion asks about the row it names and nothing else.
+idrow()    { printf '%s' "$1" | grep -qE "^[[:space:]]*$2([[:space:]]|$)"; }
+hasrow()   { if idrow "$2" "$3"; then ok "$1"; else bad "$1" "no row for [$3] in [$2]"; fi; }
+hasntrow() { if idrow "$2" "$3"; then bad "$1" "unwanted row for [$3] in [$2]"; else ok "$1"; fi; }
 
 K() { bun run "$HERE/cli.ts" "$@" 2>&1; }
 
@@ -111,18 +120,18 @@ seed t1 "## What happened
 ## Expected" "Bug report" "" 1
 
 out=$(K drafts --global)
-has   "pending lists an unassigned draft" "$out" "d1"
-has   "pending lists a same-board draft"  "$out" "d2"
-hasnt "pending hides a template"          "$out" "t1"
+hasrow   "pending lists an unassigned draft" "$out" "d1"
+hasrow   "pending lists a same-board draft"  "$out" "d2"
+hasntrow "pending hides a template"          "$out" "t1"
 out=$(K drafts --templates)
-has   "template list shows the template"  "$out" "t1"
-hasnt "template list hides a draft"       "$out" "d1"
+hasrow   "template list shows the template"  "$out" "t1"
+hasntrow "template list hides a draft"       "$out" "d1"
 
 # Board scoping: run from inside the project so the CLI resolves its own board.
 out=$(cd "$PROJ" && K drafts)
-has   "in-project sweep keeps its own board's draft" "$out" "d2"
-has   "in-project sweep keeps unassigned drafts"     "$out" "d1"
-hasnt "in-project sweep drops another board's draft" "$out" "d3"
+hasrow   "in-project sweep keeps its own board's draft" "$out" "d2"
+hasrow   "in-project sweep keeps unassigned drafts"     "$out" "d1"
+hasntrow "in-project sweep drops another board's draft" "$out" "d3"
 
 # ---- 3. reading one in full is what a pull reads ---------------------------
 out=$(K drafts d1)
@@ -146,13 +155,13 @@ check "pull stores the card, its board, and the note" "$rec" "$CARD|$SLUG|made i
 out=$(K drafts --global)
 hasnt "a pulled draft leaves the pending sweep" "$out" "d1  [pending]"
 out=$(K drafts --all --global)
-has "--all still shows the pulled one" "$out" "d1"
+hasrow "--all still shows the pulled one" "$out" "d1"
 
 # ---- 5. reversal ----------------------------------------------------------
 out=$(K pull d1 --undo)
 has "undo confirms" "$out" "un-pulled d1"
 out=$(K drafts --global)
-has "an un-pulled draft is pending again" "$out" "d1"
+hasrow "an un-pulled draft is pending again" "$out" "d1"
 out=$(K pull d1 --undo)
 has "undo on an unpulled draft refuses" "$out" "not pulled"
 
@@ -212,7 +221,7 @@ hasnt "pulling the revision consumes it again" "$out" "d9  [pending]"
 
 touch_draft d9 trigger
 out=$(K drafts --global)
-has "offering a consumed draft brings it back"     "$out" "d9"
+hasrow "offering a consumed draft brings it back"     "$out" "d9"
 has "an offered draft is marked for pickup now"    "$out" "d9  [now]"
 
 # The marker and the sweep must answer the same question. They read the same
