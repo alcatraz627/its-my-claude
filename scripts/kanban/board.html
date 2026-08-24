@@ -1693,6 +1693,9 @@ function bufferPopover(cardId, noteId) {
 // and asks whether the panel is shut. A `let` read before its line is an error,
 // not a false.
 let sideCollapsed = (localStorage.getItem("kanban-side") ?? "1") === "1";
+// One shared handle: the navbar hangs its repaint on this, and toggleSide
+// calls it, so every path that flips the panel repaints the bar's chevron.
+const navAside = { isCollapsed: () => sideCollapsed, toggle: toggleSide };
 
 function mountBoardNav() {
   const bar = document.querySelector(".brow");
@@ -1725,8 +1728,7 @@ function mountBoardNav() {
   // that when a filter makes it appear it lands beside the zone you just used.
   page.append($("saveView"), $("pickGrp"), bar.querySelector(".tgrp.act"), cog);
   navbar({ mount: bar, active: "boards", identity: ident, find,
-           actions: page, peers: $("live"), help: openHelp,
-           aside: { isCollapsed: () => sideCollapsed, toggle: toggleSide } });
+           actions: page, peers: $("live"), help: openHelp, aside: navAside });
 }
 mountBoardNav();
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
@@ -3384,6 +3386,11 @@ function toggleSide() {
   sideCollapsed = !sideCollapsed;
   localStorage.setItem("kanban-side", sideCollapsed ? "1" : "0");
   renderSide();
+  // The navbar's chevron reads this state too, and this is the one write path
+  // for it. Repainting only from the navbar button left the other three
+  // callers (the | key, the rail's expand, the panel head) with a stale
+  // chevron, tooltip and aria-expanded.
+  navAside.repaint?.();
 }
 
 // A filter you are looking at becomes a view by naming it. This is the whole
