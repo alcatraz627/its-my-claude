@@ -50,12 +50,17 @@
   .brow .crumb a:hover{color:var(--text);background:var(--card)}
   .brow .crumb span{color:var(--border-2);margin:0 1px}
   .brow .actions{margin-left:14px}
+  /* Under pressure the "All boards /" prefix goes before the name does: the
+     name is the loudest word in the bar, and the logo still goes home. */
+  .navbar[data-tight] .bident > .crumb{display:none}
   /* The title shrinks and the NAME ellipsises. Both held their content width,
      so a squeezed identity zone hard-clipped the name at .nident's overflow
      edge with no ellipsis: "kanban-fixture" read "kanban-". */
   .btitle{font:600 var(--fs-title)/1.3 var(--sans);letter-spacing:-.011em;white-space:nowrap;
           min-width:0;display:inline-flex;align-items:baseline}
-  .btitle .bnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  /* the floor: whatever else the bar wants, the board's own name shows at
+     least ~8 characters before anything reads "a…" */
+  .btitle .bnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:8ch}
   .bpath{color:var(--text-3);font:var(--fs-small)/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
   /* Charter §6: group, then hold. Four groups, each a holder, so the row parses
      as find / pick / act / view instead of eight peers in a line. The gap
@@ -132,10 +137,15 @@
   .stat-chip.mute{color:var(--text-3);cursor:default}
   .stat-chip.mute:hover{background:none;border-color:transparent;color:var(--text-3)}
   .stat-chip.stale{color:var(--amber)}
-  /* the delta is a second row: it is news, not state, and it comes and goes */
-  .sband{display:flex;align-items:center;gap:7px;flex-wrap:wrap;width:100%}
-  .sdelta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;width:100%;padding-top:2px}
-  .sdelta .dlabel{font-size:var(--fs-body);color:var(--text-3);display:inline-flex;align-items:center;gap:6px}
+  /* Both live INSIDE the navbar's one-line status strip now. The wrap +
+     width:100% here belonged to the retired standalone band, and inside the
+     bar they stacked the delta into a third and fourth line: the bar grew to
+     170px on any board with news. One line each; the strip slides. */
+  .sband{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;flex:none}
+  .sdelta{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;flex:none;white-space:nowrap}
+  .sdelta .dlabel{font-size:var(--fs-body);color:var(--text-3);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  /* under pressure the delta's words go first; its chips are the news */
+  .navbar[data-tight] .sdelta .dlabel .dl{display:none}
   .sdelta .dlabel .sg{color:var(--text-3)}
   .dchip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:var(--r-pill);
          border:1px solid var(--border);background:var(--card);color:var(--text-2);font:500 var(--fs-body)/1 var(--sans);cursor:pointer}
@@ -2252,7 +2262,7 @@ function openTagOps(t, btn, n) {
   card.style.left = `${Math.min(Math.max(10, r.left - cr.width + 40), innerWidth - cr.width - 10)}px`;
   btn.setAttribute?.("aria-expanded", "true");
   const foot = card.querySelector("#tgfoot");
-  const say = (text) => { foot.textContent = text; };
+  const say = (text) => { if (foot.isConnected) foot.textContent = text; };
 
   // No Save button: the field IS the rename. It settles half a second after you
   // stop typing and says so, which is one control instead of two and removes the
@@ -2274,9 +2284,13 @@ function openTagOps(t, btn, n) {
     clearTimeout(timer); say("Renaming when you stop\u2026");
     timer = setTimeout(commit, 500);
   });
+  // Two exits, one contract: "saves on its own" means click-away saves too,
+  // and Escape is the one exit that throws the typed name away. The away-close
+  // used to race the 500ms timer, committing against a torn-down card.
+  colCardCleanup = () => { clearTimeout(timer); commit(); };
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { e.preventDefault(); clearTimeout(timer); commit(); }
-    if (e.key === "Escape") { e.stopPropagation(); clearTimeout(timer); closeColCard(); }
+    if (e.key === "Escape") { e.stopPropagation(); clearTimeout(timer); input.value = live; closeColCard(); }
   });
 
   const hint = (el2, text) => {
@@ -2386,7 +2400,12 @@ function openColCard(lane, wrap, btn) {
   setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
 }
 function closeColCardAway(e) { if (!e.target.closest("#colcard")) closeColCard(); else setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0); }
+// A popover with pending work (the tag rename's debounce) registers a cleanup
+// here; every close path runs it, so no exit leaves a timer racing a dead node.
+let colCardCleanup = null;
 function closeColCard() {
+  const fin = colCardCleanup; colCardCleanup = null;
+  fin?.();
   document.getElementById("colcard")?.remove();
   document.getElementById("bsBtn")?.setAttribute("aria-expanded", "false");
   document.querySelectorAll(".cmenu.on").forEach((b) => b.classList.remove("on"));
@@ -2883,7 +2902,7 @@ function cardEl(c) {
   // tags first: they say what the card IS, and the notes say what is being
   // asked about it
   cardTags.forEach((t) => chipRow.appendChild(tagChip(t, { onCard: c.id })));
-  chipRow.dataset.fxKey = c.id;
+  chipRow.dataset.fxKey = `chips:${c.id}`;   // namespaced: three containers key by card, and a shared bare id makes them diff against each other
   fxMark(chipRow, ".chip.tag", (e) => e.textContent);
   if (!allNotes.length && !cardTags.length) chipRow.remove();
   else allNotes.forEach((n, i) => {
@@ -3059,7 +3078,7 @@ function deltaRow() {
   row.className = "sdelta";
   const label = document.createElement("span");
   label.className = "dlabel";
-  label.innerHTML = `<span class="sg">${SB_ICON.delta}</span><span>since your last visit ${ago(anchor)} ago</span>`;
+  label.innerHTML = `<span class="sg">${SB_ICON.delta}</span><span class="dl">since your last visit ${ago(anchor)} ago</span>`;
   row.append(label);
   const chip = (n, text, filter, cls = "") => {
     if (!n) return;
@@ -3446,6 +3465,12 @@ function resetSideWidth() {
   const el = $("side");
   el.classList.remove("sized"); el.style.removeProperty("--sw");
 }
+// The 40% ceiling is a function of the window, so a width kept at 1920 must be
+// re-clamped at 900. The drawer already does this; the panel did not.
+addEventListener("resize", () => {
+  const el = $("side");
+  if (el.classList.contains("sized") && el.getBoundingClientRect().width > SIDE_MAX()) setSideWidth(SIDE_MAX());
+});
 
 function renderSide() {
   const el = $("side");
@@ -4130,6 +4155,7 @@ function editGoal(cardId, current) {
 
 function renderCardTags(cardId) {
   const row = $("dTags2");
+  row.dataset.fxKey = `dTags2:${cardId}`;   // static node reused per card: key by the card (namespaced), or B's chips read as arrivals vs A's
   row.replaceChildren(...tagsOnCard(cardId).map((t) => tagChip(t, { onCard: cardId })));
   fxMark(row, ".chip.tag", (e) => e.textContent);
   const add = document.createElement("button");
@@ -4356,6 +4382,10 @@ function renderOtherNotes(id) {
       b.addEventListener("pointerdown", (e) => { if (e.button === 1) e.preventDefault(); });
       b.addEventListener("auxclick", (e) => { if (e.button === 1) { e.preventDefault(); dismissNote(id, opts.noteId); } });
     }
+    // fxMark keys rows by noteId, falling back to textContent. The draft row's
+    // text changes with what is typed, so without a fixed id it reads as an
+    // arrival on every revisit and flashes.
+    else if (opts.draft) b.dataset.noteId = "__draft";
     return b;
   };
 
@@ -4379,6 +4409,7 @@ function renderOtherNotes(id) {
     draft: true,
     onclick: () => { flushDraft(); openNoteId = null; loadNoteIntoComposer(id); renderOtherNotes(id); fx($("dNote"), "fx-back"); $("dNote").focus(); },
   }));
+  $("dOther").dataset.fxKey = `dOther:${id}`;   // same trap as dTags2: one node, many cards
   $("dOther").replaceChildren(...rows);
   fxMark($("dOther"), ".nrow");
   // the height the owner dragged this list to, restored and then watched
@@ -5413,8 +5444,15 @@ $("tpick").onclick = (e) => { if (e.target === $("tpick")) closeTagPick(); };
 // Never say "no results" without saying what was looked in (SEARCH-DESIGN.md
 // §3). Built from the sections search actually has, so a kind added to the
 // registry is named here without anyone remembering to.
+// A kind whose index answered null was NOT searched, and saying it was is the
+// dishonesty §12 names. The sentence claims only what actually answered; the
+// no-results state names what could not be reached.
 const searchCorpora = () => ["this board's cards", "your notes", "your tags"]
-  .concat(searchKinds().map((k) => `your ${k.indexLabel}`));
+  .concat(searchKinds().filter((k) => !spIndex || spIndex[k.id] != null)
+                       .map((k) => `your ${k.indexLabel}`));
+const searchUnreached = () => spIndex
+  ? searchKinds().filter((k) => spIndex[k.id] == null).map((k) => `your ${k.indexLabel}`)
+  : [];
 
 const QUESTIONS = [
   { q: "blocked", label: "Blocked", hint: "cards the agent stopped on", filter: "is:blocked" },
@@ -5504,7 +5542,9 @@ function renderSearch() {
   }
   if (!spRows.length) {
     // never say "no results" without saying what was looked in
-    $("splist").innerHTML = `<div class="bpnone">Nothing matches “${esc(q)}”. Searched ${esc(andList(searchCorpora()))}.</div>`;
+    const failed = searchUnreached();
+    $("splist").innerHTML = `<div class="bpnone">Nothing matches “${esc(q)}”. Searched ${esc(andList(searchCorpora()))}.`
+      + (failed.length ? ` ${esc(andList(failed))} could not be reached.` : "") + `</div>`;
     return;
   }
   const frag = document.createDocumentFragment();
@@ -5652,7 +5692,12 @@ function renderBoardPick() {
   const secs = bpSections();
   bpRows = secs.flatMap((s2) => s2.rows.map((r) => ({ ...r, kind: s2.kind })));
   bpAt = Math.min(bpAt, Math.max(0, bpRows.length - 1));
-  if (!bpRows.length) { $("bplist").innerHTML = `<div class="bpnone">Nothing matches that.</div>`; return; }
+  if (!bpRows.length) {
+    // an index that answered null was not searched: an unloadable list is not an empty one
+    const msg = bpIndex?.boards == null ? "Your boards could not be loaded. Is the server reachable?"
+                                        : "Nothing matches that.";
+    $("bplist").innerHTML = `<div class="bpnone">${msg}</div>`; return;
+  }
   const frag = document.createDocumentFragment();
   let i = 0;
   for (const sec of secs) {

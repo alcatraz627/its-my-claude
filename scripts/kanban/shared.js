@@ -102,24 +102,30 @@ function wireGrip(grip, { width, set, edge = "right", step = 24, before, after }
   if (!grip) return;
   let from = null;
   const sign = edge === "right" ? 1 : -1;
-  grip.addEventListener("pointerdown", (e) => {
-    from = { x: e.clientX, w: width() };
-    grip.classList.add("on");
-    if (before) before();
-    try { grip.setPointerCapture(e.pointerId); } catch {}
-    e.preventDefault(); e.stopPropagation();
-  });
-  grip.addEventListener("pointermove", (e) => {
-    if (from) set(from.w + sign * (e.clientX - from.x));
-  });
+  // Listeners ride the WINDOW for the drag's duration: pointer capture's
+  // failure is swallowed, and without it a grip-only listener stops tracking
+  // the instant the pointer leaves the 9px band and end() never fires, leaving
+  // the grip latched. Window listeners work with or without capture.
+  const move = (e) => { if (from) set(from.w + sign * (e.clientX - from.x)); };
   const end = (e) => {
     if (!from) return;
     from = null; grip.classList.remove("on");
     if (after) after();
     try { grip.releasePointerCapture(e.pointerId); } catch {}
+    removeEventListener("pointermove", move);
+    removeEventListener("pointerup", end);
+    removeEventListener("pointercancel", end);
   };
-  grip.addEventListener("pointerup", end);
-  grip.addEventListener("pointercancel", end);
+  grip.addEventListener("pointerdown", (e) => {
+    from = { x: e.clientX, w: width() };
+    grip.classList.add("on");
+    if (before) before();
+    try { grip.setPointerCapture(e.pointerId); } catch {}
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", end);
+    addEventListener("pointercancel", end);
+    e.preventDefault(); e.stopPropagation();
+  });
   // A grip nobody can tab to is not a control. The arrow that grows it is the
   // one pointing away from the edge it hangs on, so the key agrees with the drag.
   grip.tabIndex = 0;

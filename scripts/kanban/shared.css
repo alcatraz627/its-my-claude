@@ -241,7 +241,7 @@
      every width, 1920 included: an auto basis demands the FULL path before
      the other zones are served. A small basis that grows into free space
      serves the controls first and gives the path whatever is left. */
-  .nzid{flex:1 1 340px;min-width:180px;max-width:44%}
+  .nzid{flex:1 1 340px;min-width:230px;max-width:44%}
   /* The zone was allowed to shrink and could not, because the wrapper a page
      mounts its identity into carried no styles at all: a flex item defaults to
      min-width:auto, so it refuses to go below its content and the zone clips
