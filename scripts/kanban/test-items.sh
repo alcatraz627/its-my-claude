@@ -322,5 +322,28 @@ EOF
     *) bad "item $sub refuses: $want" "$got" ;; esac
 done
 
+# The full view grammar (D4b, ruled 2026-08-23): NOT binds a clause, AND binds
+# tighter than OR, no parentheses. The back-compat row matters most: every view
+# written before this must parse to what it did before.
+grammar2=$(bun -e '
+const m = require("'"$HERE"'/match.js");
+const ctx = { reviewOf:(id)=>id==="rev", since:()=>false,
+              tagsOf:(id)=>id==="m2"?[{kind:"milestone",name:"M2"}]:[], noteOf:()=>"" };
+const C = (id, lane) => ({ id, lane, title:id, createdAt:"", updatedAt:"", docs:[] });
+const open=C("open","active"), block=C("block","blocked"), rev=C("rev","active"),
+      m2=C("m2","blocked"), done=C("done","done");
+const q = (c,s) => m.matchQuery(c, s.split(/\s+/), ctx) ? "1" : "0";
+process.stdout.write([
+  q(open,"is:open is:blocked"), q(block,"is:open is:blocked"),
+  q(block,"is:blocked or review-me"), q(rev,"is:blocked or review-me"), q(open,"is:blocked or review-me"),
+  q(m2,"tag:milestone:M2 is:blocked or review-me"), q(rev,"tag:milestone:M2 is:blocked or review-me"),
+  q(block,"tag:milestone:M2 is:blocked or review-me"),
+  q(open,"is:open not review-me"), q(rev,"is:open not review-me"),
+  q(done,"is:settled or not is:open"), q(open,"is:settled or not is:open"), q(block,"is:settled or not is:open"),
+  q(open,""), q(block,"is:blocked or"), q(open,"is:blocked or"),
+].join(""));
+' 2>/dev/null)
+check "view grammar: AND back-compat, OR, AND-binds-tighter, NOT, empty, dangling (D4b)" "$grammar2" "0111011010100110"
+
 printf '  ---- %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

@@ -36,5 +36,28 @@ arrow=$(cd "$HERE" && rg -n '↗|↖|↘|↙' board.html hub.html drafts.html ||
 if [ -z "$arrow" ]; then ok "no typed corner arrows anywhere on board, hub or drafts (§5, G17)"
 else no "no typed corner arrows anywhere on board, hub or drafts (§5, G17)" "$arrow"; fi
 
+# The skill is how an agent MEETS this CLI. It sat six weeks behind it, missing
+# seven verbs including tag and verify, which is exactly what a peer reported on
+# 2026-08-24: those verbs "are all documented and all were invisible to me".
+# This reads the CLI's own help for the verb list and greps the skill for each,
+# so it compares two independent sources rather than agreeing with itself.
+SKILL="$HOME/.claude/skills/kanban/SKILL.md"
+if [ -f "$SKILL" ]; then
+  missing=""
+  # The verb list comes from cli.ts's own switch, not from the help prose: a
+  # wrapped continuation line in the footer parsed as a verb called
+  # "positional". Two independent sources is still the point, code against doc.
+  for v in $(rg -o '^  case "[a-z][a-z-]*"' "$HERE/cli.ts" | rg -o '"[a-z-]*"' | tr -d '"' | sort -u); do
+    case "$v" in help|"") continue ;; esac
+    # Command position: after kanban.sh or the $K shorthand, allowing the
+    # open|status|check alternation the skill uses. A bare word match is not
+    # enough; it passed while `tag` was undocumented, matching the word inside
+    # the clause grammar "tag:<kind>:<name>", so the guard agreed with itself.
+    rg -q "(kanban\.sh|\\\$K) [a-z|]*\\b$v\\b" "$SKILL" || missing="$missing $v"
+  done
+  if [ -z "$missing" ]; then ok "every cli.ts verb appears in the /kanban skill"
+  else no "every cli.ts verb appears in the /kanban skill" "undocumented:$missing"; fi
+fi
+
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

@@ -509,12 +509,19 @@ export const presetFor = (kind: TagKind): TagPreset =>
 export interface Tag { id: string; name: string; kind: TagKind; note?: string; createdAt: string }
 export interface View {
   id: string; name: string; clauses: string[];
+  // What the owner is USING this view for, in their words, optional. D3a,
+  // ruled 2026-08-23: "allow me to add notes for agent (optional) as well so
+  // when the agent reads the board it can know what I am using it for, it may
+  // or may not bother using it". So it is written for an agent to read and
+  // never acted on automatically.
+  note?: string;
   by: "owner" | "agent"; createdAt: string; updatedAt: string;
 }
 // What a view MEANS lives in match.js, which has no imports and no DOM so the
 // board can <script> the same file bun imports here. Re-exported rather than
 // re-implemented: a second copy is how two surfaces start disagreeing.
-export { VIEW_LIMITS, CLAUSE_GRAMMAR, isKnownClause, matchClause, matchView } from "./match.js";
+export { VIEW_LIMITS, CLAUSE_GRAMMAR, OPERATORS, isOperator, isKnownClause,
+         matchClause, parseQuery, matchParsed, matchQuery, matchView } from "./match.js";
 
 export interface Plan {
   tags: Tag[];                        // the board's vocabulary

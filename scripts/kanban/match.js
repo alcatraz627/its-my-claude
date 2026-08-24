@@ -18,6 +18,11 @@ const CLAUSE_GRAMMAR = [
   "since:new", "since:moved", "since:done", "since:blocked",
   "tag:<kind>:<name>", "<a word to search for>",
 ];
+// The two operator words. They are grammar, not clauses: they never match a
+// card, they do not count against maxClauses, and a view made only of them
+// selects nothing in particular.
+const OPERATORS = new Set(["or", "not"]);
+const isOperator = (c) => OPERATORS.has(String(c ?? "").trim().toLowerCase());
 const isKnownClause = (c) =>
   CLAUSE_GRAMMAR.includes(c) || c.startsWith("tag:") || !/^(is|since):/.test(c);
 
@@ -47,11 +52,61 @@ function matchClause(card, clause, ctx) {
     ...(card.subs ?? []).map((s) => s.title)].filter(Boolean).join(" ").toLowerCase();
   return hay.includes(c);
 }
-// clauses are ANDed; OR and NOT are deferred until a view needs them
-const matchView = (card, clauses, ctx) => clauses.every((cl) => matchClause(card, cl, ctx));
+// The full grammar, ruled by the owner on 2026-08-23 (D4b). Precedence, from
+// that ruling: NOT binds a single clause, AND binds tighter than OR, and there
+// are no parentheses. AND is still the space between two clauses, so every
+// view written before this parses to exactly what it did before.
+//
+//   is:open not tag:area:docs           -> open AND (not docs)
+//   tag:milestone:M2 is:blocked or review-me
+//                                       -> (M2 AND blocked) OR (review-me)
+//
+// Parsed once rather than per card, because the board re-filters on every
+// keystroke across every card and the parse does not depend on the card.
+function parseQuery(clauses) {
+  const groups = [];
+  let current = [];
+  let negateNext = false;
+  for (const raw of clauses ?? []) {
+    const c = String(raw ?? "").trim().toLowerCase();
+    if (!c) continue;
+    if (c === "or") {
+      // A trailing or dangling `or` starts a group that never fills; dropping
+      // the empty one keeps `a or` meaning `a` rather than matching everything.
+      if (current.length) groups.push(current);
+      current = []; negateNext = false;
+      continue;
+    }
+    if (c === "not") { negateNext = true; continue; }
+    current.push({ clause: c, neg: negateNext });
+    negateNext = false;
+  }
+  if (current.length) groups.push(current);
+  return groups;
+}
+
+// A parsed query matches when ANY group matches, and a group matches when
+// EVERY term in it does. An empty query matches everything, which is what an
+// empty filter box has always meant.
+function matchParsed(card, groups, ctx) {
+  if (!groups.length) return true;
+  return groups.some((g) => g.every((t) => {
+    const hit = matchClause(card, t.clause, ctx);
+    return t.neg ? !hit : hit;
+  }));
+}
+
+// Parse and match in one call, for a caller holding a card and a clause list.
+const matchQuery = (card, clauses, ctx) => matchParsed(card, parseQuery(clauses), ctx);
+
+// The name every existing caller already uses. Kept, and now the full grammar:
+// a clause list with no `or` and no `not` parses to one AND group, which is
+// what this did before.
+const matchView = matchQuery;
 
 // A classic script in the browser, where these become globals; a CommonJS
 // module under bun, which re-exports them. No "export" keyword, because that
 // is a syntax error in a plain <script> and the board loads it as one.
 if (typeof module !== "undefined" && module.exports)
-  module.exports = { VIEW_LIMITS, CLAUSE_GRAMMAR, isKnownClause, matchClause, matchView };
+  module.exports = { VIEW_LIMITS, CLAUSE_GRAMMAR, OPERATORS, isOperator,
+                     isKnownClause, matchClause, parseQuery, matchParsed, matchQuery, matchView };

@@ -13,7 +13,7 @@ import {
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
   loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState,
-  VIEW_LIMITS, isKnownClause, matchView, type Plan, type TagKind,
+  VIEW_LIMITS, isKnownClause, isOperator, matchView, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 
@@ -925,7 +925,7 @@ const server = Bun.serve({
     // "the for-me view" means one list no matter who says it.
     if (req.method === "POST" && p === "/api/view") {
       const body = (await req.json().catch(() => null)) as
-        { slug?: string; op?: string; id?: string; name?: string; clauses?: string[] } | null;
+        { slug?: string; op?: string; id?: string; name?: string; clauses?: string[]; note?: string } | null;
       const dir = body?.slug ? boardDirOf(body.slug) : null;
       if (!dir || !body?.op) return json({ error: "need {slug, op: add|rename|rm, …}" }, 400);
       let out: any = { error: "unwritten" };
@@ -941,13 +941,18 @@ const server = Bun.serve({
           if (name.length < VIEW_LIMITS.nameMin || name.length > VIEW_LIMITS.nameMax)
             { out = { error: `a view name is ${VIEW_LIMITS.nameMin} to ${VIEW_LIMITS.nameMax} characters` }; return; }
           if (!clauses.length) { out = { error: "a view needs at least one clause" }; return; }
-          if (clauses.length > VIEW_LIMITS.maxClauses)
+          // `or` and `not` are grammar, not clauses, so they never count against
+          // the cap: "a or b or c or d" is four clauses, not seven.
+          const real = clauses.filter((c) => !isOperator(c));
+          if (real.length > VIEW_LIMITS.maxClauses)
             { out = { error: `at most ${VIEW_LIMITS.maxClauses} clauses; more than that is a search` }; return; }
-          const bad = clauses.filter((c) => !isKnownClause(c));
+          const bad = real.filter((c) => !isKnownClause(c));
           if (bad.length) { out = { error: `unknown clause: ${bad.join(", ")}` }; return; }
           // the tag rule: unique per board, case-insensitively
           if (dup(name)) { out = { error: `a view called "${name}" already exists here` }; return; }
-          const v = { id: noteId(), name, clauses, by: "owner" as const, createdAt: now, updatedAt: now };
+          const noteIn = typeof body!.note === "string" ? body!.note.trim() : "";
+          const v = { id: noteId(), name, clauses, ...(noteIn ? { note: noteIn } : {}),
+                      by: "owner" as const, createdAt: now, updatedAt: now };
           plan.views!.push(v);
           savePlan(dir, plan, "view:add");
           out = { ok: true, view: v };
@@ -955,6 +960,16 @@ const server = Bun.serve({
         }
         const v = plan.views!.find((x) => x.id === body!.id);
         if (!v) { out = { error: `no view ${body!.id}` }; return; }
+        if (body!.op === "note") {
+          // An empty note clears it, the same grammar an empty body uses to
+          // delete an ask. Optional in, optional out.
+          const t = typeof body!.note === "string" ? body!.note.trim() : "";
+          if (t) v.note = t; else delete v.note;
+          v.updatedAt = now;
+          savePlan(dir, plan, "view:note");
+          out = { ok: true, view: v };
+          return;
+        }
         if (body!.op === "rm") {
           plan.views = plan.views!.filter((x) => x.id !== v.id);
           savePlan(dir, plan, "view:rm");

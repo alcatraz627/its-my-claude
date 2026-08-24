@@ -44,6 +44,73 @@ bash ~/.claude/scripts/kanban/kanban.sh drop <card-id>            # retire; --fo
 bash ~/.claude/scripts/kanban/kanban.sh unregister                # remove a whole board
 ```
 
+## Say what a card IS, not just that it exists
+
+A lane nobody can scan is a lane nobody reads. `sync` derives a card's name from
+the prose line it harvested, so a synced card is named by a sentence until
+someone improves it. Its digest reports the coverage; act on those two numbers.
+
+```bash
+K=~/.claude/scripts/kanban/kanban.sh
+bash $K tag <card-id> area:board          # kind:name; bare `tag` lists the board's vocabulary
+bash $K tag <card-id> -area:board         # a leading minus unapplies
+bash $K brief <card-id> "a name you can scan"   # replaces a sentence-length title on the face
+bash $K after <card-id> <other-id>        # execution order; bare reads it, --clear drops it
+bash $K goal <card-id> "what done means"
+bash $K verify <card-id> executed|cited|reasoned [--needs-human] [--note "…"]
+```
+
+`verify --needs-human` is how a card asks the owner something, and it can carry
+the choice itself so they answer where the context is:
+
+```bash
+bash $K verify <card-id> reasoned --needs-human \
+     --ask "which way?" --option "A" --option "B" --rec 1
+bash $K answer <card-id> --pick 2          # or --text "neither, do X"
+```
+
+## Views: a name over a query, said the same way on both sides
+
+A view is a NAME over a QUERY, never a list of card ids, so it is still right
+tomorrow. The owner presses it in the sidebar; you run it here; neither has to
+describe the filter in prose to the other.
+
+```bash
+bash $K view                               # list them, with what each is for
+bash $K view add "M2 blocked" tag:milestone:M2 is:blocked
+bash $K view add "mine" is:open not tag:area:docs --note "what I work from"
+bash $K view rm "M2 blocked"
+```
+
+Clauses join with a space (and), `or`, or `not`. NOT binds one clause, AND binds
+tighter than OR, and there are no parentheses. The grammar: `is:open`
+`is:blocked` `is:settled` `needs-you` `review-me` `since:new` `since:moved`
+`since:done` `since:blocked` `tag:<kind>:<name>` and one free-text word.
+
+**Read a view's `--note` before using it.** It is the owner's own line on what
+they use that view for, and it is written for you to read.
+
+## The owner's asks, and writing one yourself
+
+```bash
+bash $K items [--all] [--global] [--json]  # unsorted first; sorting is your job
+bash $K classify <item-id> task|subtask|clarification|remark [--card <id>] [--note "…"]
+bash $K item add "what you want done" [--board <slug>|--global]
+bash $K item edit <item-id> "the new text"
+bash $K item rm <item-id>
+```
+
+Star, trigger and scope are the owner's, not yours: each means "notice this",
+so setting one forges their intent.
+
+## Drafts: documents they wrote for you
+
+```bash
+bash $K drafts [<draft-id>]                # pending first; an id reads one in full
+bash $K pull <draft-id> [--card <id>] [--note "what you did"]
+bash $K to <draft-id> agent:<alias>|board:<slug>
+```
+
 `--json` on `status`/`show`/`notes`/`add` gives machine-readable output; put flags AFTER
 positional args. A human note is deleted by saving an empty note (board UI drawer, or
 `POST /api/note` with `note:""`); `drop --force` does this for you via the server.

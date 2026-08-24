@@ -14,7 +14,7 @@ import {
   loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled, diffHunks,
   DRAFTS, saveDrafts, recipientsOf, selfAlias, askState, askOf,
-  matchView, isKnownClause, CLAUSE_GRAMMAR, VIEW_LIMITS, savePlan, noteId, type View,
+  matchView, isKnownClause, isOperator, CLAUSE_GRAMMAR, VIEW_LIMITS, savePlan, noteId, type View,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -217,6 +217,9 @@ switch (verb) {
       for (const v of plan.views) {
         const n = board.cards.filter((c) => matchView(c, v.clauses, ctx)).length;
         console.log(`${v.name}  ·  ${v.clauses.join(" ")}  ·  ${n} card${n === 1 ? "" : "s"} now${v.by === "agent" ? "  (by agent)" : ""}`);
+        // The owner's own line on what it is for. Printed under the view rather
+        // than beside it, because it is prose and the row above is data.
+        if (v.note) console.log(`    ${v.note}`);
       }
       break;
     }
@@ -228,19 +231,28 @@ switch (verb) {
       if (name.length < VIEW_LIMITS.nameMin || name.length > VIEW_LIMITS.nameMax)
         die(`a view name is ${VIEW_LIMITS.nameMin} to ${VIEW_LIMITS.nameMax} characters`, `"${name}" is ${name.length}`);
       if (!clauses.length) die("a view needs at least one clause", `the grammar: ${CLAUSE_GRAMMAR.join(" · ")}`);
-      if (clauses.length > VIEW_LIMITS.maxClauses)
-        die(`a view holds at most ${VIEW_LIMITS.maxClauses} clauses, got ${clauses.length}`, "more clauses than that is a search, not a view");
-      const bad = clauses.filter((c) => !isKnownClause(c));
-      if (bad.length) die(`unknown clause: ${bad.join(", ")}`, `the grammar: ${CLAUSE_GRAMMAR.join(" · ")}`);
-      const words = clauses.filter((c) => !/^(is|since|tag):/.test(c) && c !== "needs-you" && c !== "review-me");
+      // `or` and `not` are grammar, not clauses, and never count against the cap
+      const real = clauses.filter((c) => !isOperator(c));
+      if (real.length > VIEW_LIMITS.maxClauses)
+        die(`a view holds at most ${VIEW_LIMITS.maxClauses} clauses, got ${real.length}`, "more clauses than that is a search, not a view");
+      const bad = real.filter((c) => !isKnownClause(c));
+      if (bad.length) die(`unknown clause: ${bad.join(", ")}`, `the grammar: ${CLAUSE_GRAMMAR.join(" · ")} · joined with a space (and), \`or\`, or \`not\``);
+      const words = real.filter((c) => !/^(is|since|tag):/.test(c) && c !== "needs-you" && c !== "review-me");
       if (words.length > VIEW_LIMITS.maxWords)
         die(`at most ${VIEW_LIMITS.maxWords} free-text word, got ${words.length}`, "two words is a search; name the query instead");
       const now = new Date().toISOString();
+      // What the owner is using it for, optional, written for an agent to read
+      const noteIn = flag("note")?.trim();
       const existing = byName(name);
-      if (existing) { existing.clauses = clauses; existing.updatedAt = now; }
-      else plan.views.push({ id: noteId(), name, clauses, by: "agent", createdAt: now, updatedAt: now });
+      if (existing) {
+        existing.clauses = clauses; existing.updatedAt = now;
+        if (noteIn !== undefined) { if (noteIn) existing.note = noteIn; else delete existing.note; }
+      }
+      else plan.views.push({ id: noteId(), name, clauses, ...(noteIn ? { note: noteIn } : {}),
+                             by: "agent", createdAt: now, updatedAt: now });
       savePlan(boardDir, plan, `view:${existing ? "update" : "add"}`);
       console.log(`${existing ? "updated" : "added"} view "${name}": ${clauses.join(" ")}`);
+      if (noteIn) console.log(`  for: ${noteIn}`);
       break;
     }
 
@@ -1028,6 +1040,10 @@ switch (verb) {
                            won't resurrect); noted cards need --force
   unregister [slug] [--keep-data] remove a board everywhere (registry, status,
                            hub, HTTP); default trashes the board data too
+  view [list]              the board's named queries and what each is for;
+                           add "<name>" <clause…> [--note "what it is for"] ·
+                           rm "<name>". Clauses join with a space (and), or,
+                           or not:  is:open not tag:area:docs
   items [--all] [--global] the owner's own asks, unsorted first. They write these
                            from the board or the hub and never classify them;
                            sorting is your job. --all also shows sorted ones.
