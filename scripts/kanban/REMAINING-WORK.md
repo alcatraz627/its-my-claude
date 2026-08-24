@@ -175,6 +175,17 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     box; the board keeps its illustrated version. `esc` moved to `shared.js`
     for the same reason the CSS did.
 11. **Help hosts on the decision-page and transcript surfaces**, same source.
+    **Blocked, and the two halves are blocked differently.** The transcript
+    surface does not exist: `rg transcript *.html *.ts` finds nothing, and
+    `CHAT-HISTORY.md:71` records that the hub deliberately has no Sessions tab
+    yet, so `#14` has to land first. Decision pages are a separate subsystem
+    (`~/.claude/scripts/decision-page/`, its own `template.html` and static
+    `server.py` on :5197), and that template is deliberately self-contained
+    with one inline `<style>` and no external asset. Hosting the modal there
+    means one of two things and it is the owner's call: point those pages at
+    `http://localhost:5106/shared.{js,css}`, which makes a decision page depend
+    on the kanban server being up to look right, or inline a copy into every
+    generated page, which is the duplication the shared file exists to end.
 
 ### Unified surfaces
 
