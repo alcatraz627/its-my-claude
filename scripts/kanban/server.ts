@@ -13,6 +13,7 @@ import {
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
   loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState,
+  TAG_HUES, tagColourKey, loadTagColours, saveTagColours,
   VIEW_LIMITS, isKnownClause, isOperator, matchView, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
@@ -511,7 +512,8 @@ const server = Bun.serve({
             .map(([cid, ids]) => [cid, ids.filter((x) => alive.has(x))])) };
         return json({ slug, name: reg.name, root: reg.root, board: bd,
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
-          selection: loadSelection(dir), plan, presets: TAG_PRESETS });
+          selection: loadSelection(dir), plan, presets: TAG_PRESETS,
+          tagColours: loadTagColours() });
       }
       // The owner's own lane. `slug` scopes to one board and always keeps the
       // unassigned ones, because an unassigned item is routable to any board.
@@ -988,6 +990,26 @@ const server = Bun.serve({
           return;
         }
         out = { error: `unknown op ${body!.op}` };
+      });
+      return json(out, out.error ? 400 : 200);
+    }
+
+    // A tag's colour, held across boards (#66): global rather than per board,
+    // because the same word should look the same everywhere. Empty hue clears.
+    if (req.method === "POST" && p === "/api/tag-colour") {
+      const body = (await req.json().catch(() => null)) as
+        { kind?: string; name?: string; hue?: string | null } | null;
+      if (!body?.kind || !body?.name) return json({ error: "need {kind, name, hue|null}" }, 400);
+      const hue = body.hue ?? "";
+      if (hue && !(TAG_HUES as readonly string[]).includes(hue))
+        return json({ error: `hue must be one of ${TAG_HUES.join(", ")}` }, 400);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const m = loadTagColours();
+        const k = tagColourKey(body!.kind!, body!.name!);
+        if (hue) m[k] = hue; else delete m[k];
+        saveTagColours(m);
+        out = { ok: true, tagColours: m };
       });
       return json(out, out.error ? 400 : 200);
     }

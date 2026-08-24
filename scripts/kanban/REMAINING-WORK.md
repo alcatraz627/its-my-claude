@@ -254,7 +254,14 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     three modes on a five-line note is chrome without payload. Originally
     filed as: (`50b6dafd4faa`). Drafts has
     three modes; note editors have a two-state toggle.
-24. **Global tag colours** (`#66`). Set a tag's colour once, holds across boards.
+24. **Global tag colours** (`#66`) **Done 2026-08-25.** `KROOT/tag-colours.json`
+    keyed by `kind:name` (ids are per board; the word is what should look the
+    same everywhere), served with every board payload, written through
+    `/api/tag-colour` with the one-writer queue. The tag popover carries a
+    swatch row (8 theme hues plus back-to-kind), and the override is applied
+    as inline hue vars at every tag render site so it beats the kind class.
+    Verified live: set teal, the row wears the theme's teal, another board's
+    payload carries the same mapping, clearing removes it.
 25. **Inactive boards on the hub** (`#67`) **Was already built** (this row was
     stale): the hub's crate toggle archives a board out of every live tier
     into a greyed "gone" tier, server-backed via pins rather than the

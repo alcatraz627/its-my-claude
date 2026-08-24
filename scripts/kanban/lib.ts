@@ -507,6 +507,16 @@ export const presetFor = (kind: TagKind): TagPreset =>
   TAG_PRESETS.find((p) => p.kind === kind) ?? TAG_PRESETS[TAG_PRESETS.length - 1];
 
 export interface Tag { id: string; name: string; kind: TagKind; note?: string; createdAt: string }
+
+// A tag's colour, set once and held across boards (#66). Keyed by kind:name
+// because ids are per board and the same word should look the same everywhere.
+// Values are hue token names; the UI resolves them to its theme's variables.
+export const TAG_HUES = ["violet", "blue", "amber", "teal", "green", "red", "pink", "grey"] as const;
+export type TagColours = Record<string, string>;
+export const tagColourKey = (kind: string, name: string) => `${kind}:${String(name).trim().toLowerCase()}`;
+const tagColourFile = () => path.join(KROOT, "tag-colours.json");
+export const loadTagColours = (): TagColours => readJson<TagColours>(tagColourFile(), {});
+export const saveTagColours = (m: TagColours): void => atomicWrite(tagColourFile(), m, "tag-colour");
 export interface View {
   id: string; name: string; clauses: string[];
   // What the owner is USING this view for, in their words, optional. D3a,
