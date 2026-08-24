@@ -2458,9 +2458,16 @@ async function load() {
     if (lastError) { lastError = false; lastPayload = ""; } // recovery must re-render, not latch
     if (text === lastPayload) return; // unchanged: no re-render, keeps focus stable
     const parsed = JSON.parse(text);
-    // never clobber typing — but still look for a conflicting write, and leave
-    // lastPayload alone so the render happens as soon as the field is idle
-    if (dirty || document.activeElement === $("dNote")) { checkConflict(parsed); return; }
+    // Never clobber typing. `dirty` is that condition, and every keystroke in
+    // the composer sets it. Focus is NOT that condition, and testing for it
+    // froze the whole page: saving a note leaves the caret in the composer, so
+    // this returned early on the very load the save had just triggered, and
+    // the sidebar's note list, the card face counts and the summary all stayed
+    // on the previous state until something else happened to re-render. The
+    // owner met that as "saving the note does not update your notes".
+    // render() does not write to the composer (openDrawer does), so a render
+    // while the field is merely focused is safe.
+    if (dirty) { checkConflict(parsed); return; }
     lastPayload = text;
     data = parsed;
     render();
@@ -3661,17 +3668,46 @@ function autoGrow(ta) {
   const want = Math.min(Math.max(ta.scrollHeight + 2, 76), room);
   if (want > now) ta.style.height = `${want}px`;
 }
-// A fresh note is a fresh sitting, so the box returns to its resting height.
-function resetGrow(ta) { if (ta) { delete ta.dataset.userSized; ta.style.height = ""; autoGrow(ta); } }
+// How tall the owner wants a box is a preference, not a property of one note.
+// It used to last exactly one sitting: opening the next note cleared userSized
+// and the height with it, so a drag that plainly worked was gone by the time
+// you looked again, which reads as a box that cannot be resized at all. It is
+// stored per surface and per board now, because the drawer's composer and the
+// popover are different sizes of question.
+const sizeKey = (ta) => `kanban-h-${ta.id}-${slug}`;
+function savedSize(ta) { try { return localStorage.getItem(sizeKey(ta)); } catch { return null; } }
+
+// A fresh note is a fresh sitting, so the box returns to the height the owner
+// last chose, or to its resting height when they have never chosen one.
+function resetGrow(ta) {
+  if (!ta) return;
+  const want = savedSize(ta);
+  if (want) { ta.dataset.userSized = "1"; ta.style.height = want; return; }
+  delete ta.dataset.userSized; ta.style.height = ""; autoGrow(ta);
+}
 // A drag on the corner is the owner saying how big this should be. Nothing
-// grows over that afterwards.
-new ResizeObserver((es) => {
+// grows over that afterwards, and it outlives the sitting.
+let sizeSaveTimer = null;
+const sizeWatch = new ResizeObserver((es) => {
   for (const e of es) {
     const ta = e.target;
     if (ta.dataset.growing === "1") { ta.dataset.growing = ""; continue; }
-    if (document.activeElement === ta || ta.matches(":hover")) ta.dataset.userSized = "1";
+    if (document.activeElement !== ta && !ta.matches(":hover")) continue;
+    ta.dataset.userSized = "1";
+    // a drag fires this every frame and localStorage is synchronous
+    clearTimeout(sizeSaveTimer);
+    sizeSaveTimer = setTimeout(() => {
+      try { if (ta.style.height) localStorage.setItem(sizeKey(ta), ta.style.height); } catch {}
+    }, 200);
   }
-}).observe(document.getElementById("dNote"));
+});
+for (const id of ["dNote", "popNote"]) {
+  const ta = document.getElementById(id);
+  if (!ta) continue;
+  const want = savedSize(ta);
+  if (want) { ta.dataset.userSized = "1"; ta.style.height = want; }
+  sizeWatch.observe(ta);
+}
 // A short, once-only cue per action. The class is cleared on the way in so a
 // repeated action re-fires rather than sitting inert.
 function fx(el, name) {
@@ -5382,6 +5418,7 @@ function closeDrawer() {
   dirty = false;
   setCollapsed(true);
 }
+
 
 $("dNote").addEventListener("input", () => {
   dirty = true;
