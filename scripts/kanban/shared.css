@@ -281,9 +281,12 @@
   /* The page's own group is the widest thing in the bar and it was wrapping to
      a second row. It slides instead: a bar that changes HEIGHT as you use it
      costs more than one you scroll, and the zones stay where the eye left them. */
-  .npage{display:flex;align-items:center;gap:5px;padding:3px;flex:1 1 auto;min-width:0;
-         overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
-         border:1px solid var(--border);border-radius:var(--r-card);background:var(--canvas)}
+  /* The page's own verbs are a run of buttons, not a boxed widget. The bar drew
+     a capsule here, another around the tab group and a third around the send
+     group inside this one, so four outlines competed on one row and the bar
+     stopped reading as a bar. The zone divider carries the grouping instead. */
+  .npage{display:flex;align-items:center;gap:5px;padding:3px 0;flex:1 1 auto;min-width:0;
+         overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
   .npage::-webkit-scrollbar{display:none}
   /* A group that scrolls with no sign of it is a hidden control: "Copy status"
      simply stopped existing at 1600px. The mask fades the cut edge so the row

@@ -89,6 +89,48 @@ function tailTrim(el) {
   addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
 })();
 
+// ---------- one resize grip ----------
+// The lanes, the right drawer and the left sidebar each grew their own copy of
+// pointer capture, arrow keys and a persisted width. They differ only in which
+// edge the grip hangs on, so this takes that as an argument. C11: the third
+// copy is the one worth stopping.
+//
+// `width` reads the current size and `set` writes it (clamping and persistence
+// belong to the caller, which knows its own floor). `before`/`after` exist for
+// a surface that animates its width and must not animate a drag.
+function wireGrip(grip, { width, set, edge = "right", step = 24, before, after } = {}) {
+  if (!grip) return;
+  let from = null;
+  const sign = edge === "right" ? 1 : -1;
+  grip.addEventListener("pointerdown", (e) => {
+    from = { x: e.clientX, w: width() };
+    grip.classList.add("on");
+    if (before) before();
+    try { grip.setPointerCapture(e.pointerId); } catch {}
+    e.preventDefault(); e.stopPropagation();
+  });
+  grip.addEventListener("pointermove", (e) => {
+    if (from) set(from.w + sign * (e.clientX - from.x));
+  });
+  const end = (e) => {
+    if (!from) return;
+    from = null; grip.classList.remove("on");
+    if (after) after();
+    try { grip.releasePointerCapture(e.pointerId); } catch {}
+  };
+  grip.addEventListener("pointerup", end);
+  grip.addEventListener("pointercancel", end);
+  // A grip nobody can tab to is not a control. The arrow that grows it is the
+  // one pointing away from the edge it hangs on, so the key agrees with the drag.
+  grip.tabIndex = 0;
+  grip.addEventListener("keydown", (e) => {
+    const grow = edge === "right" ? "ArrowRight" : "ArrowLeft";
+    const shrink = edge === "right" ? "ArrowLeft" : "ArrowRight";
+    if (e.key === grow) { set(width() + step); e.preventDefault(); }
+    if (e.key === shrink) { set(width() - step); e.preventDefault(); }
+  });
+}
+
 // ---------- the page chrome ----------
 // Three views, reachable from all of them, with the same keys everywhere. The
 // partial navigation graph was the audit's headline finding: you could not

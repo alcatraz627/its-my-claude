@@ -74,7 +74,10 @@
           color:var(--text);font:var(--fs-body)/1 var(--sans)}
   #filter:focus{outline:none}
   /* the act group is the one that reaches an agent, so it holds a ground */
-  .tgrp.act{background:var(--well);border:1px solid var(--border);border-radius:var(--r-card);padding:3px}
+  /* This group sits inside the page group, which already draws the region, and
+     its buttons draw themselves. Three nested outlines is what made the bar read
+     as widgets sharing a row rather than one bar (FEEDBACK-CLASSES C7). */
+  .tgrp.act{padding:0}
   .tgrp.act button{height:26px}
   .tgrp.view{gap:2px}
   /* an empty group must not leave a hole in the row */
@@ -166,10 +169,27 @@
   /* context, never a destination: it rides along with whatever the canvas shows
      and never owns the page (the shell rule in v2-plan-r2) */
   .shell{flex:1;min-height:0;display:flex;align-items:stretch;min-width:0}
-  aside.side{flex:none;width:186px;border-right:1px solid var(--border);background:var(--well);
+  aside.side{position:relative;flex:none;width:186px;border-right:1px solid var(--border);background:var(--well);
              display:flex;flex-direction:column;gap:14px;padding:14px 12px;overflow-y:auto}
+  aside.side.sized{width:var(--sw)}
   aside.side.collapsed{width:38px;padding:14px 6px;gap:10px;align-items:center}
+  aside.side.collapsed.sized{width:38px}
   aside.side.collapsed .sgroup{display:none}
+  /* A panel says what it is. The drawer has carried a head since it was built;
+     this one had a bare chevron floating above a list of tags. */
+  .shead{display:flex;align-items:center;gap:6px;position:sticky;top:-14px;z-index:1;
+         margin:-14px -12px 0;padding:12px 10px 8px;background:var(--well);
+         border-bottom:1px solid var(--border)}
+  .shead h2{margin:0;font:600 var(--fs-body)/1.2 var(--sans);color:var(--text-2);
+            letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .shead .sp{flex:1}
+  /* the trailing edge, the way the lanes carry theirs; the drawer's is on its
+     leading edge because it is docked the other way round */
+  .sgrip{position:absolute;right:-3px;top:0;bottom:0;width:7px;cursor:col-resize;z-index:var(--z-grip)}
+  .sgrip::after{content:"";position:absolute;left:2px;top:14px;bottom:14px;width:2px;
+                border-radius:var(--r-hair);background:transparent;transition:background var(--t-fast)}
+  .sgrip:hover::after,.sgrip.on::after{background:var(--blue)}
+  aside.side.collapsed .sgrip{display:none}
   .sidetoggle{width:100%;justify-content:center;height:24px;padding:0;font-size:var(--fs-body);
               background:none;border-color:transparent;color:var(--text-3)}
   .sidetoggle:hover{background:var(--card);border-color:var(--border);color:var(--text)}
@@ -485,12 +505,18 @@
   .srcrow .ln{font:var(--fs-small)/1 var(--mono);color:var(--text-3);flex:none}
   .srcrow .ln.attached{font-family:var(--sans);border:1px solid var(--border);border-radius:var(--r-pill);padding:1px 7px}
   .srcrow .go{color:var(--text-3);flex:none;font-size:var(--fs-small)}
-  .livepeers{display:none;align-items:center;gap:6px;font-size:var(--fs-small);color:var(--text-2);white-space:nowrap}
+  /* However many are working here, this cannot grow without bound: it shares a
+     row with the primary action, and an unbounded list pushed "Send to agent"
+     off the bar the moment a third session appeared (C7 — the bar needs a
+     layout algorithm, not a hope that content stays short). */
+  .livepeers{display:none;align-items:center;gap:6px;font-size:var(--fs-small);color:var(--text-2);
+             white-space:nowrap;min-width:0;max-width:190px;flex:0 1 auto}
   .livepeers.on{display:inline-flex}
   /* neutral, not blue: blue now means "you and your controls" and active is
      carried by width and weight, so a peer-liveness dot is information */
   .livepeers i{width:6px;height:6px;border-radius:50%;background:var(--text-3);flex:none}
-  .livepeers b{font-weight:550;font-family:var(--mono);font-size:var(--fs-small);color:var(--text)}
+  .livepeers b{font-weight:550;font-family:var(--mono);font-size:var(--fs-small);color:var(--text);
+               min-width:0;overflow:hidden;text-overflow:ellipsis}
 
   #filter::placeholder{color:var(--text-3)}
 
@@ -1933,27 +1959,9 @@ function resetColWidth(lane) {
   if (el) applyColWidth(el, lane);
 }
 function wireColGrip(grip, wrap, lane) {
-  let from = null;
-  grip.addEventListener("pointerdown", (e) => {
-    from = { x: e.clientX, w: wrap.getBoundingClientRect().width };
-    grip.classList.add("on");
-    try { grip.setPointerCapture(e.pointerId); } catch {}
-    e.preventDefault(); e.stopPropagation();
-  });
-  grip.addEventListener("pointermove", (e) => { if (from) setColWidth(lane, from.w + (e.clientX - from.x)); });
-  const end = (e) => {
-    if (!from) return;
-    from = null; grip.classList.remove("on");
-    try { grip.releasePointerCapture(e.pointerId); } catch {}
-  };
-  grip.addEventListener("pointerup", end);
-  grip.addEventListener("pointercancel", end);
-  // a grip nobody can tab to is not a control
-  grip.tabIndex = 0;
-  grip.addEventListener("keydown", (e) => {
-    const cur = wrap.getBoundingClientRect().width;
-    if (e.key === "ArrowRight") { setColWidth(lane, cur + 24); e.preventDefault(); }
-    if (e.key === "ArrowLeft") { setColWidth(lane, cur - 24); e.preventDefault(); }
+  wireGrip(grip, {
+    width: () => wrap.getBoundingClientRect().width,
+    set: (px) => setColWidth(lane, px),
   });
 }
 
@@ -3093,19 +3101,74 @@ function renderSaveView() {
   };
 }
 
+// The sidebar was a fixed 186px, which is why a milestone read "aug22-kar" and
+// a view read "open not do…": it had no way to be wider. It is a panel like the
+// drawer now — a head that names it, a grip that resizes it, and a width kept
+// per board — which is the parity #74 asks for (FEEDBACK-CLASSES C3).
+const SIDE_MIN = 150, SIDE_MAX = () => Math.max(SIDE_MIN, Math.round(innerWidth * 0.4));
+const sideKey = () => `kanban-sidew-${slug}`;
+function setSideWidth(px, persist = true) {
+  const w = Math.min(Math.max(Math.round(px), SIDE_MIN), SIDE_MAX());
+  const el = $("side");
+  el.style.setProperty("--sw", `${w}px`);
+  el.classList.add("sized");
+  if (persist) localStorage.setItem(sideKey(), String(w));
+  return w;
+}
+function resetSideWidth() {
+  localStorage.removeItem(sideKey());
+  const el = $("side");
+  el.classList.remove("sized"); el.style.removeProperty("--sw");
+}
+
 function renderSide() {
   const el = $("side");
   el.className = "side" + (sideCollapsed ? " collapsed" : "");
   el.replaceChildren();
+  // Re-apply the kept width, which means writing the property and not merely
+  // the class: the class alone leaves width:var(--sw) resolving to nothing.
+  const saved = +localStorage.getItem(sideKey());
+  if (saved) setSideWidth(saved, false);
 
+  // Collapsed, it is a rail: the one control that brings it back, and nothing
+  // else. Expanded, it is a panel with a name on it, the way the drawer is.
+  if (sideCollapsed) {
+    const open = document.createElement("button");
+    open.type = "button"; open.className = "sidetoggle";
+    open.innerHTML = CHEV_R_ICON;
+    open.setAttribute("aria-label", "expand the sidebar");
+    open.dataset.tip = "Expand the sidebar (|)";
+    open.onclick = toggleSide;
+    el.appendChild(open);
+    return;
+  }
+
+  const head = document.createElement("div");
+  head.className = "shead";
+  const title = document.createElement("h2");
+  title.textContent = "This board";
+  const spacer = document.createElement("span");
+  spacer.className = "sp";
   const toggle = document.createElement("button");
-  toggle.type = "button"; toggle.className = "sidetoggle";
-  toggle.innerHTML = sideCollapsed ? CHEV_R_ICON : CHEV_L_ICON;
-  toggle.setAttribute("aria-label", sideCollapsed ? "expand the sidebar" : "collapse the sidebar");
-  toggle.dataset.tip = sideCollapsed ? "Expand the sidebar" : "Collapse the sidebar";
+  toggle.type = "button"; toggle.className = "icon ghost";
+  toggle.innerHTML = CHEV_L_ICON;
+  toggle.setAttribute("aria-label", "collapse the sidebar");
+  toggle.dataset.tip = "Collapse the sidebar (|)";
   toggle.onclick = toggleSide;
-  el.appendChild(toggle);
-  if (sideCollapsed) return;
+  head.append(title, spacer, toggle);
+  el.appendChild(head);
+
+  // The grip hangs on the trailing edge, so dragging right widens it, which is
+  // the same agreement between drag and arrow key the lanes and drawer keep.
+  const grip = document.createElement("div");
+  grip.className = "sgrip";
+  grip.setAttribute("role", "separator");
+  grip.setAttribute("aria-orientation", "vertical");
+  grip.setAttribute("aria-label", "resize the sidebar");
+  grip.dataset.tip = "Drag to resize · double-click to reset";
+  grip.ondblclick = resetSideWidth;
+  el.appendChild(grip);
+  wireGrip(grip, { width: () => el.getBoundingClientRect().width, set: setSideWidth });
 
   const group = (label, build) => {
     const g = document.createElement("div");
@@ -4143,25 +4206,13 @@ function setDrawerWidth(px, persist = true) {
 (() => {
   const saved = +localStorage.getItem(`kanban-dw-${slug}`);
   if (saved) setDrawerWidth(saved, false);
-  let resizing = false;
-  const grip = $("dGrip");
-  grip.addEventListener("pointerdown", (e) => {
-    resizing = true; grip.classList.add("on");
-    // the transition is for open/close, not for a drag that must track the pointer
-    $("drawer").style.transition = "none";
-    try { grip.setPointerCapture(e.pointerId); } catch {}
-    e.preventDefault(); e.stopPropagation();
-  });
-  addEventListener("pointermove", (e) => { if (resizing) setDrawerWidth(innerWidth - e.clientX); });
-  addEventListener("pointerup", () => {
-    if (!resizing) return;
-    resizing = false; grip.classList.remove("on"); $("drawer").style.transition = "";
-  });
-  // keyboard resize, because a drag handle nobody can tab to is not a control
-  grip.addEventListener("keydown", (e) => {
-    const cur = $("drawer").getBoundingClientRect().width;
-    if (e.key === "ArrowLeft") { setDrawerWidth(cur + 24); e.preventDefault(); }
-    if (e.key === "ArrowRight") { setDrawerWidth(cur - 24); e.preventDefault(); }
+  wireGrip($("dGrip"), {
+    edge: "left",                       // it hangs on this panel's leading edge
+    width: () => $("drawer").getBoundingClientRect().width,
+    set: (px) => setDrawerWidth(px),
+    // the transition is for open and close, not for a drag that must track the pointer
+    before: () => { $("drawer").style.transition = "none"; },
+    after: () => { $("drawer").style.transition = ""; },
   });
   addEventListener("resize", () => {
     const cur = $("drawer").getBoundingClientRect().width;
@@ -5267,9 +5318,12 @@ function renderLive() {
   const names = document.createElement("b");
   // a session's sub-agents ride along with its name, from the same file and the
   // same staleness window the statusline reads
-  names.textContent = who.map((p) => p.alias + (p.subagents ? ` +${p.subagents}` : "")).join(", ");
+  const full = who.map((p) => p.alias + (p.subagents ? ` +${p.subagents}` : ""));
+  // Two names and a remainder, because the bar has a finite row and the whole
+  // list is one hover away. The tooltip is where the detail belongs.
+  names.textContent = full.length > 2 ? `${full.slice(0, 2).join(", ")} +${full.length - 2}` : full.join(", ");
   el.append(dot, label, names);
-  el.dataset.tip = "Agent sessions working in this project right now";
+  el.dataset.tip = `Agent sessions working in this project right now:\n${full.join("\n")}`;
   el.className = "livepeers on";
 }
 

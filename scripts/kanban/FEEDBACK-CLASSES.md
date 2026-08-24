@@ -76,6 +76,22 @@ note popover, composer, search / tag / go-to pickers, doc modal, help modal.
 every surface above is built from it. A surface that deliberately opts out of
 one records why, in the charter.
 
+**Progress 2026-08-24.** The resize half of the primitive exists:
+`shared.js:wireGrip` carries pointer capture, arrow keys and an edge argument,
+and the three copies that had grown separately (lane columns, right drawer,
+left sidebar) all run through it. The left tag sidebar reached drawer parity —
+a head that names it, a collapse control, a grip, and a width kept per board,
+which is what `#74` asked for. It was a fixed 186px, which is why its labels
+read "aug22-kar" and "open not do…"; at any width the owner picks, nothing
+truncates.
+
+**Still open, and named rather than implied:** the asks column, ephemeral tag
+columns, the note popover, the composer, the three pickers, the doc modal and
+the help modal have none of it. Neither does the drag half for surfaces that
+genuinely float, nor "more than one at a time", which only means something for
+the ephemeral tag columns. A docked panel's grip is its drag handle; a floating
+one needs a real one, and no surface here floats freely yet.
+
 ---
 
 ## C4 · Structural chrome has no keyboard route
@@ -145,6 +161,21 @@ and 1920 widths, on every view of every page.
 
 **Done when.** One component, one layout algorithm, a documented overflow
 behaviour, sticky everywhere, verified at four widths in both themes.
+
+**Progress 2026-08-24.** Of the five things caught, three are closed. It no
+longer overflows: the identity wrapper had no styles at all so the zone clipped
+rather than shrank, and the find zone painted its overflow on top of the tab
+group. It reads less like unrelated widgets: four nested outlines competed on
+one row (a capsule around the tabs, one around the page group, a third around
+the send group inside that, and the buttons' own), and only the two that are
+genuinely one control each remain. The live-sessions badge could grow without
+bound and shoved the primary action off the bar, so it is capped with the full
+list in its tooltip.
+
+**Still open:** the spacing that wastes vertical room, whether it sticks on
+every view of Your asks, and the four-width two-theme verification. The overflow
+behaviour is now consistent but is not written down anywhere, which the row
+asks for.
 
 ---
 
