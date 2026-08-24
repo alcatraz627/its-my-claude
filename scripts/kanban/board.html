@@ -920,6 +920,12 @@
   /* ---------- sidebar tags ---------- */
   .srow.tagrow{gap:7px}
   .srow .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
+  /* a plan's state, worn as a small chip on its sidebar row (#58) */
+  .pstate{margin-left:auto;flex:none;font:600 var(--fs-caption)/1 var(--sans);letter-spacing:.03em;
+          border:1px solid var(--border);border-radius:var(--r-pill);padding:2px 7px;color:var(--text-3)}
+  .pstate.st-draft{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
+  .pstate.st-ruled{color:var(--green);border-color:var(--green-br);background:var(--green-bg)}
+  .pstate.st-superseded{color:var(--text-3);background:var(--well)}
   .srow .tct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
   .srow.on{background:var(--card);border-color:var(--border-2);color:var(--text)}
   .srow{display:flex;align-items:center;gap:3px;position:relative}
@@ -3773,6 +3779,32 @@ function renderSide() {
       };
       wrap.append(b, note, del);
       g.appendChild(wrap);
+    }
+  });
+
+  // Plans registered to THIS board (#58 phase 3): the docs a decision page is
+  // about, each with its state. Click reads the doc without leaving the board.
+  group("Plans", (g) => {
+    const docs = data?.planDocs ?? [];
+    if (!docs.length) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No plans registered. kanban.sh plan add <path> puts one here.";
+      g.appendChild(e);
+      return;
+    }
+    for (const pl of docs.filter((d) => sideHit(d.title) || sideHit(d.state))) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "srow planrow";
+      b.innerHTML = `<span class="stxt"></span><span class="pstate"></span>`;
+      b.querySelector(".stxt").textContent = pl.title;
+      const st = b.querySelector(".pstate");
+      st.textContent = pl.state;
+      st.className = `pstate st-${pl.state}`;
+      b.dataset.tip = `${pl.path}\n${pl.state}${pl.ruledAt ? ` ${ago(Date.parse(pl.ruledAt))} ago` : ""} · press to read it`;
+      b.onclick = () => openDocModal(pl.path, 0);
+      g.appendChild(b);
     }
   });
 

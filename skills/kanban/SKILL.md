@@ -90,6 +90,20 @@ tighter than OR, and there are no parentheses. The grammar: `is:open`
 **Read a view's `--note` before using it.** It is the owner's own line on what
 they use that view for, and it is written for you to read.
 
+## Plans
+
+A plan is a markdown doc registered to a board with a state. Register the plan
+you are working from, and rule it when the owner has ruled; the board's
+sidebar and the hub's Decisions view both show it with its state.
+
+```bash
+bash $K plan                               # list them, with ids and states
+bash $K plan add docs/plan.md --board <slug> [--state draft|ruled|superseded]
+bash $K plan rule <id>                     # the owner ruled on it
+bash $K plan supersede <id>                # a newer plan replaced it
+bash $K plan rm <id>                       # unregister; the doc is untouched
+```
+
 ## The owner's asks, and writing one yourself
 
 ```bash

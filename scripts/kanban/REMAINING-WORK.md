@@ -200,8 +200,16 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     registry. The hub renders both views, pending first with origin and age;
     rows link to :5197 where the pages already live. Verified live.
 13. **Phase 2: the charter as a decision page** (`#57`). After 12.
-14. **Phase 3: plans as a kind** (`#58`) `[spine]`. Lane-vocabulary states,
-    plan add and rule verbs. After 13.
+14. **Phase 3: plans as a kind** (`#58`) `[spine]` **Done 2026-08-25** (built
+    before 13, which is owner-gated; the spec says each phase ships alone).
+    `KROOT/plans.jsonl`, CLI `plan add/rule/supersede/rm/list` (documented in
+    the /kanban skill, charter-gated), plans in `/api/surfaces` and per board
+    in the board payload, a Plans group in the hub's Decisions view (draft
+    first, amber), and a PLANS sidebar section on the board whose rows open
+    the doc viewer. The five plan docs of this app are registered (4 ruled, 1
+    draft); a probe plan's rule-flip was verified at the API. Deliberately
+    NOT built: decision-page auto-rule on submit (cross-system, rides the
+    owner-gated 13) and plan tagging (ambiguous in the spec).
 15. **Phase 4: decisions without a card** (`#59`, P1). Derived attention,
     Decisions view. After 14.
 

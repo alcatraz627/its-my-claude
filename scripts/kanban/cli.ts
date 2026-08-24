@@ -15,6 +15,7 @@ import {
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled, diffHunks,
   DRAFTS, saveDrafts, recipientsOf, selfAlias, askState, askOf,
   matchView, isKnownClause, isOperator, CLAUSE_GRAMMAR, VIEW_LIMITS, savePlan, noteId, type View,
+  loadPlans, savePlans, type PlanDoc,
 } from "./lib.ts";
 import { harvest } from "./harvest.ts";
 
@@ -826,6 +827,59 @@ switch (verb) {
     });
     break;
   }
+  // A plan is a markdown doc registered to a board with a state (#58 phase 3):
+  // the artifact a decision page is about. Draft until ruled.
+  case "plan": {
+    const sub = positional[0] ?? "list";
+    const plans = loadPlans();
+    if (sub === "add") {
+      const given = positional[1];
+      if (!given) die("plan add needs a path", 'kanban.sh plan add docs/plan/22.md --board <slug> [--state draft]');
+      const abs = path.resolve(given);
+      if (!fs.existsSync(abs)) die(`no file at ${abs}`, "the path is resolved from the current directory");
+      const board = flag("board") ?? boardFor(projectDir()).slug;
+      const state = (flag("state") ?? "draft") as PlanDoc["state"];
+      if (!["draft", "ruled", "superseded"].includes(state))
+        die(`state must be draft, ruled or superseded`, `got "${state}"`);
+      let title = path.basename(abs);
+      try { const m = fs.readFileSync(abs, "utf8").match(/^#\s+(.+)$/m); if (m) title = m[1].trim(); } catch {}
+      const existing = plans.find((x) => x.path === abs);
+      if (existing) { existing.board = board; existing.state = state; existing.title = title; }
+      else plans.push({ id: noteId(), path: abs, board, title, state, at: new Date().toISOString() });
+      savePlans(plans);
+      console.log(`${existing ? "updated" : "registered"} plan "${title}" on ${board} (${state})`);
+      break;
+    }
+    if (sub === "rule" || sub === "supersede") {
+      const ref = positional[1];
+      const pl = plans.find((x) => x.id === ref) ?? plans.find((x) => ref && x.path.endsWith(ref));
+      if (!pl) die(`no plan matches "${ref ?? ""}"`, "kanban.sh plan lists them with their ids");
+      pl.state = sub === "rule" ? "ruled" : "superseded";
+      pl.ruledAt = new Date().toISOString();
+      savePlans(plans);
+      console.log(`${pl.state}: "${pl.title}" (${pl.id})`);
+      break;
+    }
+    if (sub === "rm") {
+      const ref = positional[1];
+      const pl = plans.find((x) => x.id === ref) ?? plans.find((x) => ref && x.path.endsWith(ref));
+      if (!pl) die(`no plan matches "${ref ?? ""}"`, "kanban.sh plan lists them with their ids");
+      savePlans(plans.filter((x) => x.id !== pl.id));
+      console.log(`removed plan "${pl.title}" (the doc itself is untouched)`);
+      break;
+    }
+    if (!plans.length) {
+      console.log("no plans registered yet");
+      console.log("  register one: kanban.sh plan add docs/plan.md --board <slug>");
+      break;
+    }
+    for (const pl of plans) {
+      console.log(`${pl.id}  ${pl.state.padEnd(10)}  ${pl.title}  ·  ${pl.board}`);
+      console.log(`    ${pl.path}`);
+    }
+    break;
+  }
+
   case "status": {
     const reg = registry();
     const port = serverPort();

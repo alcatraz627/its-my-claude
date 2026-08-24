@@ -503,6 +503,11 @@ async function loadSurfaces(which) {
   };
   if (which === "decisions") {
     group("Waiting on you", rows.filter((r) => r.pending));
+    // plans ride the Decisions view: a plan is the thing a decision page is
+    // about, and a draft one is awaiting a ruling
+    const plans = (j.plans ?? []).map((pl) => ({ ...pl, pending: pl.state === "draft",
+      origin: [pl.board, pl.state].filter(Boolean).join(" · ") }));
+    group("Plans", plans);
     group("Answered", rows.filter((r) => !r.pending));
   } else group("Previews", rows);
   if (!frag.length) {

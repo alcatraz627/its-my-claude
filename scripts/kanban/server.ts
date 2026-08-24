@@ -13,7 +13,7 @@ import {
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
   loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState,
-  TAG_HUES, tagColourKey, loadTagColours, saveTagColours,
+  TAG_HUES, tagColourKey, loadTagColours, saveTagColours, loadPlans,
   VIEW_LIMITS, isKnownClause, isOperator, matchView, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
@@ -440,6 +440,15 @@ const server = Bun.serve({
         out.decisions.sort((a: any, b: any) =>
           Number(b.pending) - Number(a.pending) || String(b.at ?? "").localeCompare(String(a.at ?? "")));
 
+        // plans: markdown docs registered to a board with a state (#58 phase 3)
+        try {
+          out.plans = loadPlans().map((pl) => ({
+            kind: "plan", id: pl.id, name: pl.title, board: pl.board, state: pl.state,
+            href: `/doc?path=${encodeURIComponent(pl.path)}`, at: pl.ruledAt ?? pl.at }));
+          out.plans.sort((a: any, b: any) =>
+            Number(a.state !== "draft") - Number(b.state !== "draft") || String(b.at ?? "").localeCompare(String(a.at ?? "")));
+        } catch (e: any) { out.plansError = String(e?.message ?? e); }
+
         // previews arrive with preview.sh (not built): an empty list is the
         // honest answer, not a missing key the hub would have to guess about
         const man = path.join(CROOT, "assets", "previews", "manifest.jsonl");
@@ -451,7 +460,7 @@ const server = Bun.serve({
         return json({ ...out,
           counts: { boards: out.boards.length, decisions: out.decisions.length,
                     decisionsPending: out.decisions.filter((d: any) => d.pending).length,
-                    previews: out.previews.length } });
+                    plans: (out.plans ?? []).length, previews: out.previews.length } });
       }
 
       if (p === "/api/boards") {
@@ -513,7 +522,8 @@ const server = Bun.serve({
         return json({ slug, name: reg.name, root: reg.root, board: bd,
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
           selection: loadSelection(dir), plan, presets: TAG_PRESETS,
-          tagColours: loadTagColours() });
+          tagColours: loadTagColours(),
+          planDocs: loadPlans().filter((pl) => pl.board === slug) });
       }
       // The owner's own lane. `slug` scopes to one board and always keeps the
       // unassigned ones, because an unassigned item is routable to any board.

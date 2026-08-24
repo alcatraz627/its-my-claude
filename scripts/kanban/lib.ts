@@ -614,6 +614,27 @@ export interface LandingsFile { landings: Record<string, Landing> }
 export interface Pin { id: string; kind: "card" | "item" | "board"; ref: string; slug?: string; label?: string; at: string }
 export interface PinsFile { pins: Pin[] }
 
+// A plan is a markdown doc registered to a board with a state (#58 phase 3):
+// the artifact a decision page rules on. One global JSONL, board named per row.
+export interface PlanDoc { id: string; path: string; board: string; title: string;
+                           state: "draft" | "ruled" | "superseded"; at: string; ruledAt?: string }
+const PLANS_FILE = () => path.join(KROOT, "plans.jsonl");
+export const loadPlans = (): PlanDoc[] => {
+  try {
+    return fs.readFileSync(PLANS_FILE(), "utf8").split("\n").filter(Boolean)
+      .map((l) => { try { return JSON.parse(l) as PlanDoc; } catch { return null; } })
+      .filter((x): x is PlanDoc => !!x);
+  } catch { return []; }
+};
+export function savePlans(list: PlanDoc[]): void {
+  const file = PLANS_FILE();
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const tmp = `${file}.tmp-${process.pid}`;
+  fs.writeFileSync(tmp, list.map((x) => JSON.stringify(x)).join("\n") + (list.length ? "\n" : ""), "utf8");
+  fs.renameSync(tmp, file);
+  console.error(`[state] save file=plans.jsonl by=plan at=${new Date().toISOString()}`);
+}
+
 export const loadItems = (): ItemsFile => readJson<ItemsFile>(ITEMS, { items: [] });
 export const loadLandings = (): LandingsFile => readJson<LandingsFile>(LANDINGS, { landings: {} });
 export const loadPins = (): PinsFile => readJson<PinsFile>(PINS, { pins: [] });
