@@ -109,6 +109,8 @@
        border-radius:10px;padding:11px 14px;box-shadow:var(--shadow)}
   /* a star is an open instruction, so it stops shouting once the item is sorted */
   .ask.starred:not(.landed){border-color:var(--amber-br)}
+  /* the row a deep link asked for, lit briefly so the eye lands where the URL did */
+  .ask.linked{border-color:var(--ring);box-shadow:var(--focus-glow)}
   .ask.landed{background:none;box-shadow:none;padding:9px 12px}
   .ask .ab{font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
   .ask.landed .ab{color:var(--text-3);font-size:12.5px}
@@ -364,6 +366,7 @@ function routeEl(it, boards, onDone) {
 function askRow(it, boards = [], onDone = () => {}) {
   const el = document.createElement("div");
   el.className = "ask" + (it.landing ? " landed" : "") + (it.starred ? " starred" : "");
+  el.dataset.id = it.id;   // deep links (/?view=asks#<id>) find the row by this
   const b = document.createElement("div");
   b.className = "ab"; b.textContent = it.body;
   const f = document.createElement("div");
@@ -450,6 +453,18 @@ async function loadAsks() {
     tail.push(e);
   }
   list.replaceChildren(composeEl(boardRes.boards ?? []), bar, ...groups, ...tail);
+
+  // A deep link names one ask in the fragment. Landing on the view without
+  // bringing that ask into sight is landing on the wrong page politely.
+  const want = decodeURIComponent(location.hash.slice(1));
+  if (want) {
+    const row = list.querySelector(`.ask[data-id="${CSS.escape(want)}"]`);
+    if (row) {
+      row.scrollIntoView({ block: "center" });
+      row.classList.add("linked");
+      setTimeout(() => row.classList.remove("linked"), 2400);
+    }
+  }
 }
 
 // each view names itself in the title AND says what it is for, because the hub

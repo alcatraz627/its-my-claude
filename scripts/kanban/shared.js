@@ -252,7 +252,9 @@ const KIND_ROW = {
     text: (i) => i.body ?? "",
     row: (i) => ({ id: i.id, name: firstLineName(i.body),
                    sub: i.boardName ? `on ${i.boardName}` : "unassigned" }),
-    href: (i) => `/?v=asks#${encodeURIComponent(i.id)}`,
+    // the same parameter the kind's index href uses: the hub reads ?view=,
+    // and ?v= landed every deep link on the Boards view
+    href: (i) => `/?view=asks#${encodeURIComponent(i.id)}`,
   },
   drafts: {
     text: (d) => `${d.title ?? ""} ${d.body ?? ""}`,
@@ -282,10 +284,17 @@ function kindMatches(ix, kindId, q, cap) {
              .map((x) => ({ kind: kindId, href: a.href(x), ...a.row(x) }));
 }
 
+let navAC = null;   // the live mount's wiring; a remount aborts it first
 function navbar({ mount, active, title, sub, crumb, identity, find, actions, counts = {},
                   peers, help, onView, aside }) {
   const el = typeof mount === "string" ? document.querySelector(mount) : mount;
   if (!el) return null;
+  // The hub remounts this bar on every view switch. Without teardown each
+  // mount stacked another visibilitychange + resize set, and one tab focus
+  // fired N index refreshes (measured: 15 fetches after 4 switches).
+  navAC?.abort();
+  const navSig = (navAC = new AbortController()).signal;
+  const unobserve = (o) => navSig.addEventListener("abort", () => o.disconnect());
   // add, never replace: a page may already carry a class its own CSS reads
   // (the board styles .brow .crumb, and losing that class loses the crumb)
   el.classList.add("navbar");
@@ -349,11 +358,11 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     if (!el) return;
     const mark = () => el.dataset.of = el.scrollWidth > el.clientWidth + 1 ? "x" : "none";
     mark();
-    if (typeof ResizeObserver === "function") new ResizeObserver(mark).observe(el);
+    if (typeof ResizeObserver === "function") { const o = new ResizeObserver(mark); o.observe(el); unobserve(o); }
     // content lands after mount (the status band, the page's verbs), and a
     // content change need not change the box the ResizeObserver watches
-    if (typeof MutationObserver === "function") new MutationObserver(mark).observe(el, { childList: true, subtree: true });
-    addEventListener("resize", mark);
+    if (typeof MutationObserver === "function") { const o = new MutationObserver(mark); o.observe(el, { childList: true, subtree: true }); unobserve(o); }
+    addEventListener("resize", mark, { signal: navSig });
   };
   markOverflow(document.getElementById("nbStatus"));
   if (find) { document.getElementById("nbFind").append(find); markOverflow(find); }
@@ -393,10 +402,11 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   if (typeof ResizeObserver === "function") {
     const ro = new ResizeObserver(tighten);
     ro.observe(el);
+    unobserve(ro);
     const np = document.getElementById("nbActions");
-    if (np) { ro.observe(np); new MutationObserver(tighten).observe(np, { childList: true, subtree: true }); }
+    if (np) { ro.observe(np); const mo = new MutationObserver(tighten); mo.observe(np, { childList: true, subtree: true }); unobserve(mo); }
   }
-  addEventListener("resize", tighten);
+  addEventListener("resize", tighten, { signal: navSig });
   if (peers) document.getElementById("nbPeers").append(peers);
   // Counts land after first paint: the bar must not wait on a fetch per kind to
   // draw. A page may pass its own for a kind it already holds; anything it does
@@ -411,7 +421,7 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   loadCounts(false);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") loadCounts(true);
-  });
+  }, { signal: navSig });
   // a page that switches in place intercepts; everything else navigates
   if (onView) {
     el.querySelectorAll(".views a").forEach((a) => {
