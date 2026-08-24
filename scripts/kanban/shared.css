@@ -88,6 +88,13 @@
   body{background:var(--canvas);color:var(--text);font:var(--fs-lead)/1.5 var(--sans);-webkit-font-smoothing:antialiased}
 
   /* ---------- buttons (charter §5, §7) ---------- */
+  /* Every button in this app carries display:inline-flex, and an explicit
+     display beats the `hidden` attribute's UA display:none. So `el.hidden =
+     true` silently did nothing to a button: "save as view" stood in the bar at
+     all times while the code that owns it believed it was showing only under a
+     filter. A control the code thinks is hidden and the eye can see is worse
+     than either, so the attribute is made to win outright. */
+  [hidden]{display:none !important}
   button{font:inherit;cursor:pointer;border-radius:var(--r-control);border:1px solid var(--border);background:var(--card);
          color:var(--text-2);min-height:var(--h-control);padding:5px 10px;font-size:var(--fs-body);font-weight:500;display:inline-flex;
          align-items:center;gap:6px;transition:background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
@@ -229,8 +236,22 @@
      this zone as much as to the other one — the fix for one zone reaching zero
      must not be another zone reaching zero. */
   .nzid{flex:0 1 auto;min-width:180px}
+  /* The zone was allowed to shrink and could not, because the wrapper a page
+     mounts its identity into carried no styles at all: a flex item defaults to
+     min-width:auto, so it refuses to go below its content and the zone clips
+     instead. Whatever a page puts here, the wrapper shrinks. */
+  .nident{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden}
   .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
-  .nfind{display:flex;align-items:center;gap:7px;min-width:0}
+  /* Same treatment as .npage below, for the same reason and one zone over: this
+     one shrank correctly and then painted its overflow ON TOP of the tabs, so
+     "save as view" rendered half-under the Boards tab. A zone draws inside
+     itself; what does not fit slides, and the mask says so. */
+  .nfind{display:flex;align-items:center;gap:7px;min-width:0;
+         overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:1px 0}
+  .nfind::-webkit-scrollbar{display:none}
+  .nfind > *{flex:none}
+  .nfind[data-of="x"]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%);
+                      mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%)}
   .nowrap{white-space:nowrap;flex:none}
   /* This zone held flex:none while carrying 77% of the bar's width, so at 1600
      the bar overflowed by 62px with all three zones already on their floors:

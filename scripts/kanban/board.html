@@ -677,7 +677,6 @@
      to the hub and it does not make you scroll a fixed list to find one. */
   .btitle{background:none;border:none;padding:2px 6px 2px 2px;border-radius:var(--r-control);gap:4px}
   .btitle:hover{background:var(--card);color:var(--text)}
-  .btitle .bchev{font-size:var(--fs-small);color:var(--text-3);line-height:1}
   /* the binding rides on the control, so nobody has to open help to find it */
   .btitle .bkey{font:var(--fs-small)/1 var(--mono);color:var(--text-3);background:var(--well);
                 border:1px solid var(--border);border-radius:var(--r-inner);padding:2px 5px;margin-left:3px}
@@ -826,10 +825,17 @@
   .sview .svn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .skind{font:600 var(--fs-caption)/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);
          padding:5px 7px 1px}
-  .stagbar{display:flex;gap:4px;padding:3px 5px 0}
-  .stagbar button{flex:1;height:22px;padding:0;justify-content:center;font-size:var(--fs-small);
-                  background:none;border-color:transparent;color:var(--text-3)}
-  .stagbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  /* A tag row is a filter you press all day; renaming or destroying one is rare
+     and irreversible. Those two verbs used to stand in a permanent second row
+     under every tag, so a 186px column carried 44 always-on words competing with
+     the 22 names they belonged to. They follow the views rows now (.sdel above):
+     absolute, so they cost no width, and revealed on hover. */
+  .stag{position:relative}
+  .stag .sact{position:absolute;right:3px;top:50%;transform:translateY(-50%);
+              display:flex;gap:1px;opacity:0;pointer-events:none;
+              background:var(--well);border-radius:var(--r-control);
+              transition:opacity var(--t-fast)}
+  .stag:hover .sact,.stag:focus-within .sact{opacity:1;pointer-events:auto}
 
   /* ---------- column sizing ---------- */
   /* Each lane can be dragged wider and remembers it. The grip is on the lane's
@@ -857,6 +863,11 @@
   /* A folded lane keeps its head, its count and its amber. It narrows rather
      than vanishing, because "where did Done go" is the failure hide-lane has
      and collapse does not (§18). */
+  /* Empty is not folded: a folded lane is a choice somebody made and hides its
+     cards, while a vacant one has none to hide. It stays a full lane, keeps the
+     drop hint, and simply stops claiming room it has nothing to put in. A lane
+     the owner has dragged to a width keeps that width; theirs outranks this. */
+  .col.vacant:not(.folded):not(.sized){min-width:0;flex:0 0 250px}
   .col.folded{min-width:0;width:210px;flex:0 0 210px}
   .col.folded .cards{display:none}
   .col.folded .colgrip{display:none}
@@ -1145,7 +1156,7 @@
 <header class="top">
   <div class="brow">
     <span class="crumb"><a href="/" data-tip="The hub: every board, your pins and your drafts">All boards</a><span>/</span></span>
-    <button class="btitle" id="name" aria-haspopup="listbox" data-tip="Switch board, star one, or jump to a recent one"><span class="bnm">kanban</span><span class="bkey">b</span><span class="bchev">⌄</span></button>
+    <button class="btitle" id="name" aria-haspopup="listbox" data-tip="Switch board, star one, or jump to a recent one"><span class="bnm">kanban</span><span class="bkey">b</span></button>
     <span class="bpath" id="root"></span>
     <span class="livepeers" id="live"></span>
     <div class="actions">
@@ -1538,7 +1549,7 @@ function mountBoardNav() {
   ident.append(bar.querySelector(".crumb"), $("name"), $("root"));
   const find = document.createElement("span");
   find.className = "nfind";
-  find.append(bar.querySelector(".tgrp.find"), $("saveView"));
+  find.append(bar.querySelector(".tgrp.find"));
   const page = document.createElement("span");
   page.className = "bpage";
   // the board's own settings, in the page group because that is what they are:
@@ -1555,7 +1566,11 @@ function mountBoardNav() {
     `<circle cx="10.4" cy="8" r="1.6" fill="var(--canvas)" stroke="currentColor" stroke-width="1.3"/>` +
     `<circle cx="6.4" cy="11.4" r="1.6" fill="var(--canvas)" stroke="currentColor" stroke-width="1.3"/></svg>`;
   cog.onclick = (e) => { e.stopPropagation(); openBoardSettings(cog); };
-  page.append($("pickGrp"), bar.querySelector(".tgrp.act"), cog);
+  // "save as view" names what you are looking at, which is a verb on THIS
+  // board rather than part of the find control, and the find zone had no room
+  // for it: it painted half-under the Boards tab. It leads the page group so
+  // that when a filter makes it appear it lands beside the zone you just used.
+  page.append($("saveView"), $("pickGrp"), bar.querySelector(".tgrp.act"), cog);
   navbar({ mount: bar, active: "boards", identity: ident, find,
            actions: page, peers: $("live"), help: openHelp });
 }
@@ -3156,9 +3171,9 @@ function renderSide() {
   });
 
   // The board's vocabulary, grouped by kind so the presets read as the
-  // categories they are. Each row filters; the two buttons under it are the
-  // only place a tag is renamed or destroyed, which keeps those away from the
-  // chips you press all day.
+  // categories they are. Each row filters; renaming and destroying appear on
+  // the row when you point at it, which keeps those away from the chips you
+  // press all day without spending a permanent line on each.
   group("Tags", (g) => {
     const tags = plan().tags;
     if (!tags.length) {
@@ -3179,6 +3194,7 @@ function renderSide() {
       g.appendChild(h);
       for (const t of mine) {
         const wrap = document.createElement("div");
+        wrap.className = "stag";
         const b = document.createElement("button");
         b.type = "button";
         b.className = `srow tagrow k-${t.kind}` + (filterText === tagFilter(t) ? " on" : "");
@@ -3188,9 +3204,12 @@ function renderSide() {
         b.onclick = () => setFilter(filterText === tagFilter(t) ? "" : tagFilter(t));
         wrap.appendChild(b);
         const bar = document.createElement("div");
-        bar.className = "stagbar";
+        bar.className = "sact";
         const ren = document.createElement("button");
-        ren.type = "button"; ren.textContent = "rename"; ren.dataset.tip = "Rename it everywhere it is used";
+        ren.type = "button"; ren.className = "icon ghost";
+        ren.innerHTML = PEN_ICON;
+        ren.setAttribute("aria-label", `rename the tag ${t.name}`);
+        ren.dataset.tip = "Rename it everywhere it is used";
         ren.onclick = async () => {
           const name = prompt(`Rename ${t.kind}:${t.name} to:`, t.name);
           if (name && name.trim() && name.trim() !== t.name) {
@@ -3199,7 +3218,9 @@ function renderSide() {
           }
         };
         const del = document.createElement("button");
-        del.type = "button"; del.textContent = "delete"; del.className = "danger";
+        del.type = "button"; del.className = "icon ghost danger";
+        del.innerHTML = X_ICON;
+        del.setAttribute("aria-label", `delete the tag ${t.name}`);
         del.dataset.tip = `Remove it from all ${counts.get(t.id) ?? 0} card(s) and from the vocabulary`;
         del.onclick = async () => {
           const n = counts.get(t.id) ?? 0;
@@ -3314,8 +3335,13 @@ function render() {
     // a collapsed lane still shows its head and its count, never just a
     // chevron: §18's space rule applied to a lane, not a disappearing act
     const folded = collapsedOf(lane);
+    // A lane with nothing in it does not need the width of one holding 156
+    // cards. §18's space rule again: it keeps its head, its count and its drop
+    // target, and it widens the moment a card lands, so this is a consequence
+    // of being empty rather than a state anyone has to manage.
     wrap.className = "col" + (lane === "blocked" || lane === "active" ? " attn" : "")
       + (ARCHIVE.has(lane) ? " archive" : "") + (folded ? " folded" : "")
+      + (cardsIn.length ? "" : " vacant")
       + ` dens-${densityOf(lane)}`;
     wrap.id = `lane-${lane}`;
     const head = document.createElement(collapsible ? "summary" : "div");

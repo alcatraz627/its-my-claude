@@ -278,17 +278,23 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   document.getElementById("nbHome").onclick = () => { location.href = "/"; };
   document.getElementById("nbTheme").onclick = toggleTheme;
   if (help) document.getElementById("nbHelp").onclick = help;
-  if (find) document.getElementById("nbFind").append(find);
+  // A group that scrolls with no sign of it is a hidden control, and one that
+  // overflows with no scroll at all paints on top of its neighbour. Marking
+  // whether anything is really cut off lets the fade switch itself off, and the
+  // re-measure matters because overflow is a function of the window rather than
+  // of one render. Both scrolling groups in the bar want the same treatment.
+  const markOverflow = (el) => {
+    if (!el) return;
+    const mark = () => el.dataset.of = el.scrollWidth > el.clientWidth + 1 ? "x" : "none";
+    mark();
+    if (typeof ResizeObserver === "function") new ResizeObserver(mark).observe(el);
+    addEventListener("resize", mark);
+  };
+  if (find) { document.getElementById("nbFind").append(find); markOverflow(find); }
   if (actions) {
     const np = document.getElementById("nbActions");
     np.append(actions);
-    // The fade only means something when something is actually cut off. Mark
-    // the group so the mask can switch itself off, and re-measure on resize:
-    // whether it overflows is a function of the window, not of one render.
-    const mark = () => np.dataset.of = np.scrollWidth > np.clientWidth + 1 ? "x" : "none";
-    mark();
-    if (typeof ResizeObserver === "function") new ResizeObserver(mark).observe(np);
-    addEventListener("resize", mark);
+    markOverflow(np);
   }
   if (peers) document.getElementById("nbPeers").append(peers);
   // Counts land after first paint: the bar must not wait on a fetch per kind to
