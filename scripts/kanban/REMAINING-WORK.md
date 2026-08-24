@@ -154,9 +154,14 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 7. **OR and NOT grammar** **Done 2026-08-24**: `matchQuery` exists
    (`match.js:100`) with `parseQuery`/`matchParsed`, to the ruled precedence.
    The claim that it did not exist is what this plan said before `#39` finished.
-8. **Owner notes on a view**. D3a, his words: "allow me to add notes for agent
-   (optional) as well so when the agent reads the board it can know what I am
-   using it for". `lib.ts:510` has no `note` field.
+8. **Owner notes on a view** **Done 2026-08-25.** The claim that `lib.ts` had
+   no `note` field was stale: the field, the server's add and note ops, and
+   the CLI's `--note` flag and under-row print were already in. What was
+   actually missing was the board UI, and it is in now: the save-as-view
+   popover carries an optional "For the agent" field, the sidebar row's
+   tooltip shows `for: <note>`, and a pencil on the row edits or clears it
+   (empty clears, the ask grammar). Verified live: save with note, tooltip,
+   pencil pre-fill, edit, delete.
 9. **The `/kanban` skill is stale against its own CLI** **Done 2026-08-24**,
    and guarded: `test-charter.sh` asserts "every cli.ts verb appears in the
    /kanban skill" and passes. The peer complaint gcp-c2398e8b is answered.

@@ -2206,6 +2206,10 @@ function openNameView(btn, clauses) {
     `<div class="crow"><span class="ck">Filter</span><span class="cv">${esc(clauses.join(" "))}</span></div>` +
     `<div class="crow"><span class="ck">Name</span></div>` +
     `<input type="text" id="vwname" aria-label="view name">` +
+    // D3a: what the owner is USING the view for, in their words, for an agent
+    // that reads the board. Optional, and never acted on automatically.
+    `<div class="crow"><span class="ck">For the agent</span></div>` +
+    `<input type="text" id="vwnote" aria-label="what you are using this view for" placeholder="optional: what you are using it for">` +
     `<div class="cbtns"><button type="button" class="ghost" id="vwcancel">Cancel</button>` +
     `<button type="button" id="vwsave">Save</button></div>`;
   document.body.appendChild(card);
@@ -2215,12 +2219,14 @@ function openNameView(btn, clauses) {
   const input = card.querySelector("#vwname");
   input.value = clauses.join(" ").slice(0, 40);
   input.focus(); input.select();
+  const noteIn = card.querySelector("#vwnote");
   const save = async () => {
     const name = input.value.trim();
     if (!name) return;
+    const note = noteIn.value.trim();
     closeColCard();
     const res = await fetch("/api/view", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, op: "add", name, clauses }) });
+      body: JSON.stringify({ slug, op: "add", name, clauses, ...(note ? { note } : {}) }) });
     const out = await res.json().catch(() => ({ error: "failed" }));
     if (out.error) return toast(out.error, true);
     toast(`View "${out.view.name}" saved`);
@@ -2228,6 +2234,46 @@ function openNameView(btn, clauses) {
   };
   card.querySelector("#vwsave").onclick = save;
   card.querySelector("#vwcancel").onclick = closeColCard;
+  for (const el of [input, noteIn]) el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); save(); }
+    if (e.key === "Escape") { e.stopPropagation(); closeColCard(); }
+  });
+  setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
+}
+
+// The owner's note on a view (D3a): what they are using it for, written for
+// an agent that reads the board, never acted on automatically. Same popover
+// shell; an emptied field clears the note, the grammar an empty ask uses.
+function openViewNote(v, btn) {
+  closeColCard();
+  const card = document.createElement("div");
+  card.className = "colcard on";
+  card.id = "colcard";
+  card.innerHTML =
+    `<h4><span>${esc(v.name)}</span></h4>` +
+    `<div class="crow"><span class="ck">For the agent</span></div>` +
+    `<input type="text" id="vwnote2" aria-label="what you are using this view for" placeholder="what you are using it for">` +
+    `<div class="cfoot">An agent reading the board sees this line. Empty clears it.</div>` +
+    `<div class="cbtns"><button type="button" class="ghost" id="vwncancel">Cancel</button>` +
+    `<button type="button" id="vwnsave">Save</button></div>`;
+  document.body.appendChild(card);
+  const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
+  card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
+  card.style.left = `${Math.min(Math.max(10, r.left), innerWidth - cr.width - 10)}px`;
+  const input = card.querySelector("#vwnote2");
+  input.value = v.note ?? "";
+  input.focus(); input.select();
+  const save = async () => {
+    closeColCard();
+    const res = await fetch("/api/view", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, op: "note", id: v.id, note: input.value.trim() }) });
+    const out = await res.json().catch(() => ({ error: "failed" }));
+    if (out.error) return toast(out.error, true);
+    toast(input.value.trim() ? `The agent will see it on "${v.name}"` : `Note cleared from "${v.name}"`);
+    await afterWrite();
+  };
+  card.querySelector("#vwnsave").onclick = save;
+  card.querySelector("#vwncancel").onclick = closeColCard;
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { e.preventDefault(); save(); }
     if (e.key === "Escape") { e.stopPropagation(); closeColCard(); }
@@ -3617,8 +3663,17 @@ function renderSide() {
       b.innerHTML = `<span class="svtop"><span class="svn"></span><span class="svc"></span></span>`;
       b.querySelector(".svn").textContent = v.name;
       b.querySelector(".svc").textContent = String(n);
-      b.dataset.tip = `${v.clauses.join(" · ")}\n${n} card${n === 1 ? "" : "s"} right now${v.by === "agent" ? "\nmade by an agent" : ""}`;
+      b.dataset.tip = `${v.clauses.join(" · ")}\n${n} card${n === 1 ? "" : "s"} right now`
+        + (v.note ? `\nfor: ${v.note}` : "") + (v.by === "agent" ? "\nmade by an agent" : "");
       b.onclick = () => setFilter(v.clauses.join(" ").toLowerCase());
+      // D3a: the owner's line on what the view is FOR, editable from the row
+      // the same way delete lives there, so adding it needs no other surface.
+      const note = document.createElement("button");
+      note.type = "button"; note.className = "icon ghost sdel";
+      note.setAttribute("aria-label", `note on the view ${v.name}, for the agent`);
+      note.dataset.tip = v.note ? `For the agent: ${v.note}\nPress to change it` : "Tell the agent what you use this view for";
+      note.innerHTML = PEN_ICON;
+      note.onclick = (e) => { e.stopPropagation(); openViewNote(v, note); };
       const del = document.createElement("button");
       del.type = "button"; del.className = "icon ghost sdel";
       del.setAttribute("aria-label", `delete the view ${v.name}`);
@@ -3633,7 +3688,7 @@ function renderSide() {
         toast(`View "${v.name}" deleted`);
         await afterWrite();
       };
-      wrap.append(b, del);
+      wrap.append(b, note, del);
       g.appendChild(wrap);
     }
   });
