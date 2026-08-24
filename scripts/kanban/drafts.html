@@ -165,9 +165,25 @@
 // Drafts is a real page rather than a view, so it navigates rather than
 // switching in place. Before this it offered two links and no route to Asks at
 // all, which is the partial-graph defect the audit named.
-navbar({ mount: "#phead", active: "drafts", title: "Your drafts",
-  sub: "documents you write for an agent, the rung above an ask",
-  help: () => theHelp && theHelp.open() });
+// The same identity the board wears: `All drafts / <the one you are reading>`,
+// rather than a title block only this page had. The instance half is filled in
+// by mountNav() whenever the open draft changes.
+function mountNav() {
+  navbar({ mount: "#phead", active: "drafts",
+    identity: crumbFor("drafts", currentDraftName()),
+    help: () => theHelp && theHelp.open() });
+}
+// The draft currently open, by the name a person would call it. Nothing open is
+// the index, and the crumb correctly shows no instance half.
+function currentDraftName() {
+  if (!currentId) return "";
+  const d = (drafts ?? []).find((x) => x.id === currentId);
+  if (!d) return "";
+  // An untitled draft is named by its first real line, which is routinely a
+  // markdown heading, so the marks come off. Otherwise the crumb reads
+  // "All drafts / ## gcc-work" and shows the syntax rather than the name.
+  return d.title || firstLineName(d.body, 48) || "(untitled)";
+}
 
 // The keyboard reference, on this page too. `?` opens it; the rows are
 // generated from SHARED_KEYS so they cannot drift from the bindings.
@@ -816,6 +832,7 @@ async function renderPreview() {
 // is not rebuilt at all while the owner is mid-edit, which is what the poll's own
 // comment already promised and the code did not keep.
 function render({ editor = true } = {}) {
+  mountNav();   // the crumb names the open draft, so it re-reads on every render
   document.getElementById("list").replaceChildren(listEl());
   const t = document.getElementById("tplNew");
   const keep = t.value;

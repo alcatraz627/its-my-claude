@@ -115,6 +115,43 @@ const THEME_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none">
 // handler, and the help control is ABSENT rather than dead on a page that has no
 // modal yet (charter §7 states: a control that cannot act is hidden, never
 // silently greyed).
+// The name a person would call a body of prose: its first real line, with a
+// markdown heading's marks taken off. Without the strip a crumb reads
+// "All drafts / ## gcc-work" and a picker row reads "# Claude Instances global
+// wiring", showing the syntax instead of the name. Shared because the crumb,
+// the picker and the drafts list all name things this way and drifted apart.
+function firstLineName(body, cap = 72) {
+  const first = (body || "").split("\n").find((l) => l.trim()) ?? "";
+  return first.replace(/^\s*#{1,6}\s+/, "").replace(/^\s*[-*+]\s+/, "").trim().slice(0, cap);
+}
+
+// One address grammar, from NAV-UNIFICATION.md §1: `All <kind> / <instance>`.
+// The left half is always a link to that kind's index, so wherever you are you
+// can step up one level and then across. Its label comes from the registry, so
+// a kind reads the same word here as it does on its tab.
+//
+// Pass no instance and you get the index's own crumb, which is the whole left
+// half and no separator: a kind's index is not an instance of itself.
+function crumbFor(kindId, instance) {
+  const k = kindById(kindId);
+  const wrap = document.createElement("span");
+  wrap.className = "ncrumb";
+  const a = document.createElement("a");
+  a.href = k?.href ?? "/";
+  a.textContent = `All ${k?.indexLabel ?? (k?.label ?? kindId).toLowerCase()}`;
+  a.dataset.tip = k ? `${k.tip} · press ${k.key}` : "";
+  wrap.append(a);
+  if (instance) {
+    const sep = document.createElement("span");
+    sep.textContent = "/";
+    const now = document.createElement("strong");
+    now.className = "ncrumb-now";
+    now.textContent = instance;
+    wrap.append(sep, now);
+  }
+  return wrap;
+}
+
 function navbar({ mount, active, title, sub, crumb, identity, find, actions, counts = {},
                   peers, help, onView }) {
   const el = typeof mount === "string" ? document.querySelector(mount) : mount;

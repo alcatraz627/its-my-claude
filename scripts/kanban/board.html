@@ -5085,7 +5085,7 @@ function bpSections() {
   // Charter §4, as amended 2026-08-22: in a kind-mixing list the SECTION says
   // which kind, and the glyph's tint only reinforces it. So each kind gets its
   // own heading and never relies on hue to be understood.
-  const oneLine = (t) => (t || "").split("\n").find((l) => l.trim()) ?? "";
+
   // One adapter per non-board kind: what its instances are, how to match one
   // against the query, and how a row reads. The section's LABEL comes from the
   // registry, so a kind is named the same here as it is in the navbar. Adding
@@ -5095,13 +5095,13 @@ function bpSections() {
     asks: {
       rows: () => bpItems,
       match: (i) => (i.body || "").toLowerCase().includes(q),
-      row: (i) => ({ id: i.id, name: oneLine(i.body).slice(0, 72),
+      row: (i) => ({ id: i.id, name: firstLineName(i.body),
                      sub: i.boardName ? `on ${i.boardName}` : "unassigned" }),
     },
     drafts: {
       rows: () => bpDrafts,
       match: (d) => `${d.title ?? ""} ${d.body}`.toLowerCase().includes(q),
-      row: (d) => ({ id: d.id, name: d.title || oneLine(d.body).slice(0, 72) || "(untitled)",
+      row: (d) => ({ id: d.id, name: d.title || firstLineName(d.body) || "(untitled)",
                      sub: `${(d.body || "").split("\n").length}L` }),
     },
   };

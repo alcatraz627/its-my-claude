@@ -11,7 +11,12 @@
 const KINDS = [
   {
     id: "boards",
-    label: "Boards",                 // the human word (charter §2), shown in the UI
+    label: "Boards",                 // the human word (charter §2), on the tab
+    // What the crumb calls the kind's index: "All <indexLabel>". Separate from
+    // label because the tab wants the owner's word and the crumb wants a
+    // plural that reads after "All": the tab says "Your asks", the crumb says
+    // "All asks", never "All your asks".
+    indexLabel: "boards",
     href: "/",
     key: "1",                        // the number that reaches it
     hue: "--blue",                   // the kind's accelerator tint, on top of grouping
@@ -23,6 +28,7 @@ const KINDS = [
   {
     id: "asks",
     label: "Your asks",
+    indexLabel: "asks",
     href: "/?view=asks",
     key: "2",
     hue: "--amber",
@@ -33,6 +39,7 @@ const KINDS = [
   {
     id: "drafts",
     label: "Drafts",
+    indexLabel: "drafts",
     href: "/drafts",
     key: "3",
     hue: "--violet",

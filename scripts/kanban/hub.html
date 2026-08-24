@@ -465,9 +465,12 @@ let archived = new Set();
 const STAR = (on) => `<svg width="13" height="13" viewBox="0 0 14 14" fill="${on ? "currentColor" : "none"}"><path d="m7 1.8 1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 10l-3.2 1.7.6-3.6L1.8 5.6l3.6-.5L7 1.8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>`;
 function setView(v) {
   view = v;
-  const [t, sub] = VIEW_COPY[v] ?? VIEW_COPY.boards;
-  navbar({ mount: "#phead", active: v === "notes" ? "asks" : "boards",
-    title: t, sub, counts: hubCounts,
+  // The hub IS a kind's index, so its crumb is the left half alone: "All
+  // boards" or "All asks", no instance. Same identity slot the board and drafts
+  // use, rather than the title block this page had to itself.
+  const kind = v === "notes" ? "asks" : "boards";
+  navbar({ mount: "#phead", active: kind,
+    identity: crumbFor(kind), counts: hubCounts,
     onView: (nv) => setView(nv === "asks" ? "notes" : "boards"),
     help: () => theHelp && theHelp.open() });
   load();
