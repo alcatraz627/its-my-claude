@@ -1362,8 +1362,11 @@
       <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>previous / next tab</td></tr>
       <tr><td><kbd>1</kbd>…<kbd>9</kbd></td><td>jump to that tab</td></tr>
       <tr><td><kbd>w</kbd></td><td>close this tab</td></tr>
-      <tr><td><kbd>\</kbd></td><td>collapse / expand the panel</td></tr>
-      <tr><td><kbd>|</kbd></td><td>collapse / expand the sidebar</td></tr>
+    </tbody>
+    <tbody>
+      <tr><td colspan="2" class="grouphead">Layout</td></tr>
+      <tr><td><kbd>|</kbd></td><td>open / close the left sidebar</td></tr>
+      <tr><td><kbd>\</kbd></td><td>open / close the right panel</td></tr>
     </tbody>
     <tbody>
       <tr><td colspan="2" class="grouphead">Notes</td></tr>
@@ -2188,7 +2191,7 @@ function peekEl() {
     // opening a second copy of the same detail
     el.onclick = (e) => {
       if (e.target.closest(".chip,.cbox")) return;
-      if (!findCard(c.id)) toast("That card is filtered out of the board right now");
+      if (!findCard(c.id)) toast("That card is hidden by the filter — clear it with escape in the search box");
     };
     list.appendChild(el);
   });
@@ -2697,7 +2700,7 @@ function digestText() {
 }
 async function copyDigest() {
   try { await navigator.clipboard.writeText(digestText()); toast("Status digest copied"); }
-  catch { toast("Copy failed — clipboard blocked", 3000, "err"); }
+  catch { toast("The browser blocked the clipboard — select the text and copy it by hand", 3000, "err"); }
 }
 $("digestBtn").onclick = copyDigest;
 
@@ -3953,6 +3956,21 @@ function setCollapsed(on) {
   localStorage.setItem(`kanban-side-${slug}`, on ? "1" : "0");
   renderTabs();   // labels differ between the two widths
 }
+// Open or shut the right panel. Closing remembers nothing extra: the tab list
+// already survives, so reopening lands on the card you were reading.
+function toggleDrawer() {
+  const d = $("drawer");
+  if (d.classList.contains("open")) {
+    flushDraft();
+    d.classList.remove("open");
+    toast("Panel closed — \\ brings it back");
+    return;
+  }
+  const back = openId ?? tabs[tabs.length - 1] ?? flat[sel];
+  if (!back) { toast("No card open yet — press enter on one first"); return; }
+  openDrawer(back);
+}
+
 function closeTab(id) {
   const at = tabs.indexOf(id);
   if (at < 0) return;
@@ -3972,7 +3990,7 @@ function openInBackground(id) {
   // with "Already open in a tab", which reads as a broken gesture rather than as
   // the other half of a toggle. (Owner, 2026-08-22: "middle click on a card in
   // main board should toggle add / remove in the board".)
-  if (tabs.includes(id)) { closeTab(id); toast("Closed that tab"); return; }
+  if (tabs.includes(id)) { closeTab(id); toast("Took that card back out of the panel"); return; }
   // Whether the panel is open belongs to the reader, not to this gesture. It
   // used to force a closed panel open, which is the "without stealing focus or
   // changing sidebar open state" half of the same ask. Measured before the fix:
@@ -3981,7 +3999,10 @@ function openInBackground(id) {
   tabs.push(id);
   if (!openId && wasOpen) { openDrawer(id); return; }  // nothing active yet, and the panel is already showing
   renderTabs();
-  toast(wasOpen ? "Opened in the background" : "Added a tab, waiting in the panel");
+  // "Added a tab, waiting in the panel" named two things the owner has never
+  // called them and offered no way to reach what it had just done. A message
+  // about an action says what happened and how to get to it.
+  toast(wasOpen ? "Opened behind what you are reading" : "Added to the panel — press \\ to open it");
 }
 
 function openDrawer(id, wantNoteId, opts = {}) {
@@ -4055,7 +4076,7 @@ function openDrawer(id, wantNoteId, opts = {}) {
   $("dId").querySelector("span").textContent = c.id;
   $("dId").onclick = async () => {
     try { await navigator.clipboard.writeText(c.id); toast("Card id copied"); }
-    catch { toast("Copy failed — clipboard blocked", 3000, "err"); }
+    catch { toast("The browser blocked the clipboard — select the text and copy it by hand", 3000, "err"); }
   };
   $("dVia").textContent = c.via ? `authored by session ${c.via}` : "";
 
@@ -4941,7 +4962,7 @@ function goSearch(hit) {
 async function selectAllShown() {
   const cards = spRows.filter((x) => x.kind === "card").map((x) => x.r.id);
   const notes = spRows.filter((x) => x.kind === "note").map((x) => nKey(x.r.cid, x.r.n.id));
-  if (!cards.length && !notes.length) { toast("Nothing here to select"); return; }
+  if (!cards.length && !notes.length) { toast("Nothing here to select — this lane is empty"); return; }
   closeSearch();
   for (const id of cards) await toggleSel("card", id, true);
   for (const k of notes) await toggleSel("note", k, true);
@@ -5498,7 +5519,12 @@ document.addEventListener("keydown", (e) => {
     case "[": if (tabs.length) { openDrawer(tabs[(tabs.indexOf(openId) - 1 + tabs.length) % tabs.length]); } e.preventDefault(); break;
     case "w": if (openId) { closeTab(openId); e.preventDefault(); } break;
     case "|": toggleSide(); e.preventDefault(); break;
-    case "\\": if (panel || tabs.length) { setCollapsed(!collapsed()); e.preventDefault(); } break;
+    // The owner asked why neither sidebar opens from the keyboard. The left one
+    // did, on |. This one did not: \ only ever changed the panel's WIDTH, and
+    // did nothing at all when the panel was shut, which is exactly when you
+    // want a key. It opens and closes now. Width stays on the grip, where a
+    // drag already lives.
+    case "\\": toggleDrawer(); e.preventDefault(); break;
 
     // ---- notes ----
     case "J": if (panel) { stepNote(1); e.preventDefault(); } break;
