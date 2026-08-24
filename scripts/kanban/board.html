@@ -184,16 +184,21 @@
   aside.side.collapsed{width:38px}
   aside.side.collapsed.sized{width:38px}
   .sbody{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
-         display:flex;flex-direction:column;gap:2px;padding:8px 12px 14px}
+         display:flex;flex-direction:column;gap:0;padding:6px 10px 14px}
   aside.side.collapsed .sbody{display:none}
   /* A panel says what it is. The drawer has carried a head since it was built;
      this one had a bare chevron floating above a list of tags. */
-  .shead{display:flex;align-items:center;gap:6px;position:sticky;top:-14px;z-index:1;
-         margin:-14px -12px 0;padding:12px 10px 8px;background:var(--well);
-         border-bottom:1px solid var(--border)}
-  .shead h2{margin:0;font:600 var(--fs-body)/1.2 var(--sans);color:var(--text-2);
-            letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* The head owns the search rather than floating above it, and it carries its
+     own padding: it used to reach past the panel with negative margins left
+     over from when the shell was the scrolling box. */
+  .shead{flex:none;display:flex;flex-direction:column;gap:5px;padding:7px 10px 8px;
+         background:var(--well);border-bottom:1px solid var(--border)}
+  .shead .stop{display:flex;align-items:center;gap:6px;min-width:0}
+  .shead h2{margin:0;font:600 var(--fs-small)/1.2 var(--sans);color:var(--text-3);
+            letter-spacing:.02em;text-transform:uppercase;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .shead .sp{flex:1}
+  .shead .icon{padding:2px 4px}
   /* the trailing edge, the way the lanes carry theirs; the drawer's is on its
      leading edge because it is docked the other way round */
   .sgrip{position:absolute;right:-4px;top:0;bottom:0;width:9px;cursor:col-resize;z-index:var(--z-grip)}
@@ -205,16 +210,17 @@
               background:none;border-color:transparent;color:var(--text-3)}
   .sidetoggle:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   .sgroup{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .sgroup + .sgroup{margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .sgroup + .sgroup{margin-top:4px;padding-top:4px;border-top:1px solid var(--border)}
   /* Two levels that read as two levels. A section and a kind were 11.5px and
      10.5px, both weight 600, both uppercase — one pixel apart, which is no
      hierarchy at all. A section is now a sentence-case heading you can fold;
      a kind stays small caps and steps back, so the eye sorts them by shape
      rather than by measuring them. */
-  .slabel{display:flex;align-items:center;gap:6px;width:100%;padding:4px 6px;
+  .slabel{display:flex;align-items:center;gap:6px;width:100%;padding:3px 6px;
           background:none;border:1px solid transparent;border-radius:var(--r-control);
-          font:650 var(--fs-body)/1.2 var(--sans);letter-spacing:-.005em;color:var(--text);
+          font:550 var(--fs-body)/1.15 var(--sans);letter-spacing:-.004em;color:var(--text-2);
           text-align:left;cursor:pointer}
+  .slabel:hover{color:var(--text)}
   .slabel:hover{background:var(--card);border-color:var(--border)}
   .slabel .sfold{flex:none;display:grid;place-items:center;color:var(--text-3);
                  transition:transform var(--t-fast)}
@@ -222,7 +228,7 @@
   .slabel .stt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .slabel .sct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
   .sgroup[data-open="0"] .sgbody{display:none}
-  .sgbody{display:flex;flex-direction:column;gap:4px;padding-top:3px}
+  .sgbody{display:flex;flex-direction:column;gap:3px;padding-top:1px}
   .sempty{font-size:var(--fs-small);color:var(--text-3);line-height:1.5}
   .srow{display:flex;align-items:center;gap:6px;background:none;border:1px solid transparent;
         border-radius:var(--r-control);padding:5px 7px;color:var(--text-2);font-size:var(--fs-body);text-align:left;
@@ -255,7 +261,12 @@
   .col{flex:1 1 400px;min-width:400px;max-width:560px;max-height:100%;display:flex;flex-direction:column;min-height:0;
        background:var(--well);border:1px solid var(--border);border-radius:var(--r-panel);padding:6px 10px 4px}
   .col.archive{flex:.68 1 400px;min-width:400px;max-width:440px}
-  .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 7px;flex:none}
+  .chead{display:flex;align-items:center;gap:8px;padding:2px 4px 7px;flex:none;cursor:grab}
+  .chead:active{cursor:grabbing}
+  /* where the column will land, drawn on the edge it will land against */
+  .col.dropbefore{box-shadow:inset 3px 0 0 var(--blue)}
+  .col.dropafter{box-shadow:inset -3px 0 0 var(--blue)}
+  .col.dragging{opacity:.55}
   .chead h2{font:600 var(--fs-lead)/1.4 var(--sans);letter-spacing:-.006em;color:var(--text)}
   .chead .count{margin-left:auto;font-size:var(--fs-body);font-weight:550;color:var(--text-3);background:var(--card);
                 border:1px solid var(--border);border-radius:var(--r-pill);padding:1px 8px;min-width:24px;text-align:center}
@@ -889,8 +900,8 @@
   /* One box that narrows both lists. Twenty-two tags and no way to find one
      but scrolling was the gap; it filters as you type and says so when nothing
      matches, rather than looking empty. */
-  .sfind{display:flex;align-items:center;gap:6px;margin:0 12px 8px;padding:0 8px;
-         height:28px;background:var(--card);border:1px solid var(--border);
+  .sfind{display:flex;align-items:center;gap:6px;padding:0 7px;
+         height:26px;background:var(--card);border:1px solid var(--border);
          border-radius:var(--r-control)}
   .sfind:focus-within{border-color:var(--blue);box-shadow:var(--focus-glow)}
   .sfind svg{flex:none;color:var(--text-3)}
@@ -968,6 +979,13 @@
                             background:var(--card);border:1px solid var(--border);
                             border-radius:var(--r-control);font:400 var(--fs-body)/1 var(--sans);outline:none}
   .colcard input[type=text]:focus{border-color:var(--blue);box-shadow:var(--focus-glow)}
+  /* A line that says what the thing under your pointer does, so the icons do not
+     have to be guessed at and nothing needs a second visit to find out. */
+  .colcard .cfoot{margin-top:2px;padding-top:7px;border-top:1px solid var(--border);
+                  font:400 var(--fs-small)/1.4 var(--sans);color:var(--text-3);min-height:16px}
+  .colcard .cbtns .sp{flex:1}
+  .colcard .cbtns button{white-space:nowrap}
+  .colcard .cbtns button svg{flex:none}
   .colcard .cbtns{display:flex;gap:6px;padding-top:5px}
   .divchips{display:flex;flex-wrap:wrap;gap:5px}
   .divchips .chip{height:24px}
@@ -1696,6 +1714,12 @@ function tagChip(t, { onCard = null } = {}) {
     // rather than a filter that hides the board you were reading
     peekTag(peekOn?.id === t.id ? null : t);
   };
+  // The same tag, wherever it appears, answers a right-click with the same
+  // popover: the sidebar row and this chip are two views of one object.
+  b.addEventListener("contextmenu", (e) => {
+    e.preventDefault(); e.stopPropagation();
+    openTagOps(t, b, tagCounts().get(t.id) ?? 0);
+  });
   if (onCard) {
     b.addEventListener("auxclick", (e) => {
       // middle-click drops the tag from this card, the same gesture the tabs
@@ -2012,17 +2036,17 @@ function applyColWidth(el, lane) {
 // them and is just `rail`. Resolving it in one place is what let the asks column
 // use the lane machinery at all: setting its width wrote the key and then looked
 // for an element that does not exist.
-const colEl = (lane) => document.getElementById(lane === "rail" ? "rail" : `lane-${lane}`);
+const colNode = (lane) => document.getElementById(lane === "rail" ? "rail" : `lane-${lane}`);
 function setColWidth(lane, px) {
   const w = Math.min(Math.max(Math.round(px), COL_MIN), COL_MAX);
   localStorage.setItem(colKey(lane), String(w));
-  const el = colEl(lane);
+  const el = colNode(lane);
   if (el) applyColWidth(el, lane);
   return w;
 }
 function resetColWidth(lane) {
   localStorage.removeItem(colKey(lane));
-  const el = colEl(lane);
+  const el = colNode(lane);
   if (el) applyColWidth(el, lane);
 }
 function wireColGrip(grip, wrap, lane) {
@@ -2160,33 +2184,70 @@ function openTagOps(t, btn, n) {
   card.innerHTML =
     `<h4><i class="tdot" style="width:8px;height:8px;border-radius:50%;background:var(--dot)"></i>` +
       `<span>${esc(t.kind === "plain" ? t.name : `${t.kind}: ${t.name}`)}</span></h4>` +
-    `<div class="crow"><span class="ck">On</span><span class="cv">${n} card${n === 1 ? "" : "s"}</span></div>` +
-    `<div class="crow"><span class="ck">Name</span></div>` +
     `<input type="text" id="tgname" aria-label="tag name">` +
-    `<div class="cbtns"><button type="button" class="ghost danger" id="tgdel">Delete</button>` +
-    `<button type="button" id="tgsave">Rename</button></div>`;
+    `<div class="cbtns">` +
+      `<button type="button" class="ghost" id="tgon">${RING_ICON}<span>${n} card${n === 1 ? "" : "s"}</span></button>` +
+      `<span class="sp"></span>` +
+      `<button type="button" class="ghost" id="tgpeek">${PEEK_ICON}</button>` +
+      `<button type="button" class="ghost danger" id="tgdel">${TRASH_ICON}</button>` +
+    `</div>` +
+    `<div class="cfoot" id="tgfoot">Type to rename. Saves on its own.</div>`;
   card.classList.add(`k-${t.kind}`);
   document.body.appendChild(card);
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, r.left - cr.width + 40), innerWidth - cr.width - 10)}px`;
-  btn.setAttribute("aria-expanded", "true");
+  btn.setAttribute?.("aria-expanded", "true");
+  const foot = card.querySelector("#tgfoot");
+  const say = (text) => { foot.textContent = text; };
+
+  // No Save button: the field IS the rename. It settles half a second after you
+  // stop typing and says so, which is one control instead of two and removes the
+  // step where a name you typed is not the name it has.
   const input = card.querySelector("#tgname");
   input.value = t.name;
   input.focus(); input.select();
-  const save = async () => {
+  let live = t.name, timer = null;
+  const commit = async () => {
     const name = input.value.trim();
-    if (!name || name === t.name) return closeColCard();
-    closeColCard();
+    if (!name || name === live) return;
+    live = name;
+    say("Saving\u2026");
     await tagOp({ op: "rename", tagId: t.id, name });
+    say(`Saved as \u201c${name}\u201d`);
     render();
   };
-  card.querySelector("#tgsave").onclick = save;
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") { e.preventDefault(); save(); }
-    if (e.key === "Escape") { e.stopPropagation(); closeColCard(); }
+  input.addEventListener("input", () => {
+    clearTimeout(timer); say("Renaming when you stop\u2026");
+    timer = setTimeout(commit, 500);
   });
-  card.querySelector("#tgdel").onclick = async () => {
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); clearTimeout(timer); commit(); }
+    if (e.key === "Escape") { e.stopPropagation(); clearTimeout(timer); closeColCard(); }
+  });
+
+  const hint = (el2, text) => {
+    el2.addEventListener("mouseenter", () => say(text));
+    el2.addEventListener("mouseleave", () => say("Type to rename. Saves on its own."));
+  };
+  // The count is the thing you would press next: it says how many wear this tag,
+  // so pressing it shows exactly those.
+  const on = card.querySelector("#tgon");
+  on.dataset.tip = `Show the ${n} card${n === 1 ? "" : "s"} with this tag`;
+  on.onclick = () => { closeColCard(); setFilter(tagFilter(t)); };
+  hint(on, `Filter the board to these ${n}`);
+
+  const peek = card.querySelector("#tgpeek");
+  peek.setAttribute("aria-label", "open this tag beside the board");
+  peek.dataset.tip = "Open it in a column beside the board (middle-click the tag)";
+  peek.onclick = () => { closeColCard(); peekTag(t); };
+  hint(peek, "Open it beside the board, keeping what you were reading");
+
+  const del = card.querySelector("#tgdel");
+  del.setAttribute("aria-label", `delete the tag ${t.name}`);
+  del.dataset.tip = `Remove it from all ${n} card(s) and from the vocabulary`;
+  hint(del, `Removes it from ${n} card${n === 1 ? "" : "s"} and from the vocabulary`);
+  del.onclick = async () => {
     if (n && !confirm(`Delete ${t.kind}:${t.name}? It comes off ${n} card${n > 1 ? "s" : ""}.`)) return;
     closeColCard();
     await tagOp({ op: "delete", tagId: t.id });
@@ -3335,6 +3396,8 @@ function renderSide() {
 
   const head = document.createElement("div");
   head.className = "shead";
+  const top = document.createElement("div");
+  top.className = "stop";
   const title = document.createElement("h2");
   title.textContent = "This board";
   const spacer = document.createElement("span");
@@ -3345,7 +3408,8 @@ function renderSide() {
   toggle.setAttribute("aria-label", "collapse the sidebar");
   toggle.dataset.tip = "Collapse the sidebar (|)";
   toggle.onclick = toggleSide;
-  head.append(title, spacer, toggle);
+  top.append(title, spacer, toggle);
+  head.append(top);
   el.appendChild(head);
 
   // One box narrows every list below it. It keeps its own text across the
@@ -3368,7 +3432,7 @@ function renderSide() {
     clr.onclick = () => { sideQuery = ""; renderSide(); };
     find.append(clr);
   }
-  el.appendChild(find);
+  head.append(find);
 
   const body = document.createElement("div");
   body.className = "sbody";
@@ -3498,6 +3562,20 @@ function renderSide() {
         b.querySelector(".stxt").textContent = t.name;
         b.dataset.tip = `${counts.get(t.id) ?? 0} card(s). Press to show only those.`;
         b.onclick = () => setFilter(filterText === tagFilter(t) ? "" : tagFilter(t));
+        // Right-click reaches the same popover the handle opens, so the gesture
+        // people already try works instead of the browser's own menu.
+        b.addEventListener("contextmenu", (e) => {
+          e.preventDefault(); e.stopPropagation();
+          openTagOps(t, b, counts.get(t.id) ?? 0);
+        });
+        // Middle-click is the quiet version of this row's press (§7): pressing
+        // filters the board to the tag, so the quiet one opens it BESIDE what
+        // you are reading instead of replacing it.
+        b.addEventListener("auxclick", (e) => {
+          if (e.button !== 1) return;
+          e.preventDefault(); e.stopPropagation();
+          peekTag(peekOn?.id === t.id ? null : t);
+        });
         wrap.appendChild(b);
         // One handle, opening the pair in the app's own popover. Renaming used
         // window.prompt, which is the OS asking on the app's behalf: it cannot
@@ -3687,10 +3765,52 @@ function render() {
   for (const child of [...lanes.children]) if (child !== rail) child.remove();
   if (!rail.isConnected) lanes.appendChild(rail);
   for (const el of rest) lanes.appendChild(el);
+  applyColOrder(lanes);
   markSel();
   tailTrim($("root"));
   document.querySelectorAll(".foot .src").forEach(tailTrim);
   localStorage.setItem(VISIT_KEY, String(Date.now()));
+}
+
+// Where the columns sit, as an order the owner sets by dragging one. The peek
+// column arrives at the end because that is where it slides in from, and a
+// column you dragged somewhere should stay there — including that one, which is
+// the whole of "ephemeral columns cannot be dragged around".
+//
+// Order is a list of ids, and anything the list does not name keeps its natural
+// place after those it does. Stored per board.
+const colOrderKey = () => `kanban-colorder-${slug}`;
+const colOrder = () => { try { return JSON.parse(localStorage.getItem(colOrderKey())) ?? []; } catch { return []; } };
+function setColOrder(ids) {
+  if (ids.length) localStorage.setItem(colOrderKey(), JSON.stringify(ids));
+  else localStorage.removeItem(colOrderKey());
+}
+function applyColOrder(lanes) {
+  const saved = colOrder();
+  // Reorder the DOM, not a CSS order property. The reorder primitive indexes by
+  // document order, so a visual order laid over the top disagrees with it and
+  // moves the wrong column — measured: dragging Done landed Blocked.
+  //
+  // Moving a node blurs anything focused inside it, and the asks column holds a
+  // composer somebody may be typing in, so a pass that would move it while it
+  // has focus is skipped. The order is already stable by then.
+  if (saved.length) {
+    const want = [...lanes.children].sort((a, b) => {
+      const ai = saved.indexOf(a.id), bi = saved.indexOf(b.id);
+      return (ai < 0 ? Infinity : ai) - (bi < 0 ? Infinity : bi);
+    });
+    const holdsFocus = want.some((c) => c.contains(document.activeElement) && c.id === "rail");
+    if (!holdsFocus) want.forEach((c) => lanes.appendChild(c));
+  }
+  for (const c of lanes.children) {
+    // The HEAD is the handle, not the whole column: a draggable element cannot
+    // have text selected inside it, and a column is mostly text you want to
+    // select. dragstart bubbles, so the reorder still sees the column.
+    c.draggable = false;
+    const h = c.querySelector(".chead");
+    if (h) { h.draggable = true; h.dataset.tip = h.dataset.tip || "Drag to move this column"; }
+  }
+  wireReorder(lanes, ".col", (order) => { setColOrder(order); applyColOrder(lanes); }, (el) => el.id);
 }
 
 function markSel() {
@@ -4015,6 +4135,7 @@ for (const [id, ico] of [["dPrev", UP_ICON], ["dNext", DOWN_ICON],
   ["dCollapse", CHEV_RR_ICON], ["dClose", X_ICON], ["popPick", RING_ICON], ["popClose", X_ICON], ["hClose", X_ICON]]) {
   const b = $(id); if (b) b.innerHTML = ico;
 }
+const PEEK_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="2.8" width="12.4" height="10.4" rx="1.6" stroke="currentColor" stroke-width="1.2"/><path d="M9.6 2.8v10.4" stroke="currentColor" stroke-width="1.2"/></svg>`;
 const TRASH_ICON = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3.2 4.6h9.6M6.4 4.6V3.2h3.2v1.4M4.6 4.6l.6 8.2h5.6l.6-8.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const DOT_ICON = `<svg width="9" height="9" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>`;
 const TICK_ICON = `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.4 5.6 10 11 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -4196,8 +4317,11 @@ function wireReorder(container, sel, commit, idOf) {
       if (!dragEl || el === dragEl) return;
       e.preventDefault();
       const r = el.getBoundingClientRect();
-      // horizontal strips split left/right, vertical ones top/bottom
-      const after = container.classList.contains("dtabs") && !collapsed()
+      // Horizontal strips split left/right, vertical ones top/bottom. Which one
+      // a container is, is a fact about how it lays out, so ask the layout
+      // rather than name one container: the board's columns are a third caller
+      // and the class check knew about exactly one.
+      const after = getComputedStyle(container).flexDirection.startsWith("row")
         ? e.clientX > r.left + r.width / 2
         : e.clientY > r.top + r.height / 2;
       el.classList.remove("dropbefore", "dropafter");
