@@ -882,6 +882,10 @@
   .chead .cmenu{flex:none;width:22px;height:22px;padding:0;justify-content:center;
                 background:none;border-color:transparent;color:var(--text-3);opacity:0;transition:opacity var(--t-fast)}
   .col:hover .chead .cmenu,.chead .cmenu:focus-visible,.chead .cmenu.on{opacity:1}
+  /* On a folded column the way back is the only control there is, so it stays
+     lit: §7 lets a control hide until hover, but not the one that undoes the
+     state you are looking at. */
+  .col.folded .chead .cmenu{opacity:1}
   .chead .cmenu:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   /* the properties card. Built to take more rows than it has today. */
   /* Density is three values, not a slider: the middle one is what the board
@@ -1948,20 +1952,30 @@ const colWidth = (lane) => +localStorage.getItem(colKey(lane)) || 0;
 function applyColWidth(el, lane) {
   const w = colWidth(lane);
   el.classList.toggle("sized", !!w);
-  el.style.width = w ? `${w}px` : "";
-  el.style.maxWidth = w ? `${w}px` : "";
-  el.style.minWidth = w ? `${w}px` : "";
+  // A folded column is 210px by the space rule, and its remembered width is for
+  // when it is open again. Writing that width inline while folded beat the
+  // class, so folding a widened lane reclaimed nothing — which is the one thing
+  // folding is for. The width is kept, just not applied while folded.
+  const px = w && !el.classList.contains("folded") ? `${w}px` : "";
+  el.style.width = px;
+  el.style.maxWidth = px;
+  el.style.minWidth = px;
 }
+// Every lane's element is `lane-<id>`, except the asks column, which predates
+// them and is just `rail`. Resolving it in one place is what let the asks column
+// use the lane machinery at all: setting its width wrote the key and then looked
+// for an element that does not exist.
+const colEl = (lane) => document.getElementById(lane === "rail" ? "rail" : `lane-${lane}`);
 function setColWidth(lane, px) {
   const w = Math.min(Math.max(Math.round(px), COL_MIN), COL_MAX);
   localStorage.setItem(colKey(lane), String(w));
-  const el = document.getElementById(`lane-${lane}`);
+  const el = colEl(lane);
   if (el) applyColWidth(el, lane);
   return w;
 }
 function resetColWidth(lane) {
   localStorage.removeItem(colKey(lane));
-  const el = document.getElementById(`lane-${lane}`);
+  const el = colEl(lane);
   if (el) applyColWidth(el, lane);
 }
 function wireColGrip(grip, wrap, lane) {
@@ -2955,8 +2969,14 @@ function itemEl(it) {
 
 function railEl() {
   const wrap = document.createElement("section");
-  wrap.className = "col rail";
+  // It is a column, and it was the one column built by hand: no grip, no fold,
+  // no width of its own, while every lane beside it had all three. Same
+  // primitives, same storage keys, so it behaves the way its siblings do
+  // (FEEDBACK-CLASSES C3 and C6).
+  const folded = collapsedOf("rail");
+  wrap.className = "col rail" + (folded ? " folded" : "");
   wrap.id = "rail";
+  applyColWidth(wrap, "rail");
   const pending = items.filter((i) => !i.landing);
   const landed = items.filter((i) => i.landing && !i.archived);
   const archived = items.filter((i) => i.archived);
@@ -2967,8 +2987,24 @@ function railEl() {
   const visPending = pending.filter((i) => railScope === "all" ? true
     : railScope === "loose" ? i.everywhere : !i.everywhere).length;
   head.innerHTML = `<h2>Your asks</h2><span class="count">${
-    railScope === "all" ? pending.length : `${visPending}/${pending.length}`}</span>`;
+    railScope === "all" ? pending.length : `${visPending}/${pending.length}`}</span>` +
+    `<button type="button" class="cmenu" aria-label="fold this column"></button>`;
+  const fold = head.querySelector(".cmenu");
+  fold.innerHTML = folded ? CHEV_R_ICON : CHEV_L_ICON;
+  fold.dataset.tip = folded ? "Unfold your asks" : "Fold your asks out of the way";
+  fold.setAttribute("aria-pressed", String(folded));
+  fold.onclick = (e) => { e.stopPropagation(); setColPref("rail", { collapsed: folded ? null : true }); };
   wrap.appendChild(head);
+  if (folded) return wrap;               // a folded column keeps its head and count, nothing else
+
+  const grip = document.createElement("div");
+  grip.className = "colgrip";
+  grip.setAttribute("role", "separator");
+  grip.setAttribute("aria-orientation", "vertical");
+  grip.setAttribute("aria-label", "resize your asks");
+  grip.ondblclick = () => resetColWidth("rail");
+  wrap.appendChild(grip);
+  wireColGrip(grip, wrap, "rail");
 
   // The composer sits at the top so "I can keep throwing things" is one
   // keystroke from opening the board. No destination picker: the agent sorts.

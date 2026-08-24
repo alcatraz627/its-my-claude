@@ -85,7 +85,21 @@ which is what `#74` asked for. It was a fixed 186px, which is why its labels
 read "aug22-kar" and "open not do…"; at any width the owner picks, nothing
 truncates.
 
-**Still open, and named rather than implied:** the asks column, ephemeral tag
+**The asks column, 2026-08-24.** It was the one column built by hand, so it had
+no grip, no fold and no width of its own while every lane beside it had all
+three. It runs through the same primitives and the same storage keys now.
+Folding it puts a 156-card Active lane fully on screen, which is what the
+affordance is for.
+
+Two defects surfaced by exercising it, both older than this change. `setColWidth`
+resolved `lane-<id>`, so writing the asks column's width stored a key and then
+looked for an element that does not exist. And a remembered width was written
+inline, which beat the folded class, so folding a widened lane reclaimed nothing
+— the one thing folding is for. Both fixed for every column, and a folded column
+now keeps its unfold control lit, because the way back should not be the thing
+that hides until hover.
+
+**Still open, and named rather than implied:** ephemeral tag
 columns, the note popover, the composer, the three pickers, the doc modal and
 the help modal have none of it. Neither does the drag half for surfaces that
 genuinely float, nor "more than one at a time", which only means something for
