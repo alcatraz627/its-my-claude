@@ -121,10 +121,19 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
    the counts are re-asked when the tab comes back into view. The palette is
    the picker, and its keyboard now agrees with its mouse: Enter on a draft row
    went to `/b/undefined` because every row was sent to `gotoBoard`.
-5. **Search across all kinds** `[spine]`, plus the missing **Boards section**
-   in the board palette: `SEARCH-DESIGN.md:84` designs 6 sections,
-   `board.html:4893` implements 5. Acceptance test 5 ("typing a project name
-   offers that board") is unmet.
+5. **Search across all kinds** `[spine]`, plus the missing **Boards section**.
+   **Done 2026-08-24.** The palette and the search each loaded their own answer
+   to "what is there, of each kind", so a kind wired into one was missing from
+   the other; both now read `shared.js:kindIndex()`, which is also what the tab
+   counts. Search gained a section per kind, ranked by `searchRank` in the
+   registry rather than by nav order, because from inside a board "which board"
+   is the least local question (`SEARCH-DESIGN.md` §4). Sections now run
+   Questions, Cards, Your notes, Tags, Your asks, Drafts, Boards, and the "what
+   was searched" sentence is built from that list rather than written out, so a
+   new kind is named in it without anyone remembering to. Acceptance 5 passes:
+   typing a project name offers the board and Enter navigates. A result that is
+   already on this page stays here, so an ask on the rail scrolls rather than
+   leaving the board (§1); one that is elsewhere navigates to its own address.
 
 ### The owner's direct ask
 
