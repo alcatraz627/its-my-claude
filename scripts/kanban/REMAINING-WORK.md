@@ -236,8 +236,14 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     does; on a note chip or a saved note row in the panel it selects the
     note; plain clicks keep opening. The shift-mousedown text-selection is
     suppressed. Verified live on all three surfaces.
-19. **Floating boxes: draggable, titled, tied to their anchor** (`#72`). Every
-    floating surface, arrow to its anchor.
+19. **Floating boxes: draggable, titled, tied to their anchor** (`#72`)
+    **Done 2026-08-25** for the popover family: all five colcard popovers
+    (lane settings, board settings, tag ops, name-a-view, view note) drag by
+    their title, and a quiet blue sketched thread ties the box to the control
+    that opened it, redrawn as it moves and cleared on close. The note
+    popover and modals keep their own positioning; they are dialogs, not
+    anchored popovers. Verified live: thread drawn, drag tracks, close
+    clears. Also styled the soft-limit number input this pass exposed.
 
 ### Surfaces and polish
 

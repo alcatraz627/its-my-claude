@@ -1033,6 +1033,10 @@
   .colcard .crow .ck{flex:1;color:var(--text-3)}
   .colcard .crow .cv{font:500 var(--fs-body)/1 var(--mono);color:var(--text)}
   .colcard input[type=range]{width:100%;accent-color:var(--blue)}
+  .colcard input[type=number]{width:76px;height:26px;padding:0 8px;color:var(--text);margin-left:auto;
+                              background:var(--well);border:1px solid var(--border);border-radius:var(--r-control);
+                              font:inherit;font-size:var(--fs-body)}
+  .colcard input[type=number]:focus{border-color:var(--blue);box-shadow:var(--focus-glow);outline:none}
   .colcard input[type=text]{width:100%;height:var(--h-control);padding:0 8px;color:var(--text);
                             background:var(--card);border:1px solid var(--border);
                             border-radius:var(--r-control);font:400 var(--fs-body)/1 var(--sans);outline:none}
@@ -1104,6 +1108,12 @@
   #xarrow path{fill:none;stroke:var(--green);stroke-linecap:round;stroke-linejoin:round;
                opacity:0;transition:opacity var(--t-fast)}
   #xarrow.on path{opacity:.55}
+  /* the popover's thread to its opener (#72): quieter than the green arrow */
+  #tether{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:var(--z-arrow);overflow:visible}
+  #tether path{fill:none;stroke:var(--blue);stroke-linecap:round;opacity:0;transition:opacity var(--t-fast)}
+  #tether.on path{opacity:.4}
+  .colcard h4.fhandle{cursor:grab;user-select:none}
+  .colcard h4.fhandle:active{cursor:grabbing}
   #xarrow path.ink2{opacity:0}
   #xarrow.on path.ink2{opacity:.28}
 
@@ -1454,6 +1464,7 @@
   </div>
 </div>
 <svg id="xarrow" aria-hidden="true"></svg>
+<svg id="tether" aria-hidden="true"></svg>
 
 <div id="toast" role="status"></div>
 <div id="docmodal" role="dialog" aria-modal="true" aria-label="document preview"><div class="dbox">
@@ -2201,6 +2212,7 @@ function openBoardSettings(btn) {
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, r.right - cr.width), innerWidth - cr.width - 10)}px`;
+  wireFloat(card, btn);
   const wire = (id, key) => card.querySelector(id).addEventListener("click", async (e) => {
     const t = e.target.closest("button[data-v]"); if (!t) return;
     const dflt = key === "sort" ? "updated" : "normal";
@@ -2248,6 +2260,7 @@ function openNameView(btn, clauses) {
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, r.left), innerWidth - cr.width - 10)}px`;
+  wireFloat(card, btn);
   const input = card.querySelector("#vwname");
   input.value = clauses.join(" ").slice(0, 40);
   input.focus(); input.select();
@@ -2292,6 +2305,7 @@ function openViewNote(v, btn) {
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, r.left), innerWidth - cr.width - 10)}px`;
+  wireFloat(card, btn);
   const input = card.querySelector("#vwnote2");
   input.value = v.note ?? "";
   input.focus(); input.select();
@@ -2341,6 +2355,7 @@ function openTagOps(t, btn, n) {
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, r.left - cr.width + 40), innerWidth - cr.width - 10)}px`;
+  wireFloat(card, btn);
   btn.setAttribute?.("aria-expanded", "true");
   const foot = card.querySelector("#tgfoot");
   const say = (text) => { if (foot.isConnected) foot.textContent = text; };
@@ -2468,6 +2483,7 @@ function openColCard(lane, wrap, btn) {
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, r.right - cr.width), innerWidth - cr.width - 10)}px`;
+  wireFloat(card, btn);
   btn.classList.add("on");
   const rng = card.querySelector("#ccr");
   rng.oninput = () => { card.querySelector("#ccw").textContent = `${setColWidth(lane, +rng.value)}px`; };
@@ -2521,12 +2537,51 @@ function openColCard(lane, wrap, btn) {
   setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
 }
 function closeColCardAway(e) { if (!e.target.closest("#colcard")) closeColCard(); else setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0); }
+// #72: a floating box drags by its title, and a thread ties it to the control
+// that opened it, so "where did this come from" survives the drag.
+function wireFloat(card, btn) {
+  const h = card.querySelector("h4");
+  if (!h) return;
+  h.classList.add("fhandle");
+  const anchor = btn && btn.getBoundingClientRect ? btn : null;
+  const tether = () => {
+    const svg = $("tether");
+    if (!svg) return;
+    if (!card.isConnected || !anchor || !anchor.isConnected) { clearTether(); return; }
+    const rc = card.getBoundingClientRect(), ra = anchor.getBoundingClientRect();
+    const ax = ra.left + ra.width / 2, ay = ra.top + ra.height / 2;
+    const cx = Math.min(Math.max(ax, rc.left + 10), rc.right - 10);
+    const cy = ay < rc.top ? rc.top - 2 : rc.bottom + 2;
+    if (Math.hypot(ax - cx, ay - cy) < 30) { clearTether(); return; }
+    const seed = Math.round(rc.top + ra.top);
+    svg.innerHTML = `<path d="${sketchPath(cx, cy, ax, ay, seed)}" stroke-width="1.4" stroke-dasharray="6 6"/>`;
+    svg.classList.add("on");
+  };
+  h.addEventListener("pointerdown", (e) => {
+    if (e.target.closest("button,input,select,textarea")) return;
+    const r = card.getBoundingClientRect();
+    const dx = e.clientX - r.left, dy = e.clientY - r.top;
+    const move = (ev) => {
+      card.style.left = `${Math.min(Math.max(4, ev.clientX - dx), innerWidth - r.width - 4)}px`;
+      card.style.top = `${Math.min(Math.max(4, ev.clientY - dy), innerHeight - r.height - 4)}px`;
+      tether();
+    };
+    const up = () => { removeEventListener("pointermove", move); removeEventListener("pointerup", up); };
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", up);
+    e.preventDefault();
+  });
+  requestAnimationFrame(tether);
+}
+function clearTether() { const s = $("tether"); if (s) { s.classList.remove("on"); s.innerHTML = ""; } }
+
 // A popover with pending work (the tag rename's debounce) registers a cleanup
 // here; every close path runs it, so no exit leaves a timer racing a dead node.
 let colCardCleanup = null;
 function closeColCard() {
   const fin = colCardCleanup; colCardCleanup = null;
   fin?.();
+  clearTether();
   document.getElementById("colcard")?.remove();
   document.getElementById("bsBtn")?.setAttribute("aria-expanded", "false");
   document.querySelectorAll(".cmenu.on").forEach((b) => b.classList.remove("on"));
