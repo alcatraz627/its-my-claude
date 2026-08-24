@@ -324,6 +324,23 @@ new helper in a page file carries a line saying why it is not shared.
 
 ---
 
+## How a session works these rows (owner, decision page, 2026-08-25)
+
+Ruled on `kanban-next-direction`: the untouched classes come first, C5 then C6,
+then C1, C8 and C9. One class per turn, reported after.
+
+Two rulings shape how, and both widen rather than narrow:
+
+- **Finish all of them, not just the first.** The direction is the order, not the
+  scope. A turn ends when its class is swept and validated, and the work ends
+  when every direction is done.
+- **Validate, and if it is not right, fix it again until it is.** Owner's words:
+  "fix additional BUT ALSO VALIDATE AND IF NOT DONE FIX AGAIN UNTIL ALL IS FINE".
+  Adjacent scope is welcome, explicitly so: "can be lenient and welcoming in
+  letting in extra/adjacent/good-to-do-while-we-are-here (especially) scope".
+  This overrides the usual scope ceiling for these sweeps. A defect found beside
+  the one you came for gets fixed, not filed.
+
 ## How a session uses this file
 
 1. Before touching a surface, read the classes whose **scope** names it.
