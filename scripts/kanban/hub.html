@@ -284,11 +284,12 @@ function composeEl(boards) {
   attachBuffer(ta, { id: "hub-ask" });
   const row = document.createElement("div");
   row.className = "crow";
-  const sel = document.createElement("select");
-  sel.setAttribute("aria-label", "board, optional");
-  sel.innerHTML = `<option value="">no board yet</option>` +
-    boards.map((b) => `<option value="${b.slug}"></option>`).join("");
-  [...sel.options].slice(1).forEach((o, i) => { o.textContent = boards[i].name; });
+  // the searchable picker, not a bare select: same control the board uses
+  const boardPick = searchSelect({
+    aria: "board, optional", placeholder: "no board yet",
+    options: [{ value: "", label: "no board yet" },
+              ...boards.map((b) => ({ value: b.slug, label: b.name }))],
+    value: "" });
   const hint = document.createElement("span");
   hint.className = "chint"; hint.textContent = "⌘↵ to add";
   const go = document.createElement("button");
@@ -297,7 +298,7 @@ function composeEl(boards) {
     const v = ta.value.trim();
     if (!v) return;
     const res = await fetch("/api/item", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ body: v, ...(sel.value ? { slug: sel.value } : {}) }) });
+      body: JSON.stringify({ body: v, ...(boardPick.value ? { slug: boardPick.value } : {}) }) });
     if (!res.ok) { hint.textContent = `could not add: ${(await res.json()).error}`; return; }
     ta.value = ""; composeDraft = ""; localStorage.removeItem("kanban-hubdraft");
     loadAsks();
@@ -305,7 +306,7 @@ function composeEl(boards) {
   go.onclick = submit;
   ta.addEventListener("input", () => { composeDraft = ta.value; localStorage.setItem("kanban-hubdraft", ta.value); });
   ta.addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); submit(); } });
-  row.append(sel, hint, go);
+  row.append(boardPick.el, hint, go);
   box.append(ta, row);
   return box;
 }
@@ -326,46 +327,40 @@ const postItem = async (patch) => {
 function routeEl(it, boards, onDone) {
   const wrap = document.createElement("label");
   wrap.className = "route";
-  const sel = document.createElement("select");
-  sel.setAttribute("aria-label", "which board's rail this ask shows on");
   const tagged = it.boards ?? [];
   const origin = it.slug ? (boards.find((b) => b.slug === it.slug) ?? { slug: it.slug, name: it.slug }) : null;
   // Clearing the tags falls back to the origin board, so for an ask that has one
   // the blank option means "back where you wrote it" and NOT "everywhere". There
   // is no spelling for everywhere-despite-an-origin, so none is offered: an
   // option that silently did something else would be worse than its absence.
-  sel.dataset.tip = origin
-    ? `Untagged, this ask shows on ${origin.name}, the board you wrote it on. Tag it to move it.`
-    : "Untagged, this ask shows on every board's rail. Tag it to scope it to one.";
-  const opts = [["", origin ? `on ${origin.name} · as written` : "on every board"]];
-  for (const b of boards) { if (b.slug !== origin?.slug) opts.push([b.slug, `only on ${b.name}`]); }
-  // A single select cannot express a multi-board tag. Naming the state keeps the
+  const opts = [{ value: "", label: origin ? `on ${origin.name} · as written` : "on every board" }];
+  for (const b of boards) { if (b.slug !== origin?.slug) opts.push({ value: b.slug, label: `only on ${b.name}` }); }
+  // A single pick cannot express a multi-board tag. Naming the state keeps the
   // row honest, and picking anything else is then a deliberate narrowing.
-  if (tagged.length > 1) opts.unshift(["__multi", `on ${tagged.length} boards`]);
-  for (const [value, label] of opts) {
-    const o = document.createElement("option");
-    o.value = value; o.textContent = label;
-    if (value === "__multi") o.disabled = true;
-    sel.append(o);
-  }
-  sel.value = tagged.length > 1 ? "__multi"
-    : (tagged.length === 1 && tagged[0] !== origin?.slug) ? tagged[0]
-    : "";
-  sel.onchange = async () => {
-    const v = sel.value;
-    if (v === "__multi") return;
-    wrap.className = "route busy"; sel.disabled = true;
-    try {
-      await postItem({ id: it.id, boards: v ? [v] : null });
-      onDone();
-    } catch (e) {
-      wrap.className = "route"; sel.disabled = false;
-      const err = document.createElement("span");
-      err.className = "rerr"; err.textContent = `could not route: ${e.message}`;
-      wrap.replaceChildren(sel, err);
-    }
-  };
-  wrap.append(sel);
+  if (tagged.length > 1) opts.unshift({ value: "__multi", label: `on ${tagged.length} boards`, disabled: true });
+  const route = searchSelect({
+    aria: "which board's rail this ask shows on",
+    tip: origin
+      ? `Untagged, this ask shows on ${origin.name}, the board you wrote it on. Tag it to move it.`
+      : "Untagged, this ask shows on every board's rail. Tag it to scope it to one.",
+    options: opts,
+    value: tagged.length > 1 ? "__multi"
+      : (tagged.length === 1 && tagged[0] !== origin?.slug) ? tagged[0]
+      : "",
+    onPick: async (v) => {
+      if (v === "__multi") return;
+      wrap.className = "route busy"; route.disable(true);
+      try {
+        await postItem({ id: it.id, boards: v ? [v] : null });
+        onDone();
+      } catch (e) {
+        wrap.className = "route"; route.disable(false);
+        const err = document.createElement("span");
+        err.className = "rerr"; err.textContent = `could not route: ${e.message}`;
+        wrap.replaceChildren(route.el, err);
+      }
+    } });
+  wrap.append(route.el);
   return wrap;
 }
 

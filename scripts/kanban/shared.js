@@ -243,6 +243,89 @@ function kindIndex({ fresh = false } = {}) {
   return kindIndexP;
 }
 
+// One searchable dropdown for every pick-one-of-many (card b5e81d906f33):
+// the board's pickers had search, subtitles and a keyboard; the hub and
+// drafts wore bare <select>s with the right size and the wrong control.
+// options: [{value, label, sub?, disabled?}]. Returns {el, value, set, setOptions, disable}.
+function searchSelect({ options = [], value = "", placeholder = "Pick…", aria = "pick one", tip = "", onPick }) {
+  const wrap = document.createElement("div");
+  wrap.className = "sspick";
+  const btn = document.createElement("button");
+  btn.type = "button"; btn.className = "ssbtn";
+  btn.setAttribute("aria-haspopup", "listbox");
+  btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-label", aria);
+  if (tip) btn.dataset.tip = tip;
+  const lab = document.createElement("span"); lab.className = "sslab";
+  btn.append(lab);
+  const panel = document.createElement("div"); panel.className = "sspanel"; panel.hidden = true;
+  const q = document.createElement("input");
+  q.type = "search"; q.className = "ssq"; q.placeholder = "Type to filter";
+  q.setAttribute("aria-label", "filter the options");
+  const rowsEl = document.createElement("div"); rowsEl.className = "ssrows"; rowsEl.setAttribute("role", "listbox");
+  panel.append(q, rowsEl);
+  wrap.append(btn, panel);
+
+  let opts = options.slice(), cur = String(value ?? ""), rows = [], at = 0;
+  const paint = () => {
+    lab.textContent = opts.find((o) => String(o.value) === cur)?.label ?? placeholder;
+  };
+  const mark = () => rows.forEach((r, i) => r.el.classList.toggle("on", i === at));
+  const close = () => { panel.hidden = true; btn.setAttribute("aria-expanded", "false"); };
+  const pick = (o) => {
+    if (o.disabled) return;
+    cur = String(o.value); paint(); close(); btn.focus();
+    onPick?.(o.value, o);
+  };
+  const renderRows = () => {
+    const t = q.value.trim().toLowerCase();
+    rows = []; rowsEl.replaceChildren();
+    for (const o of opts) {
+      if (t && !`${o.label} ${o.sub ?? ""}`.toLowerCase().includes(t)) continue;
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "ssrow" + (String(o.value) === cur ? " cur" : "");
+      b.setAttribute("role", "option");
+      if (o.disabled) b.disabled = true;
+      b.innerHTML = `<span class="ssn"></span>` + (o.sub ? `<span class="sss"></span>` : "");
+      b.querySelector(".ssn").textContent = o.label;
+      if (o.sub) b.querySelector(".sss").textContent = o.sub;
+      b.onclick = () => pick(o);
+      rows.push({ el: b, o }); rowsEl.appendChild(b);
+    }
+    if (!rows.length) {
+      const e = document.createElement("div"); e.className = "ssnone"; e.textContent = "Nothing matches.";
+      rowsEl.appendChild(e);
+    }
+    at = Math.max(0, rows.findIndex((r) => r.el.classList.contains("cur")));
+    mark();
+  };
+  const open = () => {
+    panel.hidden = false; btn.setAttribute("aria-expanded", "true");
+    q.value = ""; renderRows(); q.focus();
+  };
+  btn.onclick = () => (panel.hidden ? open() : close());
+  q.addEventListener("input", renderRows);
+  q.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") { at = Math.min(at + 1, rows.length - 1); mark(); e.preventDefault(); }
+    else if (e.key === "ArrowUp") { at = Math.max(at - 1, 0); mark(); e.preventDefault(); }
+    else if (e.key === "Enter") { e.preventDefault(); if (rows[at]) pick(rows[at].o); }
+    else if (e.key === "Escape") { e.stopPropagation(); close(); btn.focus(); }
+  });
+  // no document-level listener: leaving the control (click elsewhere, tab out)
+  // blurs it, so instances created per render never accumulate global wiring
+  wrap.addEventListener("focusout", () => setTimeout(() => {
+    if (!wrap.contains(document.activeElement)) close();
+  }, 0));
+  paint();
+  return {
+    el: wrap,
+    get value() { return cur; },
+    set(v) { cur = String(v ?? ""); paint(); },
+    setOptions(next) { opts = next.slice(); paint(); if (!panel.hidden) renderRows(); },
+    disable(d) { btn.disabled = !!d; },
+  };
+}
+
 // The find box for pages whose corpora are the kinds alone (the hub, drafts).
 // The board keeps its richer in-board search; this answers "take me to an
 // instance of anything" from the same index the tabs count. Create it ONCE per

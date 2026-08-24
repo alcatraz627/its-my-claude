@@ -153,7 +153,7 @@
   <aside>
     <div class="atop">
       <button class="new" id="newDraft" type="button">New draft</button>
-      <select id="tplNew" aria-label="start from a template"><option value="">from a template…</option></select>
+      <span id="tplNewMount"></span>
     </div>
     <div class="alist" id="list"><div class="aempty">Loading…</div></div>
   </aside>
@@ -870,14 +870,11 @@ async function renderPreview() {
 function render({ editor = true } = {}) {
   mountNav();   // the crumb names the open draft, so it re-reads on every render
   document.getElementById("list").replaceChildren(listEl());
-  const t = document.getElementById("tplNew");
-  const keep = t.value;
-  t.replaceChildren(new Option("from a template…", ""));
-  for (const x of drafts.filter((d) => d.isTemplate)) {
-    t.append(new Option((x.title || x.body.split("\n").find((l) => l.trim()) || x.id).slice(0, 34), x.id));
-  }
-  t.value = keep;
-  t.disabled = t.options.length < 2;
+  const tpls = drafts.filter((d) => d.isTemplate)
+    .map((x) => ({ value: x.id,
+                   label: (x.title || x.body.split("\n").find((l) => l.trim()) || x.id).slice(0, 34) }));
+  tplPick.setOptions(tpls);
+  tplPick.disable(!tpls.length);
   if (editor) {
     const live = document.querySelector(".ebody textarea");
     const title = document.querySelector(".etop input.title");
@@ -905,11 +902,16 @@ function render({ editor = true } = {}) {
 }
 
 document.getElementById("newDraft").onclick = () => newDraft();
-document.getElementById("tplNew").onchange = (e) => {
-  const t = drafts.find((x) => x.id === e.target.value);
-  e.target.value = "";
-  if (t) newDraft({ body: t.body, title: t.title ? `${t.title} copy` : "" });
-};
+// the searchable picker, mounted once; render() refreshes its options
+const tplPick = searchSelect({
+  aria: "start from a template", placeholder: "from a template…",
+  options: [], value: "",
+  onPick: (v) => {
+    const t = drafts.find((x) => x.id === v);
+    tplPick.set("");
+    if (t) newDraft({ body: t.body, title: t.title ? `${t.title} copy` : "" });
+  } });
+document.getElementById("tplNewMount").replaceWith(tplPick.el);
 addEventListener("keydown", (e) => {
   const mod = e.metaKey || e.ctrlKey;
   if (!mod) return;

@@ -303,6 +303,30 @@
   .kflist .kfrow .kfs{margin-left:auto;color:var(--text-3);font-size:var(--fs-small);flex:none}
   .kflist .kfrow.on,.kflist .kfrow:hover{background:var(--card-hover)}
   .kflist .kfnone{padding:10px;color:var(--text-3);font-size:var(--fs-body)}
+  /* the searchable dropdown: select geometry on the button, picker behaviour in the panel */
+  .sspick{position:relative;display:inline-flex;min-width:0}
+  .sspick .ssbtn{justify-content:space-between;gap:8px;min-width:0;max-width:100%;
+                 padding:0 26px 0 10px;height:var(--h-control);
+                 background:var(--card) no-repeat right 8px center;
+                 background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7' fill='none'%3E%3Cpath d='M1 1.4L5 5.4L9 1.4' stroke='%23888' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+  .sspick .ssbtn:hover{background-color:var(--card-hover)}
+  .sspick .sslab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sspanel{position:absolute;top:calc(100% + 6px);left:0;min-width:230px;max-width:340px;max-height:50vh;
+           overflow:hidden;display:flex;flex-direction:column;background:var(--card);
+           border:1px solid var(--border-2);border-radius:var(--r-panel);box-shadow:var(--shadow);
+           z-index:var(--z-picker);padding:6px}
+  .sspanel .ssq{height:26px;padding:0 8px;margin-bottom:6px;border:1px solid var(--border);flex:none;
+                border-radius:var(--r-control);background:var(--well);color:var(--text);font:inherit;font-size:var(--fs-body)}
+  .sspanel .ssq:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
+  .ssrows{overflow:auto;display:flex;flex-direction:column;gap:1px}
+  .ssrow{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;border:0;background:none;min-height:0;
+         border-radius:var(--r-control);cursor:pointer;color:var(--text-2);text-align:left}
+  .ssrow .ssn{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ssrow .sss{margin-left:auto;color:var(--text-3);font-size:var(--fs-small);flex:none}
+  .ssrow.on,.ssrow:hover{background:var(--card-hover)}
+  .ssrow.cur .ssn{color:var(--blue)}
+  .ssrow[disabled]{opacity:.55;cursor:default}
+  .ssnone{padding:8px;color:var(--text-3);font-size:var(--fs-body)}
   .nfind[data-of="x"]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%);
                       mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%)}
   .nowrap{white-space:nowrap;flex:none}
