@@ -231,7 +231,12 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 22. **One navbar on all three pages, really** (`8349c2dc800c`). The title block
     is gone: all three wear the same crumb identity now. **Remaining:** drafts
     and the hub still have no find box, which is item 5's cross-kind search.
-23. **Edit / Live / Preview on the note editors** (`50b6dafd4faa`). Drafts has
+23. **Edit / Live / Preview on the note editors** **Partly done 2026-08-25**:
+    the note editors carry a preview, now an icon with a tooltip in the note's
+    own button row rather than a word floated above the box. Live (the
+    caret-line reveal) stays out of them on purpose, per `EDITOR-LAYERS.md`:
+    three modes on a five-line note is chrome without payload. Originally
+    filed as: (`50b6dafd4faa`). Drafts has
     three modes; note editors have a two-state toggle.
 24. **Global tag colours** (`#66`). Set a tag's colour once, holds across boards.
 25. **Inactive boards on the hub** (`#67`). localStorage only, agents never see

@@ -34,6 +34,18 @@ state and error string in `board.html`, `hub.html`, `drafts.html`, `shared.js`.
 **Done when.** A sweep has read every one of them aloud. Owner vocabulary is
 fixed in the charter glossary and the sweep cites it.
 
+**Partly swept 2026-08-25.** The caught instance was already fixed and the code
+carries the note. Two more went: no user-facing string says "lane" any more,
+because the owner says columns and this row names that word specifically, and a
+session that never named itself reads "unnamed" rather than eight characters of
+a uuid. "panel" and "tab" stay: the charter uses "panel" itself in §2, and the
+drawer genuinely has tabs a person can see, so neither is the machine talking.
+`>lane` stays too, being a CLI token somebody types rather than prose.
+
+**Still open:** the full read-aloud pass over every toast, placeholder, tooltip,
+aria-label, empty state and error on all three pages. What is done is the
+grep-able part.
+
 ---
 
 ## C2 · Owner feedback parked behind an agent's planning task
@@ -75,6 +87,12 @@ note popover, composer, search / tag / go-to pickers, doc modal, help modal.
 **Done when.** One shared floater primitive carries all six affordances and
 every surface above is built from it. A surface that deliberately opts out of
 one records why, in the charter.
+
+**More of it, 2026-08-25.** The side panel animates open and shut rather than
+jumping, and the drag suspends that transition so a resize still tracks the
+pointer. Its toggle moved to the edge the panel meets, left of the tabs, and
+stays there whether the panel is open or shut, because a control that slides
+out from under the pointer using it is the failure that placement avoids.
 
 **Progress 2026-08-24.** The resize half of the primitive exists:
 `shared.js:wireGrip` carries pointer capture, arrow keys and an edge argument,
