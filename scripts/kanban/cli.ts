@@ -551,6 +551,60 @@ switch (verb) {
     console.log(`classify with: kanban.sh classify <item-id> <${SHAPES.join("|")}> [--card <card-id>] [--note "what you did"]`);
     break;
   }
+  // Write an ask from the CLI. Until now only the UI could: `saveItems` is
+  // called from server.ts alone, so an agent could read an ask and record what
+  // it did with one, and never write one down. The owner asked for this more
+  // than once: "items.json, make it accessible properly via the CLI. Project
+  // durable, agent modifiable and readable, and shows properly on the UI."
+  //
+  // It POSTs rather than writing the file, which is deliberate. items.json has
+  // exactly ONE writer today, the server, serialising through an in-process
+  // chain that takes no file lock (server.ts:52). A direct write here would
+  // create a lock mismatch that does not currently exist, and would fork the
+  // delete-on-empty and pin-GC semantics into a second copy. `tag`, `goal` and
+  // `after` already POST for the same reason.
+  //
+  // Deliberately NOT exposed: star and trigger. Both mean "the owner is asking
+  // the agent to notice this", so an agent setting either forges their intent.
+  // Scope (`boards`) is theirs too, a display rule they set (ruling 2026-08-17).
+  case "item": {
+    const [sub, id, newBody] = positional;
+    const SUBS = ["add", "edit", "rm"];
+    if (!sub || !SUBS.includes(sub)) {
+      die(`item needs one of: ${SUBS.join(" · ")}`,
+          `kanban.sh item add "what you want done" [--board <slug>|--global]`);
+    }
+    if (sub === "add") {
+      const body = id;   // `item add "<body>"`: the body sits where an id would for the other subs
+      if (!body?.trim()) die("an empty ask is not saved", `kanban.sh item add "what you want done"`);
+      // Default scope is THIS board, matching where the owner writes from. The
+      // server treats a missing slug as unassigned, which shows everywhere.
+      const slug = hasFlag("global") ? undefined : (flag("board") ?? (() => {
+        try { return boardFor(projectDir()).slug; } catch { return undefined; }
+      })());
+      const out = await post("/api/item", { body, ...(slug ? { slug } : {}) });
+      console.log(`added ${out.id}${slug ? ` on ${slug}` : " on every board"}`);
+      console.log(`it shows in Your asks; classify it when you act on it: kanban.sh classify ${out.id} <${SHAPES.join("|")}>`);
+      break;
+    }
+    if (!id) die(`item ${sub} needs an item id`, `kanban.sh items --all  # lists the ids`);
+    if (sub === "rm") {
+      // Empty body IS the delete, which is the grammar the note composer and
+      // the server already share. Spelled as its own verb here so a CLI caller
+      // never deletes by accident while trying to blank a field.
+      await post("/api/item", { id, body: "" });
+      console.log(`removed ${id}`);
+      break;
+    }
+    if (!newBody?.trim()) {
+      die("edit needs the new text; an empty one would delete the ask",
+          `kanban.sh item edit ${id} "the new text"   ·   kanban.sh item rm ${id}`);
+    }
+    await post("/api/item", { id, body: newBody });
+    console.log(`edited ${id}`);
+    break;
+  }
+
   // Records what the agent DID with an item. Minting the card is `add`; this
   // verb only writes the verdict, so each does one thing and composes.
   case "classify": {
@@ -977,6 +1031,11 @@ switch (verb) {
   items [--all] [--global] the owner's own asks, unsorted first. They write these
                            from the board or the hub and never classify them;
                            sorting is your job. --all also shows sorted ones.
+                           [--json] for the machine-readable form
+  item add "<text>"        write an ask yourself, scoped to this board;
+                           [--board <slug>] another board, [--global] every one
+  item edit <id> "<text>"  replace an ask's text
+  item rm <id>             delete an ask (and its pin)
   classify <item-id> <shape> record what you did with an ask: task (minted a
                            card) · subtask · clarification · remark;
                            [--card <id>] links where it landed, [--note "…"]

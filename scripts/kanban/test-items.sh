@@ -303,5 +303,24 @@ if [ -n "$CARD" ]; then
   check "and the rows really are still there, so the message is true" "$still" "True True"
 fi
 
+# The `item` write verbs refuse before they reach the server, so these run
+# without one and pin the refusals rather than the round trip. The round trip
+# was exercised live against :5106 on 2026-08-24: add, read back via --json,
+# edit, confirm in the board's Your asks rail, delete, confirm gone.
+for case in \
+  "add||an empty ask is not saved" \
+  "bogus||item needs one of" \
+  "edit||needs an item id" \
+  "rm||needs an item id" \
+  "edit|someid|empty one would delete"
+do
+  IFS='|' read -r sub arg want <<EOF
+$case
+EOF
+  got=$(bun run "$HERE/cli.ts" item "$sub" ${arg:+"$arg"} --project "$PROJ" 2>&1 >/dev/null)
+  case "$got" in *"$want"*) ok "item $sub refuses: $want" ;;
+    *) bad "item $sub refuses: $want" "$got" ;; esac
+done
+
 printf '  ---- %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
