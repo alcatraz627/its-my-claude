@@ -1802,7 +1802,7 @@ async function applyTag(cardId, t, on = true) {
     const res = await fetch("/api/tag", { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ slug, op: on ? "apply" : "unapply", cardId, kind: t.kind, name: t.name, tagId: t.id }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
-    lastPayload = ""; await load();
+    await afterWrite();
     if (openId === cardId) openDrawer(cardId);
   } catch (e) { toast(`Tag failed: ${e.message}`, 4000, "err"); }
 }
@@ -1812,7 +1812,7 @@ async function tagOp(body) {
       body: JSON.stringify({ slug, ...body }) });
     const out = await res.json();
     if (!res.ok) throw new Error(out.error || res.status);
-    lastPayload = ""; await load();
+    await afterWrite();
     return out;
   } catch (e) { toast(`Tag failed: ${e.message}`, 4000, "err"); return null; }
 }
@@ -1821,7 +1821,7 @@ async function setGoal(cardId, goal) {
     const res = await fetch("/api/goal", { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ slug, cardId, goal }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
-    lastPayload = ""; await load();
+    await afterWrite();
     if (openId === cardId) openDrawer(cardId);
   } catch (e) { toast(`Goal failed: ${e.message}`, 4000, "err"); }
 }
@@ -1855,7 +1855,7 @@ async function toggleSel(kind, ref, on) {
     if (data) data.selection = await res.json();
     lastPayload = "";
     renderPicked();
-  } catch (e) { toast(`Selection failed: ${e.message}`, 3500, "err"); lastPayload = ""; load(); }
+  } catch (e) { toast(`Selection failed: ${e.message}`, 3500, "err"); afterWrite(); }
 }
 async function clearSel(which) {
   try {
@@ -4433,7 +4433,7 @@ async function dismissNote(cardId, noteId) {
     if (!res.ok) throw new Error((await res.json()).error || res.status);
     undoNote = { cardId, body: n.body };
     if (openNoteId === noteId) openNoteId = null;
-    lastPayload = ""; await load();
+    await afterWrite();
     if (openId === cardId) { loadNoteIntoComposer(cardId); renderOtherNotes(cardId); }
     toast("Note dismissed — press u to undo", 5000);
   } catch (e) { toast(`Dismiss failed: ${e.message}`, 4000, "err"); }
@@ -4446,8 +4446,7 @@ async function undoDismiss() {
       body: JSON.stringify({ slug, cardId, noteId: "new", note: body }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
     undoNote = null;
-    lastPayload = ""; await load();
-    if (openId === cardId) renderOtherNotes(cardId);
+    await afterWrite();
     toast("Note restored");
   } catch (e) { toast(`Undo failed: ${e.message}`, 4000, "err"); }
 }
@@ -4456,9 +4455,8 @@ async function saveNoteOrder(cardId, order) {
     const res = await fetch("/api/note-order", { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ slug, cardId, order }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
-    lastPayload = ""; await load();
-    if (openId === cardId) renderOtherNotes(cardId);
-  } catch (e) { toast(`Reorder failed: ${e.message}`, 4000, "err"); lastPayload = ""; load(); }
+    await afterWrite();
+  } catch (e) { toast(`Reorder failed: ${e.message}`, 4000, "err"); afterWrite(); }
 }
 
 // One reorder implementation for both lists. HTML5 drag-and-drop rather than
@@ -4764,9 +4762,9 @@ async function postAnswer(cardId, body) {
     body: JSON.stringify({ slug, cardId, ...body }) });
   const out = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
   if (!res.ok || out.error) { toast(out.error ?? "could not save that", true); return null; }
-  // keep the client's copy honest rather than re-fetching the whole board
-  const p = plan(); p.answers = p.answers ?? {}; p.answers[cardId] = { ...(p.answers[cardId] ?? {}), ...out };
-  delete p.answers[cardId].ok; delete p.answers[cardId].state;
+  // re-read rather than patch: the client guessing at the server's merge is
+  // the exact C5 violation the charter promises does not happen
+  await afterWrite();
   return out;
 }
 
@@ -5836,7 +5834,7 @@ $("popDel").onclick = async () => {
       body: JSON.stringify({ slug, cardId: popCard, noteId: popNote, note: "" }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
     popDirty = false; closePop();
-    lastPayload = ""; await load();
+    await afterWrite();
     toast("Note deleted");
   } catch (e) { toast(`Delete failed: ${e.message}`, 4000, "err"); }
 };
@@ -6000,9 +5998,9 @@ $("dDel").onclick = async () => {
       body: JSON.stringify({ slug, cardId: openId, noteId: openNoteId, note: "" }) });
     if (!res.ok) throw new Error((await res.json()).error || res.status);
     localStorage.removeItem(DRAFT_KEY(openId, openNoteId));
-    dirty = false; lastPayload = "";
+    dirty = false;
     const c = openId; openNoteId = null;
-    await load();
+    await afterWrite();
     if (data.board.cards.some((x) => x.id === c)) openDrawer(c);
     toast("Note deleted");
   } catch (e) { toast(`Delete failed: ${e.message}`, 4000, "err"); }

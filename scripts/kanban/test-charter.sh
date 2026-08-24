@@ -21,21 +21,48 @@ if [ -z "$hits" ]; then ok "no native tooltips on board, hub or drafts (§16)"
 else no "no native tooltips on board, hub or drafts (§16)" "$hits"; fi
 
 # C5: no view keeps a private copy. A write sends a patch and then RE-READS; it
-# never writes the server's answer into the in-memory store and renders from
-# that. Three sites did (board defaults, saving a view, deleting one), so the
-# page could show something the store did not have, and the surfaces that read
-# the same data disagreed until an unrelated render.
-priv=$(cd "$HERE" && rg -n 'plan\(\)\.[a-z]+ *=[^=]' board.html || true)
+# never writes a guess into the in-memory store and renders from that. The old
+# check grepped for the one spelling `plan().foo =` and stayed green against
+# `const p = plan(); p.foo = ...` and `data.plan.foo = ...`, including a live
+# counterexample in the tree (the answers patch). This one resolves aliases.
+priv=$(cd "$HERE" && bun -e '
+const html = require("fs").readFileSync("board.html", "utf8");
+const script = html.split(/<script[^>]*>/).slice(1).map((s) => s.split("</script>")[0]).join("\n");
+const aliases = new Set();
+for (const m of script.matchAll(/(?:const|let|var)\s+(\w+)\s*=\s*plan\(\)/g)) aliases.add(m[1]);
+const bad = [];
+script.split("\n").forEach((ln, i) => {
+  const t = ln.trim();
+  if (t.startsWith("//")) return;
+  if (/plan\(\)(\.\w+|\[[^\]]+\])+\s*=[^=]/.test(ln)) bad.push(`${i + 1}: ${t}`);
+  else if (/\bdata\.plan(\.\w+|\[[^\]]+\])+\s*=[^=]/.test(ln)) bad.push(`${i + 1}: ${t}`);
+  else for (const a of aliases) {
+    if (new RegExp(`\\b${a}\\.(answers|tags|goals|views|on)\\b[^=<>!]*=[^=]`).test(ln)
+     || new RegExp(`\\b${a}\\.(answers|tags|goals|views|on)\\b.*\\.(push|splice|unshift|pop|shift)\\(`).test(ln))
+      bad.push(`${i + 1}: ${t}`);
+  }
+});
+process.stdout.write(bad.join("\n"));
+' || true)
 if [ -z "$priv" ]; then ok "no view patches the in-memory store instead of re-reading (C5)"
 else no "no view patches the in-memory store instead of re-reading (C5)" "$priv"; fi
 
-# C5: the one path out of a write exists and the rail's refresh goes through it,
-# rather than rebuilding one surface by hand and stopping there.
-if (cd "$HERE" && rg -q '^async function afterWrite' board.html) \
+# C5: the one path out of a write DOES the re-read (a name-presence grep stayed
+# green with the body gutted), and the bare cache invalidations outside it are
+# a closed ledger: the declaration, two selection echoes (the server response
+# rides the write, then the poll cache is dropped), poll recovery, the items
+# signature, the 409 conflict recovery, and afterWrite itself. Seven. A new
+# `lastPayload = ""` is an eighth path out of a write: route it or ledger it.
+body=$(cd "$HERE" && awk '/^async function afterWrite/,/^}/' board.html)
+inval=$(cd "$HERE" && rg -c 'lastPayload = ""' board.html || echo 0)
+if echo "$body" | rg -q 'lastPayload = ""' && echo "$body" | rg -q 'load\(\)' \
    && (cd "$HERE" && rg -q 'refreshRail = \(\) => afterWrite' board.html); then
-  ok "writes leave through one path, and the rail's refresh uses it (C5)"
-else no "writes leave through one path, and the rail's refresh uses it (C5)" \
-        "afterWrite missing, or refreshRail no longer routes through it"; fi
+  ok "afterWrite re-reads for real, and the rail's refresh uses it (C5)"
+else no "afterWrite re-reads for real, and the rail's refresh uses it (C5)" \
+        "afterWrite body no longer drops the cache and re-loads, or refreshRail bypasses it"; fi
+if [ "$inval" = "7" ]; then ok "cache invalidations outside afterWrite are the ledgered seven (C5)"
+else no "cache invalidations outside afterWrite are the ledgered seven (C5)" \
+        "found $inval; a new one is a second path out of a write — route it through afterWrite or update the ledger AND this count"; fi
 
 # C6: the editing core is layer 0, "every surface, no opt-out" (EDITOR-LAYERS.md),
 # and it was loaded by board.html alone. A page that builds a text surface loads
@@ -44,14 +71,16 @@ for pg in board.html hub.html; do
   if (cd "$HERE" && rg -q 'src="/editor.js"' "$pg"); then ok "$pg loads the editing core (C6)"
   else no "$pg loads the editing core (C6)" "no <script src=/editor.js> in $pg"; fi
 done
-# and the surfaces that get rebuilt actually attach it
+# and the surfaces that get rebuilt actually attach it. Live code only: the
+# comment filter is what lets this row fail when the call is deleted but its
+# text survives in a comment, which is exactly how it was mutation-tested green.
+live(){ (cd "$HERE" && rg -n "$1" "$2" | rg -v ':[[:space:]]*//' | rg -q .); }
 missing=""
-for surf in 'ask-\$\{slug\}' 'goal-\$\{cardId\}'; do
-  (cd "$HERE" && rg -q "attachBuffer\(ta, \{ id: \`$surf\`" board.html) || missing="$missing $surf"
-done
-(cd "$HERE" && rg -q 'attachBuffer\(ta, \{ id: "hub-ask"' hub.html) || missing="$missing hub-ask"
-if [ -z "$missing" ]; then ok "every rebuilt text surface attaches the core (C6)"
-else no "every rebuilt text surface attaches the core (C6)" "unattached:$missing"; fi
+live "attachBuffer\(ta, \{ id: \`ask-\\\$\{slug\}\`" board.html || missing="$missing ask"
+live "attachBuffer\(ta, \{ id: \`goal-\\\$\{cardId\}\`" board.html || missing="$missing goal"
+live 'attachBuffer\(ta, \{ id: "hub-ask"' hub.html || missing="$missing hub-ask"
+if [ -z "$missing" ]; then ok "every rebuilt text surface attaches the core, in live code (C6)"
+else no "every rebuilt text surface attaches the core, in live code (C6)" "unattached:$missing"; fi
 
 # §5: drawn, not typed. A button whose only content is a unicode dingbat, in
 # markup or assigned as textContent, reads at a different weight from the SVG
