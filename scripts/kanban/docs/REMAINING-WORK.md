@@ -355,11 +355,20 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
   After `#16`.
 - **Four carried caveats** (`#60`, was five). Reduced-motion has no emulation in
   the tool, concurrent note edits need two clients, the light sweep retires with
-  §17, nudging a live peer needs a second session alive. **The doc-viewer caveat
-  is retired as written**: `CAVEATS-LEDGER.md:56` says "renderMd has not changed
-  yet", and `EDITOR-LAYERS.md:121` on the same day records that it did, gaining
-  tables and images. The real item is a `/doc` re-check against the changed
-  renderer, which is now a build task, not a blocked caveat.
+  §17, nudging a live peer needs a second session alive. **The doc-viewer
+  re-check is DONE 2026-08-25 and it found two real defects**, which is the
+  argument for re-checks. `test/render-probe.md` exercises every construct at
+  once and is kept as the fixture.
+  - **Nested lists were flattened.** `renderMd` held one flat list and threw
+    the indentation away, so three levels of nesting came out as one run of
+    siblings. It is a stack of open levels now, folding each closed level into
+    its parent's last item. No doc in this repo nests today, checked rather
+    than assumed, so this fixes the future rather than the present.
+  - **Blockquotes were never rendered at all**, and 224 lines of them across
+    the docs were coming through as literal `>` text. Prose only on purpose:
+    not one quote in this repo holds a list or a heading. The first attempt
+    silently did nothing because `esc()` runs on the whole block before the
+    line loop, so the pattern has to match `&gt;` and not `>`.
 
 ---
 

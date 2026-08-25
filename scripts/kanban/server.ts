@@ -134,12 +134,29 @@ function renderMd(input: string): string {
     let para: string[] = [];
     let paraLine = blockStart;
     let listLine = blockStart;
-    let list: { tag: "ul" | "ol"; items: string[] } | null = null;
+    let quoteLine = blockStart;
+    // Lists nest, so this is a stack of open levels rather than one list. A flat
+    // model silently rendered three levels of nesting as one run of siblings.
+    type LItem = { text: string; kids: string };
+    type Lvl = { tag: "ul" | "ol"; items: LItem[]; indent: number };
+    let stack: Lvl[] = [];
     let table: string[][] | null = null;
     const flushPara = () => { if (para.length) { out.push(`<p${anchor(paraLine)}>${inline(para.join(" "))}</p>`); para = []; } };
-    const flushList = () => {
-      if (list) { out.push(`<${list.tag}${anchor(listLine)}>` + list.items.map((x) => `<li>${inline(x)}</li>`).join("") + `</${list.tag}>`); list = null; }
+    const renderLvl = (lv: Lvl, outer: boolean) =>
+      `<${lv.tag}${outer ? anchor(listLine) : ""}>` +
+      lv.items.map((it) => `<li>${inline(it.text)}${it.kids}</li>`).join("") +
+      `</${lv.tag}>`;
+    // close every level deeper than `keep`, folding each into its parent's last item
+    const closeTo = (keep: number) => {
+      while (stack.length > keep) {
+        const lv = stack.pop()!;
+        const html = renderLvl(lv, stack.length === 0);
+        const p = stack[stack.length - 1];
+        if (p && p.items.length) p.items[p.items.length - 1].kids += html;
+        else out.push(html);
+      }
     };
+    const flushList = () => closeTo(0);
     const flushTable = () => {
       if (!table) return;
       const [head, ...rows] = table;
@@ -149,13 +166,35 @@ function renderMd(input: string): string {
       );
       table = null;
     };
-    const flushAll = () => { flushPara(); flushList(); flushTable(); };
+    // Quotes were passing through as literal "> " text, and the docs carry 224
+    // lines of them. Prose only, deliberately: not one quote in this repo holds
+    // a list or a heading, so paragraphs split on an empty ">" is the grammar.
+    let quote: string[] | null = null;
+    const flushQuote = () => {
+      if (!quote) return;
+      const paras: string[][] = [[]];
+      for (const q of quote) { if (!q.trim()) paras.push([]); else paras[paras.length - 1].push(q); }
+      out.push(`<blockquote${anchor(quoteLine)}>` +
+        paras.filter((p) => p.length).map((p) => `<p>${inline(p.join(" "))}</p>`).join("") +
+        "</blockquote>");
+      quote = null;
+    };
+    const flushAll = () => { flushPara(); flushList(); flushTable(); flushQuote(); };
     for (const [idx, l] of lines.entries()) {
       const here = blockStart + idx;
       if (!para.length) paraLine = here;
-      if (!list) listLine = here;
+      if (!stack.length) listLine = here;
       const h = l.match(/^(#{1,6}) (.*)$/);
       if (h) { flushAll(); out.push(`<h${h[1].length}${anchor(here)}>${inline(h[2])}</h${h[1].length}>`); continue; }
+      // &gt;, not >: esc() runs on the whole block before this loop sees a line
+      const bq = l.match(/^&gt;\s?(.*)$/);
+      if (bq) {
+        flushPara(); flushList(); flushTable();
+        if (!quote) { quote = []; quoteLine = here; }
+        quote.push(bq[1]);
+        continue;
+      }
+      flushQuote();
       if (/^\s*\|.*\|\s*$/.test(l)) {
         flushPara(); flushList();
         const cells = l.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
@@ -172,10 +211,18 @@ function renderMd(input: string): string {
       if (ol || ul) {
         flushPara();
         const tag: "ul" | "ol" = ol ? "ol" : "ul";
-        if (!list || list.tag !== tag) { flushList(); list = { tag, items: [] }; }
-        list.items.push(box
+        // depth is the leading whitespace; a tab counts as four columns
+        const indent = (l.match(/^[ \t]*/)?.[0] ?? "").replace(/\t/g, "    ").length;
+        if (!stack.length) { listLine = here; stack.push({ tag, items: [], indent }); }
+        else {
+          while (stack.length > 1 && indent < stack[stack.length - 1].indent) closeTo(stack.length - 1);
+          const top = stack[stack.length - 1];
+          if (indent > top.indent) stack.push({ tag, items: [], indent });
+          else if (top.tag !== tag) { closeTo(stack.length - 1); stack.push({ tag, items: [], indent }); }
+        }
+        stack[stack.length - 1].items.push({ kids: "", text: box
           ? `<span class="tbox${box[1] === " " ? "" : " on"}">${box[1] === " " ? "" : "\u2713"}</span>${inline(box[2])}`
-          : (ol ?? ul)![1]);
+          : (ol ?? ul)![1] });
         continue;
       }
       if (/^---+$/.test(l.trim())) { flushAll(); out.push("<hr>"); continue; }
@@ -186,7 +233,11 @@ function renderMd(input: string): string {
       // ordered list rendered as a run of one-item lists each numbered "1." with
       // its second half adrift. Every doc in this repo is wrapped at ~80 columns,
       // so this was the common case rather than an edge one.
-      if (list && list.items.length) { list.items[list.items.length - 1] += " " + l.trim(); continue; }
+      if (stack.length && stack[stack.length - 1].items.length) {
+        const its = stack[stack.length - 1].items;
+        its[its.length - 1].text += " " + l.trim();
+        continue;
+      }
       flushList();
       para.push(l.trim());
     }
