@@ -234,6 +234,7 @@ elif isinstance(c.get("origin"), dict):
 if "groups" in c and not isinstance(c["groups"], dict):
     probs.append("'groups' must be an object of group-name -> {context,color}")
 ids = set()
+missing = []
 for d in c.get("decisions") or []:
     if not d.get("id"): probs.append("a decision has no 'id'"); continue
     if d["id"] in ids: probs.append(f"duplicate id '{d['id']}'")
@@ -242,7 +243,23 @@ for d in c.get("decisions") or []:
     recs = [o for o in d.get("options") or [] if o.get("rec")]
     if not d.get("options"): probs.append(f"{d['id']}: no options")
     elif len(recs) != 1: probs.append(f"{d['id']}: needs exactly one option with rec:true (has {len(recs)})")
-missing = []
+    # a visual one-of-many: images ride the option, and the page turns the group
+    # into a gallery. The built-in reject option is `none: true` on the decision.
+    for o in d.get("options") or []:
+        if "images" in o and not isinstance(o["images"], list):
+            probs.append(f"{d['id']}/{o.get('code','?')}: option 'images' must be a list of filenames")
+        for im in o.get("images") or []:
+            if not os.path.exists(os.path.join(os.path.dirname(p), im)):
+                missing.append(f"{d['id']}/{o.get('code','?')}: {im}")
+    if "images" in d and not isinstance(d["images"], list):
+        probs.append(f"{d['id']}: 'images' must be a list of filenames")
+    for im in d.get("images") or []:
+        if not os.path.exists(os.path.join(os.path.dirname(p), im)):
+            missing.append(f"{d['id']}: {im}")
+    if "none" in d and not isinstance(d["none"], bool):
+        probs.append(f"{d['id']}: 'none' must be true/false (it adds a built-in \"None of these\" option)")
+    if d.get("noneCode") and d["noneCode"] in {o.get("code") for o in d.get("options") or []}:
+        probs.append(f"{d['id']}: noneCode '{d['noneCode']}' collides with an authored option code")
 for s in c.get("sections") or []:
     if not s.get("id"): probs.append("a section has no 'id'"); continue
     if s["id"] in ids: probs.append(f"duplicate id '{s['id']}'")

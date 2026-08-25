@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="en">
+<!-- data-digits: 1-9 pick an option on the focused card, so the kind tabs must
+     not claim them. Everything else in the shared key map still applies. -->
+<html lang="en" data-digits="own">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -108,6 +110,19 @@ h3 .idtag{color:var(--text-3);font:500 var(--fs-caption)/1.4 var(--mono);letter-
 .opt .num{display:none;position:absolute;right:10px;top:8px;color:var(--text-3);font-size:var(--fs-caption);
   border:1px solid var(--border);border-radius:4px;padding:0 5px}
 section.card.focused .opt .num{display:inline-block}
+/* A visual one-of-many: options that carry a picture become tiles you compare
+   side by side, because the picture IS the choice (owner, 2026-08-25). */
+.opts.gallery{display:grid;gap:10px;margin:6px 0;
+  grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr))}
+.opts.gallery .opt{margin:0;display:flex;flex-direction:column;gap:8px;padding:10px}
+.opts.gallery .opt .shots{margin:0}
+.opts.gallery .opt .shots img{max-width:100%}
+.opt.shot .optline{display:block}
+/* the reject-everything option reads as a way out, not as a peer of the others */
+.opt.none{border-style:dashed;color:var(--text-3)}
+.opt.none:has(input:checked){border-style:solid;border-color:var(--amber-br);
+  background:var(--amber-bg);color:var(--amber)}
+.opts.gallery .opt.none{grid-column:1/-1;flex-direction:row;align-items:center}
 .rec-tag{color:var(--green);font-size:var(--fs-caption);font-weight:700;letter-spacing:.05em;margin-left:6px}
 .react{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
 .react label{font-size:var(--fs-body);display:flex;gap:6px;align-items:center}
@@ -195,6 +210,26 @@ const CHEV = `<svg class="gcv" width="11" height="11" viewBox="0 0 16 16" fill="
 /* the boards kind's own glyph, so the link back wears the same mark as the tab */
 const BOARD_GLYPH = (typeof kindById === "function" && kindById("boards")?.icon) || "";
 
+/* One image strip, wherever images appear: a section, a decision, or a single
+   option. They all get the same zoom and the same keyboard because they are all
+   the same act of looking (owner, 2026-08-25). */
+function shotsOf(images, alt) {
+  return `<div class="shots">` + (images || []).map(im =>
+    `<img src="${esc(im)}" alt="${esc(alt || "")}" loading="lazy">`).join("") + `</div>`;
+}
+
+/* "None of these" is built in rather than hand-written per page. Without it the
+   only way to reject every option was to disagree with each one separately, which
+   is what the owner had to do across eight boxes. `none: true` on the decision
+   opts in; `noneLabel` renames it. Its code is "z" so it never collides with the
+   a, b, c the author is writing, and it sorts last. */
+function optionsOf(d) {
+  const opts = (d.options || []).slice();
+  if (d.none) opts.push({ code: d.noneCode || "z",
+                          label: d.noneLabel || "None of these", none: true });
+  return opts;
+}
+
 function render() {
   document.title = (CFG.title || "Decision page") + " · kanban";
   if (CFG.notes === false) document.body.classList.add("notes-off");
@@ -229,12 +264,23 @@ function render() {
       h += `<section class="card decision" data-d="${esc(d.id)}" tabindex="-1">
         <h3><span class="idtag">${esc(d.id)}</span> ${esc(d.question)}</h3>`;
       if (d.context) h += `<p class="read">${linkify(d.context)}</p>`;
-      d.options.forEach((o, i) => {
-        h += `<label class="opt"><input type="radio" name="${esc(d.id)}"
-          value="${esc(o.code)}" ${o.rec ? "checked" : ""}><b>${esc(o.code)}</b> ·
-          ${esc(o.label)}${o.rec ? '<span class="rec-tag">RECOMMENDED</span>' : ""}
-          <span class="num">${i + 1}</span></label>`;
+      // a decision can carry its own evidence, the way a section always could
+      if ((d.images || []).length) h += shotsOf(d.images, d.question);
+      const opts = optionsOf(d);
+      // An option with a picture is a thing you LOOK at, so the row becomes a
+      // tile and the group becomes a gallery. Owner, 2026-08-25: a pick-one-of-N
+      // over rendered variants should be one control, not N agree-boxes.
+      const visual = opts.some(o => (o.images || []).length);
+      h += `<div class="opts${visual ? " gallery" : ""}">`;
+      opts.forEach((o, i) => {
+        h += `<label class="opt${o.none ? " none" : ""}${(o.images || []).length ? " shot" : ""}">
+          <input type="radio" name="${esc(d.id)}" value="${esc(o.code)}" ${o.rec ? "checked" : ""}>
+          ${(o.images || []).length ? shotsOf(o.images, o.label) : ""}
+          <span class="optline"><b>${esc(o.code)}</b> · ${esc(o.label)}${
+            o.rec ? '<span class="rec-tag">RECOMMENDED</span>' : ""}
+          <span class="num">${i + 1}</span></span></label>`;
       });
+      h += `</div>`;
       if (CFG.notes !== false) {
         h += `<div class="react"><button class="addnote" tabindex="-1" data-verb="note" data-tip="Say something in your own words about this item">Add a note</button></div>`;
         h += noteField("dnote", d.note, "why you picked differently, a caveat, a question…");
@@ -516,7 +562,7 @@ function summarizeAnswer(txt) {
     const m = decLine.match(new RegExp(
       "(?:^|\\s)" + d.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(\\S*)"));
     if (!m) return;
-    const opt = (d.options || []).find(o => o.code === m[1]);
+    const opt = optionsOf(d).find(o => o.code === m[1]);
     out.picks.push({ id: d.id, label: opt ? opt.label : (m[1] || "?"),
                      moved: !!(opt && !opt.rec) });
   });

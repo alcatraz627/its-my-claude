@@ -410,12 +410,24 @@ Answer string: `D1d D2a D3a D4a D5a D6b`, with four notes.
   per-token spend arrived through a background channel, so it wants one line
   in chat before a seat opens.
 - **D3a**, refresh `SURFACE-CATALOG.md` first, no seat authorized for `#54`.
-- **D4a**, build the visual one-of-many. Owner note: *"Also build other things
-  that are common use. Also allow better support for rendering images as
-  helper or options, the same click to expand + keyboard support applies."*
-  So: option-level images, a built-in "none of these", images as helpers on
-  any item, and the existing scrimmed zoom plus keyboard behaviour extended to
-  all of them.
+- **D4a**, build the visual one-of-many. **Done 2026-08-25.** An option can
+  carry `images`, which turns the group into a gallery of tiles: the pick-one-
+  of-N that `catch-port-b2` had to fake as one radio plus eight agree-boxes is
+  now one control, and rejecting all of them is one token (`D1z`) instead of
+  eight disagreements. A decision can carry its own `images` as evidence.
+  `none: true` adds a built-in reject option, renameable via `noneLabel` and
+  `noneCode`, drawn dashed so it reads as a way out rather than a peer. The
+  scrimmed zoom and the 1-9 keyboard apply to every image and every option
+  wherever they appear, which was the owner's *"the same click to expand +
+  keyboard support applies"*.
+  **A latent bug fell out of testing it.** The kind tabs bind 1-5 globally, so
+  on any decision page pressing 4 to pick the fourth option NAVIGATED to the
+  Decisions hub. The shared key map had only an all-or-nothing opt-out
+  (`data-keys="own"`, which the board uses), so a page wanting its own digits
+  had to give up the theme and goto keys as well. There is a narrow one now:
+  `data-digits="own"` claims 0-9 and keeps the rest. Verified both ways: on a
+  decision page 4 reaches the built-in none and 2 and 1 pick options with no
+  navigation, and on the hub 3 still goes to drafts.
 - **D5a**, the showcase board's root is `~/Code/Claude/kanban-showcase`. Owner
   note, and it is a bigger ask than the row was: *"Fill that up with enough
   details for an alarms / tasks / scheduling app being built (don't build the

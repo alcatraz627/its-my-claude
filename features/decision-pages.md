@@ -131,8 +131,15 @@ carry their own `index.html` copy (re-copy to refresh — see the authoring rule
   "decisions": [                         // radio groups, answered as D1a D2b …
     { "id": "D1", "question": "…", "context": "…",
       "note": "…",                       // OPTIONAL pre-seeded note (renders expanded)
-      "options": [ { "code": "a", "label": "…", "rec": true },
-                   { "code": "b", "label": "…" } ] }
+      "images": ["evidence.png"],        // OPTIONAL evidence for the whole decision
+      "none": true,                      // OPTIONAL built-in "None of these" option.
+      "noneLabel": "Neither, ask again", //   Renames it; noneCode renames its code
+      "noneCode": "z",                   //   (default "z", must not collide)
+      // An option with `images` becomes a TILE and the group becomes a gallery:
+      // that is the visual pick-one-of-N. Same scrimmed zoom and same 1-9
+      // keyboard as any other image. Mixing tiled and plain options is allowed.
+      "options": [ { "code": "a", "label": "…", "rec": true, "images": ["v-a.png"] },
+                   { "code": "b", "label": "…", "images": ["v-b.png"] } ] }
   ],
   "sections": [                          // item cards, answered as id: agree/DISAGREE — note
     { "id": "wm-01", "group": "Walmart", "title": "Dashboard", "prio": "MUST",

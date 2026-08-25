@@ -856,6 +856,11 @@ addEventListener("keydown", (e) => {
   if (e.key === "g") { gArmed = setTimeout(() => { gArmed = null; }, 1400); return; }
   if (e.key === "?" && theHelp) { theHelp.open(); return; }
   if (e.key === "t") return toggleTheme();
+  // A page with its own numbered picker claims the digits with data-digits="own"
+  // and keeps everything else here. Without it the kind tabs swallow 1-9: on a
+  // decision page, pressing 4 to pick the fourth option navigated to the
+  // Decisions hub instead, which is the tab whose key is 4.
+  if (document.documentElement.dataset.digits === "own" && /^[0-9]$/.test(e.key)) return;
   const hit = document.querySelector(`.views a[data-k="${e.key}"]`);
   if (hit) hit.click();
 });
