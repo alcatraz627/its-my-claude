@@ -168,7 +168,7 @@ Each agent gets:
 - With `--model-mix "<model=count,...;jester=<model>>"` (example: `--model-mix "fable=1,opus5=2;jester=opus4.8"`): explicit per-seat assignment. Counts must sum to the main-pool size; the jester clause is separate. Overrides `--model` and `--diverse`. Randomize which persona gets which model unless the user pins seats; record every assignment in meta.json `voters[].model`.
   - Bare aliases (`sonnet`, `opus`, `haiku`, `fable`) pass straight to the Agent tool's `model` param.
   - Versioned names (`opus5`, `opus4.8`, or a full model id) need a thin agent definition at `~/.claude/agents/magi-voter-<slug>.md` whose frontmatter pins the exact model id; dispatch that voter with its `subagent_type`. If the harness rejects the pin, fall back one lane DOWN (never up) and log the substitution in meta.json.
-  - `fable` seats: allowed only while the owner sentinel `~/.claude/.allow-fable-subagents` exists, and every fable seat must be declared in the run's Model Plan (`rules/model-tier-routing.md`). Per-token cost is uncapped: name it in the Phase 1 cost line.
+  - `fable` seats: allowed only while the owner sentinel `~/.claude/.allow-fable-subagents` exists, and every fable seat must be declared in the run's Model Plan (`rules/model-tier-routing.md`). In-subscription since 2026-08-25, so name it in the Phase 1 line as a routing choice rather than as a cost.
 
 ### 4.2 — Capture cost
 

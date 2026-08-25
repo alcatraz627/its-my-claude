@@ -9,10 +9,10 @@ triggers:
   - skill:commit
   - skill:readme
   - skill:write-docs
-related: [rules/comments.md, rules/pushback-and-self-criticism.md, conventions/doc-writing.md]
+related: [rules/comments.md, rules/pushback-and-self-criticism.md, conventions/doc-writing.md, rules/machine-token-where-human-words-belong.md]
 tier: 2
 category: rules
-updated: 2026-06-20
+updated: 2026-08-25
 stale_after_days: 120
 ---
 
@@ -127,6 +127,14 @@ output style and genuine forks are legitimate). Loop-safe and heed-tracked: an
 identical message never re-fires, and a cleaned message records `heeded:true`.
 Mute: `PROSE_SMELL_OFF=1` (process) · `touch ~/.claude/.no-prose-smell-gate`
 (machine-wide until removed).
+
+## The data half of this doctrine lives next door
+
+This rule governs the prose YOU write. Its sibling,
+[[machine-token-where-human-words-belong]], governs the values a MACHINE emits
+that reach a person: a code, a raw scalar, a value's type, a sentinel rendered
+as a name. Same principle, other direction, and the second one is easier to miss
+because nothing in it reads as writing at all.
 
 ## Same root cause, other atones (reuse their notes)
 

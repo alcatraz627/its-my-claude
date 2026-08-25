@@ -34,9 +34,13 @@ LLM calls. Three behaviors, in order:
 2. **Hard block (LIFTED 2026-07-23):** `model` matching fable/mythos → `decision:block`
    unless the human-owned sentinel `~/.claude/.allow-fable-subagents` exists (it does,
    per the owner's "lift the fable hard-block altogether"; trash it to re-arm).
-   Rationale: that tier is priced per-token OUTSIDE the subscription cap; a sub-agent on
-   it multiplies uncapped spend (user decision 2026-07-07 — when the flagship was
-   cap-covered Opus, this didn't matter; the block keys on pricing, not flagship-ness).
+   Original rationale: that tier was priced per-token outside the subscription cap, so a
+   sub-agent on it multiplied spend (user decision 2026-07-07; when the flagship was
+   cap-covered Opus this did not matter, and the block keyed on pricing rather than on
+   flagship-ness). **That rationale expired on 2026-08-25**: Anthropic brought fable
+   inside the subscription (owner). The sentinel stays because the owner still wants
+   the lane chosen deliberately, but it is no longer guarding a bill. Do not cite cost
+   as the reason to refuse a fable seat.
 3. **Warn (muteable):** `model` absent → `additionalContext` nudge citing the rule.
    Mute: `touch ~/.claude/.model-tier-off` or `MODEL_TIER_OFF=1` one-shot.
 

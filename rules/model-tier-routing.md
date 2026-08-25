@@ -35,7 +35,7 @@ tokens; spend more only when efficacy measurably demands it. Full spec + provena
 | **haiku** | ¢ | trivial sub-agent lookups | low |
 | **sonnet** | $ | DEFAULT sub-agent: research, inventory, mechanical multi-step | verify what matters |
 | **opus** | $$ | main daily driver; judgment/review sub-agent seats | high |
-| **fable/mythos** | $$$$ uncapped | main agent ONLY, for genuinely vague+complex tasks | sub-agent seats ALLOWED since 2026-07-23 (owner lift, sentinel-gated + telemetry-logged; still priced per-token outside the subscription — a deliberate Model-Plan choice, never a default) |
+| **fable/mythos** | $$$ in-subscription since 2026-08-25 | genuinely vague+complex tasks; judgment and ideation seats | sub-agent seats ALLOWED since 2026-07-23 (owner lift, sentinel-gated + telemetry-logged). **Anthropic brought fable inside the subscription (owner, 2026-08-25)**, so it is no longer a spend gate. Still the most expensive lane in effort terms and still Model-Plan-declared, but a seat no longer needs a budget conversation |
 
 **Effort axis:** sub-agent effort ≤ a high/xhigh main. Sonnet is cheap — be liberal
 (`high` when it helps; `low` for wide/numerous fan-outs). Opus stays at `medium` unless
@@ -47,9 +47,10 @@ Tool-call count is NOT effort — a low-effort agent may make many calls.
 Opus is the default ceiling for sub-agents at ANY nesting depth. Fable/mythos seats
 are permitted since 2026-07-23 (owner: "lift the fable hard-block altogether"; guard
 sentinel `~/.claude/.allow-fable-subagents`, trash it to re-arm) — deliberate,
-Model-Plan-declared choices with uncapped per-token cost, never defaults. The ceiling
-graduated 2026-07-07 from two same-day flagship-dispatch occurrences in the
-versable-builder planning session.
+Model-Plan-declared choices, never defaults. Since 2026-08-25 fable is inside the
+subscription, so the reason to declare a seat is that the lane should be chosen out
+loud, not that it costs extra. The ceiling graduated 2026-07-07 from two same-day
+flagship-dispatch occurrences in the versable-builder planning session.
 
 1. **Every `Agent`/`workflow.agent()` dispatch carries an explicit `model:` pin.** An
    unpinned spawn can inherit the session model — the flagship.

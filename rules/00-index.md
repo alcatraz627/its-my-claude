@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-08-20
+updated: 2026-08-25
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-08-20 03:30.
+Regenerated 2026-08-25 20:12.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -42,11 +42,13 @@ Regenerated 2026-08-20 03:30.
 | `exercise-based-verification` | always | Run the code in the state that matters before declaring done — collecting/compiling/linting is not running. Enforced by the declared-ready Stop hook. |
 | `generalize-before-enumerate` | always | Before writing a helper/abstraction that handles "all cases", enumerate the actual cases first — if you can't list them, you don't understand the domain well enough to abstract |
 | `git` | always | Frequent commits, public repos by default, .gitignore patterns, never push main without approval |
+| `github-agent-marker` | always | Every comment posted to GitHub under the owner's account carries the owner's attribution marker near the top, "> Generated via a 🤖 on @<gh-user> machine (_<one random phrase>_)" (a blockquote; the handle is the logged-in gh user), enforced by guard-github-agent-marker.sh with NO bypass; the phrase is picked at random from the owner's fixed list per comment. |
 | `grep-scope-before-claiming-absence` | always | Grep the FULL relevant tree (not just one subdir) before claiming a module/function/helper doesn't exist or proposing to create one |
 | `helper-return-type-assumption` | always | Before calling a method on a helper's return value, grep the helper's definition — don't assume its shape |
 | `invariant-graduation` | always | "X stays / X unaffected / only threading needed" claims in plans, design docs, and reports must immediately become a verification task + a Standing-constraints checkpoint entry; mixed thread-vs-rebuild framing must be resolved with the user BEFORE implementation. |
 | `js-escape-sequences-in-template-literals` | scoped | JS inside server-side backtick template literals needs DOUBLE escapes; `node --check` won't catch it; verify in a real browser |
 | `literal-request-over-intent` | always | A request names a goal; the wording is a sample of it, not its boundary. Seven shapes with distinct tells (named string, named instance, complaint-as-menu, deferral, urgency, a ban's scope, a repeated ask), one shared precheck, one escape hatch. 9× S3, the account's most active blind spot. |
+| `machine-token-where-human-words-belong` | scoped | A value crossing from a machine to a person's screen is written in the machine's vocabulary, and something has to translate it. Where nothing does, the raw token ships to the reader least able to read it. Four shapes (a code, a raw scalar, a value's type, a sentinel rendered as a name); the tell is a surface that formats SOME fields and passes the rest through. |
 | `model-tier-routing` | always | Route every piece of work to the smallest adequate lane (local lm / gemini / haiku→sonnet→opus; fable = main-only) with right-sized effort; every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan; never switch models without explicit user confirmation. Enforced by guard-model-tier.sh. |
 | `never-modify-anthropic-credentials` | always | NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential — a bad value crashes EVERY Claude instance at once. Stop and ask the user to do it by hand. |
 | `owner-decisions-go-through-a-wizard` | always | Any batch of owner decisions (authorizations, rulings, review of an agent-written doc) is boiled down to the questions only the owner can answer and presented through /decision-wizard (TUI menu or pre-answered HTML form), never as a numbered list in chat and never as "read this doc" |

@@ -5,9 +5,11 @@
 #   1. TELEMETRY (always, even when muted): every sub-agent dispatch appends
 #      {ts, session_id, tool, model, prompt_head} to ~/.claude/logs/model-dispatch.jsonl
 #      — the efficacy-review data feed (tier-telemetry-review, Aug-04).
-#   2. HARD BLOCK (no self-mute): model = fable/mythos-class. That tier is priced
-#      per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped
-#      spend (user decision 2026-07-07 — the block keys on pricing, not flagship-ness).
+#   2. HARD BLOCK (no self-mute): model = fable/mythos-class, unless the owner's
+#      sentinel exists. The original reason was pricing (per-token outside the
+#      subscription cap, user decision 2026-07-07). Anthropic brought fable inside
+#      the subscription on 2026-08-25, so what the block now enforces is that the
+#      lane gets chosen deliberately, not that it costs extra.
 #   3. WARN (muteable): dispatch carries no model pin — an unpinned spawn can inherit
 #      the session flagship (rules/model-tier-routing.md § sub-agent ceiling).
 #
@@ -44,7 +46,7 @@ TLINE=$(echo "$INPUT" | jq -c '{ts: (now | todate), session_id: (.session_id // 
 # sub-agent spend stays reviewable (tier-telemetry-review).
 if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
   if [ ! -f "$HOME/.claude/.allow-fable-subagents" ]; then
-    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED — '$MODEL' is priced per-token OUTSIDE the subscription cap; a sub-agent on it multiplies uncapped spend for no quality gain (rules/model-tier-routing.md § sub-agent ceiling; user decision 2026-07-07). Re-dispatch on sonnet (default) or opus (judgment seats). The flagship is for the supervising main loop only. The human lifts this by creating ~/.claude/.allow-fable-subagents; an agent never does."
+    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED: '$MODEL' is the flagship lane and this dispatch has no owner sentinel. Fable is inside the subscription since 2026-08-25, so this is NOT a cost block; it exists so the lane is chosen deliberately and declared in a Model Plan (rules/model-tier-routing.md § sub-agent ceiling). Re-dispatch on sonnet (default) or opus (judgment seats), or ask the owner to create ~/.claude/.allow-fable-subagents; an agent never does."
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0
@@ -56,7 +58,7 @@ fi
 [ -f "$HOME/.claude/.model-tier-off" ] && exit 0
 
 if [ -z "$MODEL" ]; then
-  msg="[model-tier] This dispatch has NO model pin — an unpinned spawn can inherit the session flagship (uncapped per-token cost). Pin it: sonnet = default (research/inventory/mechanical, effort liberal), opus = judgment seats (medium), haiku = trivial. Also consider the free lanes: lm fleet for judged batch work, lm gemini for large-context ingestion (rules/model-tier-routing.md). (mute: touch ~/.claude/.model-tier-off)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
+  msg="[model-tier] This dispatch has NO model pin, so it can inherit the session flagship instead of the lane you meant. Pin it: sonnet = default (research/inventory/mechanical, effort liberal), opus = judgment seats (medium), haiku = trivial. Also consider the free lanes: lm fleet for judged batch work, lm gemini for large-context ingestion (rules/model-tier-routing.md). (mute: touch ~/.claude/.model-tier-off)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action nudge --heeded unknown >/dev/null 2>&1 || true
 fi
