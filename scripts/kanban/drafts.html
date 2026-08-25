@@ -56,6 +56,8 @@
                     color:var(--text);font:600 14px/1.4 var(--sans);padding:5px 8px}
   .etop input.title:hover{border-color:var(--border)}
   .etop input.title:focus{outline:none;background:var(--well);border-color:var(--blue)}
+  /* the editor's pickers are searchSelect now; this rule is kept for any
+     native select the page still grows */
   .etop select{font:inherit;font-size:12px;background:var(--card);color:var(--text-2);
                border:1px solid var(--border);border-radius:6px;padding:5px 7px;max-width:190px}
   /* Handing a draft over is the consequential act on this page, so it wears the
@@ -467,49 +469,52 @@ function editorEl() {
   title.oninput = () => { buf.title = title.value; stash(); paintStatus(); scheduleAutoSave(); histRecord(); };
   top.append(title);
 
-  const tpl = el("select");
-  tpl.setAttribute("aria-label", "insert a template at the cursor");
-  tpl.append(new Option("insert template…", ""));
-  for (const t of drafts.filter((x) => x.isTemplate)) {
-    tpl.append(new Option((t.title || t.body.split("\n").find((l) => l.trim()) || t.id).slice(0, 40), t.id));
-  }
-  tpl.disabled = tpl.options.length < 2;
-  tpl.onchange = () => { const t = drafts.find((x) => x.id === tpl.value); if (t) insertAtCursor(t.body); tpl.value = ""; };
-  top.append(tpl);
+  // The three editor pickers were native selects while the same page already
+  // used searchSelect for the template-new control. Same control everywhere now.
+  const tplOpts = drafts.filter((x) => x.isTemplate).map((t) => ({
+    value: t.id,
+    label: (t.title || t.body.split("\n").find((l) => l.trim()) || t.id).slice(0, 40) }));
+  const tpl = searchSelect({
+    aria: "insert a template at the cursor", placeholder: "insert template…",
+    tip: "Drop a template's text in at the caret",
+    options: tplOpts, value: "",
+    onPick: (v) => { const t = drafts.find((x) => x.id === v); tpl.set(""); if (t) insertAtCursor(t.body); } });
+  tpl.disable(!tplOpts.length);
+  top.append(tpl.el);
 
   if (d) {
-    const board = el("select");
-    board.setAttribute("aria-label", "board, optional");
-    board.append(new Option("no board", ""));
-    for (const b of boards) board.append(new Option(b.name, b.slug));
-    board.value = d.slug ?? "";
-    board.onchange = () => patch({ slug: board.value || null }, board.value ? "attached" : "detached");
-    top.append(board);
+    const board = searchSelect({
+      aria: "board, optional", placeholder: "no board",
+      tip: "Which board this draft lives on",
+      options: [{ value: "", label: "no board" },
+                ...boards.map((b) => ({ value: b.slug, label: b.name }))],
+      value: d.slug ?? "",
+      onPick: (v) => patch({ slug: v || null }, v ? "attached" : "detached") });
+    top.append(board.el);
   }
 
   // Who this draft is FOR, which is a different question from which board it
   // lives on. Absent means anyone, which is what every draft was until today.
-  const forSel = el("select", "forsel");
-  forSel.dataset.tip = "Who this draft is for. Anyone means whoever sweeps; naming an agent hides it from the others.";
-  forSel.setAttribute("aria-label", "who this draft is for");
-  forSel.append(new Option("For: anyone", ""));
-  for (const a of agents) forSel.append(new Option(`For: ${a}`, `agent:${a}`));
-  for (const b of boards) forSel.append(new Option(`For: ${b.name} (board)`, `board:${b.slug}`));
+  const forOpts = [{ value: "", label: "For: anyone" },
+    ...agents.map((a) => ({ value: `agent:${a}`, label: `For: ${a}` })),
+    ...boards.map((b) => ({ value: `board:${b.slug}`, label: `For: ${b.name} (board)` }))];
   const cur = (buf.to ?? saved?.to ?? d?.to ?? [])[0] ?? "";
   // An alias that has since gone quiet must still show as the current answer, or
   // the control would silently claim the draft is for anyone.
-  if (cur && ![...forSel.options].some((o) => o.value === cur)) {
-    forSel.append(new Option(`For: ${cur.replace(/^agent:/, "")} (not live)`, cur));
+  if (cur && !forOpts.some((o) => o.value === cur)) {
+    forOpts.push({ value: cur, label: `For: ${cur.replace(/^agent:/, "")} (not live)` });
   }
-  forSel.value = cur;
-  forSel.disabled = !currentId;
-  forSel.onchange = async () => {
+  const forSel = searchSelect({
+    aria: "who this draft is for", placeholder: "For: anyone",
+    tip: "Who this draft is for. Anyone means whoever sweeps; naming an agent hides it from the others.",
+    options: forOpts, value: cur,
+    onPick: async (v) => {
     try {
       const res = await fetch("/api/draft", { method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id: currentId, to: forSel.value ? [forSel.value] : [] }) });
+        body: JSON.stringify({ id: currentId, to: v ? [v] : [] }) });
       const out = await res.json();
       if (!res.ok) throw new Error(out.error ?? res.status);
-      status = { kind: "ok", msg: forSel.value ? `for ${forSel.value}` : "for anyone" };
+      status = { kind: "ok", msg: v ? `for ${v}` : "for anyone" };
       await load({ keepBuffer: true });
       // load() deliberately leaves the editor alone while the owner is mid-edit,
       // which is what stops the poll eating keystrokes. A recipient change is not
@@ -518,8 +523,10 @@ function editorEl() {
       // hands focus and caret back, so asking is safe.
       render();
     } catch (e) { status = { kind: "err", msg: e.message }; render(); }
-  };
-  top.append(forSel);
+  } });
+  forSel.disable(!currentId);
+  forSel.el.classList.add("forsel");
+  top.append(forSel.el);
 
   // Handing it over is a different act from leaving it out, so it is a different
   // control. It appears only when there is somebody named to hand it to.
