@@ -283,9 +283,16 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     them D2a/D3a/D4a; the plan doc's own names are canonical): transcript view on
     the board, old viewer retires, `transcript.py` a subprocess behind a fixed
     contract, sessions a drawer tab. **A kind, not a special case.**
-21. **A searchable dropdown, shared** (`b5e81d906f33`). The board has it in its
-    three pickers; drafts has bare selects. Today's fix gave them the right
-    size, not the right control. Promote the pickers out of `board.html` first.
+21. **A searchable dropdown, shared** (`b5e81d906f33`) **Done 2026-08-25.**
+    The promotion had already happened: `searchSelect` has been in `shared.js`
+    for a while, the hub uses it twice and drafts used it for the template-new
+    picker. What was left is that the drafts EDITOR kept three native selects
+    sitting beside it (template, board, and For, the last with 16 options).
+    All three are the shared control now. A source grep says drafts has no
+    `<select>` markup and always did, because these are built with
+    `createElement`; only the DOM knew. Verified: zero native selects on the
+    page, typing "board" narrows the For picker from 16 rows to 10, and a pick
+    commits and closes.
 22. **One navbar on all three pages, really** (`8349c2dc800c`) **Done
     2026-08-25.** The title block was already gone; the missing half was the
     find box. `shared.js:kindFind()` now searches every kind from the same
@@ -319,8 +326,21 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     a Soft limit row in the lane popover, and the head's count turns amber
     above it with a tooltip saying it is a signal, never a block. Verified
     live: set 1 on a lane of 4, amber with tooltip, persists, clears back.
-27. **Showcase boards** (`#65`). Exercise every feature, tag each card
-    `showcase` plus its slug. After 15, when there is a full feature set.
+27. **Showcase boards** (`#65`). **Content designed, placement is one owner
+    call.** `test/showcase/docs/features.md` is the card set: one card per
+    feature (every tag hue, a title that needs a brief, an after-chain, all
+    three verify grades plus needs-human, sub-items, a linked doc, a goal,
+    notes, and one card per lane). It is inert where it sits, because
+    `globDocs` only walks `<root>/docs` and this is four levels below that.
+    **What blocks it is where the board's ROOT lives.** `~/.claude` is itself
+    one board, so `init` inside this repo resolves upward to `-claude-244ec6`
+    rather than making a new board; a showcase board needs a root outside
+    `~/.claude`. The three demo boards use `/private/tmp/kanban-demo/`, which
+    is why `kanban-fixture-3aae75` is registered today against a root that no
+    longer exists (a previous session's scratchpad). So the pick is a stable
+    path outside `~/.claude`, and it is the owner's filesystem.
+    Related and separate: **the dead `kanban-fixture` registration should be
+    unregistered**, which is a deletion and wants the owner's word.
 
 ---
 
