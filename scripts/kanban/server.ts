@@ -321,24 +321,36 @@ function docSegment(reqPath: string, line: number): Response {
 // it: a second theme toggle inside the document reads as a document action.
 function docResponse(reqPath: string, line = 0, embed = false,
                      back: { slug: string; card: string } = { slug: "", card: "" }): Response {
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] ?? c));
   const r = resolveDocPath(reqPath);
   if ("error" in r) {
     if (r.status !== 404) return json({ error: r.error }, r.status);
     // a human lands here from a stale card link; JSON is the wrong shape
     return new Response(
+      // An error page is still a page: it wears the bar, so a dead link is a
+      // place you can leave rather than a dead end (charter U4).
       `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>doc not found</title>
-<style>body{background:#14161a;color:#d8dde4;font:15px/1.6 -apple-system,sans-serif;max-width:640px;margin:18vh auto;padding:0 1rem}
-code{background:#1b1e24;border:1px solid #2a2f37;border-radius:4px;padding:1px 5px}p{color:#8a93a0}</style>
+<link rel="stylesheet" href="/shared.css">
+<style>body{background:var(--canvas);color:var(--text);font:15px/1.7 var(--sans);margin:0}
+.gone{width:min(60ch,calc(100% - 44px));margin:16vh auto}
+.gone h2{font-size:1.5em;margin:0 0 .6em}
+.gone p{color:var(--text-2);margin:0 0 1em}
+code{background:var(--well);border:1px solid var(--border);border-radius:4px;padding:.08em .38em;font:.87em var(--mono)}</style>
+<header id="phead"></header>
+<div class="gone">
 <h2>This document is gone</h2>
-<p><code>${reqPath.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] ?? c))}</code></p>
+<p><code>${esc(reqPath)}</code></p>
 <p>The board is a mirror of your docs at sync time; this source file has since moved
-or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</code></p>`,
+or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</code></p>
+</div>
+<script src="/kinds.js"></script><script src="/shared.js"></script>
+<script>navbar({ mount: "#phead", active: "boards",
+  identity: crumbFor("boards", "document not found") });</script>`,
       { status: 404, headers: { "content-type": "text/html; charset=utf-8" } },
     );
   }
   const real = r.real;
-  const esc = (s: string) => s.replace(/[&<>"]/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] ?? c));
   const body = renderMd(fs.readFileSync(real, "utf8"));
   return new Response(
     `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>${path.basename(real)}</title>

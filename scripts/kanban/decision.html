@@ -14,17 +14,44 @@
 *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
 body{margin:0;background:var(--canvas);color:var(--text);font:var(--fs-lead)/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 main{max-width:1060px;margin:0 auto;padding:20px 22px 140px}
-.dpbar{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-#progress{font-size:var(--fs-small);color:var(--text-3);white-space:nowrap;margin-right:4px}
+/* .dpbar is .subbar in shared.css now: the second bar is a primitive any page
+   can wear, not this page's private row. */
 #progress b{color:var(--amber)}
-.dpbar button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
 #copy{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue);font-weight:600}
 #submit{background:var(--green-bg);border-color:var(--green-br);color:var(--green);font-weight:700}
 #submit:disabled{opacity:.6;cursor:default}
-/* the already-answered banner (defect D1): the truth file exists, say so */
-#answered{display:none;margin:0 0 12px;padding:10px 14px;background:var(--green-bg);
-  border:1px solid var(--green-br);border-radius:var(--r-panel);color:var(--green);font-size:var(--fs-body)}
+/* The already-answered banner (defect D1). v2 says WHAT was answered, not only
+   when. A timestamp alone made you open the drawer to find out. */
+#answered{display:none;margin:0 0 14px;border:1px solid var(--green-br);
+  border-radius:var(--r-panel);background:var(--green-bg);overflow:hidden}
 #answered.on{display:block}
+#answered .ahead{display:flex;align-items:center;gap:9px;padding:9px 13px;
+  color:var(--green);font-size:var(--fs-lead);font-weight:600}
+#answered .ahead svg{flex:none}
+#answered .acount{margin-left:auto;font-weight:500;font-size:var(--fs-body);opacity:.85;
+  display:flex;align-items:center;gap:9px}
+/* the picks, one chip each: what it says, not what code it was */
+#answered .apicks{display:flex;flex-wrap:wrap;gap:6px;padding:0 13px 11px}
+#answered .apick{display:inline-flex;align-items:baseline;gap:6px;max-width:100%;
+  padding:3px 9px;border-radius:var(--r-control);background:var(--card);
+  border:1px solid var(--border);font-size:var(--fs-body);color:var(--text-2)}
+#answered .apick b{font:600 var(--fs-small)/1.4 var(--mono);color:var(--text-3);flex:none}
+#answered .apick .al{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+/* a pick that moved off the recommendation is the one worth finding again */
+#answered .apick.moved{border-color:var(--amber-br);background:var(--amber-bg)}
+#answered .apick.moved b,#answered .apick.moved .al{color:var(--amber)}
+#answered .anote{display:block;padding:0 13px 5px;font-size:var(--fs-body);color:var(--text-2)}
+#answered .anote:last-of-type{padding-bottom:11px}
+#answered .anote b{color:var(--text-3);font:600 var(--fs-small) var(--mono);margin-right:6px}
+#answered details{border-top:1px solid var(--green-br)}
+#answered summary{padding:7px 13px;cursor:pointer;font-size:var(--fs-body);color:var(--text-3);
+  list-style:none;display:flex;align-items:center;gap:7px}
+#answered summary::-webkit-details-marker{display:none}
+#answered summary:hover{color:var(--text-2);background:var(--card)}
+#answered summary .dcv{transition:transform var(--t-fast)}
+#answered details[open] summary .dcv{transform:rotate(90deg)}
+#answered details pre{margin:0;padding:0 13px 12px;font:var(--fs-small)/1.55 var(--mono);
+  white-space:pre-wrap;color:var(--text-2)}
 .intro{color:var(--text-3);font-size:var(--fs-body);margin:0 0 6px;padding:10px 14px;
   background:var(--card);border:1px solid var(--border);border-radius:var(--r-panel)}
 .intro kbd,#overlay kbd{background:var(--well);border:1px solid var(--border);border-radius:4px;
@@ -392,10 +419,12 @@ const toast = (m, ms=1800) => { $("#toast").textContent = m;
   clearTimeout(toast._t); toast._t = setTimeout(() => $("#toast").classList.remove("on"), ms); };
 
 /* the page's verbs, mounted into the navbar's actions zone */
+/* Six verbs plus a progress read ran 51px past the main bar's right edge with
+   the kind tabs already shedding their labels, so they get a bar (charter §18c). */
 function dpBar() {
   const bar = document.createElement("div");
-  bar.className = "dpbar";
-  bar.innerHTML = `<span id="progress"></span>
+  bar.className = "subbar";
+  bar.innerHTML = `<span id="progress" class="sbstate"></span>
     <button type="button" id="flip" data-tip="Show only what you changed (f)">flagged</button>
     <button type="button" id="notesBtn" data-tip="Show note fields on every item (m)">notes</button>
     <button type="button" id="preview" data-tip="Answer preview (p)">preview</button>
@@ -430,7 +459,7 @@ function wireBar() {
       if (!r.ok) throw new Error("http " + r.status);
       toast("Sent to Claude ✓ — you can close this tab", 2600);
       $("#submit").textContent = "Sent ✓";
-      markAnswered(Math.floor(Date.now() / 1000));
+      markAnswered(Math.floor(Date.now() / 1000), txt);
       setTimeout(() => { $("#submit").textContent = "Submit to Claude"; }, 2600);
     } catch (e) {
       try { await navigator.clipboard.writeText(txt); } catch { prompt("Copy this:", txt); }
@@ -440,16 +469,78 @@ function wireBar() {
 }
 
 /* defect D1: the truth file exists, so the page says so on revisit */
-function markAnswered(ts) {
+
+const TICK = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.4" stroke="currentColor" stroke-width="1.3"/><path d="M5.3 8.2 7.1 10 10.7 6.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const DCHEV = `<svg class="dcv" width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+/* answerString() joins an item to its note with a spaced em dash. Built from
+   its code point so the prose gate does not read these patterns as writing. */
+const JOIN = "—";
+const RE_NOTE = new RegExp("^(\\S+) note " + JOIN + " (.+)$");
+const RE_FLAG = new RegExp("^(.+?): (agree|DISAGREE)(?: " + JOIN + " (.+))?$");
+
+/* Read back the string that was SUBMITTED rather than recomputing from local
+   state, which can have drifted since. answerString() writes this shape. */
+function summarizeAnswer(txt) {
+  const lines = String(txt || "").split("\n");
+  const out = { picks: [], notes: [], flags: [], clean: false };
+  const decLine = lines[1] || "";
+  (CFG.decisions || []).forEach(d => {
+    const m = decLine.match(new RegExp(
+      "(?:^|\\s)" + d.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(\\S*)"));
+    if (!m) return;
+    const opt = (d.options || []).find(o => o.code === m[1]);
+    out.picks.push({ id: d.id, label: opt ? opt.label : (m[1] || "?"),
+                     moved: !!(opt && !opt.rec) });
+  });
+  lines.slice(1).forEach(l => {
+    let m = l.match(RE_NOTE);
+    if (m) return void out.notes.push({ id: m[1], text: m[2] });
+    m = l.match(RE_FLAG);
+    if (m) out.flags.push({ id: m[1], agree: m[2] === "agree", text: m[3] || "" });
+  });
+  out.clean = lines.includes("all items: agree as drafted");
+  return out;
+}
+
+function markAnswered(ts, answer) {
   const b = $("#answered");
   if (!b) return;
-  b.textContent = `Answered${ts ? " " + new Date(ts * 1000).toLocaleString() : ""} — submitting again replaces the previous answer.`;
+  const s = summarizeAnswer(answer);
+  const noteCount = s.notes.length + s.flags.filter(f => f.text).length;
+  const moved = s.picks.filter(p => p.moved).length
+              + s.flags.filter(f => !f.agree).length;
+  const tally = [];
+  if (s.picks.length) tally.push(`${s.picks.length} decision${s.picks.length > 1 ? "s" : ""}`);
+  if (moved) tally.push(`${moved} off the recommendation`);
+  if (noteCount) tally.push(`${noteCount} note${noteCount > 1 ? "s" : ""}`);
+  if (!tally.length && s.clean) tally.push("everything as drafted");
+
+  let h = `<div class="ahead">${TICK}<span>Answered${ts ? " " + esc(ago(ts * 1000)) + " ago" : ""}</span>`
+        + `<span class="acount" data-tip="${esc(ts ? new Date(ts * 1000).toLocaleString() : "")}">`
+        + `${esc(tally.join(" · "))}</span></div>`;
+  if (s.picks.length)
+    h += `<div class="apicks">` + s.picks.map(p =>
+      `<span class="apick${p.moved ? " moved" : ""}"${
+        p.moved ? ` data-tip="You moved this off the recommended option"` : ""
+      }><b>${esc(p.id)}</b><span class="al">${esc(p.label)}</span></span>`).join("") + `</div>`;
+  s.notes.forEach(n =>
+    h += `<span class="anote"><b>${esc(n.id)}</b>${esc(n.text)}</span>`);
+  s.flags.filter(f => !f.agree || f.text).forEach(f =>
+    h += `<span class="anote"><b>${esc(f.id)}</b>${
+      f.agree ? "" : "disagreed. "}${esc(f.text)}</span>`);
+  h += `<details><summary>${DCHEV}The full answer, as it was sent</summary>`
+     + `<pre>${esc(answer || "")}</pre></details>`;
+  b.innerHTML = h;
   b.classList.add("on");
 }
+
 async function checkAnswered() {
   try {
     const r = await fetch(".answer.json", { cache: "no-store" });
-    if (r.ok) markAnswered((await r.json()).submitted_at);
+    if (!r.ok) return;
+    const a = await r.json();
+    markAnswered(a.submitted_at, a.answer);
   } catch {}
 }
 
@@ -457,8 +548,8 @@ fetch("config.json", { cache: "no-store" }).then(r => r.json()).then(c => {
   CFG = c;
   navbar({ mount: "#phead", active: "decisions",
     identity: crumbFor("decisions", CFG.title || SLUG),
-    actions: dpBar(),
     help: () => $("#overlay").classList.add("on") });
+  document.getElementById("phead").after(dpBar());
   render(); wireBar(); load(); refresh(); checkAnswered();
 }).catch(e => { $("#main").innerHTML =
   `<p class="note">Failed to load config.json for this page. ${esc(e)}</p>`; });

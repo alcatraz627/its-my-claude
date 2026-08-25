@@ -306,6 +306,25 @@
      1 1 240px and crushed the status strip beside it to "/Users…" while ~500px
      of it sat empty. An empty zone gives its space back. */
   .nzfind:empty{flex:0 0 0;min-width:0;margin-left:0}
+
+  /* ---------- the second bar (charter §18c) ----------
+     Owner, 2026-08-25: a page with many verbs gets a second bar under the main
+     one rather than cramming the main one. The decision page ran 51px over with
+     the tabs already shedding their labels. Same tokens, one rung quieter, so it
+     reads as this page's row and never as a rival navbar. */
+  .subbar{position:sticky;top:var(--h-nav,45px);z-index:calc(var(--z-nav) - 1);
+          display:flex;align-items:center;gap:6px;padding:6px 14px;
+          background:var(--canvas);border-bottom:1px solid var(--border);
+          overflow-x:auto;scrollbar-width:none}
+  .subbar::-webkit-scrollbar{display:none}
+  .subbar > *{flex:none}
+  /* the page's own state reads first and takes the slack, so the verbs sit
+     right where the main bar's verbs used to */
+  .subbar .sbstate{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+                   white-space:nowrap;font-size:var(--fs-body);color:var(--text-3)}
+  .subbar button{background:none;border-color:transparent;color:var(--text-2)}
+  .subbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .subbar button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
   /* Same treatment as .npage below, for the same reason and one zone over: this
      one shrank correctly and then painted its overflow ON TOP of the tabs, so
      "save as view" rendered half-under the Boards tab. A zone draws inside

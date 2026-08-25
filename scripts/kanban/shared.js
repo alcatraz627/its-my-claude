@@ -528,6 +528,14 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
     if (typeof MutationObserver === "function") { const o = new MutationObserver(mark); o.observe(el, { childList: true, subtree: true }); unobserve(o); }
     addEventListener("resize", mark, { signal: navSig });
   };
+  // A second bar sticks BELOW this one (charter §18c), and the offset it needs
+  // is this bar's real height, which varies with what the page put in it.
+  const publishHeight = () => document.documentElement.style
+    .setProperty("--h-nav", Math.round(el.getBoundingClientRect().height) + "px");
+  publishHeight();
+  if (typeof ResizeObserver === "function") {
+    const o = new ResizeObserver(publishHeight); o.observe(el); unobserve(o);
+  }
   markOverflow(document.getElementById("nbStatus"));
   if (find) { document.getElementById("nbFind").append(find); markOverflow(find); }
   if (actions) {

@@ -452,7 +452,60 @@ input you have, not the tidy one, and assert every zone is above its floor.
 
 ---
 
+## 18c. One bar for every page, and it stays uncrowded
+
+Owner, 2026-08-25, verbatim: *"Can you PLEASE HAVE A UNIFIED NAVBAR FOR ALL
+PAGES, optionally a second navbar if the page needs it but for smaller items
+just cram them into a common slot in the main one with unified styling."*
+
+Three rules, in the order they bind.
+
+**Every page wears the bar, including the ones nobody plans for.** §16's
+"one navbar" was read as "the three real pages" and the surfaces at the edges
+were left bare: the doc viewer rendered headerless for a day, and the
+document-is-gone page was a dead end you could only leave by closing the tab.
+An error page is a page. A viewer is a page. The test is not "is this a main
+surface", it is "can a person arrive here", and if they can arrive they can
+leave the same way they leave everywhere else.
+
+**A page's small items go in the bar's own slots, not in a strip below it.**
+The doc viewer had grown a second bordered strip carrying a back-link, a path
+and a read-only badge, which is a second bar denying it is one: more height,
+a second visual language, and the same three things the board says in its
+status slot without a strip. `#nbStatus` takes what you are looking AT
+(`.bpath`, `.stat-chip`); `#nbActions` takes what you can DO. A primitive two
+pages wear lives in `shared.css`, never in the page that happened to need it
+first.
+
+**A second bar is earned by verb count, not by convenience.** Where a page
+genuinely has many verbs, a second per-page bar beneath the main one beats
+cramming the main one, and it is a deliberate choice with the owner rather
+than a default. Buttons carry icons with `data-tip` tooltips (§16 bans native
+`title=`), and only the verb that needs emphasis gets it: a bar where every
+control is accented has no emphasis at all.
+
+**A zone that holds nothing gives its space back.** §18b said no zone may
+reach zero; the mirror is that no empty zone may keep its share. The doc
+viewer passes no find box, and `.nzfind` held its `1 1 240px` anyway, so ~500
+blank pixels sat beside a path ellipsised to `/Users…`. Any zone that can be
+absent declares `:empty{flex:0 0 0}`.
+
+---
+
 ## 19. Changelog
+
+- **2026-08-25, the bar reaches the edge surfaces (§18c).** `/doc` called
+  `pageHead()`, which #68 had renamed to `navbar()`; the call lives in a
+  server-side template literal, so no build, type-check or test could see it,
+  and the page threw and rendered bare until the owner asked where the navbar
+  went. That is `rename-without-grepping-readers` in its string-keyed form:
+  the rename was "done" because the app built and the three real pages worked.
+  The doc's own strip is gone and its back-link, path and read-only badge ride
+  `#nbStatus`; `.stat-chip`, `.sband` and `.bpath` moved to `shared.css`,
+  because the board is no longer their only wearer. The 404 doc page gained the
+  bar too. Two bar defects surfaced by giving it a second tenant: `.ncrumb a`
+  wrapped "All boards" onto two lines, and `.nzfind` held its flex basis while
+  empty.
 
 - **2026-08-24, one navbar (#68).** Every page wears `navbar()` from
   `shared.js`: identity left, find in the middle, everything common plus the
