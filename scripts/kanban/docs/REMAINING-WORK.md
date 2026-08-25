@@ -381,10 +381,25 @@ All three **done 2026-08-25**, plus the two the owner added while they shipped.
 - **Icons, tooltips, proper words, colour** (owner, 2026-08-25: *"Icons and
   tooltips and proper words + colors / shade only when needed but used, all
   over"*). **Started, not finished.** `VERB_ICON` + `verbButton()` in
-  `shared.js` are the one source, and the decision page's six verbs are
-  converted. **Still open: `board.html` has 32 word-only buttons, 26 of them
-  with no tooltip at all**, and `drafts.html` has one (`New draft`). That is
-  the bulk of the "all over" and it is a pass of its own.
+  `shared.js` are the one source, plus `paintVerbs()` for static markup marked
+  `data-verb` and a `watchVerbs()` observer so a popover that rebuilds its own
+  innerHTML does not come back bare. **Done:** all 24 genuinely word-only
+  buttons across `board.html` (21), `drafts.html` (1) and `decision.html` (2)
+  now carry an icon, a `data-tip` and a verb-phrase label. Modal-footer
+  Cancel / Done / Close keep their word and take no glyph on purpose: a
+  dismiss pair is already legible, and an icon there is decoration. Emphasis
+  audited at the same time, in both directions the ruling cuts: the decision
+  page had painted Copy AND Submit so neither read as primary (Copy went
+  quiet), while the view-save and column-settings modals had no accent at all
+  and their primary is now painted.
+
+- **The board's bar has earned a second one** **NEW, filed not done.**
+  Surfaced by the icon pass: `-claude-244ec6` runs `data-tight` at 1400px with
+  Nudge pushed past the right edge. The bar carries identity, search, five kind
+  tabs, peers, Select cards, Select notes, Nudge, Copy status, theme and help.
+  §18c says the fix is a `.subbar`, which now exists and the decision page
+  proves out. It is a design call about WHICH verbs demote, so it wants the
+  owner rather than a guess.
 
 ## Everything else (7)
 

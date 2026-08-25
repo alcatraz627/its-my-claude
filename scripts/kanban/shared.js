@@ -178,6 +178,35 @@ const VERB_ICON = (() => {
 /* Icon + word + tooltip, in one call, so no page has to remember all three.
    `tone` paints only a verb that has earned emphasis; everything else stays
    quiet, which is what makes the painted one readable. */
+/* Static markup marks itself `data-verb="copy"` and gets the glyph at mount,
+   so a page never inlines an SVG it would then own a copy of. Idempotent, so
+   re-rendering a panel does not stack glyphs. */
+function paintVerbs(root = document) {
+  (root.querySelectorAll ? root : document).querySelectorAll(
+    "button[data-verb]:not([data-verb-done]), a[data-verb]:not([data-verb-done])"
+  ).forEach((b) => {
+    const g = VERB_ICON[b.dataset.verb];
+    if (!g) return;
+    b.insertAdjacentHTML("afterbegin", g);
+    b.dataset.verbDone = "1";
+  });
+}
+
+/* Popovers and modals rebuild their own innerHTML, so painting once at load
+   would leave every re-rendered panel bare. One observer beats a paintVerbs()
+   call at each of the fourteen sites, where a forgotten one is a missing icon
+   nobody reports. */
+function watchVerbs() {
+  if (typeof MutationObserver !== "function" || watchVerbs.on) return;
+  watchVerbs.on = true;
+  new MutationObserver((recs) => {
+    for (const r of recs)
+      for (const n of r.addedNodes)
+        if (n.nodeType === 1 && (n.matches?.("[data-verb]") || n.querySelector?.("[data-verb]")))
+          return void paintVerbs(document);
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
 function verbButton({ id, verb, label, tip, tone = "", type = "button" }) {
   const b = document.createElement("button");
   b.type = type;
@@ -567,6 +596,8 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   };
   // A second bar sticks BELOW this one (charter §18c), and the offset it needs
   // is this bar's real height, which varies with what the page put in it.
+  paintVerbs();
+  watchVerbs();
   const publishHeight = () => document.documentElement.style
     .setProperty("--h-nav", Math.round(el.getBoundingClientRect().height) + "px");
   publishHeight();

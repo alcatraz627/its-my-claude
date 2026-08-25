@@ -1314,18 +1314,18 @@
     <span class="livepeers" id="live"></span>
     <div class="actions">
       <span class="tgrp find">
-        <button class="ghost" id="searchBtn" data-tip="Search cards, your notes, tags and asks (/)" aria-label="search"><span class="sl">Search</span></button>
+        <button class="ghost" id="searchBtn" data-verb="search" data-tip="Search cards, your notes, tags and asks (/)" aria-label="search"><span class="sl">Search</span></button>
         <input id="filter" type="search" placeholder="Filter this board" aria-label="filter this board" autocomplete="off">
       </span>
-      <button type="button" class="ghost nowrap" id="saveView" hidden data-tip="Name what you are looking at, so you and an agent can both say it">save as view</button>
+      <button type="button" class="ghost nowrap" id="saveView" hidden data-verb="view" data-tip="Name what you are looking at, so you and an agent can both say it">Save as view</button>
       <span class="tgrp pick" id="pickGrp">
         <span id="cardSelWrap"></span>
         <span id="noteSelWrap"></span>
       </span>
       <span class="tgrp act">
         <span id="sendWrap"></span>
-        <button id="nudgeBtn" data-tip="Ask whoever is working here to bring the board up to date and carry on. If they are blocked they will explain it plainly and recommend a way out; if they are idle they will pick the work back up.">Nudge</button>
-        <button id="digestBtn" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
+        <button id="nudgeBtn" data-verb="nudge" data-tip="Ask whoever is working here to bring the board up to date and carry on. If they are blocked they will explain it plainly and recommend a way out; if they are idle they will pick the work back up.">Nudge</button>
+        <button id="digestBtn" data-verb="copy" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
       </span>
     </div>
   </div>
@@ -1392,7 +1392,7 @@
       <button type="button" class="icon iact" id="dAdd" aria-label="start another note"></button>
       <button type="button" class="icon iact danger" id="dDel" aria-label="delete this note"></button>
     </div>
-    <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard">discard it</button></div>
+    <div class="restored" id="dRestored"><span>Unsaved draft restored</span><button type="button" id="dDiscard" data-verb="trash" data-tip="Throw away the restored draft and start from empty">Discard it</button></div>
     <div class="conflict" id="dConflict"></div>
     <div class="pvpane" id="dNotePane" hidden></div>
     <textarea id="dNote" placeholder="Leave a note. The agent reads it on its next pickup, so write it the way you would say it."></textarea>
@@ -1400,7 +1400,7 @@
     <div class="parsed" id="dTags"></div>
     <div class="cbar">
       <div class="inserts" id="dInsert"></div>
-      <button class="accent" id="dSave">Save note <span class="k">⌘↵</span></button>
+      <button class="accent" id="dSave" data-verb="save" data-tip="Save this note to the card">Save note <span class="k">⌘↵</span></button>
     </div>
   </div>
   </aside>
@@ -1443,8 +1443,8 @@
   <div class="pbar">
     <span class="pst" id="popSt"></span>
     <span class="psp"></span>
-    <button type="button" class="danger" id="popDel">Delete</button>
-    <button type="button" class="accent" id="popSave">Save <span class="k">⌘↵</span></button>
+    <button type="button" class="danger" id="popDel" data-verb="trash" data-tip="Delete this for good">Delete</button>
+    <button type="button" class="accent" id="popSave" data-verb="save" data-tip="Save your changes">Save <span class="k">⌘↵</span></button>
   </div>
 </div>
 <svg id="xarrow" aria-hidden="true"></svg>
@@ -1455,7 +1455,7 @@
   <div class="dbar">
     <span class="dmp" id="dmPath"></span>
     <a id="dmOpen" href="#" target="_blank" rel="noopener">open in tab</a>
-    <button type="button" id="dmClose">close</button>
+    <button type="button" id="dmClose" data-tip="Close this panel (Esc)">Close</button>
   </div>
   <iframe id="dmFrame" title="document preview" src="about:blank"></iframe>
 </div></div>
@@ -2189,8 +2189,8 @@ function openBoardSettings(btn) {
         ? diverged.map((l) => `<button type="button" class="chip" data-lane="${l}">${LANE_NAME[l]}</button>`).join("")
         : `<span class="ck">None. Every column is using these.</span>`) +
     `</div>` +
-    `<div class="cbtns"><button type="button" class="ghost" id="bsreset">Clear board defaults</button>` +
-    `<button type="button" id="ccdone">Done</button></div>`;
+    `<div class="cbtns"><button type="button" class="ghost" id="bsreset" data-verb="reset" data-tip="Put every lane back to this board\u2019s default view">Clear board defaults</button>` +
+    `<button type="button" class="accent" id="ccdone">Done</button></div>`;
   document.body.appendChild(card);
   btn.setAttribute("aria-expanded", "true");
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
@@ -2239,7 +2239,7 @@ function openNameView(btn, clauses) {
     `<div class="crow"><span class="ck">For the agent</span></div>` +
     `<input type="text" id="vwnote" aria-label="what you are using this view for" placeholder="optional: what you are using it for">` +
     `<div class="cbtns"><button type="button" class="ghost" id="vwcancel">Cancel</button>` +
-    `<button type="button" id="vwsave">Save</button></div>`;
+    `<button type="button" class="accent" id="vwsave" data-verb="save">Save</button></div>`;
   document.body.appendChild(card);
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
@@ -2284,7 +2284,7 @@ function openViewNote(v, btn) {
     `<input type="text" id="vwnote2" aria-label="what you are using this view for" placeholder="what you are using it for">` +
     `<div class="cfoot">An agent reading the board sees this line. Empty clears it.</div>` +
     `<div class="cbtns"><button type="button" class="ghost" id="vwncancel">Cancel</button>` +
-    `<button type="button" id="vwnsave">Save</button></div>`;
+    `<button type="button" class="accent" id="vwnsave" data-verb="save">Save</button></div>`;
   document.body.appendChild(card);
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
@@ -2461,8 +2461,8 @@ function openColCard(lane, wrap, btn) {
       `<input type="number" id="cclim" min="1" max="99" inputmode="numeric" placeholder="none"` +
       ` value="${boardCols().limits?.[lane] ?? ""}" aria-label="soft limit for this column"` +
       ` data-tip="Above this count the head turns amber. Shared with the board and its agents; a signal, never a block."></div>` +
-    `<div class="cbtns"><button type="button" class="ghost" id="ccreset">Reset this column</button>` +
-    `<button type="button" id="ccdone">Done</button></div>`;
+    `<div class="cbtns"><button type="button" class="ghost" id="ccreset" data-verb="reset" data-tip="Put this lane back to the board default">Reset this column</button>` +
+    `<button type="button" class="accent" id="ccdone">Done</button></div>`;
   document.body.appendChild(card);
   const r = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(r.bottom + 6, innerHeight - cr.height - 10)}px`;
@@ -3284,7 +3284,7 @@ function renderStale() {
   if (ts && Date.now() - ts > 24 * 36e5) {
     const cmd = `kanban.sh sync --project ${data.root}`;
     bar.innerHTML = `<span class="bar"></span><span class="grow">This mirror was synced ${ago(ts)} ago — it reflects the docs then, not the code now. Refresh with <code>kanban.sh sync</code>.</span>` +
-      `<button type="button" id="copySync">copy command</button>`;
+      `<button type="button" id="copySync" data-verb="copy" data-tip="Copy the sync command to run in a terminal">Copy command</button>`;
     bar.className = "notice warn on";
     $("copySync").onclick = () => { navigator.clipboard.writeText(cmd); toast("Sync command copied"); };
   } else bar.className = "notice warn";
@@ -4261,7 +4261,7 @@ function renderConflict(at) {
   if (conflictNote === null) { el.className = "conflict"; el.innerHTML = ""; syncComposer(); return; }
   syncComposer(); // a conflict must be seen, so it always expands the dock
   el.innerHTML = `<div class="crow2"><span class="grow">This note changed elsewhere${at ? " " + ago(Date.parse(at)) + " ago" : ""}, maybe in another tab. Saving keeps yours.</span>` +
-    `<button type="button" id="cShow">show theirs</button><button type="button" id="cUse">use theirs</button></div>` +
+    `<button type="button" id="cShow" data-verb="preview" data-tip="See the version saved by whoever edited this after you">Show theirs</button><button type="button" id="cUse" data-verb="save" data-tip="Replace your text with theirs; yours is lost">Use theirs</button></div>` +
     `<div class="ctheirs" id="cTheirs" hidden></div>`;
   $("cTheirs").textContent = conflictNote || "(they cleared the note)";
   el.className = "conflict on";

@@ -236,7 +236,7 @@ function render() {
           <span class="num">${i + 1}</span></label>`;
       });
       if (CFG.notes !== false) {
-        h += `<div class="react"><button class="addnote" tabindex="-1">add a note</button></div>`;
+        h += `<div class="react"><button class="addnote" tabindex="-1" data-verb="note" data-tip="Say something in your own words about this item">Add a note</button></div>`;
         h += noteField("dnote", d.note, "why you picked differently, a caveat, a question…");
       }
       h += `</section>`;
@@ -264,7 +264,7 @@ function render() {
         `<div><b>${esc(k)}</b> ${esc(v)}</div>`).join("") + `</div>`;
     }
     h += `<div class="react"><label><input type="checkbox" class="agree" checked>agree</label>`;
-    if (CFG.notes !== false) h += `<button class="addnote" tabindex="-1">add a note</button>`;
+    if (CFG.notes !== false) h += `<button class="addnote" tabindex="-1" data-verb="note" data-tip="Say something in your own words about this item">Add a note</button>`;
     h += `</div>`;
     if (CFG.notes !== false) h += noteField("notes", s.note, "exception / note…");
     h += `</section>`;
