@@ -425,6 +425,37 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ---
 
+### From the usage trial (2026-08-25, `design/TRIAL-01-REPORT.md`)
+
+A sonnet agent that had never seen the app planned a product on it and
+reported where it fought back. Full report and its unedited feedback in
+`design/`. Six asks, ranked by it, verdicts mine.
+
+1. **A milestone should be an object, not a tag** `[spine]` **NEW, the one
+   real build here.** Milestones have an order, a goal sentence and a done
+   state; `tag milestone:m2` has none of those. The trial expressed "M1
+   shipped" by moving seven cards to `done` one at a time, and each
+   milestone's goal sentence lives only in its doc, unreachable from the
+   board. A `milestone` kind in the registry, not a tag kind.
+2. **`after` should be navigable, not just countable** **NEW, small.**
+   Clicking `after 1` should show which card, the way clicking a tag does.
+3. **`add --json`** **NEW, trivial.** `show` and `status` have it. Without it
+   the trial regexed prose out of stdout to script a batch of cards.
+4. **A harvest miss should explain itself** **NEW, small.** A scanned file
+   that yields zero cards reports identically to "nothing changed". The trial
+   diffed two files by hand to find out why.
+5. **Document `plan`, and fix its scoping** **Done 2026-08-25.** Worse than
+   reported: bare `plan` in the showcase project listed eight plans belonging
+   to `-claude-244ec6` with nothing marking them foreign. Now scoped, with
+   `--all` to span boards, and `plan` and `decide` are in the bare help.
+6. **Batch `tag`** **NEW, trivial.** `after` already takes many ids.
+
+Two structural gaps it named that are not in its ranked list, because it
+worked around them rather than hitting a wall: **a plan CHANGE has no shape
+on the board** (so "what changed since last week" is unbuildable as a view),
+and **a split card cannot say what it split from** (`after` carries the
+dependency, nothing carries the sibling relationship).
+
 ### The six-calls answers (2026-08-25, page `kanban-six-calls`)
 
 Answer string: `D1d D2a D3a D4a D5a D6b`, with four notes.
