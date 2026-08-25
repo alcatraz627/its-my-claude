@@ -41,7 +41,12 @@ capability ("minimize the work I have to do").
 ## Mechanics
 
 ```
-bash ~/.claude/scripts/decision-page/decision-page.sh new <slug> [--title "…"]
+bash ~/.claude/scripts/decision-page/decision-page.sh new <slug> [--title "…"] \
+  [--topic "…"] [--session <id>] \
+  [--board <slug>] [--card <id>] [--goal "…"] [--milestone "…"]
+# --board seeds itself from the board whose root contains your cwd; pass the
+# others when the page rules on a specific card, goal or milestone, so the hub
+# and the page can link the answer back to the work it governs.
 # → scaffolds ~/.claude/assets/decision-pages/<slug>/{index.html,config.json}
 #   ensures the kanban server (:5106); the hub is its Decisions view (:5106/?view=decisions)
 # agent then: writes real config.json + drops images
@@ -114,7 +119,13 @@ carry their own `index.html` copy (re-copy to refresh — see the authoring rule
   "accent": "#7c3aed",                   // OPTIONAL — per-page accent color
   "origin": {                            // OPTIONAL — `new` seeds this; shown on page + hub
     "session": "dec-wiz-7a", "project": "~/proj",
-    "topic": "what this is about", "created": "2026-07-16" },
+    "topic": "what this is about", "created": "2026-07-16",
+    // What the page BELONGS to, so the answer can be read back at the work.
+    // `board` seeds itself from the deepest board root containing your cwd;
+    // the rest cannot be guessed, so pass them: --card --goal --milestone.
+    // A `card` without a `board` fails check: card ids are per board.
+    "board": "-claude-244ec6", "card": "98fc85065372",
+    "goal": "ship the sessions kind", "milestone": "aug24-ergonomics" },
   "groups": {                            // OPTIONAL — per-cluster helper context + color tint
     "API": { "context": "land before v1 freeze", "color": "#52bd8a" } },
   "decisions": [                         // radio groups, answered as D1a D2b …

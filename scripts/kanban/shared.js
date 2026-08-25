@@ -151,6 +151,43 @@ const HELP_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><
 const CLOSE_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="m4.6 4.6 6.8 6.8M11.4 4.6l-6.8 6.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
 const THEME_ICON = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.6" stroke="currentColor" stroke-width="1.3"/><path d="M8 2.4a5.6 5.6 0 0 0 0 11.2V2.4Z" fill="currentColor"/></svg>`;
 
+/* The verbs, drawn once (owner, 2026-08-25: "Icons and tooltips and proper
+   words + colors / shade only when needed but used, all over"). A word-only
+   button is unfindable at a glance; a page that draws its own is a fifth
+   dialect. Charter 18c. */
+const VERB_ICON = (() => {
+  const s = (d, extra = "") => `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">${extra}<path d="${d}" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  return {
+    flag:    s("M4 14V2.6h7.6l-1.5 2.6 1.5 2.6H4"),
+    note:    s("M3.4 2.6h9.2v6.6l-3.2 4.2H3.4V2.6M12.6 9.2H9.4v4.2"),
+    preview: s("M1.8 8S4.2 3.8 8 3.8 14.2 8 14.2 8 11.8 12.2 8 12.2 1.8 8 1.8 8Z",
+               `<circle cx="8" cy="8" r="1.7" stroke="currentColor" stroke-width="1.3"/>`),
+    reset:   s("M2.8 8a5.2 5.2 0 1 0 1.6-3.75M2.4 2.6v3.2h3.2"),
+    copy:    s("M5.6 5.6V3.2h7.2v7.2h-2.4M3.2 5.6h7.2v7.2H3.2V5.6Z"),
+    send:    s("M14 2 2 6.8l4.6 2.2L9 13.6 14 2ZM6.6 9l2.6-2.6"),
+    add:     s("M8 3.4v9.2M3.4 8h9.2"),
+    save:    s("M3 3h7.4L13 5.6V13H3V3ZM5.6 3v3.4h4.4V3M5.6 13v-3.6h4.8V13"),
+    trash:   s("M2.8 4.4h10.4M6.2 4.4V2.9h3.6v1.5M4.4 4.4l.7 8.7h5.8l.7-8.7"),
+    search:  s("M13.4 13.4 10.6 10.6", `<circle cx="7.2" cy="7.2" r="4.4" stroke="currentColor" stroke-width="1.3"/>`),
+    nudge:   s("M8 2.4a3.8 3.8 0 0 0-3.8 3.8c0 3-1.4 4-1.4 4h10.4s-1.4-1-1.4-4A3.8 3.8 0 0 0 8 2.4ZM6.9 12.6a1.3 1.3 0 0 0 2.2 0"),
+    view:    s("M2.6 4.2h10.8M2.6 8h10.8M2.6 11.8h6.4"),
+    edit:    s("M10.6 2.8 13.2 5.4 5.6 13H3v-2.6l7.6-7.6Z"),
+  };
+})();
+
+/* Icon + word + tooltip, in one call, so no page has to remember all three.
+   `tone` paints only a verb that has earned emphasis; everything else stays
+   quiet, which is what makes the painted one readable. */
+function verbButton({ id, verb, label, tip, tone = "", type = "button" }) {
+  const b = document.createElement("button");
+  b.type = type;
+  if (id) b.id = id;
+  if (tone) b.classList.add(tone);
+  if (tip) b.dataset.tip = tip;
+  b.innerHTML = (VERB_ICON[verb] || "") + `<span class="vlabel">${label}</span>`;
+  return b;
+}
+
 // `active` is one of boards | asks | drafts. `onView` is optional: a page that
 // switches in place (the hub) handles its own two views; a page that does not
 // (drafts) navigates.

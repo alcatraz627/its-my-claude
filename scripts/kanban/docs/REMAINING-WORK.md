@@ -351,15 +351,40 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ### New from the dp-system-feedback answers (2026-08-25)
 
-- **Answered banner v2**: improve visually and show a readable summary of
-  WHAT was answered, not just when.
-- **Decision origin weaving**: tag decision pages with session / board
-  (+card/goal/milestone) where possible; encourage authoring agents to seed
-  that link in config.origin.
-- **Navbar guidance (design-language)**: buttons carry icons + tooltips,
-  emphasize only what needs it, the navbar must NOT be crowded; consider a
-  SECOND per-page navbar rather than cramming the main one. Recorded in
-  design/SYSTEM.md for the ideation round.
+All three **done 2026-08-25**, plus the two the owner added while they shipped.
+
+- **Answered banner v2** **Done.** It said "Answered <timestamp>" and nothing
+  else, so learning what you had said meant opening the drawer. It parses the
+  string that was SUBMITTED (not local state, which can have drifted since)
+  and shows a chip per decision carrying the option's own words, amber where
+  you moved off the recommendation, your notes under it, and the raw answer
+  behind a details row. Verified live on `dp-system-feedback`.
+- **Decision origin weaving** **Done.** `origin` gained `board`, `card`,
+  `goal`, `milestone`. `board` seeds ITSELF from the deepest board root
+  containing the cwd, so the common case needs no flag and "encourage agents
+  to seed it" became "it is already seeded"; the rest take flags. `check`
+  validates the keys and rejects a `card` without a `board`, since card ids
+  are per board. The page renders the link, `/api/surfaces` carries all four.
+  Verified end to end: the page's link opens that card's drawer on the board.
+- **Navbar guidance** **Done, and it became law rather than guidance.**
+  `design/SYSTEM.md` law 16 binds the ideation round only; the current code
+  needed a charter section, so §18c. Enforced, not just written: `/doc` had
+  been rendering with NO navbar for a day (it called `pageHead()`, renamed to
+  `navbar()` by #68, inside a server-side template literal where nothing could
+  see it break), the doc 404 page was a dead end, and the decision page ran
+  51px over its bar. All three fixed.
+
+- **Second bar** **NEW, done.** `.subbar` in `shared.css`: a page with too
+  many verbs gets a bar under the navbar rather than cramming it, sticky at a
+  `--h-nav` the navbar publishes and re-measures. First wearer is the decision
+  page, which dropped out of tight mode entirely as a result.
+- **Icons, tooltips, proper words, colour** (owner, 2026-08-25: *"Icons and
+  tooltips and proper words + colors / shade only when needed but used, all
+  over"*). **Started, not finished.** `VERB_ICON` + `verbButton()` in
+  `shared.js` are the one source, and the decision page's six verbs are
+  converted. **Still open: `board.html` has 32 word-only buttons, 26 of them
+  with no tooltip at all**, and `drafts.html` has one (`New draft`). That is
+  the bulk of the "all over" and it is a pass of its own.
 
 ## Everything else (7)
 

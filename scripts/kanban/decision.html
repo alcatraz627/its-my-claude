@@ -17,8 +17,10 @@ main{max-width:1060px;margin:0 auto;padding:20px 22px 140px}
 /* .dpbar is .subbar in shared.css now: the second bar is a primitive any page
    can wear, not this page's private row. */
 #progress b{color:var(--amber)}
-#copy{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue);font-weight:600}
-#submit{background:var(--green-bg);border-color:var(--green-br);color:var(--green);font-weight:700}
+/* Submit is the only painted verb here (charter §18c): it is what ends the
+   page. Copy used to be painted too, which left neither reading as primary. */
+#submit{background:var(--green-bg);border-color:var(--green-br);color:var(--green);font-weight:650}
+#submit:hover{background:var(--green);border-color:var(--green);color:var(--on-accent)}
 #submit:disabled{opacity:.6;cursor:default}
 /* The already-answered banner (defect D1). v2 says WHAT was answered, not only
    when. A timestamp alone made you open the drawer to find out. */
@@ -60,6 +62,14 @@ a.evidence{color:var(--blue);text-decoration:underline;text-underline-offset:2px
 .origin{font-size:var(--fs-small);color:var(--text-3);margin:0 0 12px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .origin .badge{background:var(--well);border:1px solid var(--border);border-radius:var(--r-control);padding:2px 9px;color:var(--text);font-weight:600}
 .origin .sep{opacity:.5}
+/* the link back to the work: reachable things get a glyph and a hover, the
+   rest stay plain, so what is clickable is legible without reading it */
+.origin .olink{display:inline-flex;align-items:center;gap:5px;color:var(--blue);
+  text-decoration:none;padding:1px 7px;border-radius:var(--r-control);
+  background:var(--blue-bg);border:1px solid var(--blue-br)}
+.origin .olink:hover{background:var(--card);border-color:var(--blue)}
+.origin .olink svg{flex:none;opacity:.9}
+.origin .obit{color:var(--text-2)}
 .gctx{font-size:var(--fs-small);color:var(--text-3);margin:-2px 0 6px;padding:0 2px}
 .group.tinted h2,.group.tinted h2 .gcv{color:var(--gcol)}
 section.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-panel);
@@ -182,6 +192,8 @@ function noteField(cls, seed, ph) {
 }
 
 const CHEV = `<svg class="gcv" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/* the boards kind's own glyph, so the link back wears the same mark as the tab */
+const BOARD_GLYPH = (typeof kindById === "function" && kindById("boards")?.icon) || "";
 
 function render() {
   document.title = (CFG.title || "Decision page") + " · kanban";
@@ -189,11 +201,22 @@ function render() {
   if (CFG.accent) document.documentElement.style.setProperty("--blue", CFG.accent);
   const M = $("#main");
   let h = `<div id="answered"></div>`;
+  /* What this page belongs to, linked where it can be reached. A ruling that
+     cannot be read back at the work it governs is a ruling nobody applies. */
   if (CFG.origin) {
     const o = CFG.origin;
-    const tail = [o.session, o.project, o.created].filter(Boolean)
-      .map(esc).join(`<span class="sep"> · </span>`);
-    h += `<p class="origin">${o.topic ? `<span class="badge">${esc(o.topic)}</span>` : ""}${tail}</p>`;
+    const bits = [];
+    if (o.board)
+      bits.push(`<a class="olink" href="/b/${encodeURIComponent(o.board)}${
+        o.card ? `?card=${encodeURIComponent(o.card)}` : ""}"
+        data-tip="${esc(o.card ? "The card this page rules on" : "The board this page belongs to")}"
+        >${BOARD_GLYPH}${esc(o.card ? o.card : o.board)}</a>`);
+    if (o.milestone) bits.push(`<span class="obit" data-tip="Milestone">${esc(o.milestone)}</span>`);
+    if (o.goal) bits.push(`<span class="obit" data-tip="Goal">${esc(o.goal)}</span>`);
+    [o.session, o.project, o.created].filter(Boolean)
+      .forEach(x => bits.push(`<span>${esc(x)}</span>`));
+    h += `<p class="origin">${o.topic ? `<span class="badge">${esc(o.topic)}</span>` : ""}${
+      bits.join(`<span class="sep"> · </span>`)}</p>`;
   }
   if (CFG.intro) h += `<p class="intro">${linkify(CFG.intro)} When you're done, hit
     <b>Submit to Claude</b> (or <b>Copy answers</b> to paste it yourself). Press
@@ -347,7 +370,7 @@ function refresh() {
           + f.dnote.filter(id => !f.d.includes(id)).length + (f.end ? 1 : 0);
   $("#progress").innerHTML = n
     ? `${total} items · <b>${n} flagged</b>` : `${total} items · all as drafted`;
-  $("#copy").textContent = n ? `Copy answers (${n})` : "Copy answers";
+  $("#copy .vlabel").textContent = n ? `Copy answers (${n})` : "Copy answers";
   if ($("#drawer").classList.contains("on")) $("#drawertext").textContent = answerString();
 }
 
@@ -424,13 +447,17 @@ const toast = (m, ms=1800) => { $("#toast").textContent = m;
 function dpBar() {
   const bar = document.createElement("div");
   bar.className = "subbar";
-  bar.innerHTML = `<span id="progress" class="sbstate"></span>
-    <button type="button" id="flip" data-tip="Show only what you changed (f)">flagged</button>
-    <button type="button" id="notesBtn" data-tip="Show note fields on every item (m)">notes</button>
-    <button type="button" id="preview" data-tip="Answer preview (p)">preview</button>
-    <button type="button" id="reset" data-tip="Back to drafted answers">reset</button>
-    <button type="button" id="copy" data-tip="Copy the answer string (c)">Copy answers</button>
-    <button type="button" id="submit" data-tip="Send answers straight to Claude (s)">Submit to Claude</button>`;
+  bar.innerHTML = `<span id="progress" class="sbstate"></span>`;
+  /* Only Submit is painted. It is the one verb that ends the page, and a bar
+     where several controls are accented has no accent at all. */
+  [{ id: "flip",     verb: "flag",    label: "Flagged only", tip: "Show only what you changed (f)" },
+   { id: "notesBtn", verb: "note",    label: "Notes",        tip: "Show note fields on every item (m)" },
+   { id: "preview",  verb: "preview", label: "Preview",      tip: "See the answer as it will be sent (p)" },
+   { id: "reset",    verb: "reset",   label: "Reset",        tip: "Put every item back to its drafted answer" },
+   { id: "copy",     verb: "copy",    label: "Copy answers", tip: "Copy the answer string to paste yourself (c)" },
+   { id: "submit",   verb: "send",    label: "Submit to Claude", tone: "accent",
+     tip: "Send your answers straight to Claude (s)" },
+  ].forEach(v => bar.append(verbButton(v)));
   return bar;
 }
 function wireBar() {
@@ -458,9 +485,9 @@ function wireBar() {
         headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answer: txt }) });
       if (!r.ok) throw new Error("http " + r.status);
       toast("Sent to Claude ✓ — you can close this tab", 2600);
-      $("#submit").textContent = "Sent ✓";
+      $("#submit .vlabel").textContent = "Sent";
       markAnswered(Math.floor(Date.now() / 1000), txt);
-      setTimeout(() => { $("#submit").textContent = "Submit to Claude"; }, 2600);
+      setTimeout(() => { $("#submit .vlabel").textContent = "Submit to Claude"; }, 2600);
     } catch (e) {
       try { await navigator.clipboard.writeText(txt); } catch { prompt("Copy this:", txt); }
       toast("Submit unavailable — copied instead, paste it in chat", 2800);

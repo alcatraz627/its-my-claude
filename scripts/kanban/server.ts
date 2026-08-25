@@ -552,6 +552,13 @@ const server = Bun.serve({
               name: cfg.title ?? slug,
               href: `/dp/${slug}/`,   // adopted: served by this server now
               origin: cfg.origin?.project ?? null,
+              // what this ruling belongs to, so the hub can link an answer back
+              // to the work rather than only naming the project it came from
+              board: cfg.origin?.board ?? null,
+              card: cfg.origin?.card ?? null,
+              session: cfg.origin?.session ?? null,
+              goal: cfg.origin?.goal ?? null,
+              milestone: cfg.origin?.milestone ?? null,
               items: (cfg.decisions?.length ?? 0) + (cfg.sections?.length ?? 0),
               pending: pendingSlugs.has(slug),
               at: st ? new Date(st.mtimeMs).toISOString() : null,

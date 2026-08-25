@@ -101,15 +101,46 @@ else: print(f"{s}s")
 PY
 }
 
+# The board this directory belongs to, or empty. Most pages are made while
+# standing somewhere inside the project they are about, which is usually BELOW
+# the board's root rather than at it, so the deepest containing root wins.
+board_here() {
+  python3 - "$PWD" <<'PY' 2>/dev/null || true
+import json, os, sys
+try:
+    reg = json.load(open(os.path.expanduser("~/.claude/kanban/registry.json")))
+except Exception:
+    sys.exit(0)
+cwd = os.path.realpath(sys.argv[1])
+best, best_len = "", -1
+for slug, b in (reg.get("boards") or {}).items():
+    root = b.get("root")
+    if not root:
+        continue
+    root = os.path.realpath(os.path.expanduser(root))
+    if (cwd == root or cwd.startswith(root + os.sep)) and len(root) > best_len:
+        best, best_len = slug, len(root)
+if best:
+    print(best)
+PY
+}
+
 # ── commands ────────────────────────────────────────────────────────────────
 cmd_new() {
   local slug="${1:-}"; shift || true
-  local title="" topic="" sess=""
+  local title="" topic="" sess="" board="" card="" goal="" milestone=""
   while [ $# -gt 0 ]; do case "$1" in
     --title)   title="${2:?--title needs a value}"; shift 2 ;;
     --topic)   topic="${2:?--topic needs a value}"; shift 2 ;;
     --session) sess="${2:?--session needs a value}"; shift 2 ;;
-    *) die "unknown flag for new: $1" "decision-page.sh new <slug> [--title \"…\"] [--topic \"…\"] [--session <id>]" ;;
+    # What this page BELONGS to, so an answer can be read back where the work
+    # lives (owner, 2026-08-25). --board defaults to the board whose root is
+    # this directory; the rest have no way to be guessed.
+    --board)   board="${2:?--board needs a value}"; shift 2 ;;
+    --card)    card="${2:?--card needs a value}"; shift 2 ;;
+    --goal)    goal="${2:?--goal needs a value}"; shift 2 ;;
+    --milestone) milestone="${2:?--milestone needs a value}"; shift 2 ;;
+    *) die "unknown flag for new: $1" "decision-page.sh new <slug> [--title \"…\"] [--topic \"…\"] [--session <id>] [--board <slug>] [--card <id>] [--goal \"…\"] [--milestone \"…\"]" ;;
   esac; done
   [ -n "$slug" ] || die "new needs a slug" "decision-page.sh new <slug> [--title \"…\"]"
   printf '%s' "$slug" | grep -qE '^[a-z0-9][a-z0-9._-]*$' \
@@ -125,14 +156,20 @@ cmd_new() {
   # NB: no ${title:-…} here — bash honors quotes INSIDE ${…} even under double
   # quotes, so an apostrophe in the default text breaks the parse of the file.
   [ -n "$title" ] || title="TITLE — every answer drafted; flip what needs changing"
+  # the board whose root IS this directory, so the common case needs no flag
+  [ -n "$board" ] || board="$(board_here)"
   T="$title" SLUG="$slug" TOPIC="$topic" SESS="${sess:-${CLAUDE_SESSION_ID:-}}" \
   PROJ="${PWD/#$HOME/~}" CREATED="$(date +%Y-%m-%d)" \
+  BOARD="$board" CARD="$card" GOAL="$goal" MILESTONE="$milestone" \
   python3 - "$dir/config.json" <<'PY'
 import json, os, sys
-# origin: which session/project/topic created this page — shown on the page + hub
+# origin: what this page came out of and what it belongs to. Shown on the page,
+# and carried by /api/surfaces so the hub can link the answer back to the work.
 origin = {k: v for k, v in {
   "session": os.environ.get("SESS", ""), "project": os.environ.get("PROJ", ""),
   "topic": os.environ.get("TOPIC", ""), "created": os.environ.get("CREATED", ""),
+  "board": os.environ.get("BOARD", ""), "card": os.environ.get("CARD", ""),
+  "goal": os.environ.get("GOAL", ""), "milestone": os.environ.get("MILESTONE", ""),
 }.items() if v}
 cfg = {
   "title": os.environ["T"], "storageKey": os.environ["SLUG"],
@@ -184,7 +221,16 @@ if "notes" in c and not isinstance(c["notes"], bool):
 if "accent" in c and not isinstance(c["accent"], str):
     probs.append("'accent' must be a CSS color string, e.g. \"#7c3aed\"")
 if "origin" in c and not isinstance(c["origin"], dict):
-    probs.append("'origin' must be an object {session,project,topic,created}")
+    probs.append("'origin' must be an object {session,project,topic,created,board,card,goal,milestone}")
+elif isinstance(c.get("origin"), dict):
+    known = {"session", "project", "topic", "created", "board", "card", "goal", "milestone"}
+    for k in sorted(set(c["origin"]) - known):
+        probs.append(f"origin.{k} is not a known key; drop it or use one of {sorted(known)}")
+    for k in ("board", "card", "goal", "milestone", "session", "topic"):
+        if k in c["origin"] and not isinstance(c["origin"][k], str):
+            probs.append(f"origin.{k} must be a string")
+    if c["origin"].get("card") and not c["origin"].get("board"):
+        probs.append("origin.card without origin.board: a card id is per board, so the link cannot resolve")
 if "groups" in c and not isinstance(c["groups"], dict):
     probs.append("'groups' must be an object of group-name -> {context,color}")
 ids = set()

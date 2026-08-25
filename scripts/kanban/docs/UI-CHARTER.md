@@ -490,6 +490,30 @@ viewer passes no find box, and `.nzfind` held its `1 1 240px` anyway, so ~500
 blank pixels sat beside a path ellipsised to `/Users…`. Any zone that can be
 absent declares `:empty{flex:0 0 0}`.
 
+**Every control: an icon, a tooltip, a proper word.** Owner, 2026-08-25,
+verbatim: *"Icons and tooltips and proper words + colors / shade only when
+needed but used, all over."* All four parts bind, and the last one is the one
+that gets read wrong.
+
+- **Icon.** Drawn, never typed (§5), from `VERB_ICON` in `shared.js`. A page
+  that draws its own verb glyphs is a fifth dialect of the same twelve verbs.
+- **Tooltip.** `data-tip`, never native `title=` (§16), saying what the control
+  does and its key. A word-only button is a thing you have to try.
+- **Proper word.** The label is a verb phrase a person would say. `flagged`
+  is a filter state pretending to be a verb; `Flagged only` is the control.
+  Lowercase fragments read as debug affordances.
+- **Colour, only where earned, and then actually used.** The rule cuts both
+  ways and the second half is why it is worth writing down. A bar where
+  several controls are painted has no emphasis, so paint the ONE verb that
+  ends the interaction and let the rest sit quiet. The decision page had
+  painted both Copy and Submit, which left neither reading as primary; Submit
+  keeps its green and Copy went quiet. But a surface with no accent at all is
+  the opposite failure, not the safe default: if a verb is primary, it is
+  painted.
+
+Under width pressure the words go and the glyphs stay, which is only survivable
+because the glyph and the tooltip were there from the start.
+
 ---
 
 ## 19. Changelog

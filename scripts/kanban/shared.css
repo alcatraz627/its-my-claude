@@ -325,6 +325,11 @@
   .subbar button{background:none;border-color:transparent;color:var(--text-2)}
   .subbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   .subbar button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  /* the one verb that has earned paint; see charter §18c */
+  .subbar button.accent{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue);font-weight:600}
+  /* Under 900 the words go and the glyphs stay, the same bargain the tabs
+     strike. A drawn verb with a tooltip still says what it does. */
+  @media (max-width:900px){ .subbar .vlabel{display:none} .subbar button{padding:0 9px} }
   /* Same treatment as .npage below, for the same reason and one zone over: this
      one shrank correctly and then painted its overflow ON TOP of the tabs, so
      "save as view" rendered half-under the Boards tab. A zone draws inside
