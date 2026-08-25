@@ -223,7 +223,8 @@ switch (verb) {
     if (sub === "add") {
       const q = positional[1];
       if (!q) die("decide add needs the question", 'kanban.sh decide add "ship behind a flag or wait?" --why "the launch date moves either way"');
-      const d: any = { id: noteId(), question: q, at: now };
+      // who raised it, so an answer can be routed back while their context lives
+      const d: any = { id: noteId(), question: q, at: now, by: process.env.CLAUDE_SESSION_ID || undefined };
       const why = flag("why"), card = flag("card");
       if (why) d.why = why;
       if (card) d.card = card;

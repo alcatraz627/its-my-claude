@@ -69,9 +69,49 @@ function dpPending(): Set<string> {
       .split("\n").map((x) => x.trim()).filter(Boolean));
   } catch { return new Set(); }
 }
+// How long ago a named session was last seen, or null. The registry's `status`
+// column is not the liveness test (it read "live" for 21-hour-dead sessions,
+// measured 2026-08-22); last_seen is. Asked per alias rather than per cwd,
+// because the question here is "can this answer still reach the session that
+// raised it", not "who works on this board".
+function seenAgoByAlias(): Map<string, number> {
+  const out = new Map<string, number>();
+  if (ipcMissing) return out;
+  let db: any = null;
+  try {
+    if (!fs.existsSync(IPC_DB)) { ipcMissing = true; return out; }
+    // lazy: a machine with no ipc broker never pays for the sqlite driver
+    const { Database } = require("bun:sqlite");
+    // opened per call, not kept: a held handle pins a WAL snapshot, so last_seen
+    // freezes while the clock moves and every session ages out to cold
+    db = new Database(IPC_DB, { readonly: true });
+    const now = Date.now() / 1000;
+    for (const r of db.query("select alias, max(last_seen) as seen from registry_snapshot group by alias")
+      .all() as { alias: string; seen: number }[]) {
+      if (r.alias && r.seen) out.set(r.alias, Math.max(0, Math.round(now - r.seen)));
+    }
+  } catch { /* no broker is not an error */ }
+  finally { try { db?.close(); } catch { /* nothing to do */ } }
+  return out;
+}
+
+// An answer's value decays with the asking session's context: answering a live
+// session costs it nothing, answering after its /clear costs a re-brief. So a
+// pending decision carries whether it can still reach the session that raised
+// it, and the sort puts hot above old-and-cold. Never asserts "live": it
+// reports when the session was last seen and lets the reader judge.
+const HOT_S = 1800;
+function reachOf(session: string | null | undefined, seen: Map<string, number>): any {
+  if (!session) return { state: "unknown", seenAgo: null };
+  const ago = seen.get(session);
+  if (ago == null) return { state: "cold", seenAgo: null };
+  return { state: ago <= HOT_S ? "hot" : "cold", seenAgo: ago };
+}
+
 function boardDecisions(slug: string, plan: any): any[] {
   const out: any[] = [];
   const pending = dpPending();
+  const seen = seenAgoByAlias();
   try {
     for (const s of fs.readdirSync(DP_ROOT)) {
       const dir = path.join(DP_ROOT, s);
@@ -85,6 +125,8 @@ function boardDecisions(slug: string, plan: any): any[] {
       out.push({ kind: "page", id: s, title: cfg.title ?? s,
         href: `/dp/${s}/`, card: cfg.origin?.card ?? null,
         pending: pending.has(s), seen: fs.existsSync(path.join(dir, ".seen.json")),
+        session: cfg.origin?.session ?? null,
+        reach: reachOf(cfg.origin?.session, seen),
         answer: answer?.answer ?? null, answeredAt: answer?.submitted_at ?? null, at });
     }
   } catch { /* no registry is not an error */ }
@@ -93,10 +135,14 @@ function boardDecisions(slug: string, plan: any): any[] {
     out.push({ kind: "recorded", id: d.id, title: d.question, href: null,
       card: d.card ?? null, pending: !d.answer, seen: true,
       answer: d.answer ?? null, answeredAt: d.answeredAt ?? null, at: d.at ?? null,
+      session: d.by ?? null, reach: reachOf(d.by, seen),
       why: d.why ?? null, notes: d.notes ?? [] });
   }
-  // what needs the owner comes first; within a tier, newest first
-  out.sort((a, b) => Number(b.pending) - Number(a.pending) ||
+  // Needs-the-owner first, then answer-while-hot: among pending rows, one that
+  // still reaches a live session outranks one whose asker has gone cold, because
+  // the same minute of the owner's time is worth more there. Newest breaks ties.
+  const hot = (x: any) => Number(x.pending && x.reach?.state === "hot");
+  out.sort((a, b) => Number(b.pending) - Number(a.pending) || hot(b) - hot(a) ||
     String(b.at ?? "").localeCompare(String(a.at ?? "")));
   return out;
 }
@@ -1265,7 +1311,7 @@ const server = Bun.serve({
     if (req.method === "POST" && p === "/api/decide") {
       const body = (await req.json().catch(() => null)) as
         { slug?: string; op?: string; id?: string; question?: string;
-          why?: string; card?: string; answer?: string; note?: string } | null;
+          why?: string; card?: string; answer?: string; note?: string; by?: string } | null;
       const dir = body?.slug ? boardDirOf(body.slug) : null;
       if (!dir || !body?.op) return json({ error: "need {slug, op: add|answer|note|rm, …}" }, 400);
       let out: any = { error: "unwritten" };
@@ -1277,6 +1323,7 @@ const server = Bun.serve({
           const q = (body.question ?? "").trim();
           if (!q) { out = { error: "a decision needs a question" }; return; }
           const d: any = { id: noteId(), question: q, at: now };
+          if (body.by) d.by = String(body.by);
           if (body.why) d.why = body.why.trim();
           if (body.card) d.card = body.card;
           plan.decisions.push(d);

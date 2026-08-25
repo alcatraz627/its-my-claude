@@ -222,6 +222,18 @@ One contract, no exceptions:
   reaching the old `:5197` pages across origins; that server is retired and
   kanban serves them itself, so the gate had dissolved before anyone looked.
 
+- **An empty zone stays visible if its absence would be ambiguous.** Owner,
+  2026-08-25, ruling on a proposal to retire or auto-hide the empty Inbox
+  lane: *"I wouldn't even know if its supposed to be there / or if it is
+  broken, it will disappear. Let's keep it."* An empty column that is
+  SUPPOSED to be empty is reporting a true fact, and hiding it replaces that
+  fact with a question the owner cannot answer from the screen. This is the
+  §12 honesty rule pointed at absence: a surface that vanishes when it has
+  nothing to say is indistinguishable from one that broke. Distinct from
+  §18c's empty-zone clause, which is about a zone giving back its FLEX, never
+  its presence. The Inbox lane stays, and so does anything else whose
+  disappearance would read as a fault.
+
 - **A path that is gone is flagged where the thing lives.** Owner, 2026-08-25:
   *"If a dir doesn't exist then that needs to be flagged as an alert in the
   card in general."* A board whose project directory has been deleted keeps

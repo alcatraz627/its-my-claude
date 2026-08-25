@@ -914,6 +914,9 @@
      first one means nobody has looked at it yet */
   .pstate.st-unseen{color:var(--red);border-color:var(--red-br);background:var(--red-bg)}
   .srow.decrow.pend .stxt{color:var(--text)}
+  /* the asker is still reachable: answering now costs them nothing */
+  .srow.decrow .hotdot{display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:6px;vertical-align:middle;flex:none}
   .srow .tct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
   .srow.on{background:var(--card);border-color:var(--border-2);color:var(--text)}
   .srow{display:flex;align-items:center;gap:3px;position:relative}
@@ -3875,8 +3878,22 @@ function renderSide() {
       st.textContent = d.pending ? (d.seen ? "needs you" : "unseen") : "ruled";
       st.className = "pstate " + (d.pending ? (d.seen ? "st-draft" : "st-unseen") : "st-ruled");
       const tail = d.answer ? `\nruled: ${String(d.answer).split("\n")[0].slice(0, 90)}` : "";
+      // Answer-while-hot: a pending decision whose asker is still around is
+      // worth the owner's minute more than one whose asker has gone cold. Never
+      // says "live", only when the session was last seen (the registry's own
+      // status column reads live for day-dead sessions).
+      const r = d.reach || {};
+      if (d.pending && r.state === "hot") {
+        const dot = document.createElement("span");
+        dot.className = "hotdot";
+        b.querySelector(".stxt").prepend(dot);
+      }
+      const reachLine = !d.pending ? ""
+        : r.state === "hot" ? `\n${d.session} was seen ${ago(Date.now() - r.seenAgo * 1000)} ago, so an answer still reaches it`
+        : r.state === "cold" ? `\n${d.session} has gone cold; answering costs it a re-brief`
+        : "";
       b.dataset.tip = (d.kind === "page" ? "A decision page" : "Recorded by an agent") +
-        (d.at ? ` · ${ago(Date.parse(d.at))} ago` : "") + tail +
+        (d.at ? ` · ${ago(Date.parse(d.at))} ago` : "") + reachLine + tail +
         (d.href ? "\npress to open it" : "");
       if (d.href) b.onclick = () => { location.href = d.href; };
       else b.onclick = () => toast(d.why ? `why: ${d.why}` : "Recorded decision, no page", 3200);
