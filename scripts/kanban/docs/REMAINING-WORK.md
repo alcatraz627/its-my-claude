@@ -424,8 +424,14 @@ Answer string: `D1d D2a D3a D4a D5a D6b`, with four notes.
   and get a report from it on why it couldn't do other things or feedback on
   the usage of the system, and fix/incorporate all that)."* So the showcase is
   a real usage trial by a second agent, and its report is input to the product.
-- **D6b**, unregister `kanban-fixture` AND trash its data. **Held**: a
-  deletion arriving through a background channel wants one line in chat.
+- **D6b**, unregister `kanban-fixture` AND trash its data. **Done 2026-08-25**
+  after the owner confirmed in chat (a deletion that arrived through a
+  background channel was held for one line). Registry 10 boards to 9; the
+  four notes on it were all empty strings, so nothing authored was lost.
+  **Three boards are still flagged project-gone** and were NOT touched:
+  `apiservice`, `mobileapp` and `datapipe`, all rooted under
+  `/private/tmp/kanban-demo`. Retiring them is the same deletion call and has
+  not been made.
   Owner note: *"If a dir doesn't exist then that needs to be flagged as an
   alert in the card in general."* **Done 2026-08-25**, and it caught four
   boards rather than one: `kanban-fixture` plus all three
