@@ -1,3 +1,10 @@
+> **SUPERSEDED 2026-08-25.** This copy was written 2026-08-23, never
+> re-measured, and had drifted: it describes a `pageHead` that no longer
+> exists, three kinds where there are five, no decision pages, and a
+> `board.html` that links neither shared file when it now links both. The
+> live catalog is `docs/SURFACE-CATALOG.md`, measured rather than recalled.
+> Kept for drift comparison only; do not cite it.
+
 # Surface catalog
 
 Every surface the kanban app shows, what it displays, what it can do, and the

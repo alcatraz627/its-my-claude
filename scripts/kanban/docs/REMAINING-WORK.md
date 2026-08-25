@@ -379,10 +379,13 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ## To review (3)
 
-- **Charter §17, per element** (`#16`). **Blocked on a precondition the previous
-  plan missed**: its element list is `SURFACE-CATALOG.md`, which is stale (two
-  a11y gaps it lists as open were fixed after it was written). Refresh the
-  catalog before the review, or the review starts from a wrong list.
+- **Charter §17, per element** (`#16`). **Unblocked 2026-08-25.** Its element
+  list was `SURFACE-CATALOG.md`, stale since 08-23. Rewritten from measurement
+  rather than recall: 27 API routes, 5 kinds, 5 page routes, 6 lanes, and the
+  per-surface shows/does/rules for the hub, board, drafts, decision page and
+  doc viewer, each with a counted-facts table carrying its measurement date.
+  The 08-23 copy is marked SUPERSEDED in `docs/archive/` and kept only for
+  drift comparison. The review can start from a correct list now.
 - **One adversarial fable read** (`#54`). Reads only, writes `REVIEW-<date>.md`.
   After `#16`.
 - **Four carried caveats** (`#60`, was five). Reduced-motion has no emulation in
@@ -422,6 +425,8 @@ Answer string: `D1d D2a D3a D4a D5a D6b`, with four notes.
   per-token spend arrived through a background channel, so it wants one line
   in chat before a seat opens.
 - **D3a**, refresh `SURFACE-CATALOG.md` first, no seat authorized for `#54`.
+  **Catalog done 2026-08-25**; `#54` remains unauthorized and now has a
+  correct list to read when it is.
 - **D4a**, build the visual one-of-many. **Done 2026-08-25.** An option can
   carry `images`, which turns the group into a gallery of tiles: the pick-one-
   of-N that `catch-port-b2` had to fake as one radio plus eight agree-boxes is
