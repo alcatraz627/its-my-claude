@@ -924,13 +924,23 @@ switch (verb) {
       console.log(`removed plan "${pl.title}" (the doc itself is untouched)`);
       break;
     }
-    if (!plans.length) {
-      console.log("no plans registered yet");
-      console.log("  register one: kanban.sh plan add docs/plan.md --board <slug>");
+    // Scoped to THIS board unless --all. The unscoped list read as this
+    // project's plans while listing another board's, which is worse than
+    // showing nothing: a trial user standing in one project was handed a
+    // different project's docs with no sign they were foreign.
+    const here = boardFor(projectDir()).slug;
+    const mine = hasFlag("all") ? plans : plans.filter((x) => x.board === here);
+    if (!mine.length) {
+      console.log(hasFlag("all")
+        ? "no plans registered on any board"
+        : `no plans registered on ${here}`);
+      console.log("  register one: kanban.sh plan add docs/plan.md");
+      if (!hasFlag("all") && plans.length)
+        console.log(`  ${plans.length} plan(s) exist on other boards: kanban.sh plan list --all`);
       break;
     }
-    for (const pl of plans) {
-      console.log(`${pl.id}  ${pl.state.padEnd(10)}  ${pl.title}  ·  ${pl.board}`);
+    for (const pl of mine) {
+      console.log(`${pl.id}  ${pl.state.padEnd(10)}  ${pl.title}${hasFlag("all") ? `  ·  ${pl.board}` : ""}`);
       console.log(`    ${pl.path}`);
     }
     break;
@@ -1150,6 +1160,11 @@ switch (verb) {
                            won't resurrect); noted cards need --force
   unregister [slug] [--keep-data] remove a board everywhere (registry, status,
                            hub, HTTP); default trashes the board data too
+  plan [list] [--all]      docs registered to this board, with their state; --all
+                           spans every board. add <path> [--state draft|ruled|
+                           superseded] · rule <id> · supersede <id> · rm <id>
+  decide [list]            decisions an agent took to the owner on this board;
+                           add "<q>" [--why …] · answer <id> "<ruling>" · rm <id>
   view [list]              the board's named queries and what each is for;
                            add "<name>" <clause…> [--note "what it is for"] ·
                            rm "<name>". Clauses join with a space (and), or,
