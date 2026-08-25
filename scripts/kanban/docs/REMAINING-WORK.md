@@ -83,9 +83,13 @@ the UI stays "Your asks". `#21` is unblocked on both its gates now.
 
 ### The spine, first
 
-1. **Kind registry** `[spine]` **NEW**. One declaration per kind: name, human
-   label, glyph, hue, index route, search adapter, card shape. Consumers listed
-   in the table above. Gates items 2 to 5 and changes the shape of `#56`.
+1. **Kind registry** `[spine]` **Done 2026-08-24, and this row was stale.** It
+   is `kinds.js`: one declaration per kind carrying name, `indexLabel`, glyph,
+   hue, route, key, search adapter and rank. Items 2 to 5 below are all done
+   and every one of them cites `KINDS` as the mechanism, so the thing this row
+   called NEW and gating had already shipped and done its gating. Five kinds
+   registered (boards, asks, drafts, decisions, previews); adding sessions is
+   one entry there and nothing elsewhere, which is the whole point.
 
 ### `#21` nav unification, absent from the previous plan entirely
 
@@ -222,13 +226,15 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     draft); a probe plan's rule-flip was verified at the API. Deliberately
     NOT built: decision-page auto-rule on submit (cross-system, rides the
     owner-gated 13) and plan tagging (ambiguous in the spec).
-15. **Phase 4: decisions without a card** (`#59`, P1). **Partly covered by
-    item 12, rest gated 2026-08-25**: the Decisions kind's tab already counts
+15. **Phase 4: decisions without a card** (`#59`, P1). **Half done, and the
+    gate on the other half has dissolved.** The Decisions tab already counts
     pending pages on every page, which is the derived-attention half. The
-    unseen-versus-seen half needs the :5197 decision pages to report "the
-    owner opened me", which is the same cross-system integration item 13
-    waits on (the owner's call on how decision pages adopt kanban's assets).
-    Build the rest with 13.
+    unseen-versus-seen half was gated on the :5197 pages reporting "the owner
+    opened me" across origins. That gate is gone: :5197 is dark (verified,
+    connection refused) and kanban serves every page itself at `/dp/<slug>/`
+    same-origin, so an opened-ping is now a route on this server rather than a
+    cross-system integration. **Unblocked and buildable**; it no longer waits
+    on item 13 or on an owner call.
 
 ### Ergonomics, all four unchained from `#70` on 2026-08-24
 
@@ -392,6 +398,16 @@ All three **done 2026-08-25**, plus the two the owner added while they shipped.
   page had painted Copy AND Submit so neither read as primary (Copy went
   quiet), while the view-save and column-settings modals had no accent at all
   and their primary is now painted.
+
+- **A decision can not offer a visual one-of-many** **NEW, filed not done.**
+  From `catch-port-b2` via ipc, 2026-08-25, on the owner's instruction.
+  `decisions[].options[]` carry only `code`, `label`, `rec`
+  (`features/decision-pages.md:123`) while images attach to `sections[]` only
+  (:128), so "pick one of these N rendered variants" cannot be one radio group
+  with a preview per option. That agent had to ship a D1 radio plus eight image
+  sections, and the owner had to disagree with eight boxes to say "neither".
+  Asked for: an option-level `images`, or a decision-level image strip keyed by
+  option code, plus a built-in "none of these" option. Not urgent.
 
 - **The board's bar has earned a second one** **NEW, filed not done.**
   Surfaced by the icon pass: `-claude-244ec6` runs `data-tight` at 1400px with
