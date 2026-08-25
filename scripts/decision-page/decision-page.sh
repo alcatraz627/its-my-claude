@@ -6,10 +6,10 @@
 # questions: every item pre-answered with a recommendation, the human flips
 # what's wrong and pastes ONE compact answer string back into chat.
 #
-# Registry: ~/.claude/assets/decision-pages/<slug>/  (index.html + config.json
-# + any images). One pm2 static server ("decision-pages", port 5197) serves the
-# whole registry; the registry ROOT is a hub page (index.html + pages.json)
-# listing every page with live progress. Pages are temporary — prune freely.
+# Registry: ~/.claude/assets/decision-pages/<slug>/ (config.json + any images).
+# Served by the KANBAN server (:5106) since 2026-08-25: every page renders at
+# /dp/<slug>/ from ONE dynamic template, and the kanban Decisions view is the
+# hub. Pages are temporary — prune freely. (The old :5197 server is retired.)
 #
 # Agent contract: `new` scaffolds and prints the TODO; `check <slug>` is the one
 # verification call (config parses, schema sane, images exist, page renders) and
@@ -21,9 +21,14 @@ set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REG="$HOME/.claude/assets/decision-pages"
 PEND="$REG/.pending.txt"          # one slug per line = "handed off, awaiting the human"
-PORT=5197
-NAME="decision-pages"
-BASE="http://localhost:$PORT"
+# Served by the KANBAN server since 2026-08-25 (DECISION-PAGES-ADOPTION.md):
+# one dynamic charter template at /dp/<slug>/, submit at /api/dp-submit/<slug>.
+# The old :5197 python server is retired; pages, pending and answers are the
+# same files they always were.
+PORT=5106
+NAME="kanban"
+BASE="http://localhost:$PORT/dp"
+HUB="http://localhost:$PORT/?view=decisions"
 
 # TTY-gated palette (std::claude::tui) — vars are empty when piped, so callsites never branch.
 if [ -f "$HOME/.claude/scripts/tui/colors.sh" ]; then
@@ -65,41 +70,25 @@ json.dump({"generated": int(time.time()), "pages": pages}, open(tmp, "w"), inden
 os.replace(tmp, os.path.join(reg, "pages.json"))
 print(f"manifest: {len(pages)} page(s)")
 PY
-  # the hub template lives here; the copy in the registry root is disposable
-  cp -f "$HERE/hub.html" "$REG/index.html"
+  # the old hub is retired; the kanban Decisions view is the hub now
 }
 
 ensure_server() {
   mkdir -p "$REG"
-  # server.py: static GET (index.html on dir URLs) + POST /_submit/<slug> so a page
-  # can hand its answer straight back to the agent. Not `pm2 serve` (EISDIRs on dir
-  # URLs), not `-m http.server` (GET-only, no submit endpoint).
-  if pm2 describe "$NAME" >/dev/null 2>&1; then
-    if pm2 describe "$NAME" 2>/dev/null | grep -q "server.py"; then
-      # A pm2 entry is not a live server: svc-reap leaves the entry STOPPED,
-      # and this branch once printed "up" while the port was dead (2026-08-14,
-      # mid-triage). The port is the truth; revive through svc.sh so the idle
-      # bookkeeping stays correct, pm2 restart only as the fallback.
-      if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
-        printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"; return
-      fi
-      bash "$HOME/.claude/scripts/dev-servers/svc.sh" up "$NAME" >/dev/null 2>&1 \
-        || pm2 restart "$NAME" >/dev/null 2>&1
-      local i
-      for i in 1 2 3 4 5; do
-        lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1 \
-          && { printf 'server: revived — %s%s/%s\n' "$C" "$BASE" "$R"; return; }
-        sleep 1
-      done
-      die "pm2 entry exists but port $PORT never came up" "pm2 logs $NAME --lines 20   # why it dies"
-    fi
-    # an older static (http.server) instance is running — upgrade it in place
-    pm2 delete "$NAME" >/dev/null 2>&1
-  elif lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
-    die "port $PORT is taken by another process" "lsof -nP -iTCP:$PORT -sTCP:LISTEN   # see who; then free it or change PORT in $0"
+  # The kanban server owns the pages now. If it is down, revive it through
+  # svc.sh (idle bookkeeping) with pm2 as the fallback; the port is the truth.
+  if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
+    printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"; return
   fi
-  DP_PORT="$PORT" pm2 start "$HERE/server.py" --name "$NAME" --interpreter python3 >/dev/null
-  printf 'server: started — %s%s/%s\n' "$C" "$BASE" "$R"
+  bash "$HOME/.claude/scripts/dev-servers/svc.sh" up "$NAME" >/dev/null 2>&1 \
+    || pm2 restart "$NAME" >/dev/null 2>&1
+  local i
+  for i in 1 2 3 4 5; do
+    lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1 \
+      && { printf 'server: revived — %s%s/%s\n' "$C" "$BASE" "$R"; return; }
+    sleep 1
+  done
+  die "kanban server (port $PORT) never came up" "pm2 logs $NAME --lines 20   # why it dies"
 }
 
 age_of() { # humanize mtime of a path
@@ -131,7 +120,8 @@ cmd_new() {
         "inspect: decision-page.sh check $slug · open: decision-page.sh open $slug · replace: decision-page.sh rm $slug first"
   fi
   mkdir -p "$dir"
-  cp -f "$HERE/template.html" "$dir/index.html"
+  # no index.html copy: the kanban server renders every page from config.json
+  # with ONE template, so a template fix reaches every page ever made
   # NB: no ${title:-…} here — bash honors quotes INSIDE ${…} even under double
   # quotes, so an apostrophe in the default text breaks the parse of the file.
   [ -n "$title" ] || title="TITLE — every answer drafted; flip what needs changing"
@@ -167,7 +157,7 @@ ${B}agent TODO:${R}
   1. Write the real $dir/config.json  (schema: features/decision-pages.md)
   2. Drop referenced images into $dir/
   3. ${B}Verify:${R} decision-page.sh check $slug     ${D}(one call: schema + images + render)${R}
-  4. Hand the human: ${C}$BASE/$slug/${R}   ${D}(hub: $BASE/)${R}
+  4. Hand the human: ${C}$BASE/$slug/${R}   ${D}(hub: $HUB)${R}
 EOT
 }
 
@@ -247,14 +237,14 @@ cmd_list() {
     any=1
   done
   [ "$any" = 1 ] || printf 'no pages yet — scaffold one: decision-page.sh new <slug>\n'
-  printf '%shub:%s %s%s/%s\n' "$D" "$R" "$C" "$BASE" "$R"
+  printf '%shub:%s %s%s%s\n' "$D" "$R" "$C" "$HUB" "$R"
 }
 
 cmd_status() {
-  if pm2 describe "$NAME" >/dev/null 2>&1; then printf 'server: %sup%s (pm2 "%s", port %s)\n' "$G" "$R" "$NAME" "$PORT"
+  if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then printf 'server: %sup%s (kanban, port %s)\n' "$G" "$R" "$PORT"
   else printf 'server: %sdown%s — start: decision-page.sh serve\n' "$RED" "$R"; fi
   local n; n=$(ls -d "$REG"/*/ 2>/dev/null | wc -l | tr -d ' ')
-  printf 'pages:  %s  ·  hub: %s%s/%s\n' "$n" "$C" "$BASE" "$R"
+  printf 'pages:  %s  ·  hub: %s%s%s\n' "$n" "$C" "$HUB" "$R"
   local pend=0; [ -f "$PEND" ] && pend=$(grep -cv '^[[:space:]]*$' "$PEND" 2>/dev/null); pend=${pend:-0}
   if [ "$pend" -gt 0 ]; then
     printf 'await:  %s%s awaiting an answer%s — %s\n' "$Y" "$pend" "$R" "$(grep -v '^[[:space:]]*$' "$PEND" 2>/dev/null | tr '\n' ' ')"
@@ -368,7 +358,7 @@ ${Y}commands${R}
   ${B}prune${R} --older-than <days>  trash old pages (confirms on a TTY)
 
 ${Y}surfaces${R}
-  hub   ${C}$BASE/${R}          every page + live progress + copy-from-hub
+  hub   ${C}$HUB${R}   every page, pending first (the kanban Decisions view)
   page  ${C}$BASE/<slug>/${R}   keyboard-first: press ${B}?${R} on the page for shortcuts
 
 ${D}schema + answer-string shape: features/decision-pages.md${R}
@@ -381,7 +371,8 @@ case "${1:-help}" in
   serve)  ensure_server; regen_manifest ;;
   list)   cmd_list ;;
   status) cmd_status ;;
-  open)   ensure_server >/dev/null; regen_manifest >/dev/null; open "$BASE/${2:+$2/}" ;;
+  open)   ensure_server >/dev/null; regen_manifest >/dev/null
+          if [ -n "${2:-}" ]; then open "$BASE/$2/"; else open "$HUB"; fi ;;
   pending) shift; cmd_pending "$@" ;;
   answer) shift; cmd_answer "$@" ;;
   rm)     slug="${2:?usage: decision-page.sh rm <slug>}"

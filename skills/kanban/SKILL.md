@@ -90,6 +90,13 @@ tighter than OR, and there are no parentheses. The grammar: `is:open`
 **Read a view's `--note` before using it.** It is the owner's own line on what
 they use that view for, and it is written for you to read.
 
+## Decision pages
+
+Decision pages live in this app now: every page renders at
+`http://localhost:5106/dp/<slug>/` and the Decisions view
+(`:5106/?view=decisions`) is the hub, pending first. Authoring stays with
+`decision-page.sh` (see /decision-wizard); this server just serves them.
+
 ## Plans
 
 A plan is a markdown doc registered to a board with a state. Register the plan

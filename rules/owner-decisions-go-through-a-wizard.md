@@ -26,7 +26,7 @@ When a turn needs more than one decision from the owner, the reply is not the
 place to ask. Boil the set down to the questions only the owner can answer,
 draft an answer for each, and present them through `/decision-wizard`: a tiny
 inline numbered menu for two or three simple picks, a pre-answered HTML page on
-:5197 for anything larger. The owner flips what is wrong and pastes one string
+:5106/dp/ (the kanban server) for anything larger. The owner flips what is wrong and pastes one string
 back. Two shapes of this failure, both called out by the owner on 2026-08-20.
 
 ## Face 1: a batch of asks typed as a list

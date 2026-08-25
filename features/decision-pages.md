@@ -1,5 +1,5 @@
 ---
-brief: Interactive decision/feedback pages — when an agent needs a human verdict on MANY items (design review, migration plan, per-screen feedback), scaffold a pre-answered HTML page from the template instead of asking N questions; the human flips what's wrong and pastes ONE compact answer string back. Registry ~/.claude/assets/decision-pages/ served once by pm2 on :5197.
+brief: Interactive decision/feedback pages — when an agent needs a human verdict on MANY items (design review, migration plan, per-screen feedback), scaffold a pre-answered HTML page from the template instead of asking N questions; the human flips what's wrong and pastes ONE compact answer string back. Registry ~/.claude/assets/decision-pages/ served by the kanban server at :5106/dp/<slug>/ (adopted 2026-08-25; the old :5197 server is retired).
 triggers:
   - tool:decision-page.sh
   - skill:decision-wizard
@@ -43,12 +43,12 @@ capability ("minimize the work I have to do").
 ```
 bash ~/.claude/scripts/decision-page/decision-page.sh new <slug> [--title "…"]
 # → scaffolds ~/.claude/assets/decision-pages/<slug>/{index.html,config.json}
-#   ensures ONE pm2 static server "decision-pages" on :5197 + a hub at :5197/
+#   ensures the kanban server (:5106); the hub is its Decisions view (:5106/?view=decisions)
 # agent then: writes real config.json + drops images
 bash …/decision-page.sh check <slug>     # THE verification call before handoff
 # → schema-lint (ids unique, exactly one rec:true per decision, images exist) +
 #   HTTP-200 render check; every failure prints a "fix:" line; exits non-zero
-#   until READY. Then hand the human http://localhost:5197/<slug>/
+#   until READY. Then hand the human http://localhost:5106/dp/<slug>/
 ```
 
 Full command set (each failure proposes its fix, agent-first per
@@ -67,7 +67,7 @@ Full command set (each failure proposes its fix, agent-first per
 | `rm <slug>` | trash a page |
 | `prune --older-than <days>` | trash old pages (confirms on a TTY) |
 
-The **hub** (`:5197/`) lists every page with a live status chip
+The **hub** (the kanban Decisions view, `:5106/?view=decisions`) lists every page, pending first,
 (`untouched` / `viewed · as drafted` / `N flipped` / `broken config`), reads each
 page's answers straight from localStorage, and can copy any page's answer string
 without opening it. Regenerated (`pages.json` + `index.html`) on every mutating op.

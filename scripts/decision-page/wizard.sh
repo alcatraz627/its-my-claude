@@ -7,9 +7,9 @@
 # where opening a browser is a context switch.
 #
 # It is deliberately NOT a second source of truth. It reads the page the
-# authoring agent already wrote and verified, and it submits through
-# /_submit/<slug> so the server still writes .answer.json, clears the pending
-# marker, and fires the origin notification. A page answered here and a page
+# authoring agent already wrote and verified, and it submits through the kanban
+# server's /api/dp-submit/<slug> so the server still writes .answer.json,
+# clears the pending marker, and fires the origin notification. A page answered here and a page
 # answered in the browser are indistinguishable downstream.
 #
 # usage: wizard.sh <slug> [--dry-run]
@@ -182,7 +182,7 @@ fi
 code=$(curl -s -o /dev/null -w '%{http_code}' -X POST \
   -H 'Content-Type: application/json' \
   --data "$(python3 -c 'import json,sys;print(json.dumps({"answer":sys.stdin.read()}))' <<< "$answer")" \
-  "http://localhost:5197/_submit/$SLUG" 2>/dev/null)
+  "http://localhost:5106/api/dp-submit/$SLUG" 2>/dev/null)
 if [ "$code" = "200" ]; then
   printf '%ssent.%s The session picks it up the same way it would a browser Submit.\n' "${TUI_GREEN:-}" "${TUI_RESET:-}"
 else

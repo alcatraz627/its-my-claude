@@ -112,7 +112,19 @@ palette, the switcher and search all land in-app.
    in the registry is rewritten. Both run side by side until the owner
    retires :5197.
 
-## Transition / retirement (owner's later call)
+## Transition / retirement — EXECUTED 2026-08-25
+
+The owner ruled the retirement the same day. decision-page.sh and wizard.sh
+now target the kanban server (URLs, ensure-server, submit endpoint); the
+/kanban and /decision-wizard skills, features/decision-pages.md, CLAUDE.md,
+the wizard rule and the callout convention were repointed in the same change,
+so a naive invocation lands on the new system with no knowledge of the
+switch. `new` no longer copies template.html (every page renders from the one
+dynamic template). pm2 `decision-pages` is deleted and :5197 is dark. The
+statusline's pending chip reads .pending.txt directly and needed nothing.
+The section below is the original plan, kept for the record.
+
+## Transition / retirement (the original plan, as written)
 
 Once the kanban surface has carried a few real decision rounds: repoint
 `decision-page.sh`'s printed URLs and `open` at :5106/dp/, teach `new` to

@@ -116,7 +116,7 @@ right edge is what makes their width safe), and a note here.
 A box never grows its own option menu. When an event needs an owner call,
 the arrow line says "decision below" and the decision-wizard surface
 follows: an inline numbered menu for up to ~3 simple picks, the decision
-page on :5197 for batches. Dialog tools stay banned in the fullscreen TUI.
+page on :5106/dp/ for batches. Dialog tools stay banned in the fullscreen TUI.
 
 ## Match the shape to the channel, and route around a bad one
 

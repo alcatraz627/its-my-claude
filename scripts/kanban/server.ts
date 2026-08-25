@@ -401,9 +401,9 @@ const server = Bun.serve({
       // earns a URL you could send someone (v2-plan.md:151).
       if (p === "/drafts") return html("drafts.html");
       // Decision pages, adopted (DECISION-PAGES-ADOPTION.md). Kanban serves
-      // the SAME registry the :5197 server serves, read-only for GETs, with
+      // the SAME registry the old :5197 server served, read-only for GETs, with
       // ONE dynamic template instead of a per-page copy of template.html.
-      // Both servers run side by side until the owner retires :5197.
+      // The old server is retired (owner, 2026-08-25); this is the only one.
       if (p.startsWith("/dp/")) {
         const parts = p.slice(4).split("/").filter(Boolean).map((x) => decodeURIComponent(x));
         const slug = parts[0] ?? "";
@@ -448,7 +448,7 @@ const server = Bun.serve({
         return json({ notes: rows, broken });
       }
       // Every surface the owner has, in one list (#56, phase 1). Colocation, not
-      // migration: boards stay where they are, decision pages stay on :5197, and
+      // migration: boards stay where they are, decision pages are served here, and
       // this only answers "what is there". A hub tab reads it; nothing moves.
       if (p === "/api/surfaces") {
         const out: any = { boards: [], decisions: [], previews: [] };
@@ -1053,7 +1053,7 @@ const server = Bun.serve({
       return json(out, out.error ? 400 : 200);
     }
 
-    // A decision page's Submit, byte-compatible with the old :5197 server:
+    // A decision page's Submit, byte-compatible with the retired :5197 server:
     // same .answer.json shape, same pending clear, same origin ipc notify.
     // An agent watching .answer.json cannot tell which server took it.
     if (req.method === "POST" && p.startsWith("/api/dp-submit/")) {

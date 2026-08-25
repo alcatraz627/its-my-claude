@@ -1,6 +1,6 @@
 ---
 name: decision-wizard
-description: Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments — a design review, a migration go/no-go, config triage, per-item feedback, "which of these should I…" — STOP and use this instead of serializing questions into chat. It routes to one of two surfaces: a tiny inline numbered menu the user answers in one line (for ≤3 simple picks), or a pre-answered HTML decision page served on :5197 where every item carries YOUR drafted answer + recommendation and the user flips only what is wrong, then pastes back one compact string. Supports optional per-question and end-of-form notes. Use when the user says "decision page", "decision wizard", "ask me a batch", "feedback form", "minimize the work I have to do", "answer complex forms", or any time a task would otherwise spray N questions at the user.
+description: Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments — a design review, a migration go/no-go, config triage, per-item feedback, "which of these should I…" — STOP and use this instead of serializing questions into chat. It routes to one of two surfaces: a tiny inline numbered menu the user answers in one line (for ≤3 simple picks), or a pre-answered HTML decision page served by the kanban server (:5106/dp/) where every item carries YOUR drafted answer + recommendation and the user flips only what is wrong, then pastes back one compact string. Supports optional per-question and end-of-form notes. Use when the user says "decision page", "decision wizard", "ask me a batch", "feedback form", "minimize the work I have to do", "answer complex forms", or any time a task would otherwise spray N questions at the user.
 allowed-tools: Bash, Read, Write, Edit
 user-invocable: true
 argument-hint: "[what you need decided]"
@@ -63,7 +63,7 @@ S=my-slug   # lowercase-kebab, unique
 bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
   --title "…" --topic "one line: what this page is about" --session "<your session id>"
 # → scaffolds assets/decision-pages/$S/{index.html,config.json} with an `origin`
-#   block (session/project/topic/date), ensures the :5197 server, prints the TODO.
+#   block (session/project/topic/date), ensures the kanban server, prints the TODO.
 #   origin is shown on the page + hub so the user can tell YOUR page apart from
 #   other concurrent sessions' pages. --session takes your friendly id (e.g. the
 #   one you announced at session start); it falls back to $CLAUDE_SESSION_ID.
@@ -95,7 +95,7 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
    ```bash
    bash ~/.claude/scripts/decision-page/decision-page.sh pending add "$S"
    ```
-   Give the user the URL `http://localhost:5197/$S/` (hub: `:5197/`) and tell them
+   Give the user the URL `http://localhost:5106/dp/$S/` (hub: `:5106/?view=decisions`) and tell them
    to skim, flip what's wrong, then hit **Submit to Claude** (or **Copy answers**
    to paste it themselves). Also set the tab-title (Subsystem links below).
 5. **Get the answer back — two paths:**

@@ -72,7 +72,7 @@ future blocked ones. In order:
    fastest-visible-progress-first — user confirms or overrides (their ruling:
    situation-chosen, never hardcoded).
 6. **Front-load every foreseeable decision** into one pre-answered surface
-   (`/decision-wizard`: inline menu for ≤3 picks, the :5197 page for more).
+   (`/decision-wizard`: inline menu for ≤3 picks, the :5106/dp/ page for more).
    For the unforeseeable, pre-authorize reversible defaults: "if X turns out
    to be Y, I take Z unless vetoed."
 7. **Capture the availability forecast** ("here ~10min, gone 2h, back after
@@ -170,7 +170,7 @@ BURN and VETO spend it well. Never an open-composition question where a pick
 works.
 
 Lowest-attention channel, live today (verified against the code, not
-assumed): the :5197 decision page's Submit button POSTs `/_submit/<slug>`,
+assumed): the decision page's Submit button POSTs the kanban server's `/api/dp-submit/<slug>`,
 writing `<slug>/.answer.json`; the agent watches that file (Monitor, or poll
 `decision-page.sh answer <slug> --consume`) and wakes with zero chat traffic
 — `features/decision-pages.md` §Submit-to-wake. `/wake` covers the

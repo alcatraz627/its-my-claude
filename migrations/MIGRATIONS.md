@@ -93,6 +93,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0052 | cron duty ledger + CronCreate process-scope convention | ✅ | 2026-08-21 | 2026-08-21 | [0052-cron-duty-ledger.md](0052-cron-duty-ledger.md) |
 | 0053 | usage gate for autonomous institutions (warden + residue-review) | ✅ | 2026-08-21 | 2026-08-21 | [0053-usage-gate.md](0053-usage-gate.md) |
 | 0054 | warden succession hardening + weekly review row | ✅ | 2026-08-21 | 2026-08-21 | [0054-warden-succession.md](0054-warden-succession.md) |
+| 0055 | decision pages served by kanban; :5197 retired | ✅ | 2026-08-25 | 2026-08-25 | [0055-decision-pages-into-kanban.md](0055-decision-pages-into-kanban.md) |
 
 ---
 
