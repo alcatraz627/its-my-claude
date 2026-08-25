@@ -116,6 +116,11 @@
         text-decoration:none;min-width:0}
   .surf:hover{background:var(--card-hover)}
   .surf.pending{border-color:var(--amber-br)}
+  /* a pending page you have never opened; the dot is the only thing that
+     distinguishes news from a thing you read and left (charter §12) */
+  .surf.unseen{border-color:var(--amber);background:var(--amber-bg)}
+  .surf .udot{display:inline-block;width:7px;height:7px;border-radius:50%;
+    background:var(--amber);margin-right:7px;vertical-align:middle;flex:none}
   .surf .sn{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .surf .so{color:var(--text-3);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .surf .sage{margin-left:auto;color:var(--text-3);font-size:12px;flex:none}
@@ -485,10 +490,18 @@ async function loadSurfaces(which) {
     g.appendChild(l);
     for (const r of rs) {
       const a = document.createElement("a");
-      a.className = "surf" + (r.pending ? " pending" : "");
+      // §12: unseen is its own state. A pending page you have never opened is
+      // not the same as one you read and left, and only the first is news.
+      const unseen = r.pending && r.seen === false;
+      a.className = "surf" + (r.pending ? " pending" : "") + (unseen ? " unseen" : "");
       a.href = r.href;
       const nm = document.createElement("span");
       nm.className = "sn"; nm.textContent = r.name ?? r.title ?? "(untitled)";
+      if (unseen) {
+        const dot = document.createElement("span");
+        dot.className = "udot"; dot.dataset.tip = "You have not opened this one yet";
+        nm.prepend(dot);
+      }
       const so = document.createElement("span");
       so.className = "so";
       so.textContent = [r.origin, r.items ? `${r.items} item${r.items === 1 ? "" : "s"}` : null]

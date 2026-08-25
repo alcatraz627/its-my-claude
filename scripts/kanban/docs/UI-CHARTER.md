@@ -213,6 +213,14 @@ One contract, no exceptions:
   looked and put it off, somebody answered. Collapsing the first two makes the
   board report a choice as pending when it was never actually put in front of
   anyone (#48; vb-fable's constraint 2, which nobody else would have given).
+  **Implemented 2026-08-25** (`#59` phase 4): the page pings
+  `POST /api/dp-seen/<slug>` on load, which writes `.seen.json` once and
+  refuses to restart the clock on a re-read, since the first open is the fact.
+  `/api/surfaces` carries `seen`, and the hub's Decisions view gives an unopened
+  pending page an amber fill and a dot. Opening one moves it out of unseen
+  without answering it, which is the whole distinction. This waited months on
+  reaching the old `:5197` pages across origins; that server is retired and
+  kanban serves them itself, so the gate had dissolved before anyone looked.
 
 - **Distinguish delivered, nobody-home and broken.** Three outcomes, three
   sentences. Never collapse a failure into a silence.

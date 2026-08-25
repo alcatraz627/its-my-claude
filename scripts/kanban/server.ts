@@ -562,6 +562,9 @@ const server = Bun.serve({
               milestone: cfg.origin?.milestone ?? null,
               items: (cfg.decisions?.length ?? 0) + (cfg.sections?.length ?? 0),
               pending: pendingSlugs.has(slug),
+              // §12: unseen is a different state from undecided, and only a
+              // pending page can be unseen (an answered one was obviously read)
+              seen: fs.existsSync(path.join(dir, ".seen.json")),
               at: st ? new Date(st.mtimeMs).toISOString() : null,
             });
           }
@@ -1149,6 +1152,23 @@ const server = Bun.serve({
       dpClearPending(slug);
       dpNotifyOrigin(slug, dir);
       return json({ ok: true, slug });
+    }
+
+    // Charter §12, phase 4: a decision the owner has not opened reads as UNSEEN,
+    // never as undecided. The page pings this on load, so opening one moves it
+    // out of unseen without answering it. Was gated on reaching the :5197 pages
+    // across origins; that server is retired and these are served here now.
+    if (req.method === "POST" && p.startsWith("/api/dp-seen/")) {
+      const slug = decodeURIComponent(p.slice("/api/dp-seen/".length)).replace(/\/+$/, "");
+      const dir = dpDirOf(slug);
+      if (!dir) return json({ error: "unknown slug" }, 404);
+      const f = path.join(dir, ".seen.json");
+      // first open is the one that matters; a re-read must not restart the clock
+      if (fs.existsSync(f)) return json({ ok: true, slug, already: true });
+      const tmp = f + ".tmp";
+      fs.writeFileSync(tmp, JSON.stringify({ seen_at: Math.floor(Date.now() / 1000) }, null, 1), "utf8");
+      fs.renameSync(tmp, f);
+      return json({ ok: true, slug, already: false });
     }
 
     // A tag's colour, held across boards (#66): global rather than per board,

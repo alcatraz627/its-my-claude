@@ -562,6 +562,12 @@ function markAnswered(ts, answer) {
   b.classList.add("on");
 }
 
+/* §12: opening a decision moves it out of unseen without answering it. Fire and
+   forget; a page you looked at is not less looked-at because the ping failed. */
+function markSeen() {
+  fetch(`/api/dp-seen/${encodeURIComponent(SLUG)}`, { method: "POST" }).catch(() => {});
+}
+
 async function checkAnswered() {
   try {
     const r = await fetch(".answer.json", { cache: "no-store" });
@@ -577,7 +583,7 @@ fetch("config.json", { cache: "no-store" }).then(r => r.json()).then(c => {
     identity: crumbFor("decisions", CFG.title || SLUG),
     help: () => $("#overlay").classList.add("on") });
   document.getElementById("phead").after(dpBar());
-  render(); wireBar(); load(); refresh(); checkAnswered();
+  render(); wireBar(); load(); refresh(); checkAnswered(); markSeen();
 }).catch(e => { $("#main").innerHTML =
   `<p class="note">Failed to load config.json for this page. ${esc(e)}</p>`; });
 </script>

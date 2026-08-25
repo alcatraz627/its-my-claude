@@ -226,15 +226,23 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     draft); a probe plan's rule-flip was verified at the API. Deliberately
     NOT built: decision-page auto-rule on submit (cross-system, rides the
     owner-gated 13) and plan tagging (ambiguous in the spec).
-15. **Phase 4: decisions without a card** (`#59`, P1). **Half done, and the
-    gate on the other half has dissolved.** The Decisions tab already counts
-    pending pages on every page, which is the derived-attention half. The
-    unseen-versus-seen half was gated on the :5197 pages reporting "the owner
-    opened me" across origins. That gate is gone: :5197 is dark (verified,
-    connection refused) and kanban serves every page itself at `/dp/<slug>/`
-    same-origin, so an opened-ping is now a route on this server rather than a
-    cross-system integration. **Unblocked and buildable**; it no longer waits
-    on item 13 or on an owner call.
+15. **Phase 4: decisions without a card** (`#59`, P1). **Seen-versus-unseen
+    done 2026-08-25.** The gate turned out to have dissolved on its own: it
+    waited on the :5197 pages reporting "the owner opened me" across origins,
+    and :5197 is dark while kanban serves every page itself same-origin, so
+    the cross-system integration is a route on this server. The page pings
+    `POST /api/dp-seen/<slug>` on load; `.seen.json` is written once and a
+    re-read will not restart the clock, because the first open is the fact.
+    `/api/surfaces` carries `seen`, the hub gives an unopened pending page an
+    amber fill and a dot, and charter §12 records the mechanism under the rule
+    it had been stating without implementing. Verified with three seeded
+    pending pages: opening one flipped it to seen while it stayed pending, the
+    other two did not move, a re-post left `seen_at` unchanged, and an unknown
+    slug and a traversal attempt both 404.
+    **Still open from D9a**, and larger than this half was: a Decisions view
+    ON the board listing every decision card-bound or not, `kanban.sh decide
+    add` for agent-recorded decisions, owner comments through the note
+    composer, and the nudge hookup.
 
 ### Ergonomics, all four unchained from `#70` on 2026-08-24
 
