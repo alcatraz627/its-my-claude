@@ -1330,6 +1330,16 @@ switch (verb) {
   plan [list] [--all]      docs registered to this board, with their state; --all
                            spans every board. add <path> [--state draft|ruled|
                            superseded] · rule <id> · supersede <id> · rm <id>
+  milestone [list]         the board's checkpoints, in order, each with a goal
+                           sentence and how many of its cards are done.
+                           add <name> [--goal "…"] [--order n] · goal <name> "…" ·
+                           doc <name> <path> · order <name> <n> ·
+                           done <name> [--no-cards] ships it AND moves its cards ·
+                           reopen <name> · rm <name>. A card joins a milestone the
+                           way it always has: kanban.sh tag <id> milestone:<name>
+  changed [--since 7d]     what changed on this board and when: syncs, lane moves,
+                           milestones. The board holds the current state; this
+                           holds the transitions. [--limit n] [--json]
   decide [list]            decisions an agent took to the owner on this board;
                            add "<q>" [--why …] · answer <id> "<ruling>" · rm <id>
   view [list]              the board's named queries and what each is for;
