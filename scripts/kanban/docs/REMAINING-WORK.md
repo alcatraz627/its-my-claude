@@ -431,8 +431,10 @@ A sonnet agent that had never seen the app planned a product on it and
 reported where it fought back. Full report and its unedited feedback in
 `design/`. Six asks, ranked by it, verdicts mine.
 
-1. **A milestone should be an object, not a tag** `[spine]` **NEW, the one
-   real build here.** Milestones have an order, a goal sentence and a done
+1. **A milestone should be an object, not a tag** `[spine]` **RULED YES,
+   owner 2026-08-26.** Becomes a registry kind. Owner's note: *"as many plans
+   and reference docs per entity is fine"*, so an entity carries N docs rather
+   than one.** Milestones have an order, a goal sentence and a done
    state; `tag milestone:m2` has none of those. The trial expressed "M1
    shipped" by moving seven cards to `done` one at a time, and each
    milestone's goal sentence lives only in its doc, unreachable from the
@@ -451,8 +453,9 @@ reported where it fought back. Full report and its unedited feedback in
 6. **Batch `tag`** **NEW, trivial.** `after` already takes many ids.
 
 Two structural gaps it named that are not in its ranked list, because it
-worked around them rather than hitting a wall: **a plan CHANGE has no shape
-on the board** (so "what changed since last week" is unbuildable as a view),
+worked around them rather than hitting a wall. **A plan CHANGE has no shape
+on the board** (**RULED YES, owner 2026-08-26**: it becomes a first-class
+object) (so "what changed since last week" is unbuildable as a view),
 and **a split card cannot say what it split from** (`after` carries the
 dependency, nothing carries the sibling relationship).
 
