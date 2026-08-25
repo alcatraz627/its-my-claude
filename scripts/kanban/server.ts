@@ -42,6 +42,34 @@ function enqueueNote(fn: () => unknown): Promise<unknown> {
   return run;
 }
 
+// the decision-pages registry lives beside kanban's root, unchanged
+const DP_ROOT = path.join(path.dirname(KROOT), "assets", "decision-pages");
+function dpDirOf(slug: string): string | null {
+  if (!/^[a-z0-9][a-z0-9._-]*$/.test(slug)) return null;
+  const dir = path.join(DP_ROOT, slug);
+  return fs.existsSync(path.join(dir, "config.json")) ? dir : null;
+}
+function dpClearPending(slug: string): void {
+  try {
+    const pend = path.join(DP_ROOT, ".pending.txt");
+    if (!fs.existsSync(pend)) return;
+    const keep = fs.readFileSync(pend, "utf8").split("\n").filter((l) => l.trim() && l.trim() !== slug);
+    const tmp = pend + ".srv.tmp";
+    fs.writeFileSync(tmp, keep.join("\n") + (keep.length ? "\n" : ""), "utf8");
+    fs.renameSync(tmp, pend);
+  } catch { /* best-effort, the answer file is the load-bearing signal */ }
+}
+function dpNotifyOrigin(slug: string, dir: string): void {
+  try {
+    const cfg = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+    const origin = cfg?.origin?.session ?? "";
+    if (!origin) return;
+    Bun.spawn(["claude-ipc", "send", "--from", "dp-server", "--to", origin,
+      `decision page ${slug} answered — read it: bash ~/.claude/scripts/decision-page/decision-page.sh answer ${slug}`],
+      { stdout: "ignore", stderr: "ignore" });
+  } catch { /* best-effort */ }
+}
+
 function boardDirOf(slug: string): string | null {
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
   return registry().boards[slug] ? path.join(KROOT, "boards", slug) : null;
@@ -372,6 +400,27 @@ const server = Bun.serve({
       // A destination, not a mode: its own data model and its own canvas, so it
       // earns a URL you could send someone (v2-plan.md:151).
       if (p === "/drafts") return html("drafts.html");
+      // Decision pages, adopted (DECISION-PAGES-ADOPTION.md). Kanban serves
+      // the SAME registry the :5197 server serves, read-only for GETs, with
+      // ONE dynamic template instead of a per-page copy of template.html.
+      // Both servers run side by side until the owner retires :5197.
+      if (p.startsWith("/dp/")) {
+        const parts = p.slice(4).split("/").filter(Boolean).map((x) => decodeURIComponent(x));
+        const slug = parts[0] ?? "";
+        const dir = dpDirOf(slug);
+        if (!dir) return json({ error: `unknown decision page ${slug}` }, 404);
+        if (parts.length <= 1) return html("decision.html");
+        // an asset inside the page dir (config.json, images) — no traversal
+        const rel = parts.slice(1).join("/");
+        const real = path.resolve(dir, rel);
+        if (!real.startsWith(path.resolve(dir) + path.sep)) return json({ error: "bad path" }, 400);
+        if (!fs.existsSync(real) || !fs.statSync(real).isFile()) return json({ error: `no ${rel} in ${slug}` }, 404);
+        const type = rel.endsWith(".json") ? "application/json"
+          : rel.endsWith(".png") ? "image/png" : rel.endsWith(".jpg") || rel.endsWith(".jpeg") ? "image/jpeg"
+          : rel.endsWith(".svg") ? "image/svg+xml" : rel.endsWith(".webp") ? "image/webp"
+          : rel.endsWith(".html") ? "text/html; charset=utf-8" : "application/octet-stream";
+        return new Response(fs.readFileSync(real), { headers: { "content-type": type, "cache-control": "no-store" } });
+      }
       if (p.startsWith("/b/")) return boardDirOf(p.slice(3)) ? html("board.html") : json({ error: `unknown board ${p.slice(3)} — kanban.sh status lists boards` }, 404);
       // every note on every board, so the hub can answer "what did I ask for"
       if (p === "/api/notes") {
@@ -428,7 +477,7 @@ const server = Bun.serve({
             out.decisions.push({
               kind: "decision", slug,
               name: cfg.title ?? slug,
-              href: `http://localhost:5197/${slug}/`,
+              href: `/dp/${slug}/`,   // adopted: served by this server now
               origin: cfg.origin?.project ?? null,
               items: (cfg.decisions?.length ?? 0) + (cfg.sections?.length ?? 0),
               pending: pendingSlugs.has(slug),
@@ -1002,6 +1051,23 @@ const server = Bun.serve({
         out = { error: `unknown op ${body!.op}` };
       });
       return json(out, out.error ? 400 : 200);
+    }
+
+    // A decision page's Submit, byte-compatible with the old :5197 server:
+    // same .answer.json shape, same pending clear, same origin ipc notify.
+    // An agent watching .answer.json cannot tell which server took it.
+    if (req.method === "POST" && p.startsWith("/api/dp-submit/")) {
+      const slug = decodeURIComponent(p.slice("/api/dp-submit/".length)).replace(/\/+$/, "");
+      const dir = dpDirOf(slug);
+      if (!dir) return json({ error: "unknown slug" }, 404);
+      const body = (await req.json().catch(() => null)) as { answer?: string } | null;
+      const rec = { answer: body?.answer ?? "", submitted_at: Math.floor(Date.now() / 1000) };
+      const tmp = path.join(dir, ".answer.json.tmp");
+      fs.writeFileSync(tmp, JSON.stringify(rec, null, 1), "utf8");
+      fs.renameSync(tmp, path.join(dir, ".answer.json"));
+      dpClearPending(slug);
+      dpNotifyOrigin(slug, dir);
+      return json({ ok: true, slug });
     }
 
     // A tag's colour, held across boards (#66): global rather than per board,

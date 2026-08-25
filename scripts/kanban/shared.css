@@ -348,8 +348,9 @@
   .ncrumb a:hover{color:var(--text);background:var(--card)}
   /* the instance you are looking AT is the loudest word in the bar; the kind
      above it stays one step quieter, which is the whole highlighting rule */
+  /* the same 8ch floor the board name has: identity may ellipsise, never vanish */
   .ncrumb-now{font:600 var(--fs-lead)/1.2 var(--sans);letter-spacing:-.011em;color:var(--text);
-              overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+              overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:8ch}
   .ncrumb{min-width:0}
   .ntx{display:flex;flex-direction:column;gap:2px;min-width:0}
   /* the thing you are looking AT is the loudest word in the bar; everything

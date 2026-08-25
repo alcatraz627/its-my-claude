@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision page</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%235b9dd9'/%3E%3Cpath d='M9 16.4l4.6 4.6L23 11' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/shared.css">
+<style>
+/* kanban — a decision page, adopted (DECISION-PAGES-ADOPTION.md). The answer
+   contract (state, flips, answerString, keyboard, storage key) is the old
+   template's, verbatim. Only the chrome is the charter's: shared tokens, the
+   navbar, data-tip tooltips, drawn glyphs. */
+*{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
+body{margin:0;background:var(--canvas);color:var(--text);font:var(--fs-lead)/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+main{max-width:1060px;margin:0 auto;padding:20px 22px 140px}
+.dpbar{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+#progress{font-size:var(--fs-small);color:var(--text-3);white-space:nowrap;margin-right:4px}
+#progress b{color:var(--amber)}
+.dpbar button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+#copy{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue);font-weight:600}
+#submit{background:var(--green-bg);border-color:var(--green-br);color:var(--green);font-weight:700}
+#submit:disabled{opacity:.6;cursor:default}
+/* the already-answered banner (defect D1): the truth file exists, say so */
+#answered{display:none;margin:0 0 12px;padding:10px 14px;background:var(--green-bg);
+  border:1px solid var(--green-br);border-radius:var(--r-panel);color:var(--green);font-size:var(--fs-body)}
+#answered.on{display:block}
+.intro{color:var(--text-3);font-size:var(--fs-body);margin:0 0 6px;padding:10px 14px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-panel)}
+.intro kbd,#overlay kbd{background:var(--well);border:1px solid var(--border);border-radius:4px;
+  padding:1px 6px;font:var(--fs-small) var(--mono);color:var(--text)}
+a.evidence{color:var(--blue);text-decoration:underline;text-underline-offset:2px;word-break:break-all}
+.origin{font-size:var(--fs-small);color:var(--text-3);margin:0 0 12px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.origin .badge{background:var(--well);border:1px solid var(--border);border-radius:var(--r-control);padding:2px 9px;color:var(--text);font-weight:600}
+.origin .sep{opacity:.5}
+.gctx{font-size:var(--fs-small);color:var(--text-3);margin:-2px 0 6px;padding:0 2px}
+.group.tinted h2,.group.tinted h2 .gcv{color:var(--gcol)}
+section.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-panel);
+  padding:16px 18px;margin:12px 0;scroll-margin:92px;box-shadow:var(--shadow)}
+section.card.focused{border-color:var(--blue);box-shadow:var(--focus-glow)}
+section.card.flipped{border-left:3px solid var(--amber)}
+section.card.noted:not(.flipped){border-left:3px solid var(--blue)}
+body.flip-only section.card:not(.flipped):not(.noted){display:none}
+body.flip-only .group:not(:has(.card.flipped)):not(:has(.card.noted)) h2{display:none}
+.group h2{font:600 var(--fs-caption)/1.4 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);margin:24px 0 4px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px}
+.group h2 .n{font-weight:400;opacity:.7}
+.group.collapsed section.card{display:none}
+/* drawn chevron, not CSS-content text (defect U2) */
+.group h2 .gcv{display:inline-flex;transition:transform var(--t-fast)}
+.group.collapsed h2 .gcv{transform:rotate(-90deg)}
+h3{font-size:var(--fs-title);font-weight:600;margin:0 0 8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;letter-spacing:-.005em}
+h3 .idtag{color:var(--text-3);font:500 var(--fs-caption)/1.4 var(--mono);letter-spacing:0;
+  background:var(--well);border-radius:5px;padding:1px 7px}
+.read{color:var(--text-3);font-size:var(--fs-body);margin:0 0 12px}
+.shots{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.shots img{max-width:236px;width:100%;border:1px solid var(--border);border-radius:var(--r-card);cursor:zoom-in;background:#fff}
+/* scrimmed zoom instead of an in-flow blowup (defect U5) */
+#zoom{position:fixed;inset:0;background:var(--scrim);z-index:var(--z-modal);display:none;
+  align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
+#zoom.on{display:flex}
+#zoom img{max-width:96vw;max-height:92vh;border-radius:var(--r-card);background:#fff}
+.slots{font-size:var(--fs-body);margin:8px 0}
+.slots b{display:inline-block;min-width:62px;color:var(--text-3);font-weight:600;font-size:var(--fs-caption);letter-spacing:.05em}
+.slots div{margin:3px 0}
+.opt{display:block;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r-card);
+  margin:6px 0;cursor:pointer;font-size:var(--fs-body);position:relative}
+.opt:has(input:checked){border-color:var(--blue-br);background:var(--blue-bg)}
+.opt:focus-within{border-color:var(--blue);box-shadow:var(--focus-glow)}
+.opt input{margin-right:8px}
+.opt .num{display:none;position:absolute;right:10px;top:8px;color:var(--text-3);font-size:var(--fs-caption);
+  border:1px solid var(--border);border-radius:4px;padding:0 5px}
+section.card.focused .opt .num{display:inline-block}
+.rec-tag{color:var(--green);font-size:var(--fs-caption);font-weight:700;letter-spacing:.05em;margin-left:6px}
+.react{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.react label{font-size:var(--fs-body);display:flex;gap:6px;align-items:center}
+.prio{color:var(--amber);font-size:var(--fs-micro);font-weight:700;letter-spacing:.06em;
+  background:var(--well);border-radius:5px;padding:1px 7px}
+.addnote{display:none;background:none;border:1px dashed var(--border);color:var(--text-3);
+  border-radius:var(--r-control);padding:2px 8px;font-size:var(--fs-small);cursor:pointer;min-height:0}
+.addnote:hover{border-color:var(--blue);color:var(--text)}
+section.card.focused .addnote{display:inline-flex}
+.notewrap{display:none;margin-top:8px}
+body.notes-on .notewrap,section.card.shownote .notewrap{display:block}
+body.notes-on .addnote,section.card.shownote .addnote{display:none}
+.notewrap textarea{width:100%;background:var(--well);color:var(--text);border:1px solid var(--border);
+  border-radius:var(--r-control);padding:7px 10px;font:var(--fs-body)/1.5 var(--sans);resize:vertical}
+.notewrap.filled textarea{border-left:2px solid var(--blue)}
+body.notes-off #notesBtn,body.notes-off .addnote,body.notes-off .notewrap,body.notes-off #endnotes{display:none}
+.notelabel{font-size:var(--fs-caption);color:var(--text-3);letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+#endnotes{margin:26px 0 0}
+#endnotes .card{border-style:dashed}
+#endnotes textarea{min-height:64px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;
+  padding:10px 18px;border-radius:var(--r-card);opacity:0;transition:opacity .25s;pointer-events:none;
+  font-size:var(--fs-lead);z-index:var(--z-toast)}
+#toast.on{opacity:1}
+.note{font-size:var(--fs-body);color:var(--text-3)}
+#drawer{position:fixed;bottom:0;left:0;right:0;z-index:var(--z-pop);background:var(--card);
+  border-top:1px solid var(--border-2);max-height:44vh;overflow:auto;padding:10px 22px;display:none}
+#drawer.on{display:block}
+#drawer pre{margin:4px 0;font:var(--fs-small)/1.5 var(--mono);white-space:pre-wrap}
+#drawer .cap{font-size:var(--fs-caption);color:var(--text-3);letter-spacing:.05em;text-transform:uppercase}
+#overlay{position:fixed;inset:0;background:var(--scrim);z-index:var(--z-modal);display:none;align-items:center;justify-content:center}
+#overlay.on{display:flex}
+#overlay .box{background:var(--card);border:1px solid var(--border-2);border-radius:var(--r-panel);
+  padding:22px 28px;max-width:480px;font-size:var(--fs-body)}
+#overlay table{border-collapse:collapse}
+#overlay td{padding:3px 12px 3px 0}
+</style>
+</head>
+<body>
+<div id="phead"></div>
+<main id="main"><p class="note">Loading config.json…</p></main>
+<div id="drawer"><span class="cap">answer preview — this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
+<div id="overlay"><div class="box">
+  <h3 style="margin-top:0">Keyboard</h3>
+  <table>
+    <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>next / previous item</td></tr>
+    <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>pick option in the focused decision</td></tr>
+    <tr><td><kbd>a</kbd></td><td>toggle agree on the focused item</td></tr>
+    <tr><td><kbd>n</kbd></td><td>add a note to the focused item (<kbd>Esc</kbd> to leave)</td></tr>
+    <tr><td><kbd>m</kbd></td><td>notes mode — show a note field on every item</td></tr>
+    <tr><td><kbd>N</kbd></td><td>jump to the end-of-form notes for Claude</td></tr>
+    <tr><td><kbd>f</kbd></td><td>show only items you changed or noted</td></tr>
+    <tr><td><kbd>p</kbd></td><td>answer preview drawer</td></tr>
+    <tr><td><kbd>c</kbd></td><td>copy the answer string</td></tr>
+    <tr><td><kbd>s</kbd></td><td>submit answers straight to Claude</td></tr>
+    <tr><td><kbd>g</kbd> / <kbd>G</kbd></td><td>first / last item</td></tr>
+    <tr><td><kbd>t</kbd></td><td>theme</td></tr>
+    <tr><td><kbd>?</kbd></td><td>this help (<kbd>Esc</kbd> closes)</td></tr>
+  </table>
+  <p class="note">Untouched = agreed. Only your changes and notes end up in the paste — notes are optional.</p>
+</div></div>
+<div id="zoom"><img alt=""></div>
+<div id="toast">Copied — paste it in chat</div>
+<script src="/kinds.js"></script>
+<script src="/shared.js"></script>
+<script>
+/* The answer contract below (state, recOf, flips, answerString, storage key,
+   keyboard map) is ported VERBATIM from the old template.html. A change here
+   is a change to what every skill parses from the paste — do not drift it. */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+let CFG = null, FOCUS = -1;
+const SLUG = location.pathname.split("/").filter(Boolean)[1] || "";
+
+// esc comes from shared.js (same implementation); redeclaring it threw
+const linkify = s => esc(s).replace(/(https?:\/\/[^\s<)]+)/g,
+  u => `<a class="evidence" href="${u}" target="_blank" rel="noreferrer">${u.replace(/^https?:\/\/[^/]+\//, "")}</a>`);
+
+function noteField(cls, seed, ph) {
+  return `<div class="notewrap"><div class="notelabel">note (optional)</div>
+    <textarea class="${cls}" rows="1" placeholder="${esc(ph)}">${esc(seed || "")}</textarea></div>`;
+}
+
+const CHEV = `<svg class="gcv" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function render() {
+  document.title = (CFG.title || "Decision page") + " · kanban";
+  if (CFG.notes === false) document.body.classList.add("notes-off");
+  if (CFG.accent) document.documentElement.style.setProperty("--blue", CFG.accent);
+  const M = $("#main");
+  let h = `<div id="answered"></div>`;
+  if (CFG.origin) {
+    const o = CFG.origin;
+    const tail = [o.session, o.project, o.created].filter(Boolean)
+      .map(esc).join(`<span class="sep"> · </span>`);
+    h += `<p class="origin">${o.topic ? `<span class="badge">${esc(o.topic)}</span>` : ""}${tail}</p>`;
+  }
+  if (CFG.intro) h += `<p class="intro">${linkify(CFG.intro)} When you're done, hit
+    <b>Submit to Claude</b> (or <b>Copy answers</b> to paste it yourself). Press
+    <kbd>?</kbd> for keyboard.</p>`;
+  if ((CFG.decisions || []).length) {
+    const dm = (CFG.groups || {})["Decisions"] || {};
+    h += `<div class="group${dm.color ? " tinted" : ""}" data-g="__decisions"${dm.color ? ` style="--gcol:${esc(dm.color)}"` : ""}><h2>${CHEV}Decisions <span class="n">· ${CFG.decisions.length}</span></h2>`;
+    if (dm.context) h += `<p class="gctx">${linkify(dm.context)}</p>`;
+    CFG.decisions.forEach(d => {
+      h += `<section class="card decision" data-d="${esc(d.id)}" tabindex="-1">
+        <h3><span class="idtag">${esc(d.id)}</span> ${esc(d.question)}</h3>`;
+      if (d.context) h += `<p class="read">${linkify(d.context)}</p>`;
+      d.options.forEach((o, i) => {
+        h += `<label class="opt"><input type="radio" name="${esc(d.id)}"
+          value="${esc(o.code)}" ${o.rec ? "checked" : ""}><b>${esc(o.code)}</b> ·
+          ${esc(o.label)}${o.rec ? '<span class="rec-tag">RECOMMENDED</span>' : ""}
+          <span class="num">${i + 1}</span></label>`;
+      });
+      if (CFG.notes !== false) {
+        h += `<div class="react"><button class="addnote" tabindex="-1">add a note</button></div>`;
+        h += noteField("dnote", d.note, "why you picked differently, a caveat, a question…");
+      }
+      h += `</section>`;
+    });
+    h += `</div>`;
+  }
+  let group = null, open = false;
+  (CFG.sections || []).forEach(s => {
+    if ((s.group || "Items") !== group) {
+      if (open) h += `</div>`;
+      group = s.group || "Items";
+      const n = CFG.sections.filter(x => (x.group || "Items") === group).length;
+      const gm = (CFG.groups || {})[group] || {};
+      h += `<div class="group${gm.color ? " tinted" : ""}" data-g="${esc(group)}"${gm.color ? ` style="--gcol:${esc(gm.color)}"` : ""}><h2>${CHEV}${esc(group)} <span class="n">· ${n}</span></h2>`;
+      if (gm.context) h += `<p class="gctx">${linkify(gm.context)}</p>`;
+      open = true;
+    }
+    h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
+      <h3>${esc(s.title)} <span class="idtag">${esc(s.id)}</span>${s.prio ? ` <span class="prio">${esc(s.prio)}</span>` : ""}</h3>`;
+    if (s.read) h += `<p class="read">${linkify(s.read)}</p>`;
+    if ((s.images || []).length) h += `<div class="shots">` +
+      s.images.map(im => `<img src="${esc(im)}" alt="${esc(s.title)}" loading="lazy">`).join("") + `</div>`;
+    if (s.slots) {
+      h += `<div class="slots">` + Object.entries(s.slots).map(([k, v]) =>
+        `<div><b>${esc(k)}</b> ${esc(v)}</div>`).join("") + `</div>`;
+    }
+    h += `<div class="react"><label><input type="checkbox" class="agree" checked>agree</label>`;
+    if (CFG.notes !== false) h += `<button class="addnote" tabindex="-1">add a note</button>`;
+    h += `</div>`;
+    if (CFG.notes !== false) h += noteField("notes", s.note, "exception / note…");
+    h += `</section>`;
+  });
+  if (open) h += `</div>`;
+  if (CFG.notes !== false)
+    h += `<div id="endnotes"><section class="card endnote" data-s="__end" tabindex="-1">
+      <h3>Notes for Claude <span class="idtag">optional</span></h3>
+      <p class="read">Anything the form above can't capture — extra context, a
+        constraint, a follow-up. Leave blank to keep the payload lean.</p>
+      <div class="notewrap" style="display:block"><textarea class="endnotes"
+        rows="2" placeholder="e.g. do the Walmart ones first; ping me before the DB migration…"></textarea></div>
+    </section></div>`;
+  M.innerHTML = h;
+  $$(".group h2").forEach(t => t.onclick = () => { t.parentElement.classList.toggle("collapsed"); save(); });
+}
+
+const recOf = id => (CFG.decisions.find(d => d.id === id)?.options.find(o => o.rec) || {}).code;
+
+function state() {
+  const s = { theme: document.documentElement.dataset.theme, ts: Date.now(),
+              d: {}, dnotes: {}, screens: {}, endnotes: "",
+              notesOn: document.body.classList.contains("notes-on"), collapsed: [] };
+  (CFG.decisions || []).forEach(d => {
+    s.d[d.id] = $(`input[name="${d.id}"]:checked`)?.value;
+    const dn = $(`section[data-d="${d.id}"] .dnote`);
+    if (dn && dn.value.trim()) s.dnotes[d.id] = dn.value.trim();
+  });
+  $$("section.screen").forEach(sec => {
+    s.screens[sec.dataset.s] = {
+      agree: $(".agree", sec).checked, note: ($(".notes", sec)?.value || "").trim() };
+  });
+  s.endnotes = ($(".endnotes")?.value || "").trim();
+  s.collapsed = $$(".group.collapsed").map(g => g.dataset.g);
+  return s;
+}
+const KEY = () => "decision-page:" + (CFG.storageKey || CFG.title || "default");
+function save() { localStorage.setItem(KEY(), JSON.stringify(state())); refresh(); }
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY()) || "null"); if (!s) return;
+    if (s.notesOn) document.body.classList.add("notes-on"), $("#notesBtn").classList.add("on");
+    Object.entries(s.d || {}).forEach(([d, v]) => {
+      const el = $(`input[name="${d}"][value="${v}"]`); if (el) el.checked = true; });
+    Object.entries(s.dnotes || {}).forEach(([d, v]) => {
+      const el = $(`section[data-d="${d}"] .dnote`); if (el) el.value = v; });
+    Object.entries(s.screens || {}).forEach(([k, v]) => {
+      const sec = $(`section[data-s="${k}"]`); if (!sec) return;
+      $(".agree", sec).checked = v.agree;
+      const nt = $(".notes", sec); if (nt) nt.value = v.note || ""; });
+    if (s.endnotes && $(".endnotes")) $(".endnotes").value = s.endnotes;
+    (s.collapsed || []).forEach(g => {
+      const el = $(`.group[data-g="${CSS.escape(g)}"]`); if (el) el.classList.add("collapsed"); });
+  } catch {}
+}
+
+function flips() {
+  const s = state(), out = { d: [], dnote: [], screens: [], end: !!s.endnotes };
+  (CFG.decisions || []).forEach(d => {
+    if (s.d[d.id] !== recOf(d.id)) out.d.push(d.id);
+    if (s.dnotes[d.id]) out.dnote.push(d.id);
+  });
+  Object.entries(s.screens).forEach(([k, v]) => { if (!v.agree || v.note) out.screens.push(k); });
+  return out;
+}
+function answerString() {
+  const s = state(), f = flips();
+  const lines = [(CFG.copyHeader || CFG.title || "answers") + ":"];
+  if ((CFG.decisions || []).length)
+    lines.push(CFG.decisions.map(d => d.id + (s.d[d.id] || recOf(d.id) || "?")).join(" "));
+  (CFG.decisions || []).forEach(d => {
+    if (s.dnotes[d.id]) lines.push(`${d.id} note — ${s.dnotes[d.id]}`);
+  });
+  Object.entries(s.screens).forEach(([k, v]) => {
+    if (!v.agree || v.note) lines.push(
+      `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? " — " + v.note : ""}`);
+  });
+  if (s.endnotes) lines.push("notes:", s.endnotes);
+  if (!f.d.length && !f.dnote.length && !f.screens.length && !f.end)
+    lines.push("all items: agree as drafted");
+  return lines.join("\n");
+}
+
+function refresh() {
+  const f = flips();
+  $$("section.decision").forEach(sec => {
+    sec.classList.toggle("flipped", f.d.includes(sec.dataset.d));
+    sec.classList.toggle("noted", !f.d.includes(sec.dataset.d) && f.dnote.includes(sec.dataset.d));
+  });
+  $$("section.screen").forEach(sec => {
+    const dis = f.screens.includes(sec.dataset.s);
+    const noteOnly = dis && $(".agree", sec).checked;
+    sec.classList.toggle("flipped", dis && !noteOnly);
+    sec.classList.toggle("noted", noteOnly);
+  });
+  $$(".notewrap").forEach(w => {
+    const t = $("textarea", w); const filled = t && t.value.trim();
+    w.classList.toggle("filled", !!filled);
+    if (filled) w.closest("section.card")?.classList.add("shownote");
+  });
+  const total = (CFG.decisions || []).length + (CFG.sections || []).length;
+  const n = f.d.length + f.screens.length
+          + f.dnote.filter(id => !f.d.includes(id)).length + (f.end ? 1 : 0);
+  $("#progress").innerHTML = n
+    ? `${total} items · <b>${n} flagged</b>` : `${total} items · all as drafted`;
+  $("#copy").textContent = n ? `Copy answers (${n})` : "Copy answers";
+  if ($("#drawer").classList.contains("on")) $("#drawertext").textContent = answerString();
+}
+
+const cards = () => $$("section.card").filter(c => c.offsetParent !== null);
+function focusCard(i) {
+  const cs = cards(); if (!cs.length) return;
+  FOCUS = Math.max(0, Math.min(i, cs.length - 1));
+  $$("section.card.focused").forEach(c => c.classList.remove("focused"));
+  const c = cs[FOCUS];
+  c.classList.add("focused");
+  c.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+function openNote(card) {
+  if (!card || document.body.classList.contains("notes-off")) return;
+  card.classList.add("shownote");
+  const t = $(".notewrap textarea", card); if (t) { t.focus(); }
+}
+document.addEventListener("keydown", e => {
+  const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName || "");
+  if (e.key === "Escape") {
+    if ($("#zoom").classList.contains("on")) return $("#zoom").classList.remove("on");
+    if ($("#overlay").classList.contains("on")) return $("#overlay").classList.remove("on");
+    if (typing) return document.activeElement.blur();
+  }
+  if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+  const cs = cards(), cur = cs[FOCUS];
+  switch (e.key) {
+    case "j": case "ArrowDown": e.preventDefault(); focusCard(FOCUS + 1); break;
+    case "k": case "ArrowUp":   e.preventDefault(); focusCard(FOCUS - 1); break;
+    case "g": focusCard(0); break;
+    case "G": focusCard(cards().length - 1); break;
+    case "a": if (cur?.classList.contains("screen")) {
+        const cb = $(".agree", cur); cb.checked = !cb.checked; save(); } break;
+    case "n": if (cur) { e.preventDefault(); openNote(cur); } break;
+    case "N": { const end = $("#endnotes .endnotes");
+        if (end) { e.preventDefault(); end.scrollIntoView({block:"center"}); end.focus(); } } break;
+    case "m": $("#notesBtn").click(); break;
+    case "f": $("#flip").click(); break;
+    case "p": $("#preview").click(); break;
+    case "c": $("#copy").click(); break;
+    case "s": $("#submit").click(); break;
+    case "t": toggleTheme(); break;
+    case "?": $("#overlay").classList.add("on"); break;
+    default:
+      if (/^[1-9]$/.test(e.key) && cur?.classList.contains("decision")) {
+        const opt = $$(".opt input", cur)[Number(e.key) - 1];
+        if (opt) { opt.checked = true; save(); }
+      }
+  }
+});
+
+document.body.addEventListener("click", e => {
+  if (e.target.matches(".shots img")) {
+    $("#zoom img").src = e.target.src; $("#zoom").classList.add("on"); return;
+  }
+  if (e.target.closest("#zoom")) { $("#zoom").classList.remove("on"); return; }
+  if (e.target.matches(".addnote")) { e.preventDefault();
+    openNote(e.target.closest("section.card")); return; }
+  const card = e.target.closest("section.card");
+  if (card) { const cs = cards(); FOCUS = cs.indexOf(card);
+    $$("section.card.focused").forEach(c => c.classList.remove("focused"));
+    card.classList.add("focused"); }
+});
+document.body.addEventListener("change", save);
+document.body.addEventListener("input", save);
+
+const toast = (m, ms=1800) => { $("#toast").textContent = m;
+  $("#toast").classList.add("on");
+  clearTimeout(toast._t); toast._t = setTimeout(() => $("#toast").classList.remove("on"), ms); };
+
+/* the page's verbs, mounted into the navbar's actions zone */
+function dpBar() {
+  const bar = document.createElement("div");
+  bar.className = "dpbar";
+  bar.innerHTML = `<span id="progress"></span>
+    <button type="button" id="flip" data-tip="Show only what you changed (f)">flagged</button>
+    <button type="button" id="notesBtn" data-tip="Show note fields on every item (m)">notes</button>
+    <button type="button" id="preview" data-tip="Answer preview (p)">preview</button>
+    <button type="button" id="reset" data-tip="Back to drafted answers">reset</button>
+    <button type="button" id="copy" data-tip="Copy the answer string (c)">Copy answers</button>
+    <button type="button" id="submit" data-tip="Send answers straight to Claude (s)">Submit to Claude</button>`;
+  return bar;
+}
+function wireBar() {
+  $("#flip").onclick = () => { document.body.classList.toggle("flip-only");
+    $("#flip").classList.toggle("on"); FOCUS = -1; };
+  $("#notesBtn").onclick = () => { if (document.body.classList.contains("notes-off")) return;
+    document.body.classList.toggle("notes-on");
+    $("#notesBtn").classList.toggle("on"); save(); };
+  $("#preview").onclick = () => { const d = $("#drawer"); d.classList.toggle("on");
+    $("#preview").classList.toggle("on"); refresh(); };
+  $("#reset").onclick = () => {
+    if (!confirm("Reset every answer back to the drafted recommendation?")) return;
+    localStorage.removeItem(KEY()); location.reload();
+  };
+  $("#copy").onclick = async () => {
+    const txt = answerString();
+    try { await navigator.clipboard.writeText(txt); }
+    catch { prompt("Copy this:", txt); }
+    toast("Copied — paste it in chat");
+  };
+  $("#submit").onclick = async () => {
+    const txt = answerString();
+    try {
+      const r = await fetch(`/api/dp-submit/${encodeURIComponent(SLUG)}`, { method: "POST",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answer: txt }) });
+      if (!r.ok) throw new Error("http " + r.status);
+      toast("Sent to Claude ✓ — you can close this tab", 2600);
+      $("#submit").textContent = "Sent ✓";
+      markAnswered(Math.floor(Date.now() / 1000));
+      setTimeout(() => { $("#submit").textContent = "Submit to Claude"; }, 2600);
+    } catch (e) {
+      try { await navigator.clipboard.writeText(txt); } catch { prompt("Copy this:", txt); }
+      toast("Submit unavailable — copied instead, paste it in chat", 2800);
+    }
+  };
+}
+
+/* defect D1: the truth file exists, so the page says so on revisit */
+function markAnswered(ts) {
+  const b = $("#answered");
+  if (!b) return;
+  b.textContent = `Answered${ts ? " " + new Date(ts * 1000).toLocaleString() : ""} — submitting again replaces the previous answer.`;
+  b.classList.add("on");
+}
+async function checkAnswered() {
+  try {
+    const r = await fetch(".answer.json", { cache: "no-store" });
+    if (r.ok) markAnswered((await r.json()).submitted_at);
+  } catch {}
+}
+
+fetch("config.json", { cache: "no-store" }).then(r => r.json()).then(c => {
+  CFG = c;
+  navbar({ mount: "#phead", active: "decisions",
+    identity: crumbFor("decisions", CFG.title || SLUG),
+    actions: dpBar(),
+    help: () => $("#overlay").classList.add("on") });
+  render(); wireBar(); load(); refresh(); checkAnswered();
+}).catch(e => { $("#main").innerHTML =
+  `<p class="note">Failed to load config.json for this page. ${esc(e)}</p>`; });
+</script>
+</body>
+</html>

@@ -179,7 +179,11 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     box; the board keeps its illustrated version. `esc` moved to `shared.js`
     for the same reason the CSS did.
 11. **Help hosts on the decision-page and transcript surfaces**, same source.
-    **Blocked, and the two halves are blocked differently.** The transcript
+    **Half unblocked 2026-08-25**: the owner ruled decision pages fold INTO
+    kanban (DECISION-PAGES-ADOPTION.md), so the adopted /dp/ pages are
+    same-origin and the shared help modal is one mount away. The transcript
+    half still waits on #14/#20. Original blocker note kept below for the
+    record. **Was: blocked, and the two halves are blocked differently.** The transcript
     surface does not exist: `rg transcript *.html *.ts` finds nothing, and
     `CHAT-HISTORY.md:71` records that the hub deliberately has no Sessions tab
     yet, so `#14` has to land first. Decision pages are a separate subsystem
@@ -199,7 +203,15 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     palette and switcher sections, and the find box all derive from the one
     registry. The hub renders both views, pending first with origin and age;
     rows link to :5197 where the pages already live. Verified live.
-13. **Phase 2: the charter as a decision page** (`#57`). After 12.
+13. **Phase 2: the charter as a decision page** (`#57`) **Done 2026-08-25,
+    by absorption rather than restyling**: the owner ruled decision pages
+    fold into kanban, so instead of template.html adopting shared.css across
+    servers, kanban serves the registry itself at /dp/<slug>/ with ONE
+    charter-styled dynamic template, a byte-compatible submit endpoint, and
+    the answer contract ported verbatim (byte-equality verified on clean and
+    flipped states). Full examination, defect catalog and transition plan:
+    DECISION-PAGES-ADOPTION.md. The :5197 server runs beside it until the
+    owner retires it.
 14. **Phase 3: plans as a kind** (`#58`) `[spine]` **Done 2026-08-25** (built
     before 13, which is owner-gated; the spec says each phase ships alone).
     `KROOT/plans.jsonl`, CLI `plan add/rule/supersede/rm/list` (documented in
