@@ -113,11 +113,17 @@ pruned as X.4.
 
 ## Phase 1 · Do next. Each earns its cost, none is a rewrite.
 
-### P1.1 · The owed item, derived, WITHOUT the queue UI · G1 · the cut half of §4.1
+### P1.1 · The owed item, derived, WITHOUT the queue UI · G1 · §4.1 · **BUILT 2026-08-25**
 The ideation wants a queue as the front door. That is Phase 2. What is worth
 having now is the thing underneath it: one aggregator over the kind registry's
 own adapters that answers "what awaits the owner, since when, blocking what".
 Serve it at `/api/owed` and read it with `kanban.sh owed`.
+**Built.** `GET /api/owed` spans decisions, needs-human cards and unread
+notes across every board (or one via `?slug=`), sorted hot-first then oldest,
+with counts. `kanban.sh owed` reads it, `--global` spans boards. Each row says
+WHY it is owed in a sentence rather than leaving the reader to infer it.
+No storage: derived at read time the way session lists are.
+
 **Why the cut:** the derivation is the reusable half and costs one aggregator.
 The queue UI is the expensive half, and it is expensive for a reason the
 ideation understates, see P2.1. Building the derivation first means the hub's
@@ -134,12 +140,17 @@ agent-reported and therefore a claim, which means law 1 rendering and a whole
 trust surface. Do the first two states, which are mechanical and true. Leave
 the third with §4.9, both in Phase 2.
 
-### P1.3 · Defer with a horizon · G1 · from §4.4
+### P1.3 · Defer with a horizon · G1 · §4.4 · **BUILT 2026-08-25, with P1.1**
 `deferredAt` exists and means "not now" forever. A deferral that names its
 horizon leaves the list and comes back at it.
 **Benefit: it is the thing that stops P1.1 silting up and dying the inbox
 death. Churn: one optional field, one rule, one dropdown.** Do it with P1.1 or
 not at all; a list that only accumulates is worse than no list.
+
+**Built with it, as the rule required.** `decide defer <id> <date>` sets a
+horizon; the owed derivation skips anything whose horizon has not passed and
+takes it back when it has. Verified in both directions: deferring dropped the
+list from 5 to 4, and a horizon already in the past returned it to 5.
 
 ### P1.4 · Name the day model · G5 · the free half of §4.7
 The ideation's own line is the useful part: naming the model matters more than

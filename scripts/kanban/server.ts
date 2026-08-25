@@ -135,7 +135,7 @@ function boardDecisions(slug: string, plan: any): any[] {
     out.push({ kind: "recorded", id: d.id, title: d.question, href: null,
       card: d.card ?? null, pending: !d.answer, seen: true,
       answer: d.answer ?? null, answeredAt: d.answeredAt ?? null, at: d.at ?? null,
-      session: d.by ?? null, reach: reachOf(d.by, seen),
+      session: d.by ?? null, reach: reachOf(d.by, seen), deferUntil: d.deferUntil ?? null,
       why: d.why ?? null, notes: d.notes ?? [] });
   }
   // Needs-the-owner first, then answer-while-hot: among pending rows, one that
@@ -669,6 +669,63 @@ const server = Bun.serve({
         rows.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
         return json({ notes: rows, broken });
       }
+      // P1.1: one list of what awaits the owner, across kinds. Four surfaces
+      // answer this partially today (the hub's tiers, the tab counts, the nudge,
+      // the session line); this is the one derivation they should all read.
+      // Derived at read time, never stored, the same way session lists are.
+      if (p === "/api/owed") {
+        const only = url.searchParams.get("slug") ?? "";
+        const now = Date.now();
+        const rows: any[] = [];
+        const reg = registry();
+        const seen = seenAgoByAlias();
+        for (const [slug, b] of Object.entries(reg.boards) as any) {
+          if (only && slug !== only) continue;
+          const dir = boardDirOf(slug);
+          if (!dir) continue;
+          let plan: any = {}, bd: any = { cards: [] }, notes: any = {}, ack: any = {};
+          try { plan = loadPlan(dir); bd = loadBoard(dir); notes = loadNotes(dir); ack = loadAck(dir); } catch { continue; }
+          const push = (o: any) => rows.push({ board: slug, boardName: b.name ?? slug, ...o });
+
+          for (const d of boardDecisions(slug, plan)) {
+            if (!d.pending) continue;
+            // P1.3: a deferral with a horizon leaves the list and comes back at
+            // it. Without one, "later" means forever and the list silts up.
+            if (d.deferUntil && Date.parse(d.deferUntil) > now) continue;
+            push({ kind: "decision", id: d.id, title: d.title, since: d.at,
+                   href: d.href, reach: d.reach, seen: d.seen,
+                   why: d.pending && !d.seen ? "you have not opened it" : "waiting on your word" });
+          }
+          for (const c of bd.cards ?? []) {
+            if (!c.verify?.needsHuman) continue;
+            push({ kind: "card", id: c.id, title: c.titleBrief || c.title,
+                   since: c.updatedAt ?? c.createdAt, href: `/b/${slug}?card=${c.id}`,
+                   reach: { state: "unknown", seenAgo: null },
+                   why: "the agent cannot close it alone" });
+          }
+          const flat = Object.entries(notes).flatMap(([cid, e]: any) =>
+            notesOf(e).map((n: any) => ({ cid, n, t: parseNoteTags(n.body) })));
+          for (const x of flat) {
+            if (x.t.me || noteSeen(ack, x.cid, x.n)) continue;
+            push({ kind: "note", id: x.n.id ?? x.cid, title: String(x.n.body).split("\n")[0].slice(0, 90),
+                   since: x.n.updatedAt ?? x.n.at, href: `/b/${slug}?card=${x.cid}`,
+                   reach: { state: "unknown", seenAgo: null },
+                   why: "an agent has not picked this up" });
+          }
+        }
+        // hot first among equals: the same minute is worth more where the asker
+        // is still around. Then oldest, because waiting longer is its own claim.
+        const hot = (x: any) => Number(x.reach?.state === "hot");
+        rows.sort((a, b2) => hot(b2) - hot(a) ||
+          String(a.since ?? "").localeCompare(String(b2.since ?? "")));
+        return json({ owed: rows, counts: {
+          total: rows.length,
+          hot: rows.filter((r) => r.reach?.state === "hot").length,
+          decision: rows.filter((r) => r.kind === "decision").length,
+          card: rows.filter((r) => r.kind === "card").length,
+          note: rows.filter((r) => r.kind === "note").length } });
+      }
+
       // Every surface the owner has, in one list (#56, phase 1). Colocation, not
       // migration: boards stay where they are, decision pages are served here, and
       // this only answers "what is there". A hub tab reads it; nothing moves.
@@ -1311,9 +1368,9 @@ const server = Bun.serve({
     if (req.method === "POST" && p === "/api/decide") {
       const body = (await req.json().catch(() => null)) as
         { slug?: string; op?: string; id?: string; question?: string;
-          why?: string; card?: string; answer?: string; note?: string; by?: string } | null;
+          why?: string; card?: string; answer?: string; note?: string; by?: string; until?: string } | null;
       const dir = body?.slug ? boardDirOf(body.slug) : null;
-      if (!dir || !body?.op) return json({ error: "need {slug, op: add|answer|note|rm, …}" }, 400);
+      if (!dir || !body?.op) return json({ error: "need {slug, op: add|answer|note|defer|rm, …}" }, 400);
       let out: any = { error: "unwritten" };
       await enqueueItem(() => {
         const plan = loadPlan(dir) as any;
@@ -1343,6 +1400,13 @@ const server = Bun.serve({
           if (!t) { out = { error: "an empty comment is not a comment" }; return; }
           (d.notes = d.notes ?? []).push({ body: t, at: now });
           savePlan(dir, plan, "decide:note");
+          out = { ok: true, decision: d };
+        } else if (body.op === "defer") {
+          // a horizon, not a black hole: it leaves the owed list and returns
+          const u = (body.until ?? "").trim();
+          if (u) { if (isNaN(Date.parse(u))) { out = { error: `until must be a date, got "${u}"` }; return; } d.deferUntil = new Date(u).toISOString(); }
+          else delete d.deferUntil;
+          savePlan(dir, plan, "decide:defer");
           out = { ok: true, decision: d };
         } else if (body.op === "rm") {
           plan.decisions = plan.decisions.filter((x: any) => x.id !== body.id);

@@ -194,6 +194,30 @@ switch (verb) {
     });
     break;
   }
+  case "owed": {
+    // One list of what awaits the owner, across kinds. Four surfaces answer
+    // this partially; they should all read this one derivation.
+    const slug = hasFlag("global") ? "" : boardFor(projectDir()).slug;
+    const port = serverPort();
+    if (!port) die("the kanban server is not running", "start it: pm2 restart kanban");
+    let j: any = {};
+    try {
+      const res = await fetch(`http://localhost:${port}/api/owed${slug ? `?slug=${encodeURIComponent(slug)}` : ""}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      j = await res.json();
+    } catch (e: any) { die(`could not read the owed list (${e.message})`, "is the server up? pm2 restart kanban"); }
+    const rows = j.owed ?? [];
+    if (!rows.length) { console.log(slug ? `nothing awaits the owner on ${slug}` : "nothing awaits the owner anywhere"); break; }
+    const c = j.counts ?? {};
+    console.log(`${c.total} awaiting the owner${c.hot ? ` · ${c.hot} still reach a live session` : ""}`);
+    for (const r of rows) {
+      const hot = r.reach?.state === "hot" ? " HOT" : "";
+      console.log(`${r.kind.padEnd(9)}${hot.padEnd(5)}${r.title}`);
+      console.log(`    ${r.why}${slug ? "" : ` · ${r.boardName}`}`);
+    }
+    break;
+  }
+
   case "decide": {
     // D9a: a decision an agent TOOK to the owner, written down where the work
     // is. A decision page is for a batch the owner sits down to; this is for
@@ -242,11 +266,18 @@ switch (verb) {
       target.answer = a; target.answeredAt = now;
       savePlan(boardDir, plan, "decide:answer");
       console.log(`${target.id} ruled: ${a}`);
+    } else if (sub === "defer") {
+      const until = positional[2];
+      if (!until) die("decide defer needs a horizon", `kanban.sh decide defer ${target.id} 2026-09-01   # it comes back then`);
+      if (isNaN(Date.parse(until))) die(`"${until}" is not a date`, "try an ISO date: 2026-09-01");
+      target.deferUntil = new Date(until).toISOString();
+      savePlan(boardDir, plan, "decide:defer");
+      console.log(`${target.id} leaves the owed list until ${until}`);
     } else if (sub === "rm") {
       plan.decisions = plan.decisions.filter((x: any) => x.id !== target.id);
       savePlan(boardDir, plan, "decide:rm");
       console.log(`dropped ${target.id}`);
-    } else die(`unknown: decide ${sub}`, "decide [list] · add <question> [--why …] [--card <id>] · answer <id> <ruling> · rm <id>");
+    } else die(`unknown: decide ${sub}`, "decide [list] · add <question> [--why …] · answer <id> <ruling> · defer <id> <date> · rm <id>");
     break;
   }
 
