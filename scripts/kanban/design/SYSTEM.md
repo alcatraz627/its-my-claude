@@ -155,6 +155,10 @@ each is a ruling paid for in lived friction, not a taste.
     a raw control where the system has a component is a defect (C8).
 15. **Never rebuild a focused element**; a re-render is invisible to
     someone typing (caret restored, buffers survive the node).
+16. **The bar stays uncrowded (owner, 2026-08-25).** Buttons carry icons
+    with tooltips; only the verbs that need emphasis get it; when a page
+    has many verbs, prefer a SECOND per-page bar under the main navbar to
+    cramming the one bar. Weigh this across the whole app.
 
 ## 4. EXISTING: the incumbent visual language (context, not a target)
 

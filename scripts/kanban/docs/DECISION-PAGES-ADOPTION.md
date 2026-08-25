@@ -112,6 +112,18 @@ palette, the switcher and search all land in-app.
    in the registry is rewritten. Both run side by side until the owner
    retires :5197.
 
+## First production round: dp-system-feedback (2026-08-25)
+
+The first real page on the adopted system collected the gated decisions and
+feedback on the surface itself; the watcher wake and the ipc backup both
+fired on Submit. Rulings: sessions get a hub surface woven with boards
+(D1b); #20 runs after the WiZ dropdown (D2b); terminal DEFERRED pending
+real design (D3a+note), task runner and skip-permissions spawner never
+as-was (D4a, D5a). Follow-ups recorded in docs/REMAINING-WORK.md: answered
+banner v2, decision origin weaving, the navbar-crowding guidance. The 52
+stale per-page index.html copies were trashed on the owner's nod; every
+page renders from the one template (verified post-trash).
+
 ## Transition / retirement — EXECUTED 2026-08-25
 
 The owner ruled the retirement the same day. decision-page.sh and wizard.sh

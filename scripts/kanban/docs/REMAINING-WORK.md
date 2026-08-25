@@ -313,9 +313,11 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 ## To plan (6)
 
 - **Chat history, sessions and per-board conversation history** (`#14` P1,
-  absorbing `7cbb583da830`). Three plan entries for one piece of work in the
-  previous version. Rulings all in. Largest design piece left, and it is the
-  first new kind the spine has to carry.
+  absorbing `7cbb583da830`). Rulings all in, PLUS the 2026-08-25
+  dp-system-feedback ruling (D1b): the hub gets a Sessions surface in the
+  same build, "session hub separately and then linking closely to board(s)
+  but still cross-accessible", weaving to be designed. Timing (D2b): runs
+  AFTER the WiZ dropdown lands in claude-instances. Largest piece left.
 - **Movement and control across the whole app** (`#70` P1). No longer gating
   anything; it informs items 16 to 19 rather than holding them.
 - **Drafts routing slice 4** (`#32`) **NEW**. "A draft can land as an `Item` on
@@ -347,6 +349,18 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ---
 
+### New from the dp-system-feedback answers (2026-08-25)
+
+- **Answered banner v2**: improve visually and show a readable summary of
+  WHAT was answered, not just when.
+- **Decision origin weaving**: tag decision pages with session / board
+  (+card/goal/milestone) where possible; encourage authoring agents to seed
+  that link in config.origin.
+- **Navbar guidance (design-language)**: buttons carry icons + tooltips,
+  emphasize only what needs it, the navbar must NOT be crowded; consider a
+  SECOND per-page navbar rather than cramming the main one. Recorded in
+  design/SYSTEM.md for the ideation round.
+
 ## Everything else (7)
 
 - **The spec docs are stale, and three of them are load-bearing.**
@@ -368,6 +382,9 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
   a poll-versus-render race on new empty drafts. Do not close on the failed
   repro alone.
 - **The gcc proposals backlog** (`e52413e3e1f7`). 170 open, 48 ranked PROMOTE.
+- **Platform note (owner, 2026-08-25)**: if kanban.sh becomes limiting, a
+  TypeScript client+server port is on the table, only if it buys
+  reliability/simplicity for the growing project, never for its own sake.
 - **Something sends SIGINT to pm2 processes** (`577af55d9c63`). Undiagnosed. The
   kanban server has restarted 165 times.
 
