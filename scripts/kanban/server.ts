@@ -59,6 +59,48 @@ function dpClearPending(slug: string): void {
     fs.renameSync(tmp, pend);
   } catch { /* best-effort, the answer file is the load-bearing signal */ }
 }
+// D9a: every decision that belongs to a board, in one list, whatever its shape.
+// Two sources. A decision PAGE names its board in origin.board. A decision an
+// agent simply TOOK to the owner has no page and lives in the board's own plan,
+// because the owner asked for "the decided ones stored here too".
+function dpPending(): Set<string> {
+  try {
+    return new Set(fs.readFileSync(path.join(DP_ROOT, ".pending.txt"), "utf8")
+      .split("\n").map((x) => x.trim()).filter(Boolean));
+  } catch { return new Set(); }
+}
+function boardDecisions(slug: string, plan: any): any[] {
+  const out: any[] = [];
+  const pending = dpPending();
+  try {
+    for (const s of fs.readdirSync(DP_ROOT)) {
+      const dir = path.join(DP_ROOT, s);
+      let cfg: any = null;
+      try { cfg = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8")); } catch { continue; }
+      if ((cfg.origin?.board ?? "") !== slug) continue;
+      let answer: any = null;
+      try { answer = JSON.parse(fs.readFileSync(path.join(dir, ".answer.json"), "utf8")); } catch {}
+      let at: string | null = null;
+      try { at = new Date(fs.statSync(path.join(dir, "config.json")).mtimeMs).toISOString(); } catch {}
+      out.push({ kind: "page", id: s, title: cfg.title ?? s,
+        href: `/dp/${s}/`, card: cfg.origin?.card ?? null,
+        pending: pending.has(s), seen: fs.existsSync(path.join(dir, ".seen.json")),
+        answer: answer?.answer ?? null, answeredAt: answer?.submitted_at ?? null, at });
+    }
+  } catch { /* no registry is not an error */ }
+  // recorded decisions: no page, the agent wrote them down where the work is
+  for (const d of (plan?.decisions ?? [])) {
+    out.push({ kind: "recorded", id: d.id, title: d.question, href: null,
+      card: d.card ?? null, pending: !d.answer, seen: true,
+      answer: d.answer ?? null, answeredAt: d.answeredAt ?? null, at: d.at ?? null,
+      why: d.why ?? null, notes: d.notes ?? [] });
+  }
+  // what needs the owner comes first; within a tier, newest first
+  out.sort((a, b) => Number(b.pending) - Number(a.pending) ||
+    String(b.at ?? "").localeCompare(String(a.at ?? "")));
+  return out;
+}
+
 function dpNotifyOrigin(slug: string, dir: string): void {
   try {
     const cfg = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
@@ -718,6 +760,7 @@ const server = Bun.serve({
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
           selection: loadSelection(dir), plan, presets: TAG_PRESETS,
           tagColours: loadTagColours(),
+          decisions: boardDecisions(slug, plan),
           planDocs: loadPlans().filter((pl) => pl.board === slug) });
       }
       // The owner's own lane. `slug` scopes to one board and always keeps the
@@ -1214,6 +1257,53 @@ const server = Bun.serve({
       dpClearPending(slug);
       dpNotifyOrigin(slug, dir);
       return json({ ok: true, slug });
+    }
+
+    // D9a: a decision an agent took to the owner, recorded where the work is
+    // rather than as a page. add records it, answer rules it, note is the
+    // owner's comment on any decision including a page-backed one.
+    if (req.method === "POST" && p === "/api/decide") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; op?: string; id?: string; question?: string;
+          why?: string; card?: string; answer?: string; note?: string } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.op) return json({ error: "need {slug, op: add|answer|note|rm, …}" }, 400);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir) as any;
+        plan.decisions = plan.decisions ?? [];
+        const now = new Date().toISOString();
+        if (body.op === "add") {
+          const q = (body.question ?? "").trim();
+          if (!q) { out = { error: "a decision needs a question" }; return; }
+          const d: any = { id: noteId(), question: q, at: now };
+          if (body.why) d.why = body.why.trim();
+          if (body.card) d.card = body.card;
+          plan.decisions.push(d);
+          savePlan(dir, plan, "decide:add");
+          out = { ok: true, decision: d };
+          return;
+        }
+        const d = plan.decisions.find((x: any) => x.id === body.id);
+        if (!d) { out = { error: `no decision ${body.id}` }; return; }
+        if (body.op === "answer") {
+          const a = (body.answer ?? "").trim();
+          if (a) { d.answer = a; d.answeredAt = now; } else { delete d.answer; delete d.answeredAt; }
+          savePlan(dir, plan, "decide:answer");
+          out = { ok: true, decision: d };
+        } else if (body.op === "note") {
+          const t = (body.note ?? "").trim();
+          if (!t) { out = { error: "an empty comment is not a comment" }; return; }
+          (d.notes = d.notes ?? []).push({ body: t, at: now });
+          savePlan(dir, plan, "decide:note");
+          out = { ok: true, decision: d };
+        } else if (body.op === "rm") {
+          plan.decisions = plan.decisions.filter((x: any) => x.id !== body.id);
+          savePlan(dir, plan, "decide:rm");
+          out = { ok: true, removed: d.question };
+        } else out = { error: `unknown op ${body.op}` };
+      });
+      return json(out, out.error ? 400 : 200);
     }
 
     // Charter §12, phase 4: a decision the owner has not opened reads as UNSEEN,

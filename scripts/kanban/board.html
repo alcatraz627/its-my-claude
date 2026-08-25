@@ -910,6 +910,10 @@
   .pstate.st-draft{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg)}
   .pstate.st-ruled{color:var(--green);border-color:var(--green-br);background:var(--green-bg)}
   .pstate.st-superseded{color:var(--text-3);background:var(--well)}
+  /* §12 again: never opened is louder than opened-and-parked, because only the
+     first one means nobody has looked at it yet */
+  .pstate.st-unseen{color:var(--red);border-color:var(--red-br);background:var(--red-bg)}
+  .srow.decrow.pend .stxt{color:var(--text)}
   .srow .tct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
   .srow.on{background:var(--card);border-color:var(--border-2);color:var(--text)}
   .srow{display:flex;align-items:center;gap:3px;position:relative}
@@ -3843,6 +3847,39 @@ function renderSide() {
       st.className = `pstate st-${pl.state}`;
       b.dataset.tip = `${pl.path}\n${pl.state}${pl.ruledAt ? ` ${ago(Date.parse(pl.ruledAt))} ago` : ""} · press to read it`;
       b.onclick = () => openDocModal(pl.path, 0);
+      g.appendChild(b);
+    }
+  });
+
+  // D9a: every decision that belongs to this board in one place, whatever its
+  // shape. A page-backed one opens its page; a recorded one is a call an agent
+  // took to the owner mid-work and would otherwise live only in a transcript.
+  // Pending first, because that is the half that is about the owner.
+  group("Decisions", (g) => {
+    const ds = (data?.decisions ?? []).filter((d) => sideHit(d.title));
+    if (!ds.length) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No decisions here. A decision page naming this board, or kanban.sh decide add, puts one in.";
+      g.appendChild(e);
+      return;
+    }
+    for (const d of ds) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "srow decrow" + (d.pending ? " pend" : "");
+      b.innerHTML = `<span class="stxt"></span><span class="pstate"></span>`;
+      b.querySelector(".stxt").textContent = d.title;
+      const st = b.querySelector(".pstate");
+      // §12: unseen is its own state, not a synonym for undecided
+      st.textContent = d.pending ? (d.seen ? "needs you" : "unseen") : "ruled";
+      st.className = "pstate " + (d.pending ? (d.seen ? "st-draft" : "st-unseen") : "st-ruled");
+      const tail = d.answer ? `\nruled: ${String(d.answer).split("\n")[0].slice(0, 90)}` : "";
+      b.dataset.tip = (d.kind === "page" ? "A decision page" : "Recorded by an agent") +
+        (d.at ? ` · ${ago(Date.parse(d.at))} ago` : "") + tail +
+        (d.href ? "\npress to open it" : "");
+      if (d.href) b.onclick = () => { location.href = d.href; };
+      else b.onclick = () => toast(d.why ? `why: ${d.why}` : "Recorded decision, no page", 3200);
       g.appendChild(b);
     }
   });

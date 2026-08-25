@@ -179,11 +179,46 @@ elif [ "${dpend:-0}" -gt 0 ] 2>/dev/null || [ "${dagent:-0}" -gt 0 ] 2>/dev/null
   drafted=" · the owner has drafts ($dbits) — documents they wrote for you, above an ask. Read before planning: bash ~/.claude/scripts/kanban/kanban.sh drafts"
 fi
 
+# D9a: a decision waiting on the owner is attention the same way an unread note
+# is, so the agent's own line says it rather than only the board showing it.
+decided=""
+pending_dec=$(python3 - "$slug" <<'PYD' 2>/dev/null || echo 0
+import json, os, sys
+slug = sys.argv[1]
+n = 0
+try:
+    plan = json.load(open(os.path.expanduser(f"~/.claude/kanban/boards/{slug}/plan.json")))
+    n += sum(1 for d in (plan.get("decisions") or []) if not d.get("answer"))
+except Exception:
+    pass
+try:
+    reg = os.path.expanduser("~/.claude/assets/decision-pages")
+    pend = set()
+    try:
+        pend = {l.strip() for l in open(os.path.join(reg, ".pending.txt")) if l.strip()}
+    except Exception:
+        pass
+    for s in pend:
+        try:
+            c = json.load(open(os.path.join(reg, s, "config.json")))
+        except Exception:
+            continue
+        if (c.get("origin") or {}).get("board") == slug:
+            n += 1
+except Exception:
+    pass
+print(n)
+PYD
+)
+if [ "${pending_dec:-0}" -gt 0 ] 2>/dev/null; then
+  decided=" · $pending_dec decision(s) waiting on the owner: bash ~/.claude/scripts/kanban/kanban.sh decide list"
+fi
+
 if [ "${unread:-0}" -gt 0 ] 2>/dev/null; then
   extra=""; [ "${actionable:-0}" -gt 0 ] 2>/dev/null && extra=" ($actionable marked !now)"
-  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked$drafted · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked$drafted$decided · board: http://localhost:5106/b/$slug"
 else
-  line="[kanban] board \"$name\" — no unread notes$asks$picked$drafted · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — no unread notes$asks$picked$drafted$decided · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
 fi
 
 jq -nc --arg c "$line" '{additionalContext: $c}'

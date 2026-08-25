@@ -239,10 +239,28 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     pending pages: opening one flipped it to seen while it stayed pending, the
     other two did not move, a re-post left `seen_at` unchanged, and an unknown
     slug and a traversal attempt both 404.
-    **Still open from D9a**, and larger than this half was: a Decisions view
-    ON the board listing every decision card-bound or not, `kanban.sh decide
-    add` for agent-recorded decisions, owner comments through the note
-    composer, and the nudge hookup.
+    **The D9a half is done 2026-08-25.** A decision that belongs to a board now
+    comes from two sources merged into one list: a decision PAGE naming the
+    board in `origin.board`, and a decision an agent simply TOOK to the owner,
+    which has no page and lives in the board's own plan. That second shape is
+    the one the owner asked for ("store the decided ones here too"): a call
+    that came up mid-work would otherwise survive only in a transcript nobody
+    re-reads.
+    - `/api/board` carries `decisions`, pending first, newest within a tier.
+    - `POST /api/decide` does add, answer, note and rm, with the note op being
+      the owner's comment on any decision.
+    - `kanban.sh decide [list] · add <q> [--why] [--card] · answer <id> <ruling>
+      · rm <id>`.
+    - The board's left panel has a Decisions section: pending rows read
+      "needs you" in amber or "unseen" in red (§12 again, never opened is not
+      the same as not decided), ruled rows read green, and the ruling itself is
+      on the row's tooltip rather than inline because the panel is ~186px.
+    - The session-start line names pending decisions, so the agent side sees
+      them without opening the board.
+    Verified: both sources resolve on real boards, all three write ops work,
+    three guards refuse (empty question, unknown id, unknown board), the CLI
+    round-trips, and the session line stays silent on a board with none and
+    goes quiet again once the decision is ruled.
 
 ### Ergonomics, all four unchained from `#70` on 2026-08-24
 

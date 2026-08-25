@@ -194,6 +194,61 @@ switch (verb) {
     });
     break;
   }
+  case "decide": {
+    // D9a: a decision an agent TOOK to the owner, written down where the work
+    // is. A decision page is for a batch the owner sits down to; this is for
+    // the single call that came up mid-work and would otherwise live only in a
+    // transcript nobody re-reads.
+    const { slug, boardDir } = boardFor(projectDir());
+    const plan = loadPlan(boardDir) as any;
+    plan.decisions = plan.decisions ?? [];
+    const sub = positional[0];
+    const now = new Date().toISOString();
+
+    if (!sub || sub === "list") {
+      if (!plan.decisions.length) {
+        console.log(`no decisions recorded on ${slug} yet`);
+        console.log(`  record one: kanban.sh decide add "the question" --why "why it needs them"`);
+        break;
+      }
+      for (const d of plan.decisions) {
+        const state = d.answer ? "ruled" : "NEEDS YOU";
+        console.log(`${d.id}  ${state}  ${d.question}`);
+        if (d.why) console.log(`    why: ${d.why}`);
+        if (d.answer) console.log(`    ruled: ${d.answer}`);
+        for (const n of d.notes ?? []) console.log(`    note: ${n.body}`);
+      }
+      break;
+    }
+    if (sub === "add") {
+      const q = positional[1];
+      if (!q) die("decide add needs the question", 'kanban.sh decide add "ship behind a flag or wait?" --why "the launch date moves either way"');
+      const d: any = { id: noteId(), question: q, at: now };
+      const why = flag("why"), card = flag("card");
+      if (why) d.why = why;
+      if (card) d.card = card;
+      plan.decisions.push(d);
+      savePlan(boardDir, plan, "decide:add");
+      console.log(`recorded ${d.id} on ${slug}: ${q}`);
+      console.log(`  the owner sees it on the board and in the nudge until they rule`);
+      break;
+    }
+    const target = plan.decisions.find((x: any) => x.id === positional[1]);
+    if (!target) die(`no decision ${positional[1] ?? "(none given)"}`, `kanban.sh decide list   # the ids on ${slug}`);
+    if (sub === "answer") {
+      const a = positional[2];
+      if (!a) die("decide answer needs the ruling", `kanban.sh decide answer ${target.id} "wait for the launch"`);
+      target.answer = a; target.answeredAt = now;
+      savePlan(boardDir, plan, "decide:answer");
+      console.log(`${target.id} ruled: ${a}`);
+    } else if (sub === "rm") {
+      plan.decisions = plan.decisions.filter((x: any) => x.id !== target.id);
+      savePlan(boardDir, plan, "decide:rm");
+      console.log(`dropped ${target.id}`);
+    } else die(`unknown: decide ${sub}`, "decide [list] · add <question> [--why …] [--card <id>] · answer <id> <ruling> · rm <id>");
+    break;
+  }
+
   case "view": {
     // A name over a query, said the same way on both sides. The owner presses
     // it in the sidebar; an agent runs it here; neither has to describe the
