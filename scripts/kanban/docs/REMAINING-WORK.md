@@ -326,8 +326,20 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     a Soft limit row in the lane popover, and the head's count turns amber
     above it with a tooltip saying it is a signal, never a block. Verified
     live: set 1 on a lane of 4, amber with tooltip, persists, clears back.
-27. **Showcase boards** (`#65`). **Content designed, placement is one owner
-    call.** `test/showcase/docs/features.md` is the card set: one card per
+27. **Showcase boards** (`#65`). **Board built 2026-08-25**, at the root the
+    owner picked in D5a: `~/Code/Claude/kanban-showcase`, registered as
+    `kanban-showcase-945e63`, 14 cards from `docs/features.md`. Every feature
+    is exercised on it: all seven tag kinds on one card plus `showcase` on all
+    fourteen, a brief cutting a long title, an after-chain, all three verify
+    grades and a needs-human, sub-items, a linked doc, a goal, and a card in
+    each lane. Two named views. Verified live: the grades render distinctly
+    and `needs you` reads amber.
+    **The other half is still open.** The owner's D5 note asks for a second
+    agent to plan and seed it as a real alarms and scheduling app, use the
+    board to full capacity, and report back on what it could not do, with that
+    report fed into the product. That is a separate dispatch, deliberately not
+    run alongside the design ideation seat.
+    *(The original placement problem, for the record:* `test/showcase/docs/features.md` is the card set: one card per
     feature (every tag hue, a title that needs a brief, an after-chain, all
     three verify grades plus needs-human, sub-items, a linked doc, a goal,
     notes, and one card per lane). It is inert where it sits, because
@@ -339,8 +351,8 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
     is why `kanban-fixture-3aae75` is registered today against a root that no
     longer exists (a previous session's scratchpad). So the pick is a stable
     path outside `~/.claude`, and it is the owner's filesystem.
-    Related and separate: **the dead `kanban-fixture` registration should be
-    unregistered**, which is a deletion and wants the owner's word.
+    Both were settled the same day: the root is `~/Code/Claude/kanban-showcase`
+    and all four dead registrations are retired.)
 
 ---
 
