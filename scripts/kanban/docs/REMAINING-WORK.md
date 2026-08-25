@@ -392,6 +392,48 @@ owner notes, AND/OR/NOT, session-start line and `/kanban` skill updated."
 
 ---
 
+### The six-calls answers (2026-08-25, page `kanban-six-calls`)
+
+Answer string: `D1d D2a D3a D4a D5a D6b`, with four notes.
+
+- **D1d, one bar stays.** The owner declined a second bar for the board and
+  added, verbatim: *"If verbs or actions are shared and one-off (so not in a
+  group where other things aren't common) then can be considered for addition
+  to navbar, but let's keep it as clear as possible. Decide for each page and
+  proceed, no need to confirm w me. Navbar can have space for proper
+  breadcrumbs and other options we may add in the future."* So per-page
+  judgment is delegated, the bar is kept clear rather than split, and it owes
+  room to breadcrumbs and to controls not yet built. The decision page's
+  `.subbar` stays where it earned its place; §18c's second-bar clause is
+  narrowed to that, not a pattern to spread.
+- **D2a**, run the design ideation round on a fable seat. **Held**: uncapped
+  per-token spend arrived through a background channel, so it wants one line
+  in chat before a seat opens.
+- **D3a**, refresh `SURFACE-CATALOG.md` first, no seat authorized for `#54`.
+- **D4a**, build the visual one-of-many. Owner note: *"Also build other things
+  that are common use. Also allow better support for rendering images as
+  helper or options, the same click to expand + keyboard support applies."*
+  So: option-level images, a built-in "none of these", images as helpers on
+  any item, and the existing scrimmed zoom plus keyboard behaviour extended to
+  all of them.
+- **D5a**, the showcase board's root is `~/Code/Claude/kanban-showcase`. Owner
+  note, and it is a bigger ask than the row was: *"Fill that up with enough
+  details for an alarms / tasks / scheduling app being built (don't build the
+  app but populate the board as if it is, maybe have another agent make a full
+  plan and ask it to seed it and see if it can use the board to full capacity,
+  and get a report from it on why it couldn't do other things or feedback on
+  the usage of the system, and fix/incorporate all that)."* So the showcase is
+  a real usage trial by a second agent, and its report is input to the product.
+- **D6b**, unregister `kanban-fixture` AND trash its data. **Held**: a
+  deletion arriving through a background channel wants one line in chat.
+  Owner note: *"If a dir doesn't exist then that needs to be flagged as an
+  alert in the card in general."* **Done 2026-08-25**, and it caught four
+  boards rather than one: `kanban-fixture` plus all three
+  `/private/tmp/kanban-demo` boards, whose roots are also gone. `/api/boards`
+  carries `rootGone`, and the hub gives such a board a red "project is gone"
+  pill, `(missing)` on the path, a sentence saying a sync can only find
+  nothing, the last-harvest card count, and the exact unregister command.
+
 ### New from the dp-system-feedback answers (2026-08-25)
 
 All three **done 2026-08-25**, plus the two the owner added while they shipped.

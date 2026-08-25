@@ -222,6 +222,15 @@ One contract, no exceptions:
   reaching the old `:5197` pages across origins; that server is retired and
   kanban serves them itself, so the gate had dissolved before anyone looked.
 
+- **A path that is gone is flagged where the thing lives.** Owner, 2026-08-25:
+  *"If a dir doesn't exist then that needs to be flagged as an alert in the
+  card in general."* A board whose project directory has been deleted keeps
+  serving its last harvest and looks perfectly healthy, which is how four
+  boards sat registered against dead directories without anyone noticing. The
+  alert says which of the three it is: gone, unreadable, or merely stale. It
+  names what the rows below actually are (a last harvest, not a current one)
+  and gives the command that retires it.
+
 - **Distinguish delivered, nobody-home and broken.** Three outcomes, three
   sentences. Never collapse a failure into a silence.
 - **Loud truncation.** A list showing part of itself says how much it hid.
@@ -485,10 +494,18 @@ status slot without a strip. `#nbStatus` takes what you are looking AT
 pages wear lives in `shared.css`, never in the page that happened to need it
 first.
 
-**A second bar is earned by verb count, not by convenience.** Where a page
-genuinely has many verbs, a second per-page bar beneath the main one beats
-cramming the main one, and it is a deliberate choice with the owner rather
-than a default. Buttons carry icons with `data-tip` tooltips (§16 bans native
+**A second bar is earned by verb count, and the owner narrowed it on
+2026-08-25.** Asked whether the board should get one, they said no: *"let's
+keep it as clear as possible. Decide for each page and proceed, no need to
+confirm w me. Navbar can have space for proper breadcrumbs and other options
+we may add in the future."* So one bar is the default and a second is the
+exception the decision page earned by running 51px over with its tab labels
+already shed. The rest of a crowded bar is fixed by taking things OUT or
+quieting them, not by splitting it, and the bar owes room to breadcrumbs and
+to controls that do not exist yet. Per-page judgment is delegated; do not ask
+again. Where a page genuinely has many verbs, a second per-page bar beneath
+the main one beats cramming the main one, and it is a deliberate choice
+rather than a default. Buttons carry icons with `data-tip` tooltips (§16 bans native
 `title=`), and only the verb that needs emphasis gets it: a bar where every
 control is accented has no emphasis at all.
 

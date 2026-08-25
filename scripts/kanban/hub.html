@@ -37,6 +37,9 @@
   .pill{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 9px;border-radius:20px;
         font:500 11.5px/1 var(--sans);border:1px solid var(--border);color:var(--text-2);white-space:nowrap}
   .pill.blk{color:var(--amber);border-color:var(--amber-br);background:var(--amber-bg);font-weight:600}
+  /* a project that is gone is a harder fact than a stale one: red, not amber */
+  .pill.warn{color:var(--red);border-color:var(--red-br);background:var(--red-bg);font-weight:600}
+  .board.gone-root{border-color:var(--red-br)}
   .pill.unread{color:var(--text-2);border-color:var(--border);background:var(--well)}
   .root{color:var(--text-3);font:11.5px/1.5 var(--mono);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .counts{color:var(--text-2);font-size:12.5px;margin-top:7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -171,6 +174,17 @@ function boardEl(b, quiet) {
       `<div class="counts"><span class="stale">This board's data will not parse. Nothing else is affected. Fix or trash <code>~/.claude/kanban/boards/${b.slug}</code>.</span></div>`;
     a.querySelector(".name").textContent = b.name;
     const re = a.querySelector(".root"); re.dataset.tip = b.root; re.textContent = b.root;
+    return a;
+  }
+  // Owner, 2026-08-25: a directory that is gone gets flagged. The board keeps
+  // serving its last harvest and looks healthy otherwise, which is how a board
+  // stayed registered against a deleted scratchpad without anyone noticing.
+  if (b.rootGone) {
+    a.className = "board gone-root";
+    a.innerHTML = `<div class="row1"><span class="name"></span><span class="badges"><span class="pill warn">project is gone</span></span></div><div class="root"></div>` +
+      `<div class="counts"><span class="stale">This board's project directory no longer exists, so a sync can only ever find nothing. The ${open} card${open === 1 ? "" : "s"} below are the last harvest. Re-point it or retire it: <code>kanban.sh unregister ${b.slug}</code>.</span></div>`;
+    a.querySelector(".name").textContent = b.name;
+    const re = a.querySelector(".root"); re.dataset.tip = b.root + " (missing)"; re.textContent = b.root;
     return a;
   }
   if (quiet) {

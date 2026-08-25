@@ -370,6 +370,15 @@ function docSegment(reqPath: string, line: number): Response {
 
 // embed=1 is the in-drawer modal, which already has the board's chrome around
 // it: a second theme toggle inside the document reads as a document action.
+// Owner, 2026-08-25: "If a dir doesn't exist then that needs to be flagged as an
+// alert in the card in general." A board whose project has been deleted or moved
+// keeps serving its last harvest and looks healthy, which is how kanban-fixture
+// sat registered against a dead scratchpad without anyone noticing.
+function rootMissing(root?: string | null): boolean {
+  if (!root) return false;
+  try { return !fs.existsSync(root.replace(/^~(?=$|\/)/, os.homedir())); } catch { return false; }
+}
+
 function docResponse(reqPath: string, line = 0, embed = false,
                      back: { slug: string; card: string } = { slug: "", card: "" }): Response {
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) =>
@@ -671,10 +680,12 @@ const server = Bun.serve({
             }, { graded: 0, needsHuman: 0 });
             return { slug, name: b.name, root: b.root, counts, unread, reviewMe, verify, ackTs,
               live: livePeers(b.root), syncedAt: board.syncedAt,
+              rootGone: rootMissing(b.root),
               stack: b.stack ?? [], branch: b.branch ?? null };
             } catch {
               // unreadable board data: say so in place rather than 500 the fleet
               return { slug, name: b.name, root: b.root, broken: true,
+                rootGone: rootMissing(b.root),
                 counts: Object.fromEntries(LANES.map((l) => [l, 0])),
                 unread: 0, reviewMe: 0, verify: { graded: 0, needsHuman: 0 },
                 ackTs: 0, live: [], syncedAt: null };
