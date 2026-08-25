@@ -263,10 +263,35 @@
   .nstatus::-webkit-scrollbar{display:none}
   .nstatus[data-of="x"]{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%);
                         mask-image:linear-gradient(to right,#000 calc(100% - 16px),transparent 100%)}
+  /* What the strip HOLDS. These three lived in board.html, so the board was the
+     only page that could fill its own status zone; the doc viewer had to draw a
+     second strip of its own below the bar to say the same kind of thing. Owner,
+     2026-08-25: one bar for every page, small items in a common slot with
+     unified styling. A primitive two pages wear belongs here. */
+  /* a stat is a filter that happens to show a number */
+  .stat-chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:var(--r-control);
+             border:1px solid transparent;background:none;color:var(--text-2);font:var(--fs-lead)/1 var(--sans);cursor:pointer}
+  .stat-chip:hover{background:var(--card);border-color:var(--border);color:var(--text)}
+  .stat-chip.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+  .stat-chip .sg{flex:none;display:grid;place-items:center;color:var(--text-3)}
+  .stat-chip:hover .sg,.stat-chip.on .sg{color:currentColor}
+  .stat-chip.warn{color:var(--amber)}
+  .stat-chip.warn .sg{color:var(--amber)}
+  .stat-chip.warn:hover{background:var(--amber-bg);border-color:var(--amber-br)}
+  .stat-chip.warn.on{background:var(--amber-bg);border-color:var(--amber-br);color:var(--amber)}
+  .stat-chip.mute{color:var(--text-3);cursor:default}
+  .stat-chip.mute:hover{background:none;border-color:transparent;color:var(--text-3)}
+  .stat-chip.stale{color:var(--amber)}
+  .sband{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;flex:none}
+  /* the path to the thing you are looking at: monospace, ellipsised, first to
+     shed under pressure because the crumb beside it already names the thing */
+  .bpath{color:var(--text-3);font:var(--fs-small)/1.4 var(--mono);overflow:hidden;
+         text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
   /* One line, always. The band wraps by default and a wrapped band makes the
      bar taller, which is the height this change exists to give back. */
   .nstatus .sband{flex-wrap:nowrap;gap:6px;min-width:0}
   .nstatus .stat-chip{flex:none;white-space:nowrap}
+  .nstatus .bpath{flex:0 1 auto}
   .nstatus:empty{display:none}
   /* It does NOT shed first. Hiding it when the bar is tight meant hiding it
      almost always, which is worse than the band it replaced: the point of
@@ -277,6 +302,10 @@
   .navbar[data-tight] .nstatus .stat-chip.mute{display:none}
   .navbar[data-tight] .nstatus .stat-chip{padding:0 6px;gap:4px}
   .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
+  /* A page with no find box was still paying for one: the zone held its
+     1 1 240px and crushed the status strip beside it to "/Users…" while ~500px
+     of it sat empty. An empty zone gives its space back. */
+  .nzfind:empty{flex:0 0 0;min-width:0;margin-left:0}
   /* Same treatment as .npage below, for the same reason and one zone over: this
      one shrank correctly and then painted its overflow ON TOP of the tabs, so
      "save as view" rendered half-under the Boards tab. A zone draws inside
@@ -344,7 +373,10 @@
      hard-clips the board name with no ellipsis. Shrinking here lets
      .ncrumb-now do the ellipsising it already declares. */
   .ncrumb{flex:0 1 auto;display:flex;align-items:center;gap:6px;font:400 var(--fs-body)/1.3 var(--sans);color:var(--text-3)}
-  .ncrumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);padding:2px 5px;margin-left:-5px}
+  /* "All boards" broke to two lines and made the bar two rows tall on any page
+     whose identity zone was tight. The kind's name is two words; it is one label. */
+  .ncrumb a{color:var(--text-3);text-decoration:none;border-radius:var(--r-control);
+            padding:2px 5px;margin-left:-5px;white-space:nowrap;flex:none}
   .ncrumb a:hover{color:var(--text);background:var(--card)}
   /* the instance you are looking AT is the loudest word in the bar; the kind
      above it stays one step quieter, which is the whole highlighting rule */

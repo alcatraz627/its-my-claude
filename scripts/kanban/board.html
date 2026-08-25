@@ -61,7 +61,7 @@
   /* the floor: whatever else the bar wants, the board's own name shows at
      least ~8 characters before anything reads "a…" */
   .btitle .bnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:8ch}
-  .bpath{color:var(--text-3);font:var(--fs-small)/1.4 var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+  /* .bpath is in shared.css now — the doc viewer names its file the same way */
   /* Charter §6: group, then hold. Four groups, each a holder, so the row parses
      as find / pick / act / view instead of eight peers in a line. The gap
      BETWEEN groups is larger than the gap inside one, which is what makes the
@@ -123,25 +123,9 @@
   .summary b{color:var(--text);font-weight:600}
   .summary .dotsep{width:3px;height:3px;border-radius:50%;background:var(--border-2);flex:none}
   .summary .blocked{color:var(--amber);font-weight:500}
-  /* a stat is a filter that happens to show a number */
-  .stat-chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:var(--r-control);
-             border:1px solid transparent;background:none;color:var(--text-2);font:var(--fs-lead)/1 var(--sans);cursor:pointer}
-  .stat-chip:hover{background:var(--card);border-color:var(--border);color:var(--text)}
-  .stat-chip.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
-  .stat-chip .sg{flex:none;display:grid;place-items:center;color:var(--text-3)}
-  .stat-chip:hover .sg,.stat-chip.on .sg{color:currentColor}
-  .stat-chip.warn{color:var(--amber)}
-  .stat-chip.warn .sg{color:var(--amber)}
-  .stat-chip.warn:hover{background:var(--amber-bg);border-color:var(--amber-br)}
-  .stat-chip.warn.on{background:var(--amber-bg);border-color:var(--amber-br);color:var(--amber)}
-  .stat-chip.mute{color:var(--text-3);cursor:default}
-  .stat-chip.mute:hover{background:none;border-color:transparent;color:var(--text-3)}
-  .stat-chip.stale{color:var(--amber)}
-  /* Both live INSIDE the navbar's one-line status strip now. The wrap +
-     width:100% here belonged to the retired standalone band, and inside the
-     bar they stacked the delta into a third and fourth line: the bar grew to
-     170px on any board with news. One line each; the strip slides. */
-  .sband{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;flex:none}
+  /* .stat-chip, .sband and .bpath moved to shared.css (2026-08-25): the doc
+     viewer wears the same status strip, and a primitive two pages use is not
+     the board's to own. .sdelta stays: only a board has a delta. */
   .sdelta{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;flex:none;white-space:nowrap}
   .sdelta .dlabel{font-size:var(--fs-body);color:var(--text-3);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
   /* under pressure the delta's words go first; its chips are the news */

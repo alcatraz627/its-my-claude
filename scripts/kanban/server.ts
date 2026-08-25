@@ -337,6 +337,8 @@ or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</co
     );
   }
   const real = r.real;
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] ?? c));
   const body = renderMd(fs.readFileSync(real, "utf8"));
   return new Response(
     `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>${path.basename(real)}</title>
@@ -344,26 +346,85 @@ or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</co
 <style>
 /* the document reads on the same tokens as everything else; it used to carry a
    fourth private palette that agreed with the others by hand */
-body{background:var(--canvas);color:var(--text);font:15px/1.68 var(--sans);margin:0}
-.docwrap{max-width:860px;margin:26px auto;padding:0 20px}
-code,pre{background:var(--well);border:1px solid var(--border);border-radius:4px;padding:1px 4px}
-pre{padding:10px;overflow-x:auto}h1,h2,h3{line-height:1.3}a{color:var(--blue)}hr{border:0;border-top:1px solid var(--border)}
-table{border-collapse:collapse;margin:10px 0;display:block;overflow-x:auto;max-width:100%}
-th,td{border:1px solid var(--border);padding:5px 10px;text-align:left;vertical-align:top}th{background:var(--well)}
+body{background:var(--canvas);color:var(--text);font:15px/1.7 var(--sans);margin:0}
+/* Prose wants a measure, not the window. */
+.docwrap{width:min(78ch,calc(100% - 44px));margin:30px auto 96px}
+.docwrap > :first-child{margin-top:0}
+
+/* More room above a heading than below it, so a section reads as attached to
+   its own title rather than floating between two. */
+h1,h2,h3,h4,h5,h6{line-height:1.25;font-weight:650;color:var(--text);
+                  margin:0 0 .5em;letter-spacing:-.01em}
+h1{font-size:1.85em;margin-top:1.6em;letter-spacing:-.02em}
+h2{font-size:1.38em;margin-top:2.1em;padding-bottom:.34em;border-bottom:1px solid var(--border)}
+h3{font-size:1.13em;margin-top:1.7em}
+h4{font-size:1em;margin-top:1.4em;color:var(--text-2)}
+h5,h6{font-size:.92em;margin-top:1.3em;color:var(--text-3);
+      text-transform:uppercase;letter-spacing:.06em}
+
+p{margin:0 0 1.05em}
+strong{font-weight:640;color:var(--text)}
+em{color:var(--text-2)}
+a{color:var(--blue);text-decoration:underline;text-underline-offset:2px;
+  text-decoration-color:var(--blue-br)}
+a:hover{text-decoration-color:var(--blue)}
+
+/* The UA's 40px indent reads as a gutter at this body size, and gapless items
+   read as one paragraph. */
+ul,ol{margin:0 0 1.05em;padding-left:1.5em}
+li{margin:.3em 0}
+li > ul,li > ol{margin:.35em 0 .1em}
+li::marker{color:var(--text-3)}
+ul ul,ol ol,ul ol,ol ul{font-size:.98em}
+
+blockquote{margin:1.1em 0;padding:.15em 0 .15em 1.05em;color:var(--text-2);
+           border-left:2px solid var(--border-2)}
+blockquote > :last-child{margin-bottom:0}
+
+code{background:var(--well);border:1px solid var(--border);border-radius:4px;
+     padding:.08em .38em;font:.87em/1.4 var(--mono);color:var(--text-2);
+     overflow-wrap:break-word}
+pre{background:var(--well);border:1px solid var(--border);border-radius:var(--r-panel);
+    padding:12px 14px;overflow-x:auto;margin:0 0 1.15em;line-height:1.55}
+pre code{background:none;border:0;padding:0;font-size:.86em;color:var(--text)}
+
+hr{border:0;border-top:1px solid var(--border);margin:2.2em 0}
+
+/* A table is its own scroller so a wide one never widens the page. */
+table{border-collapse:collapse;margin:0 0 1.2em;display:block;overflow-x:auto;
+      max-width:100%;font-size:.94em}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--well);font-weight:620;color:var(--text);white-space:nowrap}
+tbody tr:nth-child(even) td{background:rgb(255 255 255/.014)}
+
+img{max-width:100%;height:auto;border-radius:var(--r-panel)}
+
 .hit{background:var(--well);outline:2px dotted var(--blue);outline-offset:6px;border-radius:3px}
-.docmeta{display:flex;align-items:center;gap:9px;font:11.5px/1.5 var(--mono);color:var(--text-3);
-         padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--well);margin-bottom:20px}
-.docmeta .dsp{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.docmeta .ro{flex:none}
 *{scrollbar-width:thin;scrollbar-color:var(--border) transparent}</style>
 ${embed ? "" : `<header id="phead"></header>`}
-${embed ? body : `<div class="docwrap"><div class="docmeta">
-  ${back.slug ? `<a href="/b/${back.slug}${back.card ? `?card=${back.card}` : ""}" data-tip="Back to the card that linked this">&larr; back to the board</a>` : ""}
-  <span class="dsp">${real}</span><span class="ro">read-only mirror</span></div>${body}</div>`}
-${embed ? "" : `<script src="/shared.js"></script>`}
+${embed ? body : `<div class="docwrap">${body}</div>`}
+${embed ? "" : `<script src="/kinds.js"></script><script src="/shared.js"></script>`}
 <script>${embed ? `const applyTheme=t=>{document.documentElement.dataset.theme=t;localStorage.setItem("kanban-theme",t)};
-applyTheme(localStorage.getItem("kanban-theme")||"dark");` : `pageHead({ mount: "#phead", active: "boards",
-  title: ${JSON.stringify(path.basename(real))}, sub: "a document the board reads, shown read-only" });`}
+applyTheme(localStorage.getItem("kanban-theme")||"dark");` : `
+/* The same bar every other page wears. It called pageHead() until 2026-08-25,
+   which #68 had renamed to navbar(), so this page threw and rendered bare. */
+navbar({ mount: "#phead", active: "boards",
+  identity: crumbFor("boards", ${JSON.stringify(path.basename(real))}) });
+/* The doc's own small items go in the bar's status slot rather than a second
+   strip below it (owner ruling, 2026-08-25). */
+{
+  const band = document.createElement("span");
+  band.className = "sband";
+  band.innerHTML = ${JSON.stringify(
+    (back.slug
+      ? `<a class="stat-chip" href="/b/${esc(encodeURIComponent(back.slug))}${back.card ? `?card=${esc(encodeURIComponent(back.card))}` : ""}"` +
+        ` data-tip="Back to the card that linked this">&larr; the board</a>`
+      : "") +
+    `<span class="bpath" data-tip="The file this mirrors">${esc(real)}</span>` +
+    `<span class="stat-chip mute" data-tip="The board mirrors your docs; edit the file itself">read-only</span>`,
+  )};
+  document.getElementById("nbStatus")?.append(...band.childNodes);
+}`}
 const want=${line || 0};
 if(want){const els=[...document.querySelectorAll("[id^=L]")].filter(e=>/^L\\d+$/.test(e.id));
  const hit=els.filter(e=>+e.id.slice(1)<=want).pop()||els[0];
