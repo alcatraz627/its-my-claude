@@ -92,12 +92,22 @@ the old sentence.
 **Benefit: prevents building the wrong thing. Churn: one paragraph.** Whoever
 builds `#14` reads one of the two first and there is a coin flip in it.
 
-### P0.5 · `kanban.sh ask` for the human · G1 · the cheap slice of §4.11
-The ask is deliberately the cheapest write in the system and still costs a page
-visit. The ideation's global-hotkey capture is out-of-app and out of scope; a
-CLI verb the owner can type from any terminal is one verb.
-**Benefit real, churn one verb.** Right now a text file beats the app for
-capture, which means thoughts leak out of the system that exists to hold them.
+### P0.5 · CLI capture for the human · G1 · §4.11 · **ALREADY BUILT, no work**
+The ideation says the ask "still costs a page visit" and proposes a CLI verb
+for the human. **That verb exists.** `kanban.sh item add "…"` writes an ask
+from any terminal, scoped to the board you are standing in, and it appears in
+Your asks immediately. Verified by running it.
+
+The ideation was wrong here, and the reason is instructive: it read the CLI's
+help text, where `item add` is described as *"write an ask yourself"*, phrased
+for an agent writing one. The capability is the owner's too and the help does
+not say so. So the real gap is one line of help text, not a feature.
+
+An `ask` alias is deliberately NOT added: the owner ruled on 2026-08-24 that
+the machine vocabulary is `items` and the human label is "Your asks", and a
+second verb for one action is the §13 anti-pattern the ruling was avoiding.
+What is left of §4.11 is the global hotkey, which is out-of-app and stays
+pruned as X.4.
 
 ---
 

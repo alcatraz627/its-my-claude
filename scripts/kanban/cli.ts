@@ -1158,7 +1158,9 @@ switch (verb) {
                            from the board or the hub and never classify them;
                            sorting is your job. --all also shows sorted ones.
                            [--json] for the machine-readable form
-  item add "<text>"        write an ask yourself, scoped to this board;
+  item add "<text>"        write an ask, yourself or on the owner's behalf.
+                             The owner can run this too, from any terminal, which is
+                             the cheapest way to capture a thought; scoped to this board,
                            [--board <slug>] another board, [--global] every one
   item edit <id> "<text>"  replace an ask's text
   item rm <id>             delete an ask (and its pin)
