@@ -13,6 +13,7 @@ import {
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
   loadPlan, savePlan, findTag, tagKey, TAG_PRESETS, presetFor, askState,
+  recordChange, loadChanges, sinceMsOf, milestonesOf, withBoardLock,
   TAG_HUES, tagColourKey, loadTagColours, saveTagColours, loadPlans,
   VIEW_LIMITS, isKnownClause, isOperator, matchView, type Plan, type TagKind,
   type Item, type Pin, type Draft,
@@ -74,8 +75,16 @@ function dpPending(): Set<string> {
 // measured 2026-08-22); last_seen is. Asked per alias rather than per cwd,
 // because the question here is "can this answer still reach the session that
 // raised it", not "who works on this board".
-function seenAgoByAlias(): Map<string, number> {
-  const out = new Map<string, number>();
+// Returns the readings AND whether the lookup itself worked, because those are
+// different facts and the caller needs both. It used to return only the map, so
+// four unrelated situations produced an identical empty result: no broker
+// installed, the sqlite file missing, the open or query throwing, and the alias
+// genuinely not being there. Only the last one means "this session is not
+// around"; the other three mean "I could not find out". SYSTEM.md law 1 — an
+// unloadable list is not an empty one.
+function seenAgoByAlias(): Map<string, number> & { ok?: boolean } {
+  const out: Map<string, number> & { ok?: boolean } = new Map<string, number>();
+  out.ok = false;
   if (ipcMissing) return out;
   let db: any = null;
   try {
@@ -90,7 +99,11 @@ function seenAgoByAlias(): Map<string, number> {
       .all() as { alias: string; seen: number }[]) {
       if (r.alias && r.seen) out.set(r.alias, Math.max(0, Math.round(now - r.seen)));
     }
-  } catch { /* no broker is not an error */ }
+    // Set only after the query returns: reaching here means the registry was
+    // read, so an alias missing from the map is genuinely absent rather than
+    // unlooked-up.
+    out.ok = true;
+  } catch { /* no broker is not an error, but it IS not an answer either */ }
   finally { try { db?.close(); } catch { /* nothing to do */ } }
   return out;
 }
@@ -104,7 +117,22 @@ const HOT_S = 1800;
 function reachOf(session: string | null | undefined, seen: Map<string, number>): any {
   if (!session) return { state: "unknown", seenAgo: null };
   const ago = seen.get(session);
-  if (ago == null) return { state: "cold", seenAgo: null };
+  // "cold" is a claim about the session ("it has gone away, so an answer can
+  // wait"). Making that claim on the strength of a lookup that failed is the
+  // same overclaim as saying "live", pointed the other way, and this surface was
+  // guarded against only one direction. When the registry could not be read, the
+  // honest answer is the unknown state that already exists.
+  if (ago == null) return (seen as any).ok
+    // The registry was read and this alias is not in it. That is not "gone
+    // cold": cold is a claim that a session was once reachable and has since
+    // drifted out, and it carries "answering costs it a re-brief". An alias
+    // that never registered was never warm, and there may be no session behind
+    // it at all. Different fact, different word.
+    ? { state: "absent", seenAgo: null }
+    // The registry could not be read at all — no broker, missing sqlite file,
+    // or a throwing open/query. Claiming anything about the session here is the
+    // same overclaim as asserting "live", pointed the other way.
+    : { state: "unknown", seenAgo: null };
   return { state: ago <= HOT_S ? "hot" : "cold", seenAgo: ago };
 }
 
@@ -132,8 +160,14 @@ function boardDecisions(slug: string, plan: any): any[] {
   } catch { /* no registry is not an error */ }
   // recorded decisions: no page, the agent wrote them down where the work is
   for (const d of (plan?.decisions ?? [])) {
+    // seen used to be hardcoded true here, which is the whole reason the red
+    // "unseen" state had never once rendered: a page-backed decision is unseen
+    // until the owner opens its page and writes .seen.json, and a recorded one
+    // claimed to have been seen the instant an agent wrote it. Now it is stamped
+    // when the owner opens the row on the board (op: "seen"), so a decision an
+    // agent raised while they were away reads as unseen until they look at it.
     out.push({ kind: "recorded", id: d.id, title: d.question, href: null,
-      card: d.card ?? null, pending: !d.answer, seen: true,
+      card: d.card ?? null, pending: !d.answer, seen: !!d.seenAt,
       answer: d.answer ?? null, answeredAt: d.answeredAt ?? null, at: d.at ?? null,
       session: d.by ?? null, reach: reachOf(d.by, seen), deferUntil: d.deferUntil ?? null,
       why: d.why ?? null, notes: d.notes ?? [] });
@@ -172,167 +206,7 @@ function enqueueItem(fn: () => unknown): Promise<unknown> {
   return run;
 }
 
-// Hand-rolled markdown→html for the doc viewer — zero dependencies, not full CommonMark.
-function renderMd(input: string): string {
-  // \r is a line terminator in JS, so `.` never matches it: without this every
-  // heading, list and table in a CRLF file falls through to a paragraph.
-  const src = input.replace(/\r\n?/g, "\n");
-  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  // GFM, kept incremental on the owner's own fence ("I don't want to overcomplicate
-  // just incrementally improv"): strikethrough, emphasis, bare-URL autolinks.
-  //
-  // Code spans are lifted OUT first and put back LAST. Replacing them in place is
-  // not enough, and that is the whole reason for the detour: every later pass
-  // still walks the produced string, so `~~x~~` inside backticks came back struck
-  // through. Markup inside code must stay literal, or code cannot quote markup.
-  const inline = (s: string) => {
-    const spans: string[] = [];
-    let out = s.replace(/`([^`]+)`/g, (_m, code) => `\u0000${spans.push(code) - 1}\u0000`);
-    out = out
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/~~([^~]+)~~/g, "<del>$1</del>")
-      .replace(/(^|[\s(])\*([^*\s][^*]*)\*(?=[\s).,;:!?]|$)/g, "$1<em>$2</em>")
-      // Images BEFORE links, because ![alt](src) contains [alt](src) and the
-      // link rule would eat the inside and leave a stray "!".
-      //
-      // A relative path only means something relative to a document, and a note
-      // has no document, so it says so inline rather than emitting a broken
-      // <img>. An empty frame reads as "the image is missing"; this reads as
-      // "there is nowhere to resolve this from", which is the true one.
-      .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) =>
-        /^(https?:)?\/\//.test(src) || src.startsWith("/")
-          ? `<img src="${src}" alt="${alt}" loading="lazy" style="max-width:100%;height:auto;border-radius:8px">`
-          : `<span class="cnote">image <code>${src}</code> is relative, and this surface has no document to resolve it from</span>`)
-      .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, `<a href="$2" rel="noopener">$1</a>`)
-      .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, `$1<a href="$2" rel="noopener">$2</a>`);
-    return out.replace(/\u0000(\d+)\u0000/g, (_m, n) => `<code>${spans[Number(n)]}</code>`);
-  };
-  const out: string[] = [];
-  // Blocks carry the source line they started on, so /doc?line=N can scroll to
-  // the place a card was harvested from. The fence split eats one line per ```.
-  let srcLine = 1;
-  const anchor = (n: number) => ` id="L${n}"`;
-  // split on line-initial fences only: a ``` inside inline code is not a fence,
-  // and treating it as one swallowed the rest of the document into a <pre>
-  src.replace(/<!--[\s\S]*?-->/g, "").split(/^[ \t]*```[^\n]*$/m).forEach((block, i) => {
-    const blockStart = srcLine;
-    srcLine += block.split("\n").length - 1;
-    if (i % 2 === 1) { out.push(`<pre${anchor(blockStart)}><code>${esc(block.replace(/^[a-z]*\n/, ""))}</code></pre>`); return; }
-    const lines = esc(block).split("\n");
-    let para: string[] = [];
-    let paraLine = blockStart;
-    let listLine = blockStart;
-    let quoteLine = blockStart;
-    // Lists nest, so this is a stack of open levels rather than one list. A flat
-    // model silently rendered three levels of nesting as one run of siblings.
-    type LItem = { text: string; kids: string };
-    type Lvl = { tag: "ul" | "ol"; items: LItem[]; indent: number };
-    let stack: Lvl[] = [];
-    let table: string[][] | null = null;
-    const flushPara = () => { if (para.length) { out.push(`<p${anchor(paraLine)}>${inline(para.join(" "))}</p>`); para = []; } };
-    const renderLvl = (lv: Lvl, outer: boolean) =>
-      `<${lv.tag}${outer ? anchor(listLine) : ""}>` +
-      lv.items.map((it) => `<li>${inline(it.text)}${it.kids}</li>`).join("") +
-      `</${lv.tag}>`;
-    // close every level deeper than `keep`, folding each into its parent's last item
-    const closeTo = (keep: number) => {
-      while (stack.length > keep) {
-        const lv = stack.pop()!;
-        const html = renderLvl(lv, stack.length === 0);
-        const p = stack[stack.length - 1];
-        if (p && p.items.length) p.items[p.items.length - 1].kids += html;
-        else out.push(html);
-      }
-    };
-    const flushList = () => closeTo(0);
-    const flushTable = () => {
-      if (!table) return;
-      const [head, ...rows] = table;
-      out.push(
-        "<table><thead><tr>" + head.map((c) => `<th>${inline(c)}</th>`).join("") + "</tr></thead><tbody>" +
-        rows.map((r) => "<tr>" + r.map((c) => `<td>${inline(c)}</td>`).join("") + "</tr>").join("") + "</tbody></table>",
-      );
-      table = null;
-    };
-    // Quotes were passing through as literal "> " text, and the docs carry 224
-    // lines of them. Prose only, deliberately: not one quote in this repo holds
-    // a list or a heading, so paragraphs split on an empty ">" is the grammar.
-    let quote: string[] | null = null;
-    const flushQuote = () => {
-      if (!quote) return;
-      const paras: string[][] = [[]];
-      for (const q of quote) { if (!q.trim()) paras.push([]); else paras[paras.length - 1].push(q); }
-      out.push(`<blockquote${anchor(quoteLine)}>` +
-        paras.filter((p) => p.length).map((p) => `<p>${inline(p.join(" "))}</p>`).join("") +
-        "</blockquote>");
-      quote = null;
-    };
-    const flushAll = () => { flushPara(); flushList(); flushTable(); flushQuote(); };
-    for (const [idx, l] of lines.entries()) {
-      const here = blockStart + idx;
-      if (!para.length) paraLine = here;
-      if (!stack.length) listLine = here;
-      const h = l.match(/^(#{1,6}) (.*)$/);
-      if (h) { flushAll(); out.push(`<h${h[1].length}${anchor(here)}>${inline(h[2])}</h${h[1].length}>`); continue; }
-      // &gt;, not >: esc() runs on the whole block before this loop sees a line
-      const bq = l.match(/^&gt;\s?(.*)$/);
-      if (bq) {
-        flushPara(); flushList(); flushTable();
-        if (!quote) { quote = []; quoteLine = here; }
-        quote.push(bq[1]);
-        continue;
-      }
-      flushQuote();
-      if (/^\s*\|.*\|\s*$/.test(l)) {
-        flushPara(); flushList();
-        const cells = l.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
-        if (cells.every((c) => /^:?-{2,}:?$/.test(c))) continue; // separator row
-        (table ??= []).push(cells);
-        continue;
-      }
-      flushTable();
-      const ol = l.match(/^\s*\d+\.\s+(.*)$/);
-      const ul = l.match(/^\s*[-*]\s+(.*)$/);
-      // A checkbox is what the harvester reads to mint a card, so a doc full of
-      // them rendering as literal "[ ]" was the one gap worth closing here.
-      const box = ul && ul[1].match(/^\[([ xX])\]\s+(.*)$/);
-      if (ol || ul) {
-        flushPara();
-        const tag: "ul" | "ol" = ol ? "ol" : "ul";
-        // depth is the leading whitespace; a tab counts as four columns
-        const indent = (l.match(/^[ \t]*/)?.[0] ?? "").replace(/\t/g, "    ").length;
-        if (!stack.length) { listLine = here; stack.push({ tag, items: [], indent }); }
-        else {
-          while (stack.length > 1 && indent < stack[stack.length - 1].indent) closeTo(stack.length - 1);
-          const top = stack[stack.length - 1];
-          if (indent > top.indent) stack.push({ tag, items: [], indent });
-          else if (top.tag !== tag) { closeTo(stack.length - 1); stack.push({ tag, items: [], indent }); }
-        }
-        stack[stack.length - 1].items.push({ kids: "", text: box
-          ? `<span class="tbox${box[1] === " " ? "" : " on"}">${box[1] === " " ? "" : "\u2713"}</span>${inline(box[2])}`
-          : (ol ?? ul)![1] });
-        continue;
-      }
-      if (/^---+$/.test(l.trim())) { flushAll(); out.push("<hr>"); continue; }
-      if (!l.trim()) { flushAll(); continue; }
-      // A hard-wrapped list item continues on the following line; markdown calls
-      // this a lazy continuation. Without it any wrapped bullet ENDED its list and
-      // the rest of the sentence became a paragraph outside it, so a hard-wrapped
-      // ordered list rendered as a run of one-item lists each numbered "1." with
-      // its second half adrift. Every doc in this repo is wrapped at ~80 columns,
-      // so this was the common case rather than an edge one.
-      if (stack.length && stack[stack.length - 1].items.length) {
-        const its = stack[stack.length - 1].items;
-        its[its.length - 1].text += " " + l.trim();
-        continue;
-      }
-      flushList();
-      para.push(l.trim());
-    }
-    flushAll();
-  });
-  return out.join("\n");
-}
+import { renderMd } from "./render-md.ts";
 
 // Which agent sessions are working in a board's project right now, from the
 // claude-ipc registry. A stale "live" is worse than no badge, so nothing caches.
@@ -436,11 +310,35 @@ function resolveDocPath(reqPath: string): { real: string } | { error: string; st
     path.join(os.homedir(), ".claude", "assets", "reports"),
     path.join(os.homedir(), ".claude", "scratchpad"),
   ];
+  // The checks below run in order and return on the first failure, which means
+  // the LAST one inherits every problem the earlier ones did not name. It used
+  // to be the extension test, so a request with no path at all — which resolves
+  // to the process CWD, itself inside a board root, and so passes both earlier
+  // gates — came back "doc viewer renders .md/.txt only". A confident, specific
+  // sentence about a file type, for a request that named no file. The two cases
+  // that were being swallowed now answer for themselves, first.
+  if (!reqPath.trim()) return { error: "no document asked for — /doc needs ?path=<file>", status: 400 };
   let real: string;
   try { real = fs.realpathSync(path.resolve(reqPath)); } catch { return { error: `no such file: ${reqPath}`, status: 404 }; }
   const allowed = roots.some((r) => { try { const rr = fs.realpathSync(r); return real === rr || real.startsWith(rr + path.sep); } catch { return false; } });
   if (!allowed) return { error: `path outside allowlisted roots (board projects + ~/.claude/assets/reports + ~/.claude/scratchpad)`, status: 403 };
-  if (!/\.(md|txt|markdown)$/i.test(real)) return { error: "doc viewer renders .md/.txt only", status: 415 };
+  // A directory was the only non-file case checked, and the check was about
+  // giving a good message. This one is about staying alive: every read below is
+  // synchronous, and a synchronous open() on a NAMED PIPE with no writer blocks
+  // forever. Bun runs one JS thread, so that is not a slow request — it is the
+  // whole server, every board, every endpoint, until someone notices and
+  // restarts it. Deleting the pipe afterwards does not help; the fd is already
+  // open. The validator did exactly this to the live instance on 2026-08-26.
+  //
+  // Any board root and ~/.claude/scratchpad are writable by any local agent, so
+  // a pipe, a socket or a device node can land in one deliberately or as a
+  // build artifact. realpathSync above already resolved any symlink without
+  // opening anything, so this stats the true target either way.
+  let st: fs.Stats;
+  try { st = fs.lstatSync(real); } catch { return { error: `no such file: ${reqPath}`, status: 404 }; }
+  if (st.isDirectory()) return { error: `that is a folder, not a document: ${real}`, status: 400 };
+  if (!st.isFile()) return { error: `that is not a regular file, so it cannot be read as a document`, status: 400 };
+  if (!/\.(md|txt|markdown)$/i.test(real)) return { error: `the doc viewer renders .md and .txt; this is ${path.extname(real) || "extensionless"}`, status: 415 };
   return { real };
 }
 
@@ -473,12 +371,24 @@ function docResponse(reqPath: string, line = 0, embed = false,
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] ?? c));
   const r = resolveDocPath(reqPath);
   if ("error" in r) {
-    if (r.status !== 404) return json({ error: r.error }, r.status);
-    // a human lands here from a stale card link; JSON is the wrong shape
+    // Every doc error is a page, not only the 404. A 403 and a 415 used to
+    // return bare JSON in a chrome-less document, so the two failures a person
+    // is most likely to reach by typing a URL were the two with no way out of
+    // them. An error page is still a page: it wears the bar (charter §18c) so a
+    // dead link is a place you can leave rather than a dead end (charter U4).
+    const said: Record<number, { head: string; hint: string }> = {
+      400: { head: "That is not a document",
+             hint: "The doc viewer takes one file. Open a card's source from the board, or pass <code>?path=</code> a markdown file." },
+      403: { head: "That file is outside the boards",
+             hint: "The viewer reads a board's own project, <code>~/.claude/assets/reports</code> and <code>~/.claude/scratchpad</code>. Anything else is off limits, deliberately." },
+      404: { head: "This document is gone",
+             hint: "The board is a mirror of your docs at sync time; this source file has since moved or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</code>" },
+      415: { head: "The viewer cannot render that file",
+             hint: "It renders <code>.md</code> and <code>.txt</code>. Source files open in your editor, not here." },
+    };
+    const say = said[r.status] ?? { head: "That document could not be opened", hint: "" };
     return new Response(
-      // An error page is still a page: it wears the bar, so a dead link is a
-      // place you can leave rather than a dead end (charter U4).
-      `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>doc not found</title>
+      `<!doctype html><meta charset="utf-8"><link rel="icon" href="/favicon.svg"><title>${esc(say.head.toLowerCase())}</title>
 <link rel="stylesheet" href="/shared.css">
 <style>body{background:var(--canvas);color:var(--text);font:15px/1.7 var(--sans);margin:0}
 .gone{width:min(60ch,calc(100% - 44px));margin:16vh auto}
@@ -487,15 +397,15 @@ function docResponse(reqPath: string, line = 0, embed = false,
 code{background:var(--well);border:1px solid var(--border);border-radius:4px;padding:.08em .38em;font:.87em var(--mono)}</style>
 <header id="phead"></header>
 <div class="gone">
-<h2>This document is gone</h2>
-<p><code>${esc(reqPath)}</code></p>
-<p>The board is a mirror of your docs at sync time; this source file has since moved
-or been deleted. Re-sync the board to drop stale cards: <code>kanban.sh sync</code></p>
+<h2>${esc(say.head)}</h2>
+<p><code>${esc(reqPath || "(no path given)")}</code></p>
+<p>${esc(r.error)}</p>
+${say.hint ? `<p>${say.hint}</p>` : ""}
 </div>
 <script src="/kinds.js"></script><script src="/shared.js"></script>
 <script>navbar({ mount: "#phead", active: "boards",
-  identity: crumbFor("boards", "document not found") });</script>`,
-      { status: 404, headers: { "content-type": "text/html; charset=utf-8" } },
+  identity: crumbFor("boards", ${JSON.stringify(say.head.toLowerCase())}) });</script>`,
+      { status: r.status, headers: { "content-type": "text/html; charset=utf-8" } },
     );
   }
   const real = r.real;
@@ -774,6 +684,41 @@ const server = Bun.serve({
             });
           }
         } catch (e: any) { if ((e?.code ?? "") !== "ENOENT") out.decisionsError = String(e?.message ?? e); }
+        // Recorded decisions — the ones an agent wrote down where the work is,
+        // with no page behind them. They were missing here entirely, so the
+        // `decide` CLI recorded into a store that only the board's own left
+        // panel could read: not the hub's Decisions view, and not the navbar
+        // count, which both read this endpoint. An agent could take a call to
+        // the owner and the owner's front door would never mention it.
+        //
+        // kinds.js promises the count and the list "can never disagree about
+        // what counts" because both go through one listOf. That holds only if
+        // this list is complete, so completeness is this endpoint's job.
+        try {
+          const seenLive = seenAgoByAlias();
+          for (const [slug, b] of Object.entries(registry().boards) as any) {
+            const dir = path.join(KROOT, "boards", slug);
+            let plan: any = null;
+            try { plan = loadPlan(dir); } catch { continue; }
+            for (const d of (plan?.decisions ?? [])) {
+              out.decisions.push({
+                kind: "recorded", slug, name: d.question,
+                // no page to open; the row links to the board that holds it
+                href: `/b/${slug}`,
+                board: slug, boardName: b.name ?? slug, card: d.card ?? null,
+                session: d.by ?? null, reach: reachOf(d.by, seenLive),
+                why: d.why ?? null, items: 1,
+                // Same rule /api/owed uses at :561 — a deferred decision is not
+                // pending until its horizon passes. Inlined rather than a shared
+                // helper for one more caller; two callsites is where one earns.
+                pending: !d.answer && !(d.deferUntil && Date.parse(d.deferUntil) > Date.now()),
+                seen: !!d.seenAt,
+                at: d.at ?? null,
+              });
+            }
+          }
+        } catch (e: any) { out.recordedError = String(e?.message ?? e); }
+
         // pending first: a page waiting on the owner outranks one they answered
         out.decisions.sort((a: any, b: any) =>
           Number(b.pending) - Number(a.pending) || String(b.at ?? "").localeCompare(String(a.at ?? "")));
@@ -859,7 +804,13 @@ const server = Bun.serve({
           goals: Object.fromEntries(Object.entries(rawPlan.goals ?? {}).filter(([cid]) => alive.has(cid))),
           seq: Object.fromEntries(Object.entries(rawPlan.seq ?? {}).filter(([cid]) => alive.has(cid))
             .map(([cid, ids]) => [cid, ids.filter((x) => alive.has(x))])) };
+        // rootGone was computed for the hub's list and nowhere else, so a board
+        // whose project directory has been deleted showed a red pill on the hub
+        // and, once opened, said only "synced 32d ago" — which reads as a stale
+        // mirror rather than a project that no longer exists. Same fact, and the
+        // page a person actually works in was the one that did not carry it.
         return json({ slug, name: reg.name, root: reg.root, board: bd,
+          rootGone: rootMissing(reg.root),
           notes: loadNotes(dir), ackTs: loadAck(dir).lastAckTs, live: livePeers(reg.root),
           selection: loadSelection(dir), plan, presets: TAG_PRESETS,
           tagColours: loadTagColours(),
@@ -946,6 +897,50 @@ const server = Bun.serve({
         const src = fs.readFileSync(f, "utf8");
         return json({ html: renderMd(src), bytes: src.length,
                       mtime: fs.statSync(f).mtime.toISOString() });
+      }
+      // Every milestone the owner has, across boards. The kind's index, which is
+      // what makes it a registry kind rather than a per-board feature: kinds.js
+      // reads this for the tab count and the hub reads it for the list, so the
+      // two cannot disagree about what a milestone is.
+      if (req.method === "GET" && p === "/api/milestones") {
+        const out: any[] = [];
+        try {
+          for (const [slug, b] of Object.entries(registry().boards) as any) {
+            const dir = path.join(KROOT, "boards", slug);
+            let plan: any = null, bd: any = null;
+            try { plan = loadPlan(dir); bd = loadBoard(dir); } catch { continue; }
+            const live = new Set(bd.cards.map((c: any) => c.id));
+            for (const m of milestonesOf(plan)) {
+              const t = findTag(plan, "milestone", m.name);
+              const ids = t ? Object.entries(plan.on ?? {})
+                .filter(([cid, tids]: any) => live.has(cid) && tids.includes(t.id))
+                .map(([cid]) => cid) : [];
+              const done = ids.filter((cid) =>
+                bd.cards.find((c: any) => c.id === cid)?.lane === "done").length;
+              out.push({ kind: "milestone", id: m.id, name: m.name, goal: m.goal ?? null,
+                order: m.order, docs: m.docs ?? [], doneAt: m.doneAt ?? null,
+                board: slug, boardName: b.name ?? slug, href: `/b/${slug}`,
+                cards: ids.length, done, at: m.at });
+            }
+          }
+        } catch (e: any) { return json({ error: String(e?.message ?? e) }, 500); }
+        // Open first, because a milestone you have shipped is not one you are
+        // steering by. Then by the order the board declared.
+        out.sort((a, b) => Number(!!a.doneAt) - Number(!!b.doneAt) ||
+          a.order - b.order || a.name.localeCompare(b.name));
+        return json({ milestones: out, counts: { total: out.length,
+          open: out.filter((m) => !m.doneAt).length } });
+      }
+
+      // What changed on a board, newest first. The transitions, not the state.
+      if (req.method === "GET" && p === "/api/changes") {
+        const slug = url.searchParams.get("slug") ?? "";
+        const dir = boardDirOf(slug);
+        if (!dir) return json({ error: `unknown board ${slug}` }, 404);
+        const since = sinceMsOf(url.searchParams.get("since") ?? "7d");
+        const rows = loadChanges(dir, since, Number(url.searchParams.get("limit") ?? 200));
+        return json({ slug, since: since ? new Date(since).toISOString() : null,
+                      count: rows.length, changes: rows });
       }
       return json({ error: `no route ${p}` }, 404);
     }
@@ -1352,7 +1347,30 @@ const server = Bun.serve({
       const slug = decodeURIComponent(p.slice("/api/dp-submit/".length)).replace(/\/+$/, "");
       const dir = dpDirOf(slug);
       if (!dir) return json({ error: "unknown slug" }, 404);
-      const body = (await req.json().catch(() => null)) as { answer?: string } | null;
+      const body = (await req.json().catch(() => null)) as { answer?: string; replace?: boolean } | null;
+      // An answered page used to accept a second submit unconditionally. Reloading
+      // one reset every radio to the agent's RECOMMENDATION and left the primary
+      // button enabled, so a single press replaced the owner's real rulings with
+      // the agent's suggestions, cleared pending, and told the origin session the
+      // owner had spoken. The ruling it would have destroyed on kanban-six-calls
+      // is the one that produced charter §18c.
+      //
+      // The answer file is the load-bearing signal, so the guard lives here rather
+      // than only in the page: a stale tab, a re-POST, or a script hits this too.
+      // Replacing a ruling stays possible and now has to say so.
+      const answerFile = path.join(dir, ".answer.json");
+      // `=== true`, never truthiness. The first version of this guard read
+      // `!body?.replace`, so `replace: "false"`, `replace: []`, `replace: {}`
+      // and any non-empty string all sailed through and destroyed the ruling
+      // with a 200 — the exact bug this guard was written to close, wearing a
+      // different input. A guard on a destructive path takes the literal true
+      // and nothing else.
+      if (fs.existsSync(answerFile) && body?.replace !== true) {
+        let had = "";
+        try { had = JSON.parse(fs.readFileSync(answerFile, "utf8")).answer ?? ""; } catch {}
+        return json({ error: "this page is already answered; send replace:true to overwrite it",
+                      answered: true, existing: had }, 409);
+      }
       const rec = { answer: body?.answer ?? "", submitted_at: Math.floor(Date.now() / 1000) };
       const tmp = path.join(dir, ".answer.json.tmp");
       fs.writeFileSync(tmp, JSON.stringify(rec, null, 1), "utf8");
@@ -1360,6 +1378,100 @@ const server = Bun.serve({
       dpClearPending(slug);
       dpNotifyOrigin(slug, dir);
       return json({ ok: true, slug });
+    }
+
+    // Milestones. plan.json, like tags and views, because it is the shared
+    // vocabulary file and the CLI is not the only writer of it. Membership is
+    // never touched here: a card belongs to a milestone by wearing its tag, and
+    // this endpoint owns only the order, the goal, the docs and the done state.
+    if (req.method === "POST" && p === "/api/milestone") {
+      const body = (await req.json().catch(() => null)) as
+        { slug?: string; op?: string; name?: string; value?: string;
+          goal?: string; order?: string; moveCards?: boolean } | null;
+      const dir = body?.slug ? boardDirOf(body.slug) : null;
+      if (!dir || !body?.op || !body.name) return json({ error: "need {slug, op, name}" }, 400);
+      let out: any = { error: "unwritten" };
+      await enqueueItem(() => {
+        const plan = loadPlan(dir) as any;
+        plan.milestones = plan.milestones ?? [];
+        const now = new Date().toISOString();
+        const key = (n: string) => tagKey("milestone", n);
+        const found = plan.milestones.find((m: any) => key(m.name) === key(body!.name!));
+
+        if (body!.op === "add") {
+          if (found) { out = { error: `${body!.name} already exists on this board` }; return; }
+          const order = body!.order != null && body!.order !== ""
+            ? Number(body!.order)
+            : (plan.milestones.reduce((a: number, m: any) => Math.max(a, m.order), 0) + 1);
+          if (!Number.isFinite(order)) { out = { error: `order must be a number, got "${body!.order}"` }; return; }
+          const m = { id: noteId(), name: body!.name!.trim(), order,
+                      goal: (body!.goal ?? "").trim() || undefined, docs: [], at: now };
+          plan.milestones.push(m);
+          savePlan(dir, plan, "milestone:add");
+          recordChange(dir, { kind: "milestone", by: "board", what: `milestone ${m.name} added`, to: m.name });
+          out = { ok: true, milestone: m };
+          return;
+        }
+        if (!found) { out = { error: `no milestone ${body!.name} on this board` }; return; }
+
+        if (body!.op === "goal") { found.goal = (body!.value ?? "").trim() || undefined; }
+        else if (body!.op === "doc") { (found.docs = found.docs ?? []).push(String(body!.value)); }
+        else if (body!.op === "order") {
+          const n = Number(body!.value);
+          if (!Number.isFinite(n)) { out = { error: `order must be a number, got "${body!.value}"` }; return; }
+          found.order = n;
+        }
+        else if (body!.op === "done" || body!.op === "reopen") {
+          found.doneAt = body!.op === "done" ? now : null;
+        }
+        else if (body!.op === "rm") {
+          plan.milestones = plan.milestones.filter((m: any) => m.id !== found.id);
+        }
+        else { out = { error: `unknown op ${body!.op}` }; return; }
+
+        // Shipping a milestone moves its cards with it. board.json has one
+        // writer and it is the CLI (charter §11) — except that the same
+        // exception the answers map already takes applies here, and it takes it
+        // through the same lock, because the alternative is the owner moving
+        // seven cards by hand which is the complaint that produced this object.
+        let moved = 0;
+        // The cards to move are DERIVED here, from the milestone's own tag, and
+        // never taken from the caller. The first version trusted a `cards` array
+        // in the request body, which meant any caller could hand this endpoint
+        // arbitrary ids and have them moved to done under a milestone's name.
+        // The CLI happened to compute the right list, and the CLI being the only
+        // caller I pictured is exactly why I did not see it.
+        //
+        // It also keeps the promise the design makes: a card belongs to a
+        // milestone by wearing its tag, and nothing else keeps a membership
+        // list, so the two can never disagree. `moveCards: false` (the CLI's
+        // --no-cards) is the only thing a caller may say about this.
+        if (body!.op === "done" && body!.moveCards !== false) {
+          const tag = findTag(plan, "milestone", found.name);
+          withBoardLock(dir, () => {
+            const bd = loadBoard(dir);
+            const live = new Set(bd.cards.map((c: any) => c.id));
+            const mine = tag ? Object.entries(plan.on ?? {})
+              .filter(([cid, ids]: any) => live.has(cid) && ids.includes(tag.id))
+              .map(([cid]) => cid) : [];
+            for (const cid of mine) {
+              const c = bd.cards.find((x) => x.id === cid);
+              if (!c || c.lane === "done") continue;
+              c.lane = "done"; c.updatedAt = now;
+              bd.overrides[cid] = { lane: "done" };
+              moved++;
+            }
+            if (moved) atomicWrite(path.join(dir, "board.json"), bd, "milestone:done", `cards=${moved}`);
+          });
+        }
+        savePlan(dir, plan, `milestone:${body!.op}`);
+        if (body!.op === "done")
+          recordChange(dir, { kind: "milestone", by: "board",
+            what: `milestone ${found.name} shipped${moved ? `, ${moved} card(s) moved to done` : ""}`,
+            to: found.name, counts: { moved } });
+        out = { ok: true, milestone: found, moved };
+      });
+      return json(out, out.error ? 400 : 200);
     }
 
     // D9a: a decision an agent took to the owner, recorded where the work is
@@ -1370,7 +1482,7 @@ const server = Bun.serve({
         { slug?: string; op?: string; id?: string; question?: string;
           why?: string; card?: string; answer?: string; note?: string; by?: string; until?: string } | null;
       const dir = body?.slug ? boardDirOf(body.slug) : null;
-      if (!dir || !body?.op) return json({ error: "need {slug, op: add|answer|note|defer|rm, …}" }, 400);
+      if (!dir || !body?.op) return json({ error: "need {slug, op: add|answer|note|defer|seen|rm, …}" }, 400);
       let out: any = { error: "unwritten" };
       await enqueueItem(() => {
         const plan = loadPlan(dir) as any;
@@ -1400,6 +1512,11 @@ const server = Bun.serve({
           if (!t) { out = { error: "an empty comment is not a comment" }; return; }
           (d.notes = d.notes ?? []).push({ body: t, at: now });
           savePlan(dir, plan, "decide:note");
+          out = { ok: true, decision: d };
+        } else if (body.op === "seen") {
+          // Idempotent and first-write-wins: the stamp records when the owner
+          // FIRST looked, so re-opening a decision does not keep resetting it.
+          if (!d.seenAt) { d.seenAt = now; savePlan(dir, plan, "decide:seen"); }
           out = { ok: true, decision: d };
         } else if (body.op === "defer") {
           // a horizon, not a black hole: it leaves the owed list and returns

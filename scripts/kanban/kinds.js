@@ -96,6 +96,25 @@ const KINDS = [
     inPage: true,
     icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1.8 8S4.2 3.6 8 3.6 14.2 8 14.2 8 11.8 12.4 8 12.4 1.8 8 1.8 8Z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg>`,
   },
+  {
+    id: "milestones",
+    label: "Milestones",
+    indexLabel: "milestones",
+    href: "/?view=milestones",
+    key: "6",
+    hue: "--green",
+    tip: "What you are shipping next, across every board",
+    // Owner ruled 2026-08-26 that a milestone is a registry kind rather than a
+    // tag kind: it has an order, a goal sentence and a done state, and a tag has
+    // none of those. Membership is still the milestone tag, so this kind adds a
+    // way to SEE them without adding a second way to say a card is in one.
+    searchRank: 6,
+    api: "/api/milestones",
+    // the tab counts what is still ahead of you; the view lists shipped ones too
+    listOf: (j) => (j.milestones ?? []).filter((m) => !m.doneAt),
+    inPage: true,
+    icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4 2.4v11.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M4 3.2h7.4l-1.6 2.3 1.6 2.3H4V3.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+  },
   // Sessions lands here when its page does (CHAT-HISTORY.md, D-ch-1..3). It is
   // a kind, not a special case: one entry, and the navbar, the hue, the key and
   // the palette all follow. Nothing else has to be edited to add it, which is

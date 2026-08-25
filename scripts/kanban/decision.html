@@ -526,9 +526,20 @@ function wireBar() {
   };
   $("#submit").onclick = async () => {
     const txt = answerString();
+    // Overwriting a ruling is the one destructive act this page can perform, so
+    // it asks. Answering a fresh page asks nothing, which is the common case.
+    if (ANSWERED && !confirm(
+        "This page is already answered.\n\nReplace the recorded ruling with what is on screen now?"))
+      return;
     try {
       const r = await fetch(`/api/dp-submit/${encodeURIComponent(SLUG)}`, { method: "POST",
-        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answer: txt }) });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer: txt, replace: ANSWERED }) });
+      if (r.status === 409) {
+        // Another tab or another hand answered it while this page was open.
+        toast("Answered somewhere else already — reload to see what was recorded", 3600, true);
+        return;
+      }
       if (!r.ok) throw new Error("http " + r.status);
       toast("Sent to Claude ✓ — you can close this tab", 2600);
       $("#submit .vlabel").textContent = "Sent";
@@ -563,7 +574,7 @@ function summarizeAnswer(txt) {
       "(?:^|\\s)" + d.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(\\S*)"));
     if (!m) return;
     const opt = optionsOf(d).find(o => o.code === m[1]);
-    out.picks.push({ id: d.id, label: opt ? opt.label : (m[1] || "?"),
+    out.picks.push({ id: d.id, code: m[1] || "", label: opt ? opt.label : (m[1] || "?"),
                      moved: !!(opt && !opt.rec) });
   });
   lines.slice(1).forEach(l => {
@@ -606,7 +617,39 @@ function markAnswered(ts, answer) {
      + `<pre>${esc(answer || "")}</pre></details>`;
   b.innerHTML = h;
   b.classList.add("on");
+
+  // Reloading an answered page used to leave every radio on the agent's
+  // RECOMMENDATION while the banner above it reported the owner's real ruling.
+  // The two disagreed on screen, the primary button stayed enabled and green,
+  // and one press replaced the ruling with the recommendations. The banner was
+  // honest; the form under it was not, which is the worse half, because the form
+  // is the part that acts.
+  //
+  // So the form is seeded from what was actually sent. Anything the answer does
+  // not name is left alone rather than forced, because "no pick recorded" and
+  // "recommended" are different states and only one of them is a fact.
+  s.picks.forEach((pk) => {
+    if (!pk.code) return;
+    const r = document.querySelector(
+      `input[name="${CSS.escape(pk.id)}"][value="${CSS.escape(pk.code)}"]`);
+    if (r) r.checked = true;
+  });
+
+  // A second submit is now a REPLACEMENT and says so. The server refuses an
+  // unflagged overwrite too (409): a stale tab and a re-POST reach it without
+  // passing through this button.
+  ANSWERED = true;
+  const sb = $("#submit");
+  if (sb) {
+    const lab = sb.querySelector(".vlabel");
+    if (lab) lab.textContent = "Replace this answer";
+    sb.dataset.tip = "This page is already answered. Sending again replaces the ruling above.";
+  }
 }
+
+/* Whether a ruling already exists, so Submit knows it is replacing rather than
+   answering. Set by markAnswered, which only runs when .answer.json is real. */
+let ANSWERED = false;
 
 /* §12: opening a decision moves it out of unseen without answering it. Fire and
    forget; a page you looked at is not less looked-at because the ping failed. */

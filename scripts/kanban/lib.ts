@@ -533,8 +533,37 @@ export interface View {
 export { VIEW_LIMITS, CLAUSE_GRAMMAR, OPERATORS, isOperator, isKnownClause,
          matchClause, parseQuery, matchParsed, matchQuery, matchView } from "./match.js";
 
+// A milestone, as an OBJECT rather than a tag (owner ruled yes, 2026-08-26).
+//
+// It stayed a tag for a long time and the tag was doing most of the job: several
+// cards share it, and "what is left for M2" is a filter. What a tag cannot hold
+// is the three things a milestone actually is — an ORDER (M1 before M2), a GOAL
+// SENTENCE (what shipping it means), and a DONE STATE. The usage trial expressed
+// "M1 shipped" by moving seven cards to done one at a time, and each milestone's
+// goal sentence lived only in a design doc, unreachable from the board.
+//
+// Membership is deliberately still the `milestone:<name>` tag. The object owns
+// the name and the tag remains the edge, so every existing board keeps working
+// with no migration, `tag <card> milestone:M2` keeps meaning what it meant, and
+// there is exactly one way to say a card belongs to a milestone. A second
+// membership axis is the overlap-you-have-to-guess-at that the simplification
+// report already collects complaints about.
+//
+// Owner's note on the same ruling: "as many plans and reference docs per entity
+// is fine", so `docs` is a list and nothing caps it.
+export interface Milestone {
+  id: string;
+  name: string;            // matches the milestone tag's name, loosely (tagKey)
+  goal?: string;           // one sentence: what shipping this means
+  order: number;           // small integer; ties break on name
+  docs?: string[];         // plans and reference docs, as many as it takes
+  doneAt?: string | null;  // ISO when it shipped; absent means open
+  at: string;
+}
+
 export interface Plan {
   tags: Tag[];                        // the board's vocabulary
+  milestones?: Milestone[];           // the board's checkpoints, ordered
   on: Record<string, string[]>;       // cardId → tag ids
   goals: Record<string, string>;      // cardId → why this card exists, in one line
   seq?: Record<string, string[]>;     // cardId → the cards it comes after (execution order)
@@ -566,8 +595,93 @@ export function savePlan(boardDir: string, plan: Plan, by: string): void {
 export const tagKey = (kind: string, name: string) => `${kind}:${name.trim().toLowerCase()}`;
 export const findTag = (plan: Plan, kind: string, name: string): Tag | undefined =>
   plan.tags.find((t) => tagKey(t.kind, t.name) === tagKey(kind, name));
+// The milestones a board declares, in the order it declares them.
+export const milestonesOf = (plan: Plan): Milestone[] =>
+  [...(plan.milestones ?? [])].sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
+// Loose match, the same rule tagKey uses, so "M2", "m2" and " M2 " are one
+// milestone. A vocabulary that quietly forks on case is one nobody can filter by.
+export const findMilestone = (plan: Plan, name: string): Milestone | undefined =>
+  (plan.milestones ?? []).find((m) => tagKey("milestone", m.name) === tagKey("milestone", name));
+// Which cards belong to a milestone: the ones wearing its tag. The object never
+// keeps its own membership list, so the two can never disagree about who is in.
+export const milestoneTagOf = (plan: Plan, m: Milestone): Tag | undefined =>
+  findTag(plan, "milestone", m.name);
+
 export const tagsOn = (plan: Plan, cardId: string): Tag[] =>
   (plan.on[cardId] ?? []).map((id) => plan.tags.find((t) => t.id === id)).filter((t): t is Tag => !!t);
+
+// ---------- what changed, and when (the plan-change object) ----------
+//
+// Owner ruled yes, 2026-08-26. Until now a change had no shape: the board held
+// the CURRENT state and nothing held the transitions, so "what changed since
+// last week" could not be built as a view — only inferred by eye from
+// updatedAt stamps, which say when a card last moved but never what moved or
+// why. The usage trial worked around it and named it as a structural gap.
+//
+// One append-only JSONL per board, beside board.json. Append-only because a
+// history that can be edited is not a history, and because two writers
+// appending whole lines cannot corrupt each other the way a read-modify-write
+// of a JSON array can. Nothing prunes it: a line is ~150 bytes and a busy board
+// writes a few dozen a day.
+//
+// Deliberately NOT derived from card timestamps. A derivation can only report
+// what the current state implies, so a card that moved to active and back to
+// backlog reads as never having moved at all, and a card that was deleted
+// leaves no trace whatsoever. Those two are exactly the changes a person asks
+// about.
+export type ChangeKind = "sync" | "move" | "milestone" | "decision" | "tag" | "card";
+export interface PlanChange {
+  id: string;
+  at: string;               // ISO
+  kind: ChangeKind;
+  by: string;               // the agent or person who caused it
+  what: string;             // one human sentence, already readable
+  card?: string;            // the card id, when the change is about one card
+  from?: string;            // previous value, for a move
+  to?: string;              // new value
+  counts?: Record<string, number>;   // for a sync, its delta
+}
+
+const changesFile = (boardDir: string) => path.join(boardDir, "changes.jsonl");
+
+// Append one change. Best-effort by design: a board that cannot write its
+// history must still accept the work that produced it, so a failure here is
+// swallowed rather than failing the sync or the move that called it.
+export function recordChange(boardDir: string, c: Omit<PlanChange, "id" | "at">): void {
+  try {
+    const row: PlanChange = { id: noteId(), at: new Date().toISOString(), ...c };
+    fs.mkdirSync(boardDir, { recursive: true });
+    fs.appendFileSync(changesFile(boardDir), JSON.stringify(row) + "\n", "utf8");
+  } catch { /* history is a bonus, never a gate on the work */ }
+}
+
+// Read the history newest-first, optionally bounded by age and count. A bad
+// line is skipped rather than throwing: one truncated append (a crash mid-write)
+// must not take the whole history with it.
+export function loadChanges(boardDir: string, sinceMs = 0, limit = 500): PlanChange[] {
+  let raw = "";
+  try { raw = fs.readFileSync(changesFile(boardDir), "utf8"); } catch { return []; }
+  const out: PlanChange[] = [];
+  for (const line of raw.split("\n")) {
+    if (!line.trim()) continue;
+    let row: PlanChange;
+    try { row = JSON.parse(line) as PlanChange; } catch { continue; }
+    if (sinceMs && Date.parse(row.at) < sinceMs) continue;
+    out.push(row);
+  }
+  out.reverse();
+  return out.slice(0, limit);
+}
+
+// "7d", "36h", "90m" -> milliseconds before now. Returns 0 for anything it
+// cannot read, which means "no bound" rather than "everything is out of range":
+// a mistyped window should show too much, never silently show nothing.
+export function sinceMsOf(spec: string): number {
+  const m = String(spec || "").trim().match(/^(\d+)\s*([dhm])$/i);
+  if (!m) return 0;
+  const mult = { d: 864e5, h: 36e5, m: 6e4 }[m[2].toLowerCase() as "d" | "h" | "m"];
+  return Date.now() - Number(m[1]) * mult;
+}
 
 export const PINS = path.join(KROOT, "pins.json");
 
@@ -936,6 +1050,20 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
       autoBrief: cards.filter((c) => c.briefAuto).length,
       untagged: cards.filter((c) => !c.tag).length,
     };
+    // A sync that changed nothing is not a change, and writing a line for it
+    // would bury the real ones under a heartbeat. This is the same distinction
+    // the harvest-miss complaint is about: "nothing happened" and "something
+    // happened, all of it kept" are different answers and deserve different
+    // records.
+    if (delta.new || delta.moved || delta.gone || delta.stale) {
+      const bits = [];
+      if (delta.new) bits.push(`${delta.new} new`);
+      if (delta.moved) bits.push(`${delta.moved} moved`);
+      if (delta.gone) bits.push(`${delta.gone} gone`);
+      if (delta.stale) bits.push(`${delta.stale} went stale`);
+      recordChange(boardDir, { kind: "sync", by,
+        what: `sync: ${bits.join(", ")}`, counts: { ...delta } });
+    }
     return { board, delta, overridesHeld, coverage,
       notesPreserved: Object.keys(notes).filter((id) => notesOf(notes[id]).length).length };
   });

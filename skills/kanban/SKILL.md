@@ -111,6 +111,57 @@ bash $K plan supersede <id>                # a newer plan replaced it
 bash $K plan rm <id>                       # unregister; the doc is untouched
 ```
 
+## Milestones
+
+A milestone is an object, not a tag (owner ruled 2026-08-26): it has an order, a
+goal sentence and a done state, which is what a tag cannot hold. Membership is
+still the `milestone:<name>` tag, so there is exactly one way to say a card is in
+one and existing boards get milestones with no migration.
+
+```bash
+bash $K milestone                          # list them: order, goal, N/M done
+bash $K milestone add M1 --goal "what shipping it means" [--order 1]
+bash $K tag <card-id> milestone:M1         # membership — the tag, as always
+bash $K milestone goal M1 "a better sentence"
+bash $K milestone doc M1 docs/plan/m1.md   # as many plans and docs as it takes
+bash $K milestone done M1 [--no-cards]     # ships it AND moves its cards to done
+bash $K milestone reopen M1
+bash $K milestone rm M1                    # the tag and its cards are untouched
+```
+
+`milestone done` moving the cards is the point of the object: expressing "M1
+shipped" used to mean moving seven cards one at a time. Pass `--no-cards` when
+the milestone is done but its cards are not.
+
+## What changed, and when
+
+The board holds the current state; this holds the transitions, which is the
+difference between "these cards are in done" and "these cards reached done this
+week" (owner ruled 2026-08-26). Recorded automatically on sync, on `move`, and on
+milestone and decision transitions.
+
+```bash
+bash $K changed                            # the last 7 days
+bash $K changed --since 36h [--limit 50] [--json]
+```
+
+It distinguishes "nothing changed in this window" from "nothing was ever
+recorded", because those are different answers.
+
+## Decisions, and what is owed
+
+```bash
+bash $K owed [--global]                    # everything awaiting the owner, hot first
+bash $K decide add "the question" [--why "…"] [--card <id>]
+bash $K decide answer <id> "the ruling"
+bash $K decide note <id> "a comment"
+bash $K decide defer <id> --until 2026-09-01
+bash $K decide rm <id>
+```
+
+A decision an agent records shows on its board AND in the hub's Decisions view,
+and reads as `unseen` until the owner opens it.
+
 ## The owner's asks, and writing one yourself
 
 ```bash

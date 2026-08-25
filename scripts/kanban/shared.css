@@ -298,8 +298,19 @@
      dropping that band was to keep the numbers and get the height back. Under
      pressure it drops its words and keeps its numbers, the same bargain the
      tabs strike. */
-  .navbar[data-tight] .nstatus .stat-chip .sl,
-  .navbar[data-tight] .nstatus .stat-chip.mute{display:none}
+  /* Three bargains, not one, because "drop the word and keep the number" only
+     works for a chip that HAS a number.
+     - A counted, ordinary chip sheds its word. That is the intended trade.
+     - A chip with no number keeps its icon instead of disappearing. `.mute`
+       used to be display:none outright, so `synced 32d ago` vanished below
+       1920px — and charter §12 is that a thing which vanishes cannot be told
+       apart from a thing that broke. Owner, 2026-08-25: "I wouldn't even know
+       if its supposed to be there / or if it is broken, it will disappear."
+     - A warning keeps its words at every width. A red glyph with a tooltip is
+       not a warning anybody reads, and the widths where the bar is tight are
+       exactly the widths the owner works at. */
+  .navbar[data-tight] .nstatus .stat-chip:has(.sn):not(.warn) .sl,
+  .navbar[data-tight] .nstatus .stat-chip.mute:not(.warn) .sl{display:none}
   .navbar[data-tight] .nstatus .stat-chip{padding:0 6px;gap:4px}
   .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
   /* A page with no find box was still paying for one: the zone held its

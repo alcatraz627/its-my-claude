@@ -548,6 +548,57 @@ async function loadSurfaces(which) {
   list.replaceChildren(...frag);
 }
 
+// Milestones (owner ruled a registry kind, 2026-08-26). Same row shape as the
+// other indexes on purpose: a person scanning the hub should not have to learn
+// a new row for each kind. Open ones first, because a shipped milestone is not
+// one you are steering by.
+async function loadMilestones() {
+  const list = document.getElementById("list");
+  const j = await (await fetch("/api/milestones")).json();
+  const rows = j.milestones ?? [];
+  const frag = [];
+  const group = (label, rs) => {
+    if (!rs.length) return;
+    const g = document.createElement("div");
+    g.className = "group";
+    const l = document.createElement("div");
+    l.className = "glabel"; l.textContent = `${label} · ${rs.length}`;
+    g.appendChild(l);
+    for (const m of rs) {
+      const a = document.createElement("a");
+      a.className = "surf" + (m.doneAt ? "" : " pending");
+      a.href = m.href;
+      const nm = document.createElement("span");
+      nm.className = "sn";
+      nm.textContent = m.goal ? `${m.name} — ${m.goal}` : m.name;
+      const so = document.createElement("span");
+      so.className = "so";
+      // The count is the honest progress: cards wearing this milestone's tag
+      // that have reached done. A milestone with no cards says so rather than
+      // reading as 0% of something.
+      so.textContent = [m.boardName,
+        m.cards ? `${m.done}/${m.cards} done` : "no cards yet"].filter(Boolean).join(" · ");
+      const age = document.createElement("span");
+      age.className = "sage";
+      age.textContent = m.doneAt ? `shipped ${ago(Date.parse(m.doneAt))} ago` : "";
+      a.append(nm, so, age);
+      g.appendChild(a);
+    }
+    frag.push(g);
+  };
+  group("Ahead of you", rows.filter((m) => !m.doneAt));
+  group("Shipped", rows.filter((m) => m.doneAt));
+  if (!frag.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = "No milestones yet. Declare one on a board with: "
+      + "kanban.sh milestone add M1 --goal \"what shipping it means\", "
+      + "then put cards in it with kanban.sh tag <card-id> milestone:M1";
+    frag.push(e);
+  }
+  list.replaceChildren(...frag);
+}
+
 // each view names itself in the title AND says what it is for, because the hub
 // is where someone lands who does not yet know what any of this is
 // The header, the tabs, the keys and the theme are shared.js's now; this page
@@ -557,6 +608,7 @@ const VIEW_COPY = {
   notes: ["Your asks", "things you wrote down for an agent to sort into cards"],
   decisions: ["Decisions", "pages an agent built for you to rule on"],
   previews: ["Previews", "one-off pages agents rendered for you to look at"],
+  milestones: ["Milestones", "what you are shipping next, across every board"],
 };
 let starred = new Set();
 // An archived board is one the owner has said is not theirs right now. A crate
@@ -629,6 +681,11 @@ registerHelp(helpModal({
 async function load() {
   const list = document.getElementById("list");
   if (view === "notes") { try { await loadAsks(); } catch (e) { list.innerHTML = `<div class="empty">Asks failed to load: ${e.message}</div>`; } return; }
+  if (view === "milestones") {
+    try { await loadMilestones(); }
+    catch (e) { list.innerHTML = `<div class="empty">Milestones failed to load: ${e.message}</div>`; }
+    return;
+  }
   if (view === "decisions" || view === "previews") {
     try { await loadSurfaces(view); }
     catch (e) { list.innerHTML = `<div class="empty">${VIEW_COPY[view][0]} failed to load: ${e.message}</div>`; }
@@ -687,8 +744,19 @@ composeDraft = localStorage.getItem("kanban-hubdraft") ?? "";
 // the tab said Asks and the page has to agree with the tab
 setView((() => {
   const pv = new URLSearchParams(location.search).get("view");
+  // The kind list comes from kinds.js, never a literal here. This line used to
+  // read ["boards", "decisions", "previews"] and so silently ignored any kind
+  // added later: registering milestones gave the navbar a tab that led back to
+  // the boards view, which is the myopia the owner named on 2026-08-24 — "you
+  // do know we're gonna be adding session and maybe other things in the future
+  // right? don't be myopic". Adding a kind should cost one entry in kinds.js
+  // and nothing else, which is the whole point of that file.
+  //
+  // "asks" is the one kind whose hub view carries a different internal name,
+  // for historical reasons; the mapping stays here rather than in the registry
+  // because it is this page's business, not the kind's.
   if (pv === "asks") return "notes";
-  return ["boards", "decisions", "previews"].includes(pv) ? pv : view;
+  return kindIds().includes(pv) ? pv : view;
 })());
 // the Asks view rebuilds its composer on every render, so a poll landing
 // mid-sentence would take the field out from under the typing

@@ -10,6 +10,7 @@ import {
   cardId, readJson, atomicWrite,
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
   loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
+  recordChange, loadChanges, sinceMsOf, milestonesOf, findMilestone, findTag,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
   loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
   displayScope, PULLS, loadDrafts, loadPulls, pendingDrafts, isPulled, diffHunks,
@@ -186,10 +187,16 @@ switch (verb) {
       const board = loadBoard(boardDir);
       const card = board.cards.find((c) => c.id === id);
       if (!card) die(`no card ${id} on ${slug}`, `kanban.sh status --project ${projectDir()} lists ids`);
+      const was = card.lane;
       card.lane = lane;
       card.updatedAt = new Date().toISOString();
       board.overrides[id] = { lane };
       atomicWrite(path.join(boardDir, "board.json"), board, "move", `card=${id}`);
+      // The card's own updatedAt says WHEN it last moved; only the history says
+      // where from. A card that went active and came back reads as unmoved
+      // otherwise, which is one of the two cases anyone actually asks about.
+      if (was !== lane) recordChange(boardDir, { kind: "move", by: selfAlias() ?? "move", card: id,
+        from: was, to: lane, what: `${card.titleBrief || card.title} moved ${was} → ${lane}` });
       console.log(`moved ${id} → ${lane} (override recorded; survives sync)`);
     });
     break;
@@ -197,7 +204,14 @@ switch (verb) {
   case "owed": {
     // One list of what awaits the owner, across kinds. Four surfaces answer
     // this partially; they should all read this one derivation.
-    const slug = hasFlag("global") ? "" : boardFor(projectDir()).slug;
+    // Standing outside any board, the owner most likely wants the global list
+    // rather than a new board here, so say both escapes. boardFor's own hint
+    // only knows about init, because it cannot know what the caller wanted.
+    let slug = "";
+    if (!hasFlag("global")) {
+      try { slug = boardFor(projectDir()).slug; }
+      catch { die(`no board in ${projectDir()}`, `see everything instead: kanban.sh owed --global`); }
+    }
     const port = serverPort();
     if (!port) die("the kanban server is not running", "start it: pm2 restart kanban");
     let j: any = {};
@@ -449,6 +463,128 @@ switch (verb) {
     console.log(renderSelection(boardDir, name, sel));
     break;
   }
+  // A milestone is an object now, not only a tag (owner ruled yes 2026-08-26).
+  // Membership is still the tag, so nothing here invents a second way to say a
+  // card belongs to one: this verb owns the order, the goal sentence, the docs
+  // and the done state, and `tag <card> milestone:M2` still puts a card in.
+  case "milestone": {
+    const [sub, ...rest] = positional;
+    const { slug, boardDir } = boardFor(projectDir());
+    const plan = loadPlan(boardDir) as any;
+    plan.milestones = plan.milestones ?? [];
+    const live = new Set(loadBoard(boardDir).cards.map((c) => c.id));
+    // Cards wearing a milestone's tag, counted against the LIVE board for the
+    // same reason `tag` does it: a dropped card leaves its tag row behind, and a
+    // count taken from the raw store promises cards no filter can produce.
+    const cardsIn = (m: any) => {
+      const t = findTag(plan, "milestone", m.name);
+      if (!t) return [] as string[];
+      return Object.entries(plan.on ?? {})
+        .filter(([cid, ids]) => live.has(cid) && (ids as string[]).includes(t.id))
+        .map(([cid]) => cid);
+    };
+
+    if (!sub || sub === "list") {
+      const ms = milestonesOf(plan);
+      if (hasFlag("json")) { console.log(JSON.stringify(ms.map((m) => ({ ...m, cards: cardsIn(m) })))); break; }
+      if (!ms.length) {
+        console.log(`no milestones on ${slug} yet.` +
+          `\n  add one: kanban.sh milestone add M1 --goal "what shipping it means"` +
+          `\n  then put cards in it the way you always have: kanban.sh tag <card-id> milestone:M1`);
+        break;
+      }
+      const board = loadBoard(boardDir);
+      for (const m of ms) {
+        const ids = cardsIn(m);
+        const done = ids.filter((cid) => board.cards.find((c) => c.id === cid)?.lane === "done").length;
+        const state = m.doneAt ? `shipped ${m.doneAt.slice(0, 10)}` : `${done}/${ids.length} done`;
+        console.log(`  ${String(m.order).padStart(2)}. ${m.name.padEnd(12)} ${state}`);
+        if (m.goal) console.log(`      ${m.goal}`);
+        for (const d of (m.docs ?? [])) console.log(`      doc: ${d}`);
+      }
+      break;
+    }
+
+    const post = async (body: any) => {
+      const port = serverPort();
+      if (!port) die("the kanban server is not running", "start it: pm2 restart kanban");
+      const res = await fetch(`http://localhost:${port}/api/milestone`, { method: "POST",
+        headers: { "content-type": "application/json" }, body: JSON.stringify({ slug, ...body }) });
+      const out = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+      if (!res.ok || out.error) die(out.error ?? `HTTP ${res.status}`, "kanban.sh milestone list");
+      return out;
+    };
+
+    if (sub === "add") {
+      const name = rest[0];
+      if (!name) die("a milestone needs a name", `kanban.sh milestone add M1 --goal "ship the thing"`);
+      const out = await post({ op: "add", name, goal: flag("goal"), order: flag("order") });
+      console.log(`milestone ${out.milestone.name} added (order ${out.milestone.order})` +
+        `\n  put cards in it: kanban.sh tag <card-id> milestone:${out.milestone.name}`);
+      break;
+    }
+    if (sub === "goal" || sub === "order" || sub === "doc") {
+      const name = rest[0];
+      const value = rest.slice(1).join(" ");
+      if (!name || !value) die("usage", `kanban.sh milestone ${sub} <name> <value>`);
+      const out = await post({ op: sub, name, value });
+      console.log(`${out.milestone.name}: ${sub} set`);
+      break;
+    }
+    if (sub === "done" || sub === "reopen") {
+      const name = rest[0];
+      if (!name) die("usage", `kanban.sh milestone ${sub} <name>`);
+      const m = findMilestone(plan, name);
+      if (!m) die(`no milestone ${name} on ${slug}`, "kanban.sh milestone list");
+      // The trial's actual complaint: it expressed "M1 shipped" by moving seven
+      // cards to done one at a time. Shipping a milestone moves its cards with
+      // it, unless the caller says not to.
+      //
+      // Which cards is the SERVER's question, answered from the milestone's tag.
+      // This used to send the list and the server used to trust it, which made
+      // "move these ids to done" reachable by any caller under a milestone's
+      // name. All the CLI gets to say is whether to move them at all.
+      const out = await post({ op: sub, name, moveCards: !hasFlag("no-cards") });
+      console.log(sub === "done"
+        ? `${out.milestone.name} shipped` + (out.moved ? `, and ${out.moved} card(s) moved to done` : "")
+        : `${out.milestone.name} reopened`);
+      break;
+    }
+    if (sub === "rm") {
+      const name = rest[0];
+      if (!name) die("usage", "kanban.sh milestone rm <name>");
+      await post({ op: "rm", name });
+      console.log(`milestone ${name} removed — its tag and the cards wearing it are untouched`);
+      break;
+    }
+    die(`unknown milestone verb ${sub}`, "one of: list add goal order doc done reopen rm");
+  }
+
+  // What changed, and when. The board holds the current state; this holds the
+  // transitions, which is the difference between "these cards are in done" and
+  // "these cards reached done this week" (owner ruled yes 2026-08-26).
+  case "changed": {
+    const { slug, boardDir } = boardFor(projectDir());
+    const spec = flag("since") ?? "7d";
+    const since = sinceMsOf(spec);
+    const rows = loadChanges(boardDir, since, Number(flag("limit") ?? 200));
+    if (hasFlag("json")) { console.log(JSON.stringify(rows)); break; }
+    if (!rows.length) {
+      // "nothing changed" and "nothing was recorded" are different answers, and
+      // the harvest-miss complaint is exactly about conflating them.
+      const any = loadChanges(boardDir, 0, 1).length;
+      console.log(any
+        ? `nothing changed on ${slug} in the last ${spec}`
+        : `no history on ${slug} yet — it starts recording at the next sync, move or ruling`);
+      break;
+    }
+    console.log(`${rows.length} change(s) on ${slug} in the last ${spec}`);
+    for (const r of rows) {
+      console.log(`  ${r.at.slice(0, 16).replace("T", " ")}  ${r.kind.padEnd(9)} ${r.what}`);
+    }
+    break;
+  }
+
   // Tags are the board's one cross-cutting axis: a milestone, a model lane, an
   // effort, an area. Writes go through the server because plan.json is the
   // human lane's file, the same way `drop --force` routes note deletion.

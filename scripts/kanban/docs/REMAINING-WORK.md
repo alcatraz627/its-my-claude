@@ -432,7 +432,13 @@ reported where it fought back. Full report and its unedited feedback in
 `design/`. Six asks, ranked by it, verdicts mine.
 
 1. **A milestone should be an object, not a tag** `[spine]` **RULED YES,
-   owner 2026-08-26.** Becomes a registry kind. Owner's note: *"as many plans
+   owner 2026-08-26 — BUILT 2026-08-26.** A registry kind in `kinds.js`,
+   stored in `plan.json`, with `kanban.sh milestone add|goal|doc|order|done|
+   reopen|rm`, `/api/milestone`, `/api/milestones`, and a hub view.
+   Membership is deliberately still the `milestone:` tag, so the showcase
+   board's existing M1 picked up its ten cards with no migration, and
+   `milestone done M1` shipped it and moved three cards in one command —
+   the seven-by-hand moves this ask was about. Original text follows.** Becomes a registry kind. Owner's note: *"as many plans
    and reference docs per entity is fine"*, so an entity carries N docs rather
    than one.** Milestones have an order, a goal sentence and a done
    state; `tag milestone:m2` has none of those. The trial expressed "M1
@@ -458,6 +464,29 @@ on the board** (**RULED YES, owner 2026-08-26**: it becomes a first-class
 object) (so "what changed since last week" is unbuildable as a view),
 and **a split card cannot say what it split from** (`after` carries the
 dependency, nothing carries the sibling relationship).
+
+**The plan-change object is BUILT (2026-08-26).** An append-only
+`changes.jsonl` per board, written on sync, on `move` and on milestone
+transitions, read by `kanban.sh changed --since` and `/api/changes`. It is
+deliberately not derived from card timestamps: a derivation reports only what
+the current state implies, so a card that went to active and back reads as
+never having moved, and a deleted card leaves no trace — which are the two
+changes anyone actually asks about. It also distinguishes "nothing changed in
+this window" from "nothing was ever recorded".
+
+### The adversarial round, 2026-08-26
+
+A prosecutor audited the 2026-08-25 work against eleven claims and its report is
+at `~/.claude/assets/reports/20260826-adversarial-review/indictment-prosecutor.md`.
+Twelve findings were fixed and are listed with their exercises in
+`DISPOSITIONS.md` beside it. **Nine were not, and they are open work:** the stale
+tether (F8), a tooltip drawn over its own popover (F9), 41 of 179 controls with
+neither tooltip nor aria-label (F10, a direct hit on the owner's icons-and-
+tooltips ruling), the theme key and missing help button on the decision page
+(F11), decision row labels clipped to a fifth of their width (F14), the hub's
+kind tabs at zero width at 900px (F16), page actions offscreen at 900px (F6),
+reachability asserting "cold" as confidently as it declines to assert "live"
+(claim 10), and a missing sibling `data-digits` attribute (claim 9).
 
 ### The six-calls answers (2026-08-25, page `kanban-six-calls`)
 

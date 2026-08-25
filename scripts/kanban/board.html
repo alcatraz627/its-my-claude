@@ -289,6 +289,12 @@
   details.col > summary::-webkit-details-marker{display:none}
   .cards{overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:1px 1px 8px;flex:1;min-height:0}
   .empty-col{color:var(--text-3);font-size:var(--fs-body);padding:6px 5px 12px}
+  /* The second line says how something gets here. Quieter than the first, and
+     on its own line, because an empty column is read at a glance and the verb
+     is only wanted by someone who has decided to act on the emptiness. */
+  .empty-how{display:block;margin-top:5px;color:var(--text-3);opacity:.82;line-height:1.55}
+  .empty-how code{font:var(--fs-small) var(--mono);background:var(--well);
+                  border:1px solid var(--border);border-radius:4px;padding:.05em .32em}
   /* the two columns that need you sit on a lighter well — weight, not hue */
   /* attention is width and border weight, never a tint: a hue here would be a
      fourth claimant on a closed palette, and the light tint measured 1.000 */
@@ -914,6 +920,17 @@
      first one means nobody has looked at it yet */
   .pstate.st-unseen{color:var(--red);border-color:var(--red-br);background:var(--red-bg)}
   .srow.decrow.pend .stxt{color:var(--text)}
+  /* A decision question is the one row label worth two lines. The shared .stxt
+     rule ellipsises to a single line, which in a 186px panel showed about 63px
+     of a 318px question — enough to know a decision exists and not which one.
+     Decisions are few and each one is a thing the owner has to answer, so they
+     get the height. The state badge moves to the top so a long question grows
+     downward rather than pushing it out of line. */
+  .srow.decrow{align-items:flex-start}
+  .srow.decrow .stxt{white-space:normal;overflow:visible;text-overflow:clip;
+                     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+                     overflow:hidden;line-height:1.35}
+  .srow.decrow .pstate{margin-top:1px}
   /* the asker is still reachable: answering now costs them nothing */
   .srow.decrow .hotdot{display:inline-block;width:6px;height:6px;border-radius:50%;
     background:var(--green);margin-right:6px;vertical-align:middle;flex:none}
@@ -3215,6 +3232,17 @@ function renderSummary() {
 
   const band = document.createElement("div");
   band.className = "sband";
+  // 0. Whether this board still has a project at all. First, because every
+  //    number after it describes a mirror of a directory that is not there.
+  //    The hub has flagged this since 2026-08-25 and the board did not, so
+  //    opening a dead board downgraded the news to "synced 32d ago" — which
+  //    reads as a stale mirror rather than a project that no longer exists.
+  if (data.rootGone) {
+    band.append(statChip({ icon: "blocked", n: "", label: "project is gone", cls: "warn",
+      tip: `${data.root} no longer exists, so a sync can only ever find nothing. `
+         + `The cards here are the last harvest. Re-point it, or retire it with: `
+         + `kanban.sh unregister ${data.slug}` }));
+  }
   // 1. what wants you. Loud, first, and gone entirely when the answer is none.
   if (needs) band.append(statChip({ icon: "needs", n: needs, label: `need${needs > 1 ? "" : "s"} you`,
     filter: "needs-you", cls: "warn",
@@ -3888,15 +3916,39 @@ function renderSide() {
         dot.className = "hotdot";
         b.querySelector(".stxt").prepend(dot);
       }
+      // Three states, three sentences. "unknown" used to fall through to silence,
+      // which reads as "nothing to say about reach" when it actually means "the
+      // registry could not be read". Saying so costs one line and stops the
+      // owner inferring reachability from an absence.
       const reachLine = !d.pending ? ""
         : r.state === "hot" ? `\n${d.session} was seen ${ago(Date.now() - r.seenAgo * 1000)} ago, so an answer still reaches it`
         : r.state === "cold" ? `\n${d.session} has gone cold; answering costs it a re-brief`
+        : r.state === "absent" ? `\n${d.session} is not in the session registry, so an answer has nobody to reach`
+        : d.session ? `\ncould not check whether ${d.session} is still around`
         : "";
-      b.dataset.tip = (d.kind === "page" ? "A decision page" : "Recorded by an agent") +
+      // The question leads the tooltip. Two clamped lines still cut a long one,
+      // and the row's whole job is saying WHICH decision — a tooltip that gives
+      // the provenance and age of a question you cannot read is answering a
+      // question nobody asked.
+      b.dataset.tip = d.title + "\n" +
+        (d.kind === "page" ? "A decision page" : "Recorded by an agent") +
         (d.at ? ` · ${ago(Date.parse(d.at))} ago` : "") + reachLine + tail +
         (d.href ? "\npress to open it" : "");
+      // Opening a recorded decision is the owner LOOKING at it, which is the
+      // event that turns "unseen" into "needs you". A page-backed decision gets
+      // this for free when its page writes .seen.json; a recorded one had no
+      // equivalent moment, so it claimed seen from birth and the red state was
+      // unreachable by construction. This is that moment.
       if (d.href) b.onclick = () => { location.href = d.href; };
-      else b.onclick = () => toast(d.why ? `why: ${d.why}` : "Recorded decision, no page", 3200);
+      else b.onclick = () => {
+        toast(d.why ? `why: ${d.why}` : "Recorded decision, no page", 3200);
+        if (d.seen) return;
+        // Fire and forget, then re-read: a failed stamp costs the red dot one
+        // more render, never the owner's click.
+        fetch("/api/decide", { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ slug, op: "seen", id: d.id }) })
+          .then(() => afterWrite()).catch(() => {});
+      };
       g.appendChild(b);
     }
   });
@@ -4121,7 +4173,21 @@ function render() {
     wrap.appendChild(grip);
     const list = document.createElement("div");
     list.className = "cards";
-    if (!cardsIn.length) list.innerHTML = `<div class="empty-col">No cards in this column. Drag one here to move it.</div>`;
+    // An empty column said "Drag one here to move it" for as long as the board
+    // has existed, and cards have never been draggable. Charter §7 is why they
+    // are not: "drag means rank", and a card's lane is its state rather than its
+    // order — columns, notes and tabs drag because their order persists, cards
+    // are sorted. So the sentence was not a missing feature, it was an
+    // instruction for something the board deliberately does not do.
+    //
+    // What replaces it names the real verb. Charter §12 keeps the empty column
+    // visible so its emptiness does not read as a fault (owner, 2026-08-25:
+    // "I wouldn't even know if its supposed to be there / or if it is broken");
+    // a visible column that lies is the same failure wearing better clothes.
+    if (!cardsIn.length) list.innerHTML =
+      `<div class="empty-col">Nothing in ${LANE_NAME[lane] ?? lane}.` +
+      `<span class="empty-how">Cards land here on <code>kanban.sh sync</code>, or` +
+      ` move here with <code>kanban.sh move &lt;id&gt; ${lane}</code>.</span></div>`;
     // a folded lane builds no cards at all: the point is the space, and the
     // filter still counts them because the count comes from cardsIn above
     if (!folded) cardsIn.forEach((c) => list.appendChild(cardEl(c)));
@@ -6313,14 +6379,25 @@ $("dAdd").onclick = () => {
 };
 // Collapse, not destroy: the tabs are the open set and they survive. Closing an
 // individual card is closeTab; emptying the panel is what hides it.
+// Escape's only caller. It used to call setCollapsed(true), which is not a
+// close at all: setCollapsed writes kanban-side-<slug> to localStorage and the
+// board reads it back on every load. So one Escape aimed at a popover set a
+// DURABLE per-board preference, and from then on clicking any card on that
+// board gave a 46px strip showing two initials instead of the note. Nothing
+// said so, and nothing undid it.
+//
+// Closing is transient, the way toggleDrawer just above already does it. The
+// draft flush and the dirty toast stay: those are about not losing typing, and
+// they were never the problem.
 function closeDrawer() {
-  // no confirm dialog: collapsing flushes the pending draft write, so it can never lose it
+  // no confirm dialog: closing flushes the pending draft write, so it can never lose it
   flushDraft();
   // dirty means "typed", not "changed": reverting to the saved text leaves
   // nothing to keep, so promising a kept draft would be a lie.
   if (dirty && $("dNote").value !== baseNote) toast("Draft kept — it will be here when you come back");
   dirty = false;
-  setCollapsed(true);
+  $("drawer").classList.remove("open");
+  toast("Panel closed — \\ brings it back");
 }
 
 
@@ -6499,9 +6576,16 @@ document.addEventListener("keydown", (e) => {
     case "c": copyDigest(); break;
     case "t": toggleTheme(); break;
     case "?": openHelp(); break;
-    // one Escape walks back out: note cursor, then the panel, then the filter
+    // One Escape walks back out, topmost layer first: a popover, then the note
+    // cursor, then the panel, then the filter.
+    //
+    // #colcard was missing from this ladder entirely, so Escape over an open
+    // lane-settings or board-settings popover reached straight past it and shut
+    // the panel underneath. Only the three popovers holding a text input bound
+    // Escape themselves; the ones that are pure controls had no exit key at all.
     case "Escape":
-      if (panel && noteAt >= 0) { noteAt = -1; markNote(); }
+      if (document.getElementById("colcard")) closeColCard();
+      else if (panel && noteAt >= 0) { noteAt = -1; markNote(); }
       else if (panel) closeDrawer();
       else if (filterText) { $("filter").value = ""; $("filter").dispatchEvent(new Event("input")); }
       break;
