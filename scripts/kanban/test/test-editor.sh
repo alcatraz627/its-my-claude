@@ -3,7 +3,7 @@
 # DOM until a function is called, so the history can be exercised against a
 # stub element — which is the only way this is testable at all, and the reason
 # it is its own file rather than a section of shared.js.
-HERE="$(cd "$(dirname "$0")" && pwd)"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
 pass=0; fail=0
 ok()  { printf '  PASS  %s\n' "$1"; pass=$((pass+1)); }
 bad() { printf '  FAIL  %s\n     %s\n' "$1" "${2:-}"; fail=$((fail+1)); }

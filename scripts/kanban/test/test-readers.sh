@@ -7,7 +7,7 @@
 #   bash test-readers.sh            run
 #   bash test-readers.sh --mutate   break the derived field first, expect RED
 set -uo pipefail
-HERE="$(cd "$(dirname "$0")" && pwd)"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
 ROOT="${TMPDIR:-/tmp}/kanban-readertest.$$"
 BOARDS="$HOME/.claude/kanban/boards"
 pass=0; fail=0

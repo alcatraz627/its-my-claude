@@ -5,7 +5,7 @@
 #
 #   bash test-charter.sh
 set -uo pipefail
-HERE="$(cd "$(dirname "$0")" && pwd)"
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
 pass=0; fail=0
 ok(){ echo "  PASS  $1"; pass=$((pass+1)); }
 no(){ echo "  FAIL  $1"; echo "     $2"; fail=$((fail+1)); }

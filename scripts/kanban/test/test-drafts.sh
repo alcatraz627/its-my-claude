@@ -7,7 +7,7 @@
 # no server running.
 
 set -uo pipefail
-HERE=$(cd "$(dirname "$0")" && pwd)
+HERE=$(cd "$(dirname "$0")/.." && pwd)
 ROOT=$(mktemp -d "${TMPDIR:-/tmp}/kanban-drafts-XXXXXX")
 export KANBAN_ROOT="$ROOT"
 trap 'rm -rf "$ROOT"' EXIT

@@ -36,7 +36,7 @@ entity the taxonomy lacks without saying you are proposing one.
 
 ## The shelf (source docs, when you want depth)
 
-All in `~/.claude/scripts/kanban/`: `UI-CHARTER.md` (the rulings ledger),
+All in `~/.claude/scripts/kanban/docs/`: `UI-CHARTER.md` (the rulings ledger),
 `DESIGN-SYSTEM.md` (current tokens/components), `FEEDBACK-CLASSES.md` (the
 eleven recurring failure classes), `SEARCH-DESIGN.md`, `NAV-UNIFICATION.md`,
 `EDITOR-LAYERS.md`, `CHAT-HISTORY.md` (the sessions plan, ruled),

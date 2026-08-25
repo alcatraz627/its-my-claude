@@ -649,8 +649,8 @@ const server = Bun.serve({
       // second list of what the first list already says", and it would go stale
       // the first time a ruling landed.
       if (p === "/api/charter") {
-        const f = path.join(HERE, "UI-CHARTER.md");
-        if (!fs.existsSync(f)) return json({ error: "UI-CHARTER.md is not beside the server" }, 404);
+        const f = path.join(HERE, "docs", "UI-CHARTER.md");
+        if (!fs.existsSync(f)) return json({ error: "docs/UI-CHARTER.md is missing" }, 404);
         const src = fs.readFileSync(f, "utf8");
         return json({ html: renderMd(src), bytes: src.length,
                       mtime: fs.statSync(f).mtime.toISOString() });
