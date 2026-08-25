@@ -67,9 +67,19 @@ violet-tinted like a card, with its own glyph). Inside:
 "worked on in: <alias> · <alias>", derived from turns that touched the card,
 each pressable. A card with no session mentions shows nothing.
 
-**4. Hub.** The Boards tab's `N live` pill already exists; a **Sessions** tab
+**4. Hub.** ~~The Boards tab's `N live` pill already exists; a **Sessions** tab
 is not added (the unified-surfaces hub gets Decisions and Previews; sessions
-are per board, the wrong altitude for the hub, same reasoning as views).
+are per board, the wrong altitude for the hub, same reasoning as views).~~
+
+> **SUPERSEDED 2026-08-25 by owner ruling D1b** on the `dp-system-feedback`
+> page: *"session hub separately and then linking closely to board(s) but
+> still cross-accessible (to think on how to weave them properly)"*. So the
+> hub DOES get a sessions surface, built in the same pass as the per-board
+> view, with the weaving still to be designed. The struck sentence above was
+> the 2026-08-24 position and is kept only so a reader who remembers it can
+> see it was reversed rather than forgotten. Whoever builds `#14` follows D1b.
+> The per-board drawer tab (D-ch-3) is unaffected; that was always a separate
+> question from whether the hub gets one.
 
 ## What happens to claude-instances
 

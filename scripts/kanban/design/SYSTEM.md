@@ -147,7 +147,10 @@ each is a ruling paid for in lived friction, not a taste.
 9. **Drawn, not typed (§5).** Glyphs are SVG; a glyph accompanies a label
    or has a tooltip; no dingbat-only buttons.
 10. **No native tooltips (§16); one delegated tip layer.**
-11. **A control that cannot act is hidden, not greyed (§7).**
+11. **Irrelevant is hidden; unavailable is visible, quiet, explained (§7).**
+    Amended 2026-08-25: the old form collapsed two cases. A control that makes
+    no sense here is hidden; one that cannot act right now stays put with a
+    tooltip saying why.
 12. **Overlays are symmetric, Esc closes, one scrim (§9).**
 13. **Optimism only with re-sync.** Optimistic touches must re-read; errors
     roll back visibly (the ask-routing busy/error idiom).

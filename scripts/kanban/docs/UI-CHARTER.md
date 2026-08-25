@@ -138,6 +138,20 @@ already states the kind. A kind hue without its heading is the bug.
   and per-item actions all stop propagation. This has been requested twice.
 - **Composite states.** hover, focus-visible, active, on and disabled are five
   different appearances. A control with only two of them is unfinished.
+
+- **Irrelevant is hidden; unavailable is visible, quiet, and explains itself.**
+  Amended 2026-08-25. The old form was "a control that cannot act is hidden,
+  not greyed", which collapsed two different cases. A control that makes no
+  sense here (Send, with nothing selected) is hidden. A control that exists
+  here and cannot act *right now* stays where it was, quiet, with a tooltip
+  saying why and when it returns. Spatial memory is how a daily user operates,
+  and a bar whose controls appear and vanish teaches the owner the bar cannot
+  be trusted; the help control that was absent rather than disabled on two
+  pages read as a bug to anyone who had learned `?` on the board. The tooltip
+  requirement is what preserves the original ruling's intent, which was that
+  nothing is greyed without an explanation. Same principle as §12's
+  empty-stays-visible rule: a thing that disappears is indistinguishable from
+  a thing that broke.
 - **The primary is blue, the related peer is green.** Hovering something that
   has a counterpart elsewhere lights both. The primary keeps its blue and gains
   a dotted, spaced outline with a soft glow. The peer takes a green,
