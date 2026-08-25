@@ -418,8 +418,9 @@ ${embed ? body : `<div class="docwrap">${body}</div>`}
 ${embed ? "" : `<script src="/kinds.js"></script><script src="/shared.js"></script>`}
 <script>${embed ? `const applyTheme=t=>{document.documentElement.dataset.theme=t;localStorage.setItem("kanban-theme",t)};
 applyTheme(localStorage.getItem("kanban-theme")||"dark");` : `
-/* The same bar every other page wears. It called pageHead() until 2026-08-25,
-   which #68 had renamed to navbar(), so this page threw and rendered bare. */
+/* The same bar every other page wears. This called the navbar by its old name
+   until 2026-08-25, threw, and rendered bare for a day; a name inside a server
+   template literal is invisible to every check the repo has. */
 navbar({ mount: "#phead", active: "boards",
   identity: crumbFor("boards", ${JSON.stringify(path.basename(real))}) });
 /* The doc's own small items go in the bar's status slot rather than a second
