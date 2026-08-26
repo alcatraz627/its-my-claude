@@ -27,7 +27,11 @@ is promoted. Promote it immediately, in the same turn it is written:
    claim has a consequence that blocks "done".
 2. **A Standing-constraints entry** in the Resume Contract (`/core-dump` §2.6),
    copied VERBATIM with the check that would catch its loss (parity ledger,
-   baseline screenshots, a named flow). Verbatim matters: paraphrase is where
+   baseline screenshots, a named flow). A parity ledger's rows are SURFACES (this
+   page, this table's width, this input's position, this card), not behaviours:
+   a ledger that lists behaviours and not surfaces lets a rebuild pass every row
+   and look worse (gcp-docs, 2026-08-26, after the owner refused a restructure
+   that passed its ledger). Verbatim matters: paraphrase is where
    laundering starts, and the constraint must survive every later checkpoint.
 
 ## The mixed-framing clause
@@ -57,25 +61,7 @@ task momentum survives.
 
 ## The UI surface purge gate
 
-Everything above activates when someone *writes* a claim. The damage happens
-later, during implementation, where a component gets deleted and no claim was
-ever written to trigger the check. So the gate binds to the deletion itself.
-
-Before deleting, removing, or replacing a component, page, or route:
-
-1. Did this surface appear in any prior owner-reviewed UI round?
-2. If yes, you need a parity ledger entry or explicit owner approval **in this
-   turn**, before the deletion.
-
-**Zero importers is not evidence.** The owner can have reviewed and approved a
-surface that no code calls, and an orphan this same work stream created reads
-identically to an orphan that was always dead. The import graph cannot tell you
-which one you are looking at; only the review history can.
-
-This is the build-time complement to the claim-level check above. The rule is
-currently 7× S3 with four events in a single week, annotated in the session
-briefing as a standing blind spot, which is why it now has two activation points
-instead of one.
+Extracted 2026-08-27 to `rules/no-silent-ui-surface-deletion.md`: before deleting a component, page, or route that appeared in any owner-reviewed round, a parity entry or owner approval in this turn; zero importers is not evidence.
 
 ## What this rule does NOT mean
 

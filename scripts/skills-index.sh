@@ -99,6 +99,13 @@ for name in sorted(os.listdir(root)):
 for name, invoke, g in rows:
     print(f"| `{name}` | {invoke} | {g} |")
 PY
+  # The parked band: kept, not loaded, still invocable by name after a copy-in.
+  PARKED="$HOME/.claude/skills-parked"
+  if [ -d "$PARKED" ]; then
+    pc=$(ls -d "$PARKED"/*/ 2>/dev/null | wc -l | tr -d ' ')
+    printf '\n## Parked (%s, not loaded)\n\nKept out of the roster so they cost no listing budget; each has a tldr, tags and an activation line in `skills-parked/INDEX.md` (regenerate: `bash ~/.claude/scripts/parked/parked.sh index`). Search both files before saying a skill does not exist. Copy one in with `parked.sh copy <name>`; un-park by moving it back here and re-running this script.\n\n' "$pc"
+    for d in "$PARKED"/*/; do [ -f "$d/SKILL.md" ] && printf -- '- `%s`\n' "$(basename "$d")"; done
+  fi
 } >"$OUT"
 
 echo "skills index regenerated: $OUT ($(grep -c '^| `' "$OUT") skills)"

@@ -74,15 +74,15 @@ When dispatching a sub-agent (`Agent` tool) that produces material content — r
 
 ### Don't override `NOTE(by human)` preferences silently
 
-Code with `NOTE(by human)`, `HACK`, `IMPORTANT`, or similar human-attribution comments marks a deliberate, tested choice. **Never override silently.** Ask first with reasoning, get approval, then verify the result visually/functionally. The fact that the code "looks wrong" without context is not evidence it's actually wrong — the comment is the context. Graduated from atone `overriding-user-commented-preferences` (S3). See also `rules/testing.md` § "Human-commented values".
+Code with `NOTE(by human)`, `HACK`, `IMPORTANT` marks a deliberate, tested choice: never override silently; ask first with reasoning, then verify. Full rule: `rules/human-note-preferences.md`.
 
 ### Don't invent "test-only / dev-convenience" exceptions to hard rules
 
-When the user asks for something that touches a surface an ADR or hard architectural rule says not to touch, **do NOT invent a "test-only" / "temporary" / "dev-convenience" exception** that the rule doesn't contain. Stop and ask the user for either (a) an explicit carve-out, or (b) a non-violating path. Self-permitting exceptions become permanent surface area; the next agent finds the exception and broadens it. Graduated from atone `self-permitting-exception-to-an-adr-hard-rule` (S3).
+Never invent a test-only or temporary exception to a hard rule; stop and ask for a carve-out or a non-violating path. Full rule: `rules/no-self-permitted-exceptions.md`.
 
 ### Flag coupled dependencies when the user simplifies
 
-When the user says "drop X" and other features they want to keep depend on X, **push back individually before accepting the broader simplification**. Cleanly accepting a request that silently breaks an adjacent feature is sycophantic deference, not helpfulness. Specifically: when evaluating "drop Y", check what else uses Y; if the user retained dependencies on Y, surface the coupling: "you can drop the broader direction, but this specific piece is load-bearing for the cap behavior you want." Graduated from atone `sycophantic-deference-on-coupled-decisions` (S3).
+When the user drops X and a kept feature depends on X, surface the coupling before accepting. Full rule: `rules/flag-coupled-dependencies.md`.
 
 ### Model-tier routing — smallest adequate lane, chosen out loud
 
@@ -149,6 +149,7 @@ Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixe
 | `features/tmp-jail.md`           | `topic:tmp-jail`, `topic:confine-to-tmp`, `topic:restrict-writes`, `phrase:"only write to tmp"` | Session-scoped /tmp write-jail. `tmp-jail on` confines this session (and its sub-agents) to /tmp; reads unaffected. Off ONLY by the user (`tmp-jail off <id>`) — the agent CANNOT lift it and must ASK with that exact command. Rare-use, off by default, no mute file. Guide: `features/tmp-jail.md` |
 | `features/model-tier-harness.md` | `topic:model-tier`, `topic:gemini`, `tool:lm-gemini`, `topic:dispatch-telemetry` | Mechanics behind `rules/model-tier-routing.md`: guard-model-tier.sh (block fable sub-agents, warn unpinned, dispatch telemetry → `logs/model-dispatch.jsonl`), image-read logging, the Jul-28/Aug-04 reviews, and the `lm gemini` pairing lane (wrapper-only access, gemini-3.5-flash) |
 | `features/decision-pages.md`     | `tool:decision-page.sh`, `topic:decision-page`, `topic:feedback-form`, needing a human verdict on many items | Pre-answered interactive HTML feedback pages — when a task needs >~4 human judgments, scaffold `decision-page.sh new <slug>` instead of asking N questions; human flips what's wrong + pastes one compact answer string. Registry `assets/decision-pages/`, served by kanban at :5106/dp/ |
+| `features/ci-oauth-token-minting.md` | `tool:mint-ci-token.sh`, `topic:ci-auth`, `phrase:"CLAUDE_CODE_OAUTH_TOKEN"`, changing the Claude account CI runs as | Mint a Claude Code OAuth token for a DIFFERENT account via a throwaway Linux codespace, so the machine's own login is never at risk (macOS keeps the credential in the Keychain, not a config file). Covers the three CI auth modes, the script, and the paid-for traps: two OAuth rounds, the browser picks the account, a pasted token can carry a line break that one CI lane tolerates and another dies on |
 
 ### Conventions
 

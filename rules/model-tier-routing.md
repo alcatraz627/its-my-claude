@@ -52,12 +52,10 @@ subscription, so the reason to declare a seat is that the lane should be chosen 
 loud, not that it costs extra. The ceiling graduated 2026-07-07 from two same-day
 flagship-dispatch occurrences in the versable-builder planning session.
 
-1. **Every `Agent`/`workflow.agent()` dispatch carries an explicit `model:` pin.** An
-   unpinned spawn can inherit the session model — the flagship.
-2. **Close the nesting leak** (how the ceiling was breached despite top-level pins):
-   every delegation prompt includes ONE of "Do NOT spawn sub-agents" (preferred for
-   bounded tasks) or "any sub-agent you spawn must pin sonnet or lower."
-3. In-flight agents are let to finish; the rule governs new dispatches.
+1. **Every dispatch carries an explicit `model:` pin** and the nesting-close clause;
+   the wording of both lives in `rules/subagent-dispatch-prompt.md` with the other two
+   clauses every brief carries.
+2. In-flight agents are let to finish; the rule governs new dispatches.
 
 ## Decision rules (task class → lane)
 

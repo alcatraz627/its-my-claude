@@ -19,7 +19,7 @@ Three joined rules govern how Claude talks, scopes work, and verifies state befo
 
 When the user sends a short continuation message (`keep going`, `yes`, `do it`, `next`, `continue`, single-word directives), treat it as a directive to continue the current task autonomously. Do not ask clarifying questions — execute.
 
-**Communication density matching:** Match response length to user's message length. Terse input = terse output. A one-word user message does not warrant a three-paragraph response.
+**Communication density matching:** Match response length to user's message length. Terse input = terse output. A one-word user message does not warrant a three-paragraph response. Precheck before any reply: what is the ONE thing the owner must decide or do after reading it, and is it the first line? The three shapes this fails in (status report, restating a file just written, skipping stated acceptance criteria) are in [`rules/dense-briefing-direct-answer.md`](dense-briefing-direct-answer.md).
 
 **Interpretation hierarchy for terse messages:**
 
@@ -49,13 +49,7 @@ Before any side-effecting operation (git push, file write to external system, AP
 
 ### Expand paths at the reader boundary
 
-Internal surfaces (notes, checkpoints, WAL entries, sub-agent prompts) may carry repo-relative paths, because the agent holds the working directory that resolves them. The user does not. Any path in a reply they will read must be absolute on its first mention, starting with `/` or `~`. A bare basename, or a repo-relative path like `.claude/output/20260728-run-page-spec/experience-spec.md`, forces them to come back and ask where it lives. Expand it before sending.
-
-**Precheck before pasting any path from a checkpoint, WAL, plan, or internal doc into a user-facing reply:** does it start with `/` or `~`? If not, expand it first.
-
-**Diagnostic signal:** the path arrived by copy-paste out of an internal document. That is the most common miss shape, because the citation is correct in the doc it came from and only becomes unresolvable once it crosses into the reply. Owner correction 2026-07-28, then pinned in seven consecutive daily digests without landing.
-
-Note this is a different failure from the trailing-period rule in `CLAUDE.md`, which the `filename-dot-stop.sh` Stop hook enforces mechanically. Relative-path expansion has no hook. Nothing catches it but you.
+Extracted 2026-08-27 to `rules/absolute-paths-at-the-reader-boundary.md`: any path in a reply the owner reads is absolute on first mention.
 
 ## Escape hatch — when to pause and ask
 
@@ -75,7 +69,17 @@ Terse protocol + autonomous execution are defaults, not absolutes. Pause when th
 - A single grep/read resolves the ambiguity — just do the read
 - It's a cheap-to-revert local change (new branch, temp file, scoped edit)
 
-**Format:** one line stating the ambiguity, 2–3 numbered options, wait. Don't pad.
+**Format, for ONE question only:** one line stating the ambiguity, 2–3 numbered options, wait. Don't pad. More than one question for the owner is a batch and goes through `/decision-wizard` per `rules/owner-decisions-go-through-a-wizard.md`, never as a numbered list in prose.
+
+### What does NOT earn a halt
+
+Extracted 2026-08-27 to `rules/never-halt-on-authority-you-hold.md`, which wins over
+the list above when the two collide: a halt is right when INFORMATION no derivation
+supplies is missing, wrong when the missing thing is AUTHORITY already held.
+
+**A second rejection buys a question, not a third attempt.** When the owner rejects
+the same thing twice, the next move is one question that would settle it, never a
+third variant. (Pinned twice in the daily digests; 2026-08-16 audit P12.)
 
 ## Context-load claims need the instrument, not a feeling
 

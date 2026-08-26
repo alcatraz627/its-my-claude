@@ -10,3 +10,24 @@ scaffold	new-project,bootstrap	a brand-new repo is being started from nothing
 dep-audit	npm,security,dependencies	owner asks about outdated or vulnerable deps in a node project
 daily-todo	todo,daily	owner asks for a daily todo file again (fell out of use 2026-Q2)
 forgotten-todos	todo,backlog,checkpoints	owner asks "what did I forget" / cross-session backlog browse
+statusline	statusline,terminal	owner asks to change the statusline itself (conf lives in assets/docs/statusline-dev-guide.md)
+statusline-config	statusline,config	same as statusline
+scan-sessions	transcripts,analysis	owner asks for a deep scan of past sessions for patterns
+mini	llm,fast-lookup	a sub-second local-model lookup is wanted; `q` on PATH covers most cases
+past-sessions	transcripts,history	owner asks "what did we do last time" beyond what /catchup or WAL holds
+shell-mem	shell,history	owner asks about recent shell commands or background processes; the MCP covers reads
+context-prime	orient,onboarding	a fresh session must orient in an unfamiliar repo (superseded by /router:pick-skill + /arch-qa)
+project-index	orient,index	a project needs a generated structure index; /arch-qa covers most asks
+describe	docs,report	owner wants an HTML deep-dive report on one skill or feature
+capabilities	docs,report	owner asks "what can this Claude do" as a report
+user-config	config,audit	owner wants the project's .claude config listed or edited interactively
+improve-config	config,audit	an audit of a .claude directory is wanted
+archive-notes	maintenance,runtime-notes	runtime-notes.md exceeds 800 lines or 3 weeks
+gotchas-update	maintenance,docs	a project keeps a gotchas.md and a lesson lands
+autocorrect	hinter,typos	the autocorrect dictionaries need editing
+new-migration	gcc,migrations	a structural gcc change needs a migration entry (see conventions/gcc-hygiene.md)
+git-setup	git,bootstrap	a new repo needs .gitignore, protection, templates
+visual-regression	ui,screenshots	baseline-vs-later screenshot diffs are wanted
+diagram	docs,ascii	a terminal diagram beyond an inline box drawing
+cogitate	research,notes	a durable topic note under ~/Documents/Claude/Topics is wanted
+thesaurus	style,ledger	a style verdict must be captured; the style ledger digest

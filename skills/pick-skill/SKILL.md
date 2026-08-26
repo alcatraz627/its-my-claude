@@ -44,9 +44,11 @@ most damage). Name the goal in one line first; route the goal.
    ```bash
    bash ~/.claude/scripts/skills-index.sh
    ```
-   Then search `~/.claude/skills/00-index.md` with `rg` on the user's terms AND
-   your own synonyms for them. Plugin skills are not in the index; check the
-   session skill roster for those before declaring absence.
+   Then search `~/.claude/skills/00-index.md` AND `~/.claude/skills-parked/INDEX.md`
+   with `rg` on the user's terms and your own synonyms for them. A parked hit is a
+   real answer: name it, say it is parked, and offer `parked.sh copy <name>`. Plugin
+   skills are in neither index; check the session skill roster for those before
+   declaring absence.
 
    **Sources beyond the index, when the index alone is thin.** The subsystems
    already carry routing signal. Three more surfaces, in order, stopping when

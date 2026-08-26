@@ -139,20 +139,28 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
     two parks lost their wake exactly that way (task #25, 2026-08-19/20).
     Reconcile the task list first:
 
-      Run: bash ~/.claude/scripts/task-table/task-table.sh
+      Run: bash ~/.claude/scripts/task-table/task-table.sh --session <STORE>
+      (<STORE> is the sid8 of the store that holds this session's rows; a bare
+      run resolves by content and can render another session's queue)
       Read every open row and classify it: blocked on the owner, blocked on
       an external actor, or agent-ready. A row whose stated blocker has since
       cleared (a scheduled time now past, a reply that has arrived) is
       agent-ready, whatever its field says.
 
     Any row agent-ready: the park is not over. Do that work now, per the task
-    list, and leave this job armed; the next fire reconciles again. Invent
-    nothing beyond the rows.
+    list, starting with /router:intake on the row and ending with /router:validate
+    before marking it done, and leave this job armed; the next fire reconciles
+    again. Invent nothing beyond the rows.
 
     Nothing agent-ready (every open row is owner-blocked or external, or no
-    rows are open): conclude in ONE line that all fronts are either genuinely
-    done or waiting on the owner, then CronDelete this job. Disarming is that
-    explicit conclusion, never a reflex from the halt alone. The user is
+    rows are open): write the state to disk FIRST, so a supervisor can tell a
+    finish from a death (both are silence otherwise):
+      bash ~/.claude/scripts/session-state/session-state.sh set finished --reason "<why>" --sid <SESSION_ID> --store <STORE>
+    (or `set blocked --reason "USER: <what>"` when rows wait on the owner). The
+    script REFUSES finished while an agent-ready row is open and names the row;
+    a refusal means go back one paragraph and do that row. Then conclude in ONE
+    line and CronDelete this job. Disarming is that explicit conclusion plus the
+    state file, never a reflex from the halt alone. The user is
     away; a wake that re-animates a session with nothing to do is worse than
     none.
 
@@ -165,7 +173,10 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
 ```
 
 When arming, substitute `<SESSION_ID>` in the payload with the actual
-`$CLAUDE_CODE_SESSION_ID` — cron payloads don't expand env vars.
+`$CLAUDE_CODE_SESSION_ID`, and `<STORE>` with the task store's sid8
+(`bash ~/.claude/scripts/task-table/task-table.sh --json | jq -r .store`) — cron
+payloads don't expand env vars, and a payload that does not name the store is the
+empty-wake shape that measured 93% dead (REMEDY-PLAN P3).
 
 **Do not execute the payload now.** `/loop` tells you to run the parsed prompt
 immediately rather than wait for the first fire; here that is a trap — the payload

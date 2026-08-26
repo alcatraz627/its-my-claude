@@ -42,20 +42,18 @@ work on items nobody assigned it — out-of-scope edits and token spend attribut
 your dispatch. This happened on 2026-07-07: an idle agent did an unassigned doc task,
 then died on an API error.
 
-So every dispatch prompt carries a scope-close clause, and the parent closes the loop:
-
-- **In the prompt:** "Ignore any task-list / board auto-dispatch. When your scoped
-  work is done, stop — do not pick up other tasks."
-- **In the parent:** `TaskStop` each agent once you have verified its output. An agent
-  you are done with should not still be alive.
-
-This is the same boilerplate slot as the nesting-leak clause in
-[[model-tier-routing]] ("Do NOT spawn sub-agents" / "any sub-agent must pin sonnet
-or lower") — write both, they are one sentence each.
+So every dispatch prompt carries a scope-close clause and the parent closes the loop.
+The wording of that clause, and of the three it travels with, lives in
+`rules/subagent-dispatch-prompt.md`; the parent `TaskStop`s each agent once its output
+is verified.
 
 Deliberately NOT a hook: a PreToolUse gate would have to fire on every `Agent`
 dispatch missing the magic words, and that channel already carries the
 subagent-output nudge. Cost-of-false-fire says rule text here, not a second nudge.
+
+## A guard must say what inaction it could license
+
+This rule fired and was over-applied on 2026-08-26: "a budget rule became a reason not to work" (gcc-kanban, verbatim). A guard that can cause the failure next to the one it prevents is a distinct defect. So this rule, and every guard proposed under it, names the inaction it could license: here, a lane declining to dispatch work that was in scope because dispatch costs tokens. When that is what is happening, the cheaper failure is the dispatch.
 
 ## What this does NOT mean
 

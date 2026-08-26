@@ -108,6 +108,14 @@ doc 71 required a second review pass, got a grounded answer, then had to ask
 "aren't we using gemini for the reader?" because the answer never said the work
 could not currently run (`mist-20260820-191945-b3`).
 
+### 8. A skill or renderer with an open defect: ask before invoking, not after
+
+When the instrument the request would route through carries a known open defect (a
+todo in its own notes, a callout row still open), the literal move is to invoke it and
+report the defect afterwards. The goal was the output, so the question comes first:
+one line, "X has an open defect that would affect this; use it anyway, or route
+around?" (2026-08-16 audit P5.)
+
 ## The escape hatch
 
 If the user says "exactly this", or repeats the string after you pushed back,

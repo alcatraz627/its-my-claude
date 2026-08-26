@@ -3,7 +3,7 @@ name: create-skill
 description: Turns a skill idea (a spec, intent, or checklist answers) into a finished SKILL.md with a tailored validation rubric and ledger steps, reviewed by a fresh seat for intent-vs-verbatim before it is written. Use when someone wants a new skill, slash command, or reusable workflow.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 user-invocable: true
-argument-hint: "[skill-name] [--global | --project] [--dry-run <dir>]"
+argument-hint: "[skill-name] [--global | --project] [--dry-run <dir>] | subagent-prompt [--shape S] [--persona P] [--out PATH]"
 ---
 
 ## Brief
@@ -38,6 +38,16 @@ project when CWD is a repo with a `.claude/` directory and `--project` is passed
 CWD is not the gcc. Always absolute paths. Never `.claude/skills/<name>` relative to
 CWD: from the gcc that nests one level too deep and `block-nested-claude.sh` refuses
 it.
+
+## Mode: subagent-prompt
+
+When the first argument is `subagent-prompt`, this skill writes the brief a sub-agent
+will receive instead of a SKILL.md. The whole mode, with the shape table, the six-line
+checklist, the section order and the traps, is in `subagent-prompt.md` beside this
+file; read it and follow it, then return here for nothing. Owner ruling 2026-08-26
+(decision page skills-0826, D5a): seed the structure from the shape of the goal, do not
+overconstrain, name what moves the needle, the pitfalls, and the claims to prove or
+contradict; ask the owner one batched question only when the checklist has blanks.
 
 ## Phase 1: what the skill is (spec-first)
 

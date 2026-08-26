@@ -25,6 +25,13 @@ logging reliable.
   (skip `_proposed/`, `usage/`, `README.md`, `BUILD_LOG.md`), read each file's
   `role:` frontmatter line only, and pick the best match. If two are plausible,
   say which two and why you picked one — do not ask unless genuinely blocking.
+- **Seating a sub-agent** (the primary use since 2026-08-27, owner ruling D4a):
+  `bash ~/.claude/scripts/persona/persona.sh seat <persona> <PROMPT.md>` composes the
+  brief (`/create-skill subagent-prompt` writes PROMPT.md), pins the persona's
+  `tier:`, logs the seat, and prints the composed path and model for the `Agent`
+  call. `persona.sh list` shows every persona with its type and tier. Five were
+  mined from a week of real dispatches: `hands-lane`, `ui-reviewer`,
+  `planning-seat`, `fresh-context-judge`, `digest-seat`.
 - Dispatch-only personas (`juror`, `skeptical-reviewer`) are NOT adoptable —
   they belong to their owning flows (`atone-juror-dispatch.sh`,
   `/skeptical-review`). If matched, point at the owning flow instead.

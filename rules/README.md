@@ -20,7 +20,7 @@ Each `*.md` carries YAML frontmatter (`brief`, `triggers:`, `related`, `tier`, `
 
 The compact always-on menu at `rules/00-index.md` is DERIVED from each rule's `brief:`. After adding, renaming, or removing a rule, regenerate it with `bash ~/.claude/scripts/rules-index.sh`. Your `brief:` is what the index shows, so make it a good one-line gist. If a similar rule already exists, refine that one rather than adding a near-duplicate.
 
-Body structure (per `rules/comments.md` rubric): code-agnostic purpose → contract → caveats. Keep <8 lines per docstring; link out for depth.
+Body structure (per `rules/comments.md` rubric): code-agnostic purpose → contract → caveats. A rule that gates or budgets an action also names the inaction it could license, so a guard cannot become a reason not to work (gcc-kanban, 2026-08-26). Keep <8 lines per docstring; link out for depth.
 
 ## Promotion / demotion
 

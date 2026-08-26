@@ -12,7 +12,7 @@
 #     --keep N      newest entries to keep in the active file (default 50)
 #     --dry-run     report the split, write nothing
 #
-# Contract (mirrors skills/archive-notes/SKILL.md phases 2-5):
+# Contract (mirrors skills-parked/archive-notes/SKILL.md phases 2-5):
 #   - an entry starts at each "## " heading; everything before the first "## "
 #     is the file header and always stays
 #   - entries are newest-first (prepend-runtime-note.sh order), so "keep N"

@@ -71,6 +71,20 @@ Every PR you raise, without exception:
    thread teaches it nothing. Use `/file-gh-issue`, which is dry-run by default
    and gated on your approval before it files.
 
+## Confidence decays across rounds, and the check before "ready" is mechanical
+
+A finding you argued away that comes back in the next round is evidence your argument
+missed, not evidence the reviewer is stubborn. Arguing the same finding across rounds
+without NEW evidence is the PR-thread costume of [[literal-request-over-intent]] shape
+7 (a repeated ask means the last answer missed). Second round: find what you did not
+show. Third round on the same finding: fix it or file the issue; do not argue again.
+
+And the runnable check, from RCA `mist-20260826-083406-6f` (this rule existed and did
+not bind): before telling the owner a PR is ready, done, or theirs to merge, run
+`gh pr view <n> --repo <repo> --json comments --jq '.comments[].body'` and read it. If
+any review finding is unanswered, the PR is not ready and the sentence you were about
+to write is false.
+
 ## Never do this
 
 - Report a PR as done, ask for a merge, or move to the next task while a finding

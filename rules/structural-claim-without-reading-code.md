@@ -41,6 +41,24 @@ If you cannot name a file:line that proves it, **read the code that decides X fi
 
 **Precheck (answer before typing the claim):** Can I name the exact file:line that proves this statement right now? YES → include the citation. NO → read the code first, then type the claim. This is the same gate the atone event format records as `precheck`; treat it as a decision point, not a reminder.
 
+## Name the instrument, and ask whether it measures the claim
+
+The precheck above asks whether you can cite the line. Two failures pass that check
+and are still wrong, and both were live on 2026-08-26. First, the citation resolves but
+the value there has moved: a count quoted from a report written three days ago, a
+"validated" instrument that was never on disk (audit P7, citation currency). Second,
+the instrument is real and current and measures a different thing: `git status`
+porcelain read as "someone is mid-edit", IPC recency read as "the peer is silent", a
+200 read as a rendered page (RCA `mist-20260826-091157-3c`, thirteen instances in one
+warden lane). So the fuller precheck:
+
+> Before asserting any state, name the instrument that told you, in one clause, and
+> ask two things: does that instrument measure the thing I am about to claim, and is
+> its reading current? If either answer is no, say what you actually checked instead.
+
+A citation that still resolves is not a claim that is still current. A check and a
+claim about different things, with nothing in the output saying so, is the shape.
+
 ## Process-completion claims get the same precheck
 
 The rule above covers *how a subsystem works*. The same verification failure

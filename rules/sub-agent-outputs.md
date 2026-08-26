@@ -178,22 +178,8 @@ disk and the abstract was the only artifact:
 
 ## Render-check your own output before declaring done
 
-The "I wrote it" claim is not the same as "I verified it renders." After
-writing any file that downstream consumers (humans, other agents, parsers)
-will read as **source** — `.md`, `.html`, `.json`, `.yaml`, `.toml`, RCAs,
-reports — run a quick render-check before considering the task done:
+The rule and its per-format 10-second checks live in `CLAUDE.md` Tier 0 ("Render before saving artifact files"); run that check on any file another reader or parser will consume as source.
 
-| File kind | 10-second check |
-|-----------|-----------------|
-| Markdown  | `glow file.md` OR `bat -l md file.md` OR scan first 20 lines |
-| JSON      | `jq . file.json` (parses + reformats; failure = invalid) |
-| YAML      | `python3 -c "import yaml; yaml.safe_load(open('file').read())"` |
-| HTML      | `open file.html` in a browser, or `tidy -e file.html` |
-| Markdown frontmatter | Confirm first line is `---`, closing `---` within first 30 lines |
-
-The check catches: missing frontmatter, broken H1 (wrapped headings),
-gum/TTY-render-saved-as-source (every line indented 2 spaces, `…` in tables,
-truncated column headers), invalid JSON, malformed YAML.
 
 This is the same principle as `render-before-judge` from the mistake-patterns
 log applied to the agent's own output — not just to user-flagged values.

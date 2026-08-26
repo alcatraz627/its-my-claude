@@ -137,6 +137,13 @@ box_state() {
   else
     echo "no goal to box" >&2; return 1
   fi
+  # The box ends with WORK, never with a bare goal restatement: a check-in that
+  # only restates the goal legitimised waiting (REMEDY-PLAN P3, 93% dead windows).
+  local js nxt
+  js=$(bash "$HOME/.claude/scripts/task-table/task-table.sh" --json 2>/dev/null)
+  nxt=$(printf '%s' "$js" | jq -r -f "$HOME/.claude/scripts/task-table/agent-ready.jq" 2>/dev/null | jq -r 'first | select(.!=null) | "next agent-ready row: #\(.id) \(.subject)"' 2>/dev/null)
+  [ -n "$nxt" ] || nxt="no agent-ready row; state your state: session-state.sh set blocked|finished --reason <why>"
+  why="$why"$'\n'"$nxt"
   local B="$HOME/.claude/scripts/box/box.sh"
   if [ -x "$B" ]; then
     bash "$B" goal "${SID:0:8}" --body "$text"$'\n'"$why" --action "$action" $rail ${seal:+--seal "$seal"} 2>/dev/null || true

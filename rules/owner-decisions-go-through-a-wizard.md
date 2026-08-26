@@ -1,5 +1,5 @@
 ---
-brief: Any batch of owner decisions (authorizations, rulings, review of an agent-written doc) is boiled down to the questions only the owner can answer and presented through /decision-wizard (TUI menu or pre-answered HTML form), never as a numbered list in chat and never as "read this doc"
+brief: Any batch of owner decisions (authorizations, rulings, review of an agent-written doc) is boiled down to the questions only the owner can answer and presented through /decision-wizard (TUI menu or pre-answered HTML form), never as a numbered list in chat and never as "read this doc". A UI is a medium, not an exemption: owner ruling 2026-08-26, a decision SET is ONE decision page, never N rows. And the pick is not the hard part, the owner's sentence is the ruling, so size the surface for prose and default the questions that arrive with their own answer attached
 triggers:
   - phrase:"need from you"
   - phrase:"before you go"
@@ -16,7 +16,7 @@ related:
   - rules/pushback-and-self-criticism.md
 tier: 2
 category: rules
-updated: 2026-08-20
+updated: 2026-08-27
 stale_after_days: 120
 ---
 
@@ -54,12 +54,22 @@ the wizard, and the doc is linked for the curious, not assigned.
 2. Write the questions in the owner's unit. Each one is something only they can
    decide (an authorization, a taste call, a scope fork). Drop every question
    the agent can default and record the default in the artifact instead.
-3. Draft the recommended answer and a one-line explainer per question.
+3. Split the survivors by confidence (owner ruling 2026-08-27, rules-0827 D1b). A
+   question you hold a confident pick for is DEFAULTED, not asked: apply the pick,
+   and list it in the reply or on the page under "Defaults applied, silence means
+   agreement", one line each, so the owner can flip one without being asked. Only
+   the genuinely open calls (a taste fork, an authorization, a scope choice the
+   evidence does not settle) are asked, each with a drafted answer and a one-line
+   explainer.
 4. Present through `/decision-wizard` (inline menu at three or fewer simple
    picks; HTML decision page above that). Never `AskUserQuestion` in the
    owner's fullscreen TUI, and never a bare numbered list in prose.
 5. Record each answer in the artifact it binds (the plan doc, the task's
    blocked-on, a project memory), not only in chat.
+
+## `USER:` means the owner can act on it today
+
+Extracted 2026-08-27 to `rules/owner-gate-means-actionable-today.md`: before anything goes in front of the owner, ask which of it they can act on today.
 
 ## What this does NOT mean
 

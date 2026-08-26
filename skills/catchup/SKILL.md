@@ -702,6 +702,13 @@ Which pending item should we start with? (number from the Pending list, or say)
 →
 ```
 
+When the owner picks one, the first move on it is `/router:intake` (owner ruling
+2026-08-27, skills-0826 D1a: the routers are the default hand-off), so the ask is
+modelled before any file is touched.
+
+```
+```
+
 Wait for the user's response before beginning any work. Do not make assumptions about priority or start executing autonomously.
 
 ## Notes

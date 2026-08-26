@@ -15,9 +15,9 @@ stale_after_days: 90
 # Git
 Commit cadence, push discipline, repo defaults, and gitignore patterns.
 
-## Frequent commits — MANDATORY
+## Frequent commits — MANDATORY when commits are in scope
 
-Commit after each logical unit, before switching areas, before risky operations, and if ~15-20 min of work accumulates. Batch related small changes (rename + imports = one commit) but never let 3-4+ changes pile up. Push after every 2-3 commits.
+Commit after each logical unit, before switching areas, before risky operations, and if ~15-20 min of work accumulates. Batch related small changes (rename + imports = one commit) but never let 3-4+ changes pile up. Push after every 2-3 commits. This cadence is guidance for *when* commits are already in scope; it is not standing authorization to commit or push when the user has not asked (the Tier-0 wording in `CLAUDE.md`).
 
 Authorization is the repo's protection status (user ruling 2026-07-11), cadence is only timing:
 
