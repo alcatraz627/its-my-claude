@@ -717,6 +717,10 @@ const server = Bun.serve({
             for (const d of (plan?.decisions ?? [])) {
               out.decisions.push({
                 kind: "recorded", slug, name: d.question,
+                // The id is what /api/decide answers against. Without it the hub
+                // could render a recorded decision and never rule on one, which
+                // is what the owner hit: six rows waiting on them, none answerable.
+                id: d.id,
                 // no page to open; the row links to the board that holds it
                 href: `/b/${slug}`,
                 board: slug, boardName: b.name ?? slug, card: d.card ?? null,
