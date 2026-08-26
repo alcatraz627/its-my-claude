@@ -217,6 +217,13 @@
      its stickiness itself, so a page cannot wrap it in a second set of both.
      It sticks on EVERY page: it did so on none, and the owner met that on Your
      asks first. */
+  /* It WRAPS rather than overflowing. The zones shed their words under pressure
+     and then stop shrinking, so past that point the bar simply ran off the right
+     edge and took the whole document with it: 926px of bar in an 800px window
+     pushed every page sideways, which is not the lanes scrolling, it is the page
+     moving. Owner's working range is 800 to 1400 and 800 was the width that
+     broke. A wrapped row costs ~30px and hides nothing, which §12 asks for and
+     an overflowing row does not. */
   .navbar{position:sticky;top:0;z-index:var(--z-nav);
           display:flex;align-items:center;gap:0;padding:7px 14px;
           border-bottom:1px solid var(--border);background:var(--well)}
@@ -312,6 +319,30 @@
   .navbar[data-tight] .nstatus .stat-chip:has(.sn):not(.warn) .sl,
   .navbar[data-tight] .nstatus .stat-chip.mute:not(.warn) .sl{display:none}
   .navbar[data-tight] .nstatus .stat-chip{padding:0 6px;gap:4px}
+  /* Both bars WRAP only where they must. flex-wrap and flex-shrink are
+     exclusive in practice: with wrap on, an item wraps rather than compressing
+     below its flex-basis, so turning it on unconditionally made 1400 worse than
+     it was (three rows where one had fit). Above 1000 the zones shed words and
+     shrink, which is the right bargain and the one they were built for. At or
+     below 1000 they have nothing left to shed, and a wrapped row costs ~30px
+     while an overflowing one takes the whole document sideways.
+     Owner's working range is 800 to 1400, and 800 was the width that broke. */
+  /* Shrink FIRST, wrap only as a last resort. flex-wrap alone wraps an item
+     rather than letting it go under its flex-basis, so turning it on with the
+     zones' 340px and 140px bases intact moved 1400 from one row to three. With
+     the bases released the zones compress the way they always did, shed their
+     words, and only then take a second row — which is what an overflowing bar
+     should have done all along instead of widening the document. */
+  /* Shed first, wrap last. The zones keep their flex-bases because those are
+     what make them compress in order rather than each claiming a row; with the
+     bases released every zone wrapped and then GREW to fill its own line, which
+     turned a 51px bar into 177px. Wrapping is the floor under the shed, for the
+     widths where there is nothing left to shed, and it beats the alternative:
+     an overflowing bar takes the whole document sideways. */
+  @media (max-width: 940px) {
+    .navbar{flex-wrap:wrap;row-gap:5px}
+    .subbar{flex-wrap:wrap;row-gap:4px}
+  }
   .nzfind{flex:1 1 240px;min-width:150px;justify-content:flex-start}
   /* A page with no find box was still paying for one: the zone held its
      1 1 240px and crushed the status strip beside it to "/Users…" while ~500px
@@ -329,10 +360,21 @@
           overflow-x:auto;scrollbar-width:none}
   .subbar::-webkit-scrollbar{display:none}
   .subbar > *{flex:none}
+
+  .subbar .sbstats{display:flex;align-items:center;gap:6px;flex:none}
+  /* the name and path give up room first, and the identity never wraps away */
+  .subbar .sbstate{flex:1 1 200px}
   /* the page's own state reads first and takes the slack, so the verbs sit
      right where the main bar's verbs used to */
   .subbar .sbstate{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
-                   white-space:nowrap;font-size:var(--fs-body);color:var(--text-3)}
+                   white-space:nowrap;font-size:var(--fs-body);color:var(--text-3);
+                   display:flex;align-items:baseline;gap:8px}
+  .subbar .sbstate b{color:var(--text);font-weight:600;flex:none}
+  /* The path is the first thing to give up room, and the LAST thing to vanish:
+     it ellipsises rather than disappearing, because charter §12 is that a thing
+     which vanishes cannot be told apart from a thing that broke. */
+  .subbar .sbpath{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+                  font:var(--fs-small) var(--mono);color:var(--text-3);opacity:.8}
   .subbar button{background:none;border-color:transparent;color:var(--text-2)}
   .subbar button:hover{background:var(--card);border-color:var(--border);color:var(--text)}
   .subbar button.on{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}

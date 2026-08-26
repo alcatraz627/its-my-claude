@@ -20,7 +20,18 @@
   ::-webkit-scrollbar-track{background:transparent}
   html,body{margin:0;height:100%}
   body{background:var(--canvas);color:var(--text);font:var(--fs-lead)/1.5 var(--sans);-webkit-font-smoothing:antialiased;
-       font-variant-numeric:tabular-nums;display:flex;flex-direction:column}
+       font-variant-numeric:tabular-nums;display:flex;flex-direction:column;
+       /* The card panel parks OFFSCREEN to the right when shut, at x≈1610 in a
+          1400px window, and a parked panel was widening the whole document by
+          84px — so the page scrolled sideways at every width, and the lanes'
+          own scroll was not the cause. main keeps its own overflow-x:auto, so
+          the columns still scroll inside it; this only stops the parked panel
+          from dragging the page along with it. */
+       overflow-x:hidden}
+  /* html as well as body: the document element is what scrolls, so clipping
+     only body left scrollWidth reporting the parked panel's 1610px and the page
+     still slid sideways. Sticky is verified working under this. */
+  html{overflow-x:hidden}
   h1,h2,h3{margin:0}
   svg{display:block;flex:none}
 
@@ -1791,8 +1802,46 @@ function mountBoardNav() {
   // for it: it painted half-under the Boards tab. It leads the page group so
   // that when a filter makes it appear it lands beside the zone you just used.
   page.append($("saveView"), $("pickGrp"), bar.querySelector(".tgrp.act"), cog);
+  // The board's verbs and its session read move to a SECOND bar (owner ruling
+  // D3a, 2026-08-26). The main bar was carrying identity, search, six kind tabs,
+  // a session indicator, four page verbs, theme and help, which is more than one
+  // row holds: at 1400 its right end clipped and the search placeholder was cut
+  // mid-word, at 900 the verbs sat offscreen behind a 70px window with no scroll
+  // affordance, and at 700 the board had no name and no verbs at all, so nothing
+  // on screen said which board you were looking at.
+  //
+  // The owner's working range is 800 to 1400 (their words: "The page opens at
+  // half width on my large monitor... it should work fine for 800px to 1400px,
+  // and also hold up best effort beyond"), so the split is unconditional rather
+  // than width-gated: a bar that only appears when things break means the layout
+  // moves under you at the width you work at. Charter §18c already ruled that a
+  // second bar is earned by verb count, and the board has the most verbs of any
+  // page here.
+  // Captured BEFORE navbar(), which sets innerHTML on the bar and so destroys
+  // anything still inside it. `find` and `page` above are captured for exactly
+  // this reason; appending #live to the second bar AFTER the call meant
+  // renderLive found nothing and every board poll threw.
+  const live = $("live");
   navbar({ mount: bar, active: "boards", identity: ident, find,
-           actions: page, peers: $("live"), help: openHelp, aside: navAside });
+           help: openHelp, aside: navAside });
+  const sub = document.createElement("div");
+  sub.className = "subbar";
+  // The board's identity leads the second bar, taking the slack, so the verbs
+  // land at the right edge where they have always been. It also means the board
+  // says which board it is even when the main bar is tight.
+  const where = document.createElement("span");
+  where.className = "sbstate";
+  where.id = "bWhere";
+  const stats = document.createElement("span");
+  stats.className = "sbstats";
+  stats.id = "bStats";
+  sub.append(where, stats, live, page);
+  bar.insertAdjacentElement("afterend", sub);
+  // --h-nav is what .subbar sticks below; publish the real height rather than
+  // the 45px default, which is only right at one width.
+  const publish = () => document.documentElement.style.setProperty("--h-nav", `${Math.round(bar.getBoundingClientRect().height)}px`);
+  publish();
+  new ResizeObserver(publish).observe(bar);
 }
 mountBoardNav();
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
@@ -3051,7 +3100,12 @@ function showState(kind, msg) {
   if (msg) s.querySelector(".statemsg").textContent = msg; // never innerHTML an error string
   s.className = "on" + (kind === "err" ? " err" : "");
   document.querySelector(".shell").style.display = "none";
-  if (kind === "err") { $("summary").innerHTML = ""; $("stalebar").className = "notice warn"; }
+  // Defensive because this is an ERROR handler: #summary is removed by
+  // renderSummary once the status band replaces it, so on any load failure the
+  // handler threw and hid the real error behind its own. An error path that can
+  // fail is an error path that reports the wrong thing.
+  if (kind === "err") { const sm = $("summary"); if (sm) sm.innerHTML = "";
+                        const sb = $("stalebar"); if (sb) sb.className = "notice warn"; }
 }
 function hideState() { $("state").className = ""; document.querySelector(".shell").style.display = ""; }
 
@@ -3419,8 +3473,25 @@ function renderSummary() {
   // Into the bar, not a row of its own. A second band cost ~49px of the scarce
   // axis to say four things, three of which the columns already count, and the
   // owner ruled it out on 2026-08-25. The deltas ride along with it.
-  const slot = document.getElementById("nbStatus");
+  // The counts belong on the SECOND bar, not the first. They are this board's
+  // state, which is exactly what .sbstate is for, and leaving them in the main
+  // bar kept it 126px over at 800 — the width the owner actually works at —
+  // which pushed the whole document sideways rather than just the lanes.
+  const slot = document.getElementById("bStats") ?? document.getElementById("nbStatus");
   if (slot) slot.replaceChildren(band, ...deltaRow());
+  // The second bar carries the board's name and path. At 700 the main bar drops
+  // both, so before the split nothing on screen said which board you were on.
+  const w = document.getElementById("bWhere");
+  if (w) {
+    w.replaceChildren();
+    const nm = document.createElement("b");
+    nm.textContent = data.name ?? slug;
+    const pth = document.createElement("span");
+    pth.className = "sbpath";
+    pth.textContent = data.root ?? "";
+    pth.dataset.tip = data.root ?? "";
+    w.append(nm, pth);
+  }
   const legacy = document.getElementById("summary");
   if (legacy) legacy.remove();
 }

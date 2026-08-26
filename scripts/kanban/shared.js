@@ -628,11 +628,22 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
   // is measured, and the same state always gets the same answer. Asking how
   // much slack is left instead would never loosen, because the zones flex and
   // absorb every spare pixel.
+  // Measures the BAR, not the actions group. It used to bail when #nbActions was
+  // empty, on the assumption that a bar with no page verbs could never be tight.
+  // The board disproved that on 2026-08-26: its verbs moved to a second bar, the
+  // group emptied, tighten() returned early forever, the kind tabs never shed
+  // their labels, and 766px of tabs pushed the bar 84px past a 1400px window.
+  // A page with no verbs at all can still be over capacity.
   const tighten = () => {
-    const np = document.getElementById("nbActions");
-    if (!np || !np.firstChild) return;
     delete el.dataset.tight;
-    const cutWithLabels = np.scrollWidth - np.clientWidth;   // forces the reflow
+    // The LAST child's right edge against the bar's own, not scrollWidth: a
+    // nowrap flex row with visible overflow does not report its overflow in
+    // scrollWidth, so the old measure read zero while the bar ran 84px past a
+    // 1400px window. getBoundingClientRect sees where things actually are.
+    const last = el.lastElementChild;
+    if (!last) return;
+    const pad = parseFloat(getComputedStyle(el).paddingRight) || 0;
+    const cutWithLabels = Math.round(last.getBoundingClientRect().right - (el.getBoundingClientRect().right - pad));
     if (cutWithLabels > 1) el.dataset.tight = "1";
   };
   tighten();
