@@ -126,6 +126,18 @@
     background:var(--amber);margin-right:7px;vertical-align:middle;flex:none}
   .surf .sn{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .surf .so{color:var(--text-3);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* A row that carries several handles stops being one big link. The chips are
+     the handles: a milestone's cards, its doc, the board, the card a decision
+     blocks. Each goes to the thing itself rather than to the board it lives on,
+     which is what the whole-row anchor used to do. */
+  .surf.surflinks{cursor:default}
+  .surf.surflinks:hover{background:var(--card)}
+  .surf .so{display:flex;align-items:center;gap:6px;flex-wrap:wrap;white-space:normal;overflow:visible}
+  .rchip{flex:none;display:inline-flex;align-items:center;padding:1px 7px;border-radius:var(--r-pill);
+         border:1px solid var(--border);background:var(--well);color:var(--text-2);
+         font-size:12px;text-decoration:none;line-height:1.6}
+  .rchip:hover{border-color:var(--blue-br);color:var(--blue);background:var(--blue-bg)}
+  .rnone{flex:none;color:var(--text-3);font-size:12px;opacity:.85}
   .surf .sage{margin-left:auto;color:var(--text-3);font-size:12px;flex:none}
   .ask.landed .ab{color:var(--text-3);font-size:12.5px}
   .ask .af{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--text-3)}
@@ -503,12 +515,16 @@ async function loadSurfaces(which) {
     l.className = "glabel"; l.textContent = `${label} · ${rs.length}`;
     g.appendChild(l);
     for (const r of rs) {
-      const a = document.createElement("a");
+      // A page-backed decision has ONE place to go and stays a whole-row link.
+      // A recorded one has several (its board, its card) so it becomes a div
+      // carrying chips, because an anchor cannot hold anchors.
+      const whole = r.kind !== "recorded";
+      const a = document.createElement(whole ? "a" : "div");
       // §12: unseen is its own state. A pending page you have never opened is
       // not the same as one you read and left, and only the first is news.
       const unseen = r.pending && r.seen === false;
-      a.className = "surf" + (r.pending ? " pending" : "") + (unseen ? " unseen" : "");
-      a.href = r.href;
+      a.className = "surf" + (whole ? "" : " surflinks") + (r.pending ? " pending" : "") + (unseen ? " unseen" : "");
+      if (whole) a.href = r.href;
       const nm = document.createElement("span");
       nm.className = "sn"; nm.textContent = r.name ?? r.title ?? "(untitled)";
       if (unseen) {
@@ -585,19 +601,41 @@ async function loadMilestones() {
     l.className = "glabel"; l.textContent = `${label} · ${rs.length}`;
     g.appendChild(l);
     for (const m of rs) {
-      const a = document.createElement("a");
-      a.className = "surf" + (m.doneAt ? "" : " pending");
-      a.href = m.href;
+      // A row that opens the whole board is not a link, it is a shrug. Every
+      // relation this object HAS gets its own handle: the cards go to the cards,
+      // the doc goes to the doc, the board goes to the board. The row itself is
+      // a div, not one big anchor, because a nested anchor inside an anchor is
+      // not a thing HTML allows.
+      const a = document.createElement("div");
+      a.className = "surf surflinks" + (m.doneAt ? "" : " pending");
       const nm = document.createElement("span");
       nm.className = "sn";
       nm.textContent = m.goal ? `${m.name} — ${m.goal}` : m.name;
       const so = document.createElement("span");
       so.className = "so";
-      // The count is the honest progress: cards wearing this milestone's tag
-      // that have reached done. A milestone with no cards says so rather than
-      // reading as 0% of something.
-      so.textContent = [m.boardName,
-        m.cards ? `${m.done}/${m.cards} done` : "no cards yet"].filter(Boolean).join(" · ");
+      const chip = (label, href, tip) => {
+        const e = document.createElement("a");
+        e.className = "rchip"; e.href = href; e.textContent = label;
+        if (tip) e.dataset.tip = tip;
+        return e;
+      };
+      so.append(chip(m.boardName, `/b/${m.board}`, "open this board"));
+      if (m.cards) {
+        so.append(chip(`${m.done}/${m.cards} done`,
+          `/b/${m.board}?q=${encodeURIComponent("tag:milestone:" + m.name)}`,
+          `show the ${m.cards} card(s) in ${m.name}`));
+        if (m.cards - m.done > 0)
+          so.append(chip(`${m.cards - m.done} left`,
+            `/b/${m.board}?q=${encodeURIComponent("tag:milestone:" + m.name + " is:open")}`,
+            "show only the ones not done"));
+      } else {
+        const none = document.createElement("span");
+        none.className = "rnone";
+        none.textContent = "no cards yet — tag one milestone:" + m.name;
+        so.append(none);
+      }
+      for (const d of (m.docs ?? []))
+        so.append(chip(d.split("/").pop(), `/doc?path=${encodeURIComponent(d)}`, d));
       const age = document.createElement("span");
       age.className = "sage";
       age.textContent = m.doneAt ? `shipped ${ago(Date.parse(m.doneAt))} ago` : "";

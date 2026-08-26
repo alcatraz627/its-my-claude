@@ -152,6 +152,25 @@ lad=$(rg 'getElementById\("colcard"\)\) closeColCard' "$(dirname "$0")/../board.
 [ -n "$lad" ] && ok "a popover is first on the Escape ladder" \
               || no "a popover is first on the Escape ladder" "#colcard is not in the ladder"
 
+echo; echo "-- a ~ path opens in the doc viewer (automation, cost a real decision) --"
+got=$(code -G --data-urlencode "path=~/.claude/scripts/kanban/docs/UI-CHARTER.md" "$S/doc")
+[ "$got" = "200" ] && ok "a ~ path resolves" || no "a ~ path resolves" "got $got"
+
+echo; echo "-- the board honours a ?q= deep link --"
+page=$(body "$S/b/-claude-244ec6?q=is%3Ablocked")
+case "$page" in
+  *'deepLink.get("q")'*) ok "the board reads ?q= on load" ;;
+  *) no "the board reads ?q= on load" "no q handler in the served page" ;;
+esac
+
+echo; echo "-- linkify is inert on markup, live on links --"
+lk=$(sed 's://.*::' "$(dirname "$0")/../board.html" | rg -c 'function linkify' || true)
+[ "$lk" != "0" ] && ok "linkify exists" || no "linkify exists" "gone from board.html"
+# It must build nodes, never markup: card bodies and decision why fields are
+# arbitrary agent-written text, and innerHTML on those is an injection.
+bad=$(rg -n 'linkify[\s\S]{0,900}?innerHTML' -U "$(dirname "$0")/../board.html" || true)
+[ -z "$bad" ] && ok "linkify never writes innerHTML" || no "linkify never writes innerHTML" "$bad"
+
 echo
 echo "======== pass=$pass fail=$fail ========"
 [ "$fail" = 0 ]

@@ -318,6 +318,11 @@ function resolveDocPath(reqPath: string): { real: string } | { error: string; st
   // sentence about a file type, for a request that named no file. The two cases
   // that were being swallowed now answer for themselves, first.
   if (!reqPath.trim()) return { error: "no document asked for — /doc needs ?path=<file>", status: 400 };
+  // ~ is how a path is written everywhere else in this app — in card bodies, in
+  // decision why fields, in notes, in the docs themselves. path.resolve does not
+  // expand it, so every one of those was unopenable until now. rootMissing has
+  // expanded it for board roots since the beginning; this is the same rule.
+  reqPath = reqPath.replace(/^~(?=$|\/)/, os.homedir());
   let real: string;
   try { real = fs.realpathSync(path.resolve(reqPath)); } catch { return { error: `no such file: ${reqPath}`, status: 404 }; }
   const allowed = roots.some((r) => { try { const rr = fs.realpathSync(r); return real === rr || real.startsWith(rr + path.sep); } catch { return false; } });

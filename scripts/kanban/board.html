@@ -929,7 +929,13 @@
   /* The answer popover is wider than a lane-settings card because it holds a
      question, its reason and a ruling, none of which read at 236px. */
   .colcard.decidecard{min-width:min(420px,calc(100vw - 28px));max-width:min(420px,calc(100vw - 28px))}
-  .colcard .dq{font:var(--fs-body)/1.45 var(--sans);color:var(--text)}
+  .colcard .dq{font:var(--fs-body)/1.45 var(--sans);color:var(--text);user-select:text}
+  .colcard .dwhy{user-select:text}
+  /* An inline link inside body text. Underlined rather than only coloured,
+     because "this is clickable" should not depend on hue. */
+  .inlink{color:var(--blue);text-decoration:underline;text-underline-offset:2px;
+          text-decoration-color:var(--blue-br);word-break:break-all}
+  .inlink:hover{text-decoration-color:var(--blue);background:var(--blue-bg)}
   .colcard .dwhy{margin-top:-3px}
   .colcard textarea{width:100%;box-sizing:border-box;resize:vertical;min-height:74px;
                     padding:7px 9px;border:1px solid var(--border);border-radius:var(--r-control);
@@ -1187,7 +1193,11 @@
 
   #toast.err{border-color:var(--red);color:var(--red)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-2);
-         border-radius:var(--r-card);padding:9px 16px;font-size:var(--fs-lead);display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:var(--z-toast)}
+         border-radius:var(--r-card);padding:9px 16px;font-size:var(--fs-lead);display:none;box-shadow:0 8px 28px rgb(0 0 0/.34);z-index:var(--z-toast);
+         /* selectable and wrappable: a toast now carries filters, rulings and
+            paths, which are things you copy rather than glance at */
+         user-select:text;max-width:min(720px,calc(100vw - 40px));cursor:pointer}
+  #toast:hover{border-color:var(--border-2);background:var(--card-hover)}
   #help h3{font:600 var(--fs-lead)/1 var(--sans);margin-bottom:14px}
   /* One table treatment for the whole modal. Before this, the Vibe Code tables
      carried a full hierarchy (column heads, a promoted identifier column, row
@@ -1788,9 +1798,64 @@ mountBoardNav();
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
 // and the toggle restyles by class alone — no re-render, nothing inlined
 
-function toast(msg, ms = 1900, kind = "") { const t = $("toast"); t.textContent = msg;
-  t.className = kind === "err" ? "err" : ""; t.setAttribute("role", kind === "err" ? "alert" : "status");
-  t.style.display = "block"; setTimeout(() => (t.style.display = "none"), ms); }
+// Turn bare URLs and absolute paths into things you can click or copy.
+//
+// A path or a URL that only exists inside a tooltip cannot be selected, cannot
+// be copied, and cannot be followed. On 2026-08-25 that cost a real decision:
+// the owner had a decision whose `why` carried the URL of the page holding 16
+// rulings, and their words were "I'm just not able to fucking open or copy the
+// path from the kanban board". Those 16 rulings gated 43 tasks and went
+// unanswered because the board would not give up a string.
+//
+// Returns a DocumentFragment, never HTML: the text is whatever an agent wrote,
+// and building markup out of it is how a card body becomes an injection.
+function linkify(text) {
+  const frag = document.createDocumentFragment();
+  const src = String(text ?? "");
+  // http(s) URLs, and absolute paths that look like a file worth opening
+  const re = /(https?:\/\/[^\s<>"')\]]+)|((?:~|\/)[\w.@+\-\/]*\.(?:md|txt|markdown|json|ts|js|css|html|sh|py))/g;
+  let last = 0, m;
+  while ((m = re.exec(src))) {
+    if (m.index > last) frag.append(src.slice(last, m.index));
+    const hit = m[0];
+    const a = document.createElement("a");
+    a.className = "inlink";
+    a.textContent = hit;
+    if (m[1]) { a.href = hit; a.target = "_blank"; a.rel = "noopener"; a.dataset.tip = "open in a new tab"; }
+    else {
+      // a path opens in the doc viewer when it can render it, and is copyable either way
+      // the ~ is kept: the server expands it, and stripping it produced
+      // /doc?path=/.claude/... which resolves to nothing
+      a.href = `/doc?path=${encodeURIComponent(hit)}`;
+      a.dataset.tip = "open this file in the doc viewer";
+    }
+    frag.append(a);
+    last = m.index + hit.length;
+  }
+  if (last < src.length) frag.append(src.slice(last));
+  return frag;
+}
+
+// The toast used to be 1900ms and each call set a NEW timer without clearing
+// the old one, so two toasts in quick succession meant the first one's timer
+// hid the second early. It also vanished while you were still reading it, which
+// matters now that it carries filters and rulings rather than only "saved".
+// Hovering holds it open; a click dismisses it; its text selects and its links
+// work.
+let toastTimer = null;
+function toast(msg, ms = 3400, kind = "") {
+  const t = $("toast");
+  t.replaceChildren(linkify(msg));
+  t.className = kind === "err" ? "err" : "";
+  t.setAttribute("role", kind === "err" ? "alert" : "status");
+  t.style.display = "block";
+  clearTimeout(toastTimer);
+  const arm = (delay) => { clearTimeout(toastTimer); toastTimer = setTimeout(() => (t.style.display = "none"), delay); };
+  arm(ms);
+  t.onmouseenter = () => clearTimeout(toastTimer);
+  t.onmouseleave = () => arm(1200);
+  t.onclick = (e) => { if (!e.target.closest("a")) t.style.display = "none"; };
+}
 
 // ---------- tags ----------
 // One vocabulary, one chip, one filter. A milestone is a tag several cards
@@ -2339,8 +2404,11 @@ function openDecideAnswer(d, btn) {
     `<button type="button" class="accent" id="dcsave" data-verb="send">Answer${d.session ? " and tell them" : ""}</button></div>`;
   document.body.appendChild(card);
   // textContent, not innerHTML: a question is arbitrary text an agent wrote.
-  card.querySelector(".dq").textContent = d.title;
-  if (d.why) card.querySelector(".dwhy").textContent = d.why;
+  // linkify, not textContent: the why routinely carries the URL or path of the
+  // thing the decision is about, and that is exactly the string that could not
+  // be opened or copied when it lived in a tooltip.
+  card.querySelector(".dq").replaceChildren(linkify(d.title));
+  if (d.why) card.querySelector(".dwhy").replaceChildren(linkify(d.why));
   const rr = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
   card.style.top = `${Math.min(rr.bottom + 6, innerHeight - cr.height - 10)}px`;
   card.style.left = `${Math.min(Math.max(10, rr.left), innerWidth - cr.width - 10)}px`;
@@ -3009,12 +3077,23 @@ async function load() {
     lastPayload = text;
     data = parsed;
     render();
+    // ?q= lands you on the CARDS, not on the board. Every index row that
+    // counts something — a milestone's members, a tag's cards, a decision's
+    // subject — had nowhere to point except /b/<slug>, so following any of them
+    // opened the whole board and left you to find the thing yourself. A count
+    // you cannot follow is a number, not a link.
+    const wantQ = deepLink.get("q");
+    if (wantQ) {
+      deepLink.delete("q");
+      setFilter(wantQ);
+      toast(`Filtered to: ${wantQ} — clear it with the filter box or Escape`, 5200);
+    }
     const wantCard = deepLink.get("card");
     if (wantCard && data.board.cards.some((c) => c.id === wantCard)) {
       deepLink.delete("card");                        // first paint only
       openDrawer(wantCard, deepLink.get("note"));
-      history.replaceState(null, "", location.pathname);
     }
+    if (wantQ || wantCard) history.replaceState(null, "", location.pathname);
   } catch (e) { lastError = true; showState("err", e.message); }
 }
 
