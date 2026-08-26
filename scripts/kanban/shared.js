@@ -555,7 +555,7 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
         KINDS.map((k) =>
           `<a href="${k.href}" data-v="${k.id}" data-k="${k.key}" role="tab"
               class="${k.id === active ? "on" : ""}" style="--nav-hue:var(${k.hue})"
-              data-tip="${k.tip} · press ${k.key}">
+              data-tip="${k.label} — ${k.tip} · press ${k.key}">
              <span class="vi">${k.icon}</span><span class="vt">${k.label}</span>
              <span class="vn">${counts[k.id] ?? ""}</span></a>`).join("") +
       `</div>` +

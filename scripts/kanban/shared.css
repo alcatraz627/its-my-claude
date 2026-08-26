@@ -339,7 +339,10 @@
      turned a 51px bar into 177px. Wrapping is the floor under the shed, for the
      widths where there is nothing left to shed, and it beats the alternative:
      an overflowing bar takes the whole document sideways. */
-  @media (max-width: 940px) {
+  /* Lowered from 940 once the tab labels went: the tabs dropped from 766px to
+     378px, so the bar fits on one row far further down than it used to and the
+     old threshold was wrapping widths that no longer needed it. */
+  @media (max-width: 880px) {
     .navbar{flex-wrap:wrap;row-gap:5px}
     .subbar{flex-wrap:wrap;row-gap:4px}
   }
@@ -534,16 +537,23 @@
      because a glyph and a count still state which kind you are in, while a
      primary action that has scrolled off the edge states nothing. */
   .navbar[data-tight] .bpath{display:none}
-  .navbar[data-tight] .views .vt{display:none}
-  .navbar[data-tight] .views button,.navbar[data-tight] .views a{padding:0 9px}
+
+  /* The tab labels are gone at EVERY width, not only under pressure. Owner,
+     2026-08-26: "Can the navbar page tabs only have icons and show the content
+     as a tooltip? Waste of space." Six kinds spelled out cost 766px of a bar
+     that has to hold identity, search, theme and help as well, and the label was
+     the only part of a tab a glyph and a count do not already say. The name
+     leads the tooltip now, so it is one hover away rather than gone.
+     This also removes the shed itself: there is nothing left to shed here, which
+     is what kept the bar over capacity at 1400 in the first place. */
+  .views .vt{display:none}
+  .views button,.views a{padding:0 9px}
 
   /* Under 1200 the bar sheds words before it sheds room. The tab keeps its icon
      and its count, and the name moves to the tooltip that was already there, so
      nothing becomes unreachable — it becomes shorter. Measured at the four
      widths this app is used at: 900, 1280, 1600, 1920. */
   @media (max-width:1200px){
-    .views .vt{display:none}
-    .views button,.views a{padding:0 9px}
     .navbar .nsub{display:none}
     .nzcommon{padding-left:10px}
     .nz + .nz{margin-left:9px}
