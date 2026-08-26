@@ -474,6 +474,47 @@ never having moved, and a deleted card leaves no trace — which are the two
 changes anyone actually asks about. It also distinguishes "nothing changed in
 this window" from "nothing was ever recorded".
 
+### Round 3, 2026-08-26 (owner answered `kanban-round-3`)
+
+Answer string `D1a D2a D3a D4a D5b D6c`, and **two of the notes overrode their
+own picks**, which is a defect in the options I wrote rather than in the answers.
+
+- **D4** picked 1600-1920 and the note says the real working range is **800 to
+  1400**: *"The page opens at half width on my large monitor... it should work
+  fine for 800px to 1400px, and also hold up best effort beyond... I don't want
+  the kanban board page crammed when there's more space available, but I don't
+  want it only showing fine in larger widths either."* 800-1400 is the range
+  everything is judged at now.
+- **D5** picked "I have never used it" and the note says *"Oh I absolutely want
+  them. I've tried my best to use them but they are so lacking I couldn't use
+  them much."* There was no option for "I want this and it is not good enough
+  yet", which is the answer.
+
+**Built from the rulings:** the board's second bar (D3a), milestone
+reconciliation with mismatch warnings (D6c), `batch` and multi-id `tag` (D6
+note on CLI composability), decisions answerable in the board with the raiser
+notified, index rows that link to the thing rather than to the board, `?q=`
+deep links, `linkify` for URLs and paths anywhere body text is shown, `~`
+expansion in the doc viewer, and `is:unnamed` / `is:untagged`.
+
+**The two open gates are one question.** D5's note describes asks and card-notes
+as the same act differing only in whether it is attached to something, and asks
+for the same affordance in both; D1's note says Your Asks *"works in a board and
+fails floating in its own page"*, missing cross-linking, archive, amend and
+focus. Those want a planning session together, not two patches. The owner asked
+for `/pick-skill` to diagnose usage-versus-intent first.
+
+**What the navbar split uncovered, none of it the bar:** `tighten()` bailed
+whenever the page-verbs group was empty, so moving the verbs silently disabled
+the kind tabs' label-shedding for good; it also measured `scrollWidth`, which a
+nowrap flex row with visible overflow does not report. And the card panel parks
+offscreen at about x=1610, widening the document by 84px at every width, so the
+page slid sideways and the lanes were never the cause.
+
+**Known cost, stated rather than hidden:** at 800 the header takes 177px because
+both bars wrap. Wrapping hides nothing, which §12 asks for, and an overflowing
+bar takes the whole document with it. It is not free.
+
 ### The adversarial round, 2026-08-26
 
 A prosecutor audited the 2026-08-25 work against eleven claims and its report is
