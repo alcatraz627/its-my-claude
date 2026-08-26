@@ -152,7 +152,9 @@ export function renderMd(input: string): string {
       // &gt;, not >: esc() runs on the whole block before this loop sees a line
       const bq = l.match(/^&gt;\s?(.*)$/);
       if (bq) {
-        flushPara(); flushList(); flushTable();
+        // flushCode with the others, or an indented block that precedes this
+        // survives to flushAll and is emitted AFTER the thing that followed it.
+        flushPara(); flushCode(); flushList(); flushTable();
         if (!quote) { quote = []; quoteLine = here; }
         // the RAW line, because flushQuote re-parses this as markdown
         quote.push((rawLines[idx] ?? "").replace(/^\s*>\s?/, ""));
@@ -160,7 +162,7 @@ export function renderMd(input: string): string {
       }
       flushQuote();
       if (/^\s*\|.*\|\s*$/.test(l)) {
-        flushPara();
+        flushPara(); flushCode();
         // Indented deeper than the item that opened the list, so it is the
         // item's content; keep the list open and let flushTable fold it in.
         const tIndent = (l.match(/^[ \t]*/)?.[0] ?? "").replace(/\t/g, "    ").length;
@@ -180,7 +182,7 @@ export function renderMd(input: string): string {
       // them rendering as literal "[ ]" was the one gap worth closing here.
       const box = ul && ul[1].match(/^\[([ xX])\]\s+(.*)$/);
       if (ol || ul) {
-        flushPara();
+        flushPara(); flushCode();
         const tag: "ul" | "ol" = ol ? "ol" : "ul";
         // depth is the leading whitespace; a tab counts as four columns
         const indent = (l.match(/^[ \t]*/)?.[0] ?? "").replace(/\t/g, "    ").length;

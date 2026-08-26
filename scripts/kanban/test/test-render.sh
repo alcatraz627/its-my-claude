@@ -181,6 +181,25 @@ case "$got" in
   *) no "markup inside an indented block stays literal" "$got" ;;
 esac
 
+# --- an indented block keeps its place when another block follows it ----------
+#
+# The code buffer was only flushed on the paragraph fallthrough, so a table, a
+# list or a blockquote starting right after an indented block left the block
+# open; flushAll then emitted it at the END. A table rendered BEFORE the code
+# that preceded it in the source. Found by testing the boundaries after the
+# local reviewer pointed vaguely at block termination.
+for after in 'table:| a | b |\n| - | - |\n:<table' 'list:- item\n:<ul' 'quote:> quoted\n:<blockquote'; do
+  nm="${after%%:*}"; rest="${after#*:}"; body="${rest%:*}"; tag="${rest##*:}"
+  got=$(printf "para\n\n    code\n\n$body" | render)
+  pre_at=$(printf '%s' "$got" | grep -bo '<pre' | head -1 | cut -d: -f1)
+  oth_at=$(printf '%s' "$got" | grep -bo -- "$tag" | head -1 | cut -d: -f1)
+  if [ -n "$pre_at" ] && [ -n "$oth_at" ] && [ "$pre_at" -lt "$oth_at" ]; then
+    ok "an indented block stays before a following $nm"
+  else
+    no "an indented block stays before a following $nm" "pre@${pre_at:-none} $nm@${oth_at:-none}: $got"
+  fi
+done
+
 # --- KNOWN GAP: an ordered list interrupted by a FENCED block still splits -----
 #
 # Same defect class as the table case above, reached through a different
