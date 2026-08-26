@@ -171,6 +171,49 @@ lk=$(sed 's://.*::' "$(dirname "$0")/../board.html" | rg -c 'function linkify' |
 bad=$(rg -n 'linkify[\s\S]{0,900}?innerHTML' -U "$(dirname "$0")/../board.html" || true)
 [ -z "$bad" ] && ok "linkify never writes innerHTML" || no "linkify never writes innerHTML" "$bad"
 
+echo; echo "-- a decision page reached without its trailing slash (owner, 2026-08-26) --"
+# Every relative fetch on the page resolves against the parent directory, so
+# config.json 404s. That 404 answers with a JSON error BODY, which parses, so the
+# page's .catch never fired and it drew its full chrome around zero items with a
+# live Submit. Pressing that files a blank ruling and tells the raising session
+# the owner has spoken. The probe page is created here rather than borrowed from
+# the registry: a fixture that depends on someone else's data can go missing and
+# read as a pass.
+dpslug="zz-smoke-dp"
+dpdir="$HOME/.claude/assets/decision-pages/$dpslug"
+mkdir -p "$dpdir"
+printf '{"title":"smoke probe","storageKey":"%s","decisions":[],"sections":[]}' "$dpslug" > "$dpdir/config.json"
+
+got=$(code "$S/dp/$dpslug")
+[ "$got" = "301" ] && ok "/dp/<slug> redirects to /dp/<slug>/" \
+                   || no "/dp/<slug> redirects to /dp/<slug>/" "got $got, so relative fetches break"
+loc=$(curl -s -o /dev/null -w '%{redirect_url}' "$S/dp/$dpslug?x=1")
+case "$loc" in
+  *"/dp/$dpslug/?x=1") ok "the redirect keeps the query string" ;;
+  *) no "the redirect keeps the query string" "Location was $loc" ;;
+esac
+got=$(code "$S/dp/$dpslug/")
+[ "$got" = "200" ] && ok "the directory URL still serves the page" \
+                   || no "the directory URL still serves the page" "got $got"
+# The relative asset the page actually fetches, from the directory URL.
+got=$(code "$S/dp/$dpslug/config.json")
+[ "$got" = "200" ] && ok "config.json resolves from the directory URL" \
+                   || no "config.json resolves from the directory URL" "got $got"
+
+# The page-level guard, independent of the redirect. curl cannot run the JS, so
+# assert the guards are present in what the server serves; their behaviour is
+# mutation-tested in the browser.
+pg=$(body "$S/dp/$dpslug/")
+case "$pg" in
+  *"config.json returned"*) ok "the page checks the config response status" ;;
+  *) no "the page checks the config response status" "no status guard in decision.html" ;;
+esac
+case "$pg" in
+  *"carries neither decisions nor sections"*) ok "the page asserts the config shape" ;;
+  *) no "the page asserts the config shape" "a valid-but-empty config would render a live Submit" ;;
+esac
+trash "$dpdir" 2>/dev/null || true
+
 echo
 echo "======== pass=$pass fail=$fail ========"
 [ "$fail" = 0 ]

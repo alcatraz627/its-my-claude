@@ -666,7 +666,17 @@ async function checkAnswered() {
   } catch {}
 }
 
-fetch("config.json", { cache: "no-store" }).then(r => r.json()).then(c => {
+fetch("config.json", { cache: "no-store" }).then(r => {
+  /* A bad /dp/ path answers 404 with a JSON error body, so .json() succeeds and
+     the old chain sailed on with CFG = {error}. The page then drew its whole
+     chrome around nothing and left Submit live, which files a blank ruling and
+     tells the raising session the owner has spoken. Check the status, then the
+     shape: absence is the failure here, so absence is what has to be asserted. */
+  if (!r.ok) throw new Error(`config.json returned ${r.status}`);
+  return r.json();
+}).then(c => {
+  if (!c || typeof c !== "object" || (!Array.isArray(c.decisions) && !Array.isArray(c.sections)))
+    throw new Error("config.json carries neither decisions nor sections");
   CFG = c;
   navbar({ mount: "#phead", active: "decisions",
     identity: crumbFor("decisions", CFG.title || SLUG),

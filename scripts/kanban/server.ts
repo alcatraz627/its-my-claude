@@ -546,7 +546,16 @@ const server = Bun.serve({
         const slug = parts[0] ?? "";
         const dir = dpDirOf(slug);
         if (!dir) return json({ error: `unknown decision page ${slug}` }, 404);
-        if (parts.length <= 1) return html("decision.html");
+        // Reached without its trailing slash, every relative fetch on the page
+        // resolves one directory up: config.json becomes /dp/config.json, which
+        // answers 404 with a JSON error body that parses fine. Send the browser
+        // to the directory URL the way any file server would.
+        if (parts.length <= 1) {
+          if (!p.endsWith("/"))
+            return new Response(null, { status: 301,
+              headers: { location: `/dp/${encodeURIComponent(slug)}/${url.search}` } });
+          return html("decision.html");
+        }
         // an asset inside the page dir (config.json, images) — no traversal
         const rel = parts.slice(1).join("/");
         const real = path.resolve(dir, rel);
