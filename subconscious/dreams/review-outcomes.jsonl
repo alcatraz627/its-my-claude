@@ -1,2 +1,4 @@
 {"ts": "2026-08-05T19:30:14Z", "surfaced": 8, "applied": 5, "source": "manual-review"}
 {"ts": "2026-08-13T09:44:45Z", "surfaced": 9, "applied": 4, "source": "manual-review"}
+{"ts": "2026-08-26T11:44:20Z", "audit": "2026-08-23", "surfaced": 17, "applied": 5, "rejected": 12, "source": "manual-review", "session": "gcc-night-7a"}
+{"ts": "2026-08-26T11:44:20Z", "audit": "2026-08-16", "surfaced": 13, "applied": 2, "rejected": 7, "left_open": 4, "source": "manual-review", "session": "gcc-night-7a"}

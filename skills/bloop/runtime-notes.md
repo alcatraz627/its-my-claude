@@ -1,3 +1,53 @@
+## session: kanban adversarial fix round · gcc-kanban f452498c — 2026-08-26
+
+Purpose: fix 18 findings from an adversarial review of the kanban app, plus build
+two objects the owner had ruled on. Ran the full loop; the gate found real defects
+in the guards themselves.
+
+- **A frozen sub-agent transcript is not a dead sub-agent, and the difference is
+  invisible.** I concluded a prosecutor had been killed by a `/clear`, reconstructed
+  its findings from 235 tool-call/result pairs, and wrote a whole report on that
+  premise. It had gone idle and announced itself twenty minutes later. `ListAgents`
+  does not list in-process teammates, so it looked like confirmation. **Before
+  declaring a teammate dead, SendMessage it** — the cost of asking is one message
+  and the cost of being wrong is an entire duplicated deliverable.
+
+- **A transcript records what an agent LOOKED AT, never what it CONCLUDED.** Two of
+  the findings in my reconstruction were mine, not the prosecutor's: I read a raw
+  computed-style measurement and wrote a finding from it, then rejected that
+  finding on the agent's behalf. It confirmed it had never raised it. Reading
+  measurements back out of a transcript manufactures authorless claims that are
+  indistinguishable from real ones once they are on the page.
+
+- **Mutation-testing found three broken guards of MY OWN in one round**, which is
+  the strongest argument for the ritual I have seen. The best: under
+  `set -o pipefail`, `sed FILE | rg -q PATTERN` reports FAILURE on a match — rg
+  exits the instant it matches, sed takes SIGPIPE (141), and pipefail surfaces
+  that. So `if ... ; then no "bug present"; else ok; fi` read "found the bug" as
+  "clean" and stayed green with the defect deliberately reinstated. **Capture the
+  output (`hits=$(... || true)`) rather than testing a pipeline's exit status.**
+  Second: a no-op mutation (a `python -c` whose replacement silently did not apply)
+  read as a passing guard, so always confirm the mutation LANDED before believing
+  the green. Third: a glob assertion `*"<li>one"*"<table>"*"</li>"*` matched a
+  `</li>` from a later list item.
+
+- **A guard that greps for a removed string will match the comment explaining its
+  removal.** Every fix comment quotes what it deleted. Strip comments before
+  grepping, or the checker reads its own prose as evidence of the bug.
+
+- **The gate earned its cost again.** It reached attack 5 of 9 and had already
+  found a hole the whole round missed: `milestone done` trusts a client-supplied
+  `cards` array, so the server moves whatever ids it is handed. Self-review had
+  exercised the happy path through the CLI, which computes that array correctly —
+  the CLI was the only caller I imagined.
+
+- **Extract before you test.** Three renderer defects were untestable because
+  `renderMd` lived inside `server.ts`, and importing that file boots a second
+  server on the live port. Pulling it into `render-md.ts` was the whole cost of
+  getting a 10-check guard.
+
+---
+
 ## bloop: #73 tell 8 + repeated-ask hinter (gcc-work-78) — 2026-08-18 15:40
 
 **Purpose:** A length-ratio tell for prose-smell, and a shape-7 hinter for a

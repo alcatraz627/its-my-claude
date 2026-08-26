@@ -1,1234 +1,18 @@
 {
-  "$schema" : "https:\/\/json.schemastore.org\/claude-code-settings.json",
-  "agentPushNotifEnabled" : true,
-  "alwaysThinkingEnabled" : true,
-  "autoMode" : {
-    "environment" : [
-      "### Org-wide",
-      "**Organization**: Versable (versable.ai Google Workspace)",
-      "**Cloud provider(s)**: Google Cloud Platform — projects `walmart-496912` (gcloud CLI default), `speedway-versable`, `versable-pim`",
-      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — unqueryable here (no remote configured on this repo)",
-      "**Internal sharing \/ snippet hosting**: None configured — treat public paste\/gist services as outside the trust boundary",
-      "**Secrets management**: GCP Secret Manager (`gcloud secrets`) — reading secret values (`secrets versions access`) and creating service-account keys are hard-blocked per this repo's CLAUDE.md safety model",
-      "**Default \/ protected branches**: not queryable here (no git remote configured on this repo)",
-      "**CI\/CD deploy targets**: Cloud Run service `speedway` and `speedway-dev` in `us-central1` under project `speedway-versable`, driven by `\/Users\/alcatraz627\/Code\/Versable\/speedway\/deploy\/deploy.sh`",
-      "**Network posture**: None configured",
-      "**Source control**: This repo (`\/Users\/alcatraz627\/Code\/Versable\/gcp`) has no configured remote — treat as local-only until a remote is added",
-      "**Trusted internal domains**: versable.ai (Google Workspace org)",
-      "**Trusted cloud buckets**: None configured",
-      "**Key internal services**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim`; Cloud Run services `speedway`, `speedway-dev`",
-      "**Internal package registry**: None configured",
-      "**Sensitive data locations & audiences**: on-disk GCP credentials, ADC files, and any output of `gcloud secrets versions access` are sensitive — never print secret values or key material into the transcript; audience is the operator at a real terminal only",
-      "**Data retention \/ declassification**: None configured",
-      "**Sensitive remote targets**: any GCP resource, namespace, or Cloud Run service whose name carries `prod` or `production` as a whole word or name segment; also treat `speedway` and `speedway-dev` production traffic paths as sensitive per this repo's deploy tiering (mutations require explicit ask)",
-      "**Protected deployment namespaces \/ environments**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim` — mutating operations (`run deploy`, `instances create\/stop`, `services enable`, `secrets create`, `*-iam-policy-binding`, `config set`, `bq query`, `storage cp\/mv`, `tf apply`) require an explicit ask each time per this repo's declared safety model; delete\/destroy, `set-iam-policy`, `secrets versions access`, `sa keys create`, and `auth revoke` are hard-blocked with no override",
-      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment; `set-iam-policy` specifically flagged as dangerous (wholesale policy replacement, can silently drop bindings)",
-      "### User-specific",
-      "**Primary use of Claude Code**: GCP operations\/inspection for Versable — running gcloud commands, reading cloud state, and recording findings (no application code in this repo)",
-      "**Trusted repo**: The git repository the agent started in (`\/Users\/alcatraz627\/Code\/Versable\/gcp`) — no remote is currently configured, so treat as local-only until one is added",
-      "**Org-specific CLIs**: `gcloud` (project-scoped to `walmart-496912`, `speedway-versable`, `versable-pim`; always requires explicit `--project`); `bin\/gcp-preflight.sh` for auth preflight",
-      "Routine under `\/Users\/alcatraz627\/Code\/Versable\/` prefix: gcloud read-only operations (list, describe, get-iam-policy, logging read, versions list, ls, du, builds log) run freely per this repo's declared allow tier"
-    ],
-    "soft_deny" : [
-      "$defaults",
-      "Bash(gcloud *iam-policy-binding*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier",
-      "Bash(gcloud *storage cp*:*) and Bash(gcloud *storage mv*:*) — scoped to Versable GCP projects, matches this repo's declared ASK tier",
-      "Bash(gcloud *run deploy*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier"
-    ]
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 365,
+  "skillListingBudgetFraction": 0.02,
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "92",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": "5000",
+    "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alcatraz627/.cargo/bin:/Users/alcatraz627/.pyenv/shims:/Users/alcatraz627/.pyenv/bin:/Users/alcatraz627/.bun/bin:/Users/alcatraz627/.codeium/windsurf/bin:/Users/alcatraz627/Code/my-gcp-tools:/Users/alcatraz627/.local/bin",
+    "PROSE_SMELL_ENFORCE": "1",
+    "STATUSLINE_PROFILE": "custom"
   },
-  "autoUpdatesChannel" : "latest",
-  "cleanupPeriodDays" : 365,
-  "effortLevel" : "medium",
-  "enableAllProjectMcpServers" : false,
-  "enabledPlugins" : {
-    "analyze-codebase@awesome-claude-code-plugins" : false,
-    "chrome-devtools-mcp@claude-plugins-official" : true,
-    "claude-md-management@claude-plugins-official" : true,
-    "code-review@claude-plugins-official" : true,
-    "code-simplifier@claude-plugins-official" : true,
-    "codex@openai-codex" : true,
-    "commit-commands@claude-plugins-official" : true,
-    "explanatory-output-style@claude-code-plugins" : true,
-    "feature-dev@claude-plugins-official" : true,
-    "frontend-design@claude-plugins-official" : true,
-    "frontend-developer@awesome-claude-code-plugins" : false,
-    "github@claude-plugins-official" : false,
-    "hookify@claude-plugins-official" : true,
-    "linear@claude-plugins-official" : false,
-    "playground@claude-plugins-official" : true,
-    "playwright@claude-plugins-official" : true,
-    "railway@claude-plugins-official" : false,
-    "rust-analyzer-lsp@claude-plugins-official" : true,
-    "sentry@claude-plugins-official" : false,
-    "skill-creator@claude-plugins-official" : false,
-    "slack@claude-plugins-official" : false,
-    "stripe@claude-plugins-official" : false,
-    "typescript-lsp@claude-plugins-official" : true,
-    "vercel@claude-plugins-official" : false,
-    "wd@wd-marketplace" : false
-  },
-  "env" : {
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE" : "92",
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE" : "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" : "1",
-    "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION" : "5000",
-    "PATH" : "\/opt\/homebrew\/bin:\/opt\/homebrew\/sbin:\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin:\/Users\/alcatraz627\/.cargo\/bin:\/Users\/alcatraz627\/.pyenv\/shims:\/Users\/alcatraz627\/.pyenv\/bin:\/Users\/alcatraz627\/.bun\/bin:\/Users\/alcatraz627\/.codeium\/windsurf\/bin:\/Users\/alcatraz627\/Code\/my-gcp-tools:\/Users\/alcatraz627\/.local\/bin",
-    "PROSE_SMELL_ENFORCE" : "1",
-    "STATUSLINE_PROFILE" : "custom"
-  },
-  "extraKnownMarketplaces" : {
-    "awesome-claude-code-plugins" : {
-      "source" : {
-        "repo" : "ccplugins\/awesome-claude-code-plugins",
-        "source" : "github"
-      }
-    },
-    "openai-codex" : {
-      "source" : {
-        "repo" : "openai\/codex-plugin-cc",
-        "source" : "github"
-      }
-    },
-    "wd-marketplace" : {
-      "source" : {
-        "repo" : "Para-FR\/wd-framework",
-        "source" : "github"
-      }
-    }
-  },
-  "hooks" : {
-    "FileChanged" : [
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/file-changed.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : ".envrc|.env|.env.local|.env.development|.env.production|.gitignore|package.json|package-lock.json|yarn.lock|pnpm-lock.yaml|bun.lockb|tsconfig.json|Dockerfile|docker-compose.yml|docker-compose.yaml"
-      }
-    ],
-    "Notification" : [
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/notification-context.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "idle_prompt|elicitation_dialog"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh Notification",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "PermissionRequest" : [
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/permission-notify.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh PermissionRequest",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "PostCompact" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/session-mgmt\/post-compact-recovery.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "jq -n '{systemMessage: \"Post-compaction complete. Invoke \/catchup now to restore full session context from the pre-compaction checkpoint file.\"}'",
-            "statusMessage" : "Queuing \/catchup...",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh PostCompact",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "PostToolUse" : [
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/tab-title\/hooks\/post-tool.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash|Agent|Task"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/log-image-reads.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Read"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/auto-format.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/diff-preview.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-speculative-export.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-comment-verbosity.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/skill-lint-nudge.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/tool-counter.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/shell-mem.sh track-bash",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/shell-mem.sh mark-done-bash",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "BashOutput"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/edit-tracker.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/check-human-comments.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/test-status-hook.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "BashOutput"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/exit-code-hook.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "BashOutput"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "bash \/Users\/alcatraz627\/.claude\/subconscious\/hooks\/post-tool-use.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh PostToolUse",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write|Bash|Task"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/session-mgmt\/heartbeat.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/wal\/bash-wal.sh post",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/track-edits-session.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/no-task-nudge.sh",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/kanban-nudge.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/persona-log-nudge.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Read|Bash|Edit|Write|MultiEdit|Grep|Glob|Task|TaskCreate|TaskUpdate|WebFetch|WebSearch"
-      }
-    ],
-    "PreCompact" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/session-mgmt\/pre-compact-checkpoint.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/shell-mem.sh pre-compact-shell",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh PreCompact",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/session-mgmt\/enqueue-auto-coredump.sh",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "PreToolUse" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-secret-file-read.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash|Read"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/tab-title\/hooks\/pre-tool.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash|Agent|Task"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/tab-title\/hooks\/raw-guard.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/safe-delete.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-user-commit.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-git-push.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-near-dup-env-var.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-banned-vocab.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-lazy-question.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "AskUserQuestion"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-anthropic-credentials.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash|Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-system-dir-writes.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/cli-gating\/gate-cli-actions.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/migrate-hint.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/warn-kill-9.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/prefer-read-over-cat.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/prefer-read-over-head-tail-file.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/prefer-glob-over-find.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hooks\/prefer-tmp-py-over-inline.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/block-curl-post-auth.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/prefer-ripgrep.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-rg-replace-bundle.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-zsh-path-var.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/block-nested-claude.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit|NotebookEdit|Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/wal\/bash-wal.sh pre",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/protect-atone-raw.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash|Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/prevent-unsolicited-index-manipulation.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/warn-git-add-enumeration.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-env-access.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Edit|Write|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-cluster-e-smells.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-duplicate-symbol.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-comment-hygiene.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-subagent-output.sh",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-model-tier.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Agent|Task"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "python3 ~\/.claude\/scripts\/render-mcp-gate.py",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "mcp__render__.*"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "python3 ~\/.claude\/scripts\/hooks\/guard-settings-write.py",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/tmp-jail-guard.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit|MultiEdit|NotebookEdit|Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/nudge-model-plan.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "ExitPlanMode"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-dev-server-port.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "bash \/Users\/alcatraz627\/.claude\/subconscious\/hooks\/pre-tool-use.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-commit-signature.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Bash"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-prose-quality.sh",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-ai-signature.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Write|Edit"
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/hooks\/subagent-box.sh",
-            "type" : "command"
-          }
-        ],
-        "matcher" : "Agent|Task"
-      }
-    ],
-    "SessionEnd" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/session-mgmt\/session-end-checkpoint.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/session-mgmt\/enqueue-auto-coredump.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/tmp-jail-cleanup.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/gcc-signal-capture.sh",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "SessionStart" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/parked-skills-nudge.sh",
-            "type" : "command"
-          },
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hook-orchestrator\/run.sh SessionStart",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/Users\/alcatraz627\/Code\/Claude\/claude-ipc\/hooks\/session-start.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/session-mgmt\/sessionstart-inject.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/gemini-mode-inject.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "bash \/Users\/alcatraz627\/.claude\/subconscious\/hooks\/session-start.sh",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "Stop" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/speculative-atone-stop.sh",
-            "type" : "command"
-          },
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/hook-orchestrator\/run.sh Stop",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/bare-id-cluster-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/review-gate-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/declared-ready-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/filename-dot-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/relpath-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/ctx-claim-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-structural-claim.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/guard-absence-claim.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/atone-stop-gate.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/auto-continue-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/cleanup-comments-nudge.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/sync-todos\/stop-sync.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/Users\/alcatraz627\/Code\/Claude\/claude-ipc\/hooks\/stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/counter-gate-stop.sh",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/reply-lede-stop.sh",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/prose-smell-stop.sh",
-            "type" : "command"
-          },
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/style-watch-stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "bash \/Users\/alcatraz627\/.claude\/subconscious\/hooks\/stop.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/heed-writeback.sh resolve",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "SubagentStart" : [
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/session-mgmt\/subagent-tracker.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh SubagentStart",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/hooks\/subagent-box.sh",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "SubagentStop" : [
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/session-mgmt\/subagent-tracker.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh SubagentStop",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/hooks\/subagent-box.sh",
-            "type" : "command"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit" : [
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/speculative-atone-hint.sh",
-            "type" : "command"
-          },
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/session-mgmt\/turn-counter.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/session-mgmt\/turn-start.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/shell-mem.sh inject-shell-state",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hint-injector.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/dream\/dream-insights-prompt.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "bash \/Users\/alcatraz627\/.claude\/subconscious\/hooks\/user-prompt-submit.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/emit-event.sh UserPromptSubmit",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/Users\/alcatraz627\/Code\/Claude\/claude-ipc\/hooks\/ups.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/ctx-signal-nudge.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/ctx-pressure-nudge.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/api-recovery-nudge.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/persona-suggest.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "async" : true,
-            "command" : "~\/.claude\/scripts\/tab-title\/hooks\/auto-base.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "\/bin\/bash ~\/.claude\/scripts\/hooks\/subagent-box.sh",
-            "type" : "command"
-          }
-        ]
-      },
-      {
-        "hooks" : [
-          {
-            "command" : "~\/.claude\/scripts\/hooks\/task-table-inject.sh",
-            "type" : "command"
-          }
-        ]
-      }
-    ]
-  },
-  "inputNeededNotifEnabled" : false,
-  "model" : "claude-fable-5[1m]",
-  "outputStyle" : "Explanatory",
-  "permissions" : {
-    "allow" : [
+  "permissions": {
+    "allow": [
       "Bash(bash:*)",
       "Edit",
       "Write",
@@ -1255,18 +39,17 @@
       "Bash(rsync:*)",
       "Bash(ssh:*)",
       "Bash(tailscale:*)",
-      "Bash(\/Applications\/Tailscale.app\/Contents\/MacOS\/Tailscale:*)",
-      "Bash(touch \/Users\/alcatraz627\/.claude\/.render-approve-*)",
-      "Bash(touch ~\/.claude\/.render-approve-*)",
-      "Bash(touch ~\/.claude\/.cli-approve-*)",
-      "Bash(touch \/Users\/alcatraz627\/.claude\/.cli-approve-*)",
+      "Bash(/Applications/Tailscale.app/Contents/MacOS/Tailscale:*)",
+      "Bash(touch /Users/alcatraz627/.claude/.render-approve-*)",
+      "Bash(touch ~/.claude/.render-approve-*)",
+      "Bash(touch ~/.claude/.cli-approve-*)",
+      "Bash(touch /Users/alcatraz627/.claude/.cli-approve-*)",
       "Bash(claude-ipc inbox *)",
       "Bash(claude-ipc reply *)",
       "Bash(claude-ipc snooze *)"
     ],
-    "defaultMode" : "auto",
-    "deny" : [
-      "Bash(*rm -rf \/*)",
+    "deny": [
+      "Bash(*rm -rf /*)",
       "Bash(*rm -rf ~*)",
       "Bash(*rm -rf $HOME*)",
       "Bash(*rm -rf .*)",
@@ -1296,45 +79,1279 @@
       "Bash(*wget*|*sh*)",
       "Bash(*eval*curl*)",
       "Bash(*eval*wget*)",
-      "Bash(*python* \/etc*)",
-      "Bash(*python* \/System*)",
-      "Bash(*python* \/Library*)",
+      "Bash(*python* /etc*)",
+      "Bash(*python* /System*)",
+      "Bash(*python* /Library*)",
       "Bash(*python*os.system*rm -rf*)",
-      "Bash(*python*shutil.rmtree*\/*)",
-      "Bash(*node* \/etc*)",
-      "Bash(*node* \/System*)",
-      "Read(~\/.ssh\/**)",
-      "Read(~\/.aws\/**)",
-      "Read(~\/.npmrc)",
-      "Read(~\/.git-credentials)",
-      "Read(~\/.netrc)",
-      "Read(~\/.config\/gh\/hosts.yml)",
-      "Bash(*cat ~\/.ssh*)",
-      "Bash(*cat ~\/.aws*)",
-      "Bash(*cat ~\/.npmrc*)",
-      "Bash(*cat ~\/.git-credentials*)",
-      "Bash(*cat ~\/.netrc*)",
+      "Bash(*python*shutil.rmtree*/*)",
+      "Bash(*node* /etc*)",
+      "Bash(*node* /System*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.npmrc)",
+      "Read(~/.git-credentials)",
+      "Read(~/.netrc)",
+      "Read(~/.config/gh/hosts.yml)",
+      "Bash(*cat ~/.ssh*)",
+      "Bash(*cat ~/.aws*)",
+      "Bash(*cat ~/.npmrc*)",
+      "Bash(*cat ~/.git-credentials*)",
+      "Bash(*cat ~/.netrc*)",
       "mcp__claude_ai_Notion__*",
       "mcp__claude_ai_Sentry__*"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "claude-fable-5[1m]",
+  "enableAllProjectMcpServers": false,
+  "hooks": {
+    "FileChanged": [
+      {
+        "matcher": ".envrc|.env|.env.local|.env.development|.env.production|.gitignore|package.json|package-lock.json|yarn.lock|pnpm-lock.yaml|bun.lockb|tsconfig.json|Dockerfile|docker-compose.yml|docker-compose.yaml",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/file-changed.sh",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/notification-context.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh Notification",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/permission-notify.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh PermissionRequest",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/post-compact-recovery.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -n '{systemMessage: \"Post-compaction complete. Invoke /catchup now to restore full session context from the pre-compaction checkpoint file.\"}'",
+            "statusMessage": "Queuing /catchup..."
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh PostCompact",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/tab-title/hooks/post-tool.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/log-image-reads.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/auto-format.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/diff-preview.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-speculative-export.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-comment-verbosity.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/skill-lint-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/tool-counter.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/shell-mem.sh track-bash",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "BashOutput",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/shell-mem.sh mark-done-bash",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/edit-tracker.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/check-human-comments.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "BashOutput",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/test-status-hook.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "BashOutput",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/exit-code-hook.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/post-tool-use.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|Bash|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh PostToolUse",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/session-mgmt/heartbeat.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/wal/bash-wal.sh post"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/track-edits-session.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/no-task-nudge.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/kanban-nudge.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Bash|Edit|Write|MultiEdit|Grep|Glob|Task|TaskCreate|TaskUpdate|WebFetch|WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/persona-log-nudge.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/pre-compact-checkpoint.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/shell-mem.sh pre-compact-shell"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh PreCompact",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/enqueue-auto-coredump.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-secret-file-read.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/tab-title/hooks/pre-tool.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/tab-title/hooks/raw-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/safe-delete.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-user-commit.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-git-push.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-github-agent-marker.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-near-dup-env-var.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-banned-vocab.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-lazy-question.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-anthropic-credentials.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-system-dir-writes.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/cli-gating/gate-cli-actions.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/migrate-hint.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/warn-kill-9.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prefer-read-over-cat.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prefer-read-over-head-tail-file.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prefer-glob-over-find.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prefer-tmp-py-over-inline.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/block-curl-post-auth.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/prefer-ripgrep.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-rg-replace-bundle.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-zsh-path-var.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/block-nested-claude.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/wal/bash-wal.sh pre"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/protect-atone-raw.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prevent-unsolicited-index-manipulation.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/warn-git-add-enumeration.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-env-access.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-cluster-e-smells.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-duplicate-symbol.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-comment-hygiene.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-subagent-output.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-model-tier.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__render__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/render-mcp-gate.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/guard-settings-write.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/tmp-jail-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/nudge-model-plan.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-dev-server-port.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/pre-tool-use.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-commit-signature.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-prose-quality.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-ai-signature.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/hooks/subagent-box.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/session-end-checkpoint.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/enqueue-auto-coredump.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/tmp-jail-cleanup.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/gcc-signal-capture.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/parked-skills-nudge.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hook-orchestrator/run.sh SessionStart",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/session-start.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/sessionstart-inject.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/gemini-mode-inject.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/speculative-atone-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hook-orchestrator/run.sh Stop",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/bare-id-cluster-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/review-gate-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/declared-ready-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/filename-dot-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/relpath-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/ctx-claim-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-structural-claim.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-absence-claim.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/atone-stop-gate.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/auto-continue-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/cleanup-comments-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/sync-todos/stop-sync.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/counter-gate-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/reply-lede-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/prose-smell-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/style-watch-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/heed-writeback.sh resolve"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/subagent-tracker.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh SubagentStart",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/hooks/subagent-box.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/subagent-tracker.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh SubagentStop",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/hooks/subagent-box.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/speculative-atone-hint.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/turn-counter.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/turn-start.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/shell-mem.sh inject-shell-state"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hint-injector.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/dream/dream-insights-prompt.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/user-prompt-submit.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/emit-event.sh UserPromptSubmit",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/ups.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/ctx-signal-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/ctx-pressure-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/api-recovery-nudge.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/persona-suggest.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/tab-title/hooks/auto-base.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash ~/.claude/scripts/hooks/subagent-box.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/task-table-inject.sh"
+          }
+        ]
+      }
     ]
   },
-  "preferredNotifChannel" : "ghostty",
-  "remoteControlAtStartup" : true,
-  "skillListingBudgetFraction" : 0.02,
-  "skipAutoPermissionPrompt" : true,
-  "skipDangerousModePermissionPrompt" : true,
-  "skipWorkflowUsageWarning" : false,
-  "statusLine" : {
-    "command" : "~\/.claude\/scripts\/statusline\/statusline.sh",
-    "type" : "command"
+  "worktree": {
+    "baseRef": "fresh"
   },
-  "teammateMode" : "auto",
-  "theme" : "dark",
-  "tui" : "fullscreen",
-  "useAutoModeDuringPlan" : true,
-  "verbose" : true,
-  "voiceEnabled" : false,
-  "worktree" : {
-    "baseRef" : "fresh"
-  }
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/scripts/statusline/statusline.sh"
+  },
+  "enabledPlugins": {
+    "analyze-codebase@awesome-claude-code-plugins": false,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "codex@openai-codex": true,
+    "commit-commands@claude-plugins-official": true,
+    "explanatory-output-style@claude-code-plugins": true,
+    "feature-dev@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "frontend-developer@awesome-claude-code-plugins": false,
+    "github@claude-plugins-official": false,
+    "hookify@claude-plugins-official": true,
+    "linear@claude-plugins-official": false,
+    "playground@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "railway@claude-plugins-official": false,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "sentry@claude-plugins-official": false,
+    "skill-creator@claude-plugins-official": false,
+    "slack@claude-plugins-official": false,
+    "stripe@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": true,
+    "vercel@claude-plugins-official": false,
+    "wd@wd-marketplace": false
+  },
+  "extraKnownMarketplaces": {
+    "awesome-claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "ccplugins/awesome-claude-code-plugins"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "wd-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "Para-FR/wd-framework"
+      }
+    }
+  },
+  "outputStyle": "Explanatory",
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "high"
+    },
+    "claude-fable-5": {
+      "effortLevel": "high"
+    }
+  },
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": false,
+  "theme": "dark",
+  "verbose": true,
+  "preferredNotifChannel": "ghostty",
+  "teammateMode": "auto",
+  "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "useAutoModeDuringPlan": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(gcloud *iam-policy-binding*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier",
+      "Bash(gcloud *storage cp*:*) and Bash(gcloud *storage mv*:*) — scoped to Versable GCP projects, matches this repo's declared ASK tier",
+      "Bash(gcloud *run deploy*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: Versable (versable.ai Google Workspace)",
+      "**Cloud provider(s)**: Google Cloud Platform — projects `walmart-496912` (gcloud CLI default), `speedway-versable`, `versable-pim`",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — unqueryable here (no remote configured on this repo)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: GCP Secret Manager (`gcloud secrets`) — reading secret values (`secrets versions access`) and creating service-account keys are hard-blocked per this repo's CLAUDE.md safety model",
+      "**Default / protected branches**: not queryable here (no git remote configured on this repo)",
+      "**CI/CD deploy targets**: Cloud Run service `speedway` and `speedway-dev` in `us-central1` under project `speedway-versable`, driven by `/Users/alcatraz627/Code/Versable/speedway/deploy/deploy.sh`",
+      "**Network posture**: None configured",
+      "**Source control**: This repo (`/Users/alcatraz627/Code/Versable/gcp`) has no configured remote — treat as local-only until a remote is added",
+      "**Trusted internal domains**: versable.ai (Google Workspace org)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim`; Cloud Run services `speedway`, `speedway-dev`",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: on-disk GCP credentials, ADC files, and any output of `gcloud secrets versions access` are sensitive — never print secret values or key material into the transcript; audience is the operator at a real terminal only",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any GCP resource, namespace, or Cloud Run service whose name carries `prod` or `production` as a whole word or name segment; also treat `speedway` and `speedway-dev` production traffic paths as sensitive per this repo's deploy tiering (mutations require explicit ask)",
+      "**Protected deployment namespaces / environments**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim` — mutating operations (`run deploy`, `instances create/stop`, `services enable`, `secrets create`, `*-iam-policy-binding`, `config set`, `bq query`, `storage cp/mv`, `tf apply`) require an explicit ask each time per this repo's declared safety model; delete/destroy, `set-iam-policy`, `secrets versions access`, `sa keys create`, and `auth revoke` are hard-blocked with no override",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment; `set-iam-policy` specifically flagged as dangerous (wholesale policy replacement, can silently drop bindings)",
+      "### User-specific",
+      "**Primary use of Claude Code**: GCP operations/inspection for Versable — running gcloud commands, reading cloud state, and recording findings (no application code in this repo)",
+      "**Trusted repo**: The git repository the agent started in (`/Users/alcatraz627/Code/Versable/gcp`) — no remote is currently configured, so treat as local-only until one is added",
+      "**Org-specific CLIs**: `gcloud` (project-scoped to `walmart-496912`, `speedway-versable`, `versable-pim`; always requires explicit `--project`); `bin/gcp-preflight.sh` for auth preflight",
+      "Routine under `/Users/alcatraz627/Code/Versable/` prefix: gcloud read-only operations (list, describe, get-iam-policy, logging read, versions list, ls, du, builds log) run freely per this repo's declared allow tier"
+    ]
+  },
+  "voiceEnabled": false
 }

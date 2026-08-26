@@ -1,17 +1,23 @@
-<!-- i-dream project brief · 2026-08-19T22:34:37.161436+00:00 · 9 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-08-24T19:41:28.494981+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-A Versable product (forge v6) engineering workspace with a strong emphasis on structured decision-making, precise output fidelity, and owner-gated execution flow. Working style is sequential with explicit blocking at owner-action boundaries.
+
+Versable Forge v6 is a TypeScript/full-stack product codebase. The dominant working style is iterative UI and API work with high task throughput — sessions accumulate many edits rapidly and require tight scope discipline.
 
 ## Things to do (or keep doing)
-- Batch all pending owner decisions through `/decision-wizard` before any AFK or multi-step execution — never scatter questions across a numbered chat list
-- When you hold the full result set in tool output, surface it completely; substituting a curated summary when the user asked for data is a substitution error
-- Block clearly and wait at sequential clauses that require an owner action — do not satisfy adjacent work or propose workarounds while blocked
+
+- **Show the data directly** — when the user asks to see results, present the actual data inline, not a description or summary of it
+- **Update the task list continuously** — reconcile completed and new work into the Task tool during active editing, not only at turn boundaries
+- **Use visual hierarchy in planning docs** — tables, JSON payload examples, and ASCII architecture diagrams; prose-only docs don't serve this user
+- **Collect batched decisions via `/decision-wizard`** — never post a numbered question list in chat
 
 ## Things to avoid
-- Don't publish HTML when plain markdown serves the purpose; if HTML is published, it must include a light/dark toggle
-- Don't write narrative or literary prose in technical outputs (commit messages, status reports, structured docs) — register violation will be called out
-- Don't stop to confirm an action your own reasoning has already identified as correct — identify and execute
-- Don't answer "what do I need to do?" with verbose step-by-step instructions; answer only the specific owner action required, nothing more
+
+- **Don't overshoot the format** — markdown when markdown suffices; HTML only when interactivity justifies it (and then mandatory light/dark toggle)
+- **Don't halt without a genuine blocker** — stopping to confirm an action the agent already reasoned to is a waste; the pause threshold must be high
+- **Don't write narrative or literary prose** in technical output, commit messages, or status replies — plain register only
+- **Don't dispatch sub-agents without a spend ceiling** — budget constraint clause is required even when other constraints are already present
 
 ## Open questions / known gaps
-- Boundary between "project status summary" and "planning/contracts document" has caused intent mismatches — clarify which the user wants before producing either
+
+- **UI verification gap**: sessions repeatedly produce UI changes without a mechanism to visually confirm the result — this leads to token waste fixing same-session regressions; no durable solution is in place yet
+- **Task list drift**: the pattern of tasks going stale during long editing runs recurs despite the task-discipline rule, suggesting the update cadence isn't mechanically enforced here

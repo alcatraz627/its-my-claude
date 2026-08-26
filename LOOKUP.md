@@ -45,6 +45,7 @@
 | `rules/testing.md` | Test every non-trivial change; clean-slate; verify each change | `topic:testing`, `topic:verification` |
 | `rules/shell.md` | Project-root-first grep, `trash` not `rm`, non-interactive flags | `topic:shell`, `tool:trash` |
 | `rules/git.md` | Frequent commits, public by default, gitignore, no main push | `topic:git-commits`, `topic:github-repos` |
+| `rules/machine-token-where-human-words-belong.md` | **scoped** (`paths:` UI/template globs). A machine value reaching a person's screen untranslated: a code, a raw scalar, a value's type, a sentinel shown as a name. The tell is a surface formatting SOME fields and passing the rest through | `topic:ui`, `topic:rendering`, `phrase:"object Object"` |
 | `rules/corrections.md` | After-correction ritual: state mistake → invoke /atone → fix | `topic:user-corrections`, `phrase:"revert this"` |
 | `rules/scheduling-discipline.md` | Cross-tool scheduling practice (`std::claude::schedule`): which scheduler for which job, --description required, naming, retire-after-fire, no-secrets-in-command, audit cadence, pause-vs-rm, AND the calendar-companion contract (every cron gets an `Automations` event; retire both together — absorbed cron-calendar-companion.md 2026-07-09) | `topic:scheduling`, `topic:cron`, `topic:launchd`, `tool:CronCreate`, `tool:gcc-schedule` |
 

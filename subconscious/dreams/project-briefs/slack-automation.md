@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-18T17:50:20.047251+00:00 · 20 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-08-24T19:41:54.744805+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-Slack automation and fan-out scraping pipelines with multi-platform data aggregation. Work style is iterative with strong session-continuity needs and external-platform integrations requiring explicit agent attribution.
+Slack automation tooling with multi-platform data scraping, GitHub PR workflows, and dashboard UI — worked in iterative sessions with frequent UI touch and agent-posted external content.
 
 ## Things to do (or keep doing)
-- Route raw scraping/collection steps to sonnet-high or gemini; reserve higher-tier models for analysis only
-- Always read a sub-agent's output file before treating its work as done — the completion notice is a pointer, not the artifact
-- When correcting any pattern instance (prose, code, UI), grep for sibling instances of the same class before declaring done
-- Verify task list session scope before displaying — showing the wrong session's list is treated as a hard error
+- Always verify referenced artifacts (PR numbers, issue IDs) exist in the repo before citing them in output or comments
+- Always identify whether a correction targets an instance or its generator; fix the generator, not just the symptom
+- Reconcile the task list against completed work after every multi-turn stretch — drift misleads future sessions
+- Match output weight to question weight: direct question → direct sentence, no multi-section briefing preamble
 
 ## Things to avoid
-- Don't resurface work the user has explicitly parked on a concrete trigger condition (e.g., "only if customer demand"); the deferral stands until explicitly lifted
-- Don't name tasks as "unblocked" or "mine" in closing text without executing them in that same turn — naming and deferring is not execution
-- Don't assess context pressure by tool count or turn count; only ctx-pressure hook notifications (70/80/90%) are valid instruments
-- Don't apply hard line caps to checkpoint summaries; load-bearing constraints must be preserved verbatim regardless of length
+- Don't claim done without exercising the code path; the declared-ready hook fires repeatedly here — the pattern recurs
+- Don't post to external platforms (GitHub comments, PR bodies) without the owner attribution marker; it posts under the user's account
+- Don't iterate on UI changes when there's no visual verification mechanism — acknowledge the gap rather than burning tokens
+- Don't surface previously-deferred work (apps/artifacts the user shelved pending a trigger condition) unless that condition is met
 
 ## Open questions / known gaps
-- AI-smell prose (em-dashes, bold spans) resurfaces repeatedly after correction within the same session — correction loop is not landing; treat prose regeneration after a block as requiring a full rewrite pass, not incremental edits
-- Per-source filter coverage in multi-platform data UIs is consistently incomplete at first pass; explicitly audit all actively-scraped sources against the filter UI before calling the feature done
+- UI verification loop is broken: changes ship without visual confirmation, producing regressions that consume the next session's budget
+- Checkpoint summaries silently drop load-bearing constraints when a line cap is applied — no mechanical guard exists yet

@@ -1,5 +1,5 @@
-📌 The consolidated prose review set for the PR bot (REVIEW, 100, 82, 69, 126, 123)
-📌 Owner-tagged pattern: inferring the earned/conditional nature of structure even 
-📌 Unneeded checkpoint ceremony at 66% free context: acted on the generic tool-coun
-📌 Owner-ruled kit API design principle (2026-08-14, doc44-judgment D1 note): prese
-📌 PROXY SIGNALS THAT HEDGE ARE MORE DANGEROUS THAN SILENT ONES. Two hooks report o
+📌 The Artifact tool's own description recommends publishing proactively for work-p
+📌 A tool's feature surface is invisible to an agent that only ever calls one verb.
+📌 A UI the owner reviews repeatedly accumulates rulings that nothing holds, so eac
+📌 A component built for surface A was reused for surface B, and the invariants B r
+📌 Owner-facing queues should be grouped by what each item costs the OWNER (seconds

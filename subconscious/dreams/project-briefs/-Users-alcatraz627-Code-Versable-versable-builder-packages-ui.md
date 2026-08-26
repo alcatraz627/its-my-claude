@@ -1,17 +1,19 @@
-<!-- i-dream project brief · 2026-08-08T10:27:19.913686+00:00 · 8 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-21T19:19:37.116741+00:00 · 15 patterns / 3 insights -->
 ## What this project is about
-UI package for a job-tracking/recruiting product (versable-builder). Work is data-heavy with scored outputs, decision pages, and sub-agent pipelines; sessions are long and edit-dense.
+UI package work within the Versable builder monorepo — component-level changes, data display, and job/report pipelines. Work is iterative and session-heavy, with frequent multi-file edits and sub-agent delegation.
 
 ## Things to do (or keep doing)
-- **Reconcile the Task list before stopping** — in edit-heavy sessions, task state drifts; sync it to reality at every natural pause, not just at session end.
-- **Trace every claim back to the raw source** — never treat an agent-produced summary, derivative doc, or "I read through it" assertion as authoritative; re-read the original rows/records before acting.
-- **Verify filter criteria conjunctively against real output** — after implementing any multi-criteria filter or exclusion rule, spot-check actual results to confirm ALL criteria fire together, not just the last one touched.
-- **Handle null/missing fields before numeric ops** — any field that feeds a score, sort, or display calculation needs an explicit null guard first; silent coercion produces wrong aggregates.
+- **Show actual data when asked** — when the user says "show me", include the real rows/output in the reply, not a summary of what you did
+- **Enumerate all instances before fixing one** — when a pattern is wrong on one component, list every sibling affected before writing any code
+- **Reconcile the task list before stopping** — after 10+ edits, sync completed/new work into the Task tool; a frozen task list after 50 edits is a known failure mode here
+- **Verify coverage dimensions explicitly** — before claiming a filter/UI/check is done, name the data sources, visual modes, and edge states actually exercised vs. assumed
 
 ## Things to avoid
-- **Don't fix one instance of a pattern-level bug** — when you find a broken pagination, unenforced criterion, or missing link in one place, grep for all surfaces with the same shape before closing the task.
-- **Don't batch sub-agent output verification** — when a sub-agent is told to write incrementally, confirm it honored that contract (check file size / record count mid-run); don't assume batching didn't happen.
-- **Don't wholesale inherit a dead agent's plan** — when triaging a prior session's PENDING list, evaluate each item against the current state independently; stale plans contain superseded work.
+- **Don't count regression fixes as progress** — correcting a same-session breakage is net-zero recovery; don't surface it as a finding or forward movement
+- **Don't treat your own output as external validation** — "I authored X" is not evidence X is correct, received, or complete; seek an independent signal
+- **Don't reference PR/issue numbers without verifying they exist** — confirm the artifact is real in the target repo before citing it
+- **Don't deliver multi-criteria filters without testing all criteria conjunctively** against real (not fixture) data
 
 ## Open questions / known gaps
-- Deferred user-directed actions (emails, posts) accumulate in PENDING lists across sessions without executing — unclear whether the block is tooling, auth, or scope creep each time.
+- Deferred user-named actions (emails, posts) accumulate in PENDING lists across sessions without ever executing — no clear resolution pattern established
+- Sub-agent incremental-write contracts are frequently violated (batching instead of per-item); parent verification of the contract is inconsistent

@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-19T22:34:56.352690+00:00 · 9 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-08-21T23:38:56.788118+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A Versable sub-project (`silica-runner`) with multi-session planning and execution work; the dominant pattern is owner-gated sequential tasks with frequent AFK handoffs requiring upfront decision batching.
+A runner/orchestration service (likely part of the Versable product) with a strong emphasis on API contracts, deployment coordination, and technical planning docs. Work style is high-autonomy, low-interruption — the user's attention is scarce and interruptions are expensive.
 
 ## Things to do (or keep doing)
-- Batch all pending owner decisions upfront before AFK — surface the full decision set at once via `/decision-wizard`, not piecemeal in chat
-- When you already hold the full result in tool output, return it verbatim — never substitute a curated subset or summary unless explicitly asked
-- When your own reasoning identifies the correct next action, execute it — don't ask the user to confirm what you've already determined
-- Block clearly and wait when a sequential clause requires an owner action; never satisfy adjacent clauses or propose workarounds as a substitute
+- **Show the actual data** when the user says "show me" — never substitute a summary or curated subset for the full result the agent already holds
+- **Use decision wizard** (`/decision-wizard`) whenever more than one owner judgment is needed; never ask via numbered chat list
+- **Reconcile the task list every few turns** — don't let it drift while edits accumulate; mark completed, add newly-discovered work
+- **Technical planning docs need structure**: ASCII diagrams, tables, JSON payload shape examples — prose-only docs are rejected
 
 ## Things to avoid
-- Don't emit narrative/literary prose in technical outputs, commit messages, or status reports — register violation, warrants correction
-- Don't publish HTML when markdown suffices; if HTML is required, always include a light/dark toggle
-- Don't answer "what do I need to do?" with verbose step-by-step instructions — answer only the specific action genuinely required from the owner
-- Don't conflate a planning/contracts document with a project status summary — they are different artifacts with different intents
+- **Don't halt without a genuine blocker** — the threshold for pausing is high (only when the user must do something the agent truly cannot); re-raising a soft blocker after "keep going" is a recurrence failure
+- **Don't count same-session regression fixes as forward progress** — UI changes that only undo the agent's own mistakes are net-zero recovery
+- **No literary or narrative phrasing** in technical output, commit messages, or status reports — plain register only
+- **Don't conflate "project status" with "planning/contracts doc"** — when the user asks for a plan or contract, deliver architecture + API shape, not deployment state
 
 ## Open questions / known gaps
-- Sequential owner-gated tasks create execution stalls; no clear dry-run or autonomous-progress mode exists yet to unblock when owner is unreachable
-- Prose register discipline (narrative vs. technical) appears to be a recurring correction — may need a project-level hook or lint gate
+- Behavioral corrections (prose register, task reconciliation) degrade within the same session; re-check adherence to mid-session corrections every 3–5 turns rather than assuming they persist
+- Deferral patterns lose context by resumption time — persist decision options and blocking question at the moment of deferral, not at resumption

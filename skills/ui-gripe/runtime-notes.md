@@ -1,5 +1,48 @@
 # ui-gripe — runtime notes
 
+## ui-gripe: kanban board, live-tree audit (no gripe, no path), 2026-08-24
+
+**Purpose:** No-args run in the kanban project. No screenshot was supplied and the
+newest capture set (`20260824-kanban-pass1/`) predated the day's commits by 15h, so
+the target became the live pm2 board on :5106, driven with Playwright at 1440x900.
+
+**Insights:**
+
+1. **Check the capture's age against the commit log before using it.** Four shots sat
+   in `assets/screenshots/20260824-kanban-pass1/` from 01:44, and `git log` showed six
+   commits between 16:40 and 17:00. Auditing those pixels would have reported a tree
+   nobody was running. When the app is live, capture beats the folder.
+2. **The file under test can be edited mid-run.** `board.html` mtime moved to 17:44:41
+   while I was probing, and two DOM reads disagreed (`.stagbar` parent + all-grey
+   danger buttons, then `.sact` parent + 23-of-24 red). Both reads were honest; the
+   tree moved between them. Fix: reload onto a known state, re-run every load-bearing
+   check in ONE pass, and fingerprint what you measured (`md5 board.html`). A finding
+   measured against a tree that no longer exists is a false report even though the
+   measurement was real.
+3. **`elementFromPoint` is the honest reachability test, and it disagrees with
+   `getBoundingClientRect`.** A button's rect can sit inside the viewport while the
+   button is unreachable, because the rect reports where the element WOULD be, past
+   its scroll container's clip edge. Hit-test the centre and ask whether the returned
+   node is the element; that converted "looks clipped" into "fails to receive a click".
+4. **Prove an edge affordance is conditional before calling it decoration.** I was
+   ready to file "the fade mask is always on so it signals nothing", then widened to
+   2200px: `hiddenPx` went to 0 and `maskImage` went to `none`. The affordance was
+   state-driven and correct. One resize killed a finding I would otherwise have shipped.
+5. **Read the comment above a layout constant before proposing to change it.**
+   `board.html:200` says the 400px lane floor is "owner's call" and that sideways
+   scrolling is by design. That reframed the top finding from "lanes are too wide" to
+   "lane ORDER spends the first viewport on two empty lanes", which is a real finding
+   that does not fight a human ruling.
+6. **A badge that is semantically right can still be a finding.** `Your asks 0` counts
+   `pending` asks (`board.html:2948-2951`) while the lane shows an answered one. The
+   number is correct; the badge shape is identical to five neighbours that count
+   contents. Check what a badge COUNTS, not just whether it is accurate.
+7. cwd resets between Bash calls in an agent thread, so relative `rg` paths silently
+   searched the right place early and I nearly mis-read a no-hit result as "the class
+   does not exist in the repo". Use absolute paths from the first call.
+
+---
+
 ## ui-gripe: kanban gripefix re-audit (20260811-kanban-gripefix-*.png x4), 2026-08-11
 
 **Purpose:** No-args re-audit of the agent-kanban board after a four-finding fix pass.

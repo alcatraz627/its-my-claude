@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-11T00:22:57.255952+00:00 · 20 patterns / 3 insights -->
+<!-- i-dream project brief · 2026-08-21T23:41:51.322710+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A Claude Code scripts and kanban tooling project operating in autonomous/multi-agent mode, with scraping pipelines, deploy flows, and a heavy UI component. Work style is agentic and long-running with frequent stop-hook interventions.
+CLI/automation tooling for managing kanban-style task boards within Claude Code sessions. Work pattern is autonomous-heavy with frequent UI and documentation generation tasks.
 
 ## Things to do (or keep doing)
-- **Always consult design mocks before writing any UI module** — label names, page structure, and creation flows must trace to the mock, not your mental model
-- **Surface blocking events (auth prompts, rate limits) within 30 seconds**, naming the exact command needed; never stall silently
-- **Update task status after each logical unit** in autonomous sessions — task list drift is a known failure mode here
-- **Validate sub-agent output against standing style rules before shipping** — producing agents violate constraints the dispatching agent already documented
+- Always enumerate what was actually checked when a sweep or scrape returns zero/few results — list pages, endpoints, or sources examined, not just the count
+- Prefer async non-blocking deploy flows; pre-establish credentials before any autonomous session that could hit OAuth gates
+- Technical planning docs must include visual hierarchy: tables, JSON payload shapes, ASCII diagrams — prose-only is a format failure
+- Update task status after each logical unit of work during autonomous runs; don't let the task list drift from actual work done
 
 ## Things to avoid
-- **Don't emit em-dashes or excessive bold spans** — the stop-hook fires on this repeatedly; rewrite before the turn ends, not after the hook catches it
-- **Don't treat agent-authored artifacts as upstream authority** — always trace claims to the user spec, design mock, or source code, never to a formalization you derived
-- **Don't dispatch a sub-agent to an MCP resource without verifying no other session holds it** — resource conflicts cause silent failures
-- **Don't ship UI as done when it reads visually sparse** — verify density and completeness alongside correctness
+- Don't halt mid-task without a genuine blocker only the user can resolve; "keep going" means the prior pause was unjustified — don't re-raise the same soft blocker
+- Don't author a constraint rule (style ban, UI invariant) and then immediately violate it in the same session's output
+- Don't use AI-smell prose (em-dashes, excessive bold, literary phrasing) in technical output — stop-hook warnings are not optional
+- Don't ground feature gap audits or reviews in agent-authored downstream docs; trace claims to the original user-authored spec
 
 ## Open questions / known gaps
-- **Interactive OAuth in deploy pipelines** — the user wants fully async flows, but pre-established credentials aren't always in place; this tension recurs without a durable resolution
-- **Model limit handling mid-session** — the agent should switch models on hitting a limit, but the fallback path isn't hardened; autonomous sessions still stall
+- No graceful degradation when model rate limits hit mid-autonomous-session; the session stalls silently rather than surfacing the failure and switching models
+- UI completeness verification is systematically incomplete: single-mode sign-offs (dark only, one state) ship as "done" when multi-state exercise was required

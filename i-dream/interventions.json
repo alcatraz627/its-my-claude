@@ -153,13 +153,15 @@
     "slug": "critique-loops-cannot-produce-design-gestalt",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "\\b(redesign|design questionnaire|design review round|rework the (ui|ux|design)|revamp the (ui|ux|design))\\b"
     },
     "body": "Before drafting design questions: name the 3-5 composite user stories this surface serves and tie each question to one. Don't emit a list of independent taste option-picks.",
     "created": "2026-07-27T19:59:36.977558Z",
-    "strength": 0.8
+    "promoted": "2026-08-21T19:13:12.930807Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "ab332bca10f938fc",
@@ -231,7 +233,7 @@
     },
     "body": "Before adding a raw JSX form control: grep this file for existing Select/Input/Button/Dropdown imports. If one fills that role, use it — a green typecheck says nothing about convention.",
     "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.22857142857142856
+    "strength": 0.15714285714285714
   },
   {
     "id": "0eee058e090c5109",
@@ -245,7 +247,7 @@
     },
     "body": "This grep is filtered or compound. Do not write an absence claim (none / no X / nothing uses X) from it — re-run the bare symbol over the narrowest tree that would contain it first.",
     "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.22857142857142856
+    "strength": 0.15714285714285714
   },
   {
     "id": "3bdb8957ec425538",
@@ -259,7 +261,7 @@
     },
     "body": "Check whether the user already declined, deferred, or ignored this blocked-on-user item this session. If so, leave it in the task list and drop it from this message.",
     "created": "2026-08-16T03:45:46.205718Z",
-    "strength": 0.2571428571428572
+    "strength": 0.18571428571428572
   },
   {
     "id": "6c97902d153cf79e",
@@ -273,7 +275,7 @@
     },
     "body": "Before marking any task done here, trace its deliverable (commit/file/artifact) in the Resume Contract. If it sits under standing caveats or reads unverified, the status is 'open, awaiting verdict'.",
     "created": "2026-08-16T21:01:57.842342Z",
-    "strength": 0.2571428571428572
+    "strength": 0.2
   },
   {
     "id": "07fe981e338aa9c2",
@@ -308,13 +310,15 @@
     "slug": "named-the-next-work-then-stopped",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "^\\s*(keep going|continue|carry on|go on|next|proceed)\\b"
     },
     "body": "A terse 'continue' means the last turn stopped short. Don't end a turn on a sentence naming work you could start — do it. Stop only when a human must decide something first.",
     "created": "2026-08-19T01:04:07.339490Z",
-    "strength": 0.3
+    "promoted": "2026-08-21T19:13:12.930807Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "df8bafaededd469b",
@@ -328,7 +332,7 @@
     },
     "body": "Check this project's memory for the owner's grouping ruling before printing tasks. Group by domain lane (A..E), not the NOW / NEEDS YOU / AGENT-READY actor split the tool defaults to.",
     "created": "2026-08-19T01:04:07.339490Z",
-    "strength": 0.3
+    "strength": 0.22857142857142856
   },
   {
     "id": "469cc32b63e5d2fc",
@@ -342,19 +346,49 @@
     },
     "body": "HTML output rule: dark is the default :root palette and a dark/light toggle control is MANDATORY. Add both before writing, or state the conflict and wait — a skill's silence is not an exemption.",
     "created": "2026-08-19T19:49:09.230148Z",
-    "strength": 0.3
+    "strength": 0.6000000000000001
   },
   {
     "id": "65cfe4c27a2ad5d1",
     "slug": "halted-for-a-goahead-already-granted",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "\\b(keep going|carry on|continue|go ahead|proceed|just do it|finish it|do it all|next)\\b"
     },
     "body": "Don't end this turn with a question. If both options are yours to run and cheap to reverse, pick one, say which and why, and execute.",
     "created": "2026-08-19T22:30:14.502499Z",
+    "promoted": "2026-08-21T19:13:12.930807Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "dd8dfb8410c5de9d",
+    "slug": "agent-comment-posted-without-agent-attribution",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "gh\\s+(pr|issue)\\s+comment|gh\\s+api\\s+.*(comments|reviews)"
+    },
+    "body": "Read the first two lines of the body you are about to post. If it does not carry the agent-attribution marker (via 🤖claude), add it before sending — it lands under the owner's account.",
+    "created": "2026-08-24T19:34:43.973505Z",
+    "strength": 0.3
+  },
+  {
+    "id": "3025937a7d35fbbd",
+    "slug": "published-to-external-host-unasked",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\b(vercel|netlify|surge|gh-pages|ngrok)\\s+(deploy|publish)|gh\\s+gist\\s+create|npm\\s+publish"
+    },
+    "body": "Did the user ask for a hosted or shareable surface in this turn, in those words? If not, write the file in the project and offer hosting in one sentence instead.",
+    "created": "2026-08-24T19:34:43.973505Z",
     "strength": 0.3
   }
 ]

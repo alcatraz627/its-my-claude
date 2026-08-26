@@ -1,0 +1,270 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17418,
+    "correction_density": 0.02040816326530612,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22060759493367388,
+    "unit_count": 98
+  },
+  "response": {
+    "biases_detected": [
+      "optimism_bias_on_script_compatibility:RECURRING:STABLE — unit b4373e33-18 shows three consecutive Bash commands (tools 2, 3, 5) targeting /Users/alcatraz627/Code/Versable/app-forge-v6 failing (success:false) before the agent pivoted to reading package.json directly via python3; same access-barrier probe-after-failure shape flagged in prior cycle for this exact unit; the prior cycle's noted partial improvement (probe-before in runner-verification context) has not generalized to directory-accessibility checks; trajectory STABLE against prior cycle assessment, not worsening"
+    ],
+    "calibration_score": 0.68,
+    "cross_references": [
+      "dream_insight_1 CONFIRMED strongly in units b4373e33-10 and b4373e33-15: agent names specific HTTP response codes, job state values, and test output lines before issuing contract verdicts and fix-complete claims; this is the named-artifact-before-claiming pattern the insight prescribes, and it appears as a stable generalization in the runner-verification context across this session",
+      "dream_insight_1 PARTIALLY VIOLATED in unit b4373e33-18: the three failed Bash commands assume app-forge-v6 is accessible under the current working directory without first probing that the path resolves; the agent holds its own proxy (a prior recon file) and falls back to it correctly, but the failure was discovered rather than anticipated",
+      "dream_insight_2 CONFIRMED in unit b4373e33-9: the catchup data explicitly names blocked_on with specific peer aliases and their offline duration, and the IPC send to vb-fable surfaces the runner-is-up signal that was the outstanding owed message; blocked state is named and actionable, not silent",
+      "unit b4373e33-16 contributes a NEW positive cross-reference against dream_insight_1: the agent corrects a wrong claim (D2/D3/D13 called open when already ruled) across three surfaces — decision set md, deployment-state md, and the HTML artifact — within the same turn; this matches the rename-without-grepping-readers rule and demonstrates the claim-correction discipline the insight asks for applied to off-tree surfaces",
+      "unit b4373e33-9 shows probe-before-claim on runner liveness: the IPC send asserting THE RUNNER IS UP follows explicit lsof and curl checks, not an assumption from a prior turn; this is the first turn of a resumed session and the agent re-verifies rather than relying on the checkpoint's stated state"
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "optimism_bias_on_script_compatibility already flagged in prior cycle with the access-barrier subtype identified; no new recommendation warranted beyond what prior cycle captured — this is a known stable recurrence, not an escalating one",
+      "self-correction quality in unit b4373e33-16 is notably high: the atone entries correctly identify the mechanism (skill silence != rule waiver, not just forgetting the rule) and the precheck is specific and mechanical; this represents a pattern worth reinforcing, not correcting"
+    ],
+    "underconfident_count": 0,
+    "unit_assessments": [
+      {
+        "biases": [],
+        "confidence_calibration": 0.8,
+        "error_pattern_match": false,
+        "strategy_quality": 0.85,
+        "unit_id": "b4373e33-d46a-4927-9a51-7ad99bfd89af-9"
+      },
+      {
+        "biases": [],
+        "confidence_calibration": 0.9,
+        "error_pattern_match": false,
+        "strategy_quality": 0.92,
+        "unit_id": "b4373e33-d46a-4927-9a51-7ad99bfd89af-10"
+      },
+      {
+        "biases": [],
+        "confidence_calibration": 0.85,
+        "error_pattern_match": false,
+        "strategy_quality": 0.9,
+        "unit_id": "b4373e33-d46a-4927-9a51-7ad99bfd89af-12"
+      },
+      {
+        "biases": [],
+        "confidence_calibration": 0.88,
+        "error_pattern_match": false,
+        "strategy_quality": 0.9,
+        "unit_id": "b4373e33-d46a-4927-9a51-7ad99bfd89af-15"
+      },
+      {
+        "biases": [],
+        "confidence_calibration": 0.85,
+        "error_pattern_match": false,
+        "strategy_quality": 0.88,
+        "unit_id": "b4373e33-d46a-4927-9a51-7ad99bfd89af-16"
+      },
+      {
+        "biases": [
+          "optimism_bias_on_script_compatibility"
+        ],
+        "confidence_calibration": -0.3,
+        "error_pattern_match": true,
+        "strategy_quality": 0.6,
+        "unit_id": "b4373e33-d46a-4927-9a51-7ad99bfd89af-18"
+      }
+    ],
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "deca2f3b-79c0-497c-afe8-b9115d9267f2",
+      149241
+    ],
+    [
+      "d10fc4b9-b288-43cc-9eb6-53aeae4d25ce",
+      143664
+    ],
+    [
+      "a36d85c7-1a5d-40c5-8ec2-67bf9c338ebb",
+      143701
+    ],
+    [
+      "5c94b3f7-f9d2-4275-b228-b62135757b41",
+      155804
+    ],
+    [
+      "d63d3a3c-b654-4700-b3d2-67a366512aa4",
+      159702
+    ],
+    [
+      "bcdb36e3-6f93-4c51-a3a7-018cd8c4b5bc",
+      148667
+    ],
+    [
+      "b4373e33-d46a-4927-9a51-7ad99bfd89af",
+      21124163
+    ],
+    [
+      "a4ac8aad-b201-4f40-9230-d810f4855dec",
+      131418
+    ],
+    [
+      "a3745b46-2b42-4908-97bf-914e8200c44c",
+      142726
+    ],
+    [
+      "a2fad101-d3df-4e63-8e31-c55422218114",
+      11759814
+    ],
+    [
+      "9badb811-364a-45f1-bff4-7f5f389367d3",
+      7291165
+    ],
+    [
+      "8c515b50-8376-4515-944c-861083fdd2e3",
+      112806
+    ],
+    [
+      "89bb6ec4-f32e-4917-87c9-cc46f6714327",
+      111319
+    ],
+    [
+      "79a6cab6-c23e-452f-b98a-ec03a29bb292",
+      149129
+    ],
+    [
+      "7828eb80-e17d-47a2-8b04-a0b809f9bba3",
+      117039
+    ],
+    [
+      "6ee9be02-7bb2-48e0-9a8a-7a7b79daba78",
+      6669492
+    ],
+    [
+      "635300dc-2722-4531-9a80-c9b32acacbfe",
+      132998
+    ],
+    [
+      "5df43ec8-82d8-406b-aae5-2116f12a91bb",
+      155016
+    ],
+    [
+      "5b7cd051-5fda-4282-9a93-ddf6694cb225",
+      150503
+    ],
+    [
+      "5904084a-5770-4c94-b40e-1acc2eb69000",
+      113058
+    ],
+    [
+      "4ead2bf1-310c-4289-ba51-8cea738c5a2c",
+      111766
+    ],
+    [
+      "0bc0a69d-70fa-48d2-a29d-86e3c771af79",
+      113084
+    ],
+    [
+      "ec5b4b70-8e56-4a7a-9e24-2297b9e66d86",
+      128845
+    ],
+    [
+      "aca776e1-af31-4ade-a5ba-8b88de40fc56",
+      113812
+    ],
+    [
+      "7e781759-c254-4c8d-9b06-6f8c2402db0d",
+      7149488
+    ],
+    [
+      "7b17a504-6247-4942-be28-8da863878095",
+      129862
+    ],
+    [
+      "2f6be777-2ff3-47f1-bf5d-6683b00d157d",
+      14990879
+    ],
+    [
+      "0fca68a3-d40f-46f4-886a-eb837ba1088f",
+      150367
+    ],
+    [
+      "9b69e2a5-8167-4361-b964-efae2cdfdee4",
+      139856
+    ],
+    [
+      "89959fab-589c-4cbf-9cc3-149aece90ab4",
+      107660
+    ],
+    [
+      "51daadfa-920d-48cc-a0b2-2a772c93b7e3",
+      18498101
+    ],
+    [
+      "16e26a00-a991-4587-8a76-acb952ab6c4b",
+      126960
+    ],
+    [
+      "fec9f645-e089-43b9-8ed6-edfda20a118b",
+      109203
+    ],
+    [
+      "fd81df04-a314-489a-9e78-201a31ac5f78",
+      109485
+    ],
+    [
+      "fc30c063-f084-4ed6-bc04-620daa650e16",
+      4276517
+    ],
+    [
+      "f78307d1-0c4e-495b-8982-d4eb0d88a1a3",
+      113125
+    ],
+    [
+      "bdf25dd1-dff4-47ab-8aa1-8b802e9da2b2",
+      109707
+    ],
+    [
+      "b8008a10-bd3a-4f98-b53b-fb5b040f9133",
+      8285994
+    ],
+    [
+      "b0bb7ac1-a813-4f44-ae32-3814ede6d853",
+      827994
+    ],
+    [
+      "ac7f34c0-3727-4c68-a0eb-02915c6eb298",
+      3944089
+    ],
+    [
+      "9b4da3b0-c5c7-42e9-ad21-b9a7317a4766",
+      111934
+    ],
+    [
+      "980f8941-9037-4b6e-ac2d-a01d013a45d0",
+      6020417
+    ],
+    [
+      "905f3f85-7fea-4214-b880-b2530c52ca06",
+      121726
+    ],
+    [
+      "69f87dbd-f4a6-43df-80cd-3cd3eedf4a97",
+      111287
+    ],
+    [
+      "67b63d06-72f6-4f8a-936a-f15bfb18d56f",
+      113677
+    ],
+    [
+      "1037b7fa-ea17-4564-b1bf-9195b00807b4",
+      1040348
+    ],
+    [
+      "26739d4b-465b-4855-881f-c17c67022ae5",
+      1757510
+    ]
+  ],
+  "timestamp": "2026-08-21T23:37:40.995538Z",
+  "tokens_used": 22334,
+  "units_analyzed": 6,
+  "units_total": 98
+}

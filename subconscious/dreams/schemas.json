@@ -1851,21 +1851,37 @@
     "last_seen": "2026-07-16T07:29:34.966880+00:00"
   },
   {
-    "id": "719d2e984e293ac0",
-    "text": "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without reflecting them in the task list causes the live status view to drift and confuses both the user and future turns.",
+    "id": "69e8e8a545de4d82",
+    "text": "The task list must be updated continuously during active editing work, not only at turn boundaries; when many edits happen without task updates, the list drifts and loses its value as a live status surface.",
     "category": "approach",
     "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "fbf0922a-6fa1-4c02-ac46-be9d438dbd95",
+    "confidence": 0.87,
+    "occurrences": 10,
+    "member_count": 10,
+    "rep_pattern_id": "2181098a-bf83-44ba-bd9c-d25a5b03ab42",
     "member_ids": [
       "fbf0922a-6fa1-4c02-ac46-be9d438dbd95",
-      "e66148e4-d554-4417-b726-aebe9131dd15"
+      "86ce33bc-2781-45bd-9d9b-85766878626e",
+      "d06bb7b1-5b4b-4196-b17a-7291574b658a",
+      "7686db6b-db42-4579-ba8b-924a719c6954",
+      "28b4f699-4fcd-472d-9a8e-4ad053ffa7e0",
+      "7e1cb31a-6e21-4c3a-8b9f-0bca6a01b8c9",
+      "2afa1d85-e93e-4637-9b9b-6cdb4b751ec8",
+      "e66148e4-d554-4417-b726-aebe9131dd15",
+      "7a63b5fc-87ce-4271-8f62-e5d5a1cc7b63",
+      "2181098a-bf83-44ba-bd9c-d25a5b03ab42"
     ],
     "member_texts": [
       "The Task tool must be updated incrementally throughout active work, not only at major milestones; allowing many edits to accumulate without reflecting them in the task list causes the live status view to drift and confuses both the user and future turns.",
-      "When active work spans many turns without task list reconciliation, the live task list drifts from the actual work done and must be updated proactively — not only when a hook fires to report the gap."
+      "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless.",
+      "During high-activity multi-agent sessions with many file edits, the task list frequently drifts from the actual work being done; task state must be reconciled before stopping rather than batched at session end.",
+      "In high-activity sessions with many sequential file edits, the task list must be reconciled before stopping rather than allowed to drift — a task list frozen across 50+ edits leaves the user's TUI blind and signals the agent has lost track of its own progress.",
+      "During extended autonomous work with a stop-hook condition, the task list drifts from actual work done; the agent should update task status proactively after each logical unit of work rather than batching updates at session end.",
+      "During autonomous multi-turn sessions with many sequential edits, the Task tool list drifts from actual work in progress; the agent should update task statuses within every 2-3 substantive edits, not batch updates at the end of a work block.",
+      "During long autonomous sessions with many tool calls, the agent's task list drifts from what it is actually doing, requiring external hook intervention to force reconciliation.",
+      "When active work spans many turns without task list reconciliation, the live task list drifts from the actual work done and must be updated proactively — not only when a hook fires to report the gap.",
+      "When a task list goes many turns without updates while edits accumulate, it drifts into misleading state; the agent must reconcile completed and newly-added work into the task tool frequently, not at the end of a long run.",
+      "The task list must be updated continuously during active editing work, not only at turn boundaries; when many edits happen without task updates, the list drifts and loses its value as a live status surface."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -1880,12 +1896,31 @@
       "local-models",
       "invasion-of-the-fiber-snatchers",
       "frontend",
+      "i-dream",
+      "ghostty-themes",
+      "data-forge",
+      "alcatraz627",
+      "versable-builder",
+      "its-my-config",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "studio_search_jul_26-fable",
+      "walmart-mvp",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude-widgets-claude-instances",
+      "-Users-alcatraz627--claude-scripts-kanban",
       "-Users-alcatraz627-Code-Versable-automation",
       "slack-automation",
-      "versable-builder"
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "gcp",
+      "kanban"
     ],
     "first_seen": "2026-07-16T07:29:34.966880+00:00",
-    "last_seen": "2026-08-17T03:14:11.269047+00:00"
+    "last_seen": "2026-08-24T19:32:13.856362+00:00"
   },
   {
     "id": "68798804c0da4c21",
@@ -2051,56 +2086,6 @@
     ],
     "first_seen": "2026-07-18T06:18:38.213947+00:00",
     "last_seen": "2026-07-18T06:18:38.213947+00:00"
-  },
-  {
-    "id": "9cc1f4ee06cfedec",
-    "text": "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.87,
-    "occurrences": 6,
-    "member_count": 6,
-    "rep_pattern_id": "86ce33bc-2781-45bd-9d9b-85766878626e",
-    "member_ids": [
-      "86ce33bc-2781-45bd-9d9b-85766878626e",
-      "d06bb7b1-5b4b-4196-b17a-7291574b658a",
-      "7686db6b-db42-4579-ba8b-924a719c6954",
-      "28b4f699-4fcd-472d-9a8e-4ad053ffa7e0",
-      "7e1cb31a-6e21-4c3a-8b9f-0bca6a01b8c9",
-      "2afa1d85-e93e-4637-9b9b-6cdb4b751ec8"
-    ],
-    "member_texts": [
-      "During autonomous multi-turn work sessions, the task list must be updated after each logical unit of work rather than batching updates at session end — allowing the task list to drift from actual progress renders the live status surface useless.",
-      "During high-activity multi-agent sessions with many file edits, the task list frequently drifts from the actual work being done; task state must be reconciled before stopping rather than batched at session end.",
-      "In high-activity sessions with many sequential file edits, the task list must be reconciled before stopping rather than allowed to drift — a task list frozen across 50+ edits leaves the user's TUI blind and signals the agent has lost track of its own progress.",
-      "During extended autonomous work with a stop-hook condition, the task list drifts from actual work done; the agent should update task status proactively after each logical unit of work rather than batching updates at session end.",
-      "During autonomous multi-turn sessions with many sequential edits, the Task tool list drifts from actual work in progress; the agent should update task statuses within every 2-3 substantive edits, not batch updates at the end of a work block.",
-      "During long autonomous sessions with many tool calls, the agent's task list drifts from what it is actually doing, requiring external hook intervention to force reconciliation."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "i-dream",
-      "ghostty-themes",
-      "data-forge",
-      ".claude",
-      "alcatraz627",
-      "local-models",
-      "versable-builder",
-      "claude-instances",
-      "its-my-config",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
-      "studio_search_jul_26-fable",
-      "walmart-mvp",
-      "-Users-alcatraz627-Code-Claude-ig-download",
-      "-Users-alcatraz627--claude-widgets-claude-instances",
-      "-Users-alcatraz627--claude-scripts-kanban",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627-Code-Versable-automation"
-    ],
-    "first_seen": "2026-07-18T06:18:38.213947+00:00",
-    "last_seen": "2026-08-12T07:47:07.716839+00:00"
   },
   {
     "id": "00075594dc41687d",
@@ -6495,13 +6480,12 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 6,
-    "member_count": 6,
+    "occurrences": 5,
+    "member_count": 5,
     "rep_pattern_id": "5d0bde8a-621a-4034-ae93-731b3653ac7c",
     "member_ids": [
       "22199f96-33d2-4da1-a54d-dc10074b99c4",
       "62f08b0b-e9cb-42ff-bd1e-e8cd87c15c72",
-      "c67f8d4b-b279-44d0-95f7-ef9eb218c1ce",
       "5d0bde8a-621a-4034-ae93-731b3653ac7c",
       "311448f9-25ac-403c-a757-71bb00526e7e",
       "9f1a4e28-a5a6-4336-b3c1-9b1e3b71f174"
@@ -6509,7 +6493,6 @@
     "member_texts": [
       "The agent generates AI-smell prose (em-dashes, excessive bold spans) even after a stop-hook explicitly flags it and demands a re-emission, requiring multiple correction cycles in the same session before the pattern clears.",
       "The agent generates em-dashes and excessive bold spans in prose even after a stop-hook explicitly flags them and demands re-emission, requiring multiple correction cycles within the same session before the pattern clears",
-      "When a stop hook fires for a prose violation and the agent rewrites the reply, it frequently regenerates the same violations rather than actually fixing them — the rewrite is cosmetic, not corrective.",
       "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in the very next reply, requiring multiple correction cycles within the same session; the pattern does not clear from a single correction alone.",
       "After a stop hook flags AI-smell prose tells (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in the very next reply; the correction does not clear from a single warning and requires multiple cycles within the same session.",
       "After a prose-smell hook fires and the agent rewrites a response, the regenerated reply frequently contains the same violations (em-dashes, bold-span excess, Label:fragment rows) that triggered the hook, requiring multiple correction cycles within the same session."
@@ -6777,6 +6760,30 @@
     ],
     "first_seen": "2026-08-12T05:39:10.860157+00:00",
     "last_seen": "2026-08-12T05:39:10.860157+00:00"
+  },
+  {
+    "id": "84f390a557ff0d7b",
+    "text": "When a stop hook fires for a prose violation and the agent rewrites the reply, it frequently regenerates the same violations rather than actually fixing them — the rewrite is cosmetic, not corrective.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "c67f8d4b-b279-44d0-95f7-ef9eb218c1ce",
+    "member_ids": [
+      "c67f8d4b-b279-44d0-95f7-ef9eb218c1ce"
+    ],
+    "member_texts": [
+      "When a stop hook fires for a prose violation and the agent rewrites the reply, it frequently regenerates the same violations rather than actually fixing them — the rewrite is cosmetic, not corrective."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627-Code-Claude-ig-download",
+      "-Users-alcatraz627--claude"
+    ],
+    "first_seen": "2026-08-12T07:47:07.716839+00:00",
+    "last_seen": "2026-08-12T07:47:07.716839+00:00"
   },
   {
     "id": "cafc117dd8154d2a",
@@ -9741,19 +9748,21 @@
     "last_seen": "2026-08-19T22:28:04.871600+00:00"
   },
   {
-    "id": "756e87a2eb2e50a8",
-    "text": "Publishing a rendered HTML artifact when a plain markdown file would serve the purpose is an over-engineering error; and any HTML output that is published must include a light/dark mode toggle.",
-    "category": "approach",
+    "id": "63ad69d58cdc959a",
+    "text": "Choosing an HTML artifact format over markdown when markdown would have sufficed is a format overshoot; when HTML is chosen for any output, the mandatory light/dark toggle must be present or the artifact is treated as incomplete.",
+    "category": "user-preference",
     "valence": "negative",
-    "confidence": 0.87,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "98c4b4a1-68bc-424c-83c3-775873992261",
+    "confidence": 0.9,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "e4d4cecd-2d74-43f3-ba46-5afb5b673239",
     "member_ids": [
-      "98c4b4a1-68bc-424c-83c3-775873992261"
+      "98c4b4a1-68bc-424c-83c3-775873992261",
+      "e4d4cecd-2d74-43f3-ba46-5afb5b673239"
     ],
     "member_texts": [
-      "Publishing a rendered HTML artifact when a plain markdown file would serve the purpose is an over-engineering error; and any HTML output that is published must include a light/dark mode toggle."
+      "Publishing a rendered HTML artifact when a plain markdown file would serve the purpose is an over-engineering error; and any HTML output that is published must include a light/dark mode toggle.",
+      "Choosing an HTML artifact format over markdown when markdown would have sufficed is a format overshoot; when HTML is chosen for any output, the mandatory light/dark toggle must be present or the artifact is treated as incomplete."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
@@ -9763,10 +9772,12 @@
       "-Users-alcatraz627-Code-Versable-gcp",
       "-Users-alcatraz627-Code-Versable-enhancement-product",
       "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627--claude"
+      "-Users-alcatraz627--claude",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-"
     ],
     "first_seen": "2026-08-19T22:28:04.871600+00:00",
-    "last_seen": "2026-08-19T22:28:04.871600+00:00"
+    "last_seen": "2026-08-21T23:33:55.199183+00:00"
   },
   {
     "id": "e361c70f38356c50",
@@ -9907,5 +9918,461 @@
     ],
     "first_seen": "2026-08-19T22:28:04.871600+00:00",
     "last_seen": "2026-08-19T22:28:04.871600+00:00"
+  },
+  {
+    "id": "adaf54b3a1745790",
+    "text": "When the agent spends significant tokens on UI changes but produces no visible improvement (or fixes only its own same-session regressions), the user treats it as a waste; UI work requires visual verification against actual user-visible outcomes before claiming done.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "30a6f869-ad7b-4bc8-8bfe-28757691f2f8",
+    "member_ids": [
+      "30a6f869-ad7b-4bc8-8bfe-28757691f2f8"
+    ],
+    "member_texts": [
+      "When the agent spends significant tokens on UI changes but produces no visible improvement (or fixes only its own same-session regressions), the user treats it as a waste; UI work requires visual verification against actual user-visible outcomes before claiming done."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      ".claude",
+      "versable-builder",
+      "gcp",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-21T19:10:56.749104+00:00",
+    "last_seen": "2026-08-21T19:10:56.749104+00:00"
+  },
+  {
+    "id": "ccf0119fdd544a0c",
+    "text": "Responding cryptically instead of directly showing the output the user asked for is a failure to serve intent — when the user says 'show me', the reply must contain the actual data or rendered artifact, not a summary or status line.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "1375f853-89dc-4cd0-ab96-e777f71c6740",
+    "member_ids": [
+      "1375f853-89dc-4cd0-ab96-e777f71c6740"
+    ],
+    "member_texts": [
+      "Responding cryptically instead of directly showing the output the user asked for is a failure to serve intent — when the user says 'show me', the reply must contain the actual data or rendered artifact, not a summary or status line."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      ".claude",
+      "versable-builder",
+      "gcp",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-21T19:10:56.749104+00:00",
+    "last_seen": "2026-08-21T19:10:56.749104+00:00"
+  },
+  {
+    "id": "faf4f38c99411646",
+    "text": "Before referencing a specific numbered artifact (PR, issue, ticket) in a repo the agent is already making API calls to, the agent must verify that artifact actually exists in that repo — asserting a PR number without checking is a verifiable error that one extra call would have caught.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b44c8f8b-2fa1-4b76-8432-190f8fbaa36f",
+    "member_ids": [
+      "b44c8f8b-2fa1-4b76-8432-190f8fbaa36f"
+    ],
+    "member_texts": [
+      "Before referencing a specific numbered artifact (PR, issue, ticket) in a repo the agent is already making API calls to, the agent must verify that artifact actually exists in that repo — asserting a PR number without checking is a verifiable error that one extra call would have caught."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      ".claude",
+      "versable-builder",
+      "gcp",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-21T19:10:56.749104+00:00",
+    "last_seen": "2026-08-21T19:10:56.749104+00:00"
+  },
+  {
+    "id": "980104f4a116ee54",
+    "text": "UI changes that only correct regressions the agent introduced in the same session should not be counted as forward progress or findings; they represent net-zero recovery, not new user value.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "5b26fc7c-7a54-43d2-836e-c26ef7c34c22",
+    "member_ids": [
+      "5b26fc7c-7a54-43d2-836e-c26ef7c34c22"
+    ],
+    "member_texts": [
+      "UI changes that only correct regressions the agent introduced in the same session should not be counted as forward progress or findings; they represent net-zero recovery, not new user value."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      ".claude",
+      "versable-builder",
+      "gcp",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-21T19:10:56.749104+00:00",
+    "last_seen": "2026-08-21T19:10:56.749104+00:00"
+  },
+  {
+    "id": "9f851b47a94ea725",
+    "text": "When a periodic automated duty (warden check, cron) has been retired or superseded mid-session, the agent should recognize this from context and say so explicitly rather than silently performing now-unnecessary work.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "fba93b15-72b1-4994-b609-0f61f92649bf",
+    "member_ids": [
+      "fba93b15-72b1-4994-b609-0f61f92649bf"
+    ],
+    "member_texts": [
+      "When a periodic automated duty (warden check, cron) has been retired or superseded mid-session, the agent should recognize this from context and say so explicitly rather than silently performing now-unnecessary work."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      ".claude",
+      "versable-builder",
+      "gcp",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-21T19:10:56.749104+00:00",
+    "last_seen": "2026-08-21T19:10:56.749104+00:00"
+  },
+  {
+    "id": "aacacdaab4de152b",
+    "text": "A stop hook or session-exit condition with multiple sequential clauses requires every clause to be satisfied, not just the last one reached; the agent must re-read compound conditions as a checklist before treating them as satisfied.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "010cc18d-601d-43f5-8986-7d96185250ed",
+    "member_ids": [
+      "010cc18d-601d-43f5-8986-7d96185250ed"
+    ],
+    "member_texts": [
+      "A stop hook or session-exit condition with multiple sequential clauses requires every clause to be satisfied, not just the last one reached; the agent must re-read compound conditions as a checklist before treating them as satisfied."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      ".claude",
+      "versable-builder",
+      "gcp",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-21T19:10:56.749104+00:00",
+    "last_seen": "2026-08-21T19:10:56.749104+00:00"
+  },
+  {
+    "id": "9048c528aa63d391",
+    "text": "When asked to document plans or contracts, the output must be architecture diagrams, API payload shape tables, and JSON examples — not a summary of current project deployment status; conflating the two forces a correction round-trip.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.92,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "dff6a45d-bf09-4b34-bc04-1df258d2cb4d",
+    "member_ids": [
+      "dff6a45d-bf09-4b34-bc04-1df258d2cb4d"
+    ],
+    "member_texts": [
+      "When asked to document plans or contracts, the output must be architecture diagrams, API payload shape tables, and JSON examples — not a summary of current project deployment status; conflating the two forces a correction round-trip."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-"
+    ],
+    "first_seen": "2026-08-21T23:33:55.199183+00:00",
+    "last_seen": "2026-08-21T23:33:55.199183+00:00"
+  },
+  {
+    "id": "96089a7581b81cd4",
+    "text": "Technical planning documents intended for human skimming require visual hierarchy by default: tables, JSON payload shape examples, and ASCII architectural diagrams — prose-only documents fail the scan test regardless of factual accuracy.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "97718cd8-3a03-4a45-bef5-e1480ce41ac3",
+    "member_ids": [
+      "97718cd8-3a03-4a45-bef5-e1480ce41ac3"
+    ],
+    "member_texts": [
+      "Technical planning documents intended for human skimming require visual hierarchy by default: tables, JSON payload shape examples, and ASCII architectural diagrams — prose-only documents fail the scan test regardless of factual accuracy."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-"
+    ],
+    "first_seen": "2026-08-21T23:33:55.199183+00:00",
+    "last_seen": "2026-08-21T23:33:55.199183+00:00"
+  },
+  {
+    "id": "f88326dded64d27d",
+    "text": "Literary or narrative phrasing in technical output ('The build chase ended somewhere genuinely useful, and it was never the token') is a prose violation in the same class as em-dash use — technical conclusions must state facts plainly without rhetorical flourish.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "29ce9a7e-4592-4d33-b7a8-7c3ed004d83c",
+    "member_ids": [
+      "29ce9a7e-4592-4d33-b7a8-7c3ed004d83c"
+    ],
+    "member_texts": [
+      "Literary or narrative phrasing in technical output ('The build chase ended somewhere genuinely useful, and it was never the token') is a prose violation in the same class as em-dash use — technical conclusions must state facts plainly without rhetorical flourish."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-"
+    ],
+    "first_seen": "2026-08-21T23:33:55.199183+00:00",
+    "last_seen": "2026-08-21T23:33:55.199183+00:00"
+  },
+  {
+    "id": "5911fc943b371fc6",
+    "text": "Halting mid-task without a specific, genuine blocker that only the user can resolve wastes the user's attention budget; the threshold for pausing must be high — only when the agent literally cannot proceed without a human decision.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "cc04661d-ce57-44db-95da-9ecc1b04aced",
+    "member_ids": [
+      "cc04661d-ce57-44db-95da-9ecc1b04aced"
+    ],
+    "member_texts": [
+      "Halting mid-task without a specific, genuine blocker that only the user can resolve wastes the user's attention budget; the threshold for pausing must be high — only when the agent literally cannot proceed without a human decision."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-"
+    ],
+    "first_seen": "2026-08-21T23:33:55.199183+00:00",
+    "last_seen": "2026-08-21T23:33:55.199183+00:00"
+  },
+  {
+    "id": "2d2e354193ac96f4",
+    "text": "When the user responds to an agent pause with 'keep going' or invokes /atone for stubbornness, the prior stop was unjustified; re-raising the same soft blocker after an explicit 'keep going' is a repeated failure warranting an S3 atone entry.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.91,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "cf449c89-2a8e-442b-9a86-e87a3fa38f67",
+    "member_ids": [
+      "cf449c89-2a8e-442b-9a86-e87a3fa38f67"
+    ],
+    "member_texts": [
+      "When the user responds to an agent pause with 'keep going' or invokes /atone for stubbornness, the prior stop was unjustified; re-raising the same soft blocker after an explicit 'keep going' is a repeated failure warranting an S3 atone entry."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "-Users-alcatraz627-Code-Versable-silica-runner",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Versable-automation",
+      "-Users-alcatraz627--claude-scripts-kanban",
+      "-Users-alcatraz627--claude",
+      "-"
+    ],
+    "first_seen": "2026-08-21T23:33:55.199183+00:00",
+    "last_seen": "2026-08-21T23:33:55.199183+00:00"
+  },
+  {
+    "id": "7204886c7a8dcea1",
+    "text": "When the user asks to see specific data or results, the agent must present that data directly rather than describing it cryptically or summarizing it at one level of abstraction removed from what was requested.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bcc48585-e49a-48d6-8102-e945d5ee253a",
+    "member_ids": [
+      "bcc48585-e49a-48d6-8102-e945d5ee253a"
+    ],
+    "member_texts": [
+      "When the user asks to see specific data or results, the agent must present that data directly rather than describing it cryptically or summarizing it at one level of abstraction removed from what was requested."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "kanban",
+      "gcp",
+      ".claude",
+      "versable-builder",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-24T19:32:13.856362+00:00",
+    "last_seen": "2026-08-24T19:32:13.856362+00:00"
+  },
+  {
+    "id": "da93a050bc0a5814",
+    "text": "Iterating on UI changes without a mechanism to visually verify the result wastes tokens and fails to make real progress; the agent should acknowledge when it cannot verify UI changes rather than continuing to apply blind edits.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "84a5309d-9028-4288-9ee4-325e5f57eab6",
+    "member_ids": [
+      "84a5309d-9028-4288-9ee4-325e5f57eab6"
+    ],
+    "member_texts": [
+      "Iterating on UI changes without a mechanism to visually verify the result wastes tokens and fails to make real progress; the agent should acknowledge when it cannot verify UI changes rather than continuing to apply blind edits."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "kanban",
+      "gcp",
+      ".claude",
+      "versable-builder",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-24T19:32:13.856362+00:00",
+    "last_seen": "2026-08-24T19:32:13.856362+00:00"
+  },
+  {
+    "id": "090019503a8c50bc",
+    "text": "Sub-agent dispatch prompts must include an explicit spend ceiling or budget constraint clause; omitting it while including other constraint clauses is a recognized failure even when the other clauses are present.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "198871a2-c513-481a-99d3-a85b0f15fd7d",
+    "member_ids": [
+      "198871a2-c513-481a-99d3-a85b0f15fd7d"
+    ],
+    "member_texts": [
+      "Sub-agent dispatch prompts must include an explicit spend ceiling or budget constraint clause; omitting it while including other constraint clauses is a recognized failure even when the other clauses are present."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "kanban",
+      "gcp",
+      ".claude",
+      "versable-builder",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-24T19:32:13.856362+00:00",
+    "last_seen": "2026-08-24T19:32:13.856362+00:00"
+  },
+  {
+    "id": "ea00cc97d0ba3e97",
+    "text": "When search or filtering results repeatedly include irrelevant categories despite clear constraints, the correct response is to diagnose the filtering logic rather than presenting the irrelevant results again.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "67d5ab33-f686-4ed3-9e2f-cdecfc1454e1",
+    "member_ids": [
+      "67d5ab33-f686-4ed3-9e2f-cdecfc1454e1"
+    ],
+    "member_texts": [
+      "When search or filtering results repeatedly include irrelevant categories despite clear constraints, the correct response is to diagnose the filtering logic rather than presenting the irrelevant results again."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "kanban",
+      "gcp",
+      ".claude",
+      "versable-builder",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-24T19:32:13.856362+00:00",
+    "last_seen": "2026-08-24T19:32:13.856362+00:00"
+  },
+  {
+    "id": "a253dcbb3200788e",
+    "text": "The WebSearch session cap in Claude Code is a real, configurable setting surfaced via a runtime error message when the cap is hit, even if not documented in official public docs.",
+    "category": "domain",
+    "valence": "neutral",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "b75b72b7-3a8e-4857-8e89-36cbe0793743",
+    "member_ids": [
+      "b75b72b7-3a8e-4857-8e89-36cbe0793743"
+    ],
+    "member_texts": [
+      "The WebSearch session cap in Claude Code is a real, configurable setting surfaced via a runtime error message when the cap is hit, even if not documented in official public docs."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
+      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
+      "kanban",
+      "gcp",
+      ".claude",
+      "versable-builder",
+      "slack-automation"
+    ],
+    "first_seen": "2026-08-24T19:32:13.856362+00:00",
+    "last_seen": "2026-08-24T19:32:13.856362+00:00"
   }
 ]

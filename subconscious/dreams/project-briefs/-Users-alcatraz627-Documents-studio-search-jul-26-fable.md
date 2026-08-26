@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-19T22:33:53.882060+00:00 · 20 patterns / 7 insights -->
+<!-- i-dream project brief · 2026-08-24T19:39:46.286388+00:00 · 20 patterns / 7 insights -->
 ## What this project is about
-A multi-source job/talent search aggregation platform with filtering UI and data pipelines. Working style is adversarial peer-review: two agents produce independent plans, then grade each other — convergence comes after, not before.
+A multi-source job/content aggregation and search tool with a filtering UI, built using a two-agent mutual peer-review workflow where agents independently produce plans and grade each other's blueprints.
 
 ## Things to do (or keep doing)
-- Always present parallel plans or options at equal depth side-by-side before any merge or synthesis step; the user needs the full option space first
-- Always annotate assessments (gap tables, filter reports, pipeline results) with the exact observation boundary — which files read, which modes tested, which endpoints hit
-- Always enumerate other consumers before claiming or modifying any shared resource (browser session, UI component, codebase region, established pattern)
-- When blocked by an external constraint (auth wall, harness guard, credential scope), surface the exact unblocking action for the owner — never attempt workarounds
+- Prefer the two-agent peer-review pattern: produce independently, then contrast side-by-side — never merge without explicit instruction
+- Always enumerate all axes of a multi-dimensional feature (filter criteria, data sources, visual modes) before declaring it complete
+- Always include the derivation chain alongside any outcome report — which sources checked, which files read, what prior context applied
+- Verify outcomes at the consumer's end (running app, actual output rows, receiving agent) not the producer's end
 
 ## Things to avoid
-- Don't re-raise topics the user has deferred or skipped more than twice without explicit invitation; three skips is a final no
-- Don't sub-agent output to a file named `report.md` — the harness blocks this write; always use a non-reserved name
-- Don't substitute a curated subset in your reply when the user asked for the full result set
-- Don't claim done without exercising the changed path; the declared-ready hook fires repeatedly here — treat every firing as a real block
+- Don't regenerate AI-smell prose (em-dashes, excessive bold spans) after the stop-hook flags it — the hook fires because the fix didn't land; treat the second flag as a generator problem, not an instance problem
+- Don't re-raise a topic the user has deferred or skipped three or more times without explicit invitation
+- Don't name a sub-agent output file `report.md` — the harness blocks this write; use a dated slug path
+- Don't claim a filter, coverage, or verification is complete after checking only one criterion or source — conjunctive enforcement against real output is required
 
 ## Open questions / known gaps
-- Prose-smell correction is not durable: em-dashes and bold spans re-emerge in the very next reply after hook correction; needs a mechanical post-generation check, not just intent
-- Deferred-review queue accumulates across turns and is lost on session end; no durable persistence exists for it yet
+- The declared-ready hook fires repeatedly within sessions, signaling a persistent habit of claiming success without exercising the code path — treat any "done" claim as requiring a run signal first
+- Scope underspecification recurs: before implementing features whose acceptance criteria would have to be invented, surface a spec for the user to approve

@@ -1,0 +1,230 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16587,
+    "correction_density": 0.02040816326530612,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.19165083337702501,
+    "unit_count": 49
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:WORSENING_COUNT — 11 zero-tool style-enforcement sessions this cycle (units 0a27e96d-0, 5fad4e12-0, 517a46c8-0, 7a4bb49e-0, d6af000e-0, c57ffcb4-0, 7c73f143-0, 5f74cfe3-0, 4e2c7a3d-0, 4749b92f-0, 25dcbac1-0) vs 2 prior cycle and 1 the cycle before; topic_keywords uniformly ['enforce','style','ledger','file','content']; all Unknown or Accepted reactions; count jump is notable even under full deprioritization — may signal environmental change (more sessions spawning this path) rather than behavioral drift; keeping deprioritized per history guidance but flagging count trajectory",
+      "optimism_bias_on_script_compatibility:RECURRING:STABLE — two instances: (1) 71f07d7d-30 shows first two Bash attempts using compound commit+push pipeline (git add && git commit && git push) failing before agent narrowed to commit-only, same shape flagged in 2026-08-19 cycle; (2) 71f07d7d-57 shows first tool call (cat on assumed artifact path) failing before agent recovered with ls to discover actual directory state — probe-after-failure, not probe-before; no probe-before-fix instances detected this cycle; prior cycle noted partial improvement in runner-verification context that has not generalized; trajectory STABLE-to-WORSENING given two distinct instances across two sessions"
+    ],
+    "calibration_score": 0.62,
+    "overconfident_count": 2,
+    "recommendations": [
+      "optimism_bias_on_script_compatibility: Pattern spans three consecutive cycles without generalization of the probe-before-fix improvement; recommend enforcing a pre-probe step before any compound git command that chains commit with push — specifically: run git status + git log --oneline -1 + verify push authorization before chaining; the runner-verification improvement (prior cycle) shows the habit is achievable in one context; the gate is generalization",
+      "style_log_volume: Count of 11 vs prior cycle's 2 warrants one additional monitoring cycle before deciding whether to re-prioritize; if count remains elevated (>5) next cycle, investigate whether a new session-spawn trigger is activating this path more frequently rather than treating it as purely a behavior signal"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 26
+  },
+  "sessions": [
+    [
+      "f8de75f5-0bdf-4e37-9dee-c0d7b97f191b",
+      125302
+    ],
+    [
+      "b92aba57-8223-43e6-bcb5-057e98953bdd",
+      142059
+    ],
+    [
+      "97d1b64a-3abc-4dcf-9311-0a4fa50d60b1",
+      7735897
+    ],
+    [
+      "6d8188ed-aa81-42e9-90ba-6d830459c37c",
+      141548
+    ],
+    [
+      "43559745-ceae-47e9-9b91-07303b098643",
+      138059
+    ],
+    [
+      "28e25d1a-e7b1-41e6-849f-1a5e0197a0d7",
+      139897
+    ],
+    [
+      "272e9069-0cb5-45be-bd36-b79281657259",
+      107766
+    ],
+    [
+      "254e4639-9d73-47da-a302-843e19237f3a",
+      140162
+    ],
+    [
+      "0a27e96d-9397-4f73-be8f-dda46a293163",
+      143168
+    ],
+    [
+      "02ecb464-1bc5-47b6-ae94-c0d9839de64f",
+      136585
+    ],
+    [
+      "6574a122-8999-449a-836f-3386f710f4f8",
+      118770
+    ],
+    [
+      "5fad4e12-b16f-45a2-b2d4-842f04f8a894",
+      142138
+    ],
+    [
+      "517a46c8-9a9e-4074-9398-71289f79bf95",
+      148163
+    ],
+    [
+      "496ee166-0c7e-4145-a039-65fcd5b3a5e6",
+      131842
+    ],
+    [
+      "7a4bb49e-bdd2-4c6a-9bc2-8c31cac4f291",
+      120027
+    ],
+    [
+      "f5f638f0-7a66-4ec2-8810-43853f2209f9",
+      150294
+    ],
+    [
+      "e82d0205-8506-4752-ad0a-16ba480b6d5b",
+      1700194
+    ],
+    [
+      "e4facedb-7a17-4e10-b380-32385ebeb115",
+      127065
+    ],
+    [
+      "e082fcdf-6936-4bd5-877a-c3a5b4435838",
+      120318
+    ],
+    [
+      "d6af000e-2d5b-40ef-83c4-7797cd4f7a55",
+      112916
+    ],
+    [
+      "cbd5b63d-afc0-4c37-9bdf-a751183d2629",
+      155658
+    ],
+    [
+      "c57ffcb4-63b3-420a-af0b-43962123b8bc",
+      131293
+    ],
+    [
+      "ae423752-de00-4702-ba18-cd02bda1ecb5",
+      144945
+    ],
+    [
+      "810270b1-b71b-424d-8d46-979f8a3cc663",
+      116098
+    ],
+    [
+      "7c73f143-0ffc-4918-9fc4-f0eba2cf6eff",
+      142779
+    ],
+    [
+      "71f07d7d-95ec-4a2b-82a7-f6cec82775b5",
+      9743735
+    ],
+    [
+      "60cdfb72-d748-4435-bff6-0d03e61d8d95",
+      142619
+    ],
+    [
+      "5f74cfe3-1a9e-4ac4-b0bc-98a6f8c9d16c",
+      159714
+    ],
+    [
+      "4e2c7a3d-7e45-4dbb-837f-21f61b380f05",
+      163095
+    ],
+    [
+      "4c8abd33-8f35-451e-9d19-829548734f93",
+      151116
+    ],
+    [
+      "4749b92f-da0b-4edc-afd0-26b735573baa",
+      144063
+    ],
+    [
+      "4449a61d-1457-46a7-b398-47a0f1dce432",
+      7762508
+    ],
+    [
+      "3a192cd8-d505-4548-b71f-33cfb1191259",
+      134701
+    ],
+    [
+      "38400d41-6de4-4eb4-8990-9ef721680191",
+      118143
+    ],
+    [
+      "35ffd39d-7ac9-4bfe-9b3a-745cf3ee5b20",
+      139440
+    ],
+    [
+      "282ce1f8-9d25-4d51-bde3-d6e78d14aa32",
+      115169
+    ],
+    [
+      "25dcbac1-5102-4159-ac11-62bc2e4fc252",
+      154640
+    ],
+    [
+      "0eeffc6e-39a0-48f0-82f1-7b1d6232d621",
+      12348172
+    ],
+    [
+      "ffb01f0d-6df2-48de-97ce-1a5437087849",
+      111552
+    ],
+    [
+      "e3dfc4c5-b3c5-46d3-99af-251569acd86e",
+      113436
+    ],
+    [
+      "d2981195-7a3b-4948-af0c-b85bfb6fef5b",
+      115370
+    ],
+    [
+      "5d8d9b56-16b7-464a-b678-235ba57b5f98",
+      115580
+    ],
+    [
+      "2bb86cfa-06b1-4cab-aa93-1cc5301a540d",
+      111749
+    ],
+    [
+      "88103e98-67ef-4a57-9db5-9eb9a06b9e4a",
+      128838
+    ],
+    [
+      "f57c235a-7b07-4d55-a13c-9360b7131026",
+      132980
+    ],
+    [
+      "f35fb866-de9c-4d0d-a775-14769db1fe49",
+      95491
+    ],
+    [
+      "df7fe5f3-0763-42ef-b980-e74758b059f6",
+      7007898
+    ],
+    [
+      "d429e5b7-8f13-4a82-8e16-47ab92ac2f31",
+      140107
+    ],
+    [
+      "d224ea51-16c7-47b6-9485-16cefdb8a6b5",
+      114103
+    ],
+    [
+      "c4ed4faa-3a3e-41f2-b0b2-c1146c185682",
+      129515
+    ]
+  ],
+  "timestamp": "2026-08-21T19:14:46.450515Z",
+  "tokens_used": 10518,
+  "units_analyzed": 38,
+  "units_total": 49
+}

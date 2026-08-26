@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-19T22:34:15.491155+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-08-21T19:17:22.734876+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-A multi-page React/Next.js product builder (versable-builder) with complex shared UI shell components, multi-agent coordination, and external-facing documents; work style is iterative with high UI verification bar and parallel sub-agent use.
+A multi-agent SaaS builder (versable-builder) with heavy UI work, parallel sub-agent coordination, and external stakeholder-facing output. Work style mixes high-velocity parallel edits with protected-repo discipline.
 
 ## Things to do (or keep doing)
-- Before implementing any sidebar/drawer/modal, audit ALL pages that use the same component — never build per-page variants of a shared shell
-- Verify fixes on the actual running dev server and read the rendered output; send-side success and test-pass are proxy signals, not confirmation
-- Identify the receiver when posting to GitHub under the user's account — always mark agent-generated content explicitly
-- Pre-negotiate task ownership via IPC before launching parallel agents; batch-sync state after any burst of parallel completions
+- **Audit every page** before implementing any shared UI shell (sidebar, drawer, modal) — enumerate all instances first, implement globally in one pass, never per-page
+- **Verify on the running dev server** before claiming a UI or IPC fix is done — proxy evidence (send-success, test-pass, code looks right) is not direct evidence
+- **Pre-negotiate task ownership via IPC** before parallel sub-agents touch the same files — post-burst, treat all cached state (tasks, git, file contents) as stale and re-sync
+- **Collect multiple owner decisions through `/decision-wizard`**, never as a numbered chat list
 
 ## Things to avoid
-- Don't claim a UI sub-issue fixed without verifying the full rendered containing element — adjacent problems survive partial fixes
-- Don't re-raise topics the user has deferred or ignored three or more times without explicit re-invitation
-- Don't route decisions to the user as numbered chat lists; use `/decision-wizard` for any batch of owner choices
-- Don't emit em-dashes or excessive bold spans in prose — the stop-hook fires repeatedly on this and the correction doesn't stick without a mechanical re-check before sending
+- **Don't commit or push** — this is a protected repo; prepare the diff, show it, hand the commit to the user
+- **Don't emit em-dashes or excessive bold spans** in any prose, even after a stop-hook fires and demands re-emission — treat the hook as a hard gate, not an advisory
+- **Don't raise a deferred topic again** once the user has skipped it three or more times — if it resurfaces, wait for their explicit invitation
+- **Don't post to shared platforms (GitHub, etc.) under the user's account** without an explicit "posted by agent" marker in the message body
 
 ## Open questions / known gaps
-- Generative prose priors (AI-smell tells) re-insert themselves after in-session correction; a mechanical post-generation scan is needed but not yet wired
-- Parallelism degrades all bookkeeping simultaneously; no structured sync checkpoint is enforced after sub-agent bursts
+- **Absence-as-default trap is recurring**: gates default ALLOW on unknown inputs, lookups return zero instead of UNCERTAIN — every new gate or extraction needs an explicit unknown/deny path wired at creation time
+- **External-document hygiene**: docs drafted here sometimes contain internal commentary that must be stripped before any stakeholder share — no automated gate exists for this

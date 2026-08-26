@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-19T22:35:35.517858+00:00 · 20 patterns / 10 insights -->
+<!-- i-dream project brief · 2026-08-21T23:39:53.231426+00:00 · 20 patterns / 10 insights -->
 ## What this project is about
-The user's global Claude configuration (`~/.claude`) — rules, skills, hooks, scripts, and memory that govern agent behavior across all projects. Work is iterative meta-tooling: build, validate, and refine the infrastructure Claude itself runs on.
+This is the user's global `~/.claude` configuration and tooling project — scripts, skills, hooks, rules, and memory systems. Work here is high-stakes: changes affect every Claude session machine-wide.
 
 ## Things to do (or keep doing)
-- Use two-agent peer-review for plans: each agent produces a blueprint independently, then grades the other's — never merge without an explicit request to do so
-- For protected repos, prepare the diff and stop — hand the commit to the user, never push speculatively
-- Verify at the receiver boundary (rendered output, running app, peer acknowledgment), not the sender boundary (your edit, your log)
-- Update any status surface (task lists, deferred decisions) at the same granularity it will be consumed — per-turn if read per-turn
+- **Verify at the consumer end, not the producer end** — a send-success, test-pass, or advisory-doc is not proof; check the receiving side's actual state before claiming done.
+- **Enumerate siblings before implementing any pattern** — UI components, filters, pages, and scripts that share a shape must all be audited and fixed in the same response, not just the one in front of you.
+- **Route owner decisions through `/decision-wizard`** — batch any multi-item judgment call into a pre-answered wizard form; never send a numbered chat list.
+- **Hand commits to the user for protected repos** — prepare the diff, show it, stop; never commit or push without explicit fresh approval per the protected-repos registry.
 
 ## Things to avoid
-- Don't make structural claims about where functionality lives without reading the relevant source file first
-- Don't re-raise topics the user has deferred or explicitly skipped — three or more skips is a hard stop
-- Don't post to shared platforms (GitHub, Slack) under the user's account without marking the message as agent-generated
-- Don't collect multiple decisions as a numbered chat list — route them through `/decision-wizard`
+- **Don't claim a fix works without exercising it on the running surface** — false assurance cycles on UI and runtime bugs are a recurring trust failure here.
+- **Don't make structural claims about the codebase without reading the file first** — "this does not exist / this is not present" requires a citation or a read, not pattern-matching.
+- **Don't re-raise deferred topics** — if the user has skipped or ignored a subject three or more times, do not bring it back without an explicit invitation.
+- **Don't emit AI-smell prose** — no em-dashes, no excessive bold spans, no label:fragment rows; the stop-hook fires on these and the pattern keeps recurring.
 
 ## Open questions / known gaps
-- AI-smell prose (em-dashes, bold-spam) re-inserts after each in-session correction, suggesting the stop-hook feedback loop hasn't durably overridden the generation prior; a per-reply mechanical scan may be needed
-- Parallel sub-agent bursts consistently degrade state bookkeeping — task lists drift, edits clobber — pre-negotiating ownership via IPC before parallel work starts is the prescribed fix but hasn't been enforced
+- **Proxy-vs-direct evidence** is a persistent blind spot across IPC, testing, and UI verification — the agent repeatedly accepts a plausible-looking positive result without confirming it was computed from real input.
+- **Parallel-work state hygiene** degrades under load: after any burst of concurrent edits or sub-agent completions, task lists, branch state, and file ownership all drift simultaneously.
