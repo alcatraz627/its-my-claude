@@ -111,6 +111,28 @@ bash $K plan supersede <id>                # a newer plan replaced it
 bash $K plan rm <id>                       # unregister; the doc is untouched
 ```
 
+## Several actions in one call
+
+When you would emit a list of `kanban.sh` commands, send them as one batch. Each
+line is a verb line; quotes are respected so a sentence survives. Blank lines and
+`#` comments are skipped. It stops at the first failure, because later lines
+usually depend on earlier ones; `--keep-going` pushes through.
+
+```bash
+bash $K batch <<'EOF'
+# bring the board up to date after a work session
+sync
+tag ab12cd34ef56 gh78ij90kl12 milestone:M1     # many ids, one tag
+move ab12cd34ef56 active
+goal ab12cd34ef56 "why this card exists"
+milestone check                                 # any milestone disagreeing with its cards
+EOF
+```
+
+`tag` takes as many card ids as you like, space- or comma-separated, with the
+`kind:name` last. An unknown verb exits non-zero, so a typo in a batch is
+reported rather than counted as success.
+
 ## Milestones
 
 A milestone is an object, not a tag (owner ruled 2026-08-26): it has an order, a
@@ -119,7 +141,8 @@ still the `milestone:<name>` tag, so there is exactly one way to say a card is i
 one and existing boards get milestones with no migration.
 
 ```bash
-bash $K milestone                          # list them: order, goal, N/M done
+bash $K milestone                          # list them: order, goal, N/M done, and any mismatch
+bash $K milestone check                    # where a milestone and its cards disagree
 bash $K milestone add M1 --goal "what shipping it means" [--order 1]
 bash $K tag <card-id> milestone:M1         # membership — the tag, as always
 bash $K milestone goal M1 "a better sentence"

@@ -470,6 +470,73 @@ switch (verb) {
     console.log(renderSelection(boardDir, name, sel));
     break;
   }
+  // Several actions in one call, because an agent asked to "bring the board up
+  // to date" emits a LIST of kanban.sh commands and the owner has been watching
+  // it happen. Owner ruling, 2026-08-26: "make the CLI powerful via whatever
+  // ways (composability of complex commands, pass multiple actions in the same
+  // call, whatever works for an agents)".
+  //
+  //   kanban.sh batch <<'EOF'
+  //   tag ab12 milestone:M1
+  //   move cd34 active
+  //   goal ab12 "why this card exists"
+  //   EOF
+  //
+  // Each line is a verb line, parsed the way a shell would (quotes respected).
+  // Blank lines and # comments are skipped so a batch can be commented. It stops
+  // at the first failure, because later lines routinely depend on earlier ones
+  // and finishing a half-applied plan is worse than stopping; --keep-going says
+  // otherwise. Each line re-invokes this CLI rather than calling an internal
+  // dispatch: one process per line costs ~30ms and buys exact parity with what
+  // the same command does on its own, which a second code path would not.
+  case "batch": {
+    const src = positional.length
+      ? positional.join("\n")
+      : await Bun.stdin.text();
+    const lines = src.split("\n").map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"));
+    if (!lines.length) die("batch got no commands", `pipe them in:  kanban.sh batch <<'EOF'\n  tag ab12 milestone:M1\n  move cd34 active\nEOF`);
+    // shell-ish split: honour single and double quotes so a goal sentence survives
+    const split = (l: string): string[] => {
+      const out: string[] = []; let cur = ""; let q: string | null = null;
+      for (const ch of l) {
+        if (q) { if (ch === q) q = null; else cur += ch; continue; }
+        if (ch === '"' || ch === "'") { q = ch; continue; }
+        if (/\s/.test(ch)) { if (cur) { out.push(cur); cur = ""; } continue; }
+        cur += ch;
+      }
+      if (q) throw new CliError(`unclosed ${q} quote in: ${l}`, "quote the whole value, or drop the quote");
+      if (cur) out.push(cur);
+      return out;
+    };
+    const keep = hasFlag("keep-going");
+    let ok = 0; const failed: { line: string; why: string }[] = [];
+    for (const line of lines) {
+      if (/^batch\b/.test(line)) { failed.push({ line, why: "a batch cannot contain a batch" }); if (!keep) break; continue; }
+      const argv = split(line);
+      const r = Bun.spawnSync([process.execPath, __filename, ...argv, "--project", projectDir()],
+                              { stdout: "pipe", stderr: "pipe" });
+      const outTxt = new TextDecoder().decode(r.stdout).trim();
+      const errTxt = new TextDecoder().decode(r.stderr).trim();
+      if (r.exitCode === 0) {
+        ok++;
+        console.log(`  ok  ${line}`);
+        // the verb's own last line is the useful half; the rest is state noise
+        const say = outTxt.split("\n").filter((x) => !x.startsWith("[state]")).pop();
+        if (say) console.log(`      ${say}`);
+      } else {
+        const why = (errTxt || outTxt).split("\n")[0] || `exit ${r.exitCode}`;
+        failed.push({ line, why });
+        console.log(`  FAIL ${line}`);
+        console.log(`      ${why}`);
+        if (!keep) { console.log(`  stopped here — later lines usually depend on earlier ones (--keep-going to push through)`); break; }
+      }
+    }
+    console.log(`\nbatch: ${ok} ok, ${failed.length} failed, ${lines.length - ok - failed.length} not attempted`);
+    if (failed.length) process.exitCode = 1;
+    break;
+  }
+
   // A milestone is an object now, not only a tag (owner ruled yes 2026-08-26).
   // Membership is still the tag, so nothing here invents a second way to say a
   // card belongs to one: this verb owns the order, the goal sentence, the docs
@@ -491,6 +558,48 @@ switch (verb) {
         .map(([cid]) => cid);
     };
 
+    // A milestone and its cards can disagree, and the disagreement is the useful
+    // signal. Owner ruling D6c + note, 2026-08-26: "Make the AGENT do the
+    // reconciling please, warn it if there could be a state mismatch (cards done
+    // but milestone open, or milestone being marked done but card open /
+    // blocked), make it resolve all."
+    //
+    // So this never fixes anything on its own. It names each disagreement and
+    // the one command that settles it, because which way a mismatch should
+    // resolve is a judgment: a shipped milestone with a blocked card might mean
+    // the card is stale, or might mean the milestone shipped broken.
+    const mismatches = () => {
+      const board = loadBoard(boardDir);
+      const laneOf = (cid: string) => board.cards.find((c) => c.id === cid)?.lane;
+      const out: { m: any; kind: string; say: string; fix: string }[] = [];
+      for (const m of milestonesOf(plan)) {
+        const ids = cardsIn(m);
+        if (!ids.length) continue;
+        const open = ids.filter((cid) => !["done", "stale"].includes(laneOf(cid) ?? ""));
+        const blocked = ids.filter((cid) => laneOf(cid) === "blocked");
+        if (!m.doneAt && open.length === 0) out.push({ m, kind: "ready",
+          say: `${m.name}: all ${ids.length} card(s) are settled but the milestone is still open`,
+          fix: `kanban.sh milestone done ${m.name}` });
+        if (m.doneAt && open.length) out.push({ m, kind: "shipped-with-open",
+          say: `${m.name}: shipped, but ${open.length} card(s) are still open` +
+               (blocked.length ? ` and ${blocked.length} of those are BLOCKED` : ""),
+          fix: `kanban.sh milestone reopen ${m.name}   (or move the cards: ${open.slice(0, 3).join(" ")}${open.length > 3 ? " …" : ""})` });
+        if (!m.doneAt && blocked.length) out.push({ m, kind: "blocked",
+          say: `${m.name}: ${blocked.length} card(s) blocked, so it cannot ship as it stands`,
+          fix: `kanban.sh show ${blocked[0]}   (see what it is waiting for)` });
+      }
+      return out;
+    };
+
+    if (sub === "check" || sub === "reconcile") {
+      const ms = mismatches();
+      if (hasFlag("json")) { console.log(JSON.stringify(ms.map((x) => ({ milestone: x.m.name, kind: x.kind, say: x.say, fix: x.fix })))); break; }
+      if (!ms.length) { console.log(`no milestone disagrees with its cards on ${slug}`); break; }
+      console.log(`${ms.length} mismatch(es) on ${slug} — each needs a judgment, so none is applied for you:`);
+      for (const x of ms) { console.log(`  ${x.say}`); console.log(`    → ${x.fix}`); }
+      break;
+    }
+
     if (!sub || sub === "list") {
       const ms = milestonesOf(plan);
       if (hasFlag("json")) { console.log(JSON.stringify(ms.map((m) => ({ ...m, cards: cardsIn(m) })))); break; }
@@ -505,7 +614,11 @@ switch (verb) {
         const ids = cardsIn(m);
         const done = ids.filter((cid) => board.cards.find((c) => c.id === cid)?.lane === "done").length;
         const state = m.doneAt ? `shipped ${m.doneAt.slice(0, 10)}` : `${done}/${ids.length} done`;
-        console.log(`  ${String(m.order).padStart(2)}. ${m.name.padEnd(12)} ${state}`);
+        // The warning arrives without being asked for: a milestone that disagrees
+        // with its cards is the thing you most want to know when you look at the list.
+        const bad = mismatches().filter((x) => x.m.id === m.id);
+        console.log(`  ${String(m.order).padStart(2)}. ${m.name.padEnd(12)} ${state}${bad.length ? "   ! mismatch" : ""}`);
+        for (const x of bad) console.log(`      ! ${x.say}`);
         if (m.goal) console.log(`      ${m.goal}`);
         for (const d of (m.docs ?? [])) console.log(`      doc: ${d}`);
       }
@@ -543,6 +656,18 @@ switch (verb) {
       if (!name) die("usage", `kanban.sh milestone ${sub} <name>`);
       const m = findMilestone(plan, name);
       if (!m) die(`no milestone ${name} on ${slug}`, "kanban.sh milestone list");
+      // Ruling D6c: warn on a state mismatch rather than papering over it. The
+      // blocked card is the one that matters — `done` sweeps open cards into
+      // done, and sweeping a BLOCKED card discards a real signal about why it
+      // could not finish.
+      if (sub === "done") {
+        const bd = loadBoard(boardDir);
+        const blocked = cardsIn(m).filter((cid) => bd.cards.find((c) => c.id === cid)?.lane === "blocked");
+        if (blocked.length && !hasFlag("anyway")) {
+          die(`${m.name} has ${blocked.length} BLOCKED card(s); shipping it would move them to done`,
+              `look first: kanban.sh show ${blocked[0]}  ·  ship anyway: --anyway  ·  ship without moving cards: --no-cards`);
+        }
+      }
       // The trial's actual complaint: it expressed "M1 shipped" by moving seven
       // cards to done one at a time. Shipping a milestone moves its cards with
       // it, unless the caller says not to.
@@ -564,7 +689,7 @@ switch (verb) {
       console.log(`milestone ${name} removed — its tag and the cards wearing it are untouched`);
       break;
     }
-    die(`unknown milestone verb ${sub}`, "one of: list add goal order doc done reopen rm");
+    die(`unknown milestone verb ${sub}`, "one of: list check add goal order doc done reopen rm");
   }
 
   // What changed, and when. The board holds the current state; this holds the
@@ -596,7 +721,16 @@ switch (verb) {
   // effort, an area. Writes go through the server because plan.json is the
   // human lane's file, the same way `drop --force` routes note deletion.
   case "tag": {
-    const [id, spec] = positional;
+    // Many ids, one tag. `sync` ends by reporting "46 untagged, tag them so a
+    // lane can be read" and then offered exactly one card at a time, so two
+    // agents independently reported tagging in a shell loop. A message that
+    // names 46 problems should name a way to fix 46. The SPEC is the last
+    // positional; everything before it is a card id, and commas split too.
+    const spec = positional.length > 1 ? positional[positional.length - 1] : positional[1];
+    const ids = positional.length > 1
+      ? positional.slice(0, -1).flatMap((x) => x.split(",")).filter(Boolean)
+      : [];
+    const id = positional[0];
     const { slug, boardDir } = boardFor(projectDir());
     if (!id) {
       // bare `tag` lists the vocabulary and what it is worth
@@ -629,8 +763,20 @@ switch (verb) {
     if (!TAG_PRESETS.some((t) => t.kind === kind)) {
       die(`unknown tag kind ${kind}`, `one of: ${TAG_PRESETS.map((t) => t.kind).join(" ")}, or a bare name for a plain tag`);
     }
-    const res = await post("/api/tag", { slug, op: spec.startsWith("-") ? "unapply" : "apply", cardId: id, kind, name: value });
-    console.log(`${spec.startsWith("-") ? "removed" : "tagged"} ${id}: ${kind}:${value}`);
+    const op = spec.startsWith("-") ? "unapply" : "apply";
+    const targets = ids.length ? ids : [id];
+    let done = 0; const bad: string[] = [];
+    for (const cid of targets) {
+      try { await post("/api/tag", { slug, op, cardId: cid, kind, name: value }); done++; }
+      catch (e: any) { bad.push(`${cid}: ${e?.message ?? e}`); }
+    }
+    const verb2 = op === "apply" ? "tagged" : "removed from";
+    console.log(targets.length === 1
+      ? `${op === "apply" ? "tagged" : "removed"} ${targets[0]}: ${kind}:${value}`
+      : `${verb2} ${done}/${targets.length} card(s): ${kind}:${value}`);
+    // Named, not counted: a failure you cannot identify is a failure you cannot fix.
+    for (const b of bad) console.log(`  failed ${b}`);
+    if (bad.length) process.exitCode = 1;
     break;
   }
   case "goal": {
@@ -1307,6 +1453,15 @@ switch (verb) {
     break;
   }
   default:
+    // A bare `kanban.sh` is a help request and exits 0. An UNKNOWN verb is a
+    // mistake and exits 1: it used to print help and succeed, so a typo inside a
+    // batch reported "ok" and the run looked clean while doing nothing. Anything
+    // driving this by exit code — batch, a shell script, CI — was being told a
+    // typo had worked.
+    if (verb !== "help" && verb !== "--help" && verb !== "-h" && args.length) {
+      process.exitCode = 1;
+      console.error(`kanban: unknown verb "${verb}"\n`);
+    }
     console.log(`kanban.sh <verb>
   init [--project dir]     register + first sync + URL
   sync [--project dir]     re-harvest; prints the delta digest. Refuses to empty
@@ -1341,7 +1496,8 @@ switch (verb) {
                            sentence and how many of its cards are done.
                            add <name> [--goal "…"] [--order n] · goal <name> "…" ·
                            doc <name> <path> · order <name> <n> ·
-                           done <name> [--no-cards] ships it AND moves its cards ·
+                           check names every place a milestone and its cards disagree ·
+                           done <name> [--no-cards] [--anyway] ships it AND moves its cards ·
                            reopen <name> · rm <name>. A card joins a milestone the
                            way it always has: kanban.sh tag <id> milestone:<name>
   changed [--since 7d]     what changed on this board and when: syncs, lane moves,
