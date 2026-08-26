@@ -24,7 +24,7 @@ const CLAUSE_GRAMMAR = [
   // 60 lines by eye".)
   "is:unnamed", "is:untagged",
   "since:new", "since:moved", "since:done", "since:blocked",
-  "tag:<kind>:<name>", "<a word to search for>",
+  "tag:<kind>:<name>", "goal:<text>", "<a word to search for>",
 ];
 // The two operator words. They are grammar, not clauses: they never match a
 // card, they do not count against maxClauses, and a view made only of them
@@ -55,6 +55,16 @@ function matchClause(card, clause, ctx) {
     case "since:new":     return ctx.since(card.createdAt);
     case "since:moved":   return ctx.since(card.updatedAt) && card.lane !== "done"
                                  && card.lane !== "blocked" && !ctx.since(card.createdAt);
+  }
+  // A goal is a sentence written on a card, not a tag, so it has no kind:name
+  // shape and it contains spaces. The board splits a filter on whitespace, so
+  // the value arrives percent-encoded and is decoded here; no other clause and
+  // no caller has to know that. A malformed encoding is a filter the user is
+  // still typing, so it matches nothing rather than throwing on every keystroke.
+  if (c.startsWith("goal:")) {
+    let want = c.slice(5);
+    try { want = decodeURIComponent(want); } catch { return false; }
+    return String(ctx.goalOf?.(card.id) ?? "").trim().toLowerCase() === want.trim();
   }
   if (c.startsWith("tag:")) {
     const want = c.slice(4);

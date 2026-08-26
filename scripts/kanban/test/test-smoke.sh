@@ -214,6 +214,61 @@ case "$pg" in
 esac
 trash "$dpdir" 2>/dev/null || true
 
+echo; echo "-- goals and milestones are pressable in the board (owner callout, 2026-08-26) --"
+# "Instead of actually letting me see the goals and milestones in a board via
+# click, you just lied ... you pretended the goals and milestones are just tags."
+K="$(dirname "$0")/.."
+# A goal is a sentence, not a tag, so it needed a clause. Exercised on the shared
+# matcher, because that file exists so the board and the CLI cannot disagree.
+gout=$(node -e '
+const m = require(process.argv[1] + "/match.js");
+const ctx = { goalOf: (id) => ({a:"1 Fix now", b:"4 Polish"}[id] ?? ""),
+              tagsOf:()=>[], noteOf:()=>"", reviewOf:()=>false, since:()=>false };
+const c = (id) => ({id, title:"", subs:[]});
+const want = [
+  ["exact goal matches",            m.matchClause(c("a"), "goal:1%20Fix%20now", ctx), true],
+  ["other card does not match",     m.matchClause(c("b"), "goal:1%20Fix%20now", ctx), false],
+  ["a goal nobody has matches none",m.matchClause(c("a"), "goal:nope", ctx), false],
+  ["a prefix is not a match",       m.matchClause(c("a"), "goal:1%20Fix", ctx), false],
+  // A half-typed filter must not throw: the board re-matches on every keystroke.
+  ["malformed encoding is inert",   m.matchClause(c("a"), "goal:%", ctx), false],
+  ["goal: is named in the grammar", m.CLAUSE_GRAMMAR.includes("goal:<text>"), true],
+];
+for (const [n, got, exp] of want) if (got !== exp) { console.log("BAD " + n); process.exit(1); }
+console.log("OK");
+' "$K" 2>&1 | tail -1)
+[ "$gout" = "OK" ] && ok "the goal: clause matches exactly and survives a half-typed filter" \
+                   || no "the goal: clause matches exactly and survives a half-typed filter" "$gout"
+
+# BOTH sides, never one side against a literal: a clause the board can answer and
+# the CLI cannot is a silent disagreement, and this one measured 19 cards against
+# 0 when the CLI's goalOf was missing.
+bg=$(rg -c 'goalOf' "$K/board.html" || echo 0)
+cg=$(rg -c 'goalOf' "$K/cli.ts" || echo 0)
+if [ "$bg" != "0" ] && [ "$cg" != "0" ]; then
+  ok "board and CLI both give the matcher a goalOf"
+else
+  no "board and CLI both give the matcher a goalOf" "board=$bg cli=$cg; the surfaces would disagree"
+fi
+
+# The sidebar rows themselves. Milestones is the UNION of the registry and the
+# milestone tags: this board has 1 registry entry with 0 cards and 4 tag-only
+# milestones with cards, so either side alone renders a part as the whole.
+page=$(body "$S/b/-claude-244ec6")
+for probe in 'group("Milestones"::a Milestones group exists' \
+             'group("Goals"::a Goals group exists' \
+             'kind === "milestone"::Milestones unions the tags, not the registry alone' \
+             'goal:${encodeURIComponent::a goal row presses a goal: query'; do
+  needle="${probe%%::*}"; label="${probe##*::}"
+  case "$page" in *"$needle"*) ok "$label" ;; *) no "$label" "not in the served board" ;; esac
+done
+# A milestone's doc rows must not be .srow: group() counts .srow for the header,
+# so a doc counted as a milestone made 1 milestone + 1 doc report "2".
+case "$page" in
+  *'a.className = "msdoc"'*) ok "a milestone doc row is not counted as a milestone" ;;
+  *) no "a milestone doc row is not counted as a milestone" "msdoc still carries srow" ;;
+esac
+
 echo
 echo "======== pass=$pass fail=$fail ========"
 [ "$fail" = 0 ]

@@ -314,6 +314,10 @@ switch (verb) {
     const ctxFor = (notes: any) => ({
       since: (iso?: string) => !!iso && Date.now() - Date.parse(iso) < RECENT_MS,
       tagsOf: (id: string) => tagsOn(plan, id),
+      // The board answers goal: from the same plan.goals map. Leaving this out
+      // is not a missing feature, it is the two surfaces disagreeing silently:
+      // the clause would match 19 cards on the board and none here.
+      goalOf: (id: string) => (plan.goals ?? {})[id] ?? "",
       noteOf: (id: string) => notesOf(notes, id).map((n: any) => n.body).join(" "),
       reviewOf: (id: string) => notesOf(notes, id).some((n: any) => parseNoteTags(n.body).review),
     });

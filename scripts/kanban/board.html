@@ -973,6 +973,34 @@
   .srow.decrow .hotdot{display:inline-block;width:6px;height:6px;border-radius:50%;
     background:var(--green);margin-right:6px;vertical-align:middle;flex:none}
   .srow .tct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
+  /* A milestone's ORDER is the thing that makes M1 read before M2, so it leads
+     the row as a chip instead of only sorting silently. */
+  .srow.msrow .msord{flex:none;font:600 var(--fs-caption)/1 var(--mono);color:var(--text-3);
+                     border:1px solid var(--border);border-radius:var(--r-pill);padding:2px 5px}
+  /* Shipped reads dimmer, never disappears: §12, a row that vanishes reads as a
+     fault rather than as a state. */
+  .srow.ms-done .stxt{color:var(--text-3);text-decoration:line-through;
+                      text-decoration-color:var(--border-2)}
+  .srow.ms-done .msord{color:var(--green);border-color:var(--green-br);background:var(--green-bg)}
+  /* A milestone's docs hang under it, indented, so the nesting shows without
+     spending a second heading level on it. */
+  /* Deliberately not a .srow: the group header counts .srow, so a doc counted
+     as a milestone made one milestone with one doc report two. */
+  .msdoc{display:flex;align-items:center;gap:6px;width:100%;min-width:0;cursor:pointer;
+         background:none;border:1px solid transparent;border-radius:var(--r-control);
+         padding:3px 7px 3px 22px;text-align:left}
+  .msdoc:hover{background:var(--card);border-color:var(--border)}
+  .msdoc .stxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+               font:400 var(--fs-small)/1.3 var(--sans);color:var(--text-3)}
+  .msdoc:hover .stxt{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+  /* A goal is a sentence, not a name, so the reasoning the decision rows already
+     carry applies here: one ellipsised line tells you a goal exists and not which
+     one. Two lines, then clamp. */
+  .srow.goalrow{align-items:flex-start}
+  .srow.goalrow .stxt{white-space:normal;text-overflow:clip;
+                      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+                      overflow:hidden;line-height:1.35}
+  .srow.goalrow .tct{margin-top:1px}
   .srow.on{background:var(--card);border-color:var(--border-2);color:var(--text)}
   .srow{display:flex;align-items:center;gap:3px;position:relative}
   .sview{flex:1;display:flex;flex-direction:column;align-items:stretch;gap:2px;
@@ -4115,6 +4143,145 @@ function renderSide() {
     }
   });
 
+  // Milestones and Goals, the two things the owner said they could not see here.
+  // Their words, 2026-08-26: "Instead of actually letting me see the goals and
+  // milestones in a board via click, you just lied ... you pretended the goals
+  // and milestones are just tags." A registry, a CLI and two endpoints existed;
+  // the board had no row to press, which is the only surface the ruling was about.
+  //
+  // They sit above Plans and below Views for the same reason Views outrank Tags:
+  // a milestone is a thing someone NAMED and ordered, not vocabulary that merely
+  // accumulated.
+  //
+  // The list is the UNION of the registry and the milestone tags, and it has to
+  // be. Membership is the milestone:<name> tag and the registry only adds order,
+  // goal and docs, so the two drift: on this board the registry holds one
+  // milestone with no cards while four milestones with cards have no registry
+  // entry. Rendering either side alone shows a part and reads as the whole.
+  group("Milestones", (g) => {
+    const key = (x) => String(x ?? "").trim().toLowerCase();
+    const counts = tagCounts();
+    const rows = new Map();
+    for (const m of (plan().milestones ?? []))
+      rows.set(key(m.name), { name: m.name, order: m.order, goal: m.goal ?? "",
+                              docs: m.docs ?? [], doneAt: m.doneAt ?? null, tag: null });
+    for (const t of plan().tags.filter((t) => t.kind === "milestone")) {
+      const k = key(t.name);
+      if (rows.has(k)) rows.get(k).tag = t;
+      else rows.set(k, { name: t.name, order: null, goal: "", docs: [], doneAt: null, tag: t });
+    }
+    if (!rows.size) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No milestones yet. Tag a card milestone:<name> to start one, and kanban.sh milestone add <name> gives it an order, a goal sentence and its docs.";
+      g.appendChild(e);
+      return;
+    }
+    const n = (r) => (r.tag ? (counts.get(r.tag.id) ?? 0) : 0);
+    // Registry entries lead, in their order, because the order is the thing the
+    // registry is for. A milestone that exists only as a tag has no order to
+    // sort on, so it falls back to how many cards are on it.
+    const list = [...rows.values()].sort((a, b) => {
+      if ((a.order ?? null) !== null && (b.order ?? null) !== null) return a.order - b.order;
+      if ((a.order ?? null) !== null) return -1;
+      if ((b.order ?? null) !== null) return 1;
+      return n(b) - n(a) || String(a.name).localeCompare(String(b.name));
+    });
+    for (const r of list) {
+      if (!sideHit(r.name) && !sideHit(r.goal)) continue;
+      const cards = n(r);
+      const q = `tag:milestone:${r.name}`;
+      const registered = r.order !== null || !!r.goal || (r.docs ?? []).length > 0;
+      const done = !!r.doneAt;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "srow msrow" + (filterText === q ? " on" : "") + (done ? " ms-done" : "");
+      b.innerHTML = `<span class="msord"></span><span class="stxt"></span><span class="tct"></span>`;
+      b.querySelector(".msord").textContent = r.order !== null ? `M${r.order}` : "·";
+      b.querySelector(".stxt").textContent = r.name;
+      b.querySelector(".tct").textContent = String(cards);
+      // The goal sentence is what shipping this MEANS and is the reason the
+      // registry exists; the row is too narrow for it, so it rides the tooltip.
+      // An unregistered milestone says so, with the command that registers it,
+      // rather than looking like a registered one that lost its goal.
+      b.dataset.tip = (r.goal ? r.goal + " " : "")
+        + `${cards} card${cards === 1 ? "" : "s"}. Press to show only those.`
+        + (done ? ` Shipped ${ago(Date.parse(r.doneAt))} ago.` : "")
+        + (registered ? "" : ` Not in the registry, so it has no order, goal or docs: kanban.sh milestone add ${r.name}`);
+      b.onclick = () => setFilter(filterText === q ? "" : q);
+      g.appendChild(b);
+      // As many plans and reference docs per entity as it takes (owner, same
+      // ruling), so every doc gets a row. These are NOT .srow: the group header
+      // counts .srow, and counting a milestone's docs as milestones made a board
+      // with one milestone and one doc report two.
+      for (const d of (r.docs ?? [])) {
+        const a = document.createElement("button");
+        a.type = "button"; a.className = "msdoc";
+        a.innerHTML = `<span class="stxt"></span>`;
+        a.querySelector(".stxt").textContent = d.split("/").pop();
+        a.dataset.tip = `Read ${d}`;
+        a.onclick = (e) => { e.stopPropagation(); openDocModal(d, 0); };
+        g.appendChild(a);
+      }
+    }
+  });
+
+  // A goal is a sentence ON a card (plan.goals is cardId -> text), never a tag,
+  // so cards share a goal by wearing the same sentence. The rows are therefore
+  // the DISTINCT sentences, counted over cards still on the board: plan.goals
+  // outlives the cards it named, and counting its raw entries would report cards
+  // that are not there.
+  //
+  // Split into shared and one-card, using the same .skind heading Tags uses for
+  // its kinds. On this board 33 of 38 goals are worn by a single card, and a
+  // flat list buries the five real ones under them. Nothing is hidden (§12): the
+  // one-card goals are still every one of them, under a heading that says what
+  // they are.
+  group("Goals", (g) => {
+    const live = new Set(data.board.cards.map((c) => c.id));
+    const byText = new Map();
+    for (const [cid, text] of Object.entries(plan().goals ?? {})) {
+      if (!live.has(cid)) continue;
+      const t = String(text ?? "").trim();
+      if (!t) continue;
+      byText.set(t, (byText.get(t) ?? 0) + 1);
+    }
+    if (!byText.size) {
+      const e = document.createElement("div");
+      e.className = "sempty";
+      e.textContent = "No goals yet. Open a card and press g to say what it is for; cards sharing a sentence group here.";
+      g.appendChild(e);
+      return;
+    }
+    const all = [...byText.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .filter(([text]) => sideHit(text));
+    const band = (label, hint, rows) => {
+      if (!rows.length) return;
+      const h = document.createElement("div");
+      h.className = "skind"; h.textContent = label; h.dataset.tip = hint;
+      g.appendChild(h);
+      for (const [text, n] of rows) {
+        // Percent-encoded because the filter box splits on whitespace and a goal
+        // is a sentence; match.js decodes it. See the goal: clause there.
+        const q = `goal:${encodeURIComponent(text)}`;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "srow goalrow" + (filterText === q ? " on" : "");
+        b.innerHTML = `<span class="stxt"></span><span class="tct"></span>`;
+        b.querySelector(".stxt").textContent = text;
+        b.querySelector(".tct").textContent = String(n);
+        b.dataset.tip = `${n} card${n === 1 ? "" : "s"} share this goal. Press to show only those.`;
+        b.onclick = () => setFilter(filterText === q ? "" : q);
+        g.appendChild(b);
+      }
+    };
+    band("Shared", "A sentence more than one card is working towards",
+         all.filter(([, n]) => n > 1));
+    band("One card each", "One card's own sentence. Give two cards the same one and it moves up.",
+         all.filter(([, n]) => n === 1));
+  });
+
   // Plans registered to THIS board (#58 phase 3): the docs a decision page is
   // about, each with its state. Click reads the doc without leaving the board.
   group("Plans", (g) => {
@@ -6513,6 +6680,7 @@ let filterText = "";
 const clauseCtx = () => ({
   since: (iso) => since(iso),
   tagsOf: (id) => tagsOnCard(id),
+  goalOf: (id) => plan().goals[id] ?? "",
   noteOf: (id) => data.notes[id]?.note ?? "",
   reviewOf: (id) => !!parseTags(data.notes[id]?.note).review,
 });
