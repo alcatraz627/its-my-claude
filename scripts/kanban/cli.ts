@@ -9,7 +9,7 @@ import {
   CliError, KROOT, REGISTRY, SERVER_INFO, LANES, LANDINGS, SHAPES, BRIEF_MAX, type Lane, type ItemShape,
   cardId, readJson, atomicWrite,
   canonicalRoot, slugFor, registry, registerBoard, loadBoard, loadNotes,
-  loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, refreshFacts,
+  loadAck, mergeSync, withBoardLock, parseNoteTags, TAG_LEGEND, notesOf, noteSeen, ackKey, answerKey, refreshFacts,
   recordChange, loadChanges, sinceMsOf, milestonesOf, findMilestone, findTag,
   loadItems, loadLandings, withItemsLock, pendingItems, isClassified, isArchived, sessionId,
   loadSelection, renderSelection, loadPlan, tagsOn, findTag, TAG_PRESETS, presetFor, type TagKind,
@@ -287,6 +287,18 @@ switch (verb) {
       target.answer = a; target.answeredAt = now;
       savePlan(boardDir, plan, "decide:answer");
       console.log(`${target.id} ruled: ${a}`);
+    } else if (sub === "read") {
+      // P1.2, the second state: an agent records that it has READ the ruling.
+      // The receipt lives in ack.json beside the note receipts, because that
+      // file is CLI-owned so a pickup can be recorded while the server is down,
+      // and it is per-board so the decision id alone is a unique key.
+      if (!target.answeredAt) die(`${target.id} has no ruling to read`, `kanban.sh decide list   # ${target.id} is still open`);
+      const ackFile = path.join(boardDir, "ack.json");
+      const cur = loadAck(boardDir);
+      const next = { ...cur, answers: { ...(cur.answers ?? {}) } };
+      next.answers[answerKey(target.id)] = Date.now();
+      atomicWrite(ackFile, next, "ack");
+      console.log(`${target.id} marked read; it leaves the owed list`);
     } else if (sub === "defer") {
       const until = positional[2];
       if (!until) die("decide defer needs a horizon", `kanban.sh decide defer ${target.id} 2026-09-01   # it comes back then`);
@@ -1508,7 +1520,10 @@ switch (verb) {
                            milestones. The board holds the current state; this
                            holds the transitions. [--limit n] [--json]
   decide [list]            decisions an agent took to the owner on this board;
-                           add "<q>" [--why …] · answer <id> "<ruling>" · rm <id>
+                           add "<q>" [--why …] · answer <id> "<ruling>" ·
+                           read <id> (an agent signs for a ruling it has read;
+                           unread after a day, the ruling returns to the owed
+                           list) · defer <id> <date> · rm <id>
   view [list]              the board's named queries and what each is for;
                            add "<name>" <clause…> [--note "what it is for"] ·
                            rm "<name>". Clauses join with a space (and), or,

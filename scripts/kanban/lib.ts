@@ -348,7 +348,20 @@ export const loadBoard = (boardDir: string): Board =>
 export const loadNotes = (boardDir: string): Notes => readJson<Notes>(path.join(boardDir, "notes.json"), {});
 // Per-note pickup lives here, not in notes.json: ack is a CLI verb and notes
 // are server-owned, so routing ack through the server would break when it is down.
-export interface Ack { lastAckTs: number; notes?: Record<string, number> }
+// answersAckTs is a SEPARATE floor from lastAckTs, and that separation is the
+// whole correctness of the receipt. lastAckTs is written by `notes --ack`, which
+// is an agent saying it read the NOTES; it says nothing about rulings. Sharing
+// the floor meant the first routine note sweep silently marked every older
+// answer as read, issuing receipts nobody gave, which masks exactly the case
+// this feature exists to catch. Measured, not reasoned: with the floors shared,
+// an answer backdated three days sat at owed.counts.answer = 0 because a note
+// ack from the day before had already covered it.
+export interface Ack {
+  lastAckTs: number;
+  notes?: Record<string, number>;
+  answers?: Record<string, number>;
+  answersAckTs?: number;
+}
 export const loadAck = (boardDir: string): Ack =>
   readJson<Ack>(path.join(boardDir, "ack.json"), { lastAckTs: 0 });
 
@@ -359,6 +372,31 @@ export function noteSeen(ack: Ack, cardId: string, n: Note): boolean {
   const at = ack.notes?.[ackKey(cardId, n)];
   if (at !== undefined) return at >= Date.parse(n.updatedAt);
   return ack.lastAckTs >= Date.parse(n.updatedAt);
+}
+
+// P1.2 answer receipts (design: design/IDEATION-01-SCOPED.md:134). A note has a
+// pickup state and an answer did not, so the owner could rule and nobody would
+// ever know whether the session that asked came back and read it. The owner
+// answered a decision page eleven hours before an agent noticed, and the board
+// asserted NEEDS YOU the whole time.
+//
+// Deliberately the SAME pattern as noteSeen rather than a new one: a per-item
+// stamp with lastAckTs as the floor, in ack.json, which is CLI-owned precisely
+// so a pickup can be recorded while the server is down.
+//
+// Two states only, and that is the spec's own scoping. "Answered" is d.answer
+// plus d.answeredAt and is mechanical. "Read by an agent" is this. The third
+// state the ideation wanted, acted-with-a-reference, is agent-REPORTED and
+// therefore a claim, so it waits for Phase 2 with the trust surface it needs.
+export const answerKey = (decisionId: string): string => `answer:${decisionId}`;
+
+export function answerSeen(ack: Ack, d: { id: string; answeredAt?: string }): boolean {
+  if (!d.answeredAt) return false;              // never answered is not "read"
+  const when = Date.parse(d.answeredAt);
+  if (Number.isNaN(when)) return false;
+  const at = ack.answers?.[answerKey(d.id)];
+  if (at !== undefined) return at >= when;
+  return (ack.answersAckTs ?? 0) >= when;
 }
 
 // Tagged notes v1 (design: assets/reports/20260727-kanban-ui-stories/STORIES.md).

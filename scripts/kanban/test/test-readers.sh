@@ -132,5 +132,32 @@ else
   echo "  SKIP  write-path checks (no server on :$port)"
 fi
 
+
+# --- P1.2 answer receipts: the two floors must stay separate -------------------
+#
+# answerSeen mirrors noteSeen (per-item stamp, floor underneath) but must NOT
+# share lastAckTs. That field is written by `notes --ack`, an agent saying it
+# read the NOTES, which says nothing about rulings. Sharing it meant the first
+# routine note sweep silently marked every older answer read, issuing receipts
+# nobody gave and masking the exact case the feature exists to catch. Found by
+# running it: an answer backdated three days sat at owed.counts.answer = 0.
+r=$(bun --eval "
+  const { answerSeen } = await import('$HERE/lib.ts');
+  const d = { id: 'abc', answeredAt: '2026-08-23T00:00:00.000Z' };
+  const t = Date.parse(d.answeredAt);
+  const r = {
+    noteAckDoesNotCover: answerSeen({ lastAckTs: Date.now() }, d) === false,
+    ownFloorCovers:      answerSeen({ lastAckTs: 0, answersAckTs: t + 1 }, d) === true,
+    perItemWins:         answerSeen({ lastAckTs: 0, answers: { 'answer:abc': t + 1 } }, d) === true,
+    perItemStaleFails:   answerSeen({ lastAckTs: 0, answers: { 'answer:abc': t - 1 } }, d) === false,
+    unansweredIsNotRead: answerSeen({ lastAckTs: 9e15 }, { id: 'abc' }) === false,
+    badDateFailsClosed:  answerSeen({ lastAckTs: 9e15 }, { id: 'abc', answeredAt: 'nonsense' }) === false,
+  };
+  console.log(Object.entries(r).filter(([,v]) => !v).map(([k]) => k).join(',') || 'ALLGOOD');
+" 2>&1 | tail -1)
+if [ "$r" = "ALLGOOD" ]; then ok "answer receipts: note-ack does not cover a ruling, and both malformed classes fail closed"
+else no "answer receipts: $r"; fi
+
+
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

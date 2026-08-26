@@ -567,6 +567,35 @@ because the glyph and the tooltip were there from the start.
 
 ---
 
+## 18d. The day model, and what may interrupt
+
+P1.4 of `design/IDEATION-01-SCOPED.md`. The ideation's own line is the useful
+part: naming the model matters more than any of its three pieces, because it
+gives every future "should this notify" question an answer instead of a debate.
+
+The day has three moments, and each one owns a different surface.
+
+**Morning is the owed list.** What the owner is behind on, in one place, read
+once. This is where a thing that has been waiting belongs, and it is the only
+moment that gets to show a backlog.
+
+**Deep work is one number and nothing else.** A single count on the menu bar.
+Not a list, not a name, not a preview, not a badge that grows a tooltip. The
+count exists so the owner can decide to look; anything richer decides for them.
+A surface that wants to say more during deep work has to wait for evening.
+
+**Evening is the delta digest.** What changed since morning, once, as a
+difference rather than a re-listing of everything still open.
+
+So the rule any future notification is measured against: which moment does this
+belong to, and does it carry more than that moment allows? A thing that cannot
+name its moment is not urgent, it is unplaced.
+
+The three pieces the ideation costed (the beacon, the interrupt flag, the
+digest) stay unscheduled on purpose. Naming the model was the free half and it
+is the half that decides things; building the pieces is Phase 2 and needs
+evidence that a moment is actually being missed.
+
 ## 19. Changelog
 
 - **2026-08-25, the bar reaches the edge surfaces (§18c).** `/doc` called

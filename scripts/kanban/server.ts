@@ -8,7 +8,7 @@ import * as os from "node:os";
 import { execFileSync } from "node:child_process";
 import {
   KROOT, SERVER_INFO, LANES, PINS, atomicWrite, registry, loadBoard, loadNotes, saveNotes,
-  loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen,
+  loadAck, parseNoteTags, notesOf, deriveEntry, noteId, noteSeen, answerSeen,
   loadItems, saveItems, loadLandings, loadPins, isArchived, displayScope, visibleOn,
   loadDrafts, saveDrafts, loadPulls, loadSelection, saveSelection, emptySelection, noteKey, renderSelection, type Selection,
   recipientsOf, isPulled,
@@ -258,7 +258,8 @@ function applyOpenRulings(board: string, dir: string, answer: string): any {
           + (d.why ? `why you raised it: ${d.why}\n` : "")
           + `\nTHEIR RULING: ${text}\n\n`
           + `Act on it. If it changes work already done, say so plainly rather than quietly reworking it. `
-          + `Read it in full with: kanban.sh decide list`],
+          + `Read it in full with: kanban.sh decide list\n`
+          + `Then sign for it: kanban.sh decide read ${d.id}   # otherwise it goes back on the owner's owed list after a day`],
           { stdout: "ignore", stderr: "ignore" });
       } catch { /* best-effort: the ruling is saved either way */ }
     }
@@ -695,6 +696,23 @@ const server = Bun.serve({
                    href: d.href, reach: d.reach, seen: d.seen,
                    why: d.pending && !d.seen ? "you have not opened it" : "waiting on your word" });
           }
+          // P1.2: an answer nobody read. The owner rules, and the session that
+          // asked may never come back; nothing in the system said so, which is
+          // how a page answered eleven hours earlier still read as NEEDS YOU.
+          // A day's grace first, because an answer read within the hour is the
+          // normal case and nagging about it would make this list noise.
+          for (const d of (plan.decisions ?? [])) {
+            if (!d.answer || !d.answeredAt) continue;
+            if (answerSeen(ack, d)) continue;
+            const when = Date.parse(d.answeredAt);
+            if (Number.isNaN(when) || now - when < 24 * 3600 * 1000) continue;
+            push({ kind: "answer", id: d.id,
+                   title: String(d.question ?? "(untitled)").slice(0, 90),
+                   since: d.answeredAt, href: `/b/${slug}`,
+                   reach: reachOf(d.by, seen), seen: true,
+                   why: d.by ? `you ruled and ${d.by} has not read it`
+                             : "you ruled and no agent has read it" });
+          }
           for (const c of bd.cards ?? []) {
             if (!c.verify?.needsHuman) continue;
             push({ kind: "card", id: c.id, title: c.titleBrief || c.title,
@@ -722,7 +740,10 @@ const server = Bun.serve({
           hot: rows.filter((r) => r.reach?.state === "hot").length,
           decision: rows.filter((r) => r.kind === "decision").length,
           card: rows.filter((r) => r.kind === "card").length,
-          note: rows.filter((r) => r.kind === "note").length } });
+          note: rows.filter((r) => r.kind === "note").length,
+          // A kind absent from counts is invisible to every consumer that reads
+          // counts rather than rows, which is the tab badge and the nudge.
+          answer: rows.filter((r) => r.kind === "answer").length } });
       }
 
       // Every surface the owner has, in one list (#56, phase 1). Colocation, not
@@ -1645,7 +1666,8 @@ const server = Bun.serve({
                 + (d.why ? `why you raised it: ${d.why}\n` : "")
                 + `\nTHEIR RULING: ${a}\n\n`
                 + `Act on it. If it changes work already done, say so plainly rather than quietly reworking it. `
-                + `Read it in full with: kanban.sh decide list`],
+                + `Read it in full with: kanban.sh decide list\n`
+                + `Then sign for it: kanban.sh decide read ${d.id}   # otherwise it goes back on the owner's owed list after a day`],
                 { stdout: "ignore", stderr: "ignore" });
             } catch { /* best-effort: the ruling is saved either way */ }
           }
