@@ -77,6 +77,11 @@
    ```
    Rejected (non-fast-forward = another session pushed) → step 2's rebase, retry.
 
+5b. **If the push waits on the owner's sentinel, release the lock first** and
+   re-acquire it for the push. The lock's 300s TTL is shorter than a human
+   approval wait, and holding it blocks every sibling commit meanwhile
+   (prop-20260808-052330-57). A local `commit-msg` hook in this repo strips any
+   harness signature trailer before the commit lands (prop-20260722-123329-41).
 6. **Release the lock** — ALWAYS, even if you aborted at any earlier step:
    ```bash
    bash ~/.claude/skills/shared/lock-file.sh release ~/.claude/.git gcc-commit

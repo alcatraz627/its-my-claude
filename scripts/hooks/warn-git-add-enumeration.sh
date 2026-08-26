@@ -30,6 +30,14 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 # Mute via env (one-shot) or file (per-session)
 [ "${ATONE_NO_ADD_WARN:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/atone/.add-warn-off" ] && exit 0
+# Multi-session repo with a live sibling in the same cwd: enumeration IS the safety
+# property (a parent add sweeps the sibling's edits), so the warning would argue for
+# the wrong thing. prop-20260717-152247-a0, fired again on the 2026-08-27 commit.
+if command -v claude-ipc >/dev/null 2>&1; then
+  me="${CLAUDE_CODE_SESSION_ID:-}"
+  live=$(claude-ipc peers --by-session 2>/dev/null | jq -r --arg cwd "$PWD" --arg me "$me" '[.peers[]? | select(.status=="live" and .cwd==$cwd and .sessionId!=$me)] | length' 2>/dev/null)
+  [ "${live:-0}" -gt 0 ] && exit 0
+fi
 
 # Skip when invoked from an atone-suite script
 echo "$CMD" | grep -qE '/\.claude/scripts/atone' && exit 0

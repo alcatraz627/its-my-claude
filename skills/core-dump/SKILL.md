@@ -381,6 +381,7 @@ everything below them:
   references the store directly instead of re-deriving it. `/tasks` resolves it by
   content-matching task subjects against the transcript, which works, and is a
   derivation the checkpoint can simply hand over. Write `—` if no tasks exist.
+- **ipc alias** — this session's claude-ipc alias (`claude-ipc who` or the SessionStart line), so a resume knows which dead mailbox holds its predecessor's mail.
 - **Key anchor** — the single most load-bearing file:line, or `—`.
 
 **Gather the last three fields, do not recall them.** Live commitments and the
@@ -493,6 +494,7 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 - **Live commitments:** goal: <verbatim · STILL VALID|SUPERSEDED by …|none · clauses: <name>=served|UNSERVED … (2+ clause goals only) · harness ARMED|not armed · gcc set|none> · wake: <schedule · ARMED|FIRED|none> · deadline: <commitment due when · LIVE|MET|MISSED|none> · crons: <duty-slug (job, schedule) via CronList|none>
 - **Task list, glanced:** <N open, M done · needs you: #ids · grouped by <key> | —>
 - **Task store:** <session-<sid8> | —>
+- **ipc alias:** <alias | —>
 - **Key anchor:** <file:line | —>
 
 ## Initial Goal
