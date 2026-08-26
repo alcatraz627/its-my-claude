@@ -169,20 +169,6 @@
   .rule .rnote:focus{outline:none;border-color:var(--blue-br)}
   .rule .rfoot{color:var(--text-3);font-size:12px;line-height:1.45}
   .rule .rbtns{display:flex;justify-content:flex-end;gap:8px}
-  /* The wizard row is the one thing to press when several decisions wait, so it
-     reads as the primary action rather than as a seventh sibling of the six. */
-  .wizrow{align-items:center;border-color:var(--blue-br);background:var(--blue-bg)}
-  .wizrow:hover{background:var(--blue-bg);border-color:var(--blue)}
-  .wizrow .wizn{flex:none;font-weight:640;color:var(--blue)}
-  .wizrow .wizsub{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-                  color:var(--text-3);font-size:12px}
-  /* Where you are in the queue. An owner three screens into six wants to know
-     there are three left, and which board they are answering for. */
-  .wizpanel .wizhead{display:flex;align-items:baseline;justify-content:space-between;
-                     gap:10px;color:var(--text-3);font-size:12px}
-  .wizpanel .wizcount{font-weight:640;color:var(--text-2)}
-  .wizpanel .wizboard{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .wizpanel .rbtns{justify-content:space-between}
   .rule .rsave[disabled]{opacity:.5;cursor:not-allowed}
   .surf .so{display:flex;align-items:center;gap:6px;flex-wrap:wrap;white-space:normal;overflow:visible}
   .rchip{flex:none;display:inline-flex;align-items:center;padding:1px 7px;border-radius:var(--r-pill);
@@ -644,129 +630,6 @@ function openRuling(r, panel, row) {
   });
 }
 
-// ONE wizard over everything waiting on you, because six rows is six decisions
-// to find, open and close by hand. Owner, 2026-08-26, looking at exactly six:
-// "why are there multiple entries for one unified decision wizard".
-//
-// rules/owner-decisions-go-through-a-wizard.md is the standing ruling: a BATCH
-// of owner decisions is boiled down and presented through ONE wizard, never as
-// a list they work through themselves. That rule was written about chat replies
-// and this surface is the same failure wearing a UI.
-//
-// The rows below it stay exactly as they were. Nothing is hidden (charter §12):
-// the wizard is the sanctioned path THROUGH the list, not a replacement for
-// seeing it, and a decision the owner wants to jump straight to is still there.
-function wizardCard(queue) {
-  const g = document.createElement("div");
-  g.className = "group";
-  const row = document.createElement("button");
-  row.type = "button";
-  row.className = "surf surflinks pending wizrow";
-  row.setAttribute("aria-expanded", "false");
-  const n = queue.length;
-  row.innerHTML = `<span class="sn"><span class="wizn"></span><span class="wizsub"></span></span>`
-    + `<span class="sage">one at a time</span>`;
-  row.querySelector(".wizn").textContent = `Rule on all ${n}`;
-  row.querySelector(".wizsub").textContent =
-    `${n} decisions are waiting on you across ${new Set(queue.map(q => q.slug)).size} board(s)`;
-  row.dataset.tip = "Steps through every decision waiting on you, one screen each. Each ruling saves as you go, so stopping half way keeps what you answered.";
-  const panel = document.createElement("div");
-  panel.className = "rule wizpanel"; panel.hidden = true;
-  const TIP = row.dataset.tip;
-  let i = 0;
-  const close = () => { panel.hidden = true; panel.replaceChildren();
-                        row.setAttribute("aria-expanded", "false");
-                        row.dataset.tip = TIP; };
-  const step = () => {
-    if (i >= queue.length) { close(); loadSurfaces("decisions"); return; }
-    const r = queue[i];
-    const st = r.reach?.state, ago_ = (x) => ago(Date.now() - x * 1000);
-    const who = !r.session ? "No session is recorded on this decision, so nobody is told."
-      : st === "hot"    ? `${r.session} was seen ${ago_(r.reach.seenAgo)} ago and will be told.`
-      : st === "cold"   ? `${r.session} has gone cold. It will be told and will need a re-brief.`
-      : st === "absent" ? `${r.session} is not in the session registry, so telling it may go nowhere.`
-      : `Could not check whether ${r.session} is reachable.`;
-    const last = i === queue.length - 1;
-    panel.innerHTML =
-        `<div class="wizhead"><span class="wizcount"></span><span class="wizboard"></span></div>`
-      + `<div class="rq"></div>` + (r.why ? `<div class="rwhy"></div>` : "")
-      + `<div class="ropts" role="group" aria-label="common rulings"></div>`
-      + `<textarea class="rnote" rows="3" aria-label="your ruling on this decision"`
-      + ` placeholder="Say what you have decided, in your own words."></textarea>`
-      + `<div class="rfoot"></div>`
-      + `<div class="rbtns"><button type="button" class="ghost wizclose">Close</button>`
-      + `<button type="button" class="ghost wizskip">Skip</button>`
-      + `<button type="button" class="accent wizsave"></button></div>`;
-    panel.querySelector(".wizcount").textContent = `Decision ${i + 1} of ${queue.length}`;
-    panel.querySelector(".wizboard").textContent = r.boardName || r.slug || "";
-    panel.querySelector(".rq").textContent = r.name ?? "(untitled)";
-    if (r.why) panel.querySelector(".rwhy").textContent = r.why;
-    const ta = panel.querySelector(".rnote");
-    const foot = panel.querySelector(".rfoot");
-    const save = panel.querySelector(".wizsave");
-    save.textContent = last ? "Save and finish" : "Save and next";
-    for (const [label, fill] of [["Agree", "Agreed."], ["Disagree", "No, "],
-                                 ["Needs a session", "Needs a planning session before I rule."]]) {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "ropt"; b.textContent = label;
-      b.dataset.tip = "Puts this in the box. Edit it, then save.";
-      b.onclick = () => { ta.value = fill; ta.focus();
-                          ta.setSelectionRange(ta.value.length, ta.value.length); };
-      panel.querySelector(".ropts").appendChild(b);
-    }
-    // Same guard the single-row form carries: a row with no id cannot be
-    // answered, and a live save over that writes a ruling nowhere.
-    if (!r.id) { save.disabled = true;
-      foot.textContent = "This decision arrived without an id, so it cannot be answered here. Open its board."; }
-    else foot.textContent = who;
-    ta.value = r.answer ?? "";
-    ta.focus();
-    // Skip advances without writing. An owner who cannot rule on one yet should
-    // not have to abandon the other five to get past it.
-    panel.querySelector(".wizskip").onclick = () => { i++; step(); };
-    panel.querySelector(".wizclose").onclick = close;
-    const submit = async () => {
-      const text = ta.value.trim();
-      if (!text) { foot.textContent = "An empty ruling is not a ruling. Say what you decided, or Skip."; ta.focus(); return; }
-      save.disabled = true; save.textContent = "Sending";
-      let out;
-      try {
-        const res = await fetch("/api/decide", { method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ slug: r.slug, op: "answer", id: r.id, answer: text, notify: true }) });
-        out = await res.json();
-      } catch (e) { out = { error: String(e) }; }
-      if (!out || out.error) {
-        save.disabled = false; save.textContent = last ? "Save and finish" : "Save and next";
-        foot.textContent = (out && out.error) || "Could not save that.";
-        return;
-      }
-      i++; step();
-    };
-    save.onclick = submit;
-    ta.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); }
-      if (e.key === "Escape") { e.stopPropagation(); close(); row.focus(); }
-    });
-  };
-  // The tip explains a row you have not pressed yet. Once it is open, the tip is
-  // a floating box sitting on top of the first thing the wizard says, which is
-  // which decision you are on. Stow it while open, restore it on close.
-  row.onclick = () => {
-    if (!panel.hidden) { close(); row.dataset.tip = TIP; return; }
-    delete row.dataset.tip;
-    row.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
-    for (const other of document.querySelectorAll(".rule:not([hidden])")) {
-      const b = other.previousElementSibling;
-      if (b) { other.hidden = true; other.replaceChildren(); b.setAttribute("aria-expanded", "false"); }
-    }
-    panel.hidden = false; row.setAttribute("aria-expanded", "true");
-    i = 0; step();
-  };
-  g.append(row, panel);
-  return g;
-}
-
 async function loadSurfaces(which) {
   const list = document.getElementById("list");
   const j = await (await fetch("/api/surfaces")).json();
@@ -830,13 +693,6 @@ async function loadSurfaces(which) {
     // Boards with the most waiting come first, because that is where the reader
     // is going anyway.
     const pending = rows.filter((r) => r.pending);
-    // The wizard leads, above every band, because it is the one thing to press
-    // when several decisions are waiting. Only rows that can actually be ruled
-    // on from here go in the queue: a page-backed decision is answered on its
-    // own page, and one with no id cannot be written at all, so putting either
-    // in a "rule on all" would be a promise the last screen breaks.
-    const queue = pending.filter((r) => r.kind === "recorded" && r.id);
-    if (queue.length > 1) frag.push(wizardCard(queue));
     const byProject = new Map();
     for (const r of pending) {
       const k = r.boardName || r.board || r.origin || "No project";

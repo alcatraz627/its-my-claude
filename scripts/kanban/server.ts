@@ -192,6 +192,81 @@ function dpNotifyOrigin(slug: string, dir: string): void {
   } catch { /* best-effort */ }
 }
 
+// Reading a decision PAGE's answer back onto the board decisions it covers. Owner, 2026-08-26: "The older decision page worked fine WHY THE FUCK
+// DID YOU FORCE THIS NEW FORMAT". He is right that there was already a format,
+// and it is a good one: every item on one screen, each pre-answered with the
+// agent's pick, flip what is wrong, one Submit. A batch of recorded decisions is
+// exactly that shape, so it gets that page instead of a hand-rolled stepper.
+//
+// Synthesized on request and never written to the registry. What is open is a
+// QUERY, so a generated file would be wrong the moment anyone ruled, and a
+// registry full of stale "open decisions" pages is worse than none.
+//
+// The page's item ids ARE the decide ids, which is what makes the answer route
+// home: the answer string is "<id><code>" per item, so a submitted page maps
+// back onto the decisions it was built from with no lookup table to drift.
+const OPEN_CODES: Record<string, string> = {
+  a: "Agreed.",
+  b: "No.",
+  c: "Needs a planning session before I rule.",
+};
+function openDecisionsOf(dir: string): any[] {
+  let plan: any = null;
+  try { plan = loadPlan(dir); } catch { return []; }
+  return (plan?.decisions ?? []).filter((d: any) =>
+    !d.answer && !(d.deferUntil && Date.parse(d.deferUntil) > Date.now()));
+}
+// Read a submitted page back onto the decisions it was built from. Only ids that
+// are still open are touched: a page held open in a tab while someone ruled
+// elsewhere must not resurrect or overwrite that ruling.
+function applyOpenRulings(board: string, dir: string, answer: string): any {
+  const bdir = dir;
+  const plan = loadPlan(bdir) as any;
+  plan.decisions = plan.decisions ?? [];
+  const openIds = new Set(openDecisionsOf(bdir).map((d: any) => d.id));
+  const codes = new Map<string, string>();
+  const notes = new Map<string, string>();
+  for (const raw of String(answer ?? "").split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    const m = line.match(/^(\S+)\s+note\s+[\u2014-]\s*(.+)$/);
+    if (m && openIds.has(m[1])) { notes.set(m[1], m[2].trim()); continue; }
+    for (const tok of line.split(/\s+/)) {
+      const id = tok.slice(0, -1), c = tok.slice(-1).toLowerCase();
+      if (openIds.has(id) && OPEN_CODES[c]) codes.set(id, c);
+    }
+  }
+  const now = new Date().toISOString();
+  const ruled: string[] = [];
+  for (const id of openIds) {
+    const c = codes.get(id);
+    const note = notes.get(id);
+    if (!c && !note) continue;
+    const d = plan.decisions.find((x: any) => x.id === id);
+    if (!d) continue;
+    const text = [c ? OPEN_CODES[c] : null, note].filter(Boolean).join(" ");
+    if (!text) continue;
+    d.answer = text; d.answeredAt = now;
+    ruled.push(id);
+    recordChange(bdir, { kind: "decision", by: "owner",
+      what: `ruled: ${d.question}`, to: text.split("\n")[0].slice(0, 80) });
+    if (d.by) {
+      try {
+        Bun.spawn(["claude-ipc", "send", "--from", "kanban-board", "--to", String(d.by),
+          `[kanban] the owner ruled on a decision you raised on board "${board}".\n\n`
+          + `Q: ${d.question}\n`
+          + (d.why ? `why you raised it: ${d.why}\n` : "")
+          + `\nTHEIR RULING: ${text}\n\n`
+          + `Act on it. If it changes work already done, say so plainly rather than quietly reworking it. `
+          + `Read it in full with: kanban.sh decide list`],
+          { stdout: "ignore", stderr: "ignore" });
+      } catch { /* best-effort: the ruling is saved either way */ }
+    }
+  }
+  if (ruled.length) savePlan(bdir, plan, "decide:page");
+  return { ok: true, ruled: ruled.length, ids: ruled };
+}
+
 function boardDirOf(slug: string): string | null {
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
   return registry().boards[slug] ? path.join(KROOT, "boards", slug) : null;
@@ -685,6 +760,14 @@ const server = Bun.serve({
               // what this ruling belongs to, so the hub can link an answer back
               // to the work rather than only naming the project it came from
               board: cfg.origin?.board ?? null,
+              // The board's NAME, not just its slug. The hub bands rows by
+              // boardName first, so a page over a board's decisions grouped by
+              // raw slug landed in a band of its own, beside the very decisions
+              // it covers rather than above them. The owner had already named
+              // that shape once: a batch entry that "does not indicate what
+              // project / decision set it is for".
+              boardName: cfg.origin?.board
+                ? ((registry().boards as any)[cfg.origin.board]?.name ?? null) : null,
               card: cfg.origin?.card ?? null,
               session: cfg.origin?.session ?? null,
               goal: cfg.origin?.goal ?? null,
@@ -1395,7 +1478,26 @@ const server = Bun.serve({
       fs.renameSync(tmp, path.join(dir, ".answer.json"));
       dpClearPending(slug);
       dpNotifyOrigin(slug, dir);
-      return json({ ok: true, slug });
+      // A page built over a board's recorded decisions has to write its rulings
+      // ONTO those decisions. Without this the owner answers six questions, the
+      // answer sits in .answer.json, and the board goes on saying NEEDS YOU for
+      // every one of them: the eleven-hour gap automation reported, by design.
+      // Opt-in by construction, not by a flag: it fires only when the config
+      // names a board AND its item ids are that board's open decision ids, which
+      // is exactly the shape a page-over-decisions has and nothing else does.
+      let routed: any = null;
+      try {
+        const cfg = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+        const board = cfg?.origin?.board ? String(cfg.origin.board) : "";
+        const bdir = board ? boardDirOf(board) : null;
+        if (bdir) {
+          const open = new Set(openDecisionsOf(bdir).map((d: any) => d.id));
+          const ids = (cfg.decisions ?? []).map((d: any) => String(d.id));
+          if (ids.length && ids.some((id: string) => open.has(id)))
+            await enqueueItem(() => { routed = applyOpenRulings(board, bdir, rec.answer); });
+        }
+      } catch { /* the page's own answer is saved either way */ }
+      return json({ ok: true, slug, routed });
     }
 
     // Milestones. plan.json, like tags and views, because it is the shared
