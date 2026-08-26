@@ -200,6 +200,22 @@ got=$(code "$S/dp/$dpslug/config.json")
 [ "$got" = "200" ] && ok "config.json resolves from the directory URL" \
                    || no "config.json resolves from the directory URL" "got $got"
 
+# The bare surface is a PROBE: an agent asking whether decision-pages are alive.
+# It answered 404 with {"error":"unknown decision page "}, which slack-automation
+# read as dead before hand-rolling its own server on 6221. Both forms now point
+# at the index that already exists, the hub's decisions view.
+for probe in "/dp" "/dp/"; do
+  got=$(code "$S$probe")
+  loc=$(curl -s -o /dev/null -w '%{redirect_url}' "$S$probe")
+  case "$got:$loc" in
+    30[12]:*"/?view=decisions") ok "$probe reaches the decisions index" ;;
+    *) no "$probe reaches the decisions index" "got $got -> ${loc:-nowhere}" ;;
+  esac
+done
+# and a slug that really is unknown must still say so
+got=$(code "$S/dp/zz-no-such-page/")
+[ "$got" = "404" ] && ok "an unknown slug still 404s" || no "an unknown slug still 404s" "got $got"
+
 # The page-level guard, independent of the redirect. curl cannot run the JS, so
 # assert the guards are present in what the server serves; their behaviour is
 # mutation-tested in the browser.

@@ -973,6 +973,12 @@
   .srow.decrow .hotdot{display:inline-block;width:6px;height:6px;border-radius:50%;
     background:var(--green);margin-right:6px;vertical-align:middle;flex:none}
   .srow .tct{flex:none;font:500 var(--fs-small)/1 var(--mono);color:var(--text-3)}
+  .colcard .seqlist{display:flex;flex-direction:column;gap:2px;min-width:220px}
+  .colcard .seqrow .tct{text-transform:uppercase;letter-spacing:.04em}
+  .colcard .seqrow.soft .stxt{color:var(--text-3);text-decoration:line-through;
+                              text-decoration-color:var(--border-2)}
+  /* the pill is a control now, so it must look like one */
+  button.pill.seq{cursor:pointer;font:inherit}
   /* A milestone's ORDER is the thing that makes M1 read before M2, so it leads
      the row as a chip instead of only sorting silently. */
   .srow.msrow .msord{flex:none;font:600 var(--fs-caption)/1 var(--mono);color:var(--text-3);
@@ -3283,9 +3289,64 @@ function afterPill(c) {
   if (!ids.length) return "";
   const preds = ids.map((id) => data.board.cards.find((x) => x.id === id)).filter(Boolean);
   const open = preds.filter((p) => !ARCHIVE.has(p.lane));
-  const tip = "after: " + preds.map((p) => briefOf(p)).join(" · ");
-  return `<span class="pill seq${open.length ? "" : " soft"}" data-tip="${esc(tip)}">${SEQ_ICON}after ${open.length || preds.length}</span>`;
+  const tip = "after: " + preds.map((p) => briefOf(p)).join(" · ")
+    + "\nPress to open " + (preds.length === 1 ? "it" : "them");
+  // A count you cannot follow is a number, not a link (the same sentence the
+  // ?q= deep link was built on). "after 1" told you a predecessor existed and
+  // left finding it to you; the tip named it and still could not take you there.
+  return `<button type="button" class="pill seq${open.length ? "" : " soft"}"
+    data-after="${esc(ids.join(","))}" data-tip="${esc(tip)}">${SEQ_ICON}after ${open.length || preds.length}</button>`;
 }
+// Delegated, because the pill is built as markup inside a card's HTML string.
+// One predecessor opens straight away; several get a list, since picking is the
+// whole question once there is more than one.
+// CAPTURE phase, not bubble. The card carries its own click handler that opens
+// its drawer, and on the way up that handler runs first, so a bubble-phase
+// listener here opened the card you pressed FROM as well as the one you asked
+// for. Pressing "after 1" must show the predecessor and nothing else.
+document.addEventListener("click", (e) => {
+  const b = e.target.closest?.(".pill.seq[data-after]");
+  if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  const ids = String(b.dataset.after || "").split(",").filter(Boolean);
+  const live = ids.filter((id) => data.board.cards.some((x) => x.id === id));
+  if (!live.length) { toast("those predecessors are no longer on this board", true); return; }
+  if (live.length === 1) { openDrawer(live[0]); return; }
+  closeColCard();
+  const card = document.createElement("div");
+  card.className = "colcard on"; card.id = "colcard";
+  card.innerHTML = `<h4><span>Comes after</span></h4><div class="seqlist"></div>`;
+  const list = card.querySelector(".seqlist");
+  for (const id of live) {
+    const c2 = data.board.cards.find((x) => x.id === id);
+    const row = document.createElement("button");
+    row.type = "button"; row.className = "srow seqrow" + (ARCHIVE.has(c2.lane) ? " soft" : "");
+    row.innerHTML = `<span class="stxt"></span><span class="tct"></span>`;
+    row.querySelector(".stxt").textContent = briefOf(c2);
+    row.querySelector(".tct").textContent = c2.lane;
+    row.dataset.tip = "Open this card";
+    row.onclick = () => { closeColCard(); openDrawer(id); };
+    list.appendChild(row);
+  }
+  document.body.appendChild(card);
+  // Flip above when there is not room below, or a pill near the foot of the
+  // board opens a list that runs off the bottom of the screen.
+  // Placed after a frame, because the height measured on the same tick as the
+  // append is not the laid-out height and the list ran off the bottom of the
+  // screen for any pill low on the board.
+  const place = () => {
+    const r = b.getBoundingClientRect(), cr = card.getBoundingClientRect();
+    const below = r.bottom + 6;
+    const top = below + cr.height <= innerHeight - 8
+      ? below
+      : Math.max(8, Math.min(r.top - cr.height - 6, innerHeight - cr.height - 8));
+    card.style.left = `${Math.max(8, Math.min(r.left, innerWidth - cr.width - 8))}px`;
+    card.style.top = `${top}px`;
+  };
+  place(); requestAnimationFrame(place);
+  wireFloat(card, b);
+}, true);
+
 function cardEl(c) {
   const el = document.createElement("article");
   const hue = c.heading ? labelHue(c.heading) : null;

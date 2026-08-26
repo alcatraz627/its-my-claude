@@ -233,6 +233,30 @@ elif isinstance(c.get("origin"), dict):
         probs.append("origin.card without origin.board: a card id is per board, so the link cannot resolve")
 if "groups" in c and not isinstance(c["groups"], dict):
     probs.append("'groups' must be an object of group-name -> {context,color}")
+elif isinstance(c.get("groups"), dict):
+    # A group key nothing can reach is a SILENT no-op, and that silence is the
+    # defect. Sections band by their own `group`, but every decision renders
+    # under one fixed group whose metadata is read from groups["Decisions"] and
+    # nowhere else. So a page declaring four groups, one per plan, each with its
+    # own context, showed exactly one and dropped three without a word.
+    # (automation, 2026-08-26, while rewriting 16 decisions for a human who had
+    # said they lacked context.)
+    reach = set()
+    if c.get("decisions"): reach.add("Decisions")
+    for sec in c.get("sections") or []:
+        reach.add(sec.get("group") or "Items")
+    for k in sorted(set(c["groups"]) - reach):
+        if c.get("decisions") and not c.get("sections"):
+            probs.append(
+                f"groups['{k}'] is unreachable: this page has decisions and no sections, "
+                f"so the only group key a decision reads is 'Decisions'. Rename it to "
+                f"'Decisions', or give the items that belong to it a sections[] entry "
+                f"with \"group\": \"{k}\".")
+        else:
+            probs.append(
+                f"groups['{k}'] is unreachable: no section carries \"group\": \"{k}\""
+                + (" and decisions only read groups['Decisions']" if c.get("decisions") else "")
+                + f". Reachable here: {sorted(reach) or ['(none)']}.")
 ids = set()
 missing = []
 for d in c.get("decisions") or []:

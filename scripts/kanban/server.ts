@@ -617,9 +617,24 @@ const server = Bun.serve({
       // the SAME registry the old :5197 server served, read-only for GETs, with
       // ONE dynamic template instead of a per-page copy of template.html.
       // The old server is retired (owner, 2026-08-25); this is the only one.
+      // The bare form never even reached the /dp/ route, since that test needs
+      // the trailing slash. slack-automation's report named both.
+      if (p === "/dp") return new Response(null, { status: 302,
+        headers: { location: "/?view=decisions" } });
       if (p.startsWith("/dp/")) {
         const parts = p.slice(4).split("/").filter(Boolean).map((x) => decodeURIComponent(x));
         const slug = parts[0] ?? "";
+        // /dp/ with no slug is a PROBE: an agent asking whether this surface is
+        // alive. It answered 404 with {"error":"unknown decision page "}, and
+        // slack-automation read that as the surface being dead, then hand-rolled
+        // a python http.server on 6221 to show the owner four colour swatches.
+        // His reply: "Where the fuck is the preview page for it?"
+        //
+        // The index it wanted already exists and is the hub's decisions view,
+        // which lists every page, pending first. Point at that rather than grow
+        // a second listing that could disagree with it.
+        if (!slug) return new Response(null, { status: 302,
+          headers: { location: "/?view=decisions" } });
         const dir = dpDirOf(slug);
         if (!dir) return json({ error: `unknown decision page ${slug}` }, 404);
         // Reached without its trailing slash, every relative fetch on the page

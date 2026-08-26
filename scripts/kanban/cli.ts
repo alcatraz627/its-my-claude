@@ -133,6 +133,18 @@ function doSync(dir: string, by: string) {
     ` · notes preserved: ${notesPreserved} · ` +
     `scanned ${h.scanned.length} files${h.skipped.length ? ` · SKIPPED ${h.skipped.length}: ${h.skipped.slice(0, 3).join(", ")}` : ""}`,
   );
+  // A file that was READ and gave nothing is a different answer from a file
+  // that had nothing new, and the harvest-miss complaint is exactly that
+  // conflation: the trial diffed two docs by hand to work out that the
+  // harvester wants checkbox lines. Only worth saying when the sync produced
+  // nothing new, otherwise it is noise under a working sync.
+  if (delta.new === 0 && h.barren.length) {
+    const rel = (f: string) => f.replace(root + "/", "");
+    console.log(`  ${h.barren.length} of ${h.scanned.length} scanned files produced no cards:`);
+    for (const b of h.barren.slice(0, 5)) console.log(`    ${rel(b.file)} — ${b.why}`);
+    if (h.barren.length > 5) console.log(`    … and ${h.barren.length - 5} more`);
+    console.log(`  a card comes from a checkbox line; in session-notes only under "## Todos"`);
+  }
   // The quality half of the digest. A count line reports that sync ran; this
   // reports whether the board it just wrote can be read. Second line on
   // purpose: the owner scans for it, and burying it in the first would make
@@ -275,8 +287,15 @@ switch (verb) {
       if (card) d.card = card;
       plan.decisions.push(d);
       savePlan(boardDir, plan, "decide:add");
-      console.log(`recorded ${d.id} on ${slug}: ${q}`);
-      console.log(`  the owner sees it on the board and in the nudge until they rule`);
+      // `add` printed the id only inside a sentence, so chaining a second call
+      // meant grepping prose for it. gcp-fable did exactly that (rg -o '#[0-9]+')
+      // while putting the AUTH milestones on a board. `show` and `status` already
+      // had --json; these two were the holes.
+      if (hasFlag("json")) { console.log(JSON.stringify({ id: d.id, slug, question: q })); }
+      else {
+        console.log(`recorded ${d.id} on ${slug}: ${q}`);
+        console.log(`  the owner sees it on the board and in the nudge until they rule`);
+      }
       break;
     }
     const target = plan.decisions.find((x: any) => x.id === positional[1]);
@@ -988,8 +1007,11 @@ switch (verb) {
         try { return boardFor(projectDir()).slug; } catch { return undefined; }
       })());
       const out = await post("/api/item", { body, ...(slug ? { slug } : {}) });
-      console.log(`added ${out.id}${slug ? ` on ${slug}` : " on every board"}`);
-      console.log(`it shows in Your asks; classify it when you act on it: kanban.sh classify ${out.id} <${SHAPES.join("|")}>`);
+      if (hasFlag("json")) { console.log(JSON.stringify({ id: out.id, slug: slug ?? null })); }
+      else {
+        console.log(`added ${out.id}${slug ? ` on ${slug}` : " on every board"}`);
+        console.log(`it shows in Your asks; classify it when you act on it: kanban.sh classify ${out.id} <${SHAPES.join("|")}>`);
+      }
       break;
     }
     if (!id) die(`item ${sub} needs an item id`, `kanban.sh items --all  # lists the ids`);

@@ -11,7 +11,15 @@ import { canonicalRoot, cardId, type HarvestedCard, type Lane } from "./lib.ts";
 const MAX_FILES = 120; // a repo with a big docs/plan tree blew straight through 60
 const MAX_CARDS = 400;
 
-interface HarvestResult { cards: HarvestedCard[]; scanned: string[]; skipped: string[] }
+// `barren` is a file that was READ and produced nothing. Without it a sync that
+// found no cards reported identically to one where nothing had changed, so the
+// only way to learn why was to diff two files by hand and notice that the
+// harvester wants checkbox lines. Scanned-and-empty and nothing-new are
+// different answers and the digest now gives the right one.
+interface HarvestResult {
+  cards: HarvestedCard[]; scanned: string[]; skipped: string[];
+  barren: { file: string; why: string }[];
+}
 
 const CHECKBOX = /^\s*[-*]\s*\[([ xX])\]\s+(.*)$/;
 const HEADING = /^(#{1,4})\s+(.*)$/;
@@ -162,6 +170,7 @@ function worktreeRoots(root: string): string[] {
 export function harvest(root: string): HarvestResult {
   const scanned: string[] = [];
   const skipped: string[] = [];
+  const barren: { file: string; why: string }[] = [];
   type Harvested = HarvestedCard & { _mtime?: number };
   let cards: Harvested[] = [];
 
@@ -170,7 +179,21 @@ export function harvest(root: string): HarvestResult {
     scanned.push(abs);
     try {
       const mtime = fs.statSync(abs).mtimeMs;
+      const before = cards.length;
       cards = cards.concat(fn().map((c) => ({ ...c, _mtime: mtime })));
+      // Read and gave nothing. Say WHICH of the two reasons it was, because
+      // "add checkboxes" and "move them under ## Todos" are different fixes.
+      if (cards.length === before) {
+        let why = "no checkbox lines (- [ ] / - [x])";
+        try {
+          const text = fs.readFileSync(abs, "utf8");
+          const hasBox = text.split("\n").some((l) => CHECKBOX.test(l));
+          if (hasBox) why = abs.includes("session-notes")
+            ? "has checkboxes, but none under a `## Todos` heading"
+            : "has checkboxes none of which parsed as a card";
+        } catch { /* the reason is a courtesy; the barren fact is the point */ }
+        barren.push({ file: abs, why });
+      }
     } catch (e: any) {
       skipped.push(`${abs} (${e.message})`);
     }
@@ -243,5 +266,5 @@ export function harvest(root: string): HarvestResult {
     skipped.push(`${deduped.length - MAX_CARDS} cards over the ${MAX_CARDS} cap (dropped)`);
     deduped = deduped.slice(0, MAX_CARDS);
   }
-  return { cards: deduped, scanned, skipped };
+  return { cards: deduped, scanned, skipped, barren };
 }

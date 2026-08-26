@@ -91,7 +91,19 @@ body.flip-only .group:not(:has(.card.flipped)):not(:has(.card.noted)) h2{display
 h3{font-size:var(--fs-title);font-weight:600;margin:0 0 8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;letter-spacing:-.005em}
 h3 .idtag{color:var(--text-3);font:500 var(--fs-caption)/1.4 var(--mono);letter-spacing:0;
   background:var(--well);border-radius:5px;padding:1px 7px}
+/* pre-wrap so a context can hold structure. It was rendered into one <p> with
+   newlines collapsed, so an author wanting "what is true today / what option a
+   costs / what waits on it" had to write one dense paragraph and sentence order
+   was the only lever they had. automation hit this rewriting 16 contexts for a
+   human who had just said they lacked context. The hub's own .rwhy already
+   reads pre-wrap; this makes the two agree. Blank lines and short lines now
+   survive, which is the structure most contexts actually want, and it needs no
+   parser and no new syntax to learn. */
 .read{color:var(--text-3);font-size:var(--fs-body);margin:0 0 12px}
+/* Only the AUTHORED contexts wrap pre. A .read written as literal markup in
+   this file spans several source lines, and pre-wrap on the shared class made
+   that HTML indentation visible on screen. */
+.read.flow{white-space:pre-wrap}
 .shots{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
 .shots img{max-width:236px;width:100%;border:1px solid var(--border);border-radius:var(--r-card);cursor:zoom-in;background:#fff}
 /* scrimmed zoom instead of an in-flow blowup (defect U5) */
@@ -263,7 +275,7 @@ function render() {
     CFG.decisions.forEach(d => {
       h += `<section class="card decision" data-d="${esc(d.id)}" tabindex="-1">
         <h3><span class="idtag">${esc(d.id)}</span> ${esc(d.question)}</h3>`;
-      if (d.context) h += `<p class="read">${linkify(d.context)}</p>`;
+      if (d.context) h += `<p class="read flow">${linkify(d.context)}</p>`;
       // a decision can carry its own evidence, the way a section always could
       if ((d.images || []).length) h += shotsOf(d.images, d.question);
       const opts = optionsOf(d);
@@ -302,7 +314,7 @@ function render() {
     }
     h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
       <h3>${esc(s.title)} <span class="idtag">${esc(s.id)}</span>${s.prio ? ` <span class="prio">${esc(s.prio)}</span>` : ""}</h3>`;
-    if (s.read) h += `<p class="read">${linkify(s.read)}</p>`;
+    if (s.read) h += `<p class="read flow">${linkify(s.read)}</p>`;
     if ((s.images || []).length) h += `<div class="shots">` +
       s.images.map(im => `<img src="${esc(im)}" alt="${esc(s.title)}" loading="lazy">`).join("") + `</div>`;
     if (s.slots) {
