@@ -121,5 +121,20 @@ if [ -f "$SKILL" ]; then
   else no "every cli.ts verb appears in the /kanban skill" "undocumented:$missing"; fi
 fi
 
+
+# A tooltip is the most human-facing prose in the app and the prose gate cannot
+# see string literals, so nothing caught an em-dash in one until the owner
+# hovered it. Budget is zero (rules/audience-aware-writing.md).
+hits=$(rg -n -o '(?:data-tip|dataset\.tip|tip:)[^,;]{0,24}"[^"]*[—–][^"]*"' \
+       "$HERE"/*.html "$HERE"/*.js 2>/dev/null || true)
+if [ -z "$hits" ]; then ok "no em-dash in any tooltip (budget: zero)"
+else no "no em-dash in any tooltip (budget: zero)" "$hits"; fi
+
+# A tooltip answers "should I press this". Past ~90 characters it is
+# documentation hidden behind a hover; one was 195 before 2026-08-26.
+long=$(rg -n -o '(?:data-tip|dataset\.tip)="[^"$]{95,}"' "$HERE"/*.html "$HERE"/*.js 2>/dev/null || true)
+if [ -z "$long" ]; then ok "no tooltip over 95 chars"
+else no "no tooltip over 95 chars" "$long"; fi
+
 echo "  ---- $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

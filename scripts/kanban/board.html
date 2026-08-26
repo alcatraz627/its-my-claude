@@ -1396,7 +1396,7 @@
       </span>
       <span class="tgrp act">
         <span id="sendWrap"></span>
-        <button id="nudgeBtn" data-verb="nudge" data-tip="Ask whoever is working here to bring the board up to date and carry on. If they are blocked they will explain it plainly and recommend a way out; if they are idle they will pick the work back up.">Nudge</button>
+        <button id="nudgeBtn" data-verb="nudge" data-tip="Ask the agents here to sync the board and carry on">Nudge</button>
         <button id="digestBtn" data-verb="copy" data-tip="Copy a status digest of the whole board (c)">Copy status</button>
       </span>
     </div>
@@ -2139,7 +2139,7 @@ function sendBtn() {
   const b = document.createElement("button");
   b.className = "accent";
   b.innerHTML = `${SEND_ICON}<span>Send ${n} to agent</span>`;
-  b.dataset.tip = "Push everything selected — cards and notes — at whichever agent is live in this project, in full. If nobody is live it is saved and the next one is told.";
+  b.dataset.tip = "Send the selection to whoever is live here. If nobody is, it waits for the next session";
   b.onclick = sendToAgent;
   return b;
 }
@@ -2221,7 +2221,7 @@ function syncPopPick() {
   const on = popCard && popNote && isPickedNote(popCard, popNote);
   $("popPick").classList.toggle("on", !!on);
   $("popPick").innerHTML = on ? PICK_ICON : "○";
-  $("popPick").dataset.tip = on ? "Selected — click to deselect" : "Add this note to the selection you send an agent";
+  $("popPick").dataset.tip = on ? "Selected. Click to deselect" : "Add this note to the selection you send an agent";
 }
 
 // ---------- lane sizing ----------
@@ -2701,7 +2701,7 @@ function openColCard(lane, wrap, btn) {
     `<div class="crow"><span class="ck">Soft limit</span>` +
       `<input type="number" id="cclim" min="1" max="99" inputmode="numeric" placeholder="none"` +
       ` value="${boardCols().limits?.[lane] ?? ""}" aria-label="soft limit for this column"` +
-      ` data-tip="Above this count the head turns amber. Shared with the board and its agents; a signal, never a block."></div>` +
+      ` data-tip="Turns the column head amber above this count. A signal, never a block"></div>` +
     `<div class="cbtns"><button type="button" class="ghost" id="ccreset" data-verb="reset" data-tip="Put this lane back to the board default">Reset this column</button>` +
     `<button type="button" class="accent" id="ccdone">Done</button></div>`;
   document.body.appendChild(card);
@@ -3320,7 +3320,7 @@ function cardEl(c) {
     `<div class="cfirst"></div>` +
     `<div class="foot"><span class="src"></span>` +
     (note && !line && !nt.me && Date.parse(entry.updatedAt) > (data.ackTs || 0)
-      ? `<span class="waiting" data-tip="Written after the agent last read this board's notes, so it has not been picked up yet">awaiting pickup</span>` : "") +
+      ? `<span class="waiting" data-tip="Not picked up yet: written after the agent last read this board">awaiting pickup</span>` : "") +
     `<span class="age"></span></div>`;
   const titleEl = el.querySelector(".title");
   titleEl.textContent = briefOf(c);
@@ -4745,7 +4745,7 @@ function renderGoal(cardId) {
   txt.className = "gt" + (g ? "" : " empty");
   txt.textContent = g || "Say why this card exists, in one line";
   el.append(ic, txt);
-  el.dataset.tip = "The card's goal. The agent reads it with the card, and it travels with a sent selection.";
+  el.dataset.tip = "Why this card exists. The agent reads it with the card";
   el.onclick = () => editGoal(cardId, g);
 }
 function editGoal(cardId, current) {
@@ -4780,7 +4780,7 @@ function renderCardTags(cardId) {
   const add = document.createElement("button");
   add.type = "button"; add.className = "chip";
   add.innerHTML = `<span class="ci">＋</span><span>tag</span>`;
-  add.dataset.tip = "Add a tag (#). Milestones, model tier, effort — anything worth grouping cards by.";
+  add.dataset.tip = "Add a tag (#): a milestone, a model tier, an effort, anything worth grouping by";
   add.onclick = (e) => { e.stopPropagation(); openTagPick(cardId, add); };
   row.appendChild(add);
 }
@@ -4977,7 +4977,7 @@ function renderOtherNotes(id) {
       bx.innerHTML = opts.picked ? PICK_ICON : "";
       bx.setAttribute("role", "checkbox");
       bx.setAttribute("aria-checked", String(!!opts.picked));
-      bx.dataset.tip = opts.picked ? "Selected — click to drop it from the set you send an agent"
+      bx.dataset.tip = opts.picked ? "Selected. Click to drop it from the set you send"
                                    : "Select this note to send it to an agent";
       bx.onclick = (e) => { e.stopPropagation(); toggleSel("note", opts.key); renderOtherNotes(id); };
       left.append(bx);
@@ -5291,7 +5291,7 @@ function openDrawer(id, wantNoteId, opts = {}) {
   // a linked doc has no line, so its preview is the top of the file. Say that,
   // or it reads as the harvested excerpt showing the wrong card's content.
   // the doc gets told where the reader came from, so it can offer a way back
-  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}" target="_blank" rel="noopener" data-tip="Open ${esc(p)} — the document this card was read from">` +
+  const srcRow = (p, line, attached) => `<a class="srcrow" href="/doc?path=${encodeURIComponent(data.root + "/" + p)}&from=${encodeURIComponent(slug)}&card=${encodeURIComponent(c.id)}" target="_blank" rel="noopener" data-tip="Open ${esc(p)}, the document this card was read from">` +
     `${FILE_ICON}<span class="path">${esc(p)}</span>${line ? `<span class="ln">:${line}</span>` : ""}` +
     `${attached ? `<span class="ln attached">attached</span>` : ""}<span class="go">${EXT_ICON}</span></a>` +
     `<button type="button" class="seg" data-path="${esc(data.root + "/" + p)}" data-line="${line ?? ""}" data-head="${attached ? "1" : ""}" hidden></button>`;

@@ -130,7 +130,18 @@
      the handles: a milestone's cards, its doc, the board, the card a decision
      blocks. Each goes to the thing itself rather than to the board it lives on,
      which is what the whole-row anchor used to do. */
-  .surf.surflinks{cursor:default}
+  /* One row shape for every milestone, whichever group it is in. The name is
+     the thing you scan for so it never truncates; the goal takes the slack and
+     clamps to one line with the full text on hover; the chips hold one row at a
+     fixed height so a stack of rows reads as a column rather than as rubble. */
+  .surf.surflinks{cursor:default;align-items:flex-start;min-height:46px}
+  .surf .sn{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1 1 auto}
+  .surf .mname{flex:none;color:var(--text);font-weight:620}
+  .surf .mgoal{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+               color:var(--text-3);font-size:12px}
+  .surf.surflinks .so{flex:0 0 auto;max-width:46%;justify-content:flex-end;align-items:center}
+  .surf.surflinks .sage{flex:none;align-self:center}
+  .rchip{white-space:nowrap}
   .surf.surflinks:hover{background:var(--card)}
   .surf .so{display:flex;align-items:center;gap:6px;flex-wrap:wrap;white-space:normal;overflow:visible}
   .rchip{flex:none;display:inline-flex;align-items:center;padding:1px 7px;border-radius:var(--r-pill);
@@ -608,9 +619,23 @@ async function loadMilestones() {
       // not a thing HTML allows.
       const a = document.createElement("div");
       a.className = "surf surflinks" + (m.doneAt ? "" : " pending");
+      // Name and goal are two things, so they get two elements. Jamming them
+      // into one line with a dash meant the name (short, the thing you scan for)
+      // shared a truncation budget with the goal (a sentence), so every row cut
+      // the goal mid-word and the dash was an em-dash the owner has banned.
       const nm = document.createElement("span");
       nm.className = "sn";
-      nm.textContent = m.goal ? `${m.name} — ${m.goal}` : m.name;
+      const who = document.createElement("b");
+      who.className = "mname";
+      who.textContent = m.name;
+      nm.append(who);
+      if (m.goal) {
+        const g = document.createElement("span");
+        g.className = "mgoal";
+        g.textContent = m.goal;
+        g.dataset.tip = m.goal;      // the clamp cuts it; the hover restores it
+        nm.append(g);
+      }
       const so = document.createElement("span");
       so.className = "so";
       const chip = (label, href, tip) => {
@@ -629,9 +654,13 @@ async function loadMilestones() {
             `/b/${m.board}?q=${encodeURIComponent("tag:milestone:" + m.name + " is:open")}`,
             "show only the ones not done"));
       } else {
+        // Was: "no cards yet — tag one milestone:review-debt", which is a CLI
+        // fragment quoted at a person plus a banned dash. Say the state; the
+        // tooltip carries the command for whoever wants it.
         const none = document.createElement("span");
         none.className = "rnone";
-        none.textContent = "no cards yet — tag one milestone:" + m.name;
+        none.textContent = "no cards yet";
+        none.dataset.tip = `Put cards in it with: kanban.sh tag <card-id> milestone:${m.name}`;
         so.append(none);
       }
       for (const d of (m.docs ?? []))
@@ -644,6 +673,11 @@ async function loadMilestones() {
     }
     frag.push(g);
   };
+  // Both groups go through the same builder and therefore look the same. They
+  // were written at different times and rendered differently: one carried chips,
+  // the other inline text with a right-aligned age, so the two halves of one
+  // list did not read as one list. Nothing compares two branches of a renderer
+  // except looking at them together.
   group("Ahead of you", rows.filter((m) => !m.doneAt));
   group("Shipped", rows.filter((m) => m.doneAt));
   if (!frag.length) {
