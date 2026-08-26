@@ -133,6 +133,54 @@ case "$got" in
   *) no "a quote in prose stays a quote" "$got" ;;
 esac
 
+# --- an indented four-space block is CODE, not a paragraph (#17) ---------------
+#
+# Shipped broken and carried as a standing caveat since 2026-08-25. The renderer
+# had no indented-code branch at all: the per-line fallthrough ends in
+# para.push(l.trim()), so the indentation was discarded and the lines were joined
+# with a space into one <p>. A pasted shell transcript rendered as a sentence.
+got=$(printf 'para\n\n    code line one\n    code line two\n\nafter\n' | render)
+case "$got" in
+  *"<pre"*"<code>"*) ok "an indented four-space block renders as pre/code" ;;
+  *) no "an indented four-space block renders as pre/code" "$got" ;;
+esac
+# Presence is not enough: the defect JOINED the lines, so pin the newline.
+case "$got" in
+  *"code line one"$'\n'"code line two"*) ok "its lines keep their newline, not joined by a space" ;;
+  *) no "its lines keep their newline, not joined by a space" "$got" ;;
+esac
+# CommonMark: an indented chunk cannot interrupt a paragraph. Without this the
+# second line of any hard-wrapped paragraph that happens to be indented would
+# silently become code.
+got=$(printf 'a sentence\n    still the same sentence\n' | render)
+case "$got" in
+  *"<pre"*) no "an indented line does not interrupt a paragraph" "$got" ;;
+  *) ok "an indented line does not interrupt a paragraph" ;;
+esac
+# Regression guard for the lazy-continuation feature next door: an indented line
+# under a list item is that item's continuation and must NOT become code.
+got=$(printf -- '- item one\n    wrapped onto a second line\n' | render)
+case "$got" in
+  *"<pre"*) no "an indented line under a list item stays a continuation" "$got" ;;
+  *"wrapped onto a second line"*) ok "an indented line under a list item stays a continuation" ;;
+  *) no "an indented line under a list item stays a continuation" "$got" ;;
+esac
+# A blank line inside an indented block does not end it; truncating at the first
+# blank would be the same defect class wearing a different costume.
+got=$(printf 'para\n\n    line one\n\n    line three\n\nafter\n' | render)
+n=$(printf '%s' "$got" | grep -o '<pre' | wc -l | tr -d ' ')
+if [ "$n" = "1" ] && printf '%s' "$got" | grep -q 'line three'; then
+  ok "a blank line inside an indented block does not split it"
+else
+  no "a blank line inside an indented block does not split it" "$n <pre>: $got"
+fi
+# Markup inside code stays literal.
+got=$(printf 'para\n\n    <b>not bold</b>\n' | render)
+case "$got" in
+  *"&lt;b&gt;not bold&lt;/b&gt;"*) ok "markup inside an indented block stays literal" ;;
+  *) no "markup inside an indented block stays literal" "$got" ;;
+esac
+
 # --- KNOWN GAP: an ordered list interrupted by a FENCED block still splits -----
 #
 # Same defect class as the table case above, reached through a different

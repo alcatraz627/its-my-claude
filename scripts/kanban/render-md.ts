@@ -80,6 +80,18 @@ export function renderMd(input: string): string {
     let stack: Lvl[] = [];
     let table: string[][] | null = null;
     const flushPara = () => { if (para.length) { out.push(`<p${anchor(paraLine)}>${inline(para.join(" "))}</p>`); para = []; } };
+    // An indented four-space chunk at the top level is a code block. The renderer
+    // had no branch for one, so it fell through to para.push(l.trim()), which
+    // discarded the indentation and joined the lines with a space: a pasted shell
+    // transcript rendered as a sentence. Blank lines are BUFFERED rather than
+    // ending the block, because a run of code with a gap in it is still one block
+    // and truncating at the first gap is the same defect wearing a costume.
+    let code: string[] | null = null, codeLine = 0, codeGap = 0;
+    const flushCode = () => {
+      if (!code) return;
+      out.push(`<pre${anchor(codeLine)}><code>${code.join("\n")}</code></pre>`);
+      code = null; codeGap = 0;
+    };
     const renderLvl = (lv: Lvl, outer: boolean) =>
       `<${lv.tag}${outer ? anchor(listLine) : ""}>` +
       lv.items.map((it) => `<li>${inline(it.text)}${it.kids}</li>`).join("") +
@@ -130,7 +142,7 @@ export function renderMd(input: string): string {
       out.push(`<blockquote${anchor(quoteLine)}>${inner}</blockquote>`);
       quote = null;
     };
-    const flushAll = () => { flushPara(); flushList(); flushTable(); flushQuote(); };
+    const flushAll = () => { flushPara(); flushCode(); flushList(); flushTable(); flushQuote(); };
     for (const [idx, l] of lines.entries()) {
       const here = blockStart + idx;
       if (!para.length) paraLine = here;
@@ -196,13 +208,29 @@ export function renderMd(input: string): string {
         continue;
       }
       if (/^---+$/.test(l.trim())) { flushAll(); out.push("<hr>"); continue; }
-      if (!l.trim()) { flushAll(); continue; }
+      // A blank line ends most blocks, but inside indented code it may just be a
+      // gap between two runs. Count it; the next line decides whether it was.
+      if (!l.trim()) { if (code) { codeGap++; continue; } flushAll(); continue; }
       // A hard-wrapped list item continues on the following line; markdown calls
       // this a lazy continuation. Without it any wrapped bullet ENDED its list and
       // the rest of the sentence became a paragraph outside it, so a hard-wrapped
       // ordered list rendered as a run of one-item lists each numbered "1." with
       // its second half adrift. Every doc in this repo is wrapped at ~80 columns,
       // so this was the common case rather than an edge one.
+      // Four spaces or a tab, at the top level only. Gated on an empty paragraph
+      // because CommonMark says an indented chunk cannot interrupt one, and on an
+      // empty stack because an indented line under a list item is that item's
+      // lazy continuation, which the branch below owns. `l` is already escaped and
+      // esc() does not touch whitespace, so the indentation survives to here.
+      const ind = l.match(/^(?: {4}|\t)(.*)$/);
+      if (ind && !para.length && !stack.length && !table && !quote) {
+        if (!code) { code = []; codeLine = here; }
+        while (codeGap > 0) { code.push(""); codeGap--; }
+        code.push(ind[1]);
+        continue;
+      }
+      // Anything else ends the block, and trailing blanks were never part of it.
+      flushCode();
       if (stack.length && stack[stack.length - 1].items.length) {
         const its = stack[stack.length - 1].items;
         its[its.length - 1].text += " " + l.trim();
