@@ -295,8 +295,20 @@ def refs_for(r):
 
 GATE = re.compile(r"USER-GATED|Blocked on the owner|owner reviews|needs you|"
                   r"owner present|phrase-gated|dedicated session", re.I)
+# blocked_on is free text by design, and the convention prefixes it with who is
+# blocked: "USER: needs your ruling" versus "AGENT: mine to build". The table
+# painted ANY non-empty value as owner-gated, so a row saying AGENT rendered
+# under GATES (you) in the owner's colour. gcp-fable reported three such rows on
+# 2026-08-26 and gcc-kanban reproduced it on its own queue the same day, in the
+# list it was about to hand the owner.
+#
+# The imprecision of the field is deliberate and stays: it is what let gcp-fable
+# discover eleven "owner gates" that were its own sequencing notes. The fix is to
+# READ the prefix the convention already writes, not to make the field an enum.
+AGENT_BLOCKED = re.compile(r"^\s*(AGENT|ME|SELF)\s*:", re.I)
 def gated(r):
-    if meta(r, "blocked_on"): return True
+    b = meta(r, "blocked_on")
+    if b: return not AGENT_BLOCKED.match(str(b))
     # An explicit lane beats prose inference. A row the agent has claimed
     # (lane gcc) is not owner-gated because its description mentions "needs
     # you": #48 on 2026-08-23 was ABOUT needs-human cards and rendered as a
@@ -305,7 +317,7 @@ def gated(r):
     if lane and lane != "owner": return False
     if lane == "owner": return True
     return bool(GATE.search(desc(r)) or GATE.search(subj(r)))
-def gate_declared(r): return bool(meta(r, "blocked_on"))
+def gate_declared(r): return bool(meta(r, "blocked_on")) and not AGENT_BLOCKED.match(str(meta(r, "blocked_on")))
 
 # The store carries real dependency edges in blockedBy, and the table used to
 # ignore them entirely: a row sequenced behind an in-progress task rendered as
