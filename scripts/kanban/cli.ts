@@ -262,7 +262,14 @@ switch (verb) {
       const q = positional[1];
       if (!q) die("decide add needs the question", 'kanban.sh decide add "ship behind a flag or wait?" --why "the launch date moves either way"');
       // who raised it, so an answer can be routed back while their context lives
-      const d: any = { id: noteId(), question: q, at: now, by: process.env.CLAUDE_SESSION_ID || undefined };
+      // Who raised it, so the owner's ruling has somewhere to go back to. This
+      // read CLAUDE_SESSION_ID alone, which is not set in this harness, so every
+      // recorded decision carried no raiser and the board could only offer
+      // "nobody is told". selfAlias resolves the ipc alias the same way every
+      // other verb here does; --by overrides for an agent recording on another's
+      // behalf.
+      const d: any = { id: noteId(), question: q, at: now,
+                       by: flag("by") || selfAlias() || process.env.CLAUDE_SESSION_ID || undefined };
       const why = flag("why"), card = flag("card");
       if (why) d.why = why;
       if (card) d.card = card;

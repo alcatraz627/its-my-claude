@@ -926,6 +926,15 @@
      Decisions are few and each one is a thing the owner has to answer, so they
      get the height. The state badge moves to the top so a long question grows
      downward rather than pushing it out of line. */
+  /* The answer popover is wider than a lane-settings card because it holds a
+     question, its reason and a ruling, none of which read at 236px. */
+  .colcard.decidecard{min-width:min(420px,calc(100vw - 28px));max-width:min(420px,calc(100vw - 28px))}
+  .colcard .dq{font:var(--fs-body)/1.45 var(--sans);color:var(--text)}
+  .colcard .dwhy{margin-top:-3px}
+  .colcard textarea{width:100%;box-sizing:border-box;resize:vertical;min-height:74px;
+                    padding:7px 9px;border:1px solid var(--border);border-radius:var(--r-control);
+                    background:var(--well);color:var(--text);font:var(--fs-body)/1.5 var(--sans)}
+  .colcard textarea:focus{outline:none;border-color:var(--blue-br);background:var(--canvas)}
   .srow.decrow{align-items:flex-start}
   .srow.decrow .stxt{white-space:normal;overflow:visible;text-overflow:clip;
                      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
@@ -2289,6 +2298,73 @@ function openNameView(btn, clauses) {
   card.querySelector("#vwcancel").onclick = closeColCard;
   for (const el of [input, noteIn]) el.addEventListener("keydown", (e) => {
     if (e.key === "Enter") { e.preventDefault(); save(); }
+    if (e.key === "Escape") { e.stopPropagation(); closeColCard(); }
+  });
+  setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
+}
+
+// Answering a decision, from the board, without leaving it.
+//
+// This did not exist. A recorded decision rendered "needs you", and clicking it
+// showed a TOAST with the why and nothing else — so the one surface that says a
+// decision is waiting had no way to answer it. The owner's words, 2026-08-26:
+// "Why doesn't it fucking open anything wtf am I supposed to type it out and
+// send it to the agent? Why can't I answer here and nudge the agent". Both
+// halves of that are the feature: rule it here, and the session that raised it
+// hears about it.
+//
+// A page-backed decision still navigates to its page. The page IS its answer
+// surface, with its options and its recommendations, and a second answer box on
+// the board would be a second way to say the same thing.
+function openDecideAnswer(d, btn) {
+  closeColCard();
+  const card = document.createElement("div");
+  card.className = "colcard on decidecard";
+  card.id = "colcard";
+  const r = d.reach || {};
+  // Who hears about it, said honestly. reach has four states and only one of
+  // them means "an answer lands somewhere useful right now".
+  const who = !d.session ? "No session recorded, so nobody is told."
+    : r.state === "hot" ? `${esc(d.session)} was seen ${ago(Date.now() - r.seenAgo * 1000)} ago and will be told.`
+    : r.state === "cold" ? `${esc(d.session)} has gone cold; it will be told and will need a re-brief.`
+    : r.state === "absent" ? `${esc(d.session)} is not in the session registry, so telling it may go nowhere.`
+    : `Could not check whether ${esc(d.session)} is reachable.`;
+  card.innerHTML =
+    `<h4><span>Your ruling</span></h4>` +
+    `<div class="dq"></div>` +
+    (d.why ? `<div class="cfoot dwhy"></div>` : "") +
+    `<textarea id="dcans" rows="4" aria-label="your ruling on this decision" placeholder="Say what you have decided, in your own words."></textarea>` +
+    `<div class="cfoot">${who}</div>` +
+    `<div class="cbtns"><button type="button" class="ghost" id="dccancel">Cancel</button>` +
+    `<button type="button" class="accent" id="dcsave" data-verb="send">Answer${d.session ? " and tell them" : ""}</button></div>`;
+  document.body.appendChild(card);
+  // textContent, not innerHTML: a question is arbitrary text an agent wrote.
+  card.querySelector(".dq").textContent = d.title;
+  if (d.why) card.querySelector(".dwhy").textContent = d.why;
+  const rr = btn.getBoundingClientRect(), cr = card.getBoundingClientRect();
+  card.style.top = `${Math.min(rr.bottom + 6, innerHeight - cr.height - 10)}px`;
+  card.style.left = `${Math.min(Math.max(10, rr.left), innerWidth - cr.width - 10)}px`;
+  wireFloat(card, btn);
+  const ta = card.querySelector("#dcans");
+  ta.value = d.answer ?? "";
+  ta.focus();
+  const save = async () => {
+    const text = ta.value.trim();
+    if (!text) return toast("An empty ruling is not a ruling — say what you decided, or Cancel", 3200, true);
+    closeColCard();
+    const res = await fetch("/api/decide", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ slug, op: "answer", id: d.id, answer: text, notify: true }) });
+    const out = await res.json().catch(() => ({ error: "could not save that" }));
+    if (out.error) return toast(out.error, 4000, true);
+    toast(out.told ? `Ruled — ${out.told} was told` : "Ruled", 3000);
+    await afterWrite();
+  };
+  card.querySelector("#dcsave").onclick = save;
+  card.querySelector("#dccancel").onclick = closeColCard;
+  ta.addEventListener("keydown", (e) => {
+    // Enter makes a newline in a ruling; the deliberate save is cmd/ctrl-Enter,
+    // the same bargain the note editor strikes.
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(); }
     if (e.key === "Escape") { e.stopPropagation(); closeColCard(); }
   });
   setTimeout(() => addEventListener("pointerdown", closeColCardAway, { once: true }), 0);
@@ -3940,8 +4016,11 @@ function renderSide() {
       // equivalent moment, so it claimed seen from birth and the red state was
       // unreachable by construction. This is that moment.
       if (d.href) b.onclick = () => { location.href = d.href; };
-      else b.onclick = () => {
-        toast(d.why ? `why: ${d.why}` : "Recorded decision, no page", 3200);
+      else b.onclick = (e) => {
+        // Answer it here. The toast this replaced showed the why and then left
+        // the owner with nowhere to rule, on the one surface that had just told
+        // them a ruling was needed.
+        openDecideAnswer(d, e.currentTarget);
         if (d.seen) return;
         // Fire and forget, then re-read: a failed stamp costs the red dot one
         // more render, never the owner's click.

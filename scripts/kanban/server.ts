@@ -1506,7 +1506,30 @@ const server = Bun.serve({
           const a = (body.answer ?? "").trim();
           if (a) { d.answer = a; d.answeredAt = now; } else { delete d.answer; delete d.answeredAt; }
           savePlan(dir, plan, "decide:answer");
-          out = { ok: true, decision: d };
+          // A ruling nobody hears about is a ruling that changes nothing. A
+          // decision PAGE already notifies its origin session on submit
+          // (dpNotifyOrigin); a recorded decision had no equivalent, so the
+          // owner ruled on the board and the session that asked went on waiting.
+          // Opt-in via `notify` so the CLI's own `decide answer` stays quiet
+          // unless it asks — an agent recording its own answer should not ping
+          // itself.
+          let told: string | null = null;
+          if (a && body.notify && d.by) {
+            told = String(d.by);
+            recordChange(dir, { kind: "decision", by: "owner",
+              what: `ruled: ${d.question}`, to: a.split("\n")[0].slice(0, 80) });
+            try {
+              Bun.spawn(["claude-ipc", "send", "--from", "kanban-board", "--to", told,
+                `[kanban] the owner ruled on a decision you raised on board "${body.slug}".\n\n`
+                + `Q: ${d.question}\n`
+                + (d.why ? `why you raised it: ${d.why}\n` : "")
+                + `\nTHEIR RULING: ${a}\n\n`
+                + `Act on it. If it changes work already done, say so plainly rather than quietly reworking it. `
+                + `Read it in full with: kanban.sh decide list`],
+                { stdout: "ignore", stderr: "ignore" });
+            } catch { /* best-effort: the ruling is saved either way */ }
+          }
+          out = { ok: true, decision: d, told };
         } else if (body.op === "note") {
           const t = (body.note ?? "").trim();
           if (!t) { out = { error: "an empty comment is not a comment" }; return; }

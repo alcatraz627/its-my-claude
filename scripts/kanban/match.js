@@ -15,6 +15,14 @@ const VIEW_LIMITS = { nameMin: 2, nameMax: 40, maxClauses: 4, maxWords: 1 };
 // cannot name is one the owner would have to learn by reading source.
 const CLAUSE_GRAMMAR = [
   "is:open", "is:blocked", "is:settled", "needs-you", "review-me",
+  // The two absence clauses. Every other clause here names something a card
+  // HAS, and the grammar had no way to ask what a card LACKS — so `sync` could
+  // end with "24 still unnamed, 46 untagged" and then offer only one-at-a-time
+  // fixes, with no way to list the cards it had just counted. A message that
+  // opens a loop has to be able to close it. (automation, 2026-08-26, from
+  // populating a 69-card board: "the only route is status --cards and reading
+  // 60 lines by eye".)
+  "is:unnamed", "is:untagged",
   "since:new", "since:moved", "since:done", "since:blocked",
   "tag:<kind>:<name>", "<a word to search for>",
 ];
@@ -37,6 +45,11 @@ function matchClause(card, clause, ctx) {
     case "is:blocked":    return card.lane === "blocked";
     case "is:open":       return card.lane !== "done" && card.lane !== "stale";
     case "is:settled":    return card.lane === "done" || card.lane === "stale";
+    // Unnamed means no HUMAN name: an auto-generated brief is a starting point,
+    // not a name, and it is exactly what the sync digest is counting when it
+    // says "124 auto-named, 22 still unnamed".
+    case "is:unnamed":    return !card.titleBrief || !!card.briefAuto;
+    case "is:untagged":   return ctx.tagsOf(card.id).length === 0;
     case "since:done":    return ctx.since(card.updatedAt) && card.lane === "done";
     case "since:blocked": return ctx.since(card.updatedAt) && card.lane === "blocked";
     case "since:new":     return ctx.since(card.createdAt);

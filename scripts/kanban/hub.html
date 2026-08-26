@@ -529,7 +529,27 @@ async function loadSurfaces(which) {
     frag.push(g);
   };
   if (which === "decisions") {
-    group("Waiting on you", rows.filter((r) => r.pending));
+    // Waiting-on-you leads, and inside it the rows band by PROJECT. Owner ask,
+    // 2026-08-26: "Why not allow grouping by project". A flat list of everything
+    // pending across seven boards asks the reader to hold which project each row
+    // belongs to while they scan, which is work the heading can do for free.
+    // Boards with the most waiting come first, because that is where the reader
+    // is going anyway.
+    const pending = rows.filter((r) => r.pending);
+    const byProject = new Map();
+    for (const r of pending) {
+      const k = r.boardName || r.board || r.origin || "No project";
+      if (!byProject.has(k)) byProject.set(k, []);
+      byProject.get(k).push(r);
+    }
+    if (byProject.size > 1) {
+      for (const [name, rs] of [...byProject.entries()].sort((a, b) => b[1].length - a[1].length))
+        group(`Waiting on you · ${name}`, rs);
+    } else {
+      // One project, or none named: a per-project band would be a heading that
+      // says what the page already says.
+      group("Waiting on you", pending);
+    }
     // plans ride the Decisions view: a plan is the thing a decision page is
     // about, and a draft one is awaiting a ruling
     const plans = (j.plans ?? []).map((pl) => ({ ...pl, pending: pl.state === "draft",
