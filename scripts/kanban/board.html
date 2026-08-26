@@ -919,7 +919,19 @@
                   background:var(--card);border:1px solid var(--border);border-radius:var(--r-card);padding:7px 9px;color:var(--text)}
 
   /* ---------- sidebar tags ---------- */
-  .srow.tagrow{gap:7px}
+  /* Halved vertically, on the owner's ask (2026-08-26, second time of asking).
+     A tag row is one short line and was 31px tall: 5px of padding each side plus
+     a 3px gap. The list is long, it is scanned rather than read, and the height
+     was buying nothing. The HORIZONTAL gap stays at 7px because that separates
+     the dot from the name and is doing real work. */
+  .srow.tagrow{gap:7px;padding-top:2px;padding-bottom:2px;min-height:0}
+  /* The 3px between rows came from nothing anyone chose; the list is a block and
+     the rows fell where they fell. Stated explicitly at 1px so the pitch is a
+     decision. Row height itself is now content-bound: 19px of text inside 2px of
+     padding, so the padding is at its floor and further tightening would have to
+     come out of the type. */
+  .stag{display:flex;flex-direction:column;gap:1px}
+  .stag .srow.tagrow + .srow.tagrow{margin-top:-2px}
   .srow .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
   /* a plan's state, worn as a small chip on its sidebar row (#58) */
   .pstate{margin-left:auto;flex:none;font:600 var(--fs-caption)/1 var(--sans);letter-spacing:.03em;
@@ -1095,7 +1107,13 @@
             border-style:dashed;border-color:var(--dot,var(--violet));
             background:linear-gradient(color-mix(in srgb,var(--dot,var(--violet)) 7%,transparent),
                                        color-mix(in srgb,var(--dot,var(--violet)) 7%,transparent)) var(--well);
-            animation:peekin .26s cubic-bezier(.32,.72,0,1)}
+            }
+  /* The entry animation belongs to OPENING the peek, not to drawing it. It sat
+     on .col.peek itself, and the board re-renders on a 5s poll which rebuilds
+     the column from scratch, so the thing slid in from the left every five
+     seconds for as long as it was open. Charter §8 already says motion is for a
+     change the person caused; a poll is not one. */
+  .col.peek.fresh{animation:peekin .26s cubic-bezier(.32,.72,0,1)}
   @keyframes peekin{from{opacity:0;transform:translateX(-14px);max-width:0}}
   .col.peek .chead h2{color:var(--dot,var(--violet));display:flex;align-items:center;gap:7px}
   .col.peek .chead .count{border-color:color-mix(in srgb,var(--dot,var(--violet)) 40%,transparent);
@@ -1822,20 +1840,26 @@ function mountBoardNav() {
   // this reason; appending #live to the second bar AFTER the call meant
   // renderLive found nothing and every board poll threw.
   const live = $("live");
+  // No `aside:` any more. The toggle rendered at the head of the common zone,
+  // which put it between the search box and the first kind tab — floating in the
+  // middle of the bar with nothing either side to say what it belonged to. It is
+  // also the third way to do the same thing: the panel has its own grip on its
+  // edge and the `|` key toggles it, both of which sit where the panel is rather
+  // than in the middle of an unrelated bar.
   navbar({ mount: bar, active: "boards", identity: ident, find,
-           help: openHelp, aside: navAside });
+           help: openHelp });
   const sub = document.createElement("div");
   sub.className = "subbar";
   // The board's identity leads the second bar, taking the slack, so the verbs
   // land at the right edge where they have always been. It also means the board
   // says which board it is even when the main bar is tight.
-  const where = document.createElement("span");
-  where.className = "sbstate";
-  where.id = "bWhere";
+  // The counts lead the second bar. There is no board name here: the crumb in
+  // the main bar already reads "All boards / .claude  b  ~/.clau…", and adding
+  // it again below meant the board said its own name twice, three inches apart.
   const stats = document.createElement("span");
-  stats.className = "sbstats";
+  stats.className = "sbstate sbstats";
   stats.id = "bStats";
-  sub.append(where, stats, live, page);
+  sub.append(stats, live, page);
   bar.insertAdjacentElement("afterend", sub);
   // --h-nav is what .subbar sticks below; publish the real height rather than
   // the 45px default, which is only right at one width.
@@ -2797,9 +2821,12 @@ function closeColCard() {
 // same press that opened it, and a second peek stands beside the first.
 let peeks = [];
 const isPeeked = (t) => peeks.some((p) => p.id === t?.id);
+// Which peeks have already played their entry animation. A tag's entry is
+// forgotten when its peek is dismissed, so re-opening it animates again.
+const peekSeen = new Set();
 function peekTag(t) {
-  if (!t) peeks = [];
-  else if (isPeeked(t)) peeks = peeks.filter((p) => p.id !== t.id);
+  if (!t) { peekSeen.clear(); peeks = []; }
+  else if (isPeeked(t)) { peekSeen.delete(t.id); peeks = peeks.filter((p) => p.id !== t.id); }
   else peeks.push({ id: t.id });
   render();
   if (t && isPeeked(t)) {
@@ -2811,7 +2838,18 @@ function peekEl(pk) {
   const t = plan().tags.find((x) => x.id === pk.id);
   if (!t) { peeks = peeks.filter((p) => p.id !== pk.id); return null; }
   const wrap = document.createElement("section");
-  wrap.className = `col peek k-${t.kind}`;
+  // `fresh` only the first time this tag's peek is built, so the slide-in plays
+  // when you open it and never again while it sits there.
+  const first = !peekSeen.has(t.id);
+  if (first) peekSeen.add(t.id);
+  wrap.className = `col peek k-${t.kind}${first ? " fresh" : ""}`;
+  // Take the class off the moment it has played. A CSS animation replays every
+  // time its element is re-inserted into the DOM, and the column reorder moves
+  // columns on render, so a `fresh` that stays set is a slide-in armed forever:
+  // the peek came in from the left again on every 5s poll for as long as it was
+  // open. Dropping the class after one play makes a replay impossible whatever
+  // moves the node.
+  if (first) wrap.addEventListener("animationend", () => wrap.classList.remove("fresh"), { once: true });
   applyTagHue(wrap, t);
   wrap.id = `peek-${t.id}`;   // per tag, so a dragged position is kept per tag
   const mine = data.board.cards.filter((c) => tagsOnCard(c.id).some((x) => x.id === t.id));
@@ -2882,13 +2920,18 @@ const PAIRS = [
   { sel: ".notestack .nrow", peers: (el) => [noteChipFor(el.dataset.noteId)] },
   { sel: ".srow.tagrow", peers: (el) => cardsWithTag(el) },
   { sel: ".dtab", peers: (el) => [cardNode(el.dataset.tabId)] },
-  { sel: "#peek .card", peers: (el) => [boardCardFor(el)] },
+  // `.col.peek`, not `#peek`. The peek column became one-per-tag and its id
+  // turned into `peek-<tagId>`, but these three readers kept matching `#peek`,
+  // which exists nowhere. So the selector matched nothing, the pair never fired,
+  // and hovering a card in a tag peek stopped highlighting its source on the
+  // board — the class and the CSS were both fine the whole time.
+  { sel: ".col.peek .card", peers: (el) => [boardCardFor(el)] },
   { sel: ".item", peers: (el) => [landedCardFor(el)] },
   { sel: ".card", peers: (el) => [tabNode(el.dataset.id), peekRowFor(el.dataset.id)] },
 ];
 // a card in the peek and the same card on the board are two ends of one thing
-const peekRowFor = (id) => document.querySelector(`#peek .card[data-id="${id}"]`);
-const boardCardFor = (el) => el.closest("#peek")
+const peekRowFor = (id) => document.querySelector(`.col.peek .card[data-id="${id}"]`);
+const boardCardFor = (el) => el.closest(".col.peek")
   ? document.querySelector(`main .col:not(.peek) .card[data-id="${el.dataset.id}"]`) : null;
 const noteChipFor = (nid) => nid
   ? document.querySelector(`.card .chip.note[data-key$=":${nid}"]`) : null;
@@ -3481,17 +3524,7 @@ function renderSummary() {
   if (slot) slot.replaceChildren(band, ...deltaRow());
   // The second bar carries the board's name and path. At 700 the main bar drops
   // both, so before the split nothing on screen said which board you were on.
-  const w = document.getElementById("bWhere");
-  if (w) {
-    w.replaceChildren();
-    const nm = document.createElement("b");
-    nm.textContent = data.name ?? slug;
-    const pth = document.createElement("span");
-    pth.className = "sbpath";
-    pth.textContent = data.root ?? "";
-    pth.dataset.tip = data.root ?? "";
-    w.append(nm, pth);
-  }
+
   const legacy = document.getElementById("summary");
   if (legacy) legacy.remove();
 }

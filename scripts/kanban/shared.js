@@ -187,7 +187,12 @@ function paintVerbs(root = document) {
   ).forEach((b) => {
     const g = VERB_ICON[b.dataset.verb];
     if (!g) return;
-    b.insertAdjacentHTML("afterbegin", g);
+    // A button that already draws its own glyph does not get a second one. The
+    // 2026-08-25 verb pass reported "all 24 word-only buttons converted", and
+    // three of them were not word-only: search, nudge and copy-status each
+    // carried a hand-written SVG already, so each ended up with two icons side
+    // by side. Marked done either way, so the observer stops revisiting it.
+    if (!b.querySelector(":scope > svg")) b.insertAdjacentHTML("afterbegin", g);
     b.dataset.verbDone = "1";
   });
 }
