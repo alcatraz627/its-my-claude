@@ -305,7 +305,11 @@ GATE = re.compile(r"USER-GATED|Blocked on the owner|owner reviews|needs you|"
 # The imprecision of the field is deliberate and stays: it is what let gcp-fable
 # discover eleven "owner gates" that were its own sequencing notes. The fix is to
 # READ the prefix the convention already writes, not to make the field an enum.
-AGENT_BLOCKED = re.compile(r"^\s*(AGENT|ME|SELF)\s*:", re.I)
+# Three states, not two (prop 2026-08-27, gcp rows #5 and #168): USER: is an owner gate
+# the owner can act on today; AGENT:/ME:/SELF: is the agent's own wait; BLOCKED-BY:,
+# AFTER:, EXTERNAL:, WAITING: name other work or another actor and are neither
+# agent-ready nor the owner's to act on. Only the first band reaches GATES (you).
+AGENT_BLOCKED = re.compile(r"^\s*(AGENT|ME|SELF|BLOCKED[- ]BY|AFTER|EXTERNAL|WAITING)\s*:", re.I)
 def gated(r):
     b = meta(r, "blocked_on")
     if b: return not AGENT_BLOCKED.match(str(b))
