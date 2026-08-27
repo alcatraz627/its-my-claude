@@ -3224,6 +3224,23 @@ async function load() {
       deepLink.delete("card");                        // first paint only
       openDrawer(wantCard, deepLink.get("note"));
     }
+    // Owner ruling 4a: arrive on the questions, not beside them. First paint
+    // only, and it does NOT filter the cards: silently cutting 259 cards down
+    // is a surface that lies about what is there (charter section 12). The
+    // group is opened and scrolled to; the board itself is left alone.
+    if (!arrivedOnDecisions) {
+      arrivedOnDecisions = true;
+      const owed = (data?.decisions ?? []).filter((d) => d.pending).length;
+      if (owed) {
+        sideForced.add("Decisions");
+        renderSide();
+        requestAnimationFrame(() => {
+          const g = [...document.querySelectorAll("#side .sgroup")]
+            .find((x) => (x.querySelector(".stt")?.textContent || "").trim() === "Decisions");
+          g?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        });
+      }
+    }
     if (wantQ || wantCard) history.replaceState(null, "", location.pathname);
   } catch (e) { lastError = true; showState("err", e.message); }
 }
@@ -3997,8 +4014,18 @@ const sideOpenKey = () => `kanban-sideopen-${slug}`;
 const sideOpenAll = () => { try { return JSON.parse(localStorage.getItem(sideOpenKey())) ?? {}; } catch { return {}; } };
 // Open unless this board was told otherwise: a sidebar that starts folded hides
 // what it is for, and the fold is a thing you choose rather than a default.
-const sideOpen = (label) => sideOpenAll()[label] !== false;
+// Owner ruling 4a, 2026-08-26: the Decisions group opens when a decision is
+// waiting, because the board's core use is discovering agent questions and the
+// face did not lead with it. Forced for THIS PAGE LOAD only, never written to
+// the stored fold state: an override that persists is an override that has
+// quietly taken the choice away, and folding it again mid-session must stick.
+const sideForced = new Set();
+let arrivedOnDecisions = false;
+const sideOpen = (label) => sideForced.has(label) || sideOpenAll()[label] !== false;
 function setSideOpen(label, on) {
+  // Folding it by hand releases the force, so the owner's gesture wins over the
+  // arrival rule for the rest of the session.
+  if (!on) sideForced.delete(label);
   const all = sideOpenAll();
   if (on) delete all[label]; else all[label] = false;
   if (Object.keys(all).length) localStorage.setItem(sideOpenKey(), JSON.stringify(all));
@@ -4609,7 +4636,11 @@ const refreshRail = () => afterWrite({ items: true });
 function render() {
   hideState();
   $("name").querySelector(".bnm").textContent = data.name;
-  document.title = `${data.name} · kanban`;
+  // The count rides the TAB TITLE, so a board sitting behind other tabs still
+  // says how many decisions are waiting. Pending already excludes a deferral
+  // whose horizon has not passed, so a parked decision does not nag from here.
+  const owed = (data?.decisions ?? []).filter((d) => d.pending).length;
+  document.title = `${owed ? `(${owed}) ` : ""}${data.name} · kanban`;
   $("root").dataset.tip = data.root; $("root").textContent = data.root;
   const all = data.board.cards;
   if (!all.length) { showState("empty"); return; }

@@ -230,10 +230,35 @@ case "$pg" in
 esac
 trash "$dpdir" 2>/dev/null || true
 
+echo; echo "-- the board arrives on its decisions (owner ruling 4a, 2026-08-26) --"
+page=$(body "$S/b/-claude-244ec6")
+# The count rides the tab title so a backgrounded board still says how many wait.
+case "$page" in
+  *'owed ? `(${owed}) `'*) ok "the tab title leads with the pending count" ;;
+  *) no "the tab title leads with the pending count" "no count in the title expression" ;;
+esac
+# Forced for the page load only. Persisting it would take the fold away for good.
+case "$page" in
+  *"sideForced"*) ok "the Decisions group can be forced open on arrival" ;;
+  *) no "the Decisions group can be forced open on arrival" "sideForced is gone" ;;
+esac
+case "$page" in
+  *"if (!on) sideForced.delete(label)"*) ok "folding it by hand releases the force" ;;
+  *) no "folding it by hand releases the force" "the owner's gesture would be overridden every render" ;;
+esac
+# The ruling was explicit that the CARDS are left alone: filtering 259 cards down
+# on arrival is a surface that lies about what is there.
+blk=$(printf '%s' "$page" | sed -n '/arrivedOnDecisions = true;/,/^    }$/p')
+if [ -n "$blk" ] && ! printf '%s' "$blk" | grep -q 'setFilter'; then
+  ok "arrival does not filter the cards"
+else
+  no "arrival does not filter the cards" "${blk:+setFilter inside the arrival block}${blk:-arrival block not found}"
+fi
+
 echo; echo "-- goals and milestones are pressable in the board (owner callout, 2026-08-26) --"
 # "Instead of actually letting me see the goals and milestones in a board via
 # click, you just lied ... you pretended the goals and milestones are just tags."
-K="$(dirname "$0")/.."
+K="$(cd "$(dirname "$0")/.." && pwd)"
 # A goal is a sentence, not a tag, so it needed a clause. Exercised on the shared
 # matcher, because that file exists so the board and the CLI cannot disagree.
 gout=$(node -e '
