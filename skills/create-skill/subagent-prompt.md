@@ -95,6 +95,14 @@ exists before using anything the seat said (`rules/sub-agent-outputs.md`).
 - `research`: counts quoted from a doc instead of measured; a source read once, cited as settled.
 - `digest`: the interesting story kept, the owner's stated criteria dropped.
 
+## Seat-type traps
+
+- **codex seats (`codex:codex-rescue`) do not read `SendMessage` mid-run.** Three
+  steering messages to a running codex build were never acted on; the mailbox drains
+  between tool rounds or at completion (gcp-fable, 2026-08-27). Mid-run steering goes
+  through a file the seat re-reads, named in `Read first` (the spec on disk), never
+  through a message. Put the spec's sha in the brief so the seat can notice it moved.
+
 ## Validation
 
 Efficacy for this mode is measured in the dispatch record, not in the prompt's length:

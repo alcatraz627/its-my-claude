@@ -53,6 +53,16 @@ LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run
 # so token boundaries survive. Falls back to the raw command if unavailable,
 # which is the pre-2026-08 behaviour.
 SCAN="$CMD"
+# Heredoc bodies are prose, not commands: a checkpoint written with `cat <<EOF`
+# that mentions a launcher launched nothing (prop-20260826-235336-54). Blank every
+# line between a `<<[-]['"]?WORD` opener and its terminator; line count is kept.
+SCAN=$(printf '%s\n' "$SCAN" | awk '
+  BEGIN{inb=0}
+  inb==1 { if ($0 == term) { inb=0; print; next } ; print ""; next }
+  { line=$0
+    if (match(line, /<<-?[ \t]*["\047]?[A-Za-z_][A-Za-z0-9_]*["\047]?/)) {
+      t=substr(line, RSTART, RLENGTH); sub(/^<<-?[ \t]*/, "", t); gsub(/["\047]/, "", t); term=t; inb=1 }
+    print line }')
 if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
   . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
   if type hook_cmd_skeleton >/dev/null 2>&1; then

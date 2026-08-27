@@ -26,6 +26,14 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 echo "$CMD" | rg -q '\bcurl\b' 2>/dev/null || exit 0
 echo "$CMD" | rg -q "\-X\s+(POST|PUT|PATCH|DELETE)\b|--request\s+(POST|PUT|PATCH|DELETE)\b|--(data|data-raw|data-binary|data-urlencode|json|form)\b" 2>/dev/null || exit 0
 echo "$CMD" | rg -q "Authorization\s*:|-u\s+\S+:|--user\s+\S+:" 2>/dev/null || exit 0
+# A header whose value is an UNEXPANDED reference ($VAR, ${VAR}, $(cmd)) puts no
+# secret in the transcript, which is the leak this block exists to stop; the
+# file-tools route would put the literal there instead. Allow it, logged.
+# prop-20260826-223912-c4, the never-print-tokens conflict.
+if echo "$CMD" | rg -q "Authorization\s*:\s*(Bearer|Basic|Token)?\s*(\\$\{?[A-Za-z_][A-Za-z0-9_]*\}?|\\$\([^)]*\))\s*[\"']?(\s|$|-)" 2>/dev/null; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook block-curl-post-auth --action allow-var-ref --heeded unknown >/dev/null 2>&1 || true
+  exit 0
+fi
 
 if [ "$MUTED" = 1 ]; then
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook block-curl-post-auth --action muted --heeded unknown >/dev/null 2>&1 || true
