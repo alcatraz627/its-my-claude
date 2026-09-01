@@ -14,6 +14,11 @@ related:
   - rules/exercise-based-verification.md
   - rules/structural-claim-without-reading-code.md
   - rules/pushback-and-self-criticism.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; binds after `gh pr create`; a creation-moment nudge hook is proposed in the backlog.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
 updated: 2026-09-01
@@ -70,6 +75,20 @@ Every PR you raise, without exception:
    finding is a defect in the reviewer, and an argument that ends in the PR
    thread teaches it nothing. Use `/file-gh-issue`, which is dry-run by default
    and gated on your approval before it files.
+
+## When the review fails, or never comes (owner ruling 2026-09-01)
+
+From the prime-demotion-0901 notes, and it reshapes the loop above:
+
+- **A review that FAILS is flagged, not waited on.** Check the run logs and docs
+  for why when they are in reach, or just flag it — either way tell the owner why
+  it failed, and continue working. Halting is not necessary.
+- **The review = a comment.** Comment presence is what "reviewed" means here.
+- **No review comment AND no action running → this rule does not apply.**
+
+And the versable-git standing default (same ruling, r2 note): in versable-git
+projects, replies to review findings always go through `/claude-bot ask (via
+🤖claude)` — the standing default there, not a per-finding choice.
 
 ## Confidence decays across rounds, and the check before "ready" is mechanical
 

@@ -156,7 +156,7 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 >    § Review contract).
 > 7. **Mutation-test any guard the change adds or modifies** — a guard nobody has
 >    watched fail is untested, and a green suite only says it did not fire
->    (`rules/testing.md` § `[mutation-test-the-guard]`). COPY the guard plus the
+>    (`rules/testing-patterns.md` § `[mutation-test-the-guard]`). COPY the guard plus the
 >    code it protects into `/tmp`, break the protected behaviour THERE, and
 >    confirm the guard goes red on the copy — never mutate the live file, the
 >    read-only rule above still binds. If the mutation stays green, the TEST is

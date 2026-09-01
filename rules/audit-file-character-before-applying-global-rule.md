@@ -11,6 +11,11 @@ related:
   - rules/speculative-abstractions-without-a-load-bearing-caller.md
   - rules/generalize-before-enumerate.md
   - rules/communication.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; fires on move/consolidate refactors; never-halt carries the collision half.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
 updated: 2026-09-01

@@ -10,9 +10,14 @@ triggers:
 related:
   - rules/read-the-comments-on-a-pr-you-raised.md
   - rules/git.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; binds at `gh pr create`; a creation-moment nudge hook is proposed in the backlog.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
-updated: 2026-08-20
+updated: 2026-09-01
 stale_after_days: 180
 ---
 

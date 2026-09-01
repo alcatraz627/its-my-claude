@@ -92,7 +92,7 @@ defect is visible in the DOM and cheap to match:
 Three of the four instances would have failed that check before a person looked.
 A gate that claims to catch "machine data rendered as prose" and catches none of
 these is a check that has never been watched failing
-(`rules/testing.md` § `[mutation-test-the-guard]`).
+(`rules/testing-patterns.md` § `[mutation-test-the-guard]`).
 
 ## What this rule does NOT mean
 
@@ -111,6 +111,6 @@ whether it should be on screen in that form.
 
 - [[audience-aware-writing]] owns the **prose** half of this doctrine (identify
   the reader, write meaning-first). This owns the **data** half.
-- `rules/testing.md` § `[render-before-judge]`, § `[mutation-test-the-guard]`
+- `rules/testing-patterns.md` § `[render-before-judge]`, § `[mutation-test-the-guard]`
 - Worked instances and the project-side standard: `contract/v6/console-presentation.md`
   axis 20, in `~/Code/Versable/gcp`.

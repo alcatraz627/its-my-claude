@@ -8,9 +8,14 @@ triggers:
   - phrase:"reusable"
 related:
   - rules/grep-scope-before-claiming-absence.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; generalize-before-enumerate stays always and names the family.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
-updated: 2026-05-20
+updated: 2026-09-01
 stale_after_days: 90
 ---
 

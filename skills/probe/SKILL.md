@@ -22,7 +22,7 @@ probes run.
 
 Read `~/.claude/skills/GUIDELINES.md` and the `## probe:` entries in
 `~/.claude/skills/runtime-notes.md`. The doctrine's tags are in
-`~/.claude/rules/testing.md` (`[root-cause]`, `[re-edit-thrash]`,
+`~/.claude/rules/testing-patterns.md` (`[root-cause]`, `[re-edit-thrash]`,
 `[instrument-describes-the-wrong-moment]`).
 
 ## The procedure

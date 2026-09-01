@@ -7,9 +7,14 @@ triggers:
 related:
   - conventions/hook-authoring-and-review.md
   - features/hooks-tui-limits.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; newer hooks carry the surface instruction in their own message.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
-updated: 2026-06-01
+updated: 2026-09-01
 stale_after_days: 365
 ---
 

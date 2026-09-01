@@ -56,7 +56,7 @@ Before writing/saying done · works · fixed · passing · verified · shipped:
    (copy-based), watch it go green. Mutation-test each guard individually; a
    mutation that stays green means the test is the bug. Four guards passed their
    own tests while the thing they guarded was broken in one session — see
-   `rules/testing.md` § `[mutation-test-the-guard]` for the five ways it hides.
+   `rules/testing-patterns.md` § `[mutation-test-the-guard]` for the five ways it hides.
 6. **Mark the un-exercisable honestly.** If you genuinely cannot run something
    (throttled sandbox, missing hardware), write `UNCONFIRMED — <reason>`, not a
    checkmark. An honest gap is worth more than a false pass.
@@ -93,5 +93,5 @@ You're about to type "done"/"works"/"passing" and the last thing you actually
 *ran* was a collect, a compile, a lint, or nothing at all. Stop — run the path.
 
 ## Related
-- `rules/testing.md` — scale-to-task ladder + `[collect-not-run]`, `[declared-ready]`
+- `rules/testing.md` — scale-to-task ladder · `rules/testing-patterns.md` — `[collect-not-run]`, `[declared-ready]`
 - Atone lineage: `bash ~/.claude/scripts/atone.sh search declared-ready`

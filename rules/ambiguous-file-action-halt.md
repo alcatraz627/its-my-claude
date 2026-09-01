@@ -8,6 +8,11 @@ triggers:
 related:
   - rules/communication.md
   - rules/sub-agent-outputs.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; the harness refuses Write-without-Read; the halt gist rides the index line.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
 updated: 2026-09-01

@@ -44,7 +44,7 @@ looked exactly like a real pipeline failure.
    the instant after `browser_navigate` can abort client-side. Allow a settle
    delay and poll for a ready signal rather than assuming.
 3. **A browser abort/timeout is environmental until proven otherwise** (see
-   `rules/testing.md` `[root-cause]`). `net::ERR_ABORTED` / `ECONNABORTED` right
+   `rules/testing-patterns.md` `[root-cause]`). `net::ERR_ABORTED` / `ECONNABORTED` right
    after navigate is usually a timing artifact, not a product bug.
 
 ## What this rule does NOT mean

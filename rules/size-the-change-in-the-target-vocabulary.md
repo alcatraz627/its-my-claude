@@ -16,6 +16,11 @@ related:
   - rules/right-sized-code.md
   - rules/audit-file-character-before-applying-global-rule.md
   - rules/no-silent-ui-surface-deletion.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; binds when sizing work off a design/spec diff; read from the index menu.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
 updated: 2026-09-01

@@ -7,9 +7,14 @@ triggers:
   - phrase:"intentional"
 related:
   - rules/testing.md
+paths:
+  # autoload opt-out (prime-demotion-0901, owner D1a + card agreed, 2026-09-01):
+  # disclosed on demand, not always-on. Gist stays in rules/00-index.md; trigger is a literal system-reminder string; a hinter for that moment is proposed in the backlog.
+  # Sentinel below never matches a real file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
-updated: 2026-05-15
+updated: 2026-09-01
 stale_after_days: 90
 ---
 
