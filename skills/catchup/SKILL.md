@@ -146,9 +146,12 @@ When `--auto` returned exit 2, render the list and prompt the user to pick:
 This prints a numbered table with name / project / age / summary. Show that
 table to the user AS PLAIN TEXT and ask for a number in the conversation, plus
 "or paste an explicit checkpoint path". Never present this through
-`mcp__inputs__pick_one` or any dialog tool: the inputs dialogs are unusable in
-the owner's fullscreen TUI (memory `feedback_askuserquestion_tui_fullscreen`),
-and a picker that hangs is a failed resume.
+`mcp__inputs__pick_one` or any dialog tool. Plain text stays the default even
+though the old fullscreen ban on AskUserQuestion is retired (memory
+`feedback_askuserquestion_tui_fullscreen`, re-verified working 2026-08-20): a
+resume must never hang on a dialog surface, and the inputs-MCP dialogs carry no
+equivalent re-verification on record — that memory is about AskUserQuestion,
+not them. A picker that hangs is a failed resume.
 
 Resolve the typed number via `~/.claude/scripts/checkpoint/resolve.sh --pick <N>` and use that JSON entry; a pasted path is used directly.
 
