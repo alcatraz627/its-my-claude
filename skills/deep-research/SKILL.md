@@ -112,6 +112,13 @@ Do not recommend an action unless the user asked for one. The caller decides.
 
 ## Phase 5: Persist and return
 
+**Section titles are for the reader, not for you.** Before emitting, list your own
+phase names from this file. No section title in the document may contain a content
+word from that list, and none may contain the word "Phase". Retitle any that do, by
+the question the section answers. Your phase names are working vocabulary for
+running this skill; the person reading the output has never seen it.
+
+
 Write the report before returning it, at a path carrying date and time so two
 runs on one day cannot overwrite each other:
 

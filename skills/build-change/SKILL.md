@@ -157,6 +157,13 @@ Do not introduce a helper for a caller that does not exist yet.
 
 ## Phase 8: Emit the plan, then stop for the ruling
 
+**Section titles are for the reader, not for you.** Before emitting, list your own
+phase names from this file. No section title in the document may contain a content
+word from that list, and none may contain the word "Phase". Retitle any that do, by
+the question the section answers. Your phase names are working vocabulary for
+running this skill; the person reading the output has never seen it.
+
+
 **Write the plan to a file before returning it.** The parity ledger is the part
 worth surviving, and a ledger that lives only in a context window is gone at the
 next `/clear` or compaction, which is exactly when `/validate` comes looking for

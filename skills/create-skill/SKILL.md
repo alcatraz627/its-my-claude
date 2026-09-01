@@ -147,7 +147,8 @@ argument-hint: "<…>"                                       # ≤120 chars
 ---
 
 ## Brief
-<what it is and why it exists, ≤8 lines, human voice>
+<what it IS, in the first sentence, before any rationale; then why it exists.
+≤8 lines, human voice. Opening with motivation is the recurring defect here.>
 
 ## Step 0
 Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md`
@@ -156,8 +157,11 @@ when one exists) and the `## <name>:` entries in `~/.claude/skills/runtime-notes
 ## Usage
 <invocation lines + argument table>
 
-## <Phase 1 … N>
-<gather → decide → do → check, named for what they do; as long as the work needs>
+## <one heading per stage, each named for what it holds>
+<gather → decide → do → check, in whatever order the work needs. Name each heading
+for its contents, the way `## Inputs` / `## Sorting open items` / `## Output` do.
+Never emit a heading of the form "Phase N": it names your process, not the reader's
+question, and a generated skill inherits whatever this example shows.>
 
 ## Boundaries
 <what it never does; only when there are real ones>

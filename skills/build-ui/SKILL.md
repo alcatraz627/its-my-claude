@@ -467,6 +467,13 @@ grep done-conditions.
 
 ## Phase 11. Emit the plan, then stop for the ruling
 
+**Section titles are for the reader, not for you.** Before emitting, list your own
+phase names from this file. No section title in the document may contain a content
+word from that list, and none may contain the word "Phase". Retitle any that do, by
+the question the section answers. Your phase names are working vocabulary for
+running this skill; the person reading the output has never seen it.
+
+
 Write to `<app>/.claude/output/<YYYYMMDD>-<HHMM>-<slug>-renovation/PLAN.md`.
 The time segment is not decoration: two plans for one slug on one day collide
 without it, and the second silently overwrites the first.

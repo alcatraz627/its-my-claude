@@ -100,6 +100,18 @@ did not deliver.
 *Lived case:* three escalating asks for a UI pass answered with reviews and
 micro-fixes (`mist-20260811-142119-a5`, S3).
 
+*The repeat may be invisible, because it crossed a session boundary.* A request
+the owner made last week, that nobody delivered, arrives at a fresh session
+looking like a first ask. It is not, and the owner is counting. Two S3 events
+under `repeat-request-dropped-across-sessions`: a page-top loading bar asked for
+repeatedly, where a stub existed in `root.tsx` and successive sessions each
+edited that file without delivering the visible bar; and a task-list grouping the
+owner had ruled four times, re-rendered from the tool's default each time. When a
+request touches a surface that already carries a stub, a half-implementation, or
+a standing ruling, check whether this is the second ask before treating it as the
+first. The board and the callout store exist for exactly this, and they only work
+if you read them.
+
 *The tell that hides:* the second ask does not have to repeat the first. A NEW
 question on the SAME topic, immediately after your answer, is the same signal
 wearing a different phrasing; read it as evidence the first answer was

@@ -91,6 +91,33 @@ printf 'export const existing = 1\nexport function addedApi(){return 2}\n' > "$R
 edited "$REPO/src/base.ts"
 check "tracked-adds-export" BLOCK "$(run "$SID")"
 
+# H: another session left an uncommitted export in a file WE also edit, and we
+# add no export → SILENT. Before the snapshot branch this BLOCKED, because
+# `git diff HEAD` attributed their line to us. Nine proposals' worth of false fire.
+SID=70707070; reset "$SID"
+rm -rf "/tmp/claude-presnap-$SID"
+printf 'export const theirs = 1\n' > "$REPO/src/shared.ts"   # their uncommitted work
+printf '{"session_id":"%s","tool_input":{"file_path":"%s"}}' \
+  "${SID}$(printf '%040d' 0)" "$REPO/src/shared.ts" \
+  | bash "$HOME/.claude/scripts/hooks/snapshot-pre-edit.sh"   # our session starts here
+printf 'export const theirs = 1\nconst ours = 2\n' > "$REPO/src/shared.ts"
+edited "$REPO/src/shared.ts"
+check "cross-session-their-export" SILENT "$(run "$SID")"
+rm -rf "/tmp/claude-presnap-$SID"
+
+# I: same setup, but WE add the export → BLOCK. The positive control for H: a
+# guard that only ever goes silent is not a guard.
+SID=60606060; reset "$SID"
+rm -rf "/tmp/claude-presnap-$SID"
+printf 'const theirs = 1\n' > "$REPO/src/shared2.ts"
+printf '{"session_id":"%s","tool_input":{"file_path":"%s"}}' \
+  "${SID}$(printf '%040d' 0)" "$REPO/src/shared2.ts" \
+  | bash "$HOME/.claude/scripts/hooks/snapshot-pre-edit.sh"
+printf 'const theirs = 1\nexport const ours = 2\n' > "$REPO/src/shared2.ts"
+edited "$REPO/src/shared2.ts"
+check "cross-session-our-export" BLOCK "$(run "$SID")"
+rm -rf "/tmp/claude-presnap-$SID"
+
 echo "---- $pass passed, $fail failed ----"
 rm -rf "$WORK"
 [ "$fail" = 0 ]

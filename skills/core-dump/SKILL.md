@@ -464,6 +464,15 @@ edits the wrong tree. Resolve via `git rev-parse --show-toplevel` +
 bash ~/.claude/skills/shared/lock-file.sh acquire "_checkpoint.claude.md" "core-dump"
 ```
 
+**Every completion claim carries how it was checked.** A successor reads this file
+as fact and acts on it. "Verified", "done", "passing", and "fixed" each need the
+command, the file, or the run that produced them, in the same sentence. Anything
+you believe but did not check is written as unverified, in those words. The
+failure this prevents is a successor inheriting confidence you never earned and
+spending its session on work that was already done, or trusting a claim that was
+never true. Across 122 post-gate checkpoints, completion language outnumbers
+hedged language 72 to 1.
+
 Write to `<project-root>/<resolved-filename>` using the Write tool. The `##`
 section headings below are parsed verbatim by `/catchup` — keep them exact:
 

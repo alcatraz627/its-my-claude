@@ -141,6 +141,13 @@ A ruling is not recorded until it lives in the artifact it governs.
 
 ## Phase 5: build, verify, report
 
+**Section titles are for the reader, not for you.** Before emitting, list your own
+phase names from this file. No section title in the document may contain a content
+word from that list, and none may contain the word "Phase". Retitle any that do, by
+the question the section answers. Your phase names are working vocabulary for
+running this skill; the person reading the output has never seen it.
+
+
 Hand the build to `/bloop` when it warrants the gate, or do it inline when it
 does not. Two rules specific to post-ruling work:
 

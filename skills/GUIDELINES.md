@@ -451,6 +451,35 @@ When a skill generates a file intended as **internal agent context** (session ch
 
 ---
 
+## 10. Writing the documents a skill produces
+
+A skill's phases are named for the agent running them. The document that comes
+out is read by someone who has never seen the skill. These are different
+audiences and the second one is the one that matters.
+
+Before emitting any document a person will read:
+
+1. **Name the reader in one line**, to yourself. A teammate reviewing a change, a
+   future session resuming work, and the owner deciding something are three
+   different readers and want three different registers.
+2. **The first sentence says what the thing IS**, in terms that reader already
+   has, before any sentence of rationale. Rationale goes in paragraph two.
+3. **Section titles name their contents**, not the step that produced them. A
+   title is a navigation target: the reader is scanning for the section that
+   answers their question. Never emit the word "Phase" into a document.
+4. **Table headers name the data in the column**, as a noun phrase. "Check that
+   flips" and "Must still hold" are clauses; "Check" and "Requirement" are headers.
+5. **A metaphor is not a defined term.** If a word does real work in the document
+   (altitude, ladder, skeleton, embryo, lane), either it is defined where it is
+   first used or it is replaced with the thing it stands for.
+
+The full catalogue of tells, with worked before-and-after rewrites, is
+`~/.claude/conventions/doc-writing.md`. Read it before authoring anything longer
+than a page. `python3 ~/.claude/scripts/style/prose-lint.py <file>` checks the
+word-level half; it does not check any of the five points above.
+
+---
+
 ## Skill Authoring Conventions
 
 When **creating a new skill**, follow these conventions (the `/create-skill` wizard

@@ -33,6 +33,7 @@ input=$(cat 2>/dev/null) || exit 0
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -n "$sid" ] || exit 0
 sid8="${sid:0:8}"
+SID8="$sid8"   # exported for new_code_export's snapshot lookup
 EDITED="/tmp/claude-edited-files-${sid8}"
 MARK="/tmp/claude-review-gate-blocked-${sid8}"
 [ -f "$EDITED" ] || exit 0
@@ -112,8 +113,21 @@ nunrev=$("$MARKER" count "$sid8" 2>/dev/null || echo 0)
 # what makes a brand-new .ts/.py file's exports actually register (a whole-tree
 # `git diff` misses untracked files — the false-negative this replaces).
 new_code_export() {
-  local f="$1" groot="$2" added=""
-  if [ -n "$groot" ] && git -C "$groot" ls-files --error-unmatch -- "$f" >/dev/null 2>&1; then
+  local f="$1" groot="$2" added="" snap=""
+  # Prefer this session's own pre-edit snapshot over `git diff HEAD`. HEAD is a
+  # shared baseline: on a tree several sessions are editing, its diff attributes
+  # their uncommitted lines to you, and the gate then demands review of work you
+  # never wrote. snapshot-pre-edit.sh keeps one copy per file per session, taken
+  # before the first edit, which is the only baseline that answers "what did THIS
+  # session add?". Falls back to HEAD when no snapshot exists (a file edited
+  # before the snapshotter was wired, or a resumed session).
+  if [ -n "${SID8:-}" ]; then
+    local fr; fr=$(cd "$(dirname "$f")" 2>/dev/null && printf '%s/%s' "$(pwd -P)" "$(basename "$f")") || fr="$f"
+    snap="/tmp/claude-presnap-${SID8}/$(printf '%s' "$fr" | shasum 2>/dev/null | awk '{print $1}')"
+  fi
+  if [ -n "$snap" ] && [ -f "$snap" ]; then
+    added=$(diff "$snap" "$f" 2>/dev/null | rg '^> ' 2>/dev/null | sed 's/^> //')
+  elif [ -n "$groot" ] && git -C "$groot" ls-files --error-unmatch -- "$f" >/dev/null 2>&1; then
     added=$(git -C "$groot" diff -U0 HEAD -- "$f" 2>/dev/null | rg '^\+[^+]' 2>/dev/null)
   else
     added=$(cat "$f" 2>/dev/null)   # untracked / non-git → whole body is new

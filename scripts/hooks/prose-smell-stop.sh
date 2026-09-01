@@ -20,6 +20,9 @@
 #     decision:block only when PROSE_SMELL_ENFORCE=1. Measure-first rollout:
 #     both source RCAs asked to "flag", cost-of-miss is one LLM-voiced message
 #     (recoverable), and the active Explanatory output style produces em-dashes
+#     legitimately. NOTE: enforcement WAS promoted — settings.json sets
+#     PROSE_SMELL_ENFORCE=1, so decision:block is live. The paragraph below
+#     describes the original measure-first rollout, kept for provenance.
 #     legitimately — so blocking waits for fire-rate telemetry (review verdict
 #     2026-07-10, assets/reports/20260710-queue-reviews/1.5a-prose-smell.md).
 #   any tells at all → systemMessage note (non-blocking, visible)
@@ -92,10 +95,31 @@ if [ "${bold_n:-0}" -gt 5 ] 2>/dev/null; then
   block_hits=$((block_hits + 1))
 fi
 
-# 5 · praise-without-evidence opener (first non-empty prose line).
+# 5 · a self-grading opener on the first non-empty prose line. Two families, one
+# tell: praise the owner did not ask for, and a verdict the owner owns. The
+# verdict half is widened from praise-only per prop-20260812-212542-69 +
+# prop-20260819-172738-2c (atone ai-smell-prose-against-stored-voice, S3 x9);
+# the lexicon is prose-lint.py's VERDICT_OPENER, reused rather than re-invented
+# so the reply gate and the file gate cannot disagree about what a verdict is.
 first_line=$(printf '%s\n' "$prose" | rg -m1 '\S' 2>/dev/null | head -1)
 if printf '%s' "$first_line" | rg -qi "^(you'?re (absolutely |completely |exactly )?right|great (question|point|idea|catch)|excellent|perfect[.!]|fair question|what a )" 2>/dev/null; then
   tells="${tells}\n- praise opener (\"${first_line:0:60}…\") — open with substance, praise only with evidence"
+  block_hits=$((block_hits + 1))
+elif printf '%s' "$first_line" | rg -qiP "^\\W*(\\*\\*)?((Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\\s*[.!:—]|All (done|set|good)\\b|Everything (is|works)\\b|Release is live\\b)" 2>/dev/null; then
+  # WARN-TIER, deliberately. PROSE_SMELL_ENFORCE=1 is set in settings.json, so
+  # this gate really blocks, and a verdict opener is a judgment call that
+  # collides with terse-in-terse-out: "Done. Pushed the fix and reran the suite"
+  # is a shape this account's own doctrine asks for. Flag it, never block on it
+  # alone. The validator produced a compliant reply that this blocked before the
+  # demotion. Promote only if telemetry shows it firing on real defects.
+  tells="${tells}\n- self-grading verdict opener (\"${first_line:0:60}…\") — warn-tier: the done-verdict is the owner's; prefer leading with what is true"
+fi
+
+# 5b · the not-X-but-Y contrastive frame, banned in earnest prose. Same lexicon
+# as prose-lint.py's CONTRASTIVE. Quoted material is already stripped upstream.
+contra_n=$(printf '%s' "$prose" | rg -coiP "\\bnot\\s+[^.;,]{2,40},?\\s+but\\s+" 2>/dev/null || true)
+if [ "${contra_n:-0}" -ge 1 ] 2>/dev/null; then
+  tells="${tells}\n- not-X-but-Y frame ×${contra_n} — state the thing; the contrast scaffold adds length, not meaning"
   block_hits=$((block_hits + 1))
 fi
 

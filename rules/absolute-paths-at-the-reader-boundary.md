@@ -20,5 +20,5 @@ Internal surfaces (notes, checkpoints, WAL entries, sub-agent prompts) may carry
 
 **Diagnostic signal:** the path arrived by copy-paste out of an internal document. That is the most common miss shape, because the citation is correct in the doc it came from and only becomes unresolvable once it crosses into the reply. Owner correction 2026-07-28, then pinned in seven consecutive daily digests without landing.
 
-Note this is a different failure from the trailing-period rule in `CLAUDE.md`, which the `filename-dot-stop.sh` Stop hook enforces mechanically. Relative-path expansion has no hook. Nothing catches it but you.
+Note this is a different failure from the trailing-period rule in `CLAUDE.md`, which the `filename-dot-stop.sh` Stop hook enforces mechanically. Relative-path expansion is enforced too, by `scripts/hooks/relpath-stop.sh` (Stop hook, advisory notice, mute `~/.claude/.no-relpath-gate`). It fires on a cwd-relative deliverable path in a final message and names each one. Treat it as a second reader, not as the check: it strips fenced blocks, so a path in prose is caught and a path in a code block is not.
 

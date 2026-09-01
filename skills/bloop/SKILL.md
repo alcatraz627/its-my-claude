@@ -193,6 +193,13 @@ Triage the findings (blocker / major / minor / nit) and act — **non-defensivel
 
 ## Phase 6 — Docs
 
+**Section titles are for the reader, not for you.** Before emitting, list your own
+phase names from this file. No section title in the document may contain a content
+word from that list, and none may contain the word "Phase". Retitle any that do, by
+the question the section answers. Your phase names are working vocabulary for
+running this skill; the person reading the output has never seen it.
+
+
 Close the loop legibly.
 
 1. Update the design / status / ledger docs to reflect what shipped — and what's deferred.
