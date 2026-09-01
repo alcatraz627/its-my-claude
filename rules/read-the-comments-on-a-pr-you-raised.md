@@ -16,7 +16,7 @@ related:
   - rules/pushback-and-self-criticism.md
 tier: 1
 category: rules
-updated: 2026-08-19
+updated: 2026-09-01
 stale_after_days: 180
 ---
 
@@ -100,7 +100,10 @@ to write is false.
 
 ## What this is not
 
-Not a poll loop that blocks your session. Check when the run has plausibly
+Not a bot-chase on a PR the bot will never review: under a `[nobot] [noslack]`
+title (`rules/pr-nobot-noslack-codex-review.md`, every agent-raised PR) the
+review bot is silenced, so the loop covers human comments and the local codex
+verdict, and "until the bot concedes" is vacuous there. Not a poll loop that blocks your session. Check when the run has plausibly
 finished, and again after each push. Not a mandate to obey every finding
 either: a wrong finding gets a sentence saying why, which is itself the answer,
 and then an issue so it gets fixed at the source.

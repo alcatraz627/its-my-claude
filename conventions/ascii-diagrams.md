@@ -18,7 +18,7 @@ When explaining architecture, data flows, state machines, request lifecycles, di
 ## Rules
 
 - Use Unicode box-drawing characters: `┌─┐│└─┘├┤┬┴┼──▶`
-- Place the diagram **before** the text explanation
+- Place the diagram **before** the text explanation, but below the direct answer line — `rules/dense-briefing-direct-answer.md` owns line 1
 - Max width: **78 chars**
 - Wrap in code blocks so rendering is monospaced
 - Use `/diagram` skill for complex layouts

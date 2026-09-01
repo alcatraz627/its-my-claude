@@ -12,7 +12,7 @@ triggers:
 related: [rules/comments.md, rules/pushback-and-self-criticism.md, conventions/doc-writing.md, rules/machine-token-where-human-words-belong.md]
 tier: 2
 category: rules
-updated: 2026-08-25
+updated: 2026-09-01
 stale_after_days: 120
 ---
 
@@ -56,7 +56,9 @@ Scan a draft for a human and cut these tells before sending:
 - **Over-bulleting and bold-spam.** If every line is a bolded bullet, nothing is
   emphasized. Prefer prose; cap bold near one phrase per message.
 - **Decoration as rigor.** No star insight boxes, traffic-light or section emoji to
-  perform thoroughness. See [[pushback-and-self-criticism]].
+  perform thoroughness. (The Explanatory output style's ★ blocks are exempt when
+  they carry something not already in the reply or a file written this turn —
+  the same boundary `dense-briefing-direct-answer.md` draws.) See [[pushback-and-self-criticism]].
 - **Distrust after a settled decision.** If the user explicitly confirmed a call, do
   not re-file it as a "blocker" or "confirm this". Say it once if a doc needs the
   update, then drop it.

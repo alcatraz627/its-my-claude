@@ -56,6 +56,11 @@ flagship-dispatch occurrences in the versable-builder planning session.
    the wording of both lives in `rules/subagent-dispatch-prompt.md` with the other two
    clauses every brief carries.
 2. In-flight agents are let to finish; the rule governs new dispatches.
+3. **Fable does involved work ITSELF.** Owner ruling 2026-09-01, verbatim: "for
+   involved work we want fable to do it ITSELF (no subagent); only applies to
+   fable tier models" — a fable-tier main agent never delegates its involved work
+   to sub-agents. Enforced: guard-model-tier.sh job 2b (fable-delegation block),
+   `guard-model-tier.fable-delegation.test.sh`.
 
 ## Decision rules (task class → lane)
 

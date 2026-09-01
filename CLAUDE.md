@@ -48,7 +48,7 @@ Commit after each logical unit, before area switch, before risky ops, every ~15-
 
 ### Comments are for humans first
 
-Comments are for humans first, AI agents second, machines never. First sentence of every non-trivial docstring is code-agnostic — what the thing IS in human terms. Speak from the caller's perspective, not the machine's. NEVER include `[claude@<ts>]` tags, "Phase N / Track X / Round Y" plan refs, "pre-fix/post-fix" archeology, or shipped-already TODOs — those rot. Docstrings >8 lines move to a doc. Full rules: `rules/comments.md`. This generalizes to all prose: writing is a UI surface with an audience. Human readers (comments, docs, PRs, user-facing messages) get a human voice, meaning-first, no em-dashes or AI-smell; agent readers (internal notes, RCAs) can be dry but still read meaning-first. Identify the reader before writing: `rules/audience-aware-writing.md`.
+Comments are for humans first, AI agents second, machines never. First sentence of every non-trivial docstring is code-agnostic — what the thing IS in human terms. Speak from the caller's perspective, not the machine's. NEVER include `[claude@<ts>]` tags in human comments (separate agent-note blocks may carry them — `rules/comments.md` §4), "Phase N / Track X / Round Y" plan refs, "pre-fix/post-fix" archeology, or shipped-already TODOs — those rot. Docstrings >8 lines move to a doc. Full rules: `rules/comments.md`. This generalizes to all prose: writing is a UI surface with an audience. Human readers (comments, docs, PRs, user-facing messages) get a human voice, meaning-first, no em-dashes or AI-smell; agent readers (internal notes, RCAs) can be dry but still read meaning-first. Identify the reader before writing: `rules/audience-aware-writing.md`.
 
 ### Atone — mistake tracking & affirmation system
 
@@ -62,7 +62,7 @@ Comments are for humans first, AI agents second, machines never. First sentence 
 
 ### Proactive ASCII diagrams
 
-When explaining architecture, flows, state machines, or multi-step processes, include a Unicode box-drawing diagram **before** the text. Max width 78 chars, wrap in code block. Do NOT diagram simple lists, single functions, or error messages. Full rules: `conventions/ascii-diagrams.md`.
+When explaining architecture, flows, state machines, or multi-step processes, include a Unicode box-drawing diagram **before** the prose explanation — below the direct answer line, which `rules/dense-briefing-direct-answer.md` still owns. Max width 78 chars, wrap in code block. Do NOT diagram simple lists, single functions, or error messages. Full rules: `conventions/ascii-diagrams.md`.
 
 ### Building a terminal UI — use the `std::claude::tui` library (INSISTENT)
 
