@@ -390,6 +390,15 @@
             "command": "~/.claude/scripts/hooks/persona-log-nudge.sh"
           }
         ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/skill-invocation-log.sh"
+          }
+        ]
       }
     ],
     "PreCompact": [
@@ -507,6 +516,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-banned-vocab.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/snapshot-pre-edit.sh"
           }
         ]
       },
@@ -799,7 +812,7 @@
         ]
       },
       {
-        "matcher": "Write|Edit",
+        "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -817,6 +830,15 @@
           {
             "type": "command",
             "command": "/bin/bash ~/.claude/scripts/hooks/subagent-box.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Artifact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-artifact-unasked.sh"
           }
         ]
       }
@@ -1049,6 +1071,14 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/heed-writeback.sh resolve"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/ui-callouts-gate.sh"
           }
         ]
       }
@@ -1311,7 +1341,7 @@
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": false,
   "theme": "dark",
-  "verbose": true,
+  "verbose": false,
   "preferredNotifChannel": "ghostty",
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
