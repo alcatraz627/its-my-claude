@@ -24,6 +24,11 @@ local CALLOUTS = {
   IMPORTANT = "Callout Important",
 }
 
+-- Glyphs pair with the colours in theme.json; keep the two in step.
+local GLYPHS = {
+  NOTE = "◈", TIP = "✦", WARNING = "▲", CAUTION = "▲", IMPORTANT = "●",
+}
+
 local DIAGRAM_CLASSES = { diagram = true, ascii = true, text = true, [""] = true }
 
 local function custom(style, blocks)
@@ -42,9 +47,10 @@ function BlockQuote(el)
   while first.content[1] and (first.content[1].t == "SoftBreak" or first.content[1].t == "Space") do
     table.remove(first.content, 1)
   end
-  local label = kind:sub(1, 1) .. kind:sub(2):lower()
-  table.insert(first.content, 1, pandoc.Span({ pandoc.Strong(pandoc.Str(label)), pandoc.Str("  ") }))
-  return custom(CALLOUTS[kind], el.content)
+  -- Ruled layout: the kind on its own head line (glyph + label), body below.
+  local head = custom(CALLOUTS[kind] .. " Head",
+    { pandoc.Para({ pandoc.Str(GLYPHS[kind] .. "  " .. kind) }) })
+  return { head, custom(CALLOUTS[kind], el.content) }
 end
 
 function CodeBlock(el)

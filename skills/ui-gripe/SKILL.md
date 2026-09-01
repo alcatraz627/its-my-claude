@@ -139,7 +139,16 @@ evidence — rather than inventing findings. See `rules/pushback-and-self-critic
 
 ## Post-run
 
-Per GUIDELINES.md, prepend a short entry to `~/.claude/skills/ui-gripe/runtime-notes.md`
+MANDATORY, every run (unlogged usage is invisible to the adoption audits; the
+2026-08-10 review nearly retired this lane on missing telemetry):
+
+```bash
+bash ~/.claude/scripts/skill-log.sh record ui-gripe \
+  --task "<surface griped, one line>" --outcome <ok|revised|failed> --corrections <n> \
+  --note "findings=<n> surface=<path-or-url>"
+```
+
+Per GUIDELINES.md, also prepend a short entry to `~/.claude/skills/ui-gripe/runtime-notes.md`
 (purpose + 2–4 insights) when the run surfaced anything reusable — a rubric item that
 keeps firing, a see read that needed a crop, a gripe class this skill handles badly.
 

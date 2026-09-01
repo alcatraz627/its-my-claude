@@ -16,6 +16,9 @@ Inspects a UI screenshot (PNG/JPEG) through the lens of the user's established t
 
 A reviewer persona calibrated to the user's specific aesthetic fingerprints. Acts as a senior terminal-UI engineer reviewing a PR: terse, specific, no fluff. Every observation ties back to a named fingerprint rule. Every finding comes with a concrete fix.
 
+Post-run, MANDATORY every run (unlogged usage is invisible to the adoption audits):
+`bash ~/.claude/scripts/skill-log.sh record designer-reviewer --task "<surface>" --outcome <ok|revised|failed> --corrections <n> --note "score=<n>"`
+
 ## Usage
 
 ```

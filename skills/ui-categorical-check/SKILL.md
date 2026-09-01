@@ -29,15 +29,21 @@ permanent gate instead of a lesson relearned.
 Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the run. Also read this
 skill's `runtime-notes.md` if present.
 
+## Post-run (MANDATORY, every run)
+
+Unlogged usage is invisible to the adoption audits. Record the run:
+`bash ~/.claude/scripts/skill-log.sh record ui-categorical-check --task "<surface>" --outcome <ok|revised|failed> --corrections <n> --note "classes_fired=<n>"`
+
 ## Phase 1 — Load the pattern catalog (the checklist is DATA, not prose here)
 
 The catalog lives with the project it was mined from, so it stays close to the feedback
 that produced it:
 
-- Versable: `speedway/.claude/output/20260714-ui-categorical/patterns.md` — speedway,
-  NOT versable-builder. speedway tracks `.claude/output/`; versable-builder gitignores
-  it, so a catalog written there would not survive a clone. speedway is also where the
-  UI being checked actually lives.
+- Versable: `versable-builder/docs/ui-categorical/patterns.md` is the CANONICAL copy
+  since 2026-08-31 (12 classes: the 10 mined ones plus the em-dash and shade-step
+  mechanical checks). It lives in `docs/`, which versable-builder tracks. The old
+  speedway copy (`speedway/.claude/output/20260714-ui-categorical/patterns.md`) is its
+  frozen ancestor, kept because that repo tracks `.claude/output/`.
 - gcc tooling UIs (the kanban board and hub, the instances hub, decision pages,
   anything served out of `~/.claude`):
   `~/.claude/assets/reports/*-ui-categorical/patterns.md`, currently the

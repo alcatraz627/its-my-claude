@@ -69,19 +69,45 @@ catch offending issues.
 
 ## What the renderer already decides (do not re-decide in DOC.md)
 
-- One theme: Calibri 11pt body, bold slate-blue headings at 20 / 15 / 12.5 / 11pt
-  with a rule under level 1, Consolas 9pt code on a tinted box with an accent bar,
-  diagrams in a hairline frame, inline code on a light tint, tables with an accent
-  header row, white header text and banded body, four callout tints, A4 with one
-  inch margins, a footer with the title left and "Page N of M" right. `--accent`,
-  `--font-body`, `--font-mono`, `--paper` exist for a document that must match a
-  house style; say so in the delivery message when you used one.
-- Fonts are names the reader's machine must have. Calibri and Consolas ship with
-  Word. Google Docs renders Calibri; whether it renders Consolas or substitutes is
-  UNCONFIRMED (no Drive upload has been checked yet; do it on the first real one
-  and record the answer in runtime notes). The docx declares the mono font as
-  fixed-pitch so a viewer without it should pick another mono, and
-  `--font-mono "Courier New"` is the fallback every viewer has.
+- **The theme is a spec file, not code constants.** The owner-ruled standard
+  lives in `~/.claude/scripts/word-doc/theme.json` (fonts, palette, callout
+  colors and glyphs, and prose notes naming each ruled structure), and
+  `render.py` auto-loads it on every run. Ruled 2026-09-01 over three decision
+  pages: Inter 700 titles, Inter body, JetBrains Mono code; dotted-separator
+  tables (no header fill, accent header text over a dashed accent rule); code
+  and diagram blocks in a dotted frame with a solid accent left bar on the
+  soft-card tint; an indent-rail contents list; callouts with the kind on its
+  own head line (glyph + label in the kind color) and the body below. Links
+  render in the accent color with no underline. Margins are half an inch all
+  round, callouts run margin to margin with the bar in the gutter, and the
+  vertical rhythm is deliberately open (title, headings, contents rows,
+  callouts, tables, code boxes all carry ruled spacing). Change the theme by
+  editing theme.json, never by re-deriving styles in DOC.md; `--accent`,
+  `--font-body`, `--font-mono`, `--paper` still override per document, and say
+  so in the delivery message when you used one.
+- Fonts are names the reader's machine must have. Inter and JetBrains Mono are
+  installed here and cover any machine that also has them; a machine without
+  them substitutes by declared shape (a variable sans, a fixed-pitch mono).
+  Both faces are in the Google Fonts catalog, so a Drive conversion should keep
+  the typography. That is UNCONFIRMED until the first real upload; check it
+  then and record the answer in runtime notes. `--font-body Calibri
+  --font-mono Consolas` remains the every-Windows-machine fallback.
+
+## Delivering to Google Drive (optional, on request)
+
+The docs land in the owner's Drive, so the skill can deliver there directly:
+`bash ~/.claude/scripts/word-doc/gdrive-upload.sh <file.docx> [drive-folder]`
+uploads via rclone with `--drive-import-formats docx`, which converts the file
+to a native Google Doc on upload. The default folder `Docs` is the ruled
+destination (owner, 2026-09-01: the pick was right, and moving inside Drive is
+easy, so never ask for a path first). The script auto-detects the configured
+remote (currently `versable`; `RCLONE_REMOTE` overrides). Auth was configured
+once by the human and the stored refresh token is durable; if the remote is
+ever missing the script says exactly what to run and exits, and the OAuth is
+never attempted from a tool call. After delivering to Drive, print the link
+(`rclone link "<remote>:Docs/<name>.docx"`). Upload when the doc is plainly
+bound for Drive or the owner asks; the first confirmed conversion happened
+2026-09-01.
 - The contents list is static and hyperlinked (levels 1 to 3), not a Word TOC
   field, because the field ships empty to Google Docs and LibreOffice.
 - Syntax highlighting is pandoc's, 160+ languages, `tango` by default.

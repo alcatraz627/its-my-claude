@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-08-27
+updated: 2026-09-01
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-08-27 00:31.
+Regenerated 2026-09-01 02:26.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -75,10 +75,11 @@ Regenerated 2026-08-27 00:31.
 | `probe` | yes | Drives a defect to its confirmed mechanism before any fix: a runnable probe isolates the one unknown, the harness is ruled out first, and a second fix attempt on the … |
 | `pyramid-sweep` | yes | Runs a pyramid-of-intelligence corpus sweep — mine a large transcript corpus for candidate items with cheap mechanical passes, then refine through progressively smarter … |
 | `readme` | yes | Scans a git repo's structure, docs, package metadata, and prior skill reports — generates a polished README.md with GitHub-style badges, a pixel-art cover image, a … |
+| `recommend` | yes | Answers what to do next on a session, project, or plan file as a call already made, splitting what it needs from you into gates you can clear today and defaults it took … |
 | `retro-dump` | yes | Manually trigger a retroactive /core-dump on a past session that ended without one. Headless — spawns `claude -p --resume <uuid>` to read the transcript and synthesize a … |
 | `revive` | yes | Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume … |
 | `roster-budget` | yes | Measures the skill roster against its listing budget and names the skills whose descriptions are being dropped, ranked by what each long description costs. Use when a … |
-| `router` | yes | The front door to the routing skills, one prefix. /router:pick-skill when the instrument is not obvious, /router:plan for how to approach something, /router:ui for … |
+| `router` | yes | One prefix for the five routers. /router:pick-skill (find the instrument) · /router:plan (how to approach) · /router:ui (any screen) · /router:validate (before calling … |
 | `session-stats` | yes | Full session analytics report — cost, tokens, tools, rate limits, context usage, and activity timeline |
 | `skeptical-review` | yes | Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling … |
 | `ste-writing` | yes | Rewrite prose into Simplified Technical English adapted to this account. Covers docs, READMEs, PR descriptions and their inventories, error messages, release notes, … |
@@ -91,6 +92,7 @@ Regenerated 2026-08-27 00:31.
 | `ui-categorical-check` | yes | Checks a UI change for CATEGORICAL bug-classes — the non-primitive defects that pass every DOM/behavioral assertion and only a human notices (a transparent floating … |
 | `ui-direction` | yes | Finds and rules on a visual direction before anyone plans or builds. Grounds the work in a cited research sheet that reads the owner's rejection record FIRST, runs the … |
 | `ui-gripe` | yes | Diagnoses WHY a UI feels stupid, confusing, or frustrating — runs the local see --ui structural inventory as $0 ground truth, then a native-vision judgment pass to name … |
+| `ui-loop` | yes | Drives a UI change to convergence through the local-models loop, where scripts measure, Claude judges, the ledger tracks, and `see reshoot` re-captures. Use for … |
 | `validate` | yes | Routes a finished or nearly-finished change to the checks it actually needs, by first naming every validation question the change raises and then saying which instrument … |
 | `vis-compare` | yes | Judges whether a recreated image faithfully imitates a reference — runs the local `see diff A B` deterministic evidence pack (text/color/hash/shape, zero-cost, … |
 | `wake` | user-only | Arm an opt-in wake monitor that revives THIS session if an outage leaves it alive-but-idle. A turn killed by a transient API error stops dead until a human types "keep … |

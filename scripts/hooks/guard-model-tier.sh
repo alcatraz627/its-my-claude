@@ -53,6 +53,42 @@ if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
   fi
 fi
 
+# 2b — a fable lane may not delegate its OWN work away (hard block, no self-mute).
+#
+# Owner ruling 2026-09-01. A fable session is the brains lane: it exists to do the
+# involved thinking, and authoring docs IS the involved thinking. Measured over 30
+# days, 129 docs-shaped dispatches went out and 100 of them landed on sonnet, one
+# of which literally read "Adopt the dispatch persona at personas/doc-writer.md".
+# Rules alone never bound this because nothing read them.
+#
+# The asymmetry is deliberate and runs one way only:
+#   fable  -> sub-agent for AUTHORING  = blocked, fable does it itself
+#   fable  -> sub-agent for review / verification / a cheap pass = fine
+#   opus/sonnet -> fable sub-agent for docs = fine, gated by 2 above, not here
+#
+# Dispatcher model comes from the transcript, because the payload carries only the
+# SUB-agent's pin. The last assistant entry's message.model is this session's own.
+TP=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
+if [ -n "$TP" ] && [ -f "$TP" ]; then
+  PARENT=$(tail -n 400 "$TP" 2>/dev/null | jq -rc 'select(.type=="assistant") | .message.model // empty' 2>/dev/null | tail -n 1)
+  case "$PARENT" in
+    *fable*|*mythos*)
+      PH=$(echo "$INPUT" | jq -r '.tool_input.prompt // empty' 2>/dev/null)
+      # Allowed first: a seat that reads, checks or judges is exactly what a brains
+      # lane SHOULD delegate. Checked before the authoring list because a review
+      # brief legitimately says "the docs you wrote".
+      if printf '%s' "$PH" | rg -qiP '\b(review|adversarial|verify|verification|validate|check|audit|critique|judge|proofread|lint|test|reproduce|fact.?check|second seat|read.only|sanity)\b' 2>/dev/null; then
+        :
+      elif printf '%s' "$PH" | rg -qiP '\b(write|author|draft|compose|rewrite|document|documentation|docs|readme|guide|handbook|spec|plan|design|implement|build|refactor|migrate)\b' 2>/dev/null; then
+        reason="⛔ FABLE MAY NOT DELEGATE ITS OWN WORK. This session is running on '$PARENT', the brains lane, and this dispatch hands authoring work to a sub-agent. Authoring IS the work the lane exists for: do it yourself. Delegating review, verification, a cheap pass or a fact-check is fine and encouraged; delegating writing, planning, designing or implementing is not. Owner ruling 2026-09-01, after 100 of 129 docs-shaped dispatches in 30 days landed on sonnet. An opus or sonnet session may still dispatch fable for docs; this gate binds the fable lane only. No mute: the owner asked for a hard block."
+        bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block-fable-delegation --heeded unknown >/dev/null 2>&1 || true
+        jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+        exit 0
+      fi
+      ;;
+  esac
+fi
+
 # 3 — the missing-pin warn (muteable).
 [ "${MODEL_TIER_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.model-tier-off" ] && exit 0

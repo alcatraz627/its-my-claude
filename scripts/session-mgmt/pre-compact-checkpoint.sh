@@ -397,6 +397,22 @@ echo "" >&2
 echo "After compaction, run: /catchup" >&2
 echo "  (reads $symlink via WAL fast path or checkpoint file)" >&2
 
+# ── 5b. Measure the prose this hook just wrote (log only, never blocks) ──────
+# A hook writes this file, and PreToolUse only sees an agent's Write/Edit, so no
+# prose gate has ever inspected a checkpoint. Across 122 post-gate checkpoints
+# that left 388 connective dashes the write gate would have blocked. This does
+# not gate: a compaction snapshot has no fallback floor, so refusing to write one
+# loses the session's state entirely. It measures, so the surface stops being dark.
+if [[ -f "$dump_file" ]] && command -v python3 >/dev/null 2>&1; then
+  _pl=$(python3 "$HOME/.claude/scripts/style/prose-lint.py" --json "$dump_file" 2>/dev/null) || _pl=""
+  if [[ -n "$_pl" ]]; then
+    mkdir -p "$HOME/.claude/logs"
+    printf '{"ts":"%s","session":"%s","file":"%s","lint":%s}\n' \
+      "${ts:-$(date +%H:%M)}" "${session_id:-unknown}" "$dump_file" "$_pl" \
+      >> "$HOME/.claude/logs/checkpoint-prose.jsonl" 2>/dev/null || true
+  fi
+fi
+
 # ── 6. Asset cleanup (non-blocking) ──────────────────────────────────────────
 bash "$HOME/.claude/assets/asset.sh" cleanup >/dev/null 2>&1 || true
 

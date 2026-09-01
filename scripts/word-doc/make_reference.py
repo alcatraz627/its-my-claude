@@ -15,6 +15,7 @@ Fonts are names, not files. The viewer's machine must have them, so the defaults
 are the ones Word and Google Docs both ship: Calibri for text, Consolas for code.
 """
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -49,7 +50,33 @@ PAPER = {
     "a4":     dict(w=11906, h=16838),
     "letter": dict(w=12240, h=15840),
 }
-MARGIN = 1440  # 1 inch, in twips (1/20 pt)
+MARGIN = 720  # half inch, in twips; halved by owner ruling 2026-09-01
+
+
+def load_theme_spec(path=None):
+    """The ruled theme lives in theme.json beside this script; the dicts above
+    are the fallback when it is absent. Returns (theme, callouts) where callouts
+    maps style name -> (fill, bar)."""
+    p = Path(path) if path else Path(__file__).parent / "theme.json"
+    t = dict(THEME)
+    c = dict(CALLOUTS)
+    if p.exists():
+        spec = json.loads(p.read_text(encoding="utf-8"))
+        f = spec.get("fonts", {})
+        t["font_body"] = f.get("body", t["font_body"])
+        t["font_mono"] = f.get("mono", t["font_mono"])
+        pal = spec.get("palette", {})
+        for k in ("accent", "accent_soft", "secondary", "tint", "ink", "muted",
+                  "code_bg", "code_border", "grid", "band"):
+            if k in pal:
+                t[k] = pal[k]
+        for kind, v in spec.get("callouts", {}).items():
+            name = "Callout " + kind.capitalize()
+            if "fill" in v and "bar" in v:
+                c[name] = (v["fill"], v["bar"])
+    t.setdefault("secondary", t["accent"])
+    t.setdefault("tint", t["band"])
+    return t, c
 
 
 def hp(pt):
@@ -62,10 +89,11 @@ def run_fonts(t, mono=False):
     return f'<w:rFonts w:ascii="{f}" w:hAnsi="{f}" w:cs="{f}" w:eastAsia="{f}"/>'
 
 
-def styles_override(t):
+def styles_override(t, callouts=None):
     """The paragraph/character/table styles the theme owns. Each entry replaces
     the style of the same id in pandoc's default, or is appended if new."""
     acc, soft, ink, muted = t["accent"], t["accent_soft"], t["ink"], t["muted"]
+    callouts = callouts or CALLOUTS
     S = {}
 
     S["Normal"] = f'''
@@ -97,10 +125,10 @@ def styles_override(t):
     # Heading ramp: 20 / 15 / 12.5 / 11 pt, accent colour, keep-with-next.
     # H1 carries a thin rule under it so a new top-level section reads as a section.
     ramp = [
-        (1, 20, 480, 120, True),
-        (2, 15, 360, 80, False),
-        (3, 12.5, 280, 60, False),
-        (4, 11, 240, 40, False),
+        (1, 20, 520, 180, True),
+        (2, 15, 400, 130, False),
+        (3, 12.5, 300, 90, False),
+        (4, 11, 260, 60, False),
     ]
     for lvl, pt, before, after, rule in ramp:
         border = (f'<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="4" w:color="{soft}"/></w:pBdr>'
@@ -116,13 +144,13 @@ def styles_override(t):
     S["Title"] = f'''
   <w:style w:type="paragraph" w:styleId="Title">
     <w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="BodyText"/><w:link w:val="TitleChar"/><w:uiPriority w:val="10"/><w:qFormat/>
-    <w:pPr><w:spacing w:before="0" w:after="60"/><w:contextualSpacing/></w:pPr>
+    <w:pPr><w:spacing w:before="0" w:after="140"/><w:contextualSpacing/></w:pPr>
     <w:rPr>{run_fonts(t)}<w:b/><w:color w:val="{acc}"/><w:sz w:val="{hp(28)}"/><w:szCs w:val="{hp(28)}"/></w:rPr>
   </w:style>'''
     S["Subtitle"] = f'''
   <w:style w:type="paragraph" w:styleId="Subtitle">
     <w:name w:val="Subtitle"/><w:basedOn w:val="Normal"/><w:next w:val="BodyText"/><w:link w:val="SubtitleChar"/><w:uiPriority w:val="11"/><w:qFormat/>
-    <w:pPr><w:spacing w:before="0" w:after="120"/></w:pPr>
+    <w:pPr><w:spacing w:before="0" w:after="220"/></w:pPr>
     <w:rPr>{run_fonts(t)}<w:color w:val="{muted}"/><w:sz w:val="{hp(14)}"/><w:szCs w:val="{hp(14)}"/></w:rPr>
   </w:style>'''
     for sid, name in (("Author", "Author"), ("Date", "Date")):
@@ -133,12 +161,14 @@ def styles_override(t):
     <w:rPr><w:color w:val="{muted}"/><w:sz w:val="{hp(10.5)}"/><w:szCs w:val="{hp(10.5)}"/></w:rPr>
   </w:style>'''
 
-    # Code block: mono, tinted, accent bar on the left, never split across pages
-    # when it can be helped.
-    code = f'''<w:pBdr><w:left w:val="single" w:sz="18" w:space="8" w:color="{acc}"/></w:pBdr>
+    # Code block, per the ruled theme: solid accent bar left, dashed hairline on
+    # the other three sides, soft-card fill. Never split across pages when it
+    # can be helped.
+    cb = t["code_border"]
+    code = f'''<w:pBdr><w:top w:val="dashed" w:sz="6" w:space="6" w:color="{cb}"/><w:left w:val="single" w:sz="18" w:space="8" w:color="{acc}"/><w:bottom w:val="dashed" w:sz="6" w:space="6" w:color="{cb}"/><w:right w:val="dashed" w:sz="6" w:space="8" w:color="{cb}"/></w:pBdr>
       <w:shd w:val="clear" w:color="auto" w:fill="{t["code_bg"]}"/>
-      <w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/>
-      <w:ind w:left="120"/><w:keepLines/>'''
+      <w:spacing w:before="160" w:after="220" w:line="240" w:lineRule="auto"/>
+      <w:ind w:left="120" w:right="120"/><w:keepLines/>'''
     S["SourceCode"] = f'''
   <w:style w:type="paragraph" w:customStyle="1" w:styleId="SourceCode">
     <w:name w:val="Source Code"/><w:basedOn w:val="Normal"/><w:link w:val="VerbatimChar"/>
@@ -146,14 +176,12 @@ def styles_override(t):
     <w:rPr>{run_fonts(t, mono=True)}<w:sz w:val="{hp(t["code_pt"])}"/><w:szCs w:val="{hp(t["code_pt"])}"/></w:rPr>
   </w:style>'''
 
-    # Diagram: an ASCII figure. Same box as code but a full hairline frame and
-    # no accent bar, so the eye reads "figure", not "snippet".
+    # Diagram: an ASCII figure. The ruled theme gives it the same dressed box as
+    # code (the dir tree was the specimen the ruling was made on).
     S["Diagram"] = f'''
   <w:style w:type="paragraph" w:customStyle="1" w:styleId="Diagram">
     <w:name w:val="Diagram"/><w:basedOn w:val="Normal"/>
-    <w:pPr><w:pBdr><w:top w:val="single" w:sz="4" w:space="6" w:color="{t["code_border"]}"/><w:left w:val="single" w:sz="4" w:space="8" w:color="{t["code_border"]}"/><w:bottom w:val="single" w:sz="4" w:space="6" w:color="{t["code_border"]}"/><w:right w:val="single" w:sz="4" w:space="8" w:color="{t["code_border"]}"/></w:pBdr>
-      <w:shd w:val="clear" w:color="auto" w:fill="{t["code_bg"]}"/>
-      <w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/><w:ind w:left="120" w:right="120"/><w:keepLines/></w:pPr>
+    <w:pPr>{code}</w:pPr>
     <w:rPr>{run_fonts(t, mono=True)}<w:color w:val="{ink}"/><w:sz w:val="{hp(t["diagram_pt"])}"/><w:szCs w:val="{hp(t["diagram_pt"])}"/></w:rPr>
   </w:style>'''
 
@@ -172,12 +200,23 @@ def styles_override(t):
     <w:rPr><w:i/><w:color w:val="{muted}"/></w:rPr>
   </w:style>'''
 
-    for name, (fill, bar) in CALLOUTS.items():
+    # Callouts, per the ruled layout: a head paragraph (glyph + kind, in the
+    # kind's colour) and the body under it. Same fill and bar on both, so Word
+    # merges them into one visual block; the head keeps next.
+    for name, (fill, bar) in callouts.items():
         sid = name.replace(" ", "")
+        box = (f'<w:pBdr><w:left w:val="single" w:sz="24" w:space="10" w:color="{bar}"/></w:pBdr>'
+               f'<w:shd w:val="clear" w:color="auto" w:fill="{fill}"/>')
+        S[sid + "Head"] = f'''
+  <w:style w:type="paragraph" w:customStyle="1" w:styleId="{sid}Head">
+    <w:name w:val="{name} Head"/><w:basedOn w:val="Normal"/><w:next w:val="{sid}"/><w:qFormat/>
+    <w:pPr><w:keepNext/><w:keepLines/>{box}<w:spacing w:before="200" w:after="20"/></w:pPr>
+    <w:rPr><w:b/><w:color w:val="{bar}"/><w:spacing w:val="16"/><w:sz w:val="{hp(9.5)}"/><w:szCs w:val="{hp(9.5)}"/></w:rPr>
+  </w:style>'''
         S[sid] = f'''
   <w:style w:type="paragraph" w:customStyle="1" w:styleId="{sid}">
     <w:name w:val="{name}"/><w:basedOn w:val="Normal"/><w:qFormat/>
-    <w:pPr><w:pBdr><w:left w:val="single" w:sz="24" w:space="10" w:color="{bar}"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="{fill}"/><w:spacing w:before="120" w:after="160"/><w:ind w:left="120" w:right="120"/><w:keepLines/></w:pPr>
+    <w:pPr>{box}<w:spacing w:before="0" w:after="220"/><w:keepLines/></w:pPr>
     <w:rPr><w:sz w:val="{hp(t["body_pt"] - 0.5)}"/><w:szCs w:val="{hp(t["body_pt"] - 0.5)}"/></w:rPr>
   </w:style>'''
 
@@ -193,23 +232,27 @@ def styles_override(t):
     S["TableSpacer"] = '''
   <w:style w:type="paragraph" w:customStyle="1" w:styleId="TableSpacer">
     <w:name w:val="Table Spacer"/><w:basedOn w:val="Normal"/>
-    <w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr>
+    <w:pPr><w:spacing w:before="0" w:after="200" w:line="240" w:lineRule="auto"/></w:pPr>
     <w:rPr><w:sz w:val="8"/><w:szCs w:val="8"/></w:rPr>
   </w:style>'''
 
     S["Hyperlink"] = f'''
   <w:style w:type="character" w:styleId="Hyperlink">
     <w:name w:val="Hyperlink"/><w:basedOn w:val="DefaultParagraphFont"/>
-    <w:rPr><w:color w:val="{acc}"/><w:u w:val="single"/></w:rPr>
+    <w:rPr><w:color w:val="{acc}"/></w:rPr>
   </w:style>'''
 
-    for lvl, ind in ((1, 0), (2, 360), (3, 720)):
+    # Contents, per the ruled indent-rail: an accent rail down the left of every
+    # entry, level 1 semibold, deeper levels indented and muted.
+    rail = f'<w:pBdr><w:left w:val="single" w:sz="18" w:space="14" w:color="{acc}"/></w:pBdr>'
+    for lvl, ind in ((1, 300), (2, 660), (3, 1020)):
         bold = "<w:b/>" if lvl == 1 else ""
+        color = "" if lvl == 1 else f'<w:color w:val="{muted}"/>'
         S[f"TOC{lvl}"] = f'''
   <w:style w:type="paragraph" w:customStyle="1" w:styleId="TOC{lvl}">
     <w:name w:val="TOC {lvl}"/><w:basedOn w:val="Normal"/><w:qFormat/>
-    <w:pPr><w:spacing w:before="{40 if lvl > 1 else 100}" w:after="20"/><w:ind w:left="{ind}"/></w:pPr>
-    <w:rPr>{bold}<w:sz w:val="{hp(10.5)}"/><w:szCs w:val="{hp(10.5)}"/></w:rPr>
+    <w:pPr>{rail}<w:spacing w:before="{40 if lvl > 1 else 100}" w:after="60"/><w:ind w:left="{ind}"/></w:pPr>
+    <w:rPr>{bold}{color}<w:sz w:val="{hp(10.5)}"/><w:szCs w:val="{hp(10.5)}"/></w:rPr>
   </w:style>'''
 
     S["TOCHeading"] = f'''
@@ -218,27 +261,23 @@ def styles_override(t):
     <w:pPr><w:outlineLvl w:val="9"/></w:pPr>
   </w:style>'''
 
-    # Table: header row in accent with white text, horizontal hairlines only,
-    # banded body rows, breathing room in every cell.
-    g, band = t["grid"], t["band"]
+    # Table, per the ruled dotted-separator treatment: no header fill, accent
+    # header text over a dashed accent rule, dashed light separators between
+    # rows, no banding, breathing room in every cell.
+    g = t["grid"]
     S["Table"] = f'''
   <w:style w:type="table" w:default="1" w:styleId="Table">
     <w:name w:val="Table"/><w:basedOn w:val="TableNormal"/><w:qFormat/>
     <w:tblPr>
       <w:tblInd w:w="0" w:type="dxa"/>
       <w:tblBorders>
-        <w:top w:val="single" w:sz="6" w:space="0" w:color="{acc}"/>
-        <w:bottom w:val="single" w:sz="6" w:space="0" w:color="{acc}"/>
-        <w:insideH w:val="single" w:sz="4" w:space="0" w:color="{g}"/>
+        <w:insideH w:val="dashed" w:sz="4" w:space="0" w:color="{g}"/>
       </w:tblBorders>
-      <w:tblCellMar><w:top w:w="70" w:type="dxa"/><w:left w:w="110" w:type="dxa"/><w:bottom w:w="70" w:type="dxa"/><w:right w:w="110" w:type="dxa"/></w:tblCellMar>
+      <w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="110" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="110" w:type="dxa"/></w:tblCellMar>
     </w:tblPr>
     <w:tblStylePr w:type="firstRow">
-      <w:rPr><w:b/><w:color w:val="FFFFFF"/></w:rPr>
-      <w:tcPr><w:shd w:val="clear" w:color="auto" w:fill="{acc}"/><w:vAlign w:val="center"/></w:tcPr>
-    </w:tblStylePr>
-    <w:tblStylePr w:type="band2Horz">
-      <w:tcPr><w:shd w:val="clear" w:color="auto" w:fill="{band}"/></w:tcPr>
+      <w:rPr><w:b/><w:color w:val="{acc}"/></w:rPr>
+      <w:tcPr><w:tcBorders><w:bottom w:val="dashed" w:sz="8" w:space="0" w:color="{acc}"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr>
     </w:tblStylePr>
   </w:style>'''
     return S
@@ -274,12 +313,12 @@ def sect_pr(paper, footer_rid):
     return (f'<w:sectPr><w:footerReference w:type="default" r:id="{footer_rid}"/>'
             f'<w:footnotePr><w:numRestart w:val="eachSect"/></w:footnotePr>'
             f'<w:pgSz w:w="{p["w"]}" w:h="{p["h"]}"/>'
-            f'<w:pgMar w:top="{MARGIN}" w:right="{MARGIN}" w:bottom="{MARGIN}" w:left="{MARGIN}" w:header="708" w:footer="708" w:gutter="0"/>'
+            f'<w:pgMar w:top="{MARGIN}" w:right="{MARGIN}" w:bottom="{MARGIN}" w:left="{MARGIN}" w:header="360" w:footer="360" w:gutter="0"/>'
             f'<w:cols w:space="708"/></w:sectPr>')
 
 
-def patch_styles(xml, t):
-    S = styles_override(t)
+def patch_styles(xml, t, callouts=None):
+    S = styles_override(t, callouts)
     S["Footer"] = footer_style(t)
     # docDefaults: the body font and ink colour everywhere a style does not say
     # otherwise. The colour lives HERE and not in Normal on purpose: Word applies a
@@ -297,8 +336,8 @@ def patch_styles(xml, t):
     return xml
 
 
-def build(out, paper="a4", font_body=None, font_mono=None, accent=None):
-    t = dict(THEME)
+def build(out, paper="a4", font_body=None, font_mono=None, accent=None, theme=None):
+    t, callouts = load_theme_spec(theme)
     if font_body: t["font_body"] = font_body
     if font_mono: t["font_mono"] = font_mono
     if accent: t["accent"] = accent.lstrip("#").upper()
@@ -311,7 +350,7 @@ def build(out, paper="a4", font_body=None, font_mono=None, accent=None):
     for item in zin.infolist():
         data = zin.read(item.filename)
         if item.filename == "word/styles.xml":
-            data = patch_styles(data.decode("utf-8"), t).encode("utf-8")
+            data = patch_styles(data.decode("utf-8"), t, callouts).encode("utf-8")
         elif item.filename == "word/document.xml":
             d = data.decode("utf-8")
             if 'xmlns:r=' not in d.split('>', 2)[1]:

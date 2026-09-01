@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-08-27
+updated: 2026-09-01
 stale_after_days: 365
 ---
 
@@ -22,11 +22,12 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-08-27 00:50.
+Regenerated 2026-09-01 16:06.
 
 | Rule | Load | Gist |
 |------|------|------|
 | `absolute-paths-at-the-reader-boundary` | always | Any path in a reply the owner will read is absolute on its first mention, starting with / or ~; a repo-relative path pasted from a checkpoint, WAL, or plan forces them to come back and ask where it lives. |
+| `added-scope-without-checking-siblings` | always | Before adding a component, control, or pattern to a file, read how its siblings solve the same shape and follow them. A choice that is fine in isolation is a defect when every neighbouring file already answered the question differently, and neither a compiler nor a test can see it. |
 | `ambiguous-file-action-halt` | always | When a write target already holds content you didn't create and the user hasn't said overwrite/append/merge, HALT and confirm — don't guess |
 | `api-error-recovery` | scoped | After an API-outage abort, a terse "keep going" means re-orient first — reconstruct goal + what's done + the interrupted step — then continue, rolling back if the abort left things half-done. |
 | `audience-aware-writing` | always | Writing is a UI surface with an audience. Identify the reader (human for comments/docs/PRs, agent for internal notes) and write meaning-first, never default-LLM register. |
@@ -47,6 +48,7 @@ Regenerated 2026-08-27 00:50.
 | `generalize-before-enumerate` | always | Before writing a helper/abstraction that handles "all cases", enumerate the actual cases first — if you can't list them, you don't understand the domain well enough to abstract |
 | `git` | always | Frequent commits, public repos by default, .gitignore patterns, never push main without approval |
 | `github-agent-marker` | always | Every comment posted to GitHub under the owner's account carries the owner's attribution marker near the top, "> Generated via a 🤖 on @<gh-user> machine (_<one random phrase>_)" (a blockquote; the handle is the logged-in gh user), enforced by guard-github-agent-marker.sh with NO bypass; the phrase is picked at random from the owner's fixed list per comment. |
+| `goal-statement-on-starting-work` | always | Every agent hands the owner a `/goal <text>` paste line whenever it starts something, before the work, not after. The line is bare on its own line so selecting it copies clean. Every clause must be one the agent can finish alone, because an armed goal is a Stop condition and a clause whose actor is the owner blocks every stop until he disarms it by hand. |
 | `grep-scope-before-claiming-absence` | always | Grep the FULL relevant tree (not just one subdir) before claiming a module/function/helper doesn't exist or proposing to create one |
 | `helper-return-type-assumption` | always | Before calling a method on a helper's return value, grep the helper's definition — don't assume its shape |
 | `human-note-preferences` | always | Code marked NOTE(by human), HACK, or IMPORTANT is a deliberate, tested choice: never override it silently; ask first with reasoning, then verify the result. Looking wrong without context is not evidence it is wrong. |
@@ -70,6 +72,7 @@ Regenerated 2026-08-27 00:50.
 | `right-sized-code` | always | Right-size code to the task, don't blindly minimize — gate the decision on goal shape, scope, stated intent, and total-cost fit, then climb the laziness ladder inside that gate. Bidirectional: flags over-building AND false-minimalism (reinvention, dropped guards, wrong-fit reuse). |
 | `scheduling-discipline` | scoped | Scheduling contract, read BEFORE creating or retiring ANY scheduled job — every recurring cron (launchd plist / crontab / CronCreate) ALSO gets an `Automations` calendar event with label+command+plist in the notes, and retiring a cron deletes its event in the same change; always pass --description; no secrets in commands; prefer gcc-schedule for "fire shell command X at time Y". |
 | `shell` | always | Inline commands run zsh (never name a var `path`); trash not rm; no Glob from ~/; non-interactive flags |
+| `size-the-change-in-the-target-vocabulary` | always | Never describe the size or nature of work in the source artifact's vocabulary. A design tool's two frames, a spec's two versions, a doc's two revisions all read as "rebuilt" while the change in code is an edit to one file. Size the work by the diff it costs in the thing you will actually change, and say that number. |
 | `skill-spec-update-not-honored-by-running-session` | scoped | SKILL.md mandates are advisory to already-running sessions (specs are cached at discovery, never re-read) — when adding a mandatory phase to a skill, add enforcement at the data-write CLI in the same change, or it's silently bypassable. Read this rule when editing SKILL.md mandates or debugging a skipped skill phase. |
 | `speculative-abstractions-without-a-load-bearing-caller` | always | Don't create a helper/constant/type for a planned-but-nonexistent future caller — inline at the real callsite when you build it; let abstractions crystallize from ≥2 real callsites |
 | `structural-claim-without-reading-code` | always | Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first; same precheck for process-completion claims ("the migration ran", "the deploy succeeded") — name the artifact that proves it |

@@ -29,8 +29,11 @@ grids=$(printf '%s' "$doc" | tr -d '\n' | rg -o '<w:tblGrid>.*?</w:tblGrid>' | h
 lacks '(<w:gridCol w:w="([0-9]+)" />)(<w:gridCol w:w="\2" />){2}' "$grids" "pipe-table columns are sized from content, not equal"
 has 'Figure 1\. Today' "$doc" "diagram caption present"
 has 'Listing 1\.' "$doc" "code caption present"
-has 'w:fill="1F3A5F"' "$sty" "table header fill is the accent"
-has '<w:rPrDefault><w:rPr><w:rFonts[^/]*/><w:color w:val="1F2933"' "$(unzip -p "$T/full.docx" word/styles.xml | tr -d '\n')" "ink colour lives in docDefaults (table header white must win)"
+ACC=$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('$HERE/theme.json')))['palette']['accent'])")
+has "<w:bottom[^/]*w:color=\"$ACC\"[^/]*w:val=\"dashed\"|<w:bottom[^/]*w:val=\"dashed\"[^/]*w:color=\"$ACC\"" "$sty" "ruled table: dashed accent rule under the header (theme.json accent)"
+has '<w:insideH[^/]*w:val="dashed"' "$sty" "ruled table: dashed row separators"
+has 'CalloutNoteHead' "$sty" "ruled callouts: head style present"
+has '<w:rPrDefault><w:rPr><w:rFonts[^/]*/><w:color w:val="222B36"' "$(unzip -p "$T/full.docx" word/styles.xml | tr -d '\n')" "ink colour lives in docDefaults (theme.json ink)"
 has 'footer1.xml' "$(unzip -l "$T/full.docx")" "footer part present"
 has 'NUMPAGES' "$(unzip -p "$T/full.docx" word/footer1.xml)" "footer has page N of M"
 has 'w:pgSz w:h="16838" w:w="11906"' "$doc" "A4 by default"

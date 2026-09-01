@@ -1,0 +1,51 @@
+{
+  "_": "The ruled /word-doc theme. render.py auto-loads this beside itself; CLI flags still override. Ruled on decision pages doc-style through doc-style-4, 2026-09-01. All axes are settled.",
+  "fonts": {
+    "body": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "palette": {
+    "_": "Harbor, ruled on decision page doc-style-4 (D2f)",
+    "accent": "3D6E82",
+    "secondary": "79A8B5",
+    "accent_soft": "CDE0E5",
+    "tint": "E9F1F3",
+    "ink": "222B36",
+    "muted": "5A6672",
+    "code_bg": "F5F7FA",
+    "code_border": "B9C2D6",
+    "grid": "D5DAE6",
+    "band": "E9F1F3"
+  },
+  "callouts": {
+    "NOTE": {
+      "glyph": "◈",
+      "bar": "4F6EF0",
+      "fill": "EEF1FE"
+    },
+    "TIP": {
+      "glyph": "✦",
+      "bar": "0D9488",
+      "fill": "E6F5F3"
+    },
+    "WARNING": {
+      "glyph": "▲",
+      "bar": "E08A00",
+      "fill": "FDF3E0"
+    },
+    "IMPORTANT": {
+      "glyph": "●",
+      "bar": "D4487A",
+      "fill": "FDEDF3"
+    }
+  },
+  "structures": {
+    "table": "dotted-separators: no header fill, accent header text, dashed accent rule under the header, dashed light row separators",
+    "code": "dotted frame + solid accent left bar over the soft-card background, applied to both code and diagram blocks",
+    "toc": "indent rail: accent rail on the left, level-1 entries semibold, deeper levels indented",
+    "callout": "type line first (glyph + label in the kind color), body below, tight gap, shared tint and bar",
+    "links": "accent color, no underline, anywhere including the contents list",
+    "page": "half-inch margins all round (halved by owner ruling 2026-09-01), footer with title left and page N of M right",
+    "spacing": "opened rhythm, same ruling: air after title and subtitle, around headings, between contents rows and off the rail, before and after callouts, after tables, around code and tree boxes; callouts run margin to margin with the bar in the gutter"
+  }
+}

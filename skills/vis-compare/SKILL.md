@@ -225,7 +225,15 @@ The judge is fallible; make correcting it cheap and durable.
 
 ## Post-run
 
-Per GUIDELINES.md, prepend a short entry to `runtime-notes.md` (purpose + 2–4 insights)
+MANDATORY, every run (unlogged usage is invisible to the adoption audits):
+
+```bash
+bash ~/.claude/scripts/skill-log.sh record vis-compare \
+  --task "<A vs B, one line>" --outcome <ok|revised|failed> --corrections <n> \
+  --note "verdict=<overall> divergences=<n> loop_round=<n-or-none>"
+```
+
+Per GUIDELINES.md, also prepend a short entry to `runtime-notes.md` (purpose + 2–4 insights)
 when the run surfaced anything reusable — a divergence class the policy handles badly, a
 pack signal that kept misleading the judgment, a suppression worth graduating to policy.
 
