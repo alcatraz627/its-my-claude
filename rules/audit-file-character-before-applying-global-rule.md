@@ -13,7 +13,7 @@ related:
   - rules/communication.md
 tier: 2
 category: rules
-updated: 2026-06-19
+updated: 2026-09-01
 stale_after_days: 365
 ---
 
@@ -64,6 +64,7 @@ behavior the user endorsed via `/affirm`, not the cleverness of the exception.
   [[speculative-abstractions-without-a-load-bearing-caller]] and the "don't invent
   test-only exceptions to a hard rule" Tier-0 brief — the audit decides *whether*
   a rule applies; it does not let you self-permit past one that does.
+- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

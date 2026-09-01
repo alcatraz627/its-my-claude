@@ -7,7 +7,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-07-28
+updated: 2026-09-01
 stale_after_days: 90
 ---
 
@@ -39,6 +39,8 @@ When making N distinct changes in one edit, verify each one. Don't check the pri
 ## Human-commented values require confirmation
 
 Code with `NOTE(by human)`, `HACK`, `IMPORTANT`, or similar comments reflects a deliberate, tested decision. If you think it should change, ask the user first with your reasoning. If approved, make the change AND verify the result visually/functionally.
+
+A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## UI/frontend verification
 

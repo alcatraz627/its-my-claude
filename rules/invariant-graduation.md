@@ -12,7 +12,7 @@ triggers:
 related: [rules/structural-claim-without-reading-code.md, features/context-retention.md, rules/testing.md]
 tier: 1
 category: rules
-updated: 2026-07-16
+updated: 2026-09-01
 stale_after_days: 180
 ---
 
@@ -71,6 +71,7 @@ Extracted 2026-08-27 to `rules/no-silent-ui-surface-deletion.md`: before deletin
   parity entry or one line of owner approval clears the gate.
 - Not a ban on rebuilds. A rebuild is fine once stated explicitly and paired
   with a parity checklist the user has seen.
+- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

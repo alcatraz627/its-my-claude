@@ -9,6 +9,7 @@ Checks:
   - category matches the directory name
   - updated date is valid YYYY-MM-DD
   - stale_after_days is a number; age beyond threshold emits warning
+  - always-loaded rules/ files with a halt directive carry the never-halt anchor
 
 Exit codes:
   0  all files valid
@@ -26,6 +27,31 @@ ROOTS = ("rules", "features", "conventions")
 REQUIRED_FIELDS = ("brief", "triggers", "related", "tier", "category", "updated", "stale_after_days")
 VALID_PREFIXES = {"tool", "topic", "phrase", "skill", "mcp"}
 VALID_TIERS = {"0", "1", "2", "3"}
+
+# A rule that gates an action must name the inaction it could license
+# (rules/README.md; applied corpus-wide 2026-09-01, see
+# assets/reports/20260901-halt-imbalance/report.md). Any ALWAYS-loaded rule
+# whose body directs an owner-gated halt must reference the halt-scope anchor.
+HALT_ANCHOR = "never-halt-on-authority-you-hold"
+HALT_DIRECTIVE = re.compile(r"""(
+    (stop|halt|pause)\b[^.\n]{0,30}\b(and\s+)?(ask|confirm|get\s+confirmation)
+  | ask\s+(the\s+(user|owner)\s+)?(first|before)
+  | confirm(ation)?\s+(before|first|each)
+  | CONFIRM\s+EACH\s+TIME
+  | without\s+(explicit|fresh)\s+(user\s+)?(approval|confirmation)
+  | without\s+the\s+user'?s?\s+explicit\s+(confirmation|approval)
+  | explicit\s+(user|owner)('s)?\s+(confirmation|approval)
+  | requires?\s+fresh\s+(user\s+)?(confirmation|approval)
+  | put\s+the\s+decision\s+back\s+to\s+the\s+user
+  | WITH\s+THE\s+USER\s+before
+  | owner\s+approval\s+in\s+this\s+turn
+  | push\s+back\s+individually\s+before\s+accepting
+  | question\s+comes\s+first
+  | ask\s+in\s+one\s+line
+  | hand\s+the\s+commit\s+to\s+the\s+user
+  | wait\s+for\s+(the\s+)?user
+  | only\s+the\s+owner\s+can\s+answer
+)""", re.IGNORECASE | re.VERBOSE)
 
 def parse_frontmatter(text):
     """Return dict of {field: raw_value_str} plus list of trigger entries. Minimal YAML-ish parser."""
@@ -122,6 +148,15 @@ def main():
                     print(f"✗ {rel}: trigger '{t}' has invalid prefix (want: {sorted(VALID_PREFIXES)})")
                     errors += 1
                 trigger_map[t].append(str(rel))
+            # Halt-scope anchor (always-loaded rules only; scoped rules have paths:)
+            if root == "rules" and f.stem != HALT_ANCHOR and "paths" not in fields:
+                body = text[text.find("\n---\n", 4) + 5:] if text.startswith("---\n") else text
+                if HALT_DIRECTIVE.search(body) and HALT_ANCHOR not in text:
+                    print(f"✗ {rel}: halt directive without the halt-scope anchor — "
+                          f"add the one-line inaction clause referencing "
+                          f"`never-halt-on-authority-you-hold.md` "
+                          f"(see assets/reports/20260901-halt-imbalance/report.md)")
+                    errors += 1
 
     # Trigger collisions
     print("\n── Trigger collision report ──")

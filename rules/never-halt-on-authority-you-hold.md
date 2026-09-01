@@ -55,6 +55,8 @@ derivation supplies; it is wrong when the agent lacks AUTHORITY it already holds
 Before stopping, name which of the two is missing. If it is authority, check the
 ruling's text, then act.
 
+Since 2026-09-01 every always-loaded rule that directs an owner-gated halt carries a one-line pointer back to this rule at its halt site, and `scripts/validate-triggers.sh` fails any new halt rule that omits it (membership and method: `assets/reports/20260901-halt-imbalance/report.md`).
+
 ## Diagnostic signal
 
 You are about to end a turn with the next work named and undone, or to ask for a go

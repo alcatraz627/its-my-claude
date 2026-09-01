@@ -10,7 +10,7 @@ related:
   - rules/sub-agent-outputs.md
 tier: 1
 category: rules
-updated: 2026-05-31
+updated: 2026-09-01
 stale_after_days: 365
 ---
 
@@ -50,6 +50,7 @@ Read first, in its own turn, when a destination's contents are in question.
   their contents; proceed.
 - Not for empty/absent targets — there's nothing to clobber.
 - Not for files the user explicitly said to overwrite/replace.
+- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

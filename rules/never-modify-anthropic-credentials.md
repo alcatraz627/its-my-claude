@@ -11,7 +11,7 @@ related:
   - rules/shell.md
 tier: 0
 category: rules
-updated: 2026-05-25
+updated: 2026-09-01
 stale_after_days: 365
 ---
 
@@ -61,6 +61,8 @@ Give the exact value/command for the user to run; never run it for them.
   sync-all's `secret_guard`) — those read/match, they don't set.
 - Reading docs, or telling the user how to set it.
 The line is **set/modify vs read/mention.**
+
+A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

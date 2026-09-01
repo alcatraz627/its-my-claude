@@ -8,7 +8,7 @@ triggers:
 related: []
 tier: 1
 category: rules
-updated: 2026-07-11
+updated: 2026-09-01
 stale_after_days: 90
 ---
 
@@ -28,6 +28,8 @@ Authorization is the repo's protection status (user ruling 2026-07-11), cadence 
 ## Never push to main without explicit approval
 
 One approval ≠ blanket approval. Each push to `main` or `master` requires fresh confirmation (guard-git-push.sh pops the native dialog / sentinel flow). Protected repos gate ALL pushes the same way; unprotected feature-branch pushes flow freely.
+
+A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## GitHub repos — public by default
 

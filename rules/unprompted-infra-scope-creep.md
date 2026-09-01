@@ -14,7 +14,7 @@ related:
   - rules/speculative-abstractions-without-a-load-bearing-caller.md
 tier: 2
 category: rules
-updated: 2026-07-12
+updated: 2026-09-01
 stale_after_days: 120
 ---
 
@@ -55,6 +55,7 @@ surface the next agent extends.
   tainted commits because its gate waited in the backlog unannounced).
 - Repo-required scaffolding named by the task (a migration the schema change
   needs) is in scope; a "while I'm here" pre-commit hook is not.
+- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

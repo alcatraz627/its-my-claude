@@ -13,7 +13,7 @@ related:
   - structure-over-one-shotting
 tier: 0
 category: rules
-updated: 2026-07-09
+updated: 2026-09-01
 stale_after_days: 180
 ---
 
@@ -109,6 +109,7 @@ never up to fable.
   `~/.claude/.allow-fable-subagents` exists; the human re-arms it by trashing
   that file — an agent never touches the sentinel.
 - Everything degraded → main agent does it inline and records the miss.
+- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 
