@@ -83,6 +83,13 @@ reap_checkpoints() {
     if printf '%s\n' "$refs" | grep -qxF "${base%.*}" 2>/dev/null; then
       kept_indexed=$((kept_indexed + 1)); continue
     fi
+    # also keep a collision-preserved pointer <slug>.<uuid8>.json (write.sh:122,
+    # served by resolve.sh's "$safe".*.json glob): protected when its SLUG (the
+    # part before the first dot) is an indexed session. An adversarial re-review
+    # found 24 of these unprotected, the oldest days from the 30d window.
+    if printf '%s\n' "$refs" | grep -qxF "${base%%.*}" 2>/dev/null; then
+      kept_indexed=$((kept_indexed + 1)); continue
+    fi
     if [ -n "$(find "$f" -mtime "+${CHECKPOINT_DAYS}" 2>/dev/null)" ]; then
       drop_file "$f" && removed=$((removed + 1))
     fi
