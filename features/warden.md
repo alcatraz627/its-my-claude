@@ -1,5 +1,5 @@
 ---
-brief: "The warden: a persistent monitor session judging working agents' trajectories from artifacts, run by a 45m launchd beat with $0 short-circuits, cost-unit governor, usage gate, owner pause, and handoff-style succession. CLI claude-warden; institution at ~/.claude/warden/."
+brief: "The warden: session-liveness + event-driven revive for working agents. The 45m standing-judgment beat is RETIRED (2026-09-02, D1a); event-driven revive (ward-revive.sh + ipc-wake.sh) and on-demand judgment survive. Institution at ~/.claude/warden/; turn-state freshness via turnstate-active.sh."
 triggers:
   - tool:claude-warden
   - topic:warden
@@ -9,17 +9,37 @@ triggers:
 related: [scheduling-discipline, model-tier-routing]
 tier: 2
 category: features
-updated: 2026-08-21
+updated: 2026-09-02
 stale_after_days: 90
 ---
 
 # The warden
 
-One persistent sonnet session that watches working agents against their goals,
-challenges done-claims with evidence, and escalates to the owner, never
-overruling. Its durable self is `~/.claude/warden/` (PROMPT.md charter with
-conduct rules 1-10, WATCH.md early-life watch items, state/ per-ward notes,
-ledger.jsonl, spend.jsonl, insights.md), not any process or context.
+> **Status, 2026-09-02: the 45m standing-judgment beat is RETIRED** (owner
+> ruling lifecycle-fixes-0902 D1a, after an efficacy review). `com.alcatraz.warden-beat`
+> is bootout + disabled and `warden/.paused` is set. What survives is the part
+> that measured real value: **event-driven revive** (a `--reply-by` request to an
+> idle group member creates a headless turn) via `ward-revive.sh` + `ipc-wake.sh`,
+> plus **on-demand judgment** (owner-invoked, or a group's watcher seat). The
+> standing judgment session was retired because its own record showed a 50%
+> self-failure rate (4 of its 8 atone appearances were its own supervisory
+> failures, including `supervisor-gate-made-the-lanes-halt`), which is the
+> "incompetent, not merely down" failure the owner named. Efficacy review +
+> plan: `assets/reports/20260901-warden-keep-or-kill/`. The section below
+> describes the retired beat model, kept for reference until the group-entity
+> rescope (owner ruling 2a) lands.
+
+The warden watched working agents against their goals, challenged done-claims
+with evidence, and escalated to the owner, never overruling. Its durable self is
+`~/.claude/warden/` (PROMPT.md charter with conduct rules 1-10, WATCH.md early-life
+watch items, state/ per-ward notes, ledger.jsonl, spend.jsonl, insights.md), not
+any process or context.
+
+The liveness read that once wedged the beat for 10 days (an orphaned turn-state
+sentinel read as "mid-turn" forever) is fixed: `scripts/session-mgmt/turnstate-active.sh`
+answers "mid-turn?" by sentinel freshness within a 30m TTL, and both the beat and
+ward-revive call it. `scripts/startup/tasks/60-reap-session-state.sh` reaps the
+leaked turn-state that fed the wedge.
 
 ## Moving parts
 
