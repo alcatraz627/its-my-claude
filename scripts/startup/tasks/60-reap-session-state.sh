@@ -65,9 +65,13 @@ reap_checkpoints() {
   local dir="$CLAUDE/checkpoints" idx="$CLAUDE/checkpoints/index.jsonl"
   local removed=0 current=0 kept_indexed=0 f base
   [ -d "$dir" ] || { printf '  %-14s (absent)\n' checkpoints; return; }
-  # basenames still referenced by any index row (path or session_id)
+  # basenames still referenced by any index row. The index carries THREE keys a
+  # pointer can be reached by: checkpoint_path, session_id, and (newer schema)
+  # session_uuid. Miss any one and a referenced pointer gets reaped — a
+  # uuid-only-referenced checkpoint was deleted in an adversarial fixture before
+  # session_uuid was added here (2026-09-02).
   local refs=""
-  [ -f "$idx" ] && refs=$(jq -r '(.checkpoint_path // ""), (.session_id // "")' "$idx" 2>/dev/null \
+  [ -f "$idx" ] && refs=$(jq -r '(.checkpoint_path // ""), (.session_id // ""), (.session_uuid // "")' "$idx" 2>/dev/null \
                           | sed 's#.*/##' | sort -u)
   while IFS= read -r -d '' f; do
     current=$((current + 1))
@@ -94,9 +98,13 @@ reap_session_env() {
   [ -d "$dir" ] || { printf '  %-14s (absent)\n' session-env; return; }
   while IFS= read -r -d '' d; do
     current=$((current + 1))
-    # dir is stale if nothing inside it was modified within the window
+    # Stale needs BOTH: no file inside touched within the window, AND the dir's
+    # OWN mtime is older than the window. Without the dir-mtime check an EMPTY
+    # dir passes vacuously (no files to be recent), so a dir created seconds ago
+    # would be rm -rf'd — an adversarial fixture hit exactly that (2026-09-02).
     newest=$(find "$d" -type f -mtime "-${SESSION_ENV_DAYS}" -print -quit 2>/dev/null)
-    if [ -z "$newest" ]; then
+    local dir_fresh; dir_fresh=$(find "$d" -maxdepth 0 -mtime "-${SESSION_ENV_DAYS}" -print 2>/dev/null)
+    if [ -z "$newest" ] && [ -z "$dir_fresh" ]; then
       if (( DRY_RUN )); then removed=$((removed + 1))
       else rm -rf "$d" 2>/dev/null && removed=$((removed + 1)); fi
     fi

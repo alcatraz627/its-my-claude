@@ -46,6 +46,14 @@ esac
 NEW_COUNT=$((PREV_COUNT + 1))
 printf '%s' "$NEW_COUNT" > "$COUNTER_FILE" 2>/dev/null || true
 
+# Refresh the turn-state sentinel's mtime so a long turn keeps reading as
+# mid-turn. turn-start.sh writes <sid>.json ONCE at turn start; without this
+# touch a turn past turnstate-active.sh's 30m TTL reads as not-mid-turn while
+# still live, and a beat/revive could resume into it (adversarial F3, 2026-09-02).
+# Only touch when it exists: never fabricate a turn for a session between turns.
+SENTINEL="$STATE_DIR/$SAFE_SID.json"
+[ -f "$SENTINEL" ] && touch "$SENTINEL" 2>/dev/null || true
+
 # Only emit on interval boundaries
 if [ "$((NEW_COUNT % HEARTBEAT_INTERVAL))" -ne 0 ]; then
   exit 0

@@ -1,5 +1,5 @@
 ---
-brief: "The warden: session-liveness + event-driven revive for working agents. The 45m standing-judgment beat is RETIRED (2026-09-02, D1a); event-driven revive (ward-revive.sh + ipc-wake.sh) and on-demand judgment survive. Institution at ~/.claude/warden/; turn-state freshness via turnstate-active.sh."
+brief: "The warden: session-liveness + event-driven revive for working agents. The 45m standing-judgment beat is RETIRED (2026-09-02, D1a); on-demand judgment survives (claude-warden open); event-driven revive is NOT currently wired (no runner for ipc-wake; ward-revive was beat-driven) pending an owner decision. Institution at ~/.claude/warden/; turn-state freshness via turnstate-active.sh."
 triggers:
   - tool:claude-warden
   - topic:warden
@@ -17,14 +17,18 @@ stale_after_days: 90
 
 > **Status, 2026-09-02: the 45m standing-judgment beat is RETIRED** (owner
 > ruling lifecycle-fixes-0902 D1a, after an efficacy review). `com.alcatraz.warden-beat`
-> is bootout + disabled and `warden/.paused` is set. What survives is the part
-> that measured real value: **event-driven revive** (a `--reply-by` request to an
-> idle group member creates a headless turn) via `ward-revive.sh` + `ipc-wake.sh`,
-> plus **on-demand judgment** (owner-invoked, or a group's watcher seat). The
-> standing judgment session was retired because its own record showed a 50%
-> self-failure rate (4 of its 8 atone appearances were its own supervisory
-> failures, including `supervisor-gate-made-the-lanes-halt`), which is the
-> "incompetent, not merely down" failure the owner named. Efficacy review +
+> is bootout + disabled and `warden/.paused` is set. What survives is **on-demand judgment** (`claude-warden open` resumes the
+> session interactively). **Event-driven revive is NOT currently wired**: an
+> adversarial review (2026-09-02) found `ward-revive.sh` was only ever invoked by
+> the now-retired beat, and `ipc-wake.sh` (the intended `--reply-by` wake loop)
+> has no runner and last ran 2026-08-27. Its mid-turn read was also still the
+> bare-existence wedge, now repointed. Wiring a runner for it is a pending owner
+> decision (it is an autonomous headless-turn-spawning daemon). The
+> standing judgment session was retired because its own record showed that every warden-tagged atone
+> event is a first-person warden-seat failure (6 of 6), including
+> `supervisor-gate-made-the-lanes-halt` ("As warden I told both lanes 'nothing
+> is done until I ratify it'"), which is the "incompetent, not merely down"
+> failure the owner named. Efficacy review +
 > plan: `assets/reports/20260901-warden-keep-or-kill/`. The section below
 > describes the retired beat model, kept for reference until the group-entity
 > rescope (owner ruling 2a) lands.
