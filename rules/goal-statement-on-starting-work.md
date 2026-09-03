@@ -106,6 +106,44 @@ Three to six lines is the usual range. One line is fine when the work is one
 thing. Past six, the goal has become the queue this section warns about, and the
 extra lines belong in the task list.
 
+### Short is not the same as checkable
+
+Length was never the real test, and an earlier version of this section implied it
+was. Three agents audited on 2026-09-04 all shipped short statements that no
+reader can mark true. Two shapes do it, and both look compliant because they fit
+on one line.
+
+**An unbounded quantifier.** "Every way stage 7 can fail shows an operator what
+happened." "No comment in the files I own describes behaviour the code does not
+have." A reader cannot confirm these, only fail to find a counterexample.
+forge-integration's own words: an unbounded quantifier makes a short sentence
+exactly as uncheckable as a long one. Bound it. Name the three failure modes, or
+the two files, and the line becomes checkable without getting longer.
+
+**A standing behaviour instead of a state.** "Every question another lane sends
+is answered the turn it arrives." That is true over a window, never at a moment,
+so nobody can mark it at the time the goal is read. Convert it to the artifact or
+the threshold that would show it happened.
+
+The test to apply to each line: could someone who is not me sit down right now,
+look at one named thing, and say yes or no? If they would have to search an
+unbounded set, or watch for a while, rewrite it.
+
+### Do not arm your own goal
+
+`goal.sh set` is the owner's move. Print the paste line and work under your
+proposal as stated intent; a goal you armed yourself is a Stop condition you
+wrote for yourself. One session on 2026-09-04 armed its own with `--by agent`,
+and the goal it armed carried a clause whose actor was the owner, which is the
+trap the actor constraint above exists to prevent. The only exception stays the
+one `/catchup` owns: a checkpoint goal marked STILL VALID is re-armed without
+asking, because a previous session already judged it.
+
+**A re-armed goal inherits its old register.** That same auto-re-arm carried a
+long prose goal forward intact from a checkpoint. When re-arming, read the goal
+against this section first, and if it fails, put the rewrite to the owner as a
+paste line rather than reviving the shape.
+
 ## Every clause must be one YOU can finish alone
 
 This is the part that is easy to get wrong and expensive when you do. An armed
