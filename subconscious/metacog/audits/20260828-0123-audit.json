@@ -1,0 +1,230 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 15988,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.10698134909783377,
+    "unit_count": 28
+  },
+  "response": {
+    "biases_detected": [
+      "relative-path-at-reader-boundary-blind-spot:RECURRING:WORSENING — unit 30bb5666-13 produced auth plan deliverables with relative file paths in the completion report despite the identical slug (file-referenced-without-full-path) being filed as S3 sixth-recurrence in unit 30bb5666-8 just two turns earlier in the same session; the pattern fires specifically at the completion-report boundary: absolute paths are applied correctly during navigation and IPC coordination but not when naming deliverable artifacts in the final report; six total recurrences with zero trajectory improvement",
+      "confirmation_bias_style_log:RECURRING:IMPROVING — 2 zero-tool style-enforcement sessions (f8d48a99-0, 8ca82502-0) vs 14 in the prior cycle and 11 the cycle before; count trajectory across cycles: 2→11→14→2; the drop is notable and consistent with a possible environmental change rather than in-session behavioral correction; deprioritized per history guidance but trajectory flagged as potentially improving"
+    ],
+    "calibration_score": 0.55,
+    "overconfident_count": 1,
+    "recommendations": [
+      "relative-path-at-reader-boundary-blind-spot has now recurred six times at S3 with an advisory-only regime; the bias is boundary-specific (completion reports, not planning or navigation), which makes a Stop hook targeting messages that assert completion while containing bare filename references mechanically tractable; the six-recurrence count without improvement is the threshold at which the atone system's own promotion path says a hook proposal should be filed",
+      "style-enforcement session count dropped from 14 to 2 this cycle; no new recommendation until the next cycle confirms direction — if count stays low the pattern may have resolved environmentally"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 12
+  },
+  "sessions": [
+    [
+      "a7be7634-d0ba-4550-8006-ec03595639ec",
+      124796
+    ],
+    [
+      "ed154b56-3108-4688-aa82-4b90751fcacf",
+      148693
+    ],
+    [
+      "ed080e96-3046-4fc6-90e7-6104d3ada155",
+      246342
+    ],
+    [
+      "8d0e744d-d558-4a82-83b7-640bddad65b0",
+      110622
+    ],
+    [
+      "f8d48a99-125b-438f-96e3-4aefb6ac4f5d",
+      130866
+    ],
+    [
+      "d2a36c43-c70a-48d7-ac0b-ec6e49263e00",
+      98564
+    ],
+    [
+      "ce4417c2-8c1f-43c3-8e8b-3e86353d3ff2",
+      125415
+    ],
+    [
+      "ce2a40cc-4325-4c99-a9ff-dad8cb8fbd59",
+      153114
+    ],
+    [
+      "a5b64b22-6ab3-4134-b534-299d66731f20",
+      115268
+    ],
+    [
+      "9761e535-ecc3-472e-9b10-fa43366bd2c4",
+      111243
+    ],
+    [
+      "8ca82502-7ffd-4862-9f32-34063167aa9b",
+      121002
+    ],
+    [
+      "811a6eb7-8196-4112-93b2-b2d130f4f52b",
+      97194
+    ],
+    [
+      "5b12c2f7-1b60-4a5b-8b4f-6c44d3b5fede",
+      95966
+    ],
+    [
+      "575f2244-a23c-426e-b089-22e95eb5bcfc",
+      99841
+    ],
+    [
+      "30bb5666-3146-4edb-8ff0-9c9e3c586e1b",
+      17602079
+    ],
+    [
+      "22dcb62f-fa9f-45fd-b37d-fd4708e3c16b",
+      99147
+    ],
+    [
+      "1b2c8771-b10d-42e6-b2b3-6fd37b1d13e8",
+      98529
+    ],
+    [
+      "e8dabe78-1575-42c6-8bd3-f3237643264e",
+      115270
+    ],
+    [
+      "f2703f51-78c2-4545-93d2-76d33e702730",
+      135129
+    ],
+    [
+      "d6f9e1bc-b2d9-48e8-b520-29ad74cae028",
+      119008
+    ],
+    [
+      "b73396e7-5e73-4421-9547-b4c6cfb47086",
+      125920
+    ],
+    [
+      "b6178bdb-9551-4080-a783-87d6b463c83e",
+      129319
+    ],
+    [
+      "a7a1893d-a0c0-444a-90d7-aed1a66004cd",
+      121586
+    ],
+    [
+      "a2ca66a0-ec23-4169-8f13-f14afa5c1364",
+      114140
+    ],
+    [
+      "9f7574f8-d2c3-4e69-a11f-a62d179234c1",
+      127175
+    ],
+    [
+      "9d141ecb-93e4-4d3a-af94-cb8dc2fb1858",
+      122223
+    ],
+    [
+      "659e30f6-a885-481c-b53b-75b65b76bc85",
+      128248
+    ],
+    [
+      "468d42fb-1f86-492b-83de-bf94fe278fc0",
+      120669
+    ],
+    [
+      "389f45a9-2dee-48de-b258-f3ae7c04ff5e",
+      114779
+    ],
+    [
+      "2f8bba50-f9de-41b4-9c53-c74ff26b674a",
+      123070
+    ],
+    [
+      "0e648580-8e04-47f7-9891-b35e9d5f0f73",
+      123113
+    ],
+    [
+      "0184a826-0ad6-4a6b-976c-3e74b621e85e",
+      120590
+    ],
+    [
+      "faafb38d-5f8f-41a4-b423-9692b13f9d70",
+      134107
+    ],
+    [
+      "fa61154a-ab88-4820-8bc5-617b7214d0bd",
+      104059
+    ],
+    [
+      "f9246615-d285-4b9b-95b7-e91b0c7ac074",
+      133846
+    ],
+    [
+      "f8ef0ae0-fed4-4c16-8145-0a555ccd1fb0",
+      104257
+    ],
+    [
+      "f8a0e448-fe37-4c0b-aa38-67fce3d2a6ae",
+      105118
+    ],
+    [
+      "f3bc43f8-8341-4a84-89b1-d034eeafb5c6",
+      136480
+    ],
+    [
+      "f24dec0a-9495-4607-a343-da195294e313",
+      129741
+    ],
+    [
+      "ec9e8337-8a81-4e57-b07c-3cfd61d114a2",
+      135885
+    ],
+    [
+      "e40a76d6-91cd-4ace-a797-8b8535d61732",
+      136728
+    ],
+    [
+      "e177f1d4-23bc-4578-a29a-728a4276e078",
+      120815
+    ],
+    [
+      "dd9f9ae0-e6f4-4b7d-a016-a6e353065db9",
+      105320
+    ],
+    [
+      "db36511b-0351-4391-bf18-aaef5d3875ab",
+      141412
+    ],
+    [
+      "d982ad75-6f98-44e5-9c93-85ef607cb1dc",
+      124673
+    ],
+    [
+      "d61a73fa-622e-499f-ba6a-17e84540a4b1",
+      135997
+    ],
+    [
+      "d09f106b-20d7-4c86-b4d4-06fa69d9dbd7",
+      120382
+    ],
+    [
+      "cfc29031-ddec-4a79-b723-ffcd793b609b",
+      131563
+    ],
+    [
+      "cec0f854-9d5d-40e5-81fb-b341600505d6",
+      126846
+    ],
+    [
+      "c311f048-2031-4dc4-8f64-b3c78cee43db",
+      124574
+    ]
+  ],
+  "timestamp": "2026-08-28T01:23:33.402615Z",
+  "tokens_used": 8671,
+  "units_analyzed": 13,
+  "units_total": 28
+}

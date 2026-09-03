@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-24T19:41:54.744805+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-09-02T05:46:29.360732+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-Slack automation tooling with multi-platform data scraping, GitHub PR workflows, and dashboard UI — worked in iterative sessions with frequent UI touch and agent-posted external content.
+Slack automation tooling with multi-agent orchestration patterns. Work style is verification-heavy with recurring tension between autonomous execution and explicit confirmation gates.
 
 ## Things to do (or keep doing)
-- Always verify referenced artifacts (PR numbers, issue IDs) exist in the repo before citing them in output or comments
-- Always identify whether a correction targets an instance or its generator; fix the generator, not just the symptom
-- Reconcile the task list against completed work after every multi-turn stretch — drift misleads future sessions
-- Match output weight to question weight: direct question → direct sentence, no multi-section briefing preamble
+- Always use `rg --no-ignore` (not default search) before claiming a file, module, or path does not exist
+- Verify completion by reading destination state directly — check the file, the endpoint, the channel — never infer from logs or idle signals
+- When posting to external platforms (GitHub, Slack) through the user's account, include an explicit agent-attribution marker in the message body
+- Pause and confirm before decisions that establish identity, project scope, or external-facing content; proceed autonomously on reversible sequential steps
 
 ## Things to avoid
-- Don't claim done without exercising the code path; the declared-ready hook fires repeatedly here — the pattern recurs
-- Don't post to external platforms (GitHub comments, PR bodies) without the owner attribution marker; it posts under the user's account
-- Don't iterate on UI changes when there's no visual verification mechanism — acknowledge the gap rather than burning tokens
-- Don't surface previously-deferred work (apps/artifacts the user shelved pending a trigger condition) unless that condition is met
+- Don't claim done/works/fixed without executing the changed code path — the declared-ready gate fires repeatedly here and correctly; each firing means an unexercised claim
+- Don't answer status or scoping questions with multi-section briefings — give the direct answer first, structure second
+- Don't treat agent-generated docs as the authoritative spec for audits or synthesis; re-ground against the human-authored upstream source
+- Don't place a period immediately after a file path in replies — it breaks terminal hyperlinking; follow paths with a space, comma, or restructure the sentence
 
 ## Open questions / known gaps
-- UI verification loop is broken: changes ship without visual confirmation, producing regressions that consume the next session's budget
-- Checkpoint summaries silently drop load-bearing constraints when a line cap is applied — no mechanical guard exists yet
+- UI verification is structurally blocked (no visual confirm mechanism in scope); acknowledge this explicitly rather than iterating blind and claiming progress
+- Behavioral corrections (prose style, task-list sync) reassert within a few turns — schedule re-checks every ~10 tool calls rather than treating a mid-session correction as permanent

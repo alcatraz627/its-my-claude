@@ -1,0 +1,130 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16989,
+    "correction_density": 0.02127659574468085,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22019476189094234,
+    "unit_count": 47
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 1 zero-tool style-enforcement unit (0093d8e9-0: 12912-char input, 652-char output, Unknown reaction); count trajectory: 14→14→2→8→3→5→8→2→3→1→1; single count consistent with recent low-band trend; deprioritize",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — unit b4194488-4 ends with git commit failure (index.lock present); no pre-check of lock state before issuing the commit; handled correctly in the next unit (b4194488-5: trash lock, verify clean, then commit succeeds); same probe-after-failure shape as prior cycles, resolution was sound but prevention gap persists"
+    ],
+    "calibration_score": 0.66,
+    "cross_references": [
+      "dream_insight_1 CONFIRMED (b4194488-4, b4194488-5): agent verified at the receiving end throughout — used playwright browser screenshots plus curl HTTP probes to confirm the redirect behavior, not just the server-side patch; read the rendered page in both dark and light mode before claiming verified; the wake rule 'read the consumer's state, never the producer's log' was applied correctly across both units",
+      "dream_insight_2 CONFIRMED_AVOIDANCE (b4194488-5): the goals/milestones feature explicitly audited BOTH sibling surfaces — the agent added goalOf to board.html and then caught that cli.ts also needed it, mutation-tested the disagreement (observed 19 cards on the board vs 0 from CLI with goalOf removed), and wired both before committing; the smoke test asserts 'board and CLI both give the matcher a goalOf' rather than testing either side against a literal; this is the exact pattern the insight prescribes"
+    ],
+    "overconfident_count": 0,
+    "recommendations": [
+      "optimism_bias_on_edit_availability: add a one-line pre-check before git commit — 'ls .git/index.lock 2>/dev/null && echo LOCK PRESENT' — this costs nothing and prevents the failure mode that has now recurred across Edit/Write (prior cycles) and git commit (this cycle); the recovery is always correct but the detection is always reactive",
+      "confirmation_bias_style_log: no new action warranted; trajectory remains at or below 1-3 count band; deprioritize unless rebound above 5"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "05bbfd53-2f33-41a8-9dd9-d05b22924e30",
+      101336
+    ],
+    [
+      "0093d8e9-78ec-4ecd-b733-7d568be2d461",
+      135022
+    ],
+    [
+      "b6fab009-ac47-4408-a398-b503b05d9d7b",
+      129925
+    ],
+    [
+      "b4194488-fea2-4285-a2e5-b6306f0af498",
+      18418573
+    ],
+    [
+      "7e85ba34-a1ee-4ae4-a276-0a3fde14b633",
+      139557
+    ],
+    [
+      "71e19c23-f443-4e14-b421-3d6e5a9c5788",
+      123036
+    ],
+    [
+      "f23b6559-27d7-4130-91ed-ef6d9d3e7c7f",
+      115307
+    ],
+    [
+      "e6a18408-1125-4ca0-b189-01b053c17011",
+      21445
+    ],
+    [
+      "d51c7fca-fa41-4f95-a298-b1d69caee21a",
+      115221
+    ],
+    [
+      "c6141d18-7e1e-4637-a76c-07a9c6f1996c",
+      2101983
+    ],
+    [
+      "c0ea0092-f621-44e1-b5b5-8832f38deb0d",
+      92952
+    ],
+    [
+      "ba57b418-5cf3-4a41-8d52-0387ab76148f",
+      112987
+    ],
+    [
+      "b4f89ad1-ecc2-48ba-b59a-0db3b698c66b",
+      108508
+    ],
+    [
+      "b18a9023-01b4-4114-8b55-5899b8a36922",
+      464071
+    ],
+    [
+      "60dcd267-67eb-444b-af0d-5dea98372ced",
+      111038
+    ],
+    [
+      "5cbe12eb-6a66-400e-afa6-f755acf84ea2",
+      114897
+    ],
+    [
+      "55cd6d1b-5ea0-495c-b22d-78f6c792a578",
+      114783
+    ],
+    [
+      "38c07b78-58f6-4865-b2f7-79136daff3f9",
+      114039
+    ],
+    [
+      "36607486-9e47-4460-bcbf-3531b96b8dcf",
+      5832861
+    ],
+    [
+      "2d301d90-2866-449e-a17f-0806a84f063f",
+      102075
+    ],
+    [
+      "150e763e-d1ac-4c39-a73b-8483eb4b5859",
+      110690
+    ],
+    [
+      "1338b9a0-c5ea-4726-8937-94e26729807c",
+      112785
+    ],
+    [
+      "7dfbf02f-47e4-4ccd-b07f-9063448e4597",
+      4329554
+    ],
+    [
+      "26739d4b-465b-4855-881f-c17c67022ae5",
+      8504367
+    ]
+  ],
+  "timestamp": "2026-08-31T05:37:46.962777Z",
+  "tokens_used": 21049,
+  "units_analyzed": 3,
+  "units_total": 47
+}

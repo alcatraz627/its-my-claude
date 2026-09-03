@@ -1,0 +1,230 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17543,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1360294085850556,
+    "unit_count": 9
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:WORSENING — 8 zero-tool style-enforcement units this cycle (81ebac84-0, 80b62722-0, 80784388-0, 7ae3aee5-0, 71caa93d-0, 714f170f-0, 6d5ca54e-0, 62ef3396-0); count trajectory: 14→14→2→8→3→5→8; current count matches the prior plateau level and reverses the improvement trend observed over the last two cycles; two of eight have non-standard input lengths (5039 vs typical 13710) suggesting slight variation in trigger source but same zero-tool response pattern; all Unknown reactions except one Accepted; pattern remains automated but regression from 5 warrants re-escalation"
+    ],
+    "calibration_score": 0.58,
+    "overconfident_count": 0,
+    "recommendations": [
+      "confirmation_bias_style_log has rebounded to plateau-level count (8) after two cycles of improvement; deprioritization is no longer warranted — flag for behavioral review rather than pattern-as-automated classification",
+      "unit 6e9368f7 (juror/opinion role, 1661-char output, no tools) is the sole non-style unit and appears well-calibrated for its task shape; no action needed",
+      "no new bias shapes detected this cycle; optimism_bias_on_agent_dispatch and git_push_to_main_without_fresh_approval from prior cycles have no matching units here and cannot be assessed for trajectory"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 9
+  },
+  "sessions": [
+    [
+      "8620d3f6-fc89-401e-aee0-b5a63618138a",
+      139916
+    ],
+    [
+      "85ddcddf-061f-4351-a066-061f1046cb36",
+      118222
+    ],
+    [
+      "854a5ab0-6c59-48a2-bd2f-11213a2198db",
+      121586
+    ],
+    [
+      "832e26c2-14f8-4ed9-bc33-84c1c3e41226",
+      140588
+    ],
+    [
+      "82abb810-1090-4b3d-acfc-9857d3b842d7",
+      128809
+    ],
+    [
+      "81ebac84-c926-4bf6-9d1d-132845aaaaee",
+      130682
+    ],
+    [
+      "8198cba8-10c1-4e85-9d3f-9ec271c4e6c4",
+      106058
+    ],
+    [
+      "815346bf-77b1-4e82-8590-f1a1c1b70135",
+      119566
+    ],
+    [
+      "80b62722-ca97-43da-ad76-cbb126b332d1",
+      135196
+    ],
+    [
+      "809a318c-4d63-4e53-9768-3d37a5a26b82",
+      115867
+    ],
+    [
+      "80784388-9473-4af8-8c87-1f51ab5c30a0",
+      117374
+    ],
+    [
+      "7fdffec5-40d3-4cd2-9aeb-1f60be0deae3",
+      117185
+    ],
+    [
+      "7f9249ff-7575-407b-b795-b293aeedb098",
+      101400
+    ],
+    [
+      "7f404bf1-7eb7-4bd1-850b-395b1c8d13bf",
+      123999
+    ],
+    [
+      "7c309de5-85b0-4763-9553-482505f384e3",
+      117929
+    ],
+    [
+      "7b902bbe-f108-4c9a-8472-b8073ee76cc6",
+      113859
+    ],
+    [
+      "7ae3aee5-2daa-4e9c-8c12-0f22007012de",
+      135737
+    ],
+    [
+      "7a144d79-933f-45bc-bb3d-5ec109b173c6",
+      122550
+    ],
+    [
+      "797a5fb0-fc36-4f57-937c-94a2dbc84a0f",
+      141452
+    ],
+    [
+      "788ab0d6-a511-4aaa-a14c-5abe5d349a46",
+      135665
+    ],
+    [
+      "7807feee-bc2a-4c23-a43e-da090ece0098",
+      115301
+    ],
+    [
+      "77ba415c-6e29-4715-bb39-e64aa3dd1ce0",
+      147136
+    ],
+    [
+      "778af1e5-484b-4163-b349-2704e182267d",
+      110640
+    ],
+    [
+      "76c00d31-12fb-44b4-b2a3-28dcbf1c68e4",
+      111905
+    ],
+    [
+      "76982d29-d2aa-4f85-a420-2f39e9ff61a2",
+      144311
+    ],
+    [
+      "75d6be73-4cbf-45a1-b384-4c8a5116117a",
+      129440
+    ],
+    [
+      "75563524-5e95-4475-bf2d-676c997b9f7e",
+      131625
+    ],
+    [
+      "7524a80d-c9bd-4347-afc1-a73b4d10adff",
+      127357
+    ],
+    [
+      "74725f3b-e3cb-4d06-b202-f09ba77fec88",
+      107208
+    ],
+    [
+      "737e3803-91e7-4ac6-8cee-5d8714008ceb",
+      155495
+    ],
+    [
+      "7373d202-4246-4819-8ccf-e6c6387d3dd0",
+      130309
+    ],
+    [
+      "71caa93d-152a-47d3-bab9-c862a9be50d6",
+      115935
+    ],
+    [
+      "714f170f-fc0a-4e76-b972-0783abca514b",
+      116159
+    ],
+    [
+      "6fb09031-70f1-4f62-85a2-6b94c2fd996d",
+      134966
+    ],
+    [
+      "6f7b3fca-4a1e-48c9-a822-3932ab702eba",
+      115837
+    ],
+    [
+      "6e9368f7-21ef-42b1-8dad-7d51a5835699",
+      100089
+    ],
+    [
+      "6d5ca54e-d38c-422b-beda-70308b4aec15",
+      131146
+    ],
+    [
+      "6c9a0921-7747-4357-bc13-dcde7b50267b",
+      125622
+    ],
+    [
+      "6c4af4ec-6d43-4c28-9661-b8fb05253d06",
+      107245
+    ],
+    [
+      "6a6ced68-86bf-4587-83f0-6b2235dabd63",
+      125686
+    ],
+    [
+      "68544756-fa2d-4738-bc88-cd8d387e1337",
+      110310
+    ],
+    [
+      "6824943f-f742-46da-b902-bc91b76c5463",
+      114633
+    ],
+    [
+      "66e5938d-94c8-4b16-a240-64b2c50aedf4",
+      110820
+    ],
+    [
+      "659d8dce-7e19-4d69-9c6d-69b157e9935e",
+      123306
+    ],
+    [
+      "6546b5b7-c618-48a7-aeb7-0a18687c984a",
+      118077
+    ],
+    [
+      "631f001c-9649-4e19-888f-66d06fa4f273",
+      127513
+    ],
+    [
+      "62ef3396-9291-446a-b352-d214df7795ee",
+      124178
+    ],
+    [
+      "616e7f9a-1d0e-4378-82e1-6953159fe3f2",
+      131283
+    ],
+    [
+      "612f8e7c-709c-4dc6-9740-63366f7cb087",
+      147286
+    ],
+    [
+      "601e8d57-2315-4237-9bd5-3f148429747e",
+      109847
+    ]
+  ],
+  "timestamp": "2026-08-30T17:53:24.508508Z",
+  "tokens_used": 2226,
+  "units_analyzed": 9,
+  "units_total": 9
+}

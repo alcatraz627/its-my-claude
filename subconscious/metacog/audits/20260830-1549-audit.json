@@ -1,0 +1,249 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17438,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.22462432854776843,
+    "unit_count": 70
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:MIXED_TRAJECTORY — 5 zero-tool style-enforcement units this cycle (b90f8f59-0, b8c37136-0, b1ca61aa-0, aed4e0e9-0, a42a1da0-0); count trajectory: 14→14→2→8→3→5; slight rebound from 3 but still well below 8+ plateau; pattern remains automated rather than behavioral",
+      "optimism_bias_on_agent_dispatch:RECURRING:STABLE — unit a85cce65-28 shows two Agent tool calls with success:false before two succeeded; same probe-after-failure shape as prior optimism_bias_on_edit_availability but on Agent dispatch rather than Edit/Write tool; agent attempted dispatch without verifying prerequisite agent capacity state",
+      "git_push_to_main_without_fresh_approval:NEW — units a85cce65-69 and a85cce65-72 both execute git push origin main triggered by a bash-hook input (message_hash 9bf116d58926d66c, topic bash/stdout, not a user message requesting push); per rules each push to main requires fresh explicit approval; both were Accepted but the authorization path is ambiguous — a hook trigger is not the same as the user granting fresh approval"
+    ],
+    "calibration_score": 0.62,
+    "cross_references": [
+      {
+        "insight": "IPC send-without-ack delivery confirmation",
+        "observation": "a123a5fc-9 and a85cce65-24 both verify IPC delivery by checking receiver state (gcloud builds list, claude-ipc inbox checks) rather than trusting send success codes — CONFIRMS the dream insight; both sessions follow the round-trip verification pattern",
+        "verdict": "confirmed"
+      },
+      {
+        "insight": "block is a handoff point not a problem to solve",
+        "observation": "a123a5fc-37 surfaces the exact recovery command for the warden (gate run with audit pair) and stops rather than attempting to run the gate itself — CONFIRMS; unit does not retry or stall on the watcher dependency",
+        "verdict": "confirmed"
+      },
+      {
+        "insight": "attention narrows to proximate trigger",
+        "observation": "a85cce65-24 investigates the runner stall comprehensively but within the runner scope; the midnight tmp_cleaner wipe and the event-loop block on part_type_matching were both found and fixed without widening scope to unrelated pages — partially confirms the insight in that scope was correctly limited, but notably the agent did NOT miss adjacent causes (found both the store wipe and the loop block in the same unit)",
+        "verdict": "plausible"
+      }
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "confirmation_bias_style_log: count rebounded from 3 to 5 — do not deprioritize yet; trajectory is not a stable improvement; monitor next cycle before downgrading",
+      "optimism_bias_on_agent_dispatch: probe Agent availability before dispatch in high-stakes multi-seat sessions; the a85cce65 session had 2 failed Agent dispatches that consumed a turn before succeeding — check peer availability via ListAgents before dispatching",
+      "git_push_to_main_without_fresh_approval: add a rule or hook check that bash-hook-triggered push sequences still surface an explicit confirmation before pushing to main; a sentinel file touch (unit a85cce65-68) used as a push signal is a brittle approval path that the rules explicitly prohibit"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 29
+  },
+  "sessions": [
+    [
+      "b9ddf256-6944-43af-bb5a-6eab77e8f4db",
+      121253
+    ],
+    [
+      "b90f8f59-e5b6-4b50-951f-cb54c19e2428",
+      143267
+    ],
+    [
+      "b8c37136-50ee-40ca-9ab3-9a73498c04a0",
+      122293
+    ],
+    [
+      "b83c9364-d507-4cf5-a51b-2bd45222319f",
+      110163
+    ],
+    [
+      "b74759dd-5ce4-45c5-9f5a-a1b8c88d87bb",
+      135986
+    ],
+    [
+      "b212fd50-7b4d-4538-9f43-ab23b816fc8a",
+      104497
+    ],
+    [
+      "b1ca61aa-ed02-4909-be7b-7a3ab5eb242b",
+      124854
+    ],
+    [
+      "b035cb1a-b09b-4db6-951f-3f87192cf7f9",
+      111529
+    ],
+    [
+      "aed4e0e9-7cf9-40c1-8a5c-483d944284ed",
+      142948
+    ],
+    [
+      "ade4d4ec-f01c-41ad-822d-12493fe0cd7e",
+      130656
+    ],
+    [
+      "acb1b8b7-2c9e-4da6-a74d-2f580eec95fa",
+      126038
+    ],
+    [
+      "a9bc5bf4-9fd0-43e9-8d43-33490a1254a8",
+      131989
+    ],
+    [
+      "a99347db-4b95-48ed-920c-7dddb6cf60ef",
+      101024
+    ],
+    [
+      "a9391cc9-9cff-45ec-a544-8a809dcf4fb1",
+      129443
+    ],
+    [
+      "a8628753-86d3-4a7d-842b-05362bec922a",
+      125879
+    ],
+    [
+      "a85cce65-1fd2-4e8d-9c24-8837e41dc7d2",
+      5952444
+    ],
+    [
+      "a6e4a497-cddc-4108-9eaf-17a4214adf1b",
+      99707
+    ],
+    [
+      "a4b8fb13-9d53-4619-837e-c63b007789bb",
+      134378
+    ],
+    [
+      "a42a1da0-3e04-42a5-a71a-ac2ece024d90",
+      142021
+    ],
+    [
+      "a1f6dce5-93ff-4bd3-9448-4ed30e35ea88",
+      116912
+    ],
+    [
+      "a1d5afa6-4ecb-4fbe-9eaa-e13ba6a16e60",
+      118920
+    ],
+    [
+      "a18d7642-3daa-4ac2-96a4-8c84750278c6",
+      128175
+    ],
+    [
+      "a123a5fc-5815-43ce-9c1e-633a01adcd33",
+      7148953
+    ],
+    [
+      "a0de7367-77ca-4147-a73c-50e01ec1e43f",
+      108785
+    ],
+    [
+      "9f6273df-f182-4eab-be7f-07c513939f5d",
+      101275
+    ],
+    [
+      "9f532164-eb1e-4e58-aa9e-7b3c60cedd86",
+      130775
+    ],
+    [
+      "9f295dbc-7928-4761-9836-769f3aa82a81",
+      5554483
+    ],
+    [
+      "9d45a01c-128a-4ed6-bb68-c0f9a711df93",
+      105599
+    ],
+    [
+      "9c31e772-6931-4ac9-a221-3415470bac84",
+      138222
+    ],
+    [
+      "9badb811-364a-45f1-bff4-7f5f389367d3",
+      11657158
+    ],
+    [
+      "998c2f29-4532-49c7-a0db-2f36867edaf3",
+      136402
+    ],
+    [
+      "98a011aa-21a4-4603-8200-e966b2364f36",
+      129467
+    ],
+    [
+      "987a86b7-1b3e-49f5-ab5d-a7db4a54c488",
+      115935
+    ],
+    [
+      "98210e79-58cd-4a9a-b75c-13cc607a6556",
+      129715
+    ],
+    [
+      "97e73d0b-9631-44c7-a50b-f8e9cc8948e2",
+      123371
+    ],
+    [
+      "970a58f5-43aa-4ac8-980e-df38515c8632",
+      125503
+    ],
+    [
+      "9619c8b6-68bd-442f-b282-d43350d17592",
+      132749
+    ],
+    [
+      "946d927f-18fd-49df-b20d-a6150ec76985",
+      118168
+    ],
+    [
+      "9404f622-04f9-421b-8846-129a2519ab47",
+      126157
+    ],
+    [
+      "92173030-4f83-4642-9072-602de3d524c2",
+      136245
+    ],
+    [
+      "91dcbaa8-82b5-43e1-9c11-2d6b6c877279",
+      123568
+    ],
+    [
+      "918da76c-75b0-492c-aabb-9e89f104876f",
+      176872
+    ],
+    [
+      "8ec774c3-5bf4-439b-bacc-1ab76e561172",
+      5266079
+    ],
+    [
+      "8eab76e1-31c1-4dd6-b50f-4bf7d9738ddf",
+      130762
+    ],
+    [
+      "8e987b68-0be6-4dbd-b96d-83a41a1c6b38",
+      11574876
+    ],
+    [
+      "8dd2a46d-a6e9-4607-a4b3-2fd2627d5ed8",
+      130455
+    ],
+    [
+      "8cc37e12-a967-4b6c-95a0-55d10e64b47f",
+      136938
+    ],
+    [
+      "8bcdf671-8718-465c-a1c3-348ff25ffdd8",
+      116541
+    ],
+    [
+      "8abf1df8-4045-41af-8e8d-f9bf5cd499fc",
+      125310
+    ],
+    [
+      "8a8ec883-21c1-488c-b3e4-e2d299c2acfa",
+      132232
+    ]
+  ],
+  "timestamp": "2026-08-30T15:49:32.142571Z",
+  "tokens_used": 22399,
+  "units_analyzed": 31,
+  "units_total": 70
+}

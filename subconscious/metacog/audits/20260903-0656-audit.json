@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17250,
+    "correction_density": 0.07407407407407407,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17702013932424743,
+    "unit_count": 81
+  },
+  "response": {
+    "biases_detected": [
+      "inline_python3_str_replace_pattern:RECURRING:WORSENING — units bceca328-8 contains five separate inline python3 str.replace() blocks across CLAUDE.md, lane-start.sh, and contract/v6/20260902-streams-and-lanes.md; none carry the explicit `assert old in s` guard that the prior two cycles identified as the corrected form; prior cycles scored this as IMPROVING because guards appeared; this cycle shows regression to the unguarded form; one replace on lane-start.sh targets a multi-line string with internal indentation that is fragile to any whitespace drift; no failures observed but the prevention gap is now larger than it was two cycles ago",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — Write to feedback_never-read-user-notes-files.md fails on the first attempt (success:false, duration_ms:0) and succeeds on the second with no pre-check of availability; same probe-after-failure shape as prior cycles; the task-table bash call (the large i1..i6 block) also returns success:false and is recovered by writing a script and re-running; two distinct fail-then-recover sequences in a single unit with no availability probe before either attempt; resolves correctly both times but pattern is unchanged",
+      "compound_bash_overloading:RECURRING:STABLE — the task-table add block chains six task-create calls, six meta calls, three blocked-by links, and a list call into one Bash invocation; failure of the first attempt masked the intermediate state for all six items simultaneously; the script-based recovery was sound but only possible because the agent caught the top-level failure; the pattern from prior cycles persists though the recovery strategy (externalizing to a script) is better than a bare retry"
+    ],
+    "calibration_score": 0.52,
+    "overconfident_count": 0,
+    "recommendations": [
+      "inline_python3_str_replace: the regression from the asserted form back to bare str.replace() is the highest-priority finding this cycle; prior cycles flagged IMPROVING based on the guards appearing; those guards are absent here across five distinct replace calls; recommend flagging this as a mandatory pre-condition check — before any inline python3 patch, read the target string and assert presence before replacing; the lane-start.sh multi-line target is especially fragile",
+      "optimism_bias_on_edit_availability: no improvement across four cycles; the cost of a pre-check (one Read or a test-existence Bash call) is lower than the recovery round-trip; given the pattern's stability, a pre-check rule rather than a recovery strategy is the fix; deprioritize further recommendation if no regression observed in next cycle",
+      "compound_bash_overloading: the script-externalization recovery pattern observed here is an improvement over bare retry; no new recommendation beyond the prior cycle's note; maintain current monitoring cadence"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 1
+  },
+  "sessions": [
+    [
+      "d909e97d-6104-41f6-b573-b2fce3bf5828",
+      128998
+    ],
+    [
+      "c5dbca60-03be-4848-b7be-e0cb2367b5ba",
+      97405
+    ],
+    [
+      "c40512a0-150a-4b30-9c43-0db507f4e03f",
+      117061
+    ],
+    [
+      "bceca328-f01e-429c-8a3a-47b5895485f2",
+      6029855
+    ],
+    [
+      "b87ee0bf-dfa6-40ab-9cff-0b8693d48f67",
+      125602
+    ],
+    [
+      "afa77b51-b091-437a-bb4c-249157209a58",
+      9141584
+    ],
+    [
+      "a12d7f42-fd33-4cda-aa63-bdac3be769b2",
+      115060
+    ],
+    [
+      "9db9923d-7209-4c27-ba6b-723dadc082c0",
+      122143
+    ],
+    [
+      "9a9309c2-bb50-473e-a5ee-d7cf9685f83e",
+      122623
+    ],
+    [
+      "979e1481-40e9-4bef-859a-88c7df56ea47",
+      150037
+    ],
+    [
+      "90234847-11a3-43c0-a6f2-2de7fe0dc3ab",
+      100906
+    ],
+    [
+      "8ca518df-67b4-44a3-b67d-080a3e67aab0",
+      99601
+    ],
+    [
+      "811ed879-d73d-432f-bfd9-85007b5b0bc1",
+      121623
+    ],
+    [
+      "7dca03b5-e4a6-4fcc-bcef-3eed71a47415",
+      16504911
+    ],
+    [
+      "7c983be3-6aa9-461d-97d8-7a396ef6929c",
+      130177
+    ],
+    [
+      "7abf727f-78bf-4777-9e09-c929224ea1cb",
+      150693
+    ],
+    [
+      "79f1b885-5b6d-400d-8228-0a1e7859290c",
+      99793
+    ],
+    [
+      "73ff1c7e-9be5-425c-a56a-1dd0dd4dcc87",
+      107891
+    ],
+    [
+      "70d17724-1565-4e5d-8470-f618eacd7df5",
+      115348
+    ],
+    [
+      "6e58bdf0-055f-46a9-aaec-7bf40602dca0",
+      110514
+    ],
+    [
+      "6bed7810-a5be-4883-8e5c-b0bf9c403226",
+      113246
+    ],
+    [
+      "6b6650d5-3b0d-4686-b25c-61b48d0375d1",
+      98685
+    ],
+    [
+      "68446ff5-8a25-4b54-8791-8988e963c924",
+      100598
+    ],
+    [
+      "6838303d-2785-4119-a552-a7f8498bbd76",
+      105261
+    ],
+    [
+      "67cb961a-f472-48b2-b4d1-d45fef9b78e3",
+      4122505
+    ],
+    [
+      "5d819e67-7fb3-4b75-bb13-fa054871d4cc",
+      7285160
+    ],
+    [
+      "5ba6c770-f3c5-4bdf-9d48-cf0bcfd38aa1",
+      97763
+    ],
+    [
+      "5aa15310-d2fc-4b96-bb08-ab6a82781437",
+      124658
+    ],
+    [
+      "597da719-643c-4231-bc12-9db07ad8cefa",
+      122051
+    ],
+    [
+      "546d4462-dde6-437c-9c93-a41ea5743bc2",
+      111967
+    ],
+    [
+      "4e74c8db-7ed7-4107-8508-b3bec71a8d4e",
+      115714
+    ],
+    [
+      "4dd13b16-bdb8-4ede-956b-fc6dde21a78f",
+      101917
+    ],
+    [
+      "4621ce3c-010b-47c1-aeb2-786d98607af8",
+      97887
+    ],
+    [
+      "41d60b32-d116-42ba-82b4-fa8bfbe2a169",
+      10507325
+    ],
+    [
+      "3e7b4af6-ed9c-4f2e-8adf-960b915743f9",
+      15820711
+    ],
+    [
+      "39a120c7-ac3e-4d49-93f9-b1a2090ca15b",
+      109678
+    ],
+    [
+      "35636bd8-c9ae-4d7f-bf57-f8d81be08e6c",
+      120216
+    ],
+    [
+      "33045d4e-b30a-4e13-9511-38949f45a59a",
+      129960
+    ],
+    [
+      "32d6554b-2d7b-426f-be61-f383c552ccc0",
+      113107
+    ],
+    [
+      "305bb551-108b-46fa-b534-950663abad15",
+      107028
+    ],
+    [
+      "2ec7529c-3883-43c0-85dd-f769e9869eee",
+      23656
+    ],
+    [
+      "2aa18278-4405-42c6-9702-99b65b9d17d0",
+      119409
+    ],
+    [
+      "27a9c97e-8f71-4216-aae8-760d9f9903b6",
+      130738
+    ],
+    [
+      "25219db9-642d-4a11-9b88-6b06cc10b93b",
+      122758
+    ],
+    [
+      "1eb5ca50-7cc7-42a6-8526-8b77335f45ac",
+      97637
+    ],
+    [
+      "19532f1a-c74a-40c7-a88e-391b0d328625",
+      125176
+    ],
+    [
+      "137b4dd7-001e-4d50-b5ac-a25dbaae59dd",
+      130175
+    ],
+    [
+      "11112ceb-e18d-46b1-b4d4-6357938c2c46",
+      98786
+    ],
+    [
+      "0fb73468-86e3-4dd4-a84d-a9accd1a0610",
+      118963
+    ],
+    [
+      "05ab5940-4afe-4835-af25-2269794aa771",
+      124935
+    ]
+  ],
+  "timestamp": "2026-09-03T06:56:35.380187Z",
+  "tokens_used": 9980,
+  "units_analyzed": 1,
+  "units_total": 81
+}

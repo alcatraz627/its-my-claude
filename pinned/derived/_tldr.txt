@@ -1,5 +1,5 @@
-📌 The Artifact tool's own description recommends publishing proactively for work-p
-📌 A tool's feature surface is invisible to an agent that only ever calls one verb.
-📌 A UI the owner reviews repeatedly accumulates rulings that nothing holds, so eac
-📌 A component built for surface A was reused for surface B, and the invariants B r
-📌 Owner-facing queues should be grouped by what each item costs the OWNER (seconds
+📌 The owner's sharpest recurring cost in this project is being asked something he 
+📌 ADR-004 (external voice + floor-only measurement) is accepted policy and the own
+📌 UI work stack shipped 2026-08-30/31 (callouts Stop gate, forge-v6 seeded, canoni
+📌 A decision page offered a confident pick while the evidence behind it was missin
+📌 Agents treat a failing deploy as a puzzle to solve, because solving it feels lik

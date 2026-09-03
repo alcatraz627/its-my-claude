@@ -1,0 +1,257 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17331,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.10192487589724408,
+    "unit_count": 45
+  },
+  "response": {
+    "biases_detected": [
+      "structural_claim_without_reading_code:RECURRING:STABLE — unit f56866a0-4 produced 1303 chars with 2 code blocks on a 12-char 'eject' input using zero tools, then was corrected; this is the canonical zero-tool+short-input+code-output+correction signature; session analytics confirm 28x recurrence with the pattern escalated to hook rung, and no trajectory improvement is visible in this cycle's sample",
+      "confirmation_bias_style_log:RECURRING:IMPROVING — 0 zero-tool style-enforcement units detected in this cycle's 3-unit sample vs 7 in the prior cycle; prior history guidance says deprioritize if no worsening; trajectory appears improving but sample size is too small to confirm stable correction"
+    ],
+    "calibration_score": 0.31,
+    "overconfident_count": 1,
+    "recommendations": [
+      "structural_claim_without_reading_code requires no new recommendation — it is already hook-escalated and S3-flagged at 28x; the actionable note is that the pattern is detectable at input-length < 20 chars combined with zero tools and code-block output, suggesting the hook could gate on that triple rather than on output content alone; do not re-file this as a new finding",
+      "affirm the f2d0df21-8 execution pattern: extensive pre-read before structural claims, mutation-tested guards individually with restore-after, worktree isolation, explicit PR polling loop, and a stated rationale for each concession to the reviewer; this is the positive counterexample that structural_claim_without_reading_code needs for contrast",
+      "confirmation_bias_style_log: maintain deprioritization per history guidance; if next cycle returns non-zero count, flag as REBOUNDING (per the 2→8 rebound pattern documented in prior cycle)",
+      "no new biases detected in this sample; f2d0df21-1's zero-output accepted unit is consistent with a session-start acknowledgment or broker-message handshake, not a style-enforcement pattern"
+    ],
+    "underconfident_count": 0,
+    "unit_assessments": [
+      {
+        "biases": [
+          "structural_claim_without_reading_code"
+        ],
+        "confidence_calibration": -0.72,
+        "error_pattern_match": true,
+        "strategy_quality": 0.1,
+        "unit_id": "f56866a0-4a5e-4443-99c9-201b8b081fd2-4"
+      },
+      {
+        "biases": [],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": false,
+        "strategy_quality": 0.5,
+        "unit_id": "f2d0df21-5dfc-406f-a370-f7eacab78897-1"
+      },
+      {
+        "biases": [],
+        "confidence_calibration": 0.82,
+        "error_pattern_match": false,
+        "strategy_quality": 0.91,
+        "unit_id": "f2d0df21-5dfc-406f-a370-f7eacab78897-8"
+      }
+    ],
+    "well_calibrated_count": 2
+  },
+  "sessions": [
+    [
+      "f56866a0-4a5e-4443-99c9-201b8b081fd2",
+      425972
+    ],
+    [
+      "f2d0df21-5dfc-406f-a370-f7eacab78897",
+      15954970
+    ],
+    [
+      "eda66bb8-e51d-428c-a1be-2909aeb12ed7",
+      130603
+    ],
+    [
+      "e2be1c41-8810-4d2b-802c-36743336ec67",
+      100830
+    ],
+    [
+      "94fa1b71-a902-4903-b285-081d7119beb1",
+      117691
+    ],
+    [
+      "8fc7bb6b-e7bd-491a-9a39-f7b2f29dddcd",
+      132480
+    ],
+    [
+      "69b01d5e-1df7-443d-b698-dbb3102435eb",
+      151188
+    ],
+    [
+      "637623ad-2aca-40fb-8a6e-509fd6ed2dc9",
+      123869
+    ],
+    [
+      "5cb3b3ff-aabe-4307-9493-9d99f48f2539",
+      100387
+    ],
+    [
+      "50a165f6-6009-4442-bed7-0454a26d4b85",
+      122925
+    ],
+    [
+      "45ad5738-3eb9-4857-a7d1-0c83f4975e58",
+      113311
+    ],
+    [
+      "26885c19-a1d1-458e-ac2d-d7ca035a38cf",
+      100188
+    ],
+    [
+      "08df3dcb-85c8-4efd-b758-ea229c23cc81",
+      124714
+    ],
+    [
+      "bd70a45e-3b99-4945-8917-312bfbfe2c83",
+      137357
+    ],
+    [
+      "85ffa728-fe9b-46c9-b841-3f6830a8ac8c",
+      30494316
+    ],
+    [
+      "7fcbfd25-c42b-4bbb-9144-278ea3e8e3e9",
+      138112
+    ],
+    [
+      "5acd93bb-90f4-4b16-8542-00c4b343310f",
+      10945695
+    ],
+    [
+      "268e8f10-2ed5-4291-8403-3f8e55ac5797",
+      10949586
+    ],
+    [
+      "0ec0805f-e308-4a45-a5bc-ff2fae81eca7",
+      27131
+    ],
+    [
+      "48e5467c-d5cd-473b-a5bd-73fd5c4f5d2d",
+      650508
+    ],
+    [
+      "30ed8609-93cc-4325-8fae-ee5ed5b21597",
+      447024
+    ],
+    [
+      "9419e956-1a64-4d1f-8b04-1bc584d033c2",
+      131275
+    ],
+    [
+      "a745fb70-b3e8-44d1-aff6-8210ccd07a3c",
+      116451
+    ],
+    [
+      "a1d30441-1a8e-4f61-9efa-ebf4d04b6589",
+      117154
+    ],
+    [
+      "19182439-7f8b-4d78-9589-1bdac627d8a9",
+      113235
+    ],
+    [
+      "ff616d5b-6d60-4fe3-84cc-26fdcef9dec4",
+      131893
+    ],
+    [
+      "feec721e-bab0-4bdc-a49b-ba76676cf1cf",
+      110220
+    ],
+    [
+      "fea560ec-c1f6-420a-be38-41428107b5e6",
+      127057
+    ],
+    [
+      "fc9c2ba3-cf4c-4e24-9718-ca014c9f7f86",
+      13008525
+    ],
+    [
+      "f7634814-002d-4b77-a035-d044aebfbcfe",
+      135706
+    ],
+    [
+      "f48fd726-033c-4903-ac0e-239a91d1e452",
+      2908415
+    ],
+    [
+      "f311f92a-53a6-4e60-97e1-af1e873e844c",
+      128819
+    ],
+    [
+      "f2e6b476-a726-49b0-9b11-a60e93b144c2",
+      136519
+    ],
+    [
+      "f1fb42fc-4ef1-486f-acfd-5be88e24db43",
+      127375
+    ],
+    [
+      "f14a513b-25c4-4b43-a1d8-0432e8ff5157",
+      130031
+    ],
+    [
+      "f0dd7071-96e7-4ae2-af1a-7c60b3661689",
+      115929
+    ],
+    [
+      "f02cc058-82df-4d23-aacc-673fc173d27b",
+      131636
+    ],
+    [
+      "edd6be57-d161-42ba-819a-6f4568d775a4",
+      110593
+    ],
+    [
+      "ed926f60-eb00-402c-bdc3-68057a6cfcde",
+      124469
+    ],
+    [
+      "eace878a-7f54-4964-8c0a-0120f8baecf8",
+      129208
+    ],
+    [
+      "eaaf68ff-6ba8-4bcb-8c7a-8f46135c26e6",
+      142631
+    ],
+    [
+      "ea68c2af-d90b-42ff-84ae-ac194b5bd119",
+      117958
+    ],
+    [
+      "e992816a-8443-48e4-991c-6db4a6c05182",
+      125890
+    ],
+    [
+      "e94a1df1-d55d-4b72-9fae-c2659232b890",
+      104314
+    ],
+    [
+      "e6726752-8858-4ea4-8e18-30b8b3cc54d8",
+      126575
+    ],
+    [
+      "e65ec2bd-3d79-4245-97be-3219ccb9168e",
+      102541
+    ],
+    [
+      "e6411e06-c553-4ea9-a2cf-0b900f1e4680",
+      135343
+    ],
+    [
+      "e4f0aa03-684b-4f91-a24c-f82e7854e9c5",
+      129381
+    ],
+    [
+      "e37eaa83-0c81-4dda-ad97-9074f3d82d02",
+      104122
+    ],
+    [
+      "e33e6164-a275-4191-887c-ea3a0f1925e6",
+      115896
+    ]
+  ],
+  "timestamp": "2026-08-28T07:41:10.922188Z",
+  "tokens_used": 8758,
+  "units_analyzed": 3,
+  "units_total": 45
+}

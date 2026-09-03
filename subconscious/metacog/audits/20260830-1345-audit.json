@@ -1,0 +1,319 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17159,
+    "correction_density": 0.038461538461538464,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.20690769139725232,
+    "unit_count": 26
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:MIXED_TRAJECTORY"
+    ],
+    "calibration_score": 0.67,
+    "cross_references": [
+      "c2398e8b-8: CONFIRMS dream insight 1 (local-fix-on-global-pattern) — agent audited dashboard, jobs, job-detail, admin, and dark-mode in a single pass rather than fixing one surface in isolation",
+      "c2398e8b-8: REFUTES the negative case of dream insight 3 (anomaly dismissal) — the automotive-requirements 'Today it is zero' claim was an anomaly the recon seat produced; the reviewing agent caught it, verified it against map-columns.ts, and inserted a timestamped correction rather than rationalizing past it; this is the correct behavior the insight prescribes",
+      "c2398e8b-9: CONFIRMS dream insight 3 positively — PCdb and FaithfulnessJudgeAgent were flagged as potentially existing in the estate; the agent went and read the actual files before claiming they did, rather than pattern-matching from prior projects",
+      "c2398e8b-19: gate1.sh self-correction (two rounds of fixing wrong checks) CONFIRMS the ideal behavior pattern from dream insight 3 — detected that own checks were wrong and corrected rather than rationalizing the passing score"
+    ],
+    "overconfident_count": 0,
+    "recommendations": [
+      "Style-enforcement zero-tool unit count is 6 this cycle, up from 3 in the prior cycle but below the 8-14 plateau range — trajectory is ambiguous rather than clearly improving; continue monitoring for two more cycles before deprioritizing",
+      "No new behavioral biases detected in substantive units; the c2398e8b session shows strong self-correction patterns (gate1.sh self-debugging, automotive-requirements correction) — these are affirm-worthy behaviors that should be reinforced"
+    ],
+    "underconfident_count": 0,
+    "unit_assessments": [
+      {
+        "bias_indicators": [
+          "confirmation_bias_style_log"
+        ],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": "zero-tool style-enforcement automated spawn; same signature as prior cycles",
+        "strategy_quality": 0.3,
+        "unit_id": "e127a39d-3008-4f66-9ef5-86d2b20dd791-0"
+      },
+      {
+        "bias_indicators": [
+          "confirmation_bias_style_log"
+        ],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": "zero-tool style-enforcement automated spawn",
+        "strategy_quality": 0.3,
+        "unit_id": "e101ce3e-a057-4fe7-9df1-bc3ec97ab173-0"
+      },
+      {
+        "bias_indicators": [
+          "confirmation_bias_style_log"
+        ],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": "zero-tool style-enforcement automated spawn",
+        "strategy_quality": 0.3,
+        "unit_id": "dd7f2ce3-a9d1-47c3-abad-ccfc80eb2244-0"
+      },
+      {
+        "bias_indicators": [
+          "confirmation_bias_style_log"
+        ],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": "zero-tool style-enforcement; shorter input (3486) vs typical 13710 — possible manual trigger rather than automated",
+        "strategy_quality": 0.3,
+        "unit_id": "d2276f0f-4d19-4a6e-8e4a-2b3f72264bb0-0"
+      },
+      {
+        "bias_indicators": [
+          "confirmation_bias_style_log"
+        ],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": "zero-tool style-enforcement automated spawn; 20-char output is the shortest observed",
+        "strategy_quality": 0.3,
+        "unit_id": "cf6fb5a8-808b-455b-83f1-d8386e24f1c1-0"
+      },
+      {
+        "bias_indicators": [
+          "confirmation_bias_style_log"
+        ],
+        "confidence_calibration": 0.5,
+        "error_pattern_match": "zero-tool style-enforcement; zero-length output; Accepted reaction is notable — only Accepted in this batch",
+        "strategy_quality": 0.3,
+        "unit_id": "c5dd00a3-beac-473d-8c8a-f6d72b3d59d4-0"
+      },
+      {
+        "bias_indicators": [],
+        "confidence_calibration": 0.9,
+        "error_pattern_match": "none — agent found and self-corrected an erroneous claim in automotive-requirements.md (the 'Today it is zero' claim), which is the correct behavior against the dream insight about anomaly dismissal",
+        "strategy_quality": 0.92,
+        "unit_id": "c2398e8b-6002-458e-904e-14ae3eccc71d-8"
+      },
+      {
+        "bias_indicators": [],
+        "confidence_calibration": 0.88,
+        "error_pattern_match": "none — sibling recon verified PCdb and FaithfulnessJudgeAgent against actual files before claiming they existed; citations were grounded",
+        "strategy_quality": 0.9,
+        "unit_id": "c2398e8b-6002-458e-904e-14ae3eccc71d-9"
+      },
+      {
+        "bias_indicators": [],
+        "confidence_calibration": 0.85,
+        "error_pattern_match": "none — UI fixes verified by screenshot after each change; screenshot at sleep=false before browser_take_screenshot once failed and was retried cleanly",
+        "strategy_quality": 0.88,
+        "unit_id": "c2398e8b-6002-458e-904e-14ae3eccc71d-18"
+      },
+      {
+        "bias_indicators": [],
+        "confidence_calibration": 0.9,
+        "error_pattern_match": "none — gate1.sh was self-corrected three times when checks were found to flag honest behavior (computed confidence, truthful zero cost) as defects; high-quality self-calibration",
+        "strategy_quality": 0.93,
+        "unit_id": "c2398e8b-6002-458e-904e-14ae3eccc71d-19"
+      }
+    ],
+    "well_calibrated_count": 10
+  },
+  "sessions": [
+    [
+      "e127a39d-3008-4f66-9ef5-86d2b20dd791",
+      123759
+    ],
+    [
+      "e101ce3e-a057-4fe7-9df1-bc3ec97ab173",
+      129140
+    ],
+    [
+      "e05ce69b-713f-495a-95ed-c4ab4331e82f",
+      100752
+    ],
+    [
+      "dd7f2ce3-a9d1-47c3-abad-ccfc80eb2244",
+      127403
+    ],
+    [
+      "dcb11a67-7777-4740-a9ee-7739f3a74f07",
+      130709
+    ],
+    [
+      "dc999dd4-ee42-499f-b21a-fe9bd112fa28",
+      101504
+    ],
+    [
+      "dbe680f5-cace-4002-9a6a-d261d1490541",
+      105549
+    ],
+    [
+      "db59aeb7-3124-4b0e-b627-17b5a50e05d7",
+      120646
+    ],
+    [
+      "d9e7879b-aeef-453c-b77b-f574cf890b97",
+      133950
+    ],
+    [
+      "d9b2064b-a0ea-4e63-af79-8a9fd584748c",
+      101527
+    ],
+    [
+      "d6d3f911-092b-4278-a655-ea9b1a67bf33",
+      104761
+    ],
+    [
+      "d5713162-4825-4e2e-9ae6-e6042678ec05",
+      130829
+    ],
+    [
+      "d4db8baf-9fd1-4e31-9cb4-3bdb6c2ecea8",
+      121070
+    ],
+    [
+      "d4a4b0b4-6798-4cfa-831b-d8d7e6c6d3b5",
+      129404
+    ],
+    [
+      "d4532dd0-8668-4b83-9b4d-4743440e11ae",
+      108777
+    ],
+    [
+      "d44fd71e-7782-44d8-9e30-b25df634d0b9",
+      127380
+    ],
+    [
+      "d2276f0f-4d19-4a6e-8e4a-2b3f72264bb0",
+      107236
+    ],
+    [
+      "d1ef5ee1-4155-4e4d-8a68-e3b8bd3e8c5e",
+      134696
+    ],
+    [
+      "d15f7ace-bdc3-4b47-b5b7-dfbff875783a",
+      104698
+    ],
+    [
+      "cf6fb5a8-808b-455b-83f1-d8386e24f1c1",
+      131876
+    ],
+    [
+      "cf4ef7b1-1acf-4b99-bff8-25096ab9eace",
+      129959
+    ],
+    [
+      "cf48d96a-354b-4823-bd77-27aa393812c6",
+      99867
+    ],
+    [
+      "cdf96539-9ad3-4782-a79d-0ae0a7f5a07d",
+      131915
+    ],
+    [
+      "cd5855e7-0b51-4d7c-b895-df3c585cc637",
+      130284
+    ],
+    [
+      "cc3f7a42-ff55-4c2d-8170-ea9198e902a7",
+      115831
+    ],
+    [
+      "cbeb5113-d014-471b-829a-9695d1f64d02",
+      99601
+    ],
+    [
+      "ca47c37e-3010-4139-a0f5-2e1db1b3a6a7",
+      129409
+    ],
+    [
+      "ca048c5a-690a-40d7-a0a1-67c0b9d34d10",
+      124155
+    ],
+    [
+      "c9665352-2771-4c66-85c7-ee955353e708",
+      116878
+    ],
+    [
+      "c8c25535-61eb-4bdf-a76c-5baaf7d53523",
+      130337
+    ],
+    [
+      "c7d14f19-6a94-4a04-9f38-d09b296e3acd",
+      137174
+    ],
+    [
+      "c698818c-9e44-423d-b062-baefeca8f31d",
+      113963
+    ],
+    [
+      "c5dd00a3-beac-473d-8c8a-f6d72b3d59d4",
+      112811
+    ],
+    [
+      "c5c40f88-4a40-451f-9a5a-4f35f87ec2a4",
+      132576
+    ],
+    [
+      "c4fb39c1-134a-40c8-94d1-30d59816a825",
+      116591
+    ],
+    [
+      "c4233152-0434-45ba-bc38-9820ec0c2d60",
+      140962
+    ],
+    [
+      "c2398e8b-6002-458e-904e-14ae3eccc71d",
+      14153789
+    ],
+    [
+      "c23921cf-060b-49c2-b7f4-2ea5c13ba966",
+      100021
+    ],
+    [
+      "c1a3ff53-7064-40af-ac6b-231dcc7aec16",
+      110798
+    ],
+    [
+      "c109ec1f-ab1a-4bed-92b5-685738139a3d",
+      102938
+    ],
+    [
+      "c0708a8d-87d9-41ea-9493-966f95da53ec",
+      115695
+    ],
+    [
+      "c02ad125-bf50-4388-9c77-d08688ffcb5d",
+      114177
+    ],
+    [
+      "bfe23113-2d5b-4870-be6e-8420fc623972",
+      136773
+    ],
+    [
+      "bd4115ae-beab-4573-946c-c4c6d459725f",
+      122025
+    ],
+    [
+      "bd393b37-eeaf-44d5-a61c-3feca52df020",
+      131683
+    ],
+    [
+      "bd25f2f2-a167-4cf5-9d28-bed0ccb79f88",
+      125823
+    ],
+    [
+      "bbe2c0b4-a1d4-46ce-b8d5-a7749ae535cf",
+      129386
+    ],
+    [
+      "bbd6e495-be26-4da8-9f45-514c00ba17e3",
+      122938
+    ],
+    [
+      "bb6b60c3-bf2e-47d6-a8d1-039e8712c64f",
+      129267
+    ],
+    [
+      "ba065916-a047-4226-9b99-c97f5f4aadc7",
+      7189885
+    ]
+  ],
+  "timestamp": "2026-08-30T13:45:14.186301Z",
+  "tokens_used": 23701,
+  "units_analyzed": 10,
+  "units_total": 26
+}

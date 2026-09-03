@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-08-24T19:37:28.454678Z",
-  "average_depth": 8.9,
-  "average_breadth": 1.3,
-  "fixation_rate": 0.05,
-  "assumption_rate": 0.35,
-  "overconfidence_rate": 0.12,
+  "last_updated": "2026-09-02T05:41:58.074498Z",
+  "average_depth": 7.9,
+  "average_breadth": 1.5,
+  "fixation_rate": 0.08,
+  "assumption_rate": 0.67,
+  "overconfidence_rate": 0.52,
   "common_assumptions": [
-    "Input content conforms to expected format without pre-validation",
-    "Prior session and file state persists unchanged between tool calls",
-    "Tool outputs are complete and not paginated or truncated",
-    "Successful build or typecheck implies correct runtime behavior",
-    "Single-pass rule application covers all edge cases in style enforcement tasks"
+    "style ledger rules are exhaustive and correctly apply to all input content without ambiguity",
+    "single-pass rule application is sufficient without iteration or counter-checking",
+    "input context is complete and accurately represents the full task state",
+    "juror evaluation evidence is unambiguous and requires no additional fact-finding",
+    "tool output faithfully represents current system state without staleness"
   ],
   "strength_patterns": [
-    "Targeted read-modify-verify cycles demonstrate systematic grounding before committing edits in complex chains",
-    "Complex tasks decompose cleanly into scout-modify-test sequences with intermediate tool-based verification",
-    "Constrained single-step tasks execute with strict rule adherence and zero scope creep"
+    "Deep investigative chains (>40 steps) show systematic multi-angle verification before concluding, with explicit mutation testing and cross-checking",
+    "Complex multi-session chains demonstrate adaptive redirection when initial approaches fail, avoiding sunk-cost fixation",
+    "High-step chains maintain coherent goal tracking across many sequential tool uses with clear progress signals"
   ],
   "weakness_patterns": [
-    "Fixation loops where a single file is edited 15 or more times without a convergence check before continuing",
-    "Premature termination visible in multiple zero-step chains on non-trivial tasks suggesting early abandonment before output",
-    "Single-pass execution on verification-requiring tasks with no runtime exercise to confirm correctness"
+    "Over 70% of chains are single-step with no visible reasoning, alternative exploration, or verification before response",
+    "Outcome fields are uniformly empty across all 60 sampled chains, eliminating any calibration feedback loop",
+    "High-step chains show repetitive same-file edits (e.g., +layout.svelte edited 15+ times in one chain) suggesting narrow fixation rather than systematic exploration"
   ],
   "trend": {
     "calibration_improving": false,

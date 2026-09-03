@@ -1,0 +1,237 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 16719,
+    "correction_density": 0.012658227848101266,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.24842559989798735,
+    "unit_count": 79
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:IMPROVING — 3 zero-tool style-enforcement units (b8262cb0-0, 5858b494-0, 5358461f-0) vs 8 prior cycle and 14 the cycle before; count trajectory: 14→14→2→8→3; current count is the second-lowest observed and continues the downward trend from the 14-plateau; topic_keywords uniformly ['enforce','style','ledger','file','content']; all Unknown reactions; deprioritized per history guidance but trajectory now shows consistent improvement over 2 cycles",
+      "optimism_bias_on_edit_availability:NEW — unit e2e2fc30-24 shows 3 failed Write/Edit attempts on MEMORY.md and plan.md before succeeding (Write success:false twice, Edit MEMORY.md success:false twice, Edit plan.md success:false once); unit e2e2fc30-25 shows Edit vis-ledger.py success:false before Bash+Edit approach, then 4 consecutive Edit SKILL.md failures before lock-file.sh acquisition enabled them; pattern is probe-after-failure rather than probe-before — agent attempts Edit without verifying file availability state; adjacent to prior 'optimism_bias_on_script_compatibility' (file access failures) but specifically about Edit tool readiness and file lock state; NEW shape not previously classified under this name"
+    ],
+    "calibration_score": 0.55,
+    "cross_references": [
+      "e2e2fc30-5 CONFIRMS dream insight on autonomous pipelines: the 5-agent fan-out for estate research was structured with explicit output paths and scope-close discipline, avoiding the silent-stall failure mode the insight warns about; positive confirmation",
+      "8ae664f9-3,4,6 CONFIRMS dream insight on finite-enumerable-set coverage: the export OOM fix systematically covered all 3 export routes (template.tsx, tabs.tsx, review/export.ts) rather than stopping at the first or most obvious one; the codex review in unit -6 caught the Buffer→Uint8Array type issue that the implementation pass missed, validating the multi-pass verification pattern",
+      "fdb6eb9d-0 and d0ce53a2-0 are a RISK zone for the structural_claim_without_reading_code insight violation: both produced multi-paragraph analysis on code-adjacent topics with zero tool calls; no user correction observed so not a confirmed violation this cycle, but the pattern matches the insight's 'single-point sample generalized across domain' shape if any architectural claim in those outputs is wrong",
+      "e2e2fc30-25 partially VIOLATES the single-axis verification insight: the gemini library test suite covered multiple failure modes (good, bogus, hang, auth, plain) which is multi-axis; the SKILL.md edit failures and recovery were eventually resolved; no single-point generalization detected; net assessment is neutral"
+    ],
+    "overconfident_count": 2,
+    "recommendations": [
+      "optimism_bias_on_edit_availability is a new pattern worth tracking: before Edit on files that may be locked or in ambiguous state (SKILL.md files, session memory files), a quick existence/lock check would eliminate the retry loops; the lock-file.sh approach was eventually used correctly but only after 4 failures — the check should precede the first attempt; do not file a hook yet, collect one more cycle to confirm recurrence",
+      "confirmation_bias_style_log continues improving; no new action recommended this cycle — the prior cycles' deprioritization appears to be working; if count drops below 3 in the next cycle, consider archiving from active tracking",
+      "juror-role units (fdb6eb9d-0, d0ce53a2-0) produced substantial text output with zero tool use on 5300-5400 char inputs about code systems; the structural_claim_without_reading_code history makes these a latent risk zone; juror seats are legitimately text-only, so this is not a finding for this cycle, but if a juror output generates a user correction citing a wrong structural claim, immediately classify that event under structural_claim_without_reading_code and note the juror-seat context"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 13
+  },
+  "sessions": [
+    [
+      "be257ec7-2623-4cdd-81a6-9ab70adca131",
+      127261
+    ],
+    [
+      "7edb1ac4-7b69-4309-8b93-6f041fd9cbf2",
+      175409
+    ],
+    [
+      "4522e558-d4c5-4e52-a20c-b5a6e7fa5c14",
+      163413
+    ],
+    [
+      "fdb6eb9d-216b-46a9-a4ae-c753cf8ed1f5",
+      118517
+    ],
+    [
+      "fb859d5f-8656-4a55-8c86-e861d240de69",
+      131853
+    ],
+    [
+      "f9fb661f-743d-4ea3-9ba7-4fba41df4c88",
+      129355
+    ],
+    [
+      "e2e2fc30-cf26-4bcb-adbc-1493f25cd0e3",
+      5142693
+    ],
+    [
+      "d41e0feb-a0f5-4402-b97b-fcee91e1dc2e",
+      133878
+    ],
+    [
+      "cf6211fd-6948-4bc5-972b-1eef1e2f9c2b",
+      113937
+    ],
+    [
+      "67ebc0dd-dab4-4207-96cf-7d59f75ebc54",
+      131280
+    ],
+    [
+      "61dfeb73-7888-4758-958b-cc16eff483fe",
+      115767
+    ],
+    [
+      "60d657aa-53ef-40c0-8834-2fd5cfd423ff",
+      132564
+    ],
+    [
+      "4eac3342-c7c3-4ce5-b2a6-b0eabcffecd1",
+      118563
+    ],
+    [
+      "36766c57-a49f-41d5-8d8d-087a56c9ba6c",
+      124794
+    ],
+    [
+      "3122ba70-4068-401a-ad90-4b7c3456555f",
+      129564
+    ],
+    [
+      "ca35cb52-9b66-49dc-8530-b6f91bb668c0",
+      127073
+    ],
+    [
+      "b8262cb0-5194-490e-9305-62632ae00932",
+      133919
+    ],
+    [
+      "ad9f2835-5060-43d0-ab44-c2a91c79d22c",
+      136199
+    ],
+    [
+      "5858b494-9fcb-4f2a-81fb-402e1b9ee78a",
+      128941
+    ],
+    [
+      "56887084-7038-45d3-a086-c7efe4085c75",
+      124475
+    ],
+    [
+      "5358461f-b2cc-421e-a394-fc70170eb233",
+      130757
+    ],
+    [
+      "df86f121-8c1a-4fe4-aeb6-5205a541174b",
+      110226
+    ],
+    [
+      "d0ce53a2-6a64-4abc-abf7-67fb6fe4b9b8",
+      114055
+    ],
+    [
+      "afb18aa7-46ce-47a6-be9c-dd3ba3e86647",
+      118177
+    ],
+    [
+      "8ae664f9-1637-44d4-a94a-465622217213",
+      4080788
+    ],
+    [
+      "538f680a-6e50-4626-be79-026785644f65",
+      112558
+    ],
+    [
+      "e92c055c-effc-48bb-a1c0-f8695d929e36",
+      139712
+    ],
+    [
+      "af656828-e8d7-4335-8ec3-8f72968e5684",
+      137927
+    ],
+    [
+      "9a3a5c3a-10cf-4f5d-9e79-2b0f0ce28cf8",
+      143728
+    ],
+    [
+      "503d2e58-1463-495f-8418-1ec209187b73",
+      128426
+    ],
+    [
+      "1115056c-aa14-4e05-adb2-bd1f56a32528",
+      124342
+    ],
+    [
+      "f2d0df21-5dfc-406f-a370-f7eacab78897",
+      16154662
+    ],
+    [
+      "b2a07984-a60f-4ad6-95a7-045618a13483",
+      1692667
+    ],
+    [
+      "8a8b5165-2638-4a98-8401-b3665356224f",
+      145535
+    ],
+    [
+      "2c0bf1db-a66f-41ce-9173-8e625932d2bc",
+      143144
+    ],
+    [
+      "fe56c708-510f-49e8-99ea-51a109345bd9",
+      108485
+    ],
+    [
+      "c9765845-0b95-4521-a389-273edf4e6941",
+      110742
+    ],
+    [
+      "afd61c56-e025-44c2-a92d-3295364b3942",
+      111636
+    ],
+    [
+      "aaad9284-ea6e-4314-8f95-ab5797d71eda",
+      23274698
+    ],
+    [
+      "268e8f10-2ed5-4291-8403-3f8e55ac5797",
+      26657081
+    ],
+    [
+      "1cdfe3c8-6946-499a-a5a9-0b36d631240d",
+      127614
+    ],
+    [
+      "fee87010-4126-4576-ba92-f122abe81486",
+      133085
+    ],
+    [
+      "f996781d-96de-496c-a1be-6cf3129d4262",
+      122057
+    ],
+    [
+      "f48fd726-033c-4903-ac0e-239a91d1e452",
+      8287588
+    ],
+    [
+      "e8f9106c-cd68-4fc2-b105-15644d595b7d",
+      5636400
+    ],
+    [
+      "e4ddd683-0b11-4fac-b26f-38a4e1e92156",
+      122228
+    ],
+    [
+      "e410789f-0204-4da1-b565-6a3e6dee7612",
+      11945807
+    ],
+    [
+      "e3387433-4cc8-41c3-8a0d-3374271c250f",
+      131751
+    ],
+    [
+      "e22bd6d0-3e69-40eb-820e-21b0b49e0a8c",
+      111418
+    ],
+    [
+      "e13389f2-0770-43a2-abcf-25f0c7595da5",
+      133509
+    ]
+  ],
+  "timestamp": "2026-08-30T11:35:46.943811Z",
+  "tokens_used": 23509,
+  "units_analyzed": 15,
+  "units_total": 79
+}

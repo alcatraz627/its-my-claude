@@ -1,19 +1,22 @@
-<!-- i-dream project brief · 2026-08-18T06:09:52.861066+00:00 · 20 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-08-28T07:43:14.602637+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-GCP contract/integration work with heavy multi-agent adversarial review orchestration; sessions mix domain automation with time-pressured presentation prep.
+GCP contract/product work with heavy multi-agent orchestration — parallel review panels, sub-agent fleets, shared contract files, and iterative design reviews. Dominant working style is plan-heavy with adversarial verification gates.
 
 ## Things to do (or keep doing)
-- Pass `--quiet` on all `gcloud` commands to prevent mid-pipeline interactive prompts from blocking automation
-- Verify sub-agent output by reading ballot/output files on disk — idle notifications are unreliable (stale signals and stop/idle crossings recur)
-- Include a maximally adversarial "jester" seat in any review panel that challenges the core premise, not just surface quality
-- Honor explicit parking directives ("park it as is") immediately without tidying or attempting to finish
+
+- **Verify state at the destination, not the source** — check files on disk, read actual deploy logs, run `rg --no-ignore` before claiming absence; never trust send-side signals as proof of receive-side truth
+- **Pre-filter owner decisions aggressively** — default mechanical choices, surface only genuine judgment calls; use `/decision-wizard` for batches, never prose lists
+- **Re-read shared contract/doc files immediately before writing** — concurrent sub-agents drift; stale reads produce conflicting edits
+- **Include a maximally adversarial seat in review panels** — one voter whose premise is the product category itself is flawed; surface value-to-effort ratio before presenting findings as action items
 
 ## Things to avoid
-- Don't scope magi/review panels to the session's current presentation goal; the user expects real product usability gaps, not a rehearsal check
-- Don't re-surface work the user has explicitly conditioned on a concrete trigger (e.g., customer demand); wait for the trigger
-- Don't present exhaustive review findings as action items — pre-filter by value-to-effort ratio before surfacing
-- Don't use escaped dots in `gcloud --format` projection field paths; they silently fail; use an alternative syntax
+
+- **Don't claim code paths work without executing them** — lint/type-check/collect-only is not a run; the stop hook fires here repeatedly
+- **Don't dispatch sub-agents at the wrong model tier** — when a ruling specifies a tier (e.g., "one fable planning seat"), violating it ignores an explicit standing constraint
+- **Don't re-surface deferred work** — if the user said "don't ask again" or set a concrete trigger condition, mark it deferred and never re-raise it as a question or blocker
+- **Don't show a task list without verifying session scope** — a wrong-session task list triggers strong frustration; confirm the session sid before rendering
 
 ## Open questions / known gaps
-- Sub-agent idle notification handling has no robust resolution pattern: stale signals and stop/idle crossings cause repeated verification failures
-- Mid-session deadline reveals (same-day demo) act as full priority resets but the scope-triage discipline isn't yet consistent
+
+- Multi-voter panel scoping drifts toward the session's presentation goal rather than real product usability gaps — pre-confirm scope explicitly before launching
+- Sub-agent completion tracking via idle notifications is unreliable; output files on disk are the ground truth but this pattern keeps being skipped

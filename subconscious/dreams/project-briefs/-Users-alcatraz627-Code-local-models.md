@@ -1,18 +1,18 @@
-<!-- i-dream project brief · 2026-07-14T03:22:45.304149+00:00 · 13 patterns / 3 insights -->
+<!-- i-dream project brief · 2026-09-02T05:45:59.651609+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-Local LLM suite (`~/Code/local-models`) — model runners, UI, data pipelines, and agent harness tooling. Work style is iterative with high emphasis on runtime correctness and safeguard integrity.
+Local model suite (`q`/`see`/`imagine`/`lm`) — a CLI harness for running local LLMs and image-gen on this machine. Work style is autonomous, multi-agent, and high-iteration; sessions frequently fan out sub-agents for research, auditing, and adversarial review.
 
 ## Things to do (or keep doing)
-- **Run the affected code path after every non-trivial change** — test suites (even 99+ tests) miss bugs that live execution catches; dogfood before claiming done
-- **Dispatch an adversarial reviewer sub-agent immediately after implementing complex features** — it reliably surfaces HIGH-severity bugs the implementing agent misses
-- **Restate the exact scope of any user signal before acting on it** — `'you said X, which I interpret as Y but not Z'` — social comfort ("I trust you") is never authorization to remove a gate; intensity complaints ("too noisy") set a ceiling, not a kill switch
-- **Surface the structural observation behind a local workaround** — inline CSS signals a UI kit gap, a silent zero-default signals missing data; name the systemic issue before applying the fix
+- **Dispatch an adversarial reviewer sub-agent immediately after implementing any complex feature** — it reliably catches HIGH-severity bugs the main agent misses.
+- **TaskStop every sub-agent the turn its output is verified** — idle seats get commandeered by board auto-dispatchers; close the loop in the same turn.
+- **Proceed autonomously through obvious sequential steps** — pause only at genuine decision forks (identity, project scope, irreversible ops); never checkpoint between steps the user can predict.
+- **Re-ground synthesis against the human-authored upstream source** before writing any multi-agent research output — not against downstream agent docs.
 
 ## Things to avoid
-- **Don't use `dict.get('key', 0)` or similar zero-defaults when data may be absent** — fabricated zeros produce plausible-looking downstream values that suppress investigation
-- **Don't let the task list drift across many turns of editing** — reconcile completed/abandoned items before stopping; a stale list is fiction
-- **Don't add a new library dependency silently** — surface the constraint, offer a within-existing-deps alternative first, wait for approval
+- **Don't claim work complete without executing the changed code path** — the declared-ready gate fires on inspection claims; run the path, read the result.
+- **Don't silently pick a branch on a bare "yes"** — confirm which branch the affirmative resolves before proceeding.
+- **Don't let agent-generated docs become the spec** for audits or gap analyses — authority contamination flows downstream and corrupts scoped synthesis.
+- **Don't mix planned and done work in a status answer** — three separate flat lists (done / in-flight / planned), not a timeline narrative.
 
 ## Open questions / known gaps
-- Config validation only at parse time silently breaks unrelated features when fields are missing; no systematic write-time validation in place yet
-- Plausible-but-wrong state (fabricated values, passing-but-not-running tests) is the project's highest-recurrence failure class — no automated ground-truth verification gate exists
+- **Scope leakage in multi-agent fan-outs** — sibling-project findings repeatedly bleed into scoped syntheses; no mechanical guard exists yet beyond re-grounding at write time.

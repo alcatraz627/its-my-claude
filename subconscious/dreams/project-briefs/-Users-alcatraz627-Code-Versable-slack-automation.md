@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-21T19:19:04.188271+00:00 · 20 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-09-03T04:53:21.933863+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-Slack automation tooling with multi-agent orchestration, GitHub PR integration, and UI surfaces. Sessions tend to be long, multi-task, and involve adversarial review passes (magi) and peer agent IPC.
+Slack automation tooling for Versable, worked in an execution-heavy style where the user wants autonomous forward momentum on implementation and terse, literal responses with zero ceremony.
 
 ## Things to do (or keep doing)
-- Before fixing a pattern on one instance, enumerate ALL siblings sharing that pattern — enumeration is the guard against partial fixes
-- Read sub-agent output files before treating work as done; the completion notice is a pointer, not the artifact
-- Filter adversarial review findings by value-to-effort before presenting as action items; don't dump the full set
-- Route mechanical doc/annotation work to lower-tier sub-agents; reserve judgment capacity for ideation and scope calls
+- Always execute the changed code path before claiming done — the declared-ready gate fires repeatedly here; lint/type-check/collect is not execution
+- Stop sub-agents immediately after verifying output on disk; never leave idle seats running — they get commandeered by board auto-dispatchers
+- Show actual data when the user says "show me" — the reply must contain the output, not a pointer to it
+- Bias toward autonomous execution for work that moves tasks forward; halt only for irreversible decisions or genuine missing information
 
 ## Things to avoid
-- Don't name tasks as "mine / next / unblocked" in closing text and then stop — if you named it, execute it first
-- Don't reference a numbered artifact (PR, issue) without verifying it exists in the repo; phantom references cause friction
-- Don't surface deferred work unless its stated trigger condition has been met; re-raising it is noise
-- Don't count UI fixes that only recover same-session regressions as forward progress; net-zero recovery ≠ findings
+- Don't name the next task and then stop — "unblocked", "mine next", or "I'll do X" in closing text means execute it before the turn ends
+- Don't re-surface deferred work the user has explicitly parked with "don't ask again" — mark it deferred and leave it alone
+- Don't claim a file, route, or path doesn't exist without running `rg --no-ignore` first; scoped searches silently miss things
+- Don't dispatch sub-agents at a different model tier than the task or standing ruling specifies — tier is a hard constraint, not a suggestion
 
 ## Open questions / known gaps
-- Task list drift is a recurring issue: lists go stale across multi-turn edits and show wrong session context — reconcile the Task tool after any substantive edit cluster, not at session end
-- Peer IPC queries during a turn are structurally easy to miss; build an answer-before-stop habit whenever the session has live peer agents
+- UI work repeatedly burns tokens without visible improvement or fixes same-session regressions; the threshold for what counts as a "real" UI change worth spending on is unclear
+- Multi-seat fan-out synthesis has a recurring scope-drift problem: synthesizing agents don't re-confirm target scope at write time, only at dispatch time

@@ -1,23 +1,19 @@
-<!-- i-dream project brief · 2026-08-24T19:41:28.494981+00:00 · 20 patterns / 1 insights -->
+<!-- i-dream project brief · 2026-09-02T05:44:28.950818+00:00 · 20 patterns / 4 insights -->
 ## What this project is about
-
-Versable Forge v6 is a TypeScript/full-stack product codebase. The dominant working style is iterative UI and API work with high task throughput — sessions accumulate many edits rapidly and require tight scope discipline.
+Full-stack product build (Versable Forge v6) with heavy multi-agent orchestration, UI iteration, and data pipeline work. Dominant style: high-autonomy sequential execution with explicit pause gates only for identity/scope-establishing decisions.
 
 ## Things to do (or keep doing)
-
-- **Show the data directly** — when the user asks to see results, present the actual data inline, not a description or summary of it
-- **Update the task list continuously** — reconcile completed and new work into the Task tool during active editing, not only at turn boundaries
-- **Use visual hierarchy in planning docs** — tables, JSON payload examples, and ASCII architecture diagrams; prose-only docs don't serve this user
-- **Collect batched decisions via `/decision-wizard`** — never post a numbered question list in chat
+- **Proceed autonomously** on reversible sequential steps and terse continuations; only pause when the decision establishes identity, provenance, or irreversible state the user must own.
+- **Show the actual data** when the user says "show me" — present the full result set directly, never a summary or abstraction of it.
+- **Run an ignore-transparent search** (`rg --no-ignore` / `fd --no-ignore`) before asserting a file, module, or directory doesn't exist.
+- **Batch multiple owner decisions** through `/decision-wizard` (inline menu ≤3 picks, HTML page above that) — never a numbered chat list.
 
 ## Things to avoid
-
-- **Don't overshoot the format** — markdown when markdown suffices; HTML only when interactivity justifies it (and then mandatory light/dark toggle)
-- **Don't halt without a genuine blocker** — stopping to confirm an action the agent already reasoned to is a waste; the pause threshold must be high
-- **Don't write narrative or literary prose** in technical output, commit messages, or status replies — plain register only
-- **Don't dispatch sub-agents without a spend ceiling** — budget constraint clause is required even when other constraints are already present
+- **Don't claim work is live or complete** without runtime verification — absent env vars, unchecked output paths, and idle notifications are not evidence; read the destination state directly.
+- **Don't halt mid-task** without a specific blocker only the user can resolve; re-raising the same soft blocker after an explicit "keep going" is unjustified and wastes attention budget.
+- **Don't validate against agent-generated docs** — when auditing or synthesizing, re-ground against the human-authored upstream source, not a downstream agent output that may carry authority contamination.
+- **Don't produce UI work** without a verification mechanism; acknowledge inability to verify rather than iterating blindly.
 
 ## Open questions / known gaps
-
-- **UI verification gap**: sessions repeatedly produce UI changes without a mechanism to visually confirm the result — this leads to token waste fixing same-session regressions; no durable solution is in place yet
-- **Task list drift**: the pattern of tasks going stale during long editing runs recurs despite the task-discipline rule, suggesting the update cadence isn't mechanically enforced here
+- Prose drift recurs mid-session: corrections reset behavior momentarily but the generative default reasserts; schedule re-checks every 10–15 tool calls on long sessions.
+- Multi-agent synthesis scope bleeds: synthesizing agents must re-confirm target project scope at write time, not only at dispatch time.

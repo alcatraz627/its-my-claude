@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17446,
+    "correction_density": 0.023255813953488372,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.15119541410294945,
+    "unit_count": 43
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 1 zero-tool unit (c020acec-1: 130-char input, 0-char output, Accepted); count trajectory: 14→14→2→8→3→5→8→2→3→1→1→1→2→1; sustained single-digit low band consistent with prior six cycles; deprioritize",
+      "inline_python3_str_replace_pattern:RECURRING:IMPROVING — units 5ca7a1e0-16, 5ca7a1e0-17, and 5ca7a1e0-18 each contain multiple python3 inline str.replace() blocks on production source files (app.py, exercise_app.py, cite-links.cjs, PR ledger files); every replacement is guarded by assert s.count(old)==1 before the write, which is the corrected form identified in the prior cycle; improvement sustained; structural reliance on string-literal match targets over Edit-tool calls persists but no regression from last cycle's status",
+      "compound_bash_overloading:NEW — units 5ca7a1e0-16, 5ca7a1e0-17, and 5ca7a1e0-18 each contain individual Bash calls that chain 6–12 distinct operations (inline python3 patch, mutation-test harness, full test suite, commit, push, gh pr comment, Monitor setup) into a single pipeline; intermediate failure modes are partially masked because later steps are gated on prior success tokens, but a silent early failure can produce an ambiguous final exit; not flagged in any prior cycle; all calls succeeded this session, so no outcome degradation observed yet"
+    ],
+    "calibration_score": 0.67,
+    "overconfident_count": 0,
+    "recommendations": [
+      "compound_bash_overloading is NEW this cycle; observe across one to two more cycles before prescribing a structural change — the current approach succeeded and the chaining is intentional (atomic PR-comment-after-commit sequences); flag only if a partial failure obscures a real error",
+      "inline_python3_str_replace_pattern: assert-guard discipline is holding across three units; no corrective action recommended this cycle; retire from active watch if the guard pattern persists for two more cycles without regression",
+      "confirmation_bias_style_log: six consecutive cycles in the single-digit low band; consider removing from the active bias list at the next review unless count rises above 3"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 8
+  },
+  "sessions": [
+    [
+      "e8a0fcc2-cc26-4ca4-ba37-02a52bd5f5e1",
+      95843
+    ],
+    [
+      "c020acec-c5e1-476f-a0e1-9bba48150804",
+      155183
+    ],
+    [
+      "a37731d6-79d4-4908-9efa-5f2c483cf8e6",
+      102295
+    ],
+    [
+      "a0e4d3a1-a56a-46a6-a44f-be4f7b13ca6d",
+      95329
+    ],
+    [
+      "5ca7a1e0-2cd2-42d8-89a4-09773c3c588c",
+      6250976
+    ],
+    [
+      "5bac375d-a010-47b1-9af1-a0403629093b",
+      7865133
+    ],
+    [
+      "448d4fa9-1011-4e1e-ae60-af5122b00258",
+      96337
+    ],
+    [
+      "38ad89fe-b8e2-459a-bc01-eab6c4afc0b6",
+      96905
+    ],
+    [
+      "33c0e977-3045-409f-b7dd-91127f07abd9",
+      104595
+    ],
+    [
+      "23499e20-e83d-49e7-b5a9-c920be9c3306",
+      97026
+    ],
+    [
+      "0f8f6783-8d0f-4730-a22c-0b01050ee6b4",
+      117097
+    ],
+    [
+      "0c480372-2f23-4ba6-b365-74ebc32b6f79",
+      122340
+    ],
+    [
+      "0a35ffb7-6a55-4574-8641-71c051f5220c",
+      96030
+    ],
+    [
+      "041e9b86-2d2a-4883-ba1b-3318e8372013",
+      124524
+    ],
+    [
+      "01c29af6-ae3b-42f5-9a52-5d04e36510fa",
+      112753
+    ],
+    [
+      "fcc426dd-eeab-4198-8ad5-122f7c4c9ca0",
+      124812
+    ],
+    [
+      "ed8bef6c-62a7-49ac-9240-575d2ab52e76",
+      113079
+    ],
+    [
+      "e785690a-8550-433c-bf53-8a960ebcfeb6",
+      108077
+    ],
+    [
+      "ddd7c2bd-2124-43f2-9f53-a0d9969531e6",
+      117494
+    ],
+    [
+      "d2d76b8a-17d0-4ce2-9f54-b149ab46c098",
+      101771
+    ],
+    [
+      "a97e0916-b342-4380-961a-52d251e25da6",
+      91891
+    ],
+    [
+      "a379026f-144d-438e-b3e0-beb426757ece",
+      122249
+    ],
+    [
+      "a1cf863f-8473-4d22-9814-5e2624f4a739",
+      101449
+    ],
+    [
+      "93fc8cef-ae34-4924-84fe-fe9fe0fa0483",
+      121401
+    ],
+    [
+      "9230bea4-af58-4d8b-9603-d8fc452f23e8",
+      120133
+    ],
+    [
+      "55cb65ac-916e-4171-91e0-e1dbd37df582",
+      122321
+    ],
+    [
+      "49eb8d16-d54a-4ec7-a24a-abee8a91b15d",
+      2798851
+    ],
+    [
+      "49d0afe9-f517-477e-a109-8a8b01ccfdf7",
+      103930
+    ],
+    [
+      "39c0377e-6d59-4e8a-93c7-a4fdb870e258",
+      94706
+    ],
+    [
+      "0c46377e-7ac7-49b5-90df-36a0e3b096d1",
+      101775
+    ],
+    [
+      "017f11d1-1da0-431f-9ff9-6c54f95882b3",
+      110876
+    ],
+    [
+      "d4626e6a-f54b-4a6c-8296-6f5c8937ae45",
+      113507
+    ],
+    [
+      "c4e612aa-d7de-4ee4-b9b8-66f50ef6d773",
+      17267264
+    ],
+    [
+      "9b44c1b2-7c55-476d-9286-7b306c7b3e0b",
+      121583
+    ],
+    [
+      "95c6183b-f339-4d2f-8a15-5c88f9c8095a",
+      114006
+    ],
+    [
+      "8ca6a1b4-b37f-476f-b282-847750e7abdd",
+      113758
+    ],
+    [
+      "609d06d9-73d8-4562-9bdc-c847c16381fc",
+      116997
+    ],
+    [
+      "4ff4d6c5-23cb-4595-9606-e1bbf753eaf9",
+      118489
+    ],
+    [
+      "45bd9587-6c5b-40ca-9b5a-ee142ca402ab",
+      113931
+    ],
+    [
+      "17f052d9-05e8-478a-846c-e78471cde3ef",
+      136244
+    ],
+    [
+      "16a679d3-356a-4e54-9c79-e805c68bc6a1",
+      137184
+    ],
+    [
+      "029e8ae5-6bf0-49a3-b572-5fde1026935b",
+      118253
+    ],
+    [
+      "026a868b-b2ec-4d13-b8a0-d540beec4e0d",
+      265095
+    ],
+    [
+      "fe1be542-9648-4ed5-8db3-7ca01db2b823",
+      98738
+    ],
+    [
+      "f39d0453-144c-49e8-a74a-19f0cf3a0c1e",
+      103377
+    ],
+    [
+      "f2024da3-4574-46ca-9599-74049d9b54ed",
+      126111
+    ],
+    [
+      "ebf68d81-6888-4b28-a230-d71d39cf01f2",
+      111943
+    ],
+    [
+      "e2821d3e-03d5-4243-b999-bb2e81840a0c",
+      127720
+    ],
+    [
+      "e1b8735a-8546-4a59-b576-c4d69da99c3c",
+      111545
+    ],
+    [
+      "da6fc501-35fd-455d-a557-a292eeffa477",
+      100217
+    ]
+  ],
+  "timestamp": "2026-09-03T04:50:33.461647Z",
+  "tokens_used": 11000,
+  "units_analyzed": 8,
+  "units_total": 43
+}

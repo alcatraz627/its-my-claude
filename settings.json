@@ -102,7 +102,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5-1[1m]",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -1333,6 +1333,9 @@
       "effortLevel": "high"
     },
     "claude-fable-5": {
+      "effortLevel": "medium"
+    },
+    "claude-fable-5-1": {
       "effortLevel": "high"
     }
   },

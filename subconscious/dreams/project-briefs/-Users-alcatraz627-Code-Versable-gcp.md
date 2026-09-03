@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-21T23:40:48.842451+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-09-03T09:01:50.732127+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-GCP/cloud infrastructure and full-stack feature work on the Versable product, operated via multi-agent IPC sessions with high coordination overhead and frequent UI iteration cycles.
+GCP infrastructure and tooling work (deployments, multi-agent orchestration, shared directories) with a heavy emphasis on rigor around state verification, artifact citation, and attention-budget discipline.
 
 ## Things to do (or keep doing)
-- Always label agent-generated GitHub comments with an explicit attribution marker when posting under the user's account
-- Read before every Write in shared multi-agent directories — peer agents modify files between your turns
-- Verify a PR/issue number actually exists in the target repo before referencing it in any reply or action
-- When the user asks a scoping question ("what do you truly need me for?"), answer with a tight enumeration of owner-only actions only
+- Always run `rg --no-ignore` before claiming a file, route, or code path doesn't exist — default search ignores .gitignore'd paths
+- Read every file before writing it, especially in shared multi-agent dirs where peer agents may have modified it since last read
+- When the user asks a scoping/delegation question, enumerate only the owner-only blockers — brief, not operational rundown
+- Verify numbered artifacts (PRs, issues) actually exist in the repo before referencing them
 
 ## Things to avoid
-- Don't halt mid-task without a genuine owner-only blocker; re-raising a soft blocker after an explicit "keep going" is the specific failure
-- Don't substitute a summary or curated subset when the user asked for the actual data — show the full output
-- Don't accumulate multiple decisions into a numbered chat list; use `/decision-wizard` for any batch of owner asks
-- Don't produce UI work that fixes only same-session regressions with no net visible improvement — that registers as waste
+- Don't treat `--dry-run` output as confirmation of a real deploy; it prints commands, it does not execute them
+- Don't halt mid-task unless the blocker is genuine and only the user can resolve it — re-raising soft blockers after an explicit "keep going" is a known failure mode here
+- Don't substitute a curated summary when the user asked for raw data; deliver the full result set
+- Don't re-raise items the user has explicitly ruled closed — record the ruling durably and never surface it again
 
 ## Open questions / known gaps
-- Task list scope verification is a recurring failure point; showing the wrong session's list causes strong user frustration and no reliable check exists yet
-- Behavioral corrections (prose style, task reconciliation) decay within the same session and must be explicitly re-checked every few turns rather than assumed to persist
+- Orchestrating agent tends to spend turns relaying IPC instead of doing substantive work; the boundary between orchestration and delegation is an ongoing tension
+- State surfaces (task list, agent roster) drift without live reconciliation — treat every status as potentially stale before acting on it

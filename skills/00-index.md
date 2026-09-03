@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-09-01
+updated: 2026-09-03
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed Â
 `user-only` = `disable-model-invocation: true`, the user must type it Â·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-09-01 02:26.
+Regenerated 2026-09-03 14:46.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|

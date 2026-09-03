@@ -1,0 +1,23 @@
+{"ts": "2026-07-14T14:28:16Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:28:45Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:03Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:19Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:35Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:29:53Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:46:19Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T14:47:12Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T15:10:59Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T18:17:41Z", "slugs": ["infra-before-grep", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename", "literal-request-over-intent"]}
+{"ts": "2026-07-14T20:01:35Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:03:36Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:15:05Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:17:36Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:17:53Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:19:38Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:21:23Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:22:04Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:23:24Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:24:07Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:24:19Z", "slugs": ["infra-before-grep", "literal-request-over-intent", "unprompted-infra-scope-creep", "review-missed-stale-caller-after-rename"]}
+{"ts": "2026-07-14T21:49:51Z", "kind": "dream-ranked-prompt", "ids": ["2117cf47d22ba394", "c07158042266d7c4", "091b1300d401c515", "8fc0716f4e291f71", "722869794527508a"], "cwd_leaf": "frontend", "sid": "7c520f34-be41-4703-8754-6c213809f661"}
+{"ts": "2026-07-14T23:51:28Z", "kind": "dream-ranked", "ids": ["091b1300d401c515", "2117cf47d22ba394", "8fc0716f4e291f71", "722869794527508a", "48ca81f722f28a0a"], "cwd_leaf": "tmp", "sid": "4c7a31df-bf1e-45ea-b00d-7df49143e5c6"}

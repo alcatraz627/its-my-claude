@@ -1,0 +1,234 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17103,
+    "correction_density": 0.013888888888888888,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.11595234619393355,
+    "unit_count": 72
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:IMPROVING — 1 zero-tool style-enforcement unit (092fa1d1-0, 13710-char input, 71-char output); count trajectory: 14→14→2→8→3→5→8→2→3→1; single-digit trend now at a new low; deprioritize unless rebound",
+      "partial_scope_absence_claim_in_config:RECURRING_NEW_COSTUME — unit 0927092b-12: agent checked .env.local and pm2 for FORGE_TENANT, found nothing, filed an absence claim and a downstream 'bug' (header/wire disagreement) that does not exist; missed .env, which Next also loads; root pattern is grep-scope-before-claiming-absence (existing rule) but the costume is config-file loader enumeration rather than code-file tree search; agent verbatim in IPC: 'its config equivalent is enumerating every file the FRAMEWORK LOADS'; self-caught after peer correction and verified rather than accepting — good recovery, weak prevention",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — unit 0927092b-18: first Write to _20260826-gcp-opus.claude.md fails, second succeeds; also unit 0927092b-14: python3 heredoc Write to scratchpad fails, retry with explicit SC env export succeeds; multiple Python -c and heredoc Bash failures before working formulation; same probe-after-failure shape as prior cycles, no pre-check of lock or availability state",
+      "two_instrument_corroboration_illusion:NEW — unit 0927092b-12: agent verified absence claim twice (in .env.local, in pm2) and noted it 'felt safe' because 'two agreeing instruments feel like corroboration'; both instruments were the same instrument pointed twice since neither is the loader; pattern is distinct from the prior partial-scope bias instances which involved single checks; the agent named this explicitly post-correction; no prior cycle flag for this specific shape"
+    ],
+    "calibration_score": 0.57,
+    "overconfident_count": 1,
+    "recommendations": [
+      "partial_scope_absence_claim_in_config: the existing grep-scope-before-claiming-absence rule covers code trees; add a config-specific precheck: before any absence claim about an env var, enumerate the full loader chain for the framework in use (Next: .env + .env.local + .env.{NODE_ENV} + pm2 env; Python uvicorn: runner/.env + pm2 env + shell exports); absence claim is valid only when ALL loader sources are checked, not any subset",
+      "two_instrument_corroboration_illusion: do not promote to rule yet — agent caught and named it in the same session, which suggests the correction is already load-bearing; pin for i-dream to watch whether it recurs; if it appears again, the rule text is: before calling two checks 'corroboration', ask whether they are the same instrument pointed twice rather than two independent instruments measuring the same thing",
+      "confirmation_bias_style_log: no action; at 1 count this cycle (down from 8), de-escalate; resume monitoring only if rebound above 5",
+      "optimism_bias_on_edit_availability: already in prior recommendations without improvement; the failure is consistent enough to warrant a pre-check hook proposal: before Write/Edit to a path in /private/tmp or ~/.claude, check whether a lock file exists at the path; do not re-file unless this recommendation was not previously filed in the backlog"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 3
+  },
+  "sessions": [
+    [
+      "0dcc31d0-7d43-40a4-b0ae-02a6d943d3b2",
+      104931
+    ],
+    [
+      "0d65045f-d078-4323-89bf-a4a108f90c35",
+      148432
+    ],
+    [
+      "0d5e8123-69d6-485f-ab81-484524df1949",
+      107718
+    ],
+    [
+      "0cc02198-044a-4f3b-84b7-76833157aada",
+      134332
+    ],
+    [
+      "0c9000e5-a214-425f-a03a-59f316eb1770",
+      132521
+    ],
+    [
+      "0b77112e-6751-461c-bb4e-396c6fa6dc2c",
+      134028
+    ],
+    [
+      "0ad41a3d-1560-493c-b049-8367901e9b42",
+      130029
+    ],
+    [
+      "0a0a4a5d-61d3-4018-9911-3b078a807f42",
+      153702
+    ],
+    [
+      "092fa1d1-60cd-4a30-8485-f7beda69b78c",
+      123136
+    ],
+    [
+      "0927092b-b75f-41f8-8c73-c2b06f331773",
+      13037914
+    ],
+    [
+      "0769120d-fa82-4aa8-b410-2ec8e202ad53",
+      130682
+    ],
+    [
+      "06f1a682-fe23-4067-a6a6-d5f32d019db0",
+      131034
+    ],
+    [
+      "04fbec1d-8e0c-4e67-b13d-cf7aa0422bee",
+      130175
+    ],
+    [
+      "04da591a-5535-48cf-ad45-95f8c22d614a",
+      128978
+    ],
+    [
+      "048021f9-dcc6-4aa5-8908-f4072d8c1882",
+      129756
+    ],
+    [
+      "0475c5ad-23bc-4085-9db5-7c9ddd410c4b",
+      111032
+    ],
+    [
+      "03e62f3e-2f2a-4ee6-9ec4-a8e92c408b84",
+      130669
+    ],
+    [
+      "03aecb76-de9c-44a5-bf5e-d84e812c628e",
+      123430
+    ],
+    [
+      "0350e51a-526a-4efa-bd22-7dce6c7f619f",
+      130183
+    ],
+    [
+      "0204e57c-d3cc-498f-88c5-bdd658ca8007",
+      102870
+    ],
+    [
+      "01f3910b-1a71-4867-b397-d088999930d0",
+      7750724
+    ],
+    [
+      "016985d9-b25e-438c-b7c5-bd94b8cfe6d0",
+      126404
+    ],
+    [
+      "016516bb-fdbe-4f68-873c-e30f8a0c62e8",
+      7786189
+    ],
+    [
+      "00b45f5a-32eb-4e94-9bf4-5d78f3df571b",
+      132839
+    ],
+    [
+      "0058b0b1-3c8a-4696-8c01-3d1ac0f663ea",
+      123526
+    ],
+    [
+      "f4fc47a7-2a79-4a9f-b34e-6612c18ffadc",
+      132798
+    ],
+    [
+      "ed99dbc7-b6f7-4351-b4fe-e8127f907bb1",
+      127045
+    ],
+    [
+      "e1c59d3a-8310-4e6c-840e-3b893a577392",
+      6737529
+    ],
+    [
+      "da65a2e3-bc04-4a49-82f1-d7faf1f52892",
+      118313
+    ],
+    [
+      "cb2ff78d-559e-4722-b8ea-2ac4b38e15e0",
+      104763
+    ],
+    [
+      "c831fe93-d49d-448f-8737-ad589a7636ae",
+      133974
+    ],
+    [
+      "c3d94763-9d29-47ad-ad0e-95bf603e8b40",
+      110304
+    ],
+    [
+      "b6db5050-5f75-4fac-af93-abd906a10ac4",
+      110939
+    ],
+    [
+      "b54fa897-beae-435f-a646-c0379c801d54",
+      102410
+    ],
+    [
+      "b2071083-62d5-40c3-97e5-13a65937c583",
+      27022589
+    ],
+    [
+      "9b8a9105-3bb2-413f-b9f4-8b57895a9507",
+      137630
+    ],
+    [
+      "8fd3a413-a14e-432a-9802-9fba04e1adf2",
+      21601788
+    ],
+    [
+      "8bbb8651-b6d6-40d1-bd1d-b58de6875011",
+      104000
+    ],
+    [
+      "7d178923-f23e-47bd-934b-725c8161af3f",
+      103649
+    ],
+    [
+      "7405f94a-19b2-4c66-ba6c-0216538396b5",
+      156619
+    ],
+    [
+      "6e5ace49-e92a-46ab-9cf3-f4a81256a2fa",
+      114256
+    ],
+    [
+      "699e5131-0ed9-4964-966d-066c6f405219",
+      106223
+    ],
+    [
+      "69319a8c-850f-4fe0-8f41-59266b00caa5",
+      103219
+    ],
+    [
+      "6835870b-960a-47cf-8d09-c58312f7e345",
+      101724
+    ],
+    [
+      "6399c7b2-abb5-41e0-9be3-a751079be3d3",
+      135484
+    ],
+    [
+      "62326dc3-3ab0-4051-a755-5ab076e2a7a8",
+      137957
+    ],
+    [
+      "5ca5b918-9993-4da9-a1a7-0ec79757722c",
+      123485
+    ],
+    [
+      "58f8ad99-6aaf-41c5-a8ff-e2a589751a89",
+      102789
+    ],
+    [
+      "4ab62d32-c5cb-4755-930b-be56f18c1816",
+      136415
+    ],
+    [
+      "41ba1727-7c9b-4333-94f3-81d5cc4c5304",
+      105553
+    ]
+  ],
+  "timestamp": "2026-08-31T01:26:42.773258Z",
+  "tokens_used": 9302,
+  "units_analyzed": 4,
+  "units_total": 72
+}

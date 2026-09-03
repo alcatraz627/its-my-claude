@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16535,
+    "correction_density": 0.027777777777777776,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.17544022265388307,
+    "unit_count": 36
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 1 zero-tool style-enforcement unit (e2e2fc30-1: 132-char input, 0-char output, Accepted); count trajectory: 14→14→2→8→3→5→8→2→3→1→1→1; single count, consistent with sustained low-band; deprioritize",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — two instances this cycle; unit e2e2fc30-24: Write to memory file fails twice before succeeding, Edit to MEMORY.md fails twice before succeeding, no pre-check of lock or availability state before issuing blocked writes; unit e2e2fc30-25: Edit to four SKILL.md files fails 4 times before lock acquisition is attempted, then fails again after locks are acquired (different failure mode), then succeeds on a third strategy — three distinct attempt strategies on the same files with no pre-check of what blocked the first; probe-after-failure shape persists from prior cycles with no improvement in prevention; pattern continues to resolve correctly but prevention gap is unchanged",
+      "checkpoint_string_replacement_fragility:NEW — unit e2e2fc30-36: agent uses inline python3 with str.replace() targeting a specific hard-coded string in a checkpoint file; outcome is Corrected (the only Corrected unit this cycle); failure mode is structural-claim-without-reading-code applied to document content — the replace() call assumes the exact string is present without reading the file first and verifying the match target; 5305-char output for what was a checkpoint patch also matches dense-briefing-instead-of-a-direct-answer shape; no prior cycle flag for this specific costume"
+    ],
+    "calibration_score": 0.49,
+    "overconfident_count": 1,
+    "recommendations": [
+      "checkpoint_string_replacement_fragility (NEW): before any inline script that patches a file by string replacement, Read the file first and confirm the match target is present; prefer Edit tool over python3 replace() for structured documents — the Edit tool validates old_string uniqueness and fails explicitly when the match is absent, while replace() silently no-ops if the string drifted",
+      "optimism_bias_on_edit_availability (RECURRING, no improvement): the pattern has now recurred across four consecutive cycle reports without prevention improving; the fix is not in the recovery (which is consistently sound) but in the probe: before the first Edit or Write to a file that may be locked or under concurrent access, check lock state or use the lock-file.sh acquire path first; deprioritize a new recommendation here only if a pre-check step appears in the next cycle",
+      "confirmation_bias_style_log: deprioritize — count is 1 and trajectory is stable in the low-single-digit band for six consecutive cycles"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 6
+  },
+  "sessions": [
+    [
+      "e2e2fc30-cf26-4bcb-adbc-1493f25cd0e3",
+      6049181
+    ],
+    [
+      "5a43c70f-37cd-4b04-844a-29a2077bddc3",
+      122718
+    ],
+    [
+      "49e49fe4-815c-43c7-a23b-43e987f4e84d",
+      121106
+    ],
+    [
+      "ffe37a6f-27f4-4bcf-a5aa-49d4813f9892",
+      123179
+    ],
+    [
+      "eef43f08-85d9-40d2-8e8a-b5816673ffcb",
+      126198
+    ],
+    [
+      "ea723620-74ad-4732-97d8-aba245e350fd",
+      102173
+    ],
+    [
+      "dd752bab-9f2d-40c2-91dc-579ee6e55434",
+      125325
+    ],
+    [
+      "d8107f0f-40c9-4397-835f-8c066c2ec002",
+      122101
+    ],
+    [
+      "cd2242d5-7f0b-4401-922b-070d380d8b67",
+      121112
+    ],
+    [
+      "c989c3dd-12a6-42c4-a246-4377d957a2bc",
+      116467
+    ],
+    [
+      "bc4c781c-6fb9-4216-9bdc-2db71647092e",
+      137930
+    ],
+    [
+      "ae770cb0-0f39-46c1-92f6-51343af3e86d",
+      116762
+    ],
+    [
+      "a9559b1b-edd6-4f4f-bf8b-d34d36fb2845",
+      114019
+    ],
+    [
+      "a3f0ca9e-52d4-43d8-b96a-da0b56104494",
+      127334
+    ],
+    [
+      "9db112b3-fdf1-4c2f-90cd-d87b425ba6e1",
+      117180
+    ],
+    [
+      "9b576594-4cbc-456e-9ea9-8b108020e483",
+      129521
+    ],
+    [
+      "99eeb729-2810-45d4-bfb5-128987c55d34",
+      121281
+    ],
+    [
+      "956d15e6-eb79-4331-a51b-4c77c538df8d",
+      121306
+    ],
+    [
+      "8cab1dca-a386-4bf1-bc77-729ef745a90a",
+      121032
+    ],
+    [
+      "8b65ec32-1015-4b18-a991-7021eff2796d",
+      121694
+    ],
+    [
+      "80ae3855-9867-423d-87c6-1279c39cabe5",
+      125068
+    ],
+    [
+      "7fff8df3-bbf2-4fc3-9df8-34fb10c5a31b",
+      103122
+    ],
+    [
+      "7e3a2a49-b09c-4975-a70f-1514975310a0",
+      99929
+    ],
+    [
+      "79f01d5d-c054-4e72-90a0-597e624d0b91",
+      124828
+    ],
+    [
+      "6f7ed10b-1cfb-4caa-a05c-ce01435220dc",
+      102474
+    ],
+    [
+      "6c2f416b-b05e-40b9-8d99-2e4f01bdd5d1",
+      114923
+    ],
+    [
+      "6b7ad4e3-1d61-4fe4-a41b-7d0a1103b34f",
+      101600
+    ],
+    [
+      "6489b406-7fb6-4aec-8ee6-48eefe1d0823",
+      100539
+    ],
+    [
+      "5acd7358-4ff3-4c6a-bb42-ebb164e48634",
+      112674
+    ],
+    [
+      "55e7e858-a69b-45c9-aacc-db209f95bbd5",
+      128931
+    ],
+    [
+      "51b4ae25-015e-41f8-92da-c1fd5c4f0b0e",
+      98883
+    ],
+    [
+      "50dcc04e-6a06-4903-bcb1-d1885d2fe9e7",
+      125865
+    ],
+    [
+      "4d1a536a-da8b-449d-a11e-9ebb13a8add9",
+      121889
+    ],
+    [
+      "4c480806-a7dc-4878-a501-399b6a978913",
+      123665
+    ],
+    [
+      "4922f7aa-0e5a-4667-9c15-5817c6ca288d",
+      118099
+    ],
+    [
+      "46ee4131-98ee-4d72-898e-7f92bedefc7c",
+      125392
+    ],
+    [
+      "4447a9e2-17bf-458a-a167-5ce891f49923",
+      128119
+    ],
+    [
+      "36cc3e5b-ad2e-40ae-ac89-e48dcfcedcf3",
+      124601
+    ],
+    [
+      "32ddf289-a78c-4be3-b40d-7cdda3a632a1",
+      105276
+    ],
+    [
+      "2f3c5631-2185-435d-bced-76cd02759306",
+      114820
+    ],
+    [
+      "2123266c-bc72-4dc2-811a-df3a696df0f3",
+      123350
+    ],
+    [
+      "1c907ebb-23e7-4612-99b1-662f417277dd",
+      118928
+    ],
+    [
+      "148c08bb-5b77-46f4-bea2-0163ef0d8eb7",
+      117620
+    ],
+    [
+      "10065c28-70dd-41d3-9ba3-704166f0fe7f",
+      111021
+    ],
+    [
+      "0fc034c9-d6d2-4ab0-9f85-64364307b491",
+      102051
+    ],
+    [
+      "0f57d6f8-5dbc-4251-9a97-ddd44c0c43b3",
+      102932
+    ],
+    [
+      "0af7f932-4ccb-4f48-ad23-67a11f98ba3e",
+      117179
+    ],
+    [
+      "9a0a94a9-3fb2-443e-b001-7cb5533aa996",
+      100897
+    ],
+    [
+      "8ae664f9-1637-44d4-a94a-465622217213",
+      4579949
+    ],
+    [
+      "ff5c44f2-809a-4a91-b9d5-43831a94322b",
+      112034
+    ]
+  ],
+  "timestamp": "2026-09-02T05:40:48.784740Z",
+  "tokens_used": 10190,
+  "units_analyzed": 7,
+  "units_total": 36
+}

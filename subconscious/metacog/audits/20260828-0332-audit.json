@@ -1,0 +1,231 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16873,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.057480431452799643,
+    "unit_count": 17
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 14 zero-tool style-enforcement units this cycle (beedfca0, ba76ff7c, a2be8e1c, 9ae82b2d, 83ebc627, 7cb5e684, 751adc17, 6f07aaf0, 6620e9cf, 60b66f1e, 5122e733, 4b381cb5, 4ae54e27, 448c6156); topic_keywords uniformly ['enforce','style','ledger','file','content']; all zero-tool, short outputs (20–293 chars); reactions all Unknown; count trajectory across last four cycles: 2→11→14→14; count has plateaued rather than escalating further, suggesting automated spawning path rather than per-turn drift; trajectory STABLE vs prior cycle, not worsening"
+    ],
+    "calibration_score": 0.65,
+    "overconfident_count": 0,
+    "recommendations": [
+      "confirmation_bias_style_log is RECURRING and STABLE — count plateaued at 14; deprioritized per history guidance since trajectory is not worsening; no new fix recommended beyond what prior cycles have already flagged",
+      "relative-path-at-reader-boundary-blind-spot from prior cycle (2026-08-28 history) not visible in this batch — no completion-report units with deliverable paths present; no action needed this cycle",
+      "juror units (c041b10d, 7a262138, 58f0274f) show appropriate strategy: zero tools, longer analytical outputs (1415–1760 chars) matching opinion/analysis task shape; well-calibrated",
+      "no new biases detected beyond those already in the recurring history; no novel recommendations warranted this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 17
+  },
+  "sessions": [
+    [
+      "c0b89dc3-2d59-4ce4-99a1-73c5a26f71a8",
+      119386
+    ],
+    [
+      "c041b10d-b907-45e9-83de-ee8cfddaf495",
+      103691
+    ],
+    [
+      "bfa4ad8b-a419-4e1f-a6b2-d72639045821",
+      116703
+    ],
+    [
+      "beedfca0-a75b-4250-a0c2-b78e2ab9c326",
+      129052
+    ],
+    [
+      "bc000bf9-35dd-460b-ac94-e7c3a5289cd9",
+      119741
+    ],
+    [
+      "bb380ad9-1aea-4082-9b25-ed8da364bc14",
+      103702
+    ],
+    [
+      "ba76ff7c-24b4-4f0d-b699-5fc1ad478887",
+      130767
+    ],
+    [
+      "b72d08f5-c8eb-4cfa-b8ff-85dbc8550455",
+      135421
+    ],
+    [
+      "ad8011dd-c515-42bb-8e4a-d12efd668ad8",
+      131159
+    ],
+    [
+      "ac19c6d4-73ca-485d-b3f4-6237619b3de7",
+      130823
+    ],
+    [
+      "a82d5641-cd16-491e-bbb6-78e04e31f91c",
+      130463
+    ],
+    [
+      "a7b8e603-ab00-4b76-8904-3a613cbd4aab",
+      119120
+    ],
+    [
+      "a64bef88-b553-481f-89ce-5a30ec148b73",
+      131201
+    ],
+    [
+      "a2be8e1c-5b71-48ea-8bc5-2873f4d44538",
+      122722
+    ],
+    [
+      "9e84e734-aad6-45f6-af91-1d184b800e7c",
+      135623
+    ],
+    [
+      "9e00619a-49e9-4c54-8fbe-7e27f2335da8",
+      138340
+    ],
+    [
+      "9d32b31a-c5a7-4bfa-956d-9be112b8710c",
+      128830
+    ],
+    [
+      "9ae82b2d-6b74-4287-bc78-27463e220fe1",
+      114852
+    ],
+    [
+      "9733a046-84a6-43c3-8ec1-0d54a92b0edf",
+      130553
+    ],
+    [
+      "96d1162e-277c-45a4-be3f-bb888b1112b9",
+      118036
+    ],
+    [
+      "9020dba2-30d3-45d5-903a-64baed66c249",
+      120567
+    ],
+    [
+      "8b51f7e7-c72f-4c9b-87f7-bcf8cc54026b",
+      133261
+    ],
+    [
+      "8affb8a7-f7d3-49a3-83a3-7af146c2581d",
+      149936
+    ],
+    [
+      "8a518a9e-14cd-4268-9b42-21f89966ce25",
+      119199
+    ],
+    [
+      "87dd7d66-802b-4e06-a802-67cf8b795adc",
+      133254
+    ],
+    [
+      "83ebc627-c918-4623-a97d-9266071c5b3c",
+      121178
+    ],
+    [
+      "839c02b6-c500-4fcd-8a62-e7da02460c44",
+      102744
+    ],
+    [
+      "7cee7e8d-38d0-486c-8109-b350584b7b37",
+      143637
+    ],
+    [
+      "7cb5e684-a073-4011-8150-8fbde7ae342e",
+      136746
+    ],
+    [
+      "7a262138-a30e-4141-8502-6176eb830936",
+      106956
+    ],
+    [
+      "791c4531-2506-4820-bb2e-b4ed49994de0",
+      119186
+    ],
+    [
+      "779eebff-d943-49b1-8c6b-9fb279ff1efd",
+      155669
+    ],
+    [
+      "766bb305-065a-4771-b8fb-3e3926f85b62",
+      127652
+    ],
+    [
+      "751adc17-e9f4-464b-994a-0ec5ae347392",
+      134807
+    ],
+    [
+      "739f8e49-bdad-4e9c-a0c5-57056b8c5e88",
+      106099
+    ],
+    [
+      "6f07aaf0-d268-4ac3-921a-3c3a6e148319",
+      131443
+    ],
+    [
+      "6d665dbc-9995-4866-8d52-b98d5fa1dcec",
+      116101
+    ],
+    [
+      "6c59cedd-0966-41aa-ab6c-f8a7700d430e",
+      131909
+    ],
+    [
+      "6a872ecb-b7f8-41e9-844b-e9a4efd72504",
+      126091
+    ],
+    [
+      "6620e9cf-b4f4-47c7-bdfe-8d2da4bbf80b",
+      120368
+    ],
+    [
+      "60b66f1e-f028-4634-ad6c-49e5a0480194",
+      138256
+    ],
+    [
+      "58f0274f-0cbc-422d-adca-797a1d2f651c",
+      106740
+    ],
+    [
+      "5122e733-7ad3-4c1e-b573-b079af89cca9",
+      128364
+    ],
+    [
+      "4b381cb5-e62b-463d-9d62-4cbb41fe3b10",
+      130267
+    ],
+    [
+      "4ae54e27-5de7-4aaf-9bd6-3599ebcecf8e",
+      118229
+    ],
+    [
+      "4a550df9-598e-42d7-804f-b227ccc7900a",
+      129248
+    ],
+    [
+      "49d84343-4c92-49fe-935a-792b37a7239f",
+      127467
+    ],
+    [
+      "47b56b28-6527-489c-b84d-b65af1bec5a7",
+      106441
+    ],
+    [
+      "448c6156-de5f-4005-9da5-54455c0b615a",
+      136605
+    ],
+    [
+      "40cae13a-6aa5-4baa-a130-d4671283ee9f",
+      136686
+    ]
+  ],
+  "timestamp": "2026-08-28T03:32:20.867923Z",
+  "tokens_used": 2990,
+  "units_analyzed": 17,
+  "units_total": 17
+}

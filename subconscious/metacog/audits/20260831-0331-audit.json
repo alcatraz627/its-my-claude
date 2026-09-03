@@ -1,0 +1,231 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 16916,
+    "correction_density": 0.014925373134328358,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.13318301212911318,
+    "unit_count": 67
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:SLIGHT_UPTICK — 3 zero-tool units this cycle (364f3979-0: style/ledger 13710-char input, 423-char output; 2aa55be1-0: juror/opinion 5954-char input, 1918-char output; 1fc65762-0: style/ledger 13710-char input identical hash to 364f3979-0, 124-char output); count trajectory: 14→14→2→8→3→5→8→2→3→1→3; uptick from prior cycle low of 1 but still in the low-single-digit band; 364f3979-0 and 1fc65762-0 share identical 13710-char inputs suggesting same automated prompt firing twice on different sessions within the same day; deprioritize unless count rebounds above 5",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — unit 1e943ed2-13: two sequential curl API probe attempts (success:false both) before switching strategy; git stash pop failure with recovery; same probe-after-failure shape as prior cycles with no pre-check of key availability or endpoint reachability before issuing blocked command; appropriately acknowledged model ID uncertainty by filing USER-gated task rather than asserting the model exists"
+    ],
+    "calibration_score": 0.58,
+    "overconfident_count": 0,
+    "recommendations": [
+      "confirmation_bias_style_log: count at 3 matches the cycle-2-prior low; trajectory is oscillating in the 1–3 band rather than trending down; no action until rebound above 5 — already in backlog and flagged in prior cycles",
+      "optimism_bias_on_edit_availability: pre-check availability state (key present, endpoint reachable, lock held) before issuing the first attempt; the pattern has been flagged four consecutive cycles with no structural change in behavior — consider adding a one-line probe step to the dispatch sequence rather than waiting for the first failure to reveal the blocker",
+      "no new bias patterns detected this cycle; 1e943ed2-13 showed appropriate uncertainty calibration by explicitly flagging unconfirmed model ID as USER-gated rather than asserting it — this is the correct recovery shape and should not be flagged as overconfidence"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "364f3979-220b-4e18-948c-01f7d88b0806",
+      145299
+    ],
+    [
+      "2aa55be1-4459-46c4-8793-920b91bd926e",
+      105076
+    ],
+    [
+      "1fc65762-5180-44f1-8e58-2ddba81642d1",
+      129205
+    ],
+    [
+      "1e943ed2-5290-43e0-9d73-d3f4d6dd412f",
+      7523774
+    ],
+    [
+      "11a02a62-c411-4f30-9cae-df4c23d0bf5e",
+      103401
+    ],
+    [
+      "0f45052d-809f-4f45-adea-f8fe39d0043b",
+      116065
+    ],
+    [
+      "1d41592b-2e92-40c5-82dc-1d2f8728b14b",
+      571301
+    ],
+    [
+      "56a3a713-2c73-4549-86e0-aa1f526d0f6a",
+      123565
+    ],
+    [
+      "b7f9e56a-c536-46d5-837b-93f2e3b2d2b8",
+      130278
+    ],
+    [
+      "4cb43f06-874d-4148-a162-d89de0254465",
+      132743
+    ],
+    [
+      "f452498c-ef60-4822-82fd-c8f9ed12f7a7",
+      8342432
+    ],
+    [
+      "f00a0017-b6bf-431b-8d07-9ad848008820",
+      15060004
+    ],
+    [
+      "eb21fbca-c05f-4e85-b564-34cd31d5485b",
+      100434
+    ],
+    [
+      "e713b3b8-2b09-4338-b60c-13b887add972",
+      126441
+    ],
+    [
+      "e2ddef64-2403-4b5d-94b3-5e13ca43c5a0",
+      108243
+    ],
+    [
+      "e1759fbe-09f6-481d-97d0-6a8a067a468a",
+      10475034
+    ],
+    [
+      "d8f2ac81-565b-49ed-a724-026e0a436451",
+      111417
+    ],
+    [
+      "d43d525d-53cb-4a3b-92bb-ac02b3e26375",
+      7752600
+    ],
+    [
+      "d23cf82e-08ee-41a4-9264-af21a9032502",
+      113988
+    ],
+    [
+      "d08d3308-1858-42b0-8001-085823b2768d",
+      101227
+    ],
+    [
+      "cbcd8766-7eb3-4a10-937a-f782b210bfd3",
+      127060
+    ],
+    [
+      "c8e4541d-8737-4c94-9f67-5b28f2680b05",
+      118873
+    ],
+    [
+      "c6bc35ce-8d86-43b6-af88-18af402aeffb",
+      107510
+    ],
+    [
+      "c502f589-942c-48c3-a610-223ee6dee551",
+      13397926
+    ],
+    [
+      "b643e8f9-c76e-43b4-8a8d-7e41145c9cdb",
+      124835
+    ],
+    [
+      "b2a17ec4-d61d-4788-afa8-c6ca39e8f7bf",
+      128955
+    ],
+    [
+      "b01bf8e7-f281-4638-a814-15b1e058af6c",
+      130249
+    ],
+    [
+      "ab260daa-2e72-4a6f-83ef-bc8608a9f72f",
+      129126
+    ],
+    [
+      "a6431c2c-5a9d-47e9-b4ef-3f94e1cf7d4b",
+      107349
+    ],
+    [
+      "9e6d3a55-ee53-461e-ac2c-5216d50571f4",
+      127949
+    ],
+    [
+      "9bb682a8-ab90-486e-8e0e-82d388c984fc",
+      103855
+    ],
+    [
+      "992cebcc-4fac-4f24-86bb-0ea7da001558",
+      114254
+    ],
+    [
+      "9531236d-268e-46c5-b82e-8fb6fce57308",
+      21709
+    ],
+    [
+      "911c6b71-6eff-4bdf-a5a2-605272c3d2d5",
+      131870
+    ],
+    [
+      "7fd7fe51-6fd2-4e6a-974e-c2aabe59ed1e",
+      103097
+    ],
+    [
+      "6b23868e-61cf-455a-a7e8-0f25d904569e",
+      104121
+    ],
+    [
+      "63cffb49-9c96-4828-ba52-7037323c1161",
+      101708
+    ],
+    [
+      "62748a68-2b46-409a-8d32-6d2746b342aa",
+      9058131
+    ],
+    [
+      "521893ed-bba7-42dc-ad35-6390c04cae79",
+      117438
+    ],
+    [
+      "51daadfa-920d-48cc-a0b2-2a772c93b7e3",
+      18726559
+    ],
+    [
+      "4bbe4cbd-5cef-458b-ad5c-ca6e6d5deeb6",
+      18134959
+    ],
+    [
+      "46663e62-d1ee-4faf-85af-fa25a5630712",
+      131499
+    ],
+    [
+      "329ab3a8-4cd0-4ec3-960d-0d495f9d7db6",
+      129574
+    ],
+    [
+      "2c2697f0-beba-4c4c-8f87-0b04df1de487",
+      112133
+    ],
+    [
+      "26036696-ea49-4635-a6b3-add250680cf7",
+      107630
+    ],
+    [
+      "222e975d-fbe1-4ee4-8d31-897a43e97d90",
+      100159
+    ],
+    [
+      "19030651-a1c8-4fd6-80ff-f1a81c67dd4e",
+      128241
+    ],
+    [
+      "185d4152-7ff0-4fa4-951d-154400c9f90a",
+      18601668
+    ],
+    [
+      "14b2e57a-58dd-40ed-b5f3-91f239e76a9d",
+      102999
+    ],
+    [
+      "11838933-2b14-476f-b907-019735eb9289",
+      102861
+    ]
+  ],
+  "timestamp": "2026-08-31T03:31:49.230767Z",
+  "tokens_used": 7807,
+  "units_analyzed": 7,
+  "units_total": 67
+}

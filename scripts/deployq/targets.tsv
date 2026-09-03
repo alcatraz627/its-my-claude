@@ -1,0 +1,19 @@
+# deployq target registry.  target <TAB> repo <TAB> wrapper <TAB> probe-url
+#
+# The registry is DATA and this file carries the ids, exactly as estate.ids does
+# for gcp-actions.sh — so the scripts beside it stay estate-agnostic and can be
+# promoted without edits.
+#
+# A wrapper must already exist in its repo and be the reviewed deploy path for
+# that service. deployq never composes a gcloud command; it runs the wrapper the
+# repo already trusts. That is what keeps this from becoming a shell with a JSON
+# front door, and it is why gcp-actions.sh can go on refusing to mutate: the
+# mutation path is here, named, queued and reported, instead of ad hoc.
+#
+# probe-url is what the post-checks interrogate. Leave it "-" if the target
+# serves nothing (a job, a migration), and give it no http post-checks.
+
+auth-dev	/Users/alcatraz627/Code/Versable/foundry-auth/auth	./deploy.sh --env dev	https://auth-dev-575485603284.us-central1.run.app
+forge-console-dev	/Users/alcatraz627/Code/Versable/versable-forge-v6	./deploy.sh --env dev	https://versable-forge-v6-dev-cdsd3jb53a-uc.a.run.app
+forge-runner-dev	/Users/alcatraz627/Code/Versable/versable-foundry/runner	./deploy.sh --env dev	https://silica-runner-dev-cdsd3jb53a-uc.a.run.app
+forge-console-dev-auth	/Users/alcatraz627/Code/Versable/forge-auth	./deploy.sh --env dev	https://versable-forge-v6-dev-cdsd3jb53a-uc.a.run.app

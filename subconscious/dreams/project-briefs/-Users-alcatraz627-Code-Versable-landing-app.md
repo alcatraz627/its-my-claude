@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-05-16T20:59:41.029938+00:00 · 12 patterns / 0 insights -->
+<!-- i-dream project brief · 2026-09-03T04:51:28.492581+00:00 · 20 patterns / 1 insights -->
 ## What this project is about
-Versable landing app — a Next.js web product with strict conventions around auth, env vars, and component architecture. Work style is iterative and convention-compliance-heavy; the user catches abstraction violations quickly.
+A Next.js/React landing app (Versable product) with heavy visual design iteration, CSS animation work, and multi-agent sub-agent workflows. Working style is high-autonomy execution with explicit model-tier discipline.
 
 ## Things to do (or keep doing)
-- **Use existing abstractions** — always prefer named helpers (`isDevelopment`, `isProduction`) over inlining raw expressions; grep before writing new code
-- **Augment before replacing** — when improving existing design, minimize structural change; propose additions not rewrites
-- **Write permanent scripts from the start** — if proposing a validation/link-check/lint tool, commit it as a real artifact, not a one-off
-- **Scope checkpoints per agent** — when running parallel agents, explicitly scope context files to avoid cross-loading wrong session state
+- Complete all obvious sequential steps autonomously without checkpoint confirmations — terse continuation means execute, not pause
+- Always `TaskStop` a sub-agent immediately after verifying its output on disk to prevent task-board commandeering
+- Run `rg --no-ignore` across the full tree before claiming any file, route, or code path doesn't exist
+- When designing visual variants for review, ensure they represent meaningfully different directions — color language, motif, composition — not minor diffs
 
 ## Things to avoid
-- **Don't declare complete without convention-check** — verify all changes conform to project patterns, not just functional correctness
-- **Don't infer architecture** — never assert which service owns auth/token/validation without reading the actual code; cite file:line
-- **Don't expose client env vars silently** — flag any `NEXT_PUBLIC_` additions and question necessity before adding
-- **Don't introduce infra categories without confirmation** — CI pipelines, test harnesses, deployment hooks need explicit approval if no precedent exists
+- Don't claim "done" or "works" without executing the actual code path — lint/type-check/collect-only is not a run
+- Don't dispatch sub-agents at a different model tier than the task or standing ruling specifies; tier violations are explicit failures
+- Don't declare a deployment successful without reading actual deploy logs for warnings or silent downgrade messages
+- Don't declare CSS custom properties as empty (`--x: ;`) expecting `var(--x, fallback)` to use the fallback — it won't; omit the declaration entirely
 
 ## Open questions / known gaps
-- Test setup is ambiguous — always check `package.json` and existing test files before suggesting a framework; one likely already exists
-- Component deletion triggers recurring corrections — the "why does this split exist?" question is frequently missed before refactors
+- Ambiguous affirmatives ("yes", "ok") to either/or questions still misfire — agent picks the branch already in motion rather than asking which was meant
+- `node_modules/.cache` cleanup is routinely missed in "clean state" resets, causing stale-cache debugging loops

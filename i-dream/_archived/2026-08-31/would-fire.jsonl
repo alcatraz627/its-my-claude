@@ -1,0 +1,30 @@
+{"id": "d70ac4ce6f871434", "sid": "9b1abb34-4ffb-44bf-8bde-e96b2081a135", "state": "live", "surface": "prompt", "ts": 1786459933}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459933}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459933}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786459933}
+{"id": "91c2e2e7f756ba2b", "sid": "407286e9-c71c-4ec1-9b22-85e2db2db184", "state": "live", "surface": "tool", "tool": "Write", "ts": 1786459936}
+{"id": "3c40a861cd0842a7", "sid": "407286e9-c71c-4ec1-9b22-85e2db2db184", "state": "live", "surface": "tool", "tool": "Write", "ts": 1786459936}
+{"id": "8f2469b9c91895c0", "sid": "407286e9-c71c-4ec1-9b22-85e2db2db184", "state": "live", "surface": "tool", "tool": "Write", "ts": 1786459936}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459939}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459939}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786459939}
+{"id": "b26957e5af923ced", "sid": "407286e9-c71c-4ec1-9b22-85e2db2db184", "state": "candidate", "surface": "tool", "tool": "Bash", "ts": 1786459952}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459956}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459956}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786459956}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459957}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786459957}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786459957}
+{"id": "2c5dedd9d8a2b605", "sid": "0ea6c44c-9d0a-4d4e-ae81-4013897807d5", "state": "live", "surface": "prompt", "ts": 1786459958}
+{"id": "d70ac4ce6f871434", "sid": "0ea6c44c-9d0a-4d4e-ae81-4013897807d5", "state": "live", "surface": "prompt", "ts": 1786459958}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786460056}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786460056}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786460056}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786460058}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786460058}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786460058}
+{"id": "ab332bca10f938fc", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786460078}
+{"id": "6ac96d0a5866cf77", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "candidate", "surface": "tool", "tool": "Edit", "ts": 1786460078}
+{"id": "fbbe2e1ac4733ec2", "sid": "e2c47b29-4bbf-45be-bd61-19b839882da3", "state": "live", "surface": "tool", "tool": "Edit", "ts": 1786460078}
+{"id": "91c2e2e7f756ba2b", "sid": "407286e9-c71c-4ec1-9b22-85e2db2db184", "state": "live", "surface": "tool", "tool": "Write", "ts": 1786460107}
+{"id": "3c40a861cd0842a7", "sid": "407286e9-c71c-4ec1-9b22-85e2db2db184", "state": "live", "surface": "tool", "tool": "Write", "ts": 1786460107}

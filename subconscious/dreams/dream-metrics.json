@@ -1,233 +1,229 @@
 {
-  "generated_at": "2026-08-24T19:39:17Z",
-  "events_analyzed": 199682,
-  "sessions_analyzed": 622,
+  "generated_at": "2026-09-03T09:01:19Z",
+  "events_analyzed": 19026,
+  "sessions_analyzed": 62,
   "session_quality": {
-    "average_score": 70.4,
+    "average_score": 68.8,
     "top_sessions": [
       {
-        "session_id": "30ed8609-93cc-4325-8fae-ee5ed5b21597",
-        "project": "contract",
-        "score": 81.6,
-        "tool_count": 19,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 0.158,
-        "efficiency": 19.0,
-        "prompts": 1,
-        "compactions": 0,
-        "duration_min": 2.9,
-        "completed": true,
-        "start": "2026-08-23T11:06:52Z"
-      },
-      {
-        "session_id": "130ecdff-573f-4589-9978-5959499fe437",
-        "project": "tmp",
-        "score": 81.2,
-        "tool_count": 5,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 0.6,
-        "efficiency": 5.0,
-        "prompts": 1,
-        "compactions": 0,
-        "duration_min": 2.7,
-        "completed": true,
-        "start": "2026-05-17T20:44:10Z"
-      },
-      {
-        "session_id": "ab5b6508-65d0-4285-93a4-52d36102ba61",
-        "project": "tmp",
-        "score": 81.2,
-        "tool_count": 5,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 0.6,
-        "efficiency": 5.0,
-        "prompts": 1,
-        "compactions": 0,
-        "duration_min": 4.9,
-        "completed": true,
-        "start": "2026-05-21T17:28:54Z"
-      },
-      {
-        "session_id": "1a20d719-1438-42bf-8fde-fbd23eee272b",
-        "project": "tmp",
-        "score": 80.2,
-        "tool_count": 7,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 0.429,
-        "efficiency": 7.0,
-        "prompts": 1,
-        "compactions": 0,
-        "duration_min": 6.0,
-        "completed": true,
-        "start": "2026-05-27T01:37:45Z"
-      },
-      {
-        "session_id": "afe26d7d-cabb-4b6d-8fca-49a8feefe21c",
-        "project": "backend",
+        "session_id": "00b45f5a-32eb-4e94-9bf4-5d78f3df571b",
+        "project": "/",
         "score": 80.0,
         "tool_count": 4,
         "error_count": 0,
         "error_rate": 0.0,
         "diversity": 0.5,
-        "efficiency": 4,
-        "prompts": 0,
+        "efficiency": 4.0,
+        "prompts": 1,
         "compactions": 0,
-        "duration_min": 580.6,
+        "duration_min": 1.0,
         "completed": true,
-        "start": "2026-06-17T21:09:02Z"
+        "start": "2026-08-27T18:52:15Z"
+      },
+      {
+        "session_id": "03efdd0b-716f-445b-ba82-3d027ded0f1e",
+        "project": "gcp",
+        "score": 78.2,
+        "tool_count": 31,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.065,
+        "efficiency": 31.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 4.0,
+        "completed": true,
+        "start": "2026-09-01T14:40:31Z"
+      },
+      {
+        "session_id": "4522e558-d4c5-4e52-a20c-b5a6e7fa5c14",
+        "project": "20260830-0159-deep-research-estate-audit",
+        "score": 77.5,
+        "tool_count": 2,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.5,
+        "efficiency": 2.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 0.6,
+        "completed": true,
+        "start": "2026-08-29T20:56:19Z"
+      },
+      {
+        "session_id": "ea08a147-4cca-4cb3-92ea-8f3b27a1f73c",
+        "project": "slack-automation",
+        "score": 77.5,
+        "tool_count": 2,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.5,
+        "efficiency": 2.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 1.2,
+        "completed": true,
+        "start": "2026-08-31T14:25:54Z"
+      },
+      {
+        "session_id": "89d21b45-2b9b-41d0-b44f-3e85591cc1e0",
+        "project": "tmp",
+        "score": 77.5,
+        "tool_count": 2,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.5,
+        "efficiency": 2.0,
+        "prompts": 1,
+        "compactions": 0,
+        "duration_min": 1.1,
+        "completed": true,
+        "start": "2026-08-31T21:19:31Z"
       }
     ],
     "bottom_sessions": [
       {
-        "session_id": "864825eb-ed10-49e8-a277-55f90e44d199",
-        "project": "tmp",
-        "score": 56.2,
-        "tool_count": 5,
+        "session_id": "e410789f-0204-4da1-b565-6a3e6dee7612",
+        "project": "gcp",
+        "score": 57.7,
+        "tool_count": 311,
         "error_count": 0,
         "error_rate": 0.0,
-        "diversity": 0.2,
-        "efficiency": 5.0,
+        "diversity": 0.006,
+        "efficiency": 5.9,
+        "prompts": 53,
+        "compactions": 0,
+        "duration_min": 853.6,
+        "completed": true,
+        "start": "2026-08-29T17:29:31Z"
+      },
+      {
+        "session_id": "5ca7a1e0-2cd2-42d8-89a4-09773c3c588c",
+        "project": "slack-automation",
+        "score": 57.7,
+        "tool_count": 382,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.008,
+        "efficiency": 5.9,
+        "prompts": 65,
+        "compactions": 0,
+        "duration_min": 1076.0,
+        "completed": true,
+        "start": "2026-09-02T08:51:02Z"
+      },
+      {
+        "session_id": "00a32d21-1113-4d20-ba88-8f0c5d11f3d9",
+        "project": "/",
+        "score": 57.5,
+        "tool_count": 4,
+        "error_count": 0,
+        "error_rate": 0.0,
+        "diversity": 0.25,
+        "efficiency": 4.0,
         "prompts": 1,
         "compactions": 0,
         "duration_min": 0,
         "completed": false,
-        "start": "2026-08-05T06:21:27Z"
+        "start": "2026-08-27T18:50:15Z"
       },
       {
-        "session_id": "71f9d42e-5138-4a99-8165-531b4e6a52a2",
-        "project": ".claude",
-        "score": 55.6,
-        "tool_count": 41,
+        "session_id": "8ae664f9-1637-44d4-a94a-465622217213",
+        "project": "speedway",
+        "score": 57.4,
+        "tool_count": 277,
         "error_count": 0,
         "error_rate": 0.0,
-        "diversity": 0.049,
-        "efficiency": 2.6,
-        "prompts": 16,
+        "diversity": 0.007,
+        "efficiency": 5.7,
+        "prompts": 49,
         "compactions": 0,
-        "duration_min": 116.1,
+        "duration_min": 4170.2,
         "completed": true,
-        "start": "2026-07-08T07:57:06Z"
+        "start": "2026-08-28T13:41:44Z"
       },
       {
-        "session_id": "1e792352-68e5-4389-8429-3eee3c5cc6d6",
-        "project": "frontend",
-        "score": 55.0,
-        "tool_count": 140,
+        "session_id": "8ec774c3-5bf4-439b-bacc-1ab76e561172",
+        "project": "gcp",
+        "score": 56.4,
+        "tool_count": 379,
         "error_count": 0,
         "error_rate": 0.0,
-        "diversity": 0.021,
-        "efficiency": 3.2,
-        "prompts": 44,
+        "diversity": 0.011,
+        "efficiency": 4.7,
+        "prompts": 80,
         "compactions": 0,
-        "duration_min": 2131.8,
+        "duration_min": 2051.0,
         "completed": true,
-        "start": "2026-05-07T10:14:34Z"
-      },
-      {
-        "session_id": "fc18be8e-6bc8-4b98-a5ea-a1b1d77849dd",
-        "project": "i-dream",
-        "score": 49.1,
-        "tool_count": 11,
-        "error_count": 0,
-        "error_rate": 0.0,
-        "diversity": 0.091,
-        "efficiency": 3.7,
-        "prompts": 3,
-        "compactions": 0,
-        "duration_min": 0,
-        "completed": false,
-        "start": "2026-05-24T02:51:40Z"
-      },
-      {
-        "session_id": "test-ev-01",
-        "project": "",
-        "score": 47.5,
-        "tool_count": 2,
-        "error_count": 1,
-        "error_rate": 0.5,
-        "diversity": 1.0,
-        "efficiency": 2,
-        "prompts": 0,
-        "compactions": 0,
-        "duration_min": 0,
-        "completed": true,
-        "start": ""
+        "start": "2026-08-28T13:55:01Z"
       }
     ]
   },
   "error_taxonomy": {
-    "total_errors": 1,
-    "by_tool": {
-      "Read": 1
-    },
-    "by_project": {
-      "tmp": 1
-    },
+    "total_errors": 0,
+    "by_tool": {},
+    "by_project": {},
     "error_rate_overall": 0.0
   },
   "topic_drift": {
     "primary_focus": "gcp",
     "recent_projects": {
       "gcp": 4,
-      "kanban": 2,
-      "versable-builder": 2,
-      "automation": 1,
-      "/": 1
+      "landing-app": 1,
+      "tmp": 3,
+      "slack-automation": 1,
+      "scripts": 1
     },
-    "drift_rate": 0.76,
-    "total_switches": 471,
+    "drift_rate": 0.746,
+    "total_switches": 44,
     "recent_switches": [
       {
-        "ts": "2026-08-24T08:20:47Z",
-        "from": "versable-builder",
+        "ts": "2026-09-01T21:15:05Z",
+        "from": "gcp",
+        "to": "tmp"
+      },
+      {
+        "ts": "2026-09-02T08:25:21Z",
+        "from": "tmp",
         "to": "gcp"
       },
       {
-        "ts": "2026-08-24T10:32:22Z",
+        "ts": "2026-09-02T08:51:02Z",
         "from": "gcp",
-        "to": "automation"
+        "to": "slack-automation"
       },
       {
-        "ts": "2026-08-24T10:54:48Z",
-        "from": "automation",
-        "to": "kanban"
+        "ts": "2026-09-02T18:14:42Z",
+        "from": "slack-automation",
+        "to": "scripts"
       },
       {
-        "ts": "2026-08-24T12:06:58Z",
-        "from": "kanban",
-        "to": "gcp"
-      },
-      {
-        "ts": "2026-08-24T15:54:55Z",
-        "from": "gcp",
-        "to": "/"
+        "ts": "2026-09-02T21:15:44Z",
+        "from": "scripts",
+        "to": "tmp"
       }
     ]
   },
   "collaboration_style": {
-    "total_prompts": 14692,
-    "corrections": 2738,
-    "confirmations": 1785,
-    "directives": 479,
-    "terse_messages": 927,
-    "correction_rate": 0.186,
-    "confirmation_rate": 0.121,
-    "directive_rate": 0.033,
-    "terse_rate": 0.063,
-    "style_label": "conversational"
+    "total_prompts": 1726,
+    "corrections": 372,
+    "confirmations": 55,
+    "directives": 27,
+    "terse_messages": 38,
+    "correction_rate": 0.216,
+    "confirmation_rate": 0.032,
+    "directive_rate": 0.016,
+    "terse_rate": 0.022,
+    "style_label": "corrective"
   },
   "graduation_yield": {
     "maintenance": false,
-    "latest_yield": 0.4444444444444444,
+    "latest_yield": 0.15384615384615385,
     "judged_window": [
-      0.625,
-      0.4444444444444444
+      0.29411764705882354,
+      0.15384615384615385
     ],
-    "reviews_counted": 2,
-    "updated_at": "2026-08-24T19:34:22.555636Z"
+    "reviews_counted": 4,
+    "updated_at": "2026-09-03T08:59:28.430978Z"
   }
 }

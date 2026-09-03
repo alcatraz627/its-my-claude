@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-21T23:38:56.788118+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-28T07:44:15.191806+00:00 · 20 patterns / 2 insights -->
 ## What this project is about
-A runner/orchestration service (likely part of the Versable product) with a strong emphasis on API contracts, deployment coordination, and technical planning docs. Work style is high-autonomy, low-interruption — the user's attention is scarce and interruptions are expensive.
+A TypeScript/Node runner service (silica-runner) within the Versable ecosystem, worked on with high autonomy expectations and low tolerance for agent friction or padding.
 
 ## Things to do (or keep doing)
-- **Show the actual data** when the user says "show me" — never substitute a summary or curated subset for the full result the agent already holds
-- **Use decision wizard** (`/decision-wizard`) whenever more than one owner judgment is needed; never ask via numbered chat list
-- **Reconcile the task list every few turns** — don't let it drift while edits accumulate; mark completed, add newly-discovered work
-- **Technical planning docs need structure**: ASCII diagrams, tables, JSON payload shape examples — prose-only docs are rejected
+- **Verify at the destination, not the source** — check the file on disk, the peer's reply, or an `rg --no-ignore` search result; never trust send logs, lint outputs, or default-scope searches as proof of state
+- **Show the actual data when asked** — when the user says "show me", the reply contains the literal output, not a summary or pointer to it
+- **Update the Task tool as work lands** — reconcile completed and new tasks after each batch of edits, not at session end
+- **Enumerate coverage explicitly on multi-state surfaces** — dark/light, both page variants, etc.; state which modes were checked and which were not
 
 ## Things to avoid
-- **Don't halt without a genuine blocker** — the threshold for pausing is high (only when the user must do something the agent truly cannot); re-raising a soft blocker after "keep going" is a recurrence failure
-- **Don't count same-session regression fixes as forward progress** — UI changes that only undo the agent's own mistakes are net-zero recovery
-- **No literary or narrative phrasing** in technical output, commit messages, or status reports — plain register only
-- **Don't conflate "project status" with "planning/contracts doc"** — when the user asks for a plan or contract, deliver architecture + API shape, not deployment state
+- **Don't halt without a genuine blocker** — if the agent can derive the next action, execute it; re-raising a soft blocker after "keep going" or `/atone` is a disqualifying failure
+- **Don't claim done without execution** — a lint, type-check, or collect-only run is not execution; run the code path and read the result
+- **Don't re-surface deferred tasks** — if the user said "don't ask me again", mark it deferred and never raise it again as a question or blocker
+- **Don't use literary phrasing or prose padding** — narrative flourishes and verbose step-by-step instructions when a direct answer fits are both violations
 
 ## Open questions / known gaps
-- Behavioral corrections (prose register, task reconciliation) degrade within the same session; re-check adherence to mid-session corrections every 3–5 turns rather than assuming they persist
-- Deferral patterns lose context by resumption time — persist decision options and blocking question at the moment of deferral, not at resumption
+- Recurring tension between sub-agent model-tier rulings (specified tier) and what actually gets dispatched — verify the dispatch matches the ruling before each fan-out
+- HTML vs markdown format choice keeps misfiring; when HTML is chosen it must carry the mandatory light/dark toggle without exception

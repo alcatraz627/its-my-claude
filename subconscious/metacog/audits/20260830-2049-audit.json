@@ -1,0 +1,298 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17210,
+    "correction_density": 0.00980392156862745,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.23251871625897158,
+    "unit_count": 102
+  },
+  "response": {
+    "biases_detected": [
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — e2e2fc30-24: Write MEMORY.md success:false twice, Edit MEMORY.md success:false twice before succeeding; e2e2fc30-25: 4 consecutive Edit SKILL.md failures before lock-file.sh acquisition, then Edit vis-ledger.py success:false before Bash+Edit approach; same probe-after-failure shape as prior cycle with no pre-check of file availability or lock state before attempting Edit",
+      "confirmation_bias_style_log:RECURRING:IMPROVING — 2 zero-tool automated units detected (e2e2fc30-1: 132-char input, 0-char output; e2e2fc30-22: 964-char input, 145-char output); count trajectory: 14→14→2→8→3→5→8→2; current 2-count matches the prior low-point but comes after the rebound-to-8 cycle, so trajectory is ambiguous — could be genuine improvement or another environmental oscillation; deprioritize unless count rebounds again"
+    ],
+    "calibration_score": 0.65,
+    "cross_references": [
+      "dream_insight_1 CONFIRMED — 8ae664f9-3/4: OOM fix applied to all three export routes (export/template.tsx, export/tabs.tsx, review/export.ts) and both builders in uploadtemplate.server.ts rather than only the reported 503 site. Audit scope matched the structurally similar class, not just the named instance.",
+      "dream_insight_2 CONFIRMED — 8ae664f9-3: Investigation attached the full evidence chain before reporting findings: gcloud OOM event counts by day, revision deploy timestamps correlated against the spike onset, the actual export flow traced to buildUploadTemplate and the double-buffer sites at specific file:line. Output carried the derivation, not just the conclusion.",
+      "optimism_bias_on_edit_availability vs dream_insight_2: e2e2fc30-25 partially violates insight 2 — the claim 'four SKILL.md edits will succeed' was stated by attempting them rather than by checking the lock state. The evidence chain (lock-file.sh) existed but was consulted only after failure, not before."
+    ],
+    "overconfident_count": 1,
+    "recommendations": [
+      "optimism_bias_on_edit_availability: This is now confirmed in two consecutive cycles across two different sessions (e2e2fc30 units 24 and 25). The pattern is probe-after-failure rather than probe-before: check file lock state or run lock-file.sh acquire before the first Edit attempt on any file in ~/.claude/skills/ or cross-session memory paths. The lock acquisition already exists in the toolchain (e2e2fc30-25 found and used it), so the fix is to front-load it, not discover it after 4 failures. Escalate from prior cycle's NEW to RECURRING:STABLE in the record.",
+      "confirmation_bias_style_log: The 2-count after a rebound-to-8 cycle does not yet confirm stable improvement. Hold at RECURRING:IMPROVING and do not de-prioritize until two consecutive cycles stay at or below 3. The 14→2→8→5→8→2 trajectory shows oscillation, not monotone decline.",
+      "No new biases introduced this cycle. The speedway OOM investigation (8ae664f9-3 and 8ae664f9-4) shows strong sibling-scope auditing: all three export routes were patched together, not just the one that 503'd. This confirms the dream insight 1 rule is being applied."
+    ],
+    "underconfident_count": 0,
+    "unit_assessments": [
+      {
+        "calibration": 0.5,
+        "notes": "zero-tool automated unit; unassessable for calibration; pattern matches style-enforcement spawning",
+        "strategy_quality": null,
+        "unit_id": "e2e2fc30-1"
+      },
+      {
+        "calibration": 0.8,
+        "notes": "appropriate fan-out for estate-wide research; pre-recon Bash calls before Agent dispatch; one Bash failure recovered cleanly",
+        "strategy_quality": 0.85,
+        "unit_id": "e2e2fc30-5"
+      },
+      {
+        "calibration": 0.5,
+        "notes": "zero-tool automated unit; IPC/heartbeat shape; unassessable",
+        "strategy_quality": null,
+        "unit_id": "e2e2fc30-22"
+      },
+      {
+        "calibration": 0.4,
+        "notes": "optimism_bias_on_edit_availability: Write MEMORY.md success:false x2, Edit MEMORY.md success:false x2 before success; no pre-check of file state",
+        "strategy_quality": 0.65,
+        "unit_id": "e2e2fc30-24"
+      },
+      {
+        "calibration": 0.55,
+        "notes": "optimism_bias_on_edit_availability: 4 Edit SKILL.md failures before lock acquisition; recovers correctly once lock is used; otherwise methodical — lock acquire/release, test mutation, vis-battery 53/53",
+        "strategy_quality": 0.75,
+        "unit_id": "e2e2fc30-25"
+      },
+      {
+        "calibration": 0.8,
+        "notes": "bounded: TaskStop + read + edit plan + commit; clean execution on teammate probe results",
+        "strategy_quality": 0.9,
+        "unit_id": "e2e2fc30-27"
+      },
+      {
+        "calibration": 0.75,
+        "notes": "probed settings files before asking; AskUserQuestion used appropriately for a genuine ambiguity",
+        "strategy_quality": 0.8,
+        "unit_id": "8ae664f9-0"
+      },
+      {
+        "calibration": 0.85,
+        "notes": "thorough gcloud + source trace; one Bash failure (type-add flag) recovered; sibling-scope export audit covers all three routes",
+        "strategy_quality": 0.9,
+        "unit_id": "8ae664f9-3"
+      },
+      {
+        "calibration": 0.75,
+        "notes": "identified PAT expiry as deploy blocker and surfaced it rather than looping; codex review attempted before PR push; git add with explicit file list not -A on commit",
+        "strategy_quality": 0.85,
+        "unit_id": "8ae664f9-4"
+      },
+      {
+        "calibration": 0.8,
+        "notes": "codex review found Buffer/BodyInit type issue; fix applied, second codex verification run confirms; one codex exec failure then success",
+        "strategy_quality": 0.85,
+        "unit_id": "8ae664f9-6"
+      }
+    ],
+    "well_calibrated_count": 7
+  },
+  "sessions": [
+    [
+      "e2e2fc30-cf26-4bcb-adbc-1493f25cd0e3",
+      5306490
+    ],
+    [
+      "61f824c0-0342-41ef-9304-2b7774926c9d",
+      99062
+    ],
+    [
+      "af044107-9101-43ee-8138-a1e44802ce7b",
+      105246
+    ],
+    [
+      "8ae664f9-1637-44d4-a94a-465622217213",
+      4164650
+    ],
+    [
+      "8aff32d9-0b03-43f1-8e1a-f9cf8e85f535",
+      126424
+    ],
+    [
+      "b2a07984-a60f-4ad6-95a7-045618a13483",
+      1878266
+    ],
+    [
+      "5f25ae5b-2c96-4138-b1a8-e03d68bb9492",
+      102137
+    ],
+    [
+      "5de6c127-198f-460a-8c70-bace13147cb6",
+      116742
+    ],
+    [
+      "5dbae637-e9c6-4db0-9c6b-80416033493d",
+      106774
+    ],
+    [
+      "5c65423d-13fd-4a02-bd81-f1adffbdc135",
+      105267
+    ],
+    [
+      "5987c2a5-1953-43c4-8ae5-eb44fe984dae",
+      95387
+    ],
+    [
+      "5967675f-fb89-4511-9d52-dbe2c572da8e",
+      124193
+    ],
+    [
+      "595fa2f7-30ee-42e6-88ae-9f64a61e04d8",
+      126803
+    ],
+    [
+      "5925c783-a577-498a-82b6-193a230d43b0",
+      108665
+    ],
+    [
+      "580d3ab6-b294-40f1-a343-f42930580a60",
+      11104943
+    ],
+    [
+      "5772d01d-0422-4f86-8b90-222b7fc5d5e5",
+      130125
+    ],
+    [
+      "573b813c-c0cb-48e6-b0e7-38631c22dbed",
+      108608
+    ],
+    [
+      "56211fd7-ff60-4391-a2d9-3506f0dcc777",
+      138819
+    ],
+    [
+      "555af55f-4147-420d-ba0d-7daae7e933a0",
+      132769
+    ],
+    [
+      "53c6b253-0bb6-4c76-b992-0ccc12798a4e",
+      115987
+    ],
+    [
+      "53164f88-95b1-4cbb-825f-e1f06f589b16",
+      114400
+    ],
+    [
+      "52a392c2-ae17-4523-9ac4-5606c674db77",
+      121667
+    ],
+    [
+      "51bb5e88-9006-485d-9b58-e945e22feb52",
+      115372
+    ],
+    [
+      "518b1826-2e60-4520-ae3f-7b7630f81ab0",
+      120115
+    ],
+    [
+      "4d5866a0-c9dd-4abe-a2cb-3d9f7b0f3ca4",
+      116311
+    ],
+    [
+      "4b57c546-2bcf-4067-9d1e-6311ccf7f40c",
+      125730
+    ],
+    [
+      "49f22169-4aff-49f1-a834-278ed06413c4",
+      104768
+    ],
+    [
+      "48d363e4-7324-4414-b7eb-7a704580f28c",
+      128514
+    ],
+    [
+      "4872447e-0905-4893-a30e-dfda168aecbd",
+      122462
+    ],
+    [
+      "48213516-2405-4677-bf16-328f1a94507d",
+      7288002
+    ],
+    [
+      "451d2540-9894-4bfb-abea-8cbd121c4e83",
+      121409
+    ],
+    [
+      "442e1416-41d2-4263-9802-cc4ed213f91f",
+      130522
+    ],
+    [
+      "43a03c11-4fa2-41b6-81d8-352817f8a3aa",
+      134087
+    ],
+    [
+      "41fc5f6b-9301-4871-867e-c61ba6dc7026",
+      125115
+    ],
+    [
+      "41d223f6-5582-4432-96f1-a54f197a8aa5",
+      115884
+    ],
+    [
+      "40c20519-89e3-41c5-975c-10a25ef9be32",
+      135542
+    ],
+    [
+      "3e7f01dc-3f6f-462a-b1f9-5af8a1be1d00",
+      8778351
+    ],
+    [
+      "3d9731e0-cd8d-45cd-876f-f3b41ae06b69",
+      104398
+    ],
+    [
+      "3d588b44-9d16-4c5f-8d1c-dcde74245181",
+      27251314
+    ],
+    [
+      "3d279184-eb48-41b8-8772-eda22effc6d3",
+      135257
+    ],
+    [
+      "3d10467d-7c9e-4268-8191-1c5b09071069",
+      7896599
+    ],
+    [
+      "3a69b1dd-6b5a-4b66-83dc-785b5d78a4a8",
+      123513
+    ],
+    [
+      "3a2603cf-2967-408b-bfe8-fbf5f23cd5bd",
+      141765
+    ],
+    [
+      "39d10fea-23f7-47ad-85c9-dac1a59dc650",
+      133253
+    ],
+    [
+      "38ad4c53-0c55-498a-891b-cd573cf766ec",
+      139203
+    ],
+    [
+      "388c0813-4f04-4275-99d7-e22e3e322a30",
+      125581
+    ],
+    [
+      "37415230-5569-4a40-a141-393c6b5b8c9b",
+      121227
+    ],
+    [
+      "37216caf-1ae2-4eb7-bab1-d76081d348fe",
+      131002
+    ],
+    [
+      "36f35b2b-258e-45d2-aea1-dfe2a3f92a0a",
+      116619
+    ],
+    [
+      "36f100bf-bb53-45f9-96cc-7e8a58e81122",
+      125071
+    ]
+  ],
+  "timestamp": "2026-08-30T20:49:10.287861Z",
+  "tokens_used": 23220,
+  "units_analyzed": 10,
+  "units_total": 102
+}

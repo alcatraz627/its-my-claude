@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-21T23:41:24.095222+00:00 · 20 patterns / 4 insights -->
+<!-- i-dream project brief · 2026-08-31T03:33:50.030512+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-Versable automation — a multi-source data scraping and aggregation product with GitHub-integrated review workflows. Work is incremental, PR-driven, and scope-disciplined.
+Versable automation tooling — scraping, data pipelines, GitHub integrations, and multi-agent workflows. Work is iterative and verification-heavy, with frequent sub-agent dispatches and shared-platform writes (GitHub PR comments).
 
 ## Things to do (or keep doing)
-- **Lead with the payload**: answer first, then context — never open with framing, structure, or a briefing preamble
-- **Enumerate what you checked**: when any sweep returns zero or few results, list what was actually examined; absence of results is not evidence of absence
-- **Convert blocks into handoff artifacts**: when hitting a scope boundary (auth, harness guard, product decision), write the exact action needed, who can take it, and what resumes after
-- **Route multi-decision batches through `/decision-wizard`**: never post a numbered question list in chat
+- Always front-load the decision or action in the first sentence; context follows, never precedes
+- Verify against CI results, not just local test runs, before declaring a PR green
+- When any auth/credential/subscription gate blocks progress, surface the exact user-runnable command immediately, mark blocked, and move on
+- Enumerate all output states (light/dark, loaded/empty, success/error) and verify each before declaring done
 
 ## Things to avoid
-- **Don't regenerate AI-smell after a hook fires**: rewriting with the same em-dashes, bold-spam, or Label:fragment rows is a cosmetic pass — actually remove the tell before resending; re-check every 3–5 turns
-- **Don't mark tasks done without verified completion**: a task is done when the code path ran and you read the result, not when the edit landed
-- **Don't post to GitHub without an agent attribution marker**: all PR comments, reviews, or shared-platform posts via the user's account must self-identify as agent-generated — `(via 🤖claude)` on line 2+
-- **Don't make structural claims without reading the source**: "this is not present" requires a citation or a grep result, not pattern-matching
+- Don't post to GitHub under the user's account without the agent attribution marker (blockquote format, random phrase from the fixed list — enforced by hook, no bypass)
+- Don't mark tasks complete without runtime verification; false done-reports are treated as reporting errors
+- Don't re-raise a topic the user has deferred or skipped multiple times — three ignores means it's out of scope until re-invited
+- Don't regenerate prose with the same AI-smell tells (em-dashes, excessive bold, Label:fragment rows) after the prose-smell hook fires; clean it before re-emitting
 
 ## Open questions / known gaps
-- Prose-smell corrections degrade within the same session — no durable enforcement between turns; check adherence explicitly after any prose correction
-- Per-source filters for scraped data sources are expected but frequently missing from initial implementations; audit UI filter coverage against active scrapers before calling a filter surface done
+- AI-smell prose failures recur even after hook correction in the same turn — the re-emission loop is a standing blind spot requiring active attention on every reply
+- Cost reasoning cited without verification is a recurring design-justification error; always check which option is actually cheaper before asserting it

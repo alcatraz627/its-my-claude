@@ -1,0 +1,91 @@
+{
+  "effort_level": "Deep",
+  "effort_signals": {
+    "budget_tokens": 17219,
+    "correction_density": 0.034482758620689655,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.24687183497939344,
+    "unit_count": 29
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 2 zero-tool units this cycle (ec6ec886-0: juror/opinion 5555-char input, 1321-char output; e6a18408-1: style-enforcement 132-char input, 0-char output, Accepted); count trajectory: 14→14→2→8→3→5→8→2→3→1→1→1→2→1→2; still in the low-single-digit band; deprioritize unless rebound above 5",
+      "inline_python3_str_replace_pattern:RECURRING:WORSENING — unit e6a18408-6 contains two large inline python3 str.replace() patch blocks on report.md and fix-plan.md; each block uses `assert s!=orig` at the end rather than the per-replacement `assert old in s` guard identified as the corrected form in the 2026-09-03 cycle; the end-state guard detects total-replacement-failure but not partial-miss where some targets were found and one was silently skipped; the 2026-09-03 cycle flagged regression to the unguarded form, and this cycle shows a still-weaker intermediate form (end-state guard, not per-replacement guard), continuing a two-cycle regression from the validated corrected form"
+    ],
+    "calibration_score": 0.68,
+    "cross_references": [
+      "dream insight 'send-side success vs receive-side truth': CONFIRMED by unit 03efdd0b-0 — after fixing the stale PIN path in test_job_state_vocabulary.py the agent ran the full suite and read the pass line before committing; destination-side verification honored before the done claim",
+      "dream insight 'preserve independence of parallel artifacts': CONFIRMED by unit e6a18408-6 — the adversarial indictment (indictment-fable.md) was kept as a separate artifact and the corrections were applied as patches to the original report and fix-plan rather than collapsing the two into a single synthesis; optionality preserved",
+      "dream insight 'agent treats each page/surface as a scoped unit when concern is global': NOT TRIGGERED — unit e6a18408-4 scanned across multiple repos and doc-producing skills before asserting the lexicon overlap pattern; the analysis was corpus-wide, not named-instance scoped"
+    ],
+    "overconfident_count": 0,
+    "recommendations": [
+      "inline_python3_str_replace_pattern: the validated corrected form is `assert old in s` immediately before each str.replace() call, not `assert s!=orig` after all replacements complete; the end-state guard only confirms something changed, not that every individual target was found; the partial-miss failure mode (two targets matched, one silently unchanged) passes the end-state guard and produces a wrong artifact; restore per-replacement guards",
+      "the adversarial review workflow in unit e6a18408-6 — a prosecutor seat finding real errors in the control experiment and the MultiEdit traffic claim, the agent accepting both corrections and patching the artifacts — is affirm-worthy behavior; the MultiEdit finding was resolved by an existence-check grep rather than inference (frequency-matched decoy rebuilt from scratch); maintain this verification-at-destination pattern"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "0516748d-a9a2-4a60-b7eb-14a0c783e2b8",
+      102568
+    ],
+    [
+      "03efdd0b-716f-445b-ba82-3d027ded0f1e",
+      543181
+    ],
+    [
+      "f7ce638e-cde4-4ad6-b2b3-64083a08739a",
+      96147
+    ],
+    [
+      "ec6ec886-03e4-434c-8478-c2629532d8dc",
+      102676
+    ],
+    [
+      "e6a18408-1125-4ca0-b189-01b053c17011",
+      4716311
+    ],
+    [
+      "d56a2526-5250-42a4-bcba-4d26a4f87950",
+      96923
+    ],
+    [
+      "bc72a695-d60a-4607-8994-5d741ded3667",
+      97706
+    ],
+    [
+      "b18a9023-01b4-4114-8b55-5899b8a36922",
+      3266425
+    ],
+    [
+      "a6a73301-d0dd-41bf-b7f0-145f7fb2f3a1",
+      98246
+    ],
+    [
+      "a3faea75-7c3f-4841-967a-5e9e7f957c30",
+      95438
+    ],
+    [
+      "85ce4c33-9932-426a-a85a-eccb93eb0c99",
+      119341
+    ],
+    [
+      "66a9ef40-98e8-443a-b164-e996bdaf9956",
+      100821
+    ],
+    [
+      "16346c34-4270-49f1-953f-cd5f047803d6",
+      123629
+    ],
+    [
+      "0fb48af0-cecc-4d68-a53b-9191f37db107",
+      4867828
+    ]
+  ],
+  "timestamp": "2026-09-03T09:00:54.850575Z",
+  "tokens_used": 23864,
+  "units_analyzed": 5,
+  "units_total": 29
+}

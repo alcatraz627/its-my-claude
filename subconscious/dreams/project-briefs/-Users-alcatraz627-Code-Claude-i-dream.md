@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-18T17:47:57.931412+00:00 · 20 patterns / 5 insights -->
+<!-- i-dream project brief · 2026-08-31T03:33:20.734914+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-A dream-tracking dashboard (i-dream) with widgets, pm2 services, and Anthropic API integration. Dominant work style: multi-agent peer-review workflows, UI-heavy feature development, and frequent context-retention discipline.
+Dream-cycle memory consolidation system for Claude Code sessions — a background agent that reads session transcripts, extracts behavioral patterns, and writes structured insight files. Work style is investigative + review-heavy with frequent peer-agent cross-checks.
 
 ## Things to do (or keep doing)
-- **Audit all sibling pages/components before touching any UI shell** (drawer, sidebar, modal) — implementing per-page instead of globally is the single most common rework trigger here.
-- **Consult design mocks before writing any label, page name, or creation flow** — internal naming conventions and code patterns are not substitutes; mocks are the contract.
-- **Classify multi-agent output handling mode explicitly** before acting: keep-separate (peer-review/comparison), validate (cross-check against constraints), or triage (dead-agent recovery).
-- **Preserve load-bearing constraints verbatim in every checkpoint** — applying line caps to summaries silently drops invariants; constraints survive truncation, everything else doesn't.
+- **Preserve independent outputs as separate artifacts** until the user explicitly requests a merge — peer plans stay side-by-side, never auto-collapsed
+- **Grep the full project tree before fixing any single instance** — UI shells, pagination, component patterns are always global concerns
+- **Trace claims back to human-authored source** (design mock, spec, actual code) before using them — never treat a Claude-generated doc as ground truth
+- **Continue on terse signals** ("proceed", "keep going") without asking for clarification when context is below 70% pressure
 
 ## Things to avoid
-- **Don't claim a UI fix is done without visually exercising the rendered page on the running dev server** — compile passes and send-side logs are not destination-state proof.
-- **Don't treat a prose-smell correction as resolved after one rewrite** — AI-smell (em-dashes, bold-spam, Label:fragment rows) resurfaces in multi-turn sessions; re-scan before every human-facing reply.
-- **Don't proceed on a terse continuation when the next action involves a product-level behavioral choice** (user-visible label, feature scope, data model semantics) — pause one line, then execute.
-- **Don't make structural claims about where functionality lives without reading the relevant source file first** — verified at file:line, not inferred from naming.
+- **Don't declare UI or runtime fixes done without exercising the running dev server** — visual inspection only; green local tests ≠ CI pass ≠ rendered page verified
+- **Don't implement any UI shell component on one page without auditing all sibling pages** for the same component first
+- **Don't assert cost or structural claims without reading the source** — "this is cheaper" or "this doesn't exist" requires a file:line citation
+- **Don't regress to default-LLM register after a prose-smell hook fires** — rewritten replies must be checked before sending; the same violations recur immediately after correction
 
 ## Open questions / known gaps
-- Tension between "proceed on terse continuation" and "surface product-level decisions explicitly" is unresolved — the boundary between an execution decision and a product choice needs per-case judgment, not a blanket rule.
-- Prose-smell hook fires repeatedly on the same violations session after session; a durable fix (stricter self-scan before send, not just hook-triggered rewrite) has not landed.
+- Prose-smell hook fires repeatedly but corrections don't stick across turns — the enforcement loop isn't closing; each rewrite needs an explicit self-check before sending
+- CI vs local test divergence is a recurring false-green pattern; the project may need a standing "check CI, not just local" checkpoint before any "done" claim

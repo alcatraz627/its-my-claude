@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17250,
+    "correction_density": 0.045454545454545456,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.1229540739323348,
+    "unit_count": 44
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 2 zero-tool monitor-notification units (f914a060-12: 384-char input, 0-char output; f914a060-20: 303-char input, 0-char output); count trajectory: 14→14→2→8→3→5→8→2→3→1→1→1→2; still in the low-single-digit band consistent with prior cycles; deprioritize",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — unit f914a060-39: one Bash tool call (the python3 inline author-patch script) returns success:false before the agent reads output and re-derives what to fix with a second strategy; same probe-after-failure shape as prior cycles with no pre-check of the string layout before issuing the replacement; resolves correctly but prevention gap persists",
+      "inline_python3_str_replace_pattern:RECURRING:IMPROVING — unit f914a060-39 and f914a060-44 use extensive inline python3 str.replace() blocks on source files (app.py, exercise_app.py, body-gate.cjs); unlike the checkpoint_string_replacement_fragility case flagged NEW in the prior cycle, every replacement in this session is preceded by an explicit `assert old in s` guard, which is the corrected form of the pattern; improvement is real but the reliance on string-literal match targets for production source edits rather than Edit-tool calls remains a structural fragility; flag at lower severity than prior cycle"
+    ],
+    "calibration_score": 0.63,
+    "overconfident_count": 0,
+    "recommendations": [
+      "optimism_bias_on_edit_availability has now appeared in every recent cycle with no improvement in prevention — consider a pre-read or dry-run step before multi-substitution python3 scripts that have no fallback if the target string layout drifted; the pattern resolves correctly but the first-attempt failure rate is consistent",
+      "inline_python3_str_replace assertions are now present and mutation-tested (unit f914a060-39 runs mutation passes on the same session's changes), which is the corrected form; no new recommendation beyond noting the improvement — deprioritize unless assertions start being omitted again",
+      "confirmation_bias_style_log zero-tool monitor units continue at stable low count; no new recommendation this cycle"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "fb8e5eb8-c0c1-4d22-adfe-f5139d6a14e7",
+      133379
+    ],
+    [
+      "f914a060-8543-4da7-b3c6-78233ec25626",
+      7011476
+    ],
+    [
+      "f5e90b6b-d43f-4977-b534-351234449869",
+      99160
+    ],
+    [
+      "ef78c40a-a6ce-4f1e-aa12-3a52d8cd7e97",
+      113302
+    ],
+    [
+      "ea2aaa9d-7e1f-4f38-be6d-d37d08e11d00",
+      111865
+    ],
+    [
+      "ea08a147-4cca-4cb3-92ea-8f3b27a1f73c",
+      142022
+    ],
+    [
+      "e60a1370-1abf-4908-b9fa-e707c450ef58",
+      129252
+    ],
+    [
+      "e578df42-2f48-412f-82c2-4c40545ef3ef",
+      136768
+    ],
+    [
+      "e350cb65-a668-4923-9d06-fe2eed2bfdbf",
+      113172
+    ],
+    [
+      "de3aa2d8-ac8d-4b93-8c25-28374067b16f",
+      133201
+    ],
+    [
+      "de09013d-0450-4aa1-8708-cb66db781924",
+      145145
+    ],
+    [
+      "dd805bd2-cdbc-42e4-9f9c-d0489ff0abc7",
+      116661
+    ],
+    [
+      "d9f1a4bd-d5c4-4944-847f-e6f259b05d13",
+      117388
+    ],
+    [
+      "d8d38621-d7e7-496e-ba02-f32e321089ed",
+      114697
+    ],
+    [
+      "d079e0c7-80de-4691-8801-824fc15f5be9",
+      131748
+    ],
+    [
+      "cf2fba71-2988-4819-8b69-9d98bffa3214",
+      111966
+    ],
+    [
+      "ce02009b-f471-43d7-8031-269ba415b269",
+      116812
+    ],
+    [
+      "cd4970ba-f393-42bf-a186-ff8a5e817a83",
+      113167
+    ],
+    [
+      "cb520e2c-4834-4900-89ed-9f1b2b46fea4",
+      124492
+    ],
+    [
+      "c7af71c8-914b-4d5c-838e-1a2efe91c4d5",
+      99191
+    ],
+    [
+      "c623a78c-60cb-4b09-9675-0fad495c7ae9",
+      141005
+    ],
+    [
+      "bd5d8c5d-858f-4918-a309-4a3a7e1e8efb",
+      112067
+    ],
+    [
+      "b60ee7b1-8820-4a28-947e-be6ccd0afc74",
+      116674
+    ],
+    [
+      "b2a07984-a60f-4ad6-95a7-045618a13483",
+      2505659
+    ],
+    [
+      "adddda77-695a-405b-82ed-ae08e4015dbb",
+      112424
+    ],
+    [
+      "ac9f57d0-1f7b-4d0b-b51f-d2bddabf3494",
+      98255
+    ],
+    [
+      "993da137-b6c5-49e0-aa8b-f3472b760eb1",
+      117064
+    ],
+    [
+      "975e2e68-63ba-4441-9505-efc6cb3fa9f0",
+      129849
+    ],
+    [
+      "93a33c9d-3b60-4910-83ab-a7b775361c3e",
+      125669
+    ],
+    [
+      "80816bc2-2ded-46e7-93e1-caec7faa5dbf",
+      112775
+    ],
+    [
+      "67f197a1-315e-4e3e-904d-945af9a87337",
+      135464
+    ],
+    [
+      "62c75718-6346-4a3a-b027-d71627449f2d",
+      122934
+    ],
+    [
+      "5f4758d2-99b5-4938-99de-664c7e6d5b53",
+      127599
+    ],
+    [
+      "5bac375d-a010-47b1-9af1-a0403629093b",
+      7708719
+    ],
+    [
+      "5a3f2d39-7258-4d31-a8d4-3742c72940af",
+      120803
+    ],
+    [
+      "5935e227-528c-473b-b01e-ec8088df40f9",
+      101735
+    ],
+    [
+      "58247c1d-a713-4e20-acf8-a4a675fc56ef",
+      119483
+    ],
+    [
+      "50cb8e1e-7d56-467f-b7a8-405909d16893",
+      122669
+    ],
+    [
+      "4a5c01b4-d41a-49ba-b3b7-e0b44ef5ac0b",
+      112831
+    ],
+    [
+      "47e73919-c295-4ac0-9464-902ef34d1523",
+      114700
+    ],
+    [
+      "41c1f301-ddaa-4b39-84d6-9a4acd8e49e2",
+      113277
+    ],
+    [
+      "4065f932-0e32-4473-b8d4-ecd5e4fbbbd1",
+      122197
+    ],
+    [
+      "3cffc41e-5024-4041-b099-af0965f73234",
+      113082
+    ],
+    [
+      "312df0ed-9c6b-4c5e-bf62-bec4a368aee1",
+      126659
+    ],
+    [
+      "2edeff0b-89e6-4289-aebc-6b92ca6be5ad",
+      111983
+    ],
+    [
+      "1c7faa96-677c-4eda-94d3-68b6f2060fe0",
+      127804
+    ],
+    [
+      "1a33c7f6-11c4-4f98-9bce-0878e57b4406",
+      126021
+    ],
+    [
+      "183ab218-8b7c-431c-ae45-355a47e8468a",
+      119806
+    ],
+    [
+      "14e4c4b6-ac47-4a2a-bccd-86b38b77f8e2",
+      98174
+    ],
+    [
+      "133e35bb-3ab1-4c21-a732-3cffe68a9832",
+      115358
+    ]
+  ],
+  "timestamp": "2026-09-02T07:52:05.730599Z",
+  "tokens_used": 10259,
+  "units_analyzed": 7,
+  "units_total": 44
+}

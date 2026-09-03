@@ -1,19 +1,19 @@
-<!-- i-dream project brief · 2026-08-21T23:41:51.322710+00:00 · 20 patterns / 2 insights -->
+<!-- i-dream project brief · 2026-08-31T05:39:42.880320+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-CLI/automation tooling for managing kanban-style task boards within Claude Code sessions. Work pattern is autonomous-heavy with frequent UI and documentation generation tasks.
+A kanban/dashboard tooling layer inside `~/.claude/scripts/kanban` — shell scripts, HTML artifacts, and scraping/data pipelines that Claude Code sessions consume directly. Work style is iterative UI fixes, multi-agent coordination, and data verification loops.
 
 ## Things to do (or keep doing)
-- Always enumerate what was actually checked when a sweep or scrape returns zero/few results — list pages, endpoints, or sources examined, not just the count
-- Prefer async non-blocking deploy flows; pre-establish credentials before any autonomous session that could hit OAuth gates
-- Technical planning docs must include visual hierarchy: tables, JSON payload shapes, ASCII diagrams — prose-only is a format failure
-- Update task status after each logical unit of work during autonomous runs; don't let the task list drift from actual work done
+- **Consult design mocks before writing any UI element** — labels, page names, creation flows must match mocks; skipping causes full reworks.
+- **Exercise every decision surface before directing the owner to it** — curl or screenshot to confirm it works, not just that the code compiles.
+- **Surface exact blockers with the recovery command** whenever an external boundary (auth, limit, guard) stalls progress; never stall silently.
+- **Scan sibling pages for existing patterns** before implementing any UI element — adopt the established pattern or cite why not.
 
 ## Things to avoid
-- Don't halt mid-task without a genuine blocker only the user can resolve; "keep going" means the prior pause was unjustified — don't re-raise the same soft blocker
-- Don't author a constraint rule (style ban, UI invariant) and then immediately violate it in the same session's output
-- Don't use AI-smell prose (em-dashes, excessive bold, literary phrasing) in technical output — stop-hook warnings are not optional
-- Don't ground feature gap audits or reviews in agent-authored downstream docs; trace claims to the original user-authored spec
+- **Don't declare a fix resolved without mechanical verification** — same failure recurring across sessions means the prior "resolved" claim was unverified.
+- **Don't treat an a11y snapshot or DOM structure as a render** — "opened and read" requires a screenshot read at the element the complaint named, not a nearby panel.
+- **Don't halt mid-task on soft blockers** — if the user has said "keep going" or invoked `/atone` for stubbornness, re-raising the same non-blocker is the failure.
+- **Don't post GitHub comments without the owner's agent attribution marker** (blockquote format, random phrase from fixed list) — no exceptions.
 
 ## Open questions / known gaps
-- No graceful degradation when model rate limits hit mid-autonomous-session; the session stalls silently rather than surfacing the failure and switching models
-- UI completeness verification is systematically incomplete: single-mode sign-offs (dark only, one state) ship as "done" when multi-state exercise was required
+- **Prose smell recurs even after the stop-hook fires** — em-dashes and bold-spam survive multiple correction cycles; treat any hook warning as a hard block, not a nudge.
+- **CI vs local test divergence is unresolved** — local green ≠ CI green; always check CI job results before claiming a PR is clean.

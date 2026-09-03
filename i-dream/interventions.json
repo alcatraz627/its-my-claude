@@ -132,7 +132,7 @@
     },
     "body": "Before renaming: run `rg -F '<old-name>'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.",
     "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.6000000000000001
+    "strength": 0.5
   },
   {
     "id": "b26957e5af923ced",
@@ -161,7 +161,7 @@
     "created": "2026-07-27T19:59:36.977558Z",
     "promoted": "2026-08-21T19:13:12.930807Z",
     "promoted_by": "evidence-auto",
-    "strength": 1.0
+    "strength": 0.9
   },
   {
     "id": "ab332bca10f938fc",
@@ -233,7 +233,7 @@
     },
     "body": "Before adding a raw JSX form control: grep this file for existing Select/Input/Button/Dropdown imports. If one fills that role, use it — a green typecheck says nothing about convention.",
     "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.15714285714285714
+    "strength": 0.014285714285714301
   },
   {
     "id": "0eee058e090c5109",
@@ -247,7 +247,7 @@
     },
     "body": "This grep is filtered or compound. Do not write an absence claim (none / no X / nothing uses X) from it — re-run the bare symbol over the narrowest tree that would contain it first.",
     "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.15714285714285714
+    "strength": 0.014285714285714301
   },
   {
     "id": "3bdb8957ec425538",
@@ -261,7 +261,7 @@
     },
     "body": "Check whether the user already declined, deferred, or ignored this blocked-on-user item this session. If so, leave it in the task list and drop it from this message.",
     "created": "2026-08-16T03:45:46.205718Z",
-    "strength": 0.18571428571428572
+    "strength": 0.04285714285714287
   },
   {
     "id": "6c97902d153cf79e",
@@ -275,7 +275,7 @@
     },
     "body": "Before marking any task done here, trace its deliverable (commit/file/artifact) in the Resume Contract. If it sits under standing caveats or reads unverified, the status is 'open, awaiting verdict'.",
     "created": "2026-08-16T21:01:57.842342Z",
-    "strength": 0.2
+    "strength": 0.057142857142857134
   },
   {
     "id": "07fe981e338aa9c2",
@@ -325,14 +325,16 @@
     "slug": "repeat-request-dropped-across-sessions",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "project": "slack-automation",
       "prompt_pattern": "\\b(task list|tasks|todo list|queue|what'?s (left|pending)|open work)\\b"
     },
     "body": "Check this project's memory for the owner's grouping ruling before printing tasks. Group by domain lane (A..E), not the NOW / NEEDS YOU / AGENT-READY actor split the tool defaults to.",
     "created": "2026-08-19T01:04:07.339490Z",
-    "strength": 0.22857142857142856
+    "promoted": "2026-09-02T05:39:33.727731Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "469cc32b63e5d2fc",
@@ -346,7 +348,7 @@
     },
     "body": "HTML output rule: dark is the default :root palette and a dark/light toggle control is MANDATORY. Add both before writing, or state the conflict and wait — a skill's silence is not an exemption.",
     "created": "2026-08-19T19:49:09.230148Z",
-    "strength": 0.6000000000000001
+    "strength": 0.8
   },
   {
     "id": "65cfe4c27a2ad5d1",
@@ -368,14 +370,14 @@
     "slug": "agent-comment-posted-without-agent-attribution",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "gh\\s+(pr|issue)\\s+comment|gh\\s+api\\s+.*(comments|reviews)"
     },
     "body": "Read the first two lines of the body you are about to post. If it does not carry the agent-attribution marker (via 🤖claude), add it before sending — it lands under the owner's account.",
     "created": "2026-08-24T19:34:43.973505Z",
-    "strength": 0.3
+    "strength": 1.0
   },
   {
     "id": "3025937a7d35fbbd",
@@ -389,6 +391,116 @@
     },
     "body": "Did the user ask for a hosted or shareable surface in this turn, in those words? If not, write the file in the project and offer hosting in one sentence instead.",
     "created": "2026-08-24T19:34:43.973505Z",
+    "strength": 0.5
+  },
+  {
+    "id": "2026cc3b1134c93a",
+    "slug": "supervisory-role-drift-into-implementation",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "candidate",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bgcloud\\s+(secrets|run|iam|projects add-iam)"
+    },
+    "body": "Cloud-state change from the brains seat: tell gcp-watcher and wait for their answer first. Dispatching a seat does not change who originated the mutation.",
+    "created": "2026-08-28T01:22:24.995413Z",
+    "strength": 1.0
+  },
+  {
+    "id": "e606efbe6e71a5a2",
+    "slug": "owner-decisions-not-batched-through-a-wizard",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "\\b(decisions?|questions?|approvals?|sign[- ]?off)\\b.*\\b(batch|list|review|answer)\\b"
+    },
+    "body": "Count what this surface asks the owner to answer. More than one means /decision-wizard governs it, in a reply or a UI alike.",
+    "created": "2026-08-28T01:22:24.995413Z",
+    "promoted": "2026-08-30T11:34:01.382550Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "661138867999c26a",
+    "slug": "delegated-the-judgment-the-owner-assigned-to-me",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(write|draft|author|produce)\\b[^.]{0,40}\\b(doc|docs|readme|report|rca|write-?up|summary|proposal|spec)\\b"
+    },
+    "body": "Do not seat a sub-agent to author prose a person will read. Seats gather facts and check links; you write it. If volume blocks that, say so to the owner instead of dispatching.",
+    "created": "2026-09-02T05:39:33.700961Z",
+    "strength": 0.6000000000000001
+  },
+  {
+    "id": "b89ae0da4a9a6d81",
+    "slug": "heavier-output-medium-than-the-task-needed",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "\\.html$"
+    },
+    "body": "Quote the words in the request that ask for an HTML page. If they said here, in chat, or in the terminal, answer there and offer the page in one sentence.",
+    "created": "2026-09-02T05:39:33.700961Z",
+    "strength": 0.2857142857142857
+  },
+  {
+    "id": "359500ec8b5fe450",
+    "slug": "partial-fix-reported-against-a-numeric-ask",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(fix|address|resolve|handle)\\b[^.]{0,50}\\b(all|both|each|every|\\d+)\\s+(of\\s+)?(the\\s+|these\\s+|those\\s+)?(issue|item|finding|bug|problem|point|thing)s?\\b"
+    },
+    "body": "List every item named and the diff answering each. Any item with no diff is reported as not done, in the owner's words, above the summary. Never write fixed over an unanswered item.",
+    "created": "2026-09-02T05:39:33.700961Z",
+    "strength": 0.2857142857142857
+  },
+  {
+    "id": "f1bb5cf4998e4ded",
+    "slug": "self-adjudicating-goal-with-tradeoff-unstated",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "goal(\\.sh)?\\s+set\\b"
+    },
+    "body": "Check each clause's subject: it must be the system and what it does, never you or your diligence. Someone else must be able to declare it met, and it must be meetable at all.",
+    "created": "2026-09-02T05:39:33.700961Z",
+    "strength": 0.2857142857142857
+  },
+  {
+    "id": "d178058596c639ab",
+    "slug": "shipping-surface-without-utility-check",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(verif(y|ied)|check|done|ready)\\b[^.]{0,40}\\b(page|screen|surface|dashboard|view|ui)\\b"
+    },
+    "body": "Name the three things a person will try to do here and say what actually happens for each. If the answer is nothing and the page does not say so, it is not done.",
+    "created": "2026-09-02T05:39:33.700961Z",
+    "strength": 0.7000000000000001
+  },
+  {
+    "id": "c5117fc62db1b837",
+    "slug": "doc-committed-without-render-check",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "(sed -i|perl -[a-z]*i|python[0-9.]* .*(renumber|splice)|awk).*\\.(md|mdx|rst|txt)"
+    },
+    "body": "You spliced a reader-facing doc programmatically. Read the full result end to end before describing it as done; a cross-reference you had to fix is proof the read is owed.",
+    "created": "2026-09-03T04:49:17.316995Z",
     "strength": 0.3
   }
 ]

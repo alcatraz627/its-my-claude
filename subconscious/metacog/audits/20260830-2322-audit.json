@@ -1,0 +1,232 @@
+{
+  "effort_level": "Standard",
+  "effort_signals": {
+    "budget_tokens": 17117,
+    "correction_density": 0.0,
+    "fresh_dream_insights": true,
+    "novelty_score": 0.16530293658221842,
+    "unit_count": 66
+  },
+  "response": {
+    "biases_detected": [
+      "confirmation_bias_style_log:RECURRING:STABLE — 3 zero-tool units this cycle (32c0ae1d-0: juror/opinion 5922-char input, 1595-char output; 329a7753-0: style/ledger 13710-char input standard length, 273-char output; 2e9161a3-0: juror/opinion 4941-char input, 1595-char output identical to 32c0ae1d-0); count trajectory: 14→14→2→8→3→5→8→2→3; current count is 3, slight uptick from prior cycle low of 2 but still in the low-range band; 2e9161a3-0 and 32c0ae1d-0 share identical 1595-char outputs suggesting templated juror response; deprioritize unless count rebounds above 5",
+      "optimism_bias_on_edit_availability:RECURRING:STABLE — unit 25a67d26-7 shows two sequential git hook blocks: git rm --cached fails (hook fires), retried with ATONE_INDEX_OK=1 env var bypass succeeds; git commit fails (hook fires), retried with staged files adjusted and succeeds; same probe-after-failure shape as prior cycles with no pre-check of hook arm state before issuing the blocked command; prior cycle flagged same pattern on Edit/Write, now manifests on Bash git operations",
+      "git_push_to_main_without_fresh_approval:RECURRING:STABLE — unit 25a67d26-7 executes bash push-all.sh twice (once after FORBIDDEN pattern fix, once after removing cached scratch files), pushing to both versable-forge-v6 and silica-runner main branches; authorization path is through the script created within the same unit rather than through explicit user approval in this turn; user Accepted both outcomes but the approval chain remains ambiguous; prior cycle flagged same pattern at units a85cce65-69 and a85cce65-72 triggered by bash-hook inputs"
+    ],
+    "calibration_score": 0.6,
+    "overconfident_count": 1,
+    "recommendations": [
+      "optimism_bias_on_edit_availability is actionable and not improving: before any git rm --cached or git commit call, run git status --short and check known hook arm state (e.g., ATONE_INDEX_OK, guard-user-commit.sh sentinel) to avoid predictable block-and-retry cycles that waste tool calls",
+      "confirmation_bias_style_log count of 3 is within the established low-range (2-3); do not re-escalate unless next cycle rebounds above 5; the templated 1595-char juror output shared across two units with different input lengths warrants monitoring as a potential template_reuse_without_context_adaptation pattern — note for next cycle",
+      "git_push_to_main_without_fresh_approval has now appeared in two consecutive cycles; the push-all.sh script pattern makes it structurally recurrent (one bash call pushes both repos); the fix is not in the script but in requiring an explicit user-visible confirmation step before invoking it, distinct from the build authorization that created the script"
+    ],
+    "underconfident_count": 0,
+    "well_calibrated_count": 5
+  },
+  "sessions": [
+    [
+      "350c5f96-aa59-463c-945f-bb7c437bbeb9",
+      125588
+    ],
+    [
+      "350ac940-e768-4dab-bf8a-ce3c34b69207",
+      126846
+    ],
+    [
+      "32c0ae1d-871b-4b42-8663-c14ff9dced3d",
+      117073
+    ],
+    [
+      "329a7753-a9a9-47a5-97d7-99aae6159b3d",
+      147726
+    ],
+    [
+      "32300502-fd52-4dfd-b7d5-c671b1eab498",
+      125756
+    ],
+    [
+      "31de743d-d9cb-402c-8ddc-c0dc28a8f9a7",
+      123172
+    ],
+    [
+      "31460b54-09c8-4636-85e7-7e3f1a8c378a",
+      128024
+    ],
+    [
+      "30ef6c18-22fe-41c7-bb15-b366f0466379",
+      125711
+    ],
+    [
+      "3029beb3-a996-4c95-b768-9c42f253aa75",
+      116694
+    ],
+    [
+      "2e9161a3-c477-49a2-827a-b16787bc8671",
+      100464
+    ],
+    [
+      "2dbc7b2a-03fd-45f6-acc1-109171677a77",
+      129875
+    ],
+    [
+      "2d5c8df9-969e-41ca-b705-2a2d5ac38d0d",
+      110506
+    ],
+    [
+      "2ac89dc7-b7c1-4d28-9942-b013bf04fbe5",
+      115759
+    ],
+    [
+      "2a0856f2-8b3f-4f7f-a6d6-8fcce31d5b40",
+      100117
+    ],
+    [
+      "26f5e5c9-d17b-440b-a4ff-be308f16e53e",
+      128730
+    ],
+    [
+      "260dc67a-809d-4255-a358-55e61f7a565a",
+      127057
+    ],
+    [
+      "25ee0ea5-5e99-41ff-aa40-1b8507f4a07a",
+      117087
+    ],
+    [
+      "25adbf08-fa6a-482c-987e-7df0de06f4d8",
+      129102
+    ],
+    [
+      "25a67d26-131d-43f6-a19f-6a0db21c8012",
+      14872787
+    ],
+    [
+      "23766275-974c-486e-b1d4-525b741e301c",
+      129426
+    ],
+    [
+      "22c26ac6-879a-4248-8375-e25a51030e7a",
+      116968
+    ],
+    [
+      "2258af0d-1d1a-4e3d-b379-8bca98e561a0",
+      129380
+    ],
+    [
+      "21ed5cf7-89f8-452b-9434-a00a5328af1f",
+      112854
+    ],
+    [
+      "21c0b81a-9fcd-4298-bbf5-376ee11d8270",
+      128459
+    ],
+    [
+      "210b31a3-084c-43fe-88da-a3ca4376f936",
+      113597
+    ],
+    [
+      "202d3ac2-bf10-47a3-a30d-59b20423cb6c",
+      116472
+    ],
+    [
+      "1eaecb5d-16cc-40c5-869a-b2269088274b",
+      131211
+    ],
+    [
+      "1e144f0e-a3b1-4860-b7a3-c1f3de3bf8c9",
+      132410
+    ],
+    [
+      "1d7672c1-f5d7-4135-98ab-9fc8766777a3",
+      135346
+    ],
+    [
+      "1cee893a-cebd-4967-b0f4-72d21577cf79",
+      131840
+    ],
+    [
+      "1be040b1-18b2-4014-9fea-6f0954beaf96",
+      132611
+    ],
+    [
+      "1b96b64c-9159-42e1-9478-a82f64aef19d",
+      123855
+    ],
+    [
+      "1a8a764a-4841-404f-a59e-411d8eb2e78e",
+      111621
+    ],
+    [
+      "1a4a668c-b53f-46b2-ad63-7e1f7d3ea709",
+      100475
+    ],
+    [
+      "19c6c195-d538-43b3-939a-5e1f71116d5d",
+      127086
+    ],
+    [
+      "19a13f83-c6b7-4957-85c5-4104fa2c77da",
+      6730599
+    ],
+    [
+      "1951d692-87a6-48f0-ab06-4e2b8952800e",
+      133529
+    ],
+    [
+      "191ac567-e06a-4217-a1a5-98a80220125a",
+      131077
+    ],
+    [
+      "17fdb998-3b4a-4f1b-a50d-1a562ed0a85b",
+      128837
+    ],
+    [
+      "17818853-d4a0-4921-94a8-5692f38f2a78",
+      7116721
+    ],
+    [
+      "174efc95-e681-40dd-a671-8eb3dad7704d",
+      5600179
+    ],
+    [
+      "16b61192-e5a2-4fda-9ec2-f36237947baa",
+      135322
+    ],
+    [
+      "160ea752-9068-44f3-b9a8-53c6bd2011f4",
+      135982
+    ],
+    [
+      "160d3918-2d77-4366-bf25-b99e5a91503a",
+      122578
+    ],
+    [
+      "151db72e-f417-484f-8122-d7a022b61bed",
+      7001709
+    ],
+    [
+      "130341cf-4312-4e0b-88bb-27b286c8764a",
+      116449
+    ],
+    [
+      "11fbc85b-12ee-4ba2-9dd5-0e2789ae6de3",
+      118308
+    ],
+    [
+      "1196c293-c00b-486f-baee-2a28331cbf30",
+      131688
+    ],
+    [
+      "0fb0f072-fa10-408a-a7dc-dfebaf45cee3",
+      116079
+    ],
+    [
+      "0e07bfe2-72a8-4cab-a5b7-fcc5eb3ecefe",
+      129813
+    ]
+  ],
+  "timestamp": "2026-08-30T23:22:30.070835Z",
+  "tokens_used": 6243,
+  "units_analyzed": 6,
+  "units_total": 66
+}
