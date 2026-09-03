@@ -29,17 +29,58 @@
 
 set -euo pipefail
 
+FORCE_GLOBAL=0
+PROJECT_DIR=""
+ARGS=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --global)  FORCE_GLOBAL=1; shift ;;
+    --project) PROJECT_DIR="${2:-}"; shift 2 ;;
+    *)         ARGS+=("$1"); shift ;;
+  esac
+done
+set -- "${ARGS[@]+"${ARGS[@]}"}"
+
 SKILL_NAME="${1:-}"
 ENTRY_FILE="${2:-}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-# Canonical absolute path, used BOTH as the write target and the lock key. The key
-# must be a deterministic function of the file being protected: this script is
-# invoked from arbitrary project cwds but always writes THIS one global file, so a
-# relative lock key (PWD-scoped since lock-file.sh's 2026-07-09 change) would give
-# two projects different locks for the same file and silently lose prepends.
-# Canonicalizing (no "..") also makes the key identical to the one
-# inject-dream-insights.sh locks for the same file.
-NOTES_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/runtime-notes.md"
+# The global notes file, and the fallback when no project has opted in. It stays
+# a canonical absolute path (no "..") so its lock key matches the one
+# inject-dream-insights.sh takes on the same file.
+GLOBAL_NOTES="$(cd "$SCRIPT_DIR/.." && pwd)/runtime-notes.md"
+
+# Which runtime-notes file this note belongs in.
+#
+# The old answer was always the global one, because the path was derived from
+# where THIS SCRIPT lives rather than from where the caller is. A project with
+# its own .claude/skills/runtime-notes.md never received a note, and the next
+# session there read a file nothing had written. Every versable-builder session
+# since 2026-08-17 moved its note across by hand instead.
+#
+# Detection tests for the FILE, never the directory. A project holding a
+# .claude/ but no notes file has not opted in, and creating one silently would
+# split a skill's history across two files with nothing announcing the split.
+resolve_notes_file() {
+  if [[ "$FORCE_GLOBAL" == "1" ]]; then echo "$GLOBAL_NOTES"; return; fi
+  if [[ -n "$PROJECT_DIR" ]]; then
+    echo "$(cd "$PROJECT_DIR" 2>/dev/null && pwd)/.claude/skills/runtime-notes.md"; return
+  fi
+  local d="$PWD"
+  while [[ -n "$d" && "$d" != "/" ]]; do
+    if [[ -f "$d/.claude/skills/runtime-notes.md" ]]; then
+      echo "$d/.claude/skills/runtime-notes.md"; return
+    fi
+    [[ "$d" == "$HOME" ]] && break        # never walk above the user's home
+    d="$(dirname "$d")"
+  done
+  echo "$GLOBAL_NOTES"
+}
+
+# The lock key is the resolved path, so it stays a deterministic function of the
+# file being protected. That is the constraint the original comment asked for;
+# what it could not have, while the target was fixed, is two different files
+# under two different locks.
+NOTES_FILE="$(resolve_notes_file)"
 
 if [[ -z "$SKILL_NAME" || -z "$ENTRY_FILE" ]]; then
   echo "Usage: prepend-runtime-note.sh <skill-name> <entry-file>" >&2

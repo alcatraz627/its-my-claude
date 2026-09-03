@@ -35,11 +35,23 @@ CMD=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 # not smuggle a raw launch past the gate (`pm2 ls; vite --port 5173` was a
 # full bypass, review finding 8).
 case "$CMD" in *PORTS_OK=1*) exit 0 ;; esac
+# Belt and braces, and currently UNREACHABLE: LAUNCH_RE anchors every alternate
+# at start-of-string or after a separator, so a command beginning with `pm2`
+# cannot match it, and seven pm2 forms give an identical verdict with this line
+# removed (mutation M3, 2026-09-04). Kept because it costs nothing and would
+# start mattering the moment LAUNCH_RE gains an unanchored alternate. Do not read
+# the passing A-P9 test case as proof this line works; it does not isolate it.
 printf '%s' "$CMD" | rg -q '^\s*pm2\s[^;&|]*$' 2>/dev/null && exit 0
 
 # Launch detection — the common local dev-server spawners. Env-var prefixes
 # (PORT=… NODE_ENV=…) before the launcher are part of the launch form.
-LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run\s+)?dev\b|vite\b|next\s+(dev|start)\b|react-router\s+dev\b|remix\s+(vite:)?dev\b|astro\s+dev\b|nuxt\s+dev\b|webpack\s+serve\b|python3?\s+-m\s+http\.server\b|serve\b|uvicorn\b|flask\s+run\b)'
+# `\b` is the wrong boundary for a bare tool name, because a hyphen satisfies it:
+# `vite\b` matched `vite-node` and `vite-plugin-inspect`, so a one-shot script
+# runner read as a dev server (prop-20260825-215830-94). Bare names therefore end
+# with `([^-\w]|$)`: a following hyphen or word character means this is a
+# DIFFERENT tool whose name merely starts the same. Compound alternates such as
+# `npm run dev` keep `\b`, because `npm run dev-server` really is a launch.
+LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run\s+)?dev\b|vite([^-\w]|$)|next\s+(dev|start)\b|react-router\s+dev\b|remix\s+(vite:)?dev\b|astro\s+dev\b|nuxt\s+dev\b|webpack\s+serve\b|python3?\s+-m\s+http\.server\b|serve([^-\w]|$)|uvicorn([^-\w]|$)|flask\s+run\b)'
 # Scan a quote-blanked copy: a dev-server name that only appears INSIDE a
 # quoted grep/rg/ps/awk pattern (e.g. `ps … | rg 'next-server|next dev'`) is
 # a read-only inspection, not a launch — but the `|`/`;`/`&` inside those
@@ -47,27 +59,25 @@ LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run
 # unquoted, so blanking quoted spans leaves them intact. Port extraction below
 # still runs on the original command.
 #
-# Uses the shared hook_cmd_skeleton rather than a local blanker. The previous
-# perl version DELETED quoted spans, which welds the surrounding tokens into
-# one (`vi'x'te` reads as `vite`); the helper blanks to spaces of equal length,
-# so token boundaries survive. Falls back to the raw command if unavailable,
-# which is the pre-2026-08 behaviour.
+# One stage, not two. An earlier version built a heredoc-blanked copy into SCAN
+# and then threw it away three lines later by re-reading $CMD, so the heredoc
+# handling never ran once: a `git commit -F -` whose MESSAGE body began with
+# `npm run dev` was blocked as a launch (prop-20260903-131552-b6).
+#
+# strip-payloads.py does both jobs in one pass. It blanks heredoc bodies AND
+# quoted spans, and it knows command position, so a launcher counts only where a
+# shell would actually run one. hook_cmd_skeleton is deliberately NOT used here:
+# it states at hook-common.sh:166 that it does not parse heredoc bodies, and that
+# is the half this guard needs most.
+#
+# A scanner failure falls back to the RAW command, which is the conservative
+# direction for a safety gate: the guard keeps working as it did before the
+# stripper existed, rather than silently disarming on a broken python.
+STRIP="$HOME/.claude/scripts/hooks/strip-payloads.py"
 SCAN="$CMD"
-# Heredoc bodies are prose, not commands: a checkpoint written with `cat <<EOF`
-# that mentions a launcher launched nothing (prop-20260826-235336-54). Blank every
-# line between a `<<[-]['"]?WORD` opener and its terminator; line count is kept.
-SCAN=$(printf '%s\n' "$SCAN" | awk '
-  BEGIN{inb=0}
-  inb==1 { if ($0 == term) { inb=0; print; next } ; print ""; next }
-  { line=$0
-    if (match(line, /<<-?[ \t]*["\047]?[A-Za-z_][A-Za-z0-9_]*["\047]?/)) {
-      t=substr(line, RSTART, RLENGTH); sub(/^<<-?[ \t]*/, "", t); gsub(/["\047]/, "", t); term=t; inb=1 }
-    print line }')
-if [ -r "$HOME/.claude/scripts/hooks/hook-common.sh" ]; then
-  . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
-  if type hook_cmd_skeleton >/dev/null 2>&1; then
-    SCAN=$(printf '%s' "$CMD" | hook_cmd_skeleton)
-  fi
+if [ -r "$STRIP" ]; then
+  _stripped=$(printf '%s' "$CMD" | python3 "$STRIP" 2>/dev/null)
+  [ -n "$_stripped" ] && SCAN="$_stripped"
 fi
 printf '%s' "$SCAN" | rg -q "$LAUNCH_RE" 2>/dev/null || exit 0
 

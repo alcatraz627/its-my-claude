@@ -29,9 +29,18 @@
 # Common flags: --session <sid8> · --new · --json (machine output)
 set -uo pipefail
 TASKS="$HOME/.claude/tasks"; PINS="$TASKS/.live-session-map"
+SESSION=""; NEW=0; JSON=0; ARGS=()
+# Global flags are accepted BEFORE the subcommand as well as after it. Taking $1
+# as the subcommand unconditionally meant `task.sh --session X update 87` died
+# with "unknown command --session", which names the wrong thing: the flag is
+# valid, only its position was not. Both orders now work, so nobody loses a call
+# to a rule the help text never stated (owner, 2026-09-04).
+while [ $# -gt 0 ]; do case "$1" in
+  --session) SESSION="$2"; shift 2;; --new) NEW=1; shift;; --json) JSON=1; shift;;
+  *) break;; esac; done
+
 CMD="${1:-}"; [ -n "$CMD" ] && shift || { sed -n '2,29p' "$0"; exit 2; }
 case "$CMD" in -h|--help|help) sed -n '2,29p' "$0"; exit 0;; esac
-SESSION=""; NEW=0; JSON=0; ARGS=()
 while [ $# -gt 0 ]; do case "$1" in
   --session) SESSION="$2"; shift 2;; --new) NEW=1; shift;; --json) JSON=1; shift;;
   -h|--help) sed -n '2,29p' "$0"; exit 0;; *) ARGS+=("$1"); shift;; esac; done

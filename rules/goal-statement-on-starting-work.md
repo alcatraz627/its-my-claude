@@ -49,20 +49,62 @@ he likes. Prefer those over hand-typing the line.
 It does not fire on a one-line answer, a lookup, or a continuation of work
 whose goal is already armed and unchanged.
 
-## The goal names an outcome a person can recognise, not a checklist
+## A few short statements, each true or false on its own
 
-Write what becomes true for someone when the work lands. The owner's own goals
-never carry a ticket number, a filename, or a count; measured across 42 goal
-records on 2026-09-01, his are 0% enumerative and the agent's are 25%. His best
-one reads:
+Write a small number of short declarative sentences. Each one names a concrete
+state: an environment, an artifact, a check, a threshold. A reader should be able
+to take any single sentence and say whether it currently holds.
+
+The owner's own goals never carry a ticket number, a filename, or a count.
+Measured across 42 goal records on 2026-09-01, his are 0% enumerative and the
+agent's are 25%. His best one reads:
 
 > A nontechnical teammate gets one real JEGS workbook through the console alone:
 > upload, preview, run, read the results, export. No step needs me.
 
-That is the register. "Fix all 14 findings (H1..L5), then continue
-REMAINING-WORK.md" is the register to avoid: it is a queue with a goal's
-punctuation, and it is met the moment the boxes are ticked whether or not
-anything got better.
+Two registers fail, in opposite directions.
+
+**A queue wearing a goal's punctuation.** "Fix all 14 findings (H1..L5), then
+continue REMAINING-WORK.md" is met the moment the boxes are ticked, whether or
+not anything got better. Avoid it.
+
+**One long behavioural sentence.** Over-correcting away from the checklist
+produces flowing prose where the tangible parts blur together. Owner ruling
+2026-09-04, verbatim: "Rephrase your goal as simpler statements about the goal,
+not this prose. I think you're going too subjective into making the goal
+behavioral, to the point of making the tangible parts blurry."
+
+### Worked example
+
+Before, from forge-console's walmart goal (gcc goal store, session `70ca5d40`,
+set 2026-09-03). One paragraph, seven clauses, and no single sentence a reader
+can check:
+
+> Level 4 is closed in the runner's own suite. Every one of the nine checks is
+> proven by a planted defect that turns its test red and is then restored, not by
+> inspection. A caller key with no capability list is visible rather than silent.
+> Keystore list and revoke are driven through the CLI. Punctured output is gone:
+> every row reaches a terminal state carrying a reason a person can read, a
+> decline's reason survives to the surface, and a job held for a configuration
+> problem says so at the job level rather than only per row.
+
+After. Same work, same outcomes, each line standing alone:
+
+> The runner suite is green at head.
+> All nine Level 4 checks are mutation-proven, not inspected.
+> A caller key with no capability list shows up instead of failing silently.
+> Keystore list and revoke both run from the CLI.
+> Every row ends in a terminal state with a reason a person can read.
+> A job held for a configuration problem says so at the job level.
+
+Nothing was dropped. The second version is checkable line by line, and a reader
+who knows the system can mark each one today.
+
+### How many
+
+Three to six lines is the usual range. One line is fine when the work is one
+thing. Past six, the goal has become the queue this section warns about, and the
+extra lines belong in the task list.
 
 ## Every clause must be one YOU can finish alone
 
