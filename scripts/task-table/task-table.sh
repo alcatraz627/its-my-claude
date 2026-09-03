@@ -724,20 +724,45 @@ def render_rows(compact_mode):
         return 2 if (compact and (x.get("blocked_on") or meta_of(x, "note"))) else 1
     def room_for(x): return fits(row_cost(x))
     def hide_all(items): hidden.extend(f"#{x['id']}" for x in items)
-    def band(title, items, indent="  "):
+    def band(title, items, indent="  ", budget=None):
+        """Render one band. `budget` caps the lines THIS band may take.
+
+        A band header costs two lines (rule + title) and used to be written
+        unconditionally, which caused both halves of #103: past the cap every
+        row was hidden and the header stayed, so the band rendered EMPTY, and
+        those two lines per band pushed the total over the 44-line law (47/44
+        observed 2026-08-19). A band earns its header only if a row can follow.
+        """
         if not items: return
-        # A band header costs two lines (rule + title) and used to be written
-        # unconditionally, which caused both halves of #103: past the cap every
-        # row was hidden and the header stayed, so the band rendered EMPTY, and
-        # those two lines per band pushed the total over the 44-line law (47/44
-        # observed 2026-08-19). A band earns its header only if a row can follow.
         if not fits(3): hide_all(items); return
         w(RULE); w(title)
+        start = len(out)
+        held = []
         for x in items:
-            if not room_for(x): hidden.append(f"#{x['id']}"); continue
+            over_budget = budget is not None and (len(out) - start) + row_cost(x) > budget
+            if over_budget or not room_for(x):
+                held.append(x); hidden.append(f"#{x['id']}"); continue
             row(x, indent)
-    # the owner reads the gates first, so they come first and are never the rows the cap eats
-    band("GATES (you)   " + f"({len(gates)})", seq_sort(gates))
+        if held and budget is not None:
+            # Say it inside the band, not only in the global truncation line. A
+            # reader who sees three gates must not conclude there are three.
+            w(" " * len(indent) + f"… +{len(held)} more held here so the work below stays visible"
+              f" ({' '.join('#' + str(x['id']) for x in held[:8])}"
+              f"{' …' if len(held) > 8 else ''}) · --detail shows all")
+
+    # GATES renders first because the owner reads it first. It used to render
+    # first AND without limit, which is a different thing and it cost him the
+    # whole table: on 2026-09-04 session f04ae843 had 16 gate rows at two lines
+    # each, so the band alone exceeded LINE_CAP and all 166 other rows were
+    # hidden. He saw only work he could not act on.
+    #
+    # So gates keep priority without keeping totality. WORK_FLOOR is the number
+    # of lines held back for everything after GATES: a rule, a group title, a
+    # batch subtitle, and roughly nine rows of actual work. Whatever gates cannot
+    # fit in the remainder is named inside the band rather than dropped silently.
+    WORK_FLOOR = 12
+    band("GATES (you)   " + f"({len(gates)})", seq_sort(gates),
+         budget=max(6, LINE_CAP - WORK_FLOOR))
     for k, items in groups.items():
         label = labels.get(k, k)
         n_run = sum(1 for x in items if x["status"] == "in_progress"); n_wait = sum(1 for x in items if x.get("waits_on"))
