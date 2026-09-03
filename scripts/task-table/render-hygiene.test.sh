@@ -164,6 +164,30 @@ HOME="$ROOT" bash "$TT" --session gates001 > "$ROOT/gates-fresh.txt" 2>&1
 ok "silent when no gate is stale"    "$(rg -c 'untouched >24h' "$ROOT/gates-fresh.txt" 2>/dev/null || echo 0)" 0
 
 echo
+echo "── 8. an empty store points at the store that holds the rows ──"
+# An empty table is indistinguishable from an empty QUEUE. A peer read exactly
+# that on 2026-09-04: its twenty rows lived in the store that created them, a
+# bare run showed nothing, and it concluded the queue was done.
+mkdir -p "$ROOT/.claude/tasks/session-empty001"
+REAL="$ROOT/.claude/tasks/session-holder01"
+mkdir -p "$REAL"
+for i in 1 2 3; do
+  python3 - "$REAL/$i.json" "$i" <<'PY'
+import json, sys
+p, tid = sys.argv[1:3]
+json.dump({"id": tid, "subject": f"A real row {tid} in the creating store", "description": "",
+           "status": "pending", "activeForm": None, "blocks": [], "blockedBy": [],
+           "metadata": {"lane": "hands", "tier": "opus", "domain": "d"}}, open(p, "w"), indent=1)
+PY
+done
+EOUT="$ROOT/empty.txt"
+HOME="$ROOT" bash "$TT" --session empty001 > "$EOUT" 2>&1
+ok "the empty store says so"          "$(rg -c 'EMPTY STORE' "$EOUT" 2>/dev/null || echo 0)" 1
+ok "it names a populated store"       "$(rg -c 'task-table.sh --session holder01' "$EOUT" 2>/dev/null || echo 0)" 1
+ok "with its open count"              "$(rg -c 'holder01   3 open of 3' "$EOUT" 2>/dev/null || echo 0)" 1
+ok "and a recognisable subject"       "$(rg -c 'A real row' "$EOUT" 2>/dev/null || echo 0)" 1
+
+echo
 echo "── control: the suite can see the defects it names ──"
 MUT="$ROOT/mut.sh"
 python3 - "$TT" "$MUT" <<'PY'

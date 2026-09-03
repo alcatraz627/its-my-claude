@@ -586,8 +586,29 @@ def w(s=""): out.append(s)
 _open_all = len(now) + len(openish); _other = len(data) - _open_all - len(done)
 _counts = f"{_open_all} open" + (f" ({len(now)} running)" if now else "") + f", {len(done)} done" + (f", {_other} other" if _other else "")
 if not data:
-    w(f"!! EMPTY STORE: {d.name} holds no task files. A resumed session's tasks live in the store")
-    w(f"   that CREATED them: task-table.sh --candidates, then --session <sid8>")
+    # Naming the candidates here rather than telling the reader to go find them.
+    # An empty table is indistinguishable from an empty QUEUE, and a peer read
+    # exactly that on 2026-09-04: its twenty rows lived in the store that created
+    # them while a bare run showed nothing and it concluded the queue was done.
+    w(f"!! EMPTY STORE: {d.name} holds no task files. A resumed session's tasks live in the")
+    w(f"   store that CREATED them, not in the one named for this session.")
+    try:
+        _cands = []
+        for _sd in sorted(d.parent.glob("session-*"), key=lambda p: p.stat().st_mtime, reverse=True):
+            _files = list(_sd.glob("*.json"))
+            if not _files: continue
+            _newest = max(_files, key=lambda p: p.stat().st_mtime)
+            _subj = (json.loads(_newest.read_text()).get("subject") or "")[:52]
+            _open = sum(1 for f in _files
+                        if (json.loads(f.read_text()).get("status") or "") not in ("completed", "cancelled"))
+            _cands.append((_sd.name[len("session-"):], len(_files), _open, _subj))
+            if len(_cands) == 3: break
+        if _cands:
+            w("   Likely yours, newest first:")
+            for _sid, _n, _o, _subj in _cands:
+                w(f"     task-table.sh --session {_sid}   {_o} open of {_n}   “{_subj}”")
+    except Exception:
+        w("   task-table.sh --candidates lists the stores that could be yours")
 def _age(sec):
     m = sec / 60
     return f"{int(m)}m" if m < 60 else (f"{m/60:.0f}h" if m < 48*60 else f"{m/1440:.0f}d")
