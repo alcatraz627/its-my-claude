@@ -631,8 +631,30 @@ def tags(x):
     v = meta_of(x, "verified")
     if v not in ("", None, False): t.append("verified" if v is True else f"verified:{v}")
     return " · ".join(t)
+_PRIO_HEAD = re.compile(r"^\s*(P\d(?:\.\d)?)\s+")
 def prio(x):
-    v = meta_of(x, "priority"); return f"{v} " if v else ""
+    v = meta_of(x, "priority")
+    return f"{v} " if v else ""
+def subject_of(x):
+    """The subject with a redundant leading priority token removed.
+
+    Many rows were written with the priority in the subject text AND in
+    metadata.priority, so the renderer printed it twice: "P2 P2 Vocabulary
+    terms renders a 185-chip wall". Sixteen of the owner's 599 rows did this on
+    2026-09-04.
+
+    Strip it only when the two AGREE. Two rows disagree (#324 says P2 in
+    metadata and P1 in the subject, #333 says P3 and P2), and that is a real
+    conflict about how urgent the work is, not a formatting artifact. Those keep
+    both values, labelled, so the disagreement is legible instead of looking
+    like the doubled prefix above.
+    """
+    s = x["subject"]
+    v = meta_of(x, "priority")
+    m = _PRIO_HEAD.match(s or "")
+    if not (v and m): return s
+    if m.group(1) == str(v): return s[m.end():]
+    return f"(subject says {m.group(1)}) " + s[m.end():]
 def state_note(x):
     if x.get("waits_on"): return "after #" + " #".join(str(i) for i in x["waits_on"])
     return ""
@@ -662,7 +684,7 @@ def row(x, indent="  "):
     head = f"{indent}{glyph(x)} #{x['id']}"
     head = dljust(head, len(indent) + 2 + 1 + IDW + 1)
     sn = state_note(x)
-    task = prio(x) + (f"[{sn}] " if sn else "") + x["subject"]
+    task = prio(x) + (f"[{sn}] " if sn else "") + subject_of(x)
     tag = dljust(lane_tag(x), LANEW)
     if compact:
         one = task if dwidth(task) <= TASKW else task[:TASKW-1] + "…"
