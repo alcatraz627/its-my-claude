@@ -164,6 +164,15 @@ case "$CMD" in
   start) with_lock do_update "$1" --status in_progress ;;
   meta) [ -n "${2:-}" ] || { echo "task.sh meta: need <id> key=value…" >&2; exit 2; }; with_lock do_meta "$@" ;;
   show) cat "$STORE/$1.json" ;;
-  list) for f in $(ls "$STORE"/*.json | sort -t/ -k"$(($(echo "$STORE" | tr -cd / | wc -c)+1))" -n); do jq -r '"\(.id)\t\(.status)\t\(.subject)"' "$f"; done | sort -n | awk -F'\t' '{printf "%4s  %-12s %s\n",$1,$2,$3}' ;;
+  # --json is advertised at the top of this file as "machine output" and was
+  # honoured by add and update but silently ignored here, so a caller asking for
+  # JSON got the human table and had to parse columns. Emit one array, id-sorted,
+  # with every field the store holds.
+  list)
+    if [ "$JSON" = 1 ]; then
+      jq -s 'sort_by(.id | tonumber? // .id)' "$STORE"/*.json
+    else
+      for f in $(ls "$STORE"/*.json | sort -t/ -k"$(($(echo "$STORE" | tr -cd / | wc -c)+1))" -n); do jq -r '"\(.id)\t\(.status)\t\(.subject)"' "$f"; done | sort -n | awk -F'\t' '{printf "%4s  %-12s %s\n",$1,$2,$3}'
+    fi ;;
   *) echo "task.sh: unknown command $CMD" >&2; exit 2 ;;
 esac
