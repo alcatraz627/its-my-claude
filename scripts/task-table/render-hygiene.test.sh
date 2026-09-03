@@ -188,6 +188,43 @@ ok "with its open count"              "$(rg -c 'holder01   3 open of 3' "$EOUT" 
 ok "and a recognisable subject"       "$(rg -c 'A real row' "$EOUT" 2>/dev/null || echo 0)" 1
 
 echo
+echo "── 9. a lane label naming the wrong model says so ──"
+# A lane label is hand-written config and cannot know about a model switch.
+# forge-brains reported its legend still naming Fable hours after moving to
+# Opus 5, so the footer contradicted the header and neither said which was right.
+LANEDIR="$ROOT/lanes"
+mkdir -p "$LANEDIR/.claude/tasks/session-lanes001" "$LANEDIR/.claude"
+cat > "$LANEDIR/.claude/tasks-view.json" <<'VIEW'
+{ "group": "domain",
+  "lanes": { "brains": "gcp-fable (this session, Fable)", "owner": "the owner" } }
+VIEW
+for i in 1 2; do
+  python3 - "$LANEDIR/.claude/tasks/session-lanes001/$i.json" "$i" <<'PY'
+import json, sys
+p, tid = sys.argv[1:3]
+json.dump({"id": tid, "subject": f"Row {tid}", "description": "", "status": "pending",
+           "activeForm": None, "blocks": [], "blockedBy": [],
+           "metadata": {"lane": "brains", "tier": "opus", "domain": "d"}}, open(p, "w"), indent=1)
+PY
+done
+LOUT="$LANEDIR/out.txt"
+# The view file resolves from the CWD's git root, not from HOME, so this case has
+# to RUN from the sandbox. A cd inside this script is fine; the no-cd rule is
+# about Bash tool calls, where an unresolvable relative path stalls on a dialog.
+( cd "$LANEDIR" && HOME="$LANEDIR" bash "$TT" --session lanes001 ) > "$LOUT" 2>&1
+ok "the drift is flagged"        "$(rg -c 'lane label out of date' "$LOUT" 2>/dev/null || echo 0)" 1
+ok "it names the lane and both"  "$(rg -c 'brains \(label says fable, rows run opus\)' "$LOUT" 2>/dev/null || echo 0)" 1
+ok "and says where to fix it"    "$(rg -c "tasks-view.json" "$LOUT" 2>/dev/null || echo 0)" 1
+
+# Control: a label naming the model the rows actually run must stay silent.
+cat > "$LANEDIR/.claude/tasks-view.json" <<'VIEW'
+{ "group": "domain",
+  "lanes": { "brains": "gcp-brains (Opus 5)", "owner": "the owner" } }
+VIEW
+( cd "$LANEDIR" && HOME="$LANEDIR" bash "$TT" --session lanes001 ) > "$LANEDIR/ok.txt" 2>&1
+ok "silent when the label agrees" "$(rg -c 'lane label out of date' "$LANEDIR/ok.txt" 2>/dev/null || echo 0)" 0
+
+echo
 echo "── control: the suite can see the defects it names ──"
 MUT="$ROOT/mut.sh"
 python3 - "$TT" "$MUT" <<'PY'

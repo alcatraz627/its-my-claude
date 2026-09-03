@@ -920,6 +920,24 @@ if _used:
     if lanes_legend: legend += "   lanes: " + " · ".join(f"{k} = {v}" for k, v in lanes_legend.items())
     elif lane_vals: legend += "   lanes: " + " · ".join(lane_vals)
     w(legend)
+    # A lane label is hand-written config and cannot know about a model switch.
+    # forge-brains reported its legend still naming Fable hours after moving to
+    # Opus 5, which makes the footer contradict the header. Say which labels the
+    # rows disagree with rather than quietly printing both.
+    if lanes_legend:
+        _MODELS = ("fable", "opus", "sonnet", "haiku", "mythos")
+        _drift = []
+        for _lane, _label in lanes_legend.items():
+            _named = {m for m in _MODELS if m in str(_label).lower()}
+            if not _named: continue
+            _tiers = {(meta_of(x, "tier") or meta_of(x, "model") or "").lower()
+                      for x in live if (meta_of(x, "lane") or meta_of(x, "owner")) == _lane}
+            _tiers.discard("")
+            if _tiers and not (_named & _tiers):
+                _drift.append(f"{_lane} (label says {'/'.join(sorted(_named))}, rows run {'/'.join(sorted(_tiers))})")
+        if _drift:
+            w("  !! lane label out of date: " + " · ".join(_drift)
+              + "   — edit 'lanes' in the project's tasks-view.json")
 # The id-collapse is for tables that still show open work. In the all-done view the
 # subjects are already on screen above, so repeating them as ids is noise.
 if done and live:
