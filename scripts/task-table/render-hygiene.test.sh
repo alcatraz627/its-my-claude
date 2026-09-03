@@ -133,6 +133,37 @@ ok "and its coverage is flagged"    "$(rg -c "only .* of open rows carry 'goal'"
 ok "the warning names an alternative" "$(rg -c 'regroup: task-table.sh --group' "$PIN" 2>/dev/null || echo 0)" 1
 
 echo
+echo "── 7. an untouched owner gate says its age ──"
+# A gate goes false by being SATISFIED, and nothing closes the row. Twice on
+# 2026-09-04 the owner's band held an ask somebody had already cleared. Wording
+# cannot catch that; only recency can.
+GATED="$ROOT/.claude/tasks/session-gates001"
+mkdir -p "$GATED"
+for i in 1 2 3; do
+  python3 - "$GATED/$i.json" "$i" <<'PY'
+import json, sys
+p, tid = sys.argv[1:3]
+json.dump({"id": tid, "subject": f"Owner ask {tid}", "description": "", "status": "pending",
+           "activeForm": None, "blocks": [], "blockedBy": [],
+           "metadata": {"lane": "hands", "tier": "opus", "domain": "d", "class": "c",
+                        "blocked_on": f"USER: decide item {tid}"}}, open(p, "w"), indent=1)
+PY
+done
+# Rows 1 and 2 are two days stale; row 3 was touched just now.
+OLD_TS=$(( $(date +%s) - 2 * 24 * 3600 ))
+touch -t "$(date -r $OLD_TS +%Y%m%d%H%M.%S)" "$GATED/1.json" "$GATED/2.json"
+GOUT="$ROOT/gates.txt"
+HOME="$ROOT" bash "$TT" --session gates001 > "$GOUT" 2>&1
+ok "the stale gates are flagged"     "$(rg -c 'untouched >24h, re-check before acting' "$GOUT" 2>/dev/null || echo 0)" 1
+ok "and named by id"                 "$(rg -c 're-check before acting: #1 #2' "$GOUT" 2>/dev/null || echo 0)" 1
+ok "the fresh gate is not named"     "$(rg -c 'acting: #1 #2 #3' "$GOUT" 2>/dev/null || echo 0)" 0
+
+# Control: with every gate fresh the note must not appear at all.
+touch "$GATED/1.json" "$GATED/2.json"
+HOME="$ROOT" bash "$TT" --session gates001 > "$ROOT/gates-fresh.txt" 2>&1
+ok "silent when no gate is stale"    "$(rg -c 'untouched >24h' "$ROOT/gates-fresh.txt" 2>/dev/null || echo 0)" 0
+
+echo
 echo "── control: the suite can see the defects it names ──"
 MUT="$ROOT/mut.sh"
 python3 - "$TT" "$MUT" <<'PY'

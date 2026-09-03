@@ -359,6 +359,10 @@ def enrich(r):
     return {
         "id": num(r), "subject": subj(r), "status": r.get("status", "pending"),
         "gated": gated(r), "source": "backlog" if backlog(r) else "session",
+        # Carried through because the GATES band flags an ask nobody has touched
+        # in a day: a gate goes false by being satisfied, and recency is the only
+        # signal for that. Dropping it here made the check a silent no-op.
+        "_mtime": r.get("_mtime"),
         # Set at TaskCreate time; never inferred. An inferred class would be
         # wrong in a way no reader could see.
         "class": meta(r, "class", ""), "domain": meta(r, "domain", ""),
@@ -812,8 +816,18 @@ def render_rows(compact_mode):
     # batch subtitle, and roughly nine rows of actual work. Whatever gates cannot
     # fit in the remainder is named inside the band rather than dropped silently.
     WORK_FLOOR = 12
-    band("GATES (you)   " + f"({len(gates)})", seq_sort(gates),
-         budget=max(6, LINE_CAP - WORK_FLOOR))
+    # A gate goes false by being SATISFIED, and nothing closes the row. Twice on
+    # 2026-09-04 the owner's band held an ask somebody had already cleared: #599's
+    # sentinel was minted, and #574's migration was applied twenty minutes before
+    # the table rendered it. Its own author called the band 50% stale. Wording
+    # cannot catch this, only recency can, so an untouched gate says its age.
+    STALE_GATE_S = 24 * 3600
+    _old = [x for x in gates if x.get("_mtime") and time.time() - x["_mtime"] > STALE_GATE_S]
+    _title = "GATES (you)   " + f"({len(gates)})"
+    if _old:
+        _ids = " ".join(f"#{x['id']}" for x in _old[:6]) + (" …" if len(_old) > 6 else "")
+        _title += f"   ·  untouched >24h, re-check before acting: {_ids}"
+    band(_title, seq_sort(gates), budget=max(6, LINE_CAP - WORK_FLOOR))
     for k, items in groups.items():
         label = labels.get(k, k)
         n_run = sum(1 for x in items if x["status"] == "in_progress"); n_wait = sum(1 for x in items if x.get("waits_on"))
