@@ -96,6 +96,43 @@ else
 fi
 
 echo
+echo "── 5. auto-grouping picks a key most rows carry ──"
+# The old test was any(): one row bearing a goal made goal the grouping key for
+# the whole store, and every row without one landed in a single band titled
+# "GOAL (no goal)". On the owner's queue that band held 98 of 180 open rows and
+# was the largest thing on screen while naming nothing.
+#
+# This store is built so goal is sparse (5 of 50) and domain is dense (all 50).
+SPARSE="$ROOT/.claude/tasks/session-sparse01"
+mkdir -p "$SPARSE"
+for i in $(seq 1 50); do
+  python3 - "$SPARSE/$i.json" "$i" "$(( i <= 5 ? 1 : 0 ))" "${DOMAINS[$((i % 6))]}" <<'PY'
+import json, sys
+p, tid, has_goal, dom = sys.argv[1:5]
+meta = {"lane": "hands", "tier": "opus", "domain": dom, "class": "fix"}
+if has_goal == "1": meta["goal"] = "A goal only a few rows carry"
+json.dump({"id": tid, "subject": f"Row {tid}", "description": "", "status": "pending",
+           "activeForm": None, "blocks": [], "blockedBy": [], "metadata": meta},
+          open(p, "w"), indent=1)
+PY
+done
+AUTO="$ROOT/auto.txt"
+HOME="$ROOT" bash "$TT" --session sparse01 --group auto > "$AUTO" 2>&1
+ok "sparse goal is not chosen"      "$(rg -c 'grouped: goal' "$AUTO" 2>/dev/null || echo 0)" 0
+ok "dense domain is chosen"         "$(rg -c 'grouped: domain' "$AUTO" 2>/dev/null || echo 0)" 1
+ok "no giant unnamed goal band"     "$(rg -c 'GOAL \(no goal\)' "$AUTO" 2>/dev/null || echo 0)" 0
+
+echo
+echo "── 6. a PINNED sparse key is honoured, but says what it costs ──"
+# A flag or a project view file may still pin a sparse key. That ruling is not
+# ours to override; the reader just has to be told why one band swallowed the table.
+PIN="$ROOT/pin.txt"
+HOME="$ROOT" bash "$TT" --session sparse01 --group goal > "$PIN" 2>&1
+ok "the pinned key is obeyed"       "$(rg -c 'grouped: goal' "$PIN" 2>/dev/null || echo 0)" 1
+ok "and its coverage is flagged"    "$(rg -c "only .* of open rows carry 'goal'" "$PIN" 2>/dev/null || echo 0)" 1
+ok "the warning names an alternative" "$(rg -c 'regroup: task-table.sh --group' "$PIN" 2>/dev/null || echo 0)" 1
+
+echo
 echo "── control: the suite can see the defects it names ──"
 MUT="$ROOT/mut.sh"
 python3 - "$TT" "$MUT" <<'PY'

@@ -444,9 +444,27 @@ def meta_of(x, k): return (x.get("metadata") or {}).get(k) or ""
 # fell through to "actor" and grouped a finished store by a field none of it had.
 _probe = live if live else [x for x in rows if _is_done(x)]
 def has_meta(k): return any(meta_of(x, k) for x in _probe)
+def coverage(k):
+    return (sum(1 for x in _probe if meta_of(x, k)) / len(_probe)) if _probe else 0.0
 if group == "auto":
-    group = "goal" if has_meta("goal") else "batch" if has_meta("batch") else "domain" if has_meta("domain") else "actor"
-    group_src += f" → {group}"
+    # Group by a key MOST rows actually carry. The old test was any(), so a single
+    # row bearing a goal made goal the grouping key for the whole store: on
+    # 2026-09-04 the owner's queue had goal on 82 of 180 open rows and the other
+    # 98 landed in one band titled "GOAL (no goal)", which is the largest band on
+    # screen and names nothing. Domain covered 161 of 180 and would have grouped
+    # the same queue usefully.
+    #
+    # Preference order still favours goal, because a goal is what the owner
+    # thinks in; the bar just stops a sparse key from winning on a technicality.
+    BAR = 0.70
+    ladder = ["goal", "batch", "domain", "class"]
+    group = next((k for k in ladder if coverage(k) >= BAR), "")
+    if not group:
+        # Nothing is well covered. Take the best of a bad set rather than falling
+        # to actor, which splits by a field the rows may not carry either.
+        best = max(ladder, key=coverage)
+        group = best if coverage(best) > 0 else "actor"
+    group_src += f" → {group} ({coverage(group):.0%} of open rows carry it)"
 # a lane·model tag: metadata.lane + metadata.tier (or model); "?" marks an unset tier loudly
 def lane_tag(x):
     lane = meta_of(x, "lane") or meta_of(x, "owner"); tier = meta_of(x, "tier") or meta_of(x, "model")
@@ -586,6 +604,17 @@ notier = sum(1 for x in live if not (meta_of(x, "tier") or meta_of(x, "model"))
              and (meta_of(x, "lane") or "").lower() != "owner" and not deferred(x))
 if notier: w(f"  {notier} open row(s) carry no tier (rendered '?'); set with task.sh update <id> --tier <fable|opus|sonnet|haiku|lm>")
 if view.get("_broken"): w(f"  !! view file did not parse, ignored: {view['_broken']}")
+# A grouping key most rows do not carry produces one huge band named "(no <key>)",
+# which is the biggest thing on screen and identifies nothing. Auto-selection now
+# refuses such a key, but a flag or a project view file can still pin one, and a
+# pinned ruling is not ours to override. Say what it costs instead.
+if group in ("goal", "batch", "domain", "class") and _probe:
+    _cov = coverage(group)
+    if _cov < 0.70:
+        _alt = max([k for k in ("goal", "batch", "domain", "class") if k != group], key=coverage)
+        w(f"  !! only {_cov:.0%} of open rows carry '{group}', so {sum(1 for x in _probe if not meta_of(x, group))}"
+          f" land in one unnamed band. '{_alt}' covers {coverage(_alt):.0%}"
+          f" — regroup: task-table.sh --group {_alt}   ·   or set it on the rows")
 if resolved_by.startswith("guess"):
     w(f"  !! STORE NOT CONFIRMED ({resolved_by}). This may be another session's queue. Pin: task-table.sh --session <sid8>")
 if _open_m and time.time() - max(_open_m) > 24 * 3600:
