@@ -309,7 +309,16 @@ GATE = re.compile(r"USER-GATED|Blocked on the owner|owner reviews|needs you|"
 # the owner can act on today; AGENT:/ME:/SELF: is the agent's own wait; BLOCKED-BY:,
 # AFTER:, EXTERNAL:, WAITING: name other work or another actor and are neither
 # agent-ready nor the owner's to act on. Only the first band reaches GATES (you).
-AGENT_BLOCKED = re.compile(r"^\s*(AGENT|ME|SELF|BLOCKED[- ]BY|AFTER|EXTERNAL|WAITING)\s*:", re.I)
+# The keyword ends at a WORD BOUNDARY, and the colon is optional, because that is
+# how the convention is actually written. Requiring a colon immediately after the
+# keyword meant "blocked-by #404: gcp-watcher gates the board" did not match, since
+# its colon sits after the task number. Measured on session f04ae843 on 2026-09-04:
+# 14 of 14 rows carrying blocked_on were painted as owner gates, and only 2 of them
+# began with USER:. The owner read a 16-row GATES band that had 2 real rows in it,
+# and every other row in the queue was pushed off screen by the height cap.
+AGENT_BLOCKED = re.compile(
+    r"^\s*(AGENT|ME|SELF|BLOCKED[-_ ]?BY|BLOCKED|AFTER|DEPENDS[-_ ]?ON|"
+    r"EXTERNAL|WAITING|SEQUENCED|PLAN)\b", re.I)
 def gated(r):
     b = meta(r, "blocked_on")
     if b: return not AGENT_BLOCKED.match(str(b))
@@ -523,6 +532,18 @@ def dwidth(s):
         else: n += 1
     return n
 def dljust(s, w): return s + " " * max(0, w - dwidth(s))
+def ellip(s, w):
+    """Trim to width at a word boundary, marking that the text continues.
+
+    A hard slice cut mid-token and produced continuation lines ending "Was mis"
+    and "What remains is an acc": a whole line of screen spent on a fragment the
+    reader cannot use. Falls back to a hard cut only when the first word alone
+    already overruns.
+    """
+    if dwidth(s) <= w: return s
+    cut = s[:max(1, w - 1)]
+    sp = cut.rfind(" ")
+    return (cut[:sp] if sp > w // 2 else cut) + "…"
 def wrap(text, width):
     words, lines, cur = text.split(), [], ""
     for wd in words:
@@ -592,9 +613,19 @@ for _k in ("class", "domain", "batch", "goal", "planning"):
 def tags(x):
     shown = {"class", "domain", "batch", "goal", "lane", "owner", "tier", "model", "blocked_on", "verified", "note", "board_card", "deferred", "planning", "priority"}
     t = []
+    # Two keys often carry the same word on a row: class=build with domain=build,
+    # class=ui with domain=ui. Printing "build · build" spends the reader's
+    # attention on a repetition that tells them nothing, and it happened on 34 of
+    # the 92 open rows in session f04ae843. One occurrence of a value is enough.
     for k in ("class", "domain", "batch", "goal", "planning"):
         v = meta_of(x, k)
-        if v and k != group and k != sub and k not in _uniform: t.append(str(v))
+        if not v or k == group or k == sub or k in _uniform: continue
+        # Split on the separator before comparing. Some rows carry a PRE-JOINED
+        # value in a single-value field: row #294 has domain="ui · forge" beside
+        # class="ui", which rendered as "ui · ui · forge". Splitting first lets
+        # the dedup below see the parts, so bad data costs the reader nothing.
+        for sv in [p.strip() for p in re.split(r"\s*·\s*", str(v)) if p.strip()]:
+            if sv.casefold() not in {e.casefold() for e in t}: t.append(sv)
     for k, v in (x.get("metadata") or {}).items():
         if k not in shown and v not in ("", None, [], {}): t.append(f"{k}:{v}")
     v = meta_of(x, "verified")
@@ -643,7 +674,13 @@ def row(x, indent="  "):
             keep.append(f"delegated to {_deleg(x)}" + (" · CONFIRMED" if _c == "true" else " · unconfirmed"))
         if x.get("blocked_on"): keep.append(f"blocked: {x['blocked_on']}")
         if meta_of(x, "note"): keep.append(f"note: {meta_of(x, 'note')}")
-        if keep: w(" " * (len(indent) + 2 + 1 + IDW + 1) + ("↳ " + " · ".join(keep))[:W - 12])
+        if keep:
+            # Cut at a word boundary, not mid-token. A hard slice produced lines
+            # ending "Was mis" and "What remains is an acc", which cost a line of
+            # screen and told the reader nothing. The ellipsis says the sentence
+            # continues; --detail carries the rest.
+            _pre = " " * (len(indent) + 2 + 1 + IDW + 1)
+            w(_pre + ellip("↳ " + " · ".join(keep), W - 12))
         return
     lines = wrap(task, TASKW)
     w(f"{head}{dljust(lines[0], TASKW)}  {tag}  {fit_tags(x)}")

@@ -309,7 +309,11 @@
       "Bash(*cat ~/.git-credentials*)",
       "Bash(*cat ~/.netrc*)",
       "mcp__claude_ai_Notion__*",
-      "mcp__claude_ai_Sentry__*"
+      "mcp__claude_ai_Sentry__*",
+      "Read(~/.config/gcloud/credentials.db)",
+      "Read(~/.config/gcloud/access_tokens.db)",
+      "Read(~/.config/gcloud/application_default_credentials.json)",
+      "Read(~/.config/gcloud/legacy_credentials/**)"
     ],
     "defaultMode": "bypassPermissions"
   },
