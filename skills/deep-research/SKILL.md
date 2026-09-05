@@ -1,6 +1,6 @@
 ---
 name: deep-research
-description: Answers a question that needs evidence from outside this machine, by splitting it into claims, researching each in parallel, verifying the load-bearing ones against independent sources with a seat that did not gather them, and writing a cited report with its uncertainties intact. Use when being wrong would be expensive and one search will not settle it: a technology choice, a security or licensing question, a market or vendor comparison, a "what is actually true about X" where sources disagree. For a single lookup use WebSearch. For a durable topic note use /cogitate, which routes its deep mode here.
+description: Answers a question that needs evidence from outside this machine, by splitting it into claims, researching each in parallel, verifying the load-bearing ones against independent sources with a seat that did not gather them, and writing a cited report with its uncertainties intact. Use when being wrong would be expensive and one search will not settle it: a technology choice, a security or licensing question, a market or vendor comparison, a "what is actually true about X" where sources disagree. For a single lookup use WebSearch.
 allowed-tools: Read, Write, Glob, Grep, Bash, WebSearch, WebFetch, Agent
 argument-hint: "<the question> [--scope quick|standard|exhaustive]"
 user-invocable: true
@@ -8,8 +8,8 @@ user-invocable: true
 
 ## Brief
 
-The research harness the rest of the account already points at. `/cogitate`
-deep mode, `/pick-skill`, and `personas/web-researcher.md` all defer heavy
+The research harness the rest of the account already points at. `/pick-skill`,
+`personas/web-researcher.md`, and the parked `/cogitate` deep mode all defer heavy
 multi-source work here, so this skill's job is to be worth deferring to: fan out
 across the question's parts, verify the claims that carry weight using a seat
 that did not produce them, and return something whose confidence is legible.
@@ -134,9 +134,9 @@ because it resolves to `~/.claude/.claude/` where nothing reads it.
 
 The report holds the question, the scope, the answer, the evidence per claim,
 what verification attempted and found, the uncertainties, and the source table.
-Return the report inline as well as the path when a skill called you. `/cogitate`
-delegates here from its Phase 2.2 and carries what you return into its Phase 2.3
-synthesis, so a path alone leaves it with nothing to synthesise.
+Return the report inline as well as the path when a skill called you. A calling
+skill carries what you return into its own synthesis (the parked `/cogitate` did
+this from its Phase 2.2), so a path alone leaves it with nothing to synthesise.
 
 ## Phase 6: Record the run
 
@@ -168,9 +168,10 @@ questions; a question needing fifteen is usually two questions.
 
 - One fact, one obvious source. Use WebSearch.
 - A question about this machine or this codebase. Use grep, `/arch-qa`, or
-  `/past-sessions`.
-- A durable note on a topic you will revisit. Use `/cogitate`, which calls this
-  when it needs the evidence.
+  `/catchup` / `/revive` for prior sessions (`/past-sessions` is parked).
+- A durable note on a topic you will revisit. Write it under
+  `~/Documents/Claude/Topics/` and call this skill for the evidence (`/cogitate`,
+  which wrapped that flow, is parked).
 - A decision between options already understood. That is `/magi`.
 
 ## Done-condition
@@ -188,11 +189,11 @@ questions; a question needing fifteen is usually two questions.
 
 ## See also
 
-- `/cogitate` files research as a durable topic note and routes its deep mode
-  here (its Phase 2.2)
+- `/cogitate` (parked, mig 0048; `~/.claude/skills-parked/cogitate/`) filed
+  research as a durable topic note and routed its deep mode here (its Phase 2.2)
 - `personas/web-researcher.md` is the disposition for research you do yourself,
   and defers heavy deliverables here
-- `skills/cogitate/agents/deep-research.md` is cogitate's own fallback seat
+- `skills-parked/cogitate/agents/deep-research.md` is cogitate's own fallback seat
   prompt, kept for when this skill is unavailable
 - `/magi` for deliberation between known options, `/pyramid-sweep` for mining a
   large local corpus rather than the open web

@@ -206,7 +206,7 @@ Topic propagates as a filter to every source query in Phase 5+.
 [?] Checkpoint files     (_*.claude.md mtime in window)
 [?] Memory               (~/.claude/projects/<encoded>/memory/*.md created/modified in window)
 [?] Recently-modified    (find . -mtime within window — captures uncommitted work)
-[?] Past-session transcripts  (via `/past-sessions` if available — slow, opt-in)
+[?] Past-session transcripts  (via skills-parked/past-sessions/scripts/list-sessions.sh; slow, opt-in)
 ```
 
 Each `[?]` defaults on (`[x]`) if the probe found data, off (`[ ]`) if empty.
@@ -388,7 +388,7 @@ For each selected source, run its query and store results keyed by source.
 | Checkpoint files  | `find . -maxdepth 2 -name "_*.claude.md" -newermt "<lower>"` then `Read` each — extract Goal / Pending / Current Expectation           |
 | Memory            | List + Read modified files in `~/.claude/projects/<encoded-cwd>/memory/`. Cross-reference against `MEMORY.md` index                    |
 | Recently-modified | `find . -type f -newermt "<lower>" \| filter forbidden paths` — focus on files NOT in `git log` (uncommitted work)                     |
-| Past-sessions     | Invoke `/past-sessions` (or its underlying script) with the time window + topic — receive a digest, not raw transcripts                |
+| Past-sessions     | Run `bash ~/.claude/skills-parked/past-sessions/scripts/list-sessions.sh` (the `/past-sessions` skill is parked) with the time window + topic — receive a digest, not raw transcripts |
 
 For PR scope: prefer `gh pr view <num> --json title,body,commits,files` + `gh pr diff <num>`.
 
@@ -652,7 +652,7 @@ If output went to a file, print the path. If terminal output > 40 lines, offer t
 | Only commits, no ambient data                    | Render normally; footer notes which optional sources were empty              |
 | WAL is corrupt / unparseable                     | Skip WAL with a printed warning; continue                                    |
 | Multiple checkpoint files in window              | Treat each as a separate entry under "Goals stated this window"              |
-| Past-sessions selected but `/past-sessions` slow | Run as a subagent (Agent tool) so it doesn't block the main flow             |
+| Past-sessions selected but the list-sessions script is slow | Run as a subagent (Agent tool) so it doesn't block the main flow |
 | Topic filter matches nothing in any source       | Tell the user; offer to broaden (drop topic, widen window, add more sources) |
 | `--last session` but no WAL                      | Fall back to "last 4 hours" with a printed warning                           |
 | User declines all conflict-resolution options    | Exit 0 with a hint to refine the scope                                       |
@@ -660,7 +660,7 @@ If output went to a file, print the path. If terminal output > 40 lines, offer t
 ### Integrations
 
 - Calls `/create-report` when `--format html`.
-- Calls `/past-sessions` (or its underlying script) when that source is selected.
+- Runs `skills-parked/past-sessions/scripts/list-sessions.sh` by path when that source is selected (the `/past-sessions` skill is parked, mig 0048).
 - Pairs with `/commit-push-pr` — generate a PR description, then commit-push.
 - Reads `.claude/wal.jsonl` per the WAL spec (`~/.claude/skills/shared/wal-format.md`).
 - Reads `_checkpoint.claude.md` per the `/core-dump` schema (Initial Goal / Agent Actions / Current Expectation / Pending Items).

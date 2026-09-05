@@ -93,7 +93,7 @@ the whole chain end to end with gates is `/bloop`.
 | code | "do it", "implement the plan" | main agent inline; `/bloop` when it should carry its own gates |
 | validate | "is this right", "check it", "review my work" | `/validate` (routes on seven questions); `/skeptical-review` for adversarial audit |
 | experience | "this feels wrong", "is the screen done" | `/ui` front door; `/ui-gripe` confusion; `/ui-categorical-check` bug classes |
-| research | "what's true about X", "find sources" | `/deep-research` heavy report; `/cogitate` topic file |
+| research | "what's true about X", "find sources" | `/deep-research` heavy report; a topic file is hand-written (`/cogitate` is parked) |
 | prose, docs, comments | "write it up", "de-slop this", "document X", "clean the comments" | `/write-docs` docs; `/ste-writing` plain rewrites; `/cleanup-comments` comment passes; `python3 ~/.claude/scripts/style/prose-lint.py` for a lint verdict |
 
 **The writing lane crosses every stage.** Nearly every stage emits prose, and

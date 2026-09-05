@@ -326,4 +326,4 @@ rm -f .claude/table-data.tmp.json
 ## Related Skills
 
 - `/create-report` — Generates structured HTML reports from markdown (different purpose: narrative reports vs. data tables)
-- `/project-index` → `/create-report` → `/create-report:table` — A full data documentation pipeline
+- any markdown source, then `/create-report`, then `/create-report:table`: a data documentation pipeline. The old first stage, `/project-index`, is parked

@@ -32,6 +32,8 @@ These folders are created and maintained by Claude Code itself. Touching them ri
 | `tasks/` | TaskCreate/TaskList persistence (UUID-keyed) | |
 | `teams/` | Agent-team state | |
 | `telemetry/` | Anonymized usage metrics | |
+| `daemon/` | Background-session daemon state: `roster.json` (supervisor pid, worker sessions, pty/rendezvous sockets), `dispatch/`, `attach-journal`, `control.key` | Owns the `bg` sessions `ListAgents` shows; sockets live under `/tmp/cc-daemon-<uid>/` |
+| `jobs/` | Per-job `state.json` + `tmp/` keyed by an 8-char hash, plus `pins.json` | Harness job persistence; appeared 2026-09 |
 
 **Plus root files:** `config.json`, `settings.local.json` (Anthropic-managed); session state files like `wal.jsonl`/`wal.md` are co-owned (Claude writes, user reads/edits).
 
@@ -72,11 +74,10 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `llm-mini-state/` | `mini` skill / Ollama | Cache + Ollama log for the local fast model |
 | `logs/` | misc | Hook/script logs (tab-title-emit.log, mistake-patterns-graduation.log) |
 | `memory/` | auto-memory | Per-project + global memory entries (the auto-loaded MEMORY.md system) |
-| `mistake-patterns/` | atone derivation | Working dir for the consolidation cron |
 | `mistakes/` | (legacy?) | Pre-atone mistake notes; verify before touching |
-| `output/` | sub-agent outputs | Per `rules/sub-agent-outputs.md`, agents write material output here |
+| `output/` | (legacy) | Early sub-agent output dir, newest entry 2026-05-24. CLAUDE.md now redirects `.claude/output/X` to `assets/reports/X`; nothing writes here |
 | `paste-cache/` | clipboard paste hook | Cached pastes from user prompts |
-| `personas/` | (planned) | Persona prompts to style Claude per task — **not yet built out** |
+| `personas/` | `/persona` skill | Working-mode persona prompts (40 files) plus `usage/` adoption log. Activation: `features/persona-activation.md` |
 | `plans/` | misc | Multi-session plan files (`/core-dump` scratchpads, etc.) |
 | `scratchpad/` | scratchpad MCP + global | **Prototype** scratch space — see `reference_scratchpad_system.md` memory entry |
 | `shell-logs/` | shell-mem MCP | Bash command history (DIY mem system) |
@@ -91,6 +92,28 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `pinned/` | `/pin-for-dream` | Insights pinned for the next dream cycle; `consolidate.sh` decays them after ~2 cycles |
 | `scheduled/` | `gcc-schedule` / routines | Cron/launchd routine registry (`registry.json` + `history.jsonl`) that runs the domain consolidations + dream passes |
 | `session-notes/` | `/workspace` + `/core-dump` + `/catchup` | Per-session workspace docs (`<session-id>.md`: Todos / Notes / Doc Links / Decisions); `_active.md` points to the current session |
+| `adapters/` | `features/codex-adapter.md` | Adapter code for driving a non-Claude model seat (today: `codex/`) from this config |
+| `archive/` | `scripts/archive-transcripts.sh` | Archived session transcripts plus `archive.log`; the cold tier for `projects/` JSONL that `/revive` no longer needs hot |
+| `cron-duties/` | `scripts/cron/cron-duty.sh` | One JSON per recurring session-scoped duty (heartbeats, warden check-ins): stable slug, arming process, liveness verdict, so a resume does not re-arm a duty whose process is still alive |
+| `deployq/` | `scripts/deployq/deployq.sh` + `worker.sh` | Deploy queue: `pending/` → `running/` → `done/`, with `reports/`. The worker is a cron duty |
+| `feedback/` | (empty) | Reserved, nothing writes here yet; candidate for removal at the next map |
+| `git-hooks/` | `core.hooksPath` (mig 0039, 0040) | Global git hooks for every repo on the machine; `commit-msg` strips harness trailers, `guard-commit-signature.sh` is the hard block |
+| `goals/` | `scripts/goal/goal.sh` | One JSON per session goal (`<session-uuid>.json`; `.cleared` suffix once disarmed). Read by the goal hinters and the Stop harness |
+| `groups/` | `scripts/group/group.sh` | Per-group entity records (members, one goal, declared stores, authority line) per the 2026-08-26 IPC ruling; empty until a group is created |
+| `kanban/` | `scripts/kanban/` server | Runtime data for the agent kanban: `registry.json`, `items.json`, `drafts.json`, `boards/`, `plans.jsonl`, rotated `.prev-*.bak` copies, plus review screenshots. Product code lives in `scripts/kanban/`; guide `features/kanban.md` |
+| `review/` | `review/freshness.sh` | The lane-freshness detector: `registry.jsonl` maps each scheduled producer to its artifact and cadence; `freshness.sh` reads only mtimes and goes RED when a lane stops producing |
+| `secrets/` | (owner) | Env files for audits and CI (`*.env`). Never read or print; gitignored |
+| `session-state/` | `scripts/session-state/session-state.sh` | Per-session key/value state (`<sid>.json`, both full-uuid and 8-char forms); reaped at startup by `startup/tasks/60-reap-session-state.sh` |
+| `skills-parked/` | mig 0048 | Skills taken off the roster but kept whole (34 as of 2026-09-05), with `INDEX.md` and `tags.tsv`. A parked skill is not invocable; citers must be swept when parking |
+| `tasks-pins/` | `scripts/task-table/task-table.sh --pin` (mig 0057) | Per-session pin naming which task store `/tasks` renders, moved out of `tasks/` so the harness's store directory holds only stores |
+| `auto-continue/` | `scripts/auto-continue.sh` + `hooks/auto-continue-stop.sh` | State for the auto-continue Stop hook; empty between runs |
+| `dev-servers/` | `scripts/dev-servers/ports.sh` + `svc.sh` (mig 0029, 0043) | The port ledger (`port-registry.md`, `port-events.jsonl`) and the pm2 idle-lifecycle state (`svc-state.json`, `svc-events.jsonl`), plus `logs/`. Policy: `features/dev-servers.md` |
+| `fiber-actions/` | fiber-snatcher (`features/fiber-snatcher.md`) | Per-run action bundles for React dev-app dispatches, hash-keyed |
+| `guidance/` | guidance channel | `notes.md`: standing owner directives ("note this for the future"), surfaced relevance-gated by `hinters/06-guidance.sh` |
+| `hooks/` | `std::claude::ledger` | Hook telemetry streams: `warn-events.jsonl` (advisory fires) and `feedback.jsonl` (hook feedback records). Hook SCRIPTS live in `scripts/hooks/`, not here |
+| `run/` | `features/tmp-jail.md` | Runtime state for session-scoped confinement (`tmpjail/`); managed by `scripts/tmp-jail` and its guard/cleanup hooks |
+| `style/` | `std::claude::style` (mig 0033, 0035) | The prose-quality control plane: `thesaurus.jsonl`, `derived/` verdict ledgers, `friction-ledger.jsonl`, glossary hint tables, `sweep/`. Readers: `scripts/style/` |
+| `warden/` | `warden/warden-beat.sh` + `ward-revive.sh` | The watcher lane's runtime: `PROMPT.md`, `WATCH.md`, `ledger.jsonl`, `revive.jsonl`, `spend.jsonl`, `beat.log`, `state/`. Guide `features/warden.md` |
 
 ---
 
@@ -110,67 +133,81 @@ A common decision when writing files inside `~/.claude/`:
 
 <!-- AUTO-GENERATED BELOW — regenerated by scripts/folders-index.sh; do not hand-edit -->
 
-## Census (auto-generated 2026-07-16 16:57)
+## Census (auto-generated 2026-09-05 13:44)
 
 | Folder | Size | Files | Subdirs | Last touched |
 |---|---|---|---|---|
-| `affirm/` | 400K | 4 | 3 | 2026-07-15 |
-| `agents/` | 8.0K | 1 | 0 | 2026-01-29 |
-| `archive/` | 1.3G | 1 | 1 | 2026-07-16 |
-| `assets/` | 596M | 4 | 18 | 2026-07-16 |
+| `adapters/` | 20K | 0 | 1 | 2026-08-15 |
+| `affirm/` | 656K | 4 | 3 | 2026-08-25 |
+| `agents/` | 16K | 3 | 0 | 2026-08-11 |
+| `archive/` | 4.8G | 1 | 1 | 2026-09-05 |
+| `assets/` | 944M | 4 | 19 | 2026-09-05 |
 | `atone-snapshots/` | 7.9M | 1 | 16 | 2026-05-26 |
-| `atone/` | 15M | 13 | 7 | 2026-07-16 |
+| `atone/` | 186M | 14 | 7 | 2026-09-05 |
 | `auto-continue/` | 0B | 0 | 0 | empty |
-| `backups/` | 960K | 5 | 0 | 2026-07-16 |
-| `cache/` | 520K | 3 | 2 | 2026-07-16 |
-| `checkpoints/` | 1.7M | 166 | 1 | 2026-07-16 |
-| `claudew/` | 160K | 12 | 3 | 2026-07-16 |
+| `backups/` | 1.1M | 5 | 0 | 2026-09-05 |
+| `cache/` | 700K | 3 | 2 | 2026-09-05 |
+| `checkpoints/` | 17M | 428 | 1 | 2026-09-05 |
+| `claudew/` | 164K | 12 | 3 | 2026-09-03 |
 | `code/` | 44K | 2 | 2 | 2026-05-01 |
-| `conventions/` | 224K | 20 | 1 | 2026-07-13 |
-| `daemon/` | 8.0K | 2 | 1 | 2026-07-06 |
-| `dev-servers/` | 12K | 3 | 0 | 2026-07-14 |
-| `features/` | 180K | 29 | 0 | 2026-07-16 |
+| `conventions/` | 296K | 27 | 1 | 2026-09-01 |
+| `cron-duties/` | 48K | 12 | 0 | 2026-09-05 |
+| `daemon/` | 12K | 2 | 2 | 2026-09-05 |
+| `deployq/` | 24K | 0 | 4 | 2026-08-27 |
+| `dev-servers/` | 72K | 5 | 1 | 2026-09-05 |
+| `features/` | 232K | 33 | 0 | 2026-09-02 |
+| `feedback/` | 0B | 0 | 0 | empty |
 | `fiber-actions/` | 24K | 0 | 2 | 2026-07-04 |
-| `file-history/` | 100M | 0 | 119 | 2026-07-16 |
+| `file-history/` | 244M | 0 | 346 | 2026-09-05 |
+| `git-hooks/` | 44K | 11 | 0 | 2026-07-28 |
+| `goals/` | 208K | 52 | 0 | 2026-09-05 |
+| `groups/` | 0B | 0 | 0 | empty |
 | `guidance/` | 4.0K | 1 | 0 | 2026-07-10 |
-| `hinters/` | 72K | 15 | 0 | 2026-07-16 |
-| `hooks-feedback-domain/` | 40K | 2 | 2 | 2026-07-16 |
-| `hooks/` | 828K | 3 | 0 | 2026-07-16 |
-| `i-dream/` | 2.3M | 5 | 7 | 2026-07-16 |
-| `ide/` | 8.0K | 2 | 0 | 2026-07-16 |
-| `jobs/` | 4.0K | 1 | 0 | 2026-07-06 |
-| `ledger/` | 332K | 10 | 0 | 2026-07-16 |
+| `hinters/` | 112K | 24 | 0 | 2026-09-05 |
+| `hooks-feedback-domain/` | 176K | 2 | 2 | 2026-09-03 |
+| `hooks/` | 5.8M | 3 | 0 | 2026-09-05 |
+| `i-dream/` | 15M | 9 | 8 | 2026-09-05 |
+| `ide/` | 4.0K | 1 | 0 | 2026-08-31 |
+| `jobs/` | 148K | 2 | 2 | 2026-09-05 |
+| `kanban/` | 5.7M | 70 | 2 | 2026-09-05 |
+| `ledger/` | 2.8M | 10 | 0 | 2026-09-05 |
 | `llm-mini-state/` | 108K | 2 | 0 | 2026-05-04 |
-| `logs/` | 27M | 12 | 1 | 2026-07-16 |
-| `memory-domain/` | 156K | 4 | 2 | 2026-07-16 |
+| `logs/` | 21M | 24 | 1 | 2026-09-05 |
+| `memory-domain/` | 200K | 5 | 2 | 2026-09-05 |
 | `memory/` | 108K | 0 | 1 | 2026-07-09 |
-| `migrations/` | 228K | 34 | 0 | 2026-07-16 |
+| `migrations/` | 340K | 58 | 0 | 2026-09-04 |
 | `mistakes/` | 32K | 3 | 0 | 2026-05-13 |
 | `output/` | 2.3M | 0 | 13 | 2026-05-24 |
-| `paste-cache/` | 548K | 81 | 0 | 2026-07-16 |
-| `personas/` | 212K | 18 | 2 | 2026-07-16 |
-| `pinned/` | 172K | 4 | 3 | 2026-07-16 |
-| `plans/` | 32K | 0 | 1 | 2026-03-10 |
-| `plugins/` | 1.9G | 5 | 3 | 2026-07-16 |
-| `projects/` | 1.5G | 1 | 60 | 2026-07-16 |
-| `proposals-domain/` | 36K | 1 | 2 | 2026-07-16 |
-| `rules/` | 236K | 40 | 0 | 2026-07-16 |
+| `paste-cache/` | 1.1M | 178 | 0 | 2026-09-05 |
+| `personas/` | 392K | 25 | 2 | 2026-09-05 |
+| `pinned/` | 440K | 4 | 3 | 2026-09-05 |
+| `plans/` | 72K | 2 | 1 | 2026-08-31 |
+| `plugins/` | 1.1G | 5 | 3 | 2026-09-05 |
+| `projects/` | 5.4G | 1 | 118 | 2026-09-05 |
+| `proposals-domain/` | 72K | 1 | 2 | 2026-09-05 |
+| `review/` | 8.0K | 2 | 0 | 2026-08-21 |
+| `rules/` | 408K | 64 | 0 | 2026-09-04 |
 | `run/` | 0B | 0 | 1 | empty |
-| `scheduled/` | 328K | 10 | 32 | 2026-07-16 |
-| `scratchpad/` | 24M | 6 | 3 | 2026-07-10 |
-| `scripts/` | 6.2M | 76 | 30 | 2026-07-16 |
-| `session-env/` | 0B | 0 | 478 | empty |
-| `session-notes/` | 96K | 23 | 0 | 2026-07-16 |
-| `sessions-domain/` | 280K | 4 | 2 | 2026-07-16 |
-| `sessions/` | 28K | 7 | 0 | 2026-07-16 |
-| `shell-logs/` | 9.3M | 106 | 0 | 2026-07-16 |
-| `shell-snapshots/` | 1.6M | 11 | 0 | 2026-07-16 |
-| `skills/` | 87M | 7 | 77 | 2026-07-16 |
-| `style/` | 28K | 3 | 1 | 2026-07-16 |
-| `subconscious/` | 158M | 7 | 9 | 2026-07-16 |
-| `tasks/` | 8.4M | 995 | 170 | 2026-07-16 |
-| `teams/` | 88K | 0 | 13 | 2026-07-16 |
-| `telemetry/` | 1.4M | 3 | 0 | 2026-06-26 |
-| `tools/` | 14M | 0 | 1 | 2026-04-06 |
-| `topics/` | 292K | 43 | 0 | 2026-07-16 |
-| `widgets/` | 727M | 2 | 2 | 2026-07-16 |
+| `scheduled/` | 312K | 10 | 28 | 2026-09-05 |
+| `scratchpad/` | 24M | 6 | 4 | 2026-09-04 |
+| `scripts/` | 81M | 97 | 50 | 2026-09-05 |
+| `secrets/` | 4.0K | 1 | 0 | 2026-08-28 |
+| `session-env/` | 6.4M | 0 | 1633 | 2026-09-05 |
+| `session-notes/` | 172K | 41 | 0 | 2026-09-03 |
+| `session-state/` | 52K | 13 | 0 | 2026-09-05 |
+| `sessions-domain/` | 2.0M | 5 | 2 | 2026-08-06 |
+| `sessions/` | 56K | 14 | 0 | 2026-09-05 |
+| `shell-logs/` | 29M | 157 | 0 | 2026-09-05 |
+| `shell-snapshots/` | 2.6M | 19 | 0 | 2026-09-05 |
+| `skills-parked/` | 5.7M | 3 | 32 | 2026-08-27 |
+| `skills/` | 80M | 8 | 74 | 2026-09-05 |
+| `style/` | 58M | 251 | 2 | 2026-09-05 |
+| `subconscious/` | 545M | 7 | 9 | 2026-09-05 |
+| `tasks-pins/` | 16K | 4 | 0 | 2026-09-05 |
+| `tasks/` | 49M | 5781 | 327 | 2026-09-05 |
+| `teams/` | 272K | 0 | 22 | 2026-09-05 |
+| `telemetry/` | 3.4M | 16 | 0 | 2026-08-12 |
+| `tools/` | 14M | 0 | 1 | 2026-08-24 |
+| `topics/` | 752K | 88 | 0 | 2026-09-05 |
+| `warden/` | 1.2M | 15 | 3 | 2026-09-02 |
+| `widgets/` | 776M | 5 | 2 | 2026-09-05 |

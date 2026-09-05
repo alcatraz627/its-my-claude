@@ -144,7 +144,7 @@ Collect file paths, titles (first `# Heading` in each file), and file sizes. Exc
 Check `.claude/` for previously generated skill outputs — these contain already-derived
 insights that are more reliable than re-scanning:
 
-- `.claude/project-index.md` — architecture, directory structure, key files
+- `.claude/project-index.md`: architecture, directory structure, key files. Present only in projects that ran the now-parked `/project-index`; skip when absent
 - `.claude/output/` — any HTML reports from `/create-report` runs
 - `_*.claude.md` files in the repo root — arch-qa or other context hand-offs
 

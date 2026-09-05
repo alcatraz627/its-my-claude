@@ -85,8 +85,11 @@ fi
 # --- Nudge: same trigger as before (inline python3 -c with >5 newlines). ---
 [[ "$verb" == "inline" && "$nl" -gt 5 ]] || exit 0
 
-msg="[hint] python3 -c with $nl newlines: tracebacks show \"<string>\" instead of real line numbers. Prefer writing the script to /tmp/<slug>.py (heredoc) then 'python3 /tmp/<slug>.py' — real line numbers in tracebacks, re-runnable, no shell-quote bugs. (mute: touch ~/.claude/.no-inline-py-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
-jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
+# Ledger and heed marker only: registered async on PreToolUse, whose stdout the
+# harness never returns (canary 2026-09-05; owner ruling: strip the payload, keep
+# the telemetry). The heed measurement still works because it reads the NEXT
+# command, not the nudge. To revive the nudge, register synchronous and emit
+# additionalContext here.
 printf '%s' "$sid8" > "$MARK" 2>/dev/null || true    # arm heed detection for the next python run
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-tmp-py-over-inline --action nudge --heeded unknown >/dev/null 2>&1 || true
 exit 0

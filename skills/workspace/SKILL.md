@@ -13,7 +13,7 @@ A workspace doc is a session-scoped Todos/Notes/Doc-Links/Decisions file at `<pr
 Where it slots in:
 - **`/core-dump`** reads `_active.md`, synthesizes proposed updates (todos done, new todos, notes append, doc links, decisions), shows a diff to the user, applies on confirmation. Never blind overwrite.
 - **`/catchup`** reads `_active.md` first when restoring. Surfaces Todos prominently as the immediate next steps.
-- **`/forgotten-todos`** ingests Todos via the dream pipeline → cross-session unfinished-todo surfacing.
+- **The dream pipeline** ingests Todos → cross-session unfinished-todo surfacing in the SessionStart briefing (the `/forgotten-todos` browse skill is parked, mig 0048; the ingestion still runs).
 
 ## When to use
 

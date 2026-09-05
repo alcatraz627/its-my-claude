@@ -19,7 +19,7 @@ Run `/core-dump mini` against a past Claude Code session transcript without ente
 ## When NOT to use
 
 - The session is still active in another terminal — use `/core-dump` from there
-- You just want a quick read of the transcript — use `/past-sessions`
+- You just want a quick read of the transcript. Use `/revive` to pick it, or run `bash ~/.claude/skills-parked/past-sessions/scripts/list-sessions.sh` by path (`/past-sessions` itself is parked)
 
 ## Usage
 

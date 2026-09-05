@@ -6,9 +6,15 @@ triggers:
   - phrase:"one-shot"
   - phrase:"just one-shot it"
 related: [communication.md, todo-discipline.md, exercise-based-verification.md]
+paths:
+  # autoload opt-out (gcc-map v4 rec 7, owner D4a, 2026-09-05): the CLAUDE.md Tier-0
+  # brief carries the rule and the owner's quote; the body adds provenance and links,
+  # disclosed on demand from rules/00-index.md. Sentinel below never matches a real
+  # file. Revert by deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
-updated: 2026-06-19
+updated: 2026-09-05
 stale_after_days: 120
 ---
 

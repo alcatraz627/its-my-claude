@@ -54,6 +54,11 @@ HINTS=""
 for hinter in "$HINTER_DIR"/*.sh; do
     [[ -f "$hinter" ]] || continue
     [[ -x "$hinter" ]] || continue
+    # A hinter's test suite sits beside it as NN-slug.test.sh and matches the
+    # glob above. Skip it by name, not by mode: an executable test file would
+    # otherwise run on every prompt of every session (it happened, 2026-08-20
+    # to 2026-09-05). Guard: scripts/hint-injector.test.sh
+    [[ "$hinter" == *.test.sh ]] && continue
 
     # Run hinter (time-capped), feed prompt via stdin
     hint=$(echo "$PROMPT" | _cap_hinter "$hinter" || true)

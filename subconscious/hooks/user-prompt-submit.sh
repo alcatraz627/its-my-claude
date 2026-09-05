@@ -1,9 +1,11 @@
 #!/bin/bash
 # i-dream: UserPromptSubmit hook — sentiment signals + compiled-intervention
 # hints (felt-metabolism Phase 2).
-# NOTE: stdout is injected into the user message by Claude Code. This script
-#       emits NOTHING to stdout except the interpreter's single
-#       additionalContext JSON for LIVE intervention hints.
+# NOTE: this hook is registered async, and an async UserPromptSubmit hook's stdout
+#       never reaches the model (verified 2026-09-05). It therefore emits NOTHING
+#       to stdout; LIVE intervention hints reach the model through the sync
+#       PreToolUse sibling, and every match is still written to the would-fire
+#       ledger here.
 # No daemon-up guard here on purpose: the sentiment send needs the socket,
 # but the intervention interpreter is file-only and must run regardless.
 SOCKET="/Users/alcatraz627/.claude/subconscious/daemon.sock"
@@ -140,10 +142,13 @@ try:
                             "ts": int(time.time())}) + "\n")
             except Exception:
                 pass
-        if live_hits:
-            lines = ["[i-dream:%s] %s" % (str(it.get("id", ""))[:8], it.get("body", ""))
-                     for it in live_hits[:2]]
-            print(json.dumps({"additionalContext": "\n".join(lines)}))
+        # LIVE hints used to print one additionalContext JSON here. This hook is
+        # registered async on UserPromptSubmit and the harness never returns that
+        # stdout (canary 2026-09-05: zero deliveries in any transcript), so the
+        # owner ruled to strip the payload and keep the ledger above. The sync
+        # PreToolUse sibling (pre-tool-use.sh) still delivers hints at tool time.
+        # To revive prompt-time hints, register this hook synchronous and print
+        # json.dumps({"additionalContext": ...}) here again.
 except Exception:
     pass
 PYEOF

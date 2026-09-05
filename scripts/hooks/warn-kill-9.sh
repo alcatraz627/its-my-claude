@@ -5,8 +5,9 @@
 # (subconscious, statusline-daemon, llm-mini ollama), this corrupts
 # in-flight writes. SIGTERM first lets the process flush + close gracefully.
 #
-# Non-blocking: injects additionalContext to the agent (which surfaces it to the
-# user). Mute: touch ~/.claude/.no-kill-9-hint
+# Non-blocking. Since 2026-09-05 a fire is recorded to the warn ledger only: the hook
+# is registered async on PreToolUse and that stdout never reaches the model.
+# Mute: touch ~/.claude/.no-kill-9-hint
 
 set -uo pipefail
 [[ -f "$HOME/.claude/.no-kill-9-hint" ]] && exit 0
@@ -28,8 +29,9 @@ if echo "$CMD" | rg -q '(^|\s|;|&&|\|\|)\s*kill\s+(-9|-SIGKILL)\b' 2>/dev/null; 
         ! printf '%s' "$CMD" | hook_cmd_skeleton \
           | rg -q '(^|\s|;|&&|\|\|)\s*kill\s+(-9|-SIGKILL)\b' 2>/dev/null && exit 0
     fi
-    msg="[hint] \`kill -9\` (SIGKILL) skips cleanup — daemons writing files may corrupt in-flight writes. Try SIGTERM first: 'kill <pid>' (default, lets it flush), then 'sleep 1; kill -9 <pid>' only if still running. (mute: touch ~/.claude/.no-kill-9-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
-    jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
+    # Ledger only: registered async on PreToolUse, whose stdout the harness never
+    # returns (canary 2026-09-05; owner ruling: strip the payload, keep the telemetry).
+    # To revive the nudge, register synchronous and emit additionalContext here.
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook warn-kill-9 --action nudge --heeded unknown >/dev/null 2>&1 || true
   fi
 fi

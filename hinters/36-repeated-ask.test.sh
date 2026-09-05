@@ -4,6 +4,9 @@
 set -uo pipefail
 H=/Users/alcatraz627/.claude/hinters/36-repeated-ask.sh; pass=0; fail=0
 ok(){ pass=$((pass+1)); echo "  ok    $1"; }; ko(){ fail=$((fail+1)); echo "  FAIL  $1"; }
+# Sandbox HOME (same shape as 37-goal-standing.test.sh): the mute file is HOME-relative,
+# so the mute test used to flip ~/.claude/.no-repeated-ask machine-wide for a moment.
+T=$(mktemp -d); REAL="$HOME"; export HOME="$T"; mkdir -p "$HOME/.claude"
 export CLAUDE_HINT_SID=t36test1; ST=/tmp/claude-repeatask-t36test; trash "$ST"* 2>/dev/null || true
 run(){ echo "$1" | bash "$H"; }
 [ -x "$H" ] && ok "hinter carries the x bit (hint-injector skips 644 silently)" || ko "not executable"
@@ -14,4 +17,4 @@ run "No I asked you IF the session start hook entry was firing, not to rewrite i
 run "again: fix the session start hook entry" | rg -q "repeated-ask" && ok "'again:' arm fires (I5)" || ko "again: arm"
 [ -z "$(run "<system-reminder>session start hook entry")" ] && ok "machine turn: quiet" || ko "machine turn fired"
 touch "$HOME/.claude/.no-repeated-ask"; [ -z "$(run "I asked you about the session start hook entry")" ] && ok "mute honoured" || ko "mute"; trash "$HOME/.claude/.no-repeated-ask"
-trash "$ST"* 2>/dev/null || true; echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]
+export HOME="$REAL"; trash "$ST"* "$T" 2>/dev/null || true; echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

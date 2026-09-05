@@ -425,5 +425,5 @@ Print to terminal:
 
 ## Related Skills
 
-- `/project-index` — Generates the markdown that feeds into this skill
-- Full pipeline: `/project-index` → auto-calls `/create-report .claude/project-index.md`
+- `/project-index` (parked, mig 0048) used to generate `.claude/project-index.md` and
+  auto-call this skill on it. Any markdown file works as input today

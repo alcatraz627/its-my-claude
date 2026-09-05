@@ -30,8 +30,9 @@ if echo "$CMD" | rg -q '(^|\s|;|&&|\|\|)\s*find\s+\S+\s+-name\s+\S+' 2>/dev/null
       ! printf '%s' "$CMD" | hook_cmd_skeleton \
         | rg -q '(^|\s|;|&&|\|\|)\s*find\s+\S+\s+-name\s+\S+' 2>/dev/null && exit 0
   fi
-  msg="[hint] \`find -name\` → consider the Glob tool: faster for shallow patterns, sorts by mtime. Critical: the Bash sandbox SILENTLY no-ops find on /tmp + ~/ paths (0 results instead of erroring) — Glob works correctly there. (mute: touch ~/.claude/.no-find-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
-  jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
+  # Ledger only: registered async on PreToolUse, whose stdout the harness never
+  # returns (canary 2026-09-05; owner ruling: strip the payload, keep the telemetry).
+  # To revive the nudge, register synchronous and emit additionalContext here.
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-glob-over-find --action nudge --heeded unknown >/dev/null 2>&1 || true
 fi
 exit 0

@@ -91,7 +91,28 @@ Run these repeatable checks. They are necessary, not sufficient.
 4. **Tier / paths drift:** rules with a `tier:` implying on-demand but no `paths:` lever,
    so they load unconditionally; and rules whose `paths:` do not match their real scope.
 5. **Derived-view freshness:** each auto-generated view versus its source (regenerate to
-   compare; never hand-edit).
+   compare; never hand-edit). Compare AGE too, not only rows: a view whose stamp is older
+   than the newest mtime in the tree it describes is stale even when its row count
+   happens to match (FOLDERS.md went 51 days this way, v4 D4).
+6. **Glob-loader hygiene:** for every loader that picks up files by glob rather than by
+   name (`hint-injector.sh` over `hinters/*.sh`, any `for f in dir/*` in a hook), list the
+   files it will actually execute and flag non-conforming names: `*.test.sh`, backups,
+   editor swaps, anything with the execute bit that was never registered. Four executable
+   test suites ran on every prompt for 16 days before v4 caught it (D1).
+7. **Present-sentinel inventory:** list every `.no-*` / `*-off` mute file present at
+   `~/.claude/`, then for each find the rule or feature doc that promises the gate it
+   mutes. A rule that says "enforced by hook X" while X's mute file is present is a
+   divergence; report the pair and the sentinel's age (v4 D2: five present, two muting
+   always-loaded rules).
+8. **Declared thresholds:** grep the docs for every self-declared numeric cap (line
+   caps, entry caps, day limits, "keep last N", byte thresholds) and measure each
+   against disk. v3 proposed this; v4 ran it and found 8 of 12 in breach (D3, D7,
+   `runtime-notes.md` caps). Report as declared / measured / breach.
+9. **Context-vs-disk, by content:** the set check (files in context equal files without
+   `paths:` on disk) passes even when a file was edited after the session started.
+   Hash or diff one or two always-on files against the copy in context; report which
+   snapshot (HEAD vs working tree) every count in the map was taken from (critic A1,
+   A2, C4).
 
 ## Phase 5: The blindspot pass (the ceiling, anti-pre-fab)
 

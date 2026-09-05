@@ -330,12 +330,13 @@ See `reference.md` in this directory for:
 
 ## Related Skills
 
-- `/project-index` - Build a full project index first for better context (run this first!)
 - `/code-review` - Review specific implementations found during Q&A
+- `/project-index` is parked (mig 0048); this skill maps structure itself now
 
 ## Tips
 
-- **First run `/project-index`** to build context about the project
+- **Orient from the tree first** (`fd`, `rg`, the package manifest); the old "run
+  `/project-index` first" step no longer applies
 - Keep a mental model of common patterns (e.g., "API route → service layer → DB")
 - Use the project index (if available) as a starting reference
 - When explaining flows, think: UI → API → Logic → Data → Response

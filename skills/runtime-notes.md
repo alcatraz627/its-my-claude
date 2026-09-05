@@ -16,6 +16,118 @@
 
 ---
 
+## core-dump: end-of-week halt after gcc-map v4 follow-through (gcc-map-7e, 2026-09-05 17:35)
+
+**Purpose:** full checkpoint for a session that finished one stream (gcc-map v4 batch, uncommitted) and planned a second (pivotal docs review) whose adversarial review died with a process restart.
+
+**Insights:**
+
+1. A process restart kills in-process seats and wipes the session scratchpad, but subagent transcripts under `projects/<slug>/<sid>/subagents/` survive. Check the transcript's longest assistant text block before declaring a seat's work lost; here it showed the seat had died on its first line, so the task went back to pending honestly.
+2. The template literal `AGENT: none — go` trips the prose gate on Write. Use `AGENT: none, go`.
+3. `ls` of the atone verdicts directory with options after the path fails under zsh; put options first or use `rg` on the directory listing.
+4. When the owner asks for the task table at halt time, render it from `task-table.sh` first and reset any row whose seat died before believing the store's "running".
+
+---
+
+---
+
+## validate: second seat on task #59 refuted a class claim the ledger could not see · 2026-09-05 16:15
+**Purpose:** Route the validation of #59 (renderer clips, empty meter, wrapped title) and record what the second seat found.
+
+**Insights:**
+1. A parity ledger built from the call sites the change touched cannot fail on a call site it never listed. The seat found a fourth hard slice on the --refs path by grepping the whole file for the pattern class; the author's ledger had ten rows and none covered --refs. Grep the file for the class before claiming the class closed.
+2. "Proven by mutation" must say where the mutant lives. Mutants run from a scratch script are real proof of the moment, not a guard the suite carries; the row's note conflated the two and the seat read it as false. Name the mechanism in the claim.
+3. The seat's Vg answer was worth the dispatch on its own: it named that this row makes the page tell fewer lies while the owner's complaint is about looks, which is the colour call the owner has not yet ruled. A validator that only checks the rows never says that.
+
+---
+
+## catchup: resumed the /tasks re-eval, landed #54 #55 #56 and the audit's V1/V2 · 2026-09-05 13:40
+**Purpose:** Resume from the full dump, build the three prepared rows, and run the owner's mid-turn ask for a cold visual audit of /tasks, re-lensed for a person with six tabs.
+
+**Insights:**
+1. The "resolved by content-match" mislabel had a mechanism, not a wording problem: resolve-store.sh rung 1 returned any store NAMED for the live session, empty included, and the ladder called every resolver answer a content match. Fix the rung and the label together or the wording fix lies again next resume.
+2. A visual audit seat needs a frozen copy of the renderer, because the parent edits the live file while the seat renders; the frozen copy also made the seat's captures reproducible after the fix landed.
+3. An audit by one careful cold reader ranks empty chrome first; the same audit re-lensed for a tab-flipping owner drops it to third and puts tab identity and the owed surface first. Ask for the reader's situation in the brief, not after.
+4. A line claimed inside the body after the last box is gone half the time, because the row loop fills to the cap; anything that must appear when the screen is full belongs in the footer on a line the fixed point reserved.
+5. Case 9's corner mutation is sensitive to band order: re-measure the deciding fixture size after any change to what leads a box (the table is in its comment).
+6. The band-order mutation in a suite must target the expensive band SECOND; the box prices its first band atomically, so a mutant on the band check has nothing to bite if the costly band leads.
+
+---
+
+## gcc-map: deep v4 structure map with visual sheets [gcc-map-3e], 2026-09-05 12:20
+
+**Purpose:** Second `--deep` map of `~/.claude`: measure load channels and the doc graph before reading the indices, diff, run the battery plus the four checks v3 proposed, fan out five lens seats and a critic, write MAP.md and a d3 companion page.
+
+**Insights:**
+
+1. Read the session's own injected UserPromptSubmit context as evidence first. The top finding (four `hinters/*.test.sh` files executing on every prompt) was visible in the first prompt's hint block as `pass=8 fail=0` lines; measuring it later cost one `ls -l`.
+2. Verify lens headline claims against the file before folding them in. One lens claim (the fable sentinel lifting a second check) died on a single `rg -B3 -A3`; another (per-skill runtime-notes references broken) was reversed by a sibling lens reading the guard clause. Both would have shipped as findings.
+3. The regenerated indices were exactly right and every hand-maintained one had drifted, same as v3. Skip re-verifying `rules/00-index.md` and `skills/00-index.md` row by row next time; spend the calls on FOLDERS, NAMESPACE, LOOKUP, MIGRATIONS.
+4. The chrome-devtools MCP profile was held by another session; Playwright worked but blocks `file://`, needs an `http://` origin (claim a 62xx port with `ports.sh claim <name> --tier 3`, `free` it after) and only writes screenshots under `~/.claude/.playwright-mcp/`.
+5. The artifact gate blocks publishing when the owner asked for visuals but not a hosted page. Write the HTML into the report dir and offer publishing in one line; do not retry the publish.
+6. Run `validate_palette.js` before drawing: the first hand-picked palette failed three checks in both themes; the reference palette's first four slots passed on the page's own surfaces in one run each.
+7. The `git ls-tree` series the churn lens produced (always-on bytes at five revisions) is the right growth instrument; the parent's two-point v3-vs-now comparison hid that the 09-01 diet never brought the total below its pre-diet mark.
+
+---
+
+---
+
+## core-dump: full dump at 96% context after the /tasks and /goal re-eval · 2026-09-05 10:40
+**Purpose:** Hand a fresh window the exact remainder (#54 #55 #56) with the parity ledger and the six owner calls, after a night of landing defaults across wakes.
+
+**Insights:**
+1. Three mini dumps with addenda carried the session through 82% to 96% context; the full dump at the end consolidated their caveats by hand because the stem-based caveat diff cannot match a mini to a full.
+2. The wake loop kept working at 85-95% context by landing one contained, suite-guarded piece per fire and refusing multi-file changes; the one crash came from a heredoc edit launched into suites without a smoke render, now a standing constraint.
+3. The Resume Contract's Live commitments needed a clause ledger for a two-clause goal (all-done and ack), because the ack clause is the one a resume would otherwise round away.
+
+---
+
+## core-dump: mini dump mid re-eval, two review seats out · 2026-09-05 02:47
+**Purpose:** Checkpoint the /tasks and /goal re-eval at the boundary where two adversarial seats were the only work in flight.
+
+**Insights:**
+1. `goal.sh harness` reported "not armed (last /goal was clear)" for the live session while the harness Stop-hook notice proved a goal was armed. Second live instance in one night (first: the fabad34c checkpoint). The mini dump recorded BOTH and wrote the goal to the gcc store with `--by owner --via core-dump`, which is the safety net the skill prescribes when harness and gcc disagree.
+2. A checkpoint that predates the session's own uncommitted work is a trap the catchup "reality drift" step does not catch: check the mtime of the key anchor against the checkpoint timestamp before rebuilding anything. Two hours were lost to a parallel build of a renderer this same session had already landed pre-/clear.
+3. The seal render with `--receipt` is the right closer for a mini dump; the `emitted` rows carried the four report files so nothing depends on scrollback.
+
+---
+
+**Purpose:** Build /deploy-parity-testing from a notes file the dispatcher wrote first (walmart-on-foundry phases 2 to 4), spec-first, one review seat.
+
+**Insights:**
+
+1. Writing the planning and execution notes as their own file BEFORE invoking create-skill made the skill a compression pass instead of a recall pass; the seat found zero pasted input from the owner because the owner's words never entered the draft.
+2. The seat's real catch was a worked example frozen as a requirement: four off-box rows from one project written as THE table. Fix was to name the class each row belongs to and label the four as one derivation. Same shape as examples-as-quotas, one level up.
+3. "The push gate consumes one sentinel" read as house dialect to the seat; a skill leaving the gcc needs the mechanism linked or restated tool-agnostically.
+
+---
+
+## session: core-dump full, forge-console walmart wrap [catch-forge-9a] — 2026-09-04
+
+Purpose: full checkpoint at the phase-2 to phase-3 boundary of the walmart build, on the owner's "wrap up all, show me the next plan, then /core-dump".
+
+Insights:
+- A full dump at 83 percent context fits when the mini dumps were kept current all day: the full one is mostly promotion of the mini's fields into the template, not fresh synthesis.
+- The caveat diff needs a stem match by default; this session renamed its dump stem (build -> wrap), so the diff was run against the earlier file by name. Rename stems deliberately and diff explicitly when you do.
+- The render's data JSON must not sit in /tmp when the write guard treats the scratchpad as the only sanctioned temp dir; the scratchpad path works with trace.sh unchanged.
+
+---
+
+---
+
+## session: catchup forge-console walmart kickoff [catch-forge-9a / forge-console] — 2026-09-03
+
+Purpose: resume forge-console off the 13:30 dump for the walmart buildout, flaw-pass first.
+
+Insights:
+- The cron ledger keys liveness on the harness pid, and /clear keeps the pid. A cron cancelled before the /clear therefore still reads LIVE in the ledger; CronList is the instrument for "armed in this process", the ledger only says "the process that armed it is alive". Check both before re-arming.
+- The compound collector command (cron-duty + pm2 + curl + kanban + goal in one line) was denied by the permission layer; the same five as separate calls all ran. Split collectors from the start.
+- The local runner pm2 name is foundry-runner after the rename; it was stopped and came up on `pm2 start foundry-runner` with /health 200 in four seconds.
+
+---
+
+---
+
 ## session: repo audit across six axes, nothing changed [audit-pick-7a] · 2026-09-03
 
 **Purpose:** owner asked for a self-written audit brief (usability, completeness, consistency, waste, discoverability, agent self-serve) over every category in the repo, run inline. Brief and report under `.claude/output/20260903-repo-audit/`, decision page `vb-repo-audit-0903` for the eight owner calls.

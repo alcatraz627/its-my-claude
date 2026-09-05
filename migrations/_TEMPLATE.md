@@ -34,6 +34,16 @@ Before declaring complete, the following must pass:
 - [ ] No new entries in `~/.claude/logs/<relevant>.log` showing failures
 - [ ] (anything else specific to this migration)
 
+## Indices updated
+
+A structural change is not complete until the maps that describe the tree agree with it. Name each one touched, or write "not affected" with the reason. Four of the five migrations before 0057 named none, and the directory 0057 created was invisible to every index for a month (gcc-map v4, 2026-09-05).
+
+- [ ] `MIGRATIONS.md` row added
+- [ ] `FOLDERS.md`: census regenerated (`scripts/folders-index.sh`) AND an Intent row for any new or renamed top-level directory
+- [ ] `NAMESPACE.md`: the cluster that claims any new path, or the "not yet clustered" list
+- [ ] `LOOKUP.md`: a row for any new doc, script, or hook a reader would look up
+- [ ] `rules/00-index.md` / `skills/00-index.md` regenerated if a rule or skill moved
+
 ## Rollback
 
 How to undo, if needed:

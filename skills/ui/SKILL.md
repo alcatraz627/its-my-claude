@@ -29,7 +29,7 @@ user leaves with, not what they typed.
 | "new page", "new surface", nothing like it exists yet | **greenfield** | `/ui-direction` first, then `frontend-design` to execute |
 | "make this a shared component", "every page hand-rolls this", "promote it into the kit" | **promote** a primitive | `/build-ui` (its primitive-promotion class) |
 | "this is confusing", "why is this stupid", "it annoys me" | **diagnose** confusion | `/ui-gripe` |
-| "is this done", "check it", "did I break anything" | **verify** | `/ui-categorical-check`, plus `/vis-compare` when a reference image exists, plus `/visual-regression` when a stored baseline exists |
+| "is this done", "check it", "did I break anything" | **verify** | `/ui-categorical-check`, plus `/vis-compare` when a reference image exists, plus `/ui-loop` (`see reshoot`) when a stored baseline exists (`/visual-regression` is parked) |
 
 Say the intent and the target out loud in one line before invoking anything, so
 a wrong read costs one sentence instead of a whole run.
@@ -163,7 +163,7 @@ often is mis-classifying, and its intent table is what needs the fix.
 
 - `/build-ui` conversion planning · `/ui-direction` research and direction
 - `/ui-gripe` confusion forensics · `/ui-categorical-check` bug classes
-- `/vis-compare` fidelity against a reference · `/visual-regression` baselines
+- `/vis-compare` fidelity against a reference · `/ui-loop` baselines and re-shoots
 - `frontend-design` (plugin) greenfield execution · `/designer-reviewer` scored
   aesthetic critique, human-invoked by design
 - `/plan` the same shape for planning, routing on six needs · `/validate` the

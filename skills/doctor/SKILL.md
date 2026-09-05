@@ -460,4 +460,4 @@ gum_complete "doctor" \
 - `~/.claude/scripts/rotation/prune-backups.sh` — backup retention helper (Step 5 above)
 - `~/.claude/scripts/validate-memory.sh` — deep-check memory for stale file references. Not run by default (scans every `memory/*.md`); run manually when auditing memory rot: `bash ~/.claude/scripts/validate-memory.sh`
 - `~/.claude/scripts/propose.sh` — file a proposal for any improvement `/doctor` reveals but cannot fix
-- `/past-sessions` — for inspecting prior conversation transcripts
+- `/revive` (full rehydration) or `/catchup` (checkpoint briefing) for prior sessions. `/past-sessions` is parked

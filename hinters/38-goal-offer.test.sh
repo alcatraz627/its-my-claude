@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Tests for 38-goal-offer.sh. Mirrors 37-goal-standing.test.sh's shape.
 set -uo pipefail
+# Sandbox HOME (same shape as 37-goal-standing.test.sh): the goal store and the mute
+# file are HOME-relative, so the goal-set and mute cases used to touch the real ones.
+T=$(mktemp -d); REAL="$HOME"; export HOME="$T"; mkdir -p "$HOME/.claude/goals" "$HOME/.claude/scripts/goal" "$HOME/.claude/hinters"
+cp /Users/alcatraz627/.claude/scripts/goal/goal.sh "$HOME/.claude/scripts/goal/"
+cp /Users/alcatraz627/.claude/hinters/38-goal-offer.sh "$HOME/.claude/hinters/"
 H="$HOME/.claude/hinters/38-goal-offer.sh"
 pass=0; fail=0
 ck(){ if [ "$2" = "$3" ]; then echo "  ok    $1"; pass=$((pass+1)); else echo "  FAIL  $1 (got '$3' want '$2')"; fail=$((fail+1)); fi; }
@@ -37,6 +42,7 @@ S=goaloffer-hhhh-hhhh; clean "$S"
 touch "$HOME/.claude/.no-goal-hint"
 ck "mute honoured"                        0 "$(run "$S" 'lets build the export pipeline')"
 rm -f "$HOME/.claude/.no-goal-hint"; clean "$S"
+export HOME="$REAL"; trash "$T" 2>/dev/null || true
 
 echo "---- pass=$pass fail=$fail ----"
 [ "$fail" -eq 0 ]

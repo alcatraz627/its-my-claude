@@ -12,11 +12,19 @@
 #   - flock-guarded with graceful degradation (macOS has no stock flock).
 #
 # Threshold override: WAL_ROTATE_THRESHOLD=<bytes>.
+#
+# The legacy markdown WAL (wal.md) rotates here too, at its own threshold
+# (WAL_MD_ROTATE_THRESHOLD, default 2MB). Three hooks still append to it and
+# five readers parse it, so it is kept, but until 2026-09-05 nothing ever
+# rotated it and it reached 2.6 MB as the largest file in the config root.
+# Rotation keeps the two-line header the readers expect (title + policy comment).
+# Guard: rotate-wal.test.sh beside this file.
 
 set -uo pipefail
 
 ARCHIVE_DIR="$HOME/.claude/assets/backups/wal-archive"
 THRESHOLD_BYTES=${WAL_ROTATE_THRESHOLD:-$((5 * 1024 * 1024))}
+MD_THRESHOLD_BYTES=${WAL_MD_ROTATE_THRESHOLD:-$((2 * 1024 * 1024))}
 
 # Parse Stop-hook JSON from stdin to get the CWD (may be empty when run standalone).
 STDIN_JSON=""
@@ -67,13 +75,50 @@ rotate_one() {
   ) 9>>"$LOCK" || true
 }
 
+# Same idea for the markdown WAL. The header is the first two lines
+# ("# WAL — …" and the keep-policy comment); the body after them is archived
+# and the header is written back so /catchup and the shell-mem hooks find the
+# file shape they expect.
+rotate_md() {
+  local LOG="$1"
+  local LABEL="$2"
+
+  [ -f "$LOG" ] || return 0
+
+  local size
+  size=$(stat -f%z "$LOG" 2>/dev/null || stat -c%s "$LOG" 2>/dev/null || echo 0)
+  [ "$size" -lt "$MD_THRESHOLD_BYTES" ] && return 0
+
+  local LOCK="${LOG}.lock"
+
+  (
+    flock -x 9 2>/dev/null || true
+
+    size=$(stat -f%z "$LOG" 2>/dev/null || stat -c%s "$LOG" 2>/dev/null || echo 0)
+    [ "$size" -lt "$MD_THRESHOLD_BYTES" ] && exit 0
+
+    local header archive stamp
+    header=$(head -2 "$LOG")
+    stamp=$(date -u +%Y-%m-%d)
+    archive="$ARCHIVE_DIR/wal-md-${LABEL}-${stamp}.md.gz"
+    if [ -f "$archive" ]; then
+      archive="$ARCHIVE_DIR/wal-md-${LABEL}-${stamp}-$(date -u +%H%M%S).md.gz"
+    fi
+
+    gzip -c "$LOG" > "$archive" && printf '%s\n' "$header" > "$LOG"
+    echo "[rotate-wal] archived $(du -h "$archive" | cut -f1) -> $archive" >&2
+  ) 9>>"$LOCK" || true
+}
+
 # Always try global WAL
 rotate_one "$HOME/.claude/wal.jsonl" "global"
+rotate_md  "$HOME/.claude/wal.md"    "global"
 
-# If we have a CWD and it has a .claude/wal.jsonl, rotate that too
-if [ -n "$SESSION_CWD" ] && [ -f "$SESSION_CWD/.claude/wal.jsonl" ]; then
+# If we have a CWD and it has a .claude/wal.*, rotate that too
+if [ -n "$SESSION_CWD" ]; then
   PROJECT_LABEL=$(basename "$SESSION_CWD" | tr -c 'a-zA-Z0-9_-' '_' | head -c 40)
-  rotate_one "$SESSION_CWD/.claude/wal.jsonl" "$PROJECT_LABEL"
+  [ -f "$SESSION_CWD/.claude/wal.jsonl" ] && rotate_one "$SESSION_CWD/.claude/wal.jsonl" "$PROJECT_LABEL"
+  [ -f "$SESSION_CWD/.claude/wal.md" ]    && rotate_md  "$SESSION_CWD/.claude/wal.md"    "$PROJECT_LABEL"
 fi
 
 exit 0

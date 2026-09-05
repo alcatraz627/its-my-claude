@@ -10,9 +10,17 @@ triggers:
   - skill:readme
   - skill:write-docs
 related: [rules/comments.md, rules/pushback-and-self-criticism.md, conventions/doc-writing.md, rules/machine-token-where-human-words-belong.md]
+paths:
+  # scoped (gcc-map v4 rec 7, owner D5a, 2026-09-05): the depth here (the tells
+  # catalogue, the fresh-reviewer step) is for authoring docs. Chat-reply register
+  # stays covered every session by the CLAUDE.md brief plus the prose-smell Stop hook.
+  - "**/*.md"
+  - "**/*.mdx"
+  - "**/README*"
+  - "**/*.txt"
 tier: 2
 category: rules
-updated: 2026-09-01
+updated: 2026-09-05
 stale_after_days: 120
 ---
 

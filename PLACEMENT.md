@@ -75,7 +75,7 @@ they stop paying always-on budget.
 `features/` and `conventions/` are genuinely on-demand (the loader never pulls them
 until an agent opens the file), so the tier model works as intended there; the
 special case is `rules/`. Measured cost and the full picture live in
-`assets/reports/20260704-gcc-structure-map/MAP.md` (session tag-skill, 2026-07-04).
+`assets/reports/20260905-gcc-structure-map/MAP.md` (v4, 2026-09-05; v3 of 2026-07-04 sits beside it as the baseline it diffs against).
 
 ### Decision heuristics
 
@@ -195,5 +195,6 @@ Triggers are **advisory** — they guide agent self-selection when scanning LOOK
 - **CLAUDE.md never exceeds 200 lines** — if an edit would push past, something else must move out first
 - **Validator:** run `bash ~/.claude/scripts/validate-triggers.sh` after any sub-file add/rename
 - **Rules index:** after adding/renaming/removing a `rules/*.md` file, regenerate the always-on menu with `bash ~/.claude/scripts/rules-index.sh` (it derives from each rule's `brief:`; if a similar rule exists, refine it instead of duplicating)
+- **Folders census:** after creating, renaming, or removing a top-level directory under `~/.claude/`, regenerate the census with `bash ~/.claude/scripts/folders-index.sh` AND add the directory's Intent row to the hand-written table above the marker in `FOLDERS.md`. The census went 51 days without a run once (2026-07-16 to 2026-09-05) and its own heuristic then condemned fourteen live directories as debris. Note the script takes no `-h`: any argument other than `--stdout` regenerates in place
 - **When in doubt:** read this file, read LOOKUP.md, pick the most conservative tier, ask the user
 - **Prior art:** Anthropic Agent Skills (description-based triggering), Cline `.clinerules/` directory. [web reference: `~/.claude/assets/research/20260424-agent-instructions-best-practices.md`]

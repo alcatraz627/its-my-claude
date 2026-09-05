@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-09-03
+updated: 2026-09-05
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-09-03 14:46.
+Regenerated 2026-09-05 17:01.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -50,6 +50,7 @@ Regenerated 2026-09-03 14:46.
 | `decision-wizard` | yes | Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments — a design review, a migration … |
 | `deck` | yes | Turns a source document (or the conversation) into one self-contained HTML slide deck with a synced presenter-notes window, verifies that no slide overflows by measuring … |
 | `deep-research` | yes | Answers a question that needs evidence from outside this machine, by splitting it into claims, researching each in parallel, verifying the load-bearing ones against … |
+| `deploy-parity-testing` | user-only | Runs a parity test cycle when a service moves work to a new execution path (runner, provider, flag): plan rows with a spend class each, a seat brief, a fresh seat's … |
 | `designer-reviewer` | user-only | Reviews UI screenshots against the user's terminal-dashboard aesthetic fingerprints. Gives scored critiques with actionable CSS fixes. Use when reviewing pm2-manage, … |
 | `doctor` | yes | On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirtiness, plus hook/event-log integrity. Use when the user asks "what's wrong", … |
 | `file-gh-issue` | yes | File a MINOR technical issue to the current repo's GitHub Issues, with a human gate. Dry-run by default. Use when an agent surfaces a small technical cleanup worth … |

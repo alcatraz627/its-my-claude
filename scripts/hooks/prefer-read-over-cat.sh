@@ -52,8 +52,12 @@ if echo "$CMD" | rg -q '(^|;|&&|\|\|)\s*cat\s+[^-<|>]\S*\s*(\||$|;|&&)' 2>/dev/n
       ! printf '%s' "$CMD" | hook_cmd_skeleton \
         | rg -q '(^|;|&&|\|\|)\s*cat\s+[^-<|>]\S*\s*(\||$|;|&&)' 2>/dev/null && exit 0
   fi
-  msg="[hint] \`cat <file>\` floods context with the whole file. Prefer the Read tool: Read with offset+limit for partial views (replaces 'cat | head -N'), or Read alone for the full file (line-numbered output for accurate citing). Bash cat is still right for heredoc / redirect / stdin-adapter. (mute: touch ~/.claude/.no-cat-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
-  jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
+  # A fire is recorded to the warn ledger only. This hook is registered async on
+  # PreToolUse, and the harness never returns an async PreToolUse hook's stdout
+  # (canary, 2026-09-05: 0 deliveries in any transcript; owner ruling: strip the
+  # payload, keep the telemetry). To make the nudge visible again, register it
+  # synchronous and emit hookSpecificOutput.additionalContext here.
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-read-over-cat --action nudge --heeded unknown >/dev/null 2>&1 || true
 fi
 
 exit 0

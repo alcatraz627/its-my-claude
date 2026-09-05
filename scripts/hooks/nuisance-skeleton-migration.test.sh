@@ -24,14 +24,26 @@ cd "$(dirname "$0")" || exit 1
 
 pass=0; fail=0
 BARE=$(mktemp -d)                        # a HOME with no hook-common = pre-migration
-trap 'rm -rf "$BARE"' EXIT
+# The bare HOME still carries warn-log.sh: since 2026-09-05 the nuisance hooks
+# record a fire to the warn ledger instead of printing additionalContext (their
+# async PreToolUse stdout never reached the model), so the ledger is how a fire
+# is observed, and the pre-migration control needs the writer too. hook-common
+# stays absent, which is what makes it the control.
+mkdir -p "$BARE/.claude/scripts/hooks"
+cp ./warn-log.sh "$BARE/.claude/scripts/hooks/warn-log.sh"
+STORE=$(mktemp "${TMPDIR:-/tmp}/nuisance-ledger-XXXXXX")
+export WARN_LOG_STORE="$STORE"
+trap 'rm -rf "$BARE" "$STORE"' EXIT
 
 fire() {                                  # fire <hook> <cmd> [home] -> FIRE|SILENT
-  local out
+  # A fire is either stdout (a blocking guard) or a new warn-ledger line (a nudge).
+  local out before after
+  before=$(wc -l < "$STORE" 2>/dev/null || echo 0)
   out=$(printf '%s' "$2" \
         | jq -Rs '{tool_name:"Bash",tool_input:{command:.},cwd:"/tmp"}' \
         | HOME="${3:-$HOME}" bash "./${1}.sh" 2>/dev/null)
-  [ -n "$out" ] && echo FIRE || echo SILENT
+  after=$(wc -l < "$STORE" 2>/dev/null || echo 0)
+  if [ -n "$out" ] || [ "${after:-0}" -gt "${before:-0}" ]; then echo FIRE; else echo SILENT; fi
 }
 
 ok()   { pass=$((pass+1)); echo "  ok   $1"; }

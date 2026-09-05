@@ -24,11 +24,17 @@ rm -f "$MARK"
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
 
-# feed <command> -> runs the hook, returns "NUDGE" if it emitted additionalContext, else "quiet"
+# feed <command> -> runs the hook, returns "NUDGE" if it recorded a nudge, else "quiet".
+# A nudge is a new kind:"warn" line in the ledger. The hook no longer prints
+# additionalContext (async PreToolUse stdout never reaches the model, 2026-09-05),
+# so the ledger is the observable.
+warn_count(){ jq -r 'select(.kind=="warn")' "$STORE" 2>/dev/null | jq -s length; }
 feed(){
-  local out
-  out=$(printf '{"tool_name":"Bash","tool_input":{"command":%s}}' "$(printf '%s' "$1" | jq -Rs .)" | bash "$HOOK" 2>/dev/null)
-  if printf '%s' "$out" | grep -q 'additionalContext'; then echo NUDGE; else echo quiet; fi
+  local before after
+  before=$(warn_count)
+  printf '{"tool_name":"Bash","tool_input":{"command":%s}}' "$(printf '%s' "$1" | jq -Rs .)" | bash "$HOOK" >/dev/null 2>&1
+  after=$(warn_count)
+  if [ "${after:-0}" -gt "${before:-0}" ]; then echo NUDGE; else echo quiet; fi
 }
 # last heed verdict written to the ledger (true|false|none)
 last_heed(){ jq -r 'select(.kind=="heed") | .heeded' "$STORE" 2>/dev/null | tail -1; }

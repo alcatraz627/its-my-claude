@@ -7,9 +7,25 @@ triggers:
 related:
   - rules/audience-aware-writing.md
   - conventions/doc-writing.md
+paths:
+  # scoped (gcc-map v4 rec 7, owner D6a, 2026-09-05): binds when writing source. The
+  # CLAUDE.md Tier-0 brief keeps the one rule and the no-[claude@]-tags clause every
+  # session.
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+  - "**/*.sh"
+  - "**/*.swift"
+  - "**/*.rs"
+  - "**/*.go"
+  - "**/*.rb"
+  - "**/*.java"
+  - "**/*.kt"
 tier: 1
 category: rules
-updated: 2026-07-05
+updated: 2026-09-05
 stale_after_days: 180
 ---
 

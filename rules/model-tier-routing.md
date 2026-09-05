@@ -109,7 +109,11 @@ never up to fable.
 - Mid-task suggest-a-switch is encouraged; silent-switch never (lane-internal choices —
   which intent, which judge — stay autonomous).
 - Warn-path mutes: `touch ~/.claude/.model-tier-off` (machine-wide — ALL sessions
-  until removed) · `MODEL_TIER_OFF=1` (this process only). The
+  until removed) · `MODEL_TIER_OFF=1` (this process only). **That mute file has been
+  present since 2026-08-13 and the owner kept it (gcc-map v4, gate 1a)**, so
+  guard-model-tier.sh's warn path is off and the routing in this rule binds as text,
+  not as a hook. The SessionStart briefing lists present sentinels under "Muted
+  gates". The
   fable-as-sub-agent block is LIFTED (owner, 2026-07-23) while
   `~/.claude/.allow-fable-subagents` exists; the human re-arms it by trashing
   that file — an agent never touches the sentinel.

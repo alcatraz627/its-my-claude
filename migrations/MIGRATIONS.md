@@ -82,6 +82,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0040 | commit signature gate: hard block (git layer + PreToolUse guard, no-verify closed) | ✅ | 2026-07-28 | 2026-07-28 | [0040-commit-signature-hard-block.md](0040-commit-signature-hard-block.md) |
 | 0041 | prose-quality write gate: em-dash/verdict-first/score blocked on Write+Edit of prose files | ✅ | 2026-07-28 | 2026-07-28 | [0041-prose-quality-write-gate.md](0041-prose-quality-write-gate.md) |
 | 0042 | language gates extended: code-file string copy + PR bodies; coverage map | ✅ | 2026-07-28 | 2026-07-28 | [0042-universal-language-gates.md](0042-universal-language-gates.md) |
+| 0043 | svc: idle lifecycle for pm2-managed services (stop after 12h idle, start on demand); launchd load waits on the owner | ✅ scripts live | 2026-08-06 | 2026-08-06 | [0043-svc-pm2-idle-lifecycle.md](0043-svc-pm2-idle-lifecycle.md) |
 | 0044 | chat prose-smell gate enforced (PROSE_SMELL_ENFORCE=1 in settings env) + .json string copy gated | ✅ | 2026-08-08 | 2026-08-08 | [0044-chat-enforce-and-json-copy-gate.md](0044-chat-enforce-and-json-copy-gate.md) |
 | 0045 | Callout dialect v2, checkpoint-pair integration, triage-0814 gates (retrofit) | ✅ | 2026-08-14 | 2026-08-14 | [0045-callout-v2-triage-0814-gates.md](0045-callout-v2-triage-0814-gates.md) |
 | 0046 | Codex adapter, `adapters/` as a new top level | ✅ | 2026-08-14 | 2026-08-14 | [0046-codex-adapter.md](0046-codex-adapter.md) |
@@ -95,6 +96,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0054 | warden succession hardening + weekly review row | ✅ | 2026-08-21 | 2026-08-21 | [0054-warden-succession.md](0054-warden-succession.md) |
 | 0055 | decision pages served by kanban; :5197 retired | ✅ | 2026-08-25 | 2026-08-25 | [0055-decision-pages-into-kanban.md](0055-decision-pages-into-kanban.md) |
 | 0056 | 13 always-on rules demoted on-demand; testing+shell split core/catalog | ✅ | 2026-09-01 | 2026-09-01 | [0056-prime-demotion.md](0056-prime-demotion.md) |
+| 0057 | live-session task pin moves out of `tasks/` into new top-level `tasks-pins/` | ✅ | 2026-09-04 | 2026-09-04 | [0057-task-pin-out-of-tasks-dir.md](0057-task-pin-out-of-tasks-dir.md) |
 
 ---
 

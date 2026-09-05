@@ -1,3 +1,34 @@
+## bloop: gcc-map v4 follow-through batch (gcc-map-7e, 2026-09-05 14:55)
+
+Purpose: ship eight of the map's twelve recommendations plus the async-hook
+canary and gate 1a, with one adversarial sonnet gate over the whole batch.
+
+- **A canary does not need a new registration when the transcript already holds
+  the experiment.** Hook settings are read at session start, so a planted canary
+  could not have been read this session. But the session had run 16 bare `cat`
+  calls against an async hook that targets exactly that, and the JSONL transcript
+  records hook attachments by type. Counting `hook_additional_context` records per
+  marker string settled the claim (0 async against 58 and 12 sync) in one script.
+  Before planting an instrument, ask whether the log already ran it.
+- **The validator's own attack list can pollute what it validates.** A5 asked it
+  to run the real injector under the real HOME; a real hinter fired and wrote one
+  synthetic telemetry row. The validator flagged it and correctly did not touch
+  it. Next time, a regression check that exercises real hooks gets a temp HOME or
+  a session id the archive filter already excludes.
+- **Redirecting writers is the wrong fix when the readers outnumber them.** The
+  map said "point the three wal.md writers at wal.sh". A grep found five readers
+  still parsing wal.md, so the cheaper, safer fix was rotation with the header
+  preserved. Rename-without-grepping-readers applies to retirements too.
+- **The prose gate blocks em-dashes in NEW text even when the surrounding line
+  already had one.** Five edits bounced because I copied the line's existing dash
+  into my replacement. Rewrite the whole line dash-free rather than editing around
+  it.
+- **`folders-index.sh -h` regenerates.** Any argument other than `--stdout`
+  rewrites FOLDERS.md in place. Harmless here (that was the task), but a help
+  probe that mutates is a trap; noted in PLACEMENT.md's trigger line.
+
+---
+
 ## session: kanban adversarial fix round · gcc-kanban f452498c — 2026-08-26
 
 Purpose: fix 18 findings from an adversarial review of the kanban app, plus build

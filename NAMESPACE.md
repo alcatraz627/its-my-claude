@@ -601,6 +601,20 @@ These may become namespaces later but are not promoted yet:
 
 Don't create a namespace speculatively — wait until at least two artifacts want the label.
 
+### Top-level directories not yet clustered (acknowledged 2026-09-05)
+
+gcc-map v4 found 28 top-level directories this file did not mention, five of them load-bearing subsystems with their own rules or migrations; the table below lists 33, the 28 plus five siblings the same sweep turned up. They are listed here so the gap is visible; each names the cluster it would most plausibly join, and `FOLDERS.md` carries the per-directory Intent row. Promote when the rule above is met.
+
+| Directory | Would join | Note |
+|---|---|---|
+| `kanban/`, `goals/`, `tasks-pins/`, `groups/`, `warden/`, `cron-duties/`, `deployq/` | a future `::institutions` or `::todos` extension | runtime data for the board, goals, groups, warden and deploy lanes; mig 0051, 0052, 0057 |
+| `session-notes/`, `session-state/`, `session-env/`, `auto-continue/`, `run/` | `::checkpoints` (session-scoped state) | `session-env/` is harness-owned |
+| `style/`, `guidance/`, `topics/` | `::style` / `::memory` | `style/` is the `::style` data dir already described at §style but not listed in the tree |
+| `memory-domain/`, `sessions-domain/`, `proposals-domain/`, `hooks-feedback-domain/`, `atone-snapshots/` | `::improvement` | i-dream domain streams and atone snapshots |
+| `hooks/`, `paste-cache/`, `cache/`, `llm-mini-state/`, `shell-snapshots/`, `fiber-actions/` | `::ledger` / `::scripts` runtime data | telemetry and caches written by hooks and tools |
+| `git-hooks/`, `adapters/`, `skills-parked/` | `::scripts` / `::skills` | mig 0039, 0046, 0048 |
+| `teams/`, `file-history/`, `daemon/`, `jobs/` | none; Anthropic-managed | listed in `FOLDERS.md` under the DO-NOT-TOUCH table |
+
 ---
 
 ## Migration history

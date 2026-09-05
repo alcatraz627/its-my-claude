@@ -10,8 +10,9 @@ argument-hint: "<review | system | page <type>> [options]"
 
 Professional web UI design skill with three modes: `review` (screenshot-based critique with
 actionable fixes), `system` (extract and consolidate design tokens from existing code), and
-`page` (generate page layouts with proven patterns and experienced defaults). Separates visual
-regression testing into `/visual-regression` for Playwright-specific work.
+`page` (generate page layouts with proven patterns and experienced defaults). Visual
+regression testing lives in `/vis-compare` and `/ui-loop` (the former `/visual-regression`
+skill is parked).
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
@@ -176,14 +177,12 @@ Format:
 
 Every issue must include a concrete CSS fix, not just a description.
 
-### Integration with /visual-regression
+### Before/after comparison
 
-For automated before/after comparison, use:
-```
-/visual-regression baseline <url>
-# make changes
-/visual-regression compare <url>
-```
+For automated before/after comparison, use `/vis-compare` (reference image versus
+recreation) or `/ui-loop` (`see reshoot` re-captures a live page against its stored
+baseline). `/visual-regression`, the Playwright baseline/compare skill this section
+used to hand off to, is parked (mig 0048; `~/.claude/skills-parked/visual-regression/`).
 
 ---
 
@@ -298,8 +297,8 @@ If a dev server is running:
 - This skill writes CSS and component code but never touches backend logic or routes
 - The `review` subcommand is non-destructive — it analyzes and reports, never modifies code unless asked
 - The `system` subcommand proposes a token file but does NOT auto-replace values in existing code — it prints a migration plan the user can execute
-- For visual regression testing (automated before/after screenshot comparison), use the separate `/visual-regression` skill
-- Pairs well with: `/designer-reviewer` (terminal aesthetic), `frontend-design` plugin (general frontend), `/visual-regression` (automated diffing)
+- For visual regression testing (automated before/after screenshot comparison), use `/vis-compare` or `/ui-loop`; `/visual-regression` is parked
+- Pairs well with: `/designer-reviewer` (terminal aesthetic), `frontend-design` plugin (general frontend), `/vis-compare` (evidence-pack diffing)
 
 ### See Also — personas that drive this skill
 

@@ -31,8 +31,8 @@ skipping is the failure this skill exists to stop.
 |---|---|---|
 | Va | **Does it run?** | `/test`, the harness-bundled `run` skill, `/bloop` Phase 4, and `rules/exercise-based-verification.md` |
 | Vb | **Is the code right?** | `/skeptical-review` while still in the session, `/adversarial-review` once it has been declared done |
-| Vc | **Does it look right?** | `/ui-categorical-check` for bug classes, `/ui-gripe` for confusion, `/vis-compare` against a reference, `/visual-regression` against a baseline, `/designer-reviewer` and `/web-design` for scored critique |
-| Vd | **Is it safe, typed, consistent?** | `/dep-audit`, the harness-bundled `security-review` skill. See the project-gating note below before reaching for the three Next.js audits |
+| Vc | **Does it look right?** | `/ui-categorical-check` for bug classes, `/ui-gripe` for confusion, `/vis-compare` against a reference, `/ui-loop` (`see reshoot`) against a stored baseline, `/designer-reviewer` and `/web-design` for scored critique. `/visual-regression` is parked |
+| Vd | **Is it safe, typed, consistent?** | the harness-bundled `security-review` skill; `npm audit` and `npm outdated` by hand (`/dep-audit` is parked). See the project-gating note below before reaching for the three Next.js audits |
 | Ve | **Is the writing right?** | `scripts/style/prose-lint.py`, `/ste-writing`, `/cleanup-comments` |
 | Vf | **Did what already worked survive?** | a parity ledger. See Phase 3 |
 | Vg | **Is this what was asked?** | nothing automated. See Phase 4 |
@@ -45,7 +45,10 @@ worth having.
 **Project-gating note.** `/type-audit`, `/route-audit` and `/invalidate-audit`
 are written against Next.js App Router and one specific product, and all three
 set `disable-model-invocation: true`, so they cannot auto-fire and must not be
-offered outside a project whose shape matches. Check before naming them.
+offered outside a project whose shape matches. They are also PARKED (mig 0048,
+`~/.claude/skills-parked/`): invoking any of them fails today regardless of
+project shape. To use one, copy it into the project's `.claude/skills/` first,
+then name it.
 
 ## Phase 2: Map the change type to its questions, then state the skips
 

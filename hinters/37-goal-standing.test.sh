@@ -10,7 +10,11 @@ SID=bbbbbbbb-0000-0000-0000-000000000002; export CLAUDE_HINT_SID=$SID; ST="/tmp/
 run(){ echo "$1" | bash "$H"; }
 [ -z "$(run hi)" ] && ok "no goal file: silent" || ko "no goal silent"
 bash "$G" set "finish the thing" --by catchup --sid $SID >/dev/null
-run hi | rg -q "Standing objective.*finish the thing.*/goal finish the thing" && ok "prompt 1 fires with the paste line" || ko "prompt 1"
+out=$(run hi)
+echo "$out" | rg -q "Standing objective.*finish the thing" && ok "prompt 1 fires" || ko "prompt 1"
+# The paste line is its own bare line (adv-goal F7): exactly "/goal <text>", no
+# prose before it, no mute clause after it, so selecting the line copies clean.
+echo "$out" | rg -qx "/goal finish the thing" && ok "the paste line stands alone, bare" || ko "paste line not bare: $(echo "$out" | rg '/goal')"
 [ -z "$(run hi)" ] && ok "prompt 2 silent" || ko "prompt 2"
 for i in 3 4 5 6 7; do run x >/dev/null; done
 [ -n "$(run x)" ] && ok "prompt 8 fires" || ko "prompt 8"

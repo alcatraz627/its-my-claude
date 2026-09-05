@@ -34,7 +34,10 @@ if echo "$CMD" | rg -q '(^|;|&&|\|\|)\s*(head|tail)\s+-\d+\s+[^-\s|>]\S*\s*(;|$|
       ! printf '%s' "$CMD" | hook_cmd_skeleton \
         | rg -q '(^|;|&&|\|\|)\s*(head|tail)\s+-\d+\s+[^-\s|>]\S*\s*(;|$|&&|\|\|)' 2>/dev/null && exit 0
   fi
-  msg="[hint] \`head -N <file>\` / \`tail -N <file>\` → consider the Read tool with offset+limit: line-numbered output (accurate file:line cites), respects token budget, no shell-quote/path issues. For 'cmd | head -N' (stream slicing) keep head/tail. (mute: touch ~/.claude/.no-head-tail-hint)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
-  jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}'
+  # A fire is recorded to the warn ledger only. Registered async on PreToolUse, whose
+  # stdout the harness never returns (canary 2026-09-05; owner ruling: strip the
+  # payload, keep the telemetry). To revive the nudge, register synchronous and emit
+  # hookSpecificOutput.additionalContext here.
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-read-over-head-tail-file --action nudge --heeded unknown >/dev/null 2>&1 || true
 fi
 exit 0

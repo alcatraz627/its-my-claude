@@ -3,11 +3,18 @@
 # re-fires on the first prompt after a /clear, and below the threshold leaves
 # no state, no log row, and no output at all.
 set -uo pipefail
-H=/Users/alcatraz627/.claude/hinters/25-weekly-usage.sh; pass=0; fail=0
+pass=0; fail=0
 ok(){ pass=$((pass+1)); echo "  ok    $1"; }; ko(){ fail=$((fail+1)); echo "  FAIL  $1"; }
+# Sandbox HOME (same shape as 37-goal-standing.test.sh): the hinter's mute file and
+# its telemetry log are HOME-relative, so a run against the real HOME flipped a
+# machine-wide mute and wrote ~9,000 fake rows into logs/weekly-usage-hint.jsonl.
+T=$(mktemp -d); REAL="$HOME"; export HOME="$T"; mkdir -p "$HOME/.claude/logs" "$HOME/.claude/scripts/hooks" "$HOME/.claude/hinters"
+cp /Users/alcatraz627/.claude/scripts/hooks/hook-common.sh "$HOME/.claude/scripts/hooks/"
+cp /Users/alcatraz627/.claude/hinters/25-weekly-usage.sh "$HOME/.claude/hinters/"; H="$HOME/.claude/hinters/25-weekly-usage.sh"
+: > "$HOME/.claude/logs/weekly-usage-hint.jsonl"   # empty log, so the +2 check below starts from a real zero
 export CLAUDE_HINT_SID=t25weekly; ST=/tmp/claude-weeklyhint-t25weekl
 SEN=/tmp/claude-clear-reset-t25weekl
-T=$(mktemp -d); trash "$ST" "$SEN" 2>/dev/null || true
+trash "$ST" "$SEN" 2>/dev/null || true
 echo '{"week":{"pct":85},"5h":{"pct":20}}' > "$T/hot.json"
 echo '{"week":{"pct":72},"5h":{"pct":95}}' > "$T/cool.json"   # 5h has NO bearing
 LOG="$HOME/.claude/logs/weekly-usage-hint.jsonl"; lines_before=$(wc -l < "$LOG" 2>/dev/null || echo 0)
@@ -34,5 +41,5 @@ trash "$ST" 2>/dev/null || true
 [ -z "$(run "$T/hot.json" "a real prompt")" ] && ok "stale limits file: silent (no reading is not a hot reading)" || ko "stale file fired"
 lines_after=$(wc -l < "$LOG" 2>/dev/null || echo 0)
 [ $(( lines_after - lines_before )) -eq 2 ] && ok "exactly the 2 real fires reached the telemetry log" || ko "log rows: expected +2, got +$(( lines_after - lines_before ))"
-trash "$ST" "$SEN" "$T" 2>/dev/null || true
+export HOME="$REAL"; trash "$ST" "$SEN" "$T" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

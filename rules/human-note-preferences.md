@@ -7,9 +7,15 @@ triggers:
 related:
   - rules/testing.md
   - rules/comments.md
+paths:
+  # autoload opt-out (gcc-map v4 rec 7, owner D2a, 2026-09-05): the CLAUDE.md Tier-0
+  # brief and rules/testing.md both carry this rule, so the full text is disclosed on
+  # demand from rules/00-index.md. Sentinel below never matches a real file. Revert by
+  # deleting this paths: block.
+  - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
-updated: 2026-09-01
+updated: 2026-09-05
 stale_after_days: 180
 ---
 
