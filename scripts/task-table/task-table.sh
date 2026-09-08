@@ -292,6 +292,9 @@ for f in d.glob("*.json"):
     # A task file carries no timestamp of its own, so mtime is the only age
     # signal there is. Keeping it is what lets the header say whether these
     # rows have moved recently or are an accumulated store rendered as today.
+    # pathlib's glob matches dotfiles, unlike the shell's: a JSON sidecar such
+    # as .goals (or a future .anything.json) is store metadata, never a row.
+    if f.name.startswith("."): continue
     try:
         r = json.load(open(f))
         r["_mtime"] = f.stat().st_mtime
@@ -553,6 +556,21 @@ vf = os.environ.get("VIEW_FILE", "")
 if vf and os.path.exists(vf):
     try: view = json.load(open(vf))
     except Exception: view = {"_broken": vf}
+# What a goal says about itself (P3, 2026-09-08): the 🧭 direction it serves and
+# the ✅ check that closes it. A goal is a tag, not a row, so these live in a
+# store sidecar keyed by the goal's text (task.sh goal). Absent for every store
+# written before today, and the render is unchanged then: the two lines are
+# drawn only when set, so no golden moves.
+goal_meta = {}
+_gmf = d / ".goals"       # no .json suffix: pathlib's *.json glob above would read it as a row
+if _gmf.exists():
+    try: goal_meta = json.load(open(_gmf)) or {}
+    except Exception: goal_meta = {"_broken": str(_gmf)}
+    if not isinstance(goal_meta, dict): goal_meta = {"_broken": str(_gmf)}
+def goal_says(key, field):
+    """The direction or the when a goal carries, or an empty string."""
+    v = goal_meta.get(key) if isinstance(goal_meta.get(key), dict) else None
+    return str((v or {}).get(field) or "").strip()
 detail = os.environ.get("DETAIL", "0") == "1"
 alias = os.environ.get("ALIAS", "") or "?"; model = os.environ.get("MODEL", "") or "?"
 group_flag = os.environ.get("GROUP", "") or ""
@@ -688,6 +706,8 @@ if mode == "json":
             key=lambda x: -(x.get("_mtime") or 0))],
         "counts": {"total": len(data), "in_progress": len(now), "open": len(openish),
         "done": len(done), "blocked": len(blocked), "ready": len(ready)},
+        # Goal-level fields, keyed by goal text, only for goals some row carries.
+        "goals": {k: v for k, v in goal_meta.items() if k != "_broken" and isinstance(v, dict)},
         "tasks": data}, indent=2)); sys.exit()
 
 import unicodedata, hashlib, collections
@@ -1207,6 +1227,7 @@ if _stale:
 if _open_m and time.time() - max(_open_m) > 24 * 3600:
     _bangs.append(f"  !! NOT TODAY'S QUEUE: no open row has moved in {_last_open}; carried-over or umbrella items")
 if view.get("_broken"): _bangs.append(f"  !! view file did not parse, ignored: {view['_broken']}")
+if goal_meta.get("_broken"): _bangs.append(f"  !! goal sidecar did not parse, ignored: {goal_meta['_broken']}")
 notier = sum(1 for x in live if not (meta_of(x, "tier") or meta_of(x, "model"))
              and (meta_of(x, "lane") or "").lower() != "owner" and not deferred(x))
 if notier:
@@ -1307,11 +1328,13 @@ def hidden_cost(n):
 
 def build_body():
     """Emit CLEAR NOW and the goal boxes into `out`, under the current cap."""
-    global hidden, _unopened, _states_used
+    global hidden, _unopened, _states_used, _last_dir, _goal_lines_used
     del out[HEADER_LEN:]
     hidden = []
     _unopened = []          # boxes the cap refused: (ball, emoji, title, rows)
     _states_used = set()
+    _last_dir = ""          # the 🧭 line is drawn once per run of boxes sharing it
+    _goal_lines_used = set()
     # CLEAR NOW.
     # Every row waiting on the owner (Q1a), drawn across every goal and every lane,
     # capped at three. The cap is the point: the remainder is counted rather than
@@ -1511,8 +1534,28 @@ def build_body():
         than under it: one says whether the goal can continue without him, the other
         says which goal this is.
         """
-        global _box_owed
+        global _box_owed, _last_dir
         items = seq_sort(items)
+        # What the goal says about itself. The direction goes ABOVE the title, in
+        # plain text like the title (D3, nothing between the owner's words and the
+        # terminal), and is drawn once for a run of boxes that share it. The when
+        # goes under the meter, where the reader already looks for "how close".
+        # Both cost a line and are priced into the box below; neither is drawn when
+        # unset, so a store with no sidecar renders as before.
+        _dir  = "" if unfiled else goal_says(key, "direction")
+        _when = "" if unfiled else goal_says(key, "when")
+        _dcost = 1 if (_dir and _dir != _last_dir) else 0
+        _wcost = 1 if _when else 0
+        def _draw_dir():
+            global _last_dir
+            if _dir and _dir != _last_dir:
+                w("\U0001F9ED " + ellip(_dir, BOX_W - 3)); _goal_lines_used.add("direction")
+            _last_dir = _dir
+        def _when_lines(indent):
+            _room = BOX_W - dwidth(indent) - 9
+            _ls = wrap(_when, _room) if detail else [ellip(_when, _room)]
+            _goal_lines_used.add("when")
+            return [indent + "✅ when: " + _ls[0]] + [indent + "         " + x for x in _ls[1:]]
         # A box is drawn only when its chrome AND its first row fit together:
         # blank, corner, rule, meter, rail and the closing corner are six, then
         # a milestone header pair when bands are drawn, then the first row at
@@ -1568,14 +1611,17 @@ def build_body():
             _tlines = [_tlines[0], ellip(" ".join(_tlines[1:]), room)]
         _tlines = [ellip(t, room) for t in _tlines]
         if one_row:
-            if not fits(1 + len(_tlines) + first_row_cost(items)):
+            if not fits(1 + len(_tlines) + first_row_cost(items) + _dcost + _wcost):
                 hidden.extend(f"#{x['id']}" for x in items)
                 _unopened.append((ball, emo, title, len(items))); return
             _box_owed = 0
             if out and out[-1] != "": w("")
+            _draw_dir()
             w(lead + _tlines[0] + (tailtxt if len(_tlines) == 1 else ""))
             for _tl in _tlines[1:-1]: w(_tl)
             if len(_tlines) > 1: w(_tlines[-1] + tailtxt)
+            if _when:
+                for _wl in _when_lines(" " * (ID_COL - 2)): w(_wl)
             _start = len(out)
             emit_rows(items)
             # The row keeps its shape and loses its rail: there is no box to rail.
@@ -1587,11 +1633,12 @@ def build_body():
                 w(" " * (ID_COL - 2) + f"no milestone named yet   ·   name one: task.sh meta {items[0]['id']} batch=<the state it reaches>")
             return
         _first = (2 + first_row_cost(_bands[0][1])) if _bands else first_row_cost(items)
-        if not fits(5 + len(_tlines) + _first):
+        if not fits(5 + len(_tlines) + _first + _dcost + _wcost):
             hidden.extend(f"#{x['id']}" for x in items)
             _unopened.append((ball, emo, title, len(items))); return
         _box_owed = 1
         if out and out[-1] != "": w("")
+        _draw_dir()
         w(lead + _tlines[0])
         for _tl in _tlines[1:]: w(_tl)
         w("╭▏" + "─" * (BOX_W - 2 - dwidth(tailtxt)) + tailtxt)
@@ -1621,6 +1668,8 @@ def build_body():
                 w("│  " + meter(cl, tot)
                   + f"  {cl} of {tot} milestone{'s' if tot != 1 else ''}"
                   + (f"   ·   next: {ellip(nxt, 48)}{thin_flag(nxt)}" if nxt else ""))
+        if _when:
+            for _wl in _when_lines("│  "): w(_wl)
         w("│")
         if _bands is None:
             emit_rows(items)
@@ -1732,6 +1781,8 @@ if _leg:
     w("  " + "   ".join(_leg))
     w("  " + "─" * (BOX_W - 3))
     _okey = "".join(f"   {g} {n}" for n, g in ORIGIN_GLYPH.items() if g in _origins_used)
+    if "direction" in _goal_lines_used: _okey += "   \U0001F9ED direction the goal serves"
+    if "when" in _goal_lines_used: _okey += "   ✅ when: the check that closes the goal"
     w("  ◆ lane   ◇ tier   ▪ kind   ▫ domain" + _okey + "   »  note, shown only"
       " when it changes what you do   ·   the emoji beside a box's ball is that goal's badge"
       "   ·   height {H}/" + str(HEIGHT) + "   ·   -h for flags")

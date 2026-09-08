@@ -202,7 +202,17 @@ task.sh add "<subject>" --class fix --domain hooks --batch A --goal "<goal>" --l
 task.sh update <id> --status in_progress|completed --append-desc "…" --blocked-on … --clear-blocked-on
 task.sh close <id> --by "<the check, run or artifact>"   ·   task.sh start <id>   ·   task.sh meta <id> batch=B owner=me   ·   task.sh list
 task.sh add "…" --origin asked|measured|inferred     # 🗣 the owner asked · 📏 a number or file:line behind it · 💭 an agent inferred it
+task.sh goal <id|"goal text"> --direction "<🧭 the direction it serves>" --when "<✅ the check that closes it>"   # goal-level, once per goal, in <store>/.goals
 ```
+
+**What a goal says about itself (P3, 2026-09-08).** A goal is a tag rows carry,
+so its direction and its closing check have no row to sit on. `task.sh goal`
+writes them once, keyed by the goal's text, and the table draws the 🧭 line
+above the box (once for a run of boxes sharing it) and `✅ when:` under the
+meter. Both are absent until set; `--json` carries them under `goals`. This is
+the owner's own hierarchy, direction to goal to milestone to task, and it is
+what answers the fourth question, what each row serves, at the level above the
+row.
 
 **The close rule.** Close a row when the work has landed, not when the edit is
 made, and say what proved it: `close <id> --by "<the suite, the command, the

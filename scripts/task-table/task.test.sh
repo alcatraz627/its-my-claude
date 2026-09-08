@@ -161,5 +161,31 @@ jq -e '.blockedBy == []' "$S/$idc.json" >/dev/null && ok "the refused edge wrote
 $T update "$idc" --desc "the child's ask" >/dev/null
 $TT --session cccccccc --json 2>/dev/null | jq -e --arg id "$idc" '.tasks[] | select((.id|tostring)==$id) | .description == "the child'"'"'s ask"' >/dev/null && ok "--json carries description under its own name" || ko "json description missing"
 
+echo "== P3 (#24, 2026-09-08): what a goal says about itself lives in the store's .goals sidecar =="
+$T add "row under a real goal" --goal "The screen never lies" --batch "The header is right" >/dev/null 2>&1
+idg=$(ls "$S" | rg -o '^[0-9]+' | sort -n | tail -1)
+$T goal "$idg" --direction "See where things stand" --when "checks 1 and 3 are green" >/dev/null 2>&1; rc=$?
+[ "$rc" -eq 0 ] && [ -f "$S/.goals" ] && ok "goal <id> writes the sidecar, resolving the id to its goal text" || ko "goal by id (rc $rc)"
+jq -e '.["The screen never lies"].direction=="See where things stand" and .["The screen never lies"].when=="checks 1 and 3 are green" and (.["The screen never lies"].set_at|length)>0' "$S/.goals" >/dev/null && ok "keyed by goal text, both fields and a timestamp" || ko "sidecar shape: $(cat "$S/.goals")"
+$T goal "The screen never lies" --when "" >/dev/null 2>&1
+jq -e '.["The screen never lies"] | (has("when")|not) and .direction=="See where things stand"' "$S/.goals" >/dev/null && ok "an empty value clears one field and leaves the other" || ko "clear: $(cat "$S/.goals")"
+out=$($T goal "The screen never lies" 2>&1); echo "$out" | rg -q '"direction": "See where things stand"' && ok "no flag shows what is set" || ko "show: $out"
+$T goal "a goal nobody filed" --direction x >/dev/null 2>&1; rc=$?
+[ "$rc" -eq 1 ] && ok "a goal no row carries is refused (rc 1)" || ko "unfiled goal accepted (rc $rc)"
+err=$($T goal "a goal nobody filed" --direction x 2>&1 >/dev/null); echo "$err" | rg -q "The screen never lies" && ok "and the refusal lists the goals this store has" || ko "refusal named no goals: $err"
+$T goal "$idg" --bogus x >/dev/null 2>&1; rc=$?
+[ "$rc" -eq 2 ] && ok "an unknown flag is refused (rc 2)" || ko "bad flag rc $rc"
+$T goal "$idg" --direction >/dev/null 2>&1; rc=$?
+[ "$rc" -eq 2 ] && ok "a flag with no value is refused, not looped on" || ko "dangling flag rc $rc"
+jq -e '.["The screen never lies"].direction=="See where things stand"' "$S/.goals" >/dev/null && ok "the refusals wrote nothing" || ko "a refusal wrote"
+$T goal 1 --direction x >/dev/null 2>&1; rc=$?
+[ "$rc" -eq 2 ] && ok "an id whose row carries no goal is refused and told to file it" || ko "goalless id rc $rc"
+[ ! -d "$S/.task-sh.lock" ] && ok "the lock is released after goal" || ko "lock left by goal"
+ls "$S" | rg -q '^\.goals\.json$' && ko "the sidecar must not end in .json (pathlib reads it as a row)" || ok "the sidecar is .goals, no .json suffix"
+# --group goal: this store's rows mostly carry class and domain, so auto-grouping
+# picks one of those, and a direction belongs to a goal box only.
+$TT --session cccccccc --group goal 2>/dev/null | rg -q '^🧭 See where things stand$' && ok "the renderer draws the direction from the sidecar" || ko "direction not drawn"
+$TT --session cccccccc --json 2>/dev/null | jq -e '.goals["The screen never lies"].direction=="See where things stand"' >/dev/null && ok "--json carries the goal-level fields" || ko "json goals missing"
+
 export HOME="$REAL"; trash "$SB" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

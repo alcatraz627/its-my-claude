@@ -266,11 +266,15 @@ echo "── 9. the closing corner is charged to the budget ──"
 # 30 and 60. Re-measured 2026-09-05 after bands began ordering by recency (#56),
 # which changes which band leads and so which row the cap lands on: the corner
 # decides at 20, 40, 45, 70, 80, 90 and 100 and is absorbed at 30, 50, 55 and
-# 60. 40 is used here, and the assertion is that the mutation breaks the
-# 44-line law outright rather than merely that the render grew, because
-# "grew" is a fact about this fixture and "over the cap" is the actual defect.
+# 60. Re-measured 2026-09-08 after the footer gained its "today: filed, closed"
+# line, which moves every remainder by one: the corner now decides at 25, 30,
+# 35, 55 and 60 and is absorbed at 20, 40, 45, 50, 70 and up (40, the previous
+# pick, passed while proving nothing for a day). 30 is used here, and the
+# assertion is that the mutation breaks the 44-line law outright rather than
+# merely that the render grew, because "grew" is a fact about this fixture and
+# "over the cap" is the actual defect.
 reset
-for i in $(seq 1 40); do
+for i in $(seq 1 30); do
   mk "$i" pending "Ship the thing" "M$((i % 4))" hands opus build tasks
 done
 M=$(mutate boxowed 'def fits(n): return detail or len(out) + n + _box_owed <= LINE_CAP' \
@@ -374,7 +378,10 @@ mk 1 completed "Ship the thing" "M1" hands opus build tasks
 mk 2 pending "Ship the thing" "M1" hands opus build tasks
 render
 # Q8a (owner, 2026-09-05): counts, never ids; the ids live in --json.
-has "a row closed just now is counted as moved" '1 moved in the last 6h   ·   1 done, 1 with no instrument named   ·   ids in --json' "$ROOT/out"
+# The "today: N filed, M closed" clause sits between the two since 2026-09-08
+# (the backlog's growth on the first screen); this row pins the moved count and
+# the done count on either side of it, not the exact middle.
+has "a row closed just now is counted as moved" '1 moved in the last 6h   ·   today: 2 filed, 1 closed   ·   1 done, 1 with no instrument named   ·   ids in --json' "$ROOT/out"
 hasnt "and the footer prints no id wall"        'done \(1\): #1' "$ROOT/out"
 hasnt "nor a moved id list"                     'moved in the last 6h: #' "$ROOT/out"
 HOME="$ROOT" bash "$TT" --session box00001 --json > "$ROOT/out.json" 2>&1
@@ -415,7 +422,10 @@ echo "── 18. a box or a band never opens onto nothing, across a sweep of bud
 # the box is considered, so the sweep walks thirty remainders.
 cat > "$ROOT/inv.py" <<'PY'
 import sys, re
-ROW = re.compile("^│\\s+(🔴|🟠|🔵|🟢|🟣|💤|⚪|🤝|✅) ")
+# A row is ball, twin, id. The ball alone is not enough: the "✅ when:" line under
+# a meter (P3, case 26) carries the done ball at the row position and is not a
+# row, and with the looser pattern this detector read an empty box as full.
+ROW = re.compile("^│\\s+(🔴|🟠|🔵|🟢|🟣|💤|⚪|🤝|✅) \\S+ #\\d+")
 lines = [l.rstrip("\n") for l in open(sys.argv[1], encoding="utf-8")]
 bad = 0
 for i, l in enumerate(lines):
@@ -456,7 +466,7 @@ sweep(){ # sweep <renderer> -> violations summed over 1..45 filler rows
 }
 ok "no box or band opens onto nothing across thirty budgets" "$(sweep "$TT")" "0"
 has "a goal the cap refused is named in one line" '^  no room left for: ' "$ROOT/out"
-M=$(mutate boxnine 'if not fits(5 + len(_tlines) + _first):' 'if not fits(9):')
+M=$(mutate boxnine 'if not fits(5 + len(_tlines) + _first + _dcost + _wcost):' 'if not fits(9):')
 v=$(sweep "$M")
 ok "MUTATION: a flat nine opens boxes onto nothing somewhere in the sweep" "$([ "$v" -gt 0 ] && echo caught || echo "missed (0)")" "caught"
 M=$(mutate bandfour 'if not fits(2 + first_row_cost(body) + (0 if first else 1)):' 'if not fits(4 if first else 5):')
@@ -595,6 +605,107 @@ ok "the goal lines are paid for: the render stays inside the law" "$([ "$n" -le 
 M=$(mutate goalline 'for _gl in wrap("/goal " + _armed, BOX_W): w(_gl)' 'pass')
 rm -f "$ROOT/out"; HOME="$ROOT" TASKS_ARMED_GOAL="$GOAL" bash "$M" --session box00001 > "$ROOT/out" 2>&1
 hasnt "MUTATION: dropping the /goal line is caught"    '^/goal The first screen' "$ROOT/out"
+
+echo
+echo "── 26. what a goal says about itself: 🧭 direction above the title, ✅ when under the meter (P3, #24, 2026-09-08) ──"
+# The store cannot say which direction a goal serves or what check closes it;
+# directions.md could, and only on paper. P3 lands both as goal-level fields in
+# a store sidecar (.goals, no .json suffix: pathlib's *.json glob reads dotfiles
+# as rows). Additive: a store with no sidecar renders exactly as before.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Ship the thing" "M1" hands opus fix tasks
+mk 3 pending "Land the other thing" "N1" hands opus build tasks
+mk 4 pending "Land the other thing" "N1" hands opus fix tasks
+render
+hasnt "no sidecar: no direction line"                  '^🧭 ' "$ROOT/out"
+hasnt "no sidecar: no when line"                       '✅ when: ' "$ROOT/out"
+hasnt "no sidecar: the legend keys neither"            'direction the goal serves' "$ROOT/out"
+base=$(wc -l < "$ROOT/out" | tr -d ' ')
+cat > "$STORE/.goals" <<'JSON'
+{"Ship the thing": {"direction": "See where things stand", "when": "checks 1 and 3 are green and a stranger answers the four questions"},
+ "Land the other thing": {"direction": "See where things stand"}}
+JSON
+render
+has "the direction is drawn above the box title, at column 0"  '^🧭 See where things stand$' "$ROOT/out"
+ok "one direction line for two boxes that share it" "$(rg -c '^🧭 ' "$ROOT/out")" "1"
+has "the when rides under the meter, on the rail"     '^│  ✅ when: checks 1 and 3 are green' "$ROOT/out"
+ok "a goal with no when draws no when line (the legend's key is not a when line)" "$(rg -c '^│  ✅ when: ' "$ROOT/out")" "1"
+has "the legend keys both"                             '🧭 direction the goal serves   ✅ when: the check that closes the goal' "$ROOT/out"
+python3 - "$ROOT/out" > "$ROOT/order" <<'PY'
+import sys
+L = [l.rstrip("\n") for l in open(sys.argv[1], encoding="utf-8")]
+d = next(i for i, l in enumerate(L) if l.startswith("🧭 "))
+print("above a title" if L[d + 1][:1] in "🔴🟠🔵🟢" else f"line after: {L[d + 1][:40]!r}")
+PY
+ok "the direction line sits immediately above a box title" "$(cat "$ROOT/order")" "above a title"
+n=$(wc -l < "$ROOT/out" | tr -d ' ')
+ok "the two lines are paid for: one shared direction plus one when, inside the law" "$((n - base))·$([ "$n" -le 44 ] && echo inside || echo over)" "2·inside"
+HOME="$ROOT" bash "$TT" --session box00001 --json > "$ROOT/out.json" 2>&1
+ok "--json carries the goal-level fields by goal text" "$(jq -r '.goals["Ship the thing"].when | length > 0' "$ROOT/out.json" 2>/dev/null)" "true"
+ok "and the sidecar is never read as a row"           "$(jq -r '[.tasks[].id] | length' "$ROOT/out.json")" "4"
+# The one-row collapse (D3a) keeps both lines: the direction above the title,
+# the when under it, without a rail since there is no box.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+render
+has "one-row goal: direction above the title"         '^🧭 See where things stand$' "$ROOT/out"
+has "one-row goal: when under the title, no rail"     '^ +✅ when: checks 1 and 3' "$ROOT/out"
+# A sidecar that does not parse is named in the header nag, never fatal.
+echo "not json" > "$STORE/.goals"
+render
+has "a broken sidecar is reported, not fatal"          'goal sidecar did not parse' "$ROOT/out"
+has "and the rows still render"                        '#1 ' "$ROOT/out"
+rm -f "$STORE/.goals"
+# Mutations, one per guard.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Ship the thing" "M1" hands opus fix tasks
+printf '{"Ship the thing": {"direction": "See where things stand", "when": "checks 1 and 3 are green"}}' > "$STORE/.goals"
+M=$(mutate nodir 'w("\U0001F9ED " + ellip(_dir, BOX_W - 3)); _goal_lines_used.add("direction")' 'pass')
+render "$M"
+hasnt "MUTATION: dropping the direction line is caught" '^🧭 ' "$ROOT/out"
+M=$(mutate nowhen 'if _when:
+            for _wl in _when_lines("│  "): w(_wl)' 'pass')
+render "$M"
+hasnt "MUTATION: dropping the when line is caught"      '✅ when: ' "$ROOT/out"
+# A dotfile JSON in the store is metadata, never a row. The first sidecar was
+# named .goals.json and the renderer read it as a task (KeyError: status); the
+# name changed AND the loader now skips dotfiles, so the class is closed twice.
+printf '{"stray": "a dotfile json that is not a row"}' > "$STORE/.stray.json"
+render
+has "a stray dotfile json does not stop the render"    '#1 ' "$ROOT/out"
+ok "and it is not counted as a row"                    "$(HOME="$ROOT" bash "$TT" --session box00001 --json 2>/dev/null | jq -r '[.tasks[].id] | length')" "2"
+M=$(mutate dotrow 'if f.name.startswith("."): continue' 'pass')
+render "$M"
+has "MUTATION: without the skip, the dotfile is read as a row and the render dies" "KeyError|Traceback" "$ROOT/out"
+rm -f "$STORE/.stray.json"
+# The two lines are priced into the box's open-or-refuse decision. Pricing only
+# bites at the margin, so the guard is a sweep like case 18, with case 18's
+# detector: an unpriced box opens two lines short, its first row no longer
+# fits, and the box closes on nothing (visual audit V1). The height law holds
+# either way, because the row loop prices what it draws; the defect is the
+# empty box, so that is what the sweep counts.
+M=$(mutate unpriced 'if not fits(5 + len(_tlines) + _first + _dcost + _wcost):' 'if not fits(5 + len(_tlines) + _first):')
+sweep_goal(){ # sweep_goal <renderer> -> "<empty boxes>/<max height>" over 1..45 filler rows
+  local bad=0 mx=0 n i h
+  for n in $(seq 1 45); do
+    reset
+    for i in $(seq 1 "$n"); do mk "$i" pending "Alpha goal" "M1" hands opus build tasks; done
+    mk 51 pending "Beta goal" "B1" hands opus build tasks
+    mk 52 pending "Beta goal" "B1" hands opus fix tasks
+    printf '{"Beta goal": {"direction": "See where things stand", "when": "checks 1 and 3 are green"}}' > "$STORE/.goals"
+    render "$1"
+    bad=$((bad + $(python3 "$ROOT/inv.py" "$ROOT/out")))
+    h=$(wc -l < "$ROOT/out" | tr -d ' '); [ "$h" -gt "$mx" ] && mx=$h
+  done
+  echo "$bad/$mx"
+}
+r=$(sweep_goal "$TT")
+ok "the real render opens no empty box and stays inside the law across the sweep" "$([ "${r%/*}" -eq 0 ] && [ "${r#*/}" -le 44 ] && echo clean || echo "$r")" "clean"
+r=$(sweep_goal "$M")
+ok "MUTATION: unpriced goal lines open a box onto nothing somewhere in the sweep" "$([ "${r%/*}" -gt 0 ] && echo caught || echo "missed ($r)")" "caught"
+rm -f "$STORE/.goals"
 
 echo
 echo "---- pass=$pass fail=$fail"

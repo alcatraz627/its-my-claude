@@ -33,6 +33,12 @@
 #                                     extension of the 2026-08-10 ruling, 2026-09-08)
 #   task.sh start <id>                mark in_progress
 #   task.sh meta <id> key=value …     set arbitrary metadata keys
+#   task.sh goal <id|"goal text"> [--direction "<d>"] [--when "<check>"]
+#                                     the two things a goal says about itself (P3, 2026-09-08): the
+#                                     🧭 direction it serves and the ✅ check that closes it. Kept in
+#                                     <store>/.goals (JSON) keyed by the goal's text, so a goal has one
+#                                     answer however many rows carry it. An id names its row's goal;
+#                                     an empty value clears; no flag prints what is set
 #   task.sh show <id>                 print the JSON
 #   task.sh list                      short list (id · status · subject); /tasks is the full view
 #   task.sh store                     print the resolved store path
@@ -75,7 +81,7 @@ STORE=$(resolve_store) || { echo "task.sh: no task store resolves for this sessi
 # A write stamps the store with its project once, so the renderer can find the
 # project's view file from any shell directory. Reads never stamp it: a `list`
 # run from a stranger's repo must not claim the store.
-case "$CMD" in add|update|done|start|meta)
+case "$CMD" in add|update|done|start|meta|goal)
   if [ ! -s "$STORE/.project" ]; then
     p=$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null); [ -n "$p" ] || p="$PWD"
     printf '%s' "$p" > "$STORE/.project"
@@ -385,6 +391,48 @@ do_meta() {
     case "$v" in true|false|null) FILTER="$FILTER | .metadata[\"$k\"]=$v";; *) FILTER="$FILTER | .metadata[\"$k\"]=\$v_$k"; ARGJ+=(--arg "v_$k" "$v");; esac; done
   jq "${ARGJ[@]+"${ARGJ[@]}"}" "$FILTER" "$f" | write_json "$f" && echo "meta #$id: $(jq -c .metadata "$f")"
 }
+# Goal-level fields. A goal is a TAG rows carry, not a row, so anything said about
+# the goal itself has nowhere to live on a row without inviting the rows to
+# disagree (the batch_at problem, one level up). The sidecar holds one entry per
+# goal text. The renderer draws the direction above the box and the check under
+# its meter; --json carries both. The goal named must be one some row carries,
+# because a field on a goal nobody filed is a note to no one.
+# No .json suffix, on purpose: pathlib's "*.json" matches dotfiles (the shell's
+# and glob.glob's do not), and the renderer read a sidecar named .goals.json as a
+# row on the first render (KeyError: status). Same convention as .project.
+GOALS_FILE="$STORE/.goals"
+do_goal() {
+  local ref="${1:-}"; shift; local goal="" dir="" when="" set_dir=0 set_when=0
+  [ -n "$ref" ] || { echo "task.sh goal: need <id> or \"<goal text>\"" >&2; return 2; }
+  case "$ref" in
+    *[!0-9]*) goal="$ref" ;;
+    *) local f="$STORE/$ref.json"; [ -f "$f" ] || { echo "task.sh goal: no task #$ref" >&2; return 1; }
+       goal=$(jq -r '.metadata.goal // empty' "$f")
+       [ -n "$goal" ] || { echo "task.sh goal: #$ref carries no goal; file it first: task.sh update $ref --goal \"<g>\" --batch \"<m>\"" >&2; return 2; } ;;
+  esac
+  while [ $# -gt 0 ]; do case "$1" in
+    --direction|--when)
+      [ $# -ge 2 ] || { printf 'task.sh goal: %s needs a value (an empty string clears it)\n' "$1" >&2; return 2; }
+      if [ "$1" = --direction ]; then dir="$2"; set_dir=1; else when="$2"; set_when=1; fi; shift 2 ;;
+    *) { printf 'task.sh goal: unknown flag %s\n' "$1"; printf '  flags: --direction "<d>"  --when "<check>"  (empty value clears; no flag shows)\n'; } >&2; return 2 ;;
+  esac; done
+  if ! cat "$STORE"/[0-9]*.json 2>/dev/null | jq -e --arg g "$goal" 'select(.metadata.goal==$g)' >/dev/null 2>&1; then
+    { printf 'task.sh goal: no row in this store carries the goal "%s"\n' "$goal"
+      printf '  goals here:\n'; cat "$STORE"/[0-9]*.json 2>/dev/null | jq -r '.metadata.goal // empty' | sort -u | sed 's/^/    /'; } >&2
+    return 1
+  fi
+  [ -s "$GOALS_FILE" ] || echo '{}' > "$GOALS_FILE"
+  if [ "$set_dir" = 0 ] && [ "$set_when" = 0 ]; then
+    jq --arg g "$goal" '{goal: $g} + (.[$g] // {})' "$GOALS_FILE"; return 0
+  fi
+  jq --arg g "$goal" --arg d "$dir" --arg w "$when" --argjson sd "$set_dir" --argjson sw "$set_when" \
+     --arg ts "$(date -u +%FT%TZ)" '
+    .[$g] = ((.[$g] // {})
+      | (if $sd == 1 then (if $d == "" then del(.direction) else .direction = $d end) else . end)
+      | (if $sw == 1 then (if $w == "" then del(.when) else .when = $w end) else . end)
+      | .set_at = $ts)' "$GOALS_FILE" | write_json "$GOALS_FILE" \
+    && echo "goal: $(jq -c --arg g "$goal" '{goal: $g} + .[$g]' "$GOALS_FILE")"
+}
 # A row that closes without saying what proved it is the liberty the owner named
 # in the definition of done. The close still lands; the omission is said aloud
 # (alignment check 9: done rows name their instrument).
@@ -428,6 +476,7 @@ case "$CMD" in
     echo "moved #$id to the board as card $card; the row closes here with the pointer" ;;
   start) with_lock do_update "$1" --status in_progress --state active ;;
   meta) [ -n "${2:-}" ] || { echo "task.sh meta: need <id> key=value…" >&2; exit 2; }; with_lock do_meta "$@" ;;
+  goal) with_lock do_goal "$@" ;;
   show) cat "$STORE/$1.json" ;;
   # --json is advertised at the top of this file as "machine output" and was
   # honoured by add and update but silently ignored here, so a caller asking for

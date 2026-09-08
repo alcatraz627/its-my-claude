@@ -98,6 +98,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0056 | 13 always-on rules demoted on-demand; testing+shell split core/catalog | ✅ | 2026-09-01 | 2026-09-01 | [0056-prime-demotion.md](0056-prime-demotion.md) |
 | 0057 | live-session task pin moves out of `tasks/` into new top-level `tasks-pins/` | ✅ | 2026-09-04 | 2026-09-04 | [0057-task-pin-out-of-tasks-dir.md](0057-task-pin-out-of-tasks-dir.md) |
 | 0058 | warden standing beat retired per owner ruling D1a (2026-09-02); on-demand judgment survives; revive runner unbuilt | ✅ | 2026-09-08 | 2026-09-08 | [0058-warden-beat-retired.md](0058-warden-beat-retired.md) |
+| 0059 | task stores gain a `.goals` sidecar (direction, when) written by `task.sh goal`, drawn by /tasks; the row loader skips dotfiles | ✅ | 2026-09-08 | 2026-09-08 | [0059-task-store-goals-sidecar.md](0059-task-store-goals-sidecar.md) |
 
 ---
 
