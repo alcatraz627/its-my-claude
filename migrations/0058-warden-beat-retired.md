@@ -63,5 +63,5 @@ Rollback is a new owner ruling, not a repair: D1a was made on the efficacy recor
 
 ## Notes / followups
 
-- The one open half: wire a runner for `ipc-wake.sh` (an autonomous headless-turn daemon) or retire event-driven revive too. Put to the owner 2026-09-08 with the warden diagnosis (`assets/reports/20260907-alignment-surfaces-diagnosis/warden-diagnosis.md`).
+- The one open half: wire a runner for `ipc-wake.sh` (an autonomous headless-turn daemon) or retire event-driven revive too. Put to the owner 2026-09-08 with the warden diagnosis (`assets/reports/20260907-alignment-surfaces-diagnosis/warden-diagnosis.md`). **Ruled 2026-09-08, decision page unblock-0908 D1a: retire event-driven revive too; the in-session hooks (goal-standing hinter, task nudge, goal-arm lint) carry ask 1.** Nothing is built; `ipc-wake.sh` stays on disk with no runner, like the rest of `warden/`.
 - The owner's note on the ruling (session recovery and lifecycle neglected) was worked in the 09-01 to 09-03 gcc-audit session: reapers `60-reap-session-state.sh`, `61-reap-orphan-bg.sh`, the turnstate-active.sh freshness fix (`session-notes/78060eb5-041d-42ca-a4a6-0fbeaada71b8.md:50-62`).

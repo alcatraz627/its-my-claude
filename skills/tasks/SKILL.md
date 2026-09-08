@@ -29,23 +29,24 @@ as a complete one.
 
 ## The shape (ruled 2026-09-04 and 2026-09-05; every /tasks run, every session)
 
-Each goal is a closed box with a rail down its left edge. The ball on the corner
-answers one question: can this goal continue WITHOUT the owner. The emoji beside
-it identifies the goal and never moves when the ball does. A rendered store, as
-the tool prints a six-row fixture (two goals, a gate, a running row, one in
-review, one deferred, one unfiled), which unlike a live-store snapshot does not
-go stale:
+Each goal is its title in plain text over a closed box with a rail down its left
+edge (a one-row goal is the title and the row, no box). The ball leading the
+title answers one question: can this goal continue WITHOUT the owner. The emoji
+beside it identifies the goal and never moves when the ball does. A rendered store, as
+the tool prints a five-row fixture (two goals, a gate, a running row, one in
+review, one deferred), which unlike a live-store snapshot does not go stale:
 
 ```
-TASKS  session-skillfx1  ·  🎯 armed: A teammate ships one workbook through the console alone  ·  🟢 2 goal tags, 0 met  ·  🏁 0 of 2 milestones  ·  0 running
-  store session-skillfx1, found by the --session you passed  ·  grouped by goal, then batch, auto, 83% of open rows carry it
+TASKS  session-skillfx1  ·  🎯 armed, on the /goal line below  ·  🟢 2 goal tags, 0 met  ·  🏁 0 of 3 milestones  ·  🔴 1 need you  ·  1 running
+  store session-skillfx1, found by the --session you passed  ·  grouped by goal, then batch, auto, 100% of open rows carry it
+/goal A teammate ships one workbook through the console alone
 
 ⚡ CLEAR NOW   1 of 1 waiting on you, across 1 goal and 1 lane
    1  #1    Rule on the notes-and-asks redesign
                 ▸ do    open the decision page and rule
 
-╭▏🔴 · 📋  The owner sees every decision he owes on one page                           ·  0m
-│  ─────────────────────────────────────────────────────────────────────────────────────────
+🔴 · 📋  The owner sees every decision he owes on one page
+╭▏───────────────────────────────────────────────────────────────────────────────────  ·  0m
 │  ▱▱▱▱▱▱▱▱▱▱  0 of 1 milestone   ·   next: DEC
 │
 │  ▸ DEC
@@ -54,32 +55,30 @@ TASKS  session-skillfx1  ·  🎯 armed: A teammate ships one workbook through t
 │         ◆ owner ◇ opus   ▪ decide ▫ kanban   » USER: open the decision page and rule
 │    🔵 ▶ #2    Force the Decisions group open when any decision is pending
 │         ◆ hands ◇ sonnet ▪ build  ▫ kanban
-│    🟢 ○ #3    Board tab title carries the pending count
+│    🟠 ~ #3    Board tab title carries the pending count
 │         ◆ hands ◇ sonnet ▪ build  ▫ kanban   » after #2
 ╰▏
 
-╭▏🟣 · 🏭  A person drives the job page end to end without stumbling                   ·  0m
-│  ─────────────────────────────────────────────────────────────────────────────────────────
-│  ▱▱▱▱▱▱▱▱▱▱  0 of 1 milestone   ·   next: the page loads without a flash
-│
-│  ▸ the page loads without a flash
-│    ─────
-│    🟣 = #4    Skeleton for the parts table while it loads
-│         ◆ hands ◇ opus   ▪ ui     ▫ forge    » PR open, awaiting a peer read
-│    💤 z #5    Export XLSX rich formatting, the rest of it
-│         ◆ hands ◇ sonnet ▪ build  ▫ forge    » out of scope for v1 by decision
-╰▏
-… +1 rows held by the height cap (--detail or --json shows all): #6
-  🔴 needs you (!)   🔵 running (▶)   🟢 ready (○)   🟣 in review (=)   💤 deferred (z)
+🟣 · 🏭  A person drives the job page end to end without stumbling  ·  0m
+     🟣 = #4    Skeleton for the parts table while it loads
+          ◆ hands ◇ opus   ▪ ui     ▫ forge    » PR open, awaiting a peer read
+
+💤 · 💤  later · deferred, or after V1  ·  0m
+     💤 z #5    Export XLSX rich formatting, the rest of it
+          ◆ hands ◇ sonnet ▪ build  ▫ forge    » out of scope for v1 by decision
+  🔴 needs you (!)   🟠 after a task (~)   🔵 running (▶)   🟣 in review (=)   💤 deferred (z)
   ─────────────────────────────────────────────────────────────────────────────────────────
-  ◆ lane   ◇ tier   ▪ kind   ▫ domain   🗣 asked   📏 measured   »  note, shown only when it changes what you do   ·   the emoji beside a box's ball is that goal's badge   ·   height 37/44   ·   -h for flags
-⚠ 1 rows not on screen, 16% of the queue   ·   median subject 43 chars, 1 carry no goal
+  ◆ lane   ◇ tier   ▪ kind   ▫ domain   »  note, shown only when it changes what you do   ·   the emoji beside a box's ball is that goal's badge   ·   height 33/44   ·   -h for flags
 ```
 
 What the pieces mean:
 
-- **Header.** `🎯 armed: <his /goal>`, then `N goal tags, M met` and `🏁 closed of
-  total milestones`: goals are what the owner measures, never task counts ("I CARE
+- **Header.** `🎯 armed, on the /goal line below` (or `no /goal armed`), then `N
+  goal tags, M met` and `🏁 closed of total milestones`. His goal itself rides
+  its own `/goal <text>` line under the provenance line, whole, wrapped with the
+  continuation at column 0 and nothing else on it, so he can select and paste it
+  (owner ruling unblock-0908 D2b, 2026-09-08; the Q7a clip at 96 chars cut goals
+  at their second promise). Goals are what the owner measures, never task counts ("I CARE
   ABOUT GOALS BEING DONE AGAINST THEIR MEANINGFUL BEHAVIORIAL INDENDED CHANGE; be
   it 3 tasks or 30 tasks"). The count says "goal tags" because it counts the
   `metadata.goal` strings on rows, which are not his armed goal: on 2026-09-08 the
@@ -90,9 +89,16 @@ What the pieces mean:
   Q1a, 2026-09-05: every `USER:` gate reaches CLEAR NOW, capped at three with the
   rest counted; the steer/errand split is gone. A gate's do-line is a declared
   closer when it has one and otherwise the owner's own prose after `USER:`.
-- **Goal box.** `╭▏<ball> · <emoji>  <title>  ·  <age>`, a full-width rule, then
-  the meter `▰▰▱▱ closed of total milestones · next: <milestone>`. Boxes are
-  separated by one blank line. The box holding a gate renders first.
+- **Goal box.** The title first, as plain text: `<ball> · <emoji>  <title>`,
+  wrapped with the continuation at column 0 and no rail glyph anywhere in it
+  (owner, 2026-09-08: "the box around the goal makes it hard to copy paste it,
+  no fancy characters between the terminal text flow"). Then the opening corner
+  carrying the full-width rule and the age, `╭▏────  ·  <age>`, then the meter
+  `▰▰▱▱ closed of total milestones · next: <milestone>`. Boxes are separated by
+  one blank line. The box holding a gate renders first. **A goal with one row
+  draws no box** (D3a, same ruling): its title line carries the age and the row
+  follows without a rail, because six lines of chrome around one row hid seven
+  rows on a small store in the turn the owner asked what was left.
 - **Milestone band.** `▸ <name>` on the rail with a short rule under it. A
   milestone names a STATE ("Right now, …" parses true or false), never activity.
   A three-letter acronym is the floor for its name (owner, 2026-09-05).

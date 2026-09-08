@@ -30,7 +30,7 @@ render | rg -q "grouped by domain(, then batch)?, auto" && ok "domain present: a
 render | rg -q "\(no domain\)" && ok "rows without the key land in a named (no domain) group" || ko "no-key group"
 $T meta 2 batch=B >/dev/null; $T meta 3 batch=B >/dev/null; $T meta 1 batch=A >/dev/null
 render | rg -q "grouped by batch, auto" && ok "batch present: auto → batch" || ko "auto batch"
-out=$(render); [ "$(echo "$out" | rg -n "╭▏[^A-Za-z]*B( |$)" | head -1 | cut -d: -f1)" -lt "$(echo "$out" | rg -n "╭▏[^A-Za-z]*A( |$)" | head -1 | cut -d: -f1)" ] && ok "the box holding the gate renders first" || ko "batch order"
+out=$(render); [ "$(echo "$out" | rg -n "^[🔴🟠🔵🟢⚪] · [^A-Za-z]*B( |$)" | head -1 | cut -d: -f1)" -lt "$(echo "$out" | rg -n "^[🔴🟠🔵🟢⚪] · [^A-Za-z]*A( |$)" | head -1 | cut -d: -f1)" ] && ok "the box holding the gate renders first" || ko "batch order"
 render | rg -q "▸ do +rule" && render | rg -q "USER: rule" && ok "the gate's prose is its CLEAR NOW do-line AND its blocked_on text stays on the row" || ko "do-line/blocked line"
 
 echo "== explicit lane beats prose inference =="
@@ -50,8 +50,8 @@ bash "$TT" --set-group domain | rg -q "group=domain" && ok "--set-group writes t
 render | rg -q "grouped by domain(, then batch)?, set in this project's view file" && ok "view file outranks auto" || ko "view precedence"
 render --group batch | rg -q "grouped by batch, from the --group flag" && ok "flag outranks the view file" || ko "flag over file"
 jq '.group="batch" | .order=["B","A"] | .labels={"B":"B · second batch first"}' "$SB/proj/.claude/tasks-view.json" > "$SB/v.json" && mv -f "$SB/v.json" "$SB/proj/.claude/tasks-view.json"
-out=$(render); echo "$out" | rg -q "╭▏.*B · second batch first" && ok "labels render" || ko "labels"
-[ "$(echo "$out" | rg -n "second batch first" | head -1 | cut -d: -f1)" -lt "$(echo "$out" | rg -n "╭▏[^A-Za-z]*A( |$)" | head -1 | cut -d: -f1)" ] && ok "order from the view file wins over natural order" || ko "order"
+out=$(render); echo "$out" | rg -q "^[🔴🟠🔵🟢⚪] · .*B · second batch first" && ok "labels render" || ko "labels"
+[ "$(echo "$out" | rg -n "second batch first" | head -1 | cut -d: -f1)" -lt "$(echo "$out" | rg -n "^[🔴🟠🔵🟢⚪] · [^A-Za-z]*A( |$)" | head -1 | cut -d: -f1)" ] && ok "order from the view file wins over natural order" || ko "order"
 echo "not json" > "$SB/proj/.claude/tasks-view.json"; render | rg -q "view file did not parse" && ok "broken view file is reported, not fatal" || ko "broken view"
 trash "$SB/proj/.claude/tasks-view.json" 2>/dev/null || true
 
@@ -76,7 +76,7 @@ $T add "deferred thing" --goal G1 --batch "after V1" --lane builder --tier fable
 # would be testing the fixture, not the rule. File the other two open rows.
 for r in 1 2 4 121; do $T --session eeeeeeee meta "$r" goal=G2 batch=b2 >/dev/null 2>&1; done
 out=$(render); echo "$out" | rg -q "grouped by goal, then batch" && ok "goal present on most rows: goal › batch" || ko "goal>batch: $(echo "$out" | sed -n 2p)"
-echo "$out" | rg -q "╭▏.*G1" && echo "$out" | rg -q "▸ b1" && ok "goal box with a milestone band" || ko "bands"
+echo "$out" | rg -q "^[🔴🟠🔵🟢⚪] · .*G1" && echo "$out" | rg -q "▸ b1" && ok "goal box with a milestone band" || ko "bands"
 echo "$out" | rg -q "◆ hands" && echo "$out" | rg -q "◇ opus" && ok "lane and tier each in their own column" || ko "lane tag"
 echo "$out" | rg -q "after #122" && ok "sequenced row says after #x" || ko "sequence note"
 [ "$(echo "$out" | rg -n "#122 " | head -1 | cut -d: -f1)" -lt "$(echo "$out" | rg -n "#123 " | head -1 | cut -d: -f1)" ] && ok "blockedBy chain orders the batch" || ko "chain order"
@@ -285,7 +285,10 @@ _ask=$(echo "$out" | rg -n "gate with an ask" | sed -n 1p | cut -d: -f1); _no=$(
 [ -n "$_ask" ] && [ -n "$_no" ] && [ "$_ask" -lt "$_no" ] && ok "a gate with an ask ranks above a gate with none in CLEAR NOW" || ko "CLEAR NOW order: ask at line ${_ask:-none}, no-ask at line ${_no:-none}"
 echo "$out" | rg -q "names no ask" && ok "the no-ask do-line says the ask is owed, not a maintenance command" || ko "no-ask do-line: $(echo "$out" | rg -m1 'no instruction|names no ask')"
 # (c) a box with no milestone prints no meter that reads 0 of 0
-$T add "lonely goal row" --goal G3 --session eeeeeeee >/dev/null 2>&1
+# Written as JSON: task.sh refuses a goal row with no milestone (D6a), and until
+# 2026-09-08 this line's refusal was swallowed, so the assertion below was being
+# satisfied by the deferred box's hint rather than by this row (a blind fixture).
+printf '{"id":"126","subject":"lonely goal row","description":"","status":"pending","blocks":[],"blockedBy":[],"metadata":{"goal":"G3","lane":"hands","tier":"opus"}}' > "$HOME/.claude/tasks/session-eeeeeeee/126.json"
 out=$(render --detail)
 echo "$out" | rg -q "0 of 0 milestones" && ko "a box with no milestone printed 0 of 0" || ok "a box with no milestone prints no 0 of 0 meter"
 echo "$out" | rg -q "no milestone named yet" && ok "and it says what is missing instead" || ko "the no-milestone line is absent (a prohibition alone is blind to omission)"

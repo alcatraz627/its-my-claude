@@ -128,8 +128,12 @@ def header_says_which_goal_it_counts():
     # armed), and the count names itself as tags. A green on the count alone
     # survived the armed segment being deleted (review 2026-09-08).
     if armed:
-        if "armed:" not in head or armed[:24] not in head:
-            return "RED", f"a goal is armed but line 1 does not carry it: {head[:80]}"
+        # Since 2026-09-08 (unblock-0908 D2b) line 1 says a goal is armed and
+        # the text rides its own /goal line under the provenance line, whole.
+        first = out.splitlines()[:8]
+        goal_line = next((l for l in first if l.startswith("/goal ")), "")
+        if "armed" not in head or not goal_line or armed[:24] not in goal_line:
+            return "RED", f"a goal is armed but the first screen does not carry it on a /goal line: {head[:80]}"
     elif "no /goal armed" not in head:
         return "RED", f"no goal is armed and line 1 does not say so: {head[:80]}"
     if "goal tag" in head or "metadata.goal" in head or "no rows" in head.lower():
@@ -169,7 +173,8 @@ def suite_renders_the_real_stores():
     cites = [t for t in tests if any(sid in open(t, errors="ignore").read() for sid in BIG_STORES)]
     if len(have) == 2 and cites:
         return "GREEN", f"both stores frozen with goldens; cited by {os.path.basename(cites[0])}"
-    return "RED", f"frozen stores with goldens: {have or 'none'}; suites citing a real store: {len(cites)} of {len(tests)}"
+    return "RED", (f"frozen stores with goldens: {have or 'none'}; suites citing a real store: {len(cites)} of {len(tests)}"
+                   f"; the fixtures are local only (public remote, D4a 2026-09-08): python3 {fx}/freeze.py {' '.join(BIG_STORES)}")
 
 
 def a_row_moves_between_store_and_board():

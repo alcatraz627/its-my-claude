@@ -5,6 +5,12 @@
 # these two do, which is where the renderer failed on 2026-09-07.
 set -uo pipefail
 FX="$HOME/.claude/scripts/task-table/fixtures"
+# The frozen stores are Versable project text and the remote is public, so they
+# stay local (unblock-0908 D4a, 2026-09-08); a clone without them skips, saying how.
+if ! ls "$FX"/session-*.json >/dev/null 2>&1; then
+  echo "SKIPPED: no frozen stores under $FX; freeze them locally: python3 $FX/freeze.py 1523e931 f04ae843"
+  exit 0
+fi
 # A sandbox HOME, like every other suite: the fixtures used to unpack under the
 # live ~/.claude/tasks, and a mid-run death left a store there (review 2026-09-08).
 SRC="$HOME/.claude/scripts/task-table"; REAL="$HOME"; SB=$(mktemp -d "${TMPDIR:-/tmp}/realstore-home-XXXXXX")

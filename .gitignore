@@ -121,3 +121,12 @@ subconscious/dreams/processed.json
 subconscious/dreams/digest-meta.json
 subconscious/metacog/processed.json
 subconscious/state.json
+
+# Frozen copies of the two real task stores and the first-screen renders back the
+# golden suites and alignment checks 2 and 5. They are Versable project text and
+# this remote is public, so they stay local (owner ruling unblock-0908 D4a,
+# 2026-09-08). freeze.py rebuilds them; the suites say SKIPPED with that command
+# when they are absent.
+scripts/task-table/fixtures/session-*.json
+scripts/task-table/fixtures/session-*.golden.txt
+scripts/alignment-checks/fixtures/*.txt

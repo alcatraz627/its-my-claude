@@ -277,6 +277,9 @@ done
 # the reader can tell his goal from the goal TAGS the count below is made of.
 ARMED_GOAL=""
 [ -n "$LIVE" ] && ARMED_GOAL=$(bash "$HOME/.claude/scripts/goal/goal.sh" harness --sid "$LIVE" 2>/dev/null | jq -r 'select(.armed==true) | .text // empty' 2>/dev/null)
+# Test seam: the suites run with no live harness goal, and the /goal line is a
+# ruled surface (D2b) that has to be exercised.
+[ -n "${TASKS_ARMED_GOAL:-}" ] && ARMED_GOAL="$TASKS_ARMED_GOAL"
 ALIAS="$ALIAS" MODEL="$MODEL" DETAIL="$DETAIL" MODE="$MODE" DIR="$DIR" GCC="$HOME/.claude" RESOLVED_BY="$RESOLVED_BY" GROUP="$GROUP" VIEW_FILE="$VIEW_FILE" PROOT="$PROOT" ARMED_GOAL="$ARMED_GOAL" python3 - <<'PY'
 import calendar, json, os, re, pathlib, sys, time
 
@@ -1052,9 +1055,10 @@ _head = f"TASKS  {d.name}"
 # word, and the count below names itself as tags (alignment check 3).
 _armed = (os.environ.get("ARMED_GOAL") or "").strip()
 if _armed:
-    if len(_armed) > 96:
-        _armed = _armed[:96].rsplit(" ", 1)[0] + "…"
-    _head += f"  ·  \U0001F3AF armed: {_armed}"
+    # The text itself rides its own line under the provenance line (unblock-0908
+    # D2b, 2026-09-08); Q7a's 96-char clip on this line cut goals at their
+    # second promise (cold-read-P2 Q5, #38).
+    _head += "  ·  \U0001F3AF armed, on the /goal line below"
 else:
     _head += "  ·  \U0001F3AF no /goal armed"
 if _goal_ms:
@@ -1099,6 +1103,11 @@ _src = ("from the --group flag" if group_src.startswith("flag")
         else "auto")
 w(f"  store {d.name}, found by {_how}  ·  grouped by {group}"
   + (f", then {sub}" if sub else "") + f", {_src}")
+# His goal in his words, whole, as the line he can paste back. Plain text with
+# continuation lines at column 0 and nothing else on them, because he copies it
+# off this screen (unblock-0908 D2b and the D3 note, 2026-09-08).
+if _armed:
+    for _gl in wrap("/goal " + _armed, BOX_W): w(_gl)
 
 if not data:
     # An empty table is indistinguishable from an empty QUEUE, and a peer read
@@ -1484,8 +1493,8 @@ def build_body():
     def emit_box(key, items, unfiled=False, fixed_emoji="", fixed_ball=""):
         """One goal, drawn as a closed box.
 
-        Curved corners, a rail down the left, the ball attached to the rail by a slim
-        bar, and a full-width rule under the title. The box is what was missing when
+        The title as plain text, then curved corners, a rail down the left and a
+        full-width rule on the opening corner. The box is what was missing when
         the owner said the distinctions were not proper. The ball rides on the rail
         and does not replace it, and the per-goal emoji sits beside the ball rather
         than under it: one says whether the goal can continue without him, the other
@@ -1524,9 +1533,19 @@ def build_body():
         else:
             _mt = max((x.get("_mtime") or 0) for x in items) or 0
             age = _age(time.time() - _mt) if _mt else "—"
-        lead = f"╭▏{ball} · {emo}  "
+        # The title is plain text above the rails. The owner copies his goal off
+        # this screen, and a rail glyph on a wrapped continuation line came along
+        # with the selection: "the box around the goal makes it hard to copy paste
+        # it, no fancy characters between the terminal text flow" (unblock-0908
+        # D3, 2026-09-08). The lead glyphs sit before the text, never inside it;
+        # the rule and the age moved down to the corner line.
+        lead = f"{ball} · {emo}  "
         tailtxt = f"  ·  {age}"
-        room = BOX_W - dwidth(lead) - dwidth(tailtxt)
+        # A one-row goal is its title and its row (D3a, #44): six lines of chrome
+        # around one row read as a form with nothing in it on small stores, and
+        # hid seven rows in the turn the owner asked what was left (ledger 2).
+        one_row = len(items) == 1 and not unfiled
+        room = BOX_W - dwidth(lead) - (dwidth(tailtxt) if one_row else 0)
         # A title is never elided from the middle. The mid-cut of the owner's own
         # goal read "tell the owner … without him decoding it", a sentence that
         # still parsed and meant something else (visual audit V6, #59). A title
@@ -1537,16 +1556,34 @@ def build_body():
         if len(_tlines) > 2:
             _tlines = [_tlines[0], ellip(" ".join(_tlines[1:]), room)]
         _tlines = [ellip(t, room) for t in _tlines]
+        if one_row:
+            if not fits(1 + len(_tlines) + first_row_cost(items)):
+                hidden.extend(f"#{x['id']}" for x in items)
+                _unopened.append((ball, emo, title, len(items))); return
+            _box_owed = 0
+            if out and out[-1] != "": w("")
+            w(lead + _tlines[0] + (tailtxt if len(_tlines) == 1 else ""))
+            for _tl in _tlines[1:-1]: w(_tl)
+            if len(_tlines) > 1: w(_tlines[-1] + tailtxt)
+            _start = len(out)
+            emit_rows(items)
+            # The row keeps its shape and loses its rail: there is no box to rail.
+            for _i in range(_start, len(out)):
+                if out[_i].startswith("│"): out[_i] = " " + out[_i][1:]
+            # The meter is gone with the chrome, but its one defect callout is not
+            # chrome (cold-read-P2 Q2): a goal with no milestone still says so.
+            if not meta_of(items[0], "batch") and fits(1):
+                w(" " * (ID_COL - 2) + f"no milestone named yet   ·   name one: task.sh meta {items[0]['id']} batch=<the state it reaches>")
+            return
         _first = (2 + first_row_cost(_bands[0][1])) if _bands else first_row_cost(items)
-        if not fits(6 + (len(_tlines) - 1) + _first):
+        if not fits(5 + len(_tlines) + _first):
             hidden.extend(f"#{x['id']}" for x in items)
             _unopened.append((ball, emo, title, len(items))); return
         _box_owed = 1
         if out and out[-1] != "": w("")
-        w(lead + dljust(_tlines[0], room) + tailtxt)
-        for _tl in _tlines[1:]:
-            w("│" + " " * (dwidth(lead) - 1) + _tl)
-        w("│  " + RULE_IN)
+        w(lead + _tlines[0])
+        for _tl in _tlines[1:]: w(_tl)
+        w("╭▏" + "─" * (BOX_W - 2 - dwidth(tailtxt)) + tailtxt)
         if unfiled:
             # An empty bar, never a full one: a solid bar reads as complete on
             # every other line of the page (visual audit V8, #59).

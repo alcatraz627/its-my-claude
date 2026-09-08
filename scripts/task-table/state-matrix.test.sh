@@ -238,7 +238,9 @@ printf '{"id":"1","subject":"short subject","description":"","status":"pending",
 # D1 split the stacked tag cell into four fixed trait columns, so the line to
 # read is the trait row under the subject rather than the row itself. The
 # property is unchanged: a value the cell could not hold must SAY it was cut.
-tagout=$(bash "$TT" --session tagcut01 2>&1 | rg '^│\s+◆' || true)
+# A one-row goal draws without rails since D3a (2026-09-08), so the trait row
+# may start with a rail or with spaces; the cell is what is under test.
+tagout=$(bash "$TT" --session tagcut01 2>&1 | rg '^[│ ]\s+◆' || true)
 cell="$tagout"
 case "$cell" in
   *"…"*) ok ;;                    # "…" = this value is cut
@@ -316,12 +318,13 @@ do_=$(bash "$TT" --session defr0001 2>&1)
 printf '%s\n' "$do_" | python3 -c '
 import sys
 L=[l.rstrip() for l in sys.stdin]
-# Deferred rows now sit in their own box rather than a LATER band, so the region
-# is bounded by the box corners instead of by the next flush-left title.
+# Deferred rows sit in their own box. Since D3a (2026-09-08) the title is a plain
+# line above the rails and a one-row box has no rails at all, so the region runs
+# from the title line to the closing corner or the next blank line.
 later=False; banished=False; parked=False
 for l in L:
-    if l.startswith("\u256d") and "later \u00b7" in l: later=True; continue
-    if l.startswith("\u2570"): later=False; continue
+    if l.startswith("\U0001F4A4") and "later \u00b7" in l: later=True; continue
+    if l.startswith("\u2570") or l.strip() == "": later=False; continue
     if later and "active lane work" in l: banished=True
     if later and "genuinely parked" in l: parked=True
 sys.exit(0 if (not banished and parked) else 1)' >/dev/null 2>&1 \

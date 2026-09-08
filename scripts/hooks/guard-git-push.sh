@@ -212,7 +212,10 @@ Instead:
      a. AskUserQuestion, with exactly ONE option labelled exactly:
           Approve push ${nonce}
         Their pick of that option writes the sentinel. Any other option, an
-        altered label, or two options carrying the nonce writes nothing.
+        altered label, or two options carrying the nonce writes nothing. A
+        [push-gate] line follows the pick when the hook ran; if none does, the
+        harness skipped the hook (seen once in three, 2026-09-08): ask once
+        more, then fall back to (b).
      b. Or they type, in their own shell, with the ! prefix:
           ! touch ${SENTINEL}
   3. Re-run the push. The approval is single-use — it is consumed by this one push.

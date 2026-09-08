@@ -86,7 +86,7 @@ rm -f "$ROOT/human"; HOME="$ROOT" "$TT" --session cont001 --group goal > "$ROOT/
 # unchanged and is what these still assert: the rows are kept, the band names
 # itself rather than an absent field, it carries the command that empties it, and
 # it sorts after every real outcome.
-has "the band renders under its own name"  '^╭▏⚪ · 📥  unfiled' "$ROOT/human"
+has "the band renders under its own name"  '^⚪ · 📥  unfiled' "$ROOT/human"
 has "it counts what is in it"              'no meter can be drawn' "$ROOT/human"
 # A solid bar reads as complete on every other line of the page (visual audit V8, #59).
 has "its meter is an empty bar"            '▱▱▱▱▱▱▱▱▱▱  no meter' "$ROOT/human"
@@ -97,15 +97,15 @@ hasnt "and so is the absent-field title"   '\(no goal\)' "$ROOT/human"
 
 # Last, so the real outcomes are read first. The old bucket sorted alphabetically
 # among them and was the largest thing on screen.
-_g=$(rg -n '^╭' "$ROOT/human" | rg -v 'unfiled' | tail -1 | cut -d: -f1)
-_u=$(rg -n '^╭▏⚪ · 📥  unfiled' "$ROOT/human" | head -1 | cut -d: -f1)
+_g=$(rg -n '^[🔴🟠🔵🟢] · ' "$ROOT/human" | tail -1 | cut -d: -f1)
+_u=$(rg -n '^⚪ · 📥  unfiled' "$ROOT/human" | head -1 | cut -d: -f1)
 ok "the band sorts after every real goal" "$([ -n "$_g" ] && [ -n "$_u" ] && [ "$_u" -gt "$_g" ] && echo yes || echo no)" "yes"
 
 # A queue with nothing unfiled must not grow an empty band.
 reset
 mk 1 pending "Ship it" "B1"
 rm -f "$ROOT/clean"; HOME="$ROOT" "$TT" --session cont001 --group goal > "$ROOT/clean" 2>&1
-hasnt "no band when nothing is unfiled" '^╭▏⚪ · 📥  unfiled' "$ROOT/clean"
+hasnt "no band when nothing is unfiled" '^⚪ · 📥  unfiled' "$ROOT/clean"
 
 echo "---- pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]
