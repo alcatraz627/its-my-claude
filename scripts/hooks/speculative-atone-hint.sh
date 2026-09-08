@@ -35,14 +35,36 @@ CNT_DIR="$HOME/.claude/.turn-state"; mkdir -p "$CNT_DIR"
 CNT_FILE="$CNT_DIR/spec-atone-nags-$SID8"
 n=$(( $(cat "$CNT_FILE" 2>/dev/null || echo 0) + 1 )); printf '%s' "$n" > "$CNT_FILE"
 
-tone="unresolved speculative atones from the residue review; resolve each this session"
-[ "$n" -ge "$ESCALATE_AT" ] && tone="IGNORED $n TURNS — the Stop gate is now armed; turn-ends will block until these are resolved"
+# Two identical fires, then one line. The same ten-line box on four consecutive
+# turns was ignored three times and the owner had to ask for it himself (ledger
+# 10, sys-monitor 2026-09-07); five identical re-injections sat inside a live
+# exchange about missing hardware (ledger 20). Repetition was the design, and it
+# stays for the escalation count, but the SAME box a third time carries nothing
+# the second did not. So: the full box while the pending set is new or changed,
+# then one line naming the count and the ids until the set changes.
+SIG_FILE="$CNT_DIR/spec-atone-sig-$SID8"
+sig=$(printf '%s' "$pending" | shasum | cut -c1-12)
+prev=$(cat "$SIG_FILE" 2>/dev/null || echo "")
+prev_sig="${prev%% *}"; prev_cnt="${prev##* }"
+case "$prev_cnt" in ''|*[!0-9]*) prev_cnt=0 ;; esac
+if [ "$prev_sig" = "$sig" ]; then same=$((prev_cnt + 1)); else same=1; fi
+printf '%s %s' "$sig" "$same" > "$SIG_FILE"
 
-msg="┌─ 🙏 atone · speculative ─────────────────────── nag $n ──
+tone="unresolved speculative atones from the residue review; resolve each this session"
+[ "$n" -ge "$ESCALATE_AT" ] && tone="IGNORED $n TURNS — the Stop gate is armed and blocks turn-ends once the owner has been quiet 30 minutes"
+verbs="confirm = run /atone then \`atone-speculative.sh confirm <id> --atone <mist-id>\` · agree = \`atone-speculative.sh agree <id> --evidence \"<cited>\"\` (you accept it; the atone follows when idle) · refute = \`atone-speculative.sh refute <id> --evidence \"<cited>\"\`"
+
+if [ "$same" -gt 2 ]; then
+  ids=$(printf '%s\n' "$pending" | awk '{print $1}' | head -6 | paste -sd' ' -)
+  cnt=$(printf '%s\n' "$pending" | rg -c . 2>/dev/null || echo 0)
+  msg="🙏 atone · speculative: $cnt row(s) still pending after $same identical nags ($ids) · $tone · bash ~/.claude/scripts/atone-speculative.sh pending · $verbs"
+else
+  msg="┌─ 🙏 atone · speculative ─────────────────────── nag $n ──
 $(printf '%s\n' "$pending" | head -12 | sed 's/^/│/')
-│ → $tone: confirm = run /atone then \`atone-speculative.sh confirm <id> --atone <mist-id>\` · refute = \`atone-speculative.sh refute <id> --evidence \"<cited>\"\`
+│ → $tone: $verbs
 └──────────────────────────────────────────────────────────────
 Surface this box to the user (rules/surface-hook-nudges-to-user.md), then act on it."
+fi
 
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "UserPromptSubmit", additionalContext: $c}}' 2>/dev/null || true
 exit 0

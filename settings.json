@@ -1299,6 +1299,14 @@
             "command": "~/.claude/scripts/hooks/credential-ask-stop.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/named-next-work-stop.sh"
+          }
+        ]
       }
     ],
     "SubagentStart": [

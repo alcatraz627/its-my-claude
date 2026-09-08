@@ -36,6 +36,11 @@ SID=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 # the owner asking for anything.
 case "$PROMPT" in
   '<task-notification'*|'[SYSTEM'*|'Caveat:'*|'<local-command'*) exit 0 ;;
+  # A cron wake or heartbeat is the lane talking to itself. 12 of the first 24
+  # reaction rows were wake prompts, each flagged "again" by their own repeated
+  # text, and the owner's real next words after the render were never counted
+  # (2026-09-08). The render marker is left in place so his prompt still is.
+  'Wake check'*|'Heartbeat'*) exit 0 ;;
 esac
 
 TABLE="$HOME/.claude/scripts/task-table/task-table.sh"

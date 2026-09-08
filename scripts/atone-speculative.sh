@@ -14,6 +14,8 @@
 #       --issue "<what the auditor saw>" --cite "<turn/file citation>" [--run <run-id>]
 #   atone-speculative.sh pending [--session <s>]        unresolved rows (all sessions bare)
 #   atone-speculative.sh confirm <id> --atone <mist-id>
+#   atone-speculative.sh agree <id> --evidence "<why the auditor is right, cited>"   the cheap honest yes; /atone owed when idle
+#   atone-speculative.sh agreed [--session <alias>]                                   what is owed a real /atone
 #   atone-speculative.sh refute <id> --evidence "<why the auditor is wrong, cited>"
 #   atone-speculative.sh stats                          nominated / confirmed / refuted by run
 #
@@ -89,6 +91,33 @@ cmd_refute() {
     && echo "refuted: $id"
 }
 
+# Agreeing costs what refuting costs. Confirming an S2 or S3 meant a case file,
+# a juror dispatch at 20 to 40 seconds each and a verdict gate that can refuse
+# the write, while a refute was one command with a cited string, so the cheap
+# path was the dishonest one (ledger 21, csync 2026-09-07: six confirms cost
+# three juror dispatches plus an override; three refutes cost one command each).
+# `agree` is the honest cheap path: the same 40-character cited evidence as a
+# refute, the row leaves the nag, and the real /atone is owed when the session
+# is idle. `stats` and `pending --agreed` show what is owed.
+cmd_agree() {
+  local id="${1:-}"; shift || true
+  local evidence=""
+  while [ $# -gt 0 ]; do case "$1" in --evidence) evidence="$2"; shift 2;; *) shift;; esac; done
+  [ -n "$id" ] || { echo "atone-speculative agree: <id> --evidence required" >&2; exit 2; }
+  [ ${#evidence} -ge 40 ] || { echo "atone-speculative agree: evidence under 40 chars is a nod, not agreement — cite the turn or file:line that shows the auditor was right" >&2; exit 2; }
+  _mutate "$id" ".status = \"agreed\" | .evidence = $(jq -cn --arg e "$evidence" '$e') | .resolved_ts = \$now" \
+    && echo "agreed: $id (the real /atone is owed when idle; then: confirm $id --atone <mist-id>)"
+}
+
+cmd_agreed() {
+  local session=""
+  while [ $# -gt 0 ]; do case "$1" in --session) session="$2"; shift 2;; *) shift;; esac; done
+  [ -f "$STORE" ] || return 0
+  jq -r --arg s "$session" '
+    select(.status == "agreed") | select(($s == "") or (.session == $s) or ((.session | startswith($s))))
+    | "  \(.id)  [\(.severity // "?")] \(.slug // "unslugged")  \(.issue[0:90])\n     agreed: \(.evidence // "-")  session: \(.session)"' "$STORE"
+}
+
 cmd_stats() {
   [ -f "$STORE" ] || { echo "no speculative atones yet"; return 0; }
   jq -r '[.run // "unattributed", .status] | @tsv' "$STORE" | sort | uniq -c \
@@ -99,6 +128,8 @@ case "${1:-}" in
   add) shift; cmd_add "$@";;
   pending) shift; cmd_pending "$@";;
   confirm) shift; cmd_confirm "$@";;
+  agree) shift; cmd_agree "$@";;
+  agreed) shift; cmd_agreed "$@";;
   refute) shift; cmd_refute "$@";;
   stats) shift; cmd_stats "$@";;
   *) sed -n '2,21p' "$0" | sed 's/^# \{0,1\}//';;
