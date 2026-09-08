@@ -97,6 +97,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0055 | decision pages served by kanban; :5197 retired | ✅ | 2026-08-25 | 2026-08-25 | [0055-decision-pages-into-kanban.md](0055-decision-pages-into-kanban.md) |
 | 0056 | 13 always-on rules demoted on-demand; testing+shell split core/catalog | ✅ | 2026-09-01 | 2026-09-01 | [0056-prime-demotion.md](0056-prime-demotion.md) |
 | 0057 | live-session task pin moves out of `tasks/` into new top-level `tasks-pins/` | ✅ | 2026-09-04 | 2026-09-04 | [0057-task-pin-out-of-tasks-dir.md](0057-task-pin-out-of-tasks-dir.md) |
+| 0058 | warden standing beat retired per owner ruling D1a (2026-09-02); on-demand judgment survives; revive runner unbuilt | ✅ | 2026-09-08 | 2026-09-08 | [0058-warden-beat-retired.md](0058-warden-beat-retired.md) |
 
 ---
 

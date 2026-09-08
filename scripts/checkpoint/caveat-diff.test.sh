@@ -59,6 +59,27 @@ bash "$V" "$D" --diff-caveats "$PREV" >/dev/null 2>&1 \
   && bad "an emptied caveat list passed as clean" \
   || ok "emptying the list is reported"
 
+echo "== caveats carried as sub-bullets under the label are read as caveats (sys-monitor, 2026-09-08) =="
+mkb() {  # mkb <summary> <bullet…> -> path
+  local t; t=$(mktemp -d); local summary="$1"; shift
+  {
+    printf '# Core Dump\n\n## Resume Contract\n\n'
+    printf -- '- **Standing caveats:** %s\n' "$summary"
+    for b in "$@"; do printf -- '  - %s\n' "$b"; done
+    printf -- '- **Next action:** x\n\n'
+    printf '## Initial Goal\nx\n## Agent Actions\nx\n## Current Expectation\nx\n## Pending Items\nx\n'
+  } > "$t/cp.md"
+  printf '%s' "$t/cp.md"
+}
+PB=$(mkb '3 entries, each verbatim, listed below. None retired.' 'NOTHING IS COMMITTED, 152 dirty files.' 'The atone snapshot net has been dead since May.' 'Four review findings remain undispositioned.')
+NB=$(mkb '4 entries, listed below.' 'Nothing is committed, now 156 dirty files.' 'The atone snapshot net has been dead since May.' 'Four review findings remain undispositioned.' 'A brand new one.')
+bash "$V" "$NB" --diff-caveats "$PB" >/dev/null 2>&1 \
+  && ok "a changed summary line over carried bullets is not a loss" \
+  || bad "the summary line was compared instead of the bullets"
+DB=$(mkb '2 entries.' 'Nothing is committed, now 156 dirty files.' 'A brand new one.')
+out=$(bash "$V" "$DB" --diff-caveats "$PB" 2>&1); rc=$?
+[ "$rc" = 3 ] && printf '%s' "$out" | rg -q 'atone snapshot net' && ok "a dropped bullet is still named as vanished" || bad "dropped bullet not caught (rc $rc)"
+
 echo "== usage =="
 bash "$V" "$PREV" --diff-caveats /nonexistent/file.md >/dev/null 2>&1
 [ "$?" = 2 ] && ok "missing previous file exits 2" || bad "bad usage did not exit 2"

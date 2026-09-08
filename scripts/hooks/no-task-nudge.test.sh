@@ -118,5 +118,25 @@ o=$(fire "post-clear, no dir" "" 0 "" clear)
 nudged "$o" && bad "asserted an empty list while blind (post-/clear)" || ok "post-/clear -> silent, not guessing"
 
 echo
+echo
+echo "== it must stay quiet when the rows live in a pinned or project-stamped store (2026-09-08, three sessions) =="
+firex() {  # $1 label · $2 "pin"|"stamp"
+  local T; T=$(mktemp -d); mkdir -p "$T/.claude/tasks/session-other000" "$T/.claude/tasks-pins" "$T/proj"
+  printf '{"id":"1"}' > "$T/.claude/tasks/session-other000/1.json"
+  if [ "$2" = pin ]; then printf 'other000' > "$T/.claude/tasks-pins/${SID8}"; fi
+  if [ "$2" = stamp ]; then printf '%s' "$T/proj" > "$T/.claude/tasks/session-other000/.project"; fi
+  rm -f "/tmp/claude-notask-nudged-${SID8}" "/tmp/claude-clear-reset-${SID8}"
+  local out
+  out=$(env HOME="$T" bash -c '
+      printf "E=8\nW=5\n" > "/tmp/claude-tools-$$"
+      printf "{\"session_id\":\"'"$SID"'\",\"cwd\":\"'"$T/proj"'\"}" | bash "'"$HOOK"'" 2>/dev/null
+      rm -f "/tmp/claude-tools-$$"')
+  rm -rf "$T" "/tmp/claude-notask-nudged-${SID8}"
+  printf '%s' "$out"
+}
+o=$(firex "pin" pin);   nudged "$o" && bad "nudged a session whose pin points at a populated store" || ok "pinned store with rows -> quiet"
+o=$(firex "stamp" stamp); nudged "$o" && bad "nudged a session whose project already keeps a stamped store" || ok "project-stamped store with rows -> quiet"
+o=$(fire "control" "" 0 ""); nudged "$o" && ok "control: with neither pin nor stamp it still nudges" || bad "the new exits silenced the hook entirely"
+
 printf 'passed %d, failed %d\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

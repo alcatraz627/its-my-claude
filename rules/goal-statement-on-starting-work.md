@@ -175,6 +175,21 @@ proposing for new work is the owner's to accept: print the paste line and
 carry on working under it as your stated intent. Do not call
 `goal.sh set` unasked.
 
+## The armed goal and the task list's goal band may differ, and that is not a fault
+
+Owner ruling Q3c, 2026-09-05: no code checks the /tasks goal band against the
+armed /goal; this is doctrine for agents. His words, verbatim: "Let the goal be
+nudged towards reconciling with the goal but allow it to be free-floating for
+local focus or external constraints, the agent should not be confused but in
+case I specify or ask for a goal it should not fight me just politely remind and
+reconcile."
+
+So: the goal band on the task list may name a local focus or an external
+constraint the armed goal does not, and an agent reads that as intended, not as
+drift. Nudge toward reconciling when it costs nothing. When the owner sets or
+asks for a goal, never argue with it: remind him in one line what the band says,
+then reconcile the two, in his direction.
+
 ## Diagnostic signal
 
 You are three tool calls into something new and the owner has not been given a

@@ -45,6 +45,27 @@ SID8="${SID:0:8}"
 STATE="/tmp/claude-task-table-${SID8:-unknown}"
 REMIND_AFTER=12
 
+# The owner's next message after a render is the only instrument that says
+# whether the render helped (alignment check 2; owner "go" 2026-09-08). One row
+# per render, appended on the first owner prompt within 30 minutes of it; the
+# marker is then consumed so a second prompt is not counted. Nothing is injected.
+REACT_LOG="$HOME/.claude/logs/tasks-render-reactions.jsonl"
+if [ -f "$STATE" ]; then
+  rendered_at=$(cat "$STATE" 2>/dev/null || echo 0)
+  case "$rendered_at" in ''|*[!0-9]*) rendered_at=0 ;; esac
+  now=$(date +%s); since=$((now - rendered_at))
+  if [ "$rendered_at" -gt 0 ] && [ "$since" -le 1800 ]; then
+    flags=$(printf '%s' "$PROMPT" | rg -oi 'again|still|validate me|not helpful|wtf|what the fuck|useless|word salad|lost in the weeds|^stop |focus|wrong|nonsense|not what i|inconsequential|^no[ ,.]|^/atone|^/pin-for-dream' 2>/dev/null | tr 'A-Z' 'a-z' | sort -u | tr '\n' ',' | sed 's/,$//')
+    cwd=$(printf '%s' "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
+    mkdir -p "$(dirname "$REACT_LOG")"
+    jq -cn --arg ts "$now" --arg sid "$SID8" --arg cwd "$cwd" --arg since "$since" \
+          --arg head "$(printf '%s' "$PROMPT" | head -c 300)" --arg flags "$flags" \
+          '{ts:($ts|tonumber), sid8:$sid, project:$cwd, seconds_since_render:($since|tonumber), prompt_head:$head, flags:($flags|split(",")|map(select(.!="")))}' \
+          >> "$REACT_LOG" 2>/dev/null || true
+    trash "$STATE" 2>/dev/null || true
+  fi
+fi
+
 # The phrasings are taken from the owner's actual asks, 2026-08-13 to 08-15,
 # rather than invented. Add to this list from observed misses, never from guesses.
 ASKED=0

@@ -14,14 +14,32 @@ set -uo pipefail
 PROMPT=$(cat 2>/dev/null || echo "")
 [ -f "$HOME/.claude/.no-goal-hint" ] && exit 0
 SID="${CLAUDE_HINT_SID:-${CLAUDE_CODE_SESSION_ID:-}}"; [ -n "$SID" ] || exit 0
-GOAL="$HOME/.claude/goals/$SID.json"; [ -f "$GOAL" ] || exit 0
+GOAL="$HOME/.claude/goals/$SID.json"
 # machine-generated "user" turns are not the owner talking; do not spend a slot on them
 case "$PROMPT" in "<system-reminder>"*|"<command-name>"*|"<local-command"*|"Caveat:"*|"Base directory for this skill:"*|"Stop hook feedback:"*|"<task-notification>"*|"Another Claude session sent"*) exit 0;; esac
+G="$HOME/.claude/scripts/goal/goal.sh"
+if [ ! -f "$GOAL" ]; then
+  # No goal anywhere. The first paste line went unarmed and nothing raised the
+  # absence again across twenty turns of work (sys-monitor, 2026-09-08). Its own
+  # counter, so these prompts spend no slot of the standing-goal cadence below:
+  # once at the eighth goalless prompt and every sixteenth after.
+  S2="/tmp/claude-nogoal-${SID:0:8}"; m=$(cat "$S2" 2>/dev/null || echo 0); m=$((m+1)); echo "$m" > "$S2"
+  [ "$m" -eq 8 ] || [ $((m % 16)) -eq 0 ] || exit 0
+  armed=$(bash "$G" harness --sid "$SID" 2>/dev/null | jq -r '.armed // false')
+  [ "$armed" = "true" ] && exit 0
+  printf '%s\n' "[goal] $m prompts in and no goal is armed or proposed for this session. If this is more than a lookup, print the owner a /goal paste line now (rules/goal-statement-on-starting-work.md) and work under it. (mute: touch ~/.claude/.no-goal-hint)"
+  exit 0
+fi
 STATE="/tmp/claude-goalhint-${SID:0:8}"; n=$(cat "$STATE" 2>/dev/null || echo 0); n=$((n+1)); echo "$n" > "$STATE"
 [ "$n" -eq 1 ] || [ $((n % 8)) -eq 0 ] || exit 0
-G="$HOME/.claude/scripts/goal/goal.sh"
 armed=$(bash "$G" harness --sid "$SID" 2>/dev/null | jq -r '.armed // false')
 [ "$armed" = "true" ] && exit 0
 text=$(jq -r '.text // empty' "$GOAL"); [ -n "$text" ] || exit 0
 by=$(jq -r '.by // "agent"' "$GOAL")
-echo "[goal] Standing objective for this session (set by $by, harness /goal NOT armed): $text. Keep working under it; to arm the Stop hook too the owner can paste:  /goal $text  (mute: touch ~/.claude/.no-goal-hint)"
+# The paste line stands alone on its own line, bare, so selecting it copies clean.
+# It used to sit mid-sentence with the mute clause appended (adv-goal F7,
+# 2026-09-05), on the goal surface the owner meets most often.
+printf '%s\n%s\n%s\n' \
+  "[goal] Standing objective for this session (set by $by, harness /goal NOT armed): $text. Keep working under it. To arm the Stop hook too, the owner can paste the next line:" \
+  "/goal $text" \
+  "(mute: touch ~/.claude/.no-goal-hint)"

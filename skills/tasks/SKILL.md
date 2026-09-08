@@ -27,33 +27,108 @@ catchup briefing follows. Detail is welcome inside that budget. Past it the tabl
 truncates loudly and names what it dropped, because a silently trimmed list reads
 as a complete one.
 
-## The shape (owner-ratified 2026-08-19, every /tasks run, every session)
+## The shape (ruled 2026-09-04 and 2026-09-05; every /tasks run, every session)
+
+Each goal is a closed box with a rail down its left edge. The ball on the corner
+answers one question: can this goal continue WITHOUT the owner. The emoji beside
+it identifies the goal and never moves when the ball does. A rendered store, as
+the tool prints a six-row fixture (two goals, a gate, a running row, one in
+review, one deferred, one unfiled), which unlike a live-store snapshot does not
+go stale:
 
 ```
-TASKS · <store> · <alias> (<model>) · N open, M done · open rows written Xm ago
-  grouped: goal › batch (project view file) · needs you: #… · running: #…
-────────────────────────────────────────────────────────────────────────
-GATES (you)   (n)                       ← first, always
-  🔴 #id  task                                     owner        tags
-         ↳ blocked: <the blocked_on text> · note: …
-────────────────────────────────────────────────────────────────────────
-GOAL <name>   (n open, k sequenced)
-  BATCH <name>
-    ○ #id  task                                    lane·tier    class · domain
-    ⛓ #id  task  (after #x)                        lane·tier    …
-         ↳ refs: #x (gloss) · prop-… (title)
-────────────────────────────────────────────────────────────────────────
-LATER · deferred / after V1   (n)
-────────────────────────────────────────────────────────────────────────
-legend: ✅ done · ▶ running · ○ ready · ⛓ after #x · 🔴 needs you · ⏳ needs you (inferred)   lanes: …
-done (M): #…      height h/44 · regroup … · --detail · edit: task.sh
+TASKS  session-skillfx1  ·  🎯 armed: A teammate ships one workbook through the console alone  ·  🟢 2 goal tags, 0 met  ·  🏁 0 of 2 milestones  ·  0 running
+  store session-skillfx1, found by the --session you passed  ·  grouped by goal, then batch, auto, 83% of open rows carry it
+
+⚡ CLEAR NOW   1 of 1 waiting on you, across 1 goal and 1 lane
+   1  #1    Rule on the notes-and-asks redesign
+                ▸ do    open the decision page and rule
+
+╭▏🔴 · 📋  The owner sees every decision he owes on one page                           ·  0m
+│  ─────────────────────────────────────────────────────────────────────────────────────────
+│  ▱▱▱▱▱▱▱▱▱▱  0 of 1 milestone   ·   next: DEC
+│
+│  ▸ DEC
+│    ─────
+│    🔴 ! #1    Rule on the notes-and-asks redesign
+│         ◆ owner ◇ opus   ▪ decide ▫ kanban   » USER: open the decision page and rule
+│    🔵 ▶ #2    Force the Decisions group open when any decision is pending
+│         ◆ hands ◇ sonnet ▪ build  ▫ kanban
+│    🟢 ○ #3    Board tab title carries the pending count
+│         ◆ hands ◇ sonnet ▪ build  ▫ kanban   » after #2
+╰▏
+
+╭▏🟣 · 🏭  A person drives the job page end to end without stumbling                   ·  0m
+│  ─────────────────────────────────────────────────────────────────────────────────────────
+│  ▱▱▱▱▱▱▱▱▱▱  0 of 1 milestone   ·   next: the page loads without a flash
+│
+│  ▸ the page loads without a flash
+│    ─────
+│    🟣 = #4    Skeleton for the parts table while it loads
+│         ◆ hands ◇ opus   ▪ ui     ▫ forge    » PR open, awaiting a peer read
+│    💤 z #5    Export XLSX rich formatting, the rest of it
+│         ◆ hands ◇ sonnet ▪ build  ▫ forge    » out of scope for v1 by decision
+╰▏
+… +1 rows held by the height cap (--detail or --json shows all): #6
+  🔴 needs you (!)   🔵 running (▶)   🟢 ready (○)   🟣 in review (=)   💤 deferred (z)
+  ─────────────────────────────────────────────────────────────────────────────────────────
+  ◆ lane   ◇ tier   ▪ kind   ▫ domain   🗣 asked   📏 measured   »  note, shown only when it changes what you do   ·   the emoji beside a box's ball is that goal's badge   ·   height 37/44   ·   -h for flags
+⚠ 1 rows not on screen, 16% of the queue   ·   median subject 43 chars, 1 carry no goal
 ```
 
-No vertical box borders (a glyph's terminal width can then never break the frame); rows
-inside a batch follow the `blockedBy` chain; every stored field prints (blocked_on text,
-lane, tier, goal, note, priority, refs gloss); an unset tier is a loud `?`; `--detail`
-prints descriptions and the full glossary. Rulings and provenance:
-`assets/reports/20260819-tasks-audit/plan.md`.
+What the pieces mean:
+
+- **Header.** `🎯 armed: <his /goal>`, then `N goal tags, M met` and `🏁 closed of
+  total milestones`: goals are what the owner measures, never task counts ("I CARE
+  ABOUT GOALS BEING DONE AGAINST THEIR MEANINGFUL BEHAVIORIAL INDENDED CHANGE; be
+  it 3 tasks or 30 tasks"). The count says "goal tags" because it counts the
+  `metadata.goal` strings on rows, which are not his armed goal: on 2026-09-08 the
+  header read "1 goal, 0 met" about a tag the owner had already retired, beside
+  the goal he had just armed. When the two differ, relocate the open rows under
+  the armed goal's text; the old tag keeps its done rows and reads as met.
+  `🔴 N need you` counts every owner gate, in the legend's own words. Owner ruling
+  Q1a, 2026-09-05: every `USER:` gate reaches CLEAR NOW, capped at three with the
+  rest counted; the steer/errand split is gone. A gate's do-line is a declared
+  closer when it has one and otherwise the owner's own prose after `USER:`.
+- **Goal box.** `╭▏<ball> · <emoji>  <title>  ·  <age>`, a full-width rule, then
+  the meter `▰▰▱▱ closed of total milestones · next: <milestone>`. Boxes are
+  separated by one blank line. The box holding a gate renders first.
+- **Milestone band.** `▸ <name>` on the rail with a short rule under it. A
+  milestone names a STATE ("Right now, …" parses true or false), never activity.
+  A three-letter acronym is the floor for its name (owner, 2026-09-05).
+- **Row.** `<ball> <twin> #id  subject`, then ONE trait line `◆ lane ◇ tier
+  ▪ kind ▫ domain`, one trait per column, never stacked (D1 note, verbatim: "use
+  column for one trait only (no stacking of lane / model / other tags in a single
+  col)"). A note rides the trait line when it fits and drops to its own `»` line
+  when it would be clipped to a stub. A row with no traits prints no trait line.
+  There is NO blank line between rows; blanks sit under milestones and between
+  boxes only (owner, 2026-09-05).
+- **Nine states the tool draws, two channels each.** 🔴 `!` needs you · 🟠 `~`
+  after a task · 🔵 `▶` running · 🟢 `○` ready · 🟣 `=` in review · 💤 `z`
+  deferred · ⚪ `·` unassigned · 🤝 `@` delegated (handed to a peer, unconfirmed
+  until it acknowledges) · ✅ `x` done. The seven RULED states (REDESIGN.md D7a)
+  are the first seven plus done; `delegated` is a renderer distinction inside
+  `active`. Colour is never load-bearing alone. The legend lists only the states
+  present.
+- **Delegated is written by the agent that dispatches, or it never shows.** The
+  renderer reads `metadata.delegated_to`; nothing sets it for you. When you hand
+  a row to a sub-agent or a peer, run `task.sh update <id> --delegated-to <agent>`
+  in the same turn as the dispatch, and `--delegated-confirmed true` when the seat
+  acknowledges (`--undelegate` if it never does). vb dispatched twelve seats on
+  2026-09-05 and every one rendered as ready, because none carried the field
+  (#55). Automatic writing from the dispatch hook is filed as
+  prop-20260905-062648-5a.
+- **UNFILED.** Rows with no goal land in their own loud box (D3b). A holding pen,
+  not a home.
+- **Footer.** Height `h/44`; when rows did not fit, the overflow line accuses the
+  DATA with a measurement (median subject length, rows with no goal), never the
+  tool.
+
+Width is free. Height is a forcing function at 44: past it the render degrades
+(notes collapse before traits; traits never drop) and then truncates loudly,
+naming what it hid. `--detail` prints every line. Rulings and provenance:
+`skills/tasks/REDESIGN.md` (the model, D1 through D7) and
+`assets/reports/20260904-tasks-visual-variants/final.md` (the layout, rev 2).
 
 ## Grouping comes first, and a project ruling outranks the baseline
 
@@ -73,14 +148,17 @@ in this order, highest first:
    <key>` writes it so it is said once. A ruling that lives only in a memory note
    is the shape that produced a 4th-occurrence S3 on 2026-08-18
    (`mist-20260818-130748-e4`).
-3. Auto: `goal` if any open row carries `metadata.goal` (with `batch` as the sub-band),
-   else `batch`, else `domain`, else the actor split.
+3. Auto: the first of `goal`, `batch`, `domain`, `class` that at least 70% of open
+   rows carry (`goal` gets `batch` as its sub-band); if none reaches the bar, the
+   best-covered of them; if none is set at all, the actor split. The bar exists
+   because "goal if any" once put 98 of 180 owner rows into one nameless band
+   (2026-09-04). Rows without the chosen key land in UNFILED, loudly.
 
-Whatever the grouping, the actor split is never lost: it rides as the row glyph
-(🔴 gated on you · ⏳ gated by inference · ▶ running · ○ ready · ⛓ waits · ✅
-verified) and as one `needs you: … · agent-ready: …` line under the header. The
-`tags` column carries class / domain / batch (whichever is not the group key) and
-`seq` carries `⛓ #N` (waits on) or `→ #M` (blocks).
+Whatever the grouping, the actor split is never lost: it rides as the row's ball
+and ASCII twin (the seven states above) and as the CLEAR NOW band under the
+header, which lists up to three owner gates with their do-lines and counts the
+rest. Lane, tier, kind and domain
+each keep their own trait column under the row.
 
 **Rearranging is yours to do, and welcome.** When the owner says "group by X" or
 "put the deck stuff first", run it with `--group` and, if it is a standing
@@ -116,12 +194,31 @@ store files the Task tool writes, so this table reads both:
 ```bash
 task.sh add "<subject>" --class fix --domain hooks --batch A --goal "<goal>" --lane <lane> --tier <fable|opus|sonnet|haiku|lm> [--priority P1] [--owner <alias>] [--note "…"] [--blocked-on "USER: …"] [--verified true|false|prod] [--blocked-by 3,4]
 task.sh update <id> --status in_progress|completed --append-desc "…" --blocked-on … --clear-blocked-on
-task.sh done <id>…   ·   task.sh start <id>   ·   task.sh meta <id> batch=B owner=me   ·   task.sh list
+task.sh close <id> --by "<the check, run or artifact>"   ·   task.sh start <id>   ·   task.sh meta <id> batch=B owner=me   ·   task.sh list
+task.sh add "…" --origin asked|measured|inferred     # 🗣 the owner asked · 📏 a number or file:line behind it · 💭 an agent inferred it
 ```
 
-Set `class`, `domain`, `batch`, and `blocked_on` at creation, whichever tool you
-use: this table groups and gates from metadata, and an unset field is rendered as
-inferred (⏳) rather than declared (🔴), which is a weaker claim.
+**The close rule.** Close a row when the work has landed, not when the edit is
+made, and say what proved it: `close <id> --by "<the suite, the command, the
+screenshot>"`. `--by true` means you ran it, `--by prod` means you saw it live,
+`--by false` means nothing did, and then one clause says why the row closes
+anyway. `done` still works and says aloud that no instrument was named; the
+footer counts those rows, because check 9 (`scripts/alignment-checks`) reads
+them: 361 of 379 closes in the week to 2026-09-08 named nothing.
+
+**The round report.** After each round of work, one line to the owner in this
+shape, and nothing else about the round: `<check or row> · <flip: what changed> ·
+<mutation: what went red to prove it> · <suites: name and verdict>`. A round with
+no mutation says "no mutation" in that slot rather than dropping it. Name the
+suite and "green", not its pass count: five rows cited one suite at four
+different counts inside twenty minutes on 2026-09-08, each true of a tree that
+no longer existed.
+
+Set `goal`, `batch`, `class`, `domain`, `lane`, `tier`, and `blocked_on` at
+creation, whichever tool you use: this table groups, gates, and draws its trait
+columns from metadata. A row with no goal lands in UNFILED; a gate is only a gate
+when `blocked_on` says `USER:`; an unset tier is a loud `?` in the header; a row
+with no traits prints no trait line at all.
 
 ## The script owns the facts. You own the presented table.
 
@@ -185,11 +282,12 @@ full ledger with descriptions and provenance.
 
 ## What the actor split means
 
-**NOW** is in-progress work. **NEEDS YOU** is anything gated on the owner (a
-phrase, a review, a decision, their presence). **AGENT-READY** needs nothing from
-them. **WAITING ON ANOTHER TASK** is sequenced behind an open row (`blockedBy`).
-**DONE** collapses to a row of ids. Under a batch or domain grouping these become
-the glyph and the summary line rather than the sections.
+**running** is in-progress work. **needs you** is anything gated on the owner (a
+phrase, a review, a decision, their presence); every gate reaches CLEAR NOW (Q1a).
+**ready** needs nothing from them. **after a task** is sequenced behind an open
+row (`blockedBy`). **in review** is held short of done on purpose; **deferred** is
+out of scope by decision. **done** collapses to a row of ids. Under any grouping
+these are the row's ball and twin, never separate sections.
 
 ## When they want more than the table
 
@@ -225,16 +323,30 @@ On 2026-08-16 a bare run rendered a different session's queue with complete
 confidence: fifty-nine tasks, one open, none of them ours. "Most recently
 modified" is whichever session wrote last, not whichever is asking.
 
-The resolver now runs a ladder, and declares a guess rather than making one
-quietly:
+The renderer runs a ladder and never guesses (this list is the script's own,
+`task-table.sh` "STORE RESOLUTION"; an earlier version of this section described
+a newest-populated rung the script never had, and it misled a reader on
+2026-09-08):
 
-1. `--session <sid8>` when the directory exists.
-2. A store matching `CLAUDE_CODE_SESSION_ID`, which usually does not exist.
-3. The newest populated store, printing `!! STORE NOT CONFIRMED` in the header.
+1. `--session <sid8>`: wins, or refuses with candidates. Never falls through.
+2. The pin `--pin` wrote for this live session (`~/.claude/tasks-pins/<sid8>`).
+3. `resolve-store.sh`, whose rungs are (`resolve-store.sh`, 2026-09-08): the
+   store literally named for the session when it holds rows; the cached answer
+   from an earlier run; a content match of task subjects against the transcript;
+   the ONE populated store stamped with this project (`.project`), which is the
+   project's queue whichever session created it; a refusal naming the stamped
+   stores when two or more exist and the own store is empty; the empty own store
+   when nothing is stamped at all; else a refusal. `~/.claude` itself is never
+   resolved by stamp, because many unrelated streams keep stores there. The
+   header says which rung answered (`found by the pin`, `found by project-stamp`,
+   `found by content-match`), and `--explain` prints the rung on stderr.
+4. Refuse, with the candidates and the two commands that pin one.
 
-**When you see that warning, pin the store before trusting the table.** Run
-`ls ~/.claude/tasks/` and pass the right `--session`. A status surface showing the
-wrong status is worse than one showing nothing, and this one has done it once.
+**On a refusal, pin the store before trusting any table.** Pass `--session` or
+`--pin <sid8>`. A status surface showing the wrong status is worse than one
+showing nothing, and this one has done it once. Stores carry their project in
+`<store>/.project`, written by any `task.sh` write and by `--pin`, so the
+project's view file is found from any shell directory.
 
 Mute: `touch ~/.claude/.no-task-table-inject`, machine-wide until removed.
 
@@ -259,8 +371,11 @@ So the flow between them is deliberately narrow:
 - **Cite, do not import.** A task may carry an optional `board_card` in its
   metadata, set by hand, and the table may show it. The link is one-directional
   and the board's state is never read in as truth.
-- **Never generate.** Do not create board cards from tasks, and do not fold board
-  state into the table. That is the collapse the ruling names.
+- **Never generate.** Do not create board cards from tasks in bulk, and do not
+  fold board state into the table. That is the collapse the ruling names. The
+  one legal move is `task.sh to-board <id>`: a hand-moved row that leaves the
+  store and closes here with the card id as its pointer. Owner extension of the
+  2026-08-10 ruling, 2026-09-08: "relocation, not generation".
 
 The table answers "what is this session doing right now". The board answers "where
 is this project". A reader who wants the second question answered is on the wrong
@@ -283,3 +398,12 @@ table until it becomes one.
 - **An empty store says so loudly** (`!! EMPTY STORE`), because a resumed
   session's tasks live in the store that CREATED them, and the empty own-store is
   the usual wrong answer (vb-fable, 2026-08-18).
+- **The goal band and the armed /goal may differ; no code reconciles them.**
+  Owner ruling Q3c, 2026-09-05, verbatim: "Let the goal be nudged towards
+  reconciling with the goal but allow it to be free-floating for local focus or
+  external constraints, the agent should not be confused but in case I specify
+  or ask for a goal it should not fight me just politely remind and reconcile."
+  Read a band that names a local focus as intended. When the owner sets or asks
+  for a goal, remind him in one line what the band says, then reconcile in his
+  direction. Never argue. The fuller doctrine is in
+  `rules/goal-statement-on-starting-work.md`.

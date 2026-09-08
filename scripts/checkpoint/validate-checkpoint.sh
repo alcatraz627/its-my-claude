@@ -62,12 +62,22 @@ if [ "$mode" = "--diff-caveats" ]; then
 import re, subprocess, sys
 
 def caveats(path):
+    # The label line plus any indented bullets beneath it: a dump that lists
+    # its caveats as sub-bullets used to be read as one summary line, and the
+    # summary changing ("5 entries" to "7") reported every caveat vanished
+    # (sys-monitor, 2026-09-08).
     txt = open(path, encoding="utf-8", errors="replace").read()
-    m = re.search(r'^\s*-\s*\*\*Standing caveats:\*\*(.*)$', txt, re.M)
+    m = re.search(r'^\s*-\s*\*\*Standing caveats:\*\*(.*?)(?=^\s*-\s*\*\*[^*\n]+:\*\*|^## |\Z)', txt, re.M | re.S)
     if not m:
         return []
-    parts = re.split(r'\(\d+[a-z]?\)', m.group(1))
-    return [p.strip() for p in parts if p.strip()]
+    block = m.group(1)
+    # items are numbered, bulleted, or joined with a middle dot; one long line
+    # read as one caveat compared a whole list to a whole list (2026-09-08)
+    parts = re.split(r'\(\d+[a-z]?\)|^\s+[-*]\s+|\s·\s', block, flags=re.M)
+    parts = [p.strip() for p in parts if p.strip()]
+    if len(parts) > 1 and re.match(r'^\d+\b', parts[0]) and len(parts[0]) < 90:
+        parts = parts[1:]     # a counting summary line is not a caveat
+    return parts
 
 def words(s):
     return set(re.findall(r'[a-z]+', s.lower()))
@@ -173,8 +183,12 @@ PYX
       absent_fields="${absent_fields} '${lbl}'"
     else
       _val=${_line#*"**${lbl}:**"}
+      # A value carried as indented bullets under the label is not empty; the
+      # old read pushed authors to pad the label line to silence this warning
+      # (csync, 2026-09-08).
+      _next=$(printf '%s\n' "$_contract" | rg -A1 -F "**${lbl}:**" | sed -n 2p)
       case "$(printf '%s' "$_val" | tr -d '[:space:]')" in
-        ""|"-"|"—") empty_fields="${empty_fields} '${lbl}'" ;;
+        ""|"-"|"—") printf '%s' "$_next" | rg -q '^\s+[-*]\s+\S' || empty_fields="${empty_fields} '${lbl}'" ;;
       esac
     fi
   done <<< "$_fields"

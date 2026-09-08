@@ -27,7 +27,7 @@ Authorization is the repo's protection status (user ruling 2026-07-11), cadence 
 
 ## Never push to main without explicit approval
 
-One approval ≠ blanket approval. Each push to `main` or `master` requires fresh confirmation (guard-git-push.sh pops the native dialog / sentinel flow). Protected repos gate ALL pushes the same way; unprotected feature-branch pushes flow freely.
+One approval ≠ blanket approval. Each push to `main` or `master` requires fresh confirmation: guard-git-push.sh blocks and prints a nonce; ask through AskUserQuestion with one option labelled exactly `Approve push <nonce>` and the owner's pick writes the single-use sentinel (push-approve-ask.sh), or the owner runs the printed `! touch` in his own shell. Protected repos gate ALL pushes the same way; unprotected feature-branch pushes flow freely.
 
 A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 

@@ -45,6 +45,7 @@ while [[ $# -gt 0 ]]; do
     --kind)              KIND="$2"; shift ;;
     --mode)              MODE="$2"; shift ;;
     --guard-newer-than)  GUARD_SECS="$2"; shift ;;
+    -h|--help) sed -n '16,27p' "$0"; exit 0 ;;
     *) printf 'unknown arg: %s\n' "$1" >&2; exit 2 ;;
   esac
   shift

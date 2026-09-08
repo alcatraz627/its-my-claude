@@ -57,7 +57,10 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-G="$HOME/.claude"; TASKS="$G/tasks"; CACHE="$TASKS/.live-session-map"
+# CACHE moved out of ~/.claude/tasks on 2026-09-04: the live session's own entry
+# kept being swept from there while everything outside that directory survived.
+# Reasoning and evidence in task-table.sh beside its PIN_DIR. Legacy read kept.
+G="$HOME/.claude"; TASKS="$G/tasks"; CACHE="$G/tasks-pins"; CACHE_LEGACY="$TASKS/.live-session-map"
 LIVE="${CLAUDE_CODE_SESSION_ID:-}"
 
 # --as-session substitutes the identity but NOT the cache: a probe of somebody
@@ -78,20 +81,32 @@ fi
 LIVE8="${LIVE:0:8}"
 [ -n "$LIVE8" ] || { echo "resolve-store: no CLAUDE_CODE_SESSION_ID (and no --as-session)" >&2; exit 4; }
 
-# 1. A store literally named for the live session (rare but free).
+# 1. A store literally named for the live session: free when it holds rows.
+#    When it is EMPTY it is held back as the last resort instead of returned. A
+#    resumed session has one of these while its real rows live in the store that
+#    created them, and returning the empty one first told two peers on
+#    2026-09-05 that their queue was done (task #54). Content gets to answer
+#    first; the empty store wins only when nothing else can.
+SELF=""
 if [ -d "$TASKS/session-$LIVE8" ]; then
-  [ "$EXPLAIN" = 1 ] && echo "resolved by: live session id names a store" >&2
-  printf '%s' "$TASKS/session-$LIVE8"; exit 0
+  if [ -n "$(ls "$TASKS/session-$LIVE8"/*.json 2>/dev/null)" ]; then
+    [ "$EXPLAIN" = 1 ] && echo "resolved by: live session id names a store" >&2
+    printf '%s' "$TASKS/session-$LIVE8"; exit 0
+  fi
+  SELF="$TASKS/session-$LIVE8"
 fi
 
 # 2. Cache. Written by step 3, not by hand. Verified before use, because a
 #    cached answer that has since been deleted must not silently win.
-if [ "$NO_CACHE" = 0 ] && [ -r "$CACHE/$LIVE8" ]; then
-  c=$(cat "$CACHE/$LIVE8" 2>/dev/null)
-  if [ -n "$c" ] && [ -d "$TASKS/session-$c" ]; then
-    [ "$EXPLAIN" = 1 ] && echo "resolved by: cached content-match ($c)" >&2
-    printf '%s' "$TASKS/session-$c"; exit 0
-  fi
+if [ "$NO_CACHE" = 0 ]; then
+  for _cd in "$CACHE" "$CACHE_LEGACY"; do
+    [ -r "$_cd/$LIVE8" ] || continue
+    c=$(cat "$_cd/$LIVE8" 2>/dev/null)
+    if [ -n "$c" ] && [ -d "$TASKS/session-$c" ]; then
+      [ "$EXPLAIN" = 1 ] && echo "resolved by: cached content-match ($c)" >&2
+      printf '%s' "$TASKS/session-$c"; exit 0
+    fi
+  done
 fi
 
 # 3. Content-match against the live transcript, then cache the result.
@@ -180,7 +195,7 @@ print(top[1].replace("session-", ""))
 PY
 )
 if [ -n "$OUT" ] && [ -d "$TASKS/session-$OUT" ]; then
-  [ "$NO_CACHE" = 0 ] && { mkdir -p "$CACHE" 2>/dev/null && printf '%s' "$OUT" > "$CACHE/$LIVE8" 2>/dev/null || true; }
+  [ "$NO_CACHE" = 0 ] && { mkdir -p "$CACHE" 2>/dev/null && printf '%s' "$OUT" > "$CACHE/$LIVE8" 2>/dev/null && printf 'content-match' > "$CACHE/$LIVE8.by" 2>/dev/null || true; }
   printf '%s' "$TASKS/session-$OUT"; exit 0
 fi
 
@@ -192,6 +207,47 @@ fi
 # right; failing closed WITHOUT A WORD leaves the caller unable to tell a refusal
 # from a crash, and `STORE=$(resolve-store.sh)` then builds ~/.claude/tasks//
 # out of an empty variable. A refusal owes the caller its reason.
+#
+# Before refusing: the empty store named for this session, if rung 1 held one
+# back. It is a real answer (the session can add rows to it) and it is labelled
+# for what it is, so the caller never mistakes it for a content match.
+# An empty own-store is not returned while a populated store stamped with this
+# project exists: that is the inherited-store shape, and the empty answer went
+# into an agent's context as "the queue is empty" under a trust-this instruction
+# (forge-console, 2026-09-08). ONE stamped store is the project's queue and is
+# returned; two or more are named as candidates and refused.
+PROOT=$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null); [ -n "$PROOT" ] || PROOT="$PWD"
+SAME=""
+for d in "$TASKS"/session-*/; do
+  d="${d%/}"; [ -s "$d/.project" ] || continue
+  [ "$(cat "$d/.project")" = "$PROOT" ] || continue
+  [ -n "$(ls "$d"/*.json 2>/dev/null)" ] || continue
+  SAME="$SAME $(basename "$d")"
+done
+# Exactly ONE populated store stamped with this project is a decisive answer,
+# not a candidate: it is the project's queue, whichever session created it
+# (csync, 2026-09-08: three candidates offered by recency while every open row
+# carried the project's own domain). Two or more stamped stores still refuse.
+# ~/.claude is the global config dir, not one project's queue: many unrelated
+# streams keep stores stamped with it (catchup's CWD-trap rule says the same),
+# so the stamp never picks there.
+if [ "$PROOT" != "$HOME/.claude" ] && [ "$(printf '%s\n' $SAME | rg -c .)" = "1" ]; then
+  ONLY=$(printf '%s' "$SAME" | tr -d ' ')
+  [ "$EXPLAIN" = 1 ] && echo "resolved by: the one populated store stamped with this project ($ONLY); no transcript match, own store empty or absent" >&2
+  [ "$NO_CACHE" = 0 ] && { mkdir -p "$CACHE" 2>/dev/null && printf '%s' "${ONLY#session-}" > "$CACHE/$LIVE8" 2>/dev/null && printf 'project-stamp' > "$CACHE/$LIVE8.by" 2>/dev/null || true; }
+  printf '%s' "$TASKS/$ONLY"; exit 0
+fi
+if [ -n "$SELF" ] && [ -n "$SAME" ]; then
+  echo "resolve-store: session ${LIVE8}'s own store is empty, and these populated stores are stamped with this project:" >&2
+  for s in $SAME; do echo "    $s" >&2; done
+  echo "  One is probably yours, inherited from an earlier session. Pin it: bash ~/.claude/scripts/task-table/task-table.sh --pin <sid8>" >&2
+  echo "  A genuinely new session with no tasks yet adds its first row instead: bash ~/.claude/scripts/task-table/task.sh --new add \"<subject>\"" >&2
+  exit 4
+fi
+if [ -n "$SELF" ]; then
+  [ "$EXPLAIN" = 1 ] && echo "resolved by: live session id names a store (empty; nothing matched by content)" >&2
+  printf '%s' "$SELF"; exit 0
+fi
 echo "resolve-store: no decisive match for session ${LIVE8}." >&2
 echo "  Content-matching needs >=2 task subjects in this session's transcript and one" >&2
 echo "  store holding at least double the runner-up. A store INHERITED from a previous" >&2

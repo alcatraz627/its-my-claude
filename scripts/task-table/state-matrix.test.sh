@@ -139,11 +139,23 @@ PY
     *"held by the height cap"*)
       printf '%s\n' "$out" | python3 -c '
 import sys, re
-txt = sys.stdin.read()
-m = re.search(r"\u2026 \+(\d+) rows held by the height cap[^:]*:(.*)", txt, re.S)
-if not m: sys.exit(0)
-claimed = int(m.group(1))
-tail = m.group(2).split("legend:")[0]
+# The id block is bounded by its own shape, not by whatever line used to follow
+# it. Splitting on the old "legend:" footer made this read on into "done (3):
+# #1 #2 #3" once the footer changed, so it reported a mismatch on 22 real stores
+# whose counts were correct. A test that fails on a layout change it does not
+# test is a test that gets muted.
+L = sys.stdin.read().split("\n")
+i = next((k for k, l in enumerate(L)
+          if re.match(r"\u2026 \+\d+ rows held by the height cap", l)), None)
+if i is None: sys.exit(0)
+claimed = int(re.search(r"\+(\d+) rows held", L[i]).group(1))
+block = [L[i].split(":", 1)[1]]
+for l in L[i+1:]:
+    if re.match(r"^\s+(#\d+ ?)+$", l) or re.match(r"^\s+\u2026 \+\d+ more ids in --json$", l):
+        block.append(l)
+    else:
+        break
+tail = "\n".join(block)
 named = len(re.findall(r"#\d+", tail))
 extra = re.search(r"\u2026 \+(\d+) more ids in --json", tail)
 if extra: named += int(extra.group(1))
@@ -223,16 +235,19 @@ echo "== the tag cell cuts on tag boundaries, never mid-word =="
 export HOME="$SB"
 d="$SB/.claude/tasks/session-tagcut01"; rm -rf "$d"; mkdir -p "$d"
 printf '{"id":"1","subject":"short subject","description":"","status":"pending","blocks":[],"blockedBy":[],"metadata":{"class":"gate-adherence-with-a-very-long-name","domain":"forge-platform-services","batch":"deployment-pipeline","planning":"V1-showable-milestone"}}' > "$d/1.json"
-tagout=$(bash "$TT" --session tagcut01 2>&1 | rg '^\s+○' || true)
-cell=$(printf '%s' "$tagout" | sed 's/.*  //')
+# D1 split the stacked tag cell into four fixed trait columns, so the line to
+# read is the trait row under the subject rather than the row itself. The
+# property is unchanged: a value the cell could not hold must SAY it was cut.
+tagout=$(bash "$TT" --session tagcut01 2>&1 | rg '^│\s+◆' || true)
+cell="$tagout"
 case "$cell" in
-  *"…"|*"+1"|*"+2"|*"+3") ok ;;   # "…" = this tag is cut, "+N" = N whole tags dropped
-  *) # nothing dropped: then every tag must be present whole
+  *"…"*) ok ;;                    # "…" = this value is cut
+  *) # nothing cut: then every value must be present whole
      miss=0
      for t in "gate-adherence-with-a-very-long-name" "forge-platform-services"; do
        case "$tagout" in *"$t"*) ;; *) miss=1;; esac
      done
-     [ "$miss" = 0 ] && ok || ko "tag cell dropped tags without an ellipsis: [$cell]" ;;
+     [ "$miss" = 0 ] && ok || ko "trait cell dropped a value without an ellipsis: [$cell]" ;;
 esac
 # and no cut may leave a bare word fragment of a KNOWN tag
 frag=0
@@ -284,7 +299,11 @@ d="$SB/.claude/tasks/session-stat0001"; rm -rf "$d"; mkdir -p "$d"
 printf '{"id":"1","subject":"finished the old way","description":"","status":"done","blocks":[],"blockedBy":[],"metadata":{"goal":"G1"}}' > "$d/1.json"
 printf '{"id":"2","subject":"finished the new way","description":"","status":"completed","blocks":[],"blockedBy":[],"metadata":{"goal":"G1"}}' > "$d/2.json"
 so=$(bash "$TT" --session stat0001 2>&1)
-case "$so" in *"2 done"*) ok ;; *) ko "status 'done' not counted: $(printf '%s' "$so" | head -1)" ;; esac
+# The header used to carry a finished-task count and no longer does: the owner
+# ruled it answers a question nobody asked ("I CARE ABOUT GOALS BEING DONE
+# AGAINST THEIR MEANINGFUL BEHAVIORIAL INDENDED CHANGE"). With nothing open the
+# done rows ARE the table, so the box title is where the tally now lives.
+case "$so" in *"done · 2 finished"*) ok ;; *) ko "status 'done' not counted: $(printf '%s' "$so" | rg 'done ·|goal' | head -1)" ;; esac
 case "$so" in *"other"*) ko "a 'done' row was bucketed as 'other'" ;; *) ok ;; esac
 case "$so" in *"finished the old way"*) ok ;; *) ko "the status-'done' row never reached the screen" ;; esac
 
@@ -297,10 +316,12 @@ do_=$(bash "$TT" --session defr0001 2>&1)
 printf '%s\n' "$do_" | python3 -c '
 import sys
 L=[l.rstrip() for l in sys.stdin]
+# Deferred rows now sit in their own box rather than a LATER band, so the region
+# is bounded by the box corners instead of by the next flush-left title.
 later=False; banished=False; parked=False
 for l in L:
-    if l.startswith("LATER"): later=True; continue
-    if l and not l.startswith(" ") and not l.startswith("\u2500"): later=False
+    if l.startswith("\u256d") and "later \u00b7" in l: later=True; continue
+    if l.startswith("\u2570"): later=False; continue
     if later and "active lane work" in l: banished=True
     if later and "genuinely parked" in l: parked=True
 sys.exit(0 if (not banished and parked) else 1)' >/dev/null 2>&1 \
@@ -317,13 +338,13 @@ printf '{"id":"1","subject":"mine to do","description":"","status":"pending","bl
 printf '{"id":"2","subject":"someone else has this","description":"","status":"pending","blocks":[],"blockedBy":[],"metadata":{"goal":"G1","blocked_on":"USER: decide","delegated_to":"peer-x"}}' > "$d/2.json"
 printf '{"id":"3","subject":"handed over and acknowledged","description":"","status":"pending","blocks":[],"blockedBy":[],"metadata":{"goal":"G1","delegated_to":"peer-y","delegated_confirmed":"true"}}' > "$d/3.json"
 dout=$(bash "$TT" --session deleg001 --detail 2>&1)
-case "$dout" in *"DELEGATED"*) ok "delegated rows get their own band" ;; *) ko "no DELEGATED band" ;; esac
+case "$dout" in *"delegated · someone else has these"*) ok "delegated rows get their own box" ;; *) ko "no DELEGATED band" ;; esac
 case "$dout" in *"delegated to peer-x"*) ok "the band names who took it" ;; *) ko "band does not name the delegate" ;; esac
 case "$dout" in *"unconfirmed"*) ok "delegated-but-unacknowledged is distinguishable" ;; *) ko "unconfirmed state not shown" ;; esac
 case "$dout" in *"CONFIRMED"*) ok "delegated-and-acknowledged is distinguishable" ;; *) ko "confirmed state not shown" ;; esac
 # the load-bearing one: a delegated row that ALSO carries blocked_on must not
 # count as an owner gate, or the inflation this feature exists to remove survives
-gline=$(printf '%s\n' "$dout" | rg "^GATES" || true)
+gline=$(printf '%s\n' "$dout" | rg "^⚡ CLEAR NOW|^  ☎️ " || true)
 [ -z "$gline" ] && ok "a delegated row carrying blocked_on does NOT inflate GATES" \
                 || ko "delegated row still counted as an owner gate: $gline"
 dig=$(bash "$TT" --session deleg001 --compact 2>&1)

@@ -1,0 +1,512 @@
+#!/usr/bin/env bash
+# goal-box.test.sh — the ruled goal-box layout, and the guards that hold it up.
+#
+# The design is assets/reports/20260904-tasks-visual-variants/final.md, revision
+# 2, owner-approved after four rounds. This suite pins the claims that document
+# makes, not the pixels: the box is closed, the ball rides the rail and reports
+# whether the goal can continue WITHOUT him, the emoji identifies the goal and
+# does not move when the ball does, every row gets two lines, CLEAR NOW carries
+# three blockers and counts the rest, and the whole thing stays inside 44 lines.
+#
+# EVERY GUARD HERE CARRIES ITS OWN MUTATION. A green suite says nothing about a
+# guard; only watching it go red does. Each case plants the defect in a COPY of
+# the renderer, asserts that copy fails the same check, and leaves the real file
+# untouched (rules/testing-patterns.md, [mutation-test-the-guard]).
+#
+# Run: bash ~/.claude/scripts/task-table/goal-box.test.sh
+set -uo pipefail
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+TT="$HERE/task-table.sh"
+ROOT="$(mktemp -d "${TMPDIR:-/tmp}/goalbox-XXXXXX")"
+trap 'rm -rf "$ROOT"' EXIT
+STORE="$ROOT/.claude/tasks/session-box00001"
+mkdir -p "$STORE"
+
+pass=0; fail=0
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1"; echo "        got  [$2]"; echo "        want [$3]"; fi; }
+has(){ if rg -q -- "$2" "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — no match for [$2]"; fi; }
+hasnt(){ if rg -q -- "$2" "$3" 2>/dev/null; then fail=$((fail+1)); echo "  FAIL: $1 — unexpected match for [$2]"; else pass=$((pass+1)); fi; }
+
+# mutate <name> <find> <replace> — a copy of the renderer with one defect planted.
+# It asserts the substitution actually applied, because a mutation that silently
+# matches nothing reads as a passing guard and is the commonest way this kind of
+# test lies about itself.
+mutate(){
+  local out="$ROOT/mut-$1.sh"
+  python3 - "$TT" "$out" "$2" "$3" <<'PY'
+import sys
+src, dst, find, repl = sys.argv[1:5]
+s = open(src).read()
+assert find in s, "mutation target not found: " + find[:60]
+open(dst, "w").write(s.replace(find, repl, 1))
+PY
+  printf '%s' "$out"
+}
+
+mk(){ # mk <id> <status> <goal> <milestone> <lane> <tier> <class> <domain> [blocked_on] [closer]
+  python3 - "$STORE/$1.json" "$@" <<'PY'
+import json, sys
+p = sys.argv[1]
+tid, status, goal, ms, lane, tier, cls, dom = sys.argv[2:10]
+blocked = sys.argv[10] if len(sys.argv) > 10 else ""
+closer  = sys.argv[11] if len(sys.argv) > 11 else ""
+meta = {"goal": goal, "batch": ms, "lane": lane, "tier": tier, "class": cls, "domain": dom}
+if blocked: meta["blocked_on"] = blocked
+if closer:  meta["closer"] = closer
+json.dump({"id": tid, "subject": f"Row {tid} states an outcome in a readable subject",
+           "description": "", "status": status, "activeForm": None,
+           "blocks": [], "blockedBy": [], "metadata": meta}, open(p, "w"), indent=1)
+PY
+}
+reset(){ rm -f "$STORE"/*.json; }
+render(){ rm -f "$ROOT/out"; HOME="$ROOT" bash "${1:-$TT}" --session box00001 > "$ROOT/out" 2>&1; }
+
+echo "── 1. the box is closed, and the ball rides the rail rather than replacing it ──"
+reset
+mk 1 pending "Ship the thing" "M1" hands opus fix tasks
+mk 2 pending "Ship the thing" "M1" hands opus build tasks
+render
+has "the box opens on a curved corner"     '^╭▏' "$ROOT/out"
+has "the ball sits on a slim bar, then the emoji" '^╭▏[🔴🟠🔵🟢⚪] · ' "$ROOT/out"
+has "a rail runs down the left edge"       '^│' "$ROOT/out"
+has "a full-width rule sits under the title" '^│  ─────' "$ROOT/out"
+has "the box closes on a curved corner"    '^╰▏' "$ROOT/out"
+
+echo
+echo "── 2. the column grid survives double-width emoji ──"
+# The one defect most likely to sink this layout: emoji are two terminal columns
+# and box characters are one, so a width computed with len() drifts the right
+# edge of every line that carries a ball. The oracle below is deliberately NOT
+# the renderer's own function — it is a hardcoded table of the glyphs this
+# fixture uses, so a bug in dwidth() cannot hide by being consulted twice.
+width_check(){
+  python3 - "$1" <<'PY'
+import sys, unicodedata
+WIDE = set("🔴🟠🔵🟢⚪🤝💤✅⚡🏁📥🎯⚙🪝🎨🔧📄📐🧩🏭🔬🏃🛒🧰🔨📜🧱🔑💻🧪🧠📋📡🧭🧬"
+           "🌀🔷🔶🟣🟤🧿🪐🍀🔺🧊")
+def w(s):
+    n = 0
+    for ch in s:
+        if ch in ("️", "︎") or unicodedata.category(ch) in ("Mn", "Me", "Cf"):
+            continue
+        n += 2 if (ch in WIDE or unicodedata.east_asian_width(ch) in ("W", "F")) else 1
+    return n
+bad = []
+for line in open(sys.argv[1]):
+    line = line.rstrip("\n")
+    if line.startswith("╭▏") or line.startswith("│  ─"):
+        bad.append((w(line), line[:40]))
+widths = {b[0] for b in bad}
+print(",".join(str(x) for x in sorted(widths)))
+PY
+}
+ok "every box header and rule ends at the same column" "$(width_check "$ROOT/out")" "92"
+
+M=$(mutate dwidth 'def dwidth(s):' 'def dwidth(s):
+    return len(s)
+def _dead_dwidth(s):')
+render "$M"
+ok "MUTATION: a len()-based width drifts the grid" \
+   "$([ "$(width_check "$ROOT/out")" = "92" ] && echo same || echo drifted)" "drifted"
+
+echo
+echo "── 3. the ball answers continuability, and is not any one task's state ──"
+# A goal holding an owner gate reads 🔴 even though it also holds pickable work.
+# That is the whole point of the field: it says whether the goal can move WITHOUT
+# him, not what its first row happens to be doing.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Ship the thing" "M1" hands opus fix tasks "USER: rule on the shape"
+render
+has "a goal holding a gate reads red"       '^╭▏🔴 · ' "$ROOT/out"
+has "and its ready row still renders green" '^│ +🟢 ○ ' "$ROOT/out"
+
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 in_progress "Ship the thing" "M1" brains opus fix tasks
+render
+has "ready outranks running when nothing is gated" '^╭▏🟢 · ' "$ROOT/out"
+
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Ship the thing" "M1" hands opus fix tasks "USER: rule on the shape"
+M=$(mutate ballrank \
+  'BALL_RANK = ["gate", "ready", "running", "review", "waiting", "unassigned",' \
+  'BALL_RANK = ["ready", "gate", "running", "review", "waiting", "unassigned",')
+render "$M"
+hasnt "MUTATION: reordering precedence hides the gate" '^╭▏🔴 · ' "$ROOT/out"
+
+echo
+echo "── 4. the emoji identifies the goal and does not move when the ball does ──"
+# The regression final.md records: revision 2 put the ball where the emoji was
+# and the emoji vanished. They answer different questions, so this asserts BOTH
+# are present and that the emoji is unchanged across a state change.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+render
+before=$(rg -o '^╭▏[^ ]+ · ([^ ]+)' -r '$1' "$ROOT/out" | head -1)
+mk 2 pending "Ship the thing" "M1" hands opus fix tasks "USER: rule on the shape"
+render
+after=$(rg -o '^╭▏[^ ]+ · ([^ ]+)' -r '$1' "$ROOT/out" | head -1)
+ok "the emoji is stable while the ball changes" "$before" "$after"
+has "and the ball did change"                   '^╭▏🔴 · ' "$ROOT/out"
+ok "the emoji is the domain's, not a hash"      "$before" "⚙️"
+
+M=$(mutate emoji 'lead = f"╭▏{ball} · {emo}  "' 'lead = f"╭▏{ball}  "')
+render "$M"
+hasnt "MUTATION: dropping the emoji is caught" '^╭▏[🔴🟠🔵🟢⚪] · ' "$ROOT/out"
+
+echo
+echo "── 5. two lines always, and the traits never share a column ──"
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+render
+has "the row carries a trait line under it" '^│ +◆ hands' "$ROOT/out"
+has "each trait has its own marker"         '◆ hands.*◇ opus.*▪ build.*▫ tasks' "$ROOT/out"
+hasnt "and nothing is stacked into one cell" 'hands·opus' "$ROOT/out"
+
+M=$(mutate traits \
+  'w("│" + " " * (ID_COL - 2) + cells.rstrip())' \
+  'pass')
+render "$M"
+hasnt "MUTATION: dropping the trait line is caught" '^│ +◆ hands' "$ROOT/out"
+
+echo
+echo "── 6. CLEAR NOW shows three and counts the rest, each with a closer ──"
+reset
+for i in 1 2 3 4 5; do
+  mk "$i" pending "Ship the thing" "M1" hands opus fix tasks \
+     "USER: clear item $i" "run: bash /tmp/clear-$i.sh — dry-run first"
+done
+mk 6 pending "Ship the thing" "M1" hands opus build tasks
+render
+has "the band names itself"          '^⚡ CLEAR NOW ' "$ROOT/out"
+has "it shows three of five"         'CLEAR NOW   3 of 5 waiting on you' "$ROOT/out"
+has "it says it spans goals and lanes" 'across 1 goal and 1 lane' "$ROOT/out"
+has "each entry carries its closer"  '▸ run   bash /tmp/clear-1.sh' "$ROOT/out"
+has "the hint survives beside it"    'dry-run first' "$ROOT/out"
+has "and the remainder is counted, not listed" '\+2 more waiting on you' "$ROOT/out"
+
+M=$(mutate clearcap 'CLEAR_CAP = 3' 'CLEAR_CAP = 99')
+render "$M"
+hasnt "MUTATION: an uncapped band stops reading as a sitting" '\+2 more waiting on you' "$ROOT/out"
+
+echo
+echo "── 7. a gate with no command-shaped closer still reaches CLEAR NOW, in the owner's words (Q1a) ──"
+# Owner ruling 2026-09-05: "Every USER: gate reaches CLEAR NOW, capped at three
+# with the rest counted; the steer/errand split is dropped." The old split printed
+# "no closer" beside "USER: push is yours" and kept the band off five of six tabs.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus fix tasks "USER: which shape do you want"
+mk 2 pending "Ship the thing" "M1" hands opus build tasks
+render
+has "the gate reaches CLEAR NOW"            '^⚡ CLEAR NOW   1 of 1 waiting on you' "$ROOT/out"
+has "its do-line is the owner's own prose"  '▸ do    which shape do you want' "$ROOT/out"
+has "the header counts what needs him, in the legend's words" '🔴 1 need you' "$ROOT/out"
+hasnt "no row is labelled as lacking a closer" 'no closer' "$ROOT/out"
+hasnt "and no steers line remains"           '☎️' "$ROOT/out"
+
+M=$(mutate admit 'clear_now = list(gates)' 'clear_now = [x for x in gates if meta_of(x, "closer")]')
+render "$M"
+hasnt "MUTATION: readmitting the split hides the ask from CLEAR NOW" '^⚡ CLEAR NOW' "$ROOT/out"
+M=$(mutate prose 'if prose: found.append(("do", ellip(prose, 74), ""))' 'pass')
+render "$M"
+hasnt "MUTATION: dropping the prose fallback loses the do-line" '▸ do    which shape do you want' "$ROOT/out"
+
+echo
+echo "── 8. the 44-line law holds, and the id list is paid for out of the budget ──"
+# The failure this pins is specific and was live: the held-id block is written
+# after the boxes, so a budget that does not reserve it walks the render to 45
+# and 46 while the footer still reports 44. Four real stores did exactly that.
+reset
+for i in $(seq 1 60); do
+  mk "$i" pending "Ship the thing" "M$((i % 4))" hands opus build tasks
+done
+render
+h=$(rg -o 'height ([0-9]+)/44' -r '$1' "$ROOT/out" | tail -1)
+n=$(wc -l < "$ROOT/out" | tr -d ' ')
+ok "the reported height is inside the law"  "$([ "${h:-99}" -le 44 ] && echo yes || echo "no ($h)")" "yes"
+ok "and the reported height is the real one" "$h" "$n"
+has "the truncation is loud"                'rows held by the height cap' "$ROOT/out"
+has "and it accuses the data"               '^⚠ [0-9]+ rows not on screen' "$ROOT/out"
+
+M=$(mutate budget \
+  'LINE_CAP = HEIGHT - FOOTER - _res' \
+  'LINE_CAP = HEIGHT - FOOTER')
+render "$M"
+mh=$(wc -l < "$ROOT/out" | tr -d ' ')
+ok "MUTATION: unreserving the id block breaks the law" \
+   "$([ "$mh" -gt 44 ] && echo over || echo "inside ($mh)")" "over"
+
+echo
+echo "── 9. the closing corner is charged to the budget ──"
+# Its own fixture, and the count matters. Row cost changed on 2026-09-05 (the
+# per-row blank line went, an all-empty trait row stopped printing, and a short
+# note folded onto the trait row), and at 60 rows the render happened to land on
+# 44 either way, so the guard passed while proving nothing. Measured across
+# 20/30/40/50/60/80: the corner decides at 20, 40, 50 and 80 and is absorbed at
+# 30 and 60. Re-measured 2026-09-05 after bands began ordering by recency (#56),
+# which changes which band leads and so which row the cap lands on: the corner
+# decides at 20, 40, 45, 70, 80, 90 and 100 and is absorbed at 30, 50, 55 and
+# 60. 40 is used here, and the assertion is that the mutation breaks the
+# 44-line law outright rather than merely that the render grew, because
+# "grew" is a fact about this fixture and "over the cap" is the actual defect.
+reset
+for i in $(seq 1 40); do
+  mk "$i" pending "Ship the thing" "M$((i % 4))" hands opus build tasks
+done
+M=$(mutate boxowed 'def fits(n): return detail or len(out) + n + _box_owed <= LINE_CAP' \
+                   'def fits(n): return detail or len(out) + n <= LINE_CAP')
+render "$M"
+mh=$(wc -l < "$ROOT/out" | tr -d ' ')
+ok "MUTATION: an uncharged corner walks the render past the law" \
+   "$([ "$mh" -gt 44 ] && echo over || echo "inside ($mh)")" "over"
+render
+h2=$(wc -l < "$ROOT/out" | tr -d ' ')
+ok "and the real render stays inside it" \
+   "$([ "$h2" -le 44 ] && echo inside || echo "over ($h2)")" "inside"
+
+echo
+echo
+echo "── 11. the header names the store, never the reader (adv-tasks F1) ──"
+# Rendering any store used to print the READER's ipc alias over another session's
+# rows, and a hardcoded false alias survived every suite. The header now carries
+# the store id, which cannot be wrong about whose rows these are.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+render
+has "the header carries the store id" '^TASKS  session-' "$ROOT/out"
+hasnt "and not a reader alias" '^TASKS  gcc-work' "$ROOT/out"
+M=$(mutate readeralias '_head = f"TASKS  {d.name}"' '_head = f"TASKS  SOMEONE-ELSES-SESSION"')
+render "$M"
+hasnt "MUTATION: a false identity in the header goes red" '^TASKS  session-' "$ROOT/out"
+
+echo
+echo "── 12. the goal emoji does not move when work closes (adv-tasks F6) ──"
+# Three of five rows are 'hooks', two are 'tasks'. Close the three hooks rows and
+# the dominant OPEN domain flips to tasks; the emoji must not follow it, because
+# it identifies the goal across sessions and a field that changes cannot do that.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build hooks
+mk 2 pending "Ship the thing" "M1" hands opus build hooks
+mk 3 pending "Ship the thing" "M1" hands opus build hooks
+mk 4 pending "Ship the thing" "M1" hands opus build tasks
+mk 5 pending "Ship the thing" "M1" hands opus build tasks
+render
+e1=$(rg -o '^╭▏. · [^ ]+' "$ROOT/out" | head -1)
+mk 1 completed "Ship the thing" "M1" hands opus build hooks
+mk 2 completed "Ship the thing" "M1" hands opus build hooks
+mk 3 completed "Ship the thing" "M1" hands opus build hooks
+render
+e2=$(rg -o '^╭▏. · [^ ]+' "$ROOT/out" | head -1)
+ok "the emoji is the same after three rows close" "$e2" "$e1"
+
+echo
+echo "── 13. width follows the terminal; a long kind is not clipped (adv-tasks F10) ──"
+# Owner: "It can be wider, that's fine". Piped output has no terminal, so the
+# floor (92) applies and captured renders stay stable; a wide COLUMNS widens.
+reset
+mk 1 pending "Ship the thing" "M1" hands opus measure-then-tune tasks
+render
+has "a 17-char kind renders whole at the floor width" '▪ measure-then-tune' "$ROOT/out"
+w0=$(rg -o '^│  ─+' "$ROOT/out" | head -1 | wc -m | tr -d ' ')
+rm -f "$ROOT/out"; HOME="$ROOT" COLUMNS=140 bash "$TT" --session box00001 > "$ROOT/out" 2>&1
+w1=$(rg -o '^│  ─+' "$ROOT/out" | head -1 | wc -m | tr -d ' ')
+ok "COLUMNS=140 draws a wider rule than the floor" "$([ "${w1:-0}" -gt "${w0:-0}" ] && echo wider || echo "same ($w0 vs $w1)")" "wider"
+
+echo
+echo "── 14. a milestone named by one letter is flagged, a real name is not (owner 2026-09-05) ──"
+reset
+mk 1 pending "Ship the thing" "A" hands opus build tasks
+render
+has "a one-letter milestone is marked too thin" '⚠ name too thin' "$ROOT/out"
+reset
+mk 1 pending "Ship the thing" "the change is under review as a PR" hands opus build tasks
+render
+hasnt "a state-shaped name is not marked" '⚠ name too thin' "$ROOT/out"
+M=$(mutate thinflag 'if name in ("", "no milestone named yet") or len(letters) >= 3: return ""' 'if True: return ""')
+reset
+mk 1 pending "Ship the thing" "A" hands opus build tasks
+render "$M"
+hasnt "MUTATION: with the flag disabled the one-letter name passes silently" '⚠ name too thin' "$ROOT/out"
+
+echo
+echo "── 15. a parked goal and a stale running row are named, not miscounted (fleet #55 #56) ──"
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Someday thing" "after V1" hands opus build tasks
+render
+has "a goal whose only open row is deferred reads as parked" '2 goal tags, 0 met, 1 parked' "$ROOT/out"
+reset
+mk 1 in_progress "Ship the thing" "M1" hands opus build tasks
+touch -t 202601010000 "$STORE/1.json"
+render
+has "an in_progress row untouched for a day is named stale" '0 running, 1 stale' "$ROOT/out"
+M=$(mutate stale '> 86400]' '> 86400000]')
+render "$M"
+hasnt "MUTATION: with the stale window widened the tombstone reads as running" '1 stale' "$ROOT/out"
+
+echo
+echo "── 16. what moved recently is named (fleet #56) ──"
+reset
+mk 1 completed "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Ship the thing" "M1" hands opus build tasks
+render
+# Q8a (owner, 2026-09-05): counts, never ids; the ids live in --json.
+has "a row closed just now is counted as moved" '1 moved in the last 6h   ·   1 done, 1 with no instrument named   ·   ids in --json' "$ROOT/out"
+hasnt "and the footer prints no id wall"        'done \(1\): #1' "$ROOT/out"
+hasnt "nor a moved id list"                     'moved in the last 6h: #' "$ROOT/out"
+HOME="$ROOT" bash "$TT" --session box00001 --json > "$ROOT/out.json" 2>&1
+ok "--json carries the moved ids" "$(jq -r '.moved_recently | map(tostring) | index("1") != null' "$ROOT/out.json" 2>/dev/null)" "true"
+M=$(mutate idwall "if _recent: _parts.append(f\"{len(_recent)} moved in the last {RECENT_H}h\")" "if _recent: _parts.append(\"moved in the last 6h: \" + \" \".join(f\"#{x['id']}\" for x in _recent))")
+render "$M"
+has "MUTATION: an id list in the footer is caught" 'moved in the last 6h: #' "$ROOT/out"
+touch -t 202601010000 "$STORE/1.json"
+render
+hasnt "a row closed long ago is not counted" 'moved in the last' "$ROOT/out"
+
+echo "── 17. the band that moved last comes first; unfiled never outranks a name (fleet #56) ──"
+# f04ae843: the one band that fit was "(no batch)" holding August rows, and the
+# three rows filed that evening were off screen. Alpha is stale, Zulu is fresh,
+# and the unfiled row is fresher than both yet must still come last.
+reset
+mk 1 pending "Ship the thing" "Alpha" hands opus build tasks
+mk 2 pending "Ship the thing" "Zulu"  hands opus build tasks
+mk 3 pending "Ship the thing" ""      hands opus build tasks
+touch -t 202601010000 "$STORE/1.json"
+touch -t 202606010000 "$STORE/2.json"
+bands(){ python3 - "$1" <<'PY'
+import sys, re
+print("|".join(re.sub(r"^.*▸ ", "", l.rstrip()) for l in open(sys.argv[1]) if "▸ " in l))
+PY
+}
+render
+ok "fresh Zulu, then stale Alpha, then the unfiled band" "$(bands "$ROOT/out")" "Zulu|Alpha|no milestone named yet"
+M=$(mutate bandorder 'for sk in sorted(subs, key=_band_key)]' 'for sk in sorted(subs, key=natkey)]')
+render "$M"
+ok "MUTATION: natural order puts the unfiled band first and Alpha before Zulu" "$(bands "$ROOT/out")" "no milestone named yet|Alpha|Zulu"
+
+echo "── 18. a box or a band never opens onto nothing, across a sweep of budgets (visual audit V1, V2) ──"
+# f452498c closed a box on zero rows and fabad34c closed on a band header with
+# nothing under it: the box priced its first row at one line and the band at two,
+# while gate rows with a wrapped note cost up to five. One fixture size proves
+# nothing here because the defect depends on the budget remainder at the moment
+# the box is considered, so the sweep walks thirty remainders.
+cat > "$ROOT/inv.py" <<'PY'
+import sys, re
+ROW = re.compile("^│\\s+(🔴|🟠|🔵|🟢|🟣|💤|⚪|🤝|✅) ")
+lines = [l.rstrip("\n") for l in open(sys.argv[1], encoding="utf-8")]
+bad = 0
+for i, l in enumerate(lines):
+    if l.startswith("╭▏"):
+        j = i + 1
+        while j < len(lines) and not lines[j].startswith("╰▏"): j += 1
+        if not any(ROW.match(x) for x in lines[i:j]): bad += 1
+    if l.startswith("│") and "▸ " in l:
+        nxt = lines[i + 2] if i + 2 < len(lines) else ""
+        if not ROW.match(nxt): bad += 1
+print(bad)
+PY
+GATENOTE="USER: a ruling long enough that the note wraps onto its own lines and the row costs more than the two the old threshold assumed"
+sweep(){ # sweep <renderer> -> violations summed over 1..45 filler rows
+  # 45, not 30: once every gate also occupies CLEAR NOW lines (Q1a), the budget
+  # remainders shifted and the flat-nine mutant needed a wider walk to bite.
+  local tot=0 n i
+  for n in $(seq 1 45); do
+    reset
+    for i in $(seq 1 "$n"); do mk "$i" pending "Alpha goal" "M1" hands opus build tasks; done
+    # One gate per goal, not three: since Q1a every gate also takes two CLEAR NOW
+    # lines, and six of them filled the screen before any box could meet the
+    # remainder window the flat-nine mutant needs.
+    for i in 41; do mk "$i" pending "Alpha goal" "M2" hands opus build tasks "$GATENOTE"; done
+    for i in 51; do mk "$i" pending "Beta goal"  "B1" hands opus build tasks "$GATENOTE"; done
+    # A third goal with no gate draws last and is the one the cap refuses.
+    for i in 61 62; do mk "$i" pending "Gamma goal" "G1" hands opus build tasks; done
+    # The expensive band must come SECOND, because the box prices its first band
+    # atomically; bands order by recency, so the gate rows are aged.
+    for i in 41; do touch -t 202601010000 "$STORE/$i.json"; done
+    render "$1"
+    tot=$((tot + $(python3 "$ROOT/inv.py" "$ROOT/out")))
+  done
+  echo "$tot"
+}
+ok "no box or band opens onto nothing across thirty budgets" "$(sweep "$TT")" "0"
+has "a goal the cap refused is named in one line" '^  no room left for: ' "$ROOT/out"
+M=$(mutate boxnine 'if not fits(6 + (len(_tlines) - 1) + _first):' 'if not fits(9):')
+v=$(sweep "$M")
+ok "MUTATION: a flat nine opens boxes onto nothing somewhere in the sweep" "$([ "$v" -gt 0 ] && echo caught || echo "missed (0)")" "caught"
+M=$(mutate bandfour 'if not fits(2 + first_row_cost(body) + (0 if first else 1)):' 'if not fits(4 if first else 5):')
+v=$(sweep "$M")
+ok "MUTATION: a flat four leaves band headers with nothing under them" "$([ "$v" -gt 0 ] && echo caught || echo "missed (0)")" "caught"
+
+echo "── 19. a long goal title wraps whole; it is never elided from the middle (visual audit V6) ──"
+# The owner's own goal rendered as "tell the owner … without him decoding it": the
+# mid-cut deleted "the truth" and left a sentence that still parsed. Wrapping costs
+# one line, which the box prices in, so the 44-line law still holds under it.
+reset
+LONGTITLE="the /tasks and /goal surfaces tell the owner the truth without him decoding it, and every render says which store it read"
+for i in $(seq 1 30); do mk "$i" pending "$LONGTITLE" "M1" hands opus build tasks; done
+render
+hasnt "no mid-ellipsis anywhere in the title" ' … ' "$ROOT/out"
+has "the head of the title is on the corner line"   '^╭▏🟢 · .*the /tasks and /goal surfaces tell the owner the truth' "$ROOT/out"
+has "and the tail follows on the next line, whole"  '^│ +[a-z].*every render says which store it read$' "$ROOT/out"
+python3 - "$ROOT/out" "$LONGTITLE" > "$ROOT/joined" <<'PY'
+import sys
+lines = [l.rstrip("\n") for l in open(sys.argv[1], encoding="utf-8")]
+i = next(k for k, l in enumerate(lines) if l.startswith("╭▏"))
+head = lines[i].split("  ", 1)[1].rsplit("  ·  ", 1)[0].strip()
+tail = lines[i + 1].lstrip("│").strip()
+print("WHOLE" if (head + " " + tail) == sys.argv[2] else f"CUT: {head} | {tail}")
+PY
+ok "the two lines together are the whole title, no word lost" "$(cat "$ROOT/joined")" "WHOLE"
+n=$(wc -l < "$ROOT/out" | tr -d ' ')
+ok "the wrapped title is paid for: the render stays inside the law" "$([ "$n" -le 44 ] && echo inside || echo "over ($n)")" "inside"
+M=$(mutate titleclip '_tlines = wrap(title, room)' '_tlines = [title[:room // 2].rstrip() + " … " + title[-(room // 4):]]')
+render "$M"
+has "MUTATION: a mid-cut title is caught" ' … ' "$ROOT/out"
+
+echo "── 20. a goal with no milestone named draws an empty meter, never a full one (visual audit V8) ──"
+# mk always writes a batch key, and an empty one still counts as an unnamed
+# milestone, so the zero-of-zero meter is reached by grouping on a key that has
+# no milestones at all: domain.
+reset
+mk 1 pending "A goal that has named no state yet" "" hands opus build tasks
+HOME="$ROOT" bash "$TT" --session box00001 --group domain > "$ROOT/out" 2>&1
+has "zero of zero is an empty bar"   '▱▱▱▱▱▱▱▱▱▱  no milestone named yet' "$ROOT/out"
+hasnt "and never a full one"         '██████████' "$ROOT/out"
+M=$(mutate meterfull 'if not total: return "▱" * 10' 'if not total: return "█" * 10')
+HOME="$ROOT" bash "$M" --session box00001 --group domain > "$ROOT/out" 2>&1
+has "MUTATION: the full bar is caught" '██████████' "$ROOT/out"
+
+echo "── 21. the header prints one !! at most; the rest, and every nag, live in --detail (visual audit V14) ──"
+# Three stale gates fire two notes at once (the gates themselves, and the whole
+# queue not having moved). Plain: the one that names rows he can re-check, with a
+# count of what --detail holds. No header line ends in a question.
+reset
+for i in 1 2 3; do mk "$i" pending "Ship the thing" "M1" hands opus build tasks "USER: decide item $i"; done
+for i in 1 2 3; do touch -t 202601010000 "$STORE/$i.json"; done
+render
+ok "exactly one !! line on the plain render"  "$(rg -c '^  !! ' "$ROOT/out" || echo 0)" "1"
+has "and it is the one naming rows to re-check" '^  !! 3 gate\(s\) untouched >24h.*\+1 more nag in --detail' "$ROOT/out"
+hasnt "no header line asks the reader a question" '^  .*\?$' "$ROOT/out"
+HOME="$ROOT" bash "$TT" --session box00001 --detail > "$ROOT/out" 2>&1
+ok "--detail carries both notes"  "$(rg -c '^  !! ' "$ROOT/out" || echo 0)" "2"
+M=$(mutate hdrcap 'w(_bangs[0] + (f"   ·   +{_rest} more nag{'"'"'s'"'"' if _rest != 1 else '"'"''"'"'} in --detail" if _rest else ""))' 'for _l in _bangs: w(_l)')
+render "$M"
+ok "MUTATION: an uncapped header is caught" "$(rg -c '^  !! ' "$ROOT/out" || echo 0)" "2"
+
+echo "── 10. an expanded note left-aligns to the row block, not the trait indent ──"
+reset
+LONGNOTE="USER: a ruling long enough that it cannot sit on the tail of one line and must take the full remaining width of the box to be read at all"
+mk 1 pending "Ship the thing" "M1" hands opus fix tasks "$LONGNOTE"
+mk 2 pending "Ship the thing" "M1" hands opus build tasks
+render
+# the collapsed note sits under the id (column 11); the expanded one starts left
+# of it, at the ball's column, so it gets the width the design asked for
+has "the expanded note starts at the ball column" '^│    » ' "$ROOT/out"
+hasnt "and not at the trait indent"               '^│         » USER: a ruling long enough that it cannot sit on the tail of one line and' "$ROOT/out"
+
+echo
+echo "---- pass=$pass fail=$fail"
+[ "$fail" -eq 0 ]

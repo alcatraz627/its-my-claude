@@ -22,7 +22,7 @@ mkdir "$S/.task-sh.lock"; out=$( (sleep 0.6; rmdir "$S/.task-sh.lock") & $T add 
 $T add "fourth" --session cccccccc >/dev/null; [ -f "$S/4.json" ] && ok "--session picks the store" || ko "--session"
 ls "$S" | rg -q "tmp" && ko "temp file left" || ok "no temp files left"
 $TT --session cccccccc 2>/dev/null | rg -q "second, gated" && ok "task-table.sh renders the store" || ko "table read"
-$TT --session cccccccc 2>/dev/null | rg -q "GATES \\(you\\)" && ok "gated row lands in the GATES band" || ko "gated section"
+$TT --session cccccccc 2>/dev/null | rg -q "⚡ CLEAR NOW" && ok "gated row reaches CLEAR NOW" || ko "gated section"
 $T list | rg -q "^   3  pending" && ok "list prints" || ko "list"
 echo "== D7: every rejection names the whole acceptable set =="
 # Owner ruling 2026-08-20, verbatim: "Map and refuse and on every bad flag print a
@@ -59,6 +59,107 @@ case "$err" in *"--blocked-on"*) ok "the flag list is derived from the parser it
 
 # and the canonical values still pass untouched
 $T update 3 --status pending >/dev/null 2>&1 && ok "a canonical status is accepted silently" || ko "canonical status refused"
+
+echo "== meta cannot walk around the vocabularies the flags enforce =="
+# `--tier nonsense` was refused while `meta tier=nonsense` wrote it without a
+# word, which made the flag-path validator decorative. Three tiers now: a closed
+# vocabulary is refused, a key shadowing a top-level field is refused, and an
+# unfamiliar key is warned but still written so meta stays an escape hatch.
+$T meta 3 tier=nonsense >/dev/null 2>&1 && ko "meta wrote an invalid tier" || ok "meta refuses a tier the flag path refuses"
+jq -e '.metadata.tier != "nonsense"' "$S/3.json" >/dev/null && ok "and the refusal wrote nothing" || ko "refused but wrote anyway"
+err=$($T meta 3 tier=nonsense 2>&1 >/dev/null)
+case "$err" in *"fable"*"opus"*) ok "the meta refusal names the whole set" ;; *) ko "meta refusal hid the set" ;; esac
+
+$T meta 3 status=whatever >/dev/null 2>&1 && ko "meta minted a shadow status" || ok "meta refuses a key that shadows a top-level field"
+jq -e '.metadata.status == null' "$S/3.json" >/dev/null && ok "no shadow key on disk" || ko "shadow key written"
+err=$($T meta 3 status=whatever 2>&1 >/dev/null)
+case "$err" in *"task.sh update"*) ok "and it names the flag to use instead" ;; *) ko "shadow refusal offered no route" ;; esac
+
+# The escape hatch stays open, which is the whole reason meta exists. It warns.
+$T meta 3 laen=hands >/dev/null 2>&1 && ok "an unfamiliar key is still written" || ko "meta closed its escape hatch"
+jq -e '.metadata.laen == "hands"' "$S/3.json" >/dev/null && ok "the unfamiliar key landed" || ko "unfamiliar key lost"
+err=$($T meta 3 laen=hands 2>&1 >/dev/null)
+case "$err" in *"not a key anything reads"*) ok "and the typo is called out" ;; *) ko "typo written in silence" ;; esac
+
+# A vocabulary here must never be TIGHTER than the flag it mirrors. `prod` is a
+# documented --verified value; a first draft refused it and this case caught it.
+$T meta 3 verified=prod >/dev/null 2>&1 && ok "a documented value the flag allows is allowed here too" || ko "meta is stricter than its flag"
+
+echo "== containment at the write path: D6a and D3b describe different rows =="
+# goal with no milestone is malformed on its face under three-levels-always.
+$T add "has a goal, no milestone" --goal "G" >/dev/null 2>&1 && ko "a goal without a milestone was written" || ok "a goal without a milestone is refused"
+err=$($T add "has a goal, no milestone" --goal "G" 2>&1 >/dev/null)
+case "$err" in *"--batch"*) ok "the refusal names the flag that fixes it" ;; *) ko "refusal offered no route" ;; esac
+case "$err" in *"Right now,"*) ok "and it carries the milestone naming test" ;; *) ko "no naming test in the refusal" ;; esac
+
+# Neither is D3b's case: ALLOWED, because refusing it would contradict the
+# ruling and would break every peer session that adds a row today.
+$T add "wholly unfiled row" >/dev/null 2>&1 && ok "an unfiled row is still allowed (D3b)" || ko "D3b's allowed case was refused"
+err=$($T add "another unfiled row" 2>&1 >/dev/null)
+case "$err" in *"UNFILED"*) ok "but it says so loudly" ;; *) ko "unfiled row written in silence" ;; esac
+
+# A milestone with no goal is the measured 38-row orphan shape. Allowed: the
+# goal is what is missing, and D3b governs that.
+$T add "orphan milestone row" --batch "M" >/dev/null 2>&1 && ok "a milestone without a goal is allowed" || ko "orphan milestone refused"
+
+# The lock must survive a death inside the critical section. Before the EXIT
+# trap, one bad expansion inside with_lock left the directory behind and every
+# later call to that store waited 5s and refused: the store was wedged and
+# nothing said why.
+mkdir -p "$S/.task-sh.lock"
+rmdir "$S/.task-sh.lock"
+$T add "after a lock cycle" --goal "G" --batch "M" >/dev/null 2>&1
+[ -d "$S/.task-sh.lock" ] && ko "the lock outlived its operation" || ok "the lock is released, not leaked"
+
+echo "== the seven states (D2 plus D7a), on both write paths =="
+# metadata.state is SEPARATE from top-level status on purpose. status belongs to
+# the harness Task tool, which writes these same files and knows only its three
+# values, so widening it would hand the harness something it cannot read.
+_allseven=1
+for s in owner-gate blocked active review deferred done unassigned; do
+  $T update 3 --state "$s" >/dev/null 2>&1 || _allseven=0
+  [ "$(jq -r '.metadata.state' "$S/3.json")" = "$s" ] || _allseven=0
+done
+[ "$_allseven" = 1 ] && ok "all seven states are accepted and land" || ko "a ruled state was refused or lost"
+
+$T update 3 --state nonsense >/dev/null 2>&1 && ko "an eighth state was accepted" || ok "an eighth state is refused"
+err=$($T update 3 --state nonsense 2>&1 >/dev/null)
+case "$err" in *"unassigned"*) ok "the state refusal names the whole set" ;; *) ko "state refusal hid the set" ;; esac
+
+# The residual D7a exists for. Without it the migration's only home for 156 of
+# 181 open rows was `active`, which breaks one-active-row-per-lane on all four.
+$T update 3 --state unassigned >/dev/null 2>&1
+[ "$(jq -r '.metadata.state' "$S/3.json")" = "unassigned" ] && ok "unassigned is a real state, not a placeholder" || ko "unassigned missing"
+
+$T meta 3 state=nonsense >/dev/null 2>&1 && ko "meta walked around the state enum" || ok "meta inherits the state enum"
+
+# The separation is the load-bearing part: if a future edit merges them, the
+# harness Task tool starts reading a value it does not know.
+$T update 3 --state deferred >/dev/null 2>&1
+case "$(jq -r '.status' "$S/3.json")" in
+  pending|in_progress|completed) ok "top-level status stays in the harness vocabulary" ;;
+  *) ko "status was widened; the harness Task tool cannot read it" ;;
+esac
+
+echo "== the ledger's three task.sh defects (2026-09-08) =="
+$T add "closes with the flag" >/dev/null; idv=$(ls "$S" | rg -o '^[0-9]+' | sort -n | tail -1)
+out=$($T done "$idv" --verified "task.test.sh ran it" 2>&1)
+jq -e '.status=="completed" and .metadata.verified=="task.test.sh ran it"' "$S/$idv.json" >/dev/null && ok "done <id> --verified <text> closes WITH the instrument" || ko "done --verified: $(jq -c '{status,v:.metadata.verified}' "$S/$idv.json")"
+echo "$out" | rg -q "NO instrument" && ko "warned for an instrument it was given" || ok "no warning when the instrument was given"
+$T add "meta takes a name" >/dev/null; idm=$(ls "$S" | rg -o '^[0-9]+' | sort -n | tail -1)
+$T meta "$idm" verified="goal-box.test.sh 80/0" >/dev/null 2>&1; jq -e '.metadata.verified=="goal-box.test.sh 80/0"' "$S/$idm.json" >/dev/null && ok "meta verified=<instrument name> is accepted" || ko "meta refused the instrument name"
+out=$($T update "$idm" --state review 2>&1); echo "$out" | rg -q "pending \(review\)" && ok "the update echo names the state it set" || ko "update echo: $out"
+
+echo "== ledger 43, 45, 47 (2026-09-08): note without desc warns, reversed edge refused, --json carries description =="
+out=$($T add "noted only" --note "just a note" 2>&1 >/dev/null); echo "$out" | rg -q "without --desc" && ok "add --note with no --desc says the description is what a close is judged against" || ko "no warning: $out"
+idn=$(ls "$S" | rg -o '^[0-9]+' | sort -n | tail -1)
+$T add "child of the noted row" >/dev/null; idc=$(ls "$S" | rg -o '^[0-9]+' | sort -n | tail -1)
+$T update "$idn" --blocked-by "$idc" >/dev/null 2>&1
+$T update "$idc" --blocked-by "$idn" >/dev/null 2>&1; rc=$?
+[ "$rc" -eq 2 ] && ok "a reversed --blocked-by edge is refused (rc 2)" || ko "reversed edge accepted (rc $rc)"
+jq -e '.blockedBy == []' "$S/$idc.json" >/dev/null && ok "the refused edge wrote nothing" || ko "the refused edge was written"
+$T update "$idc" --desc "the child's ask" >/dev/null
+$TT --session cccccccc --json 2>/dev/null | jq -e --arg id "$idc" '.tasks[] | select((.id|tostring)==$id) | .description == "the child'"'"'s ask"' >/dev/null && ok "--json carries description under its own name" || ko "json description missing"
 
 export HOME="$REAL"; trash "$SB" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

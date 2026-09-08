@@ -18,7 +18,7 @@ pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok   $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL $1"; }
 
-ALL="Standing constraints|Standing caveats|Next action|Next action's requirements|Blocked on|Expired authorizations|Decaying prerequisites|Verification state|Live commitments|Task list, glanced|Task store|Key anchor"
+ALL="Standing constraints|Standing caveats|Next action|Next action's requirements|Blocked on|Expired authorizations|Decaying prerequisites|Verification state|Live commitments|Task list, glanced|Task store|ipc alias|Key anchor"
 
 mk() {  # mk [label-to-omit …] -> path to a dump carrying every OTHER field
   local t; t=$(mktemp -d)
@@ -81,6 +81,25 @@ rg -n "Resume Contract field" "$V" | head -1 | cut -d: -f1 > "$T/field_line"
 [ "$(cat "$T/mini_line")" -lt "$(cat "$T/field_line")" ] \
   && ok "mini mode returns before the field check, so it can never see it" \
   || bad "the field check now sits above the mini branch and will fire on minis"
+
+echo "== a value carried as indented bullets under the label is not EMPTY (csync, 2026-09-08) =="
+{
+  printf '# Core Dump\n\n## Resume Contract\n\n'
+  printf -- '- **Standing constraints:**\n  - keep the two reports\n  - no push\n'
+  printf -- '- **Standing caveats:**\n  - nothing committed\n'
+  for f in "Next action" "Next action's requirements" "Blocked on" "Expired authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" "Task store" "Key anchor"; do printf -- '- **%s:** x\n' "$f"; done
+  printf '\n## Initial Goal\nx\n## Agent Actions\nx\n## Current Expectation\nx\n## Pending Items\nx\n'
+} > "$T/bullets.md"
+OUT=$(bash "$V" "$T/bullets.md" 2>&1)
+case "$OUT" in *"EMPTY"*) bad "bulleted constraints/caveats reported as EMPTY: $OUT";; *) ok "bulleted values under the label are read as present";; esac
+printf -- '- **Task store:**\n' >> "$T/bullets.md"
+{
+  printf '# Core Dump\n\n## Resume Contract\n\n- **Task store:**\n- **Key anchor:** x\n'
+  for f in "Standing constraints" "Standing caveats" "Next action" "Next action's requirements" "Blocked on" "Expired authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced"; do printf -- '- **%s:** x\n' "$f"; done
+  printf '\n## Initial Goal\nx\n## Agent Actions\nx\n## Current Expectation\nx\n## Pending Items\nx\n'
+} > "$T/empty.md"
+OUT=$(bash "$V" "$T/empty.md" 2>&1)
+case "$OUT" in *"EMPTY"*"Task store"*) ok "a genuinely empty label (next line is another label) is still EMPTY";; *) bad "the bullet read silenced a real empty field: $OUT";; esac
 
 echo "== the real dumps on disk =="
 R="$HOME/.claude/_20260819-gcc-work-78.claude.md"

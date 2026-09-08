@@ -16,19 +16,20 @@
 # Feature-branch pushes in unprotected repos pass freely — no friction on normal work.
 #
 # APPROVAL has two user-owned channels, both single-use per push:
-#   1. Native macOS dialog (GUI sessions): the gate pops an osascript modal
-#      (Cancel default, 30s timeout = cancel) that only the human at the screen
-#      can click — it works even under skip-permissions where the harness
-#      ask-path is inert. A decline is remembered per session so retries don't
-#      re-pop the modal.
-#   2. Sentinel fallback (headless/SSH/declined): ~/.claude/.push-approved-<session_id>
+#   1. Ask-tool answer: the block prints a nonce; the agent asks through
+#      AskUserQuestion with one option labelled "Approve push <nonce>", and the
+#      owner's pick of it makes push-approve-ask.sh (PostToolUse) write the
+#      sentinel. Works from Claude Code web, where the owner has no shell. The
+#      agent writes the question; only the harness writes the answer, and the
+#      hook reads the answer alone, so the agent cannot actuate it.
+#   2. Sentinel fallback (headless/SSH/any shell): ~/.claude/.push-approved-<session_id>
 # The block message prints the exact command. It MUST be run by the user with the
 # `! ` prefix (which runs in the user's own shell and bypasses PreToolUse hooks) —
 # NOT by the agent. The gate consumes (deletes) the sentinel on the allowed push,
 # so every gated push needs a fresh approval. That single-use property is also what
 # makes it survive compaction correctly: a stale approval can authorise at most one
-# push, never a blanket session. (Dialogs are single-use by construction — each
-# push re-enters the hook.)
+# push, never a blanket session. (A native osascript dialog was the first channel;
+# it failed open and is disabled below.)
 #
 # DELIBERATE DEVIATION (mirrors guard-user-commit): NO self-liftable mute file. A
 # `touch ~/.claude/.no-*-gate` a would let the very agent this gate exists to stop
@@ -140,11 +141,34 @@ fi
 
 [ "$gated" = 1 ] || exit 0   # feature-branch push in an unprotected repo → allow
 
-# ── Gated: consume a valid approval, or ask via native dialog, or block ──────
+# ── Gated: consume a valid approval, or block with a nonce the owner can pick ──
+NONCE_FILE="$HOME/.claude/.push-nonce-${sid_safe}"
 if [ -f "$SENTINEL" ]; then
-  rm -f "$SENTINEL"   # single-use: this approval authorises exactly one push
+  rm -f "$SENTINEL" "$NONCE_FILE"   # single-use: this approval authorises exactly one push
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action allow-approved --heeded yes >/dev/null 2>&1 || true
   exit 0
+fi
+
+# The ask-tool channel. The block below prints a nonce; the owner's pick of an
+# AskUserQuestion option labelled exactly "Approve push <nonce>" makes
+# push-approve-ask.sh (PostToolUse on AskUserQuestion) write the sentinel. The
+# agent writes the question, but only the harness writes the answer, and the
+# hook reads the answer alone. A nonce is reused while fresh, so a re-blocked
+# push after an unanswered question prints the same one; it expires after
+# NONCE_TTL seconds and a new block mints a new one.
+NONCE_TTL=1800
+nonce=""
+if [ -f "$NONCE_FILE" ]; then
+  n_ts=$(jq -r '.ts // 0' "$NONCE_FILE" 2>/dev/null); n_ts=${n_ts:-0}
+  if [ $(( $(date +%s) - n_ts )) -le "$NONCE_TTL" ]; then
+    nonce=$(jq -r '.nonce // empty' "$NONCE_FILE" 2>/dev/null)
+  fi
+fi
+if [ -z "$nonce" ]; then
+  nonce=$(od -An -N4 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')
+  [ -n "$nonce" ] || nonce=$(date +%s | tail -c 8)
+  jq -cn --arg n "$nonce" --arg t "$target" --arg w "$why" --argjson ts "$(date +%s)" \
+    '{nonce:$n, target:$t, why:$w, ts:$ts}' > "$NONCE_FILE" 2>/dev/null || true
 fi
 
 # ── DISABLED: the native-dialog approval channel is NOT SAFE here ────────────
@@ -184,8 +208,14 @@ and a context compaction may have wiped an earlier one. Do NOT work around this
 
 Instead:
   1. Show the user what will be pushed:  git -C \"$target\" log --oneline @{u}.. 2>/dev/null || git -C \"$target\" log --oneline -3
-  2. Ask them to approve THIS push by typing (in their own shell, with the ! prefix):
-       ! touch ${SENTINEL}
+  2. Ask them to approve THIS push, through either channel:
+     a. AskUserQuestion, with exactly ONE option labelled exactly:
+          Approve push ${nonce}
+        Their pick of that option writes the sentinel. Any other option, an
+        altered label, or two options carrying the nonce writes nothing.
+     b. Or they type, in their own shell, with the ! prefix:
+          ! touch ${SENTINEL}
   3. Re-run the push. The approval is single-use — it is consumed by this one push.
+     The nonce expires in 30 minutes; a later block prints a fresh one.
 
 If you believe this repo/branch should not be gated, ASK THE USER — that call is theirs."

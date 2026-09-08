@@ -63,6 +63,18 @@ MIN_EDITS="${NOTASK_MIN_EDITS:-10}"
 # the current shape first, then the legacy one (a handful of pre-2026-07 dirs).
 TASK_DIR="$HOME/.claude/tasks/session-${sid:0:8}"
 [[ -d "$TASK_DIR" ]] || TASK_DIR="$HOME/.claude/tasks/$sid"
+# A session working an inherited store keeps its rows where the pin or the
+# project stamp says, not under its own id. Three sessions were nagged for an
+# empty list while their task.sh rows sat in the project's store (2026-09-08).
+PIN="$HOME/.claude/tasks-pins/${sid:0:8}"
+[[ -s "$PIN" ]] && [[ -d "$HOME/.claude/tasks/session-$(cat "$PIN")" ]] && TASK_DIR="$HOME/.claude/tasks/session-$(cat "$PIN")"
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty'); [[ -n "$cwd" ]] || cwd="$PWD"
+proot=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null); [[ -n "$proot" ]] || proot="$cwd"
+for d in "$HOME"/.claude/tasks/session-*/; do
+  d="${d%/}"; [[ -s "$d/.project" ]] || continue
+  [[ "$(cat "$d/.project")" == "$proot" ]] || continue
+  [[ -n "$(ls "$d"/*.json 2>/dev/null)" ]] && exit 0     # this project already keeps a list
+done
 
 # Ask ".highwatermark" — how many tasks this session EVER had — before counting
 # files. The store reaps a task's json once it completes, so a session that made a
@@ -77,7 +89,7 @@ task_count=0
 (( task_count > 0 )) && exit 0
 
 touch "$SENT" 2>/dev/null || true
-jq -nc --arg m "[todo-discipline] ${edits} edits so far but your Task list is empty. Live todos belong in the Task tool (TaskCreate/TaskUpdate) — that's the source of truth, what the TUI shows, and what sync-todos mirrors to notes/memory. If this is multi-step work, create tasks now; a plan in a doc file with an empty Task list leaves the TUI blind. (Advisory; fires once per session.)" \
+jq -nc --arg m "[todo-discipline] ${edits} edits so far but your Task list is empty. Live todos belong in the Task tool (TaskCreate/TaskUpdate), or in task.sh when this harness exposes no Task tool (bash ~/.claude/scripts/task-table/task.sh add \"<subject>\" --goal ... --batch ...); that store is the source of truth, what /tasks shows, and what sync-todos mirrors to notes/memory. If this is multi-step work, create tasks now; a plan in a doc file with an empty list leaves the surface blind. (Advisory; fires once per session.)" \
   '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook no-task-nudge --action nudge --heeded unknown >/dev/null 2>&1 || true
 

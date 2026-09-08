@@ -50,16 +50,29 @@ for i in $(seq 21 60); do mk "$i" work; done
 OUT="$ROOT/render.txt"
 HOME="$ROOT" "$TT" --session synth001 > "$OUT" 2>&1
 
+# The ruled layout draws each goal as a box and keeps its gate rows inside it, so
+# a row is a rail followed by its ball and the goal band is a box corner. The
+# starvation this suite is about did not go away with the GATES band: it moved
+# into the box, where twenty gates took the whole screen on the first run of the
+# rebuilt renderer and all forty work rows were held.
 lines=$(wc -l < "$OUT" | tr -d ' ')
-gaterows=$(rg -c '^\s+[🔴⏳]' "$OUT" 2>/dev/null || echo 0)
-workband=$(rg -c '^GOAL ' "$OUT" 2>/dev/null || echo 0)
-workrows=$(rg -c '^\s+[○⛓▶]' "$OUT" 2>/dev/null || echo 0)
+# Gates render first in two places since Q1a (2026-09-05): up to three in the
+# CLEAR NOW band above the boxes, then in their goal box. Both count as "first".
+gaterows=$(( $(rg -c '^│\s+🔴' "$OUT" 2>/dev/null || echo 0) + $(rg -c '^   [0-9]  #' "$OUT" 2>/dev/null || echo 0) ))
+workband=$(rg -c '^╭▏' "$OUT" 2>/dev/null || echo 0)
+workrows=$(rg -c '^│\s+[🟢🟠🔵⚪]' "$OUT" 2>/dev/null || echo 0)
 heldnote=$(rg -c 'more held here so the work below stays visible' "$OUT" 2>/dev/null || echo 0)
 
 echo "── a 20-gate queue must still show the work ──"
 atleast "the GOAL band renders at all"            "$workband" 1
 atleast "at least 5 work rows render"             "$workrows" 5
-atleast "gates still render first and in force"   "$gaterows" 5
+# Three, not five. The ruled layout gives every row two lines plus a rail line
+# between rows, and a gate here carries a note as well, so a gate costs four
+# lines against the old one or two. Five gates and five work rows cannot both fit
+# 44 lines under that density; the arithmetic changed, the property did not. What
+# pins this guard is the mutation below, where removing the floor takes the work
+# rows to zero.
+atleast "gates still render first and in force"   "$gaterows" 3
 ok      "the held-gates note appears in the band" "$heldnote" 1
 
 echo
@@ -73,12 +86,14 @@ MUT="$ROOT/task-table-nobudget.sh"
 python3 - "$TT" "$MUT" <<'PY'
 import sys
 s = open(sys.argv[1]).read()
-s = s.replace("budget=max(6, LINE_CAP - WORK_FLOOR))", "budget=None)", 1)
+s = s.replace("budget = LINE_CAP - len(out) - _box_owed - WORK_FLOOR - 1",
+              "budget = 10 ** 6", 1)
+assert "budget = 10 ** 6" in s, "the mutation did not apply; the budget line moved"
 open(sys.argv[2], "w").write(s)
 PY
 chmod +x "$MUT"
 HOME="$ROOT" bash "$MUT" --session synth001 > "$ROOT/render-nobudget.txt" 2>&1
-nb_work=$(rg -c '^\s+[○⛓▶]' "$ROOT/render-nobudget.txt" 2>/dev/null || echo 0)
+nb_work=$(rg -c '^│\s+[🟢🟠🔵⚪]' "$ROOT/render-nobudget.txt" 2>/dev/null || echo 0)
 if [ "$nb_work" -lt "$workrows" ]; then
   pass=$((pass+1)); echo "  ok    without the budget the work rows drop to $nb_work (from $workrows)"
 else

@@ -40,7 +40,12 @@ json.dump({"id": tid, "subject": subj, "description": "", "status": "pending",
 PY
 }
 
-LONG="USER: a reason long enough that the compact continuation line must be trimmed before it reaches the end of this sentence about nothing"
+# AGENT:, not USER:. Under the ruled layout an owner gate's note EXPANDS to the
+# full remaining width rather than being trimmed, so a USER: string here would
+# exercise the wrapping path and never reach the trim this case is about. An
+# agent-blocked row keeps its note collapsed on one line, which is the path that
+# hard-sliced and produced "Was mis" and "What remains is an acc".
+LONG="AGENT: a reason long enough that the collapsed note line must be trimmed before it reaches the end of this sentence about nothing"
 
 mkrow 1 P2 "P2 Vocabulary terms render a chip wall"      ui  "ui · forge" ""
 mkrow 2 P3 "P2 The Next button is not disabled"          ui  forge        ""
@@ -80,12 +85,19 @@ ok "conflict is shown"            "$(rg -c '#2 +P3 \(subject says P2\)' "$OUT" 2
 
 echo
 echo "── 3. a tag is printed once ──"
+# D1 split the stacked tag cell into four fixed trait columns, so the two values
+# now sit in the kind and domain cells rather than joined in one. The dedup this
+# case is about survives the split: row 1 carries class="ui" beside a pre-joined
+# domain="ui · forge", and "ui" must be printed once across the row.
 ok "pre-joined domain split"      "$(rg -c 'ui · ui' "$OUT" 2>/dev/null || echo 0)" 0
-ok "row 1 keeps ui and forge"     "$(rg -c '#1 .*ui · forge' "$OUT" 2>/dev/null || echo 0)" 1
+# Scoped to row 1's own trait line. A bare count over the render would also see
+# the filler rows, which cycle through the same class values on purpose.
+ok "row 1 keeps ui as its kind and forge as its domain" \
+   "$(rg -A1 '#1 +P2 Vocabulary' "$OUT" 2>/dev/null | rg -c '▪ ui .*▫ forge' || echo 0)" 1
 
 echo
 echo "── 4. a trimmed line ends at a word, not mid-token ──"
-trimmed=$(rg -o '↳ blocked:.*' "$OUT" 2>/dev/null | head -1)
+trimmed=$(rg -o '» AGENT:.*' "$OUT" 2>/dev/null | head -1)
 if printf '%s' "$trimmed" | rg -q '…$' 2>/dev/null; then
   pass=$((pass+1))
   last=$(printf '%s' "$trimmed" | sed 's/…$//' | awk '{print $NF}')
@@ -118,8 +130,8 @@ PY
 done
 AUTO="$ROOT/auto.txt"
 HOME="$ROOT" bash "$TT" --session sparse01 --group auto > "$AUTO" 2>&1
-ok "sparse goal is not chosen"      "$(rg -c 'grouped: goal' "$AUTO" 2>/dev/null || echo 0)" 0
-ok "dense domain is chosen"         "$(rg -c 'grouped: domain' "$AUTO" 2>/dev/null || echo 0)" 1
+ok "sparse goal is not chosen"      "$(rg -c 'grouped by goal' "$AUTO" 2>/dev/null || echo 0)" 0
+ok "dense domain is chosen"         "$(rg -c 'grouped by domain' "$AUTO" 2>/dev/null || echo 0)" 1
 ok "no giant unnamed goal band"     "$(rg -c 'GOAL \(no goal\)' "$AUTO" 2>/dev/null || echo 0)" 0
 
 echo
@@ -127,8 +139,10 @@ echo "── 6. a PINNED sparse key is honoured, but says what it costs ──"
 # A flag or a project view file may still pin a sparse key. That ruling is not
 # ours to override; the reader just has to be told why one band swallowed the table.
 PIN="$ROOT/pin.txt"
-HOME="$ROOT" bash "$TT" --session sparse01 --group goal > "$PIN" 2>&1
-ok "the pinned key is obeyed"       "$(rg -c 'grouped: goal' "$PIN" 2>/dev/null || echo 0)" 1
+# The cost line is a tidiness note and prints under --detail since #58 (visual
+# audit V14; automation on #54 called the plain-header version word salad).
+HOME="$ROOT" bash "$TT" --session sparse01 --group goal --detail > "$PIN" 2>&1
+ok "the pinned key is obeyed"       "$(rg -c 'grouped by goal' "$PIN" 2>/dev/null || echo 0)" 1
 ok "and its coverage is flagged"    "$(rg -c "only .* of open rows carry 'goal'" "$PIN" 2>/dev/null || echo 0)" 1
 ok "the warning names an alternative" "$(rg -c 'regroup: task-table.sh --group' "$PIN" 2>/dev/null || echo 0)" 1
 
@@ -230,9 +244,10 @@ MUT="$ROOT/mut.sh"
 python3 - "$TT" "$MUT" <<'PY'
 import sys
 s = open(sys.argv[1]).read()
-s = s.replace("task = prio(x) + (f\"[{sn}] \" if sn else \"\") + subject_of(x)",
-              "task = prio(x) + (f\"[{sn}] \" if sn else \"\") + x[\"subject\"]", 1)
-open(sys.argv[2], "w").write(s)
+s2 = s.replace('return (og + " " if og else "") + prio(x) + subject_of(x)',
+               'return (og + " " if og else "") + prio(x) + x["subject"]', 1)
+assert s2 != s, "the mutation did not apply; titled() moved or was renamed"
+open(sys.argv[2], "w").write(s2)
 PY
 HOME="$ROOT" bash "$MUT" --session hygie001 > "$ROOT/mut.txt" 2>&1
 if [ "$(rg -c 'P2 P2' "$ROOT/mut.txt" 2>/dev/null || echo 0)" -ge 1 ]; then
@@ -240,6 +255,35 @@ if [ "$(rg -c 'P2 P2' "$ROOT/mut.txt" 2>/dev/null || echo 0)" -ge 1 ]; then
 else
   fail=$((fail+1)); echo "  FAIL: reverting subject_of changed nothing — the test is blind"
 fi
+
+echo
+echo "── 10. a row written after its deferral was set is named (forge-console, 2026-09-08) ──"
+# A batch like "later" is a verdict with a date. forge-console found nine rows put
+# in THIS WEEK still reading as deferred from an old grouping; the nag names them.
+DEF="$ROOT/.claude/tasks/session-defer001"
+mkdir -p "$DEF"
+for i in 1 2; do
+  python3 - "$DEF/$i.json" "$i" <<'PY'
+import json, sys, time
+p, tid = sys.argv[1:3]
+old = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - 3 * 86400))
+json.dump({"id": tid, "subject": f"Deferred row {tid}", "description": "", "status": "pending",
+           "activeForm": None, "blocks": [], "blockedBy": [],
+           "metadata": {"lane": "hands", "tier": "opus", "domain": "d", "class": "c",
+                        "goal": "G", "batch": "later", "batch_at": old}}, open(p, "w"), indent=1)
+PY
+done
+# Row 1 was written today, after its deferral; row 2's file is as old as its verdict.
+OLD2=$(( $(date +%s) - 3 * 24 * 3600 ))
+touch -t "$(date -r $OLD2 +%Y%m%d%H%M.%S)" "$DEF/2.json"
+DOUT="$ROOT/defer.txt"
+HOME="$ROOT" bash "$TT" --session defer001 --detail > "$DOUT" 2>&1
+ok "a row written after its deferral is named"   "$(rg -c 'written after their deferral was set' "$DOUT" 2>/dev/null || echo 0)" 1
+ok "and it is row 1, not row 2"                   "$(rg -c 're-check the verdict: #1$' "$DOUT" 2>/dev/null || echo 0)" 1
+# control: with both files as old as their verdicts the nag must not appear
+touch -t "$(date -r $OLD2 +%Y%m%d%H%M.%S)" "$DEF/1.json"
+HOME="$ROOT" bash "$TT" --session defer001 --detail > "$ROOT/defer-quiet.txt" 2>&1
+ok "silent when nothing was written after the verdict" "$(rg -c 'written after their deferral' "$ROOT/defer-quiet.txt" 2>/dev/null || echo 0)" 0
 
 echo
 echo "---- pass=$pass fail=$fail"

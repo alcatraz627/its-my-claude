@@ -1,7 +1,9 @@
 # /tasks redesign: the model, ruled 2026-09-04
 
-Status: the model is ruled, the renderer is not built. One question stays open at
-the bottom. Nothing here is implemented yet.
+Status: the model is ruled and the renderer is built (`scripts/task-table/task-table.sh`,
+2026-09-05 onward; goal boxes, milestone bands, CLEAR NOW, one trait per column).
+This file is the model the renderer answers to, not a build plan. One question
+stays open at the bottom.
 
 Provenance: an owner review on 2026-09-04, after the existing table was called
 unreadable four times in one session and the agent answered the data half each
@@ -155,9 +157,141 @@ answers yes or no about a behaviour change, while priority invites agents to ski
 valuable work on a number they disagree with. Two rows in the owner's own queue
 currently contradict their own priority metadata and nothing sorts by it.
 
+## What a milestone is, ruled 2026-09-04
+
+Milestones are always present, and the agent minimises them. One per goal is the
+default and the common case for a run of a couple of hours.
+
+**A milestone names a state the system is in. A task names an action someone
+takes.** That single line settles every case the owner raised. "Three bug fixes"
+and "one review" are quantities of effort. "The change is under review as a pull
+request" and "the system change is in place, validation is next" are descriptions
+of where things stand. A non-technical listener can picture the second kind and
+can only infer busyness from the first.
+
+The naming test, because otherwise two agents disagree about what counts:
+
+> Read the name aloud with "right now," in front of it. If it parses as a
+> true-or-false sentence about the world, it is a milestone. If it does not
+> parse, it is a pile of work.
+
+"Right now, the walmart module runs on the foundry contract" parses. "Right now,
+three bug fixes" does not.
+
+### Where to cut
+
+One milestone is wrong, and the goal needs splitting, when either holds:
+
+- **An owner-gate falls inside it** rather than at an edge. A milestone is a
+  reachable state, so a gate in the middle means the state cannot be reached
+  without the owner, which means the boundary was drawn in the wrong place. Gate
+  position is therefore a diagnostic on the decomposition, not a thing to arrange
+  around.
+- **It cannot be finished in one sitting.** A state nobody can reach before
+  stopping is not a halting point.
+
+Those two conditions are the counter-pressure that keeps minimisation honest.
+Without them, "minimise to one" reproduces the failure this whole redesign is
+for: one large milestone quietly holding three stages, reported met on the
+strength of one.
+
+### The property this buys
+
+"Can we stop here with nothing half-done" is resumability. So a milestone edge is
+also the cheapest place to checkpoint and the cleanest place to resume: a clear at
+a boundary loses nothing structural, while one taken mid-milestone loses the
+half-state. A core-dump written at an edge is a complete handoff, and the Resume
+Contract's next action becomes "start the next milestone" instead of "recover
+whatever was mid-flight".
+
+## The height ceiling is an instrument, ruled 2026-09-04
+
+It stays at 44. The number is loose and that does not matter, because a forcing
+function only has to bite reliably rather than precisely. Its job is to be a smell
+detector: when a queue will not fit one screen, that usually means rows are too
+verbose or too many, and the owner wants to be told.
+
+What changes is the message. Today the overflow line apologises for the tool:
+
+    … +165 rows held by the height cap (--detail or --json shows all)
+
+It should accuse the data and carry the measurement that proves it:
+
+    … 165 rows did not fit. A queue this size usually means rows are too verbose
+      or too many: median subject here is 97 chars and 100 rows carry no goal.
+
+Same constraint, same number, but it now reports the finding rather than the
+limitation.
+
 ## Open, needs the owner
 
-Is goal, milestone, task a fixed three levels, or may a goal hold tasks directly
-when it has no meaningful stages? Everything above is written assuming milestones
-are always present; the answer changes the renderer's grouping and the containment
-rule's arity.
+Does a subject-length ceiling near 70 characters land, with the overflow moved to
+notes automatically rather than rejected? And is a row carrying no goal malformed?
+
+This has teeth: 100 of 181 open rows carry no goal, and a further 38 carry a
+batch with no goal, which are stages belonging to an outcome nobody wrote down.
+Containment cannot attach those under any reading of the milestone rule, so they
+need a decision rather than a mapping.
+
+## The seven rulings, 2026-09-04
+
+Answered on decision page `tasks-redesign-0904`.
+
+| # | Question | Ruling |
+|---|---|---|
+| D1 | Which layout | **c**, Variant F: bordered goal panels with one internal divider |
+| D2 | Subject ceiling | **a**, 70 characters, overflow moves to notes automatically |
+| D3 | A row with no goal | **b**, allow it, render it in a loud UNFILED band |
+| D4 | Build the dialog hook | **a**, now, blocking, with mutation tests |
+| D5 | The goal store | **b**, separate change, queued as #8 #9 #10 |
+| D6 | Milestone arity | **a**, three levels always, milestone mandatory |
+| D7 | The residual state | **a**, `unassigned` |
+
+**D1 note, verbatim:** "use colored ball emojis to call out blockers if helps,
+call out different tasks with SOME indicator at least, the kanban is the worst
+plus use column for one trait only (no stacking of lane / model / other tags in
+a single col)"
+
+The last clause is the sharpest and the current renderer violates it. It packs
+`hands·opus` into one column and `fix · tasks` into another. Both split.
+
+**D5 note, verbatim:** "And then do some testing to ensure it works fine."
+
+## The "other fixes" goal: the call the owner asked me to take
+
+His words: "if the agent decides to make a 'other fixes' as a goal after all
+the main behavior changes are done that is fine I think? Validate me and take a
+call."
+
+**My call is no, with one carve-out, and I think he is half right.**
+
+Against it. A goal names a behavioural change; that is his own ruling, in
+capitals: "I CARE ABOUT GOALS BEING DONE AGAINST THEIR MEANINGFUL BEHAVIORIAL
+INDENDED CHANGE". "Other fixes" names no change. It is a bucket, and the
+measured data says buckets fill: 61 of 180 open rows in the big store already
+carry neither a goal nor a milestone. Give those a legal home and 61 rows live
+there permanently, which rebuilds the 181-row queue this redesign exists to
+kill. It would also defeat the closure rule, because a goal that never has a
+behavioural definition can never be met, so it accumulates forever and the
+header's "1/2 goals met" quietly stops meaning anything.
+
+Where he is right. Some work genuinely does not carry its own headline
+behaviour, and pretending otherwise invents goals that are worse than a bucket.
+Two homes already exist for it and neither is a new goal:
+
+- **A milestone under the goal it serves.** Small cleanups at the end of a
+  goal are a state of that goal, not a separate outcome. "Right now, the rough
+  edges are gone" parses as true or false, which is the milestone naming test
+  from the section above. That is where end-of-goal tidying belongs.
+- **`proposals.jsonl`.** His own rule for what earns a row: a discovery that
+  outlives its goal is a proposal, not a task. That is the sweep D3b's UNFILED
+  band feeds.
+
+So the UNFILED band is a holding pen, not a home. A row sits there visibly
+until it is filed under a real goal or swept to proposals. If it can be neither,
+it was never work.
+
+**What would change my mind**, stated so this is falsifiable rather than a
+preference: if after one full pass the UNFILED band is still non-empty and every
+row in it resists both homes, the bucket is real and the model is missing a
+level. Check it on the band's own contents, not by argument.
