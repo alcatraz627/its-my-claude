@@ -1853,9 +1853,13 @@ if hidden:
         _pct = f"{len(hidden) * 100 // _q}%"
         _subs = sorted(len(subj(r)) for r in rows if not _is_done(r))
         _med = _subs[len(_subs) // 2] if _subs else 0
-        _nog = sum(1 for x in live if not meta_of(x, "goal"))
+        # The cold reader asked WHICH rows carry no goal (cold-read-P2b, 2026-09-09);
+        # up to four are named, the rest live in --json.
+        _nogr = [x for x in live if not meta_of(x, "goal")]
+        _nog = len(_nogr)
+        _nogs = (" (" + " ".join(f"#{x['id']}" for x in _nogr[:4]) + (" …" if _nog > 4 else "") + ")") if _nog else ""
         _bits = [f"⚠ {len(hidden)} rows not on screen, {_pct} of the queue",
-                 f"median subject {_med} chars, {_nog} carry no goal"]
+                 f"median subject {_med} chars, {_nog} carry no goal{_nogs}"]
     # A "N lines free, under the 9 a box needs" clause was tried here on
     # 2026-09-05 and removed the same night: a peer reading it cold called it
     # renderer internals with nothing to act on, which is the owner's test for
