@@ -32,7 +32,16 @@ if [ -d "$STATE_DIR" ]; then
       sid=$(jq -r '.session_id // ""' "$f" 2>/dev/null)
       ts=$(jq -r '.ts // ""' "$f" 2>/dev/null)
       prompt=$(jq -r '.prompt_preview // ""' "$f" 2>/dev/null | head -c 80)
-      [ -n "$sid" ] && STALE_TURNS+=("$sid @ $ts — \"$prompt\"")
+      [ -n "$sid" ] || continue
+      # A retro-dump is `claude -p --resume <uuid>` driving /core-dump; when the
+      # timeout kills it, its turn-state is orphaned like any crash and this list
+      # then reads as "your session died" (csync, 2026-09-07, ledger 5). Name it.
+      case "$prompt" in
+        "/core-dump mini --no-prompt --name retroactive-"*)
+          STALE_TURNS+=("$sid @ $ts — a retro-dump run for that uuid, killed before it wrote (see ~/.claude/logs/retro-dump.log); not a session of yours") ;;
+        *)
+          STALE_TURNS+=("$sid @ $ts — \"$prompt\"") ;;
+      esac
     fi
   done < <(find "$STATE_DIR" -maxdepth 1 -name '*.json' -type f 2>/dev/null)
 fi

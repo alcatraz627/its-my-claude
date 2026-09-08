@@ -65,5 +65,42 @@ n=$(rg -c '^## (Session Todos|Agent Tasks)' "$F" 2>/dev/null || echo 0)
 [ "$n" = 0 ] && ok "the old Session Todos / Agent Tasks H2s are gone" \
              || bad "todo lists are emitted twice"
 
+echo "== the pointer stays on a real core-dump at any age (ledger 4) =="
+t=$(mktemp -d)
+printf '# Core Dump\n## Initial Goal\nx\n' > "$t/_20260906-real.claude.md"
+touch -t "$(date -v-11H +%Y%m%d%H%M)" "$t/_20260906-real.claude.md"
+ln -s "_20260906-real.claude.md" "$t/_checkpoint.claude.md"
+jq -cn --arg c "$t" '{session_id:"ccc33333-1111-2222-3333-444455556666",trigger:"session-end",cwd:$c}' | bash "$WRITER" >/dev/null 2>&1
+[ "$(readlink "$t/_checkpoint.claude.md")" = "_20260906-real.claude.md" ] \
+  && ok "an 11-hour-old core-dump keeps the pointer" \
+  || bad "the stub took the pointer from a core-dump"
+[ -f "$t/_precompact-checkpoint.claude.md" ] && ok "the stub is still written by its own name" || bad "no stub written"
+ln -sf "_gone.claude.md" "$t/_checkpoint.claude.md"
+jq -cn --arg c "$t" '{session_id:"ccc33333-1111-2222-3333-444455556666",trigger:"manual",cwd:$c}' | bash "$WRITER" >/dev/null 2>&1
+[ "$(readlink "$t/_checkpoint.claude.md")" = "_precompact-checkpoint.claude.md" ] \
+  && ok "a dangling pointer is retargeted" \
+  || bad "dangling pointer left dangling"
+
+echo "== another session's _active.md is not folded in as ours =="
+t=$(mktemp -d); mkdir -p "$t/.claude/session-notes"
+printf '## Todos\n- [x] june thing done\n' > "$t/.claude/session-notes/june-session.md"
+ln -s "june-session.md" "$t/.claude/session-notes/_active.md"
+jq -cn --arg c "$t" '{session_id:"ddd44444-1111-2222-3333-444455556666",trigger:"manual",cwd:$c}' | bash "$WRITER" >/dev/null 2>&1
+F="$t/_precompact-checkpoint.claude.md"
+rg -q 'june thing done' "$F" && bad "a foreign session's todos landed in the snapshot" || ok "foreign _active.md content excluded"
+rg -q "not this session's doc" "$F" && ok "the snapshot says why the workspace block is absent" || bad "no explanation for the missing workspace block"
+ln -sf "ddd44444-1111-2222-3333-444455556666.md" "$t/.claude/session-notes/_active.md"
+printf '## Todos\n- [ ] mine\n' > "$t/.claude/session-notes/ddd44444-1111-2222-3333-444455556666.md"
+jq -cn --arg c "$t" '{session_id:"ddd44444-1111-2222-3333-444455556666",trigger:"manual",cwd:$c}' | bash "$WRITER" >/dev/null 2>&1
+rg -q '\[ \] mine' "$F" && ok "own _active.md still folded in" || bad "own doc dropped"
+
+echo "== the session-end kind is accepted by the index writer =="
+S=$(mktemp -d); mkdir -p "$S/.claude"
+HOME="$S" bash "$HOME/.claude/scripts/checkpoint/write.sh" --session-id eee55555 --project-root "$S" \
+  --checkpoint-path "$S/_precompact-checkpoint.claude.md" --kind session-end --name se >/dev/null 2>&1
+rg -q '"kind": *"session-end"' "$S/.claude/checkpoints/index.jsonl" 2>/dev/null \
+  && ok "write.sh indexes kind=session-end (it was 'invalid --kind' before)" \
+  || bad "session-end snapshots are still never indexed"
+
 echo "---"; echo "pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

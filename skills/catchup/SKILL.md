@@ -127,7 +127,7 @@ If the user passed an explicit `filename` argument, skip this phase — they've 
 ### 0.4.2 — Try `--auto` resolution (single fresh entry)
 
 ```bash
-~/.claude/scripts/checkpoint/resolve.sh --auto
+~/.claude/scripts/checkpoint/resolve.sh --auto --cwd "$PWD"
 ```
 
 Exit code meaning:
@@ -135,15 +135,26 @@ Exit code meaning:
 - `2` — multiple fresh entries OR no fresh entries but stale ones exist; **show picker** (next step).
 - `3` — no checkpoints at all; fall through to Phase 0.5.
 
+`--cwd` is what stops the two confident-wrong resumes of 2026-09-07 (ledger 4
+and 25): the project you sit in wins a tie between fresh entries, a shell-only
+snapshot (precompact or session-end) never wins outright when a real core-dump
+for that project exists at any age, and `_*.claude.md` files on disk in the cwd
+that the index never saw make `--auto` defer to the picker instead of serving
+another project's entry over them.
+
 ### 0.4.3 — Show picker (`mcp__inputs__pick_one`)
 
 When `--auto` returned exit 2, render the list and prompt the user to pick:
 
 ```bash
-~/.claude/scripts/checkpoint/list.sh --limit 8
+~/.claude/scripts/checkpoint/list.sh --limit 8 --cwd "$PWD"
 ```
 
-This prints a numbered table with name / project / age / summary. Show that
+This prints a numbered table with name / project / age / summary, in three
+blocks: this project's indexed entries first, then checkpoint files on disk in
+the cwd that the index never saw (each with its absolute path, since those are
+picked by path, not by number), then other projects. The numbers stay global
+newest-first so they line up with `resolve.sh --pick N`. Show that
 table to the user AS PLAIN TEXT and ask for a number in the conversation, plus
 "or paste an explicit checkpoint path". Never present this through
 `mcp__inputs__pick_one` or any dialog tool. Plain text stays the default even

@@ -16,7 +16,7 @@
 # Usage:
 #   write.sh --session-id ID --project-root PATH --checkpoint-path PATH \
 #            [--name "human name"] [--summary "1-line summary"] \
-#            [--kind core-dump|precompact|retro]     # default core-dump
+#            [--kind core-dump|precompact|session-end|retro]   # default core-dump
 #            [--mode append|replace-latest]          # default append
 #            [--guard-newer-than N]                  # skip if a kind=core-dump entry
 #                                                    # exists for this session within
@@ -56,7 +56,10 @@ done
   exit 2
 }
 
-case "$KIND" in core-dump|precompact|retro) ;; *) printf 'invalid --kind %s\n' "$KIND" >&2; exit 2 ;; esac
+# session-end is the SessionEnd wrapper's kind. It was rejected here from the day
+# that wrapper shipped, so every end-of-session snapshot was written to disk and
+# relinked but never indexed, and /catchup --auto could not see it.
+case "$KIND" in core-dump|precompact|session-end|retro) ;; *) printf 'invalid --kind %s\n' "$KIND" >&2; exit 2 ;; esac
 case "$MODE" in append|replace-latest)      ;; *) printf 'invalid --mode %s\n' "$MODE" >&2; exit 2 ;; esac
 
 NAME="${NAME:-$SESSION_ID}"

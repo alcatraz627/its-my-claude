@@ -5,7 +5,8 @@
 #
 # Writes:
 #   _precompact-checkpoint.claude.md  — rich snapshot (this script)
-#   _checkpoint.claude.md             — symlink → above (for /catchup compat)
+#   _checkpoint.claude.md             — symlink → above, only when no /core-dump
+#                                       already holds that pointer
 #   .claude/wal.md                    — CHECKPOINT block appended
 #
 # Fires on BOTH auto-compaction and manual /compact
@@ -197,6 +198,7 @@ fi
 # (multi-session safe), falling back to the _active.md symlink.
 workspace_notes=""
 workspace_source=""
+workspace_skipped=""
 if [[ -n "$cwd" ]]; then
   notes_dir="$cwd/.claude/session-notes"
   { [[ "$cwd" == "$HOME/.claude" ]] || [[ "$cwd" == */.claude ]]; } && notes_dir="$cwd/session-notes"
@@ -204,7 +206,16 @@ if [[ -n "$cwd" ]]; then
   if [[ -n "$session_id" && -f "$notes_dir/${session_id}.md" ]]; then
     notes_file="$notes_dir/${session_id}.md"
   elif [[ -f "$notes_dir/_active.md" ]]; then
-    notes_file="$notes_dir/_active.md"
+    # _active.md is shared by every session in the directory, so it can point at
+    # ANOTHER session's doc, whose Todos then land in this snapshot as if they were
+    # ours (sys-monitor, 2026-09-07: a June session's 80 done items inside a killed
+    # session's stub). Fold it in only when it resolves to this session's own doc.
+    act_target=$(basename "$(readlink "$notes_dir/_active.md" 2>/dev/null || echo "")")
+    if [[ -z "$session_id" || "$act_target" == "${session_id}.md" ]]; then
+      notes_file="$notes_dir/_active.md"
+    else
+      workspace_skipped="_active.md points at ${act_target:-a plain file}, not this session's doc (${session_id}.md is absent); nothing folded in, so the Todos below are the live task list only"
+    fi
   fi
   if [[ -n "$notes_file" ]]; then
     workspace_notes=$(head -100 "$notes_file" 2>/dev/null) || true
@@ -283,6 +294,11 @@ HEADER
     echo
     echo "$workspace_notes"
     echo
+  elif [[ -n "$workspace_skipped" ]]; then
+    echo "## Workspace Notes"
+    echo
+    echo "> $workspace_skipped"
+    echo
   fi
 
   if [[ -n "$git_diff_stat" ]]; then
@@ -352,9 +368,13 @@ FOOTER
 echo "  Checkpoint written to $dump_file" >&2
 
 # ── 4. Symlink _checkpoint.claude.md → _precompact-checkpoint.claude.md ──────
-# /catchup defaults to _checkpoint.claude.md — this makes it find our file.
-# Guard (mirror of the step-7 index guard): a fresh (<30 min) NON-precompact
-# target is a real /core-dump; this shell-only snapshot must not shadow it.
+# /catchup defaults to _checkpoint.claude.md — this makes it find our file, but
+# only when nothing better holds the pointer. A pointer already on a real
+# /core-dump stays there at ANY age: a shell scrape is never the better resume
+# source, and this snapshot is reachable by its own name and its own index
+# entry. The 30-minute window that used to live here let a killed session's
+# stub shadow an 11-hour-old core-dump (sys-monitor, 2026-09-07, ledger 4), and
+# a symlink to a stub is exactly what a resumer trusts most.
 symlink="$dump_dir/_checkpoint.claude.md"
 skip_link=""
 cur_target=""
@@ -369,15 +389,12 @@ if [[ -L "$symlink" ]]; then
   if [[ -n "$cur_target" && "$cur_target" != "_precompact-checkpoint.claude.md" ]]; then
     abs_target="$cur_target"
     [[ "$abs_target" != /* ]] && abs_target="$dump_dir/$cur_target"
-    if [[ -f "$abs_target" ]]; then
-      now_s=$(date +%s)
-      tgt_s=$(stat -f %m "$abs_target" 2>/dev/null || echo 0)
-      (( now_s - tgt_s < 1800 )) && skip_link=1
-    fi
+    # A dangling link (the dump was moved or trashed) is free to retarget.
+    [[ -f "$abs_target" ]] && skip_link=1
   fi
 fi
 if [[ -n "$skip_link" ]]; then
-  echo "  _checkpoint.claude.md not retargeted: $cur_target" >&2
+  echo "  _checkpoint.claude.md stays on $cur_target (a core-dump outranks this snapshot; resume it by name: _precompact-checkpoint.claude.md)" >&2
 else
   ln -sf "_precompact-checkpoint.claude.md" "$symlink" 2>/dev/null || true
   echo "  Symlink: $symlink → _precompact-checkpoint.claude.md" >&2
