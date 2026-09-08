@@ -737,5 +737,19 @@ rm -f "$ROOT/out"; HOME="$ROOT" bash "$M" --session box00001 --group batch > "$R
 has "MUTATION: without the batch meter the cold reader's lie returns" 'no milestone named yet' "$ROOT/out"
 
 echo
+echo "── 29. the all-done screen: the done box meters its rows, the footer names no percentage of an empty queue (2026-09-09) ──"
+reset
+for i in $(seq 1 30); do mk "$i" completed "Ship the thing" "M$((i % 3))" hands opus build tasks; done
+render
+has "the done box carries a full meter of its own rows"  '^│  ▰▰▰▰▰▰▰▰▰▰  30 of 30 rows closed$' "$ROOT/out"
+hasnt "no 'no milestone named yet' on a finished store"    'no milestone named yet' "$ROOT/out"
+hasnt "no percentage of an empty queue"                    '% of the queue' "$ROOT/out"
+has "the hidden done rows are named as done, with the flag that shows them" '^⚠ [0-9]+ done rows not on screen; --detail shows them' "$ROOT/out"
+hasnt "no median over zero open rows"                      'median subject 0 chars' "$ROOT/out"
+M=$(mutate donemeter 'if fixed_ball:' 'if False:')
+render "$M"
+has "MUTATION: without the synthetic-box meter the lie returns" 'no milestone named yet' "$ROOT/out"
+
+echo
 echo "---- pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

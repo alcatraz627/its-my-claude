@@ -1674,7 +1674,13 @@ def build_body():
             # under a band that read "A · gate adherence …" (adv-tasks F7, #34).
             nxt = str(labels.get(nxt, nxt)) if nxt else ""
             _allb = [x for x in rows if _m_of(x) == key] if (tot == 0 and group != "goal") else []
-            if _allb:
+            if fixed_ball:
+                # A synthetic box (done, delegated, later) is not a goal and has no
+                # milestones to count; "no milestone named yet" over the finished
+                # store was the first line of the all-done screen (2026-09-09).
+                _bc = sum(1 for x in items if _is_done(x))
+                w("│  " + meter(_bc, len(items)) + f"  {_bc} of {len(items)} rows closed")
+            elif _allb:
                 # A milestone box under batch grouping. The per-goal meter has
                 # nothing to say about it, and "no milestone named yet" told the
                 # cold reader the box he was reading did not exist (cold-read-P2b
@@ -1838,12 +1844,18 @@ for _line in _warn: w(_line)
 # apologised for the tool; rows off screen are a finding about the queue.
 if hidden:
     _q = len(openish) + len(now)
-    _pct = f"{len(hidden) * 100 // max(1, _q)}%"
-    _subs = sorted(len(subj(r)) for r in rows if not _is_done(r))
-    _med = _subs[len(_subs) // 2] if _subs else 0
-    _nog = sum(1 for x in live if not meta_of(x, "goal"))
-    _bits = [f"⚠ {len(hidden)} rows not on screen, {_pct} of the queue",
-             f"median subject {_med} chars, {_nog} carry no goal"]
+    if _q == 0:
+        # Nothing open: the hidden rows are finished ones, and a percentage of an
+        # empty queue read "4000% of the queue" on the first all-done store
+        # (2026-09-09). Say what is off screen and where it is, nothing more.
+        _bits = [f"⚠ {len(hidden)} done rows not on screen; --detail shows them"]
+    else:
+        _pct = f"{len(hidden) * 100 // _q}%"
+        _subs = sorted(len(subj(r)) for r in rows if not _is_done(r))
+        _med = _subs[len(_subs) // 2] if _subs else 0
+        _nog = sum(1 for x in live if not meta_of(x, "goal"))
+        _bits = [f"⚠ {len(hidden)} rows not on screen, {_pct} of the queue",
+                 f"median subject {_med} chars, {_nog} carry no goal"]
     # A "N lines free, under the 9 a box needs" clause was tried here on
     # 2026-09-05 and removed the same night: a peer reading it cold called it
     # renderer internals with nothing to act on, which is the owner's test for
