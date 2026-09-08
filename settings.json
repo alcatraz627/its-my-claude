@@ -1291,6 +1291,14 @@
             "command": "~/.claude/scripts/hooks/ui-callouts-gate.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/credential-ask-stop.sh"
+          }
+        ]
       }
     ],
     "SubagentStart": [

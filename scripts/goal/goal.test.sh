@@ -172,5 +172,16 @@ echo "$out" | rg -q "not a known mechanism" && ok "and warns" || ko "no warning 
 jq -e '.text=="via probe" and .via=="unknown"' "$HOME/.claude/goals/$SID.json" >/dev/null \
   && ok "the goal is written with via=unknown" || ko "goal not written, or via not recorded as unknown"
 
+echo "== the two registers the owner rejected on 2026-09-08 =="
+SALAD="A real supplier file goes through the listing capability and every written field comes back with a verdict a person can dispute by the quote beside it. A hands seat opens the auth direction and starts the admin panel without a question back to brains. The listing module's compliance row says what needs the owner in his own words, or that nothing does."
+out=$(bash "$G" lint "$SALAD" 2>&1)
+echo "$out" | rg -q "word salad" && ok "brains' word-salad goal is named as such" || ko "word salad passed the linter"
+JEGS="A nontechnical teammate gets one real JEGS workbook through the console alone: upload, preview, run, read the results, export. No step needs me."
+out=$(bash "$G" lint "$JEGS" 2>&1)
+echo "$out" | rg -q "word salad|sentences:" && ko "the owner's own goal fires the register checks" || ok "the owner's JEGS goal passes clean"
+QUEUE="The suite is green. The check is mutation-proven. The key shows up. The CLI runs list. Every row ends terminal. The job says so. The export works. The docs are read."
+out=$(bash "$G" lint "$QUEUE" 2>&1)
+echo "$out" | rg -q "past six the goal is a queue" && ok "eight short sentences read as a queue" || ko "a queue of eight passed"
+
 export HOME="$HOME_REAL"; trash "$T" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

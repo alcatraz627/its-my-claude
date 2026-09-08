@@ -150,7 +150,17 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
     Any row agent-ready: the park is not over. Do that work now, per the task
     list, starting with /router:intake on the row and ending with /router:validate
     before marking it done, and leave this job armed; the next fire reconciles
-    again. Invent nothing beyond the rows.
+    again. Invent nothing beyond the rows. Two fences on the pick, both from
+    2026-09-08:
+      - If the owner has spoken in this session within the last 30 minutes,
+        this wake picks NOTHING: say so in one line and stop. A wake that starts
+        a row while he is mid-conversation pulls the lane off what he is asking
+        for right now (forge-console, "What are you doing?", 14:27).
+      - If any open row is owner-gated, the row you start must be on the path
+        to clearing one of those gates, or you say in one line why you are
+        starting something else before you start it (slug
+        substituted-tractable-work-for-the-blocked-ask). Startable is not the
+        same as right.
 
     Nothing agent-ready (every open row is owner-blocked or external, or no
     rows are open): write the state to disk FIRST, so a supervisor can tell a

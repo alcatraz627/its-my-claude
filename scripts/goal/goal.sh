@@ -311,6 +311,23 @@ goal_lint() {  # goal_lint <text>; prints findings to stderr, always returns 0
   if [ "$words" -gt 45 ] && [ "${stops:-0}" -lt 3 ]; then
     _f "one long sentence ($words words, $stops full stops): the tangible parts blur. Split into short statements, each true or false on its own."
   fi
+  # Word salad, the other register (owner 2026-09-08, twice in one hour on the
+  # same lane): three sentences that each run past twenty-five words, so no
+  # single line can be marked true or false. The long-sentence check above
+  # needs 45 words with under three stops and let it through.
+  local _long; _long=$(printf '%s' "$1" | python3 -c '
+import re, sys
+t = sys.stdin.read()
+sents = [s.strip() for s in re.split(r"(?<=[.!?])\s+", t) if s.strip()]
+long = [s for s in sents if len(s.split()) > 25]
+print(len(sents), len(long))' 2>/dev/null)
+  local _ns _nl; _ns=${_long%% *}; _nl=${_long##* }
+  if [ "${_nl:-0}" -gt 0 ]; then
+    _f "word salad: $_nl sentence(s) run past 25 words. A reader marks one short statement true or false; cut each long one into the one or two states it names."
+  fi
+  if [ "${_ns:-0}" -gt 6 ]; then
+    _f "$_ns sentences: past six the goal is a queue. Keep the three to six states a person would recognise; the rest belong in the task list."
+  fi
   [ "$n" -gt 0 ] && printf 'goal.sh: %s register finding(s) above. The goal still stands; this is a read, not a gate.\n' "$n" >&2
   return 0
 }

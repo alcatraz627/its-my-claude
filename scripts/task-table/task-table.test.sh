@@ -310,5 +310,9 @@ echo "$out" | rg -q "claims: .*console" && ko "a lane a live alias contains was 
 out=$(TASKS_PEERS_JSON="$SB/missing.json" render --detail)
 echo "$out" | rg -q "no live session claims" && ko "nagged with no roster to read" || ok "no roster, no nag"
 
+echo "== the backlog's growth is on the first screen (owner, 2026-09-08) =="
+out=$(render)
+echo "$out" | rg -q "today: [0-9]+ filed, [0-9]+ closed" && ok "the footer counts rows filed today beside rows closed today" || ko "no filed/closed count: $(echo "$out" | tail -3)"
+
 cd /; export HOME="$REAL"; trash "$SB" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

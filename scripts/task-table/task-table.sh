@@ -295,6 +295,8 @@ for f in d.glob("*.json"):
     try:
         r = json.load(open(f))
         r["_mtime"] = f.stat().st_mtime
+        # Birth time is when the row was filed; mtime moves on every edit.
+        r["_birth"] = getattr(f.stat(), "st_birthtime", f.stat().st_mtime)
         rows.append(r)
     except Exception: pass
 def num(r): return int(re.sub(r"\D", "", str(r.get("id", "0"))) or 0)
@@ -1271,6 +1273,15 @@ _recent = sorted((x for x in rows if (time.time() - (x.get("_mtime") or 0)) < RE
 # legend is the one id list that stays, by the 2026-08-15 ruling.
 _parts = []
 if _recent: _parts.append(f"{len(_recent)} moved in the last {RECENT_H}h")
+# The backlog's growth beside its closes, on the first screen. Owner, 2026-09-08:
+# lanes "keep piling work at the end of the backlog just to be able to close
+# existing work"; the fleet store that day filed 197 rows against 39 closes, and
+# no surface said so.
+_day = time.strftime("%Y-%m-%d")
+_added_today = [x for x in rows if time.strftime("%Y-%m-%d", time.localtime(x.get("_birth") or 0)) == _day]
+_closed_today = [x for x in rows if _is_done(x) and time.strftime("%Y-%m-%d", time.localtime(x.get("_mtime") or 0)) == _day]
+if _added_today or _closed_today:
+    _parts.append(f"today: {len(_added_today)} filed, {len(_closed_today)} closed")
 if done and live:
     # A done row with no instrument is counted here so the omission is on
     # screen; the rows themselves live in --json (alignment check 9).
