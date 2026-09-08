@@ -32,6 +32,11 @@ BIG_STORES = ["f04ae843", "1523e931"]          # the two stores over the 44-line
 WEEK = 7 * 86400
 
 
+def _landed_epoch(y, m, d):
+    """Local-midnight epoch for a fix's landing date, for a since-landing window."""
+    return time.mktime((y, m, d, 0, 0, 0, 0, 0, -1))
+
+
 def sh(args, cwd=None):
     p = subprocess.run(args, cwd=cwd, capture_output=True, text=True)
     return p.returncode, p.stdout, p.stderr
@@ -232,10 +237,48 @@ def proposed_goal_never_stops_work():
                 j += 1
             if not acted:
                 stops.append(f"{os.path.basename(f)[:8]}")
+    # Companion window: the goal-proposal Stop gate landed 2026-09-08 (1911bf9).
+    # The verdict counts the whole week, this reports since it landed.
+    since = _landed_epoch(2026, 9, 8)
+    s_prop = s_stop = 0
+    for f in glob.glob(os.path.join(PROJECTS, "*", "*.jsonl")):
+        if os.stat(f).st_mtime < since:
+            continue
+        msgs = []
+        for line in open(f, errors="ignore"):
+            try:
+                o = json.loads(line)
+            except Exception:
+                continue
+            if o.get("type") in ("user", "assistant"):
+                msgs.append(o)
+        for i, o in enumerate(msgs):
+            if o["type"] != "assistant":
+                continue
+            c = o.get("message", {}).get("content")
+            if not isinstance(c, list):
+                continue
+            texts = [b.get("text", "") for b in c if b.get("type") == "text"]
+            if not any(l.strip().startswith("/goal ") for t in texts for l in t.splitlines()):
+                continue
+            joined = "\n".join(texts)
+            if any(h in joined for h in handoff) or i == len(msgs) - 1:
+                continue
+            s_prop += 1
+            acted = any(b.get("type") == "tool_use" for b in c)
+            j = i + 1
+            while not acted and j < len(msgs) and msgs[j]["type"] == "assistant":
+                cc = msgs[j].get("message", {}).get("content")
+                if isinstance(cc, list) and any(b.get("type") == "tool_use" for b in cc):
+                    acted = True
+                j += 1
+            if not acted:
+                s_stop += 1
+    tail = f"; since the gate landed 09-08: {s_prop - s_stop} of {s_prop} acted" if s_prop else ""
     if proposals == 0:
         return "RED", f"no mid-work /goal proposals found in 7 days ({handoffs} hand-off paste lines excluded)"
     if stops:
-        return "RED", f"{len(stops)} of {proposals} mid-work proposals ended the turn with no tool call ({handoffs} hand-off lines excluded): {' '.join(sorted(set(stops))[:6])}"
+        return "RED", f"{len(stops)} of {proposals} mid-work proposals ended the turn with no tool call ({handoffs} hand-off lines excluded): {' '.join(sorted(set(stops))[:6])}{tail}"
     return "GREEN", f"all {proposals} mid-work proposals were followed by a tool call ({handoffs} hand-off lines excluded)"
 
 
@@ -280,10 +323,31 @@ def done_rows_name_their_instrument():
             total += 1
             if meta(t, "verified") in (None, "", False):
                 missing += 1
+    # A companion window: the close verb that names an instrument landed 2026-09-08
+    # (task.sh close --by, commit 1911bf9). The seven-day verdict below counts
+    # closes from before it existed and stays red until they roll out on 09-15;
+    # this line reports the window since it landed, so the reader sees the trend
+    # without the verdict lying. Honest, not green (2026-09-09).
+    since = _landed_epoch(2026, 9, 8)
+    st = sm = 0
+    for d in glob.glob(os.path.join(TASKS, "session-*")):
+        for f in glob.glob(os.path.join(d, "*.json")):
+            if os.stat(f).st_mtime < since:
+                continue
+            try:
+                t = json.load(open(f))
+            except Exception:
+                continue
+            if t.get("status") != "completed":
+                continue
+            st += 1
+            if meta(t, "verified") in (None, "", False):
+                sm += 1
+    tail = f"; since the verb landed 09-08: {st - sm} of {st} named one" if st else ""
     if total == 0:
         return "RED", "no rows completed in the last 7 days found"
     if missing:
-        return "RED", f"{missing} of {total} rows closed this week carry no verified instrument"
+        return "RED", f"{missing} of {total} rows closed this week carry no verified instrument{tail}"
     return "GREEN", f"all {total} rows closed this week name their instrument"
 
 

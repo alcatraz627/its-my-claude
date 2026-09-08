@@ -427,3 +427,31 @@ table until it becomes one.
   for a goal, remind him in one line what the band says, then reconcile in his
   direction. Never argue. The fuller doctrine is in
   `rules/goal-statement-on-starting-work.md`.
+
+## Validation
+
+The efficacy question for /tasks is not "did it render" but "did the render
+answer what the owner asked, or did he re-ask". That signal is captured live,
+not by a per-run log: this skill renders many times a session and a record on
+each would be noise.
+
+- **The reaction log is the ledger.** `logs/tasks-render-reactions.jsonl` gets
+  one row per render whose next owner prompt lands within 30 minutes, carrying
+  the seconds elapsed and any friction flag (`focus`, `again`, `wtf`, `wrong`).
+  `scripts/measure/reaction-join.py` reports the flag rate and joins it to the
+  counter-gate log. A rising flag rate is the render failing; a falling one is
+  it working.
+- **The alignment checks are the surface's contract.** `scripts/alignment-checks`
+  holds the checks this skill must keep green: the header names the store it
+  counts, the first screen reads the same from any directory, an empty own-store
+  never renders, the height law holds. Run `scripts/alignment-checks/run.sh`
+  after any renderer change.
+- **The render suites are the regression net.** `goal-box.test.sh`,
+  `task-table.test.sh`, `render-hygiene.test.sh`, `state-matrix.test.sh`,
+  `real-store.test.sh` and `height-budget.test.sh`, each mutation-tested. Green
+  before any commit that touches `task-table.sh`.
+
+To mark a notable run (a render the owner reacted to, a defect it surfaced),
+record it: `bash ~/.claude/scripts/skill-log.sh record tasks --task "<what was
+asked>" --outcome <ok|revised|failed> --corrections <n> --note "reaction=<flag
+or none>"`. Routine renders need no record; the reaction log already holds them.
