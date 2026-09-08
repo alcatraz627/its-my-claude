@@ -278,7 +278,9 @@ goal_lint() {  # goal_lint <text>; prints findings to stderr, always returns 0
   # Bounded means the noun is followed by a locator: "in /tasks", "under GATES",
   # "in this store". A locator that is itself a quantifier ("in every store",
   # "anywhere") does not bound anything.
-  local _qpre='(every|any|all|no)[[:space:]]+(one[[:space:]]+of[[:space:]]+the[[:space:]]+[a-z]+[[:space:]]+)?([a-z]+[[:space:]]+)?'
+  # Word-bounded: without it "how many rows" matched on the "any" inside "many"
+  # (own goal, 2026-09-08). ERE has no \b, so the boundary is a non-letter.
+  local _qpre='(^|[^a-z])(every|any|all|no)[[:space:]]+(one[[:space:]]+of[[:space:]]+the[[:space:]]+[a-z]+[[:space:]]+)?([a-z]+[[:space:]]+)?'
   if [[ "$t" =~ $_qpre$_qn([[:space:]]|$) ]]; then
     _bounded=0
     if [[ "$t" =~ $_qpre$_qn[[:space:]]+(in|under|on|inside)[[:space:]]+([a-z0-9_/~.-]+) ]]; then
