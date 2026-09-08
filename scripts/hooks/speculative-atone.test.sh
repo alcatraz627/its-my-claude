@@ -7,8 +7,9 @@ set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 HINT="$HERE/speculative-atone-hint.sh"; STOP="$HERE/speculative-atone-stop.sh"
 SPEC="$HERE/../atone-speculative.sh"
-T=$(mktemp -d); export HOME="$T"; mkdir -p "$T/.claude/.turn-state" "$T/.claude/atone" "$T/.claude/scripts/ledger"
+T=$(mktemp -d); export HOME="$T"; mkdir -p "$T/.claude/.turn-state" "$T/.claude/atone" "$T/.claude/scripts/ledger" "$T/.claude/scripts/session-mgmt"
 cp "$HERE/../ledger/ledger-common.sh" "$T/.claude/scripts/ledger/" 2>/dev/null || true
+cp "$HERE/../session-mgmt/owner-quiet.py" "$T/.claude/scripts/session-mgmt/"
 export SPEC_ATONE_STORE="$T/.claude/atone/speculative.jsonl"
 export PATH="$T/bin:$PATH"; mkdir -p "$T/bin"
 # No broker in the sandbox: the hinter falls back to claude-<sid8> for the alias.

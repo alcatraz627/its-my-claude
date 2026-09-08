@@ -54,14 +54,19 @@ tone="unresolved speculative atones from the residue review; resolve each this s
 [ "$n" -ge "$ESCALATE_AT" ] && tone="IGNORED $n TURNS — the Stop gate is armed and blocks turn-ends once the owner has been quiet 30 minutes"
 verbs="confirm = run /atone then \`atone-speculative.sh confirm <id> --atone <mist-id>\` · agree = \`atone-speculative.sh agree <id> --evidence \"<cited>\"\` (you accept it; the atone follows when idle) · refute = \`atone-speculative.sh refute <id> --evidence \"<cited>\"\`"
 
+# An agreed row left the nag but still owes a real /atone; the debt is named
+# in the same breath so the cheap yes never becomes a silent never.
+owed=$(jq -r --arg m "$match" 'select(.status == "agreed") | select(.session | test("^(" + $m + ")$")) | .id' "$STORE" 2>/dev/null | rg -c . 2>/dev/null || echo 0)
+owed_line=""; [ "${owed:-0}" -gt 0 ] && owed_line=" · $owed agreed row(s) still owe a real /atone (atone-speculative.sh agreed)"
+
 if [ "$same" -gt 2 ]; then
   ids=$(printf '%s\n' "$pending" | awk '{print $1}' | head -6 | paste -sd' ' -)
   cnt=$(printf '%s\n' "$pending" | rg -c . 2>/dev/null || echo 0)
-  msg="🙏 atone · speculative: $cnt row(s) still pending after $same identical nags ($ids) · $tone · bash ~/.claude/scripts/atone-speculative.sh pending · $verbs"
+  msg="🙏 atone · speculative: $cnt row(s) still pending after $same identical nags ($ids) · $tone · bash ~/.claude/scripts/atone-speculative.sh pending · $verbs$owed_line"
 else
   msg="┌─ 🙏 atone · speculative ─────────────────────── nag $n ──
 $(printf '%s\n' "$pending" | head -12 | sed 's/^/│/')
-│ → $tone: $verbs
+│ → $tone: $verbs$owed_line
 └──────────────────────────────────────────────────────────────
 Surface this box to the user (rules/surface-hook-nudges-to-user.md), then act on it."
 fi

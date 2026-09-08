@@ -1270,7 +1270,7 @@ _over = {k: v for k, v in _run_by_lane.items() if k and len(v) > 1}
 if _over:
     _warn.append("  !! one lane, several running: "
                  + " · ".join(f"{k} has {len(v)} (#" + ", #".join(v) + ")" for k, v in sorted(_over.items()))
-                 + "   ·   at most one of each is really running")
+                 + "   ·   a lane runs one row at a time, so the rest are stale in_progress")
 _nolane = _run_by_lane.get("", [])
 if len(_nolane) > 1:
     _warn.append(f"  !! {len(_nolane)} running rows carry no lane (#" + ", #".join(_nolane)
@@ -1307,7 +1307,8 @@ if done and live:
     # A done row with no instrument is counted here so the omission is on
     # screen; the rows themselves live in --json (alignment check 9).
     _unv = [x for x in done if not x.get("verified")]
-    _parts.append(f"{len(done)} done" + (f", {len(_unv)} with no instrument named" if _unv else ""))
+    # "instrument" meant nothing to a cold reader (cold-read-P2b, 2026-09-09).
+    _parts.append(f"{len(done)} done" + (f", {len(_unv)} closed with nothing named as proof" if _unv else ""))
 if _parts: _warn.append("  " + "   ·   ".join(_parts) + "   ·   ids in --json")
 FOOTER = 3 + 1 + len(_warn)
 HEADER_LEN = len(out)
@@ -1542,15 +1543,27 @@ def build_body():
         # goes under the meter, where the reader already looks for "how close".
         # Both cost a line and are priced into the box below; neither is drawn when
         # unset, so a store with no sidecar renders as before.
-        _dir  = "" if unfiled else goal_says(key, "direction")
-        _when = "" if unfiled else goal_says(key, "when")
-        _dcost = 1 if (_dir and _dir != _last_dir) else 0
+        # Under any other grouping (the owner's gcp view groups by batch) the box
+        # is a milestone, and the goal it serves is the one most of its rows
+        # carry. The line above the box then reads direction › goal, which is
+        # his whole hierarchy above the milestone; the when stays with a goal
+        # box, since a milestone's own when is not its goal's.
+        _gkey = key if (group == "goal" and not unfiled) else ""
+        if not unfiled and group != "goal":
+            _gc = collections.Counter(_g_of(x) for x in items if _g_of(x))
+            if _gc:
+                _top, _tn = _gc.most_common(1)[0]
+                if _tn * 2 >= len(items): _gkey = _top
+        _dir  = goal_says(_gkey, "direction") if _gkey else ""
+        _dline = ("\U0001F9ED " + _dir + ("" if group == "goal" else " › " + _gkey)) if _dir else ""
+        _when = goal_says(_gkey, "when") if (_gkey and group == "goal") else ""
+        _dcost = 1 if (_dline and _dline != _last_dir) else 0
         _wcost = 1 if _when else 0
         def _draw_dir():
             global _last_dir
-            if _dir and _dir != _last_dir:
-                w("\U0001F9ED " + ellip(_dir, BOX_W - 3)); _goal_lines_used.add("direction")
-            _last_dir = _dir
+            if _dline and _dline != _last_dir:
+                w(ellip(_dline, BOX_W)); _goal_lines_used.add("direction")
+            _last_dir = _dline
         def _when_lines(indent):
             _room = BOX_W - dwidth(indent) - 9
             _ls = wrap(_when, _room) if detail else [ellip(_when, _room)]
@@ -1660,7 +1673,15 @@ def build_body():
             # labels; this line did not, so it printed the sort prefix ("next: A")
             # under a band that read "A · gate adherence …" (adv-tasks F7, #34).
             nxt = str(labels.get(nxt, nxt)) if nxt else ""
-            if tot == 0:
+            _allb = [x for x in rows if _m_of(x) == key] if (tot == 0 and group != "goal") else []
+            if _allb:
+                # A milestone box under batch grouping. The per-goal meter has
+                # nothing to say about it, and "no milestone named yet" told the
+                # cold reader the box he was reading did not exist (cold-read-P2b
+                # Q4, 2026-09-09). Its meter is its own rows.
+                _bc = sum(1 for x in _allb if _is_done(x))
+                w("│  " + meter(_bc, len(_allb)) + f"  {_bc} of {len(_allb)} rows closed in this milestone")
+            elif tot == 0:
                 # "0 of 0" over live rows read as false to a cold reader; say what
                 # is missing instead (cold-read-P2.md Q2, 2026-09-08).
                 w("│  " + meter(cl, tot) + "  no milestone named yet   ·   name one: task.sh meta <id> batch=<the state it reaches>")
@@ -1784,7 +1805,7 @@ if _leg:
     if "direction" in _goal_lines_used: _okey += "   \U0001F9ED direction the goal serves"
     if "when" in _goal_lines_used: _okey += "   ✅ when: the check that closes the goal"
     w("  ◆ lane   ◇ tier   ▪ kind   ▫ domain" + _okey + "   »  note, shown only"
-      " when it changes what you do   ·   the emoji beside a box's ball is that goal's badge"
+      " when it changes what you do   ·   the emoji beside a box's state dot is that goal's badge"
       "   ·   height {H}/" + str(HEIGHT) + "   ·   -h for flags")
 else:
     # Nothing was drawn, so there is nothing to key. A trait legend under

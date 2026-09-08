@@ -381,7 +381,7 @@ render
 # The "today: N filed, M closed" clause sits between the two since 2026-09-08
 # (the backlog's growth on the first screen); this row pins the moved count and
 # the done count on either side of it, not the exact middle.
-has "a row closed just now is counted as moved" '1 moved in the last 6h   ·   today: 2 filed, 1 closed   ·   1 done, 1 with no instrument named   ·   ids in --json' "$ROOT/out"
+has "a row closed just now is counted as moved" '1 moved in the last 6h   ·   today: 2 filed, 1 closed   ·   1 done, 1 closed with nothing named as proof   ·   ids in --json' "$ROOT/out"
 hasnt "and the footer prints no id wall"        'done \(1\): #1' "$ROOT/out"
 hasnt "nor a moved id list"                     'moved in the last 6h: #' "$ROOT/out"
 HOME="$ROOT" bash "$TT" --session box00001 --json > "$ROOT/out.json" 2>&1
@@ -662,7 +662,7 @@ reset
 mk 1 pending "Ship the thing" "M1" hands opus build tasks
 mk 2 pending "Ship the thing" "M1" hands opus fix tasks
 printf '{"Ship the thing": {"direction": "See where things stand", "when": "checks 1 and 3 are green"}}' > "$STORE/.goals"
-M=$(mutate nodir 'w("\U0001F9ED " + ellip(_dir, BOX_W - 3)); _goal_lines_used.add("direction")' 'pass')
+M=$(mutate nodir 'w(ellip(_dline, BOX_W)); _goal_lines_used.add("direction")' 'pass')
 render "$M"
 hasnt "MUTATION: dropping the direction line is caught" '^🧭 ' "$ROOT/out"
 M=$(mutate nowhen 'if _when:
@@ -706,6 +706,35 @@ ok "the real render opens no empty box and stays inside the law across the sweep
 r=$(sweep_goal "$M")
 ok "MUTATION: unpriced goal lines open a box onto nothing somewhere in the sweep" "$([ "${r%/*}" -gt 0 ] && echo caught || echo "missed ($r)")" "caught"
 rm -f "$STORE/.goals"
+
+echo
+echo "── 27. under batch grouping the milestone box still says direction › goal (the owner's gcp view groups by batch) ──"
+reset
+mk 1 pending "Ship the thing" "M1" hands opus build tasks
+mk 2 pending "Ship the thing" "M1" hands opus fix tasks
+mk 3 pending "Land the other thing" "N1" hands opus build tasks
+mk 4 pending "Land the other thing" "N1" hands opus fix tasks
+printf '{"Ship the thing": {"direction": "See where things stand", "when": "checks 1 and 3 are green"}}' > "$STORE/.goals"
+rm -f "$ROOT/out"; HOME="$ROOT" bash "$TT" --session box00001 --group batch > "$ROOT/out" 2>&1
+has "the M1 box carries direction › goal above its title" '^🧭 See where things stand › Ship the thing$' "$ROOT/out"
+hasnt "a goal-level when is not drawn on a milestone box"  '✅ when: checks' "$ROOT/out"
+ok "the N1 box, whose goal has no direction, draws no line" "$(rg -c '^🧭 ' "$ROOT/out")" "1"
+rm -f "$STORE/.goals"
+
+echo
+echo "── 28. a milestone box under batch grouping meters its own rows (cold-read-P2b Q4, 2026-09-09) ──"
+reset
+mk 1 pending   "Ship the thing" "M1" hands opus build tasks
+mk 2 completed "Ship the thing" "M1" hands opus fix tasks
+mk 3 pending   "Ship the thing" "M1" hands opus fix tasks
+mk 4 pending   "Ship the thing" "M2" hands opus build tasks
+rm -f "$ROOT/out"; HOME="$ROOT" bash "$TT" --session box00001 --group batch > "$ROOT/out" 2>&1
+has "the M1 box says how many of its rows are closed"  '^│  ▰▰▰▱▱▱▱▱▱▱  1 of 3 rows closed in this milestone$' "$ROOT/out"
+hasnt "a batch box never says no milestone named yet"  'no milestone named yet' "$ROOT/out"
+hasnt "the legend no longer says ball"                  "box's ball" "$ROOT/out"
+M=$(mutate batchmeter 'if _allb:' 'if False:')
+rm -f "$ROOT/out"; HOME="$ROOT" bash "$M" --session box00001 --group batch > "$ROOT/out" 2>&1
+has "MUTATION: without the batch meter the cold reader's lie returns" 'no milestone named yet' "$ROOT/out"
 
 echo
 echo "---- pass=$pass fail=$fail"

@@ -33,31 +33,10 @@ n=$(cat "$CNT_FILE" 2>/dev/null || echo 0)
 IDLE_S="${SPEC_ATONE_IDLE_S:-1800}"
 TP=$(printf '%s' "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
 if [ -n "$TP" ] && [ -f "$TP" ]; then
-  quiet=$(tail -n 600 "$TP" | python3 -c '
-import json, sys, time, datetime
-last = None
-for l in sys.stdin:
-    try: r = json.loads(l)
-    except Exception: continue
-    if r.get("type") != "user": continue
-    c = (r.get("message") or {}).get("content")
-    if isinstance(c, str): t = c
-    elif isinstance(c, list):
-        t = " ".join(b.get("text", "") for b in c if isinstance(b, dict) and b.get("type") == "text")
-        if not t: continue
-    else: continue
-    h = t.lstrip()[:24]
-    if h.startswith(("Wake check", "Heartbeat", "<task-notification", "[SYSTEM", "Caveat:", "<local-command", "<system-reminder")): continue
-    ts = r.get("timestamp")
-    if ts: last = ts
-if last is None: print("unknown"); sys.exit(0)
-try:
-    dt = datetime.datetime.fromisoformat(last.replace("Z", "+00:00"))
-    print(int(time.time() - dt.timestamp()))
-except Exception: print("unknown")
-' 2>/dev/null)
+  # Shared with hinters/41-wake-fence.sh, so both mean the same thing by "quiet".
+  quiet=$(python3 "$HOME/.claude/scripts/session-mgmt/owner-quiet.py" "$TP" 2>/dev/null)
   case "$quiet" in
-    ''|unknown) ;;
+    ''|unknown|*[!0-9]*) ;;
     *) [ "$quiet" -lt "$IDLE_S" ] && exit 0 ;;
   esac
 fi

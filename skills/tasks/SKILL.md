@@ -212,7 +212,11 @@ above the box (once for a run of boxes sharing it) and `✅ when:` under the
 meter. Both are absent until set; `--json` carries them under `goals`. This is
 the owner's own hierarchy, direction to goal to milestone to task, and it is
 what answers the fourth question, what each row serves, at the level above the
-row.
+row. Under batch grouping (the gcp view) a milestone box carries `🧭 direction ›
+goal` above its title instead, resolved from the goal most of its rows carry.
+`scripts/task-table/directions-to-goals.py <directions.md> <store>` maps a
+directions doc's 🧭/🎯/✅ headings onto a store's goal tags and writes the
+sidecar for the ones that match; it prints the ones that do not.
 
 **The close rule.** Close a row when the work has landed, not when the edit is
 made, and say what proved it: `close <id> --by "<the suite, the command, the
