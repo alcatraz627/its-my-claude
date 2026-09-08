@@ -41,7 +41,7 @@ echo "== the documented shape approves =="
 reset; mint abcd1234
 out=$(ask "$SID" AskUserQuestion "Approve push abcd1234" "Do not push" "Approve push abcd1234")
 [ -f "$SENTINEL" ] && ok "right nonce picked: sentinel written" || bad "right nonce picked: no sentinel"
-[ ! -f "$NONCE_FILE" ] && ok "nonce consumed" || bad "nonce file survived an approval"
+[ -f "$NONCE_FILE" ] && ok "the nonce stays as the pending marker until the push consumes it" || bad "nonce dropped before the push"
 printf '%s' "$out" | rg -q 'sentinel is written' && ok "agent told to re-run the push" || bad "no approval context emitted"
 
 echo "== everything else writes nothing =="
@@ -94,11 +94,11 @@ reset
 git init -q -b main "$T/repo" && (cd "$T/repo" && git commit -q --allow-empty -m x)
 gate() { jq -nc --arg c "git push origin main" --arg w "$T/repo" --arg s "$SID" '{tool_input:{command:$c}, cwd:$w, session_id:$s}' | bash "$GATE" 2>/dev/null; }
 b1=$(gate)
-n1=$(printf '%s' "$b1" | rg -o 'Approve push [0-9a-f]{8}' | head -1 | sed 's/Approve push //')
+n1=$(printf '%s' "$b1" | rg -io 'approve push [0-9a-f]{8}' | head -1 | sed 's/[Aa]pprove push //')
 [ -n "$n1" ] && ok "gate blocks and prints a nonce ($n1)" || bad "gate printed no nonce: $b1"
 [ "$(jq -r .nonce "$NONCE_FILE" 2>/dev/null)" = "$n1" ] && ok "nonce file matches the printed nonce" || bad "nonce file disagrees with the block"
 b2=$(gate)
-n2=$(printf '%s' "$b2" | rg -o 'Approve push [0-9a-f]{8}' | head -1 | sed 's/Approve push //')
+n2=$(printf '%s' "$b2" | rg -io 'approve push [0-9a-f]{8}' | head -1 | sed 's/[Aa]pprove push //')
 [ "$n2" = "$n1" ] && ok "re-blocked push reuses the fresh nonce" || bad "second block minted a new nonce while the first was fresh"
 ask "$SID" AskUserQuestion "Approve push $n1" "Do not push" "Approve push $n1" >/dev/null
 [ -f "$SENTINEL" ] && ok "owner's pick of the gate's nonce writes the sentinel" || bad "gate nonce not accepted by the answer hook"
@@ -106,7 +106,7 @@ b3=$(gate)
 [ -z "$b3" ] && ok "gate allows the push after the pick" || bad "gate still blocks after approval: $b3"
 [ ! -f "$SENTINEL" ] && ok "sentinel consumed by the one push" || bad "sentinel survived the push"
 b4=$(gate)
-n4=$(printf '%s' "$b4" | rg -o 'Approve push [0-9a-f]{8}' | head -1 | sed 's/Approve push //')
+n4=$(printf '%s' "$b4" | rg -io 'approve push [0-9a-f]{8}' | head -1 | sed 's/[Aa]pprove push //')
 [ -n "$n4" ] && [ "$n4" != "$n1" ] && ok "next push blocks again with a fresh nonce" || bad "second push not re-gated with a new nonce"
 
 echo "---- pass=$pass fail=$fail"

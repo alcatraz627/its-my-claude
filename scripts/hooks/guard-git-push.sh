@@ -15,14 +15,18 @@
 #     ~/.claude/protected-repos.list, or a tracked .claude/require-user-commit marker).
 # Feature-branch pushes in unprotected repos pass freely — no friction on normal work.
 #
-# APPROVAL has two user-owned channels, both single-use per push:
-#   1. Ask-tool answer: the block prints a nonce; the agent asks through
-#      AskUserQuestion with one option labelled "Approve push <nonce>", and the
-#      owner's pick of it makes push-approve-ask.sh (PostToolUse) write the
-#      sentinel. Works from Claude Code web, where the owner has no shell. The
-#      agent writes the question; only the harness writes the answer, and the
-#      hook reads the answer alone, so the agent cannot actuate it.
-#   2. Sentinel fallback (headless/SSH/any shell): ~/.claude/.push-approved-<session_id>
+# APPROVAL has three user-owned channels, all single-use per push:
+#   1. Typed line: the block prints a nonce; the owner types "approve push
+#      <nonce>" as an ordinary message from any client, and push-approve-prompt.sh
+#      (UserPromptSubmit) writes the sentinel. Only a human types a prompt, so the
+#      agent cannot actuate it, and nothing waits: the agent keeps working and the
+#      hook nags on every later message while the push is pending. This is the
+#      channel; the two below are fallbacks.
+#   2. Ask-tool answer: push-approve-ask.sh (PostToolUse on AskUserQuestion)
+#      writes the sentinel on a pick of "Approve push <nonce>". It halts the turn
+#      until the owner answers and the harness skipped it on three of five picks
+#      (2026-09-08), so the block text no longer recommends it.
+#   3. Sentinel fallback (the owner's own terminal shell): ~/.claude/.push-approved-<session_id>
 # The block message prints the exact command. It MUST be run by the user with the
 # `! ` prefix (which runs in the user's own shell and bypasses PreToolUse hooks) —
 # NOT by the agent. The gate consumes (deletes) the sentinel on the allowed push,
@@ -149,20 +153,16 @@ if [ -f "$SENTINEL" ]; then
   exit 0
 fi
 
-# The ask-tool channel. The block below prints a nonce; the owner's pick of an
-# AskUserQuestion option labelled exactly "Approve push <nonce>" makes
-# push-approve-ask.sh (PostToolUse on AskUserQuestion) write the sentinel. The
-# agent writes the question, but only the harness writes the answer, and the
-# hook reads the answer alone. A nonce is reused while fresh, so a re-blocked
-# push after an unanswered question prints the same one; it expires after
-# NONCE_TTL seconds and a new block mints a new one.
-NONCE_TTL=1800
+# The typed-line channel. The block below prints a nonce; the owner types
+# "approve push <nonce>" as an ordinary message from any client, and
+# push-approve-prompt.sh (UserPromptSubmit) writes the sentinel, because only a
+# human types a prompt. The nonce file is the pending push: it is reused for as
+# long as it exists and never expires on the owner (he comes back late from
+# mobile; a rotated nonce would cost him a second round, owner 2026-09-08). It
+# is cleared by the allowed push above, or by his "cancel push".
 nonce=""
 if [ -f "$NONCE_FILE" ]; then
-  n_ts=$(jq -r '.ts // 0' "$NONCE_FILE" 2>/dev/null); n_ts=${n_ts:-0}
-  if [ $(( $(date +%s) - n_ts )) -le "$NONCE_TTL" ]; then
-    nonce=$(jq -r '.nonce // empty' "$NONCE_FILE" 2>/dev/null)
-  fi
+  nonce=$(jq -r '.nonce // empty' "$NONCE_FILE" 2>/dev/null)
 fi
 if [ -z "$nonce" ]; then
   nonce=$(od -An -N4 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')
@@ -208,17 +208,17 @@ and a context compaction may have wiped an earlier one. Do NOT work around this
 
 Instead:
   1. Show the user what will be pushed:  git -C \"$target\" log --oneline @{u}.. 2>/dev/null || git -C \"$target\" log --oneline -3
-  2. Ask them to approve THIS push, through either channel:
-     a. AskUserQuestion, with exactly ONE option labelled exactly:
-          Approve push ${nonce}
-        Their pick of that option writes the sentinel. Any other option, an
-        altered label, or two options carrying the nonce writes nothing. A
-        [push-gate] line follows the pick when the hook ran; if none does, the
-        harness skipped the hook (seen once in three, 2026-09-08): ask once
-        more, then fall back to (b).
-     b. Or they type, in their own shell, with the ! prefix:
+  2. Print the user this line ONCE, bare on its own line, then keep working on
+     other things. They type it back as an ordinary message from any client
+     (terminal, web, mobile) and a hook writes the sentinel:
+          approve push ${nonce}
+     Do NOT call AskUserQuestion for this: it halts the turn until they answer,
+     and the harness skipped its hook on three of five picks (2026-09-08). The
+     nonce never expires; every later message re-nags you with the line until
+     they approve, or type: cancel push
+     Fallback in their own terminal shell only (dead from web and mobile):
           ! touch ${SENTINEL}
-  3. Re-run the push. The approval is single-use — it is consumed by this one push.
-     The nonce expires in 30 minutes; a later block prints a fresh one.
+  3. When a [push-gate] line says the sentinel is written, re-run the same push.
+     The approval is single-use — it is consumed by this one push.
 
 If you believe this repo/branch should not be gated, ASK THE USER — that call is theirs."

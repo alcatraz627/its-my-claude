@@ -16,9 +16,12 @@ bad() { fail=$((fail+1)); echo "  FAIL  $1"; }
 git init -q -b main "$T/repo" && (cd "$T/repo" && git commit -q --allow-empty -m x)
 git init -q -b feat "$T/featrepo" && (cd "$T/featrepo" && git commit -q --allow-empty -m x)
 mkdir -p "$T/bin"; printf '#!/bin/sh\necho DENY; exit 1\n' > "$T/bin/osascript"; chmod +x "$T/bin/osascript"
+# HOME is sandboxed: with no session_id the gate writes its nonce under
+# $HOME/.claude/.push-nonce-nosession, and this suite left one in the real home.
+mkdir -p "$T/.claude"
 run() { # run <cwd> <command> → stdout of hook
   jq -nc --arg c "$2" --arg w "$1" '{tool_input:{command:$c}, cwd:$w}' \
-    | PATH="$T/bin:$PATH" bash "$HOOK" 2>/dev/null
+    | HOME="$T" PATH="$T/bin:$PATH" bash "$HOOK" 2>/dev/null
 }
 gated()  { [ -n "$(run "$1" "$2")" ] && ok "GATED: $3" || bad "not gated: $3"; }
 allowed(){ [ -z "$(run "$1" "$2")" ] && ok "allow: $3" || bad "gated (should pass): $3"; }

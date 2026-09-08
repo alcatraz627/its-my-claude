@@ -45,7 +45,7 @@ token="Approve push ${nonce}"
 # How many options the agent labelled with the token. Zero is fine (the owner
 # may type it under Other); one is the documented shape; more is a stacked deck.
 n_opt=$(printf '%s' "$input" | jq --arg t "$token" \
-  '[.tool_input.questions[]?.options[]?.label // empty | select(. == $t)] | length' 2>/dev/null)
+  '[.tool_input.questions[]?.options[]?.label // empty | ascii_downcase | select(. == ($t | ascii_downcase))] | length' 2>/dev/null)
 n_opt=${n_opt:-0}
 
 # The answers alone decide. tool_response may arrive as an object or a JSON string.
@@ -53,7 +53,7 @@ chosen=$(printf '%s' "$input" | jq --arg t "$token" '
   .tool_response
   | (if type == "string" then (fromjson? // {}) else . end)
   | (.answers // {})
-  | [ .[] | strings | gsub("^\\s+|\\s+$"; "") | select(. == $t) ]
+  | [ .[] | strings | gsub("^\\s+|\\s+$"; "") | ascii_downcase | select(. == ($t | ascii_downcase)) ]
   | length' 2>/dev/null)
 chosen=${chosen:-0}
 
@@ -66,7 +66,8 @@ fi
 
 if [ "$chosen" -ge 1 ]; then
   : > "$SENTINEL" 2>/dev/null || exit 0
-  rm -f "$NONCE_FILE"
+  # The nonce file stays: it is the pending-push marker the prompt hook nags on,
+  # and the gate clears both when the push goes through.
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action ask-approved --heeded yes >/dev/null 2>&1 || true
   jq -cn --arg m "[push-gate] the owner picked \"$token\"; the single-use sentinel is written. Re-run the same push now; it is consumed by that one push." \
     '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
