@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# gcc — the one command a codex session uses to write into the owner's gcc.
+#
+#   gcc ipc        <claude-ipc args>      send / reply / register / peers ...
+#   gcc propose    <propose.sh args>      file an improvement proposal
+#   gcc atone      <atone.sh args>        record a mistake
+#   gcc affirm     <affirm.sh args>       record an affirmed-good call
+#   gcc pin        <i-dream pin args>     pin an insight for the next dream
+#   gcc checkpoint <handback> <summary>   register a handback in the index
+#   gcc ledger     <ledger.sh args>       read the ledgers (read-only)
+#
+# Why this exists. Codex runs shell commands inside a seatbelt sandbox that
+# allows writes only under the workspace and /tmp, and blocks the claude-ipc
+# unix socket. Every gcc ledger lives under ~/.claude, so a direct call fails.
+# And codex inherits the launching Claude session's CLAUDE_CODE_SESSION_ID, so a
+# direct call that DID succeed would be attributed to the wrong session, and a
+# direct `claude-ipc register` would rebind the parent's mailbox.
+#
+# So: re-key the environment to the codex session (CODEX_THREAD_ID), stamp the
+# attribution (src:codex tag, --from cx-... alias), try the call directly, and
+# when the sandbox refuses, append the exact argv to /tmp/codex-gcc/outbox/
+# <sid>.jsonl. Codex's own hooks (PostToolUse async, Stop, SessionEnd) run
+# outside the sandbox and replay the queue; the receipt is injected at the next
+# turn. Same argv either way, so the underlying tool's own help applies.
+set -uo pipefail
+
+ROOT="$HOME/.claude"
+SID="${CODEX_THREAD_ID:-${GCC_CODEX_SID:-${CLAUDE_CODE_SESSION_ID:-}}}"
+OUTBOX_DIR="${CODEX_GCC_OUTBOX:-/tmp/codex-gcc/outbox}"
+
+die() { printf 'gcc: %s\n' "$1" >&2; exit 2; }
+[ $# -ge 1 ] || { sed -n '2,12p' "$0"; exit 2; }
+verb="$1"; shift
+
+# --- identity ---------------------------------------------------------------
+alias_for() {
+  local base tag
+  base=$(basename "$PWD" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
+  tag=$(printf '%s' "$SID" | tr -cd 'A-Za-z0-9' | tr '[:upper:]' '[:lower:]' | cut -c1-8)
+  if [ -n "$base" ] && [ -n "$tag" ]; then printf 'cx-%s-%s' "$base" "$tag"; else printf 'cx-%s' "${tag:-session}"; fi
+}
+ALIAS=$(alias_for)
+[ -n "$SID" ] && export CLAUDE_CODE_SESSION_ID="$SID" GCC_CODEX_SID="$SID"
+export CLAUDE_IPC_ALIAS="$ALIAS" GCC_HOST=codex
+unset CLAUDE_CODE_MESSAGING_SOCKET CLAUDE_CODE_MESSAGING_TOKEN 2>/dev/null || true
+
+has_flag() { local f="$1"; shift; for a in "$@"; do [ "$a" = "$f" ] && return 0; done; return 1; }
+sid8=$(printf '%s' "$SID" | cut -c1-8)
+
+# --- map verb → argv, and stamp attribution ---------------------------------
+case "$verb" in
+  ipc)
+    cmd=(claude-ipc "$@")
+    case "${1:-}" in
+      send|reply|accept|decline|snooze)
+        if ! has_flag --from "$@" && ! has_flag --as "$@"; then cmd=(claude-ipc "$1" --from "$ALIAS" "${@:2}"); fi ;;
+      register)
+        # A codex session's alias is fixed by the fabric hooks; renaming it would
+        # orphan the mailbox those hooks poll. Rebind only the cx- alias.
+        cmd=(claude-ipc register "$ALIAS") ;;
+    esac ;;
+  propose)
+    cmd=(bash "$ROOT/scripts/propose.sh" "$@")
+    if [ "${1:-}" = add ]; then
+      has_flag --tags "$@" || cmd+=(--tags "src:codex codex:$sid8")
+      has_flag --session "$@" || cmd+=(--session "$SID")
+    fi ;;
+  atone)
+    cmd=(bash "$ROOT/scripts/atone.sh" "$@")
+    [ "${1:-}" = add ] && ! has_flag --tags "$@" && cmd+=(--tags "src:codex codex:$sid8") ;;
+  affirm)
+    cmd=(bash "$ROOT/scripts/affirm.sh" "$@")
+    [ "${1:-}" = add ] && ! has_flag --tags "$@" && cmd+=(--tags "src:codex codex:$sid8") ;;
+  pin)        cmd=(i-dream pin "$@") ;;
+  checkpoint) cmd=(bash "$ROOT/adapters/codex/checkpoint-register.sh" "$@") ;;
+  ledger)     cmd=(bash "$ROOT/scripts/ledger/ledger.sh" "$@") ;;
+  -h|--help|help) sed -n '2,12p' "$0"; exit 0 ;;
+  *) die "unknown verb '$verb' (ipc|propose|atone|affirm|pin|checkpoint|ledger)" ;;
+esac
+
+# --- read-only verbs never queue ---------------------------------------------
+readonly_call=0
+case "$verb:${1:-}" in
+  ledger:*|propose:list|propose:search|propose:show|atone:list|atone:search|atone:show|atone:slugs|atone:stats|affirm:list|affirm:search|affirm:show|affirm:slugs|pin:list|pin:show|pin:archived|ipc:peers|ipc:inbox|ipc:owed|ipc:log|ipc:show|ipc:status|ipc:sent|ipc:who|ipc:digest|ipc:asks|ipc:count|ipc:projects|ipc:orphans)
+    readonly_call=1 ;;
+esac
+
+# --- try direct; queue on a sandbox refusal ----------------------------------
+# GCC_FORCE_QUEUE=1 skips the direct attempt. Exists so the queue and drain path
+# can be exercised from an unsandboxed shell (install/tests); never set it in a
+# real seat, where the direct path is the better outcome.
+if [ "${GCC_FORCE_QUEUE:-0}" = 1 ] && [ "$readonly_call" -eq 0 ]; then
+  rc=1; stderr="Operation not permitted (GCC_FORCE_QUEUE)"; CODEX_SANDBOX="${CODEX_SANDBOX:-forced}"
+else
+  err=$(mktemp "${TMPDIR:-/tmp}/gcc.XXXXXX")
+  "${cmd[@]}" 2>"$err"; rc=$?
+  stderr=$(cat "$err" 2>/dev/null); rm -f "$err"
+fi
+if [ "$rc" -eq 0 ]; then
+  [ -n "$stderr" ] && printf '%s\n' "$stderr" >&2
+  exit 0
+fi
+
+sandboxed=0
+if [ -n "${CODEX_SANDBOX:-}" ] || [ -n "${CODEX_SANDBOX_NETWORK_DISABLED:-}" ]; then
+  case "$stderr" in
+    *"Operation not permitted"*|*"Permission denied"*|*"Failed to connect"*|*EPERM*|*EACCES*|*"Read-only file system"*|*ECONNREFUSED*|*ENOENT*"sock"*) sandboxed=1 ;;
+  esac
+  # A write that produced no diagnostic at all is the seatbelt's silent refusal.
+  [ -z "$stderr" ] && [ "$readonly_call" -eq 0 ] && sandboxed=1
+fi
+
+if [ "$sandboxed" -eq 0 ] || [ "$readonly_call" -eq 1 ]; then
+  printf '%s\n' "$stderr" >&2
+  [ "$readonly_call" -eq 1 ] && [ "$verb" = ipc ] && printf 'gcc: the sandbox blocks the broker socket for reads; your inbox is injected at each turn, and `claude-ipc` reads need the launcher to grant network access.\n' >&2
+  exit "$rc"
+fi
+
+mkdir -p "$OUTBOX_DIR" 2>/dev/null || die "cannot create $OUTBOX_DIR; nothing queued (exit $rc: $stderr)"
+q="$OUTBOX_DIR/${SID:-unknown}.jsonl"
+# Monotonic per-session number, kept in its own file: the queue file itself is
+# renamed away by the drainer within seconds, so its line count restarts.
+seq="$OUTBOX_DIR/${SID:-unknown}.seq"
+n=1; [ -f "$seq" ] && n=$(( $(cat "$seq" 2>/dev/null || printf 0) + 1 )); printf '%s' "$n" > "$seq"
+jq -cn --argjson n "$n" --arg ts "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" --arg sid "$SID" --arg cwd "$PWD" \
+  --arg verb "$verb" --args '{n:$n, ts:$ts, sid:$sid, cwd:$cwd, verb:$verb, argv:$ARGS.positional}' -- "${cmd[@]}" >> "$q" \
+  || die "could not append to $q"
+printf 'gcc: queued #%s (%s) — the sandbox refused the direct call; a hook applies it within seconds and the receipt shows at your next turn.\n' "$n" "$verb"
+exit 0

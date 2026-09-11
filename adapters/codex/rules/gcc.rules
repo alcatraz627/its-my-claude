@@ -1,0 +1,75 @@
+# gcc execpolicy rules for Codex (Starlark). Source: ~/.claude/adapters/codex/rules/gcc.rules,
+# symlinked to ~/.codex/rules/gcc.rules by install.sh. Codex's own TUI allow-list
+# writes to default.rules, never here.
+#
+# This is the SECOND layer behind the PreToolUse guards in hooks.json: it is
+# evaluated by codex itself, so it holds even when hooks are untrusted or muted.
+# It matches an exact argv prefix and, at runtime, the plain segments of a
+# `bash -lc "a && b"` chain. It does not see through variables, subshells or
+# redirections, which is why the hooks stay in front of it.
+#
+# Test any rule:  codex execpolicy check --pretty --rules ~/.codex/rules/gcc.rules -- <cmd...>
+
+prefix_rule(
+    pattern = ["rm"],
+    decision = "forbidden",
+    justification = "Never rm. Use `trash <path>` (macOS Trash, recoverable), or move the file aside and say where.",
+    match = ["rm -rf build", "rm file.txt"],
+    not_match = ["git rm file.txt", "npm rm pkg"],
+)
+
+prefix_rule(
+    pattern = ["git", "push", ["--force", "-f", "--force-with-lease", "--mirror"]],
+    decision = "forbidden",
+    justification = "History-rewriting pushes are the owner's action, never a seat's.",
+    match = ["git push --force origin main", "git push -f"],
+    not_match = ["git push origin feature"],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "A push needs the owner's fresh approval each time (rules/git.md). In a non-interactive run this fails closed.",
+    match = ["git push", "git push origin feature"],
+    not_match = ["git pull"],
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Discards uncommitted work. Stash or branch instead, and say what you did.",
+    match = ["git reset --hard HEAD~1"],
+    not_match = ["git reset HEAD file.txt"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "forbidden",
+    justification = "Deletes untracked files irrecoverably. List them and hand the decision to the owner.",
+    match = ["git clean -fdx"],
+    not_match = ["git status"],
+)
+
+prefix_rule(
+    pattern = ["git", "commit", "--amend"],
+    decision = "prompt",
+    justification = "Rewrites a commit; needs the owner if it was pushed.",
+    match = ["git commit --amend --no-edit"],
+    not_match = ["git commit -m x"],
+)
+
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "prompt",
+    justification = "Rewrites history; confirm each time (rules/git.md).",
+    match = ["git rebase main"],
+    not_match = ["git merge main"],
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "delete"],
+    decision = "forbidden",
+    justification = "Never from a seat.",
+    match = ["gh repo delete owner/repo"],
+    not_match = ["gh repo view"],
+)

@@ -99,6 +99,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0057 | live-session task pin moves out of `tasks/` into new top-level `tasks-pins/` | ✅ | 2026-09-04 | 2026-09-04 | [0057-task-pin-out-of-tasks-dir.md](0057-task-pin-out-of-tasks-dir.md) |
 | 0058 | warden standing beat retired per owner ruling D1a (2026-09-02); on-demand judgment survives; revive runner unbuilt | ✅ | 2026-09-08 | 2026-09-08 | [0058-warden-beat-retired.md](0058-warden-beat-retired.md) |
 | 0059 | task stores gain a `.goals` sidecar (direction, when) written by `task.sh goal`, drawn by /tasks; the row loader skips dotfiles | ✅ | 2026-09-08 | 2026-09-08 | [0059-task-store-goals-sidecar.md](0059-task-store-goals-sidecar.md) |
+| 0060 | Codex adapter v2: `~/.codex/hooks.json` and `rules/gcc.rules` symlinked into the gcc, 10 skills linked at `~/.agents/skills`, gcc guards wrapped for Codex, `gcc` write path with an outbox hooks drain, claude-ipc identity `cx-<dir>-<id8>` | ✅ | 2026-09-10 | 2026-09-10 | [0060-codex-adapter-v2.md](0060-codex-adapter-v2.md) |
 
 ---
 

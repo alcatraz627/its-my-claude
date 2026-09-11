@@ -1,0 +1,21 @@
+# gcc skills exposed to Codex, one name per line, symlinked by install.sh:
+#   ~/.agents/skills/<name> -> ~/.claude/skills/<name>
+#
+# Curated on purpose. Codex budgets its skills list at 2% of the context window
+# (about 5k characters on gpt-6-astra) and shortens descriptions past that, so a
+# blanket symlink of all 70+ gcc skills would make every skill invisible.
+# Excluded by design: any skill whose value is `context: fork` (bloop, magi,
+# skeptical-review, arch-qa ...), skills that drive Claude-only tools
+# (AskUserQuestion, mcp__inputs, Task tool), and core-dump/catchup, whose
+# codex-side equivalent is adapters/codex/skills/core-dump.
+# Add a line, re-run install.sh. Remove a line, re-run; the stale link is pruned.
+gcc-proposal
+ipc
+pin-for-dream
+probe
+cleanup-comments
+ste-writing
+pr-description
+write-docs
+callouts
+test

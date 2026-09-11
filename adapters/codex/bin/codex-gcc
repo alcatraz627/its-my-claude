@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# codex-gcc — launch Codex with the gcc adapter fully armed.
+#
+#   codex-gcc exec [--brief <path>] [codex exec args] "<task>"
+#                                  non-interactive; hooks trusted for this run;
+#                                  refused when the Codex usage gate says GATED
+#   codex-gcc status [--hours N]   where every Codex seat is right now (read-only)
+#   codex-gcc gate [--fresh]       the usage gate's verdict, nothing else
+#   codex-gcc                      interactive TUI (trust the hooks once via /hooks)
+#   codex-gcc <any codex args>     passthrough
+#
+# What `exec` adds to `codex exec`:
+#   --dangerously-bypass-hook-trust   exec runs are headless; there is no /hooks
+#                                     prompt to answer, so the gcc hooks would
+#                                     silently not run without this. The hooks it
+#                                     trusts are ours (~/.claude/adapters/codex).
+#   --sandbox workspace-write         the default is read-only, which cannot edit.
+#   --skip-git-repo-check             codex refuses to run outside a git repo.
+#   the usage gate                    bin/codex-usage-gate.py must say PASS
+#                                     (owner ruling 2026-09-11, after 2026-08-27).
+#   --brief <path>                    the hands-seat contract: the file must be
+#                                     tracked AND committed on the current branch
+#                                     (an untracked brief never reaches a worktree;
+#                                     review B1). Exported as GCC_BRIEF so the
+#                                     PostToolUse hook can tell the seat when the
+#                                     brief changes mid-run, and prepended to the
+#                                     prompt so the seat reads it first.
+#   GCC_DISPATCH=1                    marks a lane-dispatched seat for the per-project
+#                                     seat cap in hooks/session-start.sh.
+# It never passes --dangerously-bypass-approvals-and-sandbox: the sandbox is the
+# enforcement layer, and `gcc` (bin/gcc) handles the writes it blocks.
+set -uo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+case "${1:-}" in
+  status)
+    shift
+    exec python3 "$HERE/codex-status.py" "$@" ;;
+  gate)
+    shift
+    exec python3 "$HERE/codex-usage-gate.py" "$@" ;;
+  exec)
+    shift
+    brief=""; nobrief=0; args=()
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --brief) brief="$2"; shift 2 ;;
+        --no-brief) nobrief=1; shift ;;
+        *) args+=("$1"); shift ;;
+      esac
+    done
+    # A hands seat runs from a committed brief (PLAN.md default: a prose-only
+    # dispatch is refused). --no-brief is the explicit escape for reviews and
+    # probes, so the omission is never silent. Validator blocker 1, 2026-09-11.
+    if [ -z "$brief" ] && [ "$nobrief" -eq 0 ]; then
+      printf 'codex-gcc: exec needs --brief <committed file> (the hands-seat contract) or --no-brief for a review/probe run\n' >&2
+      exit 2
+    fi
+    verdict=$(python3 "$HERE/codex-usage-gate.py" 2>/dev/null); rc=$?
+    if [ "$rc" -ne 0 ]; then
+      printf 'codex-gcc: seat refused by the Codex usage gate: %s\n' "${verdict#*	}" >&2
+      exit 75
+    fi
+    if [ -n "$brief" ]; then
+      case "$brief" in /*) ;; *) brief="$PWD/$brief" ;; esac
+      [ -f "$brief" ] || { printf 'codex-gcc: no brief at %s\n' "$brief" >&2; exit 2; }
+      bdir=$(dirname "$brief")
+      if git -C "$bdir" rev-parse --show-toplevel >/dev/null 2>&1; then
+        rel=$(git -C "$bdir" ls-files --full-name --error-unmatch "$brief" 2>/dev/null) \
+          || { printf 'codex-gcc: brief is not tracked; commit it on the work branch first: %s\n' "$brief" >&2; exit 2; }
+        git -C "$bdir" diff --quiet HEAD -- "$brief" 2>/dev/null \
+          || { printf 'codex-gcc: brief has uncommitted changes; commit it first: %s\n' "$brief" >&2; exit 2; }
+      else
+        printf 'codex-gcc: brief is not inside a git repo, so it cannot be pinned to a commit: %s\n' "$brief" >&2
+        exit 2
+      fi
+      export GCC_BRIEF="$brief"
+      # The prompt is the last positional; prepend the brief pointer to it.
+      n=${#args[@]}
+      if [ "$n" -gt 0 ]; then
+        last=$((n-1))
+        args[$last]="Your brief is the file $brief. Read it in full before anything else; it is the contract for this run and its Handback section says how to finish. Task: ${args[$last]}"
+      else
+        args+=("Your brief is the file $brief. Read it in full and do what it says.")
+      fi
+    fi
+    export GCC_DISPATCH=1
+    exec codex exec --dangerously-bypass-hook-trust --sandbox workspace-write --skip-git-repo-check "${args[@]}" ;;
+  *)
+    exec codex "$@" ;;
+esac

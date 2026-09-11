@@ -1,0 +1,52 @@
+# i-dream domain manifest — codex sessions (STAGED, NOT LIVE)
+#
+# Registers Codex's own session history as a dream domain so the dreaming layer
+# can see the third agent on this machine: what gets handed to Codex, from where,
+# and how those runs cluster. One-way: i-dream reads; nothing here writes back.
+#
+# To register (after the owner rules on i-dream/REQUEST.md):
+#   cp ~/.claude/adapters/codex/i-dream/codex-sessions.toml ~/.claude/i-dream/domains/codex-sessions.toml
+#   i-dream domain list        # shows codex-sessions, kind=external
+#   i-dream dream-pass         # status: ok, insight_count > 0
+# To remove: delete that copy. Nothing in the adapter depends on it.
+
+[domain]
+name        = "codex-sessions"
+version     = "1.0"
+description = "Codex CLI sessions on this machine: launcher, source, cwd, first prompt"
+root        = "~/.claude/adapters/codex/i-dream"
+
+[event_stream]
+path        = "{root}/events.jsonl"
+format      = "jsonl"
+id_field    = "id"
+ts_field    = "ts"
+
+[consolidation]
+enabled = true
+type    = "external_script"
+script  = "{root}/extract-events.sh"
+cadence = "daily"
+timeout = "60s"
+
+[dream]
+enabled       = true
+cadence       = "weekly"
+budget_tokens = 3000
+prompt_path   = "{root}/dream/prompt.md"
+insights_path = "{root}/dream/insights.jsonl"
+cursor_path   = "{root}/dream/cursor.json"
+prompt_fields = ["slug", "originator", "cwd", "first_prompt", "outcome", "verified_claims", "unconfirmed", "review_verdict"]
+prompt_field_max_chars = 240
+
+[hinter]
+tldr_path     = "{root}/derived/_tldr.txt"
+triggers_path = "{root}/derived/triggers.json"
+weight        = 0.5
+# Below every active-signal domain: a session log is context, never a mistake
+# signal, and must not evict an atone line from the session-start top-5.
+
+[permissions]
+network    = false
+disk       = "write"
+subprocess = true

@@ -26,6 +26,16 @@
 !/settings.json
 !/mcp-catalog.json
 !/scripts/
+# adapters/: the per-foreign-agent layer (mig 0046); ignored by accident until
+# 2026-09-11, so the whole Codex adapter was never tracked. Runtime state and
+# generated dream data under it stay ignored.
+!/adapters/
+/adapters/codex/state/
+/adapters/codex/i-dream/events.jsonl
+/adapters/codex/i-dream/events.tmp
+/adapters/codex/i-dream/dream/insights.jsonl
+/adapters/codex/i-dream/dream/cursor.json
+/adapters/codex/i-dream/derived/
 !/skills/
 # skills-parked/: the 11 skills moved out of the roster by mig 0048. Kept in
 # the repo, just not loaded — so it needs its own un-ignore line, because the

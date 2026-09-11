@@ -1,0 +1,78 @@
+{
+  "description": "gcc adapter for Codex. Source of truth: ~/.claude/adapters/codex/hooks.json (symlinked to ~/.codex/hooks.json by install.sh). Each hook must be trusted once in the Codex TUI (/hooks) after any edit here, or launched with --dangerously-bypass-hook-trust. See ~/.claude/features/codex-adapter.md",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/adapters/codex/hooks/session-start.sh",
+            "timeout": 20,
+            "additionalContextLimit": 6000,
+            "statusMessage": "gcc: joining claude-ipc, loading briefing"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/adapters/codex/hooks/user-prompt-submit.sh",
+            "timeout": 15,
+            "additionalContextLimit": 6000
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/adapters/codex/hooks/pre-tool-bash.sh",
+            "timeout": 20,
+            "statusMessage": "gcc guards"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/adapters/codex/hooks/post-tool-bash.sh",
+            "async": true,
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/adapters/codex/hooks/stop.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/adapters/codex/hooks/drain-outbox.sh --all",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}
