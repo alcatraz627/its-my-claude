@@ -67,6 +67,10 @@ ok "A-P5  python http.server"     "$(verdict 'python3 -m http.server')"  BLOCK
 ok "      portless pnpm dev"      "$(verdict 'pnpm dev')"                BLOCK
 ok "      portless uvicorn"       "$(verdict 'uvicorn app:app')"         BLOCK
 ok "      env-prefixed launch"    "$(verdict 'NODE_ENV=development vite')" BLOCK
+# A build binds no port (prop-20260710-122025-76, batch 2026-09-18).
+ok "B-01  vite build is not a launch"  "$(verdict 'npx vite build')"         allow
+ok "B-02  next build is not a launch"  "$(verdict 'next build')"             allow
+ok "B-03  vite preview still a launch" "$(verdict 'vite preview')"           BLOCK
 
 if [ -n "$PINNED_PORT" ]; then
   ok "A-P6  launch on a pinned port" "$(verdict "vite --port $PINNED_PORT")" BLOCK

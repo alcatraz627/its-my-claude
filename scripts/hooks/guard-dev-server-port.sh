@@ -80,6 +80,10 @@ if [ -r "$STRIP" ]; then
   [ -n "$_stripped" ] && SCAN="$_stripped"
 fi
 printf '%s' "$SCAN" | rg -q "$LAUNCH_RE" 2>/dev/null || exit 0
+# A build, typecheck or lint subcommand binds no port. `vite build` tripped the
+# gate in data-forge (prop-20260710-122025-76, six corroborations); only
+# dev / preview / serve / start forms are launches. Owner batch 2026-09-18.
+printf '%s' "$SCAN" | rg -q '\b(vite|next|astro|nuxt|remix|react-router)\s+(build|typecheck|lint|optimize|check|generate|info)\b' 2>/dev/null && exit 0
 
 CWD=$(printf '%s' "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
 PORTS="$HOME/.claude/scripts/dev-servers/ports.sh"

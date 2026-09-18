@@ -300,9 +300,17 @@ if [ "$KIND" = "catchup" ]; then
   # Old-format JSONs (constraints/caveats/decaying string arrays) map in.
   FSRC='(.fences // ([ ((.constraints // []) | map({head:"constraint", body:.})), ((.caveats // []) | map({head:"caveat", body:.})), ((.decaying // []) | map({head:"decaying", body:.})) ] | add))'
   FN=$(jqa "$FSRC | length"); [ "$FN" = "null" ] && FN=0
+  # Fence budget from the height law, not a flat 7 (prop-20260814-112634-71): the
+  # fixed tiers cost about 20 lines plus one per todo row, and a fence renders up
+  # to three lines, so the budget is what is left, clamped to 2..7. Precheck
+  # fences (🙏) sort ahead of the cap (prop-20260824-082400-f5): they bind like a
+  # constraint and were the first thing the old cap ate; commitments stay first.
+  TSHOWN=$TN; [ "$TSHOWN" -gt 8 ] && TSHOWN=8
+  FB=$(( (44 - 20 - TSHOWN) / 3 )); [ "$FB" -lt 2 ] && FB=2; [ "$FB" -gt 7 ] && FB=7
+  FSORT="[$FSRC[]] | (map(select(.head | test(\"^(Goal|Wake|Deadline)\"))) + map(select(.head | test(\"🙏\"))) + map(select((.head | test(\"^(Goal|Wake|Deadline)\") | not) and (.head | test(\"🙏\") | not))))"
   if [ "$FN" -gt 0 ]; then
     rule "‡" "FENCES" "verbatim, full text in checkpoint §Resume Contract" "" "$GOLD"
-    jqa "[$FSRC[]][0:7] | .[] | \"\(.head)\(.body)\"" | while IFS= read -r row; do
+    jqa "$FSORT | .[0:$FB] | .[] | \"\(.head)\(.body)\"" | while IFS= read -r row; do
       hd="${row%%$'\001'*}"; bd="${row#*$'\001'}"
       wrap_hang "$bd" $((W - 20)) 0 | { n=0; while IFS= read -r ln; do
         n=$((n + 1))
@@ -310,7 +318,12 @@ if [ "$KIND" = "catchup" ]; then
         elif [ "$n" -le 3 ]; then printf '  %s %s%s%s\n' "$(pad '' 15)" "$DIM" "$ln" "$R"
         elif [ "$n" = 4 ]; then printf '  %s %s… full text in checkpoint%s\n' "$(pad '' 15)" "$DIM" "$R"; fi; done; }
     done
-    [ "$FN" -gt 7 ] && printf '    %s… +%d more fences in checkpoint%s\n' "$DIM" $((FN - 7)) "$R"
+    # The dropped rows are named by source: a constraint or caveat is in the
+    # checkpoint, a precheck lives in the atone ledger (atone.sh show <id>).
+    if [ "$FN" -gt "$FB" ]; then
+      DROPPED=$(jqa "$FSORT | .[$FB:] | map(if (.head | test(\"🙏\")) then \"precheck (atone ledger)\" else \"\(.head) (checkpoint)\" end) | join(\", \")")
+      printf '    %s… +%d more: %s%s\n' "$DIM" $((FN - FB)) "$DROPPED" "$R"
+    fi
     echo
   fi
 

@@ -496,6 +496,12 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 - **Standing caveats:** <each verbatim | none>
 - **Next action:** <one imperative sentence>
 - **Next action's requirements:** <file:line · msg-id · report path · owner msg ts | in constraints (N) | none>
+
+> Reconcile before writing (prop-20260716-182646-e8, owner batch 2026-09-18): re-read
+> the Next action against every Standing caveat and the last three Agent Actions. If a
+> caveat or an action already says the next action is done, captured or superseded,
+> rewrite the next action or drop the stale caveat; never write both. Sections written
+> at different moments of the session drift apart, and the resume pays for it.
 - **Blocked on:** <USER: … | AGENT: none — go>
 - **Expired authorizations:** <list | none>
 - **Decaying prerequisites:** <each with its fix command — creds/tunnels/daemons/seeded data | none>
