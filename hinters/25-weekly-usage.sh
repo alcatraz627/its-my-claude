@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: self (owner go within 45m)
+# review-by: 2026-10-16
+# retire-if: owner overrides every fire for two weeks
 # 25-weekly-usage.sh — UserPromptSubmit hinter: cost-confirm big actions when
 # the WEEKLY usage window runs hot (owner ruling 2026-08-21).
 #
@@ -10,6 +14,7 @@
 set -uo pipefail
 PROMPT=$(cat 2>/dev/null || echo "")
 [ -f "$HOME/.claude/.no-weekly-usage-hint" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed weekly-usage && exit 0
 SID="${CLAUDE_HINT_SID:-${CLAUDE_CODE_SESSION_ID:-}}"; [ -n "$SID" ] || exit 0
 case "$PROMPT" in "<system-reminder>"*|"<command-name>"*|"<local-command"*|"Caveat:"*|"Base directory for this skill:"*|"Stop hook feedback:"*|"<task-notification>"*|"Another Claude session sent"*|"Wake check."*|"Warden 3h check-in"*) exit 0;; esac
 
@@ -32,4 +37,12 @@ now=$(date +%s); last=$(cat "$STATE" 2>/dev/null || echo 0)
 echo "$now" > "$STATE"
 printf '{"ts":"%s","sid":"%s","week_pct":%s}\n' "$(date -u +%FT%TZ)" "${SID:0:8}" "$wk" >> "$HOME/.claude/logs/weekly-usage-hint.jsonl" 2>/dev/null || true
 
-echo "[weekly-usage] Weekly window at ${wk}% — before any BIG action (workflow/fleet, large ingestion, opus-or-higher seat, long generation), estimate its cost in one line, tell the user, and get an explicit go. One ask per 45m window: if the user already pressed on since this nudge, proceed without re-asking until the next one. The 5h window and session context have NO bearing on this. (mute: touch ~/.claude/.no-weekly-usage-hint)"
+# Tier text comes from policy.sh (owner D5 note, 2026-09-18): WARN above 80,
+# STRONG above 90, the pinchy window; snoozable per session only.
+pol=$(POLICY_LIMITS="$LIMITS" bash "$HOME/.claude/scripts/policy.sh" general 2>/dev/null)
+tier="${pol%%	*}"; detail="${pol#*	}"
+if [ "$tier" = "STRONG" ]; then
+  echo "[weekly-usage · STRONG] ${detail}. Before any BIG action (workflow/fleet, large ingestion, opus-or-higher seat, long generation) name its cost in one line and get an explicit go; one ask per 45m window, a press-on holds until the next. Snooze only per session, owner-approved: hook-snooze.sh add weekly-usage --for 4h --scope session (mute: touch ~/.claude/.no-weekly-usage-hint)"
+else
+  echo "[weekly-usage] ${detail:-Weekly window at ${wk}%}. Before any BIG action (workflow/fleet, large ingestion, opus-or-higher seat, long generation), estimate its cost in one line, tell the user, and get an explicit go. One ask per 45m window: if the user already pressed on since this nudge, proceed without re-asking until the next one. The 5h window and session context have NO bearing on this. (mute: touch ~/.claude/.no-weekly-usage-hint)"
+fi

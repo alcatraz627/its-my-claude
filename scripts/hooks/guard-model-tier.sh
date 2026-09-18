@@ -53,6 +53,21 @@ if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
   fi
 fi
 
+# 2a — usage-window advisory for a fable seat (owner D5 note, 2026-09-18). Never a
+# block: policy.sh says WARN above 80% and STRONG above 90% of the general week,
+# and the line asks the agent to weigh value, not to skip. Snoozable as
+# model-tier-fable (group: fable).
+if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
+  . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null
+  if ! hook_snoozed model-tier-fable >/dev/null 2>&1; then
+    pol=$(bash "$HOME/.claude/scripts/policy.sh" fable 2>/dev/null); prc=$?
+    if [ "$prc" -eq 1 ] || [ "$prc" -eq 2 ]; then
+      jq -cn --arg c "[model-tier · fable · ${pol%%	*}] ${pol#*	}. Advisory: the seat still runs; say what it buys in the Model Plan, or pick opus." '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
+      bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier-fable --action nudge --heeded unknown --detail "${pol%%	*}" >/dev/null 2>&1 || true
+    fi
+  fi
+fi
+
 # 2b — a fable lane may not delegate its OWN work away (hard block, no self-mute).
 #
 # Owner ruling 2026-09-01. A fable session is the brains lane: it exists to do the

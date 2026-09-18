@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: none-yet
+# review-by: 2026-10-16
+# retire-if: no instrument by review-by: retire or instrument
 # guard-speculative-export.sh — PostToolUse[Edit|Write], SYNCHRONOUS, WARN-ONLY.
 #
 # Catches the agent adding an EXPORTED symbol that has no caller anywhere in the
@@ -32,6 +36,7 @@ set -uo pipefail
 
 # --- Mute + tool availability (silent exit on any doubt) --------------------
 [ -f "$HOME/.claude/.no-speculative-export-gate" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed guard-speculative-export && exit 0
 command -v rg >/dev/null 2>&1 || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 

@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: heed-writeback task-store-nonempty
+# review-by: 2026-10-16
+# retire-if: heed-rate < 10% over 50 fires
 # Catches the "worked all session, never used the Task tool" failure mode.
 #
 # Migration 0017 made the Task tool the todo source of truth, but an agent that
@@ -18,6 +22,7 @@
 #
 # Runtime contract: reads the PostToolUse payload on stdin (needs .session_id).
 # Fires at most once per session (sentinel in /tmp). Always exits 0.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed no-task-nudge && exit 0
 
 set -uo pipefail
 

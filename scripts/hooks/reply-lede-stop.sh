@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: none-yet
+# review-by: 2026-10-02
+# retire-if: promote or retire on the pre-registered readout
 # reply-lede-stop.sh — Stop hook, WARN tier (owner D4a 2026-09-18): position 1 of a substantial
 # owner-facing reply belongs to the lede block (box/close.sh), not to narrative.
 #
@@ -12,6 +16,7 @@
 set -uo pipefail
 [ "${REPLY_LEDE_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.no-reply-lede-gate" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed reply-lede && exit 0
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty'); tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty')

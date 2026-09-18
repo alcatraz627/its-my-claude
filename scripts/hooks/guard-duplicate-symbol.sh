@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: none-yet
+# review-by: 2026-10-16
+# retire-if: no instrument by review-by: retire or instrument
 # guard-duplicate-symbol.sh — PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
 #
 # The mechanical `infra-before-grep` / reinvent-the-wheel killer. When an edit
@@ -15,6 +19,7 @@
 
 set -uo pipefail
 [ -f "$HOME/.claude/.no-dup-symbol-guard" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed guard-duplicate-symbol && exit 0
 command -v rg >/dev/null 2>&1 || exit 0
 
 INPUT=$(cat 2>/dev/null || true)

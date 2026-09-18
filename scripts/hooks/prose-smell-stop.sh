@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: self (clean re-emit)
+# review-by: 2026-10-16
+# retire-if: heed-rate < 40% over 200 fires
 # prose-smell-stop.sh — Stop hook: flag default-LLM "AI-smell" register in the
 # final assistant message before it ends the turn.
 #
@@ -34,6 +38,7 @@
 set -uo pipefail
 [ "${PROSE_SMELL_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.no-prose-smell-gate" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed prose-smell && exit 0
 
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0

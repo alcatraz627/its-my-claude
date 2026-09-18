@@ -227,3 +227,22 @@ hook_cmd_skeleton() {
     print out
   }'
 }
+
+# hook_snoozed <hook-id> — is this hook snoozed here and now? (owner D3a, 2026-09-18)
+#
+# Reads ~/.claude/hooks/snooze.jsonl through hook-snooze.sh check, matching the
+# global scope, this project (cwd prefix) and this session. Returns 0 when a live
+# row matches and prints one line naming who snoozed it, until when, and why,
+# once per session, so a snoozed hook never goes silent. Only the tune-able
+# dozen call this; a mechanical guard stays dumb (owner, 2026-09-18).
+hook_snoozed() {
+  local id="${1:-}" sid8="${2:-${CLAUDE_CODE_SESSION_ID:-nosid}}"; sid8="${sid8:0:8}"
+  local row
+  row=$(bash "$HOME/.claude/scripts/hooks/hook-snooze.sh" check "$id" --session "$sid8" 2>/dev/null) || return 1
+  local mark="/tmp/claude-snoozed-$id-$sid8"
+  if [ ! -f "$mark" ]; then
+    touch "$mark" 2>/dev/null
+    jq -cn --arg m "[snoozed] $row" '{systemMessage: $m}' 2>/dev/null
+  fi
+  return 0
+}

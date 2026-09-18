@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: self (next command shape)
+# review-by: 2026-10-16
+# retire-if: heed-rate < 30% over 200 fires
 # prefer-tmp-py-over-inline.sh — PreToolUse[Bash] nudge, with heed measurement.
 # Multi-line `python3 -c '...'` has no traceback line numbers in Bash output
 # and is shell-quoting-sensitive. Suggests /tmp/<slug>.py for debuggability.
@@ -20,6 +24,7 @@
 #
 # Mute: touch ~/.claude/.no-inline-py-hint
 # Tests: scripts/hooks/prefer-tmp-py-over-inline.test.sh
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed prefer-tmp-py-over-inline && exit 0
 
 set -uo pipefail
 [[ -f "$HOME/.claude/.no-inline-py-hint" ]] && exit 0

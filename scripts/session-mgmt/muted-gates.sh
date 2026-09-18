@@ -46,9 +46,14 @@ for f in "$ROOT"/.no-* "$ROOT"/.*-off; do
   rows="${rows}${rows:+ · }${name} ($(age_of "$f"), mutes $(owner_of "$name"))"
 done
 
-[ -z "$rows" ] && exit 0
+# Snoozes (owner D3a 2026-09-18): scoped, expiring, reasoned. Listed with who and until.
+snz=$(bash "$ROOT/scripts/hooks/hook-snooze.sh" list 2>/dev/null | rg -v 'no live snoozes' | sed 's/^  //' | paste -sd';' - | sed 's/;/ · /g')
+
+[ -z "$rows" ] && [ -z "$snz" ] && exit 0
 
 # Plain text, no rails: this is a one-line notice, not a gate (callout-boxes.md).
-msg="[muted-gates] Mute sentinels present at ~/.claude, so these hooks are OFF machine-wide and their rules bind as text only: ${rows}. Remove a file to re-arm its gate; an agent never adds one."
+msg="[muted-gates]"
+[ -n "$rows" ] && msg="$msg Mute sentinels present at ~/.claude, so these hooks are OFF machine-wide and their rules bind as text only: ${rows}. Remove a file to re-arm its gate; an agent never adds one."
+[ -n "$snz" ] && msg="$msg Snoozed (scoped, expiring, owner-approved): ${snz}. Lift: hook-snooze.sh lift <id>."
 jq -cn --arg m "$msg" '{additionalContext: $m}'
 exit 0

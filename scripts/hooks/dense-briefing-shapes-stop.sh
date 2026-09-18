@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: dry-run
+# review-by: 2026-10-02
+# retire-if: pre-registered readout in next-tracks.md
 # dense-briefing-shapes-stop.sh — Stop hook, DRY-RUN tier: the two dense-briefing
 # shapes no detector covered (owner D4a, 2026-09-18; sweep S6).
 #
@@ -22,6 +26,7 @@
 set -uo pipefail
 [ "${DENSE_SHAPES_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.no-dense-shapes-gate" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed dense-briefing-shapes && exit 0
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 command -v python3 >/dev/null 2>&1 || exit 0

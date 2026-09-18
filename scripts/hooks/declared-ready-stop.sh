@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: self (run observed after block)
+# review-by: 2026-10-16
+# retire-if: block rate rises while atone count does not fall
 # declared-ready-stop.sh — Stop hook that catches a success claim ("done / works /
 # fixed / passing / verified") the agent makes about edited source WITHOUT having
 # exercised the path it changed this turn.
@@ -48,6 +52,7 @@
 
 set -uo pipefail
 [ -f "$HOME/.claude/.no-declared-ready-gate" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed declared-ready && exit 0
 
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0

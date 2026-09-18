@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: none-yet
+# review-by: 2026-10-16
+# retire-if: no instrument by review-by: retire or instrument
 # skill-lint-nudge.sh — PostToolUse[Edit|Write|MultiEdit], SYNCHRONOUS nudge.
 #
 # Runs scripts/skill-lint.py on a SKILL.md the moment it is written, and hands
@@ -15,6 +19,7 @@
 # Mute: touch ~/.claude/.no-skill-lint-gate
 set -uo pipefail
 [ -f "$HOME/.claude/.no-skill-lint-gate" ] && exit 0
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed skill-lint-nudge && exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 command -v python3 >/dev/null 2>&1 || exit 0
 LINT="${SKILL_LINT:-$HOME/.claude/scripts/skill-lint.py}"

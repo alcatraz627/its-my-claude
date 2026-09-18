@@ -198,6 +198,34 @@ def heed_rate_for(hook_id, heed_list):
     if yes + no == 0: return None, yes, no
     return yes / (yes + no), yes, no
 
+import re
+
+# ─── lifecycle headers (the tune-able dozen; mechanical guards carry none) ──
+import glob as _glob
+_LC = {}
+def _scan_lifecycle():
+    home = os.path.expanduser("~/.claude")
+    for path in _glob.glob(home + "/scripts/hooks/*.sh") + _glob.glob(home + "/hinters/*.sh") + _glob.glob(home + "/scripts/*.sh"):
+        try: txt = open(path, errors="replace").read(4000)
+        except OSError: continue
+        if "# lifecycle:" not in txt: continue
+        m = re.search(r"--hook\s+([A-Za-z0-9_-]+)", open(path, errors="replace").read())
+        hid = m.group(1) if m else os.path.basename(path).rsplit(".", 1)[0]
+        fields = dict(re.findall(r"^# (instrument|review-by|retire-if): *(.+)$", txt, re.M))
+        _LC[hid] = fields
+_scan_lifecycle()
+def lifecycle_of(hid):
+    f = _LC.get(hid)
+    if not f: return ("", "")
+    rb = f.get("review-by", "")
+    inst = f.get("instrument", "")
+    flags = []
+    if inst.startswith("none-yet"): flags.append("UNMEASURED")
+    try:
+        if rb and datetime.date.fromisoformat(rb) < now.date(): flags.append("OVERDUE")
+    except ValueError: pass
+    return (rb, " ".join(flags))
+
 # ─── per-hook aggregation ────────────────────────────────────────
 def build_rows(fire_list, heed_list):
     hooks = defaultdict(lambda: {"fires": 0, "actions": Counter(), "projects": Counter(),
@@ -224,6 +252,7 @@ def build_rows(fire_list, heed_list):
             "last_ts": h["last"].strftime("%Y-%m-%dT%H:%M:%SZ") if h["last"] else None,
             "last_age": humanize_age(h["last"]) if h["last"] else "-",
             "mute_path": mute_path, "muted": muted, "hard_gate": hard,
+            "review_by": lifecycle_of(hid)[0], "lifecycle": lifecycle_of(hid)[1],
         })
     rows.sort(key=lambda r: (-r["fires"], r["hook"]))
     return rows
@@ -302,9 +331,10 @@ def cell(v, w, right=False):
     if len(s) > w: s = s[:w-1] + "…"
     return s.rjust(w) if right else s.ljust(w)
 
-HK, FR, BA, HD, PJ, LF, MU = 28, 5, 22, 6, 14, 8, 6
+HK, FR, BA, HD, PJ, LF, MU, RB, LC = 28, 5, 22, 6, 14, 8, 6, 10, 18
 hdr = (cell("hook", HK) + "  " + cell("fires", FR, True) + "  " + cell("by-action", BA) + "  " +
-       cell("heed", HD) + "  " + cell("top-project", PJ) + "  " + cell("last", LF, True) + "  " + cell("mute", MU))
+       cell("heed", HD) + "  " + cell("top-project", PJ) + "  " + cell("last", LF, True) + "  " + cell("mute", MU) +
+       "  " + cell("review-by", RB) + "  " + cell("lifecycle", LC))
 win = since.strftime('%Y-%m-%d %H:%M') + "Z → now" if since else "all time"
 print(f"hook health  ·  now={now.strftime('%Y-%m-%d %H:%M')}Z  ·  window={win}  ·  {len(fires_w)} fires across {len(rows)} hooks")
 print(f"heed = heeded/(heeded+ignored) from kind:heed lines (\"-\" = none yet)  ·  MUTED = mute file exists while still firing")
@@ -314,7 +344,8 @@ for r in rows:
     mflag = "MUTED" if r["muted"] else ""
     print(cell(r["hook"], HK) + "  " + cell(r["fires"], FR, True) + "  " +
           cell(r["by_action_str"], BA) + "  " + cell(r["heed_str"], HD) + "  " +
-          cell(r["top_project"], PJ) + "  " + cell(r["last_age"], LF, True) + "  " + cell(mflag, MU))
+          cell(r["top_project"], PJ) + "  " + cell(r["last_age"], LF, True) + "  " + cell(mflag, MU) +
+          "  " + cell(r.get("review_by", ""), RB) + "  " + cell(r.get("lifecycle", ""), LC))
 print("-" * len(hdr))
 n_muted = sum(1 for r in rows if r["muted"])
 hottest = rows[0]["hook"] if rows else "-"

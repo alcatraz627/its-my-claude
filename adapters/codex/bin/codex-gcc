@@ -61,6 +61,10 @@ case "${1:-}" in
       printf 'codex-gcc: seat refused by the Codex usage gate: %s\n' "${verdict#*	}" >&2
       exit 75
     fi
+    # Advisory above 80% of the codex week (owner D5 note, 2026-09-18): the seat
+    # runs; the line asks whether this run is worth the quota.
+    pol=$(bash "$HOME/.claude/scripts/policy.sh" codex 2>/dev/null); prc=$?
+    [ "$prc" -eq 1 ] && printf 'codex-gcc: [policy WARN] %s\n' "${pol#*	}" >&2
     if [ -n "$brief" ]; then
       case "$brief" in /*) ;; *) brief="$PWD/$brief" ;; esac
       [ -f "$brief" ] || { printf 'codex-gcc: no brief at %s\n' "$brief" >&2; exit 2; }

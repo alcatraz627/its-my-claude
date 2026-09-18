@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
+# instrument: heed-writeback persona-adopted
+# review-by: 2026-10-16
+# retire-if: heed-rate < 5% over 200 fires
 # Suggests adopting a matching persona when the prompt clearly calls for one.
 #
 # Working-mode personas (~/.claude/personas/) are picked up only when the agent
@@ -13,6 +17,7 @@
 # otherwise. Dedup sentinel: /tmp/claude-personasuggest-<sid8> (one line per
 # already-suggested persona). Mute: touch ~/.claude/personas/usage/.suggest-off.
 # Always exits 0 — an advisory hook must never block a prompt.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed persona-suggest && exit 0
 
 set -uo pipefail
 
