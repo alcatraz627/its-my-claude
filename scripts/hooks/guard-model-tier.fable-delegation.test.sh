@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Job 2b: a fable lane may not delegate authoring; it may delegate review.
+# Job 2b, inverted 2026-09-18 (owner): a fable lane MAY delegate by default; the
+# authoring block binds only while a fable-restrict snooze row is live.
 set -uo pipefail
 H="$HOME/.claude/scripts/hooks/guard-model-tier.sh"
 T=$(mktemp -d); pass=0; fail=0
+export SNOOZE_LEDGER="$T/snooze.jsonl"; SNZ="$HOME/.claude/scripts/hooks/hook-snooze.sh"
 ck(){ if [ "$2" = "$3" ]; then echo "  ok    $1"; pass=$((pass+1)); else echo "  FAIL  $1 (got $3 want $2)"; fail=$((fail+1)); fi; }
 run(){ # <parent-model> <sub-model> <prompt>
 python3 - "$1" "$2" "$3" "$T" <<'PY'
@@ -14,7 +16,11 @@ open(f"{t}/in.json","w").write(json.dumps({"tool_name":"Agent","transcript_path"
 PY
 bash "$H" < "$T/in.json" 2>/dev/null | rg -c 'FABLE MAY NOT DELEGATE' 2>/dev/null || echo 0; }
 
-echo "dispatcher = fable"
+echo "dispatcher = fable, no restrict row (the default)"
+ck "authoring docs -> allowed"      0 "$(run claude-fable-5 sonnet 'write the ingestion documentation for the console')"
+ck "implement -> allowed"           0 "$(run claude-fable-5 opus 'implement the exporter and refactor the writer')"
+echo "dispatcher = fable, restrict row live"
+bash "$SNZ" add fable-restrict --for 1d --scope global --reason "test: fable scarce this week" --approved-by owner >/dev/null
 ck "authoring docs -> BLOCK"        1 "$(run claude-fable-5 sonnet 'write the ingestion documentation for the console')"
 ck "draft a spec -> BLOCK"          1 "$(run claude-fable-5 sonnet 'draft the design spec for the export module')"
 ck "implement -> BLOCK"             1 "$(run claude-fable-5 opus 'implement the exporter and refactor the writer')"

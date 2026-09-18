@@ -317,7 +317,7 @@
     ],
     "defaultMode": "bypassPermissions"
   },
-  "model": "opus[1m]",
+  "model": "claude-opus-4-8",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "FileChanged": [
@@ -662,6 +662,19 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/quoted-text-is-not-a-command.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/allow-claude-ipc.py"
+          }
+        ]
+      },
+      {
         "matcher": "Bash|Read",
         "hooks": [
           {
@@ -979,15 +992,6 @@
         ]
       },
       {
-        "matcher": "ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/nudge-model-plan.sh"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -1148,14 +1152,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/review-gate-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "~/.claude/scripts/hooks/declared-ready-stop.sh"
           }
         ]
@@ -1257,6 +1253,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/reply-lede-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/dense-briefing-shapes-stop.sh"
           },
           {
             "type": "command",
@@ -1570,7 +1570,7 @@
       "effortLevel": "medium"
     },
     "claude-fable-5-1": {
-      "effortLevel": "medium"
+      "effortLevel": "high"
     }
   },
   "askUserQuestionTimeout": "5m",
@@ -1582,6 +1582,8 @@
   "theme": "dark",
   "verbose": false,
   "preferredNotifChannel": "ghostty",
+  "autoCompactEnabled": false,
+  "switchModelsOnFlag": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "crossSessionInbound": "accept",

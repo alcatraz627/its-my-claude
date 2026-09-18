@@ -44,9 +44,12 @@ TLINE=$(echo "$INPUT" | jq -c '{ts: (now | todate), session_id: (.session_id // 
 # LIFTED since 2026-07-23 (owner instruction: "lift the fable hard-block
 # altogether"). Telemetry above logs every dispatch either way, so flagship
 # sub-agent spend stays reviewable (tier-telemetry-review).
+# Fable is ENABLED by default (owner 2026-09-18: the scarcity that justified the
+# block is gone). The block applies only while an explicit, expiring opt-out row
+# exists: hook-snooze.sh add fable-restrict --for 7d --scope global --reason … --approved-by owner
 if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
-  if [ ! -f "$HOME/.claude/.allow-fable-subagents" ]; then
-    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED: '$MODEL' is the flagship lane and this dispatch has no owner sentinel. Fable is inside the subscription since 2026-08-25, so this is NOT a cost block; it exists so the lane is chosen deliberately and declared in a Model Plan (rules/model-tier-routing.md § sub-agent ceiling). Re-dispatch on sonnet (default) or opus (judgment seats), or ask the owner to create ~/.claude/.allow-fable-subagents; an agent never does."
+  if bash "$HOME/.claude/scripts/hooks/hook-snooze.sh" check fable-restrict-subagents >/dev/null 2>&1; then
+    reason="⛔ FLAGSHIP-AS-SUB-AGENT BLOCKED: '$MODEL' is the flagship lane and the owner has an active fable-restrict row (hook-snooze.sh list shows who, until when and why). Re-dispatch on sonnet (default) or opus (judgment seats), or ask the owner to lift the row."
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0
@@ -88,7 +91,9 @@ fi
 # construction: the sentinel below is the owner's, created on their word, and
 # trashing it re-arms the block. An agent never creates it on its own.
 TP=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
-if [ -f "$HOME/.claude/.allow-fable-delegation" ]; then TP=""; fi
+# Delegation from a fable lane is ALLOWED by default (owner 2026-09-18); the
+# block binds only while an explicit fable-restrict row is live.
+bash "$HOME/.claude/scripts/hooks/hook-snooze.sh" check fable-restrict-delegation >/dev/null 2>&1 || TP=""
 if [ -n "$TP" ] && [ -f "$TP" ]; then
   PARENT=$(tail -n 400 "$TP" 2>/dev/null | jq -rc 'select(.type=="assistant") | .message.model // empty' 2>/dev/null | tail -n 1)
   case "$PARENT" in
