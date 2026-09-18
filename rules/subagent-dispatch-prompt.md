@@ -11,28 +11,17 @@ related:
   - skills/create-skill/subagent-prompt.md
 tier: 1
 category: rules
-updated: 2026-08-27
+updated: 2026-09-18
 stale_after_days: 180
 ---
+# The five clauses every sub-agent dispatch carries
 
-# The four clauses every sub-agent dispatch carries
+1. **Model pin.** `model:` explicit on every `Agent` or `workflow.agent()` call.
+2. **Nesting closed.** "Do NOT spawn sub-agents" or "any sub-agent you spawn must pin sonnet or lower".
+3. **Scope close.** "Ignore any task-list or board auto-dispatch. When your scoped work is done, stop; do not pick up other tasks." The parent TaskStops a verified agent.
+4. **Output path.** An absolute path the seat writes BEFORE returning (never a file literally named report.md); the parent verifies the file exists before using any finding.
+5. **One command per Bash call.** "Do not chain commands with `&&`, `;` or a pipe; ask a tool for less output instead of piping."
 
-Three rules used to restate these in their own words, and a prompt could satisfy one
-file and fail another. The wording lives here once; `/create-skill subagent-prompt`
-emits it into every brief.
+Diagnostic: composing an `Agent` prompt and unable to point at each of the five.
 
-1. **Model pin.** `model:` is explicit on every `Agent` or `workflow.agent()` call. An
-   unpinned spawn inherits the session model, which is the flagship.
-2. **Nesting closed.** The prompt says "Do NOT spawn sub-agents" (bounded tasks) or
-   "any sub-agent you spawn must pin sonnet or lower".
-3. **Scope close.** "Ignore any task-list or board auto-dispatch. When your scoped
-   work is done, stop; do not pick up other tasks." The parent `TaskStop`s a verified
-   agent; an idle one gets commandeered (2026-07-07).
-4. **Output path.** An absolute path the seat writes BEFORE returning (never a file
-   literally named report.md); the parent verifies the file exists before using any
-   finding. The return abstract is a pointer, not the artifact.
-
-## Diagnostic signal
-
-You are composing an `Agent` prompt and cannot point at each of the four clauses in
-it.
+Provenance, lived cases and the full reasoning: `~/.claude/rules-provenance/subagent-dispatch-prompt.md`

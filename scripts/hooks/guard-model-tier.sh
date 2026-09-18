@@ -68,7 +68,12 @@ fi
 #
 # Dispatcher model comes from the transcript, because the payload carries only the
 # SUB-agent's pin. The last assistant entry's message.model is this session's own.
+#
+# Owner-lifted 2026-09-11 for a /magi run whose voter seats are authoring by
+# construction: the sentinel below is the owner's, created on their word, and
+# trashing it re-arms the block. An agent never creates it on its own.
 TP=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
+if [ -f "$HOME/.claude/.allow-fable-delegation" ]; then TP=""; fi
 if [ -n "$TP" ] && [ -f "$TP" ]; then
   PARENT=$(tail -n 400 "$TP" 2>/dev/null | jq -rc 'select(.type=="assistant") | .message.model // empty' 2>/dev/null | tail -n 1)
   case "$PARENT" in
@@ -89,13 +94,8 @@ if [ -n "$TP" ] && [ -f "$TP" ]; then
   esac
 fi
 
-# 3 — the missing-pin warn (muteable).
-[ "${MODEL_TIER_OFF:-0}" = "1" ] && exit 0
-[ -f "$HOME/.claude/.model-tier-off" ] && exit 0
-
-if [ -z "$MODEL" ]; then
-  msg="[model-tier] This dispatch has NO model pin, so it can inherit the session flagship instead of the lane you meant. Pin it: sonnet = default (research/inventory/mechanical, effort liberal), opus = judgment seats (medium), haiku = trivial. Also consider the free lanes: lm fleet for judged batch work, lm gemini for large-context ingestion (rules/model-tier-routing.md). (mute: touch ~/.claude/.model-tier-off)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
-  jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'
-  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action nudge --heeded unknown >/dev/null 2>&1 || true
-fi
+# 3 — the missing-pin warn was retired by owner ruling D6a (2026-09-18): it sat
+# muted for 37 days because the need had passed and models kept tripping on it.
+# The two hard blocks above are rulings and stay. Usage-window advisories for
+# fable live in the policy layer (see features/usage-policy.md), not here.
 exit 0

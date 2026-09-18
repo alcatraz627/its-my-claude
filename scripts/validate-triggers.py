@@ -33,6 +33,7 @@ VALID_TIERS = {"0", "1", "2", "3"}
 # assets/reports/20260901-halt-imbalance/report.md). Any ALWAYS-loaded rule
 # whose body directs an owner-gated halt must reference the halt-scope anchor.
 HALT_ANCHOR = "never-halt-on-authority-you-hold"
+ALWAYS_RULE_CAP = 2200  # bytes; owner D1a 2026-09-18
 HALT_DIRECTIVE = re.compile(r"""(
     (stop|halt|pause)\b[^.\n]{0,30}\b(and\s+)?(ask|confirm|get\s+confirmation)
   | ask\s+(the\s+(user|owner)\s+)?(first|before)
@@ -148,6 +149,14 @@ def main():
                     print(f"✗ {rel}: trigger '{t}' has invalid prefix (want: {sorted(VALID_PREFIXES)})")
                     errors += 1
                 trigger_map[t].append(str(rel))
+            # Byte cap on always-loaded rules (owner D1a, 2026-09-18); provenance
+            # lives in ~/.claude/rules-provenance/<name>.md.
+            if root == "rules" and "paths" not in fields and f.stem != "00-index":
+                nbytes = len(text.encode("utf-8"))
+                if nbytes > ALWAYS_RULE_CAP:
+                    print(f"✗ {rel}: {nbytes} bytes; the always-loaded cap is {ALWAYS_RULE_CAP}. "
+                          f"Fold provenance into ~/.claude/rules-provenance/{f.stem}.md and keep the directive")
+                    errors += 1
             # Halt-scope anchor (always-loaded rules only; scoped rules have paths:)
             if root == "rules" and f.stem != HALT_ANCHOR and "paths" not in fields:
                 body = text[text.find("\n---\n", 4) + 5:] if text.startswith("---\n") else text

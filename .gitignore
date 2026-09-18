@@ -44,6 +44,9 @@
 !/skills-parked/
 !/hinters/
 !/rules/
+# rules-provenance/: the folded-out reasoning behind every always-loaded rule
+# (owner D1a 2026-09-18). Never loaded by the harness, always tracked.
+!/rules-provenance/
 !/git-hooks/
 !/conventions/
 !/features/

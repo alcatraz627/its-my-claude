@@ -55,7 +55,12 @@ EOF
   for f in "$RULES"/*.md; do
     b=$(basename "$f" .md)
     case "$b" in README | 00-index) continue ;; esac
-    br=$(sed -n 's/^brief: *//p' "$f" | head -1 | sed 's/|/\\|/g')
+    # `gist:` wins; else the brief's first sentence, capped near 20 words. The
+    # full brief loads with the rule itself, so repeating it here was paying for
+    # every rule twice in every session (owner D1a, 2026-09-18).
+    br=$(sed -n 's/^gist: *//p' "$f" | head -1)
+    [ -z "$br" ] && br=$(sed -n 's/^brief: *//p' "$f" | head -1 | awk '{ n=split($0,w," "); s=""; for(i=1;i<=n&&i<=20;i++){ s=s (i>1?" ":"") w[i]; if(w[i] ~ /[.;]$/) break } if(i<n) s=s " …"; print s }')
+    br=$(printf '%s' "$br" | sed 's/|/\\|/g')
     [ -z "$br" ] && br="(no brief; add frontmatter)"
     load=always
     grep -q '^paths:' "$f" && load=scoped

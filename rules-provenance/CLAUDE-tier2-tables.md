@@ -1,0 +1,52 @@
+# CLAUDE.md Tier-2 tables, folded out 2026-09-18 (owner D1a)
+
+Verbatim copy of the features and conventions tables that lived in CLAUDE.md. LOOKUP.md and each file's own frontmatter carry the same triggers.
+
+## On-demand pointers (Tier 2 — load when triggered)
+
+Every sub-file below carries YAML frontmatter with `brief` + `triggers` (prefixed `tool:` / `topic:` / `phrase:` / `skill:` / `mcp:`). Load when the user's task matches.
+
+### Features
+
+| File                             | Triggers on                                                  | Brief                                                                 |
+| -------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `features/mcp-catalog.md`        | `tool:add-mcp`, `mcp:*`, MongoDB/Redis/Postgres/Vercel setup | MCP catalog + version pinning + add-mcp injection                     |
+| `features/llm-mini.md`           | `tool:llm-mini`, `skill:mini`, fast lookup tasks             | Fast sub-second model; Ollama local + Haiku fallback                  |
+| `features/claudew.md`            | `tool:claudew`, rate-limit recovery, auto-resume             | Plugin-based claude CLI wrapper                                       |
+| `features/fiber-snatcher.md`     | `tool:fiber-snatcher`, React/Next.js debugging               | Deterministic dev-app state reads + dispatch + shoots                 |
+| `features/desktop-automation.md` | screenshot, click, macOS windows, `tool:desktop.sh`          | macOS GUI automation (with MANDATORY focus-confirm + hard-stop rules) |
+| `features/dev-servers.md`        | pm2, port setup, `topic:dev-servers`, starting any dev server | Three-tier port policy: mature=user-pinned · local-persistent=pm2+51xx · one-off=62xx+24h-TTL; `ports.sh` scan/claim/reap/revive; launches without a proper port are BLOCKED by guard-dev-server-port.sh |
+| `features/hinter-pipeline.md`    | autocorrect, UserPromptSubmit hints                          | Hint injector + active hinters + autocorrect dictionaries             |
+| `features/shared-library.md`     | `tool:gum-tui.sh`, `tool:lock-file.sh`, styled output        | std::claude::shared Python + Bash utilities                           |
+| `features/plugins.md`            | plugin vs skill decision, disabled plugins registry          | Plugin registry + plugin-vs-custom-skill rule                         |
+| `features/hooks-tui-limits.md`   | hook design, terminal-display hook questions                 | TUI alternate-screen buffer limits: what hooks CAN/CANNOT do          |
+| `features/hook-design.md`        | building/auditing a hook, `phrase:"should this hook block"`, hook false-positives | Weigh FP by cost-of-false-fire (not raw rate); match consequence (block/warn/nudge) to cost |
+| `features/shell-memory.md`       | `tool:shell-mem`, `mcp:shell-mem`, shell history             | shell-mem shell history + BG process tracking (formerly diy-mem; see mig 0014)                           |
+| `features/local-models.md`       | `tool:lm`/`q`/`imagine`/`warm`, `topic:local-models`, `topic:ollama`, `topic:image-generation` | Local LLM + image-gen suite (`~/Code/local-models`) — q/imagine/warm/lm on PATH, no-idle, JSONL histories as the agent API. Read `docs/STATE.md` there first |
+| `features/tab-title.md`          | `tool:tab-title`, `tool:set-focus`, `topic:terminal-title`, `topic:ghostty`, status/mode/intent convey | Ghostty tab-title CLI w/ named-enum slots — `status` (✅⚠️❌💤ℹ️🛑) · `mode` (auto-derived verb) · `intent` (session noun) · `focus` (sub-task). Convey state with: `~/.claude/scripts/tab-title/tab-title.sh <status\|mode\|intent\|focus> <name>`. Full guide: `features/tab-title.md` |
+| `features/tmp-jail.md`           | `topic:tmp-jail`, `topic:confine-to-tmp`, `topic:restrict-writes`, `phrase:"only write to tmp"` | Session-scoped /tmp write-jail. `tmp-jail on` confines this session (and its sub-agents) to /tmp; reads unaffected. Off ONLY by the user (`tmp-jail off <id>`) — the agent CANNOT lift it and must ASK with that exact command. Rare-use, off by default, no mute file. Guide: `features/tmp-jail.md` |
+| `features/model-tier-harness.md` | `topic:model-tier`, `topic:gemini`, `tool:lm-gemini`, `topic:dispatch-telemetry` | Mechanics behind `rules/model-tier-routing.md`: guard-model-tier.sh (block fable sub-agents, warn unpinned, dispatch telemetry → `logs/model-dispatch.jsonl`), image-read logging, the Jul-28/Aug-04 reviews, and the `lm gemini` pairing lane (wrapper-only access, gemini-3.5-flash) |
+| `features/decision-pages.md`     | `tool:decision-page.sh`, `topic:decision-page`, `topic:feedback-form`, needing a human verdict on many items | Pre-answered interactive HTML feedback pages — when a task needs >~4 human judgments, scaffold `decision-page.sh new <slug>` instead of asking N questions; human flips what's wrong + pastes one compact answer string. Registry `assets/decision-pages/`, served by kanban at :5106/dp/ |
+| `features/ci-oauth-token-minting.md` | `tool:mint-ci-token.sh`, `topic:ci-auth`, `phrase:"CLAUDE_CODE_OAUTH_TOKEN"`, changing the Claude account CI runs as | Mint a Claude Code OAuth token for a DIFFERENT account via a throwaway Linux codespace, so the machine's own login is never at risk (macOS keeps the credential in the Keychain, not a config file). Covers the three CI auth modes, the script, and the paid-for traps: two OAuth rounds, the browser picks the account, a pasted token can carry a line break that one CI lane tolerates and another dies on |
+
+### Conventions
+
+| File                              | Triggers on                                                           | Brief                                                                                                                |
+| --------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `conventions/html-output.md`      | `topic:html-output`, `topic:reports`, HTML generation                 | HTML rules: dark/light toggle MANDATORY + CSS vars + future HTML rules                                               |
+| `conventions/cli-help-design.md`  | `-h`/`--help` implementation                                          | Help text structure, colors, columns, no-pager                                                                       |
+| `conventions/tui-design.md`       | `topic:tui`, `topic:fzf`, `phrase:"interactive explorer"`, terminal browser/launcher | Functional TUI patterns + fzf-as-runtime launcher blueprint + fzf>gum>framework decision + degradation ladder       |
+| `conventions/tui-handbook.md`     | `topic:tui`, `topic:fzf`, `topic:gum`, `phrase:"build a tui"`, `tool:tui/pick.sh`, building/auditing a terminal UI | Build guide: `std::claude::tui` library (colors/tty/require/pick/file-preview) + the `--__` fzf-app blueprint + features catalog + trap→fix failure-modes + testing-without-a-tty + destructive-tool rules |
+| `conventions/visual-design.md`    | `topic:color`, `topic:ui-design`, `topic:visual-design`, `phrase:"design system"`, restyling any UI surface | Color harmony (perceptual OKLCH tiers + de-chaos rule) + hierarchy/spacing/type/truncation + curated Apple/web/widget/CLI design reference links |
+| `conventions/mobile-ux-pattern-palette.md` | `topic:mobile-ux`, `topic:ui-patterns`, `topic:todo-app`, `topic:notes-app`, `topic:capture-flow`, designing/reviewing a notes/tasks/mobile UI | Pick-from palette of mobile todo/notes UX patterns — workflow blocks (two-speed capture, triage gesture economy, overdue rituals, trust signaling), display + interaction patterns, anti-patterns; mined from 7 leading apps 2026-07 |
+| `conventions/asset-management.md` | `tool:asset.sh`, screenshots/reports/PDFs                             | Assets under `~/.claude/assets/<type>/` + CWD double-nest hazard                                                     |
+| `conventions/doc-writing.md`      | `skill:write-docs`, technical docs                                    | Anti-pattern catalog + STUB/PARTIAL/PLANNED annotations                                                              |
+| `conventions/scratch-files.md`    | `_*.claude.md` management, checkpoints                                | Scratch-file naming + monthly archive to `assets/checkpoints/YYYYMM/`                                                |
+| `conventions/dashboard-tools.md`  | `topic:dashboard-tool`, single-user Node + watcher + JSON-state tools | Build template: mutex on load-mutate-save, GETs never write, atomic + rotated writes, anti-patterns, Sherpa skeleton |
+| `conventions/preference-graduation.md` | `topic:preferences`, `topic:workflow-vocabulary`, `phrase:"bake this in"`, `phrase:"remember how I work"` | How recurring preference/vocabulary signals graduate from post-insight streams (i-dream/atone/affirm/core-dump/runtime-notes) → GLOSSARY/memory/rules. Harvester: `scripts/preference-harvest.sh` |
+| `conventions/agent-first-tools.md` | `topic:agent-first-tools`, `topic:cli-for-agents`, `phrase:"tool for an agent"`, building ANY tool Claude itself will drive | MANDATORY read before building tools whose primary user is Claude: 5 obligations (digest deltas, output budgets, fix-proposing errors, one-round-trip ambiguity, built-in waits) + 15 researched principles + lived evidence from the fiber-snatcher V2 build |
+| `conventions/language-quality.md` | `topic:language-quality`, `topic:slop`, `tool:prose-lint.py`, `phrase:"de-slop"`, writing/reviewing human-facing prose | The ratified prose-defect taxonomy (two-split structure · verdict-first · overclaim · contrastive-scaffold) from the 2026-07 transcript sweep, with worked rewrites + `scripts/style/prose-lint.py`; verdict-last reporting is the standing rule |
+| `conventions/callout-boxes.md` | `topic:callout-boxes`, `topic:hook-output`, `phrase:"pretty box"`, `tool:hook_box`, `tool:box`, composing any inline callout | One anatomy for every inline callout, v2: emoji names the emitter (closed vocab, `scripts/box/vocab.tsv`), rails carry severity (light advisory · heavy gate), seal carries lifecycle (✅ when resolved in-turn), `▸` refs stay clickable. Compose by hand per the anatomy; `box list` when unsure; `box <kind>` for ledger/thread/multi-ref shapes; hooks use `hook_box_kind`. Box only when action is owed, else line-tag |
+
+---
+

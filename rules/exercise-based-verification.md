@@ -12,92 +12,22 @@ related:
   - scripts/hooks/declared-ready-stop.sh
 tier: 1
 category: rules
-updated: 2026-06-15
+updated: 2026-09-18
 stale_after_days: 365
 ---
+# Run the change in the state that matters before calling it done
 
-# Exercise the change before you call it done
+Before writing done · works · fixed · passing · verified · shipped:
 
-A change is "done" when you have **run the affected code path in the state that
-matters and read the actual result** — not when it looks right, type-checks, or
-compiles. Inspection is not verification. The strongest, most-recurring failure
-in this account's history is declaring success off an artifact that was never
-executed.
+1. **Run it.** Execute the changed path and read the pass/fail line.
+2. **Collect ≠ run.** `pytest --collect-only`, `tsc --noEmit`, an import check, a lint, a compile execute no assertion. Never call a suite green off a collect.
+3. **A cached re-run is one run.** Bust the cache or vary the key before counting a repeat.
+4. **Induce the state that matters** (empty list, fault, pressure, cold vs warm) rather than inferring from the happy path.
+5. **A guard needs the opposite proof.** Break the thing it protects, watch its test go red, restore, watch it go green. A mutation that stays green means the test is the bug.
+6. **Mark the un-exercisable honestly:** `UNCONFIRMED — <reason>`, never a checkmark.
 
-Graduated from atone slug `declared-ready-without-runtime-exercise` — **S3, 5–6×
-recurrence** across unrelated projects and models (a Swift menu-bar that shipped
-a guaranteed crash with the test target commented out; a TS refactor; a release
-script; a not-on-PATH CLI; an S3 suite called "green" after `pytest
---collect-only`). The pattern survived a purely-advisory regime for ~90 warnings,
-which is why it is now a **rule with a mechanical gate**, not a topic-tag.
+Scale the run to the change (typo → syntax check; transform → smoke test with real data). Enforcement: `declared-ready-stop.sh`, currently muted by `~/.claude/.no-declared-ready-gate`, so this binds as text; the SessionStart brief lists muted gates.
 
-## The rule
+Diagnostic: about to type "done" and the last thing you ran was a collect, a compile, a lint, or nothing.
 
-Before writing/saying done · works · fixed · passing · verified · shipped:
-
-1. **Run it.** Execute the path you changed — the test, the endpoint, the
-   command, the UI interaction — and read the pass/fail line.
-2. **`collect ≠ run`.** `pytest --collect-only`, `tsc --noEmit`, an import-check,
-   a lint, a dry-compile — **none of these execute a single assertion.** They
-   tell you the code *parses*, not that it *works*. Never report a suite
-   "green"/"validated" off a collect or a compile.
-3. **A cached re-run is one run.** If the path is memoized (an LLM-call cache, a
-   build cache, a saved verdict/result), runs 2..N replay the cache, not the code
-   — "ran it N times, all green" is one run. Know what invalidates the cache and
-   bust it (or vary the key) before you count a re-run as evidence; an edit that
-   does not change the cache key changed nothing you just verified.
-4. **Induce the state that matters.** If the behavior only manifests under a
-   condition (warning-level memory pressure, a network fault, an empty list,
-   warm-vs-cold), induce that condition and observe — don't assert the happy path
-   and infer the rest.
-5. **A guard needs the opposite proof.** "I ran it and it passed" is evidence
-   about the CODE, never about a GUARD — a guard that has never fired is
-   untested. Break the thing it protects, watch THAT test go red, restore
-   (copy-based), watch it go green. Mutation-test each guard individually; a
-   mutation that stays green means the test is the bug. Four guards passed their
-   own tests while the thing they guarded was broken in one session — see
-   `rules/testing-patterns.md` § `[mutation-test-the-guard]` for the five ways it hides.
-6. **Mark the un-exercisable honestly.** If you genuinely cannot run something
-   (throttled sandbox, missing hardware), write `UNCONFIRMED — <reason>`, not a
-   checkmark. An honest gap is worth more than a false pass.
-
-## The enabling half — make running cheap (see the convention)
-
-This rule binds painlessly only when verifying is cheap. The companion
-[`conventions/run-and-observe-affordance.md`](../conventions/run-and-observe-affordance.md)
-asks every project to expose a one-command run-and-observe affordance (`make
-verify`, a `--self-test` flag, an env-gated debug hook). Lower the cost and
-exercise-by-default becomes the path of least resistance instead of a tax.
-
-## Enforcement (mechanical, not advisory)
-
-`scripts/hooks/declared-ready-stop.sh` (Stop hook) blocks a turn that edited
-source/test files and claims success when no run signal appears that turn. It is
-loop-safe (blocks once per claim, then steps aside) and proportional (silent on
-docs-only edits, renames, pure conversation). Mute:
-`touch ~/.claude/.no-declared-ready-gate` — **machine-wide, not per-session**: it
-silences the gate for every concurrent and future session until removed. Design:
-[`features/declared-ready-stop-hook.md`](../features/declared-ready-stop-hook.md).
-
-**The gate may be muted right now.** The mute file was present on 2026-09-04 and the
-owner chose to keep it (gcc-map v4, gate 1a). While `~/.claude/.no-declared-ready-gate`
-exists, the enforcement above does not run and this rule binds as text alone. The
-SessionStart briefing lists present sentinels under "Muted gates"; check it before
-relying on the hook to catch a premature done-claim.
-
-## What this rule does NOT mean
-
-- Not every keystroke needs a full suite — scale the run to the change (a typo
-  fix gets a syntax check; a transform gets a smoke test with real data). The
-  scale ladder lives in `rules/testing.md`.
-- "Run it" is satisfied by any real execution that exercises the change, not
-  necessarily the whole test suite.
-
-## Diagnostic signal
-
-You're about to type "done"/"works"/"passing" and the last thing you actually
-*ran* was a collect, a compile, a lint, or nothing at all. Stop — run the path.
-
-## Related
-- `rules/testing.md` — scale-to-task ladder · `rules/testing-patterns.md` — `[collect-not-run]`, `[declared-ready]`
-- Atone lineage: `bash ~/.claude/scripts/atone.sh search declared-ready`
+Provenance, lived cases and the full reasoning: `~/.claude/rules-provenance/exercise-based-verification.md`
