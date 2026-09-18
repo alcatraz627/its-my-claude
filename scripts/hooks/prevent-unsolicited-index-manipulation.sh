@@ -36,8 +36,19 @@ if echo "$CMD" | grep -qE '\bATONE_INDEX_OK=1\b'; then
   exit 0
 fi
 
+# Heredoc bodies and quoted strings are prose, not commands. Without this the
+# guard blocked a Python list that merely CONTAINED one of these verbs as a
+# string (2026-09-04), which is the raw-text-scan failure this account has now
+# paid for four times in one session.
+SCAN="$HOME/.claude/scripts/hooks/strip-payloads.py"
+if [ -x "$SCAN" ]; then
+  EXEC_ONLY=$(printf '%s' "$CMD" | python3 "$SCAN" 2>/dev/null) || EXEC_ONLY="$CMD"
+else
+  EXEC_ONLY="$CMD"
+fi
+
 # Patterns that modify the user's curated index — DESTRUCTIVE to in-flight work
-if echo "$CMD" | grep -qE '\bgit\s+(reset(\s+HEAD|\s+--mixed|\s+--soft)?\s+[^-]|restore\s+--staged\b|rm\s+--cached\b|stash(\s|$))'; then
+if echo "$EXEC_ONLY" | grep -qE '(^|[;&|(]|&&|\|\|)\s*git\s+(reset(\s+HEAD|\s+--mixed|\s+--soft)?\s+[^-]|restore\s+--staged\b|rm\s+--cached\b|stash(\s+(push|save|pop|apply|drop|clear|store)\b|\s*$))'; then
 
   # Record a feedback event so we can measure hook effectiveness
   ( bash "$HOME/.claude/scripts/atone.sh" feedback \

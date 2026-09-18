@@ -80,6 +80,21 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
 # A secret-shaped path must actually appear. Quoted spans are NOT blanked here,
 # unlike the rg guard: a path is data, and blanking it is exactly what would
 # hide `cat "$HOME/.env"` from this check.
+#
+# Heredoc BODIES are blanked, which is a different question. A body is stdin,
+# never a path the command opens, so a filename inside one is always a mention.
+# Two lanes tripped on that within an hour on 2026-09-04, one writing a doc and
+# one sending a message, and a guard people learn to route around is worse than
+# none. `cat <<EOF` still cannot read anything; `cat "$HOME/.env"` still can.
+SCAN="$HOME/.claude/scripts/hooks/strip-payloads.py"
+if [ -x "$SCAN" ]; then
+  cmd_scan=$(printf '%s' "$cmd" | python3 "$SCAN" --heredocs-only 2>/dev/null) || cmd_scan="$cmd"
+  [ -n "$cmd_scan" ] || cmd_scan="$cmd"
+else
+  cmd_scan="$cmd"
+fi
+cmd="$cmd_scan"
+
 printf '%s' "$cmd" | rg -q "$SECRET_TOKEN" 2>/dev/null || exit 0
 
 # The command is judged one SEGMENT at a time (split on ; && || |), each segment
@@ -110,6 +125,20 @@ if printf '%s' "$seg" | rg -q \
   -e '\btest\s+-[fers]\b|\[\s+-[fers]\s' \
   -e '\bssh-keygen\b.*-[yl]\b' \
   2>/dev/null; then
+  continue
+fi
+
+# A verb that TRANSMITS its argument rather than opening a file: a message to a
+# peer, an echo into a log. This fired on an IPC message that merely named a
+# config file in a sentence (2026-09-04), which teaches people to route around
+# the guard for the sake of a noun.
+#
+# Admitted only when the segment cannot smuggle a read: no command
+# substitution, no backticks, and no reading verb in it. All three, so
+# `echo "$(cat .env)"` and `claude-ipc send "$(< .env)"` still block.
+if printf '%s' "$seg" | rg -q '^\s*(claude-ipc\s+(send|reply)|echo|printf)\b' 2>/dev/null \
+   && ! printf '%s' "$seg" | rg -q '\$\(|`|\$\(<|<\s*[^ ]*\.(env|pem|key)' 2>/dev/null \
+   && ! printf '%s' "$seg" | rg -q '\b(cat|less|more|head|tail|xxd|od|strings|base64|dd|sed|awk|rg|grep|cp|scp|rsync|curl|wget)\b' 2>/dev/null; then
   continue
 fi
 
@@ -146,7 +175,7 @@ fi
 # failed safe (blocking more, never less) but it made mutation testing lie:
 # dropping sed still showed `sed ... .env` blocked, which reads as pinned and is
 # not. Only a .pem target isolates the verb. Found by automation, 2026-08-17.
-EMIT='\b(cat|bat|head|tail|less|more|nl|od|xxd|strings|base64|tee|cp|sed|awk|perl|python3?|jq|dotenv|rg|grep)\b|(^|[;&|]\s*)(env|printenv)\b|(^|[;&|]\s*)<\s*\S'
+EMIT='\b(cat|bat|head|tail|less|more|nl|od|xxd|strings|base64|tee|cp|sed|awk|perl|python3?|jq|dotenv|rg|grep)\b|(^|[;&|]\s*)(env|printenv)\b|(^|[;&|]\s*)<\s*\S|\$\(\s*<|`\s*<'
 printf '%s' "$seg" | rg -q "$EMIT" 2>/dev/null || continue
 verdict=block; break
 done < <(printf '%s\n' "$cmd" | sed -E 's/(&&|\|\||;|\|)/\

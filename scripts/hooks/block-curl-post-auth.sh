@@ -26,6 +26,19 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 echo "$CMD" | rg -q '\bcurl\b' 2>/dev/null || exit 0
 echo "$CMD" | rg -q "\-X\s+(POST|PUT|PATCH|DELETE)\b|--request\s+(POST|PUT|PATCH|DELETE)\b|--(data|data-raw|data-binary|data-urlencode|json|form)\b" 2>/dev/null || exit 0
 echo "$CMD" | rg -q "Authorization\s*:|-u\s+\S+:|--user\s+\S+:" 2>/dev/null || exit 0
+
+# Loopback only. The audit gap this guard closes is a call to something OTHER
+# than this machine; a request to 127.0.0.1 reaches one local process and no
+# network. Two lanes hit this probing a local service on the same evening and
+# both worked around it, which is how a guard stops being one.
+#
+# Every URL in the command must be loopback, so a deployed host anywhere in the
+# same line still blocks. A command with no http URL at all is not exempt.
+urls=$(echo "$CMD" | rg -o "https?://[^ \"']+" 2>/dev/null)
+if [ -n "$urls" ] && ! echo "$urls" | rg -qv "^https?://(127\.0\.0\.1|localhost|\[::1\])(:|/|$)" 2>/dev/null; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook block-curl-post-auth --action allow-loopback --heeded unknown >/dev/null 2>&1 || true
+  exit 0
+fi
 # A header whose value is an UNEXPANDED reference ($VAR, ${VAR}, $(cmd)) puts no
 # secret in the transcript, which is the leak this block exists to stop; the
 # file-tools route would put the literal there instead. Allow it, logged.

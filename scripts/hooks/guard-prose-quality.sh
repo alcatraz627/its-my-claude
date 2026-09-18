@@ -31,6 +31,10 @@ case "$fp" in
 esac
 case "$fp" in
   *test*|*spec*|*__tests__*|*fixture*|*mock*) exit 0 ;;
+  # A checkpoint is an agent-facing record with its own parse contract: the
+  # mini dump REQUIRES "**Done:**", which this gate read as a verdict-first
+  # opener, so a valid mini could not be written (sys-monitor, 2026-09-08).
+  */_*.claude.md|_*.claude.md) exit 0 ;;
 esac
 case "$fp" in
   */style/*|*/atone/*|*/i-dream/*|*/sweep/*|*language-quality*|*/ste-writing/*|*/node_modules/*|*/derived/*|*thesaurus*) exit 0 ;;
