@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
-# instrument: none-yet
-# review-by: 2026-10-16
-# retire-if: no instrument by review-by: retire or instrument
 # guard-env-access.sh — PreToolUse hook on Edit/Write/MultiEdit.
 #
 # Env vars should be reached through ONE accessor a project defines once, not
@@ -33,7 +29,6 @@ echo "$INPUT" | jq empty 2>/dev/null || exit 0
 
 [ "${ENV_ACCESS_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.env-access-off" ] && exit 0
-. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed guard-env-access && exit 0
 
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 case "$TOOL" in Edit | Write | MultiEdit) ;; *) exit 0 ;; esac

@@ -114,7 +114,7 @@ Produce a flat, scannable checkpoint — no deep analysis, no insights section, 
 Write using this template:
 
 ```markdown
-# Mini Core Dump — <ISO timestamp>
+# Mini Core Dump, <ISO timestamp>
 
 **Goal:** <1-2 sentences>
 
@@ -851,6 +851,12 @@ this path: its closing statement is the Phase 4 render with the session inside.
 **Then keep the prose short.** The render did the reporting. Say only what the
 render cannot: an unverified claim, a blocker needing the user, or a decision
 awaiting them.
+
+**End with the continuation call and the next agent's first line** (owner batch
+2026-09-18, prop-20260816-155945-34). One line each: `/clear` or `/compact`,
+with the reason from the table at the top of this skill, and the exact resume
+line the next agent runs (`/catchup at <checkpoint path>`). A dump that ends
+without naming the path forward leaves the owner to reconstruct it.
 
 ## Notes
 

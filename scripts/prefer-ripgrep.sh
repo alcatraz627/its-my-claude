@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
-# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
-# instrument: none-yet
-# review-by: 2026-10-16
-# retire-if: no instrument by review-by: retire or instrument
 # PreToolUse hook: intercept Bash grep commands and redirect to ripgrep (rg)
 # Benchmark: rg is 18–65× faster than /usr/bin/grep on the ~/.claude corpus.
 # Receives JSON on stdin with tool_name, tool_input fields.
 # Outputs JSON to block and provide rg replacement guidance.
-. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed prefer-ripgrep && exit 0
 
 set -euo pipefail
 
