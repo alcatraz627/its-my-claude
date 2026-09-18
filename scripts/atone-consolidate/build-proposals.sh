@@ -30,8 +30,10 @@ build_proposals() {
       continue
     fi
 
-    # Qualifying conditions: count >= 3 OR severity S3
-    if [ "$cnt" -lt 3 ] && [ "$sev_str" != "S3" ]; then
+    # Qualifying condition: count >= 3, whatever the severity. The S3-alone door
+    # drafted one proposal per singleton slug (204 of 271 slugs have one event)
+    # and filled the backlog with rows nobody read. Owner ruling D6a, 2026-09-18.
+    if [ "$cnt" -lt 3 ]; then
       continue
     fi
 

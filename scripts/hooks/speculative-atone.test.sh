@@ -78,7 +78,7 @@ out=$(bash "$SPEC" agree spec-1 --evidence "short" 2>&1); rc=$?
 out=$(bash "$SPEC" agree spec-1 --evidence "turn 14:23 in b13dc141: the list was written and the turn ended with every input in hand" 2>&1); rc=$?
 [ "$rc" -eq 0 ] && ok "agree with cited evidence is one command" || bad "agree failed: $out"
 jq -e 'select(.id=="spec-1") | .status=="agreed" and (.evidence|length)>40 and (.resolved_ts|length)>0' "$SPEC_ATONE_STORE" >/dev/null && ok "the row is agreed with evidence and a timestamp" || bad "row shape"
-printf '%s' "$out" | rg -q 'owed when idle' && ok "and it says the real /atone is still owed" || bad "no owed line: $out"
+printf '%s' "$out" | rg -q 'terminal; nothing further owed' && ok "and it says agree is terminal (owner D7a 2026-09-18)" || bad "agree still claims a debt: $out"
 o=$(hint); printf '%s' "$o" | rg -q 'spec-1' && bad "an agreed row still nags" || ok "an agreed row leaves the nag"
 bash "$SPEC" agreed 2>/dev/null | rg -q 'spec-1' && ok "agreed lists what is owed" || bad "agreed list empty"
 bash "$SPEC" stats 2>/dev/null | rg -q 'agreed' && ok "stats counts agreed on its own" || bad "stats hides agreed"

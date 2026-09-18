@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# reply-lede-stop.sh — Stop hook, DRY-RUN tier: position 1 of a substantial
+# reply-lede-stop.sh — Stop hook, WARN tier (owner D4a 2026-09-18): position 1 of a substantial
 # owner-facing reply belongs to the lede block (box/close.sh), not to narrative.
 #
 # Sweep evidence (20260820-regfric): buried asks are answered 1/19; the lede
@@ -31,6 +31,14 @@ if [ -f "$nf" ] && printf '%s' "$head400" | rg -q "── lede·$(cat "$nf")"; t
 # loop-safety: identical message never re-fires
 h=$(printf '%s' "$text" | shasum | cut -c1-12); marker="/tmp/claude-lede-$sid8/fired-$h"
 mkdir -p "/tmp/claude-lede-$sid8"; [ -f "$marker" ] && exit 0; touch "$marker"
-bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook reply-lede --sid "$sid8" --decision would-block 2>/dev/null || true
-jq -n --arg m "[reply-lede WOULD-BLOCK · dry-run] This reply is ${plen}c, carries owner-owed language, and position 1 is not the lede block. Compose it with: bash ~/.claude/scripts/box/close.sh --sid $sid8 --verdict '<what is true>' --next '<one action>' [--ask 'tag|text|draft'] [--tasks] and open the reply with its output. (Enforce: REPLY_LEDE_ENFORCE=1 · mute: touch ~/.claude/.no-reply-lede-gate)" '{systemMessage: $m}'
+# Warn tier since owner D4a (2026-09-18): 289 dry-run fires with no verdict was
+# the measure-first rollout that never got measured. REPLY_LEDE_ENFORCE=1 blocks.
+msg="This reply is ${plen}c, carries owner-owed language, and position 1 is not the lede block. Compose it with: bash ~/.claude/scripts/box/close.sh --sid $sid8 --verdict '<what is true>' --next '<one action>' [--ask 'tag|text|draft'] [--tasks] and open the reply with its output. (mute: touch ~/.claude/.no-reply-lede-gate)"
+if [ "${REPLY_LEDE_ENFORCE:-0}" = "1" ]; then
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook reply-lede --action block --heeded unknown 2>/dev/null || true
+  jq -cn --arg r "[reply-lede] $msg" '{decision:"block", reason:$r}'
+else
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook reply-lede --action soft --heeded unknown 2>/dev/null || true
+  jq -n --arg m "[reply-lede WARN] $msg" '{systemMessage: $m}'
+fi
 exit 0

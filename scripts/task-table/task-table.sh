@@ -1224,6 +1224,28 @@ if _orphan_lanes:
 if _stale:
     _ids = " ".join(f"#{x['id']}" for x in _stale[:6]) + (" …" if len(_stale) > 6 else "")
     _bangs.append(f"  !! {len(_stale)} gate(s) untouched >24h, re-check before acting: {_ids}")
+# A gate set BEFORE the owner's latest decision-page ruling is a recorded belief,
+# not a current state: the ruling that clears it may already be in. Owner D3c,
+# 2026-09-18 (gcp rows rendered as owner-required after the page had answered).
+# The instrument is decision-page.sh's answers.jsonl; no ledger, nothing is said.
+def _last_ruling():
+    p = os.environ.get("TASKS_RULINGS_JSONL") or os.path.expanduser("~/.claude/assets/decision-pages/answers.jsonl")
+    try:
+        best = None
+        for line in open(p):
+            try: r = json.loads(line)
+            except ValueError: continue
+            t = _iso(r.get("ts"))
+            if t and (best is None or t > best[0]): best = (t, r.get("slug", "?"))
+        return best
+    except OSError:
+        return None
+_ruling = _last_ruling() if gates else None
+if _ruling:
+    _pre = [x for x in gates if _gate_since(x) and _gate_since(x) < _ruling[0]]
+    if _pre:
+        _ids = " ".join(f"#{x['id']}" for x in _pre[:6]) + (" …" if len(_pre) > 6 else "")
+        _bangs.append(f"  !! {len(_pre)} gate(s) set before your last ruling ({_ruling[1]}), re-derive before treating as open: {_ids}")
 if _open_m and time.time() - max(_open_m) > 24 * 3600:
     _bangs.append(f"  !! NOT TODAY'S QUEUE: no open row has moved in {_last_open}; carried-over or umbrella items")
 if view.get("_broken"): _bangs.append(f"  !! view file did not parse, ignored: {view['_broken']}")

@@ -41,11 +41,11 @@ if [ -n "$TP" ] && [ -f "$TP" ]; then
   esac
 fi
 
-aliases=$(claude-ipc peers 2>/dev/null | jq -r --arg sid "$SID" \
-  '.peers[] | select(.sessionId == $sid) | (.sessionAliases // [.alias])[]' 2>/dev/null | paste -sd'|' -)
-match="${aliases:-claude-$SID8}"
-pending=$(jq -r --arg m "$match" '
-  select(.status == "pending") | select(.session | test("^(" + $m + ")$"))
+# Session uuid only (owner D7a, 2026-09-18): alias-keyed rows were inherited by
+# successor sessions; see speculative-atone-hint.sh for the reasoning.
+pending=$(jq -r --arg sid "$SID" --arg sid8 "$SID8" '
+  select(.status == "pending")
+  | select((.session == $sid) or (.session == $sid8) or (.session == ("claude-" + $sid8)))
   | "  \(.id)  \(.slug // "unslugged")"' "$STORE" 2>/dev/null)
 [ -z "$pending" ] && exit 0
 

@@ -14,8 +14,8 @@
 #       --issue "<what the auditor saw>" --cite "<turn/file citation>" [--run <run-id>]
 #   atone-speculative.sh pending [--session <s>]        unresolved rows (all sessions bare)
 #   atone-speculative.sh confirm <id> --atone <mist-id>
-#   atone-speculative.sh agree <id> --evidence "<why the auditor is right, cited>"   the cheap honest yes; /atone owed when idle
-#   atone-speculative.sh agreed [--session <alias>]                                   what is owed a real /atone
+#   atone-speculative.sh agree <id> --evidence "<why the auditor is right, cited>"   the cheap honest yes; terminal (owner D7a 2026-09-18)
+#   atone-speculative.sh agreed [--session <s>]                                       history of agreed rows
 #   atone-speculative.sh refute <id> --evidence "<why the auditor is wrong, cited>"
 #   atone-speculative.sh stats                          nominated / confirmed / refuted by run
 #
@@ -105,8 +105,11 @@ cmd_agree() {
   while [ $# -gt 0 ]; do case "$1" in --evidence) evidence="$2"; shift 2;; *) shift;; esac; done
   [ -n "$id" ] || { echo "atone-speculative agree: <id> --evidence required" >&2; exit 2; }
   [ ${#evidence} -ge 40 ] || { echo "atone-speculative agree: evidence under 40 chars is a nod, not agreement — cite the turn or file:line that shows the auditor was right" >&2; exit 2; }
+  # Terminal since owner ruling D7a (2026-09-18): the cited evidence IS the
+  # record. The "owed when idle" debt never got paid (36 rows, 0 filed) and
+  # successor sessions inherited the nag and asked the owner about it.
   _mutate "$id" ".status = \"agreed\" | .evidence = $(jq -cn --arg e "$evidence" '$e') | .resolved_ts = \$now" \
-    && echo "agreed: $id (the real /atone is owed when idle; then: confirm $id --atone <mist-id>)"
+    && echo "agreed: $id (terminal; nothing further owed)"
 }
 
 cmd_agreed() {

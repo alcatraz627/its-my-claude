@@ -2,3 +2,6 @@
 {"ts": "2026-08-13T09:44:45Z", "surfaced": 9, "applied": 4, "source": "manual-review"}
 {"ts": "2026-08-26T11:44:20Z", "audit": "2026-08-23", "surfaced": 17, "applied": 5, "rejected": 12, "source": "manual-review", "session": "gcc-night-7a"}
 {"ts": "2026-08-26T11:44:20Z", "audit": "2026-08-16", "surfaced": 13, "applied": 2, "rejected": 7, "left_open": 4, "source": "manual-review", "session": "gcc-night-7a"}
+{"ts": "2026-09-18T11:50:34Z", "audit": "2026-08-30", "surfaced": 13, "applied": 1, "rejected": 11, "left_open": 1, "source": "manual-review", "session": "review-atone-7c", "note": "owner D2a: recorded honestly knowing the yield SLO trips"}
+{"ts": "2026-09-18T11:50:34Z", "audit": "2026-09-06", "surfaced": 11, "applied": 3, "rejected": 8, "left_open": 0, "source": "manual-review", "session": "review-atone-7c"}
+{"ts": "2026-09-18T11:50:34Z", "audit": "2026-09-13", "surfaced": 12, "applied": 3, "rejected": 8, "left_open": 1, "source": "manual-review", "session": "review-atone-7c"}

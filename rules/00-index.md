@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-09-05
+updated: 2026-09-18
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-09-05 16:57.
+Regenerated 2026-09-18 17:26.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -76,6 +76,7 @@ Regenerated 2026-09-05 16:57.
 | `size-the-change-in-the-target-vocabulary` | scoped | Never describe the size or nature of work in the source artifact's vocabulary. A design tool's two frames, a spec's two versions, a doc's two revisions all read as "rebuilt" while the change in code is an edit to one file. Size the work by the diff it costs in the thing you will actually change, and say that number. |
 | `skill-spec-update-not-honored-by-running-session` | scoped | SKILL.md mandates are advisory to already-running sessions (specs are cached at discovery, never re-read) — when adding a mandatory phase to a skill, add enforcement at the data-write CLI in the same change, or it's silently bypassable. Read this rule when editing SKILL.md mandates or debugging a skipped skill phase. |
 | `speculative-abstractions-without-a-load-bearing-caller` | scoped | Don't create a helper/constant/type for a planned-but-nonexistent future caller — inline at the real callsite when you build it; let abstractions crystallize from ≥2 real callsites |
+| `stale-belief-as-current-state` | always | A stored field that recorded a past belief (task blocked_on USER:, a cron payload, a decision row) is verified live before it is rendered as current state; a gate set before the owner's latest ruling is re-derived, never repainted. Instrument, not memory: task-table flags gates older than the last decision-page answer. |
 | `structural-claim-without-reading-code` | always | Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first; same precheck for process-completion claims ("the migration ran", "the deploy succeeded") — name the artifact that proves it |
 | `structure-over-one-shotting` | scoped | Default to plan→implement→review on non-trivial work; a failed one-shot wastes more than structure would have. One-shotting is fine only for genuinely trivial one-offs. |
 | `sub-agent-outputs` | scoped | Dispatch prompts for material sub-agent work (research/analysis/audit/design) MUST pin an absolute output path AND how it gets persisted — either the sub-agent writes before returning (write-capable agent types only; never a file literally named report.md, the harness blocks it), or the sub-agent returns full text and the PARENT writes it. Parent MUST verify the file exists before using the findings — the return abstract is a pointer, not the artifact. Mechanically enforced by the subagent-output guard hook; Read this rule when designing multi-agent output flows or when the guard fires. |

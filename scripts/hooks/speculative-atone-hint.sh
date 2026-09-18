@@ -21,13 +21,13 @@ SID=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 [ -n "$SID" ] || exit 0
 SID8="${SID:0:8}"
 
-# Rows for this session. The auditor records the session's ipc alias; resolve this
-# session's aliases from the registry, fall back to the sid8 prefix.
-aliases=$(claude-ipc peers 2>/dev/null | jq -r --arg sid "$SID" \
-  '.peers[] | select(.sessionId == $sid) | (.sessionAliases // [.alias])[]' 2>/dev/null | paste -sd'|' -)
-match="${aliases:-claude-$SID8}"
-pending=$(jq -r --arg m "$match" '
-  select(.status == "pending") | select(.session | test("^(" + $m + ")$"))
+# Rows for THIS session only. The auditor records the session uuid (owner D7a,
+# 2026-09-18). Lane aliases are reused by every successor session in a project,
+# so an alias-keyed row was inherited by agents that never made the mistake;
+# the pre-ruling alias rows were expired in the store rather than matched here.
+pending=$(jq -r --arg sid "$SID" --arg sid8 "$SID8" '
+  select(.status == "pending")
+  | select((.session == $sid) or (.session == $sid8) or (.session == ("claude-" + $sid8)))
   | " \(.id)  [\(.severity // "?")] \(.slug // "unslugged")  \(.issue[0:76])"' "$STORE" 2>/dev/null)
 [ -z "$pending" ] && exit 0
 
@@ -52,12 +52,10 @@ printf '%s %s' "$sig" "$same" > "$SIG_FILE"
 
 tone="unresolved speculative atones from the residue review; resolve each this session"
 [ "$n" -ge "$ESCALATE_AT" ] && tone="IGNORED $n TURNS — the Stop gate is armed and blocks turn-ends once the owner has been quiet 30 minutes"
-verbs="confirm = run /atone then \`atone-speculative.sh confirm <id> --atone <mist-id>\` · agree = \`atone-speculative.sh agree <id> --evidence \"<cited>\"\` (you accept it; the atone follows when idle) · refute = \`atone-speculative.sh refute <id> --evidence \"<cited>\"\`"
+verbs="confirm = run /atone then \`atone-speculative.sh confirm <id> --atone <mist-id>\` · agree = \`atone-speculative.sh agree <id> --evidence \"<cited>\"\` (terminal, nothing further owed) · refute = \`atone-speculative.sh refute <id> --evidence \"<cited>\"\`"
 
-# An agreed row left the nag but still owes a real /atone; the debt is named
-# in the same breath so the cheap yes never becomes a silent never.
-owed=$(jq -r --arg m "$match" 'select(.status == "agreed") | select(.session | test("^(" + $m + ")$")) | .id' "$STORE" 2>/dev/null | rg -c . 2>/dev/null || echo 0)
-owed_line=""; [ "${owed:-0}" -gt 0 ] && owed_line=" · $owed agreed row(s) still owe a real /atone (atone-speculative.sh agreed)"
+# agree is terminal (owner D7a, 2026-09-18): no owed line, no inherited debt.
+owed_line=""
 
 if [ "$same" -gt 2 ]; then
   ids=$(printf '%s\n' "$pending" | awk '{print $1}' | head -6 | paste -sd' ' -)

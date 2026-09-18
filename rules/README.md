@@ -22,6 +22,17 @@ The compact always-on menu at `rules/00-index.md` is DERIVED from each rule's `b
 
 Body structure (per `rules/comments.md` rubric): code-agnostic purpose → contract → caveats. A rule that gates or budgets an action also names the inaction it could license, so a guard cannot become a reason not to work (gcc-kanban, 2026-08-26). Keep <8 lines per docstring; link out for depth.
 
+## Text is not the fix for a pattern over 20 events (owner ruling D1a, 2026-09-18)
+
+A proposal that adds or rearranges rule text for an atone slug with more than
+20 events is rejected unless it says why text will work where the existing
+text did not. The evidence behind the bar: dense-briefing 48 events after
+3,908 SessionStart injections, structural-claim 43 after 5,044, literal 32
+after 5,068, every count rising; declared-ready, the one slug with a Stop hook
+and no injections, fell. Past 20 events a slug is a hook candidate or nothing.
+The full read is `~/Code/Claude/i-dream/.claude/output/20260918-3wk-review/report.md`
+section 2.
+
 ## Promotion / demotion
 
 Rules live or die by adherence. Tier-0 inline in CLAUDE.md, Tier-1 brief+pointer, Tier-2 pointer-only, Tier-3 LOOKUP.md-only. See `PLACEMENT.md` for the heuristic (80%-skip test, silent-failure bump).

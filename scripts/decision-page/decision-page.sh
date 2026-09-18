@@ -401,6 +401,22 @@ cmd_answer() {
 import json, os, platform, shutil, subprocess, sys
 f, consume, notify = sys.argv[1], sys.argv[2] == "1", sys.argv[3] == "1"
 ans = json.load(open(f)).get("answer", "")
+# Rulings ledger: one line per answer read, so a renderer can tell whether a
+# gate it is about to paint was set BEFORE the owner's latest ruling (task-table
+# stale-belief check, owner D3c 2026-09-18). Consumed answers otherwise vanish.
+try:
+    import datetime as _dt
+    _slug = os.path.basename(os.path.dirname(f))
+    _proj = ""
+    try:
+        _proj = ((json.load(open(os.path.join(os.path.dirname(f), "config.json"))) or {}).get("origin") or {}).get("project") or ""
+    except (OSError, ValueError):
+        pass
+    with open(os.path.join(os.path.dirname(os.path.dirname(f)), "answers.jsonl"), "a") as _fh:
+        _fh.write(json.dumps({"slug": _slug, "project": _proj,
+                              "ts": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}) + "\n")
+except OSError:
+    pass
 # macOS notification: title = originating session, subtitle = "answers read",
 # body = the page topic. Built-in osascript banner — temporary, auto-dismisses.
 if notify and platform.system() == "Darwin" and shutil.which("osascript"):
