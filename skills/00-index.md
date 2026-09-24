@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-09-05
+updated: 2026-09-24
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-09-05 17:01.
+Regenerated 2026-09-24 01:36.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -42,6 +42,7 @@ Regenerated 2026-09-05 17:01.
 | `callouts` | yes | Persists the owner's review findings as re-runnable acceptance rows per surface, and gates any later "done" claim on re-running the open rows. Use when the owner calls … |
 | `catchup` | yes | Resumes a session from a /core-dump checkpoint. Resolves via the ~/.claude/checkpoints/ index (picker when ambiguous) or a named _checkpoint.claude.md, loads only … |
 | `cleanup-comments` | yes | Prune, simplify, and remove low-value comments in changed code (or a path you pass) per the repo comment-style rubric. Strips [claude@] tags, plan refs … |
+| `codex-handback` | yes | Reviews a Codex hands seat's handback: checks its review packet (sha, diff-stat, pasted check output) against the brief and branch, then runs the skeptical review over … |
 | `core-dump` | yes | Writes _checkpoint.claude.md (or a named file) condensing the session into goal, actions, expectation, and pending items; "mini" mode for quick notes. Indexes a … |
 | `create-agent` | yes | Scaffolds an autonomous agent SKILL.md (context: fork, no prompts, structured output) from instructions, or converts an existing skill to agent form, after reading the … |
 | `create-report` | yes | Takes a markdown file and generates a polished, self-contained HTML report with a clean UI. Supports 13 visual styles (default, notion, dashboard, magazine, terminal, … |
@@ -53,6 +54,7 @@ Regenerated 2026-09-05 17:01.
 | `deploy-parity-testing` | user-only | Runs a parity test cycle when a service moves work to a new execution path (runner, provider, flag): plan rows with a spend class each, a seat brief, a fresh seat's … |
 | `designer-reviewer` | user-only | Reviews UI screenshots against the user's terminal-dashboard aesthetic fingerprints. Gives scored critiques with actionable CSS fixes. Use when reviewing pm2-manage, … |
 | `doctor` | yes | On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirtiness, plus hook/event-log integrity. Use when the user asks "what's wrong", … |
+| `feature-doc-set` | yes | Reads a feature branch and writes its audience doc set (owner brief, engineering guide, team brief, PR description) plus a review contract of the behaviors a build … |
 | `file-gh-issue` | yes | File a MINOR technical issue to the current repo's GitHub Issues, with a human gate. Dry-run by default. Use when an agent surfaces a small technical cleanup worth … |
 | `gated-plan` | yes | The planning process for owner-gated work, meaning anything that cannot correctly proceed until a human decides. Investigates until it can falsify its own proposal, … |
 | `gcc-explore` | yes | Sit down with the gcc and look around. Renders the config as three panels (SHAPE, what it is; MOVEMENT, which way it is drifting; CYCLE, the loops keeping it alive) from … |
@@ -87,7 +89,7 @@ Regenerated 2026-09-05 17:01.
 | `summarize-changes` | yes | Generates a categorized changelog of recent work, scoped by three orthogonal axes (time / topic / source) and rendered in a user-selected format. Treats git as ONE … |
 | `svg` | yes | Authors, edits, optimizes, and render-checks SVG graphics — icons, logos, diagrams, illustrations, patterns. Claude writes the SVG markup directly (no image-gen … |
 | `tag` | user-only | Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct … |
-| `tasks` | yes | Show the current task list as ONE grouped, tagged, sequenced table (project's ruled key; width free, height within 44 lines). Also the write path when the harness has no … |
+| `tasks` | yes | The owner's steering view of live goals. Bare /tasks composes the views that fit the ask (gates first, then convergence, drift as one loud line); /tasks now \| path \| … |
 | `test` | yes | Run tests for the current folder using a cached per-folder framework detection. First run probes the folder for pyproject.toml/package.json/Cargo.toml/go.mod etc and … |
 | `ui` | yes | Routes a UI request to the one instrument that fits it, and refuses to start until an existing surface has a written capability list. The account holds a whole cluster … |
 | `ui-categorical-check` | yes | Checks a UI change for CATEGORICAL bug-classes — the non-primitive defects that pass every DOM/behavioral assertion and only a human notices (a transparent floating … |

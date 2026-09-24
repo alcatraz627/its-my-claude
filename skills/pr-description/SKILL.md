@@ -321,3 +321,9 @@ Close with the GUIDELINES 🏁 done box: the output file as a `▸` ref, the
 arrow line carrying what the user does next (read the inventory pick, or
 paste the body). Then post-run insights per GUIDELINES §7, especially any
 new commit-subject trap or diff-invisible content class discovered.
+
+When the PR is a feature (a new capability, a billing or state change, a
+control a customer can reach), offer `/feature-doc-set` in one line: it takes
+the same behavioral inventory and adds the owner brief, engineering guide,
+team brief and the review contract of behaviors a build cannot assert. Offer,
+never run it unasked.
