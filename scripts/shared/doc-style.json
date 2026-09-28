@@ -1,0 +1,114 @@
+{
+  "_": "One document style for every skill that writes a document people read: /gdoc (Google Docs, via the Docs API) and /word-doc (.docx via pandoc). Common sections apply to both. The 'gdoc' section is the owner's Google Docs look (read off their Style Guide tab 2026-09-28, block rules from their ask of 2026-09-29); /word-doc renders it too, by default since the owner kept it on 2026-09-29. The 'docx' section is the 2026-09-01 ruling (Harbor), still available with --look harbor. Colours written '@tone' resolve against the look's colour family, '@gray.tone' against the gray row, so switching 'family' keeps every role at the same relative shade.",
+  "google_palette": {
+    "_": "The Google Docs colour picker. Each family lists its tones lightest first; a role names a tone, never a hex, so the family can change underneath it.",
+    "tones": ["light3", "light2", "light1", "base", "dark1", "dark2", "dark3"],
+    "families": {
+      "red_berry":       ["E6B8AF", "DD7E6B", "CC4125", "980000", "A61C00", "85200C", "5B0F00"],
+      "red":             ["F4CCCC", "EA9999", "E06666", "FF0000", "CC0000", "990000", "660000"],
+      "orange":          ["FCE5CD", "F9CB9C", "F6B26B", "FF9900", "E69138", "B45F06", "783F04"],
+      "yellow":          ["FFF2CC", "FFE599", "FFD966", "FFFF00", "F1C232", "BF9000", "7F6000"],
+      "green":           ["D9EAD3", "B6D7A8", "93C47D", "00FF00", "6AA84F", "38761D", "274E13"],
+      "cyan":            ["D0E0E3", "A2C4C9", "76A5AF", "00FFFF", "45818E", "134F5C", "0C343D"],
+      "cornflower_blue": ["C9DAF8", "A4C2F4", "6D9EEB", "4A86E8", "3C78D8", "1155CC", "1C4587"],
+      "blue":            ["CFE2F3", "9FC5E8", "6FA8DC", "0000FF", "3D85C6", "0B5394", "073763"],
+      "purple":          ["D9D2E9", "B4A7D6", "8E7CC3", "9900FF", "674EA7", "351C75", "20124D"],
+      "magenta":         ["EAD1DC", "D5A6BD", "C27BA0", "FF00FF", "A64D79", "741B47", "4C1130"]
+    },
+    "gray": { "white": "FFFFFF", "light3": "F3F3F3", "light2": "EFEFEF", "light1": "D9D9D9", "gray": "CCCCCC", "dark1": "B7B7B7", "dark2": "999999", "dark3": "666666", "dark4": "434343", "black": "000000" }
+  },
+  "callouts": {
+    "NOTE":      { "glyph": "◈", "glyph_pt": 12, "bar": "4F6EF0", "fill": "EEF1FE", "label": "Note" },
+    "TIP":       { "glyph": "✦", "bar": "0D9488", "fill": "E6F5F3", "label": "Tip" },
+    "WARNING":   { "glyph": "▲", "bar": "E08A00", "fill": "FDF3E0", "label": "Warning" },
+    "IMPORTANT": { "glyph": "●", "bar": "D4487A", "fill": "FDEDF3", "label": "Important" },
+    "CAUTION":   { "glyph": "■", "bar": "C62828", "fill": "FDECEC", "label": "Caution" }
+  },
+  "blocks": {
+    "_": "Every block a skill may emit, so a Style Guide can show each one. Markdown source shape on the right.",
+    "heading":  "# .. ####  (title, subtitle, H1 to H6 in the ramp)",
+    "paragraph": "plain text with **bold**, *italic*, `code`, [links](url)",
+    "bullets":  "- item, nested by indentation",
+    "numbered": "1. item",
+    "checklist": "- [ ] item  (Google checkbox bullets; a ballot box in Word)",
+    "table":    "| a | b |  with a header row; an empty header row makes a header-less card table",
+    "table_light": "<!-- table: light --> on the line before a table: the light variant",
+    "code":     "``` fenced, tagged with a language (syntax coloured, markdown included)",
+    "diagram":  "``` fenced, untagged: kept verbatim in monospace, 78 columns max",
+    "callout":  "> [!NOTE] text  (NOTE TIP WARNING IMPORTANT CAUTION)",
+    "quote":    "> text  (a keyline quote with a faded opening mark)",
+    "rule":     "---",
+    "pagebreak": "\\newpage",
+    "image":    "![alt](https://...png|jpg|gif)  (Google Docs fetches the URL once; local files and SVG are not inserted)",
+    "footnote": "text[^1] and a [^1]: note line",
+    "person":   "[Name](mailto:someone@example.com)  (a person chip in Google Docs, a mail link in Word)",
+    "date":     "[Oct 1, 2026](date:2026-10-01)  (a date chip in Google Docs, plain text in Word)",
+    "richlink": "<https://docs.google.com/...>  a bare Google Drive, Docs, Sheets or Slides link becomes a rich link chip"
+  },
+  "gdoc": {
+    "family": "blue",
+    "fonts": { "title": "Comfortaa", "heading": "Comfortaa", "body": "Open Sans", "mono": "JetBrains Mono" },
+    "sizes": { "title": 26, "subtitle": 15, "h1": 20, "h2": 16, "h3": 14, "h4": 12, "h5": 11, "h6": 11, "body": 11, "table": 9, "code": 9 },
+    "heading_colors": { "h3": "@gray.dark4", "h4": "@gray.dark3", "h5": "@gray.dark3", "h6": "@gray.dark3" },
+    "heading_weights": { "title": 300, "h1": 300, "h2": 300, "h3": 300, "h4": 500, "h5": 400, "h6": 400 },
+    "spacing": { "h1": [20, 6], "h2": [18, 6], "h3": [16, 4], "h4": [14, 4], "h5": [12, 4], "h6": [12, 4], "title": [0, 3], "subtitle": [0, 16] },
+    "palette": { "accent": "@light1", "ink": "@gray.black", "muted": "@gray.dark3", "code_bg": "F3F4F6", "link": "1155CC" },
+    "table": {
+      "_": "Filled header whose dashed border is the header colour; dashed body grid two tones lighter; body text the darkest tone; first column optionally in the lightest tone. Columns sized to content.",
+      "header_fill": "@light1", "header_border": "@light1", "header_text": "FFFFFF", "header_font": "Comfortaa",
+      "border": "@light3", "dash": "DASH", "border_pt": 1,
+      "text": "@dark3", "body_font": "Open Sans", "font_pt": 9,
+      "first_col_fill": "@light3", "first_col": true,
+      "padding_pt": 4, "line_spacing": 100,
+      "page_width_pt": 468, "min_col_weight": 6, "max_col_weight": 48, "pin_header": true
+    },
+    "table_light": {
+      "_": "The light variant for lighter concerns: no fill and no vertical lines, a dashed rule in the header colour under the header, dashed separators two tones lighter between rows. Fonts and colours from the main table.",
+      "header_text": "@dark1", "rule": "@light1", "rule_pt": 1.5, "separator": "@light3", "separator_pt": 1, "dash": "DASH"
+    },
+    "code": {
+      "_": "One box per block with room on all four sides and a bar on the left. Diagrams share the box without the bar; their strokes and arrowheads are drawn lighter so the labels carry the weight.",
+      "weight": 200, "pad_pt": 8, "space_pt": 8, "line_spacing": 100,
+      "bar": "@light1", "bar_pt": 3,
+      "highlight": "tango",
+      "diagram_weight": 400, "stroke": "@gray.dark2", "stroke_weight": 200
+    },
+    "rule": { "color": "@light3", "pt": 1, "space_pt": 8 },
+    "image": { "max_width_pt": 468 },
+    "callout": {
+      "_": "Two lines in one box: the key (glyph + LABEL, mono extra bold 8) then the text (mono 9) under it, both starting at the same indent, with air above the key and below the text.",
+      "label_font": "JetBrains Mono", "label_weight": 800, "label_pt": 8, "label_upper": true,
+      "body_font": "JetBrains Mono", "body_weight": 400, "body_pt": 9, "body_color": "@gray.dark4",
+      "bar_pt": 3, "indent_pt": 12, "pad_pt": 8, "space_pt": 8
+    },
+    "quote": {
+      "_": "A keyline quote on the lightest tint, with a serif opening mark in the bar's colour at the start.",
+      "font": "Comfortaa", "pt": 9, "italic": true, "color": "@gray.dark4",
+      "fill": "@light3", "bar": "@light1", "bar_pt": 3, "indent_pt": 12, "pad_pt": 8, "space_pt": 10,
+      "mark": "“", "mark_font": "Georgia", "mark_pt": 22, "mark_color": "@light1", "mark_offset": "NONE"
+    },
+    "lists": { "line_spacing": 115, "space_above": 0, "space_below": 0 },
+    "inline_code": { "pad": " ", "size_delta": -1 },
+    "page": { "margins_pt": 72 }
+  },
+  "docx": {
+    "look": "gdoc",
+    "_look": "Which look /word-doc renders by default. 'gdoc' (the section above) since the owner kept it on 2026-09-29; 'harbor' (this section, the 2026-09-01 ruling) stays available with --look harbor.",
+    "title_align": "center",
+    "fonts": { "body": "Inter", "mono": "JetBrains Mono" },
+    "palette": {
+      "_": "Harbor, ruled on decision page doc-style-4 (D2f)",
+      "accent": "3D6E82", "secondary": "79A8B5", "accent_soft": "CDE0E5", "tint": "E9F1F3", "ink": "222B36", "muted": "5A6672",
+      "code_bg": "F5F7FA", "code_border": "B9C2D6", "grid": "D5DAE6", "band": "E9F1F3"
+    },
+    "structures": {
+      "table": "dotted-separators: no header fill, accent header text, dashed accent rule under the header, dashed light row separators",
+      "code": "dotted frame + solid accent left bar over the soft-card background, applied to both code and diagram blocks",
+      "toc": "indent rail: accent rail on the left, level-1 entries semibold, deeper levels indented",
+      "callout": "type line first (glyph + label in the kind color), body below, tight gap, shared tint and bar",
+      "links": "accent color, no underline, anywhere including the contents list",
+      "page": "half-inch margins all round (halved by owner ruling 2026-09-01), footer with title left and page N of M right",
+      "spacing": "opened rhythm, same ruling: air after title and subtitle, around headings, between contents rows and off the rail, before and after callouts, after tables, around code and tree boxes; callouts run margin to margin with the bar in the gutter"
+    }
+  }
+}

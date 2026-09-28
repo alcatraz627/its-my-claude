@@ -40,6 +40,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -176,13 +177,39 @@ def report(f, strict):
     return bool(f.errors) or (strict and bool(f.warnings))
 
 
-def run_pandoc(src, out, ref, number, highlight, toc):
+def gdoc_tables(out):
+    """Cells move from the list style (Compact) to Table Text, and the first-column look is switched on."""
+    tmp = out.with_suffix(".tmp.docx")
+    with zipfile.ZipFile(out) as zin, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            if item.filename == "word/document.xml":
+                # A marker paragraph from the filter flags the next table as the light variant.
+                d = data.decode("utf-8")
+                marker = r'<w:p>(?:(?!</w:p>).)*?<w:pStyle w:val="TableLightMarker" ?/>.*?</w:p>\s*(<w:tbl>.*?<w:tblStyle w:val=")Table(")'
+                d = re.sub(marker, r"\1TableLight\2", d, flags=re.S)
+                data = d.encode("utf-8")
+                def fix(m):
+                    t = m.group(0).replace('<w:pStyle w:val="Compact" />', '<w:pStyle w:val="TableText" />')
+                    t = t.replace('<w:pStyle w:val="Compact"/>', '<w:pStyle w:val="TableText"/>')
+                    t = re.sub(r'w:firstColumn="0"', 'w:firstColumn="1"', t)
+                    # LibreOffice reads the legacy bitmask; 0x80 is the first-column flag.
+                    return re.sub(r'(<w:tblLook[^>]*w:val=")([0-9A-Fa-f]{4})"',
+                                  lambda v: f'{v.group(1)}{int(v.group(2), 16) | 0x80:04X}"', t)
+                data = re.sub(r"<w:tbl>.*?</w:tbl>", fix, data.decode("utf-8"), flags=re.S).encode("utf-8")
+            zout.writestr(item, data)
+    tmp.replace(out)
+
+
+def run_pandoc(src, out, ref, number, highlight, toc, look="harbor"):
     cmd = ["pandoc", str(src), "-o", str(out),
            "--from", "markdown+raw_tex+pipe_tables+fenced_code_attributes+yaml_metadata_block",
            "--reference-doc", str(ref),
            "--lua-filter", str(HERE / "filters.lua"),
            "--syntax-highlighting", highlight,
-           "--metadata", "lang=en-GB"]
+           "--metadata", "lang=en-GB", "--metadata", f"doclook={look}"]
+    if look == "gdoc":
+        cmd += ["--metadata", "quotemark=" + make_reference.gdoc_theme()[2]["quote"]["mark"]]
     if number:
         cmd += ["--number-sections"]
     if toc:
@@ -193,6 +220,8 @@ def run_pandoc(src, out, ref, number, highlight, toc):
         sys.exit(2)
     if r.stderr.strip():
         print("  pandoc:", r.stderr.strip())
+    if look == "gdoc":
+        gdoc_tables(Path(out))
 
 
 def render_pages(out):
@@ -226,6 +255,8 @@ def main(argv=None):
     ap.add_argument("--font-body")
     ap.add_argument("--font-mono")
     ap.add_argument("--accent")
+    ap.add_argument("--look", choices=["harbor", "gdoc"],
+                    help="harbor: the 2026-09-01 ruling; gdoc: the Google Docs look. Default: the spec's docx.look")
     ap.add_argument("--toc", action="store_true")
     ap.add_argument("--number-sections", action="store_true")
     ap.add_argument("--highlight", default="tango",
@@ -255,11 +286,12 @@ def main(argv=None):
     paper = a.paper or meta.get("paper", "a4")
     with tempfile.TemporaryDirectory() as td:
         ref = Path(td) / "reference.docx"
+        look = a.look or make_reference.default_look()
         make_reference.build(str(ref), paper=paper, font_body=a.font_body, font_mono=a.font_mono,
-                             accent=a.accent)
-        run_pandoc(src, out, ref, a.number_sections, a.highlight, toc)
+                             accent=a.accent, look=look)
+        run_pandoc(src, out, ref, a.number_sections, a.highlight, toc, look)
     size = out.stat().st_size
-    print(f"wrote {out} ({size // 1024} KB, paper {paper}, toc {'on' if toc else 'off'})")
+    print(f"wrote {out} ({size // 1024} KB, paper {paper}, look {look}, toc {'on' if toc else 'off'})")
 
     if a.check:
         res = render_pages(out)

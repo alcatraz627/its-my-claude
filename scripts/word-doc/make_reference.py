@@ -57,11 +57,21 @@ def load_theme_spec(path=None):
     """The ruled theme lives in theme.json beside this script; the dicts above
     are the fallback when it is absent. Returns (theme, callouts) where callouts
     maps style name -> (fill, bar)."""
+    # The shared spec (~/.claude/scripts/shared/doc-style.json) holds the callouts for
+    # every document skill and a "docx" section with this renderer's fonts and palette;
+    # theme.json beside this script is the older single-target file and still wins if present.
+    shared = Path(__file__).parent.parent / "shared" / "doc-style.json"
     p = Path(path) if path else Path(__file__).parent / "theme.json"
     t = dict(THEME)
     c = dict(CALLOUTS)
-    if p.exists():
+    if not p.exists() and shared.exists():
+        raw = json.loads(shared.read_text(encoding="utf-8"))
+        spec = dict(raw.get("docx", {}))
+        spec["callouts"] = raw.get("callouts", {})
+        p = shared
+    elif p.exists():
         spec = json.loads(p.read_text(encoding="utf-8"))
+    if p.exists():
         f = spec.get("fonts", {})
         t["font_body"] = f.get("body", t["font_body"])
         t["font_mono"] = f.get("mono", t["font_mono"])
@@ -283,6 +293,219 @@ def styles_override(t, callouts=None):
     return S
 
 
+def gdoc_theme():
+    """The Google Docs look from the shared spec, as the flat theme dict the Harbor styles also read."""
+    sys.path.insert(0, str(Path(__file__).parent.parent / "shared"))
+    import doc_style
+    L = doc_style.load_look("gdoc")
+    L["title_align"] = doc_style.load_raw().get("docx", {}).get("title_align")
+    t = dict(THEME)
+    t["font_heading"] = L["fonts"]["heading"]
+    t.update(font_body=L["fonts"]["body"], font_mono=L["fonts"]["mono"], accent=L["palette"]["accent"],
+             accent_soft=L["table"]["border"], ink=L["palette"]["ink"], muted=L["palette"]["muted"],
+             code_bg=L["palette"]["code_bg"], code_border=L["palette"]["code_bg"], grid=L["table"]["border"],
+             band=L["table"]["first_col_fill"], body_pt=L["sizes"]["body"], code_pt=L["sizes"]["code"],
+             diagram_pt=L["sizes"]["code"], secondary=L["palette"]["accent"], tint=L["table"]["first_col_fill"])
+    callouts = {"Callout " + k.capitalize(): (v["fill"], v["bar"]) for k, v in L["callouts"].items()}
+    return t, callouts, L
+
+
+def mono_face(family, weight):
+    """Word picks a weight by family name, so a static cut is named: 'JetBrains Mono ExtraLight'."""
+    names = {100: "Thin", 200: "ExtraLight", 300: "Light", 500: "Medium", 600: "SemiBold", 700: "Bold", 800: "ExtraBold"}
+    return f"{family} {names[weight]}" if weight in names else family
+
+
+def fonts(name):
+    return f'<w:rFonts w:ascii="{name}" w:hAnsi="{name}" w:cs="{name}" w:eastAsia="{name}"/>'
+
+
+def sz(pt):
+    return f'<w:sz w:val="{hp(pt)}"/><w:szCs w:val="{hp(pt)}"/>'
+
+
+def tw(pt):
+    """Points to twips."""
+    return int(round(pt * 20))
+
+
+def gdoc_styles(t, callouts, L):
+    """The Google Docs look in Word: the Harbor style set first, then every style the look owns replaced."""
+    S = styles_override(t, callouts)
+    F, Z, T, C, K, Q, Li = L["fonts"], L["sizes"], L["table"], L["code"], L["callout"], L["quote"], L["lists"]
+    ink, muted, bg = L["palette"]["ink"], L["palette"]["muted"], L["palette"]["code_bg"]
+
+    def para(sid, name, ppr, rpr, based="Normal", extra=""):
+        S[sid] = f'''
+  <w:style w:type="paragraph" w:customStyle="1" w:styleId="{sid}">
+    <w:name w:val="{name}"/><w:basedOn w:val="{based}"/>{extra}<w:qFormat/>
+    <w:pPr>{ppr}</w:pPr><w:rPr>{rpr}</w:rPr>
+  </w:style>'''
+
+    def char(sid, name, rpr):
+        S[sid] = f'''
+  <w:style w:type="character" w:customStyle="1" w:styleId="{sid}">
+    <w:name w:val="{name}"/><w:basedOn w:val="DefaultParagraphFont"/>
+    <w:rPr>{rpr}</w:rPr>
+  </w:style>'''
+
+    def box(fill, pad, left=None):
+        l = (f'<w:left w:val="single" w:sz="{int(left[1] * 8)}" w:space="{pad}" w:color="{left[0]}"/>' if left
+             else f'<w:left w:val="single" w:sz="4" w:space="{pad}" w:color="{fill}"/>')
+        return (f'<w:pBdr><w:top w:val="single" w:sz="4" w:space="{pad}" w:color="{fill}"/>{l}'
+                f'<w:bottom w:val="single" w:sz="4" w:space="{pad}" w:color="{fill}"/>'
+                f'<w:right w:val="single" w:sz="4" w:space="{pad}" w:color="{fill}"/></w:pBdr>')
+
+    S["Normal"] = f'''
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
+    <w:name w:val="Normal"/><w:qFormat/>
+    <w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr>
+    <w:rPr>{fonts(F["body"])}{sz(Z["body"])}<w:lang w:val="en-GB"/></w:rPr>
+  </w:style>'''
+    S["BodyText"] = '''
+  <w:style w:type="paragraph" w:styleId="BodyText">
+    <w:name w:val="Body Text"/><w:basedOn w:val="Normal"/><w:link w:val="BodyTextChar"/><w:qFormat/>
+    <w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr>
+  </w:style>'''
+    # Tight list items; table cells are moved to TableText by render.py, so this is lists only.
+    S["Compact"] = f'''
+  <w:style w:type="paragraph" w:customStyle="1" w:styleId="Compact">
+    <w:name w:val="Compact"/><w:basedOn w:val="BodyText"/><w:qFormat/>
+    <w:pPr><w:spacing w:before="{tw(Li["space_above"])}" w:after="{tw(Li["space_below"])}" w:line="{int(240 * Li["line_spacing"] / 100)}" w:lineRule="auto"/></w:pPr>
+  </w:style>'''
+    para("TableText", "Table Text", '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>', sz(T["font_pt"]))
+
+    names = {"title": ("Title", "Title"), "subtitle": ("Subtitle", "Subtitle")}
+    jc = f'<w:jc w:val="{L.get("title_align", "left")}"/>' if L.get("title_align") else ""
+    for key, (sid, name) in names.items():
+        before, after = L["spacing"][key]
+        color = f'<w:color w:val="{muted}"/>' if key == "subtitle" else ""
+        S[sid] = f'''
+  <w:style w:type="paragraph" w:styleId="{sid}">
+    <w:name w:val="{name}"/><w:basedOn w:val="Normal"/><w:next w:val="BodyText"/><w:qFormat/>
+    <w:pPr><w:spacing w:before="{tw(before)}" w:after="{tw(after)}"/>{jc}</w:pPr>
+    <w:rPr>{fonts(F["title"])}{color}{sz(Z[key])}</w:rPr>
+  </w:style>'''
+    for lvl in range(1, 7):
+        key = f"h{lvl}"
+        before, after = L["spacing"][key]
+        color = L["heading_colors"].get(key, ink)
+        font = F["heading"] if lvl < 6 else F["body"]
+        italic = "<w:i/>" if lvl == 6 else ""
+        S[f"Heading{lvl}"] = f'''
+  <w:style w:type="paragraph" w:styleId="Heading{lvl}">
+    <w:name w:val="heading {lvl}"/><w:basedOn w:val="Normal"/><w:next w:val="BodyText"/><w:link w:val="Heading{lvl}Char"/><w:uiPriority w:val="9"/><w:qFormat/>
+    <w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="{tw(before)}" w:after="{tw(after)}"/><w:outlineLvl w:val="{lvl - 1}"/></w:pPr>
+    <w:rPr>{fonts(font)}{italic}<w:color w:val="{color}"/>{sz(Z[key])}</w:rPr>
+  </w:style>'''
+
+    pad = C["pad_pt"]
+    rest = (f'<w:shd w:val="clear" w:color="auto" w:fill="{bg}"/>'
+            f'<w:spacing w:before="{tw(C["space_pt"] + pad)}" w:after="{tw(C["space_pt"] + pad)}" w:line="240" w:lineRule="auto"/>'
+            f'<w:ind w:left="{tw(pad)}" w:right="{tw(pad)}"/><w:keepLines/>')
+    code_ppr = box(bg, pad, left=(C["bar"], C["bar_pt"])) + rest
+    diagram_ppr = box(bg, pad) + rest
+    S["SourceCode"] = f'''
+  <w:style w:type="paragraph" w:customStyle="1" w:styleId="SourceCode">
+    <w:name w:val="Source Code"/><w:basedOn w:val="Normal"/><w:link w:val="VerbatimChar"/>
+    <w:pPr>{code_ppr}</w:pPr>
+    <w:rPr>{fonts(mono_face(F["mono"], C["weight"]))}{sz(Z["code"])}</w:rPr>
+  </w:style>'''
+    para("Diagram", "Diagram", diagram_ppr, f'{fonts(mono_face(F["mono"], C["diagram_weight"]))}<w:color w:val="{ink}"/>{sz(Z["code"])}')
+    char("DiagramStroke", "Diagram Stroke", f'{fonts(mono_face(F["mono"], C["stroke_weight"]))}<w:color w:val="{C["stroke"]}"/>')
+
+    code_pt = Z["body"] + L["inline_code"]["size_delta"]
+    S["VerbatimChar"] = f'''
+  <w:style w:type="character" w:customStyle="1" w:styleId="VerbatimChar">
+    <w:name w:val="Verbatim Char"/><w:basedOn w:val="BodyTextChar"/>
+    <w:rPr>{fonts(F["mono"])}<w:shd w:val="clear" w:color="auto" w:fill="{bg}"/>{sz(code_pt)}</w:rPr>
+  </w:style>'''
+    char("VerbatimPad", "Verbatim Pad", f'<w:shd w:val="clear" w:color="auto" w:fill="{bg}"/>')
+
+    S["Hyperlink"] = f'''
+  <w:style w:type="character" w:styleId="Hyperlink">
+    <w:name w:val="Hyperlink"/><w:basedOn w:val="DefaultParagraphFont"/>
+    <w:rPr><w:color w:val="{L["palette"]["link"]}"/><w:u w:val="single"/></w:rPr>
+  </w:style>'''
+
+    # Quote: keyline in the accent over the lightest tint; edges in the tint carry the padding.
+    S["BlockText"] = f'''
+  <w:style w:type="paragraph" w:styleId="BlockText">
+    <w:name w:val="Block Text"/><w:basedOn w:val="BodyText"/><w:next w:val="BodyText"/><w:uiPriority w:val="9"/><w:qFormat/>
+    <w:pPr>{box(Q["fill"], Q["pad_pt"], left=(Q["bar"], Q["bar_pt"]))}<w:shd w:val="clear" w:color="auto" w:fill="{Q["fill"]}"/>
+      <w:spacing w:before="{tw(Q["space_pt"] + Q["pad_pt"])}" w:after="{tw(Q["space_pt"] + Q["pad_pt"])}" w:line="276" w:lineRule="auto"/><w:ind w:left="{tw(Q["indent_pt"])}" w:right="{tw(Q["pad_pt"])}"/></w:pPr>
+    <w:rPr>{fonts(Q["font"])}{"<w:i/>" if Q["italic"] else ""}<w:color w:val="{Q["color"]}"/>{sz(Q["pt"])}</w:rPr>
+  </w:style>'''
+    char("QuoteMark", "Quote Mark", f'{fonts(Q.get("mark_font") or Q["font"])}<w:i w:val="0"/><w:color w:val="{Q["mark_color"]}"/>{sz(Q["mark_pt"])}')
+
+    # Callouts: one paragraph, the key line then the text under it, both at the same indent.
+    for name, (fill, bar) in callouts.items():
+        sid = name.replace(" ", "")
+        kind = name.split(" ", 1)[1]
+        S[sid] = f'''
+  <w:style w:type="paragraph" w:customStyle="1" w:styleId="{sid}">
+    <w:name w:val="{name}"/><w:basedOn w:val="Normal"/><w:qFormat/>
+    <w:pPr>{box(fill, K["pad_pt"], left=(bar, K["bar_pt"]))}<w:shd w:val="clear" w:color="auto" w:fill="{fill}"/>
+      <w:spacing w:before="{tw(K["space_pt"] + K["pad_pt"])}" w:after="{tw(K["space_pt"] + K["pad_pt"])}" w:line="276" w:lineRule="auto"/>
+      <w:ind w:left="{tw(K["indent_pt"])}" w:right="{tw(K["pad_pt"])}"/><w:keepLines/></w:pPr>
+    <w:rPr>{fonts(mono_face(K["body_font"], K["body_weight"]))}<w:color w:val="{K["body_color"]}"/>{sz(K["body_pt"])}</w:rPr>
+  </w:style>'''
+        # Base family plus bold: a named ExtraBold cut is not found by every viewer.
+        bold = "<w:b/>" if K["label_weight"] >= 600 else ""
+        char(f"CalloutKey{kind}", f"Callout Key {kind}",
+             f'{fonts(K["label_font"])}{bold}<w:color w:val="{bar}"/>{sz(K["label_pt"])}')
+        gpt = L["callouts"].get(kind.upper(), {}).get("glyph_pt") or K["label_pt"]
+        char(f"CalloutGlyph{kind}", f"Callout Glyph {kind}",
+             f'{fonts(K["label_font"])}{bold}<w:color w:val="{bar}"/>{sz(gpt)}')
+
+    R = L["rule"]
+    para("Rule", "Rule", f'<w:pBdr><w:bottom w:val="single" w:sz="{int(R["pt"] * 8)}" w:space="1" w:color="{R["color"]}"/></w:pBdr>'
+                         f'<w:spacing w:before="{tw(R["space_pt"])}" w:after="{tw(R["space_pt"])}" w:line="240" w:lineRule="auto"/>', sz(2))
+    para("BoxSpacer", "Box Spacer", '<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/>', sz(2))
+
+    # Table: filled header with a dashed border in its own colour, dashed body grid two tones lighter,
+    # body text in the darkest tone, first column in the lightest.
+    hb = f'w:val="dashed" w:sz="{int(T["border_pt"] * 8)}" w:space="0" w:color="{T["header_border"]}"'
+    gb = f'w:val="dashed" w:sz="{int(T["border_pt"] * 8)}" w:space="0" w:color="{T["border"]}"'
+    first_col = (f'<w:tblStylePr w:type="firstCol"><w:tcPr><w:shd w:val="clear" w:color="auto" w:fill="{T["first_col_fill"]}"/></w:tcPr></w:tblStylePr>'
+                 if T["first_col"] else "")
+    p = tw(T["padding_pt"])
+    S["Table"] = f'''
+  <w:style w:type="table" w:default="1" w:styleId="Table">
+    <w:name w:val="Table"/><w:basedOn w:val="TableNormal"/><w:qFormat/>
+    <w:rPr><w:color w:val="{T["text"]}"/>{sz(T["font_pt"])}</w:rPr>
+    <w:tblPr>
+      <w:tblInd w:w="0" w:type="dxa"/>
+      <w:tblBorders><w:top {gb}/><w:left {gb}/><w:bottom {gb}/><w:right {gb}/><w:insideH {gb}/><w:insideV {gb}/></w:tblBorders>
+      <w:tblCellMar><w:top w:w="{p}" w:type="dxa"/><w:left w:w="{p}" w:type="dxa"/><w:bottom w:w="{p}" w:type="dxa"/><w:right w:w="{p}" w:type="dxa"/></w:tblCellMar>
+    </w:tblPr>
+    <w:tblStylePr w:type="firstRow">
+      <w:rPr>{fonts(T["header_font"])}<w:b w:val="0"/><w:color w:val="{T["header_text"]}"/></w:rPr>
+      <w:tcPr><w:tcBorders><w:top {hb}/><w:left {hb}/><w:bottom {hb}/><w:right {hb}/><w:insideV {hb}/></w:tcBorders>
+        <w:shd w:val="clear" w:color="auto" w:fill="{T["header_fill"]}"/></w:tcPr>
+    </w:tblStylePr>
+    {first_col}
+  </w:style>'''
+    TL = L["table_light"]
+    rule = f'w:val="dashed" w:sz="{int(TL["rule_pt"] * 8)}" w:space="0" w:color="{TL["rule"]}"'
+    sep = f'w:val="dashed" w:sz="{int(TL["separator_pt"] * 8)}" w:space="0" w:color="{TL["separator"]}"'
+    S["TableLight"] = f'''
+  <w:style w:type="table" w:customStyle="1" w:styleId="TableLight">
+    <w:name w:val="Table Light"/><w:basedOn w:val="TableNormal"/><w:qFormat/>
+    <w:rPr><w:color w:val="{T["text"]}"/>{sz(T["font_pt"])}</w:rPr>
+    <w:tblPr>
+      <w:tblInd w:w="0" w:type="dxa"/>
+      <w:tblBorders><w:bottom {sep}/><w:insideH {sep}/></w:tblBorders>
+      <w:tblCellMar><w:top w:w="{p}" w:type="dxa"/><w:left w:w="{p}" w:type="dxa"/><w:bottom w:w="{p}" w:type="dxa"/><w:right w:w="{p}" w:type="dxa"/></w:tblCellMar>
+    </w:tblPr>
+    <w:tblStylePr w:type="firstRow">
+      <w:rPr>{fonts(T["header_font"])}<w:b w:val="0"/><w:color w:val="{TL["header_text"]}"/></w:rPr>
+      <w:tcPr><w:tcBorders><w:bottom {rule}/></w:tcBorders></w:tcPr>
+    </w:tblStylePr>
+  </w:style>'''
+    return S
+
+
 def footer_xml():
     """Footer: document title on the left, "Page N of M" on the right."""
     return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
@@ -308,17 +531,24 @@ def footer_style(t):
   </w:style>'''
 
 
-def sect_pr(paper, footer_rid):
+def sect_pr(paper, footer_rid, margin=MARGIN):
     p = PAPER[paper]
     return (f'<w:sectPr><w:footerReference w:type="default" r:id="{footer_rid}"/>'
             f'<w:footnotePr><w:numRestart w:val="eachSect"/></w:footnotePr>'
             f'<w:pgSz w:w="{p["w"]}" w:h="{p["h"]}"/>'
-            f'<w:pgMar w:top="{MARGIN}" w:right="{MARGIN}" w:bottom="{MARGIN}" w:left="{MARGIN}" w:header="360" w:footer="360" w:gutter="0"/>'
+            f'<w:pgMar w:top="{margin}" w:right="{margin}" w:bottom="{margin}" w:left="{margin}" w:header="360" w:footer="360" w:gutter="0"/>'
             f'<w:cols w:space="708"/></w:sectPr>')
 
 
-def patch_styles(xml, t, callouts=None):
-    S = styles_override(t, callouts)
+def default_look():
+    shared = Path(__file__).parent.parent / "shared" / "doc-style.json"
+    if shared.exists():
+        return json.loads(shared.read_text(encoding="utf-8")).get("docx", {}).get("look", "harbor")
+    return "harbor"
+
+
+def patch_styles(xml, t, callouts=None, S=None):
+    S = S or styles_override(t, callouts)
     S["Footer"] = footer_style(t)
     # docDefaults: the body font and ink colour everywhere a style does not say
     # otherwise. The colour lives HERE and not in Normal on purpose: Word applies a
@@ -336,11 +566,19 @@ def patch_styles(xml, t, callouts=None):
     return xml
 
 
-def build(out, paper="a4", font_body=None, font_mono=None, accent=None, theme=None):
-    t, callouts = load_theme_spec(theme)
+def build(out, paper="a4", font_body=None, font_mono=None, accent=None, theme=None, look=None):
+    look = look or default_look()
+    S, margin = None, MARGIN
+    if look == "gdoc":
+        t, callouts, L = gdoc_theme()
+        margin = tw(L["page"]["margins_pt"])
+    else:
+        t, callouts = load_theme_spec(theme)
     if font_body: t["font_body"] = font_body
     if font_mono: t["font_mono"] = font_mono
     if accent: t["accent"] = accent.lstrip("#").upper()
+    if look == "gdoc":
+        S = gdoc_styles(t, callouts, L)
 
     tmp = Path(out).with_suffix(".base.docx")
     subprocess.run(["pandoc", "-o", str(tmp), "--print-default-data-file", "reference.docx"], check=True)
@@ -350,12 +588,12 @@ def build(out, paper="a4", font_body=None, font_mono=None, accent=None, theme=No
     for item in zin.infolist():
         data = zin.read(item.filename)
         if item.filename == "word/styles.xml":
-            data = patch_styles(data.decode("utf-8"), t, callouts).encode("utf-8")
+            data = patch_styles(data.decode("utf-8"), t, callouts, S).encode("utf-8")
         elif item.filename == "word/document.xml":
             d = data.decode("utf-8")
             if 'xmlns:r=' not in d.split('>', 2)[1]:
                 d = d.replace('<w:document ', '<w:document xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ', 1)
-            d = re.sub(r'<w:sectPr>.*?</w:sectPr>', sect_pr(paper, footer_rid), d, flags=re.S)
+            d = re.sub(r'<w:sectPr>.*?</w:sectPr>', sect_pr(paper, footer_rid, margin), d, flags=re.S)
             data = d.encode("utf-8")
         elif item.filename == "word/_rels/document.xml.rels":
             d = data.decode("utf-8").replace(
@@ -372,8 +610,13 @@ def build(out, paper="a4", font_body=None, font_mono=None, accent=None, theme=No
             # them substitutes a font of the same shape (a mono for the mono) instead of
             # whatever the viewer's default is.
             d = data.decode("utf-8")
-            for name, fam, pitch, panose in ((t["font_body"], "swiss", "variable", "020F0502020204030204"),
-                                             (t["font_mono"], "modern", "fixed", "020B0609020204030204")):
+            # Word has no fallback list; a missing font is swapped for the installed one closest to this
+            # declared shape. Body: Calibri's shape. Mono: Consolas's. Headings: Century Gothic's (geometric).
+            decl = [(t["font_body"], "swiss", "variable", "020F0502020204030204"),
+                    (t["font_mono"], "modern", "fixed", "020B0609020204030204")]
+            if t.get("font_heading"):
+                decl.append((t["font_heading"], "swiss", "variable", "020B0502020202020204"))
+            for name, fam, pitch, panose in decl:
                 if f'w:name="{name}"' not in d:
                     d = d.replace("</w:fonts>",
                                   f'<w:font w:name="{name}"><w:panose1 w:val="{panose}"/><w:charset w:val="00"/>'
@@ -394,8 +637,9 @@ def main(argv=None):
     ap.add_argument("--font-body")
     ap.add_argument("--font-mono")
     ap.add_argument("--accent")
+    ap.add_argument("--look", choices=["harbor", "gdoc"], help="default: the spec's docx.look")
     a = ap.parse_args(argv)
-    build(a.out, a.paper, a.font_body, a.font_mono, a.accent)
+    build(a.out, a.paper, a.font_body, a.font_mono, a.accent, look=a.look)
     print(a.out)
 
 

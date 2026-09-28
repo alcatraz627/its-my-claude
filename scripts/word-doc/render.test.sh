@@ -10,9 +10,10 @@ ok()   { pass=$((pass+1)); echo "  ok    $1"; }
 bad()  { fail=$((fail+1)); echo "  FAIL  $1"; }
 has()  { if printf '%s' "$2" | rg -q -- "$1"; then ok "$3"; else bad "$3 (wanted /$1/)"; fi; }
 lacks(){ if printf '%s' "$2" | rg -q -- "$1"; then bad "$3 (found /$1/)"; else ok "$3"; fi; }
+lacksP(){ printf '%s' "$2" | rg -q -P -- "$1"; rc=$?; if [ $rc -eq 1 ]; then ok "$3"; elif [ $rc -eq 0 ]; then bad "$3 (found /$1/)"; else bad "$3 (pattern error)"; fi; }
 
 echo "# good fixture renders"
-out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/full.docx" 2>&1); rc=$?
+out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/full.docx" --look harbor 2>&1); rc=$?
 [ $rc -eq 0 ] && ok "exit 0" || bad "exit $rc: $out"
 has "^  clean" "$out" "preflight clean"
 [ -s "$T/full.docx" ] && ok "docx written" || bad "no docx"
@@ -26,10 +27,10 @@ has 'w:br w:type="page"' "$doc" "page break emitted for \\newpage"
 has 'w:anchor="summary"' "$doc" "TOC entry links to a heading anchor"
 has 'w:tblStyle w:val="Table"' "$doc" "tables use the Table style"
 grids=$(printf '%s' "$doc" | tr -d '\n' | rg -o '<w:tblGrid>.*?</w:tblGrid>' | head -1)
-lacks '(<w:gridCol w:w="([0-9]+)" />)(<w:gridCol w:w="\2" />){2}' "$grids" "pipe-table columns are sized from content, not equal"
+lacksP '(<w:gridCol w:w="([0-9]+)" />)(<w:gridCol w:w="\2" />){2}' "$grids" "pipe-table columns are sized from content, not equal"
 has 'Figure 1\. Today' "$doc" "diagram caption present"
 has 'Listing 1\.' "$doc" "code caption present"
-ACC=$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('$HERE/theme.json')))['palette']['accent'])")
+ACC=$(python3 -c "import json;print(json.load(open('$HERE/../shared/doc-style.json'))['docx']['palette']['accent'])")
 has "<w:bottom[^/]*w:color=\"$ACC\"[^/]*w:val=\"dashed\"|<w:bottom[^/]*w:val=\"dashed\"[^/]*w:color=\"$ACC\"" "$sty" "ruled table: dashed accent rule under the header (theme.json accent)"
 has '<w:insideH[^/]*w:val="dashed"' "$sty" "ruled table: dashed row separators"
 has 'CalloutNoteHead' "$sty" "ruled callouts: head style present"
@@ -37,9 +38,9 @@ has '<w:rPrDefault><w:rPr><w:rFonts[^/]*/><w:color w:val="222B36"' "$(unzip -p "
 has 'footer1.xml' "$(unzip -l "$T/full.docx")" "footer part present"
 has 'NUMPAGES' "$(unzip -p "$T/full.docx" word/footer1.xml)" "footer has page N of M"
 has 'w:pgSz w:h="16838" w:w="11906"' "$doc" "A4 by default"
-out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/letter.docx" --paper letter 2>&1)
+out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/letter.docx" --paper letter --look harbor 2>&1)
 has 'w:pgSz w:h="15840" w:w="12240"' "$(unzip -p "$T/letter.docx" word/document.xml)" "--paper letter"
-out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/font.docx" --font-body Georgia --font-mono "JetBrains Mono" --accent 6B2D5C 2>&1)
+out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/font.docx" --font-body Georgia --font-mono "JetBrains Mono" --accent 6B2D5C --look harbor 2>&1)
 has 'w:ascii="Georgia"' "$(unzip -p "$T/font.docx" word/styles.xml)" "--font-body lands in styles"
 has 'w:ascii="JetBrains Mono"' "$(unzip -p "$T/font.docx" word/styles.xml)" "--font-mono lands in styles"
 has 'w:color w:val="6B2D5C"' "$(unzip -p "$T/font.docx" word/styles.xml)" "--accent lands in headings"
@@ -57,6 +58,20 @@ has "error.*table row has 3 cells, header has 2" "$(mk "| a | b |\n|---|---|\n| 
 has "warn.*table has 7 columns" "$(mk "| a | b | c | d | e | f | g |\n|---|---|---|---|---|---|---|\n| 1 | 2 | 3 | 4 | 5 | 6 | 7 |")" "wide table is a warning"
 has "error.*needs a title" "$(printf -- "---\nauthor: x\n---\n\n# A\n\ntext\n" > "$T/n.md"; python3 "$HERE/render.py" "$T/n.md" -o "$T/n.docx" 2>&1)" "missing title is an error"
 out=$(mk "\`\`\`python\n$(printf '%100s' x)\n\`\`\`"); python3 "$HERE/render.py" "$T/g.md" -o "$T/g.docx" --strict >/dev/null 2>&1; [ $? -eq 1 ] && ok "--strict fails on a warning" || bad "--strict did not fail"
+
+echo "# the Google Docs look renders from the shared spec"
+out=$(python3 "$HERE/render.py" "$HERE/fixtures/full.md" -o "$T/gd.docx" --look gdoc 2>&1); rc=$?
+[ $rc -eq 0 ] && ok "--look gdoc exit 0" || bad "--look gdoc exit $rc: $out"
+gdoc=$(unzip -p "$T/gd.docx" word/document.xml)
+gsty=$(unzip -p "$T/gd.docx" word/styles.xml)
+has 'w:rStyle w:val="CalloutKeyNote"' "$gdoc" "callout key is a run in the callout paragraph"
+has 'w:rStyle w:val="DiagramStroke"' "$gdoc" "diagram strokes carry the lighter style"
+has 'w:rStyle w:val="VerbatimPad"' "$gdoc" "inline code is padded"
+has 'w:pStyle w:val="TableText"' "$gdoc" "table cells use Table Text"
+has 'w:firstColumn="1"' "$gdoc" "first-column look is on"
+has 'w:type="firstCol"' "$gsty" "table style fills the first column"
+has 'w:rFonts w:ascii="Comfortaa"' "$gsty" "headings in the spec's heading font"
+lacks 'CalloutNoteHead' "$gdoc" "no separate callout head paragraph"
 
 echo "# lint fires"
 cat > "$T/l.md" <<'MD'

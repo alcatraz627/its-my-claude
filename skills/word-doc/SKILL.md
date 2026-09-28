@@ -16,6 +16,26 @@ agent owns what the document says and how it is organised (the planning method i
 `~/.claude/scripts/word-doc/` own everything visual, so two documents made a month
 apart look like siblings and nobody opens Word to fix a font.
 
+The theme now lives in the shared document spec, `~/.claude/scripts/shared/doc-style.json`
+(section `docx`, plus the shared `callouts`); `make_reference.py` reads it when no
+`theme.json` sits beside it. /gdoc reads the same file's `gdoc` section, so a block
+added to one skill is added to the spec's `blocks` list and shown in both.
+
+Two looks, one flag. The default (the spec's `docx.look`) is `gdoc`, kept by the owner
+on 2026-09-29: the Google Docs look from the spec's `gdoc` section (Comfortaa and Open
+Sans, centred title and subtitle, blue-family table with a filled dashed header and a
+tinted first column, the light table variant on `<!-- table: light -->`, padded code
+boxes with a blue left bar, lighter diagram strokes, two-line callouts, a tinted quote
+with a blue Georgia mark, 1.15 lists, a thin rule, one-inch margins). `--look harbor`
+renders the 2026-09-01 ruling (Inter, Harbor palette, dotted tables). Date links become
+plain text and mail links stay links; the chips exist only in Google Docs.
+
+Fonts: a .docx has no fallback list. `make_reference.py` declares each font's shape in
+the font table (body as Calibri's shape, mono as Consolas's, headings as Century
+Gothic's), and Word swaps a missing font for the installed one closest to that shape.
+Google Docs has all three faces natively, so a Drive import keeps the look. Open Sans
+was added to ~/Library/Fonts on 2026-09-29 so the local page check renders true.
+
 ## Step 0
 
 Read `~/.claude/skills/GUIDELINES.md`, then the `## word-doc:` entries in
@@ -69,29 +89,15 @@ catch offending issues.
 
 ## What the renderer already decides (do not re-decide in DOC.md)
 
-- **The theme is a spec file, not code constants.** The owner-ruled standard
-  lives in `~/.claude/scripts/word-doc/theme.json` (fonts, palette, callout
-  colors and glyphs, and prose notes naming each ruled structure), and
-  `render.py` auto-loads it on every run. Ruled 2026-09-01 over three decision
-  pages: Inter 700 titles, Inter body, JetBrains Mono code; dotted-separator
-  tables (no header fill, accent header text over a dashed accent rule); code
-  and diagram blocks in a dotted frame with a solid accent left bar on the
-  soft-card tint; an indent-rail contents list; callouts with the kind on its
-  own head line (glyph + label in the kind color) and the body below. Links
-  render in the accent color with no underline. Margins are half an inch all
-  round, callouts run margin to margin with the bar in the gutter, and the
-  vertical rhythm is deliberately open (title, headings, contents rows,
-  callouts, tables, code boxes all carry ruled spacing). Change the theme by
-  editing theme.json, never by re-deriving styles in DOC.md; `--accent`,
-  `--font-body`, `--font-mono`, `--paper` still override per document, and say
-  so in the delivery message when you used one.
-- Fonts are names the reader's machine must have. Inter and JetBrains Mono are
-  installed here and cover any machine that also has them; a machine without
-  them substitutes by declared shape (a variable sans, a fixed-pitch mono).
-  Both faces are in the Google Fonts catalog, so a Drive conversion should keep
-  the typography. That is UNCONFIRMED until the first real upload; check it
-  then and record the answer in runtime notes. `--font-body Calibri
-  --font-mono Consolas` remains the every-Windows-machine fallback.
+- **The theme is a spec file, not code constants.** Both looks live in
+  `~/.claude/scripts/shared/doc-style.json` and `render.py` reads it on every run
+  (the Brief above names what each look contains). Change the look by editing the
+  spec, never by re-deriving styles in DOC.md; `--accent`, `--font-body`,
+  `--font-mono`, `--paper`, `--look` still override per document, and say so in
+  the delivery message when you used one.
+- Fonts are names the reader's machine must have; see the Brief for how a missing
+  one is substituted. `--font-body Calibri --font-mono Consolas` remains the
+  every-Windows-machine override.
 
 ## Delivering to Google Drive (optional, on request)
 
