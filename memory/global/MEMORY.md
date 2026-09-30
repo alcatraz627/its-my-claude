@@ -5,6 +5,9 @@
 ## User Profile
 - [User Profile](user_profile.md) — Terminal-first macOS developer; vim-style nav; prefers CLI tools and dark mode
 
+## Reference
+- [Repo census 2026-09-30](reference_repo_census.md): every versable-git and alcatraz627 repo classified with evidence. Reuse it before surveying repos.
+
 ## Feedback — Communication & Autonomy
 - [Challenge user requests](feedback_challenge_user_asks.md) — Push back on suboptimal asks; be opinionated, not a yes-machine
 - [Autonomous mode](feedback_autonomous.md) — Prefers fully autonomous operation; batch work, use background agents

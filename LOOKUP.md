@@ -30,6 +30,7 @@
 | `*-domain/` + `i-dream/` `ledger/` `pinned/` `scheduled/` | **i-dream event-domain subsystem**: per-domain event capture (`events.jsonl`) to derived session-start hinters (`_tldr.txt` / `triggers.json`) to a weekly dream pass. Engine source `~/Code/Claude/i-dream`; per-dir owners in `FOLDERS.md`; `scheduled/registry.json` runs the passes | Understanding session-start insight injection, the dream cycle, or where feedback events go |
 | `~/.claude/memory/global/MEMORY.md` | Cross-project global memory tier index (24 feedback/user memories). **Not auto-loaded**: no hook or harness path reads it (`features/memory.md` §Tiers; verified gcc-map v3 and v4). Read it on demand alongside the auto-loaded per-project MEMORY.md | Any session that wants the cross-project defaults; per-project memory overrides it on conflict |
 | `~/.claude/assets/reports/20260905-gcc-structure-map/MAP.md` | **Living GCC structure map** (v4, `/gcc-map --deep`, 2026-09-05): how content reaches an agent, the doc graph, ranked empirical-vs-claimed divergences, a critic's audit of the audit in `lenses/critic.md`, and a ten-sheet visual companion `map.html`. Its TL;DR carries the open high-severity findings — they are live items, not archive. v3 (2026-07-04) is the baseline it diffs against | Any structural question about `~/.claude`; before restructuring config; checking what the map already flagged |
+| `~/.claude/assets/reports/20260930-repo-census/README.md` | **Repo census, dated 2026-09-30**: every repo in the versable-git org (47) and the alcatraz627 account (90) classified from commit, author and deploy evidence into product, client build, platform / internal service, internal tool, personal tool, MVP / POC, dormant and archived, with usage level, a one-line description and flagged judgment calls. `gather.py <owner>` refreshes it into a new dated folder | Any task that surveys, picks from, or describes the owner's repos; before re-gathering repo facts; check the date and refresh if it is stale |
 | `~/.claude/settings.json` | Permissions, hooks, plugins, env vars, UI settings | Modifying hooks, permissions, or plugin config |
 | `~/.claude/settings.local.json` | Local permission overrides (npm, git, skills, etc.) | Adding tool permissions for local dev |
 
@@ -67,6 +68,7 @@
 | `features/shared-library.md` | std::claude::shared Python + shell utilities | `tool:gum-tui.sh`, `topic:shared-utilities` |
 | `features/plugins.md` | Disabled plugins registry + plugin-vs-skill | `topic:plugins`, `topic:skill-selection` |
 | `features/desktop-automation.md` | macOS GUI: screencapture/osascript/cliclick | `tool:desktop.sh`, `topic:macos-windows` |
+| `features/agent-policy.md` | The owner's agent policy: allow/block switches, choices and thresholds for what agents may do as the owner, global with per-repo overrides and timed flips; menu bar panel plus `pol.sh`, read live by hooks | `topic:agent-policy`, `tool:pol.sh`, `phrase:"agent policy"` |
 | `features/macos-menubar-widget.md` | AppKit menu-bar widget patterns: settings window, live-propagation, composited badge, hover popover | `topic:macos-menubar`, `topic:appkit`, `tool:claude-instances` |
 | `features/hooks-tui-limits.md` | Hook TUI display limitation (alt-screen buffer) | `topic:hooks`, `topic:terminal-display` |
 | `features/dev-servers.md` | pm2 + port 30xx/50xx + persistence | `tool:pm2`, `topic:dev-servers` |
@@ -89,7 +91,8 @@
 | `conventions/doc-naming.md` | YYYYMMDD- prefix, session tags, living-doc rules | `topic:doc-naming`, `phrase:"session tag"` |
 | `conventions/asset-management.md` | assets/<type>/ + asset.sh + CWD double-nest | `tool:asset.sh`, `topic:assets` |
 | `conventions/cli-help-design.md` | --help structure, colors, columns, no-pager | `topic:cli-help`, `phrase:"--help"` |
-| `conventions/html-output.md` | HTML rules: dark/light toggle MANDATORY + future HTML rules | `topic:html-output`, `topic:reports` |
+| `conventions/pages.md` | Which surface to show something on, plus the shared page kit and page check | `topic:html-output`, `topic:reports`, `topic:artifacts`, `skill:page` |
+| `conventions/html-output.md` | Older HTML guidance: the colour system the kit uses, complexity tiers, snippets | `topic:html-output` |
 | `conventions/ascii-diagrams.md` | Proactive box-drawing diagrams; /diagram for complex | `skill:diagram`, `topic:diagrams` |
 | `conventions/doc-writing.md` | Technical doc guidelines + anti-patterns (migrated from root) | `skill:write-docs`, `topic:docs-work` |
 | `conventions/report-writing.md` | Genre contract for reports, RCAs, changelogs, review outputs: per finding symptom, impact, path, detail; caveats carry verbatim; critic gate before delivery | `topic:reports`, `topic:rca`, `topic:changelog` |
