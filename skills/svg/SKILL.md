@@ -47,6 +47,32 @@ inline-in-HTML) — it decides whether to set fixed `width`/`height` or leave on
 If the arg is a path to an existing `.svg`, skip to Phase 6 (edit/optimize an
 existing file) after reading it.
 
+## Phase 1b: Illustrations start from the subject and a human scene
+
+For an illustration, banner or cover about a project (not an icon), the idea
+matters more than the linework. Owner verdict on bespoke scenes: "actually great
+artworks". On tidy templates: fine but forgettable.
+
+1. **Learn the subject first.** Read the README or docs and write down 5 to 8 real
+   nouns: commands, components, numbers, model ids, the thing that goes wrong.
+   Every label in the art comes from that list. Never invent a fact to fill space.
+2. **Find the human situation it resembles.** Ask "if this system were people in a
+   real place, where would they be and what would they be doing?" Inter-agent
+   mail becomes an office floor where one agent snores on the couch and two fight
+   the coffee machine. SSO becomes an airport customs desk. Terminal themes become
+   a ghost hair salon. Local models become a crew in front of RAM stacks on fire,
+   with an old vision model squinting at a printout through a magnifying glass.
+   Publishing becomes a heavenly straw sucking packages up to npm and GitHub.
+3. **Draft three genuinely different takes** (a place, a process, a close-up
+   character), not three recolours, and let the owner pick.
+4. **Make it legible.** Real labels on the props (the actual ids and names from
+   step 1), characters facing different ways with distinct expressions, one clear
+   focal point, and humour that is true to the project.
+5. **Build it from sprites.** Small functions that return a person, desk, couch,
+   crate or truck as pixel `<rect>`s on a 4 to 8 px grid with
+   `shape-rendering="crispEdges"`, composed into the scene. A light SMIL touch (a
+   blink, a flicker) is fine. The static frame must still read on its own.
+
 ## Phase 2 — Author the markup
 
 Claude writes the SVG directly. Apply these defaults (they are what separate a
@@ -86,7 +112,11 @@ mishandles** (CSS `filter`, `foreignObject`, animation, complex gradient meshes)
 the qlmanage output looks wrong: open `file://<abs-path>.svg` via the chrome-devtools
 MCP (`new_page` / `navigate_page` + `take_screenshot`) and judge that instead.
 QuickLook is a plugin, not a full SVG engine — a false pass is a real risk, so pick
-the browser path whenever advanced features are present.
+the browser path whenever advanced features are present. For wide banners with a
+lot of text, headless Chrome is the faster exact check:
+`"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --window-size=1280,480 --screenshot=<out>.png file://<abs>.svg`.
+Add `--virtual-time-budget=5000` for animated SVGs, or the capture shows frame zero
+(a fade-in reads as blank).
 
 If it looks wrong, go back to Phase 2 — do not hand off an unverified or
 wrong-looking SVG.

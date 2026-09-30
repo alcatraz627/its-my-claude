@@ -70,6 +70,32 @@ Options: --refresh (re-fetch), --module <name> (single module),
          --add-quote / --add-riddle, --setup (change location/theme)
 ```
 
+## README banners (a different job from the daily brief)
+
+When the owner asks for a "/banner-fun banner" on a repo or README, they mean a
+**graphic** in this banner's frame language, not the terminal text. An ASCII block
+in a code fence was rejected ("svg is fine but a banner buddy a banner").
+
+- **Deliverable:** a 1280x480 SVG at `.github/readme/banner.svg`, shown first in
+  the README with `<img width="100%">`. A 16x16 pixel emblem as
+  `.github/readme/favicon.svg` sits beside the title. The riddle's answer goes in a
+  `<details>` block below the intro.
+- **Frame language:** dark card, double accent border, ◆◆ rails, ⊕ TITLE ⊕, a
+  quote-of-the-day and riddle card, a ⊙ footer. Keep it recognisably one family;
+  rearrange freely.
+- **Content comes from the project.** Read the README first. Stats, flows and
+  labels are real numbers, commands and names from it. The quote is real and
+  correctly attributed. The riddle's answer is a concept specific to this repo.
+- **Creative take:** follow `/svg` Phase 1b. Stage the project as a real-life human
+  scene built from pixel sprites, and offer three different takes. Three panels
+  (facts, flow, quote) suit repos with real numbers and a pipeline; a hero or
+  terminal layout suits apps and CLIs. A scene beats all three when the owner
+  wants character.
+- **Check before handing over:** render with headless Chrome and look at it; no
+  internal words (file names, "variants.json") anywhere in the art; the footer
+  points at the riddle answer. For a bulk run, use a decision page that shows the
+  current banner as a thumbnail beside the candidates.
+
 ## Modules
 
 | Module | Data Source | Cache TTL | Notes |
