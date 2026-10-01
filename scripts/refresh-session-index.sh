@@ -15,7 +15,9 @@ LOG="$HOME/.claude/assets/scan-sessions/refresh.log"
 
 python3 - >>"$LOG" 2>&1 <<'PY'
 import sys, os, datetime
-sys.path.insert(0, os.path.expanduser('~/.claude/skills/scan-sessions'))
+# The crawler lives with the scan-sessions skill, parked since 2026-08-27; both homes are tried.
+for d in ('~/.claude/skills/scan-sessions', '~/.claude/skills-parked/scan-sessions'):
+    sys.path.insert(0, os.path.expanduser(d))
 from crawl import get_db, crawl
 conn = get_db()
 new, updated, skipped = crawl(conn)          # retention-safe by default
